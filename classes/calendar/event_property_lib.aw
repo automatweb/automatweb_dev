@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.8 2004/08/02 11:17:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.9 2004/09/24 09:30:13 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -15,11 +15,14 @@ class event_property_lib extends aw_template
 		// see annab connectionid kõigist projektidest, mis viitavad sellele sündmusele
 		// which of course is bad.
 
+		global $XX5;
+		if ($XX5)
+		{
+			arr($arr);
+		};
+
 		// I need a list of all brothers of this object!
 		// so that I can show active ones
-		$e_conns = $arr["obj_inst"]->connections_to(array(
-			"from.class_id" => CL_PROJECT,
-		));
 
 		$orig = $arr["obj_inst"]->get_original();
 
@@ -33,42 +36,80 @@ class event_property_lib extends aw_template
 			$xlist[$o->parent()] = 1;
 		};
 
-		//arr($xlist);
-		//arr($olist);
-
-		/*
-		$prjlist = array();
-		foreach($e_conns as $conn)
-		{
-			$prjlist[$conn->prop("from")] = 1;
-		};
-		*/
-
-		$users = get_instance("users");
-		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-		$conns = $user->connections_to(array(
-			"from.class_id" => CL_PROJECT,
-			"sort_by" => "from.name",
-		));
-
 		$all_props = array();
+		$prop = $arr["prop"];
 
-		foreach($conns as $conn)
+		// väga lahe - nüüd tuleb veel grupeerimine teha
+		if (1 == $prop["all_projects"])
 		{
-			/*
-			print $conn->prop("from");
-			print "<br>";
-			*/
-			$all_props["prj_" . $conn->prop("from")] = array(
-				"type" => "checkbox",
-				"name" => "prj" . "[" .$conn->prop("from") . "]",
-				"caption" => html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
-					"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
-				)),
-				"ch_value" => $xlist[$conn->prop("from")],
-				"value" => 1,
-			);
+			$olist = new object_list(array(
+				"class_id" => CL_PROJECT,
+			));
+
+			$by_parent = array();
+			$first = true;
+
+			for($o =& $olist->begin(); !$olist->end(); $o =& $olist->next())
+			{
+				$pr = new object($o->parent());
+				if ($first)
+				{
+					$first_project = $o->id();
+					$first = false;
+				};
+
+				// aah, but that IS the bloody problem .. I can't enter events in that way
+
+				// now how do I get that grouping shit to work?
+				$all_props["prj_" . $o->id()] = array(
+					"type" => "checkbox",
+					"name" => "prj" . "[" .$o->id() . "]",
+					"caption" => html::href(array(
+						"url" => $this->mk_my_orb("change",array("id" => $o->id()),CL_PROJECT),
+						"caption" => "<font color='black'>" . $o->name() . "</font>",
+					)),
+					"ch_value" => $xlist[$o->id()],
+					"value" => 1,
+				);
+
+			};
+			$pr = get_instance(CL_PROJECT);
+			$pr->_recurse_projects(0,$first_project);
+
+
+			global $XX5;
+			if ($XX5)
+			{
+				arr($by_parent);
+				arr($pr->prj_map);
+			};
+		}
+		else
+		{
+			// ajaa .. aga see on nüüd see asi et näitab ainult neid projekte kus ma ise olen
+			// mul aga on vaja et ta näitaks kõiki projekte
+
+			$users = get_instance("users");
+			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$conns = $user->connections_to(array(
+				"from.class_id" => CL_PROJECT,
+				"sort_by" => "from.name",
+			));
+
+
+			foreach($conns as $conn)
+			{
+				$all_props["prj_" . $conn->prop("from")] = array(
+					"type" => "checkbox",
+					"name" => "prj" . "[" .$conn->prop("from") . "]",
+					"caption" => html::href(array(
+						"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
+						"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
+					)),
+					"ch_value" => $xlist[$conn->prop("from")],
+					"value" => 1,
+				);
+			};
 		};
 
 		return $all_props;
@@ -124,12 +165,33 @@ class event_property_lib extends aw_template
 		$awt->stop("disconnect-from-project");
 		$awt->start("connect-to-project");
 
+		$clones = array();
+		$event_clones = $event_obj->connections_from(array(
+			"type" => "RELTYPE_COPY",
+		));
+
+		foreach($event_clones as $event_clone)
+		{
+			$clones[] = $event_clone->prop("to");
+		};
+
 		foreach($new_ones as $new_id => $whatever)
 		{
+			// seos projektist sündmusse
 			$prj_inst->connect_event(array(
 				"id" => $new_id,
 				"event_id" => $event_obj->id(),
 			));
+
+			foreach($clones as $clone_item)
+			{
+				$prj_inst->connect_event(array(
+					"id" => $new_id,
+					"event_id" => $clone_item,
+				));
+			};
+
+			// lisaks tuleb koopiad korralikult ära connectida
 		};
 
 		$awt->stop("connect-to-project");
