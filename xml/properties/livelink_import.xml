@@ -88,15 +88,23 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>HTTP autoriseerimisel samad kasutaja/parool</caption>
+            <caption>HTTP autoriseerimisel samad andmed</caption>
       </property>
       <classinfo>
             <syslog_type>ST_LIVELINK_IMPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
             <auth>
                   <caption>Autoriseerimine</caption>
             </auth>
       </groupinfo>
+      <reltypes>
+            <LOGFILE>
+                  <value>1</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Logifail</caption>
+            </LOGFILE>
+      </reltypes>
 </properties>
 
