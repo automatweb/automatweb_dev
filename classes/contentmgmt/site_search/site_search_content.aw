@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.40 2005/03/08 14:35:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.41 2005/03/18 09:43:50 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -257,27 +257,41 @@ class site_search_content extends class_base
 				break;
 
 			case "reledit":
-				$id = $prop["value"]["id"];
-				if (is_oid($id) && $this->can("view", $id))
-				{
-					$rec = get_instance(CL_RECURRENCE);
-					$stamp = $rec->get_next_event(array(
-						"id" => $id
-					));
-					// set it to scheduler
-					$sc = get_instance("scheduler");
-					$sc->add(array(
-						"event" => $this->mk_my_orb("generate_static", array(
-							"id" => $arr["obj_inst"]->id(),
-							"stamp" => $stamp
-						)),
-						"time" => $stamp,
-					));
-				}
+				$this->add_scheduler = true;
 				break;
 		}
 		return $retval;
 	}	
+
+	function callback_post_save($arr)
+	{
+		if ($this->add_scheduler)
+		{
+			$o = $arr["obj_inst"];
+			$recur_conns = $o->connections_from(array(
+				"type" => "RELTYPE_REPEATER",
+			));
+			if (sizeof($recur_conns) > 0)
+			{
+				$rec = reset($recur_conns);
+				$recur_obj_id = $rec->prop("to");
+				$rec = get_instance(CL_RECURRENCE);
+				$stamp = $rec->get_next_event(array(
+					"id" => $recur_obj_id
+				));
+				// set it to scheduler
+				$sc = get_instance("scheduler");
+				$sc->add(array(
+					"event" => $this->mk_my_orb("generate_static", array(
+						"id" => $arr["obj_inst"]->id(),
+						"stamp" => $stamp
+					)),
+					"time" => $stamp,
+				));
+			};
+		};
+
+	}
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
