@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.46 2005/03/18 12:12:22 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.47 2005/03/23 12:18:03 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -135,7 +135,7 @@ class event_search extends class_base
 		$formconfig = $o->meta("formconfig");
 		$t->define_field(array(
 			"name" => "type",
-			"caption" => t("Tp"),
+			"caption" => t("T&uuml;&uuml;p"),
 		));
 
 		$t->define_field(array(
@@ -176,8 +176,8 @@ class event_search extends class_base
 		
 		$format_selector = html::select(array(
 			"options" => array(
-				0 => "Ainult kuup&auml;ev",
-				1 => "Kuup&auml;ev, kellaajad"
+				0 => t("Ainult kuup&auml;ev"),
+				1 => t("Kuup&auml;ev, kellaajad"),
 			),
 			"name" => "start_date[format]",
 			"value" => $formconfig["start_date"]["format"],
@@ -318,14 +318,14 @@ html::select(array(
 		{
 			case "navigator_range":
 				$prop["options"] = array(
-					0 => "Kuu navigaator",
-					1 => "N&auml;dala navigaator",
+					0 => t("Kuu navigaator"),
+					1 => t("N&auml;dala navigaator"),
 				);
 				break;
 			case "show_type":
 				$prop["options"] = array(
-					0 => "Kuu j&auml;rgi",
-					1 => "P&auml;eva j&auml;rgi",
+					0 => t("Kuu j&auml;rgi"),
+					1 => t("P&auml;eva j&auml;rgi"),
 				);
 				break;
 			case "ftsearch_fields":
@@ -830,12 +830,13 @@ html::select(array(
 			);
 			if(count($prj_ch1) > 1)
 			{
+				$vars["options"] = array(0 => t("kõik"));
 				$vars["optgnames"] = $optgnames1;
 				$vars["optgroup"] = $prj_ch1;
 			}
 			else
 			{
-				$vars["options"] = reset($prj_ch1);
+				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
 			}
 			$htmlc->add_property($vars);
 		}
@@ -851,8 +852,9 @@ html::select(array(
 			);
 			if(count($prj_ch2) > 1)
 			{
+				$vars["options"] = array(0 => t("kõik"));
 				$vars["optgnames"] = $optgnames2;
-				$vars["optgroup"] = $prj_ch2;
+				$vars["optgroup"] = array(0 => t("kõik")) + $prj_ch2;
 			}
 			else
 			{
@@ -1153,7 +1155,7 @@ html::select(array(
 				$orig = $b_o->brother_of();
 				if ($edata[$orig])
 				{
-					if(in_array($b_o->parent(), $par2))
+					if(!in_array($b_o->parent(), $par2) && !in_array($b_o->parent(), $par1))
 					{
 						continue;
 					}
