@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.82 2004/01/06 11:43:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.84 2004/02/06 13:55:37 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -170,6 +170,9 @@
 	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
 	@property ip type=table store=no group=ip no_caption=1
+
+	@property frontpage type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
+	@caption Esilehel
 
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
@@ -1030,6 +1033,11 @@ class menu extends class_base
 			return "";
 		}
 		$target = $f;
+
+		if (!$this->object_exists($target["oid"]))
+		{
+			return "";
+		}
 
 		$o = obj($target["oid"]);
 

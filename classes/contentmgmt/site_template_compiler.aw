@@ -674,6 +674,12 @@ class site_template_compiler extends aw_template
 				);
 				break;
 
+			case "FPONLY":
+				return array(
+					"prop" => "frontpage",
+					"value" => "1"
+				);
+				break;
 			default:
 				break;
 		}

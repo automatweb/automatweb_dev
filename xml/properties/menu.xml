@@ -503,6 +503,16 @@
             <table>menu</table>
             <field>ip</field>
       </property>
+      <property>
+            <name>frontpage</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <ch_value>1</ch_value>
+            <caption>Esilehel</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
