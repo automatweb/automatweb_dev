@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.133 2004/01/05 16:38:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.134 2004/01/07 13:16:18 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -208,6 +208,8 @@ class aliasmgr extends aw_template
 			};
 		};
 
+		$o->set_meta("aliaslinks",$link);
+		$o->save();
 
 		$cache_inst = get_instance("cache");
 		$alist = $o->connections_from();
