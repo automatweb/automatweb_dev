@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.41 2001/12/18 00:09:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.42 2002/01/06 15:05:04 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -7,7 +7,45 @@ class form_element extends aw_template
 {
 	function form_element()
 	{
-		// this is an abstract class and this constructor will never be called
+		$this->subtypes=array(
+			"link" => array(
+				"" => "",
+				"show_op" => "N&auml;ita pikemalt"
+			),
+			"listbox" => array(
+				"" => "",
+				"relation" => "Seoseelement",
+				"activity" => "Aktiivsuse pikendamine"
+			),
+			"textbox" => array(
+				"" => "",
+				"count" => "Mitu",
+				"int" => "Arv",
+				"activity" => "Aktiivsuse pikendamine",
+				"email" => "E-mail", 
+				"surname" => "Eesnimi", 
+				"lastname" => "Perekonnanimi"
+			),
+			"button" => array(
+				"" => "",
+				"submit" => "Submit", 
+				"reset" => "Reset",
+				"delete" => "Kustuta",
+				"url" => "URL",
+				"preview" => "Eelvaade",
+				"confirm" => "Kinnita",
+				"order" => "Tellimine",
+				"close" => "Sulge aken"
+			),
+			"date" => array(
+				"" => "",
+				"from" => "Algus", 
+				"to" => "L&otilde;pp",
+				"expires" => "Aegumine",
+				"created" => "Loomine",
+				"activity" => "Aktiivsuse pikendamine"
+			)
+		);
 	}
 
 	////
@@ -83,7 +121,7 @@ class form_element extends aw_template
 				$this->vars(array(
 					"link_text"			=> $this->arr["link_text"],
 					"link_address"	=> $this->arr["link_address"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","show_op" => "N&auml;ita pikemalt"))
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["link"])
 				));
 				$li = $this->parse("HLINK_ITEMS");
 				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
@@ -121,7 +159,7 @@ class form_element extends aw_template
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
 					"lb_size" => $this->arr["lb_size"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","relation" => "Seoseelement","activity" => "Aktiivsuse pikendamine"))
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["listbox"])
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -237,7 +275,7 @@ class form_element extends aw_template
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","count" => "Mitu","int" => "Arv","activity" => "Aktiivsuse pikendamine")),
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["textbox"]),
 					"activity_hours" => checked($this->arr["activity_type"] == "hours"),
 					"activity_days" => checked($this->arr["activity_type"] == "days"),
 					"activity_weeks" => checked($this->arr["activity_type"] == "weeks"),
@@ -260,9 +298,11 @@ class form_element extends aw_template
 				$this->vars(array(
 					"default_checked"	=> checked($this->arr["default"] == 1),
 					"ch_value" => $this->arr["ch_value"],
-					"ch_grp" => $this->arr["ch_grp"]
+					"ch_grp" => $this->arr["ch_grp"],
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["checkbox"])
 				));
 				$dc = $this->parse("CHECKBOX_ITEMS");
+				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
 			}
 
 			$pc="";
@@ -306,7 +346,7 @@ class form_element extends aw_template
 				$ob = new db_objects;
 				$this->vars(array(
 					"button_text" => $this->arr["button_text"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade","confirm" => "Kinnita","order" => "Tellimine","close" => "Sulge aken")),
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["button"]),
 					"button_url" => $this->arr["button_url"],
 					"chain_forward" => checked($this->arr["chain_forward"]==1),
 					"chain_backward" => checked($this->arr["chain_backward"]==1),
@@ -346,7 +386,7 @@ class form_element extends aw_template
 				$this->vars(array(
 					"from_year" => $this->arr["from_year"],
 					"to_year" => $this->arr["to_year"],
-					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","from" => "Algus", "to" => "L&otilde;pp","expires" => "Aegumine","created" => "Loomine","activity" => "Aktiivsuse pikendamine")),
+					"subtypes" => $this->picker($this->arr["subtype"], $this->subtypes["date"]),
 					"def_date_num" => $this->arr["def_date_num"],
 					"add_types" => $this->picker($this->arr["def_date_add"],$add_types),
 					"date_now_checked" => checked($this->arr["def_date_type"] == "now"),
@@ -1348,13 +1388,13 @@ class form_element extends aw_template
 
 			case "textbox":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">";
 				break;
 
 			case "button":
