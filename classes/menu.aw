@@ -1,10 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.10 2002/11/15 22:23:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.11 2002/11/19 14:09:18 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
+
+	@property alias type=textbox group=general 
+	@caption Alias
+
+	@property status type=status group=general 
+	@caption Staatus
+
+	@property jrk type=textbox size=4 group=general
+	@caption Jrk
+
+	@property comment type=textbox group=general
+	@caption Kommentaar
 
 	@property users_only type=checkbox field=meta method=serialize group=advanced
 	@caption Ainult sisselogitud kasutajatele
@@ -51,7 +63,7 @@
 	@property img_act type=imgupload field=meta method=serialize group=presentation
 	@caption Aktiivse menüü pilt
 
-	@property menu_images type=array field=meta method=serialize getter=callback_get_menu_image group=presentation
+	@property menu_images type=generated field=meta method=serialize generator=callback_get_menu_image group=presentation
 	@caption Menüü pildid
 
 	// and now stuff that goes into menu table
@@ -288,19 +300,18 @@ class menu extends aw_template
 	{
 		classload("image","html");
 		$data = $args["prop"];
-		static $i = 0;
 		// each line consists of multiple elements
 		// and this is where we create them
-		if ($i < $this->cfg["num_menu_images"])
+		$nodes = array();
+		for ($i = 0; $i < $this->cfg["num_menu_images"]; $i++)
 		{
-			$tmp = array();
 			$node = array();
 			// do something
-			$node["caption"] = "Pilt #" . ($i + 1);
+			$node["caption"] = "Pilt #" . ($i+1);
 			$node["items"] = array();
-
+			
 			$val = $data["value"][$i];
-		
+
 			// ord textbox
 			$tmp = array(
 				"type" => "textbox",
@@ -332,13 +343,9 @@ class menu extends aw_template
 			);
 			array_push($node["items"],$tmp);
 
-			$i++;
-		}
-		else
-		{
-			$node = false;
+			$nodes[] = $node;
 		};
-		return $node;
+		return $nodes;
 	}
 
 	function set_property($args = array())
@@ -393,6 +400,15 @@ class menu extends aw_template
 					$form_data["pm_url_admin"] = "";
 					$form_data["pm_url_menus"] = "";
 				};
+
+			case "menu_images":
+				$form_data = &$args["form_data"];
+				$form_data["menu_images"] = $this->update_menu_images(array(
+					"id" => $args["obj"]["oid"],
+					"img_del" => $args["form_data"]["img_del"],
+					"img_ord" => $args["form_data"]["img_ord"],
+					"meta" => $args["obj"]["meta"],
+				));
 		};
                 return $retval;
 	}
@@ -544,6 +560,43 @@ class menu extends aw_template
 		// updmenus is used to invalidate the menu cache for the objects
 		// that have changed. So I need to invalidate all the brothers
 		// and the current menu as well
+	}
+
+	function update_menu_images($args = array())
+	{
+		extract($args);
+		$num_menu_images = $this->cfg["num_menu_images"]; 
+		$t = get_instance("image");
+		
+		$imgar = $meta["menu_images"];
+		for ($i=0; $i < $num_menu_images; $i++)
+		{
+			if ($img_del[$i] == 1)
+			{
+				unset($imgar[$i]);
+			}
+			else
+			{
+				$ar = $t->add_upload_image("img".$i, $id, $imgar[$i]["id"]);
+				$imgar[$i]["id"] = $ar["id"];
+				$imgar[$i]["url"] = $ar["url"];
+				$imgar[$i]["ord"] = $img_ord[$i];
+			}
+		}
+
+		$timgar = array();
+		$cnt = 0;
+		for ($i=0; $i < $num_menu_images; $i++)
+		{
+			if ($imgar[$i]["id"])
+			{
+				$timgar[$cnt++] = $imgar[$i];
+			}
+		}
+
+		// now sort the image array
+		usort($timgar,array($this,"_menu_img_cmp"));
+		return $timgar;
 	}
 
 };
