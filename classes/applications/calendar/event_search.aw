@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.13 2005/01/12 15:22:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.14 2005/01/12 17:40:57 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -606,13 +606,13 @@ class event_search extends class_base
 			$tmp = obj($rn1);
 			if($tmp->class_id() == CL_MENU)
 			{
-				$prj_ch1 = $this->_get_project_choices($rn1);
+				$prj_cx = $this->_get_project_choices($rn1);
 				// if there are projects to choose from, search from them, else assume that it's a event folder
-				if(!empty($prj_ch1))
+				if(!empty($prj_cx))
 				{
 					$search_p1 = true;
-					asort($prj_ch1);
-					$prj_ch1 = array_merge(array(0 => t("kõik")), $prj_ch1);
+					asort($prj_cx);
+					$prj_ch1 = array(0 => t("kõik")) + $prj_cx;
 				}
 				else
 				{
@@ -634,12 +634,12 @@ class event_search extends class_base
 			$tmp = obj($rn2);
 			if($tmp->class_id() == CL_MENU)
 			{
-				$prj_ch2 = $this->_get_project_choices($rn2);
-				if(!empty($prj_ch2))
+				$prj_cx = $this->_get_project_choices($rn2);
+				if(!empty($prj_cx))
 				{
 					$search_p2 = true;
-					asort($prj_ch2);
-					$prj_ch2 = array_merge(array(0 => t("kõik")), $prj_ch2);
+					asort($prj_cx);
+					$prj_ch2 = array(0 => t("kõik")) + $prj_cx;
 				}
 				else
 				{
