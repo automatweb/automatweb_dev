@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.39 2003/02/27 13:25:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.40 2003/03/10 10:55:48 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -809,6 +809,10 @@ class form_table extends form_base
 			foreach($this->table["defsort"] as $nr => $dat)
 			{
 				$cl = $this->get_col_for_el($dat["el"]);
+				if ($cl === false)
+				{
+					$cl = gen_uniq_id();
+				}
 				if ($this->table["defs"][$cl]['el_main_types'][$dat['el']] == 'date')
 				{
 					$_sby["ev_col_".$cl] = "el_".$dat["el"];
@@ -2720,7 +2724,7 @@ class form_table extends form_base
 	// params:
 	// $str - the current row content
 	// $cc - the curent row settings ($this->table["defs"][$col])
-	// $dat - the current row data 
+	// $dat - the current row data
 	// $col - the current column number
 	// $section - the current section
 	// $form_id - the id of the form of the current entry
@@ -2731,7 +2735,7 @@ class form_table extends form_base
 		if (is_array($cc["alias"]))
 		{
 			// first, the image aliases, because they affect the row contents
-			foreach($cc["alias"] as $aid)	
+			foreach($cc["alias"] as $aid)
 			{
 				$alias_data = $cc["alias_data"][$aid];
 				if ($alias_data["class_id"] == CL_IMAGE)
@@ -2742,7 +2746,7 @@ class form_table extends form_base
 
 			// then the form_table aliases, cause they can add a link around the whole thing
 			// and the form_output aliases, for the same reason
-			foreach($cc["alias"] as $aid)	
+			foreach($cc["alias"] as $aid)
 			{
 				$alias_data = $cc["alias_data"][$aid];
 				if ($alias_data["class_id"] == CL_FORM_TABLE)
