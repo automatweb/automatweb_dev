@@ -515,38 +515,26 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		if ($arr["from"])
 		{
-			if (is_array($arr["from"]))
-			{
-				$awa = new aw_array($arr["from"]);
-				$sql .= " AND source IN ('".$awa->to_sql()."') ";
-			}
-			else
-			{
-				$sql .= " AND source = '".$arr["from"]."' ";
-			}
+			$awa = new aw_array($arr["from"]);
+			$sql .= " AND source IN ('".$awa->to_sql()."') ";
 		}
 
 		if ($arr["to"])
 		{
-			if (is_array($arr["to"]))
-			{
-				$awa = new aw_array($arr["to"]);
-				$sql .= " AND target IN ('".$awa->to_sql()."') ";
-			}
-			else
-			{
-				$sql .= " AND target = '".$arr["to"]."' ";
-			}
+			$awa = new aw_array($arr["to"]);
+			$sql .= " AND target IN ('".$awa->to_sql()."') ";
 		}
 
 		if ($arr["type"])
 		{
-			$sql .= " AND reltype = '".$arr["type"]."' ";
+			$awa = new aw_array($arr["type"]);
+			$sql .= " AND reltype IN ('".$awa->to_sql()."') ";
 		}
 
 		if ($arr["class"])
 		{
-			$sql .= " AND type = '".$arr["class"]."' ";
+			$awa = new aw_array($arr["class"]);
+			$sql .= " AND type IN ('".$awa->to_sql()."') ";
 		}
 
 		foreach($arr as $k => $v)
@@ -569,6 +557,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$sql .= " ORDER BY a.id ";
+
+		if (aw_global_get("uid") == "duke")
+		{
+			print $sql;
+		};
 
 		$this->db_query($sql);
 		$ret = array();
