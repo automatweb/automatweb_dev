@@ -411,12 +411,13 @@ class _int_object_loader
 
 				// now, iterate over the current acl data with the current gidlist
 				// and find the highest priority acl currently
-				foreach($gl as $g_oid => $g_pri)
+				
+				foreach($acld as $g_oid => $g_acld)
 				{
-					if ($g_pri > $max_priority && isset($acld[$g_oid]))
+					if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority)
 					{
-						$max_acl = $acld[$g_oid];
-						$max_priority = $g_pri;
+						$max_acl = $g_acld;
+						$max_priority = $gl[$g_oid];
 					}
 				}
 

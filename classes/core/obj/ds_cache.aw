@@ -70,6 +70,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			"brother_of" => $arr["objdata"]["brother_of"],
 		));
 
+		$tarr[$arr["objdata"]["oid"]] = 1;
 		$char = array_keys($tarr);
 		foreach($char as $obj_id)
 		{
