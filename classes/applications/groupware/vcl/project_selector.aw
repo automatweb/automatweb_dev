@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.3 2004/10/13 15:51:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.4 2004/10/16 22:32:47 duke Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -9,18 +9,15 @@ class project_selector extends core
 
 	function init_vcl_property($arr)
 	{
-		// see annab connectionid kõigist projektidest, mis viitavad sellele sündmusele
-		// which of course is bad.
-		// I need a list of all brothers of this object!
-		// so that I can show active ones
-
 		$orig = $arr["obj_inst"]->get_original();
+		//$orig = $arr["obj_inst"];
 
 		$olist = new object_list(array(
 			"brother_of" => $orig->id(),
 		));
 
 		$prjlist = array();
+		$xlist = array();
 		foreach($olist->arr() as $o)
 		{
 			$xlist[$o->parent()] = 1;
@@ -30,54 +27,31 @@ class project_selector extends core
 		$prop = $arr["prop"];
 
 		$propname = $prop["name"];
+		$by_parent = array();
 
-		// väga lahe - nüüd tuleb veel grupeerimine teha
+		// create a list of projects sorted by parent for better overview
+		// default behaviour is to show all projects the current user participiates in
+		// or if all_project is set then all project in the system
 		if (1 == $prop["all_projects"])
 		{
 			$olist = new object_list(array(
 				"class_id" => CL_PROJECT,
 			));
 
-			$by_parent = array();
-			$first = true;
 
 			foreach($olist->arr() as $o)
 			{
 				$pr = new object($o->parent());
 				$id = $o->id();
-				
-				if ($first)
-				{
-					$first_project = $id;
-					$first = false;
-				};
 
-				// aah, but that IS the bloody problem .. I can't enter events in that way
-
-				// now how do I get that grouping shit to work?
-				$all_props["${propname}${id}"] = array(
-					"type" => "checkbox",
-					"name" => "${propname}[${id}]",
-					"caption" => html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $id),CL_PROJECT),
-						"caption" => "<font color='black'>" . $o->name() . "</font>",
-					)),
-					"ch_value" => $xlist[$id],
-					"value" => 1,
-				);
-
+				$by_parent[$pr->id()][$o->id()] = $o->name();
 			};
-			/*
-			$pr = get_instance(CL_PROJECT);
-			$pr->_recurse_projects(0,$first_project);
-			*/
+
+			$all_props = array();
 
 		}
 		else
 		{
-			// ajaa .. aga see on nüüd see asi et näitab ainult neid projekte kus ma ise olen
-			// mul aga on vaja et ta näitaks kõiki projekte
-
 			$users = get_instance("users");
 			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 			$conns = $user->connections_to(array(
@@ -88,19 +62,60 @@ class project_selector extends core
 
 			foreach($conns as $conn)
 			{
-				$from = $conn->prop("from");
-				$all_props["${propname}${from}"] = array(
+				#$from = $conn->prop("from");
+				$from = $conn->from();
+				$by_parent[$from->parent()][$from->id()] = $from->name();
+			};
+		};
+
+		$tree = aw_ini_get("project.tree");
+		
+		if (1 == aw_ini_get("project.tree"))
+		{
+			$c = new connection();
+			$conns = $c->find(array(
+				"from.class_id" => CL_PROJECT,
+				"to.class_id" => CL_PROJECT,
+				"type" => 1,
+			));
+
+			$links = array();
+			foreach($conns as $conn)
+			{
+				$links[$conn["from"]] = $conn["to"];
+			};
+			
+		};
+
+		// now put together a nice layout
+		foreach ($by_parent as $parent_id => $items)
+		{
+			$pr_obj = new object($parent_id);
+			$all_props["${propname}${parent_id}tx"] = array(
+				"name" => "${propname}[${parent_id}tx]",
+				"type" => "text",
+				"subtitle" => 1,
+				"value" => $pr_obj->name(),
+			);
+			asort($items);
+			foreach($items as $item_id => $item_name)
+			{
+				$name = $propname . $item_id;
+				$item = new object($item_id);
+				$color = ($links[$item_id]) ? "black" : "red";
+				$all_props[$propname . $item_id] = array(
 					"type" => "checkbox",
-					"name" => "${propname}[${from}]",
+					"name" => $propname . "[" . $item_id . "]",
 					"caption" => html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $from),CL_PROJECT),
-						"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
+						"url" => $this->mk_my_orb("change",array("id" => $item_id),CL_PROJECT),
+						"caption" => "<font color='$color'>" . $item->name() . "</font>",
 					)),
-					"ch_value" => $xlist[$from],
+					"ch_value" => $xlist[$item_id],
 					"value" => 1,
 				);
 			};
-		};
+
+		}
 
 		return $all_props;
 	}
@@ -111,9 +126,6 @@ class project_selector extends core
 		// 1) retreieve all connections that this event has to projects
 		// 2) remove those that were not explicitly checked in the form
 		// 3) create new connections which did not exist before
-		global $awt;
-		$awt->start("retr-project-connections");
-
 		$orig = $arr["obj_inst"]->get_original();
 
 		// figure out all current brothers
@@ -135,9 +147,10 @@ class project_selector extends core
 			};
 		};
 
-		//arr($xlist);
+		// now, how do I know which projects are on the lowest level?
 
-		$awt->stop("retr-project-connections");
+		// simple, I ask for connections and the projects which do not have outgoing connections
+		// will be used as masters.
 
 		$new_ones = array();
 		if (is_array($arr["prop"]["value"]))
@@ -148,7 +161,6 @@ class project_selector extends core
 		unset($new_ones[$event_obj->parent()]);
 
 		$prj_inst = get_instance(CL_PROJECT);
-		$awt->start("disconnect-from-project");
 
 		foreach($xlist as $obj_id => $folder_id)
 		{
@@ -160,98 +172,79 @@ class project_selector extends core
 			unset($new_ones[$obj_id]);
 		};
 
-		$awt->stop("disconnect-from-project");
-		$awt->start("connect-to-project");
-
-		$clones = $transx = array();
-
-		// what if this thing itself is a copy?
-		$event_clones = $orig->connections_from(array(
-			"type" => "RELTYPE_COPY",
-		));
-
-		foreach($event_clones as $event_clone)
+		if (1 == aw_ini_get("project.tree"))
 		{
-			$clones[] = $event_clone->prop("to");
+			$real_parent = $orig->parent();
+			
+			$c = new connection();
+			$conns = $c->find(array(
+				"from.class_id" => CL_PROJECT,
+				"to.class_id" => CL_PROJECT,
+				"type" => 1,
+			));
+
+			$links = array();
+			foreach($conns as $conn)
+			{
+				$links[$conn["from"]] = $conn["to"];
+			};
+			
+			$olist = new object_list(array(
+				"class_id" => CL_PROJECT,
+			));
+
+			$parentcount = 0;
+			foreach($new_ones as $new_id => $whatever)
+			{
+				if (empty($links[$new_id]))
+				{
+					$parentcount++;
+					$new_parent = $new_id;
+				};
+			};
+
+			if ($parentcount > 1)
+			{
+				// XXX: get that thing to show!
+				$arr["prop"]["error"] = "Sündmus ei saa korraga olla mitmes viimase taseme projektis!";	
+				return PROP_ERROR;
+			};
+
+			if ($new_parent)
+			{
+				// that easy huh?
+				if ($event_obj->is_brother())
+				{
+					$orig->set_parent($new_parent);
+					$orig->save();
+					$new_ones[$event_obj->parent()] = 1;
+				}
+				else
+				{
+					$arr["obj_inst"]->set_parent($new_parent);
+				};
+				
+				// do not create a brother if there is an object there already
+				unset($new_ones[$new_parent]);
+
+				//print "duh?";
+			};
+
+			// so now, what do I have to do?
+
+			// change the parent of the original
+			// create brothers under all others
+
+
 		};
-
-		obj_set_opt("no_auto_translation", 1);
-		$translations = $orig->connections_from(array(
-			"type" => RELTYPE_TRANSLATION,
-		));
-
-		foreach($translations as $translation)
-		{
-			$transx[] = $translation->prop("to");
-		};
-		obj_set_opt("no_auto_translation", 0);
-
-		// uut venda ei looda kui ta juba olemas on
 
 		foreach($new_ones as $new_id => $whatever)
 		{
 
-			// kurat, siin on ju kamm sees, ta üritab luua venda projekti enda juurde. GRÄH
 			$event_obj->create_brother($new_id);
-
-			// aga vend tuleb luua iga keele alla kuhu sündmus pandud on!
-			// ja tuleks ka kontrollida kas see seos on juba olemas või ei
-			// seos projektist sündmusse
-
-			// mida fakki ma sin teen .. mind ei huvita ju absoluutselt see case .. tõlked on ikkagi
-			// originaalil ja mitte vennal.
-
-			foreach($transx as $trans_item)
-			{
-				/*
-				obj_set_opt("no_auto_translation", 1);
-				$trans_obj = new object($trans_item);
-				obj_set_opt("no_auto_translation", 0);
-			
-				dbg::p1("translation is " . $trans_obj->id() . "/" . $trans_obj->lang());
-				
-				$trans_brother = $trans_obj->create_brother($new_id);
-				$trans_brother_obj = new object($trans_brother);
-				*/
-
-				// by default tehakse tõlge ju aktiivse keele koodiga
-				/*
-				$trans_brother_obj->set_lang($trans_obj->lang());
-				$trans_brother_obj->save();
-				*/
-
-				// kloonil pole alguskuupäeva, vaat mis :(
-				//dbg::p1("created translation with id " . $trans_brother_obj->id());
-			};
-
-			foreach($clones as $clone_item)
-			{
-				/*
-				$clone_obj = new object($clone_item);
-				$clone_obj->create_brother($new_id);
-				*/
-
-				// ja tõlked on ju kaaa vaja kloonida! ooh fuck
-				/*
-				$prj_inst->connect_event(array(
-					"id" => $new_id,
-					"event_id" => $clone_item,
-				));
-				*/
-			};
-
-			// lisaks tuleb koopiad korralikult ära connectida
 		};
 
-		$awt->stop("connect-to-project");
 
 	}
-
-
-
-
-
-	
-
 };
 ?>
