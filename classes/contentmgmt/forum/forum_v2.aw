@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.40 2004/10/26 18:51:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.41 2004/10/27 09:44:32 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -738,11 +738,24 @@ class forum_v2 extends class_base
 		$from = ($selpage - 1) * $topics_on_page + 1;
 		$to = $from + $topics_on_page - 1;
 		$cnt = 0;
-				
-		for ($subtopic_obj = $subtopic_list->begin(); !$subtopic_list->end(); $subtopic_obj = $subtopic_list->next())
+		
+		$age_check = false;
+		$c_date = 0;
+		$user_id = aw_global_get("uid_oid");
+		if(!empty($user_id))
+		{
+			$user_obj = obj($user_id);
+			$c_date = $user_obj->meta("topic_age");
+			if(!empty($c_date))
+			{
+				$age_check = true;
+			}
+		}
+		
+		foreach($subtopic_list->arr() as $subtopic_obj)
 		{
 			$cnt++;
-			if (!between($cnt,$from,$to))
+			if(!between($cnt, $from, $to))
 			{
 				continue;
 			};
@@ -751,15 +764,21 @@ class forum_v2 extends class_base
 			$last = $this->get_last_comments(array(
 				"parents" => array($subtopic_obj->id()),
 			));
-
+			
+			if($age_check === true && $last["created"] < $c_date)
+			{
+				$cnt--;
+				continue;
+			}
+			
 			$creator = $subtopic_obj->createdby();
 
 			if ($last)
 			{
 				$last["created"] = $this->time2date($last["created"],2);
 			};
-
-
+			
+			
 			$this->vars(array(
 				"name" => $subtopic_obj->name(),
 				"comment_count" => (int)$comm_counts[$subtopic_obj->id()],
