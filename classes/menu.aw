@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.100 2004/09/13 14:21:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.101 2004/09/20 13:14:55 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -55,6 +55,9 @@
 	
 	@property show_lead_template type=select field=meta method=serialize group=advanced 
 	@caption Leadi template
+
+	@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=advanced
+	@caption Sisu objektist
 	
 	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
 	@caption AW Märksõnad
@@ -255,6 +258,10 @@
 
 	@reltype SUBMENUS value=16 clid=CL_SHOP_ORDER_CENTER,CL_CRM_SECTION,CL_OBJECT_TREEVIEW_V2,CL_ABSTRACT_DATASOURCE
 	@caption alammen&uuml;&uuml;d objektist
+
+	@reltype CONTENT_FROM value=17 clid=CL_PROJECT
+	@caption Sisu objektist
+
 */
 
 define("IP_ALLOWED", 1);
@@ -315,11 +322,6 @@ class menu extends class_base
 		return parent::change($args);
 	}
 
-	function __callback_on_load($arr)
-	{
-		$this->cfgmanager = 128946;
-	}
-	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
@@ -1235,12 +1237,12 @@ class menu extends class_base
 		}
 		$target = $f;
 
-		if (!$this->can("view", $target["oid"]))
+		if (!$this->can("view", $alias["to"]))
 		{
 			return "";
 		}
 
-		$o = obj($target["oid"]);
+		$o = obj($alias["to"]);
 
 		if ($o->prop("link") != "")
 		{
@@ -1248,7 +1250,7 @@ class menu extends class_base
 		}	
 		else
 		{
-			$link = $this->cfg["baseurl"]."/".$target["oid"];
+			$link = $this->cfg["baseurl"]."/".$alias["to"];
 		}
 
 		$ltarget = "";
