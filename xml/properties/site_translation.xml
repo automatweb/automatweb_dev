@@ -47,7 +47,7 @@
       </property>
       <property>
             <name>baselang</name>
-            <type>text</type>
+            <type>select</type>
             <group>general</group>
             <store>no</store>
             <table>objects</table>
@@ -56,7 +56,7 @@
       </property>
       <property>
             <name>targetlang</name>
-            <type>text</type>
+            <type>select</type>
             <group>general</group>
             <store>no</store>
             <table>objects</table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.6 2003/11/04 09:59:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.7 2003/11/27 10:49:18 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -17,10 +17,10 @@
 @property inp_toolbar group=ipr_day,ipr_week,ipr_month,ipr_all type=toolbar  store=no no_caption=1
 @caption TB
 
-@property baselang type=text group=general store=no
+@property baselang type=select group=general store=no
 @caption Baaskeel
 
-@property targetlang type=text group=general store=no
+@property targetlang type=select group=general store=no
 @caption Sihtkeel
 
 @property targetlang_all type=checkbox ch_value=1 group=general field=meta method=serialize
@@ -86,10 +86,14 @@ class site_translation extends class_base
 		switch($data["name"])
 		{
 			case "baselang":
+				$l = get_instance("languages");
+				$data["options"] = $l->get_list();
 				$data["value"] = $this->base_lang_code;
 				break;
 
 			case "targetlang":
+				$l = get_instance("languages");
+				$data["options"] = $l->get_list();
 				$data["value"] = $this->target_lang_code;
 				break;
 			
@@ -131,8 +135,25 @@ class site_translation extends class_base
 		// get the current user and figure out the base and target languages
 		$udat = $this->get_user();
 		$ucfg = new object($udat["oid"]);
-		$this->base_lang_id = $ucfg->meta("base_lang");
-		$this->target_lang_id = $ucfg->meta("target_lang");
+
+		$tr_o = obj($args["obj"]["oid"]);
+		if ($tr_o->prop("baselang"))
+		{
+			$this->base_lang_id = $tr_o->prop("baselang");
+		}
+		else
+		{
+			$this->base_lang_id = $ucfg->meta("base_lang");
+		}
+
+		if ($tr_o->prop("targetlang"))
+		{
+			$this->target_lang_id = $tr_o->prop("targetlang");
+		}
+		else
+		{
+			$this->target_lang_id = $ucfg->meta("target_lang");
+		}
 		$l = get_instance("languages");
 		$langinfo = $l->get_list(array(
 			"all_data" => true,
