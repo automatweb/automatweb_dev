@@ -237,7 +237,7 @@ class _int_object_loader
 		{
 			// relocate the object in the global list
 			$GLOBALS["objects"][$t_oid] = $GLOBALS["objects"][$oid];
-			unset($GLOBALS["objects"][$oid]);
+			$GLOBALS["objects"][$oid] =& $GLOBALS["objects"][$t_oid];
 		}
 		// return the new value, so that the pointers go to the right place.
 		//
