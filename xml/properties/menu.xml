@@ -20,6 +20,15 @@
             <caption>Menüü värv</caption>
       </property>
       <property>
+            <name>color2</name>
+            <type>colorpicker</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <table>objects</table>
+            <caption>Menüü värv 2</caption>
+      </property>
+      <property>
             <name>icon</name>
             <type>icon</type>
             <field>meta</field>
@@ -130,9 +139,10 @@
             <type>select</type>
             <multiple>1</multiple>
             <size>20</size>
+            <field>meta</field>
+            <method>serialize</method>
             <group>relations</group>
             <table>objects</table>
-            <field>sections</field>
             <caption>Vennastamine</caption>
       </property>
       <property>
@@ -159,7 +169,7 @@
             <type>generated</type>
             <field>meta</field>
             <method>serialize</method>
-            <generator>callback_get_menu_image</generator>
+            <callback>callback_get_menu_image</callback>
             <group>presentation</group>
             <table>objects</table>
             <caption>Menüü pildid</caption>
@@ -448,21 +458,6 @@
             </show>
       </groupinfo>
       <tableinfo>
-            <files>
-                  <index>id</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid	</master_index>
-            </files>
-            <images>
-                  <index>id</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </images>
-            <extlinks>
-                  <index>id</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </extlinks>
             <menu>
                   <index>id</index>
                   <master_table>objects</master_table>
