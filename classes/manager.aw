@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/manager.aw,v 2.2 2002/06/12 10:56:41 duke Exp $
 // that's your basic file manager with 2 frames class. On the left side is a
 // menu tree just like in /automatweb right now, on the right side we show objects
 // someday this can perhaps replace the current menuedit framework
@@ -7,7 +8,9 @@ class manager extends aw_template
 	function manager($args = array())
 	{
 		$this->init("manager");
-		$this->root = 42527;
+		$this->root = $this->cfg["root"];
+		$this->lc_load("manager","lc_manager");
+
 	}
 
 	////
@@ -38,7 +41,8 @@ class manager extends aw_template
 		$this->_traverse($this->root);
 		$this->vars(array(
 			"root" => $this->root,
-			"uid" => UID,
+			"uid" => aw_global_get("uid"),
+			"rooturl" => $this->mk_my_orb("browse",array("parent" => $this->root)),
 			"TREE" => $this->tree,
 		));
 		return $this->parse();
@@ -78,31 +82,36 @@ class manager extends aw_template
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "nimi",
+			"caption" => LC_MANAGER_COLS_NAME,
 			"talign" => "center",
 			"sortable" => 1,
 			"nowrap" => "1",
 		));
+
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+
+			$t->define_field(array(
+				"name" => "ord",
+				"caption" => LC_MANAGER_COLS_ORD,
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+			));
 		
-		$t->define_field(array(
-			"name" => "ord",
-			"caption" => "jrk",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-		));
-		
-		$t->define_field(array(
-			"name" => "active",
-			"caption" => "Ak.",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-		));
+			$t->define_field(array(
+				"name" => "active",
+				"caption" => LC_MANAGER_COLS_ACT,
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+			));
+
+		}
 		
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => LC_MANAGER_COLS_MODIFIEDBY,
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -111,21 +120,33 @@ class manager extends aw_template
 		
 		$t->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => LC_MANAGER_COLS_MODIFIED,
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 			"nowrap" => "1",
 		));
-		
-		$t->define_field(array(
-			"name" => "action",
-			"caption" => "Tegevus",
-			"talign" => "center",
-			"align" => "center",
-			"nowrap" => "1",
-		));
 
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+
+			$t->define_field(array(
+				"name" => "action",
+				"caption" => LC_MANAGER_COLS_SETTINGS,
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+			));
+			
+			$t->define_field(array(
+				"name" => "delete",
+				"caption" => LC_MANAGER_COLS_DELETE,
+				"talign" => "center",
+				"align" => "center",
+				"nowrap" => "1",
+			));
+
+		}	
 		$q = "SELECT * FROM objects WHERE class_id = 1 AND status != 0 AND parent = '$parent' ORDER BY jrk,name";
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -136,12 +157,13 @@ class manager extends aw_template
 			$active = checked($row["status"] == 2);
 			$t->define_data(array(
 				"folder" => "<img src='/automatweb/images/ftv2folderclosed.gif'>",
-				"name" => "<a href='$oplink'>$row[name]</a>",
+				"name" => "&nbsp;<a href='$oplink'>$row[name]</a>",
 				"ord" => "<input type='textbox' name='ord[$oid]' size='2' value='$row[jrk]'>",
 				"active" => "<input type='checkbox' value='2' name='active[$oid]' $active>",
 				"modifiedby" => $row["modifiedby"],
 				"modified" => $this->time2date($row["modified"],2),
-				"action" => "<a href='$chlink'><img src='/automatweb/images/blue/obj_settings.gif' border='0'></a>",
+				"action" => "<a href='$chlink'><img src='/automatweb/images/blue/obj_settings.gif' alt='" . LC_MANAGER_HINT_SETTINGS ."' title='" . LC_MANAGER_HINT_SETTINGS . "' border='0'></a>", 
+				"delete" => "<input type='checkbox' name='del[$row[oid]]' value='$row[oid]'>",
 			));
 		};
 
@@ -161,11 +183,14 @@ class manager extends aw_template
 				"active" => "<input type='checkbox' value='2' name='active[$oid]' $active>",
 				"modifiedby" => $row["modifiedby"],
 				"modified" => $this->time2date($row["modified"],2),
-				"action" => "<a href='$chlink'><img src='/automatweb/images/blue/obj_settings.gif' border='0'></a>",
+				"action" => "<a href='$chlink'><img src='/automatweb/images/blue/obj_settings.gif' alt='" . LC_MANAGER_HINT_SETTINGS . "' title='" . LC_MANAGER_HINT_SETTINGS ."' border='0'></a>", 
+				"delete" => "<input type='checkbox' name='del[$row[oid]]' value='$row[oid]'>",
 			));
 
 		}
-		
+
+		// sort by name by default
+		$sortby = ($args["sortby"]) ? $args["sortby"] : "name";
 		$t->sort_by(array("field" => $args["sortby"]));
 
 		$this->vars(array(
@@ -174,6 +199,11 @@ class manager extends aw_template
 			"add_menu" => $this->mk_my_orb("add_menu",array("parent" => $parent)),
 			"add_file" => $this->mk_my_orb("new",array("parent" => $parent),"file"),
 		));
+
+		if ($this->prog_acl("view", PRG_MENUEDIT))
+		{
+			$this->vars(array("ADMIN" => $adm));
+		};
 		return $this->parse();
 	}
 
@@ -195,6 +225,21 @@ class manager extends aw_template
 		};
 		return $this->mk_my_orb("browse",array("parent" => $parent),"",false,1);
 	}
+
+	////
+	//  !Deletes selected objects
+	function delete($args = array())
+	{
+		extract($args);
+		if (is_array($del))
+		{
+			$del_obj = join(",",$del);
+			$q = "UPDATE objects SET status = 0  WHERE oid IN ($del_obj)";
+			$this->db_query($q);
+		}
+		return $this->mk_my_orb("browse",array("parent" => $parent),"",false,1);
+	}
+
 
 	////
 	// !Traverse a single level
@@ -257,12 +302,17 @@ class manager extends aw_template
 		if ($id)
 		{
 			$menu = $this->get_object($id);
+			$caption = LC_MANAGER_EDIT_FOLDER . ": $menu[name]";
+                        $prnt = $menu["parent"];
 		}
 		else
 		{
 			$menu = array();
+			$caption = LC_MANAGER_ADD_FOLDER;
+                        $prnt = $parent;
 		};
 		$this->read_template("edit_menu.tpl");
+		$this->_make_yah($prnt,$caption);
 		$this->vars(array(
 			"name" => $menu["name"],
 			"reforb" => $this->mk_reforb("submit_menu",array("id" => $id,"parent" => $parent)),
