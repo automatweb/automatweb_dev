@@ -37,6 +37,7 @@
 			<function name="get_branch">
 				<arguments>
 					<optional name="parent" type="int"/>
+					<optional name="format"/>
 				</arguments>
 			</function>
 		</action>
@@ -156,6 +157,23 @@
 
 		<action name="blank">
 			<function name="blank">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_feedback">
+			<function name="copy_feedback">
+				<arguments>
+					<required name="parent"/>
+					<optional name="period"/>
+					<optional name="sel"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_copy_feedback">
+			<function name="submit_copy_feedback">
 				<arguments>
 				</arguments>
 			</function>
