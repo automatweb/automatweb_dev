@@ -10,18 +10,18 @@
                           <td colspan="7">
 								  		<table width="100%" height="30"  border="0" cellpadding="0" cellspacing="0">
                               <tr>
-                                <td class="lrgTitle">Tellimiste ajalugu </td>
+                                <td class="lrgTitle">{VAR:trans_order_history} </td>
                                 <td align="right"><span class="listItem"><a href="javascript:void()" onClick="window.open('157','','directory=0,height=360,width=350,resizable=1, statusbar=0, hotkeys=0,menubar=0,scrollbars=0,status=0,toolbar=0')"><img src="img/qmark.gif" width="20" height="20" hspace="10" border="0"></a></span></td>
                               </tr>
                             </table></td>
                           </tr>
                       <tr>
-                        <td class="{VAR:timestmpcss}"><a href="?class=taket_tellimuste_list&action=show&sort=timestmp&dir={VAR:timestmpdir}">Registreeritud</a></td>
-                        <td class="{VAR:order_idcss}"><a href="?class=taket_tellimuste_list&action=show&sort=order_id&dir={VAR:order_iddir}">Tellimus nr.</a></td>
-                        <td class="{VAR:pricecss}"><a href="?class=taket_tellimuste_list&action=show&sort=price&dir={VAR:pricedir}">Tasutav summa</a></td>
-                        <td class="{VAR:contactcss}"><a href="?class=taket_tellimuste_list&action=show&sort=contact&dir={VAR:contactdir}">Konaktisik</a></td>
-                        <td class="{VAR:transportcss}"><a href="?class=taket_tellimuste_list&action=show&sort=transport&dir={VAR:transportdir}">Transport</a></td>
-                        <td class="{VAR:statuscss}"><a href="?class=taket_tellimuste_list&action=show&sort=status&dir={VAR:statusdir}">Staatus</a></td>
+                        <td class="{VAR:timestmpcss}"><a href="?class=taket_tellimuste_list&action=show&sort=timestmp&dir={VAR:timestmpdir}">{VAR:trans_registered}</a></td>
+                        <td class="{VAR:order_idcss}"><a href="?class=taket_tellimuste_list&action=show&sort=order_id&dir={VAR:order_iddir}">{VAR:trans_order_no}</a></td>
+                        <td class="{VAR:pricecss}"><a href="?class=taket_tellimuste_list&action=show&sort=price&dir={VAR:pricedir}">{VAR:trans_sum}</a></td>
+                        <td class="{VAR:contactcss}"><a href="?class=taket_tellimuste_list&action=show&sort=contact&dir={VAR:contactdir}">{VAR:trans_contact}</a></td>
+                        <td class="{VAR:transportcss}"><a href="?class=taket_tellimuste_list&action=show&sort=transport&dir={VAR:transportdir}">{VAR:trans_transport}</a></td>
+                        <td class="{VAR:statuscss}"><a href="?class=taket_tellimuste_list&action=show&sort=status&dir={VAR:statusdir}">{VAR:trans_status}</a></td>
                       </tr>
 <!-- SUB: tellimus -->
                       <tr onmouseover="setPointer(this, '#EEEFF4')" onmouseout="setPointer(this, '#FFFFFF')">
