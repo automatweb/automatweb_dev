@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.149 2003/12/10 14:47:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.150 2004/01/05 13:14:43 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -124,7 +124,7 @@ define("REP_YEAR",4);
 @reltype EVENT_SOURCE value=2 clid=CL_PLANNER
 @caption võta sündmusi teistest kalendritest
 
-@reltype EVENT value=3
+@reltype EVENT value=3 clid=CL_TASK
 @caption sündmus
 
 @reltype DC_RELATION value=4 clid=CL_RELATION
@@ -443,8 +443,29 @@ class planner extends class_base
 				$real_obj = $this->get_object($row["brother_of"]);
 				$row["name"] = $real_obj["name"];
 				$row["status"] = $real_obj["status"];
+				$row["flags"] = $real_obj["flags"];
 				$this->restore_handle();
 			};
+			if ($row["class_id"] == CL_CRM_CALL)
+			{
+				if ($row["flags"] == 8)
+				{
+					$row["name"] = html::img(array(
+						"url" => "/automatweb/images/icons/call-done.gif",
+						"border" => 0,
+					)) . $row["name"];
+				}
+				else
+				{
+					$row["name"] = html::img(array(
+						"url" => "/automatweb/images/icons/call-todo.gif",
+						"border" => 0,
+					)) . $row["name"];
+				};
+			};
+
+
+
 			if ($row["status"] != 0)
 			{
 				$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
@@ -2228,6 +2249,7 @@ class planner extends class_base
 				{
 					$daylink = "/" . $tgt;
 				};
+
 				if (!$this->is_template("CELL") && (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT)))
 				{
 					$daylink = "";
@@ -2260,16 +2282,17 @@ class planner extends class_base
 					};
 				};
 
-                                $this->vars(array(
+				$this->vars(array(
 					"event_content" => $pv,
-                                        "lead" => $e["lead"],
-                                        "moreinfo" => $e["moreinfo"],
-                                        "title" => $e["title"],
+					"lead" => $e["lead"],
+					"moreinfo" => $e["moreinfo"],
+					"title" => $e["title"],
 					"id" => $e["id"],
 					"content" => $e["content"],
+					"icon" => $e["icon"],
 					"daylink" => $daylink,
 					"imgurl" => isset($e["imgurl"]) ? $e["imgurl"] : "/img/trans.gif",
-                                ));
+				));
 				if ($daylink && !empty($e["content"]))
 				{
 					$this->vars(array(
@@ -2956,6 +2979,7 @@ class planner extends class_base
 		$planners = new object_list(array(
 			"class_id" => CL_PLANNER,
 			"sort_by" => "name",
+			"site_id" => array(),
 		));
 
 		for($o = $planners->begin(); !$planners->end(); $o = $planners->next())
