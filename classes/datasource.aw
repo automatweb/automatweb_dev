@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.10 2004/01/13 16:24:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.11 2004/06/08 09:53:51 kristo Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -20,7 +20,7 @@ define("DS_XML",1);
 	@property fullpath type=textbox editonly=1
 	@caption Faili asukoht
 
-	@property url type=textbox editonly=1
+	@property url type=textbox editonly=1 size=60
 	@caption Faili url
 
 	@classinfo no_status=1
