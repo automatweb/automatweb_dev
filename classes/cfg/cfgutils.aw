@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.38 2004/02/11 10:57:09 duke Exp $
+// $Id: cfgutils.aw,v 1.39 2004/03/17 11:35:55 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -215,9 +215,11 @@ class cfgutils extends aw_template
 		$res = array();
 
 		$do_filter = false;
+
+		// naw, it cannot really be empty, can it?
 		if (empty($filter["form"]))
 		{
-			$filter["form"] = "";
+			$filter["form"] = array("","add","edit");
 		};
 
 		if (isset($filter) && is_array($filter) && sizeof($filter) > 0)
@@ -241,10 +243,37 @@ class cfgutils extends aw_template
 					$pass = 0;
 					foreach($filter as $key => $val)
 					{
-						if ($_tmp[$key] == $val || $_tmp[$key] == "all")
+						// all is a special value, this makes it appear regardless of the filter value
+						if ($_tmp[$key] == "all")
 						{
 							$pass++;
 						}
+						else if (is_array($val))
+						{
+							if (is_array($_tmp[$key]))
+							{
+								$intersect = array_intersect($_tmp[$key],$val);
+								if (sizeof($intersect) > 0)
+								{
+									$pass++;
+								};
+							}
+							else
+							{
+								if (in_array($_tmp[$key],$val))
+								{
+									$pass++;
+								};
+							};
+						}
+						else if (is_array($_tmp[$key]) && in_array($val,$_tmp[$key]))
+						{
+							$pass++;
+						}
+						else if ($_tmp[$key] == $val)
+						{
+							$pass++;
+						};
 					}
 					if ($pass == $pass_count)
 					{
@@ -257,6 +286,7 @@ class cfgutils extends aw_template
 				};
 			};
 		};
+
 		return $res;
 	}
 
@@ -288,7 +318,7 @@ class cfgutils extends aw_template
 			"file" => $file,
 			"filter" => $filter,
 		));
-		
+
 		if (empty($this->classinfo["trans"]))
 		{
 			unset($coreprops["needs_translation"]);
