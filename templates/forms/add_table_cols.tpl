@@ -60,6 +60,11 @@
 											<select class="formselect" name="cols[{VAR:col_id}][els][]" multiple size="10">{VAR:els}</select>
 											<!-- END SUB: SEL_ELS -->
 
+											<!-- SUB: SEL_ORDER_FORM -->
+											Vali tellimise url:<Br>
+											<input type="text" class="formtext" name="cols[{VAR:col_id}][order_form]" value="{VAR:order_form}">
+											<!-- END SUB: SEL_ORDER_FORM -->
+
 											<!-- SUB: SEL_ALIAS -->
 											Vali alias:<Br>
 											<select class="formselect" name="cols[{VAR:col_id}][alias][]" multiple size="5">{VAR:aliases}</select>
