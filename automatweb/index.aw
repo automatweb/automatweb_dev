@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/automatweb/index.aw,v 2.1 2001/05/31 18:17:02 duke Exp $
 session_name("automatweb");
 session_start();
 if (!$uid) {
