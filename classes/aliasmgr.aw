@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.112 2003/07/09 15:26:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.113 2003/07/09 15:45:44 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -732,8 +732,8 @@ class aliasmgr extends aw_template
 	////
 	// !adds the specified alias to the object
 	// parameters
-	//   id - the object to which the alias is added
-	//   alias - id of the object to add as alias
+	//   id - the object to which the alias is added (source)
+	//   alias - id of the object to add as alias (target)
 	function create_alias($args = array())
 	{
 		extract($args);
@@ -770,6 +770,7 @@ class aliasmgr extends aw_template
 					"alias" => $onealias,
 					"reltype" => $reltype,
 					"relobj_id" => $relobj_id,
+					"data" => $args["data"],
 				));
 				$alias_reltype[$onealias] = $reltype;
 			}
@@ -780,12 +781,16 @@ class aliasmgr extends aw_template
 					"alias" => $onealias,
 					"reltype" => $reltype,
 					"relobj_id" => $relobj_id,
+					"data" => $args["data"],
 				));
 				$alias_reltype[$onealias] = $reltype;
 			}
 
 		};
 
+		// this really is obsoleted by the reltype field in the aliases table ..
+		// but before it can be removed, we should check whether any code
+		// relies on reading the type from metainfo. -- duke
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"key" => "alias_reltype",
