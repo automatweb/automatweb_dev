@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.34 2001/08/02 00:26:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.35 2001/08/12 23:21:07 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -10,7 +10,9 @@ define("AW_VERSION","2.0.0");
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
 // ---------------------------------------------------------------------------
+// do we need that line here?
 $tpldirs["stat.struktuur.ee"] = "/www/stat/templates";
+
 if (empty($driver))
 {
 	$driver = "mysql"; 			// driver
@@ -39,6 +41,11 @@ if (empty($index_file))
 {
 	$index_file = "index";
 }
+
+if (!defined("AW_PATH"))
+{
+	define("AW_PATH","/www/automatweb_dev");
+};
 
 // kasutatakse saidi juurde kuuluvate objektide idenfitiseerimiseks
 if (empty($SITE_ID)) 
@@ -153,7 +160,8 @@ if ($pi)
 {
 	 if (preg_match("/[&|=]/",$pi)) 
 	 {
-		parse_str(str_replace("?","&",str_replace("/","&",$pi))); 	// expand and import PATH_INFO
+		// expand and import PATH_INFO
+		parse_str(str_replace("?","&",str_replace("/","&",$pi)));
 	 } 
 	 else 
 	 {
@@ -307,7 +315,8 @@ define("CL_TEST",44);
 define("CL_FORM_XML_OUTPUT",45);
 define("CL_FORM_XML_INPUT",46); // XML sisend .. yle xml-rpc muutmiseks
 
-// yuck.
+define("CL_EVENT",47); // Vibe event
+
 define("CL_GUESTBOOK",49);
 define("CL_GUESTBOOK_ENTRY",50);
 
@@ -349,6 +358,14 @@ define("CL_FORUM",69); // 68 sest siis ei teki probleeme kui dev versioon siia y
 define("CL_OBJECT_VOTE",70); // mingi tunnuse alusesl grupeeritud objektide poolt hääletamine
 
 define("CL_CSS",71); // CSS objekt
+
+define("CL_ML_LIST",72);
+define("CL_ML_MEMBER",73);
+define("CL_ML_MAIL",74);
+
+define("CL_SHOP_TABLE",75);
+
+define("CL_CSS_GROUP",76); // Oh yeah, I know it should be next to CL_CSS
 
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
@@ -404,6 +421,10 @@ $class_defs = array(	CL_PSEUDO => array("name" => LC_CONST_MENU,"file" => "menue
 			CL_FORUM => array("name" => "Foorum", "file" => "forum", "can_add" => 1),
 			CL_OBJECT_VOTE => array("name" => "Objektide hääletus","file" => "object_vote","can_add" => 1),
 			CL_CSS => array("name" => "CSS Editor","file" => "css","can_add" => 0),
+			CL_ML_LIST => array("name" => "Meililist","file" => "ml_list","can_add" => 1),
+			CL_ML_MAIL => array("name" => "Meililisti meil","file" => "ml_mail","can_add" => 1),
+			CL_ML_MEMBER => array("name" => "Meililisti liige","file" => "ml_member","can_add" => 1),
+			CL_SHOP_TABLE => array("name" => "Kaupade tabel", "file" => "shop_table", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
@@ -440,6 +461,8 @@ define("MN_HOME_FOLDER_SUB",75);
 
 // formi element, mis on samas ka menyy
 define("MN_FORM_ELEMENT",76);
+
+define("MN_ML_LIST",77);
 
 // nini. siin tuleb siis nyyd see koht, kus on kirjas k6ik erinevad "alamprogrammid" , mis aw sees olemas on
 // mix nii? well, sest neile peab saama ikoone m22rata ja neid uude menyyeditori teha.
@@ -492,6 +515,8 @@ define("PRG_KEYWORD",42);
 define("PRG_CONF_JOIN_MAIL",43);
 define("PRG_CSS_EDITOR",44);
 define("PRG_LOGIN_MENU",45); // vastavalt grupile login menüü määramine
+define("PRG_ML_MANAGER",47);
+define("PRG_CONFIG_ERRORS",48);	// sisselogimist vajavate veateadete konfimine
 
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
@@ -542,6 +567,8 @@ PRG_EKOMAR						=> array("name" => MN_EKOMAR,            "url" => "orb.$ext?clas
 PRG_KEYWORD						=> array("name" => MN_KEYWORD,					"url" => "orb.aw?class=keywords&action=list"),
 PRG_CONF_JOIN_MAIL		=> array("name" => MN_JOIN_MAIL,				"url" => "orb.aw?class=config&action=join_mail"),
 PRG_CSS_EDITOR		=> array("name" => "CSS editor",				"url" => "orb.aw?class=css&action=list"),
+PRG_ML_MANAGER		=> array("name" => "Meililistid",				"url" => "orb.aw?class=ml_mail&action=queue&manager=1"),
+PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors")
 );
 
 // formide tyybid
