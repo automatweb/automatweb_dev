@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.6 2004/08/30 14:42:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.7 2004/09/27 14:39:13 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -16,6 +16,9 @@
 
 @default field=meta
 @default method=serialize
+
+@property project_selector type=callback callback=cb_project_selector store=no group=projects all_projects=1
+@caption Projektid
 
 @property utextbox1 type=textbox 
 @caption
@@ -98,6 +101,8 @@
 @property seealso type=relpicker reltype=RELTYPE_SEEALSO
 @caption
 
+@groupinfo projects caption="Projektid"
+
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -135,18 +140,26 @@ class calendar_event extends class_base
 	}
 	*/
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "project_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_project_selector($arr);
+				break;
 
 		}
 		return $retval;
 	}	
-	*/
+	
+	function cb_project_selector($arr)
+        {
+                $elib = get_instance("calendar/event_property_lib");
+                return $elib->project_selector($arr);
+        }
 
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
