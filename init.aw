@@ -269,10 +269,8 @@ function classload($args)
 	$arg_list = func_get_args();
 	while(list(,$lib) = each($arg_list))
 	{
-		// votab stringist ainult selle osa, mis jääb /-i ja stringi lopu vahele
-		// vältimaks katseid laadida faile /etc/passwd
-		preg_match("/(\w*)$/",$lib,$m);
-		$lib = $m[1];
+		// let's not allow including ../../../etc/passwd :)
+		$lib = str_replace(".","", $lib);
 		$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 		include_once($lib);
 	};
@@ -290,17 +288,18 @@ function get_instance($class,$args = array())
 	{
 		preg_match("/(\w*)$/",$class,$m);
 		$lib = $m[1];
-		$lib = "$classdir/$lib.$ext";
-		@include_once($lib);
-		if (class_exists($class))
+		$class = str_replace(".","", $class);
+		$libfile = "$classdir/$class.$ext";
+		@include_once($libfile);
+		if (class_exists($lib))
 		{
 			if (sizeof($args) > 0)
 			{
-				$instance = new $class($args);
+				$instance = new $lib($args);
 			}
 			else
 			{
-				$instance = new $class();
+				$instance = new $lib();
 			};
 			aw_global_set($id,$instance);
 		}
