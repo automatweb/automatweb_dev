@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.24 2004/11/01 20:20:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.25 2004/11/03 07:11:00 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -292,7 +292,7 @@ class scheduler extends aw_template
 		$url = $mt[1];
 
 		echo "url = $url <br />";
-		$awt = get_instance("protoocols/file/http");
+		$awt = get_instance("protocols/file/http");
 		$awt->handshake(array(
 			"host" => $url,
 			"sessid" => $evnt["sessid"]
