@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.143 2002/09/05 16:57:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.144 2002/09/09 14:06:40 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5805,5 +5805,17 @@ class form extends form_base
 
 		return $ret;
 	}
+
+	//// 
+	// !Generates a preview of the form and adds the formgen menubars to it         
+	function preview_form($args = array()) 
+	{ 
+		extract($args); 
+		$this->if_init($id,"show.tpl", "Eelvaade"); 
+		$this->vars(array( 
+			"LINE" => $this->gen_preview(array("id" => $id)), 
+		)); 
+		return $this->do_menu_return();                                 
+	} 
 };	// class ends
 ?>
