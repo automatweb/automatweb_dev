@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.13 2004/08/24 13:01:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.14 2004/08/30 09:32:07 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -289,6 +289,24 @@ class shop_order_cart extends class_base
 			}
 		}
 
+		$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
+
+		// check cfgform controllers for user data
+		$cfgf = $oc->prop("data_form");
+		if ($cfgf)
+		{
+			$is_valid = $this->validate_data(array(
+				"cfgform_id" => $cfgf,
+				"request" => $user_data
+			));
+			if (count($is_valid) > 0)
+			{
+				$order_ok = false;
+				// save the errors in session
+				aw_session_set("soc_err_ud", $is_valid);
+			}
+		}
+
 		if (!$order_ok)
 		{
 			$awa = new aw_array($arr["add_to_cart"]);
@@ -323,8 +341,6 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-
-		$_SESSION["cart"]["user_data"] = $GLOBALS["user_data"];
 
 		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
 		{
@@ -583,6 +599,12 @@ class shop_order_cart extends class_base
 			"obj_inst" => $wh_o
 		));
 
+		$els["userdate1"]["year_from"] = 1930;
+		$els["userdate1"]["year_to"] = date("Y");
+
+		// if there are errors
+		$els = $this->do_insert_user_data_errors($els);
+
 		$rd = get_instance(CL_REGISTER_DATA);
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
@@ -654,6 +676,30 @@ class shop_order_cart extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	function do_insert_user_data_errors($props)
+	{
+		$errs = new aw_array(aw_global_get("soc_err_ud"));
+		$errs = $errs->get();
+
+		$ret = array();
+		foreach($props as $pn => $pd)
+		{
+			if (isset($errs[$pn]))
+			{
+				$ret[$pn."_err"] = array(
+					"name" => $pn."_err",
+					"type" => "text",
+					"store" => "no",
+					"value" => "<font color=red>".$errs[$pn]["msg"]."</font>",
+					"no_caption" => 1
+				);
+			}
+			$ret[$pn] = $pd;
+		}
+
+		return $ret;
 	}
 }
 ?>
