@@ -1,4 +1,4 @@
-<form method="POST">
+<form action="reforb.{VAR:ext}" method="POST">
 <table border="1" cellspacing="0" cellpadding="0" width="100%">
 <tr>
 <!-- SUB: rate -->
