@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.2 2003/11/18 14:42:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.3 2003/12/03 12:47:00 kristo Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -55,6 +55,28 @@ class object_type extends class_base
 		asort($ret);
 		$ret = array("__all_objs" => "K&otilde;ik") + $ret;
 		return $ret;
+	}
+
+	////
+	// !builds the url for adding a new object
+	function get_add_url($arr)
+	{
+		$o = new object($arr["id"]);
+
+		$clss = $this->cfg["classes"][$o->prop("type")]["file"];
+		if ($clss == "document")
+		{
+			$clss = "doc";
+		}
+		$rv = $this->mk_my_orb("new", array(
+				"parent" => $arr["parent"],
+				"period" => aw_global_get("period"),
+				"section" => $arr["section"],
+				"cfgform" => $o->prop("use_cfgform"),
+			 ),$clss);
+		return $rv;
+	
+
 	}
 }
 ?>
