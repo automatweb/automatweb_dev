@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.318 2004/11/11 13:02:03 ahti Exp $
+// $Id: class_base.aw,v 2.319 2004/11/12 11:24:09 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -292,9 +292,10 @@ class class_base extends aw_template
 			));
 		};
 
+
 		$this->use_form = $use_form;
 
-		$cfgform_id = $args["cfgform"];
+		//$cfgform_id = $args["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
@@ -612,7 +613,7 @@ class class_base extends aw_template
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
 			"reltype" => $this->reltype,
-			"cfgform" => isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
+			"cfgform" => empty($this->auto_cfgform) && isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
@@ -912,12 +913,36 @@ class class_base extends aw_template
 			$this->classinfo = $cfgu->get_classinfo();
 			*/
 		};
-		
+
+
 		// If uses configform manager then use this.
 		if($this->tmp_cfgform)
 		{
 			return $this->tmp_cfgform;
 		}
+		
+		$ol = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"subclass" => $this->clid,
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+
+                $active = 0;
+                foreach ($ol->arr() as $item)
+                {
+                        $flg = $item->flag(OBJ_FLAG_IS_SELECTED);
+                        if ($flg)
+                        {
+                                $active = $item->id();
+				$this->auto_cfgform = true;
+                        };
+                };
+
+		if  ($active)
+		{
+			return $active;
+		};
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
 
