@@ -51,6 +51,15 @@
             <caption>Pildi allkiri</caption>
       </property>
       <property>
+            <name>author</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <group>general</group>
+            <caption>Pildi autor</caption>
+      </property>
+      <property>
             <name>alt</name>
             <type>textbox</type>
             <table>objects</table>

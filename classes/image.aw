@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.64 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.65 2003/08/26 09:21:37 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -21,6 +21,9 @@
 
 	@property comment table=objects field=comment type=textbox
 	@caption Pildi allkiri
+
+	@property author table=objects field=meta method=serialize type=textbox
+	@caption Pildi autor
 
 	@property alt type=textbox table=objects field=meta method=serialize
 	@caption Alt
@@ -174,8 +177,15 @@ class image extends class_base
 				"w_big_height" => isset($size[1]) ? $size[1]+10 : "",
 				"bi_show_link" => $bi_show_link,
 				"bi_link" => $bi_link,
+				"author" => $idata["meta"]["author"]
 			);
- 
+			$ha = ""; 
+			if ($idata["meta"]["author"] != "")
+			{
+				$ha = localparse($tpls["HAS_AUTHOR"], $vars);
+			}
+			$vars["HAS_AUTHOR"] = $ha;
+			
 			if ($this->is_flash($idata["file"]))
 			{
 				$replacement = localparse($tpls["image_flash"],$vars);
@@ -648,7 +658,7 @@ class image extends class_base
 	function callback_post_save($arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
-		if ($im['meta']['do_resize'] != '')
+		if ($im['meta']['do_resize'] != '' && false)
 		{
 			$img = $this->_imagecreatefromstring($this->get_file(array("file" => $im['file'])), $im['file']);
 		
