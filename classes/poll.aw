@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.3 2002/01/11 21:17:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.4 2002/01/11 23:59:13 duke Exp $
 session_register("poll_clicked");
 global $class_defs;
 $class_defs["poll"] = "xml";
@@ -15,6 +15,10 @@ class poll extends aw_template
 		if (is_array($lc_poll))
 		{
 			$this->vars($lc_poll);
+		}
+		if (!$this->prog_acl("view", PRG_POLL))
+		{
+			$this->prog_acl_error("view", PRG_POLL);
 		}
 		//$this->sub_merge = 1;
 	}
@@ -244,6 +248,12 @@ class poll extends aw_template
 		$answers[0]["answer"] = "";
 		reset($answers);
 		$al = "";
+		$sum = 0;
+
+		// "Ford! There's an infinite number of monkeys  outside  who
+		// want to talk to us about this line of PHP code they've worked out."	
+		array_walk($answers,create_function('$val,$key,$sum','$sum = $sum + $val["clicks"];'),&$sum);
+		reset($answers);
 		while (list($aid,$v) = each($answers))
 		{
 			//foreach($langs as $lang)
@@ -253,6 +263,8 @@ class poll extends aw_template
 					"lang_id" => $lang["id"],
 					"answer_id" => $aid, 
 					"answer" => $v["answer"],
+					"clicks" => $v["clicks"],
+					"percent" => sprintf("%0.02f",$v["clicks"]*100/$sum),
 				));
 				$al.=$this->parse("QUESTION");
 			//}
@@ -261,7 +273,9 @@ class poll extends aw_template
 		}
 
 		$this->vars(array(
+			"id" => $id,
 			"name" => $poll["name"],
+			"sum" => $sum,
 			"comment" => $poll["comment"],
 			"QUESTION" => $al,
 			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
