@@ -1001,6 +1001,28 @@ class _int_object
 		$val = $this->_int_get_prop($param);
 		switch($type)
 		{
+			/*case "date_select":
+				if ($val > 1)
+				{
+					$val = date("d.m.Y", $val);
+				}
+				else
+				{
+					$val = "n/a";
+				}
+				break;
+
+			case "datetime_select":
+				if ($val > 1)
+				{
+					$val = date("d.m.Y H:i", $val);
+				}
+				else
+				{
+					$val = "n/a";
+				}
+				break;*/
+
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
