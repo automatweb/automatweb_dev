@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.12 2002/08/29 03:08:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.13 2002/09/27 11:45:51 duke Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -128,6 +128,7 @@ class sys extends aw_template
 			"awvibe.struktuur.ee" => "awvibe.struktuur.ee",
 			"horizon.struktuur.ee" => "horizon.struktuur.ee",
 			"star.automatweb.com" => "star.automatweb.com",
+			"arin.struktuur.ee" => "arin.struktuur.ee",
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
@@ -325,7 +326,7 @@ class sys extends aw_template
 					}
 					else
 					{
-						if (in_array("auto_increment",$dr["flags"]))
+						if (is_array($dr["flags"]) && in_array("auto_increment",$dr["flags"]))
 						{
 							$flags = str_replace("auto_increment","",$flags);
 							// primary keys NEED not null
@@ -352,8 +353,9 @@ class sys extends aw_template
 						};
 					};
 
-					print "Q: $line<br>";
+					print "Q1: $line<br>";
 					$this->db_query($line);
+					$line = "";
 					if ( ($dr["key"] == "PRI") && ($prim_key_added == false))
 					{
 						$line = "ALTER TABLE $table ADD PRIMARY KEY ($key)";
@@ -362,8 +364,11 @@ class sys extends aw_template
 					{
 						$line = "ALTER TABLE $table ADD KEY ($key)";
 					};
-					print "Q: $line<br>";
-					$this->db_query($line);
+					if ($line)
+					{
+						print "Q2: $line<br>";
+						$this->db_query($line);
+					};
 					//print "updating field $key of table $table<br>";
 					//print "donor value is <pre>";
 					//print_r($donor_struct[$table][$key]);
