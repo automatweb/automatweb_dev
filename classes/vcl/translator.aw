@@ -1,5 +1,5 @@
 <?php
-// $Head$
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.2 2004/10/08 15:59:46 duke Exp $
 class translator extends  core
 {
 	function translator()
@@ -21,10 +21,13 @@ class translator extends  core
                         "key" => "acceptlang",
                         "all_data" => true,
                 ));
-		
 
 		// XXX: be more intelligent and retrieve all properties with trans=1 
                 $tprop = $prop["props"];
+		if (!is_array($tprop))
+		{
+			$tprop = array($tprop);
+		};
 		
                 $props = $i->get_property_group(array());
 
@@ -83,6 +86,16 @@ class translator extends  core
                                         "value" => ($current_translation) ? $current_translation->prop($elname) : "",
                                 );
                         };
+
+
+			// new translations should be default be active
+			$rv["act_$lid"] = array(
+				"name" => "trans[" . $l_accept . "][status]",
+				"type" => "checkbox",
+				"ch_value" => STAT_ACTIVE,
+				"value" => ($current_translation) ? $current_translation->status() == STAT_ACTIVE : 1,
+				"caption" => "Aktiivne",
+			);
                 };
 
                 obj_set_opt("no_auto_translation", 0);
@@ -109,6 +122,7 @@ class translator extends  core
                 };
 
                 $act_lang = $o->lang();
+                $o->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
 
 		foreach($eldata as $lang => $lang_data)
 		{
@@ -157,6 +171,8 @@ class translator extends  core
                                         $clone->set_lang($lang);
 
                                         // needed for ds_auto_translation
+					
+					// ja vot -- siit ongi puudu koopiate tõlkimine
                                         $clone->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
                                         $clone->save_new();
 
@@ -172,7 +188,64 @@ class translator extends  core
                                 };
                         };
                 };
+
+		// nii aga nüüd on vaja sisse lugeda ka objekti koopiad ja ka nende tõlked uuendada. mnjaa. vot.
+		// või siis vajadusel tõlke objektid tekitada
+
+		// now - ask for all existing translations
+		$trans_conns = $o->connections_from(array(
+			"type" => RELTYPE_TRANSLATION,
+		));
+
+		$translation_objects = array();
+
+		foreach($trans_conns as $trans_conn)
+		{
+			$translation_objects[$trans_conn->prop("lang.id")] = $trans_conn->to();
+		};
+		
+
+		$clones = $o->connections_from(array(
+			"type" => "RELTYPE_COPY",
+		));
+
+		//arr($translation_objects);
+
+		foreach($clones as $clone)
+		{
+
+			$clone_obj = $clone->to();
+
+
+			/*
+			print "<h2>clone</h2>";
+			arr($clone);
+
+			$clone_trans = $clone_obj->connections_from(array(
+				"type" => "RELTYPE_TRANSLATION",
+			));
+			*/
+
+			// see on vist sünkroniseerimiseks mõeldud eks?
+
+			// aga kuidas ma neid sünkroniseerin?
+
+			/*
+			print "<h2>trans</h2>";
+			arr($clone_trans);
+			*/
+			// now figure out which translations does the clone have
+
+			// update existing ones
+			// create new ones .. 
+
+			// simpel, isn't it?
+
+
+		};
                 obj_set_opt("no_auto_translation", 0);
+
+
 	}
 };
 ?>
