@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.43 2005/01/12 10:34:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.44 2005/01/12 10:37:40 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -589,7 +589,7 @@ class object_treeview_v2 extends class_base
 				if ($sel_cols[$colid] == 1)
 				{
 					$this->vars(array(
-						"h_text" => ($colid == "icon" ? "" : $udef_cols[$colid])
+						"h_text" => ($udef_cols[$colid])
 					));
 					$str = $this->parse("HEADER");
 					$this->vars(array(
