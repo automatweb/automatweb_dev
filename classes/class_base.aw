@@ -1,12 +1,12 @@
 <?php
-// $Id: class_base.aw,v 2.262 2004/04/27 13:22:24 kristo Exp $
+// $Id: class_base.aw,v 2.263 2004/04/28 13:56:58 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
 // Do not be writink any HTML in this class, it defeats half
 // of the purpose of this class. If you really absolutely
 // must, then do it in the htmlclient class.
-// ------------------------------------------------------------------:w
+// ------------------------------------------------------------------
 // 
 // Common properties for all classes
 /*
@@ -2040,10 +2040,7 @@ class class_base extends aw_template
 			
 			if ($val["type"] == "relmanager" && empty($val["_parsed"]))
 			{
-				$target_reltype = @constant($val["reltype"]);
-				$argblock["prop"]["relx"] = $val["reltype"];
-				$argblock["prop"]["reltype"] = $target_reltype;
-				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+				$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
 				$val["vcl_inst"]->init_rel_manager($argblock);
 			};
 			
@@ -2965,10 +2962,66 @@ class class_base extends aw_template
 			if ($alias_to || $rawdata["alias_to"])
 			{
 				$_to = obj(($rawdata["alias_to"] ? $rawdata["alias_to"] : $alias_to));
+
+				// XXX: reltype in the url is numeric, it probably should not be
+				$reltype = $rawdata["reltype"] ? $rawdata["reltype"] : $reltype;
+
 				$_to->connect(array(
 					"to" => $this->obj_inst->id(),
-					"reltype" => ($rawdata["reltype"] ? $rawdata["reltype"] : $reltype),
+					"reltype" => $reltype,
 				));
+				// now scan the bloody properties
+				// but I need all the properties
+
+
+				// XXX: this invokes load_defaults, which in turn overwrites variables
+				// in $this instance. This might lead to some nasty bugs
+				$bt = $this->get_properties_by_type(array(
+					"type" => "relpicker",
+					"clid" => $_to->class_id(),
+				));
+
+				$symname = "";
+
+				// figure out symbolic name for numeric reltype
+				foreach($this->relinfo as $key => $val)
+				{
+					if (substr($key,0,7) == "RELTYPE")
+					{
+						if ($reltype == $val["value"])
+						{
+							$symname = $key;
+						};
+					};
+				};
+
+				// figure out which property to check
+				foreach($bt as $item_key => $item)
+				{
+					// double check just in case
+					if (!empty($symname) && ($item["type"] == "relpicker") && ($item["reltype"] == $symname))
+					{
+						$target_prop = $item_key;
+					};
+				};
+
+				// now check, whether that property has a value. If not, 
+				// set it to point to the newly created connection
+				if (!empty($symname) && !empty($target_prop))
+				{
+					$conns = $_to->connections_from(array(
+						"type" => $symname,
+					));
+					$conn_count = sizeof($conns);
+					//$old_val = $_to->prop($target_prop);
+				};
+
+				// this is after the new connection has been made
+				if ($conn_count == 1)
+				{
+					$_to->set_prop($target_prop,$this->obj_inst->id());
+					$_to->save();
+				}
 			};
 		};
 
