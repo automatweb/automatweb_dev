@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.25 2004/11/03 07:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.26 2004/12/02 17:20:09 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -39,7 +39,7 @@ class scheduler extends aw_template
 		if ($rep_id)
 		{
 			// if we use a repeater for scheduling events we get a bunch of times and add the events for those times
-			$pl = get_instance("planner");
+			$pl = get_instance(CL_PLANNER);
 			$reps = $pl->get_events(array( 
 				"start" => time(), 
 				"limit" => 20,
@@ -104,7 +104,7 @@ class scheduler extends aw_template
 		$this->repdata = $newdat;
 
 		// and now add new events for that repeater
-		$pl = get_instance("planner");
+		$pl = get_instance(CL_PLANNER);
 		$reps = $pl->get_events(array( 
 			"start" => time(), 
 			"limit" => 20,
