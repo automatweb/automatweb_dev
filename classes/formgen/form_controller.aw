@@ -216,7 +216,7 @@ class form_controller extends form_base
 			$this->dequote(&$eq);
 			eval($eq);
 		}
-		dbg2("evaling $eq , res = $res<br>");
+		dbg::p2("evaling $eq , res = $res<br>");
 		return $res;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.132 2002/12/03 12:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.133 2002/12/03 13:27:55 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2625,7 +2625,7 @@ class document extends aw_template
 		{
 			foreach($parens as $_parent)
 			{
-				dbg("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
+				dbg::p("parent = $_parent ,name = ".$this->mmc[$_parent]["name"]."<br>");
 				if ($this->can("view",$_parent) && is_array($this->mmc[$_parent]))
 				{
 					$this->marr[] = $_parent;
@@ -2761,7 +2761,7 @@ class document extends aw_template
 										 FROM documents 
 										 LEFT JOIN objects ON objects.oid = documents.docid
 										 WHERE ($docmatch) AND objects.status = 2 AND objects.lang_id = ".aw_global_get("lang_id")." AND objects.site_id = " . $this->cfg["site_id"] . " AND (documents.no_search is null OR documents.no_search = 0) $ml";
-		dbg("search_q = $q <br>");
+		dbg::p("search_q = $q <br>");
 		$si = __get_site_instance();
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -2966,7 +2966,7 @@ class document extends aw_template
 				{
 					$this->darr[] = $v["last"];
 				}
-				dbg("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
+				dbg::p("name: ".$pref."/".$v["name"]." id = ".$v["oid"]." <br>");
 				$this->rec_list($v["oid"],$pref."/".$v["name"]);
 			}
 		}

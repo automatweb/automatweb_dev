@@ -309,7 +309,6 @@ class languages extends aw_template
 			if (!$force_read && ($cc = $this->file_cache->file_get($this->cf_name))) 	
 			{
 				aw_cache_set_array("languages", aw_unserialize($cc));
-//				dbg1("read from cache - force_read = '$force_read' ".$this->cf_name."<br>");
 			}
 			else
 			{
@@ -320,7 +319,6 @@ class languages extends aw_template
 				{
 					aw_cache_set("languages", $row["id"],$row);
 				}
-//				dbg1("wrote cache <br>");
 				$this->file_cache->file_set($this->cf_name,aw_serialize(aw_cache_get_array("languages")));
 			}
 			aw_global_set("lang_cache_init",1);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.181 2002/12/03 12:39:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.182 2002/12/03 13:27:55 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -248,7 +248,7 @@ class menuedit extends aw_template
 		$this->right_pane = (isset($no_right_pane) && $no_right_pane == true) ? false : true;
 
 		// read all the menus and other necessary info into arrays from the database
-		dbg("active language for menus is ".aw_global_get("lang_id")."<br>");
+		dbg::p("active language for menus is ".aw_global_get("lang_id")."<br>");
 
 		$this->make_menu_caches();
 
@@ -454,7 +454,7 @@ class menuedit extends aw_template
 			while (list($id,$name) = each($menu_defs_v2))
 			{
 				$nx = $name;
-				dbg("drawing $id,$name<br>");
+				dbg::p("drawing $id,$name<br>");
 
 				// SIC! check whether login menus are defined and
 				// if so, overwrite the one defined in aw.ini
@@ -4763,7 +4763,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					));
 				}
 
-				dbg($pr_c);
+				dbg::p($pr_c);
 
 				$this->vars(array(
 					"comment" => $ar["comment"],
@@ -5735,7 +5735,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 		};
 		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		dbg("l = " . strlen($retval));
+		dbg::p("l = " . strlen($retval));
 		return $retval;
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop.aw,v 1.2 2002/11/07 10:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/shop.aw,v 1.3 2002/12/03 13:27:57 kristo Exp $
 // shop.aw - Shop
 
 session_register("shopping_cart");
@@ -277,14 +277,14 @@ class shop extends shop_base
 			$_itypes = array();
 
 			$q = "SELECT objects.brother_of as oid,objects.parent as parent,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent IN ($mss) AND class_id = ".CL_SHOP_ITEM." AND status = 2";
-			dbg("q = $q <br>");
+			dbg::p("q = $q <br>");
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$this->save_handle();
 				unset($mn[$row["parent"]]);
 
-				dbg("thingee $row[oid]  under $row[parent] for period from ".$this->time2date($min_p,2)." to ".$this->time2date($max_p,2)." <br>");
+				dbg::p("thingee $row[oid]  under $row[parent] for period from ".$this->time2date($min_p,2)." to ".$this->time2date($max_p,2)." <br>");
 				if (!isset($_itypes[$row["type_id"]]))
 				{
 					$_itypes[$row["type_id"]] = $this->get_item_type($row["type_id"]);
@@ -293,11 +293,11 @@ class shop extends shop_base
 				if ($this->is_item_available(&$row,1,get_instance("formgen/form"),$min_p,$max_p,$_itypes[$row["type_id"]]))
 				{
 					$_ms[$row["parent"]] = true;
-					dbg("available <br>");
+					dbg::p("available <br>");
 				}
 				else
 				{
-					dbg("not available <br>");
+					dbg::p("not available <br>");
 				}
 				$this->restore_handle();
 			}
@@ -306,7 +306,7 @@ class shop extends shop_base
 			foreach($mn as $tmp => $_mid)
 			{
 				$_ms[$_mid] = true;
-				dbg("putting back menu $_mid cause it doesn't have any items <br>");
+				dbg::p("putting back menu $_mid cause it doesn't have any items <br>");
 			}
 
 			$_tmp = $ms;
@@ -315,7 +315,7 @@ class shop extends shop_base
 				if (!$_ms[$mid])
 				{
 					unset($ms[$mid]);
-					dbg("not showing menu $mid <br>");
+					dbg::p("not showing menu $mid <br>");
 				}
 			}
 		}

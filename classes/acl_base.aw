@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.28 2002/12/03 12:52:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.29 2002/12/03 13:27:55 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -438,7 +438,6 @@ class acl_base extends core
 	// !checks if the user has the $right for program $progid
 	function prog_acl($right,$progid)
 	{
-		//dbg("nime pikkusex=".strlen(aw_global_get("uid"))."   nimex on=".aw_global_get("uid")."<br>");
 		if (aw_global_get("uid") == "")
 		{
 			return aw_ini_get("acl.denied");

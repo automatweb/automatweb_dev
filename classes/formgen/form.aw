@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.10 2002/12/03 12:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.11 2002/12/03 13:27:56 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2446,7 +2446,7 @@ class form extends form_base
 					}
 					else
 					{
-						dbg("no show because no vacancies <br>");
+						dbg::p("no show because no vacancies <br>");
 					}
 				}
 				else
@@ -2718,7 +2718,7 @@ class form extends form_base
 
 			$this->main_search_form = $mid;
 			$matches = array();
-			dbg("form_search_q1 = $query  <br>\n");
+			dbg::p("form_search_q1 = $query  <br>\n");
 //		flush();
 			$this->db_query($query);
 //		echo "q finished \n <br>";
@@ -2876,7 +2876,7 @@ class form extends form_base
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
-			dbg("form_search_q2 = $query <br>");
+			dbg::p("form_search_q2 = $query <br>");
 			$matches = array();
 			$this->db_query($query);
 			while ($row = $this->db_next())

@@ -324,7 +324,7 @@ class shop_table extends shop_base
 		}
 
 		$q = "SELECT parent_object.name as parent_name,objects.name as item_name, order2item.*,AVG(order2item.price) as avg_price,SUM(order2item.price) as sum_price $tos FROM order2item LEFT JOIN form_".$typ["cnt_form"]."_entries ON form_".$typ["cnt_form"]."_entries.id = order2item.cnt_entry LEFT JOIN objects ON objects.oid = order2item.item_id LEFT JOIN objects as parent_object ON parent_object.oid = objects.parent WHERE $clause $time_clause AND parent_object.status != 0 AND objects.status != 0 GROUP BY ".$group_by;
-		dbg("q = $q <Br>\n");
+		dbg::p("q = $q <Br>\n");
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{

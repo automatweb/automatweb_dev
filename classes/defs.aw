@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.68 2002/12/03 13:00:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.69 2002/12/03 13:27:55 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -282,70 +282,6 @@ if (!defined("DEFS"))
 			$ip = aw_global_get("REMOTE_ADDR");
 		}
 		return $ip;
-	}
-
-	// debuukimisel on see funktsioon abiks
-	function dump_struct($data)
-	{
-		print "<pre>";
-		var_dump($data);
-		print "</pre>";
-	}
-
-	////
-	// !prints the message if $GLOBALS["DEBUG"] == 1, basically the same as core::dmsg, but with this you don't need to fiddle
-	// around with sessions
-	function dbg($msg)
-	{
-		if (aw_global_get("DEBUG") == 1)
-		{
-			echo $msg;
-		}
-	}
-	
-	// prints if the user has a cookie named debug1
-	function dbg1($msg)
-	{
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug1"]))
-		{
-			echo $msg;
-		}
-	}
-
-	// prints if the user has a cookie named debug2
-	function dbg2($msg)
-	{
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug2"]))
-		{
-			echo $msg;
-		}
-	}
-
-	// prints if the user has a cookie named debug3
-	function dbg3($msg)
-	{
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug3"]))
-		{
-			echo $msg;
-		}
-	}
-
-	// prints if the user has a cookie named debug4
-	function dbg4($msg)
-	{
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug4"]))
-		{
-			echo $msg;
-		}
-	}
-
-	// prints if the user has a cookie named debug5
-	function dbg5($msg)
-	{
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["debug5"]))
-		{
-			echo $msg;
-		}
 	}
 
 	// logs the query, if user has a cookie named log_query
@@ -666,6 +602,73 @@ if (!defined("DEFS"))
 				};
 			};
 			return $valid;
+		}
+	}
+
+	class dbg
+	{
+		// debuukimisel on see funktsioon abiks
+		function dump($data)
+		{
+			print "<pre>";
+			var_dump($data);
+			print "</pre>";
+		}
+
+		////
+		// !prints the message if $GLOBALS["DEBUG"] == 1, basically the same as core::dmsg, but with this you don't need to fiddle
+		// around with sessions
+		function p($msg)
+		{
+			if (aw_global_get("DEBUG") == 1)
+			{
+				echo $msg;
+			}
+		}
+		
+		// prints if the user has a cookie named debug1
+		function p1($msg)
+		{
+			if (aw_global_get("debug1"))
+			{
+				echo $msg;
+			}
+		}
+
+		// prints if the user has a cookie named debug2
+		function p2($msg)
+		{
+			if (aw_global_get("debug2"))
+			{
+				echo $msg;
+			}
+		}
+
+		// prints if the user has a cookie named debug3
+		function p3($msg)
+		{
+			if (aw_global_get("debug3"))
+			{
+				echo $msg;
+			}
+		}
+
+		// prints if the user has a cookie named debug4
+		function p4($msg)
+		{
+			if (aw_global_get("debug4"))
+			{
+				echo $msg;
+			}
+		}
+
+		// prints if the user has a cookie named debug5
+		function p5($msg)
+		{
+			if (aw_global_get("debug5"))
+			{
+				echo $msg;
+			}
 		}
 	}
 };

@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.17 2002/12/02 11:18:52 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.18 2002/12/03 13:27:55 kristo Exp $
 
 class db_periods extends aw_template 
 {
@@ -133,7 +133,7 @@ class db_periods extends aw_template
 		// 1st, the in-memory cache
 		if (($pr = aw_cache_get("per_by_id", $id)))
 		{
-			dbg1("period::get cache hit level 1");
+			dbg::p1("period::get cache hit level 1");
 			return $pr;
 		}
 		// 2nd, the file-on-disk cache
@@ -141,11 +141,11 @@ class db_periods extends aw_template
 		{
 			$pr = aw_unserialize($cc);
 			aw_cache_set("per_by_id", $id, $pr);
-			dbg1("period::get cache hit level 2");
+			dbg::p1("period::get cache hit level 2");
 			return $pr;
 		}
 		// and finally, the db
-		dbg1("period::get no hit ");
+		dbg::p1("period::get no hit ");
 		$q = "SELECT * FROM periods WHERE id = '$id'";
 		$this->db_query($q);
 		$pr = $this->db_fetch_row();
