@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.274 2003/04/04 14:25:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.275 2003/04/04 16:29:00 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1720,7 +1720,7 @@ class menuedit extends aw_template
 			$tcnt = 0;
 			foreach($this->cfg["classes"] as $clid => $cldata)
 			{
-				if (!empty($cldata["parents"]))
+				if (isset($cldata["parents"]))
 				{
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
@@ -1825,7 +1825,7 @@ class menuedit extends aw_template
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
-			//$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
+			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "menuedit",true,true);
 			$ourl = "javascript:go_open(".$obj["oid"].")";
 
 			if ($type == "js")
