@@ -9,6 +9,8 @@ $lc_form["LC_FORM_INPUT"] = "Sisestus";
 $lc_form["LC_FORM_SEARCH"] = "Otsingu";
 $lc_form["LC_FORM_RESEARCH"] = "Reitimis";
 $lc_form["LC_FORM_BASE"] = "Alusform:";
+$lc_form["LC_FORM_EL_DEFAULT_FOLDER"] = "Default kataloog uute elementide jaoks";
+$lc_form["LC_FORM_CONFIG_FILE"] = "Konfiguratsiooni definitsioon";
 
 $lc_form["LC_FORMS_EMAIL"]="Email";
 $lc_form["LC_FORMS_AFTER_FILLING_FORM_IF"]="p&auml;rast formi t&auml;itmist, kui checkboxis";
@@ -44,6 +46,8 @@ $lc_form["LC_FORMS_CHOOSE_SUBFORM"]="Vali alusform";
 $lc_form["LC_FORMS_ADMIN"]="Administreeri";
 $lc_form["LC_FORMS_CHOOSE_ELEMENTS"]="Vali elemendid";
 $lc_form["LC_FORMS_HOW_MANY_COLUMNS"]="Mitu tulpa";
+
+// settings
 $lc_form["LC_FORMS_TABLE_STYLE"]="Tabeli stiil";
 $lc_form["LC_FORMS_TABLE_STYLE_ORDINARY"]="Pealkirja stiil tavaline";
 $lc_form["LC_FORMS_TABLE_STYLE_POSS_SORT"]="Pealkirja stiil sorditav";
@@ -77,7 +81,7 @@ $lc_form["LC_FORMS_ACTIONS"]="Actionid";
 $lc_form["LC_FORMS_CONTROLLERS"]="Kontrollerid";
 $lc_form["LC_FORMS_STYLES"]="Stiilid";
 $lc_form["LC_FORMS_SMALL_ACTIONS"]="Actionid";
-$lc_form["LC_FORMS_SAVE"]="Salvesta";
+$lc_form["LC_FORMS_SAVE"]="Salvesta vorm";
 $lc_form["LC_FORMS_RESET"]="Tühista";
 $lc_form["LC_FORMS_OUTPUT_SETTINGS"]="Määrangud";
 
@@ -244,7 +248,7 @@ $lc_form["LC_FORMS_BACK_COL"]="Taustav&auml;rv";
 $lc_form["LC_FORMS_CHOOSE_COL"]="vali v&auml;rv";
 $lc_form["LC_FORMS_SIDE_WIDTH"]="Serva laius";
 $lc_form["LC_FORMS_WITDH"]="Laius";
-$lc_form["LC_FORMS_DEFAULT_STYLE"]="Default stiil";
+$lc_form["LC_FORMS_DEFAULT_STYLE"]="Vaikimisi stiil";
 
 $lc_form["LC_FORMS_BIG_CHOOSE_STYLE"]="VALI STIIL";
 
@@ -259,7 +263,7 @@ $lc_form["LC_FORMS_SEARCH_RESULTS_SHOW_TABLE"]="Kas otsingu tulemusi n&auml;idat
 $lc_form["LC_FORMS_CHOOSE_TABLE"]="Vali tabel";
 $lc_form["LC_FORMS_CHOOSE_ELEMENT_WHAT_PUT_FORM_ENTRY"]="Vali element mille sisu pannakse formi sisestuse objekti nimeks";
 
-$lc_form["LC_FORMS_FORM_TRIED_FILL_USER_DATA"]="Kas formi &uuml;&uuml;ritatakse t&auml;ita kasutaja liitumisel sisestatud andmetega";
+$lc_form["LC_FORMS_TRY_JF_DATA"]="Kas formi &uuml;&uuml;ritatakse t&auml;ita kasutaja liitumisel sisestatud andmetega";
 $lc_form["LC_FORMS_FORM_HAS_ALIASMGR"]="Aliastehaldur?";
 $lc_form["LC_FORMS_FORM_INTRALINK"]="Saidi sisene link";
 
@@ -315,6 +319,16 @@ $lc_form["LC_FORMS_CHOOSE_TIEELEMENTFORMS"]="Vali seoseelementide formid";
 
 //settings.tpl
 $lc_form["LC_FORMS_ALLOW_HTML"]="Luba väljundites HTMLi näitamist";
+$lc_form["LC_FORMS_FORM_HAS_CONTROLLERS"]="Kasutab kontrollereid";
+$lc_form["LC_FORMS_EV_ENTRY_FORM"]="Eventite sisestusvorm";
+$lc_form["LC_FORMS_CALENDAR_OP"]="Kalendris kasutatav vormitabel";
+$lc_form["LC_FORMS_CAN_EMAIL_ACTION"]="Vormi saab kasutada e-posti actioniteks";
+$lc_form["LC_FORMS_SQL_WRITER_WRITER"]="SQL kirjutaja";
+$lc_form["LC_FORMS_SQL_WRITER_WRITER_FORM"]="Vorm kuhu kirjutada";
+$lc_form["LC_FORMS_SQL_WRITER"]="SQL kirjutaja";
+$lc_form["LC_FORMS_SQL_WRITER_FORM"]="Vali kirjutamise vorm";
+$lc_form["LC_FORMS_SHOW_FORM_WITH_RESULTS"]="Näita otsivormi tulemuste juures";
+$lc_form["LC_FORMS_INTRA_LINK"]="Saidisisene link";
 $lc_form["LC_FORMS_CONTROL_FORM_STATUS"]="Kontrollida vormi staatust lehelt lahkumisel";
 $lc_form["LC_FORMS_TEXT_DISPLAY_USER"]="Tekst, mida kasutajale kuvada";
 $lc_form["LC_FORMS_SHOW_ENTRIES"]="N&auml;ita sisestust";
@@ -396,6 +410,17 @@ $lc_form["LC_FORMS_FILLING_FORM_SHOW_OUTPUT"]="P&auml;rja t&auml;itmise ajal n&a
 
 
 $lc_form["LC_FORMS_WH_MENU_LINK_IS"]="Mis men&uuml;&uuml; alla link n2itab";
+
+// form_add.tpl
+$lc_form["LC_FORMS_TYPE_ENTRY"] = "Sisestusvorm";
+$lc_form["LC_FORMS_TYPE_SEARCH"] = "Otsinguvorm";
+$lc_form["LC_FORMS_TYPE_FILTER_SEARCH"] = "Filtri otsinguvorm";
+$lc_form["LC_FORMS_TYPE_RATING"] = "Reitimisvorm";
+$lc_form["LC_FORMS_TYPE_CONFIG"] = "Konfiguratsioonivorm";
+
+// messages for syslog
+$lc_form["LC_FORMS_LOG_NEW"] = "Lisas uue vormi - ";
+
 
 
 ?>

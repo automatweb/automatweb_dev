@@ -9,6 +9,8 @@ $lc_form["LC_FORM_INPUT"] = "Entry";
 $lc_form["LC_FORM_SEARCH"] = "Search";
 $lc_form["LC_FORM_RESEARCH"] = "Rating";
 $lc_form["LC_FORM_BASE"] = "Base form:";
+$lc_form["LC_FORM_EL_DEFAULT_FOLDER"] = "Default folder for new elements:";
+$lc_form["LC_FORM_CONFIG_FILE"] = "Config definition";
 
 $lc_form["LC_FORMS_EMAIL"]="E-mail";
 
@@ -86,7 +88,7 @@ $lc_form["LC_FORMS_MAKE_OUTPUT"]="Compose output";
 $lc_form["LC_FORMS_EXPLONATION"]="Explanation";
 
 $lc_form["LC_FORMS_BIG_ELEMENTS"]="ELEMENTS";
-$lc_form["LC_FORMS_SAVE"]="Save";
+$lc_form["LC_FORMS_SAVE"]="Save form";
 $lc_form["LC_FORMS_RESET"]="Reset";
 $lc_form["LC_FORMS_OUTPUT_SETTINGS"]="Settings";
 
@@ -271,7 +273,7 @@ $lc_form["LC_FORMS_BIG_CHOOSE_STYLE"]="CHOOSE STYLE";
 $lc_form["LC_FORMS_WHAT_OUTPUT_TO_USE"]="Which outputti to use";
 $lc_form["LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL"]="Choose in which form entries are searched when filleng the form";
 
-$lc_form["LC_FORMS_FORM_TRIED_FILL_USER_DATA"]="Can form tried to fill with data that user entered when joining";
+$lc_form["LC_FORMS_TRY_JF_DATA"]="Can form tried to fill with data that user entered when joining";
 $lc_form["LC_FORMS_FORM_HAS_ALIASMGR"]="Alias manager?";
 $lc_form["LC_FORMS_FORM_INTRALINK"]="Intranet link";
 $lc_form["LC_FORMS_AFTER_FILLING"]="After filling";
@@ -331,6 +333,16 @@ $lc_form["LC_FORMS_CHOOSE_TIEELEMENTFORMS"]="Vali seoseelementide formid";
 
 //settings.tpl
 $lc_form["LC_FORMS_ALLOW_HTML"]="Luba väljundites HTMLi näitamist";
+$lc_form["LC_FORMS_FORM_HAS_CONTROLLERS"]="Kasutab kontrollereid";
+$lc_form["LC_FORMS_EV_ENTRY_FORM"]="Eventite sisestusvorm";
+$lc_form["LC_FORMS_CALENDAR_OP"]="Kalendris kasutatav vormitabel";
+$lc_form["LC_FORMS_CAN_EMAIL_ACTION"]="Vormi saab kasutada e-posti actioniteks";
+$lc_form["LC_FORMS_SQL_WRITER_WRITER"]="SQL kirjutaja";
+$lc_form["LC_FORMS_SQL_WRITER_WRITER_FORM"]="Vorm kuhu kirjutada";
+$lc_form["LC_FORMS_SQL_WRITER"]="SQL kirjutaja";
+$lc_form["LC_FORMS_SQL_WRITER_FORM"]="Vali kirjutamise vorm";
+$lc_form["LC_FORMS_SHOW_FORM_WITH_RESULTS"]="Näita otsivormi tulemuste juures";
+$lc_form["LC_FORMS_INTRA_LINK"]="Saidisisene link";
 $lc_form["LC_FORMS_CONTROL_FORM_STATUS"]="Kontrollida vormi staatust lehelt lahkumisel";
 $lc_form["LC_FORMS_TEXT_DISPLAY_USER"]="Tekst, mida kasutajale kuvada";
 $lc_form["LC_FORMS_SHOW_ENTRIES"]="N&auml;ita sisestust";
@@ -412,5 +424,15 @@ $lc_form["LC_FORMS_FILLING_FORM_SHOW_OUTPUT"]="P&auml;rja t&auml;itmise ajal n&a
 
 
 $lc_form["LC_FORMS_WH_MENU_LINK_IS"]="Mis men&uuml;&uuml; alla link n2itab";
+
+// form_add.tpl
+$lc_form["LC_FORMS_TYPE_ENTRY"] = "Entry form";
+$lc_form["LC_FORMS_TYPE_SEARCH"] = "Search form";
+$lc_form["LC_FORMS_TYPE_FILTER_SEARCH"] = "Filter search form";
+$lc_form["LC_FORMS_TYPE_RATING"] = "Rating form";
+$lc_form["LC_FORMS_TYPE_CONFIG"] = "Configuration form";
+
+// messages for syslog
+$lc_form["LC_FORMS_LOG_NEW"] = "Created new ";
 
 ?>
