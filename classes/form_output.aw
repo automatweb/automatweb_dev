@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.20 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.21 2002/07/24 20:35:39 kristo Exp $
 
 class form_output extends form_base 
 {
@@ -8,8 +8,12 @@ class form_output extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		$this->is_form_output = true;	// so that when something needs to tell the deifference it can
-		lc_load("definition");
-		$this->lc_load("form","lc_form");
+
+		if (!$this->controller_instance)
+		{
+			$this->controller_instance = get_instance("form_controller");
+		}
+		$this->style_instance = get_instance("style");
 	}
 
 	////
@@ -225,8 +229,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
 
-		classload("style");
-		$st = new style;
+		$st = get_instance("style");
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("add_html_step2", array("parent" => $parent,"reforb" => 0)),
@@ -247,8 +250,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
 
-		classload("style");
-		$st = new style;
+		$st = get_instance("style");
 
 		$els = array();
 
@@ -392,8 +394,7 @@ class form_output extends form_base
 		$this->read_template("add_output.tpl");
 		$this->mk_path($this->parent, LC_FORM_OUTPUT_CHANGE_OUT_STYLE);
 
-		classload("style");
-		$st = new style;
+		$st = get_instance("style");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"name" => $this->name,
@@ -440,7 +441,7 @@ class form_output extends form_base
 //		 $this->debug_map_print();
 
 		// put all styles in this form in an array so they will be faster to use
-		$style = new style;
+		$style = get_instance("style");
 		$style_select = $style->get_select(0,ST_CELL);
 		$this->vars(array(
 			"styles" => $this->picker(0,$style_select)
@@ -682,6 +683,8 @@ class form_output extends form_base
 		return $this->mk_orb("admin_op", array("id" => $id));
 	}
 
+	////
+	// !saves cell and contained element's properties
 	function submit_admin_cell($arr)
 	{
 		extract($arr);
@@ -697,7 +700,6 @@ class form_output extends form_base
 			if ($el->save(&$arr) == false)
 			{
 				// we must delete the element from this op.
-//				unset($this->output[$row][$col]["elements"][$i]);
 				// we must also shift all other elements up one 
 				for ($a=$i; $a < $cell["el_count"]-1; $a++)
 				{
@@ -710,7 +712,7 @@ class form_output extends form_base
 				$cell["elements"][$i] = $el->get_props();
 			}
 		}
-		
+		$cell["style"] = $cell_style;
 		$this->save_output($id);
 		return $this->mk_orb("ch_cell", array("id" => $id,"row" => $row, "col" => $col));
 	}
@@ -924,22 +926,13 @@ class form_output extends form_base
 	{
 		extract($arr);
 		$this->read_template("admin_cell.tpl");
+		$u1 = $this->mk_my_orb("change", array("id" => $id));
+		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_CHANGE_OUTPUT_ADMIN,$u1,$this->mk_my_orb("admin_op",array("id" => $id))));
 
 		$this->load_output($id);
 
-		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_CHANGE_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id)),$this->mk_my_orb("admin_op",array("id" => $id))));
-		$op_id = $id;
-
-		$this->vars(array(
-			"add_element" => $this->mk_orb("add_element", array("id" => $id, "col" => $col, "row" => $row, "after" => -1)),
-			"cell_style"	=> $this->mk_orb("sel_cell_style", array("id" => $id, "col" => $col, "row" => $row),"form"),
-			"form_id" => $this->output_id, 
-			"form_col" => $col, 
-			"form_row" => $row, 
-		));
-
+		$ell = "";
 		$cell = &$this->output[$row][$col];
-		$element="";
 		for ($i=0; $i < $cell["el_count"]; $i++)
 		{
 			$el = new form_search_element;
@@ -948,32 +941,18 @@ class form_output extends form_base
 				"element" => $el->gen_admin_html(),
 				"after" => $el->get_id(),
 			));
-
-			$this->vars(array(
-				"EL_NLAST" => ($i == ($cell["el_count"]-1) ? "" : $this->parse("EL_NLAST"))
-			));
-			$this->vars(array(
-				"EL_ADD" => $this->parse("EL_ADD"),
-				"EL_ACL" => $this->parse("EL_ACL")
-			));
-
 			$ell.=$this->parse("ELEMENT_LINE");
 		}
-		$this->vars(array("ELEMENT_LINE" => $ell));
-
 		$this->vars(array(
-			"add_el" => $this->mk_orb("add_element", array("id" => $id, "row" => $row, "col" => $col))
+			"ELEMENT_LINE" => $ell, 
+			"add_el" => $this->mk_my_orb("add_element", array("id" => $id, "row" => $row, "col" => $col))
 		));
 
-		$ca = $this->parse("CAN_ADD");
-		$caa = $this->parse("CAN_ACTION");
-
 		$this->vars(array(
-			"CAN_ADD" => $ca,
-			"CAN_ACTION"=>$caa,
+			"CAN_ADD" => $this->parse("CAN_ADD"),
+			"cell_style" => $this->picker($cell["style"], $this->style_instance->get_select(0,ST_CELL, true)),
 			"reforb"	=> $this->mk_reforb("submit_admin_cell", array("id" => $this->output_id, "row" => $row, "col" => $col),"form_output")
 		));
-
 		return $this->parse();
 	}
 
@@ -1066,15 +1045,13 @@ class form_output extends form_base
 		if (!$wizard_step)
 		{
 			$this->read_template("add_el_wiz1.tpl");
-
-			classload("objects");
-			$o = new db_objects;
+			$o = get_instance("objects");
 			$mlist = $o->get_list();
 			
 			$this->vars(array(
 				"reforb" => $this->mk_reforb("add_element", array("id" => $id, "row" => $row, "col" => $col,"wizard_step" => 1),"form_output"),
 				"folders"		=> $this->picker($this->parent, $mlist),
-				"elements"	=> $this->picker(0,$this->listall_elements(&$this))
+				"elements"	=> $this->picker(0,$this->listall_elements(true))
 			));
 			return $this->parse();
 		}
