@@ -630,11 +630,8 @@ class ml_queue extends aw_template
 		$this->get_objects_by_class(array("class" => CL_ML_STAMP));
 		while ($stamp = $this->db_next())
 		{
-			if ($this->can("send",$stamp["oid"]))
-			{
-				$content=$this->get_object_metadata(array("metadata" => $stamp["metadata"], "key" => "content"));
-				$data[$stamp["name"]]=$content;
-			};
+			$content=$this->get_object_metadata(array("metadata" => $stamp["metadata"], "key" => "content"));
+			$data[$stamp["name"]]=$content;
 		};
 		//decho("stamps=<pre>");dprint_r($data);decho("</pre>");//dbg
 
