@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.3 2002/11/07 10:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.4 2003/05/29 15:38:52 duke Exp $
 
 ////
 // !get_date_range
@@ -66,7 +66,30 @@ function get_date_range($args = array())
 			$end_ts = mktime(23,59,59,$m,$d+6,$y);
 			break;
 
+
+		case "relative":
+                        $next = mktime(0,0,0,0,0,0);
+                        $prev = mktime(0,0,0,0,0,0);
+			// if we are supposed to show future events, then set the start range to 
+			// this same day
+			if ($args["direction"] === "0")
+			{
+				$start_ts = mktime(0,0,0,$m,$d,$y);
+			}
+			else
+			{
+                        	$start_ts = mktime(0,0,0,1,1,2003);
+			};
+			global $XX1;
+			if ($XX1)
+			{
+				var_dump($start_ts);
+			};
+                        $end_ts = mktime(23,59,59,12,31,2003);
+                        break;
+		
 		case "day":
+		default:
 			$next = mktime(0,0,0,$m,$d+1,$y);
 			$prev = mktime(0,0,0,$m,$d-1,$y);
 			$start_ts = $timestamp;
