@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.11 2004/03/23 13:02:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.12 2004/03/23 13:49:07 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -63,20 +63,20 @@ class add_tree_conf extends class_base
 
 		$t->define_field(array(
 			"name" => "visible",
-			"caption" => "N&auml;htav",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"visible\")'>N&auml;htav</a>",
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "usable",
-			"caption" => "Kasutatav",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"usable\")'>Kasutatav</a>",
 			"align" => "center"
 		));
 
 
 		$t->define_field(array(
 			"name" => "alias_add",
-			"caption" => "Aliasena lisatav",
+			"caption" => "<a href='javascript:void(0)' onClick='aw_sel_chb(document.changeform,\"alias_add\")'>Aliasena lisatav</a>",
 			"align" => "center"
 		));
 
@@ -205,48 +205,7 @@ class add_tree_conf extends class_base
 		$this->level--;
 	}
 
-	////
-	// !gets the root menu for the current user from the conf object with id $id
-	function get_root_for_user($id)
-	{
-		$ob = new object($id);
-		$gidlist = aw_global_get("gidlist");
-
-		$root_id = 0;
-	
-		$max_pri = 0;
-		$max_gid = 0;
-		$pri_inst = get_instance("priority");
-		$grps = $pri_inst->get_groups($ob->prop("priority_id"));
-		foreach($gidlist as $ugid)
-		{
-			if ($grps[$ugid])
-			{
-				if ($max_pri < $grps[$ugid])
-				{
-					$max_pri = $grps[$ugid];
-					$max_gid = $ugid;
-				}
-			}
-		}
-		// now we have the gid with max priority
-		if ($max_gid)
-		{
-			$grps = $ob->meta("grps");
-			// find the root menu for this gid
-			$root_oid = $grps[$max_gid];
-			if ($root_oid)
-			{
-				$tr_obj = new object($root_oid);
-				$root_id = $tr_obj->prop("root");
-			}
-		}
-		return $root_id;
-	}
-
 	/** returns the active add_tree_conf for the current user, false if none
-
-
 	**/
 	function get_current_conf()
 	{

@@ -104,3 +104,22 @@ function awlib_addevent(o,e,f)
 	else
 		eval("o.on"+e+"="+f)
 };
+
+var chk_status;
+
+function aw_sel_chb(form,elname)
+{
+	chs = chk_status;
+
+	len = form.elements.length;
+	for(i = 0; i < len; i++)
+	{
+
+		if (form.elements[i].name.indexOf(elname) != -1)
+		{
+			form.elements[i].checked = chs;
+		}
+	}
+
+	chk_status  = chk_status ? 0 : 1;
+}
