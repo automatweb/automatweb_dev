@@ -8,13 +8,6 @@
 			</function>
 		</action>
 
-		<action name="submit" nologin="1" all_args="1">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="do_persondata_form" nologin="1">
 			<function name="do_persondata_form">
 				<arguments>
@@ -24,13 +17,6 @@
 
 		<action name="do_persondata_submit" nologin="1" all_args="1">
 			<function name="do_persondata_submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change" nologin="1" all_args="1">
-			<function name="change">
 				<arguments>
 				</arguments>
 			</function>

@@ -92,6 +92,33 @@
             <caption>Andmete filtreerimine</caption>
       </property>
       <property>
+            <name>group_by_folder</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kaustade j&amp;auml;rgi grupeeritav v&amp;auml;li</caption>
+      </property>
+      <property>
+            <name>group_in_table</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Millise v&amp;auml;lja j&amp;auml;rgi tabel grupeerida</caption>
+      </property>
+      <property>
+            <name>filter_by_char_field</name>
+            <table>objects</table>
+            <group>showing</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Millise v&amp;auml;lja v&amp;auml;&amp;auml;rtuse esit&amp;auml;he j&amp;auml;rgi filtreeritakse</caption>
+      </property>
+      <property>
             <name>title_bgcolor</name>
             <table>objects</table>
             <group>styles</group>
@@ -117,6 +144,15 @@
             <method>serialize</method>
             <type>colorpicker</type>
             <caption>Paaritu rea taustav&amp;auml;rv</caption>
+      </property>
+      <property>
+            <name>group_header_bgcolor</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>colorpicker</type>
+            <caption>Grupeeriva rea taustav&amp;auml;rv</caption>
       </property>
       <property>
             <name>header_css</name>

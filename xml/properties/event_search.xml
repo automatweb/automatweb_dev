@@ -11,6 +11,16 @@
             <caption>Kasutatav vorm</caption>
       </property>
       <property>
+            <name>show_current_mont</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Naita vaikimisi antud kuu sündmusi</caption>
+      </property>
+      <property>
             <name>ftsearch_fields</name>
             <table>objects</table>
             <group>ftsearch</group>
@@ -28,6 +38,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
+            <no_caption>1</no_caption>
             <store>no</store>
             <caption>Vorm</caption>
       </property>

@@ -6,6 +6,7 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<optional name="tv_sel" type="int" />
+					<optional name="char" />
 				</arguments>
 			</function>
 		</action>
