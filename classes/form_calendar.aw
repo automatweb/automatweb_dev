@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.2 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.3 2002/06/15 16:43:34 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -121,33 +121,6 @@ class form_calendar extends form_base
 			$events = array();
 		};
 		
-
-		/*
-
-		classload("form_table");
-		$ft = new form_table();
-
-		
-		// now get all entries of the form for the chain entry
-                $entdat = $ft->get_entries(array(
-                        "id" => $event_entry_form,
-                        "all_data" => true,
-                ));
-
-		$table_id = $row["table_id"];
-		*/
-
-		// FIXME: user should choose this
-
-		/*
-		$ft->start_table($table_id,$attribs);
-		foreach($entdat as $row)
-                {
-                        $ft->row_data($row,$form_id,$section,0,$chain,$chain_entry);
-                }
-
-		print $ft->finish_table();
-		*/
 
 		// now we have all the ranges (if any) and events (if any)
 		// and are going to build the events for calendar
@@ -445,7 +418,6 @@ class form_calendar extends form_base
 		$blocks = array();
 
 		// XXX 3600
-		//$timeshift = $ct_pregap * 3600;
 		$timeshift = $ct_pregap * 3600;
 		for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $ct_cnt)+$timeshift)
 		{
@@ -463,7 +435,129 @@ class form_calendar extends form_base
 		return $blocks;
         }
 
+	////
+	// !Registers a new calendar (invoked from form_chain submit)
+	// cal_id - int
+	// form_id - int id of event entry form
+	// vform_id - int id of the period definition form inside the chain
+	function new_calendar($args = array())
+	{
+		extract($args);
+		$q = "INSERT INTO calendar2object (cal_id,form_id,vform_id)
+			VALUES ('$cal_id','$form_id','$vform_id')";
+		$this->db_query($q);
+	}
+	
+	////
+	// !Updates an existing calendar (invoked from form_chain submit)
+	// cal_id - int
+	// form_id - int id of event entry form
+	// vform_id - int id of the period definition form inside the chain
+	function upd_calendar($args = array())
+	{
+		extract($args);
+		// reap the old entry
+		$q = "DELETE FROM calendar2object WHERE cal_id = '$cal_id'";
+		$this->db_query($q);
 
+		// only re-add if the user still wishes to have a calendar
+		// for that chain
+		if ($active)
+		{
+			$this->new_calendar($args);
+		}
+	}
 
+	////
+	// !Retrieves calender record
+	// cal_id - int
+	function get_calendar($args = array())
+	{
+		extract($args);
+		$row = false;
+		if ($cal_id)
+		{
+			$q = "SELECT * FROM calendar2object WHERE cal_id = '$cal_id'";
+			$this->db_query($q);
+			$row = $this->db_next();
+		}
+		return $row;
+	}
+
+	////
+	// !updates calende time period definitons
+	function upd_timedef($args = array())
+	{
+		extract($args);
+		// figure out which form element does what
+		foreach($els as $key => $el)
+		{
+			// start of the period
+			if ( ($el["type"] == "date") && ($el["subtype"] == "from") )
+			{
+				$start_el = $el["id"];
+			};
+
+			// end of the period
+			if ( ($el["type"] == "date") && ($el["subtype"] == "to") )
+			{
+				$end_el = $el["id"];
+			};
+
+			// max entries in one window
+			if ( ($el["type"] == "textbox") && ($el["subtype"] == "count") )
+			{
+				$max_el = $el["id"];
+			};
+
+			// length of the windows
+			if ( ($el["type"] == "timeslice") && (!$tslice_el) )
+			{
+				$tslice_el = $el["id"];
+			};
+
+			// pregap, reserved time before the start of the window
+			if ( ($el["type"] == "timeslice") && ($tslice_el > 0) )
+			{
+				$tslice_el2 = $el["id"];
+			};
+		};
+
+		/*
+		print "start = $start_el<br>";
+		print "end = $end_el<br>";
+		print "max = $max_el<br>";
+		print "tslice_el = $tslice_el<br>";
+		print "tslice_el2 = $tslice_el2<br>";
+		*/
+		// now I have the indexes for $entry array so I have to form the query 
+		// for calendar2timedef table
+
+		// first delete the existing record
+		
+		$q = "DELETE FROM calendar2timedef WHERE entry_id = '$entry_id'";
+		$this->db_query($q);
+
+		$ct_start = $entry[$start_el];
+		$ct_end = $entry[$end_el];
+		$ct_max = $entry[$max_el];
+
+		$ct_tslice = (int)$entry[$tslice_el]["count"];
+		if ($ct_tslice == 0)
+		{
+			$ct_tslice = 1;
+		};
+
+		//$ct_tslice2 = $entry[$tslice_el2]);
+		// this one can be zero as well
+		//$ct_pregap = $ct_tslice2["count"];
+
+		$q = "INSERT INTO calendar2timedef 
+			(entry_id,cal_id,start,end,timedef,max_items)
+			VALUES ('$entry_id','$cal_id','$ct_start','$ct_end','$ct_tslice',
+				'$ct_max')";
+
+		$this->db_query($q);
+	}
 };
 ?>

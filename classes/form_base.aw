@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.31 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.32 2002/06/15 16:43:34 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -62,11 +62,11 @@ class form_base extends form_db_base
 			$this->raise_error(ERR_FG_NOFORM,"form->load($id): no such form!",true);
 		}
 
-
 		$this->name = $row["name"];
 		$this->id = $row["oid"];
 		$this->parent = $row["parent"];
 		$this->type = $row["type"];
+		$this->subtype = $row["subtype"];
 		$this->comment = $row["comment"];
 		$this->lang_id = $row["lang_id"];
 		$this->entry_id = 0;
@@ -205,7 +205,7 @@ class form_base extends form_db_base
 		{
 			$this->arr["rows"] = 0;
 		}
-		$this->db_query("UPDATE forms SET content = '$contents' , rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
+		$this->db_query("UPDATE forms SET content = '$contents', subtype = " . $this->subtype . ", rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
 		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
 	}
 
@@ -595,6 +595,11 @@ class form_base extends form_db_base
 		if ($type)
 		{
 			$typ = " AND forms.type = $type ";
+		}
+
+		if ($subtype)
+		{
+			$typ .= " AND forms.subtype = $subtype ";
 		}
 
 		$q = sprintf("	SELECT
@@ -1208,11 +1213,17 @@ class form_base extends form_db_base
 	// arguments:
 	// id(int) - id of the form, which we are to load
 	// key(int) - what value to use as the key of the resulting array. default is the name
+	// use_loaded (bool) - if set, use the already loaded form
 	function get_form_elements($args = array())
 	{
 		extract($args);
 		$arrkey = ($args["key"]) ? $args["key"] : "name";
-		$this->load($id);
+
+		if (not($use_loaded))
+		{
+			$this->load($id);
+		};
+
 		$retval = array();
 		for ($i = 0; $i < $this->arr["rows"]; $i++)
 		{
@@ -1564,5 +1575,21 @@ class form_base extends form_db_base
 		return array($cnt,$result);
 	}
 
+	////
+	// !returns an array of references to the instances of all elements in this form
+	// well, theoretically references anyway, but php craps out here and actually, if you modify them, they get cloned 
+	// and changes end up in the cloned versions, so no changing stuff through these pointers
+	function get_all_els()
+	{
+		$ret = array();
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->get_els(&$ret);
+			}
+		}
+		return $ret;
+	}
 }
 ?>

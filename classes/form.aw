@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.98 2002/06/15 14:43:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.99 2002/06/15 16:43:34 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -429,14 +429,20 @@ class form extends form_base
 		$this->arr["after_submit_link"] = $after_submit_link;
 		$this->arr["has_aliasmgr"] = $has_aliasmgr;
 		$this->arr["has_controllers"] = $has_controllers;
+
+		if ($ev_entry_form)
+		{
+			$this->subtype = FSUBTYPE_EV_ENTRY;
+		}
+		/*
 		$this->arr["has_calendar"] = $has_calendar;
 		$this->arr["cal_controller"] = $cal_controller;
 		$this->arr["event_entry_form"] = $event_entry_form;
 		$this->arr["event_check_form"] = $event_check_form;
 		$this->arr["event_check_against_form"] = $event_check_against_form;
 		$this->arr["event_display_table"] = $event_display_table;
-
 		$this->arr["is_order_form"] = $is_order_form;
+		*/
 
 		$old_namels = $this->arr["name_els"];
 		$this->arr["name_els"] = array();
@@ -754,22 +760,27 @@ class form extends form_base
 		// FIXME: calendar settings should probably be on their own tab
 	
 		// list of forms for calendar controller
+		/*
 		$this->get_objects_by_class(array("class" => CL_FORM));
 		$forms = array();
 		while($row = $this->db_next())
 		{
 			$forms[$row["oid"]] = $row["name"];
 		};
+		*/
 
 		// if entries of this form are to be checked against a calendar
 		// fetch a list of elements in that form so that we can give the
 		// user the possibility to choose the element to which the calendar
 		// belongs
+
+		/*
 		if ($this->arr["event_check_form"])
 		{
 			$ft = get_instance("form_table");
 			$tables = array("0" => "Vali üks") + $ft->get_tables_for_form($id);
 		}
+		*/
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -785,18 +796,19 @@ class form extends form_base
 			"check_status"	=> checked($this->arr["check_status"]),
 			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
 			"has_controllers"	=> checked($this->arr["has_controllers"]),
-			"has_calendar"	=> checked($this->arr["has_calendar"]),
-			"is_order_form"	=> checked($this->arr["is_order_form"]),
+			//"has_calendar"	=> checked($this->arr["has_calendar"]),
+			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
+			//"is_order_form"	=> checked($this->arr["is_order_form"]),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
 			"tables" => $this->picker($this->arr["table"],$this->get_list_tables()),
 			"tablestyles" => $this->picker($this->arr["tablestyle"], $t->get_select(0,ST_TABLE)),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
-			"cal_controllers" => $this->picker($this->arr["cal_controller"],$forms),
-			"event_entry_forms" => $this->picker($this->arr["event_entry_form"],$forms),
-			"event_check_form" => checked($this->arr["event_check_form"]),
-			"event_check_against_forms" => $this->picker($this->arr["event_check_against_form"],$forms),
-			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
+			//"cal_controllers" => $this->picker($this->arr["cal_controller"],$forms),
+			//"event_entry_forms" => $this->picker($this->arr["event_entry_form"],$forms),
+			//"event_check_form" => checked($this->arr["event_check_form"]),
+			//"event_check_against_forms" => $this->picker($this->arr["event_check_against_form"],$forms),
+			//"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 		));
 
 		$ns = "";
@@ -1156,6 +1168,7 @@ class form extends form_base
 
 		$this->entry_id = $entry_id;
 
+
 		// do we have to validate this entry against a calendar?
 		// FIXME: this check should be in the form_calendar class
 		if ($this->arr["event_check_form"])
@@ -1369,6 +1382,29 @@ class form extends form_base
 		}
 
 		$this->do_actions($this->entry_id);
+		
+		// update_fcal_timedef is set to chain_id in form_chain->submit_form by altering
+		// time period definitions for a form calendar.
+
+		// notify form calendar of the changes if needed
+		if ($update_fcal_timedef)
+		{
+			$fc = get_instance("form_calendar");
+			// invoke form_calendar and add information to the 
+			// calendar2timedef table
+
+			// retrieve the fields used in this form
+			$els = $this->get_form_elements(array(
+				"use_loaded" => true,
+			));
+
+			$fc->upd_timedef(array(
+				"cal_id" => $update_fcal_timedef,
+				"els" => &$els,
+				"entry_id" => &$this->entry_id,
+				"entry" => &$this->entry,
+			));
+		}
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$GLOBALS["session_filled_forms"][$this->id] = $this->entry_id;

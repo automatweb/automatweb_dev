@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.17 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.18 2002/06/15 16:43:34 duke Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -31,10 +31,11 @@ class form_chain extends form_base
 		return $this->parse();
 	}
 
+	////
+	// !Submits a new form chain
 	function submit($arr)
 	{
 		extract($arr);
-
 		$ct = array();
 		$ct["forms"] = array();
 		if (is_array($forms))
@@ -68,20 +69,21 @@ class form_chain extends form_base
 		$ct["rep_tbls"] = $rep_tbls;
 
 		$ct["has_calendar"] = $has_calendar;
-		$ct["cal_form"] = $cal_form;
 		$ct["cal_controller"] = $cal_controller;
 		$ct["cal_entry_form"] = $cal_entry_form;
-
+		
 		$this->chain = $ct;
+
 		uksort($ct["forms"],array($this,"__ch_sort"));
 		
 		$content = aw_serialize($ct,SERIALIZE_XML);
 		$this->quote(&$content);
-
+	
 		if ($id)
 		{
 			$this->upd_object(array("oid" => $id, "name" => $name, "comment" => $comment));
 			$this->db_query("UPDATE form_chains SET content = '$content' WHERE id = $id");
+
 		}
 		else
 		{
@@ -91,7 +93,18 @@ class form_chain extends form_base
 			{
 				$this->add_alias($alias_doc, $id);
 			}
+
 		}
+		
+		// notify form_calendar
+		$fc = get_instance("form_calendar");
+		$fc->upd_calendar(array(
+			"cal_id" => $id,
+			"form_id" => $cal_entry_form,
+			"vform_id" => $cal_controller,
+			"active" => $has_calendar,
+		));
+
 
 		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
 		if (is_array($forms))
@@ -137,6 +150,8 @@ class form_chain extends form_base
 			$lh.=$this->parse("LANG_H");
 		}
 
+		$ch_forms = array();
+
 		if (is_array($this->chain["forms"]))
 		{
 			foreach($this->chain["forms"] as $fid)
@@ -157,6 +172,7 @@ class form_chain extends form_base
 						"fname" => $fname,
 						"lang_id" => $l["id"]
 					));
+					$ch_forms[$fid] = $fname;
 					$lg.=$this->parse("LANG");
 				}
 				$this->vars(array(
@@ -174,16 +190,22 @@ class form_chain extends form_base
 		classload("objects");
 		$ob = new objects;
 
-		$forms = $this->get_list(FTYPE_ENTRY,false,true);
-		$selected_forms = array("" => " -- Vali --");
-		foreach($forms as $key => $val)
-		{
-			if (in_array($key,$this->chain["forms"]))
-			{
-				$selected_forms[$key] = $val;
-			};
-		};
 
+		$forms = $this->get_flist(array(
+			"type" => FTYPE_ENTRY,
+		));
+	
+		// retrieve a list of forms that can be used for adding events
+		$ev_entry_forms = $this->get_flist(array(
+			"type" => FTYPE_ENTRY,
+			"subtype" => FSUBTYPE_EV_ENTRY,
+		));
+
+		// no form should be selected if the user has not made a choice
+		// yet, so we add a default choise to the front of both lists
+		$default = array("" => "-- Vali --");
+		$ch_forms = $default + $ch_forms;
+		$ev_entry_forms = $default + $ev_entry_forms;
 
 		$this->vars(array(
 			"forms" => $this->multiple_option_list($this->chain["forms"],$forms),
@@ -206,9 +228,9 @@ class form_chain extends form_base
 			"after_redirect_url" => $this->chain["after_redirect_url"],
 			"folders" => $this->picker($this->chain["save_folder"],$ob->get_list()),
 			"has_calendar" => checked($this->chain["has_calendar"]),
-			"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
-			"cal_controllers" => $this->picker($this->chain["cal_controller"],$selected_forms),
-			"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],array("0" => " --  Vali --") + $forms),
+			//"cal_forms" => $this->picker($this->chain["cal_form"],$selected_forms),
+			"cal_controllers" => $this->picker($this->chain["cal_controller"],$ch_forms),
+			"cal_entry_forms" => $this->picker($this->chain["cal_entry_form"],$ev_entry_forms),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 		));
 		return $this->parse();
@@ -418,7 +440,7 @@ class form_chain extends form_base
 	}
 
 	////
-	// !this gets called when a form in the chain is submitted
+	// !this is invoked when a form in the chain is submitted
 	function submit_form($arr)
 	{
 		extract($arr);
@@ -436,14 +458,45 @@ class form_chain extends form_base
 
 		// then we must let formgen process the form entry and then add the entry to the chain. 
 		classload("form");
+
+		// if this form is part of form calendar definition and is used for defining
+		// periods, then we need to set a special flag so form->process_entry can
+		// call form_calendar to update the calendar2timedef table
+
+		// performs some check before actually doing the update
+
+		// processing takes place inside form->process_entry because I have better
+		// access to form elements from there
+		$update_fcal_timedef = false;
+
+		if ($this->chain["has_calendar"])
+		{
+			$fc = get_instance("form_calendar");
+			$fcal = $fc->get_calendar(array(
+				"cal_id" => $id,
+			));
+
+			if (is_array($fcal))
+			{
+				$update_fcal_timedef = $chain_entry_id;
+			};
+
+		};
+
 		$f = new form;
-		$f->process_entry(array("id" => $form_id, "chain_entry_id" => $chain_entry_id, "entry_id" => $form_entry_id));
+		$f->process_entry(array(
+				"id" => $form_id,
+				"chain_entry_id" => $chain_entry_id,
+				"entry_id" => $form_entry_id,
+				"update_fcal_timedef" => $update_fcal_timedef,
+		));
 
 		// now update the chain entry object with the form entry name
 		$this->upd_object(array(
 			"oid" => $chain_entry_id,
 			"name" => $f->entry_name
 		));
+
 		$this->add_entry_to_chain($chain_entry_id,$f->entry_id,$form_id);
 
 		$tfid = $form_id;
