@@ -1,3 +1,21 @@
+<script language="javascript">
+var chk_status = true;
+
+function selall()
+{
+	len = document.aform.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.aform.elements[i].name.indexOf("check") != -1)
+		{
+			document.aform.elements[i].checked=chk_status;
+		}
+	}
+	chk_status = !chk_status;
+	return false;
+}
+</script>
+
 <!--tabelraam-->
 <table width="100%" cellspacing="0" cellpadding="1">
 <tr><td class="tableborder">

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.33 2002/06/13 23:05:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.34 2002/06/13 23:56:56 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -560,7 +560,7 @@ as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pob
 			"sortable" => 1,
                 ));
 		$this->t->define_field(array(
-			"caption" => "Vali",
+			"caption" => "<a href='javascript:void(0)' onClick='selall()'>Vali</a>",
 			"name" => "check",
 			"width" => 20,
 			"align" => "center",
