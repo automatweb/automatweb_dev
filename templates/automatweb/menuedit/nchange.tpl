@@ -491,6 +491,19 @@ function savemenu() {
 		<td class="celltext"><select name=admin_feature><option value=0>{VAR:admin_feature}</select></td>
 	</tr>
 <!-- END SUB: ADMIN_FEATURE -->
+<!-- SUB: PMETHOD -->
+	<tr>
+		<td class="celltext">&nbsp;Meetod:&nbsp;</td>
+		<td class="celltext"><select name="pclass">{VAR:pclasses}</select></td>
+	</tr>
+	<!--
+	<tr>
+		<td class="celltext">&nbsp;Meetod:&nbsp;</td>
+		<td class="celltext"><select name="pmethod">{VAR:pmethods}</select></td>
+	</tr>
+	-->
+	/tr>
+<!-- END SUB: PMETHOD -->
 
 	
 		<tr class="aste07">

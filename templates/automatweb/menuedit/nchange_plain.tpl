@@ -193,6 +193,19 @@ function savemenu() {
 	</tr>
 <!-- END SUB: ADMIN_FEATURE -->
 
+<!-- SUB: PMETHOD -->
+	<tr>
+		<td class="celltext">&nbsp;Meetod:&nbsp;</td>
+		<td class="celltext"><select name="pclass">{VAR:pclasses}</select></td>
+	</tr>
+	<!--
+	<tr>
+		<td class="celltext">&nbsp;Meetod:&nbsp;</td>
+		<td class="celltext"><select name="pmethod">{VAR:pmethods}</select></td>
+	</tr>
+	-->
+<!-- END SUB: PMETHOD -->
+
 	
 		<tr class="aste07">
 			<td class="celltext"  align="right" valign="top">&nbsp;{VAR:LC_MENUEDIT_COMMENT}:&nbsp;</td>
