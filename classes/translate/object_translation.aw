@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.12 2004/02/25 15:53:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.13 2004/06/02 10:51:05 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -134,7 +134,7 @@ class object_translation extends aw_template
 			$clone->set_class_id($orig_inst->class_id());
 		}
 		$clone->set_lang($dstlang);
-		$clone->set_flag(OBJ_HAS_TRANSLATION);
+		$clone->set_flag(OBJ_HAS_TRANSLATION, OBJ_HAS_TRANSLATION);
 		$clone->save();
 
 		// we also gots to create a relation
