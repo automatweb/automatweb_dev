@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.5 2001/11/20 09:16:22 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events.aw,v 2.6 2002/02/13 01:01:38 duke Exp $
 // events.aw - the sucky sucky version of Vibe events
 
 // sisestamis/muutmisvorm peab nagu praegunegi muutmisvorm,
@@ -895,10 +895,14 @@ class events extends aw_template {
 		{
 			$tpl = "details.tpl";
 		};
+		
 		$this->read_template($tpl);
-		$_tmp = $xml->xml_unserialize(array("source" => $event["metadata"]));
-		$meta = $_tmp["meta"];
+		//$_tmp = $xml->xml_unserialize(array("source" => $event["metadata"]));
+		//$meta = $_tmp["meta"];
 
+		$meta = aw_unserialize($event["metadata"]);
+
+		$meta = $meta["meta"];
 		$styles = array();	
 		foreach($this->styles as $key1 => $val1)
 		{
