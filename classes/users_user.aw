@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.76 2003/12/17 08:50:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.77 2004/01/06 12:02:14 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -713,7 +713,7 @@ class users_user extends aw_template
 		
 		if ($normalize)
 		{
-			$this->normalize_user_objects();
+			//$this->normalize_user_objects();
 		}
 	}
 
@@ -1117,6 +1117,7 @@ class users_user extends aw_template
 			$this->mk_grpcache();
 		}
 
+		$count = 0;
 		while ($gid != 0)
 		{
 			if ($this->grpcache2[$gid]["type"] == GRP_DEFAULT)
@@ -1128,6 +1129,14 @@ class users_user extends aw_template
 			{
 				$arr[] = $gid;
 				$gid = $this->grpcache2[$gid]["parent"];
+			}
+
+			if (++$count > 100)
+			{
+				error::throw(array(
+					"id" => ERR_GROUP_HIER,
+					"msg" => "Error in group hierarchy, count of 100 exceeded! $gid"
+				));
 			}
 		}
 	}
