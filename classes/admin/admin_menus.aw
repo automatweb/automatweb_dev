@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.35 2003/11/18 15:38:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.36 2003/11/19 13:55:10 duke Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -823,6 +823,7 @@ class admin_menus extends aw_template
 		}
 
 		get_instance("icons");
+		aw_global_set("date","");
 
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
