@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.1 2001/06/08 19:17:32 duke Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
