@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.256 2004/04/21 12:43:29 duke Exp $
+// $Id: class_base.aw,v 2.257 2004/04/22 12:30:48 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -662,6 +662,12 @@ class class_base extends aw_template
 				$this->is_rel = true;
 			};
 		};
+
+		if ($args["cb_no_groups"] == 1)
+		{
+			$this->cb_no_groups = 1;
+		};
+
 
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
@@ -1602,6 +1608,7 @@ class class_base extends aw_template
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
 
+
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
 			global $awt;
@@ -1756,6 +1763,34 @@ class class_base extends aw_template
 		$this->cfgu = get_instance("cfg/cfgutils");
 
 		$remap_children = false;
+		
+		foreach($properties as $key => $val)
+		{
+			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
+			{
+				$meth = $val["callback"];
+				$argblock["prop"] = &$val;
+				$vx = $this->inst->$meth($argblock);
+				if (is_array($vx))
+				{
+					foreach($vx as $ekey => $eval)
+					{
+						$this->convert_element(&$eval);
+						$resprops[$ekey] = $eval;
+					};
+				}
+			}
+			else
+			{
+				$resprops[$key] = $val;
+			};
+
+
+		}
+
+		$properties = $resprops;
+
+		$resprops = array();
 
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
@@ -1809,6 +1844,7 @@ class class_base extends aw_template
                                 };
 
                         }
+			/*
                         else
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
@@ -1824,6 +1860,7 @@ class class_base extends aw_template
 					};
 				}
 			}
+			*/
 			elseif ($val["type"] == "releditor")
 			{
 				if (!is_object($val["vcl_inst"]))
@@ -1920,6 +1957,7 @@ class class_base extends aw_template
                 {
                         $has_rte = false;
                 };
+		
 
 
 		$properties = $resprops;
@@ -1929,7 +1967,6 @@ class class_base extends aw_template
 		// need to cycle over the property nodes, do replacements
 		// where needed and then cycle over the result and generate
 		// the output
-
 
 		foreach($properties as $key => $val)
 		{
@@ -2128,6 +2165,7 @@ class class_base extends aw_template
 				$resprops[$name] = $val;
 			};
 		}
+
 
 		// if name_prefix given, prefixes all element names with the value 
 		// e.g. if name_prefix => "emb" and there is a property named comment,
@@ -3395,7 +3433,7 @@ class class_base extends aw_template
 			$propgroups = $property_groups[$key];
 
 			// skip anything that is not in the active group
-			if (!in_array($use_group,$propgroups))
+			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
 			{
 				continue;
 			};
