@@ -78,6 +78,16 @@
             <caption>Keel</caption>
       </property>
       <property>
+            <name>s_search_bros</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Leia vendi</caption>
+      </property>
+      <property>
             <name>s_status</name>
             <type>s_status</type>
             <group>
