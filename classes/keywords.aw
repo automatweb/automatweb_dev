@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.3 2001/05/18 16:29:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.4 2001/05/19 02:28:38 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
+global $orb_defs;
+$orb_defs["keywords"] = "xml";
+classload("defs");
 class keywords extends aw_template {
 	function keywords($args = array())
 	{
@@ -8,6 +11,178 @@ class keywords extends aw_template {
 		$this->tpl_init("automatweb/keywords");
 	}
 
+	////
+	// !Kuvab dokude nimekirja, mis mingi kindla võtmesõnaga "seotud" on.
+	// argumendid
+	// oid - objekti id
+	function doclist($args = array())
+	{
+		extract($args);
+		$this->read_template("doclist.tpl");
+		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
+		$q = "SELECT * FROM keywords2objects WHERE keyword_id = '$id'";
+		$this->db_query($q);
+		$oidlist = array();
+		while($row = $this->db_next())
+		{
+			$oidlist[] = $row["oid"];
+		};
+		
+		$c = "";
+		if (is_array($oidlist))
+		{
+			$objects = join(",",$oidlist);
+			$q = "SELECT * FROM objects WHERE oid IN ($objects)";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				$this->vars(array(
+						"id" => $row["oid"],
+						"title" => $row["name"],
+				));
+				$c .= $this->parse("LINE");
+			};
+		}
+		$this->vars(array(
+				"LINE" => $c,
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Kuvab kasutajate nimekirja, kes mingi votmesona listis on.
+	// argumendid
+	// id (int) 
+	function listmembers($args = array())
+	{
+		extract($args);
+		$this->read_template("users.tpl");
+		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
+		$q = "SELECT users.uid AS uid,
+				users.email AS email
+				FROM ml_users
+				LEFT JOIN users ON (ml_users.uid = users.uid)
+				WHERE list_id = '$id'";
+		$this->db_query($q);
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+					"uid" => $row["uid"],
+					"email" => $row["email"],
+			));
+			$c .= $this->parse("LINE");
+		};
+		$this->vars(array("LINE" => $c));
+		return $this->parse();
+	}
+	////
+	// !Teavitab koiki votmesonalistide liikmeid muudatustest
+	function notify($args = array())
+	{
+		extract($args);
+		$q = "SELECT keywords.list_id AS list_id FROM keywords2objects
+			LEFT JOIN keywords ON (keywords2objects.keyword_id = keywords.id)
+			WHERE oid = $id";
+		$this->db_query($q);
+		classload("email");
+		$email = new email();
+		$this->info["site_header"] = "<a href='orb.aw?class=document&action=change&id=$id'>Dokument</a>";
+		global $baseurl;
+		while($row = $this->db_next())
+		{
+			$email->mail_members(array(
+					"list_id" => $row["list_id"],
+					"from" => "nobody@automatweb.com",
+					"subject" => "Notify",
+					"content" => "Dokumendi, mis asub aadressil $baseurl/index.aw?section=$id sisu on muutunud.",
+			));
+		};
+	}
+	
+	////
+	// !Handleb saidi sees täidetud "interests" vormi datat
+	function submit_interests($args = array())
+	{
+		extract($args);
+		classload("list");
+		$list = new mlist();
+		$list->remove_user_from_lists(array(
+					"uid" => UID,
+		));
+		$list->add_user_to_lists(array(
+					"uid" => UID,
+					"name" => $name,
+					"email" => $email,
+					"list_ids" => $lists,
+				));
+		global $status_msg;
+		$status_msg = "Muudatused on salvestatud";
+		session_register("status_msg");
+		$res = "?type=interests";
+		return $res;
+	}
+
+	////
+	// !Kuvab koikide keywordide vormi
+	function list_keywords($args = array())
+	{
+		$this->read_template("list.tpl");
+		// koigepealt uurime välja lugejate arvu listides
+		
+		// this should probably be in the list class
+		$q = "SELECT list_id,COUNT(*) AS cnt FROM ml_users GROUP BY list_id";
+		$this->db_query($q);
+		$members = array();
+		while($row = $this->db_next())
+		{
+			$members[$row["list_id"]] = $row["cnt"];
+		};
+
+		$keyword_counts = array();
+		$q = "SELECT keyword_id,COUNT(oid) AS cnt FROM keywords2objects GROUP BY keyword_id";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$keyword_counts[$row["keyword_id"]] = $row["cnt"];
+		};
+
+		$q = "SELECT * FROM keywords ORDER BY keyword";
+		$this->db_query($q);
+		$c = "";
+		$this->info["site_title"] = "<a href='orb.aw?class=keywords&action=list'>Keywords</a>";
+		while($row = $this->db_next())
+		{
+			if ($members[$row["list_id"]])
+			{
+				$people_count = $members[$row["list_id"]];
+			}
+			else
+			{
+				$people_count = 0;
+			};
+
+			if ($keyword_counts[$row["id"]])
+			{
+				$doc_count = $keyword_counts[$row["id"]];
+			}
+			else
+			{
+				$doc_count = 0;
+			};
+
+			$this->vars(array(
+				"keyword" => $row["keyword"],
+				"people_count" => $people_count,
+				"doc_count" => $doc_count,
+				"id" => $row["id"],
+				"list_id" => $row["list_id"],
+			));
+			$c .= $this->parse("LINE");
+		};
+		$this->vars(array("LINE" => $c));
+		return $this->parse();
+	}
 
 	////
 	// !Tagastab mingi objekti juurde lisatud võtmesõnad
@@ -45,12 +220,12 @@ class keywords extends aw_template {
 	// argumendid: pole
 	function get_all_keywords($args = array())
 	{
-		$q = "SELECT keyword FROM keywords ORDER BY keyword";
+		$q = "SELECT list_id,keyword FROM keywords ORDER BY keyword";
 		$this->db_query($q);
 		$resarray = array();
 		while($row = $this->db_next())
 		{
-			$resarray[] = $row["keyword"];
+			$resarray[$row["list_id"]] = $row["keyword"];
 		};
 		return $resarray;
 	}
@@ -74,15 +249,15 @@ class keywords extends aw_template {
 		{
 			$keyword = trim($val);
 			$klist[] = $keyword;
-			$arg = join(",",$klist);
+			$arg = join(",",map("'%s'",$klist));
 		};
-		$q = sprintf("SELECT * FROM keywords WHERE keyword IN ('%s')",$arg);
+		$q = sprintf("SELECT * FROM keywords WHERE keyword IN (%s)",$arg);
 		$this->db_query($q);	
 		while($row = $this->db_next())
 		{
 			$ids[$row["keyword"]] = $row["id"];
 		};
-		
+	
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
 		// loome ka uue listi votmesona jaoks
 		classload("lists");
