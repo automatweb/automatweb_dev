@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.13 2002/12/19 18:03:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/remote_login.aw,v 2.14 2003/06/25 14:56:12 duke Exp $
 // remote_login.aw - AW remote login
 
 /*
@@ -34,12 +34,17 @@ class remote_login extends class_base
 	function handshake($args = array())
 	{
 		extract($args);
-		$socket = get_instance("socket");
+		$socket = get_instance("socket");  
+		if (substr($host,0,7) == "http://")
+		{
+			$host = substr($host,7);
+		};
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
 		));
-		
+	
+		// what if remote host uses a different "ext"?
 		$op = "HEAD /orb.".$this->cfg["ext"]."?class=remote_login&action=getcookie&fastcall=1 HTTP/1.0\r\n";
 		$op .= "Host: $host\r\n\r\n";
 
@@ -80,6 +85,10 @@ class remote_login extends class_base
 		extract($args);
 		$cookie = $this->cookie;
 		$socket = get_instance("socket");
+		if (substr($host,0,7) == "http://")
+		{
+			$host = substr($host,7);
+		};
 		$socket->open(array(
 			"host" => $host,
 			"port" => 80,
