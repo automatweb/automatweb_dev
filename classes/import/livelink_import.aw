@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.4 2003/04/23 15:30:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.5 2003/04/25 12:52:29 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -318,7 +318,7 @@ class livelink_import extends class_base
 			$iconurl = "";
 			if ($this->icons[$this->fext])
 			{
-				$iconurl = sprintf("<img src='/img/%s' alt='%s' />",$this->icons[$this->fext],$this->fext);
+				$iconurl = sprintf("<img src='/img/%s' alt='%s' title='%s' />",$this->icons[$this->fext],$this->fext,$this->fext);
 				$this->quote($iconurl);
 			};
 			if (in_array($parent,$this->exceptions))
