@@ -1443,6 +1443,11 @@ class site_content extends menuedit
 
 		$mc = get_instance("menu_cache");
 
+		if (!$row["oid"])
+		{
+			return;
+		}
+
 		$o = obj($row["oid"]);
 		foreach($o->connections_to(array("type" => 5, "to.lang_id" => aw_global_get("lang_id"))) as $c)
 		{
