@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.9 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.10 2001/07/02 06:13:14 duke Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -135,6 +135,10 @@ class file extends aw_template
 		$contents = $this->get_file(array(
 						"file" => $file,
 			));
+		if (!$contents)
+		{
+			$contents = $row["content"];
+		};
 		$retval = array(
 				"name" => $row["oname"],
 				"type" => $row["type"],
