@@ -827,7 +827,6 @@ class site_content extends menuedit
 
 		while (list(,$row) = each($tmp))
 		{
-			$bro = false;
 			$row["mtype"] = $row["type"];
 			// here we fake the brother menus
 			if ($row["class_id"] == CL_BROTHER)
@@ -836,7 +835,6 @@ class site_content extends menuedit
 				$trow["parent"] = $row["parent"];
 				$trow["oid"] = $row["oid"];
 				$row = $trow;
-				$bro = true;
 			}
 			
 			if ($row["oid"] == $this->section)
@@ -1094,21 +1092,22 @@ class site_content extends menuedit
 			// if no correct combination exists, use the default
 			if ($GLOBALS["DBUG2"] == 1)
 			{
-				echo "try for template $mn $ap <br />";
+				echo "try for template $mn $ap ($row[oid]) <br />";
 			}
 			if (!$this->is_template($mn.$ap))
 			{
 				$ap = "";	
 			};
 
-			if ($row["brother_of"])
+			/*if ($row["brother_of"])
 			{
 				$row = $this->mar[$row["brother_of"]];
-			}
+			}*/
 
 			$link = $this->make_menu_link(&$row);
 
 			$target = ($row["target"] == 1) ? sprintf("target='%s'","_blank") : "";
+
 
 			$imgurl2 = "";
 			if ($this_selected)
@@ -1313,6 +1312,7 @@ class site_content extends menuedit
 			$noshowu = aw_global_get("uid") == "" && $meta["users_only"] && aw_ini_get("menuedit.no_show_users_only") == true;
 			// v6i menyy nimi on tyhi, v6i menyyle on 8eldud et users only ja kasutraja pole sisse loginud const.aw sees 
 			// on defineeritud $no_show_users_only
+			//echo "oid = $row[oid] , selonly = ".dbg::dump($selonly)." name = $row[name], nshu = ".dbg::dump($noshowu)." skip = ".dbg::dump($this->skip)." <Br>";
 			if ($selonly && $row["name"] != "" && !$noshowu && !$this->skip)
 			{
 				$final_show = true;
@@ -1334,7 +1334,7 @@ class site_content extends menuedit
 						$l_mid.=$this->parse($mn.$ap);
 						if ($GLOBALS["DBUG"] == 1)
 						{
-							echo "parse is_mid $mn $ap <br />";
+							echo "parse is_mid $mn $ap ($row[oid])<br />";
 						}
 					}
 					else
@@ -1342,7 +1342,7 @@ class site_content extends menuedit
 						$l.=$this->parse($mn.$ap);
 						if ($GLOBALS["DBUG"] == 1)
 						{
-							echo "parse $mn $ap <br />";
+							echo "parse $mn $ap ($row[oid]))<br />";
 						}
 					}
 				}
