@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.133 2003/07/17 14:41:59 duke Exp $
+// $Id: class_base.aw,v 2.134 2003/07/17 15:50:15 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -80,6 +80,7 @@ class class_base extends aw_template
 		$this->is_rel = false;
 
 		$this->orb_action = $args["action"];
+		
 
 		if ($args["action"] == "new")
 		{
@@ -120,6 +121,7 @@ class class_base extends aw_template
 		));
 
 		$this->validate_cfgform($cfgform_id);
+
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
@@ -434,13 +436,6 @@ class class_base extends aw_template
 		};
 		$clfile = $this->cfg["classes"][$clid]["file"];
 
-		// temporary - until we are sure that will will not go back to
-		// the old interface
-		if ($clid == 1)
-		{
-			$clfile = "menu";
-		};
-
 		// temporary - until we switch document editing back to new interface
 		if ($clid == 7)
 		{
@@ -456,7 +451,17 @@ class class_base extends aw_template
 		$this->clid = $clid;
 		
 		// get an instance of the class that handles this object type
-		$this->inst = get_instance($clfile);
+		// fuck me plenty! .. orb.aw sets $this->orb_class
+		if (is_object($this->orb_class))
+		{
+			$this->inst = $this->orb_class;
+		}
+		// but I'm keeping the old approach too, just to be sure that
+		// nothing breaks
+		else
+		{
+			$this->inst = get_instance($clfile);
+		};
 	}
 
 	function load_obj_data($args = array())
