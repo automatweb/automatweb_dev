@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.3 2002/08/28 09:16:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.4 2002/11/07 23:03:01 kristo Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -73,6 +73,12 @@ class aw_orb extends aw_template
 		extract($args);
 		classload("orb");
 		$orb_defs = orb::load_xml_orb_def($id);
+//		echo "id = $id , action = $action , orb_defs = <pre>", var_dump($orb_defs),"</pre> <br>";
+		if ($action == "default")
+		{
+			$action = $orb_defs[$id]["default"];
+		}
+
 		$meth = $orb_defs[$id][$action];
 		$meth["values"] = array();
 		$cl = get_instance($id);
