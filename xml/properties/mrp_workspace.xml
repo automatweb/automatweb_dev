@@ -714,6 +714,20 @@
             <caption>Muuda staatust</caption>
       </property>
       <property>
+            <name>pj_errors</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_old</num_1>
+                  <num_2>grp_printer_done</num_2>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Vead</caption>
+      </property>
+      <property>
             <name>pj_change_comment</name>
             <table>objects</table>
             <field>meta</field>

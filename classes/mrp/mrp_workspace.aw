@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.54 2005/03/24 07:52:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.55 2005/03/24 09:27:37 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -214,6 +214,8 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property pj_toolbar type=toolbar store=no no_caption=1
 	@caption Muuda staatust
 
+	@property pj_errors type=text store=no
+	@caption Vead
 
 	@property pj_change_comment type=textarea rows=5 cols=50 store=no
 	@caption Kommentaar
@@ -394,6 +396,17 @@ class mrp_workspace extends class_base
 				$rpn = substr($prop["name"], 3);
 				switch($rpn)
 				{
+					case "errors":
+						$errs = aw_global_get("mrpws_err");
+						if (is_array($errs) && count($errs))
+						{
+							$prop["value"] = "<span style='color: #FF0000; font-size: 20px'>".join("<br>", $errs)."</span>";
+							aw_session_del("mrpws_err");
+							return PROP_OK;
+						}
+						return PROP_IGNORE;
+						break;
+
 					case "toolbar":
 						$this->_do_pj_toolbar($arr, $job);
 						return PROP_OK;
@@ -3040,7 +3053,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->start($arr);
+
+		$ud = parse_url($j->start($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
@@ -3058,7 +3081,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->done($arr);
+
+		$ud = parse_url($j->done($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
@@ -3076,7 +3109,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->abort($arr);
+
+		$ud = parse_url($j->abort($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
@@ -3094,7 +3137,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->pause($arr);
+
+		$ud = parse_url($j->pause($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
@@ -3112,7 +3165,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->scontinue($arr);
+
+		$ud = parse_url($j->scontinue($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
@@ -3130,7 +3193,17 @@ class mrp_workspace extends class_base
 		$tmp = $arr;
 		$j = get_instance(CL_MRP_JOB);
 		$arr["id"] = $arr["pj_job"];
-		$j->end_shift($arr);
+
+		$ud = parse_url($j->end_shift($arr));
+		$pars = array();
+		parse_str($ud["query"], $pars);
+		$this->dequote($pars["errors"]);
+		$errs = unserialize($pars["errors"]);
+
+		if (is_array($errs) && count($errs))
+		{
+			aw_session_set("mrpws_err", $errs);
+		}
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],

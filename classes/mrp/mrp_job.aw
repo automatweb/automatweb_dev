@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.27 2005/03/24 07:52:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.28 2005/03/24 09:27:37 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -270,9 +270,9 @@ class mrp_job extends class_base
 		$toolbar =& $arr["prop"]["toolbar"];
 		$this_object =& $arr["obj_inst"];
 
-		if ($this_object->prop ("state") != MRP_STATUS_INPROGRESS)
+		if (true || $this_object->prop ("state") != MRP_STATUS_INPROGRESS)
 		{
-			if ($this->can_start(array("job" => $this_object->id())))
+			if (true || $this->can_start(array("job" => $this_object->id())))
 			{
 				$toolbar->add_button(array(
 					"name" => "start",
@@ -284,7 +284,7 @@ class mrp_job extends class_base
 			}
 		}
 
-		if ($this_object->prop ("state")  == MRP_STATUS_INPROGRESS)
+		if (true || $this_object->prop ("state")  == MRP_STATUS_INPROGRESS)
 		{
 			$toolbar->add_button(array(
 				"name" => "done",
@@ -303,7 +303,7 @@ class mrp_job extends class_base
 				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }"
 			));
 
-			if ($this_object->prop("state") != MRP_STATUS_PAUSED)
+			if (true || $this_object->prop("state") != MRP_STATUS_PAUSED)
 			{
 				$toolbar->add_button(array(
 					"name" => "pause",
