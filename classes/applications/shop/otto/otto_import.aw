@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.14 2004/12/10 08:59:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.15 2004/12/27 12:32:00 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -288,14 +288,14 @@ class otto_import extends class_base
 		
 			$html = file_get_contents($url);
 
-			// image is http://image01.otto.de:80/m2bilder/OttoDe/de_DE/images/formatb/[number].jpg
+			// image is http://image01.otto.de:80/pool/OttoDe/de_DE/images/formatb/[number].jpg
 			if (strpos($html,"konnten leider keine") !== false)
 			{ 
 				// read from baur.de
 				$this->read_img_from_baur($pcode);
 			}
 			else
-			if (!preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
+			if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
 			{
 				echo "for product $pcode multiple images! <br>\n";
 				flush();
@@ -311,7 +311,7 @@ class otto_import extends class_base
 				foreach($urld as $url)
 				{
 					$html = file_get_contents($url);
-					if (!preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
+					if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
 					{
 						echo "total fakap <br>";
 						flush();
@@ -320,7 +320,7 @@ class otto_import extends class_base
 					{
 						$add = 0;
 						// check if we got the main img
-						if (preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+						if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
 						{
 							$add = 1;
 							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
@@ -347,7 +347,7 @@ class otto_import extends class_base
 							do {
 								//sleep(1);
 								$nhtml = file_get_contents($nurl);
-								$ismatch = preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
+								$ismatch = preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
 								if ($cnt > 1)
 								{
 									echo "try nr $cnt <Br>\n";
@@ -363,7 +363,7 @@ class otto_import extends class_base
 								));
 							}
 							
-							if (!preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt))
+							if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt))
 							{
 								echo "for product $pcode no image number $nr! <br>\n";
 								echo "html is $nhtml <br>";
@@ -386,7 +386,7 @@ class otto_import extends class_base
 
 				$add = 0;
 				// check if we got the main img
-				if (preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
+				if (preg_match("/pool\/OttoDe\/de_DE\/images\/formatd\/(\d+)\.jpg/imsU", $html, $mt))
 				{
 					$add = 1;
 					$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
@@ -408,7 +408,7 @@ class otto_import extends class_base
 					do {
 						//sleep(1);
 						$nhtml = file_get_contents($nurl);
-						$ismatch = preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
+						$ismatch = preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt);
 						if ($cnt > 1)
 						{
 							echo "try nr $cnt <Br>\n";
@@ -424,7 +424,7 @@ class otto_import extends class_base
 						));
 					}
 					
-					if (!preg_match("/m2bilder\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt))
+					if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$nhtml, $mt))
 					{
 						echo "for product $pcode no image number $nr! <br>\n";
 						echo "html is $nhtml <br>";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.17 2004/12/09 11:03:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.18 2004/12/27 12:31:54 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -462,14 +462,21 @@ class shop_order_center extends class_base
 		return $ol;
 	}
 
-	function make_menu_link($o)
+	function make_menu_link($o, $ref = NULL)
 	{
 		if ($o->prop("link") != "")
 		{
 			return $o->prop("link");
 		}
 
-		$link =  $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
+		if ($ref === NULL)
+		{
+			$link =  $this->mk_my_orb("show_items", array("id" => $this->folder_obj->id(), "section" => $o->id()));
+		}
+		else
+		{
+			$link =  $this->mk_my_orb("show_items", array("id" => $ref->id(), "section" => $o->id()));
+		}
 		return $link;
 	}
 
@@ -598,13 +605,21 @@ class shop_order_center extends class_base
 		foreach($pl as $o)
 		{
 			$i = $o->instance();
-			$tl_inst->add_product($i->do_draw_product(array(
-				"prod" => $o,
-				"layout" => $layout,
-				"oc_obj" => $soc,
-				"quantity" => $soce[$o->id()]["ordered_num_enter"],
-				"is_err" => $soce[$o->id()]["is_err"]
-			)));
+			if ($tl_inst->is_on_cur_page())
+			{
+				$tl_inst->add_product($i->do_draw_product(array(
+					"prod" => $o,
+					"layout" => $layout,
+					"oc_obj" => $soc,
+					"quantity" => $soce[$o->id()]["ordered_num_enter"],
+					"is_err" => $soce[$o->id()]["is_err"],
+					"prod_link_cb" => $arr["prod_link_cb"]
+				)));
+			}
+			else
+			{
+				$tl_inst->add_product("");
+			}
 		}
 
 		return $tl_inst->finish_table();

@@ -29,6 +29,26 @@
             <method>serialize</method>
             <caption>Tellimuse e-maili subjekt</caption>
       </property>
+      <property>
+            <name>update_handler</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Korvi uuendamise kontroller</caption>
+      </property>
+      <property>
+            <name>finish_handler</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tellimise kontroller</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_ORDER_CART</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -40,6 +60,11 @@
                   <clid>CL_SHOP_PRODUCT_LAYOUT</clid>
                   <caption>toote kujundus</caption>
             </PROD_LAYOUT>
+            <CONTROLLER>
+                  <value>2</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.11 2004/12/10 08:59:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.12 2004/12/27 12:31:54 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -183,7 +183,6 @@ class shop_product_packaging extends class_base
 	function do_draw_product($arr)
 	{
 		extract($arr);
-
 		$pr_i = get_instance(CL_SHOP_PRODUCT);
 
 		$pi = $prod;

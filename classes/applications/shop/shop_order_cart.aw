@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.23 2004/12/10 08:59:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.24 2004/12/27 12:31:54 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -17,8 +17,18 @@
 @property email_subj type=textbox field=meta method=serialize
 @caption Tellimuse e-maili subjekt
 
+@property update_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+@caption Korvi uuendamise kontroller
+
+@property finish_handler type=relpicker reltype=RELTYPE_CONTROLLER field=meta method=serialize
+@caption Tellimise kontroller
+
 @reltype PROD_LAYOUT value=1 clid=CL_SHOP_PRODUCT_LAYOUT
 @caption toote kujundus
+
+@reltype CONTROLLER value=2 clid=CL_FORM_CONTROLLER
+@caption kontroller
+
 */
 
 class shop_order_cart extends class_base
@@ -263,6 +273,17 @@ class shop_order_cart extends class_base
 		$layout = obj($cart_o->prop("prod_layout"));
 
 		$order_ok = true;
+
+		if (!empty($arr["add_to_cart_id"]))
+		{
+			$arr["add_to_cart"] = $add_to_cart = array(
+				$arr["add_to_cart_id"] => $arr["quantity"]
+			);
+			$arr["order_data"] = $order_data = array(
+				$arr["add_to_cart_id"] => $arr["order_data"]
+			);
+		}
+
 		$awa = new aw_array($arr["add_to_cart"]);
 		foreach($awa->get() as $iid => $quant)
 		{
@@ -428,7 +449,6 @@ class shop_order_cart extends class_base
 					}
 				}
 			}
-
 			if (isset($awa["all_pkts"]) && is_array($awa["all_pkts"]))
 			{
 				foreach($awa["all_pkts"] as $iid => $k_d)
@@ -441,6 +461,29 @@ class shop_order_cart extends class_base
 							$_SESSION["cart"]["item_data"][$c->prop("to")] = $k_d;
 						}
 					}
+				}
+			}
+		}
+
+		if (is_oid($cart_o->prop("update_handler")) && $this->can("view", $cart_o->prop("update_handler")))
+		{
+			$ctr = get_instance(CL_FORM_CONTROLLER);
+			if (!$ctr->do_check($cart_o->prop("update_handler"), NULL, $cart_o, $oc))
+			{
+				if (!$arr["return_url"])
+				{
+					if ($arr["from"] == "pre")
+					{
+						header("Location: ".$this->mk_my_orb("pre_finish_order", array("oc" => $arr["oc"], "section" => $arr["section"])));
+					}
+					else
+					{
+						header("Location: ".$this->mk_my_orb("show_cart", array("oc" => $arr["oc"], "section" => $arr["section"])));
+					}
+				}
+				else
+				{
+					header("Location: ".$arr["return_url"]);
 				}
 			}
 		}
@@ -473,6 +516,12 @@ class shop_order_cart extends class_base
 				return aw_ini_get("baseurl");
 			}
 
+			if (is_oid($cart_o->prop("finish_handler")) && $this->can("view", $cart_o->prop("finish_handler")))
+			{
+				$ctr = get_instance(CL_FORM_CONTROLLER);
+				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
+			}
+
 			aw_session_del("order.accept_cond");
 			$ordid = $this->do_create_order_from_cart($arr["oc"]);
 			$this->start_order();
@@ -488,6 +537,7 @@ class shop_order_cart extends class_base
 	{
 		$so = get_instance("applications/shop/shop_order");
 		$oc = obj($oc);
+
 		if ($warehouse === NULL)
 		{
 			if (!is_oid($oc->prop("warehouse")))

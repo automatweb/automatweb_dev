@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.21 2004/12/01 14:04:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.22 2004/12/27 12:31:54 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -621,7 +621,9 @@ class shop_order extends class_base
 			{
 				$ui = $product_info->prop("user".$i);
 				$this->vars(array(
-					'user'.$i => $ui
+					'user'.$i => $ui,
+					"packaging_user".$i => $prod->prop("user".$i),
+					"packaging_uservar".$i => $prod->prop_str("uservar".$i)
 				));
 			}
 
@@ -649,6 +651,7 @@ class shop_order extends class_base
 				"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2),
 				'order_data_color' => $ord_item_data[$prod->id()]['color'],
 				'order_data_size' => $ord_item_data[$prod->id()]['size'],
+				'order_data_price' => $ord_item_data[$prod->id()]['price'],
 			));
 
 			$total += ($pr * $tp[$prod->id()]);
