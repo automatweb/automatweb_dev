@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.38 2001/06/29 02:08:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.39 2001/06/29 15:23:12 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -28,9 +28,62 @@ class planner extends calendar {
 	{
 		// todo list
 		$this->read_template("todo.tpl");
+
 		global $udata;
 		extract($args);
 		$parent = ($parent) ? $parent : $udata["home_folder"];
+
+
+		// leiame koik todo folderid, siit kuni kodukataloogini välja
+		if ($parent != $udata["home_folder"])
+		{
+			$traverse = true;
+		};
+
+		$flatlist = array();
+		$res = true;
+		$keys = array($udata["home_folder"]);
+
+		while($res)
+		{
+			$res = $this->get_objects_below(array(
+						"parent" => $keys,
+						"class" => CL_PSEUDO,
+						"type" => MN_EVENT_FOLDER,
+				));
+			if (is_array($res))
+			{
+				foreach($res as $key => $val)
+				{
+					$flatlist[$val["parent"]][$key] = $val["name"];
+				};
+				$keys = array_keys($res);
+			};
+			
+		}
+
+		$flatlist[0][$udata["home_folder"]] = "sorteerimata";
+		$fl = $this->indent_array($flatlist,0);
+
+		$fullpath = array();
+
+		$prnt = $parent;
+
+		while($traverse)
+		{
+			$q = "SELECT * FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.oid = '$prnt'";
+			$this->db_query($q);
+			$row = $this->db_next();
+			$traverse = ! (($row["parent"] == $udata["home_folder"]) || ($row["parent"] < 1));
+			$fullpath = array($row["oid"] => $row["name"]) + $fullpath;
+			$prnt = $row["parent"];
+		}
+
+
+		$fullpath = array($udata["home_folder"] => "sorteerimata") + $fullpath;
+		global $baseurl;
+		$fullpathstr = map2("<a href='$baseurl/?class=planner&action=todo&parent=%d'>%s</a>",$fullpath);
+		
 		// koigepealt siis folderid
 		$q = "SELECT * FROM objects
 			LEFT JOIN menu ON (objects.oid = menu.id)
@@ -64,10 +117,35 @@ class planner extends calendar {
 		$this->vars(array(
 				"folderline" => $c,
 				"todoline" => $tc,
+				"targetlist" => $this->picker($parent,$fl),
+				"fullpath" => join(" &gt; ",$fullpathstr),
 				"parent" => $parent,
+				"reforb" => $this->mk_reforb("submit_todo",array("parent" => $parent)),
 		));
 		$retval = $this->parse();
 		return $retval;
+	}
+
+	function submit_todo($args = array())
+	{
+		extract($args);
+		$count = 0;
+		if (is_array($check))
+		{
+			foreach($check as $id)
+			{
+				$cnt++;
+				$q = "UPDATE objects SET parent = '$folder' WHERE oid = '$id'";
+				$this->db_query($q);
+			};
+		};
+		global $status_msg;
+		$status_msg = "$cnt taski viidi teise folderisse";
+		session_register("status_msg");
+		return $this->mk_site_orb(array(
+					"action" => "todo",
+					"parent" => $parent,
+				));
 	}
 
 	function add_todo_menu($args = array())
@@ -81,7 +159,7 @@ class planner extends calendar {
 
 		$q = "INSERT INTO menu (id,type) VALUES ('$oid'," . MN_EVENT_FOLDER . ")";
 		$this->db_query($q);
-		return $this->mk_site_orb(array("action" => "todo"));
+		return $this->mk_site_orb(array("action" => "todo","parent" => $parent));
 	}
 
 	////
@@ -155,7 +233,7 @@ class planner extends calendar {
 			"ftitle" => $ftitle,
 			"title" => $row["title"],
 			"description" => $row["description"],
-			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date)),
+			"reforb" => $this->mk_reforb("submit_todo_item",array("id" => $id,"date" => $date,"parent" => $parent)),
 		));
 		return $this->parse();
 	}
@@ -167,6 +245,9 @@ class planner extends calendar {
 		global $udata;
 		if ($id)
 		{
+			$obj = $this->get_object($id);
+			// siia voiks mingi acl checki panna
+			$parent = $obj["parent"];
 			$q = "UPDATE planner 
 				SET title = '$title',
 					description = '$description'
@@ -177,7 +258,7 @@ class planner extends calendar {
 			
 			$id = $this->new_object(array(
 					"name" => "$title",
-					"parent" => $udata["home_folder"],
+					"parent" => $parent,
 					"class_id" => CL_CAL_EVENT,
 				));
 		
@@ -190,7 +271,7 @@ class planner extends calendar {
 		global $status_msg;
 		$status_msg = "TODO on salvestatud";
 		session_register("status_msg");
-		return $this->mk_site_orb(array("action" => "todo"));
+		return $this->mk_site_orb(array("action" => "todo","parent" => $parent));
 	}
 				
 
