@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.18 2004/05/17 13:34:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.19 2004/06/14 14:31:20 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -47,6 +47,14 @@ class templatemgr extends aw_template
 		$result = array("0" => $args["caption"]);
 		while($tpl = $this->db_fetch_row())
 		{
+			if ($tpl["obj_id"] > 0)
+			{
+				if (!$this->can("view", $tpl["obj_id"]))
+				{
+					continue;
+				}
+			}
+
 			$result[$tpl["id"]] = $tpl["name"];
 			if ($tpl["filename"] == $def)
 			{
