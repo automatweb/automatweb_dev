@@ -90,6 +90,7 @@ class object_tree extends _int_obj_container_base
 			{
 				$cnt++;
 	
+				$tmp = obj($_oid);
 				if (isset($param["params"]))
 				{
 					call_user_func_array(array(&$o, $func), $param["params"]);
@@ -148,6 +149,7 @@ class object_tree extends _int_obj_container_base
 		{
 			foreach($level as $_oid => $o)
 			{
+				$o = obj($_oid);
 				if (is_array($param["func"]))
 				{
 					$meth = $param["func"][1];
@@ -172,7 +174,13 @@ class object_tree extends _int_obj_container_base
 	function level($param)
 	{
 		$oid = $GLOBALS["object_loader"]->param_to_oid($param);
-		return (is_array($this->tree[$oid]) ? $this->tree[$oid] : array());
+		$tmp =  (is_array($this->tree[$oid]) ? $this->tree[$oid] : array());
+		$ret = array();
+		foreach($tmp as $oid => $a)
+		{
+			$ret[$oid] = obj($oid);
+		}
+		return $ret;
 	}
 
 	function subtree($param)
@@ -260,20 +268,30 @@ class object_tree extends _int_obj_container_base
 	{
 		global $awt;
 		$awt->start("ds_search");
-		list($oids) = $GLOBALS["object_loader"]->ds->search($filter);
+		list($oids, $meta_filter, $acldata, $parentdata) = $GLOBALS["object_loader"]->ds->search($filter);
+
+		// set acldata to memcache
+		if (is_array($acldata))
+		{
+			foreach($acldata as $a_oid => $a_dat)
+			{
+				$GLOBALS["__obj_sys_acl_memc"][$a_oid] = $a_dat;
+			}
+		}
+
 		$awt->stop("ds_search");
 		$acl_oids = array();
 		foreach($oids as $oid => $oname)
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $oid))
 			{
-				$o = new object($oid);
 				if (count($meta_filter) > 0)
 				{
+					$o = new object($oid);
 					$add = true;
 					foreach($meta_filter as $mf_k => $mf_v)
 					{
-						$tmp = $_o->meta($mf_k);
+						$tmp = $o->meta($mf_k);
 						if (is_numeric($mf_v))
 						{
 							$tmp = (int)$tmp;
@@ -293,7 +311,7 @@ class object_tree extends _int_obj_container_base
 				}
 				else
 				{
-					$this->tree[$o->parent()][$o->id()] = $o;
+					$this->tree[$parentdata[$oid]][$oid] = $oid;
 					$acl_oids[] = $oid;
 				}
 			}
@@ -327,6 +345,7 @@ class object_tree extends _int_obj_container_base
 		{
 			foreach($this->tree[$o->id()] as $oid => $_o)
 			{
+				$_o = obj($oid);
 				$this->_int_req_remove($_o, $cnt);
 			}
 			unset($this->tree[$o->id()]);
@@ -344,6 +363,7 @@ class object_tree extends _int_obj_container_base
 		{
 			foreach($level as $oid => $o)
 			{
+				$o = obj($oid);
 				$arr = $o->arr();
 				foreach($filter as $k => $v)
 				{

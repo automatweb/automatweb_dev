@@ -819,14 +819,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "SELECT objects.oid as oid,objects.name as name $acld FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent  $acld FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
 
 			$acldata = array();
+			$parentdata = array();
 
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$ret[$row["oid"]] = $row["name"];
+				$parentdata[$row["oid"]] = $row["parent"];
 				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 				{
 					$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
@@ -864,7 +866,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}*/
-		return array($ret, $this->meta_filter, $acldata);
+		return array($ret, $this->meta_filter, $acldata, $parentdata);
 	}
 
 	function delete_object($oid)

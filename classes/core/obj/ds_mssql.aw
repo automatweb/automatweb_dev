@@ -765,7 +765,14 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 		$ret = array();
 		if ($where != "")
 		{
-			$q = "SELECT ".$this->limit." objects.oid as oid,objects.name as name FROM objects WITH (nolock) $joins WHERE $where ".$this->sby;
+			if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+			{
+				$acld = ", objects.acldata as acldata, objects.parent as parent";
+			}
+			$q = "SELECT ".$this->limit." objects.oid as oid,objects.name as name,objects.parent as parent  $acld FROM objects WITH (nolock) $joins WHERE $where ".$this->sby;
+
+			$acldata = array();
+			$parentdata = array();
 
 			$this->db_query($q);
 			while ($row = $this->db_next())
@@ -776,6 +783,12 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 					continue;
 				}
 				$ret[$row["oid"]] = $row["name"];
+				$parentdata[$row["oid"]] = $row["parent"];
+				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+				{
+					$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+					$acldata[$row["oid"]] = $row;
+				}
 			}
 		}
 
@@ -808,7 +821,7 @@ class _int_obj_ds_mssql extends _int_obj_ds_base
 				}
 			}
 		}*/
-		return array($ret, $this->meta_filter);
+		return array($ret, $this->meta_filter, $acldata, $parentdata);
 	}
 
 	function delete_object($oid)
