@@ -52,30 +52,6 @@ function setLink(li,title)
 <tr bgcolor="#C9EFEF">
 <td class="plain" colspan=2><input type='submit' value='Salvesta'></td>
 </tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='orb.{VAR:ext}?class=icons&action=icon_db'>Ikoonide baas</a></td>
-<td class="plain"><a href='orb.{VAR:ext}?class=icons&action=import_icons'>Impordi</a></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=class_icons'>Klasside ikoonid</a></td>
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_class_icons'>Impordi</a></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=file_icons'>Failit&uuml;&uuml;pide ikoonid</a></td>
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_file_icons'>Impordi</a></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=program_icons'>Programmide ikoonid</a></td>
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_program_icons'>Impordi</a></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=other_icons'>Muud ikoonid</a></td>
-<td class="plain"><a href='orb.{VAR:ext}?class=config&action=import_other_icons'>Impordi</a></td>
-</tr>
-<tr bgcolor="#C9EFEF">
-<td class="plain"><a href='{VAR:cfgform_link}'>Klasside konfiguratsioonivormid</a></td>
-<td class="plain">&nbsp;</td>
-</tr>
 </table>
 {VAR:reforb}
 </form>
