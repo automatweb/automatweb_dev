@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.132 2003/07/08 10:29:04 axel Exp $
+// $Id: class_base.aw,v 2.133 2003/07/17 14:41:59 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -18,6 +18,7 @@
 	@comment Kas objekt on aktiivne või mitte
 
 	@groupinfo general caption=Üldine default=1
+	@classinfo trans_id=TR_CLASS_BASE
 */
 
 
@@ -892,7 +893,8 @@ class class_base extends aw_template
 						// remap to the first child group
 						$property_list[$key] = $tmp;
 					}
-					elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
+					elseif (empty($sub_group) && $_grp == $this->activegroup)
+					//elseif (empty($sub_group) && $tmp["group"] == $this->activegroup)
 					{
 						$property_list[$key] = $tmp;
 					}
@@ -966,21 +968,33 @@ class class_base extends aw_template
 				$property["caption"] = $property_list[$key]["caption"];
 			};
 
-			// properties with no group end up in default group
-			$grpid = isset($property["group"]) ? $property["group"] : $this->default_group;
 
+			// nyah .. do not create the toolbar instance, if we are submitting the
+			// form. but this approach really sucks
 			if (($property["type"] == "toolbar") && ($this->orb_action != "submit"))
 			{
 				classload("toolbar");
 				$property["toolbar"] = new toolbar();
 			};
 
+			// properties with no group end up in default group
 			if (isset($val["group"]))
 			{
-				$grpid = $val["group"];
+				if (is_array($val["group"]))
+				{
+					$in_groups = $val["group"];
+				}
+				else
+				{
+					$in_groups = array($val["group"]);
+				};
+			}
+			else
+			{
+				$in_groups = array($this->default_group);
 			};
 
-			if ($no_group || ($grpid == $use_group))
+			if ($no_group || (in_array($use_group,$in_groups)))
 			{
 				$retval[$key] = $property;
 			};
