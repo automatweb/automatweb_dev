@@ -587,7 +587,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function connection_query_fetch()
 	{
-		return "a.id as `id`,
+		$ret = "a.id as `id`,
 				a.source as `from`,
 				a.target as `to`,
 				a.type as `type`,
@@ -612,8 +612,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.jrk as `to.jrk`,
 				o_s.jrk as `from.jrk`,
 				o_t.status as `to.status`,
-				o_s.status as `from.status`
+				o_s.status as `from.status`,
+				o_t.parent as `to.parent`,
+				o_s.parent as `from.parent`
 		";
+
+		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+		{
+			$ret .= ",o_t.acldata as `to.acldata`,o_s.acldata as `from.acldata`";
+		}
+		return $ret;
 	}
 
 	// arr - { [from], [to], [type], [class], [to.obj_table_field], [from.obj_table_field] }
@@ -692,6 +700,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		while ($row = $this->db_next())
 		{
+			$row["from.acldata"] = aw_unserialize($row["from.acldata"]);
+			$row["to.acldata"] = aw_unserialize($row["to.acldata"]);
 			$ret[$row["id"]] = $row;
 		}
 
@@ -759,12 +769,23 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$ret = array();
 		if ($where != "")
 		{
-			$q = "SELECT objects.oid as oid,objects.name as name FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+			if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+			{
+				$acld = ", objects.acldata as acldata, objects.parent as parent";
+			}
+			$q = "SELECT objects.oid as oid,objects.name as name $acld FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
+
+			$acldata = array();
 
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$ret[$row["oid"]] = $row["name"];
+				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+				{
+					$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+					$acldata[$row["oid"]] = $row;
+				}
 			}
 		}
 
@@ -797,7 +818,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				}
 			}
 		}*/
-		return array($ret, $this->meta_filter);
+		return array($ret, $this->meta_filter, $acldata);
 	}
 
 	function delete_object($oid)

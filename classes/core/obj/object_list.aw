@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.34 2004/09/09 11:08:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.35 2004/09/16 08:54:13 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -348,11 +348,20 @@ class object_list extends _int_obj_container_base
 		$this->_int_init_empty();
 
 		$tmp = $GLOBALS["object_loader"]->ds->search($filter);
-		list($oids, $meta_filter) = $tmp;
+		list($oids, $meta_filter, $acldata) = $tmp;
 		if (!is_array($oids))
 		{
 			return false;
 		};
+
+		// set acldata to memcache
+		if (is_array($acldata))
+		{
+			foreach($acldata as $a_oid => $a_dat)
+			{
+				$GLOBALS["__obj_sys_acl_memc"][$a_oid] = $a_dat;
+			}
+		}
 
 		if (count($meta_filter) > 0)
 		{

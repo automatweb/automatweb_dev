@@ -115,7 +115,7 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 				{
 					error::throw(array(
 						"id" => ERR_TRANS,
-						"ds_auto_translation::get_objdata($oid): found more than one translation relation from object $oid pointing to an object with lang id $lang_id!"
+						"msg" => "ds_auto_translation::get_objdata($oid): found more than one translation relation from object $oid pointing to an object with lang id $lang_id!"
 					));
 				}
 				else

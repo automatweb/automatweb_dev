@@ -266,6 +266,15 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_id => $c_d)
 		{
+			// set acldata to memcache
+			$GLOBALS["__obj_sys_acl_memc"][$c_d["from"]] = array(
+				"acldata" => $c_d["from.acldata"],
+				"parent" => $c_d["from.parent"]
+			);
+			$GLOBALS["__obj_sys_acl_memc"][$c_d["to"]] = array(
+				"acldata" => $c_d["to.acldata"],
+				"parent" => $c_d["to.parent"]
+			);
 			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["to"]))
 			{
 				$ret[$c_id] =& new connection($c_d);
@@ -345,6 +354,15 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
+			// set acldata to memcache
+			$GLOBALS["__obj_sys_acl_memc"][$c_d["from"]] = array(
+				"acldata" => $c_d["from.acldata"],
+				"parent" => $c_d["from.parent"]
+			);
+			$GLOBALS["__obj_sys_acl_memc"][$c_d["to"]] = array(
+				"acldata" => $c_d["to.acldata"],
+				"parent" => $c_d["to.parent"]
+			);	
 			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]))
 			{
 				$ret[] =& new connection($c_d);
@@ -1148,7 +1166,15 @@ class _int_object
 		$this->_init_empty();
 
 		// now. we gots to find the class_id of the object
-		$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+		if (isset($GLOBALS["__obj_sys_objd_memc"][$oid]))
+		{
+			$this->obj = $GLOBALS["__obj_sys_objd_memc"][$oid];
+			unset($GLOBALS["__obj_sys_objd_memc"][$oid]);
+		}
+		else
+		{
+			$this->obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
+		}
 
 		$this->_int_load_properties();
 
