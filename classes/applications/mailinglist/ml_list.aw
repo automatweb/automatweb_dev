@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.22 2005/02/17 11:34:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.23 2005/03/22 15:38:29 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -582,7 +582,7 @@ class ml_list extends class_base
 				$tb->add_button(array(
 					"name" => "save",
 					"img" => "save.gif",
-					"tooltip" => "Salvesta",
+					"tooltip" => t("Salvesta"),
 					"action" => "submit",
 				));
 				$msg = $arr["request"]["msg_id"];
@@ -596,7 +596,7 @@ class ml_list extends class_base
 					$tb->add_button(array(
 						"name" => "preview",
 						"img" => "preview.gif",
-						"tooltip" => "Eelvaade",
+						"tooltip" => t("Eelvaade"),
 						"url" => $link,
 						"target" => "_blank",
 					));
@@ -606,8 +606,8 @@ class ml_list extends class_base
 				$tb->add_button(array(
 					"name" => "send",
 					"img" => "mail_send.gif",
-					"tooltip" => "Saada",
-					"confirm" => "Saata kiri ära?",
+					"tooltip" => t("Saada"),
+					"confirm" => t("Saata kiri ära?"),
 				));
 				*/
 				break;
@@ -1147,7 +1147,7 @@ class ml_list extends class_base
 		{
 			$t->define_field(array(
 				"name" => "others",
-				"caption" => "Liitumisinfo",
+				"caption" => t("Liitumisinfo"),
 			));
 		}
 		$t->define_field(array(
@@ -1186,7 +1186,7 @@ class ml_list extends class_base
 					"email" => $mailto,
 					"joined" => $memberdata["joined"],
 					"others" => html::href(array(
-						"caption" => "Vaata",
+						"caption" => t("Vaata"),
 						"url" => $this->mk_my_orb("change", array(
 							"id" => $memberdata["id"],
 							"group" => "udef_fields",
@@ -1234,7 +1234,7 @@ class ml_list extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
 			"name" => "new",
-			"tooltip" => "Uus kiri",
+			"tooltip" => t("Uus kiri"),
 			"url" => $this->mk_my_orb("change", array(
 					"id" => $arr["obj_inst"]->id(),
 					"group" => "write_mail",
@@ -1244,9 +1244,10 @@ class ml_list extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "delete",
-			"tooltip" => "Kustuta",
+			"tooltip" => t("Kustuta"),
 			"action" => "delete_queue_items",
 			"img" => "delete.gif",
+			"confirm" => t("Oled kindel, et soovid valitud kirjad kustutada?"),
 		));
 	}
 
@@ -1751,7 +1752,7 @@ class ml_list extends class_base
 				"type" => "select",
 				"name" => "template_selector",
 				"options" => $options,
-				"caption" => "Vali template",
+				"caption" => t("Vali template"),
 				"value" => $msg_obj->meta("template_selector"),
 			);
 		}
@@ -2071,7 +2072,7 @@ class ml_list extends class_base
 
 		// add to scheduler
 		$this->_add_expf_sched($l);
-		die("all done");
+		die(t("all done"));
 	}
 }
 ?>
