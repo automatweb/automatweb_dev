@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.6 2004/01/13 14:15:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.7 2004/01/13 17:37:30 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -16,7 +16,7 @@
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
 
-@reltype PARTICIPANT clid=CL_USER value=2
+@reltype PARTICIPANT clid=CL_USER,CL_CRM_COMPANY value=2
 @caption osaleja
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING
@@ -50,36 +50,12 @@ class project extends class_base
 	// !Optionally this also needs to support date range ..
 	function gen_event_list($arr)
 	{
-		$ol = new object_list(array(
-			"oid" => $this->get_events_for_project(array("project_id" => $arr["obj_inst"]->id())),
-			"sort_by" => "planner.start",
-			new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
+
+		$lds = $this->get_events_for_project(array(
+			"project_id" => $arr["obj_inst"]->id(),
 		));
-
-
-		$rv = "";
-
+		
 		$t = &$arr["prop"]["vcl_inst"];
-		/*
-		$t->define_field(array(
-			"name" => "time",
-			"caption" => "Aeg",
-			"sortable" => 1,
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "type",
-			"caption" => "Tüüp",
-			"sortable" => 1,
-			"align" => "center"
-		));
-		$t->define_field(array(
-			"name" => "name",
-			"caption" => "Nimi",
-			"sortable" => 1,
-			"align" => "center"
-		));
-		*/
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
@@ -88,26 +64,26 @@ class project extends class_base
 		$start = $range["start"];
 		$end = $range["end"];
 
-		for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
+		if (sizeof($lds) > 0)
 		{
-			$clinf = $this->cfg["classes"][$o->class_id()];
-			/*
-			$t->define_data(array(
-				"time" => $this->time2date($o->prop("start1")),
-				"type" => $clinf["name"],
-				"name" => html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
-					"caption" => $o->prop("name"),
-				)),
+			$ol = new object_list(array(
+				"oid" => $lds,
+				"sort_by" => "planner.start",
+				new object_list_filter(array("non_filter_classes" => CL_CRM_MEETING)),
 			));
-			*/
-			$t->add_item(array(
-				"timestamp" => $o->prop("start1"),
-				"data" => array(
-					"name" => "<font color='gray'>" . $clinf["name"] . "</font> " . $o->prop("name"),
-					"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
-				),
-			));
+
+
+			for($o =& $ol->begin(); !$ol->end(); $o =& $ol->next())
+			{
+				$clinf = $this->cfg["classes"][$o->class_id()];
+				$t->add_item(array(
+					"timestamp" => $o->prop("start1"),
+					"data" => array(
+						"name" => "<font color='gray'>" . $clinf["name"] . "</font> " . $o->prop("name"),
+						"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
+					),
+				));
+			};
 		};
 	}
 
@@ -116,11 +92,14 @@ class project extends class_base
 	// project_id (optional) - id of the project, if specified we get events
 	// from that project only
 
+	// XXX: split this into separate methods
 	function get_events_from_projects($arr = array())
 	{
-		$rv = array();
-		if (empty($arr["project_id"]))
+		$ev_ids = array();
+		//if (empty($arr["project_id"]))
+		if ($arr["type"] == "my_projects")
 		{
+			// this returns a list of events from "My projects"
 			$users = get_instance("users");
 			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
 			$conns = $user->connections_to(array(
@@ -132,10 +111,34 @@ class project extends class_base
 				$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
 			};
 		}
-		else
+		elseif (!empty($arr["project_id"]))
 		{
 			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
 		};
+		return $ev_ids;
+	}
+
+	////
+	// !id - participant id
+	function get_events_for_participant($arr = array())
+	{
+		$ev_ids = array();
+		$projects = array();
+		$obj = new object($arr["id"]);
+		if ($obj->class_id() == CL_CRM_COMPANY)
+		{
+			$conns = $obj->connections_to(array(
+				"reltype" => RELTYPE_PARTICIPANT,
+			));
+			foreach($conns as $conn)
+			{
+				$ev_ids = $ev_ids + $this->get_events_for_project(array(
+					"project_id" => $conn->prop("from"),
+					"class_id" => $arr["clid"],
+				));
+			};
+		};
+
 		return $ev_ids;
 	}
 
@@ -144,19 +147,26 @@ class project extends class_base
 	function get_events_for_project($arr)
 	{
 		$pr_obj = new object($arr["project_id"]);
-		$event_connections = $pr_obj->connections_from(array(
+		$args = array(
 			"type" => RELTYPE_PRJ_EVENT,
-		));
+		);
+
+
+		if (!empty($arr["class_id"]))
+		{
+			$args["to.class_id"] = $arr["class_id"];
+		};
+
+		$event_connections = $pr_obj->connections_from($args);
 
 		$ev_id_list = array();
 		foreach($event_connections as $conn)
 		{
-			$ev_id_list[] = $conn->prop("to");
+			$ev_id_list[$conn->prop("to")] = $conn->prop("to");
 		};
 
 		return $ev_id_list;
 	}
-
 
 	////
 	// !connects an event to a project
