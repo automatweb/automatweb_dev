@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.17 2004/06/15 10:39:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.18 2004/06/15 11:45:46 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -289,6 +289,7 @@ class vcalendar extends aw_template
 			};
 			$awt->stop("draw-s-month");
 		};
+
 
 		$this->read_template($this->container_template);
 		$types = array(
@@ -638,6 +639,13 @@ class vcalendar extends aw_template
 			$active_day = date("d-m-Y");
 		};
 		list($d,$m,$y) = explode("-",$active_day);
+		// perhaps the date was in dd-mm-YYYY form?
+		if (empty($y))
+		{
+			$y = $m;
+			$m = $d;
+			$d = 1;
+		};
 		$act_tm = mktime(0,0,0,$m,$d,$y);
 		$act_stamp = date("Ymd",$act_tm);
 
