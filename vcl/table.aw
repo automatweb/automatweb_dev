@@ -1,16 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.23 2002/07/17 20:18:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.24 2002/07/18 10:40:54 kristo Exp $
+
+//
+// aw_table - generates the html for tables - you just have to feed it the data
+//
 
 class aw_table
 {
-	
-	// constructor
+	////
+	// !contructor - paramaters:
+	// prefix - a symbolic name for the table so we could tell it apart from the others
+	// tbgcolor - default cell background color
 	function aw_table($data)
 	{
-		// väljad
-		// prefix - kasutame sessioonimuutujate registreerimisel
-		$this->prefix = $data["prefix"];
-		$this->sortby = $data["sortby"];
 		if (file_exists(aw_ini_get("site_basedir")."/public/img/up.gif"))
 		{
 			$this->imgurl = aw_ini_get("baseurl")."/img";
@@ -19,23 +21,15 @@ class aw_table
 		{
 			$this->imgurl = aw_ini_get("baseurl")."/automatweb/images";
 		}
-		$this->self   = $data["self"];
-		$this->tbgcolor = $data["tbgcolor"];
-		$this->header_attribs = array();
-
-		if (strpos($this->self,"?") === false)
-		{
-			$this->separator = "?";
-		}
-		else
-		{
-			$this->separator = "&";
-		}
-
-		$this->lookfor = $data[lookfor];
-
 		$this->up_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/up.gif");
 		$this->dn_arr = sprintf("<img src='%s' border='0' />",$this->imgurl . "/down.gif");
+
+		// prefix - kasutame sessioonimuutujate registreerimisel
+		$this->prefix = $data["prefix"];
+		// table cell background color
+		$this->tbgcolor = $data["tbgcolor"];
+
+		$this->header_attribs = array();
 
 		// ridade värvid (och siis stiilid) muutuvad
 		// siin defineerime nad
@@ -46,28 +40,21 @@ class aw_table
 		$this->rowdefs = array();
 		$this->data = array();
 		$this->actions = array();
-		$this->alpha = false;
-
-		$this->title_attribs = array();
 
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et määrata default sort order.
 		$this->first = true;
 	}
 
+	////
+	// !sisestame andmed
 	function define_data($row) 
 	{
-		// sisestame andmed
 		$this->data[] = $row;
 	}
 
 	////
-	// !Returns the amount of rows in the table (memory)
-	function rows()
-	{
-		return sizeof($this->data);
-	}
-
+	// !merge the given data with the last data entered
 	function merge_data($row)
 	{
 		$cnt = sizeof($this->data);
@@ -75,34 +62,34 @@ class aw_table
 	}
 
 	////
-	// !Throws everything away, we need this when we want to use the same
-	// table class on the same page for multiple tables
-	function reset_data()
-	{
-		$this->data = array();
-	}
-	
-	
+	// !here you can add action rows to the table
+	// link - part of the action's link, 
+	// field - the field that will be used to complete the action link, 
+	// caption - action text
+	// cspan - colspan
+	// rspan - rowspan
+	// remote - if specified, the link will open in a new window and this parameter also must contain the height,width of the popup
+	//   
 	function define_action($row) 
 	{
-		// sisestame andmed
 		$this->actions[] = $row;
 	}
 
-	// defineerib headeri
+	////
+	// !here you can define additional headers
+	// caption - the caption at the left of the header
+	// links - an array of link => text pairs that will be put in the header
 	function define_header($caption,$links = array())
 	{
 		$this->headerstring = $caption;
 		$hlinks = array();
-		// lauri muudetud -->
 		if ($this->headerlinkclassid)
 		{
 			$hlcl=" class='".$this->headerlinkclassid."' ";
 		};
-		// <--
+		reset($links);
 		while(list($k,$v) = each($links))
 		{
-			// lauri muudetud -->
 			if ($k=="extra")
 			{
 				$this->headerextra = $v;
@@ -110,256 +97,176 @@ class aw_table
 			else
 			if ($k=="extrasize")
 			{
-				$this->headerextrasize= $v;
+				$this->headerextrasize = $v;
 			} 
 			else
 			{
 				$hlinks[] = sprintf("<a href='$k' $hlcl>$v</a>",$k,$v);
 			};
-			// <--
 		};
 		$this->headerlinks = join(" | ",$hlinks);
-			
-	}
-	
-	function set_header_attribs($args)
-	{
-		if (!is_array($args))
-		{
-			return false;
-		};
-
-		while(list($k,$v) = each($args))
-		{
-			$this->header_attribs[$k] = $v;
-		};
-		$this->header_att_string = join("&",map2("%s=%s",$this->header_attribs));
 	}
 
-	function add_query_string($string)
+	////
+	// !this lets you set a field as numeric, so that they will be sorted correctly
+	function set_numeric_field($elname)
 	{
-		$this->header_att_string .= "&" . $string;
+		$this->nfields[$elname] = 1;
 	}
 
-
-	function sort_by($params) 
+	////
+	// !sets the default sorting element(s) for the table
+	// if the sorting function finds that there are no other sorting arrangements made, then it will use
+	// the element(s) specified here. 
+	// sortby - a single element or an array of elements.
+	//   sometimes the array can be a bit weird though - namely, the key specifies the column in which the 
+	//   element is and that is used when determining if a column is sorted
+	//   but when doing the actual sorting, the value is used and that contains an ordinary element, not a column name
+	//   right now this only applies to form tables 
+	function set_default_sortby($sortby)
 	{
-		// do nothing if we have no data
-		if ($this->rows() == 0)
-		{
-			return;
-		};
+		$this->default_order = $sortby;
+	}
 
+	////
+	// !sets the default sorting order
+	// if the sorting function finds that there are no other sorting arrangements made, then it will use
+	// the order specified here. 
+	// dir - a string (asc/desc) or an array of strings - it will be linked to the sort element by index
+	function set_default_sorder($dir)
+	{
+		$this->default_odir = $dir;
+	}
+
+	////
+	// !sorts the data previously entered
+	// field - optional, what to sort by. you really don't need to specify this, the table can manage it on it's own
+	// sorder - sorting order - asc/desc. you really don't need to specify this, the table can manage it on it's own
+	// rgroupby - an array of elements whose values will be grouped in the table
+	function sort_by($params = array()) 
+	{
 		// see peaks olema array,
 		// kus on regitud erinevate tabelite andmed
 		$aw_tables = aw_global_get("aw_tables"); 
-
-		reset($this->data);
-		$newdata = array();
 		$sess_field_key   = $this->prefix . "_sortby";
 		$sess_field_order = $this->prefix . "_sorder";
-		$before = $aw_tables[$sess_field_key];
 
-		// määrame sorteerimisjärjekorra
-
-		if (!$params["field"]) 
+		// figure out the column by which we must sort
+		// start from the parameters
+		if (!($this->sortby = $params["field"]))
 		{
-			// kui sorteerimisjärjekorda polnud määratud, siis
-
-			// before peaks sisaldama sessiooni sisse salvestatud
-			// välja nime, mille järgi viimasel vaatamisel
-			// sorteeriti
-			if ($before) 
+			// if it was not specified as a parameter the next place is the url
+			if (!($this->sortby = aw_global_get("sortby")))
 			{
-				$sortby = $before;
-				$sorder = $aw_tables[$sess_field_order];
-			} 
-			else 
-			{
-				// ja kui sessioonis ka midagi pole, siis votame
-				// defaulti
-				$sortby = $this->default_order;
-				$sorder = $this->default_odir;
-			};
-			// sorteerime kasvavas järjestuses
-		} 
-		else 
-		if ($params["sorder"] == "")
-		{
-			// sorteerimisjärjekord anti ka kaasa, nyyd vaatame
-			// kumba pidi sorteerida
-
-			// kui enne ja nyyd on samad, siis peaks vist
-			// sorteerimisjärjekorda muutma
-			if ($params["field"] == $before) 
-			{
-				// vaatame nyyd sessiooni salvestatud sorteerimisjärjekorda,
-				// ja pöörame selle ümber
-				if ($aw_tables[$sess_field_order] == "asc") 
+				// and if it is not in the url either, we will try the session
+				if (!($this->sortby = $aw_tables[$sess_field_key]))
 				{
-					$sorder = "desc";
-				}
-				else 
-				{
-					$sorder = "asc";
-				};
-			} 
-			else 
-			{
-				$sorder = "asc";
-			};
-
-			$sortby = $params["field"];
-		}
-		else
-		{
-			$sorder = $params["sorder"];
-			$sortby = $params["field"];
-		}
-
-		$this->sortby = $sortby;
-		$this->sorder = $sorder;
-		$this->groupby = $params["group_by"];
-		$this->rgroupby = $params["rgroupby"];
-
-		$aw_tables[$sess_field_key] = $this->sortby;
-		$aw_tables[$sess_field_order] = $sorder;
-		aw_session_set("aw_tables", $aw_tables);
-
-		// sorteerime andmed
-		// uurime flagi v2lja
-		if ($this->nfields[$this->sortby] || $params["sort_numeric"]) 
-		{
-			$this->sort_flag = SORT_NUMERIC;
-		} 
-		else 
-		{
-			$this->sort_flag = SORT_REGULAR;
-		};
-
-		if ($this->nfields[$this->groupby]) 
-		{
-			$this->g_sort_flag = SORT_NUMERIC;
-		} 
-		else 
-		{
-			$this->g_sort_flag = SORT_REGULAR;
-		};
-
-		usort($this->data,array($this,"sorter"));
-
-		// old version here - handles just one group element
-/*		if (!is_array($this->groupby) && $this->groupby != "")
-		{
-			// now go over the defs and leave only those rows, where group_by's value is unique
-			$newdat = array();
-			$usedvals = array();
-			foreach($this->data as $row)
-			{
-				$_str = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$row[$this->groupby]);
-				if (!isset($usedvals[$_str]))
-				{
-					$usedvals[$_str] = 1;
-					$newdat[] = $row;
+					// and finally we get the default
+					$this->sortby = $this->default_order;
 				}
 			}
-			$this->data = $newdat;
 		}
-		else
-		if (is_array($this->groupby) && count($this->groupby) > 0)
-		{
-			$newdat = array();
-			$idx = 1;
-			$usedvals = array();
-			foreach($this->data as $row)
-			{
-				// create the group string
-				$gs = "";
-				foreach($this->groupby as $el)
-				{
-					$gs .= preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$row[$el]);
-				}
 
-				if (!isset($usedvals[$gs]))
+		// now figure out the order of sorting
+		// start with parameters
+		if (!($this->sorder = $params["sorder"]))
+		{
+			// if it was not specified as a parameter the next place is the url
+			if (!($this->sorder = aw_global_get("sort_order")))
+			{
+				// and if it is not in the url either, we will try the session
+				if (!($this->sorder = $aw_tables[$sess_field_order]))
 				{
-					$usedvals[$gs] = $idx;
-					$newdat[$idx] = $row;
-					$idx++;
-				}
-				else
-				{
-					// if we need to collect all the values for a column that would get excluded otherwise
-					// to an element, we do it here
-					if (isset($params["collect_el"]))
+					// and finally we get the default 
+					if (!($this->sorder = $this->default_odir))
 					{
-						foreach($params["collect_el"] as $c_el)
-						{
-							if ($row[$c_el] != "")
-							{
-								$newdat[$usedvals[$gs]][$c_el] .= $params["collect_sep"][$c_el].$row[$c_el];
-							}
-						}
+						$this->sorder = "asc";
 					}
 				}
 			}
-			$this->data = $newdat;
+		}
+
+		// we should mark this down only when we have clicked on a link and thus changed something from the default
+		// what's the difference? well - if the defaults change and this is written a reload does not change things
+		//
+		// and well, I think this kinda sucks - I don't want the damn thing to remember the state. 
+/*		if (aw_global_get("sort_order") || aw_global_get("sortby"))
+		{
+			$aw_tables[$sess_field_key] = $this->sortby;
+			$aw_tables[$sess_field_order] = $this->sorder;
+			aw_session_set("aw_tables", $aw_tables);
 		}*/
+
+		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
+		$this->rgroupby = $params["rgroupby"];
+
+		// ok, all those if sentences are getting on my nerves - we will make sure that all sorting options
+		// after this point are always arrays
+		$this->make_sort_prop_arrays();
+
+		// switch to estonian locale
+		$old_loc = setlocale(LC_COLLATE,0);	
+		setlocale(LC_COLLATE, 'et_EE');
+
+		// sort the data
+		usort($this->data,array($this,"sorter"));
+
+		// switch back to estonian
+		setlocale(LC_COLLATE, $old_loc);
 	}
 
-
+	////
+	// !the sorting function. iow - the tricky bit
+	// it must sort the data correctly, taking into account whether it is numerical or not
+	// then it must sort first by the rgroup element(s), and then the sorting element(s) 
 	function sorter($a,$b)
 	{
+		// what the hell is going on here you ask? well. 
+		// basically the idea is that we go over the sorted columns until we find two values that are different
+		// and then we can compare them and thus we get to sort the entire array.
+		// why don't we just concatenate the strings together? well, because what if the first is a text element, the next
+		// a number and the 3rd a text element - if we cat them together we lose the ability to do numerical comparisons..
+
+		$skip = false;
 		if (is_array($this->rgroupby))
 		{
-			foreach($this->rgroupby as $rgel)
+			foreach($this->rgroupby as $_rgcol => $rgel)
 			{
 				$v1 = $a[$rgel];
 				$v2 = $b[$rgel];
+				$this->u_sorder = $this->sorder[$_rgcol];
+				$this->sort_flag = $this->nfields[$_rgcol] ? SORT_NUMERIC : SORT_REGULAR;
+				if ($v1 != $v2)
+				{
+					$skip = true;
+				}
 				break;
 			}
 		}
 
-/*		if (!is_array($this->groupby) && $this->groupby != "")
+		if (is_array($this->sortby) && !$skip)
 		{
-			$v1 = $a[$this->groupby];
-			$v2 = $b[$this->groupby];
-			$sort_flag = $this->g_sort_flag;
-			$sorder = "asc";
-		}*/
-
-		if (is_array($this->sortby))
-		{
-			foreach($this->sortby as $g_el)
+			foreach($this->sortby as $_coln => $_eln)
 			{
-				$v1.=$a[$g_el];
-				$v2.=$b[$g_el];
+				$v1 =$a[$_eln];
+				$v2 =$b[$_eln];
+				$this->u_sorder = $this->sorder[$_eln];
+				$this->sort_flag = $this->nfields[$_eln] ? SORT_NUMERIC : SORT_REGULAR;
+				if ($v1 != $v2)
+				{
+					break;
+				}
 			}
 		}
-		else
-		{
-			$v1.=$a[$this->sortby];
-			$v2.=$b[$this->sortby];
-		}
 
-		$sort_flag = $this->sort_flag;
-		$sorder = $this->sorder;
-
-/*		if ($v1 == $v2)
-		{
-			$v1 = $a[$this->sortby];
-			$v2 = $b[$this->sortby];
-			$sort_flag = $this->sort_flag;
-			$sorder = $this->sorder;
-		}*/
-
-		if ($sort_flag == SORT_NUMERIC)
+		if ($this->sort_flag == SORT_NUMERIC)
 		{
 			if (((int)$v1) == ((int)$v2))
 			{
 				return 0;
 			}
 
-			if ($sorder == "asc")
+			if ($this->u_sorder == "asc")
 			{
 				return ((int)$v1) < ((int)$v2) ? -1 : 1;
 			}
@@ -370,10 +277,10 @@ class aw_table
 		}
 		else
 		{
-			$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1);
-			$_b = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2);
-			$ret = strcasecmp($_a,$_b);
-			if ($sorder == "asc")
+			$_a = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v1));
+			$_b = strtolower(preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v2));
+			$ret = strcoll($_a, $_b);
+			if ($this->u_sorder == "asc")
 			{
 				return $ret;
 			}
@@ -394,86 +301,9 @@ class aw_table
 		};
 
 		extract($arr);
-		global $PHP_SELF;
+		$PHP_SELF = aw_global_get("PHP_SELF");
+		$REQUEST_URI = aw_global_get("REQUEST_URI");
 		$tbl = "";
-		reset($this->rowdefs);
-
-		$js_table = "function xnavi_alfa(char_to_look_for) {	with(document.aw_table) {	var loc = \"field=\" + field.options[field.selectedIndex].value +	\"&lookfor=\" + char_to_look_for;	window.location = \"$PHP_SELF?\" + loc;	}}";
-
-		// loome javascripti funktsioonid
-		$tbl .= $this->opentag(array(
-			"name"	=> "script",
-			"language" => "Javascript"
-		));
-		$tbl .= $js_table;
-
-		$tbl .= $this->closetag(array(
-			"name" => "script"
-		));
-
-		if ($this->alpha || $this->seachable)		// no form if we don't need it
-		{
-			$tbl .= $this->opentag(array(
-				"name" => "form",
-				"id" => "aw_table",
-				"method" => "post"
-			));
-		}
-
-		if (is_array($this->sfields) && (sizeof($this->sfields) > 0)) 
-		{
-			$tbl .= $this->opentag(array(
-				"name" => "select",
-				"id"   => "field"
-			));
-			while(list($k,$v) = each($this->sfields)) 
-			{
-				$tbl .= sprintf("<option value='%s'>%s</option>\n",$k,$v);
-			};
-
-			$tbl .= $this->closetag(array(
-				"name" => "select"
-			));
-
-			$tbl .= $this->tag(array(
-				"name" => "input",
-				"id" => "lookfor",
-				"value" => ($this->lookfor) ? $this->lookfor : "",
-				"type" => "text",
-				"size" => "30"
-			));
-
-			$tbl .= $this->tag(array(
-				"name" => "input",
-				"type" => "submit",
-				"value" => "Apply"
-			));
-		};
-
-		// kas tähestiku ka joonistame?
-		if ($this->alpha) 
-		{
-			$al = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z");
-			$tbl .= $this->opentag(array(
-				"name" => "table",
-				"border" => 0,
-				"cellspacing" => 1,
-				"cellpadding" => 2
-			));
-			$tbl .= $this->opentag(array("name" => "tr"));
-			while(list(,$c) = each($al)) 
-			{
-				$tbl .= $this->opentag(array(
-					"name" => "td",
-					"classid" => $this->style_alfa
-				));
-				$fname = $this->prefix . "_table";
-				$tbl .= sprintf("<a href=\"javascript:xnavi_alfa('$c')\">%s</a>",$c);
-				$tbl .= $this->closetag(array("name" => "td"));
-			};
-			$tbl .= $this->closetag(array("name" => "tr"));
-			$tbl .= $this->closetag(array("name" => "table"));
-		};
 
 		// moodustame välimise raami alguse
 		if (is_array($this->frameattribs))
@@ -484,11 +314,12 @@ class aw_table
 			$tbl .= $this->opentag(array("name" => "tr"));
 			$tbl .= $this->opentag(array("name" => "td","bgcolor" => $this->framebgcolor));
 		};
+
 		// moodustame tabeli alguse
 		if (is_array($this->tableattribs))
 		{
 			$tmp = $this->tableattribs;
-			$tmp[name] = "table";
+			$tmp["name"] = "table";
 			$tbl .= $this->opentag($tmp);
 		}
 
@@ -510,6 +341,7 @@ class aw_table
 		$tbl .= $this->opentag(array("name" => "tr"));
 
 		// moodustame headeri
+		reset($this->rowdefs);
 		while(list($k,$v) = each($this->rowdefs)) 
 		{
 			$ta = array("name" => "td");
@@ -518,7 +350,7 @@ class aw_table
 			if ($v["sortable"]) 
 			{
 				// kui on sorteeritud selle välja järgi
-				if ($v["name"] == $this->sortby) 
+				if ($this->sortby[$v["name"]])
 				{
 					// peab tegema workaroundi, sest class on reserved word,
 					// samas on seda vaja kasutada tabeli cellile stiili andmiseks
@@ -567,23 +399,25 @@ class aw_table
 			{
 				// vaikimis näitame allanoolt:
 				$sufix = $this->dn_arr;
+				// by default, if a column is not sorted and you click on it, it should be sorted asc
+				$so = "asc";
 
-				// kui on sorteeritud selle välja järgi ja kahanevas järjekorras,
-				// siis näitame ülesnoolt
-				if (($v["name"] == $this->sortby) && ($this->sorder == "desc")) 
+				// kui on sorteeritud selle välja järgi
+				if ($this->sortby[$v["name"]])
 				{
-					$sufix = $this->up_arr;
-				};
-				if ($this->sorder == "desc")
-				{
-					$so = "asc";
-				}
-				else
-				{
-					$so = "desc";
+					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
+					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
 				}
 
-				$tbl .= "<b><a href='$PHP_SELF?".$this->header_att_string."&"."sortby=$v[name]&sort_order=$so'>$v[caption] $sufix</a></b>";
+				$url = $REQUEST_URI;
+				$url = preg_replace("/sortby=[^&$]*/","",$url);
+				$url = preg_replace("/sort_order=[^&$]*/","",$url);
+				$url = preg_replace("/&{2,}/","&",$url);
+				$url = str_replace("?&", "?",$url);
+				$sep = (strpos($url,"?") === false) ?	"?" : "&";
+				$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
+
+				$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
 			} 
 			else 
 			{
@@ -616,10 +450,8 @@ class aw_table
 
 			// tsükkel üle data
 			$counter = 0; // kasutame ridadele erineva värvi andmiseks
-			$cnt = 0;
 			while(list($k,$v) = each($this->data)) 
 			{
-				$cnt++;
 				$counter++;
 
 				// rida algab
@@ -655,14 +487,14 @@ class aw_table
 				while(list($k1,$v1) = each($this->rowdefs)) 
 				{
 					// määrame ära staili
-					if ($this->sortby == $v1[name]) 
+					if ($this->sortby[$v1["name"]]) 
 					{
-						$style = (($counter % 2) == 0) ? $this->selected1 : $this->selected2;
+						$style = (($counter % 2) == 0) ? $this->selected2 : $this->selected1;
 						$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
 					} 
 					else 
 					{
-						$style = (($counter % 2) == 0) ? $this->style1 : $this->style2; 
+						$style = (($counter % 2) == 0) ? $this->style2 : $this->style1; 
 						$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 					};
 						
@@ -717,7 +549,7 @@ class aw_table
 
 					if ($v1["name"] == "rec") 
 					{
-						$val = $cnt;
+						$val = $counter;
 					} 
 					else 
 					{
@@ -784,8 +616,8 @@ class aw_table
 							$tbl .= $this->opentag($tdtag);
 
 							$tbl.=$av["remote"]?
-								"<a href='javascript:remote(0,".$av["remote"].",\"$this->self?".$av["link"]."&id=".$v[$av["field"]].'");\'>'.$av["caption"]."</a>":
-								"<a href='$this->self?" . $av["link"] . "&id=" . $v[$av["field"]] . "&" . $av[field] . "=" . $v[$av["field"]] . "'>$av[caption]</a>";
+								"<a href='javascript:remote(0,".$av["remote"].",\"$PHP_SELF?".$av["link"]."&id=".$v[$av["field"]].'");\'>'.$av["caption"]."</a>":
+								"<a href='$PHP_SELF?" . $av["link"] . "&id=" . $v[$av["field"]] . "&" . $av["field"] . "=" . $v[$av["field"]] . "'>$av[caption]</a>";
 
 							$tbl .= $this->closetag(array("name" => "td"));
 						};
@@ -811,11 +643,6 @@ class aw_table
 			$tbl .= $this->closetag(array("name" => "tr"));
 			$tbl .= $this->closetag(array("name" => "table"));
 		};
-		// vorm kinni
-		if ($this->alpha || $this->searchable)
-		{
-			$tbl .= $this->closetag(array("name" => "form"));
-		}
 
 		// tagastame selle käki
 		return $tbl;
@@ -973,20 +800,8 @@ class aw_table
 	// xml funktsioonid
 	function _xml_start_element($parser,$name,$attrs) 
 	{
-		$tmp = "";
 		switch($name) 
 		{
-			// paaritute ridade värv
-			case "style1":
-				$this->style1 = $attrs["value"];
-				break;
-
-			// paaris ridade värv
-			case "style2":
-				$this->style2 = $attrs["value"];
-				break;
-
-
 			// vaikimisi määratud sorteerimisjärjekord
 			case "default_order":
 				$this->default_order = $attrs["value"];
@@ -1018,13 +833,13 @@ class aw_table
 				$this->header_normal = $attrs["value"];
 				break;
 
-			case "group_style":
-				$this->group_style = $attrs["value"];
-				break;
-
 			// sorteeritava headeri stiil
 			case "header_sortable":
 				$this->header_sortable = $attrs["value"];
+				break;
+
+			case "group_style":
+				$this->group_style = $attrs["value"];
 				break;
 
 			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
@@ -1054,19 +869,9 @@ class aw_table
 				$this->selbgcolor2 = $attrs["bgcolor"];
 				break;
 
-			// stiil, millega joonistatakse tähestik
-			case "style_alfa":
-				$this->style_alfa = $attrs["value"];
-				break;
-
 			// actionid
 			case "action":
 				$this->actions[] = $attrs;
-				break;
-
-			// kas tähestikku ka näitame?
-			case "alpha":
-				$this->alpha = true;
 				break;
 
 			case "actionrows":
@@ -1075,18 +880,12 @@ class aw_table
 
 			// väljad
 			case "field":
+				$temp = array();
 				while(list($k,$v) = each($attrs)) 
 				{
 					$temp[$k] = $v;
 				};
-
 				$this->rowdefs[] = $temp;
-				
-				if ($attrs["searchable"]) 
-				{
-					$this->sfields[$attrs["name"]] = $attrs["caption"];
-					$this->searchable = true;
-				};
 				
 				if ($attrs["numeric"]) 
 				{
@@ -1115,7 +914,6 @@ class aw_table
 
 	function parse_xml_def_string($xml_data)
 	{
-		$this->sfields = array();
 		$xml_parser = xml_parser_create();
 		xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
 		xml_set_object($xml_parser,&$this);
@@ -1134,5 +932,26 @@ class aw_table
 		$xml_data = $this->get_file_contents($file);
 		return $this->parse_xml_def_string($xml_data);
   }
+
+	////
+	// !this makes sure that all sort properties (sortby, sort_order) are 
+	// arrays and not strings - just to unify things
+	function make_sort_prop_arrays()
+	{
+		if (!is_array($this->sortby))
+		{
+			$this->sortby = ($this->sortby == "" ? array() : array($this->sortby => $this->sortby));
+		}
+		if (!is_array($this->sorder))
+		{
+			$tmp = $this->sorder;
+			$this->sorder = array();
+			foreach($this->sortby as $_coln => $_eln)
+			{
+				$this->sorder[$_coln] = $tmp == "" ? "asc" : $tmp;
+				$this->sorder[$_eln] = $tmp == "" ? "asc" : $tmp;
+			}
+		}
+	}
 };
 ?>
