@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.55 2003/11/18 17:25:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.56 2003/11/19 13:36:07 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -714,39 +714,6 @@ class doc extends class_base
 				));
 			};
 		};
-		return $retval;
-	}
-
-	////
-	function get_planners_with_folders($args = array())
-	{
-		$retval = array();
-
-		$this->get_objects_by_class(array(
-			"class" => CL_PLANNER,
-			"active" => true,
-			"fields" => "oid,name,metadata",
-			"orderby" => "name",
-		));
-
-		while($row = $this->db_next())
-		{
-
-			$row["meta"] = aw_unserialize($row["metadata"]);
-			// aight, this is where I could use $obj->get_property_value("xxx");
-			// but since I don't have it yet, this will do -- duke
-
-			// display only the calendars which have an event folder defined
-
-			if (!empty($row["meta"]["event_folder"]))
-			{
-				$retval[] = array(
-					"oid" => $row["oid"],
-					"name" => $row["name"],
-					"event_folder" => $row["meta"]["event_folder"],
-				);
-			};
-		};		
 		return $retval;
 	}
 

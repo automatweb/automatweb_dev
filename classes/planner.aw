@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.138 2003/11/18 17:25:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.139 2003/11/19 13:36:07 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -622,8 +622,7 @@ class planner extends class_base
 
 				$all_props = array();
 
-				$docinst = get_instance("doc");	
-				foreach($docinst->get_planners_with_folders() as $row)
+				foreach($this->get_planners_with_folders() as $row)
 				{
 					if ($row["event_folder"] != $arr["event_obj"]->parent())
 					{
@@ -795,6 +794,8 @@ class planner extends class_base
 			};
 
 			$t->id = $obj_to_load;
+
+
 
 			// now, I have a certain amount of groups that should get 
 			// get their contents from this class ... or perhaps not?
@@ -2972,6 +2973,39 @@ class planner extends class_base
 	{
 		$bro = new object($arr["event_id"]);
 		$bro->delete();
+	}
+	
+	////
+	function get_planners_with_folders($args = array())
+	{
+		$retval = array();
+
+		$this->get_objects_by_class(array(
+			"class" => CL_PLANNER,
+			"active" => true,
+			"fields" => "oid,name,metadata",
+			"orderby" => "name",
+		));
+
+		while($row = $this->db_next())
+		{
+
+			$row["meta"] = aw_unserialize($row["metadata"]);
+			// aight, this is where I could use $obj->get_property_value("xxx");
+			// but since I don't have it yet, this will do -- duke
+
+			// display only the calendars which have an event folder defined
+
+			if (!empty($row["meta"]["event_folder"]))
+			{
+				$retval[] = array(
+					"oid" => $row["oid"],
+					"name" => $row["name"],
+					"event_folder" => $row["meta"]["event_folder"],
+				);
+			};
+		};		
+		return $retval;
 	}
 };
 ?>
