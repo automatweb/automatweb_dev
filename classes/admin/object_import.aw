@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.6 2004/05/27 08:35:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.7 2004/05/27 08:39:21 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -89,7 +89,7 @@ class object_import extends class_base
 				break;
 
 			case "folder_field":
-				$prop["options"] = $this->get_cols_from_ds($arr["obj_inst"]);
+				$prop["options"] = array("" => "") + $this->get_cols_from_ds($arr["obj_inst"]);
 				break;
 
 			case "props":
