@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.102 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.103 2005/03/07 14:41:15 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -432,16 +432,6 @@ class doc extends class_base
 				};
 				break;
 
-			case "dcache_save":
-				if ($data["value"] == 1)
-				{
-					$dcx = get_instance("document");
-					$preview = $dcx->gen_preview(array("docid" => $args["obj_inst"]->id()));
-					$this->quote($preview);
-					$this->_preview = $preview;	
-				}
-				break;
-
 			case "gen_static":
 				if (!empty($data["value"]) && is_oid($args["obj_inst"]->id()))
 				{
@@ -559,6 +549,27 @@ class doc extends class_base
 
 	function callback_post_save($args = array())
 	{
+		if ($args["obj_inst"]->prop("dcache_save") == 1)
+		{
+			$dcx = get_instance("document");
+			$preview = $dcx->gen_preview(array(
+				"docid" => $args["obj_inst"]->id()
+			));
+			$this->quote($preview);
+			
+			$res = trim(preg_replace("/<.*>/imsU", " ",$preview));
+			$len = strlen($res);
+			for($i = 0; $i < $len; $i++)
+			{
+				if (ord($res{$i}) < 32)
+				{
+					$res{$i} = " ";
+				}
+			}
+			$args["obj_inst"]->set_prop("dcache_content", $res);
+			$args["obj_inst"]->save();
+		}
+
 		$this->flush_cache();
 	}
 
