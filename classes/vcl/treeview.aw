@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.12 2003/08/29 11:51:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.13 2003/09/25 13:58:21 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -26,6 +26,7 @@
 
 define("TREE_HTML", 1);
 define("TREE_JS", 2);
+define("TREE_DHTML",3);
 
 class treeview extends class_base
 {
@@ -288,7 +289,7 @@ class treeview extends class_base
 	function start_tree($arr)
 	{
 		$this->items = array();
-		$this->tree_type = ($arr["type"] == TREE_HTML ? TREE_HTML : TREE_JS);
+		$this->tree_type = empty($arr["type"]) ? TREE_JS : $arr["type"];
 		$this->tree_dat = $arr;
 	}
 
@@ -312,20 +313,27 @@ class treeview extends class_base
 		$this->selected_item = $id;
 	}
 
-	function finalize_tree()
+	////
+	// !draws the tree
+	// rootnode - from which node should drawing start (defaults to 0)
+	function finalize_tree($arr = array())
 	{
+
+		$this->rootnode = empty($arr["rootnode"]) ? 0 : $arr["rootnode"];
+
 		if ($this->tree_type == TREE_HTML)
 		{
 			return $this->html_finalize_tree();
 		}
 
+
 		$this->read_template("ftiens.tpl");
 		// objektipuu
-		$tr = $this->req_finalize_tree(0);
+		$tr = $this->req_finalize_tree($this->rootnode);
 		$this->vars(array(
 			"TREE" => $tr,
 			"DOC" => "",
-			"root" => 0,
+			"root" => $this->rootnode,
 			"rootname" => $this->tree_dat["root_name"],
 			"rooturl" => $this->tree_dat["root_url"],
 			"icon_root" => ($this->tree_dat["root_icon"] != "" ) ? $this->tree_dat["root_icon"] : "/automatweb/images/aw_ikoon.gif",
@@ -368,7 +376,7 @@ class treeview extends class_base
 	{
 		$this->read_template("html_tree.tpl");
 		$ml = array();
-		$this->draw_html_tree(0, &$ml);
+		$this->draw_html_tree($this->rootnode, &$ml);
 		
 		$this->vars(array(
 			"colspan" => 10
