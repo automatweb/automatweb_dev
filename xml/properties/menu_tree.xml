@@ -42,6 +42,17 @@
             <type>select</type>
             <caption>Tasemeid</caption>
       </property>
+      <property>
+            <name>no_unclickable</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>&amp;Auml;ra n&amp;auml;ita mitteklikitavaid men&amp;uuml;&amp;uuml;sid</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
       </classinfo>

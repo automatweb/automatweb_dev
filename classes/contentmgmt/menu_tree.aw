@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.4 2005/01/20 12:38:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.5 2005/01/31 11:51:58 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -21,6 +21,10 @@
 
 	@property num_levels type=select
 	@caption Tasemeid
+
+	@property no_unclickable type=checkbox ch_value=1 default=1
+	@caption &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid
+
 */
 class menu_tree extends class_base
 {
@@ -223,6 +227,11 @@ class menu_tree extends class_base
 			)),
 			"sort_by" => "objects.jrk"
 		);
+
+		if ($this->mt_obj->prop("no_unclickable") == 1)
+		{
+			$filt["clickable"] = 1;
+		}
 
 		if (aw_global_get("uid") == "")
 		{
