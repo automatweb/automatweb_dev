@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.161 2002/10/09 09:40:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.162 2002/10/11 09:10:41 erki Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -1383,7 +1383,7 @@ class menuedit extends aw_template
 
 		$this->vars(array(
 			"name"		=> "GROUPS",
-			"id"			=> "gr_".$dgid,		
+			"id"			=> "gr_".$dgid,
 			"parent"	=> $hf["oid"],
 			"iconurl" => $this->get_icon_url("hf_groups",""),
 			"url"			=> $this->mk_orb("mk_grpframe",array("parent" => $dgid),"groups")
@@ -1407,7 +1407,13 @@ class menuedit extends aw_template
 		extract($arr);
 		$ret = "";
 
-		// check if any parent menus have config objects attached 
+		$sep = "\n";
+		if ($sharp)
+		{
+			$sep = "#";
+		}
+
+		// check if any parent menus have config objects attached
 		$atc_id = 0;
 		$ch = $this->get_object_chain($id);
 		foreach($ch as $oid => $od)
@@ -1447,7 +1453,7 @@ class menuedit extends aw_template
 				{
 					$cnt++;
 					$counts[$prnt] = $cnt;
-					$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||\n";
+					$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
 					if (is_array($arr))
 					{
 						foreach($arr as $row)
@@ -1464,12 +1470,12 @@ class menuedit extends aw_template
 										$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
 									}
 								}
-								
+
 								ksort($cldata);
 								foreach($cldata as $letter => $clns)
 								{
 									$cnt++;
-									$ret .= $cnt."|".((int)$counts[$prnt])."|".$letter."||\n";
+									$ret .= $cnt."|".((int)$counts[$prnt])."|".$letter."||".$sep;
 									$cp = $cnt;
 									asort($clns);
 									foreach($clns as $cl_file => $cl_name)
@@ -1477,7 +1483,7 @@ class menuedit extends aw_template
 										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
 
 										$cnt++;
-										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list\n";
+										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
 									}
 								}
 							}
@@ -1486,7 +1492,7 @@ class menuedit extends aw_template
 								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
 
 								$cnt++;
-								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list\n";
+								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list".$sep;
 							}
 						}
 					}
@@ -1494,10 +1500,17 @@ class menuedit extends aw_template
 				die($ret);
 			}
 		}
-		die($this->req_get_default_add_menu(0, $id, $period));
+		if ($ret_data)
+		{
+			return ($this->req_get_default_add_menu(0, $id, $period, $sep));
+		}
+		else
+		{
+			die($this->req_get_default_add_menu(0, $id, $period, $sep));
+		}
 	}
 
-	function get_az_def_menu($pt, $parent, $period)
+	function get_az_def_menu($pt, $parent, $period, $sep)
 	{
 		$counts = array();
 		$cldata = array();
@@ -1514,7 +1527,7 @@ class menuedit extends aw_template
 		foreach($cldata as $letter => $clns)
 		{
 			$cnt++;
-			$ret .= $cnt."|".((int)($pt+4))."|".$letter."||\n";
+			$ret .= $cnt."|".((int)($pt+4))."|".$letter."||".$sep;
 			$cp = $cnt;
 			asort($clns);
 			foreach($clns as $cl_file => $cl_name)
@@ -1522,13 +1535,13 @@ class menuedit extends aw_template
 				$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cl_file, true, true);
 
 				$cnt++;
-				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list\n";
+				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
 			}
 		}
 		return $ret;
 	}
 
-	function req_get_default_add_menu($prnt, $parent, $period)
+	function req_get_default_add_menu($prnt, $parent, $period, $sep)
 	{
 		$ret = "";
 		if (is_array($this->cfg["classes"]) && $prnt == 0)
@@ -1543,11 +1556,11 @@ class menuedit extends aw_template
 					{
 						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
 						$tcnt++;
-						$ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list\n";
+						$ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list".$sep;
 					}
 				}
 			}
-			$ret.="separator\n";
+			$ret.="separator".$sep;
 		}
 
 		if (is_array($this->cfg["classfolders"]))
@@ -1558,11 +1571,11 @@ class menuedit extends aw_template
 				{
 					$_fid = $fid+4;
 					$_fprnt = ($fdata["parent"] == 0 ? 0 : $fdata["parent"] + 4);
-					$ret .= $_fid."|".((int)$_fprnt)."|".$fdata["name"]."||list\n";
-					$ret .= $this->req_get_default_add_menu($fid, $parent, $period);
+					$ret .= $_fid."|".((int)$_fprnt)."|".$fdata["name"]."||list".$sep;
+					$ret .= $this->req_get_default_add_menu($fid, $parent, $period, $sep);
 					if ($fdata["all_objs"])
 					{
-						$ret .= $this->get_az_def_menu($fid, $parent, $period);
+						$ret .= $this->get_az_def_menu($fid, $parent, $period, $sep);
 					}
 				}
 			}
@@ -1578,7 +1591,7 @@ class menuedit extends aw_template
 					if (in_array($prnt, $parens))
 					{
 						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
-						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list\n";
+						$ret .= ($clid+1000)."|".((int)($prnt+4))."|".$cldata["name"]."|$addlink|list".$sep;
 					}
 				}
 			}
@@ -1594,38 +1607,44 @@ class menuedit extends aw_template
 			$this->get_add_menu($args);
 		}
 		$obj = $this->get_object($id);
-	
+
+
+		$sep = "\n";
+		if ($sharp)
+		{
+			$sep = "#";
+		}
 
 		$baseurl = $this->cfg["baseurl"];
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
 			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"]), "menuedit",true,true);
-			$retval = "0|0|Open|".$ourl."|list\n";
+			$retval = "0|0|Open|".$ourl."|list".$sep;
 		}
 
 //		if ($this->can("change", $id))
 		{
 			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"]), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
-			$retval .= "1|0|Change|".$churl."|list\n";
+			$retval .= "1|0|Change|".$churl."|list".$sep;
 		}
 
 		$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-		$retval .= "2|0|Cut|".$cuturl."|list\n";
+		$retval .= "2|0|Cut|".$cuturl."|list".$sep;
 
 		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-		$retval .= "3|0|Copy|".$copyurl."|list\n";
+		$retval .= "3|0|Copy|".$copyurl."|list".$sep;
 
 		if ($this->can("delete", $id))
 		{
 			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
-			$retval .= "4|0|Delete|".$delurl."|list\n";
+			$retval .= "4|0|Delete|".$delurl."|list".$sep;
 		}
 
 		if ($this->can("admin", $id))
 		{
 			$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
-			$retval .= "5|0|ACL|".$delurl."|list\n";
+			$retval .= "5|0|ACL|".$delurl."|list".$sep;
 		}
 
 		if ($ret_data)
@@ -5646,7 +5665,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$this->save_handle();
 			$this->vars(array(
-				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true))
+				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true, "sharp" => true))
 			));
 			$this->restore_handle();
 
@@ -5690,7 +5709,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$types[$cldat["file"]] = $cldat["name"];
 		}
 		asort($types);
-		
+
 
 		// make applet for adding objects
 		$this->vars(array(
@@ -5704,7 +5723,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"name" => "",
 			"height" => 22,
 			"width" => 23,
-			"url" => $host
+			"url" => $host,
+			"content" => $this->get_add_menu(array("id" => $parent, "ret_data" => true, "sharp" => true, "addmenu" => 1))
 		));
 		$up = $this->parse("URLPARAM");
 		$this->vars(array(
@@ -5715,7 +5735,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$up .= $this->parse("URLPARAM");
 		$this->vars(array(
 			"URLPARAM" => $up,
-			"FETCHCONTENT" => ""
+			"FETCHCONTENT" => $this->parse("FETCHCONTENT")
 		));
 		$add_applet = $this->parse();
 
