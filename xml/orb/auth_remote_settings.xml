@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="autologin">
+		<action name="autologin" nologin="1">
 			<function name="autologin">
 				<arguments>
 					<required name="remote_uid" />
