@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.56 2002/11/07 22:57:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.57 2002/11/14 16:12:55 duke Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1776,6 +1776,8 @@ class users extends users_user
 			if (not(is_email($row["email"])))
 			{
 				$status_msg .= "Kasutajal $uid puudub korrektne e-posti aadress. Palun pöörduge veebisaidi haldaja poole";
+				session_register("status_msg");
+				return $this->mk_my_orb("send_hash",array());
 			};
 			$ts = time();
 			$hash = substr(gen_uniq_id(),0,15);
