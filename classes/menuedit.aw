@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.266 2003/03/17 18:36:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.267 2003/03/17 21:43:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1781,7 +1781,15 @@ class menuedit extends aw_template
 	function get_popup_data($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
+		if (isset($addmenu) && $addmenu == 1)
+		{
+			$this->get_add_menu($args);
+		}
+
+		if (!is_array($obj))
+		{
+			$obj = $this->get_object($id);
+		}
 
 		$sep = "\n";
 		if ($sharp)
@@ -5296,7 +5304,14 @@ class menuedit extends aw_template
 			$this->vars(array(
 				"menu_id" => "js_pop_".$row["oid"],
 				"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
-				"MENU_ITEM" => $this->get_popup_data(array("period" => $period,"id" => $row["oid"], "ret_data" => true, "sharp" => true,"type" => "js"))
+				"MENU_ITEM" => $this->get_popup_data(array(
+					"period" => $period,
+					"id" => $row["oid"], 
+					"ret_data" => true, 
+					"sharp" => true,
+					"type" => "js",
+					"obj" => $row
+				))
 			));
 			$row["java"] = $this->parse();
 
