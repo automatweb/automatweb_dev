@@ -16,7 +16,13 @@ function file_get_contents($name)
 
 function file_put_contents($name, $fc)
 {
-	$f = fopen($name, "w");
+	$f = @fopen($name, "w");
+	if (!$f)
+	{
+		echo "\nERROR: could not create file $name!\n\n";
+		exit(1);
+	}
+
 	$fc = fwrite($f, $fc);
 	fclose($f);
 }
@@ -66,6 +72,15 @@ if (file_exists("templates/$tpnf/show.tpl"))
 
 echo "\nmaking class $clnf...\n";
 
+if ($class_folder != "")
+{
+	// check if the directory exists
+	if (!is_dir("classes/$class_folder"))
+	{
+		mkdir("classes/$class_folder",0775);
+		echo "\tcreated classes/$class_folder...\n";
+	}
+}
 $fc = str_replace("__classdef", $class_def, file_get_contents("install/class_template/classes/base.aw"));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 file_put_contents("classes/$clnf",str_replace("__classname", $class, $fc));
