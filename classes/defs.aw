@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.75 2003/01/23 16:50:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.76 2003/01/30 12:30:01 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -12,6 +12,24 @@ if (!defined("DEFS"))
 	define("SERIALIZE_XMLRPC", 5);
 
 	classload("xml","php");
+
+	////
+	// !generates a password with length $length
+	function generate_password($arr = array())
+	{
+		extract($arr);
+		if (!$length)
+		{
+			$length = 8;
+		}
+		$chars = "1234567890-qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM_";
+		$pwd = "";
+		for ($i = 0; $i < $length; $i++)
+		{
+			$pwd .= $chars{rand(0,strlen($chars)-1)};
+		}
+		return $pwd;
+	}
 
 	////
 	// !places <a href tags around urls and e-mail addresses in text $src
