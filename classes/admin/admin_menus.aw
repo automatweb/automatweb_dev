@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.71 2004/06/25 20:09:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.72 2004/06/25 21:43:35 duke Exp $
 
 class admin_menus extends aw_template
 {
@@ -219,7 +219,7 @@ class admin_menus extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$retval = "";
 
-		if ($obj->class_id() == CL_PSEUDO)
+		if ($obj->class_id() == CL_MENU)
 		{
 			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
 			$this->vars(array(
@@ -462,7 +462,7 @@ class admin_menus extends aw_template
 			foreach($sel as $oid => $one)
 			{
 				$ob = obj($oid);
-				if ($ob->class_id() == CL_PSEUDO)
+				if ($ob->class_id() == CL_MENU)
 				{
 					return $this->mk_my_orb("copy_feedback", array("parent" => $parent, "period" => $period, "sel" => $sel));
 				}
@@ -757,7 +757,7 @@ class admin_menus extends aw_template
 					$o = obj();
 					$o->set_parent($_parent);
 					$o->set_name($mt[2]);
-					$o->set_class_id(CL_PSEUDO);
+					$o->set_class_id(CL_MENU);
 					$o->set_status(($mopts["act"] ? 2 : 1));
 					$o->set_alias($mopts["alias"]);
 					$o->set_jrk(substr($mt[1],($pos > 0 ? $pos+1 : 0)));
@@ -894,7 +894,7 @@ class admin_menus extends aw_template
 
 		if ($period)
 		{
-			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_PSEUDO." AND objects.periodic = 1)) ";
+			$ps = " AND ((objects.period = '$period') OR (objects.class_id = ".CL_MENU." AND objects.periodic = 1)) ";
 		}
 		// if no period is set in the url, BUT the menu is periodic, then only show objects from the current period
 		// this fucks shit up. basically, a periodic menu can have non-periodic submenus
@@ -969,7 +969,7 @@ class admin_menus extends aw_template
 		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
-		$containers = array(CL_PSEUDO,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
+		$containers = array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 
 		$num_records = 0;
 
@@ -1520,7 +1520,7 @@ class admin_menus extends aw_template
 
 	function req_serialize_obj_tree($oid)
 	{
-		$objs = $this->list_objects(array("class" => CL_PSEUDO, "parent" => $oid, "return" => ARR_ALL));
+		$objs = $this->list_objects(array("class" => CL_MENU, "parent" => $oid, "return" => ARR_ALL));
 		$oids = join(",", array_keys($objs));
 		if ($oids != "")
 		{
@@ -1550,7 +1550,7 @@ class admin_menus extends aw_template
 		}
 		if ($this->serialize_subobjs || aw_global_get("__is_rpc_call"))
 		{
-			$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
+			$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_MENU." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
 			while ($row = $this->db_next())
 			{
 				$dat = $this->serialize(array("oid" => $row["oid"]));
