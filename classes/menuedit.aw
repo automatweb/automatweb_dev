@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.235 2003/02/19 16:24:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.236 2003/02/21 04:16:43 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -499,7 +499,7 @@ class menuedit extends aw_template
 				$blocktemplate_subs = sprintf("MENU_%s_L%s_HAS_SUBITEMS",$name,1);
 				$blocktemplate_nosubs = sprintf("MENU_%s_L%s_NO_SUBITEMS",$name,1);
 
-				if ($this->templates[$blocktemplate_subs])
+				if (isset($this->templates[$blocktemplate_subs]) && $this->templates[$blocktemplate_subs])
 				{
 					if ( $this->subitems[$blockname] > 0) 
 					{
@@ -961,6 +961,10 @@ class menuedit extends aw_template
 			{
 				$ordby = "objects.jrk";
 			}
+			if (!isset($this->cfg["no_fp_document"]))
+			{
+				$this->cfg["no_fp_document"] = false;
+			}
 			$q = "SELECT objects.oid as oid,objects.class_id AS class_id, objects.brother_of AS brother_of, documents.esilehel as esilehel FROM objects LEFT JOIN documents ON documents.docid = objects.brother_of WHERE (($pstr AND status = 2 AND class_id in (7,29) AND objects.lang_id=".aw_global_get("lang_id").") OR (class_id = ".CL_BROTHER_DOCUMENT." AND status = 2 AND $pstr)) $lsas ORDER BY $ordby $lm";
 			$this->db_query($q);
 			while ($row = $this->db_next())
@@ -1269,18 +1273,40 @@ class menuedit extends aw_template
 
 		$arr = array();
 		$mpr = array();
+
+		$this->x_mpr = array();
 		$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
 		// listib koik menyyd ja paigutab need arraysse
 		$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
 		while ($row = $this->db_next())
 		{
+			$row["name"] = str_replace("\"","&quot;", $row["name"]);
 			if ($this->can("view",$row["oid"]))
 			{
-				$row["name"] = str_replace("\"","&quot;", $row["name"]);
 				$arr[$row["parent"]][] = $row;
 				$mpr[] = $row["parent"];
 			}
+			else
+			{
+				$this->x_mpr[$row['oid']] = $row;
+			}
 		}
+
+		// here we will make the parent of all objects that don't have parents in the tree,
+		// but have them in the excluded list, to be the root
+		// why is this? well, because then the folders that are somewhere deep in the tree and that the user
+		// has can_view acces for, but not their parent folders, can still see them
+		foreach($arr as $prnt => $data)
+		{
+			foreach($data as $d_idx => $d_row)
+			{
+				if (isset($this->x_mpr[$d_row["parent"]]))
+				{
+					$arr[$this->cfg["site_rootmenu2"]][] = $d_row;
+				}
+			}
+		}
+
 		// objektipuu
 		$tr = $this->rec_tree(&$arr, $this->cfg["admin_rootmenu2"],$period);
 
@@ -2361,26 +2387,34 @@ class menuedit extends aw_template
 		// FIXME: don't really need to do that every time
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
-		$menu_check_acl = $this->cfg["menu_check_acl"];
+		$menu_check_acl = isset($this->cfg["menu_check_acl"]) ? $this->cfg["menu_check_acl"] : false;
 		$this->sub_merge = 1;
 
-		if ($this->mar[$parent]["meta"]["show_periods"] && $this->mar[$parent]["meta"]["show_period_count"])
+		if (isset($this->mar[$parent]) &&  
+			isset($this->mar[$parent]["meta"]) && 
+			is_array($this->mar[$parent]["meta"]) && 
+			isset($this->mar[$parent]["meta"]["show_periods"]) && 
+			isset($this->mar[$parent]["meta"]["show_period_count"])
+			)
 		{
-			// now we replace the list of menus with list of periods
-			// oh, god, I hate myself
-			$this->mpr[$parent] = array();
-			$per = get_instance("periods");
-			$perlist = new aw_array($per->list_periods(0));
-			foreach($perlist->get() as $key => $val)
+			if ($this->mar[$parent]["meta"]["show_periods"] && $this->mar[$parent]["meta"]["show_period_count"])
 			{
-				$this->mpr[$parent][] = array(
-					"name" => $val["description"],
-					"comment" => $val["data"]["comment"],
-					"type" => MN_CONTENT,
-					"link" => $this->mk_my_orb("show",array("period" => $val["id"]),"contents"),
-				);
+				// now we replace the list of menus with list of periods
+				// oh, god, I hate myself
+				$this->mpr[$parent] = array();
+				$per = get_instance("periods");
+				$perlist = new aw_array($per->list_periods(0));
+				foreach($perlist->get() as $key => $val)
+				{
+					$this->mpr[$parent][] = array(
+						"name" => $val["description"],
+						"comment" => $val["data"]["comment"],
+						"type" => MN_CONTENT,
+						"link" => $this->mk_my_orb("show",array("period" => $val["id"]),"contents"),
+					);
+				};
 			};
-		};
+		}
 
 
 		$this->level++;
@@ -2394,7 +2428,7 @@ class menuedit extends aw_template
 		// I don't care about the first level menus
 		if ($this->level > 0)
 		{
-			if ($this->mar[$parent]["alias"])
+			if (isset($this->mar[$parent]["alias"]) && $this->mar[$parent]["alias"])
 			{
 				array_push($this->menu_aliases,$this->mar[$parent]["alias"]);
 			}
@@ -2482,16 +2516,20 @@ class menuedit extends aw_template
 		// go over the menus on this level
 		$l = "";
 		$l_mid = "";
+
 		reset($this->mpr[$parent]);
 
 		// find out how many menus do we have so we know when to use
 		// the _END moficator
 
 		$tmp = $this->mpr[$parent];
-		if ($this->mar[$parent]["meta"]["sort_by_name"])
+		if (isset($this->mar[$parent]["meta"]["sort_by_name"]) && $this->mar[$parent]["meta"]["sort_by_name"])
 		{
 			uasort($tmp, create_function('$a,$b','if ($a["name"] > $b["name"]) { return 1;} else if ($a["name"] < $b["name"]) { return -1;} else {return 0;}'));
 		}
+
+		$second = false;
+		$second_n = false;
 
 		$total = sizeof($tmp) - 1;
 		while (list(,$row) = each($tmp))
@@ -2524,7 +2562,7 @@ class menuedit extends aw_template
 
 			// see on siis n�ala parema paani leadide n�tamine
 			// nme h�k. FIX ME.
-			if ($meta["show_lead"])
+			if (isset($meta["show_lead"]) && $meta["show_lead"])
 			{
 				$activeperiod = aw_global_get("act_per_id");
 				$this->save_handle();
@@ -2767,7 +2805,7 @@ class menuedit extends aw_template
 
 			$num_menu_images = $this->cfg["num_menu_images"];
 			$has_image = false;
-			if (is_array($meta["menu_images"]))
+			if (isset($meta["menu_images"]) && is_array($meta["menu_images"]))
 			{
 				$imgar = $meta["menu_images"];
 			}
@@ -2777,7 +2815,7 @@ class menuedit extends aw_template
 			}
 			for ($_i=0; $_i < $num_menu_images; $_i++)
 			{
-				if ($imgar[$_i]["url"] != "")
+				if (isset($imgar[$_i]["url"]) && $imgar[$_i]["url"] != "")
 				{
 					$imgurl = image::check_url($imgar[$_i]["url"]);
 					$this->vars(array(
@@ -2804,7 +2842,7 @@ class menuedit extends aw_template
 				"image"		=> $imgurl,
 				"cnt" => $cnt,
 				"sel_image_url" => $imgurl2,
-				"color" => $meta["color"]
+				"color" => isset($meta["color"]) ? $meta["color"] : ""
 			));
 
 			if ($has_image)
@@ -2918,7 +2956,7 @@ class menuedit extends aw_template
 			if ($this->mar[$this->sel_section]["parent"] == $row["parent"])
 			{
 				// see on aktiivne tase - 1
-				if (!is_array($this->mpr[$this->sel_section]))
+				if (!isset($this->mpr[$this->sel_section]) || !is_array($this->mpr[$this->sel_section]))
 				{
 					$selonly = true;
 				}
@@ -3001,10 +3039,12 @@ class menuedit extends aw_template
 		{
 			$this->vars(array($mn."_MID" => $l_mid));
 		}
+
 		if ($second)
 		{
 			$this->vars(array($mn."2" => $l2));
 		}
+
 		if ($second_n)
 		{
 			$this->vars(array($mn."_N2" => $l2));
@@ -3651,7 +3691,8 @@ class menuedit extends aw_template
 			while (list(,$did) = each($docid)) 
 			{
 				$d->_init_vars();
-				
+
+				$tpl = "";
 				if ($jumpbox)
 				{
 					$oid = aw_global_get("oid");
@@ -3688,8 +3729,7 @@ class menuedit extends aw_template
 						"tpl" => ($dk & 1 ? $template : $template2),
 						"leadonly" => 1,
 						"section" => $section,
-						"strip_img" => $strip_img,
-						"tpls" => $tpls,
+						"strip_img" => false,
 						"keywords" => 1,
 						"no_strip_lead" => aw_global_get("document.no_strip_lead")
 					));
@@ -3700,9 +3740,8 @@ class menuedit extends aw_template
 					$ct =$d->gen_preview(array(
 						"docid" => $did,
 						"section" => $section,
-						"strip_img" => $strip_img,
+						"strip_img" => false,
 						"tpl" => $longtpl,
-						"tpls" => $tpls,
 						"keywords" => 1,
 						"no_strip_lead" => aw_global_get("document.no_strip_lead")
 					));
@@ -3979,7 +4018,7 @@ class menuedit extends aw_template
 			{
 				foreach($meta["groups"] as $gid)
 				{
-					if ($gidlist[$gid] == $gid)
+					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
 					{
 						$found = true;
 					}
@@ -4000,17 +4039,20 @@ class menuedit extends aw_template
 				$show_promo = true;
 			}
 			else
-			if ( is_array($meta["section_include_submenus"]) && in_array($section,$this->path) )
+			if (isset($meta["section_include_submenus"]))
 			{
-				// here we need to check, whether any of the parent menus for
-				// this menu has been assigned a promo box and has been told
-				// that it should be shown in all submenus as well
-				$intersect = array_intersect($this->path,$meta["section_include_submenus"]);
-				if (sizeof($intersect) > 0)
+				if (is_array($meta["section_include_submenus"]) && in_array($section,$this->path) )
 				{
-					$show_promo = true;
-				};
-			};
+					// here we need to check, whether any of the parent menus for
+					// this menu has been assigned a promo box and has been told
+					// that it should be shown in all submenus as well
+					$intersect = array_intersect($this->path,$meta["section_include_submenus"]);
+					if (sizeof($intersect) > 0)
+					{
+						$show_promo = true;
+					}
+				}
+			}
 
 			if ($found == false)
 			{
@@ -4403,6 +4445,7 @@ class menuedit extends aw_template
 		$si_parent = $sel_menu_id;
 		$imgs = false;
 		$smi = "";
+		$sel_image = "";
 		// why the fuck did I put this in?!?!
 
 		// I don't know, but we need SEL_MENU_IMAGE for director, so I'm
@@ -4673,7 +4716,7 @@ class menuedit extends aw_template
 			};
 			// also, check whether the parent of the current object is alreay handled
 			// and if so, just drop out of the cycle
-			$parent = ($this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
+			$parent = (isset($this->menu_chain[$obj["parent"]]) && $this->menu_chain[$obj["parent"]]) ? false : $obj["parent"];
 		};
 		/*
 		  print "<!--";
