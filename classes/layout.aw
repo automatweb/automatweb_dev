@@ -114,6 +114,10 @@ class layout extends class_base
 		$tmp = $ge->show($grid, $alias["target"], &$tpls);
 		$d = get_instance("document");
 		$d->create_relative_links($tmp);
+		if (strpos($tmp, "<a") !== false)
+		{
+			return $tmp;
+		}
 		return create_email_links($tmp);
 	}
 
