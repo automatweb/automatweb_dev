@@ -32,7 +32,9 @@ CMD_TRANS_ENTRY g_cmd_trans_tbl[] = {
 	{"chown", "chown"},
 	{"ln", "ln"},
 	{"rndc","rndc"},
-	{"find", "find"}
+	{"find", "find"},
+	{"rm", "rm"},
+	{"move", "mv"},
 };
 
 char *g_err_line;
