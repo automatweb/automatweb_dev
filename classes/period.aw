@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.18 2004/03/16 10:30:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.19 2004/03/18 14:49:59 duke Exp $
 // period.aw - periods 
 /*
 
@@ -348,6 +348,11 @@ class period extends class_base
 	function get_id_for_oid($oid)
 	{
 		return $this->db_fetch_field("select id from periods where obj_id = '$oid'", "id");
+	}
+
+	function get_oid_for_id($id)
+	{
+		return $this->db_fetch_field("select obj_id from periods where id = '$id'", "obj_id");
 	}
 	
 	////
