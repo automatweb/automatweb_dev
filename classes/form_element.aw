@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.83 2002/10/08 08:29:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.84 2002/10/18 08:34:39 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -2520,8 +2520,12 @@ class form_element extends aw_template
 			{
 				$v["day"] = 1;
 			}
+			if (!$this->arr["has_year"])
+			{
+				$v["year"] = date("Y");
+			}
 			
-			if ($v["year"] > 0)
+			if ($v["year"] > 0 || (!$this->arr["has_year"]))
 			{
 				$tm = mktime($v["hour"],$v["minute"],0,$v["month"],$v["day"],$v["year"]);
 			}
@@ -3141,7 +3145,7 @@ class form_element extends aw_template
 			}
 			else
 			{
-				if ($this->entry < 100)
+				if ($this->entry < 2)
 				{
 					$html = "";
 				}
