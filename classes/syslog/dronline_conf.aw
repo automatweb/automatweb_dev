@@ -264,7 +264,10 @@ class dronline_conf extends class_base
 
 	function change($arr)
 	{
-		$arr['extraids']['ret_url'] = aw_global_get("REQUEST_URI");
+		if (aw_global_get("action") != "new")
+		{
+			$arr['extraids']['ret_url'] = aw_global_get("REQUEST_URI");
+		};
 		return parent::change($arr);
 	}
 
