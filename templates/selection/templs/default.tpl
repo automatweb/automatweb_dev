@@ -1,6 +1,3 @@
-
-
-default template<br>
 <table border="1">
 <!-- SUB: object -->
 <tr>
@@ -13,7 +10,7 @@ default template<br>
 </td><td>
 {VAR:class_id}
 </td><td>
-
+{VAR:pilot}
 </td><td>
 
 </td><td>

@@ -1,23 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>pilot</name>
-            <type>relpicker</type>
-            <reltype>PILOT</reltype>
+            <name>template</name>
+            <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>näitamise pilootobjekt</caption>
-      </property>
-      <property>
-            <name>use_existing_pilot</name>
-            <type>checkbox</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas</caption>
+            <caption>Näitamise templiit</caption>
       </property>
       <property>
             <name>selections</name>
@@ -74,12 +64,12 @@
       </classinfo>
       <groupinfo>
             <objects>
-                  <caption>objectid</caption>
                   <submit>no</submit>
+                  <caption>Selle valimi objektid</caption>
             </objects>
             <selectione>
-                  <caption>valimid</caption>
                   <submit>no</submit>
+                  <caption>Seotud valimid</caption>
             </selectione>
             <shou>
                   <caption>shõu</caption>

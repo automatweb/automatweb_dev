@@ -9,54 +9,14 @@
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>output_as</name>
+            <name>template</name>
             <type>select</type>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>kuidas n‰idatakse objekte dokumendi sees</caption>
+            <caption>Tagasisidevorm</caption>
       </property>
-      <property>
-            <name>templates</name>
-            <type>select</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>objektide n‰itamise templiidid</caption>
-      </property>
-      <property>
-            <name>aw_table</name>
-            <type>select</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>m‰‰ra tabeli n‰itamise objekt</caption>
-      </property>
-      <property>
-            <name>object_show</name>
-            <type>select</type>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>millega n‰idatakse kui objektis n‰itamine puudub</caption>
-      </property>
-      <property>
-            <name>personal_contact</name>
-            <type>relpicker</type>
-            <reltype>TEMPLATE</reltype>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>kodused kontakt andmed</caption>
-      </property>
-      <classinfo>
-            <relationmgr>yes</relationmgr>
-      </classinfo>
       <groupinfo>
             <general>
                   <caption>‹ldine</caption>

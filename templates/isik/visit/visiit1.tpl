@@ -1,5 +1,4 @@
-make your own template here
-<table border="0">
+<table border="1">
 
 <tr>
 	<td>{VAR:title} <b>{VAR:firstname} {VAR:lastname}</b></td>
@@ -8,10 +7,11 @@ make your own template here
 
 <tr>
 
-<td>
-kodune aadress:
-{VAR:k_riik}<br />
-{VAR:k_maakond}<br />
+<td valign=top>
+kodune aadress:<br />
+{VAR:k_riik}
+{VAR:k_maakond}
+{VAR:k_linn}
 {VAR:k_postiindex}<br />
 {VAR:k_aadress}<br />
 
@@ -22,10 +22,14 @@ e-mail: {VAR:k_e_mail}<br />
 www: {VAR:k_kodulehekylg}<br />
 </td>
 
-<td>
-töö aadress:
-{VAR:w_riik}<br />
-{VAR:w_maakond}<br />
+
+<td valign=top>
+töö aadress:<br>
+{VAR:fnimi}
+<br>
+{VAR:w_riik}
+{VAR:w_maakond}
+{VAR:w_linn}
 {VAR:w_postiindex}<br />
 {VAR:w_aadress}<br />
 {VAR:w_name}<br />
@@ -40,7 +44,7 @@ www: {VAR:w_kodulehekylg}<br />
 </tr>
 
 <tr>
-<td></td>
+<td>{VAR:tagasisidevormid}</td>
 <td></td>
 </tr>
 </table>
