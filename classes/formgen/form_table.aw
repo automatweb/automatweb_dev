@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.71 2004/11/03 12:14:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.72 2004/11/19 11:56:13 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -3350,7 +3350,7 @@ class form_table extends form_base
 		}
 		else
 		{
-			$ret ="<input type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."' $onc>";
+			$ret ="<input class=\"button\" type='submit' name='butt_".$bt_id."' value='".$this->table["buttons"][$bt_id]["text"]."' $onc>";
 		}
 		return $ret;
 	}
