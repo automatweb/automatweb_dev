@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.6 2003/01/09 13:27:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.7 2003/01/13 14:39:43 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -856,7 +856,7 @@ class form_calendar extends form_base
 		$textboxes = array("0" => "--vali--");
 		foreach($all_els as $key => $val)
 		{
-			if ( ($val["type"] == "textbox") || ($val["type"] == "textarea") || ($val["type"] == "select") )
+			if ( ($val["type"] == "textbox") || ($val["type"] == "textarea") || ($val["type"] == "listbox") )
 			{
 				if ($val["subtype"] != "count")
 				{
@@ -970,13 +970,199 @@ class form_calendar extends form_base
 
 			$_cnt = (int)$post_vars[$el_with_value];
 
-			$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,
-				max_items,period,period_cnt, release,release_cnt,entry_id,count_el_id)
-				VALUES ('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt',
-				'$_pertype','$_period','$_reltype', '$_release','$_eid','$count_el_id')";
-			$this->db_query($q);
+			if ($_cnt > 0)
+			{
+				$q = "INSERT INTO calendar2timedef (oid,relation,cal_id,start,end,
+					max_items,period,period_cnt, release,release_cnt,entry_id,count_el_id)
+					VALUES ('$_oid','$cal_relation','$cal_id','$_start','$_end','$_cnt',
+					'$_pertype','$_period','$_reltype', '$_release','$_eid','$count_el_id')";
+				$this->db_query($q);
+			};
 		};
 	}
 
+	function edit_calendar_relation($args = array())
+	{
+		extract($args);
+		$this->read_template("calendar_relation.tpl");
+
+		$subrelations = array();
+		$countrelations = array();
+
+		// how the phuck do i load multiple relations then?
+		if ($id)
+		{
+			$item = $this->get_record("calendar2forms","id",$id);
+			$q = "SELECT * FROM calendar2form_relations WHERE calendar2forms_id = '$id'";
+			$this->db_query($q);
+			while($row = $this->db_next())
+			{
+				if ($row["el_count"])
+				{
+					$subrelations[$row["el_count"]] = $row;
+				}
+				else
+				{
+					$countrelations[] = $row;
+				};
+			};
+		}
+		else
+		{
+			$item = array();
+		};
+		
+		$els_start = $els_listboxes = $els_relation = $els_end = $tables = $target_objects = array("0" => " -- Vali --");
+                $els_count = array();
+
+		$this->get_objects_by_class(array(
+			"class" => array(CL_FORM,CL_FORM_CHAIN),
+			"active" => true,
+			"flags" => OBJ_HAS_CALENDAR,
+		));
+
+                while($row = $this->db_next())
+                {
+                        $target_objects[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
+                };
+
+		foreach($els as $key => $val)
+		{
+			if ( ($val["type"] == "date") && ($val["subtype"] == "from") )
+			{
+				$els_start[$key] = $val["name"];
+			};
+
+			if ( ($val["type"] == "date") && ($val["subtype"] == "to") )
+			{
+				$els_end[$key] = $val["name"];
+			};
+
+			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
+			{
+				$els_count[$key] = $val["name"];
+			};
+
+			if ( ($val["type"] == "listbox") && ($val["subtype"] == "relation") )
+			{
+				$els_relation[$key] = $val["name"];
+			};
+
+			if ($val["type"] == "listbox")
+			{
+				$els_listboxes[$key] = "element: " . $val["name"];
+			};
+		};
+
+		$ft = get_instance("formgen/form_table");
+		$tables = $tables + $ft->get_form_tables_for_form($form_id);
+
+		if ($item["end"] > 0)
+                {
+                        // Do we deal with days?
+                        if ($item["end"] >= 86400)
+                        {
+                                $end_mp = 86400;
+                        }
+                        // hours perhaps?
+                        elseif ($item["end"] >= 3600)
+                        {
+                                $end_mp = 3600;
+                        }
+                        // probably minutes then
+                        else
+                        {
+                                $end_mp = 60;
+                        };
+                        $end = (int)($item["end"] / $end_mp);
+                }
+                else
+                {
+                        $end_mp = 60;
+                        $end = 0;
+                };
+
+                $l = "";
+                foreach($els_count as $key => $val)
+                {
+                        $this->vars(array(
+                                "count_el_name" => $val,
+                                "count_el_id" => $key,
+                                "cnt_els" => $this->picker($subrelations[$key]["el_relation"],$els_listboxes),
+                        ));
+                        $l .= $this->parse("count_line");
+                }
+
+		$this->vars(array(
+                        "target_objects" => $this->picker($item["cal_id"],$target_objects),
+                        "objects_disabled" => disabled(sizeof($target_objects) == 1),
+                        "start_els" => $this->picker($item["el_start"],$els_start),
+                        "start_disabled" => disabled(sizeof($els_start) == 1),
+                        //"cnt_els" => $this->picker($item["el_cnt"],$els_count),
+                        //"count_disabled" => disabled(sizeof($els_count) == 1),
+                        "end_els" => $this->picker($item["el_end"],$els_end),
+                        "end_disabled" => disabled(sizeof($els_end) == 1),
+                        "relation_els" => $this->picker($item["el_relation"],$els_relation),
+                        "relation_disabled" => disabled(sizeof($els_relation) == 1),
+                        "ev_tables" => $this->picker($item["ev_table"],$tables),
+                        "tables_disabled" => disabled(sizeof($tables) == 1),
+                        //"cnt_type_el" => checked($item["count"] == 0),
+                        //"cnt_type_cnt" => checked($item["count"] > 0),
+                        "end_type_el" => checked($item["end"] == 0),
+                        "end_type_shift" => checked($item["end"] > 0),
+                        "end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "päev(a)")),
+                        "end" => $end,
+                        //"count" => (int)$item["count"],
+                        "count_line" => $l,
+                        "amount_number" => $countrelations[0]["count"],
+                        "cnt_els2" => $this->picker($countrelations[0]["el_relation"],$els_listboxes),
+                        "reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id),"form"),
+                ));
+		return $this->parse();
+
+	}
+
+	function submit_calendar_relation($args = array())
+	{
+		extract($args);
+		$count = ($cnt_type == 2) ? $count : 0;
+                $end = ($end_type == 2) ? (int)$end * (int)$end_mp : 0;
+                if ($id)
+                {
+                        $q = "UPDATE calendar2forms SET
+                                cal_id = '$cal_id',
+                                el_start = '$el_start',
+                                el_cnt = '$el_cnt',
+                                ev_table = '$ev_table',
+                                el_relation = '$el_relation',
+                                el_end = '$el_end',
+                                count = '$count',
+                                end = '$end'
+                                WHERE id = '$id'";
+                }
+                else
+                {
+                        $q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end, count, end)
+                                VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end','$count','$end')";
+                        $id = $this->db_last_insert_id();
+                };
+                $this->db_query($q);
+                $amount_elements = new aw_array($amount_el);
+                $q = "DELETE FROM calendar2form_relations WHERE calendar2forms_id = '$id'";
+                $this->db_query($q);
+                foreach($amount_elements->get() as $key => $val)
+                {
+                        $q = "INSERT INTO calendar2form_relations (calendar2forms_id,el_count,el_relation) VALUES ('$id','$key','$val')";
+                        $this->db_query($q);
+                }
+
+		$amount_elements2 = new aw_array($amount_el2);
+                foreach($amount_elements2->get() as $key => $val)
+                {
+                        $cnt = $amount_number[$key];
+                        $q = "INSERT INTO calendar2form_relations (calendar2forms_id,count,el_relation) VALUES ('$id','$cnt','$val')";
+                        $this->db_query($q);
+                }
+	}
 };
 ?>

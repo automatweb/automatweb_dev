@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.18 2003/01/10 15:50:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.19 2003/01/13 14:40:07 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5504,132 +5504,24 @@ class form extends form_base
 	{
 		extract($args);
 		$this->if_init($form_id,"calendar_relation.tpl", "Kalendrisätungid");
+		
+		$els = $this->get_all_elements(array("type" => 1));
 
-		if ($id)
-		{
-			$item = $this->get_record("calendar2forms","id",$id);
-		}
-		else
-		{
-			$item = array();
-		};
-
-		$this->get_objects_by_class(array(
-			"class" => array(CL_FORM,CL_FORM_CHAIN),
-			"active" => true,
-			"flags" => OBJ_HAS_CALENDAR,
+		$fcal = get_instance("formgen/form_calendar");
+		$c = $fcal->edit_calendar_relation(array(
+			"els" => &$els,
+			"id" => $id,
+			"form_id" => $form_id,	
 		));
 
-		$els_start = $els_count = $els_relation = $els_end = $tables = $target_objects = array("0" => " -- Vali --");
-		while($row = $this->db_next())
-		{
-			$target_objects[$row["oid"]] = ($row["name"]) ? $row["name"] : "(nimetu)";
-		};
-		
-		$_els = $this->get_all_elements(array("type" => 1));
-
-		foreach($_els as $key => $val)
-		{
-			if ( ($val["type"] == "date") && ($val["subtype"] == "from") )
-			{
-				$els_start[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "date") && ($val["subtype"] == "to") )
-			{
-				$els_end[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "textbox") && ($val["subtype"] == "count") )
-			{
-				$els_count[$key] = $val["name"];
-			};
-			
-			if ( ($val["type"] == "listbox") && ($val["subtype"] == "relation") )
-			{
-				$els_relation[$key] = $val["name"];
-			};
-		};
-		
-		$ft = get_instance("formgen/form_table");
-		$tables = $tables + $ft->get_form_tables_for_form($form_id);
-
-		if ($item["end"] > 0)
-		{
-			// Do we deal with days?
-			if ($item["end"] >= 86400)
-			{
-				$end_mp = 86400;
-			}
-			// hours perhaps?
-			elseif ($item["end"] >= 3600)
-			{
-				$end_mp = 3600;
-			}
-			// probably minutes then
-			else
-			{
-				$end_mp = 60;
-			};
-			$end = (int)($item["end"] / $end_mp);
-		}
-		else
-		{
-			$end_mp = 60;
-			$end = 0;
-		};
-
-		$this->vars(array(
-			"target_objects" => $this->picker($item["cal_id"],$target_objects),
-			"objects_disabled" => disabled(sizeof($target_objects) == 1),
-			"start_els" => $this->picker($item["el_start"],$els_start),
-			"start_disabled" => disabled(sizeof($els_start) == 1),
-			"cnt_els" => $this->picker($item["el_cnt"],$els_count),
-			"count_disabled" => disabled(sizeof($els_count) == 1),
-			"end_els" => $this->picker($item["el_end"],$els_end),
-			"end_disabled" => disabled(sizeof($els_end) == 1),
-			"relation_els" => $this->picker($item["el_relation"],$els_relation),
-			"relation_disabled" => disabled(sizeof($els_relation) == 1),
-			"ev_tables" => $this->picker($item["ev_table"],$tables),
-			"tables_disabled" => disabled(sizeof($tables) == 1),
-			"cnt_type_el" => checked($item["count"] == 0),
-			"cnt_type_cnt" => checked($item["count"] > 0),
-			"end_type_el" => checked($item["end"] == 0),
-			"end_type_shift" => checked($item["end"] > 0),
-			"end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "päev(a)")),
-			"end" => $end,
-			"count" => (int)$item["count"],
-			"reforb" => $this->mk_reforb("submit_cal_rel",array("form_id" => $form_id,"id" => $id)),
-		));
-		return $this->do_menu_return();				
+		return $this->do_menu_return($c);				
 	}
 
 	function submit_cal_rel($args = array())
 	{
-		extract($args);
-		$count = ($cnt_type == 2) ? $count : 0;
-		$end = ($end_type == 2) ? (int)$end * (int)$end_mp : 0;
-		if ($id)
-		{
-			$q = "UPDATE calendar2forms SET
-				cal_id = '$cal_id',
-				el_start = '$el_start',
-				el_cnt = '$el_cnt',
-				ev_table = '$ev_table',
-				el_relation = '$el_relation',
-				el_end = '$el_end',
-				count = '$count',
-				end = '$end'
-				WHERE id = '$id'";
-		}
-		else
-		{
-			$q = "INSERT INTO calendar2forms (cal_id,form_id,el_start,el_cnt,ev_table,el_relation,el_end, count, end)
-				VALUES ('$cal_id','$form_id','$el_start','$el_cnt','$ev_table','$el_relation','$el_end','$count','$end')";
-		};
-		//print $q;
-		$this->db_query($q);
-		return $this->mk_my_orb("calendar",array("id" => $form_id));
+		$fcal = get_instance("formgen/form_calendar");
+		$fcal->submit_calendar_relation($args);
+		return $this->mk_my_orb("calendar",array("id" => $args["form_id"]));
 	}
 
 	function del_cal_rel($args = array())
