@@ -155,6 +155,18 @@ and hovering on them causes the submenu to open.
 Note that you can have an arbitrary number of submenus, there
 are no physical limitations for that.
 
+Adding a horizontal separator
+-----------------------------
+#php#
+$tb->add_menu_separator(array(
+	"parent" => "mymenu",
+));
+#/php#
+
+Where
+
+parent - is the name of the sub_menu
+
 Getting results
 ---------------
 
