@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.214 2003/01/29 20:18:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.215 2003/01/30 16:11:59 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -863,7 +863,7 @@ class menuedit extends aw_template
 			$periods = $me_row["meta"]["pers"];
 
 
-			if (is_array($sections))
+			if (is_array($sections) && $sections[0])
 			{
 				$pstr = join(",",$sections);
 				if ($pstr != "")
