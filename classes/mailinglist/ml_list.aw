@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.41 2004/02/06 10:16:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.42 2004/02/06 10:20:22 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -691,6 +691,13 @@ class ml_list extends class_base
 		};
 	}
 	
+	/** removes queue items 
+		
+		@attrib name=delete_queue_items 
+		
+		@param id required type=int 
+		
+	**/
 	function delete_queue_items($arr)
 	{
 		if (is_array($arr["sel"]))
