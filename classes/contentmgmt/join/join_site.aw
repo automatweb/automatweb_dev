@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.13 2004/10/27 12:03:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.14 2004/11/23 16:06:38 ahti Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -941,7 +941,8 @@ class join_site extends class_base
 			"to" => $c_id,
 			"reltype" => 6 // RELTYPE_WORK from crm/crm_person
 		));
-
+		
+		$a_objs = array();
 		foreach($this->_get_clids($obj) as $clid)
 		{
 			if ($clid == CL_CRM_PERSON || $clid == CL_USER || $clid == CL_CRM_COMPANY)
@@ -963,10 +964,12 @@ class join_site extends class_base
 				"to" => $o_id,
 				"reltype" => 15 // RELTYPE_USER_DATA from crm/crm_person
 			));
+			$a_objs[$o->class_id()] = $o_id;
+			
 		}
 
 		// also, do update, all complex element crap is in there
-		$this->_do_update_data_objects($obj, $u_o, $arr);
+		$this->_do_update_data_objects($obj, $u_o, $arr, $a_objs);
 		aw_restore_user();
 	}
 
@@ -1253,7 +1256,7 @@ class join_site extends class_base
 		$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_o->id());
 	}
 
-	function _do_update_data_objects($ob, $u_o, $data)
+	function _do_update_data_objects($ob, $u_o, $data, $a_objs = array())
 	{
 		$visible = $ob->meta("visible");
 		$cfgu = get_instance("cfg/cfgutils");
@@ -1281,8 +1284,7 @@ class join_site extends class_base
 			{
 				$data_o = $u_o;
 			}
-			else
-			if ($clid == CL_CRM_PERSON)
+			elseif ($clid == CL_CRM_PERSON)
 			{
 				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
 				if ($c)
@@ -1290,8 +1292,7 @@ class join_site extends class_base
 					$data_o = $c->to();
 				}
 			}
-			else
-			if ($clid == CL_CRM_COMPANY)
+			elseif ($clid == CL_CRM_COMPANY)
 			{
 				$c = reset($u_o->connections_from(array("type" => 2 /* RELTYPE_PERSON */)));
 				if ($c)
@@ -1304,8 +1305,11 @@ class join_site extends class_base
 					}
 				}
 			}
-
-
+			elseif($this->can("edit", $a_objs[$clid]) && is_oid($a_objs[$clid]))
+			{
+				$data_o = obj($a_objs[$clid]);
+			}
+			
 			if ($data_o)
 			{
 				$this->_do_fake_form_submit(array(
