@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.123 2002/11/14 15:16:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.124 2002/11/14 15:17:24 duke Exp $
 // core.aw - Core functions
 
 // Core properties - common for all classes
@@ -1450,12 +1450,6 @@ class core extends db_connector
 			$ret = array();
 		}
 		$this->save_handle();
-		global $XXX;
-		if ($XXX)
-		{
-			print "travitt";
-			flush();
-		};
 		$this->get_objects_by_class($arr);
 		while ($row = $this->db_next())
 		{
@@ -1469,12 +1463,6 @@ class core extends db_connector
 			}
 		}
 		$this->restore_handle();
-		global $XXX;
-		if ($XXX)
-		{
-			print "blergh";
-			flush();
-		};
 		return $ret;
 	}
 
