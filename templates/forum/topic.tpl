@@ -57,6 +57,4 @@ Kommentaar:<br>
 </form>
 
 
-</table>
-</form>
 
