@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.11 2004/10/18 20:39:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.12 2004/11/03 12:15:55 kristo Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -151,7 +151,6 @@ class calendar_view extends class_base
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
 		));
-
 		$this->obj_inst = $arr["obj_inst"];
 
 
@@ -276,7 +275,6 @@ class calendar_view extends class_base
 					"obj_inst" => $to_o,
 					"range" => $range,
 				));
-
 				foreach($events as $event)
 				{
 					$data = $event;
@@ -421,8 +419,13 @@ class calendar_view extends class_base
 			$range_p["type"] = "last_events";
 		}
 
-		
 		$range = $vcal->get_range($range_p);
+
+		if ($arr["start_from"])
+		{
+			// this is used by project to limit the year view to start from the current month
+			$range["start"] = $arr["start_from"];
+		}
 
 		// this cycle creates the "big" calendar, minicalendar is done in the 
 		// get_overview callback

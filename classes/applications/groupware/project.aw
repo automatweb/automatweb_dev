@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.12 2004/10/29 15:53:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.13 2004/11/03 12:15:55 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -598,6 +598,7 @@ class project extends class_base
 				"brother_of" => $ids,
 				"lang_id" => array(),
 			));
+		
 
 
 			// how does it work? Events will be assigned to multiple projects
@@ -932,7 +933,7 @@ class project extends class_base
 		$this->level = 0;
 
 		$this->name_stack = array();
-
+		$this->done = array();
 		$this->_finalize_tree($parent);
 
 
@@ -944,6 +945,12 @@ class project extends class_base
 		{
 			return false;
 		}
+		if ($this->done[$parent])
+		{
+			return false;
+		};
+		$this->done[$parent] = 1;
+			
 		$this->_ptree[$parent] = $this->level;
 		$this->level++;
 
@@ -1347,6 +1354,7 @@ class project extends class_base
 		{
 			$use_template = "year";
 			$viewtype = "year";
+			$start_from = mktime(0,0,0,date("m"), 1, date("Y"));
 		};
 
 		if ($view_from_url == 1)
@@ -1379,6 +1387,7 @@ class project extends class_base
 			"status" => STAT_ACTIVE,
 			"skip_empty" => true,
 			"full_weeks" => true,
+			"start_from" => $start_from
 		));
 
 		classload("date_calc");
