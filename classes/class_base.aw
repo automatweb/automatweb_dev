@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.204 2004/02/04 14:19:53 kristo Exp $
+// $Id: class_base.aw,v 2.205 2004/02/04 14:22:02 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -689,12 +689,13 @@ class class_base extends aw_template
 
 		if (($args["args"]["action"] == "change") && !empty($args["meta"]["cfgform_id"]))
 		{
-			global $XX5;
-			if ($XX5)
-			{
-				print "bwahah";
-			};
 			$retval = $args["meta"]["cfgform_id"];
+		};
+
+		// XXX: check whether that id really is an cfgform id
+		if (!empty($args["args"]["cfgform"]))
+		{
+			$retval = $args["args"]["cfgform"];
 		};
 		return $retval;
 	}
