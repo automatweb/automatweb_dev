@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.19 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.20 2001/10/22 05:09:59 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -410,6 +410,10 @@ class db_objects extends aw_template
 	// rootobj - mis objektist alustame
 	function get_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
 	{
+		global $awt;
+		$awt->start("objects::get_list");
+		$awt->count("objects::get_list");
+
 		if (!$ignore_langmenus)
 		{
 			if ($GLOBALS["lang_menus"] == 1)
@@ -448,6 +452,7 @@ class db_objects extends aw_template
 			$this->mkah(&$ret,&$tt,$hf,$GLOBALS["uid"]);
 		}
 
+		$awt->stop("objects::get_list");
 		return $tt;
 	}
 	
@@ -647,6 +652,12 @@ class objects extends db_objects
 				}
 			}
 		}
+
+		// just in case if any menus were deleted or changed - I thought it would be too expensive to put checks in 
+		// core::delete_object and core::upd_object to check if menus were changed and then flush the cache 
+		// - yeah, that would be a lot safer, but is it really necessary?
+		$cache = new cache;
+		$cache->db_invalidate("menuedit::menu_cache");
 
 		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"]));
 	}
