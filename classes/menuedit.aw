@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.164 2002/10/18 09:45:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.165 2002/10/21 13:29:36 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -2328,6 +2328,7 @@ class menuedit extends aw_template
 					"pm_url_menus" => $pm_url_menus,
 					"objtbl_conf" => $objtbl_conf,
 					"add_tree_conf" => $add_tree_conf,
+					"cfgmanager" => $cfgmanager,
 					"sort_by_name" => $sort_by_name
 				),
 			));
@@ -2424,8 +2425,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 			if ($autodeactivate == "on") 
 			{
-				$deact_stamp = mktime($deactivate_at["hour"],$deactivate_at["minute"],0,$deactivate_at["month"],
-															$deactivate_at["day"],$deactivate_at["year"]);
+				$deact_stamp = mktime($deactivate_at["hour"],$deactivate_at["minute"],0,$deactivate_at["month"],$deactivate_at["day"],$deactivate_at["year"]);
 				$autodeactivate = 1;
 			};
 
@@ -2913,6 +2913,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"aip_filename" => $meta["aip_filename"],
 			"objtbl_conf" => $this->picker($meta["objtbl_conf"], $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true))),
 			"add_tree_conf" => $this->picker($meta["add_tree_conf"], $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true))),
+			"cfgmanager" => $this->picker($meta["cfgmanager"], $this->list_objects(array("class" => CL_CFGMANAGER, "addempty" => true))),
 			"sort_by_name" => checked($meta["sort_by_name"])
 		));
 
@@ -5834,7 +5835,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->t->define_data($row);
 			}
 		}
-
 		$types = array();
 		foreach($this->cfg["classes"] as $clid => $cldat)
 		{
@@ -5895,7 +5895,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"parent" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
-			"toolbar" => $toolbar,
+			"toolbar" => $toolbar->get_toolbar(),
 		));
 
 		return $this->parse();
@@ -5904,23 +5904,32 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function rf_toolbar($args = array())
 	{
 		extract($args);
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+		$toolbar = get_instance("toolbar");
 		
-		// array of visible buttons, you can override it with show_buttons(array) argument
-		// default is to show all (?) buttons 
-
 		if ($this->can("add", $parent))
 		{
 			$toolbar->add_cdata($add_applet);
 		};
 
+		if (!$no_save)
+		{
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Salvesta",
+				"url" => "javascript:document.foo.submit()",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
+		};
+		
 		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.foo.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
+			"name" => "search",
+			"tooltip" => "Otsi",
+			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
+			"imgover" => "search_over.gif",
+			"img" => "search.gif",
 		));
+		
 
 		$toolbar->add_separator();
 
@@ -5993,20 +6002,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"img" => "bugtrack.gif",
 		));
 	
-		$toolbar->add_button(array(
-			"name" => "search",
-			"tooltip" => "Otsi",
-			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
-			"imgover" => "search_over.gif",
-			"img" => "search.gif",
-		));
-		
 		if (is_array($callback) && sizeof($callback) == 2)
 		{
 			$callback[0]->$callback[1](array("toolbar" => &$toolbar));
 		};
 
-		return $toolbar->get_toolbar();
+		return $toolbar;
 	}
 
 	function submit_rf($arr)
