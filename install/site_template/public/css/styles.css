@@ -1,3 +1,56 @@
+/* MSGBOARD */
+
+.msgboardcolor {
+background-color: #fffedd;
+}
+
+.msgboardcolor2 {
+background-color: #fffedd;
+}
+
+.msgboardcolor3 {
+background-color: #edecbd;
+}
+
+.msgboardcolor4 {
+background-color: #fffedd;
+}
+
+.msgboardhdr {
+font-family: Verdana, Arial, sans-serif;
+font-size: 11px;
+color: #FFFFFF;
+text-decoration: none;
+background-color: #996846;
+}
+
+
+.msgboardrw1 {
+font-family: Verdana, Arial, sans-serif;
+font-size: 11px;
+color: #000000;
+text-decoration: none;
+background-color: #fffedd;
+}
+.msgboardrw1 a {color: #3C9917; text-decoration:underline;}
+.msgboardrw1 a:hover {color: #000000; text-decoration:underline;}
+
+
+.msgboardrw2 {
+font-family: Verdana, Arial, sans-serif;
+font-size: 11px;
+color: #000000;
+text-decoration: none;
+background-color: #edecbd;
+}
+.msgboardrw2 a {color: #3C9917; text-decoration:underline;}
+.msgboardrw2 a:hover {color: #000000; text-decoration:underline;}
+
+
+
+/* END MSGBOARD */
+
+
 HR {color:#BCE67F}
 
 .menuheader {
