@@ -133,5 +133,12 @@
 			</function>
 		</action>
 
+		<action name="submit_user_info">
+			<function name="submit_user_info">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
