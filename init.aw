@@ -292,7 +292,7 @@ function get_instance($class,$args = array())
 
 	if (not($instance))
 	{
-		@include_once($classdir."/".str_replace(".","", $class).".".$ext);
+		include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
 		{
 			if (sizeof($args) > 0)
