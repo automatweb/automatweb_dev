@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.63 2003/10/06 14:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.64 2003/10/14 10:16:45 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -1300,23 +1300,41 @@ class aw_table
 			if ($this->lgrpvals[$rgel] != $_a)
 			{
 				// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
-				$tbl.=$this->opentag(array(
-					"name" => "td",
-					"colspan" => count($this->rowdefs),
-				));
-				if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
+				if (is_array($rgroupdat[$rgel]) && count($rgroupdat[$rgel]) > 0)
 				{
-					$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
+					$tbl.=$this->opentag(array(
+						"name" => "td",
+						"colspan" => count($this->rowdefs),
+					));
+	
+					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
+					{
+						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
+					}
+
+					$tbl .= $this->opentag(array(
+						"name" => "span",
+						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
+					));
+					$tbl.=$_a;
+					$tbl .= $this->closetag(array(
+						"name" => "span"
+					));
 				}
-				
-				$tbl .= $this->opentag(array(
-					"name" => "span",
-					"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
-				));
-				$tbl.=$_a;
-				$tbl .= $this->closetag(array(
-					"name" => "span"
-				));
+				else
+				{
+					$tbl.=$this->opentag(array(
+						"name" => "td",
+						"colspan" => count($this->rowdefs),
+						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
+					));
+					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
+					{
+						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
+					}
+					$tbl.=$_a;
+				}
+
 				$this->lgrpvals[$rgel] = $_a;
 				// if we should display some other elements after the group element
 				// they will be passed in the $rgroupdat array
@@ -1343,6 +1361,7 @@ class aw_table
 					$val .= $rgroupby_sep[$rgel]["after"];
 				}
 				$tbl .= str_replace("[__jrk_replace__]",$this->rgroupcounts[$_a],$val);
+
 				if (isset($this->group_add_els_style) && $this->group_add_els_style != "")
 				{
 					$tbl .= $this->closetag(array(
