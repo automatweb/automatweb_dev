@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.132 2002/08/25 19:38:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.133 2002/08/28 04:38:39 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -640,6 +640,7 @@ class form extends form_base
 			// from this form. 
 			$this->arr["elements"][$i][$col] = array();
 			$this->arr["contents"][$i][$col]->del();
+			$this->arr["contents"][$i][$col] = "";
 			$this->arr["contents"][$i][$this->arr["cols"]-1] = array();
 		}
 
@@ -673,6 +674,7 @@ class form extends form_base
 		{
 			$this->arr["elements"][$row][$i] = array();
 			$this->arr["contents"][$row][$i]->del();
+			$this->arr["contents"][$row][$i] = "";
 			$this->arr["contents"][$this->arr["rows"]-1][$i] = "";
 		}
 
@@ -1112,7 +1114,7 @@ class form extends form_base
 				$frel = $this->db_next();
 				if (!$frel)
 				{
-					$this->raise_error(ERR_FG_CAL_NORELEL, "No relation found in relation table for calendar relation element $row[el_relation]", true);
+					$this->raise_error(ERR_FG_CAL_NORELEL, "No relation found in relation table for calendar relation element $row[el_relation] (check that the relation element in the calendar is set correctly)", true);
 				}
 				$q = sprintf("SELECT id,ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
 						$frel["el_from"],$frel["form_from"],$_rel);
