@@ -276,8 +276,6 @@
             <callback>callback_get_pmethod_options</callback>
             <group>general</group>
             <store>no</store>
-            <table>menu</table>
-            <field>pmethod_properties</field>
             <caption>Avaliku meetodi seaded</caption>
       </property>
       <property>

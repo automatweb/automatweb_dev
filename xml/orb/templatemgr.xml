@@ -32,6 +32,12 @@
 				</arguments>
 			</function>
 		</action>
+		<action name="get_template_folder_list" nologin="1">
+			<function name="get_template_folder_list">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		

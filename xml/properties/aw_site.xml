@@ -53,7 +53,39 @@
             <group>general</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Vali kataloog olemasolevas baasis</caption>
+            <caption>Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse</caption>
+      </property>
+      <property>
+            <name>use_existing_templates</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali olemasolevad templated</caption>
+      </property>
+      <property>
+            <name>select_tpl_sites</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>10</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali saidid, mille templatesid valida saad</caption>
+      </property>
+      <property>
+            <name>select_tpl_folders</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>20</size>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali templatede kataloogid, mis uude saiti kopeerida</caption>
       </property>
       <property>
             <name>gen_site</name>

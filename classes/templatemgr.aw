@@ -103,5 +103,41 @@ class templatemgr extends aw_template
 		$row = $this->get_record("template","id",$id,array("filename"));
 		return $row["filename"];
 	}
+
+	////
+	// !returns a list of all template folders that are for this site
+	// return value is array, key is complete template folder path and value is the path, starting from the site basefolder
+	function get_template_folder_list($arr)
+	{
+		extract($arr);
+		$this->tplfolder_list = array(
+			$this->cfg["tpldir"] => str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $this->cfg["tpldir"])
+		);
+		$this->_req_tplfolders($this->cfg["tpldir"]);
+		return $this->tplfolder_list;
+	}
+
+	function _req_tplfolders($fld)
+	{
+		$cnt = 0;
+		if ($dir = @opendir($fld)) 
+		{
+			while (($file = readdir($dir)) !== false) 
+			{
+				if (!($file == "." || $file == ".."))
+				{
+					$cf = $fld."/".$file;
+					if (is_dir($cf))
+					{
+						$cnt++;
+						$this->_req_tplfolders($cf);
+						$this->tplfolder_list[$cf] = str_replace($this->cfg["site_basedir"],$this->cfg["stitle"], $cf);
+					}
+				}
+			}  
+			closedir($dir);
+		}
+		return $cnt;
+	}
 }
 ?>
