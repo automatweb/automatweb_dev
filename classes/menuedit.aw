@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.327 2004/06/25 19:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.328 2004/06/26 08:06:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -78,8 +78,8 @@ class menuedit extends aw_template
 //		echo "section = $section <br />";
 
 
-		$obj = $this->get_object($section);
-		$meta = $obj["meta"];
+		$obj = obj($section);
+		$meta = $obj->meta();
 		$params["section"] = $section;
 
 		global $format;
@@ -235,12 +235,12 @@ class menuedit extends aw_template
 			{
 				$sid = (int)$sid;
 
-				$ml_msg = $this->get_object($sid);
+				$ml_msg = obj($sid);
 
 				$this->db_query("SELECT ml_users.*,objects.name as name FROM ml_users LEFT JOIN objects ON objects.oid = ml_users.id WHERE id = $artid");
 				if (($ml_user = $this->db_next()))
 				{
-					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg["name"],$section);
+					$this->_log(ST_MENUEDIT, SA_PAGEVIEW ,$ml_user["name"]." (".$ml_user["mail"].") tuli lehele $log meilist ".$ml_msg->name(),$section);
 
 					// and also remember the guy
 					// set a cookie, that expires in 3 years
@@ -316,11 +316,11 @@ class menuedit extends aw_template
 		}
 		else
 		{
-			$_obj = $this->get_object($realsect);
-			$set_lang_id = $_obj["lang_id"];
+			$_obj = obj($realsect);
+			$set_lang_id = $_obj->lang_id();
 			// we do document hit count logging here, because
 			// we know if it's a document or not here
-			if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($_obj["class_id"] == CL_DOCUMENT || $_obj["class_id"] == CL_BROTHER_DOCUMENT || $_obj["class_id"] == CL_PERIODIC_SECTION))
+			if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($_obj->class_id() == CL_DOCUMENT || $_obj->class_id() == CL_BROTHER_DOCUMENT || $_obj->class_id() == CL_PERIODIC_SECTION))
 			{
 				$dt = get_instance("contentmgmt/document_statistics");
 				$dt->add_hit($realsect);
@@ -427,17 +427,6 @@ class menuedit extends aw_template
 	
 				// if it contains a single $section, it is now located in $sections[0]
 			
-				// oh boy, that hurt. we accepted random crap as section name and then
-				// fed it directly to the SQL server (get_object_by_alias)
-				// so now we check whether the name contains anything besides alphanumeric and _
-				// and if so, log it as crack attempt
-	
-				// and if that check is not good enough, we need something like "is_valid_section"
-
-				// yeah, well, /\W/ match is way too strict - I can't use blah.html as the alias for instance
-				// $this->quote(&$alias) will prevent doing any bad things in the sql - terryf
-				//$prnt = 0;
-
 				$candidates = array();
 				$last = array_pop($sections);
 						

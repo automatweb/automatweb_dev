@@ -487,82 +487,6 @@ html::checkbox(array('name'=>'remember['.$what.']['.$field.']['.$nr.']','checked
 	}
 /**/
 
-//see on kirvemeetodil tabeli normaliseerimine, ei osand praegu kuhugi mujale panna
-/*
-	function normalizer($arr)
-	{
-		extract($arr);
-//		$ob = $this->get_object($id);
-		echo "<pre>";
-		$mitu=0;
-		$source_table="html_import_firmad";
-		$lookup='kliendibaas_toode';
-//		$lookup='kliendibaas_tegevusala';
-		$field='tooted';
-//		$field='tooted';
-
-		$row = $this->db_fetch_row("select max(id),min(id) from ".$source_table);
-		$min=$row["min(id)"];
-		$max=$row["max(id)"];
-//		for ($id=$min;$id<=10;$id++)
-		for ($id=$min;$id<=$max;$id++)
-		{
-			$val = $this->db_fetch_field("select ".$field." from ".$source_table." where id=".$id, $field);
-
-			if ($val)
-			{
-				$value="";
-				switch ($tyyp)
-{
-case 'get_nrs':
-				{
-					preg_match_all("/([0-9]{2,})&nbsp;/", $val, $r);// leiab kõik pikemad kui 2digit numbrid
-					foreach($r[1] as $key=>$vv)
-					{
-						//echo $vv;
-//						$oooid = $this->db_fetch_field("select oid from ".$lookup." where kood='".$vv."'", "oid");
-						$value.=$vv.";";
-//						$value.=$oooid.";";
-					}
-				}
-break;
-
-case 'get_nr':
-
-				{
-					preg_match("/([0-9]){2,}/", $val, $r);// leiab pikema kui 2digit numbri
-					$value = $r[0];
-//					$value= $this->db_fetch_field("select oid from ".$lookup." where kood='".$r[0]."'", "oid");
-				}
-break;
-
-case 'strip_dots':
-				$value=trim(str_replace('.','',$val));
-break;
-
-}
-
-				$q="update ".$source_table." set ".$field."='".$value."' where id=".$id;
-				echo $q.' > ';
-//				$this->db_query($q);
-
-
-				echo $id.">".$value."\n";
-				flush();
-
-
-			}//if val
-
-
-		}// switch
-
-		echo "</pre>";
-		die();
-	}
-
-/**/
-
-
 	function write_log($source_id,$generator_oid,$object_oid,$timed,$msg="",$source_info="",$object_info="")
 	{
 		$q="insert into ob_gen_log (source_id,generator_oid,object_oid,timed,msg,source_info,object_info)
@@ -604,36 +528,29 @@ break;
 	function generate_objects($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-//print_r($ob['meta']['log']);
+		$ob = obj($id);
 //		echo "<pre>";
 		$alg=$alg?$alg:0;
 		if ($alg>0) echo "continuing imort from $alg<br />";else echo "stating import from 0<br />";
 //die();
 //	echo 	"starting from: ".$this->db_fetch_field("select max(source_id)as maks from ob_gen_log where generator_oid=$id","maks");
 
-		$lopp=$ob['meta']['limit'];
+		$lopp=$ob->meta('limit');
 		$this->newcount=0;
 		$whats=array("object","sisu","meta");
 
-		if ($ob['meta']['use_object'])
+		if ($ob->meta('use_object'))
 		{
 			$object_data=array(
-				'class_id'=>$ob['meta']['my_class_id'],
-				'parent'=>$ob['meta']['my_parent'],
-				'status'=>$ob['meta']['my_status'],
+				'class_id'=>$ob->meta('my_class_id'),
+				'parent'=>$ob->meta('my_parent'),
+				'status'=>$ob->meta('my_status'),
 			);
-		}
-
-		if ($ob['meta']['log_display']||$ob['meta']['log_db_table'])
-		{
-			//setup log
 		}
 
 		do
 		{
-			$q="select * from ".$ob['meta']['source_table']." limit $alg,$lopp \n";
-//			$q="select ".$ob['meta']['source_table'].".* from ".$ob['meta']['source_table']." as t1 left join ob_gen_log as t2 where t2.source_id==limit $alg,$lopp \n";
+			$q="select * from ".$ob->meta('source_table')." limit $alg,$lopp \n";
 			$data=$this->db_fetch_array($q);
 			$count2=0;
 			$skipped=0;
@@ -661,8 +578,8 @@ break;
 
 				foreach($row as $field=> $val)
 				{
-
-					if ($ob['meta']['unique'][$field])
+					$tmp = $ob->meta('unique');
+					if ($tmp[$field])
 					{
 						if ($unique[$field][$val]==$val) //already made that object
 						{
@@ -681,51 +598,52 @@ break;
 
 					foreach($whats as $what)
 					{
-
-foreach($ob['meta']['add'][$what][$field] as $nr => $xxx)
-{
-						if ($ob['meta'][$what][$field][$nr]){
-							if ($ob['meta']['dejoin'][$what][$field][$nr] && $ob['meta']['dejoin_table'][$what][$field][$nr] && $ob['meta']['dejoin_field'][$what][$field][$nr] && $val)
+						$tmp = $ob->meta('add');
+						$mt = $ob->meta();
+						foreach($tmp[$what][$field] as $nr => $xxx)
+						{
+						if ($mt[$what][$field][$nr]){
+							if ($mt['dejoin'][$what][$field][$nr] && $mt['dejoin_table'][$what][$field][$nr] && $mt['dejoin_field'][$what][$field][$nr] && $val)
 							{
 								// kui meil on eelnevalt sama asja baasist küsitud
-								if ($ob['meta']['remember'][$what][$field][$nr] && $remembered[$what][$field][$nr][$val])
+								if ($mt['remember'][$what][$field][$nr] && $remembered[$what][$field][$nr][$val])
 								{
-									$$what+=array($ob['meta'][$what][$field][$nr] => $remembered[$what][$field][$val]);
+									$$what+=array($mt[$what][$field][$nr] => $remembered[$what][$field][$val]);
 								}
 								else
 								{
 									///vääga geeruline, t2hendab küsitakse teisest tablist oid
-if ($ob['meta']['multiple'][$what][$field][$nr])
+if ($mt['multiple'][$what][$field][$nr])
 {
 	$vals=explode($val);
 
 	foreach ($vals as $kkk => $vvv)
 	{
-					$get_oid=$this->get_oid($ob['meta']['dejoin_table'][$what][$field][$nr],$ob['meta']['dejoin_field'][$what][$field][$nr],$vvv);
+					$get_oid=$this->get_oid($mt['dejoin_table'][$what][$field][$nr],$mt['dejoin_field'][$what][$field][$nr],$vvv);
 
-									if($ob['meta']['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
+									if($mt['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
 									{
 										$remembered[$what][$field][$nr][$vvv]=$get_oid;
 									}
 									if (!$get_oid)
 									{
-										$msg.="could not find oid for '$val' from table ".$ob['meta']['dejoin_table'][$what][$field][$nr]."\n";
+										$msg.="could not find oid for '$val' from table ".$mt['dejoin_table'][$what][$field][$nr]."\n";
 									}
 $get_oids.=$get_oid.';';
 
 	}
-									$$what+=array($ob['meta'][$what][$field][$nr] => $get_oids?$get_oids:NULL);
+									$$what+=array($mt[$what][$field][$nr] => $get_oids?$get_oids:NULL);
 } else {
-			$get_oid=$this->get_oid($ob['meta']['dejoin_table'][$what][$field][$nr],$ob['meta']['dejoin_field'][$what][$field][$nr],$val);
-									if($ob['meta']['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
+			$get_oid=$this->get_oid($mt['dejoin_table'][$what][$field][$nr],$mt['dejoin_field'][$what][$field][$nr],$val);
+									if($mt['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
 									{
 										$remembered[$what][$field][$nr][$val]=$get_oid;
 									}
 					if (!$get_oid)
 									{
-										$msg.="could not find oid for '$val' from table ".$ob['meta']['dejoin_table'][$what][$field][$nr]."\n";
+										$msg.="could not find oid for '$val' from table ".$mt['dejoin_table'][$what][$field][$nr]."\n";
 									}
-									$$what+=array($ob['meta'][$what][$field][$nr] => $get_oid?$get_oid:NULL);
+									$$what+=array($mt[$what][$field][$nr] => $get_oid?$get_oid:NULL);
 }
 
 								}
@@ -733,7 +651,7 @@ $get_oids.=$get_oid.';';
 							}
 							else
 							{
-								$$what+=array($ob['meta'][$what][$field][$nr] => $val);
+								$$what+=array($mt[$what][$field][$nr] => $val);
 							}
 						}
 }
@@ -744,24 +662,24 @@ $get_oids.=$get_oid.';';
 					"object" =>(array)$object + (array)$object_data,
 					"meta" => $meta,
 					"sql" =>array(
-						"table_name" => $ob['meta']['sisu_table'],
+						"table_name" => $ob->meta('sisu_table'),
 						"data" => $sisu,
 					),
 				));
 
 				$msg.=$gen_ob['oid']?"":"!!!could not make object";
 
-				if (($ob['meta']['log_log_warnings']&&$msg)||($ob['meta']['log_made_objects']&&$gen_ob['oid']))
+				if (($ob->meta('log_log_warnings')&&$msg)||($ob->meta('log_made_objects')&&$gen_ob['oid']))
 				{
-					if($ob['meta']['log_db_table'])
+					if($ob->meta('log_db_table'))
 					{
-						$this->write_log($row['id'],$ob['oid'],$gen_ob['oid'],
-							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log_a_source_field']]);
+						$this->write_log($row['id'],$ob->id(),$gen_ob['oid'],
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob->meta('log_a_source_field')]);
 					}
-					if($ob['meta']['log_display'])
+					if($ob->meta('log_display'))
 					{
-						$this->display_log($row['id'],$ob['oid'],$gen_ob['oid'],
-							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log_a_source_field']]);
+						$this->display_log($row['id'],$ob->id(),$gen_ob['oid'],
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob->meta('log_a_source_field')]);
 					}
 				}
 

@@ -349,8 +349,8 @@ class menu_gen extends class_base
  	function make_the_catalogs($arr)
 	{
 		extract($arr);
-		$obj=$this->get_object($id);
-		$meta=$obj['meta'];
+		$obj=obj($id);
+		$meta=$obj->meta();
 
 		$objects=$this->find_objects_under_parent($meta['analyse_this'],$meta['sub_menus']);//CL_PSEUDO
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.82 2004/06/21 11:20:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.83 2004/06/26 08:06:46 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -554,7 +554,8 @@ class file extends class_base
 	// !returns file by id
 	function get_file_by_id($id) 
 	{
-		$row = new aw_array($this->get_object($id));
+		$tmp = obj($id);
+		$row = new aw_array($tmp->fetch());
 		$this->db_query("SELECT * FROM files WHERE id = $id");
 		$ar = new aw_array($this->db_next());
 		$ret = $row->get() + $ar->get();
@@ -722,9 +723,10 @@ class file extends class_base
 	{
 		$file_id = (int)$file_id;
 
+		$fd = obj();
 		if ($file_id)
 		{
-			$fd = $this->get_object($file_id);
+			$fd = obj($file_id);
 		}
 
 		global $HTTP_POST_FILES;
@@ -735,7 +737,7 @@ class file extends class_base
 			$fname = $HTTP_POST_FILES[$name]["name"];
 
 			// if a new file was uploaded, we can forget about the previous one 
-			if ($fd["class_id"] != CL_FILE)
+			if ($fd->class_id() != CL_FILE)
 			{
 				$file_id = 0;
 				$fd = array();
@@ -757,10 +759,10 @@ class file extends class_base
 		{
 			if ($file_id)
 			{
-				if ($fd["class_id"] != CL_FILE)
+				if ($fd->class_id() != CL_FILE)
 				{
 					// we gots problems - this is probably an old image file from formgen
-					if ($fd["class_id"] == CL_IMAGE)
+					if ($fd->class_id() == CL_IMAGE)
 					{
 						// let the image class handle this
 						$im = get_instance("image");
@@ -768,11 +770,11 @@ class file extends class_base
 						return array("id" => $file_id,"url" => $id["url"]);
 					}
 					// if we get here, we're pretty much fucked, so bail out
-					$this->raise_error(ERR_FILE_WRONG_CLASS, "Objekt $file_id on valet tyypi ($fd[class_id])",true);
+					$this->raise_error(ERR_FILE_WRONG_CLASS, "Objekt $file_id on valet tyypi (".$fd->class_id().")",true);
 				}
 				else
 				{
-					return array("id" => $file_id,"url" => $this->get_url($file_id, $fd["name"]), "orig_name" => $fd["name"]);
+					return array("id" => $file_id,"url" => $this->get_url($file_id, $fd->name()), "orig_name" => $fd->name());
 				}
 			}
 			else

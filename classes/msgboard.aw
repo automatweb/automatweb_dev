@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.34 2004/06/25 18:13:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.35 2004/06/26 08:06:47 kristo Exp $
 define(PER_PAGE,10);
 define(PER_FLAT_PAGE,20);
 define(TOPICS_PER_PAGE,7);
@@ -362,8 +362,8 @@ class msgboard extends aw_template
 		global $HTTP_SESSION_VARS;
 		$votes = $HTTP_SESSION_VARS["commentvotes"];
 		
-		$forumdat = $this->get_object($forum_id);
-		$meta = aw_unserialize($forumdat["metadata"]);
+		$forumdat = obj($forum_id);
+		$meta = $forumdat->meta();
 
 		$tmp = obj($id);
 		$votedata = $tmp->meta("votes");
