@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.51 2003/06/19 09:57:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.52 2003/06/26 15:39:14 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -469,6 +469,7 @@ class form_element extends aw_template
 
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
+					"HAS_DEFAULT_CONTROLLER" => $this->parse("HAS_DEFAULT_CONTROLLER"),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 					"CHECK_LENGTH" => $this->parse("CHECK_LENGTH"),
 				));
