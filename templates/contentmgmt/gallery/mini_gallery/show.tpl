@@ -1,12 +1,11 @@
 <style type="text/css">
-.mgalimg {
+.mgalimg td{
 	font-family: Trebuchet MS,Tahoma,sans-serif;
 	font-weight: bold;
 	font-weight: bold;
 	font-size: 10px;
 	color: #FFFFFF;
 	background-color: #599BC4;
-padding-left: 10;
 }
 </style>
 
