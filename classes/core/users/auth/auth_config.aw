@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.10 2005/01/18 10:38:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.11 2005/01/28 08:58:16 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -279,13 +279,24 @@ class auth_config extends class_base
 
 		$confo = obj($auth_id);
 
-		if ($ol->count())
+		$has = false;
+		$obo = false;
+		foreach($ol->arr() as $_o)
+		{
+			if ($_o->prop("uid") == $cred["uid"])
+			{
+				$has = true;
+				$obo = $_o;
+				break;
+			}
+		}
+
+		if ($has)
 		{
 			// check e-mail and name if present in $cred
 			if (!empty($cred["mail"]) || !empty($cred["name"]))
 			{
-				$u = $ol->begin();
-				$this->_upd_udata($u, $cred, $confo);
+				$this->_upd_udata($obo, $cred, $confo);
 			}
 			return true;
 		}
