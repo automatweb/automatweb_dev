@@ -1,12 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.3 2001/11/02 12:05:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php.aw,v 2.4 2002/01/16 23:02:52 duke Exp $
+// php.aw - PHP serializer
 class php_serializer 
 {
+	function set($key,$val)
+	{
+		$this->$key = $val;
+	}
+
 	function php_serialize($arr)
 	{
 		if (!is_array($arr))
 		{
-			echo "php::php_serialize($arr): can only serialize arrays!";
+			//echo "php::php_serialize($arr): can only serialize arrays!";
+			return false;
 		}
 
 		return "\$arr = ".$this->req_serialize($arr).";";
@@ -31,7 +38,14 @@ class php_serializer
 				$v = "\"$v\"";
 			}
 			$k = str_replace("\"","\\\"",$k);
-			$td[] = "\"$k\""."=>".$v."\n";
+			if ($this->no_index)
+			{
+				$td[] = $v."\n";
+			}
+			else
+			{
+				$td[] = "\"$k\""."=>".$v."\n";
+			};
 		}
 		return $str.join(",",$td).")\n";
 	}

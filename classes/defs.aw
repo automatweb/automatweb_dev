@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.34 2002/01/08 02:37:37 duke Exp $
-// defs.aw - common functions (C) StruktuurMeedia 2000,2001
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.35 2002/01/16 23:02:51 duke Exp $
+// defs.aw - common functions 
 if (!defined("DEFS"))
 {
 define(DEFS,1);
@@ -8,6 +8,7 @@ define(DEFS,1);
 define("SERIALIZE_PHP",1);
 define("SERIALIZE_XML",2);
 define("SERIALIZE_NATIVE",3);
+define("SERIALIZE_PHP_NOINDEX",4);
 
 classload("xml","php");
 
@@ -487,6 +488,11 @@ function aw_serialize($arr,$type = SERIALIZE_PHP)
 	{
 		case SERIALIZE_PHP:
 			$ser = new php_serializer;
+			$str = $ser->php_serialize($arr);
+			break;
+		case SERIALIZE_PHP_NOINDEX:
+			$ser = new php_serializer;
+			$ser->set("no_index",1);
 			$str = $ser->php_serialize($arr);
 			break;
 
