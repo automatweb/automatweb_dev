@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.6 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.7 2001/06/16 15:41:25 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -296,23 +296,73 @@ class users extends users_user
 		$this->read_template($tpl);
 
 		$result = array();
-		$startfrom = ($parent == 0) ? $udata["home_folder"] : $parent;
+		$startfrom = (!$parent) ? $udata["home_folder"] : $parent;
+
+		$grps_by_parent = array();
+		$grps = array();
+	
+		// we always start from the home folder
+		$fldr = $udata["home_folder"];
+
+		do
+		{
+			$groups = $this->get_objects_below(array(
+						"parent" => $fldr,
+						"class" => CL_PSEUDO,
+				));
+
+			foreach($groups as $key => $val)
+			{
+				$grps_by_parent[$val["parent"]][$key] = $val;
+				$grps[$key] = $val["parent"];
+			};
+
+			$fldr = array_keys($groups);
+
+		} while(sizeof($groups) > 0);
+
+		$current = $startfrom;
+		
+		while ($udata["home_folder"] != $current)
+		{
+			$path[$current] = 1;
+			$current = $grps[$current];
+		}
+		
+		$path[$udata["home_folder"]] = 1;
+
+		// security check. if the requested is outside or above the
+		// users home folder, we will show him the home folder.
+
+		// this should be done differently of course, by checking the
+		// ACL of the respective document, but for now, we will settle
+		// to this.
+		if (!$grps[$startfrom])
+		{
+			$startfrom = $udata["home_folder"];
+		};
+
+		// we need a small cycle that passes all the oids-s and 
+		// parents until we do find 
+
+		$this->path = $path;
+		$this->folders = "";
+		$this->active = $startfrom;
+		$this->_show_hf_folder($grps_by_parent,$udata["home_folder"]);
+
+		
+		// print sizeof($grps_by_parent[$udata["home_folder"]]);
+		
+		// we will always have to display the first level,
+		// and then find out the parents of the currently
+		// opened folder, and then we have to track the parents
+		// back up to the home folder
 	
 		$thisone = $this->get_object($startfrom);
 		$prnt = $this->get_object($thisone["parent"]);
 
-		$up = "";
-		if ($parent && $parent != $udata["home_folder"])
-		{
-			$this->vars(array(
-				"to_parent" => $this->mk_my_orb("gen_home_dir",array("id" => $thisone["parent"])),
-				"name" => $prnt["name"]
-			));
-			$up = $this->parse("up");
-		}
-
 		$q = "SELECT name,oid,class_id,name FROM objects
-			WHERE objects.parent = '$startfrom' and objects.status != 0";
+			WHERE objects.parent = '$startfrom' and objects.status != 0 and objects.class_id != 1";
 		$this->db_query($q);
 
 		$folders = "";
@@ -337,9 +387,10 @@ class users extends users_user
 					break;
 			};
 			$this->vars(array(
-				"name" => $row["name"],
+				"name" => ($row["name"]) ? $row["name"] : "(nimetu)",
 				"id" => $row["oid"],
 				"iconurl" => get_icon_url($row["class_id"],0),
+				"color" => ($cnt % 2) ? "#FFFFFF" : "#EEEEEE",
 				"f_click" => $this->mk_my_orb("gen_home_dir", array("id" => $row["oid"])),
 				"preview" => $preview,
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),$class)
@@ -360,21 +411,49 @@ class users extends users_user
 			"parent" => $startfrom,
 			"delete" => $delete,
 			"total" => $cnt,
-			"up" => $up,
+			"folders" => $this->folders,
 			"reforb1" => $this->mk_reforb("del_objects", array("parent" => $startfrom)),	// delete form
-			"reforb2" => $this->mk_reforb("submit_add_folder", array("parent" => $startfrom)),	// add form
 			"home_f" => $this->mk_my_orb("gen_home_dir"),
 		));
 		return $this->parse();
 	}
+	
+	////
+	// !for internal use
+	function _show_hf_folder($items,$section)
+	{
+		static $indent = 0;
+		$indent++;
+		static $cnt = 0;
+		while(list($key,$val) = each($items[$section]))
+		{
+			$cnt++;
+			$this->vars(array(
+					"id" => $val["oid"],
+					"indent" => str_repeat("&nbsp;",$indent * 3),
+					"name" => $val["name"],
+					"color" => ($cnt % 2) ? "#EEEEEE" : "#FFFFFF",
+				));
+			$tpl = ($this->active == $key) ? "activefolder" : "folders";
+			$this->folders .= $this->parse($tpl);
+			if ( (is_array($items[$key])) && ($this->path[$key]))
+			{
+				$this->_show_hf_folder($items,$key);
+			};
+		}
+		$indent--;
+	}
 
 	////
-	// !creates a new forlder int the users home folder
+	// !creates a new folder int the users home folder
 	function submit_add_folder($arr)
 	{
 		extract($arr);
-		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $f_name));
+		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $name));
 		$this->db_query("INSERT INTO menu(id,type) values($id,".MN_HOME_FOLDER_SUB.")");
+		global $status_msg;
+		$status_msg = "Folder lisatud";
+		session_register("status_msg");
 
 		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));
 	}
@@ -439,6 +518,9 @@ class users extends users_user
 		{
 			// also, update users join form entries
 			$this->save(array("uid" => $id, "join_form_entry" => serialize($GLOBALS["session_filled_forms"]))); 
+
+			// zero out formgen's user data cache
+			$this->set_user_config(array("uid" => $id, "key" => "user_info_cache", "value" => false));
 
 			// and when we're dont with all of them, update dyn groups and return to user list
 			$this->update_dyn_user($id);
@@ -793,6 +875,9 @@ class users extends users_user
 			return "Andmete muutmiseks peate olema sisse logitud!<br>";
 		}
 
+		// zero out formgen's user data cache
+		$this->set_user_config(array("uid" => $id, "key" => "user_info_cache", "value" => false));
+
 		$this->update_dyn_user($id);
 		$u = $this->fetch($id);
 		$fs = unserialize($u[join_form_entry]);
@@ -891,6 +976,52 @@ class users extends users_user
 		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".MAIL_FROM);
 
 		return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after;
+	}
+
+	////
+	// !this is used by formgen to retrieve the data that the user $uid entered when he joined 
+	// the return value is an array(element_name => element_value). 
+	// the function caches the result for better performance
+	// the cache needs to be zeroed out when the user changes his/her data
+	function get_user_info($uid)
+	{
+		// yeah. use the cached version if available for better performance
+		$dat = $this->get_user_config(array("uid" => $uid, "key" => "user_info_cache"));
+		if (is_array($dat))
+		{
+			return $dat;
+		}
+
+		$elvalues = array();
+		$udata = $this->get_user(array("uid" => $uid));
+		$jf = unserialize($udata["join_form_entry"]);
+		if (is_array($jf))
+		{
+			$elvs = array();
+			$f = new form();
+			foreach($jf as $joinform => $joinentry)
+			{
+				$f->core_load_entry($joinentry,$joinform);
+				$elvs = $elvs + $f->entry;
+			};
+			// now elvalues is array el_id => el_value
+			// but we need it to be el_name => el_value
+			// so we do a bigass query to find all the names of the elements
+			$elsss = join(",",$this->map2("%s",$elvs));
+
+			if ($elsss != "")
+			{
+				$this->db_query("SELECT oid,name FROM objects WHERE oid IN($elsss)");
+				while ($row = $this->db_next())
+				{
+					$elvalues[$row["name"]] = $elvs[$row["oid"]];
+				}
+			}
+			$elvalues["E-mail"] = $udata["email"];
+			// but we could also just cache this info in the users table
+			$this->set_user_config(array("uid" => $uid, "key" => "user_info_cache", "value" => $elvalues));
+		};
+		return $elvalues;
 	}
 }
 ?>
