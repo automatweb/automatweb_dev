@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.30 2002/07/17 07:44:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.31 2002/07/23 12:58:13 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -33,9 +33,6 @@ class form_cell extends form_base
 				break;
 			case FTYPE_SEARCH:
 				$t = "form_search_element";
-				break;
-			case FTYPE_RATING:
-				$t = "form_entry_element";
 				break;
 			case FTYPE_FILTER_SEARCH:
 				$t = "form_filter_search_element";

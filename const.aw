@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.67 2002/07/23 05:29:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.68 2002/07/23 13:00:53 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -156,7 +156,6 @@ define("MN_PMETHOD",77);
 // formide tyybid
 define("FTYPE_ENTRY",1);
 define("FTYPE_SEARCH",2);
-define("FTYPE_RATING",3);
 define("FTYPE_FILTER_SEARCH",4);
 define("FTYPE_CONFIG",5);
 
