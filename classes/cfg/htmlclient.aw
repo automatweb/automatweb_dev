@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.72 2004/09/08 11:32:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.73 2004/09/10 12:04:11 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -659,10 +659,10 @@ class htmlclient extends aw_template
 						$cells = "";
 						for ($j = 1; $j <= $cols; $j++)
 						{
-							print "doing $i * $j<br>";
+							//print "doing $i * $j<br>";
 							if ($used[$i][$j])
 							{
-								print "skipping, cause it is used<br>";
+								//print "skipping, cause it is used<br>";
 								continue;
 							};
 							// now how do I get the spans to work?
@@ -681,14 +681,13 @@ class htmlclient extends aw_template
 
 								if ($rowspan > 1 || $colspan > 1)
 								{
-									for ($i1 = 1; $i1 <= $rowspan; $i1++)
+									for ($i1 = $i; $i1 <= $i + $rowspan; $i1++)
 									{
-										for ($j1 = 1; $j1 <= $colspan; $j1++)
+										for ($j1 = $j; $j1 <= $j + $colspan; $j1++)
 										{
-											$used[$j + $i1][$i + $j1] = 1;
+											$used[$i1][$j1] = 1;
 										}
 									};
-									arr($used);
 								};
 								// now, how do I leave out stolen cells?
 								$grid->vars(array(
