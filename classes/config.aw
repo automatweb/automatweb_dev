@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.57 2004/04/29 12:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.58 2004/06/26 10:03:19 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -744,7 +744,12 @@ class config extends db_config
 		
 		$this->read_template("class_cfgforms.tpl");
 				
-		$options = $this->list_objects(array("class" => CL_CFGFORM, "addempty" => true));
+		$ol = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$options = array("" => "") + $ol->names();
 		classload("html");
 
 		$cfgu = get_instance("cfg/cfgutils");

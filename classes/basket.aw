@@ -37,8 +37,15 @@ class basket extends aw_template
 		$ob = get_instance("objects");
 		$fo = get_instance("formgen/form");
 
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_TABLE,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lll = array("" => "") + $ol->names();
+
 		$this->vars(array(
-			"ftbls" => $this->picker(0,$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
+			"ftbls" => $this->picker(0,$lll),
 			"ord_parents" => $this->picker(0,$ob->get_list()),
 			"order_form" => $this->picker(0, $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to, "return_url" => $return_url))
@@ -122,15 +129,22 @@ class basket extends aw_template
 
 		$ops = $fo->get_op_list($ob->meta("order_form"));
 
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_TABLE,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lll = array("" => "") + $ol->names();
+
 		$this->vars(array(
 			"name" => $ob->name(),
 			"after_order" => $ob->meta("after_order"),
 			"mail_to" => $ob->meta("mail_to"),
-			"ftbls" => $this->picker($ob->meta("ftbl"),$this->list_objects(array("class" => CL_FORM_TABLE, "addempty" => true))),
+			"ftbls" => $this->picker($ob->meta("ftbl"),$lll),
 			"ord_parents" => $this->picker($ob->meta("ord_parent"),$oj->get_list()),
 			"order_form" => $this->picker($ob->meta("order_form"), $fo->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true, "addfolders" => true, "sort" => true))),
 			"order_form_op" => $this->picker($ob->meta("order_form_op"), $ops[$ob->meta("order_form")]),
-			"order_ftbl" => $this->picker($ob->meta("order_ftbl"), $this->list_objects(array("class" => CL_FORM_TABLE,"addempty" => true))),
+			"order_ftbl" => $this->picker($ob->meta("order_ftbl"), $lll),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 

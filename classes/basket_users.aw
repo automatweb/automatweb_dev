@@ -34,8 +34,15 @@ class basket_users extends basket
 		}
 		$this->read_template("add_uo_list.tpl");
 
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_BASKET,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lll = array("" => "") + $ol->names();
+
 		$this->vars(array(
-			"baskets" => $this->picker(0,$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+			"baskets" => $this->picker(0,$lll),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_to" => $alias_to,"return_url" => $return_url))
 		));
 		return $this->parse();
@@ -101,9 +108,16 @@ class basket_users extends basket
 		}
 		$this->read_template("add_uo_list.tpl");
 
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_BASKET,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lll = array("" => "") + $ol->names();
+
 		$this->vars(array(
 			"name" => $ob->name(),
-			"baskets" => $this->picker($ob->meta("basket"),$this->list_objects(array("class" => CL_SHOP_BASKET, "addempty" => true))),
+			"baskets" => $this->picker($ob->meta("basket"),$lll),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 

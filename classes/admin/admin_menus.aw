@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.72 2004/06/25 21:43:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.73 2004/06/26 10:03:20 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -1520,8 +1520,14 @@ class admin_menus extends aw_template
 
 	function req_serialize_obj_tree($oid)
 	{
-		$objs = $this->list_objects(array("class" => CL_MENU, "parent" => $oid, "return" => ARR_ALL));
-		$oids = join(",", array_keys($objs));
+		$ol = new object_list(array(
+			"class_id" => CL_MENU,
+			"parent" => $oid,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+	
+		$oids = join(",", array_values($ol->ids()));
 		if ($oids != "")
 		{
 			$this->db_query("SELECT * FROM menu WHERE id IN ($oids)");
@@ -1532,7 +1538,8 @@ class admin_menus extends aw_template
 				$hash = gen_uniq_id();
 				$this->menu_hash2id[$cur_id] = $hash;
 
-				$od = $objs[$cur_id];
+				$od = $ol->get_at($cur_id);
+				$od = $od->fetch();
 				$od["parent"] = $this->menu_hash2id[$od["parent"]];
 				$od["oid"] = $hash;
 				$row["id"] = $hash;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.42 2004/06/25 19:03:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.43 2004/06/26 10:03:20 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -724,12 +724,14 @@ class converters extends aw_template
 	function convert_acl_to_classbase()
 	{
 		// go over all acl objects and make aliases for the selected roles/chains/groups
-		$objs = $this->list_objects(array(
-			"class" => CL_ACL,
-			"return" => ARR_ALL
+		$ol = new object_list(array(
+			"class_id" => CL_ACL,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
-		foreach($objs as $obj)
+		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+			$obj = $o->fetch();
 			echo "converting object $obj[name] ($obj[oid]) <br />\n";
 			$obj["meta"] = aw_unserialize($obj["metadata"]);
 			flush();
@@ -796,13 +798,15 @@ class converters extends aw_template
 	**/
 	function convert_fg_tables_deleted()
 	{
-		$ol = $this->list_objects(array(
-			"class" => CL_FORM
+		$ol = new object_list(array(
+			"class_id" => CL_FORM,
+			"site_id" => array(),
+			"lang_id" => array()
 		));
 
 		echo "converting formgen tables! <br /><br />\n";
 
-		foreach($ol as $oid => $_d)
+		foreach($ol->names() as $oid => $_d)
 		{
 			echo "form $oid <br />\n";
 			flush();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.8 2004/06/26 08:15:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.9 2004/06/26 10:03:19 kristo Exp $
 
 class object_vote extends aw_template
 {
@@ -7,44 +7,6 @@ class object_vote extends aw_template
 	{
 		$this->init("documents");
 	}
-
-	function list_objects($args = array())
-	{
-		$this->read_template("list_clusters.tpl");
-		$per_oid = $this->cfg["per_oid"];
-		$q = "SELECT * FROM objects WHERE parent = '$per_oid' AND class_id = " . CL_OBJECT_VOTE . " AND status != 0 ORDER BY period DESC";
-		$this->db_query($q);
-		$c = "";
-		while($row = $this->db_next())
-		{
-			$this->vars(array(
-				"id" => $row["oid"],
-				"title" => $row["name"],
-				"checked" => ($row["status"] == 2) ? "checked" : "",
-				"class" => ($row["status"] == 2) ? "selected" : "plain",
-			));
-			$c .= $this->parse("line");
-		};
-		$this->vars(array(
-			"add" => "orb.".$this->cfg["ext"]."?class=object_vote&action=add_cluster",
-			"line" => $c,
-			"reforb" => $this->mk_reforb("submit_cluster_list",array()),
-		));
-		return $this->parse();
-	}
-
-	function submit_cluster_list($args = array())
-	{
-		extract($args);
-		$per_oid = $this->cfg["per_oid"];
-		$q = "UPDATE objects SET status = 1 WHERE parent = '$per_oid' AND class_id = " . CL_OBJECT_VOTE;
-		$this->db_query($q);
-		$q = "UPDATE objects set status = 2 WHERE oid = $check";
-		$this->db_query($q);
-		header("Location: " . $this->cfg["baseurl"] . "/automatweb/orb.".$this->cfg["ext"]."?class=object_vote&action=list");
-		exit;
-	}
-		
 
 	////
 	// !Lisab uue objektiklastri, kroonika/seltskonna puhul siis lubab valida perioodi

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.74 2004/06/25 19:16:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.75 2004/06/26 10:03:19 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -1091,10 +1091,17 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		if (!$fields["server"])
 		{
+			$ol = new object_list(array(
+				"class_id" => CL_AW_LOGIN,
+				"site_id" => array(),
+				"lang_id" => array()
+			));
+			$lll = array("" => "") + $ol->names();
+
 			$fields["server"] = array(
 				"type" => "select",
 				"caption" => "Server",
-				"options" => $this->list_objects(array("addempty" => true, "class" => CL_AW_LOGIN)),
+				"options" => $lll,
 				"selected" => $args["s"]["server"],
 			);
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.9 2003/08/01 12:48:18 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.10 2004/06/26 10:03:20 kristo Exp $
 
 class sql_filter extends aw_template 
 {
@@ -224,6 +224,13 @@ class sql_filter extends aw_template
 			$selecteddate=time();
 		};
 
+		$ol = new object_list(array(
+			"class_id" => CL_FORM_OUTPUT,
+			"site_id" => array(),
+			"lang_id" => array()
+		));
+		$lll = array("" => "") + $ol->names();
+
 		$this->vars(array(
 			"fieldlist" => $this->picker($change_p_field,$fieldarr),
 			"sql" => $this->filter_to_sql(array("noeval"=>1,"fake"=>1)),
@@ -243,7 +250,7 @@ class sql_filter extends aw_template
 			"name" => $this->filter["name"],
 			"dedit" => $date_edit->gen_edit_form("dateval",$selecteddate),
 			"reforb" => $arr["reforb"] ? $arr["reforb"] : $this->mk_my_orb($reforb_func,$reforb_arr,$reforb_class),
-			"ops" => $this->picker($this->filter["filter_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT, "addempty" => true)))
+			"ops" => $this->picker($this->filter["filter_op"], $lll)
 		));
 		
 		
