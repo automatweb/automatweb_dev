@@ -455,7 +455,6 @@ class form_db_base extends aw_template
 	function read_entry_data($entry_id, $only_el = false)
 	{
 		$this->save_handle();
-		$this->object_table_joins = array();
 
 		if ($this->type == FTYPE_SEARCH)
 		{
@@ -545,7 +544,6 @@ class form_db_base extends aw_template
 		{
 			$used_els = array();
 		}
-		$this->object_table_joins = array();
 
 		// ugh. this is the complicated bit again. 
 
@@ -771,21 +769,13 @@ class form_db_base extends aw_template
 							}
 
 							$del = "";
-							if (!$dat["save_table"])
+							if (substr($jdata["to_tbl"], 0, 5) == "form_")
 							{
 								$del = " AND $jdata[to_tbl].deleted != 1 ";
 							}
 
 							$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON (".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"]." $lang $del) ";
 
-							// ok, now we must also join the objects table if it is a regular fg table
-							// and add to the where clause the check that the objects are not deleted
-							if (substr($jdata["to_tbl"], 0, 5) == "form_")
-							{
-								$on = "objects_".$__t2fid;
-								$sql .= " LEFT JOIN objects $on ON $on.".OID." = $jdata[to_tbl].id ";
-								$this->object_table_joins[] = $on;
-							}
 							$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
 						}
 						else
@@ -1956,17 +1946,6 @@ class form_db_base extends aw_template
 			{
 				$query.=" AND objects.lang_id = '".aw_global_get("lang_id")."'";
 			}
-		}
-
-		// add all the object joins status checks
-		$ar = new aw_array($this->object_table_joins);
-		foreach($ar->get() as $on)
-		{
-			if ($query != "")
-			{
-				$query .= " AND ";
-			}
-			$query .= " $on.status != ".STAT_DELETED;
 		}
 
 		if ($query != "")
