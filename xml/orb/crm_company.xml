@@ -95,5 +95,16 @@
 			</function>
 		</action>
 
+		<action name="create_new_person" >
+			<function name="create_new_person">
+				<arguments>
+					<required name="parent" />
+					<required name="alias_to" />
+					<required name="reltype" />
+					<optional name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
