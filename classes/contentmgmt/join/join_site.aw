@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.5 2004/04/30 08:39:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.6 2004/05/12 13:46:31 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -734,6 +734,7 @@ class join_site extends class_base
 			$sessd = aw_global_get("site_join_status");
 		}
 
+		
 		// set the data to the session
 		foreach($arr as $k => $v)
 		{
