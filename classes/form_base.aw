@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.24 2001/10/01 13:47:04 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.25 2001/10/01 14:05:42 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -339,9 +339,11 @@ class form_base extends aw_template
 			"actions"					=> $this->mk_orb("list_actions", array("id" => $this->id),"form_actions"),
 			"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
 			"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form"),
+			"sel_filter_search"			=> $this->mk_orb("sel_filter_search", array("id" => $this->id), "form"),
 			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import"),
 			"set_folders" => $this->mk_my_orb("set_folders", array("id" => $this->id),"form"),
-			"translate" => $this->mk_my_orb("translate", array("id" => $this->id),"form")
+			"translate" => $this->mk_my_orb("translate", array("id" => $this->id),"form"),
+			"tables" => $this->mk_my_orb("sel_tables", array("id" => $this->id),"form")
 		));
 
 		if ($action == "change" || $action == "show" || $action == "all_elements")
@@ -384,10 +386,16 @@ class form_base extends aw_template
 			}
 		}
 
-		if ($this->type == 2)
+		if ($this->type == 2)//blah, better use the constant, man!
 		{
 			$this->parse("SEARCH_SEL");
+		} 
+		else
+		if ($this->type == FORM_FILTER_SEARCH)
+		{
+			$this->parse("FILTER_SEARCH_SEL");
 		}
+
 		$this->parse("CAN_GRID");
 		$this->parse("CAN_ALL");
 		$this->parse("CAN_TABLE");
@@ -406,7 +414,7 @@ class form_base extends aw_template
 
 		$this->parse("M_EXPORT_STYLES");
 
-		if ($this->type != 2)
+		if ($this->type != 2 && $this->type != FORM_FILTER_SEARCH)
 		{
 			$this->parse("OP_1");
 		}

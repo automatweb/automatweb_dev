@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.24 2001/10/01 13:47:55 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.25 2001/10/01 14:05:42 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -995,6 +995,12 @@ class form_element extends aw_template
 						$cnt++;
 					}
 					$this->arr["listbox_count"] = $cnt;
+					if ($this->form->type == FTYPE_SEARCH)
+					{
+						$this->arr["listbox_count"] = $cnt+1;
+						$this->arr["listbox_items"][$cnt] = "";
+						$this->arr["listbox_default"] = $cnt;
+					}
 					$this->restore_handle();
 				}
 				$html="<select $stat_check name='".$prefix.$elid."'";
