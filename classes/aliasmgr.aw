@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.108 2003/07/08 10:56:26 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.109 2003/07/09 12:22:35 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -306,7 +306,10 @@ class aliasmgr extends aw_template
 			$meta = $_tmp["meta"];
 		};
 
-		if (is_array($meta["aliases_by_class"]) && false)
+		//if (is_array($meta["aliases_by_class"]) && false)
+		// um, no .. try again. doing it this way caused a heaven 'n hell crap
+		// all over themsleves .. -duke
+		if (is_array($meta["aliases_by_class"]))
 		{
 			$aliases = $meta["aliases_by_class"];
 		}
@@ -786,7 +789,6 @@ class aliasmgr extends aw_template
 			// let the correct class override the alias adding if it wants to
 			// if the class does not handle it, it falls back on core::addalias
 			$cl = $this->cfg["classes"][$al["class_id"]]["alias_class"];
-
 			if ($cl != "")
 			{
 				$inst = get_instance($cl);
@@ -928,6 +930,7 @@ class aliasmgr extends aw_template
 		$alist = $this->get_aliases(array(
 			"oid" => $id,
 		));
+		$oid = $id;
 
 		// we need to check whether there are any conflicts in the idx list
 		// and if so, correct them
@@ -964,6 +967,7 @@ class aliasmgr extends aw_template
 				$q = "UPDATE aliases SET idx = '$idx' WHERE id = '$id'";
 				$this->db_query($q);
 			};
+			$this->cache_oo_aliases($oid);
 		};
 	}
 
@@ -1251,7 +1255,6 @@ HTM;
 			$this->make_alias_classarr();
 			$parts["class_id"] = sprintf("class_id IN (%s)",join(",",array_keys($this->classarr)));
 		};
-		//$parts["brother_id"] = "brother_of = oid ";
 		$parts["brother_id"] = "(brother_of = 0 OR brother_of = oid)";
 	}
 
