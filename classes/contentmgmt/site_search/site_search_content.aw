@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.17 2004/11/09 15:46:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.18 2004/11/09 15:54:27 sven Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -412,9 +412,7 @@ class site_search_content extends class_base
 			return;
 		}
 		
-		//This is temporary... it comes from search config in the future
 		$classes = $obj->prop("keyword_search_classes");
-		arr(CL_FILE);	
 		$keyword_aliased_conns = new connection();
 		
 		$keyword_aliased_conns = $keyword_aliased_conns->find(array(
