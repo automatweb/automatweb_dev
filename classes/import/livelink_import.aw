@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.7 2003/05/14 12:11:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.8 2003/05/14 16:13:00 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -218,9 +218,13 @@ class livelink_import extends class_base
 
 
 			$old = $this->db_fetch_row("SELECT * FROM livelink_folders WHERE id = '$id'");
+		
+			// we always scan the contents of folders (files) for changes
+			$this->need2update[] = $id;
+
 			if (in_array($id,$this->exceptions))
 			{
-				$this->need2update[] = $id;
+				//$this->need2update[] = $id;
 			}
 			else
 			if (empty($old))
@@ -233,7 +237,7 @@ class livelink_import extends class_base
 					VALUES ('$id','$name','$realname','$description','$parent','$modified','$rootnode')";
 				print $q;
 				print "\n";
-				$this->need2update[] = $id;
+				//$this->need2update[] = $id;
 				$this->db_query($q);
 			}
 			else
@@ -257,7 +261,7 @@ class livelink_import extends class_base
 					modified = '$modified',	
 					rootnode = '$rootnode'
 					WHERE id = '$id'";
-				$this->need2update[] = $id;
+				//$this->need2update[] = $id;
 
 				print $q;
 				print "\n";
@@ -265,7 +269,7 @@ class livelink_import extends class_base
 			}
 			else
 			{
-				print "not touching $name, since it has not been modified\n";
+				//print "not touching $name, since it has not been modified\n";
 			};
                 }
 
@@ -349,6 +353,7 @@ class livelink_import extends class_base
 		{
 			#$name = $this->name;
 			$name = $this->desc;
+			$realname = preg_replace("/^\d+?\.\s/","",$name);
 			$id = $this->id;
 			$parent = $this->parentid;
 			$modified = $this->modified;
@@ -373,8 +378,8 @@ class livelink_import extends class_base
 				$this->quote($filename);
 				// wah, wah
 				$this->write_outfile();
-				$q = "INSERT INTO livelink_files (id,parent,name,filename,modified,icon,rootnode)
-				VALUES('$id','$parent','$name','$filename','$modified','$iconurl','$rootnode')";
+				$q = "INSERT INTO livelink_files (id,parent,name,realname,filename,modified,icon,rootnode)
+				VALUES('$id','$parent','$name','$realname','$filename','$modified','$iconurl','$rootnode')";
 				$this->db_query($q);
 			}
 			else
@@ -386,7 +391,7 @@ class livelink_import extends class_base
 				// wah, wah
 				$this->write_outfile();
 				$q = "UPDATE livelink_files SET
-				parent = '$parent',name = '$name',filename = '$filename',
+				parent = '$parent',name = '$name',realname = '$realname',filename = '$filename',
 				modified = '$modified', rootnode = '$rootnode',
 				icon = '$iconurl'
 				WHERE id = '$id'";
