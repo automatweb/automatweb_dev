@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.9 2003/09/25 13:03:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.10 2004/11/22 11:36:00 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -161,7 +161,7 @@ class aw_timer
 	function get_time() 
 	{
 		list($micro,$sec) = explode(" ",microtime());
-		return $sec + $micro;
+		return ((float)$sec + (float)$micro);
 	}
 
 	// kas taimer töötab?

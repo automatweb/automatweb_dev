@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.40 2004/11/19 11:29:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.41 2004/11/22 11:36:01 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -195,6 +195,8 @@ class sys extends aw_template
 			"sven.dev.struktuur.ee" => "sven.dev.struktuur.ee",
 			"otto.struktuur.ee" => "otto.struktuur.ee",
 			"rate.automatweb.com" => "rate.automatweb.com",
+			"www.kiosk.ee" => "www.kiosk.ee",
+
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
@@ -677,28 +679,47 @@ class sys extends aw_template
 			$urls = array();
 			$sid2url = array();
 			$total = count($lines);
+			$total_time = 0;
+			$times = array();
+			$page_times = array();
+			$tot_page_times = array();
+
 			foreach($lines as $line)
 			{
-				list($dp, $tm, $sid, $bu, $url) = explode(" ", $line);
+				list($dp, $tm, $sid, $bu, $url, $time) = explode(" ", $line);
 				$sites[$sid]++;
 				$sid2url[$sid] = $bu;
 				$urls[$bu.$url]++;
+				$time = (float)$time;
+				$times[$sid] += $time;
+				$total_time += $time;
+				$page_times[] = $time;
+				$page_t2p[] = $bu.$url;
+				$tot_page_times[$bu.$url] += $time;
+			}
+
+			$avg_page_times = array();
+			foreach($tot_page_times as $pg => $time)
+			{
+				$avg_page_times[$pg] = $time / $urls[$pg];
 			}
 
 			arsort($sites);
 			arsort($urls);
-	
-			echo "total pageviews: $total<Br>top sites: <br>";
+			arsort($page_times);	
+			arsort($avg_page_times);
+
+			echo "total pageviews: $total<Br>total time taken: $total_time seconds <br>top sites: <br>";
 			$num = 0;
 			foreach($sites as $site => $cnt)
 			{
-				echo "site ".$sid2url[$site]." got $cnt pageviews <Br>";
+				echo "site ".$sid2url[$site]." got $cnt pageviews and took a total of ".$times[$site]." seconds, average pv is ".($times[$site] / $cnt)." <Br>";
 				if (++$num > 10)
 				{
 					break;
 				}
 			}
-			echo "total number of sites touched: ".count($sites)."<br>top urls: <br>";
+			echo "<br>total number of sites touched: ".count($sites)."<br>top urls: <br>";
 			$num = 0;
 			foreach($urls as $url => $cnt)
 			{
@@ -708,6 +729,29 @@ class sys extends aw_template
 					break;
 				}
 			}
+
+			echo "<br>top 20 longest pages by longest time: <br>";
+			$num = 0;
+			foreach($page_times as $idx => $time)
+			{
+				echo "page ".$page_t2p[$idx]." took $time seconds <br>";
+				if (++$num > 20)
+				{
+					break;
+				}
+			}
+
+			echo "<br>top 20 longest pages by average: <br>";
+			$num = 0;
+			foreach($avg_page_times as $url => $time)
+			{
+				echo "page $url took $time seconds on average <br>";
+				if (++$num > 20)
+				{
+					break;
+				}
+			}
+
 			echo "------------------------------------<br>";
 		}
 		die();
