@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.43 2003/02/15 20:03:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.44 2003/04/23 07:00:37 duke Exp $
 
 class db_config extends aw_template 
 {
@@ -306,11 +306,17 @@ class config extends db_config
 	function set_menu_icon($arr)
 	{
 		extract($arr);
-		$t = get_instance("menuedit");
-		$t->set_menu_icon($id,$icon_id);
-		$obj = $t->get_object($id);
+
+		$af = $this->db_fetch_field("SELECT admin_feature FROM menu WHERE id = $id","admin_feature");
+		if ($af)
+		{
+			$this->set_program_icon(array("id" => $af,"icon_id" => $icon_id));
+		}
+		$this->db_query("UPDATE menu SET icon_id = $icon_id WHERE id = $id");
+		$obj = $this->get_object($id);
 		header("Location: ".$t->mk_orb("change", array("id" => $id, "parent" => $obj["parent"])));
 		die();
+
 	}
 
 	function show_favicon($arr)
