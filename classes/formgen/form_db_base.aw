@@ -706,7 +706,7 @@ class form_db_base extends aw_template
 					}
 					// other tables get joined - making sure we don't accidentally join them several times
 					$__t = $this->get_rtbl_from_tbl($jdata["to_tbl"]);
-					if ($__t != "")
+					if ($__t != "" && $jdata["from_tbl"] != "" && $jdata["from_el"] != "")
 					{
 						$sql.=" LEFT JOIN ".$__t." AS ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
 						$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
