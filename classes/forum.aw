@@ -1,7 +1,28 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.54 2002/10/29 13:30:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.55 2002/11/02 23:27:28 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
+
+/*
+        // stuff that goes into the objects table
+        @default table=objects
+
+        @property comments type=checkbox field=meta method=serialize
+        @caption Kommenteeritav
+        
+	@property rated type=checkbox field=meta method=serialize
+        @caption Hinnatav
+
+	@property template type=select field=meta method=serialize
+	@caption Template
+
+	@property onpage type=select field=meta method=serialize
+	@caption Kommentaare lehel
+
+	@property topicsonpage type=select field=meta method=serialize
+	@caption Teemasid lehel
+
+*/
 
 class forum extends aw_template
 {
@@ -2030,6 +2051,25 @@ topic");
                 );
 
 		return $fields;
+	}
+
+	function get_property($args)
+	{
+		$data = &$args["prop"];
+		switch($data["name"])
+		{
+			case "template":
+				$data["options"] = aw_ini_get("menuedit.template_sets");
+				break;
+
+			case "onpage":
+				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+				break;
+
+			case "topicsonpage":
+				$data["options"] = array(5 => 5,10 => 10,15 => 15,20 => 20,25 => 25,30 => 30);
+				break;
+		};
 	}
 }
 ?>
