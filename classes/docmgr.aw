@@ -1,5 +1,5 @@
 <?php
-// $Revision: 2.5 $
+// $Revision: 2.6 $
 // docmgr.aw - Document manager
 // our first goal is it to make a decent interface to searching
 // from documents and their archives.
@@ -22,7 +22,7 @@ class docmgr extends document
 	{
 		extract($args);
 		$GLOBALS["site_title"] = "Dokumendihaldur";
-		$this->read_template("search.tpl");
+		$this->read_template("doc_search.tpl");
 		$this->_prepare_search_form($args);
 		return $this->parse();
 	}
@@ -30,12 +30,12 @@ class docmgr extends document
 	// performs the actual serach
 	function search($args = array())
 	{
-		$this->read_template("search.tpl");
+		$this->read_template("doc_search.tpl");
 		$this->_prepare_search_form($args);
 		$GLOBALS["site_title"] = "Dokumendihaldur";
 		$form = $this->parse();
 		// I'm a template molester
-		$this->read_template("search_results.tpl");
+		$this->read_template("doc_search_results.tpl");
 		load_vcl("table");
 		if (defined("ARCHIVE"))
 		{
