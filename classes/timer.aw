@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.5 2002/10/21 10:09:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.6 2002/12/05 09:22:38 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -114,7 +114,7 @@ class aw_timer
 	// tagastab aja epohhi algusest sekundites
 	function get_time() 
 	{
-		list($micro,$sec) = split(" ",microtime());
+		list($micro,$sec) = explode(" ",microtime());
 		return $sec + $micro;
 	}
 
