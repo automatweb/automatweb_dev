@@ -6,6 +6,7 @@
             <clid>CL_ML_LIST_CONF</clid>
             <field>meta</field>
             <method>serialize</method>
+            <newonly>1</newonly>
             <table>objects</table>
             <group>general</group>
             <caption>Vali konfiguratsioon</caption>
