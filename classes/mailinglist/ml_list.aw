@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.61 2004/08/27 12:12:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.62 2004/09/02 13:24:26 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -272,6 +272,7 @@ class ml_list extends class_base
 	**/
 	function subscribe($args = array())
 	{
+		
 		$list_id = $args["id"];
 		$rel_id = $args["rel_id"];
 
@@ -313,9 +314,8 @@ class ml_list extends class_base
 		{
 			$allow = true;
 		};
-
-		// I HATE you all
-		$args["mail"] = $args["email"];
+		
+		$args["email"] = $args["mail"];
 		$request = $args;
 		if (is_array($args["udef_txbox"]))
 		{
@@ -342,17 +342,18 @@ class ml_list extends class_base
 			aw_session_set("no_cache",1);
 		
 			// fsck me plenty
+			$request["mail"] = $_POST["mail"];
 			aw_session_set("cb_reqdata",$request);
 			aw_session_set("cb_errmsg",$errmsg);
 			return aw_global_get("HTTP_REFERER");
 		};
 
 
-		$udef_fields["textboxes"] = $args["udef_txtbox"];
+		$udef_fields["textboxes"] = $args["udef_txbox"];
 		$udef_fields["textareas"] = $args["udef_txtarea"];
 		$udef_fields["checkboxes"] = $args["udef_checkbox"];
 		$udef_fields["classificators"] = $args["udef_classificator"];
-
+		$udef_fields["date1"] = $args["udef_date1"];
 		
 		if ($allow)
 		{
@@ -360,7 +361,7 @@ class ml_list extends class_base
 			{
 				$retval = $ml_member->subscribe_member_to_list(array(
 					"name" => $args["name"],
-					"email" => $args["email"],
+					"email" => $args["mail"],
 					"use_folders" => $use_folders,
 					"list_id" => $list_obj->id(),
 					"confirm_subscribe" => $list_obj->prop("confirm_subscribe"),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.33 2004/08/23 09:23:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.34 2004/09/02 13:24:26 sven Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -92,10 +92,10 @@
 	@property udef_classificator5 type=classificator field=meta method=serialize
 	@caption Klassifikaator 5
 
-	@property udef_date1 type=date_select field=meta method=serialize
+	@property udef_date1 type=date_select field=meta method=serialize year_from=1930
 	@caption Kuup&auml;ev 1
 	
-	@property udef_date2 type=date_select field=meta method=serialize
+	@property udef_date2 type=date_select field=meta method=serialize year_from=1930
 	@caption Kuup&auml;ev 2
 	
 	@groupinfo udef_fields caption=Muud väljad 
@@ -112,7 +112,21 @@ class ml_member extends class_base
 		));
 		lc_load("definition");
 	}
+	
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
 
+		switch($data["name"])
+		{
+			case "udef_date1":
+			arr($data);
+				break;
+		}
+	}
+
+	
 	////
 	// email(string) - email addy
 	// folder(string) - id of the folder to check
@@ -143,6 +157,7 @@ class ml_member extends class_base
 	// list_id - id of the list to use for subscribing
 	function subscribe_member_to_list($args = array())
 	{
+
 		// it would be _really_, _really_ nice if I could init 
 		// the data from the class_base, but it's not yet possible
 		$this->quote($args);
@@ -235,7 +250,12 @@ class ml_member extends class_base
 					{
 						$member_obj->set_prop("udef_classificator$key", $value);
 					}
-				}	
+				}
+				
+				$tmp_time = strtotime($args["udef_fields"]["date1"]["year"]."-".$args["udef_fields"]["date1"]["month"]."-".$args["udef_fields"]["date1"]["day"]);
+				$member_obj->set_prop("udef_date1", $tmp_time);
+				
+				
 				$member_obj->save();
 		
 			};
