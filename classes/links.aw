@@ -1,5 +1,5 @@
 <?php
-// $Header
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.15 2002/01/07 16:35:54 kristo Exp $
 global $orb_defs;
 $orb_defs["links"] = array("new"		=>	array("function"	=> "add",	"params"	=> array("parent"), "opt" => array("docid")),
 													 "submit"	=>	array("function"	=> "submit","params" => array("parent","id")),

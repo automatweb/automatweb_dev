@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.30 2002/01/04 12:52:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.31 2002/01/07 16:32:17 kristo Exp $
 classload("users_user","config","form","objects");
 
 load_vcl("table","date_edit");
@@ -199,7 +199,7 @@ class users extends users_user
 		$q = "SELECT groups.oid,groups.gid,objects.name
 			FROM groups
 			LEFT JOIN objects ON (objects.oid = groups.oid)
-			WHERE objects.status != 0 AND groups.type IN (".GRP_REGULAR.",".GRP_DYNAMIC.")";
+			WHERE objects.status != 0 AND groups.type IN (".GRP_REGULAR.",".GRP_DYNAMIC.",".GRP_DEFAULT.",".GRP_USERGRP . ")";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{

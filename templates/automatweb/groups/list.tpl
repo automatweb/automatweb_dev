@@ -1,3 +1,4 @@
+
 <form action='refcheck.{VAR:ext}' METHOD=POST name='boo'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 	<tr>

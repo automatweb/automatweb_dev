@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.6 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.7 2002/01/07 16:36:42 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -945,6 +945,7 @@ class groups extends users_user
 		$yah = "<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => 0))."'>Grupid</a> / ".$yah;
 		$this->vars(array("yah" => $yah));
 		$this->vars(array("ADD_CAT" => $ac));
+		$GLOBALS["site_title"] = $yah;
 
 		return $this->parse();
 	}

@@ -33,66 +33,137 @@ function toggle_javascript()
 	};
 };
 </script>
+
 <form method="POST" action="reforb.{VAR:ext}" name='b88'>
-<table border="0" cellspacing="1" cellpadding="2" bgcolor="#CCCCCC">
+
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside">
+
+
+<table border="0" cellpadding="0" cellspacing="2">
 <tr>
-	<td class="fcaption2">URL</td>
-	<td class="fform"><input type="text" name="url" size="40" value='{VAR:url}'></td>
-</tr>
-<tr>
-	<td class="fcaption2" colspan=2><input type='hidden' name='type' value='ext'><a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_EXTLINKS_INSIDE_WEB}</a></td>
-</tr>
-<tr>
-	<td class="fcaption2">{VAR:LC_EXTLINKS_NAME}</td>
-	<td class="fform"><input type="text" name="name" size="40" value='{VAR:name}'></td>
-</tr>
-<tr>
-	<td class="fcaption2" colspan=2>{VAR:LC_EXTLINKS_COMMENT_TO_LC}</td>
-</tr>					
-<tr>
-	<td colspan=2 class="fform"><textarea name="comment" rows=5 cols=50>{VAR:comment}</textarea></td>
-</tr>
-<tr>
-	<td class="fcaption2">{VAR:LC_EXTLINKS_NEW_WINDOW}</td>
-	<td class="fform"><input type="checkbox" name="newwindow" value=1 {VAR:newwindow}></td>
-</tr>
-<tr>
-	<td class="fcaption2">Kasutada lingi loomisel Javascripti?</td>
-	<td class="fform"><input type="checkbox" name="use_javascript" value=1 onClick="toggle_javascript()" {VAR:use_javascript}></td>
-</tr>
-<tr>
-	<td class="fcaption2">Uue akna mõõtmed</td>
-	<td class="fform"><input type="text" name="newwinwidth" value="{VAR:newwinwidth}" size="4"> x 
-	<input type="text" name="newwinheight" value="{VAR:newwinheight}" size="4"></td>
-</tr>
-<tr>
-	<td class="fcaption2">Uue akna sätungid</td>
-	<td class="fform">
-	Toolbar: <input type="checkbox" name="newwintoolbar" value=1 {VAR:newwintoolbar}> |
-	Address bar: <input type="checkbox" name="newwinlocation" value=1 {VAR:newwinlocation}> |
-	Menyyd: <input type="checkbox" name="newwinmenu" value=1 {VAR:newwinmenu}> |
-	Scrollbar: <input type="checkbox" name="newwinscroll" value=1 {VAR:newwinscroll}> 
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:this.document.b88.submit();"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+href="javascript:this.document.b88.submit();">Salvesta<!--{VAR:LC_EXTLINKS_ADD} {VAR:LC_EXTLINKS_LINK}--></a>
+</td></tr>
+</table>
+
+
+		</td>
+		</tr>
+		</table>
+
+
+	</td>
+	</tr>
+	</table>
 
 </td>
 </tr>
+</table>
+
+
+<table width="100%" cellspacing="0" cellpadding="5">
+<tr><td>
+
+
+
+
+
+
+
+<table border="0" cellspacing="1" cellpadding="2">
 <tr>
-	<td class="fcaption2">{VAR:LC_EXTLINKS_DOC_LC}?</td>
-	<td class="fform"><input type="checkbox" name="doclinkcollection" value=1 {VAR:doclinkcollection}></td>
+	<td>
+
+<table border="0" cellspacing="1" cellpadding="2">
+<tr>
+	<td class="celltext">URL</td>
+	<td class="celltext"><input type="text" name="url" size="40" value='{VAR:url}' class="formtext"></td>
 </tr>
 <tr>
-	<td class="fcaption2" colspan=2>{VAR:LC_EXTLINKS_CHOOSE_CATALOGUE}</td>
+	<td class="celltext" colspan=2><input type='hidden' name='type' value='ext'><a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_EXTLINKS_INSIDE_WEB}</a></td>
 </tr>
 <tr>
-	<td class="fform" colspan=2><select class='small_button' name='parent'>{VAR:parent}</select></td>
+	<td class="celltext">{VAR:LC_EXTLINKS_NAME}</td>
+	<td class="celltext"><input type="text" name="name" size="40" value='{VAR:name}' class="formtext"></td>
 </tr>
 <tr>
-	<td class="fform" align="center" colspan="2">
-		<input type="submit" value="{VAR:LC_EXTLINKS_ADD} {VAR:LC_EXTLINKS_LINK}">
-		{VAR:reforb}
+	<td class="celltext" colspan=2>{VAR:LC_EXTLINKS_COMMENT_TO_LC}</td>
+</tr>					
+<tr>
+	<td colspan=2 class="celltext"><textarea name="comment" rows=5 cols=40  class="formtext">{VAR:comment}</textarea></td>
+</tr>
+<tr>
+	<td colspan=2 class="celltext">{VAR:LC_EXTLINKS_DOC_LC}? <input type="checkbox" name="doclinkcollection" value=1 {VAR:doclinkcollection}></td>
+</tr>
+
+
+</table>
+
+	</td>
+	<td valign="top">
+
+<table border="0" cellspacing="1" cellpadding="1">
+<tr>
+	<td class="celltext" colspan="2">{VAR:LC_EXTLINKS_NEW_WINDOW} <input type="checkbox" name="newwindow" value=1 {VAR:newwindow}></td>
+</tr>
+<tr>
+	<td colspan="2" bgcolor="#FFFFFF">
+	
+
+		<table cellspacing="0" cellpadding="5">
+		<tr><td colspan="2" class="celltext" bgcolor="#EEEEEE">
+Kasutada lingi loomisel Javascripti? <input type="checkbox" name="use_javascript" value=1 onClick="toggle_javascript()" {VAR:use_javascript}>		
+		</td></tr>
+
+<tr>
+	<td class="celltext" bgcolor="#EEEEEE">Uue akna mõõtmed</td>
+	<td class="celltext" bgcolor="#EEEEEE"><input type="text" name="newwinwidth" value="{VAR:newwinwidth}" size="4"> x 
+	<input type="text" name="newwinheight" value="{VAR:newwinheight}" size="4"></td>
+</tr>
+<tr>
+	<td class="celltext" bgcolor="#EEEEEE" valign="top">Uue akna määrangud</td>
+	<td class="celltext" bgcolor="#EEEEEE">
+
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr><td><input type="checkbox" name="newwintoolbar" value=1 {VAR:newwintoolbar}></td><td class="celltext">Toolbar</td></tr>
+	<tr><td><input type="checkbox" name="newwinlocation" value=1 {VAR:newwinlocation}></td><td class="celltext">Address bar</td></tr>
+	<tr><td><input type="checkbox" name="newwinmenu" value=1 {VAR:newwinmenu}></td><td class="celltext">Menüüd</td></tr>
+	<tr><td><input type="checkbox" name="newwinscroll" value=1 {VAR:newwinscroll}></td><td class="celltext">Scrollbar</td></tr>
+	</table>
+
+</td>
+</tr>
+		</table>
+	
+	
+	
 	</td>
 </tr>
+
+
 </table>
+
+		</td>
+		</tr>
+		</table>
+<span class="celltext">{VAR:LC_EXTLINKS_CHOOSE_CATALOGUE}</span><br>
+<select class='small_button' name='parent'>{VAR:parent}</select>
+{VAR:reforb}
 </form>
 <script language="JavaScript">
 toggle_javascript();
 </script>
+
+
+</td></tr></table>

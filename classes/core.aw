@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.72 2001/12/17 23:57:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.73 2002/01/07 16:33:37 kristo Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
+
+define("TPLTYPE_TPL",0);
+define("TPLTYPE_FORM",1);
 
 classload("connect");
 class core extends db_connector
@@ -230,13 +233,15 @@ class core extends db_connector
 		$this->quote($time);
 		if (defined("TAFKAP"))
 		{
-			$q = "INSERT DELAYED INTO syslog (tm,uid,type,action,ip,oid,tafkap)
-				VALUES('$t','$uid','$type','$action','$ip','$oid','$tafkap')";
+			$q = "INSERT DELAYED INTO syslog (tm,uid,type,action,ip,oid,tafkap,created_hour,created_day,created_week,created_month,created_year)
+				VALUES('$t','$uid','$type','$action','$ip','$oid','$tafkap','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')";
 		}
 		else
 		{
 			$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid)
 				VALUES('$t','$uid','$type','$action','$ip','$oid')";
+			//$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid,created_hour,created_day,created_week,created_month,created_year)
+			//	VALUES('$t','$uid','$type','$action','$ip','$oid','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."')";
 		};
 		$this->db_query($q);
 	}
@@ -362,6 +367,10 @@ class core extends db_connector
 			case "10":
 				// 12:33
 				$dateformat = "H:i";
+				break;
+			case "11":
+				// 12:22 04-Jan-2000
+				$dateformat = "d.m.y / H:i";
 				break;
 			default:
 				// 12:22 04-01
@@ -659,7 +668,8 @@ class core extends db_connector
 	// !deletes alias $target from object $source
 	function delete_alias($source,$target)
 	{
-		$this->db_query("DELETE FROM aliases WHERE source = '$source' AND target = '$target'");
+		$q = "DELETE FROM aliases WHERE source = '$source' AND target = '$target'";
+		$this->db_query($q);
 	}
 
 	////
@@ -848,6 +858,7 @@ class core extends db_connector
 	function parse_aliases($args = array())
 	{
 		$this->blocks = array();
+		global $DEBUG;
 		extract($args);
 
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
@@ -867,12 +878,18 @@ class core extends db_connector
 				};
 			};
 		}
-		
+
 		foreach($this->parsers->reglist as $pkey => $parser)
 		{
 			// itereerime seni, kuni see äsjaleitud regulaaravaldis enam ei matchi.
+			$cnt = 0;
 			while(preg_match($parser["reg"],$text,$matches))
 			{
+				$cnt++;
+				if ($cnt > 50)
+				{
+					return;
+				};
 				// siia tuleb tekitada mingi if lause, mis 
 				// vastavalt sellele kas parserchain on defineeritud voi mitte, kutsub oige asja välja
 				if (sizeof($parser["parserchain"] > 0))
@@ -930,6 +947,11 @@ class core extends db_connector
 						};
 					};
 				};
+			};
+			if ($DEBUG)
+			{
+				print "complete<br>";
+				flush();
 			};
 		};
 		return $text;
@@ -1158,7 +1180,7 @@ class core extends db_connector
 		{
 			$q = "SELECT objects.*
 					FROM objects
-					WHERE class_id = $class AND status != 0 $pstr $astr $ostr";
+					WHERE class_id = $class AND status = 2 $pstr $astr $ostr";
 		};
 		$this->db_query($q);
 	}
@@ -1341,9 +1363,20 @@ class core extends db_connector
 		{
 			do { 
 				$section = (int)$section;
-				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
+				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
 				$row = $this->db_next();
-				$template = isset($row["filename"]) ? $row["filename"] : "";
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			if ((int)$meta["template_type"] == TPLTYPE_TPL)
+			{
+				$template = $row["filename"];
+			}
+			else
+			{
+				$template = $meta["ftpl_lead"];
+			}
 				$section = $row["parent"];
 			} while ($template == "" && $section > 1);
 			$GLOBALS["lead_template_cache"][$section] = $template;
@@ -1364,9 +1397,20 @@ class core extends db_connector
 
 		do { 
 			$section = (int)$section;
-			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent, objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
 			$row = $this->db_next();
-			$template = isset($row["filename"]) ? $row["filename"] : "";
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			if ((int)$meta["template_type"] == TPLTYPE_TPL)
+			{
+				$template = $row["filename"];
+			}
+			else
+			{
+				$template = $meta["ftpl_view"];
+			}
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
 		return $template;
@@ -1380,9 +1424,20 @@ class core extends db_connector
 	{
 		do { 
 			$section = (int)$section;
-			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
+			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
 			$row = $this->db_next();
-			$template = $row["filename"];
+			$meta = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"]
+			));
+
+			if ((int)$meta["template_type"] == TPLTYPE_TPL)
+			{
+				$template = $row["filename"];
+			}
+			else
+			{
+				$template = $meta["ftpl_edit"];
+			}
 			$section = $row["parent"];
 		} while ($template == "" && $section > 1);
 		if ($template == "")

@@ -1,4 +1,6 @@
 <script language=javascript>
+
+
 if (document.all)
 	document.write("<style type='text/css'>#down { position: relative; visibility: visible; }</style>");
 else
@@ -55,6 +57,21 @@ else
 
 </style>
 <script language=javascript>
+
+
+var element = 0;
+function set_color(vrv) 
+{  
+	document.menuinfo.elements[element].value=vrv;
+} 
+
+function varvivalik(nr)
+{  
+	element = nr;  
+	aken=window.open("colorpicker.aw","varvivalik","HEIGHT=220,WIDTH=310");  
+	aken.focus();
+}
+
 
 function hideAll()
 {
@@ -167,6 +184,76 @@ function onOff(paren,lay,vis,low)
 	}
 }
 
+
+
+
+var ops=new Array()
+<!-- SUB: FORM -->
+ops_{VAR:form_id} = new Array();
+<!-- SUB: FORM_OP -->
+ops_{VAR:form_id}[{VAR:cnt}] = new Array({VAR:op_id},"{VAR:op_name}");
+<!-- END SUB: FORM_OP -->
+
+<!-- END SUB: FORM -->
+
+function clearList(list)
+{
+	var listlen = list.length;
+
+	for(i=0; i < listlen; i++)
+		list.options[0] = null;
+}
+
+function addItem(list, arr)
+{
+	list.options[list.length] = new Option(arr[1],""+arr[0],false,false);
+}
+
+function populate_list(el,arr)
+{
+	clearList(el);
+	for (i = 0; i < arr.length; i++)
+		addItem(el,arr[i]);
+}
+
+var sel_form;
+sel_form = 0;
+
+var cur_arr;
+cur_arr = 0;
+
+function mk_ops()
+{
+	if (cur_arr != sel_form)
+	{
+		cur_arr = sel_form;
+		if (eval("typeof(ops_"+sel_form+")") != "undefined")
+		{
+			eval("far = ops_"+sel_form);
+			populate_list(menuinfo.ftpl_lead, far);
+			populate_list(menuinfo.ftpl_view, far);
+		}
+		else
+		{
+			clearList(menuinfo.ftpl_view);
+			clearList(menuinfo.ftpl_lead);
+		}
+	}
+}
+
+function idxforvalue(el,val)
+{
+	for (i=0; i < el.options.length; i++)
+	{
+		if (el.options[i].value == val)
+		{
+			return i;
+		}
+	}
+	return 0;
+}
+
+
 </script>
 
 
@@ -211,10 +298,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1284','dip1284','visible','dd1284');">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1284','dip1284','visible','dd1284');">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1284"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1284"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 1 general -->
@@ -381,6 +468,10 @@ function savemenu() {
 			<td class="celltext" align="right">&nbsp;Alias:&nbsp;</td>
 			<td class="celltext"><input type='text' NAME='alias' VALUE='{VAR:alias}' size=35></td>
 		</tr>
+		<tr>
+			<td class="celltext" align="right">&nbsp;V&auml;rv:&nbsp;</td>
+			<td class="celltext"><input type='text' NAME='color' VALUE='{VAR:color}' size=7>&nbsp;<a href="#" onclick="varvivalik('color');"> Vali </a></td>
+		</tr>
 
 		<tr>
 			<td class="celltext"  align="right">&nbsp;<a href='config.{VAR:ext}?type=sel_icon&rtype=menu_icon&rid={VAR:id}'>AW {VAR:LC_MENUEDIT_ICON}:</a>&nbsp;</td>
@@ -516,6 +607,9 @@ function savemenu() {
 		<td class="celltext"><select name="tpl_dir">{VAR:tpl_dir}</select></td>
 		</tr>
 		<tr>
+			<td class="celltext" colspan="2"><input type="radio" name="template_type" value="0" {VAR:tpltype_tpl}> Dokumendi sisestamisel kasutatakse templeite</td>
+		</tr>
+		<tr>
 		<td class="celltext" align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_EDIT}:&nbsp;</td>
 		<td class="celltext"><select name="tpl_edit">{VAR:tpl_edit}</select></td>
 		</tr>
@@ -526,6 +620,21 @@ function savemenu() {
 		<tr>
 		<td class="celltext" nowrap align="right">&nbsp;{VAR:LC_MENUEDIT_TEMPL_SHORT}:&nbsp;</td>
 		<td class="celltext"><select name="tpl_lead"><option value="0">Default</option>{VAR:tpl_lead}</select></td>
+		</tr>
+		<tr>
+			<td class="celltext" colspan="2"><input type="radio" name="template_type" value="1" {VAR:tpltype_form}> Dokumendi sisestamisel kasutatakse forme</td>
+		</tr>
+		<tr>
+		<td class="celltext" align="right">&nbsp;Muutmiseform:&nbsp;</td>
+		<td class="celltext"><select onChange="sel_form=this.options[this.selectedIndex].value;mk_ops();"  name="ftpl_edit">{VAR:ftpl_edit}</select></td>
+		</tr>
+		<tr>
+		<td class="celltext" align="right">&nbsp;Pikk v&auml;ljund:&nbsp;</td>
+		<td class="celltext"><select name="ftpl_view">{VAR:ftpl_view}</select></td>
+		</tr>
+		<tr>
+		<td class="celltext" nowrap align="right">&nbsp;Leadi v&auml;jund:&nbsp;</td>
+		<td class="celltext"><select name="ftpl_lead">{VAR:ftpl_lead}</select></td>
 		</tr>
 		<tr class="aste05">
 		<td class="celltext" nowrap>&nbsp;<font color="red">Legend:</font>&nbsp;</td>
@@ -906,4 +1015,11 @@ function savemenu() {
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <script language="javascript">
 onOff('bob1284','dip1284','visible','dd1284');
+</script>
+
+<script language="javascript">
+sel_form={VAR:ftpl_edit_id};
+mk_ops();
+menuinfo.ftpl_lead.selectedIndex = idxforvalue(menuinfo.ftpl_lead,{VAR:ftpl_lead_id});
+menuinfo.ftpl_view.selectedIndex = idxforvalue(menuinfo.ftpl_view,{VAR:ftpl_view_id});
 </script>

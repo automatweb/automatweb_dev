@@ -315,7 +315,7 @@ aste07
 &nbsp;</td>
 <td class="celltext" align=center>
 <!-- SUB: NFIRST -->
-<input class='small_button' type=text NAME='ord[{VAR:oid}]' VALUE='{VAR:order}' SIZE=2 MAXLENGTH=3><input type='hidden' name='old_ord[{VAR:oid}]' value='{VAR:order}'>
+<input class='small_button' type=text NAME='ord[{VAR:oid}]' VALUE='{VAR:order}' SIZE=3 MAXLENGTH=4><input type='hidden' name='old_ord[{VAR:oid}]' value='{VAR:order}'>
 <!-- END SUB: NFIRST -->
 </td>
 <td align="center" class="celltext">

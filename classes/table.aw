@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.20 2001/12/21 10:10:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.21 2002/01/07 16:33:02 kristo Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -78,6 +78,17 @@ $orb_defs["table"] ="xml";
 			"reg_id" => $mp,
 			"function" => "parse_alias",
 		));
+
+		                // tabelid      
+                $this->register_sub_parser(array(
+                                        "idx" => 2,
+                                        "match" => "t", // L
+                                        "class" => "table",
+                                        "reg_id" => $mp,
+                                        "function" => "parse_alias",
+                                ));
+
+
 
 		$this->register_sub_parser(array(
 			"idx" => 2,

@@ -2,50 +2,51 @@
 <br>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
-<td bgcolor="#CCCCCC">
+<td bgcolor="#FFFFFF">
 
-<table border="0" cellspacing="1" cellpadding="0" width=100%>
-<tr>
-<td height="15" colspan="11" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
+
+<table border="0" cellspacing="1" cellpadding="2" width=100%>
+<tr class="aste05">
+<td height="15" colspan="11" class="celltext">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_CATEGORIES}: 
 <!-- SUB: ADD_CAT -->
 <a href='list.{VAR:ext}?type=add_cat&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a>
 <!-- END SUB: ADD_CAT -->
 </b>
 </td>
 </tr>
-<tr>
-<td height="15" class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_DESCRIPTION}&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGER}&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_CHANGED}&nbsp;</td>
-<td align="center" colspan="3" class="title">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
+<tr class="aste05">
+<td height="15" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_DESCRIPTION}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_CHANGER}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_CHANGED}&nbsp;</td>
+<td align="center" colspan="3" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_ACTION}&nbsp;</td>
 </tr>
 
 <!-- SUB: C_LINE -->
-<tr>
-<td height="15" class="fgtext">
+<tr class="aste07">
+<td height="15" class="celltext">
 <table border=0 cellspacing=0 cellpadding=0 bgcolor=#ffffff vspace=0 hspace=0>
-<tr>
+<tr class="aste07">
 <td>{VAR:space_images}{VAR:image}</td>
-<td valign=center class="fgtext">&nbsp;<a href='list.{VAR:ext}?parent={VAR:cat_id}{VAR:op}'>{VAR:cat_name}</a>&nbsp;</td>
+<td valign=center class="celltext">&nbsp;<a href='list.{VAR:ext}?parent={VAR:cat_id}{VAR:op}'>{VAR:cat_name}</a>&nbsp;</td>
 </tr>
 </table>
 </td>
 
-<td class="fgtext">&nbsp;{VAR:cat_comment}&nbsp;</td>
-<td align="center" class="fgtext">&nbsp;{VAR:modifiedby}&nbsp;</td>
-<td align="center" class="fgtext">&nbsp;{VAR:modified}&nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;{VAR:cat_comment}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:modifiedby}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:modified}&nbsp;</td>
+<td class="celltext">&nbsp;
 <!-- SUB: CAN_CHANGE -->
 <a href='list.{VAR:ext}?type=change_cat&id={VAR:cat_id}&parent={VAR:parent}'>Metainfo</a>
 <!-- END SUB: CAN_CHANGE -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;
 <!-- SUB: CAN_DELETE -->
 <a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_CAT}?','list.{VAR:ext}?type=delete_cat&id={VAR:cat_id}&parent={VAR:parent}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: CAN_DELETE -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;
 <!-- SUB: CAN_ACL -->
 <a href='editacl.{VAR:ext}?oid={VAR:cat_id}&file=list_cat.xml'>ACL</a>
 <!-- END SUB: CAN_ACL -->
@@ -67,7 +68,7 @@
 
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td height="15" colspan="15" class="fgtitle">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_LISTS}:&nbsp;
+<td height="15" colspan="15" class="celltext">&nbsp;<b>{VAR:LC_MAILINGLIST_BIG_LISTS}:&nbsp;
 <!-- SUB: ADD_LIST -->
 <a href='list.{VAR:ext}?type=add_list&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_ADD}</a> |
 <a href='#' onClick='document.listform.submit()'>{VAR:LC_MAILINGLIST_SAVE}</a>
@@ -75,41 +76,41 @@
 </b></td>
 </tr>
 <tr>
-<td align="center" class="title">&nbsp;ID&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
-<td align="center" class="title">&nbsp;{VAR:LC_MAILINGLIST_COMMENTARY}&nbsp;</td>
-<td align="center" colspan="7" class="title">{VAR:LC_MAILINGLIST_ACTION}</td>
-<td align="center" class="title">&nbsp;Default&nbsp;</td>
+<td align="center" class="celltext">&nbsp;ID&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_NAME}&nbsp;</td>
+<td align="center" class="celltext">&nbsp;{VAR:LC_MAILINGLIST_COMMENTARY}&nbsp;</td>
+<td align="center" colspan="7" class="celltext">{VAR:LC_MAILINGLIST_ACTION}</td>
+<td align="center" class="celltext">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: LINE -->
 <tr>
-<td align="center" class="fgtext">&nbsp;{VAR:list_id}&nbsp;</td>
-<td class="fgtext">&nbsp;{VAR:list_name}&nbsp;</td>
-<td class="fgtext">&nbsp;{VAR:list_comment}&nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td align="center" class="celltext">&nbsp;{VAR:list_id}&nbsp;</td>
+<td class="celltext">&nbsp;{VAR:list_name}&nbsp;</td>
+<td class="celltext">&nbsp;{VAR:list_comment}&nbsp;</td>
+<td class="celltext">&nbsp;
 <!-- SUB: L_CHANGE -->
 <a href='list.{VAR:ext}?type=change_list&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_CHANGE}</a>
 <!-- END SUB: L_CHANGE -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=change_list_vars&id={VAR:list_id}&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_SMALL_VARIABLES}</a>&nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;<a href='list.{VAR:ext}?type=change_list_vars&id={VAR:list_id}&parent={VAR:parent}'>{VAR:LC_MAILINGLIST_SMALL_VARIABLES}</a>&nbsp;</td>
+<td class="celltext">&nbsp;
 <!-- SUB: L_DELETE -->
 <a href="javascript:box2('{VAR:LC_MAILINGLIST_WANT_TO_DEL_LIST}?','list.{VAR:ext}?type=delete_list&id={VAR:list_id}')">{VAR:LC_MAILINGLIST_DELETE}</a>
 <!-- END SUB: L_DELETE -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;
 <!-- SUB: L_ACL -->
 <a href="editacl.{VAR:ext}?oid={VAR:list_id}&file=list.xml">ACL</a>
 <!-- END SUB: L_ACL -->
 &nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_LIST_MEMBERS}</a>&nbsp;</td>
-<td class="fgtext2">&nbsp;<a href='list.{VAR:ext}?type=list_mails&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_SMALL_MAILS}</a>&nbsp;</td>
-<td class="fgtext2">&nbsp;
+<td class="celltext">&nbsp;<a href='list.{VAR:ext}?type=list_inimesed&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_LIST_MEMBERS}</a>&nbsp;</td>
+<td class="celltext">&nbsp;<a href='list.{VAR:ext}?type=list_mails&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_SMALL_MAILS}</a>&nbsp;</td>
+<td class="celltext">&nbsp;
 <!-- SUB: L_IMPORT -->
 <a href='list.{VAR:ext}?type=import_file&id={VAR:list_id}'>{VAR:LC_MAILINGLIST_IMPORT_ADDRESS}</a>
 <!-- END SUB: L_IMPORT -->
 &nbsp;</td>
-<td class="fgtext2" align="center"><input type="radio" name="default" value="{VAR:list_id}" {VAR:checked}>
+<td class="celltext" align="center"><input type="radio" name="default" value="{VAR:list_id}" {VAR:checked}>
 </td>
 <!-- END SUB: LINE -->
 </tr>

@@ -4,6 +4,7 @@
 <title>{VAR:title} / AutomatWeb</title>
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/site.css">
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/fg_menu.css">
+<link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 <!-- SUB: custom_css -->
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/get_css.aw?name={VAR:custom}.css">
 <!-- END SUB: custom_css -->

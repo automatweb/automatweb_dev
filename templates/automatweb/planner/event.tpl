@@ -3,12 +3,16 @@
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
 <td colspan="2" class="header1" align="center">
-{VAR:today} -> {VAR:caption}
+{VAR:caption}
 </td>
 </tr>
 <tr>
 <td colspan="2" class="header1">
 <table border="0" cellspacing="1" cellpadding="2" bgcolor="#FFFFFF">
+<tr>
+<td class="fgtitle"><strong>Kuupäev</strong></td>
+<td class="fgtitle">{VAR:start}</td>
+</tr>
 <tr>
 <td class="fgtitle"><strong>{VAR:LC_PLANNER_STARTS}</strong></td>
 <td class="fgtitle"><select class="lefttab" name="shour">{VAR:shour}</select> t:<select class="lefttab" name="smin">{VAR:smin}</select>m</td>

@@ -15,7 +15,7 @@
 
 <table bgcolor=#f0f0f0 width=100% height=100% border=0>
 <tr>
-<td align=left class='fgen_text' colspan=3><a href='javascript:remote("no","200","200","pickstyle.{VAR:ext}?id={VAR:form_id}&col={VAR:col}&row={VAR:row}")'>{VAR:LC_FORMS_CHOOSE_STYLE}</a>&nbsp;<input type='checkbox' name='chk[{VAR:row}][{VAR:col}]' value=1>&nbsp;{VAR:style_name}</td>
+<td align=left class='fgen_text' colspan=3>&nbsp;<input type='checkbox' name='chk[{VAR:row}][{VAR:col}]' value=1>&nbsp;{VAR:style_name}</td>
 </tr>
 
 <tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.24 2001/12/18 00:08:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.25 2002/01/07 16:37:02 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -13,8 +13,8 @@ class db_objects extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init();
-		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM);		
-		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM);	
+		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM,CL_OBJECT_CHAIN);		
+		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM,CL_OBJECT_CHAIN);	
 	lc_load("definition");
 	}
 
@@ -215,7 +215,7 @@ class db_objects extends aw_template
 			}
 			if ($s_comment != "")
 			{
-				$se[] = " objects.comment LIKE '%".$s_comment."%' ";
+				//$se[] = " objects.comment LIKE '%".$s_comment."%' ";
 			}
 			if ($s_type > 0)
 			{
@@ -225,7 +225,8 @@ class db_objects extends aw_template
 			{
 				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
 			}
-			$this->db_query("SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se));
+			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se);
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$this->vars(array(

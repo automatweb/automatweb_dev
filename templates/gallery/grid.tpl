@@ -1,28 +1,75 @@
-<table width="100%" border="0" cellpadding="5" cellspacing="0">
-<tr><td class="aste05">
+
+<form action='reforb.{VAR:ext}' METHOD=POST enctype='multipart/form-data' name="gallery">
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside">
 
 
-<span class="celltext"><b>
-Page: 
+<table border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td width="2"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""></td>
+
+
+<td><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:this.document.gallery.submit();"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="{VAR:LC_MENUEDIT_SAVE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><img
+SRC="{VAR:baseurl}/automatweb/images/blue/awicons/seperator.gif" width="6" height="25"><a href="{VAR:add_page}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('new','','{VAR:baseurl}/automatweb/images/blue/awicons/new_over.gif',1)"><img
+name="new" alt="{VAR:LC_GALLERY_ADD}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/new.gif" width="25" height="25"></a><a
+href="{VAR:del_page}"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('delete','','{VAR:baseurl}/automatweb/images/blue/awicons/delete_over.gif',1)"><img name="delete" alt="{VAR:LC_GALLERY_DEL_PAGE}" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/delete.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><br><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""></td>
+<td valign="bottom">
+
+
+<table border=0 cellpadding=0 cellspacing=0>
+<tr>
 <!-- SUB: PAGE -->
-&nbsp;&nbsp;<a href='{VAR:to_page}'>{VAR:page}</a>&nbsp;&nbsp;
+<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href='{VAR:to_page}'>{VAR:page}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
 <!-- END SUB: PAGE -->
+
+
 <!-- SUB: SEL_PAGE -->
-&nbsp;&gt;{VAR:page}&lt;&nbsp;
+<td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom">{VAR:page}</td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
 <!-- END SUB: SEL_PAGE -->
+</tr></table>
 
 
-&nbsp;&nbsp;<a href='{VAR:add_page}'>{VAR:LC_GALLERY_ADD}</a> | <a href='{VAR:del_page}'>{VAR:LC_GALLERY_DEL_PAGE}</a><br>
-</b></span>
 
-</td></tr>
-<tr><td>
+</td>
+</tr>
+</table>
+
+		</td>
+		</tr>
+		</table>
+
+	</td>
+	</tr>
+	</table>
+
+
+</td>
+</tr>
+</table>
+
+<table width="100%" border="0" cellpadding="5" cellspacing="0">
+<tr><td class="tableborder">
+
+
 
 <span class="celltext">
 
-<form action='reforb.{VAR:ext}' METHOD=POST enctype='multipart/form-data'>
+
 <input type='checkbox' name='is_slideshow' value='1' {VAR:is_slideshow}> {VAR:LC_GALLERY_IS_GALLERY_SLIDESHOW}
  <input type='checkbox' name='is_automatic_slideshow' value='1' {VAR:is_automatic_slideshow}> {VAR:LC_GALLERY_IS_SLIDESHOW_AUTO}<br>
+<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="1" HEIGHT="7" BORDER=0 ALT=""><br>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='1000000'>
 
 </span>
@@ -64,7 +111,7 @@ Page:
 </tr>
 <!-- END SUB: LINE -->
 </table>
-<input type='submit' VALUE='Save' class="formbutton">
+<!--<input type='submit' VALUE='Save' class="formbutton">-->
 {VAR:reforb}
 </form>
 <table border=0 cellpadding=0 cellspacing=3>

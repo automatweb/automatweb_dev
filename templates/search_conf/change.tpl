@@ -4,7 +4,7 @@
 <td bgcolor="#CCCCCC">
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr>
-<td class="title" colspan=4>&nbsp;<a href='{VAR:add}'>{VAR:LC_SEARCH_CONF_ADD}</a>&nbsp;</td>
+<td class="title" colspan=4>&nbsp;<a href='{VAR:add}'>{VAR:LC_SEARCH_CONF_ADD}</a>&nbsp;| <a href='{VAR:s_log}'>Log</a></td>
 </tr>
 <tr>
 <td align="center" class="title">&nbsp;{VAR:LC_SEARCH_CONF_NAME}&nbsp;</td>
