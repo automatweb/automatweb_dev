@@ -187,22 +187,23 @@ class obj_table_conf extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = obj($id);
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda objektitabeli konfi");
 		}
 		else
 		{
-			$this->mk_path($ob["parent"], "Muuda objektitabeli konfi");
+			$this->mk_path($ob->parent(), "Muuda objektitabeli konfi");
 		}
 		$this->read_template("change.tpl");
 
 		$cl = "";
 		$maxclid = $mxord = 0;
-		if (is_array($ob["meta"]["cols"]))
+		$mt = $ob->meta();
+		if (is_array($mt["cols"]))
 		{
-			foreach($ob["meta"]["cols"] as $colid => $coldata)
+			foreach($mt["cols"] as $colid => $coldata)
 			{
 				$els = "";
 				$mxidx = 0;
@@ -253,8 +254,8 @@ class obj_table_conf extends aw_template
 
 		$this->vars(array(
 			"COLUMN" => $cl,
-			"name" => $ob["name"],
-			"sep" => $ob["meta"]["sep"],
+			"name" => $ob->name(),
+			"sep" => $mt["sep"],
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
 		));
 
@@ -277,10 +278,10 @@ class obj_table_conf extends aw_template
 	// !initializes vcl table $tbl_ref to be the table defined in table conf $id
 	function init_table($id, &$tbl_ref)
 	{
-		$this->ob = $this->get_object($id);
-		if (is_array($this->ob["meta"]["cols"]))
+		$this->ob = obj($id);
+		if (is_array($this->ob->meta("cols")))
 		{
-			foreach($this->ob["meta"]["cols"] as $clid => $cldat)
+			foreach($this->ob->meta("cols") as $clid => $cldat)
 			{
 				// pick the first element's type as the type for the column
 				reset($cldat["col"]);
@@ -310,14 +311,14 @@ class obj_table_conf extends aw_template
 	function table_row($row, &$tbl_ref)
 	{
 		$dat = array();
-		foreach($this->ob["meta"]["cols"] as $clid => $cldat)
+		foreach($this->ob->meta("cols") as $clid => $cldat)
 		{
 			$str = array();
 			foreach($cldat["col"] as $idx => $colname)
 			{
 				$str[] =$row[$colname];
 			}
-			$dat["col_".$clid] = join($this->ob["meta"]["sep"], $str);
+			$dat["col_".$clid] = join($this->ob->meta("sep"), $str);
 		}
 		$tbl_ref->define_data($dat);
 	}
