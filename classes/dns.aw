@@ -3,6 +3,26 @@
 // $Header
 class dns extends aw_template
 {
+	// ns query types
+	var $types = array(
+		"A" => 1,
+		"NS" => 2,
+		"MD" => 3,
+		"MF" => 4,
+		"CNAME" => 5,
+		"SOA" => 6,
+		"MB" => 7,
+		"MG" => 8,
+		"MR" => 9,
+		"NULL" => 10,
+		"WKS" => 11,
+		"PTR" => 12,
+		"HINFO" => 13,
+		"MINFO" => 14,
+		"MX" => 15,
+		"TXT" => 16
+	);
+
 	function dns()
 	{
 		$this->init("dns");
@@ -109,5 +129,86 @@ class dns extends aw_template
 			};
 		};
 	}
+
+	////
+	// !returns the content of a DNS record, the availavle record types are in $this->types
+	// parameters:
+	//   domain - the domain for which the info is requested
+	function get_record_NS($arr)
+	{
+		extract($arr);
+
+		// creating DNS packets is just too damn hard in php, so fuck that, let's just call nslookup and have that do 
+		// all the hard work. yeah, I know, this won't work in windows but fuck that right now, cause this shit won't anyway
+
+		// get domain name - last 2 parts
+		$dom = $this->get_domain_name_for_url($domain);
+
+		$cmd = "/usr/sbin/nslookup -type=NS $dom -class=IN";
+		$op = `$cmd`;
+				
+		// now scan the op for the needed data
+		// basically the needed stuff is in this format:
+		// [domain] nameserver = [ns]
+		
+		$patt = "/$dom\snameserver\s=\s(.*)/";
+		preg_match_all($patt,$op, $mt, PREG_PATTERN_ORDER);
+		return $mt[1];
+	}
+
+	function get_id()
+	{
+		$lid = aw_global_get("dns::last_query_id");
+		$lid++;
+		aw_global_set("dns::last_query_id", $lid);
+		return (int)$lid;
+	}
+
+	function get_domain_name_for_url($domain)
+	{
+		$pts = explode(".", $domain);
+		$cnt = count($pts);
+		$dom = $pts[$cnt-2].".".$pts[$cnt-1];
+		return $dom;
+	}
+
+/*		$qid = $this->get_id();
+		$this->id2query[$qid] = $arr;
+
+		// packet format: 
+		// heaer: ID(16)/STUFF(16)/QDCOUNT(16)/ANCOUNT(16)
+
+		$packet = pack("ssssssCa*Ca*Ca*Css",
+			$qid,	// ID
+			1,		// STUFF
+			1,		// QDCOUNT
+			0,		// ANCOUNT
+			0,		// NSCOUNT
+			0,		// ARCOUNT
+			// now packet sections
+			2,
+			"aw",
+			9,
+			"struktuur",
+			2,
+			"ee",
+			0,
+			$this->types[$type],
+			0
+		);	
+		echo "packet = <pre>", $this->binhex($packet),"</pre> <br>";
+		
+		// connecting to nameserver
+		$fp = fsockopen("udp://212.7.7.6",53,$errno, $errstr,10);
+		echo "errno = $errno , errstr = $errstr <br>\n";
+		flush();
+		fwrite($fp, $packet);
+		$cnt = 0;
+		while(!feof($fp) || ($cnt++ > 100))
+		{
+			echo fgets($fp, 10);
+
+		}
+		fclose($fp);*/
 }
 ?>
