@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.169 2005/03/22 11:15:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.170 2005/03/23 13:15:37 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -650,7 +650,6 @@ class aliasmgr extends aw_template
 
 		$alinks = $obj->meta("aliaslinks");
 
-		$chlinks = array();
 		foreach($obj->connections_from() as $alias)
 		{
 			$adat = array(
@@ -674,8 +673,6 @@ class aliasmgr extends aw_template
 				$edfile = "doc";
 			};
 
-			$ch = $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => $return_url),$edfile);
-			$chlinks[$alias->prop("to")] = $ch;
 			$reltype_id = $alias->prop("reltype");
 
 			$adat["icon"] = html::img(array(
@@ -773,12 +770,11 @@ class aliasmgr extends aw_template
 		}
 
 		$this->vars(array(
-			'class_ids' => $clids,
+			"class_ids" => $clids,
 			"table" => $this->t->draw(),
 			"id" => $id,
 			"parent" => $_a_parent,
 			"reforb" => $reforb,
-			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $toolbar,
 			"return_url" => $return_url,
 			"period" => $period,
@@ -950,63 +946,6 @@ class aliasmgr extends aw_template
 		return $ret;
 	}
 
-	function recover_idx_enumeration($id)
-	{
-		if (!$id)
-		{
-			return;
-		}
-		$o = obj($id);
-		$alist = $o->connections_from();
-
-		$oid = $id;
-
-		// we need to check whether there are any conflicts in the idx list
-		// and if so, correct them
-		$idx_check = array();
-		$need_to_enumerate = array();
-		$idx_by_class = array();
-		$idx_by_id = array();
-		foreach($alist as $alias)
-		{
-			// if any of the idx-s is 0, then we need to re-enumerate for sure.
-			if ($alias->prop("idx") == 0)
-			{
-				$need_to_enumerate[$alias->prop("to.class_id")] = 1;
-			};
-
-			$idx_by_class[$alias->prop("to.class_id")]++;
-
-			$idx_by_id[$alias->prop("id")] = $idx_by_class[$alias->prop("to.class_id")];
-
-			if ($idx_check[$alias->prop("class_id")][$alias->prop("idx")])
-			{
-				$need_to_enumerate[$alias->prop("class_id")] = 1;
-			}
-			else
-			{
-				$idx_check[$alias->prop("class_id")][$alias->prop("idx")] = 1;
-			};
-		}
-
-		if ( (sizeof($need_to_enumerate) > 0) && (sizeof($idx_by_id) > 0) )
-		{
-			foreach($idx_by_id as $id => $idx)
-			{
-				if ($id)
-				{
-					$c = new connection($id);
-					if ($c->prop("from") && $c->prop("to"))
-					{
-						$c->change(array(
-							"idx" => $idx
-						));
-					}
-				}
-			};
-		};
-	}
-
 	////
 	// !Search and list share the same toolbar
 	function mk_toolbar($objtype = '', $selectedot = '')
@@ -1060,10 +999,6 @@ class aliasmgr extends aw_template
 		$this->read_template("selectboxes.tpl");
 		// wuh, this is bad and stuff
 		//$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
-
-		$hist = aw_global_get('aliasmgr_obj_history');
-
-		$hist = !is_array($hist) ? array() : $this->make_alias_classarr2($hist);
 
 		$tmp = aw_ini_get("classes");
 		$this->reltypes[RELTYPE_BROTHER] = "too vend";
@@ -1126,12 +1061,6 @@ class aliasmgr extends aw_template
 			{
 				$dvals = ',"Objekti tüüp","capt_new_object"';
 				$comp = (isset($this->rel_type_classes[$k]) && is_array($this->rel_type_classes[$k])) ? $this->rel_type_classes[$k] : $choice;
-				$hh = array_intersect($hist,$comp);
-				$history = $this->mk_kstring($hh);
-				if ($history)
-				{
-					$dvals .= ',"----------------","capt_new_object",'.$history.',"----------------","capt_new_object"';
-				}
 			}
 
 			$vals = str_replace("&auml;","ä",$vals);

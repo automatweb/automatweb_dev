@@ -1,62 +1,3 @@
-<style type="text/css">
-.awtab {
-font-family: verdana, sans-serif;
-font-size: 11px;
-font-weight: bold;
-color: #1664B9;
-background-color: #CDD5D9;
-}
-.awtab a {color: #1664B9; text-decoration:none;}
-.awtab a:hover {color: #000000; text-decoration:none;}
-
-.awtabdis {
-font-family: verdana, sans-serif;
-font-size: 11px;
-font-weight: bold;
-color: #686868;
-background-color: #CDD5D9;
-}
-
-.awtabsel {
-font-family: verdana, sans-serif;
-font-size: 11px;
-font-weight: bold;
-color: #FFFFFF;
-background-color: #478EB6;
-}
-.awtabsel a {color: #FFFFFF; text-decoration:none;}
-.awtabsel a:hover {color: #000000; text-decoration:none;}
-
-.awtabseltext {
-font-family: verdana, sans-serif;
-font-size: 11px;
-font-weight: bold;
-color: #FFFFFF;
-background-color: #478EB6;
-}
-.awtabseltext a {color: #FFFFFF; text-decoration:none;}
-.awtabseltext a:hover {color: #000000; text-decoration:none;}
-
-.awtablecellbackdark {
-font-family: verdana, sans-serif;
-font-size: 10px;
-background-color: #478EB6;
-}
-
-.awtablecellbacklight {
-background-color: #DAE8F0;
-}
-
-.awtableobjectid {
-font-family: verdana, sans-serif;
-font-size: 10px;
-text-align: left;
-color: #DBE8EE;
-background-color: #478EB6;
-}
-
-
-</style>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 <form method="GET" name="foo">
 <tr><td class="tableborder">
@@ -105,39 +46,6 @@ function aw_save()
 	};
 }
 
-function redir()
-{
-	with(document.foo)
-	{
-		cl = aselect.options[aselect.selectedIndex].value;
-		if ((cl == "capt_new_object") || (cl == "0")|| (cl == ""))
-		{
-			alert('Vali objekti tüüp!');
-		}
-		else
-		{
-			if (cl.indexOf("reltype_") == 0)
-			{
-				is_reltype = 1;
-			}
-			else
-			{
-				is_reltype = 0;
-			};
-			if (is_reltype)
-			{
-				// the string "reltype_" is 8 characters long
-				reltype = cl.substr(8,2);
-				window.location.href="{VAR:create_relation_url}&reltype=" + reltype;
-			}
-			else
-			{
-				window.location.href="orb.{VAR:ext}?class="+cl+"&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}";
-			};
-		};
-	};
-};
-
 var chk_status = true;
 
 function selall()
@@ -174,11 +82,6 @@ var clids = new Array();
 	};
 };
 
-function search_selall()
-{
-	selall();
-}
-
 </script>
 </form>
 <form method="GET" name="searchform" action="reforb.{VAR:ext}">
@@ -193,6 +96,6 @@ function search_selall()
 {VAR:reforb}
 {VAR:table}
 </form>
-		<script language= "javascript">
-			init();
-		</script>
+<script language= "javascript">
+init();
+</script>

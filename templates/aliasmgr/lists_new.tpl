@@ -9,9 +9,6 @@
 
 <script language="Javascript">
 var chk_status = true;
-var chlinks = new Array();
-{VAR:chlinks}
-
 function selall()
 {
 	len = document.changeform.elements.length;
@@ -52,35 +49,6 @@ function search_for_object()
 	objtype = document.foo.aselect.value;
 
 	window.location.href=search_url + "&reltype=" + reltype + "&objtype=" + objtype;
-}
-
-function awchange()
-{
-	len = document.changeform.elements.length;
-	cnt = 0;
-	chk = 0;
-	for (i = 0; i < len; i++)
-	{
-		with(document.changeform.elements[i])
-		{
-			if (type == "checkbox" && name.indexOf("check") != -1)
-			{
-				if (checked)
-				{
-					cnt++;
-					chk = value;
-				}	
-			}
-		}
-	};
-	if (cnt == 1)
-	{
-		window.location.href = chlinks[chk];
-	}
-	else
-	{
-		alert('Palun valige 1 objekt muutmiseks');
-	};
 }
 
 function awdelete()
@@ -133,14 +101,7 @@ function saveform()
 {VAR:reforb}
 </form>
 </table>
-
-<script type="text/javascript">
-// here I have to check whether this has been loaded in an iframe, and if so, resize the height 
-// in the parent accordingly. Ugh, is this possible at all?
-// alert(window.parent.frames["aliasmgr"].innerHeight);
-
+<script language= "javascript">
+init();
 </script>
-		<script language= "javascript">
-			init();
-		</script>
 
