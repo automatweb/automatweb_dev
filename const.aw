@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.11 2001/05/25 09:08:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.12 2001/05/31 13:38:01 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -141,18 +141,19 @@ include("$basedir/lang/" . $LC . "/errors.aw");
 include("$basedir/lang/" . $LC . "/common.aw");
 
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
-if ($PATH_INFO) 
+$pi = $PATH_INFO.$QUERY_STRING;
+if ($pi) 
 {
-	 if (preg_match("/[&|=]/",$PATH_INFO)) 
+	 if (preg_match("/[&|=]/",$pi)) 
 	 {
-		parse_str(str_replace("/","&",$PATH_INFO)); 	// expand and import PATH_INFO
+		parse_str(str_replace("/","&",$pi)); 	// expand and import PATH_INFO
 	 } 
 	 else 
 	 {
-		$section = substr($PATH_INFO,1);
+		$section = substr($pi,1);
 	};
 };
-		
+
 // menu definitions, max - maximum depth of menu, can_l3 - whether you can insert "level 3" items in the menu
 // umm. imho on see vale lähenemine
 // miskid hardcoded id-d. BAD.
