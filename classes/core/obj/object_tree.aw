@@ -133,14 +133,14 @@ class object_tree extends _int_obj_container_base
 					"msg" => "object_tree::foreach_cb(): callback method ".$param["func"][1]." does not exist in class ".get_class($param["func"][1])."!"
 				));
 			}
-			else
-			if ($param["func"] == "" || !function_exists($param["func"]))
-			{
-				error::throw(array(
-					"id" => ERR_PARAM,
-					"msg" => "object_tree::foreach_cb(): callback function $param[func] does not exist!"
-				));
-			}
+		}
+		else
+		if ($param["func"] == "" || !function_exists($param["func"]))
+		{
+			error::throw(array(
+				"id" => ERR_PARAM,
+				"msg" => "object_tree::foreach_cb(): callback function ".$param["func"][1]." does not exist!"
+			));
 		}
 
 		$cnt = 0;
