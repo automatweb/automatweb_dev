@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.56 2004/12/10 13:11:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.57 2004/12/10 13:43:26 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -12,7 +12,7 @@
 	@default method=serialize
 
 	@property show_logged type=checkbox ch_value=1
-	@caption Kui kasutaja on sisse loginud, siis täidab e-posti ja nime välja automaatselt
+	@caption Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt
 	
 	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
 	@caption Teemade kaust
