@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.33 2005/01/06 12:45:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.34 2005/01/06 13:59:57 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -188,7 +188,6 @@ class webform extends class_base
 		$this->trans_names = array(
 			"text" => t("Tekst"),
 			"textbox" => t("V&auml;ike tekstikast"),
-			"checkbox" => t("M&auml;rkeruut"),
 			"classificator" => t("Valikv&auml;li"),
 			"date_select" => t("Kuup&auml;evavalik"),
 			"textarea" => t("Suur tekstikast"),
@@ -775,12 +774,11 @@ class webform extends class_base
 			"textbox" => 0,
 			"textarea" => 1,
 			"text" => 2,
-			"checkbox" => 3,
-			"classificator" => 4,
-			"hidden" => 5,
-			"date_select" => 6,
-			"submit" => 7,
-			"reset" => 8,
+			"classificator" => 3,
+			"hidden" => 4,
+			"date_select" => 5,
+			"submit" => 6,
+			"reset" => 7,
 		);
 		$def_props = array();
 		if($this->p_clid == CL_CALENDAR_REGISTRATION_FORM)
