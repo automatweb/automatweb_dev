@@ -1,6 +1,8 @@
 <?php
-
+// lahe
+  
 /*
+
 
 @classinfo syslog_type=ST_GROUP relationmgr=yes
 
