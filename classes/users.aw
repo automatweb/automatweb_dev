@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.77 2003/02/01 20:23:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.78 2003/02/05 20:15:10 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2192,6 +2192,62 @@ class users extends users_user
 
 		$host = aw_global_get("HTTP_HOST");
 		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array("u" => $uid,"k" => $hash),"users",0,0)));
+	}
+
+	function on_site_init(&$dbi, $site, &$ini_opts)
+	{
+		if ($site['site_obj']['use_existing_database'])
+		{
+			// fetch the neede ini opts from the base site
+			$opts = $this->do_orb_method_call(array(
+				"class" => "objects",
+				"action" => "aw_ini_get_mult",
+				"params" => array(
+					"vals" => array(
+						"groups.tree_root",
+						"groups.all_users_grp",
+					)
+				)
+			));
+			echo "users::on_site_init got opts = <pre>", var_dump($opts),"</pre> <br>";
+			$ini_opts["groups.tree_root"] = $opts["groups.tree_root"];
+			$ini_opts["groups.all_users_grp"] = $opts["groups.all_users_grp"];
+		}
+		else
+		{
+			// create parent folder for groups
+			$m = get_instance("menuedit");
+			// make it use the correct db connection
+			$m->dc = $dbi->dc;
+			$gparent = $m->add_new_menu(array(
+				"parent" => 0,
+				"name" => "Groups",
+				"status" => 2,
+				"type" => MN_CLIENT,
+			));
+			$ini_opts["groups.tree_root"] = $gparent;
+
+			// create default group
+			$this->dc = $dbi->dc;
+
+			$aug = $this->addgroup(
+				$gparent,
+				"K&otilde;ik kasutajad", 
+				GRP_REGULAR,
+				0,
+				1000
+			);
+			$ini_opts["groups.all_users_grp"] = $aug;
+
+			// create default user
+			$this->add(array(
+				"uid" => $site["site_obj"]["default_user"],
+				"password" => $site["site_obj"]["default_user_pwd"],
+				"all_users_grp" => $aug,
+				"use_md5_passwords" => true,
+			));
+		}
+		$ini_opts["auth.md5_passwords"] = 1;
 	}
 }
 ?>

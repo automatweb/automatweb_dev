@@ -28,6 +28,34 @@
             <caption>Default kasutaja parool</caption>
       </property>
       <property>
+            <name>use_existing_database</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta olemasolevat andmebaasi</caption>
+      </property>
+      <property>
+            <name>select_db</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali andmebaas</caption>
+      </property>
+      <property>
+            <name>select_parent_folder</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vali kataloog olemasolevas baasis</caption>
+      </property>
+      <property>
             <name>gen_site</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -45,6 +73,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Miks saiti ei saa genereerida</caption>
+      </property>
+      <property>
+            <name>site_warnmsg</name>
+            <type>text</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Hoiatused:</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SITE</syslog_type>

@@ -33,11 +33,13 @@ class su_exec extends class_base
 		foreach($this->fc as $cmd)
 		{
 			fwrite($fp, $cmd."\n");
+			echo "wrote cmd $cmd <br>\n";
 		}
 		fclose($fp);
 
+		flush();
 		$cmdline = $this->cfg['basedir']."/scripts/install/su_exec/su_exec $fn";
-		$res = `$cmdline`;
+		$res = `$cmdline &`;
 	
 		unlink($fn);
 

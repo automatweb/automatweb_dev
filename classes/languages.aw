@@ -394,11 +394,15 @@ class languages extends aw_template
 		// code that fixes it anyway. 
 	}
 
-	function on_site_init(&$inst, $vars)
+	function on_site_init($dbi, $site, &$ini_opts)
 	{
-		foreach($this->cfg["list"] as $lid => $ldat)
+		// no need to add languages if we are to use an existing database
+		if (!$site['site_obj']['use_existing_database'])
 		{
-			$inst->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',1,'$ldat[acceptlang]','".time()."','".$vars["default_user"]."')");
+			foreach($this->cfg["list"] as $lid => $ldat)
+			{
+				$dbi->db_query("INSERT INTO languages(id, name, charset, status, acceptlang, modified, modifiedby) values('$lid','$ldat[name]','$ldat[charset]',1,'$ldat[acceptlang]','".time()."','".$site['site_obj']['default_user']."')");
+			}
 		}
 	}
 };

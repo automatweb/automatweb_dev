@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.30 2003/01/07 14:25:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.31 2003/02/05 20:15:10 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -364,6 +364,11 @@ class acl_base extends core
 
 	function create_obj_access($oid,$uuid = "")
 	{
+		if (aw_global_get("__is_install"))
+		{
+			return;
+		}
+
 		if ($uuid == "")
 		{
 			$uuid = aw_global_get("uid");
@@ -393,6 +398,10 @@ class acl_base extends core
 	// v6tab k6ikide kasutajate grupilt 2ra 6igused sellele objektile
 	function deny_obj_access($oid)
 	{
+		if (aw_global_get("__is_install"))
+		{
+			return;
+		}
 		$all_users_grp = aw_ini_get("groups.all_users_grp");
 		if (!$all_users_grp)
 		{

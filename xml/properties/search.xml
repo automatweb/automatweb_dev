@@ -13,10 +13,7 @@
       <property>
             <name>s_name</name>
             <type>textbox</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -25,10 +22,7 @@
       <property>
             <name>s_comment</name>
             <type>textbox</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -37,10 +31,7 @@
       <property>
             <name>s_class_id</name>
             <type>select</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -77,10 +68,7 @@
       <property>
             <name>s_status</name>
             <type>s_status</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -89,10 +77,7 @@
       <property>
             <name>s_createdby</name>
             <type>textbox</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -101,10 +86,7 @@
       <property>
             <name>s_modifiedby</name>
             <type>textbox</type>
-            <group>
-                  <num_0>search</num_0>
-                  <num_1>advanced</num_1>
-            </group>
+            <group>search,advanced,objsearch</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -147,13 +129,25 @@
             <method>serialize</method>
             <caption>Tulemused</caption>
       </property>
+      <property>
+            <name>objsearch</name>
+            <type>text</type>
+            <group>objsearch</group>
+            <callback>get_objsearch</callback>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
       <groupinfo>
             <search>
                   <caption>Lihtne_otsing</caption>
             </search>
             <advanced>
-                  <caption>Advanced</caption>
+                  <caption>Advanced_otsing</caption>
             </advanced>
+            <objsearch>
+                  <caption>Objektiotsing</caption>
+            </objsearch>
             <results>
                   <caption>Tulemused</caption>
                   <submit>no</submit>

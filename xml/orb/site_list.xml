@@ -13,6 +13,7 @@
 
 		<action name="get_site_list">
 			<function name="orb_get_site_list">
+				<optional name="server_id"/>
 			</function>
 		</action>
 
@@ -28,6 +29,24 @@
 
 		<action name="init_list" all_args="1">
 			<function name="init_list">
+			</function>
+		</action>
+
+		<action name="get_server_id_by_ip" all_args="1">
+			<function name="get_server_id_by_ip">
+				<required name="ip"/>
+			</function>
+		</action>
+
+		<action name="get_site_id_by_url" all_args="1">
+			<function name="get_site_id_by_url">
+				<required name="url"/>
+			</function>
+		</action>
+
+		<action name="get_site_data">
+			<function name="get_site_data">
+				<required name="site_id"/>
 			</function>
 		</action>
 	</class>

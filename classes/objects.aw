@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.56 2002/12/24 14:58:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.42 2003/02/05 20:15:10 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class db_objects extends aw_template 
 {
@@ -8,6 +8,64 @@ class db_objects extends aw_template
 		$this->init("");
 		$this->lc_load("objects","lc_objects");
 		lc_load("definition");
+	}
+
+	function hf_search($args = array())
+	{
+		classload('icons');
+		$this->tpl_init("objects");
+		extract($args);
+		if (!is_array($folders))
+		{
+			$retval = $this->mk_site_orb(array("action" => "browser","type" => "search"));
+			return $retval;
+		};
+		$flist = $this->gen_folders(array("sq" => 0));
+		$this->read_template("searchresults.tpl");
+		$maps = sprintf("(%s)",join(",",$folders));
+		$cid = sprintf("(%s)",join(",",array(CL_FILE)));
+		$q = "SELECT * FROM objects WHERE parent IN $maps AND name LIKE '%$search%' AND class_id IN $cid ORDER BY parent";
+		$this->db_query($q);
+		$lastparent = -1;
+		$c = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			if ($lastparent != $row["parent"])
+			{
+				$this->vars(array("name" => $flist[$row["parent"]]));
+				$c .= $this->parse("line");
+			};
+
+			$lastparent = $row["parent"];
+			$this->vars(array(
+				"name" => $row["name"],
+				"oid" => $row["oid"],
+				"icon" => icons::get_icon_url($row["class_id"],$row["name"]),
+			));
+			$c .= $this->parse("object");
+		};
+		$this->vars(array(
+			"line" => $c,
+			"reforb" => $this->mk_reforb("submit_hd",array("msgid" => $msgid)),
+		));
+		$retval = $this->parse();
+		print $retval;
+		exit;
+	}
+
+	function gen_folders($args = array())
+	{
+		extract($args);
+		$mnl = get_instance("menuedit_light");
+		$udata = $this->get_user();
+		$flist = $mnl->gen_rec_list(array(
+			"start_from" => $udata["home_folder"],
+			"add_start_from" => true,
+			"sq" => $sq,
+		));
+		return $flist;
 	}
 
 	////
@@ -66,10 +124,7 @@ class db_objects extends aw_template
 
 	function orb_get_list($arr)
 	{
-		if (is_array($arr))
-		{
-			extract($arr);
-		}
+		extract($arr);
 		if (!isset($rootobj))
 		{
 			$rootobj = -1;
@@ -114,24 +169,10 @@ class objects extends db_objects
 		$this->db_objects();
 	}
 
-	/** Object search 
-		
-		@attrib name=search params=name default="0"
-		
-		@param stype optional type=int
-		@param target optional type=int
-		@param otype optional type=int
-		@param one optional type=int
-		@param return_url optional
-		
-		@returns
-		
-		
-		@comment
-		otype(int) - allow to search only for a single object type
-		one(int) - use picker template (search_one)
-
-	**/
+	////
+	// !Object search
+	// otype(int) - allow to search only for a single object type
+	// one(int) - use picker template (search_one) 
 	function search($arr)
 	{
 		$s = get_instance("search");
@@ -305,17 +346,6 @@ class objects extends db_objects
 		return $this->parse();
 	}
 
-	/**  
-		
-		@attrib name=search_submit params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function search_submit($arr)
 	{
 		extract($arr);
@@ -449,50 +479,19 @@ class objects extends db_objects
 
 		// save[0], because the composer windows has two buttons with that name and therefore
 		// we cannot refer to it as just "save"
-		print "<script type=\"text/javascript\">window.opener.document.writemessage.save[0].click(); window.close();</script>";
+		print "<script>window.opener.document.writemessage.save[0].click(); window.close();</script>";
 			
 	}
 
 
-	/** Displays an object. Any object. 
-		
-		@attrib name=show params=name nologin="1" default="0"
-		
-		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-		and yes, it's not very smart. all the functionality to generate a preview of an object
-		should be inside the correspondending class
-
-	**/
+	////
+	// !Displays an object. Any object.
+	// and yes, it's not very smart. all the functionality to generate a preview of an object
+	// should be inside the correspondending class
 	function show($args = array())
 	{
 		extract($args);
-		$classes = aw_ini_get("classes");
-		$ret = "";
-
-		$o =&obj($id);
-
-		$clid = $o->class_id();
-		$i = get_instance($classes[$clid]["file"]);
-		if (method_exists($i, "parse_alias"))
-		{
-			$ret = $i->parse_alias(array(
-				"oid" => $id,
-				"alias" => array("target" => $id)
-			));
-			if (is_array($ret))
-			{
-				$ret = $ret["replacement"];
-			}
-		}
-
-		return $ret;
-
-		/*$obj = $this->get_object($id);
+		$obj = $this->get_object($id);
 		if (not($obj))
 		{
 			return false;
@@ -504,7 +503,7 @@ class objects extends db_objects
 		switch($obj["class_id"])
 		{
 			case CL_EXTLINK:
-				$t = get_instance("links");
+				$t = get_instance("extlinks");
 				list($url,$target,$caption) = $t->draw_link($obj["oid"]);
 				$replacement = sprintf("<a href='%s' %s>%s</a>",$url,$target,$caption);
 				break;
@@ -512,7 +511,7 @@ class objects extends db_objects
 			case CL_IMAGE:
 				$t = get_instance("image");
 				$idata = $t->get_image_by_id($obj["oid"]);
-				$replacement = sprintf("<img src='%s'><br />%s",$idata["url"],$idata["comment"]);
+				$replacement = sprintf("<img src='%s'><br>%s",$idata["url"],$idata["comment"]);
 				break;
 			case CL_TABLE:
 				$t = get_instance("table");
@@ -649,14 +648,36 @@ class objects extends db_objects
 					$caption = "View calendar";
 				};
 				$replacement = "<a target='new' href='$curl'>$caption</a>";
+				/*
+				$replacement = $cal->view(array("id" => $obj["oid"],"type" => "week"));
+				*/
 				break;
 
 			default:
 				$this->has_output = false;
-				$replacement = $obj["class_id"] . " This object class has no output yet<br />";
+				$replacement = $obj["class_id"] . " This object class has no output yet<br>";
 		}
 		return $replacement;
-		*/
+
+	}
+
+	////
+	// !New generation search
+	function search_new($args = array())
+	{
+		extract($args);
+		$xf = get_instance("xmlform");
+		$this->values = array(
+			"name" => "nimi",
+			"comment" => "comment",
+		);
+		$result = $xf->gen_html(array(
+			"obj" => $this,
+			"values" => $this->values,
+			"form" => "search_object",
+			"map" => "search_object",
+		));
+		return $result;
 	}
 
 	function get_fvalue($args = array())
@@ -718,18 +739,6 @@ class objects extends db_objects
 		return $retval;
 	}
 
-	/**  
-		
-		@attrib name=db_query params=name default="0"
-		
-		@param sql required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function orb_db_query($arr)
 	{
 		extract($arr);
@@ -742,36 +751,12 @@ class objects extends db_objects
 		return $ret;
 	}
 
-	/**  
-		
-		@attrib name=delete_object params=name default="0"
-		
-		@param oid required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function orb_delete_object($arr)
 	{
 		extract($arr);
 		return $this->delete_object($oid);
 	}
 
-	/**  
-		
-		@attrib name=delete_aliases_of params=name default="0"
-		
-		@param oid required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function orb_delete_aliases_of($arr)
 	{
 		extract($arr);
@@ -805,7 +790,7 @@ class objects extends db_objects
 		else
 		{
 			$client_id = $site['site_obj']['select_parent_folder'];
-			//echo "got client id as $client_id <br />\n";
+			echo "got client id as $client_id <br>\n";
 			flush();
 		}
 
@@ -816,7 +801,6 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
-
 		$ini_opts["rootmenu"] = $site_folder_id;
 		$ini_opts["admin_rootmenu2"] = $site_folder_id;
 		$ini_opts["per_oid"] = $site_folder_id;
@@ -846,24 +830,20 @@ class objects extends db_objects
 		$GLOBALS["cfg"]["__default"]["site_id"] = aw_global_get("real_site_id");
 
 		$m_db = get_instance("menu");
-		$menus = array();/*$m_db->export_menus(array(
+		$menus = $m_db->export_menus(array(
 			"id" => aw_ini_get("amenustart"),
 			"ex_menus" => array_keys($mnex),
 			"ret_data" => true,
 			"ex_icons" => 1
-		));*/
+		));
 
-		// reset to new site id
+		// temporarily put back real site id so we can fetch all the correct menus
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
 		// and now import them to the new site
 		$i_p = $menus[0];
-
-		$am = get_instance("admin/admin_menus");
-		$am->dc = $dbi->dc;	// fake the db connection
-
-		$am->req_import_menus($i_p, &$menus, $awmenu_id);
-		//echo "imported .. <br />\n";
+		$mned->req_import_menus($i_p, &$menus, $awmenu_id);
+		echo "imported .. <br>\n";
 		flush();
 
 		// create another menu with the site name and make menus under that
@@ -874,16 +854,6 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
-
-		if ($site["select_layout"])
-		{
-			$mned->set_object_metadata(array(
-				"oid" => $s_rmn_id,
-				"key" => "show_layout",
-				"value" => $site['site_obj']["select_layout"]
-			));
-		}
-
 		$ini_opts["frontpage"] = $s_rmn_id;
 
 		
@@ -951,7 +921,7 @@ class objects extends db_objects
 			"status" => 2,
 			"skip_invalidate" => true
 		));
-		$ini_opts["menuedit.menu_defs[$lo_id]"] = "LOGGED";
+		$ini_opts["menuedit.menu_defs[$lo_id]"] = "LOGIN";
 
 		$_tmp = $mned->add_new_menu(array(
 			"name" => "Tee t88d",
@@ -988,17 +958,6 @@ class objects extends db_objects
 		$dbi->db_query("INSERT INTO acl(gid,oid,acl) VALUES(1,$client_id, 9223372036854775807)");
 	}
 
-	/**  
-		
-		@attrib name=get_db_pwd params=name nologin="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function orb_get_db_pwd($arr)
 	{
 		extract($arr);
@@ -1010,18 +969,6 @@ class objects extends db_objects
 		);
 	}
 
-	/**  
-		
-		@attrib name=aw_ini_get_mult params=name nologin="1" default="0"
-		
-		@param vals required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function aw_ini_get_mult($arr)
 	{
 		extract($arr);
@@ -1031,41 +978,6 @@ class objects extends db_objects
 			$ret[$vn] = aw_ini_get($vn);
 		}
 		return $ret;
-	}
-
-	/** Object list
-		
-		@attrib name=get_list params=name default="0" nologin="1" all_args="1"
-		
-		@param ignore_langmenus optional
-		@param empty optional
-		@param rootobj optional type=int
-		
-		@returns
-		
-		
-		@comment
-			returns list of id => name pairs for all menus
-	**/
-	function orb_get_list($arr)
-	{
-		return parent::orb_get_list($arr);
-	}
-
-	/** serialize
-		
-		@attrib name=serialize params=name default="0" nologin="1" 
-		
-		@param oid required
-		
-		@returns
-		
-		@comment
-			serializes an object
-	**/
-	function orb_serialize($arr)
-	{
-		return parent::serialize($arr);
 	}
 }
 

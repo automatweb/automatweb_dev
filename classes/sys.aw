@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.16 2002/11/12 17:58:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.17 2003/02/05 20:15:10 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -568,20 +568,22 @@ class sys extends aw_template
 		exit;
 	}
 
-	function on_site_init(&$inst, $vars)
+	function on_site_init(&$dbi, $site, $ini_opts)
 	{
-		// do a dbsync from aw.struktuur.ee
-		$block = $this->db_sync(array(
-			"server" => $donor,
-			"url" => "/?class=sys&action=gen_create_tbl",
-		));
-		$tbls = aw_unserialize($block);
-
-		foreach($tbls as $tbl => $sql)
+		// no need to dbsync if we are not creating a new site
+		if (!$site['site_obj']['use_existing_database'])
 		{
-			echo "creating table $tbl <Br>\n";
-			flush();
-			$inst->db_query($sql);
+			// do a dbsync from aw.struktuur.ee
+			$block = $this->db_sync(array(
+				"server" => "aw.struktuur.ee",
+				"url" => "/?class=sys&action=gen_create_tbl",
+			));
+			$tbls = aw_unserialize($block);
+
+			foreach($tbls as $tbl => $sql)
+			{
+				$dbi->db_query($sql);
+			}
 		}
 	}
 };

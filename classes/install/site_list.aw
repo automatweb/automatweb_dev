@@ -246,11 +246,26 @@ class site_list extends class_base
 		}
 	}
 
+	////
+	// !returns a list of sites matching filter
+	// params:
+	//   server_id - filter by server id
 	function orb_get_site_list($arr)
 	{
 		extract($arr);
 		$ret = array();
-		$this->db_query("SELECT * FROM aw_site_list");
+		$filt = array();
+		if ($server_id)
+		{
+			$filt[] = "server_id = '$server_id'";
+		}
+		$fs = join(" AND ", $filt);
+		if ($fs != "")
+		{
+			$fs = " WHERE $fs ";
+		}
+		$q = "SELECT * FROM aw_site_list".$fs;
+		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
 			$ret[$row['id']] = $row;
@@ -332,6 +347,32 @@ class site_list extends class_base
 			$sic++;
 		}
 		echo "sent $srvc serverit ja $sic saiti <br>";
+	}
+
+	////
+	// !returns the id of the server that is marked as serving on ip address $ip
+	function get_server_id_by_ip($arr)
+	{
+		extract($arr);
+		return $this->db_fetch_field("SELECT id FROM aw_server_list WHERE ip LIKE '%$ip%'","id");
+	}
+
+	////
+	// !returns the id of the site that has the url $url
+	function get_site_id_by_url($arr)
+	{
+		extract($arr);
+		return $this->db_fetch_field("SELECT id FROM aw_site_list WHERE url LIKE '%$url%'","id");
+	}
+
+	////
+	// !returns all data that we have on the site
+	// parameters:
+	//   site_id - the id of the site whose data is returned
+	function get_site_data($arr)
+	{
+		extract($arr);
+		return $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$site_id'");
 	}
 }
 ?>

@@ -20,7 +20,7 @@ if ((!$section || $section == aw_ini_get("frontpage")) && !$class)
 	// then do the right callback
 	$content = $si->on_frontpage();
 }
-
+else
 // and if we should
 if (!aw_global_get("no_menus"))
 {

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.32 2003/02/01 21:44:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.33 2003/02/05 20:15:10 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -747,6 +747,7 @@ class menu extends class_base
 	
 	////
 	// !exports menu $id and all below it
+	// if $ret_data is true, then the export arr is returned, not output
 	function export_menus($arr)
 	{
 		extract($arr);
@@ -800,7 +801,13 @@ class menu extends class_base
 			{
 				$row["status"] = 2;
 			}
+			flush();
 			$this->append_exp_arr($row,&$menus,$ex_icons,$i);
+		}
+
+		if ($ret_data)
+		{
+			return $menus;
 		}
 
 		/// now all menus are in the array with all the other stuff, 

@@ -15,7 +15,7 @@ class site extends site_base
 	// it must return the content of the front page
 	function on_frontpage() 
 	{
-		return $this->do_fp_menus_return();
+		return $this->do_fp_menus_return("");
 	}
 
 	////

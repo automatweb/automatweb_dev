@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.223 2003/02/05 10:51:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.224 2003/02/05 20:15:10 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -39,9 +39,13 @@ class menuedit extends aw_template
 			"class_id" => CL_PSEUDO,   
 			"jrk" => $args["jrk"],   
 			'no_flush' => $args['no_flush'],   
+			"metadata" => array(
+				"pclass" => $args["pclass"],
+				"pm_url_admin" => $args["pm_url_admin"]
+			)
 		));   
 		$type = $args["type"] ? $args["type"] : MN_HOME_FOLDER_SUB;   
-		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,$type);   
+		$q = sprintf("INSERT INTO menu (id,type,link) VALUES (%d,%d,'%s')",$newoid,$type,$args["link"]);   
 		$this->db_query($q);   
 		$this->_log(ST_MENUEDIT, SA_ADD, $args["name"], $newoid);   
 
@@ -753,7 +757,7 @@ class menuedit extends aw_template
 		if (!$ignore)
 		{
 			// loeme sisse koik objektid
-			$aa = "AND ((objects.site_id = '".$this->cfg["site_id"]."') OR (objects.site_id IS NULL))";
+			$aa = "AND ((objects.site_id = '".aw_ini_get("site_id")."') OR (objects.site_id IS NULL))";
 		};
 		if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
 		{

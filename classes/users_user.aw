@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.49 2003/01/20 14:25:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.50 2003/02/05 20:15:10 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -602,13 +602,15 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
 
 
-		if (aw_ini_get("auth.md5_passwords"))
+		if (aw_ini_get("auth.md5_passwords") || $use_mdb_passwords)
 		{
 			$password = md5($password);
 		};
 
 		// teeme kasutaja
-		$this->db_query("INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,created_hour,created_day,created_week,created_month,created_year,logins) VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','".date("H",$t)."','".date("d",$t)."','".date("w",$t)."','".date("m",$t)."','".date("Y",$t)."','0')");
+		$this->db_query("
+			INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,logins) 
+			VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','0')");
 
 		// teeme default grupi
 		$oid = $this->new_object(array("name" => $uid, "class_id" => CL_USER_GROUP, "status" => 2));
@@ -619,7 +621,10 @@ class users_user extends aw_template
 		$this->db_query("INSERT INTO groupmembers (gid,uid,created) VALUES ('$gid','$uid',$t)");
 
 		// lisame kasutaja k6ikide kasutajate grupi liikmex
-		$all_users_grp = aw_ini_get("groups.all_users_grp");
+		if (!$all_users_grp)
+		{
+			$all_users_grp = aw_ini_get("groups.all_users_grp");
+		}
 		if ($all_users_grp)
 		{
 			$this->db_query("INSERT INTO groupmembers(gid,uid,created) VALUES($all_users_grp,'$uid',$t)");

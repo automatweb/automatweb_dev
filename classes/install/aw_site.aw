@@ -20,11 +20,23 @@
 @property default_user_pwd type=password
 @caption Default kasutaja parool
 
+@property use_existing_database type=checkbox ch_value=1
+@caption Kasuta olemasolevat andmebaasi
+
+@property select_db type=select
+@caption Vali andmebaas
+
+@property select_parent_folder type=select
+@caption Vali kataloog olemasolevas baasis, kuhu alla sait lisatakse
+
 @property gen_site type=checkbox ch_value=1
 @caption Genereeri sait!
 
 @property site_errmsg type=text
 @caption Miks saiti ei saa genereerida
+
+@property site_warnmsg type=text
+@caption Hoiatused:
 
 */
 
@@ -57,6 +69,15 @@ class aw_site extends class_base
 				}
 				$prop['value'] = $this->err_str;
 				break;
+
+			case "site_warnmsg":
+				if ($this->warning_str == "")
+				{
+					return PROP_IGNORE;
+				}
+				$prop['value'] = $this->warning_str;
+				break;
+
 			case "gen_site":
 				if ($arr['obj']['oid'])
 				{
@@ -72,6 +93,83 @@ class aw_site extends class_base
 					$this->err_str = "Saidi url on m&auml;&auml;ramata!";
 					return PROP_IGNORE;
 				}
+				break;
+
+			case "select_db":
+				if ($arr['obj']['meta']['use_existing_database'] == 1)
+				{
+					// get current server id
+					$server_id = $this->do_orb_method_call(array(
+						"class" => "site_list",
+						"action" => "get_server_id_by_ip", 
+						"params" => array(
+							"ip" => aw_ini_get("install.default_ip")
+						),
+						"method" => "xmlrpc",
+						"server" => "register.automatweb.com",
+						"no_errors" => true
+					));
+					if (!$server_id)
+					{
+						$this->err_str = "Ei saanud lugeda serveri id'd! (vali andmebaas)";
+						return PROP_IGNORE;
+					}
+
+					// ok, here we must figoure out a list of sites in that server 
+					$sl = $this->do_orb_method_call(array(
+						"class" => "site_list",
+						"action" => "get_site_list", 
+						"params" => array(
+							"server_id" => $server_id
+						),
+						"method" => "xmlrpc",
+						"server" => "register.automatweb.com",
+						"no_errors" => true
+					));
+					if (!is_array($sl))
+					{
+						$this->err_str = "Ei saanud lugeda serveri saitide nimekirja! (vali andmebaas)";
+						return PROP_IGNORE;
+					}
+
+					$prop['options'] = array("" => "");
+					foreach($sl as $sid => $sd)
+					{
+						$prop['options'][$sd['url']] = $sd['name'];
+					}
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "select_parent_folder":
+				if ($arr['obj']['meta']['use_existing_database'] == 1 && $arr['obj']['meta']['select_db'] != "")
+				{
+					// get list of folders for the site
+					$serv = str_replace("http://","",$arr['obj']['meta']['select_db']);
+					$flds = $this->do_orb_method_call(array(
+						"class" => "objects",
+						"action" => "get_list",
+						"params" => array(
+							"rootobj" => 0
+						),
+						"method" => "xmlrpc",
+						"server" => $serv,
+						"no_errors" => true
+					));
+					if (!is_array($flds))
+					{
+						$this->err_str = "Ei saanud lugeda kataloogide nimekirja saidist $serv!";
+					}
+					$prop['options'] = $flds;
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
 		}
 		return PROP_OK;
 	}
@@ -99,26 +197,46 @@ class aw_site extends class_base
 			echo "generating site, params: <Br>";
 			echo "site data : ".dbg::dump($site)." <br>";
 
+			$ini_opts = array();
+
+			aw_global_set("__is_install",1);
 
 			// now, do the actual thing. 
 
 			// first, create site folders
-			$this->create_site_folders($site);
+			$this->create_site_folders($site, $ini_opts);
 
 			// create site name in nameserver if it does not exist
-			$this->create_site_name($site);
+			$this->create_site_name($site, $ini_opts);
+
+			// get new site_id for site
+			$this->get_site_id($site, $ini_opts);
 
 			// now, create database
-			$this->create_site_database($site);
+			$this->create_site_database($site, $ini_opts);
 
 			// now let each class that is registered handle the install process
 			// each class gets an instance of a dummy class, where it can set 
 			// properties and then those properties will get written to the ini file
-			$this->do_init_classes($site);
+			$this->do_init_classes($site, $ini_opts);
+
+			// now write options to the ini file
+			$this->create_ini_file($site, $ini_opts);
+
+			// now restart webserver
+			echo "restarting webserver ... <br>\n";
+			aw_global_set("__is_install", 0);
+			flush();
+			$su = get_instance("install/su_exec");
+			$apr = aw_ini_get("install.apache_restart_script");
+			$su->add_cmd("apr $apr");
+			//$su->exec();
+			echo "... finished , site should be ready to use now!<br>\n";
+			flush();
 		}
 	}
 
-	function create_site_folders($site)
+	function create_site_folders($site, &$ini_opts)
 	{
 		// generate the script that creates the folders for the site
 		$si = get_instance("install/su_exec");
@@ -126,6 +244,7 @@ class aw_site extends class_base
 		// create the needed folders
 		$si->add_cmd("mkdir ".$site['docroot']);
 		$si->add_cmd("chmod 775 ".$site['docroot']);
+		$ini_opts['site_basedir'] = $site['docroot'];
 
 		$si->add_cmd("mkdir ".$site['docroot']."/archive");
 		$si->add_cmd("chmod 777 ".$site['docroot']."/archive");
@@ -135,12 +254,20 @@ class aw_site extends class_base
 
 		$si->add_cmd("mkdir ".$site['docroot']."/pagecache");
 		$si->add_cmd("chmod 777 ".$site['docroot']."/pagecache");
+		$ini_opts['cache.page_cache'] = "\${site_basedir}/pagecache";
 
 		$si->add_cmd("mkdir ".$site['docroot']."/public");
 		$si->add_cmd("chmod 775 ".$site['docroot']."/public");
 
 		$si->add_cmd("mkdir ".$site['docroot']."/templates");
 		$si->add_cmd("chmod 775 ".$site['docroot']."/templates");
+		$ini_opts['tpldir'] = "\${site_basedir}/templates";
+
+		// now copy base templates to the just-created templates folder
+		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/templates/* ".$site['docroot']."/templates/");
+
+		$si->add_cmd("mkdir ".$site['logroot']);
+		$si->add_cmd("chmod 777 ".$site['logroot']);
 
 		// create apache vhost file
 		$vhost_template = $this->get_file(array("file" => $this->cfg["tpldir"] . "/apache_conf/vhost.conf"));
@@ -166,6 +293,7 @@ class aw_site extends class_base
 		// copy the default code files to public folder
 		// files: index.aw . login.aw , orb.aw, reforb.aw, site.aw, site_header.aw, site_footer.aw
 		$si->add_cmd("copy ".$this->cfg["basedir"]."/install/site_template/public/*aw ".$site["docroot"]."/public/");
+		$si->add_cmd("chmod 666 $site[docroot]/public/*aw");
 
 		// now, make the const.aw file from the template
 		$constaw_template = $this->get_file(array("file" => $this->cfg["tpldir"] . "/apache_conf/const.aw.tpl"));
@@ -185,16 +313,49 @@ class aw_site extends class_base
 		echo "execd = <pre>".$si->exec()."</pre> <br>";
 	}
 
-	function do_init_classes($site)
+	function do_init_classes($site, &$ini_opts)
 	{
-		
+		// ok, fuck it, we fake the site_id so that the objects all get the correct site_id
+		$osid = aw_ini_get("site_id");
+		aw_global_set("real_site_id", $osid);
+		$GLOBALS["cfg"]["__default"]["site_id"] = $ini_opts["site_id"];
+
+		// connect to the site database
+		$dbi = get_instance("class_base");
+		$dbi->db_connect(array(
+			'driver' => 'mysql',
+			'server' => $ini_opts['db.host'],
+			'base' => $ini_opts['db.base'],
+			'username' => $ini_opts['db.user'],
+			'password' => $ini_opts['db.pass']
+		));
+
+		// right. now we must somehow assume the identity of the new site. 
+		// quiestion is, how the hell do we do that?
+		// ok, what the hell, right now just update objects.site_id to have the new id after doing stuff
+		// createdby uids will still be incorrect, but fuck that
+
+		$clss = aw_ini_get("install.init_classes");
+		foreach($clss as $class)
+		{
+			$inst = get_instance($class);
+			if (method_exists($inst, "on_site_init"))
+			{
+				echo "call on_site_init for class $class <br>\n";
+				flush();
+				$inst->on_site_init($dbi, $site, $ini_opts);
+			}
+		}
+		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 	}
 
-	function create_site_name($site)
+	function create_site_name($site, &$ini_opts)
 	{
 		$mgr_server = $this->get_dns_manager_for_url($site["url"]);
+		echo "mgr_server = $mgr_server <Br>";
 		if ($mgr_server !== false)
 		{
+			echo "doing rpc call to change $site[url] 's ip to ",aw_ini_get("install.default_ip")," <br>";
 			$this->do_orb_method_call(array(
 				"class" => "dns_server_manager",
 				"action" => "add_or_update_site",
@@ -206,14 +367,65 @@ class aw_site extends class_base
 				"server" => $mgr_server
 			));
 		}
+		$ini_opts["baseurl"] = "http://".$site['url'];
+		$ini_opts["stitle"] = $site['url'];
 	}
 
-	function create_site_database($site)
+	function create_site_database($site, &$ini_opts)
 	{
-		// create database
-		// grant permission
-		// import db schema
+		if ($site['site_obj']['use_existing_database'])
+		{
+			echo "reading database access data from the existing site<br>\n";
+			flush();
+
+			$db_dat = $this->do_orb_method_call(array(
+				"class" => "objects",
+				"action" => "get_db_pwd",
+				"method" => "xmlrpc",
+				"server" => str_replace("http://","",$site['site_obj']['select_db']),
+				"no_errors" => 1
+			));
+
+			$ini_opts['db.user'] = $db_dat['user'];
+			$ini_opts['db.host'] = $db_dat['host'];
+			$ini_opts['db.base'] = $db_dat['base'];
+			$ini_opts['db.pass'] = $db_dat['pass'];
+			echo "got db inf = <pre>", var_dump($db_dat),"</pre> <br>";
+		}
+		else
+		{
+			echo "creating database .. <br>";
+			$dbi = get_instance("class_base");
+			$dbi->db_connect(array(
+				'driver' => 'mysql',
+				'server' => aw_ini_get('install.mysql_host'),
+				'base' => 'mysql',
+				'username' => aw_ini_get('install.mysql_user'),
+				'password' => aw_ini_get('install.mysql_pass')
+			));
+
+			// create database
+			$q = "CREATE DATABASE $site[db_name]";
+			echo "exec $q <br>";
+			$dbi->db_query($q);
+
+			// grant permission
+			$q = "
+				GRANT ALL PRIVILEGES 
+					ON $site[db_name].* 
+					TO $site[db_user]@".aw_ini_get("install.mysql_client")." 
+					IDENTIFIED BY '$site[db_pwd]'
+			";
+			echo "exec $q <Br>";
+			$dbi->db_query($q);
+
+			$ini_opts['db.user'] = $site['db_user'];
+			$ini_opts['db.host'] = aw_ini_get("install.mysql_host");
+			$ini_opts['db.base'] = $site['db_name'];
+			$ini_opts['db.pass'] = $site['db_pwd'];
+		}
 	}
+
 
 	function is_site_ok($site)
 	{
@@ -238,31 +450,64 @@ class aw_site extends class_base
 			return false;
 		}
 
-		// check if the database exists
-		$dbi = get_instance("class_base");
-		$dbi->db_connect(array(
-			'driver' => 'mysql',
-			'server' => aw_ini_get('install.mysql_host'),
-			'base' => 'mysql',
-			'username' => aw_ini_get('install.mysql_user'),
-			'password' => aw_ini_get('install.mysql_pass')
-		));
-		$dbi->db_list_databases();
-
-		$found = false;
-		while ($db = $dbi->db_next_database())
+		// if we are writing to an existing database, check if we have selected all the necessary stuff
+		// and then if we can access the database (if the code version is big enough to support xmlrpc)
+		if ($site['site_obj']['use_existing_database'])
 		{
-			if ($db == $site['db_name'])
+			if ($site['site_obj']['select_db'] == "")
 			{
-				$found = true;
-				break;
+				$this->err_str = "Kasutatav andmebaas on valimata!";
+				return false;
+			}
+
+			if (!$site['site_obj']['select_parent_folder'])
+			{
+				$this->err_str = "Uue saidi root kataloog olemasolevas andmebaasis on valimata!";
+				return false;
+			}
+
+			// try to fetch db login data
+			$db_dat = $this->do_orb_method_call(array(
+				"class" => "objects",
+				"action" => "get_db_pwd",
+				"method" => "xmlrpc",
+				"server" => str_replace("http://","",$site['site_obj']['select_db']),
+				"no_errors" => 1
+			));
+			if (!is_array($db_dat))
+			{
+				$this->err_str = "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!";
+				return false;
 			}
 		}
-
-		if ($found)
+		else
 		{
-			$this->err_str = "Site database exists, will not overwrite! ($site[db_name]) ";
-			return false;
+			// check if the database exists
+			$dbi = get_instance("class_base");
+			$dbi->db_connect(array(
+				'driver' => 'mysql',
+				'server' => aw_ini_get('install.mysql_host'),
+				'base' => 'mysql',
+				'username' => aw_ini_get('install.mysql_user'),
+				'password' => aw_ini_get('install.mysql_pass')
+			));
+			$dbi->db_list_databases();
+
+			$found = false;
+			while ($db = $dbi->db_next_database())
+			{
+				if ($db['name'] == $site['db_name'])
+				{
+					$found = true;
+					break;
+				}
+			}
+
+			if ($found)
+			{
+				$this->err_str = "Site database exists, will not overwrite! ($site[db_name]) ";
+				return false;
+			}
 		}
 		
 
@@ -284,12 +529,44 @@ class aw_site extends class_base
 		}
 		else
 		{
-			if (gethostbyname($site['url']) != $site['url'])
+			if (($_ip = gethostbyname($site['url'])) != $site['url'])
 			{
-				$this->err_str = "Site domain already exists! ($site[url]) ";
-				return false;
+				$this->warning_str = "Site domain already exists! (domain = $site[url] ip = $_ip) If another site is already at this address, it will become unusable after the new site is created!";
 			}
 		}
+
+		// check if a site by that url is already defined in the site db
+		$site_id = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_site_id_by_url",
+			"params" => array(
+				'url' => $site['url']
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+		if ($site_id)
+		{
+			$this->err_str = "Saitide registris on juba sait, mille url on $site[url] !";
+			return false;
+		}
+
+		// check if a server is defined in the server db
+		$server_id = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_server_id_by_ip",
+			"params" => array(
+				"ip" => aw_ini_get("install.default_ip"),
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+		if (!$server_id)
+		{
+			$this->err_str = "IP aadressi ".aw_ini_get("install.default_ip")." jaoks pole serverite registris kirjet!";
+			return false;
+		}
+
 		return true;
 	}
 
@@ -313,7 +590,9 @@ class aw_site extends class_base
 		$site['server_ip'] = aw_ini_get('install.default_ip');
 		$site['admin_folder'] = aw_ini_get('install.admin_folder');
 		$site['db_name'] = str_replace(".","",$ob['meta']['site_url']);
+		$site['db_user'] = substr(md5(str_replace(".","",$ob['meta']['site_url'])), 0, 15);
 		$site['db_pwd'] = generate_password();
+		$site['site_obj'] = $ob['meta'];
 		return $site;
 	}
 
@@ -341,6 +620,55 @@ class aw_site extends class_base
 			}
 		}
 		return false;
+	}
+	
+	function create_ini_file($site, &$ini_opts)
+	{
+		echo "ini_opts = <pre>", var_dump($ini_opts),"</pre> <br>";
+		// create temp ini file, then use su_exec to copy it to the correct place
+		$tmpnam = tempnam(aw_ini_get("server.tmpdir"),"aw_install_ini");
+
+		$fc = join("\n", map2('%s = %s', $ini_opts));
+		$this->put_file(array(
+			'file' => $tmpnam,
+			"content" => $fc
+		));
+
+		$sue = get_instance("install/su_exec");
+		$sue->add_cmd("copy $tmpnam ".$site['docroot']."/aw.ini");
+		$sue->add_cmd("chmod 666 $site[docroot]/aw.ini");
+		$sue->exec();
+	}
+
+	function get_site_id($site, &$ini_opts)
+	{		
+		$server_id = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_server_id_by_ip",
+			"params" => array(
+				"ip" => aw_ini_get("install.default_ip"),
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+		echo "got server_id = $server_id <br>";
+
+		$site_id = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "update_site",
+			"params" => array(
+				"name" => $site['url'],
+				"url" => "http://".$site['url'],
+				"server_id" => $server_id,
+				"ip" => aw_ini_get("install.default_ip"),
+				"site_used" => true,
+				"code_branch" => "HEAD",
+			),
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com"
+		));
+		echo "got site id $site_id <br>";
+		$ini_opts["site_id"] = $site_id;
 	}
 }
 ?>

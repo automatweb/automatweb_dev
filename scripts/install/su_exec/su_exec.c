@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <signal.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 #define ERR_NOFILE -1
 #define ERR_NOKEY -2 
@@ -22,12 +25,13 @@ typedef struct _trans {
 } CMD_TRANS_ENTRY;
 
 CMD_TRANS_ENTRY g_cmd_trans_tbl[] = {
-{"print", "echo" },
-{"copy", "cp"},
-{"mkdir", "mkdir"},
-{"chmod", "chmod"},
-{"ln", "ln"},
-{"rndc","rndc"}
+	{"print", "echo" },
+	{"copy", "cp"},
+	{"mkdir", "mkdir"},
+	{"chmod", "chmod"},
+	{"ln", "ln"},
+	{"rndc","rndc"},
+	{"apr",""}
 };
 
 char *g_err_line;
@@ -153,7 +157,21 @@ int main(int argc, char **argv)
 {
 	int errline = 0, i;
 	CMD_FILE cf;
+	pid_t fres;
 
+	fres = fork();
+	if (fres == -1)
+	{
+		perror("fork");
+	}
+	else
+	if (fres != 0)
+	{
+		// controlling process, wat for child to finish
+		//waitpid(fres, NULL, 0);
+		return 0;
+	}
+	
 	// check if cmd file was given
 	if (argc < 2)
 	{
@@ -186,6 +204,19 @@ int main(int argc, char **argv)
 		free_cmds(&cf);
 		return 0;
 	}
+
+	// set the uid to root, so that shell commands think they are really run from the root account
+	setuid(geteuid());
+	// this should detach us from the parent process
+	setsid();
+	// this should avoid the child process from getting killed when the parent is killed
+	signal(SIGHUP, SIG_IGN);
+
+	// close all outputs, so that the commands can be executed in the background
+	fclose(stdin);
+	fclose(stdout);
+	fclose(stderr);
+	
 
 	for (i = 0; i < cf.num_cmds; i++)
 	{
