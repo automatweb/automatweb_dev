@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.25 2001/06/18 19:17:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.26 2001/06/18 20:29:49 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -647,48 +647,6 @@ class document extends aw_template
 			 	$pb = $this->parse("pblock");
 			};
 		};
-
-		if (isset($GLOBALS["ekomar_search"]) && $GLOBALS["ekomar_search"] == 1)
-		{
-			preg_match("/#ekomar_form eileitud=\"(.*)\"#/",$doc["content"],$mat);
-			$doc["content"] = preg_replace("/#ekomar_form eileitud=\"(.*)\"#/", $this->search_ekomar($mat[1]),$doc["content"]);
-		}
-		else
-		{
-			if (preg_match("/#ekomar_form eileitud=\"(.*)\"#/",$doc["content"],$mat))
-			{
-				$doc["content"] = preg_replace("/#ekomar_form eileitud=\"(.*)\"#/", $this->ekomar_form($mat[1]),$doc["content"]);
-			}
-		}
-
-		global $s_ark, $s_name;
-		$doc["content"] = str_replace("#s_ark#",$s_ark,$doc["content"]);
-		$doc["content"] = str_replace("#s_name#",$s_name,$doc["content"]);
-		if ($s_ark != "" && $s_name != "")
-		{
-			$doc["content"] = preg_replace("/#ekomar_search_both#(.*)#\/ekomar_search_both#/", "\\1",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_ark#(.*)#\/ekomar_search_ark#/", "",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_name#(.*)#\/ekomar_search_name#/", "",$doc["content"]);
-		}
-		else
-		if ($s_ark != "" && $s_name == "")
-		{
-			$doc["content"] = preg_replace("/#ekomar_search_both#(.*)#\/ekomar_search_both#/", "",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_ark#(.*)#\/ekomar_search_ark#/", "\\1",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_name#(.*)#\/ekomar_search_name#/", "",$doc["content"]);
-		}
-		else
-		if ($s_ark == "" && $s_name != "")
-		{
-			$doc["content"] = preg_replace("/#ekomar_search_both#(.*)#\/ekomar_search_both#/", "",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_ark#(.*)#\/ekomar_search_ark#/", "",$doc["content"]);
-			$doc["content"] = preg_replace("/#ekomar_search_name#(.*)#\/ekomar_search_name#/", "\\1",$doc["content"]);
-		}
-		
-		if (!(strpos($doc["content"],"#ekomar_failid#") === false))
-		{
-			$doc["content"] = str_replace("#ekomar_failid#",$this->ekomar_failid(),$doc["content"]);
-		}
 
 		classload("msgboard");
 		$t = new msgboard;
@@ -2635,16 +2593,6 @@ class document extends aw_template
 		}
 		return true;
 	}
-	
-	function ekomar_form($id)
-	{
-		$tt = new aw_template();
-		$tt->sub_merge = 1;
-		$tt->tpl_init("automatweb/documents");
-		$tt->read_template("ekomar_form.tpl");
-		$tt->vars(array("section" => $GLOBALS["section"],"notfound" => $id));
-		$r = $tt->parse();
-		return $r;
-	}
+
 };
 ?>
