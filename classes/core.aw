@@ -554,6 +554,11 @@ class core extends acl_base
 			));
 		}
 
+		if ($_SERVER["REQUEST_METHOD"] == "OPTIONS")
+		{
+			$send_mail = false;
+		}
+
 		if ($send_mail)
 		{		
 			send_mail("vead@struktuur.ee", $subj, $content,$head);
