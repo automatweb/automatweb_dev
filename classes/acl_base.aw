@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.60 2004/03/11 09:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.61 2004/03/11 14:30:20 kristo Exp $
 
 lc_load("definition");
 
@@ -434,12 +434,18 @@ class acl_base extends db_connector
 			$can_adm_max = 0;
 			$can_adm_oid = 0;
 
+			$str = "";
 			$gl = aw_global_get("gidlist_oid");
 			foreach($gl as $g_oid)
 			{	
 				if ($this->can("view", $g_oid))
 				{
 					$o = obj($g_oid);
+					if ($o->prop("type") == 1)
+					{
+						continue;
+					}
+					$str .= "goid= $g_oid ";
 					if ($o->prop("priority") > $can_adm_max)
 					{
 						$can_adm = $o->prop("can_admin_interface");
@@ -459,7 +465,7 @@ class acl_base extends db_connector
 			{
 				error::throw(array(
 					"id" => ERR_NOTICE,
-					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly ($can_adm_oid) gl = ".join(",", array_values($gl))."!",
+					"msg" => "acl_base::prog_acl($right, $progid): access was denied for user ".aw_global_get("uid").". please verify that the site is configured correctly ($can_adm_oid) gl = ".join(",", array_values($gl))." (str = $str)!",
 					"fatal" => false,
 					"show" => false
 				));
