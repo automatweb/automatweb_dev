@@ -220,7 +220,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		foreach($conn_prop_vals as $prop => $val)
 		{
 			$ret[$prop] = $val;
-			echo "set $prop => ".dbg::dump($val)." <br>";
+			//echo "set $prop => ".dbg::dump($val)." <br>";
 		}
 		return $ret;
 	}
