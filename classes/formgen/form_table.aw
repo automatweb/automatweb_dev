@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.22 2002/12/17 11:04:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.23 2002/12/23 13:25:22 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -233,9 +233,12 @@ class form_table extends form_base
 			$has_change_col = false;
 			for ($i = 0; $i < $this->table["cols"]; $i++)
 			{
-				if (in_array("change",$this->table["defs"][$i]["els"]))
+				if (is_array($this->table['defs'][$i]['els']))
 				{
-					$has_change_col = true;
+					if (in_array("change",$this->table["defs"][$i]["els"]))
+					{
+						$has_change_col = true;
+					}
 				}
 			}
 			if ($has_change_col)
