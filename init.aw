@@ -162,16 +162,21 @@ function init_config($arr)
 	{
 //		list($micro,$sec) = split(" ",microtime());
 //		$ts_s = $sec + $micro;
-		$rootini = false;
+		
+		// now deduce the aw path from the rootini file path
+		$basedir = dirname($ini_files[0]);
+		$GLOBALS["cfg"]["__default"]["basedir"] = $basedir;
+
+		// also, site_basedir from the second ini file
+		$site_basedir = dirname($ini_files[1]);
+		$GLOBALS["cfg"]["__default"]["site_basedir"] = $site_basedir;
+
+		// now, baseurl
+		$baseurl = "http://".$GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"];
+		$GLOBALS["cfg"]["__default"]["baseurl"] = $baseurl;
+
 		foreach($ini_files as $file)
 		{
-			if ($rootini == false)
-			{
-				// now deduce the aw path from the rootini file path
-				$rootini = $file;
-				$basedir = dirname($file);
-				$GLOBALS["cfg"]["__default"]["basedir"] = $basedir;
-			}
 			parse_config($file);
 		}
 
@@ -605,7 +610,7 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 	die("<br><b>AW_ERROR: $msg</b><br>");
 }
 
-/*error_reporting(E_ALL ^ E_NOTICE);
-set_error_handler("__aw_error_handler");
-error_reporting(E_ALL ^ E_NOTICE);*/
+//error_reporting(E_ALL ^ E_NOTICE);
+//set_error_handler("__aw_error_handler");
+//error_reporting(E_ALL ^ E_NOTICE);
 ?>
