@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.215 2003/10/16 11:56:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.216 2003/11/05 13:25:14 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -310,6 +310,7 @@ class document extends aw_template
 				return "";
 			}
 		};
+		//$doc["content"] = "<style>.styl1 {color: green; font-family: Verdana; font-weight: bold;} .styl2 {color: blue; font-size: 20px;} .styl3 {color: red; border: 1px solid blue;}</style>" . $doc["content"];
 		$params["vars"] = $doc["vars"];
 		$tpl = $doc["tpl"];
 		
@@ -697,9 +698,13 @@ class document extends aw_template
 			$this->vars($al->get_vars());
 		}; 
 
-		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
+		// where do I put that shit? that break conversion thingie?
+		if (!$doc["nobreaks"] || !$doc["meta"]["cb_nobreaks"]["contentxxx"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
-			$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
+			// fuckwits ... meeza thinks we should do the replacements when we are saving the
+			// document .. no? ... cause this nobreak thingie will cause me all kinds of 
+			// problems later on.
+			//$doc["content"] = str_replace("\r\n","<br />",$doc["content"]);
 		}
 
 		$pb = "";
@@ -901,7 +906,7 @@ class document extends aw_template
 		}
 
 		$_date = $doc["modified"] > 1 ? $doc["modified"] : $doc["created"];
-		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
+		$date_est = date("d", $_date).". ".get_et_month(date("m", $_date))." ".date("Y", $_date);
 			
 		if (!aw_ini_get("document.show_real_location"))
 		{

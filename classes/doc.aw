@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.46 2003/10/27 15:07:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.47 2003/11/05 13:25:14 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -96,7 +96,7 @@
 @property cite type=textarea cols=60 rows=10
 @caption Tsitaat
 
-@property tm type=textbox size=20
+@property tm type=textbox size=20 newonly=1
 @caption Kuupäev
 
 @property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
@@ -150,18 +150,18 @@
 @property gen_static type=checkbox store=no
 @caption Genereeri staatiline
 
-
 @property sbt type=submit value=Salvesta store=no 
+
+@property cb_part type=hidden value=1 group=general,settings store=no
+@caption cb_part
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
-@groupinfo settings caption=Seadistused
+@groupinfo settings caption=Seadistused icon=archive.gif
 @groupinfo relationmgr caption=Seostehaldur submit=no
 
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
-
-@classinfo trans=1
 
 */
 
@@ -177,9 +177,9 @@ class doc extends class_base
 		));
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -189,23 +189,16 @@ class doc extends class_base
 				break;
 
 			case "tm":
-				if (empty($args["obj"]["oid"]))
-				{
-					$data["value"] = date("d.m.Y");
-				};
+				$data["value"] = date("d.m.Y");
 				break;
 
 			case "sections":
 				$d = get_instance("document");
 				list($selected,$options) = $this->get_brothers(array(
-					"id" => $args["obj"]["oid"],
+					"id" => $arr["obj_inst"]->id(),
 				));
 				$data["options"] = array("" => "") + $options;
 				$data["selected"] = $selected;
-				break;
-
-			case "refopt":
-				$data["options"] = array("Ignoreeri","Näita","Ära näita");
 				break;
 
 			case "calendar_relation":
@@ -214,7 +207,7 @@ class doc extends class_base
 				break;
 
 			case "duration":
-				$_tmp = $args["data"]["planner"]["end"] - $args["data"]["planner"]["start"];
+				$_tmp = $arr["data"]["planner"]["end"] - $arr["data"]["planner"]["start"];
 				$data["value"] = array(
 					"hour" => (int)($_tmp/3600),
 					"minute" => ($_tmp % 3600) / 60,
@@ -222,11 +215,19 @@ class doc extends class_base
 				break;
 	
 			case "navtoolbar":
-				$this->gen_navtoolbar($args);
+				// I need a better way to do this!
+				if (!empty($arr["request"]["cb_part"]))
+				{
+					$retval = PROP_IGNORE;	
+				}
+				else
+				{
+					$this->gen_navtoolbar($arr);
+				};
 				break;
 
 			case "language":
-				$objdata = new object($args["obj"]["oid"]);
+				$objdata = $arr["obj_inst"];
 				$lg = get_instance("languages");
 				$lang_list = $lg->get_list();
 				$lang_id = $lg->get_langid_for_code($objdata->lang());
@@ -242,15 +243,6 @@ class doc extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			/*
-			case "active":
-				if (empty($data["value"]))
-				{
-					$data["value"] = STAT_NOTACTIVE;
-				};
-				break;
-			*/
-
 			case "sections":
 				$this->update_brothers(array(
 					"id" => $args["obj"]["oid"],
@@ -346,6 +338,7 @@ class doc extends class_base
 			case "dcache":
 				if (aw_ini_get("document.use_dcache"))
 				{
+					//print "generating preview<br>";
 					$dcx = get_instance("document");
 					$preview = $dcx->gen_preview(array("docid" => $args["obj"]["oid"]));
 					$this->quote($preview);
@@ -435,14 +428,18 @@ class doc extends class_base
 		{
 			$obj_inst->set_name($args["form_data"]["title"]);
 		};
+		
 		if (isset($this->_preview))
 		{
 			$obj_inst->set_meta("dcache",$this->_preview);
 		};
+		
 		if (isset($this->_modified))
 		{
 			$obj_inst->set_prop("doc_modified",$this->_modified);
 		};
+
+		// RTE also has a button to clear styles
 		if ($this->clear_styles)
 		{
 			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->get_prop("content")));	
@@ -455,7 +452,6 @@ class doc extends class_base
 		{
 			$obj_inst->set_prop("tm",date("d.m.y",$obj_inst->prop("modified")));
 		};
-
 
 	}
 
@@ -474,55 +470,30 @@ class doc extends class_base
 		return $arg;
 	}
 
-	function gen_navtoolbar($args = array())
+	function gen_navtoolbar($arr)
 	{
-		$toolbar = &$args["prop"]["toolbar"];
+		$toolbar = &$arr["prop"]["toolbar"];
 		$toolbar->add_button(array(
                         "name" => "save",
                         "tooltip" => "Salvesta",
 			"target" => "_self",
-                        "url" => "javascript:submit_changeform();",
-                        "imgover" => "save_over.gif",
+			"url" => "javascript:parent.contentarea.submit_changeform();",
                         "img" => "save.gif",
                 ));
-		/*
-		$toolbar->add_button(array(
-                        "name" => "edit",
-                        "tooltip" => "Muuda",
-                        "url" => $this->mk_my_orb("change",array("id" => $args["id"])),
-                        "imgover" => "edit_over.gif",
-                        "img" => "edit.gif",
-                ));
-		$toolbar->add_button(array(
-                        "name" => "brothering",
-                        "tooltip" => "Vennastamine",
-                        "url" => $this->mk_my_orb("change",array("id" => $args["id"],"group" => "vennastamine")),
-			# wtf is brothering supposed to mean?
-                        "imgover" => "brothering_over.gif",
-                        "img" => "brothering.gif",
-                ));
-
-		$toolbar->add_button(array(
-                        "name" => "lists",
-                        "tooltip" => "Teavita liste",
-                        "url" => $this->mk_my_orb("notify",array("id" => $args["id"]),"keywords"),
-			"target" => "_blank",
-                        "imgover" => "lists_over.gif",
-                        "img" => "lists.gif",
-                ));
-		*/
-
-		if (!empty($args["obj"]["oid"]))
+	
+		if ($arr["obj_inst"]->id())
 		{
 			$toolbar->add_button(array(
 				"name" => "preview",
 				"tooltip" => "Eelvaade",
-				"target" => "_blank",
-				"url" => aw_ini_get("baseurl") . "/" . $args["obj"]["oid"],
-				"imgover" => "preview_over.gif",
+				"target" => "contentarea",
+				"url" => aw_global_get("baseurl") . "/" . $arr["obj_inst"]->id(),
 				"img" => "preview.gif",
 			));
+
+			$toolbar->add_separator();
 		};
+
 	}
 
 	function show($args = array())
@@ -531,7 +502,7 @@ class doc extends class_base
 		$d = get_instance("document");
 		return $d->gen_preview(array("docid" => $args["id"]));
 	}
-	
+
 	function callback_get_doc_plugins($args = array())
 	{
                 $plugins = $this->parse_long_template(array(
@@ -670,6 +641,27 @@ class doc extends class_base
 			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document_brother"),
 		);
 		return $retval;
+	}
+
+	function callback_mod_retval($args = array())
+	{
+		$form_data = &$args["form_data"];
+		$new = $args["new"];
+		$args = &$args["args"];
+		// if this is a new object, then the form is posted with the _top target
+		// this ensures that the top toolbar will be updated as well
+		if (!$new && $form_data["cb_part"])
+		{
+			$args["cb_part"] = $form_data["cb_part"];
+		};
+	}
+
+	function callback_mod_reforb($args = array())
+	{
+		if ($_REQUEST["cb_part"])
+		{
+			$args["cb_part"] = $_REQUEST["cb_part"];
+		};
 	}
 
 	////
