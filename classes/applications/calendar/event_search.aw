@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.16 2005/01/17 16:43:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.17 2005/01/18 15:25:29 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -748,6 +748,10 @@ class event_search extends class_base
 					$search["parent"][] = $rn2;
 				}
 			}
+			if(is_oid($arr["event_id"]) && $this->can("view", $arr["event_id"]))
+			{
+				$search["brother_of"] = $arr["event_id"];
+			}
 			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
 			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
@@ -893,14 +897,12 @@ class event_search extends class_base
 			$aliasmrg = get_instance("aliasmgr");
 			foreach($edata as $ekey => $eval)
 			{
+				$id = $eval["event_id"];
+				$obj = obj($id);
 				$cdat = "";
 				foreach($tabledef as $sname => $propdef)
 				{
-					if($sname == "content")
-					{
-						continue;
-					}
-					if(!$propdef["active"])
+					if($sname == "content" || (!$propdef["active"]))
 					{
 						continue;
 					}
@@ -940,26 +942,28 @@ class event_search extends class_base
 						}
 						if($nms == "name")
 						{
-							$id = $eval["event_id"];
-							if(is_oid($id) && $this->can("view", $id))
+							if($obj->prop("udeftb1") != "")
 							{
-								$obj = obj($id);
-								if($obj->prop("udeftb1") != "")
-								{
-									$v = html::popup(array(
-										"url" => $obj->prop("udeftb1"),
-										"caption" => $v,
-										"target" => "_blank",
-										"toolbar" => 1,
-										"directories" => 1,
-										"status" => 1,
-										"location" => 1,
-										"resizable" => 1,
-										"scrollbars" => 1,
-										"menubar" => 1,
-									));
-								}
+								$v = html::popup(array(
+									"url" => $obj->prop("udeftb1"),
+									"caption" => $v,
+									"target" => "_blank",
+									"toolbar" => 1,
+									"directories" => 1,
+									"status" => 1,
+									"location" => 1,
+									"resizable" => 1,
+									"scrollbars" => 1,
+									"menubar" => 1,
+								));
 							}
+						}
+						if($tabledef[$nms]["clickable"] == 1)
+						{
+							$v = html::href(array(
+								"url" => aw_ini_get("baseurl").aw_url_change_var(array("event_id" => $id)),
+								"caption" => $v,
+							));
 						}
 						$aliasmrg->parse_oo_aliases($ekey, $v);
 						$val[] = $v;
@@ -986,7 +990,7 @@ class event_search extends class_base
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($nmx != "")
+				if($search["brother_of"])
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
