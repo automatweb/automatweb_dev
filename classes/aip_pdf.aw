@@ -13,7 +13,6 @@ class aip_pdf extends aw_template
 {
 	function aip_pdf()
 	{
-		enter_function("aip_pdf::aip_pdf",array());
 		$this->init("aip_pdf");
 
 		$this->statuses = array(
@@ -22,12 +21,10 @@ class aip_pdf extends aw_template
 			FILE_STAT_DELETED => "<font color='red'>Kustutatud</font>",
 			FILE_STAT_SAME => "Ei ole muudetud"
 		);
-		exit_function("aip_pdf::aip_pdf");
 	}
 
 	function mk_header()
 	{
-		enter_function("aip_pdf::mk_header",array());
 		$this->tpl = new aw_template;
 		$this->tpl->tpl_init("aip_pdf");
 		$this->tpl->db_init();
@@ -35,13 +32,11 @@ class aip_pdf extends aw_template
 		$this->tpl->vars(array(
 			"menu_import" => $this->cfg["baseurl"]."/vv_aip.aw?section=".$this->section."&action=importmenus"
 		));
-		exit_function("aip_pdf::mk_header");
 		return $this->tpl->parse();
 	}
 
 	function listfiles($arr)
 	{
-		enter_function("aip_pdf::listfiles",array());
 		extract($arr);
 		$this->read_template("file_list.tpl");
 
@@ -134,13 +129,11 @@ class aip_pdf extends aw_template
 			"folders" => $this->picker($parent,$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit_list", array("section" => $section))
 		));
-		exit_function("aip_pdf::listfiles");
 		return $this->parse();
 	}
 
 	function submit_list($arr)
 	{
-		enter_function("aip_pdf::submit_list",array());
 		extract($arr);
 
 		set_time_limit(0);
@@ -303,13 +296,11 @@ class aip_pdf extends aw_template
 				flush();
 			}
 		}
-		exit_function("aip_pdf::submit_list");
 		return $this->mk_my_orb("listfiles", array("section" => $section),"",false,true);
 	}
 
 	function get_file_data($parent)
 	{
-		enter_function("aip_pdf::get_file_data",array());
 		$this->mk_menu_cache();
 		$menus = array();
 		$this->get_menus_below($parent,$menus);
@@ -330,7 +321,6 @@ class aip_pdf extends aw_template
 				$this->restore_handle();
 			}
 		}
-		exit_function("aip_pdf::get_file_data");
 		return $ret;
 	}
 
@@ -338,7 +328,6 @@ class aip_pdf extends aw_template
 	// !creates the list of files and checks each file's status and returns them in an array
 	function mk_file_list($folder,$parent)
 	{
-		enter_function("aip_pdf::mk_file_list",array());
 		$fd = $this->get_file_data($parent);
 		clearstatcache();
 		if ($dir = @opendir($folder)) 
@@ -376,20 +365,16 @@ class aip_pdf extends aw_template
 				$ret[$fn] = FILE_STAT_DELETED;
 			}
 		}
-		exit_function("aip_pdf::mk_file_list");
 		return $ret;
 	}
 
 	function flush_menu_cache()
 	{
-		enter_function("aip_pdf::flush_menu_cache",array());
 		$this->mpr = false;
-		exit_function("aip_pdf::flush_menu_cache");
 	}
 
 	function mk_menu_cache()
 	{
-		enter_function("aip_pdf::mk_menu_cache",array());
 		if (!is_array($this->mpr))
 		{
 			classload("menuedit");
@@ -398,12 +383,10 @@ class aip_pdf extends aw_template
 			$this->mpr = $m->mpr;
 			$this->mar = $m->mar;
 		}
-		exit_function("aip_pdf::mk_menu_cache");
 	}
 
 	function get_menus_below($parent,&$ar)
 	{
-		enter_function("aip_pdf::get_menus_below",array());
 		if (is_array($this->mpr[$parent]))
 		{
 			foreach($this->mpr[$parent] as $row)
@@ -412,14 +395,12 @@ class aip_pdf extends aw_template
 				$this->get_menus_below($row["oid"],$ar);
 			}
 		}
-		exit_function("aip_pdf::get_menus_below");
 	}
 
 	////
 	// !here we must split ehe filename in parts and figure out under what folder to store the damn thing. 
 	function find_parent_for_file($f,$parent,$min_len)
 	{
-		enter_function("aip_pdf::find_parent_for_file",array());
 		$this->mk_menu_cache();
 		$ar = array();
 		$this->get_menus_below($parent,$ar);
@@ -445,7 +426,6 @@ class aip_pdf extends aw_template
 			if ($meta["aip_filename"] == $_tn)
 			{
 				// ok, we found the menu for this file. return it.
-		exit_function("aip_pdf::find_parent_for_file");
 				return $mid;
 			}
 
@@ -504,36 +484,29 @@ class aip_pdf extends aw_template
 
 		if ($max_chars >= $min_len)
 		{
-		exit_function("aip_pdf::find_parent_for_file");
 			return $max_menu;
 		}
 		else
 		{
-		exit_function("aip_pdf::find_parent_for_file");
 			return false;
 		}
-		exit_function("aip_pdf::find_parent_for_file");
 	}
 
 	function get_new_folder_name_for_file($fn)
 	{
-		enter_function("aip_pdf::get_new_folder_name_for_file",array());
 		list($n,$pt) = explode(" ",$fn);
 		list($pt1,$ptn) = explode(".",$pt);
 		list($pt2,$t) = explode("-",$ptn);
-		exit_function("aip_pdf::get_new_folder_name_for_file");
 		return $n."/".$pt1."/".$pt2;
 	}
 
 	function split_filename($name)
 	{
-		enter_function("aip_pdf::split_filename",array());
 		list($n,$pt) = explode(" ",$name);
 		list($pt1,$ptn) = explode(".",$pt);
 		list($pt2,$t) = explode("-",$ptn);
 		$t = (int)$t;
 		$ret =  array(0 => $n,1 => $pt1, 2 => $pt2,3 => $t);
-		exit_function("aip_pdf::split_filename");
 		return $ret;
 	}
 }
