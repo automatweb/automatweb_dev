@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.7 2004/12/03 12:52:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.8 2004/12/03 13:52:28 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -444,7 +444,7 @@ class webform extends class_base
 				$get_controllers = array(
 					array(
 						"name" => "Kuva sisestaja IP ja host aadress",
-						"formula" => 'if(!empty($prop["value"])){$prop["type"] = "text";}',
+						"formula" => 'if(!empty($prop["value"])){$prop["type"] = "text";$prop["value"] = nl2br($prop["value"]);}',
 					),
 				);
 				$i = 0;
