@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.54 2002/09/05 14:24:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.55 2002/09/09 12:28:53 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -1077,24 +1077,8 @@ class form_table extends form_base
 	{
 		if (!($ret = aw_cache_get("form_table::aliases",$this->table_id)))
 		{
-			classload("aliasmgr");
-			$am = new aliasmgr;
-			$am->_init_aliases();
-			$defs = $am->get_defs();
-			
-			$defs2 = array();
-			foreach($defs as $dd)
-			{
-				$defs2[$dd["class_id"]] = $dd["alias"];
-			}
-
-			$cnts = array();
-			$aliases = $this->get_aliases_for($this->table_id);
-			$ret = array();
-			foreach($aliases as $ad)
-			{
-				$ret[$ad["id"]] = "#".$defs2[$ad["class_id"]].(++$cnts[$ad["class_id"]])."#";
-			}
+			$am = get_instance("aliasmgr");
+			$ret = $am->get_alias_list_for_obj_as_aliasnames($this->table_id);
 			aw_cache_set("form_table::aliases", $this->table_id, $ret);
 		}
 
