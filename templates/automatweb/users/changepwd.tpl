@@ -1,4 +1,21 @@
-<form action='reforb.{VAR:ext}' method=post>
+<script language="javascript">
+function gp()
+{
+	pwd = new String("");
+	for (i = 0; i < 8; i++)
+	{
+		rv = Math.random()*(123-97);
+		rn = parseInt(rv);
+		rt = rn+97;
+		pwd = pwd + String.fromCharCode(rt);
+	}
+	document.ua.pwd.value = pwd;
+	document.ua.pwd2.value = pwd;
+	document.ua.genpwd.value = pwd;
+}
+</script>
+
+<form action='reforb.{VAR:ext}' method=post name="ua">
 <font color="red">{VAR:error}</font>
 
 <style>
@@ -36,10 +53,14 @@ background-color: #EFEFEF;
 <td class="tabletext"><input type="text" name="email" VALUE='{VAR:email}'></td>
 </tr>
 <tr>
-<td class="tabletext">Parool:</td><td class="tabletext"><input type='password' NAME='pwd' ></td>
+<td class="tabletext">Parool:</td><td class="tabletext"><input type='password' NAME='pwd' >  (<a href='#' onClick='gp();'>Genereeri</a>)</td>
 </tr>
 <tr>
 <td class="tabletext">Parool uuesti:</td><td class="tabletext"><input type='password' NAME='pwd2' ></td>
+</tr>
+<tr>
+<td class="tabletext">Genereeritud parool:</td>
+<td class="tabletext"><input type="text" name="genpwd"></td>
 </tr>
 <tr>
 <td class="tabletext">Saada liitumismeil uuesti:</td><td class="tabletext"><input type="checkbox" name="send_welcome_mail" value="1"></td>
