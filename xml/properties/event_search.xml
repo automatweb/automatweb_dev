@@ -151,6 +151,7 @@
                   <clid>
                         <num_0>CL_MENU</num_0>
                         <num_1>CL_PLANNER</num_1>
+                        <num_2>CL_PROJECT</num_2>
                   </clid>
                   <caption>S&amp;uuml;ndmuste allikas</caption>
             </EVENT_SOURCE>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.40 2005/02/21 15:48:22 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.41 2005/03/07 16:14:46 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -63,7 +63,7 @@
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
 @caption S&uuml;ndmuse vorm
 
-@reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PLANNER
+@reltype EVENT_SOURCE value=3 clid=CL_MENU,CL_PLANNER,CL_PROJECT
 @caption S&uuml;ndmuste allikas
 
 @reltype EVENT_SHOW value=4 clid=CL_CFGFORM
@@ -639,10 +639,39 @@ class event_search extends class_base
 			}
 			elseif($tmp->class_id() == CL_PLANNER)
 			{
+				$rn1 = array();
 				$r = $tmp->prop("event_folder");
 				if(is_oid($r) && $this->can("view", $r))
 				{
-					$rn1 = $r;
+					$rn1[] = $r;
+				}
+				// this goddamn calendar has to manage the 
+				// events from other calendars and projects aswell.. oh hell..
+				$sources = $tmp->connections_from(array(
+					"type" => "RELTYPE_EVENT_SOURCE",
+				));
+				foreach($sources as $source)
+				{
+					if($source->prop("to.class_id") == CL_PLANNER)
+					{
+						$_tmp = $source->to();
+						$rn1[] = $_tmp->prop("event_folder");
+					}
+					else
+					{
+						$rn1[] = $source->prop("to");
+					}
+				}
+			}
+			elseif($tmp->class_id() == CL_PROJECT)
+			{
+				$rn1 = array($rn1);
+				$sources = $tmp->connections_from(array(
+					"type" => "RELTYPE_SUBPROJECT",
+				));
+				foreach($sources as $source)
+				{
+					$rn1[] = $source->prop("to");
 				}
 			}
 		}
@@ -666,10 +695,37 @@ class event_search extends class_base
 			}
 			elseif($tmp->class_id() == CL_PLANNER)
 			{
+				$rn2 = array();
 				$r = $tmp->prop("event_folder");
 				if(is_oid($r) && $this->can("view", $r))
 				{
-					$rn2 = $r;
+					$rn2[] = $r;
+				}
+				$sources = $tmp->connections_from(array(
+					"type" => "RELTYPE_EVENT_SOURCE",
+				));
+				foreach($sources as $source)
+				{
+					if($source->prop("to.class_id") == CL_PLANNER)
+					{
+						$_tmp = $source->to();
+						$rn2[] = $_tmp->prop("event_folder");
+					}
+					else
+					{
+						$rn2[] = $source->prop("to");
+					}
+				}
+			}
+			elseif($tmp->class_id() == CL_PROJECT)
+			{
+				$rn1 = array($rn1);
+				$sources = $tmp->connections_from(array(
+					"type" => "RELTYPE_SUBPROJECT",
+				));
+				foreach($sources as $source)
+				{
+					$rn1[] = $source->prop("to");
 				}
 			}
 		}
@@ -741,17 +797,57 @@ class event_search extends class_base
 			{
 				if($rn1)
 				{
-					$search["parent"][] = $rn1;
+					if(is_array($rn1))
+					{
+						$search["parent"] = array_merge($rn1, $search["parent"]);
+					}
+					else
+					{
+						$search["parent"][] = $rn1;
+					}
 				}
 				if($rn2)
 				{
-					$parx2[] = $rn2;
+					if(is_array($rn2))
+					{
+						$parx2 = array_merge($rn2, $parx2);
+					}
+					else
+					{
+						$parx2[] = $rn2;
+					}
 				}
 			}
-			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24));
-			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24));
-			$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 3600*24));
+			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 3600*24));
+			//$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+			//$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
+			$search["CL_CRM_MEETING.end"] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array("CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array("CL_CRM_MEETING.end" => -1),
+					)),
+				),
+			));
+			$search["CL_CALENDAR_EVENT.end"] = new object_list_filter(array(
+				"logic" => "OR",
+				"conditions" => array(
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array("CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array("CL_CALENDAR_EVENT.end" => -1),
+					)),
+				),
+			));
 			$search["lang_id"] = array();
 			$search["site_id"] = array();
 			$ft_fields = $ob->prop("ftsearch_fields");
@@ -781,6 +877,7 @@ class event_search extends class_base
 			$edata = array();
 			$ecount = array();
 			
+			
 			// it would be a nice habbit to always commment my own code,
 			// but then again, these magical bugs have miraculous ability to come into
 			// makes tasklist, so why bother :) ok ok, i really should...
@@ -796,11 +893,11 @@ class event_search extends class_base
 					$oris = $ol->brother_ofs();
 					if($rn2)
 					{
-					$search2 = $search;
-					$search2["parent"] = $parx2;
-					$ol = new object_list($search2);
-					$oris2 = $ol->brother_ofs();
-					$ids = array_intersect($oris2, $oris);
+						$search2 = $search;
+						$search2["parent"] = $parx2;
+						$ol = new object_list($search2);
+						$oris2 = $ol->brother_ofs();
+						$ids = array_intersect($oris2, $oris);
 					}
 					else
 					{
@@ -812,9 +909,37 @@ class event_search extends class_base
 							"oid" => $ids,
 							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
 							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
-							"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							//"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
 							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
-							"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							//"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							/*
+							"CL_CRM_MEETING.end" => new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									new object_list_filter(array(
+										"logic" => "AND",
+										"conditions" => array("CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
+									)),
+									new object_list_filter(array(
+										"logic" => "AND",
+										"conditions" => array("CL_CRM_MEETING.end" => -1),
+									)),
+								),
+							)),
+							"CL_CALENDAR_EVENT.end" => new object_list_filter(array(
+								"logic" => "OR",
+								"conditions" => array(
+									new object_list_filter(array(
+										"logic" => "AND",
+										"conditions" => array("CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
+									)),
+									new object_list_filter(array(
+										"logic" => "AND",
+										"conditions" => array("CL_CALENDAR_EVENT.end" => -1),
+									)),
+								),
+							)),
+							*/
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
 							"site_id" => array(),
@@ -975,7 +1100,7 @@ class event_search extends class_base
 						{
 							continue;
 						}
-						$v = $eval[$nms];
+						$v = create_links($eval[$nms]);
 						if ($nms == "start1" || $nms == "end")
 						{
 							if($skip)
