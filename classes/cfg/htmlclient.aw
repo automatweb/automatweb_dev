@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.16 2003/01/09 22:02:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.17 2003/01/17 18:01:59 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -74,6 +74,9 @@ class htmlclient extends aw_template
 	{
 		// that too should not be here. It only forms 2 radiobuttons ...
 		// which could as well be done some place else
+
+		// of course this should be here, where the hell else do you
+		// want it to be?
 		if ($args["type"] == "status")
 		{
 			if (!$args["value"])
@@ -81,6 +84,35 @@ class htmlclient extends aw_template
 				// default to deactive
 				$args["value"] = 1;
 			};
+			$val .= html::radiobutton(array(
+						"name" => $args["name"],
+						"value" => 2,
+						"checked" => ($args["value"] == 2),
+						"caption" => "Aktiivne",
+			));
+			$val .= html::radiobutton(array(
+						"name" => $args["name"],
+						"value" => 1,
+						"checked" => ($args["value"] == 1),
+						"caption" => "Deaktiivne",
+			));
+			
+			$args["value"] = $val;
+		};
+		
+		if ($args["type"] == "s_status")
+		{
+			if (!$args["value"])
+			{
+				// default to deactive
+				$args["value"] = 1;
+			};
+			$val .= html::radiobutton(array(
+						"name" => $args["name"],
+						"value" => 3,
+						"checked" => ($args["value"] == 3),
+						"caption" => "Kõik",
+			));
 			$val .= html::radiobutton(array(
 						"name" => $args["name"],
 						"value" => 2,
@@ -177,17 +209,20 @@ class htmlclient extends aw_template
 	function finish_output($args = array())
 	{
 		extract($args);
-		$this->res .= "<tr>\n\t<td class='chformleftcol' align='center'>&nbsp;</td>\n";
-		$this->res .= "\t<td class='chformrightcol'>";
-		$this->res .= "<input type='submit' value='Salvesta' class='small_button'>";
-		$this->res .= "</td>\n";
-		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
-		unset($data["orb_class"]);
-		$this->res .= $this->mk_reforb($action,$data,$orb_class);
-		$this->res .= "</form>\n";
-		$this->res .= "</tr>\n";
+		if ($submit !== "no")
+		{
+			$this->res .= "<tr>\n\t<td class='chformleftcol' align='center'>&nbsp;</td>\n";
+			$this->res .= "\t<td class='chformrightcol'>";
+			$this->res .= "<input type='submit' value='Salvesta' class='small_button'>";
+			$this->res .= "</td>\n";
+			$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
+			unset($data["orb_class"]);
+			$this->res .= $this->mk_reforb($action,$data,$orb_class);
+			$this->res .= "</tr>\n";
 
-		$this->res .= "</table>\n";
+			$this->res .= "</table>\n";
+		};
+		$this->res .= "</form>\n";
 	}
 
 	function get_result()	
