@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.9 2001/12/31 14:25:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.10 2002/01/04 18:30:08 cvs Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -327,8 +327,8 @@ class form_import extends form_base
 		classload("xml");
 		$x = new xml;
 		$form = new form;
-		$ar = fgetcsv($fp,100000,";");	// skipime esimese rea
-		while (($ar = fgetcsv($fp,100000,";")))
+		$ar = fgetcsv($fp,100000,"\t");	// skipime esimese rea
+		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
 			// first we create a new chain entry for this line
 			$chain_entry_id = $this->db_fetch_field("SELECT max(id) as id FROM form_chain_entries", "id")+1;
@@ -398,11 +398,15 @@ class form_import extends form_base
 
 				$this->db_query("insert into form_entries(id,form_id) values($entry_id, $id)");
 				
-				$sels = "id,chain_id,".join(",",$rowels);
-				$svals = $entry_id.",".$chain_entry_id.",".join(",",$rowvals);
-
-				$sql = "INSERT INTO form_".$fid."_entries($sels) VALUES($svals)";
-				$this->db_query($sql);
+				$_rowels = join(",",$rowels);
+				if ($_rowels != "")
+				{
+					$sels = "id,chain_id,".$_rowels;
+					$svals = $entry_id.",".$chain_entry_id.",".join(",",$rowvals);
+	
+					$sql = "INSERT INTO form_".$fid."_entries($sels) VALUES($svals)";
+					$this->db_query($sql);
+				}
 			}
 			$ches = $x->xml_serialize($chentrys);
 			$this->quote(&$ches);
