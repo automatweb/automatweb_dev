@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.52 2003/12/09 15:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.53 2003/12/19 14:00:32 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -28,6 +28,9 @@
 
 	@property s_lang_id type=select
 	@caption Keel
+
+	@property s_search_bros type=checkbox ch_value=1
+	@caption Leia vendi
 
 	@property s_status type=s_status group=search,advanced,objsearch
 	@caption Staatus
@@ -329,7 +332,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"alias" => "",
 			"redir_target" => "",
 			"oid" => "",
-			"site_id" => aw_ini_get('site_id')
+			"site_id" => aw_ini_get('site_id'),
 		);
 
 		$_obj = $args["obj"];
@@ -383,7 +386,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// perform the actual search
 		if ($search)
 		{
-			$obj_list = $this->_get_s_parent($args);
+			// object_tree seems to be REALLY slow, so I'm commenting this out
+			//$obj_list = $this->_get_s_parent($args);
 			load_vcl("table");
 			$this->t = new aw_table(array("layout" => "generic"));
 
@@ -566,6 +570,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			// if so, we assume that it knows what it's doing and simply
 			// call it.
 			$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
+
 
 			// if not, use our own (old?) search method
 			if ($caller_search === false)
@@ -819,7 +824,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "checkbox":
-						$element = "<input type='checkbox' name='".$fieldref['name']."' $fieldref[checked]>";
+						$element = "<input type='checkbox' name='".$fieldref['name']."' value='".$fieldref["ch_value"]."' ".checked($fieldref["value"] == $fieldref["ch_value"]).">";
 						$caption = $fieldref["caption"];
 						break;
 
@@ -1149,6 +1154,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			);
 		};
 		
+		if (!$fields["search_bros"])
+		{
+			$fields["search_bros"] = array(
+				"type" => "checkbox",
+				"caption" => "Leia vendi",
+				"ch_value" => 1,
+				"value" => $args["s"]["search_bros"],
+			);
+		};
 	}
 
 	// generates contents for the class picker drop-down menu
@@ -1628,6 +1642,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// first check, whether the caller has a do_search callback,
 		// if so, we assume that it knows what it's doing and simply
 		// call it.
+		print "1";
+		flush();
 		$caller_search = $this->search_callback(array("name" => "do_search","args" => $args));
 
 		// if not, use our own (old?) search method
@@ -1637,6 +1653,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			if ($query)
 			{
+				print "2";
+				flush();
 				$this->db_query($query);
 				$partcount = 1;
 			}

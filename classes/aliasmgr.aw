@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.131 2003/12/17 11:39:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.132 2003/12/19 14:00:33 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -1173,7 +1173,7 @@ HTM;
 		}
 	}
 
-	function search_callback_modify_parts($args,$parts)
+	function search_callback_modify_parts(&$args,&$parts)
 	{
 		// if there is no class_id part, limit the search to those object types
 		// which have alias_class set
@@ -1182,7 +1182,12 @@ HTM;
 			$this->make_alias_classarr();
 			$parts["class_id"] = sprintf("class_id IN (%s)",join(",",array_keys($this->classarr)));
 		};
-		$parts["brother_id"] = "(brother_of = 0 OR brother_of = oid)";
+
+		if ($args["s"]["search_bros"] != 1)
+		{
+			$parts["brother_id"] = "(brother_of = 0 OR brother_of = oid)";
+		}
+		unset($parts["search_bros"]);
 	}
 
 	////
