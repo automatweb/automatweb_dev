@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.120 2004/11/18 10:40:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.121 2004/11/23 15:52:34 ahti Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -927,7 +927,23 @@ class image extends class_base
 		{
 			$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
 		}
-
+		if($i_width < $width && $i_height < $height)
+		{
+			$width = $i_width;
+			$height = $i_height;
+		}
+		elseif($i_height < $height && $i_width > $width)
+		{
+			$ratio = $i_height / $height;
+			$width = (int)($i_width * $ratio);
+			$height = (int)($i_height * $ratio);
+		}
+		elseif($i_width < $width && $i_height > $height)
+		{
+			$ratio = $i_width / $width;
+			$width = (int)($i_width * $ratio);
+			$height = (int)($i_height * $ratio);
+		}
 		$img->resize_simple($width, $height);
 
 		$this->put_file(array(
@@ -1123,7 +1139,6 @@ class image extends class_base
 			"w" => $i_width, 
 			"h" => $i_height
 		));
-
 		if ($xyd["is_subimage"] && $xyd["si_width"] && $xyd["si_height"])
 		{
 			// make subimage
