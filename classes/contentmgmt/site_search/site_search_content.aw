@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.37 2005/02/15 15:35:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.38 2005/02/21 08:53:44 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1108,6 +1108,7 @@ class site_search_content extends class_base
 	{
 //		return "Otsinguv&otilde;imalus on tehnilistel p&otilde;hjustel ajutiselt piiratud! Palun proovige hiljem uuesti";
 //		return "Search has been disabled temporarily for technical reasons. Please check back later";
+		error::view_check($arr["id"]);
 		extract($this->set_defaults($arr));
 		$o = obj($id);
 
