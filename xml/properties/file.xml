@@ -36,8 +36,8 @@
             <name>showal</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>files</table>
-            <group>general</group>
             <field>showal</field>
             <caption>Näita kohe</caption>
       </property>
@@ -45,8 +45,8 @@
             <name>newwindow</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>files</table>
-            <group>general</group>
             <field>newwindow</field>
             <caption>Uues aknas</caption>
       </property>
@@ -54,8 +54,8 @@
             <name>show_framed</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>settings</group>
             <table>objects</table>
-            <group>general</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Näita saidi raamis</caption>
@@ -93,10 +93,9 @@
             <trans_id>TR_FILE</trans_id>
       </classinfo>
       <groupinfo>
-            <general>
-                  <caption>Üldine</caption>
-                  <default>1</default>
-            </general>
+            <settings>
+                  <caption>Seadistused</caption>
+            </settings>
             <dates>
                   <caption>Ajad</caption>
             </dates>
