@@ -46,6 +46,14 @@
 			</function>
 		</action>
 
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
