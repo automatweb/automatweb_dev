@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.12 2001/12/12 13:04:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.13 2001/12/12 13:36:15 duke Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -92,7 +92,7 @@ class extlinks extends aw_template {
 				"target" => $target,
 			);
 
-		if ($this->is_template($tpls["link"]))
+		if (isset($tpls["link"]))
 		{
 			$replacement = $this->localparse($tpls["link"],$vars);
 		}
