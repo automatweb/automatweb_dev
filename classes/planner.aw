@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.110 2003/05/07 15:44:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.111 2003/05/29 15:33:50 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -9,6 +9,7 @@
 	@default method=serialize
 	@default group=general
 	@classinfo relationmgr=yes 
+	@classinfo toolbar=yes
 
 	@property default_view type=select rel=1
 	@caption Default vaade
@@ -33,9 +34,6 @@
 
 	@property tab_day_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Päev" nähtav
-
-	@property tab_overview_visible type=checkbox ch_value=1 default=1 group=advanced
-	@caption "Ülevaade" nähtav
 
 	@property tab_week_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Nädal" nähtav
@@ -78,15 +76,12 @@
 	// -- calendar view
 	@default view=show
 	
-	@property id type=hidden table=objects field=oid group=show_day,show_overview,show_week,show_month,add_event
+	@property id type=hidden table=objects field=oid group=show_day,show_week,show_month,add_event
 
 	@default store=no
 
 	@property show_day callback=callback_show_day group=show_day 
 	@caption Päev
-	
-	@property show_overview callback=callback_show_overview group=show_overview
-	@caption Ülevaade
 	
 	@property show_week callback=callback_show_week group=show_week
 	@caption Nädal
@@ -98,7 +93,6 @@
 	@caption Lisa sündmus
 
 	@groupinfo show_day caption=Päev submit=no
-	@groupinfo show_overview caption=Ülevaade submit=no
 	@groupinfo show_week caption=Nädal submit=no
 	@groupinfo show_month caption=Kuu submit=no default=1
 	@groupinfo add_event caption=Lisa_sündmus
@@ -147,7 +141,6 @@ class planner extends class_base
 		$this->viewtypes = array(
 				"0" => "default",
 				"1" => "day",
-				"2" => "overview",
 				"3" => "week",
 				"4" => "month",
 				"5" => "relative",
@@ -221,7 +214,7 @@ class planner extends class_base
 			case "event_cfgform":
 				// try and check the config form
 				$frm = $this->get_object($data["value"]);
-				if (!$frm["meta"]["xml_definition"])
+				if (!$frm["meta"]["cfg_proplist"])
 				{
 					$retval = PROP_IGNORE;
 				};
@@ -389,28 +382,6 @@ class planner extends class_base
 			"no_caption" => 1,
 			"value" => $this->view(array(
 				"type" => "day",
-				"id" => $args["request"]["id"],
-				"date" => $args["request"]["date"],
-				"no_tabs" => 1,
-				"events" => $events,
-			)),
-		);
-		return $nodes;
-	}
-
-	////
-	// !Week-at-a-glance view	
-	function callback_show_overview($args = array())
-	{
-		$nodes = array();
-		$events = $this->_init_event_source(array(
-			"id" => $args["request"]["id"],
-			"type" => "overview",
-		));
-		$nodes[] = array(
-			"no_caption" => 1,
-			"value" => $this->view(array(
-				"type" => "overview",
 				"id" => $args["request"]["id"],
 				"date" => $args["request"]["date"],
 				"no_tabs" => 1,
@@ -721,53 +692,33 @@ class planner extends class_base
 		return $replacement;
 	}
 
-
 	////
-	// !Joonistab menüü
-	// argumendid:
-	// activelist(array), levelite kaupa info selle kohta, millised elemendid
-	// aktiivsed on
-	// vars(array) - muutujad, mida xml-i sisse pannakse
-	function gen_menu($args = array())
-	{
-		// this whole XML menu concept sucks, I'm telling ya
-		extract($args);
-		load_vcl("xmlmenu");
-		$xm = new xmlmenu();
-
-		// base for all other navigation links
-		$baselink = array("id" => $vars["id"],"ctrl" => $vars["ctrl"],"ctrle" => $vars["ctrle"]);
-
-		// base with date
-		$baselink2 = array("id" => $vars["id"],"date" => $vars["date"],"ctrl" => $vars["ctrl"],"ctrle" => $vars["ctrle"]);
-
-		$links = array(
-			"view_today" => $this->mk_my_orb("view",$baselink),
-			"view_overview" => $this->mk_my_orb("view",array_merge($baselink2,array("type" => "overview"))),
-			"view_day" => $this->mk_my_orb("view",array_merge($baselink2,array("type" => "day"))),
-			"view_week" => $this->mk_my_orb("view",array_merge($baselink2,array("type" => "week"))),
-			"view_month" => $this->mk_my_orb("view",array_merge($baselink2,array("type" => "month"))),
-		);
-
-		$xm->vars(array_merge($vars,$links));
-		$xm->load_from_files(array(
-			"xml" => $this->cfg["basedir"] . "/xml/planner/menucode.xml",
-			"tpl" => $this->template_dir . "/menus.tpl",
-		));
-		return $xm->create(array(
-			"activelist" => $activelist,
-		));
-	}
-
-	////
-	// !used to sort events by start date
-	function __x_sort($el1,$el2)
+	// !used to sort events by start date (ascending)
+	function __asc_sort($el1,$el2)
 	{
 		if ($el1["start"] < $el2["start"])
 		{
 			return -1;
 		}
 		elseif ($el1["start"] > $el2["start"])
+		{
+			return 1;
+		}
+		else
+		{
+			return 0;
+		};
+	}
+	
+	////
+	// !used to sort events by start date (descending)
+	function __desc_sort($el1,$el2)
+	{
+		if ($el1["start"] > $el2["start"])
+		{
+			return -1;
+		}
+		elseif ($el1["start"] < $el2["start"])
 		{
 			return 1;
 		}
@@ -883,15 +834,6 @@ class planner extends class_base
 				));
 			};
 
-			if ($this->conf["tab_overview_visible"] == 1)
-			{
-				$this->tp->add_tab(array(
-					"link" => $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => "overview")),
-					"caption" => "Ülevaade",
-					"active" => ($act == "overview"),
-				));
-			};
-
 			if ($this->conf["tab_week_visible"] == 1)
 			{
 				$this->tp->add_tab(array(
@@ -943,6 +885,7 @@ class planner extends class_base
 		$di = get_date_range(array(
 			"date" => $date,
 			"type" => $type,
+			"direction" => $this->conf["event_direction"],
 		));
 
 		/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
@@ -990,10 +933,10 @@ class planner extends class_base
 
 			// recalculate di, it can change if we honor the 
 			// only_days_with_events setting
-			if (isset($this->start_date))
+			if (isset($this->start_time))
 			{
 				$di = get_date_range(array(
-					"date" => $this->start_date,
+					"time" => $this->start_time,
 					"type" => $type,
 				));
 			};
@@ -1039,7 +982,6 @@ class planner extends class_base
 		$this->ev->actlink = $this->actlink;
 		$this->ev->start(array("tpl" => "simple_event.tpl"));
 
-		list($d,$m,$y) = split("-",$date);
 		switch($type)
 		{
 			case "week":
@@ -1071,42 +1013,20 @@ class planner extends class_base
 				$start = $date;
 				break;
 
-			case "overview":
-				$this->type = CAL_SHOW_OVERVIEW;
-				$title = CAL_OVERVIEW;
-				list($d1,$m1,$y1) = split("-",date("d-m-Y",$di["start"]));
-				list($d2,$m2,$y2) = split("-",date("d-m-Y",$di["end"]));
-				$mon1 = get_lc_month($m1);
-				$mon2 = get_lc_month($m2);
-				$caption = sprintf("%d.%s %d - %d.%s %d",$d1,$mon1,$y1,$d2,$mon2,$y2);
-				$this->read_template("sub_day.tpl");
-				$c = "";
-				$cnt = 0;
-				$slice = date("dmY",$di["start"]);
-				if (is_array($events[$slice]))
-				{
-					foreach($events[$slice] as $key => $e)
-					{
-						$cnt++;
-						$this->_draw_event($e);
-						$c .= $this->parse("line");
-					};
-				};
-				$this->vars(array(
-					"line" => $c,
-					"total" => $cnt
-				));
-				$content = $this->disp_day(array("events" => $events,"di" => $di,"tpl" => "disp_day.tpl"));
-				$di["start"] = $di["start"] + 86400;
-				$content .= $this->disp_week(array("events" => $events,"di" => $di,"tpl" => "disp_week.tpl"));
-				$start = $date;
-				break;
-
 			case "day":
 				$this->type = CAL_SHOW_DAY;
 				$tpl = is_array($this->conf) ? "disp_day2.tpl" : "disp_day.tpl";
-				$content = $this->disp_day(array("events" => $events,"di" => $di,"tpl" => $tpl));
-				$caption = sprintf("%s",$this->time2date($di["start"],8));
+				$content = $this->disp_day(array(
+					"events" => $events,
+					"di" => $di,
+					"tpl" => $tpl,
+				));
+				$caption = sprintf("%s, %d.%s %d",
+					ucfirst(get_lc_weekday($di["start_wd"])),
+					date("d",$di["start"]),
+					get_lc_month($m),
+					date("Y",$di["start"])
+				);
 				$start = $date;
 				break;
 
@@ -1121,49 +1041,37 @@ class planner extends class_base
 		};
 
 		// that is the outer frame
-		$navigator = "";
+		$navigator = $navi1 = $navi2 = "";
+
+		$this->read_template("planner.tpl");
 
 		if ($this->conf["navigator_visible"])
 		{
-			$this->vars(array("cell" => ""));
-			$navi1 = $_cal->draw_month(array(
-					"year" => $y,
-					"mon" => $m,
-					"id" => $id,
-					"day" => $d,
-					"type" => $type,
-					"marked" => $events,
-					"use_class" => "planner",
-					"day_orb_link" => $this->day_orb_link,
-					"week_orb_link" => $this->week_orb_link,
-					"ctrl" => $this->ctrl,
-					"tpl" =>  "small_month.tpl",
+			$navi1 = $_cal->draw_calendar(array(
+				"tm" => $di["start"],
+				"caption" => get_lc_month((int)$m) . " $y",
+				"width" => 7,
+				"now" => mktime(0,0,0,$m,$d,$y),
+				"type" => "month",
+				"day_orb_link" => $this->day_orb_link,
+				"marked" => $events,
 			));
-
-			$this->vars(array("cell" => ""));
-
 			if ($this->conf["navigator_months"] == 2)
 			{
-
-				$navi2 = $_cal->draw_month(array(
-						"year" => $y,
-						"mon" => $m + 1,
-						"id" => $id,
-						"day" => "666",
-						"type" => $type,
-						"ctrl" => $this->ctrl,
-						"use_class" => "planner",
-						"day_orb_link" => $this->day_orb_link,
-						"week_orb_link" => $this->week_orb_link,
-						"tpl" =>  "small_month.tpl",
+				list($_thismon,$_thisyear) = explode("-",date("m-Y",$di["start"]));
+				$_nextmon = mktime(0,0,0,$_thismon+1,1,$_thisyear);
+				$_nm = date("m",$_nextmon);
+				$navi2 = $_cal->draw_calendar(array(
+					"tm" => $_nextmon,
+					"caption" => get_lc_month((int)$_nm) . " $y",
+					"width" => 7,
+					"type" => "month",
+					"day_orb_link" => $this->day_orb_link,
+					"marked" => $events,
 				));
-			}
-			else
-			{
-				$navi2 = "";
-			};
 
-			$this->read_template("planner.tpl");
+			};
+			
 			$this->vars(array(
 				"navi1" => $navi1,
 				"navi2" => $navi2,
@@ -1173,7 +1081,6 @@ class planner extends class_base
 
 		$summary_pane = $this->mk_summary_pane($this->conf);
 
-		$this->read_template("planner.tpl");
 		$this->vars(array(
 			"navi1" => "",
 			"navi2" => "",
@@ -1243,10 +1150,14 @@ class planner extends class_base
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
 			"date" => $date,
-			"menubar" => $menubar,
 			"prev" => $prev,
 			"next" => $next,
 		));
+
+		if ( (strlen($navigator) > 0) || (strlen($summary_pane) > 0))
+		{
+			$this->vars(array("NAVPANEL" => $this->parse("NAVPANEL")));
+		}
 
 		if ($this->is_template("HAS_NEXT"))
 		{
@@ -1344,6 +1255,7 @@ class planner extends class_base
 
 		$vars = array(
 			"color" => $e["color"],
+			"time_start" => date("H:i",$e["start"]), 
 			"time" => date("H:i",$e["start"]) . "-" . date("H:i",$e["end"]),
 			"event_link" => $ev_link,
 			"id" => $e["id"],
@@ -1352,91 +1264,6 @@ class planner extends class_base
 			"contents" => nl2br($e["description"]),
 		);
 		return $vars;
-	}
-
-	function object_list($args = array())
-	{
-		extract($args);
-		if (!$date)
-		{
-			$date = date("d-m-Y");
-		};
-		$_cal = get_instance("calendar",array("tpldir" => "planner"));
-		$di = $_cal->get_date_range(array(
-			"date" => $date,
-			"type" => $type,
-		));
-		
-		$events = $this->get_events2(array(
-			"start" => $di["start"],
-			"end" => $di["end"],
-			"folder" => $id,
-		));
-		$slice = date("dmY",$di["start"]);
-		$repl = "";
-		if (is_array($events[$slice]))
-		{
-			foreach($events[$slice] as $key => $e)
-			{
-				$emb_obj = $this->db_fetch_field("SELECT oid FROM planner WHERE id = $e[id]","oid");
-				$repl .= $this->_show_object(array("oid" => $emb_obj));
-			};
-		};
-		return $repl;
-
-	}
-
-	function display_object($args = array())
-	{
-		extract($args);
-		$obj = $this->get_object($args["id"]);
-		$repl = $this->_show_object($obj);
-		return $repl;
-	}
-
-	////
-	// Copies the calendar object together with all repeaters.
-	// argumendid:
-	// id(int): vana kalendri id
-	// parent(int): kuhu kalender kopeerida
-
-	// oh god, this is sooo ugly
-	function cp($args = array())
-	{
-		$id = $args["id"];
-		// koigepealt kopeerime kalendri enda objekti
-		$old = $this->get_object($args["id"]);
-		$old["parent"] = $args["parent"];
-		$new_id = $this->new_object($old);
-		// now we need to copy the events (planner table)
-		$q = "SELECT * FROM objects WHERE parent = $id";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$this->save_handle();
-			$row["parent"] = $new_id;
-			$new_pid = $this->new_object($row);
-			$plx = $this->get_record("planner","id",$row["oid"]);
-			extract($plx);
-			$q = "INSERT INTO planner (id,uid,start,end,title,description,type,status,oid,
-				place,reminder,private,color,rep_type,rep_dur,rep_until)
-				VALUES ('$new_pid','$uid','$start','$end','$title','$description','$type',
-					'$status','$oid','$place','$reminder','$private','$color',
-					'$rep_type','$rep_dur','$rep_until')";
-			$this->db_query($q);
-			$q = "SELECT * FROM planner_repeaters WHERE eid = '$row[oid]'";
-			$this->db_query($q);
-			while($row2 = $this->db_next())
-			{
-				extract($row2);
-				$q = "INSERT INTO planner_repeaters (eid,type,start,end,skip,pwhen,cid,pwhen2)
-					VALUES ('$new_pid','$type','$start','$end','$skip','$pwhen','$cid','$pwhen2')";
-				$this->db_query($q);
-			};
-
-			$this->restore_handle();
-		}
-		return $new_id;
 	}
 
 	function get_events2($args = array())
@@ -1448,18 +1275,9 @@ class planner extends class_base
 		};
 		$evx = $de->get_events_in_range($args);
 
-		$this->start_date = $de->start_date;
+		$this->start_time = $de->start_time;
 		$this->prevref = $de->prev_event;
 		$this->nextref = $de->next_event;
-
-		global $XX1;
-		if ($XX1)
-		{
-			print "<pre>";
-			var_dump($this->prevref);
-			var_dump($this->nextref);
-			print "</pre>";
-		};
 
 		return $evx;
 
@@ -1614,32 +1432,6 @@ class planner extends class_base
 			$gdn++;
 		};
 		return (sizeof($retval) > 0) ? $retval : false;
-	}
-
-	// aga voib-olla luua nende vahemike kujutamiseks hoopis eraldi objekt?
-	function parse_repeater($args = array())
-	{
-		extract($args);
-		
-
-	}
-
-
-	////
-	// !Displays an object the screen
-	// expects the data from the object array
-	function _show_object($args = array())
-	{
-		extract($args);
-		$replacement = "";
-		if (not($this->ob))
-		{
-			$this->ob = get_instance("objects");
-		}
-
-		$replacement = $this->ob->show(array("id" => $args["oid"]));
-		return $replacement;
-
 	}
 
 	function redir($args = array())
@@ -1848,6 +1640,10 @@ class planner extends class_base
 
 	function _get_cal_target($rel_id)
 	{
+		if (empty($rel_id))
+		{
+			return false;
+		};
 		$q = "SELECT aliases2.source AS source FROM aliases
 			LEFT JOIN aliases AS aliases2 ON (aliases.target = aliases2.relobj_id)
 			WHERE aliases.relobj_id = '$rel_id'";
@@ -1863,10 +1659,6 @@ class planner extends class_base
 			"today" => array(
 				"link" => "$baseurl/?class=planner",
 				"caption" => LC_PLANNER_TODAY,
-			),
-			"overview" => array(
-				"link" => "$baseurl/?class=planner&action=overview",
-				"caption" => LC_PLANNER_OVERVIEW,
 			),
 			"day" => array(
 				"link" => "$baseurl/?class=planner",
@@ -1939,108 +1731,6 @@ class planner extends class_base
 		return $this->parse();
 	}
 		
-
-	////
-	// !Impordib serializetud objekti
-	function import($args = array())
-	{
-		extract($args);
-		$udata = $this->get_user();
-		$q = "SELECT * FROM msg_objects WHERE id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		$data = unserialize($row["content"]);
-		extract($data);
-		$uid = aw_global_get("uid");
-		$id = $this->new_object(array(
-			"class_id" => CL_CAL_EVENT,
-			"parent" => $udata["home_folder"],
-			"name" => "$title",
-			),true);
-		$q = "INSERT INTO planner
-			(id,start,end,uid,title,description)
-			VALUES('$id','$start','$end','$uid','$title','$description')";
-		$this->db_query($q);
-		global $status_msg;
-		$date = date("d-m-Y",$start);
-		$status_msg = LC_PLANNER_EVENT_ADDED2;
-		session_register("status_msg");
-		$retval = $this->mk_site_orb(array(
-			"class" => "planner",
-			"action" => "dummy",
-			"date" => $date,
-		));
-		return $retval;
-	}	
-
-	function dummy($args = array())
-	{
-		$this->read_template("finish_import.tpl");
-		extract($args);
-		$this->vars(array(
-			"date" => $date,
-		));
-		print $this->parse();
-		exit;
-	}
-		
-		
-
-	//// 
-	// Kustutab eventid, mille id-d olid antud
-	function delete_events($args = array())
-	{
-		extract($args);
-		if (is_array($check))
-		{
-			while(list($k,) = each($check))
-			{
-				$q = "DELETE FROM planner WHERE id = '$k'";
-				$this->db_query($q);
-			};
-		};
-		return $this->mk_site_orb(array(
-			"date" => $thisdate,
-		));
-	}
-
-	////
-	// !Since we need to show the planner tabs when adding an event we need to wrap
-	// those functions from cal_event here
-	function _new_event($args = array())
-	{
-		extract($args);
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("add"),
-			"vars" => array("id" => $parent,"date" => $date),
-		));
-		$ce = get_instance("cal_event");
-		$html = $ce->add(array(
-			"parent" => $parent,
-			"folder" => $parent,
-			"date" => $date,
-			"time" => $time,
-		));
-		return $menubar . $html;
-	}
-	
-	function _change_event($args = array())
-	{
-		extract($args);
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("xxx"),
-			"vars" => array("id" => $obj["parent"]),
-		));
-		$ce = get_instance("cal_event");
-		$html = $ce->change(array(
-			"id" => $id,
-		));
-		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
-		return $menubar . $html;
-	}
-
 	////
 	// !Embed the repeater editor form inside the planner interface
 	function event_repeaters($args = array())
@@ -2048,10 +1738,12 @@ class planner extends class_base
 		extract($args);
 		$obj = $this->get_object($id);
 		$par_obj = $this->get_object($obj["parent"]);
+		/*
 		$menubar = $this->gen_menu(array(
 			"activelist" => array("xxx"),
 			"vars" => array("id" => $obj["parent"]),
 		));
+		*/
 		$ce = get_instance("calendar/cal_event");
 		$html = $ce->repeaters(array(
 			"id" => $id,
@@ -2073,44 +1765,6 @@ class planner extends class_base
 		));
 
 		return $this->mk_my_orb("event_repeaters",array("id" => $id));
-	}
-
-	// ??
-	function event_reminder($args = array())
-	{
-		extract($args);
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("xxx"),
-			"vars" => array("id" => $obj["parent"]),
-		));
-		$ce = get_instance("cal_event");
-		$html = $ce->reminder(array(
-			"id" => $id,
-		));
-		$this->mk_path($par_obj["parent"],"Kalender / Muuda sündmust");
-		return $menubar . $html;
-	}
-
-	// ??
-	function event_object_search($args = array())
-	{
-		extract($args);
-		$obj = $this->get_object($id);
-		$par_obj = $this->get_object($obj["parent"]);
-		$menubar = $this->gen_menu(array(
-			"activelist" => array("xxx"),
-			"vars" => array("id" => $obj["parent"]),
-		));
-		$ce = get_instance("cal_event");
-		$html = $ce->search(array(
-			"id" => $id,
-			"s_name" => $s_name,
-			"s_type" => $s_type,
-			"s_comment" => $s_comment,
-		));
-		return $menubar . $html;
 	}
 
 	function bron_add_event($args = array())
@@ -2183,14 +1837,16 @@ class planner extends class_base
 
 			// moo. miks neid eventeid varem ära ei sorteerita?
 			// sort the events by start date
-			uasort($events,array($this,"__x_sort"));
+			uasort($events,array($this,"__asc_sort"));
 			$c = "";
 
 			$section = aw_global_get("section");
 			$d = get_instance("document");
+			$cntr = 0;
 	
 			foreach($events as $key => $e)
 			{
+				$cntr++;
 				$pv = "";
 				$objlink = "";
 				$this->day_event_count++;
@@ -2220,19 +1876,22 @@ class planner extends class_base
 					$section = $e["id"];
 					if ($this->type == CAL_SHOW_DAY)
 					{
-						$this->no_wrapper = true;
-						$e["docid"] = $e["id"];
-						$e["showlead"] = 1;
-						$pv = $d->gen_preview(array(
-							  "tpl" => "doc_event.tpl",
-							  "docid" => $e["id"],
-							  "doc" => $e,
-							  "vars" => array(
-							  	"edate" => date("d-m-Y",$e["start"]),
-								"prevref" => $this->prevref,
-								"nextref" => $this->nextref,
-							),
-						));
+						if (substr(aw_global_get("REQUEST_URI"),0,11) != "/automatweb")
+						{
+							$this->no_wrapper = true;
+							$e["docid"] = $e["id"];
+							$e["showlead"] = 1;
+							$pv = $d->gen_preview(array(
+								  "tpl" => "doc_event.tpl",
+								  "docid" => $e["id"],
+								  "doc" => $e,
+								  "vars" => array(
+									"edate" => date("d-m-Y",$e["start"]),
+									"prevref" => $this->prevref,
+									"nextref" => $this->nextref,
+								),
+							));
+						};
 
 					};
 				};
@@ -2268,7 +1927,20 @@ class planner extends class_base
 				}
 				else
 				{
-					$c .= $this->ev->draw($e);
+					if ($this->type == CAL_SHOW_DAY)
+					{
+						$e["color"] = ($cntr % 2) ? "#FFF" : "#F6F6F6";
+					};
+					if ($this->is_template("event"))
+					{
+						$e["time_start"] = date("H:i",$e["start"]);
+						$this->vars($e);
+						$c .= $this->parse("event");
+					}
+					else
+					{
+						$c .= $this->ev->draw($e);
+					};
 				};
 			};
 		};
@@ -2522,28 +2194,156 @@ class planner extends class_base
 		$d = date("d",$thisday);
 		$dm = date("d-m-Y",$thisday);
 
-		$ranges = "";
+		$dcell = "";
 
-		if (is_array($this->conf))
+		if (is_array($this->conf) && $this->is_template("dcell"))
 		{
-			list($d,$m,$y) = explode("-",date("d-m-Y"));
+			$colors = new aw_array(array("#FFFF00","#FF9900","#FF3300","#99CCFF","#996600",
+								"#6600FF","#339999","#336600","#A04CBC","#DCD00C"));
+			$events = $this->events[$dx];
+			$step = 30*60; // pool tundi
+			$ref_matrix = array();
+			for ($i = $di["start"]; $i <= $di["end"]; $i = $i + $step)
+			{
+				$ref_matrix[$i] = array();
+				$color_arr[$i] = array();
+			};
+
+
+			if (is_array($events))
+			{
+				uasort($events,array($this,"__desc_sort"));
+				$dps = array();
+
+				foreach($events as $key => $val)
+				{
+					// ma pean arvestama ka lõpuaega ja paljundama eventi igasse
+					// slotti, mis asub enne requestitud vahemiku lõppu
+					$rstart = $val["start"] - ($val["start"] % $step);
+
+					// let's fool around a bit
+					$end = $val["start"] + 7200;
+
+					$nextcolor = $colors->next();
+					if (!$nextcolor)
+					{
+						$nextcolor = $colors->first();
+					};
+
+					$color = $nextcolor["value"];
+					$dpos = 0;
+					
+					for ($i = $rstart; $i <= $end; $i = $i + $step)
+					{
+						$cont = ($i > $rstart) ? 1 : 0;
+
+						// this check makes us ignore slots outside of the
+						// requested time frame
+						if (is_array($ref_matrix[$i]))
+						{
+							array_unshift($ref_matrix[$i],array(
+								"oid" => $val["oid"],
+								"cont" => $cont,
+							));
+						};
+
+						$dps[$i]++;
+					
+						if ($dpos <= $dps[$i])
+						{
+							$dpos = $dps[$i];
+						};
+						
+
+						$color_arr[$i][] = $val["oid"];
+					};
+				
+					$events[$val["oid"]]["dpos"] = $dpos;
+					$events[$val["oid"]]["color"] = $color;
+
+				}
+			}
+
+			// figure out the slot with most events
+			$max_items_per_slot = 0;
+			foreach($ref_matrix as $ts => $items)
+			{
+				if (sizeof($items) > $max_items_per_slot)
+				{
+					$max_items_per_slot = sizeof($items);
+				}
+			}
+
+			list($d,$m,$y) = explode("-",$dm);
 			$this->ts_daystart = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_start"]["hour"] * 3600) + ($this->conf["day_start"]["minute"] * 60);
 			$this->ts_dayend = mktime(0,0,0,$m,$d,$y) + ($this->conf["day_end"]["hour"] * 3600) + ($this->conf["day_end"]["minute"] * 60);
-			for ($ts = $this->ts_daystart; $ts <= $this->ts_dayend; $ts = $ts + (30*60))
-			{
-				$min = date("i",$ts);
-				$this->vars(array(
-					"add_link" => $this->mk_my_orb("new_event",array("parent" => $this->id,"date" => $dm,"time" => date("H:i",$ts))),
-					
-					"time" => date("H:i",$ts),
-				));
-				$_tpl = ($min == 30) ? "timestamp2" : "timestamp";
-				$ranges .= $this->parse($_tpl);
-			};
-		};
 
-		// draws day
-		$c1 = $this->_disp_day(array("dx" => $dx));
+			for ($ts = $this->ts_daystart; $ts <= $this->ts_dayend; $ts = $ts + $step)
+			{
+				$d_event = "";
+				$dslots = array();
+					
+				$this->vars(array(
+					"color" => "#FFFFFF",
+				));
+
+				for ($i = 1; $i <= $max_items_per_slot; $i++)
+				{
+					$dslots[$i] = $this->parse("duration_cell");
+				};
+
+				for ($i = $max_items_per_slot; $i > 0; $i--)
+				{
+					$tv = $color_arr[$ts][$i-1];
+					$this->vars(array(
+						"color" => $events[$tv]["color"],
+					));
+
+					if (isset($events[$tv]["dpos"]))
+					{
+						$dslots[$events[$tv]["dpos"]] = $this->parse("duration_cell");
+					};
+				};
+
+				$this->vars(array(
+					"dcellheader" => date("H:i",$ts),
+					"duration_cell" => join("",$dslots),
+
+				));
+
+				$made = 0;
+
+				foreach($ref_matrix[$ts] as $_event)
+				{
+					$d_event = "";
+					if ($_event["cont"] == 0)
+					{
+						$made++;
+						$this->vars($events[$_event["oid"]]);
+						$d_event = $this->parse("d_event");
+
+						$this->vars(array(
+							"d_event" => $d_event,
+						));
+
+						$dcell .= $this->parse("dcell");
+					};
+				};
+
+				if ($made == 0)
+				{
+					$this->vars(array(
+						"d_event" => "",
+					));
+					$dcell .= $this->parse("dcell");
+				};
+			};
+		}
+		else
+		{
+			// draws day
+			$c1 = $this->_disp_day(array("dx" => $dx));
+		};
 
 		// draw header
 		$this->vars(array(
@@ -2559,8 +2359,7 @@ class planner extends class_base
 			"type" => "week",
 			"date" => date("d-m-Y",$thisday),
 			"dateinfo" => "$d. " . get_lc_month(date("m",$thisday)),
-			"bgcolor" => $bgcolor,
-			"timestamp" => $ranges,
+			"dcell" => $dcell,
 
 		));
 		
@@ -2675,6 +2474,45 @@ class planner extends class_base
 			};
 		};
 
+	}
+
+	function callback_get_toolbar($arr = array())
+	{
+		$id = $arr["id"];
+                if ($id)
+                {
+			$toolbar = &$arr["toolbar"];
+
+			$toolbar->add_button(array(
+                                "name" => "add",
+                                "tooltip" => "Uus",
+                                "url" => "#",
+                                "img" => "new.gif",
+                                "imgover" => "new_over.gif",
+                                "class" => "menuButton",
+                        ));
+
+			$dt = date("d-m-Y",time());
+		
+			$toolbar->add_button(array(
+                                "name" => "today",
+                                "tooltip" => "Täna",
+                                "url" => $this->day_orb_link . "&date=$dt",
+                                "img" => "today.gif",
+                                "imgover" => "today_over.gif",
+                                "class" => "menuButton",
+                        ));
+			
+			$toolbar->add_button(array(
+                                "name" => "delete",
+                                "tooltip" => "Kustuta märgitud sündmused",
+                                "url" => "#",
+                                "img" => "delete.gif",
+                                "imgover" => "delete_over.gif",
+                                "class" => "menuButton",
+                        ));
+			
+                };
 	}
 };
 ?>
