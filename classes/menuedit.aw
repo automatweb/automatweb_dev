@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.342 2005/01/28 14:07:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.343 2005/01/31 13:15:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -336,42 +336,27 @@ class menuedit extends aw_template
 			};
 		};
 
-		// let logged-in users see not-active language stuff
-		/*if (aw_global_get("uid") != "")
-		{
-			$st = " AND status != 0 ";
-		}
-		else
-		{
-			$st = " AND status = 2 ";
-		}
-		$q = "SELECT name FROM languages WHERE id = '$set_lang_id' $st";
-		$this->db_query($q);
-		$row = $this->db_next();
-
-
 		if ($set_lang_id)
 		{
-			if ($row)
+			$la = get_instance("languages");
+			if (!$la->set_active($set_lang_id))
 			{
-				$la = get_instance("languages");
-				$la->set_active($set_lang_id);
+				$realsect = $this->cfg["frontpage"];
+			}
+			else
+			{
 				$this->lc_load("menuedit","lc_menuedit");
 				lc_site_load("menuedit",$this);
 				lc_load("definition");
+				$GLOBALS["objects"] = array();
 				// we must reset the objcache here, because
 				// it already contains the section obj
 				// and after the language switch it contains the old language
 				// objects and that messes up the auto_translation
 				// anyway, tyhis does not add much overhead, 
 				// because here we should only have the section object loaded
-				$GLOBALS["objects"] = array();
 			}
-			else
-			{
-				$realsect = $this->cfg["frontpage"];
-			};
-		};*/
+		};
 
 		aw_global_set("section",$realsect);
 	}
