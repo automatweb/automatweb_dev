@@ -121,6 +121,66 @@
             <caption>Testi filtreid</caption>
       </property>
       <property>
+            <name>s_toolbar</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <caption>Otsingu toolbar</caption>
+      </property>
+      <property>
+            <name>s_from</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>From</caption>
+      </property>
+      <property>
+            <name>s_subject</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Subject</caption>
+      </property>
+      <property>
+            <name>s_submit</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>no_reforb</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>hidden</type>
+            <value>1</value>
+            <caption>lolo</caption>
+      </property>
+      <property>
+            <name>s_results</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tulemused</caption>
+      </property>
+      <property>
             <name>rule_editor</name>
             <table>objects</table>
             <group>rules</group>
@@ -145,6 +205,12 @@
                   <caption>Kirjad</caption>
                   <submit>no</submit>
             </main_view>
+            <search>
+                  <caption>Otsing</caption>
+                  <submit>no</submit>
+                  <submit_action>change</submit_action>
+                  <submit_method>GET</submit_method>
+            </search>
             <rules>
                   <caption>Ruulid</caption>
                   <submit>no</submit>
