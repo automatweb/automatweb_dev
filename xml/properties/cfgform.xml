@@ -12,6 +12,7 @@
       <property>
             <name>xml_definition</name>
             <type>fileupload</type>
+            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -21,11 +22,9 @@
       <property>
             <name>preview</name>
             <type>text</type>
-            <store>no	</store>
-            <table>objects</table>
+            <store>no</store>
+            <editonly>1</editonly>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Definitsioon</caption>
       </property>
       <classinfo>
