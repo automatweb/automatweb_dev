@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.119 2002/08/16 11:35:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.120 2002/08/16 11:58:10 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -420,16 +420,10 @@ class form extends form_base
 		$this->arr["show_form_with_results"] = $show_form_with_results;
 		$this->arr["sql_writer_writer"] = $sql_writer_writer;
 		$this->arr["sql_writer_writer_form"] = $sql_writer_writer_form;
-		$this->arr["event_display_table"] = $event_display_table;
-		$this->arr["event_start_el"] = $event_start_el;
 		$this->arr["has_calendar"] = $has_calendar;
 
-		$this->subtype = 0;
+		//$this->subtype = 0;
 
-		if ($ev_entry_form)
-		{
-			$this->subtype = FSUBTYPE_EV_ENTRY;
-		}
 		
 		if ($email_form_action)
 		{
@@ -716,6 +710,7 @@ class form extends form_base
 		$o = get_instance("objects");
 		$menulist = $o->get_list();
 		$ops = $this->get_op_list($id);
+		/*
 		$els = $this->get_all_elements(array("type" => 1));
 		$date_els = array("0" => "Vali üks");
 		foreach($els as $key => $val)
@@ -727,18 +722,21 @@ class form extends form_base
 		};
 
 		$ft = get_instance("form_table");
+		*/
 
 		// once upon a time there was a function called get_tables_for_form in the
 		// form_table class. Alas, now it's gone and there is a function with the
 		// same name in form_db_base .. which does a completely different thing.
 		// Well, anyway. the function that returns a list of tables for a form
 		// should be elsewhere. Feel free to move the following code out of here.
+		/*
 		$tables = array("0" => "Vali üks");
 		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
                 while ($row = $this->db_next())
                 {
                         $tables[$row["table_id"]] = $row["name"];
                 }
+		*/
 
 		$this->vars(array(
 			"allow_html"	=> checked($this->arr["allow_html"]),
@@ -754,7 +752,6 @@ class form extends form_base
 			"check_status"	=> checked($this->arr["check_status"]),
 			"has_aliasmgr"	=> checked($this->arr["has_aliasmgr"]),
 			"has_controllers"	=> checked($this->arr["has_controllers"]),
-			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
 			"email_form_action" => checked($this->subtype == FSUBTYPE_EMAIL_ACTION),
 			"check_status_text" => $this->arr["check_status_text"],
 			"show_table_checked" => checked($this->arr["show_table"]),
@@ -766,8 +763,11 @@ class form extends form_base
 			"sql_writer_writer_forms" => $this->picker($this->arr["sql_writer_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"forms" => $this->picker($this->arr["sql_writer_form"], $this->get_flist(array("type" => FTYPE_ENTRY, "addfolders" => true, "search" => true))),
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
+			/*
+			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
 			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
 			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
+			*/
 			"has_calendar" => checked($this->arr["has_calendar"]),
 		));
 
@@ -5170,6 +5170,33 @@ class form extends form_base
 		$this->if_init($id,"calendar.tpl", "Kalendrisätungid");
 		$period_types = array("hour" => "tund", "day" => "päev", "week" => "nädal", "month" => "kuu");
 		$deact_types = array("hour" => "tundi", "day" => "päeva", "week" => "nädalat", "month" => "kuud");
+	
+		// -----------------------
+		$els = $this->get_all_elements(array("type" => 1));
+		$date_els = array("0" => "Vali üks");
+		foreach($els as $key => $val)
+		{
+			if ($val["type"] == "date")
+			{
+				$date_els[$key] = $val["name"];
+			};
+		};
+
+		$ft = get_instance("form_table");
+
+		// once upon a time there was a function called get_tables_for_form in the
+		// form_table class. Alas, now it's gone and there is a function with the
+		// same name in form_db_base .. which does a completely different thing.
+		// Well, anyway. the function that returns a list of tables for a form
+		// should be elsewhere. Feel free to move the following code out of here.
+		$tables = array("0" => "Vali üks");
+		$this->db_query("SELECT * FROM form_table2form LEFT JOIN objects ON (form_table2form.table_id = objects.oid) WHERE form_id = $id");
+                while ($row = $this->db_next())
+                {
+                        $tables[$row["table_id"]] = $row["name"];
+                }
+		// ------------------------
+
 
 		$this->get_objects_by_class(array("class" => CL_FORM));
 		$forms = $chains = array();
@@ -5185,8 +5212,12 @@ class form extends form_base
 		};
 
 		$of_target_type = ($this->arr["of_target_type"]) ? $this->arr["of_target_type"] : "form";
-		
+
 		$this->vars(array(
+			"ev_entry_form" => checked($this->subtype == FSUBTYPE_EV_ENTRY),
+			"event_display_tables" => $this->picker($this->arr["event_display_table"],$tables),
+			"event_start_els" => $this->picker($this->arr["event_start_el"],$date_els),
+			//---------------
 			"period_entry_forms" => $this->picker($this->arr["period_entry_form"],$forms),
 			"forms" => $this->picker($this->arr["of_target_form"],$forms),
 			"chains" => $this->picker($this->arr["of_target_chain"],$chains),
@@ -5213,10 +5244,13 @@ class form extends form_base
 		$this->quote($args);
 		extract($args);
 		$this->load($id);
-		$this->arr["period_entry_form"] = $period_entry_form;
-		$this->arr["of_target_form"] = $of_target_form;
-		$this->arr["of_target_chain"] = $of_target_chain;
-		$this->arr["of_target_type"] = $of_target_type;
+		$this->arr["event_display_table"] = $event_display_table;
+		$this->arr["event_start_el"] = $event_start_el;
+		$this->subtype = ($ev_entry_form) ? FSUBTYPE_EV_ENTRY : 0;
+		//$this->arr["period_entry_form"] = $period_entry_form;
+		//$this->arr["of_target_form"] = $of_target_form;
+		//$this->arr["of_target_chain"] = $of_target_chain;
+		//$this->arr["of_target_type"] = $of_target_type;
 		$this->save();
 		return $this->mk_my_orb("calendar",array("id" => $id));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.38 2002/08/16 11:35:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.39 2002/08/16 11:58:10 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -8,11 +8,7 @@ class form_base extends form_db_base
 {
 	function form_base()
 	{
-		$this->tpl_init("forms");
-		$this->db_init();
-		// must NOT call core::init from here, because we also have an init function in form_base that clashes with the name
-		// fuck, this sucks
-
+		$this->init("forms");
 		lc_load("definition");
 		$this->lc_load("form","lc_form");
 	}
@@ -304,7 +300,7 @@ class form_base extends form_db_base
 			$this->parse("GRID_SEL");
 		}
 
-		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables")))
+		if (in_array($action, array("table_settings","list_actions","metainfo","set_folders","translate","sel_tables","calendar")))
 		{
 			$this->parse("SETTINGS_SEL");
 		}
