@@ -1,0 +1,101 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="contacts">
+		<action name="import">
+			<function name="import">
+				<arguments>
+					<required name="addr"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submitimport">
+			<function name="submitimport">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="contacts" default="1">
+			<function name="list_contacts">
+				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_contacts">
+			<function name="submit_contacts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_group">
+			<function name="edit_group">
+				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit_group">
+			<function name="edit_group">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_group">
+			<function name="submit_group">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add">
+			<function name="edit">
+				<arguments>
+					<optional name="folder"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit">
+			<function name="edit">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="search">
+			<function name="search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_search">
+			<function name="submit_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pick">
+			<function name="pick">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+	</class>
+</orb>
