@@ -124,6 +124,7 @@ class basket extends aw_template
 				}
 			}
 			else
+			if (aw_global_get("uid") != "")
 			{
 				// if the basket was not in the session, 
 				// load the state of the basket from the user's config space
@@ -141,6 +142,12 @@ class basket extends aw_template
 				{
 					$tmp[$id]["items"] = array();
 				}
+				aw_session_set("shop_basket", $tmp);
+			}
+			else
+			{
+				$tmp[$id] = array();
+				$tmp[$id]["items"] = array();
 				aw_session_set("shop_basket", $tmp);
 			}
 		}
@@ -192,14 +199,18 @@ class basket extends aw_template
 	// the data is saved in the user's personal config space
 	function save_user_basket()
 	{
-		$tmp = aw_global_get("shop_basket");
+		return;
+		if (aw_global_get("uid") != "")
+		{
+			$tmp = aw_global_get("shop_basket");
 
-		$us = get_instance("users");
-		$us->set_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "current_basket".$this->current_basket_id,
-			"value" => $tmp[$this->current_basket_id]
-		));
+			$us = get_instance("users");
+			$us->set_user_config(array(
+				"uid" => aw_global_get("uid"),
+				"key" => "current_basket".$this->current_basket_id,
+				"value" => $tmp[$this->current_basket_id]
+			));
+		}
 	}
 
 	////
@@ -371,6 +382,24 @@ class basket extends aw_template
 		$this->current_basket_id = false;
 
 		return $ob["meta"]["after_order"] == "" ? urldecode($ret_url) : $ob["meta"]["after_order"];
+	}
+
+	////
+	// !adds item to basket and redirects to specified url
+	// params:
+	//   item_id - form entry id of item to add to basket
+	//   form_id - form id of entry to add to basket
+	//   basket_id - if of the basket to add item to
+	//   count - number of items to add to basket
+	//   redir - url of page to redirect to
+	function orb_add_item($arr)
+	{
+		extract($arr);
+		$this->init_basket($basket_id);
+		$this->set_item_count(array("item_id" => $item_id, "count" => $count+$this->get_item_count(array("item_id" => $item_id)), "form_id" => $form_id));
+		$this->save_user_basket();
+		header("Location: ".$redir);
+		die();
 	}
 }
 ?>
