@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.23 2002/01/30 00:02:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.24 2002/01/30 01:14:02 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -49,109 +49,6 @@ $orb_defs["table"] ="xml";
 		$replacement = $this->show(array("id" => $alias["target"],"align" => $align));
 		return $replacement;
 			
-	}
-
-	////
-	// !Asendab tabeli sources aliased vastavate väärtustega
-	// content(string) - tabeli source
-	// oid(int) - millise tabeliga tegu?
-	function replace_aliases($args = array())
-	{
-		extract($args);
-		$mp = $this->register_parser(array(
-			"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "p",
-			"class" => "image",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		                // tabelid      
-                $this->register_sub_parser(array(
-                                        "idx" => 2,
-                                        "match" => "t", // L
-                                        "class" => "table",
-                                        "reg_id" => $mp,
-                                        "function" => "parse_alias",
-                                ));
-
-
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "l", // L
-			"class" => "extlinks",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-			"reset" => "reset_aliases",
-			"templates" => array("link"),
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "v",
-			"class" => "file",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "f",
-			"class" => "form",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "c",
-			"class" => "form_chain",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "x",
-			"class" => "link_collection",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "g",
-			"class" => "graph",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "r",
-			"class" => "form_alias",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-		
-		$this->register_sub_parser(array(
-			"idx" => 2,
-			"match" => "m",
-			"class" => "menu",
-			"reg_id" => $mp,
-			"function" => "parse_alias",
-		));
-
-		$retval = $this->parse_aliases(array(
-			"oid" => $id,
-			"text" => $content,
-		));
-		return $retval;
 	}
 
 	////
@@ -1524,7 +1421,12 @@ $orb_defs["table"] ="xml";
 
 				$table.= $footer_style ? $stc->get_text_begin_str($footer_style).$footer.$stc->get_text_end_str($footer_style) : $footer;
 			}
-			$retval = $this->replace_aliases(array("id" => $id,"content" => $table));
+
+			classload("aliasmgr");
+			$al = new aliasmgr();
+			$al->parse_oo_aliases($id,&$table,array());
+
+			$retval = $table;
 
 			$css_file = "";
 			classload("css");
