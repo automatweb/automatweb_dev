@@ -1,0 +1,35 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="site_list" folder="install" extends="class_base">
+		<action name="site_list">
+			<function name="orb_list">
+			</function>
+		</action>
+
+		<action name="server_list">
+			<function name="orb_server_list">
+			</function>
+		</action>
+
+		<action name="get_site_list">
+			<function name="orb_get_site_list">
+			</function>
+		</action>
+
+		<action name="update_site" all_args="1">
+			<function name="orb_update_site">
+			</function>
+		</action>
+
+		<action name="update_server" all_args="1">
+			<function name="orb_update_server">
+			</function>
+		</action>
+
+		<action name="init_list" all_args="1">
+			<function name="init_list">
+			</function>
+		</action>
+	</class>
+</orb>
+		
