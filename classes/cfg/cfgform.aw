@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.47 2004/12/01 14:04:39 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.48 2004/12/01 14:14:18 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1067,6 +1067,11 @@ class cfgform extends class_base
 			$ret[$pn] = $pd;
 		}
 		$els = $ret;
+		$els["__submit"] = array(
+			"name" => "__submit",
+			"type" => "submit",
+			"value" => "Salvesta"	
+		);
 		$rd = get_instance(CL_REGISTER_DATA);
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
