@@ -361,6 +361,11 @@ class object
 	{
 		return $GLOBALS["objects"][$this->oid]->brother_of();
 	}
+
+	function &instance()
+	{
+		return $GLOBALS["objects"][$this->oid]->instance();
+	}
 }
 
 function &obj($param = NULL)

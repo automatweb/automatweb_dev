@@ -32,6 +32,8 @@ class _int_obj_ds_auto_translation
 	{
 		$lang_id = aw_global_get("lang_id");
 
+		$req_od = $this->contained->get_objdata($oid);
+
 		// check whether there are any relations of type RELTYPE_TRANSLATION pointing
 		// to this object .. 
 		$conns = $this->contained->find_connections(array(
@@ -50,7 +52,7 @@ class _int_obj_ds_auto_translation
 		{
 			// we found that there are some connections to this object with translation reltype
 			// that means that this is a translation object. so load it and see if we hit the correct one in regards to lang_id
-			$objdata = $this->contained->get_objdata($oid);
+			$objdata = $req_od;
 
 			// mark in cache that this is the original object for the translation
 			$this->objdata[$conns[0]["from"]]["type"] = OBJ_TRANS_ORIG;
@@ -92,12 +94,16 @@ class _int_obj_ds_auto_translation
 				$this->objdata[$conns2[0]["to"]]["trans_orig"] = $conns[0]["from"];
 
 				// the correct object is in $conns2[0]["to"]
-				return $this->contained->get_objdata($conns2[0]["to"]);
+				$ret = $this->contained->get_objdata($conns2[0]["to"]);
+				$ret["lang_id"] = $req_od["lang_id"];
+				return $ret;
 			}
 			else
 			{
 				// no connections, return the untranslated object
-				return $this->contained->get_objdata($conns[0]["from"]);
+				$ret = $this->contained->get_objdata($conns[0]["from"]);
+				$ret["lang_id"] = $req_od["lang_id"];
+				return $ret;
 			}
 		}
 		else
@@ -106,7 +112,8 @@ class _int_obj_ds_auto_translation
 
 			$this->objdata[$oid]["type"] = OBJ_TRANS_ORIG;
 
-			return $this->contained->get_objdata($oid);
+			$ret = $req_od;
+			return $ret;
 		}
 	}
 

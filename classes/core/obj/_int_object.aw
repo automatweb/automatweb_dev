@@ -179,6 +179,17 @@ class _int_object
 			{
 				$filter["to"] = $param["to"];
 			}
+			foreach($param as $k => $v)
+			{
+				if (substr($k, 0, 3) == "to.")
+				{
+					$filter[$k] = $v;
+				}
+				if (substr($k, 0, 5) == "from.")
+				{
+					$filter[$k] = $v;
+				}
+			}
 		}
 
 		$ret = array();
@@ -417,7 +428,7 @@ class _int_object
 		$prev = $this->lang();
 
 		$li = get_instance("languages");
-		$lang_id = $li->get_langid($param);
+		$lang_id = $li->get_langid_for_code($param);
 		if (!$lang_id)
 		{
 			error::throw(array(
@@ -870,6 +881,20 @@ class _int_object
 	function brother_of()
 	{
 		return $this->obj['brother_of'];
+	}
+
+	function instance()
+	{
+		$clid = $this->class_id();
+		if (!$clid)
+		{
+			error::throw(array(
+				"id" => ERR_OBJ_INSTANCE,
+				"msg" => "object::instance(): no object loaded or class id not set!"
+			));
+		}
+		$clss = aw_ini_get("classes");
+		return get_instance($clss[$clid]["file"]);
 	}
 
 	/////////////////////////////////////////////////////////////////

@@ -39,7 +39,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid)
 	{
-		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid");
+		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
+		if ($ret === false)
+		{
+			error::throw(array(
+				"id" => ERR_NO_OBJ,
+				"msg" => "object::load($oid): no such object!"
+			));
+		}
+
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
 		unset($ret["metadata"]);
 		return $ret;
