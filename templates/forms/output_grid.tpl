@@ -45,16 +45,18 @@
 <!-- END SUB: EXP_RIGHT -->
 </td>
 </tr>
+<tr>
+<td class="fgen_text" colspan=2><a href='{VAR:ch_cell}'>Muuda</a> | <a href='{VAR:addel}'>Lisa element</a></td>
+</tr>
 <!-- SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text>Element:</td>
-<td>&nbsp;</td>
+<td>{VAR:el_name}</td>
 </tr>
 <!-- END SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text>Stiil:</td>
-<td class=fgen_text>{VAR:style_name} <input type='checkbox' name='sel[{VAR:row}][{VAR:col}]' value='1'><br>
-<a href='{VAR:ch_cell}'>Muuda</a>	
+<td class=fgen_text>{VAR:style_name} <input type='checkbox' name='sel[{VAR:row}][{VAR:col}]' value='1'>
 </td>
 </tr>
 <!-- SUB: SPLITS -->
