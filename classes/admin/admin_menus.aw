@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.79 2004/07/18 17:29:18 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.80 2004/08/17 10:06:02 kristo Exp $
 
 class admin_menus extends aw_template
 {
@@ -758,9 +758,9 @@ class admin_menus extends aw_template
 					$o->set_parent($_parent);
 					$o->set_name($mt[2]);
 					$o->set_class_id(CL_MENU);
-					$o->set_status(($mopts["act"] ? 2 : 1));
+					$o->set_status(STAT_ACTIVE /*($mopts["act"] ? 2 : 1)*/);
 					$o->set_alias($mopts["alias"]);
-					$o->set_jrk(substr($mt[1],($pos > 0 ? $pos+1 : 0)));
+					$o->set_ord(substr($mt[1],($pos > 0 ? $pos+1 : 0)));
 
 					$o->set_prop("type", MN_CONTENT);
 					$o->set_prop("link", $mopts["link"]);
@@ -868,6 +868,13 @@ class admin_menus extends aw_template
 		$site_id = $this->cfg["site_id"];
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
 		$menu_obj = new object($parent);
+
+		if ($menu_obj->is_brother())
+		{
+			$menu_obj = $menu_obj->get_original();
+			$parent = $menu_obj->id();
+		}
+
 		$sel_objs = aw_global_get("cut_objects");
 		if (!is_array($sel_objs))
 		{
