@@ -99,7 +99,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$objtblprops[] = $data;
 			}
 		}
-
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{
@@ -157,7 +156,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (count($fields) > 0)
 			{
 				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
-				//echo "q = $q <br />";
+				if (aw_global_get("uid") == "kix")
+				{
+					//echo "q = $q <br />";
+				}
 				$data = $this->db_fetch_row($q);
 				if (is_array($data))
 				{
@@ -522,7 +524,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.name as `to.name`,
 				o_s.name as `from.name`,
 				o_t.class_id as `to.class_id`,
-				o_s.class_id as `from.class_id`
+				o_s.class_id as `from.class_id`,
+				o_t.status as `to.status`,
+				o_s.status as `from.status`
 		";
 	}
 
