@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.31 2004/06/22 12:07:50 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.32 2004/06/22 12:34:42 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -747,20 +747,21 @@ class crm_company extends class_base
 		// call : rel=9 : clid=CL_CRM_CALL
 		// meeting : rel=8 : clid=CL_CRM_MEETING
 		// task : rel=10 : clid=CL_TASK
-		foreach($conns as $conn)
+		$persons = array();
+		$this->get_all_workers_for_company(&$arr['obj_inst'],&$persons,true);
+		foreach($persons as $person)
 		{
-			$idat = $crmp->fetch_all_data($conn->prop("to"));
+			$person = new object($person);
+			$idat = $crmp->fetch_all_data($person->id());
 			$pdat = $crmp->fetch_person_by_id(array(
-				"id" => $conn->prop("to"),
+				"id" => $person->id(),
 				"cal_id" => $cal_id,
 			));
 
 			if((int)$arr['request']['cat'])
 			{
-				//persoon
-				$tmp_obj = new object($conn->prop('to'));	
 				//persoon -> ametinimetus on reltype_rank
-				$tmp_conns = $tmp_obj->connections_from(array('type'=>RELTYPE_RANK));
+				$tmp_conns = $person->connections_from(array('type'=>RELTYPE_RANK));
 				$continue=true;
 				foreach($tmp_conns as $tmp_conn)
 				{
@@ -774,8 +775,8 @@ class crm_company extends class_base
 			}
 
 			$tdata = array(
-				"name" => $conn->prop("to.name"),
-				"id" => $conn->prop("to"),
+				"name" => $person->prop('name'),
+				"id" => $person->id(),
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
 				"email" => html::href(array(
@@ -806,21 +807,36 @@ class crm_company extends class_base
 
 	}
 
-	/*function get_all_workers_for_company($obj)
+	function get_all_workers_for_company($obj,$data,$workers_too=false)
 	{	
-		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_WORKERS,
+		//getting all the workers for the $obj
+		$conns = $obj->connections_from(array(
+			"type" => RELTYPE_MEMBER,
 		));
-
-		//if listing from a specific unit, then the reltype is different
-		if((int)$arr['request']['unit'])
+		foreach($conns as $conn)
 		{
-			$obj = new object((int)$arr['request']['unit']);
-			$conns = $obj->connections_from(array(
-				'type' => RELTYPE_MEMBER,
-			));
+			$data[] = $conn->prop('to');	
 		}
-	}*/
+		if($workers_too)
+		{
+			$conns = $obj->connections_from(array(
+				'type' => RELTYPE_WORKERS
+			));
+			foreach($conns as $conn)
+			{
+				$data[] = $conn->prop('to');
+			}
+		}
+		//getting all the sections
+		$conns = $obj->connections_from(array(
+			'type' => RELTYPE_SECTION,
+		));
+		foreach($conns as $conn)
+		{
+			$tmp_obj = new object($conn->prop('to'));
+			$this->get_all_workers_for_company(&$tmp_obj,&$data);
+		}
+	}
 
 	function callb_human_name($arr)
 	{
