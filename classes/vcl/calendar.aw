@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.46 2005/01/28 14:07:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.47 2005/02/16 13:25:19 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -46,11 +46,25 @@ class vcalendar extends aw_template
 		$this->evt_tpl = get_instance("aw_template");
 		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
 		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
+		$better_template = "";
 		if ($arr["event_template"])
 		{
 			$tpl = $arr["event_template"];
+		}
+		else
+		if ($this->range["viewtype"] == "week")
+		{
+			$better_template = "week_event.tpl";
 		};
-		$this->evt_tpl->read_template($tpl);
+		$got_it = false;
+		if ($better_template)
+		{
+			$got_it = $this->evt_tpl->read_template($better_template,1);
+		};
+		if (!$got_it)
+		{
+			$this->evt_tpl->read_template($tpl);
+		};
 		$this->output_initialized = true;
 	}
 
@@ -64,51 +78,25 @@ class vcalendar extends aw_template
 	////
 	// !Configures the calendar view
 	// overview_func -> a function that is used to define the presence of the quick navigator
+	// day_start - array (hour,minute) of day start
+	// day_end - array (hour,minute) of day end
 	function configure($arr = array())
 	{
-		if (!empty($arr["tasklist_func"]))
+		$attribs = array("tasklist_func","overview_func","overview_range",
+			"container_template","show_days_with_events","skip_empty",
+			"full_weeks","target_section","day_start","day_end");
+
+		foreach($attribs as $attrib)
 		{
-			$this->tasklist_func = $arr["tasklist_func"];
+			if (!empty($arr[$attrib]))
+			{
+				$this->$attrib = $arr[$attrib];
+			};
 		};
+
 		// fact is, event list and overview should use different functions,
 		// cause they need different kinds of data. It should be faster with
 		// different functions
-		if (!empty($arr["overview_func"]))
-		{
-			$this->overview_func = $arr["overview_func"];
-		};
-
-		if (!empty($arr["overview_range"]))
-		{
-			$this->overview_range = $arr["overview_range"];
-		};
-
-		if (!empty($arr["container_template"]))
-		{
-			$this->container_template = $arr["container_template"];
-		};
-
-		if (!empty($arr["show_days_with_events"]))
-		{
-			$this->show_days_with_events = 1;
-		};
-
-		if (!empty($arr["skip_empty"]))
-		{
-			$this->skip_empty = $arr["skip_empty"];
-		};
-		
-		if (!empty($arr["full_weeks"]))
-		{
-			$this->full_weeks = $arr["full_weeks"];
-		};
-
-		if (!empty($arr["target_section"]))
-		{
-			$this->target_section = $arr["target_section"];
-		};
-
-
 	}
 
 	////
@@ -194,9 +182,13 @@ class vcalendar extends aw_template
 			{
 				$arr["item_end"] = $arr["item_start"];
 			};
+			// experimental support for multiday events
 			if ($arr["item_start"] > $arr["item_end"])
 			{
 				// hehe, textbook problem .. swap variables
+				// but I don't do that, since I'm afraid that there are too many
+				// events where the start date is later than end. But maybe
+				// I shouldn't care 
 				$arr["item_end"] = $arr["item_start"];
 				/*
 				$tmp = $arr["item_end"];
@@ -212,22 +204,50 @@ class vcalendar extends aw_template
 		$this->el_count++;
 		$data = $arr["data"];
 		$data["timestamp"] = $arr["timestamp"];
+
 		if ($arr["item_start"])
 		{
 			$data["item_start"] = $arr["item_start"];
+			$start_tm = (int)($data["item_start"] / 86400);
 		};
 		if ($arr["item_end"])
 		{
 			$data["item_end"] = $arr["item_end"];
+			$end_tm = (int)($data["item_end"] / 86400);
+			list($ed,$em,$ey) = explode("/",date("d/m/Y",$arr["item_end"]));
 		};
+
 		$data["_id"] = $this->el_count;
 		$data["id"] = $arr["data"]["id"];
-		$data['comment'] = $arr['data']['comment'];
+		$data["comment"] = $arr["data"]["comment"];
 		$data["utextarea1"] = nl2br($data["utextarea1"]);
+
+
+		//if (aw_global_get("uid") == "duke")
+		//{
+			if ($end_tm > $start_tm)
+			{
+				$data["item_end"] = mktime($this->day_end["hour"],$this->day_end["minute"],59,$em,$ed,$ey);
+				//$data["time"] = "Algab: " . date("H:i",$data["item_start"]);
+			};
+			/*
+			print "adding data";
+			print "start_tm = $start_tm<br>";
+			print "end_tm = $end_tm<br>";
+			arr($data);
+			*/
+	//	};
 
 		$this->evt_list[$this->el_count] = $data;
 		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
 
+		// deal with passed recurrence information
+
+		// aga ääki peaks seda üldse recurrence abil tegema? Sest kalendri komponent
+		// ei tea ju midagi kalendripäeva algusest ja lõpust. Ja ei saagi teada
+
+		// actually, I can pass that information to the component through the configure method
+		// so it is not really a problem
 		if (isset($arr["recurrence"]) && is_array($arr["recurrence"]))
 		{
 			$this->recur_info[$this->el_count] = $arr["recurrence"];
@@ -238,16 +258,55 @@ class vcalendar extends aw_template
 			};
 		};
 
+		// this will deal with multi-day events and will add events on other days
+		// besides the first one
 		if (isset($arr["item_end"]))
 		{
 			$arr["item_start"]+= 86400;
-			$arr["item_end"]+= 85399;
+			//$arr["item_end"]+= 85399;
 			//$arr["item_start"] += 86400;
+			// okey .. first day needs to end at the specified time
+			// second (and all the remainders start at specified time)
+			$days_between = $end_tm - $start_tm;
+			$day_counter = 0;
 			for ($i = $arr["item_start"]; $i <= $arr["item_end"]; $i = $i + 86400)
 			{
+				$day_counter++;
 				$use_date = date("Ymd",$i);
 				// but .. I do not need to use those references .. yees?
-				$this->items[$use_date][] = &$this->evt_list[$this->el_count];
+				$tmp = $this->evt_list[$this->el_count];
+				// aga siin on mul vaja teada päeva algust
+				$tmp["item_start"] = mktime($this->day_start["hour"],$this->day_start["minute"],0,1,1,2005);
+				//$tmp["item_start"] = mktime(0,0,0,1,1,2005);
+
+				// siin tuleb kuidagi kindlaks teha .. et kui tegemist on viimase
+				// päevaga, siis näitame ka õiget kellaaega
+				if ($day_counter == $days_between)
+				{
+					//$tmp["time"] = "Lõpeb: " . date("H:i",$arr["item_end"]);
+					$tmp["item_end"] =  $arr["item_end"];
+				}
+				else
+				{
+					//$tmp["time"] = "";
+				};
+
+				// ahaa.. sest see on juba lisatud!
+				// miks see kontroll lisab asju, mis on juba lisatud?
+				/*
+				if ($i == $arr["item_start"])
+				{
+					$tmp["item_end"] = 666;
+				};
+				*/
+				/*
+				if ($_GET["XX6"])
+				{
+					print "adding";
+					arr($tmp);
+				};
+				*/
+				$this->items[$use_date][] = $tmp;
 			};
 		};
 		// this is used for relational view
@@ -1185,18 +1244,26 @@ class vcalendar extends aw_template
 		{
 			$dchecked = $this->evt_tpl->parse("DCHECKED");
 		}
+		/*
 		if ($_GET["XX6"])
 		{
 			arr($evt);
 		};
-
-		if ($evt["item_start"] && $evt["item_end"] && $evt["item_start"] != $evt["item_end"])
+		*/
+		if (!isset($evt["time"]))
 		{
-			$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
+			if ($evt["item_start"] && $evt["item_end"] && $evt["item_start"] != $evt["item_end"])
+			{
+				$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
+			}
+			else
+			{
+				$time = date("H:i",$evt["timestamp"]);
+			};
 		}
 		else
 		{
-			$time = date("H:i",$evt["timestamp"]);
+			$time = $evt["time"];
 		};
 		
 		$this->evt_tpl->vars(array(
