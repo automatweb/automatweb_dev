@@ -1,19 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.223 2003/12/04 16:37:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.224 2003/12/05 13:00:06 kristo Exp $
 // document.aw - Dokumentide haldus. 
-
-// erinevad dokumentide muutmise templated.
-//  kui soovid uut lisada, siis paned selle kataloogi 
-//  /www/automatweb/public/templates/automatweb/documents
-// ja registreerid 2ra baasis automatweb tabelis
-// template 
-// insert into template (type,name,filename) values (0,'minu template','mytemplate.tpl')
-// tyyp 0 ongi moeldud just muutmistemplatede jaoks
-// ja edasi .. votad menueditorist suvalise koha pealt Metainfo lahti .. 
-// ja valid seal dropdownist selle, millist template selle ja alamsektsioonide
-// jaoks kasutatakse
-// ahja veel. template sees peab olema vahemalt 1 sisuv2li ja docid.
-// naiteks voib vaadata ylaltoodud kataloomas asuvad ed_short.tpl faili.
 
 class document extends aw_template
 {
