@@ -126,19 +126,29 @@ class _int_object
 			{
 				$cprms["type"] = $param["reltype"];
 			}
-
-			$tmp = obj_set_opt("no_cache", 1);
-			if (count($this->connections_from($cprms)) > 0)
+			
+			// use a different code path for not saved objects
+			if (!is_oid($this->obj["oid"]))
 			{
-				obj_set_opt("no_cache", $tmp);
-				continue;
+				// object is not saved, therefore we cannot create
+				// the actual connection, so remember the data
+				// and try to create it _after_ the object is saved
+				$this->obj["_create_connections"][] = $param;
 			}
-			obj_set_opt("no_cache", $tmp);
-
-			$c = new connection();
-			$param["from"] = $this->obj["brother_of"];
-			$param["to"] = $oid;
-			$c->change($param);
+			else
+			{
+				$tmp = obj_set_opt("no_cache", 1);
+				if (count($this->connections_from($cprms)) > 0)
+				{
+					obj_set_opt("no_cache", $tmp);
+					continue;
+				}
+				obj_set_opt("no_cache", $tmp);
+				$c = new connection();
+				$param["from"] = $this->obj["brother_of"];
+				$param["to"] = $oid;
+				$c->change($param);
+			};
 		}
 	}
 
@@ -1176,6 +1186,15 @@ class _int_object
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 			"propvalues" => $this->obj["properties"]
 		));
+
+		if (is_array($this->obj["_create_connections"]))
+		{
+			foreach($this->obj["_create_connections"] as $new_conn)
+			{
+				$obj = obj($this->obj["oid"]);
+				$obj->connect($new_conn);
+			};
+		};
 
 		return $this->obj["oid"];
 	}
