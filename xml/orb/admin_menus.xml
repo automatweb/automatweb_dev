@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="admin_menus" folder="admin" extends="aw_template">
-		<action name="import" >
+		<action name="import">
 			<function name="import">
 				<arguments>
 					<required name="parent" />
@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="submit_import" >
+		<action name="submit_import">
 			<function name="submit_import">
 				<arguments>
 					<required name="parent" />
@@ -17,21 +17,21 @@
 			</function>
 		</action>
 
-		<action name="cut" >
+		<action name="cut">
 			<function name="cut">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="copy" >
+		<action name="copy">
 			<function name="copy">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="copy_feedback" >
+		<action name="copy_feedback">
 			<function name="copy_feedback">
 				<arguments>
 					<required name="parent" />
@@ -41,21 +41,21 @@
 			</function>
 		</action>
 
-		<action name="submit_copy_feedback" >
+		<action name="submit_copy_feedback">
 			<function name="submit_copy_feedback">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="paste" >
+		<action name="paste">
 			<function name="paste">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="right_frame" >
+		<action name="right_frame">
 			<function name="right_frame">
 				<arguments>
 					<optional name="parent" />
@@ -67,21 +67,21 @@
 			</function>
 		</action>
 
-		<action name="submit_rf" >
+		<action name="submit_rf">
 			<function name="submit_rf">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete" >
+		<action name="delete">
 			<function name="new_delete">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_redir" >
+		<action name="change_redir">
 			<function name="change_redir">
 				<arguments>
 				</arguments>

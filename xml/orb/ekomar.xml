@@ -1,28 +1,28 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ekomar" folder="" extends="aw_template">
-		<action name="list_files" >
+		<action name="list_files">
 			<function name="list_files">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_file" >
+		<action name="add_file">
 			<function name="add_file">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_file" >
+		<action name="submit_file">
 			<function name="submit_file">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_file" >
+		<action name="change_file">
 			<function name="change_file">
 				<arguments>
 					<required name="id" />
@@ -30,7 +30,7 @@
 			</function>
 		</action>
 
-		<action name="delete_file" >
+		<action name="delete_file">
 			<function name="delete_file">
 				<arguments>
 					<required name="id" />
@@ -38,14 +38,14 @@
 			</function>
 		</action>
 
-		<action name="import_cos" >
+		<action name="import_cos">
 			<function name="import_firms">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="upload_cos" >
+		<action name="upload_cos">
 			<function name="uplaod_cos">
 				<arguments>
 				</arguments>

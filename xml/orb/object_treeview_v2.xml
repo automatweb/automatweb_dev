@@ -4,16 +4,16 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
-					<optional name="tv_sel" type="int"/>
+					<required name="id" type="int" acl="view" />
+					<optional name="tv_sel" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_show" >
+		<action name="submit_show">
 			<function name="submit_show">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<required name="subact" />
 					<optional name="sel" />
 					<required name="return_url" />

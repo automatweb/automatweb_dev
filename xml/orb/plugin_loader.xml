@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="plugin_loader" folder="plugins" extends="aw_template">
-	</class>
-</orb>

@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="export" folder="" extends="aw_template">
-		<action name="export" >
+		<action name="export">
 			<function name="orb_export">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_export" >
+		<action name="submit_export">
 			<function name="submit_export">
 				<arguments>
 				</arguments>
@@ -23,30 +23,30 @@
 			</function>
 		</action>
 
-		<action name="new" >
+		<action name="new">
 			<function name="add_rule">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_rule" >
+		<action name="submit_rule">
 			<function name="submit_rule">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change_rule">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="stop_rule" >
+		<action name="stop_rule">
 			<function name="stop_rule">
 				<arguments>
 					<optional name="id" />
@@ -54,21 +54,21 @@
 			</function>
 		</action>
 
-		<action name="pick_active_version" >
+		<action name="pick_active_version">
 			<function name="pick_active">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_pick_active" >
+		<action name="submit_pick_active">
 			<function name="submit_pick_active">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="view_log" >
+		<action name="view_log">
 			<function name="view_log">
 				<arguments>
 					<optional name="page" />
@@ -76,16 +76,16 @@
 			</function>
 		</action>
 
-		<action name="view_log_entry" >
+		<action name="view_log_entry">
 			<function name="view_log_entry">
 				<arguments>
 					<required name="id" />
-					<optional name="type" default="errors"/>
+					<optional name="type" default="errors" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_log_entry" >
+		<action name="del_log_entry">
 			<function name="del_log_entry">
 				<arguments>
 					<required name="id" />
@@ -93,7 +93,7 @@
 			</function>
 		</action>
 
-		<action name="delete_version" >
+		<action name="delete_version">
 			<function name="delete_version">
 				<arguments>
 					<required name="id" />
@@ -101,14 +101,14 @@
 			</function>
 		</action>
 
-		<action name="iexport" >
+		<action name="iexport">
 			<function name="iexport">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_iexport" >
+		<action name="submit_iexport">
 			<function name="submit_iexport">
 				<arguments>
 					<optional name="urls" />

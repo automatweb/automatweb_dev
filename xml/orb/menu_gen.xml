@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="menu_gen" folder="" extends="class_base">
-		<action name="make_the_catalogs" >
+		<action name="make_the_catalogs">
 			<function name="make_the_catalogs">
 				<arguments>
 					<required name="id" />

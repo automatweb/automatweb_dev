@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_offer" folder="crm" extends="class_base">
-		<action name="connect_selected_packages_to_offer" >
+		<action name="connect_selected_packages_to_offer">
 			<function name="connect_selected_packages_to_offer">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="get_search_packets_url" >
+		<action name="get_search_packets_url">
 			<function name="get_search_packets_url">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_selected_packages" >
+		<action name="delete_selected_packages">
 			<function name="delete_selected_packages">
 				<arguments>
 				</arguments>

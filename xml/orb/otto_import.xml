@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="otto_import" folder="applications/shop/otto" extends="class_base">
-		<action name="pictimp" >
+		<action name="pictimp">
 			<function name="pictimp">
 				<arguments>
 				</arguments>
@@ -15,28 +15,28 @@
 			</function>
 		</action>
 
-		<action name="pictfix" >
+		<action name="pictfix">
 			<function name="pictfix">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="fix_image_codes" >
+		<action name="fix_image_codes">
 			<function name="fix_image_codes">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="fix_prices" >
+		<action name="fix_prices">
 			<function name="fix_prices">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="fix_package_pages" >
+		<action name="fix_package_pages">
 			<function name="fix_package_pages">
 				<arguments>
 				</arguments>

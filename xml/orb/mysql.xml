@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="mysql" folder="db_drivers" extends="">
-	</class>
-</orb>

@@ -1,42 +1,42 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="config" folder="" extends="db_config">
-		<action name="join_mail" >
+		<action name="join_mail">
 			<function name="join_mail">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_join_mail" >
+		<action name="submit_join_mail">
 			<function name="submit_join_mail">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="errors" >
+		<action name="errors">
 			<function name="errors">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_errors" >
+		<action name="submit_errors">
 			<function name="submit_errors">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="grp_redirect" >
+		<action name="grp_redirect">
 			<function name="grp_redirect">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_grp_redirect" >
+		<action name="submit_grp_redirect">
 			<function name="submit_grp_redirect">
 				<arguments>
 				</arguments>
@@ -50,14 +50,14 @@
 			</function>
 		</action>
 
-		<action name="config" >
+		<action name="config">
 			<function name="gen_config">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="login_menus" >
+		<action name="login_menus">
 			<function name="login_menus">
 				<arguments>
 				</arguments>
@@ -71,42 +71,42 @@
 			</function>
 		</action>
 
-		<action name="sel_join_form" >
+		<action name="sel_join_form">
 			<function name="sel_join_form">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_email_els" >
+		<action name="submit_email_els">
 			<function name="submit_email_els">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_jf" >
+		<action name="save_jf">
 			<function name="save_jf">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="class_cfgforms" >
+		<action name="class_cfgforms">
 			<function name="class_cfgforms">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_class_cfgforms" >
+		<action name="submit_class_cfgforms">
 			<function name="submit_class_cfgforms">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_loginaddr" >
+		<action name="submit_loginaddr">
 			<function name="submit_loaginaddr">
 				<arguments>
 				</arguments>

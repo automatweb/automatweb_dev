@@ -1,28 +1,28 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="db_server_explorer" folder="applications/awmyadmin" extends="class_base">
-		<action name="submit_admin_col" >
+		<action name="submit_admin_col">
 			<function name="submit_admin_col">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin" >
+		<action name="submit_admin">
 			<function name="submit_admin">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin_indexes" >
+		<action name="submit_admin_indexes">
 			<function name="submit_admin_indexes">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin_index" >
+		<action name="submit_admin_index">
 			<function name="submit_admin_index">
 				<arguments>
 				</arguments>

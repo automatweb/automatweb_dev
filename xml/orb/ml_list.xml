@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="ml_list" folder="mailinglist" extends="class_base">
-		<action name="post_message" >
+		<action name="post_message">
 			<function name="post_message">
 				<arguments>
 					<required name="id" />
@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="submit_post_message" >
+		<action name="submit_post_message">
 			<function name="submit_post_message">
 				<arguments>
 				</arguments>
@@ -20,44 +20,44 @@
 		<action name="subscribe" nologin="1">
 			<function name="subscribe">
 				<arguments>
-					<required name="id" type="int"/>
-					<required name="rel_id" type="int"/>
+					<required name="id" type="int" />
+					<required name="rel_id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="msg_preview" >
+		<action name="msg_preview">
 			<function name="msg_preview">
 				<arguments>
-					<required name="id" type="int"/>
-					<required name="msg_id" type="int"/>
+					<required name="id" type="int" />
+					<required name="msg_id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="export_members" >
+		<action name="export_members">
 			<function name="export_members">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 					<optional name="filename" />
-					<optional name="export_type" type="int"/>
-					<optional name="export_date" type="int"/>
+					<optional name="export_type" type="int" />
+					<optional name="export_date" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_queue_items" >
+		<action name="delete_queue_items">
 			<function name="delete_queue_items">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_members" >
+		<action name="delete_members">
 			<function name="delete_members">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

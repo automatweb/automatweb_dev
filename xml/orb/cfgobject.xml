@@ -1,23 +1,23 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cfgobject" folder="cfg" extends="aw_template">
-		<action name="new" >
+		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="submit">
 				<arguments>
 				</arguments>
@@ -31,7 +31,7 @@
 			</function>
 		</action>
 
-		<action name="save_objects" >
+		<action name="save_objects">
 			<function name="save_objects">
 				<arguments>
 				</arguments>

@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="new_package" >
+		<action name="new_package">
 			<function name="new_package">
 				<arguments>
 				</arguments>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="taket_tellimuste_list" folder="taket" extends="class_base">
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 					<optional name="sort" />
@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="show_order" >
+		<action name="show_order">
 			<function name="show_order">
 				<arguments>
 					<required name="order_id" />

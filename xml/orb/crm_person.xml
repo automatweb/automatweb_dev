@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_person" folder="crm" extends="class_base">
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 					<required name="id" />
@@ -9,14 +9,14 @@
 			</function>
 		</action>
 
-		<action name="delete_objects" >
+		<action name="delete_objects">
 			<function name="delete_objects">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="edit_something" >
+		<action name="edit_something">
 			<function name="edit_something">
 				<arguments>
 				</arguments>

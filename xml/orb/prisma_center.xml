@@ -1,13 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="prisma_center" folder="applications/prisma" extends="class_base">
-		<action name="process_entity" >
+		<action name="process_entity">
 			<function name="process_entity">
 				<arguments>
-					<required name="id" type="int"/>
-					<required name="entity_id" type="int"/>
-					<required name="process_id" type="int"/>
-					<required name="actor_id" type="int"/>
+					<required name="id" type="int" />
+					<required name="entity_id" type="int" />
+					<required name="process_id" type="int" />
+					<required name="actor_id" type="int" />
 				</arguments>
 			</function>
 		</action>

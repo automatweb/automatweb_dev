@@ -12,7 +12,7 @@
 		<action name="view" nologin="1">
 			<function name="view">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -20,7 +20,7 @@
 		<action name="show_big" nologin="1">
 			<function name="show_big">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="form_element" folder="formgen" extends="aw_template">
-	</class>
-</orb>

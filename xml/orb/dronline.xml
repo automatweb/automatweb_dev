@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="dronline" folder="syslog" extends="class_base">
-		<action name="saveblock" >
+		<action name="saveblock">
 			<function name="saveblock">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_block" >
+		<action name="submit_block">
 			<function name="submit_block">
 				<arguments>
 				</arguments>
@@ -23,7 +23,7 @@
 			</function>
 		</action>
 
-		<action name="submit_act_tbl" >
+		<action name="submit_act_tbl">
 			<function name="submit_act_tbl">
 				<arguments>
 				</arguments>

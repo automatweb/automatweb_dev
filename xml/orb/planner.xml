@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="planner" folder="applications/calendar" extends="class_base">
-		<action name="submit_delete_participants_from_calendar" >
+		<action name="submit_delete_participants_from_calendar">
 			<function name="submit_delete_participants_from_calendar">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
@@ -16,21 +16,21 @@
 			</function>
 		</action>
 
-		<action name="do_event_search" >
+		<action name="do_event_search">
 			<function name="do_event_search">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="search_contacts" >
+		<action name="search_contacts">
 			<function name="search_contacts">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_participant_search_results" >
+		<action name="save_participant_search_results">
 			<function name="save_participant_search_results">
 				<arguments>
 				</arguments>

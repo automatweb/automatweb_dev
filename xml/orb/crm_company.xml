@@ -1,101 +1,101 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_company" folder="crm" extends="class_base">
-		<action name="delete_selected_objects" >
+		<action name="delete_selected_objects">
 			<function name="delete_selected_objects">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_new_task" >
+		<action name="submit_new_task">
 			<function name="submit_new_task">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="search_for_contacts" >
+		<action name="search_for_contacts">
 			<function name="search_for_contacts">
 				<arguments>
-					<optional name="cat" type="int"/>
-					<optional name="unit" type="int"/>
+					<optional name="cat" type="int" />
+					<optional name="unit" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="search_for_customers" >
+		<action name="search_for_customers">
 			<function name="search_for_customers">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_new_call" >
+		<action name="submit_new_call">
 			<function name="submit_new_call">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_new_meeting" >
+		<action name="submit_new_meeting">
 			<function name="submit_new_meeting">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_delete_relations" >
+		<action name="submit_delete_relations">
 			<function name="submit_delete_relations">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
-					<optional name="unit" type="int"/>
+					<required name="id" type="int" acl="view" />
+					<optional name="unit" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_delete_my_customers_relations" >
+		<action name="submit_delete_my_customers_relations">
 			<function name="submit_delete_my_customers_relations">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_delete_customer_relations" >
+		<action name="submit_delete_customer_relations">
 			<function name="submit_delete_customer_relations">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
-					<optional name="customer" type="int"/>
+					<required name="id" type="int" acl="view" />
+					<optional name="customer" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="create_new_company" >
+		<action name="create_new_company">
 			<function name="create_new_company">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_customer_search_results" >
+		<action name="save_customer_search_results">
 			<function name="save_customer_search_results">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_search_results" >
+		<action name="save_search_results">
 			<function name="save_search_results">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="create_new_person" >
+		<action name="create_new_person">
 			<function name="create_new_person">
 				<arguments>
 					<required name="parent" />
@@ -106,7 +106,7 @@
 			</function>
 		</action>
 
-		<action name="cut" >
+		<action name="cut">
 			<function name="cut">
 				<arguments>
 				</arguments>

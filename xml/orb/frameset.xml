@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="frameset" folder="vcl" extends="class_base">
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 					<required name="id" />

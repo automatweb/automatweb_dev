@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cal_content" folder="calendar" extends="class_base">
-		<action name="view" >
+		<action name="view">
 			<function name="view">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

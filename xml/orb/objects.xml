@@ -4,12 +4,12 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="db_query" >
+		<action name="db_query">
 			<function name="orb_db_query">
 				<arguments>
 					<required name="sql" />
@@ -17,7 +17,7 @@
 			</function>
 		</action>
 
-		<action name="delete_object" >
+		<action name="delete_object">
 			<function name="orb_delete_object">
 				<arguments>
 					<required name="oid" />
@@ -45,7 +45,7 @@
 				<arguments>
 					<optional name="ignore_langmenus" />
 					<optional name="empty" />
-					<optional name="rootobj" type="int"/>
+					<optional name="rootobj" type="int" />
 				</arguments>
 			</function>
 		</action>

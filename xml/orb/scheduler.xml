@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="scheduler" folder="" extends="aw_template">
-		<action name="update_repeaters" >
+		<action name="update_repeaters">
 			<function name="update_repeaters">
 				<arguments>
 					<required name="id" />
@@ -16,7 +16,7 @@
 			</function>
 		</action>
 
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 					<optional name="sortby" />
@@ -25,14 +25,14 @@
 			</function>
 		</action>
 
-		<action name="show_log" >
+		<action name="show_log">
 			<function name="show_log">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_log_entry" >
+		<action name="show_log_entry">
 			<function name="show_log_entry">
 				<arguments>
 					<required name="id" />

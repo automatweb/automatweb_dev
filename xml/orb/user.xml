@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="user" folder="core/users" extends="class_base">
-		<action name="change_pwd" >
+		<action name="change_pwd">
 			<function name="change_pwd">
 				<arguments>
 				</arguments>

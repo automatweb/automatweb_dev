@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="submit_styles" >
+		<action name="submit_styles">
 			<function name="submit_styles">
 				<arguments>
 				</arguments>

@@ -4,8 +4,8 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="poll_id" type="int"/>
-					<optional name="answer_id" type="int"/>
+					<required name="poll_id" type="int" />
+					<optional name="answer_id" type="int" />
 				</arguments>
 			</function>
 		</action>

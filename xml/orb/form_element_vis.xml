@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_element_vis" folder="formgen" extends="">
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
 				</arguments>

@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="admin_languages" folder="admin" extends="languages">
-		<action name="admin_list" >
+		<action name="admin_list">
 			<function name="gen_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add" >
+		<action name="add">
 			<function name="add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
 					<required name="id" />
@@ -23,21 +23,21 @@
 			</function>
 		</action>
 
-		<action name="submit_add" >
+		<action name="submit_add">
 			<function name="submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin" >
+		<action name="submit_admin">
 			<function name="submit_admin">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete" >
+		<action name="delete">
 			<function name="orb_delete">
 				<arguments>
 					<required name="id" />

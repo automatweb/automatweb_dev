@@ -46,21 +46,21 @@
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_conf" >
+		<action name="submit_conf">
 			<function name="submit_conf">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_grp" >
+		<action name="change_grp">
 			<function name="change_grp">
 				<arguments>
 					<optional name="id" />
@@ -68,14 +68,14 @@
 			</function>
 		</action>
 
-		<action name="submit_change_grp" >
+		<action name="submit_change_grp">
 			<function name="submit_change_grp">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_grp" >
+		<action name="delete_grp">
 			<function name="delete_grp">
 				<arguments>
 					<optional name="id" />
@@ -83,7 +83,7 @@
 			</function>
 		</action>
 
-		<action name="search_log" >
+		<action name="search_log">
 			<function name="search_log">
 				<arguments>
 				</arguments>

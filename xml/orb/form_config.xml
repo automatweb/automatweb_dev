@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_config" folder="formgen" extends="form_base">
-		<action name="config" >
+		<action name="config">
 			<function name="config">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="submit">
 				<arguments>
 				</arguments>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="taket_search" folder="taket" extends="class_base">
-		<action name="parse_submit_info" >
+		<action name="parse_submit_info">
 			<function name="parse_submit_info">
 				<arguments>
 					<optional name="tootekood" />

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="config_login_menus" folder="admin/config" extends="class_base">
-		<action name="find_active_edit" >
+		<action name="find_active_edit">
 			<function name="find_active_edit">
 				<arguments>
 				</arguments>

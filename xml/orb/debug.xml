@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="debug" folder="dbg" extends="class_base">
-		<action name="syntaxcheck" >
+		<action name="syntaxcheck">
 			<function name="syntaxcheck">
 				<arguments>
 				</arguments>

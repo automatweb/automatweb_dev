@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="acl_base" folder="core/obj" extends="db_connector">
-	</class>
-</orb>

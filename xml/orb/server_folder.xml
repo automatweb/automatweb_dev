@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="server_folder" folder="contentmgmt" extends="class_base">
-		<action name="show_file" >
+		<action name="show_file">
 			<function name="show_file">
 				<arguments>
 					<required name="fid" />
@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="change_file" >
+		<action name="change_file">
 			<function name="change_file">
 				<arguments>
 					<required name="fid" />
@@ -18,23 +18,23 @@
 			</function>
 		</action>
 
-		<action name="submit_chfile" >
+		<action name="submit_chfile">
 			<function name="submit_chfile">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_file" >
+		<action name="add_file">
 			<function name="add_file">
 				<arguments>
-					<required name="id" type="int"/>
-					<optional name="section" type="int"/>
+					<required name="id" type="int" />
+					<optional name="section" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_addfile" >
+		<action name="submit_addfile">
 			<function name="submit_addfile">
 				<arguments>
 				</arguments>

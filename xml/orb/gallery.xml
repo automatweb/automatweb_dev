@@ -1,88 +1,88 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="gallery" folder="contentmgmt/gallery" extends="aw_template">
-		<action name="new" >
+		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 					<optional name="alias_to" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="csubmit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="admin" >
+		<action name="admin">
 			<function name="admin">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_row" >
+		<action name="add_row">
 			<function name="add_rows">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 					<optional name="rows" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_col" >
+		<action name="add_col">
 			<function name="add_cols">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 					<optional name="cols" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_col" >
+		<action name="del_col">
 			<function name="del_col">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_row" >
+		<action name="del_row">
 			<function name="del_row">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="c_submit" >
+		<action name="c_submit">
 			<function name="submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_page" >
+		<action name="add_page">
 			<function name="add_page">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 				</arguments>
 			</function>
@@ -101,10 +101,10 @@
 			</function>
 		</action>
 
-		<action name="del_page" >
+		<action name="del_page">
 			<function name="del_page">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="page" />
 				</arguments>
 			</function>

@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="aip_change_show" folder="aip" extends="class_base">
-	</class>
-</orb>

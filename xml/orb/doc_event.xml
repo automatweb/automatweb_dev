@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="doc_event" folder="" extends="core">
-	</class>
-</orb>

@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="restore_objects" >
+		<action name="restore_objects">
 			<function name="restore_objects">
 				<arguments>
 				</arguments>

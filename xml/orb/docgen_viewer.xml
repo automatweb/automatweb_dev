@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="docgen_viewer" folder="core/docgen" extends="class_base">
-		<action name="class_list" >
+		<action name="class_list">
 			<function name="class_list">
 				<arguments>
 				</arguments>
@@ -11,12 +11,12 @@
 		<action name="frames" default="1">
 			<function name="frameset">
 				<arguments>
-					<optional name="id" type="int"/>
+					<optional name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="prop_info" >
+		<action name="prop_info">
 			<function name="prop_info">
 				<arguments>
 					<required name="option" />
@@ -33,7 +33,7 @@
 			</function>
 		</action>
 
-		<action name="search_method" >
+		<action name="search_method">
 			<function name="search_method">
 				<arguments>
 					<required name="method" />
@@ -41,7 +41,7 @@
 			</function>
 		</action>
 
-		<action name="view_source" >
+		<action name="view_source">
 			<function name="view_source">
 				<arguments>
 					<required name="file" />
@@ -51,15 +51,15 @@
 			</function>
 		</action>
 
-		<action name="doclist" >
+		<action name="doclist">
 			<function name="doclist">
 				<arguments>
-					<optional name="type" default="classes"/>
+					<optional name="type" default="classes" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_doc" >
+		<action name="show_doc">
 			<function name="show_doc">
 				<arguments>
 					<required name="file" />
@@ -67,14 +67,14 @@
 			</function>
 		</action>
 
-		<action name="do_db_update" >
+		<action name="do_db_update">
 			<function name="do_db_update">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="view_usage" >
+		<action name="view_usage">
 			<function name="view_usage">
 				<arguments>
 					<required name="file" />
@@ -84,7 +84,7 @@
 			</function>
 		</action>
 
-		<action name="topf" >
+		<action name="topf">
 			<function name="topf">
 				<arguments>
 					<optional name="id" />
@@ -92,7 +92,7 @@
 			</function>
 		</action>
 
-		<action name="proplist" >
+		<action name="proplist">
 			<function name="doc_proplist">
 				<arguments>
 					<required name="id" />
@@ -100,7 +100,7 @@
 			</function>
 		</action>
 
-		<action name="doc_class_list" >
+		<action name="doc_class_list">
 			<function name="doc_class_list">
 				<arguments>
 				</arguments>

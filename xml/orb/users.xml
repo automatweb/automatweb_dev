@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="users" folder="" extends="users_user">
-		<action name="do_change" >
+		<action name="do_change">
 			<function name="do_change">
 				<arguments>
 					<required name="id" />
@@ -18,7 +18,7 @@
 			</function>
 		</action>
 
-		<action name="submit_change_pwd" >
+		<action name="submit_change_pwd">
 			<function name="submit_change_pwd">
 				<arguments>
 				</arguments>
@@ -35,12 +35,12 @@
 		<action name="udata" is_public="1" caption="Edit information">
 			<function name="do_change_site">
 				<arguments>
-					<optional name="fid" type="int"/>
+					<optional name="fid" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_udata" >
+		<action name="save_udata">
 			<function name="submit_do_change_site">
 				<arguments>
 				</arguments>
@@ -61,14 +61,14 @@
 			</function>
 		</action>
 
-		<action name="submit_user_info" >
+		<action name="submit_user_info">
 			<function name="submit_user_info">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show_user_info" >
+		<action name="show_user_info">
 			<function name="show_user_info">
 				<arguments>
 				</arguments>
@@ -116,21 +116,21 @@
 			</function>
 		</action>
 
-		<action name="createpwd" >
+		<action name="createpwd">
 			<function name="createpwd">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_createpwd" >
+		<action name="submit_createpwd">
 			<function name="submit_createpwd">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="pwconv" >
+		<action name="pwconv">
 			<function name="pwconv">
 				<arguments>
 				</arguments>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="shortcut" folder="admin" extends="class_base">
-		<action name="view" >
+		<action name="view">
 			<function name="view">
 				<arguments>
 					<required name="id" />
@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="mk_shortcut" >
+		<action name="mk_shortcut">
 			<function name="mk_shortcut">
 				<arguments>
 					<required name="id" />

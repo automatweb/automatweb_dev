@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="personnel_management" folder="applications/personnel_management" extends="class_base">
-		<action name="delete_rels" >
+		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="set_default_cv" >
+		<action name="set_default_cv">
 			<function name="set_default_cv">
 				<arguments>
 				</arguments>

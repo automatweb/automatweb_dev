@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="submit_exec" >
+		<action name="submit_exec">
 			<function name="submit_exec">
 				<arguments>
 				</arguments>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="personnel_management_job_offer" folder="applications/personnel_management" extends="class_base">
-		<action name="delete_rels" >
+		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>
 				</arguments>
@@ -15,14 +15,14 @@
 			</function>
 		</action>
 
-		<action name="delete_cv_file" >
+		<action name="delete_cv_file">
 			<function name="delete_cv_file">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="job_to_not_act" >
+		<action name="job_to_not_act">
 			<function name="job_to_not_act">
 				<arguments>
 				</arguments>
@@ -32,7 +32,7 @@
 		<action name="gen_job_pdf" nologin="1">
 			<function name="gen_job_pdf">
 				<arguments>
-					<required name="oid" type="int"/>
+					<required name="oid" type="int" />
 				</arguments>
 			</function>
 		</action>

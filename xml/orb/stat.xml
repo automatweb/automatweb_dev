@@ -12,7 +12,7 @@
 			</function>
 		</action>
 
-		<action name="graph" >
+		<action name="graph">
 			<function name="graph">
 				<arguments>
 					<optional name="id" />
@@ -20,14 +20,14 @@
 			</function>
 		</action>
 
-		<action name="compare" >
+		<action name="compare">
 			<function name="compare">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="cgraph" >
+		<action name="cgraph">
 			<function name="cgraph">
 				<arguments>
 				</arguments>

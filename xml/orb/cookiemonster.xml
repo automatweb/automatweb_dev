@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="munch" >
+		<action name="munch">
 			<function name="munch">
 				<arguments>
 				</arguments>

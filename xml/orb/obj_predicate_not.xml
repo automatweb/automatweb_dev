@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="obj_predicate_not" folder="core/obj" extends="">
-	</class>
-</orb>

@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="reminder" folder="vcl" extends="core">
-	</class>
-</orb>

@@ -8,17 +8,17 @@
 			</function>
 		</action>
 
-		<action name="submit_list" >
+		<action name="submit_list">
 			<function name="submit_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="list_aliases" >
+		<action name="list_aliases">
 			<function name="list_aliases">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 					<optional name="table" />
 					<optional name="sortby" />
 					<optional name="sort_order" />
@@ -26,7 +26,7 @@
 			</function>
 		</action>
 
-		<action name="addalias" >
+		<action name="addalias">
 			<function name="orb_addalias">
 				<arguments>
 					<required name="id" />

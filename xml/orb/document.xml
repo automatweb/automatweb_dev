@@ -1,18 +1,18 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="document" folder="" extends="aw_template">
-		<action name="fetch" >
+		<action name="fetch">
 			<function name="fetch">
 				<arguments>
-					<required name="docid" type="int"/>
+					<required name="docid" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save" >
+		<action name="save">
 			<function name="save">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
@@ -20,7 +20,7 @@
 		<action name="new" is_public="1" caption="New document">
 			<function name="add">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 					<optional name="period" />
 					<optional name="alias_to" />
 					<optional name="return_url" />
@@ -32,14 +32,14 @@
 		<action name="change" is_public="1" caption="Edit document">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int" acl="edit;view"/>
+					<required name="id" type="int" acl="edit;view" />
 					<optional name="section" />
 					<optional name="period" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="sellang" >
+		<action name="sellang">
 			<function name="sel_lang_bros">
 				<arguments>
 					<required name="id" />
@@ -47,7 +47,7 @@
 			</function>
 		</action>
 
-		<action name="seb_s" >
+		<action name="seb_s">
 			<function name="seb_s">
 				<arguments>
 					<required name="id" />
@@ -55,7 +55,7 @@
 			</function>
 		</action>
 
-		<action name="set_lang_bro" >
+		<action name="set_lang_bro">
 			<function name="set_lang_bro">
 				<arguments>
 					<required name="id" />
@@ -66,7 +66,7 @@
 			</function>
 		</action>
 
-		<action name="sel_menus" >
+		<action name="sel_menus">
 			<function name="sel_menus">
 				<arguments>
 					<required name="id" />
@@ -74,7 +74,7 @@
 			</function>
 		</action>
 
-		<action name="submit_menus" >
+		<action name="submit_menus">
 			<function name="submit_menus">
 				<arguments>
 					<required name="id" />
@@ -123,7 +123,7 @@
 			<function name="feedback">
 				<arguments>
 					<required name="section" />
-					<optional name="e" type="int"/>
+					<optional name="e" type="int" />
 				</arguments>
 			</function>
 		</action>

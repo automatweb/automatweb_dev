@@ -1,6 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="classbase_group" folder="contentmgmt" extends="class_base">
-	</class>
-</orb>
-		

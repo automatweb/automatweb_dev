@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="contact_list" folder="applications/quickmessage" extends="class_base">
-		<action name="delete" >
+		<action name="delete">
 			<function name="delete">
 				<arguments>
 					<required name="sel" />

@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="syslog" folder="syslog" extends="db_syslog">
-		<action name="block" >
+		<action name="block">
 			<function name="block">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="saveblock" >
+		<action name="saveblock">
 			<function name="saveblock">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_syslog" >
+		<action name="convert_syslog">
 			<function name="convert_syslog">
 				<arguments>
 				</arguments>

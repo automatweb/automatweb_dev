@@ -15,21 +15,21 @@
 			</function>
 		</action>
 
-		<action name="convimages" >
+		<action name="convimages">
 			<function name="convimages">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="dbsync" >
+		<action name="dbsync">
 			<function name="db_compare_choose_donor">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="db_compare_dbs" >
+		<action name="db_compare_dbs">
 			<function name="_db_compare_dbs">
 				<arguments>
 				</arguments>
@@ -53,29 +53,29 @@
 		<action name="has_objects" nologin="1">
 			<function name="has_objects">
 				<arguments>
-					<required name="clid" type="int"/>
+					<required name="clid" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="last_mod" >
+		<action name="last_mod">
 			<function name="last_mod">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="perf" >
+		<action name="perf">
 			<function name="perf">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="test_object_types" >
+		<action name="test_object_types">
 			<function name="test_object_types">
 				<arguments>
-					<required name="parent" acl="view;add"/>
+					<required name="parent" acl="view;add" />
 				</arguments>
 			</function>
 		</action>

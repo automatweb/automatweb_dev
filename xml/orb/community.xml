@@ -4,8 +4,8 @@
 		<action name="add_blocked" all_args="1">
 			<function name="add_blocked">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
-					<required name="id" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>
@@ -14,8 +14,8 @@
 		<action name="add_moderator" all_args="1">
 			<function name="add_moderator">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
-					<required name="id" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>
@@ -24,8 +24,8 @@
 		<action name="add_member" all_args="1">
 			<function name="add_member">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
-					<required name="id" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>
@@ -34,8 +34,8 @@
 		<action name="remove_con" all_args="1">
 			<function name="remove_con">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
-					<required name="id" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>
@@ -44,7 +44,7 @@
 		<action name="change" nologin="1" is_public="1" all_args="1" caption="Kogukonna sisu">
 			<function name="change">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>

@@ -8,17 +8,17 @@
 			</function>
 		</action>
 
-		<action name="show_site" >
+		<action name="show_site">
 			<function name="show_site">
 				<arguments>
 					<required name="url" />
-					<optional name="logged" type="int"/>
-					<optional name="time" type="int"/>
+					<optional name="logged" type="int" />
+					<optional name="time" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_sess" >
+		<action name="del_sess">
 			<function name="del_sess">
 				<arguments>
 					<required name="sess" />
@@ -27,7 +27,7 @@
 			</function>
 		</action>
 
-		<action name="do_redir" >
+		<action name="do_redir">
 			<function name="do_redir">
 				<arguments>
 					<required name="sess" />
@@ -37,7 +37,7 @@
 			</function>
 		</action>
 
-		<action name="do_msg" >
+		<action name="do_msg">
 			<function name="do_msg">
 				<arguments>
 					<required name="sess" />

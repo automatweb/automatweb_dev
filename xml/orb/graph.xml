@@ -1,38 +1,38 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="graph" folder="" extends="aw_template">
-		<action name="new" >
+		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 					<optional name="alias_doc" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="base_add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="savepie" >
+		<action name="savepie">
 			<function name="save_pie">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="configure">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 					<required name="id" />
@@ -40,7 +40,7 @@
 			</function>
 		</action>
 
-		<action name="gotbarline" >
+		<action name="gotbarline">
 			<function name="line_bar_add">
 				<arguments>
 					<required name="id" />
@@ -50,7 +50,7 @@
 			</function>
 		</action>
 
-		<action name="savedatasrc" >
+		<action name="savedatasrc">
 			<function name="save_datasrc_bar_line">
 				<arguments>
 					<required name="id" />
@@ -59,14 +59,14 @@
 			</function>
 		</action>
 
-		<action name="savelinebar" >
+		<action name="savelinebar">
 			<function name="line_bar_save">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="list" >
+		<action name="list">
 			<function name="glist">
 				<arguments>
 					<required name="parent" />
@@ -74,7 +74,7 @@
 			</function>
 		</action>
 
-		<action name="delete" >
+		<action name="delete">
 			<function name="delete_graph">
 				<arguments>
 					<required name="id" />
@@ -83,7 +83,7 @@
 			</function>
 		</action>
 
-		<action name="preview" >
+		<action name="preview">
 			<function name="preview">
 				<arguments>
 					<required name="id" />
@@ -91,7 +91,7 @@
 			</function>
 		</action>
 
-		<action name="userdata" >
+		<action name="userdata">
 			<function name="insert_data">
 				<arguments>
 					<required name="id" />
@@ -99,7 +99,7 @@
 			</function>
 		</action>
 
-		<action name="savedata" >
+		<action name="savedata">
 			<function name="save_userdata">
 				<arguments>
 					<required name="id" />
@@ -107,7 +107,7 @@
 			</function>
 		</action>
 
-		<action name="meta" >
+		<action name="meta">
 			<function name="show_meta">
 				<arguments>
 					<required name="id" />
@@ -115,7 +115,7 @@
 			</function>
 		</action>
 
-		<action name="savemeta" >
+		<action name="savemeta">
 			<function name="save_meta">
 				<arguments>
 					<required name="id" />
@@ -123,7 +123,7 @@
 			</function>
 		</action>
 
-		<action name="upload" >
+		<action name="upload">
 			<function name="handle_upload">
 				<arguments>
 					<required name="id" />

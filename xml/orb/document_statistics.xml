@@ -4,7 +4,7 @@
 		<action name="do_send_mail" nologin="1">
 			<function name="do_send_mail">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

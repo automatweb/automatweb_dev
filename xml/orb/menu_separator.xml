@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="menu_separator" folder="admin" extends="class_base">
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
 				</arguments>

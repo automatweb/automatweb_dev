@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="admin_folders" folder="admin" extends="aw_template">
-		<action name="folders" >
+		<action name="folders">
 			<function name="show_folders">
 				<arguments>
 					<optional name="period" />

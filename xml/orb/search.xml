@@ -18,7 +18,7 @@
 		<action name="view" all_args="1">
 			<function name="view">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

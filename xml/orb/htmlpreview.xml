@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="htmlpreview" folder="cfg" extends="aw_template">
-	</class>
-</orb>

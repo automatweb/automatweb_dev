@@ -11,26 +11,26 @@
 		<action name="gen_job_pdf" nologin="1">
 			<function name="gen_job_pdf">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="edit_something" >
+		<action name="edit_something">
 			<function name="edit_something">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_rels" >
+		<action name="delete_rels">
 			<function name="delete_rels">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="cv_to_not_act" >
+		<action name="cv_to_not_act">
 			<function name="cv_to_not_act">
 				<arguments>
 				</arguments>

@@ -11,20 +11,20 @@
 		<action name="run_filters" nologin="1">
 			<function name="run_filters">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="test_filters" >
+		<action name="test_filters">
 			<function name="test_filters">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_messages" >
+		<action name="delete_messages">
 			<function name="delete_messages">
 				<arguments>
 				</arguments>
@@ -38,7 +38,7 @@
 			</function>
 		</action>
 
-		<action name="move_messages" >
+		<action name="move_messages">
 			<function name="move_messages">
 				<arguments>
 				</arguments>

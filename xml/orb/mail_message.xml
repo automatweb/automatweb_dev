@@ -1,70 +1,70 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="mail_message" folder="applications/messenger" extends="class_base">
-		<action name="deliver" >
+		<action name="deliver">
 			<function name="deliver">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="get_part" >
+		<action name="get_part">
 			<function name="get_part">
 				<arguments>
-					<required name="msgrid" type="int"/>
-					<required name="msgid" type="int"/>
+					<required name="msgrid" type="int" />
+					<required name="msgid" type="int" />
 					<required name="mailbox" />
-					<required name="part" type="int"/>
+					<required name="part" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="create_draft" >
+		<action name="create_draft">
 			<function name="create_draft">
 				<arguments>
-					<required name="msgrid" type="int"/>
-					<optional name="cb_part" type="int"/>
+					<required name="msgrid" type="int" />
+					<optional name="cb_part" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="register_event" >
+		<action name="register_event">
 			<function name="register_event">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="mail_delete" >
+		<action name="mail_delete">
 			<function name="mail_delete">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="mail_send" >
+		<action name="mail_send">
 			<function name="mail_send">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="mail_reply" >
+		<action name="mail_reply">
 			<function name="mail_reply">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="mail_reply_all" >
+		<action name="mail_reply_all">
 			<function name="mail_reply_all">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="mail_forward" >
+		<action name="mail_forward">
 			<function name="mail_forward">
 				<arguments>
 				</arguments>

@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="object_list_filter" folder="core/obj" extends="">
-	</class>
-</orb>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_actions" folder="formgen" extends="form_base">
-		<action name="list_actions" >
+		<action name="list_actions">
 			<function name="list_actions">
 				<arguments>
 					<required name="id" />
@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="add_action" >
+		<action name="add_action">
 			<function name="add_action">
 				<arguments>
 					<required name="id" />
@@ -17,24 +17,24 @@
 			</function>
 		</action>
 
-		<action name="submit_action" >
+		<action name="submit_action">
 			<function name="submit_action">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_action" >
+		<action name="change_action">
 			<function name="change_action">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<required name="aid" />
 					<optional name="level" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_action" >
+		<action name="delete_action">
 			<function name="delete_action">
 				<arguments>
 					<required name="id" />

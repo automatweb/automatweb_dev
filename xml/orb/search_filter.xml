@@ -1,32 +1,32 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="search_filter" folder="" extends="aw_template">
-		<action name="new" >
+		<action name="new">
 			<function name="orb_new">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_new" >
+		<action name="submit_new">
 			<function name="orb_submit_new">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_change" >
+		<action name="submit_change">
 			<function name="orb_submit_change">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="orb_change">
 				<arguments>
-					<required name="id" acl="view;edit"/>
+					<required name="id" acl="view;edit" />
 					<optional name="parent" />
 					<optional name="change_part" />
 					<optional name="is_change_part" />
@@ -34,7 +34,7 @@
 			</function>
 		</action>
 
-		<action name="tf_fulltext_search" >
+		<action name="tf_fulltext_search">
 			<function name="orb_totally_fake_fulltext_search">
 				<arguments>
 					<required name="id" />
@@ -42,7 +42,7 @@
 			</function>
 		</action>
 
-		<action name="do_tf_fulltext_search" >
+		<action name="do_tf_fulltext_search">
 			<function name="orb_do_totally_fake_fulltext_search">
 				<arguments>
 					<required name="id" />
@@ -51,7 +51,7 @@
 			</function>
 		</action>
 
-		<action name="stat_select_submit" >
+		<action name="stat_select_submit">
 			<function name="orb_stat_select_submit">
 				<arguments>
 					<required name="id" />
@@ -59,7 +59,7 @@
 			</function>
 		</action>
 
-		<action name="stat_new_submit" >
+		<action name="stat_new_submit">
 			<function name="orb_stat_new_submit">
 				<arguments>
 					<required name="id" />
@@ -67,7 +67,7 @@
 			</function>
 		</action>
 
-		<action name="statdata" >
+		<action name="statdata">
 			<function name="orb_statdata">
 				<arguments>
 					<required name="id" />
@@ -75,7 +75,7 @@
 			</function>
 		</action>
 
-		<action name="submit_statdata" >
+		<action name="submit_statdata">
 			<function name="orb_submit_statdata">
 				<arguments>
 					<required name="id" />
@@ -83,7 +83,7 @@
 			</function>
 		</action>
 
-		<action name="stat" >
+		<action name="stat">
 			<function name="orb_stat">
 				<arguments>
 					<required name="id" />
@@ -91,7 +91,7 @@
 			</function>
 		</action>
 
-		<action name="search" >
+		<action name="search">
 			<function name="orb_search">
 				<arguments>
 					<required name="id" />
@@ -101,21 +101,21 @@
 			</function>
 		</action>
 
-		<action name="submit_select_forms" >
+		<action name="submit_select_forms">
 			<function name="orb_submit_select_forms">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_select_fields" >
+		<action name="submit_select_fields">
 			<function name="orb_submit_select_fields">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="output_use" >
+		<action name="output_use">
 			<function name="orb_output_use">
 				<arguments>
 					<required name="id" />
@@ -123,7 +123,7 @@
 			</function>
 		</action>
 
-		<action name="submit_output_use" >
+		<action name="submit_output_use">
 			<function name="orb_submit_output_use">
 				<arguments>
 					<required name="id" />
@@ -131,7 +131,7 @@
 			</function>
 		</action>
 
-		<action name="output" >
+		<action name="output">
 			<function name="orb_output">
 				<arguments>
 					<required name="id" />
@@ -139,7 +139,7 @@
 			</function>
 		</action>
 
-		<action name="output_submit" >
+		<action name="output_submit">
 			<function name="orb_output_submit">
 				<arguments>
 					<required name="id" />
@@ -147,21 +147,21 @@
 			</function>
 		</action>
 
-		<action name="filter_edit_change_part" >
+		<action name="filter_edit_change_part">
 			<function name="orb_filter_edit_change_part">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="filter_edit_add" >
+		<action name="filter_edit_add">
 			<function name="orb_filter_edit_add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="filter_edit_del" >
+		<action name="filter_edit_del">
 			<function name="orb_filter_edit_del">
 				<arguments>
 				</arguments>

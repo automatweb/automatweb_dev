@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="xml_import" folder="" extends="class_base">
-		<action name="invoke" >
+		<action name="invoke">
 			<function name="invoke">
 				<arguments>
 					<required name="id" />

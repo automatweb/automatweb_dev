@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="brother_support" folder="core/obj" extends="">
-	</class>
-</orb>

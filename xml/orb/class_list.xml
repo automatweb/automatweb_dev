@@ -9,7 +9,7 @@
 			</function>
 		</action>
 
-		<action name="update_class_def" >
+		<action name="update_class_def">
 			<function name="update_class_def">
 				<arguments>
 					<required name="data" />
@@ -17,7 +17,7 @@
 			</function>
 		</action>
 
-		<action name="get_list" >
+		<action name="get_list">
 			<function name="get_list">
 				<arguments>
 				</arguments>

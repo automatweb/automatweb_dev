@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="metamgr" folder="meta" extends="class_base">
-		<action name="move_items" >
+		<action name="move_items">
 			<function name="move_items">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_marked" >
+		<action name="delete_marked">
 			<function name="delete_marked">
 				<arguments>
 				</arguments>

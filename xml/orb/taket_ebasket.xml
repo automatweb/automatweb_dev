@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="taket_ebasket" folder="taket" extends="class_base">
-		<action name="send_order" >
+		<action name="send_order">
 			<function name="send_order">
 				<arguments>
 					<optional name="transport" />
@@ -12,7 +12,7 @@
 			</function>
 		</action>
 
-		<action name="save_ebasket" >
+		<action name="save_ebasket">
 			<function name="save_ebasket">
 				<arguments>
 					<optional name="productId" />

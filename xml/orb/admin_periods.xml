@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="admin_periods" folder="admin" extends="period">
-		<action name="admin_list" >
+		<action name="admin_list">
 			<function name="admin_list">
 				<arguments>
 					<optional name="sortby" />

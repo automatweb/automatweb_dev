@@ -4,7 +4,7 @@
 		<action name="show_cart" nologin="1">
 			<function name="show">
 				<arguments>
-					<optional name="oc" type="int"/>
+					<optional name="oc" type="int" />
 					<optional name="section" />
 				</arguments>
 			</function>
@@ -13,9 +13,9 @@
 		<action name="submit_add_cart" nologin="1">
 			<function name="submit_add_cart">
 				<arguments>
-					<required name="oc" type="int" acl="view"/>
+					<required name="oc" type="int" acl="view" />
 					<optional name="add_to_cart" />
-					<optional name="is_update" type="int"/>
+					<optional name="is_update" type="int" />
 					<optional name="order_data" />
 				</arguments>
 			</function>

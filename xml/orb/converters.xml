@@ -1,50 +1,50 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="converters" folder="admin" extends="aw_template">
-		<action name="menu_convimages" >
+		<action name="menu_convimages">
 			<function name="menu_convimages">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="menu_reset_template_sets" >
+		<action name="menu_reset_template_sets">
 			<function name="menu_reset_template_sets">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="promo_convert" >
+		<action name="promo_convert">
 			<function name="promo_convert">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_aliases" >
+		<action name="convert_aliases">
 			<function name="convert_aliases">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_periods" >
+		<action name="convert_periods">
 			<function name="convert_periods">
 				<arguments>
-					<optional name="parent" type="int"/>
+					<optional name="parent" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="groups_convert" >
+		<action name="groups_convert">
 			<function name="groups_convert">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_acl_to_classbase" >
+		<action name="convert_acl_to_classbase">
 			<function name="convert_acl_to_classbase">
 				<arguments>
 				</arguments>
@@ -58,14 +58,14 @@
 			</function>
 		</action>
 
-		<action name="convert_really_old_aliases" >
+		<action name="convert_really_old_aliases">
 			<function name="convert_really_old_aliases">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_alias_idx" >
+		<action name="convert_alias_idx">
 			<function name="convert_alias_idx">
 				<arguments>
 				</arguments>
@@ -122,14 +122,14 @@
 			</function>
 		</action>
 
-		<action name="convert_person_org_relations" >
+		<action name="convert_person_org_relations">
 			<function name="convert_person_org_relations">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="confirm_crm_choices" >
+		<action name="confirm_crm_choices">
 			<function name="confirm_crm_choices">
 				<arguments>
 				</arguments>
@@ -143,50 +143,50 @@
 			</function>
 		</action>
 
-		<action name="convert_crm_links" >
+		<action name="convert_crm_links">
 			<function name="convert_crm_links">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_planner_owners" >
+		<action name="convert_planner_owners">
 			<function name="convert_planner_owners">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="convert_acl_rels" >
+		<action name="convert_acl_rels">
 			<function name="convert_acl_rels">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="lang_new_convert" >
+		<action name="lang_new_convert">
 			<function name="lang_new_convert">
 				<arguments>
-					<required name="parent" type="int"/>
+					<required name="parent" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="conv_files_to_fs" >
+		<action name="conv_files_to_fs">
 			<function name="conv_files_to_fs">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="acl_to_objtbl" >
+		<action name="acl_to_objtbl">
 			<function name="acl_to_objtbl">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="test_acl" >
+		<action name="test_acl">
 			<function name="test_acl">
 				<arguments>
 				</arguments>

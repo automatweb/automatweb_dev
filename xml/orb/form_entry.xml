@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_entry" folder="formgen" extends="aw_template">
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>

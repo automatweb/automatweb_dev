@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="site_list" folder="install" extends="class_base">
-		<action name="site_list" >
+		<action name="site_list">
 			<function name="orb_list">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="server_list" >
+		<action name="server_list">
 			<function name="orb_server_list">
 				<arguments>
 				</arguments>
@@ -29,7 +29,7 @@
 			</function>
 		</action>
 
-		<action name="get_site_list" >
+		<action name="get_site_list">
 			<function name="orb_get_site_list">
 				<arguments>
 					<optional name="server_id" />
@@ -53,7 +53,7 @@
 			</function>
 		</action>
 
-		<action name="get_site_data" >
+		<action name="get_site_data">
 			<function name="get_site_data">
 				<arguments>
 					<required name="site_id" />
@@ -61,44 +61,44 @@
 			</function>
 		</action>
 
-		<action name="change_site" >
+		<action name="change_site">
 			<function name="change_site">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_change_site" >
+		<action name="submit_change_site">
 			<function name="submit_change_site">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_server" >
+		<action name="change_server">
 			<function name="change_server">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_change_server" >
+		<action name="submit_change_server">
 			<function name="submit_change_server">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="get_site_info" >
+		<action name="get_site_info">
 			<function name="get_site_info">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="fetch_site_data" >
+		<action name="fetch_site_data">
 			<function name="fetch_site_data">
 				<arguments>
 				</arguments>

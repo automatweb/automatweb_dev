@@ -4,7 +4,7 @@
 		<action name="show_file" nologin="1">
 			<function name="show_file">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cb_search" folder="cfg" extends="class_base">
-		<action name="delete_obj" >
+		<action name="delete_obj">
 			<function name="delete_obj">
 				<arguments>
 					<required name="id" />

@@ -4,9 +4,9 @@
 		<action name="vote" nologin="1">
 			<function name="vote">
 				<arguments>
-					<required name="oid" type="int"/>
-					<required name="poll" type="int"/>
-					<required name="choice" type="int"/>
+					<required name="oid" type="int" />
+					<required name="poll" type="int" />
+					<required name="choice" type="int" />
 					<optional name="section" />
 				</arguments>
 			</function>

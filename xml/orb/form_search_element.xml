@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="form_search_element" folder="formgen" extends="form_element">
-	</class>
-</orb>

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="project" folder="applications/groupware" extends="class_base">
-		<action name="wtf" >
+		<action name="wtf">
 			<function name="wtf">
 				<arguments>
 				</arguments>

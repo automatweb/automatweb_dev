@@ -4,7 +4,7 @@
 		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
@@ -12,7 +12,7 @@
 		<action name="gen_pdf" nologin="1">
 			<function name="gen_pdf">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<optional name="html" />
 				</arguments>
 			</function>

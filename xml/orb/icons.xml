@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="icons" folder="" extends="aw_template">
-		<action name="new" >
+		<action name="new">
 			<function name="orb_add">
 				<arguments>
 					<required name="parent" />
@@ -11,7 +11,7 @@
 			</function>
 		</action>
 
-		<action name="icon_db" >
+		<action name="icon_db">
 			<function name="gen_db">
 				<arguments>
 					<optional name="page" />
@@ -20,21 +20,21 @@
 			</function>
 		</action>
 
-		<action name="add_icon" >
+		<action name="add_icon">
 			<function name="add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_zip" >
+		<action name="add_zip">
 			<function name="add_zip">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change_icon" >
+		<action name="change_icon">
 			<function name="change">
 				<arguments>
 					<required name="id" />
@@ -42,15 +42,15 @@
 			</function>
 		</action>
 
-		<action name="show" >
+		<action name="show">
 			<function name="show">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_icon" >
+		<action name="delete_icon">
 			<function name="delete">
 				<arguments>
 					<required name="id" />
@@ -59,14 +59,14 @@
 			</function>
 		</action>
 
-		<action name="del_icons" >
+		<action name="del_icons">
 			<function name="del_icons">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="sel_icon" >
+		<action name="sel_icon">
 			<function name="sel_icon">
 				<arguments>
 					<required name="rtype" />
@@ -78,14 +78,14 @@
 			</function>
 		</action>
 
-		<action name="export_icons" >
+		<action name="export_icons">
 			<function name="export">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="import_icons" >
+		<action name="import_icons">
 			<function name="import">
 				<arguments>
 					<optional name="level" />
@@ -93,21 +93,21 @@
 			</function>
 		</action>
 
-		<action name="submit_icon_zip" >
+		<action name="submit_icon_zip">
 			<function name="upload_zip">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="grp_icons" >
+		<action name="grp_icons">
 			<function name="grp_icons">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="ic_grp_name" >
+		<action name="ic_grp_name">
 			<function name="ic_grp_name">
 				<arguments>
 					<required name="ics" />
@@ -115,21 +115,21 @@
 			</function>
 		</action>
 
-		<action name="submit_ic_grp" >
+		<action name="submit_ic_grp">
 			<function name="submit_ic_grp">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_grp" >
+		<action name="del_grp">
 			<function name="del_grp">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="save_class_icons" >
+		<action name="save_class_icons">
 			<function name="save_class_icons">
 				<arguments>
 				</arguments>

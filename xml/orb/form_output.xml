@@ -1,22 +1,22 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_output" folder="formgen" extends="form_base">
-		<action name="new" >
+		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent" acl="add"/>
+					<required name="parent" acl="add" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="choose_output_type" >
+		<action name="choose_output_type">
 			<function name="choose_output_type">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="edit_xml" >
+		<action name="edit_xml">
 			<function name="edit_xml">
 				<arguments>
 					<required name="id" />
@@ -24,14 +24,14 @@
 			</function>
 		</action>
 
-		<action name="submit_xml" >
+		<action name="submit_xml">
 			<function name="submit_xml">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="xml_op" >
+		<action name="xml_op">
 			<function name="xml_op">
 				<arguments>
 					<required name="id" />
@@ -39,14 +39,14 @@
 			</function>
 		</action>
 
-		<action name="submit_xml_output" >
+		<action name="submit_xml_output">
 			<function name="submit_xml_output">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_html" >
+		<action name="add_html">
 			<function name="add_html">
 				<arguments>
 					<required name="parent" />
@@ -61,30 +61,30 @@
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="submit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="admin_op" >
+		<action name="admin_op">
 			<function name="admin">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="aliasmgr" >
+		<action name="aliasmgr">
 			<function name="aliasmgr">
 				<arguments>
 					<required name="id" />
@@ -92,166 +92,166 @@
 			</function>
 		</action>
 
-		<action name="add_n_rows" >
+		<action name="add_n_rows">
 			<function name="add_n_rows">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="after" />
 					<optional name="count" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_n_cols" >
+		<action name="add_n_cols">
 			<function name="add_n_cols">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="after" />
 					<optional name="count" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin" >
+		<action name="submit_admin">
 			<function name="submit_admin">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_admin_cell" >
+		<action name="submit_admin_cell">
 			<function name="submit_admin_cell">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_col" >
+		<action name="add_col">
 			<function name="add_col">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="after" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_col" >
+		<action name="del_col">
 			<function name="del_col">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_row" >
+		<action name="add_row">
 			<function name="add_row">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="after" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="del_row" >
+		<action name="del_row">
 			<function name="del_row">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="exp_up" >
+		<action name="exp_up">
 			<function name="exp_up">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="exp_down" >
+		<action name="exp_down">
 			<function name="exp_down">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="exp_left" >
+		<action name="exp_left">
 			<function name="exp_left">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="exp_right" >
+		<action name="exp_right">
 			<function name="exp_right">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="split_cell_ver" >
+		<action name="split_cell_ver">
 			<function name="split_cell_ver">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="split_cell_hor" >
+		<action name="split_cell_hor">
 			<function name="split_cell_hor">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<optional name="row" />
 					<optional name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="ch_cell" >
+		<action name="ch_cell">
 			<function name="ch_cell">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<required name="row" />
 					<required name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_element" >
+		<action name="add_element">
 			<function name="add_element">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 					<required name="row" />
 					<required name="col" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="translate" >
+		<action name="translate">
 			<function name="translate">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_translate" >
+		<action name="submit_translate">
 			<function name="submit_translate">
 				<arguments>
 				</arguments>

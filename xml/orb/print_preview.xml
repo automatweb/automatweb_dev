@@ -1,5 +1,0 @@
-<?xml version='1.0'?>
-<orb>
-	<class name="print_preview" folder="plugins/document" extends="aw_template">
-	</class>
-</orb>

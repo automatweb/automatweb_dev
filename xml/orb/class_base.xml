@@ -4,11 +4,11 @@
 		<action name="new" all_args="1">
 			<function name="new_change">
 				<arguments>
-					<optional name="parent" type="int" acl="add"/>
+					<optional name="parent" type="int" acl="add" />
 					<optional name="period" />
 					<optional name="alias_to" />
 					<optional name="return_url" />
-					<optional name="reltype" type="int"/>
+					<optional name="reltype" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -16,7 +16,7 @@
 		<action name="change" all_args="1">
 			<function name="change">
 				<arguments>
-					<optional name="id" type="int" acl="edit"/>
+					<optional name="id" type="int" acl="edit" />
 					<optional name="group" />
 					<optional name="period" />
 					<optional name="alias_to" />
@@ -25,7 +25,7 @@
 			</function>
 		</action>
 
-		<action name="submit" >
+		<action name="submit">
 			<function name="submit">
 				<arguments>
 				</arguments>
@@ -60,10 +60,10 @@
 			</function>
 		</action>
 
-		<action name="ng_serialize" >
+		<action name="ng_serialize">
 			<function name="_serialize">
 				<arguments>
-					<required name="oid" type="int"/>
+					<required name="oid" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -71,7 +71,7 @@
 		<action name="view" all_args="1">
 			<function name="view">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="period" />
 				</arguments>

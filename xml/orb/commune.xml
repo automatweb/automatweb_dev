@@ -4,7 +4,7 @@
 		<action name="new_profile" all_args="1">
 			<function name="new_profile">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="return_url" />
 				</arguments>
@@ -21,7 +21,7 @@
 		<action name="delete_profile" all_args="1">
 			<function name="delete_profile">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<optional name="group" />
 					<required name="sel" />
 					<optional name="return_url" />
@@ -42,7 +42,7 @@
 		<action name="remove_ignored" all_args="1">
 			<function name="remove_ignored">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="return_url" />
 				</arguments>
@@ -52,7 +52,7 @@
 		<action name="remove_blocked" all_args="1">
 			<function name="remove_blocked">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="return_url" />
 				</arguments>
@@ -73,7 +73,7 @@
 		<action name="hide_prof_com" all_args="1">
 			<function name="hide_prof_com">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 					<required name="profile_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -84,7 +84,7 @@
 		<action name="delete_prof_com" all_args="1">
 			<function name="delete_prof_com">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 					<required name="profile_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -95,7 +95,7 @@
 		<action name="delete_comments" all_args="1">
 			<function name="delete_comments">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 					<required name="img_id" />
 					<optional name="group" />
 					<optional name="return_url" />
@@ -103,7 +103,7 @@
 			</function>
 		</action>
 
-		<action name="delete_contact" >
+		<action name="delete_contact">
 			<function name="delete_contact">
 				<arguments>
 					<required name="sel" />
@@ -111,37 +111,37 @@
 			</function>
 		</action>
 
-		<action name="hit_that_shit" >
+		<action name="hit_that_shit">
 			<function name="hit_that_shit">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="delete_message" >
+		<action name="delete_message">
 			<function name="delete_message">
 				<arguments>
-					<required name="sel" type="int" acl="delete"/>
+					<required name="sel" type="int" acl="delete" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="commaction" >
+		<action name="commaction">
 			<function name="commaction">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
 					<required name="commact" />
-					<optional name="profile" type="int" acl="view"/>
-					<optional name="cuser" type="int" acl="view"/>
+					<optional name="profile" type="int" acl="view" />
+					<optional name="cuser" type="int" acl="view" />
 					<optional name="group" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="archive_message" >
+		<action name="archive_message">
 			<function name="archive_message">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>
@@ -149,8 +149,8 @@
 		<action name="remove_from_community" all_args="1">
 			<function name="remove_from_community">
 				<arguments>
-					<required name="id" type="int"/>
-					<required name="sel" type="int" acl="view"/>
+					<required name="id" type="int" />
+					<required name="sel" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="return_url" />
 				</arguments>
@@ -160,7 +160,7 @@
 		<action name="change" nologin="1" is_public="1" all_args="1" caption="Kommuuni sisu">
 			<function name="change">
 				<arguments>
-					<optional name="id" type="int" acl="view"/>
+					<optional name="id" type="int" acl="view" />
 					<optional name="group" />
 					<optional name="period" />
 					<optional name="alias_to" />

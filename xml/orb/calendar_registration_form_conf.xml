@@ -11,8 +11,8 @@
 		<action name="show_data" nologin="1">
 			<function name="show_data">
 				<arguments>
-					<required name="id" type="int" acl="view"/>
-					<required name="data" type="int" acl="view"/>
+					<required name="id" type="int" acl="view" />
+					<required name="data" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

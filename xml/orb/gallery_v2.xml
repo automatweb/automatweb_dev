@@ -4,10 +4,10 @@
 		<action name="view" nologin="1">
 			<function name="view">
 				<arguments>
-					<optional name="id" type="int"/>
-					<optional name="page" type="int"/>
-					<optional name="col" type="int"/>
-					<optional name="row" type="int"/>
+					<optional name="id" type="int" />
+					<optional name="page" type="int" />
+					<optional name="col" type="int" />
+					<optional name="row" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -15,11 +15,11 @@
 		<action name="show_image" nologin="1">
 			<function name="show_image">
 				<arguments>
-					<optional name="id" type="int"/>
-					<optional name="page" type="int"/>
-					<optional name="col" type="int"/>
-					<optional name="row" type="int"/>
-					<optional name="img_id" type="int"/>
+					<optional name="id" type="int" />
+					<optional name="page" type="int" />
+					<optional name="col" type="int" />
+					<optional name="row" type="int" />
+					<optional name="img_id" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -49,7 +49,7 @@
 		<action name="show_aliased" nologin="1" caption="Näita galeriid">
 			<function name="show_aliased">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>
@@ -57,7 +57,7 @@
 		<action name="show_top_image" nologin="1" caption="Parim pilt">
 			<function name="show_top_image">
 				<arguments>
-					<required name="id" type="int"/>
+					<required name="id" type="int" />
 				</arguments>
 			</function>
 		</action>

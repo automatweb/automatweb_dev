@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="form_alias" folder="formgen" extends="form_base">
-		<action name="new" >
+		<action name="new">
 			<function name="do_new">
 				<arguments>
 					<required name="return_url" />
@@ -15,7 +15,7 @@
 			</function>
 		</action>
 
-		<action name="new_entry_alias" >
+		<action name="new_entry_alias">
 			<function name="new_entry_alias">
 				<arguments>
 					<required name="return_url" />
@@ -29,14 +29,14 @@
 			</function>
 		</action>
 
-		<action name="submit_entry_alias" >
+		<action name="submit_entry_alias">
 			<function name="submit_entry_alias">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="change" >
+		<action name="change">
 			<function name="change_entry_alias">
 				<arguments>
 					<required name="id" />

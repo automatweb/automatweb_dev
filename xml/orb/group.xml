@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="group" folder="core/users" extends="class_base">
-		<action name="remove_role_from_group" >
+		<action name="remove_role_from_group">
 			<function name="remove_role_from_group">
 				<arguments>
 					<required name="role_id" />

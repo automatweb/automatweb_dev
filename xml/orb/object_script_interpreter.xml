@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="object_script_interpreter" folder="install" extends="class_base">
-		<action name="exec_file" >
+		<action name="exec_file">
 			<function name="exec_file">
 				<arguments>
 					<required name="file" />

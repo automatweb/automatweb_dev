@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="quickmessagebox" folder="applications/quickmessage" extends="class_base">
-		<action name="delete_message" >
+		<action name="delete_message">
 			<function name="delete_message">
 				<arguments>
 					<required name="sel" />
@@ -9,10 +9,10 @@
 			</function>
 		</action>
 
-		<action name="archive_message" >
+		<action name="archive_message">
 			<function name="archive_message">
 				<arguments>
-					<required name="sel" type="int" acl="view"/>
+					<required name="sel" type="int" acl="view" />
 				</arguments>
 			</function>
 		</action>

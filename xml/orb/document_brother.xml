@@ -12,7 +12,7 @@
 			</function>
 		</action>
 
-		<action name="create_bro" >
+		<action name="create_bro">
 			<function name="create_bro">
 				<arguments>
 					<required name="parent" />

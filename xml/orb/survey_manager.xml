@@ -8,7 +8,7 @@
 			</function>
 		</action>
 
-		<action name="delete_surveys" >
+		<action name="delete_surveys">
 			<function name="delete_surveys">
 				<arguments>
 				</arguments>
