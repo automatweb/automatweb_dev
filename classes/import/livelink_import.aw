@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.18 2004/06/08 19:13:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.19 2005/01/04 13:59:35 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -13,6 +13,12 @@
 	
 	@property exception_node type=textbox size=40 maxlength=40
 	@caption Erandite ID (eralda komadega)
+
+	@property ll_username type=textbox size=40
+	@caption Livelink kasutaja
+	
+	@property ll_password type=password size=40
+	@caption Livelink parool
 
 	@property outdir type=textbox 
 	@caption Kataloog, kuhu failid kirjutada
@@ -142,6 +148,8 @@ class livelink_import extends class_base
 				"outdir" => $outdir,
 				"rootnode" => (int)$rootnode,
 				"fileprefix" => $obj->prop("fileprefix"),
+				"ll_username" => $obj->prop("ll_username"),
+				"ll_password" => $obj->prop("ll_password"),
 			));
 		};
 
@@ -156,6 +164,9 @@ class livelink_import extends class_base
 		$this->outdir = $args["outdir"];
 		$this->rootnode = $args["rootnode"];
 		$this->fileprefix = $args["fileprefix"];
+
+		$this->ll_username = $args["ll_username"];
+		$this->ll_password = $args["ll_password"];
 
 		$this->docs_to_retrieve = array();
 		$this->file_id_list = array();
@@ -312,7 +323,9 @@ class livelink_import extends class_base
         {
 		$outfile = tempnam($this->tmpdir,"aw-");
 		$rootnode = $this->rootnode;
-		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$rootnode&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
+		$ll_username = $this->ll_username;
+		$ll_password = $this->ll_password;
+		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${rootnode}&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
 		var_dump($retval);
 		print "got structure, parsing \n";
 		// check whether opening succeeded?
@@ -328,7 +341,9 @@ class livelink_import extends class_base
 	function fetch_node($node_id)
 	{
 		$outfile = tempnam($this->tmpdir,"aw-");	
-		$cmdline = "wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$node_id&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
+		$ll_username = $this->ll_username;
+		$ll_password = $this->ll_password;
+		$cmdline = "wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=${ll_username}&password=${ll_password}'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=${node_id}&objAction=XMLExport&scope=sub&versioninfo=current&schema&content=base64'";
 		print "executing $cmdline<br />";
 		passthru($cmdline);
 		// check whether opening succeeded?
