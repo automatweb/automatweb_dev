@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.149 2002/10/04 12:19:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.150 2002/10/16 11:35:58 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1307,7 +1307,7 @@ class form extends form_base
 				$this->db_query($q);
 			}
 
-			
+			$this->is_new_entry = true;
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
@@ -1317,6 +1317,7 @@ class form extends form_base
 			// update the stored data from the gathered data
 			$this->update_entry_data($this->entry_id,$this->entry);
 			$this->_log("form","Muutis formi $this->name sisestust $this->entry_id");
+			$this->is_new_entry = false;
 		}
 
 		$eid = $this->entry_id;
@@ -2167,6 +2168,9 @@ class form extends form_base
 			// check whether we are using are filtering using a calendar
 			// and if so, replace the value of date element before performing
 			// the actual search
+			//
+			// uh, dude, what the FUCK is this doing HERE??!?!
+			// this belongs to form_alias or something. definately not HERE. - terryf
 			global $cal;
 			if ($cal)
 			{
@@ -2191,7 +2195,6 @@ class form extends form_base
 		{
 			// alter the loaded search entry with the data
 			$l2r = $this->get_linked2real_element_array();
-//			echo "linked 2 real = <pre>", var_dump($l2r),"</pre> <br>";
 
 			foreach($restrict_search_el as $idx => $rel)
 			{
@@ -2199,7 +2202,6 @@ class form extends form_base
 
 				if (is_object($el) && is_object($this->arr["contents"][$el->get_row()][$el->get_col()]))
 				{
-//					echo "set element in row ", $el->get_row()," col ",$el->get_col()," id ",$l2r[$rel]," to val ",$restrict_search_val[$idx]," <Br>";
 					$this->arr["contents"][$el->get_row()][$el->get_col()]->set_element_entry($l2r[$rel],$restrict_search_val[$idx],true);
 				}
 			}
@@ -2250,14 +2252,21 @@ class form extends form_base
 
 
 
-		// execute it and show the results in the desired form
-		if ($this->arr["search_type"] == "forms")
+		if (!$output_id)
 		{
-			$op = $this->arr["search_form_op"];
+			// execute it and show the results in the desired form
+			if ($this->arr["search_type"] == "forms")
+			{
+				$op = $this->arr["search_form_op"];
+			}
+			else
+			{
+				$op = $this->arr["search_chain_op"];
+			}
 		}
 		else
 		{
-			$op = $this->arr["search_chain_op"];
+			$op = $output_id;
 		}
 
 		if ($this->arr["search_chain"])
@@ -2373,11 +2382,14 @@ class form extends form_base
 
 		// now get the search query
 //		echo "getting search query , used_els = <pre>",var_dump($used_els) ,"</pre><br>";
+
+		enter_function("form::new_do_search::get_query",array());
 		$sql = $this->get_search_query(array(
 			"used_els" => $used_els,
 			"group_els" => $group_els,
 			"group_collect_els" => $group_collect_els
 		));
+		exit_function("form::new_do_search::get_query",array());
 //		echo "sql = $sql <br>";
 		$result = "";
 		enter_function("form::new_do_search::query",array());

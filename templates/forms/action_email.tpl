@@ -32,6 +32,10 @@
 <td class="celltext"><select class='small_button' name='l_section'>{VAR:sec}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Kas saata meil ainult sisestuse loomisel:</td>
+<td class="celltext"><input type="checkbox" name="no_mail_on_change" value="1" {VAR:no_mail_on_change}></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input type='submit' class='formbutton' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.15 2002/08/29 03:17:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.16 2002/10/16 11:35:58 kristo Exp $
 // form_actions.aw - creates and executes form actions
 
 class form_actions extends form_base
@@ -79,6 +79,7 @@ class form_actions extends form_base
 						$data["email"] = $email;
 						$data["op_id"] = $op_id;
 						$data["l_section"] = $l_section;
+						$data["no_mail_on_change"] = $no_mail_on_change;
 						$la = new languages;
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -255,7 +256,8 @@ class form_actions extends form_base
 			"sec" => $this->picker($data["l_section"],$ob->get_list(false, true)),
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
 			"T_LANG" => $lt,
-			"LANG" => $lc
+			"LANG" => $lc,
+			"no_mail_on_change" => checked($data["no_mail_on_change"])
 		));
 
 		return $this->parse();
@@ -543,6 +545,11 @@ class form_actions extends form_base
 	// $entry_id - submitted form entry id
 	function do_email_action(&$form, $data, $entry_id)
 	{
+		if ($data["no_mail_on_change"] && !$form->is_new_entry)
+		{
+			return;
+		}
+
 		if (aw_global_get("uid") != "")
 		{
 			$us = get_instance("users");
