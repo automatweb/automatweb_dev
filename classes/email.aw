@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.9 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.10 2001/07/26 12:55:12 kristo Exp $
 // mailinglist saadetavate mailide klass
-
+lc_load("mailinglist");
 	class email extends aw_template
 	{
 		function email()
@@ -10,6 +10,11 @@
 			$this->tpl_init("mailinglist");
 			$this->sent = array();
 			lc_load("definition");
+			global $lc_mailinglist;
+		if (is_array($lc_mailinglist))
+		{
+			$this->vars($lc_mailinglist);
+		}
 		}
 
 		function list_mails($parent)
@@ -360,7 +365,8 @@
 				$c = $this->mk_mail($user_id, $mail[contents], $user[name], $user[mail],$id);
 				$c = $this->mk_stamps($c);
 				
-				#$c = str_replace("\n","\n\r",$c);
+				$c = str_replace("\r","",$c);
+				$c = str_replace("\n\n","\n\n\n",$c);
 				fwrite($f, "\n".$c."\n");
 				pclose($f);
 				echo LC_EMAIL_SENT_EMAIL3, $user[name], "(" ,  $user[mail], ") 'le<br>";

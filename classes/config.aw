@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.13 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.14 2001/07/26 12:55:12 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -518,6 +518,8 @@ class db_config extends aw_template
 		$icons[$id]["id"] = $icon_id;
 		$icons[$id]["url"] = $ic["url"];
 
+		$this->db_query("UPDATE menu SET icon_id = '$icon_id' WHERE admin_feature = '$id'");
+
 		$cs = serialize($icons);
 		$this->set_simple_config("program_icons",$cs);
 	}
@@ -544,6 +546,9 @@ class db_config extends aw_template
 		$this->vars(array("type" => LC_CONFIG_BROD_MENY, "mtype" => "brother", "url" => $v["url"]));
 		$this->parse("LINE");
 
+		$v = $ar["homefolder"];
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 		$this->vars(array("type" => LC_CONFIG_HOME_CAT, "mtype" => "homefolder", "url" => $v["url"]));
 		$this->parse("LINE");
 
@@ -561,12 +566,6 @@ class db_config extends aw_template
 		$this->vars(array("type" => LC_CONFIG_HOMECATALOG_GROUPS, "mtype" => "hf_groups", "url" => $v["url"]));
 		$this->parse("LINE");
 
-		$v = $ar["bugtrack"];
-		if ($v["url"] == "")
-			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
-
-		$this->vars(array("type" => LC_CONFIG_CLIENTBACK, "mtype" => "bugtrack", "url" => $v["url"]));
-		$this->parse("LINE");
 
 		return $this->parse();
 	}

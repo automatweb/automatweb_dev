@@ -2,7 +2,7 @@
 define(C_TYPE_PLACE,0);
 define(C_TYPE_EVENT,1);
 classload("defs");
-
+lc_load("events");
 class events_user extends aw_template
 {
 	function events_user()
@@ -14,6 +14,11 @@ class events_user extends aw_template
 			C_TYPE_EVENT => LC_EVENTS_USERADD_EVENTTYPE
 		);
 		lc_load("definition");
+		global $lc_events;
+		if (is_array($lc_events))
+		{
+			$this->vars($lc_events);}
+
 	}
 
 	////

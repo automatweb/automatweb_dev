@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_client.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_client.aw,v 2.3 2001/07/26 12:55:12 kristo Exp $
 
 global $orb_defs;
 $orb_defs["banner_client"] = "xml";
-
+lc_load("banner");
 classload("banner");
 
 class banner_client extends banner
@@ -13,6 +13,10 @@ class banner_client extends banner
 		$this->banner();
 		$this->def_html = "<a href='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?gid=%s&click=1&ss=[ss]'><img src='".$GLOBALS["baseurl"]."/banner.".$GLOBALS["ext"]."?gid=%s&ss=[ss]' border=0></a>";
 		lc_load("definition");
+		global $lc_banner;
+		if (is_array($lc_banner))
+		{
+			$this->vars($lc_banner);}
 	}
 
 	////

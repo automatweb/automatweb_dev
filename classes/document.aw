@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.37 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.38 2001/07/26 12:55:12 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -637,9 +637,9 @@ class document extends aw_template
 		$t = new msgboard;
 		$nc = $t->get_num_comments($docid);
 		$nc = $nc < 1 ? "0" : $nc;
-		$doc["content"] = str_replace(LC_DOCUMENT_COM_NR,$nc,$doc["content"]);
+		$doc["content"] = str_replace("#kommentaaride arv#",$nc,$doc["content"]);
 
-		$doc["content"] = preg_replace("/<kommentaar>(.*)<\/kommentaar>/isU","<a class=\"links\" href='$baseurl/comments.$ext?section=$docid'>\\1</a>",$doc["content"]);
+		$doc["content"] = preg_replace("/#kommentaar#(.*)#\/kommentaar#/isU","<a class=\"links\" href='$baseurl/comments.$ext?section=$docid'>\\1</a>",$doc["content"]);
 
 	// <mail to="bla@ee">lahe tyyp</mail>
     $doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
@@ -2283,7 +2283,6 @@ class document extends aw_template
 		$row = $this->db_next();
 
 		$al = $this->get_aliases_for($oid);
-
 		return serialize(array("row" => $row, "aliases" => $al));
 	}
 
@@ -2301,6 +2300,7 @@ class document extends aw_template
 		reset($this->knownfields);
 		while(list($fcap,$fname) = each($this->knownfields)) 
 		{
+			$this->quote(&$row[$fname]);
 			$q_parts[] = "'$row[$fname]'";
 			$s_parts[] = "$fname";
 		};

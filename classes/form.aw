@@ -1,7 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.39 2001/07/18 18:08:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.40 2001/07/26 12:55:12 kristo Exp $
 // form.aw - Class for creating forms
+
+// This class should be split in 2, one that handles editing of forms, and another that allows
+// filling them and processing the results. It's needed to complete our plan to take over the world.
 lc_load("form");
+lc_load("automatweb");
 global $orb_defs;
 $orb_defs["form"] = "xml";
 
@@ -46,6 +50,15 @@ class form extends form_base
 		$this->active_currency = 0;
 
 		lc_load("definition");
+
+		global $lc_automatweb;
+
+		// those should only be loaded, if we are inside an interactive session
+		// and not let's say process_entry.
+		if (is_array($lc_automatweb))
+		{
+			$this->vars($lc_automatweb);
+		};
 	}
 
 	////
@@ -66,109 +79,20 @@ class form extends form_base
 	}
 
 	////
-	// !
-	function rpc_listentries($args = array())
+	function get_xml_input($args = array())
 	{
-		preg_match("/^(\w*)/",$args[0],$matches);
-		$alias = $matches[1];
-		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
+		$alias = $args[0];
+		$q = sprintf("SELECT * FROM objects WHERE name = '%s' AND class_id = %d",$alias,CL_FORM_XML_INPUT);
 		$this->db_query($q);
-		$entry_list = array();
-		classload("xml");
-		$xml = new xml();
-		$blacklist = array();
 		$row = $this->db_next();
-		if ($row)
-		{
-			$xdata = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"],
-			));
-			if (is_array($xdata["forms"]))
-			{
-				foreach($xdata["forms"] as $key => $val)
-				{
-					$q = "SELECT * FROM form_" . $val . "_entries";
-					$this->db_query($q);
-					// if the entry is a part of form_chain, 
-					while($row = $this->db_next())
-					{
-						if (!$blacklist[$row["id"]])
-						{
-							$entry_list[] = $row["id"];
-						};
-
-						if ($row["chain_id"])
-						{
-							$this->save_handle();
-							$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
-							$this->db_query($q);
-							$crow = $this->db_next();
-							$blacklist = $blacklist + array_flip($xml->xml_unserialize(array("source" => $crow["ids"])));
-							$this->restore_handle();
-						};
-					};
-				};
-			};
-			$retval = array(
-					"data" => $entry_list,
-					"type" => "array",
-			);
-		}
-		else
-		{
-			$retval = array(
-					"error" => "Name/alias not found",
-					"errno" => "1",
-			);
-		};
-		return $retval;
-	}
-
-	function rpc_getentry($args = array())
-	{
-		$eid = $args[0];
-		$alias = $args[1];
-
-		classload("form_entry");
-		$form_entry = new form_entry();
-		$block = $form_entry->get_entry(array("eid" => $eid));
-
-		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
-		$this->db_query($q);
-		
-		$row = $this->db_next();
-			
-		$xdata = $this->get_object_metadata(array(
+		$meta = $this->get_object_metadata(array(
 				"metadata" => $row["metadata"],
 		));
-
-		$jrk = $xdata["data"]["jrk"];
-		$active = $xdata["data"]["active"];
-		$tags = $xdata["data"]["tag"];
-
-		$this->pstruct = array();
-
-		asort($jrk);
-		
-		foreach($jrk as $key => $val)
-		{
-			if ($active[$key])
-			{
-				$idx = "el_" . $key;
-				$keyblock = array(
-						"name" => $tags[$key],
-						"value" => $block[$idx],
-				);
-				$this->pstruct[] = $keyblock;
-			};
-		};
-
-		$retval = array(
-			"data" => $this->pstruct,
-			"type" => "struct",
-		);
-		return $retval;
+		classload("xml_support");
+		$struct = rpc_create_struct($meta);
+		return $struct;
 	}
+
 			
 	////
 	// !Generates form admin interface
@@ -193,17 +117,28 @@ class form extends form_base
 				$els = $this->arr["contents"][$row][$a]->get_elements();
 				reset($els);
 				while(list(,$v) = each($els))
+				{
 					if (!$this->can("delete",$v["id"]))
+					{
 						$fl = false;
+					}
+				}
 			}
-			$this->vars(array("form_col" => $a,
-												"del_col"		=> $this->mk_orb("del_col",array("id" => $this->id, "col" => $a))));
+			$this->vars(array(
+				"form_col" => $a,
+				"del_col"		=> $this->mk_orb("del_col",array("id" => $this->id, "col" => $a))
+			));
 			$cd = "";
 			if ($fl == true)
+			{
 				$cd = $this->parse("DELETE_COL");
+			}
 
-			$this->vars(array("FIRST_C" => $fi, "DELETE_COL" => $cd,
-												"add_col"	=> $this->mk_orb("add_col", array("id" => $this->id, "count" => 1, "after" => $a))));
+			$this->vars(array(
+				"FIRST_C" => $fi, 
+				"DELETE_COL" => $cd,
+				"add_col"	=> $this->mk_orb("add_col", array("id" => $this->id, "count" => 1, "after" => $a))
+			));
 			$this->parse("DC");
 		}
 
@@ -214,7 +149,9 @@ class form extends form_base
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
 				if (!($arr = $this->get_spans($i, $a)))
+				{
 					continue;
+				}
 				
 				$els = $this->arr["contents"][$arr["r_row"]][$arr["r_col"]]->get_elements();
 
@@ -278,7 +215,14 @@ class form extends form_base
 					$ed = $this->parse("EXP_DOWN");
 				}
 
-				$this->vars(array("SPLIT_HORIZONTAL" => $sh, "SPLIT_VERTICAL" => $sv, "EXP_UP" => $eu, "EXP_LEFT" => $el, "EXP_RIGHT" => $er,"EXP_DOWN" => $ed));
+				$this->vars(array(
+					"SPLIT_HORIZONTAL" => $sh, 
+					"SPLIT_VERTICAL" => $sv, 
+					"EXP_UP" => $eu, 
+					"EXP_LEFT" => $el, 
+					"EXP_RIGHT" => $er,
+					"EXP_DOWN" => $ed
+				));
 				$cols.=$this->parse("COL");
 			}
 			$fi = "";
@@ -355,16 +299,7 @@ class form extends form_base
 					"row"						=> $arr["r_row"]
 				));	
 
-/*				if ($el == "")
-				{
-					$se = "<img src='/images/transa.gif' height=1 width=1 border=0>";
-				}
-				else
-				{*/
-					$se = $this->parse("SOME_ELEMENTS");
-//				}
-
-				$this->vars(array("SOME_ELEMENTS" => $se));
+				$this->vars(array("SOME_ELEMENTS" => $this->parse("SOME_ELEMENTS")));
 
 				$cols.=$this->parse("COL");
 			}
@@ -413,7 +348,23 @@ class form extends form_base
 				}
 			}
 		}
+
 		$this->save();
+
+		if (is_array($selel))
+		{
+			$this->load($id);
+			foreach($selel as $selid)
+			{
+				$el = $this->get_element_by_id($selid);
+				if ($el)
+				{
+					unset($this->arr["elements"][$el->get_row()][$el->get_col()][$selid]);
+					$el->del();
+				}
+			}
+			$this->save();
+		}
 		return $this->mk_my_orb("all_elements", array("id" => $id));
 	}
 
@@ -470,7 +421,7 @@ class form extends form_base
 			$this->load($id);
 			foreach($sel as $elid)
 			{
-				$inothers = false;
+				$inothers = true;
 				$this->db_query("SELECT * FROM element2form WHERE el_id = $elid AND form_id != $id");
 				while ($row = $this->db_next())
 				{
@@ -481,12 +432,15 @@ class form extends form_base
 					// since this element is in some other forms as well, we must create a replica and remove the old one from this form
 					$el = $this->get_element_by_id($elid);
 					
-					$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = ".$el->get_id(),"parent");
+					if ($el)
+					{
+						$el_parent = $this->db_fetch_field("SELECT parent FROM objects WHERE oid = ".$el->get_id(),"parent");
 
-					$this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid));
+						$this->arr["contents"][$el->get_row()][$el->get_col()]->do_add_element(array("name" => $el->get_el_name(), "parent" => $this->arr["tear_folder"], "based_on" => $elid,"props" => $el->get_props()));
 
-					unset($this->arr["elements"][$el->get_row()][$el->get_col()][$elid]);
-					$el->del();	// delete the element from this form
+						unset($this->arr["elements"][$el->get_row()][$el->get_col()][$elid]);
+						$el->del();	// delete the element from this form
+					}
 				}
 			}
 			$this->save();
@@ -752,11 +706,12 @@ class form extends form_base
 				$form_action = "/reforb.".$GLOBALS["ext"];
 			}
 		}
-		$form_action = $baseurl.$form_action;
+		//$form_action = $baseurl.$form_action;
 
+		global $section;
 		if (!isset($reforb) || $reforb == "")
 		{
-			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id));
+			$reforb = $this->mk_reforb("process_entry", array("id" => $this->id,"section" => $section));
 		}
 		if (isset($entry_id) && $entry_id)
 		{
@@ -869,18 +824,72 @@ class form extends form_base
 		return $html;
 	}
 
+	function rpc_handle($args = array())
+	{
+		print "rpc handler starts<br>";
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+		$retval = array(
+			"name" => "success",
+			"value" => "yes",
+		);
+		return $retval;
+	}
+
+	////
+	// Beginning of a saner version of process_entry. Saner because it doesn't load the values
+	// directly from the global scope
+	// arguments:
+	// id(int) - millise vormi sisse andmed laadida?
+	// parent(int) - millise objekti alla entry objekt teha
+	// entry_id(optional)(int) - kui antud, siis salvestatakse olemasolev entry üle
+	// vars(array) - pairs of element_id => value 
+	function proc_entry($args = array())
+	{
+		extract($args);
+		// load the originating form
+		print "<pre>";
+		print_r($args);
+		print "</pre>";
+		//$this->load($id);
+		// right now we only handle new entries
+		//$entry_id = $this->new_object(array(
+		//			"parent" => $parent,
+		//			"class_id" => CL_FORM_ENTRY,
+		//			"name" => "form entry",
+		//));
+		
+		//for ($i=0; $i < $this->arr["rows"]; $i++)
+		//{
+		//	for ($a=0; $a < $this->arr["cols"]; $a++)
+		//	{
+		//		// form_cell->process_entry
+		//		$this->arr["contents"][$i][$a] -> proc_entry(&$this->entry, $entry_id);
+		//	}
+		///}
+		
+
+
+	}
+
+
 	////
 	// !saves the entry for the form $id, if $entry_id specified, updates it instead of creating a new one
 	// elements are assumed to be prefixed by $prefix
 	// optional argument $chain_entry_id - if creating a new entry and it is specified, the entry is created with that chain entry id
+	// parent (id) - mille alla entry salvestada
+
 	function process_entry($arr)
 	{
 		extract($arr);
+
 		$this->load($id);
 
 		if (!$entry_id)
 		{
 			$parent = isset($parent) ? $parent: $this->arr["ff_folder"];
+			// what the hell is that single "form_entry" doing there in the middle?
 			$entry_id = $this->new_object(array("parent" => $parent, "form_entry", "class_id" => CL_FORM_ENTRY));
 			$this->entry_id = $entry_id;
 			$new = true;
@@ -889,6 +898,7 @@ class form extends form_base
 		{
 			$new = false;
 		}
+
 		if (!isset($prefix))
 		{
 			$prefix = "";
@@ -898,6 +908,7 @@ class form extends form_base
 		{
 			for ($a=0; $a < $this->arr["cols"]; $a++)
 			{
+				// form_cell->process_entry
 				$this->arr["contents"][$i][$a] -> process_entry(&$this->entry, $entry_id,$prefix);
 			}
 		}
@@ -905,20 +916,26 @@ class form extends form_base
 		if ($this->arr["name_el"])
 		{
 			$el = $this->get_element_by_id($this->arr["name_el"]);
-			if ($el->get_type() == "")
+			if ($el)
 			{
-				$this->entry_name = $el->get_text();
-			}
-			else
-			{
-				$this->entry_name = $el->get_value();
+				if ($el->get_type() == "")
+				{
+					$this->entry_name = $el->get_text();
+				}
+				else
+				{
+					$this->entry_name = $el->get_value();
+				}
 			}
 			$this->upd_object(array("oid" => $entry_id, "name" => $this->entry_name,"comment" => ""));
 		}
+		
 		$en = serialize($this->entry);
+		
 		if ($new)
 		{
-			$this->db_query("insert into form_entries values($entry_id, $this->id, ".time().", '$en')");
+			// lisame uue entry
+			$this->db_query("INSERT INTO form_entries VALUES($entry_id, $this->id, ".time().", '$en')");
 
 			// create sql 
 			reset($this->entry);
@@ -928,39 +945,52 @@ class form extends form_base
 				$ids.=",chain_id";
 				$vals.=",".$chain_entry_id;
 			}
+
 			$first = true;
+
 			while (list($k, $v) = each($this->entry))
 			{
-				$ids.=",el_$k";
+				$el = $this->get_element_by_id($k);
+				$ev = $el->get_value();
+
+				$ids.=",el_$k,ev_$k";
 				// see on pildi uploadimise elementide jaoks
 				if (is_array($v))
 				{
 					$v = serialize($v);
 				}
-				$vals.=",'$v'";
+				$vals.=",'$v','$ev'";
 			}
+
 			$sql = "INSERT INTO form_".$this->id."_entries($ids) VALUES($vals)";
 			$this->db_query($sql);
 
+			// see logimine on omal kohal ainult siis, kui täitmine toimub
+			// läbi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
 			$this->do_actions($entry_id);
 		}
 		else
 		{
-			$this->db_query("update form_entries set form_entries.tm = ".time().", contents = '$en' where id = $entry_id");
+			// muudame olemasolevat entryt.
+			$this->db_query("UPDATE form_entries SET form_entries.tm = ".time().", contents = '$en' WHERE id = $entry_id");
 			// create sql 
 			reset($this->entry);
 			$ids = "id = $entry_id";
 			$first = true;
+
 			while (list($k, $v) = each($this->entry))
 			{
+				$el = $this->get_element_by_id($k);
+				$ev = $el->get_value();
 				if (is_array($v))
 				{
 					$v = serialize($v);
 				}
-				$ids.=",el_$k = '$v'";
+				$ids.=",el_$k = '$v',ev_$k = '$ev'";
 			}
-			$sql = "update form_".$this->id."_entries set $ids where id = $entry_id";
+
+			$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
 			$this->db_query($sql);
 			$this->_log("form","Muutis formi $this->name sisestust $entry_id");
 		}
@@ -985,13 +1015,13 @@ class form extends form_base
 				$l = $this->get_ae_location();
 				break;
 			case "search_results":
-				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1));
+				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1,"section" => $section));
 				break;
 			default:
 				if ($this->type == FTYPE_SEARCH)
 				{
 					// n2itame ocingu tulemusi
-					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1));
+					$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id,"op_id" => 1,"section" => $section));
 				}
 				else
 				{
@@ -1029,7 +1059,7 @@ class form extends form_base
 			$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
 		};
 
-		$row["form_".$id."_entry"] = $crow["id"];
+		$row["form_".$id."_entry"] = $row["id"];
 
 		if ($row["chain_id"])
 		{
@@ -1098,12 +1128,24 @@ class form extends form_base
 	function show($arr)
 	{
 		extract($arr);
-	
+		
+		global $awt;
+		$awt->start("form::show");
 		// if reset argument is set, zero out all data that has been gathered inside templates
 		if (isset($reset))
 		{
 			$this->tpl_reset();
 		};
+		
+		// what the fuck is going on here? there are entry_id-s on form_XX_entry tables
+		// which are not even registered.
+		// classload("form_entry");
+		// $f_entry = new form_entry();
+		/// $block = $f_entry->get_entry(array("eid" => $entry_id));
+		// print "<pre>";
+		// print_r($block);
+		// print "</pre>";
+		// print "+++";
 
 		if (!$no_load_entry)
 		{
@@ -1113,6 +1155,7 @@ class form extends form_base
 		// if this is a search form, then search, instead of showing the entered data
 		if ($this->type == FORM_SEARCH)
 		{
+			$awt->stop("form::show");
 			return $this->do_search($entry_id, $op_id);
 		}
 
@@ -1209,6 +1252,9 @@ class form extends form_base
 			$frow_cnt = $this->output["rows"];
 		}
 	
+		$op_far = $this->get_op_forms($op_id);
+
+		// tsykkel yle koigi outputi ridade ja cellide
 		for ($row = 0; $row < $this->output["rows"]; $row++)
 		{
 			$html="";
@@ -1240,14 +1286,33 @@ class form extends form_base
 				$chtml= "";
 				for ($i=0; $i < $op_cell["el_count"]; $i++)
 				{
-					$el = $this->get_element_by_id($op_cell["els"][$i]);
+					$el = false;
+					if (is_array($op_cell["elements"]))	// new op
+					{
+						$op_elid = $op_cell["elements"][$i]["id"];
+						if (!$op_cell["elements"][$i]["linked_element"] || $op_far[$op_cell["elements"][$i]["linked_form"]] != $op_cell["elements"][$i]["linked_form"])
+						{
+							// j2relikult tuleb lihtsalt see element n2idata, mis seal on ja selle texti n2idata
+							$el=new form_entry_element;
+							$el->load($op_cell["elements"][$i],&$this,$rcol,$rrow);
+							$el->set_entry($this->entry,$this->entry_id, &$this);
+						}
+					}
+					else
+					{
+						$op_elid = $op_cell["els"][$i];
+					}
+
+					if (!$el)
+					{
+						$el = $this->get_element_by_id($op_elid);
+					}
 					if (!$el)
 					{
 						// j2relikult on see element m6nes teises selle outputi formis. et siis tuleb loadida k6ik selle 
 						// outputiga seotud formid ja nende seest elementi otsida
 						if (!$op_other_forms_loaded)
 						{
-							$op_far = $this->get_op_forms($op_id);
 							$op_forms = array();
 							foreach($op_far as $op_fid)
 							{
@@ -1270,7 +1335,7 @@ class form extends form_base
 						{
 							if (!$el)
 							{
-								$el = $op_form->get_element_by_id($op_cell["els"][$i]);
+								$el = $op_form->get_element_by_id($op_elid);
 							}
 						}
 
@@ -1311,6 +1376,7 @@ class form extends form_base
 				"tablestring" => $t_style->get_table_string($this->output["table_style"])
 			));
 		}
+			$awt->stop("form::show");
 		return $this->parse();
 	}
 
@@ -1531,49 +1597,141 @@ class form extends form_base
 		reset($this->arr["search_from"]);
 		$this->cached_results = array();
 
-		// loop through all the forms that are selected as search targets
-		while (list($id,$v) = each($this->arr["search_from"]))
+		// leiame kas see otsing on p2rja kohta. 
+		$is_chain = false;
+		$fidstr = join(",", $this->map2("%s",$this->arr["search_from"]));
+		if ($fidstr != "")
 		{
-			if ($v != 1)		// search only selected forms
+			$this->db_query("SELECT distinct(chain_id) as chain_id FROM form2chain WHERE form_id IN ($fidstr)");
+			while ($row = $this->db_next())
 			{
-				continue;
+				$is_chain = true;
+				$chain_id = $row["chain_id"];
+			}
+		}
+
+		if ($is_chain)
+		{
+	//		echo "chid = $chain_id <br>";
+			// loop through all the forms that are selected as search targets
+			$ar = $this->get_forms_for_chain($chain_id);
+			reset($ar);
+			list($mid,$v) = each($ar);
+			$formar = array("objects.oid as oid","form_".$mid."_entries.id as entry_id","form_".$mid."_entries.*");
+			$joinar = array();
+			while (list($id,) = each($ar))
+			{
+				$formar[] = "form_".$id."_entries.*";
+				$joinar[] = "LEFT JOIN form_".$id."_entries ON (form_".$id."_entries.chain_id = form_".$mid."_entries.chain_id OR form_".$id."_entries.chain_id IS NULL) ";
 			}
 
-			// create the sql that searches from this form's entries
-			$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 ";
-			if (is_array($parent))
-			{
-				$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
-			}
+			$query="SELECT ".(join(",",$formar))." FROM form_".$mid."_entries LEFT JOIN objects ON objects.oid = form_".$mid."_entries.id ".(join(" ",$joinar))."  WHERE objects.status != 0 AND form_".$mid."_entries.chain_id IS NOT NULL ";
 
 			// loop through all the elements of this form 
 			reset($els);
 			while( list(,$el) = each($els))
 			{
-				if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
+				if ($el->arr["linked_form"])	// and use only the elements that are members of the current form in the query
 				{
 					// oh la la
-					if ($this->entry[$el->get_id()] != "")	
+					if (trim($el->get_value()) != "")	
 					{
-						$query.= "AND el_".$el->arr["linked_element"]." like '%".$this->entry[$el->get_id()]."%' ";
+						if ($el->get_type() == "multiple")
+						{
+							$query.=" AND (";
+							$ec=explode(",",$el->entry);
+							reset($ec);
+							$qpts = array();
+							while (list(, $v) = each($ec))
+							{
+								$qpts[] =" form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->arr["multiple_items"][$v]."%' ";
+							}
+
+							$query.= join("OR",$qpts).")";
+						}
+						else
+						if ($el->get_type() == "checkbox")
+						{	
+							//checkboxidest ocime aint siis kui nad on tshekitud
+							if ($el->get_value(true) == 1)
+							{
+								$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+							}
+						}
+						else
+						{
+							$query.= "AND (form_".$el->arr["linked_form"]."_entries.ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%')";
+						}
 					}
 				}
 			}
-
+	
+			
 			if ($query == "")
 			{
 				$query = "SELECT * FROM form_".$id."_entries";
 			}
 
 			$matches = array();
+//		echo "query = $query <br>\n";
+//		flush();
 			$this->db_query($query);
 			while ($row = $this->db_next())
 			{
-				$matches[] = $row["id"];
-				$this->cached_results[$id][$row["oid"]] = $row;
+				$matches[] = $row["oid"];
+				$this->cached_results[$mid][$row["oid"]] = $row;
 			}
 
-			$ret[$id] = $matches;
+//			echo "done \n<br>";
+//			flush();
+			$ret[$mid] = $matches;
+		}
+		else
+		{
+			// loop through all the forms that are selected as search targets
+			while (list($id,$v) = each($this->arr["search_from"]))
+			{
+				if ($v != 1)		// search only selected forms
+				{
+					continue;
+				}
+
+				// create the sql that searches from this form's entries
+				$query="SELECT * FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE objects.status !=0 ";
+				if (is_array($parent))
+				{
+					$query .= sprintf(" AND objects.parent IN (%s)",join(",",$parent));
+				}
+
+				// loop through all the elements of this form 
+				reset($els);
+				while( list(,$el) = each($els))
+				{
+					if ($el->arr["linked_form"] == $id)	// and use only the elements that are members of the current form in the query
+					{
+						// oh la la
+						if ($this->entry[$el->get_id()] != "")	
+						{
+							$query.= "AND ev_".$el->arr["linked_element"]." like '%".$el->get_value()."%' ";
+						}
+					}
+				}
+
+				if ($query == "")
+				{
+					$query = "SELECT * FROM form_".$id."_entries";
+				}
+
+				$matches = array();
+				$this->db_query($query);
+				while ($row = $this->db_next())
+				{
+					$matches[] = $row["id"];
+					$this->cached_results[$id][$row["oid"]] = $row;
+				}
+
+				$ret[$id] = $matches;
+			}
 		}
 	
 		return $ret;
@@ -1581,9 +1739,13 @@ class form extends form_base
 
 	function do_search($entry_id, $output_id)
 	{
+		global $awt,$section;
+		$awt->start("form::search");
 		$matches = $this->search($entry_id);
+		$awt->stop("form::search");
 		if ($this->arr["show_table"])
 		{
+			$awt->start("form::gen_table");
 			if (!$this->arr["table"])
 			{
 				$this->raise_error("No table selected for showing data!",true);
@@ -1591,21 +1753,9 @@ class form extends form_base
 
 			classload("form_table");
 			$ft = new form_table;
-			$xml = $ft->get_xml($this->arr["table"]);
+			$ft->start_table($this->arr["table"], array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section));
 
-			// siin peame k6igepealt genereerima tabelit defineeriva xmli
-			// siis selle tabeligenekale ette s88tma
-			// ja siis rea kaupa data talle ette s88tma
-			load_vcl("table");
-			$t = new aw_table(array(
-				"prefix" => "fg_".$entry_id,
-				"self" => $PHP_SELF,
-				"imgurl" => $baseurl . "/automatweb/images"
-			));
-			$t->parse_xml_def_string($xml);
-			$t->set_header_attribs(array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id));
-
-			classload("objects");
+/*			classload("objects");
 			$ob = new db_objects;
 			$li = $ob->get_list();
 			$movetoar = array();
@@ -1615,62 +1765,59 @@ class form extends form_base
 				{
 					$movetoar[$mid] = $li[$mid];
 				}
-			}
+			}*/
 			$movetoar["0"] = "  ";
-			$form = new form;
 			reset($matches);
 			while(list($fid,$v) = each($matches))
 			{
-				$form->load($fid);
-				foreach($v as $eid)
+				// figure out if this form is in any chains and if it is, then bring in the entries from other forms in chain
+				// with the same query
+				$chs = $this->get_chains_for_form($fid);
+				foreach($chs as $ch_id => $ch_id)
 				{
-					$form->load_entry($eid);
-					$eobj = $this->get_object($eid);
-
-					$rds = array();
-					if ($form->chain_entry_id)
+					$fos = $this->get_forms_for_chain($ch_id);
+					$tbls = "";
+					$joins = "";
+					foreach($fos as $ch_fid => $ch_fid)
 					{
-						$chain_id = $this->db_fetch_field("SELECT chain_id FROM form_chain_entries WHERE id = ".$this->chain_entry_id,"chain_id");
-						$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $this->chain_entry_id), "form_chain")."'>Muuda</a>";
-					}
-					else
-					{
-						$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $eid), "form_entry")."'>Muuda</a>";
-					}
-					
-					$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $eid, "op_id" => $this->arr["search_outputs"][$fid]))."'>Vaata</a>";
-					$rds["el_delete"] = "<a href='".$this->mk_my_orb(
-						"delete_entry", 
-							array(
-								"id" => $fid,
-								"entry_id" => $eid, 
-								"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))
-							)
-						)."'>Kustuta</a>";
-					$rds["el_created"] = $this->time2date($eobj["created"],2);
-					$rds["el_modified"] = $this->time2date($eobj["modified"],2);
-					$rds["el_createdby"] = $this->time2date($eobj["uid"],2);
-					$rds["el_active"] = "<input type='checkbox' name='active[".$fid."][".$eid."]' value='1' ".(checked($eobj["status"]==2))."><input type='hidden' name='old_active[".$fid."][".$eid."]' value='".$eobj["status"]."'>";
-					if (is_array($ft->table["moveto"]))
-					{
-						$rds["el_chpos"] = "<select name='chpos[".$fid."][".$eid."]>".$this->picker((in_array($eobj["parent"],$ft->table["moveto"]) ? $eobj["parent"] : 0),$movetoar)."</select><input type='hidden' name='old_pos[".$fid."][".$eid."]' value='".$eobj["parent"]."'>";
-					}
-					for ($row = 0; $row < $form->arr["rows"]; $row++)
-					{
-						for ($col = 0; $col < $form->arr["cols"]; $col++)
+						if ($ch_fid != $fid)
 						{
-							$form->arr["contents"][$row][$col]->get_els(&$elar);
-							reset($elar);
-							while (list(,$el) = each($elar))
-							{
-								$rds["el_".$el->get_id()] = htmlspecialchars($el->get_value());
-							}
+							$tbls.=",form_".$ch_fid."_entries.*";
+							$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
 						}
 					}
-					$t->define_data($rds);
+					break;
+				}
+				
+				$eids = join(",", $v);
+				if ($eids != "")
+				{
+//					echo "q = SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries $joins WHERE form_".$fid."_entries.id in ($eids)\n<br>";
+//					flush();
+					$this->db_query("SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries $joins WHERE form_".$fid."_entries.id in ($eids)");
+					$chenrties = array();
+//					echo "done\n<br>";
+	//				flush();
+					while ($row = $this->db_next())
+					{
+						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $ch_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+///						$row["ev_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $row["entry_id"]), "form_entry")."'>Muuda</a>";
+						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$fid],"section" => $section))."'>Vaata</a>";		
+						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+							"delete_entry", 
+								array(
+									"id" => $fid,
+									"entry_id" => $row["entry_id"], 
+									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
+								),
+							"form")."'>Kustuta</a>";
+						$ft->row_data($row);
+					}
 				}
 			}
-			$t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+//			echo "going to sort <br>\n";
+//			flush();
+			$ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
 			$tbl = $ft->get_css();
 			$tbl.="<form action='reforb.aw' method='POST'>\n";
 			if ($ft->table["submit_top"])
@@ -1681,7 +1828,7 @@ class form extends form_base
 			{
 				$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
 			}
-			$tbl.=$t->draw();
+			$tbl.=$ft->t->draw();
 
 			if ($ft->table["submit_bottom"])
 			{
@@ -1693,6 +1840,9 @@ class form extends form_base
 			}
 			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 			$tbl.="</form>";
+//			echo "finish<br>\n";
+//			flush();
+			$awt->stop("form::gen_table");
 			return $tbl;
 		}
 		else
@@ -2152,18 +2302,7 @@ class form extends form_base
 				for ($i=0; $i < $el_count; $i++)
 				{
 					$name = $oldel["name"]."_".$cnt;
-					$new_el = $this->new_object(array("parent" => $oldel_ob["parent"], "name" => $name, "class_id" => CL_FORM_ELEMENT));
-//						$this->db_query("INSERT INTO menu (id,type) values($new_el,".MN_FORM_ELEMENT.")");
-					$this->db_query("INSERT INTO form_elements (id) VALUES($new_el)");
-
-					// we must also update the form_$id_entries table
-					$this->db_query("ALTER TABLE form_".$id."_entries add el_$new_el text");
-
-					$this->db_query("INSERT INTO element2form(el_id,form_id) values($new_el,$id)");
-					$arr = $oldel;
-					$arr["id"] = $new_el;
-					$arr["name"] = $name;
-					$this->arr[elements][$r][$c][$new_el] = $arr;
+					$this->arr["contents"][$row][$col]->do_add_element(array("name" => $name, "parent" => $oldel_ob["parent"], "based_on" => $el_id));
 					$cnt++;
 				}
 			}
@@ -2482,6 +2621,108 @@ class form extends form_base
 	}
 
 	////
+	// !converts form_xx_entries table and adds ev_xxx columns
+	function convtables()
+	{
+		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			
+			$this->db_query("SELECT * FROM element2form WHERE form_id = ".$row["oid"]);
+			while ($erow = $this->db_next())
+			{
+				$this->save_handle();
+				
+				$this->db_query("ALTER TABLE form_".$row["oid"]."_entries ADD ev_".$erow["el_id"]." text");
+				
+				$this->restore_handle();
+			}
+			
+			$this->restore_handle();
+		}
+	}
+
+	function conventries()
+	{
+		$run = true;
+//		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FORM);
+		
+//		while ($frow = $this->db_next())
+//		{
+	$frow=array("oid" => 1735);
+
+			if ($run)
+			{
+			$this->save_handle();
+
+			$form = new form;
+			$form->load($frow["oid"]);
+
+			echo "form ",$frow["oid"],"<br>\n";
+			flush();
+			$cnt = 0;
+			$this->db_query("SELECT * FROM form_".$frow["oid"]."_entries");
+			while ($erow = $this->db_next())
+			{
+				$cnt++;
+				if (($cnt % 100) == 0)
+				{
+					echo "cnt = $cnt <br>\n";
+					flush();
+				}
+				$this->save_handle();
+				
+				$form->load_entry($erow["id"]);
+				for ($row = 0; $row < $form->arr["rows"]; $row++)
+				{
+					for ($col = 0; $col < $form->arr["cols"]; $col++)
+					{
+						$elar = array();
+						$form->arr["contents"][$row][$col]->get_els(&$elar);
+						foreach($elar as $el)
+						{
+//							if ($erow["ev_".$el->get_id()] != $el->get_value())
+//							{
+								$ev = $el->get_value();
+//								$ev = preg_replace("/<(.*)>(.*)<\/(.*)>/imsU","",$ev);
+								$ev = strip_tags($ev);
+	echo "value for element ", $el->get_id(), " set to $ev <br>\n";
+	flush();
+								$this->db_query("UPDATE form_".$frow["oid"]."_entries SET ev_".$el->get_id()." = '".$ev."' WHERE id = ".$erow["id"]);
+//							}
+						}
+					}
+				}
+				
+				$this->restore_handle();
+			}
+
+			$this->restore_handle();
+			}
+//		}
+	}
+
+	function convchains()
+	{
+		classload("xml");
+		$x = new xml;
+		$this->db_query("DELETE FROM form2chain");
+
+		$this->db_query("SELECT * FROM form_chains");
+		while ($row = $this->db_next())
+		{
+			$this->save_handle();
+			$cc = $x->xml_unserialize(array("source" => $row["content"]));
+			foreach($cc["forms"] as $fid => $fid)
+			{
+				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord) values($fid,".$row["id"].",'".$cc["form_order"][$fid]."')");
+			}
+			$this->restore_handle();
+		}
+	}
+
+	////
 	// !lets the user select all folders for the form
 	function set_folders($arr)
 	{
@@ -2548,6 +2789,454 @@ class form extends form_base
 	function set_active_currency($cuid = 0)
 	{
 		$this->active_currency = $cuid;
+	}
+
+	////
+	// !shows the form texts translation form
+	function translate($arr)
+	{
+		extract($arr);
+		$this->init($id,"translate.tpl","T&otilde;gi");
+
+		classload("languages");
+		$la = new languages;
+		$langs = $la->listall();
+
+		foreach($langs as $lar)
+		{
+			$this->vars(array(
+				"lang_name" => $lar["name"]
+			));
+			$lah.=$this->parse("LANGH");
+		}
+		$this->vars(array("LANGH" => $lah));
+
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					$lcol = "";
+					foreach($langs as $lar)
+					{
+						$this->vars(array(
+							"text" => $el->get_lang_text($lar["id"]),
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"]
+						));
+						$lcol.=$this->parse("LCOL");
+					}
+					$this->vars(array("LCOL" => $lcol));
+					$lrow.=$this->parse("LROW");
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ($el->get_type() == "listbox")
+					{
+						for ($i=0; $i < $el->arr["listbox_count"]; $i++)
+						{
+							$lcol1 = "";
+							foreach($langs as $lar)
+							{
+								if ($lar["id"] != $this->lang_id)
+								{
+									$txt = $el->arr["listbox_lang_items"][$lar["id"]][$i];
+								}
+								else
+								{
+									$txt = $el->arr["listbox_items"][$i];
+								}
+								$this->vars(array(
+									"text" => $txt,
+									"col" => $col,
+									"row" => $row,
+									"elid" => $el->get_id(),
+									"lang_id" => $lar["id"],
+									"item" => $i
+								));
+								$lcol1.=$this->parse("LCOL1");
+							}
+							$this->vars(array("LCOL1" => $lcol1));
+							$lrow1.=$this->parse("LROW1");
+						}
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ($el->get_type() == "multiple")
+					{
+						for ($i=0; $i < $el->arr["multiple_count"]; $i++)
+						{
+							$lcol2 = "";
+							foreach($langs as $lar)
+							{
+								if ($lar["id"] != $this->lang_id)
+								{
+									$txt = $el->arr["multiple_lang_items"][$lar["id"]][$i];
+								}
+								else
+								{
+									$txt = $el->arr["multiple_items"][$i];
+								}
+								$this->vars(array(
+									"text" => $txt,
+									"col" => $col,
+									"row" => $row,
+									"elid" => $el->get_id(),
+									"lang_id" => $lar["id"],
+									"item" => $i
+								));
+								$lcol2.=$this->parse("LCOL2");
+							}
+							$this->vars(array("LCOL2" => $lcol2));
+							$lrow2.=$this->parse("LROW2");
+						}
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					$lcol3 = "";
+					foreach($langs as $lar)
+					{
+						if ($lar["id"] != $this->lang_id)
+						{
+							$txt = $el->arr["lang_info"][$lar["id"]];
+						}
+						else
+						{
+							$txt = $el->arr["info"];
+						}
+						$this->vars(array(
+							"text" => $txt,
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"],
+						));
+						$lcol3.=$this->parse("LCOL3");
+					}
+					$this->vars(array("LCOL3" => $lcol3));
+					$lrow3.=$this->parse("LROW3");
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ($el->get_type() == "textbox" || $el->get_type() == "textarea")
+					{
+						$lcol4 = "";
+						foreach($langs as $lar)
+						{
+							if ($lar["id"] != $this->lang_id)
+							{
+								$txt = $el->arr["lang_default"][$lar["id"]];
+							}
+							else
+							{
+								$txt = $el->arr["default"];
+							}
+							$this->vars(array(
+								"text" => $txt,
+								"col" => $col,
+								"row" => $row,
+								"elid" => $el->get_id(),
+								"lang_id" => $lar["id"],
+							));
+							$lcol4.=$this->parse("LCOL4");
+						}
+						$this->vars(array("LCOL4" => $lcol4));
+						$lrow4.=$this->parse("LROW4");
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					$lcol5 = "";
+					foreach($langs as $lar)
+					{
+						if ($lar["id"] != $this->lang_id)
+						{
+							$txt = $el->arr["lang_must_error"][$lar["id"]];
+						}
+						else
+						{
+							$txt = $el->arr["must_error"];
+						}
+						$this->vars(array(
+							"text" => $txt,
+							"col" => $col,
+							"row" => $row,
+							"elid" => $el->get_id(),
+							"lang_id" => $lar["id"],
+						));
+						$lcol5.=$this->parse("LCOL5");
+					}
+					$this->vars(array("LCOL5" => $lcol5));
+					$lrow5.=$this->parse("LROW5");
+				}
+			}
+		}
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					if ($el->get_type() == "button")
+					{
+						$lcol6 = "";
+						foreach($langs as $lar)
+						{
+							if ($lar["id"] != $this->lang_id)
+							{
+								$txt = $el->arr["lang_button_text"][$lar["id"]];
+							}
+							else
+							{
+								$txt = $el->arr["button_text"];
+							}
+							$this->vars(array(
+								"text" => $txt,
+								"col" => $col,
+								"row" => $row,
+								"elid" => $el->get_id(),
+								"lang_id" => $lar["id"],
+							));
+							$lcol6.=$this->parse("LCOL6");
+						}
+						$this->vars(array("LCOL6" => $lcol6));
+						$lrow6.=$this->parse("LROW6");
+					}
+				}
+			}
+		}
+		$this->vars(array(
+			"LROW" => $lrow,
+			"LROW1" => $lrow1,
+			"LROW2" => $lrow2,
+			"LROW3" => $lrow3,
+			"LROW4" => $lrow4,
+			"LROW5" => $lrow5,
+			"LROW6" => $lrow6,
+			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
+		));
+
+		return $this->do_menu_return();
+	}
+
+	function submit_translate($arr)
+	{
+		extract($arr);
+		$this->load($id);
+
+		classload("languages");
+		$la = new languages;
+		$langs = $la->listall();
+
+		for ($row=0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->arr["cols"]; $col++)
+			{
+				$elar = array();
+				$this->arr["contents"][$row][$col]->get_els(&$elar);
+
+				foreach($elar as $el)
+				{
+					foreach($langs as $lar)
+					{
+						$this->arr["elements"][$row][$col][$el->get_id()]["lang_text"][$lar["id"]] = $r[$row][$col][$lar["id"]][$el->get_id()];
+						$this->arr["elements"][$row][$col][$el->get_id()]["lang_info"][$lar["id"]] = $s[$row][$col][$lar["id"]][$el->get_id()];
+						$this->arr["elements"][$row][$col][$el->get_id()]["lang_default"][$lar["id"]] = $d[$row][$col][$lar["id"]][$el->get_id()];
+						$this->arr["elements"][$row][$col][$el->get_id()]["lang_must_error"][$lar["id"]] = $e[$row][$col][$lar["id"]][$el->get_id()];
+						if ($el->get_type() == "button")
+						{
+							$this->arr["elements"][$row][$col][$el->get_id()]["lang_button_text"][$lar["id"]] = $b[$row][$col][$lar["id"]][$el->get_id()];
+						}
+					}
+					if ($el->get_type() == "listbox")
+					{
+						foreach($langs as $lar)
+						{
+							for ($i=0; $i < $el->arr["listbox_count"]; $i++)
+							{
+								$this->arr["elements"][$row][$col][$el->get_id()]["listbox_lang_items"][$lar["id"]][$i] = $l[$row][$col][$lar["id"]][$el->get_id()][$i];
+							}
+						}
+					}
+					else
+					if ($el->get_type() == "multiple")
+					{
+						foreach($langs as $lar)
+						{
+							for ($i=0; $i < $el->arr["multiple_count"]; $i++)
+							{
+								$this->arr["elements"][$row][$col][$el->get_id()]["multiple_lang_items"][$lar["id"]][$i] = $m[$row][$col][$lar["id"]][$el->get_id()][$i];
+							}
+						}
+					}
+				}
+			}
+		}
+		$this->save();
+
+		return $this->mk_my_orb("translate", array("id" => $id));
+	}
+
+	// the following functions will eventuall be moved out from this class.
+	////
+	// !
+	function rpc_listentries($args = array())
+	{
+		preg_match("/^(\w*)/",$args[0],$matches);
+		$alias = $matches[1];
+		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
+		$this->db_query($q);
+		$entry_list = array();
+		classload("xml");
+		$xml = new xml();
+		$blacklist = array();
+		$row = $this->db_next();
+		if ($row)
+		{
+			$xdata = $this->get_object_metadata(array(
+					"metadata" => $row["metadata"],
+			));
+			if (is_array($xdata["forms"]))
+			{
+				foreach($xdata["forms"] as $key => $val)
+				{
+					$q = "SELECT * FROM form_" . $val . "_entries";
+					$this->db_query($q);
+					// if the entry is a part of form_chain, 
+					while($row = $this->db_next())
+					{
+						if (!$blacklist[$row["id"]])
+						{
+							$entry_list[] = $row["id"];
+						};
+
+						if ($row["chain_id"])
+						{
+							$this->save_handle();
+							$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
+							$this->db_query($q);
+							$crow = $this->db_next();
+							$blacklist = $blacklist + array_flip($xml->xml_unserialize(array("source" => $crow["ids"])));
+							$this->restore_handle();
+						};
+					};
+				};
+			};
+			$retval = array(
+					"data" => $entry_list,
+					"type" => "array",
+			);
+		}
+		else
+		{
+			$retval = array(
+					"error" => "Name/alias not found",
+					"errno" => "1",
+			);
+		};
+		return $retval;
+	}
+
+	function rpc_getentry($args = array())
+	{
+		$eid = $args[0];
+		$alias = $args[1];
+
+		classload("form_entry");
+		$form_entry = new form_entry();
+		$block = $form_entry->get_entry(array("eid" => $eid));
+
+		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
+		$this->db_query($q);
+		
+		$row = $this->db_next();
+			
+		$xdata = $this->get_object_metadata(array(
+				"metadata" => $row["metadata"],
+		));
+
+		$jrk = $xdata["data"]["jrk"];
+		$active = $xdata["data"]["active"];
+		$tags = $xdata["data"]["tag"];
+
+		$this->pstruct = array();
+
+		asort($jrk);
+		
+		foreach($jrk as $key => $val)
+		{
+			if ($active[$key])
+			{
+				$idx = "el_" . $key;
+				$keyblock = array(
+						"name" => $tags[$key],
+						"value" => $block[$idx],
+				);
+				$this->pstruct[] = $keyblock;
+			};
+		};
+
+		$retval = array(
+			"data" => $this->pstruct,
+			"type" => "struct",
+		);
+		return $retval;
 	}
 };	// class ends
 ?>

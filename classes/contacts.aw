@@ -611,6 +611,7 @@ class contacts extends aw_template {
 			{
 				foreach($entries_by_parent[$oid] as $key => $gname)
 				{
+					$gname = str_replace("\"","\\\"",$gname);
 					$this->vars(array(
 							"id" => $key,
 							"name" => $gname,

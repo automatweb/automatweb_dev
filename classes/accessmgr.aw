@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.5 2001/07/26 12:55:12 kristo Exp $
 
 global $orb_defs;
 $orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array())
 																
-															);
+			lc_load("accessmsg");												);
 classload("config");
 class accessmgr extends aw_template
 {
@@ -14,6 +14,10 @@ class accessmgr extends aw_template
 		$this->tpl_init("accessmgr");
 		$this->sub_merge = 1;
 		lc_load("definition");
+				global $lc_accessmsg;
+		if (is_array($lc_accessmsg))
+		{
+			$this->vars($lc_accessmsg);}
 
 		$c = new db_config;
 		$this->ar = unserialize($c->get_simple_config("accessmgr"));

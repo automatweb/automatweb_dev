@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.2 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.3 2001/07/26 12:55:12 kristo Exp $
 
 global $orb_defs;
 $orb_defs["banner_profile"] = "xml";
-
+lc_load("banner");
 classload("banner");
 class banner_profile extends banner
 {
@@ -11,6 +11,10 @@ class banner_profile extends banner
 	{
 		$this->banner();
 	lc_load("definition");	
+	global $lc_banner;
+		if (is_array($lc_banner))
+		{
+			$this->vars($lc_banner);}
 	}
 
 	////

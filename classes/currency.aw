@@ -1,5 +1,5 @@
 <?php
-
+lc_load("currency");	
 global $orb_defs;
 $orb_defs["currency"] = "xml";
 
@@ -14,6 +14,10 @@ class currency extends aw_template
 		$this->tpl_init("currency");
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_currency;
+		if (is_array($currency))
+		{
+			$this->vars($lc_currency);}
 	}
 
 	function add($arr)

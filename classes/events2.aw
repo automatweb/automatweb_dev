@@ -1,15 +1,20 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.1 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.2 2001/07/26 12:55:12 kristo Exp $
 // events2.aw - FormGen based events
 global $orb_defs;
 $orb_defs["events2"] = "xml";
-
+lc_load("events");
 class events2 extends aw_template {
 	function events2($args = array())
 	{
 		$this->db_init();
 		$this->tpl_init();
 		lc_load("definition");
+		global $lc_events;
+		if (is_array($lc_events))
+		{
+			$this->vars($lc_events);}
+
 	}
 
 	////

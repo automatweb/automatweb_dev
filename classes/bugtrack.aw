@@ -28,6 +28,10 @@ class bugtrack extends aw_template
 		////
 		//! mis on developerite grupi id
 		global $bugtrack_developergid;
+		if (!isset($bugtrack_developergid))
+		{
+			$this->raise_error("developerite grupi GID on defineerimata",true);
+		};
 		$this->devgroupid=$bugtrack_developergid;
 
 

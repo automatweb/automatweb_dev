@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.6 2001/07/26 12:55:12 kristo Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
-
+lc_load("banner");
 // act_type's:
 // 0 - always active
 // 1 - from date to date
@@ -40,6 +40,10 @@ class banner extends aw_template
 		$this->db_init();
 		$this->sub_merge = 1;
 			lc_load("definition");
+			global $lc_banner;
+		if (is_array($lc_banner))
+		{
+			$this->vars($lc_banner);}
 	}
 
 	////

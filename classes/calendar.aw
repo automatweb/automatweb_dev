@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.5 2001/07/26 12:55:12 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -9,7 +9,7 @@ define(CAL_SUNDAY,7);
 // mis päevast nädal algab
 define(CAL_WEEK_START,1);
 define(ROLL_OVER,6 + CAL_WEEK_START);
-
+lc_load("calendar");
 classload("defs");
 global $orb_defs;
 $orb_defs["calendar"] = "xml";
@@ -21,6 +21,10 @@ class calendar extends aw_template
 	function calendar()
 	{
 		$this->tpl_init("calendar");
+		global $lc_calendar;
+		if (is_array($lc_calendar))
+		{
+			$this->vars($lc_calendar);}
 	}
 
 	function draw_month($args = array())
