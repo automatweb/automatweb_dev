@@ -91,10 +91,13 @@ class propcollector extends aw_template
 					{
 						$this->add_property($m[1],$m[2]);
 					};
-
 					if (preg_match("/^\s*@caption (.*)/",$line,$m))
 					{
 						$this->add_caption($m[1]);
+					};
+					if (preg_match("/^\s*@comment (.*)/",$line,$m))
+					{
+						$this->add_comment($m[1]);
 					};
 				};
 				if (sizeof($this->properties) > 0)
@@ -260,6 +263,11 @@ class propcollector extends aw_template
 	function add_caption($caption)
 	{
 		$this->properties[$this->name]["caption"] = $caption;
+	}
+	
+	function add_comment($comment)
+	{
+		$this->properties[$this->name]["comment"] = $comment;
 	}
 
 	////
