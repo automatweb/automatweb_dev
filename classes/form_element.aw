@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.54 2002/06/27 23:45:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.55 2002/06/28 18:50:30 duke Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -1529,7 +1529,7 @@ class form_element extends aw_template
 		if (is_array($this->form->controller_errors[$this->id]) && count($this->form->controller_errors[$this->id]) > 0)
 		{
 			$html.="<font color='red' size='2'>";
-			$html.=join("<br>",$this->form->controller_errors[$this->id])."<Br>";
+			$html.=join("<br />",$this->form->controller_errors[$this->id])."<Br />";
 			$html.="</font>";
 		}
 
@@ -1559,7 +1559,7 @@ class form_element extends aw_template
 
 		if ($disabled)
 		{
-			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."'>";
+			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."' />";
 		}
 
 		switch($this->arr["type"])
@@ -1568,7 +1568,7 @@ class form_element extends aw_template
 				// only IE supports wysiwyg editor
 				if (($this->arr["wysiwyg"] == 1) && ($this->is_ie))
 				{
-					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\">";
+					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\" />";
 					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>\n";
 					$html.="<script for=window event=onload>\n";
 					$html.="_ifr_".$prefix.$elid.".document.designMode='On';\n";
@@ -1586,7 +1586,7 @@ class form_element extends aw_template
 
 			case "radiobutton":
 				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html .="<input type='radio' $disabled $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
+				$html .="<input type='radio' $disabled $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch />";
 				break;
 
 			case "listbox":
@@ -1666,11 +1666,11 @@ class form_element extends aw_template
 								// lisatud tyhi element, siis topime selle hoopis k6ige esimeseks a numbri j2tame samax. voh. 
 								if ($this->form->type == FTYPE_SEARCH && $b == ($cnt-1))
 								{
-									$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts;
+									$lb_opts ="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value.$lb_opts."</option>\n";
 								}
 								else
 								{
-									$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+									$lb_opts.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value."</option>\n";
 								}
 							}
 						}
@@ -1735,7 +1735,7 @@ class form_element extends aw_template
 
 					if ($controllers_ok)
 					{
-						$html.="<option ".selected($sel == true)." VALUE='$b'>".$larr[$b];
+						$html.="<option ".selected($sel == true)." VALUE='$b'>".$larr[$b] ."</option>";
 					}
 				}
 				$html.="</select>\n";
@@ -1743,7 +1743,7 @@ class form_element extends aw_template
 
 			case "checkbox":
 				$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
-				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>\n";
+				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel />\n";
 				break;
 
 			case "textbox":
@@ -1753,13 +1753,13 @@ class form_element extends aw_template
 				{
 					$tb_type = "password";
 				}
-				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">\n";
+				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\">\n";
+				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
 				break;
 
 			case "alias":
@@ -1803,7 +1803,7 @@ class form_element extends aw_template
 
 			case "timeslice":
 				$values = aw_unserialize($this->get_val($elvalues));
-				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d'>\n",$prefix.$elid,$values["count"]);
+				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d' />\n",$prefix.$elid,$values["count"]);
 				$html .= sprintf("<select name='%s_type'>%s</select>\n",$prefix.$elid,$this->picker($values["type"],$this->timeslice_types));
 				break;
 
@@ -1855,35 +1855,35 @@ class form_element extends aw_template
 
 						$bname = sprintf("name='submit[%d]'",$this->id);
 
-						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\">\n";
+						$html .= "<input $csscl $disabled $bname type='$btype' $bsrc VALUE='".$butt."' onClick=\"return check_submit();\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
 						if ($btype == "image")
 						{
-							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\">\n";
+							$html .= "<input $csscl $disabled type='image' $bsrc onClick=\"form_reset(); return false;\" />\n";
 						}
 						else
 						{
-							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."'>\n";
+							$html .= "<input $csscl $disabled type='reset' VALUE='".$butt."' />\n";
 						};
 					}
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">\n";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "order")
 					{
 						$loc = $this->mk_my_orb("show", array("id" => $this->arr["order_form"], "load_entry_data" => $this->form->entry_id,"section" => $GLOBALS["section"]),"form");
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\">\n";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.location='".$loc."';return false;\" />\n";
 					}
 					else
 					if ($this->arr["subtype"] == "close")
 					{
-						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\">\n";
+						$html .= "<input $csscl $disabled type='$btype' $bsrc VALUE='".$butt."' onClick=\"window.close();return false;\" />\n";
 					}
 				}
 				break;
@@ -1893,15 +1893,15 @@ class form_element extends aw_template
 				{
 					$html.=$this->get_value();
 				}
-				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value=''>\n";
+				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value='' />\n";
 				break;
 
 			// yuck
 			case "link":
 				if ($this->arr["subtype"] != "show_op")
 				{
-					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."'></td></tr>";
-					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."'></td></tr></table>";
+					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."' /></td></tr>";
+					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."' /></td></tr></table>";
 					$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
 				}
 				break;
@@ -1944,13 +1944,6 @@ class form_element extends aw_template
 				uasort($bits,array($this,"_date_ord_cmp"));
 
 
-				global $DK;
-				if ($DK)
-				{
-					print "<pre>";
-					print_r($bits);
-					print "</pre>";
-				};
 				if ($has_some)
 				{
 					$de->configure($bits);
@@ -1981,8 +1974,8 @@ class form_element extends aw_template
 		
 		if ($this->arr["type"] != "")
 		{
-			$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
-			$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+			$sep_ver = ($this->arr["text_distance"] > 0 ? "<br /><img src='/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0' /><br />" : "<br />");
+			$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0' />" : "");
 		}
 		if ($this->arr["text_pos"] == "up")
 		{
@@ -2004,17 +1997,17 @@ class form_element extends aw_template
 		}
 		if ($this->arr["info"] != "")
 		{
-			$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
+			$html .= "<br /><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
 		}
 
 		if ($this->arr["sep_type"] == 1)	// reavahetus
 		{
-			$html.="<br>";
+			$html.="<br />";
 		}
 		else
 		if ($this->arr["sep_pixels"] > 0)
 		{
-			$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+			$html.="<img src='/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0 />";
 		}
 		return $html;
 	}
@@ -2353,7 +2346,7 @@ class form_element extends aw_template
 					{
 						if ($this->arr["fshow"])
 						{
-							$html="<img src=\"".file::check_url($this->entry["url"])."\"><br>";
+							$html="<img src=\"".file::check_url($this->entry["url"])."\" /><br />";
 						}
 					}
 					else
@@ -2361,7 +2354,7 @@ class form_element extends aw_template
 					{
 						if ($this->arr["fshow"])
 						{
-							$html.="<a href=\"".file::check_url($this->entry["url"])."\">".$this->arr["flink_text"]."</a><br>";
+							$html.="<a href=\"".file::check_url($this->entry["url"])."\" />".$this->arr["flink_text"]."</a><br />";
 						}
 					}
 				}
