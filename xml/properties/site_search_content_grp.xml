@@ -15,7 +15,7 @@
             <type>text</type>
             <store>no</store>
             <callback>callback_get_menus</callback>
-            <edit_only>1</edit_only>
+            <editonly>1</editonly>
             <table>objects</table>
             <group>general</group>
             <field>menus</field>
