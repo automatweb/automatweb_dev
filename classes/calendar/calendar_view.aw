@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.13 2004/11/19 12:01:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.14 2004/11/26 14:12:23 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -244,10 +244,15 @@ class calendar_view extends class_base
 		if (is_oid($arr["oid"]))
 		{
 			$obj = new object($arr["oid"]);
+			$cal_inst = &$arr["cal_inst"];
+			$first_image = $cal_inst->has_feature("first_image");
+			$project_media = $cal_inst->has_feature("project_media");
 			$events = $this->get_events_from_object(array(
 				"obj_inst" => $obj,
 				"range" => $range,
 				"status" => $arr["status"],
+				"first_image" => $first_image,
+				"project_media" => $project_media,
 			));
 
 			foreach($events as $event)
@@ -268,9 +273,10 @@ class calendar_view extends class_base
 			$conns = $arr["obj_inst"]->connections_from(array(
 				"type" => RELTYPE_EVENT_SOURCE,
 			));
-
 			$cal_inst = &$arr["cal_inst"];
 			$first_image = $cal_inst->has_feature("first_image");
+			$project_media = $cal_inst->has_feature("project_media");
+
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -279,6 +285,7 @@ class calendar_view extends class_base
 					"obj_inst" => $to_o,
 					"range" => $range,
 					"first_image" => $first_image,
+					"project_media" => $project_media,
 				));
 
 				foreach($events as $event)
@@ -288,7 +295,7 @@ class calendar_view extends class_base
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
-					$cal_inst->add_item(array(
+					$arr["cal_inst"]->add_item(array(
 						"timestamp" => $event["start"],
 						"data" => $data,
 					));
@@ -335,6 +342,7 @@ class calendar_view extends class_base
 					"range" => $range,
 					"status" => $arr["status"],
 					"first_image" => $arr["first_image"],
+					"project_media" => $arr["project_media"],
 				));
 				break;
 		};
