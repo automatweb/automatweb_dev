@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.27 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.28 2005/02/23 11:30:46 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -65,7 +65,7 @@ class shop_order_cart extends class_base
 	
 	function get_cart($oc)
 	{
-		if($oc->prop("cart_type") == 1 && aw_global_get("uid") != "")
+		if($oc && $oc->prop("cart_type") == 1 && aw_global_get("uid") != "")
 		{
 			$user = obj(aw_global_get("uid_oid"));
 			// well, it would be wise to syncronize the session aswell...
