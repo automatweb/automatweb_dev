@@ -169,7 +169,7 @@ class search_conf extends aw_template
 			$this->vars(array("baseurl" => $bs));
 		}
 
-		$k = get_instance("keywords");
+		$k = get_instance(CL_KEYWORD);
 
 		$keys = array();
 		$sel_keys = false;
@@ -271,7 +271,7 @@ class search_conf extends aw_template
 			if ($grps[$s_parent]["search_form"])
 			{
 				// do form search
-				$finst = get_instance("formgen/form");
+				$finst = get_instance(CL_FORM);
 				// we must load the form before we can set element values
 				$finst->load($grps[$s_parent]["search_form"]);
 
@@ -506,7 +506,7 @@ class search_conf extends aw_template
 			$perstr = "";
 			if (aw_ini_get("search_conf.only_active_periods"))
 			{
-				$pei = get_instance("period");
+				$pei = get_instance(CL_PERIOD);
 				$plist = $pei->period_list(0,false,1);
 				$perstr = ($q_cons != "" ? " AND " : "")." objects.period IN (".join(",", array_keys($plist)).")";
 			}
@@ -572,7 +572,7 @@ class search_conf extends aw_template
 
 				if (aw_ini_get("search.rewrite_urls"))
 				{
-					$exp = get_instance("export/export");
+					$exp = get_instance(CL_EXPORT_RULE);
 					$exp->fn_type = aw_ini_get("search.rewrite_url_type");
 					$sec = $exp->rewrite_link($sec);
 					$sec = aw_ini_get("baseurl")."/".$exp->get_hash_for_url($sec,aw_global_get("lang_id"));
@@ -980,7 +980,7 @@ class search_conf extends aw_template
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("change", array())."'>Gruppide nimekiri</a> / Muuda gruppi");
 		$grps = $this->get_groups();
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$flist = $f->get_flist(array(
 			"type" => FTYPE_SEARCH, 
 			"addempty" => true, 

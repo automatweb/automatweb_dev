@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.320 2005/03/18 11:37:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.321 2005/03/24 10:14:40 ahti Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -100,7 +100,7 @@ class document extends aw_template
 
 		if ($row->meta("all_pers"))
 		{
-			$period_instance = get_instance("period");
+			$period_instance = get_instance(CL_PERIOD);
 			$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 		}
 		else
@@ -309,7 +309,7 @@ class document extends aw_template
 			$row = $this->db_next();
 			if ($row)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fl = $fi->get_file_by_id($_t_oid);
 				return $fl["content"];
 			};
@@ -344,7 +344,7 @@ class document extends aw_template
 			$row = $this->db_next();
 			if ($row)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fl = $fi->get_file_by_id($oid);
 				$doc["content"] = $fl["content"];
 				$doc["lead"] = "";
@@ -580,7 +580,7 @@ class document extends aw_template
 
 		// would be nice if I could check whether the template _has_ one of those period variables
 		// and only _then_ load the period class --duke
-		$db_periods = get_instance("period",$this->cfg["per_oid"]);
+		$db_periods = get_instance(CL_PERIOD, $this->cfg["per_oid"]);
 		$act_per = aw_global_get("act_per_id");
 		$pdat = $db_periods->get($act_per);
 
@@ -671,7 +671,7 @@ class document extends aw_template
 					if (preg_match("/#p(\d+?)(v|k|p|)#/i",$doc["lead"],$match)) 
 					{
 						// asendame 
-						$img = get_instance("image");
+						$img = get_instance(CL_IMAGE);
 						$idata = $img->get_img_by_oid($docid,$match[1]);
 						$this->vars(array(
 							"imgref" => $idata["url"]
@@ -1257,7 +1257,7 @@ class document extends aw_template
 			$ldata = $l->fetch($lang_id);
 			$sel_lang_img = $ldata["meta"]["lang_img"];
 
-			$i = get_instance("image");
+			$i = get_instance(CL_IMAGE);
 			$sel_lang_img_url = html::img(array(
 				"url" => $i->get_url_by_id($sel_lang_img)
 			));
@@ -1560,7 +1560,7 @@ class document extends aw_template
 
 		if (isset($data["keywords"]) || isset($data["link_keywords"]))
 		{
-			$kw = get_instance("keywords");
+			$kw = get_instance(CL_KEYWORD);
 			if (isset($data["keywords"]))
 			{
 				$kw->update_keywords(array(
@@ -1987,7 +1987,7 @@ class document extends aw_template
 		$this->vars(array(
 			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
-		$kw = get_instance("keywords");
+		$kw = get_instance(CL_KEYWORD);
 		$keywords = $kw->get_keywords(array(
 			"oid" => $id,
 		));
@@ -2526,7 +2526,7 @@ class document extends aw_template
 		if ($search_groups[$parent]["search_form"])
 		{
 			// do form search
-			$finst = get_instance("formgen/form");
+			$finst = get_instance(CL_FORM);
 			// we must load the form before we can set element values
 			$finst->load($search_groups[$parent]["search_form"]);
 
@@ -2721,7 +2721,7 @@ class document extends aw_template
 		$perstr = "";
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
-			$pei = get_instance("period");
+			$pei = get_instance(CL_PERIOD);
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " AND  objects.period IN (".join(",", array_keys($plist)).")";
 		}
@@ -2837,7 +2837,7 @@ class document extends aw_template
 
 		if (aw_ini_get("search.rewrite_urls"))
 		{
-			$exp = get_instance("export/export");
+			$exp = get_instance(CL_EXPORT_RULE);
 			$exp->init_settings();
 		}
 
@@ -3517,7 +3517,7 @@ class document extends aw_template
 		$perstr = "";
 		if (aw_ini_get("search_conf.only_active_periods"))
 		{
-			$pei = get_instance("period");
+			$pei = get_instance(CL_PERIOD);
 			$plist = $pei->period_list(0,false,1);
 			$perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
 		}
@@ -3587,7 +3587,7 @@ class document extends aw_template
 		echo "\n\r<br />"; flush();
 		ob_start();
 
-		$exp = get_instance("export/export");
+		$exp = get_instance(CL_EXPORT_RULE);
 		$exp->init_settings();
 
 		$obj = obj($id);
@@ -3645,7 +3645,7 @@ class document extends aw_template
 			"value" => $args["author"],
 		);
 
-		$periods = get_instance("period");
+		$periods = get_instance(CL_PERIOD);
 
 		$mlist = $periods->period_list($args["period"]);
 
@@ -3706,7 +3706,7 @@ class document extends aw_template
 	**/
 	function docsearch($args = array())
 	{
-		$search = get_instance("search");
+		$search = get_instance(CL_SEARCH);
 		$this->read_template("docsearch.tpl");
 		$args["clid"] = "document";
 		$os = $this->mk_my_orb("search",array("parent" => $args["parent"]),"search");

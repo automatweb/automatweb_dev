@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.10 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.11 2005/03/24 10:13:00 ahti Exp $
 // commune.aw - Kommuun
 /*
 
@@ -1136,7 +1136,7 @@ class commune extends class_base
 					$tmp["id"] = $j_oid;
 					if (aw_global_get("uid") == "")
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$url = $ji->submit_join_form($tmp);
 						if ($url != "")
 						{
@@ -1146,7 +1146,7 @@ class commune extends class_base
 					}
 					else
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$ji->submit_update_form($tmp);
 					}
 				}
@@ -4446,7 +4446,7 @@ class commune extends class_base
 		{
 			$join = obj($j_oid);
 	
-			$ji = get_instance("contentmgmt/join/join_site");
+			$ji = get_instance(CL_JOIN_SITE);
 			$pps = $ji->get_elements_from_obj($join, array(
 				"err_return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI")
 			));

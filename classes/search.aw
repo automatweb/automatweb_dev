@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.90 2005/03/22 15:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.91 2005/03/24 10:19:14 ahti Exp $
 // search.aw - Search Manager
 
 /*
@@ -156,7 +156,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 
 			case "s_period":
-				$pr = get_instance("period");
+				$pr = get_instance(CL_PERIOD);
 				$data["options"] = $pr->period_list(aw_global_get("act_per_id"),true);
 				break;
 
@@ -1205,7 +1205,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		if (!$fields["period"])
 		{
-			$lg = get_instance("period");
+			$lg = get_instance(CL_PERIOD);
 			$fields["period"] = array(
 				"type" => "select",
 				"caption" => t("Periood"),
@@ -1252,7 +1252,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"only_addable" => 1
 		));
 
-		$atc_inst = get_instance("admin/add_tree_conf");
+		$atc_inst = get_instance(CL_ADD_TREE_CONF);
 		$atc_id = $atc_inst->get_current_conf();
 		if (is_oid($atc_id) && $this->can("view", $atc_id))
 		{
@@ -1566,7 +1566,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 		elseif ($subaction == "assign_config")
 		{
-			$ac = get_instance("cfg/cfgobject");
+			$ac = get_instance(CL_CFGOBJECT);
 			die($ac->assign($args));
 		}
 		else

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.138 2005/03/23 13:30:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.139 2005/03/24 10:14:40 ahti Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -334,7 +334,7 @@ class users extends users_user
 		{
 			$jfs = serialize($this->get_join_form_entries($join_grp));
 
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			$us->add_user(array(
 				"join_form_entry" => $jfs, 
 				"uid" => $add_state["uid"], 
@@ -554,7 +554,7 @@ class users extends users_user
 				// kui pole emailiaadressi, siis yritame seda leida liitumisformidest
 				foreach($groups[$add_group] as $fid => $eid)
 				{
-					$f = get_instance("formgen/form");
+					$f = get_instance(CL_FORM);
 					$f->load($fid);
 					$f->load_entry($eid);
 					$em = $f->get_element_value_by_name("E-mail");
@@ -634,7 +634,7 @@ class users extends users_user
 		$u = $this->fetch($id);
 		$fs = unserialize($u["join_form_entry"]);
 
-		$t = get_instance("formgen/form");
+		$t = get_instance(CL_FORM);
 		return $t->gen_preview(array(
 			"id" => $fid, 
 			"entry_id" => $fs[$fid], 
@@ -660,7 +660,7 @@ class users extends users_user
 		$u = $this->fetch($user_id);
 		$fs = unserialize($u["join_form_entry"]);
 
-		$t = get_instance("formgen/form");
+		$t = get_instance(CL_FORM);
 		$t->process_entry(array(
 			"id" => $fid,
 			"entry_id" => $fs[$fid]
@@ -730,7 +730,7 @@ class users extends users_user
 		{
 			$jf = unserialize($udata["join_form_entry"]);
 			{
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				if (is_array($jf))
 				{
 					foreach($jf as $joinform => $joinentry)
@@ -839,7 +839,7 @@ class users extends users_user
 		if (is_array($jf))
 		{
 			$elvs = array();
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			foreach($jf as $joinform => $joinentry)
 			{
 				$f->load($joinform);
@@ -913,7 +913,7 @@ class users extends users_user
 		$co = get_instance("config");
 		$fo = $co->get_simple_config("user_info_form");
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$f->process_entry(array("id" => $fo, "entry_id" => $entry_id));
 
 		$this->set_user_config(array("uid" => $u_uid, "key" => "info_entry", "value" => $f->entry_id));
@@ -941,7 +941,7 @@ class users extends users_user
 			$eid = $this->get_user_config(array("uid" => aw_global_get("uid"), "key" => "info_entry"));
 			if ($eid)
 			{
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				return $f->show(array("id" => $fo, "entry_id" => $eid,"op_id" => $co->get_simple_config("user_info_op")));
 			}
 		}
@@ -1542,7 +1542,7 @@ class users extends users_user
 			flush();*/
 
 			// create default user
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			$user_o = $us->add_user(array(
 				"uid" => $site["site_obj"]["default_user"],
 				"password" => $site["site_obj"]["default_user_pwd"],

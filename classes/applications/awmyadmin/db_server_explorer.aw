@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.2 2004/06/25 20:13:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_explorer.aw,v 1.3 2005/03/24 10:13:00 ahti Exp $
 
 /*
 	@classinfo syslog_type=ST_DB_SERVER_EXPLORER relationmgr=yes no_status=1 no_comment=1
@@ -358,7 +358,7 @@ class db_server_explorer extends class_base
 
 	function _sht_do_content($arr)
 	{
-		$dtc = get_instance('applications/awmyadmin/db_sql_query');
+		$dtc = get_instance(CL_DB_SQL_QUERY);
 		$nr = 0;
 		return $dtc->show_query_results($arr['db_id'],'SELECT * FROM '.$arr['table'],$nr);
 	}
@@ -370,7 +370,7 @@ class db_server_explorer extends class_base
 		$tarr['no_reforb'] = 1;
 		unset($tarr['sql']);
 
-		$dtc = get_instance('applications/awmyadmin/db_sql_query');
+		$dtc = get_instance(CL_DB_SQL_QUERY);
 		$nr = 0;
 		if ($arr['sql'] != '')
 		{
@@ -494,7 +494,7 @@ class db_server_explorer extends class_base
 	{
 		extract($arr);
 
-		$db = get_instance('awmyadmin/db_login');
+		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($db_id);
 
 		if ($is_del)
@@ -576,7 +576,7 @@ class db_server_explorer extends class_base
 		extract($arr);
 		$this->read_template('admin_index.tpl');
 
-		$db = get_instance('awmyadmin/db_login');
+		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($db_id);
 
 		$db->db_list_indexes($table);
@@ -623,7 +623,7 @@ class db_server_explorer extends class_base
 	{
 		extract($arr);
 	
-		$db = get_instance('awmyadmin/db_login');
+		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($db_id);
 
 		if ($is_del)

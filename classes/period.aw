@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.28 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.29 2005/03/24 10:19:14 ahti Exp $
 // period.aw - periods 
 /*
 
@@ -515,7 +515,7 @@ class period extends class_base
 	{	
 		$_t = aw_global_get("act_period");
 
-		$imc = get_instance("image");
+		$imc = get_instance(CL_IMAGE);
 		$imdata = $imc->get_image_by_id($_t["data"]["image"]);
 		$arr["inst"]->vars(array(
 			"per_string" => $_t["name"],
@@ -542,7 +542,7 @@ class period extends class_base
 		
 		if ($arr["inst"]->is_template("PERIOD_SWITCH"))
 		{
-			$per_inst = get_instance("period");
+			$per_inst = get_instance(CL_PERIOD);
 			$plist = array_reverse($per_inst->period_list(0,false, 1), true);
 			$next = false;
 			$prev_per_id = 0;
@@ -612,13 +612,13 @@ class period extends class_base
 
 		if ($o->prop("perimage"))
 		{
-			$i = get_instance("image");
+			$i = get_instance(CL_IMAGE);
 			$image = $i->make_img_tag($i->get_url_by_id($o->prop("perimage")));
 		}
 		else
 		if ($o->meta("image"))
 		{
-			$i = get_instance("image");
+			$i = get_instance(CL_IMAGE);
 			$image = $i->make_img_tag($i->get_url_by_id($o->meta("image")));
 		}
 		else

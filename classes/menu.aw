@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.127 2005/03/22 15:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.128 2005/03/24 10:19:14 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -397,7 +397,7 @@ class menu extends class_base
 				break;
 
 			case "grkeywords":
-				$kwds = get_instance("keywords");
+				$kwds = get_instance(CL_KEYWORD);
 				$data["options"] = $kwds->get_keyword_picker();
 				$data["selected"] = $this->get_menu_keywords($ob->id());
 				break;
@@ -650,7 +650,7 @@ class menu extends class_base
 		{
 			// image preview
 			$url = "";
-			$imi = get_instance("image");
+			$imi = get_instance(CL_IMAGE);
 			if ($imdata[$i]["image_id"])
 			{
 				$url = $imi->get_url_by_id($imdata[$i]["image_id"]);
@@ -1000,7 +1000,7 @@ class menu extends class_base
 	{
 		extract($args);
 		$num_menu_images = $this->cfg["num_menu_images"];
-		$t = get_instance("image");
+		$t = get_instance(CL_IMAGE);
 
 		$imgar = $meta["menu_images"];
 		for ($i=0; $i < $num_menu_images; $i++)
@@ -1050,7 +1050,7 @@ class menu extends class_base
 		$request = &$arr["request"];
 		if ($request["group"] == "import_export")
 		{
-			$menu_export = get_instance("export/menu_export");
+			$menu_export = get_instance(CL_EXPORT_RULE);
 			$menu_export->export_menus(array(
 				"id" => $arr["obj_inst"]->id(),
 				"ex_menus" => $request["ex_menus"],
@@ -1408,7 +1408,7 @@ class menu extends class_base
 				{
 					$d_tpl = $this->cfg["seealso_doc_tpl_names"][$tpl];
 				}
-				$d = get_instance("document");
+				$d = get_instance(CL_DOCUMENT);
 				$tmp[$tpl] .= $d->gen_preview(array(
 					"docid" => $did,
 					"tpl" => $d_tpl

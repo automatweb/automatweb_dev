@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.33 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.34 2005/03/24 10:13:00 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -1700,7 +1700,7 @@ class project extends class_base
 			$first = reset($conns);
 			if ($first)
 			{
-				$t = get_instance("document");
+				$t = get_instance(CL_DOCUMENT);
 				$description = $t->gen_preview(array(
 					"docid" => $first->prop("to"),
 					"leadonly" => -1,

@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.170 2005/03/23 13:15:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.171 2005/03/24 10:19:14 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -30,7 +30,7 @@ class aliasmgr extends aw_template
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
 
 		$GLOBALS['site_title'] = "Seostehaldur";
-		$search = get_instance("search");
+		$search = get_instance(CL_SEARCH);
 
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
@@ -837,7 +837,7 @@ class aliasmgr extends aw_template
 	// !puts all alias classes into $this->typearr
 	function make_alias_typearr()
 	{
-		$adc = get_instance("admin/add_tree_conf");
+		$adc = get_instance(CL_ADD_TREE_CONF);
 		$filt = false;
 		if (($adc_id = $adc->get_current_conf()))
 		{
@@ -862,7 +862,7 @@ class aliasmgr extends aw_template
 	function make_alias_classarr($clid_list = false)
 	{
 		// check if there is an add tree conf for the current user
-		$adc = get_instance("admin/add_tree_conf");
+		$adc = get_instance(CL_ADD_TREE_CONF);
 		$filt = false;
 		if (($adc_id = $adc->get_current_conf()))
 		{
@@ -906,7 +906,7 @@ class aliasmgr extends aw_template
 		}
 
 		// check if there is an add tree conf for the current user
-		$adc = get_instance("admin/add_tree_conf");
+		$adc = get_instance(CL_ADD_TREE_CONF);
 		$filt = false;
 		if (($adc_id = $adc->get_current_conf()))
 		{
@@ -966,7 +966,7 @@ class aliasmgr extends aw_template
 			$objtype = NULL;
 		}
 
-		$adc = get_instance("admin/add_tree_conf");
+		$adc = get_instance(CL_ADD_TREE_CONF);
 		$filt = false;
 		if (($adc_id = $adc->get_current_conf()))
 		{
@@ -1302,7 +1302,7 @@ HTM;
 	{
 		// filtr
 		// check if there is an add tree conf for the current user
-		$adc = get_instance("admin/add_tree_conf");
+		$adc = get_instance(CL_ADD_TREE_CONF);
 		if (($adc_id = $adc->get_current_conf()) && is_array($this->rel_type_classes))
 		{
 			$tmp = array();

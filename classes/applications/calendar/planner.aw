@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.51 2005/03/22 17:04:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.52 2005/03/24 10:13:00 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1305,7 +1305,7 @@ class planner extends class_base
 		extract($args);
 		$obj = new object($id);
 		$par_obj = new object($obj->parent());
-		$ce = get_instance("calendar/cal_event");
+		$ce = get_instance(CL_CAL_EVENT);
 		$html = $ce->repeaters(array(
 			"id" => $id,
 			"cycle" => $cycle,

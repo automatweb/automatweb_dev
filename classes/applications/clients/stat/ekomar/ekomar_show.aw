@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.3 2005/03/18 12:13:43 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.4 2005/03/24 10:13:00 ahti Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
@@ -176,7 +176,7 @@ class ekomar_show extends class_base
 	**/
 	function show_file($arr)
 	{
-		$e = get_instance("applications/clients/stat/ekomar/ekomar");
+		$e = get_instance(CL_EKOMAR_SHOW);
 		die($e->show($arr["id"]));
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.8 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.9 2005/03/24 10:13:00 ahti Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 //HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
@@ -148,7 +148,7 @@ class personnel_management_job_offer extends class_base
 		
 		if (!aw_global_get("no_db_connection"))
 		{
-			$personalikeskkond = get_instance("applications/personnel_management/personnel_management");
+			$personalikeskkond = get_instance(CL_PERSONNEL_MANAGEMENT);
 			$this->my_profile = $personalikeskkond->my_profile;
 		}
 	}

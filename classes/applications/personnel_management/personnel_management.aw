@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.7 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.8 2005/03/24 10:13:00 ahti Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -394,7 +394,7 @@ class personnel_management extends class_base
 			return 0;
 		}
 
-		$user_inst = get_instance("core/users/user");
+		$user_inst = get_instance(CL_USER);
 		
 		foreach ($manager->connections_from(array("type" => "RELTYPE_TOOTSIJA")) as $tootu)
 		{
@@ -1279,7 +1279,7 @@ class personnel_management extends class_base
 					$tmp["id"] = $j_oid;
 					if (!empty($arr["request"]["join_butt"]))
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$url = $ji->submit_join_form($tmp);
 		
 						if ($ji->join_done)
@@ -1303,7 +1303,7 @@ class personnel_management extends class_base
 					else
 					if (!empty($arr["request"]["upd_butt"]))
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$ji->submit_update_form($tmp);
 					}
 				}
@@ -1317,7 +1317,7 @@ class personnel_management extends class_base
 					$tmp["id"] = $j_oid;
 					if (aw_global_get("uid") == "")
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$url = $ji->submit_join_form($tmp);
 
 						if ($ji->join_done)
@@ -1340,7 +1340,7 @@ class personnel_management extends class_base
 					}
 					else
 					{
-						$ji = get_instance("contentmgmt/join/join_site");
+						$ji = get_instance(CL_JOIN_SITE);
 						$ji->submit_update_form($tmp);
 					}
 				}
@@ -1383,7 +1383,7 @@ class personnel_management extends class_base
 		
 		$employee_profile["user_obj"] = & obj($user_id);
 		
-		$u_i = get_instance("core/users/user");
+		$u_i = get_instance(CL_USER);
 		$employee_profile["person_obj"] = obj($u_i->get_current_person());
 		
 		$manager_conns = new connection();
@@ -1408,7 +1408,7 @@ class personnel_management extends class_base
 		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 		$employer_profile["user_obj"] = & obj($user_id);
 		
-		$u_i = get_instance("core/users/user");
+		$u_i = get_instance(CL_USER);
 		$employer_profile["person_obj"] = obj($u_i->get_current_person());
 
 		$employer_profile["org_obj"] = obj($u_i->get_current_company());
@@ -1435,7 +1435,7 @@ class personnel_management extends class_base
 		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
 		$manager_profile["user_obj"] = & obj($user_id);
 		
-		$u_i = get_instance("core/users/user");
+		$u_i = get_instance(CL_USER);
 	
 		$manager_profile["person_obj"] = obj($u_i->get_current_person());
 		
@@ -1501,7 +1501,7 @@ class personnel_management extends class_base
 		{
 			$join = obj($j_oid);
 	
-			$ji = get_instance("contentmgmt/join/join_site");
+			$ji = get_instance(CL_JOIN_SITE);
 			$pps = $ji->get_elements_from_obj($join, array(
 				"err_return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI")
 			));
@@ -1533,7 +1533,7 @@ class personnel_management extends class_base
 		{
 			$join = obj($j_oid);
 	
-			$ji = get_instance("contentmgmt/join/join_site");
+			$ji = get_instance(CL_JOIN_SITE);
 			$pps = $ji->get_elements_from_obj($join,aw_global_get("REQUEST_URI"));
 			if (aw_global_get("uid") == "")
 			{	

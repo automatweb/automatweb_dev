@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.370 2005/03/22 11:15:11 ahti Exp $
+// $Id: class_base.aw,v 2.371 2005/03/24 10:19:14 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2905,7 +2905,7 @@ class class_base extends aw_template
 		{
 			if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 			{
-				$cf = get_instance("cfg/cfgform");
+				$cf = get_instance(CL_CFGFORM);
 				$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 			}
 			else

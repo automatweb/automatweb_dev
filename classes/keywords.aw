@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.61 2005/03/20 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.62 2005/03/24 10:14:40 ahti Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -61,7 +61,7 @@ class keywords extends class_base
 			array(1,2,3)
 		));
 		
-		$si = get_instance("install/site_list");
+		$si = get_instance(CL_INSTALL_SITE_LIST);
 		if($conns)
 		{
 			$docs = new object_list($conns);
@@ -780,7 +780,7 @@ class keywords extends class_base
 		$eesnimi = $perenimi = "";
 		if (is_array($jf))
 		{
-			$f = get_instance("formgen/form");
+			$f = get_instance(CL_FORM);
 			foreach($jf as $joinform => $joinentry)
 			{ 
 				$f->load($joinform);
@@ -863,7 +863,7 @@ class keywords extends class_base
 		$udata = $this->_get_user_data();
 		classload("list");
 		$mlist = new mlist();
-		$kw = get_instance("keywords");
+		$kw = get_instance(CL_KEYWORD);
 		$act = $mlist->get_user_lists(array(
 			"uid" => aw_global_get("uid"),
 		));
@@ -892,7 +892,7 @@ class keywords extends class_base
 	{
 		classload("list");
 		$mlist = new mlist();
-		$kw = get_instance("keywords");
+		$kw = get_instance(CL_KEYWORD);
 		$act = $mlist->get_user_lists(array(
 			"uid" => aw_global_get("uid"),
 		));
@@ -1043,7 +1043,7 @@ class keywords extends class_base
 			$bros[$row["parent"]][$row["brother_of"]] = $row;
 		}
 
-		$d = get_instance("document_brother");
+		$d = get_instance(CL_BROTHER_DOCUMENT);
 
 		// now go through all the menus and for each menu check the brother documents that are created from keywords and
 		// delete/create them as necessary

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.54 2005/03/18 12:50:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.55 2005/03/24 10:14:40 ahti Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -35,7 +35,7 @@ class converters extends aw_template
 			$cnt = 0;
 			$imgar = array();
 
-			$t = get_instance("image");
+			$t = get_instance(CL_IMAGE);
 			if ($row["img_id"])
 			{
 				$img = $t->get_img_by_id($row["img_id"]);
@@ -1638,7 +1638,7 @@ class converters extends aw_template
 			{
 				echo "putting file $row[id] to fs! <br>\n";
 				flush();
-				$f = get_instance("file");
+				$f = get_instance(CL_FILE);
 				$fs = $f->_put_fs(array(
 					"type" => $row["type"],
 					"content" => $row["content"]

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.7 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.8 2005/03/24 10:13:00 ahti Exp $
 
 /*
 
@@ -426,7 +426,7 @@ class banner extends class_base
 		$f_o = obj($o->prop("banner_file"));
 		if ($f_o->class_id() == CL_IMAGE)
 		{
-			$i = get_instance("image");
+			$i = get_instance(CL_IMAGE);
 			$r = $i->get_image_by_id($f_o->id());
 			$i->show(array(
 				"file" => basename($r["file"])

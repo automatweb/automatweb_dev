@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.109 2005/02/10 11:35:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.110 2005/03/24 10:14:40 ahti Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -794,7 +794,7 @@ class users_user extends aw_template
 		{
 			if ($usfid && $usfeid)
 			{
-				$f = get_instance("formgen/form");
+				$f = get_instance(CL_FORM);
 				$f->load($usfid);
 				$f->load_entry($usfeid);
 				if (($el = $f->get_element_by_name("uid")))
@@ -855,7 +855,7 @@ class users_user extends aw_template
 		$sfid = $gr["search_form"];
 
 		// now do the search
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$f->load($sfid);
 		// FIXME: new search func needed
 		$matches = $f->search($gr["data"]);
@@ -935,7 +935,7 @@ class users_user extends aw_template
 		$toadd = array();
 		$toremove = array();
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 
 		$this->listgroups(-1,-1,2);
 		while($group = $this->db_next())

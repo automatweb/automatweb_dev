@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.28 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.29 2005/03/24 10:14:40 ahti Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -407,7 +407,7 @@ class object_import extends class_base
 
 	function get_props_from_obj($o)
 	{
-		$cf = get_instance("cfg/cfgform");
+		$cf = get_instance(CL_CFGFORM);
 		return $cf->get_props_from_ot(array(
 			"ot" => $o->prop("object_type")
 		));

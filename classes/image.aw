@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.134 2005/03/20 13:37:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.135 2005/03/24 10:19:14 ahti Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -399,7 +399,7 @@ class image extends class_base
 	{
 		$img_id = (int)$img_id;
 
-		$_fi = get_instance("file");
+		$_fi = get_instance(CL_FILE);
 		if ($_FILES[$name]['tmp_name'] != "" && $_FILES[$name]['tmp_name'] != "none")
 		{
 			if (!$img_id)
@@ -730,7 +730,7 @@ class image extends class_base
 				// see on siis, kui tuleb vormist
 				if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 				{
-					$_fi = get_instance("file");
+					$_fi = get_instance(CL_FILE);
 					$fl = $_fi->_put_fs(array(
 						"type" => $_FILES["file"]["type"],
 						"content" => $this->get_file(array("file" => $_FILES["file"]["tmp_name"])),
@@ -746,7 +746,7 @@ class image extends class_base
 				// XXX: this is not the correct way to detect this
 				elseif (!empty($prop["value"]["type"]))
 				{
-					$_fi = get_instance("file");
+					$_fi = get_instance(CL_FILE);
 					$fl = $_fi->_put_fs(array(
 						"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
 						// this I think has something to do with copy&paste of objects
@@ -775,7 +775,7 @@ class image extends class_base
 				{
 					if (is_uploaded_file($_FILES["file2"]["tmp_name"]))
 					{
-						$_fi = get_instance("file");
+						$_fi = get_instance(CL_FILE);
 						$fl = $_fi->_put_fs(array(
 							"type" => $_FILES["file2"]["type"],
 							"content" => $this->get_file(array("file" => $_FILES["file2"]["tmp_name"])),
@@ -785,7 +785,7 @@ class image extends class_base
 					// XXX: this is not the correct way to detect this
 					elseif (!empty($prop["value"]["type"]))
 					{
-						$_fi = get_instance("file");
+						$_fi = get_instance(CL_FILE);
 						$fl = $_fi->_put_fs(array(
 							"type" => !empty($prop["value"]["type"]) ? $prop["value"]["type"] : "image/jpg",
 							"content" => $prop["value"]["contents"],
@@ -867,7 +867,7 @@ class image extends class_base
 			$oid = $id;
 		}
 
-		$_fi = get_instance("file");
+		$_fi = get_instance(CL_FILE);
 		$mime = get_instance("core/aw_mime_types");
 		$fl = $_fi->_put_fs(array(
 			"type" => $mime->type_for_file($orig_name),
@@ -1086,7 +1086,7 @@ class image extends class_base
 				$bigf = $o->prop("file");
 				if ($bigf)
 				{
-					$f = get_instance("file");
+					$f = get_instance(CL_FILE);
 					$bigf = $f->_put_fs(array(
 						"type" => "image/jpg",
 						"content" => $this->get_file(array("file" => $bigf))
@@ -1111,7 +1111,7 @@ class image extends class_base
 			$smallf = $o->prop("file2");
 			if ($smallf)
 			{
-				$f = get_instance("file");
+				$f = get_instance(CL_FILE);
 				$smallf = $f->_put_fs(array(
 					"type" => "image/jpg",
 					"content" => $this->get_file(array("file" => $smallf))
@@ -1165,7 +1165,7 @@ class image extends class_base
 
 	function make_img_tag_wl($id, $alt = NULL, $has_big_alt = NULL)
 	{
-		$that = get_instance("image");
+		$that = get_instance(CL_IMAGE);
 		$u = $that->get_url_by_id($id);
 
 		$o = obj($id);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.103 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.104 2005/03/24 10:19:14 ahti Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -813,7 +813,7 @@ class file extends class_base
 					if ($fd->class_id() == CL_IMAGE)
 					{
 						// let the image class handle this
-						$im = get_instance("image");
+						$im = get_instance(CL_IMAGE);
 						$id = $im->get_image_by_id($file_id);
 						return array("id" => $file_id,"url" => $id["url"]);
 					}

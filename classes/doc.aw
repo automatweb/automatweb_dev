@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.104 2005/03/22 15:32:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.105 2005/03/24 10:14:40 ahti Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -285,7 +285,7 @@ class doc extends class_base
 				break;
 
 			case "sections":
-				$d = get_instance("document");
+				$d = get_instance(CL_DOCUMENT);
 				list($selected,$options) = $this->get_brothers(array(
 					"id" => $arr["obj_inst"]->id(),
 				));
@@ -351,7 +351,7 @@ class doc extends class_base
 			case "link_keywords":
 				if (is_oid($args["obj_inst"]->id()))
 				{
-					$kw = get_instance("keywords");
+					$kw = get_instance(CL_KEYWORD);
 					if (isset($args["request"]["keywords"]))
 					{
 						$kw->update_keywords(array(
@@ -425,7 +425,7 @@ class doc extends class_base
 				if (aw_ini_get("document.use_dcache"))
 				{
 					//print "generating preview<br>";
-					$dcx = get_instance("document");
+					$dcx = get_instance(CL_DOCUMENT);
 					$preview = $dcx->gen_preview(array("docid" => $args["obj_inst"]->id()));
 					$this->quote($preview);
 					$this->_preview = $preview;
@@ -435,7 +435,7 @@ class doc extends class_base
 			case "gen_static":
 				if (!empty($data["value"]) && is_oid($args["obj_inst"]->id()))
 				{
-					$dcx = get_instance("document");
+					$dcx = get_instance(CL_DOCUMENT);
 					// but this dies anyway
 					$dcx->gen_static_doc($args["obj_inst"]->id());
 				};
@@ -551,7 +551,7 @@ class doc extends class_base
 	{
 		if ($args["obj_inst"]->prop("dcache_save") == 1)
 		{
-			$dcx = get_instance("document");
+			$dcx = get_instance(CL_DOCUMENT);
 			$preview = $dcx->gen_preview(array(
 				"docid" => $args["obj_inst"]->id()
 			));
@@ -624,7 +624,7 @@ class doc extends class_base
 	function show($args = array())
 	{
 		extract($args);
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		return $d->gen_preview(array("docid" => $args["id"]));
 	}
 
@@ -832,7 +832,7 @@ class doc extends class_base
 
 			if (!empty($tgt))
 			{
-				$awi = get_instance("image");
+				$awi = get_instance(CL_IMAGE);
 				$picdata = $awi->get_image_by_id($tgt);
 				$retval = html::img(array(
 					"url" => $picdata["url"],
@@ -887,7 +887,7 @@ class doc extends class_base
 		{
 			$tplmgr = get_instance("templatemgr");
 			$_long = $tplmgr->get_long_template($parent);
-			$inst = get_instance("document");
+			$inst = get_instance(CL_DOCUMENT);
 			$inst->read_any_template($_long);
 		};
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.15 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pullout.aw,v 2.16 2005/03/24 10:19:14 ahti Exp $
 // pullout.aw - Pullout manager
 
 /*
@@ -126,7 +126,7 @@ class pullout extends class_base
 			return "";
 		}
 
-		$do = get_instance("document");
+		$do = get_instance(CL_DOCUMENT);
 		if ($o->meta("template") == "" || $o->meta("template") == "0")
 		{
 			if ($GLOBALS["print"] == 1)

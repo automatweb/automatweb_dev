@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.347 2005/03/21 11:07:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.348 2005/03/24 10:19:14 ahti Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -312,7 +312,7 @@ class menuedit extends aw_template
 				// we know if it's a document or not here
 				if (1 == aw_ini_get("document_statistics.use") && $realsect != aw_ini_get("frontpage") && ($class_id == CL_DOCUMENT || $class_id == CL_BROTHER_DOCUMENT || $class_id == CL_PERIODIC_SECTION))
 				{
-					$dt = get_instance("contentmgmt/document_statistics");
+					$dt = get_instance(CL_DOCUMENT_STATISTICS);
 					$dt->add_hit($realsect);
 				}
 			};

@@ -109,7 +109,7 @@ class layout extends class_base
 			$row = $this->db_next();
 			if ($row)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fl = $fi->get_file_by_id($oid);
 				return $fl["content"];
 			};
@@ -132,7 +132,7 @@ class layout extends class_base
 			$al->parse_oo_aliases($ob->id(), &$h_tmp);
 			if ($grid["table_style"])
 			{
-				$st = get_instance("style");
+				$st = get_instance(CL_STYLE);
 				$h_tmp = $st->apply_style_to_text($grid["table_style"], $h_tmp, array("is_header" => true));
 			}
 			$tmp = $h_tmp.$tmp;
@@ -144,13 +144,13 @@ class layout extends class_base
 			$al->parse_oo_aliases($ob->id(), &$h_tmp);
 			if ($grid["table_style"])
 			{
-				$st = get_instance("style");
+				$st = get_instance(CL_STYLE);
 				$h_tmp = $st->apply_style_to_text($grid["table_style"], $h_tmp, array("is_footer" => true));
 			}
 			$tmp .= $h_tmp;
 		}
 
-		$d = get_instance("document");
+		$d = get_instance(CL_DOCUMENT);
 		$d->create_relative_links($tmp);
 		if (strpos($tmp, "<a") !== false || strpos($tmp, "< a") !== false || strpos($tmp, "<A") !== false)
 		{
@@ -212,7 +212,7 @@ class layout extends class_base
 				{
 					$tmp .= nl2br($arr['obj_inst']->prop("footer"));
 				}
-				$d = get_instance("document");
+				$d = get_instance(CL_DOCUMENT);
 				$d->create_relative_links($tmp);
 				if (strpos($tmp, "<a") !== false)
 				{
@@ -226,7 +226,7 @@ class layout extends class_base
 				break;
 
 			case "table_style":
-				$st = get_instance("style");
+				$st = get_instance(CL_STYLE);
 				$prop['options'] = $st->get_table_style_picker();
 				break;
 

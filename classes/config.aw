@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.68 2005/03/20 16:46:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.69 2005/03/24 10:19:14 ahti Exp $
 
 class db_config extends aw_template 
 {
@@ -428,7 +428,7 @@ class config extends db_config
 		
 		$forms = array();
 
-		$f = get_instance("formgen/form");
+		$f = get_instance(CL_FORM);
 		$ops = $f->get_op_list();
 		while ($row = $this->db_next())
 		{
@@ -480,7 +480,7 @@ class config extends db_config
 		$name_els = aw_unserialize($this->get_cval("users::name_elements"));
 		$name_els_sep = $this->get_cval("users::name_elements_sep");
 
-		$finst = get_instance("formgen/form");
+		$finst = get_instance(CL_FORM);
 		$els = $finst->get_elements_for_forms($forms, false, true);
 
 		$this->vars(array(

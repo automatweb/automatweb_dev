@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.6 2005/03/21 12:50:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.7 2005/03/24 10:14:39 ahti Exp $
 
 /*
 @default group=search
@@ -320,7 +320,7 @@ class search_v2 extends class_base
 			"only_addable" => 1
 		));
 
-		$atc_inst = get_instance("admin/add_tree_conf");
+		$atc_inst = get_instance(CL_ADD_TREE_CONF);
 		$atc_id = $atc_inst->get_current_conf();
 		if (is_oid($atc_id) && $this->can("view", $atc_id))
 		{

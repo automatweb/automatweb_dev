@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.5 2005/03/23 10:31:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.6 2005/03/24 10:13:00 ahti Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -59,7 +59,7 @@ class personnel_management_cv_search extends class_base
 		));
 		if (!aw_global_get("no_db_connection"))
 		{
-			$personalikeskkond = get_instance("applications/personnel_management/personnel_management");
+			$personalikeskkond = get_instance(CL_PERSONNEL_MANAGEMENT);
 			$this->my_profile = $personalikeskkond->my_profile;
 		}
 	}

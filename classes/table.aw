@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.59 2004/11/07 19:26:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.60 2005/03/24 10:14:39 ahti Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -43,7 +43,7 @@ class table extends aw_template
 			$row = $this->db_next();
 			if ($row)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fl = $fi->get_file_by_id($oid);
 				return $fl["content"];
 			};
@@ -184,7 +184,7 @@ class table extends aw_template
 		));
 		$this->gen_yah();
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$stylesel = $st->get_select(0,ST_CELL,true);
 		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
@@ -237,7 +237,7 @@ class table extends aw_template
 			$this->arr["style2class"][$default_style] = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$default_style'","class_id");
 		}
 
-		$stl = get_instance("style");
+		$stl = get_instance(CL_STYLE);
 		if ($this->arr["table_style"])
 		{
 			$tbst = $stl->mk_cache($this->arr["table_style"]);
@@ -365,7 +365,7 @@ class table extends aw_template
 			$this->vars(array("COL"	=> $col));
 			$this->parse("LINE");
 		}
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"table_id" => $id,
@@ -487,7 +487,7 @@ class table extends aw_template
 
 			$this->parse("LINE");
 		}
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_admin", array("id" => $id)),
 			"table_id" => $id,
@@ -1320,7 +1320,7 @@ class table extends aw_template
 				
 			$this->parse("LINE");
 		}
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_styles", array("id" => $id)),
 			"table_id" => $id,
@@ -1443,7 +1443,7 @@ class table extends aw_template
 		}
 		$this->read_template("pickstyle.tpl");
 
-		$st = get_instance("style");
+		$st = get_instance(CL_STYLE);
 		$stylesel = $st->get_select(0,ST_CELL,true);
 		$css = get_instance(CL_CSS);
 		$tmp = $css->get_select();
@@ -1731,7 +1731,7 @@ class table extends aw_template
 			$row = $this->db_next();
 			if ($row)
 			{
-				$fi = get_instance("file");
+				$fi = get_instance(CL_FILE);
 				$fl = $fi->get_file_by_id($oid);
 				return $fl["content"];
 			};
@@ -1747,7 +1747,7 @@ class table extends aw_template
 			$table = "<b><font size=\"+1\">".$this->table_name."</font></b><br />";
 		}
 		
-		$stc = get_instance("style"); 
+		$stc = get_instance(CL_STYLE); 
 		$frow_style = 0; 
 		$fcol_style = 0; 
 		$num_fcols = 0; 

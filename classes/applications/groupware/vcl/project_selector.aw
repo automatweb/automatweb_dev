@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.6 2005/01/26 22:35:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.7 2005/03/24 10:13:00 ahti Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -162,8 +162,6 @@ class project_selector extends core
 		{
 			$new_ones = $arr["prop"]["value"];
 		}
-
-		$prj_inst = get_instance(CL_PROJECT);
 
 		foreach($xlist as $folder_id => $obj_id)
 		{

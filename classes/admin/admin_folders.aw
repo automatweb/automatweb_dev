@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.41 2005/03/18 09:20:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.42 2005/03/24 10:14:40 ahti Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -285,7 +285,7 @@ class admin_folders extends aw_template
 		if ($this->cfg["per_oid"])
 		{
 			$per_oid = $this->cfg["per_oid"];
-			$dbp = get_instance("period",$per_oid);
+			$dbp = get_instance(CL_PERIOD, $per_oid);
 			$act_per_id = $dbp->get_active_period();
 			//$dbp->clist(-1);
 			$pl = array();

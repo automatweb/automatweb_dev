@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.11 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.12 2005/03/24 10:13:00 ahti Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -859,11 +859,18 @@ class orders_order extends class_base
 	
 	function request_execute($obj)
 	{
-		$form = get_instance(CL_ORDERS_FORM);
-		//$_SESSION["order_cart_id"] = $obj->id();
-		//$_SESSION["order_form_id"] = $obj->id();
+		$form_i = get_instance(CL_ORDERS_FORM);
+		if(!$_SESSION["order_cart_id"])
+		{
+			$_SESSION["order_cart_id"] = $obj->id();
+			$form = new object_list(array(
+				"class_id" => CL_ORDERS_FORM,
+			));
+			$form = reset($form->arr());
+			$_SESSION["order_form_id"] = $form->id();
+		}
 		$_SESSION["show_order"] = 1;
-		$val = $form->change(array("show_order" => 1));
+		$val = $form_i->change(array("show_order" => 1));
 		unset($_SESSION["show_order"]);
 		//unset($_SESSION["order_form_id"]);
 		

@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.31 2005/02/21 14:39:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.32 2005/03/24 10:19:14 ahti Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
 	function scheduler()
 	{
 		$this->init("scheduler");
-		$this->file = get_instance("file");
+		$this->file = get_instance(CL_FILE);
 	}
 
 	////

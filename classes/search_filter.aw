@@ -267,7 +267,7 @@ class search_filter extends aw_template
                         }
                 };
                 
-                $this->form=get_instance("formgen/form");
+                $this->form=get_instance(CL_FORM);
                 
                 //Okay, let's build the array
                 foreach ($formids as $k => $fid)
@@ -486,7 +486,7 @@ class search_filter extends aw_template
                 $this->id=$filter_id;
                 $this->__load_data();
 
-                $tbl=get_instance("table");
+                $tbl=get_instance(CL_TABLE);
                 
                 $arr["is_filter"]=1;
                 $arr["filter"]=$this->id;
@@ -658,7 +658,7 @@ class search_filter extends aw_template
                 
                 $this->__load_data();
 
-                $tbl=get_instance("table");
+                $tbl=get_instance(CL_TABLE);
                 if ($this->data["stat_id"])
                 {
                         $parse="<div><IFRAME SRC='".$this->mk_my_orb("change",array(
@@ -745,7 +745,7 @@ class search_filter extends aw_template
                 }
 
                 //siin tuleb stuffi näidata
-                $this->ft=get_instance("formgen/form_table");
+                $this->ft=get_instance(CL_FORM_TABLE);
                 $table_id=$this->data["output_id"];
                 $this->ft->start_table($table_id);
 
@@ -937,7 +937,7 @@ class search_filter extends aw_template
                 // Siin hakkab näitama statistika tabelit all
                 if ($this->data["stat_show"] && $this->data["stat_id"])
                 {
-                        $tbl=get_instance("table");
+                        $tbl=get_instance(CL_FORM_TABLE);
                         // tee veel avg funktsioonid korda, sest neil tuleb lõpus summa / ridade arv
                         $tbl->fl_external=array();
 
@@ -1096,7 +1096,7 @@ class search_filter extends aw_template
                 $parent=$r["parent"];
                 $name=$r["name"];
 
-                $this->ft=get_instance("formgen/form_table");
+                $this->ft=get_instance(CL_FORM_TABLE);
 
                 $this->__load_data();
                 $this->__load_filter();
@@ -1257,7 +1257,7 @@ class search_filter extends aw_template
         function orb_output_submit($arr)
         {
                 extract($arr);
-                $this->ft=get_instance("formgen/form_table");
+                $this->ft=get_instance(CL_FORM_TABLE);
                 $this->ft->submit($arr);
                 
                 return $this->mk_my_orb("output",array("id" => $filter_id));

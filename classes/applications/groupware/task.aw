@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.13 2005/02/14 15:33:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.14 2005/03/24 10:13:00 ahti Exp $
 // task.aw - TODO item
 /*
 
@@ -258,7 +258,7 @@ class task extends class_base
 		//or not
 		if(!empty($arr['new']))
 		{
-			$user = get_instance('core/users/user');
+			$user = get_instance(CL_USER);
 			$person = new object($user->get_current_person());
 			$person->connect(array(
 				'reltype' => 'RELTYPE_PERSON_TASK',
