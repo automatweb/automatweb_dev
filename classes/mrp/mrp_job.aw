@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.41 2005/03/30 13:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.42 2005/03/30 16:35:52 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -18,14 +18,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property comment type=textarea
 	@caption Kommentaar
 
-	@property advised_starttime type=datetime_select
-	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
-	@caption Soovitav algusaeg
-
-
 @groupinfo data caption="Andmed"
 @default group=data
 	@property job_toolbar type=toolbar no_caption=1 store=no
+
+	@property advised_starttime type=datetime_select
+	@comment Allhankijaga kokkulepitud aeg, millal töö alustada.
+	@caption Soovitav algusaeg
 
 @default table=mrp_job
 	@property resource type=text
@@ -54,7 +53,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@comment Komaga eraldatud
 	@caption Eeldustööd
 
-	@property starttime type=datetime_select
+	@property starttime type=text
 	@caption Plaanitud töösseminekuaeg
 
 	@property planned_length type=text
@@ -176,26 +175,32 @@ class mrp_job extends class_base
 		));
 	}
 
-	function callback_pre_edit($arr)
+	function callback_on_load ($arr)
 	{
-		if ($arr["request"]["action"] === "new")
+		if (((string) $arr["request"]["action"]) == "new")
 		{
 			$this->mrp_error .= t("Uut tööd saab luua vaid ressursihalduskeskkonnas. ");
 		}
 		else
 		{
-			$this_object =& $arr["obj_inst"];
+			$this_object = obj($arr["request"]["id"]);
 			$project_id = $this_object->prop ("project");
 			$resource_id = $this_object->prop ("resource");
 
-			if ( is_oid($project_id) and is_oid($resource_id) and !$arr["new"] and !is_object($this->project) )
+			if ( is_oid($project_id) and is_oid($resource_id) )
 			{
 				$this->project = obj ($project_id);
 				$this->resource = obj ($resource_id);
+				$this->workspace = $this->project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+				if (!$this->workspace or !$this->project or !$this->resource)
+				{
+					$this->mrp_error .= t("Tööl puudub ressurss, projekt või ressursihalduskeskkond. ");
+				}
 			}
 			else
 			{
-				$this->mrp_error .= t("Tööl puudub ressurss, projekt või ressursihalduskeskkond. ");
+				$this->mrp_error .= t("Tööl puudub ressurss või projekt. ");
 			}
 		}
 	}
@@ -205,7 +210,7 @@ class mrp_job extends class_base
 		if ($this->mrp_error)
 		{
 			$prop["error"] = $this->mrp_error;
-			return PROP_FATAL_ERROR;
+			return PROP_IGNORE;
 		}
 
 		$this_object =& $arr["obj_inst"];
@@ -245,6 +250,10 @@ class mrp_job extends class_base
 				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : t("Määramata");
 				break;
 
+			case "starttime":
+				$prop["value"] = $prop["value"] ? date(MRP_DATE_FORMAT, $prop["value"]) : t("Planeerimata");
+				break;
+
 			case "job_toolbar":
 				$this->create_job_toolbar ($arr);
 				break;
@@ -255,15 +264,41 @@ class mrp_job extends class_base
 
 	function set_property ($arr = array())
 	{
+		if ($this->mrp_error)
+		{
+			$prop["error"] = $this->mrp_error;
+			return PROP_FATAL_ERROR;
+		}
+
 		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
-		$resource = obj($this_object->prop ("resource"));
+
+		### post rescheduling msg where necessary
+		$applicable_planning_states = array(
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+
+		switch ($prop["name"])
+		{
+			case "length":
+			case "pre_buffer":
+			case "post_buffer":
+			case "prerequisites":
+			case "minstart":
+				if ( in_array ($this_object->prop ("state"), $applicable_planning_states) and ($this_object->prop ($prop["name"]) != $prop["value"]) )
+				{
+					$this->workspace->set_prop("rescheduling_needed", 1);
+				}
+				break;
+		}
+
 
 		switch($prop["name"])
 		{
 			case "advised_starttime":
-				if ($resource->prop("type") != MRP_RESOURCE_SUBCONTRACTOR)
+				if ($this->resource->prop("type") != MRP_RESOURCE_SUBCONTRACTOR)
 				{
 					return PROP_IGNORE;
 				}
@@ -274,9 +309,14 @@ class mrp_job extends class_base
 			case "post_buffer":
 				$prop["value"] = round ($prop["value"] * 3600);
 				break;
-
 		}
+
 		return $retval;
+	}
+
+	function callback_post_save ($arr)
+	{
+		$this->workspace->save ();
 	}
 
 	function create_job_toolbar ($arr = array())
@@ -559,6 +599,15 @@ class mrp_job extends class_base
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
 			}
 
+			### post rescheduling msg
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
+			}
+
 			### log job change
 			$ws = get_instance (CL_MRP_WORKSPACE);
 			$ws->mrp_log(
@@ -664,6 +713,16 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
+			}
+
+			### post rescheduling msg
+			$project = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_PROJECT");
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
 			}
 
 			### log event
@@ -1067,6 +1126,23 @@ class mrp_job extends class_base
 				"oid" => $project->id ()
 			)
 		));
+
+		$applicable_planning_states = array(
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+
+		if (in_array ($project->prop ("state"), $applicable_planning_states))
+		{
+			### post rescheduling msg
+			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+			if ($workspace)
+			{
+				$workspace->set_prop("rescheduling_needed", 1);
+				$workspace->save();
+			}
+		}
 	}
 }
 

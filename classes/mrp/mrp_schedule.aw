@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.33 2005/03/30 13:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.34 2005/03/30 16:35:52 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1053,7 +1053,7 @@ class mrp_schedule extends class_base
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time);
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */  echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+// /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 // /* dbg */ }
 
 		### find if period ends before another starts
@@ -1308,7 +1308,6 @@ class mrp_schedule extends class_base
 		$resource_id = $arr["mrp_resource"];
 		$resource = obj ($resource_id);
 		$workspace = $resource->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-		$pointer = 0;
 
 		if (!is_object($workspace))
 		{

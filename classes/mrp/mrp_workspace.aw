@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.69 2005/03/30 13:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.70 2005/03/30 16:35:52 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -351,9 +351,9 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_PAUSED", "#AFAFAF");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
-define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
@@ -768,12 +768,35 @@ class mrp_workspace extends class_base
 
 	function set_property ($arr = array ())
 	{
+		$this_object =& $arr["obj_inst"];
 		$prop =& $arr["prop"];
 		$retval = PROP_OK;
+
+		if ( (substr($prop["name"], 0, 9) == "parameter") and ($this_object->prop ($prop["name"]) != $prop["value"]) )
+		{
+			### post rescheduling msg
+			$this_object->set_prop("rescheduling_needed", 1);
+		}
 
 		switch ($prop["name"])
 		{
 			case "projects_list":
+				$retval = $this->save_custom_form_data ($arr);
+				$applicable_lists = array (
+					"inwork",
+					"planned_overdue",
+					"overdue",
+					"planned",
+					"subcontracts",
+					"aborted_jobs"
+				);
+
+				if ( in_array ($arr["request"]["mrp_tree_active_item"], $applicable_lists) or empty ($arr["request"]["mrp_tree_active_item"]) )
+				{
+					$this_object->set_prop("rescheduling_needed", 1);
+				}
+				break;
+
 			case "resources_list":
 				$retval = $this->save_custom_form_data ($arr);
 				break;
@@ -1848,7 +1871,7 @@ class mrp_workspace extends class_base
 					)
 				));
 
-				// add reserved times for resources
+				### add reserved times for resources
 				$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
 					"mrp_resource" => $resource->id(),
 					"mrp_start" => $range_start,
@@ -1862,7 +1885,7 @@ class mrp_workspace extends class_base
 							"row" => $resource->id(),
 							"start" => $rt_start,
 							"length" => $rt_end - $rt_start,
-							"colour" => "#AAAAAA",
+							"colour" => MRP_COLOUR_PAUSED,
 							"url" => "#",
 							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
 						));
@@ -1945,7 +1968,7 @@ class mrp_workspace extends class_base
 
 			$chart->add_bar ($bar);
 
-			// add paused bars
+			### add paused bars
 			foreach(safe_array($job->meta("paused_times")) as $pd)
 			{
 				if ($pd["start"] && $pd["end"])
@@ -1958,7 +1981,7 @@ class mrp_workspace extends class_base
 						"uri" => aw_url_change_var ("mrp_hilight", $project_id),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
 					);
-	
+
 					$chart->add_bar ($bar);
 				}
 			}

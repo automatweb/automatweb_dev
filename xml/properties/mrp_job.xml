@@ -18,15 +18,6 @@
             <caption>Kommentaar</caption>
       </property>
       <property>
-            <name>advised_starttime</name>
-            <group>general</group>
-            <table>objects</table>
-            <type>datetime_select</type>
-            <field>advised_starttime</field>
-            <comment>Allhankijaga kokkulepitud aeg, millal töö alustada.</comment>
-            <caption>Soovitav algusaeg</caption>
-      </property>
-      <property>
             <name>job_toolbar</name>
             <group>data</group>
             <table>objects</table>
@@ -34,6 +25,15 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <field>job_toolbar</field>
+      </property>
+      <property>
+            <name>advised_starttime</name>
+            <group>data</group>
+            <table>objects</table>
+            <type>datetime_select</type>
+            <field>advised_starttime</field>
+            <comment>Allhankijaga kokkulepitud aeg, millal töö alustada.</comment>
+            <caption>Soovitav algusaeg</caption>
       </property>
       <property>
             <name>resource</name>
@@ -105,7 +105,7 @@
             <name>starttime</name>
             <group>data</group>
             <table>mrp_job</table>
-            <type>datetime_select</type>
+            <type>text</type>
             <field>starttime</field>
             <caption>Plaanitud töösseminekuaeg</caption>
       </property>
