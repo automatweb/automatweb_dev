@@ -18,7 +18,7 @@
 			</function>
 		</action>
 
-		<action name="show">
+		<action name="gen_home_dir">
 			<function name="gen_home_dir">
 				<arguments>
 					<optional name="id"/>
