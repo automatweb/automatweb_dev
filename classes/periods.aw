@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.22 2003/01/20 14:25:50 kristo Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.23 2003/01/29 20:18:01 duke Exp $
 
 class db_periods extends aw_template 
 {
@@ -527,6 +527,17 @@ class periods extends db_periods
 			};
 		};
 		return $content;
+	}
+
+	function list_periods($args = array())
+	{
+		$this->clist();
+		$retval = array();
+		while($row = $this->db_next())
+		{
+			$retval[] = $row;
+		};
+		return $retval;
 	}
 }
 
