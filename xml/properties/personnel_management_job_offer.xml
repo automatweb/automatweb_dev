@@ -118,6 +118,15 @@
             <caption>Vali cv kandideerimiseks</caption>
       </property>
       <property>
+            <name>kaaskiri</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <store>no</store>
+            <field>kaaskiri</field>
+            <caption>Kaaskiri</caption>
+      </property>
+      <property>
             <name>statistika</name>
             <table>objects</table>
             <group>statistika</group>

@@ -52,7 +52,7 @@
             <clid>CL_CRM_CITY</clid>
             <orient>vertical</orient>
             <field>s_cv_asukoht</field>
-            <caption>Töötamise piirkond</caption>
+            <caption>Ttamise piirkond</caption>
       </property>
       <property>
             <name>s_cv_koormus</name>

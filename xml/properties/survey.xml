@@ -188,6 +188,30 @@
             <field>utext5</field>
             <caption>Utext5</caption>
       </property>
+      <property>
+            <name>utext6</name>
+            <table>survey</table>
+            <group>survey</group>
+            <type>textbox</type>
+            <field>utext6</field>
+            <caption>Utext6</caption>
+      </property>
+      <property>
+            <name>utext7</name>
+            <table>survey</table>
+            <group>survey</group>
+            <type>textbox</type>
+            <field>utext7</field>
+            <caption>utext7</caption>
+      </property>
+      <property>
+            <name>utext8</name>
+            <table>survey</table>
+            <group>survey</group>
+            <type>textbox</type>
+            <field>utext8</field>
+            <caption>utext8</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SURVEY</syslog_type>
             <relationmgr>yes</relationmgr>

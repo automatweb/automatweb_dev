@@ -41,6 +41,16 @@
             <no_caption>1</no_caption>
             <caption>Täidetud ankeedid</caption>
       </property>
+      <property>
+            <name>sweepstake1</name>
+            <table>objects</table>
+            <group>sweepstake</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Paarid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SURVEY_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -50,6 +60,9 @@
                   <caption>Täidetud ankeedid</caption>
                   <submit>no</submit>
             </filled_surveys>
+            <sweepstake>
+                  <caption>Loosimine</caption>
+            </sweepstake>
       </groupinfo>
       <reltypes>
             <SURVEY_FOLDER>

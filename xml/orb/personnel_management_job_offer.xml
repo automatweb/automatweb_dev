@@ -8,6 +8,13 @@
 			</function>
 		</action>
 
+		<action name="change" nologin="1" all_args="1">
+			<function name="change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="delete_cv_file" >
 			<function name="delete_cv_file">
 				<arguments>
@@ -22,7 +29,7 @@
 			</function>
 		</action>
 
-		<action name="gen_job_pdf" >
+		<action name="gen_job_pdf" nologin="1">
 			<function name="gen_job_pdf">
 				<arguments>
 					<required name="oid" type="int"/>

@@ -28,6 +28,15 @@
             <caption>Teemade xml fail</caption>
       </property>
       <property>
+            <name>update_cache</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>update_cache</field>
+            <caption></caption>
+      </property>
+      <property>
             <name>ct</name>
             <table>objects</table>
             <group>content</group>

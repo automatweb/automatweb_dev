@@ -78,6 +78,16 @@
             <caption>Objekte sorteeritakse</caption>
       </property>
       <property>
+            <name>tree_on_left</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Puu vasakul</caption>
+      </property>
+      <property>
             <name>clids</name>
             <table>objects</table>
             <group>clids</group>
@@ -86,6 +96,16 @@
             <store>no</store>
             <field>clids</field>
             <caption>Klassid</caption>
+      </property>
+      <property>
+            <name>style_donor</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE_DONOR</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Stiilide doonor</caption>
       </property>
       <property>
             <name>title_bgcolor</name>
@@ -186,6 +206,11 @@
                   <clid>CL_CSS</clid>
                   <caption>css stiil</caption>
             </CSS>
+            <STYLE_DONOR>
+                  <value>5</value>
+                  <clid>CL_OBJECT_TREEVIEW</clid>
+                  <caption>stiilide doonor</caption>
+            </STYLE_DONOR>
       </reltypes>
 </properties>
 
