@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.62 2005/02/14 15:12:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.63 2005/03/10 12:48:37 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1665,11 +1665,13 @@ class webform extends class_base
 			// way to do it without messing up htmlclient
 			if($val["type"] == "button")
 			{
-				$els[$key]["no_caption"] = 1;
-				$els[$key]["value"] = $val["caption"];
-				unset($els[$key]["caption"]);
-				$els[$key]["onclick"] = "document.changeform.subaction.value='print';submit_changeform();";
-				$els[$key]["class"] = "sbtbutton";
+				$val["no_caption"] = 1;
+				$val["value"] = $val["caption"];
+				unset($val["caption"]);
+				$val["onclick"] = "document.changeform.subaction.value='print';submit_changeform();";
+				$val["class"] = "sbtbutton";
+				$_tmp3 = $val;
+				unset($els[$key]);
 			}
 			if(in_array($clf_type[$key], $this->n_props))
 			{
@@ -1677,7 +1679,17 @@ class webform extends class_base
 			}
 			if($all_props[$key]["type"] == "reset" || $all_props[$key]["type"] == "submit")
 			{
-				$els[$key]["class"] = $els[$key]["style"]["prop"];
+				$val["class"] = $val["style"]["prop"];
+				if($all_props[$key]["type"] == "submit")
+				{
+					$_tmp = $val;
+					unset($els[$key]);
+				}
+				elseif($all_props[$key]["type"] == "reset")
+				{
+					$_tmp2 = $val;
+					unset($els[$key]);
+				}
 			}
 			if($val["type"] == "select")
 			{
@@ -1722,6 +1734,20 @@ class webform extends class_base
 				}
 			}
 		}
+		$tmp = array();
+		if($_tmp || $_tmp2 || $_tmp3)
+		{
+			$tmp["submit"] = array(
+				"items" => array(
+					"usersubmit1" => $_tmp,
+					"userreset1" => $_tmp2,
+					"userprint1" => $_tmp3,
+				),
+				"type" => "text",
+				"layout" => true,
+			);
+		}
+		$els = $els + $tmp;
 		classload("cfg/htmlclient");
 		$htmlc = new htmlclient(array(
 			"template" => "real_webform.tpl",
@@ -1927,7 +1953,7 @@ class webform extends class_base
 
 	/**  
 		
-		@attrib name=remove_entries	
+		@attrib name=remove_entries
 		@param id required type=int acl=view
 		@param group optional
 		@param select required
