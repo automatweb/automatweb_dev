@@ -177,9 +177,9 @@ class object_treeview extends class_base
 				{
 					$target = "target=\"_blank\"";
 				}
-				$fileSizeBytes = number_format(filesize($od->prop('file')),2);
-				$fileSizeKBytes = number_format(filesize($od->prop('file'))/(1024),2);
-				$fileSizeMBytes = number_format(filesize($od->prop('file'))/(1024*1024),2);
+				$fileSizeBytes = number_format(@filesize($od->prop('file')),2);
+				$fileSizeKBytes = number_format(@filesize($od->prop('file'))/(1024),2);
+				$fileSizeMBytes = number_format(@filesize($od->prop('file'))/(1024*1024),2);
 			}
 			else
 			if ($od->class_id() == CL_MENU)
@@ -201,9 +201,9 @@ class object_treeview extends class_base
 					$fid = $od->id().":".$_file;
 
 					$fqfn = $od->prop("folder")."/".$_file;
-					$fileSizeBytes = number_format(filesize($fqfn),0);
-					$fileSizeKBytes = number_format(filesize($fqfn)/(1024),2);
-					$fileSizeMBytes = number_format(filesize($fqfn)/(1024*1024),2);
+					$fileSizeBytes = number_format(@filesize($fqfn),0);
+					$fileSizeKBytes = number_format(@filesize($fqfn)/(1024),2);
+					$fileSizeMBytes = number_format(@filesize($fqfn)/(1024*1024),2);
 				
 					$fowner = posix_getpwuid(fileowner($fqfn));
 
