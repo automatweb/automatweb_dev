@@ -117,6 +117,10 @@ function setLink(li,title)
 <td class="celltext"><select class="formselect2" name='sql_writer_form'>{VAR:forms}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Kuhu suunata p&auml;rast kirjutamist:</td>
+<td class="celltext"><input type="text" name='sql_writer_redirect_after' class='formtext' value='{VAR:sql_writer_redirect_after}' size="50"></td>
+</tr>
+<tr class="aste01">
 <td class="celltext">Form otsib ainult aktiivse keele alt:</td>
 <td class="celltext"><input type="checkbox" name="search_act_lang_only" value="1" {VAR:search_act_lang_only}></td>
 </tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.69 2003/06/25 13:50:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.70 2003/06/26 14:14:37 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -456,6 +456,7 @@ class form extends form_base
 		$this->arr["search_act_lang_only"] = $search_act_lang_only;
 		$this->arr["hide_empty_rows"] = $hide_empty_rows;
 		$this->arr["calendar_controller"] = $calendar_controller;
+		$this->arr["sql_writer_redirect_after"] = $sql_writer_redirect_after;
 
 		if ($is_translatable && !$this->arr["is_translatable"])
 		{
@@ -850,7 +851,8 @@ class form extends form_base
 			"show_form_with_results" => checked($this->arr["show_form_with_results"]),
 			"search_act_lang_only" => checked($this->arr["search_act_lang_only"]),
 			"hide_empty_rows" => checked($this->arr["hide_empty_rows"]),
-			"is_translatable" => checked($this->arr["is_translatable"])
+			"is_translatable" => checked($this->arr["is_translatable"]),
+			"sql_writer_redirect_after" => htmlspecialchars($this->arr["sql_writer_redirect_after"])
 		));
 
 		$ns = "";
@@ -5865,7 +5867,14 @@ class form extends form_base
 		}
 
 		// and finally, call the search func so the search results will be shown again
-		return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1, "section" => $section));
+		if ($this->arr["sql_writer_redirect_after"] != "")
+		{
+			return $this->arr["sql_writer_redirect_after"];
+		}
+		else
+		{
+			return $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1, "section" => $section));
+		}
 	}
 
 	////
