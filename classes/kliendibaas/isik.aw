@@ -1,5 +1,8 @@
 <?php
 /*
+	
+	@groupinfo general caption=&Uuml;ldine
+	
 	@classinfo relationmgr=yes
 	@tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
@@ -23,7 +26,7 @@
 	@property gender type=textbox size=5 maxlength=10
 	@caption sugu
 
-	@property personal_id type=textbox size=10 maxlength=15
+	@property personal_id type=textbox size=13 maxlength=11
 	@caption isikukood
 
 	@property title type=textbox size=5 maxlength=10
@@ -56,11 +59,13 @@
 	@property picture type=relpicker reltype=PICTURE
 	@caption pilt/foto
 
+//	@property work_contact type=popup_objmgr clid=CL_TEGEVUSALA multiple=1 method=serialize field=meta table=objects
 	@property work_contact type=relpicker reltype=WORKADDRESS
 	@caption töökoha kontakt andmed
 
 	@property personal_contact type=relpicker reltype=HOMEADDRESS
 	@caption kodused kontakt andmed
+
 */
 
 define ('HOMEADDRESS',1);
@@ -69,6 +74,60 @@ define ('PICTURE',3);
 
 class isik extends class_base
 {
+
+	function show($args)
+	{
+		extract($args);
+
+		$this->read_template('show.tpl');
+
+		$row = $this->db_fetch_row("select t2.name as name, firstname,lastname, gender,    personal_id,    title,    nickname,    messenger,    birthday,    social_status,    spouse,    children,    personal_contact,
+    work_contact,    digitalID,    notes,    pictureurl,    picture,
+    t3.riik as k_riik,
+    t3.maakond as k_maakond,
+    t3.postiindeks as k_postiindex,
+    t3.aadress as k_aadress,
+    t3.telefon as k_telefon,
+    t3.mobiil as k_mobiil,
+    t3.faks as k_faks,
+    t3.e_mail as k_e_mail,
+    t3.kodulehekylg as k_kodulehekylg,
+
+    t4.riik as w_riik,
+    t4.maakond as w_maakond,
+    t4.postiindeks as w_postiindex,
+    t4.aadress as w_aadress,
+    t4.telefon as w_telefon,
+    t4.mobiil as w_mobiil,
+    t4.faks as w_faks,
+    t4.e_mail as w_e_mail,
+    t4.kodulehekylg as w_kodulehekylg
+
+		 from objects as t1 left join kliendibaas_isik as t2 on t1.oid=t2.oid
+			left join kliendibaas_address as t3 on t2.personal_contact=t3.oid
+			left join kliendibaas_address as t4 on t2.work_contact=t4.oid
+
+		 where t1.oid=".$id);
+
+
+		$row['picture']=$row['pictureurl']?html::img(array('url' => $row['pictureurl'])):'';
+		$row['k_e_mail']=$row['k_e_mail']?html::href(array('url' => 'mailto:'.$row['k_e_mail'], 'caption' => $row['k_e_mail'])):'';
+		$row['w_e_mail']=$row['w_e_mail']?html::href(array('url' => 'mailto:'.$row['w_e_mail'],'caption' => $row['w_e_mail'])):'';
+		$row['k_kodulehekylg']=$row['k_kodulehekylg']?html::href(array('url' => $row['k_kodulehekylg'],'caption' => $row['k_kodulehekylg'],'target' => '_blank')):'';
+		$row['w_kodulehekylg']=$row['w_kodulehekylg']?html::href(array('url' => $row['w_kodulehekylg'],'caption' => $row['w_kodulehekylg'],'target' => '_blank')):'';
+
+
+		$this->vars($row);
+
+		return $this->parse();;
+	}
+
+	function parse_alias($args)
+	{
+		extract($args);
+		return $this->show(array('id' => $alias['target']));
+	}
+
 
 	function callback_get_rel_types()
 	{
@@ -82,6 +141,7 @@ class isik extends class_base
 	function isik()
 	{
 		$this->init(array(
+			"tpldir" => "isik",
 			'clid' => CL_ISIK,
 		));
 	}

@@ -43,8 +43,8 @@
       <property>
             <name>personal_id</name>
             <type>textbox</type>
-            <size>10</size>
-            <maxlength>15</maxlength>
+            <size>13</size>
+            <maxlength>11</maxlength>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>personal_id</field>
@@ -170,6 +170,11 @@
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>&amp;Uuml;ldine</caption>
+            </general>
+      </groupinfo>
       <tableinfo>
             <kliendibaas_isik>
                   <index>oid</index>
