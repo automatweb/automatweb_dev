@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.19 2003/02/12 15:00:27 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.20 2003/03/06 15:01:11 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -29,6 +29,7 @@ class htmlclient extends aw_template
 		$this->res .= sprintf("<form action='reforb.%s' method='post' name='changeform' enctype='multipart/form-data'>\n",aw_ini_get("ext"));
 		$this->res .= "<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='500000'>\n";
 		$this->res .= "\n<table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>\n";
+		$this->orb_vars = array();
 	}
 
 	function add_property($args = array())
@@ -51,6 +52,11 @@ class htmlclient extends aw_template
 			$this->mod_property(&$args);
 		};
 
+		if ($args["type"] == "hidden")
+		{
+			$this->orb_vars[$args["name"]] = $args["value"];
+		}
+		else
 		if ($args["no_caption"])
 		{
 			$this->put_content($args);
@@ -221,6 +227,7 @@ class htmlclient extends aw_template
 		$this->res .= "</table>\n";
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
+		$data = $data + $this->orb_vars;
 		$this->res .= $this->mk_reforb($action,$data,$orb_class);
 		$this->res .= "</form>\n";
 	}
