@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.3 2004/12/09 18:18:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.4 2004/12/10 16:02:14 ahti Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -138,21 +138,31 @@ class timing extends class_base
 		}
 		if($atrue)
 		{
-			$event = str_replace("/automatweb", "", $this->mk_my_orb("init_action", array(
+			$event = $this->mk_my_orb("init_action", array(
 				"subaction" => "activate", 
 				"id" => $arr["obj_inst"]->id(),
-			)));
+			));
 			$scheduler->remove(array("event" => $event));
-			$scheduler->evnt_add(mktime($act["hour"], $act["minute"], 0, $act["month"], $act["day"], $act["year"]), $event);
+			$scheduler->add(array(
+				"time" => mktime($act["hour"], $act["minute"], 0, $act["month"], $act["day"], $act["year"]),
+				"event" =>  $event,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
 		}
 		if($datrue)
 		{
-			$event = str_replace("/automatweb", "", $this->mk_my_orb("init_action", array(
+			$event = $this->mk_my_orb("init_action", array(
 				"subaction" => "deactivate", 
 				"id" => $arr["obj_inst"]->id(),
-			)));
+			));
 			$scheduler->remove(array("event" => $event));
-			$scheduler->evnt_add(mktime($deact["hour"], $deact["minute"], 0, $deact["month"], $deact["day"], $deact["year"]), $event);
+			$scheduler->add(array(
+				"time" => mktime($deact["hour"], $deact["minute"], 0, $deact["month"], $deact["day"], $deact["year"]), 
+				"event" => $event,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
 		}
 		//$time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "", $sessid ="")
 	}
@@ -226,7 +236,7 @@ class timing extends class_base
 	}
 	
 	/**
-		@attrib name=init_action no_login=1
+		@attrib name=init_action
 		
 		@param id required type=int acl=view
 		@param subaction required

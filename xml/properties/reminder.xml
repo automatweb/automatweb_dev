@@ -18,7 +18,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
-            <reltype>RELTYPE_CON_OBJECT</reltype>
+            <reltype>RELTYPE_EMAIL</reltype>
             <multiple>1</multiple>
             <caption>E-mail(id), millele meeldetuletus saadetakse</caption>
       </property>
@@ -72,6 +72,11 @@
                   </clid>
                   <caption>Seotud objekt</caption>
             </REMINDER_OBJECT>
+            <EMAIL>
+                  <value>2</value>
+                  <clid>CL_ML_MEMBER</clid>
+                  <caption>E-mail</caption>
+            </EMAIL>
       </reltypes>
 </properties>
 

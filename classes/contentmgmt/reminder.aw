@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.3 2004/12/09 18:18:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/Attic/reminder.aw,v 1.4 2004/12/10 16:02:14 ahti Exp $
 // reminder.aw - Meeldetuletus 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_rconnect_from)
@@ -17,7 +17,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconne
 @property remind type=datetime_select year_from=2004 year_to=2010
 @caption Millal meelde tuletab
 
-@property emails type=relpicker reltype=RELTYPE_CON_OBJECT multiple=1
+@property emails type=relpicker reltype=RELTYPE_EMAIL multiple=1
 @caption E-mail(id), millele meeldetuletus saadetakse
 
 @property subject type=textbox
@@ -34,6 +34,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_rdisconne
 
 @reltype REMINDER_OBJECT value=1 clid=CL_DOCUMENT,CL_MENU
 @caption Seotud objekt
+
+@reltype EMAIL value=2 clid=CL_ML_MEMBER
+@caption E-mail
 
 */
 
@@ -131,11 +134,16 @@ class reminder extends class_base
 		}
 		if($rtrue)
 		{
-			$event = str_replace("/automatweb", "", $this->mk_my_orb("init_action", array(
+			$event = $this->mk_my_orb("init_action", array(
 				"id" => $arr["obj_inst"]->id(),
-			)));
+			));
 			$scheduler->remove(array("event" => $event));
-			$scheduler->evnt_add(mktime($rem["hour"], $rem["minute"], 0, $rem["month"], $rem["day"], $rem["year"]), $event);
+			$scheduler->add(array(
+				"time" => mktime($rem["hour"], $rem["minute"], 0, $rem["month"], $rem["day"], $rem["year"]), 
+				"event" => $event,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
 		}
 	}
 	
@@ -208,7 +216,7 @@ class reminder extends class_base
 	}
 	
 	/**
-		@attrib name=init_action no_login=1
+		@attrib name=init_action
 		
 		@param id required type=int acl=view
 	**/
