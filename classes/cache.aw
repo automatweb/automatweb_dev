@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.20 2003/08/29 11:51:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.21 2003/09/23 16:06:55 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -164,7 +164,7 @@ class cache extends core
 		$dirname = str_replace(".","",$pathinfo["dirname"]);
 
 		$fqfn = $this->cfg["basedir"] . $dirname . "/" . $pathinfo["basename"];
-
+		
 		// this is all nice and good, but I need a way to load files from the
 		// site directory as well. 
 
@@ -194,12 +194,12 @@ class cache extends core
 
 		$cachefile = $cachedir . "/" . $cache_id;
 			
-		if (!is_writable($cachedir))
-		{
+		//if (!is_writable($cachedir))
+		//{
 			// cannot write cache, bail out
 			// OTOH this is not a fatal error, we can still work without cache
-			return false;
-		}
+		//	return false;
+		//}
 
 		// now get mtime for both files, source and cache
 		$source_mtime = @filemtime($fqfn);
@@ -232,11 +232,14 @@ class cache extends core
 			{
 				$clobj->$clmeth(array("data" => $result));
 			};
-			$ser_res = aw_serialize($result,SERIALIZE_PHP);
-			$this->put_file(array(
-				"file" => $cachefile,
-				"content" => $ser_res,
-			));
+			if (is_writable($cachedir))
+			{
+				$ser_res = aw_serialize($result,SERIALIZE_PHP);
+				$this->put_file(array(
+					"file" => $cachefile,
+					"content" => $ser_res,
+				));
+			};
 			// Now I somehow need to retrieve the results of unserialization
 			// and write them out to the file
 			// 4) aquire reference to results
