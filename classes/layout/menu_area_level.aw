@@ -79,7 +79,7 @@ class menu_area_level extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$this->ob = $this->get_object($id);
+		$this->ob = obj($id);
 
 		// ok, here we need to figure out if this level's parent menu is active. how the hell do we do that?
 		// ok, first get the path
@@ -89,20 +89,20 @@ class menu_area_level extends class_base
 		$path = $sg->get_active_path();
 
 		$ma = get_instance("layout/menu_area");
-		$rootmenu = $ma->get_root_menu($this->ob["meta"]["menu_area"]);
+		$rootmenu = $ma->get_root_menu($this->ob->meta("menu_area"));
 
-		if ($this->ob['meta']['has_sub_menus'])
+		if ($this->ob->meta('has_sub_menus'))
 		{
 			$next_level_id = $ma->get_next_level_id(array(
-				"id" => $this->ob["meta"]["menu_area"],
-				"cur_level" => $this->ob['meta']['level']
+				"id" => $this->ob->meta("menu_area"),
+				"cur_level" => $this->ob->meta('level')
 			));
 		}
 
-		if ($this->ob['meta']['pre_image'])
+		if ($this->ob->meta('pre_image'))
 		{
 			$im = get_instance("image");
-			$imd = $im->get_image_by_id($this->ob['meta']['pre_image']);
+			$imd = $im->get_image_by_id($this->ob->meta('pre_image'));
 			$imstr = image::make_img_tag(image::check_url($imd["url"]));
 		}
 
@@ -118,13 +118,13 @@ class menu_area_level extends class_base
 		}
 
 		$cont = "";
-		if (($root_menu_level && ($parent = $path[$root_menu_level+$this->ob['meta']['level']])) || ($this->ob['meta']['level'] == 0) || $force_show)
+		if (($root_menu_level && ($parent = $path[$root_menu_level+$this->ob->meta('level')])) || ($this->ob->meta('level') == 0) || $force_show)
 		{
 			if ($force_show)
 			{
 				$parent = $force_parent;
 			}
-			if ($this->ob['meta']['level'] == 0)
+			if ($this->ob->meta('level') == 0)
 			{
 				$parent = $rootmenu;
 			}
@@ -143,7 +143,7 @@ class menu_area_level extends class_base
 					"active" => in_array($menu_data["oid"], $path)
 				));
 
-				if ($this->ob['meta']['has_sub_menus'] && $next_level_id)
+				if ($this->ob->meta('has_sub_menus') && $next_level_id)
 				{
 					// find next level menus and draw them
 					$nl = get_instance("layout/menu_area_level");
@@ -151,11 +151,11 @@ class menu_area_level extends class_base
 						"id" => $next_level_id,
 						"force_show" => true,
 						"force_parent" => $menu_data["oid"],
-						"prepend_sep" => $prepend_sep.$this->ob['meta']['has_sub_menus_sep']
+						"prepend_sep" => $prepend_sep.$this->ob->meta('has_sub_menus_sep')
 					));
 				}
 			}
-			return join($this->ob['meta']['separator'], $names);
+			return join($this->ob->meta('separator'), $names);
 		}
 
 		return "";
@@ -213,9 +213,9 @@ class menu_area_level extends class_base
 		}
 
 		// if a style for this item that matches the type exactly is not set, then use the default
-		if (!($stylid = $this->ob['meta'][$style_name]))
+		if (!($stylid = $this->ob->meta($style_name)))
 		{
-			$stylid = $this->ob['meta']["item_style"];
+			$stylid = $this->ob->meta("item_style");
 		}
 		
 		$link = html::href(array(
@@ -223,9 +223,9 @@ class menu_area_level extends class_base
 			"caption" => $data["name"]
 		));
 
-		if ($this->ob["meta"]["show_comment"] && $data["comment"] != "")
+		if ($this->ob->meta("show_comment") && $data["comment"] != "")
 		{
-			$link .= $this->ob["meta"]["comment_sep"].$data["comment"];
+			$link .= $this->ob->meta("comment_sep").$data["comment"];
 		}
 
 		if ($stylid)

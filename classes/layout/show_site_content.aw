@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.4 2004/04/19 12:43:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.5 2004/06/08 19:08:28 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE_CONTENT
@@ -33,8 +33,6 @@ class show_site_content extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-
 		$pd = get_instance("layout/active_page_data");
 		$mned = get_instance("contentmgmt/site_content");
 

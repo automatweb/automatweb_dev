@@ -36,7 +36,6 @@ class site_search extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
 
 		$this->read_template('show.tpl');
 
