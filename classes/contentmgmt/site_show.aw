@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.59 2004/06/02 10:52:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.60 2004/06/04 11:23:07 kristo Exp $
 
 /*
 
@@ -1592,6 +1592,7 @@ class site_show extends class_base
 		// site_title_rev - shows two levels in reverse order
 		$pcnt = count($this->title_yah_arr);
 		$site_title_rev = ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-1])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "");
+		$site_title_yah = " / ". ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-1]) : "");
 
 		$adt = "";
 		if ($this->active_doc)
@@ -1616,6 +1617,7 @@ class site_show extends class_base
 			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 			"site_title" => strip_tags($this->site_title),
 			"site_title_rev" => $site_title_rev,
+			"site_title_yah" => $site_title_yah,
 			"active_document_title" => $adt,
 			"current_period" => aw_global_get("current_period"),
 		));
