@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.31 2004/03/25 19:40:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.32 2004/03/25 21:18:42 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -54,10 +54,31 @@ caption Identiteet
 @property testfilters type=text 
 @caption Testi filtreid
 
+@default group=search 
+
+@property s_toolbar type=toolbar no_caption=1
+@caption Otsingu toolbar
+
+@property s_from type=textbox store=no
+@caption From
+
+@property s_subject type=textbox store=no
+@caption Subject
+
+@property s_submit type=submit
+@caption Otsi
+
+@property no_reforb type=hidden value=1
+@caption lolo
+
+@property s_results type=table no_caption=1
+@caption Tulemused
+
 @property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules props=rule_from,rule_subject,target_folder
 @caption Reeglid
 
-@groupinfo main_view caption="Kirjad" submit=no
+@groupinfo main_view caption="Kirjad" submit=no 
+@groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Ruulid submit=no
 
 @reltype MAIL_IDENTITY value=1 clid=CL_MESSENGER_IDENTITY
@@ -169,7 +190,28 @@ class messenger_v2 extends class_base
 				$data["value"] = $this->use_mailbox;
 				break;
 
+			case "s_from":
+				$data["value"] = $arr["request"]["s_from"];
+				break;
 
+			case "s_subject":
+				$data["value"] = $arr["request"]["s_subject"];
+				break;
+
+			case "s_results":
+				$this->do_search(&$arr);
+				break;
+
+			case "s_toolbar":
+				$t = &$data["toolbar"];
+				$t->add_button(array(
+					"name" => "delete",
+					"img" => "delete.gif",
+					"confirm" => "Kustutada?",
+					"tooltip" => "Kustuta märgitud kirjad",
+					"action" => "delete_search_results",
+				));
+				break;
 		};
 		return $retval;
 	}
@@ -788,6 +830,33 @@ class messenger_v2 extends class_base
 			"mailbox" => $arr["mailbox"],
 		));
 	}
+	
+	/** Deletes messages from server
+
+		@attrib name=delete_search_results all_args="1"
+
+	**/
+	function delete_search_results($arr)
+	{
+		$marked = is_array($arr["mark"]) && sizeof($arr["mark"]) > 0 ? $arr["mark"] : false;
+
+		if (is_array($marked))
+		{
+			$this->_connect_server(array(
+				"msgr_id" => $arr["id"],
+			));
+			$this->drv_inst->delete_msgs_from_folder(array_keys($marked));
+		};
+
+		// those have to return links, and how do I do that?
+		return $this->mk_my_orb("change",array(
+			"id" => $arr["id"],
+			"group" => $arr["group"],
+			"s_subject" => $arr["s_subject"],
+			"s_from" => $arr["s_from"],
+
+		));
+	}
 
 	/** Moves messages to another server
 
@@ -853,6 +922,87 @@ class messenger_v2 extends class_base
 			$rv[$obj->id()] = $obj->prop("name");
 		};
 		return $rv;
+	}
+
+	function do_search($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->parse_xml_def("messenger/mailbox_view");
+		$t->define_chooser(array(
+			"field" => "id",
+			"name" => "mark",
+		));
+		$from = $arr["request"]["s_from"];
+		$subj = $arr["request"]["s_subject"];
+		$this->_connect_server(array(
+			"msgr_id" => $arr["obj_inst"]->id(),
+			"no_folders" => true,
+		));
+		if (!empty($subj) || !empty($from))
+		{
+			$str = array();
+			if (!empty($subj))
+			{
+				$str[] = sprintf('SUBJECT "%s"',$subj);
+			};
+			if (!empty($from))
+			{
+				$str[] = sprintf('FROM "%s"',$from);
+			};
+			$matches = $this->drv_inst->search_folder(join(" ",$str));
+			if (is_array($matches))
+			{
+				foreach($matches as $msg_uid)
+				{
+					$message = $this->drv_inst->fetch_headers(array(
+						"msgid" => $msg_uid,
+						"arr" => 1,
+
+					));
+
+					$seen = ($message->Unseen != "U");
+					$fromline = "";
+
+					$addrinf = $this->drv_inst->_extract_address($message->fromaddress);
+					$fromn = $this->drv_inst->MIME_decode($addrinf["name"]);
+					if (!empty($fromn))
+					{
+						$fromline = html::href(array(
+							"url" => "javascript:void();",
+							"title" => $message->fromaddress,
+							"caption" => substr($fromn,0,1),
+						)) . substr($fromn,1);
+					}
+					else
+					{
+						$fromline = $message->from;
+					};
+
+					// this should be unique enough
+					$wname = "msgr" . $key;
+
+					$t->define_data(array(
+						"id" => $msg_uid,
+						"from" => $this->_format($fromline,$seen),
+						"subject" => html::href(array(
+							"url" => "javascript:aw_popup_scroll(\"" . $this->mk_my_orb("change",array(
+									"msgrid" => $arr["obj_inst"]->id(),
+									"msgid" => $msg_uid,
+									"form" => "showmsg",
+									"cb_part" => 1,
+									"mailbox" => $this->use_mailbox,
+							),"mail_message",false,true) . "\",\"$wname\",800,600)",
+							"caption" => $this->_format(parse_obj_name($this->drv_inst->_parse_subj($message->subject)),$seen),
+						)),
+						"date" => strtotime($message->date),
+						"size" => $this->_format(sprintf("%d",$message->Size/1024),$seen),
+						"answered" => $this->_format($this->_conv_stat($message->answered),$seen),
+						"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
+					));
+				};
+			};
+
+		};
 	}
 
 }
