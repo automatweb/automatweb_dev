@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.51 2005/04/04 11:59:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.52 2005/04/04 12:13:11 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -250,10 +250,10 @@ class event_search extends class_base
 				"checked" => $formconfig["project1"]["active"],
 			)),
 			"data" => html::select(array(
-				"name" => "project[rootnode]",
+				"name" => "project1[rootnode]",
 				"options" => $prj_opts,
 				"multiple" => 1,
-				"value" => $formconfig["project"]["rootnode"],
+				"value" => $formconfig["project1"]["rootnode"],
 			)),
 		));
 		
