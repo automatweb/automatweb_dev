@@ -847,5 +847,69 @@ class site_list extends class_base
 
 		return $decrypted;
 	}
+
+	/** returns the baseurl for the given site id
+
+		@attrib api=1
+
+	**/
+	function get_url_for_site($id)
+	{
+		// get the record from the local list
+		$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$id'");
+		if ($row["last_update"] < (time()-24*3600))
+		{
+			$this->_do_update_list_cache();
+			$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$id'");
+		}
+		return $row["url"];
+	}
+
+	function _do_update_list_cache()
+	{
+		if (aw_ini_get("site_id") == 33)
+		{
+			return; // never ever update register.aw.com site list :)
+		}
+
+		$existing = array();
+		$this->db_query("SELECT id FROM aw_site_list");
+		while ($row = $this->db_next())
+		{
+			$existing[$row["id"]] = $row["id"];
+		}
+
+		$list = $this->do_orb_method_call(array(
+			"class" => "site_list",
+			"action" => "get_site_list",
+			"method" => "xmlrpc",
+			"server" => "register.automatweb.com",
+			"no_errors" => true
+		));
+		foreach($list as $id => $row)
+		{
+			if ($existing[$id])
+			{
+				$this->db_query("
+					UPDATE 
+						aw_site_list 
+					SET 
+						url = '$row[url]',
+						name = '$row[name]',
+						server_id = '$row[server_id]',
+						last_update = '".time()."'
+					WHERE
+						id = $id
+				");						
+			}
+			else
+			{
+				$this->db_query("
+					INSERT INTO aw_site_list(id,url,name,server_id, last_update)
+						VALUES($id,'$row[url]','$row[name]','$row[server_id]','".time()."')
+				");
+			}
+		}
+	}
 }
 ?>
