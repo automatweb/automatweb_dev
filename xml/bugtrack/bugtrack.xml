@@ -24,9 +24,10 @@
 <field name="id" caption="#" talign="center" sortable="1" type="int" numeric="yea"/>
 <field name="title" caption="Pealkiri" talign="left" sortable="1"/>
 <field name="pri" caption="Pri" talign="center" sortable="1" chgbgcolor="__pribgcolor" type="int" numeric="yea"/>
+<field name="severity" caption="T&amp;otilde;sidus" talign="center" sortable="1"/>
 <field name="status" caption="Status" talign="center" chgbgcolor="__statbgcolor" sortable="1"/>
-<field name="tm" caption="Lisatud" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
-<field name="timeready" caption="Parandada" talign="center" type="time" format="H:i d-M-y" sortable="1" chgbgcolor="__trbgcolor" numeric="yea"/>
+<field name="tm" caption="Lisatud" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yes"/>
+<!--<field name="timeready" caption="Parandada" talign="center" type="time" format="H:i d-M-y" sortable="1" chgbgcolor="__trbgcolor" numeric="yea"/>-->
 <field name="uid" caption="Kes" talign="center" sortable="1"/>
 <field name="developer" caption="Kellele" talign="center" sortable="1"/>
 <field name="site" caption="Site" talign="center" sortable="1"/>
