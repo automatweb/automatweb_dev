@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.12 2004/11/12 12:44:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.13 2004/11/19 12:05:45 duke Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -86,6 +86,7 @@ class datasource extends class_base
 		{
 			$read = "";
 			$curl = $this->cfg["curl_path"];
+			/*
 			if (!file_exists($curl))
 			{
 				 error::throw(array(
@@ -93,6 +94,7 @@ class datasource extends class_base
 					"msg" => "$curl not found"
 				));
 			};
+			*/
 			$fp = popen ("$curl $url", "r");
 			while(!feof($fp))
 			{
