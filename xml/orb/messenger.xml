@@ -53,6 +53,7 @@
 				<arguments>
 					<optional name="id"/>
 					<optional name="sortby"/>
+					<optional name="sort_order"/>
 					<optional name="page"/>
 				</arguments>
 			</function>
@@ -161,6 +162,7 @@
 		<action name="search">
 			<function name="search">
 				<arguments>
+					<optional name="mfrom"/>
 				</arguments>
 			</function>
 		</action>
@@ -176,13 +178,18 @@
 		<action name="do_search">
 			<function name="do_search">
 				<arguments>
-					<optional name="folders"/>
-					<required name="field"/>
-					<required name="value"/>
+					<optional name="sortby"/>
+					<optional name="sort_order"/>
 				</arguments>
 			</function>
 		</action>
 
+		<action name="register_search">
+			<function name="register_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 
 		<action name="show">
 			<function name="show_message">
