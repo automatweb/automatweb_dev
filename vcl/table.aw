@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.22 2002/07/16 18:48:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.23 2002/07/17 20:18:48 kristo Exp $
 
 class aw_table
 {
@@ -631,7 +631,7 @@ class aw_table
 				{
 					foreach($rgroupby as $rgel)
 					{
-						$_a = preg_replace("/<a (.*)>(.*)<\/a>/","\\2",$v[$rgel]);
+						$_a = preg_replace("/<a (.*)>(.*)<\/a>/U","\\2",$v[$rgel]);
 						if ($lgrpvals[$rgel] != $_a)
 						{
 							// kui on uus v22rtus grupeerimistulbal, siis paneme rea vahele
@@ -749,6 +749,7 @@ class aw_table
 						// chunk split adds one too many separators, so remove that
 						$val = substr($val,strlen($v1["thousands_sep"]));
 					}
+					$val = str_replace("[__jrk_replace__]",$counter,$val);	
 					$tbl .= $val;
 					$tbl .= $this->closetag(array("name" => "td"));
 				};
