@@ -50,5 +50,13 @@
 			</function>
 		</action>
 
+		<action name="has_objects" nologin="1">
+			<function name="has_objects">
+				<arguments>
+					<required name="clid" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
