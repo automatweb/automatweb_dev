@@ -715,6 +715,14 @@ class site_template_compiler extends aw_template
 				);
  				break;
 
+			case "SUBOBJ":
+				return array(
+					"prop" => "level_selected",
+					"value" => "obj_not_menu",
+					"no_display_item" => true
+				);
+ 				break;
+
 			case "FPONLY":
 				return array(
 					"prop" => "frontpage",
@@ -1259,6 +1267,11 @@ class site_template_compiler extends aw_template
 			if ($arr["value"] == "not_in_path")
 			{
 				$ret = "((\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->".$this->id_func."()) && \$this->_helper_is_in_path(".$o_name."->parent())) && ";
+			}
+			else
+			if ($arr["value"] == "obj_not_menu")
+			{
+				$ret = "((\$this->_helper_get_levels_in_path_for_area(".$arr["a_parent"].") >= ".$arr["level"].") && !\$this->_helper_is_in_path(".$o_name."->".$this->id_func."()) && \$this->_helper_is_in_path(".$o_name."->parent())) && \$this->section_obj->id() != \$this->sel_section_obj->id() && ";
 			}
 		}
 		else
