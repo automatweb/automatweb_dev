@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.10 2004/08/30 16:49:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.11 2004/08/31 10:50:16 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -94,11 +94,8 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical
 	@caption Sündmuse tüüp
 	
-	@property event_search_done type=checkbox
-	@caption Tehtud sündmus
-	
-	@property event_search_all type=checkbox
-	@caption Otsi kõigist kalendritest
+	@property event_search_add type=chooser multiple=1 orient=vertical
+	@caption Lisatingimused
 	
 	@property event_search_button type=submit
 	@caption Otsi
@@ -318,6 +315,7 @@ class planner extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$data["value"] = $arr["request"]["event_search_name"];
 			break;
 			
 			case "event_search_content":
@@ -325,12 +323,14 @@ class planner extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$data["value"] = $arr["request"]["event_search_content"];
 			break;
 			case "event_search_comment":
 				if(!$arr["request"]["search"] == 1)
 				{
 					return PROP_IGNORE;
 				}
+				$data["value"] = $arr["request"]["event_search_comment"];
 			break;
 			case "event_search_type":
 				
@@ -340,7 +340,7 @@ class planner extends class_base
 					CL_TASK => "Toimetus",
 					CL_CRM_MEETING => "Kohtumine",				
 				);
-				
+				$data["value"] = $arr["request"]["event_search_type"];
 				if(!$arr["request"]["search"] == 1)
 				{
 					return PROP_IGNORE;
@@ -351,6 +351,7 @@ class planner extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				$data["value"] = $arr["request"]["event_search_done"];
 			break;
 			case "event_search_all":
 				if(!$arr["request"]["search"] == 1)
@@ -377,6 +378,25 @@ class planner extends class_base
 			break;
 			case "search":
 				$data["value"] = $arr["request"]["search"];
+			break;
+			case "event_search_add":
+				if($arr["request"]["event_search_add"])
+				{
+					$data["value"] = $arr["request"]["event_search_add"];
+				}
+				else
+				{
+					$data["value"] = array(
+						"done" => 1,
+						"not_done" => 1,
+					);
+				}
+				
+				$data["options"] = array(
+					"done" => "Otsi tehtud sündmusi",
+					"not_done" => "Otsi tegemata sündmusi",
+					"all_cal" => "Otsi kõigist kalendritest",
+				);
 			break;
 
 		}
@@ -428,9 +448,7 @@ class planner extends class_base
 			$di = get_date_range(array(
 				"date" => isset($arr["date"]) ? $arr["date"] : date("d-m-Y"),
 				"type" => $arr["type"],
-				"fullweeks" => 1,
 			));
-
 
 			$_start = $di["start"];
 			$_end = $di["end"];
@@ -555,17 +573,8 @@ class planner extends class_base
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE planner.start >= '${_start}' AND
-			(planner.start <= '${_end}' OR planner.end IS NULL) AND
-			objects.status != 0";
-	
-		/*
-		$q = "SELECT objects.oid AS id,objects.brother_of,objects.name,planner.start,planner.end
-			FROM planner
-			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE planner.start >= '${_start}' AND
 			(planner.end <= '${_end}' OR planner.end IS NULL) AND
 			objects.status != 0";
-		*/
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
 		// I need to connect that god damn recurrence table into this fucking place.
@@ -1311,7 +1320,16 @@ class planner extends class_base
 			$clidlist = $this->event_entry_classes;
 			$tmp = aw_ini_get("classes");
 			foreach($clidlist as $clid)
-			{
+			{	//Show only if has configform
+				if(($clid == CL_CALENDAR_EVENT) && ($arr["obj_inst"]->get_first_conn_by_reltype("RELTYPE_EVENT_ENTRY") == false))
+				{
+					continue;
+				}
+				//Dont show at all
+				if($clid == CL_CRM_OFFER)
+				{
+					continue;
+				}
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
@@ -1452,9 +1470,6 @@ class planner extends class_base
 
 		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
 
-		// oi bljaad!
-		// think I need to add a attribute there that gives me a range from the starting monday to the ending sunday
-		// right?
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"] ? $arr["request"]["viewtype"] : $viewtype,
@@ -1860,6 +1875,10 @@ class planner extends class_base
 		$table = &$arr["prop"]["vcl_inst"];
 		
 		$table->define_field(array(
+			"name" => "icon",
+		));
+			
+		$table->define_field(array(
 			"name" => "name",
 			"caption" => "Sündmuse nimi",
 			"sortable" => 1,
@@ -1870,24 +1889,73 @@ class planner extends class_base
 			"caption" => "Sündmuse tüüp",
 			"sortable" => 1,
 		));
+		
+		$table->define_field(array(
+			"name" => "createdby",
+			"caption" => "Sündmuse looja",
+			"sortable" => "1",
+			"align" => "center",
+		));
+
+		$table->define_field(array(
+			"name" => "participants",
+			"caption" => "Sündmusel osalejad",
+			"sortable" => "1",
+			"align" => "center",
+		));
 			
 		$table->define_field(array(
 			"name" => "date",
-			"caption" => "Kuupäev",
+			"caption" => "Algus",
 			"sortable" => "1",
 			"type" => "time",
 			"numeric" => 1,
-			"format" => "d.m.y",
+			"format" => "d.m.y - H:m",
 			"align" => "center",
 		));
 		
+		$table->define_field(array(
+			"name" => "modified",
+			"caption" => "Muudetud",
+			"sortable" => "1",
+			"type" => "time",
+			"numeric" => 1,
+			"format" => "d.m.y - H:m",
+			"align" => "center",
+		));
+		
+		get_instance("icons");
+		
+		$user_inst = get_instance(CL_USER);
 		$classes = aw_ini_get("classes");		
 		foreach ($data->arr() as $result)
 		{
+			$iconurl = icons::get_icon_url($result->class_id());
+			if($result->prop("is_done"))
+			{
+				$iconurl = str_replace(".gif", "_done.gif", $iconurl);
+			}
+			
+			$author_user = &obj($result->createdby());
+			$author_person_id = $user_inst->get_person_for_user($author_user);
+			$author_person_obj = &obj($author_person_id);
 			$table->define_data(array(
-				"name" => html::get_change_url($result->id(), array(), $result->name()),
+				//"name" => html::get_change_url($result->id(), array(), $result->name()),
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"group" => "add_event", 
+						"event_id" => $result->brother_of(), 
+						"id" => $arr["obj_inst"]->id()),
+						CL_PLANNER),
+					"caption" => $result->name(),
+				)),
 				"type" => $classes[$result->class_id()]["name"],
 				"date" => $result->prop("start1"),
+				"createdby" => $author_person_obj->name(),
+				"modified" => $result->modified(),
+				"icon" => html::img(array(
+					"url" => $iconurl,
+				)),
 			));
 		}
 	}
@@ -1898,7 +1966,7 @@ class planner extends class_base
 	function do_event_search($arr)
 	{
 		//IF search from all calenders
-		if($arr["event_search_all"])
+		if($arr["event_search_add"]["all_cal"])
 		{
 			$calender_list = new object_list(array(
 				"class_id" => CL_PLANNER,
@@ -1954,9 +2022,13 @@ class planner extends class_base
 			$params["oid"] = $list;
 		}
 		
-		if($arr["event_search_done"])
+		if($arr["event_search_add"]["done"] && !$arr["event_search_add"]["not_done"])
 		{
 			$params["is_done"] = OBJ_IS_DONE;
+		}
+		if($arr["event_search_add"]["not_done"] && !$arr["event_search_add"]["done"])
+		{
+			$params["is_done"] = 0;
 		}
 		
 		if($arr["event_search_type"])
@@ -1967,7 +2039,8 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-	
+		
+		
 		$event_ol = new object_list($params);
 		return $event_ol;
 	}
