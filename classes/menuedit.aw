@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.267 2003/03/17 21:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.268 2003/03/18 12:18:42 duke Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1685,7 +1685,6 @@ class menuedit extends aw_template
 				);
 			}
 		}
-		return $ret;
 	}
 
 	function req_get_default_add_menu($prnt, $parent, $period, $fld_id = 0)
@@ -1764,7 +1763,7 @@ class menuedit extends aw_template
 						$this->add_menu[$_fid] = $d->get_doc_add_menu($parent,$period);
 					};
 	
-					if ($fdata["separator"])
+					if (isset($fdata["separator"]))
 					{	
 						$this->add_menu[$_fprnt][] = array(
 							"separator" => true,
@@ -5190,7 +5189,9 @@ class menuedit extends aw_template
 		}
 	}
 
-	function new_right_frame($arr)
+	////
+	// !Displays the right frame table .. uh, what a name. 
+	function right_frame($arr)
 	{
 		extract($arr);
 		if (!$this->prog_acl("view", PRG_MENUEDIT))
@@ -5198,12 +5199,9 @@ class menuedit extends aw_template
 			$this->acl_error("view", PRG_MENUEDIT);
 		}
 
-		$d = get_instance("doc");
-		$d->get_cfgform_list();
-
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
-		$parent = $parent ? $parent : $this->cfg["rootmenu"];
+		$parent = isset($parent) ? $parent : $this->cfg["rootmenu"];
 		$sel_objs = aw_global_get("cut_objects");
 		if (!is_array($sel_objs))
 		{
@@ -5224,11 +5222,13 @@ class menuedit extends aw_template
 		$this->setup_rf_table($parent);
 
 		$host = str_replace("http://","",$this->cfg["baseurl"]);
-		preg_match("/.*:(.+?)/U",$host, $mt);
-		if ($mt[1])
+		if (preg_match("/.*:(.+?)/U",$host, $mt))
 		{
-			$host = str_replace(":".$mt[1], "", $host);
-		}
+			if (isset($mt[1]))
+			{
+				$host = str_replace(":".$mt[1], "", $host);
+			}
+		};
 
 		$ps = "";
 
@@ -5258,6 +5258,9 @@ class menuedit extends aw_template
 		// we just spend a lot of memory on nothing when handling long object lists.
 		// BUT doing this right now would break the custom object list thingie ... -- duke
 
+		// by the way, mk_my_orb is pretty expensive and all those calls to it
+		// here take up to 10% of the time used to create the page -- duke
+
 		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0 $cls $ps ");
 		while ($row = $this->db_next())
 		{
@@ -5272,7 +5275,6 @@ class menuedit extends aw_template
 			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER || $row["class_id"] == CL_PROMO)
 			{
 				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
-				//$chlink = "javascript:go_go(".$row["oid"].",'".$period."')";
 				$row["is_menu"] = 1;
 			}
 			else
@@ -5287,7 +5289,6 @@ class menuedit extends aw_template
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
-			//$dellink = "javascript:go_delete('menuedit',$id,$row["parent"])"; $id ==? $row["oid"]
 			if (isset($sel_objs[$row["oid"]]))
 			{
 				$row["cutcopied"] = "#E2E2DB";
@@ -5388,9 +5389,10 @@ class menuedit extends aw_template
 				{
 					$tpl = "MENU_ITEM";
 				};
+			
 				$this->vars(array(
-					"caption" => $el_data["caption"],
-					"url" => $el_data["link"],
+					"caption" => isset($el_data["caption"]) ? $el_data["caption"] : "",
+					"url" => isset($el_data["link"]) ? $el_data["link"] : "",
 					"sub_menu_id" => "aw_menu_" . $el_id,
 				));
 				$menu_data .= $this->parse($tpl);
