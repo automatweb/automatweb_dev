@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.100 2003/03/31 17:01:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.101 2003/04/01 16:41:00 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -86,7 +86,7 @@
 	@groupinfo show_overview caption=Ülevaade submit=no
 	@groupinfo show_week caption=Nädal submit=no
 	@groupinfo show_month caption=Kuu submit=no
-	@groupinfo add_event caption=Lisa_sündmus submit=no
+	@groupinfo add_event caption=Lisa_sündmus
 
 */
 
@@ -373,139 +373,167 @@ class planner extends class_base
 		$event_cfgform = $meta["event_cfgform"];
 		$event_folder = $meta["event_folder"];
 
-		// I have to create the event object right away :(
 		$event_id = $args["request"]["event_id"];
-		if (!$event_id)
-		{
-			$new_id = $this->new_object(array(
-				"parent" => $event_folder,
-				"status" => 1,
-				"class_id" => CL_DOCUMENT,
-			));
-
-			// create those bloody records, but actually I should
-			// let class_base handle those. Oh well, for now this
-			// has to do.
-			$q = "INSERT INTO documents (docid) VALUES ('$new_id')";
-			$this->db_query($q);
-
-			$q = "INSERT INTO planner (id) VALUES ('$new_id')";
-			$this->db_query($q);
-
-			$event_id = $new_id;
-			$row = array();
-
-			$this->addalias(array(
-				"id" =>	$args["request"]["id"],
-				"alias" => $event_id,
-				"reltype" => RELTYPE_EVENT,
-			)); 
-		}
-		else
-		{
-			// hm, what I would build the join functionality into get_object?
-			$q = "SELECT * FROM planner LEFT JOIN documents ON (planner.id = documents.docid) LEFT JOIN objects ON (planner.id = objects.oid) WHERE planner.id = '$event_id'";
-			$this->db_query($q);
-			$row = $this->db_next();
-			$row["meta"] = aw_unserialize($row["metadata"]);
-		};
-
-
 		$this->event_id = $event_id;
+
+		$res_props = array();
 
 		if ($event_cfgform)
 		{
 			$frm = $this->get_object($event_cfgform);
 			// events are documents
-			$t = get_instance("doc");
-			$tmp = $row;
-			// XXX: eek, this sucks.
-			if (is_array($row["meta"]))
+			classload("doc");
+			$t = new doc();
+			$t->cfgform = $frm;
+			$t->cfgform_id = $frm["oid"];
+
+			$t->init_class_base();
+
+			$emb_group = "general";
+			if ($this->event_id && $args["request"]["cb_group"])
 			{
-				$tmp = $tmp + $row["meta"];
+				$emb_group = $args["request"]["cb_group"];
 			};
-			$xprops = $t->get_properties_by_group(array(
-				"content" => $frm["meta"]["xml_definition"],
-				"group" => "general",
-				"values" => array("id" => $event_id) + $tmp,
+
+			$t->role = "obj_edit";
+
+			$all_props = $t->get_active_properties(array(
+				"group" => $emb_group,
 			));
+
+			if ($this->event_id)
+			{
+				$t->load_obj_data(array("id" => $this->event_id));
+				$t->id = $this->event_id;
+			};
+			$xprops = array();
+			$xtmp = $t->groupinfo;
+			$tmp = array(
+				"type" => "text",
+				"caption" => "header",
+				"subtitle" => 1,
+			);	
+			$captions = array();
+			foreach($xtmp->get() as $key => $val)
+			{
+				if ($this->event_id && ($key != $emb_group))
+				{
+					$url = aw_global_get("QUERY_STRING");
+					if (strpos($url,"cb_group"))
+					{
+						$url = preg_replace("/&cb_group=\w*/","",$url);
+					};
+					$url .= "&cb_group=$key";
+					$url = "orb.aw?" . $url;
+					$captions[] = html::href(array(
+							"url" => $url,
+							"caption" => $val["caption"],
+					));
+				}
+				else
+				{
+					$captions[] = $val["caption"];
+				};
+			};
+			$this->emb_group = $emb_group;
+			$tmp["value"] = join(" | ",$captions);
+			$xprops = $t->parse_properties(array(
+					"properties" => $all_props,
+			));
+			$resprops = array();
+			// bad, I need a way to detect the default group. 
+			// but for now this has to do.
+			$resprops["capt"] = $tmp;
+			foreach($xprops as $key => $val)
+			{
+				// a põmst, kui nimes on [ sees, siis peab lahutama
+				$bracket = strpos($val["name"],"[");
+				if ($bracket > 0)
+				{
+					$pre = substr($val["name"],0,$bracket);
+					$aft = substr($val["name"],$bracket);
+					$newname = "emb[$pre]" . $aft;
+				
+				}
+				else
+				{
+					$newname = "emb[" . $val["name"] . "]";
+				};	
+				$xprops[$key]["name"] = $newname;
+				$resprops["emb_$key"] = $xprops[$key];
+			};	
+			$resprops[] = array(
+				"type" => "hidden",
+				"name" => "emb[class]",
+				"value" => "doc",
+			);
+			$resprops[] = array(
+				"type" => "hidden",
+				"name" => "emb[action]",
+				"value" => "submit",
+			);
+			$resprops[] = array(
+				"type" => "hidden",
+				"name" => "emb[group]",
+				"value" => $emb_group,
+			);
+			if ($this->event_id)
+			{
+				$resprops[] = array(
+					"type" => "hidden",
+					"name" => "emb[id]",
+					"value" => $this->event_id,
+				);	
+			}
+			else
+			{
+				$resprops[] = array(
+					"type" => "hidden",
+					"name" => "emb[cfgform]",
+					"value" => $event_cfgform,
+				);	
+			};
 
 		}
 		else
 		{
-			$xprops[] = array(
+			$resprops[] = array(
 				"type" => "text",
 				"value" => "Sündmusi ei saa lisada enne, kui oled valinud eventite sisestamise vormi",
 			);
 		};
 
 		// but, before I can add a new event, I need to know where to put those new objects
-		return $xprops;
+		return $resprops;
 	}
 
 	function create_planner_event($args = array())
 	{
 		$obj = $this->get_object($args["obj"]["oid"]);
 		$event_cfgform = $obj["meta"]["event_cfgform"];
+		$event_folder = $obj["meta"]["event_folder"];
+		if (empty($event_folder))
+		{
+			return PROP_ERROR;
+		};
 		$frm = $this->get_object($event_cfgform);
-		$t = get_instance("doc");
-		$savedata = $t->process_form_data(array(
-			"content" => $frm["meta"]["xml_definition"],
-			"form_data" => $args["form_data"],
-			"group_by" => "table",
-		));
-		// this really-really should be handled by class_base
-		$event_id = $args["form_data"]["event_id"];
-		$event_data = $this->get_object($event_id);
-
-		if (isset($args["form_data"]["cal1"]))
+		classload("doc");
+		$t = new doc();
+		$emb = $args["form_data"]["emb"];
+		if (is_array($emb))
 		{
-			// delete all old brother documents
-			$q = "DELETE FROM objects WHERE brother_of = '$event_id' AND class_id = " .  CL_BROTHER_DOCUMENT;
-			$this->db_query($q);
-
-			// create a new one, IF it points to somewhere else
-			$other_cal = $this->get_object($args["form_data"]["cal1"]);
-			$other_folder = $other_cal["meta"]["event_folder"];
-			// create the new one
-			if ($other_folder)
+			if (empty($emb["id"]))
 			{
-				$this->new_object(array(
-					"parent" => $other_folder,
-					"class_id" => CL_BROTHER_DOCUMENT,
-					"status" => STAT_ACTIVE,
-					"brother_of" => $event_id,
-				));
+				$emb["parent"] = $event_folder; 
 			};
 		};
-
-		foreach($savedata as $table => $fields)
+		$t->id_only = true;
+		if (isset($emb["group"]))
 		{
-			if ($table == "objects")
-			{
-				$fields["oid"] = $event_id;
-				if ($savedata["documents"]["title"])
-				{
-					$fields["name"] = $savedata["documents"]["title"];
-				};
-				$fields["metadata"] = $fields["meta"];
-				unset($fields["meta"]);
-				$this->upd_object($fields);
-			}
-			else
-			{
-					$data = join(",",map2("%s='%s'",$fields));
-					if ($table == "documents")
-					{
-						$q = sprintf("UPDATE documents SET %s WHERE docid = %d",$data,$event_id);
-					}
-					else
-					{
-						$q = sprintf("UPDATE %s SET %s WHERE id = %d",$table,$data,$event_id);
-					};
-					$this->db_query($q);
-			};
+			$this->emb_group = $emb["group"];
 		};
+		$this->event_id = $t->submit($emb);
+		return PROP_OK;
 	}
 
 	function callback_mod_reforb($args = array())
@@ -518,13 +546,25 @@ class planner extends class_base
 
        function callback_mod_retval($args = array())
        {
-                if ($args["form_data"]["event_id"])
+                if ($this->event_id)
                 {
                         $form_data = &$args["form_data"];
                         $args = &$args["args"];
-			$args["event_id"] = $form_data["event_id"];
+			$args["event_id"] = $this->event_id;
+			if ($this->emb_group)
+			{
+				$args["cb_group"] = $this->emb_group;
+			};
                 };
         }
+
+	function callback_mod_tab($args = array())
+	{
+		if ($args["id"] == "add_event")
+		{
+			$args["caption"] = isset($this->event_id) ? "Muuda sündmust" : "Lisa sündmus";
+		};
+	}
 
 
 	function change_event($args = array())
@@ -2532,7 +2572,6 @@ class planner extends class_base
 
 
 	}
-
 
   
 };
