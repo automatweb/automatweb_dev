@@ -640,8 +640,6 @@ class search_filter extends aw_template
 		
 		if ($this->data["type"]=="chain")
 		{
-			// form_table rida 469
-			
 			// kui on mitu chaini siis tuleb siin SEDA andmete näitamise osa korrata 1x iga chaini matchide jaoks
 			if ($GLOBALS["dbg_ft"]) echo "multchain=[".$this->data["multchain"]."]<br>";
 			if (!$this->data["multchain"])
@@ -654,105 +652,83 @@ class search_filter extends aw_template
 			};
 			// et asi puusse ei paneks kuna ka mitte millestki võib midagi otsida eksole
 			if (is_array($chainids))
-			foreach ($chainids as $chain_id) // This is THE loop
 			{
-				if ($GLOBALS["dbg_ft"]) echo "[searching in $chain_id]<br>";
-				$eids = $this->perform_search($this->data["multchain"]?$chain_id:array());// Limit conditions to chain $chain_id
-				
-				$this->ft->load_chain($chain_id);
-
-				if ($GLOBALS["dbg_ft"]) {echo "eids=", var_dump($eids), "<br>";};//dbg
-
-				$tbls = "";
-				$joins = "";
-				reset($this->ft->chain["forms"]);
-				list($fid,) = each($this->ft->chain["forms"]);
-				while(list($ch_fid,) = each($this->ft->chain["forms"]))
+				foreach ($chainids as $chain_id) // This is THE loop
 				{
-					if ($ch_fid != $fid)
-					{
-						$tbls.=",form_".$ch_fid."_entries.*";
-						$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
-					}
-				}
-				
-				$eids = join(",", $eids);
-				// temporary workaround selle topelt entryte kala jaoks, kuigi see
-				// kuradi distinct() peaks hoopis seda tegema vist
+					if ($GLOBALS["dbg_ft"]) echo "[searching in $chain_id]<br>";
+					$eids = $this->perform_search($this->data["multchain"]?$chain_id:array());// Limit conditions to chain $chain_id
+					
+					$this->ft->load_chain($chain_id);
 
-				$used_eids=array();
-				if ($eids != "")
-				{
-					$q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
-					 if ($GLOBALS["dbg_ft"]) echo "q = $q <br>";//dbg
-					$this->ft->db_query($q);
-					while ($row = $this->ft->db_next())
-					{
-						if ($used_eids[$row["chain_id"]])
-							continue;
-						$used_eids[$row["chain_id"]]=1;
+					if ($GLOBALS["dbg_ft"]) {echo "eids=", var_dump($eids), "<br>";};//dbg
 
-						if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";//dbg
-						$num_rec_found++;
-						if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
+					$tbls = "";
+					$joins = "";
+					reset($this->ft->chain["forms"]);
+					list($fid,) = each($this->ft->chain["forms"]);
+					while(list($ch_fid,) = each($this->ft->chain["forms"]))
+					{
+						if ($ch_fid != $fid)
 						{
-							foreach($this->data["statdata"] as $alias2 => $statd2)
+							$tbls.=",form_".$ch_fid."_entries.*";
+							$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
+						}
+					}
+					
+					$eids = join(",", $eids);
+					// temporary workaround selle topelt entryte kala jaoks, kuigi see
+					// kuradi distinct() peaks hoopis seda tegema vist
+
+					$used_eids=array();
+					if ($eids != "")
+					{
+						$q = "SELECT distinct(form_".$fid."_entries.id) as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)";
+						 if ($GLOBALS["dbg_ft"]) echo "q = $q <br>";//dbg
+						$this->db_query($q);
+						while ($row = $this->db_next())
+						{
+							if ($used_eids[$row["chain_id"]])
 							{
-								
-								$v2=$row[$statd2["field"]];
-								//echo($statd2["field"]." = ".$v2."<br>");//dbg
-								switch($statd2["func"])
+								continue;
+							}
+							$used_eids[$row["chain_id"]]=1;
+
+							if ($GLOBALS["dbg_ft"]) echo "nr= $num_rec_found eid = ", $row["entry_id"], " ch_eid = ", $row["chain_entry_id"], "<br>";//dbg
+							$num_rec_found++;
+							if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
+							{
+								foreach($this->data["statdata"] as $alias2 => $statd2)
 								{
-									case "sum":
-										$stats[$alias2]["val"]+=$v2;
-										break;
-									case "min":
-										if ($stats[$alias2]["val"]=="")
-											$stats[$alias2]["val"]=$v2;
-										if ($v2<$stats[$alias2]["val"])
-											$stats[$alias2]["val"]=$v2;
-										break;
-									case "max":
-										if ($v2>$stats[$alias2]["val"])
-											$stats[$alias2]["val"]=$v2;
-										break;
-									case "avg":
-										$stats[$alias2]["sum"]+=$v2;
-										$stats[$alias2]["num"]++;
-										break;
+									
+									$v2=$row[$statd2["field"]];
+									//echo($statd2["field"]." = ".$v2."<br>");//dbg
+									switch($statd2["func"])
+									{
+										case "sum":
+											$stats[$alias2]["val"]+=$v2;
+											break;
+										case "min":
+											if ($stats[$alias2]["val"]=="")
+												$stats[$alias2]["val"]=$v2;
+											if ($v2<$stats[$alias2]["val"])
+												$stats[$alias2]["val"]=$v2;
+											break;
+										case "max":
+											if ($v2>$stats[$alias2]["val"])
+												$stats[$alias2]["val"]=$v2;
+											break;
+										case "avg":
+											$stats[$alias2]["sum"]+=$v2;
+											$stats[$alias2]["num"]++;
+											break;
+									};
 								};
 							};
+							$this->ft->row_data($row);
 						};
-						// if ($GLOBALS["dbg_ft"]) echo "<pre>",var_dump($row),"</pre>" ;//dbg
-						$row["ev_change"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
-						$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"], "op_id" => $op_id,"section" => $section),"form_chain")."'>Vaata</a>";		
-						$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
-							"delete_entry", 
-								array(
-									"id" => $fid,
-									"entry_id" => $row["entry_id"], 
-									"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
-								),
-							"form")."'>Kustuta</a>";
-						
-						// dis shit here makes the link that does a new search on the element you clicked 
-						if (is_array($this->ft->table["doelsearchcols"]))
-						{
-							foreach($this->ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
-							{
-								if ($row["ev_".$_de_elid_ar["elid"]] != "")
-								{
-									$_de_url = $this->mk_my_orb("search", array("id" => $this->id, "search_el" => $_de_elid_ar["elid"], "search_val" => 	$row["ev_".$_de_elid_ar["elid"]],"search_form" => $_de_elid_ar["elform"],"section" => $GLOBALS["section"],"no_menu" => ($GLOBALS["section"] ? 1 : 0)));
-									$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
-								}
-							}
-						}
-
-						$this->ft->row_data($row);
 					};
-				};
-			}; // of foreach ($chainids as $chain_id)
-
+				}; // of foreach ($chainids as $chain_id)
+			}
 		} 
 		else
 		{
@@ -765,8 +741,8 @@ class search_filter extends aw_template
 			if ($eids != "")
 			{
 				$q="SELECT * FROM form_".$fid."_entries,objects WHERE objects.status != 0 and objects.oid = '$fid' AND form_".$fid."_entries.id in ($eids)";
-				$this->ft->db_query($q);
-				while ($row = $this->ft->db_next())
+				$this->db_query($q);
+				while ($row = $this->db_next())
 				{
 					$num_rec_found++;
 					if ($this->data["stat_show"] && $this->data["stat_id"] && is_array($this->data["statdata"]))
@@ -799,27 +775,6 @@ class search_filter extends aw_template
 							};
 						};
 					};
-					$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
-						"delete_entry", 
-							array(
-								"id" => $fid,
-								"entry_id" => $row["entry_id"], 
-								"after" => $this->ft->binhex($this->ft->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
-							),
-						"form")."'>Kustuta</a>";
-
-						// dis shit here makes the link that does a new search on the element you clicked 
-						if (is_array($this->ft->table["doelsearchcols"]))
-						{
-							foreach($this->ft->table["doelsearchcols"] as $_de_col => $_de_elid_ar)
-							{
-								if ($row["ev_".$_de_elid_ar["elid"]] != "")
-								{
-									$_de_url = $this->mk_my_orb("search", array("id" => $this->id, "search_el" => $_de_elid_ar["elid"], "search_val" => $row["ev_".$_de_elid_ar["elid"]],"search_form" => $_de_elid_ar["elform"],"section" => $GLOBALS["section"],"no_menu" => ($GLOBALS["section"] ? 1 : 0)));
-									$row["ev_".$_de_elid_ar["elid"]] = "<a href='".$_de_url."'>".$row["ev_".$_de_elid_ar["elid"]]."</a>";
-								}
-							}
-						}
 					$this->ft->row_data($row);
 				}
 			};
@@ -827,9 +782,6 @@ class search_filter extends aw_template
 
 
 		// Siin on juba joonistatud nüüd see andmete osa siis
-
-		$this->ft->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
-
 		if ($GLOBALS["get_csv_file"])
 		{
 			header('Content-type: Application/Octet-stream"');
@@ -837,6 +789,7 @@ class search_filter extends aw_template
 			print $this->ft->t->get_csv_file();
 			die();
 		};
+
 		$parse="";
 		// See siin on miskise ymber nurga fulltext searchi jaoks mis kaob varsti ära kui asi tööle hakkab
 		if ($j2ta_see_form_sinna_yles)
@@ -862,35 +815,7 @@ class search_filter extends aw_template
 			$parse.="&nbsp;&nbsp;<a href='".$this->mk_my_orb("search",array("id"=>$id,"get_csv_file"=>1))."' target=_blank>CSV</a><br>";
 		};
 		
-		$parse.= $this->ft->get_css();
-		if (!$no_form_tags)
-		{
-			$parse.="<form action='reforb.".$this->cfg["ext"]."' method='POST'>\n";
-		}
-		if ($this->ft->table["submit_top"])
-		{
-			$parse.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-		}
-		if ($this->ft->table["user_button_top"])
-		{
-			$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-		}
-		$parse.=$this->ft->t->draw();
-		//$parse.=str_replace("<table>","",$blah);
-
-		if ($this->ft->table["submit_bottom"])
-		{
-			$parse.="<input type='submit' value='".$this->ft->table["submit_text"]."'>";
-		};
-		if ($this->ft->table["user_button_bottom"])
-		{
-			$parse.="&nbsp;<input type='submit' value='".$this->ft->table["user_button_text"]."' onClick=\"window.location='".$this->ft->table["user_button_url"]."';return false;\">";
-		};
-
-		if (!$no_form_tags)
-		{
-			$parse.=$this->ft->mk_reforb("submit_table", array("return" => $this->ft->binhex($this->ft->mk_my_orb("show_entry", array("id" => $this->ft->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
-		}
+		$parse.= $this->ft->finalize_table(array("no_form_tags" => $no_form_tags));
 
 		// Siin hakkab näitama statistika tabelit all
 		if ($this->data["stat_show"] && $this->data["stat_id"])
@@ -914,10 +839,6 @@ class search_filter extends aw_template
 			};
 			$parse.=$tbl->show(array("id" => $this->data["stat_id"],"is_filter" => 1));
 		};
-		if (!$no_form_tags)
-		{
-			$parse.="</form>";
-		}
 		if (!$no_menu && !$GLOBALS["section"])
 		{
 			$parse=$this->make_upper_menu($arr,"search").$parse;
@@ -1139,7 +1060,7 @@ class search_filter extends aw_template
 			};
 		}
 
-		$cparse=$this->ft->change(array("id" => $this->data["output_id"]));
+		$cparse=$this->ft->new_change_cols(array("id" => $this->data["output_id"]));
 		$cparse=preg_replace("/name='class' value='(.+?)'/","name='class' value='search_filter'",$cparse);
 		$cparse=preg_replace("/name='action' value='(.+?)'/","name='action' value='output_submit'",$cparse);
 		$cparse=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$cparse);
