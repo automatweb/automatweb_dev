@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.8 2001/11/02 08:57:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.9 2001/11/02 11:22:38 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -86,7 +86,7 @@ class forum extends aw_template
 	function show($args = array())
 	{
 		extract($args);
-		$board_obj = $this->get_object($board);
+		$board_obj = $this->get_obj_meta($board);
 		$forum_obj = $this->get_object($board_obj["parent"]);
 		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("change",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
 		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
@@ -107,16 +107,73 @@ class forum extends aw_template
 		{
 			$id = $forum_obj["oid"];
 		};
+		
+		// arvutame häälte arvu sellele foorumile
+		if ($board_obj["meta"]["voters"] == 0)
+		{
+			$rate = 0;
+		}
+		else
+		{
+			$rate = $board_obj["meta"]["votesum"] / $board_obj["meta"]["voters"];
+		};
+
+		$this->vars(array(
+			"vote_reforb" => $this->mk_reforb("submit_vote",array("board" => $board)),
+			"topic" => $board_obj["name"],
+			"rate" => sprintf("%0.2f",$rate),
+		));
+		global $forum_votes;
+		if ($forum_votes[$board])
+		{
+			$voteblock = $this->parse("ALREADY_VOTED");
+		}
+		else
+		{
+			$voteblock = $this->parse("VOTE_FOR_TOPIC");
+		};
+
+
 		$this->vars(array(
 			"message" => $content,
 			"threaded_link" => $this->mk_my_orb("show_threaded",array("board" => $board)),
 			"newtopic_link" => $this->mk_my_orb("add_topic",array("id" => $id,"section" => $oid)),
 			"flat_link" => $this->mk_my_orb("show",array("board" => $board)),
 			"forum_link" => $this->mk_my_orb("topics",array("id" => $id)),
+			"VOTE_FOR_TOPIC" => $voteblock,
+			"TOPIC" => $this->parse("TOPIC"),
 		));
 		
 		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $section));
 
+	}
+
+	////
+	// !Submits a vote to a topic
+	function submit_vote($args = array())
+	{
+		extract($args);
+		global $forum_votes;
+		if (not($forum_votes[$args["board"]]))
+		{
+			$forum_votes[$args["board"]] = rand();
+			session_register("forum_votes");
+			$board_obj = $this->get_obj_meta($board);
+			$voters = ++$board_obj["meta"]["voters"];
+			$votesum = $board_obj["meta"]["votesum"] + $vote;
+			$this->set_object_metadata(array(
+				"oid" => $board,
+				"key" => "voters",
+				"value" => $voters,
+			));
+			$this->set_object_metadata(array(
+				"oid" => $board,
+				"key" => "votesum",
+				"value" => $votesum,
+			));
+		}
+
+		return $this->mk_my_orb("show",array("board" => $board));
 	}
 
 	////
