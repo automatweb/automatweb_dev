@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.304 2003/12/05 13:01:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.305 2003/12/09 09:33:16 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -497,7 +497,14 @@ class menuedit extends aw_template
 					"status" => STAT_ACTIVE,
 					"site_id" => aw_ini_get("site_id")
 				));
-				$obj = $ol->begin();
+				if ($ol->count() < 1)
+				{
+					$obj = false;
+				}
+				else
+				{
+					$obj = $ol->begin();
+				}
 			}
 
 			// nope. mingi skriptitatikas? voi cal6
@@ -549,6 +556,11 @@ class menuedit extends aw_template
 			}
 		};
 
+		if (!$section)
+		{
+			$section = aw_ini_get("frontpage");
+		}
+	
 		if (!headers_sent())
 		{
 			header("X-AW-Section: ".$section);
