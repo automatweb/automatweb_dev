@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.90 2003/07/01 10:20:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.91 2003/07/08 11:57:46 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -325,7 +325,7 @@ class users extends users_user
 		}
 
 		$u = $this->fetch($id);
-		if (!$this->can("change", $u["oid"]))
+		if (!($this->can("change", $u["oid"]) || aw_global_get("uid") == $id))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
 		}
