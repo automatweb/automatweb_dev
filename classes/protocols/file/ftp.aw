@@ -119,11 +119,19 @@ class ftp extends class_base
 		}
 
 		$fn = tempnam(aw_ini_get("server.tmpdir"), "aw_ftp");
-		$res = ftp_get($this->handle, $fn, $file, FTP_BINARY);
+		$res = @ftp_get($this->handle, $fn, $file, FTP_BINARY);
 
-		$fc = file_get_contents($fn);
-		unlink($fn);
-		return $fc;
+		if ($res)
+		{
+			$fc = file_get_contents($fn);
+			unlink($fn);
+			return $fc;
+		}
+		else
+		{
+			return false;
+		};
+
 	}
 
 	/** uploads $content to $remote_file on the current server
