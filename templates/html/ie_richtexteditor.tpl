@@ -69,30 +69,32 @@ function format(what,opt)
 	}
 	if (opt==null)
 	{
-		eval(sel_el+".document.execCommand(what)");
+		sel_el.document.execCommand(what);
 	}
 	else
 	{
-		eval(sel_el+".document.execCommand(what,\"\",opt)");
+		sel_el.document.execCommand(what,"",opt);
 	}
 
-	var s=eval(sel_el+".document.selection.createRange()"),p=s.parentElement()  
+	var s=sel_el.document.selection.createRange(),p=s.parentElement()  
 	if ((p.tagName=="FONT") && (p.style.backgroundColor!=""))
 		p.outerHTML=p.innerHTML;
-	eval(sel_el+".focus()");
+	sel_el.focus();
 	sel=null
 }
-var sel_el = "{VAR:name}_edit";
+
+var sel_el = '';
 </script>
 <!-- END SUB: toolbar -->
 
 <!-- SUB: field -->
 <input type="hidden" name="{VAR:name}" value="{VAR:value}">
-<iframe name="{VAR:name}_edit" onFocus="sel_el='{VAR:name}_edit'" onBlur="changeform.{VAR:name}.value={VAR:name}_edit.document.body.innerHTML" frameborder="1" width="{VAR:width}" height="{VAR:height}"></iframe>
+<iframe name="{VAR:name}_edit" onFocus="sel_el = document.frames('{VAR:name}_edit');" onBlur="document.changeform.elements('{VAR:name}').value=document.frames('{VAR:name}_edit').document.body.innerHTML" frameborder="1" width="{VAR:width}" height="{VAR:height}"></iframe>
 <script>
-	{VAR:name}_edit.document.designMode='On';
-	{VAR:name}_edit.document.write("<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
-	{VAR:name}_edit.document.write(changeform.{VAR:name}.value);
-	{VAR:name}_edit.document.close();
+	elx = document.frames("{VAR:name}_edit");
+	elx.document.designMode='On';
+	elx.document.write("<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>");
+	elx.document.write(document.changeform.elements['{VAR:name}'].value);
+	elx.document.close();
 </script>
 <!-- END SUB: field -->
