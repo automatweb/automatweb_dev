@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.2 2004/11/24 15:06:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.3 2004/11/30 10:20:24 ahti Exp $
 
 /*
 
@@ -216,7 +216,6 @@ class classificator extends class_base
 				$ff = $custom_ff;
 			};
 		};
-
 		$oft = new object($ff);
 		$clf = $oft->meta("classificator");
 		
@@ -284,10 +283,9 @@ class classificator extends class_base
 		list($choices,,) = $this->get_choices(array(
 			"clid" => $arr["clid"],
 			"name" => $property["name"],
+			"obj_inst" => $arr["obj_inst"],
 		));
-
 		$ids = $this->make_keys($choices->ids());
-
 		// I need to list the choices
 		foreach($items->get() as $item)
 		{
