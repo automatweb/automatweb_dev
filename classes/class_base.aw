@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.148 2003/09/23 16:32:51 duke Exp $
+// $Id: class_base.aw,v 2.149 2003/09/24 12:49:53 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -24,7 +24,7 @@
 	@caption Vajab tõlget
 
 	// see peaks olemas olema ainult siis, kui sellel objekt on _actually_ mingi asja tõlge
-	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 // OBJ_IS_TRANSLATED
+	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
 	@caption Tõlge kinnitatud
 
 	@groupinfo general caption=Üldine default=1
@@ -64,6 +64,7 @@ define('RELTYPE_CFGFORM',101);
 
 // translation
 define('RELTYPE_TRANSLATION',102);
+define('RELTYPE_ORIGINAL',103);
 
 class class_base extends aw_template
 {
@@ -105,6 +106,8 @@ class class_base extends aw_template
 				die($this->ds->get_error_text());
 			};
 
+			$this->use_mode = "new";
+
 			$this->parent = $args["parent"];
 			$this->id = "";
 			$this->obj_inst = new object();
@@ -120,6 +123,7 @@ class class_base extends aw_template
 			$this->toolbar_type = ((isset($obj['meta']['use_menubar']) && ($obj['meta']['use_menubar'] == '1')) ? 'menubar' : 'tabs');
 			$this->parent = "";
 
+			$this->use_mode = "edit";
 
 			if ($obj["class_id"] == CL_RELATION)
 			{
@@ -138,7 +142,6 @@ class class_base extends aw_template
 		));
 
 		$this->validate_cfgform($cfgform_id);
-
 
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
@@ -869,6 +872,7 @@ class class_base extends aw_template
 			"content" => isset($args["content"]) ? $args["content"] : "",
 			"rel" => isset($args["rel"]) ? $args["rel"] : "",
 		));
+		
 
 		// figure out which group is active
 		// it the group argument is a defined group, use that
@@ -1113,6 +1117,25 @@ class class_base extends aw_template
 				"filter" => $filter,
 			));
 		};
+		
+		$this->classinfo = $cfgu->get_classinfo();
+		if (is_array($this->classconfig))
+		{
+			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
+		};
+		
+		if ($this->use_mode == "edit")
+		{
+			if ($this->classinfo["trans"]["text"] == 1)
+			{
+				$o_t = get_instance("translate/object_translation");
+				$t_list = $o_t->translation_list($this->id, true);
+				if (in_array($this->id, $t_list))
+				{
+					$this->is_translated = 1;
+				}
+			}
+		}
 
 		$this->cb_views = $group_el_cnt = $this->all_props = array();
 
@@ -1179,6 +1202,17 @@ class class_base extends aw_template
 				};
 			}
 			
+			// if it is a translated object, then don't show properties that can't be translated
+			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "needs_translation" && $val["name"] != "is_translated")
+			{
+				continue;
+			};
+
+			if (!$this->is_translated && $val["name"] == "is_translated")
+			{
+				continue;
+			}
+			
 			if (empty($val["view"]))
 			{
 				$val["view"] = "";
@@ -1239,11 +1273,6 @@ class class_base extends aw_template
 			}
 		}
 
-		$this->classinfo = $cfgu->get_classinfo();
-		if (is_array($this->classconfig))
-		{
-			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
-		};
 		$grpinfo = array();
 		if (is_array($grplist))
 		{
@@ -1616,11 +1645,6 @@ class class_base extends aw_template
 				$status = $this->inst->get_property($argblock);
 			};
 
-			// if it is a translated object, then don't show properties that can't be translated
-			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "needs_translation" && $val["name"] != "is_translated")
-			{
-				$status = PROP_IGNORE;
-			}
 
 			if ($status === PROP_IGNORE)
 			{
@@ -1916,6 +1940,8 @@ class class_base extends aw_template
 		$raw = isset($args["raw"]) ? $args["raw"] : aw_unserialize($args["str"]);
 		$this->init_class_base();
 
+		$this->quote(&$raw);
+
 		$this->process_data(array(
 			"parent" => $args["parent"],
 			"rawdata" => $raw,
@@ -2034,6 +2060,11 @@ class class_base extends aw_template
 				continue;
 			};
 			// don't save or display un-translatable fields if we are editing a translated object
+			if (!$this->is_translated && $property["name"] == "is_translated")
+			{
+				$xval = 1;
+			}
+			else
 			if ($this->is_translated && $property["trans"] != 1)
 			{
 				continue;
@@ -2045,18 +2076,18 @@ class class_base extends aw_template
 			$table = $property["table"];
 			$field = !empty($property["field"]) ? $property["field"] : $property["name"];
 				
-                        $xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
+			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
 			if ($new && empty($xval) && !empty($property["default"]))
 			{
 				$xval = $property["default"];
 			};
 
-                        if ($property["type"] == "checkbox")
-                        {
-                                // set value to 0 for unchecked checkboxes
+			if ($property["type"] == "checkbox")
+			{
+				// set value to 0 for unchecked checkboxes
 				$xval = (int)$xval;
-                        };
+			};
 
 			if ($method == "bitmask" && empty($pvalues[$field]))
 			{
@@ -2066,14 +2097,14 @@ class class_base extends aw_template
 			$property["value"] = $xval;
 
 
-                        $argblock = array(
-                                "prop" => &$property,
-                                "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
-                                "metadata" => &$metadata,
-                                "form_data" => &$rawdata,
-                                "new" => $new,
-                        );
+			$argblock = array(
+				"prop" => &$property,
+				"obj" => &$this->coredata,
+				"objdata" => &$this->objdata,
+				"metadata" => &$metadata,
+				"form_data" => &$rawdata,
+				"new" => $new,
+			);
 
 			$status = PROP_OK;
 
@@ -2091,7 +2122,7 @@ class class_base extends aw_template
 
 			// oh well, bail out then.
 			if ($status != PROP_OK)
-                        {
+			{
 				continue;
 			};
 

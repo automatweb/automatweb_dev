@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.5 2003/09/22 12:08:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.6 2003/09/24 12:49:56 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -90,12 +90,15 @@ class object_translation extends aw_template
 		$raw["class_id"] = $orig->class_id();
 
 		// create new .. 
+//		echo "unserializing for $fl <br>";
+//		echo dbg::dump($raw);
 		$clone_id = $orig_inst->unserialize(array(
 			"parent" => $orig->parent(),
 			"raw" => $raw,
 		));
 
 		$clone = obj($clone_id);
+//		echo "clone name = ".$clone->name()." <br>";
 		$clone->set_lang($dstlang);
 		$clone->save();
 
@@ -106,7 +109,21 @@ class object_translation extends aw_template
 			"to" => $clone_id,
 			"reltype" => RELTYPE_TRANSLATION
 		));
+
+		// and also a reverse relation back to the original object
+		$co = new connection();
+		$co->change(array(
+			"to" => $orig->id(),
+			"from" => $clone_id,
+			"reltype" => RELTYPE_ORIGINAL
+		));
+
 		return $this->mk_my_orb("change",array("id" => $clone_id),$fl);
+	}
+
+	function get_original($oid)
+	{
+		return $GLOBALS["object_loader"]->ds->_get_root_obj($oid);
 	}
 
 	function translation_list($oid, $no_orig = false)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.25 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.26 2003/09/24 12:49:54 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -1193,6 +1193,7 @@ class admin_menus extends aw_template
 
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
+			"period" => $period,
 			"add_applet" => $whole_menu,
 			"sel_count" => count($sel_objs),
 		));
@@ -1333,6 +1334,32 @@ class admin_menus extends aw_template
 		{
 			$callback[0]->$callback[1](array("toolbar" => &$toolbar));
 		};
+
+		// now, if we are in a auto_trans site, then the language change links point to the same parent
+		// but if not, then to the top level frame
+		$l = get_instance("languages");
+		$li = $l->get_list();
+		$tmp = array();
+		foreach($li as $lid => $ln)
+		{
+			if (aw_ini_get("config.object_translation"))
+			{
+				$url = $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "set_lang_id" => $lid));
+				$target = "";
+			}
+			else
+			{
+				$url = aw_ini_get("baseurl")."/automatweb/index.aw?set_lang_id=".$lid;
+				$target = "_top";
+			}
+			$tmp[] = html::href(array(
+				"url" => $url,
+				"target" => $target,
+				"caption" => "<font size=\"1\" color=\"#FFFFFF\">".($lid == aw_global_get("lang_id") ? "<b>".$ln."</b>" : $ln)."</font>"
+			));
+		}
+		$toolbar->add_end_cdata("<font size=\"1\" color=\"#FFFFFF\">[".join("|", $tmp)."]</font>");
+
 
 		return $toolbar;
 	}

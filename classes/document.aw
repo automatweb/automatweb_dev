@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.211 2003/09/16 12:21:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.212 2003/09/24 12:49:53 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -207,7 +207,7 @@ class document extends aw_template
 			}
 		}
 
-		if ($docobj->prop("status") == STAT_DELETED)
+		if ($docobj->status() == STAT_DELETED)
 		{
 			$docobj = false;
 		};
@@ -217,13 +217,13 @@ class document extends aw_template
 		{
 			$retval = $docobj->fetch();
 			$retval["docid"] = $retval["oid"];
-			/*
-			print "<pre>";
+			
+/*			print "<pre>";
 			print_r($retval);
 			print "------<br>";
 			print_r($docobj->arr());
-			print "</pre>";
-			*/
+			print "</pre>";*/
+			
 		};
 		return $retval;
 	}

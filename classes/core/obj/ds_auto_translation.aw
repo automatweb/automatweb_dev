@@ -96,6 +96,7 @@ class _int_obj_ds_auto_translation
 				// the correct object is in $conns2[0]["to"]
 				$ret = $this->contained->get_objdata($conns2[0]["to"]);
 				$ret["lang_id"] = $req_od["lang_id"];
+				$ret["meta"] = $req_od["meta"];
 				return $ret;
 			}
 			else
@@ -103,6 +104,7 @@ class _int_obj_ds_auto_translation
 				// no connections, return the untranslated object
 				$ret = $this->contained->get_objdata($conns[0]["from"]);
 				$ret["lang_id"] = $req_od["lang_id"];
+				$ret["meta"] = $req_od["meta"];
 				return $ret;
 			}
 		}

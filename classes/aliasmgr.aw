@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.118 2003/08/21 10:23:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.119 2003/09/24 12:49:53 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -696,6 +696,10 @@ class aliasmgr extends aw_template
 			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_TRANSLATION))
 			{
 				$type_str = "tõlge (" . $langinfo[$alias["lang_id"]] . ")";
+			};
+			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_ORIGINAL))
+			{
+				$type_str = "originaal (" . $langinfo[$alias["lang_id"]] . ")";
 			};
 
 			if ($alias["relobj_id"])

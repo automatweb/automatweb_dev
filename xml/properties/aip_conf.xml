@@ -2,7 +2,8 @@
 <properties>
       <property>
             <name>change_folder</name>
-            <type>RELATION_CHANGE_FOLDER</type>
+            <type>relpicker</type>
+            <reltype>RELATION_CHANGE_FOLDER</reltype>
             <field>meta</field>
             <method>serialize</method>
             <table>objects</table>

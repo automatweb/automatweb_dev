@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.10 2003/09/23 16:43:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.11 2003/09/24 12:49:55 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -647,14 +647,14 @@ class promo extends class_base
 
 			$show_promo = false;
 			
-			$msec = $o->meta("section");
+			$msec = $o->prop("section");
 
 			if ($o->meta("all_menus"))
 			{
 				$show_promo = true;
 			}
 			else
-			if (isset($msec[$inst->sel_section]) && $msec[$inst->sel_section])
+			if (isset($msec[$inst->sel_section_real]) && $msec[$inst->sel_section_real])
 			{
 				$show_promo = true;
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.67 2003/09/24 11:46:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.68 2003/09/24 12:49:53 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1041,6 +1041,44 @@ class menu extends class_base
 				break;
 		};
 		return $retval;
+	}
+
+	function callback_on_submit_relation_list($args)
+	{
+		$obj =& obj($args["id"]);
+		$co = $obj->connections_from(array(
+			"type" => RELTYPE_ID
+		));
+
+		$_allow = $obj->meta("ip_allow");
+		$_deny = $obj->meta("ip_deny");
+
+		$lut = array();
+		foreach($co as $c)
+		{
+			$lut[$c->prop("to")] = $c->prop("to");
+		}
+
+		$allow = array();
+		$deny = array();
+		foreach($allow as $ipa => $one)
+		{
+			if (isset($lut[$ipa]))
+			{
+				$allow[$ipa] = $one;
+			}
+		}
+		foreach($deny as $ipa => $one)
+		{
+			if (isset($lut[$ipa]))
+			{
+				$deny[$ipa] = $one;
+			}
+		}
+
+		$obj->set_meta("ip_allow", $allow);
+		$obj->set_meta("ip_deny", $deny);
+		$obj->save();
 	}
 };
 ?>

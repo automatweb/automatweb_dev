@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.4 2003/09/22 09:33:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/site_translation.aw,v 1.5 2003/09/24 12:49:56 kristo Exp $
 // site_translation.aw - Saidi tõlge 
 /*
 
@@ -178,6 +178,11 @@ class site_translation extends class_base
 				$start = mktime(0,0,0,date("m"),date("d"),date("Y"));
 				break;
 		};
+		if (!isset($args["request"]["clid"]))
+		{
+			$args["request"]["clid"] = CL_MENU;
+		}
+
 		$filter = array(
 			"flags" => array(
 				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
@@ -207,7 +212,7 @@ class site_translation extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Originaal objekti nimi",
+			"caption" => "Originaali nimi",
 			"sortable" => 1,
 		));
 		
@@ -297,6 +302,11 @@ class site_translation extends class_base
 				break;
 		};
 
+		if (!isset($args["request"]["clid"]))
+		{
+			$args["request"]["clid"] = CL_MENU;
+		}
+
 		$filter = array(
 			"flags" => array(
 				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION,
@@ -324,7 +334,7 @@ class site_translation extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => "Originaali nimi",
 			"sortable" => 1,
 		));
 		
@@ -415,6 +425,11 @@ class site_translation extends class_base
 				break;
 		};
 
+		if (!isset($args["request"]["clid"]))
+		{
+			$args["request"]["clid"] = CL_MENU;
+		}
+
 		$filter = array(
 			"flags" => array(
 				"mask" => OBJ_IS_TRANSLATED|OBJ_NEEDS_TRANSLATION, 
@@ -442,7 +457,7 @@ class site_translation extends class_base
 		
 		$t->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => "Originaali nimi",
 			"sortable" => 1,
 		));
 		
@@ -521,6 +536,11 @@ class site_translation extends class_base
 			// 1- lisa grupp
 			$toolbar = &$arr["prop"]["toolbar"];
 
+			if (!isset($arr["request"]["clid"]))
+			{
+				$arr["request"]["clid"] = CL_MENU;
+			}
+
 			$toolbar->add_cdata(html::select(array(
 				"name" => "clid",
 				"options" => $this->_prep_clid_list(),
@@ -547,6 +567,11 @@ class site_translation extends class_base
 			// 1- lisa grupp
 			$toolbar = &$arr["prop"]["toolbar"];
 
+			if (!isset($arr["request"]["clid"]))
+			{
+				$arr["request"]["clid"] = CL_MENU;
+			}
+
 			$toolbar->add_cdata(html::select(array(
 				"name" => "clid",
 				"options" => $this->_prep_clid_list(),
@@ -572,6 +597,11 @@ class site_translation extends class_base
 			// which links do I need on the toolbar?
 			// 1- lisa grupp
 			$toolbar = &$arr["prop"]["toolbar"];
+
+			if (!isset($arr["request"]["clid"]))
+			{
+				$arr["request"]["clid"] = CL_MENU;
+			}
 			
 			$toolbar->add_cdata(html::select(array(
 				"name" => "clid",

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.39 2003/09/17 14:53:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.40 2003/09/24 12:49:53 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -105,7 +105,7 @@
 @property sections type=select multiple=1 size=20 group=vennastamine store=no
 @caption Sektsioonid
 
-@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr
+@property aliasmgr type=aliasmgr store=no editonly=1 group=relationmgr trans=1
 @caption Aliastehaldur
 
 @property start type=date_select table=planner group=calendar
@@ -456,7 +456,7 @@ class doc extends class_base
 		
 		if (!$objdata["tm"])
 		{
-			$objdata["tm"] = date("d/m/y", $objdata["modified"]);
+			$objdata["tm"] = date("d.m.y", $objdata["modified"]);
 		}
 	}
 

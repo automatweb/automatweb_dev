@@ -322,6 +322,7 @@
             <store>no</store>
             <editonly>1</editonly>
             <group>relationmgr</group>
+            <trans>1</trans>
             <table>documents</table>
             <field>aliasmgr</field>
             <caption>Aliastehaldur</caption>
