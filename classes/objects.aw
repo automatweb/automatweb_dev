@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.35 2002/09/25 13:36:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.36 2002/10/09 09:49:18 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -121,6 +121,16 @@ class db_objects extends aw_template
 			$this->_gen_rec_list($_parents);
 		};
 		$this->restore_handle();
+	}
+
+	function orb_get_list($arr)
+	{
+		extract($arr);
+		if (!isset($rootobj))
+		{
+			$rootobj = -1;
+		}
+		return $this->get_menu_list($ignore_langmenus,$empty,$rootobj);
 	}
 
 	function get_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
