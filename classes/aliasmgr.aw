@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.49 2002/09/26 11:42:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.51 2002/10/02 11:56:24 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -23,30 +23,13 @@ class aliasmgr extends aw_template
 	function search($args = array())
 	{
 		extract($args);
-		$search = get_instance("search");
-		return $res . $search->show(array(
-			"docid" => $docid,
-			"name" => $name,
-			"comment" => $comment,
-			"obj" => "aliasmgr",
-		));
-	}	
-
-	////
-	// !Callbacks for object search
-	function _get_s_class_id($val)
-	{
-		$this->make_alias_classarr();
-		asort($this->classarr);
-		return $this->picker($val,$this->classarr);
-	}
-
-	function _get_s_header($args)
-	{
 		$this->read_template("search.tpl");
-		$id = $args["docid"];
-		$obj = $this->get_object($id);
+		$search = get_instance("search");
+		$args["clid"] = "aliasmgr";
+		$form = $search->show($args);
 
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
+		
 		// generate a list of class => name pairs
 		$aliases = array();
 		$classes = $this->cfg["classes"];
@@ -58,60 +41,71 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		$toolbar = get_instance("toolbar");
-		$buttons = "";
-		
-		$buttons .= $toolbar->gen_button(array(
+		$this->vars(array(
+			"aliases" => $this->picker(-1,$aliases),
+		));
+
+		$toolbar->add_cdata($this->parse("aliaslist"));
+
+		$toolbar->add_button(array(
 			"name" => "new",
 			"tooltip" => "Lisa uus objekt",
 			"url" => "javascript:redir()",
-			"imgover" => "automatweb/images/blue/awicons/new_over.gif",
-			"img" => "automatweb/images/blue/awicons/new.gif",
+			"imgover" => "new_over.gif",
+			"img" => "new.gif",
 		));
 
-
-		$buttons .= $toolbar->gen_separator();
+		$toolbar->add_separator();
 		
-		$buttons .= $toolbar->gen_button(array(
+		$toolbar->add_button(array(
 			"name" => "refresh",
 			"tooltip" => "Reload",
 			"url" => "javascript:window.location.reload()",
-			"imgover" => "automatweb/images/blue/awicons/refresh_over.gif",
-			"img" => "automatweb/images/blue/awicons/refresh.gif",
+			"imgover" => "refresh_over.gif",
+			"img" => "refresh.gif",
 		));
 		
-		$buttons .= $toolbar->gen_button(array(
+		$toolbar->add_button(array(
 			"name" => "save",
 			"tooltip" => "Tee valitud objektidele aliased",
 			"url" => "javascript:aw_save()",
-			"imgover" => "automatweb/images/blue/awicons/save_over.gif",
-			"img" => "automatweb/images/blue/awicons/save.gif",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
 		));
+		$id = $args["docid"];
+		$obj = $this->get_object($id);
 
 		$this->vars(array(
-			"aliases" => $this->picker(-1,$aliases),
-			"buttons" => $buttons,
+			"reforb" => $this->mk_reforb("search",array("no_reforb" => 1, "search" => 1, "docid" => $docid)),
 			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"])),
-			"id" => $id,
-			"parent" => $obj["parent"],
-			"return_url" => urlencode($this->mk_my_orb("list_aliases", array("id" => $id))),
+			"toolbar" => $toolbar->get_toolbar(),
+			"form" => $form,
+			"table" => $search->get_results(),
 		));
-
+		$results = $search->get_results();
 		return $this->parse();
+	}	
+
+	function search_callback_get_fields(&$fields,$args)
+	{
+		$fields = array();
+		$this->make_alias_classarr();
+		asort($this->classarr);
+		$fields["class_id"] = array(
+			"type" => "select",
+			"caption" => "Klass",
+			"options" => $this->classarr,
+			"selected" => $args["class_id"],
+		);
 	}
 
-	function _gen_s_chlink($args)
+	function search_callback_modify_data($row,$args)
 	{
-		//return "<a href='" . $this->mk_my_orb("addalias",array("id" => $args["docid"], "alias" => $args["oid"]),"aliasmgr") . "'>Võta see</a>";
-		return "<input type='checkbox' name='check' value='$args[oid]'>";
-		return "<a href='" . $this->mk_my_orb("addalias",array("id" => $args["docid"], "alias" => $args["oid"]),"aliasmgr") . "'>Võta see</a>";
+		$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
+		$url = "#";
+		$row["name"] = "<a href='$url'>$row[name]</a>";
 	}
 
-	function _gen_s_path($args)
-	{
-		return array(0,"<a href='".$this->mk_my_orb("list_aliases", array("id" => $args["docid"]))."'>Tagasi</a> / Otsi objekti");
-	}
-	
 	////
 	// !Submits the alias list
 	function submit_list($args = array())
@@ -521,7 +515,7 @@ class aliasmgr extends aw_template
 			if ($cl != "")
 			{
 				$inst = get_instance($cl);
-				$inst->addalias($arr);
+				$inst->addalias(array("id" => $id,"alias" => $onealias));
 			}
 			else
 			{
