@@ -650,6 +650,10 @@ class export extends aw_template
 		if (!isset($this->type2ext[$ct]))
 		{
 			echo "<B><font color=red><br>VIGA! EI LEIDNUD ext for type $ct <br></font></b>";
+			$this->err_log[] = array(
+				"tm" => time(),
+				"msg" => "VIGA! EI LEIDNUD ext for type $ct"
+			);
 		}
 
 		$this->link2type[$link] = $this->type2ext[$ct];
@@ -946,6 +950,7 @@ class export extends aw_template
 		$ls = array();
 		foreach($fr as $mnid)
 		{
+			$ls += $o->get_list(false, false, $mnid);
 			$ls[$mnid] = $lst[$mnid];
 		}
 		$this->vars(array(
