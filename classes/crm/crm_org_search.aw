@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.3 2004/03/16 11:59:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.4 2004/04/07 13:47:55 duke Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 
 // and pray tell .. how to I embed this into crm_db now?
@@ -92,12 +92,6 @@ class crm_org_search extends class_base
 		$tf->define_field(array(
                         "name" => "name",
                         "caption" => "Organisatsioon",
-                        "sortable" => 1,
-                ));
-
-                $tf->define_field(array(
-                        "name" => "reg_nr",
-                        "caption" => "Reg nr.",
                         "sortable" => 1,
                 ));
 
@@ -271,7 +265,10 @@ class crm_org_search extends class_base
 			if (is_oid($o->prop("email_id")))
 			{
 				$mail_obj = new object($o->prop("email_id"));
-				$mail = $mail_obj->prop("mail");
+				$mail = html::href(array(
+					"url" => "mailto:" . $mail_obj->prop("mail"),
+					"caption" => $mail_obj->prop("mail"),
+				));
 
 			};
 
