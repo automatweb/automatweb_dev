@@ -8,12 +8,5 @@
 			</function>
 		</action>
 
-		<action name="table_dialog" all_args="1">
-			<function name="table_dialog">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
