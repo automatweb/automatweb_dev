@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.63 2003/06/03 13:54:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.64 2003/06/09 08:29:32 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -3464,7 +3464,8 @@ class form extends form_base
 
 		// $type is integer now
 		$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
-		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,INDEX(chain_id))");
+		$this->db_query("CREATE TABLE form_".$id."_entries (id INT PRIMARY KEY,chain_id INT,deleted int default 0, INDEX(chain_id))");
+		$this->db_query("ALTER TABLE form_".$id."_entries ADD index deleted(deleted)");
 
 		$this->load($id);
 
