@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.30 2004/10/29 19:06:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.31 2004/11/02 09:53:02 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -116,6 +116,10 @@ class form_actions extends form_base
 						$data["link_to_change"] = $link_to_change;
 						$data["link_caption"] = $link_caption;
 						$data["text_only"] = $text_only;
+						$data["no_user_info_link"] = $no_user_info_link;
+						$data["send_html_mail"] = $send_html_mail;
+						$data["from_addr"] = $from_addr;
+						$data["from_name"] = $from_name;
 						$la = get_instance("languages");
 						$ls = $la->listall();
 						foreach($ls as $ld)
@@ -362,7 +366,11 @@ class form_actions extends form_base
 			"add_pdf" => checked($data["add_pdf"]),
 			"from_email_el" => $this->picker($data["from_email_el"], $this->get_elements_for_forms(array($id), false, true)),
 			"text_only" => checked($try["text_only"]),
-			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true))
+			"email_el" => $this->picker($data["email_el"], $this->get_elements_for_forms(array($id), false, true)),
+			"no_user_info_link" => checked($data["no_user_info_link"]),
+			"send_html_mail" => checked($data["send_html_mail"]),
+			"from_name" => $data["from_name"],
+			"from_addr" => $data["from_addr"]
 		));
 
 		return $this->parse();
@@ -758,7 +766,7 @@ class form_actions extends form_base
 			$GLOBALS["no_html"] = 1;
 		}
 
-		if (aw_global_get("uid") != "")
+		if (aw_global_get("uid") != "" && !$data["no_user_info_link"])
 		{
 			$us = get_instance("users");
 			$uif = $us->fetch(aw_global_get("uid"));
@@ -782,7 +790,7 @@ class form_actions extends form_base
 			}
 		}
 		$f = get_instance("formgen/form");
-		if ($data['op_id'] && $data['link_caption'] != '')
+		if ($data['op_id'] && ($data['link_caption'] != '' || $data["send_html_mail"]))
 		{
 			$msg_html = $f->show(array(
 				"id" => $form->get_id(),
@@ -835,7 +843,7 @@ class form_actions extends form_base
 
 		$subj = $data["subj"][aw_global_get("lang_id")] != "" ? $data["subj"][aw_global_get("lang_id")] :LC_FORM_BASE_ORDER_FROM_AW;
 
-		if ($data['link_caption'] != '')
+		if ($data['link_caption'] != '' || $data["send_html_mail"])
 		{
 			if ($data["from_email_el"])
 			{
@@ -843,10 +851,22 @@ class form_actions extends form_base
 				$fromn = $from;
 			}
 			else
+			if ($data["from_addr"])
+			{
+				$froma = $data["from_addr"];
+				$fromn = $data["from_name"];
+			}
+			else
 			{
 				$froma = "automatweb@automatweb.com";
 				$fromn = "AutomatWeb";
 			}
+
+			if (aw_global_get("fa_mail_subject") != "")
+			{
+				$subj = aw_global_get("fa_mail_subject");
+			}
+			
 			$awm = get_instance("protocols/mail/aw_mail");
 			$awm->create_message(array(
 				"froma" => $froma,
@@ -855,7 +875,6 @@ class form_actions extends form_base
 				"to" => $data['email'],
 				"body" => $msg.$app.$link_url,
 			));
-			
 			$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
 				'url' => $link_url,
 				'caption' => $data['link_caption']
@@ -867,9 +886,11 @@ class form_actions extends form_base
 			{
 				$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
 			}
+
 			$ll = get_instance("languages");
 			//$awm->set_header("Content-type","text/plain; charset=".$ll->get_charset());
-
+			
+	
 			$fname = "attachment.pdf";
 			if (aw_global_get("fa_mail_attach_name") != "")
 			{
@@ -908,54 +929,80 @@ class form_actions extends form_base
 					$fromn = $from;
 				}
 				else
+				if ($data["from_addr"])
+				{
+					$froma = $data["from_addr"];
+					$fromn = $data["from_name"];
+				}
+				else
 				{
 					$froma = "automatweb@automatweb.com";
 					$fromn = "AutomatWeb";
 				}
-				$awm = get_instance("protocols/mail/aw_mail");
-				$awm->create_message(array(
-					"froma" => $froma,
-					"fromn" => $fromn,
-					"subject" => $subj,
-					"to" => $_to,
-					"body" => $msg.$app.$link_url,
-				));
-			
-				$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
-					'url' => $link_url,
-					'caption' => $data['link_caption']
-				));
-
-				$awm->htmlbodyattach(array("data" => $app));
-
-				if (aw_global_get("fa_mail_priority"))
+				
+				$fromstr = $froma;
+				if ($fromn != "")
 				{
-					$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
+					$fromstr = $fromn." <".$froma.">";
 				}
-				$ll = get_instance("languages");
-				//$awm->set_header("Content-type","text/plain; charset=".$ll->get_charset());
-
-				$fname = "attachment.pdf";
-				if (aw_global_get("fa_mail_attach_name") != "")
+				
+				if ($data["text_only"])
 				{
-					$fname = aw_global_get("fa_mail_attach_name");
+					$l = get_instance("languages");
+					$ct = "";/*"Content-type: text/plain; charset=".$l->get_charset()."\n";*/
+					$from = $f->get_element_value($data["from_email_el"]);
+					mail($_to, $subj, strip_tags($msg_html), "From: $fromstr\n$ct");
 				}
-
-				if ($data["add_pdf"])
+				else
 				{
-					$co = get_instance("core/converters/html2pdf");
-					$pdf = $co->convert(array(
-						"source" => $msg_html
+					if (aw_global_get("fa_mail_subject") != "")
+					{
+						$subj = aw_global_get("fa_mail_subject");
+					}
+					
+					$awm = get_instance("protocols/mail/aw_mail");
+					$awm->create_message(array(
+						"froma" => $froma,
+						"fromn" => $fromn,
+						"subject" => $subj,
+						"to" => $_to,
+						"body" => $msg.$app.$link_url,
 					));
-					$awm->fattach(array(
-						"content" => $pdf,
-						"filename" => $fname,
-						"contenttype" => "application/pdf",
-						"name" => $fname
+					
+					$app = $msg_html.'<br />'.$app_html.'<br />'.html::href(array(
+						'url' => $link_url,
+						'caption' => $data['link_caption']
 					));
+	
+					$awm->htmlbodyattach(array("data" => $app));
+	
+					if (aw_global_get("fa_mail_priority"))
+					{
+						$awm->set_header("X-Priority",aw_global_get("fa_mail_priority"));
+					}
+	
+					$fname = "attachment.pdf";
+					if (aw_global_get("fa_mail_attach_name") != "")
+					{
+						$fname = aw_global_get("fa_mail_attach_name");
+					}
+	
+					if ($data["add_pdf"])
+					{
+						$co = get_instance("core/converters/html2pdf");
+						$pdf = $co->convert(array(
+							"source" => $msg_html
+						));
+						$awm->fattach(array(
+							"content" => $pdf,
+							"filename" => $fname,
+							"contenttype" => "application/pdf",
+							"name" => $fname
+						));
+					}
+	
+					$awm->gen_mail();
 				}
-
-				$awm->gen_mail();
 			}
 		}
 		else

@@ -61,6 +61,22 @@
 <td class="celltext"><select name="email_el" class="formselect">{VAR:email_el}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">&Auml;ra lisa kasutaja info linki:</td>
+<td class="celltext"><input type="checkbox" value="1" {VAR:no_user_info_link} name="no_user_info_link" ></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">HTML Meil:</td>
+<td class="celltext"><input type="checkbox" value="1" {VAR:send_html_mail} name="send_html_mail" ></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Maili From aadress:</td>
+<td class="celltext"><input type="textbox" value="{VAR:from_addr}" name="from_addr" ></td>
+</tr>
+<tr class="aste01">
+<td class="celltext">Maili From nimi:</td>
+<td class="celltext"><input type="textbox" value="{VAR:from_name}" name="from_name" ></td>
+</tr>
+<tr class="aste01">
 <td></td>
 <td class="celltext"><input type='submit' class='formbutton' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </tr>
