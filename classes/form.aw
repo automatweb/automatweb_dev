@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.41 2001/07/26 16:38:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.42 2001/07/26 16:44:19 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -2742,6 +2742,7 @@ class form extends form_base
 		$menulist = $o->get_list();
 		$this->vars(array(
 			"ff_folder"	=> $this->picker($this->arr["ff_folder"], $menulist),
+			"ne_folder"	=> $this->picker($this->arr["newel_parent"], $menulist),
 			"tear_folder"	=> $this->picker($this->arr["tear_folder"], $menulist),
 			"el_menus" => $this->multiple_option_list($this->arr["el_menus"], $menulist),
 			"el_menus2" => $this->multiple_option_list($this->arr["el_menus2"], $menulist),
@@ -2755,6 +2756,7 @@ class form extends form_base
 		extract($arr);
 		$this->load($id);
 		$this->arr["ff_folder"] = $ff_folder;
+		$this->arr["newel_parent"] = $newel_parent;
 		$this->arr["tear_folder"] = $tear_folder;
 		$this->arr["el_menus"] = "";
 		if (is_array($el_menus))
