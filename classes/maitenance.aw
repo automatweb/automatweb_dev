@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.11 2004/10/21 09:46:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.12 2004/11/19 11:29:18 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -868,7 +868,11 @@ class maitenance extends class_base
 			}
 			echo '<br />'.count($this->files).' files deleted!!<br />';
 		}
-		die();
+
+		if (!$args["no_die"])
+		{
+			die();
+		}
 	}
 	
 	//////
