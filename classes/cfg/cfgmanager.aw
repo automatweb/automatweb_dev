@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.11 2004/04/29 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.12 2004/05/17 14:04:27 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 
@@ -123,10 +123,6 @@ class cfgmanager extends class_base
 
 
 		$this->use_form = $arr["obj_inst"]->meta("use_form");
-
-		print "<pre>";
-		print_r($use_form);
-		print "</pre>";
 
 		foreach($grplist as $grpid => $grpname)
 		{
