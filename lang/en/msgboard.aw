@@ -74,17 +74,18 @@ $lc_msgboard["LC_MSGBOARD_ARCHIVE_SELECTED_CONFIRM"] = "Archive selected topics?
 $lc_msgboard["LC_MSGBOARD_RESTORE_SELECTED_CONFIRM"] = "Restore selected topics?";
 
 
-define("LC_MSGBOARD_NEWTOPIC","New topic");
-define("LC_MSGBOARD_ADDCOMMENT","New question");
-define("LC_MSGBOARD_FLATLIST","List of topics");
-define("LC_MSGBOARD_CONFIGURE","Configure");
-define("LC_MSGBOARD_TOPICS_ONLY","Topics only");
-define("LC_MSGBOARD_MARK_ALL_READ","Mark all read");
-define("LC_MSGBOARD_SEARCH","Search");
-define("LC_MSGBOARD_NO_RESPONSE","Unanswered only");
-define("LC_MSGBOARD_TITLE","Forum");
-define("LC_MSGBOARD_SORTBY_DATE","By date");
-define("LC_MSGBOARD_THREADEDLIST","Questions/answers");
-define("LC_MSGBOARD_ARCHIVE","Archive");
+$lc_msgboard["LC_MSGBOARD_NEWTOPIC"] = "New topic";
+$lc_msgboard["LC_MSGBOARD_ADDCOMMENT"]= "Uus kommentaar";
+$lc_msgboard["LC_MSGBOARD_FLATLIST"] = "List of topics";
+$lc_msgboard["LC_MSGBOARD_CONFIGURE"] = "Configure";
+$lc_msgboard["LC_MSGBOARD_TOPICS_ONLY"] = "Topics only";
+$lc_msgboard["LC_MSGBOARD_TITLES_ONLY"] = "Titles only";
+$lc_msgboard["LC_MSGBOARD_MARK_ALL_READ"] = "Mark all read";
+$lc_msgboard["LC_MSGBOARD_SEARCH"] = "Search";
+$lc_msgboard["LC_MSGBOARD_NO_RESPONSE"] = "Unanswered only";
+$lc_msgboard["LC_MSGBOARD_FORUM"] = "Forum";
+$lc_msgboard["LC_MSGBOARD_SORTBY_DATE"] = "By date";
+$lc_msgboard["LC_MSGBOARD_SORTBY_THREAD"] = "By thread";
+$lc_msgboard["LC_MSGBOARD_ARCHIVE"] = "Archive";
 
 ?>
