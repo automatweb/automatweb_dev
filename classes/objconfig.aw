@@ -24,6 +24,10 @@ class objconfig extends aw_template
 
 		$caption = "Lisa konfiguratsiooniobjekt";
 		$this->read_template("add.tpl");
+		$ac = get_instance("config");
+		$cfgforms = $ac->get_simple_config("config_forms");
+		$config_forms = aw_unserialize($cfgforms);
+
 		foreach($this->baseclasses as $clid)
 		{
 			$this->vars(array(
@@ -41,6 +45,7 @@ class objconfig extends aw_template
 		$this->vars(array(
 			"name" => $obj["name"],
 			"classlist" => $block,
+			"forms" => $this->picker(-1,$config_forms),
 			"comment" => $obj["comment"],
 			"reforb" => $this->mk_reforb("submit_add",array("parent" => $parent)),
 		));
@@ -60,6 +65,7 @@ class objconfig extends aw_template
 			"comment" => $comment,
 			"class_id" => CL_OBJCONFIG,
 			"subclass" => $baseclass,
+			"metadata" => array("form" => $form),
 		));
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
@@ -73,47 +79,18 @@ class objconfig extends aw_template
 		$obj = $this->get_object($id);
 		$this->read_template("change.tpl");
 		$this->mk_path($obj["parent"],"Muuda konfiguratsiooniobjekti");
-		$bc = get_instance($this->cfg["classes"][$obj["subclass"]]["file"]);
-		$keys = $bc->get_config_keys();
-		$conflines = "";
-		foreach($keys as $key => $val)
-		{
-			if (is_array($val))
-			{
-				$element = "<select name='conf[$key]'>" . $this->picker($obj["meta"][$key],$val) . "</select>";
-				$this->vars(array(
-					"name" => $key,
-					"element" => $element,
-				));
-				$conflines .= $this->parse("confline");
-			};
-			if ($val == "time")
-			{
-				load_vcl("date_edit");
-				$de = new date_edit("conf[$key]");
-				$de->minute_step = 30;
-				$de->configure(array("hour" => 1,"minute" => 2));
-				$ts = ($obj["meta"][$key]["hour"] * 3600) + ($obj["meta"][$key]["minute"] * 60);
-				list($d,$m,$y) = explode("-",date("d-m-Y"));
-				$ts += mktime(0,0,0,$m,$d,$y);
-				$element = $de->gen_edit_form("conf[$key]",$ts);
-				$this->vars(array(
-					"name" => $key,
-					"element" => $element,
-				));
-				$conflines .= $this->parse("confline");
-			};
+		$form = $obj["meta"]["form"];
 
-		}
+		// figure out which entry_id this form uses
+		$q = "SELECT id FROM form_entries WHERE obj_id = '$id'";
+		$this->db_query($q);
+		$row = $this->db_next();
 
-		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"confline" => $conflines,
-			"baseclass" => $this->cfg["classes"][$obj["subclass"]]["name"],
-			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
-		));
-		return $this->parse();
+		// that's the form we want to use for editing object configuration
+
+		// this is now fixed width.
+		$frm = get_instance("form");
+		return $frm->gen_preview(array("id" => $form,"obj_id" => $id,"entry_id" => $row["id"]));
 	}
 
 	////
@@ -131,44 +108,12 @@ class objconfig extends aw_template
 		$this->set_object_metadata(array(
 			"oid" => $id,
 			"data" => $conf,
+			"overwrite" => 1,
 		));
 
 		return $this->mk_my_orb("change",array("id" => $id));
 	}
 
-	////
-	// !Parses an iframe alias
-	function parse_alias($args = array())
-	{
-		extract($args);
-		if (not($alias["target"]))
-		{
-			return "";
-		};
-			
-		$obj = $this->_get_iframe($alias["target"]);
-
-		$this->read_adm_template("iframe.tpl");
-
-		$align = array(
-			"" => "",
-			"v" => "left",
-			"k" => "center",
-			"p" => "right",
-		);
-
-		$this->vars(array(
-			"url" => $obj["meta"]["url"],
-			"width" => $obj["meta"]["width"],
-			"height" => $obj["meta"]["height"],
-			"scrolling" => $obj["meta"]["scrolling"],
-			"frameborder" => $obj["meta"]["frameborder"],
-			"comment" => $obj["meta"]["comment"],
-			"align" => $align[$matches[4]], // that's where the align char is
-		));
-
-		return $this->parse();
-	}
 	
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.1 2002/06/14 02:23:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xmlform.aw,v 2.2 2002/06/26 11:23:41 duke Exp $
 // handles xml based configuration forms
 class xmlform extends aw_template
 {
@@ -47,7 +47,7 @@ class xmlform extends aw_template
 					if (isset($attr["index"]))
 					{
 						$checked = $xmldata[$key][$attr["index"]];
-						$key .= "[" . $attr["index"] . "]";
+						//$key .= "[" . $attr["index"] . "]";
 					}
 					else
 					{
@@ -155,7 +155,8 @@ class xmlform extends aw_template
 
 					if (isset($attr["index"]))
 					{
-						$key .= "[" . $attr["index"] . "]";
+						//$key .= "[" . $attr["index"] . "]";
+						$key = "[" . $key . "][" . $attr["index"] . "]";
 					}
 					
 				}
@@ -181,7 +182,7 @@ class xmlform extends aw_template
 				// create caption
 				$text = $attr["caption"];
 				$this->create_fg_element($key.":tekst",array("text" => $text),0);
-				$this->create_fg_element($key.":klass",$tmp,1);
+				$this->create_fg_element($key,$tmp,1,true);
 				$this->rowcount++;
 			};
 
@@ -208,7 +209,7 @@ class xmlform extends aw_template
 				$tmp["listbox_count"] = sizeof($options);
 				$tmp["listbox_items"] = $options;
 				$this->create_fg_element($name . ":tekst",array("text" => $caption),0);
-				$this->create_fg_element($name . ":klass",$tmp,1);
+				$this->create_fg_element($name,$tmp,1,true);
 				$this->rowcount++;
 				
                         };
@@ -245,14 +246,13 @@ class xmlform extends aw_template
 		return $map;
 	}
 
-	function create_fg_element($key,$tmp = array(),$col)
+	function create_fg_element($key,$tmp = array(),$col,$gen_config_key = false)
 	{
 		// adds a single html element
 		$this->quote($key);
 		$el = $this->new_object(array("parent" => $this->parent, "name" => $key, "class_id" => CL_FORM_ELEMENT));
 		$this->db_query("INSERT INTO form_elements (id) values($el)");
-		$this->db_query("ALTER TABLE form_".$this->fid."_entries ADD el_$el TEXT");
-		$this->db_query("ALTER TABLE form_".$this->fid."_entries ADD ev_$el TEXT");
+		$this->db_query("ALTER TABLE form_".$this->fid."_entries ADD el_$el TEXT, ADD ev_$el TEXT");
 		$this->db_query("INSERT INTO element2form(el_id,form_id) VALUES ($el,$this->fid)");
 
 		$arr = array();
@@ -265,7 +265,11 @@ class xmlform extends aw_template
 		$arr["rel_table_id"] = 0;
 
 		$arr = $arr + $tmp;
-		$arr["config_key"] = $key;
+		if ($gen_config_key == true)
+		{
+			$arr["config_key"] = $key;
+		};
+
 		$this->cfg_arr["elements"][$this->rowcount][$col][$el] = $arr;
 
 	}
