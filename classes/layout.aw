@@ -440,5 +440,25 @@ class layout extends class_base
 			"add_folders" => true
 		));
 	}
+
+	function _unserialize($args)
+	{
+		$raw = isset($args["raw"]) ? $args["raw"] : aw_unserialize($args["str"]);
+		$o = obj();
+		$o->set_parent($args["parent"]);
+		$o->set_period((int)$args["period"]);
+		$o->set_class_id(CL_LAYOUT);
+	
+		foreach(safe_array($raw) as $k => $v)
+		{
+			if ($o->is_property($k))
+			{
+				$o->set_prop($k, $v);
+			}
+		}
+		$o->save();
+
+		return $o->id();
+	}
 }
 ?>
