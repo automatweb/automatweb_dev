@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.51 2003/07/07 14:59:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.52 2003/07/23 17:06:46 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -195,10 +195,16 @@ class file extends class_base
 				// so what if we have it twice?
 				$this->dequote(&$fi["content"]);
 				$fi["content"] .= "</body>";
-				preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
-				// return only the body of the file
-	     		$replacement = str_replace("\n","",$map[2]);
-//				$replacement = $fi["content"];
+				if (strpos($fi["content"],"<body>"))
+				{
+					preg_match("/<body(.*)>(.*)<\/body>/imsU",$fi["content"],$map);
+					// return only the body of the file
+	     				$replacement = str_replace("\n","",$map[2]);
+				}
+				else
+				{
+					$replacement = $fi["content"];
+				};
 			}
 			// embed xml files
 			elseif ($fi["type"] == "text/xml")
@@ -238,6 +244,10 @@ class file extends class_base
 			};
 			$replacement = "<a $ss class=\"sisutekst\" href='".$url."'>$comment</a>";
 		}
+		if ($XX3)
+		{
+			print "ct = $replacement<br>";
+		};
 		return $replacement;
 	}
 
@@ -493,7 +503,7 @@ class file extends class_base
 		}
 		else
 		{
-			//$this->dequote($ret["content"]);
+			$this->dequote($ret["content"]);
 		};
 		return $ret;
 	}
