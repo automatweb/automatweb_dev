@@ -26,7 +26,7 @@ class object_script_interpreter extends class_base
 	{
 		extract($arr);
 		$sc = $this->get_file(array("file" => $file));
-		error::throw_if($sc === false, array(
+		error::raise_if($sc === false, array(
 			"id" => ERR_NO_FILE,
 			"msg" => "object_script_interpreter::exec_file($file): file does not exist!"
 		));
@@ -118,7 +118,7 @@ class object_script_interpreter extends class_base
 
 	function _get_sym($n)
 	{
-		error::throw_if(!isset($this->sym_table[$n]), array(
+		error::raise_if(!isset($this->sym_table[$n]), array(
 			"id" => ERR_OSI_NO_VAR,
 			"msg" => "object_script_interpreter::_get_sym($n): no variable by the name $n defined on line ".$this->lineno."!"
 		));
@@ -172,7 +172,7 @@ class object_script_interpreter extends class_base
 		}
 		else
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_OSI_PARSE,
 				"msg" => "object_script_interpreter::_tokenize_line($line): parse error - unrecognized command on line ".$this->lineno."!"
 			));
@@ -180,12 +180,12 @@ class object_script_interpreter extends class_base
 
 		$line = trim(substr($line, 3));
 
-		error::throw_if($line{0} != "{", array(
+		error::raise_if($line{0} != "{", array(
 			"id" => ERR_OSI_PARSE,
 			"msg" => "object_script_interpreter::_tokenize_line($line): parse error no opening brace after command on line ".$this->lineno."!"
 		));
 
-		error::throw_if($line{strlen($line)-1} != "}", array(
+		error::raise_if($line{strlen($line)-1} != "}", array(
 			"id" => ERR_OSI_PARSE,
 			"msg" => "object_script_interpreter::_tokenize_line($line): parse error no closing brace on line ".$this->lineno."!"
 		));

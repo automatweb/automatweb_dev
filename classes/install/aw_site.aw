@@ -1563,7 +1563,7 @@ class aw_site extends class_base
 		echo "cache = $cache , pg = ".$_t["cache.page_cache"]." <br>";
 		if ($cache == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_XLMRPC,
 				"msg" => "aw_site::_do_change_url($old_url): pagecache folder is empty or bad ( ".$_t["cache.page_cache"]." )!"
 			));
@@ -1671,7 +1671,7 @@ class aw_site extends class_base
 
 		if ($cache == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_XLMRPC,
 				"msg" => "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (".$_t["cache.page_cache"].")!"
 			));
@@ -1679,7 +1679,7 @@ class aw_site extends class_base
 
 		if ($css == "/*" || $img == "/*" || $_t["site_basedir"] == "" || !is_dir($_t["site_basedir"]) || strpos($_t["site_basedir"], $sn) === false)
 		{
-			error::throw(array(
+			error::raise(array(
 				"id" => ERR_XLMRPC,
 				"msg" => "aw_site::_do_change_imgcss(): basedir is empty or bad ($_t[site_basedir])!"
 			));
@@ -1730,7 +1730,7 @@ class aw_site extends class_base
 			echo "rm -rf $t <br>";
 			if ($t == "/*" || $_t["cache.page_cache"] == "" || !is_dir($_t["cache.page_cache"]) || strpos($_t["cache.page_cache"], $sn) === false)
 			{
-				error::throw(array(
+				error::raise(array(
 					"id" => ERR_XLMRPC,
 					"msg" => "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (".$_t["cache.page_cache"].")!"
 				));
