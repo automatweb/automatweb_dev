@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.30 2003/01/20 18:42:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.31 2003/01/30 12:31:53 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -515,7 +515,7 @@ class new_orb extends orb
 		if (!$method || $method == "local")
 		{
 			// local call
-			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params, $orb_defs[$class]["folder"]);
+			$data = $this->do_local_call($orb_defs[$class][$action]["function"], $class, $params, $orb_defs[$class]["___folder"]);
 		}
 		else
 		{
@@ -666,6 +666,9 @@ class new_orb extends orb
 	{
 		extract($arr);
 
+		// now, catch all output
+		ob_start();
+
 		// load rpc handler
 		$inst = get_instance("orb/".$method);
 		if (!is_object($inst))
@@ -678,9 +681,18 @@ class new_orb extends orb
 
 		// do the method calling thing
 		$orb_defs = $this->try_load_class($request["class"]);
+
 		$params = $this->check_method_params($orb_defs, $request["params"], $request["class"], $request["action"]);
 
-		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params, $orb_defs[$request["class"]]["folder"]);
+		$ret = $this->do_local_call($orb_defs[$request["class"]][$request["action"]]["function"], $request["class"], $params,$orb_defs[$request["class"]]["___folder"]);
+
+		$output = ob_get_contents();
+		ob_end_clean();
+
+		if ($output != "")
+		{
+			$this->raise_error(ERR_RPC_OUTPUT, "Output generated during RPC call! content: '$output'", true, false);
+		}
 
 		return $inst->encode_return_data($ret);
 	}
