@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.54 2004/04/07 15:10:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.55 2004/04/07 17:17:06 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -475,9 +475,9 @@ class htmlclient extends aw_template
 				};
 				if ($type == "hbox")
 				{
-					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
-					$tmp .= join("</td><td valign=top>",$val["items"]);
-					$tmp .= "</td></tr></table>";
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>";
+					$tmp .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]);
+					$tmp .= "</table></td></tr></table>";
 				};
 					
 				$this->layoutinfo[$val["parent"]]["items"][] = $tmp;
@@ -503,12 +503,14 @@ class htmlclient extends aw_template
 				};
 				if ($type == "hbox")
 				{
-					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>";
-					$res .= join("</td><td valign=top>",$val["items"]);
-					$res .= "</td></tr></table>";
+					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>";
+					$res .= join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]);
+					$res .= "</table></td></tr></table>";
 				};
 			};
 		};
+
+		header("loll");
 
 		$submit_handler = $txt = "";
 		if ($this->rte)
