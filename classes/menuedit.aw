@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.32 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.33 2001/07/12 03:52:16 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -30,6 +30,7 @@ class menuedit extends aw_template
 		{
 			$this->vars($lc_menuedit);
 		}
+		lc_load("definition");
 	}
 
 	function mk_folders($parent,$str)
@@ -85,7 +86,7 @@ class menuedit extends aw_template
 		));
 		$q = sprintf("INSERT INTO menu (id,type) VALUES (%d,%d)",$newoid,MN_HOME_FOLDER_SUB);
 		$this->db_query($q);
-		$this->_log("menuedit","Lisas kodukataloogi folderi $args[name]");
+		$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_HOMECAT_FOLDER,$args[name]));
 		return $newoid;
 
 	}
@@ -139,7 +140,7 @@ class menuedit extends aw_template
 			// seda objekti pold caches
 			$res = $this->_gen_site_html($params);
 			$this->cache->set($section,$cp,$res);
-			// echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
@@ -278,6 +279,17 @@ class menuedit extends aw_template
 		{
 			// sektsioon pole perioodiline
 			$this->vars(array("doc_content" => $this->show_documents($section,$docid)));
+			if ( (is_array($this->blocks)) && (sizeof($this->blocks) > 0) )
+			{
+				while(list(,$blockdata) = each($this->blocks))
+				{
+					$this->vars(array(
+							"title" => $blockdata["title"],
+							"content" => $blockdata["content"],
+					));
+					$vars[$blockdata["template"]] .= $this->parse($blockdata["template"]);
+				};
+			};
 		}
 		else
 		{
@@ -327,292 +339,293 @@ class menuedit extends aw_template
 			$awt->stop("menuedit_ver2");
 		}
 		else
+		// I dream of the day when this block of code disappears
 		{
-		reset($this->mar);
-		global $ext;
-		while (list(,$row) = each($this->mar))
-		{
-			// find the menu this object belongs under
-			// we build the subtemplate name from the name of the menu in the definition
-			$cur_menu = "";
-			$level = -1;
-			$pt = $row["oid"];
-			// pt on parent?
-			while ($pt != $rootmenu && $pt > 1)
+			reset($this->mar);
+			global $ext;
+			while (list(,$row) = each($this->mar))
 			{
-				if ($this->mar[$pt]["parent"] == $rootmenu)
+				// find the menu this object belongs under
+				// we build the subtemplate name from the name of the menu in the definition
+				$cur_menu = "";
+				$level = -1;
+				$pt = $row["oid"];
+				// pt on parent?
+				while ($pt != $rootmenu && $pt > 1)
 				{
-					if (is_array($menu_defs[$pt]))
+					if ($this->mar[$pt]["parent"] == $rootmenu)
 					{
-						$cur_menu = $menu_defs[$pt];
-						$cur_menu["id"] = $pt;
-					}
-				}
-
-				$pt = $this->mar[$pt]["parent"];
-				$level++;
-			}
-			// kach mingi kahtlase v‰‰rtusega h‰kk
-			$mn = "MENU_".$cur_menu["name"]."_L".$level."_ITEM";	$ap = "";
-			$outputs[$mn] .= "";
-			// fakk. GOTO ja selle derivatiivid imevad. Ja seda kohe sitta moodi
-			// we must only show menus that are marked to be shown
-
-			if ($row["mtype"] != MN_CONTENT || $level < 1)
-				continue;
-
-			if ($level > 1 && !in_array($row["parent"],$path))
-				continue;
-
-			if (is_array($cur_menu))
-			{
-				// kas naidata menyyd, kui seal aktiivseid elemente pole? (hide_noact)
-				if ($row["hide_noact"])
-				{
-					// kaime ka alamdokud labi.
-					if (!$this->has_sub_dox($row["oid"]))
-						continue;
-				}
-
-				// tshekime, et kui selle template sees on j2rgmise taseme template,
-				// siis joonistame selle enne valmis.
-				// see on sellex, et saax vibe-moodi asju teha, kus on k6ik menyyd kohe n2ha
-				$mmn = "MENU_".$cur_menu["name"]."_L".($level+1)."_ITEM";
-				$mmmm = ""; //$mmmm2 = "";
-				if ($this->is_parent_tpl($mmn, $mn))
-				{
-					// make next level tuu
-					if (is_array($this->mpr[$row["oid"]]))
-					{
-						reset($this->mpr[$row["oid"]]);
-						while (list(,$mrow) = each($this->mpr[$row["oid"]]))
+						if (is_array($menu_defs[$pt]))
 						{
-							$ap = "";
-							// niisiis. Kui menyyelemendil on link defineeritud
-							// siis kasutame seda
-							if ($mrow["link"] != "")
-							{
-								$link = $mrow["link"];
-							}
-							else
-							// kui mitte, siis
-							{
-								$link = $GLOBALS["baseurl"] . "/";
-								// kasutame 
-								// a)aliast, kui see on olemas
-								// b)sektsiooni id-d 
-								$link .= ($mrow["alias"] != "") ? $mrow["alias"] : "index." . $ext . "/section=" . $mrow["oid"];
-							}
-							// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
-							$href_target = "_new";
-							$target = ($mrow["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
-							$this->vars(array(	"text" => $mrow["name"],
-										"link" => $link,
-										"target" => $target,
-										"image"		=> ($mrow["img_url"] != "" ? "<img src='".$mrow["img_url"]."' border='0'>" : ""),
-										"section" => $mrow["oid"]));
-							// if this is selected
-							if (in_array($mrow["oid"],$path) && $mrow["clickable"] == 1)
-							{
-								$ap="_SEL";
-							};
-							if (($mmmm2 == "" && $mrow["mid"] == 1))
-							{
-								$ap.="_BEGIN";
-							};
-							if ($mrow["clickable"] != 1)
-							{
-								$ap.="_SEP";
-							};
-							if (is_array($this->mpr[$mrow["oid"]]))
-							{
-								$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
-							}
-							else
-							{
-								$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
-							}
-							$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
-							if ($mrow["mid"] == 1)
-							{
-								// need jobud tahavad, et keskmisi menyysid
-								// n2idatakse aint valitud menyyde all.
-								if (in_array($mrow["parent"],$path))
-								{
-									$has_mid = true;
-									$mmmm2.=$this->parse($mmn."_MID".$ap);
-								};
-							}
-							else
-							{
-								$mmmm.=$this->parse($mmn.$ap);
-							};
-						} // while (tsykkel yle parentite)(next_level level)
-					} // if (next_level)
-					$has_items[$cur_menu["name"]] = true;
-					$this->vars(array(	$mmn => $mmmm,
-								$mmn."_MID" => $mmmm2));
-					$ce = true;
-				}
-				// ja et siis esimene tase.	
-				$ap = "";
-				if ($row["link"] != "")
-				{
-					$link = $row["link"];
-				}
-				else
-				{
-					$link = $GLOBALS["baseurl"] . "/";
-					$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
-				}
-				// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
-				$href_target = "_new";
-				$target = ($row["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
-				$this->vars(array(	"text" 		=> $row["name"],
-							"link" 		=> $link,
-							"section" 	=> $row["oid"],
-							"target" 	=> $target,
-							"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
-
-				// if this is the first one
-				if ($outputs[$mn] == "" && $this->is_template($mn."_BEGIN"))
-				{
-					$ap.="_BEGIN";
-				};
-
-				// if this is selected
-				if (in_array($row["oid"],$path) && $row["clickable"] == 1)
-				{
-					$ap.="_SEL";
-					$this->vars(array($mn."_TEXT" => $row["name"]));
-				};
-
-				if ($row["clickable"] != 1)
-				{
-					$ap.="_SEP";
-				};
-
-				if ($this->is_template($mn.$ap."_NOSUB") && $mmmm == "")
-				{
-					$ap.="_NOSUB";
-				};
-
-				if (!$this->is_template($mn.$ap))
-				{
-					$ap = "";
-				};
-
-				if (is_array($this->mpr[$row["oid"]]))
-				{
-					$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
-				}
-				else
-				{
-					$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
-				}
-				$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
-
-				if ($this->is_parent_tpl("DOC_LINK",$mn))
-				{
-					// make a list of all documents under the menu
-					// and any other menus we must get the documents from
-					$ob = " jrk ";
-					if ($row["ndocs"] > 0)
-					{
-						$ob = " objects.modified DESC ";
-					}
-					$sss = unserialize($row["sss"]);
-					$sss[$row["oid"]] = $row["oid"];
-					$parstr = join(",",$sss);
-					$this->db_query("SELECT * FROM objects WHERE status = 2 AND class_id = ".CL_DOCUMENT." AND site_id = ".$GLOBALS["SITE_ID"]." AND parent IN($parstr) ORDER BY $ob");
-					$dl = "";
-					$cnt = 1;
-					while ($drow = $this->db_next())
-					{
-						if (!($row["ndocs"] > 0 && $cnt > $row["ndocs"]))
-						{
-							$this->vars(array("link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$drow["oid"], 
-																"title" => $drow["name"]));
-							$dl.=$this->parse("DOC_LINK");
+							$cur_menu = $menu_defs[$pt];
+							$cur_menu["id"] = $pt;
 						}
-						$cnt ++;
 					}
-					$this->vars(array("DOC_LINK" => $dl));
+	
+					$pt = $this->mar[$pt]["parent"];
+					$level++;
 				}
-				// siin on siis koht mis tshekib, et kui me joonistame parajasti n2dala saidi
-				// paremat paani, siis topime menyyde vahele
-				// dokude leadid ka. issand kui kohutav.
-				// EEEK!
-				if ($GLOBALS["SITE_ID"] == 3 && $cur_menu["name"] == "PAREM")
-				{	
-					$awt->start("nn_parem");
-					// ja ongi nii.
-					$do = new document;
-					// KLUK KLUK
+				// kach mingi kahtlase v‰‰rtusega h‰kk
+				$mn = "MENU_".$cur_menu["name"]."_L".$level."_ITEM";	$ap = "";
+				$outputs[$mn] .= "";
+				// fakk. GOTO ja selle derivatiivid imevad. Ja seda kohe sitta moodi
+				// we must only show menus that are marked to be shown
 
-					//$period = $per->rec_get_active_period($cur_menu[id]);
-					$periods = new db_periods(190);	// yeah. vasak menyy. ja ei koti.
-					$period = $periods->get_active_period(188);
-					if ($this->subs[$row["oid"]] > 0) {
-						$did = $do->db_fetch_field("SELECT docid FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE objects.period = '$period' AND documents.yleval_paremal = 1 AND objects.status = 2 AND objects.parent = ".$row["oid"]." AND objects.lang_id=".$GLOBALS["lang_id"],"docid");
-						$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"], 	"strip_img" => 1));
-						$this->vars(array("lugu" => $done));
-						$outputs[$mn] .= $this->parse($mn.$ap);
-					};
-					$awt->stop("nn_parem");
-				} 
-				else 
-				if ($row["mid"] == 1)
+				if ($row["mtype"] != MN_CONTENT || $level < 1)
+					continue;
+
+				if ($level > 1 && !in_array($row["parent"],$path))
+					continue;
+
+				if (is_array($cur_menu))
 				{
-					// need jobud tahavad, et keskmisi menyysid n2idatakse aint valitud menyyde all.
-					if (in_array($row["parent"],$path) && $this->is_template($mn.$ap."_MID") && $mmmm2 == "")
+					// kas naidata menyyd, kui seal aktiivseid elemente pole? (hide_noact)
+					if ($row["hide_noact"])
 					{
-						$ap.="_MID";
-						$midd.=$this->parse($mn.$ap);
-						$has_mid = true;
+						// kaime ka alamdokud labi.
+						if (!$this->has_sub_dox($row["oid"]))
+							continue;
+					}
+
+					// tshekime, et kui selle template sees on j2rgmise taseme template,
+					// siis joonistame selle enne valmis.
+					// see on sellex, et saax vibe-moodi asju teha, kus on k6ik menyyd kohe n2ha
+					$mmn = "MENU_".$cur_menu["name"]."_L".($level+1)."_ITEM";
+					$mmmm = ""; //$mmmm2 = "";
+					if ($this->is_parent_tpl($mmn, $mn))
+					{
+						// make next level tuu
+						if (is_array($this->mpr[$row["oid"]]))
+						{
+							reset($this->mpr[$row["oid"]]);
+							while (list(,$mrow) = each($this->mpr[$row["oid"]]))
+							{
+								$ap = "";
+								// niisiis. Kui menyyelemendil on link defineeritud
+								// siis kasutame seda
+								if ($mrow["link"] != "")
+								{
+									$link = $mrow["link"];
+								}
+								else
+								// kui mitte, siis
+								{
+									$link = $GLOBALS["baseurl"] . "/";
+									// kasutame 
+									// a)aliast, kui see on olemas
+									// b)sektsiooni id-d 
+									$link .= ($mrow["alias"] != "") ? $mrow["alias"] : "index." . $ext . "/section=" . $mrow["oid"];
+								}
+								// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
+								$href_target = "_new";
+								$target = ($mrow["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
+								$this->vars(array(	"text" => $mrow["name"],
+											"link" => $link,
+											"target" => $target,
+											"image"		=> ($mrow["img_url"] != "" ? "<img src='".$mrow["img_url"]."' border='0'>" : ""),
+											"section" => $mrow["oid"]));
+								// if this is selected
+								if (in_array($mrow["oid"],$path) && $mrow["clickable"] == 1)
+								{
+									$ap="_SEL";
+								};
+								if (($mmmm2 == "" && $mrow["mid"] == 1))
+								{
+									$ap.="_BEGIN";
+								};
+								if ($mrow["clickable"] != 1)
+								{
+									$ap.="_SEP";
+								};
+								if (is_array($this->mpr[$mrow["oid"]]))
+								{
+									$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
+								}
+								else
+								{
+									$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
+								}
+								$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
+								if ($mrow["mid"] == 1)
+								{
+									// need jobud tahavad, et keskmisi menyysid
+									// n2idatakse aint valitud menyyde all.
+									if (in_array($mrow["parent"],$path))
+									{
+										$has_mid = true;
+										$mmmm2.=$this->parse($mmn."_MID".$ap);
+									};
+								}
+								else
+								{
+									$mmmm.=$this->parse($mmn.$ap);
+								};
+							} // while (tsykkel yle parentite)(next_level level)
+						} // if (next_level)
+						$has_items[$cur_menu["name"]] = true;
+						$this->vars(array(	$mmn => $mmmm,
+									$mmn."_MID" => $mmmm2));
+						$ce = true;
+					}
+					// ja et siis esimene tase.	
+					$ap = "";
+					if ($row["link"] != "")
+					{
+						$link = $row["link"];
 					}
 					else
 					{
+						$link = $GLOBALS["baseurl"] . "/";
+						$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+					}
+					// hiljem voib-olla tekib tahtmine siia mingeid muid targeteid lisada?
+					$href_target = "_new";
+					$target = ($row["target"] == 1) ? sprintf("target='%s'",$href_target) : "";
+					$this->vars(array(	"text" 		=> $row["name"],
+								"link" 		=> $link,
+								"section" 	=> $row["oid"],
+								"target" 	=> $target,
+								"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
+
+					// if this is the first one
+					if ($outputs[$mn] == "" && $this->is_template($mn."_BEGIN"))
+					{
+						$ap.="_BEGIN";
+					};
+
+					// if this is selected
+					if (in_array($row["oid"],$path) && $row["clickable"] == 1)
+					{
+						$ap.="_SEL";
+						$this->vars(array($mn."_TEXT" => $row["name"]));
+					};
+
+					if ($row["clickable"] != 1)
+					{
+						$ap.="_SEP";
+					};
+
+					if ($this->is_template($mn.$ap."_NOSUB") && $mmmm == "")
+					{
+						$ap.="_NOSUB";
+					};
+
+					if (!$this->is_template($mn.$ap))
+					{
 						$ap = "";
+					};
+
+					if (is_array($this->mpr[$row["oid"]]))
+					{
+						$hs = $this->parse("HAS_SUBITEMS_".$cur_menu["name"]);
+					}
+					else
+					{
+						$hs = $this->parse("NO_SUBITEMS_".$cur_menu["name"]);
+					}
+					$this->vars(array("HAS_SUBITEMS_".$cur_menu["name"] => $hs));
+
+					if ($this->is_parent_tpl("DOC_LINK",$mn))
+					{
+						// make a list of all documents under the menu
+						// and any other menus we must get the documents from
+						$ob = " jrk ";
+						if ($row["ndocs"] > 0)
+						{
+							$ob = " objects.modified DESC ";
+						}
+						$sss = unserialize($row["sss"]);
+						$sss[$row["oid"]] = $row["oid"];
+						$parstr = join(",",$sss);
+						$this->db_query("SELECT * FROM objects WHERE status = 2 AND class_id = ".CL_DOCUMENT." AND site_id = ".$GLOBALS["SITE_ID"]." AND parent IN($parstr) ORDER BY $ob");
+						$dl = "";
+						$cnt = 1;
+						while ($drow = $this->db_next())
+						{
+							if (!($row["ndocs"] > 0 && $cnt > $row["ndocs"]))
+							{
+								$this->vars(array("link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$drow["oid"], 
+																	"title" => $drow["name"]));
+								$dl.=$this->parse("DOC_LINK");
+							}
+							$cnt ++;
+						}
+						$this->vars(array("DOC_LINK" => $dl));
+					}
+					// siin on siis koht mis tshekib, et kui me joonistame parajasti n2dala saidi
+					// paremat paani, siis topime menyyde vahele
+					// dokude leadid ka. issand kui kohutav.
+					// EEEK!
+					if ($GLOBALS["SITE_ID"] == 3 && $cur_menu["name"] == "PAREM")
+					{	
+						$awt->start("nn_parem");
+						// ja ongi nii.
+						$do = new document;
+						// KLUK KLUK
+
+						//$period = $per->rec_get_active_period($cur_menu[id]);
+						$periods = new db_periods(190);	// yeah. vasak menyy. ja ei koti.
+						$period = $periods->get_active_period(188);
+						if ($this->subs[$row["oid"]] > 0) {
+							$did = $do->db_fetch_field("SELECT docid FROM documents LEFT JOIN objects ON objects.oid = documents.docid WHERE objects.period = '$period' AND documents.yleval_paremal = 1 AND objects.status = 2 AND objects.parent = ".$row["oid"]." AND objects.lang_id=".$GLOBALS["lang_id"],"docid");
+							$done = $do->gen_preview(array("docid" => $did, "tpl" => "nadal_film_side_lead.tpl","leadonly" => 1, "section" => $row["oid"], 	"strip_img" => 1));
+							$this->vars(array("lugu" => $done));
+							$outputs[$mn] .= $this->parse($mn.$ap);
+						};
+						$awt->stop("nn_parem");
+					}	 
+					else 
+					if ($row["mid"] == 1)
+					{
+						// need jobud tahavad, et keskmisi menyysid n2idatakse aint valitud menyyde all.
+						if (in_array($row["parent"],$path) && $this->is_template($mn.$ap."_MID") && $mmmm2 == "")
+						{
+							$ap.="_MID";
+							$midd.=$this->parse($mn.$ap);
+							$has_mid = true;
+						}
+						else
+						{
+							$ap = "";
+							$outputs[$mn] .= $this->parse($mn.$ap);
+						}
+					}
+					else
+					{
 						$outputs[$mn] .= $this->parse($mn.$ap);
 					}
+					$has_items[$cur_menu["name"]] = true;
 				}
-				else
-				{
-					$outputs[$mn] .= $this->parse($mn.$ap);
-				}
-				$has_items[$cur_menu["name"]] = true;
 			}
-		}
 
-		$this->vars(array("MENU_menyy1_L2_ITEM_MID" => $midd));
+			$this->vars(array("MENU_menyy1_L2_ITEM_MID" => $midd));
 
-		if ($has_mid)
-		{
-			$this->vars(array("HAS_MID" => $this->parse("HAS_MID")));
-		}
-		$used = false;
-		reset($outputs);
-		while (list($k,$v) = each($outputs))
-		{
-			$this->vars(array($k => $v,$k."_SEL" => "",$k."_BEGIN" => "",$k."_BEGIN_SEL" => "",$k."_SEP" => "",$k."_BEGIN_SEP" => "",$k."_NOSUB" => "",$k."_SEL_NOSUB" => ""));
-			if ($k == "MENU_ALUMINE_L2_ITEM")
-				$used = true;
-		}
-	
-		if (!$ce)
-		{
-			$this->vars(array("MENU_menyy1_L3_ITEM_MID" => "", "MENU_menyy1_L3_ITEM_MID_SEL" => "", "MENU_menyy1_L3_ITEM_MID_SEP" => "", "MENU_menyy1_L3_ITEM_MID_BEGIN" => "", "MENU_menyy1_L3_ITEM_MID_SEL_BEGIN" => "", "MENU_menyy1_L3_ITEM_MID_BEGIN_SEP" => ""));
-		}
-
-		if (is_array($has_items))
-		{
-			reset($has_items);
-			while (list($name,) = each($has_items))
+			if ($has_mid)
 			{
-				$this->vars(array("IS_MENU_".$name => $this->parse("IS_MENU_".$name)));
+				$this->vars(array("HAS_MID" => $this->parse("HAS_MID")));
 			}
-		}
+			$used = false;
+			reset($outputs);
+			while (list($k,$v) = each($outputs))
+			{
+				$this->vars(array($k => $v,$k."_SEL" => "",$k."_BEGIN" => "",$k."_BEGIN_SEL" => "",$k."_SEP" => "",$k."_BEGIN_SEP" => "",$k."_NOSUB" => "",$k."_SEL_NOSUB" => ""));
+				if ($k == "MENU_ALUMINE_L2_ITEM")
+				$used = true;
+			}
+	
+			if (!$ce)
+			{
+				$this->vars(array("MENU_menyy1_L3_ITEM_MID" => "", "MENU_menyy1_L3_ITEM_MID_SEL" => "", "MENU_menyy1_L3_ITEM_MID_SEP" => "", "MENU_menyy1_L3_ITEM_MID_BEGIN" => "", "MENU_menyy1_L3_ITEM_MID_SEL_BEGIN" => "", "MENU_menyy1_L3_ITEM_MID_BEGIN_SEP" => ""));
+			}
+
+			if (is_array($has_items))
+			{
+				reset($has_items);
+				while (list($name,) = each($has_items))
+				{
+					$this->vars(array("IS_MENU_".$name => $this->parse("IS_MENU_".$name)));
+				}
+			}
 		} // end MENUEDIT_VER2
 
 		$awt->stop("cycle");
@@ -642,9 +655,11 @@ class menuedit extends aw_template
 		));
 		if (is_array($vars))
 		{
+			$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
 			$this->vars($vars);
 		}
 
+		// eek.
 		if ($GLOBALS["uid"] != "")
 		{
 			classload("users");
@@ -868,6 +883,7 @@ class menuedit extends aw_template
 		$awt->count("menuedit->get_default_document()");
 		$awt->start("menuedit->get_default_document()");
 
+		// the following line looks so wrong
 		if (isset($GLOBALS["docid"]) && $GLOBALS["docid"] && $ignore_global == false)
 		{
 			$awt->stop("menuedit->get_default_document()");
@@ -973,7 +989,7 @@ class menuedit extends aw_template
 				$this->_log("pageview",$ml_user["name"]." (".$ml_user["mail"].") vaatas lehte $log",$section);
 		}
 		else
-			$this->_log("pageview","Vaatas lehte $log",$section);
+			$this->_log("pageview",sprintf(LC_MENUEDIT_LOOKED_SITE,$log),$section);
 		$awt->stop("syslog_core");
 	}
 
@@ -1007,7 +1023,7 @@ class menuedit extends aw_template
 			// nope. mingi skriptitatikas? voi cal6
 			if (!$obj) 
 			{
-				$this->_log("menuedit","¸ritas accessida objekti id-ga '$section'. Kr‰kkimiskatse?");
+				$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS,$section));
 				// neat :), kui objekti ei leita, siis saadame 404 koodi
 				header ("HTTP/1.1 404 Not Found");
 				printf(E_ME_NOT_FOUND);
@@ -1023,7 +1039,7 @@ class menuedit extends aw_template
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n‰itame esilehte
 			if (!(($section > 0) && ($this->get_object($section)))) 
 			{
-				$this->_log("menuedit","¸ritas accessida olematut objekti id-ga 'section'. Suunati esilehele");
+				$this->_log("menuedit",sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section));
 				$section = $globals["frontpage"];
 			}
 		};
@@ -1443,7 +1459,7 @@ class menuedit extends aw_template
 					}
 					else
 					{
-						$url = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2doc.gif";
+						$url = isset($row["icon_id"]) && $row["icon_id"] > 0 ? $baseurl."/icon.".$ext."?id=".$row["icon_id"] : "images/ftv2doc.gif";
 					}
 					$this->vars(array(
 						"name" => $row["name"],
@@ -1504,7 +1520,9 @@ class menuedit extends aw_template
 		};	
 
 		if (!$this->can("view", $parent))
+		{
 			return $this->acl_error("view",$parent);
+		}
 
 		// selle voiks ju ka tablegenni peale ajada.
 		global $sortby;
@@ -1522,11 +1540,12 @@ class menuedit extends aw_template
 
 		$this->read_template("menus.tpl");
 
-		$this->vars(array("parent" => $parent,
-				"addmenu" => $this->mk_orb("new", array("parent" => $parent)),
-				"period"	=> $period,
-				"import"	=> $this->mk_orb("import", array("parent" => $parent))));
-
+		$this->vars(array(
+			"parent" => $parent,
+			"addmenu" => $this->mk_orb("new", array("parent" => $parent)),
+			"period"	=> $period,
+			"import"	=> $this->mk_orb("import", array("parent" => $parent))
+		));
 
 		// vaikimisi on need t¸hjad
 		$can_add = "";
@@ -1582,21 +1601,31 @@ class menuedit extends aw_template
 
 			$r_id = ($row["class_id"] == CL_BROTHER ? $row["brother_of"] : $row["oid"]);
 
+			if ($row["class_id"] == CL_PROMO)
+			{
+				$ic_url = $this->get_icon_url("promo_box","");
+			}
+			else
+			{
+				$ic_url = "images/ftv2folderclosed.gif";
+			}
 			$this->vars(array(
-			"is_cut"				=> ($cut_objects[$row["oid"]] ? $cut : $nocut),
-			"name"					=> $row["name"],
-			"menu_id"				=> $row["oid"], 
-			"menu_order"		=> $row["jrk"], 
-			"menu_active"		=> ($row["status"] == 2 ? "CHECKED" : ""),
-			"menu_active2"	=> $row["status"],
-			"prd1"					=> ($row["periodic"] == 1 ? "CHECKED" : ""),
-			"prd2"					=> $row["periodic"],
-			"copied"				=> $row["is_copied"] == 1 ? "CHECKED" : "",
-			"modified"			=> $this->time2date($row["modified"],2),
-			"modifiedby"		=> $row["modifiedby"],
-			"delete"				=> $this->mk_orb("delete", array("parent" => $parent,"id" => $row["oid"],"period" => $period)),
-			"r_menu_id"			=> $r_id,
-			"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $r_id,"period" => $period))));
+				"is_cut"				=> ($cut_objects[$row["oid"]] ? $cut : $nocut),
+				"name"					=> $row["name"],
+				"menu_id"				=> $row["oid"], 
+				"menu_order"		=> $row["jrk"], 
+				"menu_active"		=> ($row["status"] == 2 ? "CHECKED" : ""),
+				"menu_active2"	=> $row["status"],
+				"prd1"					=> ($row["periodic"] == 1 ? "CHECKED" : ""),
+				"prd2"					=> $row["periodic"],
+				"copied"				=> $row["is_copied"] == 1 ? "CHECKED" : "",
+				"modified"			=> $this->time2date($row["modified"],2),
+				"modifiedby"		=> $row["modifiedby"],
+				"delete"				=> $this->mk_orb("delete", array("parent" => $parent,"id" => $row["oid"],"period" => $period)),
+				"r_menu_id"			=> $r_id,
+				"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $r_id,"period" => $period)),
+				"imgref" => $ic_url
+			));
 
 			$this->vars(array(
 				"NFIRST" => $this->can("order",$row["oid"]) ? $this->parse("NFIRST") : "",
@@ -1723,6 +1752,7 @@ class menuedit extends aw_template
 			return $this->acl_error("view",$parent);
 
 		$mtype = $this->db_fetch_field("SELECT type FROM menu WHERE id = $parent", "type");
+		
 		// et siis like. Mis tyypi see menu on? kui tegemist vormielementidega, siis...
 		if ($mtype == MN_FORM_ELEMENT)
 		{
@@ -1798,19 +1828,23 @@ class menuedit extends aw_template
 			$opar = array();
 			$forms = array();
 			$fesstr = join(",",$fstrs);
-			$this->db_query("SELECT distinct(form_id) as form_id FROM form_entries WHERE form_entries.id IN ($fesstr)");
+			$ops = $fop->get_op_list();
+			$q = "SELECT distinct(form_id) as form_id FROM form_entries WHERE form_entries.id IN ($fesstr)";
+			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
 				$forms[] = $row["form_id"];
-				$ops = $fop->get_op_list(array("id" => $row["form_id"]));
-				reset($ops);
 				$cnt = 0;
 				$o = "";
-				while (list($opid,$opname) = each($ops))
+				if (is_array($ops[$row["form_id"]]))
 				{
-					$this->vars(array("form_id" => $row["form_id"], "cnt" => $cnt, "op_id" => $opid, "op_name" => $opname));
-					$o.=$this->parse("FORM_OP");
-					$cnt++;
+					reset($ops[$row["form_id"]]);
+					while (list($opid,$opname) = each($ops[$row["form_id"]]))
+					{
+						$this->vars(array("form_id" => $row["form_id"], "cnt" => $cnt, "op_id" => $opid, "op_name" => $opname));
+						$o.=$this->parse("FORM_OP");
+						$cnt++;
+					}
 				}
 				$this->vars(array("FORM_OP" => $o));
 				$f.=$this->parse("FORM");
@@ -1949,7 +1983,7 @@ class menuedit extends aw_template
 		// let the user pick a default document
 		// select all documents that are non-periodic and not under this menu and active
 		$this->extrarr = array();
-		$this->db_query("SELECT objects.oid as oid,documents.title as title ,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE parent != $parent AND status = 2 AND periodic = 0 AND site_id = ".$GLOBALS["SITE_ID"]." AND class_id = ".CL_DOCUMENT);
+		$this->db_query("SELECT objects.oid as oid,documents.title as title ,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE parent != $parent AND status = 2 AND periodic = 0 AND site_id = ".$GLOBALS["SITE_ID"]." AND class_id = ".CL_DOCUMENT." AND objects.lang_id = ".$GLOBALS["lang_id"]);
 		while ($row = $this->db_next())
 		{
 			$this->extrarr[$row["parent"]][] = array("docid" => $row["oid"], "name" => substr($row["title"],0,15).".aw");
@@ -2071,38 +2105,38 @@ class menuedit extends aw_template
 		extract($arr);
 
 		if (!$this->can("add",$parent))
-			$this->raise_error("Your access level does not allow you to do this!", true);
+			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
 
 		global $ext;
-		$this->mk_path($parent,"Lisa");
+		$this->mk_path($parent,LC_MENUEDIT_ADD);
 		$this->read_template("nadd.tpl");
 		$q = "SELECT * FROM menu WHERE id = '$parent'";
 		$this->db_query($q);
 		$par_info = $this->db_fetch_row();
 		if ((($parent == 1) || ($parent == 29) && $GLOBALS["SITE_ID"] < 100)) 
 		{
-			$classlist = $this->option_list(1,array("69" => "Klient"));
+			$classlist = $this->option_list(1,array("69" => LC_MENUEDIT_CLIENT));
 			// sektsioonid, mida saab teha kohe kliendi alla
 		} 
 		else
 		if ($par_info["type"] == MN_CLIENT) 
 		{
-			$classlist = $this->option_list(1,array("70" => "Sektsioon",
-																							"71" => "Adminni menyy"));
+			$classlist = $this->option_list(1,array("70" => LC_MENUEDIT_SECTION,
+																							"71" => LC_MENUEDIT_ADMINN_MENU));
 		} 
 		else
 		if ($par_info["type"] == MN_ADMIN1) 
 		{
-			$classlist = $this->option_list(1,array("71" => "Adminni menyy","72" => "Dokument"));
+			$classlist = $this->option_list(1,array("71" => LC_MENUEDIT_ADMINN_MENU,"72" => LC_MENUEDIT_DOCUMENT));
 		} 
 		else
 		if ($par_info["type"] == MN_HOME_FOLDER || $par_info["type"] == MN_HOME_FOLDER_SUB) 
 		{
-			$classlist = $this->option_list(1,array("75" => "Kataloog"));
+			$classlist = $this->option_list(1,array("75" => LC_MENUEDIT_CATALOG));
 		} 
 		else 
 		{
-			$classlist = $this->option_list(1,array("70" => "Sektsioon"));
+			$classlist = $this->option_list(1,array("70" => LC_MENUEDIT_SECTION));
 		};
 		$this->vars(array("parent"  => $parent,
 											"name"    => "",
@@ -2124,7 +2158,7 @@ class menuedit extends aw_template
 		if ($id) 
 		{
 			if (!$this->can("edit",$id))
-				$this->raise_error("Your access level does not allow you to do this!", true);
+				$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
 
 			// k¸sime olemasoleva info men¸¸ kohta
 			$q = "SELECT objects.*,menu.* FROM objects
@@ -2277,7 +2311,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 
 			$this->upd_object($charr);
-			$this->_log("menuedit","Muutis men&uuml;&uuml;d $name");
+			$this->_log("menuedit",sprintf(LC_MENUEDIT_CJANGED_MENU,$name));
 			$q = "UPDATE menu SET 
 							tpl_edit = '$tpl_edit',
 							tpl_lead = '$tpl_lead',
@@ -2309,7 +2343,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			if (!$this->can("add",$parent))
 			{
-				$this->raise_error("Your access level does not allow you to do this!", true);
+				$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
 			}
 			// teeme uue menyy
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO, "comment" => $comment,"status" => 1));
@@ -2319,7 +2353,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				// keelame teistel selle n2gemise sharetud folderis
 				$this->deny_obj_access($id);
 			}
-			$this->_log("menuedit","Lisas sektsiooni $name");
+			$this->_log("menuedit",sprintf(LC_MENUEDIT_ADDED_SECTION,$name));
 		}
 		return $this->mk_orb("change", array("parent" => $arr["parent"],"id" => $id,"period" => $arr["period"]));
 	}
@@ -2580,11 +2614,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 		if (!$this->can("delete",$id))
-			$this->raise_error("Your access level does not allow you to do this!", true);
+			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
 
 		$this->rd($id);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
-		$this->_log("menuedit","Kustutas men&uuml;&uuml; $name");
+		$this->_log("menuedit",sprintf(LC_MENUEDIT_ERASED_MENU,$name));
 		header("Location: ".$this->mk_orb("menu_list", array("parent" => $arr["parent"])));
 	}
 
@@ -2594,7 +2628,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		global $period;
 		$this->mk_path($id, "Muuda");
 		if (!$this->can("edit",$id))
-			$this->raise_error("Your access level does not allow you to do this!", true);
+			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
 
 		global $basedir,$baseurl;
 		global $ext;
@@ -3020,7 +3054,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 
-			$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
+			if (!defined("SKIP_MENU_RECURSION"))
+			{
+				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
+			};
 
 			if ($cnt == 0 && $this->is_template($mn."_BEGIN"))
 			{
@@ -3239,7 +3276,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function import($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Impordi men&uuml;&uuml;sid");
+		$this->mk_path($parent,LC_MENUEDIT_IMPORT_MENU);
 		$this->read_template("import.tpl");
 		$this->vars(array("reforb" => $this->mk_reforb("submit_import", array("parent" => $parent))));
 		return $this->parse();
@@ -3575,6 +3612,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$docid = $this->get_default_document($section);
 		};
 		$ct = "";
+
+		// oleks vaja teha voimalus feedbacki tegemiseks. S.t. doku voib 
+		// lisaks enda sisule tekitada veel mingeid datat, mida siis menuedit
+		// voiks paigutada saidi raami sisse. Related links .. voi nimekiri
+		// mingitest artiklis esinevatest asjadest. You name it.
+		$this->blocks = array();
+		
+
 		$template = $this->get_long_template($section);
 		if (is_array($docid)) 
 		{
@@ -3600,6 +3645,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		} 
 		else 
 		{
+			// kui docid on 0, siis leiame default doku
+			if ($docid == 0)
+			{
+				$pobj = $this->get_object($section);
+				$lastar = unserialize($pobj["last"]);
+				// this is wrong, lang_id should be used
+				list(,$default_doc) = each($lastar);
+				$docid = $default_doc;
+			};
+
 			if ($docid)
 			{
 				$ct = $d->gen_preview(array(
@@ -3619,6 +3674,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 				$this->vars(array("docid" => $docid));
 				$this->active_doc = $docid;
+				if (is_array($d->blocks))
+				{
+					$this->blocks = $this->blocks + $d->blocks;
+				};
 			}
 		}
 		$awt->stop("show_documents()");
@@ -3782,6 +3841,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$this->restore_handle();
 			}
 		};
+
 		$this->vars(array(
 			"LEFT_PROMO" => $left_promo,
 			"RIGHT_PROMO" => $right_promo,
@@ -3983,6 +4043,19 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		$ret = $sh->show(array("section" => $section,"id" => $shop_id));
 		$this->vars(array("shop_menus" => $sh->shop_menus));
 		return $ret;
+	}
+
+	function mdelete($arr)
+	{
+		extract($arr);
+		if (is_array($sel))
+		{
+			foreach($sel as $oid => $one)
+			{
+				$this->delete_object($oid);
+			}
+		}
+		return "menuedit.".$GLOBALS["ext"]."?parent=".$parent."&type=menus&period=".$period;
 	}
 }
 ?>
