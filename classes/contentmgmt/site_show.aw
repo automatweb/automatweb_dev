@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.54 2004/05/04 07:53:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.55 2004/05/10 14:53:56 kristo Exp $
 
 /*
 
@@ -1460,6 +1460,7 @@ class site_show extends class_base
 	function exec_subtemplate_handlers($arr)
 	{
 		// go over all class defs and check if that class is the handler for any subtemplates
+		$promo_done = false;
 		$tmp = aw_ini_get("classes");
 		foreach($tmp as $clid => $cldef)
 		{
@@ -1481,6 +1482,10 @@ class site_show extends class_base
 				if (count($ask_content) > 0)
 				{
 					$inst = get_instance($cldef["file"]);
+					if ($cldef["file"] == "contentmgmt/promo")
+					{
+						$promo_done = true;
+					}
 					$fl = $cldef["file"];
 					$awt->start("mainc-$fl");
 					if (!method_exists($inst, "on_get_subtemplate_content"))
@@ -1498,6 +1503,16 @@ class site_show extends class_base
 				}
 				$awt->stop("mainc");
 			}
+		}
+
+		if (!$promo_done)
+		{
+			$awt->start("after-mainc-promo");
+			$inst = get_instance("contentmgmt/promo");
+			$inst->on_get_subtemplate_content(array(
+				"inst" => &$this,
+			));
+			$awt->stop("after-mainc-promo");
 		}
 	}
 
