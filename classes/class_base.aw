@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.224 2004/02/27 11:56:21 duke Exp $
+// $Id: class_base.aw,v 2.225 2004/02/27 11:57:32 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1426,42 +1426,6 @@ class class_base extends aw_template
 				$val["value"] = time();
 			};
 		}
-
-		if (($val["type"] == "popup_objmgr"))
-		{
-			if ($val['multiple'])
-			{
-				if ($val['value'])
-				{
-				$val['value']=(array)$val['value'];
-				foreach($val['value'] as $va)
-				{
-					$obj=$this->get_object($va);
-					$options_[$va]=htmlentities($obj['name']);
-				}
-				$val['selected'] = $val['value'];
-				$val['options'] = $options_;
-				}
-			}
-			else
-			{
-				$val['selected'] = $val['value'];
-				if (is_numeric($val['value']))
-				{
-					$obj=$this->get_object($val['value']);
-				}
-				$val['options'] = array($val['value']=>$obj['name'],0 => ' - ');
-			}
-
-			$val['popup_objmgr'] = $this->mk_my_orb('search',array(
-				'check_name' => isset($val['check_name']) ? $val['check_name'] : NULL,
-				'multiple' => $val['multiple'],
-				"parent" => $this->parent,
-				'return_url' => 'plaa',
-				),'popup_objmgr');
-
-		};
-
 
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
