@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.21 2004/12/29 09:46:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.22 2004/12/29 10:02:28 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -217,13 +217,16 @@ class webform extends class_base
 			{
 				$this->cfgform_i->_init_cfgform_data($this->cfgform);
 			}
-			if($this->cfgform->prop("type") == CL_REGISTER_DATA)
+			if(!$arr["new"])
 			{
-				$this->p_clid = CL_REGISTER_DATA;
-			}
-			else
-			{
-				$this->p_clid = CL_CALENDAR_REGISTRATION_FORM;
+				if($obj_inst->prop("form_type") == CL_REGISTER_DATA)
+				{
+					$this->p_clid = CL_REGISTER_DATA;
+				}
+				else
+				{
+					$this->p_clid = CL_CALENDAR_REGISTRATION_FORM;
+				}
 			}
 		}
 	}
@@ -255,7 +258,7 @@ class webform extends class_base
 		switch($prop["name"])
 		{
 			case "form_type_value":
-				$prop["value"] = $arr["obj_inst"]->prop("form_type") == 1 ? t("Registri andmed") : t("Sündmuse vorm");
+				$prop["value"] = $arr["obj_inst"]->prop("form_type") == CL_REGISTER_DATA ? t("Registri andmed") : t("Sündmuse vorm");
 				break;
 				
 			case "form_type":
@@ -1302,8 +1305,13 @@ class webform extends class_base
 		$errs = safe_array($arr["errors"]);
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
 		$ret = array();
+		$no_sbt = true;
 		foreach($els as $pn => $pd)
 		{
+			if($pd["type"] == "submit")
+			{
+				$no_sbt = false;
+			}
 			if (isset($errs[$pn]))
 			{
 				$ret[$pn."_err"] = array(
@@ -1318,7 +1326,7 @@ class webform extends class_base
 		}
 		$els = $ret;
 		// special case n shit
-		if(empty($els["submit"]))
+		if($no_sbt)
 		{
 			$els["submit"] = array(
 				"name" => "submit",
