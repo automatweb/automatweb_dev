@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.16 2001/06/13 03:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.17 2001/06/13 05:27:34 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -188,11 +188,21 @@ else
 	}
 
 	// loads localization constants from the site's $site_basedir
-	function lc_site_load($file)
+	function lc_site_load($file,&$obj)
 	{
 		global $site_basedir;
 		global $ext,$LC;
 		@include_once("$site_basedir/lang/" . $LC . "/$file.$ext");
+		if ($obj)
+		{
+			// kui objekt anti kaasa, siis loeme tema template sisse muutuja $lc_$file 
+			$var = "lc_".$file;
+			global $$var;
+			if (is_array($$var))
+			{
+				$obj->vars($$var);
+			}
+		}
 	}
 
 	function classload($args)
