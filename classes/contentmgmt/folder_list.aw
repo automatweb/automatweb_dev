@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.4 2004/05/06 11:19:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.5 2004/05/06 14:24:45 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -17,8 +17,11 @@
 @property sort_by type=select field=meta method=serialize
 @caption Mille j&auml;rgi sortida
 
-@property show_comment type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita kommentaari
+@property show_comment type=chooser field=meta method=serialize
+@caption N&auml;ita kausta all
+
+@property no_folder_links type=checkbox ch_value=1 field=meta method=serialize
+@caption &Auml;ra lingi katalooge
 
 @reltype FOLDER clid=CL_MENU value=1
 @caption juurkataloog
@@ -52,6 +55,13 @@ class folder_list extends class_base
 				$data["options"] = array(
 					"objects.name" => "Nimi",
 					"objects.jrk" => "J&auml;rjekord"
+				);
+				break;
+
+			case "show_comment":
+				$data["options"] = array(
+					"comment" => "Kommentaari",	
+					"doc" => "Esimest dokumenti"
 				);
 				break;
 		};
@@ -105,6 +115,7 @@ class folder_list extends class_base
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
+		$d = get_instance("document");
 
 		$fls = "";
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -116,7 +127,26 @@ class folder_list extends class_base
 				"comment" => nl2br($o->comment())
 			));
 
-			if ($ob->prop("show_comment"))
+			if ($ob->prop("show_comment") == "doc")
+			{
+				$docs = $ssh->get_default_document(array(
+					"obj" => $o
+				));
+				$doc = $docs;
+				if (is_array($docs))
+				{
+					$doc = reset($docs);
+				}
+				$doco = obj($doc);
+				$this->vars(array(
+					"comment" => $doco->prop("lead")
+				));
+				$this->vars(array(
+					"SHOW_COMMENT" => $this->parse("SHOW_COMMENT")
+				));
+			}
+			else
+			if ($ob->prop("show_comment") == "comment")
 			{
 				$this->vars(array(
 					"SHOW_COMMENT" => $this->parse("SHOW_COMMENT")
@@ -126,6 +156,21 @@ class folder_list extends class_base
 			{
 				$this->vars(array(
 					"SHOW_COMMENT" => ""
+				));
+			}
+
+			if ($ob->prop("no_folder_links"))
+			{
+				$this->vars(array(
+					"NO_LINK" => $this->parse("NO_LINK"),
+					"HAS_LINK" => ""
+				));
+			}
+			else
+			{
+				$this->vars(array(
+					"NO_LINK" => "",
+					"HAS_LINK" => $this->parse("HAS_LINK")
 				));
 			}
 			$fls .= $this->parse("FOLDER");
