@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.23 2001/09/12 19:47:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.24 2001/10/01 13:52:08 cvs Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -76,7 +76,10 @@ class db_config extends aw_template
 	// aadressi.
 	function get_login_menus($args = array())
 	{
-		$data = $this->_get_login_menus();
+		$_data = $this->_get_login_menus();
+		global $lang_id;
+		global $DEBUG;
+		$data = $_data[$lang_id];
 		$cur_pri = -1;
 		$cur_menu = false;
 		global $uid;
@@ -116,11 +119,13 @@ class db_config extends aw_template
 		{
 			$this->raise_error("LOGIN_MENUS on defineerimata.",true);
 		};
-		
-		$data = $this->_get_login_menus();
+	
+		global $lang_id;	
+		$_data = $this->_get_login_menus();
+		$data = $_data[$lang_id];
 
 
-		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO));
+		$obj = $this->get_objects_below(array("parent" => LOGIN_MENUS,"class" => CL_PSEUDO,"lang_id" => $lang_id));
 
 		$menus = array();
 
@@ -168,12 +173,16 @@ class db_config extends aw_template
 		extract($args);
 		classload("xml");
 		$xml = new xml();
-		$data = array(
+		global $lang_id;
+		$old = $this->get_simple_config("login_menus");
+		$olddata = $xml->xml_unserialize(array("source" => $old));
+		global $lang_id;
+		$olddata[$lang_id] = array(
 			"pri" => $pri,
 			"menu" => $menu,
 		);
 
-		$xmldata = $xml->xml_serialize($data);
+		$xmldata = $xml->xml_serialize($olddata);
 
 		$this->quote($xmldata);
 
