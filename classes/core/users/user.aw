@@ -812,7 +812,21 @@ class user extends class_base
 
 	function add($arr)
 	{
-		return $this->users->add_user($arr);
+		/*$po = $this->get_object($arr["parent"]);
+		if ($po["class_id"] == CL_GROUP)
+		{
+			return $this->add_user_to_grp($arr);
+		}
+		else
+		{*/
+			return $this->users->add_user($arr);
+//		}
 	}
+
+/*	function add_user_to_grp($arr)
+	{
+		$this->read_template("add_user.tpl");
+		return $this->parse();
+	}*/
 }
 ?>
