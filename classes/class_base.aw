@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.271 2004/05/31 07:44:01 duke Exp $
+// $Id: class_base.aw,v 2.272 2004/05/31 11:22:40 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -213,6 +213,11 @@ class class_base extends aw_template
 			$args["action"] = "view";
 		};
 
+		if (1 == $args["view"])
+		{
+			$this->view = true;
+		};
+
 		$use_form = $args["form"];
 			
 			
@@ -279,13 +284,6 @@ class class_base extends aw_template
 
 		$this->cfgform_id = $cfgform_id;
 
-		global $XX4;
-		if ($XX4)
-		{
-			$this->cfgform_id = "";
-			$cfgform_id = "";
-		};
-		
 		$filter = array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
@@ -536,6 +534,11 @@ class class_base extends aw_template
 
 		// and, if we are in that other layout mode, then we should probably remap all
 		// the links in the toolbar .. augh, how the hell do I do that?
+		if ($this->view)
+		{
+			$cli->view_mode = 1;
+		};
+
 		foreach($resprops as $val)
 		{
 			$cli->add_property($val);
@@ -641,6 +644,7 @@ class class_base extends aw_template
 		$rv =  $this->gen_output(array(
 			"parent" => $this->parent,
 			"content" => isset($content) ? $content : "",
+			"orb_action" => $this->view == 1 ? "view" : "",
 		));
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
@@ -1610,6 +1614,11 @@ class class_base extends aw_template
 			return false;
 		};
 
+		if ($this->view == 1)
+		{
+			$val["type"] = "text";
+		};
+
 		// XXX: move get_html calls out of here, they really do not belong
 		if (($val["type"] == "toolbar") && is_object($val["toolbar"]))
 		{
@@ -1984,6 +1993,10 @@ class class_base extends aw_template
 
 		foreach($properties as $key => $val)
 		{
+			if ($val["name"] == "tabpanel" && $this->view)
+			{
+				continue;
+			};
 
 			// XXX: need to get rid of that "text" index
 			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
@@ -3220,9 +3233,9 @@ class class_base extends aw_template
 
 	/**  
 		
-		@attrib name=view params=name 
+		@attrib name=view params=name all_args="1"
 		
-		@param id required type=int
+		@param id required type=int acl="view"
 		@param group optional
 		@param period optional
 		
@@ -3230,10 +3243,12 @@ class class_base extends aw_template
 		
 		
 		@comment
-
+	
 	**/
 	function view($args = array())
 	{
+		$args["view"] = 1;
+		return $this->change($args);
 		// create an instance of the class servicing the object ($this->inst)
 		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile (Do I need the latter at all?)
