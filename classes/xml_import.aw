@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.19 2003/11/06 14:57:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.20 2003/11/06 15:22:00 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -368,6 +368,7 @@ class xml_import extends class_base
 				$sisetel = $t_attr["sisetel"];
 				$pritel = $t_attr["pritel"];
 				$tootajad_view = array();
+				$amt_data = array();
 			}
 
 			if ( ($token["tag"] == "amet") && ($token["type"] == "complete") )
@@ -403,11 +404,15 @@ class xml_import extends class_base
 					$koormus_view = " " . $koormus . " k";
 				};
 				$st_id = $attr["struktuur"] . $tid;
+				$pikknimi = $eriala . $nimi . $koormus_view;
+                                $this->quote($pikknimi);
+
 				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid,st_id)
 					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
 						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid','$st_id')";
 				print $q;
 				$this->db_query($q);
+				$amt_data[$st_id][] = $pikknimi;
 				$tootajad_view[$attr[struktuur]][] = array(
 					"tootaja_id" => $tid,
 					"info" => $eriala . $nimi . $koormus_view,
@@ -459,6 +464,29 @@ class xml_import extends class_base
 					$this->db_query($q);
 				};
 				$kraad = array();
+
+				foreach($amt_data as $str_id => $items)
+                                {
+                                        $q = "";
+                                        if (sizeof($items) > 0)
+                                        {
+                                                $amts = join(", ",$items);
+                                                $q = "UPDATE ut_ametid SET nimi_pikk = '$amts' WHERE st_id = '$str_id'";
+                                        }
+                                        /*
+                                        elseif (sizeof($items) == 1)
+                                        {
+                                                $q = "UPDATE ut_ametid SET nimi_pikk = nimi WHERE st_id = '$str_id'";
+                                        };
+                                        */
+                                        if (!empty($q))
+                                        {
+                                                print $q;
+                                                print "<br />";
+                                                $this->db_query($q);
+                                        };
+                                };
+
 
 				if (is_array($tootajad_view))
 				{
