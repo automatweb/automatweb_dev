@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.6 2001/10/09 12:11:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.1 2002/10/28 13:54:53 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -33,7 +33,7 @@ class form_table extends form_base
 		$this->ru = aw_global_get("REQUEST_URI");
 		$this->image = get_instance("image");
 		$this->uid = aw_global_get("uid");
-		$this->controller_instance = get_instance("formgen/form_controller");
+		$this->controller_instance = get_instance("form_controller");
 	}
 
 	////
@@ -377,21 +377,12 @@ class form_table extends form_base
 						if ($cc["el_show"][$elid] == 1)
 						{
 							$cursums[$elid] += $dat["ev_".$elid];
-							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
-							if ($cc['el_main_types'][$elid] == 'date')
-							{
-								$str .= $dat["el_".$elid];
-							}
-							else
-							{
-								$str .= $dat["ev_".$elid];
-							}
+							$str .= $dat["ev_".$elid];
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
 						else
 						{
-							$noshowstr .= $this->table["defs"][$col]["el_sep_pre"][$elid];
-							$noshowstr .= $cc['el_main_types'][$elid] == 'date' ? $dat["el_".$elid] : $dat["ev_".$elid];
+							$noshowstr .= $dat["ev_".$elid];
 							$noshowstr .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
 					}
@@ -401,7 +392,6 @@ class form_table extends form_base
 						// order element will never have a value in the data
 						if ($elid == "order" )
 						{
-							$str .= $this->table["defs"][$col]["el_sep_pre"][$elid];
 							$str .= $this->get_order_url($col,$dat);
 							$str .= $this->table["defs"][$col]["el_sep"][$elid];
 						}
@@ -526,25 +516,6 @@ class form_table extends form_base
 				// and then, finally some misc settings
 				if (isset($cc["link_el"]))
 				{
-					$linktext = $str;
-					$ar = new aw_array($cc["alias"]);
-					foreach($ar->get() as $aid)	
-					{
-						$alias_data = $cc["alias_data"][$aid];
-						if ($alias_data["class_id"] == CL_IMAGE)
-						{
-							$linktext = $this->get_image_alias_url($str, $alias_data["target"], $col, $noshowstr);
-						}
-					}
-					$ar = new aw_array($reset_aliases[$col]);
-					foreach($ar->get() as $aid)	
-					{
-						$alias_data = $cc["alias_data"][$aid];
-						if ($alias_data["class_id"] == CL_IMAGE)
-						{
-							$linktext = $this->get_image_alias_url($str, $alias_data["target"], $col, $noshowstr);
-						}
-					}
 					if (isset($cc["link_popup"]) && $cc["link_popup"])
 					{
 						$str = "<a href=\"".sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d,%d,%d)",
@@ -555,11 +526,11 @@ class form_table extends form_base
 							$cc["link_popup_addressbar"],
 							$cc["link_popup_width"],
 							$cc["link_popup_height"]
-						)."\">".$linktext."</a>";
+						)."\">".$str."</a>";
 					}
 					else
 					{
-						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$linktext."</a>";
+						$str = "<a href='".$dat["ev_".$cc["link_el"]]."'>".$str."</a>";
 					}
 				}
 				else
@@ -747,14 +718,7 @@ class form_table extends form_base
 			foreach($this->table["defsort"] as $nr => $dat)
 			{
 				$cl = $this->get_col_for_el($dat["el"]);
-				if ($this->table["defs"][$cl]['el_main_types'][$dat['el']] == 'date')
-				{
-					$_sby["ev_col_".$cl] = "el_".$dat["el"];
-				}
-				else
-				{
-					$_sby["ev_col_".$cl] = "ev_".$dat["el"];
-				}
+				$_sby["ev_col_".$cl] = "ev_".$dat["el"];
 				$_sord["ev_col_".$cl] = $dat["type"];
 				$_sord["ev_".$dat["el"]] = $dat["type"];
 			}
@@ -922,7 +886,7 @@ class form_table extends form_base
 					}
 				}
 			}
-			$form = get_instance("formgen/form");
+			$form = new form;
 			// here we must find the value for the element($this->table["show_second_table_search_val_el"]) that was on the row
 			// we clicked on
 			// we do that like this - we add the entry_id and form_id of the row to the search url
@@ -1088,17 +1052,12 @@ class form_table extends form_base
 			// we need to check if the first element in the column is numeric - if it is, then we must sort that col numerically
 			if (is_array($cc["els"]))
 			{
-				reset($cc['els']);
-				list(,$elid) = each($cc['els']);
-				if ($cc['el_main_types'][$elid] == 'date')
+				reset($cc["els"]);
+				list(,$elid) = each($cc["els"]);
+				if ($cc["el_types"][$elid] == "int")
 				{
-					$numericattr = ' type="time" format="d.m.y / H:i" numeric="yes"';
-				}
-				else
-				if ($cc['el_types'][$elid] == 'int')
-				{
-					$numericattr = " numeric=\"1\" thousands_sep=\"".$cc['thousands_sep']."\"";
-				}
+					$numericattr = " numeric=\"1\" thousands_sep=\"".$cc["thousands_sep"]."\"";
+				};
 			}
 			
 			$title = $cc["lang_title"][aw_global_get("lang_id")];
@@ -1388,7 +1347,6 @@ class form_table extends form_base
 				foreach($formels as $k_elid => $v_eldata)
 				{
 					$els[$k_elid]=$formid;
-					$elsubtypes[$formid][$k_elid]["type"]=$v_eldata["type"];
 					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
 					$elsubtypes[$formid][$k_elid]["thousands_sep"]=$v_eldata["thousands_sep"];
 				};
@@ -1766,7 +1724,7 @@ class form_table extends form_base
 
 	function do_menu()
 	{
-		$tpl = get_instance("aw_template");
+		$tpl = new aw_template;
 		$tpl->tpl_init("forms");
 		$tpl->read_template("fg_table_menu.tpl");
 
@@ -1922,7 +1880,6 @@ class form_table extends form_base
 						"el_ord" => $this->table["defs"][$col]["el_ord"][$el],
 						"el_id" => $el,
 						"el_sep" => $this->table["defs"][$col]["el_sep"][$el],
-						"el_sep_pre" => $this->table["defs"][$col]["el_sep_pre"][$el],
 						"el_show" => checked($this->table["defs"][$col]["el_show"][$el]),
 						"el_search" => checked($this->table["defs"][$col]["el_search"][$el])
 					));
@@ -2059,7 +2016,6 @@ class form_table extends form_base
 				foreach($formels as $k_elid => $v_eldata)
 				{
 					$els[$k_elid]=$formid;
-					$elsubtypes[$formid][$k_elid]["type"]=$v_eldata["type"];
 					$elsubtypes[$formid][$k_elid]["subtype"]=$v_eldata["subtype"];
 					$elsubtypes[$formid][$k_elid]["thousands_sep"]=$v_eldata["thousands_sep"];
 				};
@@ -2074,7 +2030,6 @@ class form_table extends form_base
 			{
 				$this->table["defs"][$i]["el_forms"][$elid] = $els[$elid];
 				$this->table["defs"][$i]["el_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["subtype"];
-				$this->table["defs"][$i]["el_main_types"][$elid] = $elsubtypes[$els[$elid]][$elid]["type"];
 
 				// if the damn element is a "formel" then we gots to figure out the damn thing's form 
 				// so that when we show the damn thing, we will know what damn form to load the damn thing from. 
