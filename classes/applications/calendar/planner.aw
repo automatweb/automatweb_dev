@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.13 2004/08/31 11:33:29 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.14 2004/08/31 15:05:44 sven Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -380,6 +380,10 @@ class planner extends class_base
 				$data["value"] = $arr["request"]["search"];
 			break;
 			case "event_search_add":
+				if(!$arr["request"]["search"] == 1)
+				{
+					return PROP_IGNORE;
+				}
 				if($arr["request"]["event_search_add"])
 				{
 					$data["value"] = $arr["request"]["event_search_add"];
@@ -2059,7 +2063,6 @@ class planner extends class_base
 		{
 			$params["class_id"] = $this->event_entry_classes;
 		}
-		
 		
 		$event_ol = new object_list($params);
 		return $event_ol;
