@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.5 2003/05/21 12:45:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.6 2003/08/18 14:20:42 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -362,7 +362,7 @@ class period extends class_base
 			// yes, this will take a query, but this will not be done often, only when the user switches periods
 			$r_act_per = $this->get_active_period();
 
-			if ($r_act_per = $act_per_id)
+			if ($r_act_per == $act_per_id)
 			{
 				$in_archive = false;
 			}
