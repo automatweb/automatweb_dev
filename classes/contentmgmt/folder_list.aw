@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.6 2004/05/12 13:47:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.7 2004/05/19 16:17:43 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -15,13 +15,16 @@
 @caption Kujundusmall
 
 @property sort_by type=select field=meta method=serialize
-@caption Mille j&auml;rgi sortida
+@caption Kuidas sortida
 
 @property show_comment type=chooser field=meta method=serialize
 @caption N&auml;ita kausta all
 
 @property no_folder_links type=checkbox ch_value=1 field=meta method=serialize
 @caption &Auml;ra lingi katalooge
+
+@property only_act type=checkbox ch_value=1 field=meta method=serialize
+@caption N&auml;ita ainult aktiivseid katalooge
 
 @reltype FOLDER clid=CL_MENU value=1
 @caption juurkataloog
@@ -114,7 +117,8 @@ class folder_list extends class_base
 		$ol = new object_list(array(
 			"parent" => $ob->prop("rootmenu"),
 			"class_id" => CL_MENU,
-			"sort_by" => $sby
+			"sort_by" => $sby,
+			"status" => $ob->prop("only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE)
 		));
 
 		$ssh = get_instance("contentmgmt/site_show");
@@ -129,7 +133,8 @@ class folder_list extends class_base
 				$sol = new object_list(array(
 					"parent" => $o->id(),
 					"class_id" => CL_MENU,
-					"sort_by" => $sby
+					"sort_by" => $sby,
+					"status" => $ob->prop("only_act") ? STAT_ACTIVE : array(STAT_ACTIVE, STAT_NOTACTIVE)
 				));
 				for ($so = $sol->begin(); !$sol->end(); $so = $sol->next())
 				{

@@ -26,7 +26,7 @@
             <type>select</type>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Mille j&amp;auml;rgi sortida</caption>
+            <caption>Kuidas sortida</caption>
       </property>
       <property>
             <name>show_comment</name>
@@ -46,6 +46,16 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>&amp;Auml;ra lingi katalooge</caption>
+      </property>
+      <property>
+            <name>only_act</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>N&amp;auml;ita ainult aktiivseid katalooge</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FOLDER_LIST</syslog_type>
