@@ -1,11 +1,27 @@
 <table border="0" cellspacing="1" cellpadding="0" width=100%>
 <tr>
-<td class="fgtitle">
+<td class="header4">
 <b>{VAR:LC_MSGBOARD_BIG_SUBJECT}:</b>
+<a href="{VAR:newtopic_link}">Uus teema</a> |
+<a href="{VAR:search_link}">Otsi</a> |
+<a href="{VAR:forum_link}">Teemad</a> |
 <a href="{VAR:threaded_link}">Threaded</a>
 </td>
 </tr>
 </table>
+<!-- SUB: TOPIC -->
+<table border="0" cellspacing="1" cellpadding="0" width="100%">
+<tr>
+<td bgcolor="#ffffff" class="header4"><b>Teema:</b> {VAR:topic}</td>
+<td bgcolor="#ffffff" class="header4"><b>Postitas:</b> {VAR:from} @ {VAR:created}</td>
+</tr>
+<tr>
+<td bgcolor="#FFFFFF" class="header4" colspan="2">
+{VAR:text}
+</td>
+</tr>
+</table>
+<!-- END SUB: TOPIC -->
 <br>
 <!-- SUB: message -->
 <table width="500" border="0" cellspacing="0" cellpadding="0">
