@@ -8,11 +8,10 @@
 					<optional name="date"/>
 					<optional name="type"/>
 					<optional name="ctrl" type="int"/>
-					<optional name="ctrle" type="int"/>
 				</arguments>
 			</function>
 		</action>
-		
+
 		<action name="redir">
 			<function name="redir">
 				<arguments>
