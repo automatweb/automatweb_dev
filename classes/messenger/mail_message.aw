@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.29 2004/05/24 10:53:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.30 2004/06/11 08:50:04 kristo Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -998,9 +998,7 @@ class mail_message extends class_base
 				$args["id"]);
 		$this->db_query($q);
 		$row = $this->db_next();
-		$row["meta"] = $this->get_object_metadata(array(
-			"metadata" => $row["metadata"]
-		));
+		$row["meta"] = aw_unerialize($row["metadata"]);
 		// get subject from object name, since that is where the new mail_message class keeps
 		// it -- duke
 		if (empty($row["subject"]) && !empty($row["name"]))
