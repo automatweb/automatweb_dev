@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.111 2003/05/29 15:33:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.112 2003/05/29 16:18:17 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2498,8 +2498,8 @@ class planner extends class_base
                                 "name" => "today",
                                 "tooltip" => "Täna",
                                 "url" => $this->day_orb_link . "&date=$dt",
-                                "img" => "today.gif",
-                                "imgover" => "today_over.gif",
+                                "img" => "icon_cal_today.gif",
+                                "imgover" => "icon_cal_today_over.gif",
                                 "class" => "menuButton",
                         ));
 			
