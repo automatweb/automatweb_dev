@@ -80,6 +80,10 @@ href="javascript:this.document.imageadd.submit();">Salvesta</a>
 	<td class="celltext"><input type="text" size="28" name="comment" value='{VAR:comment}' class="formtext"></td>
 </tr>
 <tr>
+	<td class="celltext" align="right">Alt:</td>
+	<td class="celltext"><input type="text" size="28" name="alt" value='{VAR:alt}' class="formtext"></td>
+</tr>
+<tr>
 	<td class="celltext" align="right">Link:</td>
 	<td class="celltext"><input type="text" size="28" name="link" value='{VAR:link}' class="formtext"></td>
 </tr>

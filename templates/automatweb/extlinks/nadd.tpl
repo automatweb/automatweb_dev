@@ -110,6 +110,11 @@ href="javascript:this.document.b88.submit();">Salvesta<!--{VAR:LC_EXTLINKS_ADD} 
 </tr>
 <tr>
 	<td colspan=2 class="celltext">
+			Alt: <input type='text' size='30' name='alt' value="{VAR:alt}">
+	</td>
+</tr>
+<tr>
+	<td colspan=2 class="celltext">
 		Pilt on aktiivne: <input type='checkbox' name='link_image_check_active' value='1' {VAR:link_image_check_active}><br>
 		{VAR:link_image_active_until}
 	</td>
