@@ -783,6 +783,13 @@ class form_controller extends form_base
 		$fc = preg_replace("/{include:(.*)}/eU","\$this->_incl_file(\\1)",$fc);
 		return $fc;
 	}
+
+	function parse_alias($args = array())
+	{
+		extract($args);
+
+		return $this->eval_controller($alias["target"]);
+	}
 }
 
 ?>
