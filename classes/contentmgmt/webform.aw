@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.49 2005/01/25 09:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.50 2005/01/27 14:18:39 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -9,27 +9,32 @@
 
 ------------- general -------------
 @default group=general
+@default method=serialize
+@default field=meta
 
 @property on_init type=hidden newonly=1
 @caption Initsialiseeri objekt
 
-@property form_type type=select newonly=1 method=serialize field=meta
+@property form_type type=select newonly=1
 @caption Vormi t&uuml;&uuml;p
 
 @property form_type_value type=text editonly=1
 @caption Vormi t&uuml;&uuml;p
 
-@property def_name type=textbox method=serialize field=meta
+@property def_name type=textbox
 @caption Saatja nimi
 
-@property def_mail type=textbox method=serialize field=meta
+@property def_mail type=textbox
 @caption Saatja e-mail
 
-@property obj_name type=select multiple=1 size=3 field=meta method=serialize
+@property obj_name type=select multiple=1 size=3
 @caption Millised sisestatud v&auml;&auml;rtused pannakse nimeks
 
-@property redirect type=textbox field=meta method=serialize
+@property redirect type=textbox
 @caption Kuhu suunata peale t&auml;tmist
+
+@property error_location type=chooser multiple=1 default=0
+@caption Kuva veateateid
 
 ------------- end: general -------------
 
@@ -50,31 +55,33 @@
 
 ------------- props -------------
 @groupinfo props caption="Omadused" submit=no
+@default group=props
 
-@property availtoolbar type=toolbar group=props no_caption=1
+@property availtoolbar type=toolbar no_caption=1
 @caption Toolbar
 
-@property props type=callback callback=callback_props group=props no_caption=1
+@property props type=callback callback=callback_props no_caption=1
 @caption Omadused
 ------------- end: props -------------
 
 
 ------------- styles -------------
 @groupinfo styles caption="Stiilid"
+@default group=styles
 
-@property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER field=meta method=serialize group=styles
+@property style_folder type=relpicker reltype=RELTYPE_STYLE_FOLDER
 @caption Stiilide kaust
 
-@property def_caption_style type=select group=styles field=meta method=serialize
+@property def_caption_style type=select
 @caption Vaikimisi pealkirja stiil
 
-@property def_prop_style type=select group=styles field=meta method=serialize
+@property def_prop_style type=select
 @caption Vaikimisi elemendi stiil
 
-@property def_form_style type=select group=styles field=meta method=serialize
+@property def_form_style type=select
 @caption Tabeli stiil
 
-@property styles type=callback callback=callback_styles group=styles no_caption=1
+@property styles type=callback callback=callback_styles no_caption=1
 @caption Stiilid
 ------------- end: styles -------------
 
@@ -102,8 +109,9 @@
 
 ------------- search -------------
 @groupinfo search caption="Otsing" parent=show_entries submit_method=get submit=no
+@default group=set_controllers
 
-@property search type=text store=no no_caption=1 group=search
+@property search type=text no_caption=1
 @caption Otsing
 ------------- end: search -------------
 
@@ -113,22 +121,24 @@
 
 ------------- set_controllers -------------
 @groupinfo set_controllers caption="Salvestamine" parent=controllers
+@default group=set_controllers
 
-@property set_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=set_controllers
+@property set_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER
 @caption Kontrollerite kaust
 
-@property submit_controllers type=callback callback=callback_submit_controllers group=set_controllers no_caption=1
+@property submit_controllers type=callback callback=callback_submit_controllers no_caption=1
 @caption Kontrollerid
 ------------- end: set_controllers -------------
 
 
 ------------- get_controllers -------------
 @groupinfo get_controllers caption="Näitamine" parent=controllers
+@default group=get_controllers
 
-@property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER field=meta method=serialize group=get_controllers
+@property get_controller_folder type=relpicker reltype=RELTYPE_CONTROLLER_FOLDER
 @caption Kontrollerite kaust
 
-@property view_controllers type=callback callback=callback_view_controllers group=get_controllers no_caption=1
+@property view_controllers type=callback callback=callback_view_controllers no_caption=1
 @caption Kontrollerid
 ------------- end: get_controllers -------------
 
@@ -269,6 +279,14 @@ class webform extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "error_location":
+				$prop["options"] = array(
+					0 => t("Elementide kohale"),
+					1 => t("Vormi kohale"),
+					2 => t("Vormi alla"),
+				);
+				break;
+
 			case "form_type_value":
 				$prop["value"] = $arr["obj_inst"]->prop("form_type") != CL_CALENDAR_REGISTRATION_FORM ? t("Tavaline vorm") : t("Sündmusele registreerimine");
 				break;
@@ -1011,15 +1029,16 @@ class webform extends class_base
 			$sc = "";
 			foreach($proplist as $property)
 			{
+				$clf1 = $clf2 = "";
 				$cnt++;
 				$prpdata = $this->cfgform_i->all_props[$property["name"]];
 				if (!$prpdata)
 				{
 					continue;
-				};
+				}
 				$used_props[$property["name"]] = 1;
 				$this->vars(array(
-					"bgcolor" => $cnt % 2 ? "#EEEEEE" : "#FFFFFF",
+					"bgcolor" => $cnt % 2 ? "#C9C9C9" : "#FFFFFF",
 					"prp_caption" => $property["caption"],
 					"prp_type" => $this->trans_names[$prpdata["type"]],
 					"prp_key" => $prpdata["name"],
@@ -1072,20 +1091,19 @@ class webform extends class_base
 							"ordering" => "",
 						));
 					}
-					$this->vars(array(
-						"clf1" => $this->parse("clf1"),
-					));
+					$clf1 = $this->parse("clf1");
 				}
-				else
+				elseif($prpdata["type"] == "text")
 				{
 					$this->vars(array(
-						"clf_type" => "",
-						"prp_metas" => "",
-						"metamgr_link" => "",
-						"clf1" => "",
-						"predefs" => "",
+						"prp_value" => "sadffgfdgdf",
 					));
+					$clf2 = $this->parse("clf2");
 				}
+				$this->vars(array(
+					"clf1" => $clf1,
+					"clf2" => $clf2,
+				));
 				$sc .= $this->parse("property");
 			}
 			$this->vars(array(
@@ -1268,7 +1286,6 @@ class webform extends class_base
 		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 		$errors = aw_global_get("wf_errors");
 		$values = aw_global_get("wf_data");
-		
 		if(strpos(strtolower($_SERVER["REQUEST_URI"]), "/automatweb") !== false)
 		{
 			$section = html::get_change_url($arr["id"], array(
@@ -1354,29 +1371,65 @@ class webform extends class_base
 		$sel_styles = safe_array($arr["obj_inst"]->meta("styles"));
 		$m_styles = safe_array($arr["obj_inst"]->meta("m_styles"));
 		$errs = safe_array($arr["errors"]);
+		$values = safe_array($arr["values"]);
 		$all_props = safe_array($cfgform->meta("cfg_proplist"));
-		$ret = array();
+		$ret = $errs2 = $errs1 = $sbz = array();
 		$no_sbt = true;
 		foreach($els as $pn => $pd)
 		{
+			$pd["value"] = $values[$pn];
 			if($pd["type"] == "submit")
 			{
+				$sbz[$pn] = $pd;
 				$no_sbt = false;
+				continue;
 			}
+			elseif($pd["type"] == "reset")
+			{
+				$sbz[$pn] = $pd;
+				continue;
+			}
+			$num = 0;
 			if (isset($errs[$pn]))
 			{
-
-				$ret[$pn."_err"] = array(
-					"name" => $pn."_err",
+				$erz = array(
+					"name" => $pn."_err".$num,
 					"type" => "text",
 					"store" => "no",
 					"value" => '<font color="red" class="st'.$m_styles["error"].'">'.$errs[$pn]["msg"].'</font>',
 					"no_caption" => 1,
 				);
+				$erloc = safe_array($arr["obj_inst"]->prop("error_location"));
+				if(empty($erloc))
+				{
+					$ret[$pn."_err".$num] = $erz;
+				}
+				else
+				{
+					foreach($erloc as $key => $erx)
+					{
+						switch($key)
+						{
+							case 1:
+								$errs1[$pn."_err".$num] = $erz;
+								$errs1[$pn."_err".$num]["name"] = $pn."_err".$num;
+								break;
+							case 2:
+								$errs2[$pn."_err".$num] = $erz;
+								$errs2[$pn."_err".$num]["name"] = $pn."_err".$num;
+								break;
+							default:
+								$ret[$pn."_err".$num] = $erz;
+								$ret[$pn."_err".$num]["name"] = $pn."_err".$num;
+								break;
+						}
+						$num++;
+					}
+				}
 			}
 			$ret[$pn] = $pd;
 		}
-		$els = $ret;
+		$els = $errs1 + $ret + $errs2 + $sbz;
 		// special case n shit
 		if($no_sbt)
 		{
@@ -1527,15 +1580,9 @@ class webform extends class_base
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->prop("redirect");
 		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
-		if(!$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE"))
-		{
-			return $rval;
-		}
-		if(!$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM"))
-		{
-			return $rval;
-		}
-		
+		$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
+		$cfgform = $obj_inst->get_first_obj_by_reltype("RELTYPE_CFGFORM");
+		$register = $obj_inst->get_first_obj_by_reltype("RELTYPE_REGISTER");
 		$prplist = safe_array($cfgform->meta("cfg_proplist"));
 		$cf = $cfgform->instance();
 		$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
@@ -1610,7 +1657,7 @@ class webform extends class_base
 					list($choices,,) = $cls->get_choices(array(
 						"clid" => CL_REGISTER_DATA,
 						"name" => $key,
-						"obj_inst" => $o,
+						"object_type_id" => $object_type->id(),
 					));
 					$choices = $choices->names();
 					$vals = array();
@@ -1621,7 +1668,7 @@ class webform extends class_base
 					}
 					$arr[$key] = implode(", ", $vals);
 				}
-				if(!in_array($prplist[$key]["type"], $no_trans))
+				if(!in_array($prplist[$key]["type"], $no_trans) && !empty($arr[$key]))
 				{
 					$body .= $prplist[$key]["caption"].": ".$arr[$key]."\n";
 				}
@@ -1662,8 +1709,8 @@ class webform extends class_base
 				) + $prx);
 				$awm->gen_mail();
 			}
+			return $rval;
 		}
-		return $rval;
 	}
 	
 	function _insert_event_inf($e, $o)

@@ -4,86 +4,100 @@
             <name>on_init</name>
             <table>objects</table>
             <group>general</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>hidden</type>
             <newonly>1</newonly>
-            <field>on_init</field>
             <caption>Initsialiseeri objekt</caption>
       </property>
       <property>
             <name>form_type</name>
             <table>objects</table>
             <group>general</group>
-            <type>select</type>
-            <newonly>1</newonly>
             <method>serialize</method>
             <field>meta</field>
+            <type>select</type>
+            <newonly>1</newonly>
             <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>form_type_value</name>
             <table>objects</table>
             <group>general</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
             <editonly>1</editonly>
-            <field>form_type_value</field>
             <caption>Vormi t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>def_name</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
+            <type>textbox</type>
             <caption>Saatja nimi</caption>
       </property>
       <property>
             <name>def_mail</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
             <method>serialize</method>
             <field>meta</field>
+            <type>textbox</type>
             <caption>Saatja e-mail</caption>
       </property>
       <property>
             <name>obj_name</name>
             <table>objects</table>
             <group>general</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>select</type>
             <multiple>1</multiple>
             <size>3</size>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Millised sisestatud v&amp;auml;&amp;auml;rtused pannakse nimeks</caption>
       </property>
       <property>
             <name>redirect</name>
             <table>objects</table>
             <group>general</group>
-            <type>textbox</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>textbox</type>
             <caption>Kuhu suunata peale t&amp;auml;tmist</caption>
+      </property>
+      <property>
+            <name>error_location</name>
+            <table>objects</table>
+            <group>general</group>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Kuva veateateid</caption>
       </property>
       <property>
             <name>navtoolbar</name>
             <table>objects</table>
             <group>form</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>navtoolbar</field>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>form</name>
             <table>objects</table>
             <group>form</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_form</callback>
             <no_caption>1</no_caption>
-            <field>form</field>
             <caption>Vorm</caption>
       </property>
       <property>
@@ -93,86 +107,91 @@
                   <num_0>form</num_0>
                   <num_1>props</num_1>
             </group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>hidden</type>
             <store>no</store>
-            <field>subaction</field>
             <caption>Subaction</caption>
       </property>
       <property>
             <name>availtoolbar</name>
             <table>objects</table>
             <group>props</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>availtoolbar</field>
             <caption>Toolbar</caption>
       </property>
       <property>
             <name>props</name>
             <table>objects</table>
             <group>props</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_props</callback>
             <no_caption>1</no_caption>
-            <field>props</field>
             <caption>Omadused</caption>
       </property>
       <property>
             <name>style_folder</name>
             <table>objects</table>
             <group>styles</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Stiilide kaust</caption>
       </property>
       <property>
             <name>def_caption_style</name>
             <table>objects</table>
             <group>styles</group>
-            <type>select</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
             <caption>Vaikimisi pealkirja stiil</caption>
       </property>
       <property>
             <name>def_prop_style</name>
             <table>objects</table>
             <group>styles</group>
-            <type>select</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
             <caption>Vaikimisi elemendi stiil</caption>
       </property>
       <property>
             <name>def_form_style</name>
             <table>objects</table>
             <group>styles</group>
-            <type>select</type>
-            <field>meta</field>
             <method>serialize</method>
+            <field>meta</field>
+            <type>select</type>
             <caption>Tabeli stiil</caption>
       </property>
       <property>
             <name>styles</name>
             <table>objects</table>
             <group>styles</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_styles</callback>
             <no_caption>1</no_caption>
-            <field>styles</field>
             <caption>Stiilid</caption>
       </property>
       <property>
             <name>preview</name>
             <table>objects</table>
             <group>preview</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_preview</callback>
             <no_caption>1</no_caption>
-            <field>preview</field>
             <caption>Eelvaade</caption>
       </property>
       <property>
@@ -182,70 +201,74 @@
                   <num_0>entries</num_0>
                   <num_1>search</num_1>
             </group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>entries_toolbar</field>
             <caption>Sisestuste toolbar</caption>
       </property>
       <property>
             <name>entries</name>
             <table>objects</table>
             <group>entries</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <field>entries</field>
             <caption>Sisestused</caption>
       </property>
       <property>
             <name>search</name>
             <table>objects</table>
-            <group>search</group>
+            <group>set_controllers</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>text</type>
-            <store>no</store>
             <no_caption>1</no_caption>
-            <field>search</field>
             <caption>Otsing</caption>
       </property>
       <property>
             <name>set_controller_folder</name>
             <table>objects</table>
             <group>set_controllers</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTROLLER_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kontrollerite kaust</caption>
       </property>
       <property>
             <name>submit_controllers</name>
             <table>objects</table>
             <group>set_controllers</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_submit_controllers</callback>
             <no_caption>1</no_caption>
-            <field>submit_controllers</field>
             <caption>Kontrollerid</caption>
       </property>
       <property>
             <name>get_controller_folder</name>
             <table>objects</table>
             <group>get_controllers</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_CONTROLLER_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
             <caption>Kontrollerite kaust</caption>
       </property>
       <property>
             <name>view_controllers</name>
             <table>objects</table>
             <group>get_controllers</group>
+            <method>serialize</method>
+            <field>meta</field>
             <type>callback</type>
             <callback>callback_view_controllers</callback>
             <no_caption>1</no_caption>
-            <field>view_controllers</field>
             <caption>Kontrollerid</caption>
       </property>
       <classinfo>
