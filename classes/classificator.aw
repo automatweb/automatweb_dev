@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.10 2004/03/23 16:12:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.11 2004/03/24 12:44:41 duke Exp $
 
 /*
 
@@ -118,7 +118,7 @@ class classificator extends class_base
 				$prop["options"] = array("" => "") + $choices->names();
 		};
 
-		return array($prop);
+		return array($prop["name"] => $prop);
 		// well, that was pretty easy. Now I need a way to tell the bloody classificator, that
 		// it should use connections instead of field. And what could be easier than doing
 		// it where the classificator is defined. ajee!
