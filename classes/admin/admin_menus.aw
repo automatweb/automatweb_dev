@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.75 2004/07/01 13:14:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.76 2004/07/13 08:57:57 rtoomas Exp $
 
 class admin_menus extends aw_template
 {
@@ -219,15 +219,12 @@ class admin_menus extends aw_template
 		$baseurl = $this->cfg["baseurl"];
 		$retval = "";
 
-		if ($obj->class_id() == CL_MENU)
-		{
-			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
-			$this->vars(array(
-				"link" => $ourl,
-				"text" => "Ava"
-			));
-			$retval = $this->parse("MENU_ITEM");
-		}
+		$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj->id(),"period" => $period), "admin_menus",true,true);
+		$this->vars(array(
+			"link" => $ourl,
+			"text" => "Ava"
+		));
+		$retval = $this->parse("MENU_ITEM");
 
 		if ($this->can("edit", $id))
 		{
