@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.3 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/tree_root.aw,v 1.4 2005/03/18 11:46:52 ahti Exp $
 // tree_root.aw - puu rootobjekt
 
 /*
@@ -38,13 +38,13 @@ class tree_root extends class_base
 		if (!empty($oldroot))
 		{
 			$conns = $arr["obj_inst"]->connections_from(array(
-				"type" => RELTYPE_ROOT,
+				"type" => "RELTYPE_ROOT",
 				"to" => $oldroot,
 			));
 			if (0 == sizeof($conns))
 			{
 				$arr["obj_inst"]->connect(array(
-					"reltype" => RELTYPE_ROOT,
+					"reltype" => "RELTYPE_ROOT",
 					"to" => $oldroot,
 				));
 			};

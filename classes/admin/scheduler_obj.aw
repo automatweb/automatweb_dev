@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.3 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.4 2005/03/18 11:46:52 ahti Exp $
 // scheduler.aw - Scheduler
 
 // okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
@@ -67,7 +67,7 @@ class scheduler_obj extends class_base
 	{
 		// use only the first for now
 		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_RECURRENCE,
+			"type" => "RELTYPE_RECURRENCE",
 		));
 
 		if (sizeof($conns) > 0)
@@ -78,7 +78,7 @@ class scheduler_obj extends class_base
 
 		// again, only the first for now
 		$targets = $arr["obj_inst"]->connections_from(array(
-			"type" => RELTYPE_TARGET_OBJ,
+			"type" => "RELTYPE_TARGET_OBJ",
 		));
 
 		if (sizeof($targets) > 0)

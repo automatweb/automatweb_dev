@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.12 2005/01/28 08:36:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.13 2005/03/18 11:46:53 ahti Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -213,17 +213,17 @@ class config_login_menus extends class_base
 
 		$o->connect(array(
 			"to" => $vars["logged_users"],
-			"reltype" => RELTYPE_FOLDER
+			"reltype" => "RELTYPE_FOLDER",
 		));
 
 		$o->connect(array(
 			"to" => $vars["logged_admins"],
-			"reltype" => RELTYPE_FOLDER
+			"reltype" => "RELTYPE_FOLDER",
 		));
 
 		$o->connect(array(
 			"to" => $vars["logged_editors"],
-			"reltype" => RELTYPE_FOLDER
+			"reltype" => "RELTYPE_FOLDER",
 		));
 
 		// and manually set login menu conf as correct

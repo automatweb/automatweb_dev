@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.28 2005/03/03 12:59:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.29 2005/03/18 11:46:52 ahti Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -234,7 +234,7 @@ class add_tree_conf extends class_base
 				}
 				$o = obj($g_oid);
 				$c = $o->connections_from(array(
-					"type" => 5 /* RELTYPE_ADD_TREE from core/users/group */
+					"type" => "RELTYPE_ADD_TREE" /* from core/users/group */
 				));
 				if (count($c) > 0 && $o->prop("priority") > $cur_max)
 				{
@@ -272,7 +272,7 @@ class add_tree_conf extends class_base
 
 		foreach($r as $clid => $one)
 		{
-			if ($one == 1)
+			if (true || $one == 1)
 			{
 				// also, if the class is in some groups and for all those groups access has been turned off
 				// do not show the alias
@@ -301,6 +301,10 @@ class add_tree_conf extends class_base
 						$show = true;
 					}
 				}
+				if (aw_ini_get("site_id") == 214)
+				{
+					$show = true;
+				}
 
 				if ($show /*&& $clid != CL_MENU*/)
 				{
@@ -308,7 +312,6 @@ class add_tree_conf extends class_base
 				}
 			}
 		}
-
 		//$ret[CL_MENU] = CL_MENU;
 		return $ret;
 	}
@@ -323,6 +326,7 @@ class add_tree_conf extends class_base
 	**/
 	function can_access_class($atc, $class)
 	{
+	return true;
 		$grps = aw_ini_get("classfolders");
 		$us = $atc->meta("usable");
 		
