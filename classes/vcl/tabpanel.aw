@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.8 2004/04/22 12:28:22 duke Exp $
+// $Id: tabpanel.aw,v 1.9 2004/05/03 11:22:50 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -90,6 +90,35 @@ class tabpanel extends aw_template
 	}
 
 	////
+	// !Initializes a tabpanel component
+	function init_vcl_property($arr)
+	{
+		$prop = $arr["property"];
+		$prop["vcl_inst"] = $this;
+
+		return array($prop["name"] => $prop);
+		//print "initializing tab panel<br>";
+
+
+
+	}
+
+	function get_html()
+	{
+		// this thing has to return generated html from the component
+		return $this->get_tabpanel();
+
+	}
+
+	function set_style($style_name)
+	{
+		if ($style_name == "with_logo")
+		{
+			$this->read_template("tabs_with_logo.tpl");
+		};
+	}
+
+	////
 	// !Generates and returns the tabpanel
 	// content(string) - contents of active panel
 	function get_tabpanel($args = array())
@@ -113,6 +142,7 @@ class tabpanel extends aw_template
 				$this->vars(array(
 					$prefix . "tabs_L" . $lnr => $this->parse($prefix . "tabs_L" . $lnr),
 				));
+
 			};
 		};
 
