@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.34 2003/02/11 19:18:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.35 2003/02/13 14:31:04 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -184,7 +184,7 @@ class menu extends class_base
 	function get_property($args)
 	{
 		$data = &$args["prop"];
-		$retval = true;
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "type":
