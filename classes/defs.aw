@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.77 2003/01/31 18:23:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.78 2003/02/03 18:59:29 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -706,6 +706,12 @@ if (!defined("DEFS"))
 		function key_exists($key)
 		{
 			return isset($this->arg[$key]);
+		}
+
+		function first()
+		{
+			$this->reset();
+			return $this->next();
 		}
 
 		function to_sql()
