@@ -1,19 +1,19 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>object_chain</class>
-      <func>on_add_alias</func>
-      <param>CL_OBJECT_CHAIN</param>
-</num_0>
-<num_1>
       <class>core/users/group</class>
       <func>on_add_alias_for_group</func>
       <param>CL_GROUP</param>
-</num_1>
-<num_2>
+</num_0>
+<num_1>
       <class>applications/personnel_management/personnel_management_job_offer</class>
       <func>on_connect_to_sector</func>
       <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
+</num_1>
+<num_2>
+      <class>applications/calendar/calendar_registration_form_conf</class>
+      <func>on_rfconnect_to</func>
+      <param>CL_MENU</param>
 </num_2>
 <num_3>
       <class>applications/mailinglist/ml_list</class>
@@ -50,4 +50,9 @@
       <func>on_add_alias</func>
       <param>CL_FORM_ENTRY</param>
 </num_9>
+<num_10>
+      <class>object_chain</class>
+      <func>on_add_alias</func>
+      <param>CL_OBJECT_CHAIN</param>
+</num_10>
 </xml>
