@@ -388,6 +388,11 @@
                   <clid>CL_CRM_PHONE</clid>
                   <caption>Telefon</caption>
             </PHONE>
+            <PROFILE>
+                  <value>14</value>
+                  <clid>CL_PROFIIL</clid>
+                  <caption>Profiil</caption>
+            </PROFILE>
       </reltypes>
 </properties>
 
