@@ -83,6 +83,26 @@
             <method>serialize</method>
             <caption>Kirja sisu</caption>
       </property>
+      <property>
+            <name>text_style</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokumendi pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>comment_style</name>
+            <table>objects</table>
+            <group>styles</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CSS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaatamiste arvu stiil</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_DOCUMENT_STATISTICS</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -95,6 +115,9 @@
             <mail>
                   <caption>E-mail</caption>
             </mail>
+            <styles>
+                  <caption>Stiilid</caption>
+            </styles>
       </groupinfo>
       <reltypes>
             <SHOW_FOLDER>
@@ -107,6 +130,11 @@
                   <clid>CL_PERIOD</clid>
                   <caption>periood</caption>
             </SHOW_PERIOD>
+            <CSS>
+                  <value>3</value>
+                  <clid>CL_CSS</clid>
+                  <caption>css stiil</caption>
+            </CSS>
       </reltypes>
 </properties>
 

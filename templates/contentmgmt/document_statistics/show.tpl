@@ -1,9 +1,4 @@
-<table border="0" cellpadding="0" cellspacing="0">
 <!-- SUB: LINE -->
-	<tr>
-		<td class="leftmenul3"><a href='{VAR:baseurl}/{VAR:docid}'>{VAR:doc_name}</a></td>
-		<td class="leftmenul3">{VAR:hits}</td>
-	</tr>
+<span class="{VAR:doc_style}"><a href='{VAR:baseurl}/{VAR:docid}'>{VAR:doc_name}</a></span><span class="{VAR:hits_style}"> ({VAR:hits})</span> <br>
+<img src='{VAR:baseurl}/automatweb/images/trans.gif' width=2 height=10><br>
 <!-- END SUB: LINE -->
-
-</table>

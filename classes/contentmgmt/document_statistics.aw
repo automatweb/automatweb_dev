@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.9 2004/04/06 08:23:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.10 2004/04/06 15:12:29 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -40,11 +40,22 @@
 @property mail_content type=textarea rows=25 cols=70 field=meta method=serialize group=mail
 @caption Kirja sisu
 
+@groupinfo styles caption="Stiilid"
+
+@property text_style type=relpicker reltype=RELTYPE_CSS field=meta method=serialize group=styles
+@caption Dokumendi pealkirja stiil
+
+@property comment_style type=relpicker reltype=RELTYPE_CSS field=meta method=serialize group=styles
+@caption Vaatamiste arvu stiil
+
 @reltype SHOW_FOLDER value=1 clid=CL_MENU
 @caption kataloog
 
 @reltype SHOW_PERIOD value=2 clid=CL_PERIOD
 @caption periood
+
+@reltype CSS value=3 clid=CL_CSS
+@caption css stiil
 
 */
 
@@ -197,20 +208,30 @@ class document_statistics extends class_base
 	function parse_alias($arr)
 	{
 		// don't show immediately, mark as to be shown
-		return "[document_statistics".$arr["alias"]["target"]."]";
+		$tmp =  "[document_statistics".$arr["alias"]["target"]."]";
+		$ob = obj($arr["alias"]["target"]);
+		if ($ob->prop("text_style"))
+		{
+			active_page_data::add_site_css_style($ob->prop("text_style"));
+		}
+		if ($ob->prop("comment_style"))
+		{
+			active_page_data::add_site_css_style($ob->prop("comment_style"));
+		}
+		return $tmp;
 	}
 
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
-
-		classload("vcl/table");
-		$t = new aw_table();
-
 		$st = $this->get_stat_arr($ob, $arr["yesterday"]);
 				
 
 		$this->read_template("show.tpl");
+		$this->vars(array(
+			"doc_style" => "st".$ob->prop("text_style"),
+			"hits_style" => "st".$ob->prop("comment_style")
+		));
 
 		$l = "";
 
@@ -218,7 +239,7 @@ class document_statistics extends class_base
 		{
 			$o = obj($did);
 			$this->vars(array(
-				"doc_name" => $o->name(),
+				"doc_name" => trim(strip_tags($o->name())),
 				"docid" => $did,
 				"hits" => $hc
 			));
@@ -229,7 +250,8 @@ class document_statistics extends class_base
 		$this->vars(array(
 			"LINE" => $l
 		));
-		return $this->parse();
+		$tmp =  $this->parse();
+		return $tmp;
 	}
 
 	/** adds a hit to the document hit list to the document $docid
