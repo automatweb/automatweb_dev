@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.8 2004/03/25 15:00:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.9 2004/03/30 11:42:14 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -862,6 +862,7 @@ class aw_table extends aw_template
 					//   ));
 					if (isset($v1["callback"]) && is_callable($v1["callback"]))
 					{
+						$v["_this_cell"] = $v1["name"];
 						$val = call_user_func ($v1["callback"], isset($v1['callb_pass_row']) ? $v : $val);
 					}
 
