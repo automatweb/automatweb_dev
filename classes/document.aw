@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.264 2004/06/18 16:23:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.265 2004/06/19 19:15:18 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -293,23 +293,23 @@ class document extends aw_template
 			$doc_o = obj($doc["docid"]);
 		}
 
-                // if oid is in the arguments check whether that object is attached to
-                // this document and display it instead of document
-                $_t_oid = aw_global_get("oid");
-                if ($_t_oid)
-                {
-                        $q = "SELECT * FROM aliases WHERE source = '".$doc_o->brother_of()."' AND target = '$_t_oid' AND type =" . CL_FILE;
-                        $this->db_query($q);
-                        $row = $this->db_next();
-                        if ($row)
-                        {
-                                $fi = get_instance("file");
-                                $fl = $fi->get_file_by_id($_t_oid);
-                                return $fl["content"];
-                        };
-                }
+		// if oid is in the arguments check whether that object is attached to
+		// this document and display it instead of document
+		$_t_oid = aw_global_get("oid");
+		if ($_t_oid)
+		{
+			$q = "SELECT * FROM aliases WHERE source = '".$doc_o->brother_of()."' AND target = '$_t_oid' AND type =" . CL_FILE;
+			$this->db_query($q);
+			$row = $this->db_next();
+			if ($row)
+			{
+				$fi = get_instance("file");
+				$fl = $fi->get_file_by_id($_t_oid);
+				return $fl["content"];
+			};
+		}
 
-		if ($params["tpl_auto"] && !$params["tpl"])
+		if (($params["tpl_auto"] || true) && !$params["tpl"])
 		{
 			// do template autodetect from parent
 			if ($leadonly)
