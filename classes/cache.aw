@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.16 2003/01/21 08:53:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.17 2003/01/21 09:23:12 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -201,8 +201,6 @@ class cache extends core
 		// now get mtime for both files, source and cache
 		$source_mtime = @filemtime($fqfn);
 		$cache_mtime = @filemtime($cachefile);
-
-		$source_mtime = $cache_mtime + 100;
 
 		if ($source_mtime > $cache_mtime)
 		{
