@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.30 2004/04/02 16:40:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.31 2004/04/12 14:07:14 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -29,6 +29,9 @@
 	
 	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Sisu ei cacheta
+	
+	@property promo_tpl type=select table=objects field=meta method=serialize
+	@caption Template (dokumendi sees)
 	
 	@default table=objects
 	@default field=meta
@@ -114,6 +117,13 @@ class promo extends class_base
 		$retval = PROP_OK; 
 		switch($data["name"])
 		{
+			case "promo_tpl":
+				$tm = get_instance("templatemgr");
+				$prop["options"] = $tm->template_picker(array(
+					"folder" => "promo/doctemplates"
+				));
+				break;
+
 			case "tpl_edit":
 				$tplmgr = get_instance("templatemgr");
 				$data["options"] = $tplmgr->get_template_list(array(

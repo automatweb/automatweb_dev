@@ -73,6 +73,15 @@
             <caption>Sisu ei cacheta</caption>
       </property>
       <property>
+            <name>promo_tpl</name>
+            <group>general</group>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Template (dokumendi sees)</caption>
+      </property>
+      <property>
             <name>no_title</name>
             <group>show</group>
             <table>objects</table>
