@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/socket.aw,v 2.4 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/socket.aw,v 2.5 2003/06/06 14:02:16 kristo Exp $
 // socket.aw - low level communications
 // provides functions that can be used by other classes to connect to hosts
 // and read/write information to/from those hosts
@@ -24,7 +24,6 @@ class socket
 		if (not($this->sock))
 		{
 			print "WARNING: Connection to $host:$port failed, $errstr\n";
-			exit;
 		};
 	}
 
@@ -41,7 +40,7 @@ class socket
 		if (not($this->sock))
 		{
 			print "WARNING: No open socket to write to\n";
-			exit;
+			return 0;
 		};
 		
 		if (not(fputs($this->sock, $data, strlen($data))))
