@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.18 2001/08/08 02:25:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.19 2001/08/08 06:06:47 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -195,7 +195,8 @@ class db_config extends aw_template
 					forms.j_order as j_order,
 					forms.j_name AS j_name,
 					forms.j_op AS j_op,
-					forms.j_op2 AS j_op2
+					forms.j_op2 AS j_op2,
+					forms.j_mustfill AS j_mustfill
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
 				WHERE objects.status != 0 AND forms.type = ".FTYPE_ENTRY);
@@ -215,7 +216,8 @@ class db_config extends aw_template
 				"name"		=> $row["j_name"],
 				"order"		=> $row["j_order"],
 				"jops"			=> $this->picker($row["j_op"],$ops[$row["oid"]]),
-				"jops2"			=> $this->picker($row["j_op2"],$ops[$row["oid"]])
+				"jops2"			=> $this->picker($row["j_op2"],$ops[$row["oid"]]),
+				"mf" => checked($row["j_mustfill"] == 1)
 			));
 			if ($row["subtype"] == FSUBTYPE_JOIN)
 			{
@@ -225,11 +227,12 @@ class db_config extends aw_template
 					"NAME"	=> $this->parse("NAME"),
 					"OPS"	=> $this->parse("OPS"),
 					"OPS2"	=> $this->parse("OPS2"),
+					"MUSTFILL"	=> $this->parse("MUSTFILL"),
 				));
 			}
 			else
 			{
-				$this->vars(array("GROUP" => "","NAME" => "", "ORDER" => "","OPS" => "","OPS2" => ""));
+				$this->vars(array("GROUP" => "","NAME" => "", "ORDER" => "","OPS" => "","OPS2" => "","MUSTFILL" => ""));
 			}
 			$l.=$this->parse("LINE");
 		}
@@ -254,8 +257,8 @@ class db_config extends aw_template
 			$this->quote($fg);
 			while(list($fid,$v) = each($sf))
 			{
-				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s', j_op = '%s',j_op2 = '%s' WHERE id = $fid",
-					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid],$fp[$fid],$fp2[$fid]);
+				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s', j_op = '%s',j_op2 = '%s',j_mustfill='%s' WHERE id = $fid",
+					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid],$fp[$fid],$fp2[$fid],$mf[$fid]);
 				$this->db_query($q);
 			}
 		}
