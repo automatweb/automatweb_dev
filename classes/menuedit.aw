@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.48 2001/08/13 14:58:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.49 2001/08/22 16:16:09 cvs Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3257,7 +3257,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			};
 
 			$is_mid = false;
-			if ($row["mid"] == 1 && !in_array($parent,$path))
+			if ($row["mid"] == 1 && !in_array($row["parent"],$path))
 			{
 				// keskel olevad menyyd peavad ignoreerima seda et neid igaljuhul n2idatakse
 				$no_mid = true;
@@ -3312,18 +3312,29 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 
 			$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
+
+			if ( isset($row["img_url"]) && ($row["img_url"] != "") )
+			{
+				$imgurl = preg_replace("/^http:\/\/.*\//","/",$row["img_url"]);
+				$imgurl = sprintf("<img src='%s' border='0'>",$imgurl);
+			}
+			else
+			{
+				$imgurl = "";
+			};
 			$this->vars(array(
 				"text" 		=> $row["name"],
 				"link" 		=> $link,
 				"section"	=> $row["oid"],
 				"target" 	=> $target,
-				"image"		=> (isset($row["img_url"]) && $row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : ""),
+				"image"		=> $imgurl,
 				"cnt" => $cnt
 			));
 	
 			if ($is_mid)
 			{
 				$l_mid.=$this->parse($mn.$ap);
+				echo "<!-- parsing ",$mn.$ap," -->\n";
 			}
 			else
 			{
@@ -3333,6 +3344,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (!$no_mid)
 			{
 				$this->vars(array($mn."_MID" => ""));
+				echo "<!-- insert mid for $row[name] -->\n";
 			}
 			if ($this->is_template($mn."2"))
 			{
