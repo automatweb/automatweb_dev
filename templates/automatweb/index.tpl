@@ -74,7 +74,7 @@ div.menuBar a.menuButton,
 div.menu,
 div.menu a.menuItem {
   font-family: "MS Sans Serif", Arial, sans-serif;
-  font-size: 8pt;
+  font-size: 11pt;
   font-style: normal;
   font-weight: normal;
   color: #000000;
@@ -91,7 +91,6 @@ div.menuBar a.menuButton {
   cursor: default;
   left: 0px;
   margin: 1px;
-  position: relative;
   text-decoration: none;
   top: 0px;
   z-index: 100;
