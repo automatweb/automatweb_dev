@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.15 2002/09/17 15:58:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.16 2002/09/26 16:22:32 duke Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -97,6 +97,10 @@ class calendar extends aw_template
 		$day_end = new date_edit("day_end");
                 $day_end->configure(array("hour" => 1, "minute" => 1));
 
+		$css = get_instance("css");
+		$styles = $css->get_select();
+
+
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		if (is_array($obj["meta"]["day_start"]))
 		{
@@ -132,6 +136,12 @@ class calendar extends aw_template
 			"docid" => $doc["oid"],
 			"docname" => $doc["name"],
 			"doc_link" => $this->mk_my_orb("search_document",array("id" => $id, "return_url" => urlencode($return_url))),
+			"header_styles" => $this->picker($obj["meta"]["header_style"],$styles),
+			"weekday_styles" => $this->picker($obj["meta"]["weekday_style"],$styles),
+			"weekend_styles" => $this->picker($obj["meta"]["weekend_style"],$styles),
+			"day_styles" => $this->picker($obj["meta"]["day_style"],$styles),
+			"act_day_styles" => $this->picker($obj["meta"]["act_day_style"],$styles),
+			"cel_day_styles" => $this->picker($obj["meta"]["cel_day_style"],$styles),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
                 ));
 
@@ -158,6 +168,12 @@ class calendar extends aw_template
 					"target_element" => $target_element,
 					"day_start" => $day_start,
 					"day_end" => $day_end,
+					"header_style" => $header_style,
+					"weekday_style" => $weekday_style,
+					"weekend_style" => $weekend_style,
+					"day_style" => $day_style,
+					"act_day_style" => $act_day_style,
+					"cel_day_style" => $cel_day_style,
 				),
 			));
 		}
@@ -603,6 +619,26 @@ class calendar extends aw_template
 		global $d;
 		$date = $d;
 
+		$s = get_instance("css");
+		$obj = $this->get_object($target);
+
+		// sue me
+		$header_style = $this->get_object($obj["meta"]["header_style"]);
+		$weekday_style = $this->get_object($obj["meta"]["weekday_style"]);
+		$weekend_style = $this->get_object($obj["meta"]["weekend_style"]);
+		$day_style = $this->get_object($obj["meta"]["day_style"]);
+		$act_day_style = $this->get_object($obj["meta"]["act_day_style"]);
+		$cel_day_style = $this->get_object($obj["meta"]["cel_day_style"]);
+
+		$css = "<style>\n";
+		$css .= $s->_gen_css_style("style" . $header_style["oid"],$header_style["meta"]["css"]);
+		$css .= $s->_gen_css_style("style" . $weekday_style["oid"],$weekday_style["meta"]["css"]);
+		$css .= $s->_gen_css_style("style" . $weekday_style["oid"],$weekend_style["meta"]["css"]);
+		$css .= $s->_gen_css_style("style" . $day_style["oid"],$day_style["meta"]["css"]);
+		$css .= $s->_gen_css_style("style" . $act_day_style["oid"],$act_day_style["meta"]["css"]);
+		$css .= $s->_gen_css_style("style" . $cel_day_style["oid"],$cel_day_style["meta"]["css"]);
+		$css .= "</style>";
+
 		if (isset($date))
 		{
 			list($dd,$mm,$yy) = explode("-",$date);
@@ -643,9 +679,21 @@ class calendar extends aw_template
 		// generate the calendar
 		$header = "";
 		$line = "";
+		$i = 0;
 		foreach($wdays as $value)
 		{
+			$i++;
+			if ($i >= 6)
+			{
+				$style = $weekend_style["oid"];
+			}
+			else
+			{
+				$style = $weekday_style["oid"];
+			};
+
 			$this->vars(array(
+				"weekday_style" => "style" . $style,
 				"header_content" => $value,
 			));
 
@@ -663,17 +711,17 @@ class calendar extends aw_template
 			{
 				$cell = "&nbsp;";
 				$empty = true;
-				$color = "#FFFFFF";
+				$style = $day_style["oid"];
 			}
-			elseif ($zz == $day)
+			elseif ($zz == (int)$day)
 			{
 				$cell = $zz;
-				$color = "#FFCC66";
+				$style = $act_day_style["oid"];
 			}
 			else
 			{
 				$cell = $zz;
-				$color = "#FFFFFF";
+				$style = $day_style["oid"];
 			}
 
 			if (!$empty)
@@ -682,9 +730,14 @@ class calendar extends aw_template
 				$cell = sprintf("<a href='%s/section=%s/docid=%d/cal=%d/d=%s'>%s</a>",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$date,$cell);
 			};
 
+			if (($i >= 5) && ($zz != (int)$day))
+			{
+				$style = $cel_day_style["oid"];
+			}
+
 			$this->vars(array(
 				"content" => $cell,
-				"bgcolor" => $color,
+				"day_style" => "style" . $style,
 			));
 
 			$line .= $this->parse("cell");
@@ -702,6 +755,7 @@ class calendar extends aw_template
 			{
 				$i++;
 			};
+
 		};
 
 		if ($i < 7)
@@ -712,13 +766,23 @@ class calendar extends aw_template
 			$content .= $this->parse("line");
 		};
 
+		$ts = mktime(0,0,0,$month,$day,$year);
+		$prev_ts = strtotime("-1 month",$ts);
+		$next_ts = strtotime("+1 month",$ts);
+
+		$prev_date = date("d-m-Y",$prev_ts);
+		$next_date = date("d-m-Y",$next_ts);
+
 		$this->vars(array(
 			"month_name" => get_lc_month($month),
 			"header_cell" => $header,
+			"header_style" => "style" . $header_style["oid"],
 			"line" => $content,
+			"prev" => sprintf("%s/section=%s/docid=%d/cal=%d/d=%s",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$prev_date),
+			"next" => sprintf("%s/section=%s/docid=%d/cal=%d/d=%s",aw_ini_get("baseurl"),aw_global_get("section"),$args["target_document"],$args["target"],$next_date),
 		));
 
-		return $this->parse();
+		return $css. $this->parse();
 	}   
 
 	function get_wday_vector()
