@@ -40,6 +40,104 @@
             <group>general</group>
             <caption>Piltide asukoht</caption>
       </property>
+      <property>
+            <name>img_vert</name>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kui pilt on k&amp;otilde;rgem kui laiem</caption>
+      </property>
+      <property>
+            <name>v_tn_width</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>V&amp;auml;ikese pildi laius</caption>
+      </property>
+      <property>
+            <name>v_tn_height</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>V&amp;auml;ikese pildi k&amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>v_width</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Suure pildi laius</caption>
+      </property>
+      <property>
+            <name>v_height</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Suure pildi k&amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>img_horiz</name>
+            <type>text</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kui pilt on laiem kui k&amp;otilde;rgem </caption>
+      </property>
+      <property>
+            <name>h_tn_width</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>V&amp;auml;ikese pildi laius</caption>
+      </property>
+      <property>
+            <name>h_tn_height</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>V&amp;auml;ikese pildi k&amp;otilde;rgus</caption>
+      </property>
+      <property>
+            <name>h_width</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Suure pildi laius</caption>
+      </property>
+      <property>
+            <name>h_height</name>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Suure pildi k&amp;otilde;rgus</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_GALLERY_CONF</syslog_type>
             <relationmgr>yes</relationmgr>

@@ -129,6 +129,16 @@
             <table>objects</table>
       </property>
       <property>
+            <name>import_ftp</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Impordi FTP serverist</caption>
+      </property>
+      <property>
             <name>ftp_host</name>
             <type>textbox</type>
             <field>meta</field>
@@ -163,6 +173,25 @@
             <group>import</group>
             <table>objects</table>
             <caption>FTP Serveri kataloog</caption>
+      </property>
+      <property>
+            <name>import_local</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Impordi kataloogist</caption>
+      </property>
+      <property>
+            <name>local_folder</name>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>import</group>
+            <table>objects</table>
+            <caption>Kataloog</caption>
       </property>
       <property>
             <name>import_overwrite</name>

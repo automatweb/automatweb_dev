@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.2 2003/03/14 13:36:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.3 2003/03/14 16:01:38 kristo Exp $
 
 /*
 
@@ -47,6 +47,9 @@
 
 @property preview type=text field=meta method=serialize group=preview no_caption=1
 
+@property import_ftp type=checkbox ch_value=1 field=meta method=serialize group=import
+@caption Impordi FTP serverist
+
 @property ftp_host type=textbox field=meta method=serialize group=import
 @caption FTP Server
 
@@ -59,8 +62,17 @@
 @property ftp_folder type=textbox field=meta method=serialize group=import
 @caption FTP Serveri kataloog
 
+@property import_local type=checkbox ch_value=1 field=meta method=serialize group=import
+@caption Impordi kataloogist
+
+@property local_folder type=textbox field=meta method=serialize group=import
+@caption Kataloog
+
 @property import_overwrite type=checkbox ch_value=1 field=meta method=serialize group=import
 @caption Importimisel kirjuta olemasolevad pildid &uuml;le
+
+@property import_add_pages type=checkbox ch_value=1 field=meta method=serialize group=import
+@caption Importimisel lisa vajadusel lehek&uuml;lgi
 
 @property do_import type=submit field=meta method=serialize group=import value=Impordi
 
@@ -225,12 +237,14 @@ class gallery_v2 extends class_base
 			'ord' => $pd['ord'],
 		));
 
+		$this->vars(array("HAS_IMG" => ""));
 		if ($pd['tn']['id'])
 		{
 			$this->vars(array(
 				"HAS_IMG" => $this->parse("HAS_IMG")
 			));
 		}
+		$this->vars(array("BIG" => ""));
 		if ($pd['img']['id'])
 		{
 			$this->vars(array(
@@ -273,42 +287,304 @@ class gallery_v2 extends class_base
 		return PROP_OK;
 	}
 
-	function callback_pre_save($arr)
+	function callback_post_save($arr)
 	{
-		$meta =& $arr["coredata"]["metadata"];
-		if ($meta['do_import'] != "" && $meta['ftp_user'] != "" && $meta['ftp_host'] != "" && $meta['ftp_pass'] != "")
+		$ob = $this->get_object($arr["id"]);
+		$meta = $ob['meta'];
+
+		if ($meta['do_import'] != "")
 		{
-			$cu = "ftp://".$meta['ftp_user'].":".$meta['ftp_pass']."@".$meta['ftp_host'].":".$meta['ftp_folder'];
-			echo "cu = $cu <br>";
-			$ftp = get_instance("core/ftp");
-			if (!$ftp->is_available())
+			set_time_limit(0);
+			if ($meta['import_overwrite'] == 1)
 			{
-				return;
+				$this->_clear_images(&$meta);
 			}
 
-			$ftp->connect(array(
-				"host" => $meta['ftp_host'],
-				"user" => $meta['ftp_user'],
-				"pass" => $meta['ftp_pass'],
-			));
+			if ($meta["import_ftp"] == 1)
+			{
+				$ftp = get_instance("core/ftp");
+				if (!$ftp->is_available())
+				{
+					return;
+				}
+
+				$ftp->connect(array(
+					"host" => $meta['ftp_host'],
+					"user" => $meta['ftp_user'],
+					"pass" => $meta['ftp_pass'],
+				));
+				$files = $ftp->dir_list($meta['ftp_folder']);
+			}
+			else
+			if ($meta["import_local"] == 1)
+			{
+				$files = array();
+				if ($dir = @opendir($meta['local_folder'])) 
+				{
+					while (($file = readdir($dir)) !== false) 
+					{
+						if (!($file == "." || $file == ".."))
+						{
+							$files[] = $file;
+						}
+					}  
+					closedir($dir);
+				}
+			}
 
 			$img = get_instance("image");
-			$img_folder = $this->_get_image_folder($arr["object"]);
+			$img_folder = $this->_get_image_folder($ob);
 
-			$files = $ftp->dir_list($meta['ftp_folder']);
+			$conf = get_instance("contentmgmt/gallery/gallery_conf");
+			$conf_id = $this->_get_conf_for_folder($ob["parent"]);
+			$conf_o = $this->get_object($conf_id);
+
+			echo "Impordin faile, palun oodake... <Br><br>\n\n";
+			flush();
 			foreach($files as $file)
 			{
-				echo "file = $file <br>";
+				echo "Leidsin pildi $file <br>\n";
+				flush();
 
-				$fc = $ftp->get($meta["ftp_folder"]."/".$file);
-				$img->add_file(array(
-					"str" => $ftp->get($meta["ftp_folder"]."/".$file), 
+				if ($meta["import_ftp"] == 1)
+				{
+					$fc = $ftp->get($meta["ftp_folder"]."/".$file);
+				}
+				else
+				if ($meta["import_local"] == 1)
+				{
+					$fc = $this->get_file(array("file" => $meta['local_folder']."/".$file));
+//					echo "got local file <br>";
+				}
+			
+				// get image size
+				// save temp file
+				$tn = tempnam(aw_ini_get("server.tmpdir"), "aw_g_v2_conv");
+				$this->put_file(array(
+					"file" => $tn,
+					"content" => $fc
+				));
+				$img = imagecreatefromjpeg($tn);
+				unlink($tn);
+
+				$i_width = imagesx($img);
+				$i_height = imagesy($img);
+
+				if ($i_width > $i_height)
+				{
+					$tn_width = $conf_o["meta"]["h_tn_width"];
+					$tn_height = $conf_o["meta"]["h_tn_height"];
+					$width = $conf_o["meta"]["h_width"];
+					$height = $conf_o["meta"]["h_height"];
+				}
+				else
+				{
+					$tn_width = $conf_o["meta"]["v_tn_width"];
+					$tn_height = $conf_o["meta"]["v_tn_height"];
+					$width = $conf_o["meta"]["v_width"];
+					$height = $conf_o["meta"]["v_height"];
+				}
+//				echo "before convert, tn_width = $tn_width, tn_height = $tn_height , width = $width, height= $height, i_width = $i_width , i_height = $i_height <BR>";
+
+				if (!$width)
+				{
+					$width = $i_width;
+				}
+				if (!$height)
+				{
+					$height = $i_height;
+				}
+
+				// now convert to pixels
+				if ($width{strlen($width)-1} == "%")
+				{
+					$width = (int)($i_width * (((int)substr($width, 0, -1))/100));
+				}
+				if ($height{strlen($height)-1} == "%")
+				{
+					$height = (int)($i_height * (((int)substr($height, 0, -1))/100));
+				}
+
+				if ($tn_width{strlen($tn_width)-1} == "%")
+				{
+					$tn_width = (int)($width * (((int)substr($tn_width, 0, -1))/100));
+				}
+				if ($tn_height{strlen($tn_height)-1} == "%")
+				{
+					$tn_height = (int)($height * (((int)substr($tn_height, 0, -1))/100));
+				}
+
+//				echo "after convert, tn_width = $tn_width, tn_height = $tn_height , width = $width, height= $height, i_width = $i_width , i_height = $i_height <BR>";
+				
+				// the conf object may specify a different size for images, so resize if necessary
+				if (($width && ($width != $i_width)) || ($height && ($height != $i_height)))
+				{
+//					echo "resize! <br>";
+					$n_img = imagecreatetruecolor($width, $height);
+					imagecopyresized($n_img, $img, 0, 0, 0,0, $width, $height, $i_width, $i_height);
+					imagedestroy($img);
+					$img = $n_img;
+				}
+				
+				// get the image
+				// we gots to do the ob trick here :( sucks!
+				ob_start();
+				imagejpeg($img);
+				$fc = ob_get_contents();
+				ob_end_clean();
+				
+				$img_inst = get_instance("image");
+				$idata = $img_inst->add_image(array(
+					"str" => $fc, 
 					"orig_name" => $file,
 					"parent" => $img_folder
 				));
+//				echo "idata = ".dbg::dump($idata)." <br>";
+
+				// now we gots to make a thumbnail and add that as well.
+				$n_img = imagecreatetruecolor($tn_width, $tn_height);
+//				echo "imagecopyresized from $n_img to $img $tn_width, $tn_height, $width, $height <br>";
+				$res = imagecopyresized($n_img, $img, 0, 0, 0,0, $tn_width, $tn_height, $width, $height);
+//				echo "tn create res = $res <br>";
+				imagedestroy($img);
+				$img = $n_img;
+
+				// get the image
+				// we gots to do the ob trick here :( sucks!
+				ob_start();
+				imagejpeg($img);
+				$fc = ob_get_contents();
+				ob_end_clean();
+				
+				$tn_idata = $img_inst->add_image(array(
+					"str" => $fc, 
+					"orig_name" => $file,
+					"parent" => $img_folder
+				));
+//				echo "tn_idata = ".dbg::dump($tn_idata)." <br>";
+
+				// and now we need to add the image to the first empty slot
+				$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col);
+//				echo "r = ".dbg::dump($r)." <br>";
+				if ($r == false && $meta['import_add_pages'] == 1)
+				{
+					// add page to the end
+					$this->_add_page(&$meta);
+					$r = $this->_get_next_free_pos($meta, $_pg, $_row, $_col);
+//					echo "r after add page = ".dbg::dump($r)." <br>";
+				}
+
+				if ($r != false)
+				{
+					$_pg = $r[0];
+					$_row = $r[1];
+					$_col = $r[2];
+//					echo "free page = $_pg row = $_row , col = $_col <br>";
+					$meta['page_data'][$_pg]['content'][$_row][$_col]['img'] = $idata;
+					$meta['page_data'][$_pg]['content'][$_row][$_col]['tn'] = $tn_idata;
+				}
+			}
+			$meta["do_import"] = "";
+			$this->upd_object(array(
+				"oid" => $arr["id"],
+				"metadata" => $meta
+			));
+			echo "Valmis! <a href='".$this->mk_my_orb("change", array("id" => $arr["id"], "group" => "import"))."'>Tagasi</a><br>\n";
+			die();
+		}
+	}
+
+	function _add_page(&$meta)
+	{
+		$l = get_instance("layout");
+		$page_data = $l->get_layout($meta['def_layout']);
+
+		$meta['num_pages']++;
+		$meta['page_data'][$meta['num_pages']]['layout'] = $page_data;
+	}
+
+	function _get_next_free_pos(&$meta, $page, $row, $col)
+	{
+		// ok, we start from the pos, and scan left->right and up->down and then pages, until we find a place
+		// that is empty
+
+		if (!$page)
+		{
+			$page = 1;
+		}		
+//		echo "gnfp p $page r $row c $col <br>";
+		for ($_page = 1; $_page < $meta['num_pages']; $_page++)
+		{
+			if (!$meta['page_data'][$_page]['layout'])
+			{
+				// insert default layout
+				$l = get_instance("layout");
+				$meta['page_data'][$_page]['layout'] = $l->get_layout($meta['def_layout']);
+			}
+
+//			echo "scanning .. page $_page , rows = ".$meta['page_data'][$_page]['layout']['rows']." <br>";
+			for ($_row = 0; $_row < $meta['page_data'][$_page]['layout']['rows']; $_row++)
+			{
+//				echo "scanning .. page $_page , row $_row ,  cols = ".$meta['page_data'][$_page]['layout']['cols']." <br>";
+				for ($_col = 0; $_col < $meta['page_data'][$_page]['layout']['cols']; $_col++)
+				{
+//					echo "scanning .. page $_page , row = $_row , col = $_col <br>";
+					
+					$col_data = $meta['page_data'][$_page]['content'][$_row][$_col];
+//					echo "col data = ".dbg::dump($col_data)." <br>";
+					if ($_page == $page && $_row >= $row)
+					{
+						if ($_row == $row)
+						{
+							if ($_col >= $col)
+							{
+//								echo "first half = row <br>";
+								if (!$col_data["img"]["id"])
+								{
+//									echo "found it! <br>";
+									return array($_page, $_row, $_col);
+								}
+							}
+						}
+						else
+						{
+//							echo "first page <br>";
+							if (!$col_data["img"]["id"])
+							{
+//								echo "found! <br>";
+								return array($_page, $_row, $_col);
+							}
+						}
+					}
+					else
+					if ($_page > $page)
+					{
+//						echo "other page! <br>";
+						if (!$col_data["img"]["id"])
+						{	
+//							echo "found! <br>";
+							return array($_page, $_row, $_col);
+						}
+					}
+				}
 			}
 		}
-		$meta["do_import"] = "";
+		return false;
+	}
+
+	function _clear_images(&$meta)
+	{
+		for ($_page = 1; $_page < $meta['num_pages']; $_page++)
+		{
+			for ($_row = 0; $_row < $meta['page_data'][$_page]['layout']['rows']; $_row++)
+			{
+				for ($_col = 0; $_col < $meta['page_data'][$_page]['layout']['cols']; $_col++)
+				{
+					$meta['page_data'][$_page]['content'][$_row][$_col]['img'] = array();
+					$meta['page_data'][$_page]['content'][$_row][$_col]['tn'] = array();
+				}
+			}
+		}
 	}
 
 	function _set_edit_cell_content($params, $row, $col, $post_data)

@@ -21,6 +21,37 @@
 @property images_folder type=relpicker field=meta method=serialize reltype=RELTYPE_IMAGES_FOLDER
 @caption Piltide asukoht
 
+@property img_vert type=text field=meta method=serialize
+@caption Kui pilt on k&otilde;rgem kui laiem
+
+@property v_tn_width type=textbox size=5 field=meta method=serialize
+@caption V&auml;ikese pildi laius
+
+@property v_tn_height type=textbox size=5 field=meta method=serialize
+@caption V&auml;ikese pildi k&otilde;rgus
+
+@property v_width type=textbox size=5 field=meta method=serialize
+@caption Suure pildi laius
+
+@property v_height type=textbox size=5 field=meta method=serialize
+@caption Suure pildi k&otilde;rgus
+
+@property img_horiz type=text field=meta method=serialize
+@caption Kui pilt on laiem kui k&otilde;rgem 
+
+@property h_tn_width type=textbox size=5 field=meta method=serialize
+@caption V&auml;ikese pildi laius
+
+@property h_tn_height type=textbox size=5 field=meta method=serialize
+@caption V&auml;ikese pildi k&otilde;rgus
+
+@property h_width type=textbox size=5 field=meta method=serialize
+@caption Suure pildi laius
+
+@property h_height type=textbox size=5 field=meta method=serialize
+@caption Suure pildi k&otilde;rgus
+
+
 */
 
 define("RELTYPE_FOLDER", 1);
