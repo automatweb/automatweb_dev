@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.1 2003/04/03 15:19:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.2 2003/04/08 13:29:52 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -9,6 +9,9 @@
 	@default group=general
 	@default field=meta
 	@default method=serialize
+
+	@property rootnode type=textbox size=10 maxlength=10
+	@caption Juurika ID
 
 	@property outdir type=textbox 
 	@caption Kataloog, kuhu failid kirjutada
@@ -110,6 +113,7 @@ class livelink_import extends class_base
 
 		$this->import_livelink_structure(array(
 			"outdir" => $outdir,
+			"rootnode" => (int)$obj["meta"]["rootnode"],
 			"fileprefix" => $obj["meta"]["fileprefix"],
 		));
 
@@ -120,6 +124,7 @@ class livelink_import extends class_base
 	{
 		$this->tmpdir = aw_ini_get("server.tmpdir");
 		$this->outdir = $args["outdir"];
+		$this->rootnode = $args["rootnode"];
 		$this->fileprefix = $args["fileprefix"];
 
 		$this->docs_to_retrieve = array();
@@ -221,7 +226,8 @@ class livelink_import extends class_base
 	function fetch_structure()
         {
 		$outfile = tempnam($this->tmpdir,"aw-");
-		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=864257&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
+		$rootnode = $this->rootnode;
+		passthru("wget -O $outfile 'https://dok.ut.ee/livelink/livelink?func=LL.login&username=avatud&password=avatud'  'https://dok.ut.ee/livelink/livelink?func=ll&objId=$rootnode&objAction=XMLExport&scope=sub&versioninfo=current&schema' 2>&1",$retval);
 		var_dump($retval);
 		print "got file, parsing \n";
 		// check whether opening succeeded?
