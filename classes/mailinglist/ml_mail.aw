@@ -102,7 +102,8 @@ class ml_mail extends aw_template
 
 		$ob = $this->get_object($id);
 
-		$start_at = get_ts_from_arr($start_at);
+		load_vcl('date_edit');
+		$start_at = date_edit::get_timestamp($start_at);
 		$delay = $delay * 60;
 
 		if (is_array($lists))

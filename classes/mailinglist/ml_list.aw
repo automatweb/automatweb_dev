@@ -484,6 +484,7 @@ class ml_list extends aw_template
 		// kui on veel valitud täpsustavaid gruppe ka, siis 0 muudetakse eelmise funktsiooni poolt
 		// ülejäänud gruppideks ehk kokkuvõttes saadetakse kogu grupile meil, ainut osale gruppidele on eritingimused
 
+		load_vcl('date_edit');
 		unset($aid);
 		$total=0;
 		foreach($lists as $lid => $v)
@@ -492,7 +493,7 @@ class ml_list extends aw_template
 			{
 				$key="$lid:$gid";
 				//echo($lid." -".$v["name"].":$gid- $gname key=$key<br>");//dbg
-				$_start_at=get_ts_from_arr($start_at[$key]);
+				$_start_at=date_edit::get_timestamp($start_at[$key]);
 				$_delay=$delay[$key] * 60;
 				$_patch_size=$patch_size[$key];
 				//echo("$_start_at $_delay $_patch_size<br>");//dbg

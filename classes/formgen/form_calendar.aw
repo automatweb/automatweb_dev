@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.3 2002/11/07 18:13:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.4 2002/12/03 13:56:11 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -593,7 +593,8 @@ class form_calendar extends form_base
 		{
 			return -1;
 		};
-		$_start = get_ts_from_arr($args["start"]);
+		load_vcl('date_edit');
+		$_start = date_edit::get_timestamp($args["start"]);
 		list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
 		if ($end > 0)
 		{
@@ -767,6 +768,7 @@ class form_calendar extends form_base
 	{
 		extract($args);
 
+		load_vcl('date_edit');
 		$this->del_event_relations($eid);
 		// cycle over all the forms that this event entry form
 		// has been assigned to and write new relations for those
@@ -791,7 +793,7 @@ class form_calendar extends form_base
 				};
 			};
 
-			$_start = (int)get_ts_from_arr($args["post_vars"][$row["el_start"]]);
+			$_start = (int)date_edit::get_timestamp($args["post_vars"][$row["el_start"]]);
 
 			if ($row["end"] > 0)
 			{
@@ -799,7 +801,7 @@ class form_calendar extends form_base
 			}
 			else
 			{
-				$_end = (int)get_ts_from_arr($args["post_vars"][$row["el_end"]]);
+				$_end = (int)date_edit::get_timestamp($args["post_vars"][$row["el_end"]]);
 			};
 
 			if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))

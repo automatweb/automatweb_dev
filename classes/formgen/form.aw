@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.11 2002/12/03 13:27:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.12 2002/12/03 13:56:11 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -19,6 +19,7 @@ define("RET_FIRST", 1);
 define("RET_ALL", 2);
 
 classload("formgen/form_base");
+load_vcl("date_edit");
 class form extends form_base
 {
 	function form()
@@ -1362,8 +1363,8 @@ class form extends form_base
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF)
 		{
 			$fc = get_instance("formgen/form_calendar");
-			$_start = get_ts_from_arr($this->post_vars[$this->arr["el_event_start"]]);
-			$_end = get_ts_from_arr($this->post_vars[$this->arr["el_event_end"]]) + 86399;
+			$_start = date_edit::get_timestamp($this->post_vars[$this->arr["el_event_start"]]);
+			$_end = date_edit::get_timestamp($this->post_vars[$this->arr["el_event_end"]]) + 86399;
 			$_cnt = $this->post_vars[$this->arr["el_event_count"]];
 			$_types = array(
 				"hour" => "1",
@@ -5380,7 +5381,6 @@ class form extends form_base
 		}
 		elseif ($this->subtype & FSUBTYPE_CAL_CONF2)
 		{
-			load_vcl("date_edit");
 			$de = new date_edit(0);
 			$de->configure(array(
 				"year" => "",
@@ -5460,8 +5460,8 @@ class form extends form_base
 
 		if ($this->subtype  & FSUBTYPE_CAL_CONF2)
 		{
-			$_start = (int)get_ts_from_arr($args["start"]);
-			$_end = (int)get_ts_from_arr($args["end"]) - 1;
+			$_start = (int)date_edit::get_timestamp($args["start"]);
+			$_end = (int)date_edit::get_timestamp($args["end"]) - 1;
 			$_count = (int)$args["count"];
 			$_period = (int)$args["period"];
 
