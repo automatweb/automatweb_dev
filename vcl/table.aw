@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.33 2002/10/08 14:15:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.34 2002/10/16 15:43:55 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -407,7 +407,7 @@ class aw_table
 			foreach($this->rowdefs as $k => $v)
 			{
 				$style = false;
-				$style = $this->header_styles[$v["name"]];
+				$style = ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->col_styles[$v["name"]]["header_sorted"] : $this->col_styles[$v["name"]]["header_sortable"]) : $this->col_styles[$v["name"]]["header_normal"]);
 				if (!$style)
 				{
 					$style = ($v["sortable"] ? ($this->sortby[$v["name"]] ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
@@ -536,7 +536,17 @@ class aw_table
 					// m??rame ?ra staili
 					if (!$style)
 					{
-						$style = $this->col_styles[$v1["name"]];
+						if ($this->sortby[$v1["name"]]) 
+						{
+							$style = (($counter % 2) == 0) ? $this->col_styles[$v1["name"]]["content_sorted_style2"] : $this->col_styles[$v1["name"]]["content_sorted_style1"];
+							$bgcolor = ($counter % 2) ? $this->selbgcolor1 : $this->selbgcolor2;
+						} 
+						else 
+						{
+							$style = (($counter % 2) == 0) ? $this->col_styles[$v1["name"]]["content_style2"] : $this->col_styles[$v1["name"]]["content_style1"];
+							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
+						}
+
 						if (!$style)
 						{
 							if ($this->sortby[$v1["name"]]) 
@@ -555,7 +565,7 @@ class aw_table
 					// moodustame celli
 					$tbl .= $this->opentag(array(
 						"name"    => "td",
-						"classid" => ($v["style"] ? $v["style"] : $style),
+						"classid" => $style,
 						"width" => $v1["width"],
 						"rowspan" => ($this->actionrows ? $this->actionrows : $rowspan),
 						"style" => (($v1["chgbgcolor"] && $v[$v1["chgbgcolor"]]) ? ("background:".$v[$v1["chgbgcolor"]]) : ""),
@@ -916,14 +926,38 @@ class aw_table
 					$this->nfields[$attrs["name"]] = 1;
 				};
 
-				if ($attrs["style"] != "") 
+				if ($attrs["header_normal"] != "")
 				{
-					$this->col_styles[$attrs["name"]] = $attrs["style"];
-				};
-				if ($attrs["header_style"] != "") 
+					$this->col_styles[$attrs["name"]]["headder_normal"] = $attrs["header_normal"];
+				}
+				if ($attrs["header_sortable"] != "")
 				{
-					$this->header_styles[$attrs["name"]] = $attrs["header_style"];
-				};
+					$this->col_styles[$attrs["name"]]["header_sortable"] = $attrs["header_sortable"];
+				}
+				if ($attrs["header_sorted"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["header_sorted"] = $attrs["header_sorted"];
+				}
+				if ($attrs["content_style1"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["content_style1"] = $attrs["content_style1"];
+				}
+				if ($attrs["content_style2"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["content_style2"] = $attrs["content_style2"];
+				}
+				if ($attrs["content_sorted_style1"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["content_sorted_style1"] = $attrs["content_sorted_style1"];
+				}
+				if ($attrs["content_sorted_style2"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["content_sorted_style2"] = $attrs["content_sorted_style2"];
+				}
+				if ($attrs["group_style"] != "")
+				{
+					$this->col_styles[$attrs["name"]]["group_style"] = $attrs["group_style"];
+				}
 				break;
 
 			default:
@@ -1014,7 +1048,7 @@ class aw_table
 			// the headers between groups are never clickable - less confusing that way
 			$tbl .= $this->opentag(array(
 				"name" => "td",
-				"classid" => $this->header_normal, 
+				"classid" => ($this->col_styles[$v["name"]]["header_normal"] ? $this->col_styles[$v["name"]]["header_normal"] : $this->header_normal), 
 				"align" => ($v["talign"] ? $v["talign"] : ""),
 				"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
 				"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
@@ -1084,7 +1118,7 @@ class aw_table
 					$tbl.=$this->opentag(array(
 						"name" => "td",
 						"colspan" => count($this->rowdefs),
-						"classid" => $this->group_style
+						"classid" => ($this->col_styles[$v["name"]]["group_style"] ? $this->col_styles[$v["name"]]["group_style"] : $this->group_style)
 					));
 					$tbl.=$_a;
 					$this->lgrpvals[$rgel] = $_a;
