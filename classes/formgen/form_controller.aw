@@ -210,13 +210,13 @@ class form_controller extends form_base
 		$eq = $this->replace_vars($co,$co["meta"]["eq"],true,$form_ref, $el_ref, $entry);
 
 		$eq = "\$res = ".$eq.";\$contr_finish = true;";
+		dbg::p2("evaling $eq , res = $res<br>");
 		@eval($eq);
 		if (!$contr_finish)
 		{
 			$this->dequote(&$eq);
 			eval($eq);
 		}
-		dbg::p2("evaling $eq , res = $res<br>");
 		return $res;
 	}
 
@@ -236,7 +236,7 @@ class form_controller extends form_base
 //					echo "val = $val <br>";
 					if ($add_quotes)
 					{
-						$val = "\"".$val."\"";
+						$val = "\"".str_replace("\"","\\\"",$val)."\"";
 					}
 					$eq = str_replace("[".$var."]",$val,$eq);
 				}
@@ -256,7 +256,7 @@ class form_controller extends form_base
 					$val = str_replace("\"", "\\\"", $el->get_controller_value());
 					if ($add_quotes)
 					{
-						$val = "\"".$val."\"";
+						$val = "\"".str_replace("\"","\\\"",$val)."\"";
 					}
 	//				echo "replace '$var' with '$val' <Br>";
 					$eq = str_replace("[".$var."]",$val,$eq);
@@ -472,12 +472,15 @@ class form_controller extends form_base
 					{
 						// if the entry for this form has not been made in the chain or is in a related form, 
 						// try and load any entry from the chain, since it will contain all the available elements anyway! yay!
-						foreach($chd as $_fid => $entry_id)
+						if (is_array($chd))
 						{
-							if ($entry_id)
+							foreach($chd as $_fid => $entry_id)
 							{
-								$form =& $this->cache_get_form_instance($_fid);
-								break;
+								if ($entry_id)
+								{
+									$form =& $this->cache_get_form_instance($_fid);
+									break;
+								}
 							}
 						}
 					}
