@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.2 2003/11/05 13:12:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.3 2003/12/03 12:34:05 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -182,11 +182,10 @@ class rte extends class_base
                         preg_match("/(\.text \{.+?\})/sm",$site_styles,$m);
                         $text_style = str_replace("\n"," ",$m[1]);
 
-			/*
                         $this->vars(array(
-                                "rte_styles" => $text_style . " .styl1 {color: green; font-family: Verdana; font-weight: bold;} .styl2 {color: blue; font-size: 20px;} .styl3 {color: red; border: 1px solid blue;}",
+                                "rte_styles" => $text_style,
+                                //"rte_styles" => $text_style . " .styl1 {color: green; font-family: Verdana; font-weight: bold;} .styl2 {color: blue; font-size: 20px;} .styl3 {color: red; border: 1px solid blue;}",
                         ));
-			*/
                         $retval .= $this->parse("writer");
                         $retval .= $this->parse("toolbar");
                 };
