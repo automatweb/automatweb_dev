@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.138 2003/01/09 12:39:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.139 2003/01/09 15:53:38 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2552,6 +2552,11 @@ class document extends aw_template
 			$sortby = "percent";
 		}
 
+		if ($parent == "default")
+		{
+			$parent = $this->get_cval("search::default_group");
+		}
+
 		$str = trim($str);
 		$this->tpl_init("automatweb/documents");
 		// kas ei peaks checkkima ka teiste argumentide oigsust?
@@ -2594,6 +2599,35 @@ class document extends aw_template
 
 		$sc = get_instance("search_conf");
 		$search_groups = $sc->get_groups();
+
+		if ($search_groups[$parent]["search_form"])
+		{
+			// do form search
+			$finst = get_instance("formgen/form");
+			// we must load the form before we can set element values
+			$finst->load($search_groups[$parent]["search_form"]);
+
+			// set the search elements values
+			foreach($search_groups[$parent]["search_elements"] as $el)
+			{
+				$finst->set_element_value($el, $str, true);
+			}
+
+			global $restrict_search_el,$restrict_search_val,$use_table,$search_form;
+			$this->vars(array(
+				"MATCH" => $finst->new_do_search(array(
+					"restrict_search_el" => $restrict_search_el,
+					"restrict_search_val" => $restrict_search_val,
+					"use_table" => $use_table,
+					"section" => $section,
+					"search_form" => $search_form
+				)),
+				"HEADER" => ""
+			));
+
+			return $this->parse();
+		}
+
 		$search_group = $search_groups[$parent];
 
 		$this->menucache = array();
@@ -2945,7 +2979,10 @@ class document extends aw_template
 			"section" => $section
 		));
 		$ps = $this->parse("PAGESELECTOR");
-		$this->vars(array("PAGESELECTOR" => $ps));
+		$this->vars(array(
+			"PAGESELECTOR" => $ps, 
+			"HEADER" => $this->parse("HEADER")
+		));
 
 		$this->_log(ST_SEARCH, SA_DO_SEARCH, "otsis stringi $str , alamjaotusest nr $parent, leiti $cnt dokumenti");
 		$this->db_query("INSERT INTO searches(str,s_parent,numresults,ip,tm) VALUES('$str','$parent','$cnt','".aw_global_get("REMOTE_ADDR")."','".time()."')");
