@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.15 2001/07/25 01:07:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.16 2001/07/25 02:08:43 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -1055,6 +1055,44 @@ class form_base extends aw_template
 			}
 		}
 		return $ret;
+	}
+
+	////
+	// !returns an array of elements for a form, (including id-s, types, 'n stuff)
+	// I realize that this is slow, but you're welcome to improve this
+	// arguments:
+	// id(int) - id of the form, which we are to load
+	function get_form_elements($args = array())
+	{
+		extract($args);
+		$this->load($id);
+		$retval = array();
+		for ($i = 0; $i < $this->arr["rows"]; $i++)
+		{
+			$cols = "";
+			for ($j = 0; $j < $this->arr["cols"]; $j++) 
+			{
+				// kui see cell on mone teise "all", siis jätame
+				// ta lihtsalt vahele
+				if (!($arr = $this->get_spans($i, $j)))
+				{
+					continue;
+				}
+
+				$cell = &$this->arr["contents"][$arr["r_row"]][$arr["r_col"]];
+				$els = $cell->get_elements();
+				foreach($els as $key => $val)
+				{
+					if ($val["name"])
+					{
+						// we only want elements with names, the rest
+						// is probably just captions 'n stuff
+						$retval[$val["name"]] = $val;
+					};
+				};
+			}
+		}
+		return $retval;
 	}
 
 	////
