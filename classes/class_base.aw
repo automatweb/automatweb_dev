@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.55 2003/01/22 11:38:21 kristo Exp $
+// $Id: class_base.aw,v 2.56 2003/01/26 17:43:29 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -166,7 +166,6 @@ class class_base extends aliasmgr
 				"group" => $args["group"],
 		));
 
-
 		$this->load_obj_data(array("id" => $this->id));
 
 		if (method_exists($this->inst,"callback_pre_edit"))
@@ -265,16 +264,11 @@ class class_base extends aliasmgr
 		if (method_exists($this->inst,"callback_on_submit"))
 		{
 			// nb! the handler gets quoted data
-
 			$this->inst->callback_on_submit(array(
 				"id" => $this->id,
 				"form_data" => &$args,
 			));
 		}
-		
-
-		// here we need to check whether this record really belongs to the objects
-		// table or not
 		
 		$realprops = $this->get_active_properties(array(
 			"clfile" => $this->clfile,
@@ -514,6 +508,7 @@ class class_base extends aliasmgr
 			"alias_to" => $args["alias_to"],
 			"return_url" => $args["return_url"],
 		) + (is_array($extraids) ? $extraids : array());
+		//$this->sync_object();
 		return $this->mk_my_orb("change",$args,get_class($this->orb_class));
 	}
 
@@ -799,75 +794,21 @@ class class_base extends aliasmgr
 	// or saving data. 
 	function get_active_properties($args = array())
 	{
-		
-		// load all properties for the current class
-		$cfgu = get_instance("cfg/cfgutils");
-		$_all_props = $cfgu->load_properties(array(
-			"clid" => $this->clid,
-		));
-	
-		$argblock = array(
-			'oid' => $this->id,
-			'request' => $this->request,
-		);
+		// properties are all saved in a single file, so sadly
+		// we do need to load them all
+		$this->get_all_properties();
 
-		// ok, first add all the generated props to the props array 
-		$all_props = array();
-		foreach($_all_props as $k => $val)
-		{
-			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
-			{
-				$meth = $val["generator"];
-				$vx = new aw_array($this->inst->$meth($argblock));
-				foreach($vx->get() as $vxk => $vxv)
-				{
-					if (!$vxv["group"])
-					{
-						$vxv["group"] = $val["group"];
-					};
-					$all_props[$vxk] = $vxv;
-				}
-			}
-			else
-			{
-				$all_props[$k] = $val;
-			}
-		}
-
-		// first I need to collect the names of all groups, e.g.
-		// reorder the $all_props list based on group name
-		$bygroup = array();
-
-		foreach($all_props as $key => $val)
-		{
-			if (is_array($val["group"]))
-			{
-				$tmp = $val;
-				foreach($val["group"] as $_group)
-				{
-					$tmp["group"] = $_group;
-					$bygroup[$_group][$key] = $tmp;
-				}
-			}
-			else
-			{
-				$bygroup[$val["group"]][$key] = $val;
-			};
-		};
-
-		// loads all properties for this class
-		$this->classinfo = $cfgu->get_classinfo();
-		$groupinfo = new aw_array($cfgu->get_groupinfo());
-		$this->groupinfo = $groupinfo;
-		$this->tableinfo = $cfgu->get_opt("tableinfo");
-
-		if ($args["group"] && $bygroup[$args["group"]])
+		// figure out which group is active
+		// it the group argument is a defined group, use that
+		if ( $args["group"] && $this->groupinfo->key_exists($args["group"]) )
 		{
 			$use_group = $args["group"];
 		}
 		else
 		{
-			foreach($groupinfo->get() as $gkey => $ginfo)
+			// otherwise try to figure out whether any of the groups
+			// has been set to default, if so, use it
+			foreach($this->groupinfo->get() as $gkey => $ginfo)
 			{
 				if ($ginfo["default"])
 				{
@@ -877,15 +818,46 @@ class class_base extends aliasmgr
 		};
 
 
+		// and if nothing suitable was found, default to the "general" group
 		if (!$use_group)
 		{
 			$use_group = "general";
 		};
 
 		$this->activegroup = $use_group;
+		
+		// get the list of all groups
+		$groupnames = array();
+		foreach($this->groupinfo->get() as $key => $val)
+		{
+			$groupnames[$key] = $val["caption"];
+		};
+			
+		$this->groupnames = $groupnames;
 
-		$property_list = $bygroup[$use_group];
-		// loads all properties for this class
+		foreach($this->all_props as $key => $val)
+		{
+			// handle multiple groups
+			if (is_array($val["group"]))
+			{
+				$tmp = $val;
+				foreach($val["group"] as $_group)
+				{
+					$tmp["group"] = $_group;
+					if ($_group == $this->activegroup)
+					{
+						$property_list[$key] = $tmp;
+					};
+				}
+			}
+			else
+			{
+				if ($val["group"] == $this->activegroup)
+				{
+					$property_list[$key] = $val;
+				};
+			};
+		};
 
 		// This concept of core fields sucks beams through a garden hose
 		$corefields = $this->get_visible_corefields();
@@ -949,41 +921,21 @@ class class_base extends aliasmgr
 				};
 
 			}
-		}
-		else
-		{
-			// I need names of all group and the contents of active group
-			// group means the contents of a tab
-			foreach($all_props as $key => $val)
-			{
-				$use = true;
-				$name = $val["name"];
-			};
 		};
 
 		$retval = array();
-
-		$this->groupnames = array();
-
-		// now, cycle over all the properties and do all necessary filtering
-		foreach($groupinfo->get() as $key => $val)
-		{
-			$groupnames[$key] = $val["caption"];
-		};
-			
-		$this->groupnames = $groupnames;
-
 		$tables = array();
 
 		foreach($property_list as $key => $val)
 		{
-			$property = $all_props[$key];
+			$property = $this->all_props[$key];
 
 			if ($property_list[$key]["caption"])
 			{
 				$property["caption"] = $property_list[$key]["caption"];
 			};
 
+			// properties with no group end up in default group
 			$grpid = ($property["group"]) ? $property["group"] : $this->default_group;
 
 			if ($val["group"])
@@ -994,15 +946,6 @@ class class_base extends aliasmgr
 			if ($grpid == $use_group)
 			{
 				$retval[$key] = $property;
-			};
-
-			if ($groupinfo[$grpid])
-			{
-				$grpname = $groupinfo[$grpid]["caption"];
-			}
-			else
-			{
-				$grpname = $grpid;
 			};
 
 			// figure out information about the table
@@ -1051,6 +994,46 @@ class class_base extends aliasmgr
 		};
 
 		return $retval;
+	}
+
+	function get_all_properties()
+	{
+		// load all properties for the current class
+		$cfgu = get_instance("cfg/cfgutils");
+		$_all_props = $cfgu->load_properties(array(
+			"clid" => $this->clid,
+		));
+	
+		$argblock = array(
+			'oid' => $this->id,
+			'request' => $this->request,
+		);
+
+		// ok, first add all the generated props to the props array 
+		$this->all_props = array();
+		foreach($_all_props as $k => $val)
+		{
+			if ($val["type"] == "generated" && method_exists($this->inst,$val["generator"]))
+			{
+				$meth = $val["generator"];
+				$vx = new aw_array($this->inst->$meth($argblock));
+				foreach($vx->get() as $vxk => $vxv)
+				{
+					if (!$vxv["group"])
+					{
+						$vxv["group"] = $val["group"];
+					};
+					$this->all_props[$vxk] = $vxv;
+				}
+			}
+			else
+			{
+				$this->all_props[$k] = $val;
+			}
+		}
+		$this->classinfo = $cfgu->get_classinfo();
+		$this->groupinfo = new aw_array($cfgu->get_groupinfo());
+		$this->tableinfo = $cfgu->get_opt("tableinfo");
 	}
 	
 	function convert_element(&$val)
@@ -1274,6 +1257,7 @@ class class_base extends aliasmgr
 			{
 				$this->get_value(&$val);
 			};
+
 
 			$argblock["prop"] = &$val;
 
@@ -1599,5 +1583,63 @@ class class_base extends aliasmgr
 		));
 	}
 
+	////
+	// !This works in 2 ways
+	// 1 - sync a single object
+	// 2 - sync a whole mouthful of objects (after a definition is changed for example)
+
+	// fuck, oh fuck, I hate this SO much
+	function sync_property_table($args = array())
+	{
+		
+		
+
+
+	}
+
+	function sync_object($args = array())
+	{
+		//print "syncing oid = " . $this->id . "<br>";
+		// remove current fields belonging to this object from the property table
+		$id = $this->id;
+
+		$q = "DELETE FROM properties WHERE oid = $id";
+		$this->db_query($q);
+		
+		// load the current object data
+		$this->load_obj_data(array("id" => $this->id));
+
+		// figure out all fields that have the search flag set
+		foreach($this->all_props as $key => $val)
+		{
+			if ($val["search"] == 1 && ($val["method"] == "serialize"))
+			{
+				$this->get_value($val);
+				$searchfields[$val["name"]] = $val["value"];	
+			};
+		};
+		
+		// create new records
+		$fs = new aw_array($searchfields);
+		foreach($fs->get() as $key => $val)
+		{
+			$q = "INSERT INTO properties (oid,pname,pvalue) 
+				VALUES ($id,'$key','$val')";
+			$this->db_query($q);
+		};
+
+	}
+
+/*
+mysql> explain select objects.oid,name from objects inner join properties as p_val ON (p_val.oid = objects.oid and p_val.pname = 'right_pane' and p_val.pvalue = 1) inner join properties as p_val2 ON (p_val2.oid = objects.oid and p_val2.pname = 'left_pane' and p_val2.pvalue = 1);
++---------+--------+---------------+---------+---------+-----------+------+------------+
+| table   | type   | possible_keys | key     | key_len | ref       | rows | Extra      |
++---------+--------+---------------+---------+---------+-----------+------+------------+
+| p_val   | ref    | oid,name      | name    |      51 | const     |    2 | where used |
+| objects | eq_ref | PRIMARY       | PRIMARY |       4 | p_val.oid |    1 | where used |
+| p_val2  | ref    | oid,name      | name    |      51 | const     |    2 | where used |
++---------+--------+---------------+---------+---------+-----------+------+------------+
+3 rows in set (0.00 sec)
+*/
 };
 ?>
