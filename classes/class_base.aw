@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.27 2002/12/20 14:31:07 duke Exp $
+// $Id: class_base.aw,v 2.28 2002/12/20 16:26:01 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -327,6 +327,8 @@ class class_base extends aliasmgr
 			"idfield" => "oid",
 			"fields" => $fields,
 		));
+
+		$tmp["oid"] = $args["id"];
 
 		$this->coredata = $tmp;
 
