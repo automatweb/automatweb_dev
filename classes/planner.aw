@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.7 2001/05/16 23:26:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.8 2001/05/17 07:27:16 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -130,6 +130,7 @@ class planner extends calendar {
 		{
 			$rinlist = "";
 		};
+		$rxlist = array_flip($rlist);
 	
 
 		$events = array();
@@ -141,7 +142,10 @@ class planner extends calendar {
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
-			$events[date("dmY",$row["start"])][$row["start"]] = $row;
+			if (!isset($rxlist[$row["id"]]))
+			{
+				$events[date("dmY",$row["start"])][$row["start"]] = $row;
+			};
 			$events2["$row[id]"] = $row;
 		};
 
@@ -157,17 +161,18 @@ class planner extends calendar {
 			// array labimise ajal sealt elemente maha rippida.
 			// ja nuh. ma tean, et see ei ole parim lahendus
 			reset($repeaters);
+			$more = true;
+			$yearpwhen = "";
 			while(list($key,$rep) = each($repeaters))
 			{
 				$rep["end"] = $events2[$rep["eid"]]["rep_until"];
 				$sx = strtotime("+$i days",$rep["start"]);
 				$ddiff2 = $this->get_day_diff($rep["start"],$di["start"]);
-				$j = $i + $ddiff2 + 1;
+				$j = $i + $ddiff2;
 				$sx = strtotime("+$j days",$rep["start"]);
 				$s1 = date("dmY",$sx);
 				$s2 = date("dmY",$rep["start"]);
 				$ddiff = $this->get_day_diff($rep["start"],$sx);
-				// Kas parajasti vaadeldav event algab vaatluse all oleval päeval?
 				if ($s1 == $s2)
 				{
 					// do nothing
@@ -179,7 +184,7 @@ class planner extends calendar {
 				{
 					// kui yritus on sellest perioodist expirenud
 					// do also nothing
-					unset($repeaters[$key]);
+					//unset($repeaters[$key]);
 
 				}
 				elseif ($rep["start"] >= $sx)
@@ -189,14 +194,12 @@ class planner extends calendar {
 				else
 				// Lisa see eventite plaani
 				{
-					$more = true;
-					$yearpwhen = "";
 					switch($rep["type"])
 					{
 						case REP_YEAR:
 							if ($rep["skip"] > 0)
 							{
-								$startyear = date("Y",$di["start"]);	
+								$startyear = date("Y",$rep["start"]);	
 								$thisyear = date("Y",strtotime("+$i days",$di["start"]));
 								if ( (($thisyear - $startyear) % $rep["skip"]) != 0)
 								{
@@ -212,55 +215,62 @@ class planner extends calendar {
 							if ($more && (($rep["skip"] > 0) || ($yearpwhen)) )
 							{
 								$startmon = date("m",$di["start"]);
-								$thismon = date("m",strotime("+$i days",$di["start"]));
-							};
-								
-							// kui olid määratud mingid kindlad päevad kuu sees, siis kasutame
-							// ka neid
-							if (1)
-							{
-								foreach($useddays as $uday)
+								$thismon = (int)date("m",strtotime("+$i days",$di["start"]));
+								if ($yearpwhen)
 								{
-									if (!$events[$s1][$rep["start"]])
+									$yplist = explode(",",$yearpwhen);
+									$yplist = array_flip($yplist);
+									if (!isset($yplist[$thismon]))
 									{
-										$events[$s1][$rep["start"]] = $events2[$rep["eid"]];
-										ksort($events[$s1]);
+										$more = false;
+									};
+								}
+								else
+								{
+									$mdiff = $this->get_mon_diff($di["start"],strtotime("+$i days",$i["start"]));
+									if (($mdiff % $rep["skip"]) != 0)
+									{
+										$more = false;
 									};
 								};
+									
 							};
-							break;
-
+								
 
 						case REP_DAY:
-							if (($ddiff % $rep["skip"]) == 0)
+							if ($more && (($ddiff % $rep["skip"]) == 0))
 							{
-								$events[$s1][$rep["start"]] = $events2[$rep["eid"]];
+								$sd = date("dmY",strtotime("+$i days",$di["start"]));
+								$events[$sd][$rep["start"]] = $events2[$rep["eid"]];
+								//print "<pre>";
+								//print_r($events2[$rep["eid"]]);
+								//print "</pre>";
 								// now, I do realize, that this is a bit 
 								// ineffective, but until I can code this better
 								// we are going to sort the list right here
 								//ksort($events[$s1][$rep["start"]]);
-								ksort($events[$s1]);
+								ksort($events[$sd]);
 							};
 							break;
 
 						case REP_WEEK:
-							$wx = date("w",strtotime("+$i days",$di["start"]));
-							$sz = date("dmY",strtotime("+$i days",$di["start"]));
-							if ($wx == 0)
-							{
-								$wx = 7;
-							};
-							$wxl = explode(",",$rep["pwhen"]);
-							$wxl = array_flip($wxl);
+							//$wx = date("w",strtotime("+$i days",$di["start"]));
+							//$sz = date("dmY",strtotime("+$i days",$di["start"]));
+							//if ($wx == 0)
+							//{
+							//		$wx = 7;
+							//};
+							//$wxl = explode(",",$rep["pwhen"]);
+							//$wxl = array_flip($wxl);
 							// so we are supposed to do something with 
 							// repeaters that have the type "week"
 
 							// well. right now are only going to use pwhen
-							if (isset($wxl[$wx]))
-							{
-								$events[$sz][$rep["start"]] = $events2[$rep["eid"]];
-								ksort($events[$sz]);
-							};
+							//if (isset($wxl[$wx]))
+							//{
+							//		$events[$sz][$rep["start"]] = $events2[$rep["eid"]];
+							//	ksort($events[$sz]);
+							//};
 							break;
 
 					}; // switch
