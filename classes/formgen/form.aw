@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.34 2003/02/07 19:42:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.35 2003/02/10 14:05:50 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1175,8 +1175,8 @@ class form extends form_base
 		else
 		{
 			// .. if that is not the case, then we just import all the POST variables.
-			global $HTTP_POST_VARS;
-			$this->post_vars = $HTTP_POST_VARS;
+			global $HTTP_POST_VARS, $HTTP_GET_VARS;
+			$this->post_vars = $HTTP_POST_VARS + $HTTP_GET_VARS;
 		};
 
 		// if this is set to true, then a variable in the session will be set to the created/loaded entry id, so that
@@ -1767,7 +1767,10 @@ class form extends form_base
 		global $type;
 		if ($type == "popup")
 		{
-			$retval .= "<form><input type='button' onClick='javascript:window.close()' value='Sulge'></form>";
+			if ($this->output["lang_close_button_text"][aw_global_get("lang_id")] != "")
+			{
+				$retval .= "<form><input type='button' onClick='javascript:window.close()' value='".$this->output["lang_close_button_text"][aw_global_get("lang_id")]."'></form>";
+			}
 		};
 		return $retval;
 	}
