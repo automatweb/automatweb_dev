@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.9 2003/08/29 11:51:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.10 2003/11/03 17:11:46 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -36,6 +36,9 @@
 	
 	@property add_comment type=callback callback=callback_gen_add_comment store=no no_caption=1 group=add_comment
 	@caption Lisa kommentaar
+
+	@property style_donor type=relpicker group=styles reltype=RELTYPE_STYLE_DONOR
+	@caption Stiilidoonor
 	
 	@property style_caption type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Tabeli pealkirja stiil
@@ -79,59 +82,57 @@
 	@groupinfo add_topic caption="Lisa teema" parent=container
 	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
-	@classinfo trans_id=TR_FORUM
-
 */
 
 define('RELTYPE_TOPIC_FOLDER',1);
 define('RELTYPE_ADDRESS_FOLDER',2);
 define('RELTYPE_STYLE',3);
+define('RELTYPE_STYLE_DONOR',4);
 
 class forum_v2 extends class_base
 {
 	function forum_v2()
 	{
-		print "initing forum_v2, eh?<br>";
 		$this->init(array(
 			"tpldir" => "forum",
 			"clid" => CL_FORUM_V2,
-			"trid" => TR_FORUM,
 		));
 	}
 
 	function callback_get_rel_types()
 	{
-		// ah, but the tr function needs to know the context as well,
-		// so that it can actually return the strings from the correct
-		// catalog. now, how do I do that?
-                return array(
-                        RELTYPE_TOPIC_FOLDER => $this->tr("teemade kataloog"),
-			RELTYPE_ADDRESS_FOLDER => $this->tr("listiliikmete kataloog"),
-			RELTYPE_STYLE => $this->tr("stiil"),
+		return array(
+			RELTYPE_TOPIC_FOLDER => "teemade kataloog",
+			RELTYPE_ADDRESS_FOLDER => "listiliikmete kataloog",
+			RELTYPE_STYLE => "stiil",
+			RELTYPE_STYLE_DONOR => "võta stiilid",
 		);
 	}
 
-	function callback_get_classes_for_relation($args)
+	function callback_get_classes_for_relation($arr)
 	{
 		$retval = false;
-	
-		switch($args["reltype"])
+		switch($arr["reltype"])
 		{
-                        case RELTYPE_TOPIC_FOLDER:
+			case RELTYPE_TOPIC_FOLDER:
 			case RELTYPE_ADDRESS_FOLDER:
-                                $retval = array(CL_PSEUDO);
+				$retval = array(CL_PSEUDO);
 				break;
 
 			case RELTYPE_STYLE:
 				$retval = array(CL_CSS);
 				break;
+
+			case RELTYPE_STYLE_DONOR:
+				$retval = array(CL_FORUM_V2);
+				break;
 		};
 		return $retval;
 	}
 
-	function get_property($args = array())
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
@@ -144,18 +145,18 @@ class forum_v2 extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "add_topic":
-				$this->create_forum_topic($args);
+				$this->create_forum_topic($arr);
 				break;
 
 			case "add_comment":
-				$this->create_forum_comment($args);
+				$this->create_forum_comment($arr);
 				break;
 		}
 		return $retval;
@@ -165,13 +166,19 @@ class forum_v2 extends class_base
 	{
 		classload("layout/active_page_data");
 		$this->style_data = array();
-		$fld = $args["obj"]["meta"]["topic_folder"];
+		$fld = $args["obj_inst"]->prop("topic_folder");
 		if (!is_numeric($fld))
 		{
 			return false;
 		};			
 
-		$this->meta = $args["obj"]["meta"];
+		$this->obj_inst = $args["obj_inst"];
+		$style_donor = $this->obj_inst->prop("style_donor");
+		if (!empty($style_donor))
+		{
+			$this->style_donor_obj = new object($style_donor);
+		};
+		//$this->meta = $args["obj"]["meta"];
 		$this->_add_style("style_caption");
 		
 		$args["fld"] = $fld;
@@ -199,10 +206,9 @@ class forum_v2 extends class_base
 	{
 		extract($args);
 
-		// first level folders
-		$flds = $this->get_objects_below(array(
-			"parent" => $fld,
-			"class" => CL_PSEUDO,
+		$folder_list = new object_list(array(
+			"parent" => $args["fld"],
+			"class_id" => CL_MENU,
 		));
 
 		$this->read_template("forum.tpl");
@@ -216,50 +222,67 @@ class forum_v2 extends class_base
 		$this->_add_style("style_folder_last_post");
 		$this->vars($this->style_data);
 
-		foreach($flds as $fdata)
+		for ($folder_obj = $folder_list->begin(); !$folder_list->end(); $folder_obj = $folder_list->next())
+		//foreach($flds as $fdata)
 		{
 			$this->vars(array(
-				"name" => $fdata["name"],
-				"comment" => $fdata["comment"],
-				"open_l1_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"c" => $fdata["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+				"name" => $folder_obj->name(),
+				"comment" => $folder_obj->comment(),
+				"open_l1_url" => $this->mk_my_orb("change",array(
+					"id" => $args["obj_inst"]->id(),
+					"c" => $folder_obj->id(),
+					"group" => $args["request"]["group"],
+					"section" => aw_global_get("section"),
+					"_alias" => get_class($this),
+				)),
 			));
 
 			$c .= $this->parse("L1_FOLDER");
 
-			if (empty($args["request"]["c"]) || ($args["request"]["c"] == $fdata["oid"]))
+			if (empty($args["request"]["c"]) || ($args["request"]["c"] == $folder_obj->id()))
 			{
 				// for each first level folder, figure out all the second level
 				// folders.
-				$subflds = $this->get_objects_below(array(
-					"parent" => $fdata["oid"],
-					"class" => CL_PSEUDO,
+				$sub_folder_list = new object_list(array(
+					"parent" => $folder_obj->id(),
+					"class_id" => CL_MENU,
 				));
 
 				// for each second level folder, figure out the amount of topics
 				// and posts 
 				list($topic_counts,$topic_list) = $this->get_topic_list(array(
-					"parents" => array_keys($subflds),
+					"parents" => $sub_folder_list->ids(),
 				));
 
 				// ja iga alamtopicu jaoks on mul vaja teada, mitu
 				// teemat seal on.
-				foreach($subflds as $soid => $sdata)
+				for ($sub_folder_obj = $sub_folder_list->begin(); !$sub_folder_list->end(); $sub_folder_obj = $sub_folder_list->next())
 				{
 					list(,$comment_count) = $this->get_comment_counts(array(
-						"parents" => $topic_list[$soid],
+						"parents" => $topic_list[$sub_folder_obj->id()],
 					));
 					
 					$last = $this->get_last_comments(array(
-						"parents" => $topic_list[$soid],
+						"parents" => $topic_list[$sub_folder_obj->id()],
 					));
 
+					$mdate = $last["created"];
+					$datestr = empty($date) ? "" : $this->time2date($mdate,2);
+
+
 					$this->vars(array(
-						"name" => $sdata["name"],
-						"topic_count" => (int)$topic_counts[$soid],
+						"name" => $sub_folder_obj->name(),
+						"topic_count" => (int)$topic_counts[$sub_folder_obj->id()],
 						"comment_count" => (int)$comment_count,
 						"last_createdby" => $last["createdby"],
-						"last_date" => $this->time2date($last["created"],2),
-						"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"folder" => $sdata["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+						"last_date" => $datestr,
+						"open_topic_url" => $this->mk_my_orb("change",array(
+							"id" => $args["obj_inst"]->id(),
+							"folder" => $sub_folder_obj->id(),
+							"group" => $args["request"]["group"],
+							"section" => aw_global_get("section"),
+							"_alias" => get_class($this),
+						)),
 					));
 					$c .= $this->parse("L2_FOLDER");
 				};
@@ -277,13 +300,18 @@ class forum_v2 extends class_base
 	function draw_folder($args = array())
 	{
 		extract($args);
-		$topics_on_page = !empty($args["obj"]["meta"]["topics_on_page"]) ? $args["obj"]["meta"]["topics_on_page"] : 5;
-		$topic_obj = $this->get_object($args["request"]["folder"]);
+		$topics_on_page = $args["obj_inst"]->prop("topics_on_page");
+		if (empty($topics_on_page))
+		{
+			$topics_on_page = 5;
+		};
+
+		$topic_obj = new object($args["request"]["folder"]);
 
 		$this->read_template("folder.tpl");
 
 		$obj_chain = $this->get_obj_chain(array(
-			"oid" => $topic_obj["oid"],
+			"oid" => $topic_obj->id(),
 			"stop" => $args["fld"],
 		));
 
@@ -293,14 +321,14 @@ class forum_v2 extends class_base
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			}
 			else
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"c" => $key,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"c" => $key,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 
@@ -315,18 +343,18 @@ class forum_v2 extends class_base
 		$this->_add_style("style_topic_last_post");
 		$this->vars($this->style_data);
 
-		$subtopics = $this->get_objects_below(array(
-			"parent" => $topic_obj["oid"],
-			"class" => CL_MSGBOARD_TOPIC,
+		$subtopic_list = new object_list(array(
+			"parent" => $topic_obj->id(),
+			"class_id" => CL_MSGBOARD_TOPIC,
 		));
 
 		$c = $pager = "";
 
 		list($comm_counts,) = $this->get_comment_counts(array(
-			"parents" => array_keys($subtopics),
+			"parents" => $subtopic_list->ids(),
 		));
 		
-		$tcount = sizeof($subtopics);
+		$tcount = sizeof($subtopic_list->ids());
 		$num_pages = (int)(($tcount / $topics_on_page) + 1);
 		$selpage = (int)$args["request"]["page"];
 		if ($selpage == 0)
@@ -341,8 +369,8 @@ class forum_v2 extends class_base
 		$from = ($selpage - 1) * $topics_on_page + 1;
 		$to = $from + $topics_on_page - 1;
 		$cnt = 0;
-
-		foreach($subtopics as $key => $val)
+				
+		for ($subtopic_obj = $subtopic_list->begin(); !$subtopic_list->end(); $subtopic_obj = $subtopic_list->next())
 		{
 			$cnt++;
 			if (!between($cnt,$from,$to))
@@ -350,24 +378,32 @@ class forum_v2 extends class_base
 				continue;
 			};
 			$last = $this->get_last_comments(array(
-				"parents" => array($key),
+				"parents" => array($subtopic_obj->id()),
 			));
+			
+			$creator = $subtopic_obj->createdby();
 
 			if (!$last)
 			{
 				$last = array(
-					"created" => $val["created"],
-					"createdby" => $val["createdby"],
+					"created" => $subtopic_obj->created(),
+					"createdby" => $creator->createdby(),
 				);
 			};
 
 			$this->vars(array(
-				"name" => $val["name"],
-				"comment_count" => (int)$comm_counts[$key],
+				"name" => $subtopic_obj->name(),
+				"comment_count" => (int)$comm_counts[$subtopic_obj->id()],
 				"last_date" => $this->time2date($last["created"],2),
 				"last_createdby" => $last["createdby"],
-				"author" => $val["createdby"],
-				"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"topic" => $val["oid"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+				"author" => $creator->name(),
+				"open_topic_url" => $this->mk_my_orb("change",array(
+						"id" => $args["obj_inst"]->id(),
+						"group" => $args["request"]["group"],
+						"topic" => $subtopic_obj->id(),
+						"section" => aw_global_get("section"),
+						"_alias" => get_class($this),
+				)),
 			));
 
 			$c .= $this->parse("SUBTOPIC");
@@ -379,14 +415,21 @@ class forum_v2 extends class_base
 		{
 			$this->vars(array(
 				"num" => $i,
-				"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"folder" => $topic_obj["oid"],"page" => $i,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+				"url" => $this->mk_my_orb("change",array(
+					"id" => $args["obj_inst"]->id(),
+						"folder" => $topic_obj->id(),
+						"page" => $i,
+						"group" => $args["request"]["group"],
+						"section" => aw_global_get("section"),
+						"_alias" => get_class($this),
+				)),
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
 
 		$this->vars(array(
 			"SUBTOPIC" => $c,
-			"name" => $topic_obj["name"],
+			"name" => $topic_obj->name(),
 			"path" => join(" &gt; ",array_reverse($path)),
 			"active_page" => $pager,
 
@@ -403,11 +446,8 @@ class forum_v2 extends class_base
 			"stop" => $args["obj"]["meta"]["topic_folder"],
 		));
 
-		$topic_obj = $this->get_object(array(
-			"oid" => $args["request"]["topic"],
-			"clid" => CL_MSGBOARD_TOPIC,
-		));
-		
+		$topic_obj = new object($args["request"]["topic"]);
+
 		$this->_add_style("style_comment_user");
 		$this->_add_style("style_comment_text");
 		$this->vars($this->style_data);
@@ -425,20 +465,20 @@ class forum_v2 extends class_base
 			}
 			else
 			{
-				$obj = $this->get_object($key);
-				if ($obj["class_id"] == CL_PSEUDO)
+				$obj = new object($key);
+				if ($obj->class_id() == CL_PSEUDO)
 				{
 					if ($obj["parent"] != $fld)
 					{
 						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"folder" => $obj["oid"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"folder" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
 							"caption" => $name,
 						));
 					}
 					else
 					{
 						$name = html::href(array(
-							"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"c" => $obj["oid"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+							"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"group" => $args["request"]["group"],"c" => $obj->id(),"section" => aw_global_get("section"),"_alias" => get_class($this))),
 							"caption" => $name,
 						));
 					};
@@ -493,15 +533,15 @@ class forum_v2 extends class_base
 		{
 			$this->vars(array(
 				"num" => $i,
-				"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"topic" => $topic_obj["oid"],"page" => $i,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
+				"url" => $this->mk_my_orb("change",array("id" => $args["obj_inst"]->id(),"topic" => $topic_obj->id(),"page" => $i,"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 			));
 			$pager .= $this->parse($selpage == $i ? "active_page" : "page");
 		};
 
 		$this->vars(array(
 			"active_page" => $pager,
-			"name" => $topic_obj["name"],
-			"comment" => $topic_obj["comment"],
+			"name" => $topic_obj->name(),
+			"comment" => $topic_obj->comment(),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",array_reverse($path)),
 		));
@@ -588,13 +628,13 @@ class forum_v2 extends class_base
 	function create_forum_topic($args)
 	{
 		$t = get_instance("contentmgmt/forum/forum_topic");
-                $emb = $args["form_data"]["emb"];
+                $emb = $args["request"]["emb"];
                 $t->id_only = true;
                 if (isset($emb["group"]))
                 {
                         $this->emb_group = $emb["group"];
                 };
-		$emb["forum_id"] = $args["form_data"]["id"];
+		$emb["forum_id"] = $args["request"]["id"];
                 $this->topic_id = $t->submit($emb);
 		return PROP_OK;
 	}
@@ -602,7 +642,7 @@ class forum_v2 extends class_base
 	function create_forum_comment($args)
 	{
 		$t = get_instance("contentmgmt/forum/forum_comment");
-                $emb = $args["form_data"]["emb"];
+                $emb = $args["request"]["emb"];
                 $t->id_only = true;
                 if (isset($emb["group"]))
                 {
@@ -612,11 +652,11 @@ class forum_v2 extends class_base
 		// out messages or not
                 $this->comm_id = $t->submit($emb);
 		$this->topic_id = $emb["parent"];
-		$topic_obj = $this->get_object($this->topic_id);
+		$topic_obj = new object($this->topic_id);
 		$topic_inst = get_instance("contentmgmt/forum/forum_topic");
 		$topic_inst->mail_subscribers(array(
 			"id" => $this->topic_id,
-			"subject" => "Uus postitus teemas $topic_obj[name]: " . $emb["name"],
+			"subject" => "Uus postitus teemas " . $topic_obj->name() . ": " . $emb["name"],
 			"message" => $emb["uname"] . " @ " . $this->time2date(time(),2) . "\n\n" . $emb["commtext"],
 		));
 		return PROP_OK;
@@ -626,8 +666,8 @@ class forum_v2 extends class_base
 	{
 		if ($this->topic_id)
 		{
-			$form_data = &$args["form_data"];
-                	$emb = $args["form_data"]["emb"];
+			$form_data = &$args["request"];
+                	$emb = $args["request"]["emb"];
 			$args = &$args["args"];
 			$args["folder"] = $emb["parent"];
 			$args["topic"] = $this->topic_id;
@@ -636,19 +676,20 @@ class forum_v2 extends class_base
 	}
 
 	function get_topic_list($args = array())
-	{	$topic_count = $topic_list = array();
+	{	$topic_count = $tlist = array();
 		if (sizeof($args["parents"]) != 0)
 		{
-			$q = sprintf("SELECT oid,parent FROM objects WHERE parent IN (%s) AND class_id = '%d' AND status != 0",
-					join(",",$args["parents"]),CL_MSGBOARD_TOPIC);
-			$this->db_query($q);
-			while($row = $this->db_next())
+			$topic_list = new object_list(array(
+				"parent" => $args["parents"],
+				"class_id" => CL_MSGBOARD_TOPIC,
+			));	
+			for ($topic = $topic_list->begin(); !$topic_list->end(); $topic = $topic_list->next())
 			{
-				$topic_count[$row["parent"]]++;
-				$topic_list[$row["parent"]][] = $row["oid"];
+				$topic_count[$topic->parent()]++;
+				$tlist[$topic->parent()][] = $topic->id();
 			};
 		};
-		return array($topic_count,$topic_list);
+		return array($topic_count,$tlist);
 	}
 	
 	function get_comment_counts($args = array())
@@ -684,13 +725,18 @@ class forum_v2 extends class_base
 
 	function _add_style($name)
 	{
-		active_page_data::add_site_css_style($this->meta[$name]);
-		$this->style_data[$name] = "st" . $this->meta[$name];
+		// this right now takes data from the currently loaded object
+		if (is_object($this->style_donor_obj))
+		{
+			$st_data = $this->style_donor_obj->prop($name);
+		}
+		else
+		{
+			$st_data = $this->obj_inst->prop($name);
+		};
+		active_page_data::add_site_css_style($st_data);
+		$this->style_data[$name] = "st" . $st_data;
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -719,12 +765,12 @@ class forum_v2 extends class_base
 	function show($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
+		$ob = new object($id);
 
 		$this->read_template('show.tpl');
 
 		$this->vars(array(
-			'name' => $ob['name']
+			'name' => $ob->name(),
 		));
 
 		return $this->parse();
