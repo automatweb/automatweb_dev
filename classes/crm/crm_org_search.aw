@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.2 2004/02/18 10:42:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.3 2004/03/16 11:59:03 duke Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 
 // and pray tell .. how to I embed this into crm_db now?
@@ -54,10 +54,6 @@ class crm_org_search extends class_base
 		// and get_property sets it, once it figures out that there is something 
 		// to search for
 		$this->valid_search = false;
-		/*
-		print "bul?";
-		arr($arr);
-		*/
 	}
 
 	function get_property($arr)
@@ -78,12 +74,6 @@ class crm_org_search extends class_base
 		return $rv;
 	}
 
-	// okey, cool, I can get the form to display now
-
-	// now I need to get the actual search working
-
-	// and then embed it in the crm_db somehow, someway
-
 	/**
 		@attrib name=test all_args="1"
 
@@ -91,17 +81,13 @@ class crm_org_search extends class_base
 	function test($arr)
 	{
 		$arr["form"] = "crm_search";
-		/*
-		print "<pre>";
-		print_r($arr);
-		print "</pre>";
-		*/
 		return $this->change($arr);
 	}
 
 	function do_search($arr)
 	{
-		//var_dump($this->valid_search);
+		global $awt;
+		$awt->start("crm-org-search");
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
                         "name" => "name",
@@ -161,6 +147,8 @@ class crm_org_search extends class_base
                         "name" => "sel",
                 ));
 
+		$awt->stop("cmr-org-search");
+
 		if (!$this->valid_search)
 		{
 			return false;
@@ -172,6 +160,9 @@ class crm_org_search extends class_base
 		);
 
 		$req = $arr["request"];
+
+		array_walk($req, create_function('&$v,$k', '$v = trim($v);'));
+		
 		if (!empty($req["name"]))
 		{
 			$filter["name"] = "%" . $req["name"] . "%";
@@ -310,18 +301,6 @@ class crm_org_search extends class_base
 				"email" => $mail,
 			));
 		}
-
-
-
-		// now then .. I need to create an object list based on the name
-		
-
-		/*
-		print "doing search?";
-		print "<pre>";
-		print_r($arr);
-		print "</pre>";
-		*/
 	}
 
 
