@@ -139,7 +139,7 @@
 		<action name="show">
 			<function name="show">
 				<arguments>
-					<required name="parent"/>
+					<required name="section"/>
 					<optional name="id"/>
 				</arguments>
 			</function>
