@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.5 2004/03/09 15:35:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.6 2004/03/17 17:12:09 duke Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -86,6 +86,7 @@ class object_type extends class_base
 		{
 			case "configuration":
 				$arr["obj_inst"]->set_meta("classificator",$arr["request"]["classificator"]);
+				$arr["obj_inst"]->set_meta("clf_type",$arr["request"]["clf_type"]);
 				break;
 
 			case "type":
@@ -158,6 +159,7 @@ class object_type extends class_base
 		};
 
 		$mx = $obj->meta("classificator");
+		$ct = $obj->meta("clf_type");
 
 
 		$prop = $arr["prop"];
@@ -170,15 +172,38 @@ class object_type extends class_base
                         "type" => "classificator",
                 ));
 
+		$types = array(
+			"" => "-vali-",
+			"select" => "select",
+			"checkboxes" => "checkboxid",
+			"radiobuttons" => "radiobuttons",
+		);
+
 		$rv = array();
 		foreach($defaults as $key => $val)
 		{
+			$rv["c".$key] = array(
+				"name" => "c".$key,
+				"type" => "text",
+				"caption" => $key,
+			);
+
 			$rv[$key] = array(
 				"name" => "classificator[" . $key . "]",
 				"selected" => $mx[$key],
 				"type" => "select",
-				"caption" => $key,
+				"caption" => "Oks",
 				"options" => $opts,
+				"parent" => "c".$key,
+			);
+
+			$rv["x".$key] = array(
+				"name" => "clf_type[" . $key . "]",
+				"type" => "select",
+				"caption" => "Tüüp",
+				"options" => $types,
+				"selected" => $ct[$key],
+				"parent" => "c".$key,
 			);
 		};
 
