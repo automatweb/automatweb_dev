@@ -1,5 +1,5 @@
 <?php
-// $Id: ds_local_sql.aw,v 1.8 2003/06/03 13:19:14 duke Exp $
+// $Id: ds_local_sql.aw,v 1.9 2003/08/27 12:25:02 kristo Exp $
 // ds_local_sql - interface for the local SQL database
 class ds_local_sql extends aw_template
 {
@@ -91,6 +91,24 @@ class ds_local_sql extends aw_template
 			$data["oid"] = $data["id"];
 			unset($data["id"]);
 			// update an existing object
+			$pos = strpos($data["name"], "'");
+			if ($pos !== false)
+			{
+				if ($data["name"]{$pos-1} != "\\")
+				{
+					$this->quote(&$data["name"]);
+				}
+			}
+
+			$pos = strpos($data["comment"], "'");
+			if ($pos !== false)
+			{
+				if ($data["comment"]{$pos-1} != "\\")
+				{
+					$this->quote(&$data["comment"]);
+				}
+			}
+
 			$this->upd_object($data);
 			$retval = true;
 

@@ -184,8 +184,15 @@ background: #FFF;
 .caleventtextsel a {color: #FFFFFF; text-decoration: none;}
 .caleventtextsel a:hover {color: #FFFFFF; text-decoration: underline;}
 .caleventtextsel a:visited {color: #FFFFFF; text-decoration: underline;}
-.caleventtextsel a:active {color: #FFFFFF; text-decoration: underline;}
-
+.caleventtextsel a:active {color: #FFFFFF; text-decoration: underline;}BODY
+    { scrollbar-face-color : #A4A4A4; 
+	 scrollbar-shadow-color : #A4A4A4; 
+	 scrollbar-highlight-color : #FFFFFF; 
+	 scrollbar-3dlight-color : #000000; 
+	 scrollbar-darkshadow-color : #000000; 
+	 scrollbar-arrow-color : #FFFFFF;
+	}
+	
 BODY{ 
 	scrollbar-face-color : #A4A4A4; 
 	scrollbar-shadow-color : #A4A4A4; 

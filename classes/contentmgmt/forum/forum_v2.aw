@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.7 2003/07/04 14:51:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.8 2003/08/27 12:25:01 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -79,6 +79,7 @@
 	@groupinfo add_topic caption="Lisa teema" parent=container
 	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
+
 */
 
 define('RELTYPE_TOPIC_FOLDER',1);
@@ -91,7 +92,7 @@ class forum_v2 extends class_base
 	{
 		$this->init(array(
 			"tpldir" => "forum",
-			"clid" => CL_FORUM_V2
+			"clid" => CL_FORUM_V2,
 		));
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.206 2003/08/26 09:34:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.207 2003/08/27 12:25:01 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1106,6 +1106,7 @@ class document extends aw_template
 			$retval = preg_replace("/<a(.*)>/U", "", $retval);
 			$retval = str_replace("</a>", "", $retval);
 		}
+
 		return $retval;
 	}
 

@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.7 2003/06/19 15:40:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.8 2003/08/27 12:25:01 kristo Exp $
 
 ////
 // !get_date_range
@@ -17,6 +17,68 @@ function get_date_range($args = array())
 	};
 		
 	$timestamp = mktime(0,0,0,$m,$d,$y);
+	$timestamp2 = mktime(23,59,59,$m,$d,$y);
+	
+	// if a range is specified then use that as the base for our calculations
+	$range_start = $args["range_start"];
+	if ($range_start > 0)
+	{
+		$timestamp = $range_start;
+		list($d,$m,$y) = explode("-",date("d-m-Y",$timestamp));
+	}
+			
+	// current = 0, backward = 1, forward = 2
+	// current - start or end from/at the timestamp
+	if ($args["direction"] == 0)
+	{
+		$rg_start = $timestamp;
+		// this will be calculated from the range type
+		$rg_end = 0;
+	}
+	elseif ($args["direction"] == 1)
+	{
+		// this time, this will be calculated from the range type
+		$rg_start = 0;
+		$rg_end = $timestamp2;
+	}
+	else
+	{
+		$rg_start = $timestamp;
+		$rg_end = $timestamp2;
+	};
+
+	if (empty($type))
+	{
+		$type = "day";
+	};
+
+	$diff = 0;
+
+	$eti = $args["event_time_item"];
+
+	if (!empty($eti) && is_numeric($eti))
+	{
+		if ($type == "day")
+		{
+			$diff = $eti;
+		}
+		elseif ($type == "week")
+		{
+			$diff = $eti * 7;
+		};
+	}
+
+	// if range start is 0 and we know how many days we want, then base the calculations on that
+	if ($rg_start == 0)
+	{
+		$rg_start = $timestamp - (86400 * $diff);
+	}
+
+	if ($rg_end == 0)
+	{
+		$rg_end = $timestamp2 + (86400 * $diff);
+	}		
+
 
 	switch($type)
 	{
@@ -58,14 +120,6 @@ function get_date_range($args = array())
 			$start_ts = mktime(0,0,0,$m,$monday,$y);
 			$end_ts = mktime(23,59,59,$m,$monday+6,$y);
 			break;
-
-		case "overview":
-			$next = mktime(0,0,0,$m,$d+7,$y);
-			$prev = mktime(0,0,0,$m,$d-7,$y);
-			$start_ts = $timestamp;
-			$end_ts = mktime(23,59,59,$m,$d+6,$y);
-			break;
-
 
 		case "relative":
                         $next = mktime(0,0,0,0,0,0);
@@ -111,25 +165,11 @@ function get_date_range($args = array())
                         break;
 		
 		case "day":
-		default:
-			$range_start = $args["range_start"];
-			if ($range_start > 0)
-			{
-				$timestamp = $range_start;
-				list($d,$m,$y) = explode("-",date("d-m-Y",$timestamp));
-			}
-			if (!empty($args["event_time_item"]))
-			{
-				$d2 = $d + $args["event_time_item"] - 1;
-			}
-			else
-			{
-				$d2 = $d;
-			};
-			$next = mktime(0,0,0,$m,$d2+1,$y);
-			$prev = mktime(0,0,0,$m,$d-1,$y);
-			$start_ts = $timestamp;
-			$end_ts = mktime(23,59,59,$m,$d2,$y);
+			$start_ts = $rg_start;
+			$end_ts = $rg_end;
+
+			$next = $end_ts + 1;
+			$prev = $start_ts - 1;
 			break;
 
 	};
@@ -144,6 +184,13 @@ function get_date_range($args = array())
 		"next" => date("d-m-Y",$next),
 		"timestamp" => $timestamp,
 	);
+	global $XX3;
+	if ($XX3)
+	{
+		print "<pre>";
+		print_r($arr);
+		print "</pre>";
+	};
 	return $arr;
 }	
 

@@ -144,6 +144,11 @@ class form_controller extends form_base
 	function load_controller($id)
 	{
 		$ret = $this->get_object($id);
+		if ($ret["meta"]["eq"] === false)
+		{
+			$this->dequote($ret["metadata"]);
+			$ret["meta"] = aw_unserialize($ret["metadata"]);
+		}
 		$this->loaded_controller = $ret;
 		return $ret;
 	}

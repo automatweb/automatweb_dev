@@ -364,6 +364,10 @@ class form_db_base extends aw_template
 			}
 
 			$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
+			if ($GLOBALS["save_dbg"] == 1)
+			{
+				echo "save sql = $sql <br>";
+			}
 			$this->db_query($sql);
 
 			if ($lang_ids != "")
@@ -1465,7 +1469,8 @@ class form_db_base extends aw_template
 		}
 		// FIXME: this error message needs to be able to point it out to the user where the link broke
 		// or at least give some hint towards the breakage
-		$this->raise_error(ERR_FG_NOFORMRELS, "Ei suuda leida seost formide $f_from ja $f_to  vahel!", true);
+		//$this->raise_error(ERR_FG_NOFORMRELS, "Ei suuda leida seost formide $f_from ja $f_to  vahel!", false,true);
+		return $this->join_path;
 	}
 
 	function req_get_join_path($f_root, $f_to)

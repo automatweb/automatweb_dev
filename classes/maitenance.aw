@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.2 2003/08/21 10:23:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.3 2003/08/27 12:25:01 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -63,13 +63,13 @@ class maitenance extends class_base
 		$str = str_replace('&nbsp;',' ',$str);
 		$str = str_replace('&amp;','&',$str);
 		$str = trim(strip_tags($str));
-		$str = str_replace('"','\"',$str);
+		//$str = str_replace('"','\"',$str);
 		return $str;
 	}
 	
 	function ta_convert($args)
 	{
-		$tegevusala_parent = 98130;
+		$tegevusala_parent = 50387;
 		$objdata = array(
 			'parent' => $parent,
 			'status' => 1,
@@ -77,8 +77,8 @@ class maitenance extends class_base
 			'modifiedby' => 'axel',
 			'created' => time(),
 			'modified' => time(),
-			'lang_id' => 1,
-			'site_id' => 9,
+			'lang_id' => 6,
+			'site_id' => 18,
 		);
 //id|kood|eng|est
 		$next = isset($args['next']) ? $args['next'] : 0;
@@ -167,18 +167,18 @@ class maitenance extends class_base
 	function kb_convert($args)
 	{
 		//teha siia igat tüüpi objektidele eraldi kataloogid		
-		$parent = 97175;//default
-		$linn_parent = 98126;
-		$maakond_parent = 98127;
-		$firma_parent = 98125;
-		$tegevusala_parent = 98130;
-		$toode_parent = 98129;
-		$ettevotlusvorm_parent = 98131;
-		$aadress_parent = 98128;
-		$isik_parent = 98132;
-		$telefon_parent = 98243;
-		$email_parent = 98241;
-		$www_parent = 98242;
+		$parent = 50396;//default
+		$linn_parent = 50388;
+		$maakond_parent = 50389;
+		$firma_parent = 50391;
+		$tegevusala_parent = 50387;
+		$toode_parent = 50386;
+		$ettevotlusvorm_parent = 50392;
+		$aadress_parent = 50390;
+		$isik_parent = 50384;
+		$telefon_parent = 50395;
+		$email_parent = 50393;
+		$www_parent = 50394;
 		/*
 		deaktiivne = 1;
 		aktiivne = 2;
@@ -191,8 +191,8 @@ class maitenance extends class_base
 			'modifiedby' => 'axel',
 			'created' => time(),
 			'modified' => time(),
-			'lang_id' => 1,
-			'site_id' => 9,
+			'lang_id' => 6,
+			'site_id' => 18,
 		);
 //id|tegevus_kir|pohitegevus|juht|www|korval|tooted|kaubamaerk|mail|faks|aadress|reg_nr|vorm|linn|maakond|mobl|tel|zip|nimi	
 		//kui firmad jagada tähtede järgi kataloogidesse siis äkki on kliendibaasi lihtsam teha
@@ -204,10 +204,30 @@ class maitenance extends class_base
 		$next = $next + $samm;
 
 		echo $from.' - '.$next."<br />";
+
 		
+// but we can also create a second connection
+	$args = array(
+		"driver" => "mysql", 
+		"server" => "hp",
+		"base" => "samaw",
+		"username" => "samaw", 
+		"password" => "fuckoff",
+		"cid" => "dev"
+	);
+	$this->db_connect($args);
+	
+
 		$q = 'select * from html_import_firmad limit '.$from.','.$samm;
-		$arr = $this->db_fetch_array($q);
-		//arr($arr);
+		$arr = $this->dc["dev"]->db_fetch_array($q);
+
+//		$this->db_connect(array('driver' =>'mysql', 'server' => 'hp','base' => 'samaw','username' => 'samaw','password' => 'fuckoff'));						
+//		$this->db_connect(array('driver' =>'mysql', 'server' => 'hp','base' => 'automatweb','username' => 'automatweb','password' => 'murukann'));
+	
+		
+		
+
+		//arr($arr,1);
 
 		if(!is_array($arr))
 		{
@@ -819,12 +839,12 @@ class maitenance extends class_base
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 5)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 10)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 20)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 30)).'">järgmised '.$samm.'</a><br />
+	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 25)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 50)).'">järgmised '.$samm.'</a><br />
-	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 70)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 100)).'">järgmised '.$samm.'</a><br />
 	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 150)).'">järgmised '.$samm.'</a><br />
+	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 200)).'">järgmised '.$samm.'</a><br />
+	<a href="'.$this->mk_my_orb('kb_convert', array('next' => $next,'samm' => $samm = 350)).'">järgmised '.$samm.'</a><br />
 			
 		<script>alert("valma");</script>';
 		

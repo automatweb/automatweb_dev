@@ -64,5 +64,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="ng_serialize">
+			<function name="ng_serialize">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>

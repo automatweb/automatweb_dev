@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.49 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.50 2003/08/27 12:25:01 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -914,6 +914,23 @@ class orb extends aw_template
 			$meth["values"]["period"] = aw_global_get("act_per_id");
 			//$data = $cl->get_opt("data");
 			$meth["values"]["parent"] = $cl->get_opt("parent");
+			if ($action == "change" && $cl->get_opt("shown_document"))
+			{
+				$meth["values"]["id"] = $cl->get_opt("shown_document");
+			}
+			if ($action == "new")
+			{
+				$meth["values"]["parent"] = aw_global_get("section");
+			}
+		};
+		if ($id == "doc")
+		{
+			$cl = get_instance("document");
+			if ($cl->get_opt("cnt_documents") == 1)
+			{
+				$meth["values"]["id"] = $cl->get_opt("shown_document");
+			}
+			$meth["values"]["period"] = aw_global_get("act_per_id");
 			if ($action == "change" && $cl->get_opt("shown_document"))
 			{
 				$meth["values"]["id"] = $cl->get_opt("shown_document");

@@ -13,7 +13,7 @@
 		<action name="change" caption="Edit document" is_public="1">
 			<function name="change">
 				<arguments>
-					<required name="id" acl="edit;view"/>
+					<required name="id" acl="edit;view" type="int"/>
 					<optional name="section"/>
 					<optional name="period"/>
 				</arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.34 2003/08/18 13:06:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.35 2003/08/27 12:25:01 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -98,7 +98,7 @@
 @property refopt type=select table=objects store=no
 @caption Ref tüüp
 
-@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize
+@property show_print type=checkbox ch_value=1 table=objects field=meta method=serialize default=1
 @caption 'Prindi' nupp
 
 @property sections type=select multiple=1 size=20 group=vennastamine store=no
@@ -630,7 +630,7 @@ class doc extends class_base
 		if (aw_ini_get("document.no_static_forms") == 0)
 		{
 			$retval["doc_default"] = array(
-				"caption" => "Dokument",
+				"caption" => $this->cfg["classes"][CL_DOCUMENT]["name"],
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
 			);
 		};

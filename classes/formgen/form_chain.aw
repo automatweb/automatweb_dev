@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.11 2003/08/01 13:27:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.12 2003/08/27 12:25:03 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -69,6 +69,7 @@ class form_chain extends form_base
 
 		$ct["cal_controller"] = $cal_controller;
 		$ct["no_load"] = $no_load;
+		$ct["controllers"] = $controllers;
 		
 		$this->chain = $ct;
 
@@ -198,7 +199,12 @@ class form_chain extends form_base
 					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->list_objects(array("class" => CL_FORM_TABLE))),
 					"rep_ops" => $this->picker($this->chain["rep_ops"][$fid], $this->list_objects(array("addempty" => true,"class" => CL_FORM_OUTPUT))),
 					"no_load" => checked($this->chain["no_load"][$fid]),
-					"LANG" => $lg
+					"LANG" => $lg,
+					"controllers" => $this->mpicker($this->chain["controllers"][$fid],$this->list_objects(array(
+						"class" => CL_FORM_CONTROLLER,
+						"addempty" => true,
+						"add_folders" => true
+					)))
 				));
 				$this->parse("FORM");
 			}
@@ -312,7 +318,36 @@ class form_chain extends form_base
 			$entry_id = $this->db_fetch_field("SELECT id FROM form_chain_entries WHERE chain_id = $id AND uid = '".aw_global_get("uid")."'","id");
 		}
 
-//		echo "entry_id = $entry_id <br />";
+		$fc = get_instance("formgen/form_controller");
+		$toshow = array();
+		foreach($this->chain["forms"] as $fid)
+		{
+			// check controllers
+			$dat = new aw_array($this->chain["controllers"][$fid]);
+			$show = true;
+			foreach($dat->get() as $ctr)
+			{
+				if (!$fc->eval_controller($ctr, $fid))
+				{
+					$show = false;
+				}
+			}
+			if (!$show)
+			{
+				continue;
+			}
+			$toshow[$fid] = $fid;
+		}
+
+		// check if the form we are currently showing can be shown, if not, pick the first available
+		if (!$toshow[$form_id])
+		{
+			reset($toshow);
+			list(,$form_id) = each($toshow);
+			$form_entry_id = NULL;
+		}
+
+//		echo "entry_id = $entry_id <br>";
 		if ($entry_id && !$this->chain["rep"][$form_id] && !$form_entry_id)
 		{
 			$ear = $this->get_chain_entry($entry_id);
@@ -323,8 +358,14 @@ class form_chain extends form_base
 		$sep = $this->parse("SEP");
 		$first = true;
 		$lang_id = aw_global_get("lang_id");
+
+
 		foreach($this->chain["forms"] as $fid)
 		{
+			if (!$toshow[$fid])
+			{
+				continue;
+			}
 			if (!$first)
 			{
 				$ff.=$sep;
@@ -464,6 +505,7 @@ class form_chain extends form_base
 	function submit_form($arr)
 	{
 		extract($arr);
+
 		$ch = $this->load_chain($id);
 
 		// ok, here we must create a new chain_entry if none is specified
@@ -496,7 +538,6 @@ class form_chain extends form_base
 		$update_fcal_timedef = false;
 		$cal_id = false;
 		$has_calendar = $ch["flags"] & OBJ_HAS_CALENDAR;
-
 
 		if ($has_calendar && $this->chain["cal_controller"])
 		{

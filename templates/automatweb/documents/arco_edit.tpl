@@ -78,6 +78,8 @@ onClick="javascript:if (confirm('Teavitada liste?')) { window.location.href='{VA
 			Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>&nbsp;&nbsp;&nbsp;
 			'Prindi' nupp: <input type='checkbox' name='show_print' value=1 {VAR:show_print}>&nbsp;&nbsp;&nbsp;
 			Muutmise kuupaev dokumendi sees: <input type='checkbox' name='show_last_changed' value=1 {VAR:show_last_changed}>&nbsp;&nbsp;&nbsp;
+			V&auml;lista otsingust:	<input type='checkbox' name="no_search" {VAR:no_search} value=1>
+
 		</td>
 	</tr>
 </table>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.83 2003/08/18 12:03:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.84 2003/08/27 12:25:03 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1295,7 +1295,6 @@ class form extends form_base
 		$controllers_ok = true;
 		$controller_warnings_ok = true;
 
-
 		$this->in_process_entry = true;
 
 		if (!$no_process_entry)
@@ -1345,7 +1344,10 @@ class form extends form_base
 						$controllers_ok = false;
 					}
 					$controller_warnings_ok = false;
+					if (aw_global_get("uid") == "erkihotel")
+					{
 //						echo "ctrlid $ctrl[ctrlid] failed! <br />";
+					}
 				}
 			}
 

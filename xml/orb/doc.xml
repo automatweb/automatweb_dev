@@ -1,6 +1,18 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="doc" extends="class_base">
+		<action name="new" all_args="1" is_public="1" caption="Lisa Dokument">
+			<function name="change">
+				<arguments>
+					<required name="parent" type="int" acl="add"/>
+					<optional name="period"/>
+					<optional name="alias_to" type="int"/>
+					<optional name="return_url"/>
+					<optional name="reltype" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="show">
 			<function name="show">
 				<arguments>

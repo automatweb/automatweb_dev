@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.14 2003/08/01 13:27:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.15 2003/08/27 12:25:02 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -134,7 +134,7 @@ class mysql
 			$this->rec_count++;
 			if ($deq)
 			{
-				$this->dequote($res);
+//				$this->dequote($res);
 			}
 			//$res['rec'] = $this->rec_count;
 		};

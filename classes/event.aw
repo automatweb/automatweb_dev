@@ -73,6 +73,7 @@ class event extends aw_template
 			"title" => ($e["title"]) ? $e["title"] : "(nimetu)",
 			"object" => $name,
 			"contents" => nl2br($e["description"]),
+			"lead" => $e["lead"],
 		));
 		return $this->parse("event");
 	}

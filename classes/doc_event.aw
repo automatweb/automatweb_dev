@@ -93,10 +93,6 @@ class doc_event extends core
 		// alltho then I _might_ probably have a problem with multiple galleries
 		// but oh well, I'll think of _THAT_ later
 		
-		// now, what about the fresh flyers ... that information (about which flyer to use
-		// is stored in the object metainfo, which means that I cannot exactly use THAT
-		// to figure out which flyer I should use. So what on earth do I do with that stuff?
-
 		// actually, I rather dislike the idea of having to set the flyer by the document ..
 		// because then I might want to do the exact same thing for galleries .. to help me
 		// decide which is the correct gallery that should be used
@@ -158,6 +154,11 @@ class doc_event extends core
 			GROUP BY objects.brother_of
 			ORDER BY planner.start $order,objects.created $lmt";
 		$this->db_query($q);
+		global $XX3;
+		if ($XX3)
+		{
+			print $q;
+		};
 		$results = array();
 		$count = $this->num_rows();
 		$almgr = get_instance("aliasmgr");

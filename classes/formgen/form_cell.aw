@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.11 2003/08/01 13:27:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.12 2003/08/27 12:25:03 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -367,7 +367,7 @@ class form_cell extends form_base
 			return -1;
 		}
 
-		if (!$has_nothidden)
+		if (!$has_nothidden && $this->form->arr["hide_empty_rows"] == 1)
 		{
 			$this->form->gen_preview_append .= $c;
 			return "";

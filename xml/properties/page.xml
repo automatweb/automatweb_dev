@@ -42,7 +42,9 @@
             <name>preview</name>
             <type>text</type>
             <store>no</store>
+            <table>objects</table>
             <group>general</group>
+            <field>preview</field>
             <caption>Eelvaade</caption>
       </property>
 </properties>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.47 2003/08/01 13:27:51 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.48 2003/08/27 12:25:03 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -240,6 +240,10 @@ class form_table extends form_base
 					if (in_array("change",$this->table["defs"][$i]["els"]))
 					{
 						$has_change_col = true;
+						if ($this->table["skip_one_liners_col"] == $i && $this->table["skip_one_liners"])
+						{
+							$this->last_table_alias_url = $change_link;
+						}
 					}
 				}
 			}

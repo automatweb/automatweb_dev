@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.215 2003/08/21 10:23:49 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.216 2003/08/27 12:25:01 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1624,7 +1624,7 @@ class core extends acl_base
 		$content.="\n\nHelpful server vars:\n\n";
 		foreach($HTTP_SERVER_VARS as $k => $v)
 		{
-			if (in_array($k,$keys))
+		//	if (in_array($k,$keys))
 			{
 				$content.="$k = $v \n";
 			};
@@ -2299,7 +2299,6 @@ class core extends acl_base
 		}
 
 		$str = array("class_id" => $obj["class_id"], "str" => $s);
-
 		return isset($arr["raw"]) ? $s : serialize($str);
 	}
 

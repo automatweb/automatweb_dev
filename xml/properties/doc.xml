@@ -290,6 +290,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <default>1</default>
             <group>general</group>
             <caption>'Prindi' nupp</caption>
       </property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.300 2003/08/13 15:55:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.301 2003/08/27 12:25:01 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -154,7 +154,7 @@ class menuedit extends aw_template
 			{
 				$cache->set($section,$cp,$res);
 			};
-			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+//			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
