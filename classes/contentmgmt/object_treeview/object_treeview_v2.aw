@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.60 2005/03/02 07:33:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.61 2005/03/02 07:39:21 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -333,6 +333,7 @@ class object_treeview_v2 extends class_base
 			case "show_hidden_cols":
 			case "alphabet_in_lower_case":
 			case "folders_table_column_count":
+			case "no_cache_page":
 				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
 				{
 					return PROP_IGNORE;
@@ -438,11 +439,6 @@ class object_treeview_v2 extends class_base
 		enter_function("otv2::show");
 		$ob = obj($id);
 
-		if ($ob->prop("no_cache_page") == 1)
-		{
-			aw_global_set("no_cache", 1);
-		}
-
 		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
 		{
 			$ih_ob = obj($ob->prop("inherit_view_props_from"));
@@ -450,6 +446,11 @@ class object_treeview_v2 extends class_base
 		else
 		{
 			$ih_ob = $ob;
+		}
+
+		if ($ih_ob->prop("no_cache_page") == 1)
+		{
+			aw_global_set("no_cache", 1);
 		}
 
 		$this->read_template('show.tpl');
