@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.16 2004/06/21 11:26:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_cell.aw,v 1.17 2004/10/22 14:57:20 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle formi sees kirjas
@@ -271,6 +271,7 @@ class form_cell extends form_base
 		$this->save_handle();
 
 		$o = obj();
+		$o->set_parent($this->form->id);
 		if (is_oid($parent))
 		{
 			$o->set_parent($parent);
