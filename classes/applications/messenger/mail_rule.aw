@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.2 2004/11/19 00:35:09 duke Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes
@@ -17,6 +17,9 @@
 
 @property target_folder type=select
 @caption Liiguta folderisse
+
+@property on_server type=checkbox ch_value=1 default=1
+@caption Salvesta serverisse
 */
 
 class mail_rule extends class_base
@@ -113,5 +116,87 @@ class mail_rule extends class_base
 			$arr["obj_inst"]->set_name(join(", ",$name_parts));
 		};
 	}
+
+	function callback_post_save($arr)
+	{
+		$o = $arr["obj_inst"];
+		if (1 == $o->prop("on_server"))
+		{
+			$match_from = $o->prop("rule_from");
+			$match_subject = $o->prop("rule_subject");
+
+			$rule_id = "# AW rule " . $o->id();
+			$rule_start = $rule_id . " start\n";
+			$rule = $rule_start;
+			$rule .= ":0:\n";
+			if ($match_from)
+			{
+				$rule .= "* ^From.*" . $match_from . "\n";
+			}
+			else
+			{
+				$rule .= "* ^Subject.*" . $match_subject . "\n";
+			};
+			$rule .= '$MAILDIR/.' . $o->prop("target_folder") . "/\n";
+			$rule_end = $rule_id . " end\n";
+			$rule .= $rule_end;
+			$msgr_id = $this->get_owner(array(
+				"obj_inst" => $arr["obj_inst"],
+			));
+
+
+			if (!empty($msgr_id))
+			{
+				$msgr_obj = new object($msgr_id);
+				$mailbox = $msgr_obj->get_first_obj_by_reltype(RELTYPE_MAIL_SOURCE);
+				$server = $mailbox->prop("server");
+				$user = $mailbox->prop("user");
+				$password = $mailbox->prop("password");
+				$t = get_instance(CL_FTP_LOGIN);
+				$conn = $t->connect(array(
+					"host" => $server,
+					"user" => $user,
+					"pass" => $password
+				));
+
+				$rulefilename = ".procmailrc";
+				$fdat = $t->get_file($rulefilename);
+
+				if (!$fdat)
+				{
+					$fdat = "";
+					$fdat = "MAILDIR=$HOME/Mail\n";
+					$fdat .= "DEFAULT=$MAILDIR/\n";
+					$fdat .= "LOGFILE=$MAILDIR/proclog\n";
+
+					$new_rule_file = $fdat . $rule;
+				}
+				else
+				{
+					$begin = strpos($fdat,$rule_start);
+					$end = strpos($fdat,$rule_end);
+
+					if ($begin && $end)
+					{
+						$before = substr($fdat,0,$begin);
+						$after = substr($fdat,$end - 1 + strlen($rule_end));
+
+						$new_rule_file = $before . $rule . $after;
+
+
+					}
+					else
+					{
+						$new_rule_file = $fdat . $rule;
+					};
+				};
+					
+				$t->put_file($rulefilename,$new_rule_file);
+			};
+		};
+
+
+	}
+
 };
 ?>
