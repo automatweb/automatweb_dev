@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.57 2002/11/11 13:12:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.58 2002/11/11 15:56:05 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -11,6 +11,7 @@ class aliasmgr extends aw_template
 	function aliasmgr($args = array())
 	{
 		extract($args);
+		$this->use_class = ($args["use_class"]) ? $args["use_class"] : get_class($this);
 		$this->init("aliasmgr");
 
 		$this->contents = "";
@@ -29,17 +30,12 @@ class aliasmgr extends aw_template
 		$form = $search->show($args);
 		$this->search = &$search;
 
-		$id = $args["docid"];
+		$id = ($args["id"]) ? $args["id"] : $args["docid"];
 		$obj = $this->get_object($id);
 
-		// I want to keep this search inside my own interface
-		$search_action = ($search_action) ? $search_action : "search";
-		$search_class = ($search_class) ? $search_class : "aliasmgr";
-
 		$this->vars(array(
-			// NB! It is possible to override class from the url
-			"reforb" => $this->mk_reforb($search_action,array("no_reforb" => 1, "search" => 1, "docid" => $docid),$search_class),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"],"_cl" => $_cl,"_ac" => $_ac)),
+			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id),$this->use_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $args["docid"]),$this->use_class),
 			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
@@ -88,7 +84,7 @@ class aliasmgr extends aw_template
 			"overwrite" => 1,
 		));
 		$this->cache_oo_aliases($id);
-		return $this->mk_my_orb("list_aliases",array("id" => $id));
+		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->orb_class);
 	}
 		
 	////
@@ -300,22 +296,21 @@ class aliasmgr extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"width" => "30",
-			//"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
 			//"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "comment",
 			"caption" => "Muu info",
 			"talign" => "center",
 			//"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "alias",
 			"caption" => "Alias",
@@ -324,7 +319,7 @@ class aliasmgr extends aw_template
 			"align" => "center",
 			"class" => "celltext",
 			//"nowrap" => "1",
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "link",
 			"caption" => "Link",
@@ -333,7 +328,7 @@ class aliasmgr extends aw_template
 			"align" => "center",
 			"class" => "celltext",
 			"nowrap" => "1",
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "modifiedby",
 			"caption" => "Muutja",
@@ -341,7 +336,7 @@ class aliasmgr extends aw_template
 			"talign" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
@@ -352,7 +347,7 @@ class aliasmgr extends aw_template
 			"numeric" => 1,
 			"type" => "time",
 			"format" => "d.m.y / H:i"
-    ));
+		));
 		$this->t->define_field(array(
 			"name" => "title",
 			"caption" => "Tüüp",
@@ -360,7 +355,7 @@ class aliasmgr extends aw_template
 			"align" => "center",
 			"nowrap" => "1",
 			"sortable" => 1,
-    ));
+		));
 		$this->t->define_field(array(
 			"caption" => "<a href='javascript:void(0)' onClick='selall()'>Vali</a>",
 			"name" => "check",
@@ -448,9 +443,7 @@ class aliasmgr extends aw_template
 			"table" => $this->t->draw(),
 			"id" => $id,
 			"parent" => $obj["parent"],
-			"return_url" => $return_url,
-			"aliases" => $this->picker("",$aliases),
-			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none")),
+			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none","return_url" => $return_url),$this->use_class),
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $this->mk_toolbar(),
 		));
@@ -487,9 +480,7 @@ class aliasmgr extends aw_template
 				$this->add_alias($id,$onealias);
 			}
 		};
-		$redir_class = ($_cl) ? $_cl : "aliasmgr";
-		$redir_action = ($_ac) ? $_ac : "list_aliases";
-		header("Location: ".$this->mk_my_orb($redir_action,array("id" => $id),$redir_class));
+		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->orb_class);
 	}
 
 	////
@@ -545,14 +536,14 @@ class aliasmgr extends aw_template
 		$_aliases = $this->get_oo_aliases(array("oid" => $oid));
 
 		// paneme aliases kirja
-    if (is_array($_aliases))
+		if (is_array($_aliases))
 		{
 			$this->set_object_metadata(array(
 				"oid" => $oid,
 				"key" => "aliases",
 				"value" => $_aliases,
 			));
-    };
+		};
 	}
 
 	////
@@ -597,11 +588,10 @@ class aliasmgr extends aw_template
 		}
 		else
 		{
-			$url = ($this->search_url) ? $this->search_url : $this->mk_my_orb("search",array("docid" => $this->id),"aliasmgr");
 			$toolbar->add_button(array(
 				"name" => "search",
 				"tooltip" => "Otsi",
-				"url" => $url,
+				"url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
 				"imgover" => "search_over.gif",
 				"img" => "search.gif",
 			));
