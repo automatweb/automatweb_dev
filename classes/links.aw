@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.42 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.43 2003/11/13 11:21:24 kristo Exp $
 
 /*
 
@@ -272,7 +272,7 @@ class links extends class_base
 		}
 		else
 		{
-			if ($img)
+			if ($this->img)
 			{
 				$replacement = sprintf("<a href='%s' %s title='%s'><img src='%s' alt='%s' border='0'></a>",$url,$target,$this->cur_link->prop("alt"),$this->img,$caption);
 			}
@@ -306,7 +306,7 @@ class links extends class_base
 		if ($link->prop("link_image_check_active") && ($link->prop("link_image_active_until") >= time()) )
 		{
 			$img = new object_list(array(
-				"parent" => $link["oid"],
+				"parent" => $link->id(),
 				"class_id" => CL_FILE
 			));
 
@@ -314,7 +314,7 @@ class links extends class_base
 			if ($img->count() > 0 && $awf->can_be_embedded($o =& $img->begin()))
 			{
 				$img = $awf->get_url($o->id(),"");
-				$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
+				//$img = "<img border='0' src='$img' alt='".$link->prop("alt")."' title='".$link->prop("alt")."' />";
 			}
 			else
 			{
