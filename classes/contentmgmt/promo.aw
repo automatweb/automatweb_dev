@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.27 2004/02/25 15:55:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.28 2004/03/01 15:10:33 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -47,6 +47,9 @@
 
 	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
 	@caption Mitu viimast dokumenti
+
+	@property start_ndocs type=textbox size=4 group=menus table=objects field=meta method=serialize
+	@caption Mitu algusest a&auml;ra j&auml;tta
 
 	@property sort_by type=select table=objects field=meta method=serialize group=show
 	@caption Dokumente j&auml;rjestatakse

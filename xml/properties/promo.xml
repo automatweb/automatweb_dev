@@ -125,6 +125,16 @@
             <caption>Mitu viimast dokumenti</caption>
       </property>
       <property>
+            <name>start_ndocs</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu algusest a&amp;auml;ra j&amp;auml;tta</caption>
+      </property>
+      <property>
             <name>sort_by</name>
             <type>select</type>
             <table>objects</table>

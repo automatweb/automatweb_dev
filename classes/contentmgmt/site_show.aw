@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.37 2004/03/01 12:15:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.38 2004/03/01 15:10:33 kristo Exp $
 
 /*
 
@@ -482,12 +482,14 @@ class site_show extends class_base
 
 		set_time_limit(0);
 
+		$skipfirst = 0;
 
 		// no default, show list
 		if ($docid < 1)	
 		{
 			if ($obj->class_id() == CL_PROMO)
 			{
+				$skipfirst = $obj->prop("start_ndocs");
 				$lm = $obj->meta("last_menus");
 				$lm_sub = $obj->meta("src_submenus");
 				if (is_array($lm) && ($lm[0] !== 0))
@@ -602,6 +604,12 @@ class site_show extends class_base
 
 			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
 			{
+				if ($skipfirst > 0 && $cnt < $skipfirst)
+				{
+					continue;
+				}
+
+
 				if (!($no_fp_document && $o->prop("esilehel") == 1))
 				{
 					// oh. damn. this is sneaky. what if the brother is not active - we gits to check for that and if it is, then
