@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.44 2002/01/08 05:53:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.45 2002/01/14 05:28:29 kristo Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 
@@ -7,16 +7,7 @@ class form_element extends aw_template
 {
 	function form_element()
 	{
-		$this->subtypes=array(
-			"link" => array(
-				"" => "",
-				"show_op" => "N&auml;ita pikemalt"
-			),
-			"listbox" => array(
-				"" => "",
-				"relation" => "Seoseelement",
-				"activity" => "Aktiivsuse pikendamine"
-			),
+		$this->all_subtypes=array(
 			"textbox" => array(
 				"" => "",
 				"count" => "Mitu",
@@ -25,6 +16,34 @@ class form_element extends aw_template
 				"email" => "E-mail", 
 				"surname" => "Eesnimi", 
 				"lastname" => "Perekonnanimi"
+			),
+			"textarea" => array(
+			),
+			"checkbox" => array(
+				"" => "",
+				"toggle_active" => "Aktiivsus",
+				"is_forum" => "Foorum",
+				"no_right_pane" => "Ilma parema paanita",
+				"clear_styles" => "T&uuml;hista stiilid",
+				"link_keywords" => "Lingi v&otilde;tmes&otilde;nad",
+				"archive" => "Arhiveeri",
+				"esilehel " => "Esilehel",
+				"frontpage_left" => "Esilehel tulbas"
+			),
+			"radiobutton" => array(
+			),
+			"listbox" => array(
+				"" => "",
+				"relation" => "Seoseelement",
+				"activity" => "Aktiivsuse pikendamine"
+			),
+			"multiple" => array(
+			),
+			"file" => array(
+			),
+			"link" => array(
+				"" => "",
+				"show_op" => "N&auml;ita pikemalt"
 			),
 			"button" => array(
 				"" => "",
@@ -37,6 +56,8 @@ class form_element extends aw_template
 				"order" => "Tellimine",
 				"close" => "Sulge aken"
 			),
+			"price" => array(
+			),
 			"date" => array(
 				"" => "",
 				"from" => "Algus", 
@@ -45,19 +66,22 @@ class form_element extends aw_template
 				"created" => "Loomine",
 				"activity" => "Aktiivsuse pikendamine"
 			),
-			"checkbox" => array(
-				"" => "",
-				"toggle_active" => "Aktiivsus",
-				"is_forum" => "Foorum",
-				"no_right_pane" => "Ilma parema paanita",
-				"clear_styles" => "T&uuml;hista stiilid",
-				"link_keywords" => "Lingi v&otilde;tmes&otilde;nad",
-				"archive" => "Arhiveeri",
-				"esilehel " => "Esilehel",
-				"frontpage_left" => "Esilehel tulbas"
-			)
 		);
-	}
+
+		$this->all_types = array(
+			"textbox" => "Tekstiboks",
+			'textarea' => "Mitmerealine tekst",
+			'checkbox' => "Checkbox",
+			'radiobutton' => "Radiobutton",
+			'listbox' => "Listbox",
+			'multiple' => "Multiple listbox",
+			'file' => "Faili lisamine",
+			'link' => "H&uuml;perlink",
+			'button' => "Nupp",
+			'price' => "Hind",
+			'date' => "Kuup&auml;ev"
+		);
+	}	
 
 	////
 	// !Loads the element from the array from inside the form
@@ -83,23 +107,18 @@ class form_element extends aw_template
 			"minute" => "",
 			"classid" => "small_button"
 		));
+
+		// now load the subtypes from the db or if they are not specified in the db, use all of them. 
+		// this function puts types and subtypes in $this->subtypes
+		$this->get_types_cached();
+
 			$this->vars(array(
 				"cell_id"									=> "element_".$this->id, 
 				"cell_text"								=> htmlentities($this->arr["text"]),
 				"cell_name"								=> htmlentities($this->arr["name"]),
 				"cell_type_name"					=> htmlentities($this->arr["type_name"]),
 				"cell_dist"								=> htmlentities($this->arr["text_distance"]),
-				"type_active_textbox" 		=> ($this->arr["type"] == "textbox" ? " SELECTED " : ""),
-				"type_active_textarea" 		=> ($this->arr["type"] == "textarea" ? " SELECTED " : ""),
-				"type_active_checkbox" 		=> ($this->arr["type"] == "checkbox" ? " SELECTED " : ""),
-				"type_active_radiobutton" => ($this->arr["type"] == "radiobutton" ? " SELECTED " : ""),
-				"type_active_listbox" 		=> ($this->arr["type"] == "listbox" ? " SELECTED " : ""),
-				"type_active_multiple"		=> ($this->arr["type"] == "multiple" ? " SELECTED " : ""),
-				"type_active_file"				=> ($this->arr["type"] == "file" ? " SELECTED " : ""),
-				"type_active_link"				=> ($this->arr["type"] == "link" ? " SELECTED " : ""),
-				"type_active_button"			=> ($this->arr["type"] == "button" ? " SELECTED " : ""),
-				"type_active_price"				=> ($this->arr["type"] == "price" ? " SELECTED " : ""),
-				"type_active_date"				=> ($this->arr["type"] == "date" ? " SELECTED " : ""),
+				"types"										=> $this->picker($this->arr["type"],$this->types),
 				"default_name"						=> "element_".$this->id."_def",
 				"default"									=> htmlentities($this->arr["default"]),
 				"cell_info"								=> htmlentities($this->arr["info"]),
@@ -2144,6 +2163,52 @@ class form_element extends aw_template
 			$this->arr["listbox_default"] = $cnt;
 		}
 		$this->restore_handle();
+	}
+
+	function get_types_cached()
+	{
+		global $awt;
+		$awt->count("form_element::get_types_cached");
+		$awt->start("form_element::get_types_cached");
+
+		if (!is_array($this->subtypes))
+		{
+			classload("config");
+			$co = new config;
+			if (!($dat = $co->get_simple_config("form::element_subtypes")))
+			{
+				$this->subtypes = $this->all_subtypes;
+			}
+			else
+			{
+				$this->subtypes = aw_unserialize($dat);
+			}
+		}
+
+		if (!is_array($this->types))
+		{
+			classload("config");
+			$co = new config;
+			if (!($dat = $co->get_simple_config("form::element_types")))
+			{
+				$this->types = $this->all_types;
+			}
+			else
+			{
+				$this->types = aw_unserialize($dat);
+			}
+		}
+		$awt->stop("form_element::get_types_cached");
+	}
+
+	function get_all_types()
+	{
+		return $this->all_types;
+	}
+
+	function get_all_subtypes()
+	{
+		return $this->all_subtypes;
 	}
 }
 ?>
