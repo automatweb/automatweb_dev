@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.176 2003/12/01 15:53:26 duke Exp $
+// $Id: class_base.aw,v 2.177 2003/12/02 15:27:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -284,6 +284,11 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$realprops,
 		));
+
+		if (isset($resprops["subgroup"]))
+		{
+			$this->subgroup = $resprops["subgroup"]["value"];
+		};
 
 
 		// so now I have a list of properties along with their values,
@@ -2662,7 +2667,7 @@ class class_base extends aw_template
 	}
 
 	////
-	// !Returns a list of config forms used by thiss
+	// !Returns a list of config forms used by this
 	function get_cfgform_list($args = array())
 	{
 		$this->get_objects_by_class(array(
@@ -2681,31 +2686,5 @@ class class_base extends aw_template
 		return $retval;
 	}
 
-	function get_properties_by_group($args = array())
-	{
-		$this->init_class_base();
-		// get a list of active properties for this object
-		// I need an easy way to turn off individual properties
-		$realprops = $this->get_active_properties(array(
-				"classonly" => isset($args["classonly"]) ? $args["classonly"] : false,
-				"clfile" => $this->clfile,
-				"content" => $args["content"],
-				"group" => $args["group"],
-		));
-
-		// parse the properties - resolve generated properties and
-		// do any callbacks
-		$this->values = &$args["values"];
-
-		if ($this->values["id"])
-		{
-			$this->id = $this->values["id"];
-		};
-		$resprops = $this->parse_properties(array(
-			"properties" => &$realprops,
-		));
-
-		return $resprops;
-	}
 };
 ?>
