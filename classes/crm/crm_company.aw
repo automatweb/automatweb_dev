@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.23 2004/06/11 12:44:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.24 2004/06/15 09:57:03 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -51,16 +51,22 @@ caption Õiguslik vorm
 
 @default group=humanres
 
-
-
 @default group=contacts2
-@property addresslist type=text store=no 
-@caption Aadress
 
-@property human_resources type=table store=no 
+@layout hbox1 type=hbox group=contacts2
+@property unit_listing_tree type=treeview parent=hbox1 no_caption=1
+
+@property human_resources type=table store=no parent=hbox1 no_caption=1
 @caption Inimesed
 
+@property addresslist type=text store=no parent=hbox1 no_caption=1
+@caption Aadress
+
+@property green_button_toolbar type=toolbar no_caption=1 store=no group=contacts
+@caption "The Green Button"
+
 @default group=cedit
+
 
 @property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
 @caption Vaikimisi aadress
@@ -120,6 +126,7 @@ caption Õiguslik vorm
 @groupinfo contacts caption="Kontaktid" 
 @groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
 @groupinfo cedit caption="Kontaktide muutmine" parent=contacts
+groupinfo green_btn caption="Lisa" parent=contacts no_caption=1
 groupinfo humanres caption="Inimesed" submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
@@ -208,6 +215,9 @@ groupinfo humanres caption="Inimesed" submit=no
 @reltype ORDER value=27 clid=CL_SHOP_ORDER
 @caption tellimus
 
+@reltype UNIT value=28 clid=CL_CRM_UNIT
+@caption Üksus
+
 @classinfo no_status=1
 			
 */
@@ -232,6 +242,8 @@ CREATE TABLE `kliendibaas_firma` (
 
 class crm_company extends class_base
 {
+	var $unit=0;
+
 	function crm_company()
 	{
 		$this->init(array(
@@ -239,13 +251,95 @@ class crm_company extends class_base
 			'tpldir' => 'firma',
 		));
 	}
+		
+	function generate_tree($tree, $obj,$node_id){
+		//objekti kõik seosed
+		$conns = $obj->connections_from(array(
+			'type'=>'RELTYPE_UNIT'
+		));
+		//kõik objektid järgnevas loobis peavad minema parentisse, mille
+		//id on parameetri hetke väärtus		
+		$this_level_id = new Integer($node_id->getValue());
+		foreach($conns as $conn){
+			//iga alam item saab ühe võrra suurema väärtuse
+			$node_id->incr();	
+			$tree->add_item($this_level_id->getValue(),
+									array("id"=>$node_id->getValue(),
+											"name"=>$conn->prop('to.name'),
+											'url'=>aw_url_change_var('unit',$conn->prop('to')))
+			);			
+			//$conn'ist saab objekt
+			$conn = $conn->to();
+			//vaatame, kas tal on seoseid
+			$tmp = $conn->connections_from(array(
+				'type'=>'RELTYPE_UNIT'
+			));			
+			if(sizeof($tmp)){				
+				crm_company::generate_tree(&$tree,$conn,&$node_id);
+			}
+		}		
+	}
 	
 	function get_property($arr)
 	{
 		$data = &$arr['prop'];
 		$retval = PROP_OK;
+		if((int)$arr['request']['unit']){
+			$this->unit=$arr['request']['unit'];
+		}
 		switch($data['name'])
-		{
+		{			
+			case "unit_listing_tree":
+			{
+				$tree_inst = &$arr['prop']['vcl_inst'];	
+				//toplevel tree item, unit=>parent won't fall into if((int)$arr['request']['unit']), so its okay
+				$tree_inst->add_item(0,array("id"=>1,
+														'name'=>'Üksused',
+														'url'=>aw_url_change_var('unit','parent')));
+				//couldn't get reference of primitives working, using a Integer wrapper
+				$node_id = new Integer(0);
+				$node_id->incr();
+				crm_company::generate_tree(&$tree_inst,&$arr['obj_inst'],&$node_id);
+				break;
+			}
+			case 'green_button_toolbar':{
+				$tb = &$data['toolbar'];
+				
+				$tb->add_menu_button(array(
+						'name'=>'add_item',
+						'tooltip'=>'Uus'
+				));
+
+				
+				$alias_to = $arr['obj_inst']->id();
+				$rel_type = RELTYPE_WORKERS;
+				
+				if((int)$arr['request']['unit']){
+					$alias_to = $arr['request']['unit'];
+					$rel_type = RELTYPE_MEMBER;
+				}
+
+				$tb->add_menu_item(array(
+						'parent'=>'add_item',
+						'text'=>'Lisa töötaja',
+						'link'=>$this->mk_my_orb('new',array(
+							'parent'=>$arr['obj_inst']->id(),
+							'alias_to'=>$alias_to,//$arr['obj_inst']->id(),
+							'reltype'=>$rel_type,
+							'return_url'=>urlencode(aw_global_get('REQUEST_URI'))
+						),'crm_unit')
+						
+				));
+				//delete button
+				$tb->add_button(array(
+					'name' => 'del',
+					'img' => 'delete.gif',
+					'tooltip' => 'Kustuta valitud',
+					'action' => 'submit_delete_relations',
+				));
+				
+				break;
+			}
 			case "customer":
 				$this->org_table(&$arr);
 				break;
@@ -453,9 +547,23 @@ class crm_company extends class_base
 			'name' => 'new_task',
 			'align' => 'center',
 		));
+
+		$t->define_chooser(array(
+			'name'=>'check',
+			'field'=>'id',
+		));
+
 		$conns = $arr["obj_inst"]->connections_from(array(
 			"type" => RELTYPE_WORKERS,
 		));
+
+		//if listing from a specific unit, then the reltype is different
+		if((int)$arr['request']['unit']){
+			$obj = new Object((int)$arr['request']['unit']);
+			$conns = $obj->connections_from(array(
+				'type' => RELTYPE_MEMBER,
+			));
+		}
 
 		$crmp = get_instance(CL_CRM_PERSON);
 
@@ -493,6 +601,7 @@ class crm_company extends class_base
 					"url" => "mailto:" . $pdat["email"],
 					"caption" => $pdat["email"],
 				)),
+				'id' => $conn->prop('to'),
 			);
 
 			if ($cal_id)
@@ -1074,7 +1183,50 @@ class crm_company extends class_base
 		}
 	}
 
+	/**
+		deletes the relations unit -> person || organization -> person
+		@attrib name=submit_delete_relations
+		@param id required type=int acl=view
+		@param unit optional type=int
+	**/
+	function submit_delete_relations($arr){
+		$mainObj = new Object($arr['id']);
+		
+		if((int)$arr['unit']){
+			$mainObj = new Object($arr['unit']);
+		}
+		
+		foreach($arr['check'] as $key=>$value){
+			$mainObj->disconnect(array('from'=>$value));
+		}
 
+		return $this->mk_my_orb('change',array(
+			'id' => $arr['id'],
+			'group'=>'contacts',),
+			CL_CRM_COMPANY
+		);
+	}
 
+	function callback_mod_reforb($arr){
+		$arr['unit'] = $this->unit;
+	}
 }
+
+class Integer{
+	var $int = 0;
+	
+	function Integer($int){
+		$this->int=$int;
+	}
+		
+	function incr(){
+		$this->int++;
+	}
+	
+	function getValue(){
+		return $this->int;
+	}
+}
+
+
 ?>
