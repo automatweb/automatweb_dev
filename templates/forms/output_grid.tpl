@@ -48,13 +48,13 @@
 <!-- SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text>Element:</td>
-<td><select class='small_button' name='elsel_{VAR:element_id}'>{VAR:elsel}</select></td>
+<td>&nbsp;</td>
 </tr>
 <!-- END SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text>Stiil:</td>
-<td class=fgen_text><select class='small_button' name='stylesel_{VAR:cell_id}'><option value=''>{VAR:stylesel}</select><br>
-<a href='{VAR:ch_cell}'>Muuda</a>
+<td class=fgen_text>{VAR:style_name} <input type='checkbox' name='sel[{VAR:row}][{VAR:col}]' value='1'><br>
+<a href='{VAR:ch_cell}'>Muuda</a>	
 </td>
 </tr>
 <!-- SUB: SPLITS -->
@@ -92,6 +92,15 @@
 </tr>
 <!-- END SUB: LINE -->
 </table></td></tr></table>
+<select name='selstyle' >{VAR:styles}</select><br>
 <input class='small_sub' type='submit' NAME='save' VALUE='Salvesta!'>
 {VAR:reforb}
+</form>
+<form action='reforb.{VAR:ext}' method=POST>
+<input type='submit' class='small_sub' value='Lisa'> <input type='text' name='nrows' size=3 class='small_button'> rida 
+{VAR:addr_reforb}
+</form>
+<form action='reforb.{VAR:ext}' method=POST>
+<input type='submit' class='small_sub' value='Lisa'> <input type='text' name='ncols' size=3 class='small_button'> tulpa 
+{VAR:addc_reforb}
 </form>

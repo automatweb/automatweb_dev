@@ -142,6 +142,21 @@ var form_{VAR:form_id}_el_{VAR:el_el_id}_type = "{VAR:el_type}";
 		}
 		ch_type(el,f_el,suf);
 	}
+
+function search(search_el,lb_el)
+{
+	val = search_el.value;
+	for (i=0; i < lb_el.options.length; i++)
+	{
+		if (lb_el.options[i].text == val)
+		{
+			lb_el.selectedIndex=i;
+			lb_el.options[i].selected = true;
+			break;
+		}
+	}
+}
+
 </script>
 <!-- END SUB: SCRIPT -->
 <table border=0>
@@ -163,7 +178,7 @@ var form_{VAR:form_id}_el_{VAR:el_el_id}_type = "{VAR:el_type}";
 </tr>
 <tr>
 <td class="fcaption">Milline valitud formist:</td>
-<td class="fform"><select NAME='{VAR:el_id}_element' onChange='ch_type(this,document.f1.{VAR:el_id}_form,"{VAR:el_id}")'>
+<td class="fform"><input type='text' name='{VAR:el_id}_search' onKeyDown="setTimeout('search(this,document.f1.{VAR:el_id}_element)',10);"><br><select NAME='{VAR:el_id}_element' onChange='ch_type(this,document.f1.{VAR:el_id}_form,"{VAR:el_id}")'>
 <!-- SUB: ELSEL -->
 <option {VAR:sel_el_active} VALUE='{VAR:sel_el_value}'>{VAR:sel_el_name}
 <!-- END SUB: ELSEL -->

@@ -54,12 +54,6 @@ function varvivalik()
 <tr>
 <td class="fform" colspan=2>Kas formi &uuml;&uuml;ritatakse t&auml;ita kasutaja liitumisel sisestatud andmetega: &nbsp;<input type='checkbox' name='try_fill' value=1 {VAR:try_fill}></td>
 </tr>
-<tr>
-<td class="fform" colspan=2>Kataloog kuhu salvestatakse formi sisestatud info:</td>
-</tr>
-<tr>
-<td colspan=2 class="fform"><select name='ff_folder' class='small_button'>{VAR:ff_folder}</select></td>
-</tr>
 <!-- SUB: NOSEARCH -->
 <tr>
 <td class="fform" colspan=2>P&auml;rast t&auml;itmist:</td>

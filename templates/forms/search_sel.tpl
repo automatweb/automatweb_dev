@@ -10,7 +10,16 @@ return false;
 }
 </script>
 <form action='reforb.{VAR:ext}' METHOD=post>
-Vali milliste formide sisestustest otsitakse selle formi t&auml;itmisel:<br>
+Lehek&uuml;lg: 
+<!-- SUB: PAGE -->
+<a href='{VAR:pageurl}'>{VAR:from} - {VAR:to}</a> |
+<!-- END SUB: PAGE -->
+
+<!-- SUB: SEL_PAGE -->
+{VAR:from} - {VAR:to} |
+<!-- END SUB: SEL_PAGE -->
+
+<br>Vali milliste formide sisestustest otsitakse selle formi t&auml;itmisel:<br>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr bgcolor="#C9EFEF">
 <td class="title">ID</td>
@@ -27,7 +36,7 @@ Vali milliste formide sisestustest otsitakse selle formi t&auml;itmisel:<br>
 <td class="plain">{VAR:form_name}</td>
 <td class="plain">{VAR:form_comment}</td>
 <td class="plain">{VAR:form_location}</td>
-<td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}></td>
+<td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}><input type='hidden' name='inpage[{VAR:form_id}]' value='1'><input type='hidden' name='prev[{VAR:form_id}]' value='{VAR:prev}'></td>
 <td class="chkbox"><SELECT class='small_button' NAME='sel_{VAR:form_id}'>{VAR:ops}</select>
 </td>
 </tr>

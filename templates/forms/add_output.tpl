@@ -14,7 +14,7 @@
 </tr>
 <!-- SUB: ADD -->
 <tr>
-<td class="fcaption">Vali alusform:</td><td class="fform"><select name='baseform'>{VAR:forms}</select></td>
+<td class="fcaption">Vali alusform:</td><td class="fform"><select multiple name='baseform[]'>{VAR:forms}</select></td>
 </tr>
 <!-- END SUB: ADD -->
 

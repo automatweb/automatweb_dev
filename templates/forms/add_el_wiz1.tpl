@@ -14,13 +14,13 @@ function init()
 		{
 			name = 0;
 		}
-		allels_s[i] = " "+f.el.options[i].text.slice(name);
+		allels_s[i] = " "+f.el.options[i].text.slice(name).toLowerCase();
 	}
 }
 
 function search()
 {
-	se = document.f.jssearch.value;
+	se = document.f.jssearch.value.toLowerCase();
 	selen = se.length;
 	first = true;
 

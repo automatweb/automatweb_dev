@@ -108,6 +108,8 @@ function toggle1(layer1,layer2) {
 <!-- SUB: CAN_META -->
 <a class="alamlingid" href='{VAR:metainfo}'>Meta info</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_META -->
+
+<a class="alamlingid" href='{VAR:set_folders}'>Vali kataloogid</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 <!--
 <a class="alamlingid" href='forms.{VAR:ext}?type=html&id={VAR:form_id}'>HTML</a>
 -->
