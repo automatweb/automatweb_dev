@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.10 2004/10/05 07:14:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.11 2004/10/08 15:58:19 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -166,7 +166,6 @@ class gallery_conf extends class_base
 		$this->init(array(
 			'clid' => CL_GALLERY_CONF
 		));
-		$this->do_check_tbl();
 	}
 
 	function callback_post_save($arr)
@@ -276,6 +275,7 @@ class gallery_conf extends class_base
 
 	function do_check_tbl()
 	{
+		return;
 		$tbld = $this->db_get_table("gallery_conf2menu");
 		if (!isset($tbld["fields"]["apply_image"]))
 		{
