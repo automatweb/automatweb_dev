@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.50 2001/06/04 03:23:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.51 2001/06/04 03:48:05 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -812,25 +812,35 @@ class messenger extends menuedit_light
 		// Shucks. Aga teist voimalust ei ole nende kättesaamiseks
 		global $status_msg;
 		global $udata;
-		
-		$this->quote($args);
 		extract($args);
+	
+		if ($post)
+		{
+			$args = $this->driver->msg_get(array(
+				"id" => $id,
+			));
+		}
+		else
+		{
+			$this->quote($args);
+			extract($args);
 
 
-		// First we need to fetch and store the attached files. If any.
-		$this->receive_attaches(array(
-					"msg_id" => $msg_id,
-				));
+			// First we need to fetch and store the attached files. If any.
+			$this->receive_attaches(array(
+						"msg_id" => $msg_id,
+					));
 
-		// now, we figure out how many attached objects that message has
-		$num_att = $this->count_objects(array(
-					"class" => CL_FILE,
-					"parent" => $msg_id,
-				));
+			// now, we figure out how many attached objects that message has
+			$num_att = $this->count_objects(array(
+						"class" => CL_FILE,
+						"parent" => $msg_id,
+					));
 		
-		// and finally we will save the message
-		$args["num_att"] = $num_att;
-		$this->save_message($args);
+			// and finally we will save the message
+			$args["num_att"] = $num_att;
+			$this->save_message($args);
+		};
 
 		if ($save)
 		{
@@ -848,9 +858,20 @@ class messenger extends menuedit_light
 							"id" => $msg_id,
 						));
 		};
-
 		// Kuna me siia joudsime, siis jarelikult on meil vaja meil laiali saata
 		// koigepealt splitime mtargetsi komade pealt ära ja eemaldame whitespace
+		
+		$this->post_message($args);	
+
+		// at this moment we just return from this function call
+		return $this->mk_site_orb(array());
+	}
+
+
+	function post_message($args = array())
+	{
+		extract($args);
+
 		$targets = explode(",",$mtargets1);
 
 		foreach($targets as $key => $val)
@@ -938,11 +959,14 @@ class messenger extends menuedit_light
 				$this->restore_handle();
 				$prefix = substr($row2["file"],0,1);
 				$fname = SITE_DIR . "/files/$prefix/$row2[file]";
-				$awm->fattach(array(	
-						"path" => $fname,
-						"name" => $row["name"],
-						"contenttype" => $row["type"],
-				));
+				if (file_exists($fname))
+				{
+					$awm->fattach(array(	
+							"path" => $fname,
+							"name" => $row["name"],
+							"contenttype" => $row["type"],
+					));
+				};
 
 			};
 	
@@ -971,153 +995,6 @@ class messenger extends menuedit_light
 
 		$q = "UPDATE objects SET parent = '$outbox' WHERE oid = '$msg_id'";
 		$this->db_query($q);
-
-		// at this moment we just return from this function call
-		return $this->mk_site_orb(array());
-
-		
-		$uid = UID;
-		$t = time();
-		
-		$this->quote($message);
-
-		// $mto sisaldab aadresse
-		// now, kui seal on komasid
-		$mtargets = $args["mtargets"];
-		$mtargets2 = $args["mtargets2"];
-		
-		// strip whitespace, if any
-		$mtargets = preg_replace("/\s+?/","",$mtargets);
-		// $mtargets2 = preg_replace("/\s+?/","",$mtargets2);
-
-		// first, we need to find out who the message was directed to
-		$parts = array();
-		$_parts = explode(",",$mtargets);
-		foreach($_parts as $key => $val)
-		{
-			$parts[$val] = $val;
-		};
-		$gids = explode(",",$mtargets2);
-		if ($gids[0])
-		{
-			$uid_list = array();
-			classload("users_user");
-			$u = new users_user();
-			foreach($gids as $gkey => $gid)
-			{
-				$parts = array_merge($parts,$u->getgroupmembers($gid));
-			};
-		};
-		// esialgu ei tee me grupinimedega midagi
-		
-		// explode tagastab alati array
-		if (sizeof($parts) == 0)
-		{
-			$status_msg = "Ühtegi addressaati polnud määratud. Teadet ei saadetud";
-			session_register("status_msg");
-			// see on ka miski kahtlane action
-			return $this->mk_site_orb(array(
-				"action" => "folders",
-			));
-		};
-			
-		$results = "";
-		$cnt["delivered"] = $cnt["failed"] = 0;
-		foreach($parts as $idx => $addr)
-		{
-			$target = $this->get_user(array(
-				"uid" => $addr,
-			));
-			$folder = $target["msg_inbox"];
-			// loeme kasutaja ruulid sisse
-			$q = "SELECT * FROM msg_rules WHERE uid = '$addr'";
-			$this->db_query($q);
-			$rules = array();
-			$rule_matched = false;
-			while(($row = $this->db_next()) && (!$rule_matched))
-			{
-				$field = $row["field"];
-				$text = $row["rule"];
-				if (preg_match("/$text/",$args[$field]))
-				{
-					$delivery = (strlen($row["delivery"]) > 0) ? $row["delivery"] : "fldr";
-					$m_addr = $row["addr"];
-					$folder = $row["folder"];
-					$rule_matched = true;
-				};
-			};
-			if (!$rule_matched)
-			{
-				$folder = $target["msg_inbox"];
-				$delivery = "fldr";
-			};
-			// loome targeti jaoks uue teate objekti
-			if ($args["sendmail"])
-			{
-				$delivery = "mail";
-				$m_addr = $target["email"];
-			};
-			if ($delivery == "fldr")
-			{
-				$oid = $this->new_object(array(
-					"parent" => $folder,
-					"name" => $args["subject"],
-					"class_id" => CL_MESSAGE),false);
-				$args["mtargets1"] = $mtargets;
-				$args["mtargets2"] = $mtargets2;
-				$args["folder"] = $folder;
-				$args["message"] = $message;
-				$args["oid"] = $oid;
-				$args["reply"] = ($reply) ? $reply : 0;
-				$success = $this->driver->msg_send($args);
-			}
-			else
-			{
-				global $udata;
-				$from = $udata["email"];
-				$message = stripslashes($message);
-				mail($m_addr,$subject,$message,"From: $from");
-				$success = true;
-			};
-				
-			
-			// hetkel me veel ei oska mailidele attache külge panna. So here.
-			if ($success || ($delivery == "mail"))
-			{
-				// kloonime koik attachid
-				$q = "SELECT * FROM msg_objects WHERE message_id = '$msg_id'";
-				$this->db_query($q);
-				while($row = $this->db_next())
-				{
-					$this->save_handle();
-					$msg_id = $row["message_id"];
-					$content = $row["content"];
-					$c = unserialize($content);
-					$content = serialize($c);
-					$this->quote($content);
-					$this->quote($content);
-					$xoid = $row["oid"];
-					$q  = "INSERT INTO msg_objects (message_id,content,oid)
-						VALUES('$oid','$content','$xoid')";
-					$this->db_query($q);
-					$this->restore_handle();
-				};
-				$results .= "* Teade saadetud kasutajale $addr<br>\n";
-				$cnt["delivered"]++;
-			}
-			else
-			{
-				$results .= "* Saatmine ebaõnnestus. Tundmatu kasutaja? $addr.<br>\n";
-				$cnt["failed"]++;
-			};
-		};
-		$results .= sprintf("Teade saadeti %d kasutajale",$cnt["delivered"]);
-		// store a copy in outbox
-		$status_msg = $results;
-		session_register("status_msg");
-		return $this->mk_site_orb(array(
-			"action" => "folder",
-		));
 	}
 	
 	////
@@ -1353,7 +1230,10 @@ class messenger extends menuedit_light
 
 		$message = nl2br($this->MIME_decode($message));
 		$this->vars(array("msg_id" => $args["id"]));
+		
+		// soltuvalt "op"-ist naitame kas show voi preview sectionit muutmistemplatest
 		$s = ($op == "show") ? $this->parse("show") : $this->parse("preview");
+
 		$this->vars(array(
 			"tm" => $this->time2date($msg["tm"]),
 			"mtargets2" => $msg["mtargets2"],
