@@ -31,6 +31,8 @@
 												<IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT=""><a href="{VAR:stats}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('stats','','{VAR:baseurl}/automatweb/images/blue/awicons/show_over.gif',1)"><img name="stats" alt="Statistika" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/show.gif" width="25" height="25"></a>
 
 												<!--createpwd--><a href="{VAR:createpwd}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('search','','{VAR:baseurl}/automatweb/images/blue/awicons/search_over.gif',1)"><img name="search" alt="Loo paroolid" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/search.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="Loo paroolid">
+
+												<!--import--><a href="{VAR:import}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('import','','{VAR:baseurl}/automatweb/images/blue/awicons/import_over.gif',1)"><img name="import" alt="Impordi" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/import.gif" width="25" height="25"></a><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="4" HEIGHT="1" BORDER=0 ALT="Impordi">
 											</td>
 										</tr>
 									</table>

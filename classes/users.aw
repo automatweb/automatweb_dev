@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.83 2003/05/09 16:17:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.84 2003/05/13 07:44:13 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -210,7 +210,8 @@ class users extends users_user
 			"search" => $this->mk_my_orb("gen_list", $_arr2),
 			"list" => $this->mk_my_orb("gen_list", $_arr3),
 			"stats" => $this->mk_my_orb("user_stats"),
-			"createpwd" => $this->mk_my_orb("createpwd")
+			"createpwd" => $this->mk_my_orb("createpwd"),
+			"import" => $this->mk_my_orb("import")
 		));
 
 		$users = $this->_gen_usr_list();
@@ -2268,6 +2269,86 @@ class users extends users_user
 			));
 		}
 		$ini_opts["auth.md5_passwords"] = 1;
+	}
+
+	function import($arr)
+	{
+		extract($arr);
+		$this->read_template("import.tpl");
+		$this->mk_path(0,"<a href='".$this->mk_my_orb("gen_list")."'>Kasutajad</a> / Impordi");
+
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_import")
+		));
+		return $this->parse();
+	}
+
+	function submit_import($arr)
+	{
+		extract($arr);
+		global $imp;
+
+		// read the damn file
+		if (is_uploaded_file($imp))
+		{
+			echo "Impordin kasutajaid ... <Br>";
+			$first = true;
+			$f = fopen($imp,"r");
+			while(($row = fgetcsv($f, 10000,",")))
+			{
+				if ($first && $first_colheaders)
+				{
+					$first = false;
+					continue;
+				}
+
+				$uid = $row[0];
+				$pass = $row[1];
+				$name = $row[2];
+				$email = $row[3];
+				$act_to = ($row[5] == "NULL" || $row[5] == "" ? -1 : strtotime($row[5]));
+				$act_from = ($row[4] == "NULL" || $row[4] == "" ? -1 : strtotime($row[4]));
+
+				$row = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid'");
+				if (!is_array($row))
+				{
+					$this->add(array(
+						"uid" => $uid,
+						"password" => $pass,
+						"email" => $email
+					));
+				}
+
+				if ($act_from)
+				{
+					$this->set_user_config(array(
+						"uid" => $uid,
+						"key" => "act_from",
+						"value" => $act_from
+					));
+				}
+
+				if ($act_to)
+				{
+					$this->set_user_config(array(
+						"uid" => $uid,
+						"key" => "act_to",
+						"value" => $act_to
+					));
+				}
+
+				echo "Importisin kasutaja $uid ... ($act_from, $act_to)<Br>\n";
+				flush();
+				$first = false;
+			}
+			echo "Valmis! <br>\n";
+			die(html::href(array(
+				"url" => $this->mk_my_orb("gen_list"),
+				"caption" => "Tagasi"
+			)));
+		}
+		return $this->mk_my_orb("gen_list");
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.52 2003/05/09 16:17:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.53 2003/05/13 07:44:13 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -614,6 +614,16 @@ class users_user extends aw_template
 		return $ret;
 	}
 
+	////
+	// !adds an user
+	// parameters:
+	//	uid 
+	//	password
+	//	email
+	//	join_grp
+	//	join_form_entry
+	//	use_md5_passwords - optional,if true, encodes password with md5, regardless of the default
+	//	all_users_group - if set, overrides the system default
 	function add($data) 
 	{
 		extract($data);

@@ -232,5 +232,17 @@
 				<arguments/>
 			</function>
 		</action>
+
+		<action name="import">
+			<function name="import">
+				<arguments/>
+			</function>
+		</action>
+
+		<action name="submit_import">
+			<function name="submit_import">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>
