@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.15 2001/05/24 21:07:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.16 2001/05/24 21:10:03 cvs Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -965,6 +965,7 @@ class db_documents extends aw_template
 
 		$doc[content] = str_replace("#current_time#",$this->time2date(time(),2),$doc[content]);
 
+		classload("users");
 		if (!(strpos($doc[content],"#liitumisform") === false))
 		{
 			preg_match("/#liitumisform info=\"(.*)\"#/",$doc[content], $maat);
