@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.4 2003/12/09 18:34:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.5 2003/12/10 16:25:12 duke Exp $
 /*
 @classinfo relationmgr=yes
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
@@ -370,8 +370,7 @@ class crm_person extends class_base
 	
 	function show_isik($args)
 	{
-
-		$arg2['id'] = $args['obj'][OID];
+		$arg2["id"] = $args["obj_inst"]->id();
 		$nodes = array();
 		$nodes['visitka'] = array(
 			"value" => $this->show($arg2),
@@ -384,11 +383,12 @@ class crm_person extends class_base
 	{
 		extract($args);
 
-		$obj = $this->get_object($id);
+		$obj = new object($id);
+		$tpls = $obj->prop("templates");
 
-		if (strlen($obj['meta']['templates']) > 4)
+		if (strlen($tpls) > 4)
 		{
-			$this->read_template('visit/'.$obj['meta']['templates']);
+			$this->read_template('visit/'.$tpls);
 		}
 		else
 		{
@@ -397,30 +397,32 @@ class crm_person extends class_base
 
 		$row = $this->fetch_all_data($id);
 
-		$forms = '';
+		$forms = $obj->prop("forms");
 		if (is_array($this->default_forms))
 		{
-			$obj['meta']['forms'] = array_merge($this->default_forms, $obj['meta']['forms']);
+			$forms = array_merge($this->default_forms, $forms);
 		}
 
+		$fb = "";
 
-		if (is_array($obj['meta']['forms']))
+
+		if (is_array($forms))
 		{
-			$obj['meta']['forms'] = array_unique($obj['meta']['forms']);
-			foreach($obj['meta']['forms'] as $val)
-//			$val = $obj['meta']['forms'];
+			$forms = array_unique($forms);
+			foreach($forms as $val)
 			{
 				if (!$val)
-				continue;
+					continue;
 
-				$form = $this->get_object($val);
-				$forms.= html::href(array(
-				'target' => $form['meta']['open_in_window']? '_blank' : NULL,
-				'caption' => $form['name'], 'url' => $this->mk_my_orb('form', array(
-					'id' => $form[OID],
-					'feedback' => $id,
-					'feedback_cl' => rawurlencode('crm/crm_person'),
-					),'pilot_object'))).'<br />';
+				$form = new object($val);
+				$fb.= html::href(array(
+					'target' => $form->prop('open_in_window')? '_blank' : NULL,
+					'caption' => $form->name(), 'url' => $this->mk_my_orb('form', array(
+						'id' => $form->id(),
+						'feedback' => $id,
+						'feedback_cl' => rawurlencode('crm/crm_person'),
+						),
+				'pilot_object'))).'<br />';
 			}
 		}
 
@@ -458,7 +460,7 @@ class crm_person extends class_base
 		$row['w_e_mail']=(!empty($row['w_e_mail']))?html::href(array('url' => 'mailto:'.$row['w_e_mail'],'caption' => $row['w_e_mail'])):'';
 		$row['k_kodulehekylg']=$row['k_kodulehekylg']?html::href(array('url' => $row['k_kodulehekylg'],'caption' => $row['k_kodulehekylg'],'target' => '_blank')):'';
 		$row['w_kodulehekylg']=$row['w_kodulehekylg']?html::href(array('url' => $row['w_kodulehekylg'],'caption' => $row['w_kodulehekylg'],'target' => '_blank')):'';
-		$row['tagasisidevormid'] = $forms;
+		$row['tagasisidevormid'] = $fb;
 
 		$this->vars($row);
 
