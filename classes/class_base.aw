@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.200 2004/01/20 16:46:49 duke Exp $
+// $Id: class_base.aw,v 2.201 2004/01/28 11:31:30 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -614,6 +614,7 @@ class class_base extends aw_template
 				{
 					$this->classinfo["disable_relationmgr"] = 1;
 				};
+
 			};
 
 		};
@@ -1308,6 +1309,21 @@ class class_base extends aw_template
 
 		}
 
+		// XXX: suckage starts
+		if (isset($grplist["general"]))
+		{
+			$grplist["general"]["icon"] = "edit";
+		};
+		if (isset($grplist["settings"]))
+		{
+			$grplist["settings"]["icon"] = "settings";
+		};
+		if (isset($grplist["relationmgr"]))
+		{
+			$grplist["relationmgr"]["icon"] = "connectionmanager";
+		};
+		// XXX: suckage ends
+		
 		$cfgu = get_instance("cfg/cfgutils");
 
 		// content comes from the config form
