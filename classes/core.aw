@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.114 2002/10/15 15:15:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.115 2002/10/15 20:33:14 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -2411,7 +2411,7 @@ class core extends db_connector
 		return $ret;
 	}
 
-	function get_obj_properties()
+	function get_obj_properties($args = array())
 	{
 
 		$fields = array();
@@ -2419,8 +2419,9 @@ class core extends db_connector
 		// should only be used for one object. You really don't
 		// want to give for example 100 objects same new name
 		// at least, I don't see a point in doing it.
+
 		$fields["name"] = array(
-			"type" => "text",
+			"type" => "textbox",
 			"caption" => "Nimi",
 			"value" => $args["name"],
 			"store" => "table",
@@ -2428,15 +2429,17 @@ class core extends db_connector
 			"idfield" => "oid",
 			"private" => 1,
 		);
+
 		$fields["comment"] = array(
-			"type" => "text",
-			"caption" => "comment",
+			"type" => "textbox",
+			"caption" => "Kommentaar",
 			"value" => $args["comment"],
 			"store" => "table",
 			"table" => "objects",
 			"idfield" => "oid",
 			"private" => 1,
 		);
+
 		return $fields;
 
 	}
