@@ -11,7 +11,7 @@
             <caption>Vaikimisi valim</caption>
       </property>
       <property>
-            <name>navtoolbar</name>
+            <name>orgtoolbar</name>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -19,7 +19,6 @@
             <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption></caption>
       </property>
       <property>
             <name>search_form</name>
@@ -48,14 +47,6 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>make_search</name>
-            <type>textbox</type>
-            <table>objects</table>
-            <group>firmad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
             <name>selection_manage_buttons</name>
             <type>text</type>
             <callback>selection_manage_bar</callback>
@@ -70,6 +61,25 @@
             <callback>firma_manager</callback>
             <table>objects</table>
             <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>make_search</name>
+            <type>textbox</type>
+            <size>1</size>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>tegtoolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1	</no_caption>
+            <table>objects</table>
+            <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -114,12 +124,32 @@
       <property>
             <name>dir_address</name>
             <type>relpicker</type>
-            <reltype>ADRESS_CAT</reltype>
+            <reltype>ADDRESS_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <caption>Vaikimisi aadresside kataloog</caption>
+      </property>
+      <property>
+            <name>dir_ettevotlusvorm</name>
+            <type>relpicker</type>
+            <reltype>ETTEVOTLUSVORM_CAT</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi õiguslike vormide kataloog</caption>
+      </property>
+      <property>
+            <name>dir_linn</name>
+            <type>relpicker</type>
+            <reltype>LINN_CAT</reltype>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi linnade kataloog</caption>
       </property>
       <property>
             <name>dir_tegevusala</name>
@@ -140,6 +170,24 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
+      </property>
+      <property>
+            <name>flimit</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirjeid ühel lehel</caption>
+      </property>
+      <property>
+            <name>default_kliendibaas</name>
+            <type>checkbox</type>
+            <table>objects</table>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>See on kasutaja default kliendibaas</caption>
       </property>
       <property>
             <name>active_selection_objects</name>
@@ -167,7 +215,7 @@
       <groupinfo>
             <firmad>
                   <submit>no</submit>
-                  <caption>Ettevõtted</caption>
+                  <caption>Organisatsioonid</caption>
             </firmad>
             <tegevusalad>
                   <caption>Tegevusalad</caption>

@@ -166,6 +166,16 @@
             <caption>Kasuta menubari</caption>
       </property>
       <property>
+            <name>user_calendar</name>
+            <type>checkbox</type>
+            <group>special</group>
+            <rel>1</rel>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja default kalender</caption>
+      </property>
+      <property>
             <name>event_direction</name>
             <type>callback</type>
             <callback>cb_get_event_direction</callback>

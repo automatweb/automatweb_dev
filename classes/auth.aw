@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.4 2003/01/20 14:25:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/auth.aw,v 2.5 2003/08/29 14:32:05 axel Exp $
 // auth.aw - authentication functions
 class auth extends aw_template 
 {
@@ -20,7 +20,7 @@ class auth extends aw_template
 		$request_uri_before_auth = aw_global_get("REQUEST_URI");
 		session_register("request_uri_before_auth");
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("login",array()),
+			"reforb" => $this->mk_reforb("login",array(),'users'),
 		));
 		return $this->parse();
 	}

@@ -18,7 +18,7 @@
 	@caption Postinindex
 	
 	@property linn type=relpicker reltype=LINN table=kliendibaas_address
-	@caption Linn/Vald
+	@caption Linn/Vald/Alev
 
 	@property maakond type=relpicker reltype=MAAKOND table=kliendibaas_address
 	@caption Maakond

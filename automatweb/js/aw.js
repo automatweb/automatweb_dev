@@ -32,3 +32,16 @@ function aw_popup_scroll(file,name,width,height)
 	_aw_popup(file,name,0,0,0,0,1,1,width,height);
 };
 
+function list_preset(el,oid)
+{
+	var i = 1;
+	elem = el + '_' + i;
+	while(it = document.getElementById(elem))
+	{
+		it.style.color='blue';
+	
+		i+=1;
+		elem = el + '_' + i;
+	}
+	document.getElementById(el).value=oid;
+}

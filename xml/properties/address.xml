@@ -35,7 +35,7 @@
             <table>kliendibaas_address</table>
             <group>general</group>
             <field>linn</field>
-            <caption>Linn/Vald</caption>
+            <caption>Linn/Vald/Alev</caption>
       </property>
       <property>
             <name>maakond</name>

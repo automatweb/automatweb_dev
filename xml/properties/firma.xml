@@ -109,8 +109,7 @@
       </property>
       <property>
             <name>firmajuht</name>
-            <type>relpicker</type>
-            <reltype>WORKERS</reltype>
+            <type>text</type>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>firmajuht</field>

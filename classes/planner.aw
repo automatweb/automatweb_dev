@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.130 2003/08/01 12:48:16 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.131 2003/08/29 14:32:05 axel Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -55,6 +55,12 @@
 
 	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
 	@caption Kasuta menubari
+	
+	@property use_menubar type=checkbox group=special rel=1 table=objects field=meta method=serialize ch_value=1
+	@caption Kasuta menubari
+
+@property user_calendar type=checkbox group=special rel=1 table=objects field=meta method=serialize
+@caption Kasutaja default kalender
 
 	@property event_direction type=callback callback=cb_get_event_direction group=advanced rel=1
 	@caption Suund
@@ -131,6 +137,7 @@ define("CAL_SHOW_OVERVIEW",2);
 define("CAL_SHOW_WEEK",3);
 define("CAL_SHOW_MONTH",4);
 
+
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
 classload("calendar");
@@ -200,6 +207,22 @@ class planner extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case 'user_calendar':
+				$this->users = get_instance("users");
+				
+				if ($args['obj'][OID] ==
+					$this->users->get_user_config(array(
+						"uid" => aw_global_get("uid"),
+						"key" => "user_calendar",
+				)))
+				{
+					$data['checked'] = true;
+					
+				}
+				$data['ch_value'] = $args['obj'][OID];
+				aw_session_set('user_calendar',$data['checked'] ? $args['obj'][OID] : '');
+			break;
+					
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -261,8 +284,27 @@ class planner extends class_base
 	{
                 $data = &$args["prop"];
                 $retval = PROP_OK;
+		$form = &$args["form_data"];		
                 switch($data["name"])
                 {
+			case 'user_calendar':
+				if ($form['user_calendar'])
+				{
+					$this->users = get_instance("users");
+						$this->users->set_user_config(array(
+						"uid" => aw_global_get("uid"),
+						"key" => "user_calendar",
+						"value" => $args['obj'][OID],
+					));
+					aw_session_del('user_calendar');
+					session_register('user_calendar');
+
+					//echo $GLOBALS['user_calendar'];
+				}
+				aw_session_set('user_calendar', $form['user_calendar']);
+	
+			break;	
+		
 			case "event_cfgform":
 				// try and check the config form
 				$frm = $this->get_object($data["value"]);
@@ -482,6 +524,8 @@ class planner extends class_base
 		$event_folder = $meta["event_folder"];
 
 		$event_id = $args["request"]["event_id"];
+		//$dtitle = $args["request"]['title'];//axel
+
 		$this->event_id = $event_id;
 
 		$res_props = array();
@@ -568,6 +612,7 @@ class planner extends class_base
 			// bad, I need a way to detect the default group. 
 			// but for now this has to do.
 			$resprops["capt"] = $tmp;
+			//$xprops['title']['value'] = $xprops['title']['value'] ? $xprops['title']['value'] : $dtitle;//axel
 			foreach($xprops as $key => $val)
 			{
 				// a põmst, kui nimes on [ sees, siis peab lahutama
@@ -585,7 +630,8 @@ class planner extends class_base
 				};	
 				$xprops[$key]["name"] = $newname;
 				$resprops["emb_$key"] = $xprops[$key];
-			};	
+			};
+
 			$resprops[] = array(
 				"type" => "hidden",
 				"name" => "emb[class]",

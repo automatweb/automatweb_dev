@@ -14,24 +14,22 @@
 //////////////////////////////////////////////////////	
 
 	@default group=firmad
-	@groupinfo firmad submit=no caption=Ettevõtted
+	@groupinfo firmad submit=no caption=Organisatsioonid
 
-@property navtoolbar type=toolbar store=no no_caption=1
-@caption 
+@property orgtoolbar type=toolbar store=no no_caption=1
 	
 	@property search_form type=text no_caption=1
 	@caption otsing
 	
 	@property sfield type=textbox
 	@property exclude type=textbox
-	@property make_search type=textbox size=1
-
 		
 	//valimi nupud	
 	@property selection_manage_buttons type=text callback=selection_manage_bar
 	
 	@property manageri type=text callback=firma_manager
 
+	@property make_search type=textbox size=1 	
 	
 //	@property page type=textbox size=3
 //	@caption page
@@ -52,6 +50,8 @@
 	@default group=tegevusalad
 	@groupinfo tegevusalad caption=Tegevusalad
 
+@property tegtoolbar type=toolbar store=no no_caption=1	
+	
 	@property tegevusala_manager type=text callback=tegevusala_manager
 
 //	@property teg_page type=textbox size=3
@@ -78,11 +78,14 @@
 	@property dir_isik type=relpicker reltype=ISIK_CAT
 	@caption Vaikimisi töötajate kataloog
 
-	@property dir_address type=relpicker reltype=ADRESS_CAT
+	@property dir_address type=relpicker reltype=ADDRESS_CAT
 	@caption Vaikimisi aadresside kataloog
 
-//	@property dir_linn type=relpicker reltype=LINN_CAT
-//	@caption linnade kataloog(id)
+	@property dir_ettevotlusvorm type=relpicker reltype=ETTEVOTLUSVORM_CAT
+	@caption Vaikimisi õiguslike vormide kataloog
+
+	@property dir_linn type=relpicker reltype=LINN_CAT
+	@caption Vaikimisi linnade kataloog
 
 //	@property dir_maakond type=relpicker reltype=MAAKOND_CAT
 //	@caption maakondade kataloog(id)
@@ -101,6 +104,13 @@
 
 //	@property where_firm type=checkbox ch_value=on
 //	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
+
+	@property flimit type=select
+	@caption Kirjeid ühel lehel
+	
+	@property default_kliendibaas type=checkbox 
+	@caption See on kasutaja default kliendibaas
+
 
 ////////////////////////////////////////////////////////////
 /	@default group=tests
@@ -139,7 +149,7 @@
 define ('SELECTIONS',1);
 define ('FIRMA_CAT',2);
 define ('ISIK_CAT',3);
-define ('ADRESS_CAT',4);
+define ('ADDRESS_CAT',4);
 define ('LINN_CAT',5);
 define ('MAAKOND_CAT',6);
 define ('RIIK_CAT',7);
@@ -147,6 +157,7 @@ define ('TEGEVUSALA_CAT',8);
 define ('TOODE_CAT',9);
 define ('GENERAL_CAT',10);
 define ('CALENDAR',11);
+define ('ETTEVOTLUSVORM_CAT',12);
 
 define('SELECTIONS_RELTYPE',SELECTIONS);
 		
@@ -171,7 +182,7 @@ class kliendibaas extends class_base
 			'tpldir' => 'kliendibaas',
 		));
 		$this->selections_reltype = SELECTIONS_RELTYPE;
-		$this->show_columns= array(
+/*		$this->show_columns= array(
 			////////firma
 //			'firma_oid' => 'firma id',
 			'firma_nimetus' => 'firma nimi',
@@ -203,7 +214,7 @@ class kliendibaas extends class_base
 /////////// aadress
 // oid   | name | tyyp | riik | linn  | maakond | postiindeks | telefon | mobiil | faks | piipar |
 // aadress | e_mail | kodulehekylg
-		);
+		);*/
 	}	
 		
 //// valim///
@@ -220,17 +231,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$arg2['sel']['oid'] = $args['obj'][OID];	
 		return $this->selection_object->obj_list($arg2);
 	}
-	
-/*	function callback_obj_list_($args)
-	{
-		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
-			$args['obj']['meta']['active_selection'] : $args['obj'][OID];
-		$arg2['obj']['parent'] = $args['obj']['parent'];
-		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
-		$arg2['sel']['oid'] = $args['obj'][OID];
-		return $dat = $this->obj_list($arg2);
-	}	*/
-
 	
 	function selection_manage_bar($args = array())
 	{
@@ -249,37 +249,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 //// end:valim///
 
 
-	/*function objects_manager($args)
-	{
-		$arr = array(
-			'linn' => 'linn',
-			'riik' => 'riik',
-			'maakond' => 'maakond',
-			'tegevusala' => 'tegevusala',
-			'toode' => 'toode',
-			'firma' => 'firma',
-			'ettevotlusvorm' => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-		foreach ($arr as $key => $value)
-		{
-			$k = $this->mk_my_orb('new', array('parent' => $args['obj']['parent']),$key);
-			$arr2[$k] = $value;
-		}
-		$str .= 'lisa objekt ';
-		$str .= html::select(array('name' => 'mk_new', 'options' => $arr2, 'onchange' =>
-			"window.open(document.changeform.mk_new.value,'new object','')"
-		));
-
-		$nodes = array();
-		$nodes['obj'] = array(
-			"value" => $str,
-		);
-		return $nodes;
-	}*/
-
 
 	function callback_get_rel_types()
 	{
@@ -287,7 +256,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			SELECTIONS => 'Valimid',
 			FIRMA_CAT => 'Firmade kataloogid',
 			ISIK_CAT => 'Töötajate kataloogid',
-			ADRESS_CAT => 'Aadresside kataloogid',
+			ADDRESS_CAT => 'Aadresside kataloogid',
 			LINN_CAT => 'Linnade kataloogid',
 			MAAKOND_CAT => 'Maakondade kataloogid',
 			RIIK_CAT => 'Riikide kataloogid',
@@ -295,6 +264,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			TOODE_CAT => 'Toodete kataloogid',
 			GENERAL_CAT => 'Üldkataloog',
 			CALENDAR => 'Kalender',
+			ETTEVOTLUSVORM_CAT => 'Õiguslike vormide kataloogid',
+			
 		);
 	}
 
@@ -312,7 +283,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case ISIK_CAT:
 				$retval = array(CL_PSEUDO);
 			break;
-			case ADRESS_CAT:
+			case ADDRESS_CAT:
 				$retval = array(CL_PSEUDO);
 			break;
 			case LINN_CAT:
@@ -330,14 +301,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case TOODE_CAT:
 				$retval = array(CL_PSEUDO);
 			break;
+			case ETTEVOTLUSVORM_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
 			case GENERAL_CAT:
 				$retval = array(CL_PSEUDO);
 			break;
 			case CALENDAR:
 				$retval = array(CL_PLANNER);
 			break;
-
-			default: $retval = array(CL_PSEUDO);
+			
 		};
 		return $retval;
 	}
@@ -345,6 +318,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 	function get_property(&$args)
 	{
+
 		$data = &$args['prop'];
 		$retval = PROP_OK;
 		$meta = &$args['obj']['meta'];
@@ -376,10 +350,24 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'active_selection':
 				$retval=PROP_IGNORE;
 				break;
-
 			
+			case 'default_kliendibaas':
+				$this->users = get_instance("users");
+				
+				if ($args['obj'][OID] ==
+					$this->users->get_user_config(array(
+						"uid" => aw_global_get("uid"),
+						"key" => "kliendibaas",
+				)))
+				{
+					$data['checked'] = true;
+				}
+				$data['ch_value'] = $args['obj'][OID];
 			
-			case 'navtoolbar':
+			break;
+								
+			
+			case 'orgtoolbar':
 				/*if (!aw_global_get('user_calender') || kliendibaasiga seotud kalender)
 				{
 					$retval=PROP_IGNORE;
@@ -387,7 +375,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				else*/
 				{
 					//$args['kliendibaas'] = aw_global_get('kliendibaas');
-					$this->kliendibaas_toolbar($args);
+					$this->org_toolbar($args);
+				}
+			break;
+			case 'tegtoolbar':
+				{
+					$this->teg_toolbar($args);
 				}
 			break;
 				
@@ -420,6 +413,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
+			case 'pagelimit':
+				$data['options'] = array ('10' => '10', '20' => '20', '30' => '30');
+			break;
+			
+			
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
@@ -532,12 +530,44 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$form = &$args["form_data"];
 		$meta =  &$args['obj']['meta'];
 		$retval = PROP_OK;
-
+		$prop = &$arr["prop"];
+		
 /*		print_r($args);
 		die();
 */
 		switch($data['name'])
-		{case 'dfgh':break;
+		{
+		
+			case 'default_kliendibaas':
+
+					$this->users = get_instance("users");
+					
+					$kb = $this->users->get_user_config(array(
+						"uid" => aw_global_get("uid"),
+						"key" => "kliendibaas",
+					));
+					if(($kb == $args['obj'][OID]) || ($kb == ''))
+					{
+						$this->users->set_user_config(array(
+							"uid" => aw_global_get("uid"),
+							"key" => "kliendibaas",
+							"value" => $args['obj'][OID],
+						));
+						aw_session_set('kliendibaas', $args['obj'][OID]);
+					}
+
+/*			
+				if ($form['default_kliendibaas'])
+				{
+					
+				}
+				else
+				{
+				
+				
+				}*/
+	
+			break;
 		/*
 			case 'select':
 			if ($meta['valim'])
@@ -722,6 +752,7 @@ elseif ($tase == 3)
 		$tf->define_field(array(
 			'name' => 'fname',
 			'caption' => 'Firma',
+			'sortable' => '1',
 		));
 
 		if (is_array($arr))
@@ -926,7 +957,7 @@ elseif ($tase == 3)
 	}
 
 */
-
+/*
 	function tegevusalad_table($data,$selection,$t,$oid,$level)
 	{
 		$arr = new aw_array($data);
@@ -953,46 +984,132 @@ elseif ($tase == 3)
 		}
 		return $t->draw();
 	}
-	
+	*/
 	function firma_manager($args)
 	{
 	
 		$letter = $args['request']['letter'] ? $args['request']['letter'] : 'A';
 		$fpage = $args['request']['fpage'] ? $args['request']['fpage'] : '1';
-		$flimit = 20;
+		$flimit = $args['meta']['flimit'] ? $args['meta']['flimit'] : 20;
 		$letters = '';
 		$pages = '';
+		$showpagenr = array();
 		
 		//echo 
 		$make_search = ($args['obj']['meta']['make_search'] && !$args['request']['no_search']) ? true : false;
 		
+			//t1 objects(firma)
+			//t2 kliendibaas_firma
+			//t3 objects(ettevotlusvorm) -> kliendibaas_firma
+			//t4 objects(contact) -> kliendibaas_firma
+			//t5 objects(firmajuht) -> kliendibaas_firma
+			//t6 kliendibaas_address -> kliendibaas_firma
+			//t7 objects(linn) -> objects(contact)
+			//t8 objects(maakond) -> objects(contact)
+			//t9 objects(e_mail) -> objects(contact)
+			//t10 extlinks(e_mail) -> objects(e_mail)
+			//t11 objects(kodulehekylg) -> objects(contact)
+			//t12 extlinks(kodulehekylg) -> objects(kodulehekylg)	
+			//t13 objects(telefon) -> objects(contact)
+			//t14 objects(pohitegevus) -> kliendibaas_firma
+			
+		$join_tables = array(
+			'left join kliendibaas_firma as t2 on t1.oid=t2.oid',
+			'left join objects as t3 on t2.ettevotlusvorm=t3.oid',
+			'left join objects as t4 on t2.contact=t4.oid',
+			'left join objects as t5 on t2.firmajuht=t5.oid',
+			'left join kliendibaas_address as t6 on t4.oid=t6.oid',
+			'left join objects as t7 on t6.linn=t7.oid',
+			'left join objects as t8 on t6.maakond=t8.oid',
+			'left join objects as t9 on t6.e_mail=t9.oid',
+			'left join extlinks as t10 on t9.oid=t10.id',
+			'left join objects as t11 on t6.kodulehekylg=t11.oid',
+			'left join extlinks as t12 on t11.oid=t12.id',
+			'left join objects as t13 on t6.telefon=t13.oid',
+			'left join objects as t14 on t2.pohitegevus=t14.oid',
+		);
 		
 		if ($make_search)
 		{	
-			$search_params = 'name like ("'.$args['obj']['meta']['sfield']['name'].'%")';
+			$search_params = '';
+			$exclude = $args['obj']['meta']['exclude'];
+			$sfield = $args['obj']['meta']['sfield'];
 
+			if ($sfield[$id = 'name'])
+			{
+				$not = $exclude[$id]? 'not' : '';
+				$search_params .= ' and t1.'.$id.' '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
+			}
+			
+			if ($sfield[$id = 'reg_nr'])
+			{
+				$not = $exclude[$id]? 'not' : '';
+				$search_params .= ' and t2.'.$id.' '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
+			}
+
+			if ($sfield[$id = 'ettevotlusvorm'])
+			{
+				$op = $exclude[$id]? '<>' : '=';
+				$search_params .= ' and t2.'.$id.' '.$op.''.$sfield[$id].' ';
+			}
+			
+			if ($sfield[$id = 'linn'])
+			{
+				$op = $exclude[$id]? '<>' : '=';
+				$search_params .= ' and t6.'.$id.' '.$op.''.$sfield[$id].' ';
+			}
+			
+			if ($sfield[$id = 'maakond'])
+			{
+				$op = $exclude[$id]? '<>' : '=';
+				$search_params .= ' and t6.'.$id.' '.$op.''.$sfield[$id].' ';
+			}
+			
+			if ($sfield[$id = 'address'])
+			{
+				/*$parts = explode(' ',$sfield['address']);
+			
+				foreach($parts as $val)
+				{
+					
+				}*/
+				
+				$not = $exclude[$id]? 'not' : '';
+				$search_params .= ' and t4.name '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
+			}
+			
+			if ($sfield[$id = 'firmajuht'])
+			{
+				$not = $exclude[$id]? 'not' : '';
+				$search_params .= ' and t5.name '.$not.' like ("%'.addslashes($sfield[$id]).'%") ';
+			}
+			
 			$cnt = $this->db_fetch_field('
-			select count(*) as cnt from objects
+			select count(*) as cnt from objects as t1 
+			'.implode(' ',$join_tables).'
 			where 
-			class_id='.CL_FIRMA.' and status<>0 and
-			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and '.$search_params.'
+			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			'.$search_params.'
 			','cnt');
+			
 		}
 		else
 		{
 			$cnt = $this->db_fetch_field('
-			select count(*) as cnt from objects
+			select count(*) as cnt from objects as t1
 			where 
-			class_id='.CL_FIRMA.' and status<>0 and
-			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and name like ("'.$letter.'%")
+			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and t1.name like ("'.$letter.'%")
 			','cnt');
 		}
 		
 		if ($cnt>$flimit)
 		{
-			for($i = 1; $i <= ceil($cnt/$flimit); $i++)
+			$pagearray = array();
+			$pagecnt = ceil($cnt/$flimit);
+			for($i = 1; $i <= $pagecnt; $i++)
 			{
 			$uri = "'".$this->mk_my_orb('change',
 					array(
@@ -1004,37 +1121,82 @@ elseif ($tase == 3)
 					)
 				)."'";
 				
-				$pages .= '<button style="width:23px" onclick="document.location='.$uri.';return false;">'.
+				$pagearray[$i] = '<button onclick="document.location='.$uri.';return false;">'.
 			(($i == $fpage) ? '<b><u>'.$i.'</u></b>' : $i).
 			'</button>';
+			}
+			
+			if ($pagecnt > 25)
+			{
+				for($i = $fpage - 6;$i <= $fpage + 4 ; $i++)
+				{
+					$showpagenr[$i] = true;
+				}
+				for($i = 1;$i<=9;$i++)
+				{
+					$showpagenr[$i] = true;
+					$showpagenr[$pagecnt-(1*($i-1))] = true;
+				}
+				
+				for($i = 1; $i <= $pagecnt; $i++)
+				{
+					if ($showpagenr[$i] === true)
+					{
+						$pages .= $pagearray[$i];
+						$b = true;
+					}
+					else
+					{
+						if ($b)
+						{
+							$pages .= ' ... ';
+						}
+						$b = false;
+
+					}
+				}
+			}
+			else
+			{
+				$pages = implode("",$pagearray);
 			}
 		}
 		
 		$limit = 'limit '.(($fpage-1) * $flimit).','.$flimit;
-		//$limit = 'limit 10';
 		
+		
+		
+		
+		$select_fields = 't1.*,t2.reg_nr,t3.name as ettevotlusvorm, t4.name as full_address, t5.name as firmajuht,
+		t7.name as linn,t8.name as maakond, t10.url as e_mail, t12.url as kodulehekylg, t6.aadress as address,
+		t13.name as telefon, t14.name as pohitegevus
+		';
 		
 		if ($make_search)
 		{
 			$q = '
-			select * from objects
+			select '.$select_fields.'
+			from objects as t1 
+			'.implode(' ',$join_tables).'
 			where 
-			class_id='.CL_FIRMA.' and status<>0 and
-			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and '.$search_params.'
-			order by name
+			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			'.$search_params.'
+			order by t1.name
 			'.$limit.'
 			';
 		}
 		else
 		{		
 			$q = '
-			select * from objects
+			select '.$select_fields.'
+			from objects as t1 
+			'.implode(' ',$join_tables).'
 			where 
-			class_id='.CL_FIRMA.' and status<>0 and
-			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
-			and name like ("'.$letter.'%")
-			order by name
+			t1.class_id='.CL_FIRMA.' and t1.status<>0 and
+			t1.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and t1.name like ("'.$letter.'%")
+			order by t1.name
 			'.$limit.'
 			';
 		}
@@ -1043,11 +1205,78 @@ elseif ($tase == 3)
 		$tf = new aw_table(array(
 			'prefix' => 'kliendibaas_frimad',
 		));
+		$tf->set_default_sortby('fname');	
 		$tf->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
 
 		$tf->define_field(array(
 			'name' => 'fname',
-			'caption' => 'Firma',
+			'caption' => 'Organisatsioon',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'reg_nr',
+			'caption' => 'Reg nr.',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'pohitegevus',
+			'caption' => 'Tegevusala',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'ettevotlusvorm',
+			'caption' => 'Õiguslik vorm',
+			'sortable' => '1',
+		));
+		
+		/*$tf->define_field(array(
+			'name' => 'full_address',
+			'caption' => 'Aadress',
+			'sortable' => '1',
+		));*/
+		
+		$tf->define_field(array(
+			'name' => 'address',
+			'caption' => 'Aadress',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'linn',
+			'caption' => 'Linn/Vald/Alev',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'maakond',
+			'caption' => 'Maakond',
+			'sortable' => '1',
+		));		
+		
+		$tf->define_field(array(
+			'name' => 'e_mail',
+			'caption' => 'E-post',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'kodulehekylg',
+			'caption' => 'Kodulehekülg',
+			'sortable' => '1',
+		));
+		$tf->define_field(array(
+			'name' => 'telefon',
+			'caption' => 'Telefon',
+			'sortable' => '1',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'firmajuht',
+			'caption' => 'Organisatsiooni juht',
+			'sortable' => '1',
 		));
 		
 		$tf->define_field(array(
@@ -1070,6 +1299,17 @@ elseif ($tase == 3)
 						'caption' => $val['name'],
 					)),
 					'check' => $check,
+					'reg_nr' => $val['reg_nr'],
+					'ettevotlusvorm' => $val['ettevotlusvorm'],
+					'full_address' => $val['full_address'],
+					'address' => $val['address'],
+					'firmajuht' => $val['firmajuht'],
+					'linn' => $val['linn'],
+					'maakond' => $val['maakond'],
+					'e_mail' => $val['e_mail'],
+					'kodulehekylg' => html::href(array('url' => $val['kodulehekylg'],'caption' => $val['kodulehekylg'],'target' => '_blank')),
+					'telefon' => $val['telefon'],
+					'pohitegevus' => $val['pohitegevus'],
 				)
 			);
 		}
@@ -1109,15 +1349,18 @@ elseif ($tase == 3)
 	//arr($arr);
 
 		//echo count($arr);
+		
+		$tf->sort_by();
+				
 		$nodes = array();
 		$nodes['teg'] = array(
-			"value" => $letters.'<br />'.$pages.$tf->draw(),
+			"value" => $letters.'<br />'.$pages.$tf->draw().'<br />total:'.$cnt,
 		);
 		return $nodes;
 	
 	}
 	
-
+/*
 	function firma_manager_($args)
 	{
 	//arr($args,1);
@@ -1132,30 +1375,31 @@ elseif ($tase == 3)
 
 		$sele = isset($meta['sele']) ? $meta['sele'] : false ;
 
-/*		if ($req['do_search'])
-		{
-			$meta['do_search'] = true;
-			$meta['search'] = $meta['search_history'];
-		}
-*/
+
+//		if ($req['do_search'])
+//		{
+//			$meta['do_search'] = true;
+//			$meta['search'] = $meta['search_history'];
+//		}
+//
 //		if ($meta['do_search'])
 //			$meta['search'] = $this->search_values;
 
-/*
-		if (is_array($meta['valim']))
-		{
-			$sl = get_instance('kliendibaas/selection');
-			$selection = $sl->get_selection($meta['valim']);
-		}
-		else
-		{
-			$nodes = array();
-			$nodes[] = array(
-				"value" => 'vali seadetest valim',
-			);
-			return $nodes;
-		}
-*/
+//
+//		if (is_array($meta['valim']))
+//		{
+//			$sl = get_instance('kliendibaas/selection');
+//			$selection = $sl->get_selection($meta['valim']);
+//		}
+//		else
+//		{
+//			$nodes = array();
+//			$nodes[] = array(
+//				"value" => 'vali seadetest valim',
+//			);
+//			return $nodes;
+//		}
+
 
 
 
@@ -1316,24 +1560,24 @@ elseif ($tase == 3)
 //					}
 				}
 
-/*
-				else
-				{
-					if ($req['do_search'])
-					{
-						if ($meta['search_history'][$req['search_history']][$key])
-						{
-							$where.=' and '.$fields[$key]." like '".$like_st.addslashes($meta['search_history'][$req['search_history']][$key]).$like_en."' ";
-						}
 
+//				else
+//				{
+//					if ($req['do_search'])
+//					{
+//						if ($meta['search_history'][$req['search_history']][$key])
+//						{
+//							$where.=' and '.$fields[$key]." like '".$like_st.addslashes($meta['search_history'][$req['search_history']][$key]).$like_en."' ";
+//						}
+//
 //					if ($meta['search_history'][$req['search_history']][$key])
 //					{
 //						$where.=' and '.$fields[$key].' IS NOT NULL and '.$fields[$key]." <> '' ";
 //
 //					}
-					}
-				}
-				*/
+//					}
+//				}
+				
 
 			}
 
@@ -1458,22 +1702,106 @@ elseif ($tase == 3)
 		return $nodes;
 
 }
-
+*/
 
 	function search_form($args)
 	{
 		$this->read_template('search_form.tpl');
 		
+		$sfield = $args['obj']['meta']['sfield'];
+		$exclude = $args['obj']['meta']['exclude'];
 		
 		$this->vars(array(
-			'id' => 'name',
-			'value' => $args['obj']['meta']['sfield']['name'],
-			'exclude' => '',
+			'id' => $id = 'name',
+			'value' => htmlentities($sfield[$id]),
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Nimi',
 		));
-		$name = $this->parse('search_field_textbox');
+		$form = $this->parse('search_field_textbox');
+		
+		$this->vars(array(
+			'id' => $id = 'reg_nr',
+			'value' => $sfield[$id],
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Reg nr.',
+		));
+		$form.= $this->parse('search_field_textbox');
+		
+		$this->vars(array(
+			'id' => $id = 'address',
+			'value' => htmlentities($sfield[$id]),
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Aadress',
+		));
+		$form.= $this->parse('search_field_textbox');
+
+		$this->vars(array(
+			'id' => $id = 'firmajuht',
+			'value' => htmlentities($sfield[$id]),
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Organisatsiooni juht',
+		));
+		$form.= $this->parse('search_field_textbox');
+
+		//ettevõtlusvorm
+		$id = 'ettevotlusvorm';
+		$arr = $this->db_fetch_array('select oid, name from objects where 
+			class_id='.CL_ETTEVOTLUSVORM.' and 
+			parent'.$this->parent_in($this->got_aliases[ETTEVOTLUSVORM_CAT]). ' order by name'
+		);
+		$options ='<option value="0"> - kõik - </option>';
+		foreach($arr as $val)
+		{
+			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
+		}
+		$this->vars(array(
+			'id' => $id,
+			'options' => $options,
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Õiguslik vorm',
+		));
+		$form.= $this->parse('search_field_select');
+		
+		//linn
+		$id = 'linn';
+		$arr = $this->db_fetch_array('select oid, name from objects where 
+			class_id='.CL_LINN.' and 
+			parent'.$this->parent_in($this->got_aliases[LINN_CAT]). ' order by name'
+		);
+		$options ='<option value="0"> - kõik - </option>';
+		foreach($arr as $val)
+		{
+			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
+		}
+		$this->vars(array(
+			'id' => $id,
+			'options' => $options,
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Linn/Vald/Alev',
+		));
+		$form.= $this->parse('search_field_select');
+		
+		//maakond
+		$id = 'maakond';
+		$arr = $this->db_fetch_array('select oid, name from objects where 
+			class_id='.CL_MAAKOND.' and 
+			parent'.$this->parent_in($this->got_aliases[MAAKOND_CAT]). ' order by name'
+		);
+		$options ='<option value="0"> - kõik - </option>';
+		foreach($arr as $val)
+		{
+			$options.='<option value="'.$val[OID].'" '.(($val[OID]==$sfield[$id])?'selected':'').'>'.$val['name'].'</option>';
+		}
+		$this->vars(array(
+			'id' => $id,
+			'options' => $options,
+			'exclude' => checked($exclude[$id]),
+			'caption' => 'Maakond',
+		));
+		$form.= $this->parse('search_field_select');
 
 /*		$this->vars(array(
-			'id' => 'name',
+			'id' => 'reg_nr',
 			'value' => '',
 			'exclude' => '',
 		));
@@ -1481,7 +1809,7 @@ elseif ($tase == 3)
 */
 
 		$this->vars(array(
-			'search_field_textbox' => $name,
+			'search_field_textbox' => $form,
 		));
 		
 		
@@ -1489,160 +1817,13 @@ elseif ($tase == 3)
 		return $this->parse();
 	
 	}
-	
-	function search_form_($ob)
+
+
+	function org_toolbar(&$args)
 	{
-		
-		$meta=$ob['obj']['meta'];
-		load_vcl('table');
-
-		$find = new aw_table(array(
-			'prefix' => 'kliendibaas_manager_search',
-		));
-		$find->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
-			$find->define_field(array(
-			'name' => 'attrib',
-			'caption' => 'atribuut',
-			'width'=> 25,
-		));
-		$find->define_field(array(
-			'name' => 'input',
-			'caption' => 'otsingu string',
-			'width'=> 100,
-		));
-		$find->define_field(array(
-			'name' => 'require',
-			'caption' => "<a href='javascript:selall(\"search_require\")'>peab olemas olema</a>",
-			'width'=> 15,
-		));
-
-		foreach($this->show_columns as $key => $val)
-		{
-			$find->define_data(array(
-				'attrib' => $val,
-				'input' => html::textbox(array('name'=>'search['.$key.']','value' => isset($meta['search'][$key]) ? $meta['search'][$key] : '','size'=>20)),
-				'require' => html::checkbox(array('name'=> 'search_require['.$key.']','value'=> 1,'checked'=> isset($meta['search_require'][$key]) ? $meta['search_require'][$key] : false)),
-			));
-		}
-
-		$submit=html::button(array('value'=>'otsi','onclick'=>'document.changeform.do_search.value=1;document.changeform.submit()'));
-
-		return '<table width=200><tr><td>'.$find->draw().'</td></tr></table>'.$submit.'<br />';
-	}
-
-
-
-	function firmad_table($data,$selection,$t)
-	{
-		$arr = new aw_array($data);
-		foreach($arr->get() as $row)
-		{
-			$row['check'] = html::checkbox(array('name'=>'sel['.$row[OID].']','checked' => isset($selection[$row[OID]]) ? $selection[$row[OID]] : false,'value' => $row[OID]));
-			$row['check'].= html::hidden(array('name'=>'objs['.$row[OID].']' ,'value'=>1));
-
-
-			if (isset($row['firma_nimetus']))
-			{
-				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
-			}
-			if (isset($row['f_kodulehekylg']))
-			{
-				$row['f_kodulehekylg']=html::href(array('url'=> ((strpos($row['f_kodulehekylg'],'://')===false) ? 'http://' : '').$row['f_kodulehekylg'],'caption'=> $row['f_kodulehekylg'], 'target' => '_blank' ));
-			}
-			if (isset($row['f_e_mail']))
-			{
-				$row['f_e_mail']=html::href(array('url'=>'mailto:'.$row['f_e_mail'],'caption'=> $row['f_e_mail']));
-			}
-
-			$t->define_data(
-				$row
-			);
-		}
-		return $t->draw();
-	}
-
-	function my_buttons($button,$page)
-	{
-		$nav = '';
-		foreach($button as $key => $val)
-		{
-			$nav.=html::button(array('value'=>$key,'onclick'=>'document.changeform.'.$page.'.value='.$val.';document.changeform.submit()'));
-		}
-		return $nav;
-	}
-
-	////
-	// ! create new contact entry
-	// contact		at least one element required here
-	//	name
-	//	riik
-	//	linn
-	//	...
-	// name
-	// parent
-	// comment
-	// ...
-	function new_address($arr,$tyyp,$class_id)
-	{
-		extract($arr);
-
-		print_r($arr);die();
-	//		echo $parent.'sfdgs';
-			foreach ($datas as $key=>$val)
-			{
-				{
-					$this->quote($val);
-					$f[]=$key;
-					$v[]="'".$val."'";
-				}
-			}
-
-			$id = $this->new_object(array(
-				"name" => $name,
-				"parent" => $parent,
-				"class_id" => $class_id,
-				"comment" => $comment,
-				"metadata" => array(
-//					"contact"=>$contact,
-				)
-			));
-			$f[]=OID;
-			$v[]="'".$id."'";
-
-			$q='insert into kliendibaas_'.$tyyp.'('.implode(",",$f).')values('.implode(",",$v).')';
-
-		$this->db_query($q);
-		return $id;
-	}
-
-
-	function owerview($args)
-	{
-		$arr=array(
-			CL_LINN => 'linn',
-			CL_RIIK => 'riik',
-			CL_MAAKOND => 'maakond',
-			CL_TEGEVUSALA => 'tegevusala',
-			CL_TOODE => 'toode',
-			CL_FIRMA => 'firma',
-			CL_ETTEVOTLUSVORM => 'ettevõtlusvorm',
-//			'' => '',
-//			'' => '',
-		);
-
-		$nodes = array();
-		$nodes['overv'] = array(
-			"value" => 'TEST',
-		);
-		return $nodes;
-	}
-
-	function kliendibaas_toolbar(&$args)
-	{
-                if ($args['obj'][OID])
+		$toolbar = &$args["prop"]["toolbar"];                
+		if ($args['obj'][OID])
                 {
-			$toolbar = &$args["prop"]["toolbar"];
-
 			$this->read_template('js_popup_menu.tpl');
 			
 			$kliendibaas = $this->get_object($args['obj'][OID]);
@@ -1695,11 +1876,270 @@ $firma_parent = $kliendibaas['meta']['dir_firmad'] ? $kliendibaas['meta']['dir_f
                                 "imgover" => "new_over.gif",
                                 "class" => "menuButton",
                         ));
+
+
 			
+			if ($cal_id = aw_global_get('user_calendar'))
+			{
+				$toolbar->add_button(array(
+					"name" => "user_calendar",
+					"tooltip" => "Kasutaja kalender",
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id),'planner'),
+					"onClick" => "",
+					"img" => "icon_cal_today.gif",
+					"imgover" => "icon_cal_today_over.gif",
+					"class" => "menuButton",
+				));
+				//$user_calendar = $this->get_object($cal_id);
+				//$getevent_folder = $user_calendar['meta']['event_folder'];
+                		//$toolbar->add_cdata($getevent_folder);
+			}
+
 		
-                };
+                }
+				
+				
+		$toolbar->add_button(array(
+			"name" => "org_search",
+			"tooltip" => "Otsi organisatsioone",
+			"url" => '',
+			"onClick" => "document.getElementById('make_search').value = '1';document.forms[0].submit();return false;",
+			"img" => "search.gif",
+			"imgover" => "search_over.gif",
+		));
+
+	
 	}	
 	
+
+	function teg_toolbar(&$args)
+	{
+                if ($args['obj'][OID])
+                {
+			$toolbar = &$args["prop"]["toolbar"];
+			$this->read_template('js_popup_menu.tpl');
+			$kliendibaas = $this->get_object($args['obj'][OID]);
+			//arr($kliendibaas);
+
+$tegevusala_parent = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
+			
+			$alist = array(
+				array('caption' => 'Lisa Tegevusala','class' => 'tegevusala', 'parent' => $tegevusala_parent),
+			);
+			$menudata = '';
+			if (is_array($alist))
+			{
+				foreach($alist as $key => $val)
+				{
+					if (!$val['parent']) continue;
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+//							'alias_to' => $args['obj']['oid'],
+//							'reltype' => $val['reltype'],
+							'class' => $val['class'],
+							'parent' => $val['parent'],
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						)),
+						'text' => $val['caption'],
+					));
+
+					$menudata .= $this->parse("MENU_ITEM");
+				};
+			};
+			
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "create_event",
+			));
+
+			$menu = $this->parse();
+
+                	$toolbar->add_cdata($menu);
+	
+			$toolbar->add_button(array(
+                                "name" => "add",
+                                "tooltip" => "Uus",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'create_event');",
+                                "img" => "new.gif",
+                                "imgover" => "new_over.gif",
+                                "class" => "menuButton",
+                        ));
+
+			if ($cal_id = aw_global_get('user_calendar'))
+			{
+				$toolbar->add_button(array(
+					"name" => "user_calendar",
+					"tooltip" => "Kasutaja kalender",
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id),'planner'),
+					"onClick" => "",
+					"img" => "icon_cal_today.gif",
+					"imgover" => "icon_cal_today_over.gif",
+					"class" => "menuButton",
+				));
+				//$user_calendar = $this->get_object($cal_id);
+				//$getevent_folder = $user_calendar['meta']['event_folder'];
+                		//$toolbar->add_cdata($getevent_folder);
+			}
+
+		
+                };
+	}
+	
+	
+/*		
+	function search_form_($ob)
+	{
+		
+		$meta=$ob['obj']['meta'];
+		load_vcl('table');
+
+		$find = new aw_table(array(
+			'prefix' => 'kliendibaas_manager_search',
+		));
+		$find->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
+			$find->define_field(array(
+			'name' => 'attrib',
+			'caption' => 'atribuut',
+			'width'=> 25,
+		));
+		$find->define_field(array(
+			'name' => 'input',
+			'caption' => 'otsingu string',
+			'width'=> 100,
+		));
+		$find->define_field(array(
+			'name' => 'require',
+			'caption' => "<a href='javascript:selall(\"search_require\")'>peab olemas olema</a>",
+			'width'=> 15,
+		));
+
+		foreach($this->show_columns as $key => $val)
+		{
+			$find->define_data(array(
+				'attrib' => $val,
+				'input' => html::textbox(array('name'=>'search['.$key.']','value' => isset($meta['search'][$key]) ? $meta['search'][$key] : '','size'=>20)),
+				'require' => html::checkbox(array('name'=> 'search_require['.$key.']','value'=> 1,'checked'=> isset($meta['search_require'][$key]) ? $meta['search_require'][$key] : false)),
+			));
+		}
+
+		$submit=html::button(array('value'=>'otsi','onclick'=>'document.changeform.do_search.value=1;document.changeform.submit()'));
+
+		return '<table width=200><tr><td>'.$find->draw().'</td></tr></table>'.$submit.'<br />';
+	}
+*/
+
+/*
+	function firmad_table($data,$selection,$t)
+	{
+		$arr = new aw_array($data);
+		foreach($arr->get() as $row)
+		{
+			$row['check'] = html::checkbox(array('name'=>'sel['.$row[OID].']','checked' => isset($selection[$row[OID]]) ? $selection[$row[OID]] : false,'value' => $row[OID]));
+			$row['check'].= html::hidden(array('name'=>'objs['.$row[OID].']' ,'value'=>1));
+
+
+			if (isset($row['firma_nimetus']))
+			{
+				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
+			}
+			if (isset($row['f_kodulehekylg']))
+			{
+				$row['f_kodulehekylg']=html::href(array('url'=> ((strpos($row['f_kodulehekylg'],'://')===false) ? 'http://' : '').$row['f_kodulehekylg'],'caption'=> $row['f_kodulehekylg'], 'target' => '_blank' ));
+			}
+			if (isset($row['f_e_mail']))
+			{
+				$row['f_e_mail']=html::href(array('url'=>'mailto:'.$row['f_e_mail'],'caption'=> $row['f_e_mail']));
+			}
+
+			$t->define_data(
+				$row
+			);
+		}
+		return $t->draw();
+	}
+
+	function my_buttons($button,$page)
+	{
+		$nav = '';
+		foreach($button as $key => $val)
+		{
+			$nav.=html::button(array('value'=>$key,'onclick'=>'document.changeform.'.$page.'.value='.$val.';document.changeform.submit()'));
+		}
+		return $nav;
+	}
+*/
+/*
+	////
+	// ! create new contact entry
+	// contact		at least one element required here
+	//	name
+	//	riik
+	//	linn
+	//	...
+	// name
+	// parent
+	// comment
+	// ...
+	function new_address($arr,$tyyp,$class_id)
+	{
+		extract($arr);
+
+		print_r($arr);die();
+	//		echo $parent.'sfdgs';
+			foreach ($datas as $key=>$val)
+			{
+				{
+					$this->quote($val);
+					$f[]=$key;
+					$v[]="'".$val."'";
+				}
+			}
+
+			$id = $this->new_object(array(
+				"name" => $name,
+				"parent" => $parent,
+				"class_id" => $class_id,
+				"comment" => $comment,
+				"metadata" => array(
+//					"contact"=>$contact,
+				)
+			));
+			$f[]=OID;
+			$v[]="'".$id."'";
+
+			$q='insert into kliendibaas_'.$tyyp.'('.implode(",",$f).')values('.implode(",",$v).')';
+
+		$this->db_query($q);
+		return $id;
+	}
+*/
+/*
+	function owerview($args)
+	{
+		$arr=array(
+			CL_LINN => 'linn',
+			CL_RIIK => 'riik',
+			CL_MAAKOND => 'maakond',
+			CL_TEGEVUSALA => 'tegevusala',
+			CL_TOODE => 'toode',
+			CL_FIRMA => 'firma',
+			CL_ETTEVOTLUSVORM => 'ettevõtlusvorm',
+//			'' => '',
+//			'' => '',
+		);
+
+		$nodes = array();
+		$nodes['overv'] = array(
+			"value" => 'TEST',
+		);
+		return $nodes;
+	}
+*/
+
+
+	
+		
 /*
 
 			$q = 'select oid,kood from kliendibaas_tegevusala where length(kood)=5';
@@ -1769,6 +2209,47 @@ $this->db_query($q);
 
 */
 
+
+	/*function objects_manager($args)
+	{
+		$arr = array(
+			'linn' => 'linn',
+			'riik' => 'riik',
+			'maakond' => 'maakond',
+			'tegevusala' => 'tegevusala',
+			'toode' => 'toode',
+			'firma' => 'firma',
+			'ettevotlusvorm' => 'ettevõtlusvorm',
+//			'' => '',
+//			'' => '',
+		);
+
+		foreach ($arr as $key => $value)
+		{
+			$k = $this->mk_my_orb('new', array('parent' => $args['obj']['parent']),$key);
+			$arr2[$k] = $value;
+		}
+		$str .= 'lisa objekt ';
+		$str .= html::select(array('name' => 'mk_new', 'options' => $arr2, 'onchange' =>
+			"window.open(document.changeform.mk_new.value,'new object','')"
+		));
+
+		$nodes = array();
+		$nodes['obj'] = array(
+			"value" => $str,
+		);
+		return $nodes;
+	}*/
+
+	/*	function callback_obj_list_($args)
+	{
+		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
+			$args['obj']['meta']['active_selection'] : $args['obj'][OID];
+		$arg2['obj']['parent'] = $args['obj']['parent'];
+		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
+		$arg2['sel']['oid'] = $args['obj'][OID];
+		return $dat = $this->obj_list($arg2);
+	}	*/
 
 }
 ?>
