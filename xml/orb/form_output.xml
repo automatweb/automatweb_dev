@@ -10,6 +10,37 @@
 			</function>
 		</action>
 
+		<action name="choose_output_type">
+			<function name="choose_output_type">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_html">
+			<function name="add_html">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_xml">
+			<function name="edit_xml">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="edit_xml">
+			<function name="edit_xml">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="change">
 			<function name="change">
 				<arguments>
