@@ -14,16 +14,23 @@ class export_lite extends aw_template
 			"text/html; charset=iso-8859-1" => "html",
 			"text/html; charset=iso-8859-15" => "html",
 			"text/css" => "css",
+			"text/plain" => "txt",
 			"text/richtext" => "rtf",
+			"text/rtf" => "rtf",
 			"image/gif" => "gif",
 			"image/jpeg" => "jpg",
 			"image/jpg" => "jpg",
 			"image/pjpeg" => "jpg",
+			"image/png" => "png",
 			"application/pdf" => "pdf",
 			"application/x-javascript" => "js",
 			"application/zip" => "zip",
 			"application/msword" => "doc",
-			"application/pdf" => "pdf"
+			"application/pdf" => "pdf",
+			"application/vnd.ms-excel" => "xls",
+			"application/octet-stream" => "bin",
+			"application/vnd.ms-powerpoint" => "ppt",
+			"application/x-zip-compressed" => "zip"
 		);
 	}
 
@@ -40,7 +47,7 @@ class export_lite extends aw_template
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
 		set_time_limit(0);
-		ignore_user_abort(false);
+		ignore_user_abort(true);
 
 		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br />\n";
 		flush();
@@ -55,9 +62,14 @@ class export_lite extends aw_template
 		// we can just delete all other entries that were created by export
 		// but are not in the current list
 
-		$sql = "DELETE FROM static_content WHERE id NOT IN(".join(",", map("'%s'", array_values($this->hashes))).") AND created_by = 'export_lite' AND site_id = '".aw_ini_get("site_id")."'";
+		$sql = "DELETE FROM static_content WHERE id NOT IN(".join(",", map("'%s'", array_values($this->hashes))).") AND created_by = 'export_lite'";
 		$this->db_query($sql);
-		
+
+		// ut fix
+		if (aw_ini_get("site_id") == 900)
+		{
+			$this->db_query("UPDATE static_content SET lang_id = 1 WHERE site_id = 900 AND section=250");
+		}
 		echo "<br />all done. <br /><br />\n\n";
 		die();
 	}
@@ -135,6 +147,11 @@ class export_lite extends aw_template
 		}
 
 		if (strpos($url, "poll.aw") !== false)
+		{
+			$is_print = true;
+		}
+
+		if (strpos($url, "class=poll") !== false)
 		{
 			$is_print = true;
 		}
@@ -342,13 +359,11 @@ class export_lite extends aw_template
 			$q = "
 				INSERT INTO static_content(
 					id, 					content, 					modified, 					section, 
-					lang_id,				title,						url,						created_by,
-					site_id
+					lang_id,				title,						url,						created_by
 				) 
 				VALUES(
 					'$h_id',				'$fc',						'$modified',					'$cur_sec',
-					'$lang_id',				'$title',					'$url',						'export_lite',
-					'".aw_ini_get("site_id")."'
+					'$lang_id',				'$title',					'$url',						'export_lite'
 				)
 			";
 			$this->db_query($q);
