@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.21 2003/06/06 13:07:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.22 2003/06/11 13:47:39 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -651,7 +651,10 @@ class doc extends class_base
 			$retval["cal_" . $row["oid"]] = array(
 				"type" => "checkbox",
 				"name" => $args["prop"]["name"] . "[]",
-				"caption" => $row["name"],
+				"caption" => html::href(array(
+					"url" => $this->mk_my_orb("change",array("id" => $row["oid"]),"planner"),
+					"caption" => "<font color='black'>" . $row["name"] . "</font>",
+				)),
 				"ch_value" => $row["oid"],
 				"value" => isset($bs[$row["event_folder"]]) ? $row["oid"] : 0,
 				"group" => $args["prop"]["group"],
