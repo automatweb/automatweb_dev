@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.53 2004/03/09 18:13:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.54 2004/03/10 11:38:12 kristo Exp $
 
 lc_load("definition");
 
@@ -186,7 +186,6 @@ class acl_base extends db_connector
 		$max_row = array();
 		$q = "
 			SELECT 
-				*,
 				acl.id as acl_rel_id, 
 				objects.parent as parent,
 				".$this->sql_unpack_string().",
@@ -216,7 +215,6 @@ class acl_base extends db_connector
 				$max_row["priority"] = $max_pri;
 			}
 		}
-		unset($max_row['metadata']);	// no need to save this in the cache, it just uses up unnecessary space.
 		return $max_row;
 	}
 
