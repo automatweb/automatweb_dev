@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.3 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.4 2004/01/14 15:02:48 rtoomas Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -17,6 +17,7 @@ class taket_ebasket extends class_base
 	var $ebasket_parent_id; //location of the baskets
 	var $ebasket_item_parent_id; //location of the basket items
 	var $order_item_parent_id;
+
 	function taket_ebasket()
 	{
 		$this->ebasket_parent_id = aw_ini_get('taket_ebasket.ebasket_parent_id');
@@ -28,6 +29,7 @@ class taket_ebasket extends class_base
 			"tpldir" => "taket/taket_ebasket",
 			"clid" => CL_TAKET_EBASKET
 		));
+		lc_site_load('taket_ebasket',&$this);
 	}
 
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -38,21 +40,6 @@ class taket_ebasket extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
-	/** this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias 
-		
-		@attrib name=show params=name default="0"
-		
-		@param saved optional
-		@param inputErr optional
-		@param sort optional
-		@param dir optional
-		
-		@returns
-		
-		
-		@comment
-
-	**/
 	function show($arr)
 	{				
 		include('IXR_Library.inc.php');
@@ -98,6 +85,7 @@ class taket_ebasket extends class_base
 					'finalpricedir' => 'asc',
 					'quantitydir' => 'asc'
 				);
+
 		if(in_array($arr['sort'],$options))
 		{
 			$sortBy=$arr['sort'];
@@ -165,10 +153,12 @@ class taket_ebasket extends class_base
 			if($data[$o->prop('product_code')]['inStock']>=$o->prop('quantity'))
 			{
 				$msg = 'Jah';
+				$this->vars(array('instock_parsed'=>$this->parse('instockyes')));
 			}
 			else
 			{
-				$msg = '<font color="#ADADAD;">Ei</font>';
+				$msg = '<font color="#ADADAD;">'.Ei.'</font>';
+				$this->vars(array('instock_parsed'=>$this->parse('instockno')));
 				$tmpFlag=0;
 			}
 			$this->vars(array(
@@ -178,7 +168,7 @@ class taket_ebasket extends class_base
 					'discount' => $o->prop('discount'),
 					'finalprice' => number_format(((1-$o->prop('discount')/100)*$o->prop('price')),2,'.',''),
 					'quantity' => $o->prop('quantity'),
-					'inStock' => $msg,
+					//'inStock' => $msg,
 					'i'	=> $i++,
 					'tmpFlag' => $tmpFlag
 			));
@@ -187,6 +177,7 @@ class taket_ebasket extends class_base
 											($o->prop('price')*(1-$o->prop('discount')/100));
 			$content.=$this->parse('toode');
 		}
+
 		$this->vars(array('toodeParsed'=>$content));
 		$content='';
 		//assign the variables calculated in the iteration
@@ -232,12 +223,17 @@ class taket_ebasket extends class_base
 													array('no_reforb'=>true)),
 				'eesperenimi' => $_SESSION['TAKET']['eesperenimi'],
 				'kontakttelefon' => $_SESSION['TAKET']['gsm'],
+				'info' => $_SESSION['TAKET']['info'],
 				'transportParsed' => $tmp
 				));
 			$tmp='';
-			if($arr['inputErr'])
+			if($arr['inputErr'] && $arr['inputErr']!=2)
 			{
 				$this->vars(array('inputErrParsed'=>$this->parse('inputErr')));
+			}
+			else if($arr['inputErr']==2)
+			{
+				$this->vars(array('inputErrParsed'=>$this->parse('inputErr2')));			
 			}
 			$this->vars(array('vormistaParsed'=>$this->parse('vormista')));
 		//}
@@ -261,7 +257,7 @@ class taket_ebasket extends class_base
 	**/
 	function send_order($arr)
 	{
-		//if all the fields weren't filled
+		//if all the fields weren't filled		
 		if(!($arr['kontakttelefon'] && $arr['eesperenimi'] && $arr['transport']))
 		{
 			return $this->mk_my_orb('show',array('inputErr'=>1,'saved'=>1),'taket_ebasket');
@@ -302,7 +298,11 @@ class taket_ebasket extends class_base
 				$orderPrice+=$o->prop('price')*$o->prop('quantity');
 			}
 		}
-		
+
+		if(!sizeof($rows)){
+			return $this->mk_my_orb('show',array('inputErr'=>2,'saved'=>1),'taket_ebasket');
+		}
+
 		//store the order locally
 		//save the order locally for later viewing
 		$obj = new object();
@@ -326,10 +326,13 @@ class taket_ebasket extends class_base
 		$toBeSent['price']=$orderPrice;
 		$toBeSent['order_id']=$orderId;
 		$toBeSent['transport']=$arr['transport'];
+		$toBeSent['transport_name']=$arr['transport_name'];
+		$toBeSent['user_info']=$arr['info'];
 		$client->query('server.sendOrder', $toBeSent);
 		$data=$client->getResponse();
 
 		//let's remember the setting for this SESSION
+		$_SESSION['TAKET']['info'] = $arr['info'];
 		$_SESSION['TAKET']['eesperenimi'] = $arr['eesperenimi'];
 		$_SESSION['TAKET']['gsm'] = $arr['kontakttelefon'];
 		$_SESSION['TAKET']['transport_type'] = $arr['transport'];
@@ -373,30 +376,26 @@ class taket_ebasket extends class_base
 		return $this->mk_my_orb('show',array(),'taket_tellimuste_list');
 	}
 
-	/**  
-		
-		@attrib name=add_item params=name default="0"
-		
-		@param product_code required
-		@param quantity required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function add_item($arr)
+	function add_item($arr, $return=true)
 	{	
-		//getting product info		
-		include('IXR_Library.inc.php');
+		//getting product info
+		include_once('IXR_Library.inc.php');
 		//let's get current users's id
 		$user_id=users::get_oid_for_uid(aw_global_get('uid'));
 		$client = new IXR_Client(aw_ini_get('taket.xmlrpchost'),
 										aw_ini_get('taket.xmlrpcpath'),
 										aw_ini_get('taket.xmlrpcport'));
-		$client->query('server.getProductInfo', $arr['product_code']);	
-		$data = $client->getResponse();
+		//xml-rpc call was made earlier?
+		if(!$return)
+		{
+			$data = $arr['data'];
+		}
+		//have to make the call
+		else
+		{
+			$client->query('server.getProductInfo', $arr['product_code']);	
+			$data = $client->getResponse();
+		}		
 		//let's get all the items
 		$ebasket = $this->get_users_active_ebasket($user_id);
 		$ol = new object_list(array(
@@ -462,6 +461,43 @@ class taket_ebasket extends class_base
 			}
 			$o->save();
 		}
+		if($return)
+			return $this->mk_my_orb("show", array(), "taket_ebasket");
+	}
+
+	function add_items($arr){
+		//adds many items to the basket at a time, uses the add_item function
+		//not to just copy the logic
+		//getting product info
+		include_once('IXR_Library.inc.php');
+		//let's get current users's id
+		$user_id=users::get_oid_for_uid(aw_global_get('uid'));
+		$client = new IXR_Client(aw_ini_get('taket.xmlrpchost'),
+										aw_ini_get('taket.xmlrpcpath'),
+										aw_ini_get('taket.xmlrpcport'));
+		//make array of selected products
+		$product_codes = array();
+		if(!is_array($arr['valitud']))
+			$arr['valitud']=array();
+		foreach($arr['valitud'] as $key=>$value)
+		{
+			$product_codes[]=$arr['productId'][$key];
+		}
+		//prefetching the data with one xml-rpc call
+		//without thiss add_item would do everytime a separate call, it COSTS
+		$client->query('server.getProductInfoArr', $product_codes);
+		$data = $client->getResponse();
+		//add the item
+		//print_r($data);
+		//die();
+		foreach($arr['valitud'] as $key=>$value)
+		{			
+			$this->add_item(array(
+									'quantity'=>$arr['quantity'][$key],
+									'product_code'=>$arr['productId'][$key],
+									'data'=>$data[$arr['productId'][$key]]
+								) ,false);
+		}
 		return $this->mk_my_orb("show", array(), "taket_ebasket");
 	}
 
@@ -495,8 +531,8 @@ class taket_ebasket extends class_base
 		//let's get the ebasket
 		$ebasket = $this->get_users_active_ebasket($user_id);
 		$tmpFlag=true;
-
 		//change the default session values
+		$_SESSION['TAKET']['info'] = $arr['sinfo'];
 		$_SESSION['TAKET']['eesperenimi'] = $arr['seesperenimi'];
 		$_SESSION['TAKET']['gsm'] = $arr['skontakttelefon'];
 		$_SESSION['TAKET']['transport_type'] = $arr['stransport'];
