@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.41 2001/10/29 17:48:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.42 2001/11/02 11:37:10 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -209,11 +209,25 @@ lc_load("definition");
 			{
 				if ($this->arr["subtype"] == "created")
 				{
-					$html.=$this->time2date($this->form->entry_created,2);
+					if ($this->arr["date_format"] == "")
+					{
+						$html.=$this->time2date($this->form->entry_created,2);
+					}
+					else
+					{
+						$html.=date($this->arr["date_format"],$this->form->entry_created);
+					}
 				}
 				else
 				{
-					$html.=$this->time2date($this->entry,5);
+					if ($this->arr["date_format"] == "")
+					{
+						$html.=$this->time2date($this->entry,5);
+					}
+					else
+					{
+						$html.=date($this->arr["date_format"],$this->entry);
+					}
 				}
 			}
 
