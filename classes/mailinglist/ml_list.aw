@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.55 2004/08/03 10:13:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.56 2004/08/04 10:30:30 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -20,7 +20,9 @@
 
 	@property redir_obj type=relpicker reltype=RELTYPE_REDIR_OBJECT rel=1
 	@caption Dokument millele suunata
-
+	
+	@property member_config type=relpicker reltype=RELTYPE_MEMBER_CONFIG rel=1
+	@caption Listi liikmete seadetevorm
 	------------------------------------------------------------------------
 	@default group=member_list
 		
@@ -116,6 +118,7 @@
 	@property show_mail_message type=text store=no no_caption=1
 	@caption Sisu
 
+	
 	------------------------------------------------------------------------
 	@groupinfo membership caption=Liikmed 
 	@groupinfo member_list caption=Nimekiri submit=no parent=membership
@@ -144,6 +147,9 @@
 
 	@reltype TEMPLATE value=4 clid=CL_MESSAGE_TEMPLATE
 	@caption kirja template
+	
+	@reltype MEMBER_CONFIG value=5 clid=CL_CFGFORM
+	@caption Listi liikme seadetevorm
 	
 */
 
@@ -755,6 +761,11 @@ class ml_list extends class_base
 		$ml_list_members = $this->get_members($arr["obj_inst"]->id(),$perpage * $ft_page +1,$perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/member_list");
+		
+		$t->define_field(array(
+			"name" => "others",
+			"caption" => "Liitumisinfo",
+		));
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "id",
@@ -781,9 +792,18 @@ class ml_list extends class_base
 					"lid" => $arr["obj_inst"]->id(),
 					"member" => $val["oid"],
 				));
+	
 				$t->define_data(array(
 					"id" => $val["oid"],
 					"email" => $mailto,
+					"others" => html::href(array(
+						"caption" => "Vaata",
+						"url" => $this->mk_my_orb("change", array(
+							"id" => $memberdata["id"],
+							"group" => "udef_fields",
+							"cfgform" => $arr["obj_inst"]->prop("member_config"),
+							), CL_ML_MEMBER),
+					)), 
 					"name" => $memberdata["name"],
 				));	
 

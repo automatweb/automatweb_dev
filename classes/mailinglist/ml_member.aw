@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.30 2004/08/02 12:19:08 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.31 2004/08/04 10:31:34 sven Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -304,6 +304,8 @@ class ml_member extends class_base
 		$m = new object($member);
 		$mailto = $m->prop("mail");
 		$memberdata["name"] = $m->prop("name");
+		$memberdata["id"] = $m->id();
+		
 		return array($mailto,$memberdata);
 	}
 
