@@ -3,18 +3,21 @@
 global $orb_defs;
 $orb_defs["form_chain"] = "xml";
 
+classload("form_base");
+
 class form_chain extends form_base
 {
 	function form_chain()
 	{
 		$this->form_base();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa formi p&auml;rg");
+		$this->mk_path($parent,LC_FORM_CHAIN_ADD_WREATH);
 		$this->read_template("add_chain.tpl");
 
 		$this->vars(array(
@@ -87,7 +90,7 @@ class form_chain extends form_base
 	{
 		extract($arr);
 		$fc = $this->load_chain($id);
-		$this->mk_path($fc["parent"], "Muuda p&auml;rga");
+		$this->mk_path($fc["parent"], LC_FORM_CHAIN_CHANGE_WREATH);
 		$this->read_template("add_chain.tpl");
 
 		if (is_array($this->chain["forms"]))
@@ -191,8 +194,14 @@ class form_chain extends form_base
 			$form_entry_id = $ear[$form_id];
 		}
 
+		$sep = $this->parse("SEP");
+		$first = true;
 		foreach($this->chain["forms"] as $fid)
 		{
+			if (!$first)
+			{
+				$ff.=$sep;
+			}
 			if ($section)
 			{
 				$url = $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section."/form_id=".$fid."/entry_id=".$entry_id;
@@ -213,6 +222,7 @@ class form_chain extends form_base
 			{
 				$ff.=$this->parse("SEL_FORM");
 			}
+			$first = false;
 		}
 
 		classload("form");
@@ -220,7 +230,8 @@ class form_chain extends form_base
 		$this->vars(array(
 			"cur_form" => $f->gen_preview(array("id" => $form_id,"entry_id" => $form_entry_id, "reforb" => $this->mk_reforb("submit_form", array("id" => $id, "section" => $section, "form_id" => $form_id, "chain_entry_id" => $entry_id,"form_entry_id" => $form_entry_id)))),
 			"FORM" => $ff,
-			"SEL_FORM" => ""
+			"SEL_FORM" => "",
+			"SEP" => ""
 		));
 		return $this->parse();
 	}
@@ -287,7 +298,7 @@ class form_chain extends form_base
 	{
 		extract($arr);
 		$ob = $this->load_chain($id);
-		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda p&auml;rga</a> / Sisestused");
+		$this->mk_path($ob["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id)).LC_FORM_CHAIN_CHANGE_WREATH_INPUT);
 		$this->read_template("show_chain_entries.tpl");
 
 		$this->db_query("SELECT * FROM form_chain_entries WHERE chain_id = $id");

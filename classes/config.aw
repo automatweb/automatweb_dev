@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.12 2001/06/28 18:04:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.13 2001/07/12 04:23:45 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -11,6 +11,7 @@ class db_config extends aw_template
 		$this->db_init();
 		$this->tpl_init("automatweb/config");
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function set_simple_config($ckey,$value)
@@ -45,7 +46,7 @@ class db_config extends aw_template
 
 	function gen_config()
 	{
-		$this->mk_path(0,"Saidi config");
+		$this->mk_path(0,LC_CONFIG_SITE);
 		$this->read_template("config.tpl");
 	
 		$al = $this->get_simple_config("after_login");
@@ -63,7 +64,7 @@ class db_config extends aw_template
 	function sel_join_form()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kasutaja liitumisform");
+		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_USER,config.$ext));
 
 		$this->read_template("sel_form.tpl");
 		
@@ -145,7 +146,7 @@ class db_config extends aw_template
 	function sel_search_form()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kasutaja otsinguform");
+		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_USER_FORM,config.$ext));
 
 		$this->read_template("sel_form.tpl");
 		
@@ -162,7 +163,7 @@ class db_config extends aw_template
 	function class_icons()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Klasside ikoonid");
+		$this->mk_path(0,sprintf(LC_CONFIG_CLASS_ICONS,config.$ext));
 
 		global $class_defs;
 		$this->read_template("admin_class_icons.tpl");
@@ -225,7 +226,7 @@ class db_config extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi klasside ikoone");
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_CLASS_ICON,config.$ext));
 			$this->read_template("import_class_icons.tpl");
 			return $this->parse();
 		}
@@ -251,7 +252,7 @@ class db_config extends aw_template
 	function file_icons()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Failit&uuml;&uuml;pide ikoonid");
+		$this->mk_path(0,LC_CONFIG_FILETYPE_ICONS);
 
 		$this->read_template("file_icons.tpl");
 
@@ -318,7 +319,7 @@ class db_config extends aw_template
 		global $fail;
 		if (!($f = fopen($fail,"r")))
 		{
-			$this->raise_error("Miskit l2x uploadimisel viltu",true);
+			$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
 		}
 
 		$fc = fread($f,filesize($fail));
@@ -350,7 +351,7 @@ class db_config extends aw_template
 			$cnt++;
 		}
 		global $ext;
-		echo "Importisin $cnt ikooni. <a href='config.$ext?type=$goto'>Tagasi</a><br>";
+		echo sprintf(LC_CONFIG_ALL_BEEN_IMPORTED,$cnt,"config.$ext?type=$goto");
 	}
 
 	function import_file_icons($level)
@@ -358,7 +359,7 @@ class db_config extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi failide ikoone");
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_FILE_ICONS,config.$ext));
 			$this->read_template("import_file_icons.tpl");
 			return $this->parse();
 		}
@@ -371,7 +372,7 @@ class db_config extends aw_template
 	function add_filetype($error)
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=file_icons'>Failit&uuml;&uuml;pide ikoonid</a> / Lisa");
+		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,"config.$ext","config.$ext?type=file_icons"));
 
 		$this->read_template("add_filetype.tpl");
 		$this->vars(array("error" => $error));
@@ -381,7 +382,7 @@ class db_config extends aw_template
 	function change_filetype($extt)
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=file_icons'>Failit&uuml;&uuml;pide ikoonid</a> / Muuda");
+		$this->mk_path(0,sprintf(LC_CONFIG_CONFIG_FILETYPE_ICONS,"config.$ext","config.$ext?type=file_icons"));
 
 		$this->read_template("add_filetype.tpl");
 		$ar = unserialize($this->get_simple_config("file_icons"));
@@ -432,7 +433,7 @@ class db_config extends aw_template
 	function program_icons()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Programmide ikoonid");
+		$this->mk_path(0,sprintf(LC_CONFIG_PROGRAMS_ICONS,"config.$ext"));
 
 		global $programs;
 		$this->read_template("admin_program_icons.tpl");
@@ -498,7 +499,7 @@ class db_config extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi programmide ikoone");
+			$this->mk_path(0,sprintf(LC_CONFIC_CONFIG_IMPORT_FILE_ICONS,config.$ext));
 			$this->read_template("import_program_icons.tpl");
 			return $this->parse();
 		}
@@ -524,7 +525,7 @@ class db_config extends aw_template
 	function other_icons()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Muud ikoonid");
+		$this->mk_path(0,sprintf(LC_CONFIG_ELSE_ICONS,config.$ext));
 
 		$this->read_template("other_icons.tpl");
 
@@ -533,38 +534,38 @@ class db_config extends aw_template
 		if ($v["url"] == "")
 			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "promo kast", "mtype" => "promo_box", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_PROMO_BOX, "mtype" => "promo_box", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["brother"];
 		if ($v["url"] == "")
 			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Vennastatud men&uuml;&uuml;", "mtype" => "brother", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_BROD_MENY, "mtype" => "brother", "url" => $v["url"]));
 		$this->parse("LINE");
 
-		$this->vars(array("type" => "Kodukataloog", "mtype" => "homefolder", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_HOME_CAT, "mtype" => "homefolder", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["shared_folders"];
 		if ($v["url"] == "")
 			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Kodukataloog/SHARED FOLDERS", "mtype" => "shared_folders", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_HOME_CAT_SHAR_FOL, "mtype" => "shared_folders", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["hf_groups"];
 		if ($v["url"] == "")
 			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Kodukataloog/grupid", "mtype" => "hf_groups", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_HOMECATALOG_GROUPS, "mtype" => "hf_groups", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["bugtrack"];
 		if ($v["url"] == "")
 			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Klienditugi/BugTrack", "mtype" => "bugtrack", "url" => $v["url"]));
+		$this->vars(array("type" => LC_CONFIG_CLIENTBACK, "mtype" => "bugtrack", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		return $this->parse();
@@ -632,7 +633,7 @@ class db_config extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi muid ikoone");
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ELSE_ICONS,config.$ext));
 			$this->read_template("import_other_icons.tpl");
 			return $this->parse();
 		}
@@ -640,7 +641,7 @@ class db_config extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error("Miskit l2x uploadimisel viltu",true);
+				$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -729,7 +730,7 @@ class db_config extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi k&otilde;ik ikoonid");
+			$this->mk_path(0,sprintf(LC_CONFIG_IMPORT_ALL_ICONS,config.$ext));
 			$this->read_template("import_all_icons.tpl");
 			return $this->parse();
 		}
@@ -737,7 +738,7 @@ class db_config extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error("Miskit l2x uploadimisel viltu",true);
+				$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -772,7 +773,7 @@ class db_config extends aw_template
 	function sel_contact_form()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Vali kontakti sisestamise form");
+		$this->mk_path(0,sprintf(LC_CONFIG_CHOOSE_CONTACT_INPUT_FORM,config.$ext));
 
 		$this->read_template("sel_form.tpl");
 		

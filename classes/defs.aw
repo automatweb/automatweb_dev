@@ -1,19 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.21 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.22 2001/07/12 04:23:45 kristo Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
-
+if (!defined("DEFS"))
+{
+define(DEFS,1);
 ////
 // !saadab 404 Not found vmt.
 function bail_out()
 {
-	header("HTTP/1.1 404 Not Found");
-	print "<html><head>\n<title>404 Not Found</title>\n</head></body>\n";
-	print "<h1>Not Found</h1>\n";
+	header(LC_DEFS_HTTP);
+	print LC_DEFS_NOT_FOUND;
+	print LC_DEFS_NOT_FOUND2;
 	global $REQUEST_URI;
 	global $SERVER_SIGNATURE;
-	print "the requested URL " . $REQUEST_URI . " was not found on this server.<p>\n";
+	print LC_DEFS_REG_URL . $REQUEST_URI . LC_DEFS_NOT_IN_SERVER;
 	print "<hr>\n<address>" . $SERVER_SIGNATURE . "</address>\n</body></html>";
 	exit;
+	lc_load("definition");
 }
 	
 function localparse($src = "",$vars = array())
@@ -570,6 +573,7 @@ function is_email ($Address = "")
 
 function is_admin()
 {
-		return (stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false);
+		return (stristr($GLOBALS["REQUEST_URI"],LC_DEFS_AUTOMATWEB)!=false);
 }
+};
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.3 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
 
 global $orb_defs;
 $orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array())
@@ -13,7 +13,7 @@ class accessmgr extends aw_template
 		$this->db_init();
 		$this->tpl_init("accessmgr");
 		$this->sub_merge = 1;
-			lc_load("definition");
+		lc_load("definition");
 
 		$c = new db_config;
 		$this->ar = unserialize($c->get_simple_config("accessmgr"));
@@ -77,6 +77,12 @@ class accessmgr extends aw_template
 			$c = new db_config;
 			$c->set_simple_config("accessmgr", serialize($this->ar));
 		}
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$ret = $sys->check_admin_templates("accessmgr", array("list.tpl"));
+		return $ret;
 	}
 }
 ?>

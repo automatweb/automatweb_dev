@@ -17,10 +17,11 @@ session_register("shopping_cart");
 
 define("ORD_FILLED",1);
 
-define("PER_PAGE",10);
+define("SHOP_PER_PAGE",10);
 
 //lc_load("shop");
 classload("shop_base");
+classload("shop_item");
 class shop extends shop_base
 {
 	function shop()
@@ -41,7 +42,7 @@ class shop extends shop_base
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa pood");
+		$this->mk_path($parent,"Add target");
 		$this->read_template("add.tpl");
 
 		classload("objects");
@@ -66,7 +67,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$oba = $this->get($id);
-		$this->mk_path($oba["parent"], "Muuda poodi");
+		$this->mk_path($oba["parent"], "Change target");
 		$this->read_template("add.tpl");
 
 		classload("objects");
@@ -203,7 +204,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Muuda poe omaniku andmeid");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Change shop owners data");
 
 		classload("form");
 		$f = new form;
@@ -365,11 +366,17 @@ class shop extends shop_base
 		{
 			$itt = $ityp->get_item_type($row["type_id"]);
 
+			$it_price = $this->get_list_price($row["oid"],$row["price"]);
+
 			$f = new form;
+			$f->load($itt["form_id"]);
+			$f->load_entry($row["entry_id"]);
+			$f->set_element_value_by_type("price",$it_price);
+
 			$this->vars(array(
-				"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["short_op"])),
+				"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["short_op"],"no_load_entry" => true)),
 				"item_id" => $row["oid"],
-				"price" => $row["price"],
+				"price" => $it_price, 
 				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 				"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $section)),
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"]),"shop_item")
@@ -400,7 +407,6 @@ class shop extends shop_base
 
 		classload("form");
 		$f = new form;
-		$images = new db_images;
 
 		$t_price = 0;
 
@@ -431,10 +437,12 @@ class shop extends shop_base
 						// oh what a mindjob.
 						// we add prefix entry_.$entry_id._ to all elements in this entry and later when processing
 						// entry, we add the same prefix so we process the elements from the right form.
-						$this->vars(array("row" => $f->mk_row_html($rownum,$images,"entry_".$ar["cnt_entry"]."_",array(),true)));
+						$this->vars(array("row" => $f->mk_row_html($rownum,"entry_".$ar["cnt_entry"]."_",array(),true)));
 						$rowhtml.=$this->parse("F_ROW");
 					}
 	
+					$el_price = $this->get_list_price($item_id, $it["price"]);
+
 					if ($ar["period"])
 					{
 						// if there is a period set in the cart for this item, we must replace the date in the item's form 
@@ -443,11 +451,16 @@ class shop extends shop_base
 						$f->load_entry($it["entry_id"]);
 						$el = $f->get_element_by_type("date", "from");
 						$f->set_element_value($el->get_id(),$ar["period"]);
+						$f->set_element_value_by_type("price", $el_price);
 						$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"],"no_load_entry" => true));
 					}
 					else
 					{
-						$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"]));
+						$f->load($itt["form_id"]);
+						$f->load_entry($it["entry_id"]);
+						$f->set_element_value_by_type("price",$el_price);
+
+						$item = $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"],"no_load_entry" => true));
 					}
 					$t_price += $ar["price"];
 					$this->vars(array(
@@ -493,6 +506,15 @@ class shop extends shop_base
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
+			// leiame perioodi alguse
+			$min_p = 2147483648;
+			foreach($shopping_cart["items"] as $iid => $idata)
+			{
+				if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
+				{
+					$min_p = $idata["period"];
+				}
+			}
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
@@ -531,7 +553,7 @@ class shop extends shop_base
 					if ($count > 0)
 					{
 						// nyyd tshekime et kas j2lle on vaba see item kyllalt palju
-						if (!$this->is_item_available($it,$count,$f,$ar["period"]))
+						if (!$this->is_item_available($it,$count,$f,$min_p))
 						{
 							// pold vabu itemeid sel ajal
 							global $status_msg;
@@ -581,9 +603,10 @@ class shop extends shop_base
 			// now check if any price alterations fall in this timespan
 		}
 
+		$el_price = $this->get_list_price($it["oid"], $it["price"]);
 		if ($eq["comment"] == "")
 		{
-			$price = (double)$it["price"] * (double)$count;
+			$price = (double)$el_price * (double)$count;
 		}
 		else
 		{
@@ -591,6 +614,8 @@ class shop extends shop_base
 			$f_kaup = new form;
 			$f_kaup->load($itt["form_id"]);
 			$f_kaup->load_entry($it["entry_id"]);
+			$f_kaup->set_element_value_by_type("price", $el_price);
+			$f->set_element_value_by_type("price", $el_price);
 
 			$els = $this->parse_eq_variables($eq["comment"]);
 
@@ -619,6 +644,7 @@ class shop extends shop_base
 				}
 				$eq = str_replace($elname,$elval,$eq);
 			}
+		//	echo "eq = $eq <br>";
 			eval("\$price = ".$eq.";");
 		}
 		return $price;
@@ -771,6 +797,15 @@ class shop extends shop_base
 		global $shopping_cart;
 		if (is_array($shopping_cart["items"]))
 		{
+			// leiame perioodi alguse
+			$min_p = 2147483648;
+			foreach($shopping_cart["items"] as $iid => $idata)
+			{
+				if ($idata["period"] && $min_p > $idata["period"] && $idata["period"] > 1)
+				{
+					$min_p = $idata["period"];
+				}
+			}
 			reset($shopping_cart["items"]);
 			while (list($item_id,$ar) = each($shopping_cart["items"]))
 			{
@@ -785,7 +820,7 @@ class shop extends shop_base
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 
-					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$ar["period"])))
+					if (!($free_items = $this->is_item_available($it,$ar["cnt"],$f,$min_p)))
 					{
 						// if no item is available, abort the order
 						global $status_msg;
@@ -889,7 +924,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("turnover_stat.tpl");
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Statistika");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Statistics");
 
 		load_vcl("date_edit");
 		$de = new date_edit(time());
@@ -968,6 +1003,7 @@ class shop extends shop_base
 		{
 			$row = $this->get_item($item_id,true);
 			$itt = $this->get_item_type($row["type_id"]);
+			$el_price = $this->get_list_price($row["oid"], $row["price"]);
 		}
 
 		//($row["has_period"] && !$row["has_objs"] && $row["has_max"]) || 
@@ -1051,7 +1087,12 @@ class shop extends shop_base
 			$this->read_template("order_item.tpl");
 			$parent = $this->do_shop_menus($shop,$section);
 			$ignoregoto = $this->db_fetch_field("SELECT shop_ignoregoto FROM menu WHERE id = $parent","shop_ignoregoto");
-			$this->vars(array("item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"]))));
+
+			$f->load($itt["form_id"]);
+			$f->load_entry($row["entry_id"]);
+			$f->set_element_value_by_type("price", $el_price);
+
+			$this->vars(array("item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"],"no_load_entry" => true))));
 			$this->vars(array(
 				"cnt_form" => $f->gen_preview(array(
 													"id" => $itt["cnt_form"],
@@ -1063,7 +1104,7 @@ class shop extends shop_base
 
 		$this->vars(array(
 			"item_id" => $row["oid"],
-			"price" => $row["price"],
+			"price" => $el_price ? $el_price : $row["price"],
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent)),
@@ -1222,7 +1263,7 @@ class shop extends shop_base
 		extract($arr);
 		$this->read_template("admin_orders.tpl");
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / Tellimused");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / Orders");
 
 		$ss = "";
 		if ($filter_uid && !is_admin())
@@ -1233,13 +1274,13 @@ class shop extends shop_base
 
 		// make pageselector
 		$cnt = $this->db_fetch_field("SELECT count(*) as cnt FROM orders WHERE shop_id = $id $ss","cnt");
-		$num_pages = $cnt / PER_PAGE;
+		$num_pages = $cnt / SHOP_PER_PAGE;
 
 		for ($i=0; $i < $num_pages; $i++)
 		{
 			$this->vars(array(
-				"from" => $i*PER_PAGE,
-				"to" => min(($i+1)*PER_PAGE,$cnt),
+				"from" => $i*SHOP_PER_PAGE,
+				"to" => min(($i+1)*SHOP_PER_PAGE,$cnt),
 				"goto_page" => $this->mk_my_orb("order_history", array("id" => $id, "section" => $section, "page" => $i))
 			));
 			if ($i == $page)
@@ -1256,7 +1297,7 @@ class shop extends shop_base
 			"SEL_PAGE" => ""
 		));
 
-		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC LIMIT ".($page*PER_PAGE).",".PER_PAGE);
+		$this->db_query("SELECT * FROM orders WHERE shop_id = $id $ss ORDER BY tm DESC LIMIT ".($page*SHOP_PER_PAGE).",".SHOP_PER_PAGE);
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -1315,7 +1356,7 @@ class shop extends shop_base
 		{
 			$id = 0;
 		}
-		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Tellimused</a> / Vaata tellimust");
+		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Change target</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Orders</a> / View order");
 
 		// load the entry from the database
 		$this->db_query("SELECT * FROM orders WHERE id = $order_id");
@@ -1329,7 +1370,6 @@ class shop extends shop_base
 
 		classload("form");
 		$f = new form;
-		$images = new db_images;
 
 		$items = false;
 		$itm = "";
@@ -1368,7 +1408,9 @@ class shop extends shop_base
 						"view_item" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop)),
 						"parent_name" => ($itt["has_voucher"] ? $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name") : ""),
 						"name" => $it["name"],
-						"F_ROW" => $rowhtml
+						"period" => $ar["period"] > 1? $this->time2date($ar["period"],5) : "",
+						"F_ROW" => $rowhtml,
+						"is_hotel" => $itt["has_voucher"] ? "<br>" : ""
 					));
 					$itm.=$this->parse("ITEM");
 				}
@@ -1433,9 +1475,9 @@ class shop extends shop_base
 		$len = strlen($str);
 		$in_var = false;
 
-		$varchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ",":");
+		$varchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","1","2","3","4","5","6","7","8","9","0","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ");
 
-		$varbeginchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ",":");
+		$varbeginchars = array("a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","z","u","v","w","x","y","z","_","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z","ä","ö","ü","õ","Ö","Ä","Ü","Õ");
 
 		for ($i=0; $i < $len; $i++)
 		{
@@ -1595,7 +1637,7 @@ class shop extends shop_base
 			}
 			else
 			{
-				$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt");
+				$this->db_query("UPDATE shop_item_period_avail SET num_sold = num_sold + $cnt WHERE item_id = ".$it["oid"]." AND period = $free_items");
 			}
 		}
 	}
@@ -1646,6 +1688,7 @@ class shop extends shop_base
 			$item = $this->get_item($row["item_id"]);
 			$item_parent_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$item["parent"],"name");
 			$item_form->load_entry($item["entry_id"]);
+			$item_form->set_element_value_by_type("price",$row["price"]);
 
 			$cnt_form->load_entry($row["cnt_entry"]);
 
@@ -1703,7 +1746,7 @@ class shop extends shop_base
 	{
 		extract($arr);
 		$sh = $this->get($id);
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda poodi</a> / Muuda tabeleid");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Change target</a> / Change tables");
 		$this->read_template("change_tables.tpl");
 
 		$itypes = $this->listall_item_types();
@@ -1853,6 +1896,68 @@ class shop extends shop_base
 			"itemname" => $item["name"]
 		));
 		die($this->parse());
+	}
+
+	function get_list_price($item_id,$def)
+	{
+		if (!is_array($GLOBALS["shopping_cart"]["items"]))
+		{
+			return $def;
+		}
+
+		$tmpar = $GLOBALS["shopping_cart"]["items"];	// copy so we won't mess up the internal pointer
+
+		foreach ($tmpar as $iid => $idata)
+		{
+			if ($idata["period"] && !$start)
+			{
+				$start = $idata["period"];
+			}
+			else
+			if ($idata["period"] && !$end)
+			{
+				$end = $idata["period"];
+			}
+		}
+		if ($end < $start)
+		{
+			$tmp = $start;
+			$start = $end;
+			$end = $tmp;
+		}
+	
+		if (!$end || !$start)
+		{
+			return $def;
+		}
+
+		$this->save_handle();
+		$this->db_query("SELECT * FROM shop_item2per_prices WHERE item_id = $item_id AND tfrom <= $start AND tto >= $end ");
+		while ($row = $this->db_next())
+		{
+			if ($row["per_type"] == PRICE_PER_WEEK)
+			{
+				$pp_week =  $row["price"];
+			}
+			else
+			if ($row["per_type"] == PRICE_PER_2WEEK)
+			{
+				$pp_2week = $row["price"];
+			}
+		}
+		$this->restore_handle();
+		$diff = $end - $start;
+
+		if (($end - $start <= 24*3600*7) && $pp_week)
+		{
+			return $pp_week;
+		}
+		else
+		if ((($end - $start > 24*3600*7) && ($end - $start <= 24*3600*14)) && $pp_2week)
+		{
+			return $pp_2week;
+		}
+		return $def;
 	}
 }
 ?>

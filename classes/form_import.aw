@@ -9,6 +9,7 @@ class form_import extends form_base
 	{
 		$this->form_base();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	////
@@ -32,7 +33,7 @@ class form_import extends form_base
 		global $file,$file_type;
 		if (!is_uploaded_file($file))
 		{
-			$this->raise_error("Te ei valinud faili!",true);
+			$this->raise_error(LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
@@ -188,7 +189,7 @@ class form_import extends form_base
 		extract($arr);
 		$this->read_template("import_entries.tpl");
 		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id),"form_chain")."'>Muuda p&auml;rga</a> / Impordi sisetusi");
+		$this->mk_path($o["parent"], sprintf(LC_IMPORT_CHAIN_HEADER,$this->mk_my_orb("change", array("id" => $id),"form_chain"));
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_chain", array("id" => $id))
@@ -202,7 +203,7 @@ class form_import extends form_base
 		global $file,$file_type;
 		if (!is_uploaded_file($file))
 		{
-			$this->raise_error("Te ei valinud faili!",true);
+			$this->raise_error(LC_FORM_IMPORT_NOT_FILE_SELECTED,true);
 		}
 
 		// liigutame faili kuskile seifi kohta ja j2tame meelde selle
@@ -219,7 +220,7 @@ class form_import extends form_base
 		classload("form_chain");
 		$f = new form_chain;
 		$ch = $f->load_chain($id);
-		$this->mk_path($ch["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id),"form_chain")."'>Muuda p&auml;rga</a> / Vali elemendid");
+		$this->mk_path($ch["parent"], sprintf(LC_FORM_IMPORT_CHAIN_ELS,$this->mk_my_orb("change", array("id" => $id),"form_chain"));
 		$this->read_template("import_entries2.tpl");
 
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea

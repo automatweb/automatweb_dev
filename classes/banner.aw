@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.4 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
 
@@ -581,11 +581,11 @@ class banner extends aw_template
 
 			if ($ba["b_url"] != "")
 			{
-				header(LC_LOCATION.$ba["b_url"]);
+				header("Location: ".$ba["b_url"]);
 			}
 			else
 			{
-				header(LC_CONTENT_TYPE.$ba["fail_type"]);
+				header("Content-type: ".$ba["fail_type"]);
 				die($ba["fail"]);
 			}
 		}
@@ -1441,7 +1441,7 @@ class banner extends aw_template
 																									 "data"  => urlencode(join(",",$dat)),
 																									 "title" => LC_USER_LOOKS,
 																									 "xtitle" => LC_BANNER,
-																									 "ytitle" => LC_LOOKS"),"banner"),
+																									 "ytitle" => LC_LOOKS),"banner"),
 			"t_views" => $t_vs,
 			"cchart" => $this->mk_orb("stat_chart", array("xvals" => urlencode(join(",",$bs2)),
 																									 "yvals" => urlencode(join(",",array(0,$m_cs))),

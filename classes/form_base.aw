@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.11 2001/07/04 23:01:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -8,6 +8,7 @@ class form_base extends aw_template
 	{
 		$this->tpl_init("forms");
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	////
@@ -86,7 +87,7 @@ class form_base extends aw_template
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
 			{
 				$this->arr["contents"][$row][$col] = new form_cell();		
-				$this->arr["contents"][$row][$col] -> load($this->id, $this->type, $row, $col, &$this->arr["elements"]);
+				$this->arr["contents"][$row][$col] -> load(&$this,$row,$col);
 			}
 	}
 
@@ -152,7 +153,7 @@ class form_base extends aw_template
 			$this->arr["rows"] = 0;
 		}
 		$this->db_query("UPDATE forms SET content = '$contents' , rows = ".$this->arr["rows"]." , cols = ".$this->arr["cols"]." WHERE id = ".$this->id);
-		$this->_log("form","Muutis formi $this->name");
+		$this->_log("form",sprintf(LC_FORM_BASE_CHANGED_FORM,$this->name));
 	}
 
 	////
@@ -268,7 +269,8 @@ class form_base extends aw_template
 			"actions"					=> $this->mk_orb("list_actions", array("id" => $this->id),"form_actions"),
 			"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
 			"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form"),
-			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import")
+			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import"),
+			"set_folders" => $this->mk_my_orb("set_folders", array("id" => $this->id),"form")
 		));
 
 		if ($action == "change" || $action == "show" || $action == "all_elements")
@@ -276,7 +278,7 @@ class form_base extends aw_template
 			$this->parse("GRID_SEL");
 		}
 
-		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings")
+		if ($action == "settings" || $action == "list_actions" || $action == "acl" || $action == "import_styles" || $action == "export_styles" || $action == "metainfo" || $action == "table_settings" || $action == "set_folders")
 		{
 			$this->parse("SETTINGS_SEL");
 		}
@@ -380,7 +382,7 @@ class form_base extends aw_template
 
 						if (is_array($jfes))
 						{
-							$app = "\n\nKasutaja ".$GLOBALS["uid"]." info:\n\n";
+							$app = LC_FORM_BASE_USER.$GLOBALS["uid"].LC_FORM_BASE_INFO;
 							foreach($jfes as $fid => $eid)
 							{
 								$app.=$this->mk_my_orb("show", array("id" => $fid, "entry_id" => $eid),"form")."\n";
@@ -389,7 +391,7 @@ class form_base extends aw_template
 					}
 					$this->load_entry($entry_id);
 					$msg = $this->show_text();
-					mail($row["data"],"Tellimus AutomatWebist", $msg.$app,"From: automatweb@automatweb.com\n");
+					mail($row["data"],LC_FORM_BASE_ORDER_FROM_AW, $msg.$app,"From: automatweb@automatweb.com\n");
 					break;
 			}
 			$this->restore_handle();
@@ -436,7 +438,7 @@ class form_base extends aw_template
 	{
 		if (!($row = $this->get_op($id)))
 		{
-			$this->raise_error("form->load_output($id): no such record!",true);
+			$this->raise_error(sprintf(LC_FORM_BASE_NO_SUCH_FORM,$id),true);
 		}
 
 		classload("xml");
@@ -1052,6 +1054,26 @@ class form_base extends aw_template
 		$x = new xml;
 		$this->chain = $x->xml_unserialize(array("source" => $row["content"]));
 		return $row;
+	}
+
+	function get_type()
+	{
+		return $this->type;
+	}
+
+	function get_id()
+	{
+		return $this->id;
+	}
+
+	function get_parent()
+	{
+		return $this->parent;
+	}
+
+	function &get_el_arr()
+	{
+		return $this->arr["elements"];
 	}
 }
 ?>

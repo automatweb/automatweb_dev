@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.4 2001/05/22 12:14:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -9,12 +9,13 @@ global $orb_defs;
 $orb_defs["groups"] = "xml";
 class groups extends users_user
 {
-	var $typearr = array(0 => "Grupp" , 1 => "Kasutaja", 2 => "Dyn.Grupp");
+	var $typearr = array(0 => LC_GROUPS_GROUP , 1 => LC_GROUPS_USER, 2 => LC_GROUPS_DYNGROUP);
 
 	function groups() 
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/groups");
+		lc_load("definition");
 	}
 
 	function make_tree($parent,$parent_name = "parent")
@@ -232,13 +233,13 @@ class groups extends users_user
 			switch ($v[type])
 			{
 				case "0":
-					$type = "Grupp";
+					$type = LC_GROUPS_GROUP;
 					break;
 				case "1":
-					$type = "Kasutaja";
+					$type = LC_GROUPS_USER;
 					break;
 				case "2":
-					$type = "Dyn.Grupp";
+					$type = LC_GROUPS_DYNGROUP;
 					break;
 			}
 
@@ -640,7 +641,7 @@ class groups extends users_user
 	function add_user_grp($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_orb("list_grps_user",array("parent" => $parent))."'>Grupid</a> / Lisa");
+		$this->mk_path(0,sprintf(LC_GROUPS_GROUP_ADD,$this->mk_orb("list_grps_user",array("parent" => $parent))));
 		$this->read_template("add_user_grp.tpl");
 		$this->vars(array("reforb" => $this->mk_reforb("submit_user_grp",array("parent" => $parent,"level" => $this->get_grp_level($parent)))));
 		return $this->parse();
@@ -649,7 +650,7 @@ class groups extends users_user
 	function change_user_grp($arr)
 	{
 		extract($arr);
-		$this->mk_path(0,"<a href='".$this->mk_orb("list_grps_user",array("parent" => $parent))."'>Grupid</a> / Muuda");
+		$this->mk_path(0,sprintf(LC_GROUPS_GROUP_CHANGE,$this->mk_orb("list_grps_user",array("parent" => $parent))));
 		$this->read_template("change_user_grp.tpl");
 
 		$gp = $this->fetchgroup($id);

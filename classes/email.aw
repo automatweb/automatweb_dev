@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.7 2001/06/21 17:50:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.8 2001/07/12 04:23:45 kristo Exp $
 // mailinglist saadetavate mailide klass
 
 	class email extends aw_template
@@ -9,6 +9,7 @@
 			$this->db_init();
 			$this->tpl_init("mailinglist");
 			$this->sent = array();
+			lc_load("definition");
 		}
 
 		function list_mails($parent)
@@ -106,13 +107,13 @@
 			{
 				$this->upd_object(array("oid" => $mail_id));
 				$this->db_query("UPDATE ml_mails SET mail_from = '$from', mail_from_name='$from_name', subj = '$subject' , contents='$contents' WHERE id = $mail_id");
-				$this->_log("e-mail","Muutis meili $subject");
+				$this->_log("e-mail",sprintf(LC_EMAIL_CHANGED_EMAIL,$subject));
 			}
 			else
 			{
 				$mail_id = $this->new_object(array("parent" => $parent,"name" => "e-mail", "class_id" => CL_EMAIL));
 				$this->db_query ("INSERT INTO ml_mails VALUES($mail_id, '$from' , '$subject' , '$contents' , 0,'$from_name')");
-				$this->_log("e-mail","Lisas meili $subject");
+				$this->_log("e-mail",sprintf(LC_EMAIL_ADD_EMAIL,$subject));
 			}
 
 			if ($link_addr != "")
@@ -125,7 +126,7 @@
 						$link_addr.="/";
 				}
 				$this->new_object(array("parent" => $mail_id,"name" => $link_addr,"class_id" => CL_MAIL_LINK));
-				$this->_log("e-mail","Lisas meilile $subject lingi $link_addr");
+				$this->_log("e-mail",sprintf(LC_EMAIL_ADD_MAIL_LINK,$subject,$link_addr));
 			}
 			return $mail_id;
 		}
@@ -166,7 +167,7 @@
 		{
 			$this->delete_object($id);
 			$subject = $this->db_fetch_field("SELECT subj FROM ml_mails WHERE id = $id","subj");
-			$this->_log("e-mail","Kustutas meili $subject");
+			$this->_log("e-mail",sprintf(LC_EMAIL_ERASED_MAIL,$subject));
 		}
 
 		function mail_preview($msg_id)
@@ -180,7 +181,7 @@
 											 LEFT JOIN ml_users ON objects.oid = ml_users.id
 											 WHERE objects.status != 0 AND objects.class_id = 17 AND objects.parent=".$mail[parent]);
 			if (!($user = $this->db_next()))
-				$this->raise_error("Systeemis pole yhtegi kasutajat, eelvaadet ei saa teha!", true);
+				$this->raise_error(LC_EMAIL_NO_USER_IN_SYSTEM, true);
 
 			$this->mk_vars($msg_id);
 			
@@ -285,7 +286,7 @@
 				
 					fwrite($f, "\n".$c."\n");
 					pclose($f); 
-					echo "saatsin maili $row[mail]'le<br>";
+					echo sprintf(LC_EMAIL_SENT_MAIL,$row[mail]);
 					if ($cache)
 					{
 						$this->sent[$row["mail"]] = 1;
@@ -326,7 +327,7 @@
 			
 			$list_id=$mail[parent];
 		
-			echo "Saadan meile<br>";
+			echo LC_EMAIL_SENDIBG_EMAIL;
 			flush();
 			
 			$this->db_query("SELECT objects.oid as oid, objects.name as name,ml_users.mail as mail FROM objects
@@ -362,13 +363,13 @@
 				$c = str_replace("\n","\n\r",$c);
 				fwrite($f, "\n".$c."\n");
 				pclose($f);
-				echo "saatsin maili ", $user[name], "(" ,  $user[mail], ") 'le<br>";
+				echo LC_EMAIL_SENT_EMAIL3, $user[name], "(" ,  $user[mail], ") 'le<br>";
 				flush();
 			}
 
 			$this->db_query("INSERT INTO ml_sent VALUES($list_id, $id, ".time().")");
 			$this->db_query("UPDATE ml_mails SET sent = ".time()." WHERE id = $id");
-			$this->_log("e-mail","Saatis meili $mail[subj]");
+			$this->_log("e-mail",sprintf(LC_EMAIL_SENT_MAIL2,$mail[subj]));
 		}
 		
 		function send_plain_mail($from, $to, $subj, $text)

@@ -1,11 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.4 2001/07/03 18:26:52 kristo Exp $
-// gallery.aw - galeriide haldus
 classload("images");
 
 global $orb_defs;
 $orb_defs["gallery"] = "xml";
-lc_load("gallery");
+
 class gallery extends aw_template
 {
 	function gallery($id = 0)
@@ -17,11 +15,12 @@ class gallery extends aw_template
 		{
 			$this->load($id,$GLOBALS["page"]);
 		}
-	global $lc_gallery;
+		global $lc_gallery;
 		if (is_array($lc_gallery))
 		{
 			$this->vars($lc_gallery);
 		}
+		lc_load("definition");
 	}
 
 	function parse_alias($args = array())
@@ -47,7 +46,7 @@ class gallery extends aw_template
 	{
 		extract($arr);
 		$this->read_template("add.tpl");
-		$this->mk_path($parent,"Lisa galerii");
+		$this->mk_path($parent,LC_GALLERY_ADD_GAL);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "alias_doc" => $alias_doc))
@@ -65,7 +64,7 @@ class gallery extends aw_template
 			$this->raise_error("no such gallery($id)!", true);
 		}
 		$this->read_template("add.tpl");
-		$this->mk_path($row["parent"],"Muuda galeriid");
+		$this->mk_path($row["parent"],LC_GALLERY_CHANGE_GAL);
 
 		$this->vars(array(
 			"name" => $row["name"], 
@@ -178,7 +177,8 @@ class gallery extends aw_template
 					"caption" => $cell["caption"], 
 					"bigurl" => $cell["bigurl"],
 					"col" => $col,
-					"date" => $cell["date"]
+					"date" => $cell["date"],
+					"link" => $cell["link"]
 				));
 				$b = $cell["bigurl"] != "" ? $this->parse("BIG") : "";
 				$this->vars(array("BIG" => $b));
@@ -315,6 +315,12 @@ class gallery extends aw_template
 				$v = str_replace("'","\"",$v);
 				$this->arr[$page]["content"][$row][$col]["caption"] = $v;
 
+				$var = "link_".$row."_".$col;
+				global $$var;
+				$v = str_replace("\\","",$$var);
+				$v = str_replace("'","\"",$v);
+				$this->arr[$page]["content"][$row][$col]["link"] = $v;
+
 				$var = "date_".$row."_".$col;
 				global $$var;
 				$v = str_replace("\\","",$$var);
@@ -350,7 +356,7 @@ class gallery extends aw_template
 		if ($page < 1)
 			$page = 0;
 
-		$baseurl = "/gallery.".$GLOBALS["ext"]."/id=".$this->id;
+		$baseurl = $GLOBALS["baseurl"]."/gallery.".$GLOBALS["ext"]."/id=".$this->id;
 
 		if (isset($GLOBALS["col"]) && isset($GLOBALS["row"]))
 		{
@@ -371,7 +377,23 @@ class gallery extends aw_template
 					$cell = $this->arr[$page][content][$row][$col];
 					$xsize = $cell[xsize] ? $cell[xsize] : 500;
 					$ysize = $cell[ysize] ? $cell[ysize] + 50: 400;
-					$this->vars(array("tnurl" => $cell[tnurl], "caption" => $cell[caption], "date" => $cell[date],"bigurl" => $baseurl."/col=$col/row=$row/page=$page","xsize" => $xsize, "ysize" => $ysize));
+					if ($cell["link"] != "")
+					{
+						$url = $cell["link"];
+						$target="target=\"_blank\"";
+					}
+					else
+					{	
+						$url = "javascript:rremote(\"$baseurl/col=$col/row=$row/page=$page\",$xsize,$ysize)";
+						$target = "";
+					}
+					$this->vars(array(
+						"tnurl" => $cell[tnurl], 
+						"caption" => $cell[caption], 
+						"date" => $cell[date],
+						"url" => $url,
+						"target" => $target
+					));
 					if ($cell[tnurl] != "")
 					{
 						$c.=$this->parse("IMAGE");

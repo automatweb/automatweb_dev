@@ -19,6 +19,7 @@ class links extends extlinks
 		{
 			$this->vars($lc_extlinks);
 		}
+		lc_load("definition");
 	}
 
 	function add($arr)
@@ -26,7 +27,7 @@ class links extends extlinks
 		extract($arr);
 		classload("menuedit");
 		$t = new menuedit;
-		$this->mk_path($parent, "Lisa link");
+		$this->mk_path($parent, LC_LINKS_ADD);
 		$this->read_template("nadd.tpl");
 		classload("objects");
 		$ob = new db_objects;
@@ -46,7 +47,7 @@ class links extends extlinks
 		classload("menuedit");
 		$t = new menuedit;
 
-		$this->mk_path($link[parent], "Muuda linki");
+		$this->mk_path($link[parent], LC_LINKS_CHANGE);
 		$this->read_template("nadd.tpl");
 		$ob = new db_objects;
 		$this->vars(array("reforb"	=> $this->mk_reforb("submit", array("docid" => $docid,"id" => $id)),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.83 2001/07/03 06:18:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.84 2001/07/12 04:23:46 kristo Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -2544,10 +2544,10 @@ class messenger extends menuedit_light
 				"title" => MSG_TITLE_RULES,
 				"activelist" => array("configure","rules","list"),
 				));
-		$fields = array("mfrom" => "Kellelt",
-				"to" => "Kellele",
-				"subject" => "Teema",
-				"message" => "Sisu",
+		$fields = array("mfrom" => LC_MESSENGER_WHOM,
+				"to" => LC_MENUEDIT_TO_WHO,
+				"subject" => LC_MENUEDIT_SUBJECT,
+				"message" => LC_MENUEDIT_MATTER,
 		);
 		classload("users");
 		$users = new users();
@@ -2591,7 +2591,7 @@ class messenger extends menuedit_light
 				$cnt++;
 				$todelete[] = $key;
 			};
-			$status_msg = "Kustutati $cnt reeglit";
+			$status_msg = sprintf(LC_MENUEDIT_ERASED,$cnt);
 			session_register("status_msg");
 		};
 		$q = "DELETE FROM msg_rules WHERE id IN (" . join(",",$todelete) . ")";
@@ -2610,10 +2610,10 @@ class messenger extends menuedit_light
 				"activelist" => array("configure","rules","addrule"),
 				));
 
-		$fields = array("mfrom" => "Kellelt",
-				"message" => "Sisu",
-				"to" => "Kellele",
-				"subject" => "Teema",
+		$fields = array("mfrom" => LC_MESSENGER_WHOM,
+				"message" =>LC_MENUEDIT_MATTER,
+				"to" => LC_MENUEDIT_TO_WHO,
+				"subject" => LC_MENUEDIT_SUBJECT,
 		);
 
 		$folders = $this->_folder_list();
@@ -2635,8 +2635,8 @@ class messenger extends menuedit_light
 
 		if (isset($id))
 		{
-			$title = "Muuda reeglit";
-			$btn_cap = "Salvesta";
+			$title = LC_MESSENGER_CHANGE_RULE;
+			$btn_cap = LC_MESSENGER_SAVE;
 			$row = $oldrules[$id];
 			if (!$row)
 			{
@@ -2651,8 +2651,8 @@ class messenger extends menuedit_light
 		}
 		else
 		{
-			$title = "Uus reegel";
-			$bnt_cap = "Lisa";
+			$title = LC_MESSENGER_NEW_RULE;
+			$bnt_cap = LC_MESSENGER_ADD;
 			$field_index = 0;
 			$folder_index = $user["msg_inbox"];
 		};
@@ -2700,12 +2700,12 @@ class messenger extends menuedit_light
 		if (isset($id))
 		{
 			$oldrules[$id] = $keyblock;
-			$status_msg = "Reegel salvestatud";
+			$status_msg = LC_MESSENGER_BULE_SAVED;
 		}
 		else
 		{
 			$oldrules[] = $keyblock;
-			$status_msg = "Reegel lisatud";
+			$status_msg = LC_MESSENGER_RULE_ADDED;
 		};
 
 		$users->set_user_config(array(
@@ -2725,7 +2725,7 @@ class messenger extends menuedit_light
 	function new_folder($args = array())
 	{
 		$menu = $this->gen_msg_menu(array(
-				"title" => "Uus folder",
+				"title" => LC_MESSENGER_NEW_FOLDER,
 				"activelist" => array("configure","folders2","newfolder"),
 				));
 		$this->read_template("addfolder.tpl");
@@ -2757,7 +2757,7 @@ class messenger extends menuedit_light
 			"parent" => $parent,
 		));
 		global $status_msg;	
-		$status_msg = "Folder on lisatud";
+		$status_msg = LC_MESSENGER_FOLDER_ADDED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 			"action" => "folders",
@@ -2812,7 +2812,7 @@ class messenger extends menuedit_light
 		$this->db_query($q);
 		$row = $this->db_next();
 		$folder = $row["folder"];
-		$status_msg = "Teade kustutati";
+		$status_msg = LC_MESSENGER_NOTE_ERASED;
 		session_register("status_msg");
 		$this->driver->msg_delete($args);
 		return $this->mk_site_orb(array(

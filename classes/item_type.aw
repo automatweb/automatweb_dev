@@ -15,6 +15,7 @@ class item_type extends shop_base
 		{
 			$this->vars($lc_shop);
 		}
+		lc_load("definition");
 	}
 
 	////
@@ -23,7 +24,7 @@ class item_type extends shop_base
 	{
 		extract($arr);
 		$this->read_template("add_item_type.tpl");
-		$this->mk_path($parent, "Lisa kaupat&uuml;&uuml;p");
+		$this->mk_path($parent, LC_ITEM_TYPE_ADD);
 
 		classload("form_base");
 		$fb = new form_base;
@@ -92,7 +93,7 @@ class item_type extends shop_base
 		extract($arr);
 		$itt = $this->get_item_type($id); 
 		$tid = $id;
-		$this->mk_path($itt["parent"], "Muuda kauba t&uuml;&uuml;pi");
+		$this->mk_path($itt["parent"], LC_ITEM_TYPE_CHANGE);
 		$this->read_template("add_item_type.tpl");
 
 		classload("form_base");

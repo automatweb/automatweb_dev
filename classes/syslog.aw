@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.3 2001/07/03 09:31:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.4 2001/07/12 04:23:46 kristo Exp $
 // syslogi vaatamine ja analüüs
+
 class db_syslog extends aw_template
 {
 	
@@ -194,5 +195,34 @@ class db_syslog extends aw_template
 						"email_c" => $syslog_params[email_c])); return
 			$this->parse("MAIN");
 	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "syslog", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"tm" => array("name" => "tm", "length" => 11, "type" => "int", "flags" => ""),
+				"uid" => array("name" => "uid", "length" => 50, "type" => "string", "flags" => ""),
+				"type" => array("name" => "type", "length" => 100, "type" => "string", "flags" => ""),
+				"action" => array("name" => "action", "length" => 255, "type" => "string", "flags" => ""),
+				"ip" => array("name" => "ip", "length" => 100, "type" => "string", "flags" => ""),
+				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
+			)
+		);
+
+		$ret = $sys->check_site_templates("syslog", array("parts.tpl","syslog.tpl"));
+		$ret.= $sys->check_db_tables(array($op_table),$fix);
+
+		return $ret;
+	}
 };
+
+class syslog extends db_syslog
+{
+	function syslog()
+	{
+		$this->db_syslog();
+	}
+}
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.9 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.10 2001/07/12 04:23:45 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -32,7 +32,7 @@ class tpl
 	}
 };
 
-require("$classdir/acl_base.$ext");
+include_once("$classdir/acl_base.$ext");
 class aw_template extends acl_base
 {
 	// compatibility muutujad
@@ -155,7 +155,7 @@ class aw_template extends acl_base
 		$filename = $this->template_dir . "/$filename";
 		if (!($source = $this->get_file(array("file" => $filename))))
 		{
-			$this->raise_error(LC_NOT_FOUND_TEMPLATE,true);
+			$this->raise_error("Template '$filename' not found",true);
 		};
 		return $this->use_template($source);
 	}
@@ -229,7 +229,7 @@ class aw_template extends acl_base
         $last = array_pop($construct);
         if ($last->name != $m[1])
 				{
-          printf(LC_BROKEN_TEMPLATE,$m[1],$last->name);
+          printf("Broken template. Tried to close '%s' while '%s' was open",$m[1],$last->name);
           die;
         };
       }

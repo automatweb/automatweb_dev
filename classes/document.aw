@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.33 2001/07/09 21:37:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.34 2001/07/12 04:23:45 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -523,6 +523,17 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "pwd_remind",
 					));
+		
+		// eventsitega seonduv kamm
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)event_(.+?)(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "events2",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+					));
 
 		// linkide parsimine
 		while (preg_match("/(#)(\d+?)(#)(.*)(#)(\d+?)(#)/",$doc["content"],$matches))
@@ -562,7 +573,7 @@ class document extends aw_template
 							"oid"	=> $docid,
 					));
 		}; 
-		
+
 		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
 			$doc["content"] = str_replace("\r\n","<br>",$doc["content"]);
@@ -612,14 +623,14 @@ class document extends aw_template
 		$t = new msgboard;
 		$nc = $t->get_num_comments($docid);
 		$nc = $nc < 1 ? "0" : $nc;
-		$doc["content"] = str_replace("<kommentaaride arv>",$nc,$doc["content"]);
+		$doc["content"] = str_replace(LC_DOCUMENT_COM_NR,$nc,$doc["content"]);
 
 		$doc["content"] = preg_replace("/<kommentaar>(.*)<\/kommentaar>/isU","<a class=\"links\" href='$baseurl/comments.$ext?section=$docid'>\\1</a>",$doc["content"]);
 
 	// <mail to="bla@ee">lahe tyyp</mail>
     $doc["content"] = preg_replace("/<mail to=\"(.*)\">(.*)<\/mail>/","<a class='mailto_link' href='mailto:\\1'>\\2</a>",$doc["content"]);
 		
-		$doc["content"] = str_replace("#current_time#",$this->time2date(time(),2),$doc["content"]);
+		$doc["content"] = str_replace(LC_DOCUMENT_CURRENT_TIME,$this->time2date(time(),2),$doc["content"]);
 
 	classload("users");
 	if (!(strpos($doc["content"],"#liitumisform") === false))
@@ -1031,7 +1042,7 @@ class document extends aw_template
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
 
-			mail("\"$to_name\" <".$to.">","Artikkel saidilt www.nadal.ee",$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+			mail("\"$to_name\" <".$to.">",LC_DOCUMENT_ART_FROM_NADAL,$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
 		}
 	}
 
@@ -1148,7 +1159,7 @@ class document extends aw_template
 
 		global $per_oid,$period;
 
-		$this->mk_path($parent,"Lisa dokument");
+		$this->mk_path($parent,LC_DOCUMENT_ADD_DOC);
 		$this->tpl_init("automatweb/documents");
 		$this->read_template("nadd.tpl");
 		$par_data = $this->get_object($parent);
@@ -1253,17 +1264,17 @@ class document extends aw_template
 		}
 
 		$document = $this->fetch($id);
-		$this->mk_path($document["parent"],"Muuda dokumenti",$document["period"]);
+		$this->mk_path($document["parent"],LC_DOCUMENT_CHANGE_DOC,$document["period"]);
 		
 		// kui class_id on 1, siis jarelikult me muudame
 		// mingi sektsiooni defaulte
 		if ($document["class_id"] == 1) 
 		{
-			$mcap = "Sektsiooni defaultid";
+			$mcap = LC_DOCUMENT_SEKTS_DEF;
 		} 
 		else 
 		{
-			$mcap = "Dokumendid";
+			$mcap = LC_DOCUMENT_DOC;
 		};
 
 		$_tpl = $this->get_edit_template($document["parent"]);
@@ -1792,7 +1803,7 @@ class document extends aw_template
 		}
 
 		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],"Eelvaade");
+		$this->mk_path($obj["parent"],LC_DOCUMENT_PREW);
 
 		if (!$user)
 		{
@@ -1835,7 +1846,7 @@ class document extends aw_template
 		global $sstring,$slang_id;
 
 		$document = $this->fetch($id);
-		$this->mk_path($document["parent"],"Keeleseosed");
+		$this->mk_path($document["parent"],LC_DOCUMENT_LANG);
 
 		$lang_brothers = unserialize($document["lang_brothers"]);
 		classload("languages");
@@ -2113,7 +2124,7 @@ class document extends aw_template
 	{
 		extract($arr);
 		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],"Eelvaade");
+		$this->mk_path($obj["parent"],LC_DOCUMENT_PREW);
 
 		$this->read_template("nbrother.tpl");
 		$sar = array();
@@ -2200,7 +2211,7 @@ class document extends aw_template
 	function add_bro($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent, "Vennasta dokumente");
+		$this->mk_path($parent, LC_DOCUMENT_BROD_DOC);
 		$this->read_template("search_doc.tpl");
 		global $s_name, $s_content,$SITE_ID;
 		if ($s_name != "" || $s_content != "")

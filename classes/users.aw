@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.11 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.12 2001/07/12 04:23:46 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -1040,6 +1040,13 @@ class users extends users_user
 			$this->set_user_config(array("uid" => $uid, "key" => "user_info_cache", "value" => $elvalues));
 		};
 		return $elvalues;
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$ret = $sys->check_admin_templates("automatweb/users", array("sel_list.tpl","list.tpl","changepwd.tpl","sel_join_grp.tpl","add.tpl"));
+		$ret.= $sys->check_orb_defs(array("users"));
+		return $ret;
 	}
 }
 ?>

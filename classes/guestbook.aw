@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.4 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
@@ -15,6 +15,7 @@ class guestbook extends aw_template
 		$this->tpl_init("guestbook");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	////
@@ -37,7 +38,7 @@ class guestbook extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent, "Lisa k&uuml;lalisteraamat");
+		$this->mk_path($parent, LC_GUESTBOOK_ADD);
 		$this->read_template("add.tpl");
 		$this->vars(array("reforb" => $this->mk_reforb("submit_gb", array("parent" => $parent,"docid" => $docid))));
 		return $this->parse();
@@ -84,7 +85,7 @@ class guestbook extends aw_template
 	{
 		extract($arr);
 		$this->read_template("change.tpl");
-		$this->mk_path($parent, "Muuda k&uuml;lalisteraamatut");
+		$this->mk_path($parent, LC_GUESTBOOK_CHANGE);
 		$o = $this->get_object($id);
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GUESTBOOK_ENTRY." AND status != 0 AND parent = $id");

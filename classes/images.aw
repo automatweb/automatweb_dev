@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.10 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/images.aw,v 2.11 2001/07/12 04:23:45 kristo Exp $
 // klass piltide manageerimiseks
 global $orb_defs;
 $orb_defs["images"] = array("new"						=> array("function"	=> "add",		"params"	=> array("parent")),
@@ -17,6 +17,7 @@ class images extends aw_template
 	function images()
 	{
 		$this->di = new db_images;	
+		lc_load("definition");
 	}
 
 	///
@@ -51,7 +52,7 @@ class images extends aw_template
 
 	function add($arr)
 	{
-		$this->di->mk_path($arr["parent"], "Lisa pilt");
+		$this->di->mk_path($arr["parent"], LC_IMAGES_ADD_PIC);
 		$this->di->read_template("nupload.tpl");
 		$this->di->vars(array("reforb" => $this->mk_reforb("submit", array("parent" => $arr["parent"]))));
 		return $this->di->parse();
@@ -296,12 +297,12 @@ class db_images extends aw_template
 				$p_oid = $this->new_object(array("parent" => $oid,"name" => $pname,"class_id" => 6,"comment" => $comment));
 				global $link;
 				$this->db_query("INSERT INTO images(id,file,idx,link,newwindow) VALUES($p_oid, '$fname.$ext' , '$idx','$link','$newwindow')");
-				$this->_log("image","Muutis pilti $p_oid");
+				$this->_log("image",SPRINTF(LC_IMAGES_CHANGED_PICT,$p_oid));
 				return array("id" => $p_oid, "idx" => $idx);
 			} 
 			else 
 			{
-				print "Midagi on valesti. Pilti ei salvestatud";
+				print LC_IMAGES_SOME_IS_WRONG;
 			};
 		} 
 		else 
@@ -343,7 +344,7 @@ class db_images extends aw_template
 
 		if (!($this->is_valid_image($file_type) || $ignore_type)) 
 		{
-			print "See failitüüp ei sobi mulle";
+			print LC_IMAGES_NOT_COMP;
 			die;
 		};
 		// leiame faili laiendi
@@ -401,12 +402,12 @@ class db_images extends aw_template
 			$this->db_query("INSERT INTO images (id,file,idx,link,newwindow) VALUES('$pid','$fname.$ext','$idx','$link','$newwindow')");
 			// paneme paika viimase pildi indexi
 			$this->set_last($oid,"image",$idx);
-			$this->_log("image","Lisas pildi $pid");
+			$this->_log("image",SPRINTF(LC_IMAGES_ADDED_PICT,$pid));
 			return array("id" => $pid, "idx" => $idx);
 		} 
 		else 
 		{
-			print "Midagi on valesti. Pilti ei salvestatud";
+			print LC_IMAGES_SOME_IS_WRONG;
 			return array();
 		};
 	}

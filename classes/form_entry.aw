@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.3 2001/06/21 07:37:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
 
 global $orb_defs;
 
@@ -18,6 +18,7 @@ class form_entry extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("forms");
+		lc_load("definition");
 	}
 
 	function change($arr)
@@ -26,7 +27,7 @@ class form_entry extends aw_template
 		$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $id", "form_id");
 
 		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], "Muuda formi sisestust");
+		$this->mk_path($o["parent"], LC_FORM_ENTRY_CHANGE_ENTRY);
 
 		classload("form");
 		$f = new form;

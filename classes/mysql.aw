@@ -1,23 +1,28 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.3 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.4 2001/07/12 04:23:46 kristo Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
-class db_connector extends root {
+class db_connector extends root 
+{
 	var $dbh; #database handle
 	var $db_base; #name of the database
 	var $qID; # query ID
 	var $errmsg; # where we keep our error messages
 	var $rec_count;
-	function db_init() {
+
+	function db_init() 
+	{
 		global $db_core;
 		$this->dbh = $db_core->dbh;
 		$this->db_base = $db_core->db_base;
 		$this->watch = 1;
 	}
 		
-	function db_connect($server,$base,$username,$password) {
+	function db_connect($server,$base,$username,$password) 
+	{
 		$this->dbh = mysql_pconnect($server,$username,$password);
-		if (!$this->dbh) {
+		if (!$this->dbh) 
+		{
 			echo "Can't connect to database";
 			exit;
 		};
@@ -94,44 +99,22 @@ class db_connector extends root {
 		return $res;
 	}
 
-	function db_list_tables()
+	function db_last_insert_id() 
 	{
-		$this->tID = mysql_list_tables($this->db_base);
-		$this->tablecount = mysql_num_rows($this->tID);
-	}
-
-	function db_next_table()
-	{
-		static $cnt = 0;
-		$res = ($cnt < $this->tablecount) ? mysql_tablename($this->tID,$cnt) : false;
-		$cnt++;
-		return $res;
-	}
-	
-	function db_get_fields()
-	{
-		$retval = array();
-		print $this->num_fields;
-		for ($i = 0; $i < $this->num_fields; $i++)
-		{
-			$retval[] = mysql_fetch_field($this->qID);
-		}
-		return $retval;
-	}
-
-	function db_last_insert_id() {
 		$res = mysql_insert_id();
 		return $res;
 	}
 
-	function db_fetch_row() {
+	function db_fetch_row() 
+	{
 		return $this->db_next();
 	}
 	
 	# seda voib kasutada, kui on vaja teada saada mingit kindlat välja
 	# a 'la cval tabelist config
 	# $cval = db_fetch_field("SELECT cval FROM config WHERE ckey = '$ckey'","cval")
-	function db_fetch_field($qtext,$field) {
+	function db_fetch_field($qtext,$field) 
+	{
 		$this->db_query($qtext);
 		$row = $this->db_fetch_row();
 		$val = $row[$field];
@@ -140,17 +123,25 @@ class db_connector extends root {
 	}
 
 	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
-	function quote(&$arr) {
-		if (is_array($arr)) {
-			while(list($k,$v) = each($arr)) {
-				if (is_array($arr[$k])) {
+	function quote(&$arr) 
+	{
+		if (is_array($arr)) 
+		{
+			while(list($k,$v) = each($arr)) 
+			{
+				if (is_array($arr[$k])) 
+				{
 					// do nothing
-				} else {
+				} 
+				else 
+				{
 					$arr[$k] = addslashes($arr[$k]);
 				};
 			};
 			reset($arr);
-		} else {
+		} 
+		else 
+		{
 			$arr = addslashes($arr);
 			return $arr;
 		};
@@ -182,6 +173,147 @@ class db_connector extends root {
 	function num_rows()
 	{
 		return mysql_num_rows($this->qID);
+	}
+
+	function db_list_tables()
+	{
+		$this->tID = mysql_list_tables($this->db_base);
+		$this->tablecount = mysql_num_rows($this->tID);
+	}
+
+	function db_next_table()
+	{
+		static $cnt = 0;
+		$res = ($cnt < $this->tablecount) ? mysql_tablename($this->tID,$cnt) : false;
+		$cnt++;
+		return $res;
+	}
+	
+	function db_get_fields()
+	{
+		$retval = array();
+		print $this->num_fields;
+		for ($i = 0; $i < $this->num_fields; $i++)
+		{
+			$retval[] = mysql_fetch_field($this->qID);
+		}
+		return $retval;
+	}
+
+	////
+	// !returns the properties of table $name or false if it doesn't exist
+	// properties are returned as array $tablename => $tableprops
+	// where $tableprops is an array("name" => $table_name, "fields" => $fieldprops)
+	// where $fieldprops is an array of $fieldname => $cur_props
+	// where $cur_props is an array("name" => $field_name, "length" => $field_length, "type" => $field_type, "flags" => $field_flags)
+	// example: CREATE TABLE tbl (id int, content text)
+	// returns: array("name" => "tbl",
+	//								"fields" => array("id" => array("name" => "id", "length" => 10, "type" => "int", "flags" => ""),
+	//																	"content" => array("name" => "content", "length" => "65535", "type" => "text", "flags" => "")
+	//																	)
+	//								)
+	function db_get_table($name)
+	{
+		$ret = array("name" => $name,"fields" => array());
+		$fID = @mysql_list_fields($this->db_base, $name, $this->dbh);
+		if (!$fID)
+		{
+			return false;
+		}
+
+		$numfields = mysql_num_fields($fID);
+		for ($i=0; $i < $numfields; $i++)
+		{
+			$name = mysql_field_name($fID,$i);
+			$type = mysql_field_type($fID,$i);
+			$len =  mysql_field_len($fID,$i);
+			$flags = mysql_field_flags($fID,$i);
+			$ret["fields"][$name] = array("name" => $name, "length" => $len, "type" => $type, "flags" => "");
+		}
+		return $ret;
+	}
+
+	////
+	// !syncs the tables, creates all fields in $dest that are not in $dest, but are in $source
+	// $dest is table name, $source is table array representation
+	function db_sync_tables($source,$dest)
+	{
+		$dest_t = $this->db_get_table($dest);
+
+		// now if the table doesn't exist, create it
+		if (!$dest_t)
+		{
+			// create
+			$fls = array();
+			foreach ($source["fields"] as $fname => $fdata)
+			{
+				$fls[] = $fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+			}
+			$sql = "CREATE TABLE ".$dest."(".(join(",",$fls)).")";
+			$this->db_query($sql);
+		}
+		else
+		{
+			// iterate over all fields and add the missing ones and convert the changed ones
+			foreach($source["fields"] as $fname => $fdata)
+			{
+				if (is_array($dest_t["fields"][$fdata["name"]]))
+				{
+					// field exists, convert it if necessary
+					$dest_field = $dest_t["fields"][$fdata["name"]];
+					if ($dest_field["type"] != $fdata["type"] || $dest_field["length"] != $fdata["length"])
+					{
+						$sql = "ALTER TABLE $dest CHANGE ".$fdata["name"]." ".$fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+						$this->db_query($sql);
+					}
+				}
+				else
+				{
+					// field does not exist, add it
+					$sql = "ALTER TABLE $dest ADD ".$fdata["name"]." ".$this->mk_field_len($fdata["type"],$fdata["length"]);
+					$this->db_query($sql);
+				}
+			}
+		}
+	}
+
+	////
+	// !this returns the sql for creating the field
+	function mk_field_len($type,$length)
+	{
+		switch ($type)
+		{
+			case "tinyint":
+			case "smallint":
+			case "mediumint":
+			case "int":
+			case "integer":
+			case "bigint":
+			case "char":
+			case "varchar":
+				return $type."(".$length.")";
+
+			default:
+				return $type;
+		}
+	}
+
+	////
+	// !this creates a nice string from the results of db_get_table
+	function db_print_table($arr)
+	{
+		$ret = "CREATE TABLE ".$arr["name"];
+		$ret.="(";
+		$fs = array();
+		if (is_array($arr["fields"]))
+		{
+			foreach($arr["fields"] as $fname => $fdata)
+			{
+				$fs[] = $fdata["name"]." ".$fdata["type"]."(".$fdata["length"].") ".$fdata["flags"];
+			}
+		}
+		$ret.=join(",",$fs);
+		return $ret.")";
 	}
 };
 ?>

@@ -13,13 +13,14 @@ class currency extends aw_template
 		$this->db_init();
 		$this->tpl_init("currency");
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function add($arr)
 	{
 		extract($arr);
 		$this->read_template("add_currency.tpl");
-		$this->mk_path($parent, "Lisa valuuta");
+		$this->mk_path($parent, LC_CURRENCY_ADD);
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent))
@@ -45,7 +46,7 @@ class currency extends aw_template
 	{
 		extract($arr);
 		$o = $this->get_object($id);
-		$this->mk_path($o["parent"], "Muuda valuutat");
+		$this->mk_path($o["parent"], "LC_CURRENCY_CHANGE");
 		$this->read_template("add_currency.tpl");
 
 		$this->vars(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.11 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.12 2001/07/12 04:23:46 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -14,6 +14,7 @@ class mlist extends aw_template
 		$this->name = $row["name"];
 		$this->l_vars = unserialize($row["last"]);
 		$this->vars(array("list_name" => $this->name, "list_id" => $this->id));
+		lc_load("definition");
 
 	}
 	
@@ -110,7 +111,7 @@ class mlist extends aw_template
 				$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$var_value."')");
 		}
 
-		$this->_log("mlist","Lisas kasutaja $name listi $this->name");
+		$this->_log("mlist",sprintf(LC_LIST_ADD_USER,$name,$this->name));
 		return $user_id;
 	}
 
@@ -144,7 +145,7 @@ class mlist extends aw_template
 						$this->db_query("INSERT INTO ml_var_values VALUES($var_id, $user_id, '".$$v."')");
 				}
 			}
-			$this->_log("mlist","Muutis kasutajat $name listis $this->name");
+			$this->_log("mlist",sprintf(LC_LIST_CHANGED_USER,$name,$this->name));
 		}
 		else
 		{
@@ -301,7 +302,7 @@ class mlist extends aw_template
 				if ($rows[$v] == 1)
 					$this->delete_object($v);
 
-			$this->_log("mlist","Kustutas kasutaja listist $this->name");
+			$this->_log("mlist",sprintf(LC_LIST_ERASED_USER,$this->name));
 		}
 	}
 
@@ -391,7 +392,7 @@ class mlist extends aw_template
 			flush();
 			$this->db_add_user(array("name" => $name, "email" => $mail));
 		}			
-		$this->_log("mlist","Importis kasutajaid listi $this->name");
+		$this->_log("mlist",sprintf(LC_LIST_IMPORTED_USER,$this->name));
 	}
 
 	function change_vars($parent)

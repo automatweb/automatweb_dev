@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.4 2001/07/02 00:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 // extlinks.aw - Väliste linkide haldamise klass
 lc_load("extlinks");
 
@@ -10,6 +10,7 @@ class extlinks extends aw_template {
 	{
 		$this->db_init();
 		$this->tpl_init();
+		lc_load("definition");
 		
 		global $lc_extlinks;
 		if (is_array($lc_extlinks))
@@ -34,7 +35,7 @@ class extlinks extends aw_template {
 		$q = "INSERT INTO extlinks (id,oid,url,name,hits,newwindow,descript,type,docid,doclinkcollection) 
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
 		$this->db_query($q);
-		$this->_log("link","Lisas lingi $name");
+		$this->_log("link",sprintf(LC_EXTLINKS_ADD_LINK,$name));
 
 		
 
@@ -57,6 +58,7 @@ class extlinks extends aw_template {
 		// now, match[3] contains the index inside the aliases array
 		$l = $this->extlinkaliases[$matches[3] - 1];
 		$link = $this->get_link($l["target"]);
+		$this->dequote(&$link);
 
 		global $baseurl;
 		$vars = array(
@@ -88,7 +90,7 @@ class extlinks extends aw_template {
 		$this->db_query($q);
 		$this->upd_object(array("oid" => $lid,
 					"name" => $name));
-		$this->_log("link","Muutis linki $name");
+		$this->_log("link",sprintf(LC_EXTLINKS_CHANGED_LINK,$name));
 	}
 
 	function get_link($id) {
@@ -115,7 +117,7 @@ class extlinks extends aw_template {
 						VALUES ('$id',$t,'$host','$uid')";
 		$this->db_query($q);
 		$name = $this->db_fetch_field("SELECT name FROM objects where oid = $id","name");
-		$this->_log("link","Klikkis lingil $name");
+		$this->_log("link",sprintf(LC_EXTLINKS_CLIK_LINK,$name));
 	}
 
 };

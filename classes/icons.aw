@@ -8,13 +8,14 @@ class icons extends aw_template
 		$this->tpl_init("automatweb/config");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function gen_db($page,$grp)
 	{	
 		$this->read_template("icon_list.tpl");
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Ikoonide baas");
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG,config.$ext));
 
 		if ($grp)
 		{
@@ -85,7 +86,7 @@ class icons extends aw_template
 	function add()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=icon_db'>Ikoonide baas</a> / Lisa");
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,"config.$ext","config.$ext?type=icon_db"));
 
 		$this->read_template("add_icon.tpl");
 		return $this->parse();
@@ -94,7 +95,7 @@ class icons extends aw_template
 	function add_zip()
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=icon_db'>Ikoonide baas</a> / Lisa");
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_ADD,"config.$ext","config.$ext?type=icon_db"));
 
 		$this->read_template("add_icon_zip.tpl");
 		return $this->parse();
@@ -111,7 +112,7 @@ class icons extends aw_template
 								    "image/pjpeg");
 		if (!in_array($fail_type,$itypes) && $fail != "none")
 		{
-			$this->raise_error("Ikoon peab olema kas gif v6i jpeg formaadis!",true);
+			$this->raise_error(LC_ICONS_GIR_OR_JPEG,true);
 		}
 
 		if ($id)
@@ -154,7 +155,7 @@ class icons extends aw_template
 	function change($id)
 	{
 		global $ext;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / <a href='config.$ext?type=icon_db'>Ikoonide baas</a> / Muuda");
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_CHANGE,"config.$ext","config.$ext?type=icon_db"));
 		$this->read_template("change_icon.tpl");
 
 		// mdx, yx ennustus. MITTE KEEGI ei hakka MITTE KUNAGI neid v2lju k6iki t2itma. 
@@ -241,7 +242,7 @@ class icons extends aw_template
 	function sel_icon($rtype,$rid,$sstring = "",$sstring2 = "",$grp="")
 	{
 		global $ext,$kelle,$puhastatud,$praht,$opsys,$p2rit,$m2rks6nad,$m2rks6nad2,$search,$programm;
-		$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Otsi ikooni");
+		$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_FIND,config.$ext));
 
 		$this->read_template("search_icon.tpl");
 		$this->vars(array("rtype" => $rtype, "rid" => $rid, "sstring" => (!$search ? "%" : $sstring), "sstring2" => $sstring2,
@@ -332,7 +333,7 @@ class icons extends aw_template
 		if (!$level)
 		{
 			global $ext;
-			$this->mk_path(0,"<a href='config.$ext'>Saidi config</a> / Impordi ikoone");
+			$this->mk_path(0,sprintf(LC_ICONS_SITE_CONFIG_IMPORT,config.$ext));
 			$this->read_template("import_icons.tpl");
 			return $this->parse();
 		}
@@ -340,7 +341,7 @@ class icons extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error("Miskit l2x uploadimisel viltu",true);
+				$this->raise_error(LC_ICONS_SOME_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -365,7 +366,7 @@ class icons extends aw_template
 			}
 		}
 		global $ext;
-		echo "Importisin $cnt ikooni. <a href='config.aw?type=icon_db'>Tagasi</a><br>";
+		echo sprintf(LC_ICONS_IMPORTED_ICONS,$cnt,"config.aw?type=icon_db");
 	}
 
 	function add_array($v)
@@ -416,7 +417,7 @@ class icons extends aw_template
 			$h = opendir($dir);
 			while ($file = readdir($h))
 			{
-				echo "protsessin faili $file <br>";
+				echo sprintf(LC_ICONS_PROCESSING_FILE,$file);
 				flush();
 				if ($file != "." && $file != "..")
 				{
@@ -424,7 +425,7 @@ class icons extends aw_template
 					// kui on vaja konvertida, siis konverdime. 
 					if (strcasecmp($ext,".ico") == 0)
 					{
-						echo "konverdin faili gifiks!<br>";
+						echo LC_ICONS_CONVERTING_FILE;
 						// ok, this is da biaatch. 
 						// ysnaga. convertiga teeme giffideks. tekib mitu giffi
 						// siis identifyga tunneme 6ige 2ra
@@ -475,7 +476,7 @@ class icons extends aw_template
 			rmdir($dir);
 			rmdir($tdir);
 		}
-		return "Importisin $cnt ikooni!<br><a href='config.aw?type=icon_db'>Tagasi</a>";
+		return sprintf(LC_ICONS_IMPORTING,$cnt,"config.aw?type=icon_db");
 	}
 
 	function convert_icon($idir, $icon, $tdir)

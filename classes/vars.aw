@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.2 2001/05/25 09:07:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.3 2001/07/12 04:23:46 kristo Exp $
 
 	global $orb_defs;
 	$orb_defs["variables"] = array(
@@ -364,5 +364,32 @@
 		{
 			$this->delete_object($id);
 		}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "ml_vars", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"name" => array("name" => "name", "length" => 255, "type" => "string", "flags" => "")
+			)
+		);
+
+		$op2_table = array(
+			"name" => "ml_var_values", 
+			"fields" => array(
+				"var_id" => array("name" => "var_id", "length" => 11, "type" => "int", "flags" => ""),
+				"user_id" => array("name" => "user_id", "length" => 11, "type" => "int", "flags" => ""),
+				"value" => array("name" => "value", "length" => 65535, "type" => "blob", "flags" => "")
+			)
+		);
+
+		$ret = $sys->check_admin_templates("mailinglist", array("add_var.tpl","list_vars.tpl","list_stamps.tpl","add_stamp.tpl","add_var_cat.tpl","change_var_cat.tpl"));
+		$ret.= $sys->check_site_templates("mailinglist", array());
+		$ret.= $sys->check_site_files(array("/images/puu_plus.gif","/images/puu_plusl.gif","/images/puu_lopp.gif","/images/puu_rist.gif","/images/puu_folder.gif","/images/puu_folderl.gif","/images/puu_tyhi.gif","/images/puu_joon.gif"));
+		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
+
+		return $ret;
 	}
+}
 ?>

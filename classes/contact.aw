@@ -34,7 +34,7 @@ class contact extends aw_template
 		$cf = get_simple_config("contact_form");
 		if (!$cf)
 		{
-			$this->raise_error("no form selected for adding contacts!",true);
+			$this->raise_error(LC_CONTACT_NO_FORM,true);
 		}
 		return $cf;
 	}

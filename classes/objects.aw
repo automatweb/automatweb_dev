@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.14 2001/07/05 02:45:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.15 2001/07/12 04:23:46 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -500,19 +500,19 @@ class objects extends db_objects
 					$found = true;
 					if ($k == "active" && $v == 1)
 					{
-						$se[] = " status = 2 ";
+						$se[] = " objects.status = 2 ";
 					}
 					else
 					if ($numfields[$k])
 					{
 						if ($v > 0)
 						{
-							$se[] = " $k = '".$v."' ";
+							$se[] = " objects.$k = '".$v."' ";
 						}
 					}
 					else
 					{
-						$se[] = " $k LIKE '%".$v."%' ";
+						$se[] = " objects.$k LIKE '%".$v."%' ";
 					}
 				}
 			}
@@ -524,12 +524,20 @@ class objects extends db_objects
 			{
 				$ses="AND ".$ses;
 			}
-			$this->db_query("SELECT * FROM objects WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses");
+			$this->db_query("SELECT objects.*,o_p.name as parent_name FROM objects, objects as o_p WHERE o_p.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) $ses");
 			while ($row = $this->db_next())
 			{
-				$this->vars(array("name" => $row["name"], 
-													"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
-													"change" => $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $class_defs[$row["class_id"]]["file"])));
+				$this->vars(array(
+					"name" => $row["name"], 
+					"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
+					"change" => $this->mk_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $class_defs[$row["class_id"]]["file"]),
+					"created" => $this->time2date($row["created"], 2),
+					"modified" => $this->time2date($row["modified"], 2),
+					"createdby" => $row["createdby"],
+					"modifiedby" => $row["modifiedby"],
+					"parent_name" => $row["parent_name"],
+					"oid" => $row["oid"]
+				));
 				$l.=$this->parse("LINE");
 			}
 			$this->vars(array("LINE" => $l));
@@ -551,6 +559,10 @@ class objects extends db_objects
 		$u = new users;
 		$uids = $u->listall_acl();
 		$uids[""] = "";
+
+		classload("objects");
+		$ob = new db_objects;
+
 		$this->vars(array(
 			"s_name"	=> $s["name"],
 			"s_comment"	=> $s["comment"],
@@ -560,9 +572,37 @@ class objects extends db_objects
 			"modifiedby" => $this->picker($s["modifiedby"],$uids),
 			"active"	=> checked($s["active"]),
 			"alias"		=> $s["alias"],
-			"reforb" => $this->mk_reforb("search", array("reforb" => 0))
+			"reforb" => $this->mk_reforb("search_submit", array()),
+			"moveto" => $this->picker(0,$ob->get_list(false,true))
 		));
 		return $this->parse();
+	}
+
+	function search_submit($arr)
+	{
+		extract($arr);
+
+		// here we must move the selected objects and change names
+		if (is_array($old_text))
+		{
+			foreach($old_text as $oid => $name)
+			{
+				if ($text[$oid] != $name)
+				{
+					$this->upd_object(array("oid" => $oid, "name" => $text[$oid]));
+				}
+			}
+		}
+
+		if (is_array($sel) && $moveto != 0)
+		{
+			foreach($sel as $oid => $one)
+			{
+				$this->upd_object(array("oid" => $oid, "parent" => $moveto));
+			}
+		}
+
+		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"]));
 	}
 }
 

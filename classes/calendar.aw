@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.3 2001/07/10 21:48:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/calendar.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
 // Generic calendar class
 
 // php arvab by default, et pühapäev on 0.
@@ -28,10 +28,10 @@ class calendar extends aw_template
 		// millise kuu kohta kalendrit joonistame?
 		$year	= ($args["year"]) ? $args["year"] : date("Y");
 		$mon	= ($args["mon"]) ? $args["mon"] : date("m");
+		$act_day = ($args["day"]) ? $args["day"] : date("d");
 		$contents = $args["contents"];
 		$tpl 	= ($args["tpl"]) ? $args["tpl"] : "plain.tpl";
 		$misc   = (is_array($args["misc"])) ? $args["misc"] : array();
-		$act_day = ($args["day"]) ? $args["day"] : date("d");
 
 
 		$add	= $args["add"]; // miski räga, mis linkidele otsa pannakse
@@ -97,7 +97,7 @@ class calendar extends aw_template
 			};
 			$this->vars(array(
 				"nday" => $day,
-				"daylink" => $this->mk_link($baselink + array("day" => $day)),
+				"daylink" => $this->mk_link($baselink + array("day" => sprintf("%02d",$day))),
 				"day" => $day,
 			));
 			$tpl = ($day == $act_day) ? "week.activecell" : "week.cell";
@@ -119,8 +119,8 @@ class calendar extends aw_template
 				$wday = CAL_WEEK_START;
 			};
 		}
-		list($prevmon,$prevyear) = explode("|",date("n|Y",mktime(0,0,0,$mon-1,1,$year)));	
-		list($nextmon,$nextyear) = explode("|",date("n|Y",mktime(0,0,0,$mon+1,1,$year)));	
+		list($prevmon,$prevyear) = explode("|",date("m|Y",mktime(0,0,0,$mon-1,1,$year)));	
+		list($nextmon,$nextyear) = explode("|",date("m|Y",mktime(0,0,0,$mon+1,1,$year)));	
 
 		$mname = get_lc_month($mon);
 

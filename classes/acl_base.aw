@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.6 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.7 2001/07/12 04:23:45 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -37,6 +37,8 @@ $acl_ids = array("0" =>	 "can_edit",
 global $acl_default;
 $acl_default = array("can_view" => ALLOWED);
 
+lc_load("definition");
+
 classload("core");
 class acl_base extends core
 {
@@ -52,7 +54,6 @@ class acl_base extends core
 			$qstr[] = " ((acl >> $bitpos) & 3) AS $name";
 
 		return join(",",$qstr);
-			lc_load("definition");
 	}
 
 	function get_acl_groups_for_obj($oid)
@@ -375,6 +376,22 @@ class acl_base extends core
 	{
 		global $programs;
 		die("Sorry, but you do not have $right access to program ".$programs[$prog]["name"]."<br>");
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "acl", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"gid" => array("name" => "gid", "length" => 11, "type" => "int", "flags" => ""),
+				"oid" => array("name" => "oid", "length" => 11, "type" => "int", "flags" => ""),
+				"acl" => array("name" => "acl", "length" => 20, "type" => "int", "flags" => "")
+			)
+		);
+
+		$ret= $sys->check_db_tables(array($op_table),$fix);
+		return $ret;
 	}
 }
 ?>

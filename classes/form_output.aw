@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.9 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.10 2001/07/12 04:23:45 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -11,13 +11,14 @@ class form_output extends form_base
 		$this->tpl_init("forms");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function add($arr)
 	{
 		extract($arr);
 		$this->read_template("add_output.tpl");
-		$this->mk_path($parent,"Lisa v&auml;ljundi stiil");
+		$this->mk_path($parent,LC_FORM_OUTPUT_ADD_OUT_STYLE);
 
 		classload("style");
 		$st = new style;
@@ -104,7 +105,7 @@ class form_output extends form_base
 		extract($arr);
 		$this->load_output($id);
 		$this->read_template("add_output.tpl");
-		$this->mk_path($this->parent, "Muuda v&auml;ljundi stiili");
+		$this->mk_path($this->parent, LC_FORM_OUTPUT_CHANGE_OUT_STYLE);
 
 		classload("style");
 		$st = new style;
@@ -140,7 +141,7 @@ class form_output extends form_base
 		extract($arr);
 		$this->read_template("output_grid.tpl");
 		$this->load_output($id);
-		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda v&auml;jundit</a> / Adminni");
+		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id))));
 		$op_id = $id;
 
 		// vaja on arrayd el_id => el_name k6ikide elementide kohta, mis on selle v2ljundi juurde valitud formides
@@ -151,7 +152,9 @@ class form_output extends form_base
 		// put all styles in this form in an array so they will be faster to use
 		$style = new style;
 		$style_select = $style->get_select(0,ST_CELL);
-
+		$this->vars(array(
+			"styles" => $this->picker(0,$style_select)
+		));
 		// tabeli ylemine rida delete column nuppudega
 		for ($a=0; $a < $this->output["cols"]; $a++)
 		{
@@ -210,7 +213,8 @@ class form_output extends form_base
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
 					"stylesel" => $this->picker($cell["style"],$style_select),
-					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $col, "row" => $row))
+					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $col, "row" => $row)),
+					"style_name" => $style_select[$cell["style"]]
 				));
 
 				$sh = ""; $sv = "";
@@ -313,7 +317,7 @@ class form_output extends form_base
 			{
 				$cell = &$this->output[$row][$col];
 
-				$var = "stylesel_".$row."_".$col;
+/*				$var = "stylesel_".$row."_".$col;
 				$cell["style"] = $$var;
 
 				for ($i=0; $i < $cell["el_count"]+1; $i++)
@@ -335,6 +339,10 @@ class form_output extends form_base
 				if ($cell["el_count"] < 0)
 				{
 					$cell["el_count"] = 0;
+				}*/
+				if ($sel[$row][$col] == 1)
+				{
+					$cell["style"] = $selstyle;
 				}
 			}
 		}
@@ -389,7 +397,7 @@ class form_output extends form_base
 		$this->quote(&$tp);
 		$this->db_query("UPDATE form_output SET op = '$tp' WHERE id = $id");
 		$this->upd_object(array("oid" => $id));
-		$this->_log("form","Muutis outputi stiili $name");
+		$this->_log("form",sprintf(LC_FORM_OUTPUT_CHANGED_STYLE,$name));
 	}
 
 	////
@@ -593,7 +601,7 @@ class form_output extends form_base
 
 		$this->load_output($id);
 
-		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda v&auml;jundit</a> / <a href='".$this->mk_my_orb("admin_op",array("id" => $id))."'>Adminni</a> / Muuda celli");
+		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_CHANGE_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id)),$this->mk_my_orb("admin_op",array("id" => $id))));
 		$op_id = $id;
 
 		$elarr = $this->mk_elarr($id);
@@ -653,6 +661,31 @@ class form_output extends form_base
 			}
 		}
 		return $elarr;
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "form_output", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"op" => array("name" => "op", "length" => 65535, "type" => "blob", "flags" => "")
+			)
+		);
+
+		$op2_table = array(
+			"name" => "output2form", 
+			"fields" => array(
+				"op_id" => array("name" => "op_id", "length" => 11, "type" => "int", "flags" => ""),
+				"form_id" => array("name" => "form_id", "length" => 11, "type" => "int", "flags" => "")
+			)
+		);
+
+		$ret = $sys->check_admin_templates("forms", array("add_output.tpl","output_grid.tpl","ch_op_cell.tpl"));
+		$ret.= $sys->check_site_templates("forms", array());
+		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
+
+		return $ret;
 	}
 }
 ?>

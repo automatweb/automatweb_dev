@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.3 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
 // acl.aw - Access Control Lists
 
 global $orb_defs;
@@ -11,7 +11,7 @@ class acl extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/acl");
-			lc_load("definition");
+		lc_load("definition");
 	}
 
 	////
@@ -333,6 +333,12 @@ class acl extends aw_template
 				$this->save_acl($oid,$gid,$acl);
 			}
 		}
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$ret = $sys->check_admin_templates("automatweb/acl", array("cells.tpl","editacl.tpl"));
+		return $ret;
 	}
 };
 ?>

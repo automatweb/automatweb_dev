@@ -12,6 +12,7 @@ class contacts extends aw_template {
 		$this->db_init();
 		// right now contact templates are stored next to the messenger ones
 		$this->tpl_init("messenger");
+		lc_load("definition");
 	}
 
 	////
@@ -95,7 +96,7 @@ class contacts extends aw_template {
 		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
 		} while(sizeof($groups) > 0);
  
-		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->flatlist = array($udata["home_folder"] => LC_CONTACT_NOT_SORTED);
 		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
 	}
 
@@ -345,7 +346,7 @@ class contacts extends aw_template {
 			$this->db_query($q);
 		};
 		global $status_msg;
-		$status_msg = "Kontaktid liigutati teise folderisse";
+		$status_msg = LC_CONTACT_CONTACT_MOVED_FOLDER;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 					"action" => "contacts",
@@ -391,7 +392,7 @@ class contacts extends aw_template {
 		$args["parent"] = $folder;
 		$f->process_entry($args);
 		global $status_msg;
-		$status_msg = ($entry_id) ? "Kontakt on salvestatud" : "Kontakt on lisatud";
+		$status_msg = ($entry_id) ? LC_CONTACT_CONTACT_SAVED : LC_CONTACT_ADDED;
 		session_register("status_msg");
 		if (!$entry_id)
 		{
@@ -452,7 +453,7 @@ class contacts extends aw_template {
 			));
 		};
 		global $status_msg;
-		$status_msg = ($args["id"]) ? "Kontaktigrupp on salvestatud" : "Kontaktigrupp on lisatud";
+		$status_msg = ($args["id"]) ? LC_CONTACT_GROUP_SAVED : LC_CONTACT_GROUP_ADDED;
 		session_register("status_msg");
 		return $this->mk_site_orb(array(
 					"action" => "edit_group",
@@ -565,7 +566,7 @@ class contacts extends aw_template {
 		} while(sizeof($groups) > 0);
 		
 		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
-		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->flatlist = array($udata["home_folder"] => LC_CONTACT_NOT_SORTED);
 		$this->indentlevel = 0;
 		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
 		
@@ -645,7 +646,7 @@ class contacts extends aw_template {
 		$g .= $this->parse("group");
 
 
-		$dummy = array("0" => "Kõik","1" => "Listid");
+		$dummy = array("0" => LC_CONTACT_ALL,"1" => LC_CONTACT_LISTS);
 		$this->vars(array(
 				"groups" => $this->picker(-1,$dummy + $this->flatlist),
 				"group" => $g,

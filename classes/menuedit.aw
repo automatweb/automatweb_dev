@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.33 2001/07/12 03:52:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.34 2001/07/12 04:23:46 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -1639,6 +1639,8 @@ class menuedit extends aw_template
 			$l.=$this->parse("LINE");
 		} // eow
 		
+		classload("languages");
+		$la = new languages;
 		$this->vars(array(
 			"LINE" => $l,
 			"reforb"	=> $this->mk_reforb("submit_order", array("parent" => $parent,"period" => $period,"from_menu" => 1)),
@@ -1657,7 +1659,8 @@ class menuedit extends aw_template
 			"yah"	=> $this->mk_path($parent,"",0,false),
 			"cut" => $this->mk_orb("cut_menus", array("parent" => $parent)),
 			"paste" => $this->mk_orb("paste_menus", array("parent" => $parent)),
-			"addpromo" => $this->mk_orb("new", array("parent" => $parent),"promo")
+			"addpromo" => $this->mk_orb("new", array("parent" => $parent),"promo"),
+			"lang_name" => $la->get_langid()
 		));
 		return $this->parse();
 	}
@@ -1944,6 +1947,8 @@ class menuedit extends aw_template
 			$paste = $this->parse("PASTE");
 		}
 		$odata = $this->get_object($parent);
+		classload("languages");
+		$la = new languages;
 		$this->vars(array("LINE" => $l,
 				"CUT"	=> "",
 				"NORMAL"	=> "", 
@@ -1964,7 +1969,8 @@ class menuedit extends aw_template
 				"order5"			=> $sortby == "class_id" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
 				"sortedimg5"	=> $sortby == "class_id" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
 				"order6"			=> $sortby == "status" ? $order == "ASC" ? "DESC" : "ASC" : "ASC",
-				"sortedimg6"	=> $sortby == "status" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : ""
+				"sortedimg6"	=> $sortby == "status" ? $order == "ASC" ? "<img src='$baseurl/images/up.gif'>" : "<img src='$baseurl/images/down.gif'>" : "",
+				"lang_name" => $la->get_langid()
 		));
 
 		if (!$period && !$popup)
@@ -3651,8 +3657,11 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$pobj = $this->get_object($section);
 				$lastar = unserialize($pobj["last"]);
 				// this is wrong, lang_id should be used
-				list(,$default_doc) = each($lastar);
-				$docid = $default_doc;
+				if (is_array($lastar))
+				{
+					list(,$default_doc) = each($lastar);
+					$docid = $default_doc;
+				}
 			};
 
 			if ($docid)

@@ -73,7 +73,7 @@ class shop_item extends shop_base
 
 		if ($id)
 		{
-			$o = $this->get_item($id);
+			$o = $this->get_item($id,true);
 			$itt = $this->get_item_type($o["type_id"]);
 
 			$f->process_entry(array("id" => $itt["form_id"],"entry_id" => $o["entry_id"]));
@@ -159,7 +159,8 @@ class shop_item extends shop_base
 			"sel_period" => $this->mk_my_orb("repeaters", array("id" => $o["per_event_id"]),"planner"),
 			"per_cnt" => $o["per_cnt"],
 			"per_prices" => $this->mk_my_orb("set_per_prices", array("id" => $id)),
-			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"]
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$o["parent"],
+			"show_free" => $this->mk_my_orb("show_free", array("id" => $id))
 		));
 		return $this->parse();
 	}
@@ -449,6 +450,78 @@ class shop_item extends shop_base
 			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type) VALUES($id,$tfrom,$tto,'".$price[0]."','".$price_type[0]."')");
 		}
 		return $this->mk_my_orb("set_per_prices", array("id" => $id,"page" => $page));
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "shop_items", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"form_id" => array("name" => "form_id", "length" => 11, "type" => "int", "flags" => ""),
+				"entry_id" => array("name" => "entry_id", "length" => 11, "type" => "int", "flags" => ""),
+				"op_id" => array("name" => "op_id", "length" => 11, "type" => "int", "flags" => ""),
+				"price" => array("name" => "price", "length" => 22, "type" => "real", "flags" => ""),
+				"op_id_l" => array("name" => "op_id_l", "length" => 11, "type" => "int", "flags" => ""),
+				"cnt_form" => array("name" => "cnt_form", "length" => 11, "type" => "int", "flags" => ""),
+				"redir" => array("name" => "redir", "length" => 11, "type" => "int", "flags" => ""),
+				"has_max" => array("name" => "has_max", "length" => 11, "type" => "int", "flags" => ""),
+				"max_items" => array("name" => "max_items", "length" => 11, "type" => "int", "flags" => ""),
+				"has_period" => array("name" => "has_period", "length" => 11, "type" => "int", "flags" => ""),
+				"has_objs" => array("name" => "has_objs", "length" => 11, "type" => "int", "flags" => ""),
+				"price_eq" => array("name" => "price_eq", "length" => 65535, "type" => "blob", "flags" => ""),
+				"type_id" => array("name" => "type_id", "length" => 11, "type" => "int", "flags" => ""),
+				"sold_items" => array("name" => "sold_items", "length" => 11, "type" => "int", "flags" => ""),
+				"calendar_id" => array("name" => "calendar_id", "length" => 11, "type" => "int", "flags" => ""),
+				"per_from" => array("name" => "per_from", "length" => 11, "type" => "int", "flags" => ""),
+				"per_event_id" => array("name" => "per_event_id", "length" => 11, "type" => "int", "flags" => ""),
+				"per_cnt" => array("name" => "per_cnt", "length" => 11, "type" => "int", "flags" => ""),
+			)
+		);
+
+		$op2_table = array(
+			"name" => "shop_item2per_prices", 
+			"fields" => array(
+				"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+				"item_id" => array("name" => "item_id", "length" => 11, "type" => "int", "flags" => ""),
+				"tto" => array("name" => "tto", "length" => 11, "type" => "int", "flags" => ""),
+				"price" => array("name" => "price", "length" => 22, "type" => "real", "flags" => ""),
+				"per_type" => array("name" => "per_type", "length" => 11, "type" => "int", "flags" => ""),
+			)
+		);
+
+		$ret = $sys->check_admin_templates("shop", array("add_item_form.tpl","edit_item.tpl","set_per_prices.tpl"));
+		$ret.= $sys->check_orb_defs(array("shop_item"));
+		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
+
+		return $ret;
+	}
+
+	function show_free($arr)
+	{
+		extract($arr);
+		$this->read_template("show_free.tpl");
+		$it = $this->get_item($id);
+		$this->mk_path($it["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Muuda</a> / Vaata vabu");
+
+		if ($it["has_period"])
+		{
+			$this->db_query("SELECT * FROM shop_item_period_avail WHERE item_id = $id ");
+			while ($row = $this->db_next())
+			{
+				$this->vars(array(
+					"period" => $this->time2date($row["period"], 5),
+					"num_sold" => $row["num_sold"],
+					"free" => $it["max_items"] - $row["num_sold"]
+				));
+				$this->parse("LINE");
+			}
+		}
+		
+		$this->vars(array(
+			"t_sold" => $it["sold_items"]
+		));
+		return $this->parse();
 	}
 }
 ?>

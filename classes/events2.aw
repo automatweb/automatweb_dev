@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.0 2001/07/11 22:54:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/events2.aw,v 2.1 2001/07/12 04:23:45 kristo Exp $
 // events2.aw - FormGen based events
 global $orb_defs;
 $orb_defs["events2"] = "xml";
@@ -20,26 +20,17 @@ class events2 extends aw_template {
 	{
 		extract($args);
 		global $ext,$baseurl;
+		list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
 		switch($matches[2])
 		{
-			case "add";
-				classload("form");
-				$f = new form();
-				$f->load(11575);
-				$form = $f->gen_preview(array(
-                                        "id" => 11575,
-                                        "reforb" => $this->mk_reforb("submit_add_event",array()),
-                                ));
-				$replacement = $form;
-				
+			case "calendar":
+				list(,,$replacement) = $this->_draw_calendar(array("oid" => $args["oid"]));
 				break;
 
 			default:
 			
 				list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
 				
-				$search_form = $this->_gen_search_form(array("oid" => $args["oid"]));
-
 				// õudne
 				$q = "UPDATE form_12168_entries 
 					SET  el_12064 = '$start'
@@ -50,8 +41,6 @@ class events2 extends aw_template {
 				classload("form");
 				$f = new form();
 		
-				$search_form = $this->_gen_search_form(array("entry_id" => 12212, "oid" => $args["oid"]));
-		
 				$lines = $f->show(array(
 						"id" => 12168,
 						"entry_id" => 12212,
@@ -60,26 +49,17 @@ class events2 extends aw_template {
 
 				list($start,$end,$calendar) = $this->_draw_calendar(array("oid" => $args["oid"]));
 
-				$retval = $search_form . $lines;
+				$retval = $lines;
 
 				$replacement = $retval;
-				$replacement = "<p><a href='/?section=11642'><font color=white><u>Lisa uus</u></font></a><p>" . $replacement;
-				
-				$this->blocks[] = array(
-						"template" => "LEFT_PROMO",
-						"title" => " SEARCH ",
-						"content" => " search links<br>here",
-				);
-
-				$this->blocks[] = array(
-						"template" => "LEFT_PROMO",
-						"title" => " CALENDAR ",
-						"content" => $calendar,
-				);
-				
 				break;
 		};
 		return $replacement;
+	}
+
+	function _create_boxes($calendar)
+	{
+		return;
 	}
 
 	function _gen_search_form($args = array())
@@ -126,19 +106,6 @@ class events2 extends aw_template {
 		$start = $range["start"];
 		$end = $range["end"];
 		return array($start,$end,$calendar);
-	}
-
-	function submit_add_event($args = array())
-	{
-		classload("form");
-		$args["id"] = 11575;
-		$args["parent"] = 11694;
-		$f = new form(11575);
-		$f->process_entry($args);
-		$eid = $f->entry_id;
-		global $baseurl;		
-		header("Location: $baseurl/index.aw/section=11598");
-		exit;
 	}
 
 	function submit_search($args = array())

@@ -401,5 +401,21 @@ class db_stat extends aw_template
 		}
 		return $bip;
 	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$ret = $sys->check_site_templates("syslog", array("compare.tpl","stat.tpl","parts.tpl"));
+		$ret.= $sys->check_db_tables(array($op_table,$op2_table),$fix);
+
+		return $ret;
+	}
 };
+
+class stat extends db_stat
+{
+	function stat($params = array())
+	{
+		$this->db_stat($params);
+	}
+}
 ?>

@@ -514,11 +514,11 @@ class bugtrack extends aw_template
 		if ($maildev)
 		{
 			$msg = UID." lisas vea/idee lehele $url, prioriteediga $pri\n $text";
-			@mail("bugtrack@struktuur.ee","Uus puuk: $SERVER_NAME $title",$msg,"From: bugtrack <bugtrack@struktuur.ee>");
+			@mail("bugtrack@struktuur.ee",sprintf(LC_BUG_BIG_PUUK,$SERVER_NAME,$title),$msg,"From: bugtrack <bugtrack@struktuur.ee>");
 		};
 
 		// logi 
-		$this->_log("bug","Lisas bugi $title");
+		$this->_log("bug",sprintf(LC_BUG_BUG_ADDED,$title));
 
 
 		return $this->mk_orb("list",array());
@@ -567,7 +567,7 @@ class bugtrack extends aw_template
 		if ($req["error"])
 		{
 			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
-			die("VIGA bugi uuendamisel");
+			die(LC_BUG_MISTAKE);
 		};
 
 		extract($bug=array_merge($bug,$arr));
@@ -588,7 +588,7 @@ class bugtrack extends aw_template
 		
 			$msg = $this->parse();
 
-			$subject="Parandatud puuk: $site $title";
+			$subject=sprintf(LC_BUG_FIXED_BUG,$site,$title);
 			@mail("dev@struktuur.ee",$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
 			if ($bug[sendmail2])
 				@mail($bug[sendmail2_mail],$subject,$msg,"From: bugtrack <dev@struktuur.ee>");
@@ -604,7 +604,7 @@ class bugtrack extends aw_template
 		};
 
 		// logi 
-		$this->_log("bug","Muutis bugi ".$bug["title"]);
+		$this->_log("bug",LC_BUG_CHANGED_BUG4.$bug["title"]);
 
 		return $this->mk_orb("list",array());
 		
@@ -642,11 +642,11 @@ class bugtrack extends aw_template
 		if ($req["error"])
 		{
 			$this->_log("error","bugtrack::replicate VIGA bugi uuendamisel");
-			die("VIGA bugi uuendamisel");
+			die("LC_BUG_MISTAKE");
 		};
 
 		// logi 
-		$this->_log("bug","Määras bugi ".$bug["title"].$developer."-le");
+		$this->_log("bug",LC_BUG_NOMI_BUGI.$bug["title"].$developer."-le");
 
 		// see on jura aga muudmoodi ei saanud minumeelest teha
 		return "<script language=\"Javascript\">
@@ -667,7 +667,7 @@ class bugtrack extends aw_template
 		global $SERVER_NAME;
 		extract($arr);
 		$buk = $this->get_bug($id);
-		$this->_log("bug","Kustutas bugi ".$buk[title]);
+		$this->_log("bug",LC_BUG_ERASED_BUG.$buk[title]);
 		
 		
 
@@ -751,7 +751,7 @@ class bugtrack extends aw_template
 	function get_userlist($sel="")
 	{
 		if (!$this->devgroupid)
-			die("VIGA: developerite grupi id on määramata");
+			die(LC_BUG_MISTAKE_NOT_GROUPID);
 			
 		$this->db_query("SELECT users.uid FROM users,groupmembers where blocked != 1 AND groupmembers.gid=$this->devgroupid AND groupmembers.uid=users.uid");
 		while ($row=$this->db_next())

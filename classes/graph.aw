@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.4 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/graph.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 // graph.aw - graafikute haldamine
 		global $orb_defs;
 		$orb_defs["graph"] = array(
@@ -41,6 +41,7 @@ lc_load("graph");
 		
 			$this->vars($lc_graph);
 		}
+		lc_load("definition");
 		}
 		
 		////
@@ -630,7 +631,7 @@ lc_load("graph");
 						));
 					$this->vars(array("reforb" => $this->mk_reforb("savedata",array("id" => $id))));
 					return $this->parse();
-				} else $this->raise_error("Impossible to insert data for this chart",TRUE);
+				} else $this->raise_error(LC_GRAPH_IMP_INS,TRUE);
 			
 		}
 		//Salvestab kasutaja andmed
@@ -653,10 +654,10 @@ lc_load("graph");
 				$ar_type=array("Pie","Line","Bar");
 				$type=$row["type"];
 				$ar_datasrc=array(
-					"userdata" => "Kasutaja andmed",
-					"stats_rows" => "Koodamise statistika ridade arvu järgi",
-					"stats_bytes" => "Koodamise statistika baitide arvu järgi",
-					"stats_words" => "Koodamise statistika sõnade arvu järgi"
+					"userdata" => LC_GRAPH_USERS_DATA,
+					"stats_rows" => LC_GRAPH_STAT_BY_ROW,
+					"stats_bytes" => LC_GRAPH_STAT_BY_BITE,
+					"stats_words" => LC_GRAPH_STAT_BY_WORD
 				);
 				$datasrc=$row["datasrc"];
 				$this->read_template("graphs/graph_meta.tpl");

@@ -10,9 +10,10 @@ class events_user extends aw_template
 		$this->db_init();
 		$this->tpl_init("events");
 		$this->tclasses = array(
-			C_TYPE_PLACE => "Kohatüüp",
-			C_TYPE_EVENT => "Ürituse tüüp"
+			C_TYPE_PLACE => LC_EVENTS_USER_PLACETYPE,
+			C_TYPE_EVENT => LC_EVENTS_USERADD_EVENTTYPE
 		);
+		lc_load("definition");
 	}
 
 	////
@@ -120,7 +121,7 @@ class events_user extends aw_template
 		}
 		else
 		{
-			$caption = "Kõik üritused";
+			$caption = LC_EVENTS_USER_ALLEVENTS;
 		};
 		$t->define_header($caption);
 		$t->sort_by(array("field" => $args["sortby"])); 
@@ -156,22 +157,22 @@ class events_user extends aw_template
 		if ($url)
 		{
 			$this->vars(array("url" => $event["url"]));
-			$url = $this->parse("URL");
+			$url = $this->parse(LC_EVENTS_USER_URL);
 		}
 		if ($free == 1)
 		{
-			$price = $this->parse("FREE");
+			$price = $this->parse(LC_EVENTS_USER_FREE);
 		}
 		else
 		{
 			$this->vars(array("price" => $event["price"],
 					"priceflyer" => $event["priceflyer"]));
-			$price = $this->parse("PRICE");
+			$price = $this->parse(LC_EVENTS_USERADD_PRICE);
 		};
 		if ($flyer)
 		{
 			$this->vars(array("flyer" => $event["flyer"]));
-			$flyer = $this->parse("FLYER");
+			$flyer = $this->parse(LC_EVENTS_USERADD_FLYER);
 		};
 		$this->vars(array(
 			"name" => $name,

@@ -64,5 +64,12 @@ class shop_eq extends shop_base
 		));
 		return $this->parse();
 	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$ret = $sys->check_admin_templates("shop", array("add_eq.tpl"));
+		$ret.= $sys->check_orb_defs(array("shop_eq"));
+		return $ret;
+	}
 }
 ?>

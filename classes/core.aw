@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.34 2001/07/10 21:29:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.35 2001/07/12 04:23:45 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -715,6 +715,7 @@ class core extends db_connector
 	function parse_aliases($args = array())
 	{
 		global $awt;
+		$this->blocks = array();
 		$awt->start("parse_aliases");
 		extract($args);
 		// tuleb siis teha tsykkel yle koigi registreeritud regulaaravaldiste
@@ -746,6 +747,10 @@ class core extends db_connector
 								"tpls" => $tpls,
 							);
 							$replacement = $this->parsers->$cls->$fun($params);
+							if (is_array($this->parsers->$cls->blocks))
+							{
+								$this->blocks = $this->blocks + $this->parsers->$cls->blocks;
+							};
 						};
 					};
 				};
@@ -1250,7 +1255,19 @@ class core extends db_connector
 	// params(array) - key/value paarid elementidest, mida lingi tekitamisel kasutada
 	function mk_link($args = array())
 	{
-		return join("/",map2("%s=%s",$args));
+		$retval = array();
+		foreach($args as $key => $val)
+		{
+			if ($val)
+			{
+				$retval[] = sprintf("%s=%s",$key,$val);
+			}
+			else
+			{
+				$retval[] = $key;
+			};
+		};
+		return join("/",$retval);
 	}
 
 	////

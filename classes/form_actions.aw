@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.3 2001/07/12 04:23:45 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
 
@@ -18,6 +18,7 @@ class form_actions extends form_base
 		$this->tpl_init("forms");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	////
@@ -25,7 +26,7 @@ class form_actions extends form_base
 	function list_actions($arr)
 	{
 		extract($arr);
-		$this->init($id, "actions.tpl", "Formi actionid");
+		$this->init($id, "actions.tpl", LC_FORM_ACTIONS_FORM_ACTIONS);
 
 		$this->db_query("SELECT *,objects.name as name, objects.comment as comment 
 										 FROM form_actions
@@ -48,7 +49,7 @@ class form_actions extends form_base
 	function add_action($arr)
 	{
 		extract($arr);
-		$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id))."'>Formi actionid</a> / Lisa action");
+		$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_ADD_ACTIONS);
 		$this->vars(array("name" => "", "comment" => "", "email_selected" => "checked", "move_filled_selected" => "", "action_id" => 0,
 											"reforb" => $this->mk_reforb("submit_action", array("id" => $id))));
 		return $this->parse();
@@ -94,7 +95,7 @@ class form_actions extends form_base
 				}
 				$this->db_query("UPDATE form_actions SET data = '$data' WHERE id = $action_id");
 				$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $action_id","name");
-				$this->_log("form","Muutis formi $this->name actioni $name");
+				$this->_log("form",sprintf(LC_FORM_ACTIONS_CHANGED_ACTION,$this->name,$name));
 				return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 			}
 			else
@@ -109,7 +110,7 @@ class form_actions extends form_base
 			// add
 			$action_id = $this->new_object(array("parent" => $id, "name" => $name, "class_id" => CL_FORM_ACTION, "comment" => $comment, "status" => 2));
 			$this->db_query("INSERT INTO form_actions(id,form_id,type) VALUES($action_id, $id, '$type')");
-			$this->_log("form","Lisas formile $id actioni $name");
+			$this->_log("form",sprintf(LC_FORM_ACTIONS_ADDED_FORM_ACTIONS,$id,$name));
 			return $this->mk_orb("change_action", array("id" => $id, "aid" => $action_id, "level" => 2));
 		}
 	}
@@ -129,7 +130,7 @@ class form_actions extends form_base
 
 		if ($level < 2)
 		{
-			$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id))."'>Formi actionid</a> / Muuda actionit");
+			$this->init($id, "add_action.tpl", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			$this->vars(array("name"									=> $row["name"], 
 												"comment"								=> $row["comment"], 
 												"email_selected"				=> ($row["type"] == 'email' ? "CHECKED" : ""),
@@ -141,7 +142,7 @@ class form_actions extends form_base
 		}
 		else
 		{
-			$this->init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id))."'>Formi actionid</a> / Muuda actionit");
+			$this->init($id, "", "<a href='".$this->mk_orb("list_actions", array("id" => $id)).LC_FORM_ACTIONS_FORM_ACTIONS_CHANGE_ACTION);
 			switch($row["type"])
 			{
 				case "email":

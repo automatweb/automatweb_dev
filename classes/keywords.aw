@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.28 2001/06/15 14:54:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.29 2001/07/12 04:23:45 kristo Exp $
 // keywords.aw - dokumentide vıtmesınad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -13,6 +13,7 @@ class keywords extends aw_template {
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/keywords");
+		lc_load("definition");
 	}
 
 	////
@@ -114,7 +115,7 @@ class keywords extends aw_template {
 		$kw = join(",",$kwa);
 		classload("email");
 		$email = new email();
-		$this->info["site_header"] = "<a href='orb.aw?class=document&action=change&id=$id'>Dokument</a>";
+		$this->info["site_header"] ="<a href='orb.aw?class=document&action=change&id=$id'>Dokument</a>";
 		global $baseurl;
 		foreach($lx as $row)
 		//while($row = $this->db_next())
@@ -147,7 +148,7 @@ class keywords extends aw_template {
 			$this->restore_handle();
 			if (!$ml)
 			{
-				print "ERR: listi $row[last] jaoks pole default meili m‰‰ratud<br>";
+				print sprintf(LC_KEYWORDS_ERR_NO_DEFAULT,$row[last]);
 			}
 			else
 			{
@@ -184,7 +185,7 @@ class keywords extends aw_template {
 					"list_ids" => $lists,
 				));
 		global $status_msg;
-		$status_msg = "Muudatused on salvestatud";
+		$status_msg = LC_KEYWORDS_CHANGES_SAVED;
 		session_register("status_msg");
 		$res = "?type=interests";
 		if ($gotourl != "")
@@ -237,8 +238,8 @@ class keywords extends aw_template {
 
 		// ja nyyd koostame meili
 		$txt = "";
-		$txt .= "Nimi: $name\n";
-		$txt .= "Aadress: $email\n";
+		$txt .= sprintf(LC_KEYWORDS_NAME,$name);
+		$txt .= sprintf(LC_KEYWORDS_ADDRESS,$email);
 		$uid = UID;
 		foreach($kw as $key => $val)
 		{
@@ -530,7 +531,7 @@ class keywords extends aw_template {
 				$list_id = $lists->create_list(array(
 								"parent" => KEYWORD_LISTS,
 								"name" => $keyword,
-								"comment" => "automaagiliselt loodud list",
+								"comment" => LC_KEYWORDS_AUTOMAG_LIST,
 							));
 				$this->restore_handle();
 				$q = "INSERT INTO keywords (id,list_id,keyword,category_id) VALUES ('$newid','$list_id','$keyword','$catid')";

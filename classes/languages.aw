@@ -6,6 +6,7 @@ class languages extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("languages");
+		lc_load("definition");
 	}
 
 	function gen_list()
@@ -132,8 +133,12 @@ class languages extends aw_template
 		return $a["charset"];
 	}
 
-	function get_langid($id)
+	function get_langid($id = -1)
 	{
+		if ($id == -1)
+		{
+			$id = $GLOBALS["lang_id"];
+		}
 		$a = $this->fetch($id);
 		return $a["acceptlang"];
 	}

@@ -196,7 +196,7 @@ class shop_stat extends shop
 		$sh = $this->get($id);
 		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
 
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / P&auml;evade kaupa");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistics</a> / By days");
 
 		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,day FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY day");
 		while ($row = $this->db_next())
@@ -265,7 +265,7 @@ class shop_stat extends shop
 		$sh = $this->get($id);
 		$shopss = join(",",$this->map2("%s",$this->get_shops_for_stat($id)));
 
-		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistika</a> / Kuude kaupa");
+		$this->mk_path($sh["parent"],"<a href='".$this->mk_orb("change", array("id" => $id))."'>Statistcs</a> / By months");
 
 		$this->db_query("SELECT COUNT(*) AS cnt, SUM(t_price) AS sum, AVG(t_price) AS avg,month FROM orders WHERE tm >= $from AND tm <= $to AND shop_id IN ($shopss) GROUP BY month");
 		while ($row = $this->db_next())
@@ -499,6 +499,23 @@ class shop_stat extends shop
 			"t_cnt" => $t_cnt
 		));
 		return $this->parse();
+	}
+
+	function check_environment(&$sys, $fix = false)
+	{
+		$op_table = array(
+			"name" => "shop2shop_stat", 
+			"fields" => array(
+				"stat_id" => array("name" => "stat_id", "length" => 11, "type" => "int", "flags" => ""),
+				"shop_id" => array("name" => "shop_id", "length" => 11, "type" => "int", "flags" => ""),
+			)
+		);
+
+		$ret = $sys->check_admin_templates("shop", array("shop_stat_add.tpl","show_shop_stat.tpl","to_stat_by_day.tpl","to_stat_by_day_no_to.tpl","to_stat_by_month.tpl","to_stat_by_month_no_to.tpl","to_stat_by_wd.tpl","to_stat_by_wd_no_to.tpl","to_stat_by_hr.tpl","to_stat_by_hr_no_to.tpl"));
+		$ret.= $sys->check_orb_defs(array("shop_stat"));
+		$ret.= $sys->check_db_tables(array($op_table),$fix);
+
+		return $ret;
 	}
 }
 ?>

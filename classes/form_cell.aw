@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.11 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -18,12 +18,13 @@ class form_cell extends aw_template
 		$this->tpl_init("forms");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	////
 	// !ElementFactory for all you fancy people ;)
 	// creates the correct element based on form type
-	function mk_element($type, &$r)
+	function mk_element($type, &$r, &$form)
 	{
 		switch($type)
 		{
@@ -39,21 +40,22 @@ class form_cell extends aw_template
 			default:
 				$this->raise_error("form_cell->mk_element($type) , error in type!",true);
 		}
-		$tmp->load(&$r,$this->id,$this->col, $this->row);
+		$tmp->load(&$r,&$form,$this->col, $this->row);
 		$this->arr[$this->cnt] = $tmp;
 		$this->cnt++;
 	}
 
-	function load($id, $type, $row, $col, $arr)
+	function load(&$form, $row, $col)
 	{
-		$this->type = $type;
+		$this->type = $form->get_type();
 		$this->col = $col;
 		$this->row = $row;
-		$this->id = $id;
+		$this->id = $form->get_id();
 		$this->cnt = 0;
+		$this->parent = $form->get_parent();
+		$this->form = &$form;
 
-		$obj = $this->get_object($this->id);
-		$this->parent = $obj["parent"];
+		$arr = &$form->get_el_arr();
 
 		if (is_array($arr[$row][$col]))
 		{
@@ -62,7 +64,7 @@ class form_cell extends aw_template
 			{
 				if (is_number($k))
 				{
-					$this->mk_element($this->type, &$v);
+					$this->mk_element($this->type, &$v, &$form);
 				}
 			}
 		}
@@ -75,7 +77,7 @@ class form_cell extends aw_template
 	function admin_cell()
 	{
 		$this->read_template("admin_cell.tpl");
-		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form")."'>Muuda formi</a> / Muuda celli");
+		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FORM_CHANGE_CELL);
 
 		classload("objects");
 		$o = new db_objects;
@@ -88,7 +90,7 @@ class form_cell extends aw_template
 
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$this->vars(array("after" => $this->arr[$i]->get_id(),"element" => $this->arr[$i]->gen_admin_html(&$this)));
+			$this->vars(array("after" => $this->arr[$i]->get_id(),"element" => $this->arr[$i]->gen_admin_html()));
 			$this->vars(array("EL_NLAST" => ($i == ($this->cnt-1) ? "" : $this->parse("EL_NLAST"))));
 			$this->vars(array("EL_ADD" => (1 ? $this->parse("EL_ADD") : ""),
 												"EL_ACL" => (1 ? $this->parse("EL_ACL") : "")));
@@ -134,18 +136,31 @@ class form_cell extends aw_template
 
 	////
 	// !Adds a new element in the folder $parent and associates it with the currently loaded form also. 
-	function add_element($wizard_step,&$form)
+	function add_element($wizard_step)
 	{
-		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form")."'>Muuda formi</a> / Lisa element");
+		$this->mk_path($this->parent, "<a href='".$this->mk_orb("change", array("id" => $this->id),"form").LC_FORM_CELL_CHANGE_FROM_ADD_ELEMENT);
 		if (!$wizard_step)
 		{
 			$this->read_template("add_el_wiz1.tpl");
 
 			classload("objects");
 			$o = new db_objects;
+			if (!is_array($this->form->arr["el_menus"]))
+			{
+				$mlist = $o->get_list();
+			}
+			else
+			{
+				$tlist = $o->get_list();
+				foreach($this->form->arr["el_menus"] as $menuid)
+				{
+					$mlist[$menuid] = $tlist[$menuid];
+				}
+			}
+			
 			$this->vars(array("reforb"		=> $this->mk_reforb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col,"wizard_step" => 1),"form"),
-												"folders"		=> $this->picker($this->parent, $o->get_list()),
-												"elements"	=> $this->picker(0,$this->listall_elements(&$form))));
+												"folders"		=> $this->picker($this->parent, $mlist),
+												"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))));
 			return $this->parse();
 		}
 		else
@@ -164,8 +179,8 @@ class form_cell extends aw_template
 				// form_elements table that is used to remember the elements proiperties when the element is insertet into another form
 				// the actual info about how the element is to be shown is written into the form's array. whee. 
 				// and also element2form table contains all element -> table relationships
-				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO));
-				$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
+				$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
+//				$this->db_query("INSERT INTO menu (id,type) values($el,".MN_FORM_ELEMENT.")");
 				$this->db_query("INSERT INTO form_elements (id) values($el)");
 			}
 			else
@@ -190,8 +205,10 @@ class form_cell extends aw_template
 				$arr["id"] = $el;
 				$arr["name"] = $name;
 				$arr["ord"] = $ord;
-				$form->arr["elements"][$this->row][$this->col][$el] = $arr;
-				$form->save();
+				$arr["linked_element"] = 0;
+				$arr["linked_form"] = 0;
+				$this->form->arr["elements"][$this->row][$this->col][$el] = $arr;
+				$this->form->save();
 			}
 			return false;
 		}
@@ -230,14 +247,14 @@ class form_cell extends aw_template
 			$this->arr[$i]->del();
 	}
 
-	function gen_user_html_not($def_style, &$images, $colspan, $rowspan,$prefix = "",$elvalues,$no_submit=false)
+	function gen_user_html_not($def_style, $colspan, $rowspan,$prefix = "",$elvalues,$no_submit=false)
 	{
 		$el = 0;
 		$c = "";
 		$cs = "";
 		for ($i=0; $i < $this->cnt; $i++)
 		{
-			$c.=$this->arr[$i]->gen_user_html_not(&$images,$prefix,$elvalues,$no_submit);
+			$c.=$this->arr[$i]->gen_user_html_not($prefix,$elvalues,$no_submit);
 			$el = &$this->arr[$i];
 		}
 		if ($c == "")
@@ -280,7 +297,9 @@ class form_cell extends aw_template
 	function set_entry(&$arr, $e_id,&$form)
 	{
 		for ($i=0; $i < $this->cnt; $i++)
+		{
 			$this->arr[$i] -> set_entry(&$arr, $e_id,&$form);
+		}
 	}
 
 	function get_els(&$arr)
@@ -305,12 +324,6 @@ class form_cell extends aw_template
 		$form->arr["elements"][$this->row][$this->col]["style"] = $id;
 	}
 
-	function set_mark($mk)
-	{
-		for ($i=0; $i < $this->cnt; $i++)
-			$this->arr[$i] -> set_mark($mk);
-	}
-
 	function admin_cell_controllers()
 	{
 		if (!$this->facl->get(can_edit))
@@ -329,26 +342,11 @@ class form_cell extends aw_template
 		return $this->parse();
 	}
 
-	function gen_parent_arr()
-	{
-		reset($this->parents);
-		$first = true;
-		while(list(, $v) = each($this->parents))
-		{
-			if($first)
-				$sql = " ( parent = ".$v["id"]." ";
-			else
-				$sql .= " OR parent = ".$v["id"]." ";
-			$first = false;
-		}
-		return $sql." ) ";
-	}
-
 	////
 	// !generates the form for selecting cell style
 	function pickstyle()
 	{
-		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change",array("id" => $this->id),"form")."'>Muuda formi</a> / <a href='".$this->mk_orb("admin_cell",array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form")."'>Muuda celli</a> / Vali stiil");
+		$this->mk_path($this->parent,"<a href='".$this->mk_orb("change",array("id" => $this->id),"form")."'>Muuda formi</a> / <a href='".$this->mk_orb("admin_cell",array("id" => $this->id, "row" => $this->row, "col" => $this->col),"form").LC_FORM_CELL_CHANDE_CELL);
 		$this->read_template("pickstyle.tpl");
 
 		classload("style");
@@ -375,7 +373,7 @@ class form_cell extends aw_template
 
 	////
 	// !creates a list of all elements to be put in a listbox for the suer to select which one he wants to add
-	function listall_elements(&$form)
+	function listall_elements()
 	{
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
@@ -392,31 +390,46 @@ class form_cell extends aw_template
 		
 		// teeme olemasolevatest elementidest array
 		$elarr = array();
-		for ($row = 0; $row < $form->arr["rows"]; $row++)
+		for ($row = 0; $row < $this->form->arr["rows"]; $row++)
 		{
-			for ($col = 0; $col < $form->arr["cols"]; $col++)
+			for ($col = 0; $col < $this->form->arr["cols"]; $col++)
 			{
-				if (is_array($form->arr["elements"][$row][$col]))
+				if (is_array($this->form->arr["elements"][$row][$col]))
 				{
-					reset($form->arr["elements"][$row][$col]);
-					while (list($eid,) = each($form->arr["elements"][$row][$col]))
+					reset($this->form->arr["elements"][$row][$col]);
+					while (list($eid,) = each($this->form->arr["elements"][$row][$col]))
 					{
 						$elarr[$eid] = $eid;
 					}
 				}
 			}
 		}
-		// can't select by class_id, cause class_id for form_elements is CL_PSEUDO
-		// so we must join menu table and select by menu type
+
+		$check_parent = false;
+		if (is_array($this->form->arr["el_menus2"]) && count($this->form->arr["el_menus2"]) > 0)
+		{
+			$check_parent = true;
+		}
+
 		$ar = array(0 => "");
-		$this->db_query("SELECT oid,name,parent FROM objects,menu WHERE objects.oid=menu.id AND menu.type= ".MN_FORM_ELEMENT." AND status != 0 AND class_id = ".CL_PSEUDO);
+		$this->db_query("SELECT oid,name,parent FROM objects WHERE objects.class_id= ".CL_FORM_ELEMENT." AND status != 0 ");
 		while ($row = $this->db_next())
 		{
 			if (!$elarr[$row["oid"]])
 			{
-				// if this element does not exist in this form yet
-				// add it to the select list.
-				$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+				if ($check_parent)
+				{
+					// if this element does not exist in this form yet
+					// add it to the select list.
+					if (in_array($row["parent"],$this->form->arr["el_menus2"]))
+					{
+						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+					}
+				}
+				else
+				{
+						$ar[$row["oid"]] = $this->mk_element_path(&$ret,&$row).$row["name"];
+				}
 			}
 		}
 

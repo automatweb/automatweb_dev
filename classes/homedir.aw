@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.3 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/homedir.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
 // homedir.aw - Class for managing users home directory
 
 global $orb_defs;
@@ -11,6 +11,7 @@ class homedir extends users {
 	{
 		$this->db_init();
 		$this->tpl_init("homedir");
+		lc_load("definition");
 	}
 
 	////
@@ -212,7 +213,7 @@ class homedir extends users {
 		$id = $this->new_object(array("parent" => $parent, "class_id" => CL_PSEUDO, "status" => 2, "name" => $name));
 		$this->db_query("INSERT INTO menu(id,type) values($id,".MN_HOME_FOLDER_SUB.")");
 		global $status_msg;
-		$status_msg = "Folder lisatud";
+		$status_msg = LC_HOMEDIR_ADDED;
 		session_register("status_msg");
 
 		return $this->mk_my_orb("gen_home_dir", array("id" => $parent));

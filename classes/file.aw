@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.11 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.12 2001/07/12 04:23:45 kristo Exp $
 // file.aw - Failide haldus
 global $orb_defs;
 $orb_defs["file"] = "xml";
@@ -13,6 +13,7 @@ class file extends aw_template
 	{
 		$this->tpl_init("file");
 		$this->db_init();
+		lc_load("definition");
 	global $lc_file;
 		{if (is_array($lc_file))
 		
@@ -178,7 +179,8 @@ class file extends aw_template
 	// !checks whether the directory needed for file storing exists and is writable
 	function check_environment($args = array())
 	{
-		$this->db_list_tables();
+		// um, yeah, what is this doing here? - terryf 
+/*		$this->db_list_tables();
 		while($name = $this->db_next_table())
 		{
 			print "name = $name<br>";
@@ -188,11 +190,12 @@ class file extends aw_template
 			print "<pre>";
 			print_r($fields);
 			print "</pre>";
-		};
+		};*/
+
 		$retval = "";
 		if (!defined("SITE_DIR"))
 		{
-			$retval .= "SITE_DIR on defineerimata, ei saa tööd jätkata<br>";
+			$retval .= LC_FILE_DIR_NOT_DEFINED;
 		}
 		else
 		{
@@ -228,7 +231,7 @@ class file extends aw_template
 	function add($arr)
 	{
 		extract($arr);
-		$this->mk_path($parent,"Lisa fail");
+		$this->mk_path($parent,LC_FILE_ADD_FILE);
 		// kui messenger argument on seatud, siis submit_add peaks tagasi messengeri minema
 		if ($msg_id)
 		{
@@ -352,7 +355,7 @@ class file extends aw_template
 		else 
 		{
 			// Sellist faili polnud. Voi tekkis mingi teine viga
-			print "Midagi on valesti. Faili ei salvestatud";
+			print LC_FILE_SOME_IS_WRONG;
 			$retval = array();
 		};
 		return $retval;
@@ -377,7 +380,7 @@ class file extends aw_template
 
 		$this->read_template("edit.tpl");
 		$fi = $this->get_file_by_id($id);
-		$this->mk_path($parent, "Muuda faili");
+		$this->mk_path($parent, LC_FILE_CHANGE_FILE);
 		$this->vars(array("reforb"	=> $this->mk_reforb("submit_change",array("id" => $id, "parent" => $parent,"doc" => $doc,"user" => $user)),"comment" => $fi[comment],"checked" => $fi[showal] ? "CHECKED" : "", "newwindow" => checked($fi[newwindow])));
 		return $this->parse();
 	}

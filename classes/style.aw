@@ -497,5 +497,22 @@ $style_cache = array();
 			}
 			return $str;
 		}
+
+		function check_environment(&$sys, $fix = false)
+		{
+			$op_table = array(
+				"name" => "styles", 
+				"fields" => array(
+					"id" => array("name" => "id", "length" => 11, "type" => "int", "flags" => ""),
+					"style" => array("name" => "style", "length" => 65535, "type" => "blob", "flags" => ""),
+					"type" => array("name" => "type", "length" => 11, "type" => "int", "flags" => ""),
+				)
+			);
+
+			$ret = $sys->check_admin_templates("style", array("list.tpl","add_sel.tpl","change_table.tpl","change_cell.tpl"));
+			$ret.= $sys->check_db_tables(array($op_table),$fix);
+
+			return $ret;
+		}
 	}
 ?>

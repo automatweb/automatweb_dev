@@ -9,6 +9,7 @@ class form_table extends form_base
 	{
 		$this->form_base();
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	////
@@ -17,7 +18,7 @@ class form_table extends form_base
 	{
 		extract($arr);
 		$this->read_template("add_table.tpl");
-		$this->mk_path($parent,"Lisa formi tabel");
+		$this->mk_path($parent,LC_FORM_TABLE_ADD_FORM_TABLE);
 
 		classload("style");
 		$s = new style;
@@ -115,7 +116,7 @@ class form_table extends form_base
 		extract($arr);
 		$this->read_template("add_table.tpl");
 		$tb = $this->load_table($id);
-		$this->mk_path($this->table_parent, "Muuda formi tabelit");
+		$this->mk_path($this->table_parent, LC_FORM_TABLE_CHANGE_FORM_TABLE);
 
 		$forms = $this->get_forms_for_table($id);
 
@@ -335,9 +336,9 @@ class form_table extends form_base
 
 						$form->load_entry_from_data($row,$char[$form->id]);
 
-						$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain")."'>Muuda</a>";
+						$rds["el_change"] = sprintf(LC_FORM_TABLE_CHAIN_CHANGE,$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain"));
 
-						$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form")."'>Vaata</a>";
+						$rds["el_view"] = sprintf(LC_FORM_TABLE_SHOW_ENTRY,$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form"));
 
 /*						for ($row = 0; $row < $form->arr["rows"]; $row++)
 						{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.4 2001/07/08 18:42:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_style.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
 // AW Style Engine.
 class aw_style 
 {
@@ -35,7 +35,7 @@ class aw_style
 		reset($this->tags);
 		foreach ($this->tags as $tag => $val)
 		{
-			$find = sprintf("<%s>(.*)<\\/%s>",$tag,$tag);
+			$find = sprintf("#%s#(.*)#\\/%s#",$tag,$tag);
 			$val = trim($val);
 			$text = preg_replace("/" . $find . "/isU",$val,$text);
 		};

@@ -1,134 +1,65 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.5 2001/07/08 18:42:50 duke Exp $
-	session_register("clipboard");
-
-	$formcache = -1;	// array of forms
-	$mcnt = 0;				// max number of elements in a form
-	$chcnt = 1;				// max number of chars on element texts
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.6 2001/07/12 04:23:45 kristo Exp $
 
 	class form_search_element extends form_element
 	{
-		function form_search_element($id = -1)
+		function form_search_element()
 		{
 			$this->tpl_init("forms");
 			$this->db_init();
 
 			$this->entry_id = 0;
-			$this->id = $id;
-			if ($id != -1)
-				$this->load($id);
+			$this->sub_merge = 1;
 		}
 
-		function gen_admin_html(&$cell)
+		function gen_admin_html()
 		{
-			$this->read_template("admin_search_element.tpl");
-			$chk_val = " CHECKED ";
-		
-			global $formcache,$mcnt,$chcnt,$max_els;
+			$this->read_template("admin_element.tpl");
 
-			if (!is_array($formcache))
+			global $elements_created;
+
+			if (!$elements_created)
 			{
-				$formcache = array();
-				$this->db_query("SELECT forms.*,objects.name as name FROM forms 
-												 LEFT JOIN objects ON objects.oid = forms.id
-												 WHERE forms.type = 1 AND objects.status != 0 
-												 GROUP BY objects.oid");
-				while ($row = $this->db_next())
+				// make javascript arrays for form elements
+				$formcache = array(0 => "");
+				$tarr = $this->form->get_search_targets();
+				$tarstr = join(",",$this->map2("%s",$tarr));
+				if ($tarstr != "")
 				{
-					if (substr($row["content"],0,14) == "<?xml version=")
+					$this->db_query("SELECT name, oid FROM objects WHERE status != 0 AND oid IN ($tarstr)");
+					while ($row = $this->db_next())
 					{
-						classload("xml");
-						$x = new xml;
-						$form = $x->xml_unserialize(array("source" => $row["content"]));
+						$formcache[$row["oid"]] = $row["name"];
 					}
-					else
-					{
-						$form = unserialize($row["content"]);
-					}
-					$fid = $row["id"];
-					$formcache[$row["id"]] = array("id" => $row["id"], "name" => $row["name"], "content" => $form);
-
-					$elnum = 0;
-					for ($row = 0; $row <  $form["rows"]; $row++)
-					{
-						for ($col = 0; $col <  $form["cols"]; $col++)
-						{
-							$elar = $form["elements"][$row][$col];
-							if (is_array($elar))
-							{
-								reset($elar);
-								while (list($elid, $el) = each($elar))
-								{
-									// el_el_id = elemendi NUMBER selle formi sees
-									$this->vars(array("form_id" => $fid, "el_el_id" => $elnum++, "el_value" => $elid, 
-																"el_text" => ($el["name"] == "" ? $el["text"] == "" ? $el["type"] : $el["text"] : $el["name"]),
-																"el_type"	=> $el["type"]));
-									$formcache[$fid]["elements"][$elid] = array("el_text" => $el["text"], "el_type" => $el["type"],"el_name" => $el["name"]);
-									$ed.=$this->parse("ELDEFS");
-								}
-							}
-						}
-					}
-					if ($elnum > $max_els)
-					{
-						$max_els = $elnum;
-					}
-				}
-				$this->vars(array("ELDEFS" => $ed));
-				$this->vars(array("SCRIPT" => $this->parse("SCRIPT")));
-			}
-			else
-				$this->vars(array("SCRIPT" => ""));
-
-			$sel_form = -1; $lid = -1;
-			reset($formcache);
-			while (list($id,$v) = each($formcache))
-			{
-				$this->vars(array("sel_form_active" => ($this->arr["linked_form"] == $id ? "SELECTED" : ""),
-													"sel_form_value"	=> $id,	
-													"sel_form_name"		=> $v["name"]));
-				$fs.=$this->parse("FORMSEL");
-
-				if ($sel_form == -1)
-					if ($this->arr["linked_form"] == $id)
-						$sel_form = $id;
 				
-				if ($lid == -1)
-					$lid = $id;
-			}
-			$this->vars(array("FORMSEL" => $fs));
-
-			if ($sel_form == -1)
-				$sel_form = $lid;
-
-			$cnt =0;
-			if (is_array($formcache[$sel_form]["elements"]))
-			{
-				reset($formcache[$sel_form]["elements"]);
-				while (list($id, $ar) = each($formcache[$sel_form]["elements"]))
-				{
-					$nc = $chcnt-strlen($ar["el_text"]);
-					$chs = $nc > 0 ? str_repeat("&nbsp;",$nc) : "";
-
-					$this->vars(array("sel_el_active" => ($this->arr["linked_element"] == $id ? "SELECTED" : ""), 
-														"sel_el_value"	=> $id, 
-														"sel_el_name"		=> $ar["el_name"] == "" ? $ar["el_text"].$chs : $ar["el_name"]));
-					$es.=$this->parse("ELSEL");
-					$cnt++;
+					$el_num = 0;
+					$this->db_query("SELECT objects.name as el_name, element2form.el_id as el_id,element2form.form_id as form_id FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN ($tarstr)");
+					while ($row = $this->db_next())
+					{
+						$this->vars(array(
+							"el_num" => $el_num++,
+							"el_id" => $row["el_id"],
+							"el_text" => $row["el_name"],
+							"form_id" => $row["form_id"]
+						));
+						$this->parse("ELDEFS");
+					}
 				}
+				$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
+				$GLOBALS["elements_created"] = true;
+				$GLOBALS["formcache"] = $formcache;
 			}
 
-			for ($i=0; $i < ($max_els-$cnt); $i++)
-			{
-				$this->vars(array("sel_el_active" => "", "sel_el_value" => "", "sel_el_name" => str_repeat("&nbsp;",$chcnt)));
-				$es.=$this->parse("ELSEL");
-			}
+			$this->do_core_admin();
 
-			$this->vars(array("ELSEL" => $es));
-			$this->vars(array("el_id" => "el_".$this->id, "el_text" => $this->arr["text"]));
+			// teeme formide listboxi ka
+			global $formcache;
+			$this->vars(array(
+				"forms" => $this->picker($this->arr["linked_form"], $formcache),
+				"linked_el" => $this->arr["linked_element"]
+			));
 
-			$GLOBALS["script"] .= "ch_type(document.f1.el_".$this->id."_element,document.f1.el_".$this->id."_form,\"el_".$this->id."\");";
-
+			$this->vars(array("SEARCH_LB" => $this->parse("SEARCH_LB")));
 			return $this->parse();
 		}
 
@@ -137,95 +68,105 @@
 			$this->quote(&$arr);
 			extract($arr);
 
-			$base = "el_".$this->id;
-			
-			$var=$base."_text";
-			$this->arr["text"] = $$var;
+			$ret = $this->do_core_save(&$arr);
 
+			$base = "element_".$this->id;
+			
 			$var=$base."_form";
 			$this->arr["linked_form"] = $$var;
 
 			$var=$base."_element";
 			$this->arr["linked_element"] = $$var;
 
-			$var = $base."_del";
-			if ($$var == 1)
-			{
-				return false;
-			}
-			return true;
+			$this->arr["ver2"] = true;
+
+			return $ret;
 		}
 
-		function gen_user_html_not(&$images)		// function that doesn't use templates
+		function gen_user_html_not($prefix = "",$elvalues = array(),$no_submit = false)		// function that doesn't use templates
 		{
-			if ($this->arr["linked_element"] > 0)
+			if ($this->arr["ver2"])	// backward compatibility sucks ass, but whut can I do...
 			{
-				$form = &$this->get_cached_form();
-
-				$t = $form->get_element_by_id($this->arr["linked_element"]);
-
-				if ($t)
-				{
-					$t->entry = $this->entry;
-					$t->entry_id = $this->entry_id;
-					if ($t->get_type() == 'listbox')
-					{
-						// add an empty element to the listbox so we can tell the difference, 
-						// if nothing was selected and we can then ignore the lb in the search
-						$t->arr["listbox_items"][$t->arr["listbox_count"]] = "";
-						$t->arr["listbox_default"] = $t->arr["listbox_count"];
-						$t->arr["listbox_count"]++;
-					}
-					if ($this->arr["text"] != "")
-						$t->arr["text"] = $this->arr["text"];
-
-					if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
-						return $t->gen_user_html_not(&$images);
-					else
-						return "";
-				}
-				else
-				{
-					return "";
-				}
+				return $this->do_core_userhtml($prefix,$elvalues,$no_submit);
 			}
 			else
-				return "";
+			{
+				if ($this->arr["linked_element"] > 0)
+				{
+					$form = &$this->get_cached_form();
+
+					$t = $form->get_element_by_id($this->arr["linked_element"]);
+
+					if ($t)
+					{
+						$t->entry = $this->entry;
+						$t->entry_id = $this->entry_id;
+						if ($t->get_type() == 'listbox')
+						{
+							// add an empty element to the listbox so we can tell the difference, 
+							// if nothing was selected and we can then ignore the lb in the search
+							$t->arr["listbox_items"][$t->arr["listbox_count"]] = "";
+							$t->arr["listbox_default"] = $t->arr["listbox_count"];
+							$t->arr["listbox_count"]++;
+						}
+						if ($this->arr["text"] != "")
+							$t->arr["text"] = $this->arr["text"];
+
+						if (!($t->get_type() == 'file' || $t->get_type() == 'link'))
+							return $t->gen_user_html_not(&$images);
+						else
+							return "";
+					}
+					else
+					{
+						return "";
+					}
+				}
+				else
+					return "";
+			}
 		}
 
 		function process_entry(&$entry, $id)
 		{
-			if (!$this->arr["linked_element"])
+			if ($this->arr["ver2"])	// backward compatibility is a bitch
 			{
-				return;
-			}
-
-			$form = &$this->get_cached_form();
-			$t = $form->get_element_by_id($this->arr["linked_element"]);
-			if ($t->get_type() != "listbox")
-			{
-				$te = array();
-				$t->process_entry(&$te, $id);
-				$entry[$this->id] = $te[$this->arr["linked_element"]];
+				return $this->core_process_entry(&$entry,$id);
 			}
 			else
 			{
-				// check if the empty element that we added was selected and if it was, don't write anything to the db, 
-				// so we can easily ignore the element in the search
-				$var = $t->get_id();
-				global $$var;
-
-				if ($$var == "element_".$this->arr["linked_element"]."_lbopt_".$t->arr["listbox_count"])
+				if (!$this->arr["linked_element"])
 				{
-					$entry[$this->id] = "";
+					return;
+				}
+
+				$form = &$this->get_cached_form();
+				$t = $form->get_element_by_id($this->arr["linked_element"]);
+				if ($t->get_type() != "listbox")
+				{
+					$te = array();
+					$t->process_entry(&$te, $id);
+					$entry[$this->id] = $te[$this->arr["linked_element"]];
 				}
 				else
 				{
-					$entry[$this->id] = $$var;
+					// check if the empty element that we added was selected and if it was, don't write anything to the db, 
+					// so we can easily ignore the element in the search
+					$var = $t->get_id();
+					global $$var;
+
+					if ($$var == "element_".$this->arr["linked_element"]."_lbopt_".$t->arr["listbox_count"])
+					{
+						$entry[$this->id] = "";
+					}
+					else
+					{
+						$entry[$this->id] = $$var;
+					}
 				}
+				$this->entry = $entry[$this->id];
+				$this->entry_id = $id;
 			}
-			$this->entry = $entry[$this->id];
-			$this->entry_id = $id;
 		}
 
 		function gen_show_html()
@@ -238,18 +179,6 @@
 			$t->entry = $this->entry;
 			$t->entry_id = $this->entry_id;
 			return $t->gen_show_html();
-		}
-
-		function get_value()
-		{
-			if (!$this->entry_id)
-				return "";
-
-			$form = &$this->get_cached_form();
-			$t = $form->get_element_by_id($this->arr["linked_element"]);
-			$t->entry = $this->entry;
-			$t->entry_id = $this->entry_id;
-			return $t->get_value();
 		}
 
 		function &get_cached_form()
