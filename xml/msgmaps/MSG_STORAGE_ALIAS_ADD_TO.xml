@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_add_alias_for_group</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
       <class>calendar/cal_event</class>
       <func>on_add_alias</func>
       <param>CL_CAL_EVENT</param>
+</num_0>
+<num_1>
+      <class>core/users/group</class>
+      <func>on_add_alias_for_group</func>
+      <param>CL_GROUP</param>
 </num_1>
 <num_2>
       <class>formgen/form_entry</class>
