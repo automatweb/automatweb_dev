@@ -235,6 +235,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="submit_pop3_conf">
+			<function name="submit_pop3_conf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
