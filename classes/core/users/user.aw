@@ -94,8 +94,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 @property resend_welcome store=no type=checkbox ch_value=1
 @caption Saada tervitusmeil uuesti
 
-@property pwd_status store=no type=text
-@caption 
+/@property pwd_status store=no type=text
+/@caption 
 
 @default group=roles
 
@@ -222,9 +222,9 @@ class user extends class_base
 				));
 				break;
 
-			case "pwd_status":
+			/*case "pwd_status":
 				$prop['value'] = aw_global_get("status_msg");
-				break;
+				break;*/
 
 			case "groups":
 				$prop['value'] = $this->_get_group_membership($arr["obj_inst"]->prop("uid"), $arr["obj_inst"]->id());
@@ -336,12 +336,16 @@ class user extends class_base
 				{
 					if ($prop['value'] != $arr['request']['passwd'])
 					{
-						aw_session_set("status_msg", "Paroolid pole samad!");
+						$prop["error"] = "Paroolid pole samad!";
+						return PROP_FATAL_ERROR;
+						//aw_session_set("status_msg", "Paroolid pole samad!");
 					}
 					else
 					if (!is_valid("password", $prop['value']))
 					{
-						aw_session_set("status_msg", "Parool sisaldab lubamatuid t&auml;hti!");
+						$prop["error"] = "Parool sisaldab lubamatuid t&auml;hti!";
+						return PROP_FATAL_ERROR;
+						//aw_session_set("status_msg", "Parool sisaldab lubamatuid t&auml;hti!");
 					}
 					else
 					{
