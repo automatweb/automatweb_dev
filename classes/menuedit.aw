@@ -1,77 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.152 2002/09/09 12:46:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.153 2002/09/19 15:11:48 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
 
-session_register("cut_objects","copied_objects","icons");
-
 classload("cache","defs","php","file","image");
 
 class menuedit extends aw_template
 {
-	// me peame ju kuidagi vahet tegema, kas vaatame perioodi
-	// voi lihtsalt koiki staatilisi dokumente
-	function menuedit($period = 0,$pname = "")
+	// this will be set to document id if only one document is shown, a document which can be edited
+	var $active_doc = false;
+
+	function menuedit()
 	{
 		$this->init("automatweb/menuedit");
 
-		$this->cache = new cache;
-		$this->feature_icons_loaded = false;
-
-		// this is set if only one document is shown, a document which can be edited
-		$this->active_doc = false;
-
+		// FIXME: damn this is a mess
 		$this->lc_load("menuedit","lc_menuedit");
 		lc_site_load("menuedit",$this);
 		lc_load("definition");
-	}
-
-	function mk_folders($parent,$str)
-	{
-		if (!isset($this->menucache[$parent]) || !is_array($this->menucache[$parent]))
-		{
-			return;
-		}
-
-		reset($this->menucache[$parent]);
-		while(list(,$v) = each($this->menucache[$parent]))
-		{
-			$name = $v["data"]["name"];
-			if ($v["data"]["parent"] == 1)
-			{
-				$words = explode(" ",$name);
-				if (count($words) == 1)
-				{
-					$name = $words[0][0].$words[0][1];
-				}
-				else
-				{
-					reset($words);
-					$mstr = "";
-					while(list(,$v3) = each($words))
-					{
-						$mstr.=$v3[0];
-					}
-					$name = $mstr;
-				}
-			}
-
-			$sep = ($str == "" ? "" : " / ");
-			$tstr = $str.$sep.$name;
-
-			if (isset($v["data"]["oid"]) && isset($this->extrarr[$v["data"]["oid"]]) && is_array($this->extrarr[$v["data"]["oid"]]))
-			{
-				reset($this->extrarr[$v["data"]["oid"]]);
-				while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
-				{
-					$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
-				}
-			}
-
-			$this->mk_folders($v["data"]["oid"],$tstr);
-		}
 	}
 
 	////
@@ -95,7 +43,6 @@ class menuedit extends aw_template
 		$this->invalidate_menu_cache(array($newoid));
 
 		return $newoid;
-
 	}
 
 	function rd($parent)
@@ -161,18 +108,6 @@ class menuedit extends aw_template
 		// separate handling?
 
 		$cp[] = $act_per_id;
-/*		if (isset($GLOBALS["page"]))
-		{
-			$cp[] = $GLOBALS["page"];
-		}
-		if (isset($GLOBALS["type"]))
-		{
-			$cp[] = $GLOBALS["type"];
-		}
-		if (isset($GLOBALS["lcb"]))
-		{
-			$cp[] = $GLOBALS["lcb"];
-		}*/
 
 		$cp[] = aw_global_get("lang_id");
 
@@ -198,17 +133,6 @@ class menuedit extends aw_template
 
 		$not_cached = false;
 
-		// what the hell did this do anyway? and I think the new cache architecture solves the problem anyway
-/*		if ($GLOBALS["docid"])
-		{
-			$cp[] = $GLOBALS["docid"];
-			if ($this->cache_dirty($GLOBALS["docid"]))
-			{
-				$not_cached = true;
-				$this->clear_cache($GLOBALS["docid"]);
-			}; 
-		};*/
-
 		$use_cache = true;
 
 		if ($params["print"] || ($params["text"] && !$params["force_cache"]))
@@ -217,17 +141,16 @@ class menuedit extends aw_template
 			$use_cache = false;
 		};
 
-		$this->cache->set_opt("metaref",$meta["metaref"]);
-		$this->cache->set_opt("referer",aw_global_get("referer"));
-		if (!($res = $this->cache->get($section,$cp)) || $params["format"] || $not_cached)
+		$cache = new cache;
+		$cache->set_opt("metaref",$meta["metaref"]);
+		$cache->set_opt("referer",aw_global_get("referer"));
+		if (!($res = $cache->get($section,$cp)) || $params["format"] || $not_cached)
 		{
 			// seda objekti pold caches
 			$res = $this->_gen_site_html($params);
-			$construct = get_instance("construct");
-			$construct->dump();
 			if ($use_cache && !aw_global_get("no_cache_content"))
 			{
-				$this->cache->set($section,$cp,$res);
+				$cache->set($section,$cp,$res);
 			};
 			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
@@ -600,11 +523,6 @@ class menuedit extends aw_template
 
 		$this->make_search();
 		
-		if ($this->is_template("NADALA_NAGU"))
-		{
-			$this->make_nadalanagu();
-		};
-
 		$this->make_banners();
 	
 		$this->do_sub_callbacks($sub_callbacks);
@@ -896,35 +814,6 @@ class menuedit extends aw_template
 		{
 			print $q;
 		}
-		$this->db_query($q);
-	}
-
-	function db_listall_lite($where = " objects.status != 0",$ignore = false,$ignore_lang = false)
-	{
-		if (!$ignore)
-		{
-			// loeme sisse koik objektid
-			$aa = "AND ((objects.site_id = '".$this->cfg["site_id"]."') OR (objects.site_id IS NULL))";
-		};
-		if ($this->cfg["lang_menus"] == 1 && $ignore_lang == false)
-		{
-			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT.")";
-		}
-		$q = "SELECT objects.oid as oid, 
-				objects.parent as parent,
-				objects.name as name,
-				objects.last as last,
-				objects.jrk as jrk,
-				objects.alias as alias,
-				objects.brother_of as brother_of,
-				objects.metadata as metadata,
-				objects.class_id as class_id,
-				objects.comment as comment,
-				menu.*
-			FROM objects 
-				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.")  AND menu.type != ".MN_FORM_ELEMENT." AND $where $aa
-				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
 	}
 
@@ -1381,7 +1270,7 @@ class menuedit extends aw_template
 			));
 		}
 		$this->vars(array(
-			"rooturl" => $this->mk_my_orb("right_frame", array("fastcall" => 1, "parent" => $this->cfg["admin_rootmenu2"]))
+			"rooturl" => $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]))
 		));
 		return $this->parse();
 	}
@@ -1419,7 +1308,7 @@ class menuedit extends aw_template
 				"id" => $row["oid"],
 				"parent" => $row["parent"],
 				"iconurl" => $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$this->cfg["ext"]."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url" => $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $row["oid"]))
+				"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"]))
 			));
 			$this->homefolders[$row["oid"]] = $row["oid"];
 			if ($sub == "")
@@ -1464,7 +1353,7 @@ class menuedit extends aw_template
 			"id" => $hf["oid"], 
 			"parent" => $admin_rootmenu2,
 			"iconurl" => $this->get_icon_url("homefolder",""),
-			"url" => $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $hf["oid"]))
+			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]))
 		));
 		$hft = $this->parse("TREE");
 
@@ -1482,7 +1371,7 @@ class menuedit extends aw_template
 				"id"	=> $v["oid"],		
 				"parent"=> SHARED_FOLDER_ID,
 				"iconurl" => $row["icon_id"] ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif",
-				"url"	=> $this->mk_my_orb("right_frame", array("fastcall" => 1,"parent" => $v["oid"]))
+				"url"	=> $this->mk_my_orb("right_frame", array("parent" => $v["oid"]))
 			));
 			$shares.=$this->parse("DOC");
 		}
@@ -1492,7 +1381,7 @@ class menuedit extends aw_template
 			"id" => SHARED_FOLDER_ID,		
 			"parent" => $hf["oid"],
 			"iconurl" => $this->get_icon_url("shared_folders",""),
-			"url" => $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => SHARED_FOLDER_ID))
+			"url" => $this->mk_my_orb("right_frame",array("parent" => SHARED_FOLDER_ID))
 		));
 		if ($shares != "")
 		{
@@ -1537,15 +1426,173 @@ class menuedit extends aw_template
 		return $ret;
 	}
 
+	function get_add_menu($arr)
+	{
+		extract($arr);
+		$ret = "";
+
+		// check if any parent menus have config objects attached 
+		$atc_id = 0;
+		$ch = $this->get_object_chain($id);
+		foreach($ch as $oid => $od)
+		{
+			if ($od["meta"]["add_tree_conf"])
+			{
+				$atc_id = $od["meta"]["add_tree_conf"];
+			}
+		}
+
+		if ($atc_id)
+		{
+			$atc_inst = get_instance("add_tree_conf");
+			$atc_root = $atc_inst->get_root_for_user($atc_id);
+			if ($atc_root)
+			{
+				$menu_cache = get_instance("menu_cache");
+				$menu_cache->make_caches();
+				$menus = $menu_cache->get_menus_below($atc_root);
+
+				$mn = array();
+				foreach($menus as $_oid => $_dat)
+				{
+					$mn[] = $_oid;
+				}
+
+				$objs = array();
+				$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_OBJECT_TYPE." AND status = 2 AND lang_id = ".aw_global_get("lang_id")." AND parent IN (".join(",",$mn).")");
+				while ($row = $this->db_next())
+				{
+					$objs[$row["parent"]][] = $row;
+				}
+
+				$cnt = 0;
+				$counts = array();
+				foreach($objs as $prnt => $arr)
+				{
+					$cnt++;
+					$counts[$prnt] = $cnt;
+					$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||\n";
+					if (is_array($arr))
+					{
+						foreach($arr as $row)
+						{
+							$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+
+							if ($meta["type"] == "__all_objs")
+							{
+								$cldata = array();
+								foreach($this->cfg["classes"] as $clid => $_cldata)
+								{
+									if ($_cldata["name"] != "")
+									{
+										$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
+									}
+								}
+								
+								ksort($cldata);
+								foreach($cldata as $letter => $clns)
+								{
+									$cnt++;
+									$ret .= $cnt."|".((int)$counts[$prnt])."|".$letter."||\n";
+									$cp = $cnt;
+									asort($clns);
+									foreach($clns as $cl_file => $cl_name)
+									{
+										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
+
+										$cnt++;
+										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list\n";
+									}
+								}
+							}
+							else
+							{
+								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
+
+								$cnt++;
+								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list\n";
+							}
+						}
+					}
+				}
+				die($ret);
+			}
+		}
+		die($this->get_default_add_menu($id, $period));
+	}
+
+	function get_default_add_menu($id, $period)
+	{
+		$counts = array();
+		$cldata = array();
+		foreach($this->cfg["classes"] as $clid => $_cldata)
+		{
+			if ($_cldata["name"] != "")
+			{
+				$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
+			}
+		}
+		
+		ksort($cldata);
+		foreach($cldata as $letter => $clns)
+		{
+			$cnt++;
+			$ret .= $cnt."|".((int)$counts[$prnt])."|".$letter."||\n";
+			$cp = $cnt;
+			asort($clns);
+			foreach($clns as $cl_file => $cl_name)
+			{
+				$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
+
+				$cnt++;
+				$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list\n";
+			}
+		}
+		return $ret;
+	}
+
 	function get_popup_data($args = array())
 	{
 		extract($args);
+		if ($addmenu == 1)
+		{
+			$this->get_add_menu($args);
+		}
+		$obj = $this->get_object($id);
+	
+
 		$baseurl = $this->cfg["baseurl"];
-		$retval = "1|0|Set notification|$baseurl/?set_notification&id=$id\n";
-		$retval .= "separator\n";
-		$retval .= "2|0|Info|\n";
-		$retval .= "3|2|General|$baseurl/?info&id=$id\n";
-		$retval .= "4|2|Audit|$baseurl/?audit&id=$id\n";
+
+		if ($obj["class_id"] == CL_PSEUDO)
+		{
+			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"]), "menuedit",true,true);
+			$retval = "0|0|Open|".$ourl."|list\n";
+		}
+
+//		if ($this->can("change", $id))
+		{
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"]), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			$retval .= "1|0|Change|".$churl."|list\n";
+		}
+
+		$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+		$retval .= "2|0|Cut|".$cuturl."|list\n";
+
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+		$retval .= "3|0|Copy|".$copyurl."|list\n";
+
+		if ($this->can("delete", $id))
+		{
+			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "menuedit",true,true);
+			$retval .= "4|0|Delete|".$delurl."|list\n";
+		}
+
+		if ($this->can("admin", $id))
+		{
+			$delurl = $baseurl."/automatweb/editacl.".$this->cfg["ext"]."?file=menu.xml&oid=".$id;
+			$retval .= "5|0|ACL|".$delurl."|list\n";
+		}
+
 		print $retval;
 		exit;
 	}
@@ -1560,7 +1607,7 @@ class menuedit extends aw_template
 		{
 			$parent = $this->cfg["amenustart"];
 			// kui parentit antud pole, siis esimese elemendina tagastame selle AW ikooni
-			$rooturl = $this->mk_my_orb("right_frame", array("fastcall" => 1, "parent" => $this->cfg["admin_rootmenu2"]));
+			$rooturl = $this->mk_my_orb("right_frame", array("parent" => $this->cfg["admin_rootmenu2"]));
 			$this->_send_branch_line(0,0,"AutomatWeb",$rooturl,$baseurl . "/automatweb/images/aw_ikoon.gif");
 		};
 
@@ -1579,7 +1626,7 @@ class menuedit extends aw_template
 			if ($hf = $this->db_next())
 			{
 
-				$url = $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $hf["oid"]));
+				$url = $this->mk_my_orb("right_frame",array("parent" => $hf["oid"]));
 				$iconurl = $this->get_icon_url("homefolder","");
 				// allpool peab ka acli kontrollima :(
 				$q = "SELECT oid FROM objects LEFT JOIN menu ON (objects.oid = menu.id) WHERE objects.status != 0 AND ( (objects.class_id = 1) OR (objects.class_id = 39) ) AND (menu.type != " . MN_FORM_ELEMENT . " AND menu.type != " . MN_ADMIN1 . ") AND objects.parent = '$hf[oid]' AND (objects.lang_id = ".aw_global_get("lang_id") . " OR menu.type = 69)";
@@ -1668,7 +1715,7 @@ class menuedit extends aw_template
 						$iconurl = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
 					}
 
-					$url = $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $row["oid"], "period" => $period));
+					$url = $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period));
 					$this->_send_branch_line($row["oid"],$subcnt,$row["name"],$url,$iconurl);
 				}
 			}
@@ -1780,7 +1827,7 @@ class menuedit extends aw_template
 			{
 				continue;
 			}
-			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && (aw_ini_get("acl.check_prog")))
+			if ($row["admin_feature"] && !$this->prog_acl("view", $row["admin_feature"]) && ($this->cfg["acl"]["check_prog"]))
 			{
 				continue;
 			}
@@ -1935,7 +1982,7 @@ class menuedit extends aw_template
 						"id" => $row["oid"],
 						"parent" => $row["parent"],
 						"iconurl" => $url,
-						"url" => $this->mk_my_orb("right_frame",array("fastcall" => 1,"parent" => $row["oid"], "period" => $period))
+						"url" => $this->mk_my_orb("right_frame",array("parent" => $row["oid"], "period" => $period))
 					));
 					if ($sub == "")
 					{
@@ -2027,7 +2074,7 @@ class menuedit extends aw_template
 		$can_paste = "";
 		$can_add_promo = "";
 
-		global $cut_objects;
+		$cut_objects = aw_global_get("cut_objects");
 		if ($this->can("add",$parent))
 		{
 			$can_add = $this->parse("ADD_CAT");
@@ -2100,8 +2147,8 @@ class menuedit extends aw_template
 				"r_menu_id"			=> $r_id,
 				"properties"	=> $this->mk_orb("change", array("parent" => $parent,"id" => $r_id,"period" => $period)),
 				"imgref" => $ic_url,
-				"clicker" => $this->mk_my_orb("right_frame", array("fastcall" => 1,"parent" => $row["oid"], "period" => $period)),
-				"clicker_r" => $this->mk_my_orb("right_frame", array("fastcall" => 1,"parent" => $r_id, "period" => $period)),
+				"clicker" => $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period)),
+				"clicker_r" => $this->mk_my_orb("right_frame", array("parent" => $r_id, "period" => $period)),
 			));
 
 			$this->vars(array(
@@ -2141,60 +2188,6 @@ class menuedit extends aw_template
 			"lang_name" => $la->get_langid()
 		));
 
-		return $this->parse();
-	}
-
-	function gen_list_filled_forms($parent)
-	{
-		classload("form_output");
-		$this->read_template("filled_forms.tpl");
-		
-		$fop = new form_output;
-		$opar = array();
-		$this->db_query("SELECT el_id,form_id FROM element2form WHERE el_id = ".$parent);
-		while ($row = $this->db_next())
-		{
-			$this->save_handle();
-			$fid = $row["form_id"];
-			// korjame k6ikide formide v2ljundi stiilid kokku $opar sisse
-			$opar[$fid] = $fop->get_op_list(array("id" => $fid));
-
-			$fname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fid", "name");
-			$this->db_query("SELECT objects.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0");
-			while ($row = $this->db_next())
-			{
-				$this->vars(array(
-					"filler"		=> $row["createdby"], 
-					"hits"			=> $row["hits"], 
-					"form"			=> $fname,
-					"modified"	=> $this->time2date($row["modified"], 2), "oid" => $row["oid"],
-					"change"		=> $this->mk_orb("show", array("id" => $fid, "entry_id" => $row["oid"]), "form"),
-					"form_id"		=> $fid
-				));
-				$l.=$this->parse("LINE");
-			}
-			$this->restore_handle();
-		}
-		reset($opar);
-		while (list($fid, $ar) = each($opar))
-		{
-			$this->vars(array("form_id" => $fid));
-			$fop = ""; $cnt=0;
-			reset($ar);
-			while (list($opid, $opname) = each($ar))
-			{
-				$this->vars(array("op_id" => $opid, "op_name" => $opname, "cnt" => $cnt));
-				$fop.=$this->parse("FORM_OP");
-				$cnt++;
-			}
-			$this->vars(array("FORM_OP" => $fop));
-			$f.=$this->parse("FORM");
-		}
-		$this->vars(array(
-			"LINE" => $l, 
-			"FORM" => $f,
-			"reforb"	=> $this->mk_reforb("change", array("id" => 0), "form")
-		));
 		return $this->parse();
 	}
 
@@ -2338,7 +2331,8 @@ class menuedit extends aw_template
 		$total = 0; 
 		$ffound = false;
 		$def_found = false;
-		global $cut_objects,$copied_objects;
+		$cut_objects = aw_global_get("cut_objects");
+		$copied_objects = aw_global_get("copied_objects");
 		$cut = $this->parse("CUT");
 		$copied = $this->parse("COPIED");
 		$nocut = $this->parse("NORMAL");
@@ -2458,93 +2452,15 @@ class menuedit extends aw_template
 			"yah"	=> $this->mk_path($parent,"",0,false),
 		));
 
-		// default document selection is deprecated now I guess?
-/*		if (!$period && !$popup)
-		{	
-			$this->vars(array(
-				"default" => $this->option_list($default_doc,$this->mk_docsel($parent)),
-				"checked" => checked(!$def_found)
-			));
-		}*/
-
 		return $this->parse();
-	}
-
-	function mk_docsel($parent = 0)
-	{
-		// let the user pick a default document
-		// select all documents that are non-periodic and not under this menu and active
-		$this->extrarr = array();
-		$lang_id = aw_global_get("lang_id");
-		$SITE_ID = $this->cfg["site_id"];
-		$this->db_query("SELECT objects.oid as oid,documents.title as title ,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid = objects.oid WHERE parent != $parent AND status = 2 AND periodic = 0 AND site_id = ".$SITE_ID." AND class_id = ".CL_DOCUMENT." AND objects.lang_id = ".$lang_id);
-		while ($row = $this->db_next())
-		{
-			$this->extrarr[$row["parent"]][] = array("docid" => $row["oid"], "name" => substr($row["title"],0,15).".",$this->cfg["ext"]);
-		}
-
-		$ss = "";
-		$this->menucache = array();
-		if ($this->cfg["lang_menus"] == 1)
-		{
-			$ss = "AND (objects.lang_id=".$lang_id." OR menu.type= ".MN_CLIENT.")";
-		}
-		$this->db_query("SELECT objects.oid as oid,
-				objects.parent as parent,
-				objects.name as name,
-				objects.last as last,
-				objects.status as status,
-				objects.jrk as jrk,
-				objects.class_id as class_id,
-				menu.type as mtype,
-				menu.periodic as mperiodic,
-				menu.is_copied as is_copied,
-				menu.data as data,
-				menu.clickable as clickable,
-				menu.hide_noact as hide_noact,
-				menu.target as target
-				FROM objects 
-				LEFT JOIN menu ON menu.id = objects.oid
-				WHERE (objects.class_id = ".CL_PSEUDO." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0  AND ((objects.site_id = ".$SITE_ID.") OR (objects.site_id IS NULL)) $ss
-				GROUP BY objects.oid
-				ORDER BY objects.parent, jrk");
-		// tsykkel yle menyyelementide
-		while ($row = $this->db_next()) 
-		{
-			$sets = unserialize(!isset($row["data"]) ? "" : $row["data"]);
-			$row["name"] = substr($row["name"],0,15);
-			$this->menucache[$row["parent"]][] = array("data" => $row);
-			if (is_array($sets["section"]))
-			{
-				reset($sets["section"]);
-				while(list(,$v) = each($sets["section"]))
-				{
-					// topime menyystruktuuri arraysse
-					$row["name"] = substr($row["name"],0,12);
-					$this->menucache[$v][] = array("data" => $row);
-				}
-			}
-		}
-
-		$this->docs = array("0" => "");
-		// uh. leave out the first level of objecs
-		if (is_array($this->menucache[$this->cfg["admin_rootmenu2"]]))
-		{
-			reset($this->menucache[$this->cfg["admin_rootmenu2"]]);
-			while (list(,$ar) = each($this->menucache[$this->cfg["admin_rootmenu2"]]))
-			{
-				$this->mk_folders($ar["data"]["oid"],"");
-			}
-		}
-		return $this->docs;
 	}
 
 	function get_feature_icon_url($fid)
 	{
-		if (!$this->feature_icons_loaded)
+		if (!is_array($this->pr_icons))
 		{
 			$c = new db_config;
-			$this->pr_icons = unserialize($c->get_simple_config("program_icons"));
+			$this->pr_icons = aw_unserialize($c->get_simple_config("program_icons"));
 		}
 		$i = $this->pr_icons[$fid]["url"];
 		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);
@@ -2715,6 +2631,8 @@ class menuedit extends aw_template
 					"pclass" => $pclass,
 					"pm_url_admin" => $pm_url_admin,
 					"pm_url_menus" => $pm_url_menus,
+					"objtbl_conf" => $objtbl_conf,
+					"add_tree_conf" => $add_tree_conf
 				),
 			));
 			
@@ -3585,7 +3503,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"ftpl_edit_id" => (int)$meta["ftpl_edit"],
 			"ftpl_lead_id" => (int)$meta["ftpl_lead"],
 			"ftpl_view_id" => (int)$meta["ftpl_view"],
-			"aip_filename" => $meta["aip_filename"]
+			"aip_filename" => $meta["aip_filename"],
+			"objtbl_conf" => $this->picker($meta["objtbl_conf"], $this->list_objects(array("class" => CL_OBJ_TABLE_CONF, "addempty" => true))),
+			"add_tree_conf" => $this->picker($meta["add_tree_conf"], $this->list_objects(array("class" => CL_ADD_TREE_CONF, "addempty" => true)))
 		));
 
 		$op_list = $fb->get_op_list();
@@ -3666,7 +3586,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		reset($ch);
 		while (list(,$row) = each($ch))
 		{
-			$path="<a target='list' href='".$this->mk_my_orb("right_frame", array("fastcall" => 1,"parent" => $row["oid"],"period" => $period))."'>".strip_tags($row["name"])."</a> / ".$path;
+			$path="<a target='list' href='".$this->mk_my_orb("right_frame", array("parent" => $row["oid"],"period" => $period))."'>".strip_tags($row["name"])."</a> / ".$path;
 		}
 
 		if ($set)
@@ -4283,7 +4203,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$cnt++;
 		}
 
-
+		$this->vars(array(
+				$mn."_SEL" => "",
+		));
 		$this->vars(array($mn => $l));
 
 		if (!$no_mid)
@@ -4428,7 +4350,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				{
 					$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 					$_tl = $link;
-					$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+					$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
 //					echo "made hash for link $_tl = $link <br>";
 				}
 				else
@@ -4446,7 +4368,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					{
 						$link = $exp->add_session_stuff($link, aw_global_get("lang_id"));
 						$_tl = $link;
-						$link = aw_ini_get("baseurl")."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
+						$link = $this->cfg["baseurl"]."/".$exp->get_hash_for_url(str_replace($this->cfg["baseurl"],"",$link),aw_global_get("lang_id"));
 	//					echo "made hash for link $_tl = $link <br>";
 					}
 					else
@@ -4688,29 +4610,17 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
-		$GLOBALS["cut_objects"] = array();
-		if ($oid)
-		{
-			$GLOBALS["cut_objects"][$oid] = $oid;
-		}
-
+		$cut_objects = array();
 		if (is_array($sel))
 		{
-			reset($sel);
-			while (list($oid,) = each($sel))
+			foreach($sel as $oid => $one)
 			{
-				$GLOBALS["cut_objects"][$oid] = $oid;
+				$cut_objects[$oid] = $oid;
 			}
 		}
 
-		if ($from_menu)
-		{
-			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		}
+		aw_session_set("cut_objects",$cut_objects);
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	////
@@ -4719,31 +4629,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
-		$GLOBALS["copied_objects"] = array();
-
-		if ($oid)
-		{
-			$r = $this->serialize(array("oid" => $oid));
-			if ($r != false)
-			{
-				$GLOBALS["copied_objects"][$oid] = $r;
-			}
-		}
-
+		$copied_objects = array();
 		if (is_array($sel))
 		{
-			reset($sel);
-			while (list($oid,) = each($sel))
+			foreach($sel as $oid => $one)
 			{
 				$r = $this->serialize(array("oid" => $oid));
 				if ($r != false)
 				{
-					$GLOBALS["copied_objects"][$oid] = $r;
+					$copied_objects[$oid] = $r;
 				}
 			}
 		}
-		
-		return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
+		aw_session_set("copied_objects", $copied_objects);
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	////
@@ -4752,8 +4651,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 
-		global $cut_objects;
-		global $copied_objects;
+		$cut_objects = aw_global_get("cut_objects");
+		$copied_objects = aw_global_get("copied_objects");
 
 		$updmenus = array();
 
@@ -4769,7 +4668,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				}
 			}
 		}
-		$GLOBALS["cut_objects"] = array();
+		aw_session_set("cut_objects",array());
 
 		if (is_array($copied_objects))
 		{
@@ -4785,15 +4684,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->invalidate_menu_cache($updmenus);
 
-		$GLOBALS["copied_objects"] = array();
-		if ($from_menu)
-		{
-			return $this->mk_orb("menu_list", array("parent" => $parent, "period" => $period));
-		}
-		else
-		{
-			return $this->mk_orb("obj_list", array("parent" => $parent, "period" => $period));
-		}
+		aw_session_set("copied_objects",array());
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
 	}
 
 	function o_delete($arr)
@@ -5209,47 +5101,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $ya;
 	}
 
-	function make_yah2($path)
-	{
-		// now build "you are here" links from the path
-		$ya = "";  
-		$show = false;
-		$cnt = count($path);
-
-		foreach($this->path as $val)
-		{
-			if ($show)
-			{
-				// default to the link field in the object
-				$link = $this->menu_chain[$val]["link"];
-				// or if that is not set, create a link
-				if (not($link))
-				{
-					$link = "/".$this->menu_chain[$val]["oid"];
-				};
-				
-				$text = $this->menu_chain[$val]["name"];
-
-				$this->vars(array(
-					"link" => $link,
-					"text" => str_replace("&nbsp;","",strip_tags($text)), 
-					"ysection" => $val,
-				));
-
-				if ($this->menu_chain[$val]["clickable"] == 1)
-				{
-					$ya.=$this->parse("YAH_LINK");
-				}
-			}
-
-			if ($val == $this->cfg["rootmenu"])
-			{
-				$show = true;
-			}
-		}
-		return $ya;
-	}
-
 	////
 	// !See jupp siin teeb promokasti
 	function make_promo_boxes($section)
@@ -5493,11 +5344,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function make_poll()
 	{
-		if ( (aw_global_get("lang_id") == 3) && ($this->cfg["site_id"] == 667) )
-		{
-			return "";
-		};
-
 		classload("poll");
 		$t = new poll;
 		$this->vars(array("POLL" => $t->gen_user_html()));
@@ -5523,40 +5369,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"str" => htmlentities($GLOBALS["HTTP_GET_VARS"]["str"])
 			));
 			$this->vars(array("SEARCH_SEL" => $this->parse("SEARCH_SEL")));
-		}
-	}
-
-	function make_nadalanagu()
-	{
-		classload("nagu");
-		$t = new nagu;
-		$nagu = $t->get_active($this->cfg["per_oid"]);
-		$tmp = $nagu["content"];
-		if ($nagu["num"] > 0 && is_array($tmp))
-		{
-			reset($tmp);
-			uasort($tmp,__nagu_sort);
-			reset($tmp);
-			$max = $nagu["num"];
-			// kui 3, siis 3
-			$max = 3;
-			for ($i=0; $i < $max; $i++)
-			{	
-				list(,$v) = each($tmp);
-				$this->vars(array("pos" => $i+1, "name" => $v["eesnimi"]." ".$v["kesknimi"]." ".$v["perenimi"]));
-				$l.=$this->parse("NAME");
-				if ($i == 0)
-				{
-					$wurl = $v["imgurl"];
-				}
-			}
-			if ($wurl == "")
-			{
-				$wurl = $this->cfg["baseurl"]."/images/transa.gif";
-			}
-			$this->vars(array("NAME" => $l,"winnerurl" => $wurl));
-			$nn = $this->parse("NADALA_NAGU");
-			$this->vars(array("NADALA_NAGU" => $nn));
 		}
 	}
 
@@ -5885,6 +5697,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// all of them. so scan the damn folder for all those files
 		if ($dir = @opendir(aw_ini_get("cache.page_cache"))) 
 		{
+			$lang_id = aw_global_get("lang_id");
 		  while (($file = readdir($dir)) !== false) 
 			{
 				if (substr($file,0,strlen("objects::get_list::")) == "objects::get_list::")
@@ -5892,7 +5705,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$cache->file_invalidate($file);
 				}
 				else
-				if (substr($file,0,strlen("menuedit::menu_cache::lang::".aw_global_get("lang_id")."::site_id::".$this->cfg["site_id"])) == "menuedit::menu_cache::lang::".aw_global_get("lang_id")."::site_id::".$this->cfg["site_id"])
+				if (substr($file,0,strlen("menuedit::menu_cache::lang::".$lang_id."::site_id::".aw_ini_get("site_id"))) == "menuedit::menu_cache::lang::".$lang_id."::site_id::".aw_ini_get("site_id"))
 				{
 					$cache->file_invalidate($file);
 				}
@@ -5990,10 +5803,6 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"value" => 0
 			));
 		}
-
-/*		classload("keywords");
-		$kwd = new keywords;
-		$kwd->update_menu_keyword_bros(array("menu_ids" => array($id)));*/
 	}
 
 	function do_center_menu($oid)
@@ -6061,16 +5870,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			if (function_exists("__get_site_instance"))
 			{
 				$si =&__get_site_instance();
-				foreach($sub_callbacks as $sub => $fun)
+				if (is_object($si))
 				{
-					if ($this->is_template($sub))
+					foreach($sub_callbacks as $sub => $fun)
 					{
-						if (is_object($si))
+						if ($this->is_template($sub))
 						{
 							$si->$fun(&$this);
-						};
+						}
 					}
-				}
+				};
 			}
 			else
 			{
@@ -6215,7 +6024,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		return $row["filename"];
 	}
 
-	////
+	////	
 	// !imports menus from text file. file format description is at http://aw.struktuur.ee/index.aw?section=38624
 	function do_text_import($arr)
 	{
@@ -6445,6 +6254,252 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			fclose($acl_server_socket);
 		}
 		die($sf->parse());
+	}
+
+	function setup_rf_table($parent)
+	{
+		// l8r, we will get the user's preferences, but right now we do the default table
+		load_vcl("table");
+		$this->t = new aw_table(array("prefix" => "me_rf"));
+
+		$this->co_id = 0;
+
+		// check if any parent menus have config objects attached 
+		$ch = $this->get_object_chain($parent);
+		foreach($ch as $oid => $od)
+		{
+			if ($od["meta"]["objtbl_conf"])
+			{
+				$this->co_id = $od["meta"]["objtbl_conf"];
+			}
+		}
+
+		if (!$this->co_id)
+		{
+			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/menuedit/right_frame_default.xml");
+		}
+		else
+		{
+			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
+			$this->otc_inst = get_instance("obj_table_conf");
+			$this->otc_inst->init_table($this->co_id, $this->t);
+		}
+	}
+
+	function new_right_frame($arr)
+	{
+		extract($arr);
+		$lang_id = aw_global_get("lang_id");
+		$site_id = $this->cfg["site_id"];
+		$parent = $parent ? $parent : $this->cfg["rootmenu"];
+		$sel_objs = aw_global_get("cut_objects");
+		if (!is_array($sel_objs))
+		{
+			$sel_objs = array();
+		}
+		$t = aw_global_get("copied_objects");
+		if (!is_array($t))
+		{
+			$t = array();
+		}
+		$sel_objs+=$t;
+
+		$this->mk_path($parent);
+
+		$la = get_instance("languages");
+		$lar = $la->get_list();
+
+		$this->setup_rf_table($parent);
+
+		$this->read_template("java_popup_menu.tpl");
+		$this->db_query("SELECT * FROM objects WHERE parent = '$parent' AND lang_id = '$lang_id' AND site_id = '$site_id' AND status != 0");
+		while ($row = $this->db_next())
+		{
+			if (!$this->can("view", $row["oid"]))
+			{
+				continue;
+			}
+			if ($row["class_id"] == CL_PSEUDO || $row["class_id"] == CL_BROTHER)
+			{
+				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
+				$row["is_menu"] = 1;
+			}
+			else
+			{
+				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
+				$row["is_menu"] = 2;
+			}
+			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
+
+			if ($sel_objs[$row["oid"]])
+			{
+				$row["cutcopied"] = "#E2E2DB";
+			}
+			else
+			{
+				$row["cutcopied"] = "#FCFCF4";
+			}
+			$iu = $this->get_icon_url($row["class_id"],$row["name"]);
+
+			$row["lang_id"] = $lar[$row["lang_id"]];
+
+			$this->vars(array(
+				"oid" => $row["oid"],
+				"name" => "",
+				"bgcolor" => $row["cutcopied"],
+				"icon" => $iu,
+				"width" => "100%",
+				"height" => "15",
+				"icon_over" => $iu,
+				"URLPARAM" => ""
+			));
+			$row["java"] = $this->parse();
+
+			$row["name"] = "<a href=\"".$chlink."\">".($row["name"] == "" ? "(nimeta)" : $row["name"])."</a>";
+			$row["icon"] = "<img src=\"".$iu."\">";
+			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
+			$row["class_id"] = $this->cfg["classes"][$row["class_id"]]["name"];
+			$row["jrk"] = "<input type=\"hidden\" name=\"old[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\"><input type=\"text\" name=\"new[jrk][".$row["oid"]."]\" value=\"".$row["jrk"]."\" class=\"formtext\" size=\"3\">";
+			$row["status"] = "<input type=\"hidden\" name=\"old[status][".$row["oid"]."]\" value=\"".$row["status"]."\"><input type=\"checkbox\" name=\"new[status][".$row["oid"]."]\" value=\"2\" ".checked($row["status"] == 2).">";
+			$row["select"] = "<input type=\"checkbox\" name=\"sel[".$row["oid"]."]\" value=\"1\">";
+			$row["change"] = "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>";
+			$row["delete"] = "<a href=\"javascript:box2('Oled kindel, et soovid seda objekti kustutada?','$dellink')\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_delete.gif\" border=\"0\"></a>";
+			$row["acl"] = "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>";
+			if ($this->co_id)
+			{
+				$this->otc_inst->table_row($row, &$this->t);
+			}
+			else
+			{
+				$this->t->define_data($row);
+			}
+		}
+
+		$types = array();
+		foreach($this->cfg["classes"] as $clid => $cldat)
+		{
+			$types[$cldat["file"]] = $cldat["name"];
+		}
+		asort($types);
+
+		// make applet for adding objects
+		$this->vars(array(
+			"icon_over" => $this->cfg["baseurl"]."/automatweb/images/icons/new_over.gif",
+			"icon" => $this->cfg["baseurl"]."/automatweb/images/icons/new.gif",
+			"oid" => $parent,
+			"bgcolor" => "#DBE8EE",
+			"nr" => 2,
+			"key" => "addmenu",
+			"val" => 1,
+			"name" => "",
+			"height" => 25,
+			"width" => 25
+		));
+		$this->vars(array(
+			"URLPARAM" => $this->parse("URLPARAM")
+		));
+		$add_applet = $this->parse();
+
+		$la = get_instance("languages");
+
+		$this->t->sort_by(array(
+			"field" => array("is_menu", $sortby),
+			"sorder" => array("is_menu" => "asc", $sortby => $sort_order)
+		));
+
+		$this->read_template("right_frame.tpl");
+		$this->vars(array(
+			"table" => $this->t->draw(),
+			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
+			"types" => $this->picker(" ", $types),
+			"parent" => $parent,
+			"period" => $period,
+			"lang_name" => $la->get_langid(),
+			"add_applet" => $add_applet
+		));
+
+		if ($this->can("add", $parent))
+		{
+			$this->vars(array(
+				"ADD_CAT" => $this->parse("ADD_CAT")
+			));
+		}
+
+		if (count($sel_objs) > 0)
+		{
+			$this->vars(array(
+				"PASTE" => $this->parse("PASTE")
+			));
+		}
+		return $this->parse();
+	}
+
+	function submit_rf($arr)
+	{
+		extract($arr);
+
+		if (is_array($old))
+		{
+			foreach($old as $column => $coldat)
+			{
+				foreach($coldat as $oid => $oval)
+				{
+					$val = $new[$column][$oid];
+					if ($column == "status" && $val == 0)
+					{
+						$val = 1;
+					}
+					if ($val != $oval)
+					{
+						$this->upd_object(array(
+							"oid" => $oid,
+							$column => $val
+						));
+					}
+				}
+			}
+		}
+		$this->invalidate_menu_cache(array());
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
+	}
+
+	function new_delete($arr)
+	{
+		extract($arr);
+		if (is_array($sel))
+		{
+			$oids = join(",",array_keys($sel));
+			$this->db_query("SELECT oid,class_id FROM objects WHERE oid IN($oids)");
+			while ($row = $this->db_next())
+			{
+				if ($this->cfg["classes"][$row["class_id"]]["file"] != "")
+				{
+					$inst = get_instance($this->cfg["classes"][$row["class_id"]]["file"]);
+					if (method_exists($inst, "delete_hook"))
+					{
+						$inst->delete_hook(array("oid" => $row["oid"]));
+					}
+				}
+				$this->delete_object($row["oid"]);
+			}
+		}
+		$this->invalidate_menu_cache(array());
+		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order));
+	}
+
+	function change_redir($arr)
+	{
+		extract($arr);
+		if (!is_array($sel))
+		{
+			$this->raise_error(ERR_MNED_NO_OBJS,"Valitud pole &uuml;htegi objekti!", true);
+		}
+
+		reset($sel);
+		list($oid,) = each($sel);
+
+		$obj = $this->get_object($oid);
+		return $this->mk_my_orb("change", array("id" => $oid, "parent" => $parent), $this->cfg["classes"][$obj["class_id"]]["file"]);
 	}
 }
 ?>
