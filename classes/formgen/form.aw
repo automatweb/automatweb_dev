@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.94 2004/04/15 11:32:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.95 2004/05/06 12:24:56 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5062,7 +5062,7 @@ class form extends form_base
 			$this->save_handle();
 			
 			$this->db_query("SELECT * FROM element2form WHERE form_id = ".$row["oid"]);
-			while ($erow = $this->db_next())
+			while ($erow ->db_next())
 			{
 				$this->save_handle();
 				
@@ -5167,10 +5167,10 @@ class form extends form_base
 //							{
 								$ev = $el->get_value();
 //								$ev = preg_replace("/<(.*)>(.*)<\/(.*)>/imsU","",$ev);
-								$ev = strip_tags($ev);
+								$ev = str_replace("'", "\\'", strip_tags($ev));
 	echo "value for element ", $el->get_id(), " set to $ev <br />\n";
 	flush();
-								$this->db_query("UPDATE form_".$frow["oid"]."_entries SET ev_".$el->get_id()." = '".$ev."' WHERE id = ".$erow["id"]);
+								//$this->db_query("UPDATE form_".$frow["oid"]."_entries SET ev_".$el->get_id()." = '".$ev."' WHERE id = ".$erow["id"]);
 //							}
 						}
 					}

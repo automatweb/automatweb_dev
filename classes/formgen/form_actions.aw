@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.21 2004/03/17 12:55:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.22 2004/05/06 12:24:56 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -338,7 +338,7 @@ class form_actions extends form_base
 
 		$this->vars(array(
 			"email" => $data["email"],
-			"ops" => $this->picker($data["op_id"],array(0 => "") + (array)$opar[$id]),
+			"ops" => $this->picker($data["op_id"],array("" => "") + (array)$opar[$id]),
 			"sec" => $this->picker($data["l_section"],$ob->get_list(false, true)),
 			"reforb" => $this->mk_reforb("submit_action", array("id" => $id, "action_id" => $aid, "level" => 2)),
 			"T_LANG" => $lt,
@@ -764,7 +764,7 @@ class form_actions extends form_base
 			$link_url ="\n".$this->mk_my_orb("show", array(
 				"id" => $form->get_id(), 
 				"entry_id" => $entry_id, 
-				"section" => $data["l_section"]
+				"section" => ($data["l_section"] > 0 ? $data["l_section"] : NULL)
 			), "form", false, false);
 		}
 		else
@@ -774,7 +774,7 @@ class form_actions extends form_base
 				"id" => $form->get_id(), 
 				"entry_id" => $entry_id, 
 				"op_id" => $data["op_id"],
-				"section" => $data["l_section"]
+				"section" => ($data["l_section"] > 0 ? $data["l_section"] : NULL)
 			), "form", false, false);
 		}
 		$link_url = str_replace('/automatweb','',$link_url);
