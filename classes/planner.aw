@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.156 2004/01/19 11:13:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.157 2004/01/22 17:32:25 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
 /*
+
+EMIT_MESSAGE(MSG_EVENT_ADD);	
+
 	@default table=objects
 	@default field=meta
 	@default method=serialize
@@ -1056,6 +1059,15 @@ class planner extends class_base
 				"reltype" => $r[1],
 			));
 			aw_session_del('org_action');
+
+			post_message_with_param(
+				MSG_EVENT_ADD,
+				$org_obj->class_id(),
+				array(
+					"source_id" => $org_obj->id(),
+					"event_id" => $this->event_id,
+				)
+			);
 		}
 		return PROP_OK;
 	}
