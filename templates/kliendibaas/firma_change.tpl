@@ -2,22 +2,28 @@
 
 function put_value(target,value)
 {
-	if (target == "linn")
-		document.add.linn.value = value;
+	if (target == "tegevusala")
+		document.add.elements["firma[tegevusala]"].value = value;
 	else
-	if (target == "maakond")
-		document.add.maakond.value = value;
+	if (target == "korvaltegevus")
+		document.add.elements["firma[korvaltegevus]"].value = document.add.elements["firma[korvaltegevus]"].value + ';' + value;
 	else
-	if (target == "riik")
-		document.add.riik.value = value;
+	if (target == "pohitegevus")
+		document.add.elements["firma[pohitegevus]"].value = value;
 	else
+	if (target == "ettevotlusvorm")
+		document.add.elements["firma[ettevotlusvorm]"].value = value;
+//	else
+//	if (target == "firmajuht")
+//		document.add.elements["firma[firmajuht]"].value = value;
+	else {}
 
 		document.add.submit();
 } 
 
 function pop_select(url)
 {
-	aken=window.open(url,"selector","HEIGHT=220,WIDTH=310")
+	aken=window.open(url,"selector","HEIGHT=300,WIDTH=510,TOP=400,LEFT=500")
  	aken.focus()
 }
 </script>
@@ -44,72 +50,136 @@ function pop_select(url)
 											</td>
 										</tr>
 									</table>
+
 									<table class="aste01" cellpadding=3 cellspacing=1 border=0>
 										<tr>
-											<td class="celltext"><small>oid:{VAR:oid}</small>
-											<fieldset><legend>põhiandmed </legend>
-												<br />
-												reg nr: <input class=formtext type=text NAME='firma[reg_nr]' value='{VAR:f_reg_nr}' size=8><br />
-												firma nimetus: <input class=formtext type=text NAME='firma[firma_nimetus]' value='{VAR:f_firma_nimetus}' size=25> 
-												ettevõtlusvorm: <input type=hidden NAME='firma[ettevotlusvorm]' value='{VAR:f_ettevotlusvorm}' size=3>
-													<select class=formselect><option>vali</select>
-												<br />
-												tegevusala: <input type=hidden NAME='firma[tegevusala]' value='{VAR:f_tegevusala}'>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_tegevusala_pop}')" value=vali>
-												<br />
-												põhitegevus: <input type=hidden NAME='firma[pohitegevus]' value='{VAR:f_pohitegevus}'>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_pohitegevus_pop}')" value=vali>
-												<br />
-												kõrvaltegevus: <input type=hidden NAME='firma[korvaltegevus]' value='{VAR:f_korvaltegevus}'>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_korvaltegevus_pop}')" value=vali>
+											<td class="celltext">
+											<fieldset><legend>Ettevõtte üldandmed</legend>
+											<table border=0 class=celltext>
+											<tr><td width=25%>
+													reg nr:
+												</td>
+											
+												<td>
+													<input class=formtext type=text NAME='firma[reg_nr]' value='{VAR:f_reg_nr}' size=8>
+												</td>
+											</tr>
+												
+											<tr>
+												<td>
+													firma nimetus:
+												</td>
+											
+												<td>
+													<input class=formtext type=text NAME='firma[firma_nimetus]' value='{VAR:f_firma_nimetus}' size=25>
+												</td>
+											</tr>											<tr>
+												<td>
+														kommentaarid: 
+												</td>
+											
+												<td>
+													<textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+												</td>
+											</tr>
+
+											
+											<tr>
+												<td>
+			
+												ettevõtlusvorm: 
+												</td>
+											
+												<td>
+												<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_ettevotlusvorm_pop}')" value="+">
+												<input type="hidden" NAME='firma[ettevotlusvorm]' value='{VAR:f_ettevotlusvorm}' size=3>
+												<b>{VAR:s_ettevotlusvorm}</b>
+												</td>
+											</tr>
+												
+											<tr>
+												<td>
+												tegevusala:
+												</td>
+											
+												<td>
+												<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_tegevusala_pop}')" value="+">
+												<input type="hidden" NAME='firma[tegevusala]' value='{VAR:f_tegevusala}'>
+												<b>{VAR:s_tegevusala}</b>
+												</td>
+											</tr>
+												
+											<tr>
+												<td>
+												põhitegevus: 
+												</td>
+											
+												<td>
+												<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_pohitegevus_pop}')" value="+">
+												<input type="hidden" NAME='firma[pohitegevus]' value='{VAR:f_pohitegevus}'>
+												<b>{VAR:s_pohitegevus}</b>
+												</td>
+											</tr>
+												
+											<tr>
+												<td>
+												kõrvaltegevused:
+												</td>
+											
+												<td>
+												<input type="hidden" NAME='firma[korvaltegevus]' value='{VAR:f_korvaltegevus}'>
+												<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_korvaltegevus_pop}')" value="+">	
+												</td>
+											</tr>
+												
+											<tr>
+												<td>
+												</td>
+											
+												<td>
+												<ul>
+												<!-- SUB: s_korvaltegevus -->
+												 <small><a href="{VAR:delete}">kustuta</a></small> <b>{VAR:nimetus}</b><br />
+												<!-- END SUB: s_korvaltegevus -->
+												</ul>
+												</td>
+											</tr>
+											<tr>
+												<td>
+												ettevõtte tegevuse kirjeldus
+												</td>
+												<td>
+													<textarea name="fima[tegevusala_kirjeldus]" rows=3 cols=40  
+													class="formtext">{VAR:f_tegevusala_kirjeldus}</textarea>
+												</td>
+											</tr>
+
+
+											
+											</table>
 											</fieldset>
 											</td>
 										</tr>
 									</table>
-									<table>
+									<table border=1>
 										<tr>
 											<td class=celltext>
-											<fieldset><legend>kontakt</legend>
-												riik: <input type=hidden NAME='firma[riik]' value='{VAR:f_riik}'>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_riik_pop}')" value=vali>
-												<br />
-												linn: <input type=hidden NAME='firma[linn]' value='{VAR:f_linn}'>{VAR:f_linn_text} 
-													<input type=text NAME='linn' value='oo'>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_linn_pop}')" value=vali>
-												<br />
-												maakond: <input type=hidden NAME='firma[maakond]' value='{VAR:f_maakond}' size=8>
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_maakond_pop}')" value=vali>
-												<br />
-												postiindeks: <input class=formtext type=text NAME='firma[postiindeks]' value='{VAR:f_postiindeks}' size=5>
-												<br />
-												tänav/maja: <input class=formtext type=text NAME='firma[aadress]' value='{VAR:f_aadress}'>
-												<br />
-												telefon: <input class=formtext type=text NAME='firma[telefon]' value='{VAR:f_telefon}' size=12>
-												mobiil: <input class=formtext type=text NAME='firma[mobiil]' value='{VAR:f_mobiil}' size=12>
-												fax: <input class=formtext type=text NAME='firma[faks]' value='{VAR:f_faks}' size=12>
-												<br>
-												e-mail: <input class=formtext type=text NAME='firma[e_mail]' value='{VAR:f_e_mail}'>
-												kodulehekülg: <input class=formtext type=text NAME='firma[kodulehekylg]' value='{VAR:f_kodulehekylg}'>
-											</fieldset>
+												<a href="{VAR:contact_change}" target=muuda title="muuda">kontakt </a>
+												</td><td>
+												<input class=formtext type="hidden" NAME='firma[contact]' value='{VAR:f_contact}'>
+												<b>{VAR:s_contact}</b>
 											</td>
 										</tr>
-									</table>
-									<table>
 										<tr>
 											<td class="celltext">
-												firmajuht: {VAR:firmajuht} 
-													<input class=formbutton type=button onclick="javascript:pop_select('{VAR:f_firmajuht_pop}')" value=vali>
-												<br>
-												andmete allikas: <a href=#>{VAR:sourcefile}</a>fail
-												<br>
-												olek: {VAR:olek}<select class=formselect><option>vali</select>
-												<br>
-												<!--lisa: <textarea NAME='firma_[more]' value='{VAR:f_more}'></textarea>-->
-												<br>
-												kommentaarid: <textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+												<a href="{VAR:firmajuht_change}" target=muuda>firmajuht </a>
+												</td><td>								
+												<input class=formtext type="hidden" NAME='firma[firmajuht]' value='{VAR:f_firmajuht}'>
+												<b>{VAR:s_firmajuht}</b>
 											</td>
 										</tr>
 									</table>
+									<iframe src="" name=muuda width=100% height=800></iframe>
 								</td>
 							</tr>
 						</table>
@@ -119,7 +189,8 @@ function pop_select(url)
 		</td>
 	</tr>
 </table>
+[{VAR:abx}]
+
 {VAR:reforb}
 </form>
-
-
+<!--<iframe name=vali width="100%" height="400" frameborder="1" src="">whee</iframe>-->

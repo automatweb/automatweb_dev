@@ -41,24 +41,35 @@ function pop_select(url)
 											<td class="celltext">
 											<fieldset><legend>Isiku andmed</legend>
 											<table class="celltext" border=1>
+<!--												<tr><td>nimi:</td><td><b>{VAR:name}</b></td></tr>-->
 <!-- SUB: textbox -->
 <tr><td>{VAR:desc}:</td><td> <input class=formtext type=text name="{VAR:name}" value="{VAR:value}" size="{VAR:size}" maxlength="{VAR:maxlength}"><br /></td></tr>
 <!-- END SUB: textbox -->
 											{VAR:form}
 
 											</table>
+											kommentaarid:<br /> <textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+
 											</fieldset>
 											</td>
 										</tr>
+									<!-- SUB: contact -->
+										<tr>
+
+											<td class=celltext>
+											
+												<a href="{VAR:contact_change}" target=change title="muuda">{VAR:desc}</a>
+											</td>
+											<td>
+												<input class=formtext type="hidden" NAME='isik[{VAR:what}]' value='{VAR:value}'>
+												<b>{VAR:s_value}</b>
+
+											</td>
+										</tr>
+									<!-- END SUB: contact -->
 									</table>
 
-												
-												
-
-								
-								
-								
-								kommentaarid: <textarea name="comment" rows=3 cols=40  class="formtext">{VAR:comment}</textarea>
+									<iframe class="aste01" src="" name=change width=100% height=400></iframe>								
 								</td>
 							</tr>
 						</table>

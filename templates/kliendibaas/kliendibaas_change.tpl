@@ -33,6 +33,17 @@
 											</td>
 										</tr>
 										<tr>
+										<td>
+										lisa uus firma</br>
+										lisa uus tegevusala</br>
+										lisa uus firmajuht</br></br>
+										vaata firmasid tegevusalade kaupa</br>
+										vaata firmasid nimede järgi</br>
+										.........
+										</td>
+										
+										</tr>
+										<tr>
 											<td class="celltext" width=30%>kliendibaasi üldkataloog</td>
 											<td class="celltext">
 											<select name="">
