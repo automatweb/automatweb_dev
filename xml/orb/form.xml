@@ -484,6 +484,17 @@
 				<optional name="entry_id"/>
 			</function>
 		</action>
+
+		<action name="joins">
+			<function name="joins">
+				<required name="id"/>
+			</function>
+		</action>
+
+		<action name="submit_joins">
+			<function name="submit_joins">
+			</function>
+		</action>
 	</class>
 </orb>
 		
