@@ -983,6 +983,10 @@ class user extends class_base
 			$o = obj($oid);
 			$real_user = $o->get_original();
 
+			if (!is_oid($o->parent()))
+			{
+				return;
+			}
 			$grp_o = obj($o->parent());
 
 			$gid = $this->users->get_gid_for_oid($o->parent());
