@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.34 2004/06/25 09:11:02 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.35 2004/06/27 13:10:08 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -637,10 +637,10 @@ class crm_person extends class_base
 			'name' => $o->prop('firstname').' '.$o->prop('lastname'),
 			'firstname' => $o->prop('firstname'),
 			'lastname' => $o->prop('lastname'),
-			"phone" => join(",",$phones),
-			"url" => join(",",$urls),
-			"email" => join(",",$emails),
-			"rank" => join(",",$ranks),
+			"phone" => join(", ",$phones),
+			"url" => join(", ",$urls),
+			"email" => join(", ",$emails),
+			"rank" => join(", ",$ranks),
 			'ranks_arr' => $ranks_arr,
 			"add_task_url" => $this->mk_my_orb("change",array(
 				"id" => $cal_id,
