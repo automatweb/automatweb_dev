@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.13 2002/11/24 15:36:54 duke Exp $
+// $Id: class_base.aw,v 2.14 2002/11/26 12:32:35 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -119,6 +119,7 @@ class class_base extends aliasmgr
 		// where needed and then cycle over the result and generate
 		// the output
 		$resprops = array();
+
                 foreach($realprops as $key => $val)
                 {
                         if (is_array($val))
@@ -128,8 +129,6 @@ class class_base extends aliasmgr
 
                         $argblock = array(
                                 "prop" => &$val,
-                                "obj" => &$this->coredata,
-                                "objdata" => &$this->objdata,
                         );
 
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
@@ -145,7 +144,7 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-			if ($val["editonly"] && !$this->id)
+			if ($val["editonly"])
 			{
 				// skip editonly elements for new objects
 			}
@@ -203,10 +202,7 @@ class class_base extends aliasmgr
 					),
 		));
 
-		if (!$content)
-		{
-			$content = $cli->get_result();
-		};
+		$content = $cli->get_result();
 
 		return $this->gen_output(array(
 			"parent" => $parent,
@@ -231,8 +227,6 @@ class class_base extends aliasmgr
 				"group" => $group,
 		));
 
-		// if the object is divided between 2 tables, then this
-		// loads data from the second table
 		$this->load_object(array("id" => $id));
 
 		// here be some magic to determine the correct output client
@@ -372,10 +366,12 @@ class class_base extends aliasmgr
 
 		$this->init_class_base();
 
-		if (method_exists($this->inst,"callback_pre_save"))
+		// right now, this callback is not used.
+		if (method_exists($this->inst,"callback_on_submit"))
 		{
 			// nb! the handler gets quoted data
-			$this->inst->callback_pre_save(array(
+
+			$this->inst->callback_on_submit(array(
 				"id" => $this->id,
 				"form_data" => &$args,
 			));
@@ -456,6 +452,8 @@ class class_base extends aliasmgr
 			// that you want to save
                         if ($callback)
                         {
+				// I need a way to let set_property insert
+				// data back into the save queue
                                 $status = $this->inst->set_property($argblock);
                         }
 			else
@@ -473,10 +471,10 @@ class class_base extends aliasmgr
 
 		};
 
-		if (sizeof($savedata) == 0)
-		{
-			die("Nothing to save! Error in the code?<br>");
-		};
+//                if (sizeof($savedata) == 0)
+//                {
+//                        die("Nothing to save! Error in the code?<br>");
+//                };
 
 		foreach($resprops as $property)
 		{
@@ -544,6 +542,16 @@ class class_base extends aliasmgr
 		{
 			$coredata["period"] = $period;
 		};
+		
+		if (method_exists($this->inst,"callback_pre_save"))
+		{
+			$this->inst->callback_pre_save(array(
+				"id" => $this->id,
+				"coredata" => &$coredata,
+				"objdata" => &$objdata,
+				"object" => array_merge($this->coredata,$this->objdata),
+			));
+		}
 
 		$this->ds->ds_save_object(array("id" => $id,"clid" => $this->clid),$coredata);
 		$this->save_object(array("data" => $objdata));
@@ -618,6 +626,7 @@ class class_base extends aliasmgr
 	{
 		// XXX: figure out a way to do better titles
 		$classname = get_class($this->orb_class);
+
 		if ($this->id)
 		{
 			$title = "Muuda $classname objekti " . $this->coredata["name"];
@@ -627,6 +636,16 @@ class class_base extends aliasmgr
 		{
 			$title = "Lisa $classname objekt";
 			$parent = $args["parent"];
+		};
+
+		// let the class specify it's own title
+		if (method_exists($this->inst,"callback_gen_path"))
+		{
+			$title = $this->inst->callback_gen_path(array(
+				"id" => $this->id,
+				"parent" => $args["parent"],
+				"object" => $this->coredata,
+			));
 		};
 
 		$this->mk_path($parent,$title,aw_global_get("period"));
@@ -647,7 +666,7 @@ class class_base extends aliasmgr
 			}
 			else
 			{
-				$link = "";
+				$link = "#";
 			};
 
 			$this->tp->add_tab(array(
@@ -673,7 +692,6 @@ class class_base extends aliasmgr
 			$this->gen_toolbar();
 			$vars = array(
 				"toolbar" => $this->toolbar,
-				"toolbar2" => $this->toolbar2,
 			);
 		};
 
@@ -1030,6 +1048,7 @@ class class_base extends aliasmgr
 		$this->init_class_base();
 
 		$this->action = $action;
+		$this->load_object(array("id" => $id));
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
@@ -1053,6 +1072,7 @@ class class_base extends aliasmgr
 		$this->init_class_base();
 
 		$this->action = $action;
+		$this->load_object(array("id" => $id));
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
