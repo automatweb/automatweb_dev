@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.7 2004/04/19 09:56:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.8 2004/06/15 08:57:26 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -532,10 +532,6 @@ class maitenance extends class_base
 					'class_id' => CL_PHONE,
 				);
 				$telefon_obj_oid = $this->do_insert(array_merge($objdata,$objects_data),'objects');
-				/*$this->set_object_metadata(array(
-					"oid" => $mobiil_obj_oid,
-					"data" => array('tyyp' => 'mobile'),
-				));*/
 			}
 			//end mobiil
 			
@@ -549,10 +545,6 @@ class maitenance extends class_base
 					'class_id' => CL_PHONE,
 				);
 				$faks_obj_oid = $this->do_insert(array_merge($objdata,$objects_data),'objects');
-				/*$this->set_object_metadata(array(
-					"oid" => $faks_obj_oid,
-					"data" => array('tyyp' => 'fax'),
-				));*/
 			}
 			//end faks
 			
@@ -566,10 +558,6 @@ class maitenance extends class_base
 					'class_id' => CL_PHONE,
 				);
 				$telefon_obj_oid = $this->do_insert(array_merge($objdata,$objects_data),'objects');
-				/*$this->set_object_metadata(array(
-					"oid" => $telefon_obj_oid,
-					"data" => array('tyyp' => 'general'),
-				));*/
 			}
 			//end telefon
 			
@@ -653,10 +641,6 @@ class maitenance extends class_base
 			
 			////$firma_metadata['contact'] = $aadress_obj_oid;
 			
-			/*$this->set_object_metadata(array(
-				"oid" => $aadress_obj_oid,
-				"data" => $aadress_metadata,
-			));*/
 		}
 		
 		// end adress
@@ -671,11 +655,7 @@ class maitenance extends class_base
 		);
 						
 		$firma_obj_oid = $this->do_insert(array_merge($objdata,$objects_data),'objects');
-		
-		$this->set_object_metadata(array(
-			"oid" => $firma_obj_oid,
-			"data" => $firma_metadata,
-		));
+
 		// -- end firma
 		
 		// -- firma data				
@@ -735,11 +715,6 @@ class maitenance extends class_base
 				'reltype' => 6,//WORK
 			));
 			//$isik_metadata['work'] = $firma_obj_oid;
-			/*			
-			$this->set_object_metadata(array(
-				"oid" => $isik_obj_oid,
-				"data" => $isik_metadata,
-			));*/
 			$this->do_update(array('work_contact' => $firma_obj_oid),$isik_obj_oid,'kliendibaas_isik');
 		}
 		
