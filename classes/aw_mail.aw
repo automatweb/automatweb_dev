@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.8 2001/06/19 14:39:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.9 2001/06/20 05:21:52 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -106,7 +106,6 @@ class aw_mail {
 			if (!$this->headers["Boundary"])
 			{
 				preg_match("/boundary=(.*)$/i",$this->headers["Content-Type"],$matches);
-				print "setting boundary to ($matches[1])<br>";
 				$this->headers["Boundary"] = $matches[1];
 			};
 			$separator = "--" . $this->headers["Boundary"]; // feel free to consult the RFC to understand this
@@ -231,6 +230,11 @@ class aw_mail {
 				};
 	 
 				if (preg_match("/name=\"(.*)\"/i",$matches[2],$nmatch))
+				{
+					$headers["Content-Name"] = $nmatch[1];
+				};
+				
+				if (preg_match("/name=(.*)/i",$matches[2],$nmatch))
 				{
 					$headers["Content-Name"] = $nmatch[1];
 				};
