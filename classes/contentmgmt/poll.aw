@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.6 2004/02/20 12:11:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.7 2004/02/26 10:24:36 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -39,7 +39,7 @@ session_register("poll_clicked");
 @property question type=textbox store=no
 @caption K&uuml;simus
 
-@property answers type=callback callback=callback_get_answers store=no
+@property answers type=callback callback=callback_get_answers store=no editonly=1
 @caption Vastused
 
 @property activity type=table group=activity no_caption=1
@@ -162,10 +162,17 @@ class poll extends class_base
 			{	 
 				$au = "/?section=".$section."&poll_id=".$ap->id()."&answer_id=".$k."&section=".aw_global_get("section");	 
 			}
-			$this->dequote(&$v["answer"]);
+			if (isset($v["answer"]))
+			{
+				if (aw_global_get("uid") == "kix")
+				{
+					echo dbg::dump($v["answer"]);
+				}
+				$this->dequote($v);
+			}
 
 			$this->vars(array(
-				"answer_id" => $k, 
+				"answer_id" => $k,
 				"answer" => $v["answer"], 
 				"click_answer" => str_replace("&", "&amp;", $au),
 				"clicks" => $v["clicks"],
@@ -495,6 +502,10 @@ class poll extends class_base
 
 	function callback_get_answers($arr)
 	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		$ansa = $arr["obj_inst"]->meta("answers");
 
 		$ret = array();
