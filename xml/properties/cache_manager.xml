@@ -23,7 +23,7 @@
       <property>
             <name>delete</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -43,7 +43,7 @@
       <property>
             <name>del_cache</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -53,7 +53,7 @@
       <property>
             <name>regen_cache</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>

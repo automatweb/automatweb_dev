@@ -6,6 +6,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <caption>Ainult sisselogitud kasutajatele</caption>
       </property>
@@ -21,7 +22,7 @@
       <property>
             <name>icon</name>
             <type>icon</type>
-            <field>icon</field>
+            <field>meta</field>
             <group>advanced</group>
             <table>objects</table>
             <caption>Ikoon</caption>
@@ -32,6 +33,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <caption>Sorteeri nime järgi</caption>
       </property>
@@ -48,7 +50,9 @@
             <name>periodic</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>objects</table>
+            <field>periodic</field>
             <caption>Perioodiline</caption>
       </property>
       <property>
@@ -88,6 +92,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <caption>Näita ainult leadi (kasutusel Nädalas)</caption>
       </property>
@@ -127,6 +132,7 @@
             <size>20</size>
             <group>relations</group>
             <table>objects</table>
+            <field>sections</field>
             <caption>Vennastamine</caption>
       </property>
       <property>
@@ -166,6 +172,7 @@
             <method>serialize</method>
             <group>relations</group>
             <table>menu</table>
+            <field>sss</field>
             <caption>Menüüd, mille alt viimased dokumendid võetakse</caption>
       </property>
       <property>
@@ -176,6 +183,7 @@
             <method>serialize</method>
             <group>relations</group>
             <table>menu</table>
+            <field>pers</field>
             <caption>Perioodid, mille alt dokumendid võetakse</caption>
       </property>
       <property>
@@ -185,6 +193,7 @@
             <size>15</size>
             <group>relations</group>
             <table>menu</table>
+            <field>seealso</field>
             <caption>
             <![CDATA[Vali menüüd, mille all see menüü on "vaata lisaks" menüü]]>
             </caption>
@@ -212,6 +221,7 @@
             <type>textbox</type>
             <group>show</group>
             <table>menu</table>
+            <field>link</field>
             <caption>Menüü link</caption>
       </property>
       <property>
@@ -219,6 +229,7 @@
             <type>select</type>
             <group>general</group>
             <table>menu</table>
+            <field>type</field>
             <caption>Menüü tüüp</caption>
       </property>
       <property>
@@ -226,6 +237,7 @@
             <type>select</type>
             <group>advanced</group>
             <table>menu</table>
+            <field>admin_feature</field>
             <caption>Vali programm</caption>
       </property>
       <property>
@@ -244,6 +256,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <caption>Meetod viitab adminni</caption>
       </property>
       <property>
@@ -253,34 +266,43 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <caption>Meetodi väljundi kuvamisel menüüde näitamine</caption>
       </property>
       <property>
             <name>clickable</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>clickable</field>
             <caption>Klikitav</caption>
       </property>
       <property>
             <name>no_menus</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>no_menus</field>
             <caption>Ilma menüüdeta</caption>
       </property>
       <property>
             <name>target</name>
             <type>checkbox</type>
             <group>general</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>target</field>
             <caption>Uues aknas</caption>
       </property>
       <property>
             <name>mid</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>mid</field>
             <caption>Paremal</caption>
       </property>
       <property>
@@ -289,41 +311,52 @@
             <size>5</size>
             <group>advanced</group>
             <table>menu</table>
+            <field>width</field>
             <caption>Laius</caption>
       </property>
       <property>
             <name>is_shop</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>is_shop</field>
             <caption>Pood</caption>
       </property>
       <property>
             <name>shop_parallel</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>shop_parallel</field>
             <caption>Kaubad sbs (pood)</caption>
       </property>
       <property>
             <name>shop_ignoregoto</name>
             <type>checkbox</type>
             <group>advanced</group>
+            <ch_value>1</ch_value>
             <table>menu</table>
+            <field>shop_ignoregoto</field>
             <caption>Ignoreeri järgmist (pood)</caption>
       </property>
       <property>
             <name>left_pane</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>menu</table>
             <group>show</group>
+            <field>left_pane</field>
             <caption>Vasak paan</caption>
       </property>
       <property>
             <name>right_pane</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>menu</table>
             <group>show</group>
+            <field>right_pane</field>
             <caption>Parem paan</caption>
       </property>
       <property>
@@ -340,6 +373,7 @@
             <type>select</type>
             <table>menu</table>
             <group>show</group>
+            <field>tpl_edit</field>
             <caption>Template dokumendi muutmiseks</caption>
       </property>
       <property>
@@ -347,6 +381,7 @@
             <type>select</type>
             <table>menu</table>
             <group>show</group>
+            <field>tpl_view</field>
             <caption>Template dokumendi näitamiseks (pikk)</caption>
       </property>
       <property>
@@ -354,6 +389,7 @@
             <type>select</type>
             <table>menu</table>
             <group>show</group>
+            <field>tpl_lead</field>
             <caption>Template dokumendi näitamiseks (lühike)</caption>
       </property>
       <property>
@@ -369,8 +405,10 @@
       <property>
             <name>hide_noact</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>menu</table>
             <group>show</group>
+            <field>hide_noact</field>
             <caption>Peida ära, kui dokumente pole</caption>
       </property>
       <property>
@@ -379,6 +417,7 @@
             <size>3</size>
             <table>menu</table>
             <group>show</group>
+            <field>ndocs</field>
             <caption>Mitu viimast dokumenti</caption>
       </property>
       <classinfo>
@@ -387,5 +426,33 @@
             <objtable_index>id</objtable_index>
             <corefields>name,comment,alias,status,jrk</corefields>
       </classinfo>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <default>1</default>
+            </general>
+            <advanced>
+                  <caption>Spetsiaal</caption>
+            </advanced>
+            <keywords>
+                  <caption>Võtmesõnad</caption>
+            </keywords>
+            <relations>
+                  <caption>Seosed</caption>
+            </relations>
+            <presentation>
+                  <caption>Presentatsioon</caption>
+            </presentation>
+            <show>
+                  <caption>Näitamine</caption>
+            </show>
+      </groupinfo>
+      <tableinfo>
+            <menu>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </menu>
+      </tableinfo>
 </properties>
 

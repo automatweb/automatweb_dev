@@ -14,6 +14,7 @@
             <size>20</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>name</field>
             <caption>Nimetus (tmp)</caption>
       </property>
       <property>
@@ -22,6 +23,7 @@
             <size>20</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>name_en</field>
             <caption>Nimetus (i.k.)</caption>
       </property>
       <property>
@@ -30,6 +32,7 @@
             <size>20</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>name_native</field>
             <caption>Niemtus kohalikus keeles</caption>
       </property>
       <property>
@@ -38,6 +41,7 @@
             <size>30</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>languages</field>
             <caption>Keeled</caption>
       </property>
       <property>
@@ -46,6 +50,7 @@
             <size>10</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>lyhend</field>
             <caption>Lühend</caption>
       </property>
       <property>
@@ -53,6 +58,7 @@
             <type>textarea</type>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>location</field>
             <caption>Asukoha kirjeldus</caption>
       </property>
       <classinfo>

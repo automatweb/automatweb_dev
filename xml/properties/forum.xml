@@ -5,6 +5,7 @@
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <caption>Kommenteeritav</caption>
       </property>
@@ -13,6 +14,7 @@
             <type>checkbox</type>
             <field>meta</field>
             <method>serialize</method>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <caption>Hinnatav</caption>
       </property>

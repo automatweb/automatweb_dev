@@ -45,7 +45,7 @@
       <property>
             <name>newwindow</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>extlinks</table>
             <field>newwindow</field>
             <group>general</group>
@@ -54,7 +54,7 @@
       <property>
             <name>doclinkcollection</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>extlinks</table>
             <field>doclinkcollection</field>
             <group>general</group>
@@ -63,7 +63,7 @@
       <property>
             <name>use_javascript</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -73,7 +73,7 @@
       <property>
             <name>newwinwidth</name>
             <type>textbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -83,7 +83,7 @@
       <property>
             <name>newwinheight</name>
             <type>textbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -93,7 +93,7 @@
       <property>
             <name>newwintoolbar</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -103,7 +103,7 @@
       <property>
             <name>newwinlocation</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -113,7 +113,7 @@
       <property>
             <name>newwinmenu</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -123,7 +123,7 @@
       <property>
             <name>newwinscroll</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -147,7 +147,7 @@
       <property>
             <name>link_image_check_active</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <field>meta</field>
             <table>objects</table>
             <method>serialize</method>

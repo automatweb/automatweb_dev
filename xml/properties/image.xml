@@ -37,7 +37,7 @@
       <property>
             <name>newwindow</name>
             <type>checkbox</type>
-            <value>1</value>
+            <ch_value>1</ch_value>
             <table>images</table>
             <field>newwindow</field>
             <caption>Uues aknas</caption>

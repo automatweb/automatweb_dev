@@ -12,6 +12,7 @@
       <property>
             <name>all_servers</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -32,6 +33,7 @@
       <property>
             <name>all_databases</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>

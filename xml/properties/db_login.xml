@@ -49,6 +49,7 @@
       <property>
             <name>db_create_ifnexist</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>

@@ -5,6 +5,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>title</field>
             <caption>Pealkiri</caption>
       </property>
       <property>
@@ -12,6 +13,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>subtitle</field>
             <caption>Alapealkiri</caption>
       </property>
       <property>
@@ -19,6 +21,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>author</field>
             <caption>Autor</caption>
       </property>
       <property>
@@ -26,6 +29,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>photos</field>
             <caption>Fotode autor</caption>
       </property>
       <property>
@@ -33,6 +37,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>keywords</field>
             <caption>Võtmesõnad</caption>
       </property>
       <property>
@@ -40,6 +45,7 @@
             <type>textbox</type>
             <size>60</size>
             <table>documents</table>
+            <field>names</field>
             <caption>Nimed</caption>
       </property>
       <property>
@@ -49,6 +55,7 @@
             <cols>60</cols>
             <rows>10</rows>
             <table>documents</table>
+            <field>lead</field>
             <caption>Lead</caption>
       </property>
       <property>
@@ -58,78 +65,103 @@
             <cols>60</cols>
             <rows>30</rows>
             <table>documents</table>
+            <field>content</field>
             <caption>Sisu</caption>
       </property>
       <property>
             <name>is_forum</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>is_forum</field>
             <caption>Foorum</caption>
       </property>
       <property>
             <name>showlead</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>showlead</field>
             <caption>Näita leadi</caption>
       </property>
       <property>
             <name>show_modified</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>show_modified</field>
             <caption>Näita muutmise kuupäeva</caption>
       </property>
       <property>
             <name>no_right_pane</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>no_right_pane</field>
             <caption>Ilma parema paanita</caption>
       </property>
       <property>
             <name>no_left_pane</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>no_left_pane</field>
             <caption>Ilma vasaku paanita</caption>
       </property>
       <property>
             <name>title_clickable</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>title_clickable</field>
             <caption>Pealkiri klikitav</caption>
       </property>
       <property>
             <name>clear_styles</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>clear_styles</field>
             <caption>Tühista stiilid</caption>
       </property>
       <property>
             <name>link_keywords</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>link_keywords</field>
             <caption>Lingi võtmesõnad</caption>
       </property>
       <property>
             <name>esilehel</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>esilehel</field>
             <caption>Esilehel</caption>
       </property>
       <property>
             <name>frontpage_left</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>frontpage_left</field>
             <caption>Cache otsingu jaoks</caption>
       </property>
       <property>
             <name>show_title</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>show_title</field>
             <caption>Näita pealkirja</caption>
       </property>
       <property>
             <name>no_search</name>
             <type>checkbox</type>
+            <ch_value>1</ch_value>
             <table>documents</table>
+            <field>no_search</field>
             <caption>Jäta otsingust välja</caption>
       </property>
       <property>
@@ -138,6 +170,7 @@
             <cols>60</cols>
             <rows>10</rows>
             <table>documents</table>
+            <field>cite</field>
             <caption>Tsitaat</caption>
       </property>
       <property>
@@ -145,6 +178,7 @@
             <type>textbox</type>
             <size>20</size>
             <table>documents</table>
+            <field>tm</field>
             <caption>Kuupäev</caption>
       </property>
       <property>
@@ -160,6 +194,7 @@
             <name>refopt</name>
             <type>select</type>
             <table>documents</table>
+            <field>refopt</field>
             <caption>Ref tüüp</caption>
       </property>
       <property>
@@ -169,12 +204,14 @@
             <size>20</size>
             <group>vennastamine</group>
             <table>documents</table>
+            <field>sections</field>
             <caption>Sektsioonid</caption>
       </property>
       <property>
             <name>aliasmgr</name>
             <type>aliasmgr</type>
             <table>documents</table>
+            <field>aliasmgr</field>
             <caption>Aliastehaldur</caption>
       </property>
       <classinfo>

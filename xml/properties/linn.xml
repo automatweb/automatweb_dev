@@ -5,6 +5,7 @@
             <type>textarea</type>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>comment</field>
             <caption>Keeled</caption>
       </property>
       <property>
@@ -13,6 +14,7 @@
             <size>20</size>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>name</field>
             <caption>Nimetus (tmp)</caption>
       </property>
       <property>
@@ -20,6 +22,7 @@
             <type>textarea</type>
             <table>kliendibaas_riik</table>
             <group>general</group>
+            <field>location</field>
             <caption>Asukoha kirjeldus</caption>
       </property>
       <classinfo>

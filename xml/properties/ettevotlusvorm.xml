@@ -16,6 +16,7 @@
             <size>10</size>
             <table>kliendibaas_ettevotlusvorm</table>
             <group>general</group>
+            <field>vorm</field>
             <caption>vorm</caption>
       </property>
       <classinfo>

@@ -19,7 +19,7 @@
       <property>
             <name>rootauto</name>
             <type>checkbox</type>
-            <value>yes</value>
+            <ch_value>yes</ch_value>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -36,7 +36,7 @@
       <property>
             <name>newwindow</name>
             <type>checkbox</type>
-            <value>yes</value>
+            <ch_value>yes</ch_value>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>
@@ -45,7 +45,7 @@
       <property>
             <name>headline</name>
             <type>checkbox</type>
-            <value>yes</value>
+            <ch_value>yes</ch_value>
             <table>objects</table>
             <method>serialize</method>
             <field>meta</field>

@@ -51,7 +51,7 @@
       <property>
             <name>gen_and_deal</name>
             <type>checkbox</type>
-            <value>ok</value>
+            <ch_value>ok</ch_value>
             <table>objects</table>
             <group>how</group>
             <field>meta</field>
@@ -80,7 +80,7 @@
       <property>
             <name>gen_only</name>
             <type>checkbox</type>
-            <value>ok</value>
+            <ch_value>ok</ch_value>
             <table>objects</table>
             <group>how</group>
             <field>meta</field>
@@ -90,7 +90,7 @@
       <property>
             <name>deal_excisting</name>
             <type>checkbox</type>
-            <value>ok</value>
+            <ch_value>ok</ch_value>
             <table>objects</table>
             <group>how</group>
             <field>meta</field>
@@ -100,7 +100,7 @@
       <property>
             <name>save_undo</name>
             <type>checkbox</type>
-            <value>saveundo</value>
+            <ch_value>saveundo</ch_value>
             <table>objects</table>
             <group>misc</group>
             <field>meta</field>
@@ -143,7 +143,7 @@
       <property>
             <name>sub_menus</name>
             <type>checkbox</type>
-            <value>ok</value>
+            <ch_value>ok</ch_value>
             <table>objects</table>
             <group>analyse</group>
             <field>meta</field>
@@ -159,5 +159,33 @@
             <method>serialize</method>
             <caption>objektid</caption>
       </property>
+      <groupinfo>
+            <general>
+                  <caption>Üldine</caption>
+                  <default>1</default>
+            </general>
+            <advanced>
+                  <caption>Spetsiaal</caption>
+            </advanced>
+            <keywords>
+                  <caption>Võtmesõnad</caption>
+            </keywords>
+            <relations>
+                  <caption>Seosed</caption>
+            </relations>
+            <presentation>
+                  <caption>Presentatsioon</caption>
+            </presentation>
+            <show>
+                  <caption>Näitamine</caption>
+            </show>
+      </groupinfo>
+      <tableinfo>
+            <menu>
+                  <index>id</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </menu>
+      </tableinfo>
 </properties>
 

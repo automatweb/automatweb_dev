@@ -14,6 +14,7 @@
             <size>8</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <field>kood</field>
             <caption>Toote kood</caption>
       </property>
       <property>
@@ -22,6 +23,7 @@
             <size>40</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <field>toode</field>
             <caption>Toode</caption>
       </property>
       <property>
@@ -30,6 +32,7 @@
             <size>40</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <field>toode_en</field>
             <caption>Toode (i.k.)</caption>
       </property>
       <property>
@@ -37,6 +40,7 @@
             <type>textarea</type>
             <table>kliendibaas_toode</table>
             <group>general</group>
+            <field>kirjeldus</field>
             <caption>Toote kirjeldus</caption>
       </property>
       <classinfo>
