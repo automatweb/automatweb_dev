@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.18 2004/10/13 11:01:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.19 2004/10/28 09:44:23 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -202,6 +202,14 @@ class crm_meeting extends class_base
 					'tooltip' => 'Salvesta',
 					"action" => "save_participant_search_results"
 				));
+
+				$tb->add_button(array(
+					'name' => 'csv',
+					'img' => 'ftype_xls.gif',
+					'tooltip' => 'CSV',
+					"url" => aw_url_change_var("get_csv_file", 1)
+				));
+
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
