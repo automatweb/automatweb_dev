@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.8 2002/11/18 16:05:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.9 2002/11/18 16:57:21 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -750,13 +750,16 @@ class form_table extends form_base
 				if ($this->table["defs"][$cl]['el_main_types'][$dat['el']] == 'date')
 				{
 					$_sby["ev_col_".$cl] = "el_".$dat["el"];
+					$this->t->set_numeric_field("ev_col_".$cl);
+					$this->t->set_numeric_field("el_".$dat["el"]);
+					$_sord["el_".$dat["el"]] = $dat["type"];
 				}
 				else
 				{
 					$_sby["ev_col_".$cl] = "ev_".$dat["el"];
+					$_sord["ev_".$dat["el"]] = $dat["type"];
 				}
 				$_sord["ev_col_".$cl] = $dat["type"];
-				$_sord["ev_".$dat["el"]] = $dat["type"];
 			}
 			$this->t->set_default_sortby($_sby);
 			$this->t->set_default_sorder($_sord);
