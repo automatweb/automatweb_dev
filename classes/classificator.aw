@@ -1,10 +1,10 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.4 2004/02/26 13:56:39 duke Exp $
 
 /*
 
 @classinfo syslog_type=ST_CLASSIFICATOR relationmgr=yes
 
-@groupinfo general caption=Üldine
 
 @default table=objects
 @default group=general
@@ -61,6 +61,26 @@ class classificator extends class_base
 				$this->db_query("INSERT INTO classificator2menu(menu_id, class_id, clf_id) VALUES('".$_tt."','".$clid."','".$id."')");
 			}
 		}
+	}
+
+	function init_vcl_property($arr)
+	{
+		$prop = &$arr["property"];
+		$ot = get_instance(CL_OBJECT_TYPE);
+		$ff = $ot->get_obj_for_class(array(
+			"clid" => $arr["clid"],
+		));
+		$oft = new object($ff);
+		$meta = $oft->meta("classificator");
+		$ofto = new object($meta[$prop["name"]]);
+		$olx = new object_list(array(
+			"parent" => $ofto->id(),
+			"class_id" => CL_META,
+			"lang_id" => array(),
+		));
+		$prop["type"] = "select";
+		$prop["options"] = array("" => "") + $olx->names();
+		$prop["caption"] = $ofto->name();
 	}
 
 	////
