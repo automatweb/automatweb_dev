@@ -188,6 +188,11 @@ class object_treeview extends class_base
 	{
 		$ret = array();
 
+		if (count($folders) < 1)
+		{
+			$folders = array($this->first_folder);
+		}
+
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
 		if (!$ob->meta('show_folders'))
