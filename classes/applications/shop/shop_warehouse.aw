@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.21 2005/01/28 14:06:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.22 2005/01/31 13:19:57 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -623,12 +623,13 @@ class shop_warehouse extends class_base
 				)).html::hidden(array(
 					"name" => "old_ord[".$o->id()."]",
 					"value" => $o->ord()
-				))
+				)),
+				"hidden_ord" => $o->ord()
 			));
 		}
 
-				
-		$tb->set_default_sortby(array("is_menu", "name"));
+		$tb->set_numeric_field("hidden_ord");				
+		$tb->set_default_sortby(array("is_menu", "hidden_ord"));
 		$tb->sort_by();
 
 		return $tb->draw(array(
@@ -655,7 +656,6 @@ class shop_warehouse extends class_base
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => "J&auml;rjekord",
-			"sortable" => 0,
 			"align" => "center"
 		));
 
