@@ -1,12 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.4 2001/06/21 07:36:53 kristo Exp $
-if (!defined("AW_TABLE_LOADED"))
-{
-define("AW_TABLE_LOADED",1);
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.5 2001/07/03 04:24:23 duke Exp $
 global $PHP_SELF;
-// see on kolmas rewrite juba. ööööh 
-// samas .. suht koht rahuldav juba
-// klass tabelite joonistamiseks
 $js_table = "
 function xnavi_alfa(char_to_look_for) {
 	with(document.aw_table) {
@@ -17,20 +11,25 @@ function xnavi_alfa(char_to_look_for) {
 }
 ";
 
-class aw_table {
+class aw_table
+{
 	
 	// constructor
-	function aw_table($data) {
+	function aw_table($data)
+	{
 		// väljad
 		// prefix - kasutame sessioonimuutujate registreerimisel
 		$this->prefix = $data["prefix"];
 		$this->sortby = $data["sortby"];
 		$this->imgurl = $data["imgurl"];
 		$this->self   = $data["self"];
+		$this->tbgcolor = $data["tbgcolor"];
+
 		if (strpos($this->self,"?") === false)
 			$this->separator = "?";
 		else
 			$this->separator = "&";
+
 		$this->lookfor = $data[lookfor];
 
 		$this->up_arr = sprintf("<img src='%s' border='0'>",$this->imgurl . "/up.gif");
@@ -115,7 +114,7 @@ class aw_table {
 
 		// määrame sorteerimisjärjekorra
 
-		if (!$params[field]) 
+		if (!$params["field"]) 
 		{
 			// kui sorteerimisjärjekorda polnud määratud, siis
 
@@ -196,7 +195,7 @@ class aw_table {
 		if ($this->nfields[$this->sortby]) {
 			$flag = SORT_NUMERIC;
 		} else {
-			$flag = SORT_STRING;
+			$flag = SORT_REGULAR;
 		};
  
 		if ($sorder == "asc") {
@@ -331,6 +330,10 @@ class aw_table {
 				$ta["valign"] = $v["tvalign"];
 			};
 
+			if ($this->tbgcolor) {
+				$ta["bgcolor"] = $this->tbgcolor;
+			};
+
 			if ($v["nowrap"])
 				$ta["nowrap"] = "";
 				
@@ -412,21 +415,43 @@ class aw_table {
 						$cell_attribs["valign"] = $v1["valign"];
 					};
 
-					if ($v1["nowrap"])
+					if ($v1["nowrap"]) {
 						$cell_attribs["nowrap"] = "";
-						
+					};
+
+					if ($v["bgcolor"]) {
+						$cell_attribs["bgcolor"] = $v["bgcolor"];
+					};
+
+					// this one overrides the definition given in the table header
+					if ($v["style"]) {
+						$cell_attribs["classid"] = $v["style"];
+					};
+
 					$tbl .= $this->opentag($cell_attribs);
+
 					if ($v1["name"] == "rec") {
 						$val = $cnt;
 					} else {
-						$val = $v[$v1["name"]];	
+						if ($v1["strformat"])
+						{
+							$format = localparse($v1["strformat"],$v);
+							$val = sprintf($format,$v[$v1["name"]]);
+						}
+						else
+						{
+							$val = $v[$v1["name"]];	
+						};
 					};
+
 					if ($v1[type] == "time") {
 						$val = date($v1["format"],$val);
 					};
+
 					if (!$val) {
 						$val = "&nbsp;";
 					};
+
 					$tbl .= $val;
 					$tbl .= $this->closetag(array("name" => "td"));
 				};
@@ -618,14 +643,15 @@ class aw_table {
 				while(list($k,$v) = each($attrs)) {
 					$temp[$k] = $v;
 				};
+
 				$this->rowdefs[] = $temp;
 				
-				if ($attrs[searchable]) {
+				if ($attrs["searchable"]) {
 					$this->sfields[$attrs["name"]] = $attrs["caption"];
 					$this->searchable = true;
 				};
 				
-				if ($attrs[numeric]) {
+				if ($attrs["numeric"]) {
 					$this->nfields[$attrs["name"]] = 1;
 				};
 				
@@ -635,6 +661,11 @@ class aw_table {
 				// do nothing
 
 		}; // end of switch
+	}
+
+	function define_field($args = array())
+	{
+		$this->rowdefs[] = $args;
 	}
 
 	function _xml_end_element($parser,$name) 
@@ -664,5 +695,4 @@ class aw_table {
 		return $this->parse_xml_def_string($xml_data);
   }
 };
-}
 ?>
