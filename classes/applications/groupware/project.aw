@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.2 2004/06/10 11:16:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.3 2004/06/15 13:37:47 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -203,22 +203,46 @@ class project extends class_base
 		return $ev_id_list;
 	}
 
+	function get_events($arr)
+	{
+		// okey, I need a generic function that should be able to return events from the range I am
+		// interested in
+		extract($arr);
+		$parent = $arr["id"];
+		$_start = $arr["range"]["start"];
+		$_end = $arr["range"]["end"];
+		$q = "SELECT objects.oid AS id,objects.class_id,objects.brother_of,objects.name,planner.start,planner.end
+                        FROM planner
+                        LEFT JOIN objects ON (planner.id = objects.brother_of)
+                        WHERE planner.start >= '${_start}' AND
+                        (planner.end <= '${_end}' OR planner.end IS NULL) AND
+                        objects.status != 0 AND parent = ${parent}";
+		$this->db_query($q);
+		$events = array();
+		$pl = get_instance(CL_PLANNER);
+		while($row = $this->db_next())
+		{
+			$events[] = array(
+				"start" => $row["start"],
+				"name" => $row["name"],
+				"id" => $row["id"],
+				"link" => $this->mk_my_orb("change",array(
+					"id" => $row["id"],
+				),$row["class_id"],true,true),
+			);
+		};
+		return $events;
+	}
+
 	////
 	// !connects an event to a project
 	// id - id of the project
 	// event_id - id of the event 
 	function connect_event($arr)
 	{
-		//$prj_obj = new object($arr["id"]);
 		$evt_obj = new object($arr["event_id"]);
 		// create a brother under the project object
 		$evt_obj->create_brother($arr["id"]);
-		/*
-		$prj_obj->connect(array(
-			"to" => $arr["event_id"],
-			"reltype" => RELTYPE_PRJ_EVENT,
-		));
-		*/
 	}
 
 	////
