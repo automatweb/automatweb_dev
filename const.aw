@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.21 2001/06/21 03:51:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.22 2001/06/21 08:14:46 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -143,12 +143,12 @@ include("$basedir/lang/" . $LC . "/common.aw");
 $cachedir = $basedir . "/cache"; 		  // where the file cache is
 $pi = "";
 (isset($PATH_INFO) ? $pi = $PATH_INFO: "");
-(isset($QUERY_STRING) ? $pi .= $QUERY_STRING: "");
+(isset($QUERY_STRING) ? $pi .= "?".$QUERY_STRING: "");
 if ($pi) 
 {
 	 if (preg_match("/[&|=]/",$pi)) 
 	 {
-		parse_str(str_replace("/","&",$pi)); 	// expand and import PATH_INFO
+		parse_str(str_replace("?","&",str_replace("/","&",$pi))); 	// expand and import PATH_INFO
 	 } 
 	 else 
 	 {
