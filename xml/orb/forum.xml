@@ -227,6 +227,18 @@
 				<optional name="section"/>
 			</function>
 		</action>
+		
+		<action name="notify_list">
+			<function name="notify_list">
+				<required name="id" type="int"/>
+				<optional name="sortby"/>
+			</function>
+		</action>
+		
+		<action name="submit_notify_list">
+			<function name="submit_notify_list">
+			</function>
+		</action>
 
 </class>
 </orb>
