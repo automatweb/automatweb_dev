@@ -1,11 +1,38 @@
 <?php
-// $Header
+// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.6 2003/01/26 20:49:34 duke Exp $
 // iframe.aw - iframes
-class iframe extends aw_template
+
+/*
+
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
+
+	@property url type=textbox size=40 
+	@caption URL
+
+	@property width type=textbox size=4 maxlength=4
+	@caption Laius
+
+	@property height type=textbox size=4 maxlength=4
+	@caption Kõrgus
+
+	@property frameborder type=checkbox value=1 ch_value=1 
+	@caption Ümbritseda raamiga
+
+	@property scrolling type=select 
+	@caption Kerimisribad
+
+*/
+class iframe extends class_base
 {
 	function iframe() 
 	{
-		$this->init("iframe");
+		$this->init(array(
+			"tpldir" => "iframe",
+			"clid" => CL_HTML_IFRAME,
+		));
 		// defaults
 		$this->default_width = 300;
 		$this->default_height = 300;
@@ -37,128 +64,67 @@ class iframe extends aw_template
 		));
 	}
 
-	////
-	// !Used for adding of changing iframe object
-	function change($args = array())
+	function get_property($args = array())
 	{
-		// Note: we cannot really show a sample iframe here, because that would be a security risk
-		// - if that URL is located on some other site, it gets the URL of this page as referer.
-		
-		extract($args);
-
-		$id = sprintf("%d",$id);
-
-		$cprefix = "";
-
-		if ($id)
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
+			case "scrolling":
+				$data["options"] = array(
+					"yes" => IFRAME_SCROLL_YES,
+					"auto" => IFRAME_SCROLL_AUTO,
+					"no" => IFRAME_SCROLL_NO,
+				);
+				break;
 
-			$obj = $this->_get_iframe($id);
-			$prnt = $obj["parent"];
-			$caption = IFRAME_CAPTION_CHANGE;
-		}
-		else
-		{
-			// set the defaults, if we have a new object
-			$obj = array();
-			$obj["meta"]["width"] = $this->default_width;
-			$obj["meta"]["height"] = $this->default_height;
-			$caption = IFRAME_CAPTION_ADD;
-			$prnt = $parent;
+			case "width":
+				if (!$args["obj"]["oid"])
+				{
+					$data["value"] = $this->default_width;
+				};
+				break;
+
+			case "height":
+				if (!$args["obj"]["oid"])
+				{
+					$data["value"] = $this->default_height;
+				};
+				break;
 		};
-
-		//$this->mk_path($prnt,$cprefix . $caption);
-		$this->gen_path(array(
-			"oid" => $prnt,
-			"alias_to" => $alias_to,
-			"return_url" => $return_url,
-			"return_cap" => IFRAME_RETURN_URL,
-			"caption" => $caption,
-		));
-
-		$scrolling = array(
-			"yes" => IFRAME_SCROLL_YES,
-			"auto" => IFRAME_SCROLL_AUTO,
-			"no" => IFRAME_SCROLL_NO,
-		);
-		
-		$this->read_template("change.tpl");
-
-		$this->vars(array(
-			"name" => $obj["name"],
-			"comment" => $obj["comment"],
-			"width" => $obj["meta"]["width"],
-			"height" => $obj["meta"]["height"],
-			"frameborder" => checked($obj["meta"]["frameborder"]),
-			"url" => $obj["meta"]["url"],
-			"min_width" => $this->min_width,
-			"min_height" => $this->min_height,
-			"max_width" => $this->max_width,
-			"max_height" => $this->max_height,
-			"scrolling" => $this->picker($obj["meta"]["scrolling"],$scrolling),
-			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent,"return_url" => $return_url,"alias_to" => $alias_to)),
-		));
-		return $this->parse();
+		return $retval;
 	}
 
-
-	////
-	// !Submits a new or changed iframe object
-	function submit($args = array())
+	function set_property($args = array())
 	{
-		extract($args);
+                $data = &$args["prop"];
+		$form_data = &$args["form_data"];
+                $retval = PROP_OK;
+                switch($data["name"])
+                {
+			case "width":
+				if ($form_data["width"] > $this->max_width)
+				{
+					$form_data["width"] = $this->max_width;
+				};
+				if ($form_data["width"] < $this->min_width)
+				{
+					$form_data["width"] = $this->min_width;
+				};
+				break;
 
-		if ($parent)
-		{
-			$id = $this->new_object(array(
-				"name" => $name,
-				"comment" => $comment,
-				"parent" => $parent,
-				"class_id" => CL_HTML_IFRAME,
-			));
-
-			$this->_log(ST_IFRAME, SA_ADD, $name, $id);
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-				"comment" => $comment,
-			));
-			
-			$this->_log(ST_IFRAME, SA_CHANGE, $name, $id);
+			case "height":
+				if ($form_data["height"] > $this->max_height)
+				{
+					$form_data["height"] = $this->max_height;
+				};
+				if ($form_data["height"] < $this->min_height)
+				{
+					$form_data["height"] = $this->min_height;
+				};
+				break;
 		};
-
-		if ( ($height < $this->min_height) || ($height > $this->max_height) )
-		{
-			$height = $this->default_height;
-		}
-		
-		if ( ($width < $this->min_width) || ($width > $this->max_width) )
-		{
-			$width = $this->default_width;
-		};
-
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"url" => $url,
-				"width" => $width,
-				"height" => $height,
-				"frameborder" => ($frameborder) ? $frameborder : 0,
-				"scrolling" => $scrolling,
-			),
-		));
-
-		if ($alias_to)
-		{
-			$this->delete_alias($alias_to,$id);
-			$this->add_alias($alias_to,$id);
-		}
-
-		return $this->mk_my_orb("change",array("id" => $id,"return_url" => urlencode($return_url),"alias_to" => $alias_to));
+		return $retval;
 	}
 
 	////
