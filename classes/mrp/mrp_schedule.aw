@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.10 2005/02/11 16:43:46 voldemar Exp $
-// mrp_schedule.aw - Ajaplaan?
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.11 2005/02/15 11:59:09 voldemar Exp $
+// mrp_schedule.aw - Ressursiplaneerija
 /*
 
 @classinfo syslog_type=ST_MRP_SCHEDULE relationmgr=yes
@@ -353,34 +353,13 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == 7458 ) {
+/* dbg */ if ($job["oid"] == 7408 ) {
 /* dbg */ $this->mrpdbg=1;
 /* dbg */ }
 
 				$job_length = $job["pre_buffer"] + $job["length"];
 //!!! misasi on prebuffer?
 //!!! kas ressursi default puhvrid pole mitte eraldi asjad vrd. t88de puhvritega?
-
-
-
-
-// job: 7458
-// res: 1341
-
-// STAHL volt: 26 h; kinni L, P; tööaeg 01:00-17:00 (16h)
-// Planeeritud - 16.06 kl 930 - 17.06 kl 2130.
-
-// Peaks olemas sedasi:
-			// 16/06 - 09:30 - 17:00: 7,5h (jääk 18,5 h)
-            // 17/06 - 01:00 - 17:00: 16h (jääk 2,5 h)
-            // 18/06 - 01:00 - 03:30: 2,5h (jääk 0)
-
-// job: 7454 mis tuleb kohe pärast seda ja mille kestus on 2 h, kuid
-// planeeritud mitu päeva.
-
-
-
-
 
 
 				if ($project_start !== false)
@@ -412,7 +391,9 @@ class mrp_schedule extends class_base
 					//!!! teatada kinnise t88 yleplaneerimisest kui vaja.
 				}
 
-
+// /* dbg */ if ($this->mrpdbg) {
+// /* dbg */ echo "rsrv time ret: ". date (MRP_DATE_FORMAT,$scheduled_start )." | length - ". $scheduled_length/3600 ."h <br>";
+// /* dbg */ }
 /* timing */ timing ("reserve time & modify earliest start", "end");
 /* timing */ timing ("modify starttimes for next jobsin wf", "start");
 
@@ -676,6 +657,7 @@ class mrp_schedule extends class_base
 // /* dbg */ echo $resource_id."-s1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)."-L1:".$length1."-d:".$d."-s:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-s2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br><br>";
 // /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
 // /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ $dbg_time = $reserved_time;
 /* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 
@@ -691,9 +673,10 @@ class mrp_schedule extends class_base
 								$reserved_time = ($unavailable_start + $unavailable_length);
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-// /* dbg */ if ($this->mrpdbg){
+/* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-// /* dbg */ }
+/* dbg */ $dbg_time = $reserved_time;
+/* dbg */ }
 							}
 							else
 							{
@@ -714,7 +697,7 @@ class mrp_schedule extends class_base
 						{
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+// /* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." | len: " . $unavailable_length/3600 . " | resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
 // /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 // /* dbg */ }
 //!!! midagi siin teha sellega:  + $this->least_reasonable_joblength -- kuhugile juurde liita
@@ -722,6 +705,9 @@ class mrp_schedule extends class_base
 							### check if with added unavailable period length, job still fits before next job
 							if (($reserved_time + $length + $unavailable_length) > $start2)
 							{
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "cycle didnt fit: true<br>";
+// /* dbg */ }
 								next ($this->reserved_times[$resource_id][$time_range]);
 								continue 2;
 							}
@@ -732,6 +718,8 @@ class mrp_schedule extends class_base
 
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
+// /* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
+// /* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
 // /* dbg */ }
 
 							}
@@ -863,10 +851,10 @@ class mrp_schedule extends class_base
 		### find if period ends before another starts
 		while (true)
 		{
-			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, ($end + $this->least_reasonable_joblength));
+			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end);
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "_closestpercyble: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . "<br>";
+// /* dbg */ echo "_closestpercyble: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . "<br>";
 // /* dbg */ }
 
 			if (($period_start <= $end) and $period_end)
@@ -884,7 +872,7 @@ class mrp_schedule extends class_base
 		$length = ($start > $this->schedule_start) ? ($end - $start) : ($end - $this->schedule_start);
 
 // /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$length)) . "<br>";
+// /* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 // /* dbg */ }
 
 		return array ($period_start, $length);
@@ -958,13 +946,20 @@ class mrp_schedule extends class_base
 			$recurrence_end = $recurrence_start + $recurrence["length"];
 
 
-// /* dbg */ if ($this->mrpdbg){
+/* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h<br>";
 // /* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . "<br>";
 // /* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . "<br>";
-// /* dbg */ }
+// /* dbg */ echo "closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ }
 
-			if ($recurrence_end <= $time)
+			if ($recurrence_start > $time)
+			{
+				$recurrence_start = $recurrence_start - $recurrence["interval"];
+				$recurrence_end = $recurrence_end - $recurrence["interval"];
+			}
+
+				if ($recurrence_end <= $time)
 			{
 				$recurrence_start += $recurrence["interval"];
 				$recurrence_end += $recurrence["interval"];
@@ -976,8 +971,16 @@ class mrp_schedule extends class_base
 			}
 		}
 
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ foreach ($closest_recurrences as $key => $value){ echo "closestrec-s:" . date (MRP_DATE_FORMAT,$key) ."-". date (MRP_DATE_FORMAT,$value) . "<br>";}
+// /* dbg */ }
+
 		list ($recurrence_start, $recurrence_end) = $this->find_combined_range ($closest_recurrences, $time);
 		$closest_periods[$recurrence_start] = $recurrence_end;
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "combined unavail rec: [".date (MRP_DATE_FORMAT, $recurrence_start)." - ".date (MRP_DATE_FORMAT, $recurrence_end) . "]<br>";
+// /* dbg */ }
 
 		### get closest separate unavailable period
 		$first = true;

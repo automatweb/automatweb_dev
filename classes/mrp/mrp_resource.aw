@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.13 2005/02/11 16:43:45 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.14 2005/02/15 11:59:09 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -51,12 +51,12 @@
 
 @default group=grp_resource_unavailable_work
 
-	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly table_fields=name,start,end,time,length
+	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly table_fields=name,start,end,time,length,recur_type
 	@caption T&ouml;&ouml;ajad
 
 @default group=grp_resource_unavailable_una
 
-	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly table_fields=name,start,end,time,length
+	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly table_fields=name,start,end,time,length,recur_type
 	@caption Kinnised ajad
 
 	@property unavailable_weekends type=checkbox ch_value=1

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.28 2005/02/14 10:57:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.29 2005/02/15 11:59:09 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -442,7 +442,7 @@ class mrp_workspace extends class_base
 
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
-					"state" => new obj_predicate_not (MRP_STATUS_DELETED),
+					"state" => new obj_predicate_not (MRP_STATUS_DELETED),//!!! peab olema not deleted and not new
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));

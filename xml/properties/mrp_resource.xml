@@ -106,6 +106,7 @@
                   <num_2>end</num_2>
                   <num_3>time</num_3>
                   <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
             </table_fields>
             <store>no</store>
             <caption>T&amp;ouml;&amp;ouml;ajad</caption>
@@ -137,6 +138,7 @@
                   <num_2>end</num_2>
                   <num_3>time</num_3>
                   <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
             </table_fields>
             <store>no</store>
             <caption>Kinnised ajad</caption>
