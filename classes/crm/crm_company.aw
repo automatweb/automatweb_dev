@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.21 2004/06/10 13:24:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.22 2004/06/11 12:26:40 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -434,11 +434,13 @@ class crm_company extends class_base
                         'caption' => 'Ametinimetus',
                         'sortable' => '1',
                 ));
+		/*
 		$t->define_field(array(
                         'name' => 'lastaction',
                         'caption' => 'Viimane tegevus',
                         'sortable' => '1',
                 ));
+		*/
 		$t->define_field(array(
 			'name' => 'new_call',
 			'align' => 'center',
@@ -487,14 +489,14 @@ class crm_company extends class_base
 				"id" => $conn->prop("to"),
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
+				"email" => html::href(array(
+					"url" => "mailto:" . $pdat["email"],
+					"caption" => $pdat["email"],
+				)),
 			);
 
 			if ($cal_id)
 			{
-				$tdata["email"] = html::href(array(
-					"url" => "mailto:" . $pdat["email"],
-					"caption" => $pdat["email"],
-				));
 				$tdata["new_task"] = html::href(array(
 					"caption" => "Uus toimetus",
 					"url" => $pdat["add_task_url"],
@@ -644,12 +646,22 @@ class crm_company extends class_base
 			};
 			
 			$icon = icons::get_icon_url($item);
-		
-			$link = $planner->get_event_edit_link(array(
-				"cal_id" => $this->cal_id,
-				"event_id" => $item->id(),
-				"return_url" => $return_url,
-			));
+
+			if ($item->class_id() == CL_DOCUMENT)
+			{
+				$link = $this->mk_my_orb("change",array(
+					"id" => $item->id(),
+					"return_url" => $return_url,
+				),CL_DOCUMENT);
+			}
+			else
+			{
+				$link = $planner->get_event_edit_link(array(
+					"cal_id" => $this->cal_id,
+					"event_id" => $item->id(),
+					"return_url" => $return_url,
+				));
+			};
 
 			if ($item->prop("start1") > $start)
 			{
