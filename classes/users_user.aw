@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.62 2003/07/07 15:01:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.63 2003/07/08 11:58:09 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -1330,7 +1330,7 @@ class users_user extends aw_template
 		// now, get all user-bro objects that are under this groups' object
 		$u_objs = array();
 		$r_u_o = array();
-		$this->db_query("SELECT oid,brother_of FROM objects WHERE class_id = ".CL_USER." AND parent = '$gd[oid]'");
+		$this->db_query("SELECT oid,brother_of FROM objects WHERE class_id = ".CL_USER." AND parent = '$gd[oid]' AND status != 0");
 		while ($row = $this->db_next())
 		{
 			$u_objs[$row["oid"]] = $row;
