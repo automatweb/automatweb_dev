@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.361 2005/02/03 15:38:55 ahti Exp $
+// $Id: class_base.aw,v 2.362 2005/02/09 16:41:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2596,6 +2596,8 @@ class class_base extends aw_template
 		{
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
+		
+		$this->use_group = "list_aliases";
 
 		$defaults = $this->get_property_group(array(
 			"clid" => $this->clid,
@@ -2603,7 +2605,6 @@ class class_base extends aw_template
 			"cfgform_id" => $cfgform_id,
 		));
 
-		$this->use_group = "list_aliases";
 
 		$reltypes = $this->get_rel_types();
 
@@ -2614,17 +2615,7 @@ class class_base extends aw_template
 			{
 				$rel_type_classes[$key] = $this->relclasses[$key];
 			};
-		}
-		elseif (method_exists($this->inst,"callback_get_classes_for_relation"))
-		{
-			foreach ($reltypes as $key => $val)
-			{
-				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
-					"reltype" => $key,
-				));
-
-			}
-		}
+		};
 
 		if (!empty($args["cb_part"]))
 		{
@@ -2689,6 +2680,7 @@ class class_base extends aw_template
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
 
+		$this->use_group = "list_aliases";
 		$defaults = $this->get_property_group(array(
 			"clid" => $this->clid,
 			"clfile" => $this->clfile,
@@ -2696,7 +2688,6 @@ class class_base extends aw_template
 			"cfgform_id" => $cfgform_id,
 		));
 		
-		$this->use_group = "list_aliases";
 
 		$reltypes = $this->get_rel_types();
 
@@ -2707,20 +2698,7 @@ class class_base extends aw_template
 			{
 				$rel_type_classes[$key] = $this->relclasses[$key];
 			};
-		}
-		else
-		if (method_exists($this->inst,"callback_get_classes_for_relation"))
-		{
-			$clid_list = $this->inst->callback_get_classes_for_relation(array(
-				"reltype" => $reltype,
-			));
-			foreach ($reltypes as $key => $val)
-			{
-				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
-					"reltype" => $key,
-				));
-			}
-		}
+		};
 
 		$args["clid_list"] = $clid_list;
 
@@ -3696,11 +3674,7 @@ class class_base extends aw_template
 				};
 				$this->relclasses[$item["value"]] = $clidlist;
 			};
-		}
-		elseif (method_exists($this->inst,"callback_get_rel_types"))
-		{
-			$reltypes = $this->inst->callback_get_rel_types();
-		}
+		};
 
 		$reltypes[0] = "alias";
 		return $reltypes;
@@ -3924,18 +3898,6 @@ class class_base extends aw_template
 			$this->grpmap[$parent][$gkey] = $ginfo;
 		};
 
-		if (aw_global_get("uid") == "duke")
-		{
-			//print "clinf = ";
-			if ($this->classinfo["relationmgr"] == "yes")
-			{
-				$this->groupinfo["list_aliases"] = array("caption" => "Seostehaldur"); 
-			};
-			//arr($this->grpmap);
-			//arr($this->groupinfo);
-			//arr($this->classinfo);
-		};
-
 		// what the fuck do I need first_subgrp for?
 		$first_subgrp = array();
 		$groupmap = $rgroupmap = array();
@@ -3972,6 +3934,11 @@ class class_base extends aw_template
 		if (!$use_group)
 		{
 			$use_group = "general";
+		};
+
+		if (!empty($this->use_group))
+		{
+			$use_group = $this->use_group;
 		};
 
 		$this->active_groups[] = $use_group;
@@ -4332,10 +4299,12 @@ class class_base extends aw_template
 		// the rationale is this .. all first level groups are always visible
 		$visible_groups = array();
 
+		// always show first level groups
 		foreach($this->grpmap[0] as $gkey => $gval)
 		{
 			$visible_groups[] = $gkey;
 		};
+
 		
 		foreach($this->active_groups as $act_group)
 		{
@@ -4347,7 +4316,6 @@ class class_base extends aw_template
 				};
 			};
 		}
-
 
 		$rv = array();
 		foreach($visible_groups as $vgr)
