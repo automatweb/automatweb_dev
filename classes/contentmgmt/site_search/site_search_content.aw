@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.5 2004/01/13 16:24:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.6 2004/01/21 10:07:56 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -197,7 +197,7 @@ class site_search_content extends class_base
 
 		$this->vars(array(
 			"GROUP" => $s_gr,
-			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1)),
+			"reforb" => $this->mk_reforb("do_search", array("id" => $id, "no_reforb" => 1, "section" => aw_global_get("section"))),
 			"str" => (isset($str) ? $str : ""),
 		));
 
@@ -302,6 +302,7 @@ class site_search_content extends class_base
 				d.docid as docid, 
 				d.title as title, 
 				o.modified as modified,
+				d.lead as lead,
 				d.content as content
 			 FROM 
 				documents d 
@@ -326,7 +327,8 @@ class site_search_content extends class_base
 				"url" => $this->cfg["baseurl"]."/".$row["docid"],
 				"title" => $row["title"],
 				"modified" => $row["modified"],
-				"content" => $row["content"]
+				"content" => $row["content"],
+				"lead" => $row["lead"]
 			);
 		}
 		return $ret;
@@ -559,7 +561,8 @@ class site_search_content extends class_base
 			"SEL_PAGE" => ""
 		));
 		$this->vars(array(
-			"PAGESELECTOR" => $this->parse("PAGESELECTOR")
+			"PAGESELECTOR" => $this->parse("PAGESELECTOR"),
+			"count" => $cnt
 		));
 
 		$this->display_sorting_links(array(
@@ -571,7 +574,7 @@ class site_search_content extends class_base
 	function _get_content($ct)
 	{
 		return "";
-		$co = strip_tags($ct);
+		$co = trim(strip_tags($ct));
 		$co = substr($co,strpos($co,"\n"));
 		$co = trim($co);
 		$co = preg_replace("/#(.*)#/","",substr($co,0,strpos($co,"\n")));
@@ -612,7 +615,8 @@ class site_search_content extends class_base
 				"link" => $results[$i]["url"],
 				"title" => $results[$i]["title"],
 				"modified" => date("d.m.Y", $results[$i]["modified"]),
-				"content" => $this->_get_content($results[$i]["content"])
+				"content" => $this->_get_content($results[$i]["content"]),
+				"lead" => preg_replace("/#(.*)#/","",$results[$i]["lead"])
 			));
 			$res .= $this->parse("MATCH");
 		}
