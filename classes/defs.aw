@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.44 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.46 2002/07/18 10:49:41 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -29,11 +29,12 @@ if (!defined("DEFS"))
 	// !Replaces links inside text
 	function create_links($src)
 	{
-		$src .= " ";
-		$src = preg_replace("/[\s|^]((http(s?):\/\/)|(www\.))(.+?)([\s|$])/i", "<a href=\"http$3://$4$5\" target=\"_blank\">$2$4$5</a>", $src);
-		$src = preg_replace('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',"<a href=\"mailto:$1\">$1</a>",$src);
+//		$src .= " ";
+		$src = preg_replace("/(\W)((http(s?):\/\/)|(www\.))(.+?)([\s|$])/im", "$1<a href=\"http$4://$5$6\" target=\"_blank\">$3$5$6</a>$7", $src);
+//		$src = preg_replace('/([a-z0-9]((\.|_)?[a-z0-9]+)+@([a-z0-9]+(\.|-)?)+[a-z0-9]\.[a-z]{2,})/i',"<a href=\"mailto:$1\">$1</a>",$src);
 		// stripime viimase tyhiku maha ka j2lle. ex ta ju asja aeglasemaks tee a seda on kaind of vaja - terryf
-		return substr($src,0,strlen($src)-1);	
+//		return substr($src,0,strlen($src)-1);	
+		return $src;
 	}
 
 	function strip_html($src)
@@ -623,7 +624,7 @@ if (!defined("DEFS"))
 			// why? well, then you can't override server vars from the url.
 
 			// known variables - these can be modified by the user and are not to be trusted, so we get them first 
-			$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period");
+			$impvars = array("lang_id","tafkap","DEBUG","no_menus","section","class","action","fastcall","reforb","set_lang_id","admin_lang","admin_lang_lc","LC","period","oid","print","sortby","sort_order");
 			foreach($impvars as $k)
 			{
 				aw_global_set($k,$GLOBALS[$k]);
