@@ -4,6 +4,7 @@
 <field name="id" caption="ID" width="50"/>
 <field name="name" caption="Nimi" sortable="1"/>
 <field name="email" caption="Aadress" sortable="1"/>
+<field name="check" caption="X" width="50" align="center"/>
 </data>
 
 </tabledef>

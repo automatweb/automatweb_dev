@@ -2,9 +2,6 @@
 <tabledef>
 <data>
 <field name="member" caption="Kellele"/>
-<field name="lid" caption="List" talign="center" sortable="1"/>
 <field name="tm" caption="Millal" talign="center" type="time" format="H:i d-M-y" sortable="1" numeric="yea"/>
-<field name="subject" caption="subject" talign="center" sortable="1"/>
 </data>
-
 </tabledef>
