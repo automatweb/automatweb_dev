@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.7 2004/03/31 10:42:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.8 2004/04/05 13:41:19 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -28,6 +28,17 @@
 
 @property period_type type=select field=meta method=serialize
 @caption Milliseid perioode kasutada
+
+@groupinfo mail caption="E-mail"
+
+@property mail_to type=textbox field=meta method=serialize group=mail
+@caption Meiliaadressid
+
+@property mail_subj type=textbox field=meta method=serialize group=mail
+@caption Kirja teema
+
+@property mail_content type=textarea rows=25 cols=70 field=meta method=serialize group=mail
+@caption Kirja sisu
 
 @reltype SHOW_FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -435,6 +446,31 @@ class document_statistics extends class_base
 		));
 
 		return $this->make_keys($ol->ids());
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["obj_inst"]->prop("mail_to") != "")
+		{
+			$body = nl2br($arr["obj_inst"]->prop("mail_content"));
+			$body = str_replace("#sisu#", $this->show(array("id" => $arr["obj_inst"]->id())), $body);
+
+			foreach(explode(",", $arr["obj_inst"]->prop("mail_to")) as $mail_to)
+			{
+				$awm = get_instance("aw_mail");
+				$awm->create_message(array(
+					"froma" => "automatweb@am.ee",
+					"fromn" => "AutomatWeb",
+					"subject" => $arr["obj_inst"]->prop("mail_subj"),
+					"to" => $mail_to,
+					"body" => strip_tags(str_replace("<br>", "\n", $body))
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $body
+				));
+				$awm->gen_mail();
+			}
+		}
 	}
 }
 ?>
