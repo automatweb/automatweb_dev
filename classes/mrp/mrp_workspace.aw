@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.29 2005/02/15 11:59:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.30 2005/02/16 09:09:05 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -538,11 +538,14 @@ class mrp_workspace extends class_base
 	function callback_mod_retval ($arr)
 	{
 		### gantt chart start selection
-		$month = (int) $arr["request"]["chart_start_date"]["month"];
-		$day = (int) $arr["request"]["chart_start_date"]["day"];
-		$year = (int) $arr["request"]["chart_start_date"]["year"];
-		$mrp_chart_start = mktime (0, 0, 0, $month, $day, $year);
-		$arr["args"]["mrp_chart_start"] = $mrp_chart_start;
+		if ($arr["request"]["chart_start_date"])
+		{
+			$month = (int) $arr["request"]["chart_start_date"]["month"];
+			$day = (int) $arr["request"]["chart_start_date"]["day"];
+			$year = (int) $arr["request"]["chart_start_date"]["year"];
+			$mrp_chart_start = mktime (0, 0, 0, $month, $day, $year);
+			$arr["args"]["mrp_chart_start"] = $mrp_chart_start;
+		}
 
 		### gantt chart project hilight
 		if ($arr["request"]["chart_project_hilight"])
@@ -685,6 +688,8 @@ class mrp_workspace extends class_base
 		$table->define_field(array(
 			"name" => "order",
 			"caption" => "Jrk.",
+			"callback" => array (&$this, "order_field_callback"),
+			"callb_pass_row" => false,
 			"sortable" => 1
 		));
 
@@ -694,7 +699,7 @@ class mrp_workspace extends class_base
 		));
 
 		$table->set_default_sortby("order");
-		$table->set_default_sorder("desc");
+		$table->set_default_sorder("asc");
 
 		$object_list = new object_list(array(
 			"class_id" => CL_MRP_RESOURCE,
@@ -730,11 +735,7 @@ class mrp_workspace extends class_base
 					"url" => $change_url,
 					)
 				),
-				"order" => html::textbox (array (
-					"name" => "mrp_resource_order-" . $resource_id,
-					"size" => "2",
-					"value" => $resource->ord (),
-				)),
+				"order" => $resource->ord (),
 				"name" => $resource->name(),
 				"operator" => join(",",$operators),
 				"status" => $resource->prop("status"),
@@ -2569,6 +2570,16 @@ class mrp_workspace extends class_base
 			"name" => "mrp_project_priority-" . $row["project_id"],
 			"size" => "2",
 			"value" => $row["priority"],
+		));
+		return $cellcontents;
+	}
+
+	function order_field_callback ($row)
+	{
+		$cellcontents = 	html::textbox (array (
+			"name" => "mrp_resource_order-" . $row["resource_id"],
+			"size" => "2",
+			"value" => $row["order"],
 		));
 		return $cellcontents;
 	}
