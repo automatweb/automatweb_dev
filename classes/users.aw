@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.113 2004/03/23 12:48:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.114 2004/03/23 15:25:05 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -275,12 +275,12 @@ class users extends users_user
 			aw_session_set("session_filled_forms",array());
 
 			$this->_log(ST_USERS, SA_ADD,  $add_state["uid"]);
-			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after_join;
+			return $this->cfg["baseurl"]."/".$after_join;
 		}
 		else
 		{
 			$add_state["level"] = 0;
-			return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=$section";
+			return $this->cfg["baseurl"]."/".$section;
 		}
 
 		return $this->mk_orb("add_user", array("level" => 1, "join_grp" => $join_grp));
