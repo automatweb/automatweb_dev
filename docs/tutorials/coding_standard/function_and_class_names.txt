@@ -1,6 +1,6 @@
 Function and class names
 
-Function and class names must not be capitalized and words should be saparated with underscores. Words should bot be abbreviated, but completely spelled out, unless that makes the name rediculously long. 
+Function and class names must not be capitalized and words should be saparated with underscores. Words should not be abbreviated, but completely spelled out, unless that makes the name rediculously long. 
 
 examples:
 
