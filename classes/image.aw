@@ -239,11 +239,11 @@ class image extends aw_template
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s",$idata["link"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s",$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' target='_blank'><img src='%s' border='0' alt='$alt' title='$alt'></a>",$idata["link"],$idata["url"]);
+						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a>",$idata["link"],$vars["target"],$idata["url"]);
 					}
 				};
 			}
