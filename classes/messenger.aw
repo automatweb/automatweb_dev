@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.46 2001/06/01 05:58:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.47 2001/06/01 06:15:57 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -721,11 +721,11 @@ class messenger extends menuedit_light
 		$idlist = array();
 		$idlist["default"] = "Default (liitumisvormist)";
 
-		if (is_array($this->msgconf["msg_identities"]))
+		if (is_array($this->msgconf["msg_pop3servers"]))
 		{
-			foreach($this->msgconf["msg_identities"] as $idkey => $idata)
+			foreach($this->msgconf["msg_pop3servers"] as $idkey => $idata)
 			{
-				$idlist[$idkey] = $idata["name"] . " " . $idata["surname"];
+				$idlist[$idkey] = $idata["name"];
 			};
 			$idlist = $this->picker($defident,$idlist);
 		};
@@ -896,8 +896,8 @@ class messenger extends menuedit_light
 			// leiame kasutatud identiteedi
 			if ($identity != "default")
 			{
-				$froma = $this->msgconf["msg_identities"][$args["identity"]]["email"];
-				$fromn = $this->msgconf["msg_identities"][$args["identity"]]["name"] . " " . $this->msgconf["msg_identities"][$args["identity"]]["surname"];
+				$froma = $this->msgconf["msg_pop3servers"][$args["identity"]]["address"];
+				$fromn = $this->msgconf["msg_pop3servers"][$args["identity"]]["name1"] . " " . $this->msgconf["msg_pop3servers"][$args["identity"]]["surname"];
 			}
 			else
 			{
@@ -1225,7 +1225,7 @@ class messenger extends menuedit_light
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("search"),
 				));
-		//$folder_list = $this->_folder_list();
+		$folder_list = $this->_folder_list();
 		if (!is_array($folders))
 		{
 			$folders = array($folders => $folders);
@@ -1239,8 +1239,8 @@ class messenger extends menuedit_light
 		$c = "";
 		foreach ($results as $id => $contents)
 		{
-			$contents["tm"] = $this->time2date($row["tm"],3);
-			$contents["from"] = $contents["modifiedby"];
+			$contents["tm"] = $this->time2date($contents["tm"],3);
+			$contents["from"] = $contents["mfrom"];
 			$contents["folder"] = $folder_list[$contents["parent"]];
 			$contents["fid"] = $contents["parent"];
 			$contents["mid"] = $contents["oid"];
