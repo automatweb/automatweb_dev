@@ -261,6 +261,12 @@ class dronline extends class_base
 			{
 				return $q;
 			}
+
+			$numres = $this->db_fetch_field("SELECT count(*) AS cnt FROM syslog ".$whc." ORDER BY tm DESC ".$this->get_limit_clause($id), "cnt");
+			if ($numres > 1000)
+			{
+				return "Tulemus on liiga suur! Maksimaalne kuvatav ridade arv on 1000, kuid tulemises on $numres rida!";
+			}
 		}
 
 		$this->db_query($q);
