@@ -42,25 +42,21 @@ class role extends class_base
 
 	function get_acl_mask($role)
 	{
-		$o = $this->get_object($role);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $o["metadata"]
-		));
-		return $meta["acls"];
+		$o = obj($role);
+		return $o->meta("acls");
 	}
 
 	function get_acl_values($role)
 	{
-		$o = $this->get_object($role);
-		$meta = $this->get_object_metadata(array(
-			"metadata" => $o["metadata"]
-		));
+		$o = obj($role);
 
 		$ret = array();
-		$acls = new aw_array($meta["acls"]);
+		$acls = new aw_array($o->meta("acls"));
+		$acls_set = $o->meta("acls_set");
+
 		foreach($acls->get() as $aclname)
 		{
-			$ret[$aclname] = ($meta["acls_set"][$aclname] == $aclname ? aw_ini_get("acl.allowed") : aw_ini_get("acl.denied"));
+			$ret[$aclname] = ($acls_set[$aclname] == $aclname ? aw_ini_get("acl.allowed") : aw_ini_get("acl.denied"));
 		}
 		return $ret;
 	}
@@ -69,6 +65,9 @@ class role extends class_base
 	{
 		$acls = array();
 		$a = $this->acl_list_acls();
+
+		$m_a = $arr["obj_inst"]->meta("acls");
+
 		foreach($a as $a_bp => $a_name)
 		{
 			$rt = "acl_".$a_bp;
@@ -79,7 +78,7 @@ class role extends class_base
 				'ch_value' => 1,
 				'store' => 'no',
 				'group' => 'objects',
-				'value' => $arr["obj"]["meta"]["acls"][$a_name] == $a_name
+				'value' => $m_a[$a_name] == $a_name
 			);
 		}
 		return $acls;
@@ -89,9 +88,13 @@ class role extends class_base
 	{
 		$acls = array();
 		$a = $this->acl_list_acls();
+
+		$a_s = $arr["obj_inst"]->meta("acls");
+		$a_s_s = $arr["obj_inst"]->meta("acls_set");
+
 		foreach($a as $a_bp => $a_name)
 		{
-			if ($arr["obj"]["meta"]["acls"][$a_name] == $a_name)
+			if ($a_s[$a_name] == $a_name)
 			{
 				$rt = "acl_set_".$a_bp;
 				$acls[$rt] = array(
@@ -101,7 +104,7 @@ class role extends class_base
 					'ch_value' => 1,
 					'store' => 'no',
 					'group' => 'objects',
-					'value' => $arr["obj"]["meta"]["acls_set"][$a_name] == $a_name
+					'value' => $a_s_s[$a_name] == $a_name
 				);
 			}
 		}
@@ -114,27 +117,30 @@ class role extends class_base
 		switch($prop['name'])
 		{
 			case 'changes':
-				$arr["metadata"]["acls"] = array();
+				$acls = array();
+
 				$a = $this->acl_list_acls();
 				foreach($a as $a_bp => $a_name)
 				{
 					if ($arr["form_data"]["acl_".$a_bp] == 1)
 					{
-						$arr["metadata"]["acls"][$a_name] = $a_name;
+						$acls[$a_name] = $a_name;
 					}
 				}
+				$arr["obj_inst"]->set_meta("acls",$acls);
 				break;
 
 			case 'acls':
-				$arr["metadata"]["acls_set"] = array();
+				$acls_set = array();
 				$a = $this->acl_list_acls();
 				foreach($a as $a_bp => $a_name)
 				{
 					if ($arr["form_data"]["acl_set_".$a_bp] == 1)
 					{
-						$arr["metadata"]["acls_set"][$a_name] = $a_name;
+						$acls_set[$a_name] = $a_name;
 					}
 				}
+				$arr["obj_inst"]->set_meta("acls_set",$acls_set);
 				break;
 
 			case 'save_acl':
