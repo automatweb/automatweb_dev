@@ -1,54 +1,87 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/cookiemonster.aw,v 2.4 2004/02/11 21:34:34 duke Exp $
 // a class to aid in debugging - you can set cookies in your browser with this
 
-class cookiemonster extends aw_template
+/*
+@default group=general
+@default form=monster
+
+@property cookietable type=table
+@caption Olemasolevad cookied
+
+@property new_name type=textbox 
+@caption Uue cookie nimi
+
+@property new_value type=textbox 
+@caption Uue cookie väärtus
+
+@forminfo monster onsubmit=munch
+
+*/
+
+class cookiemonster extends class_base
 {
 	function cookiemonster()
 	{
-		$this->init("cookiemonster");
+		$this->init();
 	}
 
 	/** generates a list of cookies in the user's browser 
 		
 		@attrib name=list params=name default="1"
 		
-		
-		@returns
-		
-		
-		@comment
-
 	**/
 	function gen_list($arr)
 	{
-		extract($arr);
-		$this->read_template("list.tpl");
-		global $HTTP_COOKIE_VARS;
-		foreach($HTTP_COOKIE_VARS as $k => $v)
+		$arr["form"] = "monster";
+		return $this->change($arr);
+	}
+
+	function get_property($arr)
+	{
+		$data = &$arr["prop"];
+		switch($data["name"])
 		{
-			$this->vars(array(
-				"name" => $k,
-				"value" => $v
-			));
-			$l.=$this->parse("LINE");
-		}
-		$this->vars(array(
-			"LINE" => $l,
-			"reforb" => $this->mk_reforb("munch")
-		));
-		return $this->parse();
+			case "cookietable":
+				$t = &$data["vcl_inst"];
+
+				$t->define_field(array(
+					"name" => "name",
+					"caption" => "Nimi",
+					"sortable" => 1,
+				));
+
+				$t->define_field(array(
+					"name" => "value",
+					"caption" => "Väärtus",
+					"sortable" => 1,
+				));
+
+				$t->define_chooser(array(
+					"name" => "del",
+					"field" => "name",
+				));
+
+				foreach($_COOKIE as $k => $v)
+				{
+					$t->define_data(array(
+						"name" => $k,
+						"value" => html::textbox(array(
+							"name" => "val[$k]",
+							"value" => $v,
+						)),
+					));
+
+
+				};
+				break;
+		};
+		return PROP_OK;
 	}
 
 	/** saves changes 
 		
-		@attrib name=munch params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
+		@attrib name=munch params=name 
 
 	**/
 	function munch($arr)
@@ -60,10 +93,7 @@ class cookiemonster extends aw_template
 		{
 			foreach($del as $nm => $ddd)
 			{
-				if ($ddd == 1)
-				{
-					setcookie($nm,"",time(),"/",$domain,0);
-				}
+				setcookie($nm,"",time(),"/",$domain,0);
 			}
 		}
 
@@ -71,7 +101,7 @@ class cookiemonster extends aw_template
 		{
 			foreach($val as $nm => $vl)
 			{
-				if ($GLOBALS["HTTP_COOKIE_VARS"][$nm] != $vl)
+				if ($_COOKIE[$nm] != $vl)
 				{
 					setcookie($nm,$vl,time()+3600*24*100,"/",$domain,0);
 				}
