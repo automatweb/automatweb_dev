@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.1 2004/08/25 08:56:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.2 2004/08/25 14:43:50 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -7,35 +7,90 @@
 
 @default table=objects
 @default group=general
+
+@property start1 type=datetime_select field=start table=planner
+@caption Algab
+
 @default field=meta
 @default method=serialize
 
-@property utextbox1 type=textbox
-@caption Utext1
+@property utextbox1 type=textbox 
+@caption
 
 @property utextbox2 type=textbox
-@caption Utext2
+@caption 
 
 @property utextbox3 type=textbox
-@caption Utext3
+@caption 
 
 @property utextbox4 type=textbox
-@caption Utext4
+@caption 
 
 @property utextbox5 type=textbox
-@caption Utext5
+@caption 
 
 @property utextbox6 type=textbox
-@caption Utext6
+@caption 
 
 @property utextbox7 type=textbox
-@caption Utext7
+@caption 
 
 @property utextbox8 type=textbox
-@caption Utext8
+@caption 
+
+@property utextbox9 type=textbox
+@caption 
+
+@property utextbox10 type=textbox
+@caption 
 
 @property utextarea1 type=textarea
-@caption Utextarea1
+@caption 
+
+@property utextarea2 type=textarea
+@caption 
+
+@property utextarea3 type=textarea
+@caption 
+
+@property utextarea4 type=textarea
+@caption 
+
+@property utextarea5 type=textarea
+@caption 
+
+@property utextvar1 type=classificator
+@caption 
+
+@property utextvar2 type=classificator
+@caption 
+
+@property utextvar3 type=classificator
+@caption 
+
+@property utextvar4 type=classificator
+@caption 
+
+@property utextvar5 type=classificator
+@caption 
+
+@property utextvar6 type=classificator
+@caption 
+
+@property utextvar7 type=classificator
+@caption 
+
+@property utextvar8 type=classificator
+@caption 
+
+@property utextvar9 type=classificator
+@caption 
+
+@property utextvar10 type=classificator
+@caption 
+
+@tableinfo planner index=id master_table=objects master_index=brother_of
+@classinfo no_status=1 no_comment=1
 
 */
 
