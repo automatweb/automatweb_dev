@@ -1,5 +1,5 @@
 <?php
-// $Id: treeview.aw,v 1.8 2003/03/06 14:07:53 duke Exp $
+// $Id: treeview.aw,v 1.9 2003/03/13 14:29:53 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -113,9 +113,9 @@ class treeview extends class_base
 			"root" => $root,
 			"linktarget" => isset($args["linktarget"]) ? $args["linktarget"] : "",
 			"shownode" => isset($args["shownode"]) ? $args["shownode"] : "",
-			"rootname" => ($obj["meta"]["rootcaption"]) ? $obj["meta"]["rootcaption"] : $rootobj["name"],
+			"rootname" => isset($obj["meta"]["rootcaption"]) ? $obj["meta"]["rootcaption"] : $rootobj["name"],
 			"rooturl" => $this->do_item_link($rootobj),
-			"icon_root" => ($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
+			"icon_root" => isset($obj["meta"]["icon_root"])? $this->mk_my_orb("show",array("id" => $obj["meta"]["icon_root"]),"icons") : "/automatweb/images/aw_ikoon.gif",
                 ));
 
 		$retval = $this->parse();

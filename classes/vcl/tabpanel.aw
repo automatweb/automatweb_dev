@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.5 2003/03/05 17:03:51 duke Exp $
+// $Id: tabpanel.aw,v 1.6 2003/03/13 14:29:53 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -8,7 +8,8 @@ class tabpanel extends aw_template
 	function tabpanel($args = array())
 	{
 		$this->init("tabpanel");
-		$this->read_template("tabs.tpl");
+		$tpl = isset($args["tpl"]) ? $args["tpl"] . ".tpl" : "tabs.tpl";
+		$this->read_template($tpl);
 		$this->tabs = array();
 		$this->tabcount = array();
 		$this->hide_one_tab = 0;
@@ -43,7 +44,8 @@ class tabpanel extends aw_template
 		{
 			$level = 1;
 		};
-		// now link? so let's show the tab as disabled
+
+		// no link? so let's show the tab as disabled
 		if (isset($args["link"]) && strlen($args["link"]) == 0)
 		{
 			$subtpl = "disabled_tab";
@@ -52,7 +54,21 @@ class tabpanel extends aw_template
 			"caption" => $args["caption"],
 			"link" => $args["link"],
 		));
-		$this->tabcount[$level]++;
+		if (isset($this->tabcount[$level]))
+		{
+			$this->tabcount[$level]++;
+		}
+		else
+		{
+			$this->tabcount[$level] = 1;
+		};
+
+		// initialize properly
+		if (empty($this->tabs[$level]))
+		{
+			$this->tabs[$level] = "";
+		};
+		
 		$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
 	}
 
@@ -75,8 +91,8 @@ class tabpanel extends aw_template
 			};
 		};
 
-		$toolbar = $args["toolbar"];
-		$toolbar2 = $args["toolbar2"];
+		$toolbar = isset($args["toolbar"]) ? $args["toolbar"] : "";
+		$toolbar2 = isset($args["toolbar2"]) ? $args["toolbar2"] : "";
 
 		$this->vars(array(
 			//"tabs" => $tabs,
