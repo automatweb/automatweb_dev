@@ -152,8 +152,9 @@
             <name>password</name>
             <type>hidden</type>
             <table>users</table>
-            <group>chpwd</group>
             <field>password</field>
+            <store>no</store>
+            <group>chpwd</group>
       </property>
       <property>
             <name>gen_pwd</name>
@@ -182,15 +183,6 @@
             <group>chpwd</group>
             <field>resend_welcome</field>
             <caption>Saada tervitusmeil uuesti</caption>
-      </property>
-      <property>
-            <name>pwd_status</name>
-            <store>no</store>
-            <type>text</type>
-            <table>users</table>
-            <group>chpwd</group>
-            <field>pwd_status</field>
-            <caption></caption>
       </property>
       <property>
             <name>roles</name>
