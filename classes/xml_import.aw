@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.26 2004/03/02 15:47:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.27 2004/03/09 11:50:57 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -48,11 +48,8 @@ class xml_import extends class_base
                         case "run_import":
                                 classload("html");
                                 $id = $args["obj_inst"]->id();
-                                if ($id)
-                                {
-                                        $url = $this->mk_my_orb("invoke",array("id" => $id,"xml_import"),0,1);
-                                        $data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
-                                };
+				$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
+				$data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
                                 break;
                                                                                                                             
                                                                                                                             
@@ -60,56 +57,9 @@ class xml_import extends class_base
                 };
         }
 
-	function set_property($args = array())
-        {
-		$retval = PROP_OK;
-                if ($args["prop"]["name"] == "run_import")
-                {
-                        $retval = PROP_IGNORE;
-                };
-                return $retval;
-        }
-
-
-
-	/** Wrapper to display the repeater editing interface inside this classes frame 
-		
-		@attrib name=repeaters params=name default="0"
-		
-		@param id required type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function repeaters($args = array())
-	{
-		extract($args);
-		classload("cal_event");
-                $ce = new cal_event();
-                $html = $ce->repeaters(array(
-                        "id" => $id,
-                        "cycle" => $cycle,
-			"hide_menubar" => true,
-                ));
-		$this->read_template("repeaters.tpl");
-		$this->vars(array(
-			"ch_link" => $this->mk_my_orb("change",array("id" => $id)),
-			"repeaters" => $html,
-		));
-		$obj = new object($id);
-		$this->mk_path($obj->parent(),"Muuda XML import objekti");
-		return $this->parse();
-
-
-
-	}
-
 	/**  
 		
-		@attrib name=invoke params=name default="0"
+		@attrib name=invoke params=name 
 		
 		@param id required
 		
@@ -162,7 +112,7 @@ class xml_import extends class_base
 
 	/**  
 		
-		@attrib name=import_tudengid params=name nologin="1" default="0"
+		@attrib name=import_tudengid params=name nologin="1" 
 		
 		
 		@returns
@@ -173,7 +123,6 @@ class xml_import extends class_base
 	**/
 	function import_tudengid($args = array())
 	{
-		//o$contents = join("",file("/home/duke/tudengid.xml"));
 		$contents = $args["source"];
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
@@ -223,7 +172,7 @@ class xml_import extends class_base
 	
 	/**  
 		
-		@attrib name=import_struktuurid params=name nologin="1" default="0"
+		@attrib name=import_struktuurid params=name nologin="1" 
 		
 		
 		@returns
@@ -235,7 +184,6 @@ class xml_import extends class_base
 	function import_struktuurid($args = array())
 	{
 		$contents = $args["source"];
-		//$contents = join("",file("/home/duke/struktuurid.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		if (xml_get_error_code($parser))
@@ -377,7 +325,7 @@ class xml_import extends class_base
 	
 	/**  
 		
-		@attrib name=import_tootajad params=name nologin="1" default="0"
+		@attrib name=import_tootajad params=name nologin="1"
 		
 		
 		@returns
@@ -389,7 +337,6 @@ class xml_import extends class_base
 	function import_tootajad($args = array())
 	{
 		$contents = $args["source"];
-		//$contents = join("",file("/home/duke/tootajad.xml"));
 		$parser = xml_parser_create();
 		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
 		// xml data arraysse
