@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.41 2003/11/05 13:09:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.42 2003/12/11 12:26:08 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -226,7 +226,12 @@ class html extends aw_template
 	function fileupload($args = array())
 	{
 		extract($args);
-		return "$value <input type='file' id='$name' name='$name' />\n";
+		$rv = "";
+		if (!empty($value))
+		{
+			$rv = $value . "<br />";
+		};
+		return $rv . "<input type='file' id='$name' name='$name' />\n";
 	}
 
 	////
