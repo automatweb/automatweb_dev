@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.10 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.11 2001/06/28 20:00:18 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -21,17 +21,18 @@ class db_objects extends aw_template
 		$this->tpl_init("objects");
 		load_vcl("html_frameset");
 		$retval = "";
+		global $baseurl;
 		switch($type)
 		{
 			case "top":
-				$retval .= "<a href='#'>Objektid</a>&nbsp; &nbsp;<a href='#'>Kalender</a>";
+				$retval .= "<a href='$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'>Objektid</a>&nbsp; &nbsp;<a href='#'>Kalender</a>";
+
 				break;
 
 			case "middle":
-				global $baseurl;
 				$frames = array(
 					"mleft" => "$baseurl/?class=objects&action=browser&type=content&msgid=$msgid",
-					"mright" => "$baseurl/?class=objects&action=browser&type=search",
+					"mright" => "$baseurl/?class=objects&action=browser&type=search&msgid=$msgid",
 				);
 				
 				$frameset = new html_frameset(array(
@@ -73,7 +74,7 @@ class db_objects extends aw_template
 							"stop" => $udata["home_folder"],
 						));
 
-				$fullpath = map2("<a href='?class=objects&action=browser&type=content&msgid=$msgid&parent=%s'>%s</a>",$chain);
+				$fullpath = map2("<a href='$baseurl/?class=objects&action=browser&type=content&msgid=$msgid&parent=%s'>%s</a>",$chain);
 			        $fullpath = join(" &gt; " ,array_reverse($fullpath));
 
 				$this->vars(array(
@@ -86,6 +87,11 @@ class db_objects extends aw_template
 
 			case "search":
 				$this->read_template("search.tpl");
+				$flist = $this->gen_folders();
+				$this->vars(array(
+						"folders" => $this->multiple_option_list($flist,$flist),
+						"reforb" => $this->mk_reforb("hf_search",array("msgid" => $msgid)),
+						));
 				$retval = $this->parse();
 				break;
 
@@ -131,6 +137,66 @@ class db_objects extends aw_template
 		print "<script language='javascript'>parent.close();</script>";
 		exit;
 	}
+
+	function hf_search($args = array())
+	{
+		$this->tpl_init("objects");
+		extract($args);
+		if (!is_array($folders))
+		{
+			$retval = $this->mk_site_orb(array("action" => "browser","type" => "search"));
+			return $retval;
+		};
+		$flist = $this->gen_folders(array("sq" => 0));
+		$this->read_template("searchresults.tpl");
+		$maps = sprintf("(%s)",join(",",$folders));
+		$cid = sprintf("(%s)",join(",",array(CL_FILE)));
+		$q = "SELECT * FROM objects WHERE parent IN $maps AND name LIKE '%$search%' AND class_id IN $cid ORDER BY parent";
+		$this->db_query($q);
+		$lastparent = -1;
+		$c = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			if ($lastparent != $row["parent"])
+			{
+				$this->vars(array("name" => $flist[$row["parent"]]));
+				$c .= $this->parse("line");
+			};
+
+			$lastparent = $row["parent"];
+			$this->vars(array(
+					"name" => $row["name"],
+					"oid" => $row["oid"],
+					"icon" => get_icon_url($row["class_id"],$row["name"]),
+			));
+			$c .= $this->parse("object");
+		};
+		$this->vars(array(
+				"line" => $c,
+				"reforb" => $this->mk_reforb("submit_hd",array("msgid" => $msgid)),
+		));
+		$retval = $this->parse();
+		print $retval;
+		exit;
+	}
+
+	function gen_folders($args = array())
+	{
+		extract($args);
+		classload("menuedit_light");
+		$mnl = new menuedit_light();
+		global $udata;
+		$flist = $mnl->gen_rec_list(array(
+				"start_from" => $udata["home_folder"],
+				"add_start_from" => true,
+				"sq" => $sq,
+			));
+		return $flist;
+	}
+
+
 
 	function search_objs($docid)
 	{

@@ -19,7 +19,7 @@ class menuedit_light extends aw_template {
 		$this->type = $args["type"];
 		//
 		$this->field = ($args["field"]) ? $args["field"] : "oid";
-		$this->sq = ($args["sq"]) ? $args["sq"] : 3;
+		$this->sq = (isset($args["sq"])) ? $args["sq"] : 3;
 		$this->tpl = ($args["tpl"]) ? $args["tpl"] : false;
 		$this->spacer = ($args["spacer"]) ? $args["spacer"] : "&nbsp;";
 		$this->threadby = ($args["threadby"]) ? $args["threadby"] : "parent";
