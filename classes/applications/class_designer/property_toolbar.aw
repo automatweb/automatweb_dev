@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.3 2005/03/07 16:00:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.4 2005/03/11 16:31:34 duke Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -13,7 +13,7 @@
 
 @default group=buttons
 
-	@property buttons type=releditor reltype=RELTYPE_BUTTON props=name,b_type no_caption=1 mode=manager
+@property buttons type=releditor reltype=RELTYPE_BUTTON table_fields=name,b_type props=name,b_type no_caption=1 mode=manager
 
 @groupinfo buttons caption="Nupud"
 
