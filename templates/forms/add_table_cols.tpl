@@ -126,7 +126,9 @@
 											Otsing elementi<Br>
 											<select name="cols[{VAR:col_id}][search_el]" class="formselect"><option value=''>{VAR:search_el}</select> <Br>
 											Otsingu v&auml;&auml;rtus elemendist:<Br>
-											<select name="cols[{VAR:col_id}][search_map]" class="formselect"><option value=''>{VAR:search_map}</select>
+											<select name="cols[{VAR:col_id}][search_map]" class="formselect"><option value=''>{VAR:search_map}</select><br>
+											Kas jagada otsing s&otilde;nadeks: <input type='checkbox' name='cols[{VAR:col_id}][split_col_search]' value='1' {VAR:split_col_search}><br>
+											S&otilde;nade eraldaja: <input type='text' name='cols[{VAR:col_id}][split_col_search_splitter]' value='{VAR:split_col_search_splitter}' class='formtext' size="2">
 											<!-- END SUB: HAS_FTABLE_ALIASES -->
 
 											<!-- END SUB: SEL_SETTINGS -->

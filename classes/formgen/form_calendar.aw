@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.22 2003/02/08 01:41:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.23 2003/02/18 21:49:57 kristo Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -595,6 +595,7 @@ class form_calendar extends form_base
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' AND relation IN ($rel) AND txtid = '$txtid'
 				AND start <= '$_end' AND end >= '$_start'";
+
 
 		$this->db_query($q);
 		$row2 = $this->db_next();

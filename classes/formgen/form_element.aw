@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.30 2003/02/18 14:06:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.31 2003/02/18 21:49:57 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -2091,25 +2091,7 @@ class form_element extends aw_template
 				break;
 
 			case "multiple":
-				if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
-				{
-					$opts = array(
-						"rel_form" => $this->arr["lb_data_from_form"],
-						"rel_element" => $this->arr["lb_data_from_el"],
-						"sort_by_alpha" => $this->arr["sort_by_alpha"],
-						"rel_unique" => $this->arr["rel_unique"],
-						"ret_ids" => true,
-					);
-					$this->arr["multiple_items"] = array();
-					$this->arr["multiple_lang_items"] = array();
-					list($cnt,$vals) = $this->form->get_entries_for_element($opts);
-					foreach($vals as $e_id => $e_val)
-					{
-						$this->arr["multiple_items"][$e_id] = $e_val;
-						$this->arr["multiple_lang_items"][$lang_id][$e_id] = $e_val;
-					}
-					$this->arr["multiple_count"] = count($vals);;
-				}
+				$this->_do_init_multiple_items();
 				$html.="<select $disabled $stat_check NAME='".$element_name."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
@@ -2865,6 +2847,7 @@ class form_element extends aw_template
 				break;
 
 			case "multiple":
+				$this->_do_init_multiple_items();
 				$ec=explode(",",$this->entry);
 				$_t = array();
 				foreach($ec as $v)
@@ -3486,6 +3469,29 @@ class form_element extends aw_template
 			default:
 				$this->entry = $val;
 				break;
+		}
+	}
+
+	function _do_init_multiple_items()
+	{
+		if ($this->arr["lb_data_from_form"] && $this->arr["lb_data_from_el"])
+		{
+			$opts = array(
+				"rel_form" => $this->arr["lb_data_from_form"],
+				"rel_element" => $this->arr["lb_data_from_el"],
+				"sort_by_alpha" => $this->arr["sort_by_alpha"],
+				"rel_unique" => $this->arr["rel_unique"],
+				"ret_ids" => true,
+			);
+			$this->arr["multiple_items"] = array();
+			$this->arr["multiple_lang_items"] = array();
+			list($cnt,$vals) = $this->form->get_entries_for_element($opts);
+			foreach($vals as $e_id => $e_val)
+			{
+				$this->arr["multiple_items"][$e_id] = $e_val;
+				$this->arr["multiple_lang_items"][$lang_id][$e_id] = $e_val;
+			}
+			$this->arr["multiple_count"] = count($vals);;
 		}
 	}
 }

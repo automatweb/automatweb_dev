@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.37 2003/02/11 15:38:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.38 2003/02/18 21:49:57 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2046,7 +2046,9 @@ class form_table extends form_base
 			$this->vars(array(
 				"SEL_EL" => $l,
 				"search_map" => $this->picker($this->table["defs"][$col]["search_map"], $elns),
-				"search_el" => $this->picker($this->table["defs"][$col]["search_el"], $elns)
+				"search_el" => $this->picker($this->table["defs"][$col]["search_el"], $elns),
+				"split_col_search" => checked($this->table["defs"][$col]["split_col_search"]),
+				"split_col_search_splitter" => $this->table["defs"][$col]["split_col_search_splitter"]
 			));
 			$has_ftable_aliases = false;
 			if (is_array($this->table["defs"][$col]["alias"]))
@@ -2637,6 +2639,7 @@ class form_table extends form_base
 
 		$url .= "&restrict_search_el[]=".$cc["search_el"];
 		$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
+//		echo "sm = ",$row_data["ev_".$cc["search_map"]]," <br>";
 		if ($this->table["has_yah"])
 		{
 			$url .= "&restrict_search_yah[]=".urlencode($textvalue);
@@ -2747,7 +2750,22 @@ class form_table extends form_base
 					// don't make the link if the cell content is itself a link
 					if (strpos($str, "<a href=") === false)
 					{
-						$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
+						if ($cc["split_col_search"] == 1)
+						{
+							$sparts = explode($cc["split_col_search_splitter"], $str);
+							$rparts = array();
+							foreach($sparts as $spart)
+							{
+								$_tdat = $dat;
+								$_tdat["ev_".$cc["search_map"]] = $spart;
+								$rparts[] = $this->get_ftable_alias_url($spart, $alias_data["target"], $_tdat, $col, $cc, $form_id, $spart);
+							}
+							$str = join($cc["split_col_search_splitter"],$rparts);
+						}
+						else
+						{
+							$str = $this->get_ftable_alias_url($str, $alias_data["target"], $dat, $col, $cc, $form_id, $textvalue);
+						}
 					}
 					else
 					{
