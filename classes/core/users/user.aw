@@ -629,7 +629,9 @@ class user extends class_base
 		$dat = $this->acl_get_acls_for_groups(array("grps" => array_keys($grps)));
 
 		$g = get_instance("core/users/group");
-		
+	
+		$ml = $this->get_menu_list();		
+
 		$t =& $g->_init_obj_table(array(
 			"exclude" => array("grp_name")
 		));
@@ -643,6 +645,7 @@ class user extends class_base
 			{
 				continue;
 			}
+			$row['obj_parent'] = $ml[$row['obj_parent']];
 			$row["acl"] = html::href(array(
 				"caption" => "Muuda",
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
@@ -651,7 +654,11 @@ class user extends class_base
 		}
 		$t->set_default_sortby("obj_name");
 		$t->sort_by();
-		return $t->draw();
+		return $t->draw(array(
+			"has_pages" => true,
+			"records_per_page" => 100,
+			"pageselector" => "text"
+		));
 	}
 
 	function callback_mod_retval($arr)
@@ -721,7 +728,7 @@ class user extends class_base
 		$t =& $this->_init_stat_table();
 		$ts = aw_ini_get('syslog.types');
 		$as = aw_ini_get('syslog.actions');
-		$q = "SELECT * FROM syslog WHERE uid = '$uid' ORDER BY tm DESC LIMIT 200";
+		$q = "SELECT * FROM syslog WHERE uid = '$uid' ORDER BY tm DESC LIMIT 4000";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -733,7 +740,11 @@ class user extends class_base
 		$t->set_default_sortby('tm');
 		$t->set_default_sorder('DESC');
 		$t->sort_by();
-		return $t->draw();
+		return $t->draw(array(
+			"has_pages" => true,
+			"records_per_page" => 200,
+			"pageselector" => "text"
+		));
 	}
 
 	function _init_stat_table()

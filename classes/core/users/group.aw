@@ -314,8 +314,12 @@ class group extends class_base
 		$t =& $this->_init_obj_table(array(
 			"exclude" => array("grp_name")
 		));
+
+		$ml = $this->get_menu_list();		
+
 		foreach($dat as $row)
 		{
+			$row['obj_parent'] = $ml[$row['obj_parent']];	
 			$row["acl"] = html::href(array(
 				"caption" => "Muuda",
 				"url" => aw_url_change_var("edit_acl", $row["oid"])
@@ -324,7 +328,11 @@ class group extends class_base
 		}
 		$t->set_default_sortby("obj_name");
 		$t->sort_by();
-		return $t->draw();
+		return $t->draw(array(
+			"has_pages" => true,
+			"records_per_page" => 100,
+			"pageselector" => "text"
+		));
 	}
 
 	function &_init_obj_table($arr)
@@ -343,6 +351,15 @@ class group extends class_base
 			$t->define_field(array(
 				"name" => "obj_name",
 				"caption" => "Objekti Nimi",
+				"sortable" => 1,
+			));
+		}
+
+		if (!in_array("obj_parent",$exclude))
+		{
+			$t->define_field(array(
+				"name" => "obj_parent",
+				"caption" => "Objekti Asukoht",
 				"sortable" => 1,
 			));
 		}
