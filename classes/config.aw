@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.62 2004/11/07 11:11:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.63 2004/11/07 12:18:25 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -39,64 +39,6 @@ class db_config extends aw_template
 	{
 		$this->quote($value);
 		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
-	}
-
-	////
-	// Votab argumentidena gidlisti, ning üritab tagastada oige login menüü
-	// aadressi.
-	function get_login_menus($args = array())
-	{
-		$_data = $this->_get_login_menus();
-		$data = $_data[aw_global_get("lang_id")];
-		if (!is_array($data))
-		{
-			if (is_array($_data))
-			{
-				foreach($_data as $k => $v)
-				{
-					if (is_array($v))
-					{
-						$data = $v;
-					}
-				}
-			}
-		};
-
-		if (!is_array($data))
-		{
-			return;
-		}
-
-		$gids = aw_global_get("gidlist");
-		$cur_pri = -1;
-		$cur_menu = -1;
-
-		if (!is_array($gids))
-		{
-			return;
-		};
-
-		foreach($gids as $gid)
-		{
-			if (($data[$gid]["pri"] > $cur_pri) && ($data[$gid]["menu"]))
-			{
-				$cur_pri = $data[$gid]["pri"];
-				$cur_menu = $data[$gid]["menu"];
-			}
-		};
-
-		return $cur_menu;
-	}
-
-	function _get_login_menus($args = array())
-	{
-		$sid = aw_ini_get("site_id");
-		$res = $this->get_simple_config("login_menus_".$sid);
-		if (!$res)
-		{
-			$res = $this->get_simple_config("login_menus");
-		}
-		return aw_unserialize($res);
 	}
 };
 
@@ -446,121 +388,6 @@ class config extends db_config
 		return $this->parse();
 	}
 	
-	/** Kuvab dünaamiliste gruppide nimekirja ja lubab igale login menüü valida 
-		
-		@attrib name=login_menus params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function login_menus($args = array())
-	{
-		$this->read_template("login_menu.tpl");
-
-		$_data = $this->_get_login_menus();
-
-		$data = $_data[aw_global_get("lang_id")];
-
-		$this->mk_path(0,"Action menüüd");
-
-		$ob = get_instance("objects");
-		$menus =  $ob->get_list(false,true);
-
-		if (is_array($data["pri"]))
-		{
-			asort($data["pri"]);
-		};
-
-		$u = get_instance("users_user");
-		$u->list_groups(array("type" => array(GRP_DYNAMIC,GRP_REGULAR)));
-		$c = "";
-		while($row = $u->db_next())
-		{
-
-			$return_url = urlencode($this->mk_my_orb("submit_login_menus",array("parent" => $row["gid"]),"config"));
-
-			$midx = $data[$row["gid"]]["menu"];
-			if ($midx)
-			{
-				$name = $menus[$midx];
-			}
-			else
-			{
-				$name = "(määramata)";
-			};
-
-			$this->vars(array(
-				"gid" => $row["gid"],
-				"group" => $row["name"],
-				"name" => $name,
-				"priority" =>  ($data[$row["gid"]]["pri"]) ? $data[$row["gid"]]["pri"] : 0,
-				"search" => $this->mk_my_orb("search",array("otype" => CL_MENU,"one" => 1,"return_url" => $return_url),"objects"),
-				"login_menu" => $this->picker($midx, $menus)
-			));
-
-			$c .= $this->parse("LINE");
-		};
-
-		$this->vars(array(
-			"LINE" => $c,
-			"reforb" => $this->mk_reforb("submit_login_menus",array()),
-		));
-		return $this->parse();
-	}
-
-	/** Submitib login_menus funktsioonis tehtud valikud 
-		
-		@attrib name=submit_login_menus params=name all_args="1" default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_login_menus($args = array())
-	{
-		extract($args);
-		$xml = get_instance("xml");
-		//$old = aw_unserialize($this->get_simple_config("login_menus"));
-		$old = $this->_get_login_menus();
-
-		if (is_array($login_menu))
-		{
-			foreach($login_menu as $gid => $mn)
-			{
-				$old[aw_global_get("lang_id")][$gid]["menu"] = $mn;
-			}
-		}
-
-		if ($pick && $parent)
-		{
-			$old[aw_global_get("lang_id")][$parent]["menu"] = $pick;
-		}
-		else
-		{
-			// overwrite priorities
-			foreach($pri as $key => $val)
-			{
-				$old[aw_global_get("lang_id")][$key]["pri"] = $val;
-			}
-		};
-
-		$data = aw_serialize($old);
-
-		$this->quote($data);
-
-		$this->set_simple_config("login_menus_".aw_ini_get("site_id"),$data);
-
-		return $this->mk_my_orb("login_menus",array());
-	}
-
-
 	/**  see laseb saidile liitumisvormi valida
 		
 		@attrib name=sel_join_form params=name default="0"

@@ -411,7 +411,7 @@ class site_content extends menuedit
 				// if so, overwrite the one defined in aw.ini
 				if ($name == "LOGGED")
 				{
-					$cfg = get_instance("config");
+					$cfg = get_instance(CL_CONFIG_LOGIN_MENUS);
 					$_id = $cfg->get_login_menus();
 					if ($_id)
 					{

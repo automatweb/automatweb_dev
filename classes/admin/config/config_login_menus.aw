@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.7 2004/05/11 07:19:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.8 2004/11/07 12:18:27 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -253,6 +253,64 @@ class config_login_menus extends class_base
 		$str = aw_serialize($data);
 		$this->quote(&$str);
 		$dbi->db_query("INSERT INTO config(ckey,content) values('login_menus_".$ini_opts["site_id"]."','$str')");
+	}
+
+	////
+	// Votab argumentidena gidlisti, ning üritab tagastada oige login menüü
+	// aadressi.
+	function get_login_menus($args = array())
+	{
+		$_data = $this->_get_login_menus();
+		$data = $_data[aw_global_get("lang_id")];
+		if (!is_array($data))
+		{
+			if (is_array($_data))
+			{
+				foreach($_data as $k => $v)
+				{
+					if (is_array($v))
+					{
+						$data = $v;
+					}
+				}
+			}
+		};
+
+		if (!is_array($data))
+		{
+			return;
+		}
+
+		$gids = aw_global_get("gidlist");
+		$cur_pri = -1;
+		$cur_menu = -1;
+
+		if (!is_array($gids))
+		{
+			return;
+		};
+
+		foreach($gids as $gid)
+		{
+			if (($data[$gid]["pri"] > $cur_pri) && ($data[$gid]["menu"]))
+			{
+				$cur_pri = $data[$gid]["pri"];
+				$cur_menu = $data[$gid]["menu"];
+			}
+		};
+
+		return $cur_menu;
+	}
+
+	function _get_login_menus($args = array())
+	{
+		$sid = aw_ini_get("site_id");
+		$res = $this->get_cval("login_menus_".$sid);
+		if (!$res)
+		{
+			$res = $this->get_cval("login_menus");
+		}
+		return aw_unserialize($res);
 	}
 }
 ?>

@@ -57,20 +57,6 @@
 			</function>
 		</action>
 
-		<action name="login_menus">
-			<function name="login_menus">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_login_menus" all_args="1">
-			<function name="submit_login_menus">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="sel_join_form">
 			<function name="sel_join_form">
 				<arguments>

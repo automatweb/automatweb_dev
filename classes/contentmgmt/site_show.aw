@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.97 2004/11/05 18:21:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.98 2004/11/07 12:18:26 kristo Exp $
 
 /*
 
@@ -1457,7 +1457,7 @@ class site_show extends class_base
 			}
 			else
 			{
-				$cfg = get_instance("config");
+				$cfg = get_instance(CL_CONFIG_LOGIN_MENUS);
 				$_id = $cfg->get_login_menus();
 				if ($_id > 0)
 				{
