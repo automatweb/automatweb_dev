@@ -71,7 +71,7 @@ class date_edit
 		if (is_array ($varname))
 		{
 			$textsize = isset ($varname["textsize"]) ? 'style="font-size: ' . (string) $varname["textsize"] . ';"' : "";
-			$disabled = isset ($varname["textsize"]) ? "disabled" : "";
+			$disabled = isset ($varname["disabled"]) ? "disabled" : "";
 			$varname = $varname["name"];
 		}
 
@@ -133,7 +133,8 @@ class date_edit
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-			        $mnames = array("1" => LC_M1,
+			        $mnames = array(
+						"1" => LC_M1,
 						"2" => LC_M2,
 						"3" => LC_M3,
 						"4" => LC_M4,

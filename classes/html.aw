@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.71 2005/03/24 10:00:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.72 2005/03/24 12:46:27 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -324,18 +324,18 @@ class html extends aw_template
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"], $args["value"]["minute"], 0, $m, $d, $y);
 
-		if ($disabled or $textsize)
+		if ($args["disabled"] or $args["textsize"])
 		{
 			$name = array ("name" => $args["name"]);
 
-			if ($disabled)
+			if ($args["disabled"])
 			{
 				$name["disabled"] = true;
 			}
 
-			if ($textsize)
+			if ($args["textsize"])
 			{
-				$name["textsize"] = $textsize;
+				$name["textsize"] = $args["textsize"];
 			}
 		}
 		else
@@ -391,18 +391,18 @@ class html extends aw_template
 			$val = $args['value'];
 		}
 
-		if ($disabled or $textsize)
+		if ($args["disabled"] or $args["textsize"])
 		{
 			$name = array ("name" => $args["name"]);
 
-			if ($disabled)
+			if ($args["disabled"])
 			{
 				$name["disabled"] = true;
 			}
 
-			if ($textsize)
+			if ($args["textsize"])
 			{
-				$name["textsize"] = $textsize;
+				$name["textsize"] = $args["textsize"];
 			}
 		}
 		else
@@ -446,18 +446,18 @@ class html extends aw_template
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : date("Y") + 5;
 
-		if ($disabled or $textsize)
+		if ($args["disabled"] or $args["textsize"])
 		{
 			$name = array ("name" => $args["name"]);
 
-			if ($disabled)
+			if ($args["disabled"])
 			{
 				$name["disabled"] = true;
 			}
 
-			if ($textsize)
+			if ($args["textsize"])
 			{
-				$name["textsize"] = $textsize;
+				$name["textsize"] = $args["textsize"];
 			}
 		}
 		else
@@ -562,7 +562,8 @@ class html extends aw_template
 	{
 		extract($args);
 		$textsize = ($textsize ? 'style="font-size: ' . $textsize . ';"' : "");
-		return '<span class="' . $class . '" ' . $textsize . '>' . $content . '</span>';
+		$class = ($class ? 'class="' . $class . '"' : "");
+		return "<span $class $textsize>$content</span>";
 	}
 
 	function get_change_url($oid, $params = array(), $caption = false)
