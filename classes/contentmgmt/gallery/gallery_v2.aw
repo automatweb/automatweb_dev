@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.48 2004/06/07 09:32:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.49 2004/06/11 08:40:27 kristo Exp $
 
 /*
 
@@ -1192,6 +1192,18 @@ class gallery_v2 extends class_base
 	function _get_xydata($arr)
 	{
 		extract($arr);
+		if (!is_oid($conf_o->id()))
+		{
+			// return original dimensions
+			return array(
+				"width" => $i_width,
+				"height" => $i_height,
+				"tn_width" => $i_width,
+				"tn_height" => $i_height,
+				"tn_is_subimage" => false,
+			);
+		}
+
 		if ($i_width > $i_height)
 		{
 			$tn_width = $conf_o->meta("h_tn_width");
