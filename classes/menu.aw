@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.84 2004/02/06 13:55:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.85 2004/02/17 20:51:53 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -179,7 +179,6 @@
 	@classinfo objtable_index=id
 	@classinfo syslog_type=ST_MENU
 
-	@groupinfo general caption=Üldine default=1
 	@groupinfo advanced caption=Spetsiaal
 	@groupinfo keywords caption=Võtmesõnad
 	@groupinfo menus caption=Kaustad
@@ -635,16 +634,16 @@ class menu extends class_base
 				break;
 
 			case "sss":
-				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["form_data"]["include_submenus"]);
+				$arr["obj_inst"]->set_meta("section_include_submenus",$arr["request"]["include_submenus"]);
 				break;
 
 			case "type":
-				$form_data = &$arr["form_data"];
-				if ($form_data["type"] != MN_ADMIN1)
+				$request = &$arr["request"];
+				if ($request["type"] != MN_ADMIN1)
 				{
 					$ob->set_prop("admin_feature",0);
 				};
-				if ($form_data["type"] != MN_PMETHOD)
+				if ($request["type"] != MN_PMETHOD)
 				{
 					$ob->set_meta("pclass","");
 					$ob->set_meta("pm_url_admin","");
@@ -657,10 +656,10 @@ class menu extends class_base
 				{
 					$arr["obj_inst"]->set_meta("menu_images",$this->update_menu_images(array(
 						"id" => $ob->id(),
-						"img_del" => $arr["form_data"]["img_del"],
-						"img_ord" => $arr["form_data"]["img_ord"],
+						"img_del" => $arr["request"]["img_del"],
+						"img_ord" => $arr["request"]["img_ord"],
 						"img" => $arr["request"]["img"],
-						"meta" => $arr["obj"]["meta"]
+						"meta" => $arr["obj_inst"]->meta(),
 					)));
 					$this->menu_images_done = 1;
 				};
@@ -668,17 +667,17 @@ class menu extends class_base
 
 
 			case "pmethod_properties":
-				$form_data = &$arr["form_data"];
-				$ob->set_meta("pclass",$form_data["pclass"]);
-				$ob->set_meta("pm_url_menus",$form_data["pm_url_menus"]);
-				$ob->set_meta("pm_url_admin",$form_data["pm_url_admin"]);
+				$request = &$arr["request"];
+				$ob->set_meta("pclass",$request["pclass"]);
+				$ob->set_meta("pm_url_menus",$request["pm_url_menus"]);
+				$ob->set_meta("pm_url_admin",$request["pm_url_admin"]);
 				break;
 
 			case "ip":
 				$allow = array();
 				$deny = array();
 
-				$ar = new aw_array($arr["form_data"]["ip"]);
+				$ar = new aw_array($arr["request"]["ip"]);
 				foreach($ar->get() as $ipid => $ipv)
 				{
 					if ($ipv == IP_ALLOWED)
@@ -749,15 +748,15 @@ class menu extends class_base
 
 	function callback_pre_save($arr)
 	{
-		$form_data = &$arr["form_data"];
-		if ($form_data["do_export"])
+		$request = &$arr["request"];
+		if ($request["do_export"])
 		{
 			$menu_export = get_instance("export/menu_export");
 			$menu_export->export_menus(array(
 				"id" => $arr["obj_inst"]->id(),
-				"ex_menus" => $form_data["ex_menus"],
-				"allactive" => $form_data["allactive"],
-				"ex_icons" => $form_data["ex_icons"],
+				"ex_menus" => $request["ex_menus"],
+				"allactive" => $request["allactive"],
+				"ex_icons" => $request["ex_icons"],
 			));
 		};
 	}
