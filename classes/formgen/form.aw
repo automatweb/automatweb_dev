@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.14 2002/12/30 11:02:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.15 2002/12/30 13:16:22 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5918,7 +5918,12 @@ class form extends form_base
 			"class" => CL_FORM_ELEMENT
 		));
 
-		$this->build_form_relation_tree($this->arr["start_search_relations_from"]);
+		$sf = $this->arr["start_search_relations_from"];
+		if ($this->type == FTYPE_ENTRY)
+		{
+			$sf = $id;
+		}
+		$this->build_form_relation_tree($sf);
 
 		foreach($this->form_rel_tree as $_ff_id => $_td)
 		{
