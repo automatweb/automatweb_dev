@@ -67,8 +67,9 @@
             <group>topic_selector</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>text</type>
+            <type>table</type>
             <no_caption>1</no_caption>
+            <store>no</store>
             <caption>Teemade tasemed</caption>
       </property>
       <property>
@@ -131,7 +132,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Esimese taseme folderi stiil</caption>
+            <caption>Teema kausta stiil</caption>
       </property>
       <property>
             <name>style_folder_caption</name>
@@ -141,7 +142,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Folderi pealkirja stiil</caption>
+            <caption>Teema kausta pealkirja stiil</caption>
       </property>
       <property>
             <name>style_folder_topic_count</name>
@@ -151,7 +152,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Folderi teemade arvu stiil</caption>
+            <caption>Teema kausta arvu stiil</caption>
       </property>
       <property>
             <name>style_folder_comment_count</name>
@@ -161,7 +162,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Folderi postituste arvu stiil</caption>
+            <caption>Teema kausta vastuste arvu stiil</caption>
       </property>
       <property>
             <name>style_folder_last_post</name>
@@ -171,7 +172,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Folderi viimase postituse stiil</caption>
+            <caption>Teema kausta viimase vastuse stiil</caption>
       </property>
       <property>
             <name>style_forum_yah</name>
@@ -181,7 +182,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Foorumi YAH</caption>
+            <caption>Foorumi asukohariba stiil</caption>
       </property>
       <property>
             <name>style_topic_caption</name>
@@ -221,7 +222,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Teema viimase postituste stiil</caption>
+            <caption>Teema viimase vastuse stiil</caption>
       </property>
       <property>
             <name>style_comment_count</name>
@@ -231,7 +232,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Kommentaaride arvu stiil</caption>
+            <caption>Vastuste arvu stiil</caption>
       </property>
       <property>
             <name>style_comment_creator</name>
@@ -241,7 +242,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Teema püstitaja stiil</caption>
+            <caption>Teema autori stiil</caption>
       </property>
       <property>
             <name>style_comment_user</name>
@@ -251,7 +252,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Kommentaari kasutajainfo stiil</caption>
+            <caption>Vastuse autori stiil</caption>
       </property>
       <property>
             <name>style_comment_time</name>
@@ -261,7 +262,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Kommentaari aja stiil</caption>
+            <caption>Vastuse aja stiil</caption>
       </property>
       <property>
             <name>style_comment_text</name>
@@ -271,7 +272,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Kommentaari teksti stiil</caption>
+            <caption>Vastuse teksti stiil</caption>
       </property>
       <property>
             <name>style_form_caption</name>
