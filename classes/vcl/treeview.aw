@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.36 2005/01/05 18:38:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.37 2005/01/10 12:53:13 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -316,6 +316,32 @@ class treeview extends class_base
 		// that node directly.
 		$this->itemdata[$item["id"]] = $item;
 		$this->items[$parent][] = &$this->itemdata[$item["id"]];
+	}
+
+	function get_item_ids()
+	{
+		return array_keys($this->itemdata);
+	}
+
+	function get_item($id)
+	{
+		return $this->itemdata[$id];
+	}
+
+	function remove_item($id)
+	{
+		unset($this->itemdata[$id]);
+		foreach($this->items as $k => $d)
+		{
+			foreach($d as $k2 => $v)
+			{
+				if ($v["id"] == $id)
+				{
+					unset($this->items[$k][$k2]);
+					return;
+				}
+			}
+		}
 	}
 
 	function set_selected_item($id)
