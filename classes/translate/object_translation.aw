@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.13 2004/06/02 10:51:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/object_translation.aw,v 1.14 2004/06/18 16:21:23 kristo Exp $
 // object_translation.aw - Objekti tõlge 
 
 // create method accepts the following arguments:
@@ -301,27 +301,77 @@ class object_translation extends aw_template
 
 		$l = get_instance("languages");
 		$ld = $l->fetch($set_lang_id);
-		
-		$this->vars(array(
-			"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
-		));
-
+	
 		$llist = $l->get_list();
-
 		$lt = "";
 
 		$tr = $this->translation_list($section, false, array("ret_name" => true));
-		foreach($tr as $lid => $od)
+		$od = $tr[$set_lang_id];
+
+		$this->vars(array(
+			"lang_baseurl" => aw_ini_get("baseurl")."/?set_lang_id=".$set_lang_id,
+			"lang_name" => $ld["name"],
+			"doc_url" => aw_ini_get("baseurl")."/".$od["oid"],
+			"doc_name" => $od["name"],
+			"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
+		));
+
+		$hd = $nd = "";
+		if ($tr[$set_lang_id])
 		{
+			$hd = $this->parse("HAS_DOC");
+		}
+		else
+		{
+			$nd = $this->parse("NO_DOC");
+		}
+
+		$this->vars(array(
+			"HAS_DOC" => $hd,
+			"NO_DOC" => $nd,
+		));
+
+		$lt .= $this->parse("LANGUAGE_SEL");
+
+		foreach($llist as $lid => $lname)
+		{
+			if ($lid == $set_lang_id)
+			{
+				continue;
+			}
+
+			$ld = $l->fetch($lid);
+			$od = $tr[$lid];
+
 			$this->vars(array(
-				"url" => aw_ini_get("baseurl")."/".$od["oid"],
-				"name" => $od["name"]
+				"lang_baseurl" => aw_ini_get("baseurl")."/?set_lang_id=".$lid,
+				"lang_name" => $ld["name"],
+				"doc_url" => aw_ini_get("baseurl")."/".$od["oid"],
+				"doc_name" => $od["name"],
+				"trans_msg" => nl2br($ld["meta"]["lang_trans_msg"] != "" ? $ld["meta"]["lang_trans_msg"] : $ld["meta"]["trans_msg"])
 			));
+
+			$hd = $nd = "";
+			if ($tr[$lid])
+			{
+				$hd = $this->parse("HAS_DOC");
+			}
+			else
+			{
+				$nd = $this->parse("NO_DOC");
+			}
+
+			$this->vars(array(
+				"HAS_DOC" => $hd,
+				"NO_DOC" => $nd,
+			));
+
 			$lt .= $this->parse("LANGUAGE");
 		}
 
 		$this->vars(array(
-			"LANGUAGE" => $lt
+			"LANGUAGE" => $lt,
+			"LANGUAGE_SEL" => "",
 		));
 
 		return $this->parse();
