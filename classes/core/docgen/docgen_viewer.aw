@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.9 2004/05/25 13:35:47 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.10 2004/05/26 22:19:43 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -161,8 +161,6 @@ class docgen_viewer extends class_base
 	function display_class($data, $cur_file)
 	{
 		$this->read_template("class_info.tpl");
-
-		//echo dbg::dump($data);
 		$f = "";
 		foreach($data["functions"] as $func => $f_data)
 		{
@@ -180,7 +178,7 @@ class docgen_viewer extends class_base
 				$arg .= $this->parse("ARG");
 			}
 
-			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".basename($cur_file, ".aw").".".$func.".txt";
+			$doc_file = dirname($cur_file)."/".basename($cur_file, ".aw")."/".$data["name"].".".$func.".txt";
 			$this->vars(array(
 				"proto" => "function $func()",
 				"name" => $func,
@@ -224,7 +222,8 @@ class docgen_viewer extends class_base
 			"LONG_FUNCTION" => $fl,
 		));
 
-		return $this->parse();
+		$str = $this->parse();
+		return $str;
 	}
 
 	/** displays information to the user about a class
@@ -656,7 +655,12 @@ class docgen_viewer extends class_base
 		$str = preg_replace("/(#code#)(.+?)(#\/code#)/esm","\"<pre>\".htmlspecialchars(stripslashes('\$2')).\"</pre>\"",$str);
 		$str = preg_replace("/(#php#)(.+?)(#\/php#)/esm","highlight_string(stripslashes('<'.'?'.'\$2'.'?'.'>'),true)",$str);
 
-		return  nl2br($str);
+		$tpl = get_instance("core/docgen/docgen_viewer");
+		$tpl->read_template("style.tpl");
+		$tpl->vars(array(
+			"content" => nl2br($str)
+		));
+		return $tpl->parse();
 	}
 
 	/** updates the class/function definitions in the database
