@@ -76,7 +76,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <default>1</default>
-            <caption>Saata mail registreerujale</caption>
+            <caption>Saada regisreeerijale kinnitus</caption>
       </property>
       <property>
             <name>mail_to_addr</name>
