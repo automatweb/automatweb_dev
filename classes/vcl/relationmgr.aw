@@ -145,7 +145,7 @@ class relationmgr extends aw_template
 			"clids" => $this->clid_list,
 			"period" => $arr["request"]["period"],
 			"id" => $arr["obj_inst"]->id(),
-			"saveurl" => $this->mk_my_orb("submit", array("reltype" => $this->reltype, "group" => $req["group"], "return_url" => urlencode($req["return_url"]), "reforb" => 1, "id" => $req["id"]), $req["class"]),
+			"saveurl" => $this->mk_my_orb("submit", array("reltype" => $this->reltype, "group" => $req["group"], "return_url" => get_ru(), "reforb" => 1, "id" => $req["id"]), $req["class"]),
 		));
 		$pr = array(
 			"relations" => array(
@@ -259,7 +259,7 @@ class relationmgr extends aw_template
 			$tb->add_button(array(
 				"name" => "translate",
 				"tooltip" => t("Tõlgi"),
-				"url" => $this->mk_my_orb("create", array("id" => $arr["obj_inst"]->id(), "return_url" => urlencode($arr["request"]["return_url"])), "object_translation"),
+				"url" => $this->mk_my_orb("create", array("id" => $arr["obj_inst"]->id(), "return_url" => get_ru()), "object_translation"),
 				"target" => "_blank",
 				"img" => "edit.gif",
 			));
@@ -446,7 +446,7 @@ class relationmgr extends aw_template
 				$edfile = "doc";
 			}
 			
-			$ch = $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => urlencode($arr["request"]["return_url"])), $edfile);
+			$ch = $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => get_ru()), $edfile);
 			$reltype_id = $alias->prop("reltype");
 			
 			$adat["icon"] = html::img(array(
@@ -520,12 +520,9 @@ class relationmgr extends aw_template
 			"id" => $arr["obj_inst"]->id(),
 			"reforb" => $reforb,
 			"toolbar" => $tb->get_toolbar(),
-			"return_url" => urlencode($arr["request"]["return_url"]),
+			"return_url" => get_ru(),
 			"period" => $period,
-			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array(
-				"return_url" => urlencode($arr["request"]["return_url"]),
-				"srch" => 1,
-			)),
+			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array("srch" => 1)),
 		));
 		$pr["form"] = array(
 			"name" => "show_aliases",
