@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.27 2004/10/18 20:39:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.28 2004/10/22 12:06:11 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -139,7 +139,7 @@ class vcalendar extends aw_template
 	{
 		if ($GLOBALS["DD"] == 1)
 		{
-			echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." <br>";
+			echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
 		}
 
 		// convert timestamp to day, since calendar is usually day based
@@ -149,6 +149,7 @@ class vcalendar extends aw_template
 		$data["timestamp"] = $arr["timestamp"];
 		$data["_id"] = $this->el_count;
 		$data['comment'] = $arr['data']['comment'];
+		$data["utextarea1"] = nl2br($data["utextarea1"]);
 
 		$this->evt_list[$this->el_count] = $data;
 		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
@@ -541,7 +542,7 @@ class vcalendar extends aw_template
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
-			"month_name" => ucfirst(get_lc_month($this->range["m"])),	
+			"month_name" => locale::get_lc_month($this->range["m"]),	
 			"year" => $this->range["y"],
 		));
 		return $this->parse();
@@ -565,7 +566,7 @@ class vcalendar extends aw_template
 		for ($i = 1; $i <= 12; $i++)
 		{
 			$this->vars(array(
-				"month_name" => ucfirst(get_lc_month($i)),	
+				"month_name" => locale::get_lc_month($i),	
 			));
 			$header = $this->parse("HEADER");
 			$footer = $this->parse("FOOTER");
@@ -677,7 +678,6 @@ class vcalendar extends aw_template
                         	"date_and_time" => $dt . ". " . $mn2,
 				"day_name" => locale::get_lc_weekday($wn,true),
 				"long_day_name" => locale::get_lc_weekday($wn),
-                        	"date" => $dt . ". " . $mn,
                         	"date" => locale::get_lc_date($reals,5),
 			));
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
@@ -712,7 +712,7 @@ class vcalendar extends aw_template
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
-                       	"date" => $dt . ". " . $mn,
+                       	"date" => locale::get_lc_date($this->range["start"],5),
 		));
 		return $this->parse();
 	}
