@@ -18,9 +18,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 /*
 
-@classinfo syslog_type=ST_USER relationmgr=yes
+@classinfo syslog_type=ST_USER relationmgr=yes no_status=1
 
-@groupinfo chpwd caption="Muuda parooli"
+@groupinfo chpwd caption="Parool"
 @groupinfo roles caption=Rollid
 @groupinfo objects caption="Objektid ja &Otilde;igused"
 @groupinfo objects_own caption="Enda tehtud" parent=objects
@@ -37,37 +37,37 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @default group=general
 
 @property uid field=uid type=text group=general editonly=1
-@caption User ID
+@caption Kasutajanimi
 
 @property uid_entry store=no type=textbox group=general 
-@caption User ID
+@caption Kasutajanimi
 
 @property logins field=logins type=text store=yes 
-@caption Logins
+@caption Sisselogimisi
 
 @property online store=no type=text
-@caption Online
+@caption Sisselogitud
 
 @property lastaction field=lastaction type=text
-@caption Last action
+@caption Viimane tegevus
 
 @property blocked field=blocked type=checkbox ch_value=1
 @caption Blokeeritud
 
 @property name store=no type=textbox
-@caption Name
+@caption Nimi
 
 @property email field=email type=textbox
 @caption E-mail
 
 @property created field=created type=date table=objects
-@caption Created
+@caption Loodud
 
 @property createdby field=createdby type=text table=objects
-@caption Created by
+@caption Looja
 
 @property admin_lang store=no type=select
-@caption Admin lang.
+@caption Admin keel
 
 @property base_lang type=select field=meta method=serialize table=objects
 @caption Baaskeel
@@ -99,7 +99,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @caption Genereeritud parool
 
 @property resend_welcome store=no type=checkbox ch_value=1
-@caption Saada tervitusmeil uuesti
+@caption Saada tervitusmeil
 
 @default group=roles
 

@@ -7,7 +7,7 @@
             <field>uid</field>
             <type>text</type>
             <editonly>1</editonly>
-            <caption>User ID</caption>
+            <caption>Kasutajanimi</caption>
       </property>
       <property>
             <name>uid_entry</name>
@@ -16,7 +16,7 @@
             <store>no</store>
             <type>textbox</type>
             <field>uid_entry</field>
-            <caption>User ID</caption>
+            <caption>Kasutajanimi</caption>
       </property>
       <property>
             <name>logins</name>
@@ -25,7 +25,7 @@
             <field>logins</field>
             <type>text</type>
             <store>yes</store>
-            <caption>Logins</caption>
+            <caption>Sisselogimisi</caption>
       </property>
       <property>
             <name>online</name>
@@ -34,7 +34,7 @@
             <store>no</store>
             <type>text</type>
             <field>online</field>
-            <caption>Online</caption>
+            <caption>Sisselogitud</caption>
       </property>
       <property>
             <name>lastaction</name>
@@ -42,7 +42,7 @@
             <group>general</group>
             <field>lastaction</field>
             <type>text</type>
-            <caption>Last action</caption>
+            <caption>Viimane tegevus</caption>
       </property>
       <property>
             <name>blocked</name>
@@ -60,7 +60,7 @@
             <store>no</store>
             <type>textbox</type>
             <field>name</field>
-            <caption>Name</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>email</name>
@@ -76,7 +76,7 @@
             <group>general</group>
             <field>created</field>
             <type>date</type>
-            <caption>Created</caption>
+            <caption>Loodud</caption>
       </property>
       <property>
             <name>createdby</name>
@@ -84,7 +84,7 @@
             <group>general</group>
             <field>createdby</field>
             <type>text</type>
-            <caption>Created by</caption>
+            <caption>Looja</caption>
       </property>
       <property>
             <name>admin_lang</name>
@@ -93,7 +93,7 @@
             <store>no</store>
             <type>select</type>
             <field>admin_lang</field>
-            <caption>Admin lang.</caption>
+            <caption>Admin keel</caption>
       </property>
       <property>
             <name>base_lang</name>
@@ -183,7 +183,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>resend_welcome</field>
-            <caption>Saada tervitusmeil uuesti</caption>
+            <caption>Saada tervitusmeil</caption>
       </property>
       <property>
             <name>roles</name>
@@ -358,10 +358,11 @@
       <classinfo>
             <syslog_type>ST_USER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <chpwd>
-                  <caption>Muuda parooli</caption>
+                  <caption>Parool</caption>
             </chpwd>
             <roles>
                   <caption>Rollid</caption>
