@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.20 2001/08/08 07:31:08 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.21 2001/08/16 10:54:46 cvs Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -946,6 +946,7 @@ class config extends db_config
 			"pwd_mail" => $this->get_simple_config("remind_pwd_mail"),
 			"join_mail_subj" => $this->get_simple_config("join_mail_subj"),
 			"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj"),
+			"join_send_also" => $this->get_simple_config("join_send_also"),
 			"reforb" => $this->mk_reforb("submit_join_mail", array())
 		));
 
@@ -960,6 +961,7 @@ class config extends db_config
 		$this->set_simple_config("remind_pwd_mail",$pwd_mail);
 		$this->set_simple_config("join_mail_subj",$join_mail_subj);
 		$this->set_simple_config("remind_pwd_mail_subj",$pwd_mail_subj);
+		$this->set_simple_config("join_send_also",$join_send_also);
 
 		return $this->mk_orb("join_mail", array());
 	}

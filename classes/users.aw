@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.20 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.21 2001/08/16 10:54:46 cvs Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -670,6 +670,11 @@ class users extends users_user
 			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
 
 			mail($add_state["email"],$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
+			$jsa = $c->get_simple_config("join_send_also");
+			if ($jsa != "")
+			{
+				mail($jsa,$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
+			}
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
 
