@@ -50,17 +50,6 @@ class site_content extends menuedit
 
 		//print_r($obj2->properties());
 
-		// this checks whether the requested object belongs to any
-		// class that can be shown directly - if so, check_object
-		// puts the result into $this->replacement. dat kind of ugly -- duke
-		$this->check_object($obj2);
-
-		if (empty($text) && isset($this->replacement))
-		{
-			$text = $this->replacement;
-		};
-
-		//--
 		$meta = $obj2->meta();
 
 		/// Vend?
@@ -3051,59 +3040,6 @@ class site_content extends menuedit
 		};
 	}
 	
-	function check_object($obj)
-	{
-		$die = false;
-		switch($obj->prop("class_id"))
-		{
-			case CL_EXTLINK:
-				$el = get_instance("links");
-				$el->show(array("id" => $obj->id()));
-				break;
-
-			case CL_IMAGE:
-				$t = get_instance("image");
-				$idata = $t->get_image_by_id($obj->id());
-				$this->replacement = sprintf("<img src='%s'><br />%s",$idata["url"],$idata["comment"]);
-
-				if ($this->raw)
-				{
-					print $this->replacement;
-					$die = true;
-				};
-				break;
-
-			case CL_FILE:
-				$t = get_instance("file");
-				die($t->show($obj->id()));
-				break;
-
-			case CL_TABLE:
-				$t = get_instance("table");
-				$this->replacement = $t->show(array("id" => $obj->id(),"align" => $align));
-				if ($this->raw)
-				{	
-					print $this->replacement;
-					$die = true;
-				};
-				break;
-
-			case CL_SITE_THREEPANE:
-				$t = get_instance("site/site_threepane");
-				print $t->show(array("id" => $obj->id()));
-				$die = true;
-				break;
-
-			default:
-				$this->replacement = "";
-
-		};
-		if ($die)
-		{
-			exit;
-		};
-	}
-
 	////
 	// !checks if the current IP has access
 	// parameters:
