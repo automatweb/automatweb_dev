@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="contact" folder="kliendibaas" extends="class_base">
+	<class name="address" folder="kliendibaas" extends="class_base">
 	</class>
 </orb>
 		
