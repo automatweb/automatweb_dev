@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.73 2003/05/28 08:45:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.74 2003/05/29 13:56:09 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -1197,6 +1197,7 @@ topic");
 	// !Submits comment to a topic
 	function submit_comment($args = array())
 	{
+		$this->quote($args);
 		extract($args);
 		if (!$name)
 		{
