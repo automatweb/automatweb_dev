@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.248 2003/02/28 17:13:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.249 2003/03/03 10:16:34 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -83,6 +83,7 @@ class menuedit extends aw_template
 		{
 			return $params["text"];
 		}
+
 
 		// kontrollib sektsiooni ID-d, tagastab oige numbri kui tegemist oli
 		// aliasega, voi lopetab t, kui miskit oli valesti
@@ -195,6 +196,7 @@ class menuedit extends aw_template
 		extract($params);	
 		$template = isset($template) && $template != "" ? $template : "main.tpl";
 		$docid = isset($docid) ? $docid : 0;
+
 
 		// impordime taimeriklassi
 
@@ -1062,12 +1064,6 @@ class menuedit extends aw_template
 	{
 		$section = aw_global_get("section");
 		$realsect = $this->check_section($section);
-		global $XX1;
-		if ($XX1)
-		{
-			var_dump($section);
-			var_dump($realsect);
-		};
 		$_mn = $this->get_menu($realsect);
 		$set_lang_id = false;
 		if ($_mn)
