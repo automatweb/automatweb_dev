@@ -183,7 +183,7 @@
             </ALL_ACCESS_GRP>
             <CSS>
                   <value>4</value>
-                  <clid>CL_GROUP</clid>
+                  <clid>CL_CSS</clid>
                   <caption>css stiil</caption>
             </CSS>
       </reltypes>
