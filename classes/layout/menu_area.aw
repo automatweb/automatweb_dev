@@ -10,9 +10,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property root_folder type=relpicker reltype=RELTYPE_ROOT_FOLDER field=meta method=serialize
 @caption Root kataloog
 

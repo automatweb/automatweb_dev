@@ -9,9 +9,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 @property separator type=textbox size=5 field=meta method=serialize
 @caption Eraldaja
 
