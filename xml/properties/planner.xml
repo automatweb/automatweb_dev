@@ -11,6 +11,15 @@
             <caption>Default vaade</caption>
       </property>
       <property>
+            <name>content_generator</name>
+            <type>select</type>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Näitamisfunktsioon</caption>
+      </property>
+      <property>
             <name>event_cfgform</name>
             <type>objpicker</type>
             <clid>CL_CFGFORM</clid>
@@ -118,6 +127,15 @@
             <caption>Näita navigaatorit</caption>
       </property>
       <property>
+            <name>navigator_months</name>
+            <type>select</type>
+            <group>advanced</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuud navigaatoris</caption>
+      </property>
+      <property>
             <name>use_tabpanel</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
@@ -127,15 +145,6 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kalendri näitamisel kasutatakse 'tabpanel' komponenti</caption>
-      </property>
-      <property>
-            <name>navigator_months</name>
-            <type>select</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>Kuud navigaatoris</caption>
       </property>
       <property>
             <name>event_folder</name>
