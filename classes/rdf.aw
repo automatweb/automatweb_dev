@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.3 2001/11/20 13:19:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.4 2001/12/04 17:09:43 duke Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -34,7 +34,7 @@ class rdf {
 	// Ärge küsige minult, miks seda vaja on
 	function _convert($str)
 	{
-		$str = preg_replace("/#p.#/","",$str);
+		$str = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",strip_tags($str));
 		return htmlentities(htmlentities($str));
 	}
 
