@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.260 2004/06/04 11:41:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.261 2004/06/11 09:17:32 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -358,7 +358,8 @@ class document extends aw_template
 		}
 		else
 		{
-			$meta = $this->get_object_metadata(array("oid" => $doc["brother_of"]));
+			$__tmp = obj($doc["brother_of"]);
+			$meta = $__tmp->meta();
 		};
 
 		$si = __get_site_instance();
@@ -2016,7 +2017,8 @@ class document extends aw_template
 
 		$t = get_instance("languages");
 
-		$meta = $this->get_object_metadata(array("oid" => $id));
+		$tmp = obj($id);
+		$meta = $tmp->meta();
 
 		$conf = get_instance("config");
 		$is_ie = false;
@@ -2445,7 +2447,8 @@ class document extends aw_template
 		reset($deleted);
 		while (list($oid,) = each($deleted))
 		{
-			$this->delete_object($oidar[$oid]);
+			$tmp = obj($oidar[$oid]);
+			$tmp->delete();
 		}
 		reset($added);
 		$this->quote($obj);
@@ -2650,7 +2653,7 @@ class document extends aw_template
 			$can = true;
 			if (aw_global_get("uid") == "" && $search_group["no_usersonly"] == 1)
 			{
-				$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
+				$meta = aw_unserialize($row["metadata"]);
 				if ($meta["users_only"] == 1)
 				{
 					$can = false;
@@ -4036,9 +4039,7 @@ class document extends aw_template
 			
 			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent,objects.metadata as metadata FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE template.type = 0 AND menu.id = $section");
 			$row = $this->db_next();
-			$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"]
-			));
+			$meta = aw_unserialize($row["metadata"]);
 
 			if ((int)$meta["template_type"] == TPLTYPE_TPL)
 			{
