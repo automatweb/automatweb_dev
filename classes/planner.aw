@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.103 2003/04/07 11:34:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.104 2003/04/09 13:40:18 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -24,6 +24,9 @@
 
 	@property day_end type=time_select rel=1
 	@caption Päev lõpeb
+
+	@property only_days_with_events type=checkbox ch_value=1 group=advanced
+	@caption Päeva vaates on ainult sündmustega päevad
 
 	@property tab_add_visible type=checkbox ch_value=1 default=1 group=advanced
 	@caption "Lisa event" nähtav
@@ -235,6 +238,14 @@ class planner extends class_base
 	function _init_event_source($args = array())
 	{
 		extract($args);
+		classload("date_calc");
+		$di = get_date_range(array(
+			"date" => isset($date) ? $date : date("d-m-Y"),
+			"type" => $type,
+		));
+
+
+		
 		$obj = $this->get_object($id);
 		$this->content_gen_class = "";
 		if (!empty($obj["meta"]["content_generator"]))
@@ -245,7 +256,31 @@ class planner extends class_base
 		};
 
 		$folder = (int)$obj["meta"]["event_folder"];
-		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.oid) WHERE objects.parent = '$folder'";
+		
+		$section = aw_global_get("section");
+
+		$this->prevlink = $this->mk_my_orb("change",array(
+			"section" => $section,
+			"id" => $id,
+			"group" => "show_" . $type,
+			"date" => $di["prev"],
+			"id" => $id,
+			"ctrl" => $ctrl,
+			"cb_view" => "show",
+		));
+
+		$this->nextlink = $this->mk_my_orb("change",array(
+			"section" => $section,
+			"id" => $id,
+			"group" => "show_" . $type,
+			"date" => $di["next"],
+			"id" => $id,
+			"ctrl" => $ctrl,
+			"cb_view" => "show",
+		));
+
+
+		$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = '$folder' AND objects.status = 2";
 		$this->db_query($q);
 		$events = array();
 		// we sure pass around a LOT of data
@@ -270,6 +305,13 @@ class planner extends class_base
 				"cb_view" => "show",
 				"event_id" => $row["oid"],
 			));
+			if ($row["class_id"] == CL_BROTHER_DOCUMENT)
+			{
+				$this->save_handle();
+				$real_obj = $this->get_object($row["brother_of"]);
+				$row["name"] = $real_obj["name"];
+				$this->restore_handle();
+			};
 			$events[$gx][] = $row;
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day","cb_view" => "show"));
@@ -287,6 +329,7 @@ class planner extends class_base
 		$nodes = array();
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
+			"type" => "day",
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -308,6 +351,7 @@ class planner extends class_base
 		$nodes = array();
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
+			"type" => "overview",
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -329,6 +373,7 @@ class planner extends class_base
 		$nodes = array();
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
+			"type" => "week",
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -350,6 +395,7 @@ class planner extends class_base
 		$nodes = array();
 		$events = $this->_init_event_source(array(
 			"id" => $args["request"]["id"],
+			"type" => "month",
 		));
 		$nodes[] = array(
 			"no_caption" => 1,
@@ -395,16 +441,26 @@ class planner extends class_base
 				$emb_group = $args["request"]["cb_group"];
 			};
 
+			$ev_data = $this->get_object($event_id);
+
 			$t->role = "obj_edit";
 
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
 
+			// sorry ass attempt to get editing of linked documents to work
+			$obj_to_load = $this->event_id;
+
+			if ($ev_data["class_id"] == CL_BROTHER_DOCUMENT)
+			{
+				$obj_to_load = $ev_data["brother_of"];
+			};
+
 			if ($this->event_id)
 			{
-				$t->load_obj_data(array("id" => $this->event_id));
-				$t->id = $this->event_id;
+				$t->load_obj_data(array("id" => $obj_to_load));
+				$t->id = $obj_to_load;
 			};
 			$xprops = array();
 			$xtmp = $t->groupinfo;
@@ -477,12 +533,12 @@ class planner extends class_base
 				"name" => "emb[group]",
 				"value" => $emb_group,
 			);
-			if ($this->event_id)
+			if ($obj_to_load)
 			{
 				$resprops[] = array(
 					"type" => "hidden",
 					"name" => "emb[id]",
-					"value" => $this->event_id,
+					"value" => $obj_to_load,
 				);	
 			}
 			else
@@ -729,13 +785,14 @@ class planner extends class_base
 		$this->actlink = $actlink;
 		
 		$use_tabpanel = false;
+
 		if (!empty($this->conf["use_tabpanel"]))
 		{
 			$use_tabpanel = true;
 		};
 		
 		$today = date("d-m-Y");
-		
+
 		if ($use_tabpanel)
 		{
 			// generate a menu bar
@@ -811,9 +868,10 @@ class planner extends class_base
 		$xdate = $d . $m . $y;
 
 		$this->mk_path($object["parent"],"Kalender $object[name]");
-
+		
 		$_cal = get_instance("calendar",array("tpldir" => "planner"));
-		$di = $_cal->get_date_range(array(
+		classload("date_calc");
+		$di = get_date_range(array(
 			"date" => $date,
 			"type" => $type,
 		));
@@ -857,7 +915,19 @@ class planner extends class_base
 				"id" => $id,
 				"folder" => $folder,
 				"conf" => $this->conf,
+				"type" => $type,
 			));
+
+			// recalculate di, it can change if we honor the 
+			// only_days_with_events setting
+			if (isset($this->start_date))
+			{
+				$di = get_date_range(array(
+					"date" => $this->start_date,
+					"type" => $type,
+				));
+			};
+
 		};
 
 		if ($ev_table)
@@ -905,6 +975,12 @@ class planner extends class_base
 			case "week":
 				$this->type = CAL_SHOW_WEEK;
 				$tpl = isset($args["week_tpl"]) ? $args["week_tpl"] : "disp_week.tpl";
+
+				if ($this->cfg["site_id"] == "1010")
+				{
+					$tpl = "week.tpl";
+				};
+
 				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => $tpl));
 
 				$caption = sprintf("%s - %s",$this->time2date($di["start"],8),$this->time2date($di["end"],8));
@@ -951,14 +1027,7 @@ class planner extends class_base
 
 			case "day":
 				$this->type = CAL_SHOW_DAY;
-				if (is_array($this->conf))
-				{
-					$tpl = "disp_day2.tpl";
-				}
-				else
-				{
-					$tpl = "disp_day.tpl";
-				};
+				$tpl = is_array($this->conf) ? "disp_day2.tpl" : "disp_day.tpl";
 				$content = $this->disp_day(array("events" => $events,"di" => $di,"tpl" => $tpl));
 				$caption = sprintf("%s",$this->time2date($di["start"],8));
 				$start = $date;
@@ -1044,25 +1113,37 @@ class planner extends class_base
 		unset($mlist[0]);
 		$section = aw_global_get("section");
 
-		$prev = $this->mk_my_orb("view",array(
-			"section" => $section,
-			"id" => $id,
-			"type" => $type,
-			"date" => $di["prev"],
-			"id" => $id,
-			"ctrl" => $ctrl,
-			"ctrle" => $ctrle,
-		));
+		if (isset($this->prevlink))
+		{
+			$prev = $this->prevlink;
+		}
+		else
+		{
+			$prev = $this->mk_my_orb("view",array(
+				"section" => $section,
+				"id" => $id,
+				"type" => $type,
+				"date" => $di["prev"],
+				"id" => $id,
+				"ctrl" => $ctrl,
+			));
+		};	
 
-		$next = $this->mk_my_orb("view",array(
-			"section" => $section,
-			"id" => $id,
-			"type" => $type,
-			"date" => $di["next"],
-			"id" => $id,
-			"ctrl" => $ctrl,
-			"ctrle" => $ctrle,
-		));
+		if (isset($this->nextlink))
+		{
+			$next = $this->nextlink;
+		}
+		else
+		{
+			$next = $this->mk_my_orb("view",array(
+				"section" => $section,
+				"id" => $id,
+				"type" => $type,
+				"date" => $di["next"],
+				"id" => $id,
+				"ctrl" => $ctrl,
+			));
+		};
 
 		$this->vars(array(
 			"menudef" => $menudef,
@@ -1073,7 +1154,7 @@ class planner extends class_base
                         "year_name" => $ylist[$y],
 			"id" => $id,
 			"content" => $content,
-			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id,"type" => $type,"ctrl" => $ctrl,"ctrle" => $ctrle)),
+			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id,"type" => $type,"ctrl" => $ctrl)),
 			"mlist" => $this->picker($m,$mlist),
 			"ylist" => $this->picker($y,$ylist),
 			"prev" => $prev,
@@ -1255,12 +1336,27 @@ class planner extends class_base
 			};
 		}
 		$calstring = join(",",$calendars);
-		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.oid = planner.id) LEFT JOIN documents ON (objects.oid = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') OR (start <= '$end'))";
+		$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND ((start >= '$start') AND (start <= '$end'))";
 		$this->db_query($q);
 		$results = array();
 		$ia = get_instance("image");
+		$count = $this->num_rows();
+		$next_active = false;
+		if (($type == "day") && ($count == 0) && $conf["only_days_with_events"])
+		{
+			// this is where I have to find the next active event
+			$q = "SELECT name,class_id,parent,planner.*,documents.lead,documents.moreinfo,documents.content FROM objects LEFT JOIN planner ON (objects.brother_of = planner.id) LEFT JOIN documents ON (objects.brother_of = documents.docid) WHERE parent IN ($calstring) AND (start >= '$start') LIMIT 1";
+			$this->db_query($q);
+			$next_active = true;
+
+		};	
 		while($row = $this->db_next())
 		{
+			if ($next_active)
+			{
+				$this->start_date = date("d-m-Y",$row["start"]);
+			};
+
 			$gx = date("dmY",$row["start"]);
 			$fl = $this->cfg["classes"][$row["class_id"]]["file"];
 			if ($fl == "document")
@@ -1493,7 +1589,7 @@ class planner extends class_base
 		$params["id"] = $id;
 		$params["disp"] = $disp;
 		$action = "view";
-		$retval = $this->mk_my_orb("view",array("type" => $type,"date" => $date,"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle),"",false,true);
+		$retval = $this->mk_my_orb("view",array("type" => $type,"date" => $date,"id" => $id,"ctrl" => $ctrl),"",false,true);
 		return $retval;
 	}
 
@@ -2106,7 +2202,6 @@ class planner extends class_base
 	// it needs an argument which shows how to draw a single event. or day. or whatever
 	function _disp_day($args = array())
 	{
-
 		if ($this->table_id)
 		{
 			$c = $this->raw_headers[$args["dx"]];
@@ -2120,18 +2215,9 @@ class planner extends class_base
 			{
 				$__ch = $this->ft->get_chains_for_form($row["form_id"]);
 				list($_ch,) = each($__ch);
-				/*
-				print "ch = $_ch<br>";
-				print "cid = ";
-				print $row["chain_id"];
-				print "<br>";
-				*/
+
 				$mx = $this->get_object((int)$row[form_id]);
-				/*
-				print "<pre>";
-				print_r($mx["meta"]);
-				print "</pre>";
-				*/
+
 				$cx = $this->get_object((int)$_ch);
 
 				//if ($mx["meta"]["calendar_chain"])
@@ -2158,6 +2244,7 @@ class planner extends class_base
 		
 			$events = $this->events[$args["dx"]];
 
+
 			// moo. miks neid eventeid varem ära ei sorteerita?
 			// sort the events by start date
 			uasort($events,array($this,"__x_sort"));
@@ -2179,7 +2266,7 @@ class planner extends class_base
 					"type" => "day",
 					"date" => date("d-m-Y",$e["start"]),
 				));
-				if ($e["class_id"] == CL_DOCUMENT)
+				if (($e["class_id"] == CL_DOCUMENT) || ($e["class_id"] == CL_BROTHER_DOCUMENT))
 				{
 					/*
 					$daylink = $this->mk_my_orb("view",array(
