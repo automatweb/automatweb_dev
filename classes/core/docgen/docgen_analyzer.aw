@@ -3,7 +3,7 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.18 2004/05/25 13:01:55 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.19 2004/09/10 13:13:46 ahti Exp $
 
 	@comment 
 	analyses aw code
@@ -788,7 +788,7 @@ class docgen_analyzer extends class_base
 			} while($o == ",");
 
 			$o = $this->get();
-			$this->assert_str($o, ";");
+			//$this->assert_str($o, ";");
 		}
 		return $depd;
 	}
