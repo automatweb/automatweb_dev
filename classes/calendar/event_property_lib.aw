@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.7 2004/08/02 10:48:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.8 2004/08/02 11:17:08 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -216,7 +216,28 @@ class event_property_lib extends aw_template
 		$tt = $tc = "";
 
 		// XXX: get date from url
-		list($d,$m,$y) = explode("-",date("d-m-Y"));
+		$use_date = aw_global_get("date");
+		if (empty($use_date))
+		{
+			$use_date = date("d-m-Y");
+		};
+		list($d,$m,$y) = explode("-",$use_date);
+
+		$tm = mktime(0,0,0,$m,$d,$y);
+
+		classload("date_calc");
+
+		$range = get_date_range(array(
+			"time" => $tm,
+			"type" => "day",
+		));
+
+
+		$this->vars(array(
+			"date" => date("d.m Y",$tm),
+			"prevlink" => aw_url_change_var("date",$range["prev"]),
+			"nextlink" => aw_url_change_var("date",$range["next"]),
+		));
 
 		// XXX: arvestada kalendris määratud päeva alguse ja lõpu aegu
 		$day_start = mktime(9,0,0,$m,$d,$y);
@@ -248,10 +269,13 @@ class event_property_lib extends aw_template
 				{
 					if (between($event["start"],$ts,$ts+$step-1))
 					{
-						$free = false;
 						$ev_obj = new object($event["id"]);
 						$ev_obj = $ev_obj->get_original();
-						$evstr .= $ev_obj->name() . "<br>";
+						if ($ev_obj->class_id() != CL_CALENDAR_VACANCY)
+						{
+							$evstr .= $ev_obj->name() . "<br>";
+							$free = false;
+						};
 					};
 				};
 
