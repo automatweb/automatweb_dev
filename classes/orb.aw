@@ -1,17 +1,23 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.45 2003/06/19 16:05:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.46 2003/07/17 15:48:59 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
+
 class orb extends aw_template 
 {
 	var $data;
 	var $info;
+	function orb($args = array())
+	{
+		$this->init();
+	}
+
 	////
 	//! Konstruktor. Koik vajalikud argumendid antakse url-is ette
 	//  why the hell did I put all the functionality into the constructor?
 	// now I can't put other useful functions into this class and used them
 	// without calling the instructor
-	function orb($args = array())
+	function process_request($args = array())
 	{
 		// peavad olema vähemalt 
 		// a) class
@@ -27,7 +33,6 @@ class orb extends aw_template
 
 		$fatal = true;
 
-		$this->init("");
 		$this->data = "";
 		$this->info = array();
 		lc_load("definition");
@@ -68,13 +73,22 @@ class orb extends aw_template
 		};
 
 		// create an array of class names that should be loaded.
-		$cl2load = array($class);
+		//$cl2load = array($class);
+		$cl2load = array();
 		if (is_array($orb_defs[$class]["_extends"]))
 		{
 			$cl2load = array_merge($cl2load,$orb_defs[$class]["_extends"]);
 		};
 
-		$found = false;
+		$fun = $orb_defs[$class][$action];
+		if (is_array($fun))
+		{
+			$found = true;
+		}
+		else
+		{
+			$found = false;
+		};
 
 		foreach($cl2load as $clname)
 		{
@@ -118,6 +132,7 @@ class orb extends aw_template
 
 		// check acl
 		$this->do_orb_acl_checks($orb_defs[$class][$action], $vars);
+
 
 		if (isset($vars["reforb"]) && $vars["reforb"] == 1)
 		{
@@ -228,11 +243,13 @@ class orb extends aw_template
 		}
 		else
 		{
-			$t = new $class;
+			//$t = new $class;
 			// ja kutsume funktsiooni v2lja
+			$t = $this->orb_class;
 			if (method_exists($t, "set_opt"))
 			{
 				$t->set_opt("orb_class",&$this->orb_class);
+				//$t->set_opt("orb_class",&$this->orb_class);
 			}
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
@@ -545,14 +562,6 @@ class orb extends aw_template
 			}
 		}
 	}
-}
-
-class new_orb extends orb
-{
-	function new_orb()
-	{
-		$this->init("");
-	}
 
 	////
 	// !executes an orb function call and returns the data that the function returns
@@ -784,6 +793,126 @@ class new_orb extends orb
 		}
 
 		return $inst->encode_return_data($ret);
+	}
+	
+	////
+	// !Returns a list of all defined ORB classes
+	// interface(string) - name of the interface file
+	function get_classes_by_interface($args = array())
+	{
+		if (empty($args["interface"]))
+		{
+			// wuh los, man?
+			return false;
+		};
+
+		switch($args["interface"])
+		{
+			case "content":
+				$ifile = "content.xml";
+				$flag = "is_content";
+				break;
+
+			case "interface":
+			default:
+				$ifile = "public.xml";
+				$flag = "is_public";
+		};
+
+		// klassi definitsioon sisse
+		$xmldef = $this->get_file(array(
+			"file" => $this->cfg["basedir"] . "/xml/interfaces/$ifile"
+		));
+
+		// loome parseri
+		$parser = xml_parser_create();
+		xml_parser_set_option($parser,XML_OPTION_CASE_FOLDING,0);
+		// xml data arraysse
+		// XXX: I need some kind of error checking here!! -- duke
+		xml_parse_into_struct($parser,$xmldef,&$values,&$tags);
+		// R.I.P. parser
+		xml_parser_free($parser);
+
+		$pclasses = array();
+
+		foreach($values as $key => $val)
+		{
+			$attr = isset($val["attributes"]) ? $val["attributes"] : array();
+			if ( ($val["tag"] == "class") && ($val["type"] == "complete") && $attr['id'] != '')
+			{
+				$pm = $this->get_methods_by_flag(array(
+					"flag" => $flag,
+					"id" => $attr["id"],
+					"name" => $attr["name"],
+				));
+
+				if (sizeof($pm)  > 0)
+				{
+					$pclasses = $pclasses + $pm;
+				};
+
+			}
+
+		}
+
+		return $pclasses;
+
+	}
+
+	////
+	// !Returns a list of methods inside a class matching a flag
+	function get_methods_by_flag($args = array())
+	{
+		extract($args);
+		$orbclass = get_instance("orb");
+		$orb_defs = $orbclass->load_xml_orb_def($id);
+		$methods = array();
+		foreach($orb_defs[$id] as $key => $val)
+		{
+			if (is_array($val) && isset($val[$flag]))
+			{
+				$caption = isset($val["caption"]) ? $val["caption"] : $val["function"];
+				$methods[$id . "/" . $key] = $name . " / " . $caption;
+			}
+		};
+
+		return $methods;
+	}
+	
+	function get_public_method($args = array())
+	{
+		extract($args);
+		$orbclass = get_instance("orb");
+		$orb_defs = $orbclass->load_xml_orb_def($id);
+//		echo "id = $id , action = $action , orb_defs = <pre>", var_dump($orb_defs),"</pre> <br>";
+		if ($action == "default")
+		{
+			$action = $orb_defs[$id]["default"];
+		}
+
+		$meth = $orb_defs[$id][$action];
+		$meth["values"] = array();
+		$cl = get_instance($id);
+		$ar = array();
+		if ($id == "document")
+		{
+			if ($cl->get_opt("cnt_documents") == 1)
+			{
+				$meth["values"]["id"] = $cl->get_opt("shown_document");
+			}
+			$meth["values"]["period"] = aw_global_get("act_per_id");
+			//$data = $cl->get_opt("data");
+			$meth["values"]["parent"] = $cl->get_opt("parent");
+			if ($action == "change" && $cl->get_opt("shown_document"))
+			{
+				$meth["values"]["id"] = $cl->get_opt("shown_document");
+			}
+			if ($action == "new")
+			{
+				$meth["values"]["parent"] = aw_global_get("section");
+			}
+		};
+		return $meth;
 	}
 }
 ?>

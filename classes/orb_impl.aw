@@ -49,7 +49,8 @@ if ($vars["fastcall"] == 1)
 include("site_header.".aw_ini_get("ext"));
 
 classload("orb");
-$orb = new orb(array(
+$orb = new orb();
+$orb->process_request(array(
 	"class" => $class,
 	"action" => $action,
 	"reforb" => $vars["reforb"],
