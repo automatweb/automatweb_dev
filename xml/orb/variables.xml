@@ -1,0 +1,17 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="variables">
+		<action name="gen_list">
+			<function name="gen_list">
+				<arguments>
+					<optiona name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="list_stamps">
+			<function name="list_stamps"/>
+		</action>
+		
+	</class>
+</orb>
