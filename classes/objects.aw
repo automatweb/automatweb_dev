@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.31 2002/07/11 20:09:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.32 2002/07/17 02:25:46 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 classload("cache");
 class db_objects extends aw_template 
@@ -151,7 +151,7 @@ class db_objects extends aw_template
 	{
 		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
 
-		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$ignore_langmenus)."::rootobj::".$rootobj;
+		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
 		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid");
 
 		if (!$ignore_langmenus)
