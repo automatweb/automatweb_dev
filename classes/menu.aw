@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.116 2004/12/01 14:49:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.117 2004/12/09 17:04:44 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -270,6 +270,9 @@
 
 	@reltype ICON value=19 clid=CL_IMAGE
     @caption ikoon
+
+	@reltype TIMING value=20 clid=CL_TIMING
+	@caption Aeg
 
 */
 
