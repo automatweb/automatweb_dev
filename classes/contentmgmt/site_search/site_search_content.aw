@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.32 2004/12/13 15:46:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.33 2004/12/16 11:13:59 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -86,6 +86,13 @@ class site_search_content extends class_base
 			S_OPT_ANY_WORD => t("&uuml;ksk&otilde;ik milline s&otilde;nadest"),
 			S_OPT_ALL_WORDS => t("koos k&otilde;igi s&otilde;nadega"),
 			S_OPT_PHRASE => t("t&auml;pne fraas")
+		);
+
+		$this->limit_opts = array(
+			"0" => "K&otilde;ik", 
+			"20" => "20", 
+			"50" => "50",
+			"100" => "100"
 		);
 	}
 
@@ -349,6 +356,7 @@ class site_search_content extends class_base
 			"str_opts" => $this->picker($opts["str"], $this->search_opts),
 			"date_from" => $de->gen_edit_form("s_date[from]", $date["from"], date("Y")-3, date("Y"), true),
 			"date_to" => $de->gen_edit_form("s_date[to]", $date["to"], date("Y")-3, date("Y"), true),
+			"limit_opts" => $this->picker($opts["limit"], $this->limit_opts)
 		));
 
 		return $this->parse();
@@ -490,6 +498,11 @@ class site_search_content extends class_base
 			$mod2 = "AND ((d.tm > 1 AND d.tm < ".$arr["date"]["to"].") OR (d.tm < 1 AND o.modified < ".$arr["date"]["to"]."))";
 		}
 
+		$lim = "";
+		if ($arr["opts"]["limit"] > 0)
+		{
+			$lim = " LIMIT ".((int)$arr["opts"]["limit"]);
+		}
 		$this->quote($str);
 		$sql = "
 			SELECT 
@@ -521,6 +534,7 @@ class site_search_content extends class_base
 				o.class_id IN (".CL_DOCUMENT.",".CL_BROTHER_DOCUMENT.",".CL_PERIODIC_SECTION.") 
 				$mod 
 				$mod2
+				$lim
 		";
 		$this->db_query($sql);
 		while ($row = $this->db_next())
@@ -1145,7 +1159,6 @@ class site_search_content extends class_base
 						$grp_sort_by = $grpcfg["sorder"][$cid];
 					};
 
-						
 					$ret .= $this->display_results(array(
 						"groupname" => $grpcfg["caption"][$conn->prop("to")],
 						"results" => $results,
@@ -1155,7 +1168,15 @@ class site_search_content extends class_base
 						"sort_by" => $grp_sort_by,
 						"str" => $str,
 						"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
-						"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
+						"params" => array(
+							"id" => $id, 
+							"str" => $str, 
+							"sort_by" => $sort_by, 
+							"group" => $group, 
+							"section" => aw_global_get("section"),
+							"sdate" => $arr["s_date"],
+							"opts" => $arr["opts"]
+						),
 						"page" => $page
 					));
 					$search = true;
@@ -1191,7 +1212,15 @@ class site_search_content extends class_base
 					"sort_by" => $grp_sort_by,
 					"str" => $str,
 					"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
-					"params" => array("id" => $id, "str" => $str, "sort_by" => $sort_by, "group" => $group, "section" => aw_global_get("section")),
+					"params" => array(
+						"id" => $id, 
+						"str" => $str, 
+						"sort_by" => $sort_by, 
+						"group" => $group, 
+						"section" => aw_global_get("section"),
+						"s_date" => $arr["s_date"],
+						"opts" => $arr["opts"]
+					),
 					"page" => $page
 				));
 			};
