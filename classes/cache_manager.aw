@@ -7,9 +7,6 @@
 	@default field=meta
 	@default method=serialize
 
-	@property status type=status
-	@caption Staatus
-
 	@property aliases type=select multiple=1 size=10
 	@caption Vali aliased
 

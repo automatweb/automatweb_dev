@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/ekomar_show.aw,v 1.1 2003/06/26 14:12:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/ekomar_show.aw,v 1.2 2003/07/25 16:04:53 duke Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
@@ -7,9 +7,6 @@
 
 @default table=objects
 @default group=general
-
-@property status type=status field=status
-@caption Staatus
 
 @property notfound type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Kuhu suunata kui ei leitud &uuml;htegi tulemust

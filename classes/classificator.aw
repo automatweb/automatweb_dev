@@ -12,9 +12,6 @@
 @property comment type=textarea cols=50 rows=5 field=comment
 @caption Kommentaar
 
-@property status type=status field=status
-@caption Staatus
-
 @default field=meta
 @default method=serialize
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.32 2003/07/18 11:51:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.33 2003/07/25 16:00:10 duke Exp $
 
 /*
 
@@ -14,9 +14,6 @@
 @tableinfo extlinks index=id master_table=objects master_index=oid
 
 @default group=general
-
-@property status type=status table=objects group=general
-@caption Staatus
 
 @property comment type=textarea cols=30 rows=5 table=objects field=comment group=general
 @caption Kommentaar lingikogusse

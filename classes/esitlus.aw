@@ -6,9 +6,6 @@
 	@default method=serialize
 	@default field=meta
 
-	@property status type=status field=status
-	@caption Staatus
-
 	@property pealkiri type=textbox 
 	@caption Tootekataloogi pealkiri
 

@@ -8,9 +8,6 @@
 @default table=objects
 @default group=general
 
-@property status type=status field=status
-@caption Staatus
-
 	@default field=meta
 	@default method=serialize
 

@@ -13,9 +13,6 @@
 @default group=general
 @default field=meta
 
-@property status type=status field=status
-@caption Staatus
-
 @default method=serialize
 
 @property graph_type type=select 
