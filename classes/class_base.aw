@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.225 2004/02/27 11:57:32 duke Exp $
+// $Id: class_base.aw,v 2.226 2004/02/27 12:11:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -616,9 +616,9 @@ class class_base extends aw_template
 		$name = $this->obj_inst->name();
 
 		$syslog_type = ST_CONFIG;
-		if (isset($this->classinfo['syslog_type']))
+		if (!empty($this->classinfo['syslog_type']))
 		{
-			$syslog_type = constant($this->classinfo['syslog_type']);
+			$syslog_type = @constant($this->classinfo['syslog_type']);
 		}
 
 		// XXX: if I want to save data that does not belong to 
