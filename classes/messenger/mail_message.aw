@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.24 2004/02/12 10:59:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.25 2004/02/12 11:17:05 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -545,7 +545,7 @@ class mail_message extends class_base
 			$tb->add_separator();
 			$tb->add_menu_button(array(
 				"name" => "calendar",
-				"tooltip" => "",
+				"tooltip" => "Lisa kalendrisse",
 				"img" => "icon_cal_today.gif",
 			));
 			$ev_classes = $pl->get_event_classes();
@@ -580,7 +580,7 @@ class mail_message extends class_base
 		$tb->add_menu_button(array(
 			"name" => "viewmode",
 			"img" => "preview.gif",
-			"tooltip" => "",
+			"tooltip" => "Päised",
 		));
 
 		$tb->add_menu_item(array(
@@ -954,7 +954,6 @@ class mail_message extends class_base
 		$msgobj = $this->_create_draft(array(
 			"msgrid" => $arr["msgrid"],
 		));
-		$this->_prepare_message($arr);
 
 		$hdr = "----Forwarded message-----\n";
 		$hdr .= "> From: $msgdata[from]\n";
