@@ -242,7 +242,7 @@
 		</action>
 
 		<action name="addrule">
-			<function name="addrule">
+			<function name="editrule">
 				<arguments>
 				</arguments>
 			</function>
@@ -263,7 +263,7 @@
 		</action>
 
 		<action name="editrule">
-			<function name="addrule">
+			<function name="editrule">
 				<arguments>
 					<required name="id"/>
 				</arguments>
