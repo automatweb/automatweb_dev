@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.88 2003/04/07 10:18:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.89 2003/04/13 17:00:30 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,8 +10,6 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
-
-	classload("xml","php");
 
 	////
 	// !adds or changes a variable in the current url
@@ -322,6 +320,7 @@ if (!defined("DEFS"))
 		switch($type)
 		{
 			case SERIALIZE_PHP:
+				classload("php");
 				$ser = new php_serializer;
 				foreach($flags as $fk => $fv)
 				{
@@ -330,12 +329,14 @@ if (!defined("DEFS"))
 				$str = $ser->php_serialize($arr);
 				break;
 			case SERIALIZE_PHP_NOINDEX:
+				classload("php");
 				$ser = new php_serializer;
 				$ser->set("no_index",1);
 				$str = $ser->php_serialize($arr);
 				break;
 
 			case SERIALIZE_XML:
+				classload("xml");
 				$ser = new xml($flags);
 				$str = $ser->xml_serialize($arr);
 				break;
@@ -362,12 +363,14 @@ if (!defined("DEFS"))
 
 		if (substr($str,0,14) == "<?xml version=")
 		{
+			classload("xml");
 			$x = new xml;
 			$retval = $x->xml_unserialize(array("source" => $str));
 		}
 		else
 		if (substr($str,0,6) == "\$arr =")
 		{
+			classload("php");
 			// php serializer
 			$p = new php_serializer;
 			$retval = $p->php_unserialize($str);
