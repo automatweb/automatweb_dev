@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.204 2003/01/17 08:46:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.205 2003/01/17 15:24:36 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -5826,7 +5826,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 			else
 			{
-				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
+				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
 				$row["is_menu"] = 2;
 			}
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
