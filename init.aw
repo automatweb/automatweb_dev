@@ -279,6 +279,16 @@ function init_config($arr)
 
 	// db driver quoting settings
 	$GLOBALS['cfg']['__default']['magic_quotes_runtime'] = ini_get('magic_quotes_runtime');
+
+	// also, make a short version on __default that is used to init classes
+	$td = $GLOBALS["cfg"]["__default"];
+
+	unset($td["classes"]);
+	unset($td["classfolders"]);
+	unset($td["programs"]);
+	unset($td["errors"]);
+	
+	$GLOBALS["cfg"]["__default__short"] = $td;
 }
 
 function aw_ini_set($key,$value)
@@ -294,13 +304,7 @@ function aw_config_init_class(&$that)
 {
 //	enter_function("__global::aw_config_init_class",array());
 	$class = get_class($that);
-	$td = $GLOBALS["cfg"]["__default"];
-	unset($td["classes"]);
-	unset($td["classfolders"]);
-	unset($td["programs"]);
-	unset($td["errors"]);
-
-	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$td);
+	$that->cfg = array_merge((isset($GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class] : array()),$GLOBALS["cfg"]["__default__short"]);
 	$that->cfg["acl"] = $GLOBALS["cfg"]["acl"];
 	$that->cfg["config"] = $GLOBALS["cfg"]["config"];
 //	exit_function("__global::aw_config_init_class");
