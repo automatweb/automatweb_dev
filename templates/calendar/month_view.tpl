@@ -19,6 +19,16 @@
 	</span>
 	</td>
 	<!-- END SUB: DAY -->
+	<!-- SUB: TODAY -->
+	<td width="150" valign="top" style="border: 1px solid #8AAABE; background-color: #EEE;">
+	<a name="today"></a>
+	<div align="right"><small><strong><a href="{VAR:daylink}">{VAR:daynum}</a></strong></small></div>
+	<span style="font-size: 11px;">
+	<p>
+		{VAR:EVENT}
+	</span>
+	</td>
+	<!-- END SUB: TODAY -->
 </tr>
 <!-- END SUB: WEEK -->
 </table>
