@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.41 2004/07/05 08:40:58 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.42 2004/07/05 08:46:56 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -609,7 +609,6 @@ class crm_person extends class_base
 		// and then I just fetch the latest thingie
 
 		// easy as pie
-
 		
 		$o = new object($arr["id"]);
 		$cal_id = $arr["cal_id"];
@@ -663,15 +662,14 @@ class crm_person extends class_base
 			$ranks[] = $conn->prop("to.name");
 			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
-		
-		$conns = $o->connections_to(array(
-							'type' => 2 //crm_person.reltype_section=21
+	
+		$conns = $o->connections_from(array(
+							'type' => 21 //crm_person.reltype_section=21
 											 //crm_section.reltype_worker=2
 					));
-
 		foreach($conns as $conn)
 		{	
-			$sections_arr[$conn->prop('from')] = $conn->prop('from.name');
+			$sections_arr[$conn->prop('to')] = $conn->prop('to.name');
 		}
 		//arr($conn);
 		$rv = array(
@@ -1178,7 +1176,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 			  "to" => $conn->prop("from"),
-			  "reltype" => 8, //cl_crm_company.reltype_workers
+			  "reltype" => RELTYPE_WORK
 			));
 		};
 	}
