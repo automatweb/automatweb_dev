@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.29 2004/10/29 16:08:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.30 2004/11/03 12:17:19 kristo Exp $
 
 /*
 
@@ -376,6 +376,7 @@ class classificator extends class_base
 			"parent" => $clinf[$arr["name"]],
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"sort_by" => "objects.jrk"
 		));
 
 		return $items->names();
