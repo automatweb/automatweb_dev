@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.59 2003/01/28 17:09:51 duke Exp $
+// $Id: class_base.aw,v 2.60 2003/01/28 18:27:47 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -400,6 +400,12 @@ class class_base extends aliasmgr
 				{
 					continue;
 				};
+
+				if ($property["store"] == "no")
+				{
+					continue;
+				};
+
 				if ($type == "date_select")
 				{
 					// turn the array into a timestamp
@@ -603,6 +609,12 @@ class class_base extends aliasmgr
 		{
 			$orb_class = get_class($this->orb_class);
 		};
+
+		if ($orb_class == "document")
+		{
+			$orb_class = "doc";
+		};
+
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (!$has_properties)
 		{
@@ -1047,12 +1059,12 @@ class class_base extends aliasmgr
 			{
 				if ($_field)
 				{
-					if ($property["type"] != "callback")
+					if (($property["type"] != "callback") && ($property["store"] != "no") )
 					{
 						$fields[$property["table"]][$_field] = $fval;
 					};
 				};
-				if (($property["type"] != "text") && ($property["type"] != "callback"))
+				if (($property["type"] != "text") && ($property["type"] != "callback") && ($property["store"] != "no"))
 				{
 					$realfields[$property["table"]][$_field] = $fval;
 				};
