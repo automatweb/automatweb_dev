@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.13 2003/07/01 10:21:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/menu_tree.aw,v 2.14 2003/07/15 16:22:54 duke Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -285,7 +285,7 @@ class menu_tree extends class_base
 			else
 			{
 				// check if we have already shown this one, so let's not do it again!
-				if (!isset($this->shown[$id]))
+				if (!isset($this->shown[$v[OID]]))
 				{
 					$this->vars(array(
 						"url" => $url,
@@ -295,7 +295,7 @@ class menu_tree extends class_base
 					));
 
 					$this->res .= $this->parse($tpl);
-					$this->shown[$id] = $id;
+					$this->shown[$v[OID]] = $id;
 				}
 			};
 
