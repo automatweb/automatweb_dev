@@ -818,6 +818,7 @@ class form_db_base extends aw_template
 		// ok, so we can assume that we have all the necessary relations in $this->_joins, so convert that into sql
 		$sql = "";
 		$first = true;
+		$this->join_sql_used = array();
 		foreach($this->_joins as $jdata)
 		{
 			if ($first)
@@ -827,7 +828,11 @@ class form_db_base extends aw_template
 			}
 			else
 			{
-				$sql.=" LEFT JOIN ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+				if (!isset($this->join_sql_used[$jdata["to_tbl"]]))
+				{
+					$sql.=" LEFT JOIN ".$jdata["to_tbl"]." ON ".$jdata["from_tbl"].".".$jdata["from_el"]." = ".$jdata["to_tbl"].".".$jdata["to_el"];
+					$this->join_sql_used[$jdata["to_tbl"]] = $jdata["to_tbl"];
+				}
 			}
 			$first = false;
 		}
