@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.65 2004/11/11 13:16:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.66 2004/11/19 11:55:17 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -2207,7 +2207,10 @@ class crm_person extends class_base
 		if (count($res))
 		{
 			$tmp = reset($res);
-			return obj($tmp["from"]);
+			if (is_oid($tmp["from"]) && $this->can("view", $tmp["from"]))
+			{
+				return obj($tmp["from"]);
+			}
 		}
 		return false;
 	}
