@@ -7,7 +7,6 @@
 			</function>
 		</action>
 
-
 		<action name="run_filters" nologin="1">
 			<function name="run_filters">
 				<arguments>

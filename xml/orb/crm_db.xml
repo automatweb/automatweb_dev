@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="kliendibaas" folder="kliendibaas" extends="class_base">
+	<class name="crm_db" folder="crm" extends="class_base">
 		<action name="change">
 			<function name="change">
 				<arguments>

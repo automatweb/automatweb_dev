@@ -8,5 +8,11 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="gen_toolbar">
+			<function name="gen_toolbar">
+				<arguments/>
+			</function>
+		</action>
 	</class>
 </orb>

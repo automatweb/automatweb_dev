@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="selection" folder="kliendibaas" extends="class_base">
+	<class name="crm_selection" folder="crm" extends="class_base">
 		<action name="save_selection">
 			<function name="save_selection">
 				<arguments>
