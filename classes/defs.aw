@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.73 2002/12/06 10:07:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.74 2002/12/09 16:31:57 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -607,7 +607,7 @@ if (!defined("DEFS"))
 		// prints if the user has a cookie named debug1
 		function p1($msg)
 		{
-			if (aw_global_get("debug1"))
+			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug1"])
 			{
 				echo $msg;
 			}
@@ -616,7 +616,7 @@ if (!defined("DEFS"))
 		// prints if the user has a cookie named debug2
 		function p2($msg)
 		{
-			if (aw_global_get("debug2"))
+			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug2"])
 			{
 				echo $msg;
 			}
@@ -625,7 +625,7 @@ if (!defined("DEFS"))
 		// prints if the user has a cookie named debug3
 		function p3($msg)
 		{
-			if (aw_global_get("debug3"))
+			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug3"])
 			{
 				echo $msg;
 			}
@@ -634,7 +634,7 @@ if (!defined("DEFS"))
 		// prints if the user has a cookie named debug4
 		function p4($msg)
 		{
-			if (aw_global_get("debug4"))
+			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug4"])
 			{
 				echo $msg;
 			}
@@ -643,7 +643,7 @@ if (!defined("DEFS"))
 		// prints if the user has a cookie named debug5
 		function p5($msg)
 		{
-			if (aw_global_get("debug5"))
+			if ($GLOBALS["HTTP_COOKIE_VARS"]["debug5"])
 			{
 				echo $msg;
 			}
