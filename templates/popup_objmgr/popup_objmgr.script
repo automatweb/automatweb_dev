@@ -1,0 +1,26 @@
+<script language='JavaScript'>
+
+var current_element = '';
+
+function put_value(OptionValue,OptionText)
+{
+	OptionList = document.changeform.elements[current_element];
+
+	for (j=0; j < OptionList.length; j++)
+	{
+		if (OptionList[j].value == OptionValue)
+		{
+			OptionList[j] = new Option(OptionText, OptionValue, true);
+			return true;
+		}
+	}
+	OptionList[OptionList.length] = new Option(OptionText, OptionValue, true);
+}
+
+function pop_select(url)
+{
+	aken=window.open(url,"popup:object manager","HEIGHT={VAR:height},WIDTH={VAR:width},scrollbars=yes,{VAR:params}");
+	aken.focus();
+}
+
+</script>
