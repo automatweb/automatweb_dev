@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.17 2001/06/07 18:11:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.18 2001/06/07 19:16:25 duke Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -762,7 +762,8 @@ $orb_defs["form"] = "xml";
 
 			if (!$entry_id)
 			{
-				$entry_id = $this->new_object(array("parent" => $this->arr["ff_folder"], "form_entry", "class_id" => CL_FORM_ENTRY));
+				$parent = ($parent) ? $parent: $this->arr["ff_folder"];
+				$entry_id = $this->new_object(array("parent" => $parent, "form_entry", "class_id" => CL_FORM_ENTRY));
 				$new = true;
 			}
 			else
