@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.25 2001/12/18 00:09:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.26 2002/02/18 13:42:45 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -47,7 +47,7 @@ class form_cell extends form_base
 				$t = "form_filter_search_element";
 				break;
 			default:
-				$this->raise_error("form_cell->mk_element($type) , error in type!",true);
+				$this->raise_error(ERR_FG_ETYPE,"form_cell->mk_element($type) , error in type!",true);
 		}
 		$awt->start("form_entry_element::load");
 		$tmp = new $t;
@@ -300,7 +300,7 @@ class form_cell extends form_base
 	function admin_cell_actions()
 	{
 		if (!$this->facl->get(can_action))
-			$this->raise_error("ACL ERROR: You do not have access to do this! (admin_cell_actions)",true);
+			$this->raise_error(ERR_FG_ACL_NOACESS,"ACL ERROR: You do not have access to do this! (admin_cell_actions)",true);
 		global $lc_form;
 		if (is_array($lc_form))
 		{
@@ -439,7 +439,7 @@ class form_cell extends form_base
 	function admin_cell_controllers()
 	{
 		if (!$this->facl->get(can_edit))
-			$this->raise_error("ACL ERROR: You do not have access to do this! (can_edit)",true);
+			$this->raise_error(ERR_FG_ACL_NOACESS,"ACL ERROR: You do not have access to do this! (can_edit)",true);
 
 		$this->read_template("admin_cell_controllers.tpl");
 

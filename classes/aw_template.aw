@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.20 2002/01/17 10:45:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.21 2002/02/18 13:38:51 kristo Exp $
 // aw_template.aw - Templatemootor
 class tpl
 {
@@ -163,7 +163,7 @@ class aw_template extends acl_base
 			global $tpldir;
 			//$name = substr($filename,strlen($tpldir) + 1);
 			$name = $filename;
-			$this->raise_error("Template '$name' not found",true);
+			$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
 		};
 		return $this->use_template($source);
 	}
@@ -183,7 +183,7 @@ class aw_template extends acl_base
 			global $tpldir;
 			//$name = substr($filename,strlen($tpldir) + 1);
 			$name = $filename;
-			$this->raise_error("Template '$name' not found",true);
+			$this->raise_error(ERR_TPL_NOTPL,"Template '$name' not found",true);
 		};
 		return $this->use_template($source);
 	}
@@ -312,7 +312,7 @@ class aw_template extends acl_base
 		$retval = $this->names[$name];
 		// wrapper backwards compatibility jaoks
     //$retval = $this->get_tpl_by_name($name,array("0"=> $this->construct));
-    		if (is_object($awt))
+    if (is_object($awt))
 		{
 			$awt->stop("aw_template::is_template");
 		};

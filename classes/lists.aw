@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.7 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.8 2002/02/18 13:48:54 kristo Exp $
 // list.aw - listide haldus
 lc_load("mailinglist");
 	global $orb_defs;
@@ -303,7 +303,7 @@ lc_load("mailinglist");
 		{
 			$this->db_query("SELECT * FROM objects WHERE oid = $id");
 			if (!($row = $this->db_next()))
-				$this->raise_error("menuedit->gen_change_html($id): No such menu!", true);
+				$this->raise_error(ERR_LISTS_NOMENU,"menuedit->gen_change_html($id): No such menu!", true);
 
 			$this->read_template("change_cat.tpl");
 

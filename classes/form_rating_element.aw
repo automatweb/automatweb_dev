@@ -42,7 +42,7 @@ lc_load("form");
 												WHERE objects.oid = $id
 												GROUP BY objects.oid");
 			if (!($row = $this->db_next()))
-				$this->raise_error("form_entry_element->load($id), no such element!", true);
+				$this->raise_error(ERR_FG_NOELEMENT,"form_entry_element->load($id), no such element!", true);
 			$this->arr = unserialize($row[content]);
 			$clipboard[id] = $this->arr[style];		// put the selected style in the clipboard so that when the user wants to change it, 
 																						// the style selector knows the currently selected one

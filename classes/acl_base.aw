@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.14 2002/01/31 00:30:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.15 2002/02/18 13:38:17 kristo Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -251,7 +251,7 @@ class acl_base extends core
 			// 25 peaks vist piisama kyll
 			if (++$cnt > 25)
 			{
-				$this->raise_error("acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
+				$this->raise_error(ERR_ACL_EHIER,"acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
 			}
 
 			$oid = $parent;
@@ -475,7 +475,7 @@ class acl_base extends core
 			$gr = $this->get_user_group($uuid);
 			if (!$gr) 
 			{
-				$this->raise_error(LC_NO_DEFAULT_GROUP,true);
+				$this->raise_error(ERR_ACL_NOGRP,LC_NO_DEFAULT_GROUP,true);
 			};
 			$this->add_acl_group_to_obj($gr["gid"], $oid);
 			$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.11 2002/02/01 11:15:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/css.aw,v 2.12 2002/02/18 13:41:19 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 // I decided to make it a separate class, because I think the style.aw 
 // class is too cluttered.
@@ -352,7 +352,7 @@ class css extends aw_template {
 		}
 		else
 		{
-			$this->raise_error("Wrong type for css_submit_add_group",true);
+			$this->raise_error(ERR_CSS_EGRP,"Wrong type for css_submit_add_group",true);
 		};
 		
 		$this->quote($name);

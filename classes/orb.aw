@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.13 2002/01/31 00:17:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.14 2002/02/18 13:47:28 kristo Exp $
 // tegeleb ORB requestide handlimisega
 classload("aw_template","defs","xml_support");
 lc_load("automatweb");
@@ -35,7 +35,7 @@ class orb extends aw_template {
 		// class defineeritud?
 		if (!isset($class))
 		{
-			$this->raise_error(E_ORB_CLASS_UNDEF,$fatal,$silent);
+			$this->raise_error(ERR_ORB_NOCLASS,E_ORB_CLASS_UNDEF,$fatal,$silent);
 			bail_out();
 		};
 		
@@ -44,7 +44,7 @@ class orb extends aw_template {
 
 		if (!class_exists($class))
 		{
-			$this->raise_error(sprintf(E_ORB_CLASS_NOT_FOUND,$class),$fatal,$silent);
+			$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$fatal,$silent);
 			bail_out();
 		};
 
@@ -79,7 +79,7 @@ class orb extends aw_template {
 			}
 			else
 			{
-				$this->raise_error(E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+				$this->raise_error(ERR_ORB_LOGIN,E_ORB_LOGIN_REQUIRED,$fatal,$silent);
 			}
 		};
 
@@ -87,19 +87,18 @@ class orb extends aw_template {
 		// action defineeritud?
 		if (!isset($action))
 		{
-			$this->raise_error(E_ORB_ACTION_UNDEF,$fatal,$silent);
+			$this->raise_error(ERR_ORB_AUNDEF,E_ORB_ACTION_UNDEF,$fatal,$silent);
 			bail_out();
 		};
 
 
 		// leiame actionile vastava funktsiooni
 		$fun = $orb_defs[$class][$action]; 
-		
 		// kas asi on defineeritud xml-is?
 		$xml = $orb_defs[$class][$action]["xml"];
 		if (!is_array($fun))
 		{
-			$this->raise_error(sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),$fatal,$silent);
+			$this->raise_error(ERR_ORB_CAUNDEF,sprintf(E_ORB_CLASS_ACTION_UNDEF,$action,$class),$fatal,$silent);
 			bail_out();
 		};
 
@@ -109,7 +108,7 @@ class orb extends aw_template {
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
-				$this->raise_error(sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
+				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
 				bail_out();
 			}
  
@@ -150,7 +149,7 @@ class orb extends aw_template {
 				{
 					if (!isset($vars[$key]))
 					{
-						$this->raise_error(sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
+						$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$key,$action,$class),$fatal,$silent);
 						bail_out();
 					};
 
@@ -159,7 +158,7 @@ class orb extends aw_template {
 					{
 						if ($vars[$key] != sprintf("%d",$vars[$key]))
 						{
-							$this->raise_error(sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
 							bail_out();
 						};
 					};
@@ -174,7 +173,7 @@ class orb extends aw_template {
 					{
 						if ( ($vartype == "int") && ($vars[$key] != sprintf("%d",$vars[$key])) )
 						{
-							$this->raise_error(sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
+							$this->raise_error(ERR_ORB_NINT,sprintf(E_ORB_NOT_INTEGER,$key),$fatal,$silent);
 							bail_out();
 						};
 						$params[$key] = $vars[$key];
@@ -196,7 +195,7 @@ class orb extends aw_template {
 			{
 				if (!isset($vars[$vname]))
 				{
-					$this->raise_error(sprintf(E_ORB_CLASS_PARM,$vname,$action,$class),$fatal,$silent);
+					$this->raise_error(ERR_ORB_CPARM,sprintf(E_ORB_CLASS_PARM,$vname,$action,$class),$fatal,$silent);
 				};
 
 				$params[$vname] = $vars[$vname];
@@ -231,7 +230,7 @@ class orb extends aw_template {
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
-				$this->raise_error(sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
+				$this->raise_error(ERR_ORB_MNOTFOUND,sprintf(E_ORB_METHOD_NOT_FOUND,$action,$class),$fatal,$silent);
 			};
 		
 			$content = $t->$fname($params);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.5 2002/02/18 13:45:32 kristo Exp $
 class pop3 extends aw_template
 {
 	function pop3()
@@ -17,21 +17,21 @@ class pop3 extends aw_template
 		$this->send_command("USER $user");
 		if (!$this->get_status($this->read_response()))
 		{	
-			$this->raise_error("pop3: Invalid username $user!",true);
+			$this->raise_error(ERR_POP3_INVUSER,"pop3: Invalid username $user!",true);
 			return false;
 		}
 
 		$this->send_command("PASS $pass");
 		if (!$this->get_status($this->read_response()))
 		{	
-			$this->raise_error("pop3: Invalid password for user $user!",true);
+			$this->raise_error(ERR_POP3_INVPWD,"pop3: Invalid password for user $user!",true);
 			return false;
 		}
 
 		$this->send_command("STAT");
 		if (!$this->get_status($res = $this->read_response()))
 		{	
-			$this->raise_error("pop3:  weird error $res after STAT!",true);
+			$this->raise_error(ERR_POP3_STAT,"pop3:  weird error $res after STAT!",true);
 			return false;
 		}
 		preg_match("/\+OK (.*) (.*)/",$res,$mt);
@@ -40,7 +40,7 @@ class pop3 extends aw_template
 		$this->send_command("UIDL");
 		if (!$this->get_status($res = $this->read_response()))
 		{	
-			$this->raise_error("pop3:  weird error $res after UIDL!",true);
+			$this->raise_error(ERR_POP3_UIDL,"pop3:  weird error $res after UIDL!",true);
 			return false;
 		}
 		$muidls = array();
@@ -83,7 +83,7 @@ class pop3 extends aw_template
 		$this->fp = fsockopen($server, 110, &$errno, &$errstr, 20);
 		if (!$this->fp)
 		{
-			$this->raise_error("pop3: error connecting, $errno , $errstr",true);
+			$this->raise_error(ERR_POP3_CONNECT,"pop3: error connecting, $errno , $errstr",true);
 			return false;
 		}
 //		echo "connected<br>\n";
@@ -124,7 +124,7 @@ class pop3 extends aw_template
 		$this->send_command("RETR $num");
 		if (!$this->get_status($res = $this->read_response()))
 		{
-			$this->raise_error("pop3: imelik error $res after RETR $num !",true);
+			$this->raise_error(ERR_POP3_RETR,"pop3: imelik error $res after RETR $num !",true);
 			return false;
 		}
 		$ret = "";

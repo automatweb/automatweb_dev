@@ -12,23 +12,23 @@ class smtp extends aw_template
 			return false;
 
 		if (!$this->get_status($this->read_response()))
-			$this->raise_error("smtp: error, something wrong with server", false);
+			$this->raise_error(ERR_SMTP_WSERVER,"smtp: error, something wrong with server", false);
 
 		$this->send_command("HELO ".$GLOBALS["SERVER_NAME"]);
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after HELO ".$GLOBALS["SERVER_NAME"], false);
+			$this->raise_error(ERR_SMTP_HELO,"smtp: error '$err' after HELO ".$GLOBALS["SERVER_NAME"], false);
 
 		$this->send_command("MAIL FROM:<$from>");
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after MAIL FROM:<$from>", false);
+			$this->raise_error(ERR_SMTP_MFROM,"smtp: error '$err' after MAIL FROM:<$from>", false);
 
 		$this->send_command("RCPT TO:<$to>");
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after RCPT TO:<$to>", false);
+			$this->raise_error(ERR_SMTP_RCPT,"smtp: error '$err' after RCPT TO:<$to>", false);
 
 		$this->send_command("DATA");
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after DATA", false);
+			$this->raise_error(ERR_SMTP_DATA,"smtp: error '$err' after DATA", false);
 		
 		$larr = explode("\n", $msg);
 		reset($larr);
@@ -44,11 +44,11 @@ class smtp extends aw_template
 		}
 		$this->send_command(".");
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after message", false);
+			$this->raise_error(ERR_SMTP_MSG,"smtp: error '$err' after message", false);
 
 		$this->send_command("QUIT");
 		if (!$this->get_status($err = $this->read_response()))
-			$this->raise_error("smtp: error '$err' after QUIT", false);
+			$this->raise_error(ERR_SMTP_QUIT,"smtp: error '$err' after QUIT", false);
 
 		return true;
 	}
@@ -58,7 +58,7 @@ class smtp extends aw_template
 		$this->fp = fsockopen($server, 25, &$errno, &$errstr, 20);
 		if (!$this->fp)
 		{
-			$this->raise_error("smtp: error connecting, $errno , $errstr",false);
+			$this->raise_error(ERR_SMTP_CONNECT,"smtp: error connecting, $errno , $errstr",false);
 			return false;
 		}
 		return true;

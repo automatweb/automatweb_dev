@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.3 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner_profile.aw,v 2.4 2002/02/18 13:39:03 kristo Exp $
 
 global $orb_defs;
 $orb_defs["banner_profile"] = "xml";
@@ -28,7 +28,7 @@ class banner_profile extends banner
 		$fid = $c->get_simple_config("banner_profile_form");
 		if (!$fid)
 		{
-			$this->raise_error(LC_NO_FORM_FOR_BANNER, true);
+			$this->raise_error(ERR_BANNER_NOFORM,LC_NO_FORM_FOR_BANNER, true);
 		}
 
 		$this->mk_path($parent, LC_ADD_BANNER_PROFILE);
@@ -89,7 +89,7 @@ class banner_profile extends banner
 
 		if (!$fid)
 		{
-			$this->raise_error(LC_NO_FORM_FOR_BANNER, true);
+			$this->raise_error(ERR_BANNER_NOFORM,LC_NO_FORM_FOR_BANNER, true);
 		}
 
 		$this->mk_path($o["parent"], LC_CHANGE_BANNER_PROFILE);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.9 2002/01/18 15:41:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.10 2002/02/18 13:45:49 kristo Exp $
 // sys.aw - various system related functions
 lc_load("syslog");
 global $orb_defs;
@@ -97,7 +97,7 @@ class sys extends aw_template
 		$fp=fsockopen($server,$port,&$this->errno, &$this->errstr);
 		if (!$fp)
 		{
-			$this->raise_error("Failed opening connection to server $server",true);
+			$this->raise_error(ERR_DBSYNC_NOSERVER,"Failed opening connection to server $server",true);
 		};
 
 		$request = "http://" . $server . $url;

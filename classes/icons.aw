@@ -112,7 +112,7 @@ class icons extends aw_template
 								    "image/pjpeg");
 		if (!in_array($fail_type,$itypes) && $fail != "none")
 		{
-			$this->raise_error(LC_ICONS_GIR_OR_JPEG,true);
+			$this->raise_error(ERR_ICONS_WTYPE,LC_ICONS_GIR_OR_JPEG,true);
 		}
 
 		if ($id)
@@ -341,7 +341,7 @@ class icons extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error(LC_ICONS_SOME_IS_WRONG,true);
+				$this->raise_error(ERR_ICONS_EOPEN,LC_ICONS_SOME_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -399,14 +399,14 @@ class icons extends aw_template
 			$dir = $tmpdir."/".$this->gen_uniq_id();
 			if (!mkdir($dir,0777))
 			{
-				$this->raise_error("Unable to create temp directory $dir !", true);
+				$this->raise_error(ERR_ICONS_NOTEMP,"Unable to create temp directory $dir !", true);
 			}
 
 			// siin konverdime
 			$tdir = $tmpdir."/".$this->gen_uniq_id();
 			if (!mkdir($tdir,0777))
 			{
-				$this->raise_error("Unable to create temp directory $tdir !", true);
+				$this->raise_error(ERR_ICONS_NOTEMP,"Unable to create temp directory $tdir !", true);
 			}
 
 			global $unzip_path;
@@ -461,7 +461,7 @@ class icons extends aw_template
 						else
 						{
 							rmdir($dir);
-							$this->raise_error("image type not supported, only .gif/.jpg/.jpeg supported! file $file , ext = $ext", true);
+							$this->raise_error(ERR_ICONS_WTYPE,"image type not supported, only .gif/.jpg/.jpeg supported! file $file , ext = $ext", true);
 						}
 
 						// kui pole, siis lisame. 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.6 2002/02/18 13:45:32 kristo Exp $
 lc_load("mailinglist");
 	global $orb_defs;
 	$orb_defs["variables"] = array(
@@ -67,7 +67,7 @@ lc_load("mailinglist");
 			$this->read_template("add_var.tpl");
 			
 			if (!($row = $this->get_object($id)))
-				$this->raise_error("variables->change_var(): no such variable!", true);
+				$this->raise_error(ERR_ML_VAR_NO_VAR,"variables->change_var(): no such variable!", true);
 			$this->parent = $row["parent"];
 			$this->vars(array(
 				"var_name" => $row[name], 
@@ -302,7 +302,7 @@ lc_load("mailinglist");
 			$this->read_template("add_stamp.tpl");
 			
 			if (!($row = $this->get_object($id)))
-				$this->raise_error("variables->change_stamp($id): no such stamp!", true);
+				$this->raise_error(ERR_ML_VAR_NO_STAMP,"variables->change_stamp($id): no such stamp!", true);
 			
 			$this->vars(array("stamp_name" => $row[name], "stamp_id" => $row[oid], "stamp_value" => $row[comment]));
 			return $this->parse();
@@ -351,7 +351,7 @@ lc_load("mailinglist");
 		function change_cat($id)
 		{
 			if (!($row = $this->get_object($id)))
-				$this->raise_error("variables->gen_change_html($id): No such category!", true);
+				$this->raise_error(ERR_ML_VAR_NO_CAT,"variables->gen_change_html($id): No such category!", true);
 
 			$this->read_template("change_var_cat.tpl");
 

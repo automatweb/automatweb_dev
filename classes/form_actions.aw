@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.7 2001/11/01 22:10:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.8 2002/02/18 13:42:08 kristo Exp $
 
 // form_actions.aw - creates and executes form actions
 lc_load("form");
@@ -133,7 +133,7 @@ class form_actions extends form_base
 										 WHERE objects.oid = $aid");
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error("form->gen_change_action($id, $aid, $level): no such action!", true);
+			$this->raise_error(ERR_FG_NOACTION,"form->gen_change_action($id, $aid, $level): no such action!", true);
 		}
 
 		if ($level < 2)

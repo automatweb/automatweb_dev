@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.7 2001/10/02 10:16:58 cvs Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.8 2002/02/18 13:45:32 kristo Exp $
 lc_load("periods");	
 class db_periods extends aw_template 
 {
@@ -12,8 +12,8 @@ class db_periods extends aw_template
 		global $lc_periods;
 		if (is_array($lc_periods))
 		{
-			$this->vars($lc_periods);}
-
+			$this->vars($lc_periods);
+		}
 	}
 	
 	function clist($arc_only = -1) 

@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.23 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/gallery.aw,v 2.24 2002/02/18 13:43:49 kristo Exp $
 classload("images");
 lc_load("gallery");
 global $orb_defs;
@@ -55,7 +55,7 @@ class gallery extends aw_template
 		extract($arr);
 		if (!($row = $this->get_object($id)))
 		{
-			$this->raise_error("no such gallery($id)!", true);
+			$this->raise_error(ERR_GAL_NOGAL,"no such gallery($id)!", true);
 		}
 		$this->read_template("add.tpl");
 		$this->mk_path($row["parent"],LC_GALLERY_CHANGE_GAL);
@@ -102,7 +102,7 @@ class gallery extends aw_template
 		$this->db_query("SELECT objects.*, galleries.content as content FROM objects LEFT JOIN galleries ON galleries.id = objects.oid WHERE oid = $id");
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error("load_gallery($id): no such gallery!", true);
+			$this->raise_error(ERR_GAL_NOGAL,"load_gallery($id): no such gallery!", true);
 		}
 
 		$this->arr = unserialize($row["content"]);

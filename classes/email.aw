@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.14 2001/11/28 13:17:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.15 2002/02/18 13:41:41 kristo Exp $
 // mailinglist saadetavate mailide klass
 lc_load("mailinglist");
 	class email extends aw_template
@@ -160,7 +160,7 @@ lc_load("mailinglist");
 
 			$this->db_query("SELECT ml_mails.*,objects.parent as parent FROM ml_mails LEFT JOIN objects ON objects.oid = ml_mails.id WHERE id = $id");
 			if (!($row = $this->db_next()))
-				$this->raise_error("email->change_mail($id): No such e-mail!", true);
+				$this->raise_error(ERR_EMAIL_NOEMAIL,"email->change_mail($id): No such e-mail!", true);
 
 			$c=$this->mk_ml_vars($row[parent]);
 			
@@ -180,13 +180,13 @@ lc_load("mailinglist");
 			$this->read_template("mail_preview.tpl");
 			$this->db_query("SELECT ml_mails.*,objects.parent as parent FROM ml_mails LEFT JOIN objects ON objects.oid = ml_mails.id WHERE id = $msg_id");
 			if (!($mail = $this->db_next()))
-				$this->raise_error("email->mail_preview($msg_id): no such email!", true);
+				$this->raise_error(ERR_EMAIL_NOEMAIL,"email->mail_preview($msg_id): no such email!", true);
 			
 			$this->db_query("SELECT objects.name as name, ml_users.* FROM objects
 											 LEFT JOIN ml_users ON objects.oid = ml_users.id
 											 WHERE objects.status != 0 AND objects.class_id = 17 AND objects.parent=".$mail[parent]);
 			if (!($user = $this->db_next()))
-				$this->raise_error(LC_EMAIL_NO_USER_IN_SYSTEM, true);
+				$this->raise_error(ERR_EMAIL_NOUSER,LC_EMAIL_NO_USER_IN_SYSTEM, true);
 
 			$this->mk_vars($msg_id);
 			
@@ -329,7 +329,7 @@ lc_load("mailinglist");
 			
 			$this->db_query("SELECT ml_mails.*,objects.parent as parent FROM ml_mails LEFT JOIN objects ON objects.oid = ml_mails.id WHERE id = $id");
 			if (!($mail = $this->db_next()))
-				$this->raise_error("email->send_mail($id): No such e-mail!", true);
+				$this->raise_error(ERR_EMAIL_NOEMAIL,"email->send_mail($id): No such e-mail!", true);
 			
 			$list_id=$mail[parent];
 		

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.94 2002/02/13 13:14:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.95 2002/02/18 13:48:17 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -306,7 +306,7 @@ class menuedit extends aw_template
 					die();
 				}
 			}
-			$this->raise_error("No ACL error messages defined!",true);
+			$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined!",true);
 		}
 
 		// main.tpl-i muutuste testimiseks ilma seda oiget main.tpl-i muutmata
@@ -1608,7 +1608,7 @@ class menuedit extends aw_template
 					WHERE oid = ".$udata["home_folder"]);
 		if (!($hf = $this->db_next()))
 		{
-			$this->raise_error(sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
+			$this->raise_error(ERR_MNEDIT_NOFOLDER,sprintf(MN_E_NO_HOME_FOLDER,$uid),true);
 		};
 		
 		// when we create the home folders we write down which ones are shown
@@ -2541,7 +2541,7 @@ class menuedit extends aw_template
 		global $class_defs,$ext;
 		$inf = $class_defs[$obj["class_id"]];
 		if (!is_array($inf))
-			$this->raise_error("menuedit->command_redirect($oid): Unknown class $row[class_id]",true);
+			$this->raise_error(ERR_MNEDIT_CMDREDIR,"menuedit->command_redirect($oid): Unknown class $row[class_id]",true);
 
 		if ($subaction == "configure")
 		{
@@ -2551,7 +2551,7 @@ class menuedit extends aw_template
 			}
 			else
 			{
-				$this->raise_error("menuedit->command_redirect($oid): this class has no configure method",true);
+				$this->raise_error(ERR_MNEDIT_NOCONF,"menuedit->command_redirect($oid): this class has no configure method",true);
 			};
 		};
 
@@ -2574,7 +2574,7 @@ class menuedit extends aw_template
 		global $class_defs,$ext;
 		$inf = $class_defs[$type];
 		if (!is_array($inf))
-			$this->raise_error("menuedit->command_redirect($oid): Unknown class ".$row["class_id"],true);
+			$this->raise_error(ERR_MNEDIT_UCLASS,"menuedit->command_redirect($oid): Unknown class ".$row["class_id"],true);
 		
 		if (!$period)
 		{
@@ -2591,7 +2591,7 @@ class menuedit extends aw_template
 		extract($arr);
 
 		if (!$this->can("add",$parent))
-			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+			$this->raise_error(ERR_MNEDIT_ACL_NOADD,LC_MENUEDIT_NOT_ALLOW, true);
 
 		// just add the damn thing and be don withit
 		$id = $this->new_object(array(
@@ -2657,7 +2657,7 @@ class menuedit extends aw_template
 		if ($id) 
 		{
 			if (!$this->can("edit",$id))
-				$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+				$this->raise_error(ERR_MNEDIT_ACL_NOCHANGE,LC_MENUEDIT_NOT_ALLOW, true);
 
 			// küsime olemasoleva info menüü kohta
 			$q = "SELECT objects.*,menu.* FROM objects
@@ -3042,7 +3042,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		{
 			if (!$this->can("add",$parent))
 			{
-				$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+				$this->raise_error(ERR_MNEDIT_ACL_NOADD,LC_MENUEDIT_NOT_ALLOW, true);
 			}
 			// teeme uue menyy
 			$id = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_PSEUDO, "comment" => $comment,"status" => 1));
@@ -3325,7 +3325,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	{
 		extract($arr);
 		if (!$this->can("delete",$id))
-			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+			$this->raise_error(ERR_MNEDIT_ACL_NODEL,LC_MENUEDIT_NOT_ALLOW, true);
 
 		$this->rd($id);
 		$name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $id","name");
@@ -3342,7 +3342,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		global $period;
 		$this->mk_path($id, "Muuda");
 		if (!$this->can("edit",$id))
-			$this->raise_error(LC_MENUEDIT_NOT_ALLOW, true);
+			$this->raise_error(ERR_MNEDIT_ACL_NOCHANGE,LC_MENUEDIT_NOT_ALLOW, true);
 
 		global $basedir,$baseurl;
 		global $ext;
@@ -3379,7 +3379,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 										 LEFT JOIN menu ON menu.id = objects.oid
 										 WHERE oid = $id");
 		if (!($row = $this->db_next()))
-			$this->raise_error("menuedit->gen_change_html($id): No such menu!", true);
+			$this->raise_error(ERR_MNEDIT_NOMENU,"menuedit->gen_change_html($id): No such menu!", true);
 
 		$meta = $this->get_object_metadata(array(
 			"metadata" => $row["metadata"],
@@ -4922,7 +4922,10 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"ysection" => $this->mar[$path[$i+1]]["oid"]
 				));
 
-				$ya.=$this->parse("YAH_LINK");
+				if ($this->mar[$path[$i+1]]["clickable"] == 1)
+				{
+					$ya.=$this->parse("YAH_LINK");
+				}
 			}
 			// don't show things that are before $frontpage
 			if (isset($path[$i]) && isset($this->mar[$path[$i]]) && $this->mar[$path[$i]]["oid"] == $GLOBALS["rootmenu"])

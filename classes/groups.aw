@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.7 2002/01/07 16:36:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.8 2002/02/18 13:44:24 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -493,7 +493,7 @@ class groups extends users_user
 		{
 			$this->read_template("change.tpl");
 			if (!($grp = $this->fetchgroup($gid)))
-				$this->raise_error("groups->gen_change($gid,$level): no such group!",true);
+				$this->raise_error(ERR_GRP_NOGRP,"groups->gen_change($gid,$level): no such group!",true);
 
 			$this->vars(array("name"				=> $grp[name],
 												"type"				=> $grp[type],
@@ -512,7 +512,7 @@ class groups extends users_user
 			$f = new form($fid);
 
 			if (!($grp = $this->fetchgroup($gid)))
-				$this->raise_error("groups->gen_change($gid,$level): no such group!",true);
+				$this->raise_error(ERR_GRP_NOGRP,"groups->gen_change($gid,$level): no such group!",true);
 
 			global $name;
 			return $f->gen_user_html($grp[data],"submit_group_change","/automatweb/refcheck.".$GLOBALS["ext"],array("gid" => $gid,"name" => $name,"type" => 2,"level" => 1));

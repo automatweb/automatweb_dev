@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.20 2001/12/10 12:36:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.21 2002/02/18 13:45:32 kristo Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -281,7 +281,7 @@ class mlist extends aw_template
 										 WHERE objects.oid = $uid
 										 GROUP BY objects.oid");
 		if (!($row = $this->db_next()))
-			$this->raise_error("mlist->change_user($uid): No such user!", true);
+			$this->raise_error(ERR_LIST_NOUSER,"mlist->change_user($uid): No such user!", true);
 
 		
 		$this->vars(array("user_id" => $row["oid"], "user_name" => $row["name"], "user_mail" => $row["mail"]));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.13 2002/01/23 15:05:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.14 2002/02/18 13:47:14 kristo Exp $
 lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
@@ -117,7 +117,7 @@ class promo extends aw_template
 
 		if (!($row = $this->get_object($id)))
 		{
-			$this->raise_error("promo->gen_change($id): No such box!", true);
+			$this->raise_error(ERR_PROMO_NOBOX,"promo->gen_change($id): No such box!", true);
 		}
 
 		$this->mk_path($row["parent"],LC_PROMO_CHANGE_PROMO_BOX);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.29 2001/10/16 04:29:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.30 2002/02/18 13:42:29 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -71,7 +71,7 @@ class form_base extends form_db_base
 		$this->db_query($q);
 		if (!($row = $this->db_next()))
 		{
-			$this->raise_error("form->load($id): no such form!",true);
+			$this->raise_error(ERR_FG_NOFORM,"form->load($id): no such form!",true);
 		}
 		$awt->stop("form_base::load::query");
 
@@ -519,7 +519,7 @@ class form_base extends form_db_base
 
 		if (!($row = $this->get_op($id)))
 		{
-			$this->raise_error(sprintf(LC_FORM_BASE_NO_SUCH_FORM,$id),true);
+			$this->raise_error(ERR_FG_NOOP,sprintf("No such output %s",$id),true);
 		}
 
 		if (substr($row["op"],0,6) == "\$arr =")

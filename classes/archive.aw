@@ -1,6 +1,6 @@
 <?php
 // archive.aw - Archive class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.10 2001/11/29 13:31:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/archive.aw,v 2.11 2002/02/18 13:38:35 kristo Exp $
 
 // arhiivide jaoks tuleb luua eraldi kataloog (check), sinna sisse 
 // kahetasemeline (peaks siiski muudetav olema) kataloogipuu, igal
@@ -34,7 +34,7 @@ class archive extends aw_template {
 
 		if (not(defined("ARC_DEPTH")))
 		{
-			$this->raise_error("ARC_DEPTH is not defined, cannot continue",true);
+			$this->raise_error(ERR_ARC_NODEPTH,"ARC_DEPTH is not defined, cannot continue",true);
 		};
 
 		global $site_basedir; // *cringe*
@@ -43,7 +43,7 @@ class archive extends aw_template {
 		// this might be slow
 		if (not(is_writable($this->arc_dir)))
 		{
-			$this->raise_error("Archive directory is not writable",true);
+			$this->raise_error(ERR_ARC_NOWRITE,"Archive directory is not writable",true);
 		};
 
 	}

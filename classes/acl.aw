@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.4 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl.aw,v 2.5 2002/02/18 13:38:01 kristo Exp $
 // acl.aw - Access Control Lists
 
 global $orb_defs;
@@ -24,7 +24,7 @@ class acl extends aw_template
 		if (!$contents)
 		{
 			// siia ei tohiks me tegelikult mitte kunagi sattuda
-			$this->raise_error("smth bad just happened. Please report to dev@struktuure.ee immediately",true);
+			$this->raise_error(ERR_ACL_ERR,"smth bad just happened. Please report to dev@struktuure.ee immediately",true);
 		};
 		list($tags,) = parse_xml_def(array(
 					"xml" => $contents,
