@@ -1,4 +1,6 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.14 2001/06/18 23:02:10 duke Exp $
+// form_entry_element.aw - 
 session_register("clipboard");
 
 load_vcl("date_edit");
@@ -376,8 +378,11 @@ load_vcl("date_edit");
 		function gen_user_html_not(&$images,$prefix = "",$elvalues = array())		// function that doesn't use templates
 		{
 			$html="";
-			$info = $images->proc_text($this->arr["info"], $this->parent);
-			$text = ($this->arr["text"] == "" ? "" : $images->proc_text($this->arr["text"], $this->parent));
+			// since that was removed from images, I'll remove it from here as well
+			//$info = $images->proc_text($this->arr["info"], $this->parent);
+			$info = $this->arr["info"]; 
+			//$text = ($this->arr["text"] == "" ? "" : $images->proc_text($this->arr["text"], $this->parent));
+			$text = $this->arr["text"];
 
 			$elid = $this->id;
 																	
@@ -586,10 +591,12 @@ load_vcl("date_edit");
 				return "";
 
 			$t = new db_images;
-			$html = $t->proc_text($this->arr["text"],$this->parent);
+			//$html = $t->proc_text($this->arr["text"],$this->parent);
+			$html = $this->arr["text"];
 
 			if ($this->arr["type"] == "textarea")
-				$html.=$t->proc_text($this->entry, $this->entry_id);
+				//$html.=$t->proc_text($this->entry, $this->entry_id);
+				$html .= $this->entry;
 					
 			if ($this->arr["type"] == "radiobutton")
 				$html.=($this->entry == $this->id ? " Jah " : " Ei ");
@@ -612,7 +619,8 @@ load_vcl("date_edit");
 				$html.=$this->entry == 1 ? "Jah " : " Ei ";
 					
 			if ($this->arr["type"] == "textbox")
-				$html.=$t->proc_text($this->entry, $this->entry_id);
+				$html .= $this->entry;
+				//$html.=$t->proc_text($this->entry, $this->entry_id);
 
 			if ($this->arr["type"] == "price")
 				$html.=$this->entry;
