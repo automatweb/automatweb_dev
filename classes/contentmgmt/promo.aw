@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.41 2004/06/14 14:30:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.42 2004/06/21 10:52:51 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -518,6 +518,11 @@ class promo extends class_base
 			$_curdoc ++;
 		}
 
+		if ($this->is_template("PREV_LINK"))
+		{
+			$this->do_prev_next_links($def->get(), $this);
+		}
+
 		if ($ob->meta('as_name') && $ob->meta("caption") == "")
 		{
 			if ($this->can("view",$ob->meta("as_name")))
@@ -768,6 +773,11 @@ class promo extends class_base
 					$d_cnt++;
 				}
 
+				if (true || $inst->is_template("PREV_LINK"))
+				{
+					$this->do_prev_next_links($docid, $inst);
+				}
+
 				$image = "";
 				$image_url = "";
 				if ($o->prop("image"))
@@ -867,6 +877,55 @@ class promo extends class_base
 		};
 
 		$inst->vars($promos);
+	}
+
+	function do_prev_next_links($docs, &$tpl)
+	{
+		$s_prev = $s_next = "";
+
+		$cur_doc = obj(aw_global_get("section"));
+		if ($cur_doc->class_id() == CL_DOCUMENT)
+		{
+			$fp_prev = false;
+			$fp_next = false;
+			$prev = false;
+			$get_next = false;
+			foreach($docs as $d)
+			{
+				if ($get_next)
+				{
+					$fp_next = $d;
+					$get_next = false;
+				}
+				if ($d == $cur_doc->id())
+				{
+					$fp_prev = $prev;
+					$get_next = true;
+				}
+				$prev = $d;
+			}
+
+			if ($fp_prev)
+			{
+				$tpl->vars(array(
+					"prev_link" => obj_link($fp_prev)
+				));
+				$s_prev = $tpl->parse("PREV_LINK");
+			}
+
+			if ($fp_next)
+			{
+				$tpl->vars(array(
+					"next_link" => obj_link($fp_next)
+				));
+				$s_next = $tpl->parse("NEXT_LINK");
+			}
+		}
+
+		$tpl->vars(array(
+			"PREV_LINK" => $s_prev,
+			"NEXT_LINK" => $s_next
+		));
 	}
 }
 ?>
