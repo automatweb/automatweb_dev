@@ -119,7 +119,6 @@ class process extends class_base
 		reset($this->actiondata);
 		
 		$r = "";
-
 		$rows = count($this->grid);
 		for($row = 0; $row < $rows; $row++)
 		{
@@ -606,7 +605,8 @@ class process extends class_base
 			else
 			if ($actid == $this->end_action_id)
 			{
-				$grid[$per_row+1][0] = array(
+				$tot = ceil(count($acts) / $per_row);
+				$grid[$tot][0] = array(
 					"id" => $actid,
 					"n" => $actn
 				);
