@@ -16,6 +16,8 @@
 <content_tr_style1  value="awmenuedittablerow"/>
 <content_tr_style2  value="awmenuedittablerow"/>
 
+<content_tr_sel value="awmenuedittablerowsel"/>
+
 <frameattribs border="0" cellspacing="0" cellpadding="0" width="100%"/>
 <framebgcolor bgcolor="#E2E2DB"/>
 
