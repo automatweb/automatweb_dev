@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.77 2001/11/01 21:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.78 2001/11/14 07:14:34 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -826,6 +826,7 @@ class form extends form_base
 	//  $elvalues - array of name => value pairs for elements that specify default values
 	//  $prefix - value to prefix the element names with
 	//  $silent_errors - if true, error messages are only written to syslog, not shown to user
+	//	$load_entry_data - loads the specified entry's data (can be an other form) and matches the elements in this form by element names
 	function gen_preview($arr)
 	{
 		global $awt;
@@ -875,6 +876,19 @@ class form extends form_base
 		}
 		else
 		{
+			if ($load_entry_data)
+			{
+				$lf_fid = $this->get_form_for_entry($load_entry_data);
+				$lf_fm = new form;
+				$lf_fm->load($lf_fid);
+				$lf_fm->load_entry($load_entry_data);
+				$lf_els = $lf_fm->get_all_els();
+				foreach($lf_els as $lf_el)
+				{
+					$elvalues[$lf_el->get_el_name()] = $lf_el->get_val();
+				}
+			}
+
 			if ($this->arr["try_fill"])
 			{
 				if (!isset($elvalues))
@@ -961,7 +975,7 @@ class form extends form_base
 			foreach($this->styles as $stylid => $stylname)
 			{
 				$css_info = $this->get_obj_meta($stylid);
-				$css_file .= $this->_gen_css_style($stylname,$css_info["meta"]["css"]);
+				$css_file .= $css->_gen_css_style($stylname,$css_info["meta"]["css"]);
 			}
 		}
 
@@ -980,8 +994,11 @@ class form extends form_base
 
 		classload("style");
 		$st = new style;
-		$s = $st->get($this->arr["tablestyle"]);
-		$s = unserialize($s["style"]);
+		if ($this->arr["tablestyle"])
+		{
+			$s = $st->get($this->arr["tablestyle"]);
+			$s = unserialize($s["style"]);
+		}
 		$this->vars(array(
 			"form_border"				=> (isset($s["border"]) && $s["border"] != "" ? " BORDER='".$s["border"]."'" : ""),
 			"form_bgcolor"			=> (isset($s["bgcolor"]) && $s["bgcolor"] !="" ? " BGCOLOR='".$s["bgcolor"]."'" : ""),
@@ -1254,15 +1271,16 @@ class form extends form_base
 		global $awt;
 		$awt->start("form::show");
 		$awt->count("form::show");
-
+		
 		extract($arr);
+
 		
 		// if reset argument is set, zero out all data that has been gathered inside templates
 		if (isset($reset))
 		{
 			$this->tpl_reset();
 		};
-		
+
 		if (!$no_load_entry)
 		{
 			if (!($this->can("view",$id)  || $GLOBALS["SITE_ID"] == 11))
@@ -1293,6 +1311,7 @@ class form extends form_base
 			{
 				$this->acl_error("view",$op_id);
 			}
+			print $no_load_op;
 			$this->load_output($op_id);
 		}
 		
@@ -2310,6 +2329,27 @@ class form extends form_base
 			$awt->start("form::do_search::setup");
 			classload("form_table");
 			$ft = new form_table;
+			// This stuff is here for the numeric element type. -->
+			/*
+			$els = array();
+			for ($row=0; $row < $this->arr["rows"]; $row++)
+			{
+				for ($col=0; $col < $this->arr["cols"]; $col++)
+				{
+					$this->arr["contents"]["$row"]["$col"]->get_els(&$els);
+				};
+			};
+			$stt=time();
+			reset($els);
+			while( list(,$el) = each($els))
+			{
+				if ($el->arr["subtype"]=="num")
+					$ft->runtime_col_types[$el->arr["id"]]="numeric";
+				if ($GLOBALS["dbg_num"]) echo("setting num for ".$el->arr["id"]."<br>");
+			};
+			if ($GLOBALS["dbg_num"]) {echo("<pre>");print_r($ft->runtime_col_types);echo("</pre>");};
+			*/
+			// <--
 			$ft->start_table($this->arr["table"], array("class" => "form", "action" => "show_entry", "id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section));
 
 			// this returns an array of roms each of which is an array of elements that are actually used in the table
@@ -4569,7 +4609,7 @@ class form extends form_base
 		$this->load_entry($entry_id);
 		//Nüüd tuleb filtri osad käigu pealt mälus ära muuta ja 
 		// panna asemele see kamm, mille kasutaja sisestas
-		//Kuna form::get_all_elements ei anna küllalt andmeid, siis tuleb siia ise teha:
+		
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($col = 0; $col < $this->arr["cols"]; $col++)
@@ -4579,11 +4619,22 @@ class form extends form_base
 				{
 					if ($el->arr["part"]!="" && $el->arr["part"]!=-1)
 					{
-						$sf->filter["p".(int)$el->arr["part"]]["val"]=$el->get_val();
+						//Nii. siin tuleb nüüd vaadata et kui filtri osa tüüp on 2 (date)
+						if ($sf->filter["p".(int)$el->arr["part"]]["type"]==2)
+						{
+							$valx=$el->get_val();
+						} else
+						{
+							$valx=$el->get_value();
+						};
+						$sf->filter["p".(int)$el->arr["part"]]["val"]=$valx;
+						if ($GLOBALS["dbg_ft"]) {echo("blah part=".$el->arr["part"]." type= ".$sf->filter["p".(int)$el->arr["part"]]["type"]." val=".$valx);};
 					};
 				}
 			}
 		}
+
+		if ($GLOBALS["dbg_ft"]) {echo("üle kantud filter=<pre>");print_r($sf->filter);echo("</pre>");};
 
 		$arr["no_menu"]=1;
 		$arr["dont_load_filter"]=1;
