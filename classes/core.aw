@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.239 2004/01/05 16:11:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.240 2004/01/28 15:34:18 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2091,7 +2091,7 @@ class core extends acl_base
 		extract($args);
 		// Directory Handle
 		$files = array();
-		if ($DH = opendir($dir)) {
+		if ($DH = @opendir($dir)) {
 			while (false !== ($file = readdir($DH))) { 
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
