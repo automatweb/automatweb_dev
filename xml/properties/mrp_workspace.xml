@@ -731,7 +731,6 @@
             </grp_projects>
             <grp_resources>
                   <caption>Ressursid</caption>
-                  <submit>no</submit>
             </grp_resources>
             <grp_schedule>
                   <caption>Kalender</caption>

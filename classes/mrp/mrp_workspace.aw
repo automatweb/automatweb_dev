@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.14 2005/01/29 12:22:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.15 2005/02/01 19:48:44 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -7,7 +7,7 @@
 
 @groupinfo grp_customers caption="Kliendid" submit=no
 @groupinfo grp_projects caption="Projektid"
-@groupinfo grp_resources caption="Ressursid" submit=no
+@groupinfo grp_resources caption="Ressursid"
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_users caption="Kasutajad"
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
@@ -466,6 +466,7 @@ class mrp_workspace extends class_base
 		switch ($prop["name"])
 		{
 			case "projects_list":
+			case "resources_list":
 				$this->save_custom_form_data ($arr);
 				break;
 		}
@@ -565,13 +566,18 @@ class mrp_workspace extends class_base
 			"name" => "modify",
 			"caption" => "Ava",
 		));
+		$table->define_field(array(
+			"name" => "order",
+			"caption" => "Jrk.",
+			"sortable" => 1
+		));
 
 		$table->define_chooser(array(
 			"name" => "selection",
 			"field" => "resource_id",
 		));
 
-		$table->set_default_sortby("name");
+		$table->set_default_sortby("order");
 		$table->set_default_sorder("desc");
 
 		$object_list = new object_list(array(
@@ -583,21 +589,27 @@ class mrp_workspace extends class_base
 
 		foreach ($resources as $resource)
 		{
-			$change_url = $this->mk_my_orb("change", array(
-				"id" => $resource->id(),
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+			$resource_id = $resource->id ();
+			$change_url = $this->mk_my_orb ("change", array(
+				"id" => $resource_id,
+				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
 			), "mrp_resource");
 
-			$table->define_data(array(
-				"modify" => html::href(array(
+			$table->define_data (array (
+				"modify" => html::href (array (
 					"caption" => "Ava",
 					"url" => $change_url,
 					)
 				),
+				"order" => html::textbox (array (
+					"name" => "mrp_resource_order-" . $resource_id,
+					"size" => "2",
+					"value" => $resource->ord (),
+				)),
 				"name" => $resource->name(),
 				"operator" => $resource->prop("operator"),
 				"status" => $resource->prop("status"),
-				"resource_id" => $resource->id(),
+				"resource_id" => $resource_id,
 			));
 		}
 	}
@@ -819,7 +831,7 @@ class mrp_workspace extends class_base
 
 		$tree->add_item (1, array (
 			"name" => "Kõik plaanisolevad" . "(" . $count_projects_planned . ")",
-			"id" => 2,
+			"id" => 7,
 			"url" => $url_projects_planned,
 		));
 
@@ -924,7 +936,7 @@ class mrp_workspace extends class_base
 				));
 				break;
 
-			case "planned":
+			case "planned": //!!! teha et yle t2htaja p. n2idataks "punaselt"
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
 					"state" => MRP_STATUS_PLANNED,
@@ -1057,7 +1069,7 @@ class mrp_workspace extends class_base
 				"sales_priority" => $project->prop ("sales_priority"),
 				"starttime" => date (MRP_DATE_FORMAT, $project->prop ("starttime")),
 				"due_date" => date (MRP_DATE_FORMAT, $project->prop ("due_date")),
-				"planned_date" => $planned_date,
+				"planned_date" => date (MRP_DATE_FORMAT, $planned_date),
 				"project_id" => $project_id,
 			));
 		}
@@ -1232,6 +1244,12 @@ class mrp_workspace extends class_base
 					$project = obj ($oid);
 					$project->set_prop ("project_priority", $this->safe_settype_float ($value));
 					$project->save ();
+					break;
+
+				case "mrp_resource_order":
+					$resource = obj ($oid);
+					$resource->set_ord ((int) $value);
+					$resource->save ();
 					break;
 			}
 		}

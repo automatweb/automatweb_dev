@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.11 2005/01/29 12:22:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.12 2005/02/01 19:48:44 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1178,7 +1178,7 @@ class mrp_case extends class_base
 		$project->save ();
 
 		### delete project's jobs
-		$connections = $o->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+		$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
 
 		foreach ($connections as $connection)
 		{

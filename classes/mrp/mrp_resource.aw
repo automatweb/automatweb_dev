@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.7 2005/01/29 12:22:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.8 2005/02/01 19:48:44 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -51,7 +51,7 @@
 
 @default group=grp_resource_unavailable_work
 
-	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK use_form=emb mode=manager
+	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly
 	@caption T&ouml;&ouml;ajad
 
 @default group=grp_resource_unavailable_una
@@ -60,9 +60,9 @@
 	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
 
 	@property unavailable_dates type=textarea rows=5 cols=50
-	@caption Kinnised p&auml;evad (formaat: p&auml;ev.kuu p&auml;ev.kuu)
+	@caption Kinnised p&auml;evad (formaat: kuupäev.kuu; kuupäev.kuu; ...)
 
-	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager
+	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager props=name,start,end,time,length,recur_type,interval_daily,interval_weekly,interval_yearly
 	@caption Kinnised ajad
 
 
@@ -174,6 +174,7 @@ class mrp_resource extends class_base
 
 			case "default_pre_buffer":
 			case "default_post_buffer":
+			case "global_buffer":
 				$prop["value"] = $prop["value"] / 3600;
 				break;
 		}
@@ -197,6 +198,7 @@ class mrp_resource extends class_base
 		{
 			case "default_pre_buffer":
 			case "default_post_buffer":
+			case "global_buffer":
 				$prop["value"] = round ($prop["value"] * 3600);
 				break;
 		}
@@ -340,7 +342,7 @@ class mrp_resource extends class_base
 	function _get_unavailable_dates ($dates, $start, $end)
 	{
 		$unavailable_dates = array ();
-		$parts = preg_split('/\s+/', $dates);
+		$dates = explode (";", $dates);
 		$start_year = date ("Y", $start);
 		$start_mon = date ("n", $start);
 		$start_day = date ("j", $start);
@@ -348,29 +350,37 @@ class mrp_resource extends class_base
 		$end_mon = date ("n", $end);
 		$end_day = date ("j", $end);
 
-		foreach($parts as $part)
+		foreach ($dates as $date)
 		{
-			list($day, $mon) = explode (".", $part);
-			$year = $start_year;
+			list ($day, $mon) = explode (".", $date);
+			settype ($day, "integer");
+			settype ($mon, "integer");
 
-			while ($year <= $end_year)
+			if ($day and $mon)
 			{
-				if (
-					(($year != $start_year) and ($year != $end_year)) or
-					(($year == $start_year) and ($mon >= $start_mon) and ($day >= $start_day)) or
-					(($year == $end_year) and ($mon <= $end_mon) and ($day <= $end_day))
-				)
-				{
-					$start = mktime (0,0,0, $mon, $day, ($year++));
+				$year = $start_year;
 
-					if (array_key_exists ($start - 86400))
+				while ($year <= $end_year)
+				{
+					if (
+						(($year != $start_year) and ($year != $end_year)) or
+						(($year == $start_year) and ($mon >= $start_mon) and ($day >= $start_day)) or
+						(($year == $end_year) and ($mon <= $end_mon) and ($day <= $end_day))
+					)
 					{
-						$unavailable_dates[$start - 86400] += 86400;
+						$start = mktime (0,0,0, $mon, $day, $year);
+
+						if (array_key_exists ($start - 86400, $unavailable_dates))
+						{
+							$unavailable_dates[$start - 86400] = $unavailable_dates[$start - 86400] + 86400;
+						}
+						else
+						{
+							$unavailable_dates[$start] = $start + 86400;
+						}
 					}
-					else
-					{
-						$unavailable_dates[$start] = 86400;
-					}
+
+					$year++;
 				}
 			}
 		}
@@ -392,10 +402,12 @@ class mrp_resource extends class_base
 
 		if ($resource->prop ("unavailable_weekends"))
 		{
+			$weekend_start = $this->get_week_start ($start) + (5 * 86400);
 			$recurrent_unavailable_periods[] = array (
-				"offset" => 6,
-				"length" => (2 * 86400),
-				"type" => "w",
+				"length" => 172800,
+				"start" => $weekend_start,
+				"end" => $end,
+				"interval" => 604800,
 			);
 		}
 
@@ -407,11 +419,13 @@ class mrp_resource extends class_base
 			switch ($recurrence->prop ("recur_type"))
 			{
 				case "1": //day
-					$interval = $recurrence->prop ("interval_daily") * 86400;
+					$interval = $recurrence->prop ("interval_daily");
+					$interval = ($interval ? $interval : 1) * 86400;
 					break;
 
 				case "2": //week
-					$interval = $recurrence->prop ("interval_weekly") * 86400 * 7;
+					$interval = $recurrence->prop ("interval_weekly");
+					$interval = ($interval ? $interval : 1) * 86400 * 7;
 					break;
 
 				case "3": //month
@@ -419,12 +433,13 @@ class mrp_resource extends class_base
 					break;
 
 				case "4": //year
-					$interval = $recurrence->prop ("interval_yearly") * 86400 * 365;
+					$interval = $recurrence->prop ("interval_yearly");
+					$interval = ($interval ? $interval : 1) * 86400 * 365;
 					break;
 			}
 
 			$recurrent_unavailable_periods[] = array (
-				"length" => $recurrence->prop ("length"),
+				"length" => ($recurrence->prop ("length") * 3600),
 				"start" => $recurrence->prop ("start") + $recurrence->prop ("time") * 3600,
 				"end" => $recurrence->prop ("end"),
 				"interval" => $interval,
@@ -439,11 +454,13 @@ class mrp_resource extends class_base
 			switch ($recurrence->prop ("recur_type"))
 			{
 				case "1": //day
-					$interval = $recurrence->prop ("interval_daily") * 86400;
+					$interval = $recurrence->prop ("interval_daily");
+					$interval = ($interval ? $interval : 1) * 86400;
 					break;
 
 				case "2": //week
-					$interval = $recurrence->prop ("interval_weekly") * 86400 * 7;
+					$interval = $recurrence->prop ("interval_weekly");
+					$interval = ($interval ? $interval : 1) * 86400 * 7;
 					break;
 
 				case "3": //month
@@ -451,12 +468,14 @@ class mrp_resource extends class_base
 					break;
 
 				case "4": //year
-					$interval = $recurrence->prop ("interval_yearly") * 86400 * 365;
+					$interval = $recurrence->prop ("interval_yearly");
+					$interval = ($interval ? $interval : 1) * 86400 * 365;
 					break;
 			}
 
-			$start = $recurrence->prop ("start") + ($recurrence->prop ("time") * 3600) + $recurrence->prop ("length");
-			$length = $interval - $recurrence->prop ("length");
+			$recurrence_length = $recurrence->prop ("length") * 3600;
+			$start = $recurrence->prop ("start") + ($recurrence->prop ("time") * 3600) + $recurrence_length;
+			$length = $interval - $recurrence_length;
 
 			$recurrent_unavailable_periods[] = array (
 				"length" => $length,
@@ -468,35 +487,14 @@ class mrp_resource extends class_base
 
 		return $recurrent_unavailable_periods;
 	}
+
+	function get_week_start ($time)
+	{
+		$date = getdate ($time);
+		$wday = $date["wday"] ? ($date["wday"] - 1) : 6;
+		$week_start = $time - ($wday * 86400 + $date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
+		return $week_start;
+	}
 }
-
-//recur props:
-// Array
-// (
-    // [name] => t88aeg
-    // [time] => 18 //starttime
-    // [length] => 15
-    // [recur_type] => 1- p2ev|2 -ndl|4 - aasta 3-kuu
-    // [interval_daily] => 1  iga x p2eva j2rel
-    // [interval_weekly] =>  ...
-    // [interval_monthly] =>
-    // [interval_yearly] =>
-    // [weekdays] =>
-
-// kui recur type on ndl siis valitud p2evad:
-// [weekdays] => Array
-        // (
-            // [2] => 2 - teisip2ev
-            // [3] => 3 - ...
-            // [4] => 4
-            // [5] => 5
-        // )
-
-    // [month_days] =>
-    // [month_rel_weekdays] =>
-    // [month_weekdays] =>
-    // [start] => 1106344800 //algus
-    // [end] => 1230674400 //l6pp
-// )
 
 ?>

@@ -89,6 +89,17 @@
             <reltype>RELTYPE_RECUR_WRK</reltype>
             <use_form>emb</use_form>
             <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>start</num_1>
+                  <num_2>end</num_2>
+                  <num_3>time</num_3>
+                  <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
+                  <num_6>interval_daily</num_6>
+                  <num_7>interval_weekly</num_7>
+                  <num_8>interval_yearly</num_8>
+            </props>
             <store>no</store>
             <caption>T&amp;ouml;&amp;ouml;ajad</caption>
       </property>
@@ -111,7 +122,7 @@
             <type>textarea</type>
             <rows>5</rows>
             <cols>50</cols>
-            <caption>Kinnised p&amp;auml;evad (formaat: p&amp;auml;ev.kuu p&amp;auml;ev.kuu)</caption>
+            <caption>Kinnised p&amp;auml;evad (formaat: kuupäev.kuu; kuupäev.kuu; ...)</caption>
       </property>
       <property>
             <name>unavailable_recur</name>
@@ -123,6 +134,17 @@
             <reltype>RELTYPE_RECUR</reltype>
             <use_form>emb</use_form>
             <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>start</num_1>
+                  <num_2>end</num_2>
+                  <num_3>time</num_3>
+                  <num_4>length</num_4>
+                  <num_5>recur_type</num_5>
+                  <num_6>interval_daily</num_6>
+                  <num_7>interval_weekly</num_7>
+                  <num_8>interval_yearly</num_8>
+            </props>
             <store>no</store>
             <caption>Kinnised ajad</caption>
       </property>
