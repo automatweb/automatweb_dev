@@ -26,6 +26,8 @@ Objekte nagu foorumid jne... n&auml;idatakse l&auml;bi dokumendi.  Saidi raami t
 
 {VAR:createdby} - Kasutaja kes l&otilde;i dokumendiobjekti
 
+{VAR:locale_date} - Dokumendi muutmise kuupäev lokaliseeritud kujul (s.t. kuu nimi on tõlgitud (kui on) ja kirjutatud sellele keele vastavate reeglite kohaselt
+
 <b>N&auml;idis template:</b> 
 #code#
 <div class="title">{VAR:title}</div>
