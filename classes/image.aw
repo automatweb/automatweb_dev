@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.104 2004/07/21 12:19:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.105 2004/07/28 13:47:53 rtoomas Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -47,6 +47,7 @@
 
 	@groupinfo img2 caption="Suur pilt"
 	@groupinfo resize caption="Muuda suurust"
+	@groupinfo resize_big caption="Muuda suure pildi suurust"
 	@classinfo syslog_type=ST_IMAGE
 		
 	@tableinfo images index=id master_table=objects master_index=oid	
@@ -57,6 +58,15 @@
 
 	@property new_h type=textbox group=resize field=meta method=serialize size=6 store=no
 	@caption Uus k&otilde;rgus
+
+	@property dimensions_big type=text group=resize_big store=no
+	@caption Mõõtmed
+	
+	@property new_w_big type=textbox group=resize_big field=meta method=serialize size=6 store=no
+	@caption Uus laius (suur)
+
+	@property new_h_big type=textbox group=resize_big field=meta method=serialize size=6 store=no
+	@caption Uus k&otilde;rgus (suur)
 
 	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
 
@@ -95,6 +105,8 @@ class image extends class_base
 				$this->db_query($q);
 				$row = $this->db_fetch_row();
 			}
+
+
 			if ($row)
 			{
 				$row["url"] = $this->get_url($row["file"]);
@@ -105,6 +117,7 @@ class image extends class_base
 					$_tmp = basename($row["meta"]["file2"]);
 					$f1 = substr($_tmp,0,1);
 					$row["meta"]["file2"] = aw_ini_get("site_basedir") . "/files/$f1/" . $_tmp;
+					$row['file2'] = &$row['meta']['file2'];
 				}
 				aw_cache_set("get_image_by_id", $id, $row);
 			}
@@ -653,6 +666,22 @@ class image extends class_base
 				};
 				break;
 
+			case "dimensions_big":
+				$fl = $arr["obj_inst"]->prop("file2");
+				if (!empty($fl))
+				{
+					if ($fl{0} != "/")
+					{
+						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+					}
+					$sz = @getimagesize($fl);
+					$prop["value"] = $sz[0] . " X " . $sz[1];
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
 			case "dimensions":
 				$fl = $arr["obj_inst"]->prop("file");
 				if (!empty($fl))
@@ -696,6 +725,7 @@ class image extends class_base
 					{
 						$arr["obj_inst"]->set_name($_FILES["file"]["name"]);
 					}
+
 				}
 				// XXX: this is not the correct way to detect this
 				elseif (!empty($prop["value"]["type"]))
@@ -769,6 +799,14 @@ class image extends class_base
 			case "new_h":
 				$this->new_h = $prop["value"];
 				break;
+			
+			case "new_h_big":
+				$this->new_h_big = $prop["value"];
+				break;
+			
+			case "new_w_big":
+				$this->new_w_big = $prop["value"];
+				break;
 		};
 		return $retval;
 	}
@@ -820,14 +858,30 @@ class image extends class_base
 	function callback_post_save($arr)
 	{
 		$im = $this->get_image_by_id($arr["id"]);
+		
+		if($this->new_h_big || $this->new_w_big)
+		{
+			$file = 'file2';
+			if(!isset($im[$file]))
+			{
+				//why would anyone want to resize a non-existent picture?
+				return;	
+			}
+			$this->new_h = $this->new_h_big;
+			$this->new_w = $this->new_w_big;
+		}
+		else
+		{
+			$file = 'file';	
+		}
 		if ($this->new_w || $this->new_h)
 		{
 			$img = get_instance("core/converters/image_convert");
-			if ($im['file']{0} != "/")
+			if ($im[$file]{0} != "/")
 			{
-				$im['file'] = $this->cfg["site_basedir"]."/files/".$im['file']{0}."/".$im['file'];
+				$im[$file] = $this->cfg["site_basedir"]."/files/".$im[$file]{0}."/".$im[$file];
 			}
-			$img->load_from_file($im['file']);
+			$img->load_from_file($im[$file]);
 	
 			list($i_width, $i_height) = $img->size();
 
@@ -873,7 +927,7 @@ class image extends class_base
 			$img->resize_simple($width, $height);
 
 			$this->put_file(array(
-				"file" => $im['file'],
+				'file' => $im[$file],
 				"content" => $img->get(IMAGE_JPEG)
 			));
 		}
