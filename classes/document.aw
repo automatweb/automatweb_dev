@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.298 2004/11/09 15:44:50 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.299 2004/11/09 17:37:15 sven Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -4275,7 +4275,11 @@ class document extends aw_template
 		{
 			$keys_arr[$keyword->prop("keyword")] = $keyword->id(); 
 		}
-
+		
+		if(!$keys_arr)
+		{
+			return;
+		}
 		foreach ($keys_arr as $key => $value)
 		{
 			$href = html::href(array(
