@@ -13,9 +13,12 @@
             <name>trans</name>
             <table>objects</table>
             <group>trans</group>
-            <type>callback</type>
+            <type>translator</type>
             <store>no</store>
-            <callback>callback_gen_trans</callback>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>name_in_plural</num_1>
+            </props>
             <field>trans</field>
             <caption>Tõlkimine</caption>
       </property>
