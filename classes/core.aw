@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.127 2002/11/24 21:15:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.128 2002/12/02 11:17:43 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -133,7 +133,6 @@ class core extends db_connector
 	// kui see on antud, siis mergetakse see metadata arrayga kokku
 	function set_object_metadata($args = array())
 	{
-		$this->quote($args);
 		extract($args);
 
 		$old = $this->_get_object_metadata($oid);
@@ -221,7 +220,6 @@ class core extends db_connector
 		{
 			$meta = $args["meta"];
 		};
-		#$this->dequote($row["meta"]);
 		$retval = $php_ser->php_unserialize($meta);
 		return $retval;
 	}
@@ -232,9 +230,7 @@ class core extends db_connector
 		extract($args);
 		$old = $this->obj_get_meta(array("oid" => $oid));
 		$old = array_merge($old,$args["meta"]);
-		classload("php");
-		$php_ser = new php_serializer();
-		$ser = $php_ser->php_serialize($old);
+		$ser = aw_serialize($old);
 		$this->quote($ser);
 		$q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
 		$this->db_query($q);
@@ -244,6 +240,8 @@ class core extends db_connector
 	// !write to syslog. 
 	function _log($type,$action,$oid = 0)
 	{
+		$this->quote($action);
+
 		$REMOTE_ADDR = aw_global_get("REMOTE_ADDR");
 		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
 		if (!is_ip($ip))
@@ -251,8 +249,6 @@ class core extends db_connector
 			$ip = $REMOTE_ADDR;
 		}
 		$t = time();
-		$this->quote($action);
-		$this->quote($time);
 		$fields = array("tm","uid","type","action","ip","oid","created_hour","created_day","created_week","created_month","created_year");
 		$values = array($t,aw_global_get("uid"),$type,$action,$ip,$oid,date("H",$t),date("d",$t),date("w",$t),date("m",$t),date("Y",$t));
 		if (aw_ini_get("tafkap"))
@@ -474,9 +470,10 @@ class core extends db_connector
 		$q = "INSERT INTO objects ( " . join(",",$cols) . ") VALUES (" . join(",",$vals) . ")";
 		$this->db_query($q);
 		
-		$q = "SELECT MAX(oid) AS oid FROM objects WHERE createdby = '".aw_global_get("uid")."'";
-		$oid = $this->db_fetch_field($q,"oid");
-		$this->db_query("INSERT INTO hits (oid,hits) VALUES ($oid,0)");
+//		$q = "SELECT MAX(oid) AS oid FROM objects WHERE createdby = '".aw_global_get("uid")."'";
+//		$oid = $this->db_fetch_field($q,"oid");
+		$oid = $this->db_last_insert_id();
+//		$this->db_query("INSERT INTO hits (oid,hits) VALUES ($oid,0)");
 
 		if ($oid > 0 && $add_acl)
 		{
@@ -547,6 +544,7 @@ class core extends db_connector
 	// !uus ja parem objekti uuendamise funktsioon, votab andmed ette arrayst
 	// ja uuendab ainult neid, mida ette anti
 	//  	oid peab olema
+	// etteantud asjad peavad quotetud olema!
 	function upd_object($params) 
 	{
 		if (!$params["oid"])
@@ -566,14 +564,15 @@ class core extends db_connector
 		$params["cachedirty"] = 1;
 		if ($params["metadata"])
 		{
+			$this->dequote(&$params['metadata']);
 			$params["metadata"] = $this->set_object_metadata(array(
 				"oid" => $params["oid"],
 				"data" => $params["metadata"],
 				"serialize" => 1,
 			));
 		};
-		$this->quote($params);
 		$q_parts = array(); // siia sisse paneme päringu osad
+		$this->quote(&$params['metadata']);
 		while(list($k,$v) = each($params)) 
 		{
 			if ($k != "oid") 
@@ -1233,6 +1232,7 @@ class core extends db_connector
 			if ($unserialize_meta && $_t)
 			{
 				$_t["meta"] = aw_unserialize($_t["metadata"]);
+	//			$this->dequote(&$_t['meta']);
 			}
 		}
 		else
@@ -1249,6 +1249,7 @@ class core extends db_connector
 				if ($unserialize_meta && $_t)
 				{
 					$_t["meta"] = aw_unserialize($_t["metadata"]);
+	//				$this->dequote(&$_t['meta']);
 				}
 
 				aw_cache_set("objcache",$oid,$_t);
