@@ -15,6 +15,7 @@
             <type>text</type>
             <store>no</store>
             <callback>callback_get_menus</callback>
+            <edit_only>1</edit_only>
             <table>objects</table>
             <group>general</group>
             <field>menus</field>
@@ -24,5 +25,12 @@
             <syslog_type>ST_SITE_SEARCH_CONTENT_GRP</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <reltypes>
+            <MENU>
+                  <value>1</value>
+                  <clid>CL_MENU</clid>
+                  <caption>menüü, mille alt otsitakse</caption>
+            </MENU>
+      </reltypes>
 </properties>
 

@@ -78,5 +78,17 @@
                   <caption>Staatiline otsing</caption>
             </static>
       </groupinfo>
+      <reltypes>
+            <REPEATER>
+                  <value>1</value>
+                  <clid>CL_REPEATER_OBJ</clid>
+                  <caption>kordus staatilise koopia genereerimiseks</caption>
+            </REPEATER>
+            <SEARCH_GRP>
+                  <value>2</value>
+                  <clid>CL_SITE_SEARCH_CONTENT_GRP</clid>
+                  <caption>otsingu grupp</caption>
+            </SEARCH_GRP>
+      </reltypes>
 </properties>
 
