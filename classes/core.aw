@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.226 2003/10/14 10:27:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.227 2003/10/21 21:32:00 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2258,7 +2258,7 @@ class core extends acl_base
 		extract($args);
 		// Directory Handle
 		$files = array();
-		if ($DH = @opendir($dir)) {
+		if ($DH = opendir($dir)) {
 			while (false !== ($file = readdir($DH))) { 
 				$fn = $dir . "/" . $file;
 				if (is_file($fn))
@@ -2345,6 +2345,10 @@ class core extends acl_base
 			return false;
 		}
 
+		if (aw_global_get("__is_rpc_call"))
+		{
+			$arr["raw"] = 1;
+		};
 		$str = array("class_id" => $obj["class_id"], "str" => $s);
 		return isset($arr["raw"]) ? $s : serialize($str);
 	}
@@ -2358,13 +2362,21 @@ class core extends acl_base
 	{
 		extract($arr);
 
+		if (is_array($str))
+		{
+			$arr["raw"] = $str;
+		};
+		
 		$s = isset($arr["raw"]) ? $arr["raw"] : unserialize($str);
+
 		if (!is_array($s))
 		{
 			return false;
 		}
 
-		$v = $this->cfg["classes"][$s["class_id"]];
+
+		$s_class_id = $s["class_id"];
+		$v = $this->cfg["classes"][$s_class_id];
 		if (!is_array($v))
 		{
 			return false;
