@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.39 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.40 2005/03/16 07:48:17 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -35,13 +35,35 @@ class admin_folders extends aw_template
 			"charset" => $t->get_charset(),
 			"content" => $this->gen_folders($period)
 		));
-		die($sf->parse());
+
+		echo ($sf->parse());
+	global $awt;
+	if (is_object($awt))
+	{
+		$sums = $awt->summaries();
+
+		echo "<!--\n";
+		while(list($k,$v) = each($sums))
+		{
+			print "$k = $v\n";
+		};
+		echo " querys = ".aw_global_get("qcount")." \n";
+		echo "-->\n";
+	}
+
+	echo "<!--\n";
+	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
+	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
+		echo "-->\n";
+
+		die();
 	}
 
 	////
 	// !Listib koik objektid
 	function db_listall()
 	{
+		enter_function("admin_folders::db_listall");
 		$where = "objects.status != 0 AND ((menu.type != ".MN_FORM_ELEMENT . " AND menu.type != ".MN_HOME_FOLDER . ") OR menu.type IS NULL)";
 		$aa = "";
 		if ($this->cfg["lang_menus"] == 1)
@@ -64,6 +86,7 @@ class admin_folders extends aw_template
 				objects.class_id as class_id,
 				objects.brother_of as brother_of,
 				objects.periodic as periodic,
+				objects.metadata as metadata,
 				menu.type as mtype,
 				menu.link as link,
 				menu.icon_id as icon_id,
@@ -73,10 +96,12 @@ class admin_folders extends aw_template
 				WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER." OR objects.class_id = ".CL_GROUP.")  AND $where $aa
 				ORDER BY objects.parent, jrk,objects.created";
 		$this->db_query($q);
+		exit_function("admin_folders::db_listall");
 	}
 
 	function gen_folders($period)
 	{
+		enter_function("admin_folders::gen_folders");
 		$this->read_template("folders.tpl");
 
 		$arr = array();
@@ -329,6 +354,7 @@ class admin_folders extends aw_template
 		$this->vars(array(
 			"has_toolbar" => $this->parse("has_toolbar"),
 		));
+		exit_function("admin_folders::gen_folders");
 		return $this->parse();
 	}
 
@@ -336,16 +362,8 @@ class admin_folders extends aw_template
 	// I'll do icons first	
 	function resolve_item(&$arr)
 	{
+		enter_function("admin_folders::resolve_item");
 		$arr["id"] = $arr["oid"];
-		/*
-		if ($this->can("view",$arr["id"]) || $arr["id"] == $this->cfg["admin_rootmenu2"])
-		{
-		}
-		else
-		{
-			return false;
-		};
-		*/
 		if ($this->period > 0 && $arr["periodic"] != 1)
 		{
 			return false;
@@ -368,23 +386,18 @@ class admin_folders extends aw_template
 			$iconurl = icons::get_feature_icon_url($arr["admin_feature"]);
 		};
 
-		if (is_oid($arr["oid"]) && $this->can("view", $arr["oid"]))
+		if (!is_array($arr["metadata"]))
 		{
-			$row_o = obj($arr["oid"]);
-			if (is_oid($row_o->meta("sel_icon")) && $this->can("view", $row_o->meta("sel_icon")))
-			{
-				$im = get_instance(CL_IMAGE);
-				$iconurl = $im->get_url_by_id($row_o->meta("sel_icon"));
-			}
+			$arr["metadata"] = aw_unserialize($arr["metadata"]);
+		}
+		
+		if (is_oid($arr["metadata"]["sel_icon"]) && $this->can("view", $arr["metadata"]["sel_icon"]))
+		{
+			$im = get_instance(CL_IMAGE);
+			$iconurl = $im->get_url_by_id($row_o->meta("sel_icon"));
 		}
 
 		// if all else fails ..
-		/*
-		if (empty($iconurl))
-		{
-			$iconurl = $baseurl . "/automatweb/images/closed_folder.gif";
-		}
-		*/
 		$arr["iconurl"] = $iconurl;
 
 		$prog = aw_ini_get("programs");
@@ -420,7 +433,6 @@ class admin_folders extends aw_template
 
 		if ($this->period > 0)
 		{
-			//if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] != 1))
 			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
 			{
 				if ($arr["id"] == 126106)
@@ -430,6 +442,7 @@ class admin_folders extends aw_template
 				$rv = false;
 			};
 		};
+		exit_function("admin_folders::resolve_item");
 		return $rv;
 	}
 
@@ -437,6 +450,7 @@ class admin_folders extends aw_template
 	// !Loob kasutaja kodukataloogi
 	function mk_homefolder(&$arr)
 	{
+		enter_function("admin_folders::mk_homefolder");
 		$uid = aw_global_get("uid");
 		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
 		$ext = $this->cfg["ext"];
@@ -446,6 +460,7 @@ class admin_folders extends aw_template
 		$ucfg = new object($us->get_current_user());
 		if (!$this->can("view", $ucfg->prop("home_folder")))
 		{
+			exit_function("admin_folders::mk_homefolder");
 			return;
 		}
 		$hf = new object($ucfg->prop("home_folder"));
@@ -459,7 +474,7 @@ class admin_folders extends aw_template
 			"iconurl" => icons::get_icon_url("homefolder",""),
 			"url" => $this->mk_my_orb("right_frame",array("parent" => $hf->id()),"admin_menus"),
 		));
-
+		exit_function("admin_folders::mk_homefolder");
 	}
 
 	function rec_admin_tree(&$arr,$parent)
@@ -468,6 +483,7 @@ class admin_folders extends aw_template
 		{
 			return "";
 		}
+		enter_function("admin_folders::rec_admin_tree");
 
 		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
 		$ext = $this->cfg["ext"];
@@ -534,6 +550,7 @@ class admin_folders extends aw_template
 				"url" => !empty($row["link"]) ? $row["link"] : ($row["admin_feature"] ? $prog[$row["admin_feature"]]["url"]: $blank),
 			));
 		}
+		exit_function("admin_folders::rec_admin_tree");
 		return $ret;
 	}
 
@@ -548,6 +565,7 @@ class admin_folders extends aw_template
 		{
 			return "";
 		}
+		enter_function("admin_folders::rec_tree");
 		$this->_x_rt[$parent] = true;
 
 		$baseurl = $this->cfg["baseurl"];
@@ -601,6 +619,7 @@ class admin_folders extends aw_template
 				}
 			}
 		}
+		exit_function("admin_folders::rec_tree");
 		return $ret;
 	}
 
