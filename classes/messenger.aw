@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.66 2001/06/20 07:07:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.67 2001/06/21 14:08:57 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -16,8 +16,6 @@ define('MSG_EXTERNAL',2);
 define('MSG_STATUS_UNREAD',0);
 define('MSG_STATUS_READ',1);
 
-// kontaktide vormid
-define('CONTACT_FORM',2007);
 
 // siit algab messengeri põhiklass
 class messenger extends menuedit_light 
