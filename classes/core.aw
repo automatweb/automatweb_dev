@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.191 2003/05/14 13:49:13 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.192 2003/05/14 13:55:16 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1828,8 +1828,7 @@ class core extends db_connector
 		// url-il? Ntx www.kirjastus.ee/pk/automatweb juures see ei tööta. - duke
 		if ((stristr($this->REQUEST_URI,"/automatweb")!=false) || $force_admin)
 		{
-//			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
-			$ret =  "orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
+			$ret =  $this->cfg["baseurl"]."/automatweb/orb.".$this->cfg["ext"].$qm.$sec."class=$cl_name".$separator."action=$fun".$separator."$urs";
 		}
 		else
 		{
