@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/item_type.aw,v 2.8 2002/10/30 11:06:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/shop/Attic/item_type.aw,v 1.1 2002/11/03 10:52:15 kristo Exp $
 // item_type.aw - kaupade tüübid
 
 classload("shop_base");
