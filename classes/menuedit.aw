@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.226 2003/02/06 09:46:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.227 2003/02/06 10:11:34 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -315,6 +315,18 @@ class menuedit extends aw_template
 		{
 			$tpldir = $this->properties["tpl_dir"];
 		}
+
+		// hook for site specific gen_site_html initialization
+		// feel free to add other stuff here, but make sure this
+		// stays _before_ the tpl_init below
+		$si = __get_site_instance();
+		if (is_object($si) && method_exists($si,"init_gen_site_html"))
+		{
+			$si->init_gen_site_html(array(
+				"tpldir" => &$tpldir,
+			));
+		};
+
 		if ($tpldir)
 		{
 			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$tpldir));
