@@ -39,7 +39,7 @@
 												<td class="celltext">Keeled:</td><td class="celltext"><select class="formselect" NAME='settings[languages][]' multiple>{VAR:languages}</select></td>
 											</tr>
 											<tr>
-												<td colspan="2" class="celltext">Vormid, kust võetakse elemendid:</td>
+												<td colspan="2" class="celltext">Vormid, kust v?etakse elemendid:</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="celltext"><select size="20" class="formselect" NAME='settings[forms][]' multiple>{VAR:forms}</select></td>
@@ -60,20 +60,20 @@
 												<td colspan="2" class="celltext"><input type="checkbox" name="settings[select_default]" value="1" class="formcheck" {VAR:select_default}> _Vali_ tulba default</td>
 											</tr>
 											<tr>
-												<td colspan="2" class="celltext"><input type="checkbox" name="settings[has_textels]" value="1" class="formcheck" {VAR:has_textels}> Näita tekst tüüpi elemente</td>
+												<td colspan="2" class="celltext"><input type="checkbox" name="settings[has_textels]" value="1" class="formcheck" {VAR:has_textels}> N?ita tekst t??pi elemente</td>
 											</tr>
 											<tr>
-												<td colspan="2" class="celltext"><input {VAR:has_groupacl} type="checkbox" name="settings[has_groupacl]" value="1" class="formcheck"> Õigused tulpadele piiratud gruppide kaupa</td>
+												<td colspan="2" class="celltext"><input {VAR:has_groupacl} type="checkbox" name="settings[has_groupacl]" value="1" class="formcheck"> ?igused tulpadele piiratud gruppide kaupa</td>
 											</tr>
 											<tr>
-												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_grpnames} name="settings[has_grpnames]" value="1" class="formcheck">Näita tulpade nimesid iga grupeerimiselemendi all</td>
+												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_grpnames} name="settings[has_grpnames]" value="1" class="formcheck">N?ita tulpade nimesid iga grupeerimiselemendi all</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_print_button} name="settings[print_button]" value="1" class="formcheck">Prindi nupp &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Browse ikoon&nbsp;<input type="file" class="formfile" name="settings[print_button_file]"></td>
 											</tr>
 <!-- SUB: CHANGE -->
 											<tr>
-												<td colspan="2" class="celltext">Näitamise m&auml;&auml;rangud</td>
+												<td colspan="2" class="celltext">N?itamise m&auml;&auml;rangud</td>
 											</tr>
 
 											<tr>
@@ -114,13 +114,13 @@
 												<td colspan="2" class="celltext">
 													<table border="0">
 														<tr>
-															<td colspan="4" class="celltext">Jäta välja mitmekordsed:</td>
+															<td colspan="4" class="celltext">J?ta v?lja mitmekordsed:</td>
 														</tr>
 														<tr>
 															<td class="celltext">Element:</td>
 															<td class="celltext">Koondatud tulp:</td>
 															<td class="celltext">Eraldaja:</td>
-															<td class="celltext">Järjekorraelement:</td>
+															<td class="celltext">J?rjekorraelement:</td>
 														</tr>
 														<!-- SUB: GRPLINE -->
 														<tr>
@@ -183,22 +183,16 @@
 											</tr>
 
 											<tr>
-												<td class="celltext" colspan="2"><input type="checkbox" name="settings[has_pages]" value="1" {VAR:has_pages}> Kirjeid näidatakse lehekülgede kaupa</td>
+												<td class="celltext" colspan="2"><input type="checkbox" name="settings[has_pages]" value="1" {VAR:has_pages}> Kirjeid n?idatakse lehek?lgede kaupa</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[records_per_page]" value="{VAR:records_per_page}" size="5"> kirjet lehel</td>
 											</tr>
 											<tr>
-												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="text" {VAR:has_pages_text}> Tekstipõhine leheküljevalik</td>
+												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="text" {VAR:has_pages_text}> Tekstip?hine lehek?ljevalik</td>
 											</tr>
 											<tr>
-												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="lb" {VAR:has_pages_lb}> Dropdown leheküljevalik</td>
-											</tr>
-											<tr>
-												<td class="celltext" colspan="2"><input type="checkbox" name="settings[has_pages_up]" value="1" {VAR:has_pages_up}> Leheküljevalik &uuml;leval <input type="checkbox" name="settings[has_pages_down]" value="1" {VAR:has_pages_down}> Leheküljevalik all </td>
-											</tr>
-											<tr>
-												<td class="celltext" colspan="2"><input type="text" class="formtext" name="settings[page_sep_pixels]" value="{VAR:page_sep_pixels}" size="5"> Pikslit tabeli ja leheküljevaliku vahel </td>
+												<td class="celltext" colspan="2"><input type="radio" name="settings[has_pages_type]" value="lb" {VAR:has_pages_lb}> Dropdown lehek?ljevalik</td>
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[skip_one_liners]" value="1" {VAR:skip_one_liners}> Kui tabelis on ainult yks rida mis on lingitud, siis suuna sinna edasi</td>
@@ -269,9 +263,12 @@
 												<td class="celltext" colspan="2">
 													<table border="0">
 														<tr>
-															<td class="celltext"><input type="checkbox" name="settings[user_entries]" value="1" {VAR:has_user_entries}> Näita ainult Useri enda sisestusi </td>
-															<td class="celltext">Näita kõiki sisestusi gruppidele:<br>
+															<td class="celltext"><input type="checkbox" name="settings[user_entries]" value="1" {VAR:has_user_entries}> N?ita ainult Useri enda sisestusi </td>
+															<td class="celltext">N?ita k?iki sisestusi gruppidele:<br>
 																<select name="user_entries_except_grps[]" multiple  size="10" class="formselect">{VAR:uee_grps}</select>
+															</td>
+															<td class="celltext">Gruppide kaupa m&auml;&auml;rangud: 
+																<input type="checkbox" name="settings[has_grpsettings]" value="1" {VAR:has_grpsettings}>
 															</td>
 														</tr>
 													</table>
@@ -285,17 +282,23 @@
 															<td class="celltext">Nupud:</td>
 															<td class="celltext">Nupu tekst:</td>
 															<td class="celltext">Jrk.:</td>
-															<td class="celltext">Üleval/all:</td>
+															<td class="celltext">?leval/all:</td>
 														</tr>
 														<!-- SUB: BUTTON -->
 														<tr>
 															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][check]" value="1" {VAR:button_check}> {VAR:bt_name}</td>
 															<td class="celltext"><input class="formtext" type="text" name="buttons[{VAR:bt_id}][text]" value="{VAR:button_text}" ></td>
 															<td class="celltext"><input class="formtext"  size="4" type="text" name="buttons[{VAR:bt_id}][ord]" value="{VAR:button_ord}"></td>
-															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][pos][up]" value="1" {VAR:button_up}> Üleval <input type="checkbox" name="buttons[{VAR:bt_id}][pos][down]" value="1" {VAR:button_down}> All</td>
+															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][pos][up]" value="1" {VAR:button_up}> ?leval <input type="checkbox" name="buttons[{VAR:bt_id}][pos][down]" value="1" {VAR:button_down}> All</td>
 														<!-- END SUB: BUTTON -->
 													</table>
 												</td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2">Aliased: #lk# - lehekylgede valimine<br>Header:<br><textarea class="formtext" name="settings[header]" cols="50" rows="5">{VAR:header}</textarea></td>
+											</tr>
+											<tr>
+												<td class="celltext" colspan="2">Footer:<br><textarea class="formtext" name="settings[footer]" cols="50" rows="5">{VAR:footer}</textarea></td>
 											</tr>
 <!-- END SUB: CHANGE -->
 

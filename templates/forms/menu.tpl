@@ -22,7 +22,7 @@ function toggle(layer) {
 
 function toggle1(layer1,layer2) {
 	hideall();
-        //theobjs[layer1].objShow();
+        theobjs[layer1].objShow();
         theobjs[layer2].objShow();
 };
 </script>
@@ -30,26 +30,53 @@ function toggle1(layer1,layer2) {
 <div id="muh" class="muh">
 
 <div id="mainmenu" class="mainmenu">
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-<tr> 
-<td>
-<table border="0" cellspacing="0" cellpadding="0">
-<tr> 
-<td align="center" height="17" class="peaLingidText"><a class="peaLingid" href="javascript:toggle1('menu1','menu1b')">{VAR:LC_FORMS_TOIMETA}</a><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1></td>
-<td align="center" height="17" class="peaLingidText"><a href="javascript:toggle1('menu2','menu2b')" class="peaLingid" >{VAR:LC_FORMS_SETTINGS}</a><img src='{VAR:baseurl}/images/transa.gif' width=10 height=1></td>
-</tr>
-</table>
-</td>
-</tr>
-<tr> 
-<td height="17" class="alamLingidText"><img src="{VAR:baseurl}/images/transa.gif" border="0" width="100" height="2" /></td>
-</tr>
-</table>
+
+
+<!--tabelraam-->
+<table width="100%" border="0" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside" height="29">
+
+
+<table border="0" cellpadding="0" cellspacing="0">
+<tr><td width="5"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="29" BORDER=0 ALT=""></td>
+
+<td valign="bottom">
+
+			<table border=0 cellpadding=0 cellspacing=0>
+			<tr>
+				<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+				<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="middle"><a href="javascript:toggle1('menu1','menu1b')">{VAR:LC_FORMS_TOIMETA}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+
+
+				<td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+				<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="middle"><a href="javascript:toggle1('menu2','menu2b')" >{VAR:LC_FORMS_SETTINGS}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+
+
+			</tr></table>
+
+</td></tr></table>
+
+</td></tr></table>
+</td></tr></table>
+<IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="5" HEIGHT="22" BORDER=0 ALT=""></td></tr></table>
+
 </div>
 
 <!-- begin# menu 1 Toimeta -->
-<div id="menu1" class="menyy1"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="javascript:toggle1('menu1','menu1b')" class="peaLingidText">{VAR:LC_FORMS_TOIMETA}</a></td></tr></table></div>
-<div id="menu1b" class="alammenyy">{VAR:LC_FORMS_TOIMETA}&gt;
+
+<div id="menu1" class="menyy1"><table border="0" cellspacing="0" cellpadding="0"><tr>
+<td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_FORMS_TOIMETA}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+</tr></table></div>
+
+<div id="menu1b" class="alammenyy">&nbsp;
 <!-- SUB: CAN_GRID -->
 <a class="alamlingid" href='{VAR:change}'>{VAR:LC_FORMS_ADMIN_FORM}</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- SUB: SEARCH_SEL -->
@@ -80,9 +107,12 @@ function toggle1(layer1,layer2) {
 <!-- end# menu 1 -->
 
 <!-- begin# menu 2 M22rangud -->
-<div id="menu2" class="menyy2"><table border="0" cellspacing="0" cellpadding="0"><tr><td align="center" height="17"><a href="#" target="main" class="peaLingidText">{VAR:LC_FORMS_SETTINGS}</a></td></tr></table></div>
+<div id="menu2" class="menyy2"><table border="0" cellspacing="0" cellpadding="0"><tr>
+<td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td>
+<td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_FORMS_SETTINGS}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td>
+</tr></table></div>
 
-<div id="menu2b" class="alammenyy">{VAR:LC_FORMS_SETTINGS}&gt;
+<div id="menu2b" class="alammenyy">&nbsp;
 <!-- SUB: CAN_TABLE -->
 <a href='{VAR:table_settings}' class="alamlingid">{VAR:LC_FORMS_TABLE_STYLES}</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 <!-- END SUB: CAN_TABLE -->
@@ -104,7 +134,7 @@ function toggle1(layer1,layer2) {
 <!-- end# menu 2 -->
 
 </div>
-<img src='{VAR:baseurl}/images/transa.gif' width=1 height=1>
+
 <script language = javascript>
 init();
 <!-- SUB: GRID_SEL -->

@@ -74,7 +74,15 @@
 											<tr>
 												<td class="celltext">Kirjete summeerimise stiil:</td><td class="celltext"><select name="styles[sum_style]" class="formselect">{VAR:sum_style}</select></td>
 											</tr>
-
+											<tr>
+												<td class="celltext">Tekst lehek&uuml;ljevaliku stiil:</td><td class="celltext"><select name="styles[pg_text_style]" class="formselect">{VAR:pg_text_style}</select></td>
+											</tr>
+											<tr>
+												<td class="celltext">Tekst lehek&uuml;ljevaliku lingi stiil:</td><td class="celltext"><select name="styles[pg_text_style_link]" class="formselect">{VAR:pg_text_style_link}</select></td>
+											</tr>
+											<tr>
+												<td class="celltext">Listboks lehek&uuml;ljevaliku stiil:</td><td class="celltext"><select name="styles[pg_lb_style]" class="formselect">{VAR:pg_lb_style}</select></td>
+											</tr>
 										</table>
 
 										<table border="0" cellpadding="0" cellspacing="0" width="100%">

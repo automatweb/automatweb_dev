@@ -17,16 +17,22 @@ function setLink(li,title)
 }
 
 </script>
+<table cellpadding=1 cellspacing=0 border=0>
 
 <form action='reforb.{VAR:ext}' method=post name=ffrm>
-<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+
+<tr>
+<td bgcolor="#FFFFFF">
+
+
+<table cellpadding=3 cellspacing=0 border=0>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_TABLE_STYLE}:</td>
-<td class="celltext"><select name='tablestyle'>{VAR:tablestyles}</select></td>
+<td class="celltext"><select name='tablestyle' class="formselect2">{VAR:tablestyles}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_DEFAULT_STYLE}:</td>
-<td class="celltext"><select name='def_style'><option VALUE=''>{VAR:def_style}</select>
+<td class="celltext"><select name='def_style' class="formselect2"><option VALUE=''>{VAR:def_style}</select>
 </td>
 </tr>
 <tr class="aste01">
@@ -50,11 +56,11 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_CALENDAR_OP}:</td>
-<td class="celltext"><select name="event_display_table">{VAR:event_display_tables}</select></td>
+<td class="celltext"><select name="event_display_table" class="formselect2">{VAR:event_display_tables}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext">Eventi alguse m‰‰rab element:</td>
-<td class="celltext"><select name="event_start_el">{VAR:event_start_els}</select></td>
+<td class="celltext"><select name="event_start_el" class="formselect2">{VAR:event_start_els}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CAN_EMAIL_ACTION}: &nbsp;<input type='checkbox' name='email_form_action' value=1 {VAR:email_form_action}></td>
@@ -75,7 +81,7 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>{VAR:LC_FORMS_GOT_TO_ADDRESS}:</td>
-<td class="celltext"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}' size="30"> <a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_FORMS_INTRA_LINK}</a></td>
+<td class="celltext"><input class="formtext" type='text' NAME='after_submit_link' value='{VAR:after_submit_link}' size="30"> <a href="javascript:remote('no',500,400,'{VAR:search_doc}')">{VAR:LC_FORMS_INTRA_LINK}</a></td>
 </tr>
 <tr class="aste01">
 <td class="celltext"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>{VAR:LC_FORMS_SHOW_ENTRIES}:</td>
@@ -83,11 +89,11 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_SQL_WRITER_WRITER}:</td>
-<td class="celltext"><input type='checkbox' NAME='sql_writer_writer' value='1' {VAR:sql_writer_writer}></td>
+<td class="celltext"><input type='checkbox'  NAME='sql_writer_writer' value='1' {VAR:sql_writer_writer}></td>
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_SQL_WRITER_WRITER_FORM}:</td>
-<td class="celltext"><select class="small_button" name='sql_writer_writer_form'>{VAR:sql_writer_writer_forms}</select></td>
+<td class="celltext"><select class="formselect2" name='sql_writer_writer_form'>{VAR:sql_writer_writer_forms}</select></td>
 </tr>
 <!-- END SUB: NOSEARCH -->
 
@@ -97,7 +103,7 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_CHOOSE_TABLE}:</td>
-<td class="celltext"><select name='table'>{VAR:tables}</select></td>
+<td class="celltext"><select name='table' class="formselect2">{VAR:tables}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_SQL_WRITER}:</td>
@@ -105,7 +111,7 @@ function setLink(li,title)
 </tr>
 <tr class="aste01">
 <td class="celltext">{VAR:LC_FORMS_SQL_WRITER_FORM}:</td>
-<td class="celltext"><select class="small_button" name='sql_writer_form'>{VAR:forms}</select></td>
+<td class="celltext"><select class="formselect2" name='sql_writer_form'>{VAR:forms}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_SHOW_FORM_WITH_RESULTS}: <input type='checkbox' NAME='show_form_with_results' value='1' {VAR:show_form_with_results}></td>
@@ -115,11 +121,17 @@ function setLink(li,title)
 <td class="celltext" colspan=2>{VAR:LC_FORMS_CHOOSE_ELEMENT_WHAT_PUT_FORM_ENTRY}</td>
 </tr>
 <tr class="aste01">
-<td colspan=2 class="celltext"><select NAME='entry_name_el[]' multiple>{VAR:els}</select></td>
+<td colspan=2 class="celltext"><select class="formselect2" NAME='entry_name_el[]' multiple>{VAR:els}</select></td>
 </tr>
 <tr class="aste01">
 <td class="celltext" colspan=2><input class='formbutton' type='submit' NAME='save_form_settings' VALUE='{VAR:LC_FORMS_SAVE}'></td>
 </table>
 {VAR:reforb}
+
+
+</td></tr>
+
 </form>
-  
+
+</table>
+  <br>
