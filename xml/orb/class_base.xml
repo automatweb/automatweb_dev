@@ -6,8 +6,9 @@
 				<arguments>
 					<required name="parent" type="int"/>
 					<optional name="period"/>
-					<optional name="alias_to"/>
+					<optional name="alias_to" type="int"/>
 					<optional name="return_url"/>
+					<optional name="reltype" type="int"/>
 				</arguments>
 			</function>
 		</action>
@@ -18,7 +19,7 @@
 					<required name="id" type="int"/>
 					<optional name="group"/>
 					<optional name="period"/>
-					<optional name="alias_to"/>
+					<optional name="alias_to" type="int"/>
 					<optional name="return_url"/>
 				</arguments>
 			</function>
@@ -62,6 +63,21 @@
 					<optional name="period"/>
 				</arguments>
 			</function>
+		</action>
+
+		<action name="edit_relation">
+			<function name="edit_relation">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="return_url"/>
+				</arguments>
+'			</function>
+		</action>
+		
+		<action name="submit_relation">
+			<function name="submit_relation">
+				<arguments/>
+'			</function>
 		</action>
 
 	</class>
