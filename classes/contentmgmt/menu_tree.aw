@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.3 2005/01/18 11:17:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/menu_tree.aw,v 1.4 2005/01/20 12:38:18 kristo Exp $
 // menu_tree.aw - menüüpuu
 
 /*
@@ -90,7 +90,13 @@ class menu_tree extends class_base
 		$obj = obj($alias["target"]);
 		$this->mt_obj = $obj;
 
-		$menus = $obj->meta("menus");
+		$menus = safe_array($obj->meta("menus"));
+		$ol = new object_list(array(
+			"oid" => $menus,
+			"sort_by" => "objects.jrk"
+		));
+		$menus = $ol->ids();
+		
 		$cho = $obj->meta("children_only");
 		$this->children_only = !empty($cho) ? true : false;
 		$tpl = ($obj->meta("template") ? $obj->meta("template") : "menu_tree.tpl");
