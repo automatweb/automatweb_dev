@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.185 2003/04/29 17:01:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.186 2003/05/07 13:29:39 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1939,16 +1939,17 @@ class core extends db_connector
 	////
 	// Tekitab lingi. duh. 
 	// params(array) - key/value paarid elementidest, mida lingi tekitamisel kasutada
-	function mk_link($args = array())
+	// skip_empty makes us ignore keys with no values
+	function mk_link($args = array(),$skip_empty = false)
 	{
 		$retval = array();
 		foreach($args as $key => $val)
 		{
 			if ($val)
 			{
-				$retval[] = sprintf("%s=%s",$key,$val);
+				$retval[] = "$key=$val";
 			}
-			else
+			elseif (!$skip_empty)
 			{
 				$retval[] = $key;
 			};
