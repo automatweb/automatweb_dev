@@ -9,6 +9,10 @@ class html_import extends aw_template
 	{
 		// change this to the folder under the templates folder, where this classes templates will be 
 		$this->init("html_import");
+		$this->temp_docu="well, iga erinevat tüüpi html lehe kohta peab tegema eraldi impordi objekti.
+		'source kataloog' on see kus html failid asuvad.
+		'näitefailid' ehk mille järgi hakkad kirjeldama datat.<br>
+		";
 	}
 
 	function getfile($file)
@@ -218,13 +222,46 @@ class html_import extends aw_template
 	}
 
 
+	////
+	// ! see on prosta tabel
+	function show_data($table,$limit=10)
+	{
+		$str.="<tr>";		
+		$res=mysql_query("select count(*) from $table");
+		$cnt=@mysql_result($res,0,0);
+			$str.="<td colspan=3>total in table:".(int)$cnt.", showing first $limit</td>";
+
+		$str.="</tr>";
+		$res=mysql_query("select * from $table limit $limit");
+		$str.="<tr>";
+		$fields = @mysql_num_fields($res);
+		for ($i=0; $i < $fields; $i++)
+		{
+			$str.="<th><b>&nbsp;".mysql_field_name($res, $i)."</th>";
+		}
+		$str.="</tr>";
+		while ($row = @mysql_fetch_row($res))
+		{
+			$str.="<tr>";
+			foreach($row as $key => $val)
+			{
+				
+				$str.="<td>&nbsp;".((substr($val,0,50)==$val)?$val:substr($val,0,50)." ...")."</td>";
+			}
+			$str.="</tr>";
+		}
+		return $str;
+	}
+
+
+
 
 	function ruul_test($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
-		$examples=explode("\n",$ob["meta"]["example"]);		
-		
+		$examples=explode("\n",$ob["meta"]["example"]);
+
 		$source=$this->getfile($examples[$f]);
 		$ruuls=$ob["meta"]["ruul"];
 		if ($ruuls)
@@ -239,6 +276,9 @@ class html_import extends aw_template
 		}
 		echo $source;
 		die();
+
+	
+	
 	}
 
 
@@ -287,9 +327,10 @@ class html_import extends aw_template
 		$ruul=$ob["meta"]["ruul"];
 //print_r(	
 		$sql_ruul=$ob["meta"]["sql_ruul"];
+				if ($ruul)
 				foreach($ruul as $key=>$val)
 				{
-					if (($ruul[$key]["end"]||$ruul[$key]["begin"])&&$ruul[$key]["mk_field"])
+					if ((($ruul[$key]["end"]||$ruul[$key]["begin"])||!$ob["meta"]["single"])&&$ruul[$key]["mk_field"])
 					{	$this->vars(array(
 						"ruul"=>$key,
 						"mis"=>"sql_ruul",
@@ -304,10 +345,12 @@ class html_import extends aw_template
 					$ruulid.=$this->parse("ruul");
 					}
 				}
-		$html=$this->getfile($ob["meta"]["example"]);
+		$examples=explode("\n",$ob["meta"]["example"]);
+		$html=$this->getfile($examples[0]);
 
-		if (is_int(@strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
+		if (is_int(strpos($html,$ob["meta"]["match"]))) //&& create lause õige && veerge on defineeritud
 		{
+
 			$import_link="<a href=".$this->mk_my_orb("tiri",array("id"=>$id))." target=_blank>impordi</a>";
 		}
 		else
@@ -320,7 +363,6 @@ class html_import extends aw_template
 			$this->drop_table($ob["meta"]["mk_my_table"]);
 		}
 
-
 		$this->vars(array(
 			"gogo"=> $import_link,
 			"create_table"=>"<a href=\"".$this->mk_my_orb("sqlconf", array("id" => $id, "create_table" => "yes", "return_url" => urlencode($return_url)))."\">CREATE</a>",
@@ -330,7 +372,9 @@ class html_import extends aw_template
 			"got_table"=>$this->show_create_table($ob["meta"]["mk_my_table"]),
 			"ruul"=>$ruulid,
 			"toolbar" => $this->my_toolbar(array("id"=>$id)),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sqlconf", "return_url" => urlencode($return_url)))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"sqlconf", "return_url" => urlencode($return_url))),
+			"some_data"=>$this->show_data("html_import_".$ob["meta"]["mk_my_table"],20),
+
 		));
 		return $this->parse();
 	}
@@ -384,6 +428,7 @@ class html_import extends aw_template
 			"name"=>$ob["name"],
 			"source_path"=>$ob["meta"]["source_path"],//$this->picker(0,array("/home/axel/public_html/html"=>"/home/axel/public_html/html")),
 			"comment"=>$ob["comment"],
+			"docu"=>$this->temp_docu,
 			"toolbar" => $this->my_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do"=>"change", "return_url" => urlencode($return_url)))
 		));
@@ -476,55 +521,46 @@ class html_import extends aw_template
 					$tmp=spliti("<tr", $source);		//leiame veergude arvu
 					$cnt=preg_match_all("/(<td)/i", $tmp[1], $null); 
 	//				print_r($source);
-//					$tbl=$this->table_to_array($source,);
+					$tbl=$this->table_to_array($source,0);
 					$this->ruul=$what;
-					$source=preg_replace("/(<td[^\!>]*>)/ie", '\$this->sel_field("\\1")', $source,$cnt);
+					$source=preg_replace("/<input.*>/Ui", '', $source);
+					$source=preg_replace("/<script.*<\/script>/Ui", '\1 nome=\3', $source);
+					$source=preg_replace("/<form [^>]*>/i", '', $source);
+//$source=preg_replace("/(<input [^>]*)(name\=)([^>]*>)/i", '\1 nome=\3', $source);//et formi elmendid ei hakkak AW-d segama
+
+					for ($i=1;$i<count($tbl[1]);$i++)
+//					foreach($what as $key => $val)
+					{
+//						if ($whatl["ruul_".$i]["mk_field"])
+//						{
+							$this->vars(array(
+								"mis"=>"ruul",
+								"ruul"=>"ruul_".$i,
+								"mk_field"=>$what["ruul_".$i]["mk_field"],
+								"desc"=>$what["ruul_".$i]["desc"],
+							));
+							$rhuul=$this->parse("fields");
+							$source=preg_replace("/(<td[^\!>]*>)/i", '<td !>'.$rhuul, $source,1);
+//						}
+					}
 				}
+				$notest=1;
 			}
 		}
-/*
-		$this->vars(array(
-			"ruul"=>"eraldajad",
-			"mis"=>"separator",
-			"begin"=>$ob["meta"]["separator"]["eraldajad"]["begin"],
-			"end"=>$ob["meta"]["separator"]["eraldajad"]["end"],
-			"fields"=>"",
-		));
-		$separators=$this->parse("ruul");*/
 
-
-//$source=preg_replace("/(<input [^>]*)(name\=)([^>]*>)/i", '\1 nome=\3', $source);//et formi elmendid ei hakkak AW-d segama
-$source=preg_replace("/<input.*>/Ui", '', $source);
-$source=preg_replace("/<script.*<\/script>/Ui", '\1 nome=\3', $source);
-$source=preg_replace("/<form [^>]*>/i", '', $source);
 
 		$this->vars(array(
 			"match"=>$ob["meta"]["match"],
 			"ruul"=>$ruulid,
 			"reset"=> "<a href='$link&reset=1'>reset</a>",
-			"source"=>"<textarea cols=95 rows=15>".$html."</textarea><br /><br />".$source,
-			"ruul_test"=>$exmpl,
+			"source"=>"fail: ".$examples[0]."<br /><textarea cols=95 rows=15>".$html."</textarea><br /><br />".$source,
+			"ruul_test"=>$notest?"":$exmpl,
 			"toolbar" => $this->my_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id, "starts"=>$starts, "do"=>"conf", "return_url" => urlencode($return_url)))
 		));
 		return $this->parse();
 	}
 
-
-	function sel_field($more="")
-	{
-		static $fn,$tbl;if(!$fn)$fn=0;
-		
-		$this->vars(array(
-			"mis"=>"ruul",
-			"ruul"=>$fn,
-			"mk_field"=>$this->ruul[$fn]["mk_field"],
-			"desc"=>$this->ruul[$fn]["desc"],
-		));
-		$fn++;
-		return	$more.$this->parse("fields");
-	
-	}
 
 	function table_to_array($table,$gets)
 	{
@@ -543,9 +579,11 @@ $source=preg_replace("/<form [^>]*>/i", '', $source);
 				$dat=array();
 				foreach($cells as $key=>$cell)
 				{
-					if ($gets[$key])
-					$dat[]=trim($cell);
-
+					if($gets[$key])
+						$dat[]=trim($cell);
+					else
+					if(!$gets)
+						$dat[]=trim($cell);
 				}
 				$tbl[]=$dat;
 			}
@@ -582,7 +620,6 @@ $source=preg_replace("/<form [^>]*>/i", '', $source);
 					$got=$val?"yes":$got;
 					$va[$key]="'".addslashes(trim(strip_tags($val)))."'";
 				}
-
 				if($got)
 				{
 					$value="(".implode(",",$va).")";
@@ -826,23 +863,23 @@ $source=preg_replace("/<form [^>]*>/i", '', $source);
 			"name" => "change",
 			"tooltip" => "change",
 			"url" => $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url))),
-			"imgover" => "change_over.gif",
-			"img" => "change.gif",
+			"imgover" => "settings_over.gif",
+			"img" => "settings.gif",
 		));
 
 		$toolbar->add_button(array(
 			"name" => "conf",
 			"tooltip" => "conf",
 			"url" => $this->mk_my_orb("conf", array("id" => $id, "return_url" => urlencode($return_url))),
-			"imgover" => "conf_over.gif",
-			"img" => "conf.gif",
+			"imgover" => "preview_over.gif",
+			"img" => "preview.gif",
 		));
 		$toolbar->add_button(array(
 			"name" => "sqlconf",
 			"tooltip" => "sqlconf",
 			"url" => $this->mk_my_orb("sqlconf", array("id" => $id, "return_url" => urlencode($return_url))),
-			"imgover" => "conf_over.gif",
-			"img" => "conf.gif",
+			"imgover" => "import_over.gif",
+			"img" => "import.gif",
 		));
 		return $toolbar->get_toolbar();
 	}
