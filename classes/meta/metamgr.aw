@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.2 2004/03/25 21:47:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/metamgr.aw,v 1.3 2004/03/29 14:58:44 duke Exp $
 // metamgr.aw - Muutujate haldus 
 
 // see on siis mingi faking muutujate haldus. Mingi puu. Ja mingid asjad. Ja see kõik pole
@@ -16,12 +16,16 @@
 @property mgrtoolbar type=toolbar no_caption=1 store=no
 @caption Toolbar
 
+
 @property manager type=text no_caption=1 store=no wrapchildren=1
 @caption Manager
 
 @property treeview type=text parent=manager store=no
 
 @property metalist type=table parent=manager store=no
+
+@property mupload type=fileupload store=no
+@caption Vali muutujatega fail
 
 @property meta type=hidden store=no 
 @caption Metainfo
@@ -425,9 +429,42 @@ class metamgr extends class_base
 			case "metalist":
 				$this->submit_meta($arr);
 				break;
+
+			case "mupload":
+				if (!empty($_FILES["mupload"]))
+				{
+					$this->import_variables_from_file($arr);
+				};
+				break;
 		}
 		return $retval;
 	}	
+
+	function import_variables_from_file($arr)
+	{
+		$filedat = $_FILES["mupload"];
+		$handle = @fopen($filedat["tmp_name"],"r");
+		if (!$handle)
+		{
+			return false;
+		};
+		$parent = $arr["request"]["meta"];
+		while ($data = fgetcsv($handle, 1000, "\t"))
+		{
+			// that's for stat.
+			if (sizeof($data) == 3)
+			{
+				$no = new object;
+				$no->set_class_id(CL_META);
+				$no->set_status(STAT_ACTIVE);
+				$no->set_parent($parent);
+				$no->set_comment($data[2]);
+				$no->set_name($data[0] . " (" . $data[1] . ")");
+				$no->save();
+			};
+		};
+		fclose($handle);	
+	}
 
 	function callback_mod_retval($arr)
 	{
