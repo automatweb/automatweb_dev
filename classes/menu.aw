@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.99 2004/07/09 12:21:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.100 2004/09/13 14:21:54 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -739,7 +739,30 @@ class menu extends class_base
 			"selected" => $arr["obj_inst"]->meta("pclass"),
 			"options" => $this->get_pmethod_sel(),
 		);
-		
+		$pclass = $arr["obj_inst"]->meta("pclass");
+		list($class_name, $tmp) = explode("/", $pclass);
+		if($class == "method")
+		{
+			
+			$classes = aw_ini_get("classes");
+			foreach($classes as $id => $class)
+			{
+				if($class["file"] == $class_name)
+				{
+					$class_id = $id;
+					break;
+				}
+			}
+			//arr($classes);
+			$nodes[] = array(
+				"type" => "select",
+				"name" => "pobject",
+				"caption" => "Vali meetodiga seotud objekt",
+				"options" => array(),
+				"selected" => $arr["obj_inst"]->meta("pobject"),
+				"options" => $this->get_pobjects($class_id),
+			);
+		} 
 		$nodes[] = array(
 			"type" => "checkbox",
 			"name" => "pm_url_admin",
@@ -844,6 +867,8 @@ class menu extends class_base
 
 			case "pmethod_properties":
 				$request = &$arr["request"];
+				list($class, $tmp) = explode("/",$request["pclass"]);
+				$ob->set_meta("pobject", ($class == "method" ? $request["pobject"] : ""));
 				$ob->set_meta("pclass",$request["pclass"]);
 				$ob->set_meta("pm_url_menus",$request["pm_url_menus"]);
 				$ob->set_meta("pm_url_admin",$request["pm_url_admin"]);
@@ -873,6 +898,15 @@ class menu extends class_base
 		return $retval;
 	}
 
+	function get_pobjects($class_id)
+	{
+		$objects = new object_list(array(
+			"class_id" => $class_id,
+			"limit" => 100,
+		));
+		return array(0 => "-- vali --") + $objects->names();
+	}
+	
 	function update_menu_images($args = array())
 	{
 		extract($args);

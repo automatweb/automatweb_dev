@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.79 2004/09/09 11:10:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.80 2004/09/13 14:21:55 ahti Exp $
 
 /*
 
@@ -1876,9 +1876,11 @@ class site_show extends class_base
 				{
 					$_cl = "period";
 				};
+				$pobject = $o->meta("pobject");
 				$meth = $orb->get_public_method(array(
 					"id" => $_cl,
 					"action" => $_act,
+					"obj" => (!empty($pobject) ? $pobject : false), 
 				));
 				$values = array();
 				$err = false;
