@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.15 2003/04/15 15:51:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.16 2003/04/15 15:52:31 kristo Exp $
 
 /*
 
@@ -325,6 +325,10 @@ class gallery_v2 extends class_base
 						}
 					}  
 					closedir($dir);
+				}
+				else
+				{
+					$this->raise_error(ERR_NO_FOLDER,"Sellist kataloogi pole serveris! ($meta[local_folder])", false, true);
 				}
 			}
 
