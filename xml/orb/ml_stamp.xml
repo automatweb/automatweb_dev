@@ -1,30 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="ml_stamp" folder="mailinglist">
-	
-		<action name="new">
-			<function name="orb_new">
-				<arguments>
-					<required name="parent" acl="add"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="submit_edit">
-			<function name="orb_submit_edit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change">
-			<function name="orb_change">
-				<arguments>
-					<required name="id" acl="view;edit"/>
-					<optional name="parent"/>
-				</arguments>
-			</function>
-		</action>
-		
-		</class>
-	</orb>
+	<class name="ml_stamp" folder="mailinglist" extends="class_base">
+	</class>
+</orb>
