@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.25 2004/02/02 19:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.26 2004/02/10 15:10:52 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -264,9 +264,9 @@ class admin_folders extends aw_template
 			$actrec = 0;
 			$rc = 0;
 			$period_list = new object_list(array(
-                                "class_id" => CL_PERIOD,
+				"class_id" => CL_PERIOD,
 				"sort_by" => "objects.jrk DESC",
-                        ));
+			));
 
 			for ($period_obj = $period_list->begin(); !$period_list->end(); $period_obj = $period_list->next())
 			// loeme k6ik perioodid sisse
@@ -278,7 +278,7 @@ class admin_folders extends aw_template
 					$actrec = $rc;
 				};
 				$pl[$rc] = array(
-					"id" => $period_obj->id(),
+					"id" => $period_obj->prop("per_id"),
 					"name" => $period_obj->name(),
 				);
 			}
