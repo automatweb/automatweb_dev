@@ -245,10 +245,12 @@ define(FORM_EELEMENT_LOADED,1);
 				$this->arr[group] = $$var;
 			}
 
-			if ($this->arr[type] == "price")
+			if ($this->arr["type"] == "price")
 			{
 				$var=$base."_price";
 				$this->arr["price"] = $$var;
+				$var=$base."_length";
+				$this->arr["length"] = $$var;
 			}
 
 			if ($this->arr[type] == "textbox" || $this->arr[type] == "textarea" || $this->arr[type] == "checkbox" || $this->arr[type] == "radiobutton")
@@ -390,7 +392,8 @@ define(FORM_EELEMENT_LOADED,1);
 
 			if ($this->arr["type"] == "price")
 			{
-				$html = "<input type='text' NAME='".$prefix.$elid."' VALUE='".($this->get_val($elvalues))."'>";
+				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
+				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
 			}
 
 			if ($this->arr["type"] == "submit")

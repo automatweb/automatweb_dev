@@ -112,8 +112,8 @@
 <tr>
 <td class="fgtext">Default hind:</td>
 <td class="fgtext"><input class='small_button' type='text' NAME='{VAR:cell_id}_price' VALUE='{VAR:price}'></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Pikkus:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
 </tr>
 <!-- END SUB: PRICE_ITEMS -->
 <tr>
