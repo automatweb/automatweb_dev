@@ -9,7 +9,7 @@ class bugtrack extends aw_template
 
 	function bugtrack()
 	{
-		$this->mastersite="http://aw";
+		$this->mastersite="http://aw.struktuur.ee";
 		global $sitekeys;
 		$this->sitekeys=$sitekeys;
 		if (!isset($sitekeys) || !is_array($sitekeys))
