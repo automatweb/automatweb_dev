@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.62 2002/11/20 13:02:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.63 2002/11/26 18:12:58 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -73,7 +73,7 @@ class aliasmgr extends aw_template
 			$to_delete = new aw_array($check);
 			foreach($to_delete->get() as $alias_id)
 			{
-                                $this->delete_alias($id,$alias_id);
+        $this->delete_alias($id,$alias_id);
 				unset($link[$alias_id]);
 			};
 		};
@@ -83,6 +83,21 @@ class aliasmgr extends aw_template
 			"value" => $link,
 			"overwrite" => 1,
 		));
+
+		$cache_inst = get_instance("cache");
+		$alist = $this->get_aliases_for($id);
+		foreach($alist as $ad)
+		{
+			if ($ad['cached'] != $cache[$ad['target']])
+			{
+				if (!$cache[$ad['target']])
+				{
+					$cache_inst->file_invalidate('alias_cache::source::'.$id.'::target::'.$ad['target']);
+				}
+				$q = "UPDATE aliases SET cached = '".$cache[$ad['target']]."' WHERE target = '".$ad['target']."' AND source = '$id'";
+				$this->db_query($q);
+			}
+		}
 		$this->cache_oo_aliases($id);
 		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
 	}
@@ -179,6 +194,8 @@ class aliasmgr extends aw_template
 
 		preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
 
+		$cache_inst = get_instance("cache");
+
 		if (is_array($matches))
 		{
 			// we gather all aliases in here, grouped by class so we gan give them to parse_alias_list()
@@ -246,8 +263,20 @@ class aliasmgr extends aw_template
 					{
 						// if nothing comes up, we just replace it with a empty string
 						$replacement = "";
+				
+						// check if the alias is cached
+						$from_cache = false;
+						if ($adata['cached'] == 1)
+						{
+							$replacement = $cache_inst->file_get('alias_cache::source::'.$adata['source'].'::target::'.$adata['target']);
+							if ($replacement !== false)
+							{
+								$source = str_replace($avalue,$replacement,$source);
+								$from_cache = true;
+							}
+						}
 
-						if (method_exists($$emb_obj_name,"parse_alias"))
+						if (method_exists($$emb_obj_name,"parse_alias") && !$from_cache)
 						{
 							$repl = $$emb_obj_name->parse_alias(array(
 								"oid" => $oid,
@@ -274,6 +303,11 @@ class aliasmgr extends aw_template
 							};
 								
 							$source = str_replace($avalue,$replacement,$source);
+
+							if ($adata['cached'] == 1)
+							{
+								$cache_inst->file_set('alias_cache::source::'.$adata['source'].'::target::'.$adata['target'],$replacement);
+							}
 						}
 					}
 				}
@@ -329,6 +363,15 @@ class aliasmgr extends aw_template
 		$this->t->define_field(array(
 			"name" => "link",
 			"caption" => "Link",
+			"talign" => "center",
+			"width" => 50,
+			"align" => "center",
+			"class" => "celltext",
+			"nowrap" => "1",
+		));
+		$this->t->define_field(array(
+			"name" => "cache",
+			"caption" => "Cache",
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
@@ -442,6 +485,12 @@ class aliasmgr extends aw_template
 			$alias["title"] = $classes[$aclid]["name"];
 			$alias["check"] = sprintf("<input type='checkbox' name='check[%d]' value='%d'>",$alias["target"],$alias["target"]);
 			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
+
+			$alias["cache"] = html::checkbox(array(
+				'name' => 'cache['.$alias['target'].']',
+				'value' => 1,
+				'checked' => ($alias['cached'] == 1)
+			));
 
 			$this->t->define_data($alias);
 		}
