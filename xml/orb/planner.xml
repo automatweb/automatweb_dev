@@ -105,6 +105,14 @@
 			</function>
 		</action>
 		
+		<action name="event_reminder">
+			<function name="event_reminder">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="event_object_search">
 			<function name="event_object_search">
 				<arguments>

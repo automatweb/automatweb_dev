@@ -22,10 +22,7 @@
 		</action>
 
 		<action name="submit">
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
+			<function name="submit"/>
 		</action>
 
 		<action name="repeaters">
@@ -37,10 +34,19 @@
 		</action>
 		
 		<action name="submit_repeaters">
-			<function name="submit_repeaters">
+			<function name="submit_repeaters"/>
+		</action>
+		
+		<action name="reminder">
+			<function name="reminder">
 				<arguments>
+					<required name="id"/>
 				</arguments>
 			</function>
+		</action>
+		
+		<action name="submit_reminder">
+			<function name="submit_reminder"/>
 		</action>
 		
 		<action name="search">
