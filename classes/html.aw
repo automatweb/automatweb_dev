@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.24 2003/02/19 14:56:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.25 2003/02/25 11:05:48 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -109,6 +109,7 @@ class html extends aw_template
 	function popup_objmgr($args = array())
 	{
 		extract($args);
+		//print_r($args);die;
 		if ($multiple)
 		{
 			$mz = "multiple ";
@@ -132,19 +133,23 @@ class html extends aw_template
 		if (!$this->got_popup_objmgr)
 		{
 			$this->got_popup_objmgr=1;
-			
+			$this->width = $width;
+			$this->height = $height;
+
 			$str.=localparse(implode('',file($this->cfg['tpldir'].'/popup_objmgr/popup_objmgr.script')),
 				array(
-					'width' => $width?$width:450,
-					'height' => $height?$height:400,
 					'params' => ($top?'top='.$top.',':'').($left?'left='.$left.',':''),
 				)
 
 			);
 		}
+		$width=(int)($width?$width:$this->width);
+		$height=(int)($height?$height:$this->height);
 
 		return 	$str.="<select name='".$name."' $mz id='".$name."'>\n".$options."</select>\n".
-			"<input type='button' value=' + ' onClick=\""."current_element='".$name."';pop_select('".$popup_objmgr."');"."\" />\n";
+			"<input type='button' value=' + ' onClick=\""."current_element='".$name."';pop_select('".$popup_objmgr."',$width,$height);"."\" />
+			".$change."\n";
+
 	}
 
 	////
