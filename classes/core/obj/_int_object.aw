@@ -1363,7 +1363,7 @@ class _int_object
 		$this->_int_do_obj_inherit_props();
 
 		// log save
-		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"]);
+		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"]);
 
 		return $this->obj["oid"];
 	}

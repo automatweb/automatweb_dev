@@ -447,6 +447,11 @@ class _int_object_loader
 		// and now return the highest found
 		return (int)$max_acl["can_".$acl_name];
 	}
+
+	function _log($new, $oid, $name)
+	{
+		$this->cache->_log(100000, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
+	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();
