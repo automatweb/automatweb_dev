@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.87 2004/10/05 09:18:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.88 2004/10/13 13:36:54 duke Exp $
 
 /*
 
@@ -728,9 +728,10 @@ class site_show extends class_base
 		// mingitest artiklis esinevatest asjadest. You name it.
 		$blocks = array();
 
+		$section_id = $this->section_obj->id();
 		if (is_array($docid)) 
 		{
-			$template = $this->get_lead_template($this->section_obj->id());
+			$template = $this->get_lead_template($section_id);
 			
 			// I need to  know that for the public method menus
 			// christ, this sucks ass, we really should put that somewhere else! - terryf
@@ -743,6 +744,7 @@ class site_show extends class_base
 
 			$_numdocs = count($docid);
 			$_curdoc = 1;
+			$no_strip_lead = aw_global_get("document.no_strip_lead");
 			foreach($docid as $dk => $did)
 			{
 				// resets the template
@@ -752,10 +754,10 @@ class site_show extends class_base
 					"docid" => $did,
 					"tpl" => ($dk & 1 ? $template2 : $template),
 					"leadonly" => 1,
-					"section" => $this->section_obj->id(),
+					"section" => $section_id,
 					"strip_img" => false,
 					"keywords" => 1,
-					"no_strip_lead" => aw_global_get("document.no_strip_lead"),
+					"no_strip_lead" => $no_strip_lead,
 					"not_last_in_list" => ($_curdoc < $_numdocs)
 				));
 				$_curdoc++;
@@ -764,7 +766,7 @@ class site_show extends class_base
 		else 
 		{
 			$awt->start("get-long");
-			$template = $this->get_long_template($this->section_obj->id());
+			$template = $this->get_long_template($section_id);
 			$awt->stop("get-long");
 
 			if ($docid)
@@ -776,7 +778,7 @@ class site_show extends class_base
 				$awt->start("gen-preview");
 				$ct = $d->gen_preview(array(
 					"docid" => $docid,
-					"section" => $this->section_obj->id(),
+					"section" => $section_id,
 					"no_strip_lead" => aw_ini_get("document.no_strip_lead"),
 					"notitleimg" => 0,
 					"tpl" => $template,
@@ -797,7 +799,7 @@ class site_show extends class_base
 
 				$this->vars(array(
 					"docid" => $docid,
-					"section" => $this->section_obj->id(),
+					"section" => $section_id,
 				));
 				$this->vars(array(
 					"PRINTANDSEND" => $this->parse("PRINTANDSEND")
