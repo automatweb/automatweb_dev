@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.3 2002/11/06 09:28:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.4 2002/11/07 22:57:40 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1311,7 +1311,7 @@ class form extends form_base
 			// see logimine on omal kohal ainult siis, kui täitmine toimub
 			// läbi veebi.
 			$this->_log("form","T&auml;itis formi $this->name");
-			// check automatic mailinglist
+			// check automatic mailinglist except 
 			$ml_list_inst = get_instance("mailinglist/ml_list");
 			$this->db_query("SELECT * FROM ml_list2automatic_form WHERE fid = '$this->id'");
 			while ($row = $this->db_next())
@@ -1393,6 +1393,13 @@ class form extends form_base
 		$sff = aw_global_get("session_filled_forms");
 		$sff[$this->id] = $this->entry_id;
 		aw_session_set("session_filled_forms", $sff);
+
+		// check mailinglist rules
+		if ($this->type == FTYPE_ENTRY && !$no_ml_rules)
+		{
+			$ml_rule_inst = get_instance("mailinglist/ml_rule");
+			$ml_rule_inst->exec_dynamic_rules();
+		}
 
 		if (isset($redirect_after) && $redirect_after)
 		{
@@ -5850,13 +5857,24 @@ class form extends form_base
 			"ret_id_only" => true
 		));
 
+		$this->matched_chain_entries = array();
+//		echo "sql = $sql <br>";
 		$this->db_query($sql);
 		while ($row = $this->db_next())
 		{
 			$ret[] = $row["entry_id"];
+			if ($row["chain_entry_id"])
+			{
+				$this->matched_chain_entries[] = $row["chain_entry_id"];
+			}
 		}
 
 		return $ret;
+	}
+
+	function get_last_search_chain_entry_ids()
+	{
+		return is_array($this->matched_chain_entries) ? $this->matched_chain_entries : array();
 	}
 
 	//// 
