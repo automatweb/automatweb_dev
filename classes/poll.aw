@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.15 2002/09/09 18:19:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.16 2002/09/09 18:22:19 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -386,7 +386,7 @@ class poll extends aw_template
 			$this->vars(array(
 				"answer_id" => $k, 
 				"answer" => $ap["meta"]["answers"][$lid][$k],
-				"click_answer" => $au
+				"click_answer" => str_replace("&", "&amp;", $au)
 			));
 			$as.=$this->parse("ANSWER");
 		}
@@ -400,7 +400,7 @@ class poll extends aw_template
 		}
 		$this->vars(array(
 			"ANSWER" => $as,
-			"show_url" => $au,
+			"show_url" => str_replace("&", "&amp;", $au)
 			"section" => aw_global_get("section")
 		));
 		return $this->parse();
