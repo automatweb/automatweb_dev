@@ -45,7 +45,7 @@ function pick_style()
 	<tr>
 		<!-- SUB: COL -->
 		<td {VAR:td_style}>
-			<input type="checkbox" name="sel_row={VAR:row};col={VAR:col}">
+			<input type="checkbox" name="sel_row={VAR:row};col={VAR:col}">{VAR:content}
 		</td>
 		<!-- END SUB: COL -->
 

@@ -21,6 +21,23 @@ class grid_editor extends class_base
 			$this->arr["map"][0][0] = array("row" => 0, "col" => 0);
 			$this->arr["rows"] = 1;
 		}
+
+		// go over the map and correct all entries with - 
+		for($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				if ($this->arr["map"][$row][$col]["row"] <= 0)
+				{
+					$this->arr["map"][$row][$col]["row"] = 0;
+				}
+
+				if ($this->arr["map"][$row][$col]["col"] <= 0)
+				{
+					$this->arr["map"][$row][$col]["col"] = 0;
+				}
+			}
+		}
 	}
 
 	function get_spans($i, $a, $map = -1,$rows = -1, $cols = -1)	// row, col
@@ -99,6 +116,11 @@ class grid_editor extends class_base
 		$this->_init_table($data);
 
 		$this->read_template("grid.tpl");
+
+		$this->debug_map_print();
+
+		$this->_get_edit_toolbar();
+
 		for ($col = 0; $col < $this->arr["cols"]; $col++)
 		{
 			$fc = "";
@@ -135,32 +157,22 @@ class grid_editor extends class_base
 					continue;
 				}
 
-				$sh = ""; $sv = "";
-				if ($spans["rowspan"] > 1)
-				{
-					$sh = "&nbsp;| <a href='javascript:split_hor($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_HOR . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
-				}
-				if ($spans["colspan"] > 1)
-				{
-					$sv = "<a href='javascript:split_ver($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_VER . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>&nbsp;";
-				}
+				$sh = $sv = $eu = $el = $er = $ed = "<img src='".$this->cfg["baseurl"]."/automatweb/images/trans.gif' width='8' height='8'>"; 
+				$sh = "<a href='javascript:split_hor($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_HOR . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_down.gif' border=0></a>";
+				$sv = "<a href='javascript:split_ver($i,$a)'><img alt='" . LC_TABLE_DEVIDE_CELL_VER . "' src='".$this->cfg["baseurl"]."/automatweb/images/split_cell_left.gif' border=0></a>";
 
-				$eu = "";
 				if ($i != 0)
 				{
-					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_UPPER_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>&nbsp;";
+					$eu = "<a href='javascript:exp_up($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_UPPER_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/up_r_arr.gif'></a>";
 				}
-				$el = "";
 				if ($a != 0)
 				{
 					$el = "<a href='javascript:exp_left($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LEFT_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/left_r_arr.gif'></a>";
 				}
-				$er = "";
 				if (($a+$spans["colspan"]) != $this->arr["cols"])
 				{
 					$er="<a href='javascript:exp_right($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_RIGHT_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/right_r_arr.gif'></a>";
 				}
-				$ed = "";
 				if (($i+$spans["rowspan"]) != $this->arr["rows"])
 				{
 					$ed = "<a href='javascript:exp_down($i,$a)'><img border=0 alt='" . LC_TABLE_DELETE_LOWER_CELL . "' src='".$this->cfg["baseurl"]."/automatweb/images/down_r_arr.gif'></a>";
@@ -212,7 +224,7 @@ class grid_editor extends class_base
 		$actions = $post["ge_action"];
 		$data = explode(";", $actions);
 
-		$cmds = array();
+		$cmds = array("fulldata" => $actions);
 		foreach($data as $pair)
 		{
 			list($k, $v) = explode("=", $pair);
@@ -222,7 +234,7 @@ class grid_editor extends class_base
 		$this->_process_command($cmds);
 	
 		// delete selected rows/cols
-		$cdelete = array();
+/*		$cdelete = array();
 		$rdelete = array();
 		foreach($post as $k => $v)
 		{
@@ -249,7 +261,7 @@ class grid_editor extends class_base
 		foreach($rdelete as $k => $v)
 		{
 			$this->_del_row(array("row" => $v));
-		}
+		}*/
 		
 		return $this->arr;
 	}
@@ -948,21 +960,15 @@ class grid_editor extends class_base
 					"row" => $map["row"],
 					"ta_rows" => $spans["rowspan"],
 					"ta_cols" => $spans["colspan"]*5+(($spans["colspan"]-1)*2),
-					"content" => htmlentities($this->arr['aliases'][$map['row']][$map['col']])
+					"content" => htmlentities($this->arr['aliases'][$map['row']][$map['col']]),
+					"width" => $spans["colspan"]*50+($spans["colspan"]-1)*7,
+					"height" => $spans["rowspan"]*17+($spans["rowspan"]-1)*9,
 				));
 
-				if ($spans["rowspan"] > 1)
-				{
-					$col.=$this->parse("COL_TA");
-				}
-				else
-				{
-					$col.=$this->parse("COL");
-				}
+				$col.=$this->parse("COL_TA");
 			}
 			$this->vars(array(
-				"COL"	=> $col,
-				"COL_TA" => ""
+				"COL_TA"	=> $col,
 			));
 				
 			$this->parse("LINE");
@@ -1111,7 +1117,8 @@ class grid_editor extends class_base
 				$this->vars(array(
 					"col" => $a,
 					"row" => $i,
-					"td_style" => $td_style
+					"td_style" => $td_style,
+					"content" => $this->arr["aliases"][$map["row"]][$map["col"]]
 				));
 				$col.=$this->parse("COL");
 			}
@@ -1127,8 +1134,12 @@ class grid_editor extends class_base
 			"oid" => $oid
 		));
 
+		$table = $this->parse();
+
+		$al = get_instance("aliasmgr");
+		$al->parse_oo_aliases($oid,&$table,array());
 		
-		return $this->_add_css_styles($used_css_styles, $this->parse());
+		return $this->_add_css_styles($used_css_styles, $table);
 	}
 
 	function on_styles_edit_submit($data, $oid)
@@ -1262,7 +1273,8 @@ class grid_editor extends class_base
 		$css_file = "";
 		$css = get_instance("css");
 		$used = array();
-		foreach($used_css_styles as $stylid => $stylid)
+		$_u = new aw_array($used_css_styles);
+		foreach($_u->get() as $stylid => $stylid)
 		{
 			if ($used[$stylid] != 1)
 			{
@@ -1276,6 +1288,451 @@ class grid_editor extends class_base
 			$retval = "<style type=\"text/css\">".$css_file."</style>\n".$retval;
 		}
 		return $retval;
+	}
+
+	function _get_edit_toolbar()
+	{
+		$tb = get_instance("toolbar");
+		$tb->add_button(array(
+			'name' => 'merge_down',
+			'tooltip' => 'Merge alla',
+			'url' => 'javascript:exec_cmd(\'merge_down\')',
+			'imgover' => 'down_r_arr.png',
+			'img' => 'down_r_arr.png'
+		));
+		$tb->add_button(array(
+			'name' => 'merge_up',
+			'tooltip' => 'Merge &uuml;les',
+			'url' => 'javascript:exec_cmd(\'merge_up\')',
+			'imgover' => 'up_r_arr.png',
+			'img' => 'up_r_arr.png'
+		));
+		$tb->add_button(array(
+			'name' => 'merge_left',
+			'tooltip' => 'Merge vasakule',
+			'url' => 'javascript:exec_cmd(\'merge_left\')',
+			'imgover' => 'left_r_arr.png',
+			'img' => 'left_r_arr.png'
+		));
+		$tb->add_button(array(
+			'name' => 'merge_right',
+			'tooltip' => 'Merge paremale',
+			'url' => 'javascript:exec_cmd(\'merge_right\')',
+			'imgover' => 'right_r_arr.png',
+			'img' => 'right_r_arr.png'
+		));
+
+		$tb->add_button(array(
+			'name' => 'split_down',
+			'tooltip' => 'Split alla',
+			'url' => 'javascript:exec_cmd(\'split_down\')',
+			'imgover' => 'merge_down.png',
+			'img' => 'merge_down.png'
+		));
+		$tb->add_button(array(
+			'name' => 'split_up',
+			'tooltip' => 'Split &uuml;les',
+			'url' => 'javascript:exec_cmd(\'split_up\')',
+			'imgover' => 'merge_up.png',
+			'img' => 'merge_up.png'
+		));
+		$tb->add_button(array(
+			'name' => 'split_left',
+			'tooltip' => 'Split vasakule',
+			'url' => 'javascript:exec_cmd(\'split_left\')',
+			'imgover' => 'merge_left.png',
+			'img' => 'merge_left.png'
+		));
+		$tb->add_button(array(
+			'name' => 'split_right',
+			'tooltip' => 'Split paremale',
+			'url' => 'javascript:exec_cmd(\'split_right\')',
+			'imgover' => 'merge_right.png',
+			'img' => 'merge_right.png'
+		));
+
+		$this->vars(array(
+			"toolbar" => $tb->get_toolbar()
+		));
+	}
+
+	function _merge_down($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($rows as $row)
+		{
+			// merge all cells on this row down one.
+			for($_col = 0; $_col < $this->arr["cols"]; $_col++)
+			{
+				$map = $this->arr["map"][$row][$_col];
+				$this->_exp_down(array(
+					"cnt" => $cnt,
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+		}
+
+		foreach($cols as $col)
+		{
+			// merge all cells in this column to one.
+			// find the real cell identifier for the topmost cell 
+			// on this column and merge that num_rows cells down
+			$map = $this->arr["map"][0][$col];
+			$this->_exp_down(array(
+				"cnt" => $this->arr["rows"],
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+
+		foreach($cells as $cell)
+		{
+			// for each cell, merge it down as much as requested.
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$this->_exp_down(array(
+				"cnt" => $cnt,
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+	}
+
+	function _merge_up($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($rows as $row)
+		{
+			// merge all cells on this row up one.
+			for($_col = 0; $_col < $this->arr["cols"]; $_col++)
+			{
+				$map = $this->arr["map"][$row][$_col];
+				$this->_exp_up(array(
+					"cnt" => $cnt,
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+		}
+
+		foreach($cols as $col)
+		{
+			// merge all cells in this column to one.
+			// find the real cell identifier for the bottom-most cell 
+			// on this column and merge that num_rows cells down
+			$map = $this->arr["map"][$this->arr["rows"]-1][$col];
+			$this->_exp_up(array(
+				"cnt" => $this->arr["rows"],
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+
+		foreach($cells as $cell)
+		{
+			// for each cell, merge it up as much as requested.
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$this->_exp_up(array(
+				"cnt" => $cnt,
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+	}
+
+	function _merge_left($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($rows as $row)
+		{
+			// merge all cells on this row to one
+			// find the rightmost cell
+			$map = $this->arr["map"][$row][$this->arr["cols"]-1];
+			$this->_exp_left(array(
+				"cnt" => $this->arr["cols"],
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+
+		foreach($cols as $col)
+		{
+			// merge all cells in this column left $cnt times
+			for ($_row = 0; $_row < $this->arr["rows"]; $_row++)
+			{
+				$map = $this->arr["map"][$_row][$col];
+				$this->_exp_left(array(
+					"cnt" => $cnt,
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			};
+		}
+
+		foreach($cells as $cell)
+		{
+			// for each cell, merge it left as much as requested.
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$this->_exp_left(array(
+				"cnt" => $cnt,
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+	}
+
+	function _merge_right($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($rows as $row)
+		{
+			// merge all cells on this row to one
+			// find the left cell
+			$map = $this->arr["map"][$row][0];
+			$this->_exp_right(array(
+				"cnt" => $this->arr["cols"],
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+
+		foreach($cols as $col)
+		{
+			// merge all cells in this column right $cnt times
+			for ($_row = 0; $_row < $this->arr["rows"]; $_row++)
+			{
+				$map = $this->arr["map"][$_row][$col];
+				$this->_exp_right(array(
+					"cnt" => $cnt,
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			};
+		}
+
+		foreach($cells as $cell)
+		{
+			// for each cell, merge it right as much as requested.
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$this->_exp_right(array(
+				"cnt" => $cnt,
+				"row" => $map["row"],
+				"col" => $map["col"]
+			));
+		}
+	}
+
+	function _split_down($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($cells as $cell)
+		{
+			// for each cell, check if it's area is > 1 in the vertical directtion. 
+			// if it is, then we just split it, no problem there
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$spans = $this->get_spans($map["row"], $map["col"]);
+			if (!$spans)
+			{
+				continue;
+			}
+
+			if ($spans["rowspan"] > 1)
+			{
+				$this->_split_hor(array(
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+			else
+			{
+				// if it is jist uan cell, then we must add a row above the cell
+				$this->_add_row(array(
+					"after" => $map["row"]-1,
+					"num" => 1
+				));
+				// then merge all other cells from the old row up one
+				for ($i = 0; $i < $this->arr["cols"]; $i++)
+				{
+					if ($i != $cell["col"])
+					{
+						$this->arr["map"][$cell["row"]][$i] = $this->arr["map"][$cell["row"]+1][$i];
+					}
+				}
+			}
+		}
+	}
+
+	function _split_up($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($cells as $cell)
+		{
+			// for each cell, check if it's area is > 1 in the vertical directtion. 
+			// if it is, then we just split it, no problem there
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$spans = $this->get_spans($map["row"], $map["col"]);
+			if (!$spans)
+			{
+				continue;
+			}
+
+			if ($spans["rowspan"] > 1)
+			{
+				$this->_split_hor(array(
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+			else
+			{
+				// if it is jist uan cell, then we must add a row below the cell
+				$this->_add_row(array(
+					"after" => $map["row"],
+					"num" => 1
+				));
+				// then merge all other cells from the old row down one
+				for ($i = 0; $i < $this->arr["cols"]; $i++)
+				{
+					if ($i != $cell["col"])
+					{
+						$this->arr["map"][$cell["row"]+1][$i] = $this->arr["map"][$cell["row"]][$i];
+					}
+				}
+			}
+		}
+	}
+
+	function _split_left($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($cells as $cell)
+		{
+			// for each cell, check if it's area is > 1 in the horiz directtion. 
+			// if it is, then we just split it, no problem there
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$spans = $this->get_spans($map["row"], $map["col"]);
+			if (!$spans)
+			{
+				continue;
+			}
+
+			if ($spans["colspan"] > 1)
+			{
+				$this->_split_ver(array(
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+			else
+			{
+				// if it is jist uan cell, then we must add a column to the right of the cell
+				$this->_add_col(array(
+					"after" => $map["col"],
+					"num" => 1
+				));
+				// then merge all other cells from the old col right one
+				for ($i = 0; $i < $this->arr["rows"]; $i++)
+				{
+					if ($i != $cell["row"])
+					{
+						$this->arr["map"][$i][$cell["col"]+1] = $this->arr["map"][$i][$cell["col"]];
+					}
+				}
+			}
+		}
+	}
+
+	function _split_right($arr)
+	{
+		// decode the action ourselves
+		list($rows,$cols,$cells, $cnt) = $this->_do_dec_cmd($arr["fulldata"]);
+
+		foreach($cells as $cell)
+		{
+			// for each cell, check if it's area is > 1 in the horiz directtion. 
+			// if it is, then we just split it, no problem there
+			$map = $this->arr["map"][$cell["row"]][$cell["col"]];
+			$spans = $this->get_spans($map["row"], $map["col"]);
+			if (!$spans)
+			{
+				continue;
+			}
+
+			if ($spans["colspan"] > 1)
+			{
+				$this->_split_ver(array(
+					"row" => $map["row"],
+					"col" => $map["col"]
+				));
+			}
+			else
+			{
+				// if it is jist uan cell, then we must add a column to the left of the cell
+				$this->_add_col(array(
+					"after" => $map["col"],
+					"num" => 1
+				));
+				// then merge all other cells from the old col left one
+				for ($i = 0; $i < $this->arr["rows"]; $i++)
+				{
+					if ($i != $cell["row"])
+					{
+						$this->arr["map"][$i][$cell["col"]] = $this->arr["map"][$i][$cell["col"]+1];
+					}
+				}
+			}
+		}
+	}
+
+	function _do_dec_cmd($cmd)
+	{
+		// decodes cmds like these: action=merge_down;cells=sel_row=0;col=3;cols=;rows=
+		// returns array(array(rows), array(cols), array(cells), $cnt)
+		// remove action bit
+		$cmd = preg_replace("/action=[^;]*/","",$cmd);
+		list($cmd, $cnt) = explode(";cnt=", $cmd);
+		list($cmd, $rowstr) = explode(";rows=", $cmd);
+		list($cmd, $colstr) = explode(";cols=", $cmd);
+		list(, $cellstr) = explode(";cells=", $cmd);
+
+		$rows = explode(";", str_replace("dr_", ";", substr($rowstr,3)));
+		$cols = explode(";", str_replace("dc_", ";", substr($colstr,3)));
+		$_cells = explode("|", str_replace("sel_", "|", substr($cellstr,4)));
+		$cells = array();
+		foreach($_cells as $_cstr)
+		{
+			preg_match("/row=(\d*);col=(\d*)/", $_cstr, $mt);
+			$cells[] = array("row" => $mt[1], "col" => $mt[2]);
+		}
+
+		return array($rows, $cols, $cells, $cnt);
+	}
+
+	function debug_map_print()
+	{
+		echo "<table border=1>";
+		for ($r=0; $r < $this->arr["rows"]; $r++)
+		{
+			echo "<tr>";
+			for ($c=0; $c < $this->arr["cols"]; $c++)
+				echo "<td>(", $this->arr["map"][$r][$c]["row"], ",",$this->arr["map"][$r][$c]["col"],")</td>";
+			echo "</tr>";
+		}
+		echo "</table>";
 	}
 }
 ?>

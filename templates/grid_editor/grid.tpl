@@ -89,9 +89,40 @@ function pick_style()
 	}
 	remote("no", 400, 400,"{VAR:selstyle}&"+rows+"&"+cols+"&"+cells+"&oid={VAR:oid}");
 }
+
+function exec_cmd(cmd)
+{
+	rows = "rows=";
+	cols = "cols=";
+	cells = "cells="; 
+
+	len = document.changeform.elements.length;
+	for (i = 0; i < len; i++)
+	{
+		el = document.changeform.elements[i];
+		if (el.name.indexOf("sel_") != -1 && el.checked)
+		{
+			cells +=el.name;
+		}
+		else
+		if (el.name.indexOf("dc_") != -1 && el.checked)
+		{
+			cols += el.name;
+		}
+		else
+		if (el.name.indexOf("dr_") != -1 && el.checked)
+		{
+			rows += el.name;
+		}
+	}
+
+	document.changeform.ge_action.value = "action="+cmd+";"+cells+";"+cols+";"+rows+";cnt="+document.changeform.exp_count.value;
+	document.changeform.submit();
+}
+
 </script>
 
-
+{VAR:toolbar}
 <table border=1 cellspacing=1 cellpadding=2>
 	<tr>
 		<td bgcolor="#FFFFFF" colspan=2 class="celltext">Mitu celli kustutada:</td><td bgcolor="#FFFFFF" colspan=100>
@@ -101,12 +132,17 @@ function pick_style()
 	<tr>
 		<!-- SUB: DC -->
 			<td bgcolor="#FFFFFF" class="celltext">
-				<!-- SUB: FIRST_C -->
-					<a href="javascript:add_col({VAR:after},1);"><img alt="{VAR:LC_TABLE_ADD_COL}" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a>
-				<!-- END SUB: FIRST_C -->
-
-				<input type='checkbox' NAME='dc_{VAR:col}' value=1>&nbsp;<a href="#" onClick="if (confirm('Oled kindel et tahad tulpa kustutada?')) { del_col({VAR:col},1); return true;} else { return false;} "><img alt="Kustuta tulp" src='{VAR:baseurl}/automatweb/images/puna_nool_alla.gif' border=0></a>
-				<a href='javascript:add_col({VAR:after}, 1)'><img alt="Lisa tulp" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a>
+				<table border="0" cellpadding="0" cellspacing="0" width="100%" hspace="0" vspace="0">
+					<tr>
+						<td valign="bottom">
+							<!-- SUB: FIRST_C -->
+								<a href="javascript:add_col({VAR:after},1);"><img alt="{VAR:LC_TABLE_ADD_COL}" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a>
+							<!-- END SUB: FIRST_C -->
+						</td>
+						<td valign="bottom" align="middle"><input type='checkbox' NAME='dc_{VAR:col}' value=1><br><a href="#" onClick="if (confirm('Oled kindel et tahad tulpa kustutada?')) { del_col({VAR:col},1); return true;} else { return false;} "><img alt="Kustuta tulp" src='{VAR:baseurl}/automatweb/images/puna_nool_alla.gif' border=0></a></td>
+						<td valign="bottom"><a href='javascript:add_col({VAR:after}, 1)'><img alt="Lisa tulp" src='{VAR:baseurl}/automatweb/images/rohe_nool_alla.gif' border=0></a></td>
+					</tr>
+				</table>
 			</td>
 		<!-- END SUB: DC -->
 		<td bgcolor="#FFFFFF">&nbsp;</td>
@@ -114,28 +150,51 @@ function pick_style()
 	<!-- SUB: LINE -->
 	<tr>
 		<!-- SUB: COL -->
-		<td bgcolor=#FFFFFF rowspan={VAR:rowspan} colspan={VAR:colspan} class="celltext"><input type="checkbox" name="sel_row={VAR:row};col={VAR:col}"><br>
-			{VAR:EXP_LEFT}
-			{VAR:EXP_UP}
-			{VAR:EXP_RIGHT}
-			{VAR:EXP_DOWN}
-			{VAR:SPLIT_VERTICAL}
-			{VAR:SPLIT_HORIZONTAL}
+		<td bgcolor=#FFFFFF rowspan={VAR:rowspan} colspan={VAR:colspan} class="celltext">
+			<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
+				<tr>
+					<td width="1" height="1"><img src='{baseurl}/automatweb/images/trans.gif' width='1' height='1'></td>
+					<td colspan="2" width="100%" align="left" valign="top">
+						<table border="0" cellpadding="0" cellspacing="0" width="100%">
+							<tr>
+								<td align="left">{VAR:EXP_UP}</td>
+								<td width="100%" align="right">{VAR:SPLIT_HORIZONTAL}{VAR:SPLIT_VERTICAL}</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<td width="1" height="1" valign="top" align="left">{VAR:EXP_LEFT}</td>
+					<td width="100%" align="center" valign="center"><input type="checkbox" name="sel_row={VAR:row};col={VAR:col}"></td>
+					<td width="1" valign="bottom" align="right">{VAR:EXP_RIGHT}</td>
+				</tr>
+				<tr>
+					<td height="1"><img src='{baseurl}/automatweb/images/trans.gif' width='1' height='1'></td>
+					<td width="100%" align="right" valign="bottom">{VAR:EXP_DOWN}</td>
+					<td width="1"><img src='{baseurl}/automatweb/images/trans.gif' width='1' height='1'></td>
+				</tr>
+			</table>
 		</td>
 		<!-- END SUB: COL -->
 
 		<td bgcolor=#ffffff valign=bottom align=left>
-			<!-- SUB: FIRST_R -->
-			<a href='javascript:add_row({VAR:after},1)'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a><br>
-			<!-- END SUB: FIRST_R -->
-			<a href="#" onClick="if (confirm('Oled kindel et soovid rida kustutada?')) { del_row({VAR:row},1); return true; } else {return false;} "><img src='{VAR:baseurl}/automatweb/images/puna_nool_vasakule.gif' alt="Kustuta rida" BORDER=0></a><Br>
-			<input type='checkbox' NAME='dr_{VAR:row}' value=1><br>
-			<a href='javascript:add_row({VAR:after},1)'><img alt="Lisa rida" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a>
+			<table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" hspace="0" vspace="0">
+				<tr>
+					<td align="left">
+						<!-- SUB: FIRST_R -->
+							<a href='javascript:add_row({VAR:after},1)'><img alt="{VAR:LC_TABLE_ADD_ROW}" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a>
+						<!-- END SUB: FIRST_R -->
+					</td>
+				</tr>
+				<tr>
+					<td><a href="#" onClick="if (confirm('Oled kindel et soovid rida kustutada?')) { del_row({VAR:row},1); return true; } else {return false;} "><img src='{VAR:baseurl}/automatweb/images/puna_nool_vasakule.gif' alt="Kustuta rida" BORDER=0></a><input type='checkbox' NAME='dr_{VAR:row}' value=1></td>
+				</tr>
+				<tr>
+					<td><a href='javascript:add_row({VAR:after},1)'><img alt="Lisa rida" src='{VAR:baseurl}/automatweb/images/rohe_nool_vasakule.gif' BORDER=0></a></td>
+				</tr>
+			</table>
 		</td>
 	</tr>
 	<!-- END SUB: LINE -->
 </table>
-<a href='#' onClick='pick_style()'>Vali stiil</a>
-
-
 <input type="hidden" name="ge_action" value="">

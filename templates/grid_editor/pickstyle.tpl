@@ -4,7 +4,7 @@
 <DIV class="fgtext">&nbsp;<select NAME='style'><option value="">{VAR:stylessel}</select>&nbsp;</div>
 
 
-<table border="1">
+<!-- <table border="1">
 	<tr>
 		<td>Lisa tulp/rida:</td>
 	</tr>
@@ -54,6 +54,7 @@
 		</td>
 	</tr>
 </table>
+-->
 <input type='submit' NAME='sub' VALUE='Salvesta'>
 {VAR:reforb}
 </form>

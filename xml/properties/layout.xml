@@ -21,6 +21,17 @@
             <caption>Tulpi</caption>
       </property>
       <property>
+            <name>cell_style_folders</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CELLSTYLE_FOLDER</reltype>
+            <group>settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <multiple>1</multiple>
+            <table>objects</table>
+            <caption>Stiilide kataloogid</caption>
+      </property>
+      <property>
             <name>grid</name>
             <type>callback</type>
             <group>layout</group>
@@ -41,7 +52,7 @@
       <property>
             <name>table_style</name>
             <type>select</type>
-            <group>layout</group>
+            <group>settings</group>
             <method>serialize</method>
             <field>meta</field>
             <table>objects</table>
@@ -80,6 +91,9 @@
             <general>
                   <caption>Üldine</caption>
             </general>
+            <settings>
+                  <caption>M&amp;auml;&amp;auml;rangud</caption>
+            </settings>
             <layout>
                   <caption>Tabel</caption>
             </layout>

@@ -5,6 +5,7 @@
 @classinfo syslog_type=ST_LAYOUT relationmgr=yes
 
 @groupinfo general caption=Üldine
+@groupinfo settings caption=M&auml;&auml;rangud
 @groupinfo layout caption=Tabel
 @groupinfo styles caption=Stiilid
 @groupinfo aliases caption=Aliased
@@ -19,13 +20,16 @@
 @property columns type=textbox group=general method=serialize size=3
 @caption Tulpi
 
+@property cell_style_folders type=relpicker reltype=RELTYPE_CELLSTYLE_FOLDER group=settings field=meta method=serialize multiple=1
+@caption Stiilide kataloogid
+
 @property grid type=callback group=layout method=serialize field=meta table=objects
 @caption Tabel
 
 @property grid_styles type=callback group=styles method=serialize field=meta table=objects
 @caption Stiilid
 
-@property table_style type=select group=layout method=serialize field=meta table=objects
+@property table_style type=select group=settings method=serialize field=meta table=objects
 @caption Tabeli stiil
 
 @property grid_aliases type=callback group=aliases method=serialize field=meta table=objects
@@ -38,6 +42,8 @@
 @caption Eelvaade
 
 */
+
+define("RELTYPE_CELLSTYLE_FOLDER",1);
 
 class layout extends class_base
 {
@@ -204,12 +210,25 @@ class layout extends class_base
 	{
 		extract($arr);
 		$this->read_template("pickstyle.tpl");
+		$ob = $this->get_object($oid);
 
-		$css = get_instance("css");
-		$stylesel = $css->get_select();
+		//$css = get_instance("css");
+		//$stylesel = $css->get_select();
+		// make style pick list
+		// folders:
+		$styles = array();
+		$folders = $ob['meta']['cell_style_folders'];
+		foreach($folders as $fld)
+		{
+			$styles += $this->list_objects(array(
+				"parent" => $fld,
+				"class" => CL_CSS,
+				"add_folders" => true
+			));
+		}
 
 		$this->vars(array(
-			"stylessel" => $this->option_list("", $stylesel),
+			"stylessel" => $this->option_list("", $styles),
 			"reforb"	=> $this->mk_reforb("submit_styles", array(
 				"cols" => $cols,
 				"rows" => $rows,
@@ -262,7 +281,6 @@ class layout extends class_base
 			{
 				if ($cell !== "")
 				{
-					echo "cell = $cell <br>";
 					list($rd, $cd) = explode(";", $cell);
 					list(, $row) = explode("=", $rd);
 					list(, $col) = explode("=", $cd);
@@ -283,8 +301,16 @@ class layout extends class_base
 		return $this->mk_my_orb("sel_style", array(
 			"cols" => $cols,
 			"rows" => $rows,
-			"cells" => $cells
+			"cells" => $cells,
+			"oid" => $oid
 		));
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			RELTYPE_CELLSTYLE_FOLDER => "celli stiilide kataloog",
+		);
 	}
 }
 ?>
