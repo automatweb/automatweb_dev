@@ -103,7 +103,9 @@ function savemenu() {
 		<td class="fgtext_g" >&nbsp;{VAR:LC_MENUEDIT_LEFT_PANE}:&nbsp;<input type="checkbox" value=1 name="left_pane" {VAR:left_pane}></td>
 		<td class="fgtext_g">&nbsp;{VAR:LC_MENUEDIT_RIGHT_PANE}:&nbsp;<input type="checkbox" value=1 name="right_pane" {VAR:right_pane}></td>
 		<td class="fgtext_g" >&nbsp;Users only:&nbsp;<input type="checkbox" value=1 name="users_only" {VAR:users_only}</td>
+		<td class="fgtext_g" >&nbsp;Show lead:&nbsp;<input type="checkbox" value=1 name="show_lead" {VAR:show_lead}</td>
 		<td class="fgtext_g" >{VAR:LC_MENUEDIT_ITEMS_SBS}:&nbsp;<input type='checkbox' name='shop_parallel' value=1 {VAR:shop_parallel}></td>
+		<td class="fgtext_g" >Ilma men&uuml;&uuml;deta:&nbsp;<input type='checkbox' name='no_menus' value=1 {VAR:no_menus}></td>
 		<td class="fgtext_g" colspan=20>{VAR:LC_MENUEDIT_IGNORE_NEXT}:&nbsp;<input type='checkbox' name='shop_ignoregoto' value=1 {VAR:shop_ignoregoto}></td>
 	</tr>
 	<tr>
