@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.38 2003/05/28 11:04:41 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.39 2003/05/28 12:03:29 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -288,6 +288,32 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	// 	obj - reference to caller
 	function show($args = array())
 	{
+
+
+		$val = $args['s']['class_id'];
+		if (is_array($val) || (($va = explode(',',ltrim($val,','))) && (count($va)>0)))
+		{
+			if (is_array($va))
+			{
+				$val = $va;
+			}
+			$tmp = array();
+			foreach($val as $_v)
+			{
+				if ($_v != 0)
+				{
+					$tmp[] = $_v;
+				}
+			}
+			$this->clid_selected = $tmp;
+		}
+		else
+		if ($val != 0)
+		{
+			$this->clid_selected = array($val);
+		};
+
+
 		classload('icons');
 		$this->db_rows = array();
 		// all the required fields and their default values
@@ -314,7 +340,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$c = "";
 		$table = "";
 
-		// create an instance of a object for callbacks 
+		// create an instance of a object for callbacks
 		if ($args["clid"])
 		{
 			if (gettype($args["clid"]) == "object")
@@ -661,15 +687,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$this->modify_fields($args,&$fields);
 
 		//foreach($real_fields as $key => $val)
-		foreach($fields as $key => $val)
+
+		$selected = '';
+		if (is_array($this->clid_selected))
 		{
-			if (is_array($fields[$key]))
+			foreach($this->clid_selected as $val)
 			{
-				$fieldref = $fields[$key];
-				if (!isset($fieldref['name']))
-				{
-					$fieldref['name'] = 's['.$key.']';
-				}
+				$selected .= "defaults[".$val."] = 1;\n";
+			}
+		}
+
 
 //dont worry this is javascript
 				$scr = <<<SCR
@@ -678,7 +705,9 @@ function GetOptions(from, tu,tyype)
 {
 	if (tyype=='select')
 	{
-//		var seld = new Array();
+		var defaults = new Array();
+
+		$selected
 
 		len = tu.options.length;
 		for (i=0; i < len; i++)
@@ -691,16 +720,9 @@ function GetOptions(from, tu,tyype)
 		{
 			if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
 			{
-				if (tyype == 'select')
-				{
 //					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, seld[from.options[i].value]);
-					tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, (len == 1) ? true : false);
-					j = j + 1;
-				}
-				else
-				{
-					tu.value = tu.value + ',' + from.options[i].value;
-				}
+tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, ((len == 1) ? true : (defaults[from.options[i].value] ? defaults[from.options[i].value] : false)));
+				j = j + 1;
 			}
 
 		}
@@ -723,6 +745,17 @@ function GetOptions(from, tu,tyype)
 }
 SCR;
 
+
+		foreach($fields as $key => $val)
+		{
+			if (is_array($fields[$key]))
+			{
+				$fieldref = $fields[$key];
+				if (!isset($fieldref['name']))
+				{
+					$fieldref['name'] = 's['.$key.']';
+				}
+				
 				switch($fieldref["type"])
 				{
 					case "select":
