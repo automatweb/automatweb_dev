@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.26 2003/10/06 14:32:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.27 2003/10/27 12:06:27 duke Exp $
 
 /*
 
@@ -922,6 +922,15 @@ class gallery_v2 extends class_base
 		
 		$w = $pd['img']['sz'][0];
 		$h = $pd['img']['sz'][1]+70;
+		if (empty($w))
+                {
+                        $w = 700;
+                };
+                if ($h == 70)
+                {
+                        $h = 600;
+                };
+
 		$link = $this->mk_my_orb("show_image", array(
 			"id" => $obj['oid'],
 			"page" => $page,
