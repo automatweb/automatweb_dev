@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.135 2002/12/09 08:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.136 2002/12/09 08:59:24 kristo Exp $
 // core.aw - Core functions
 define("ARR_NAME", 1);
 define("ARR_ALL",2);
@@ -2220,7 +2220,7 @@ class core extends db_connector
 			return false;
 		}
 
-		$t = get_instance($v["file"]);
+		$t = get_instance($v['alias_class'] != '' ? $v['alias_class'] : $v['file']);
 		$s = $t->_serialize($arr);
 		if (!$s)
 		{
