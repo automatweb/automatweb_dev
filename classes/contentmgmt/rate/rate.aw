@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.16 2004/06/02 10:51:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.17 2004/06/22 06:24:37 duke Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -175,10 +175,12 @@ class rate extends class_base
 	**/
 	function add_rate($arr)
 	{
+
 		extract($arr);
 		$ro = aw_global_get("rated_objs");
 
-		if (!isset($ro[$oid]))
+		//if (!isset($ro[$oid]))
+		if (true)
 		{
 			$this->db_query("
 				INSERT INTO ratings(oid, rating, tm, uid, ip) 
@@ -201,10 +203,17 @@ class rate extends class_base
 			$o->set_meta("__ratings",$rs);
 			$o->save();
 		}
-		
-		aw_session_set("rated_objs", $ro);
-		header("Location: $return_url");
-		die();
+
+		if ($arr["no_redir"])
+		{
+			return true;
+		}
+		else
+		{
+			aw_session_set("rated_objs", $ro);
+			header("Location: $return_url");
+			die();
+		};
 	}
 
 	/**  
