@@ -1,10 +1,16 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.35 2003/02/13 14:31:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.36 2003/02/18 09:08:54 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
+	
+	@property alias type=textbox group=general
+	@caption Alias
+	
+	@property jrk type=textbox size=4 group=general
+	@caption Jrk
 	
 	@property target type=checkbox group=general ch_value=1 search=1 table=menu
 	@caption Uues aknas
