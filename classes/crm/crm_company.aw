@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.61 2004/08/03 10:48:34 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.62 2004/08/03 11:43:03 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -454,7 +454,7 @@ class crm_company extends class_base
 		//
 		$this->group_not_shown = false;
 		$us = get_instance(CL_USER);
-		$this->users_person = obj($us->get_current_person());
+		$this->users_person = new object($us->get_current_person());
 	}
 
 	/*
@@ -899,7 +899,7 @@ class crm_company extends class_base
 					{
 						$arr['prop']['value'] = $o->id();
 					}
-					$elements[$o->id()] = $o->prop('shortname');
+					$elements[$o->id()] = $o->name();//prop('shortname');
 				}
 				$arr['prop']['options'] = $elements;
 				break;
@@ -3178,7 +3178,6 @@ class crm_company extends class_base
 			}
 		}
 		unset($xfilter['customer_search_only']);
-		
 		if(!$no_results)
 		{
 			return new object_list($xfilter);
