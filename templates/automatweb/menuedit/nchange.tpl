@@ -98,6 +98,11 @@ function savemenu() {
 		<td class="fgtext_g" >&nbsp;Pood:&nbsp;<input type='checkbox' NAME='is_shop' VALUE='1' {VAR:is_shop}></td>
 	</tr>
 	<tr>
+		<td class="title">&nbsp;</td>
+		<td class="fgtext_g" >&nbsp;Vasak paan:&nbsp;<input type="checkbox" value=1 name="left_pane" {VAR:left_pane}></td>
+		<td class="fgtext_g" colspan=20>&nbsp;Parem paan:&nbsp;<input type="checkbox" value=1 name="right_pane" {VAR:right_pane}></td>
+	</tr>
+	<tr>
 		<td class="title" valign="top">&nbsp;Kommentaar:&nbsp;</td>
 		<td class="fgtext_g" colspan=10><textarea NAME='comment' cols=50 rows=3>{VAR:comment}</textarea></td>
 	</tr>
