@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.292 2004/08/25 09:49:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.293 2004/08/26 10:49:07 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -150,7 +150,7 @@ class core extends acl_base
 
 	///
 	// !Margib koik saidi objektid dirtyks
-	function flush_cache()
+	function flush_cache($oid = NULL)
 	{
 		if (!aw_ini_get("cache.use_html_cache"))
 		{
@@ -162,7 +162,11 @@ class core extends acl_base
 			return;
 		}
 		aw_global_set("old_cache_flushed", 1);
-		$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0";
+		if ($oid !== NULL)
+		{
+			$hoid = " AND oid = '$oid'";
+		}
+		$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0 ".$hoid;
 		$this->db_query($q);
 	}
 		
@@ -764,7 +768,7 @@ class core extends acl_base
 					$u = $co->get_simple_config("error_redirect");
 				}
 
-				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && aw_global_get("uid") != "root" && !headers_sent() && aw_ini_get("site_id") != 138)
+				if ($u != "" && aw_global_get("uid") != "kix" && aw_global_get("uid") != "duke" && aw_global_get("uid") != "sven" && aw_global_get("uid") != "root" && !headers_sent() && aw_ini_get("site_id") != 138)
 				{
 					header("Location: $u");
 					die();
@@ -873,6 +877,10 @@ class core extends acl_base
 			$this->use_empty = false;
 		};
 
+		if (isset($arr["return_url"]))
+		{
+			$arr["return_url"] = substr($arr["return_url"], 0, 3500);
+		}
 		/*if ($arr["return_url"])
                 {
                         // override whatever there was in the URL with our value
