@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.7 2003/10/30 16:59:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/mail_message.aw,v 1.8 2003/10/30 17:59:18 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -25,6 +25,9 @@
 
 	@property message type=textarea cols=80 rows=40 
 	@caption Sisu
+
+	@property attachments type=text store=no
+	@caption Manused
 	
 	property send type=submit value=Saada store=no 
 	caption Saada
@@ -53,7 +56,7 @@ class mail_message extends class_base
 	{
 		$this->init(array(
 			"clid" => CL_MESSAGE,
-			"tpldir" => "messenger_v2",
+			"tpldir" => "mail_message",
 		));
 	}
 
@@ -121,9 +124,6 @@ class mail_message extends class_base
 			$this->state = "show";
 		};
 
-		//arr($msgdata);
-		//$arr["values"] = $msgdata;
-		//arr($msgdata);
 	}
 
 	function callback_save_object($arr)
@@ -222,6 +222,36 @@ class mail_message extends class_base
 				$this->gen_mail_toolbar(&$data);
 				break;
 
+			case "attachments":
+				if (empty($this->msgdata["attachments"]))
+				{
+					$retval = PROP_IGNORE;
+				}
+				else
+				{
+					$this->read_template("attachment.tpl");
+					foreach($this->msgdata["attachments"] as $num => $pdata)
+					{
+						$this->vars(array(
+							"part_name" => $pdata,
+							"get_part_url" => $this->mk_my_orb("get_part",array(
+								"id" => $arr["msgrid"],
+								"msgid" => $msgid,
+								"mailbox" => $this->use_mailbox,
+								"part" => $num,
+							)),
+							"att_reforb" => $this->mk_reforb("store_part",array(
+								"id" => $arr["msgrid"],
+								"msgid" => $msgid,
+								"mailbox" => $this->use_mailbox,
+								"part" => $num,
+							)),
+						));
+						$rv .= $this->parse();
+					};
+					$data["value"] = $rv;
+				};
+				break;
 
 			case "msgrid":
 			case "msgid":
@@ -363,82 +393,6 @@ class mail_message extends class_base
 		die();
 	}
 
-	function viewmsg($arr)
-	{
-
-
-
-	}
-
-	function viewmsg2($arr)
-	{
-		$msgid = $arr["msgid"];
-
-		$msgr = get_instance("messenger/messenger_v2");
-                $msgr->_connect_server(array(
-                        "msgr_id" => $arr["msgrid"],
-                ));
-
-
-                $msgdata = $msgr->drv_inst->fetch_message(array(
-                                "msgid" => $msgid,
-                ));
-
-                $cont = htmlspecialchars($msgdata["content"]);
-                $cont = nl2br(create_links($cont));
-
-		$this->read_template("plain.tpl");
-                $this->sub_merge = 1;
-
-		// now I have to reformat this as a class_base form .. uh.oh.
-                $this->vars(array(
-                        "from" => htmlspecialchars(parse_obj_name($msgdata["from"])),
-                        "reply_to" => htmlspecialchars(parse_obj_name($msgdata["reply_to"])),
-                        "to" => htmlspecialchars(parse_obj_name($msgdata["to"])),
-                        "subject" => htmlspecialchars(parse_obj_name($msgdata["subject"])),
-                        "date" => $msgdata["date"],
-                        "content" => $cont,
-                ));
-
-		if (is_array($msgdata["attachments"]))
-		{
-			$this->vars(array(
-				"target_opts" => $this->picker(-1,$this->localfolders),
-			));
-
-			foreach($msgdata["attachments"] as $num => $data)
-			{
-                                $this->vars(array(
-                                        "part_name" => $data,
-                                        "get_part_url" => $this->mk_my_orb("get_part",array(
-                                                "id" => $arr["msgrid"],
-                                                "msgid" => $msgid,
-                                                "mailbox" => $this->use_mailbox,
-                                                "part" => $num,
-                                        )),
-                                        "att_reforb" => $this->mk_reforb("store_part",array(
-                                                "id" => $arr["msgrid"],
-                                                "msgid" => $msgid,
-                                                "mailbox" => $this->use_mailbox,
-                                                "part" => $num,
-                                        )),
-                                ));
-                                $this->parse("attachment");
-                        };
-                };
-                return $this->parse();
-	}
-
-	function show($arr)
-	{
-		$obj = new object($arr["id"]);
-		print "<b>Kellelt:</b> " . parse_obj_name($obj->prop("mfrom")) . "<br>";
-		print "<b>Kellele:</b>" . parse_obj_name($obj->prop("to")) . "<br>";
-		print "<b>Teema:</b>" . parse_obj_name($obj->prop("name")) . "<br>";
-		print "<br><pre>" . htmlspecialchars($obj->prop("message")) . "</pre><br>";
-		exit;
-	}
-	
 	////
 	// !fetches a message by it's ID
 	// arguments:
