@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="crm_company" folder="crm" extends="class_base">
+		<action name="delete_selected_jobs" all_args="1">
+			<function name="delete_selected_jobs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="submit_new_task" >
 			<function name="submit_new_task">
 				<arguments>

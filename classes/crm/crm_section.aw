@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.10 2004/07/05 13:14:31 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section.aw,v 1.11 2004/07/05 13:21:50 sven Exp $
 // crm_section.aw - Üksus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disconnect_org_from_section)
@@ -104,10 +104,9 @@ class crm_section extends class_base
 		
 		foreach ($obj->connections_from(array("type" => 28)) as $sector)
 		{
-			$jobs_ids_temp = $this->get_section_job_ids_recrusive($sector->prop("to"));
+			$jobs_ids_temp = $this->get_section_job_ids_recursive($sector->prop("to"));
 			$professions_temp = $this->get_professions($sector->prop("to"), true);
-			
-		
+
 			if(is_array($jobs_ids_temp))
 			{
 				foreach ($jobs_ids_temp as $key=>$value)
