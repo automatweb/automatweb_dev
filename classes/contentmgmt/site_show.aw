@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.69 2004/07/08 12:26:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.70 2004/07/30 07:38:58 rtoomas Exp $
 
 /*
 
@@ -1446,7 +1446,7 @@ class site_show extends class_base
 		{
 			$this->read_template("../../".$tpldir."/".$tpl,true);
 		}
-
+		
 		if ($filename == "")
 		{
 			error::throw(array(
@@ -1478,7 +1478,7 @@ class site_show extends class_base
 		}
 
 		enter_function("site_show::do_draw_menus");
-		@include_once($this->compiled_filename);
+		include_once($this->compiled_filename);
 		exit_function("site_show::do_draw_menus");
 
 		$this->path_ids = $path_bak;
@@ -1930,7 +1930,16 @@ class site_show extends class_base
 					}
 					else
 					{
-						$link .= $o->alias();
+						//the alias seems to consist only of a space or two
+						//i'm gonna show the id, if the strlen(trim(alias)) is 0
+						if(!strlen(trim($o->alias())))
+						{
+							$link .= $o->id();
+						}
+						else
+						{
+							$link .= $o->alias();
+						}
 					}
 				}
 				else
@@ -1940,7 +1949,6 @@ class site_show extends class_base
 				};
 			};
 		}
-
 
 		// this here bullshit is so that the static ut site will work
 		// basically, rewrite_links is set if we are doing searching or some other non-static action
@@ -1998,7 +2006,11 @@ class site_show extends class_base
 	function get_cached_compiled_filename($arr)
 	{
 		$tpl = $arr["tpldir"]."/".$arr["template"];
-		$fn = $this->cache->get_fqfn("compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id"));
+		
+		$what_to_replace = array('/','.','\\',':');
+		$str_part = str_replace($what_to_replace, '_', $tpl);
+
+		$fn = $this->cache->get_fqfn("compiled_menu_template-".$str_part."-".aw_global_get("lang_id"));
 		if (@file_exists($fn) && @is_readable($fn) && @filectime($fn) > @filectime($tpl))
 		{
 			return $fn;
@@ -2012,11 +2024,12 @@ class site_show extends class_base
 	{
 		$co = get_instance("contentmgmt/site_template_compiler");
 		$code = $co->compile($path, $tpl, $mdefs, $no_cache);
-
 		$tpl = $path."/".$tpl;
-		$fn = "compiled_menu_template-".str_replace("\\","_",str_replace("/","_",str_replace(".","_",$tpl)))."-".aw_global_get("lang_id");
-
-
+		
+		$what_to_replace = array("\\","/",".",":");
+		$str_part = str_replace($what_to_replace, "_", $tpl);
+		$fn = "compiled_menu_template-".$str_part."-".aw_global_get('lang_id');
+		
 		$ca = get_instance("cache");
 		$ca->file_set($fn, $code);
 
@@ -2026,13 +2039,16 @@ class site_show extends class_base
 	function do_show_template($arr)
 	{
 		global $awt;
+
 		$tpldir = "../".str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
+		$tpldir = str_replace($this->cfg["site_basedir"]."/", "", $this->cfg["tpldir"])."/automatweb/menuedit";
 
 		if (isset($arr["tpldir"]) && $arr["tpldir"] != "")
 		{
 			$this->tpl_init(sprintf("../%s/automatweb/menuedit",$arr["tpldir"]));
 			$tpldir = "../".$arr["tpldir"]."/automatweb/menuedit";;
 		}
+
 
 		$arr["tpldir"] = $tpldir;
 		// right. now, do the template compiler bit
@@ -2050,7 +2066,7 @@ class site_show extends class_base
 		lc_site_load("menuedit",$this);
 
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
-		
+
 		$awt->start("do-show-template");
 		if (($docc = $this->do_show_documents($arr)) != "")
 		{
