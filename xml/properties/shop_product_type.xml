@@ -11,6 +11,16 @@
             <caption>Vorm, millega toodet sisestatakse</caption>
       </property>
       <property>
+            <name>sp_object_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SP_OBJECT_TYPE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekti t&amp;uuml;&amp;uuml;p, millega toodet sisestatakse</caption>
+      </property>
+      <property>
             <name>packaging_cfgform</name>
             <table>objects</table>
             <group>general</group>
@@ -51,6 +61,11 @@
                   <clid>CL_CFGFORM</clid>
                   <caption>seadete vorm</caption>
             </SP_CFGFORM>
+            <SP_OBJECT_TYPE>
+                  <value>3</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>objektit&amp;uuml;&amp;uuml;p</caption>
+            </SP_OBJECT_TYPE>
             <FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.6 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.7 2004/07/02 13:13:21 kristo Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -13,6 +13,9 @@
 
 @property rows type=textbox size=5 field=meta method=serialize
 @caption Ridu
+
+@property per_page type=textbox size=5 field=meta method=serialize
+@caption Tooteid lehel
 
 @property template type=select field=meta method=serialize
 @caption Template

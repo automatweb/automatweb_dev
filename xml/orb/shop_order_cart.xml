@@ -5,7 +5,7 @@
 			<function name="show">
 				<arguments>
 					<optional name="oc" type="int"/>
-					<optional name="section" type="int"/>
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -16,6 +16,7 @@
 					<required name="oc" type="int" acl="view"/>
 					<optional name="add_to_cart" />
 					<optional name="is_update" type="int"/>
+					<optional name="order_data" />
 				</arguments>
 			</function>
 		</action>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.9 2004/06/17 13:39:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.10 2004/07/02 13:13:21 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -57,7 +57,7 @@ class shop_order_cart extends class_base
 		@attrib name=show_cart nologin="1"
 
 		@param oc optional type=int
-		@param section optional type=int
+		@param section optional 
 	**/
 	function show($arr)
 	{
@@ -200,6 +200,7 @@ class shop_order_cart extends class_base
 		@param oc required type=int acl=view
 		@param add_to_cart optional
 		@param is_update optional type=int
+		@param order_data optional 
 
 	**/
 	function submit_add_cart($arr)
@@ -298,6 +299,12 @@ class shop_order_cart extends class_base
 			}
 		}
 
+		$awa = new aw_array($order_data);
+		foreach($awa->get() as $iid => $dat)
+		{
+			$_SESSION["cart"]["item_data"][$iid] = $dat;
+		}
+
 		if (!empty($arr["confirm_order"]))
 		{
 			// do confirm order and show user
@@ -338,9 +345,10 @@ class shop_order_cart extends class_base
 		$_SESSION["cart"] = array();
 	}
 
-	function add_item($iid, $quant)
+	function add_item($iid, $quant, $prod_data = array())
 	{
 		$_SESSION["cart"]["items"][$iid] += $quant;
+		$_SESSION["cart"]["item_data"][$iid] = $prod_data;
 	}
 
 	function set_item($iid, $quant)
@@ -382,6 +390,14 @@ class shop_order_cart extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function get_item_in_cart($iid)
+	{
+		return array(
+			"quant" => $_SESSION["cart"]["items"][$iid],
+			"data" => $_SESSION["cart"]["item_data"][$iid]
+		);
 	}
 
 	function clear_cart()

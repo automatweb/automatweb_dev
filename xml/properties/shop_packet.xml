@@ -155,6 +155,32 @@
             <field>varuser5</field>
             <caption>User-defined var 5</caption>
       </property>
+      <property>
+            <name>images</name>
+            <table>objects</table>
+            <group>img</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+                  <num_2>status</num_2>
+                  <num_3>file</num_3>
+                  <num_4>file2</num_4>
+                  <num_5>new_w</num_5>
+                  <num_6>new_h</num_6>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+            </table_fields>
+            <table_edit_fields>ord</table_edit_fields>
+            <store>no</store>
+            <caption>Pildid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PACKET</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -167,6 +193,9 @@
             <data>
                   <caption>Toote info</caption>
             </data>
+            <img>
+                  <caption>Pildid</caption>
+            </img>
       </groupinfo>
       <tableinfo>
             <aw_shop_packets>
@@ -181,6 +210,11 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>paketi toode</caption>
             </PRODUCT>
+            <IMAGE>
+                  <value>2</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt</caption>
+            </IMAGE>
       </reltypes>
 </properties>
 

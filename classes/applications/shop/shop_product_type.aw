@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.3 2004/06/04 11:11:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.4 2004/07/02 13:13:21 kristo Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 
@@ -10,6 +10,9 @@
 
 @property sp_cfgform type=relpicker reltype=RELTYPE_SP_CFGFORM field=meta method=serialize
 @caption Vorm, millega toodet sisestatakse
+
+@property sp_object_type type=relpicker reltype=RELTYPE_SP_OBJECT_TYPE field=meta method=serialize
+@caption Objekti t&uuml;&uuml;p, millega toodet sisestatakse
 
 @property packaging_cfgform type=relpicker reltype=RELTYPE_SP_CFGFORM field=meta method=serialize
 @caption Vorm, millega toote pakendit sisestatakse
@@ -23,6 +26,9 @@
 
 @reltype SP_CFGFORM value=1 clid=CL_CFGFORM
 @caption seadete vorm
+
+@reltype SP_OBJECT_TYPE value=3 clid=CL_OBJECT_TYPE
+@caption objektit&uuml;&uuml;p
 
 @reltype FOLDER value=2 clid=CL_MENU
 @caption kataloog

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.5 2004/06/19 19:17:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.6 2004/07/02 13:13:21 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -68,9 +68,18 @@
 @property uservar5 type=classificator table=aw_shop_packets field=varuser5 group=data
 @caption User-defined var 5
 
+@groupinfo img caption="Pildid"
+
+@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h group=img table_fields=name,ord table_edit_fields=ord
+@caption Pildid
+
 @tableinfo aw_shop_packets index=aw_oid master_table=objects master_index=brother_of
 @reltype PRODUCT value=1 clid=CL_SHOP_PRODUCT
 @caption paketi toode
+
+@reltype IMAGE value=2 clid=CL_IMAGE
+@caption pilt
+
 */
 
 class shop_packet extends class_base
@@ -164,6 +173,17 @@ class shop_packet extends class_base
 	{
 		extract($arr);
 
+		if (!$oc_obj)
+		{
+			$oc_obj_id = NULL;
+		}
+		else
+		{
+			$oc_obj_id = $oc_obj->id();
+		}
+
+		$sct = get_instance(CL_SHOP_ORDER_CART);
+
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
 		$l_inst->vars(array(
@@ -171,8 +191,130 @@ class shop_packet extends class_base
 			"price" => $prod->prop("price"),
 			"id" => $prod->id(),
 			"quantity" => (int)($arr["quantity"]),
-			"view_link" => obj_link($prod->id())
+			"view_link" => obj_link($prod->id().":".$oc_obj->id())
 		));
+
+		$h_s_p = "";
+
+		$prods = "";
+		$pisets = array();
+		$first = true;
+		foreach($prod->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+		{
+			$w = $c->to();
+			$w_i = $w->instance();
+			$l_inst->vars(array(
+				"prod_name" => $w->name(),
+				"prod_price" => $w_i->get_price($w),
+				"prod_link" => obj_link($prod->id().":".$oc_obj->id()),
+				"prod_in_packet_link" => obj_link($prod->id().":".$oc_obj->id())."?prod=".$w->id()
+			));
+
+			if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
+			{
+				$itemd = $sct->get_item_in_cart($w->id());
+				$clssf = get_instance("classificator");
+				for ($i = 1; $i < 11; $i++)
+				{
+					if ($l_inst->template_has_var("sel_prod_uservar".$i."_edit"))
+					{
+						$html = html::select(array(
+							"name" => "order_data[".$w->id()."][uservar".$i."]",
+							"options" => $clssf->get_options_for(array(
+								"clid" => $w->class_id(),
+								"name" => "uservar".$i,
+								"obj_inst" => $w,
+							)),
+							"selected" => $itemd["data"]["uservar".$i]
+						));
+						$l_inst->vars(array(
+							"sel_prod_uservar".$i."_edit" => $html
+						));
+					}
+				}
+
+				$l_inst->vars(array(
+					"sel_prod_id" => $w->id(),
+					"sel_prod_quantity" => $itemd["quant"],
+					"sel_prod_price" => $w_i->get_price($w)
+				));
+			}
+
+			// insert images
+			$l_inst->vars($pisets);
+			$i = get_instance("image");
+			$cnt = 1;
+			$imgc = $w->connections_from(array("type" => "RELTYPE_IMAGE"));
+			usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
+			foreach($imgc as $c)
+			{
+				$u = $i->get_url_by_id($c->prop("to"));
+				$l_inst->vars(array(
+					"prod_image".$cnt => image::make_img_tag($u, $c->prop("to.name")),
+					"prod_image".$cnt."_url" => $u,
+				));
+
+				if ($u != "")
+				{
+					$l_inst->vars(array(
+						"PROD_HAS_IMAGE_".$cnt => $l_inst->parse("PROD_HAS_IMAGE_".$cnt)
+					));
+					$pisets["PROD_HAS_IMAGE_".$cnt] = "";
+				}
+				else
+				{
+					$l_inst->vars(array(
+						"PROD_HAS_IMAGE_".$cnt => ""
+					));
+				}
+				$cnt++;
+			}
+
+			if ($GLOBALS["prod"] == $w->id())
+			{
+				$h_s_p = $l_inst->parse("HAS_SEL_PROD");
+			}
+
+			$prods .= $l_inst->parse("PRODUCT");
+			$first = false;
+		}
+
+		$l_inst->vars(array(
+			"PRODUCT" => $prods,
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "oc" => $oc_obj_id, "return_url" => aw_global_get("REQUEST_URI")), "shop_order_cart"),
+		));
+
+		// insert images
+		$i = get_instance("image");
+		$cnt = 1;
+		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
+		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
+		foreach($imgc as $c)
+		{
+			$u = $i->get_url_by_id($c->prop("to"));
+			$l_inst->vars(array(
+				"image".$cnt => image::make_img_tag_wl($c->prop("to")),
+				"image".$cnt."_url" => $u,
+			));
+
+			$l_inst->vars(array(
+				"HAS_IMAGE_".$cnt => $l_inst->parse("HAS_IMAGE_".$cnt)
+			));
+			$cnt++;
+		}
+
+		if ($h_s_p != "")
+		{
+			$l_inst->vars(array(
+				"HAS_SEL_PROD" => $h_s_p
+			));
+		}
+		else
+		{
+			$l_inst->vars(array(
+				"NO_SEL_PROD" => $l_inst->parse("NO_SEL_PROD")
+			));
+		}
 
 		return $l_inst->parse();
 	}
@@ -180,6 +322,32 @@ class shop_packet extends class_base
 	function get_contained_products($o)
 	{
 		return array($o);
+	}
+
+	function request_execute($obj)
+	{
+		list($prod_id, $oc_id) = explode(":", aw_global_get("section"));
+		$prod = obj($prod_id);
+
+		// get layout from soc.
+		$soc_o = obj($oc_id);
+		$soc_i = $soc_o->instance();
+
+		$layout = $soc_i->get_long_layout_for_prod(array(
+			"soc" => $soc_o,
+			"prod" => $prod
+		));
+
+		return $this->do_draw_product(array(
+			"layout" => $layout,
+			"prod" => $prod,
+			"oc_obj" => $soc_o
+		));
+	}
+
+	function get_must_order_num($o)
+	{
+		return 0;
 	}
 }
 ?>
