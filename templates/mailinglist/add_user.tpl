@@ -1,4 +1,4 @@
-<form action = 'refcheck.{VAR:ext}' method=post>
+<form action = 'reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
 <td class="fcaption">List:</td><td class="fcaption">{VAR:list_name}</td>
@@ -22,7 +22,10 @@
 <td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_MAILINGLIST_SAVE}'></td>
 </tr>
 </table>
+<!--
 <input type='hidden' NAME='action' VALUE='new_user'>
 <input type='hidden' NAME='id' VALUE='{VAR:list_id}'>
 <input type='hidden' NAME='user_id' VALUE='{VAR:user_id}'>
+-->
+{VAR:reforb}
 </form>
