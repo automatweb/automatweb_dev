@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.3 2003/05/01 17:31:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.4 2003/05/12 17:06:28 duke Exp $
 // this is here so that orb will work...
 classload("periods");
 class admin_periods extends periods
@@ -144,6 +144,9 @@ class admin_periods extends periods
 
 	function admin_list($arr)
 	{
+		$url = $this->mk_my_orb("convert_periods",array(),"converters");
+		$retval = "This interface has been deprecated, please run <a href='$url'>$url</a>, if you haven't done so already<br>";
+		return $retval;
 		extract($arr);
 		$this->read_template("list.tpl");
 		$active = $this->rec_get_active_period();
