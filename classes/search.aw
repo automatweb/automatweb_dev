@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.53 2003/12/19 14:00:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.54 2003/12/30 15:13:54 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -404,7 +404,17 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					case "name":
 						if ($val)
 						{
-							$parts["name"] = " name LIKE '%".str_replace("'", "\\'", $val)."%' ";
+							$val = str_replace("'", "\\'", $val);
+							if (strpos($val,",") !== false)
+							{
+								$pts = explode(",", $val);
+								
+								$parts["name"] = "(".join(" OR ", map("name LIKE '%%%s%%' ", $pts)).")";
+							}
+							else
+							{
+								$parts["name"] = " name LIKE '%".str_replace("'", "\\'", $val)."%' ";
+							}
 							$partcount++;
 						};
 						break;
