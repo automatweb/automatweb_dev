@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.35 2003/02/03 12:13:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.36 2003/02/25 15:21:35 duke Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -275,7 +275,7 @@ class aw_template extends acl_base
 	function read_tpl($arr)
 	{
 		global $TPL;
-		if ($TPL)
+		if ( (aw_ini_get("debug_mode") !=0 ) && $TPL)
 		{
 			print "using " . $this->template_filename . "<br>";
 		};
