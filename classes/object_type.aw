@@ -137,7 +137,7 @@ class object_type extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($oid);
-		return aw_serialize($row);
+		return serialize($ob);
 	}
 
 	////
@@ -150,6 +150,7 @@ class object_type extends aw_template
 		extract($arr);
 		$row = unserialize($str);
 		$row["parent"] = $parent;
+		$this->quote(&$row);
 		$id = $this->new_object($row);
 		return true;
 	}
