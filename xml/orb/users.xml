@@ -235,7 +235,9 @@
 
 		<action name="import">
 			<function name="import">
-				<arguments/>
+				<arguments>
+					<optional name="gid" type="int"/>
+				</arguments>
 			</function>
 		</action>
 
