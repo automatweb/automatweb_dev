@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.159 2003/02/25 12:25:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.160 2003/02/25 13:50:29 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2440,8 +2440,11 @@ class core extends db_connector
 			{
 				if (isset($x_mar[$d_row["parent"]]))
 				{
-					$d_row["parent"] = $rootobj;
-					$ret[$rootobj][] = $d_row;
+					if ($d_row["oid"] != $admin_rootmenu)
+					{
+						$d_row["parent"] = $admin_rootmenu;
+						$ret[$admin_rootmenu][] = $d_row;
+					}
 				}
 			}
 		}
@@ -2451,6 +2454,7 @@ class core extends db_connector
 		{
 			$tt[] = "";
 		}
+		$this->_mkah_used = array();
 		$this->mkah(&$ret,&$tt,$rootobj,"");
 
 		if ($rootobj == $admin_rootmenu)
@@ -2471,18 +2475,22 @@ class core extends db_connector
 	function mkah(&$arr, &$ret,$parent,$prefix)
 	{
 		if (!is_array($arr[$parent]))
-    {
+		{
 			return;
-    }
+    		}
+		$this->_mkah_used[$parent] = true;
 
-    reset($arr[$parent]);
-    while (list(,$v) = each($arr[$parent]))
-    {
+    		reset($arr[$parent]);
+    		while (list(,$v) = each($arr[$parent]))
+    		{
 			$name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
-      $ret[$v["oid"]] = $name;
-      $this->mkah(&$arr,&$ret,$v["oid"],$name);
-    }
-  }
+			$ret[$v["oid"]] = $name;
+			if (!$this->_mkah_used[$v["oid"]])
+			{
+				$this->mkah(&$arr,&$ret,$v["oid"],$name);
+			}
+		}
+	}
 
 	////
 	// !executes an orb function call and returns the data that the function returns
