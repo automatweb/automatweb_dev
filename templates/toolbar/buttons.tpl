@@ -18,11 +18,11 @@
 <!-- END SUB: menu_button -->
 
 <!-- SUB: text_button -->
- <td class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none;">{VAR:tooltip}</a></td>
+ <td nowrap class="aw04toolbarbutton" valign="center" onMouseOver="this.className='aw04toolbarbuttonhover'" onMouseOut="this.className='aw04toolbarbutton'" onMouseDown="this.className='aw04toolbarbuttondown'" onMouseUp="this.className='aw04toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none;">{VAR:tooltip}</a></td>
 <!-- END SUB: text_button -->
 
 <!-- SUB: separator -->
-	<td class="aw04buttongroup" nowrap></td>
+	<td class="aw04buttonsep" nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/trans.gif" WIDTH="1" HEIGHT="1" BORDER="0" ALT=""></td>
 <!-- END SUB: separator -->
 
 <!-- SUB: cdata -->
@@ -39,7 +39,7 @@
 
 <!-- SUB: right_side -->
 <td align="right"  class="aw04buttongroup">
-	<table border="0" cellspacing="0" cellpadding="0" height="30">
+	<table border="0" cellspacing="0" cellpadding="0">
 	<tr>
 	<td align="right" valign="center">
 			{VAR:right_side_content}
