@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.4 2004/03/01 16:39:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.5 2004/03/02 16:43:29 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -87,7 +87,6 @@ class add_tree_conf extends class_base
 
 		if (!is_array($visible) || !is_array($usable))
 		{
-			echo "initfakken <br>";
 			$visible = array();
 			$usable = array();
 			$alias_add = array();
