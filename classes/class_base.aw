@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.282 2004/06/25 20:23:46 duke Exp $
+// $Id: class_base.aw,v 2.283 2004/06/29 11:40:04 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -517,6 +517,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
+
 
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
@@ -1903,6 +1904,7 @@ class class_base extends aw_template
                                         ));
 
 
+
                                         if (is_array($res))
                                         {
                                                 foreach($res as $rkey => $rval)
@@ -1911,6 +1913,8 @@ class class_base extends aw_template
                                                         $resprops[$rkey] = $rval;
                                                 };
                                         };
+
+
                                 };
 
                         }
@@ -1977,6 +1981,7 @@ class class_base extends aw_template
 				$has_rte = true;
 			};
 		}
+			
 
 		if (1 != $this->classinfo(array("name" => "allow_rte")))
 		{
@@ -3754,6 +3759,13 @@ class class_base extends aw_template
 		if ($this->can("view", $id))
 		{
 			$cfgform_obj = new object($id);
+			if ($cfgform_obj->class_id() != CL_CFGFORM)
+			{
+				error::throw(array(
+					"msg" => "$id is not a valid configuration form!",
+					"fatal" => true,
+				));
+			}
 
 			$prps = $cfgform_obj->meta("cfg_proplist");
 			$rv = $prps;
