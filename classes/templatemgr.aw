@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.22 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/templatemgr.aw,v 2.23 2005/04/05 08:51:49 kristo Exp $
 
 class templatemgr extends aw_template
 {
@@ -26,12 +26,6 @@ class templatemgr extends aw_template
 		if ($args["menu"])
 		{
 			// find the template for that type for the menu
-			if ($type == 0)
-			{
-				$d = get_instance(CL_DOCUMENT);
-				$def = $d->get_edit_template($args["menu"]);
-			}
-			else
 			if ($type == 1)
 			{
 				$def = $this->get_lead_template($args["menu"]);
