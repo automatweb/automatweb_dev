@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.15 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.16 2002/11/12 17:58:21 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -561,7 +561,7 @@ class sys extends aw_template
 	function get_table($args = array())
 	{
 		extract($args);
-		$table = $this->db_get_table(array("name" => "objects"));
+		$table = $this->db_get_table("objects");
 		print "<pre>";
 		print_r($table);
 		print "</pre>";
