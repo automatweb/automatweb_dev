@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.24 2005/01/12 12:51:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.25 2005/01/21 13:22:18 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -338,6 +338,58 @@ class crm_meeting extends class_base
 			),
 			$arr['class']
 		);
+	}
+	
+	function request_execute($o)
+	{
+		return $this->show2(array("id" => $o->id()));
+	}
+
+	function show2($arr)
+	{
+		$ob = new object($arr["id"]);
+		$cform = $ob->meta("cfgform_id");
+		// feega hea .. nüüd on vaja veel nimed saad
+		$cform_obj = new object($cform);
+		$output_form = $cform_obj->prop("use_output");
+		if (is_oid($output_form))
+		{
+			$cform = $output_form;
+		};
+		$t = get_instance(CL_CFGFORM);
+		$props = $t->get_props_from_cfgform(array("id" => $cform));
+		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
+		$htmlc->start_output();
+
+		foreach($props as $propname => $propdata)
+		{
+		  	$value = $ob->prop($propname);
+			if ($propdata["type"] == "datetime_select")
+			{
+				if ($value == -1)
+				{
+					continue;
+				};
+				$value = date("d-m-Y H:i", $value);
+			};
+
+			if (!empty($value))
+			{
+			   $htmlc->add_property(array(
+			      "name" => $propname,
+			      "caption" => $propdata["caption"],
+			      "value" => nl2br($value),
+			      "type" => "text",
+			   ));
+			};
+		};
+		$htmlc->finish_output(array("submit" => "no"));
+
+		$html = $htmlc->get_result(array(
+			"form_only" => 1
+		));
+	
+		return $html;
 	}
 }
 ?>
