@@ -1,11 +1,6 @@
 <!-- SUB: group -->
-<div style="margin-left: 10px; margin-top: 10px; padding: 5px; border: 1px solid #EEE; -moz-border-radius: 0.5em;">
-Grupp: <input type="text" name="grpnames[{VAR:grpid}]" value="{VAR:grp_caption}" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC; font-weight: strong; ">
-<!--
-</div>
-	<div style="padding-left: 50px; margin-top: 5px; border: 1px solid gray;" >
-	-->
-	<br><br>
+<fieldset style="border: 1px solid #AAA; -moz-border-radius: 0.5em;">
+<legend>{VAR:grp_caption}</legend>
 	<table style="border-collapse: collapse; font-size: 11px; border-color: #CCC;" cellpadding="3px">
 	<!-- SUB: property -->
 	<tr>
@@ -17,7 +12,7 @@ Grupp: <input type="text" name="grpnames[{VAR:grpid}]" value="{VAR:grp_caption}"
 	</tr>
 	<!-- END SUB: property -->
 	</table>
-	</div>
+	</fieldset>
 <!-- END SUB: group -->
 
 <!-- SUB: textarea_options -->
