@@ -241,7 +241,7 @@ class _int_obj_ds_auto_translation
 		if (count($conns) > 0)
 		{
 			// return the from object, cause that's the one
-			return $conns[0]->prop("from");
+			return $conns[0]["from"];
 		}
 		return $oid;
 	}

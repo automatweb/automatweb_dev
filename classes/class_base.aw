@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.144 2003/09/22 09:33:22 kristo Exp $
+// $Id: class_base.aw,v 2.145 2003/09/22 10:31:52 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -127,11 +127,9 @@ class class_base extends aw_template
 
 			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
 
-			$obj = obj($this->id);
-			$conns = $obj->connections_to(array(
-				"type" => RELTYPE_TRANSLATION
-			));
-			if (count($conns) > 0)
+			$o_t = get_instance("translate/object_translation");
+			$t_list = $o_t->translation_list($this->id);
+			if (in_array($this->id, $t_list))
 			{
 				$this->is_translated = 1;
 			}
@@ -1941,11 +1939,9 @@ class class_base extends aw_template
 			$this->id = $id;
 		};
 
-		$obj = obj($this->id);
-		$conns = $obj->connections_to(array(
-			"type" => RELTYPE_TRANSLATION
-		));
-		if (count($conns) > 0)
+		$o_t = get_instance("translate/object_translation");
+		$t_list = $o_t->translation_list($this->id);
+		if (in_array($this->id, $t_list))
 		{
 			$this->is_translated = 1;
 		}
