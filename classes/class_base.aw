@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.153 2003/10/06 13:32:58 duke Exp $
+// $Id: class_base.aw,v 2.154 2003/10/14 10:17:57 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -418,7 +418,7 @@ class class_base extends aw_template
 			else
 			{
 				$cfgu = get_instance("cfg/cfgutils");
-				$def = file_get_contents(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml");
+				$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
 				list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
 				$this->cfg_proplist = $proplist;
 				$this->cfg_groups = $grplist;
@@ -2261,14 +2261,13 @@ class class_base extends aw_template
 			));
 		}
 
-                // it is set (or not) on validate_cfgform
-                //if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
-                if (isset($this->cfgform_id))
-                {
+		// it is set (or not) on validate_cfgform
+		//if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
+		if (isset($this->cfgform_id))
+		{
 			$this->obj_inst->set_meta("cfgform_id",$this->cfgform_id);
-                        //$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
-
-                };
+			//$this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
+		};
 
 		$this->obj_inst->save();
 
