@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.1 2001/05/21 14:21:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.2 2001/05/22 04:45:02 duke Exp $
 class pop3 extends aw_template
 {
 	function pop3()
@@ -52,21 +52,34 @@ class pop3 extends aw_template
 		$this->read_response();	// a "." is returned after the list
 
 		$msgs = array();
+		print "<pre>";
+		print_r($uidls);
+		print "</pre>";
+		$uidls["kala"] = 1;
 		for ($i=1; $i <= $no_msgs; $i++)
 		{
 			// only retrieve messages, that are not already downloaded
-			if (!isset($uidls[$muidls[$i]]))
+			$key = $muidls[$i];
+			print "key = $key<br>";
+			if (in_array($key,$uidls))
+			//if (isset($uidls[$key]))
 			{
-				$msgs[] = array("msg" => $this->get_message($i), "uidl" => $muidls[$i]);
-//				echo "message nr $i not downed, uidl = '",$muidls[$i],"<br>";
+				print "idl was set, skipping message<br>";
+				#$msgs[] = array("msg" => $this->get_message($i), "uidl" => $muidls[$i]);
+				echo "message nr $i not downed, uidl = '",$muidls[$i],"<br>";
 			}
+			else
+			{
+				print "idl was not set, therefore we are not skipping the message<br>";
+			};
 
-			if ($delete)
-				$this->send_command("DELE $i");
+			//if ($delete)
+			//	$this->send_command("DELE $i");
 		}
 
 		$this->send_command("QUIT");
 		$this->read_response();
+		exit;
 
 		return $msgs;
 	}
