@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.34 2005/01/28 13:59:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.35 2005/02/07 15:48:12 duke Exp $
 /*
 
-@classinfo syslog_type=ST_SITE relationmgr=yes
+@classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
 
 @groupinfo templates caption=Templated
 @groupinfo db caption=Andmebaas
@@ -80,12 +80,6 @@ class aw_site extends class_base
 		$prop =&$arr['prop'];
 		switch($prop['name'])
 		{
-			case "comment":
-			case "alias":
-			case "jrk":
-				return PROP_IGNORE;
-				break;
-
 			case "site_errmsg":
 				if ($this->err_str == "")
 				{
@@ -190,7 +184,7 @@ class aw_site extends class_base
 						"class" => "objects",
 						"action" => "get_list",
 						"params" => array(
-							"rootobj" => 0
+							"rootobj" => -1
 						),
 						"method" => "xmlrpc",
 						"server" => $serv,
