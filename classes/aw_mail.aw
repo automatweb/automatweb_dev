@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.10 2001/06/21 18:22:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.11 2001/06/21 19:48:37 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -422,6 +422,12 @@ class aw_mail {
 	}
 
 		
+	//// Genereerib message_id headeri
+	function gen_message_id()
+	{
+		$id = '<AW' . chr(rand(65,91)) . chr(rand(65,91)) . md5(uniqid(rand())) . "@automatweb>";
+		return $id;
+	}
 
 	function build_message($args = array())
 	{
@@ -490,9 +496,13 @@ class aw_mail {
 		$subject = $this->headers["Subject"];
 		unset($this->headers["To"]);
 		unset($this->headers["Subject"]);
+		$this->set_header("Message-Id",$this->gen_message_id());
 		foreach($this->headers as $name => $value)
 		{
-			$headers .= sprintf("%s: %s\n",$name,$value);
+			if ($value)
+			{
+				$headers .= sprintf("%s: %s\n",$name,$value);
+			};
 		}
 		mail($to,$subject,$email,$headers);
 		

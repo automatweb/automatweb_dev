@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.70 2001/06/21 18:21:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.71 2001/06/21 19:48:37 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -15,7 +15,6 @@ define('MSG_EXTERNAL',2);
 // teadete staatused
 define('MSG_STATUS_UNREAD',0);
 define('MSG_STATUS_READ',1);
-
 
 // siit algab messengeri põhiklass
 class messenger extends menuedit_light 
@@ -147,52 +146,6 @@ class messenger extends menuedit_light
 	}
 
 	////
-	// !Well, actually, this SHOULD be someplace else. Um. Maybe.
-	function pick_users($args = array())
-	{
-		classload("users");
-		$users = new users();
-		$users->tpl_init("messenger");
-		print $users->gen_plain_list(array("tpl" => "pick_users.tpl"));
-	}
-
-	////
-	// !And this too should be some place else
-	function pick_groups($args = array())
-	{
-		classload("menuedit_light");
-		$ml = new menuedit_light();
-		$glist = $ml->gen_rec_list(array(
-				"start_from" => 0,
-				"type" => "groups",
-				"field" => "gid",
-				"class_id" => CL_GROUP,
-			));
-		reset($glist);
-		$glist2 = array();
-		$this->read_template("pick_groups.tpl");
-		$c = "";
-		$c2 = "";
-		foreach($glist as $key => $val)
-		{
-			$this->vars(array(
-				"gid" => $key,
-				"name" => $val,
-				"name2" => str_replace("&nbsp;","",$val),
-				"members" => "n/a",
-			));
-			$c .= $this->parse("line");
-			$c2 .= $this->parse("names");
-		};
-		$this->vars(array(
-				"line" => $c,
-				"names" => $c2
-			));
-		return $this->parse();
-			
-	}
-
-	////
 	// !Joonistab menüü
 	// argumendid:
 	// activelist(array), levelite kaupa info selle kohta, millised elemendid aktiivsed on
@@ -216,34 +169,15 @@ class messenger extends menuedit_light
 
 	////
 	// !Imports a contact
+	// see kutsutakse välja messengerist, kui klikkida avatud kirjal
+	// "Kellelt" peale (ehk siis Add to Addressbook)
 	function importcontact($args = array())
 	{
 		extract($args);
 		global $ext,$udata;
+
 		$folder = ($folder) ? $folder : $udata["home_folder"];
-		$fldr = $udata["home_folder"];
-		do
-		{
-			// kysime koik sellel levelil asuvad objektid
-			$groups = $this->_get_groups_by_level($fldr);
-			
-			// sorteerime nad parentite jargi ära
-			// ja paigutame ka flat massiivi
-			foreach($groups as $key => $val)
-			{
-				$grps_by_parent[$val["parent"]][$key] = $val["name"];
-				$grps[$key] = $val["name"];
-			};
-		
-			// koostame parentite nimekirja jargmise tsykli jaoks
-			$fldr = array_keys($groups);
-	
-		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
-		} while(sizeof($groups) > 0);
-	
-		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
-		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
-		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
+		$this->_gen_contact_group_list();
 		
 		classload("form");
 		$f = new form();
@@ -251,11 +185,6 @@ class messenger extends menuedit_light
 		$el = $f->get_element_by_name("grupp");
 		$ef = &$f->get_element_by_id($el->id);
 
-		$gr = array("3" => "kala", "5" => "tursk");
-		$ef->set_content(array(
-				"content" => $gr,
-			));
-	
 		$addr = rawurldecode($addr);
 		$this->dequote($addr);
 		preg_match("/(.+?)[<|\(|\[](.+?)[>|\)|\]]/",$addr,$matches);
@@ -277,6 +206,8 @@ class messenger extends menuedit_light
 		exit;
 	}
 
+	////
+	// !importcontact handler
 	function submitimport($args = array())
 	{
 		extract($args);
@@ -384,30 +315,7 @@ class messenger extends menuedit_light
 			$c .= $this->parse("line");
 		};
 
-		
-		$fldr = $udata["home_folder"];
-		do
-		{
-			// kysime koik sellel levelil asuvad objektid
-			$groups = $this->_get_groups_by_level($fldr);
-			
-			// sorteerime nad parentite jargi ära
-			// ja paigutame ka flat massiivi
-			foreach($groups as $key => $val)
-			{
-				$grps_by_parent[$val["parent"]][$key] = $val["name"];
-				$grps[$key] = $val["name"];
-			};
-		
-			// koostame parentite nimekirja jargmise tsykli jaoks
-			$fldr = array_keys($groups);
-	
-		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
-		} while(sizeof($groups) > 0);
-	
-		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
-		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
-		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
+		$this->_gen_contact_group_list();
 		$this->vars(array(
 				"menu" => $menu,
 				"line" => $c,
@@ -419,6 +327,8 @@ class messenger extends menuedit_light
 		return $this->parse();
 	}
 
+	////
+	// !Handleb contacts funktsioonist tulnud datat.
 	function submit_contact_list($args = array())
 	{
 		extract($args);
@@ -435,6 +345,36 @@ class messenger extends menuedit_light
 					"action" => "contacts",
 					"folder" => $folder));
 
+	}
+
+	////
+	// !Genereerib nimekirja kontaktigruppidest
+	// startfrom(int) - millisest objektist alustada
+	function _gen_contact_group_list($args = array())
+	{
+		global $udata;
+		$fldr = ($args["startfrom"]) ? $args["startfrom"] : $udata["home_folder"];
+		do
+		{
+			// kysime koik sellel levelil asuvad objektid 
+			$groups = $this->_get_groups_by_level($fldr); 
+
+			// sorteerime nad parentite jargi ära
+			// ja paigutame ka flat massiivi
+			foreach($groups as $key => $val)
+			{
+				$grps_by_parent[$val["parent"]][$key] = $val["name"];
+				$grps[$key] = $val["name"];
+			};
+
+			// koostame parentite nimekirja jargmise tsykli jaoks
+			$fldr = array_keys($groups);
+
+		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
+		} while(sizeof($groups) > 0);
+
+		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
 	}
 
 	////
@@ -847,6 +787,7 @@ class messenger extends menuedit_light
 		$menu = $this->gen_msg_menu(array(
 				"activelist" => array("configure","folders2","flist"),
 				));
+
 		$flist = $this->_folder_list();
 		$this->read_template("folders.tpl");
 		reset($flist);
