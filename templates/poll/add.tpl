@@ -1,4 +1,4 @@
-<form action='refcheck.{VAR:ext}' method=post name="polladd">
+<form action='reforb.{VAR:ext}' method=post name="polladd">
 
 
 <!--tabelraam-->
@@ -49,13 +49,12 @@ href="javascript:this.document.polladd.submit();">{VAR:LC_POLL_SAVE}</a>
 
 <!-- SUB: QUESTION -->
 <tr>
-<td class="celltext" align="right">{VAR:LC_POLL_ANSWER}:</td><td class="celltext"><input size="40" type='text' NAME='an_{VAR:answer_id}' VALUE='{VAR:answer}' class="formtext"></td>
+<td class="celltext" align="right">{VAR:LC_POLL_ANSWER}:</td><td class="celltext"><input size="40" type='text' NAME='answer[{VAR:answer_id}]' VALUE='{VAR:answer}' class="formtext"></td>
 </tr>
 <!-- END SUB: QUESTION -->
 
 </table>
-<input type='hidden' NAME='action' VALUE='submit_poll'>
-<input type='hidden' NAME='id' VALUE='{VAR:id}'>
+{VAR:reforb}
 </form>
 
 </td></tr></table>
