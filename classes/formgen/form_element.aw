@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.79 2004/11/15 15:20:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.80 2004/11/27 11:05:33 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -288,6 +288,7 @@ class form_element extends aw_template
 					"file_alias"						=> checked($this->arr["fshow"] != 1),
 					"HAS_CONTROLLER" => ($this->form->arr["has_controllers"] ? $this->parse("HAS_CONTROLLER") : ""),
 					"file_new_win" => checked($this->arr["file_new_win"] == 1),
+					"button_css_class" => $this->arr["button_css_class"],
 					"file_delete_link_text" => $this->arr["file_delete_link_text"][$this->form->lang_id]				));
 				$fi = $this->parse("FILE_ITEMS");
 			}
@@ -1287,6 +1288,9 @@ class form_element extends aw_template
 			$this->arr["fshow"] = $$var;
 			$var=$base."_file_new_win";
 			$this->arr["file_new_win"] = $$var;
+			
+			$var = $base."_button_css_class";
+			$this->arr["button_css_class"] = $$var;
 
 			$var=$base."_file_delete_link_text";
 			if (!is_array($this->arr["file_delete_link_text"]))
@@ -2629,7 +2633,8 @@ class form_element extends aw_template
 				{
 					$html.=$this->get_value();
 				}
-				$html .= "<input type='file' $disabled $stat_check NAME='".$element_name."' value='' />\n";
+				$csscl = ($this->arr["button_css_class"] != "" ? "class=\"".$this->arr["button_css_class"]."\"" : "");
+				$html .= "<input type='file' $disabled $stat_check NAME='".$element_name."' value='' $csscl/>\n";
 				break;
 
 			case "link":

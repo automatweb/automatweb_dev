@@ -387,6 +387,13 @@ Kustuta lingi tekst:
 </td>
 <td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:cell_id}_file_delete_link_text' VALUE='{VAR:file_delete_link_text}'></td>
 </tr>
+<tr>
+<td class="fgtext">CSS class</td>
+<td class="fgtext"><input class='small_button' type='text' name='{VAR:cell_id}_button_css_class' value='{VAR:button_css_class}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+
 <!-- END SUB: FILE_ITEMS -->
 
 <!-- SUB: HLINK_ITEMS -->
