@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.14 2004/12/15 12:34:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.15 2004/12/20 11:10:34 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -692,9 +692,14 @@ class webform extends class_base
 			$prplist = $this->cfgform_i->prplist;
 			$prp_count = array();
 			$prplist = safe_array($this->cfgform_i->prplist);
+			$highest = 0;
 			foreach($prplist as $key => $prop)
 			{
 				$prp_count[$prop["type"]]++;
+				if($prop["ord"] > $highest)
+				{
+					$highest = $prop["ord"];
+				}
 			}
 			$ext_count = array();
 			foreach($this->cfgform_i->all_props as $key => $prop)
@@ -726,6 +731,7 @@ class webform extends class_base
 							{
 								$prplist[$key] = array(
 									"name" => $key,
+									"ord" => $highest++,
 									//"caption" => $this->all_props[$pkey]["caption"],
 									"group" => $target,
 									"type" => $val["type"],
@@ -1206,7 +1212,7 @@ class webform extends class_base
 	{
 		$obj_inst = obj($arr["id"]);
 		$redirect = $obj_inst->prop("redirect");
-		$rval = strpos(strtolower($redirect), "http://") !== false ? $redirect : substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect;
+		$rval = (strpos(strtolower($redirect), "http://") !== false ? $redirect : (substr($redirect, 0, 1) == "/" ?  aw_ini_get("baseurl").$redirect : aw_ini_get("baseurl")."/".$redirect));
 		if(!$object_type = $obj_inst->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE"))
 		{
 			return $rval;
@@ -1215,6 +1221,7 @@ class webform extends class_base
 		{
 			return $rval;
 		}
+		
 		$prplist = safe_array($cfgform->meta("cfg_proplist"));
 		$is_valid = $this->validate_data(array(
 			"cfgform_id" => $cfgform->id(),
