@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.9 2003/03/31 15:17:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.10 2003/04/09 12:15:05 kristo Exp $
 
 /*
 
@@ -370,12 +370,15 @@ class gallery_v2 extends class_base
 					$img = $n_img;
 				}
 
+				$_t = imagecreatetruecolor($width, $height);
+				imagecopy($_t, $img, 0,0,0,0, $width, $height);
+
 				if ($conf_o["meta"]["insert_logo"] == 1)
 				{
-					$img = $this->_do_logo($img, $conf_o);
+					$_t = $this->_do_logo($_t, $conf_o);
 				}
 
-				$fc = $this->_get_jpeg($img);				
+				$fc = $this->_get_jpeg($_t);
 				
 				$img_inst = get_instance("image");
 				$idata = $img_inst->add_image(array(
