@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.169 2003/03/26 03:48:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.170 2003/03/27 15:32:42 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2278,9 +2278,17 @@ class core extends db_connector
 
 	////
 	// !loads localization constans and imports them to the current class, vars are assumed to be in array $arr_name
-	function lc_load($file,$arr_name)
+	function lc_load($file,$arr_name,$lang_id = "")
 	{
-		$admin_lang_lc = aw_global_get("admin_lang_lc");
+		if (empty($lang_id))
+		{
+			$admin_lang_lc = aw_global_get("admin_lang_lc");
+		}
+		else
+		{
+			$admin_lang_lc = $lang_id;
+		};
+
 		if (!$admin_lang_lc)
 		{
 			$admin_lang_lc = "et";
