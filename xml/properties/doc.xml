@@ -373,9 +373,7 @@
             <name>user3</name>
             <table>documents</table>
             <group>general</group>
-            <type>textarea</type>
-            <rows>2</rows>
-            <cols>60</cols>
+            <type>textbox</type>
             <field>user3</field>
             <caption>Kasutaja defineeritud 3</caption>
       </property>
@@ -383,9 +381,7 @@
             <name>user4</name>
             <table>documents</table>
             <group>general</group>
-            <type>textarea</type>
-            <rows>2</rows>
-            <cols>60</cols>
+            <type>textbox</type>
             <field>user4</field>
             <caption>Kasutaja defineeritud 4</caption>
       </property>
@@ -393,9 +389,7 @@
             <name>user5</name>
             <table>documents</table>
             <group>general</group>
-            <type>textarea</type>
-            <rows>2</rows>
-            <cols>60</cols>
+            <type>textbox</type>
             <field>user5</field>
             <caption>Kasutaja defineeritud 5</caption>
       </property>
@@ -403,9 +397,7 @@
             <name>user6</name>
             <table>documents</table>
             <group>general</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>60</cols>
+            <type>textbox</type>
             <field>user6</field>
             <caption>Kasutaja defineeritud 6</caption>
       </property>
