@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.23 2003/02/18 21:49:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.24 2003/04/24 17:41:39 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -107,6 +107,10 @@ class form_calendar extends form_base
 				LEFT JOIN form_entries ON ($ft_name.id = form_entries.id)
 				WHERE form_entries.cal_id = '$cal_id' AND objects.status = 2 AND objects.oid != $ignore AND (el_%s >= %d) AND (el_%s <= %d)",
 				$el_end,$start,$el_start,$end);
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 
 		$this->db_query($q);
 		$events = array();
@@ -171,7 +175,11 @@ class form_calendar extends form_base
 
 		$q = "SELECT * FROM calendar2event
 			LEFT JOIN objects ON calendar2event.entry_id = objects.oid
-			WHERE cal_id = '$cal_id' AND relation = '$ctrl' AND start >= '$start' AND end <= '$end' AND objects.status = 2";
+			WHERE cal_id = '$cal_id' AND relation = '$ctrl' AND start >= '$start' AND end <= '$end' AND objects.status != 0";
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 		$this->db_query($q);
 		$events = array();
 		$this->raw_events = array();
@@ -371,7 +379,6 @@ class form_calendar extends form_base
 		//for ($i = ($start + $timeshift); $i <= $end; $i=$i+($shift * $timedef)+$timeshift)
 		for ($i = ($start); $i <= $end; $i=$i+($shift * $period_cnt))
 		{
-			flush();
 			// if it is in range, then ..
 			if ( ($i >= $this->start) && ($i <= $this->end) )
 			{
@@ -402,6 +409,10 @@ class form_calendar extends form_base
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' 
 				AND relation IN ($r_entry_id) AND start <= '$end' AND end >= '$start'";
+		if ($GLOBALS["fg_dbg"]) 
+		{
+			echo ("sql = $q <br>");
+		}
 
 		$this->db_query($q);
 		$row2 = $this->db_next();
@@ -419,6 +430,10 @@ class form_calendar extends form_base
 			WHERE cal_id = '$cal_id' AND form_id = '$id'
 				AND relation = '$entry_id' 
 				AND end >= '$start' AND start <= '$end'";
+		if ($GLOBALS["fg_dbg"]) 
+		{
+			echo ("sql = $q <br>");
+		}
 		/*
 		print $q;
 		print "<br>";
@@ -427,9 +442,12 @@ class form_calendar extends form_base
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
 		$vac = $max - $sum - $req_items;
-		//print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>";
-		//print "$sum ruumi on broneeritud<br>";
-		//print "$vac j‰‰ks j‰rgi<br>";
+		if ($GLOBALS["fg_dbg"]) 
+		{
+			print "id = $r_entry_id, max avail = $max, reserved = $sum, vac = $vac, requested = $req_items<br>";
+			print "$sum ruumi on broneeritud<br>";
+			print "$vac j‰‰ks j‰rgi<br>";
+		}
 		return $vac;
 	}
 	
@@ -446,6 +464,10 @@ class form_calendar extends form_base
 		$this->load($eform);
 		//$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$start' AND end >= '$end' AND relation = '$ctrl' AND status = 2";
 		$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE calendar2timedef.oid = '$eform' AND start <= '$end' AND end >= '$start' AND relation = '$ctrl' AND status = 2";
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 		$this->db_query($q);
 		$this->start = $start;
 		$this->end = $end;
@@ -595,6 +617,10 @@ class form_calendar extends form_base
 		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
 			 WHERE oid = '$contr' AND relation IN ($rel) AND txtid = '$txtid'
 				AND start <= '$_end' AND end >= '$_start'";
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 
 
 		$this->db_query($q);
@@ -613,11 +639,17 @@ class form_calendar extends form_base
 			WHERE oid != '$entry_id' AND relation = '$rel' AND txtid = '$txtid' AND
 				cal_id = '$cal_id' AND form_id = '$id' AND end >= '$_start' AND
 				start <= '$_end'";
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 		$this->db_query($q);
 		$row2 = $this->db_next();
 		$sum = (int)$row2["sum"];
 		//print "max = $max, sum = $sum, req = $req_items<br>";
 		$vac = $max - $sum - $req_items;
+		$x = &$args;
+		$x["max"] = $max;
 		return $vac;
 	}
 
@@ -667,7 +699,7 @@ class form_calendar extends form_base
                 $q = "SELECT txtid,max_items FROM calendar2timedef
                          WHERE oid = '$contr' AND relation IN ($rel)
                                 AND start <= '$_end' AND end >= '$_start'";
-                                                                                                                            
+
                 $this->db_query($q);
                 $max_items = array();
                 while($row = $this->db_next())
@@ -744,6 +776,10 @@ class form_calendar extends form_base
 		$q = "SELECT * FROM calendar2forms
 				LEFT JOIN objects ON (calendar2forms.cal_id = objects.oid)
 				WHERE form_id = '$id'";
+		if ($GLOBALS["fg_dbg"])
+                {
+                        echo ("sql = $q <br>");
+                }
 		$this->db_query($q);
 		$has_vacancies = true;
 		$has_errors = false;
@@ -828,6 +864,7 @@ class form_calendar extends form_base
 			};
 			foreach($rels as $relval)
 			{
+				$max = 0;
 				$vac = $this->get_vac_by_contr(array(
 						"start" => $args["post_vars"][$row["el_start"]],
 						"contr" => $cal_controller,
@@ -838,14 +875,15 @@ class form_calendar extends form_base
 						"rel" => $_rel,
 						"rel2" => $rel2,
 						"id" => $id,
+						"max" => &$max,
 				));
-
+// vana veateade: $this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 				if ($vac < 0)
 				{
 					$has_errors = true;
 					// where do we put the error message?
 					$err_el = ($relval["el_count"]) ? $relval["el_count"] : $row["el_start"];
-					$this->controller_errors[$err_el][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
+					$this->controller_errors[$err_el][] = "Not enough vacancies for this period! &nbsp;<br>On request only! Maximum amount '$max'";
 				};
 			};
 			$this->restore_handle();
@@ -862,7 +900,6 @@ class form_calendar extends form_base
 	function make_event_relations($args = array())
 	{
 		extract($args);
-
 		load_vcl('date_edit');
 		$this->del_event_relations($eid);
 		// cycle over all the forms that this event entry form
@@ -883,7 +920,8 @@ class form_calendar extends form_base
 			$rels = array();
 			while($relrow = $this->db_next())
 			{
-				if ($relrow["el_count"])
+				$relrow["el_use_chain_entry_id"] = $row["el_use_chain_entry_id"];
+				if (isset($relrow["el_count"]))
 				{
 					$count = $args["post_vars"][$relrow["el_count"]];
 					if ($count == 0)
@@ -896,6 +934,10 @@ class form_calendar extends form_base
 					if (preg_match("/^element_\d*_lbopt_(\d*)$/",$lb_sel,$m))	 
 					{	 
 						$relrow["txtid"] = $args["els"][$relrow["el_relation"]]["lb_items"][$m[1]];	 
+						if ($relrow["el_use_chain_entry_id"])
+						{
+							$relrow["el_relation"] = $m[1];
+						};
 						$rels[] = $relrow;	     
 					 };
 				};
@@ -911,26 +953,50 @@ class form_calendar extends form_base
 			{
 				$_end = (int)date_edit::get_timestamp($args["post_vars"][$row["el_end"]]);
 			};
-			
+
 			foreach($rels as $reval)
 			{
 				$_cnt = $reval["count"];
 				$txtid = $reval["txtid"];
 				if ($chain_entry_id && ($row["class_id"] == CL_FORM_CHAIN))
 				{
-					$__rel = $args["post_vars"][$row["el_relation"]];
-					// gah, this sucks so much
-					preg_match("/lbopt_(\d+?)$/",$__rel,$m);
-					$_rel = (int)$m[1];
+					if ($reval["el_use_chain_entry_id"] && $args["post_vars"]["chain_entry_id"])
+					{
+						$_rel = $args["post_vars"]["chain_entry_id"];
+					}
+					else
+					{
+						$__rel = $args["post_vars"][$row["el_relation"]];
+						// gah, this sucks so much
+						preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+						$_rel = (int)$m[1];
+					};
+
 					$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
 						VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
 					$this->db_query($q);
+					/*
+					if (aw_global_get("uid") == "erki")
+					{
+						print $q;
+						print "\n";
+						flush();
+					};
+					*/
 				};
-
+					
 				$_rel = $reval["el_relation"];
 				$q = "INSERT INTO calendar2event (cal_id,entry_id,start,end,items,relation,form_id,txtid)
 					VALUES ('$row[cal_id]','$eid','$_start','$_end','$_cnt','$_rel','$id','$txtid')";
 				$this->db_query($q);
+					/*
+					if (aw_global_get("uid") == "erki")
+					{
+						print $q;
+						print "<br>\n";
+						flush();
+					};
+					*/
 			};
 			$this->restore_handle();
 
@@ -1225,6 +1291,7 @@ class form_calendar extends form_base
                         "tables_disabled" => disabled(sizeof($tables) == 1),
                         //"cnt_type_el" => checked($item["count"] == 0),
                         //"cnt_type_cnt" => checked($item["count"] > 0),
+			"el_use_chain_entry_id" => checked($item["el_use_chain_entry_id"]),
                         "end_type_el" => checked($item["end"] == 0),
                         "end_type_shift" => checked($item["end"] > 0),
                         "end_mp" => $this->picker($end_mp,array(60 => "minut(it)",3600 => "tund(i)",86400 => "p‰ev(a)")),
@@ -1246,16 +1313,21 @@ class form_calendar extends form_base
                 $end = ($end_type == 2) ? (int)$end * (int)$end_mp : 0;
                 if ($id)
                 {
-                        $q = "UPDATE calendar2forms SET
-                                cal_id = '$cal_id',
-                                el_start = '$el_start',
-                                el_cnt = '$el_cnt',
-                                ev_table = '$ev_table',
-                                el_relation = '$el_relation',
-                                el_end = '$el_end',
-                                count = '$count',
-                                end = '$end'
-                                WHERE id = '$id'";
+			$upd_fields = array();
+			$upd_fields["cal_id"] = "'$cal_id'";
+			$upd_fields["el_start"] = "'$el_start'";
+			$upd_fields["el_cnt"] = "'$el_cnt'";
+			$upd_fields["el_cnt"] = "'$el_cnt'";
+			$upd_fields["ev_table"] = "'$ev_table'";
+			$upd_fields["el_relation"] = "'$el_relation'";
+			$upd_fields["el_end"] = "'$el_end'";
+			$upd_fields["count"] = "'$count'";
+			$upd_fields["end"] = "'$end'";
+			if ($el_use_chain_entry_id)
+			{
+				$upd_fields["el_use_chain_entry_id"] = $el_use_chain_entry_id;
+			};
+                        $q = sprintf("UPDATE calendar2forms SET %s WHERE id = '$id'",join(",",map2("%s=%s",$upd_fields)));
                 }
                 else
                 {
