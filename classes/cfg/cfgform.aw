@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.10 2003/03/12 14:02:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.11 2003/03/31 10:08:10 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -19,8 +19,14 @@
 	@property preview type=text store=no editonly=1
 	@caption Definitsioon
 	
-	property property_list type=callback callback=callback_get_prop_list editonly=1
-	caption Omadused
+	@property property_list type=callback callback=callback_gen_property_list store=no group=prplist
+	@caption Omadused
+
+	@property group_list type=callback callback=callback_gen_group_list store=no group=grplist
+	@caption Grupid
+
+	@groupinfo prplist caption=Omadused
+	@groupinfo grplist caption=Grupid
 	
 	@classinfo corefields=name,comment,status
 */
@@ -39,24 +45,13 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "generate":
-				$data["value"] = html::href(array(
-					"url" => $this->mk_my_orb("generate",array("id" => $args["obj"]["oid"])),
-					"caption" => "Skaneeri",
-					"target" => "_blank",
-				));
-				break;
-
 			case "xml_definition":
 				// I don't want to show the contents of the file here
 				$data["value"] = "";
 				break;
 
 			case "preview":
-				if ($args["obj"]["meta"]["xml_definition"])
-				{
-					$data["value"] = "<pre>" . htmlspecialchars($args["obj"]["meta"]["xml_definition"]) . "</pre>";
-				};
+				$data["value"] = "here be dragons";
 				break;
 		};
 		return $retval;
@@ -66,6 +61,7 @@ class cfgform extends class_base
 	{
 		$data = &$args["prop"];
 		$retval = PROP_OK;
+
 		switch($data["name"])
 		{
 			case "xml_definition":
@@ -87,6 +83,7 @@ class cfgform extends class_base
 					{
 						$data["value"] = $contents;
 					};
+					$retval = $this->_load_xml_definition($contents);
 				};
 				break;
 
@@ -98,10 +95,33 @@ class cfgform extends class_base
 					$retval = PROP_IGNORE;
 				};
 				break;
+
+			case "group_list":
+				$metadata = &$args["metadata"];
+				$metadata["cfg_groups"] = $args["form_data"]["cfg_group"];
+				break;
+			
+			case "property_list":
+				$metadata = &$args["metadata"];
+				$old = $args["obj"]["meta"]["cfg_proplist"];
+				foreach($args["form_data"]["cfg_property"] as $key => $val)
+				{
+					$old[$key] = array_merge($old[$key],$val);
+				};
+				$metadata["cfg_proplist"] = $old;
+				break;
+			
 		}
 		return $retval;
 	}
 
+	function _load_xml_definition($contents)
+	{
+		$cfgu = get_instance("cfg/cfgutils");
+		list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $contents));
+		$this->cfg_proplist = $proplist;
+		$this->cfg_groups = $grplist;
+	}
 		
 	////
 	// !Returns a list of checkboxes for selecting classes
@@ -305,126 +325,69 @@ class cfgform extends class_base
 
 	function callback_pre_save($args = array())
 	{
+		$coredata = &$args["coredata"];
 		if (isset($args["form_data"]["subclass"]))
 		{
-			$coredata = &$args["coredata"];
 			$coredata["subclass"] = $args["form_data"]["subclass"];
 		};
+		if (isset($this->cfg_proplist))
+		{
+			$coredata["metadata"]["cfg_proplist"] = $this->cfg_proplist;
+			$coredata["metadata"]["cfg_groups"] = $this->cfg_groups;
+		};
 		return true;
-			
-		if (!$args["form_data"]["ord"])
-		{
-			return false;
-		};
-		$coredata = &$args["coredata"];
-		// resolve all property groups
-
-		// this comes from the form
-		$_tmp = new aw_array($coredata["metadata"]["ord"]);
-		$ord = $_tmp->get();
-
-		asort($ord,SORT_NUMERIC);
-
-		// I want to enumerate all the properties
-		$layout = array();
-		$property_list = array();
-		$item_ord = 0;
-		$property_order = array();
-		foreach($ord as $key => $val)
-		{
-			$lkey = $key;
-			if ((int)$val != 0)
-			{
-				$item_ord = $val;
-			}
-			else
-			{
-				$item_ord++;
-			};
-				
-			if (preg_match("/^group_(\d+)$/",$key,$m))
-			{
-				$oid = (int)$m[1];
-				$prop_group = $this->get_object(array(
-					"oid" => (int)$m[1],
-					"class_id" => CL_PROPERTY_GROUP,
-				));
-				$_props = new aw_array($prop_group["meta"]["properties"]);
-				$_ord = new aw_array($prop_group["meta"]["ord"]);
-				$layout[$lkey]["caption"] = $prop_group["name"];
-				foreach($_props->get() as $pname => $pval)
-				{
-					$layout[$lkey]["items"][] = $pname;
-					$property_list[$pname] = 1;
-				};
-			}
-			else
-			{
-				$layout[$lkey] = $key;
-				$property_list[$lkey] = 1;
-			};
-
-			$property_order[$lkey] = $item_ord;
-		};
-		$coredata["metadata"]["layout"] = $layout;
-		$coredata["metadata"]["property_list"] = $property_list;
-		$coredata["metadata"]["ord"] = $property_order;
 	}
 
-	function generate($args = array())
+	////
+	// !
+	function callback_gen_group_list($args = array())
 	{
-		extract($args);
-		$obj = $this->get_object(array(
-			"oid" => $id,
-			"class_id" => CL_CFGFORM,
-		));
-		$sourcemenu = $obj["meta"]["sourcemenu"];
-		$subclass = $obj["subclass"];
-
-//                print "looking for properties for clid $subclass under $sourcemenu<br>";
-		// first, retrieve a list of all menus
-		$menus = $this->get_objects_below(array(
-			"parent" => $sourcemenu,
-			"class" => CL_PSEUDO,
-			"active" => 1,
-			"orderby" => "jrk",
-		));
-
-		$properties = array();
-
-		// for each menu, retrieve the list of properties for that menu
-		foreach($menus as $key => $val)
+		load_vcl("table");
+                $t = new aw_table(array("xml_def" => "cfgforms/grplist"));
+		$grplist = $args["obj"]["meta"]["cfg_groups"];
+		foreach($grplist as $key => $val)
 		{
-			$id = $val["oid"];
-			$properties[$id]["caption"] = $val["name"];
-			$props = $this->get_objects_below(array(
-				"parent" => $id,
-				"class" => CL_PROPERTY,
-				"active" => 1,
-				"orderby" => "jrk",
+			$t->define_data(array(
+				"name" => html::textbox(array(
+					"name" => "cfg_group[$key][caption]",
+					"size" => 40,
+					"value" => $val["caption"],
+				)),
 			));
-
-			foreach($props as $pkey => $pval)
-			{
-				$name = $pval["meta"]["name"];
-				$properties[$id]["items"][$name] = array(
-					"caption" => $pval["name"],
-					"name" => $name,
-//                                        "type" => $pval["meta"]["type"],
-				);
-			};
 		};
-
-		$this->upd_object(array(
-			"oid" => $args["id"],
-			"metadata" => array(
-				"layout" => $properties,
-			),
-		));
-		print "<pre>";
-		print_r($properties);
-		print "</pre>";
-		print "all done!<br>";
+		$item = array(
+			"type" => "text",
+			"caption" => $args["prop"]["caption"],
+			"value" => $t->draw(),
+		);
+		return array($item);
+	}
+	
+	////
+	// !
+	function callback_gen_property_list($args = array())
+	{
+		load_vcl("table");
+                $t = new aw_table(array("xml_def" => "cfgforms/prplist"));
+		$prplist = $args["obj"]["meta"]["cfg_proplist"];
+		// oh, but I need the whole list of properties here
+		foreach($prplist as $key => $val)
+		{
+			$t->define_data(array(
+				"name" => html::textbox(array(
+					"name" => "cfg_property[$key][caption]",
+					"size" => 40,
+					"value" => $val["caption"],
+				)),
+				"type" => $val["type"],
+			));
+		};
+		$item = array(
+			"type" => "text",
+			"caption" => $args["prop"]["caption"],
+			"value" => $t->draw(),
+		);
+		return array($item);
 	}
 
 	function _serialize($arr)
