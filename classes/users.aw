@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.41 2002/07/23 17:51:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.42 2002/08/02 13:25:52 kristo Exp $
 // users.aw - User Management
 classload("users_user","config","form","objects","file");
 
@@ -720,7 +720,16 @@ class users extends users_user
 
 			// and when we're dont with all of them, update dyn groups and return to user list
 			$this->update_dyn_user($id);
-			$orb = $this->mk_my_orb("gen_list", array());
+
+			// check if we are on the site side. if we are, redirect to the beginning. 
+			if (strpos(aw_global_get("REQUEST_URI"), "automatweb") === false)
+			{
+				$orb = $this->mk_my_orb("change", array());
+			}
+			else
+			{
+				$orb = $this->mk_my_orb("gen_list", array());
+			}
 			header("Location: $orb");
 			return $orb;
 		}
@@ -901,7 +910,8 @@ class users extends users_user
 				"join_form_entry" => $jfs, 
 				"uid" => $add_state["uid"], 
 				"password" => $add_state["pass"],
-				"email" => $add_state["email"]
+				"email" => $add_state["email"],
+				"join_grp" => $join_grp
 			));
 			$this->update_dyn_user($add_state["uid"]);
 
@@ -2186,6 +2196,10 @@ class users extends users_user
 		{
 			aw_global_set("gidlist", $this->get_gids_by_uid($uid));
 			$this->touch($uid);
+		}
+		if (!is_array(aw_global_get("gidlist")))
+		{
+			aw_global_set("gidlist", array());
 		}
 	}
 
