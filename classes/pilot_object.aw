@@ -195,7 +195,6 @@ class pilot_object extends class_base
 			'name' => $ob['name']
 		));
 
-		exit_function("pilot_object::");
 		return $this->parse();
 	*/
 	
