@@ -1,0 +1,100 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:51 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/calendar/cal_content.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_class
+msgid "Omaduse Vali klass (show_class) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_class_comment
+msgid "Omaduse Vali klass (show_class) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_class_help
+msgid "Omaduse Vali klass (show_class) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_count
+msgid "Omaduse Mitu (show_count) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_count_comment
+msgid "Omaduse Mitu (show_count) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_show_count_help
+msgid "Omaduse Mitu (show_count) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_preview
+msgid "Omaduse Eelvaade (preview) caption"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_preview_comment
+msgid "Omaduse Eelvaade (preview) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:prop_preview_help
+msgid "Omaduse Eelvaade (preview) help"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:45
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:69
+msgid "/ Vaata"
+msgstr ""
+
+#: classes/calendar/cal_content.aw:87
+msgid "Klass on valimata, midagi pole näidata"
+msgstr ""
+

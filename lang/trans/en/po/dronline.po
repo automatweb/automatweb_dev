@@ -1,0 +1,492 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:07:06 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/syslog/dronline.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_conf
+msgid "Omaduse Konfiguratsioon (conf) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_conf_comment
+msgid "Omaduse Konfiguratsioon (conf) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_conf_help
+msgid "Omaduse Konfiguratsioon (conf) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_numlines
+msgid "Omaduse Mitu rida (numlines) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_numlines_comment
+msgid "Omaduse Mitu rida (numlines) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_numlines_help
+msgid "Omaduse Mitu rida (numlines) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_from
+msgid "Omaduse Alates (from) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_from_comment
+msgid "Omaduse Alates (from) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_from_help
+msgid "Omaduse Alates (from) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_to
+msgid "Omaduse Kuni (to) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_to_comment
+msgid "Omaduse Kuni (to) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_to_help
+msgid "Omaduse Kuni (to) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_g_default_tab
+msgid "Omaduse Default tab (g_default_tab) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_g_default_tab_comment
+msgid "Omaduse Default tab (g_default_tab) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_g_default_tab_help
+msgid "Omaduse Default tab (g_default_tab) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj
+msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj_comment
+msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj_help
+msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj_name
+msgid "Omaduse Log objekti nimi (save_as_obj_name) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj_name_comment
+msgid "Omaduse Log objekti nimi (save_as_obj_name) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_save_as_obj_name_help
+msgid "Omaduse Log objekti nimi (save_as_obj_name) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_q
+msgid "Omaduse Lukusta objektide salvestamine (lock_q) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_q_comment
+msgid "Omaduse Lukusta objektide salvestamine (lock_q) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_q_help
+msgid "Omaduse Lukusta objektide salvestamine (lock_q) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_filter
+msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_filter_comment
+msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_lock_filter_help
+msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_queries
+msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_queries_comment
+msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_queries_help
+msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries_at
+msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries_at_comment
+msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries_at_help
+msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries
+msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries_comment
+msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_rerun_queries_help
+msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_status
+msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_status_comment
+msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_status_help
+msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_created
+msgid "Omaduse Cache viimati muudetud (bg_query_created) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_created_comment
+msgid "Omaduse Cache viimati muudetud (bg_query_created) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_bg_query_created_help
+msgid "Omaduse Cache viimati muudetud (bg_query_created) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_folders
+msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) caption"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_folders_comment
+msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) kommentaar"
+msgstr ""
+
+#: classes/syslog/dronline.aw:prop_folders_help
+msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) help"
+msgstr ""
+
+#: classes/syslog/dronline.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:group_folders
+msgid "Grupi Kataloogid (folders) pealkiri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:rel_RELTYPE_FOLDER
+msgid "Seose filtri kataloog (RELTYPE_FOLDER) tekst"
+msgstr ""
+
+#: classes/syslog/dronline.aw:102
+msgid "Online"
+msgstr ""
+
+#: classes/syslog/dronline.aw:103
+msgid "Statistika aja l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:104
+msgid "Statistika aadresside l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:105
+msgid "Statistika objektide l&otilde;ikes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:106
+msgid "IP Blokk"
+msgstr ""
+
+#: classes/syslog/dronline.aw:107
+msgid "M&auml;&auml;rangud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:108
+msgid "Kataloogid"
+msgstr ""
+
+#: classes/syslog/dronline.aw:109
+msgid "Seostehaldur"
+msgstr ""
+
+#: classes/syslog/dronline.aw:117
+msgid "Cache tegemata"
+msgstr ""
+
+#: classes/syslog/dronline.aw:118
+msgid "Cache vananenud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:119
+msgid "Cache valmis"
+msgstr ""
+
+#: classes/syslog/dronline.aw:120
+msgid "Cache uuendamisel"
+msgstr ""
+
+#: classes/syslog/dronline.aw:135
+msgid "T&auml;na"
+msgstr ""
+
+#: classes/syslog/dronline.aw:140
+msgid "Eile"
+msgstr ""
+
+#: classes/syslog/dronline.aw:145
+msgid "See n&auml;dal"
+msgstr ""
+
+#: classes/syslog/dronline.aw:150
+msgid "Viimased 2 n&auml;dalat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:155
+msgid "See kuu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:160
+msgid "Viimased 2 kuud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:165
+msgid "Viimased pool aastat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:170
+msgid "See aasta"
+msgstr ""
+
+#: classes/syslog/dronline.aw:175
+msgid "Viimased 2 aastat"
+msgstr ""
+
+#: classes/syslog/dronline.aw:307
+msgid "Nr"
+msgstr ""
+
+#: classes/syslog/dronline.aw:311
+msgid "Millal"
+msgstr ""
+
+#: classes/syslog/dronline.aw:320
+msgid "UID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:325
+msgid "Kes"
+msgstr ""
+
+#: classes/syslog/dronline.aw:330
+msgid "IP"
+msgstr ""
+
+#: classes/syslog/dronline.aw:335
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/syslog/dronline.aw:340
+msgid "Tegevus"
+msgstr ""
+
+#: classes/syslog/dronline.aw:347
+msgid "Saidi ID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:353 classes/syslog/dronline.aw:1139
+msgid "OID"
+msgstr ""
+
+#: classes/syslog/dronline.aw:358
+msgid "Mida"
+msgstr ""
+
+#: classes/syslog/dronline.aw:455
+msgid "M&auml;&auml;ratud vahemik:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:466
+msgid "Alates:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:475
+msgid "Kuni:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:485
+msgid "Kasutaja:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:494
+msgid "IP:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:504
+msgid "Tegevuse filter:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:517
+msgid "Saidid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:528
+msgid "Keeled:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:563
+msgid "Objektid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:612
+msgid "T&uuml;&uuml;bid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:621
+msgid "Tegevused:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:630
+msgid "Kombinatsioonid:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:645
+msgid "Blokeeritud IP'd:"
+msgstr ""
+
+#: classes/syslog/dronline.aw:814
+msgid "Vahemik"
+msgstr ""
+
+#: classes/syslog/dronline.aw:824 classes/syslog/dronline.aw:978 classes/syslog/dronline.aw:1162
+msgid "Mitu"
+msgstr ""
+
+#: classes/syslog/dronline.aw:831 classes/syslog/dronline.aw:984 classes/syslog/dronline.aw:1168
+msgid "%"
+msgstr ""
+
+#: classes/syslog/dronline.aw:963 classes/syslog/dronline.aw:1131 classes/syslog/dronline.aw:1358
+msgid "#"
+msgstr ""
+
+#: classes/syslog/dronline.aw:971
+msgid "IP Aadress"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1041 classes/syslog/dronline.aw:1042
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1147 classes/syslog/dronline.aw:1366
+msgid "Nimi"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1155
+msgid "Detailid"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1282
+msgid "Uuenda p&auml;ringute&nbsp;cache"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1373
+msgid "Muudetud"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1382
+msgid "Kes Muutis"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1388 classes/syslog/dronline.aw:1402
+msgid "Vaata"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1430
+msgid "Blokeeri IPd"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1456
+msgid "N&auml;ita IPd"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1536
+msgid "Salvesta p&auml;ring"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1732
+msgid "Salvesta"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1763
+msgid "Kataloog"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1768
+msgid "Aktiivne"
+msgstr ""
+
+#: classes/syslog/dronline.aw:1774
+msgid "k.a. alammen&uuml;&uuml;d"
+msgstr ""
+

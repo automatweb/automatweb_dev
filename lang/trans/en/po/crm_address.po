@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:20 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/crm/crm_address.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_aadress
+msgid "Omaduse Tänav/Küla (aadress) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_aadress_comment
+msgid "Omaduse Tänav/Küla (aadress) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_aadress_help
+msgid "Omaduse Tänav/Küla (aadress) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_postiindeks
+msgid "Omaduse Postinindex (postiindeks) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_postiindeks_comment
+msgid "Omaduse Postinindex (postiindeks) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_postiindeks_help
+msgid "Omaduse Postinindex (postiindeks) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_linn
+msgid "Omaduse Linn/Vald/Alev (linn) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_linn_comment
+msgid "Omaduse Linn/Vald/Alev (linn) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_linn_help
+msgid "Omaduse Linn/Vald/Alev (linn) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_maakond
+msgid "Omaduse Maakond (maakond) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_maakond_comment
+msgid "Omaduse Maakond (maakond) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_maakond_help
+msgid "Omaduse Maakond (maakond) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_riik
+msgid "Omaduse Riik (riik) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_riik_comment
+msgid "Omaduse Riik (riik) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_riik_help
+msgid "Omaduse Riik (riik) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_address.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_address.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_address.aw:group_settings
+msgid "Grupi Seadistused (settings) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_address.aw:rel_RELTYPE_LINN
+msgid "Seose Linn (RELTYPE_LINN) tekst"
+msgstr ""
+
+#: classes/crm/crm_address.aw:rel_RELTYPE_RIIK
+msgid "Seose Riik (RELTYPE_RIIK) tekst"
+msgstr ""
+
+#: classes/crm/crm_address.aw:rel_RELTYPE_MAAKOND
+msgid "Seose Maakond (RELTYPE_MAAKOND) tekst"
+msgstr ""
+
+#: classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
+msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
+msgstr ""
+
+#: classes/crm/crm_address.aw:136
+msgid "tel:"
+msgstr ""
+

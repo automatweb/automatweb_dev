@@ -1,0 +1,112 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:51 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_addable_types
+msgid "Omaduse  (addable_types) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_addable_types_comment
+msgid "Omaduse  (addable_types) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_addable_types_help
+msgid "Omaduse  (addable_types) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_apply_level
+msgid "Omaduse Kehtib tervele tasemele (apply_level) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_apply_level_comment
+msgid "Omaduse Kehtib tervele tasemele (apply_level) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_apply_level_help
+msgid "Omaduse Kehtib tervele tasemele (apply_level) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_filter
+msgid "Omaduse  (filter) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_filter_comment
+msgid "Omaduse  (filter) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:prop_filter_help
+msgid "Omaduse  (filter) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:group_add
+msgid "Grupi Lisatavad objektid (add) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:group_filter
+msgid "Grupi Andmete filter (filter) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:90
+msgid "Klass"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:96
+msgid "Seoset&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:229
+msgid "Omadus"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:234
+msgid "V&auml;&auml;rtus"
+msgstr ""
+

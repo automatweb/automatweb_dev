@@ -1,0 +1,348 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:36 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/groupware/task.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_info_on_object
+msgid "Omaduse Osalejad (info_on_object) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_info_on_object_comment
+msgid "Omaduse Osalejad (info_on_object) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_info_on_object_help
+msgid "Omaduse Osalejad (info_on_object) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_is_done
+msgid "Omaduse Tehtud (is_done) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_is_done_comment
+msgid "Omaduse Tehtud (is_done) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_is_done_help
+msgid "Omaduse Tehtud (is_done) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_start1
+msgid "Omaduse Algus (start1) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_start1_comment
+msgid "Omaduse Algus (start1) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_start1_help
+msgid "Omaduse Algus (start1) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_end
+msgid "Omaduse Lõpeb (end) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_end_comment
+msgid "Omaduse Lõpeb (end) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_end_help
+msgid "Omaduse Lõpeb (end) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_whole_day
+msgid "Omaduse Kestab terve päeva (whole_day) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_whole_day_comment
+msgid "Omaduse Kestab terve päeva (whole_day) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_whole_day_help
+msgid "Omaduse Kestab terve päeva (whole_day) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_aliasmgr
+msgid "Omaduse Seostehaldur (aliasmgr) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_aliasmgr_comment
+msgid "Omaduse Seostehaldur (aliasmgr) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_aliasmgr_help
+msgid "Omaduse Seostehaldur (aliasmgr) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_task_toolbar
+msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_task_toolbar_comment
+msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_task_toolbar_help
+msgid "Omaduse \"Toolbar\" (task_toolbar) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_recurrence
+msgid "Omaduse Kordused (recurrence) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_recurrence_comment
+msgid "Omaduse Kordused (recurrence) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_recurrence_help
+msgid "Omaduse Kordused (recurrence) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_calendar_selector
+msgid "Omaduse Kalendrid (calendar_selector) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_calendar_selector_comment
+msgid "Omaduse Kalendrid (calendar_selector) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_calendar_selector_help
+msgid "Omaduse Kalendrid (calendar_selector) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_other_selector
+msgid "Omaduse Teised (other_selector) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_other_selector_comment
+msgid "Omaduse Teised (other_selector) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_other_selector_help
+msgid "Omaduse Teised (other_selector) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_selector
+msgid "Omaduse Projektid (project_selector) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_selector_comment
+msgid "Omaduse Projektid (project_selector) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_project_selector_help
+msgid "Omaduse Projektid (project_selector) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment_list
+msgid "Omaduse Kommentaarid (comment_list) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment_list_comment
+msgid "Omaduse Kommentaarid (comment_list) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_comment_list_help
+msgid "Omaduse Kommentaarid (comment_list) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_rmd
+msgid "Omaduse Meeldetuletus (rmd) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_rmd_comment
+msgid "Omaduse Meeldetuletus (rmd) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_rmd_help
+msgid "Omaduse Meeldetuletus (rmd) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_participant
+msgid "Omaduse Osalejad (participant) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_participant_comment
+msgid "Omaduse Osalejad (participant) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_participant_help
+msgid "Omaduse Osalejad (participant) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_company
+msgid "Omaduse Organisatsioon (search_contact_company) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_company_comment
+msgid "Omaduse Organisatsioon (search_contact_company) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_company_help
+msgid "Omaduse Organisatsioon (search_contact_company) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_firstname
+msgid "Omaduse Eesnimi (search_contact_firstname) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_firstname_comment
+msgid "Omaduse Eesnimi (search_contact_firstname) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_firstname_help
+msgid "Omaduse Eesnimi (search_contact_firstname) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_lastname
+msgid "Omaduse Perenimi (search_contact_lastname) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_lastname_comment
+msgid "Omaduse Perenimi (search_contact_lastname) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_lastname_help
+msgid "Omaduse Perenimi (search_contact_lastname) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_code
+msgid "Omaduse Isikukood (search_contact_code) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_code_comment
+msgid "Omaduse Isikukood (search_contact_code) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_code_help
+msgid "Omaduse Isikukood (search_contact_code) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_button
+msgid "Omaduse Otsi (search_contact_button) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_button_comment
+msgid "Omaduse Otsi (search_contact_button) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_button_help
+msgid "Omaduse Otsi (search_contact_button) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_results
+msgid "Omaduse Tulemuste tabel (search_contact_results) caption"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_results_comment
+msgid "Omaduse Tulemuste tabel (search_contact_results) kommentaar"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:prop_search_contact_results_help
+msgid "Omaduse Tulemuste tabel (search_contact_results) help"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_recurrence
+msgid "Grupi Kordumine (recurrence) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_calendars
+msgid "Grupi Kalendrid (calendars) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_others
+msgid "Grupi Teised (others) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_projects
+msgid "Grupi Projektid (projects) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_comments
+msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_reminders
+msgid "Grupi Meeldetuletused (reminders) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:group_participants
+msgid "Grupi Osalejad (participants) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:rel_RELTYPE_RECURRENCE
+msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:184
+msgid "Kustuta valitud"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:193
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/groupware/task.aw:202
+msgid "Salvesta"
+msgstr ""
+

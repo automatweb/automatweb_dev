@@ -1,0 +1,148 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:38 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/apache/apache_alias.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias
+msgid "Omaduse Alias (alias) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias_comment
+msgid "Omaduse Alias (alias) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_alias_help
+msgid "Omaduse Alias (alias) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir
+msgid "Omaduse Kataloog serveris (dir) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir_comment
+msgid "Omaduse Kataloog serveris (dir) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_dir_help
+msgid "Omaduse Kataloog serveris (dir) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl
+msgid "Omaduse Tabel (tbl) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl_comment
+msgid "Omaduse Tabel (tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_tbl_help
+msgid "Omaduse Tabel (tbl) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list
+msgid "Omaduse Apache konfiguratsioon (list) caption"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list_comment
+msgid "Omaduse Apache konfiguratsioon (list) kommentaar"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:prop_list_help
+msgid "Omaduse Apache konfiguratsioon (list) help"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:group_list
+msgid "Grupi Nimekiri (list) pealkiri"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:62
+msgid "Alias ei saa olla tühi!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:76
+msgid "Sellise nimega alias on juba olemas!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:84
+msgid "Kataloog ei saa olla tühi!!"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:97
+msgid "ID"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:103
+msgid "Alias"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:109
+msgid "Kataloog serveris"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:115
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:124
+msgid "Autor"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:130
+msgid "Muudetud"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:139
+msgid "Muutja"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:170
+msgid "Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"
+msgstr ""
+

@@ -1,0 +1,176 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:32 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_ametinimetus
+msgid "Omaduse  (s_cv_ametinimetus) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_ametinimetus_comment
+msgid "Omaduse  (s_cv_ametinimetus) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_ametinimetus_help
+msgid "Omaduse  (s_cv_ametinimetus) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_palgasoov
+msgid "Omaduse  (s_cv_palgasoov) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_palgasoov_comment
+msgid "Omaduse  (s_cv_palgasoov) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_palgasoov_help
+msgid "Omaduse  (s_cv_palgasoov) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_valdkond
+msgid "Omaduse  (s_cv_valdkond) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_valdkond_comment
+msgid "Omaduse  (s_cv_valdkond) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_valdkond_help
+msgid "Omaduse  (s_cv_valdkond) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_liik
+msgid "Omaduse  (s_cv_liik) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_liik_comment
+msgid "Omaduse  (s_cv_liik) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_liik_help
+msgid "Omaduse  (s_cv_liik) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_asukoht
+msgid "Omaduse  (s_cv_asukoht) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_asukoht_comment
+msgid "Omaduse  (s_cv_asukoht) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_asukoht_help
+msgid "Omaduse  (s_cv_asukoht) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_koormus
+msgid "Omaduse  (s_cv_koormus) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_koormus_comment
+msgid "Omaduse  (s_cv_koormus) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_s_cv_koormus_help
+msgid "Omaduse  (s_cv_koormus) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_button
+msgid "Omaduse  (cv_search_button) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_button_comment
+msgid "Omaduse  (cv_search_button) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_button_help
+msgid "Omaduse  (cv_search_button) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_results
+msgid "Omaduse  (cv_search_results) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_results_comment
+msgid "Omaduse  (cv_search_results) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_cv_search_results_help
+msgid "Omaduse  (cv_search_results) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_no_reforb
+msgid "Omaduse  (no_reforb) caption"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_no_reforb_comment
+msgid "Omaduse  (no_reforb) kommentaar"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:prop_no_reforb_help
+msgid "Omaduse  (no_reforb) help"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
+msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
+msgid "Seose Linn (RELTYPE_LINN) tekst"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv_search.aw:344
+msgid "Nimi"
+msgstr ""
+

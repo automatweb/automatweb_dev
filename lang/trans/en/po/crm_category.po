@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:20 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/crm/crm_category.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_img_upload
+msgid "Omaduse Pilt (img_upload) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_img_upload_comment
+msgid "Omaduse Pilt (img_upload) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_img_upload_help
+msgid "Omaduse Pilt (img_upload) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_extern_id
+msgid "Omaduse  (extern_id) caption"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_extern_id_comment
+msgid "Omaduse  (extern_id) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_category.aw:prop_extern_id_help
+msgid "Omaduse  (extern_id) help"
+msgstr ""
+
+#: classes/crm/crm_category.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
+msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/crm/crm_category.aw:rel_RELTYPE_CATEGORY
+msgid "Seose Alam kategooria (RELTYPE_CATEGORY) tekst"
+msgstr ""
+
+#: classes/crm/crm_category.aw:rel_RELTYPE_CUSTOMER
+msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
+msgstr ""
+

@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:51 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/calendar/cal_event.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_start
+msgid "Omaduse Algab (start) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_start_comment
+msgid "Omaduse Algab (start) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_start_help
+msgid "Omaduse Algab (start) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_end
+msgid "Omaduse Lõpeb (end) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_end_comment
+msgid "Omaduse Lõpeb (end) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_end_help
+msgid "Omaduse Lõpeb (end) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_repeater_obj
+msgid "Omaduse Korduste kontroller (repeater_obj) caption"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_repeater_obj_comment
+msgid "Omaduse Korduste kontroller (repeater_obj) kommentaar"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:prop_repeater_obj_help
+msgid "Omaduse Korduste kontroller (repeater_obj) help"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:42
+msgid "korduste kontroller"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:118
+msgid "must"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:119
+msgid "punane"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:120
+msgid "roheline"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:121
+msgid "sinine"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:143
+msgid "linki objektile"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:143
+msgid "objekti ennast"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:166
+msgid "Lisa kalendrisündmus"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:311
+msgid "%s | Muuda kalendrisündmust"
+msgstr ""
+
+#: classes/calendar/cal_event.aw:372
+msgid "Muuda eventit"
+msgstr ""
+

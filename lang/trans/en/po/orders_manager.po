@@ -1,0 +1,204 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:49 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/orders/orders_manager.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder
+msgid "Omaduse Ekspordi kataloog (export_folder) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_comment
+msgid "Omaduse Ekspordi kataloog (export_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_export_folder_help
+msgid "Omaduse Ekspordi kataloog (export_folder) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_comment
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_help
+msgid "Omaduse Tellimuste toolbar (orders_toolbar) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table
+msgid "Omaduse Tellimuste tabel (orders_table) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_comment
+msgid "Omaduse Tellimuste tabel (orders_table) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:prop_orders_table_help
+msgid "Omaduse Tellimuste tabel (orders_table) help"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:group_ordermnager
+msgid "Grupi Tellimused (ordermnager) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:61
+msgid "Kustuta tellimusi"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:63
+msgid "Oled kindel, et soovid valitud tellimused kustutada?"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:72
+msgid "Tellija"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:76
+msgid "Kuupäev"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:85 classes/applications/orders/orders_manager.aw:111
+msgid "Vaata tellimust"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:207
+msgid "Toote nimi"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:208
+msgid "Kood"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:209
+msgid "V&auml;rvus"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:210
+msgid "Suurus"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:211
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:212
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:213
+msgid "Lehek&uuml;lg"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:214
+msgid "Pilt"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:217
+msgid "Eesnimi"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:218
+msgid "Perekonnanimi"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:219
+msgid "Aadress"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:220
+msgid "S&uuml;nnip&auml;ev"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:221
+msgid "E-mail"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:222
+msgid "Telefon"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:225
+msgid "Kliendi number"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:226
+msgid "Postiindeks"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:227
+msgid "Linn"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:228
+msgid "Telefon t&ouml;&ouml;l"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:229
+msgid "Mobiil"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:230
+msgid "Kliendo t&uuml;&uuml;p"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:237
+msgid "OID"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:237
+msgid "Millal"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:290
+msgid "all done!"
+msgstr ""
+

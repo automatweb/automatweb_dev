@@ -1,0 +1,128 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:58 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/contentmgmt/timing.aw:prop_name
+msgid "Omaduse Nimi (name) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_name_comment
+msgid "Omaduse Nimi (name) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_name_help
+msgid "Omaduse Nimi (name) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_activate
+msgid "Omaduse Aktiveerida (activate) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_activate_comment
+msgid "Omaduse Aktiveerida (activate) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_activate_help
+msgid "Omaduse Aktiveerida (activate) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_deactivate
+msgid "Omaduse Deaktiveerida (deactivate) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_deactivate_comment
+msgid "Omaduse Deaktiveerida (deactivate) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_deactivate_help
+msgid "Omaduse Deaktiveerida (deactivate) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar
+msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar_comment
+msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects_toolbar_help
+msgid "Omaduse Objektide toolbar (objects_toolbar) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects
+msgid "Omaduse Seotud objektid (objects) caption"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects_comment
+msgid "Omaduse Seotud objektid (objects) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:prop_objects_help
+msgid "Omaduse Seotud objektid (objects) help"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:group_objects
+msgid "Grupi Seotud objektid (objects) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:rel_RELTYPE_TIMING_OBJECT
+msgid "Seose Seotud objekt (RELTYPE_TIMING_OBJECT) tekst"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:187
+msgid "Eemalda valitud objektid"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:189
+msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:199
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:200
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/timing.aw:201
+msgid "Tüüp"
+msgstr ""
+

@@ -1,0 +1,260 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:06:30 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/commune/image_rate.aw:prop_comment
+msgid "Omaduse Kommentaar (comment) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_comment_comment
+msgid "Omaduse Kommentaar (comment) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_comment_help
+msgid "Omaduse Kommentaar (comment) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_status
+msgid "Omaduse Aktiivne (status) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_status_comment
+msgid "Omaduse Aktiivne (status) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_status_help
+msgid "Omaduse Aktiivne (status) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_check
+msgid "Omaduse  (check) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_check_comment
+msgid "Omaduse  (check) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_check_help
+msgid "Omaduse  (check) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_rate
+msgid "Omaduse  (rate) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_rate_comment
+msgid "Omaduse  (rate) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_rate_help
+msgid "Omaduse  (rate) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image
+msgid "Omaduse  (image) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_comment
+msgid "Omaduse  (image) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_help
+msgid "Omaduse  (image) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_name
+msgid "Omaduse  (image_name) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_name_comment
+msgid "Omaduse  (image_name) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_name_help
+msgid "Omaduse  (image_name) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_comment
+msgid "Omaduse  (image_comment) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_comment_comment
+msgid "Omaduse  (image_comment) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_image_comment_help
+msgid "Omaduse  (image_comment) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_current
+msgid "Omaduse  (current) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_current_comment
+msgid "Omaduse  (current) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_current_help
+msgid "Omaduse  (current) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_name
+msgid "Omaduse  (name) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_name_comment
+msgid "Omaduse  (name) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_name_help
+msgid "Omaduse  (name) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_friend_link
+msgid "Omaduse  (add_friend_link) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_friend_link_comment
+msgid "Omaduse  (add_friend_link) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_friend_link_help
+msgid "Omaduse  (add_friend_link) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_ignored_link
+msgid "Omaduse  (add_ignored_link) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_ignored_link_comment
+msgid "Omaduse  (add_ignored_link) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_ignored_link_help
+msgid "Omaduse  (add_ignored_link) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_blocked_link
+msgid "Omaduse  (add_blocked_link) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_blocked_link_comment
+msgid "Omaduse  (add_blocked_link) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_add_blocked_link_help
+msgid "Omaduse  (add_blocked_link) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_send_message_link
+msgid "Omaduse  (send_message_link) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_send_message_link_comment
+msgid "Omaduse  (send_message_link) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_send_message_link_help
+msgid "Omaduse  (send_message_link) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_contact_list_link
+msgid "Omaduse  (contact_list_link) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_contact_list_link_comment
+msgid "Omaduse  (contact_list_link) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_contact_list_link_help
+msgid "Omaduse  (contact_list_link) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_comments
+msgid "Omaduse  (comments) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_comments_comment
+msgid "Omaduse  (comments) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_comments_help
+msgid "Omaduse  (comments) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_vsbt2
+msgid "Omaduse  (vsbt2) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_vsbt2_comment
+msgid "Omaduse  (vsbt2) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_vsbt2_help
+msgid "Omaduse  (vsbt2) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_prof_id
+msgid "Omaduse  (prof_id) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_prof_id_comment
+msgid "Omaduse  (prof_id) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_prof_id_help
+msgid "Omaduse  (prof_id) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_img_id
+msgid "Omaduse  (img_id) caption"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_img_id_comment
+msgid "Omaduse  (img_id) kommentaar"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:prop_img_id_help
+msgid "Omaduse  (img_id) help"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:group_
+msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:229
+msgid "Saada sõnum"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:239
+msgid "lisa sõprade hulka"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:249
+msgid "Ignoreeri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:259
+msgid "Blokeeri"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:269
+msgid "Lisa kontaktidesse"
+msgstr ""
+
+#: classes/applications/commune/image_rate.aw:321
+msgid "pildi"
+msgstr ""
+
