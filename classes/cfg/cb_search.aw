@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.17 2004/11/23 10:40:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.18 2004/11/23 13:17:20 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -480,24 +480,20 @@ class cb_search extends class_base
 
 				$this->proc_syns_in_sdata($arr["obj_inst"], $sdata);
 
-				$do_sort_by = "";
 				if ($GLOBALS["sortby"] != "")
 				{
 					$sp = $f_props[$GLOBALS["sortby"]];
-					//$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
-					$do_sort_by = $GLOBALS["sortby"];
+					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ".$GLOBALS["sort_order"];
 				}
 				else
 				if ($this->__tdata["__defaultsort"] != "")
 				{
 					$sp = $f_props[$this->__tdata["__defaultsort"]];
-					//$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
-					$do_sort_by = $this->__tdata["__defaultsort"];
+					$sdata["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
 				}
 				else
 				{
-					//$sdata["sort_by"] = "objects.name ASC ";
-					$do_sort_by = "name";
+					$sdata["sort_by"] = "objects.name ASC ";
 				}
 
 				// if there are any criteria for search from folder, add them to the filter
