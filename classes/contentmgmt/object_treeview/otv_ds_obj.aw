@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.3 2004/06/04 11:16:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.4 2004/06/11 08:40:00 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -278,9 +278,17 @@ class otv_ds_obj extends class_base
 		else
 		// right. if the user has said, that no tree should be shown
 		// then get files in all selected folders
-		if (!$ob->meta('show_folders') && $_GET["tv_sel"])
+		if (!$ob->meta('show_folders'))
 		{
-			$parent = $folders;
+			$con = $ob->connections_from(array(
+				"type" => RELTYPE_FOLDER
+			));
+
+			$parent = array();
+			foreach($con as $c)
+			{
+				$parent[$c->prop("to")] = $c->prop("to");
+			}
 		}
 
 		if (!is_oid($ob->id()))
@@ -292,7 +300,7 @@ class otv_ds_obj extends class_base
 		{
 			// if parent can't be found. then get the objects from all the root folders
 			$con = $ob->connections_from(array(
-				"type" => RELTYPE_FOLDER
+				"type" => "RELTYPE_FOLDER"
 			));
 
 			$ignoreself = $ob->meta("ignoreself");
@@ -309,10 +317,11 @@ class otv_ds_obj extends class_base
 		}
 
 		$clids = array();
-		foreach($ob->connections_from(array("type" => "RELTYPE_ADD_TYPE")) as $c)
+		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
+		foreach($cttt as $c)
 		{
 			$c_o = $c->to();
-			$clids[] = $c_o->prop("type");
+			$clids[] = $c_o->subclass();
 		}
 
 		$awa = new aw_array($parent);

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.6 2004/06/04 11:16:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.7 2004/06/11 08:40:00 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -141,6 +141,7 @@ class object_treeview_v2 extends class_base
 		{
 			return "";
 		}
+		enter_function("otv2::show");
 		$ob = obj($id);
 
 		$this->read_template('show.tpl');
@@ -181,14 +182,19 @@ class object_treeview_v2 extends class_base
 
 		$col_list = $this->_get_col_list($ob);
 
-		$this->__is = $ob->meta("itemsorts");
+		enter_function("otv2::sort");
+		$tmp = new aw_array($ob->meta("itemsorts"));
+		$this->__is = $tmp->get();
 		usort($ol, array(&$this, "__is_sorter"));
+		exit_function("otv2::sort");
 
+		enter_function("otv2::ps");
 		// now do pages
 		if ($ob->prop("per_page"))
 		{
 			$this->do_pageselector($ol, $ob->prop("per_page"));
 		}
+		exit_function("otv2::ps");
 
 		$has_access_to = false;
 		$has_add_access = false;
@@ -272,6 +278,7 @@ class object_treeview_v2 extends class_base
 		{
 			$res = $this->_get_add_toolbar($ob).$res;
 		}
+		exit_function("otv2::show");
 		return $res;
 	}
 
@@ -418,7 +425,7 @@ class object_treeview_v2 extends class_base
 			$tv->add_item($fld["parent"], array(
 				"id" => $fld["id"],
 				"name" => $fld["name"],
-				"url" => aw_url_change_var("tv_sel", $fld["id"]),
+				"url" => aw_url_change_var("page", NULL, aw_url_change_var("tv_sel", $fld["id"])),
 				"icon" => $fld["icon"],
 				"comment" => $fld["comment"],
 				"data" => array(
@@ -691,6 +698,11 @@ class object_treeview_v2 extends class_base
 					"options" => array("asc" => "Kasvav", "desc" => "Kahanev"),
 					"selected" => $sd["ord"],
 					"name" => "itemsorts[$idx][ord]"
+				)),
+				"is_date" => html::checkbox(array(
+					"name" => "itemsorts[$idx][is_date]",
+					"value" => 1,
+					"checked" => ($sd["is_date"] == 1)
 				))
 			));
 			$maxi = max($maxi, $idx);
@@ -741,6 +753,12 @@ class object_treeview_v2 extends class_base
 			"caption" => "Kasvav / kahanev",
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "is_date",
+			"caption" => "Kuup&auml;ev?",
+			"align" => "center"
+		));
 	}
 
 	function __is_sorter($a, $b)
@@ -752,6 +770,15 @@ class object_treeview_v2 extends class_base
 		{
 			$comp_a = $a[$isd["element"]];
 			$comp_b = $b[$isd["element"]];
+
+			if (1 == $isd["is_date"])
+			{
+				list($d, $m,$y) = explode(".", $comp_a);
+				$comp_a = mktime(0,0,0, $m,$d, $y);
+
+				list($d, $m,$y) = explode(".", $comp_b);
+				$comp_b = mktime(0,0,0, $m,$d, $y);
+			}
 			$ord = $isd["ord"];
 			if ($comp_a != $comp_b)
 			{
@@ -784,14 +811,17 @@ class object_treeview_v2 extends class_base
 		$num = count($list);
 		$num_p = $num / $per_page;
 
+		$tmp = array();
 		foreach($list as $k => $v)
 		{
-			if (!($cnt >= $start && $cnt < $end))
+			if (($cnt >= $start && $cnt < $end))
 			{
-				unset($list[$k]);
+				//unset($list[$k]);
+				$tmp[$k] = $v;
 			}
 			$cnt++;
 		}
+		$list = $tmp;
 
 		$ps = "";
 		for ($i = 0; $i <  $num_p; $i++)
