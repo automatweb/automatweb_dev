@@ -34,6 +34,11 @@ class db_feedback extends aw_template
 		extract($data);
 		$ip = $_SERVER["REMOTE_ADDR"];
 		$host = gethostbyaddr($ip);
+		if ($more == "")
+		{
+			header("Location: ".aw_ini_get("baseurl")."/?class=document&action=feedback&section=$docid&e=1");
+			die();
+		}
 		$msg = "
 Dokument: ".aw_ini_get("baseurl")."/?section=$docid\n
 Pealkirjaga: $title\n
