@@ -10,13 +10,13 @@
 <table width=100%>
 	<tr>
 		<!-- SUB: FIRST_C -->
-		<td align=left valign=bottom><a href='{VAR:add_col}'><img src='/images/add_col_first.gif' border=0></a></td>
+		<td align=left valign=bottom><a href='{VAR:add_col}'><img src='/automatweb/images/add_col_first.gif' border=0></a></td>
 		<!-- END SUB: FIRST_C -->
 
 		<!-- SUB: DELETE_COL -->
-		<td align=right valign=bottom><input type='checkbox' NAME='dc_{VAR:form_col}' value=1>&nbsp;<a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_COLUMN}?','{VAR:del_col}')"><img src='/images/del_col.gif' border=0></a></td>
+		<td align=right valign=bottom><input type='checkbox' NAME='dc_{VAR:form_col}' value=1>&nbsp;<a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_COLUMN}?','{VAR:del_col}')"><img src='/automatweb/images/del_col.gif' border=0></a></td>
 		<!-- END SUB: DELETE_COL -->
-		<td align=right valign=bottom><a href='{VAR:add_col}'><img src='/images/add_col.gif' border=0></a></td>
+		<td align=right valign=bottom><a href='{VAR:add_col}'><img src='/automatweb/images/add_col.gif' border=0></a></td>
 	</tr>
 </table>
 </td>
@@ -32,17 +32,17 @@
 <table bgcolor=#f0f0f0 width=100% height=100% border=0>
 <tr>
 <!-- SUB: EXP_LEFT -->
-<td bgcolor=#ffffff rowspan={VAR:num_els_plus3}><a href='{VAR:exp_left}'><img border=0 alt='Kustuta vasak cell' src='/images/left_r_arr.gif'></a></td>
+<td bgcolor=#ffffff rowspan={VAR:num_els_plus3}><a href='{VAR:exp_left}'><img border=0 alt='Kustuta vasak cell' src='/automatweb/images/left_r_arr.gif'></a></td>
 <!-- END SUB: EXP_LEFT -->
 
 <td colspan=5 align=center height=5 bgcolor=#ffffff>
 <!-- SUB: EXP_UP -->
-<a href='{VAR:exp_up}'><img border=0 alt='Kustuta &uuml;lemine  cell' src='/images/up_r_arr.gif'></a>
+<a href='{VAR:exp_up}'><img border=0 alt='Kustuta &uuml;lemine  cell' src='/automatweb/images/up_r_arr.gif'></a>
 <!-- END SUB: EXP_UP -->
 &nbsp;</td>
 <!-- SUB: EXP_RIGHT -->
 <td bgcolor=#ffffff rowspan={VAR:num_els_plus3}>
-<a href='{VAR:exp_right}'><img border=0 alt='Kustuta parem cell' src='/images/right_r_arr.gif'></a>
+<a href='{VAR:exp_right}'><img border=0 alt='Kustuta parem cell' src='/automatweb/images/right_r_arr.gif'></a>
 </td>
 <!-- END SUB: EXP_RIGHT -->
 
@@ -54,11 +54,11 @@
 |
 <a href='{VAR:add_element}'>{VAR:LC_FORMS_ADD_ELEMENT}</a>
 <!-- SUB: SPLIT_VERTICAL -->
-&nbsp;| <a href='{VAR:split_ver}'><img alt='Jaga cell pooleks vertikaalselt' src='/images/split_cell_left.gif' border=0></a>&nbsp;
+&nbsp;| <a href='{VAR:split_ver}'><img alt='Jaga cell pooleks vertikaalselt' src='/automatweb/images/split_cell_left.gif' border=0></a>&nbsp;
 <!-- END SUB: SPLIT_VERTICAL -->
 
 <!-- SUB: SPLIT_HORIZONTAL -->
-&nbsp;| <a href='{VAR:split_hor}'><img alt='Jaga cell pooleks horisontaalselt' src='/images/split_cell_down.gif' border=0></a>
+&nbsp;| <a href='{VAR:split_hor}'><img alt='Jaga cell pooleks horisontaalselt' src='/automatweb/images/split_cell_down.gif' border=0></a>
 <!-- END SUB: SPLIT_HORIZONTAL -->
 
 </td>
@@ -88,7 +88,7 @@
 <tr>
 <td  bgcolor=#ffffff colspan=5 align=center>
 <!-- SUB: EXP_DOWN -->
-<a href='{VAR:exp_down}'><img border=0 alt='Kustuta alumine cell' src='/images/down_r_arr.gif'></a>
+<a href='{VAR:exp_down}'><img border=0 alt='Kustuta alumine cell' src='/automatweb/images/down_r_arr.gif'></a>
 <!-- END SUB: EXP_DOWN -->
 &nbsp;</td></tr>
 </table>
@@ -97,13 +97,13 @@
 <td bgcolor=#ffffff valign=bottom align=left>
 <table height=100% border=0 cellspacing=0 cellpadding=0 hspace=0 vspace=0>
 <!-- SUB: FIRST_R -->
-<tr><td valign=top><a href='{VAR:add_row}'><img src='/images/add_row_first.gif' BORDER=0></a></td></tr>
+<tr><td valign=top><a href='{VAR:add_row}'><img src='/automatweb/images/add_row_first.gif' BORDER=0></a></td></tr>
 <!-- END SUB: FIRST_R -->
 
 <!-- SUB: DELETE_ROW -->
-<tr><td valign=bottom><a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_ROW}?','{VAR:del_row}')"><img src='/images/del_row.gif' BORDER=0></a><input type='checkbox' NAME='dr_{VAR:cell_row}' value=1></td></tr>
+<tr><td valign=bottom><a href="javascript:box2('{VAR:LC_FORMS_ARE_YOU_SURE_DEL_ROW}?','{VAR:del_row}')"><img src='/automatweb/images/del_row.gif' BORDER=0></a><input type='checkbox' NAME='dr_{VAR:cell_row}' value=1></td></tr>
 <!-- END SUB: DELETE_ROW -->
-<tr><td valign=bottom><a href='{VAR:add_row}'><img src='/images/add_row.gif' BORDER=0></a></td></tr>
+<tr><td valign=bottom><a href='{VAR:add_row}'><img src='/automatweb/images/add_row.gif' BORDER=0></a></td></tr>
 </table>
 </td>
 </tr>

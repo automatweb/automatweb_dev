@@ -162,13 +162,21 @@ function toggle_file_link_newwin()
 </tr>
 <tr>
 	<td class="fgtext">&nbsp;</td>
-	<td class="fgtext">Sisu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;&nbsp;Jrk&nbsp;&nbsp;Vali
+	<td class="fgtext" valign="bottom">Sisu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Default&nbsp;&nbsp;Jrk&nbsp;&nbsp;Vali
 	<!-- SUB: LISTBOX_SORT_ACTIVITY -->
 	&nbsp;Aktiivsuse pikendamine
 	<!-- END SUB: LISTBOX_SORT_ACTIVITY -->
 	</td>
+	<!-- SUB: LB_ITEM_CONTROLLER -->
+	<td class="fgtext">Vali listboxi elementide n&auml;itamise kontroller(id):</td>
+	<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_lb_item_controllers[]'>{VAR:lb_item_controllers}</select></td>
+	<!-- END SUB: LB_ITEM_CONTROLLER -->
+
+	<!-- SUB: NO_ITEM_CONTROLLER -->
 	<td class="fgtext">&nbsp;</td>
 	<td class="fgtext">&nbsp;</td>
+	<!-- END SUB: NO_ITEM_CONTROLLER -->
+
 </tr>
 <!-- END SUB: LISTBOX_SORT -->
 
@@ -189,8 +197,8 @@ function toggle_file_link_newwin()
 <tr>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}>&nbsp;<input type='text' name='{VAR:multiple_order_name}' value='{VAR:multiple_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: MULTIPLE_ITEMS -->
 
@@ -254,7 +262,7 @@ function toggle_file_link_newwin()
 <td class="fgtext" colspan="2">&nbsp;
 </td>
 </tr>
-<td class="fgtext">{VAR:LC_FORMS_DEFAULT_DATE}Default kuup&auml;ev:</td>
+<td class="fgtext">{VAR:LC_FORMS_DEFAULT_DATE}</td>
 <td class="fgtext" align="right">
 &nbsp;<input type="radio" name="{VAR:cell_id}_def_date_type" VALUE="rel" {VAR:date_rel_checked}> {VAR:C_FORMS_DATE_IN_ELEMENT} 
 <select name='{VAR:cell_id}_def_date_rel' class='small_button'>{VAR:date_rel_els}</select>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -367,6 +375,12 @@ function toggle_file_link_newwin()
 <td class="fgtext">{VAR:LC_FORMS_NOT_GO_BACK_IN_CHAIN}:</td>
 <td class="fgtext"><input type="checkbox" name="{VAR:cell_id}_chain_backward" value="1" {VAR:chain_backward}></td>
 </tr>
+<tr>
+<td class="fgtext">CSS class</td>
+<td class="fgtext"><input class='small_button' type='text' name='{VAR:cell_id}_button_css_class' value='{VAR:button_css_class}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
 <!-- END SUB: BUTTON_ITEMS -->
 
 <!-- SUB: CHECKBOX_ITEMS -->
@@ -408,8 +422,8 @@ function toggle_file_link_newwin()
 <!-- SUB: EL_NOHLINK -->
 <td valign=top class="fgtext">{VAR:LC_FORMS_TEXT}:</td>
 <td valign=top class="fgtext"><input class="small_button" type='text' NAME='{VAR:cell_id}_text' VALUE="{VAR:cell_text}">&nbsp;{VAR:LC_FORMS_DISTANCE_FROM_ELEMENT}:&nbsp;<input class="small_button" type='text' NAME='{VAR:cell_id}_dist' size=3 VALUE='{VAR:cell_dist}'>&nbsp;pix</td>
-<td class="fgtext">&nbsp;</td>
-<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Disabled:</td>
+<td class="fgtext"><input type='checkbox' name='{VAR:cell_id}_disabled' value='1' {VAR:disabled}></td>
 <!-- END SUB: EL_NOHLINK -->
 
 <!-- SUB: ACTIVITY -->
@@ -425,6 +439,49 @@ function toggle_file_link_newwin()
 	<td class="fgtext">&nbsp;</td>
 </tr>
 <!-- END SUB: ACTIVITY -->
+
+<!-- SUB: HAS_PERIOD -->
+<tr>
+	<td class="fgtext" valign="top">
+		Perioodiühik:
+	</td>
+	<td class="fgtext" colspan="3">
+		<select name="{VAR:cell_id}_period_type">{VAR:period_types}</select>&nbsp;
+		Ühikuid:
+		<input type="text" name="{VAR:cell_id}_period_items" value="{VAR:period_items}" size="3" maxlength="3">&nbsp;
+		Max. ühikuid ühes perioodis:
+		<input type="text" name="{VAR:cell_id}_max_period_items" value="{VAR:max_period_items}" size="3" maxlength="3">&nbsp;
+	</td>
+</tr>
+<!-- END SUB: HAS_PERIOD -->
+
+<!-- SUB: ALIASES -->
+<tr>
+	<td class="fgtext" valign="top">
+		Aliased:
+	</td>
+	<td class="fgtext" colspan="3">
+		<select name="{VAR:cell_id}_alias">
+		<option value="0">--- Vali üks ---</option>
+		{VAR:aliaslist}
+		</select>
+	</td>
+</tr>
+<tr>
+<td class="fgtext">
+	Tüüp
+</td>
+<td class="fgtext">
+	<select name="{VAR:cell_id}_alias_type">
+	{VAR:aliastype}
+	</select>
+</td>
+<td colspan="2" class="fgtext">
+&nbsp;
+</td>
+</tr>
+<!-- END SUB: ALIASES -->
+
 
 <!-- SUB: EL_HLINK -->
 <td class="fgtext">{VAR:LC_FORMS_CHOOSE_OUTPUT}:</td>
@@ -467,6 +524,16 @@ function toggle_file_link_newwin()
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
+
+<!-- SUB: IS_NUMBER -->
+<tr>
+<td class="fgtext">Tuhandete eraldaja numbris: </td>
+<td class="fgtext"><input type='text' class='small_button' name='{VAR:cell_id}_thousands_sep' value='{VAR:thousands_sep}' size='2'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: IS_NUMBER -->
+
 <!-- SUB: HAS_SIMPLE_CONTROLLER -->
 <tr>
 <td class="fgtext">{VAR:LC_FORMS_SHOULD_BE_FILLED}:</td>
@@ -475,4 +542,31 @@ function toggle_file_link_newwin()
 <td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_must_error' VALUE='{VAR:must_error}'></td>
 </tr>
 <!-- END SUB: HAS_SIMPLE_CONTROLLER -->
+
+<!-- SUB: HAS_CONTROLLER -->
+<tr>
+<td class="fgtext">Vali elemendi sisestuse kontroller(id):</td>
+<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_entry_controllers[]'>{VAR:entry_controllers}</select></td>
+<td class="fgtext">Vali elemendi n&auml;itamise kontroller(id):</td>
+<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
+</tr>
+<!-- END SUB: HAS_CONTROLLER -->
+
+<!-- SUB: HAS_ONLY_SHOW_CONTROLLER -->
+<tr>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">Vali elemendi n&auml;itamise kontroller(id):</td>
+<td class="fgtext"><select multiple CLASS="small_button" NAME='{VAR:cell_id}_show_controllers[]'>{VAR:show_controllers}</select></td>
+</tr>
+<!-- END SUB: HAS_ONLY_SHOW_CONTROLLER -->
+
+<!-- SUB: HAS_DEFAULT_CONTROLLER -->
+<tr>
+<td class="fgtext">Vali default v&auml;&auml;rtuse kontroller:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_default_controller'>{VAR:default_controller}</select></td>
+<td class="fgtext">Vali v&auml;&auml;rtuse kontroller:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_value_controller'>{VAR:value_controller}</select></td>
+</tr>
+<!-- END SUB: HAS_DEFAULT_CONTROLLER -->
 </table>

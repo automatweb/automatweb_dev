@@ -8,7 +8,7 @@ function varv(vrv)
 
 function varvivalik() 
 {
-  aken=window.open("/vv.html","varvivalik","HEIGHT=220,WIDTH=310")
+  aken=window.open("{VAR:baseurl}/automatweb/orb.aw?class=css&action=colorpicker","varvivalik","HEIGHT=220,WIDTH=310")
  	aken.focus()
 }
 </script>

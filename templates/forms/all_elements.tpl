@@ -40,6 +40,9 @@
 {VAR:LC_FORMS_CHOOSE_STYLE}:<select name='setstyle' class='small_button'>{VAR:styles}</select><br>
 {VAR:LC_FORMS_CHOOSE_CALALOGUE_WHERE_MOVE_ELEMENT}:<select name='setfolder' class='small_button'>{VAR:folders}</select><br>
 {VAR:LC_FORMS_CHOOSE_ELEMENT_TYPE_WHAT_ADD}:<select name='addel' class='small_button'>{VAR:types}</select><br>
+Vali sisestuse kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_entry_controllers[]' class='small_button'>{VAR:controllers}</select><br>
+Vali n&auml;itamise kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_show_controllers[]' class='small_button'>{VAR:controllers}</select><br>
+Vali listboksi kontrollerid, mis valitud elementidele m&auml;&auml;ratakse:<select multiple name='add_lb_controllers[]' class='small_button'>{VAR:controllers}</select><br>
 <input type='submit' value='{VAR:LC_FORMS_SAVE}' class='small_button'>&nbsp;&nbsp;
 <input type='submit' name='diliit' value='Kustuta' class='small_button'>
 {VAR:reforb}

@@ -74,6 +74,11 @@ function toggle1(layer1,layer2) {
 <!-- END SUB: CAN_ALL -->
 
 <a class="alamlingid" href='{VAR:import_entries}'>{VAR:LC_FORMS_IMPORT_DATA}</a>
+
+<!-- SUB: HAS_ALIASMGR -->
+<a class="alamlingid" href="{VAR:aliasmgr}">{VAR:LC_FORMS_ALIASMGR}</a>
+<!-- END SUB: HAS_ALIASMGR -->
+
 </div>
 <!-- end# menu 1 -->
 
@@ -102,6 +107,9 @@ function toggle1(layer1,layer2) {
 <a class="alamlingid" href='{VAR:translate}'>{VAR:LC_FORMS_LANGS}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
 
 <a class="alamlingid" href='{VAR:tables}'>{VAR:LC_FORMS_TABLES}</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
+<!--
+<a class="alamlingid" href='{VAR:calendar}'>Kalendrisätungid</a><img src='/images/transa.gif' WIDTH=8 height=1 border=0>
+-->
 </div>
 <!-- end# menu 2 -->
 

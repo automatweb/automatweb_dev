@@ -7,7 +7,7 @@ function varv(vrv)
 
 function varvivalik() 
 {
-  aken=window.open("/vv.html","varvivalik","HEIGHT=220,WIDTH=310");
+  aken=window.open("{VAR:baseurl}/automatweb/orb.{VAR:ext}?class=css&action=colorpicker","varvivalik","HEIGHT=220,WIDTH=310");
  	aken.focus();
 }
 
@@ -33,7 +33,30 @@ function setLink(li,title)
 <td class="fform" colspan=2>{VAR:LC_FORMS_FORM_TRIED_FILL_USER_DATA}: &nbsp;<input type='checkbox' name='try_fill' value=1 {VAR:try_fill}></td>
 </tr>
 <tr>
+<td class="fform">{VAR:LC_FORMS_FORM_HAS_ALIASMGR}</td>
+<td class="fform"><input type="checkbox" name="has_aliasmgr" value="1" {VAR:has_aliasmgr}></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_ALLOW_HTML}: &nbsp;<input type='checkbox' name='allow_html' value=1 {VAR:allow_html}></td>
+</tr>
+<tr>
+<td class="fform" colspan=2>Form kasutab kontrollereid: &nbsp;<input type='checkbox' name='has_controllers' value=1 {VAR:has_controllers}></td>
+</tr>
+<!--
+<tr>
+<td class="fform" colspan=2>On tellimisvorm: &nbsp;<input type='checkbox' name='is_order_form' value=1 {VAR:is_order_form}></td>
+</tr>
+-->
+<tr>
+<td class="fform" colspan=2 style="background: #eeeeee">Vormi kaudu tehtud pärja sisestusted omavad kalendrit: &nbsp;<input type='checkbox' name='has_calendar' value=1 {VAR:has_calendar}><br>
+Kalendri kontrollervorm: &nbsp;<select name="cal_controller">{VAR:cal_controllers}</select><br>
+<i> vorm peab sisaldama ajaelemente ja vähemalt ühte sisestust, muidu paistab kalender tühjana</i>.
+</td>
+</tr>
+<tr>
+<td class="fform" colspan=2 style="background: #eeeeee">Eventite sisestusvorm kalendrile: &nbsp;
+&nbsp;<select name="event_entry_form">{VAR:event_entry_forms}</select><br>
+</td>
 </tr>
 <tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CONTROL_FORM_STATUS}?: &nbsp;<input type='checkbox' name='check_status' value=1 {VAR:check_status}>

@@ -35,6 +35,18 @@
 	<td class="fgtext">{VAR:LC_FORMS_ALIASMGR}:</td>
 	<td class="fgtext"><input type="checkbox" name="has_aliasmgr" value="1" {VAR:has_aliasmgr}></td>
 </tr>
+<tr>
+	<td class="fgtext">Kontrollerid:</td>
+	<td class="fgtext"><input type="checkbox" name="has_controllers" value="1" {VAR:has_controllers}></td>
+</tr>
+<tr>
+	<td class="fgtext">V&auml;&auml;rtus sessioonist:</td>
+	<td class="fgtext"><input type="checkbox" name="session_value" value="1" {VAR:session_value}></td>
+</tr>
+<tr>
+	<td class="fgtext">Sessiooni formid:</td>
+	<td class="fgtext"><select class='small_button' name="session_form">{VAR:session_form}</select></td>
+</tr>
 <!-- SUB: CHANGE -->
 <tr>
 <td class="fgtext" colspan=2><a href='{VAR:admin}'>{VAR:LC_FORMS_ADMIN}</a></td>

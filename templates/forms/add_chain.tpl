@@ -26,7 +26,10 @@ function setLink(li,title)
 <!-- SUB: LANG_H -->
 <td class="fform">{VAR:LC_FORMS_NAME} {VAR:lang_name}</td>
 <!-- END SUB: LANG_H -->
-<td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td><td class="fform">Korduv?</td>
+<td class="fform">{VAR:LC_FORMS_ORDER}</td><td class="fform">{VAR:LC_FORMS_AFTER_FILLING_GO_FORWARD}</td>
+<td class="fform">Korduv?</td>
+<td class="fform">Sisestused tabelis?</td>
+<td class="fform">Tabel</td>
 </tr>
 <!-- SUB: FORM -->
 <tr>
@@ -36,6 +39,8 @@ function setLink(li,title)
 <td class="fform"><input type='text' name='fjrk[{VAR:form_id}]' value='{VAR:fjrk}' size=3 class='small_button'></td>
 <td class="fform"><input type='checkbox' name='fgoto[{VAR:form_id}]' value='1' {VAR:fgoto} class='small_button'></td>
 <td class="fform"><input type='checkbox' name='rep[{VAR:form_id}]' value='1' {VAR:rep} class='small_button'></td>
+<td class="fform"><input type='checkbox' name='show_reps[{VAR:form_id}]' value='1' {VAR:show_reps} class='small_button'></td>
+<td class="fform"><select name='rep_tbls[{VAR:form_id}]' class='small_button'>{VAR:rep_tbls}</select></td>
 </tr>
 <!-- END SUB: FORM -->
 <tr>

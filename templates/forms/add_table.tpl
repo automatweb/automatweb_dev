@@ -1,3 +1,6 @@
+<span class="fform">
+<a href="{VAR:aliasmgr_link}">Alias manager</a>
+</span>
 <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
@@ -90,18 +93,53 @@
 <tr>
 	<td class="fform">{VAR:LC_FORMS_CHOOSE_ELEMENTS}:</td>
 	<td class="fform" ><select class="small_button" size=7 name='columns[{VAR:column}][]' multiple>{VAR:elements}</select></td>
+
+	<td class="fform">Vali alias:</td>
+	<td class="fform"><select class="small_button" size=7 name='aliases[{VAR:column}]'><option value=''>{VAR:aliases}</select></td>
+
+	<!-- SUB: NOT_ORDER -->
 	<td class="fform">Vali lingi element:</td>
-	<td class="fform" colspan=10><select class="small_button" size=7 name='link_columns[{VAR:column}]'><option value=''>{VAR:link_elements}</select></td>
+	<td class="fform"><select class="small_button" size=7 name='link_columns[{VAR:column}]'><option value=''>{VAR:link_elements}</select></td>
+	<!-- END SUB: NOT_ORDER -->
+
+	<!-- SUB: ORDER -->
+	<td class="fform">Vali tellimis url:</td>
+	<td class="fform"><input class="small_button" type='text' name='order_forms[{VAR:column}]' size='20' value='{VAR:order_forms}'></td>
+	<!-- END SUB: ORDER -->
+
+	<td class="fform">Vali mis gruppidele n&auml;idatakse:</td>
+	<td class="fform" colspan=8><select class="small_button" multiple size=7 name='show_grps[{VAR:column}][]'><option value=''>{VAR:show_grps}</select></td>
 </tr>
 <tr>
 	<td class="fform">{VAR:LC_FORMS_SORTABLE}:&nbsp;<input type="checkbox" name="sortable[{VAR:column}]" value="1" {VAR:sortable}> E-mail?&nbsp;<input type="checkbox" name="is_email[{VAR:column}]" value="1" {VAR:is_email}></td>
 	<td class="fform" colspan=2>&nbsp;&nbsp;<a href='{VAR:add_col}'>{VAR:LC_FORMS_ADD_COLU}</a>&nbsp;&nbsp;<a href='{VAR:del_col}'>{VAR:LC_FORMS_DEL_COLU}</a> <input type='checkbox' name='todelete[{VAR:column}]' value='1'></td>
-	<td class="fform" colspan="8">Tulbale klikkides tehakse otsing: <input type="checkbox" name='doelsearch[{VAR:column}]' value='1' {VAR:doelsearch}></td>
+	<td class="fform" colspan="8">Tulbale klikkides tehakse otsing: <input type="checkbox" name='doelsearch[{VAR:column}]' value='1' {VAR:doelsearch}> Link: <input type="checkbox" name='linkels[{VAR:column}]' value='1' {VAR:linkel}></td>
 </tr>
 </table>
 </td>
 </tr>
 <!-- END SUB: COL -->
+
+<tr>
+	<td class="fform" colspan="2">
+		<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+		<tr>
+			<td class="fform">Element</td>
+			<!-- SUB: CLANG_H -->
+			<td class="fform">Tulba tekst ({VAR:lang_name})</td>
+			<!-- END SUB: CLANG_H -->
+		</tr>
+		<!-- SUB: COL_TEXT -->
+		<tr>
+			<td class="fform">{VAR:eltype}</td>
+			<!-- SUB: CLANG -->
+			<td class="fform"><input type='text' class='small_button' name='texts[{VAR:eltype}][{VAR:lang_id}]' VALUE='{VAR:t_name}'></td>
+			<!-- END SUB: CLANG -->
+		</tr>
+		<!-- END SUB: COL_TEXT -->
+		</table>
+	</td>
+</tr>
 <tr>
 	<td class="fform">{VAR:LC_FORMS_CHOOSE_LOOK_EL}:</td>
 	<td class="fform"><select name="viewcol">{VAR:v_elements}</select></td>

@@ -21,10 +21,10 @@
 <table width=100% border=0>
 <tr>
 <!-- SUB: FIRST_C -->
-<td align=left valign=bottom><a href='{VAR:add_col}'><img src='/images/add_col_first.gif' border=0></a></td>
+<td align=left valign=bottom><a href='{VAR:add_col}'><img src='/automatweb/images/add_col_first.gif' border=0></a></td>
 <!-- END SUB: FIRST_C -->
-<td align=right valign=bottom><a href='{VAR:del_col}'><img src='/images/del_col.gif' border=0></a></td>
-<td align=right valign=bottom><a href='{VAR:add_col}'><img src='/images/add_col.gif' border=0></a></td>
+<td align=right valign=bottom><a href='{VAR:del_col}'><img src='/automatweb/images/del_col.gif' border=0></a></td>
+<td align=right valign=bottom><a href='{VAR:add_col}'><img src='/automatweb/images/add_col.gif' border=0></a></td>
 </tr>
 </table>
 </td>
@@ -75,11 +75,11 @@
 <tr>
 <td colspan=2 align="center">&nbsp;
 <!-- SUB: SPLIT_VERTICAL -->
-&nbsp;| <a href='{VAR:split_ver}'><img alt='{VAR:LC_FORMS_DEV_CELL_VERT}' src='/images/split_cell_left.gif' border=0></a>&nbsp;
+&nbsp;| <a href='{VAR:split_ver}'><img alt='{VAR:LC_FORMS_DEV_CELL_VERT}' src='/automatweb/images/split_cell_left.gif' border=0></a>&nbsp;
 <!-- END SUB: SPLIT_VERTICAL -->
 
 <!-- SUB: SPLIT_HORIZONTAL -->
-&nbsp;| <a href='{VAR:split_hor}'><img alt='{VAR:LC_FORMS_DEV_CELL_HOR}' src='/images/split_cell_down.gif' border=0></a>
+&nbsp;| <a href='{VAR:split_hor}'><img alt='{VAR:LC_FORMS_DEV_CELL_HOR}' src='/automatweb/images/split_cell_down.gif' border=0></a>
 <!-- END SUB: SPLIT_HORIZONTAL -->
 </td>
 </tr>
@@ -87,7 +87,7 @@
 <tr>
 <td colspan=2 align=center>&nbsp;
 <!-- SUB: EXP_DOWN -->
-<a href='{VAR:exp_down}'><img border=0 alt='{VAR:LC_FORMS_DELETE_LOWER_CELL}' src='/images/down_r_arr.gif'></a>
+<a href='{VAR:exp_down}'><img border=0 alt='{VAR:LC_FORMS_DELETE_LOWER_CELL}' src='/automatweb/images/down_r_arr.gif'></a>
 <!-- END SUB: EXP_DOWN -->
 </td></tr>
 </table>
@@ -97,10 +97,10 @@
 <td bgcolor=#ffffff valign=bottom align=left>
 <table height=100% border=0 cellspacing=0 cellpadding=0 hspace=0 vspace=0>
 <!-- SUB: FIRST_R -->
-<tr><td valign=top><a href='{VAR:add_row}'><img src='/images/add_row_first.gif' BORDER=0></a></td></tr>
+<tr><td valign=top><a href='{VAR:add_row}'><img src='/automatweb/images/add_row_first.gif' BORDER=0></a></td></tr>
 <!-- END SUB: FIRST_R -->
-<tr><td valign=bottom><a href='{VAR:del_row}'><img src='/images/del_row.gif' BORDER=0></a></td></tr>
-<tr><td valign=bottom><a href='{VAR:add_row}'><img src='/images/add_row.gif' BORDER=0></a></td></tr>
+<tr><td valign=bottom><a href='{VAR:del_row}'><img src='/automatweb/images/del_row.gif' BORDER=0></a></td></tr>
+<tr><td valign=bottom><a href='{VAR:add_row}'><img src='/automatweb/images/add_row.gif' BORDER=0></a></td></tr>
 </table>
 </td>
 </tr>

@@ -43,6 +43,12 @@
 <td colspan=2 class="fform"><select class='small_button' NAME='el_move_menus[]' size=20 multiple>{VAR:el_move_menus}</select></td>
 </tr>
 <tr>
+<td class="fform" colspan=2>Kontrollerite kataloogid:</td>
+</tr>
+<tr>
+<td colspan=2 class="fform"><select class='small_button' NAME='form_controller_folders[]' size=20 multiple>{VAR:form_controller_folders}</select></td>
+</tr>
+<tr>
 <td class="fform" colspan=2>{VAR:LC_FORMS_CHOOSE_TIEELEMENTFORMS}:</td>
 </tr>
 <tr>
