@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.160 2002/10/04 10:47:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.161 2002/10/09 09:40:52 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -557,7 +557,11 @@ class menuedit extends aw_template
 			$login = $this->parse("login");
 			$this->vars(array(
 				"login" => $login, 
+				"login2" => $this->parse("login2"), 
+				"login3" => $this->parse("login3"), 
 				"logged" => "",
+				"logged2" => "",
+				"logged3" => "",
 				"site_title" => $this->site_title
 			));
 		}
@@ -609,24 +613,24 @@ class menuedit extends aw_template
 			}
 
 
-		// god dammit, this sucks. aga ma ei oska seda kuidagi teisiti lahendada
-		// konkreetselt sonnenjetis on logged LEFT_PANE sees,
-		// www.kirjastus.ee-s on LEFT_PANE logged-i sees.
-		$lp = "";
-		$rp = "";
-		if ($this->is_template("logged.asdasdas"))
-		{
-			print "logged is inside LEFT_PANE<br>";
+			// god dammit, this sucks. aga ma ei oska seda kuidagi teisiti lahendada
+			// konkreetselt sonnenjetis on logged LEFT_PANE sees,
+			// www.kirjastus.ee-s on LEFT_PANE logged-i sees.
+			$lp = "";
+			$rp = "";
+			if ($this->is_template("logged.asdasdas"))
+			{
+				print "logged is inside LEFT_PANE<br>";
 
-		}
+			}
 		
-		$this->vars(array(
-			"logged" => $this->parse("logged"), 
-			"logged1" => $this->parse("logged1"),
-			"logged2" => $this->parse("logged2"),
-			"logged3" => $this->parse("logged3"),
-			"login" => "",
-			"site_title" => $this->site_title
+			$this->vars(array(
+				"logged" => $this->parse("logged"), 
+				"logged1" => $this->parse("logged1"),
+				"logged2" => $this->parse("logged2"),
+				"logged3" => $this->parse("logged3"),
+				"login" => "",
+				"site_title" => $this->site_title
 			));
 		};
 		
@@ -1624,6 +1628,11 @@ class menuedit extends aw_template
 			$retval .= "5|0|ACL|".$delurl."|list\n";
 		}
 
+		if ($ret_data)
+		{
+			return $retval;
+		}
+
 		print $retval;
 		exit;
 	}
@@ -1633,6 +1642,7 @@ class menuedit extends aw_template
 		extract($args);
 		// Header
 		$baseurl = $this->cfg["baseurl"];
+		$this->format = $format;
 		$this->java_branches = array();
 		if (not($parent))
 		{
@@ -1651,9 +1661,16 @@ class menuedit extends aw_template
 		if (not($args["parent"]))
 		{
 			$udata = $this->get_user();
+			$hf_id = (int)$udata["home_folder"];
+			// there is a bunch of objects with parent=0, and we dont want to show
+			// those unter the home folder
+			if ($hf_id == 0)
+			{
+				$hf_id = -1;
+			};
 			$this->db_query("SELECT menu.*,objects.* FROM menu
 						LEFT JOIN objects ON objects.oid = menu.id
-						WHERE oid = ".$udata["home_folder"]);
+						WHERE oid = '$hf_id'");
 			if ($hf = $this->db_next())
 			{
 
@@ -1678,11 +1695,40 @@ class menuedit extends aw_template
 		// programmid
 		$this->_gen_prog_branch(array("parent" => $parent));
 
+		if ($format == "xmlrpc")
+		{
+			header("Content-Type: text/xml");
+			print "<?xml version=\"1.0\"?>\n";
+			print "<methodResponse>\n";
+			print "<params>\n";
+			print "<param>\n<value>\n<struct><member><name>result</name><value>\n";
+			$mask .= "<member><name>object</name><value><array><data>";
+			$mask .= "<i4>%d</i4>\n";
+			$mask .= "<i4>%d</i4>\n";
+			$mask .= "<string>%s</string>\n";
+			$mask .= "<string>%s</string>\n";
+			$mask .= "<string>%s</string></data></array></value></member>\n";
+		}
+		else
+		{
+			$mask = "%d\t%d\t%s\t%s\t%s\n";
+		};
+
 		foreach($this->java_branches as $dt)
 		{
-			printf("%d\t%d\t%s\t%s\t%s\n",$dt["oid"],$dt["subcnt"],$dt["name"],$dt["url"],$dt["iconurl"]);
+			printf($mask,$dt["oid"],$dt["subcnt"],$dt["name"],$dt["url"],$dt["iconurl"]);
 		}
-	
+
+		if ($format == "xmlrpc")
+		{
+			print "</value>\n";
+			print "</member>\n";
+			print "</struct>\n";
+			print "</value>\n";
+			print "</param>\n";
+			print "</params>\n";
+			print "</methodResponse>\n";
+		};
 		exit;
 	}
 
@@ -1793,6 +1839,13 @@ class menuedit extends aw_template
 		{
 			$name = "(nimetu)";
 		};
+		if ($this->format == "xmlrpc")
+		{
+			$name = str_replace("&","&amp;",$name);
+			$url = str_replace("&","&amp;",$url);
+			$iconurl = str_replace("&","&amp;",$iconurl);
+		};
+
 //		printf("%d\t%d\t%s\t%s\t%s\n",$oid,$subcnt,$name,$url,$iconurl);
 		$this->java_branches[$oid] = array("oid" => $oid, "subcnt" => $subcnt, "name" => $name, "url" => $url, "iconurl" => $iconurl);
 	}		
@@ -3287,7 +3340,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				$_hi = "";
 				if ($this->is_template("HAS_IMAGE"))
 				{
-					$_hi =  $this->parse($mn.$ap.".HAS_IMAGE");
+					if ($this->is_template($mn.$ap))
+					{
+						$_hi =  $this->parse($mn.$ap.".HAS_IMAGE");
+					}
+					else
+					{
+						$_hi =  $this->parse($mn.".HAS_IMAGE");
+					}
 				}
 				$this->vars(array(
 					"HAS_IMAGE" => $_hi,
@@ -4273,10 +4333,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		// vastasel korral satume loputusse tsyklisse
 		while ($sec && ($sec != 1)) 
 		{
-//			echo "sec = $sec <br>";
 			$this->_push($sec);
 			$sec = $this->mar[$sec]["parent"];
 			$cnt++;
+			if ($cnt > 1000)
+			{
+				$this->raise_error(ERR_MNED_HIER, "Error in object hierarchy, $sec is it's own parent!", true);
+			}
 		}
 		// now the path is in the correct order on the "root" stack
 
@@ -5581,6 +5644,12 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 			$row["lang_id"] = $lar[$row["lang_id"]];
 
+			$this->save_handle();
+			$this->vars(array(
+				"content" => $this->get_popup_data(array("id" => $row["oid"], "ret_data" => true))
+			));
+			$this->restore_handle();
+
 			$this->vars(array(
 				"oid" => $row["oid"],
 				"name" => "",
@@ -5590,7 +5659,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"height" => "16",
 				"icon_over" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
 				"url" => $host,
-				"URLPARAM" => ""
+				"URLPARAM" => "",
+				"FETCHCONTENT" => ($this->cfg["fetchcontent"] ? $this->parse("FETCHCONTENT") : "")
 			));
 			$row["java"] = $this->parse();
 
@@ -5620,6 +5690,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$types[$cldat["file"]] = $cldat["name"];
 		}
 		asort($types);
+		
 
 		// make applet for adding objects
 		$this->vars(array(
@@ -5643,7 +5714,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		));
 		$up .= $this->parse("URLPARAM");
 		$this->vars(array(
-			"URLPARAM" => $up
+			"URLPARAM" => $up,
+			"FETCHCONTENT" => ""
 		));
 		$add_applet = $this->parse();
 
@@ -5656,39 +5728,66 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->read_template("right_frame.tpl");
 
+		$toolbar = $this->rf_toolbar(array(
+			"parent" => $parent,
+			"add_applet" => $add_applet,
+			"sel_count" => count($sel_objs),
+		));
+
+
+		$this->vars(array(
+			"table" => $this->t->draw(),
+			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
+			"types" => $this->picker(" ", $types),
+			"parent" => $parent,
+			"period" => $period,
+			"lang_name" => $la->get_langid(),
+			"toolbar" => $toolbar,
+		));
+
+		return $this->parse();
+	}
+
+	function rf_toolbar($args = array())
+	{
+		extract($args);
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 		
+		// array of visible buttons, you can override it with show_buttons(array) argument
+		// default is to show all (?) buttons 
+
 		if ($this->can("add", $parent))
 		{
 			$toolbar->add_cdata($add_applet);
 		};
 
 		$toolbar->add_button(array(
-                        "name" => "save",
-                        "tooltip" => "Salvesta",
-                        "url" => "javascript:document.foo.submit()",
-                        "imgover" => "save_over.gif",
-                        "img" => "save.gif",
-                ));
+			"name" => "save",
+			"tooltip" => "Salvesta",
+			"url" => "javascript:document.foo.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+
 		$toolbar->add_separator();
-		
+
 		$toolbar->add_button(array(
-                        "name" => "cut",
-                        "tooltip" => "Cut",
-                        "url" => "javascript:submit('cut')",
-                        "imgover" => "cut_over.gif",
-                        "img" => "cut.gif",
-                ));
-		
+			"name" => "cut",
+			"tooltip" => "Cut",
+			"url" => "javascript:submit('cut')",
+			"imgover" => "cut_over.gif",
+			"img" => "cut.gif",
+		));
+
 		$toolbar->add_button(array(
-                        "name" => "copy",
-                        "tooltip" => "Copy",
-                        "url" => "javascript:submit('copy')",
-                        "imgover" => "copy_over.gif",
-                        "img" => "copy.gif",
-                ));
-		
-		if (count($sel_objs) > 0)
+			"name" => "copy",
+			"tooltip" => "Copy",
+			"url" => "javascript:submit('copy')",
+			"imgover" => "copy_over.gif",
+			"img" => "copy.gif",
+		));
+
+		if ($sel_count > 0)
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
@@ -5698,70 +5797,63 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"img" => "paste.gif",
 			));
 		};
-		
-		$toolbar->add_button(array(
-                        "name" => "delete",
-                        "tooltip" => "Delete",
-                        "url" => "javascript:submit('delete')",
-                        "imgover" => "delete_over.gif",
-                        "img" => "delete.gif",
-                ));
-		
-		$toolbar->add_button(array(
-                        "name" => "edit",
-                        "tooltip" => "Edit",
-                        "url" => "javascript:change()",
-                        "imgover" => "edit_over.gif",
-                        "img" => "edit.gif",
-                ));
-		
-		$toolbar->add_separator();
-		
-		$toolbar->add_button(array(
-                        "name" => "refresh",
-                        "tooltip" => "Refresh",
-                        "url" => "javascript:window.location.reload()",
-                        "imgover" => "refresh_over.gif",
-                        "img" => "refresh.gif",
-                ));
-		
-		$toolbar->add_button(array(
-                        "name" => "import",
-                        "tooltip" => "Import",
-                        "url" => $this->mk_my_orb("import",array("parent" => $parent)),
-                        "imgover" => "import_over.gif",
-                        "img" => "import.gif",
-                ));
-		
-		$toolbar->add_button(array(
-                        "name" => "bugtrack",
-                        "tooltip" => "Bugtrack",
-                        "url" => $this->mk_my_orb("list",array("filt" => "all"),"bugtrack"),
-                        "imgover" => "bugtrack_over.gif",
-                        "img" => "bugtrack.gif",
-                ));
-		
-		$toolbar->add_button(array(
-                        "name" => "search",
-                        "tooltip" => "Otsi",
-                        "url" => $this->mk_my_orb("search",array(),"search"),
-                        "imgover" => "search_over.gif",
-                        "img" => "search.gif",
-                ));
 
-		
-
-		$this->vars(array(
-			"table" => $this->t->draw(),
-			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
-			"types" => $this->picker(" ", $types),
-			"parent" => $parent,
-			"period" => $period,
-			"lang_name" => $la->get_langid(),
-			"toolbar" => $toolbar->get_toolbar(),
+		$toolbar->add_button(array(
+			"name" => "delete",
+			"tooltip" => "Delete",
+			"url" => "javascript:submit('delete')",
+			"imgover" => "delete_over.gif",
+			"img" => "delete.gif",
 		));
 
-		return $this->parse();
+		$toolbar->add_button(array(
+			"name" => "edit",
+			"tooltip" => "Edit",
+			"url" => "javascript:change()",
+			"imgover" => "edit_over.gif",
+			"img" => "edit.gif",
+		));
+		
+		$toolbar->add_separator();
+	
+		$toolbar->add_button(array(
+			"name" => "refresh",
+			"tooltip" => "Refresh",
+			"url" => "javascript:window.location.reload()",
+			"imgover" => "refresh_over.gif",
+			"img" => "refresh.gif",
+		));
+	
+		$toolbar->add_button(array(
+			"name" => "import",
+			"tooltip" => "Import",
+			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
+			"imgover" => "import_over.gif",
+			"img" => "import.gif",
+		));
+	
+		$toolbar->add_button(array(
+			"name" => "bugtrack",
+			"tooltip" => "Bugtrack",
+			"url" => $this->mk_my_orb("list",array("filt" => "all"),"bugtrack"),
+			"imgover" => "bugtrack_over.gif",
+			"img" => "bugtrack.gif",
+		));
+	
+		$toolbar->add_button(array(
+			"name" => "search",
+			"tooltip" => "Otsi",
+			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
+			"imgover" => "search_over.gif",
+			"img" => "search.gif",
+		));
+		
+		if (is_array($callback) && sizeof($callback) == 2)
+		{
+			$callback[0]->$callback[1](array("toolbar" => &$toolbar));
+		};
+
+		return $toolbar->get_toolbar();
 	}
 
 	function submit_rf($arr)
@@ -5837,6 +5929,116 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 	function blank($arr)
 	{
 		return "<html><body>&nbsop;</body></html>";
+	}
+
+	function req_serialize_obj_tree($oid)
+	{
+		$objs = $this->list_objects(array("class" => CL_PSEUDO, "parent" => $oid, "return" => ARR_ALL));
+		$oids = join(",", array_keys($objs));
+		if ($oids != "")
+		{
+			$this->db_query("SELECT * FROM menu WHERE id IN ($oids)");
+			while ($row = $this->db_next())
+			{
+				$cur_id = $row["id"];
+
+				$hash = $this->gen_uniq_id();
+				$this->menu_hash2id[$cur_id] = $hash;
+
+				$od = $objs[$cur_id];
+				$od["parent"] = $this->menu_hash2id[$od["parent"]];
+				$od["oid"] = $hash;
+				$row["id"] = $hash;
+
+				$dat = array(
+					"object" => $od,
+					"table" => $row
+				);
+				$this->ser_obj[$hash] = $dat;
+
+				$this->req_serialize_obj_tree($cur_id);
+			}
+		}
+		$this->db_query("SELECT oid FROM objects WHERE parent = $oid AND status != 0 AND class_id != ".CL_PSEUDO." AND lang_id = '".aw_global_get("lang_id")."' AND site_id = '".$this->cfg["site_id"]."'");
+		while ($row = $this->db_next())
+		{
+			$dat = $this->serialize(array("oid" => $row["oid"]));
+			if ($dat !== false)
+			{
+				$hash = $this->gen_uniq_id();
+				$this->ser_obj[$hash] = array("is_object" => true, "objstr" => $dat, "parent" => $this->menu_hash2id[$oid]);
+			}
+		}
+	}
+
+	////
+	// !this should creates a string representation of the menu
+	// parameters
+	//    oid - menu id
+	function _serialize($arr)
+	{
+		extract($arr);
+		$this->ser_obj = array();
+		$hash = $this->gen_uniq_id();
+		$this->menu_hash2id[$oid] = $hash;
+		$od = $this->get_object($oid);
+		$od["parent"] = 0;
+		$od["oid"] = $hash;
+
+		$row = $this->db_fetch_row("SELECT * FROM menu WHERE id = '$oid'");
+		$row["id"] = $hash;
+		$dat = array(
+			"object" => $od,
+			"table" => $row
+		);
+		$this->ser_obj[$hash] = $dat;
+
+		$this->req_serialize_obj_tree($oid);
+
+		return serialize($this->ser_obj);
+	}
+
+	////
+	// !this should create a menu from a string created by the _serialize() function
+	// parameters
+	//    str - the string
+	//    parent - the folder where the new object should be created
+	function _unserialize($arr)
+	{
+		extract($arr);
+		$dat = unserialize($str);
+
+		$hash2id = array(0 => $parent);
+
+		foreach($dat as $hash => $row)
+		{
+			if (!$row["is_object"])
+			{
+				$ob = $row["object"];
+				$ob["parent"] = $hash2id[$ob["parent"]];
+				$this->quote(&$ob);
+				$id = $this->new_object($ob);
+				$hash2id[$hash] = $id;
+
+				$menu = $row["table"];
+				$m_ids = array("id");
+				$m_vls = array($id);
+				foreach($menu as $col => $val)
+				{
+					if ($col != "id" && $col != "rec")
+					{
+						$m_ids[] = $col;
+						$m_vls[] = "'".$val."'";
+					}
+				}
+				$this->db_query("INSERT INTO menu (".join(",",$m_ids).") VALUES(".join(",",$m_vls).")");
+			}
+			else
+			{
+				$this->unserialize(array("str" => $row["objstr"], "parent" => $hash2id[$row["parent"]], "period" => $period));
+			}
+		}
+		return true;
 	}
 }
 ?>
