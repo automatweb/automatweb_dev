@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.53 2002/10/15 20:33:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.54 2002/10/29 13:30:06 duke Exp $
 // foorumi hindamine tuleb teha 100% konfigureeritavaks, s.t. 
 // hindamisatribuute peab saama sisestama läbi veebivormi.
 
@@ -238,7 +238,16 @@ class forum extends aw_template
 	{
 		extract($arr);
 		// if parent is defined, then we are about to add a new forum,
-		if ($parent)
+		if ($id)
+		{
+			$obj = $this->get_object($id);
+			$this->id = $id;
+			$pobj = $this->get_object($obj["parent"]);
+			$title = "Muuda foorumit";
+			$this->mk_path($parent, $title);
+			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
+		}
+		else
 		{
 			$pobj = $this->get_object($parent);
 			// FIXME: if we entered this function from the objects list,
@@ -254,17 +263,8 @@ class forum extends aw_template
 			$title = "Lisa foorum";
 		
 			$meta = array();
-		}
-		// otherwise we are modifying an existing forum
-		else
-		{
-			$obj = $this->get_object($id);
-			$this->id = $id;
-			$pobj = $this->get_object($obj["parent"]);
-			$title = "Muuda foorumit";
-			$this->mk_path($parent, $title);
-			$meta = $this->get_object_metadata(array("metadata" => $obj["metadata"]));
 		};
+		// otherwise we are modifying an existing forum
 
 		$toolbar = get_instance("toolbar");
 
@@ -306,7 +306,7 @@ class forum extends aw_template
 			$this->mk_path($pobj["oid"], $title);
 		};
 
-		$cfgform = get_instance("cfgform");
+		$cfgform = get_instance("cfg/cfgform");
 		$reforb = $this->mk_reforb("submit_properties",array("id" => $id,"parent" => $parent));
 		$xf = $cfgform->ch_form(array(
 				"clid" => &$this,
