@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.26 2002/01/07 18:52:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.27 2002/01/07 19:36:03 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -304,7 +304,7 @@ class db_objects extends aw_template
 			// kui selle objekti all on veel elemente, siis saab expandida
 			if ($subs > 0) 
 			{
-				$expandurl = "<a href='$PHP_SELF?parent=$oid&docid=$docid'><b>+</b></a> ($subs)";
+				$expandurl = "<a href='$PHP_SELF?type=search&parent=$oid&docid=$docid'><b>+</b></a> ($subs)";
 			} 
 			else 
 			{
