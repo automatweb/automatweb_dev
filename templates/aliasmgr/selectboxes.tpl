@@ -1,4 +1,4 @@
-<script type="text/javascript" src="{VAR:script}"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/selectboxes.js"></script>
 </script>
 
 <script LANGUAGE="JavaScript">
@@ -14,4 +14,6 @@ function init() {
 	}
 
 </script>
+
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/selectbox_selector.js"></script>
 
