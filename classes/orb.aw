@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.25 2002/11/11 14:03:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.26 2002/11/11 18:03:25 duke Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 class orb extends aw_template 
@@ -59,7 +59,8 @@ class orb extends aw_template
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
 		// requested.
-		$this->orb_class = $class;
+		// classload($class);
+//                $this->orb_class = new $class();
 
 		// action defineeritud?
 		if (!isset($action))
@@ -127,7 +128,7 @@ class orb extends aw_template
 				// loome õige objekti
 				$t = new $class;
 
-				$t->set_opt("orb_class",$this->orb_class);
+				$t->set_opt("orb_class",&$this->orb_class);
 
 				// reforbi funktsioon peab tagastama aadressi, kuhu edasi minna
 				$url = $t->$fname($vars);
@@ -206,7 +207,7 @@ class orb extends aw_template
 		{
 			$t = new $class;
 			// ja kutsume funktsiooni v2lja
-			$t->set_opt("orb_class",$this->orb_class);
+			$t->set_opt("orb_class",&$this->orb_class);
 			$fname = $fun["function"];
 			if (!method_exists($t,$fname))
 			{
@@ -445,6 +446,11 @@ class orb extends aw_template
 				$this->raise_error(ERR_ORB_NOTFOUND,sprintf(E_ORB_CLASS_NOT_FOUND,$class),$this->fatal,$this->silent);
 				bail_out();
 			}
+		};
+
+		if (!$this->orb_class)
+		{
+			$this->orb_class = new $class;
 		};
 		
 		// FIXME: we should cache that def instead of parsing xml every time
