@@ -1,7 +1,7 @@
 /*
  * AW install script
  * path to configuration file should probably come from command line
- * $Header: /home/cvs/automatweb_dev/scripts/install/Attic/install.c,v 1.1 2002/04/04 22:07:22 duke Exp $
+ * $Header: /home/cvs/automatweb_dev/scripts/install/Attic/install.c,v 1.2 2002/04/04 22:40:59 duke Exp $
  */
 #include <stdio.h>
 #include <string.h>
@@ -56,7 +56,6 @@ main(int argc, char **argv)
 		fclose(fpconfig);
 	};
 
-	sprintf(cmdline,"mysql -h %s -u %s --password=%s",mysql_host,mysql_user,mysql_pass);
 
 	// get the information from the client
 	printf("AW installer\n");
@@ -73,23 +72,82 @@ main(int argc, char **argv)
 	printf("default.pass: ");
 	scanf("%20s",default_pass);
 
+	// get the database dump
+	sprintf(cmdline,"mysqldump -d -h %s -u %s --password=%s samaw > /tmp/dump.tmp",mysql_host,mysql_user,mysql_pass);
+	printf("dumping samaw...\n");
+	printf("executing %s\n",cmdline);
+	system(cmdline);
+	printf("dump complete...\n");
+	
 	// now we want to connect to database and create the bloody table
+	sprintf(cmdline,"mysql -h %s -u %s --password=%s",mysql_host,mysql_user,mysql_pass);
 	printf("executing %s\n",cmdline);
 	if ((pmysql = popen(cmdline,"w")) == NULL)
 	{
 		printf("Can't open pipe to MySQL!\n");
+		// drop dead
 		return 1;
-	}
-	else
-	{
-		sprintf(myline,"CREATE DATABASE %s;\n",dbname);
-		fputs(myline,pmysql);
-
-		sprintf(myline,"GRANT ALL PRIVILEGES ON %s.* TO %s@%s IDENTIFIED BY '%s';\n",dbname,dbuser,mysql_client,dbpass);
-		fputs(myline,pmysql);
-		
-		pclose(pmysql);
 	};
-	printf("YIKES!\n");
+
+	sprintf(myline,"CREATE DATABASE %s;\n",dbname);
+	fputs(myline,pmysql);
+
+	sprintf(myline,"GRANT ALL PRIVILEGES ON %s.* TO %s@%s IDENTIFIED BY '%s';\n",dbname,dbuser,mysql_client,dbpass);
+	fputs(myline,pmysql);
+		
+	pclose(pmysql);
+
+	sprintf(cmdline,"mysql -h %s -u %s --password=%s %s< /tmp/dump.tmp",mysql_host,dbuser,dbpass,dbname);
+	printf("Importing database dump\n");
+	printf("Executing %s\n",cmdline);
+	system(cmdline);
+	unlink("/tmp/dump.tmp");
+	printf("Import done\n");
+
+	printf("Creating default entries\n");
+	sprintf(cmdline,"mysql -h %s -u %s --password=%s %s",mysql_host,dbuser,dbpass,dbname);
+	printf("executing %s\n",cmdline);
+	if ((pmysql = popen(cmdline,"w")) == NULL)
+	{
+		printf("Can't open pipe to MySQL!\n");
+		// drop dead
+		return 1;
+	};
+
+	sprintf(myline,"INSERT INTO users (uid,password) VALUES ('%s','%s');\n",default_user,default_pass);
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO groups (gid,name,type,priority) VALUES (1,'root user',1,100000000);\n");
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO groupmembers (gid,uid) values(1,'%s');\n",default_user);
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO groups (gid,name,type,priority) VALUES (2,'admins',0,1);\n");
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO groupmembers (gid,uid) VALUES (2,'%s');\n",default_user);
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO objects (oid,parent,name,class_id,status) VALUES (1,0,'root',1,2);\n");
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO objects (oid,parent,name,class_id,status) VALUES (2,1,'admins',37,2);\n");
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	sprintf(myline,"INSERT INTO acl VALUES(1,2,2,1);\n");
+	printf("Executing %s\n",myline);
+	fputs(myline,pmysql);
+	
+	pclose(pmysql);
+
+	printf("NICE ONE, BROTHA!!!!\n");
 	return 0;
 }
