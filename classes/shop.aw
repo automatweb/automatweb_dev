@@ -18,14 +18,13 @@ session_register("shopping_cart");
 define(ORD_FILLED,1);
 
 lc_load("shop");
-
-class shop extends aw_template
+classload("shop_base");
+class shop extends shop_base
 {
 	function shop()
 	{
-		$this->tpl_init("shop");
-		$this->sub_merge = 1;
-		$this->db_init();
+		$this->shop_base();
+		lc_site_load("shop",$this);
 	}
 
 	////
@@ -192,12 +191,12 @@ class shop extends aw_template
 	}
 
 	////
-	// !shows the shop $id on the suer side, items under category $parent
+	// !shows the shop $id on the user side, items under category $parent
 	function show($arr)
 	{
 		extract($arr);
 		$this->read_template("show_shop.tpl");
-	
+
 		if (!$id)
 		{
 			$id = $this->find_shop_id($section);
@@ -207,13 +206,18 @@ class shop extends aw_template
 		$section = $this->do_shop_menus($id,$section);
 
 		classload("form");
+		classload("item_type");
+		$ityp = new item_type;
+		$ityp->mk_cache();		// cacheme k6ik tyybid selle klassi sees, et p2rast ei peaks iga itemi kohta eraldi p2ringut tegema
 
 		$this->db_query("SELECT objects.brother_of as oid,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.brother_of WHERE parent = $section AND class_id = ".CL_SHOP_ITEM." AND status = 2");
 		while ($row = $this->db_next())
 		{
+			$itt = $ityp->get_item_type($row["type_id"]);
+
 			$f = new form;
 			$this->vars(array(
-				"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id"])),
+				"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["short_op"])),
 				"item_id" => $row["oid"],
 				"price" => $row["price"],
 				"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
@@ -268,8 +272,9 @@ class shop extends aw_template
 
 					// so, get the item
 					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
 					// load it's cnt_form
-					$f->load($it["cnt_form"]);
+					$f->load($itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 					$selrows = $this->get_selected_rows_in_form(&$f);
@@ -289,6 +294,7 @@ class shop extends aw_template
 					$this->vars(array(
 						"item_link" => $this->mk_my_orb("order_item", array("item_id" => $item_id, "shop" => $shop_id, "section" => $section)),
 						"name" => $ar["name"],
+						"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $it["entry_id"], "op_id" => $itt["cart_op"])),
 						"F_ROW" => $rowhtml
 					));
 					$this->parse("ITEM");
@@ -333,12 +339,13 @@ class shop extends aw_template
 				if ($ar["cnt"] > 0)
 				{
 					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
 
-					$old_entry = $f->get_entry($it["cnt_form"],$ar["cnt_entry"]);
+					$old_entry = $f->get_entry($itt["cnt_form"],$ar["cnt_entry"]);
 
 					// process the entry
 					$f->process_entry(array(
-						"id" => $it["cnt_form"],
+						"id" => $itt["cnt_form"],
 						"entry_id" => $ar["cnt_entry"],
 						"prefix" => "entry_".$ar["cnt_entry"]."_"
 					));
@@ -392,7 +399,7 @@ class shop extends aw_template
 							$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
 							session_register("status_msg");
 							// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-							$f->restore_entry($it["cnt_form"],$ar["cnt_entry"],$old_entry);
+							$f->restore_entry($itt["cnt_form"],$ar["cnt_entry"],$old_entry);
 							return $this->mk_my_orb("view_cart", array("shop_id" => $shop_id, "section" => $section));
 						}
 					}
@@ -406,7 +413,7 @@ class shop extends aw_template
 					{
 						// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
 						$f_kaup = new form;
-						$f_kaup->load($it["form_id"]);
+						$f_kaup->load($itt["form_id"]);
 						$f_kaup->load_entry($it["entry_id"]);
 
 						$els = $this->parse_eq_variables($it["price_eq"]);
@@ -537,9 +544,10 @@ class shop extends aw_template
 				{
 					// so, get the item
 					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
 
 					// load it's cnt_form
-					$f->load($it["cnt_form"]);
+					$f->load($itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 
@@ -742,6 +750,7 @@ class shop extends aw_template
 
 		classload("form");
 		$row = $this->get_item($item_id,true);
+		$itt = $this->get_item_type($row["type_id"]);
 
 		global $shopping_cart,$ext;
 
@@ -749,32 +758,19 @@ class shop extends aw_template
 		$parent = $this->do_shop_menus($shop,$section);
 		$f = new form;
 		$this->vars(array(
-			"item" => $f->show(array("id" => $row["form_id"], "entry_id" => $row["entry_id"],"op_id" => $row["op_id_l"])),
+			"item" => $f->show(array("id" => $itt["form_id"], "entry_id" => $row["entry_id"],"op_id" => $itt["long_op"])),
 			"item_id" => $row["oid"],
 			"price" => $row["price"],
 			"it_cnt"	=> $shopping_cart["items"][$row["oid"]]["cnt"],
 			"order_item" => $this->mk_my_orb("order_item", array("item_id" => $row["oid"], "shop" => $id, "section" => $parent)),
 			"cnt_form" => $f->gen_preview(array(
-												"id" => $row["cnt_form"],
+												"id" => $itt["cnt_form"],
 												"entry_id" => $shopping_cart["items"][$row["oid"]]["cnt_entry"],
 												"reforb" => $this->mk_reforb("submit_order_item", array("item_id" => $row["oid"], "shop" => $shop, "section" => $parent)),
 												"form_action" => "/index.".$ext)),
 			"cart" => $this->mk_my_orb("view_cart", array("shop_id" => $shop, "section" => $parent))
 		));
 		return $this->parse();
-	}
-
-	////
-	// !returns the shop item $id, if $check is true we detect if the object is a brother and revert to the real one
-	function get_item($id,$check = false)
-	{
-		if ($check)
-		{
-			$o = $this->get_object($id);
-			$id = $o["brother_of"];
-		}
-		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE id = $id");
-		return $this->db_next();
 	}
 
 	////
@@ -786,18 +782,18 @@ class shop extends aw_template
 		global $shopping_cart;
 	
 		$it = $this->get_item($item_id,true);
+		$itt = $this->get_item_type($it["type_id"]);
 
-		$old_entry = 
 		classload("form");
 		$f = new form;
 
 		if ($shopping_cart["items"][$item_id]["cnt_entry"])
 		{
-			$old_entry = $f->get_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
+			$old_entry = $f->get_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"]);
 		}
 
 		$f->process_entry(array(
-			"id" => $it["cnt_form"], 
+			"id" => $itt["cnt_form"], 
 			"entry_id" => $shopping_cart["items"][$item_id]["cnt_entry"]
 		));
 		$entry_id = $f->entry_id;
@@ -832,7 +828,7 @@ class shop extends aw_template
 				session_register("status_msg");
 
 				// before returning also restore the form entry
-				$f->restore_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				$f->restore_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
 				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
 			}
 			// right now just check this combination
@@ -868,7 +864,7 @@ class shop extends aw_template
 				$status_msg = E_SHOP_NO_FREE_ITEMS_DATE;
 				session_register("status_msg");
 				// kui ei old kyllalt kohti, siis rollime tellimuse sisestuse tagasi ka
-				$f->restore_entry($it["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
+				$f->restore_entry($itt["cnt_form"],$shopping_cart["items"][$item_id]["cnt_entry"],$old_entry);
 				return $this->mk_my_orb("order_item", array("item_id" => $item_id,"shop" => $shop, "section" => $section));
 			}
 			// ei broneeri asju tegelt 2ra, bronnime alles siis kui tyyp p2ris tellimuse teeb.
@@ -885,7 +881,7 @@ class shop extends aw_template
 		{
 			// parsime price_eq'st v2lja formi elementide nimed ja asendame need numbritega ja siis laseme evali()'i peale
 			$f_kaup = new form;
-			$f_kaup->load($it["form_id"]);
+			$f_kaup->load($itt["form_id"]);
 			$f_kaup->load_entry($it["entry_id"]);
 
 			$els = $this->parse_eq_variables($it["price_eq"]);
@@ -964,7 +960,7 @@ class shop extends aw_template
 				"when" => $this->time2date($row["tm"], 2),
 				"user" => $row["user"],
 				"ip" => $row["ip"],
-				"price" => $row["price"],
+				"price" => $row["t_price"],
 				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section)),
 				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section))
 			));
@@ -1035,8 +1031,9 @@ class shop extends aw_template
 
 					// so, get the item
 					$it = $this->get_item($item_id);
+					$itt = $this->get_item_type($it["type_id"]);
 					// load it's cnt_form
-					$f->load($it["cnt_form"]);
+					$f->load($itt["cnt_form"]);
 					// now find all the rows that are selected in the entry from the shopping cart
 					$f->load_entry($ar["cnt_entry"]);
 					$selrows = $this->get_selected_rows_in_form(&$f);

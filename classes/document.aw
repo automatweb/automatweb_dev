@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.21 2001/06/13 05:28:02 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -383,7 +383,7 @@ class document extends aw_template
 		$this->vars(array("imurl" => "/images/trans.gif"));
 
 		// load localization settings and put them in the template
-		lc_site_load("document");
+		lc_site_load("document",$this);
 		if (is_array($GLOBALS["lc_doc"]))
 		{
 			$this->vars($GLOBALS["lc_doc"]);

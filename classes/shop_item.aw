@@ -3,13 +3,12 @@
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
 
-class shop_item extends aw_template
+classload("shop_base");
+class shop_item extends shop_base
 {
 	function shop_item()
 	{
-		$this->tpl_init("shop");
-		$this->db_init();
-		$this->sub_merge = 1;
+		$this->shop_base();
 	}
 
 	////
@@ -21,35 +20,10 @@ class shop_item extends aw_template
 		if ($step < 2)
 		{
 			$this->read_template("add_item_form.tpl");
-			classload("form_base");
-			$fb = new form_base;
-
-			$op_list = $fb->get_op_list();
-
-			$fl = $fb->get_list(FTYPE_ENTRY);
-			reset($fl);
-			while (list($id,) = each($fl))
-			{
-				$this->vars(array("form_id" => $id));
-				if (is_array($op_list[$id]))
-				{
-					reset($op_list[$id]);
-					$cnt = 0;
-					$fop = "";
-					while (list($op_id,$op_name) = each($op_list[$id]))
-					{
-						$this->vars(array("cnt" => $cnt, "op_id" => $op_id, "op_name" => $op_name));
-						$fop.=$this->parse("FORM_OP");
-						$cnt++;
-					}
-					$this->vars(array("FORM_OP" => $fop));
-					$this->parse("FORM");
-				}
-			}
 
 			$this->vars(array(
 				"reforb" => $this->mk_reforb("new", array("parent" => $parent,"reforb" => 0,"step" => 2)),
-				"flist" => $this->picker(0,$fl)
+				"types" => $this->picker(0,$this->listall_item_types(FOR_SELECT))
 			));
 			return $this->parse();
 		}
@@ -63,11 +37,12 @@ class shop_item extends aw_template
 			classload("objects");
 			$o = new db_objects;
 
+			$itt = $this->get_item_type($type);
+
 			$this->vars(array( 
 				"item" => $f->gen_preview(array(
-										"id" => $form_id,
-										"reforb" => $this->mk_reforb("submit", 
-																	array("parent" => $parent, "fid" => $form_id,"op_id" => $op_id,"op_id_l" => $op_id_l,"cnt_form" => $cnt_form))
+										"id" => $itt["form_id"],
+										"reforb" => $this->mk_reforb("submit", array("parent" => $parent, "type" => $type))
 									)),
 				"menus" => $this->multiple_option_list(array(),$o->get_list())
 			));
@@ -85,22 +60,27 @@ class shop_item extends aw_template
 
 		if ($id)
 		{
-			$o = $this->get($id);
-			$f->process_entry(array("id" => $o["form_id"],"entry_id" => $o["entry_id"]));
+			$o = $this->get_item($id);
+			$itt = $this->get_item_type($o["type_id"]);
+
+			$f->process_entry(array("id" => $itt["form_id"],"entry_id" => $o["entry_id"]));
+			$eid = $f->entry_id;
 			// kui itemi nimi muutub, siis muutub vendadel ka
 			$name = $f->get_element_value_by_name("nimi");
 			$this->db_query("UPDATE objects SET name = '$name',modified = '".time()."', modifiedby = '".$GLOBALS["uid"]."' WHERE brother_of = $id ");
 			$price = $f->get_element_value_by_type("price");
-			$this->db_query("UPDATE shop_items SET price='$price' WHERE id = $id");
+			$this->db_query("UPDATE shop_items SET price='$price',entry_id = '$eid' WHERE id = $id");
 		}
 		else
 		{
-			$f->process_entry(array("id" => $fid));
+			$itt = $this->get_item_type($type);
+
+			$f->process_entry(array("id" => $itt["form_id"]));
 			$eid = $f->entry_id;
 
 			$id = $this->new_object(array("parent" => $parent, "class_id" => CL_SHOP_ITEM, "status" => 2, "name" => $f->get_element_value_by_name("nimi")));
 			$price = $f->get_element_value_by_type("price");
-			$this->db_query("INSERT INTO shop_items(id,form_id,entry_id,op_id,price,op_id_l,cnt_form) values($id,'$fid','$eid','$op_id','$price','$op_id_l','$cnt_form')");
+			$this->db_query("INSERT INTO shop_items(id,price,type_id,entry_id) values($id,'$price','$type','$eid')");
 
 			// now also set the item to be a brother of itself, so we can user brother_of for joining purposes l8r
 			$this->upd_object(array("oid" => $id, "brother_of" => $id));
@@ -113,10 +93,14 @@ class shop_item extends aw_template
 	function change($arr)
 	{
 		extract($arr);
-		$o = $this->get($id);
-		$id = $o["brother_of"];	// this is in case we clicked on a brother to change it, we must revert to the real object
-
-		$o = $this->get($id);
+		$o = $this->get_item($id);
+		if ($o["brother_of"] != $id)
+		{
+			$id = $o["brother_of"];	// this is in case we clicked on a brother to change it, we must revert to the real object
+			$o = $this->get_item($id);
+		}
+		
+		$itt = $this->get_item_type($o["type_id"]);
 
 		$this->mk_path($o["parent"],"Muuda kaupa");
 
@@ -136,7 +120,7 @@ class shop_item extends aw_template
 
 		$this->vars(array( 
 			"item" => $f->gen_preview(array(
-										"id" => $o["form_id"],
+										"id" => $itt["form_id"],
 										"entry_id" => $o["entry_id"],	
 										"reforb" => $this->mk_reforb("submit", array("id" => $id))
 								)),
@@ -149,7 +133,8 @@ class shop_item extends aw_template
 			"max_items" => $o["max_items"],
 			"has_period" => checked($o["has_period"]),
 			"has_objs" => checked($o["has_objs"]),
-			"price_eq" => $o["price_eq"]
+			"price_eq" => $o["price_eq"],
+			"types" => $this->picker($o["type_id"],$this->listall_item_types())
 		));
 		return $this->parse();
 	}
@@ -187,7 +172,7 @@ class shop_item extends aw_template
 	function submit_bros($arr)
 	{
 		extract($arr);
-		$o = $this->get($id);
+		$o = $this->get_item($id);
 		// ok so how do we do this? well. what if, for each brother of this, 
 		// we create a CL_SHOP_ITEM and set it's brother_of to point to this item
 		// let's try this shit.
@@ -245,18 +230,12 @@ class shop_item extends aw_template
 		return $this->mk_orb("change", array("id" => $id));
 	}
 
-	function get($id)
-	{
-		$this->db_query("SELECT objects.*,shop_items.* FROM objects LEFT JOIN shop_items ON shop_items.id = objects.oid WHERE objects.oid = $id");
-		return $this->db_next();
-	}
-
 	function submit_opts($arr)
 	{
 		extract($arr);
 
 		// siin peame tegema uued objektid ja v2rgid ka
-		$o = $this->get($id);
+		$o = $this->get_item($id);
 
 		if ($has_objs)
 		{
@@ -304,6 +283,11 @@ class shop_item extends aw_template
 		}
 
 		$this->db_query("UPDATE shop_items SET price='$price',has_max = '$has_max',max_items = '$max_items',has_period = '$has_period' , has_objs = '$has_objs' , price_eq = '$price_eq' WHERE id = $id");
+
+		if ($type != $o["type_id"])
+		{
+			$this->db_query("UPDATE shop_items SET type_id = '$type', entry_id = '', price = '' WHERE id = $id");
+		}
 
 		return $this->mk_orb("change", array("id" => $id));
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.21 2001/06/13 05:28:02 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -288,11 +288,7 @@ classload("cache","validator","defs");
 			}
 
 			// import language constants
-			lc_site_load("menuedit");
-			if (is_array($GLOBALS["lc_menuedit"]))
-			{
-				$this->vars($GLOBALS["lc_menuedit"]);
-			}
+			lc_site_load("menuedit",$this);
 
 			// get array with path of objects in it
 			$path = $this->get_path($section,$obj);
