@@ -1,24 +1,33 @@
 <?php
-// $Id: page.aw,v 1.4 2003/06/04 14:05:19 duke Exp $
+// $Id: page.aw,v 1.5 2003/12/03 11:01:06 duke Exp $
 // page.aw - Generic HTML page
 /*
 	@default table=objects
 	@default group=general
+	@default field=meta
+	@default method=serialize
+	@classinfo relationmgr=yes
 
-	@property background type=imgupload field=meta method=serialize
+	@property background type=relpicker reltype=RELTYPE_BACKGROUND_IMAGE 
 	@caption Taustapilt
 
-	@property bgcolor type=colorpicker field=meta method=serialize
+	@property bgcolor type=colorpicker 
 	@caption Tausta värv
 
-	@property margin type=textbox size=4 field=meta method=serialize
+	@property margin type=textbox size=4 
 	@caption Servade laius
 
-	@property defayltstyle type=objpicker clid=CL_STYLE field=meta method=serialize
+	@property defayltstyle type=relpicker reltype=RELTYPE_PAGESTYLE 
 	@caption Default stiil
 
-	@property preview type=text store=no
+	@property preview type=text store=no editonly=1
 	@caption Eelvaade
+
+	@reltype BACKGROUND_IMAGE value=1 clid=CL_IMAGE
+	@caption Taustapilt
+
+	@reltype PAGESTYLE value=2 clid=CL_STYLE
+	@caption Stiil
 
 */
 class page extends class_base
@@ -31,28 +40,28 @@ class page extends class_base
 		));
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		switch($data["name"])
 		{
 			case "preview":
-				classload("html");
-				$id = $args["obj"]["oid"];
-				if ($id)
-				{
-					$data["value"] = html::href(array("url" => $this->cfg["baseurl"] . "/orb.aw?class=page&action=show&id=$id","caption" => "Näita lehte","target" => "_blank"));
-				};
+				$id = $arr["obj_inst"]->id();
+				$data["value"] = html::href(array(
+					"url" => $this->cfg["baseurl"] . "/orb.aw?class=page&action=show&id=$id",
+					"caption" => "Näita lehte",
+					"target" => "_blank",
+				));
 
 		};
 	}
 
-	function show($args)
+	function show($arr)
 	{
-		extract($args);
+		extract($arr);
 		$this->read_template("basic.tpl");
-		$obj = $this->get_object($id);
-		if ($obj["class_id"] != CL_PAGE)
+		$obj = new object($id);
+		if ($obj->class_id() != CL_PAGE)
 		{
 			die("kõtt");
 		};
@@ -63,18 +72,15 @@ class page extends class_base
 		}
 		else
 		{
-			$content = $args["content"];
+			$content = $arr["content"];
 		};
 		$this->vars(array(
-			"margin" => (int)$obj["meta"]["margin"],
-			"bgcolor" => $obj["meta"]["bgcolor"],
+			"margin" => (int)$obj->prop("margin"),
+			"bgcolor" => $obj->prop("bgcolor"),
 			"content" => $content,
 		));
 		print $this->parse();
 		exit;
 	}
-	
-
-
 };
 ?>
