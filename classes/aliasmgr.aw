@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.167 2005/01/12 12:04:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.168 2005/03/14 17:27:28 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -579,7 +579,7 @@ class aliasmgr extends aw_template
 	{
 		extract($args);
 		$GLOBALS['site_title'] = "Seostehaldur | ".html::get_change_url($id, array(),"Objekti muutmine");
-		classload('icons');
+		classload('core/icons');
 
 		$obj = obj($id);
 		$this->id = $id;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.85 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.86 2005/03/14 17:27:28 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -331,7 +331,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		};
 
 
-		classload('icons');
+		classload('core/icons');
 		$this->db_rows = array();
 		// all the required fields and their default values
 		$defaults = array(
@@ -1861,7 +1861,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$this->cfg["baseurl"] = "http://".$serv;
 		}
 
-		get_instance("icons");
+		get_instance("core/icons");
 
 		$clss = aw_ini_get("classes");
 		while($row = $this->get_next())

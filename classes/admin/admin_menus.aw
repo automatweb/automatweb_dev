@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.95 2005/03/14 10:26:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.96 2005/03/14 17:27:28 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -373,7 +373,7 @@ class admin_menus extends aw_template
 		$p_o = obj($parent);
 		$mt = $p_o->prop("type");
 
-		$i = get_instance("icons");
+		$i = get_instance("core/icons");
 		reset($menus[$i_p]);
 		while (list(,$v) = each($menus[$i_p]))
 		{
@@ -914,7 +914,7 @@ class admin_menus extends aw_template
 			$this->acl_error("view", PRG_MENUEDIT);
 		}
 
-		get_instance("icons");
+		get_instance("core/icons");
 		aw_global_set("date","");
 
 		$lang_id = aw_global_get("lang_id");

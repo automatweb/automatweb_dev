@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.45 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.46 2005/03/14 17:27:28 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -682,7 +682,7 @@ class planner extends class_base
 	{
 		extract($args);
 
-		classload("icons");
+		classload("core/icons");
 		classload("date_calc");
 
 		$prj = get_instance(CL_PROJECT);
@@ -2117,7 +2117,7 @@ class planner extends class_base
 			"nowrap" => 1,
 		));
 		
-		get_instance("icons");
+		get_instance("core/icons");
 		
 		$user_inst = get_instance(CL_USER);		
 		foreach ($data->arr() as $result)

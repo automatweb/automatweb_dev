@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.22 2004/12/08 07:29:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_call.aw,v 1.23 2005/03/14 17:27:30 kristo Exp $
 // crm_call.aw - phone call
 /*
 
@@ -94,7 +94,7 @@ class crm_call extends class_base
 
 	function request_execute($obj)
 	{
-		classload("icons");
+		classload("core/icons");
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"name" => $obj->name(),

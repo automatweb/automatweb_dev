@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.73 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.74 2005/03/14 17:27:30 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1360,7 +1360,7 @@ class crm_person extends class_base
 
 		$return_url = urlencode(aw_global_get("REQUEST_URI"));
 		$planner = get_instance(CL_PLANNER);
-		classload("icons");
+		classload("core/icons");
 		$this->overview = array();
 
 		foreach($conns as $conn)

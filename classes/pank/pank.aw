@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.4 2004/07/27 11:20:45 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.5 2005/03/14 17:27:30 kristo Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -359,7 +359,7 @@ class pank extends class_base
 			$conns = $obj->connections_from(array(
 							'type' => RELTYPE_PROJECT
 			));
-			classload('icons');
+			classload('core/icons');
 			foreach($conns as $conn)
 			{
 				$tree_node_info = array(
@@ -392,7 +392,7 @@ class pank extends class_base
 			$conns = $obj->connections_from(array(
 							'type' => RELTYPE_PRJ_EVENT
 			));
-			classload('icons');
+			classload('core/icons');
 			foreach($conns as $conn)
 			{
 				$tree_node_info = array(
@@ -421,7 +421,7 @@ class pank extends class_base
 							'type' => 10, //crm_person.reltype_person_task
 			));
 
-			classload('icons');
+			classload('core/icons');
 			foreach($conns as $conn)
 			{
 				$tree_node_info = array(
@@ -448,7 +448,7 @@ class pank extends class_base
 			$company = get_instance(CL_CRM_COMPANY);
 			$companies = array();
 			$company->get_customers_for_company($obj, &$companies);
-			classload('icons');
+			classload('core/icons');
 			foreach($companies as $key=>$value)
 			{
 				$obj = new object($value);

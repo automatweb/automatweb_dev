@@ -2029,7 +2029,7 @@ class crm_company extends class_base
 		}
 		
 		$this->overview = array();
-		classload("icons");
+		classload("core/icons");
 
 		foreach($evts as $obj_id)
 		{
@@ -4154,7 +4154,7 @@ class crm_company extends class_base
 	
 	function do_offers_listing_tree($arr)
 	{
-		get_instance("icons");
+		get_instance("core/icons");
 
 		// list all child rels
 		$parents = array();
@@ -4435,7 +4435,7 @@ class crm_company extends class_base
 	
 	function do_objects_listing_tree($arr)
 	{
-		classload("icons");
+		classload("core/icons");
 		$tree = &$arr["prop"]["vcl_inst"];
 		$ot = new object_tree(array(
     		"parent" => $arr["obj_inst"]->id(),
@@ -4517,7 +4517,7 @@ class crm_company extends class_base
 		
 		$table = &$arr["prop"]["vcl_inst"];
 		
-		get_instance("icons");
+		get_instance("core/icons");
 		foreach ($ol->arr() as $item)
 		{
 			$table->define_data(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.1 2004/12/09 14:31:21 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_help.aw,v 1.2 2005/03/14 17:27:29 kristo Exp $
 // aw_help.aw - Abitekst 
 /*
 
@@ -475,7 +475,7 @@ class aw_help extends class_base
 		
 		foreach (aw_ini_get("classes") as $key => $node)
 		{
-			get_instance("icons");
+			get_instance("core/icons");
 			$tree->add_item($node["parents"],array(
 				"id" => 10000 + $key,
     			"name" => $node["name"],

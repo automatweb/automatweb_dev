@@ -1,6 +1,6 @@
 <?php
 // cal_event.aw - Kalendri event
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.11 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_event.aw,v 1.12 2005/03/14 17:27:29 kristo Exp $
 
 /*
 	@default table=objects
@@ -96,7 +96,7 @@ class cal_event extends class_base
 	// !Fills the event editing form with data
 	function _fill_event_form($args = array())
 	{
-		classload('icons');
+		classload('core/icons');
 		load_vcl("date_edit");
 		$start = new date_edit("start");
 		$start->configure(array("day" => 1,"month" => 2,"year" => 3));

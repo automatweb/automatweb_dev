@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.14 2005/03/02 13:11:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.15 2005/03/14 17:27:29 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -207,7 +207,7 @@ class recycle_bin extends class_base
 	{	
 		$classes = aw_ini_get("classes");
 		
-		get_instance("icons");
+		get_instance("core/icons");
 
 		$paths = $this->_get_paths($rows);
 		

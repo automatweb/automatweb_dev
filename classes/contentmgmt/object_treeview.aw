@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.43 2005/03/10 12:49:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.44 2005/03/14 17:27:29 kristo Exp $
 
 /*
 
@@ -275,7 +275,7 @@ class object_treeview extends class_base
 			{
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
-			classload("icons", "image");
+			classload("core/icons", "image");
 			$act = "";
 			if ($this->can("edit", $od->id()))
 			{
@@ -651,7 +651,7 @@ class object_treeview extends class_base
 			return;
 		}
 
-		classload("icons");
+		classload("core/icons");
 		// use treeview widget
 		$tv = get_instance("vcl/treeview");
 		$tv->start_tree(array(

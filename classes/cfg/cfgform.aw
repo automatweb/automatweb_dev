@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.55 2005/03/03 12:57:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.56 2005/03/14 17:27:29 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -153,7 +153,7 @@ class cfgform extends class_base
 				break;
 
 			case "ctype":
-				classload("icons");
+				classload("core/icons");
 				$iu = html::img(array(
 					"url" => icons::get_icon_url($arr["obj_inst"]->prop("subclass"),""),
 				));

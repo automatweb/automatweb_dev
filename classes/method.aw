@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.4 2004/09/20 14:45:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/method.aw,v 1.5 2005/03/14 17:27:28 kristo Exp $
 // method.aw - Klassi meetod
 /*
 
@@ -75,7 +75,7 @@ class method extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				classload("icons");
+				classload("core/icons");
 				$iu = html::img(array(
 					"url" => icons::get_icon_url($prp,""),
 				));

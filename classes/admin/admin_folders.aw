@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.38 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.39 2005/03/14 17:27:28 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -82,7 +82,7 @@ class admin_folders extends aw_template
 		$arr = array();
 		$mpr = array();
 
-		get_instance("icons");
+		get_instance("core/icons");
 	
 		// x_mpr is used to store items for which we have no view access
 		$this->x_mpr = array();
@@ -363,11 +363,6 @@ class admin_folders extends aw_template
 			$iconurl = icons::get_icon_url("brother","");
 		}
 		else
-		if ($arr["icon_id"] > 0)
-		{
-			$iconurl = $baseurl . "/automatweb/icon.${ext}?id=" . $arr["icon_id"];
-		}
-		else
 		if ($arr["admin_feature"] > 0)
 		{
 			$iconurl = icons::get_feature_icon_url($arr["admin_feature"]);
@@ -522,7 +517,7 @@ class admin_folders extends aw_template
 			}
 			else
 			{
-				$iconurl = !empty($row["icon_id"]) ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? icons::get_feature_icon_url($row["admin_feature"]) : "");
+				$iconurl = $row["admin_feature"] ? icons::get_feature_icon_url($row["admin_feature"]) : "";
 			}
 
 			// as far as I know, this works everywhere
@@ -586,10 +581,6 @@ class admin_folders extends aw_template
 					if ($row["class_id"] == CL_BROTHER)
 					{
 						$url = icons::get_icon_url("brother","");
-					}
-					else
-					{
-						$url = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : "";
 					}
 					$this->vars(array(
 						"name" => $row["name"],

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.123 2005/02/21 08:57:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.124 2005/03/14 17:27:28 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -412,26 +412,16 @@ class menu extends class_base
 					));
 				}
 				else
-				if ($ob->prop("icon_id"))
+				if ($ob->prop("admin_feature"))
 				{
+					classload("core/icons");
 					$icon = html::img(array(
-						"url" => "${baseurl}/automatweb/icon.${ext}?id=".$ob->id(),
+						"url" => icons::get_feature_icon_url($ob->prop("admin_feature")),
 					));
 				}
 				else
 				{
-					$m = get_instance("menuedit");
-					if ($ob->prop("admin_feature"))
-					{
-						classload("icons");
-						$icon = html::img(array(
-							"url" => icons::get_feature_icon_url($ob->prop("admin_feature")),
-						));
-					}
-					else
-					{
-						$icon = t("(no icon set)");
-					};
+					$icon = t("(no icon set)");
 				};
 				$data["value"] = $icon;
 				break;

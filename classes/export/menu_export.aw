@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.3 2004/12/02 09:04:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.4 2005/03/14 17:27:30 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -19,8 +19,6 @@ class menu_export
 			return;
 		}
 
-		$i = get_instance("icons");
-		
 		$menus = array("0" => $id);
 
 		// ok. now we gotta figure out which menus the user wants to export. 
@@ -56,7 +54,7 @@ class menu_export
 			{
 				$row["status"] = 2;
 			}
-			$this->append_exp_arr($row,&$menus,$ex_icons,$i);
+			$this->append_exp_arr($row,&$menus,$ex_icons);
 		}
 
 		if ($ret_data)
@@ -72,29 +70,10 @@ class menu_export
 		die();
 	}
 
-	function append_exp_arr($db, $menus,$ex_icons,&$i)
+	function append_exp_arr($db, $menus,$ex_icons)
 	{
 		$ret = array();
 		$ret["db"] = $db;
-		/*if ($ex_icons)
-		{
-			$icon = -1;
-			// admin_feature icon takes precedence over menu's icon. so include just that.
-			if ($db["admin_feature"] > 0)
-			{
-				$icon = $this->m->pr_icons[$db["admin_feature"]]["id"];
-				if ($icon)
-				{
-					$icon = $i->get($icon);
-				}
-			}
-			else
-			if ($db["icon_id"] > 0)
-			{
-				$icon = $i->get($db["icon_id"]);
-			}
-			$ret["icon"] = $icon;
-		}*/
 		$menus[$db["parent"]][] = $ret;
 	}
 

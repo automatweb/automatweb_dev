@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.25 2005/03/08 14:33:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.26 2005/03/14 17:27:29 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -240,7 +240,7 @@ class otv_ds_obj extends class_base
 		$sub = $ob->meta("include_submenus");
 		$igns = $ob->meta("ignoreself");
 
-		classload("icons", "image");
+		classload("core/icons", "image");
 
 
 		$opts = array();
@@ -509,7 +509,7 @@ class otv_ds_obj extends class_base
 		$fields = $this->get_fields($ob, true);
 
 		$ret = array();
-		classload("icons", "image");
+		classload("core/icons", "image");
 		for($t = $ol->begin(); !$ol->end(); $t = $ol->next())
 		{
 			$url = $target = $fileSizeBytes = $fileSizeKBytes = $fileSizeMBytes = "";

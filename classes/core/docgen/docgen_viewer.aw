@@ -3,7 +3,7 @@
 /** aw code analyzer viewer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_viewer.aw,v 1.19 2005/03/02 13:11:37 kristo Exp $
+	@cvs $Id: docgen_viewer.aw,v 1.20 2005/03/14 17:27:29 kristo Exp $
 
 	@comment 
 		displays the data that the docgen analyzer generates
@@ -109,7 +109,7 @@ class docgen_viewer extends class_base
 			- terryf.
 		*/
 
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clf_tree($tv, $this->cfg["classdir"]);
 
 		$this->vars(array(
@@ -649,7 +649,7 @@ class docgen_viewer extends class_base
 		));
 
 		$this->basedir = $this->cfg["basedir"]."/docs/classes";
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/cons");
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
 		return $tv->finalize_tree(array(
@@ -718,7 +718,7 @@ class docgen_viewer extends class_base
 		));
 
 		$this->basedir = $this->cfg["basedir"]."/docs/tutorials";
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clfdoc_tree($tv, $this->basedir);
 
 		return $tv->finalize_tree(array(
@@ -990,7 +990,7 @@ class docgen_viewer extends class_base
 			"url_target" => "list"
 		));
 
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 		
 		$this->_req_mk_prop_tree(array(
 						'id' => $arr['id'],
@@ -1060,7 +1060,7 @@ class docgen_viewer extends class_base
 			"url_target" => "list"
 		));
 
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clf_doc_tree($tv, $this->cfg["classdir"]);
 
 		$this->vars(array(
@@ -1175,7 +1175,7 @@ class docgen_viewer extends class_base
 			$api_files[$fp] = $fp;
 		}
 
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 		$this->_req_mk_clf_api_tree($tv, $this->cfg["classdir"], $api_files);
 
 		$this->vars(array(

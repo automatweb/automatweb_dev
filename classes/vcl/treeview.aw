@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.42 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.43 2005/03/14 17:27:30 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -124,7 +124,7 @@ class treeview extends class_base
 
 		// listib koik menyyd ja paigutab need arraysse
 
-		$this->ic = get_instance("icons");
+		$this->ic = get_instance("core/icons");
 
 
 		// objektipuu
@@ -1156,7 +1156,7 @@ class treeview extends class_base
 			));
 		}
 
-		$ic = get_instance("icons");
+		$ic = get_instance("core/icons");
 
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())

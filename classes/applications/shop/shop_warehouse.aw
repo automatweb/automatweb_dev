@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.24 2005/03/10 14:10:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.25 2005/03/14 17:27:29 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -621,7 +621,7 @@ class shop_warehouse extends class_base
 			));
 		}
 
-		classload("icons");
+		classload("core/icons");
 
 		$ol = $ot->to_list();
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())

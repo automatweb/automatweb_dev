@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.3 2005/01/27 21:23:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.4 2005/03/14 17:27:28 kristo Exp $
 
 /*
 @default group=search
@@ -262,7 +262,7 @@ class search_v2 extends class_base
 			"caption" => t("Vali"),
 		));
 
-		classload("icons");
+		classload("core/icons");
 
 		if ($this->do_search)
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.20 2005/03/08 13:29:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.21 2005/03/14 17:27:29 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -199,7 +199,7 @@ class otv_ds_postipoiss extends class_base
 		return $ret;
 
 /*		enter_function("otv_ds_postipoiss::get_objects");
-		classload("icons", "image");
+		classload("core/icons", "image");
 		$xml_fld = $o->prop("xml_fld");
 		$cache_fld = $this->cfg["site_basedir"]."/pagecache/otv_ds_pp";
 		if (!is_dir($cache_fld))
@@ -603,7 +603,7 @@ class otv_ds_postipoiss extends class_base
 	function do_update_ds($o)
 	{
 		set_time_limit(0);
-		classload("icons", "image");
+		classload("core/icons", "image");
 		$xml_fld = $o->prop("xml_fld");
 
 		$dc = $this->get_directory(array(

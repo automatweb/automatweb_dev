@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.102 2005/03/02 13:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.103 2005/03/14 17:27:28 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -96,7 +96,7 @@ class file extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
-				classload("icons");
+				classload("core/icons");
 
 				$fname = basename($arr["obj_inst"]->prop("file"));
 
@@ -373,7 +373,7 @@ class file extends class_base
 				$url = $this->get_url($alias["target"],$fi["name"]);
 			};
 
-			classload("icons");
+			classload("core/icons");
 			$icon = icons::get_icon_url(CL_FILE,$fi["name"]);
 
 			if ($tpls["file_inplace"] != "")

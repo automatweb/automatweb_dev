@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.62 2005/03/08 14:36:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.63 2005/03/14 17:27:29 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1174,7 +1174,7 @@ class object_treeview_v2 extends class_base
 				return $table->draw();
 				break;
 			case "TREE_DHTML":
-				classload("icons");
+				classload("core/icons");
 				// use treeview widget
 				$tv = get_instance("vcl/treeview");
 				$tv->start_tree(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.41 2005/03/14 09:53:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.42 2005/03/14 17:27:30 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2241,7 +2241,7 @@ class mrp_workspace extends class_base
 		}
 
 		$t =& $arr["prop"]["vcl_inst"];
-		classload("icons");
+		classload("core/icons");
 
 		foreach($co->connections_from(array("type" => "RELTYPE_CATEGORY")) as $c)
 		{

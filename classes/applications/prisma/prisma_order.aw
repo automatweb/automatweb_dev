@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.10 2004/12/01 14:03:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/prisma/Attic/prisma_order.aw,v 1.11 2005/03/14 17:27:29 kristo Exp $
 // prisma_order.aw - Printali Tr&uuml;kis 
 /*
 
@@ -244,7 +244,7 @@ class prisma_order extends class_base
 
 		$start = $range["start"];
 		$end = $range["end"];
-		classload("icons");
+		classload("core/icons");
 
 		$this->overview = array();
 
