@@ -102,9 +102,9 @@ class aw_mime_types
 
 	function type_for_ext($ext)
 	{
-		foreach($this->type2ext as $type => $ext)
+		foreach($this->type2ext as $type => $_ext)
 		{
-			if (in_array($ext, explode(",", $ext)))
+			if (in_array($ext, explode(",", $_ext)))
 			{
 				return $type;
 			}
@@ -114,6 +114,7 @@ class aw_mime_types
 
 	function type_for_file($file)
 	{
+		$file = strtolower($file);
 		$dotpos = strrpos($file,".");
 		$ext = substr($file, $dotpos);
 		return $this->type_for_ext($ext);
