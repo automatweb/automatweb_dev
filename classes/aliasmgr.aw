@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.145 2004/04/06 15:17:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.146 2004/04/12 14:10:47 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -663,6 +663,10 @@ class aliasmgr extends aw_template
 			if ($reltype_id == 0)
 			{
 				list($astr) = explode(",",$classes[$aclid]["alias"]);
+				if ($astr == "")
+				{
+					list($astr) = explode(",",$classes[$aclid]["old_alias"]);
+				}
 				$astr = sprintf("#%s%d#",$astr,$alias->prop("idx"));
 				$adat["alias"] = sprintf("<input type='text' size='10' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			};
