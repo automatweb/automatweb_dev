@@ -463,9 +463,9 @@ function toggle_year()
 <!-- repeat types -->
 <tr>
 <td colspan="3" valign="top" class="reptext">
-<input type="radio" name="rep" value="1" checked>Korda, kuni teisiti öeldakse (forever)<br>
-<input type="radio" name="rep" value="2">Reserveeri<input type="text" class="repform" value="6" name="repeats" size="2"> järjestikust aega<br>
-<input type="radio" name="rep" value="3">Kuni
+<input type="radio" name="rep" value="1" {VAR:rep1_checked}>Korda, kuni teisiti öeldakse (forever)<br>
+<input type="radio" name="rep" value="2" {VAR:rep2_checked}>Reserveeri<input type="text" class="repform" value="{VAR:repeats}" name="repeats" size="2"> järjestikust aega<br>
+<input type="radio" name="rep" value="3" {VAR:rep3_checked}>Kuni
 {VAR:repend}
 </td>
 </tr>
