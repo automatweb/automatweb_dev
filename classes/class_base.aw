@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.259 2004/04/26 10:23:20 duke Exp $
+// $Id: class_base.aw,v 2.260 2004/04/26 10:48:35 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1860,32 +1860,6 @@ class class_base extends aw_template
 				}
 			}
 			*/
-			elseif ($val["type"] == "releditor")
-			{
-				if (!is_object($val["vcl_inst"]))
-				{
-					classload("vcl/releditor");
-					$val["vcl_inst"] = new releditor();
-				};
-				$argblock["prop"] = &$val;
-				$target_reltype = @constant($val["reltype"]);
-				$argblock["prop"]["reltype"] = $target_reltype;
-				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
-				
-				// init_rel_editor returns an array of properties to be embbeded
-				$relres = $val["vcl_inst"]->init_rel_editor($argblock);
-
-				if (is_array($relres))
-				{
-					foreach($relres as $rkey => $rval)
-					{
-						$this->convert_element(&$rval);
-						$resprops[$rkey] = $rval;
-					};
-				};
-
-
-			}
 			elseif ($val["type"] == "form")
 			{
 				// I need a list of those bloody properties, eh?
@@ -2110,6 +2084,36 @@ class class_base extends aw_template
 			}
 			else
 			{
+			
+				if ($val["type"] == "releditor")
+				{
+					if (!is_object($val["vcl_inst"]))
+					{
+						classload("vcl/releditor");
+						$val["vcl_inst"] = new releditor();
+					};
+
+					$argblock["prop"] = &$val;
+					$target_reltype = @constant($val["reltype"]);
+					$argblock["prop"]["reltype"] = $target_reltype;
+					$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
+					
+					// init_rel_editor returns an array of properties to be embbeded
+					$relres = $val["vcl_inst"]->init_rel_editor($argblock);
+
+					if (is_array($relres))
+					{
+						foreach($relres as $rkey => $rval)
+						{
+							$this->convert_element(&$rval);
+							$resprops[$rkey] = $rval;
+						};
+					};
+					continue;
+
+
+				}
+
 				if ($val["type"] == "toolbar")
 				{
 					if ($this->layout_mode == "fixed_toolbar")
