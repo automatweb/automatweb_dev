@@ -22,7 +22,7 @@
 // Definition of class Folder 
 // ***************************************************************** 
  
-function Folder(folderDescription, hreference) //constructor 
+function Folder(folderDescription, hreference, icon) //constructor 
 { 
   //constant data 
   this.desc = folderDescription 
@@ -35,7 +35,8 @@ function Folder(folderDescription, hreference) //constructor
  
   //dynamic data 
   this.isOpen = true 
-  this.iconSrc = "ftv2folderopen.gif"   
+  //this.iconSrc = "images/ftv2folderopen.gif"   
+  this.iconSrc = icon;  
   this.children = new Array 
   this.nChildren = 0 
  
@@ -77,14 +78,14 @@ function initializeFolder(level, lastNode, leftSide)
   if (level>0) 
     if (lastNode) //the last child in the children array 
     { 
-      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='ftv2mlastnode.gif' width=16 height=22 border=0></a>") 
-      leftSide = leftSide + "<img src='ftv2blank.gif' width=16 height=22>"  
+      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='images/ftv2mlastnode.gif' width=16 height=22 border=0></a>") 
+      leftSide = leftSide + "<img src='images/ftv2blank.gif' width=16 height=22>"  
       this.isLastNode = 1 
     } 
     else 
     { 
-      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='ftv2mnode.gif' width=16 height=22 border=0></a>") 
-      leftSide = leftSide + "<img src='ftv2vertline.gif' width=16 height=22>" 
+      this.renderOb(leftSide + auxEv + "<img name='nodeIcon" + this.id + "' id='nodeIcon" + this.id + "' src='images/ftv2mnode.gif' width=16 height=22 border=0></a>") 
+      leftSide = leftSide + "<img src='images/ftv2vertline.gif' width=16 height=22>" 
       this.isLastNode = 0 
     } 
   else 
@@ -136,10 +137,11 @@ function propagateChangesInState(folder)
   { 
     if (folder.nodeImg) 
       if (folder.isLastNode) 
-        folder.nodeImg.src = "ftv2mlastnode.gif" 
+        folder.nodeImg.src = "images/ftv2mlastnode.gif" 
       else 
-	    folder.nodeImg.src = "ftv2mnode.gif" 
-    folder.iconImg.src = "ftv2folderopen.gif" 
+	    folder.nodeImg.src = "images/ftv2mnode.gif" 
+    //folder.iconImg.src = "images/ftv2folderopen.gif" 
+    folder.iconImg.src = folder.iconSrc;
     for (i=0; i<folder.nChildren; i++) 
       folder.children[i].mostra() 
   } 
@@ -147,10 +149,11 @@ function propagateChangesInState(folder)
   { 
     if (folder.nodeImg) 
       if (folder.isLastNode) 
-        folder.nodeImg.src = "ftv2plastnode.gif" 
+        folder.nodeImg.src = "images/ftv2plastnode.gif" 
       else 
-	    folder.nodeImg.src = "ftv2pnode.gif" 
-    folder.iconImg.src = "ftv2folderclosed.gif"
+	    folder.nodeImg.src = "images/ftv2pnode.gif" 
+    //folder.iconImg.src = "images/ftv2folderclosed.gif"
+    folder.iconImg.src = folder.iconSrc;
     for (i=0; i<folder.nChildren; i++) 
       folder.children[i].esconde() 
   }  
@@ -174,18 +177,21 @@ function drawFolder(leftSide)
 
   this.blockStart("folder")
 
-  doc.write("<tr><td>") 
+  doc.write("<tr><td bgcolor='#a0a0a0' class='fgtext_bad'>") 
   doc.write(leftSide) 
   this.outputLink() 
   doc.write("<img id='folderIcon" + this.id + "' name='folderIcon" + this.id + "' src='" + this.iconSrc+"' border=0></a>") 
-  doc.write("</td><td valign=middle nowrap>") 
+  doc.write("</td><td valign=middle nowrap class='fgtext_bad'>") 
+  url = "parent.frames[\"list\"].location.href=\""+this.hreference+ "\";return false;";
+  onclick = "onClick='"+url+"'";
+  doc.write("<a href='#' "+onclick+">"+this.desc + "</a>");
   if (USETEXTLINKS) 
   { 
-    this.outputLink() 
-    doc.write(this.desc + "</a>") 
+    //this.outputLink() 
+    //doc.write(this.desc + "</a>") 
   } 
   else 
-    doc.write(this.desc) 
+    //doc.write(this.desc) 
   doc.write("</td>")  
 
   this.blockEnd()
@@ -244,7 +250,7 @@ function folderSubEntries()
 // Definition of class Item (a document or link inside a Folder) 
 // ************************************************************* 
  
-function Item(itemDescription, itemLink) // Constructor 
+function Item(itemDescription, itemLink, icon) // Constructor 
 { 
   // constant data 
   this.desc = itemDescription 
@@ -252,7 +258,7 @@ function Item(itemDescription, itemLink) // Constructor
   this.id = -1 //initialized in initalize() 
   this.navObj = 0 //initialized in render() 
   this.iconImg = 0 //initialized in render() 
-  this.iconSrc = "ftv2doc.gif" 
+  this.iconSrc = icon; 
  
   // methods 
   this.initialize = initializeItem 
@@ -272,13 +278,13 @@ function initializeItem(level, lastNode, leftSide)
   if (level>0) 
     if (lastNode) //the last 'brother' in the children array 
     { 
-      this.renderOb(leftSide + "<img src='ftv2lastnode.gif' width=16 height=22>") 
-      leftSide = leftSide + "<img src='ftv2blank.gif' width=16 height=22>"  
+      this.renderOb(leftSide + "<img src='images/ftv2lastnode.gif' width=16 height=22>") 
+      leftSide = leftSide + "<img src='images/ftv2blank.gif' width=16 height=22>"  
     } 
     else 
     { 
-      this.renderOb(leftSide + "<img src='ftv2node.gif' width=16 height=22>") 
-      leftSide = leftSide + "<img src='ftv2vertline.gif' width=16 height=22>" 
+      this.renderOb(leftSide + "<img src='images/ftv2node.gif' width=16 height=22>") 
+      leftSide = leftSide + "<img src='images/ftv2vertline.gif' width=16 height=22>" 
     } 
   else 
     this.renderOb("")   
@@ -287,16 +293,20 @@ function initializeItem(level, lastNode, leftSide)
 function drawItem(leftSide) 
 { 
   this.blockStart("item")
+  url = "parent.frames[\"list\"].location.href=\""+this.link+ "\";return false;";
+  onclick = "onClick='"+url+"'";
 
-  doc.write("<tr><td>") 
+  doc.write("<tr><td class='fgtext_bad'>") 
   doc.write(leftSide) 
-  doc.write("<a href=" + this.link + ">") 
+  //doc.write("<a href=" + this.link + ">") 
+  doc.write("<a href='"+this.link+"' "+onclick+" target='list'>")
   doc.write("<img id='itemIcon"+this.id+"' ") 
   doc.write("src='"+this.iconSrc+"' border=0>") 
   doc.write("</a>") 
-  doc.write("</td><td valign=middle nowrap>") 
+  doc.write("</td><td valign=middle nowrap class='fgtext_bad'>") 
   if (USETEXTLINKS) 
-    doc.write("<a href=" + this.link + ">" + this.desc + "</a>") 
+     doc.write("<a href='#' "+onclick+" >" + this.desc + "</a>")
+    //doc.write("<a href=" + this.link + ">" + this.desc + "</a>") 
   else 
     doc.write(this.desc) 
 
@@ -321,11 +331,11 @@ function drawItem(leftSide)
  
 function mostra() 
 { 
-  if (browserVersion == 1 || browserVersion == 3) { 
-     var str = new String(doc.links[0])
-     if (str.slice(16,20) != "ins.")
-	    return
-  }
+  //if (browserVersion == 1 || browserVersion == 3) { 
+  //   var str = new String(doc.links[0])
+  //   if (str.slice(16,20) != "ins.")
+//	    return
+//  }
 
   if (browserVersion == 1 || browserVersion == 3) 
     this.navObj.style.display = "block" 
@@ -424,13 +434,13 @@ function clickOnNode(folderId)
 // Auxiliary Functions for Folder-Tree backward compatibility 
 // *********************************************************** 
  
-function gFld(description, hreference) 
+function gFld(description, hreference, icon) 
 { 
-  folder = new Folder(description, hreference) 
+  folder = new Folder(description, hreference, icon) 
   return folder 
 } 
  
-function gLnk(target, description, linkData) 
+function gLnk(target, description, linkData, icon) 
 { 
   fullLink = "" 
  
@@ -446,7 +456,8 @@ function gLnk(target, description, linkData)
        fullLink = "'http://"+linkData+"' target=\"basefrm\"" 
   } 
  
-  linkItem = new Item(description, fullLink)   
+  linkItem = new Item(description, linkData,icon)   
+  //linkItem = new Item(description, fullLink,icon)   
   return linkItem 
 } 
  
