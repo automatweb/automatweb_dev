@@ -258,7 +258,7 @@ class form_controller extends form_base
 					{
 						$val = "\"".str_replace("\"","\\\"",$val)."\"";
 					}
-					echo "replace '$var' with '$val' <Br>";
+	//				echo "replace '$var' with '$val' <Br>";
 					$eq = str_replace("[".$var."]",$val,$eq);
 				}
 			}
