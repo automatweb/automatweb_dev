@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.9 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.10 2003/08/27 11:56:08 kristo Exp $
 // sitemap.aw - Site Map
 
 // DEPRECATED - duke's new menu tree showing class deprecates this one. 
@@ -99,7 +99,7 @@ class sitemap extends aw_template
 function __sm_sorter($a, $b) 
 {   
 	if ($a["jrk"] == $b["jrk"]) return 0;
-  return ($a["jrk"] < $b["jrk"]) ? -1 : 1;
+	return ($a["jrk"] < $b["jrk"]) ? -1 : 1;
 }
 
 
