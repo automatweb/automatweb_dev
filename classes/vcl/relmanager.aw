@@ -71,18 +71,26 @@ class relmanager extends aw_template
 				$this->t->define_field(array(
 					"name" => $item["name"],
 					"caption" => $item["caption"],
-					"sortable" => 1,
+					//"sortable" => 1,
 				));
+
+				$xproplist[$item["name"]] = $item;
 			};
 		};
 
 		// ------------
 		
 
+		// file klassis sisaldab vastav valitud omadus faili raw nime
+		// mul aga on vaja objekti nime
 		foreach($conns as $conn)
 		{
 			$to_o = $conn->to();
 			$to_prop = $to_o->properties();
+			if ($to_o->class_id() == CL_FILE)
+			{
+				$to_prop["file"] = $to_prop["name"];
+			};
 			$to_prop["chooser"] = html::radiobutton(array(
 				"name" => $prop["name"],
 				"value" => $to_o->id(),
@@ -98,17 +106,7 @@ class relmanager extends aw_template
 
 		$prefix = "cb_emb[" . $prop["name"] . "][new]";
 		
-		// I also need the class name, and action name .. reforb I can add myself yees?
-		// and then I also need parent. And that should do it then.
-
-		// aha put the point is that I do not need it!
-
-		// I need to retain the current name of the thing so that I can store the value.
-		// xmail needs to have the value of the setting .. otherwise it gets 
-		// much too complicated. So how do I get it work. How do I make saving to work?
-
-		// how do I get saving to work?
-		// that translates into getting 
+		// this has to be optional, I might now want any "Uus" captions
 		$addline = array(
 			"chooser" => html::hidden(array(
 				"name" => $prefix . "[parent]",
@@ -117,11 +115,27 @@ class relmanager extends aw_template
 			)) . " Uus ",
 		);
 
+		// this _NEEDS_ to be done differently .. like for example
+		// with widgets or something .. urk.
+
 		foreach($proplist as $propitem)
 		{
-			$addline[$propitem] = html::textbox(array(
-					"name" => $prefix . "[" . $propitem . "]",
-			));
+			$type = $xproplist[$propitem]["type"];
+			switch($type)
+			{
+				case "fileupload":
+					$widget = html::fileupload(array(
+						"name" => $prefix . "[" . $propitem . "]",
+					));
+					break;
+
+				default:
+					$widget = html::textbox(array(
+						"name" => $prefix . "[" . $propitem . "]",
+					));
+					break;
+			};
+			$addline[$propitem] = $widget;
 		};
 
 		$this->t->define_data($addline);
@@ -130,6 +144,80 @@ class relmanager extends aw_template
 	function get_html()
 	{
 		return $this->t->draw();
+	}
+
+	////
+	// !This processes the newly added relation
+	function process_relmanager($arr)
+	{
+		// now I need to load the bloody properties again and do some shit with them
+		$clid = $arr["prop"]["relinfo"]["clid"][0];
+		$cfgu = get_instance("cfg/cfgutils");
+		$props = $cfgu->load_properties(array(
+			"clid" => $clid,
+		));
+		$proplist = is_array($arr["prop"]["props"]) ? $arr["prop"]["props"] : array($arr["prop"]["props"]);
+
+		$xproplist = array();
+
+		foreach($props as $item)
+		{
+			if (in_array($item["name"],$proplist))
+			{
+				$xproplist[$item["name"]] = $item;
+			};
+		};
+
+		$propname = $arr["prop"]["name"];
+
+		$req = $arr["request"]["cb_emb"][$propname];
+
+		$arglist = array();
+
+		foreach($xproplist as $name => $act_prop)
+		{
+			if ($act_prop["type"] == "fileupload")
+			{
+				$_fileinf = $_FILES["cb_emb"];
+				$filename = $_fileinf["name"][$propname]["new"][$name];
+				$filetype = $_fileinf["type"][$propname]["new"][$name];
+				$tmpname = $_fileinf["tmp_name"][$propname]["new"][$name];
+				// tundub, et polnud sellist faili, eh?
+				if (empty($tmpname))
+				{
+					return false;
+				};
+				$arglist[$name] = array(
+					"tmp_name" => $tmpname,
+					"type" => $filetype,
+					"name" => $filename,
+				);
+			}
+			else
+			{
+				if (!empty($req["new"][$name]))
+				{
+					$arglist[$name] = $req["new"][$name];
+				};
+			};
+
+		};
+
+		if (sizeof($arglist) == 0)
+		{
+			return false;
+		};
+
+		$arglist["parent"] = $arr["obj_inst"]->parent();
+
+		$inst = get_instance($clid);
+		$inst->id_only = true;
+		$obj_id = $inst->submit($arglist);
+
+		$arr["obj_inst"]->connect(array(
+			"to" => $obj_id,
+			"reltype"=> $arr["prop"]["relinfo"]["value"],
+		));
 	}
 
 };
