@@ -1,3 +1,4 @@
+{VAR:menubar}
 <span class="header1">{VAR:menudef}</a>
 <br>
 <font color="red"><b>{VAR:status_msg}</b></font>

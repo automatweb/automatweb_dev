@@ -1,3 +1,4 @@
+{VAR:menubar}
 <form method="POST" action="index.{VAR:ext}" name="event">
 <table border="0" cellspacing="1" cellpadding="1" bgcolor="#ffffff">
 <tr>
@@ -14,7 +15,7 @@
 <td class="fgtitle"><strong>Kestab</strong></td>
 <td class="fgtitle"><select class="lefttab" name="dhour">{VAR:dhour}</select> t:<select class="lefttab" name="dmin">{VAR:dmin}</select>m
 &nbsp;&nbsp;
-<input type="checkbox" name="repeater" value="1" {VAR:repcheck}><a href="#" onClick="aw_popup_scroll('orb.aw?class=planner&action=repeaters','repeat',500,500)">Kordused</a>
+<input type="checkbox" name="repeater" value="1" {VAR:repcheck}>
 </td>
 </tr>
 </table>
@@ -32,6 +33,7 @@
 <td class="fgtitle"><strong>Värv</strong></td>
 <td class="fgtitle"><select name="color">{VAR:color}</select></td>
 </tr>
+<!--
 <tr>
 <td class="fgtitle"><strong>Osalejad (kasutajad)</strong></td>
 <td class="fgtitle"><input type="text" name="users" size="30" value="{VAR:users}"></td>
@@ -44,6 +46,7 @@
 <td class="fgtitle"><strong>Tuleta meelde</strong></td>
 <td class="fgtitle"><input type="text" name="reminder" size="2" maxlength="2" value="{VAR:reminder}"> minutit enne algust</td>
 </tr>
+-->
 <tr>
 <td class="fgtitle"><strong>Privaatne</strong></td>
 <td class="fgtitle"><input type="checkbox" name="private" {VAR:private} value="1"></td>
