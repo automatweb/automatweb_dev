@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.48 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.49 2005/04/06 10:15:27 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -256,7 +256,7 @@ class releditor extends core
 
 
 
-		if (is_object($obj_inst))
+		if (is_object($obj_inst) && empty($arr["view"]))
 		{
 			$act_props["id"] = array(
 				"type" => "hidden",
