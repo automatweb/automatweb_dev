@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.17 2001/09/12 17:59:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.18 2001/09/12 19:47:20 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -227,7 +227,13 @@ class users_user extends aw_template
 		{
 			classload("config");
 			$t = new db_config;
-			$url = $t->get_simple_config("after_login");
+			// 1st try to find the group based url and if that fails, then the everyone's url and then just the baseurl.
+			// wow. is this graceful degradation or what!
+			$url = $this->find_group_login_redirect($uid);
+			if (!$url)
+			{
+				$url = $t->get_simple_config("after_login");
+			}
 			$this->url = (strlen($url) > 0) ? $url : $baseurl;
 		};
 
@@ -1058,6 +1064,39 @@ class users_user extends aw_template
 		$ret.= $sys->check_db_tables(array($op_table,$op2_table,$op3_table),$fix);
 
 		return $ret;
+	}
+
+	function find_group_login_redirect($uuid)
+	{
+		classload("config");
+		$c = new db_config;
+		$ec = $c->get_simple_config("login_grp_redirect");
+		classload("xml");
+		$x = new xml;
+		$ra = $x->xml_unserialize(array("source" => $ec));
+
+		// kuna kasutaja pole veel sisse loginud, siis pole globallset gidlisti olemas, see tuleb leida
+		$gidlist = $this->get_gids_by_uid($uuid);
+		if (is_array($gidlist))
+		{
+			$d_gid = 0;
+			$d_pri = 0;
+			$d_url = "";
+			foreach($gidlist as $gid)
+			{
+				if ($ra[$gid]["pri"] >= $d_pri && $ra[$gid]["url"] != "")
+				{
+					$d_gid = $gid;
+					$d_pri = $ra[$gid]["pri"];
+					$d_url = $ra[$gid]["url"];
+				}
+			}
+			if ($d_url != "")
+			{
+				return $d_url;
+			}
+		}
+		return false;
 	}
 };
 ?>

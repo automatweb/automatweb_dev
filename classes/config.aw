@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.22 2001/08/16 15:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.23 2001/09/12 19:47:20 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -1022,6 +1022,61 @@ class config extends db_config
 		$this->set_simple_config("errors", $ss);
 
 		return $this->mk_my_orb("errors", array());
+	}
+
+	////
+	// !lets the user set it so that different groups get redirected to diferent pages when logging in
+	function grp_redirect($arr)
+	{
+		$this->read_template("login_grp_redirect.tpl");
+		$es = $this->get_simple_config("login_grp_redirect");
+		classload("xml");
+		$x = new xml;
+		$ea = $x->xml_unserialize(array("source" => $es));
+
+		classload("users");
+		$u = new users;
+		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
+		while($row = $u->db_next())
+		{
+			$this->vars(array(
+				"grp_id" => $row["gid"],
+				"grp_name" => $row["name"],
+				"url" => $ea[$row["gid"]]["url"],
+				"priority" => $ea[$row["gid"]]["pri"]
+			));
+			$li.=$this->parse("LINE");
+		}
+		$this->vars(array(
+			"LINE" => $li,
+			"reforb" => $this->mk_reforb("submit_grp_redirect", array())
+		));
+
+		return $this->parse();
+	}
+
+	function submit_grp_redirect($arr)
+	{
+		extract($arr);
+
+		$es = $this->get_simple_config("login_grp_redirect");
+		classload("xml");
+		$x = new xml;
+		$ea = $x->xml_unserialize(array("source" => $es));
+
+		if (is_array($grps))
+		{
+			foreach($grps as $grp => $gar)
+			{
+				$ea[$grp]["url"] = $gar["url"];
+				$ea[$grp]["pri"] = $gar["pri"];
+			}
+		}
+
+		$ss = $x->xml_serialize($ea);
+		$this->quote(&$ss);
+		$this->set_simple_config("login_grp_redirect", $ss);
+		return $this->mk_my_orb("grp_redirect", array());
 	}
 }
 ?>
