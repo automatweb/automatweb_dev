@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.15 2004/05/27 15:27:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.16 2004/05/31 12:33:19 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -867,6 +867,13 @@ class aw_table extends aw_template
 						}
 						else
 						{
+							$is_link = false;
+							if (preg_match("/<a (.*)>(.*)<\/a>/U",$val, $tmt))
+							{
+								$is_link = true;
+								$val = $tmt[2];
+							}
+					
 							if ($val == 0)
 							{
 								$val = "n/a";
@@ -875,6 +882,10 @@ class aw_table extends aw_template
 							{
 								$val = date($v1["format"],$val);
 							};
+							if ($is_link)
+							{
+								$val = "<a ".$tmt[1].">".$val."</a>";
+							}
 						};
 					};
 
@@ -1282,6 +1293,18 @@ class aw_table extends aw_template
 		{
 			$this->nfields[$args["name"]] = 1;
 		};
+	}
+
+	function remove_field($name)
+	{
+		$tmp = $this->rowdefs;
+		foreach($tmp as $k => $v)
+		{
+			if ($v["name"] == $name)
+			{
+				unset($this->rowdefs[$k]);
+			}
+		}
 	}
 
 	function _xml_end_element($parser,$name) 
