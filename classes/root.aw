@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.10 2002/05/08 20:33:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.11 2002/05/08 20:37:31 duke Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -15,6 +15,27 @@ class root
 		$this->stacks = array();
 		lc_load("definition");
 	}
+
+	////
+	// !Pushes a variable onto the stock
+	function _push($item,$stack = "root")
+	{
+		if ( not(is_array($this->stacks[$stack])) )
+		{
+			$this->stacks[$stack] = array();
+		};
+
+		array_push($this->stacks[$stack],$item);
+	}
+
+	////
+	// !Pops a variable from the stack
+	function _pop($stack = "root")
+	{
+		return array_pop($this->stacks[$stack]);
+	}
+
+
 
 	////
 	// !Right now this is only a wrapper for the function with
