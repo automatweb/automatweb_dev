@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.348 2004/12/27 13:43:55 ahti Exp $
+// $Id: class_base.aw,v 2.349 2004/12/30 13:30:05 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -771,7 +771,6 @@ class class_base extends aw_template
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
 
-
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,
@@ -860,6 +859,10 @@ class class_base extends aw_template
 				$retval = $this->id;
 			};
 
+		};
+		if (!$save_ok)
+		{
+			return $this->abort_action($args);
 		};
 		return $retval;
 	}
@@ -2906,10 +2909,12 @@ class class_base extends aw_template
 		foreach($props as $key => $tmp)
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
-			if($tmp["type"] == "text")
-			{
-				continue;
-			}
+			// seems that i need to do that --dragut
+//			if($tmp["type"] == "text")
+//			{
+//				continue;
+//			}
+
 			$val = $arr["request"][$key];
 			$prpdata = &$props[$key];
 			if (1 == $prpdata["required"] && !$val)
@@ -3276,10 +3281,11 @@ class class_base extends aw_template
 			};
 
 			// don't care about text elements
-			if ($type == "text")
-			{
-				continue;	
-			};
+			// but i do --dragut
+//			if ($type == "text")
+//			{
+//				continue;	
+//			};
 			
 			if ($property["type"] == "releditor")
 			{
