@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.2 2001/05/17 10:14:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.3 2001/05/17 10:26:22 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -732,7 +732,8 @@ class messenger extends menuedit_light
 		// koigepealt siis serializeme lisatud failid äsjakirjutatud kirjale külge
 		foreach($attach as $idx => $tmpname)
 		{
-			if ($tmpname != "none")
+			// opera paneb siia tyhja stringi, mitte none
+			if (($tmpname != "none") && ($tmpname))
 			{
 				 // fail sisse
 				$fc = $this->get_file(array(
