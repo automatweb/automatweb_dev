@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.29 2003/05/08 10:25:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.30 2003/05/13 12:58:02 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -154,7 +154,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				break;
 
 			case "s_period":
-				$pr = get_instance("periods");
+				$pr = get_instance("period");
 				$data["options"] = $pr->period_list(aw_global_get("act_per_id"),true);
 				break;
 
@@ -532,7 +532,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				else
 				{
 					$where = join(" AND ",$parts);
-					$q = "SELECT * FROM objects WHERE $where";
+					// limit the results to 500
+					$q = "SELECT * FROM objects WHERE $where LIMIT 500";
 //					echo "s_q = $q <br>";
 					$_tmp = array();
 					$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
@@ -622,6 +623,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			};
 
 		};
+
+
 
 		$fields = array();
 
@@ -859,6 +862,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"selected" => $args["s"]["class_id"],
 				"onChange" => "refresh_page(this)",
 			);
+
 		};
 		
 		if (!$fields["oid"])
@@ -933,7 +937,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		
 		if (!$fields["period"])
 		{
-			$lg = get_instance("periods");
+			$lg = get_instance("period");
 			$fields["period"] = array(
 				"type" => "select",
 				"caption" => "Periood",

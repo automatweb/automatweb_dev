@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.45 2003/04/23 13:59:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.46 2003/05/13 12:58:02 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -246,7 +246,7 @@ class menu extends class_base
 				break;
 
 			case "pers":
-				$dbp = get_instance("periods",$this->cfg["per_oid"]);
+				$dbp = get_instance("period",$this->cfg["per_oid"]);
 				$data["options"] = $dbp->period_list(false);
 				break;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.177 2003/05/12 12:06:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.178 2003/05/13 12:58:02 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -125,7 +125,7 @@ class document extends aw_template
 		$sections = $row["meta"]["sss"];
 		if ($row["meta"]["all_pers"])
 		{
-			$period_instance = get_instance("periods");
+			$period_instance = get_instance("period");
 			$periods = $this->make_keys(array_keys($period_instance->period_list(false)));
 		}
 		else
@@ -528,8 +528,8 @@ class document extends aw_template
 
 		// would be nice if I could check whether the template _has_ one of those period variables
 		// and only _then_ load the period class --duke
-		$db_periods = get_instance("periods",$this->cfg["per_oid"]);
-		$act_per = $db_periods->get_active_period($this->cfg["per_oid"]);
+		$db_periods = get_instance("period",$this->cfg["per_oid"]);
+		$act_per = aw_global_get("act_per_id");
 		$pdat = $db_periods->get($act_per);
 
 		// period vars
@@ -1323,8 +1323,8 @@ class document extends aw_template
 
 		if ($data["clear_styles"] == 1)
 		{
-			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
-			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<br>,<p><ul><li><ol>");
+			$data["content"] = strip_tags($data["content"], "<b>,<i>,<u>,<p><ul><li><ol>");
+			$data["lead"] = strip_tags($data["lead"], "<b>,<i>,<u>,<p><ul><li><ol>");
 		}
 
 		if ($data["status"] == 0)
@@ -3732,7 +3732,7 @@ class document extends aw_template
 			"value" => $args["author"],
 		);
 
-		$periods = get_instance("periods");
+		$periods = get_instance("period");
 
 		$mlist = $periods->period_list($args["period"]);
 

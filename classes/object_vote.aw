@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.4 2002/11/07 10:52:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/object_vote.aw,v 2.5 2003/05/13 12:58:02 duke Exp $
 
 class object_vote extends aw_template
 {
@@ -53,7 +53,7 @@ class object_vote extends aw_template
 		extract($args);
 		$this->read_template("add_cluster.tpl");
 		$per_oid = $this->cfg["per_oid"];
-		$dbp = get_instance("periods",$per_oid);
+		$dbp = get_instance("period",$per_oid);
 		$active = $dbp->get_active_period();
 		$dbp->clist();
 		$periods = array();
@@ -75,7 +75,7 @@ class object_vote extends aw_template
 		extract($args);
 		$baseurl = $this->cfg["baseurl"];
 		$per_oid = $this->cfg["per_oid"];
-		$dbp = get_instance("periods",$per_oid);
+		$dbp = get_instance("period",$per_oid);
 		$rec = $dbp->get($period);
 		$name = $rec["description"];
 		$oid = $this->new_object(array(
