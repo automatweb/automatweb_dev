@@ -1,5 +1,4 @@
 <?php
-
 classload("layout/active_page_data");
 class grid_editor extends class_base
 {
@@ -208,6 +207,7 @@ class grid_editor extends class_base
 					"EXP_LEFT"					=> $el, 
 					"EXP_RIGHT"					=> $er,
 					"EXP_DOWN"					=> $ed,
+					"content_text" => htmlspecialchars(substr($this->arr["aliases"][$map["row"]][$map["col"]], 0, 20))
 				));
 			
 				// do the callback if specified

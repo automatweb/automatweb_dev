@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.25 2003/08/29 11:51:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.26 2003/11/07 12:27:46 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -42,7 +42,7 @@ class style extends aw_template
 		return $this->db_next();
 	}
 
-	function get_select($parent, $type, $addempty = false)
+	function get_select($parent, $type, $addempty = false, $css = false)
 	{
 		$this->db_listall(0,$type);
 		if ($addempty)
@@ -58,6 +58,16 @@ class style extends aw_template
 			$arr[$row["id"]] = $row["name"];
 		}
 
+		if ($css)
+		{
+			$ol = new object_list(array(
+				"class_id" => CL_CSS,
+			));
+			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				$arr[$o->id()] = "CSS: ".$o->name();
+			}
+		}
 		return $arr;
 	}
 
@@ -125,6 +135,7 @@ class style extends aw_template
 		$style = unserialize($this->style["style"]);
 
 		$sel = $this->get_select(0,ST_CELL);
+		$sel_css = $this->get_select(0,ST_CELL, false, true);
 
 		$this->vars(array(
 			"name" => $this->style["name"], 
@@ -139,12 +150,12 @@ class style extends aw_template
 			"vspace"			=> $style["vspace"],
 			"header_style"	=> $this->picker($style["header_style"],$sel),
 			"footer_style"	=> $this->picker($style["footer_style"],$sel),
-			"even_style"	=> $this->picker($style["even_style"],$sel),
-			"odd_style"	=> $this->picker($style["odd_style"],$sel),
+			"even_style"	=> $this->picker($style["even_style"],$sel_css),
+			"odd_style"	=> $this->picker($style["odd_style"],$sel_css),
 			"num_frows"			=> $style["num_frows"],
 			"num_fcols"			=> $style["num_fcols"],
-			"frow_style"	=> $this->picker($style["frow_style"],$sel),
-			"fcol_style"	=> $this->picker($style["fcol_style"],$sel),
+			"frow_style"	=> $this->picker($style["frow_style"],$sel_css),
+			"fcol_style"	=> $this->picker($style["fcol_style"],$sel_css),
 			"reforb"			=> $this->mk_reforb("submit",array("parent" => $parent, "id" => $id))
 		));
 

@@ -166,7 +166,7 @@ function exec_cmd(cmd)
 				</tr>
 				<tr>
 					<td width="1" height="1" valign="top" align="left">{VAR:EXP_LEFT}</td>
-					<td width="100%" align="center" valign="center"><input type="checkbox" name="sel_row={VAR:row};col={VAR:col}"></td>
+					<td width="100%" align="center" valign="center"><input type="checkbox" name="sel_row={VAR:row};col={VAR:col}"> <span class="celltext">{VAR:content_text}</span></td>
 					<td width="1" valign="bottom" align="right">{VAR:EXP_RIGHT}</td>
 				</tr>
 				<tr>
