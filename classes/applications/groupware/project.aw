@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.23 2004/12/14 14:46:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.24 2004/12/15 10:34:18 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -669,6 +669,10 @@ class project extends class_base
 		{
 			$from = $conn["from"];
 			$to = $conn["to"];
+			if (!is_oid($to) || !$this->can("view", $to))
+			{
+				continue;
+			}
 			$xto = new object($to);
 			//$xtod = $xto->id();
 			//if ($projects[$from])
