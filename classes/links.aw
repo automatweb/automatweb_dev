@@ -23,6 +23,8 @@ class links extends extlinks
 		lc_load("definition");
 	}
 
+	////
+	// !Kuvab uue lingi lisamise vormi
 	function add($arr)
 	{
 		extract($arr);
@@ -75,14 +77,36 @@ class links extends extlinks
 		return $this->parse();
 	}
 
+	////
+	// !Submitib add voi change actioni tulemuse
 	function submit($arr)
 	{
+
+		$this->quote($arr);
 		extract($arr);
 		if (!$id)
 		{
-			$newlinkid = $this->new_object(array("parent" => $parent,"name" => $name,"class_id" => CL_EXTLINK,"comment" => $comment));
-			$this->add_link(array("id"  => $newlinkid,	"oid" => $parent, "name" => $name,"url" => $url,"desc"  => $desc,"newwindow" => $newwindow,"type" => $type, "docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
+			$newlinkid = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"class_id" => CL_EXTLINK,
+				"comment" => $comment,
+			));
+
+			$this->add_link(array(
+				"id"  => $newlinkid,	
+				"oid" => $parent, 
+				"name" => $name,
+				"url" => $url,
+				"desc"  => $desc,
+				"newwindow" => $newwindow,
+				"type" => $type, 
+				"docid" => $a_docid,
+				"doclinkcollection" => $doclinkcollection,
+			));
+
 			$linkid = $newlinkid;
+
 			if ($docid)
 			{
 				$this->add_alias($docid,$newlinkid);
@@ -90,11 +114,27 @@ class links extends extlinks
 		}
 		else
 		{
-			$this->upd_object(array("oid" => $id, "name" => $name, "parent" => $parent,"comment" => $comment));
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $name,
+				"parent" => $parent,
+				"comment" => $comment,
+			));
+
 			$linkid = $id;
-			$this->save_link(array("lid" => $id, "name" => $name, "url" => $url, "desc" => $desc, "newwindow" => $newwindow,"type" => $type,"docid" => $a_docid,"doclinkcollection" => $doclinkcollection));
+
+			$this->save_link(array(
+				"lid" => $id, 
+				"name" => $name, 
+				"url" => $url, 
+				"desc" => $desc, 
+				"newwindow" => $newwindow,
+				"type" => $type,
+				"docid" => $a_docid,
+				"doclinkcollection" => $doclinkcollection,
+			));
 		}
-		// tegelikult peaks metainfo salvetamise upd_object sisse panema muidugi
+		// tegelikult voiks metainfo salvetamise upd_object sisse panema muidugi
 		$meta = array(
 			"use_javascript" => $use_javascript,
 			"newwinwidth" => $newwinwidth,
@@ -106,6 +146,11 @@ class links extends extlinks
 		);
 
 		$this->obj_set_meta(array("oid" => $linkid,"meta" => $meta));
+
+		// arendaks miskit plugin arhitektuuri siin.
+		// ntx, klass providib vahendid linkide lisamiseks, muutmiseks ja submiti
+		// handlemiseks, aga redirectid tehaks siiski sellest klassist, mis vajab
+		// neid teenuseid. Ntx dokumendiklassi sees.
 		
 		if ($docid)
 		{
@@ -117,12 +162,22 @@ class links extends extlinks
 		}
 	}
 
+	////
+	// !Kustutab lingi objekti
 	function delete($arr)
 	{
 		extract($arr);
+		$p_obj = $this->get_object($parent);
 		$this->delete_object($id);
 		$this->delete_alias($parent,$id);
-		header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
+		if ($p_obj["class_id"] != CL_PSEUDO)
+                {
+			header("Location: ".$this->mk_my_orb("change",array("id" => $parent),"document"));
+                }
+                else
+                {
+                        header("Location: ".$this->mk_orb("obj_list", array("parent" => $parent),"menuedit"));
+                };
 	}
 
 	function search_doc($arr)
