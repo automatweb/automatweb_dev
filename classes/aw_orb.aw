@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.7 2003/01/21 09:24:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_orb.aw,v 2.8 2003/01/21 13:07:32 kristo Exp $
 // aw_orb.aw - new and improved ORB
 
 class aw_orb extends aw_template
@@ -31,7 +31,7 @@ class aw_orb extends aw_template
 
 		foreach($values as $key => $val)
 		{
-			if ( ($val["tag"] == "class") && ($val["type"] == "complete") )
+			if ( ($val["tag"] == "class") && ($val["type"] == "complete") && $attr['id'] != '')
 			{
 				$attr = $val["attributes"];
 				$pm = $this->get_public_methods(array(
