@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.1 2004/07/15 11:59:58 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.2 2004/08/06 09:30:21 rtoomas Exp $
 // mysql.aw - MySQL draiver
 class mssql
 {
@@ -42,6 +42,8 @@ class mssql
 	function db_query($qtext,$errors = true) 
 	{
 		global $DUKE, $INTENSE_DUKE;
+		//$qtext = preg_replace("/`([^`]+)`/i","[\${1}]",$qtext);
+
 		if ((aw_ini_get("debug_mode") != 0) && $DUKE)
 		{
 			print '<pre>';
