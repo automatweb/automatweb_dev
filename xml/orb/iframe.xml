@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="iframe">
+		<action name="new">
+			<function name="change">
+				<arguments>
+					<required name="parent"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+					<optional name="return_url"/>
+					<optional name="alias_to"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit"/>
+		</action>
+
+	</class>
+</orb>
+		
