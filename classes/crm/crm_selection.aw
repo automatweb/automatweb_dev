@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.12 2004/03/09 18:24:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.13 2004/06/11 12:54:43 duke Exp $
 /*
 @classinfo relationmgr=yes
 @default table=objects
@@ -463,10 +463,12 @@ class crm_selection extends class_base
 			"name" => 'go_move',
 			"tooltip" => "Liiguta",
 			"action" => "move_objects",
+			"img" => "import.gif",
 		));
 		
 		$toolbar->add_button(array(
 			"name" => 'go_copy',
+			"img" => "copy.gif",
 			"tooltip" => "Kopeeri",
 			"action" => "copy_objects",
 		));
