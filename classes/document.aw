@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.145 2003/01/20 14:25:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.146 2003/01/24 12:58:26 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -687,6 +687,13 @@ class document extends aw_template
 				fclose($socket);
 			}
 		}
+
+		if (strpos($doc['content'], "#login#") !== false)
+		{
+			$li = get_instance("aw_template");
+			$li->read_template("login.tpl");
+			$doc['content'] = str_replace("#login#", $li->parse(), $doc['content']);
+		}		
 
 		// create keyword links unless we are in print mode, since you cant click
 		// on links on the paper they dont make sense there :P
