@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.11 2004/08/26 15:21:11 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.12 2004/08/26 15:26:52 sven Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -11,6 +11,9 @@
 
 @property orderer type=select field=meta method=serialize
 @caption Tellija
+
+@property start1 type=datetime_select field=start 
+@caption Algus
 
 property orderer type=relpicker automatic=1 reltype=RELTYPE_ORDERER field=meta method=serialize
 caption Tellija
