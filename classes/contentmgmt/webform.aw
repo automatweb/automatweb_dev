@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.57 2005/02/11 13:06:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.58 2005/02/11 13:18:44 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -265,7 +265,7 @@ class webform extends class_base
 				}
 				else
 				{
-					$this->p_clid = CL_CALENDAR_REGISTRATION_FORM;
+					$this->p_clid = CL_REGISTER_DATA;
 				}
 				if($obj_inst->prop("form_type") != $this->p_clid)
 				{
