@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.4 2004/01/05 17:35:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.5 2004/02/19 16:58:52 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -527,7 +527,7 @@ class aw_table extends aw_template
 			$tmp = $this->frameattribs;
 			$tmp["name"] = "table";
 			$tbl .= $this->opentag($tmp);
-			$tbl .= $this->opentag(array("name" => "tr"));
+			$tbl .= "<tr>\n";
 			$tbl .= $this->opentag(array("name" => "td","bgcolor" => $this->framebgcolor));
 		};
 
@@ -542,7 +542,7 @@ class aw_table extends aw_template
 		if (!empty($this->headerstring))
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
-			$tbl .= $this->opentag(array("name" => "tr"));
+			$tbl .= "<tr>\n";
 			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan,"classid" => $this->titlestyle));
 			$tbl .= "<strong>" . $this->headerstring . ": ". $this->headerlinks . "</strong>";
 			$tbl .= "</td>\n";
@@ -554,7 +554,7 @@ class aw_table extends aw_template
 		if (empty($this->titlebar_under_groups) && empty($arr["no_titlebar"]))
 		{
 			// make header!
-			$tbl .= $this->opentag(array("name" => "tr"));
+			$tbl .= "<tr>\n";
 			foreach($this->rowdefs as $k => $v)
 			{
 				$style = false;
@@ -842,7 +842,7 @@ class aw_table extends aw_template
 					//	...
 					//	"callback" => array(&$this, "method")
 					//   ));
-					if (isset($v1["callback"]))
+					if (isset($v1["callback"]) && is_callable($v1["callback"]))
 					{
 						$val = call_user_func ($v1["callback"], isset($v1['callb_pass_row']) ? $v : $val);
 					}
@@ -867,7 +867,7 @@ class aw_table extends aw_template
 					// uutele actioni ridadele tuleb teha uus <tr>
 					if ($arow > 1)
 					{
-						$tbl.= $this->opentag(array("name"=>"tr"));
+						$tbl .= "<tr>\n";
 					};
 					$style = (($counter % 2) == 0) ? $this->style1 : $this->style2;
 					// joonistame actionid
@@ -1319,7 +1319,7 @@ class aw_table extends aw_template
 
 	function draw_titlebar_under_rgrp()
 	{
-		$tbl = $this->opentag(array("name" => "tr"));
+		$tbl .= "<tr>\n";
 		foreach($this->rowdefs as $k => $v)
 		{
 			// the headers between groups are never clickable - less confusing that way
@@ -1461,7 +1461,7 @@ class aw_table extends aw_template
 					$tbl.=$this->draw_titlebar_under_rgrp();
 				}
 
-				$tbl .= $this->opentag(array("name" => "tr"));
+				$tbl .= "<tr>\n";
 			}
 		}
 		return $tbl;
