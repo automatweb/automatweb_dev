@@ -22,6 +22,7 @@
 			<function name="edit">
 				<arguments>
 					<optional name="file"/>
+					<optional name="revision"/>
 				</arguments>
 			</function>
 		</action>
@@ -42,8 +43,24 @@
 			</function>
 		</action>
 		
+		<action name="submit_upload">
+			<function name="submit_upload">
+				<arguments>
+					<required name="fullname"/>
+				</arguments>
+			</function>
+		</action>
+		
 		<action name="source">
 			<function name="source">
+				<arguments>
+					<optional name="file"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="preview">
+			<function name="preview">
 				<arguments>
 					<optional name="file"/>
 				</arguments>

@@ -198,6 +198,15 @@
 			</function>
 		</action>
 
+		<action name="passengers_detail" all_args="1">
+			<function name="passengers_detail">
+				<arguments>
+					<required name="shop_id"/>
+					<optional name="search"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

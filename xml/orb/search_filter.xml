@@ -40,12 +40,45 @@
 			<function name="orb_search">
 				<arguments>
 					<required name="id"/>
+					<optional name="get_csv_file"/>
 				</arguments>
 			</function>
 		</action>
 
 		<action name="output">
 			<function name="orb_output">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stat">
+			<function name="orb_stat">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="statdata">
+			<function name="orb_statdata">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_statdata">
+			<function name="orb_submit_statdata">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stat_new_submit">
+			<function name="orb_stat_new_submit">
 				<arguments>
 					<required name="id"/>
 				</arguments>
@@ -99,6 +132,23 @@
 		<action name="submit_select_forms">
 			<function name="orb_submit_select_forms">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="tf_fulltext_search">
+			<function name="orb_totally_fake_fulltext_search">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_tf_fulltext_search">
+			<function name="orb_do_totally_fake_fulltext_search">
+				<arguments>
+					<required name="id"/>
+					<optional name="true_fulltext"/>
 				</arguments>
 			</function>
 		</action>

@@ -121,6 +121,10 @@
 				<arguments>
 					<required name="id"/>
 					<optional name="page"/>
+					<optional name="s_name"/>
+					<optional name="s_id"/>
+					<optional name="s_agent"/>
+					<optional name="search"/>
 				</arguments>
 			</function>
 		</action>

@@ -395,6 +395,36 @@
 			</function>
 		</action>
 
+		<action name="sel_tables">
+			<function name="tables">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_tables">
+			<function name="submit_tables">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="sel_filter_search">
+			<function name="gen_filter_search_sel">
+				<arguments>
+					<required name="id"/>
+					<optional name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_filter_search_sel">
+			<function name="save_filter_search_sel">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
