@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.39 2001/07/31 10:14:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.40 2001/08/08 06:43:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -544,7 +544,7 @@ class document extends aw_template
 					));
 
 		$this->register_sub_parser(array(
-					"class" => "events2",
+					"class" => "events",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 					));
@@ -1049,6 +1049,16 @@ class document extends aw_template
 		if ($SITE_ID == 5)
 		{
 			$text = "$from_name ($from) soovitab teil vaadata Pere ja Kodu saidile ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section\n\n$from_name kommentaar lingile: $comment\n";
+
+			if ($copy != "")
+				$bcc = "\nCc: $copy ";
+
+			mail("\"$to_name\" <".$to.">","Artikkel saidilt ".$GLOBALS["baseurl"],$text,"From: \"$from_name\" <".$from.">\nSender: \"$from_name\" <".$from.">\nReturn-path: \"$from_name\" <".$from.">".$bcc."\n\n");
+		}
+		else
+		if ($SITE_ID == 17)
+		{
+			$text = "$from_name ($from) soovitab teil vaadata Ida-Viru investeerimisportaali ".$GLOBALS["baseurl"].",\ntäpsemalt linki ".$GLOBALS["baseurl"]."/index.$ext?section=$section \n\n$from_name kommentaar lingile: $comment\n";
 
 			if ($copy != "")
 				$bcc = "\nCc: $copy ";
@@ -2403,14 +2413,19 @@ class document extends aw_template
 		{
 			// nyyd on teada k6ik tabelid, ksu string sisaldub
 			// leiame k6ik aliased, mis on nendele tabelitele tehtud
+			$mtals = array();
 			$this->db_query("SELECT * FROM aliases WHERE target IN ($mtsstr)");
 			while ($row = $this->db_next())
 			{
 				$mtals[$row[source]] = $row[source];
 			}
 
-			// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
-			$mtalsstr = "OR documents.docid IN (".join(",",$mtals).")";
+			$mts = join(",",$mtals);
+			if ($mts != "")
+			{
+				// see on siis nimekiri dokudest, kuhu on tehtud aliased tabelitest, mis matchisid
+				$mtalsstr = "OR documents.docid IN (".$mts.")";
+			}
 			//echo "ms = $mtalsstr<br>";
 		}
 
