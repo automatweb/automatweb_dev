@@ -3,11 +3,10 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.10 2004/02/19 23:23:22 duke Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.11 2004/02/27 11:16:27 kristo Exp $
 
 	@comment 
 	analyses aw code
-	generates documentation and orb defs
 **/
 
 class docgen_analyzer extends class_base
@@ -15,169 +14,6 @@ class docgen_analyzer extends class_base
 	function docgen_analyzer()
 	{
 		$this->init("core/docgen");
-	}
-
-	/**  
-		
-		@attrib name=class_list params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function class_list()
-	{
-		$p = get_instance("parser");
-		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["classdir"]);
-		
-		sort($files);
-		foreach($files as $file)
-		{
-			$file = str_replace($this->cfg["basedir"]."/classes", "", $file);
-			$f .= html::href(array(
-				"url" => $this->mk_my_orb("class_info", array("file" => $file)),
-				"caption" => $file,
-				"target" => "classinfo"
-			))."<Br>";
-		}
-
-		die($f);
-	}
-
-	/**  
-		
-		@attrib name=frames params=name default="1"
-		
-		@param aa define value="100"
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function frameset()
-	{
-		$this->read_template("frameset.tpl");
-
-		$this->vars(array(
-			"left" => $this->mk_my_orb("class_list"),
-			"right" => "about:blank"
-		));
-		die($this->parse());
-	}
-
-	function display_class($data)
-	{
-		$this->read_template("class_info.tpl");
-
-		$f = "";
-		foreach($data["functions"] as $func => $f_data)
-		{
-			$arg = "";
-
-			$_ar = new aw_array($f_data["arguments"]);
-			foreach($_ar->get() as $a_var => $a_data)
-			{
-				$this->vars(array(
-					"arg_name" => $a_data["name"],
-					"def_val" => $a_data["default_val"],
-					"is_ref" => ($a_data["is_ref"] ? "X" : "")
-				));
-
-				$arg .= $this->parse("ARG");
-			}
-
-			$this->vars(array(
-				"proto" => "function $func()",
-				"name" => $func,
-				"start_line" => $f_data["start_line"],
-				"end_line" => $f_data["end_line"],
-				"returns_ref" => ($f_data["returns_ref"] ? "X" : "&nbsp;"),
-				"ARG" => $arg,
-			));
-
-			$f .= $this->parse("FUNCTION");
-		}
-
-		$ex = "";
-
-		if ($data["extends"] != "")
-		{
-			$dat = $data;
-			$orb = get_instance("orb");
-			$that = get_instance("core/docgen/docgen_analyzer");
-
-			// now, do extended classes. we do that by parsing all the extends classes
-			do {
-				$level++;
-
-				if ($dat["extends"] == "db_connector")
-				{
-					$_extends = "db";
-				}
-				else
-				{
-					$_extends = $dat["extends"];
-				}
-
-				// get the file the class is in.
-				// for that we have to load it's orb defs to get the folder below the classes folder
-				$orb_defs = $orb->load_xml_orb_def($_extends);
-				$ex_fname = $this->cfg["basedir"]."/classes/".$orb_defs[$dat["extends"]]["___folder"]."/".$_extends.".".$this->cfg["ext"];
-
-				$this->vars(array(
-					"spacer" => str_repeat("&nbsp;", $level * 3),
-					"inh_link" => $this->mk_my_orb("class_info", array("file" => "/".$_extends.".".$this->cfg["ext"])),
-					"inh_name" => $dat["extends"]
-				));
-				$ex .= $this->parse("EXTENDER");
-
-				$_dat = $that->analyze_file($ex_fname, true);
-				$dat = $_dat["classes"][$dat["extends"]];
-			} while ($dat["extends"] != "");
-		}
-
-		$this->vars(array(
-			"name" => $data["name"],
-			"extends" => $data["extends"],
-			"end_line" => $data["end_line"],
-			"start_line" => $data["start_line"],
-			"FUNCTION" => $f,
-			"EXTENDER" => $ex
-		));
-
-		return $this->parse();
-	}
-
-	/** displays information to the user about a class
-
-		@attrib params=name nologin=0 is_public=0 all_args=0 caption="N&auml;ita klassi infot" default=0 name=class_info
-
-		@param file required 
-
-		@returns 
-		html with class info
-
-		@comment
-		shows detailed info about a class
-	**/
-	function class_info($arr)
-	{
-		extract($arr);
-
-		$data = $this->analyze_file($file);
-
-		foreach($data["classes"] as $class => $c_data)
-		{
-			$op .= $this->display_class($c_data);
-		}
-
-		return $op;
 	}
 
 	function analyze_file($file, $is_fp = false)
@@ -222,6 +58,10 @@ class docgen_analyzer extends class_base
 
 					case T_DOLLAR_OPEN_CURLY_BRACES:
 						$this->handle_brace_begin();
+						break;
+
+					case T_STRING:
+						$this->handle_t_string($token);
 						break;
 				}
 			}
@@ -418,6 +258,11 @@ class docgen_analyzer extends class_base
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["returns_ref"] = $return_ref;
 
 		$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment"] = $this->parse_doc_comment($this->last_comment);
+
+		if ($this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment"] != false)
+		{
+			$this->data["classes"][$this->current_class]["functions"][$f_name]["doc_comment_str"] = $this->last_comment;
+		}
 
 		$this->current_function = $f_name;
 		$this->in_function = true;
@@ -772,178 +617,109 @@ class docgen_analyzer extends class_base
 		return $ret;
 	}
 
-	function _get_orb_defs($data)
+	function handle_t_string($tok)
 	{
-		$xml  = "<?xml version='1.0'?>\n";
-		$xml .= "<orb>\n";
-
-		$folder = substr(dirname($data["file"]), 1);
-
-		$xml .= "\t<class name=\"".$data["name"]."\" folder=\"".$folder."\" extends=\"".$data["extends"]."\">\n";
-
-		foreach($data["functions"] as $f_name => $f_data)
+		if ($tok[1] == "get_instance" || $tok[1] == "classload")
 		{
-			// func is public if name attrib is set
-			$attr = $f_data["doc_comment"]["attribs"];
-			if (($a_name = $attr["name"]) != "")
+			// follows:
+			// (
+			// encapsed_string class name || defined constant || variable
+			// )
+			// ;
+			$o = $this->get();
+			$this->assert_str($o, "(");
+
+			// variable dependency?
+			$is_var = false;
+
+			$cln = $this->get();
+			switch($cln[0])
 			{
-				$xml .= "\t\t<action name=\"$a_name\"";
-				$x_a = array();
-				if (isset($attr["default"]) && $attr["default"] == 1)
-				{
-					$x_a[] = "default=\"1\"";
-				}
-
-				if (isset($attr["nologin"]) && $attr["nologin"] == 1)
-				{
-					$x_a[] = "nologin=\"1\"";
-				}
-
-				if (isset($attr["is_public"]) && $attr["is_public"] == 1)
-				{
-					$x_a[] = "is_public=\"1\"";
-				}
-
-				if (isset($attr["all_args"]) && $attr["all_args"] == 1)
-				{
-					$x_a[] = "all_args=\"1\"";
-				}
-
-				if (isset($attr["is_content"]) && $attr["is_content"] == 1)
-				{
-					$x_a[] = "is_content=\"1\"";
-				}
-
-				if (isset($attr["caption"]) && $attr["caption"] != "")
-				{
-					$x_a[] = "caption=\"".str_replace("&", "&amp;", $attr["caption"])."\"";
-				}
-
-				$xml .= " ".join(" ", $x_a).">\n";
-
-				$xml .= "\t\t\t<function name=\"$f_name\">\n";
-				$xml .= "\t\t\t\t<arguments>\n";
-	
-				// make parameters
-				$par = new aw_array($f_data["doc_comment"]["params"]);
-
-				foreach($par->get() as $p_name => $p_dat)
-				{
-					$xml .= "\t\t\t\t\t<".$p_dat["req"]." name=\"$p_name\"";
-					
-					$x_p = array();
-					if (isset($p_dat["type"]) && $p_dat["type"] != "")
+				case T_CONSTANT_ENCAPSED_STRING:
+					// the string is the class name, remove quotes and voila
+					$class = str_replace("\"","", str_replace("'","",$cln[1]));
+					$_tok = $this->get();
+					if ($_tok != ")")
 					{
-						$x_p[] = "type=\"".$p_dat["type"]."\"";
+						// something else, mark as vraiable dependency right now
+						$is_var = true;
+						$class = $cln[1].$this->do_read_funcall();
 					}
-
-					if (isset($p_dat["acl"]) && $p_dat["acl"] != "")
+					else
 					{
-						$x_p[] = "acl=\"".$p_dat["acl"]."\"";
+						$this->back();
 					}
+					break;
 
-					if (isset($p_dat["default"]) && $p_dat["default"] != "")
-					{
-						$x_p[] = "default=\"".$p_dat["default"]."\"";
-					}
+				case T_STRING:
+					// the string is the CL_ define
+					$class = $this->cfg["classes"][constant($cln[1])]["file"];
+					break;
 
-					if (isset($p_dat["value"]) && $p_dat["value"] != "")
-					{
-						$x_p[] = "value=\"".$p_dat["value"]."\"";
-					}
+				case T_VARIABLE:
+					// the string is in the variable, mark as depend on all
+					$class = "variable dependency!";
+					$is_var = true;
+					$class = $cln[1].$this->do_read_funcall();
+					break;
 
-					$xml .= " ".join(" ", $x_p)."/>\n";
-				}
-				$xml .= "\t\t\t\t</arguments>\n";
-				$xml .= "\t\t\t</function>\n";
-				$xml .= "\t\t</action>\n\n";
+				default:
+					$this->assert_fail($cln);
+					break;
+			}
+
+			$o = $this->get();
+			$this->assert_str($o, ")");
+
+			$o = $this->get();
+			$this->assert_str($o, ";");
+
+			if ($this->current_class)
+			{
+				$this->data["classes"][$this->current_class]["dependencies"][] = array(
+					"dep_via" => $tok[1],
+					"function" => $this->current_function,
+					"line" => $this->get_line(),
+					"dep" => $class,
+					"is_var" => $is_var
+				);
 			}
 		}
-		$xml .= "\t</class>\n";
-		$xml .= "</orb>\n";
-		return $xml;
-	}
-	
-	function make_orb_defs_from_doc_comments()
-	{
-		$p = get_instance("parser");
-		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["basedir"]."/classes");
-
-		foreach($files as $file)
-		{
-			// check if file is modified
-			$clmod = @filemtime($file);
-			$xmlmod = @filemtime($this->cfg["basedir"]."/xml/orb/".basename($file, ".aw").".xml");
-
-			if ($clmod >= $xmlmod)
-			{
-				$this->analyze_file($file, true);
-				if (!is_array($this->data["classes"]) || count($this->data["classes"]) < 1)
-				{
-					continue;
-				}
-
-				foreach($this->data["classes"] as $class => $cldat)
-				{
-					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")))
-					{
-						echo "make orb defs for $file\n";
-
-						$od = str_replace(substr($this->cfg["basedir"]."/classes/",1), "", $this->_get_orb_defs($cldat));
-						$od = str_replace(substr($this->cfg["basedir"]."/classes",1), "", $od);
-
-						$this->put_file(array(
-							"file" => $this->cfg["basedir"]."/xml/orb/".$class.".xml",
-							"content" => $od
-						));
-					}
-				}
-				flush();
-			}
-		}
-		echo ("all done\n");
 	}
 
-	/**
-		@attrib name=search_method
-		@param method required 
+	/** skips function call arguments, returns content
 	**/
-	function search_method($arr)
+	function do_read_funcall()
 	{
-		set_time_limit(0);
-		$method = $arr["method"];
-		$p = get_instance("parser");
-		$files = array();
-		$p->_get_class_list(&$files, $this->cfg["classdir"]);
-		
-		sort($files);
-		$found = 0;
-		foreach($files as $file)
-		{
-			$fdat = $this->analyze_file($file,true);
-			$bn = basename($file,".aw");
-			$check = $fdat["classes"][$bn]["functions"][$method];
-			if ($check)
+		$cnt = 1;
+		$class = "";
+		// skip until we get to the closing )
+		do {
+			$tok = $this->get();
+			if (!is_array($tok) && $tok == "(")
 			{
-				print "fl = $file<br>";
-				$start = $check["start_line"];
-				$offset = $check["end_line"] - $start;
-				$fc = join("",array_slice(file($file),$start-1,$offset+1));
-				$fc = "<" . "?\n" . $fc . "\n" . "?" . ">"; 
-				print "<pre>";
-				print highlight_string($fc,true);
-				//print_r($fdat["classes"][$bn]["functions"][$method]);
-				print "</pre>";
-				$found++;
-			};
+				$cnt++;
+			}
+			if (!is_array($tok) && $tok == ")")
+			{
+				$cnt --;
+			}
 
+			if ($cnt > 0)
+			{
+				if (is_array($tok))
+				{
+					$class .= $tok[1];
+				}
+				else
+				{
+					$class .= $tok;
+				}
+			}
+		} while ($cnt > 0);
+		$this->back();
 
-
-		}
-		print "Found $found instances<br>";
+		return $class;
 	}
-
-
 }
 ?>
