@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.107 2005/01/28 13:59:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.108 2005/02/01 14:58:52 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -466,7 +466,9 @@ class users_user extends aw_template
 
 		if (count($tmp) > 0)
 		{
-			$q = "select * from groups where gid in (".join(",", $tmp).")";
+			$q = "select groups.*,objects.name as o_name from groups 
+					LEFT JOIN objects ON objects.oid = groups.oid
+			where gid in (".join(",", $tmp).")";
 			$this->db_query($q);
 		}
 
