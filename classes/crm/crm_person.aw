@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.13 2004/03/05 12:11:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.14 2004/03/10 13:35:28 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -60,7 +60,10 @@ caption Msn/yahoo/aol/icq
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik
 @caption Organisatsioon
 
-@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik
+property rank type=objpicker clid=CL_CRM_PROFESSION table=kliendibaas_isik
+caption Ametinimetus
+
+@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1
 @caption Ametinimetus
 
 @property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
@@ -197,8 +200,8 @@ CREATE TABLE `kliendibaas_isik` (
 @reltype PROFILE value=14 clid=CL_PROFIIL
 @caption Profiil
 
-@reltype USER_DATA value=15 
-@caption Andmed
+reltype USER_DATA value=15 
+caption Andmed
 
 
 */
@@ -742,6 +745,10 @@ class crm_person extends class_base
 	{
 		$ob = $arr["obj_inst"];
 		$args = array();
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
