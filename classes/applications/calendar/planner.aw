@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.38 2005/01/21 14:15:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.39 2005/01/24 11:25:58 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1457,7 +1457,8 @@ class planner extends class_base
 				$toolbar->add_button(array(
 					"name" => "delete",
 					"tooltip" => t("Kustuta märgitud sündmused"),
-					"url" => "javascript:document.changeform.action.value='delete_events';document.changeform.submit();",
+					"action" => "delete_events",
+					"confirm" => t("Oled kindel, et soovid valitud sündmused kustutada?"),
 					"img" => "delete.gif",
 					"class" => "menuButton",
 				));
