@@ -123,6 +123,8 @@ class languages extends aw_template
 		{
 			return false;
 		}
+		$this->quote(&$id);
+		$id = (int)$id;
 		$q = "SELECT acceptlang FROM languages WHERE id = '$id'";
 		$this->db_query($q);
 		$row = $this->db_next();
@@ -133,7 +135,7 @@ class languages extends aw_template
 		$uid = aw_global_get("uid");
 		if (!empty($uid))
 		{
-			$this->db_query("UPDATE users SET lang_id = $id WHERE uid = '$uid'");
+			$this->db_query("UPDATE users SET lang_id = '$id' WHERE uid = '$uid'");
 		};
 		aw_session_set("lang_id", $id);
 
