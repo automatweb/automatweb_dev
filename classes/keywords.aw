@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.32 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.33 2001/11/09 22:45:39 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -14,6 +14,89 @@ class keywords extends aw_template {
 		$this->db_init();
 		$this->tpl_init("automatweb/keywords");
 		lc_load("definition");
+	}
+
+
+	////
+	// !Kuvab keywordi lisamise vormi
+	function add($args = array())
+	{
+		extract($args);
+		$this->read_template("change.tpl");
+		$this->mk_path($parent,"Lisa võtmesõna");
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit",array("parent" => $parent,"add" => 1)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Kuvab keywordi muutmise vormi
+	function change($args = array())
+	{
+		extract($args);
+		$this->read_template("change.tpl");
+		$obj = $this->get_object($id);
+		$this->mk_path($obj["parent"],"Muuda võtmesõma");
+		$kw = $this->db_fetch_field("SELECT keyword FROM keywords WHERE oid = '$id'","keyword");
+		$this->vars(array(
+			"keyword" => $kw,
+			"reforb" => $this->mk_reforb("submit",array("id" => $id)),
+		));
+		return $this->parse();
+	}
+
+	////
+	// !Submitib keywordi
+	function submit($args = array())
+	{
+		extract($args);
+		$this->quote($keyword);
+		if ($add)
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_KEYWORD,
+				"status" => 2,
+				"name" => $keyword,
+			));
+			$q = "INSERT INTO keywords (keyword,oid,type) VALUES ('$keyword','$id','1')";
+			$this->db_query($q);
+		}
+		else
+		{
+			$this->upd_object(array(
+				"oid" => $id,
+				"name" => $keyword,
+			));
+			$q = "UPDATE keywords SET 
+				keyword = '$keyword'
+				WHERE oid = '$id'";
+			$this->db_query($q);
+		}
+		return $this->mk_my_orb("change",array("id" => $id));
+	}
+
+	////
+	// Uuendab dokuga lingitud keywordide nimekrija
+	function update_relations($args = array())
+	{
+		extract($args);
+		$q = "DELETE FROM keywordrelations WHERE id = '$id'";
+		$this->db_query($q);
+		$q = "SELECT keywords.oid AS oid,keyword FROM keywords LEFT JOIN objects ON (keywords.oid = objects.oid) WHERE objects.status = 2";
+		$this->db_query($q);
+		$data = " $data ";
+		while($row = $this->db_next())
+		{
+			if (preg_match("/\s$row[keyword]\s/i",$data))
+			{
+				$this->save_handle();
+				$q = "INSERT INTO keywordrelations (id,keyword_id) VALUES ('$id','$row[oid]')";
+				$this->db_query($q);
+				$this->restore_handle();
+			}
+		}
 	}
 
 	////
@@ -74,7 +157,8 @@ class keywords extends aw_template {
 		$q = "SELECT users.uid AS uid,
 				users.email AS email,
 				ml_users.name AS name,
-				ml_users.tm AS tm
+				ml_users.tm AS tm,
+				ml_users.mail AS mail
 				FROM ml_users
 				LEFT JOIN users ON (ml_users.uid = users.uid)
 				WHERE list_id = '$id'";
@@ -84,7 +168,7 @@ class keywords extends aw_template {
 		{
 			$this->vars(array(
 					"uid" => $row["uid"],
-					"email" => $row["email"],
+					"email" => $row["mail"],
 					"name" => $row["name"],
 					"tm" => ($row["tm"]) ? $this->time2date($row["tm"],2) : "(info puudub)",
 			));

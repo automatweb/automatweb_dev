@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.54 2001/11/06 07:15:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.55 2001/11/09 22:45:39 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -292,13 +292,6 @@ class document extends aw_template
 	function gen_preview($params) 
 	{
 		global $DEBUG;
-		if ($DEBUG)
-		{
-			print "generating preview<bR>";
-			print "<pre>";
-			print_r($params);
-			print "</pre>";
-		};
 		extract($params);
 		$tpl = isset($params["tpl"]) ? $params["tpl"] : "plain.tpl";
 		!isset($leadonly) ? $leadonly = -1 : "";
@@ -633,6 +626,25 @@ class document extends aw_template
 		{
 			$doc["content"] = str_replace($matches[0],"<a name='" . $matches[3] . "'> </a>",$doc["content"]);
 		};
+
+		// tekitame keywordide lingid
+		// this should be toggled with a preference in site config
+		$q = "SELECT keywords.keyword AS keyword,keyword_id FROM keywordrelations LEFT JOIN keywords ON (keywordrelations.keyword_id = keywords.oid) WHERE keywordrelations.id = '$docid'";
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$keywords[$row["keyword"]] = sprintf(" <a href='%s' title='%s' target='_blank'>%s<sup><b>*</b></sup></a> ",$this->mk_my_orb("lookup",array("id" => $row["keyword_id"]),"document"),"LINK",$row["keyword"]);
+		}
+		
+		if (is_array($keywords))
+		{
+			// performs the actual search and replace
+			foreach ($keywords as $k_key => $k_val)
+			{
+				$doc["content"] = preg_replace("/\s$k_key\s/i",$k_val," " . $doc["content"] . " ");
+			};
+
+		}
 	
 		// v6tame pealkirjast <p> maha
 		$doc["title"] = preg_replace("/<p>(.*)<\/p>/is","\\1",$doc["title"]);
@@ -1051,14 +1063,24 @@ class document extends aw_template
 		if ($data["content"]) {$data["content"] = trim($data["content"]);};
 		if ($data["lead"]) {$data["lead"] = trim($data["lead"]);};
 		if ($data["cite"]) {$data["cite"] = trim($data["cite"]);};
-		if ($data["keywords"])
+		if ($data["keywords"] || $data["link_keywords"])
 		{
 			classload("keywords");
 			$kw = new keywords;
-			$kw->update_keywords(array(
-						"keywords" => $data["keywords"],
-						"oid" => $data["id"],
-			));
+			if ($data["keywords"])
+			{
+				$kw->update_keywords(array(
+							"keywords" => $data["keywords"],
+							"oid" => $data["id"],
+				));
+			}
+			else
+			{
+				$kw->update_relations(array(
+						"id" => $data["id"],
+						"data" => $data["content"],
+				));
+			};
 		};
 
 		if ($data["clear_styles"] == 1)
@@ -1526,7 +1548,8 @@ class document extends aw_template
 			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
 			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
 			"addgallery"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"gallery"),
-			"addchain" => $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form_chain")
+			"addchain" => $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form_chain"),
+			"aliasmgr_link" => $this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"),
 		));
 		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
 		$this->mk_alias_lists($id);
@@ -3020,6 +3043,62 @@ class document extends aw_template
 		}
 
 		return $this->mk_my_orb("list_user_docs");
+	}
+
+	function lookup($args = array())
+	{
+		global $SITE_ID;
+		extract($args);
+		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id = " . CL_DOCUMENT . " AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
+		$retval = "";
+		load_vcl("table");
+
+		$tt = new aw_table(array(
+			"prefix" => "keywords",
+			"imgurl"    => $GLOBALS["baseurl"]."/img",
+			"tbgcolor" => "#C3D0DC",
+		));
+
+		$tt->parse_xml_def($GLOBALS["basedir"]."/xml/generic_table.xml");
+		$tt->set_header_attribs(array(
+			"id" => $id,
+			"class" => "document",
+			"action" => "lookup",
+		));
+		$tt->define_field(array(
+			"name" => "name",
+			"caption" => "Nimi",
+			"talign" => "center",
+			"sortable" => 1,
+			"nowrap" => "1",
+		));
+		$tt->define_field(array(
+			"name" => "modified",
+			"caption" => "Muudetud",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+			"nowrap" => "1",
+		));
+		$tt->define_field(array(
+			"name" => "modifiedby",
+			"caption" => "Muutja",
+			"talign" => "center",
+			"align" => "center",
+			"sortable" => 1,
+			"nowrap" => "1",
+		));
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$tt->define_data(array(
+				"name" => sprintf("<a href='/?section=%d'>%s</a>",$row["oid"],$row["name"]),
+				"modified" => $this->time2date($row["modified"],2),
+				"modifiedby" => $row["modifiedby"],
+			));
+		};
+		$tt->sort_by(array("field" => $sortby));
+		return $tt->draw();
 	}
 };
 ?>
