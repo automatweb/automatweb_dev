@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.2 2002/11/07 10:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_chain.aw,v 1.3 2002/11/07 22:57:01 kristo Exp $
 // form_chain.aw - form chains
 
 classload("formgen/form_base");
@@ -563,6 +563,7 @@ class form_chain extends form_base
 				"update_fcal_timedef" => $update_fcal_timedef,
 				"no_vac_check" => $no_vac_check,
 				"cal_relation" => $_eid,
+				"no_ml_rules" => true
 		));
 
 //		echo "err = $f->has_controller_errors , nce  =$new_chain_entry <Br>";
@@ -666,6 +667,8 @@ class form_chain extends form_base
 		{
 			$url = $this->mk_my_orb("show", array("id" => $id, "section" => $section, "form_id" => $form_id, "entry_id" => $chain_entry_id));
 		}
+		$ml_rule_inst = get_instance("mailinglist/ml_rule");
+		$ml_rule_inst->exec_dynamic_rules();
 		return $url;
 	}
 
