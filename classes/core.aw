@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.90 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.91 2002/06/13 23:58:49 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1886,6 +1886,28 @@ class core extends db_connector
 		// actually this should return a boolean value and an error message should
 		// be stored somewhere inside the class.
 		return true;
+	}
+
+	////
+	// !Retrieves a list of files in a directory
+	// dir - full path to directory
+	// XXX: add security checks
+	function get_directory($args = array())
+	{
+		extract($args);
+		// Directory Handle
+		$files = array();
+		if ($DH = @opendir($dir)) {
+			while (false !== ($file = readdir($DH))) { 
+				$fn = $dir . "/" . $file;
+				if (is_file($fn))
+				{
+					$files[$file] = $file;
+				};
+			}
+			closedir($DH);
+		}
+		return $files;
 	}
 
 	////
