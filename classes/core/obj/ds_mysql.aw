@@ -524,6 +524,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$sql .= " AND reltype = '".$arr["type"]."' ";
 		}
+
 		if ($arr["class"])
 		{
 			$sql .= " AND type = '".$arr["class"]."' ";
@@ -533,7 +534,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			if (substr($k, 0, 3) == "to.")
 			{
-				$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
+				if (is_array($v))
+				{
+					$sql .= " AND o_t.".substr($k, 3)." IN (" . join(",",$v) . ") ";
+				}
+				else
+				{
+					$sql .= " AND o_t.".substr($k, 3)." = '$v' ";
+				};
 			}
 			if (substr($k, 0, 5) == "from.")
 			{
