@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.24 2004/02/26 13:45:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.25 2004/03/11 13:26:57 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -25,29 +25,17 @@
 	@property comments_on_page type=select
 	@caption Postitusi lehel
 
-	@property topic_depth type=select default=1 
+	@property topic_depth type=select default=0 
 	@caption Teemade sügavus
 
 	@property topic_selector type=text group=topic_selector no_caption=1
 	@caption Teemade tasemed
 
-	@property container type=text store=no group=container no_caption=1
-	@caption Konteiner
-
-	@property topic type=hidden store=no group=container
+	@property topic type=hidden store=no group=contents
 	@caption Topic ID (sys)
-
-	@property subaction type=hidden store=no group=container
-	@caption Subact (sys)
 
 	@property show type=callback callback=callback_gen_contents store=no no_caption=1 group=contents
 	@caption Foorumi sisu
-
-	@property add_topic type=callback callback=callback_gen_add_topic store=no no_caption=1 group=add_topic
-	@caption Lisa teema
-	
-	@property add_comment type=callback callback=callback_gen_add_comment store=no no_caption=1 group=add_comment
-	@caption Lisa kommentaar
 
 	@property style_donor type=relpicker group=styles reltype=RELTYPE_STYLE_DONOR
 	@caption Stiilidoonor
@@ -109,12 +97,9 @@
 	@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Sisestusvormi elemendi stiil
 
-	@groupinfo container caption=Foorum submit=no
-	@groupinfo topic_selector caption="Teemad" 
-	@groupinfo contents caption=Sisu submit=no parent=container
+	@groupinfo contents caption=Sisu submit=no
+	@groupinfo topic_selector caption=Teemad 
 	@groupinfo styles caption=Stiilid
-	@groupinfo add_topic caption="Lisa teema" parent=container
-	@groupinfo add_comment caption="Lisa kommentaar" parent=container
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption teemade kataloog
@@ -152,28 +137,26 @@ class forum_v2 extends class_base
 				break;
 
 			case "topic_depth":
-				$data["options"] = array("1" => "1","2" => "2","3" => "3","4" => "4","5" => "5");
+				$data["options"] = array("0" => "0","1" => "1","2" => "2","3" => "3","4" => "4","5" => "5");
 				break;
 
 			case "topic_selector":
-				$data["value"] = $this->get_topic_selector($arr);
+				$topic_folder = $arr["obj_inst"]->prop("topic_folder");
+				if (!is_oid($topic_folder))
+				{
+					$retval = PROP_ERROR;
+					$data["error"] = "Teemade kataloog on valimata";
+				}
+				else
+				{
+					$data["value"] = $this->get_topic_selector($arr);
+				};
 				break;
 
 			case "topic":
 				if (!empty($arr["request"]["topic"]))
 				{
 					$data["value"] = $arr["request"]["topic"];
-				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-
-			case "subaction":
-				if (!empty($arr["request"]["topic"]))
-				{
-					$data["value"] = "submit_comment";
 				}
 				else
 				{
@@ -191,14 +174,6 @@ class forum_v2 extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "add_topic":
-				$this->create_forum_topic($arr);
-				break;
-
-			case "add_comment":
-				$this->create_forum_comment($arr);
-				break;
-
 			case "topic_selector":
 				$this->update_topic_selector($arr);
 				break;
@@ -217,45 +192,34 @@ class forum_v2 extends class_base
 		$this->rel_id = aw_global_get("section");
 	}
 
-	function callback_gen_contents($args = array())
+	function callback_gen_contents($arr)
 	{
 		classload("layout/active_page_data");
 		$this->style_data = array();
-		/*
-		$fld = $args["obj_inst"]->prop("topic_folder");
-		if (!is_numeric($fld))
-		{
-			return false;
-		};			
-		*/
-
-		$this->obj_inst = $args["obj_inst"];
+		$this->obj_inst = $arr["obj_inst"];
 		$style_donor = $this->obj_inst->prop("style_donor");
 		if (!empty($style_donor))
 		{
 			$this->style_donor_obj = new object($style_donor);
 		};
 		$this->_add_style("style_caption");
-		
-		//$args["fld"] = $fld;
 
-		if (is_numeric($args["request"]["topic"]))
+		if (is_oid($arr["request"]["topic"]))
 		{
-			$retval = $this->draw_topic($args);
+			$retval = $this->draw_topic($arr);
 		}
-		elseif (is_numeric($args["request"]["folder"]))
+		elseif (is_oid($arr["request"]["folder"]))
 		{
-			$retval = $this->draw_folder($args);
+			$retval = $this->draw_folder($arr);
 		}
 		else
 		{
-			$retval = $this->draw_all_folders($args);
+			// default view, used when the user first views the forum
+			// shows all folders
+			$retval = $this->draw_all_folders($arr);
 		};
 
-		// bummer ... I need to be able to draw multiple topics
-
 		$prop = $args["prop"];
-		//$prop["type"] = "text";
 		$prop["value"] = $retval;
 		return array($prop);
 	}	
@@ -281,12 +245,14 @@ class forum_v2 extends class_base
 		// it is important to know that comments may only be at the lowest level
 
 		$depth = $args["obj_inst"]->prop("topic_depth");
-		if (empty($depth))
+		if (empty($depth) && $depth != 0)
 		{
 			$depth = 1;
 		};
 
 		$this->depth = $depth;
+
+		// forum allows turning off of certain folders, this deals with it.
 		$this->exclude = $args["obj_inst"]->meta("exclude");
 		$this->exclude_subs = $args["obj_inst"]->meta("exclude_subs");
 
@@ -298,18 +264,25 @@ class forum_v2 extends class_base
 		));
 
 		$c = "";
-		// I need to consolidate this code in some way with the code that draws 
-		// the topic selector .. oh .. herr god, how the fuck am I going to do that?
+		$first = 0;
 		foreach($conns as $conn)
 		{
-			$c .= $this->_draw_one_level(array(
-				//"parent" => $args["fld"],
-				"parent" => $conn->prop("to"),
-				"id" => $args["obj_inst"]->id(),
-			));
+			// ideaalis võiks saada teemasid teha ka otse foorumi sisse.
+			// see tähendab siis seda, et kui kataloogi pole määratud, siis
+			// tulevad teemad by default kohe foorum sisse. Ja nii ongi...
+			if ($this->depth == 0)
+			{
+				$args["request"]["folder"] = $conn->prop("to");
+				$c .= $this->draw_folder($args);
+			}
+			else
+			{
+				$c .= $this->_draw_one_level(array(
+					"parent" => $conn->prop("to"),
+					"id" => $args["obj_inst"]->id(),
+				));
+			};
 		};
-
-
 
 		$this->vars(array(
 			"forum_contents" => $c,
@@ -330,9 +303,12 @@ class forum_v2 extends class_base
 		}
 		else
 		{
+			// this shit doesn't even draw the first level, even if explicitly specify that one should exist
+			// why???
 			$folder_list = new object_list(array(
 				"parent" => $arr["parent"],
 				"class_id" => CL_MENU,
+				"status" => STAT_ACTIVE,
 			));
 			for ($folder_obj = $folder_list->begin(); !$folder_list->end(); $folder_obj = $folder_list->next())
 			{
@@ -366,22 +342,6 @@ class forum_v2 extends class_base
 					"id" => $arr["id"],
 				));
 				$this->level--;
-
-				// so if I want to make this work, I need to figure out how
-				// many levels do I have to draw. I have to make this function recursive.
-				/*
-				if (empty($args["request"]["c"]) || ($args["request"]["c"] == $folder_obj->id()))
-				{
-					$c .= $this->_draw_last_level(array(
-						"parent" => $folder_obj->id(),
-						"forum_id" => $args["obj_inst"]->id(),
-					));
-				}
-				else
-				*/
-
-
-
 			}
 		};
 		return $c;
@@ -390,11 +350,10 @@ class forum_v2 extends class_base
 	// needs at least one argument .. the parent
 	function _draw_last_level($arr)
 	{
-		// for each first level folder, figure out all the second level
-		// folders.
 		$sub_folder_list = new object_list(array(
 			"parent" => $arr["parent"],
 			"class_id" => CL_MENU,
+			"status" => STAT_ACTIVE,
 		));
 
 		// for each second level folder, figure out the amount of topics
@@ -442,15 +401,6 @@ class forum_v2 extends class_base
 			$c .= $this->parse("LAST_LEVEL");
 		};
 		return $c;
-	}
-
-	function update_contents($arr)
-	{
-		if ($arr["request"]["subaction"] == "submit_comment")
-		{
-			$this->submit_comment($arr["request"]);
-			$this->topic_id = $arr["request"]["topic"];
-		};
 	}
 
 	function get_folder_tree($arr)
@@ -565,6 +515,7 @@ class forum_v2 extends class_base
 		$subtopic_list = new object_list(array(
 			"parent" => $topic_obj->id(),
 			"class_id" => CL_MSGBOARD_TOPIC,
+			"status" => STAT_ACTIVE,
 		));
 
 		$c = $pager = "";
@@ -596,17 +547,19 @@ class forum_v2 extends class_base
 			{
 				continue;
 			};
+
+			// retrieve the date of the latest comment
 			$last = $this->get_last_comments(array(
 				"parents" => array($subtopic_obj->id()),
 			));
-			
+
 			$creator = $subtopic_obj->createdby();
 
 			if (!$last)
 			{
 				$last = array(
 					"created" => $subtopic_obj->created(),
-					"createdby" => $creator->createdby(),
+					"createdby" => $creator->name(),
 				);
 			};
 
@@ -844,45 +797,14 @@ class forum_v2 extends class_base
 
 		$rv = $this->parse();
 
-		// XXX: implement topic lock
 		$this->read_template("add_comment.tpl");
+		$this->reforb_action = "submit_comment";
 		$this->_add_style("style_form_caption");
 		$this->_add_style("style_form_text");
 		$this->_add_style("style_form_element");
 		$this->vars($this->style_data);
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit_comment",array(
-				"id" => $args["obj_inst"]->id(),
-				"section" => aw_global_get("section"),
-				"topic" => $topic_obj->id(),
-			)),
-		));
 		return $rv . $this->parse();
 
-	}
-
-	function callback_mod_tab($args = array())
-	{
-		$retval = true;
-		if ($args["id"] == "add_topic")
-		{
-			// we can only add new topics under new folders
-			if (empty($args["request"]["folder"]))
-			{
-				$retval = false;
-			};
-			$args["link"] .= "&folder=" . $args["request"]["folder"];
-		};
-		if ($args["id"] == "add_comment")
-		{
-			// we can only add comments under topics
-			if (empty($args["request"]["topic"]))
-			{
-				$retval = false;
-			};
-			$args["link"] .= "&topic=" . $args["request"]["topic"];
-		};
-		return $retval;
 	}
 
 	function callback_gen_add_topic($args = array())
@@ -945,43 +867,6 @@ class forum_v2 extends class_base
 
 	}
 
-	function create_forum_topic($args)
-	{
-		$t = get_instance("contentmgmt/forum/forum_topic");
-                $emb = $args["request"]["emb"];
-                $t->id_only = true;
-                if (isset($emb["group"]))
-                {
-                        $this->emb_group = $emb["group"];
-                };
-		$emb["forum_id"] = $args["request"]["id"];
-                $this->topic_id = $t->submit($emb);
-		return PROP_OK;
-	}
-	
-	function create_forum_comment($args)
-	{
-		$t = get_instance("contentmgmt/forum/forum_comment");
-                $emb = $args["request"]["emb"];
-                $t->id_only = true;
-                if (isset($emb["group"]))
-                {
-                        $this->emb_group = $emb["group"];
-                };
-		// now .. this is where I will have to let the comment class now whether to send
-		// out messages or not
-                $this->comm_id = $t->submit($emb);
-		$this->topic_id = $emb["parent"];
-		$topic_obj = new object($this->topic_id);
-		$topic_inst = get_instance("contentmgmt/forum/forum_topic");
-		$topic_inst->mail_subscribers(array(
-			"id" => $this->topic_id,
-			"subject" => "Uus postitus teemas " . $topic_obj->name() . ": " . $emb["name"],
-			"message" => $emb["uname"] . " @ " . $this->time2date(time(),2) . "\n\n" . $emb["commtext"],
-		));
-		return PROP_OK;
-	}
-	
 	function callback_mod_retval($args = array())
 	{
 		if ($this->topic_id)
@@ -1002,6 +887,7 @@ class forum_v2 extends class_base
 			$topic_list = new object_list(array(
 				"parent" => $args["parents"],
 				"class_id" => CL_MSGBOARD_TOPIC,
+				"status" => STAT_ACTIVE,
 			));	
 			for ($topic = $topic_list->begin(); !$topic_list->end(); $topic = $topic_list->next())
 			{
@@ -1064,7 +950,6 @@ class forum_v2 extends class_base
 	function get_topic_selector($arr)
 	{
 		// I need to create a list of topics and add a checkbox for each one
-			// I need to create a list of topics and add a checkbox for each one
 		$depth = $arr["obj_inst"]->prop("topic_folder");
 		$this->rv = "";
 
@@ -1111,6 +996,14 @@ class forum_v2 extends class_base
 		};
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		if (!empty($this->reforb_action))
+		{
+			$arr["action"] = $this->reforb_action;
+		};
+	}
+
 	function update_topic_selector($arr)
 	{
 		$arr["obj_inst"]->set_meta("exclude",$arr["request"]["exclude"]);
@@ -1143,7 +1036,8 @@ class forum_v2 extends class_base
 			"c" => $_GET["c"],
 			"cb_part" => 1,
 			"fxt" => 1,
-			"group" => isset($_GET["group"]) ? $_GET["group"] : "container",
+			"group" => "contents",
+			//"group" => isset($_GET["group"]) ? $_GET["group"] : "contents",
 		));
 	}
 
@@ -1210,39 +1104,35 @@ class forum_v2 extends class_base
 		$emb["parent"] = $arr["folder"];
                 $t->id_only = true;
 		$emb["forum_id"] = $arr["id"];
+		$emb["status"] = STAT_ACTIVE;
 		unset($emb["id"]);
                 $this->topic_id = $t->submit($emb);
 		return $this->mk_my_orb("change",array(
-			"group" => "container",
+			"group" => "contents",
 			"section" => $arr["section"],
 			"folder" => $arr["folder"],
 			"_alias" => get_class($this),
 		));
 	}
 	
-	/**  
+	/** Creates a new comment object for a topic 
 		
 		@attrib name=submit_comment params=name all_args="1" nologin="1"
-		
-		
-		@returns
-		
-		
-		@comment
 
 	**/
 	function submit_comment($arr)
 	{
-		$t = get_instance("contentmgmt/forum/forum_comment");
+		$t = get_instance(CL_COMMENT);
                 $emb = $arr;
                 $t->id_only = true;
 		unset($emb["id"]);
 		$emb["parent"] = $arr["topic"];
+		$emb["status"] = STAT_ACTIVE;
                 $this->comm_id = $t->submit($emb);
 
 		return $this->mk_my_orb("change",array(
 			"id" => $arr["id"],
-			"group" => "container",
+			"group" => $arr["group"],
 			"section" => $arr["section"],
 			"topic" => $arr["topic"],
 			"_alias" => get_class($this),
