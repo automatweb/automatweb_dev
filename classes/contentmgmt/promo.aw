@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.2 2003/07/18 10:11:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.3 2003/07/18 10:23:03 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -98,24 +98,12 @@ class promo extends class_base
 		{
 			case "tpl_lead":
 				// kysime infot lyhikeste templatede kohta
-				$q = "SELECT * FROM template WHERE type = 1 ORDER BY id";
-				$this->db_query($q);
-				$short_templates = array("0" => "Vali template");
-				$def_name = "";
-				while($tpl = $this->db_fetch_row()) 
-				{
-					if ($tpl["filename"] == aw_ini_get("promo.default_tpl"))
-					{
-						$def_name = $tpl["id"];
-						$tpl["name"] .= " (V) ";
-					}
-					$short_templates[$tpl["id"]] = $tpl["name"];
-				};
-				if ($def_name != "" && !$data["value"])
-				{
-					$data["value"] = $def_name;
-				}
-				$data["options"] = $short_templates;
+				$tplmgr = get_instance("templatemgr");
+				$data["options"] = $tplmgr->get_template_list(array(
+					"type" => 1,
+					"def" => aw_ini_get("promo.default_tpl"),
+					"caption" => "Vali template"
+				));
 				break;
 	
 			case "type":
@@ -505,9 +493,6 @@ class promo extends class_base
 			$def = new aw_array(array_slice($def->get(), 0, $ndocs));
 		}
 
-		$q = "SELECT filename FROM template WHERE id = '".$ob->prop("tpl_lead")."'";
-		$row = $this->db_fetch_row($q);
-
 		$content = "";
 		$doc = get_instance("document");
 
@@ -517,9 +502,11 @@ class promo extends class_base
 			"boldlead" => 1,
 			"no_strip_lead" => 1,
 		);
+
 		if (!$ob->meta('use_fld_tpl'))
 		{
-			$parms["tpl"] = $row["filename"];
+			$mgr = get_instance("templatemgr");
+			$parms["tpl"] = $mgr->get_template_file_by_id($ob->prop("tpl_lead"));
 		}
 		else
 		{
