@@ -705,11 +705,6 @@ class site_content extends menuedit
 			// ignore all these if the meny is a 1st level menu 
 			$this->level--;
 			array_pop($this->menu_aliases);
-			global $DBUG;
-			if ($DBUG)
-			{
-				print "skip";
-			};
 			return 0;
 		}
 		$this->vars(array(
@@ -810,7 +805,6 @@ class site_content extends menuedit
 				}
 			}
 
-			// check if this menu is THE selected menu
 			if ($this->sel_section == $row["oid"] && $this->is_template("MENU_".$name."_SEEALSO_ITEM"))
 			{
 				$this->do_seealso_items($row,$name);
@@ -1287,53 +1281,48 @@ class site_content extends menuedit
 	// !draws MENU_$name_SEEALSO_ITEM 's for the menu given in $row
 	function do_seealso_items($row,$name)
 	{
-		$ext = $this->cfg["ext"];
-		$baseurl = $this->cfg["baseurl"];
-		$lang_id = aw_global_get("lang_id");
+		$menus = $this->get_aliases_of(array(
+			"oid" => $row["oid"],
+			// XXX, this relation type is defined in "menu.aw", but I feel bad
+			// about including one big-ass file just to get one constant.
+			"reltype" => 5,
+		));
 
-		$sa = unserialize($row["seealso"]);
-		if (is_array($sa[$lang_id]))
+		$tmp = array();
+		$subtpl = "MENU_${name}_SEEALSO_ITEM";
+
+		// get_aliases_of ensures that return value is always array
+		foreach($menus as $said => $foo)
 		{
-			reset($sa[$lang_id]);
-			while (list($said,) = each($sa[$lang_id]))
+			$samenu = $this->mar[$said];
+			if (!is_array($samenu))
 			{
-				$samenu = $this->mar[$said];
-				if (!is_array($samenu))
-				{
-					// the menu was not loaded. load it.
-					$this->save_handle();
-					//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE objects.oid = $said");
-					//$samenu = $this->db_next();
+				// the menu was not loaded. load it.
+				$samenu = $this->get_menu($said);
+				$this->mar[$said] = $samenu;
+			}
 
-					$samenu = $this->get_menu($said);
-					$this->mar[$said] = $samenu;
-					$this->restore_handle();
-				}
+			$link = $this->make_menu_link($samenu);
+			$ord = (int)$samenu["meta"]["seealso_order"];
 
-				if ($samenu["link"] != "")
-				{
-					$link = $samenu["link"];
-				}
-				else
-				{
-					$link = $baseurl."/";
-					$link .= ($samenu["alias"] != "") ? $samenu["alias"] :  $samenu["oid"];
-				}
+			// the jrk number is in $samenu["meta"]["seealso_order"]
 
-				// use uncompressed version
-				$meta = $samenu["meta"];
-
-				if (!($meta["users_only"] == 1 && aw_global_get("uid") == ""))
-				{
-					$this->vars(array(
-						"target" => $samenu["target"] ? "target=\"_blank\"" : "",
-						"link" => $link,
-						"text" => str_replace("&nbsp;"," ",strip_tags($samenu["name"]))
-					));
-					$this->parse("MENU_".$name."_SEEALSO_ITEM");
-				}
+			if (!($samenu["meta"]["users_only"] == 1 && aw_global_get("uid") == ""))
+			{
+				$this->vars(array(
+					"target" => $samenu["target"] ? "target=\"_blank\"" : "",
+					"link" => $link,
+					"text" => $samenu["name"],
+				));
+				$tmp[$ord] .= $this->parse($subtpl);
 			}
 		}
+
+		// make sure, they are in correct order
+		ksort($tmp);
+		$this->vars(array(
+			$subtpl => join("",$tmp),
+		));
 	}
 
 
@@ -1543,21 +1532,7 @@ class site_content extends menuedit
 				else
 				{
 					$oid = ($row["class_id"] == 39) ? $row["brother_of"] : $row["oid"];
-					// I'm sorry -- duke
-					// how the fuck do I rewrite those URLs correctly
-					// whatever .. the fact is that I can't simply stick date to the
-					// end of that shait.
-					/*
-					$date = aw_global_get("date");
-					if ($date)
-					{
-						$link .= "section=" . $oid . "/date=" . $date;
-					}
-					else
-					{
-					*/
-						$link .= $oid;
-					//};
+					$link .= $oid;
 				};
 			};
 		}
