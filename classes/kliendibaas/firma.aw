@@ -60,7 +60,7 @@ CREATE TABLE `kliendibaas_firma` (
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`),
   KEY `teg_i` (`pohitegevus`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 
@@ -73,50 +73,27 @@ define ('TOOTED',6);
 
 class firma extends class_base
 {
-	function callback_get_rel_types()
-	{
-		return array(
-			ETTEVOTLUSVORM => 'ettevõtlusvorm',
-			POHITEGEVUS => 'põhitegevus',
-			ADDRESS => 'kontakt aadress',
-			FIRMAJUHT => 'firmajuht',
-			KORVALTEGEVUSED => 'kõrvaltegevusalad',
-			TOOTED => 'tooted',
-		);
-	}
-/*
-function callback_submit_relation_list($a)
-{
-print_r($a);die();
-}*/
 	function firma()
 	{
 		$this->init(array(
 			'clid' => CL_FIRMA,
 		));
 	}
-/*
-	function set_property($args = array())
+
+	function callback_get_rel_types()
 	{
-		$data = &$args["prop"];
-		$form = &$args["form_data"];
-		$retval = PROP_OK;
-		switch($data['name'])
-		{
-//			case 'korvaltegevused':
-///				$form['korvaltegevused'] = unserialize($this->make_keys($form['korvaltegevused']));
-//				print_r($args);
-//		die;
-//		$retval = PROP_IGNORE;
-			break;
-		};
-		return $retval;
+		return array(
+			ETTEVOTLUSVORM => 'Ettevõtlusvorm',
+			POHITEGEVUS => 'Põhitegevus',
+			ADDRESS => 'Kontaktaadress',
+			FIRMAJUHT => 'Firmajuht',
+			KORVALTEGEVUSED => 'Kõrvaltegevusalad',
+			TOOTED => 'Tooted',
+		);
 	}
-*/
+
 	function get_property($args)
 	{
-		//print_r($args);
-			//die();
 		$data = &$args['prop'];
 		$retval = PROP_OK;
 		$meta=$args['obj']['meta'];
@@ -130,13 +107,6 @@ print_r($a);die();
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
-/*			case 'korvaltegevused':
-				$data['value'] = $args['objdata']['korvaltgevused'];
-				//print_r($data['value']);
-				//die();
-			break;
-*/
-
 		};
 		return $retval;
 	}

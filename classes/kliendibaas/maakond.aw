@@ -30,7 +30,7 @@ CREATE TABLE `kliendibaas_maakond` (
   `location` text,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 class maakond extends class_base

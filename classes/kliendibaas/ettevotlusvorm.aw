@@ -23,7 +23,7 @@ CREATE TABLE `kliendibaas_ettevotlusvorm` (
   `comment` text,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 

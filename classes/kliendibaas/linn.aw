@@ -21,7 +21,7 @@ CREATE TABLE `kliendibaas_linn` (
   `location` text,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 */
 class linn extends class_base
 {

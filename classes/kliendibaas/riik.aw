@@ -42,7 +42,7 @@ CREATE TABLE `kliendibaas_riik` (
   `lyhend` varchar(20) default NULL,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 

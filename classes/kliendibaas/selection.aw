@@ -58,7 +58,7 @@ CREATE TABLE `selection` (
   `jrk` int(11) default NULL,
   `status` tinyint(4) default NULL,
   UNIQUE KEY `oid` (`oid`,`object`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 
@@ -81,7 +81,7 @@ class selection extends class_base
 	function callback_get_rel_types()
 	{
 		return array(
-			BACKFORMS2 => 'pilootobjekt',
+			BACKFORMS2 => 'Tagasisidevorm',
 		);
 	}
 
@@ -147,7 +147,7 @@ class selection extends class_base
 		$retval = $this->show($args);
 		$nodes = array();
 		$nodes[] = array(
-			"value" => 'test'.$retval,
+			"value" => $retval,
 		);
 		return $nodes;
 	}
@@ -184,7 +184,7 @@ class selection extends class_base
 		));
 		$t->define_field(array(
 			'name' => 'active',
-			'caption' => "<a href='javascript:selall(\"status\")'>aktiivne</a>",
+			'caption' => "<a href='javascript:selall(\"status\")' title='muuda kõikide objektide aktiivsust'>aktiivne</a>",
 			'width' => '20',
 			'callback' => array(&$this, 'callb_active'),
 			'callb_pass_row' => true,
@@ -395,7 +395,7 @@ class selection extends class_base
 		}
 		else
 		{
-			$toolbar->add_cdata('<small>vali valim</small>');
+			$toolbar->add_cdata('<small>Vali valim</small>');
 		}
 
 		$toolbar->add_cdata($str);
@@ -417,7 +417,7 @@ class selection extends class_base
 				case 'add':
 					$toolbar->add_button(array(
 						"name" => 'go_add',
-						"tooltip" => "lisa valitud valimisse",
+						"tooltip" => "Lisa valitud valimisse",
 						"url" => "#",
 						"imgover" => "import_over.gif",
 						"img" => "import.gif",
@@ -427,7 +427,7 @@ class selection extends class_base
 				case 'change':
 					$toolbar->add_button(array(
 						"name" => 'change_it',
-						"tooltip" => 'muuda valimit',
+						"tooltip" => 'Muuda valimit',
 						"url" => "#",
 						"imgover" => "edit_over.gif",
 						"img" => "edit.gif",
@@ -437,7 +437,7 @@ class selection extends class_base
 				case 'save':
 					$toolbar->add_button(array(
 						"name" => "save",
-						"tooltip" => "salvesta",
+						"tooltip" => "Salvesta",
 						"url" => "#",
 						"imgover" => "save_over.gif",
 						"img" => "save.gif",
@@ -447,7 +447,7 @@ class selection extends class_base
 				case 'delete':
 					$toolbar->add_button(array(
 						"name" => "delete",
-						"tooltip" => "kustuta valitud",
+						"tooltip" => "Kustuta valitud objektid valimist",
 						"url" => "#",
 						"imgover" => "delete_over.gif",
 						"img" => "delete.gif",
@@ -584,6 +584,8 @@ class selection extends class_base
 
 		if (is_array($arr))
 		{
+
+			$this->default_forms = $args['obj']['meta']['forms'];
 			//sorteerime jrk järgi
 			$this->sortby = 'jrk';
 			uasort($arr, array ($this, 'cmp_obj'));
@@ -610,11 +612,12 @@ class selection extends class_base
 
 						if (method_exists($inst[$data['class_file']],'show_in_selection'))
 						{
+							$inst[$data['class_file']]->deafult_forms = $this->default_forms;
 							$str .= $inst[$data['class_file']]->show_in_selection(array('id' =>$val['object'],'obj' => $data));
 						}
 						else
 						{
-							$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data));
+							$str .= $this->show_in_selection(array('id' =>$val['object'],'obj' => $data, 'class_file' => $data['class_file']));
 						}
 					}
 /*					else
@@ -649,13 +652,29 @@ class selection extends class_base
 	{
 		//$this->read_template();
 		//$obj['class_file']
-
 		//siin võib teha alampringud jne mida veel vaja objekti juures näidata
 
+
+		$forms = '';
+		if (is_array($this->default_forms))
+		{
+			foreach($this->default_forms as $val)
+			{
+				if (!$val)
+				continue;
+
+				$form = $this->get_object($val);
+				$args['obj']['tagasisidevormid'] .= html::href(array(
+				'target' => $form['meta']['open_in_window']? '_blank' : NULL,
+				'caption' => $form['name'], 'url' => $this->mk_my_orb('form', array(
+					'id' => $form[OID],
+					'feedback' => $args['obj'][OID],
+					'feedback_cl' => rawurlencode($data['class_file']),
+					),'pilot_object'))).'<br />';
+			}
+		}
 		return localparse($this->sel_tpl, $args['obj']);
 	}
-
-
 
 
 /*

@@ -52,14 +52,13 @@ class toode extends class_base
 		switch($data["name"])
 		{
 			case 'jrk':
-				$retval=PROP_IGNORE;
+				$retval = PROP_IGNORE;
 			break;
 			case 'alias':
-				$retval=PROP_IGNORE;
+				$retval = PROP_IGNORE;
 			break;
 		}
 		return  $retval;
 	}
-
 }
 ?>

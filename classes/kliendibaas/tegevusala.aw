@@ -34,7 +34,7 @@ CREATE TABLE `kliendibaas_tegevusala` (
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`),
   KEY `kood_i` (`kood`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 */
 
 class tegevusala extends class_base

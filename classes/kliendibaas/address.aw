@@ -61,11 +61,9 @@ CREATE TABLE `kliendibaas_address` (
   `kodulehekylg` varchar(255) default NULL,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
-
-
 
 define('LINN',1);
 define('RIIK',2);
