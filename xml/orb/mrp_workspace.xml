@@ -51,5 +51,29 @@
 			</function>
 		</action>
 
+		<action name="start">
+			<function name="start">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="done">
+			<function name="done">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="abort">
+			<function name="abort">
+				<arguments>
+					<required name="id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
