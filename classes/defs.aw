@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.76 2003/01/30 12:30:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.77 2003/01/31 18:23:42 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -150,12 +150,7 @@ if (!defined("DEFS"))
 	// !Kas argument on integer?
 	function is_number($parm)
 	{
-		$intparm = (int)$parm;
-		if (strlen($intparm) == strlen($parm))
-		{
-			return true;
-		}
-		return false;
+		return is_numeric($parm);
 	}
 
 	////
