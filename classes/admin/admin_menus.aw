@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.9 2003/06/04 14:19:55 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.10 2003/06/04 19:17:56 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -585,7 +585,26 @@ class admin_menus extends aw_template
 			{
 				if ($oid != $parent)
 				{
-					$this->upd_object(array("oid" => $oid, "parent" => $parent,"period" => $period,"lang_id" => aw_global_get("lang_id")));
+					// so, let the object update itself when it is being cut-pasted, if it so desires
+					$obj = $this->get_object($oid);
+					if ($this->cfg["classes"][$obj["class_id"]]["file"] != "")
+					{
+						$inst = get_instance($this->cfg["classes"][$obj["class_id"]]["alias_class"] != "" ? $this->cfg["classes"][$obj["class_id"]]["alias_class"] : $this->cfg["classes"][$obj["class_id"]]["file"]);
+						if (method_exists($inst, "cut_hook"))
+						{
+							$inst->cut_hook(array(
+								"oid" => $oid,
+								"new_parent" => $parent
+							));
+						}
+					}
+					
+					$this->upd_object(array(
+						"oid" => $oid, 
+						"parent" => $parent,
+						"period" => $period,
+						"lang_id" => aw_global_get("lang_id")
+					));
 				}
 			}
 		}
@@ -848,7 +867,7 @@ class admin_menus extends aw_template
 				LEFT JOIN menu m ON m.id = objects.oid
 			WHERE 
 				objects.parent = '$parent' AND 
-				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id = ". CL_PERIOD . ")
+				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP."))
 				AND site_id = '$site_id' AND 
 				status != 0 
 				$cls $ps ";
@@ -942,7 +961,7 @@ class admin_menus extends aw_template
 			}
 
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
-			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
+			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=default.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
 			if ($this->co_id)
 			{
 				$this->otc_inst->table_row($row, &$this->t);
