@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.2 2004/10/28 09:41:01 kristo Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.3 2004/10/29 16:22:45 duke Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -136,7 +136,7 @@ class docgen_orb_gen extends class_base
 
 				foreach($cld["classes"] as $class => $cldat)
 				{
-					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")))
+					if (is_array($cldat["functions"]) && $class != "" && strtolower($class) == strtolower(basename($file, ".aw")) && $cldat["extends"] != "core")
 					{
 						echo "make orb defs for $file\n";
 
