@@ -372,11 +372,6 @@ class languages extends aw_template
 	function request_startup()
 	{
 		$lang_id = aw_global_get("lang_id");
-		global $DBX;
-		if ($DBX)
-		{
-			var_dump($lang_id);
-		};
 
 		// if we explicitly request language change, we get that, except if the language is not active
 		// and we are not logged in

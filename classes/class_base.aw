@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.92 2003/04/07 10:18:54 axel Exp $
+// $Id: class_base.aw,v 2.93 2003/04/13 17:01:32 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -74,7 +74,9 @@ class class_base extends aliasmgr
 		{
 			die($this->ds->get_error_text());
 		};
-	
+
+		// if you give a id of cfgform as an argument to the new action, then
+		// we attempt to use that cfgform to generate the screen
 		if (!empty($args["cfgform"]))
 		{	
 			$this->validate_cfgform($args["cfgform"]);
