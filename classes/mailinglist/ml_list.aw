@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.64 2004/09/10 08:52:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.65 2004/09/14 12:03:49 sven Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -799,6 +799,42 @@ class ml_list extends class_base
 		$ml_list_members = $this->get_members($arr["obj_inst"]->id(),$perpage * $ft_page +1,$perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/member_list");
+		
+		
+		if($arr["obj_inst"]->prop("member_config"))
+		{
+			$config_obj = &obj($arr["obj_inst"]->prop("member_config"));
+			
+			$config_data = $config_obj->meta("cfg_proplist");
+			
+			for($i = 0; $i < 10; $i++)
+			{	
+				if($config_data["udef_txbox$i"])
+				{
+					$t->define_field(array(
+						"name" => $config_data["udef_txbox$i"]["name"],
+						"caption" => $config_data["udef_txbox$i"]["caption"],
+						"sortable" => 1,
+					));	
+				}
+				if($config_data["udef_checkbox$i"])
+				{
+					$t->define_field(array(
+						"name" => $config_data["udef_txbox$i"]["name"],
+						"caption" => $config_data["udef_txbox$i"]["caption"],
+						"sortable" => 1,
+					));	
+				}
+				if($config_data["udef_date$i"])
+				{
+					$t->define_field(array(
+						"name" => $config_data["udef_date$i"]["name"],
+						"caption" => $config_data["udef_date$i"]["caption"],
+						"sortable" => 1,
+					));	
+				}
+			}
+		}
 		
 		$t->define_field(array(
 			"name" => "others",
