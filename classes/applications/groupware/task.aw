@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.3 2004/08/01 20:36:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.4 2004/08/02 10:48:34 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -32,6 +32,9 @@
 @property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
 @caption Kalendrid
 
+@property other_selector type=callback callback=cb_calendar_others store=no group=others
+@caption Teised
+
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
@@ -43,6 +46,7 @@
 
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
+@groupinfo others caption=Teised
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo reminders caption=Meeldetuletused
@@ -85,6 +89,13 @@ class task extends class_base
 		$elib = get_instance("calendar/event_property_lib");
 		return $elib->calendar_selector($arr);
 	}
+	
+	function cb_calendar_others($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->calendar_others($arr);
+	}
+
 
 	function set_property($arr)
 	{
@@ -102,11 +113,19 @@ class task extends class_base
 				$elib->process_calendar_selector($arr);
 				break;
 
+			case "other_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_other_selector($arr);
+				break;
+
 			case "whole_day":
-				list($m,$d,$y) = explode("-",date("m-d-Y"));
-				$daystart = mktime(9,0,0,$m,$d,$y);
-				$dayend = mktime(17,0,0,$m,$d,$y);
-				$arr["obj_inst"]->set_prop("start1",$daystart);
+				if ($data["value"])
+				{
+					list($m,$d,$y) = explode("-",date("m-d-Y"));
+					$daystart = mktime(9,0,0,$m,$d,$y);
+					$dayend = mktime(17,0,0,$m,$d,$y);
+					$arr["obj_inst"]->set_prop("start1",$daystart);
+				};
 				break;
 		};
 		return $retval;
