@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.17 2001/10/02 15:32:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.18 2001/11/20 13:05:49 kristo Exp $
 lc_load("mailinglist");
 class mlist extends aw_template
 {
@@ -218,9 +218,17 @@ class mlist extends aw_template
 		{
 			foreach($list_ids as $val)
 			{
-				$q = "INSERT INTO ml_users (name,mail,list_id,uid,tm)
-					VALUES('$name','$email','$val','$uid',$t)";
+				$id = $this->new_object(array(
+					"parent" => $val,
+					"class_id" => CL_MAILINGLIST_MEMBER,
+					"name" => $name,
+					"status" => 2,
+				));
+				$q = "INSERT INTO ml_users (id,name,mail,list_id,uid,tm)
+					VALUES('$id','$name','$email','$val','$uid',$t)";
+
 				$this->db_query($q);
+
 			}
 		};
 	}
@@ -232,6 +240,15 @@ class mlist extends aw_template
 	function remove_user_from_lists($args = array())
 	{
 		extract($args);
+		$q = "SELECT * FROM ml_users WHERE uid = '$uid'";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$this->upd_object(array(
+				"oid" => $row["id"],
+				"status" => 0,
+			));
+		};
 		$q = "DELETE FROM ml_users WHERE uid = '$uid'";
 		$this->db_query($q);
 	}

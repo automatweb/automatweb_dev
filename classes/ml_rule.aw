@@ -494,8 +494,7 @@
 				//debug
 				//echo("<b>rule=$id</b><br>tables=<pre>");print_r($tables);echo("</pre>where=<pre>");print_r($w);echo("</pre><br>");//dbg
 
-				// Kas seal on miskit vahet kui ma teen FROM a,b,c WHERE a.x=b.x AND a.x=c.x või teen
-				// FROM a LEFT JOIN b ON a.x=b.x LEFT JOIN c ON a.x=c.x ???
+				
 
 				// pane see junn kokku
 				$wis=sizeof($wi)>0 ? "(".join(" AND ",$wi).")":"";

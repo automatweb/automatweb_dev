@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.11 2001/10/02 10:16:58 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.12 2001/11/20 13:05:49 kristo Exp $
 // mailinglist saadetavate mailide klass
 lc_load("mailinglist");
 	class email extends aw_template
@@ -282,7 +282,7 @@ lc_load("mailinglist");
 				if ($cache && (!$this->sent[$row["mail"]]))
 				{
 					$c = str_replace("#nimi#",$row["name"],$content);
-					$f = popen("/usr/libexec/sendmail/sendmail -f $from", "w");
+					$f = popen("/usr/sbin/sendmail -f $from", "w");
 					fwrite($f, "From: $from\n");
 					fwrite($f, "To: ".$row["mail"] . ">\n");
 					fwrite($f, "Return-Path: $from\n");
@@ -367,7 +367,7 @@ lc_load("mailinglist");
 				else
 					$from = $mail[mail_from];
 					
-				$f = popen("/usr/libexec/sendmail/sendmail -f '$from' ".$user[mail], "w");
+				$f = popen("/usr/sbin/sendmail -f '$from' ".$user[mail], "w");
 				fwrite($f, "From: $from\n");
 				fwrite($f, "To: ".$user[name]." <".$user[mail].">\n");
 				fwrite($f, "Return-Path: $from\n");
@@ -392,7 +392,7 @@ lc_load("mailinglist");
 		
 		function send_plain_mail($from, $to, $subj, $text)
 		{
-			$f = popen("/usr/libexec/sendmail/sendmail -f ".$from." ".$to, "w");
+			$f = popen("/usr/sbin/sendmail -f ".$from." ".$to, "w");
 			fwrite($f, "From: ".$from."\n");
 			fwrite($f, "Return-Path: ".$from."\n");
 			fwrite($f, "Sender: ".$from."\n");
