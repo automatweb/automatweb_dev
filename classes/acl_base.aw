@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.32 2003/02/27 09:56:15 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.33 2003/02/27 09:57:51 axel Exp $
 
 define("DENIED",0);
 define("ALLOWED",1);
@@ -228,7 +228,7 @@ class acl_base extends core
 			}
 			// siin oli 100, aga seda on imho ilmselgelt liiga palju
 			// 25 peaks vist piisama kyll
-			if (++$cnt > 35)
+			if (++$cnt > 100)
 			{
 				$this->raise_error(ERR_ACL_EHIER,"acl_base->can($access,$oid): error in object hierarchy, count exceeded!",true);
 			}
