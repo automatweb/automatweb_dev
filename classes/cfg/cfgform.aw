@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.59 2005/04/04 08:45:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.60 2005/04/04 08:47:18 ahti Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -241,6 +241,7 @@ class cfgform extends class_base
 				"caption" => $caption,
 				"type" => "relpicker",
 				"multiple" => 1,
+				"size" => 2,
 				"reltype" => "RELTYPE_CONTROLLER",
 				"value" => $controllers[$prop["name"]],
 			);
@@ -264,6 +265,7 @@ class cfgform extends class_base
 				"caption" => $caption,
 				"type" => "relpicker",
 				"multiple" => 1,
+				"size" => 2,
 				"reltype" => "RELTYPE_VIEWCONTROLLER",
 				"value" => $controllers[$prop["name"]],
 			);
