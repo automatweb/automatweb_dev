@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.13 2004/12/27 12:34:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.14 2005/03/03 13:00:29 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 
@@ -852,10 +852,6 @@ class maitenance extends class_base
 		<input type='button' value='clear cache' 
 		onclick=\"document.location='".$this->mk_my_orb('cache_clear', array('clear' => '1'))."'\"><br />";
 		
-		/*$cache = get_instance("cache");
-		$cache->_get_cache_files(aw_ini_get("cache.page_cache"));
-		echo 'about to delete '.count($cache->cache_files).' files<br />';*/
-
 		$this->files = array();
 		$this->files_from_sd(aw_ini_get("cache.page_cache"));
 		echo 'about to delete '.count($this->files).'files<br />';
