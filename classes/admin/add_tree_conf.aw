@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.10 2004/03/23 12:47:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.11 2004/03/23 13:02:03 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -335,10 +335,10 @@ class add_tree_conf extends class_base
 			}
 		}
 
-		error::throw_if(!$class_id, array(
-			"id" => ERR_NO_CLASS,
-			"msg" => "add_tree_conf::can_access_class($atc, $class): could not find class id for class name!"
-		));
+		if (!$class_id)
+		{
+			return true;
+		}
 
 		return $us[$class_id] == 1;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.56 2004/03/23 12:47:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/orb.aw,v 2.57 2004/03/23 13:01:59 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -65,7 +65,10 @@ class orb extends aw_template
 		$this->check_login(array("class" => $class,"action" => $action));
 
 		// check access for this class. access is checked by the "add tree conf" object assigned to groups
-		$this->check_class_access($class);
+		if (!($class == "users"))
+		{
+			$this->check_class_access($class);
+		}
 
 		// if the action is found in one of the classes defined by
 		// the extends attribute, it should know which class was really
