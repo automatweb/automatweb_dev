@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.20 2004/06/17 13:52:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.21 2004/06/17 14:20:27 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -48,10 +48,8 @@ class aw_table extends aw_template
 		// esimene kord andmeid sisestada?
 		// seda on vaja selleks, et määrata default sort order.
 		$this->first = true;
-		if (!empty($data["layout"]))
-		{
-			$this->set_layout($data["layout"]);
-		}
+		$layout = !empty($data["layout"]) ? $data["layout"] : "generic";
+		$this->set_layout($layout);
 		if (isset($data["xml_def"]))
 		{
 			$this->parse_xml_def($data["xml_def"]);
