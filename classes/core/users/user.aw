@@ -156,6 +156,12 @@ EMIT_MESSAGE(MSG_USER_CREATE);
 @reltype IGNORED value=5 clid=CL_USER
 @caption ignoreeritud
 
+@reltype PERSON value=2 clid=CL_CRM_PERSON
+@caption isik
+
+@reltype EMAIL value=6 clid=CL_ML_MEMBER
+@caption Email
+
 /@reltype USER_DATA value=3
 /@caption Andmed
 
@@ -447,6 +453,33 @@ class user extends class_base
 					}
 				}
 				$prop["value"] = $arr["request"]["aclwizard"];
+				break;
+			case "email":
+				if(!$prop["value"])
+				{
+					return PROP_OK;
+				}
+				
+				if($mail = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				{
+					$mail->set_prop("mail", $prop["value"]);
+				}
+				else
+				{
+					$mail = new object(array(
+						"class_id" => CL_ML_MEMBER,
+						"parent" => $arr["obj_inst"]->parent(),
+					));
+					$mail->save();
+					$mail->set_prop("mail", $prop["value"]);
+					$mail->save();
+					$arr["obj_inst"]->connect(array(
+						"to" => $mail->id(),
+						"reltype" => "RELTYPE_EMAIL",
+					));
+				}
+					
+				$mail->save();
 				break;
 		}
 		return PROP_OK;
