@@ -43,6 +43,16 @@
             <caption>Default layout:</caption>
       </property>
       <property>
+            <name>apply_image</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kehtib ka pildiobjektidele</caption>
+      </property>
+      <property>
             <name>img_vert</name>
             <table>objects</table>
             <group>imgsize</group>

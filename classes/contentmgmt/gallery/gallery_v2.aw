@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.43 2004/03/18 09:05:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.44 2004/05/20 11:47:53 kristo Exp $
 
 /*
 
@@ -186,22 +186,8 @@ class gallery_v2 extends class_base
 
 	function _get_conf_for_folder($pt)
 	{
-		$oc = $this->get_object_chain($pt);
-		$rv = false;
-		foreach($oc as $dat)
-		{
-			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '$dat[oid]' AND objects.status != 0";
-			if (($mnid = $this->db_fetch_field($q,"conf_id")))
-			{
-				$rv = $mnid;
-			}
-		}
-		// that config object might have been deleted, check it and return false, if so
-		if (!$this->can("view",$rv))
-		{
-			$rv = false;
-		};
-		return $rv;
+		$i = get_instance("image");
+		return $i->_get_conf_for_folder($pt);
 	}
 
 	function callback_mod_tab($parm)

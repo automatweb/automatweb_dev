@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.7 2004/02/16 15:38:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.8 2004/05/20 11:47:53 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -23,6 +23,9 @@
 
 @property def_layout type=relpicker reltype=RELTYPE_LAYOUT
 @caption Default layout:
+
+@property apply_image type=checkbox ch_value=1 
+@caption Kehtib ka pildiobjektidele
 
 @default group=imgsize
 
@@ -160,16 +163,19 @@ class gallery_conf extends class_base
 		$this->init(array(
 			'clid' => CL_GALLERY_CONF
 		));
+		$this->do_check_tbl();
 	}
 
 	function callback_post_save($arr)
 	{
 		extract($arr);
+		// check table structure
 		$this->db_query("DELETE FROM gallery_conf2menu WHERE conf_id = '$id'");
 		$d = new aw_array($arr["obj_inst"]->prop("conf_folders"));
+		$appi = $arr["obj_inst"]->prop("apply_image");
 		foreach($d->get() as $fld)
 		{
-			$this->db_query("INSERT INTO gallery_conf2menu(menu_id, conf_id) VALUES('$fld','$id')");
+			$this->db_query("INSERT INTO gallery_conf2menu(menu_id, conf_id, apply_image) VALUES('$fld','$id','$appi')");
 		}
 	}
 
@@ -251,6 +257,149 @@ class gallery_conf extends class_base
 	{
 		$obj = new object($id);
 		return $obj->prop("def_layout");
+	}
+
+	function do_check_tbl()
+	{
+		$tbld = $this->db_get_table("gallery_conf2menu");
+		if (!isset($tbld["fields"]["apply_image"]))
+		{
+			$this->db_query("ALTER TABLE gallery_conf2menu ADD apply_image int default 0");
+			$this->db_query("ALTER TABLE gallery_conf2menu ADD index apply_image(apply_image)");
+		}
+	}
+
+	/** returns new image sizes based on the conf and current size
+
+		@comment
+
+			$conf - conf object
+			$prefix - empty if big image, "tn_" if small image
+			$w - width
+			$h - height
+
+	**/
+	function get_xydata_from_conf($arr)
+	{
+		extract($arr);
+		if ($w > $h)
+		{
+			$width = $conf->prop("h_".$prefix."width");
+			$height = $conf->prop("h_".$prefix."height");
+			$is_subimage = $conf->prop("h_".$prefix."subimage") == 1;
+			if ($is_subimage)
+			{
+				$si_top = $conf->prop("h_".prefix."subimage_top");
+				$si_left = $conf->prop("h_".$prefix."subimage_left");
+				$si_width = $conf->prop("h_".$prefix."subimage_width");
+				$si_height = $conf->prop("h_".$prefix."subimage_height");
+			}
+		}
+		else
+		{
+			$width = $conf->prop("v_".$prefix."width");
+			$height = $conf->prop("v_".$prefix."height");
+			$is_subimage = $conf->prop("v_".$prefix."subimage") == 1;
+			if ($is_subimage)
+			{
+				$si_top = $conf->prop("v_".prefix."subimage_top");
+				$si_left = $conf->prop("v_".$prefix."subimage_left");
+				$si_width = $conf->prop("v_".$prefix."subimage_width");
+				$si_height = $conf->prop("v_".$prefix."subimage_height");
+			}
+		}
+
+		// check if the user only specified one of width/height and then calc the other one
+		if ($width && !$height)
+		{
+			if ($width{strlen($width)-1} == "%")
+			{
+				$height = $width;
+			}
+			else
+			{
+				$ratio = $width / $w;
+				$height = (int)($h * $ratio);
+			}
+		}
+
+		if (!$width && $height)
+		{
+			if ($height{strlen($height)-1} == "%")
+			{
+				$width = $height;
+			}
+			else
+			{
+				$ratio = $height / $h;
+				$width = (int)($w * $ratio);
+			}
+		}
+
+		if ($si_width && !$si_height)
+		{
+			if ($si_width{strlen($si_width)-1} == "%")
+			{
+				$si_height = $si_width;
+			}
+			else
+			{
+				$ratio = $si_width / $i_width;
+				$si_height = (int)($h * $ratio);
+			}
+		}
+
+		if (!$si_width && $si_height)
+		{
+			if ($si_height{strlen($si_height)-1} == "%")
+			{
+				$si_width = $si_height;
+			}
+			else
+			{
+				$ratio = $si_height / $h;
+				$si_width = (int)($w * $ratio);
+			}
+		}
+
+
+		if (!$width)
+		{
+			$width = $w;
+		}
+		if (!$height)
+		{
+			$height = $h;
+		}
+
+		// now convert to pixels
+		if ($width{strlen($width)-1} == "%")
+		{
+			$width = (int)($w * (((int)substr($width, 0, -1))/100));
+		}
+		if ($height{strlen($height)-1} == "%")
+		{
+			$height = (int)($h * (((int)substr($height, 0, -1))/100));
+		}
+
+		if ($si_width{strlen($si_width)-1} == "%")
+		{
+			$si_width = (int)($width * (((int)substr($si_width, 0, -1))/100));
+		}
+		if ($si_height{strlen($si_height)-1} == "%")
+		{
+			$si_height = (int)($height * (((int)substr($si_height, 0, -1))/100));
+		}
+
+		return array(
+			"width" => $width,
+			"height" => $height,
+			"is_subimage" => $is_subimage,
+			"si_top" => $si_top,
+			"si_left" => $si_left,
+			"si_width" => $si_width,
+			"si_height" => $si_height
+		);
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.93 2004/05/18 14:27:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.94 2004/05/20 11:47:52 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -59,6 +59,9 @@
 
 	@property ord type=textbox size=3 table=objects field=jrk
 	@caption J&auml;rjekord
+
+	@property resize_warn type=text store=no
+	@caption Info
 
 */
 class image extends class_base
@@ -155,6 +158,7 @@ class image extends class_base
 		{
 			// now try and list images by the old way
 			$idata = $this->get_img_by_oid($oid,$matches[3]);
+
 			if (!is_array($idata))
 			{
 				return "";
@@ -595,6 +599,21 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "resize_warn":
+				if (is_oid($arr["obj_inst"]->id()))
+				{
+					if (($id = $this->_get_conf_for_folder($arr["obj_inst"]->parent(), true)))
+					{
+						$o = obj($id);
+						$prop["value"] = "Piltide automaatset suurendamist kontrollib objekt ".html::href(array(
+							"url" => $this->mk_my_orb("change", array("id" => $id), $o->class_id()),
+							"caption" => $o->name()
+						));
+						return PROP_OK;
+					}
+				}
+				return PROP_IGNORE;
+				break;
 			case "file_show":
 			case "file_show2":
 				$propname = ($prop["name"] == "file_show") ? "file" : "file2";
@@ -678,6 +697,7 @@ class image extends class_base
 				{
 					$retval = PROP_IGNORE;
 				};
+
 				break;
 
 			case "file2":
@@ -781,7 +801,7 @@ class image extends class_base
 			}
 			$img->load_from_file($im['file']);
 	
-			list($i_height, $i_width) = $img->size();
+			list($i_width, $i_height) = $img->size();
 
 			$width = $this->new_w;
 			$height = $this->new_h;
@@ -829,6 +849,8 @@ class image extends class_base
 				"content" => $img->get(IMAGE_JPEG)
 			));
 		}
+
+		$this->do_apply_gal_conf(obj($arr["id"]), $prop["value"]);
 	}
 
 	/**  
@@ -866,6 +888,146 @@ class image extends class_base
 		$imd = $this->get_image_by_id($id);
 		$url = $this->get_url($imd["file"]);
 		return $this->check_url($url);
+	}
+
+	function _get_conf_for_folder($pt, $apply_image = false)
+	{
+		$gc = get_instance("contentmgmt/gallery/gallery_conf");
+		$gc->do_check_tbl();
+
+		$oc = $this->get_object_chain($pt);
+		$rv = false;
+		if ($apply_image)
+		{
+			$appi = " AND apply_image = 1 ";
+		}
+		foreach($oc as $dat)
+		{
+			$q = "SELECT conf_id FROM gallery_conf2menu LEFT JOIN objects ON objects.oid = gallery_conf2menu.conf_id WHERE menu_id = '$dat[oid]' AND objects.status != 0 $appi";
+			if (($mnid = $this->db_fetch_field($q,"conf_id")))
+			{
+				$rv = $mnid;
+			}
+		}
+		// that config object might have been deleted, check it and return false, if so
+		if (!$this->can("view",$rv))
+		{
+			$rv = false;
+		};
+		return $rv;
+	}
+
+
+	function do_apply_gal_conf($o)
+	{
+		$conf = $this->_get_conf_for_folder($o->parent(), true);
+		if ($conf)
+		{
+			// resize image as conf says
+			$this->do_resize_image(array(
+				"o" => $o,
+				"conf" => obj($conf)
+			));
+		}
+	}
+
+
+	/** resizes images as conf says
+
+		@comment
+		
+			$o - image object
+			$conf - gallery conf object
+	**/
+	function do_resize_image($arr)
+	{
+		extract($arr);
+		// big first
+		if (($conf->prop("v_width") || $conf->prop("v_height") || $conf->prop("h_width") || $conf->prop("h_height")))
+		{
+			$bigf = $o->prop("file2");
+			if (!$bigf)
+			{
+				// no big file, copy from small file
+				$bigf = $o->prop("file");
+				if ($bigf)
+				{
+					$f = get_instance("file");
+					$bigf = $f->_put_fs(array(
+						"type" => "image/jpg",
+						"content" => $this->get_file(array("file" => $bigf))
+					));
+					$o->set_prop("file2", $bigf);
+					$o->save();
+				}
+			}
+
+			if ($bigf)
+			{
+				// do the actual resize-file thingie
+				$this->do_resize_file_in_fs($bigf, $conf, "");
+			}
+		}
+	
+		// now small
+		$smallf = $o->prop("file");
+		if (!$smallf)
+		{
+			// do copy-big-to-small
+			$smallf = $o->prop("file2");
+			if ($smallf)
+			{
+				$f = get_instance("file");
+				$smallf = $f->_put_fs(array(
+					"type" => "image/jpg",
+					"content" => $this->get_file(array("file" => $smallf))
+				));
+				$o->set_prop("file", $smallf);
+				$o->save();
+			}
+		}
+
+		if ($smallf)
+		{
+			$this->do_resize_file_in_fs($smallf, $conf, "tn_");
+		}
+	}
+
+	function do_resize_file_in_fs($file, $conf, $prefix)
+	{
+		$img = get_instance("core/converters/image_convert");
+		$img->load_from_file($file);
+
+		// get image size
+		list($i_width, $i_height) = $img->size();
+
+		$conf_i = $conf->instance();
+		$xyd = $conf_i->get_xydata_from_conf(array(
+			"conf" => $conf, 
+			"prefix" => $prefix, 
+			"w" => $i_width, 
+			"h" => $i_height
+		));
+
+		if ($xyd["is_subimage"] && $xyd["si_width"] && $xyd["si_height"])
+		{
+			// make subimage
+			$img->resize(array(
+				"x" => $xyd["si_left"],
+				"y" => $xyd["si_top"],
+				"width" => $xyd["si_width"],
+				"height" => $xyd["si_height"],
+				"new_width" => $xyd["width"],
+				"new_height" => $xyd["height"]
+			));
+		}
+		else
+		if ($xyd["width"] != $i_width || $xyd["height"] != $i_height)
+		{
+			$img->resize_simple($xyd["width"], $xyd["height"]);
+		}
+
+		$img->save($file, IMAGE_JPEG);
 	}
 }
 ?>
