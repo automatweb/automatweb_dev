@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.36 2004/06/25 12:51:28 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.37 2004/06/27 13:21:17 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -54,6 +54,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @default group=oldcontacts
 
+@property addresslist type=text store=no no_caption=1 group=oldcontacts
+@caption Aadress
+
 @property old_human_resources type=table store=no no_caption=1 group=oldcontacts
 @caption Nimekiri
 
@@ -65,21 +68,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property contact_toolbar type=toolbar no_caption=1 store=no parent=hbox_toolbar
 @caption "The Green Button"
 
-@layout hbox_others type=hbox group=contacts2
+@layout hbox_others type=hbox group=contacts2 width=20%:80%
 
-@layout vbox_contacts_left type=vbox parent=hbox_others group=contacts2 width=30%
-
-@property addresslist type=text store=no no_caption=1 parent=vbox_contacts_left
-@caption Aadress
+@layout vbox_contacts_left type=vbox parent=hbox_others group=contacts2
 
 @property unit_listing_tree type=treeview no_caption=1 parent=vbox_contacts_left
 @caption Puu
 
-@layout vbox_contacts_right type=vbox parent=hbox_others group=contacts2 width=70%
+@layout vbox_contacts_right type=vbox parent=hbox_others group=contacts2
 
 @property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 @caption Inimesed
-
 
 @default group=cedit
 
@@ -686,6 +685,11 @@ class crm_company extends class_base
                         'sortable' => '1',
                 ));
 		$t->define_field(array(
+								'name' => 'osakond',
+								'caption' => 'E-post',
+								'sortable' => '1',
+					));
+		$t->define_field(array(
                         'name' => 'rank',
                         'caption' => 'Ametinimetus',
                         'sortable' => '1',
@@ -816,7 +820,7 @@ class crm_company extends class_base
 				{
 					$tmp_arr2[] = $professions[$value];
 				}
-				$pdat['rank'] = join(',',$tmp_arr2);
+				$pdat['rank'] = join(', ',$tmp_arr2);
 			}
 			
 			
