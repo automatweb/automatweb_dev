@@ -888,7 +888,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				'".$parent."',				'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
-				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
+				'".$objdata["jrk"]."',		'".aw_global_get("act_per_id")."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
 				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."',
 				'".$objdata["oid"]."'
 		)";
