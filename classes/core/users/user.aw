@@ -1473,9 +1473,12 @@ class user extends class_base
 			"password" => $password,
 			"email" => $o->prop("email"),
 			"join_grp" => $arr["join_grp"],
-			"join_form_entry" => "",
+			"join_form_entry" => $arr["join_form_entry"],
 			"user_oid" => $o->id(),
-			"no_add_user" => true
+			"no_add_user" => true,
+			"all_users_grp" => ($all_users_grp ? $all_users_grp : aw_ini_get("groups.all_users_grp")),
+			"use_md5_passwords" => ($use_md5_passwords ? $use_md5_passwords : aw_ini_get("auth.md5_passwords")),
+			"obj_parent" => $obj_parent
 		));
 
 		// we need to do this like this, cause the functions in users class are really badly done.

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.89 2004/06/18 16:23:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.90 2004/06/19 20:02:24 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -524,20 +524,27 @@ class users_user extends aw_template
 
 		if ($obj_parent)
 		{
-			$og["oid"] = $obj_parent;
+			$pg["oid"] = $obj_parent;
 		}
-		$oid = $this->new_object(array(
-			"name" => $gname, 
-			"class_id" => CL_GROUP, 
-			"status" => 2, 
-			"parent" => $pg["oid"]
-		));
 
-		$q = "INSERT INTO groups (name,created,createdby,modified,modifiedby,type,data,parent,priority,oid,search_form)
-			VALUES('$gname',$t,'$uid',$t,'$uid','$type','$data',$parent,$priority,$oid,$search_form)";
-		$this->db_query($q);
+		$o = obj();
+		$o->set_class_id(CL_GROUP);
+		$o->set_name($gname);
+		$o->set_status(STAT_ACTIVE);
+		$o->set_parent($pg["oid"]);
+
+		$o->set_prop("name", $gname);
+		$o->set_prop("type", $type);
+		$o->set_prop("gp_parent", $parent);
+		$o->set_prop("priority", $priority);
+
+		$gid = $this->db_fetch_field("SELECT MAX(gid) AS gid FROM groups", "gid")+1;
+		$o->set_prop("gp_gid", $gid);
+
+		$oid = $o->save();
+
 		$this->_log(ST_GROUPS, SA_ADD, $gname);
-		return $this->db_fetch_field("SELECT MAX(gid) AS gid FROM groups", "gid");
+		return $gid;
 	}
 
 	function fetchgroup($gid) 
@@ -698,6 +705,7 @@ class users_user extends aw_template
 		}
 
 		// kodukataloom
+		aw_disable_acl();
 		$o = obj();
 		$o->set_parent(1);
 		$o->set_name($uid);
@@ -705,6 +713,7 @@ class users_user extends aw_template
 		$o->set_comment($uid." kodukataloog");
 		$o->set_prop("type", MN_HOME_FOLDER);
 		$hfid = $o->save();
+		aw_restore_acl();
 		$this->hfid = $hfid;
 
 		if (aw_ini_get("auth.md5_passwords") || $use_md5_passwords)
@@ -712,34 +721,8 @@ class users_user extends aw_template
 			$password = md5($password);
 		};
 
-		if (!$user_oid)
-		{
-			// create user object under the correct folder
-			$user_oid = $this->new_object(array(
-				"parent" => $obj_parent, 
-				"name" => $uid, 
-				"class_id" => CL_USER, 
-			),false);
-			$this->last_user_oid = $user_oid;
-		}
-		
-
-		// teeme kasutaja
-		if (!$no_add_user)
-		{
-			$this->db_query("
-				INSERT INTO users (uid,password,created,join_form_entry,email,home_folder,join_grp,logins,oid) 
-				VALUES('$uid','$password',$t,'$join_form_entry','$email',$hfid,'$join_grp','0', '$user_oid')");
-		}
-
 		// teeme default grupi
-		$oid = $this->new_object(array(
-			"name" => $uid, 
-			"class_id" => CL_USER_GROUP, 
-			"status" => 2
-		));
-		$this->db_query("INSERT INTO groups (name,createdby,created,type,priority,oid)	VALUES('$uid','system',$t,1,".USER_GROUP_PRIORITY.",$oid)");
-		$gid = $this->db_fetch_field("SELECT gid FROM groups WHERE name = '$uid' AND type = 1","gid");
+		$gid = $this->addgroup(0, $uid, GRP_DEFAULT);
 
 		// lisame kasutaja default grupi liikmex
 		$this->db_query("INSERT INTO groupmembers (gid,uid,created) VALUES ('$gid','$uid',$t)");

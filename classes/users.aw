@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.119 2004/06/11 09:11:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.120 2004/06/19 20:02:23 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -237,7 +237,8 @@ class users extends users_user
 		{
 			$jfs = serialize($this->get_join_form_entries($join_grp));
 
-			$this->add(array(
+			$us = get_instance("core/users/user");
+			$us->add_user(array(
 				"join_form_entry" => $jfs, 
 				"uid" => $add_state["uid"], 
 				"password" => $add_state["pass"],
@@ -1212,7 +1213,9 @@ class users extends users_user
 			$nlg = $this->get_cval("non_logged_in_users_group");
 			if (!$nlg && ($grpp = aw_ini_get("groups.tree_root")))
 			{
+				aw_disable_acl();
 				$nlg = $this->addgroup(0, "Sisse logimata kasutajad", GRP_REGULAR, 0, 1, 0, $grpp);
+				aw_restore_acl();
 				$this->set_cval("non_logged_in_users_group", $nlg);
 			}
 
@@ -1392,7 +1395,8 @@ class users extends users_user
 			flush();
 
 			// create default user
-			$this->add(array(
+			$us = get_insstance("core/users/user");
+			$us->add_user(array(
 				"uid" => $site["site_obj"]["default_user"],
 				"password" => $site["site_obj"]["default_user_pwd"],
 				"all_users_grp" => $aug,

@@ -1368,7 +1368,7 @@ class _int_object
 				{
 					error::throw(array(
 						"id" => ERR_ACL,
-						"msg" => "object::save(): no access to save object!"
+						"msg" => "object::save(): no access to add object under folder ".$this->obj["parent"]."!"
 					));
 				}
 			}

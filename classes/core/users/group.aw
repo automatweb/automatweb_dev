@@ -237,6 +237,8 @@ class group extends class_base
 			{
 				return PROP_OK;
 			}
+
+			$us = get_instance("core/users/user");
 			echo "Impordin kasutajaid ... <br />";
 			$first = true;
 			$f = fopen($imp,"r");
@@ -258,7 +260,7 @@ class group extends class_base
 				$row = $this->db_fetch_row("SELECT uid FROM users WHERE uid = '$uid'");
 				if (!is_array($row))
 				{
-					$this->users->add(array(
+					$us->add_user(array(
 						"uid" => $uid,
 						"password" => $pass,
 						"email" => $email

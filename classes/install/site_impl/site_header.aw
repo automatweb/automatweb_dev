@@ -17,6 +17,8 @@ classload("menuedit");
 classload("document");
 classload("file");
 
+$awt = new aw_timer();
+
 aw_startup();
 
 // oughta put this in aw_startup() as well, but it is used in so many places
@@ -27,5 +29,4 @@ if (!$section)
 };
 
 // yeah. need to get rid of this as well. no time for that now though :(
-$awt = new aw_timer();
 ?>
