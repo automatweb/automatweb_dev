@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.71 2002/08/21 20:50:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.72 2002/08/22 21:34:05 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -330,6 +330,7 @@ class planner extends calendar
 
 		if ($object["class_id"] == CL_FORM_CHAIN)
 		{
+			/// XXX: check whether that object has OBJ_HAS_CALENDAR flag
 			// retrieve all entries that belong to this calendar.
 			classload("form_calendar");
 			$fc = new form_calendar();

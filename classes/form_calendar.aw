@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.8 2002/08/21 20:50:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_calendar.aw,v 2.9 2002/08/22 21:34:05 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 class form_calendar extends form_base
 {
@@ -709,12 +709,32 @@ class form_calendar extends form_base
 	
 	function check_vacancies($args = array())
 	{
-		$id = (int)$id;
 		extract($args);	
+		$id = (int)$id;
 		$found = false;
 		$blocks = array();
+		
+		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
+			 WHERE oid = '$contr' 
+				AND start <= '$end' AND end >= '$start'";
+		$this->db_query($q);
+		$row2 = $this->db_next();
+		$max = (int)$row2["max"];
+		// and now, for each calendar figure out how many
+		// free spots does it have in the requested period.
+		// for this, I'll have to query the calendar2event table
+		$q = "SELECT SUM(items) AS sum FROM calendar2event
+			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
+			WHERE objects.status = 2 AND cal_id = '$cal_id' AND form_id = '$id'
+				AND start >= '$start' AND end <= '$end'";
+		$this->db_query($q);
+		$row2 = $this->db_next();
+		$sum = (int)$row2["sum"];
+		$vac = $max - $sum - $req_items;
+		//print "max avail = $max, reserved = $sum, requested = $req_items<br>";
+		return $vac;
 
-		if ($eid)
+		if ($cal_id)
 		{
 			$q = "SELECT * FROM calendar2timedef LEFT JOIN objects ON (calendar2timedef.entry_id = objects.oid) WHERE cal_id = '$eid' AND start <= '$start' AND end >= '$end' AND status = 2";
 			$this->db_query($q);
@@ -921,6 +941,42 @@ class form_calendar extends form_base
 		return $events;
 		#return $found;
 
+	}
+
+	////
+	// !Returns the number of vacancies
+	// start (array) - period start
+	// end (timestamp) - period end
+	// cal_id (int) - calendar id
+	// entry_id (int) - entry id
+	// contr (int) - calendar controller id
+	// req_items (int) - how many items do we want?
+	// rel(int) - selector for calendar
+	function get_vac_by_contr($args = array())
+	{
+		extract($args);
+		$_start = get_ts_from_arr($args["start"]);
+		list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
+		$_end = mktime(23,59,59,$_m,$_d,$_y);
+		$q = "SELECT SUM(max_items) AS max FROM calendar2timedef
+			 WHERE oid = '$contr' 
+				AND start <= '$_end' AND end >= '$_start'";
+		$this->db_query($q);
+		$row2 = $this->db_next();
+		$max = (int)$row2["max"];
+		// and now, for each calendar figure out how many
+		// free spots does it have in the requested period.
+		// for this, I'll have to query the calendar2event table
+		$q = "SELECT SUM(items) AS sum FROM calendar2event
+			LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
+			WHERE oid != '$entry_id' AND relation = '$rel' AND objects.status = 2 AND
+				cal_id = '$cal_id' AND form_id = '$id' AND start >= '$_start' AND
+				end <= '$_end'";
+		$this->db_query($q);
+		$row2 = $this->db_next();
+		$sum = (int)$row2["sum"];
+		$vac = $max - $sum - $req_items;
+		return $vac;
 	}
 		
 };

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.128 2002/08/21 20:50:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.129 2002/08/22 21:34:04 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -1088,36 +1088,43 @@ class form extends form_base
 				$fch->load_chain($row["cal_id"]);
 				$cal_controller = (int)$fch->chain["cal_controller"];
 
+				$fcal = get_instance("form_calendar");
+
+				$__rel = $this->post_vars[$row["el_relation"]];
+				preg_match("/lbopt_(\d+?)$/",$__rel,$m);
+				$_rel = (int)$m[1];
+
 				$_req_items = (int)$this->post_vars[$row["el_cnt"]];
 				if ($_req_items == 0)
 				{
 					$_req_items = 1;
 				};
 
-				$_start = (int)get_ts_from_arr($this->post_vars[$row["el_start"]]);
-				list($_d,$_m,$_y) = explode("-",date("d-m-Y",$_start));
-				$_end = mktime(23,59,59,$_m,$_d,$_y);
-				// figure out how manu vacancies this period can have
-				$this->save_handle();
-				$q = "SELECT SUM(max_items) AS max FROM calendar2timedef WHERE oid = '$cal_controller' AND start <= '$_end' AND end >= '$_start'";
-				$this->db_query($q);
-				$row2 = $this->db_next();
-				$max = (int)$row2["max"];
-				// and now, for each calendar figure out how many
-				// free spots does it have in the requested period.
-				// for this, I'll have to query the calendar2event table
-				$q = "SELECT SUM(items) AS sum FROM calendar2event
-					LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
-					WHERE oid != '$entry_id' AND objects.status = 2 AND cal_id = '$row[cal_id]' AND form_id = '$id' AND start >= '$_start' AND end <= '$_end'";
-				$this->db_query($q);
-				$row2 = $this->db_next();
-				$sum = (int)$row2["sum"];
-				$vac = $max - $sum - $_req_items;
-				$this->restore_handle();
+				$vac = $fcal->get_vac_by_contr(array(
+					"start" => $this->post_vars[$row["el_start"]],
+					"contr" => $cal_controller,
+					"cal_id" => $row["cal_id"],
+					"entry_id" => $entry_id,
+					"req_items" => $_req_items,
+					"rel" => $_rel,
+					"id" => $id,
+				));
+
 				if ($vac < 0)
 				{
+					// now I need to figure out the selected value of the relation
+					// element
+					$this->save_handle();
+					$q = "SELECT * FROM form_relations WHERE el_to = $row[el_relation]";
+					$this->db_query($q);
+					$frel = $this->db_next();
+					$q = sprintf("SELECT ev_%s AS name FROM form_%d_entries WHERE id = '%d'",
+							$frel["el_from"],$frel["form_from"],$_rel);
+					$this->db_query($q);
+					$rowx = $this->db_next();
+					$this->restore_handle();
 					$has_errors = true;
-					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]' does not have this many vacancies in the requested period.";
+					$this->controller_errors[$row["el_cnt"]][] = "Calendar '$row[name]/$rowx[name]' does not have this many vacancies in the requested period.";
 				};
 
 			};
@@ -1257,17 +1264,12 @@ class form extends form_base
 		{
 			if ($this->subtype == FSUBTYPE_EV_ENTRY)
 			{
-				// check vacations and if found, update calendar->form relations
-				// set error messages otherwise
-
-				// note! since one event can "belong" to multiple calendars,
-				// it's possible that there is room for the event in one
-				// calendar, but is not in another
-
 				// reap the old relations, we are creating new ones anyway
 				$q = "DELETE FROM calendar2event WHERE entry_id = '$eid'";
 				$this->db_query($q);
 
+				// cycle over all the forms that this event entry form
+				// has been assigned to and write new relations for those
 				$q = "SELECT * FROM calendar2forms WHERE form_id = '$id'";
 				$this->db_query($q);
 				while($row = $this->db_next())
@@ -1322,45 +1324,6 @@ class form extends form_base
 
 		$fact = get_instance("form_actions");
 		$fact->do_actions(&$this, $this->entry_id);
-
-		// update_fcal_timedef is set to chain_id in form_chain->submit_form by altering
-		// time period definitions for a form calendar.
-
-		// notify form calendar of the changes if needed
-		if ($update_fcal_timedef)
-		{
-			$fc = get_instance("form_calendar");
-			// invoke form_calendar and add information to the 
-			// calendar2timedef table
-
-			// retrieve the fields used in this form
-			$els = $this->get_form_elements(array(
-				"use_loaded" => true,
-			));
-
-			$fc->upd_timedef(array(
-				"cal_id" => $update_fcal_timedef,
-				"els" => &$els,
-				"entry_id" => &$this->entry_id,
-				"entry" => &$this->entry,
-				"arr" => $this->arr,
-			));
-		}
-
-		// if we got there it's probably ok to save the data out to the cache too
-		/*
-		if ($this->meta["calendar_chain"])
-		{
-			$fc->upd_event(array(
-				"entry_id" => $this->entry_id,
-				"cal_id" => $cal_id,
-				"eform" => $this->id,
-				"start" => $_range_start,
-				"end" => $_range_end,
-				"items" => $_count,
-			));
-		}
-		*/
 
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$sff = aw_global_get("session_filled_forms");
@@ -2230,11 +2193,38 @@ class form extends form_base
 		if ($this->arr["search_chain"])
 		{
 			$fc = get_instance("form_chain");
-			$fc->load_chain($this->arr["search_chain"]);
-			//print "loading calendar for " . $this->arr["search_chain"] . "<br>";
-			if ($fc->chain["has_calendar"])
+			$chain = $fc->load_chain($this->arr["search_chain"]);
+			$has_calendar = $chain["flags"] & OBJ_HAS_CALENDAR;
+			if (!$this->arr["uses_calendar"])
 			{
+				$has_calendar = false;
+			};
+			if ($has_calendar)
+			{
+				$has_vacancies = true;
 				$fcal = get_instance("form_calendar");
+				$cal_id = $this->arr["search_chain"];
+				$contr = $fc->chain["cal_controller"];
+				/*
+				print "loading calendar for " . $this->arr["search_chain"] . "<br>";
+				print "controller is $contr<br>";
+				*/
+				$q = "SELECT * FROM calendar2forms WHERE cal_id = '$cal_id'";
+				$this->db_query($q);
+				$cf = $this->db_next();
+				// $row now contains the record which shows us the characteristics
+				// of the event entry form used
+				// if the chain has no 
+				if (!$cf)
+				{
+					$has_vacancies = false;
+				};
+				/*
+				print "<pre>";
+				print_r($row);
+				print "id = " . $this->id . "<br>";
+				print "</pre>";
+				*/
 				$els = $this->get_form_elements(array("id" => $this->id));
 				// figure out the start and end elements
 				$start_el = $end_el = 0;
@@ -2263,12 +2253,20 @@ class form extends form_base
 				$end = $this->entry[$end_el];
 				$count = (int)$this->entry[$count_el];
 
+
 				// if no amount was specified default to 1
 				// and .. why the hell are you searching anyway if you dont want any rooms?
 				if ($count == 0)
 				{
 					$count = 1;
 				};
+
+				/*
+				
+				print "start = $start<br>";
+				print "end = $end<br>";
+				print "count = $count<br>";
+				*/
 
 			};
 		}
@@ -2291,29 +2289,39 @@ class form extends form_base
 					$this->restore_handle();
 				};
 
-				if (isset($fc->chain["has_calendar"]) && $fc->chain["has_calendar"])
+				$DBX = aw_global_get("uid");
+				if ($DBX1 == "kix")
 				{
-					dbg("cid = $cid<br>");
-					global $DBUG;
-					if ($DBUG)
+					print "<pre>";
+					print_r($chain);
+					print_r($fc->chain);
+					print "cid = $cid<br>";
+					print "</pre>";
+				};
+
+				if ($has_calendar)
+				{
+					if ($DBX1 == "kix")
 					{
-						print "checking<br>";
-						print $row[chain_entry_id];
+						print "chain has a calendar!<br>";
 					};
-					dbg("checking calendar for $row[chain_entry_id]<br>");
+					dbg("cid = $cid<br>");
+					//print "checking<br>";
+					//print $row[chain_entry_id];
+					//echo("checking calendar for $row[chain_entry_id]<br>");
 					dbg("id = " . $fc->chain["cal_form"] . "<br>");
 					$has_vacancies = $fcal->check_vacancies(array(
 						"cal_id" => $cid,
-						"eform" => $this->id,
-						"id" => $fc->chain["cal_form"],
+						"contr" => $contr,
+						//"eform" => $this->id,
+						"id" => $cf["form_id"],
 						"eid" => $row["chain_entry_id"],
 						"start" => $start,
 						"end" => $end - 1,
-						"count" => $count,
-						"check" => "vacancies",
+						"req_items" => $count,
 					));
 					//$has_vacancies = true;
-					if ($has_vacancies)
+					if ($has_vacancies > -1)
 					{
 						$form_table->row_data($row,$this->arr["start_search_relations_from"],$section,$op,$cid,$row["chain_entry_id"]);
 					}
