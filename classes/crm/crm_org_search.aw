@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.4 2004/04/07 13:47:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.5 2004/05/05 11:42:22 duke Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 
 // and pray tell .. how to I embed this into crm_db now?
@@ -255,11 +255,17 @@ class crm_org_search extends class_base
 				$ph_obj = new object($o->prop("phone_id"));
 				$phone = $ph_obj->name();
 			};
+				
 			
 			if (is_oid($o->prop("url_id")))
 			{
 				$url_obj = new object($o->prop("url_id"));
 				$url = $url_obj->prop("url");
+				// I dunno, sometimes people write url into the name field and expect this to work
+				if (empty($url))
+				{
+					$url = $url_obj->name();
+				};
 			};
 
 			if (is_oid($o->prop("email_id")))
