@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="submit_pick_msg_event">
+			<function name="submit_pick_msg_event">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="edit_todo_item">
 			<function name="edit_todo_item">
 				<arguments>
@@ -245,6 +252,15 @@
 			<function name="_unserialize">
 				<arguments>
 					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="draw_day">
+			<function name="draw_day">
+				<arguments>
+					<optional name="date"/>
+					<optional name="msgid"/>
 				</arguments>
 			</function>
 		</action>
