@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.46 2005/01/21 11:41:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.47 2005/01/21 13:04:55 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1535,8 +1535,12 @@ class webform extends class_base
 		}
 		
 		$prplist = safe_array($cfgform->meta("cfg_proplist"));
-		$is_valid = $this->validate_data(array(
-			"cfgform_id" => $cfgform->id(),
+		$cf = $cfgfomr->instance();
+		$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
+		$register_data_i = get_instance(CL_REGISTER_DATA);
+		$register_data_i->init_class_base();
+		$is_valid = $register_data_i->validate_data(array(
+			"props" => $props,
 			"request" => &$arr,
 		));
 		if(!empty($is_valid))
