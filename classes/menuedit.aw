@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.196 2002/12/30 14:50:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.197 2003/01/06 09:34:39 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2189,7 +2189,7 @@ class menuedit extends aw_template
 				// kui pole perioodiline siis ei n2ita
 				$sub = $this->rec_tree(&$arr,$row["oid"],$period);
 				$show = true;
-				if ($sub == "" && $period > 0 && $row["mperiodic"] != 1) 
+				if ($sub == "" && $period > 0 && $row["periodic"] != 1) 
 				{
 					$show = false;
 				}
