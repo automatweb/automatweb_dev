@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.24 2004/03/10 15:27:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.25 2004/03/11 09:46:45 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -45,22 +45,26 @@ class cache extends core
 			if (!is_dir($fqfn))
 			{
 				mkdir($fqfn, 0777);
+				chmod($fqfn, 0777);
 			}
 
 			$fqfn .= "/".$hash{1};
 			if (!is_dir($fqfn))
 			{
 				mkdir($fqfn, 0777);
+				chmod($fqfn, 0777);
 			}
 
 			$fqfn .= "/".$hash{2};
 			if (!is_dir($fqfn))
 			{
 				mkdir($fqfn, 0777);
+				chmod($fqfn, 0777);
 			}
 
 			$fname = $fqfn.$fname;
 			$this->put_file(array("file" => $fname, "content" => $content));
+			chmod($fname, 0666);
 			if ($clear_flag)
 			{
 				$this->clear_cache($oid, $fname);
@@ -130,22 +134,26 @@ class cache extends core
 			if (!is_dir($fname))
 			{
 				mkdir($fname, 0777);
+				chmod($fname, 0777);
 			}
 
 			$fname .= "/".$hash{1};
 			if (!is_dir($fname))
 			{
 				mkdir($fname, 0777);
+				chmod($fname, 0777);
 			}
 
 			$fname .= "/".$hash{2};
 			if (!is_dir($fname))
 			{
 				mkdir($fname, 0777);
+				chmod($fname, 0777);
 			}
 
 			$fname .= "/$key";
 			$this->put_file(array("file" => $fname, "content" => $value));
+			chmod($fname, 0666);
 		}
 	}
 
@@ -277,6 +285,7 @@ class cache extends core
 					"file" => $cachefile,
 					"content" => $ser_res,
 				));
+				chmod($cachefile, 0666);
 			};
 			// Now I somehow need to retrieve the results of unserialization
 			// and write them out to the file

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.59 2004/03/11 09:04:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.60 2004/03/11 09:46:45 kristo Exp $
 
 lc_load("definition");
 
@@ -148,41 +148,6 @@ class acl_base extends db_connector
 
 	function get_acl_for_oid($oid)
 	{
-		$gidlist = aw_global_get("gidlist");
-		// select acl entry for this object, whose group is one of
-		// the groups the current user is in 
-		// and whose priority is highest
-		if (!is_array($gidlist))
-		{
-			return array("oid" => $oid, "can_view" => 1);
-		}
-		$gidstr = join(",",$gidlist);
-		if ($gidstr == "")
-		{
-			return array("oid" => $oid, "can_view" => 1);
-		}
-		// previously this query was:
-		/*		$q = "SELECT *,acl.id as acl_rel_id, objects.parent as parent,".$this->sql_unpack_string().",groups.priority as priority,acl.oid as oid FROM acl 
-										 LEFT JOIN groups ON groups.gid = acl.gid
-										 LEFT JOIN objects ON objects.oid = acl.oid
-										 WHERE acl.oid = $oid AND acl.gid IN (".$gidstr.") 
-										 ORDER BY groups.priority DESC
-										 LIMIT 1";*/
-		// it returned just one row - the correct one
-		// but it was slow - created a temp table and caused a table rescan (using filesort and using temporary)
-		//
-		// so we remove the groups join and do the sort in memory
-		// we have a list of all groups that the user belongs to with their priorites
-		// and we return the one from the list with the bigest priority - duke
-		//
-		// I changed the query again - now it goes to the objects table first and
-		// joins the acl table from there, it also does not filter by gid, that is done in 
-		// memory now - the reason is that now this query can be used to determine if the object 
-		// asked for exists - previously it could not. It is perhaps a bit slower to do the
-		// memory filter, but it is well worth it, because it enables us to get rid of the
-		// object_exits function.  - terryf
-
-
 		$g_pris = aw_global_get("gidlist_pri");	// this gets made in users::request_startup
 
 		$max_pri = 0;
@@ -247,10 +212,10 @@ class acl_base extends db_connector
 			{
 				$tacl = $this->get_acl_for_oid($oid);
 
-				if ($cnt == 0 && !isset($tacl["oid"]))
+				if (!isset($tacl["oid"]))
 				{
-					// if we are on the first level and we get back no object, return no access
-					// cause then we asked about an object that does not exist!
+					// if we are on any level and we get back no object, return no access
+					// cause then we asked about an object that does not exist or an object that is below a deleted object!
 					aw_cache_set("aclcache",$oid,$tacl);
 					return array();
 				}
@@ -329,18 +294,21 @@ class acl_base extends db_connector
 					if (!is_dir($fname))
 					{
 						mkdir($fname, 0777);
+						chmod($fname, 0777);
 					}
 
 					$fname .= "/".$hash{1};
 					if (!is_dir($fname))
 					{
 						mkdir($fname, 0777);
+						chmod($fname, 0777);
 					}
 
 					$fname .= "/".$hash{2};
 					if (!is_dir($fname))
 					{
 						mkdir($fname, 0777);
+						chmod($fname, 0777);
 					}
 
 					$fp = fopen($fqfn, "w");
@@ -348,6 +316,7 @@ class acl_base extends db_connector
 					fwrite($fp, $str);
 					flock($fp, LOCK_UN);
 					fclose($fp);
+					chmod($fqfn, 0666);
 				}
 
 				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
