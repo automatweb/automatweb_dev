@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.190 2002/12/19 15:19:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.191 2002/12/19 19:07:50 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -861,6 +861,7 @@ class menuedit extends aw_template
 				$docid = 0;
 			}
 		}
+
 		// ei olnud defaulti, peaks vist .. näitama nimekirja? 
 		if ($docid < 1)	
 		{
@@ -874,7 +875,15 @@ class menuedit extends aw_template
 				$me_row = $this->get_menu($section);
 			};
 
-			$sections = unserialize($me_row["sss"]);
+			if (is_array($me_row["meta"]["last_menus"]))
+			{
+				$sections = $me_row["meta"]["last_menus"];
+			}
+			else
+			{
+				$sections = unserialize($me_row["sss"]);
+			};
+
 			$periods = unserialize($me_row["pers"]);
 
 			if (is_array($sections))
@@ -4722,7 +4731,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			{
 				continue;
 			};
-
+			
 			$meta = $this->get_object_metadata(array("metadata" => $row["metadata"]));
 
 			$found = false;
@@ -4743,22 +4752,14 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 
 			$doc->doc_count = 0;
-			// FIXME: promo boxes shouldn't use the comment field for holding that data
-			$ar = unserialize($row["comment"]);
-			if (((isset($ar["section"][$section]) && $ar["section"][$section]) || ($row["comment"] == "all_menus" && $row["site_id"] == $this->cfg["site_id"])) && $found)
+
+			if ( (isset($meta["section"][$section]) && ($meta["section"][$section]) || $meta["all_menus"]) && $found)
 			{
 				// visible. so show it
 				$this->save_handle();
 				// get list of documents in this promo box
 				$pr_c = "";
 				$docid = $this->get_default_document($row["oid"],true);
-				global $XXX;
-				if ($XXX)
-				{
-					print "<pre>";
-					print_r($docid);
-					print "</pre>";
-				};
 				if (is_array($docid))
 				{
 					reset($docid);
@@ -4797,7 +4798,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				dbg::p($pr_c);
 
 				$this->vars(array(
-					"comment" => $ar["comment"],
+					"comment" => $row["comment"],
 					"title" => $row["name"], 
 					"content" => $pr_c,
 					"url" => $row["link"],
@@ -4806,26 +4807,16 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 				// which promo to use? we need to know this to use
 				// the correct SHOW_TITLE subtemplate
-				if ($ar["scroll"] == 1)
-				{
-					$use_tpl = "SCROLL_PROMO";
-				}
-				else
-				if ($ar["down"] == 1)
-				{
-					$use_tpl = "DOWN_PROMO";
-				}
-				else
-				if ($ar["up"] == 1)
-				{
-					$use_tpl = "UP_PROMO";
-				}
-				else
-				if ($ar["right"] == 1)
-				{
-					$use_tpl = "RIGHT_PROMO";
-				}
-				else
+				$templates = array(
+					"scroll" => "SCROLL_PROMO",
+					"0" => "LEFT_PROMO",
+					"1" => "RIGHT_PROMO",
+					"2" => "UP_PROMO",
+					"3" => "DOWN_PROMO",
+				);
+	
+				$use_tpl = $templates[$meta["type"]];
+				if (!$use_tpl)
 				{
 					$use_tpl = "LEFT_PROMO";
 				};
@@ -4848,74 +4839,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					$ap.="_BEGIN";
 					$this->used_promo_tpls[$use_tpl] = 1;
 				}
-				if ($ar["scroll"] == 1)
+
+
+				$promos = array();
+
+				if ($this->is_template($use_tpl . $ap))
 				{
-					if ($this->is_template("SCROLL_PROMO".$ap))
-					{
-						$scroll_promo .= $this->parse("SCROLL_PROMO".$ap);
-						$this->vars(array("SCROLL_PROMO".$ap => ""));
-					}
-					else
-					{
-						$scroll_promo .= $this->parse("SCROLL_PROMO");
-						$this->vars(array("SCROLL_PROMO" => ""));
-					}
-				}
-				else
-				if ($ar["right"] == 1)
-				{
-					if ($this->is_template("RIGHT_PROMO".$ap))
-					{
-						$right_promo .= $this->parse("RIGHT_PROMO".$ap);
-						$this->vars(array("RIGHT_PROMO".$ap => ""));
-					}
-					else
-					{
-						$right_promo .= $this->parse("RIGHT_PROMO");
-						$this->vars(array("RIGHT_PROMO" => ""));
-					}
-				}
-				else
-				if ($ar["up"] == 1)
-				{
-					if ($this->is_template("UP_PROMO".$ap))
-					{
-						$up_promo .= $this->parse("UP_PROMO".$ap);
-						$this->vars(array("UP_PROMO".$ap => ""));
-					}
-					else
-					{
-						$up_promo .= $this->parse("UP_PROMO");
-						$this->vars(array("UP_PROMO" => ""));
-					}
-				}
-				else
-				if ($ar["down"] == 1)
-				{
-					if ($this->is_template("DOWN_PROMO".$ap))
-					{
-						$down_promo .= $this->parse("DOWN_PROMO".$ap);
-						$this->vars(array("DOWN_PROMO".$ap => ""));
-					}
-					else
-					{
-						$down_promo .= $this->parse("DOWN_PROMO");
-						$this->vars(array("DOWN_PROMO" => ""));
-					}
+					$promos[$use_tpl] .= $this->parse($use_tpl . $ap);
+					$this->vars(array($use_tpl . $ap => ""));
 				}
 				else
 				{
-					if ($this->is_template("LEFT_PROMO".$ap))
-					{
-						$left_promo .= $this->parse("LEFT_PROMO".$ap);
-						$this->vars(array("LEFT_PROMO".$ap => ""));
-					}
-					else
-					{
-						$left_promo .= $this->parse("LEFT_PROMO");
-						$this->vars(array("LEFT_PROMO" => ""));
-					}
-				}
+					$promos[$use_tpl] .= $this->parse($use_tpl);
+					$this->vars(array($use_tpl => ""));
+				};
 				// nil the variables that were imported for promo boxes
 				// if we dont do that we can get unwanted copys of promo boxes
 				// in places we dont want them
@@ -4924,14 +4861,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			}
 		};
 
-		$this->vars(array(
-			"LEFT_PROMO" => $left_promo,
-			"RIGHT_PROMO" => $right_promo,
-			"UP_PROMO" => $up_promo,
-			"DOWN_PROMO" => $down_promo,
-			"SCROLL_PROMO" => $scroll_promo,
-		));
-
+		$this->vars($promos);
 	}
 
 	function make_poll()
