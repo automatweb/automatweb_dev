@@ -13,6 +13,7 @@
 			<function name="change_file">
 				<arguments>
 					<required name="fid" />
+					<optional name="section" />
 				</arguments>
 			</function>
 		</action>
@@ -28,6 +29,7 @@
 			<function name="add_file">
 				<arguments>
 					<required name="id" type="int"/>
+					<optional name="section" type="int"/>
 				</arguments>
 			</function>
 		</action>
