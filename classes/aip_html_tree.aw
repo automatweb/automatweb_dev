@@ -14,7 +14,7 @@ class aip_html_tree extends class_base
 
 		if (!$parent)
 		{
-			$parent = get_root();
+			$parent = aip::get_root();
 		}
 
 		$cache_dir = aw_ini_get("cache.page_cache");
@@ -30,11 +30,11 @@ class aip_html_tree extends class_base
 		// ok, start from the first level and go down all levels, for each checking if this level contains the
 		// active menu and if so, recurse to that
 		$ml = array();
-		$this->draw_req_menus(get_root(), &$ml);
+		$this->draw_req_menus(aip::get_root(), &$ml);
 
 
 		// make yah link.
-		$root = get_root();
+		$root = aip::get_root();
 
 		$y = array();
 		foreach($this->oc as $ocid => $ocdat)

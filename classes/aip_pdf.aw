@@ -9,6 +9,7 @@ define("CREATE_FILE",2);
 define("UPDATE_FILE",3);
 define("DELETE_FILE",4);
 
+classload("aip/aip");
 class aip_pdf extends aw_template
 {
 	function aip_pdf()
@@ -38,7 +39,7 @@ class aip_pdf extends aw_template
 
 		$folder = $this->get_cval("aip_pdf_upload_folder");
 		$parent = $this->get_cval("aip_pdf_aw_folder");
-		$this->section = ($section ? $section : get_root());
+		$this->section = ($section ? $section : aip::get_root());
 
 		$this->vars(array(
 			"log" => $this->mk_my_orb("log"),
@@ -121,7 +122,7 @@ class aip_pdf extends aw_template
 			"header" => $this->mk_header(),
 			"folder" => $folder,
 			"reforb" => $this->mk_reforb("submit_list", array("section" => $section)),
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 		));
 		$this->vars(array(
 			"NO_ADMIN" => $this->parse("NO_ADMIN")
@@ -550,10 +551,10 @@ class aip_pdf extends aw_template
 			));
 			$l .= $this->parse("LINE");
 		}
-		$this->section = get_root();
+		$this->section = aip::get_root();
 		$this->vars(array(
 			"LINE" => $l,
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 			"toolbar" => $this->mk_header()
 		));
 		return $this->parse();
@@ -566,13 +567,13 @@ class aip_pdf extends aw_template
 		$this->read_template("view_log.tpl");
 
 		$mid = $this->db_fetch_field("SELECT max(id) as id FROM aip_pdf_log","id");
-		$this->section = get_root();
+		$this->section = aip::get_root();
 		$this->vars(array(
 			"created" => $this->time2date($row["created"], 2),
 			"createdby" => $row["createdby"],
 			"act" => ($row["id"] == $mid ? "Aktuaalne" : ""),
 			"ajalugu" => $row["log"],
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 			"log" => $this->mk_my_orb("log"),
 			"toolbar" => $this->mk_header()
 		));
@@ -658,7 +659,7 @@ class aip_pdf extends aw_template
 		extract($arr);
 		$this->read_template("config.tpl");
 
-		$this->section = get_root();
+		$this->section = aip::get_root();
 		$o = get_instance("objects");
 		$this->vars(array(
 			"pdf_folder" => $this->get_cval("aip_pdf_upload_folder"),
@@ -666,7 +667,7 @@ class aip_pdf extends aw_template
 			"folders" => $this->picker($this->get_cval("aip_pdf_aw_folder"), $o->get_list()),
 			"reforb" => $this->mk_reforb("submit_configure"),
 			"toolbar" => $this->mk_header(),
-			"rootmenu" => get_root()
+			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
 	}
@@ -689,7 +690,7 @@ class aip_pdf extends aw_template
 
 		$folder = $this->get_cval("aip_pdf_upload_folder");
 		$parent = $this->get_cval("aip_pdf_aw_folder");
-		$this->section = ($section ? $section : get_root());
+		$this->section = ($section ? $section : aip::get_root());
 
 		$this->vars(array(
 			"log" => $this->mk_my_orb("log"),
@@ -735,7 +736,7 @@ class aip_pdf extends aw_template
 			"header" => $this->mk_header(),
 			"folder" => $folder,
 			"reforb" => $this->mk_reforb("submit_report", array("section" => $section)),
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 			"nochange" => checked($nochange),
 			"added" => checked($added),
 			"changed" => checked($changed),

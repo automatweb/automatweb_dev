@@ -34,8 +34,8 @@ class aip_file extends file
 			"checked" => checked($fi["showal"]), 
 			"show_framed" => checked($fi["meta"]["show_framed"]),
 			"newwindow" => checked($fi["newwindow"]),
-			"rootmenu" => get_root(),
-			"YAH_LINK" => mk_yah_link($fi["parent"], $this),
+			"rootmenu" => aip::get_root(),
+			"YAH_LINK" => aip::mk_yah_link($fi["parent"], $this),
 			"toolbar" => make_toolbar($fi["parent"], $this, "javascript:document.a.submit()"),
 		));
 		return $this->parse();

@@ -49,7 +49,7 @@ class aip_ctl_list extends aw_template
 		$_mn->vars(array(
 			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => get_root(),
+			"oid" => aip::get_root(),
 			"bgcolor" => "#D4D7DA",
 			"nr" => 2,
 			"key" => "addmenu",
@@ -58,7 +58,7 @@ class aip_ctl_list extends aw_template
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => get_root()))
+			"content" => $this->get_add_menu(array("section" => aip::get_root()))
 		));
 		$up = $_mn->parse("URLPARAM");
 		$_mn->vars(array(
@@ -71,7 +71,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&aip=1",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
@@ -79,7 +79,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
 			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
@@ -88,7 +88,7 @@ class aip_ctl_list extends aw_template
 			"LINE" => $l,
 			"upload" => $this->mk_my_orb("upload"),
 			"toolbar" => $tb->get_toolbar(),
-			"rootmenu" => get_root()
+			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
 	}
@@ -116,7 +116,7 @@ class aip_ctl_list extends aw_template
 		$_mn->vars(array(
 			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => get_root(),
+			"oid" => aip::get_root(),
 			"bgcolor" => "#D4D7DA",
 			"nr" => 2,
 			"key" => "addmenu",
@@ -125,7 +125,7 @@ class aip_ctl_list extends aw_template
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => get_root()))
+			"content" => $this->get_add_menu(array("section" => aip::get_root()))
 		));
 		$up = $_mn->parse("URLPARAM");
 		$_mn->vars(array(
@@ -147,7 +147,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&aip=1",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
@@ -155,7 +155,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
 			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
@@ -163,7 +163,7 @@ class aip_ctl_list extends aw_template
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit_upload"),
 			"toolbar" => $tb->get_toolbar(),
-			"rootmenu" => get_root()
+			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
 	}
@@ -287,7 +287,7 @@ class aip_ctl_list extends aw_template
 		$_mn->vars(array(
 			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => get_root(),
+			"oid" => aip::get_root(),
 			"bgcolor" => "#D4D7DA",
 			"nr" => 2,
 			"key" => "addmenu",
@@ -296,7 +296,7 @@ class aip_ctl_list extends aw_template
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => get_root()))
+			"content" => $this->get_add_menu(array("section" => aip::get_root()))
 		));
 		$up = $_mn->parse("URLPARAM");
 		$_mn->vars(array(
@@ -309,7 +309,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&aip=1",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
@@ -317,7 +317,7 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
 			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
@@ -325,13 +325,13 @@ class aip_ctl_list extends aw_template
 		$tb->add_button(array(
 			"name" => "toimeta",
 			"tooltip" => "Toimeta",
-			"url" => $this->mk_my_orb("list", array("section" => get_root()),"aip_ctl_list", false,true),
+			"url" => $this->mk_my_orb("list", array("section" => aip::get_root()),"aip_ctl_list", false,true),
 			"imgover" => "edit_over.gif",
 			"img" => "edit.gif"
 		));
 
 		$this->vars(array(
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 			"LINE" => $l,
 			"toolbar" => $tb->get_toolbar()
 		));

@@ -9,6 +9,7 @@ define("CREATE_FILE",2);
 define("UPDATE_FILE",3);
 define("DELETE_FILE",4);
 
+classload("aip/aip");
 class aip_change extends aw_template
 {
 	function aip_change()
@@ -38,12 +39,12 @@ class aip_change extends aw_template
 			"act_time" => $de->gen_edit_form("act_time", time()),
 			"j_time" => $de->gen_edit_form("j_time", time()),
 			"files" => $this->multiple_option_list(array(), $this->get_chfile_list()),
-			"types" => $this->picker(0,array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT")),
+			"types" => $this->picker(0,array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT","3" => "SUP")),
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"toolbar" => $this->make_toolbar("javascript:document.q.submit()"),
-			"rootmenu" => get_root(),
+			"rootmenu" => aip::get_root(),
 			"changes" => $this->mk_my_orb("list"),
-			"YAH_LINK" => mk_yah_link($parent, $this),
+			"YAH_LINK" => aip::mk_yah_link($parent, $this),
 			"date" => $this->time2date(time(), 2)
 		));
 		return $this->parse();
@@ -141,10 +142,13 @@ class aip_change extends aw_template
 			));
 		}
 
-		$sch->add(array(
-			"time" => $de->get_timestamp($act_time),
-			"event" => $this->mk_my_orb("do_change", array("id" => $id))
-		));
+		if ($type != 3)
+		{
+			$sch->add(array(
+				"time" => $de->get_timestamp($act_time),
+				"event" => $this->mk_my_orb("do_change", array("id" => $id))
+			));
+		}
 		return $this->mk_my_orb("change", array("id" => $id), "", false, true);
 	}
 
@@ -193,15 +197,21 @@ class aip_change extends aw_template
 			"j_time" => $de->gen_edit_form("j_time", $ch["meta"]["j_time"]),
 			"files" => $this->multiple_option_list($ch["meta"]["files"], $this->get_chfile_list($ch["meta"]["files"])),
 			"name" => $ch["name"],
-			"types" => $this->picker($ch["meta"]["upd_type"],array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT")),
+			"types" => $this->picker($ch["meta"]["upd_type"],array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT", "3" => "SUP")),
 			"toolbar" => $this->make_toolbar("javascript:this.document.q.submit()"),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
-			"rootmenu" => get_root(),
-			"YAH_LINK" => mk_yah_link($ch["parent"], $this),
+			"rootmenu" => aip::get_root(),
+			"YAH_LINK" => aip::mk_yah_link($ch["parent"], $this),
 			"changes" => $this->mk_my_orb("list"),
 			"comment" => $ch["comment"],
 			"date" => $this->time2date(time(), 2)
 		));
+		if ($ch["meta"]["upd_type"] != 3)
+		{
+			$this->vars(array(
+				"NOT_SUP" => $this->parse("NOT_SUP")
+			));
+		}
 		return $this->parse();
 	}
 
@@ -213,6 +223,11 @@ class aip_change extends aw_template
 		$chd = $this->get_cval("aip_change::change_dir");
 		$act_1 = $this->get_cval("aip_change::act_change_1");
 		$act_2 = $this->get_cval("aip_change::act_change_2");
+		$act_3 = aw_unserialize($this->get_cval("aip_change::act_change_3"));
+		if (!is_array($act_3))
+		{
+			$act_3 = array();
+		}
 
 		$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_AIP_CHANGE." AND status != 0");
 		while ($row = $this->db_next())
@@ -229,6 +244,7 @@ class aip_change extends aw_template
 				"modified" => $this->time2date($row["modified"],2),
 				"checked_1" => checked($act_1 == $row["oid"]),
 				"checked_2" => checked($act_2 == $row["oid"]),
+				"checked_3" => checked(in_array($row['oid'],$act_3)),
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
 				"delete" => $this->mk_my_orb("delete", array("id" => $row["oid"])),
 				"activate" => $this->mk_my_orb("do_change", array("id" => $row["oid"]))
@@ -236,6 +252,7 @@ class aip_change extends aw_template
 			$this->vars(array(
 				"CH1" => ($meta["upd_type"] == 1 ? $this->parse("CH1") : ""),
 				"CH2" => ($meta["upd_type"] == 2 ? $this->parse("CH2") : ""),
+				"CH3" => ($meta["upd_type"] == 3 ? $this->parse("CH3") : ""),
 			));
 			$l.= $this->parse("LINE");
 		}
@@ -245,8 +262,8 @@ class aip_change extends aw_template
 			"reforb" => $this->mk_reforb("submit_list", array("is_del" => false)),
 			"toolbar" => $this->make_toolbar("javascript:document.q.submit()"),
 			"date" => $this->time2date(time(), 2),
-			"YAH_LINK" => mk_yah_link($parent, $this),
-			"rootmenu" => get_root()
+			"YAH_LINK" => aip::mk_yah_link($parent, $this),
+			"rootmenu" => aip::get_root()
 		));
 		return $this->parse();
 	}
@@ -268,7 +285,7 @@ class aip_change extends aw_template
 		$_mn->vars(array(
 			"icon_over" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
 			"icon" => $_mn->cfg["baseurl"]."/automatweb/images/icons/new2.gif",
-			"oid" => get_root(),
+			"oid" => aip::get_root(),
 			"bgcolor" => "#D4D7DA",
 			"nr" => 2,
 			"key" => "addmenu",
@@ -277,7 +294,7 @@ class aip_change extends aw_template
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("section" => get_root()))
+			"content" => $this->get_add_menu(array("section" => aip::get_root()))
 		));
 		$up = $_mn->parse("URLPARAM");
 		$_mn->vars(array(
@@ -299,7 +316,7 @@ class aip_change extends aw_template
 		$tb->add_button(array(
 			"name" => "ules",
 			"tooltip" => "&Uuml;les",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&aip=1",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&aip=1",
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
@@ -307,7 +324,7 @@ class aip_change extends aw_template
 		$tb->add_button(array(
 			"name" => "import",
 			"tooltip" => "Impordi kaustad",
-			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".aip::get_root()."&action=importmenus",
 			"imgover" => "import_over.gif",
 			"img" => "import.gif"
 		));
@@ -329,6 +346,9 @@ class aip_change extends aw_template
 		$co = get_instance("config");
 		$co->set_simple_config("aip_change::act_change_1", $act_1);
 		$co->set_simple_config("aip_change::act_change_2", $act_2);
+		$act_3 = aw_serialize($act_3);
+		$this->quote(&$act3);
+		$co->set_simple_config("aip_change::act_change_3", $act_3);
 
 		if ($is_del && is_array($sel))
 		{
@@ -634,6 +654,10 @@ class aip_change extends aw_template
 		extract($arr);
 		$this->read_template("show_files.tpl");
 
+		if ($type == 3)
+		{
+			return $this->show_files_sup();
+		}
 		$ids = array();
 		$ch = $this->load($this->get_cval("aip_change::act_change_".$type));
 		if (is_array($ch["meta"]["files"]))
@@ -651,8 +675,6 @@ class aip_change extends aw_template
 		$idss = join(",",$ids);
 		if ($idss != "")
 		{
-//			$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FILE." AND status = 2 AND oid IN (".$idss.")");
-//			while ($row = $this->db_next())
 			foreach($ids as $fil)
 			{
 				$meta = $this->get_object_metadata(array(
@@ -685,9 +707,40 @@ class aip_change extends aw_template
 			"CHANGE_PDF" => $p,
 			"LINE" => $l
 		));
+		$this->vars(array(
+			"NOT_SUP" => $this->parse("NOT_SUP")
+		));
 		return $this->parse();
 	}
 
+	function show_files_sup()
+	{
+		$sels = new aw_array(aw_unserialize($this->get_cval("aip_change::act_change_3")));
+		foreach($sels->get() as $chid)
+		{
+			$ch = $this->get_object($chid);
+			$j_time = $this->time2date($ch["meta"]["j_time"], 2);
+			$act_time = $this->time2date($ch["meta"]["act_time"], 2);
+			for ($i=1; $i < 2; $i++)
+			{
+				if ($ch["meta"]["pfiles"][$i]["id"])
+				{
+					$this->vars(array(
+						"name" => $ch["meta"]["pfiles"][$i]["orig_name"],
+						"j_time" => $j_time,
+						"act_time" => $act_time,
+						"link" => file::check_url($ch["meta"]["pfiles"][$i]["url"])
+					));
+					$p.=$this->parse("LINE");
+				}
+			}
+		}
+
+		$this->vars(array(
+			"LINE" => $p,
+		));
+		return $this->parse();
+	}
 
 	////
 	// !creates the list of files and checks each file's status and returns them in an array
