@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.1 2004/06/09 12:56:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.2 2004/06/11 08:43:43 kristo Exp $
 // object_import_exception.aw - Objektide impordi erand 
 /*
 
@@ -126,7 +126,10 @@ class object_import_exception extends class_base
 		$awa = new aw_array($o->meta("exc"));
 		foreach($awa->get() as $idx => $d)
 		{
-			$text = str_replace($d["from"], $d["to"], $text);
+			if (strtolower($text) == strtolower($d["from"]))
+			{
+				$text = $d["to"];
+			}
 		}
 
 		return $text;
