@@ -202,6 +202,9 @@
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[skip_one_liners]" value="1" {VAR:skip_one_liners}> Kui tabelis on ainult yks rida mis on lingitud, siis suuna sinna edasi</td>
 											</tr>
 											<tr>
+												<td class="celltext" colspan="2"><select class="formselect" name="settings[skip_one_liners_col]">{VAR:skip_one_liners_col}</select> Millises tulbas on edasi suunamise link</td>
+											</tr>
+											<tr>
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[doc_title_is_search]" value="1" {VAR:doc_title_is_search}> Dokumendi pealkirjas viimane otsing</td>
 											</tr>
 											<tr>
@@ -303,10 +306,6 @@
 											</tr>
 											<tr>
 												<td class="celltext" colspan="2">Footer:<br><textarea class="formtext" name="settings[footer]" cols="50" rows="5">{VAR:footer}</textarea></td>
-											</tr>
-
-											<tr>
-												<td class="celltext" colspan="2">Ostukorv, kuhu kaubad lisatakse: <select class="formselect" name="settings[shop_basket]">{VAR:shop_basket}</select></td>
 											</tr>
 <!-- END SUB: CHANGE -->
 
