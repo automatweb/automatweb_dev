@@ -63,7 +63,7 @@
 				</arguments>		
 			</function>
 		</action>
-		<action name="convert_seealso_menus">
+		<action name="convert_seealso_menus" nologin="1">
 			<function name="convert_seealso_menus">
 				<arguments/>
 			</function>
