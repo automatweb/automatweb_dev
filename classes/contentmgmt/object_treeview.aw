@@ -110,6 +110,15 @@ class object_treeview extends class_base
 				$fileSizeMBytes = number_format(filesize($od->prop('file'))/(1024*1024),2);
 			}
 			else
+			if ($od->class_id() == CL_MENU)
+			{
+				$url = $this->mk_my_orb("show", array(
+					"section" => $od->id(),
+					"id" => $ob->id(),
+					"tv_sel" => $od->id()
+				));
+			}
+			else
 			{
 				$url = $this->cfg["baseurl"]."/".$oid;
 			}
@@ -117,8 +126,16 @@ class object_treeview extends class_base
 			$act = "";
 			if ($this->can("edit", $od->id()))
 			{
+				$fl = $this->cfg["classes"][$od->class_id()]["file"];
+				if ($fl == "document")
+				{
+					$fl = "doc";
+				}
 				$act .= html::href(array(
-					"url" => $this->mk_my_orb("change", array("id" => $od->id(), "section" => $od->parent()), $this->cfg["classes"][$od->class_id()]["file"]),
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $od->id(), 
+						"section" => $od->parent(),
+					), $fl),
 					"caption" => html::img(array(
 						"border" => 0,
 						"url" =>  aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif"
@@ -127,11 +144,7 @@ class object_treeview extends class_base
 			}
 			if ($this->can("delete", $od->id()))
 			{
-				if ($act != "")
-				{
-					$act .= " ";
-				}
-				$act .= html::href(array(
+				$delete = html::href(array(
 					"url" => $this->mk_my_orb("delete", array("id" => $od->id(), "return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")))),
 					"caption" => html::img(array(
 						"border" => 0,
@@ -144,6 +157,7 @@ class object_treeview extends class_base
 			$this->vars(array(
 				"show" => $url,
 				"name" => $od->name(),
+				"oid" => $od->id(),
 				"target" => $target,
 				"sizeBytes" => $fileSizeBytes,
 				"sizeKBytes" => $fileSizeKBytes,
@@ -155,7 +169,32 @@ class object_treeview extends class_base
 				"adder" => $adder->name(),
 				"modder" => $modder->name(),
 				"icon" => image::make_img_tag(icons::get_icon_url($od->class_id(), $od->name())),
-				"act" => $act
+				"act" => $act,
+				"delete" => $delete
+			));
+
+			$del = "";
+			if ($this->can("delete", $od->id()))
+			{
+				$del = $this->parse("DELETE");
+			}
+			$this->vars(array(
+				"DELETE" => $del
+			));
+
+			$tb = "";
+			$no_tb = "";
+			if ($ob->prop("show_add"))
+			{
+				$tb = $this->parse("HAS_TOOLBAR");
+			}
+			else
+			{
+				$no_tb = $this->parse("NO_TOOLBAR");
+			}
+			$this->vars(array(
+				"HAS_TOOLBAR" => $tb,
+				"NO_TOOLBAR" => $no_tb
 			));
 
 			if ($this->is_template("FILE_ODD"))
@@ -176,9 +215,27 @@ class object_treeview extends class_base
 
 			$cnt++;
 		}
+
+
+		$tb = "";
+		$no_tb = "";
+		if ($ob->prop("show_add"))
+		{
+			$tb = $this->parse("HEADER_HAS_TOOLBAR");
+		}
+		else
+		{
+			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
+		}
 		$this->vars(array(
 			"FILE" => $c,
-			"FILE_ODD" => ""
+			"FILE_ODD" => "",
+			"HEADER_HAS_TOOLBAR" => $tb,
+			"HEADER_NO_TOOLBAR" => $no_tb,
+			"reforb" => $this->mk_reforb("submit_show", array(
+				"return_url" => aw_global_get("REQUEST_URI"),
+				"subact" => "0"
+			))
 		));
 
 		$res = $this->parse();
@@ -187,6 +244,19 @@ class object_treeview extends class_base
 			$res = $this->_get_add_toolbar($ob).$res;
 		}
 		return $res;
+	}
+
+	function submit_show($arr)
+	{
+		extract($arr);
+
+		if ($subact == "delete")
+		{
+			$ol = new object_list(array("oid" => $sel));
+			$ol->delete();
+		}
+
+		return $return_url;
 	}
 
 	function _get_objects($ob, $folders)
@@ -227,8 +297,32 @@ class object_treeview extends class_base
 			"class_id" => $ob->meta('clids'),
 			"sort_by" => "objects.modified DESC"
 		));
+		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 
 		return $this->make_keys($ol->ids());
+	}
+
+	function _obj_list_sorter($a, $b)
+	{
+		if ($a->class_id() == CL_MENU && $b->class_id() != CL_MENU)
+		{
+			return -1;
+		}
+		else
+		if ($a->class_id() != CL_MENU && $b->class_id() == CL_MENU)
+		{
+			return 1;
+		}
+		else
+		if ($a->class_id() != CL_MENU && $b->class_id() != CL_MENU)
+		{
+			return $a->modified() < $b->modified();
+		}
+		else
+		if ($a->class_id() == CL_MENU && $b->class_id() == CL_MENU)
+		{
+			return $a->modified() < $b->modified();
+		}
 	}
 
 	function _get_folders($ob)
@@ -262,6 +356,9 @@ class object_treeview extends class_base
 				$is_admin = true;
 			}
 		}
+
+		// this used to give access to subfolders of given folders
+		$access_by_parent = array();
 
 		$conns = $ob->connections_from(array(
 			"type" => RELTYPE_FOLDER
@@ -308,19 +405,20 @@ class object_treeview extends class_base
 							break;
 						}
 					}
+					if ($access_by_parent[$c_id_o->parent()])
+					{
+						$add = true;
+					}
 				}
 
 				if ($add)
 				{
 					$ret[$c_id] = $c_id;
+					$access_by_parent[$c_id] = true;
 				}
 			}
 		}
 
-/*		if (count($ret) < 1)
-		{
-			$ret[$ob->parent()] = $ob->parent();
-		}*/
 		return $ret;
 	}
 
@@ -555,11 +653,19 @@ class object_treeview extends class_base
 		$tb = get_instance("toolbar");
 		$tb->add_button(array(
 			"name" => "add",
-			"tooltop" => "Uus",
+			"tooltip" => "Uus",
 			"url" => "#",
 			"onClick" => "return buttonClick(event, 'aw_menu_0');",
 			"img" => "new.gif",
-			"imgover" => "new_over.gif",
+			"class" => "menuButton",
+		));
+
+		$tb->add_button(array(
+			"name" => "del",
+			"tooltip" => "Kustuta",
+			"url" => "#",
+			"onClick" => "document.objlist.subact.value='delete';document.objlist.submit()",
+			"img" => "delete.gif",
 			"class" => "menuButton",
 		));
 		return $this->parse().$tb->get_toolbar();
