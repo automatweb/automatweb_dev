@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.5 2005/01/26 12:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.6 2005/01/28 09:42:08 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -481,7 +481,7 @@ class db_table_contents extends class_base
 		}
 		else
 		{
-			$q = 'SELECT * FROM '.$ob->prop('db_table');
+			$q = 'SELECT * FROM '.$o->prop('db_table');
 			$db->db_query($q);
 		}
 
