@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.4 2003/12/03 13:33:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.5 2004/09/09 20:28:45 sven Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -47,14 +47,7 @@ class forum_topic extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "mail_answers":
-				$forum_obj = new object($arr["request"]["id"]);
-				$addr_folder = $forum_obj->prop("address_folder");
-				if (empty($addr_folder) || !is_numeric($addr_folder))
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
+
 		};
 		return $retval;
 	}

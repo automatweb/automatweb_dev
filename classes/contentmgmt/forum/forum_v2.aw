@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.37 2004/09/08 14:09:19 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.38 2004/09/09 20:28:45 sven Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -39,6 +39,9 @@
 
 	@property style_donor type=relpicker group=styles reltype=RELTYPE_STYLE_DONOR
 	@caption Stiilidoonor
+	
+	@property style_new_topic_row type=relpicker group=styles reltype=RELTYPE_STYLE
+	@caption Teema lisamise stiil
 	
 	@property style_caption type=relpicker group=styles reltype=RELTYPE_STYLE
 	@caption Tabeli pealkirja stiil
@@ -403,6 +406,7 @@ class forum_v2 extends class_base
 
 		$c = "";
 		
+		$this->_add_style("style_new_topic_row");
 		$this->_add_style("style_l1_folder");
 		$this->_add_style("style_folder_caption");
 		$this->_add_style("style_folder_topic_count");
