@@ -1,36 +1,5 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="apache_alias" folder="" extends="aw_template">
-		<action name="list" >
-			<function name="gen_list">
-				<arguments>
-					<optional name="page" type="int"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change" >
-			<function name="change">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit" >
-			<function name="submit">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="remove" >
-			<function name="remove">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
+	<class name="apache_alias" folder="applications/apache" extends="class_base">
 	</class>
 </orb>
