@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.2 2004/08/25 14:43:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.3 2004/08/26 08:51:39 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -10,6 +10,9 @@
 
 @property start1 type=datetime_select field=start table=planner
 @caption Algab
+
+@property end type=datetime_select field=end table=planner
+@caption Lõpeb
 
 @default field=meta
 @default method=serialize
