@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.28 2004/03/12 12:31:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.29 2004/03/12 12:39:37 duke Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -48,6 +48,7 @@ class cache extends core
 				chmod($fqfn, 0777);
 			}
 
+			/*
 			$fqfn .= "/".$hash{1};
 			if (!is_dir($fqfn))
 			{
@@ -61,6 +62,7 @@ class cache extends core
 				mkdir($fqfn, 0777);
 				chmod($fqfn, 0777);
 			}
+			*/
 
 			$fname = $fqfn.$fname;
 			$this->put_file(array("file" => $fname, "content" => $content));
