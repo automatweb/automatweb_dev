@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.42 2004/10/27 10:13:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.43 2004/10/27 10:14:08 ahti Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -748,7 +748,7 @@ class forum_v2 extends class_base
 			$c_date = $user_obj->meta("topic_age");
 			if(!empty($c_date))
 			{
-				$c_date = strotime("-$c_date days");
+				$c_date = strtotime("-$c_date days");
 				$age_check = true;
 			}
 		}
