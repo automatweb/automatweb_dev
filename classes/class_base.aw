@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.340 2004/12/09 13:13:55 duke Exp $
+// $Id: class_base.aw,v 2.341 2004/12/09 16:16:00 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2914,7 +2914,7 @@ class class_base extends aw_template
 					);
 				};
 			};
-			
+			$rvs = array();
 			if($controllers[$key])
 			{
 				$controller = is_array($controllers[$key]) ? $controllers[$key] : array($controllers[$key]);
