@@ -170,6 +170,8 @@ class form_db_base extends aw_template
 					{
 						$v = serialize($v);
 					}
+					$this->quote(&$v);
+					$this->quote(&$ev);
 					$vals.=",'$v','$ev'";
 				};
 			}
@@ -203,7 +205,9 @@ class form_db_base extends aw_template
 		foreach($els as $el)
 		{
 			$colnames[] = $el->get_save_col();
-			$elvalues[] = $el->get_value();
+			$ev = $el->get_value();
+			$this->quote(&$ev);
+			$elvalues[] = $ev;
 		}
 
 		if ($first && $this->arr["save_tables_obj_tbl"] == "")	
