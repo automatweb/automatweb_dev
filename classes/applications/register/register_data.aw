@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.9 2004/11/23 12:30:49 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.10 2004/11/23 14:24:24 sven Exp $
 // register_data.aw - Registri andmed 
 /*
 
@@ -179,6 +179,10 @@
 
 @property usersubtitle5 type=text store=no group=data subtitle=1
 @caption Subtitle5
+
+@property udefhidden1 type=hidden field=meta method=serialize group=general
+@property udefhidden2 type=hidden field=meta method=serialize group=general
+@property udefhidden3 type=hidden field=meta method=serialize group=general
 
 
 @property usertext1 type=text store=no group=data
