@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.32 2005/01/27 10:27:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.33 2005/01/27 10:29:56 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -737,9 +737,9 @@ class event_search extends class_base
 					$parx2[] = $rn2;
 				}
 			}
-			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24));
 			$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $end_tm);
+			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24));
 			$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
 			$search["lang_id"] = array();
 			$search["site_id"] = array();
