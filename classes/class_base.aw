@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.141 2003/09/09 12:06:02 duke Exp $
+// $Id: class_base.aw,v 2.142 2003/09/17 14:52:08 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -94,6 +94,7 @@ class class_base extends aw_template
 
 		$this->orb_action = $args["action"];
 		
+		$this->is_translated = 0;
 
 		if ($args["action"] == "new")
 		{
@@ -125,6 +126,15 @@ class class_base extends aw_template
 			};
 
 			$this->subgroup = isset($args["subgroup"]) ? $args["subgroup"] : "";
+
+			$obj = obj($this->id);
+			$conns = $obj->connections_to(array(
+				"type" => RELTYPE_TRANSLATION
+			));
+			if (count($conns) > 0)
+			{
+				$this->is_translated = 1;
+			}
 		};
 
 		$cfgform_id = $this->get_cfgform_for_object(array(
@@ -260,6 +270,8 @@ class class_base extends aw_template
 		// check whether this current class is based on class_base
 		$this->init_class_base();
 		$this->orb_action = $args["action"];
+
+		$this->is_translated = 0;
 
 		$this->quote($args);
 		extract($args);
@@ -1553,6 +1565,12 @@ class class_base extends aw_template
 				$status = $this->inst->get_property($argblock);
 			};
 
+			// if it is a translated object, then don't show properties that can't be translated
+			if ($this->is_translated && $val["trans"] != 1)
+			{
+				$status = PROP_IGNORE;
+			}
+
 			if ($status === PROP_IGNORE)
 			{
 				// do nothing
@@ -1907,6 +1925,15 @@ class class_base extends aw_template
 			$this->id = $id;
 		};
 
+		$obj = obj($this->id);
+		$conns = $obj->connections_to(array(
+			"type" => RELTYPE_TRANSLATION
+		));
+		if (count($conns) > 0)
+		{
+			$this->is_translated = 1;
+		}
+
 		$this->new = $new;
 		
 		// the question is .. should I call set_property for those too?
@@ -1961,6 +1988,11 @@ class class_base extends aw_template
 			{
 				continue;
 			};
+			// don't save or display un-translatable fields if we are editing a translated object
+			if ($this->is_translated && $property["trans"] != 1)
+			{
+				continue;
+			}
 
 			$name = $property["name"];
 			$type = $property["type"];
