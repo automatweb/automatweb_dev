@@ -119,6 +119,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_USER, on_add_alias)
 
 @property roles type=text  store=no no_caption=1
 
+@property home_folder type=hidden field=home_folder table=users
+
 @default group=jdata
 
 @property jdata type=text  store=no
@@ -1177,6 +1179,29 @@ class user extends class_base
 				"user_oid" => $arr["obj_inst"]->id(),
 				"no_add_user" => true
 			));
+			$arr["obj_inst"]->set_prop("home_folder", $this->users->hfid);
+			$arr["obj_inst"]->save();
+
+			// add user to all users grp if we are not under that
+			$aug = aw_ini_get("groups.all_users_grp");
+			$aug_oid = $this->users->get_oid_for_gid($aug);
+			if ($aug_oid != $arr["obj_inst"]->parent())
+			{
+				$aug_o = obj($aug_oid);
+				$arr["obj_inst"]->connect(array(
+					"to" => $aug_o->id(),
+					"reltype" => RELTYPE_GRP
+				));
+
+				// add reverse alias to group
+				$aug_o->connect(array(
+					"to" => $arr["obj_inst"]->id(),
+					"reltype" => 2 // RELTYPE_MEMBER from group
+				));
+
+				//$arr["obj_inst"]->create_brother($aug_o->id());
+			}
+			
 
 			// now, we also must check if the user was added under a group
 			$parent = obj($arr["obj_inst"]->parent());

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.75 2003/12/09 15:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.76 2003/12/17 08:50:16 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -788,6 +788,7 @@ class users_user extends aw_template
 			"class_id" => CL_PSEUDO, 
 			"comment" => $uid." kodukataloog"
 		),false);
+		$this->hfid = $hfid;
 		$this->db_query("INSERT INTO menu (id,type) VALUES($hfid,".MN_HOME_FOLDER.")");
 
 
@@ -796,12 +797,15 @@ class users_user extends aw_template
 			$password = md5($password);
 		};
 
-		// create user object under the correct folder
-		$user_oid = $this->new_object(array(
-			"parent" => $obj_parent, 
-			"name" => $uid, 
-			"class_id" => CL_USER, 
-		),false);
+		if (!$user_oid)
+		{
+			// create user object under the correct folder
+			$user_oid = $this->new_object(array(
+				"parent" => $obj_parent, 
+				"name" => $uid, 
+				"class_id" => CL_USER, 
+			),false);
+		}
 		
 
 		// teeme kasutaja
