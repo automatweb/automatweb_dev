@@ -50,7 +50,7 @@
 
 			<!-- SUB: sel_tab_L2 -->
 		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
-		  <td nowrap class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b>{VAR:caption}</b></td>
+		  <td nowrap class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_back.gif"><b><a style="color: white;" href="{VAR:link}">{VAR:caption}</a></b></td>
 		  <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_sel_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
 			<!-- END SUB: sel_tab_L2 -->
 
