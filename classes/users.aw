@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.133 2004/12/14 13:51:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.134 2004/12/31 10:02:47 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -986,6 +986,7 @@ class users extends users_user
 	function submit_send_hash($args = array())
 	{
 		extract($args);
+		extract($_POST);
 		if (($type == "uid") && not(is_valid("uid",$uid)))
 		{
 			aw_session_set("status_msg","Vigane kasutajanimi");
