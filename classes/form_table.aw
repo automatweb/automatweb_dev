@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.32 2002/07/17 07:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_table.aw,v 2.33 2002/07/17 07:49:03 kristo Exp $
 class form_table extends form_base
 {
 	function form_table()
@@ -2014,9 +2014,12 @@ class form_table extends form_base
 	function get_tbl_elements()
 	{
 		$ret = array();
-		foreach($this->table["forms"] as $fid)
+		if (is_array($this->table["forms"]))
 		{
-			$ret += $this->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
+			foreach($this->table["forms"] as $fid)
+			{
+				$ret += $this->get_form_elements(array("id" => $fid, "key" => "id", "all_data" => false));
+			}
 		}
 		$ret+=$this->fakels;
 		return $ret;
