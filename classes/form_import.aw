@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.6 2001/07/25 03:09:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_import.aw,v 2.7 2001/10/01 13:49:18 cvs Exp $
 global $orb_defs;
 $orb_defs["form_import"] = "xml";
 lc_load("form");
@@ -67,7 +67,7 @@ class form_import extends form_base
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
 		global $tmpdir;
 		$fp = fopen($tmpdir."/".$file,"r");
-		$ar = fgetcsv($fp,100000,";");
+		$ar = fgetcsv($fp,100000,"\t");
 		fclose($fp);
 
 		$cnt = 0;
@@ -86,6 +86,10 @@ class form_import extends form_base
 			$elname = $block["name"];
 			$eltype = $block["type"];
 			// we should really check the type of the form element
+			if (strlen($eltype) == 0)
+			{
+				continue;
+			};
 			$this->vars(array(
 				"el_name" => $elname,
 				"el_type" => $eltype,
@@ -130,7 +134,7 @@ class form_import extends form_base
 
 		$parent = $f->arr["ff_folder"];
 
-		while (($ar = fgetcsv($fp,100000,";")))
+		while (($ar = fgetcsv($fp,100000,"\t")))
 		{
 			$rowels = array();
 			$rowvals = array();
@@ -173,19 +177,30 @@ class form_import extends form_base
 						$elvalue = $ar[$el[$elid]];
 					}
 
+					if (is_array($f->arr["name_els"]))
+					{
+						if (in_array($elid,$f->arr["name_els"]))
+						{
+							$entry_name.=($entry_name == "" ? "" : " ").$ar[$el[$elid]];
+						}
+					}
+					else
 					if ($elid == $f->arr["name_el"])
 					{
-						$entry_name = $elvalue;
+						$entry_name = $ar[$el[$elid]];
 					}
 					$rowels[] = "el_".$elid;
+					$rowels[] = "ev_" . $elid;
 					$rowvals[] = "'".$elvalue."'";
+					$rowvals[] = "'".$ar[$el[$elid]]."'";
 					$entry[$elid] = $elvalue;
 				}
 			}
 			// now insert it into the correct tables, form_entry and form_$fid_entries
 			$entry_id = $this->new_object(array("parent" => $parent, "name" => $entry_name, "class_id" => CL_FORM_ENTRY));
 			$en = serialize($entry);
-			$this->db_query("insert into form_entries values($entry_id, $id, ".time().", '$en')");
+			$q = "insert into form_entries values($entry_id, $id, ".time().", '$en')";
+			$this->db_query($q);
 			
 			$sels = "id,".join(",",$rowels);
 			$svals = $entry_id.",".join(",",$rowvals);
@@ -241,7 +256,7 @@ class form_import extends form_base
 		// leiame mitu tulpa failis oli ja loeme sealt esimese rea
 		global $tmpdir;
 		$fp = fopen($tmpdir."/".$file,"r");
-		$ar = fgetcsv($fp,100000,";");
+		$ar = fgetcsv($fp,100000,"\t");
 		fclose($fp);
 
 		$cnt = 0;
