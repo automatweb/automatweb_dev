@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:16 +0300\n"
+"POT-Creation-Date: Thu, 31 Mar 2005 14:23:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,44 +9,146 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/proxy_classes/site_list.aw:prop_name
+# classes/core/proxy_classes/site_list.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_name_comment
+# classes/core/proxy_classes/site_list.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_name_help
+# classes/core/proxy_classes/site_list.aw:prop_name_help
 msgid "Omaduse Nimi (name) help"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_comment
+# classes/core/proxy_classes/site_list.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_comment_comment
+# classes/core/proxy_classes/site_list.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_comment_help
+# classes/core/proxy_classes/site_list.aw:prop_comment_help
 msgid "Omaduse Kommentaar (comment) help"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_status
+# classes/core/proxy_classes/site_list.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_status_comment
+# classes/core/proxy_classes/site_list.aw:prop_status_comment
 msgid "Omaduse Staatus (status) kommentaar"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:prop_status_help
+# classes/core/proxy_classes/site_list.aw:prop_status_help
 msgid "Omaduse Staatus (status) help"
 msgstr ""
 
-#: classes/core/proxy_classes/site_list.aw:group_general
+# classes/core/proxy_classes/site_list.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
+#: classes/install/site_list.aw:25
+msgid "AW Saitide list"
+msgstr ""
+
+#: classes/install/site_list.aw:33 classes/install/site_list.aw:221
+#: classes/install/site_list.aw:510
+msgid "ID"
+msgstr ""
+
+#: classes/install/site_list.aw:39 classes/install/site_list.aw:228
+#: classes/install/site_list.aw:517
+msgid "Nimi"
+msgstr ""
+
+#: classes/install/site_list.aw:44 classes/install/site_list.aw:525
+msgid "URL"
+msgstr ""
+
+#: classes/install/site_list.aw:49 classes/install/site_list.aw:154
+#: classes/install/site_list.aw:533
+msgid "Server"
+msgstr ""
+
+#: classes/install/site_list.aw:54
+msgid "Kasutusel"
+msgstr ""
+
+#: classes/install/site_list.aw:59
+msgid "Koodi versioon"
+msgstr ""
+
+#: classes/install/site_list.aw:64
+msgid "Viimane uuendus"
+msgstr ""
+
+#: classes/install/site_list.aw:72 classes/install/site_list.aw:240
+#: classes/install/site_list.aw:248
+msgid "Muuda"
+msgstr ""
+
+#: classes/install/site_list.aw:107
+msgid "Jah"
+msgstr ""
+
+#: classes/install/site_list.aw:107
+msgid "Ei"
+msgstr ""
+
+#: classes/install/site_list.aw:118
+msgid "Kokku %s saiti<br />\n"
+msgstr ""
+
+#: classes/install/site_list.aw:119
+msgid "Kasutusel %s saiti <br />\n"
+msgstr ""
+
+#: classes/install/site_list.aw:120
+msgid "Serverite kaupa: <br />\n"
+msgstr ""
+
+#: classes/install/site_list.aw:122
+msgid "Koodiversioonide kaupa: <br />\n"
+msgstr ""
+
+#: classes/install/site_list.aw:159 classes/install/site_list.aw:189
+msgid "Mitu"
+msgstr ""
+
+#: classes/install/site_list.aw:184
+msgid "Koodiversioon"
+msgstr ""
+
+#: classes/install/site_list.aw:213 classes/install/site_list.aw:613
+msgid "AW Serverite list"
+msgstr ""
+
+#: classes/install/site_list.aw:234
+msgid "IP aadress"
+msgstr ""
+
+#: classes/install/site_list.aw:541
+msgid "Used?"
+msgstr ""
+
+#: classes/install/site_list.aw:549
+msgid "Code branch"
+msgstr ""
+
+#: classes/install/site_list.aw:556
+msgid "Basedir"
+msgstr ""
+
+#: classes/install/site_list.aw:563
+msgid "Updater"
+msgstr ""
+
+#: classes/install/site_list.aw:570
+msgid "Last update"
+msgstr ""
+
+#: classes/install/site_list.aw:614
+msgid " / Muuda serverit "
+msgstr ""
