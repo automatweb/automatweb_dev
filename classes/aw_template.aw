@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.39 2003/03/06 19:58:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.40 2003/03/07 10:34:55 kristo Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -86,14 +86,41 @@ class aw_template extends acl_base
 	// !Deprecated - use html::select instead
 	function option_list($active,$array)
 	{
-		return html::select(array("selected" => $active,"options" => $array));
+		$res = "";
+		if (is_array($array))
+		{
+			while(list($k,$v) = each($array))
+			{
+				$selected = ($active == $k) ? " selected " : "";
+				$res .= sprintf("<option %s value='%s'>%s</option>\n",$selected,$k,$v);
+			};
+		};
+		return $res;
+//		return html::select(array("selected" => $active,"options" => $array));
 	}
 
 	////
 	// !Deprecated - use html::select instead
 	function multiple_option_list($active,$array)
 	{
-		return html::select(array("selected" => $active,"options" => $array,"multiple" => 1));
+		$res = "";
+		if (not(is_array($array)))
+		{
+			return false;
+		};
+
+		if (is_array($active))
+		{
+			$active = array_flip($active);
+		};
+
+		while(list($k,$v) = each($array))
+		{
+			$selected = isset($active[$k]) ? " selected " : "";
+			$res .= sprintf("<option %s value='%s'>%s</option>\n",$selected,$k,$v);
+		};
+		return $res;
+//		return html::select(array("selected" => $active,"options" => $array,"multiple" => 1));
 	}
         
 	////
