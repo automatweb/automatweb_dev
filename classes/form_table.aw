@@ -28,7 +28,7 @@ class form_table extends form_base
 		$ob = new db_objects;
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
-			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY)),
+			"forms" => $this->multiple_option_list(array(),$this->get_list(FTYPE_ENTRY,false,true)),
 			"tablestyles" => $this->picker(0,$s->get_select(0,ST_TABLE)),
 			"header_normal" => $this->picker(0,$css),
 			"header_sortable" => $this->picker(0,$css),
@@ -171,7 +171,7 @@ class form_table extends form_base
 			"name" => $this->table_name,
 			"comment" => $this->table_comment,
 			"num_cols" => $this->table["cols"],
-			"forms" => $this->multiple_option_list($forms, $this->get_list(FTYPE_ENTRY)),
+			"forms" => $this->multiple_option_list($forms, $this->get_list(FTYPE_ENTRY,false,true)),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"CHANGE" => $this->parse("CHANGE"),
 			"tablestyles" => $this->picker($this->table["table_style"],$s->get_select(0,ST_TABLE)),
@@ -236,8 +236,8 @@ class form_table extends form_base
 		$rds = array();
 		foreach($forms as $form)
 		{
-			$rds["el_change"] = "<a href='".$this->mk_my_orb("change", array("id" => $form->entry_id), "form_entry")."'>Muuda</a>";
-			$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]))."'>Vaata</a>";
+			$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form->id, "entry_id" => $form->entry_id), "form")."'>Muuda</a>";
+			$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]),"form")."'>Vaata</a>";
 			$rds["el_special"] = $special;
 			for ($row = 0; $row < $form->arr["rows"]; $row++)
 			{
@@ -265,6 +265,90 @@ class form_table extends form_base
 			return $this->get_css().$this->t->draw();
 		}
 		return "";
+	}
+
+	////
+	// !shows all the entries for the logged in user of form ($form_id) or chain ($chain_id) with table $table_id
+	function show_user_entries($arr)
+	{
+		extract($arr);
+		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id));
+
+		classload("form");
+		$far = array();
+		if ($form_id)
+		{
+			// teeme nimekirja yhe formi sisestustest
+			$far[0] = new form;
+			$far[0]->load($form_id);
+			$cnt=1;
+			$this->db_query("SELECT objects.*,form_".$form_id."_entries.* FROM objects LEFT JOIN form_".$form_id."_entries ON objects.oid = form_".$form_id."_entries.id WHERE objects.status = 2 AND createdby = '".$GLOBALS["uid"]."'");
+		}
+		else
+		if ($chain_id)
+		{
+			$this->load_chain($chain_id);
+			$ftables = array();
+			$fjoins = array();
+			$ftables[] = "form_chain_entries.*";
+			$cnt=0;
+			foreach($this->chain["forms"] as $fid)
+			{
+				$ftables[] = "form_".$fid."_entries.*";
+				$fjoins[] = "LEFT JOIN form_".$fid."_entries ON form_".$fid."_entries.chain_id = form_chain_entries.id";
+				$far[$cnt] = new form;
+				$far[$cnt]->load($fid);
+				$cnt++;
+			}
+			$fts = join(",",$ftables);
+			$fjs = join(" ",$fjoins);
+			$this->db_query("SELECT $fts FROM form_chain_entries $fjs WHERE form_chain_entries.uid = '".$GLOBALS["uid"]."' GROUP BY form_chain_entries.id");
+		}
+		classload("xml");
+		$x = new xml;
+		while ($row = $this->db_next())
+		{
+			if ($chain_id && $row["chain_id"])
+			{
+				// get chain entry ids
+				$char = $x->xml_unserialize(array("source" => $row["ids"]));
+				$rds = array();
+				for ($i=0; $i < $cnt; $i++)
+				{
+					$form = &$far[$i];
+					if (!is_array($row))
+					{
+						continue;
+					}
+					$form->load_entry_from_data($row,$char[$form->id]);
+
+					$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain")."'>Muuda</a>";
+
+					$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form")."'>Vaata</a>";
+
+					for ($row = 0; $row < $form->arr["rows"]; $row++)
+					{
+						for ($col = 0; $col < $form->arr["cols"]; $col++)
+						{
+							$form->arr["contents"][$row][$col]->get_els(&$elar);
+							reset($elar);
+							while (list(,$el) = each($elar))
+							{
+								$rds["el_".$el->get_id()] = $el->get_value();
+							}
+						}
+					}
+				}
+				$this->t->define_data($rds);
+			}
+			else
+			if ($form_id)
+			{
+				$far[0]->load_entry_from_data($row,$row["id"]);
+				$this->row_data_from_form($far);
+			}
+		}
+		return $this->finish_table();
 	}
 
 	////

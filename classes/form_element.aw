@@ -160,7 +160,7 @@ class form_element extends aw_template
 		for ($col=0; $col < $f->arr["cols"]; $col++)
 		{
 			$this->vars(array(
-				"col" => $col
+				"col" => $col+1
 			));
 			$cc.=$this->parse("COLNUMC");
 			$cc2.=$this->parse("COLNUM");
@@ -175,7 +175,13 @@ class form_element extends aw_template
 			$cc="";
 			for ($col = 0; $col < $f->arr["cols"]; $col++)
 			{
-				$this->vars(array("row" => $row, "col" => $col, "checked" => checked($this->col == $col && $this->row == $row),"cnt" => $cnt++));
+				$this->vars(array(
+					"row" => $row, 
+					"col" => $col, 
+					"checked" => checked($this->col == $col && $this->row == $row),
+					"cnt" => $cnt++,
+					"drow" => $row+1
+				));
 				$c.=$this->parse("COL");
 				$cc.=$this->parse("COLC");
 			}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.3 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.4 2001/07/04 23:01:55 kristo Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml {
@@ -62,7 +62,8 @@ class xml {
 				$is_special = true;
 			};
 		};
-	
+
+		$value = str_replace("&","&amp;",$value);
 		if ($is_special)
 		{
 			$retval = $spacer . "<$tag>\n" . $spacer . "<![CDATA[" . $value . "]]>\n" . $spacer . "</$tag>\n";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.31 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.32 2001/07/04 23:01:54 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -151,44 +151,59 @@ $orb_defs["form"] = "xml";
 					while (list(, $v) = each($els))
 					{
 						// the element's can_view property is ignored here
-						$this->vars(array("form_cell_text"	=> $v["text"], 
-															"form_cell_order"	=> $v["order"],
-															"element_id"			=> $v["id"],
-															"el_name"					=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
-															"el_type"					=> ($v["type"] == "" ? "&nbsp;" : $v["type"])));
+						$this->vars(array(
+							"form_cell_text"	=> $v["text"], 
+							"form_cell_order"	=> $v["order"],
+							"element_id"			=> $v["id"],
+							"el_name"					=> ($v["name"] == "" ? "&nbsp;" : $v["name"]),
+							"el_type"					=> ($v["type"] == "" ? "&nbsp;" : $v["type"]),
+							"chpos" => $this->mk_my_orb("change_el_pos", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"],"el_id" => $v["id"]))
+						));
 						$el.=$this->parse("ELEMENT");
-						if (!$this->can("delete",$v["id"]))
-							$fl = false;
 						$el_cnt++;
 					}
 
-					$this->vars(array("ELEMENT" => $el, "cell_col" => $a, "cell_row" => $i, "ELEMENT_NOEDIT" => "","num_els_plus3"=>($el_cnt+5),
-														"exp_left"	=> $this->mk_orb("exp_cell_left", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"exp_up"		=> $this->mk_orb("exp_cell_up", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"exp_down"	=> $this->mk_orb("exp_cell_down", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"exp_right"	=> $this->mk_orb("exp_cell_right", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $this->id, "col" => $a, "row" => $i)),
-														"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
-														"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"]))));
+					$this->vars(array(
+						"ELEMENT" => $el, "cell_col" => $a, "cell_row" => $i, "ELEMENT_NOEDIT" => "","num_els_plus3"=>($el_cnt+5),
+						"exp_left"	=> $this->mk_orb("exp_cell_left", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"exp_up"		=> $this->mk_orb("exp_cell_up", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"exp_down"	=> $this->mk_orb("exp_cell_down", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"exp_right"	=> $this->mk_orb("exp_cell_right", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $this->id, "col" => $a, "row" => $i)),
+						"admin_cell"	=> $this->mk_orb("admin_cell", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
+						"add_element" => $this->mk_orb("add_element", array("id" => $this->id, "col" => $arr["r_col"], "row" => $arr["r_row"])),
+					));
 					$sh = ""; $sv = "";
 					if ($arr["rowspan"] > 1)
+					{
 						$sh = $this->parse("SPLIT_HORIZONTAL");
+					}
 					if ($arr["colspan"] > 1)
+					{
 						$sv = $this->parse("SPLIT_VERTICAL");
+					}
 
 					$eu = "";
 					if ($i != 0)
+					{
 						$eu = $this->parse("EXP_UP");
+					}
 					$el = "";
 					if ($a != 0)
+					{
 						$el = $this->parse("EXP_LEFT");
+					}
 					$er = "";
 					if (($a+$arr["colspan"]) != $this->arr["cols"])
+					{
 						$er = $this->parse("EXP_RIGHT");
+					}
 					$ed = "";
 					if (($i+$arr["rowspan"]) != $this->arr["rows"])
+					{
 						$ed = $this->parse("EXP_DOWN");
+					}
 
 					$this->vars(array("SPLIT_HORIZONTAL" => $sh, "SPLIT_VERTICAL" => $sv, "EXP_UP" => $eu, "EXP_LEFT" => $el, "EXP_RIGHT" => $er,"EXP_DOWN" => $ed));
 					$cols.=$this->parse("COL");
@@ -199,21 +214,24 @@ $orb_defs["form"] = "xml";
 					$this->vars(array("add_row" => $this->mk_orb("add_row", array("id" => $this->id, "after" => -1, "count" => 1))));
 					$fi = $this->parse("FIRST_R");
 				}
-				$cd = "";
-				if ($fl)
-				{
-					$this->vars(array("del_row" => $this->mk_orb("del_row", array("id" => $this->id, "row" => $i))));
-					$cd = $this->parse("DELETE_ROW");
-				}
-				$this->vars(array("COL" => $cols, "FIRST_R" => $fi, "DELETE_ROW" => $cd,
-													"add_row" => $this->mk_orb("add_row", array("id" => $this->id, "after" => $i, "count" => 1))));
+				$this->vars(array("del_row" => $this->mk_orb("del_row", array("id" => $this->id, "row" => $i))));
+				$cd = $this->parse("DELETE_ROW");
+
+				$this->vars(array(
+					"COL" => $cols, 
+					"FIRST_R" => $fi, 
+					"DELETE_ROW" => $cd,
+					"add_row" => $this->mk_orb("add_row", array("id" => $this->id, "after" => $i, "count" => 1))
+				));
 				$l.=$this->parse("LINE");
 			}
 
-			$this->vars(array("LINE"				=> $l,
-												"addr_reforb"	=> $this->mk_reforb("add_row", array("id" => $this->id, "after" => $this->arr["rows"]-1)),
-												"addc_reforb"	=> $this->mk_reforb("add_col", array("id" => $this->id, "after" => $this->arr["cols"]-1)),
-												"reforb"			=> $this->mk_reforb("submit_grid", array("id" => $this->id))));
+			$this->vars(array(
+				"LINE"				=> $l,
+				"addr_reforb"	=> $this->mk_reforb("add_row", array("id" => $this->id, "after" => $this->arr["rows"]-1)),
+				"addc_reforb"	=> $this->mk_reforb("add_col", array("id" => $this->id, "after" => $this->arr["cols"]-1)),
+				"reforb"			=> $this->mk_reforb("submit_grid", array("id" => $this->id))
+			));
 			return $this->do_menu_return();
 		}
 
@@ -617,10 +635,13 @@ $orb_defs["form"] = "xml";
 				$this->vars(array("COL" => $html));
 				$c.=$this->parse("LINE");
 
-				// generate all entry checking html
-				for ($a = 0; $a < $this->arr["cols"]; $a++)
+				if ($this->type == FTYPE_ENTRY)
 				{
-					$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+					// generate all entry checking html
+					for ($a = 0; $a < $this->arr["cols"]; $a++)
+					{
+						$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+					}
 				}
 			}
 
@@ -697,6 +718,7 @@ $orb_defs["form"] = "xml";
 		////
 		// !saves the entry for the form $id, if $entry_id specified, updates it instead of creating a new one
 		// elements are assumed to be prefixed by $prefix
+		// optional argument $chain_entry_id - if creating a new entry and it is specified, the entry is created with that chain entry id
 		function process_entry($arr)
 		{
 			extract($arr);
@@ -737,6 +759,11 @@ $orb_defs["form"] = "xml";
 				// create sql 
 				reset($this->entry);
 				$ids = "id"; $vals = "$entry_id";
+				if ($chain_entry_id)
+				{
+					$ids.=",chain_id";
+					$vals.=",".$chain_entry_id;
+				}
 				$first = true;
 				while (list($k, $v) = each($this->entry))
 				{
@@ -841,6 +868,29 @@ $orb_defs["form"] = "xml";
 				$this->raise_error(sprintf(E_FORM_NO_SUCH_ENTRY,$entry_id,$id),true);
 			};
 
+			if ($row["chain_id"])
+			{
+				// kuna see entry on osa chaini entryst, siis tuleb laadida ka teised chaini entryd
+				$char = $this->get_chain_entry($row["chain_id"]);
+				foreach($char as $cfid => $ceid)
+				{
+					if ($ceid != $entry_id)
+					{
+						$this->db_query("SELECT * FROM form_".$cfid."_entries WHERE id = $ceid");
+						$crow = $this->db_next();
+						if (is_array($crow))
+						{
+							$row= $row+$crow;
+						}
+					}
+				}
+			}
+			$this->load_entry_from_data($row,$entry_id);
+		}
+
+		function load_entry_from_data($row,$entry_id)
+		{
+			$this->entry_id = $entry_id;
 			reset($row);
 
 			while (list($k,$v) = each($row))
@@ -864,7 +914,6 @@ $orb_defs["form"] = "xml";
 				};
 			};
 		}
-
 
 		////
 		// !shows entry $entry_id of form $id using output $op_id
@@ -995,6 +1044,37 @@ $orb_defs["form"] = "xml";
 					for ($i=0; $i < $op_cell["el_count"]; $i++)
 					{
 						$el = $this->get_element_by_id($op_cell["els"][$i]);
+						if (!$el)
+						{
+							// j2relikult on see element m6nes teises selle outputi formis. et siis tuleb loadida k6ik selle 
+							// outputiga seotud formid ja nende seest elementi otsida
+							if (!$op_other_forms_loaded)
+							{
+								$op_far = $this->get_op_forms($op_id);
+								$op_forms = array();
+								foreach($op_far as $op_fid)
+								{
+									$op_forms[$op_fid] = new form;
+									$op_forms[$op_fid]->load($op_fid);
+									// setime entry data ka
+									for ($orow=0; $orow < $op_forms[$op_fid]->arr["rows"]; $orow++)
+									{
+										for ($ocol=0; $ocol < $op_forms[$op_fid]->arr["cols"]; $ocol++)
+										{
+											$op_forms[$op_fid]->arr["contents"][$orow][$ocol] -> set_entry(&$this->entry, $entry_id);
+										};
+									};
+								}
+								$op_other_forms_loaded = true;
+							}
+							foreach($op_forms as $op_fid => $op_form)
+							{
+								if (!$el)
+								{
+									$el = $op_form->get_element_by_id($op_cell["els"][$i]);
+								}
+							}
+						}
 						if ($el)
 						{
 							$chtml.= $el->gen_show_html();
@@ -1326,7 +1406,10 @@ $orb_defs["form"] = "xml";
 						$rds["el_modified"] = $this->time2date($eobj["modified"],2);
 						$rds["el_createdby"] = $this->time2date($eobj["uid"],2);
 						$rds["el_active"] = "<input type='checkbox' name='active[".$fid."][".$eid."]' value='1' ".(checked($eobj["status"]==2))."><input type='hidden' name='old_active[".$fid."][".$eid."]' value='".$eobj["status"]."'>";
-						$rds["el_chpos"] = "<select name='chpos[".$fid."][".$eid."]>".$this->picker((in_array($eobj["parent"],$ft->table["moveto"]) ? $eobj["parent"] : 0),$movetoar)."</select><input type='hidden' name='old_pos[".$fid."][".$eid."]' value='".$eobj["parent"]."'>";
+						if (is_array($ft->table["moveto"]))
+						{
+							$rds["el_chpos"] = "<select name='chpos[".$fid."][".$eid."]>".$this->picker((in_array($eobj["parent"],$ft->table["moveto"]) ? $eobj["parent"] : 0),$movetoar)."</select><input type='hidden' name='old_pos[".$fid."][".$eid."]' value='".$eobj["parent"]."'>";
+						}
 						for ($row = 0; $row < $form->arr["rows"]; $row++)
 						{
 							for ($col = 0; $col < $form->arr["cols"]; $col++)
@@ -1465,7 +1548,7 @@ $orb_defs["form"] = "xml";
 
 			$this->db_query("INSERT INTO forms(id, type,content,cols,rows) VALUES($id, $type,'',1,1)");
 
-			$this->db_query("CREATE TABLE form_".$id."_entries (id int primary key)");
+			$this->db_query("CREATE TABLE form_".$id."_entries (id int primary key,chain_id int)");
 
 			$this->load($id);
 
@@ -1605,7 +1688,7 @@ $orb_defs["form"] = "xml";
 			$this->load($id);
 			$this->arr["contents"][$row][$col]->set_style($style,&$this);
 			$this->save();
-			return $this->mk_orb("admin_cell", array("id" => $this->id, "row" => $row, "col" => $col));
+			return $this->mk_orb("sel_cell_style", array("id" => $this->id, "row" => $row, "col" => $col));
 		}
 
 		////
@@ -1786,6 +1869,7 @@ $orb_defs["form"] = "xml";
 						// we must also update the form_$id_entries table
 						$this->db_query("ALTER TABLE form_".$id."_entries add el_$new_el text");
 
+						$this->db_query("INSERT INTO element2form(el_id,form_id) values($new_el,$id)");
 						$arr = $oldel;
 						$arr["id"] = $new_el;
 						$arr["name"] = $name;
@@ -1838,7 +1922,7 @@ $orb_defs["form"] = "xml";
 			$this->db_query("INSERT INTO forms(id,content,type,cols,rows) values($oid,'".$row["content"]."','".$row["type"]."','".$row["cols"]."','".$row["rows"]."')");
 
 			// create form entries table
-			$this->db_query("CREATE TABLE form_".$oid."_entries (id int primary key)");
+			$this->db_query("CREATE TABLE form_".$oid."_entries (id int primary key,chain_id int)");
 
 			// then we go through alla the elements in the form
 			$this->load($oid);

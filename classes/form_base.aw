@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.10 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.11 2001/07/04 23:01:54 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 
 class form_base extends aw_template
@@ -255,18 +255,21 @@ class form_base extends aw_template
 	{
 		global $action,$op_id, $ext;
 
-		$this->vars(array("form_id"					=> $this->id, 
-											"change"					=> $this->mk_orb("change", array("id" => $this->id),"form"),
-											"show"						=> $this->mk_orb("show", array("id" => $this->id),"form"),
-											"table_settings"	=> $this->mk_orb("table_settings", array("id" => $this->id),"form"),
-											"all_elements"		=> $this->mk_orb("all_elements", array("id" => $this->id),"form"),
-											"list_op"					=> $this->mk_orb("list_op", array("id" => $this->id),"form_output"),
-											"change_op"				=> $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-											"op_style"				=> $this->mk_orb("op_style", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-											"op_meta"					=> $this->mk_orb("op_meta", array("id" => $this->id, "op_id" => $op_id),"form_output"),
-											"actions"					=> $this->mk_orb("list_actions", array("id" => $this->id),"form_actions"),
-											"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
-											"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form")));
+		$this->vars(array(
+			"form_id"					=> $this->id, 
+			"change"					=> $this->mk_orb("change", array("id" => $this->id),"form"),
+			"show"						=> $this->mk_orb("show", array("id" => $this->id),"form"),
+			"table_settings"	=> $this->mk_orb("table_settings", array("id" => $this->id),"form"),
+			"all_elements"		=> $this->mk_orb("all_elements", array("id" => $this->id),"form"),
+			"list_op"					=> $this->mk_orb("list_op", array("id" => $this->id),"form_output"),
+			"change_op"				=> $this->mk_orb("change_op", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"op_style"				=> $this->mk_orb("op_style", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"op_meta"					=> $this->mk_orb("op_meta", array("id" => $this->id, "op_id" => $op_id),"form_output"),
+			"actions"					=> $this->mk_orb("list_actions", array("id" => $this->id),"form_actions"),
+			"sel_search"			=> $this->mk_orb("sel_search", array("id" => $this->id), "form"),
+			"metainfo"				=> $this->mk_orb("metainfo", array("id" => $this->id), "form"),
+			"import_entries" => $this->mk_my_orb("import_form_entries", array("id" => $this->id),"form_import")
+		));
 
 		if ($action == "change" || $action == "show" || $action == "all_elements")
 		{
@@ -454,7 +457,7 @@ class form_base extends aw_template
 
 	////
 	// !returns a list of forms, filtered by type
-	function get_list($type,$addempty = false)
+	function get_list($type,$addempty = false,$onlyactive = false)
 	{
 		if ($addempty)
 		{
@@ -463,6 +466,14 @@ class form_base extends aw_template
 		else
 		{
 			$ret = array();
+		}
+		if ($onlyactive)
+		{
+			$st = "objects.status = 2";
+		}
+		else
+		{
+			$st = "objects.status != 0";
 		}
 		$this->db_query("SELECT objects.name AS name,
 					objects.comment AS comment,
@@ -474,7 +485,7 @@ class form_base extends aw_template
 					forms.j_name AS j_name
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
-				WHERE objects.status != 0 AND forms.type = $type");
+				WHERE $st AND forms.type = $type");
 		while ($row = $this->db_next())
 		{
 			$ret[$row["oid"]] = $row["name"];
@@ -492,6 +503,19 @@ class form_base extends aw_template
 		while ($row = $this->db_next())
 		{
 			$ret[$row["form_id"]][$row["op_id"]] = $row["name"];
+		}
+		return $ret;
+	}
+
+	////
+	// !returns an array of all forms for output $op_id
+	function get_op_forms($op_id)
+	{
+		$ret = array();
+		$this->db_query("SELECT form_id FROM output2form WHERE op_id = $op_id");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["form_id"]] = $row["form_id"];
 		}
 		return $ret;
 	}
@@ -1005,6 +1029,29 @@ class form_base extends aw_template
 			$ret[$row["oid"]] = $row["name"];
 		}
 		return $ret;
+	}
+
+	////
+	// !returns an array of form_id => entry_id for the given chain entry id
+	function get_chain_entry($entry_id)
+	{
+		$this->db_query("SELECT * FROM form_chain_entries WHERE id = $entry_id");
+		$row = $this->db_next();
+		classload("xml");
+		$x = new xml;
+		return $x->xml_unserialize(array("source" => $row["ids"]));
+	}
+
+	////
+	// !loads form chain $id into $this->chain
+	function load_chain($id)
+	{
+		$this->db_query("SELECT objects.*, form_chains.* FROM objects LEFT JOIN form_chains ON objects.oid = form_chains.id WHERE objects.oid = $id");
+		$row = $this->db_next();
+		classload("xml");
+		$x = new xml;
+		$this->chain = $x->xml_unserialize(array("source" => $row["content"]));
+		return $row;
 	}
 }
 ?>

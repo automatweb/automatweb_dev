@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.6 2001/06/21 03:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.7 2001/07/04 23:01:54 kristo Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
@@ -24,7 +24,7 @@ class form_output extends form_base
 
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
-			"forms" => $this->multiple_option_list(array(), $this->get_list(FTYPE_ENTRY,true)),
+			"forms" => $this->multiple_option_list(array(), $this->get_list(FTYPE_ENTRY,true,true)),
 			"styles" => $this->picker(0,$st->get_select(0,ST_TABLE))
 		));
 		$this->parse("ADD");
@@ -106,7 +106,7 @@ class form_output extends form_base
 			"name" => $this->name,
 			"comment" => $this->comment,
 			"admin" => $this->mk_orb("admin_op", array("id" => $id)),
-			"forms" => $this->multiple_option_list($this->get_op_forms($id), $this->get_list(FTYPE_ENTRY)),
+			"forms" => $this->multiple_option_list($this->get_op_forms($id), $this->get_list(FTYPE_ENTRY,false,true)),
 			"styles" => $this->picker($this->output["table_style"],$st->get_select(0,ST_TABLE))
 		));
 		$this->parse("CHANGE");
@@ -124,17 +124,6 @@ class form_output extends form_base
 			echo "</tr>";
 		}
 		echo "</table>";
-	}
-
-	function get_op_forms($op_id)
-	{
-		$ret = array();
-		$this->db_query("SELECT form_id FROM output2form WHERE op_id = $op_id");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["form_id"]] = $row["form_id"];
-		}
-		return $ret;
 	}
 
 	////

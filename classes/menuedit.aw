@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.30 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.31 2001/07/04 23:01:54 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -139,7 +139,7 @@ class menuedit extends aw_template
 			// seda objekti pold caches
 			$res = $this->_gen_site_html($params);
 			$this->cache->set($section,$cp,$res);
-			echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
+			// echo "<!-- no cache $section <pre>",join("-",$cp),"</pre>\n-->";
 		}
 		else
 		{
@@ -2931,7 +2931,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 	function req_draw_menu($parent,$name,&$path,$ignore_path)
 	{
-		global $baseurl, $ext;
+		global $baseurl, $ext, $menu_check_acl;
 		$this->sub_merge = 1;
 		$this->level++;
 
@@ -2942,6 +2942,13 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			$this->level--;
 			return 0;
 		}
+	
+		$check_acl = false;
+
+		if (in_array($parent,$menu_check_acl))
+		{
+			$check_acl = true;
+		};
 
 		// make the subtemplate names for this and the next level
 		$mn = "MENU_".$name."_L".$this->level."_ITEM";
@@ -2965,6 +2972,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		reset($this->mpr[$parent]);
 		while (list(,$row) = each($this->mpr[$parent]))
 		{
+			if ($check_acl)
+			{
+				// sellele menüüle pole oigusi, me ei näita seda
+				if (!$this->can("view",$row["oid"]))
+				{
+					continue;
+				};
+			};
+			
 			// only show content menus
 			if ($row["mtype"] != MN_CONTENT)
 			{

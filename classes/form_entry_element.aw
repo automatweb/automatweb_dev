@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.20 2001/07/03 18:26:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.21 2001/07/04 23:01:54 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -89,6 +89,7 @@ load_vcl("date_edit");
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
+					"lb_size" => $this->arr["lb_size"]
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -107,17 +108,6 @@ load_vcl("date_edit");
 				}	
 			}
 
-			if ($this->arr["type"] == "listbox" || $this->arr["type"] == "multiple")
-			{
-				$this->vars(array(
-					"sort_by_order" => checked($this->arr["sort_by_order"]),
-					"sort_by_alpha" => checked($this->arr["sort_by_alpha"])
-				));
-				$this->vars(array(
-					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT")
-				));
-			}
-
 			$mu = "";
 			if ($this->arr["type"] == "multiple")		
 			{	
@@ -131,9 +121,24 @@ load_vcl("date_edit");
 						"multiple_check_checked"	=> ($this->arr["multiple_defaults"][$b] == 1 ? $chk_val : ""),
 						"multiple_order_name" => "element_".$this->id."_m_order_".$b,
 						"multiple_order_value" => $this->arr["multiple_order"][$b],
+						"num" => $b
 					));
 					$mu.=$this->parse("MULTIPLE_ITEMS");
 				}	
+				$this->vars(array(
+					"lb_size" => $this->arr["mb_size"]
+				));
+			}
+
+			if ($this->arr["type"] == "listbox" || $this->arr["type"] == "multiple")
+			{
+				$this->vars(array(
+					"sort_by_order" => checked($this->arr["sort_by_order"]),
+					"sort_by_alpha" => checked($this->arr["sort_by_alpha"])
+				));
+				$this->vars(array(
+					"LISTBOX_SORT" => $this->parse("LISTBOX_SORT")
+				));
 			}
 
 			$ta = "";
@@ -301,6 +306,9 @@ load_vcl("date_edit");
 				$dwtvar = $base."_lbitems_dowhat";
 				$dwat = $$dwtvar;
 
+				$var = $base."_lb_size";
+				$this->arr["lb_size"] = $$var;
+
 				$this->arr["listbox_items"] = array();
 				$cnt=$this->arr["listbox_count"]+1;
 				for ($b=0,$num=0; $b < $cnt; $b++)
@@ -337,21 +345,42 @@ load_vcl("date_edit");
 
 			if ($this->arr["type"] == "multiple")
 			{
+				$arvar = $base."_sel";
+				$ar = $$arvar;
+
+				$dwtvar = $base."_lbitems_dowhat";
+				$dwat = $$dwtvar;
+
+				$var = $base."_lb_size";
+				$this->arr["mb_size"] = $$var;
+
 				$cnt=$this->arr["multiple_count"]+1;	
-				for ($b=0; $b < $cnt; $b++)
+				for ($b=0,$num=0; $b < $cnt; $b++)
 				{
-					$var=$base."_mul_".$b;
-					$this->arr["multiple_items"][$b] = $$var;
+					if (!($dwat == "del" && $ar[$b] == 1))
+					{
+						$var=$base."_mul_".$b;
+						$this->arr["multiple_items"][$num] = $$var;
 
-					$var = $base."_m_".$b;
-					$this->arr["multiple_defaults"][$b] = $$var;
+						$var = $base."_m_".$b;
+						$this->arr["multiple_defaults"][$num] = $$var;
 
-					$var=$base."_m_order_".$b;
-					$this->arr["multiple_order"][$b] = $$var;
+						$var=$base."_m_order_".$b;
+						$this->arr["multiple_order"][$num] = $$var;
+						$num++;
+
+						if ($dwat=="add" && $ar[$b] == 1)
+						{
+							$this->arr["multiple_items"][$num] = " ";
+							$num++;
+						}
+					}
 				}
-				if ($this->arr["multiple_items"][$cnt-1] == "")
-					$cnt--;
-				$this->arr["multiple_count"]=$cnt;
+				if ($this->arr["multiple_items"][$num-1] == "")
+				{
+					$num--;
+				}
+				$this->arr["multiple_count"]=$num;
 				$this->sort_multiple();
 
 				$this->import_m_data();
@@ -465,7 +494,7 @@ load_vcl("date_edit");
 
 			$var = $base."_srow_grp";
 			$this->arr["srow_grp"] = $$var;
-
+			
 			return true;
 		}
 
@@ -517,7 +546,12 @@ load_vcl("date_edit");
 					break;
 
 				case "listbox":
-					$html="<select name='".$prefix.$elid."'>";
+					$html="<select name='".$prefix.$elid."'";
+					if ($this->arr["lb_size"] > 1)
+					{
+						$html.=" size=\"".$this->arr["lb_size"]."\"";
+					}
+					$html.=">";
 					if (is_array($elvalues[$this->arr["name"]]))
 					{
 						$val = $this->get_val($elvalues);
@@ -551,7 +585,12 @@ load_vcl("date_edit");
 					break;
 
 				case "multiple":
-					$html="<select NAME='".$prefix.$elid."[]' MULTIPLE>";
+					$html="<select NAME='".$prefix.$elid."[]' MULTIPLE";
+					if ($this->arr["mb_size"] > 1)
+					{
+						$html.=" size=\"".$this->arr["mb_size"]."\"";
+					}
+					$html.=">";
 
 					if ($this->entry_id)
 						$ear = explode(",",$this->entry);
@@ -728,7 +767,14 @@ load_vcl("date_edit");
 			{
 				$var = $prefix.$this->id;
 				global $$var;
-				$entry[$this->id] = join(",",$$var);
+				if (is_array($$var))
+				{
+					$entry[$this->id] = join(",",$$var);
+				}
+				else
+				{
+					$entry[$this->id] = "";
+				}
 				$this->entry = $entry[$this->id];
 				$this->entry_id = $id;
 				return;

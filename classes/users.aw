@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.9 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.10 2001/07/04 23:01:55 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -977,6 +977,11 @@ class users extends users_user
 	{
 		extract($arr);
 		$udata = $this->fetch($username);
+		if (!$udata)
+		{
+			$username = $this->db_fetch_field("SELECT uid FROM users WHERE email = '$username'","uid");
+			$udata = $this->fetch($username);
+		}	
 
 		classload("config");
 		$c = new config;

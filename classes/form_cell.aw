@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.9 2001/06/28 18:04:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.10 2001/07/04 23:01:54 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -199,11 +199,14 @@ class form_cell extends aw_template
 
 	function _do_add_element($fid,$el)
 	{
-		// we must also update the form_$id_entries table
-		$this->db_query("ALTER TABLE form_".$fid."_entries add el_$el text");
-
-		// and add this form to the list of forms in which the element is
-		$this->db_query("INSERT INTO element2form(el_id,form_id) values($el,$fid)");
+		if (is_number($el))
+		{
+			// we must also update the form_$id_entries table
+			$this->db_query("ALTER TABLE form_".$fid."_entries add el_$el text");
+	
+			// and add this form to the list of forms in which the element is
+			$this->db_query("INSERT INTO element2form(el_id,form_id) values($el,$fid)");
+		}
 	}
 
 	function admin_cell_actions()

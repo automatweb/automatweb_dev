@@ -23,7 +23,7 @@
 			$this->read_template("admin_search_element.tpl");
 			$chk_val = " CHECKED ";
 		
-			global $formcache,$mcnt,$chcnt;
+			global $formcache,$mcnt,$chcnt,$max_els;
 
 			if (!is_array($formcache))
 			{
@@ -147,6 +147,11 @@
 			$var=$base."_element";
 			$this->arr["linked_element"] = $$var;
 
+			$var = $base."_del";
+			if ($$var == 1)
+			{
+				return false;
+			}
 			return true;
 		}
 

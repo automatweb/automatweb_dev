@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.31 2001/07/02 00:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.32 2001/07/04 23:01:54 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -460,6 +460,15 @@ class document extends aw_template
 					"idx" => 2,
 					"match" => "f",
 					"class" => "form",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+
+		// vormi p2rjad
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "c",
+					"class" => "form_chain",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
@@ -1300,7 +1309,8 @@ class document extends aw_template
 			"addform"		=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form"),
 			"addgb"			=> $this->mk_my_orb("new", array("parent" => $document["parent"], "docid" => $id), "guestbook"),
 			"addgraph"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"graph"),
-			"addgallery"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"gallery")
+			"addgallery"	=> $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"gallery"),
+			"addchain" => $this->mk_my_orb("new", array("parent" => $document["parent"],"alias_doc" => $id),"form_chain")
 		));
 		// see sordib ja teeb aliaste nimekirja. ja see ei meeldi mulle. but what can ye do, eh?
 		$this->mk_alias_lists($id);
@@ -1356,7 +1366,7 @@ class document extends aw_template
 											"no_search" => checked($document["no_search"]),
 											"no_left_pane" => checked($document["no_left_pane"]),
 											"no_right_pane" => checked($document["no_right_pane"]),
-											"charset" => $t->get_charset()
+											"charset" => $t->get_charset(),
 											));
 
 
@@ -1388,7 +1398,8 @@ class document extends aw_template
 					 $file_sortby,$file_order,$s_file_sortby,$s_file_order,
 					 $graph_sortby,$graph_order,$s_graph_sortby,$s_graph_order,
 					 $gallery_sortby,$gallery_order,$s_gallery_sortby,$s_gallery_order,
-					 $table_sortby,$table_order,$s_table_sortby,$s_table_order;
+					 $table_sortby,$table_order,$s_table_sortby,$s_table_order,
+					 $chain_sortby,$chain_order,$s_chain_sortby,$s_chain_order;
 		if ($pic_sortby)
 		{
 			$s_pic_sortby = $pic_sortby;
@@ -1412,6 +1423,14 @@ class document extends aw_template
 		if ($form_order)
 		{
 			$s_form_order = $form_order;
+		}
+		if ($chain_sortby)
+		{
+			$s_chain_sortby = $chain_sortby;
+		}
+		if ($chain_order)
+		{
+			$s_chain_order = $chain_order;
 		}
 		if ($table_sortby)
 		{
@@ -1590,6 +1609,40 @@ class document extends aw_template
 			$hf = $this->parse("NO_FORMS");
 		}
 		$this->vars(array("HAS_FORMS" => $hf, "NO_FORMS"));
+
+		$ffl = "";
+		$chains = $this->get_aliases_for($id,CL_FORM_CHAIN,$s_chain_sortby, $s_chain_order);
+		$cc = 0;
+		$chainlist = array();
+		reset($chains);
+		while (list(,$v) = each($chains))
+		{
+			$cc++;
+			$this->vars(array("name"								=> $v["name"], 
+												"modified"						=> $this->time2date($v["modified"],2), 
+												"modifiedby"					=> $v["modifiedby"],
+												"alias"								=> "#c".$cc."#","comment" => $v["comment"],
+												"id"									=> $v["id"],
+												"ch_chain"							=> $this->mk_my_orb("change", array("id" => $v["id"]),"form_chain"),
+												"chain_order"					=> $s_chain_order == "ASC" ? "DESC" : "ASC",
+												"chain_name_img"				=> $s_chain_sortby == "name" ?	($s_chain_order == "DESC" ? $upimg : $downimg ): "",
+												"chain_comment_img"		=> $s_chain_sortby == "comment" ?		($s_chain_order == "DESC" ? $upimg : $downimg ): "",
+												"chain_modifiedby_img"	=> $s_chain_sortby == "modifiedby" ? ($s_chain_order == "DESC" ? $upimg : $downimg ): "",
+												"chain_modified_img"		=> $s_chain_sortby == "modified" ?	($s_chain_order == "DESC" ? $upimg : $downimg ): ""));
+			$ffl.=$this->parse("CHAIN_LINE");
+			$chainlist[] = sprintf("<a href='".$this->mk_my_orb("change", array("id" => $v["id"], "parent" => $v["parent"]),"form_chain")."'>#c%d#</a> <i>(Nimi: $v[name])</i>",$cc);
+		}
+		$this->vars(array("CHAIN_LINE" => $ffl,"chainlist" => join(",",$chainlist)));
+		if ($cc > 0)
+		{
+			$hc = $this->parse("HAS_CHAINS");
+		}
+		else
+		{
+			$hc = $this->parse("NO_CHAINS");
+		}
+		$this->vars(array("HAS_CHAINS" => $hc, "NO_CHAINS"));
+
 
 		$files = $this->get_aliases_for($id,CL_FILE,$s_file_sortby, $s_file_order);
 		$fic = 0;
