@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.17 2002/07/02 12:49:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.18 2002/08/29 03:12:42 kristo Exp $
 
 classload("extlinks");
 class links extends extlinks
@@ -311,7 +311,14 @@ class links extends extlinks
 				}
 				else
 				{
-					$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
+					if (aw_ini_get("menuedit.long_section_url"))
+					{
+						$url = "/".$this->cfg["index_file"].".".$ext."/section=".$row["oid"];
+					}
+					else
+					{
+						$url = "/".$row["oid"];
+					}
 				}
 				$name = strip_tags($row["name"]);
 				$name = str_replace("'","",$name);
