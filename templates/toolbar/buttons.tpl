@@ -10,8 +10,11 @@
 
 <!-- SUB: button -->
 	<td class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"></a></td>
-
 <!-- END SUB: button -->
+
+<!-- SUB: menu_button -->
+	<td class="toolbarbutton" valign="center" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'" title="{VAR:tooltip}" alt="{VAR:tooltip}"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}"><img src="{VAR:imgbase}/{VAR:img}" border="0"><img src="{VAR:imgbase}/downarr.png" border="0"></a></td>
+<!-- END SUB: menu_button -->
 
 <!-- SUB: text_button -->
 	<td nowrap="1"><span class="toolbarbutton" onMouseOver="this.className='toolbarbuttonhover'" onMouseOut="this.className='toolbarbutton'" onMouseDown="this.className='toolbarbuttondown'" onMouseUp="this.className='toolbarbuttonhover'"><a href="{VAR:url}" target="{VAR:target}" onClick="{VAR:onClick}" style="text-decoration: none;">{VAR:tooltip}</a></span></td>
