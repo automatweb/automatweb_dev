@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.42 2005/03/22 09:21:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.43 2005/03/22 09:25:45 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -764,7 +764,8 @@ class site_search_content extends class_base
 
 		if (1 == $obj->prop("search_live"))
 		{
-			$opts["search_notactive"] = $g->prop("search_notactive");
+			$go = obj($group);
+			$opts["search_notactive"] = $go->prop("search_notactive");
 
 			$ret = $this->merge_result_sets($ret, $this->fetch_live_search_results(array(
 				"menus" => $ms,
