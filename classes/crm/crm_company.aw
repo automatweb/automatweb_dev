@@ -39,7 +39,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 @caption Kontaktisik
 
-@property year_founded type=date_select table=kliendibaas_firma year_from=1800
+@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
 @caption Asutatud
 
 ------ Üldine - Tegevused grupp -----
@@ -593,7 +593,7 @@ class crm_company extends class_base
 			'sort_by' => 'from.jrk',
 			'sort_dir' => 'asc',
 		));
-
+		
 		//parent nodes'id actually
 		$this_level_id = $node_id;
 		foreach($conns as $key=>$conn)
@@ -776,7 +776,12 @@ class crm_company extends class_base
 				}
 				$data['caption'] .= '<br><a href="'.$url.'">Muuda</a>';
 			break;
-			
+			case "year_founded":
+				if(!$data["value"])
+				{
+					$data["value"] = 0;
+				}
+			break;
 			case "tabpanel":
 				//arr($data);
 			break;
