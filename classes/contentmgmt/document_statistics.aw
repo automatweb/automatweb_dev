@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.10 2004/04/06 15:12:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.11 2004/04/15 09:04:37 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -93,6 +93,10 @@ class document_statistics extends class_base
 				break;
 
 			case "stats":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$st = $this->get_stat_arr($arr["obj_inst"]);
 				
 				$data["vcl_inst"]->define_field(array(
