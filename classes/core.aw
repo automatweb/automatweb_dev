@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.242 2004/02/06 10:39:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.243 2004/02/09 20:51:35 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1146,48 +1146,6 @@ class core extends acl_base
 	}
 
 	////
-	// !New improved version of get_object_chain.
-	// oid(int) - millisest objektist parsimist alustada
-	// stop(int)(optional) - millise objekti juures parsimine lopetada (kui puudu, siis lopeb
-	//   esimese objekti juures, mille parent on 0
-	// check(int)(optional)(n/a) - kontrollib objekti id-ga check olemasolu chainis, kui ei leitud,
-	//   siis tagastab false.
-	// class_id(int)(optional)(n/a) - millise klassi objektid meid huvitavad
-	// Damn. the correct way to do this would be to store the parents of each objects by that object
-	// that would save us A LOT of queries.
-	function get_obj_chain($args = array())
-	{
-		extract($args);
-		$retval = array();
-		$object = $this->get_object($oid);	
-		if (!$object)
-		{
-			return false;
-		};
-
-		$retval[$object["oid"]] = $object["name"];
-	
-		$found = $object["parent"];
-
-		if ($stop == $oid)
-		{
-			$found = false;
-		};
-
-		while($found)
-		{
-			$object = $this->get_object($object["parent"]);
-			$found = $object["parent"];
-			$retval[$object["oid"]] = $object["name"];
-			if ($stop == $object["oid"])
-			{
-				$found = false;
-			};
-		};
-		return $retval;
-	}
-
-	////
 	// !returns object specified in $arg
 	// if $arg is an array, it can contain $oid and $class_id variables
 	// if not, it is used as the $oid variable
@@ -1499,52 +1457,6 @@ class core extends acl_base
 				$msg .= " <br><br>\n\n";
 			}
 		}
-
-		// also attach backtrace
-		/*if (function_exists("debug_backtrace"))
-		{
-			$msg .= "<br><br> Backtrace: \n\n<Br><br>";
-			$bt = debug_backtrace();
-			for ($i = count($bt)-1; $i > 0; $i--)
-			{
-				if ($bt[$i+1]["class"] != "")
-				{
-					$fnm = "method <b>".$bt[$i+1]["class"]."::".$bt[$i+1]["function"]."</b>";
-				}
-				else
-				if ($bt[$i+1]["function"] != "")
-				{
-					$fnm = "function <b>".$bt[$i+1]["function"]."</b>";
-				}
-				else
-				{
-					$fnm = "file ".$bt[$i]["file"];
-				}
-
-				$msg .= $fnm." on line ".$bt[$i]["line"]." called <br>\n";
-
-				if ($bt[$i]["class"] != "")
-				{
-					$fnm2 = "method <b>".$bt[$i]["class"]."::".$bt[$i]["function"]."</b>";
-				}
-				else
-				if ($bt[$i]["function"] != "")
-				{
-					$fnm2 = "function <b>".$bt[$i]["function"]."</b>";
-				}
-				else
-				{
-					$fnm2 = "file ".$bt[$i]["file"];
-				}
-
-				$msg .= $fnm2." with arguments ";
-
-				$args = new aw_array($bt[$i]["args"]);
-				$msg .= "<font size=\"-1\">(".join(",", $args->get()).") file = ".$bt[$i]["file"]."</font>";
-			
-				$msg .= " <br><br>\n\n";
-			}
-		}*/
 
 		// meilime veateate listi ka
 		$subj = "Viga saidil ".$this->cfg["baseurl"];
@@ -2345,7 +2257,7 @@ class core extends acl_base
 		$this->tt = array();
 		if ($empty)
 		{
-			$tt[] = "";
+			$this->tt[] = "";
 		}
 		$ot->foreach_cb(array(
 			"save" => false,
@@ -2354,130 +2266,7 @@ class core extends acl_base
 		));
 
 		exit_function("core::get_menu_list");
-		/*$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$empty)."::rootobj::".$rootobj;
-		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid")."::onlyact::".$onlyact;
-
-		if (!$ignore_langmenus)
-		{
-			if ($this->cfg["lang_menus"] == 1)
-			{
-				$aa = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = 69)";
-				$cf_name.="::lm::1::lang_id::".aw_global_get("lang_id");
-			}
-		}
-
-		// 1st memory cache
-		if (($ret = aw_global_get($cf_name)))
-		{
-			return $ret;
-		}
-
-		// then disk cache
-		$cache = get_instance("cache");
-		if (($cont = $cache->file_get($cf_name)))
-		{
-			$dat = aw_unserialize($cont);
-			aw_global_set($cf_name, $dat);
-			return $dat;
-		}
-
-		$x_mar = array();
-
-		if ($onlyact == 1)
-		{
-			$bb = " AND objects.status = ".STAT_ACTIVE;
-		}
-		else
-		{
-			$bb = " AND objects.status != 0 ";
-		}
-
-		// and finally, the database
-		$this->db_query("SELECT objects.oid as oid, 
-														objects.parent as parent,
-														objects.name as name
-											FROM objects 
-											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE objects.class_id = 1 $bb $aa
-											GROUP BY objects.oid
-											ORDER BY objects.parent,jrk");
-		while ($row = $this->db_next())
-		{
-			if ($this->can("view", $row['oid']))
-			{
-				$ret[$row["parent"]][] = $row;
-			}
-			else
-			{
-				$x_mar[$row['oid']] = $row;
-			}
-		}
-
-		if ($rootobj == -1)
-		{
-			$rootobj = $admin_rootmenu;
-		}
-
-		// here we will make the parent of all objects that don't have parents in the tree,
-		// but have them in the excluded list, to be the root
-		// why is this? well, because then the folders that are somewhere deep in the tree and that the user
-		// has can_view acces for, but not their parent folders, can still see them
-		foreach($ret as $prnt => $data)
-		{
-			foreach($data as $d_idx => $d_row)
-			{
-				if (isset($x_mar[$d_row["parent"]]))
-				{
-					if ($d_row["oid"] != $admin_rootmenu)
-					{
-						$d_row["parent"] = $admin_rootmenu;
-						$ret[$admin_rootmenu][] = $d_row;
-					}
-				}
-			}
-		}
-
-		$tt = array();
-		if ($empty)
-		{
-			$tt[] = "";
-		}
-		$this->_mkah_used = array();
-		$this->mkah(&$ret,&$tt,$rootobj,"");
-
-		if ($rootobj == $admin_rootmenu)
-		{
-			$hf = $this->db_fetch_field("SELECT home_folder FROM users WHERE uid = '".aw_global_get("uid")."'","home_folder");
-			$hf_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$hf'","name");
-			// but we must also add the home folder itself!
-			$tt[$hf] = $hf_name;
-			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
-		}
-
-		$cache->file_set($cf_name,aw_serialize($tt));
-		aw_global_set($cf_name, $tt);*/
-
 		return $this->tt;
-	}
-
-	function mkah(&$arr, &$ret,$parent,$prefix)
-	{
-		if (!is_array($arr[$parent]))
-		{
-			return;
-		}
-		$this->_mkah_used[$parent] = true;
-
-		reset($arr[$parent]);
-		while (list(,$v) = each($arr[$parent]))
-		{
-			$name = $prefix == "" ? $v["name"] : $prefix."/".$v["name"];
-			$ret[$v["oid"]] = $name;
-			if (!$this->_mkah_used[$v["oid"]])
-			{
-				$this->mkah(&$arr,&$ret,$v["oid"],$name);
-			}
-		}
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.19 2004/02/03 17:37:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.20 2004/02/09 20:51:35 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -489,15 +489,13 @@ class forum_v2 extends class_base
 
 		$this->read_template("folder.tpl");
 
-		$obj_chain = $this->get_obj_chain(array(
-			"oid" => $topic_obj->id(),
-			//"stop" => $args["request"]["folder"],
-			"stop" => $topic_obj->parent(),
-		));
+		$obj_chain = $topic_obj->path();
 
 		$path = array();
-		foreach($obj_chain as $key => $name)
+		foreach($obj_chain as $o)
 		{
+			$key = $o->id();
+			$name = $o->name();
 			//if ($key == $fld)
 			if ($key == $args["request"]["folder"])
 			{
@@ -507,6 +505,7 @@ class forum_v2 extends class_base
 					"caption" => $name,
 				));
 				*/
+				break;
 			}
 			else
 			{
@@ -699,15 +698,18 @@ class forum_v2 extends class_base
 	
 		// path drawing starts
 		$path = array();
-		$obj_chain = $this->get_obj_chain(array(
-			"oid" => $args["request"]["topic"],
-			"stop" => $args["obj_inst"]->prop("topic_folder"),
-		));
+		$o = obj($args["request"]["topic"]);
 
 		$fld = $topic_obj->parent();
 
-		foreach($obj_chain as $key => $name)
+		foreach($o->path() as $_to)
 		{
+			$key = $_to->id();
+			$name = $_to->name();
+			if ($key == $args["obj_inst"]->prop("topic_folder"))
+			{
+				break;
+			}
 			if ($key == $fld)
 			{
 				$name = html::href(array(
