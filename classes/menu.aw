@@ -1,11 +1,15 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.42 2003/04/01 14:49:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.43 2003/04/15 13:27:35 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
 	
+	//added by martin
+	@property multi_doc_style type=checkbox value=1 ch_value=1 group=advanced field=meta method=serialize
+	@caption Kasuta jumpboxi
+
 	@property alias type=textbox group=general
 	@caption Alias
 	
@@ -595,6 +599,7 @@ class menu extends class_base
 		extract($args);
 		$sar = array(); $oidar = array();
 		// leiame koik selle menüü vennad
+		$menu = $this->get_menu($id);
 		$q = "SELECT * FROM objects
 			 WHERE brother_of = $id AND status != 0 AND class_id = " . CL_BROTHER;
 		$this->db_query($q);
