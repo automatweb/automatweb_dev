@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.32 2003/12/04 16:37:02 kristo Exp $
+// $Id: cfgutils.aw,v 1.33 2003/12/05 13:36:05 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -177,16 +177,25 @@ class cfgutils extends aw_template
 				foreach($relinfo[0] as $key => $val)
 				{
 					$_name = "RELTYPE_" . $key;
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+					$relx = $this->normalize_text_nodes($val[0]);
+					if (!is_array($relx["clid"]))
+					{
+						$relx["clid"] = array($relx["clid"]);
+					};
+					$_clidlist = array();
+					foreach($relx["clid"] as $clid)
+					{
+						if (@constant($clid))
+						{
+							$_clidlist[] = constant($clid);
+						};
+
+					};
+					$relx["clid"] = $_clidlist;
+					$tmp[$key] = $relx;
 					// define the constant
 					define($_name,$tmp[$key]["value"]);
-					/*
-					print "<h1>";
-					print $_name;
-					print "<br>";
-					print constant($_name);
-					print "</h1>";
-					*/
+					$tmp[$tmp[$key]["value"]] = $relx;
 				};
 			};
 			$this->relinfo = $tmp;
