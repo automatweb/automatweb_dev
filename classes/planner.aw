@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.136 2003/11/11 10:39:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.137 2003/11/13 14:27:51 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -88,6 +88,9 @@
 	@property navtoolbar type=toolbar group=show_day,show_week,show_month no_caption=1
 	@caption Nav. toolbar
 
+	@property project type=hidden group=show_day,show_week,show_month
+	@caption Projekti ID
+
 	@property show_day callback=callback_show_day group=show_day 
 	@caption Päev
 	
@@ -171,6 +174,7 @@ class planner extends class_base
 		);
 
 		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING);
+		$this->specialgroups = array("projects");
 	}
 	
 	function my_calendar($arr)
@@ -304,7 +308,7 @@ class planner extends class_base
 				break;
 
 			case "add_event":
-				$this->create_planner_event($args);
+				$this->register_event_with_planner($args);
 				break;
 
 			case "calendar_relation":
@@ -346,17 +350,18 @@ class planner extends class_base
 			"type" => $type,
 		));
 
-		$obj = $this->get_object($id);
+		$obj = new object($id);
+		//$obj = $this->get_object($id);
 		$this->id = $id;
 		$this->content_gen_class = "";
-		if (!empty($obj["meta"]["content_generator"]))
+		if ($obj->meta("content_generator") != "")
 		{
-			list($pf,$pm) = explode("/",$obj["meta"]["content_generator"]);
+			list($pf,$pm) = explode("/",$obj->meta("content_generator"));
 			$this->content_gen_class = $pf;
 			$this->content_gen_method = $pm;
 		};
 
-		$folder = (int)$obj["meta"]["event_folder"];
+		$folder = (int)$obj->meta("event_folder");
 		
 		$section = aw_global_get("section");
 
@@ -391,14 +396,25 @@ class planner extends class_base
 			};
 		};
 
+		// holy cow, can't I limit that stuff somehow? I really don't need to read _all_ the events do I?
 		$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
+		// holy fuck. oh well. but since I read metadata anyway, why not get project_relations from that?	
 		$this->db_query($q);
 		$events = array();
+		$project = aw_global_get("project");
+		// hõkk!
+		// now, if a project has been requested from the URL, I need to do additional filtering for each object
+		// bingo-bongo. I need to save that information into object metadata as well.
 		// we sure pass around a LOT of data
+		$this->events_done = true;
 		while($row = $this->db_next())
 		{
 			$gx = date("dmY",$row["start"]);
 			$row["meta"] = aw_unserialize($row["metadata"]);
+			if (!empty($project) && !$row["meta"]["project_connections"][$project])
+			{
+				continue;
+			};
 			unset($row["metadata"]);
 			if ($this->content_gen_class)
 			{
@@ -523,7 +539,7 @@ class planner extends class_base
 			$event_obj = new object($event_id);
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
-			if ($clid == CL_DOCUMENT)
+			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
 			{
 				unset($clid);
 			};
@@ -541,7 +557,7 @@ class planner extends class_base
 		// 2 - if cfgform_id is the url, let's presume it belongs to a document and load properties for that
 		// 3 - load the default entry form ...
 		// 4 - if that does not exist either, then return an error message
-		
+
 		if (isset($clid))
 		{
 			if (!in_array($clid,$this->event_entry_classes))
@@ -576,16 +592,12 @@ class planner extends class_base
 				if ($this->event_id)
 				{
 					$t->obj_inst = $event_obj;
-					//$t->load_obj_data(array("id" => $obj_to_load));
 				};		
 
 				$xprops = $t->parse_properties(array(
 						"properties" => $all_props,
 						"name_prefix" => "emb",
 				));
-
-				// would be nice to generalize this code somewhat, but for this I need
-				// to get saving/loading of other objects to work
 
 				$resprops = array();
 
@@ -638,17 +650,65 @@ class planner extends class_base
 
 			$t->id = $obj_to_load;
 
+			// now, I have a certain amount of groups that should get 
+			// get their contents from this class ... or perhaps not?
+
+			// well, there still are connections you know. just the special
+			// interface for creating them is located inside the planner class ..
+
+			// dunno, doesn't look like a very good idea but lets see how
+			// it works out
+
 			$all_props = $t->get_active_properties(array(
 				"group" => $emb_group,
 			));
+
+			// yes, it looks weird, but I need to load the properties to get
+			// to the groupinfo
+			if (in_array($emb_group,$this->specialgroups))
+			{
+				//$event_obj = new object($emb["id"]);
+				$e_conns = $event_obj->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				$prjlist = array();
+				foreach($e_conns as $conn)
+				{
+					$prjlist[$conn->prop("from")] = 1;
+				};
+
+				$users = get_instance("users");
+				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+				$conns = $user->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				$all_props = array();
+
+				$meta = $event_obj->meta("project_connections");
+
+				foreach($conns as $conn)
+				{
+					$all_props["prj_" . $conn->prop("from")] = array(
+						"type" => "checkbox",
+						"name" => "prj" . "[" .$conn->prop("from") . "]",
+						"caption" => html::href(array(
+							"url" => $this->mk_my_orb("change",array("id" => $conn->prop("from")),"project"),
+							"caption" => "<font color='black'>" . $conn->prop("from.name") . "</font>",
+						)),
+						"ch_value" => $prjlist[$conn->prop("from")],
+						"value" => 1,
+					);
+				};
+
+			};
 
 			if ($this->event_id)
 			{
 				$t->obj_inst = $event_obj;
 				//$t->id = $obj_to_load;
 			};
-
-			// sorry ass attempt to get editing of linked documents to work
 
 			// see gruppide tegemine on vaja kuidagi paremini tööle saada junõu
 			$xprops = array();
@@ -661,6 +721,10 @@ class planner extends class_base
 			$captions = array();
 			// still, would be nice to make 'em _real_ second level groups
 			// right now I'm simply faking 'em
+			$xtmp["projects"] = array(
+				"caption" => "Projektid",
+			);
+			// now, just add another
 			foreach($xtmp as $key => $val)
 			{
 				if ($this->event_id && ($key != $emb_group))
@@ -678,7 +742,8 @@ class planner extends class_base
 			};
 			$this->emb_group = $emb_group;
 			$tmp["value"] = join(" | ",$captions);
-			$t->inst->set_calendars(array($obj["oid"]));
+			$bid = $obj->brother_of();
+			//$t->inst->set_calendars(array($bid));
 			foreach($all_props as $sk => $st)
 			{
 				if ($st["richtext"])
@@ -724,7 +789,7 @@ class planner extends class_base
 		return $resprops;
 	}
 
-	function create_planner_event($args = array())
+	function register_event_with_planner($args = array())
 	{
 		$event_folder = $args["obj_inst"]->prop("event_folder");
 		if (empty($event_folder))
@@ -759,8 +824,56 @@ class planner extends class_base
 			$this->emb_group = $emb["group"];
 		};
 		// huu! Is it really that easy?
-		$this->event_id = $t->submit($emb);
-		
+		if (in_array($this->emb_group,$this->specialgroups))
+		{
+			$this->event_id = $emb["id"];
+			if ($this->emb_group == "projects")
+			{
+				// 1) retreieve all connections that this event has to projects
+				// 2) remove those that were not explicitly checked in the form
+				// 3) create new connections which did not exist before
+				$event_obj = new object($emb["id"]);
+				$e_conns = $event_obj->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+
+				$new_ones = array();
+				if (is_array($args["request"]["emb"]["prj"]))
+				{
+					$new_ones = $args["request"]["emb"]["prj"];
+				};
+				
+				$prj_inst = get_instance("groupware/project");
+
+				foreach($e_conns as $conn)
+				{
+					if (!$new_ones[$conn->prop("from")])
+					{
+						$prj_inst->disconnect_event(array(
+							"id" => $conn->prop("from"),
+							"event_id" => $event_obj->id(),
+						));
+					};
+					unset($new_ones[$conn->prop("from")]);
+				};
+
+				foreach($new_ones as $new_id => $whatever)
+				{
+					$prj_inst->connect_event(array(
+						"id" => $new_id,
+						"event_id" => $emb["id"],
+					));
+				};
+
+				$event_obj->set_meta("project_connections",$new_ones);
+				$event_obj->save();
+			};
+		}
+		else
+		{
+			$this->event_id = $t->submit($emb);
+		};
+
 		//I really don't like this hack //axel
 		$gl = aw_global_get('org_action');
 
@@ -787,17 +900,21 @@ class planner extends class_base
 		};
 	}
 
-	function callback_mod_retval($args = array())
+	function callback_mod_retval($arr)
 	{
+		$args = &$arr["args"];
 		if ($this->event_id)
 		{
-			$form_data = &$args["form_data"];
-			$args = &$args["args"];
+			$form_data = &$arr["request"];
 			$args["event_id"] = $this->event_id;
 			if ($this->emb_group && $this->emb_group != "general")
 			{
 				$args["cb_group"] = $this->emb_group;
 			};
+		};
+		if ($arr["request"]["project"])
+		{
+			$args["project"] = $arr["request"]["project"];
 		};
 	}
 
@@ -1049,7 +1166,7 @@ class planner extends class_base
 
 		}
 		else
-		if ($args["events"])
+		if ($args["events"] || $this->events_done)
 		{
 			$events = $args["events"];
 		}
@@ -1134,11 +1251,13 @@ class planner extends class_base
 					$tpl = "week.tpl";
 				};
 
+
 				$content = $this->disp_week(array("events" => $events,"di" => $di,"tpl" => $tpl));
 
 				// I really hate creating captions this way, that format should be specified
 				// in some other way
 				$caption = sprintf("%s - %s",$this->time2date($di["start"],8),$this->time2date($di["end"],8));
+
 				$start = $date;
 				break;
 			
@@ -1282,7 +1401,7 @@ class planner extends class_base
 		unset($mlist[0]);
 		$section = aw_global_get("section");
 
-		if (isset($this->prevref))
+		if (!empty($this->prevref))
 		{
 			$prev = $this->prevref;
 		}
@@ -1298,7 +1417,7 @@ class planner extends class_base
 			));
 		};	
 
-		if (isset($this->nextref))
+		if (!empty($this->nextref))
 		{
 			$next = $this->nextref;
 		}
@@ -1454,8 +1573,10 @@ class planner extends class_base
 
 		// first things first, I need to sync the the date ranges given for day 
 		// and relative. That really is the tricky part
+
 		$evx = $de->get_events_in_range($args);
 
+		// oh, but this really sucks!
 		$this->start_time = $de->start_time;
 		$this->prevref = $de->prev_event;
 		$this->nextref = $de->next_event;
@@ -2612,13 +2733,6 @@ class planner extends class_base
 				));
 				$menudata .= $this->parse("MENU_ITEM");
 			};
-			/*
-			print "<pre>";
-			var_dump($this->relinfo);
-			var_dump($this->classinfo);
-			print "</pre>";
-			*/
-
 
 			$this->vars(array(
 				"MENU_ITEM" => $menudata,
@@ -2655,7 +2769,34 @@ class planner extends class_base
 				"img" => "delete.gif",
 				"class" => "menuButton",
 			));
-			
+
+			$toolbar->add_separator();
+
+			$prj_opts = array("" => "--vali projekt--");
+
+			$users = get_instance("users");
+			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+			$conns = $user->connections_to(array(
+				"from.class_id" => CL_PROJECT,
+			));
+
+			foreach($conns as $conn)
+			{
+				$prj_opts[$conn->prop("from")] = $conn->prop("from.name");
+			};
+
+			$toolbar->add_cdata("&nbsp;&nbsp;".html::select(array(
+				"name" => "prj",
+				"options" => $prj_opts,
+				"selected" => $arr["request"]["project"],
+			)));
+
+			$toolbar->add_button(array(
+				"name" => "refresh",
+				"tooltip" => "Reload",
+				"url" => "javascript:document.changeform.project.value=document.changeform.prj.value;document.changeform.submit();",
+				"img" => "refresh.gif",
+			));
                 };
 	}
 
