@@ -1,10 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.64 2003/08/27 13:47:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.65 2003/09/17 14:56:05 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
 	// stuff that goes into the objects table
 	@default table=objects
+
+	@classinfo trans=1
 
 	//added by martin
 	@property multi_doc_style type=checkbox value=1 ch_value=1 group=advanced field=meta method=serialize
