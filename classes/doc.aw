@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.94 2004/12/09 14:14:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.95 2004/12/09 17:03:50 ahti Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -188,10 +188,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @tableinfo documents index=docid master_table=objects master_index=brother_of
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
-@reltype TIMING value=1 clid=CL_TIMING
+@reltype TIMING value=20 clid=CL_TIMING
 @caption Aeg
 
-@reltype REMINDER value=2 clid=CL_REMINDER
+@reltype REMINDER value=21 clid=CL_REMINDER
 @caption Meeldetuletus
 
 */
