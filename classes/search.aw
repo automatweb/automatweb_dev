@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.63 2004/02/03 11:14:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.64 2004/02/05 15:04:53 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -192,9 +192,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// for it.
 		$obj = $this->get_object($args["obj"]["oid"]);
 		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $obj["meta"]["s_class_id"],
-                ));
+		$_all_props = $cfgu->load_properties(array(
+			"clid" => $obj["meta"]["s_class_id"],
+		));
 
 		$retval = array();
 		$item = array(
@@ -226,9 +226,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		$obj = $this->get_object($args["id"]);
 		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $obj["meta"]["s_class_id"],
-                ));
+		$_all_props = $cfgu->load_properties(array(
+			"clid" => $obj["meta"]["s_class_id"],
+		));
 		
 		$obj_search_fields = array();
 
@@ -246,9 +246,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	{
 		$meta = new aw_array($args["obj"]["meta"]);
 		$cfgu = get_instance("cfg/cfgutils");
-                $_all_props = $cfgu->load_properties(array(
-                        "clid" => $args["obj"]["meta"]["s_class_id"],
-                ));
+		$_all_props = $cfgu->load_properties(array(
+			"clid" => $args["obj"]["meta"]["s_class_id"],
+		));
 
 		$params = array();
 		foreach($meta->get() as $key => $val)
@@ -342,7 +342,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"createdby" => "",
 			"modifiedby" => "",
 			"status" => 3,
-			"special" => "",
 			"alias" => "",
 			"redir_target" => "",
 			"oid" => "",
@@ -545,7 +544,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 							$xval = join(",",$tmp);
 							if ($xval != "")
 							{
-								$parts["class_id"] = " class_id IN ($xval) ";
+								$parts["class_id"] = " class_id IN ($xval)";
+								$partcount++;
+							}
+							else
+							{
+								$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.")";
 								$partcount++;
 							}
 						}
@@ -554,7 +558,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						{
 							$parts["class_id"] = " class_id = '$val' ";
 							$partcount++;
-						};
+						}
+						else
+						{
+							$parts["class_id"] = " class_id NOT IN (".CL_RELATION.",".CL_ACCESSMGR.")";
+							$partcount++;
+						}
 						break;
 
 					case "status":
@@ -1101,15 +1110,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			);
 		};
 		
-		if (!$fields["special"])
-		{
-			$fields["special"] = array(
-				"type" => "checkbox",
-				"caption" => "Spetsiaalotsing",
-				"checked" => checked($args["s"]["special"]),
-			);
-		};
-
 		if (!$fields["class_id"])
 		{
 			$fields["class_id"] = array(
@@ -1590,7 +1590,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"createdby" => "",
 			"modifiedby" => "",
 			"status" => 3,
-			"special" => "",
 			"alias" => "",
 			"redir_target" => "",
 			"oid" => "",
