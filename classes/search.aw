@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.37 2003/05/27 16:09:04 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.38 2003/05/28 11:04:41 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -719,6 +719,7 @@ function GetOptions(from, tu,tyype)
 		}
 
 	}
+	document.searchform.elements['s[name]'].focus();
 }
 SCR;
 
@@ -751,11 +752,9 @@ SCR;
 						{
 							$sel = array();
 						};
-						//$items = $this->mpicker($fieldref["selected"],$fieldref["options"]);
+
 						$items = $this->mpicker($sel,$fieldref["options"]);
 						$size = ($fieldref["size"]) ? $fieldref["size"] : 5;
-
-						//$mselectbox = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
 
 						$mselectbox = '<select multiple size="'.$size.'" name="s[class_id][]" style="width:200px"></select>'.$scr."
 if (document.forms['searchform'].elements['s[class_id][]'])
@@ -768,16 +767,13 @@ if (document.forms['searchform'].elements['s[class_id][]'])
 						if (isset($fieldref["filter"]))
 						{
 							$element = html::textbox(array('name'=>'pattern1', 'size' => '14')).
-								html::button(array('name'=>'selectmatching1', 'value'=>'vali', 'onclick' => "selectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern1.value.toLowerCase())")).
+								html::button(array(
+									'name'=>'selectmatching1',
+									'value'=>'vali',
+									'onclick' => "selectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern1.value.toLowerCase())",
+								)).
 								'<br />'.
 								$mselectbox;
-//								'vali ainult sisalduvad',
-//								html::textbox(array('name'=>'pattern2', 'size' => '9')).
-//								html::button(array('name'=>'selectmatching2', 'value'=>'vali', 'onclick' => "selectOnlyMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern2.value.toLowerCase())")),
-//								'ära vali mis sisaldavad',
-//								html::textbox(array('name'=>'pattern3', 'size' => '9')).
-//								html::button(array('name'=>'selectmatching3', 'value'=>'vali', 'onclick' => "unSelectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern3.value.toLowerCase())")),
-
 						}
 						else
 						{
@@ -788,7 +784,7 @@ if (document.forms['searchform'].elements['s[class_id][]'])
 
 					case "class_id_hidden":
 
-						echo $element = html::hidden($fieldref).$scr.
+						$element = html::hidden($fieldref).$scr.
 "
 if (document.forms['searchform'].elements['s[class_id]'])
 {
@@ -817,8 +813,6 @@ GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].el
 						$caption = $fieldref["caption"];
 						break;
 
-
-
 					case "textbox":
 						//$element = "<input type='text' name='s[$key]' size='40' value='$fieldref[value]'>";
 						$element = html::textbox($fieldref);
@@ -838,7 +832,6 @@ GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].el
 					case 'hidden':
 						$element = html::hidden($fieldref);//.$fieldref['value'];
 						break;
-
 
 					default:
 						$element = "n/a";
