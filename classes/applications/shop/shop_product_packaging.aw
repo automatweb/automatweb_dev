@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.10 2004/11/25 08:56:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.11 2004/12/10 08:59:16 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -10,6 +10,9 @@
 
 @tableinfo aw_shop_packaging index=id master_table=objects master_index=brother_of
 @default table=aw_shop_packaging
+
+@property jrk type=textbox size=5 table=objects field=jrk
+@caption J&auml;rjekord
 
 @property price type=textbox size=5 field=aw_price
 @caption Hind
@@ -31,6 +34,39 @@
 
 @property user5 type=textbox field=user5 group=data
 @caption User-defined 5
+
+@property user5 type=textbox field=user5 group=data
+@caption User-defined 5
+
+@property user6 type=textbox field=user6 group=data
+@caption User-defined 6
+
+@property user7 type=textbox field=user7 group=data
+@caption User-defined 7
+
+@property user8 type=textbox field=user8 group=data
+@caption User-defined 8
+
+@property user9 type=textbox field=user9 group=data
+@caption User-defined 9
+
+@property user10 type=textbox field=user10 group=data
+@caption User-defined 10
+
+@property user11 type=textbox field=user11 group=data
+@caption User-defined 11
+
+@property user12 type=textbox field=user12 group=data
+@caption User-defined 12
+
+@property user13 type=textbox field=user13 group=data
+@caption User-defined 13
+
+@property user14 type=textbox field=user14 group=data
+@caption User-defined 14
+
+@property user15 type=textbox field=user15 group=data
+@caption User-defined 15
 
 @property userta1 type=textarea field=userta1 group=data
 @caption User-defined ta 1

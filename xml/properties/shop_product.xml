@@ -482,6 +482,11 @@
             <mode>manager</mode>
             <field>meta</field>
             <method>serialize</method>
+            <table_edit_fields>jrk</table_edit_fields>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>jrk</num_1>
+            </table_fields>
             <store>no</store>
             <caption>Pakendid</caption>
       </property>
@@ -535,6 +540,46 @@
             <store>no</store>
             <caption>Failid</caption>
       </property>
+      <property>
+            <name>docs</name>
+            <table>objects</table>
+            <group>doc</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_DOC</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>title</num_0>
+                  <num_1>lead</num_1>
+                  <num_2>content</num_2>
+            </props>
+            <table_fields>title</table_fields>
+            <store>no</store>
+            <caption>Dokumendid</caption>
+      </property>
+      <property>
+            <name>lnk</name>
+            <table>objects</table>
+            <group>lnk</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_LNK</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>url</num_1>
+                  <num_2>newwindow</num_2>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>url</num_1>
+                  <num_2>newwindow</num_2>
+            </table_fields>
+            <store>no</store>
+            <caption>Lingid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -552,6 +597,12 @@
             <fls>
                   <caption>Failid</caption>
             </fls>
+            <doc>
+                  <caption>Dokumendid</caption>
+            </doc>
+            <lnk>
+                  <caption>Lingid</caption>
+            </lnk>
       </groupinfo>
       <tableinfo>
             <aw_shop_products>
@@ -601,6 +652,16 @@
                   <clid>CL_FILE</clid>
                   <caption>fail</caption>
             </FILE>
+            <DOC>
+                  <value>9</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>dokument</caption>
+            </DOC>
+            <LNK>
+                  <value>10</value>
+                  <clid>CL_EXTLINK</clid>
+                  <caption>link</caption>
+            </LNK>
       </reltypes>
 </properties>
 

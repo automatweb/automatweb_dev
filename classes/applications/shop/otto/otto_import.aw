@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.13 2004/12/01 14:04:18 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.14 2004/12/10 08:59:16 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -62,16 +62,16 @@
 @groupinfo views caption="Vaated"
 
 @property force_7_view type=textbox table=objects field=meta method=serialize group=views
-@caption 7 pildiga lehehed
+@caption 7 pildiga lehed
 
 @property force_inf_view type=textbox table=objects field=meta method=serialize group=views
 @caption L&otilde;pmatute pildiga lehehed
 
 @property force_10_view type=textbox table=objects field=meta method=serialize group=views
-@caption 10 pildiga lehehed
+@caption 10 pildiga lehed
 
 @property force_8_view type=textbox table=objects field=meta method=serialize group=views
-@caption 8 pildiga lehehed
+@caption 8 pildiga lehed
 
 @property force_no_side_view type=textbox table=objects field=meta method=serialize group=views
 @caption Ilma detailvaate lisapiltideta lehed
@@ -241,7 +241,7 @@ class otto_import extends class_base
 		
 		if ($fix_missing)
 		{
-			$this->db_query("select c.code from otto_imp_t_codes c left join otto_prod_img p on p.pcode = c.code where p.imnr is null");
+			$this->db_query("select c.code from otto_imp_t_codes c left join otto_prod_img p on p.pcode = c.code where (p.imnr is null or p.imnr = '')");
 			$data = array();
 			while ($row = $this->db_next())
 			{
@@ -325,6 +325,8 @@ class otto_import extends class_base
 							$add = 1;
 							$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
 								values('$pcode','1','$mt[1]')");
+							echo "rewrote first image as $mt[1] <Br>\n";
+							flush();
 						}
 
 						$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
@@ -389,6 +391,8 @@ class otto_import extends class_base
 					$add = 1;
 					$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
 						values('$pcode','1','$mt[1]')");
+					echo "rewrote first image as $mt[1] <Br>\n";
+					flush();
 				}
 
 				// also, other images, detect them via the jump_img('nr') js func
@@ -1251,7 +1255,7 @@ class otto_import extends class_base
 		$cache->_get_cache_files($fld);
 		echo 'about to delete '.count($cache->cache_files2).' files<br />';
 
-		foreach($cache->cache_files2 as $file)
+		foreach(safe_array($cache->cache_files2) as $file)
 		{
 			unlink($file);
 		}
@@ -1340,24 +1344,39 @@ class otto_import extends class_base
 		}
 		else
 		{
-			$needle = array(
-				chr(235),	// zhee;
-				chr(159),	// &uuml;
-				chr(134), 	// &Uuml;
-				chr(154),	// &ouml;
-				chr(138),	// &auml;
-				chr(205),	// &Otilde;
-				chr(155), 	// &otilde;
-			);
-			$haystack = array(
-				chr(158),
-				chr(252),
-				chr(220),
-				chr(246),
-				chr(228),
-				chr(213),
-				chr(245),
-			);
+   $needle = array(
+			chr(213),	// ylakoma;
+			chr(235),	// zhee;
+			chr(159),	// &uuml;
+			chr(134), 	// &Uuml;
+			chr(154),	// &ouml;
+			chr(228), // shaa
+			chr(138),	// &auml;
+			chr(205),	// &Otilde;
+			chr(155), 	// &otilde;
+			chr(199),
+			chr(200),
+			chr(210),
+			chr(211),
+			chr(175),
+
+		);
+		$haystack = array(
+			chr(180),	// ylakoma;
+			chr(158),// zhee;
+			chr(252),// &uuml;
+			chr(220),	// &Uuml;
+			chr(246),// &ouml;
+			chr(154), // shaa
+			chr(228),// &auml;
+			chr(213),// &Otilde;
+			chr(245),	// &otilde;
+			chr(34),
+			chr(34),
+			chr(34),
+			chr(34),
+			chr(216),
+		);
 		}
 
 		if(is_array($str))
@@ -1745,7 +1764,7 @@ class otto_import extends class_base
 			foreach($pa as $pn)
 			{
 				// check if the image combo already exists
-				$imnr = $this->db_fetch_field("SELECT imnr FROM otto_prod_img WHERE imnr = '$pn' AND nr = '$cnt' AND pcode = '$pcode'", "imnr");
+				$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$pn' AND nr = '$cnt' AND pcode = '$pcode'", "imnr");
 				if (!$imnr)
 				{
 					echo "insert new image $pn <br>\n";

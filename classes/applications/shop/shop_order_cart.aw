@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.22 2004/12/01 14:04:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.23 2004/12/10 08:59:16 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -254,6 +254,8 @@ class shop_order_cart extends class_base
 		extract($arr);
 		$oc = obj($oc);
 
+		aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
+
 		// get cart to user from oc
 		$cart_o = obj($oc->prop("cart"));
 
@@ -471,6 +473,7 @@ class shop_order_cart extends class_base
 				return aw_ini_get("baseurl");
 			}
 
+			aw_session_del("order.accept_cond");
 			$ordid = $this->do_create_order_from_cart($arr["oc"]);
 			$this->start_order();
 			return $this->mk_my_orb("show", array("id" => $ordid, "section" => $arr["section"]), "shop_order");
@@ -635,7 +638,8 @@ class shop_order_cart extends class_base
 			$err .= $this->parse("ERROR");
 		}
 		$this->vars(array(
-			"ERROR" => $err
+			"ERROR" => $err,
+			"order_cond_ok" => checked(aw_global_get("order.accept_cond"))
 		));
 
 		aw_session_del("soc_err");
@@ -748,7 +752,7 @@ class shop_order_cart extends class_base
 			$this->vars(array(
 				"ACC_ERROR" => $this->parse("ACC_ERROR")
 			));
-			aw_session_set("order_cond_fail", 0);
+			aw_session_del("order_cond_fail");
 		}
 
 		if (aw_global_get("uid") != "")
