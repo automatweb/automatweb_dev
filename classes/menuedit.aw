@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.244 2003/02/27 12:07:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.245 2003/02/27 16:17:25 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2229,7 +2229,7 @@ class menuedit extends aw_template
 				$sub.=$this->get_feature_tree($row["admin_feature"],$row["oid"]);
 			}
 
-			$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : $baseurl."/automatweb/images/ftv2doc.gif");
+			$iconurl = isset($row["icon_id"]) && $row["icon_id"] != "" ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : ($row["admin_feature"] ? $this->get_feature_icon_url($row["admin_feature"]) : "");
 			$blank = $this->mk_my_orb("blank");
 			$this->vars(array(
 				"name"		=> $row["name"],
@@ -2370,7 +2370,7 @@ class menuedit extends aw_template
 					}
 					else
 					{
-						$url = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
+						$url = $row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$row["icon_id"] : "";
 					}
 					$this->vars(array(
 						"name" => $row["name"],
