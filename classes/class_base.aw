@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.219 2004/02/20 10:04:10 duke Exp $
+// $Id: class_base.aw,v 2.220 2004/02/25 16:12:10 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2986,6 +2986,13 @@ class class_base extends aw_template
 			$old[$def] = $new;
 
 			$this->obj_inst->set_meta("values",$old);
+		}
+
+		// translation. if the object is is_translated or needs_translation, it gets the has_translation flag
+		if ($this->obj_inst->flag(OBJ_NEEDS_TRANSLATION) || $this->obj_inst->flag(OBJ_IS_TRANSLATED) || 
+			$this->obj_inst->prop("needs_translation") || $this->obj_inst->prop("is_translated"))
+		{
+			$this->obj_inst->set_flag(OBJ_HAS_TRANSLATION, true);
 		}
 
 		// gee, I wonder how many pre_save handlers do I have to fix to get this thing working
