@@ -1312,14 +1312,24 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$prev = $this->join_data[$pos-1];
 
+					$this->_do_add_class_id($join["from_class"]);
 					// join from rel to prop
 					$prev_t = "aliases_".$prev["from_class"];
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
+					if (!is_array($new_t))
+					{
+						// class only has objects table, so join that
+						$tbl = "objects_rel_".$prev["reltype"];
+						$tbl_r = "objects";
+						$field = "oid";
+					}
+					else
+					{
+						$tbl = $tbl_r = reset(array_keys($new_t));
+						$field = $new_t[$tbl]["index"];
+					}
 
-					$tbl = reset(array_keys($new_t));
-					$field = $new_t[$tbl]["index"];
-
-					$this->joins[] = " LEFT JOIN ".$tbl." ON ".$tbl.".".$field." = ".$prev_t.".target ";
+					$this->joins[] = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$prev_t.".target ";
 					$ret = array(
 						$tbl,
 						$join["field"],
@@ -1329,7 +1339,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				if (!$join["to_class"])
 				{
-					$prev_t = $join["table"]."_".$prev_clid;
+					$prev_t = $join["table"]."_".$prev_clid."_".$prev_filt;
 					$ret = array(
 						$prev_t,
 						$GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"],
@@ -1342,8 +1352,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				// first the objects table
 
 				$prev_t = $join["table"]."_".$join["from_class"];
+				$prev_filt = $join["field"];
 				$prev_clid = $join["from_class"];
-				$this->joins[] = " LEFT JOIN objects objects_".$join["from_class"]." ON objects_".$join["from_class"].".oid = $prev_t.".$join["field"]." ";
+				
+				$objt_name = "objects_".$join["from_class"]."_".$join["field"];
+				if (!isset($done_ot_js[$objt_name]))
+				{
+					$this->joins[] = " LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ";
+					$done_ot_js[$objt_name] = 1;
+				}
 			}
 		}
 
@@ -1403,7 +1420,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::raise_if($cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager", array(
+				error::raise_if($cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 				));
@@ -1417,6 +1434,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					case "relpicker":
 					case "relmanager":
+					case "classificator":
 						$relt_s = $cur_prop["reltype"];
 						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
 				

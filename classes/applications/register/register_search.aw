@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.14 2004/12/03 09:19:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.15 2004/12/06 13:14:17 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -629,9 +629,16 @@ class register_search extends class_base
 				{
 					continue;
 				}
-				$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
-			}
 
+				if ($f_props[$pn]["type"] == "classificator")
+				{
+					$tmp["CL_REGISTER_DATA.".$f_props[$pn]["reltype"].".name"] = "%".$request["rsf"][$this->fts_name]."%";
+				}
+				else
+				{
+					$tmp[$pn] = "%".$request["rsf"][$this->fts_name]."%";
+				}
+			}
 			$filter[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => $tmp
@@ -655,7 +662,7 @@ class register_search extends class_base
 		{
 			$filter["sort_by"] = "objects.name ASC ";
 		}
-
+		
 		if (count($filter) > 3 || $o->prop("show_all_right_away") == 1)
 		{
 			$ol_cnt = new object_list($filter);
