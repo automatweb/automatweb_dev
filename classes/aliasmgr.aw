@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.67 2002/12/30 18:54:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.68 2003/01/07 15:26:32 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -26,16 +26,19 @@ class aliasmgr extends aw_template
 		extract($args);
 		$this->read_template("search.tpl");
 		$search = get_instance("search");
+		$reltypes = new aw_array($reltypes);
+		$this->reltypes = $reltypes->get();
 		$args["clid"] = "aliasmgr";
 		$form = $search->show($args);
 		$this->search = &$search;
 
 		$id = ($args["id"]) ? $args["id"] : $args["docid"];
+		$this->id = $id;
 		$obj = $this->get_object($id);
 
 		$this->vars(array(
-			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id),$this->use_class),
-			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id),$this->use_class),
+			"reforb" => $this->mk_reforb("search_aliases",array("no_reforb" => 1, "search" => 1, "id" => $id, "reltype" => $reltype),$this->use_class),
+			"saveurl" => $this->mk_my_orb("addalias",array("id" => $id,"reltype" => $reltype),$this->use_class),
 			"toolbar" => $this->mk_toolbar(),
 			"form" => $form,
 			"table" => $search->get_results(),
@@ -84,12 +87,6 @@ class aliasmgr extends aw_template
 			"overwrite" => 1,
 		));
 
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "alias_reltype",
-			"value" => $reltype,
-			"overwrite" => 1,
-		));
 
 		$cache_inst = get_instance("cache");
 		$alist = $this->get_aliases_for($id);
@@ -427,14 +424,8 @@ class aliasmgr extends aw_template
 		$obj = $this->get_object($id);
 		$this->id = $id;
 
-		if (!is_array($reltypes))
-		{
-			$reltypes = array();
-		};
-
-		$alias_rel_types = array(
-			"0" => "alias",
-		) + $reltypes;
+		$reltypes = new aw_array($reltypes);
+		$this->reltypes = $reltypes->get();
 
 		// init vcl table to $this->t and define columns
 		$this->_init_la_tbl();
@@ -490,18 +481,19 @@ class aliasmgr extends aw_template
 			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
 			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$classes[$aclid]["file"]);
 			$chlinks[$alias["target"]] = $ch;
+			$reltype_id = $obj["meta"]["alias_reltype"][$alias["target"]];
 
 			$alias["icon"] = sprintf("<img src='%s'>",icons::get_icon_url($aclid,""));
-			$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
+			// it has a meaning only for embedded aliases
+			if ($reltype_id == 0)
+			{
+				$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
+			};
 			$alias["link"] = sprintf("<input type='checkbox' name='link[%d]' value='1' %s>",$alias["target"],checked($obj["meta"]["aliaslinks"][$alias["target"]]));
 			$alias["title"] = $classes[$aclid]["name"];
 			$alias["check"] = sprintf("<input type='checkbox' name='check[%d]' value='%d'>",$alias["target"],$alias["target"]);
 			$alias["name"] = sprintf("<a href='%s'>%s</a>",$ch,($alias["name"] == "" ? "(no name)" : $alias["name"]));
-			$alias["reltype"] = html::select(array(
-				'name' => 'reltype['.$alias['target'].']',
-				'options' => $alias_rel_types,
-				'selected' => $obj["meta"]["alias_reltype"][$alias["target"]],
-			));
+			$alias["reltype"] = $this->reltypes[$reltype_id];
 
 			$alias["cache"] = html::checkbox(array(
 				'name' => 'cache['.$alias['target'].']',
@@ -514,13 +506,14 @@ class aliasmgr extends aw_template
 
 		$this->t->set_default_sortby("title");
 		$this->t->sort_by();
+		$toolbar = $this->mk_toolbar();
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"id" => $id,
 			"parent" => $obj["parent"],
 			"reforb" => $this->mk_reforb("submit_list",array("id" => $id,"subaction" => "none","return_url" => $return_url),$this->use_class),
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
-			"toolbar" => $this->mk_toolbar(),
+			"toolbar" => $toolbar,
 			"return_url" => $return_url,
 			"period" => $period,
 		));
@@ -537,6 +530,8 @@ class aliasmgr extends aw_template
 	{
 		extract($arr);
 		$aliases = explode(",",$alias);
+		$obj = $this->get_object($id);
+		$alias_reltype = $obj["meta"]["alias_reltype"];
 		foreach($aliases as $onealias)
 		{
 			$_al = (int)$onealias;
@@ -551,12 +546,21 @@ class aliasmgr extends aw_template
 			{
 				$inst = get_instance($cl);
 				$inst->addalias(array("id" => $id,"alias" => $onealias));
+				$alias_reltype[$onealias] = $reltype;
 			}
 			else
 			{
 				$this->add_alias($id,$onealias);
+				$alias_reltype[$onealias] = $reltype;
 			}
 		};
+
+		$this->set_object_metadata(array(
+			"oid" => $id,
+			"key" => "alias_reltype",
+			"value" => $alias_reltype,
+		));
+
 		return $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class));
 	}
 
@@ -628,11 +632,21 @@ class aliasmgr extends aw_template
 	function mk_toolbar()
 	{
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
+
+		$choices = array();
+		$spacer = "&nbsp;&nbsp;&nbsp;";
 		
-		// generate a list of class => name pairs
-		$aliases = array("0" => "--vali--");
+		$choices["capt_new_relation"] = "Loo seos objektiga";
+
+		foreach($this->reltypes as $key => $val)
+		{
+			$choices["reltype_" . $key] = $spacer . $val;
+		};
+
+		$choices["capt_new_object"] = "Lisa uus objekt";
+
 		$classes = $this->cfg["classes"];
-		get_instance("html");
+		// generate a list of class => name pairs
 		foreach($classes as $clid => $cldat)
 		{
 			if (isset($cldat["alias"]))
@@ -640,11 +654,12 @@ class aliasmgr extends aw_template
 				$fil = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
 				preg_match("/(\w*)$/",$fil,$m);
 				$lib = $m[1];
-				$aliases[$lib] = $cldat["name"];
+				// indent the names
+				$choices[$lib] = $spacer . $cldat["name"];
 			}
 		}
 
-		$aliases = html::select(array("options" => $aliases,"name" => "aselect"));
+		$aliases = html::select(array("options" => $choices,"name" => "aselect"));
 
 		$toolbar->add_cdata($aliases);
 
@@ -718,7 +733,10 @@ class aliasmgr extends aw_template
 				"img" => "delete.gif",
 			));
 		};
-			
+	
+		$this->vars(array(
+			"create_relation_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
+		));
 
 		return $toolbar->get_toolbar();
 	}

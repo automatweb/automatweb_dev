@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.37 2003/01/02 15:18:35 duke Exp $
+// $Id: class_base.aw,v 2.39 2003/01/07 15:26:16 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -50,7 +50,7 @@ class class_base extends aliasmgr
 		$this->init("");
 	}
 
-	function init($arg)
+	function init($arg = array())
 	{
 		$this->output_client = "htmlclient";
 		$this->ds_name = "ds_local_sql";
@@ -288,6 +288,10 @@ class class_base extends aliasmgr
 	{
 		// check whether this current class is based on class_base
 		$this->init_class_base();
+		
+		extract($args);
+
+		$this->id = $id;
 
 		// right now, this callback is not used.
 		if (method_exists($this->inst,"callback_on_submit"))
@@ -300,7 +304,6 @@ class class_base extends aliasmgr
 			));
 		}
 		
-		extract($args);
 
 		// here we need to check whether this record really belongs to the objects
 		// table or not
@@ -329,7 +332,7 @@ class class_base extends aliasmgr
 			};
 			$this->new = true;
 		}
-		$this->id = $id;
+
 		$fields = $this->fields["objects"];
 		// for objects, we always load the parent field as well
 		$fields["parent"] = "direct";
@@ -482,7 +485,7 @@ class class_base extends aliasmgr
 				};
 			};
 		};
-		
+
 		if (sizeof($metadata) > 0)
 		{
 			$coredata["metadata"] = $metadata;
@@ -598,7 +601,11 @@ class class_base extends aliasmgr
 		// XXX: pathi peab htmlclient tegema
 		if ($this->id)
 		{
-			$title = "Muuda $classname objekti " . $this->coredata["name"];
+			$title = $args["title"];
+			if (!$title)
+			{
+				$title = "Muuda $classname objekti " . $this->coredata["name"];
+			};
 			$parent = $this->coredata["parent"];
 		}
 		else
@@ -751,6 +758,11 @@ class class_base extends aliasmgr
 			"clid" => $this->clid,
 		));
 	
+		$argblock = array(
+			'oid' => $this->id
+		);
+
+
 		// ok, first add all the generated props to the props array 
 		$all_props = array();
 		foreach($_all_props as $k => $val)
@@ -1290,14 +1302,7 @@ class class_base extends aliasmgr
 				"group" => $group,
 		));
 
-		if (method_exists($this->inst,"callback_get_rel_types"))
-		{
-			$reltypes = $this->inst->callback_get_rel_types();
-		}
-		else
-		{
-			$reltypes = array();
-		};
+		$reltypes = $this->get_rel_types();
 
 		$gen = $almgr->new_list_aliases(array(
 			"id" => $id,
@@ -1318,7 +1323,9 @@ class class_base extends aliasmgr
 		$this->load_coredata(array(
 			"id" => $args["id"],
 		));
-
+		
+		$reltypes = $this->get_rel_types();
+		
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
 
 		$realprops = $this->get_active_properties(array(
@@ -1327,8 +1334,16 @@ class class_base extends aliasmgr
 		));
 
 		$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
-		$gen = $almgr->search($args);
-		return $this->gen_output(array("content" => $gen));
+		$gen = $almgr->search($args + array("reltypes" => $this->get_rel_types()));
+		$classname = get_class($this->orb_class);
+		if (isset($reltype))
+		{
+			$title = "Loo seos $reltypes[$reltype] $classname objektiga " . $this->coredata["name"];
+		};
+		return $this->gen_output(array(
+			"content" => $gen,
+			"title" => $title,
+		));
 	}	
 
 
@@ -1386,6 +1401,21 @@ class class_base extends aliasmgr
 			$this->read_template($tpl);
 		}
 		return $ob;
+	}
+
+	function get_rel_types()
+	{
+		if (method_exists($this->inst,"callback_get_rel_types"))
+		{
+			$reltypes = $this->inst->callback_get_rel_types();
+		}
+		else
+		{
+			$reltypes = array();
+		};
+
+		$reltypes[0] = "alias";
+		return $reltypes;
 	}
 };
 ?>
