@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.18 2002/07/23 21:20:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.19 2002/08/08 17:19:29 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 
@@ -428,6 +428,11 @@ class aw_mail {
 		unset($this->body);
 	}
 
+	function body_replace($args = array())
+	{
+		$this->body_replacements = $args;
+	}
+
 	// <--
 	
 	////
@@ -585,6 +590,14 @@ class aw_mail {
 			echo("<textarea cols=80 rows=15>blj‰‰ \nto=$to \nsubj=$subject \nheaders:");
 			print_r($headers);
 			echo("email=$email</textarea>");
+		};
+
+		if (is_array($this->body_replacements))
+		{
+			foreach($this->body_replacements as $key => $val)
+			{
+				$email = str_replace($key,$val,$email);
+			};
 		};
 		mail($to,$subject,$email,$headers);
 		
