@@ -1,21 +1,21 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="forum_v2" folder="contentmgmt/forum" extends="class_base">
-		<action name="add_topic" all_args="1">
+		<action name="add_topic" nologin="1" all_args="1">
 			<function name="add_topic">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_topic" all_args="1">
+		<action name="submit_topic" nologin="1" all_args="1">
 			<function name="submit_topic">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_comment" all_args="1">
+		<action name="submit_comment" nologin="1" all_args="1">
 			<function name="submit_comment">
 				<arguments>
 				</arguments>
