@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.16 2004/11/22 14:16:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.17 2004/11/26 14:11:48 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -651,6 +651,22 @@ class project extends class_base
 			$web_pages[$conn["to"]] = $conn["from"];
 		};
 
+		if (1 == $arr["project_media"])
+		{
+			$conns = $c->find(array(
+				"from" => $projects,
+				"type" => RELTYPE_PRJ_VIDEO,
+			));
+
+			foreach($conns as $conn)
+			{
+
+				$v_o = new object($conn["to"]);
+				$project_videos[$conn["from"]] = $v_o->properties(); 
+
+			};
+		}
+
 		if (1 == $arr["first_image"])
 		{
 			$conns = $c->find(array(
@@ -712,6 +728,12 @@ class project extends class_base
 			else
 			{
 				$events[$key]["first_image"] = $baseurl . "/img/trans.gif";
+			};
+
+			if ($project_videos[$event["pr"]])
+			{
+				$events[$key]["media"] = $project_videos[$event["pr"]];
+
 			};
 		};
 
