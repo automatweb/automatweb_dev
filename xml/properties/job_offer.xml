@@ -2,107 +2,110 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
             <table>objects</table>
-            <field>name</field>
             <group>info_about_job</group>
+            <field>name</field>
+            <type>textbox</type>
             <caption>Ametikoht</caption>
       </property>
       <property>
             <name>navtoolbar</name>
+            <table>objects</table>
+            <group>kandideerinud</group>
+            <field>meta</field>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <group>kandideerinud</group>
-            <table>objects</table>
-            <field>meta</field>
       </property>
       <property>
             <name>toosisu</name>
-            <type>textarea</type>
-            <field>about_job</field>
             <table>personnel_management_job</table>
             <group>info_about_job</group>
+            <field>about_job</field>
+            <type>textarea</type>
             <caption>Töö kirjeldus</caption>
       </property>
       <property>
             <name>noudmised</name>
-            <type>textarea</type>
-            <field>requirements</field>
             <table>personnel_management_job</table>
             <group>info_about_job</group>
+            <field>requirements</field>
+            <type>textarea</type>
             <caption>N&amp;otilde;udmised kandidaadile</caption>
       </property>
       <property>
             <name>asukoht</name>
+            <table>objects</table>
+            <group>info_about_job</group>
+            <field>meta</field>
             <type>relpicker</type>
             <reltype>RELTYPE_LINN</reltype>
             <automatic>1</automatic>
             <editonly>1</editonly>
             <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>info_about_job</group>
             <caption>Asukoht</caption>
       </property>
       <property>
             <name>deadline</name>
-            <type>date_select</type>
-            <field>deadline</field>
             <table>personnel_management_job</table>
             <group>info_about_job</group>
+            <field>deadline</field>
+            <type>date_select</type>
             <caption>Konkursi tähtaeg</caption>
       </property>
       <property>
             <name>tegevusvaldkond</name>
-            <type>classificator</type>
+            <table>objects</table>
+            <group>info_about_job</group>
             <field>meta</field>
+            <type>classificator</type>
             <method>serialize</method>
             <multiple>1</multiple>
             <editonly>1</editonly>
-            <table>objects</table>
-            <group>info_about_job</group>
+            <store>connect</store>
+            <reltype>RELTYPE_TEGEVUSVALDKOND</reltype>
+            <orient>vertical</orient>
             <caption>Tegevusvaldkond</caption>
       </property>
       <property>
             <name>email</name>
+            <table>objects</table>
+            <group>info_about_job</group>
+            <field>meta</field>
             <type>relmanager</type>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
-            <group>info_about_job</group>
-            <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Meiliaadressid</caption>
       </property>
       <property>
             <name>phone</name>
+            <table>objects</table>
+            <group>info_about_job</group>
+            <field>meta</field>
             <type>relmanager</type>
             <reltype>RELTYPE_PHONE</reltype>
             <props>name</props>
-            <group>info_about_job</group>
-            <field>meta</field>
             <method>serialize</method>
-            <table>objects</table>
             <caption>Telefoninumbrid</caption>
       </property>
       <property>
             <name>candits</name>
-            <type>table</type>
-            <group>kandideerinud</group>
-            <store>no</store>
             <table>objects</table>
+            <group>kandideerinud</group>
             <field>meta</field>
+            <type>table</type>
+            <store>no</store>
             <caption>Kandideerijad</caption>
       </property>
       <property>
             <name>kandideerin</name>
-            <type>select</type>
+            <table>objects</table>
+            <group>minu_kandidatuur</group>
             <field>meta</field>
+            <type>select</type>
             <method>serialize</method>
             <store>no</store>
-            <group>minu_kandidatuur</group>
-            <table>objects</table>
             <caption>Vali cv kandideerimiseks</caption>
       </property>
       <classinfo>

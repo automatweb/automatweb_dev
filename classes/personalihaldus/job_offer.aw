@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/job_offer.aw,v 1.2 2004/03/16 23:35:06 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/job_offer.aw,v 1.3 2004/03/18 01:24:48 sven Exp $
 // job_offer.aw - job_offer 
 /*
 
@@ -28,7 +28,7 @@
 @property deadline type=date_select field=deadline table=personnel_management_job  group=info_about_job
 @caption Konkursi tähtaeg
 
-@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 editonly=1 table=objects  group=info_about_job
+@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 editonly=1 table=objects store=connect group=info_about_job reltype=RELTYPE_TEGEVUSVALDKOND orient=vertical
 @caption Tegevusvaldkond
 
 @property email type=relmanager reltype=RELTYPE_EMAIL props=mail  group=info_about_job field=meta method=serialize
@@ -41,6 +41,9 @@ property cv_file_rel type=releditor reltype=RELTYPE_CVFILE props=file group=info
 
 @property candits type=table group=kandideerinud
 @caption Kandideerijad
+
+@property kandideerin type=select field=meta method=serialize store=no group=minu_kandidatuur
+@caption Vali cv kandideerimiseks
 
 
 @reltype EMAIL value=2 clid=CL_ML_MEMBER
@@ -61,20 +64,11 @@ property cv_file_rel type=releditor reltype=RELTYPE_CVFILE props=file group=info
 @reltype CVFILE value=7 clid=CL_FILE
 @caption CV failina
 
-@property kandideerin type=callback callback=my_candidature_get field=meta method=serialize
-@caption Vali cv kandideerimiseks
-
-
-groupinfo info_about_job_main caption="Tööpakkumine" 
 
 @groupinfo info_about_job caption="Tööpakkumine"
-
 @groupinfo info_about_job_file caption="Tööpakkumine failina" parent=info_about_job_main
-
-@group minu_kandidatuur caption="Kandideerin"
+@groupinfo minu_kandidatuur caption="Minu kandidatuur"
 @groupinfo kandideerinud caption="Kandideerijad"
-
-
 
 */
 
@@ -185,6 +179,23 @@ class job_offer extends class_base
 					"action" => "delete_rels",
 				));
 			break;
+			
+			case "kandideerin":
+			
+				$data["options"] = $this->my_candidature_get();
+				
+				$person_obj = $this->get_my_person_obj();
+				$mycvs = $this->get_cvs_of_person($person_obj);
+							
+				foreach ($mycvs as $mycv)
+				{
+					if($arr["obj_inst"]->connections_from(array("to" => $mycv->id())))
+					{
+						$data["selected"] = $mycv->id();		
+					}
+				}
+				
+			break;
 		};
 		return $retval;
 	}
@@ -211,19 +222,12 @@ class job_offer extends class_base
 			{
 				if($employee_group==users::get_oid_for_gid($gid))
 				{
-				
-					$retval["el1"] = array(
-						"type" => "select",
-						"name" => "el1",
-						"caption" => "Kandideerin",
-						"ch_value" =>  1,
-					);		
 					
-					$retval["el1"]["options"][] = "--Vali CV--";
+					$retval[] = "--Vali CV--";
 					foreach ($mycvs as $mycv)
 					{
 						$mycv = &obj($mycv->prop("to"));
-						$retval["el1"]["options"][$mycv->id()] = $mycv->name();
+						$retval[$mycv->id()] = $mycv->name();
 						
 					}
 					
@@ -234,32 +238,30 @@ class job_offer extends class_base
 		}		
 	}
 	
-	
-	//Seostab valitud tegevusvaldkonnad antud tööpakkumise alla
-	function sectors_create_rels(&$arr)
-	{	
-		$sector_conns = new connection();
-
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_TEGEVUSVALDKOND)) as $valdkond)
+	/* This function returns current logged user person object */
+	function get_my_person_obj()
+	{
+		$user_id = users::get_oid_for_uid(aw_global_get("uid"));
+		$user_obj = & obj($user_id);
+		$person_obj = $user_obj->connections_from(array("type" => RELTYPE_PERSON));
+		
+		if($person_obj)
 		{
-			$valdkond->delete();	
+			$person_obj = array_pop($person_obj);
+			return $person_obj->to();
 		}
+	}
 	
-		if(is_array($arr["prop"]["value"]))
+	/* This function returns array of cv objects of person passed in argument */
+	
+	function get_cvs_of_person(&$person)
+	{
+		$cv_conns = $person->connections_from(array("type" => 19)); 
+		foreach ($cv_conns as $cv_conn)
 		{
-			foreach ($arr["prop"]["value"] as $valdkond)
-			{
-				if($valdkond)
-				{
-					$new_sector_conn = new connection();
-					$new_sector_conn->change(array(
-						"from" => $arr["obj_inst"]->id(),
-						"to" => $valdkond,
-						"reltype" => RELTYPE_TEGEVUSVALDKOND,
-					));
-				}
-			}
+			$return_cvs[] = $cv_conn->to();
 		}
+		return $return_cvs;
 	}
 	
 	function set_property($arr = array())
@@ -273,15 +275,11 @@ class job_offer extends class_base
         {
 			case "kandideerin" :
 				//Kontrollime kas kasutjal on ehk juba mõni CV selle tööpakkumisega seostatud
-				$user_id = users::get_oid_for_uid(aw_global_get("uid"));
-				$user_obj = & obj($user_id);
-				$person_obj = $user_obj->connections_from(array("type" => RELTYPE_PERSON));
+				$person_obj = $this->get_my_person_obj();
 		
 				if($person_obj)
 				{
-					$person_obj = array_pop($person_obj);
-					$person_obj = &obj($person_obj->prop("to"));
-					$mycvs=$person_obj->connections_from(array("type" => 19)); 
+					$mycvs=$this->get_cvs_of_person($person_obj); 
 				}
 				
 				$conn = new connection();
@@ -291,7 +289,7 @@ class job_offer extends class_base
 					$mycv_temp = $conn->find(array(
         				"from" => $arr["obj_inst"]->id(),
         				"type" => RELTYPE_CV,
-        				"to" => $cv->prop("to"),
+        				"to" => $cv->id(),
 					));
 					if($mycv_temp)
 					{
@@ -312,10 +310,6 @@ class job_offer extends class_base
 					$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["prop"]["value"], "reltype" => RELTYPE_CV));
 				}
 				
-				print_r($arr["prop"]);
-			break;
-			case "tegevusvaldkond":
-				$this->sectors_create_rels($arr);
 			break;
 		}
 		return $retval;
