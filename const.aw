@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.22 2001/06/21 08:14:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.23 2001/06/21 14:27:12 kristo Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -334,6 +334,8 @@ define("CL_SHOP_EQUASION",65);  // poe kauba hinna arvutamise valem
 
 define("CL_FORM_TABLE",66);  // otsinguformi tulemuste kuvamise tabel
 
+define("CL_CURRENCY",67);  // otsinguformi tulemuste kuvamise tabel
+
 // can_add määrab ära kas, seda klassi näidatakse Lisa listboxis
 
 // nimekiri k6ikidest klassidest ikoonide jaox
@@ -379,7 +381,8 @@ $class_defs = array(	CL_PSEUDO => array("name" => "Men&uuml","file" => "menuedit
 			CL_SHOP_STATS => array("name" => "Poe statistika", "file" => "shop_stat", "can_add" => 1),
 			CL_SHOP_ITEM_TYPE => array("name" => "Kauba t&uuml;&uuml;p", "file" => "item_type", "can_add" => 1),
 			CL_SHOP_EQUASION => array("name" => "Kauba hinnavalem", "file" => "shop_eq", "can_add" => 1),
-			CL_FORM_TABLE => array("name" => "Formi tabel", "file" => "form_table", "can_add" => 1)
+			CL_FORM_TABLE => array("name" => "Formi tabel", "file" => "form_table", "can_add" => 1),
+			CL_CURRENCY => array("name" => "Valuuta kurss", "file" => "currency", "can_add" => 1)
 );
 // kliendid. 
 // hierarhia esimene element on root
