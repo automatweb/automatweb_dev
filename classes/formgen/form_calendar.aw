@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.19 2003/02/07 18:49:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_calendar.aw,v 1.20 2003/02/07 19:20:53 duke Exp $
 // form_calendar.aw - manages formgen controlled calendars
 classload("formgen/form_base");
 class form_calendar extends form_base
@@ -639,8 +639,7 @@ class form_calendar extends form_base
 		};
 		$this->el_relation = $row["el_relation"];
 		$this->cal_controller = $cal_controller;
-		$rel = $this->get_element_by_id($this->el_relation);
-		var_dump($rel);
+			
         }
 
 	////
@@ -655,17 +654,14 @@ class form_calendar extends form_base
         function get_vac_list($args = array())
         {
                 extract($args);
-                print "trying to create vacancy list<br>";
-                print "<pre>";
-                print_r($args);
-                print "</pre>";
                                                                                                                             
                 $_start = ($start) ? $start : 0;
                 $_end = ($end) ? $end : 0;
                                                                                                                             
                 $contr = $this->cal_controller;
+		$rel = (int)$this->relation;
+                $cal_id = (int)$this->cal_id;
                                                                                                                             
-                /*
                 $q = "SELECT txtid,max_items FROM calendar2timedef
                          WHERE oid = '$contr' AND relation IN ($rel)
                                 AND start <= '$_end' AND end >= '$_start'";
@@ -676,30 +672,27 @@ class form_calendar extends form_base
                 {
                         $max_items[$row["txtid"]] = $row["max_items"];
                 };
-		                $reserved = array();
                 $q = "SELECT txtid,items FROM calendar2event
                         LEFT JOIN objects ON (calendar2event.entry_id = objects.oid)
                         WHERE relation = '$rel' AND cal_id = '$cal_id' AND form_id = '$id'
                                 AND end >= '$_start' AND start <= '$_end'";
-                print $q;
-                print "<br>";
-                $this->db_query($q);
                                                                                                                             
-                while($row = $¼his->db_next())
+                while($row = $this->db_next())
                 {
-                        $reserved[$row["txtid"]] = $row["items"];
+			$max_items[$row["txtid"]] -= $row["items"];
                 };
+
+		$tmp = array();
+		foreach($max_items as $key => $val)
+		{
+			if ($val > -1)
+			{
+				$tmp[$key] = $val;
+			};
+		};
+
+		return join(",",map2("%s=%d",$tmp));
                                                                                                                             
-                print "<pre>";
-                print_r($max_items);
-                print_r($reserved);
-                print "</pre>";
-                                                                                                                            
-                //$sum = (int)$row2["sum"];
-                //print "max = $max, sum = $sum, req = $req_items<br>";
-                //$vac = $max - $sum - $req_items;
-                */
-                return $vac;
         }
 
 	function get_rel_el($args = array())
