@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.10 2004/06/11 08:40:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.11 2004/06/14 14:29:37 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -77,6 +77,8 @@ class otv_ds_postipoiss extends class_base
 		"lisad" => "Lisad",
 		"resolutsioon" => "Resolutsioon",
 		"sep5" => "",
+		"kuupaev" => "Kuup&auml;ev",
+		"kuupaev2" => "J&otilde;ustub",
 		"tahtaeg" => "T&auml;htaeg",
 		"vastamis_kpv" => "Vastatud",
 		"sep6" => "",
@@ -85,8 +87,6 @@ class otv_ds_postipoiss extends class_base
 		"koostajad" => "Osav&otilde;tjad",
 		"allkiri" => "Allkirjastaja",
 		"viide" => "Failid",
-		"kuupaev" => "Kuup&auml;ev",
-		"kuupaev2" => "J&otilde;ustub"
 	);
 
 	function otv_ds_postipoiss()
