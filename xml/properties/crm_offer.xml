@@ -3,18 +3,18 @@
       <property>
             <name>start1</name>
             <type>datetime_select</type>
-            <table>objects</table>
+            <field>start</field>
+            <table>planner</table>
             <group>calendar</group>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Algab </caption>
       </property>
       <property>
             <name>duration</name>
             <type>time_select</type>
-            <table>objects</table>
+            <field>end</field>
+            <table>planner</table>
             <group>calendar</group>
-            <field>meta</field>
             <method>serialize</method>
             <caption>Kestab</caption>
       </property>
@@ -23,14 +23,14 @@
             <type>textarea</type>
             <cols>60</cols>
             <rows>30</rows>
-            <table>objects</table>
-            <group>calendar</group>
-            <field>meta</field>
+            <table>planner</table>
+            <field>description</field>
+            <group>general</group>
             <method>serialize</method>
             <caption>Sisu</caption>
       </property>
       <classinfo>
-            <syslog_type>ST_PAKKUMINE</syslog_type>
+            <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
 </properties>
