@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.36 2005/01/27 11:26:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.37 2005/01/27 11:51:30 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -454,10 +454,11 @@ class event_search extends class_base
 			);
 			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select")
 			{
-				$prps["props"] = html::textbox(array(
+				$prps["props"] = html::textarea(array(
 					"name" => "${pname}[${sname}][props]",
 					"value" => $oldvals[$sname]["props"],
-					"size" => 15,
+					"rows" => 5,
+					"cols" => 15,
 				));
 			}
 			//arr($oldvals[$sname]["fields"]);
@@ -948,7 +949,9 @@ class event_search extends class_base
 						continue;
 					}
 					$names = array_merge($sname, safe_array($tabledef[$sname]["fields"]));
+					$names = $this->make_keys($names);
 					$val = array();
+					$skip = false;
 					foreach($names as $nms)
 					{
 						if(empty($nms))
@@ -963,10 +966,6 @@ class event_search extends class_base
 								continue;
 							}
 							$value = $tabledef[$nms]["props"];
-							if($names["start1"] && $names["end"])
-							{
-								$skip = true;
-							}
 							if(!empty($value))
 							{
 								/*
@@ -982,11 +981,13 @@ class event_search extends class_base
 								//$a = str_replace("<br />", "##", $tabledef[$nms]["props"]);
 								//$a = str_replace("<br>", "##", $a);
 								//$v= str_replace("##", "<br />", $v);
-								if($names["start1"] && $names["end"])
+								if(strpos($value, "#php#") !== false)
 								{
-									$fs1 = explode("|", $tabledef["start1"]["props"]);
-									$fs2 = explode("|", $tabledef["end1"]["props"]);
-									$v = date($fs1[0], $eval["start1"]).(date("m", $eval["start1"]) != date("m", $eval["end"]) || date("d", $eval["start1"]) != date("d", $eval["end"]) ? " ".$tabledef[$sname]["sep"]." ".date($fs2[0], $eval["end"]) : "")." | ".date($fs1[1], $eval["start1"])." ".$tabledef[$sname]["sep"]." ".date($fs2[1], $eval["end"]);
+									$value = str_replace("#php#", "", $value);
+									$value = str_replace("#/php#", "", $value);
+									// eval is evil and inherited from the satan himself,
+									// so i decided to use it here -- ahz
+									eval($value);
 								}
 								else
 								{
