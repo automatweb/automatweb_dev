@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.28 2004/03/25 21:54:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.29 2004/05/13 14:52:11 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -245,10 +245,13 @@ class admin_folders extends aw_template
 			exit;
 		};
 
+		$t = get_instance("languages");
 		$this->vars(array(
 			"TREE" => $res,
 			"uid" => aw_global_get("uid"),
 			"date" => $this->time2date(time(),2),
+			"charset" => $t->get_charset(),
+
 		));
 
 		$tb = get_instance("toolbar");
