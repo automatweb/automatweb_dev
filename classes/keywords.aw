@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.1 2001/05/18 14:02:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.2 2001/05/18 15:02:34 duke Exp $
 // keywords.aw - dokumentide võtmesõnad
-class keywords extends aw_temlate {
+class keywords extends aw_template {
 	function keywords($args = array())
 	{
 		$this->db_init();
@@ -16,7 +16,7 @@ class keywords extends aw_temlate {
 	function get_keywords($args = array())
 	{
 		extract($args);
-		$q = "SELECT * FROM keyword2objects WHERE oid = '$oid'";
+		$q = "SELECT * FROM keywords2objects WHERE oid = '$oid'";
 		$this->db_query($q);
 		$idlist = array();
 		$result = "";
@@ -72,7 +72,7 @@ class keywords extends aw_temlate {
 		// vaja leida koigi votmesõnade ID-d. Kui ei ole, siis tekitame uue
 		foreach($keywordlist as $val)
 		{
-			$keyword = $trim($val);
+			$keyword = trim($val);
 			$klist[] = $keyword;
 			$arg = join(",",$klist);
 		};
@@ -84,7 +84,7 @@ class keywords extends aw_temlate {
 		};
 		
 		// teeme kindlaks koik votmesonad, millel polnud ID-d (uued)
-		foreach($keywordlist as $val)
+		foreach($klist as $val)
 		{
 			if (!$ids[$val])
 			{
@@ -93,7 +93,8 @@ class keywords extends aw_temlate {
 				$this->db_query($q);
 				$row = $this->db_next();
 				$newid = $row["id"];
-				$q = "INSERT INTO keywords (id,keyword) VALUES ('$newid','$val'");
+				$newid++;
+				$q = "INSERT INTO keywords (id,keyword) VALUES ('$newid','$val')";
 				$this->db_query($q);
 				$ids[$val] = $newid;
 			};
@@ -107,7 +108,7 @@ class keywords extends aw_temlate {
 
 		// ja loome uued
 
-		foreach($keywordlist as $val)
+		foreach($klist as $val)
 		{
 			$q = sprintf("INSERT INTO keywords2objects (oid,keyword_id) VALUES ('%d','%s')",$oid,$ids[$val]);
 			$this->db_query($q);
@@ -122,4 +123,3 @@ class keywords extends aw_temlate {
 		
 };
 ?>
-
