@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.32 2001/06/29 14:51:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.33 2001/07/03 09:28:30 duke Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -152,8 +152,16 @@ class core extends db_connector
 		$t = time();
 		$this->quote($action);
 		$this->quote($time);
-		$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid)
-			VALUES('$t','$uid','$type','$action','$ip','$oid')";
+		if (defined("TAFKAP"))
+		{
+			$q = "INSERT DELAYED INTO syslog (tm,uid,type,action,ip,oid,tafkap)
+				VALUES('$t','$uid','$type','$action','$ip','$oid','$tafkap')";
+		}
+		else
+		{
+			$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip,oid)
+				VALUES('$t','$uid','$type','$action','$ip','$oid')";
+		};
 		$this->db_query($q);
 	}
 		
