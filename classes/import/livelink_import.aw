@@ -1,10 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.15 2004/02/05 14:06:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.16 2004/03/10 15:33:59 duke Exp $
 // livelink_import.aw - Import livelingist
 
 /*
-	@groupinfo general caption=Üldine
-
 	@default table=objects
 	@default group=general
 	@default field=meta
@@ -47,17 +45,17 @@ class livelink_import extends class_base
 		switch($data["name"])
 		{
 			case "outdir":
-				if (empty($args["obj"]["oid"]))
+				if ($args["new"])
 				{
 					$data["value"] = aw_ini_get("site_basedir") . "/public";
 				};
 				break;
 			case "invoke":
-				list($err,) = $this->_chk_outdir($args["obj"]["meta"]["outdir"]);
+				list($err,) = $this->_chk_outdir($args["obj_inst"]->prop("outdir"));
 				if (!$err)
 				{
 					$data["value"] = html::href(array(
-						"url" => $this->mk_my_orb("invoke",array("id" => $args["obj"]["oid"])),
+						"url" => $this->mk_my_orb("invoke",array("id" => $args["obj_inst"]->id())),
 						"caption" => $data["caption"],
 					));
 				}
@@ -65,7 +63,7 @@ class livelink_import extends class_base
 				break;
 
 			case "message":
-				list($error,$data["value"]) = $this->_chk_outdir($args["obj"]["meta"]["outdir"]);
+				list($error,$data["value"]) = $this->_chk_outdir($args["obj_inst"]->prop("outdir"));
 				break;
 
 		}
@@ -112,11 +110,8 @@ class livelink_import extends class_base
 	**/
 	function invoke($args = array())
 	{
-		$obj = $this->get_object(array(
-			"oid" => $args["id"],
-			"clid" => $this->clid,
-		));
-		$outdir = $obj["meta"]["outdir"];
+		$obj = new object($args["id"]);
+		$outdir = $obj->prop("outdir");
 		list($err,$msg) = $this->_chk_outdir($outdir);
 		if ($err)
 		{
@@ -137,16 +132,16 @@ class livelink_import extends class_base
 			"csv" => "appexel.gif",
 		);
 
-		$rootnodes = explode(",",$obj["meta"]["rootnode"]);
+		$rootnodes = explode(",",$obj->prop("rootnode"));
 
-		$this->exceptions = explode(",",$obj["meta"]["exception_node"]);
+		$this->exceptions = explode(",",$obj->prop("exception_node"));
 
 		foreach($rootnodes as $rootnode)
 		{
 			$this->import_livelink_structure(array(
 				"outdir" => $outdir,
 				"rootnode" => (int)$rootnode,
-				"fileprefix" => $obj["meta"]["fileprefix"],
+				"fileprefix" => $obj->prop("fileprefix"),
 			));
 		};
 
