@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.89 2004/11/18 09:58:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.90 2004/11/27 11:15:24 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1144,7 +1144,10 @@ class admin_menus extends aw_template
 			{
 				$row["class_id"] = $clss[$row["class_id"]]["name"];
 			}
-						
+			if ($row["oid"] != $row["brother_of"])
+			{
+				$row["class_id"] .= " (vend)";
+			}
 						
 			$row["link"] = "<a href=\"".$this->cfg["baseurl"]."/".$row["oid"]."\">Link</a>";
 			
