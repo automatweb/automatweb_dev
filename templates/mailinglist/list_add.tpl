@@ -13,6 +13,9 @@
 <td class="fcaption">Listist lahkumisel saadetav meil:</td><td class="fform"><select NAME='leave_mail'>{VAR:leave_mail}</select></td>
 </tr>
 <tr>
+<td class="fcaption">Mis grupi p&otilde;hjal list teha:</td><td class="fform"><select NAME='group'><option value=''>{VAR:groups}</select></td>
+</tr>
+<tr>
 <td class="fcaption" colspan=2><input class='small_button' type='submit' VALUE='{VAR:LC_MAILINGLIST_SAVE}'></td>
 </tr>
 </table>
