@@ -135,9 +135,10 @@
 
 <tag id='aw_kast_alapealkiri'>
 <![CDATA[
-<div style="width: 100%; border-bottom: 1px solid #DCEFE6; margin-left: 2px;">
-<span class="text"><strong>&nbsp;&nbsp;\1</strong></span>
+<div style="width: 100%; border-bottom: 1px solid #DCEFE6;">
+<span class="text"><strong>\1</strong></span>
 </div>
 ]]>
 </tag>
+
 </doctags>
