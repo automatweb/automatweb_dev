@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/iframe.aw,v 2.10 2004/10/22 14:45:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.1 2005/01/20 20:39:07 kristo Exp $
 // iframe.aw - iframes
 
 /*
