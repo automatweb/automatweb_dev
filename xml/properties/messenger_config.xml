@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>msgs_on_page</name>
+            <type>select</type>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kirju lehel</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MESSENGER_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>
