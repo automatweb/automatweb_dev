@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.27 2003/06/19 09:57:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.28 2003/06/26 12:06:54 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -184,7 +184,7 @@ class doc extends class_base
 				$_tmp = $args["data"]["planner"]["end"] - $args["data"]["planner"]["start"];
 				$data["value"] = array(
 					"hour" => (int)($_tmp/3600),
-					"minute" => $_tmp % 3600,
+					"minute" => ($_tmp % 3600) / 60,
 				);
 				break;
 	
