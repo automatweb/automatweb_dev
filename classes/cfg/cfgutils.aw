@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.20 2003/05/08 12:30:32 duke Exp $
+// $Id: cfgutils.aw,v 1.21 2003/07/25 15:44:11 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -129,6 +129,7 @@ class cfgutils extends aw_template
 		$fqfn = $this->fbasedir . $file . ".xml";
                 $source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
+
                 if ($source)
                 {
                         $parser = get_instance("xml/xml_path_parser");
@@ -182,28 +183,31 @@ class cfgutils extends aw_template
 			$pass_count = sizeof($filter);
 		}
 
-		foreach($properties as $key => $val)
+		if (is_array($properties))
 		{
-			$_tmp = $this->normalize_text_nodes($val);
-			$name = $_tmp["name"];
-			if ($do_filter)
+			foreach($properties as $key => $val)
 			{
-				$pass = 0;
-				foreach($filter as $key => $val)
+				$_tmp = $this->normalize_text_nodes($val);
+				$name = $_tmp["name"];
+				if ($do_filter)
 				{
-					if ($_tmp[$key] == $val)
+					$pass = 0;
+					foreach($filter as $key => $val)
 					{
-						$pass++;
+						if ($_tmp[$key] == $val)
+						{
+							$pass++;
+						}
 					}
+					if ($pass == $pass_count)
+					{
+						$res[$name] = $_tmp;
+					};
 				}
-				if ($pass == $pass_count)
+				else
 				{
 					$res[$name] = $_tmp;
 				};
-			}
-			else
-			{
-				$res[$name] = $_tmp;
 			};
 		};
 		return $res;
