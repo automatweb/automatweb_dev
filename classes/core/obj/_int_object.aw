@@ -220,8 +220,8 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_id => $c_d)
 		{
-			if ($this->can("view", $c_d["from"]) && 
-				$this->can("view", $c_d["to"]) && 
+			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
+				$GLOBALS["object_loader"]->ds->can("view", $c_d["to"]) && 
 				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
 				$GLOBALS["object_loader"]->object_exists($c_d["to"])
 			)
@@ -294,8 +294,8 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
-			if ($this->can("view", $c_d["from"]) && 
-				$this->can("view", $c_d["to"]) &&
+			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
+				$GLOBALS["object_loader"]->ds->can("view", $c_d["to"]) &&
 				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
 				$GLOBALS["object_loader"]->object_exists($c_d["to"])
 			)
@@ -1224,6 +1224,11 @@ class _int_object
 
 	function _int_can_save()
 	{
+		if (is_array($this->obj["parent"]))
+		{
+			$this->obj["parent"] = $this->obj["parent"]["oid"];
+		}
+	
 		// required params - parent and class_id
 		if ($this->obj["parent"] > 0 && $this->obj["class_id"] > 0)
 		{
