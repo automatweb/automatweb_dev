@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.25 2002/01/31 01:10:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.26 2002/02/01 11:09:24 duke Exp $
 // table.aw - tabelite haldus
 global $orb_defs;
 
@@ -1388,7 +1388,7 @@ $orb_defs["table"] ="xml";
 					{
 						if ($this->arr["style2class"][$st] == CL_CSS)
 						{
-							$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st_".$st."\">";
+							$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
 							$used_css_styles[$st] = $st;
 						}
 						else
@@ -1446,7 +1446,7 @@ $orb_defs["table"] ="xml";
 				{
 					$used[$stylid] = 1;
 					$css_info = $this->get_obj_meta($stylid);
-					$css_file .= $css->_gen_css_style("st_".$stylid,$css_info["meta"]["css"]);
+					$css_file .= $css->_gen_css_style("st".$stylid,$css_info["meta"]["css"]);
 				}
 			}
 			if ($css_file != "")
