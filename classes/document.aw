@@ -1,7 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.27 2001/06/18 20:49:29 kristo Exp $
-// document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
-// defineerime orbi funktsioonid
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.28 2001/06/20 00:03:50 duke Exp $
+// document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
 session_register("s_pic_sortby");	// doku edimisel aliaste sortimine
@@ -161,11 +160,9 @@ class document extends aw_template
 		{
 			$rstr = "objects.period = $period";
 		};
-		
-		if ($status != -1)
-		{
-			$v.= " AND objects.status = $status ";
-		};
+	
+		// kui staatus on defineerimata, siis näitame ainult aktiivseid dokumente
+		$v.= " AND objects.status = " . ($status == -1) ? 2 : $status;
 
 		if ($row["ndocs"] > 0)
 		{
@@ -379,6 +376,7 @@ class document extends aw_template
 					$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 				}
 				$txt = "";
+
 				if ($boldlead) 
 				{
 					$txt = "<b>";
