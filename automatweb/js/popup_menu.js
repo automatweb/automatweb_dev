@@ -33,7 +33,7 @@ function Browser() {
 }
 
 // browserdetect.js is loaded anyway, don't perform an inferior detection here
-//var browser = new Browser();
+var pp_browser = new Browser();
 
 //----------------------------------------------------------------------------
 // Code for handling the menu bar and active button.
@@ -44,7 +44,7 @@ var activeButton = null;
 // Capture mouse clicks on the page so any active button can be
 // deactivated.
 
-if (browser.isIE)
+if (pp_browser.isIE)
   document.onmousedown = pageMousedown;
 else
   document.addEventListener("mousedown", pageMousedown, true);
@@ -60,7 +60,7 @@ function pageMousedown(event) {
 
   // Find the element that was clicked on.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     el = window.event.srcElement;
   else
     el = (event.target.tagName ? event.target : event.target.parentNode);
@@ -89,7 +89,7 @@ function buttonClick(event, menuId) {
 
   // Get the target button element.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     button = window.event.srcElement;
   else
     button = event.currentTarget;
@@ -130,7 +130,7 @@ function buttonMouseover(event, menuId) {
 
   // Find the target button element.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     button = window.event.srcElement;
   else
     button = event.currentTarget;
@@ -156,7 +156,7 @@ function depressButton(button) {
 	//el = document.getElementById("mb_"+cur_menuid);
 	
   x = getPageOffsetLeft(button);
-	if (browser.isIE)
+	if (pp_browser.isIE)
 	{
 	  y = getPageOffsetTop(button)/2 + button.offsetHeight*3;
 	}
@@ -167,7 +167,7 @@ function depressButton(button) {
 //	alert("gpot = "+button.offsetHeight);
   // For IE, adjust position.
 
-  if (browser.isIE) {
+  if (pp_browser.isIE) {
     x += button.offsetParent.clientLeft;
     y += button.offsetParent.clientTop;
   }
@@ -201,7 +201,7 @@ function menuMouseover(event) {
 
   // Find the target menu element.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     menu = getContainerWith(window.event.srcElement, "DIV", "menu");
   else
     menu = event.currentTarget;
@@ -218,7 +218,7 @@ function menuItemMouseover(event, menuId) {
 
   // Find the target item element and its parent menu element.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     item = getContainerWith(window.event.srcElement, "A", "menuItem");
   else
     item = event.currentTarget;
@@ -251,11 +251,11 @@ function menuItemMouseover(event, menuId) {
 
   var maxX, maxY;
 
-  if (browser.isNS) {
+  if (pp_browser.isNS) {
     maxX = window.scrollX + window.innerWidth;
     maxY = window.scrollY + window.innerHeight;
   }
-  if (browser.isIE) {
+  if (pp_browser.isIE) {
     maxX = (document.documentElement.scrollLeft   != 0 ? document.documentElement.scrollLeft    : document.body.scrollLeft)
          + (document.documentElement.clientWidth  != 0 ? document.documentElement.clientWidth   : document.body.clientWidth);
     maxY = (document.documentElement.scrollTop    != 0 ? document.documentElement.scrollTop    : document.body.scrollTop)
@@ -277,7 +277,7 @@ function menuItemMouseover(event, menuId) {
 
   // Stop the event from bubbling.
 
-  if (browser.isIE)
+  if (pp_browser.isIE)
     window.event.cancelBubble = true;
   else
     event.stopPropagation();
@@ -313,7 +313,7 @@ function menuInit(menu) {
 
   // For IE, replace arrow characters.
 
-  if (browser.isIE) 
+  if (pp_browser.isIE) 
 	{
     menu.style.lineHeight = "2.5ex";
     spanList = menu.getElementsByTagName("SPAN");
@@ -363,7 +363,7 @@ function menuInit(menu) {
   // Fix IE hover problem by setting an explicit width on first item of
   // the menu.
 
-  if (browser.isIE) {
+  if (pp_browser.isIE) {
     w = itemList[0].offsetWidth;
     itemList[0].style.width = w + "px";
     dw = itemList[0].offsetWidth - w;
