@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.7 2003/10/06 14:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.8 2003/10/28 13:16:21 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -184,6 +184,7 @@ class imap extends class_base
 		$count = $mboxinf->Nmsgs;
 		$this->count = $count;
 
+
 		// mailbox has changed, reload from server
 		if (1 || $last_check != $new_check)
 		{
@@ -212,6 +213,8 @@ class imap extends class_base
 
 			//$uidlist = join(",",$to_fetch);
 
+			// this will update the message cache ... it has to contain all
+			// the message bits in this mailbox
 			if ($count > 0)
 			{
 				$overview = "";
@@ -257,7 +260,7 @@ class imap extends class_base
 			{
 				if (!between($rkey+1,$arr["from"],$arr["to"]))
 				{
-					unset($mbox_over["contents"][$rkey]);
+					unset($mbox_over["contents"][$ritem]);
 				};
 			}
 		};
