@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.6 2001/05/22 07:28:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.7 2001/05/22 08:00:56 cvs Exp $
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -259,7 +259,7 @@ class db_config extends aw_template
 			$ret.="\x01classicon\x02\n";
 			$icon = $il["content"][$clid]["imgid"] ? $ic->get($il["content"][$clid]["imgid"]) : -1;
 			$ar = array("clid" => $clid, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -275,9 +275,9 @@ class db_config extends aw_template
 		while (list($clid,$desc) = each($class_defs))
 		{
 			$ret.="\x01classicon\x02\n";
-			$icon = $il[content][$clid][imgid] ? $ic->get($il[content][$clid][imgid]) : -1;
+			$icon = $il["content"][$clid]["imgid"] ? $ic->get($il["content"][$clid]["imgid"]) : -1;
 			$ar = array("clid" => $clid, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -303,8 +303,8 @@ class db_config extends aw_template
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("menu_icons"));
-		$icons[content][$clid][imgid] = $icon_id;
-		$icons[content][$clid][imgurl] = $ic[url];
+		$icons["content"][$clid]["imgid"] = $icon_id;
+		$icons["content"][$clid]["imgurl"] = $ic["url"];
 
 		$cs = serialize($icons);
 		$this->set_simple_config("menu_icons",$cs);
@@ -323,10 +323,10 @@ class db_config extends aw_template
 			reset($ar);
 			while (list($extt,$v) = each($ar))
 			{
-				if ($v[url] == "")
-					$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+				if ($v["url"] == "")
+					$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-				$this->vars(array("extt" => $extt, "type" => $v[type], "url" => $v[url]));
+				$this->vars(array("extt" => $extt, "type" => $v["type"], "url" => $v["url"]));
 				$this->parse("LINE");
 			}
 		}
@@ -350,9 +350,9 @@ class db_config extends aw_template
 		while (list(,$extt) = each($sel))
 		{
 			$ret.="\x01fileicon\x02\n";
-			$icon = $il[$extt][id] ? $ic->get($il[$extt][id]) : -1;
+			$icon = $il[$extt]["id"] ? $ic->get($il[$extt]["id"]) : -1;
 			$ar = array("ext" => $extt, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -368,9 +368,9 @@ class db_config extends aw_template
 		while (list($extt,$v) = each($il))
 		{
 			$ret.="\x01fileicon\x02\n";
-			$icon = $il[$extt][id] ? $ic->get($il[$extt][id]) : -1;
+			$icon = $il[$extt]["id"] ? $ic->get($il[$extt]["id"]) : -1;
 			$ar = array("ext" => $extt, "icon" => $icon);
-			$ret.=serialize($ar)."\n";
+			$ret.=serialize($ar);
 		}
 		return $ret;
 	}
@@ -476,8 +476,8 @@ class db_config extends aw_template
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("file_icons"));
-		$icons[$extt][url] = $ic[url];
-		$icons[$extt][id] = $icon_id;
+		$icons[$extt]["url"] = $ic["url"];
+		$icons[$extt]["id"] = $icon_id;
 
 		$cs = serialize($icons);
 		$this->set_simple_config("file_icons",$cs);
@@ -592,41 +592,41 @@ class db_config extends aw_template
 
 		$ar = unserialize($this->get_simple_config("other_icons"));
 		$v = $ar["promo_box"];
-		if ($v[url] == "")
-			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "promo kast", "mtype" => "promo_box", "url" => $v[url]));
+		$this->vars(array("type" => "promo kast", "mtype" => "promo_box", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["brother"];
-		if ($v[url] == "")
-			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Vennastatud men&uuml;&uuml;", "mtype" => "brother", "url" => $v[url]));
+		$this->vars(array("type" => "Vennastatud men&uuml;&uuml;", "mtype" => "brother", "url" => $v["url"]));
 		$this->parse("LINE");
 
-		$this->vars(array("type" => "Kodukataloog", "mtype" => "homefolder", "url" => $v[url]));
+		$this->vars(array("type" => "Kodukataloog", "mtype" => "homefolder", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["shared_folders"];
-		if ($v[url] == "")
-			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Kodukataloog/SHARED FOLDERS", "mtype" => "shared_folders", "url" => $v[url]));
+		$this->vars(array("type" => "Kodukataloog/SHARED FOLDERS", "mtype" => "shared_folders", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["hf_groups"];
-		if ($v[url] == "")
-			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Kodukataloog/grupid", "mtype" => "hf_groups", "url" => $v[url]));
+		$this->vars(array("type" => "Kodukataloog/grupid", "mtype" => "hf_groups", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		$v = $ar["bugtrack"];
-		if ($v[url] == "")
-			$v[url] = $GLOBALS["baseurl"]."/images/transa.gif";
+		if ($v["url"] == "")
+			$v["url"] = $GLOBALS["baseurl"]."/images/transa.gif";
 
-		$this->vars(array("type" => "Klienditugi/BugTrack", "mtype" => "bugtrack", "url" => $v[url]));
+		$this->vars(array("type" => "Klienditugi/BugTrack", "mtype" => "bugtrack", "url" => $v["url"]));
 		$this->parse("LINE");
 
 		return $this->parse();
@@ -638,8 +638,8 @@ class db_config extends aw_template
 		$ic = $t->get($icon_id);
 
 		$icons = unserialize($this->get_simple_config("other_icons"));
-		$icons[$id][id] = $icon_id;
-		$icons[$id][url] = $ic[url];
+		$icons[$id]["id"] = $icon_id;
+		$icons[$id]["url"] = $ic["url"];
 
 		$cs = serialize($icons);
 		$this->set_simple_config("other_icons",$cs);
@@ -662,9 +662,9 @@ class db_config extends aw_template
 		while (list(,$id) = each($sel))
 		{
 			$ret.="\x01othericon\x02\n";
-			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$icon = $il[$id]["id"] ? $ic->get($il[$id]["id"]) : -1;
 			$ar = array("id" => $id, "icon" => $icon);
-			$ret.= serialize($ar)."\n";
+			$ret.= serialize($ar);
 		}
 		return $ret;
 	}
@@ -682,9 +682,9 @@ class db_config extends aw_template
 		while (list($id,) = each($il))
 		{
 			$ret.="\x01othericon\x02\n";
-			$icon = $il[$id][id] ? $ic->get($il[$id][id]) : -1;
+			$icon = $il[$id]["id"] ? $ic->get($il[$id]["id"]) : -1;
 			$ar = array("id" => $id, "icon" => $icon);
-			$ret.= serialize($ar)."\n";
+			$ret.= serialize($ar);
 		}
 		return $ret;
 	}
@@ -725,12 +725,12 @@ class db_config extends aw_template
 		{
 			$v = unserialize($v);
 			$iid = 0;
-			if (is_array($v[icon]))
+			if (is_array($v["icon"]))
 			{
-				if (!($iid = $ic->get_icon_by_file($v[icon][file])))
-					$iid = $ic->add_array($v[icon]);
+				if (!($iid = $ic->get_icon_by_file($v["icon"]["file"])))
+					$iid = $ic->add_array($v["icon"]);
 			}
-			$this->set_other_icon($v[id],$iid);
+			$this->set_other_icon($v["id"],$iid);
 			$cnt++;
 		}
 		global $ext;
@@ -759,27 +759,27 @@ class db_config extends aw_template
 		{
 			classload("icons");
 			$t = new icons;
-			$ex[db] = $t->export_all();
+			$ex["db"] = $t->export_all();
 		}
 
 		if ($exp_cl)
 		{
-			$ex[cl] = $this->export_all_class_icons();
+			$ex["cl"] = $this->export_all_class_icons();
 		}
 
 		if ($exp_ft)
 		{
-			$ex[ft] = $this->export_all_file_icons();
+			$ex["ft"] = $this->export_all_file_icons();
 		}
 
 		if ($exp_pr)
 		{
-			$ex[pr] = $this->export_all_program_icons();
+			$ex["pr"] = $this->export_all_program_icons();
 		}
 
 		if ($exp_ot)
 		{
-			$ex[ot] = $this->export_all_other_icons();
+			$ex["ot"] = $this->export_all_other_icons();
 		}
 
 		header("Content-type: aw/icon-export");
@@ -805,27 +805,27 @@ class db_config extends aw_template
 			fclose($f);
 
 			$ar = unserialize($fc);
-			if ($ar[db] != "")
+			if ($ar["db"] != "")
 			{
 				classload("icons");
 				$t = new icons;
-				$t->core_import($ar[db]);
+				$t->core_import($ar["db"]);
 			}
-			if ($ar[cl] != "")
+			if ($ar["cl"] != "")
 			{
-				$this->do_core_import("classicon",set_class_icon,"class_icons","clid",$ar[cl]);
+				$this->do_core_import("classicon",set_class_icon,"class_icons","clid",$ar["cl"]);
 			}
-			if ($ar[ft] != "")
+			if ($ar["ft"] != "")
 			{
-				$this->do_core_import("fileicon",set_file_icon,"file_icons","ext",$ar[ft]);
+				$this->do_core_import("fileicon",set_file_icon,"file_icons","ext",$ar["ft"]);
 			}
-			if ($ar[pr] != "")
+			if ($ar["pr"] != "")
 			{
-				$this->do_core_import("programicon",set_program_icon,"program_icons","id",$ar[pr]);
+				$this->do_core_import("programicon",set_program_icon,"program_icons","id",$ar["pr"]);
 			}
-			if ($ar[ot] != "")
+			if ($ar["ot"] != "")
 			{
-				$this->do_core_import_other_icons($ar[ot]);
+				$this->do_core_import_other_icons($ar["ot"]);
 			}
 		}
 	}

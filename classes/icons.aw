@@ -147,10 +147,17 @@ class icons extends aw_template
 	function get($id)
 	{
 		if (is_array($GLOBALS["icon_cache"][$id]))
+		{
 			return $GLOBALS["icon_cache"][$id];
+		}
 
 		$this->db_query("SELECT * FROM icons WHERE id = $id");
 		$ret = $this->db_next(false);
+		if ($ret == false)
+		{
+			return false;
+		}
+
 		global $ext,$baseurl;
 		$ret["url"] = $baseurl."/icon.$ext?id=$id";
 
@@ -163,15 +170,15 @@ class icons extends aw_template
 	{
 		if (!$id)
 		{
-			header("Content-type: image/gif");
-			readfile($GLOBALS["baseurl"]."/images/icon_aw.gif");
+			header("Location: ".$GLOBALS["baseurl"]."/images/icon_aw.gif");
+			die();
 		}
 
 		$ic = $this->get($id);
 		if (!is_array($ic))
 		{
-			header("Content-type: image/gif");
-			readfile($GLOBALS["baseurl"]."/images/icon_aw.gif");
+			header("Location: ".$GLOBALS["baseurl"]."/images/icon_aw.gif");
+			die();
 		}
 		header("Content-type: ".$ic["file_type"]);
 		echo $ic["file"];
