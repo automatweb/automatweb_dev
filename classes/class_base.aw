@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.161 2003/10/30 18:11:43 duke Exp $
+// $Id: class_base.aw,v 2.162 2003/10/31 13:50:21 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -587,7 +587,7 @@ class class_base extends aw_template
 		{
 			if (empty($title))
 			{
-				$title = "Muuda $classname objekti " . $name;
+				$title = $name;
 			};
 			$parent = $this->coredata["parent"];
 		}
@@ -595,7 +595,7 @@ class class_base extends aw_template
 		{
 			if (empty($title))
 			{
-				$title = "Lisa $classname";
+				$title = "Uus $classname";
 			};
 			$parent = $args["parent"];
 		};
