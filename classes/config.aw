@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.31 2002/06/11 14:31:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.32 2002/06/26 11:28:42 duke Exp $
 
 classload("aw_template","xml","objects","languages","icons");
 class db_config extends aw_template 
@@ -38,6 +38,7 @@ class db_config extends aw_template
 
 	function create_config($ckey,$value)
 	{
+		$this->quote($value);
 		$this->db_query("INSERT INTO config VALUES('$ckey','$value',".time().",'".aw_global_get("uid")."')");
 	}
 
