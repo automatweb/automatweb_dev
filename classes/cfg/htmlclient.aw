@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.43 2003/12/10 11:57:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.44 2003/12/10 13:06:59 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -376,6 +376,7 @@ class htmlclient extends aw_template
 		else
 		if (empty($submit) || $submit !== "no")
 		{
+			// I need to figure out whether I have a relation manager
 			$sbt = $this->parse("SUBMIT");
 		};
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
@@ -399,6 +400,11 @@ class htmlclient extends aw_template
 						"err_msg" => $item["error"],
 					));
 					$res .= $this->parse("PROP_ERR_MSG");
+				};
+				if (!empty($sbt) && $item["type"] == "aliasmgr")
+				{
+					$res .= $sbt;
+					unset($sbt);
 				};
 				$res .= $item["html"];
 			};
