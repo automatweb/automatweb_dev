@@ -1,0 +1,30 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="sysconf">
+
+		<action name="edit">
+			<function name="edit">
+				<arguments>
+					<define name="page" value="general"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="config">
+			<function name="edit">
+				<arguments>
+					<required name="page"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
+		

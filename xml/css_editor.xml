@@ -1,0 +1,21 @@
+<?xml version='1.0'?>
+<css>
+	<list>
+		<caption>Stiiligrupid</caption>
+		<link>orb.{VAR:ext}?class=css&amp;action={VAR:glist}</link>
+	</list>
+	<my>
+		<caption>Stiilid</caption>
+		<link>orb.{VAR:ext}?class=css&amp;action={VAR:stylist}</link>
+		<sublinks>
+			<mylist>
+				<caption>Nimekiri</caption>
+				<link>#</link>
+			</mylist>
+			<myadd>
+				<caption>Lisa uus</caption>
+				<link>#</link>
+			</myadd>
+		</sublinks>
+	</my>
+</css>
