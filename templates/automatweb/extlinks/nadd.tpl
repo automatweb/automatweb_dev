@@ -14,6 +14,8 @@ function toggle_javascript()
 			newwinwidth.disabled = false;
 			newwinheight.disabled = false;
 			newwintoolbar.disabled = false;
+			newwinlocation.disabled = false;
+			newwinmenu.disabled = false;
 		};
 	}
 	else
@@ -23,6 +25,8 @@ function toggle_javascript()
 			newwinwidth.disabled = true;
 			newwinheight.disabled = true;
 			newwintoolbar.disabled = true;
+			newwinlocation.disabled = true;
+			newwinmenu.disabled = true;
 		};
 	};
 };
