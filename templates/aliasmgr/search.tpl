@@ -99,6 +99,10 @@ function selall()
 	chk_status = !chk_status;
 }
 
+function search_selall()
+{
+	selall();
+}
 
 </script>
 </form>
