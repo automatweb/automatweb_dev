@@ -1,6 +1,8 @@
 <table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0" width="100%">
+<!-- SUB: SHOW_CHANGEFORM -->
 <form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
 <input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
+<!-- END SUB: SHOW_CHANGEFORM -->
 
 {VAR:content}
 
@@ -78,6 +80,7 @@
 	&nbsp;
 <!-- END SUB: SUBITEM2 -->
 
+<!-- SUB: SHOW_CHANGEFORM2 -->
 {VAR:reforb}
 <script type="text/javascript">
 function submit_changeform(action)
@@ -91,6 +94,7 @@ function submit_changeform(action)
 }
 </script>
 </form>
+<!-- END SUB: SHOW_CHANGEFORM2 -->
 </table>
 
 <!-- SUB: iframe_body_style -->

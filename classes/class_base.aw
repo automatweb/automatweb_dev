@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.369 2005/03/17 15:12:40 ahti Exp $
+// $Id: class_base.aw,v 2.370 2005/03/22 11:15:11 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -468,6 +468,10 @@ class class_base extends aw_template
 			));
 			
 			$o_arr = array();
+			if($gdata["no_form"] == 1)
+			{
+				$o_arr["no_form"] = true;
+			}
 			
 			// the magical check, that you are fully qualified to use a different templatemodel -- ahz
 			$tpls = str_replace(aw_ini_get("basedir")."/templates/", "", $this->inst->adm_template_dir);

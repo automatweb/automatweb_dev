@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.100 2005/03/18 11:31:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.101 2005/03/22 11:15:11 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -11,6 +11,10 @@ class htmlclient extends aw_template
 {
 	function htmlclient($arr = array())
 	{
+		if($arr["no_form"])
+		{
+			$this->no_form = true;
+		}
 		$tpldir = isset($arr["tpldir"]) ? $arr["tpldir"] : "htmlclient";
 		$this->init(array("tpldir" => $tpldir));
 		$this->res = "";
@@ -1002,6 +1006,13 @@ class htmlclient extends aw_template
 			$apd = get_instance("layout/active_page_data");
 			$apd->add_serialized_css_style($this->parse("iframe_body_style"));
 		};
+		if(!$this->no_form)
+		{
+			$this->vars(array(
+				"SHOW_CHANGEFORM" => $this->parse("SHOW_CHANGEFORM"),
+				"SHOW_CHANGEFORM2" => $this->parse("SHOW_CHANGEFORM2"),
+			));
+		}
 
 		if ($arr["raw_output"])
 		{
