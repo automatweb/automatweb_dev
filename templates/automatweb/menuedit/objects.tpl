@@ -5,6 +5,22 @@
 <link rel="stylesheet" href="{VAR:baseurl}/automatweb/css/bench.css">
 
 <script language="javascript">
+
+var chk_status = true;
+
+	function selall()
+	{
+		for (i=0; i < document.foo.elements.length; i++)
+		{
+			if (document.foo.elements[i].type == "checkbox" && document.foo.elements[i].name.indexOf("sel") != -1)
+			{
+				document.foo.elements[i].checked=chk_status;
+			}
+		}
+		chk_status = !chk_status;
+		return false;
+	}
+
 	function doSubmit(act)
 	{
 		document.foo.action.value="menuedit_redirect";
@@ -188,7 +204,7 @@ function cl()
 <td align="center" class="title">&nbsp;<a href='menuedit.{VAR:ext}?parent={VAR:parent}&type=objects&sortby=class_id&order={VAR:order5}&period={VAR:period}'>{VAR:LC_MENUEDIT_TYPE}</a>{VAR:sortedimg5}&nbsp;</td>
 <td align="center" class="title">&nbsp;Link&nbsp;</td>
 
-<td align="center" colspan="2" class="title">&nbsp;{VAR:LC_MENUEDIT_CHOOSE}&nbsp;</td>
+<td align="center" colspan="2" class="title">&nbsp;<a href='#' onClick="selall();return false;">{VAR:LC_MENUEDIT_CHOOSE}</a>&nbsp;</td>
 <td align="center" class="title">&nbsp;Default&nbsp;</td>
 </tr>
 <!-- SUB: CUT -->
