@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.19 2001/07/02 00:24:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.20 2001/07/03 05:08:34 duke Exp $
 // defs.aw - common functions (C) StruktuurMeedia 2000,2001
 
 ////
@@ -14,6 +14,11 @@ function bail_out()
 	print "the requested URL " . $REQUEST_URI . " was not found on this server.<p>\n";
 	print "<hr>\n<address>" . $SERVER_SIGNATURE . "</address>\n</body></html>";
 	exit;
+}
+	
+function localparse($src = "",$vars = array())
+{
+	return preg_replace("/{VAR:(.+?)}/e","\$vars[\"\\1\"]",$src);
 }
 
 // laeb XML failist orbi definitsiooni
