@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.1 2004/12/20 23:45:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/stat/ekomar/Attic/ekomar_show.aw,v 1.2 2005/02/09 16:30:42 duke Exp $
 // ekomar_show.aw - Ekomar 
 /*
 
@@ -10,6 +10,9 @@
 
 @property notfound type=relpicker reltype=RELTYPE_FOLDER field=meta method=serialize
 @caption Kuhu suunata kui ei leitud &uuml;htegi tulemust
+
+@reltype FOLDER value=1 clid=CL_MENU,CL_DOCUMENT
+@caption kuhu suunata
 
 */
 
@@ -157,21 +160,6 @@ class ekomar_show extends class_base
 			"notfound" => $ob->meta('notfound')
 		));
 		return $this->parse();
-	}
-
-	function callback_get_rel_types()
-	{
-		return array(
-			RELTYPE_FOLDER => "kuhu suunata"
-		);
-	}
-
-	function callback_get_classes_for_relation($args = array())
-	{
-		if ($args["reltype"] == RELTYPE_FOLDER)
-		{
-			return array(CL_PSEUDO, CL_DOCUMENT);
-		}
 	}
 
 	/**  
