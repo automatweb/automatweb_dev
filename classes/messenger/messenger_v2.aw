@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.5 2003/09/17 12:45:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.6 2003/09/29 13:03:19 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -19,23 +19,38 @@ caption Identiteet
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
 @caption Konfiguratsioon
 
-@property write_mail type=callback callback=callback_write_mail no_caption=1 group=write_mail
-@caption Uus kiri
 
-@property mail_toolbar type=toolbar no_caption=1 group=message_view store=no
-@caption Msg. toolbar
 
-@property msg_cont type=text group=message_view no_caption=1 wrapchildren=1
-@caption Konteiner
-
-@property mailbox type=hidden group=message_view 
+@property mailbox type=hidden group=main_view
 @caption Mailbox ID (sys)
 
-@property treeview type=text group=message_view parent=msg_cont
+
+// --- mailbox view group
+@property mail_toolbar type=toolbar no_caption=1 group=main_view,msg_view store=no
+@caption Msg. toolbar
+
+@property msg_cont type=text group=main_view,msg_view no_caption=1 wrapchildren=1
+@caption Konteiner
+
+@property treeview type=text parent=msg_cont group=main_view,msg_view
 @caption Folderid
 
-@property message_view type=table no_caption=1 group=message_view store=no parent=msg_cont
+@property message_list type=table no_caption=1 group=main_view parent=msg_cont store=no 
 @caption Kirjad
+
+// --- message view group
+
+@property message_view type=text store=no parent=msg_cont group=msg_view no_caption=1
+@caption Kirja sisu
+
+// --- writing a message
+@property write_mail type=callback callback=callback_write_mail no_caption=1 group=write_mail 
+@caption Uus kiri
+
+// muu mudru
+
+property main_view type=callback callback=callback_gen_main_view no_caption=1 group=main_view 
+caption Peavaade
 
 @property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
 @caption Outbox
@@ -45,20 +60,38 @@ caption Identiteet
 
 @property autofilter_delay type=select
 @caption Filtrite käivitamise intervall
+@comment Minutites
 
 @property testfilters type=text 
 @caption Testi filtreid
 
-@groupinfo message_view caption="Kirjad" submit=no
-@groupinfo write_mail caption="Uus kiri" submit=no
+@default view=real
+
+
+@property message_toolbar type=toolbar no_caption=1 group=msg_view store=no 
+@caption Kirjade toolbar
+
+
+@property foldername type=textbox store=no group=folderadm
+@caption Folderi nimi
+
+@property parentfolder type=hidden store=no group=folderadm
+@caption Parent folder (sys)
+
+@groupinfo main_view caption="Kirjad" submit=no
+@groupinfo msg_view caption="Kiri" submit=no
+@groupinfo write_mail caption="Uus kiri" submit=no 
+
+@groupinfo folderadm caption="Kataloogi admin" view=real
 
 */
+// I'd really really like to get rid of the bloody iframe
 define("RELTYPE_MAIL_IDENTITY",1); // things that appear on the From lines etc...
-define("RELTYPE_MAIL_SOURCE",2); // pop3, imap, etc..
-define("RELTYPE_MAIL_CONFIG",3); // millist konfiguratsiooni kasutada
+define("RELTYPE_MAIL_SOURCE",2); // imap, pop3 is deprecated 
+define("RELTYPE_MAIL_CONFIG",3); // which config to use
 define("RELTYPE_FOLDER",4); // kataloog kuhu maile salvestada .. kehtib ainult local delivery korral
 define("RELTYPE_ADDRESS",5); // used to specify delivery addresses .. which can be AW lists for example
-define("RELTYPE_RULE",6); // maili ruul
+define("RELTYPE_RULE",6); // mail filtering rule
 
 class messenger_v2 extends class_base
 {
@@ -78,20 +111,26 @@ class messenger_v2 extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "message_view":
-				if ($arr["request"]["msgid"])
-				{
-					$data["value"] = $this->gen_message_view($arr);
-					$data["type"] = "text";
-				}
-				else
+			case "message_list":
+				if (empty($arr["request"]["msgid"]))
 				{
 					$data["value"] = $this->gen_message_list($arr);
-				};
+				}
+				break;
+
+			case "message_view":
+				if (!empty($arr["request"]["msgid"]))
+				{
+					$data["value"] = $this->gen_message_view($arr);
+				}
 				break;
 
 			case "mail_toolbar":
 				$data["value"] = $this->gen_mail_toolbar($arr);
+				break;
+			
+			case "message_toolbar":
+				$data["value"] = $this->gen_message_toolbar($arr);
 				break;
 
 			case "treeview":
@@ -113,6 +152,26 @@ class messenger_v2 extends class_base
 				));
 				break;
 
+			case "foldername":
+				if (!empty($arr["request"]["editfolder"]))
+				{
+					$foldername = $arr["request"]["editfolder"];
+					$data["value"] = substr($foldername,strrpos($foldername,"."));
+				}
+				break;
+
+			case "parentfolder":
+				if (!empty($arr["request"]["parentfolder"]))
+				{
+					$data["value"] = $arr["request"]["parentfolder"];
+				}
+				break;
+
+			case "currentfolder":
+				$data["value"] = $this->use_mailbox;
+				break;
+
+
 		};
 		return $retval;
 	}
@@ -129,6 +188,14 @@ class messenger_v2 extends class_base
 
 			case "autofilter_delay":
 				$this->schedule_filtering($arr);
+				break;
+
+			case "foldername":
+				// intercept it, create the folder .. and then do what?
+				print "creating a new folder<br>";
+				print "<pre>";
+				print_r($arr);
+				print "</pre>";
 				break;
 
 		}
@@ -148,21 +215,41 @@ class messenger_v2 extends class_base
 
 	}	
 
+	function callback_get_contents($arr)
+	{
+		print "we are inside content generator now";
+		// which properties we are showing will all depend on one additional argument in the URL
+		// let's call it MV for example
+
+		// actually .. there is a better way to define it ...
+
+		// let's have a separate group for each possible view .. oh yes, that is certainly
+		// the most effective way to do it
+
+	}
+
 	function _connect_server($arr)
 	{
+		
 		if (!$this->connected)
 		{
+			global $awt;
 			$this->msgobj = new object($arr["msgr_id"]);
 			$conns = $this->msgobj->connections_from(array("type" => RELTYPE_MAIL_SOURCE));
+
 			
 			// right now it only deals with a single server.
 			$_sdat =$conns[0];
 			$sdat = new object($_sdat->to());
 
+			$this->_name = $sdat->prop("name");
+
 			$this->drv_inst = get_instance("protocols/mail/imap");
 			$this->drv_inst->set_opt("use_mailbox",$this->use_mailbox);
 			$this->drv_inst->set_opt("outbox",$this->outbox);
-			$this->drv_inst->connect_server(array("id" => $_sdat->to()));
+			$awt->start("imap-server-connect");
+			$this->drv_inst->connect_server(array("obj_inst" => $_sdat->to()));
+			$awt->stop("imap-server-connect");
 			$this->drv_inst->set_opt("messenger_id",$arr["msgr_id"]);
 
 			$this->mbox = $this->drv_inst->get_opt("mbox");
@@ -177,8 +264,12 @@ class messenger_v2 extends class_base
 				$msg_cfg_obj = new object($msg_cfg);
 				$this->perpage = $msg_cfg_obj->prop("msgs_on_page");
 			};
-		
-			$this->mailboxlist = $this->drv_inst->list_folders();
+			$awt->start("imap-list-folders");	
+			if (!$arr["no_folders"])
+			{
+				$this->mailboxlist = $this->drv_inst->list_folders();
+			};
+			$awt->stop("imap-list-folders");
 		};
 	}
 
@@ -186,16 +277,21 @@ class messenger_v2 extends class_base
 	{
 		$this->_connect_server(array(
 			"msgr_id" => $arr["obj"]["oid"],
+			"no_folders" => true,
 		));
 
 		$perpage = empty($this->perpage) ? 50 : $this->perpage;
 
 		$ft_page = (int)$GLOBALS["ft_page"];
 
+		global $awt;
+		$awt->start("list-folder-contents");
 		$contents = $this->drv_inst->get_folder_contents(array(
 			"from" => $perpage * $ft_page + 1,
 			"to" => $perpage * ($ft_page + 1),
 		));
+
+		$awt->stop("list-folder-contents");
 
 		$count = $this->drv_inst->count;
 
@@ -214,7 +310,9 @@ class messenger_v2 extends class_base
 			));
 		};
 
-		$t->table_header = $this->navibar . $pageselector;
+		$fldr = $this->use_mailbox;	
+
+		$t->table_header = $dump . $pageselector;
 
 		foreach($contents as $key => $message)
 		{
@@ -229,7 +327,7 @@ class messenger_v2 extends class_base
 					"url" => $this->mk_my_orb("change",array(
 							"id" => $arr["obj"]["oid"],
 							"msgid" => $key,
-							"group" => $arr["request"]["group"],
+							"group" => "msg_view",
 							"mailbox" => $this->use_mailbox,
 					)),
 					"caption" => $this->_format(parse_obj_name($message["subject"]),$seen),
@@ -242,6 +340,7 @@ class messenger_v2 extends class_base
 		};
 
 	}
+
 
 	function _format($str,$flag)
 	{
@@ -264,14 +363,50 @@ class messenger_v2 extends class_base
 
 		$rv = "";
 
-		$boxes = array();
-		$boxes[0][1] = array("name" => "IMAP");
-		
 		// I have to enumerate those mailboxes, because the current DHTML
 		// trees uses names as unique identifiers for tree branches ..
 		// having special characters in them breaks javascript syntax
 		$enum = array();
+
+		$tree = get_instance("vcl/treeview");
+		$tree->start_tree(array(
+			"type" => TREE_DHTML,
+		));
+		
 		$i = 1;
+
+		$tree->add_item(0,array(
+			"name" => parse_obj_name($this->_name),
+			"id" => $i,
+		));
+
+		$i++;
+
+		$tree->add_item(0,array(
+			"name" => "Local folders",
+			"id" => $i,
+		));
+
+		//$boxes[0][$i] = array("name" => "Local folders");
+		// how the fuck do I put some javascript into tree output?
+		$local_fld = $i;
+		$this->localfolders = array();
+		$conns = $this->msgobj->connections_from(array("type" => RELTYPE_FOLDER));
+		foreach($conns as $folder_item)
+		{
+			$i++;
+			$sdat = new object($folder_item->to());
+			$tree->add_item($local_fld,array(
+				"name" => $sdat->prop("name"),
+				"id" => $i,
+				"link" => $this->mk_my_orb("change",array(
+					"id" => $arr["obj"]["oid"],
+					"group" => $arr["prop"]["group"],
+					"localmailbox" => $sdat->id(),
+				)),
+			));
+			$this->localfolders[$sdat->id()] = $sdat->prop("name");
+		};
 
 		foreach($this->mailboxlist as $key => $val)
 		{
@@ -284,7 +419,6 @@ class messenger_v2 extends class_base
 			if (strpos($val["name"],".") === false)
 			{
 				$parent = 1;
-				$boxes[1][$i] = array("name" => $val["name"]);
 				$name = $val["name"];
 			}
 			else
@@ -298,28 +432,30 @@ class messenger_v2 extends class_base
 				$name = "<strong>$name</strong>";
 			};
 
-			$boxes[$parent][$i] = array(
+			$tree->add_item($parent,array(
 				"name" => $name . " " . $val["count"],
-				"link" => $this->mk_my_orb("change",array(
+				"id" => $i,
+				"url" => $this->mk_my_orb("change",array(
 					"id" => $arr["obj"]["oid"],
-					"group" => "message_view",
+					"group" => "main_view",
 					"mailbox" => $val["name"],
 				)),
-			);
+			));
 				
 		}
 
-		$treeview = get_instance("vcl/treeview");
-                $res =  $treeview->create_tree_from_array(array(
-                        "parent" => 1,
-                        "data" => $boxes,
-                        "shownode" => $enum[$this->use_mailbox],
-                        "linktarget" => "_self",
-                ));
+		$this->read_template("foldertree.tpl");
+		$this->vars(array(
+			"new_folder_url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real")),
+		));
+		$res .= $this->parse();
+
+		$res .= $tree->finalize_tree();
 
 		$rv .= $res;
 		return $rv;
 	}
+
 
 	function gen_mail_toolbar($arr)
 	{
@@ -330,6 +466,17 @@ class messenger_v2 extends class_base
 		$toolbar = &$arr["prop"]["toolbar"];
 
 		$req_uri = aw_global_get("REQUEST_URI");
+	
+		$toolbar->add_button(array(
+			"name" => "newmessage",
+			"tooltip" => "Uus kiri",
+			"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "write_mail")),
+			"target" => "msgrcont",
+			"img" => "new.gif",
+			"imgover" => "new_over.gif",
+		));
+
+		$toolbar->add_separator();
 
 	
 		if (!empty($arr["request"]["msgid"]))
@@ -340,12 +487,29 @@ class messenger_v2 extends class_base
 			)));
 			$toolbar->add_separator();
 		}
-		else
+		elseif (!empty($this->use_mailbox))
 		{
-			$toolbar->add_cdata(html::href(array(
-				"url" => "#",
-				"caption" => "Tee uus kataloog",
-			)));
+			// I need to ask a name from the user and then create the actual folder
+			$toolbar->add_button(array(
+				"name" => "newfolder",
+				"tooltip" => "Uus kataloog",
+				//"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","parentfolder" => $this->use_mailbox)),
+				"url" => "javascript:new_folder();",
+				#"target" => "msgrcont",
+				"img" => "new.gif",
+				"imgover" => "new_over.gif",
+			));
+			$toolbar->add_button(array(
+				"name" => "editfolder",
+				"tooltip" => "Muuda kataloogi nime",
+				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","editfolder" => $this->use_mailbox)),
+				//"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "folderadm","cb_view" => "real","editfolder" => $this->use_mailbox)),
+				//"url" => "javascript:alert(document.forms['changeform'].elements['currentfolder'].value);",
+				//"target" => "msgrcont",
+				"url" => "javascript:rename_folder();",
+				"img" => "kaust_tagasi.gif",
+				"imgover" => "kaust_tagasi_over.gif",
+			));
 			$toolbar->add_separator();
 		};
 
@@ -380,34 +544,17 @@ class messenger_v2 extends class_base
 			"img" => "delete.gif",
 			"imgover" => "delete_over.gif",
 		));
+	}
+	
+	function gen_message_toolbar($arr)
+	{
+		$this->_connect_server(array(
+			"msgr_id" => $arr["obj"]["oid"],
+		));
 
-		$pieces = explode(".",$this->use_mailbox);
-		$navibar = "";
+		$toolbar = &$arr["prop"]["toolbar"];
 
-		if ($this->use_mailbox != "INBOX")
-		{
-			$navibar = html::href(array(
-				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "message_view")),
-				"caption" => "INBOX",
-			));
-		};
-
-		for ($i = 0; $i < count($pieces); $i++)
-		{
-			if ($i > 0)
-			{
-				$path .= ".";
-			};
-			$path .= $pieces[$i];
-			$navibar .= " / ";
-			$navibar .= html::href(array(
-				"url" => $this->mk_my_orb("change",array("id" => $arr["obj"]["oid"],"group" => "message_view","mailbox" => $path)),
-				"caption" => $pieces[$i],
-			));
-		}
-
-		$this->navibar = $navibar . "<br>";
-
+		$toolbar->add_cdata("kirja toolbar");
 	}
 
 	function gen_message_view($arr)
@@ -439,13 +586,25 @@ class messenger_v2 extends class_base
 			"content" => $cont,
 		));
 
+		// first I need a list of all local folders
+
 		if (is_array($msgdata["attachments"]))
 		{
+			$this->vars(array(
+				"target_opts" => $this->picker(-1,$this->localfolders),
+			));
+
 			foreach($msgdata["attachments"] as $num => $data)
 			{
 				$this->vars(array(
 					"part_name" => $data,
 					"get_part_url" => $this->mk_my_orb("get_part",array(
+						"id" => $arr["obj"]["oid"],
+						"msgid" => $msgid,
+						"mailbox" => $this->use_mailbox,
+						"part" => $num,
+					)),
+					"att_reforb" => $this->mk_reforb("store_part",array(
 						"id" => $arr["obj"]["oid"],
 						"msgid" => $msgid,
 						"mailbox" => $this->use_mailbox,
@@ -509,6 +668,13 @@ class messenger_v2 extends class_base
 
 		$t = get_instance("messenger/mail_message");
 
+		$msgobjid = $arr["request"]["msgobj"];
+		if (!empty($msgobjid))
+		{
+			$mess_obj = new object($msgobjid);
+			$_msg_id = $msgobjid;
+		}
+		else
 		if (!empty($drafts))
 		{
 			// I have to create an empty mail_message object
@@ -541,9 +707,6 @@ class messenger_v2 extends class_base
                 $all_props[] = array("type" => "hidden","name" => "parent","value" => $outbox);
 		$all_props[] = array("type" => "hidden","name" => "id","value" => $_msg_id);
 
-		// yah, I know .. this sucks -- duke
-		unset($all_props["uidl"]);
-
 		$all_props["mfrom"]["value"] = $msgobj->prop("fromname");
 
 		$related_lists = $msgobj->connections_from(array(
@@ -563,14 +726,57 @@ class messenger_v2 extends class_base
 			$all_props["name"]["value"] = "Re: " . $msgdata["subject"];
 			$all_props["message"]["value"] = "\n\n\n" . str_replace("\n","\n> ",$msgdata["content"]);
 		};
+		
+		if (is_object($mess_obj))
+		{
+			$all_props["mto"]["value"] = $mess_obj->prop("mto");
+			$all_props["name"]["value"] = $mess_obj->name();
+			$all_props["message"]["value"] = $mess_obj->prop("message");
+		};
 
                 return $t->parse_properties(array(
                         "properties" => $all_props,
                         "name_prefix" => "emb",
+			//"id" => $msgobj,
 			// aga raiks .. see viitab ju messengeri objektile nüüd, mitte
 			// kirja omale, mida mul ju tegelikult vaja oleks
 			"target_obj" => $msgobj->id(),
                 ));
+	}
+
+	////
+	// !this is the main function that will generate different views .. and really all
+	// the other stuff we are going to possibly need
+	function callback_gen_main_view($arr)
+	{
+		// okey, lets try this thing out
+		// I'm going to return different sets of properties each time
+
+		// would be nice if I could get a list of all active properties
+
+		$prop1 = $this->all_props["mail_toolbar"];
+		$prop2 = $this->all_props["msg_cont"];
+		$prop3 = $this->all_props["treeview"];
+		$prop3["group"] = $arr["request"]["group"];
+		$prop3["cb_view"] = $arr["request"]["cb_view"];
+		if ($arr["request"]["msgid"])
+		{
+			$prop4 = $this->all_props["message_view"];
+		}
+		else
+		if ($arr["request"]["write"])
+		{
+			$prop4 = $this->all_props["write_mail"];
+		}
+		else
+		{
+			$prop4 = $this->all_props["message_list"];
+		};
+
+		$rv = array($prop1,$prop2,$prop3,$prop4);
+
+		return $rv;
+
 	}
 	
 	function submit_write_mail($arr)
@@ -593,10 +799,6 @@ class messenger_v2 extends class_base
 			$target_obj = new object($to_addr);
 			if ($target_obj->prop("class_id") == CL_ML_LIST)
 			{
-				// now then .. how the fuck am I going to put that constructed message
-				// into the outbound queue of this list? eh? mh? ah?
-
-				// and do I have to save it as an AW object as well? eh?
 				if (isset($emb["group"]))
 				{
 					$this->emb_group = $emb["group"];
@@ -627,8 +829,21 @@ class messenger_v2 extends class_base
 		}
 		else
 		{
+			$t = get_instance("messenger/mail_message");
+                	$t->id_only = true;
+			unset($emb["send"]);
+			$msg_id = $t->submit($emb);
+
+			if ($emb["savedraft"])
+			{
+				// this should redirect us right back to at where we were before
+				$this->msgobj = $emb["id"];
+				return;
+			};
+
 			$this->messageobj = new object($emb["id"]);
 			$conns = $this->messageobj->connections_from();
+			
 
 			$partnum = 1;
 
@@ -701,9 +916,10 @@ class messenger_v2 extends class_base
 				"subject" => $emb["name"],
 				"message" => $msg,
 			));
+				
 
 			// redirect to inbox .. not the smartest thing to do, but hey
-			$this->redir_to_group = "message_view";
+			$this->redir_to_group = "main_view";
 		};
 
                 return PROP_OK;
@@ -734,7 +950,7 @@ class messenger_v2 extends class_base
 			));
 
 			$this->preprocess_filters();
-			
+
 			$rv = $this->do_filters();
 		
 			print $rv;
@@ -883,6 +1099,16 @@ class messenger_v2 extends class_base
 		));
 	}
 
+	function store_part($arr)
+	{
+		print "storing attachment<br>";
+		print "<pre>";
+		print_r($arr);
+		print "</pre>";
+
+
+	}
+
 	function callback_get_rel_types()
 	{
 		return array(
@@ -965,6 +1191,31 @@ class messenger_v2 extends class_base
 		{
 			$args["group"] = $this->redir_to_group;
 		}
+		if (!empty($this->msgobj))
+		{
+			$args["msgobj"] = $this->msgobj;
+		};
+
+	}
+
+	function callback_mod_tab($arr)
+	{
+		// do not show group headers for iframe contents
+		if ($arr["view"] == "real")
+		{
+			return false;
+		};
+
+		$req_grp = $arr["request"]["group"];
+
+		if (in_array($arr["id"],array("msg_view","main_view","write_mail")) && $req_grp != $arr["id"])
+		{
+			if ($req_grp != $arr["id"])
+			{
+				return false;
+			};
+		};
+
 	}
 
 }
