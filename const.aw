@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.0 2001/05/15 20:53:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.1 2001/05/15 20:59:05 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -21,12 +21,7 @@ if (empty($db_user))
 	$db_host = "hell"; 			// host to connect to
 	$db_base = "automatweb";		// base to use
 };
-// ---------------------------------------------------------------------------
-//if (empty($ext))
-//{
-	$ext = "aw"; 		          	// filename extension
-//};
-// ---------------------------------------------------------------------------
+$ext = "aw"; 		          	// filename extension
 
 // $HTTP_HOST pohjal vaatame, millisest kohast nö "public"
 // templated võtta
