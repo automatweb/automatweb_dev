@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.105 2002/07/17 04:01:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.106 2002/07/17 05:11:38 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 classload("msgboard","aw_style","form_base","file");
@@ -539,7 +539,12 @@ class document extends aw_template
 		{
 			if (!(($pp = strpos($doc["content"],"#poolita#")) === false))
 			{
-				$doc["content"] = substr($doc["content"],0,$pp)."<br><B>Edasi loe ajakirjast!</b></font>";
+				$def = "<br><B>Edasi loe ajakirjast!</b></font>";
+				if ($this->cfg["poolita_text"] != "")
+				{
+					$def = $this->cfg["poolita_text"];
+				}
+				$doc["content"] = substr($doc["content"],0,$pp).$def;
 			}
 		}
 
@@ -1102,6 +1107,8 @@ class document extends aw_template
 				}
 				$q = "SELECT oid FROM objects
 							WHERE $prnt AND $field LIKE '%$v%' AND objects.status = 2 AND objects.class_id = ".CL_PSEUDO;
+//				$this->db_query($q);
+//					echo "vv = <pre>",var_dump($this->db_next()),"</pre> q = $q  <br>";
 				$retval[$v] = $this->db_fetch_field($q,"oid");
 				if (!$retval[$v])
 				{
@@ -1110,6 +1117,7 @@ class document extends aw_template
 					$retval[$v] = $this->db_fetch_field($q,"oid");
 				}
 			}; // eow
+//			echo "retval = <pre>", var_dump($retval),"</pre> <br>";
 			return $retval;
 		}; // eoi
 	}
@@ -2813,11 +2821,10 @@ class document extends aw_template
 			// search all words
 			$wds = explode(" ",$str);
 			$docmatcha = array();
-			$docmatcha[] = join(" OR ",$this->map("documents.title LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" OR ",$this->map("documents.content LIKE '%%%s%%'",$wds));
-			$docmatcha[] = join(" OR ",$this->map("documents.author LIKE '%%%s%%'",$wds));
-			$docmatch = join(" OR ", $docmatcha);
-
+			$docmatcha[] = join(" AND ",$this->map("documents.title LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",$this->map("documents.content LIKE '%%%s%%'",$wds));
+			$docmatcha[] = join(" AND ",$this->map("documents.author LIKE '%%%s%%'",$wds));
+			$docmatch = join(" OR ", $this->map("(%s)",$docmatcha));
 		}
 		$q = "SELECT documents.*,objects.parent as parent, objects.modified as modified, objects.parent as parent 
 										 FROM documents 
@@ -2839,13 +2846,21 @@ class document extends aw_template
 			$c = substr_count(strtoupper($row["content"]),strtoupper($str)) + substr_count(strtoupper($row["title"]),strtoupper($str))*5;
 			$max_count = max($c,$max_count);
 
-			// find the first paragraph of text
-			$p1 = strpos($row["content"],"<BR>");
-			$p2 = strpos($row["content"],"</P>");
-			$pos = min($p1,$p2);
-			$co = substr($row["content"],0,$pos);
-			$co = strip_tags($co);
-			$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
+			// find the first paragraph of text or lead if it contains something
+			if ($row["lead"] != "")
+			{
+				$co = strip_tags($row["lead"]);
+				$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
+			}
+			else
+			{
+				$p1 = strpos($row["content"],"<BR>");
+				$p2 = strpos($row["content"],"</P>");
+				$pos = min($p1,$p2);
+				$co = substr($row["content"],0,$pos);
+				$co = strip_tags($co);
+				$co = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$co);
+			}
 			// to hell with html in titles
 			$row["title"] = strip_tags($row["title"]);
 			$title = ($row["title"]) ? $row["title"] : "(nimetu)";
@@ -3128,7 +3143,7 @@ class document extends aw_template
 		$SITE_ID = $this->cfg["site_id"];
 		extract($args);
 		$id = (int)$id;
-		$q = "SELECT * FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY modified DESC";
+		$q = "SELECT documents.author as author, objects.oid as oid, objects.name as name, documents.modified as modified FROM objects LEFT JOIN keywordrelations ON (keywordrelations.id = objects.oid) LEFT JOIN documents ON (documents.docid = objects.oid) WHERE status = 2 AND class_id IN (" . CL_DOCUMENT . "," . CL_PERIODIC_SECTION . ") AND site_id = '$SITE_ID' AND keywordrelations.keyword_id = '$id' ORDER BY documents.modified DESC";
 		$retval = "";
 		load_vcl("table");
 
@@ -3146,20 +3161,20 @@ class document extends aw_template
 		));
 		$tt->define_field(array(
 			"name" => "name",
-			"caption" => "Nimi",
+			"caption" => "Pealkiri",
 			"talign" => "center",
 			"sortable" => 1,
 		));
 		$tt->define_field(array(
 			"name" => "modified",
-			"caption" => "Muudetud",
+			"caption" => "Kuup&auml;ev",
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
 		));
 		$tt->define_field(array(
 			"name" => "modifiedby",
-			"caption" => "Muutja",
+			"caption" => "Autor",
 			"talign" => "center",
 			"align" => "center",
 			"sortable" => 1,
@@ -3167,13 +3182,44 @@ class document extends aw_template
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
+			$this->save_handle();
+			$x = $this->get_relations_by_field(array(
+				"field"    => "name",
+				"keywords" => $row["author"],
+				"section"  => $this->cfg["link_authors_section"]
+			));
+			$authors = array();
+			while(list($k,$v) = each($x)) 
+			{
+				if ($this->cfg["link_default_link"] != "")
+				{
+					if ($v)
+					{
+						$authors[] = sprintf("<a href='%s'>%s</a>",document::get_link($v),$k);
+					} 
+					else 
+					{
+						$authors[] = sprintf("<a href='%s'>%s</a>",$this->cfg["link_default_link"],$k);
+					};
+				}
+				else
+				{
+					$authors[] = $k;
+				}
+			}; // while
+			$author = join(", ",$authors);
+			$this->restore_handle();
+
 			$tt->define_data(array(
 				"name" => sprintf("<a href='%s'>%s</a>",document::get_link($row["oid"]),$row["name"]),
-				"modified" => $this->time2date($row["modified"],2),
-				"modifiedby" => $row["modifiedby"],
+				"modified" => $this->time2date($row["modified"],8),
+				"modifiedby" => $author,
 			));
 		};
-		$tt->sort_by(array("field" => $sortby));
+		if ($sortby != "")
+		{
+			$tt->sort_by(array("field" => $sortby));
+		}
 		return $tt->draw();
 	}
 
