@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.8 2002/12/19 18:05:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/datasource.aw,v 2.9 2003/11/20 13:55:34 duke Exp $
 // type of the data, I'm storing it in the subclass field of the objects table
 // so that I can retrieve all sources with the same type with one query
 define("DS_XML",1);
@@ -22,6 +22,8 @@ define("DS_XML",1);
 
 	@property url type=textbox editonly=1
 	@caption Faili url
+
+	@classinfo no_status=1
 */
 
 class datasource extends class_base
@@ -30,7 +32,6 @@ class datasource extends class_base
 	{
 		$this->init(array(
 			"clid" => CL_DATASOURCE,
-			"tpldir" => "datasource",
 		));
 	}
 
@@ -55,14 +56,14 @@ class datasource extends class_base
 				break;
 
 			case "fullpath":
-				if ($args["obj"]["meta"]["type"] != 0)
+				if ($args["obj_inst"]->prop("type") != 0)
 				{
 					$retval = PROP_IGNORE;
 				};
 				break;
 			
 			case "url":
-				if ($args["obj"]["meta"]["type"] == 0)
+				if ($args["obj_inst"]->prop("type") == 0)
 				{
 					$retval = PROP_IGNORE;
 				};
@@ -78,9 +79,9 @@ class datasource extends class_base
 	function retrieve($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
-		$type = $obj["meta"]["type"];
-		$url = escapeshellarg($obj["meta"]["url"]);
+		$obj = new object($id);
+		$type = $obj->prop("type");
+		$url = escapeshellarg($obj->prop("url"));
 		if (($type == 2) || ($type == 1))
 		{
 			$read = "";

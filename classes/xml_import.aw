@@ -1,16 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.23 2003/11/19 17:47:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.24 2003/11/20 13:55:12 duke Exp $
 /*
         @default table=objects
         @default group=general
+
         @property datasource type=objpicker clid=CL_DATASOURCE field=meta method=serialize
         @caption XML datasource
-                                                                                                                            
-        @property import_function type=select field=meta method=serialize
+        
+	@property import_function type=select field=meta method=serialize
         @caption Impordifunktsioon
-                                                                                                                            
-        @property run_import type=text editonly=1 store=no
+        
+	@property run_import type=text editonly=1 store=no
         @caption Käivita import
+
+	@classinfo no_status=1
                                                                                                                             
 */
 class xml_import extends class_base
@@ -19,7 +22,6 @@ class xml_import extends class_base
 	function xml_import($args = array())
 	{
 		$this->init(array(
-                        "tpldir" => "xml_import",
                         "clid" => CL_XML_IMPORT,
                 ));
 
@@ -45,10 +47,10 @@ class xml_import extends class_base
                                                                                                                             
                         case "run_import":
                                 classload("html");
-                                $id = $args["obj"]["oid"];
+                                $id = $args["obj_inst"]->id();
                                 if ($id)
                                 {
-                                        $url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
+                                        $url = $this->mk_my_orb("invoke",array("id" => $id,"xml_import",0,1);
                                         $data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
                                 };
                                 break;
@@ -87,8 +89,8 @@ class xml_import extends class_base
 			"ch_link" => $this->mk_my_orb("change",array("id" => $id)),
 			"repeaters" => $html,
 		));
-		$obj = $this->get_object($id);
-		$this->mk_path($obj["parent"],"Muuda XML import objekti");
+		$obj = new object($id);
+		$this->mk_path($obj->parent(),"Muuda XML import objekti");
 		return $this->parse();
 
 
@@ -98,13 +100,14 @@ class xml_import extends class_base
 	function invoke($args = array())
 	{
 		extract($args);
-		$obj = $this->get_object($id);
+		$obj = new object($id);
+		/*
 		if (not($obj))
 		{
 			return false;
 		};
-
-		if ($obj["class_id"] != CL_XML_IMPORT)
+		*/
+		if ($obj->class_id() != $this->clid)
 		{
 			return false;
 		};
@@ -112,9 +115,9 @@ class xml_import extends class_base
 		print "Retrieving data:<br />";
 		flush();
 		// retrieve data
-		$method = $obj["meta"]["import_function"];
+		$method = $obj->prop("import_function");
 		$ds = get_instance("datasource");
-		$src_data = $ds->retrieve(array("id" => $obj["meta"]["datasource"]));
+		$src_data = $ds->retrieve(array("id" => $obj->prop("datasource")));
 		print "Got " . strlen($src_data) . " bytes of data<br />";
 		flush();
 		if (strlen($src_data) < 100)
