@@ -1,5 +1,6 @@
 <?php
-class site_content extends aw_template
+classload("menuedit");
+class site_content extends menuedit
 {
 	function site_content()
 	{
@@ -687,11 +688,6 @@ class site_content extends aw_template
 		{
 			$this->level--;
 			array_pop($this->menu_aliases);
-			global $DBUG;
-			if ($DBUG)
-			{
-				print "skip";
-			};
 			return 0;
 		}
 		
