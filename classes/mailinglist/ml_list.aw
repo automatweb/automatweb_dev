@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.36 2003/12/23 17:07:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.37 2004/01/08 16:11:01 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -759,13 +759,13 @@ class ml_list extends class_base
 
 		if (!empty($mx["redir_obj"]))
 		{
-			$retval = $mx["redir_obj"];
+			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
 		}
-		elseif (!empty($list_obj["meta"]["redir_obj"]))
+		elseif ($list_obj->prop("redir_obj") != "")
 		{
-			$retval = $list_obj["meta"]["redir_obj"];
+			$retval = $this->cfg["baseurl"] . "/" . $list_obj->prop("redir_obj");
 		}
-		return $this->cfg["baseurl"] . "/" . $retval;
+		return $retval;
 	}
 
 	       ////
@@ -814,7 +814,8 @@ class ml_list extends class_base
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
-			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$row["target"]."</a>";
+			$tgt = htmlspecialchars($row["target"]);
+			$row["member"] = "<a href='".$this->mk_my_orb("change", array("id" => $id, "group" => "show_mail", "mail_id" => $arr["request"]["mail_id"], "s_mail_id" => $row["id"]))."'>".$tgt."</a>";
 			$t->define_data($row);
 		}
 	}
