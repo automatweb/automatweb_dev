@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.61 2005/03/29 12:58:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.62 2005/04/05 08:50:30 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -17,9 +17,6 @@
 	
 	@property type type=select table=objects field=meta method=serialize trans=1
 	@caption Kasti tüüp
-
-	@property tpl_edit type=select table=menu group=show
-	@caption Template dokumentide muutmiseks
 
 	@property link type=textbox table=menu
 	@caption Link
@@ -121,14 +118,6 @@ class promo extends class_base
 				$tm = get_instance("templatemgr");
 				$prop["options"] = $tm->template_picker(array(
 					"folder" => "promo/doctemplates"
-				));
-				break;
-
-			case "tpl_edit":
-				$tplmgr = get_instance("templatemgr");
-				$prop["options"] = $tplmgr->get_template_list(array(
-					"type" => 0,
-					"menu" => $arr["obj_inst"]->id(),
 				));
 				break;
 

@@ -39,14 +39,6 @@
             <caption>Kasti tüüp</caption>
       </property>
       <property>
-            <name>tpl_edit</name>
-            <group>show</group>
-            <type>select</type>
-            <table>menu</table>
-            <field>tpl_edit</field>
-            <caption>Template dokumentide muutmiseks</caption>
-      </property>
-      <property>
             <name>link</name>
             <group>general</group>
             <type>textbox</type>
