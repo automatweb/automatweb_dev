@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.109 2004/10/04 14:17:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.110 2004/10/05 09:22:00 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -190,6 +190,7 @@ class image extends class_base
 			return "";
 		}
 
+		
 		$replacement = "";
 		$align= array("k" => "align=\"center\"", "p" => "align=\"right\"" , "v" => "align=\"left\"" ,"" => "");
 		$alstr = array("k" => "center","v" => "left","p" => "right","" => "");
@@ -204,6 +205,11 @@ class image extends class_base
 			{
 				$i_size = @getimagesize($idata["file"]);
 			};
+
+			if ($idata["url"] == "")
+			{
+				return "";
+			}
 			$bi_show_link = $this->mk_my_orb("show_big", array("id" => $f["target"]));
 			$bi_link = "window.open('$bi_show_link','popup','width=".($size[0]).",height=".($size[1])."');";
 			$vars = array(
@@ -315,7 +321,7 @@ class image extends class_base
 					}
 					if (!empty($idata["comment"]))
 					{
-						$replacement .= "<BR>".$idata["comment"];
+						$replacement .= "<BR><span class=\"imagecomment\">".$idata["comment"]."</span>";
 					};
 					if ($vars["align"] != "")
 					{
