@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.113 2005/01/20 10:12:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.114 2005/01/28 14:04:27 kristo Exp $
 
 /*
 
@@ -2065,7 +2065,8 @@ class site_show extends class_base
 				$link = "";
 			};
 		}
-		else if ($o->prop("link") != "")
+		else 
+		if ($o->prop("link") != "")
 		{
 			$link = $o->prop("link");
 		}
