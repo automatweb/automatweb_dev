@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.68 2005/02/14 15:12:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.69 2005/03/10 12:36:57 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -360,9 +360,17 @@ class html extends aw_template
 		{
 			$val = mktime(0, 0, 0, $args["value"]["month"], $args["value"]["day"], $args["value"]["year"]);
 		}
-		else
+		elseif($args["value"])
 		{
 			$val = $args["value"];
+		}
+		elseif($args["default"])
+		{
+			$val = $args["default"];
+		}
+		else
+		{
+			$val = time();
 		}
 		
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : date("Y") - 5;
