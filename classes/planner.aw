@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.99 2003/03/26 03:48:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.100 2003/03/31 17:01:41 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2126,6 +2126,7 @@ class planner extends class_base
 				// I need to replace this with calls to doc->gen_preview() -- duke
 				$pv = "";
 				$objlink = "";
+				$this->day_event_count++;
 				$daylink = $this->mk_my_orb("view",array(
 					"section" => $section,
 					"id" => $this->id,
@@ -2325,20 +2326,24 @@ class planner extends class_base
 				$this->vars(array(
 					"imgurl" => "/img/trans.gif",
 				));
-				$c1 = $this->_disp_day(array("dx" => $dx));
 
+				$this->day_event_count = 0;
+				$c1 = $this->_disp_day(array("dx" => $dx));
+				
 				list($day,$mon,$year) = explode("-",date("d-m-Y",$thisday));
 
 				$day_orb_link = ($this->day_orb_link) ? $this->day_orb_link : $this->mk_my_orb("view",array("id" => $this->id,"ctrl" => $this->ctrl, "type" => "day"));
 				$day_orb_link .= "&date=$day-$mon-$year";
 
 				// draw header
+				$lcw = substr(get_lc_weekday($w),0,1);
 				$this->vars(array(
 					"cellwidth" => $width . "%",
-					"hcell" => strtoupper(substr(get_lc_weekday($w),0,1)) . " " . date("d-M",$thisday),
-					"hcell_weekday" => strtoupper(substr(get_lc_weekday($w),0,1)),
+					"hcell" => strtoupper($lcw) . " " . date("d-M",$thisday),
+					"hcell_weekday" => strtoupper($lcw),
+					"hcell_weekday_en" => date("D",$thisday),
 					"daynum" => $d,
-					"hcell_date" =>  date("d-M",$thisday),
+					"hcell_date" =>  date("d.m.",$thisday),
 					"dayorblink" => $day_orb_link,
 					"cell" => $c1,
 				));
@@ -2347,7 +2352,29 @@ class planner extends class_base
 				{
 					$head .= $this->parse("header_cell");
 				};
-				$c .= $this->parse("content_cell");
+
+				$tpl = "content_cell";
+
+				if (date("dmY",$thisday) == date("dmY"))
+				{
+					if ($this->templates["content_cell_today_empty"] && ($this->day_event_count == 0))
+					{
+						$tpl = "content_cell_today_empty";
+					};
+					
+					if ($this->templates["content_cell_today"])
+					{
+						$tpl = "content_cell_today";
+					};
+				}
+				else
+				{
+					if ( $this->templates["content_cell_empty"] && ($this->day_event_count == 0))
+					{
+						$tpl = "content_cell_empty";
+					};
+				};
+				$c .= $this->parse($tpl);
 
 				$this->vars(array(
                                         "lead" => "",
