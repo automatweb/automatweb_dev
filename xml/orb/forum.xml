@@ -26,6 +26,16 @@
 			</function>
 		</action>
 		
+		<action name="topics" nologin="1">
+			<function name="change">
+				<arguments>
+					<required name="id"/>
+					<optional name="from"/>
+				</arguments>
+			</function>
+		</action>
+		
+		
 		<action name="edit_properties">
 			<function name="edit_properties">
 				<arguments>
@@ -41,7 +51,7 @@
 			</function>
 		</action>
 		
-		<action name="add_topic">
+		<action name="add_topic" nologin="1">
 			<function name="add_topic">
 				<arguments>
 					<required name="id"/>
@@ -49,50 +59,55 @@
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_topic">
+		<action name="submit_topic" nologin="1">
 			<function name="submit_topic">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="show">
+		<action name="show" nologin="1">
 			<function name="show">
 				<arguments>
 					<required name="board"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="show_threaded">
+		<action name="show_threaded" nologin="1">
 			<function name="show_threaded">
 				<arguments>
 					<required name="board"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="reply">
+		<action name="reply" nologin="1">
 			<function name="reply">
 				<arguments>
 					<required name="parent"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_comment">
+		<action name="submit_comment" nologin="1">
 			<function name="submit_comment">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-		<action name="search">
+		<action name="search" nologin="1">
 			<function name="search">
 				<arguments>
 					<required name="board"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="submit_search">
+		<action name="submit_search" nologin="1">
 			<function name="submit_search">
 				<arguments>
 				</arguments>
+			</function>
+		</action>
+		<action name="mark_all_read" nologin="1">
+			<function name="mark_all_read">
+				<required name="id"/>
 			</function>
 		</action>
 </class>
