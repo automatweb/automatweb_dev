@@ -24,6 +24,7 @@
 <td class="fform"><input type="text" name="extname[{VAR:id}]" size="20" maxlength="40" value="{VAR:extname}"></td>
 <td class="fform" align="center"><input type="checkbox" name="active[{VAR:id}]" value="1" {VAR:checked}></td>
 <input type="hidden" name="exists[{VAR:id}]" value="1">
+<input type="hidden" name="type[{VAR:id}]" value="{VAR:type}">
 </tr>
 <!-- END SUB: element -->
 <tr>
