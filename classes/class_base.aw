@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.339 2004/12/09 11:27:35 duke Exp $
+// $Id: class_base.aw,v 2.340 2004/12/09 13:13:55 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -490,6 +490,13 @@ class class_base extends aw_template
 			{
 				$o_arr["embedded"] = true;
 			};
+
+			// if there no class in the request URI, then we are embedded
+			if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
+			{
+				$o_arr["embedded"] = true;		
+			}
+
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 			if (!empty($lm))
 			{
@@ -4309,7 +4316,7 @@ class class_base extends aw_template
 	**/
 	function finish_action($arr)
 	{
-		return $this->mk_my_orb("change",array(
+		$rv = $this->mk_my_orb("change",array(
 			"group" => $arr["group"],
 			"_alias" => get_class($this),
 			"page" => $arr["page"],
@@ -4318,6 +4325,12 @@ class class_base extends aw_template
 			"id" => $arr["id"],
 			"section" => $arr["section"],
 		));
+		// XXX: I need to lose class from the url
+		if (!empty($arr["_alias"]))
+		{
+			$rv = aw_url_change_var("class",false,$rv);
+		};
+		return $rv;
 
 	}
 
