@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.19 2003/01/17 18:06:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.20 2003/01/31 00:31:09 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -11,13 +11,13 @@
 	@property s_server type=objpicker clid=CL_AW_LOGIN
 	@caption Server
 
-	@property s_name type=textbox group=search,advanced
+	@property s_name type=textbox group=search,advanced,objsearch
 	@caption Nimi
 
-	@property s_comment type=textbox group=search,advanced
+	@property s_comment type=textbox group=search,advanced,objsearch
 	@caption Kommentaar
 
-	@property s_class_id type=select group=search,advanced
+	@property s_class_id type=select group=search,advanced,objsearch
 	@caption Tüüp
 
 	@property s_oid type=textbox size=5
@@ -29,13 +29,13 @@
 	@property s_lang_id type=select 
 	@caption Keel
 
-	@property s_status type=s_status group=search,advanced
+	@property s_status type=s_status group=search,advanced,objsearch
 	@caption Staatus
 
-	@property s_createdby type=textbox group=search,advanced
+	@property s_createdby type=textbox group=search,advanced,objsearch
 	@caption Looja
 
-	@property s_modifiedby type=textbox group=search,advanced
+	@property s_modifiedby type=textbox group=search,advanced,objsearch
 	@caption Muutja
 
 	@property s_alias type=textbox 
@@ -50,8 +50,11 @@
 	@property results type=text group=results callback=get_result_table
 	@caption Tulemused
 
+	@property objsearch type=text group=objsearch callback=get_objsearch
+
 	@groupinfo search caption=Lihtne_otsing 
-	@groupinfo advanced caption=Advanced otsing
+	@groupinfo advanced caption=Advanced_otsing
+	@groupinfo objsearch caption=Objektiotsing
 	@groupinfo results caption=Tulemused submit=no
 
 */
@@ -104,9 +107,70 @@ class search extends class_base
 		return $retval;
 	}
 
+	function get_objsearch($args = array())
+	{
+		// now I need to load the bloody object and retrieve the property list
+		// for it.
+		$obj = $this->get_object($args["obj"]["oid"]);
+		$cfgu = get_instance("cfg/cfgutils");
+                $_all_props = $cfgu->load_properties(array(
+                        "clid" => $obj["meta"]["s_class_id"],
+                ));
+		
+		$retval = array();
+		$item = array(
+			"caption" => "Objektitüübi omadused",
+		);
+		$retval[] = $item;
+
+		foreach($_all_props as $key => $val)
+		{
+			if ($val["search"])
+			{
+				$val["value"] = $obj["meta"]["obj"][$val["name"]];
+				$retval[] = $val;
+			};
+		}
+
+		if (sizeof($retval) == 1)
+		{
+			$item = array(
+				"caption" => "<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>",
+			);
+			$retval[] = $item;
+		};
+
+		return $retval;
+	}
+
+	function callback_pre_save($args = array())
+	{
+		$obj = $this->get_object($args["id"]);
+		$cfgu = get_instance("cfg/cfgutils");
+                $_all_props = $cfgu->load_properties(array(
+                        "clid" => $obj["meta"]["s_class_id"],
+                ));
+		
+		$obj_search_fields = array();
+
+		foreach($_all_props as $key => $val)
+		{
+			if ($val["search"] && $args["form_data"][$val["name"]])
+			{
+				$retval[$val["name"]] = $args["form_data"][$val["name"]];
+			};
+		}
+		$args["coredata"]["metadata"]["obj"] = $retval;
+	}
+
 	function get_result_table($args = array())
 	{
 		$meta = new aw_array($args["obj"]["meta"]);
+		$cfgu = get_instance("cfg/cfgutils");
+                $_all_props = $cfgu->load_properties(array(
+                        "clid" => $args["obj"]["meta"]["s_class_id"],
+                ));
+		
 		$params = array();
 		foreach($meta->get() as $key => $val)
 		{
@@ -117,7 +181,27 @@ class search extends class_base
 			};
 		};
 		$real_fields = $this->get_real_fields(array("s" => $params));
-		$this->execute_search(array("real_fields" => $real_fields));
+		// obj-meta-obj contains the values for object search
+		$obj_fields = $args["obj"]["meta"]["obj"];
+		$obj_data = array();
+		if (is_array($obj_fields))
+		{
+			foreach($obj_fields as $key => $val)
+			{
+				$obj_data[$key] = array(
+					"table" => $_all_props[$key]["table"],
+					"field" => $_all_props[$key]["field"],
+					"method" => $_all_props[$key]["method"],
+					"value" => $val,
+				);
+					
+			};
+		};
+
+		$this->execute_search(array(
+			"real_fields" => $real_fields,
+			"obj_data" => $obj_data,
+		));
 		$nodes = array();
 		$nodes[] = array(
 			"value" => $this->table,
@@ -348,6 +432,7 @@ class search extends class_base
 			// if not, use our own (old?) search method
 			if ($caller_search === false)
 			{
+				$this->search_callback(array("name" => "modify_parts","args" => &$args,"parts" => &$parts));
 				$query = $this->search_callback(array("name" => "get_query","args" => $args,"parts" => $parts));
 				if ($query)
 				{
@@ -921,11 +1006,11 @@ class search extends class_base
 	function search_callback($args = array())
 	{
 		$prefix = "search_callback_";
-		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer","do_query","get_next");
 		if (!is_object($this->obj_ref))
 		{
 			return false;
 		};
+		$allowed = array("get_fields","get_query","get_table_defs","modify_data","table_header","table_footer","do_query","get_next","modify_parts");
 
 		// paranoia? maybe. but still, do not let the user use random functions
 		// from the caller.
@@ -958,6 +1043,10 @@ class search extends class_base
 			elseif ($name == "get_next")
 			{
 				$retval = $this->obj_ref->$name();
+			}
+			elseif ($name == "search_callback_modify_parts")
+			{
+				$retval = $this->obj_ref->$name(&$args["args"],&$args["parts"]);
 			}
 			else
 			{
@@ -1264,8 +1353,28 @@ class search extends class_base
 			}
 			else
 			{
+				// if there are any object fields then I need to create the big badass query
+				// for property table now
+				$join = "";
+
+				if (is_array($obj_data) && (sizeof($obj_data) > 0))
+				{
+					$p = 0;
+					foreach($obj_data as $k => $v)
+					{
+						$p++;
+						if ( ($v["method"] == "serialize") )
+						{
+							$join .= " INNER JOIN properties AS p_val$p ON (p_val$p.oid = objects.oid AND p_val$p.pname = '$k' and p_val$p.pvalue = '$v[value]') ";
+						}
+						else
+						{
+							$join .= " INNER JOIN $v[table] AS p_val$p ON (p_val$p.id = objects.oid AND p_val$p.$v[field] = '$v[value]') ";
+						};
+					};
+				};
 				$where = join(" AND ",$parts);
-				$q = "SELECT * FROM objects WHERE $where";
+				$q = "SELECT *,objects.name AS name FROM objects $join WHERE $where";
 //					echo "s_q = $q <br>";
 				$_tmp = array();
 				$_tmp = $this->_search_mk_call("objects", "db_query", array("sql" => $q), $args);
