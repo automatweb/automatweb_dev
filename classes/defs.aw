@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.92 2003/04/30 11:15:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.93 2003/05/09 22:15:29 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,15 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+
+	function post_message($msg, $params)
+	{
+		$inst = get_instance("core/msg/msg_dispatch");
+		$inst->post_message(array(
+			"msg" => $msg, 
+			"params" => $params
+		));
+	}
 	
 	////
 	// !returns an array of all classes defined in the system, index is class id, value is class name and path
