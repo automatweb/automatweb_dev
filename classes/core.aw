@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.211 2003/07/17 15:50:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.212 2003/07/31 21:21:47 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2273,7 +2273,13 @@ class core extends acl_base
 			return false;
 		}
 
-		$t = get_instance($v['alias_class'] != '' ? $v['alias_class'] : $v['file']);
+		$file = $v["alias_class"] != "" ? $v["alias_class"] : $v["file"];
+		if ($file == "document")
+		{
+			$file = "doc";
+		};
+
+		$t = get_instance($file);
 		$s = $t->_serialize($arr);
 		if (!$s)
 		{
@@ -2282,7 +2288,7 @@ class core extends acl_base
 
 		$str = array("class_id" => $obj["class_id"], "str" => $s);
 
-		return serialize($str);
+		return isset($arr["raw"]) ? $s : serialize($str);
 	}
 
 	////
@@ -2306,7 +2312,14 @@ class core extends acl_base
 			return false;
 		}
 
-		$t = get_instance($v['alias_class'] != '' ? $v['alias_class'] : $v['file']);
+		$fl = $v["alias_class"] != "" ? $v["alias_class"] : $v["file"];
+		if ($fl == "document")
+		{
+			$fl = "doc";
+		};
+
+
+		$t = get_instance($fl);
 		return $t->_unserialize(array("str" => $s["str"], "parent" => $parent, "period" => $period));
 	}
 	
