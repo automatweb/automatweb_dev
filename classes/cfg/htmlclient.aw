@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.34 2003/09/17 11:11:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.35 2003/09/17 14:01:30 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -91,10 +91,6 @@ class htmlclient extends aw_template
 
 		$type = isset($args["type"]) ? $args["type"] : "";
 
-		if ($type == "submit")
-		{
-			$this->submit_done = true;
-		};
 
 		// hidden elements end up in the orb_vars
 		if ($type == "hidden")
@@ -233,6 +229,14 @@ class htmlclient extends aw_template
 			$val .= html::text(array("value" => $script . $tx));
 			$args["value"] = $val;
 		};
+
+		if ($args["type"] == "submit")
+		{
+			if (empty($args["value"]))
+			{
+				$args["value"] = $args["caption"];
+			};
+		};
 	}
 
 	////
@@ -318,6 +322,11 @@ class htmlclient extends aw_template
 	{
 		$tmp = new aw_array($args);
 		$arr = $tmp->get();
+		
+		if ($args["type"] == "submit")
+		{
+			$this->submit_done = true;
+		};
 
 		// Check the types and call their counterparts
 		// from the HTML class. If you want to support
