@@ -1,27 +1,27 @@
 <?xml version='1.0'?>
 <messenger>
-	<getmail>
-		<caption>Get mail</caption>
-		<link>?class=messenger&amp;action=get_mail</link>
-	</getmail>
+	<inbox>
+		<caption>Inbox</caption>
+		<link>?class=messenger</link>
+	</inbox>
 	<write>
 		<caption>Uus teade</caption>
 		<link>?class=messenger&amp;action=write</link>
 	</write>
-	<folders>
-		<caption>Folderid</caption>
-		<link>?class=messenger&amp;action=folders</link>
+	<getmail>
+		<caption>Too meili</caption>
+		<link>?class=messenger&amp;action=get_mail</link>
+	</getmail>
+	<search>
+		<caption>Otsi</caption>
+		<link>?class=messenger&amp;action=search</link>
 		<sublinks>
-			<flist>
-				<caption>Nimekiri</caption>
-				<link>?class=messenger&amp;action=folders</link>
-			</flist>
-			<newfolder>
-				<caption>Uus folder</caption>
-				<link>?class=messenger&amp;action=new_folder</link>
-			</newfolder>
+			<newsearch>
+				<caption>Uus otsing</caption>
+				<link>?class=messenger&amp;action=search</link>
+			</newsearch>
 		</sublinks>
-	</folders>
+	</search>
 	<configure>
 		<caption>H‰‰lestamine</caption>
 		<link>?class=messenger&amp;action=configure</link>
@@ -42,30 +42,34 @@
 				<caption>Kontod</caption>
 				<link>?class=messenger&amp;action=configure&amp;page=accounts</link>
 			</accounts>
+			<rules>
+				<caption>Reeglid</caption>
+				<link>?class=messenger&amp;action=rules</link>
+				<sublinks>
+					<addrule>
+						<caption>Lisa reegel</caption>
+						<link>?class=messenger&amp;action=addrule</link>
+					</addrule>
+					<list>
+						<caption>Nimestik</caption>
+						<link>?class=messenger&amp;action=rules</link>
+					</list>
+				</sublinks>
+			</rules>
+			<folders>
+				<caption>Folderid</caption>
+				<link>?class=messenger&amp;action=folders</link>
+				<sublinks>
+					<flist>
+						<caption>Nimekiri</caption>
+						<link>?class=messenger&amp;action=folders</link>
+					</flist>
+					<newfolder>
+						<caption>Uus folder</caption>
+						<link>?class=messenger&amp;action=new_folder</link>
+				</newfolder>
+				</sublinks>
+			</folders>
 		</sublinks>
 	</configure>
-	<search>
-		<caption>Otsi</caption>
-		<link>?class=messenger&amp;action=search</link>
-		<sublinks>
-			<newsearch>
-				<caption>Uus otsing</caption>
-				<link>?class=messenger&amp;action=search</link>
-			</newsearch>
-		</sublinks>
-	</search>
-	<rules>
-		<caption>Reeglid</caption>
-		<link>?class=messenger&amp;action=rules</link>
-		<sublinks>
-			<addrule>
-				<caption>Lisa reegel</caption>
-				<link>?class=messenger&amp;action=addrule</link>
-			</addrule>
-			<list>
-				<caption>Nimestik</caption>
-				<link>?class=messenger&amp;action=rules</link>
-			</list>
-		</sublinks>
-	</rules>
 </messenger>
