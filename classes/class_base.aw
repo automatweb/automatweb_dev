@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.155 2003/10/21 21:30:08 duke Exp $
+// $Id: class_base.aw,v 2.156 2003/10/23 11:50:56 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1534,6 +1534,7 @@ class class_base extends aw_template
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
 			{
 				$meth = $val["callback"];
+				$argblock["prop"] = &$val;
 				$vx = $this->inst->$meth($argblock);
 				if (is_array($vx))
 				{
@@ -2249,8 +2250,7 @@ class class_base extends aw_template
 			{
 				if (isset($property["value"]) && !empty($table))
 				{
-					$_field = ($name != $field) ? $field : $name;
-					$this->obj_inst->set_prop($_field,$property["value"]);
+					$this->obj_inst->set_prop($name,$property["value"]);
 					//$this->objdata[$table][$_field] = $property["value"];
 				};
 			};
