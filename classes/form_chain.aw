@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.25 2002/07/24 12:17:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_chain.aw,v 2.26 2002/07/24 20:46:45 kristo Exp $
 // form_chain.aw - form chains
 
 classload("form_base");
@@ -183,7 +183,7 @@ class form_chain extends form_base
 					"fgoto" => checked($this->chain["gotonext"][$fid]),
 					"rep" => checked($this->chain["rep"][$fid]),
 					"show_reps" => checked($this->chain["show_reps"][$fid]),
-					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->get_list_tables()),
+					"rep_tbls" => $this->picker($this->chain["rep_tbls"][$fid], $this->list_objects(array("class" => CL_FORM_TABLE))),
 					"LANG" => $lg
 				));
 				$this->parse("FORM");
@@ -217,14 +217,14 @@ class form_chain extends form_base
 			"fillonce" => checked($this->chain["fillonce"]),
 			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
 			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
-			"ops" => $this->picker($this->chain["after_show_op"], $this->listall_ops()),
+			"ops" => $this->picker($this->chain["after_show_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT))),
 			"after_show_entry" => checked($this->chain["after_show_entry"] == 1),
 			"during_show_entry" => checked($this->chain["during_show_entry"] == 1),
 			"op_up" => checked($this->chain["op_pos"] == "up"),
 			"op_down" => checked($this->chain["op_pos"] == "down"),
 			"op_left" => checked($this->chain["op_pos"] == "left"),
 			"op_right" => checked($this->chain["op_pos"] == "right"),
-			"d_ops" => $this->picker($this->chain["during_show_op"], $this->listall_ops()),
+			"d_ops" => $this->picker($this->chain["during_show_op"], $this->list_objects(array("class" => CL_FORM_OUTPUT))),
 			"LANG_H" => $lh,
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
 			"after_redirect" => checked($this->chain["after_redirect"] == 1),
