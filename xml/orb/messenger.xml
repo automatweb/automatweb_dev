@@ -115,15 +115,15 @@
 		</action>
 		
 		<action name="reply">
-			<function name="gen_edit_form">
+			<function name="reply_message">
 				<arguments>
-				<required name="reply"/>
+					<required name="reply"/>
 				</arguments>
 			</function>
 		</action>
 		
 		<action name="forward">
-			<function name="gen_edit_form">
+			<function name="forward_message">
 				<arguments>
 				<required name="forward"/>
 				</arguments>
