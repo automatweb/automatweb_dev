@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.7 2001/05/21 21:42:15 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.8 2001/05/22 01:07:30 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -378,7 +378,7 @@ class db_documents extends aw_template
 
 		// load localization settings and put them in the template
 		lc_site_load("document");
-		$this->vars(array($GLOBALS["lc_doc"]));
+		$this->vars($GLOBALS["lc_doc"]);
 
 		// miski kahtlane vark siin. Peaks vist sellele ka cachet rakendama?
 		if (!(strpos($doc[content], "#telekava_") === false))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.5 2001/05/21 07:12:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.6 2001/05/22 01:07:30 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3432,6 +3432,8 @@ classload("cache","validator","defs");
 		}
 		else
 		{
+			$this->left_pane = false;
+			$this->right_pane = false;
 			return $sh_id;
 		}
 	}
@@ -3906,7 +3908,8 @@ classload("cache","validator","defs");
 	{
 		classload("shop");
 		$sh = new shop;
-		return $sh->show($section,$shop_id);
+		$shop = $sh->get($shop_id);
+		return $sh->show(array("parent" => $shop["root_menu"],"id" => $shop_id));
 	}
 }
 ?>

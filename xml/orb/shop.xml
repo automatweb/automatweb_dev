@@ -136,6 +136,15 @@
 			</function>
 		</action>
 
+		<action name="show">
+			<function name="show">
+				<arguments>
+					<required name="parent"/>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		

@@ -110,25 +110,23 @@ class shop extends aw_template
 		return $ret;
 	}
 
-	function do_shop_menus($shop,$parent,$from_shop)
+	function do_shop_menus($shop,$parent)
 	{
 		$s = $this->get($shop);
 		$this->vars(array("shop" => $shop));
-
-		if (!$from_shop)
+		if (!$parent)
 		{
-			// top of the shop categories
-			$this->db_query("SELECT objects.name,objects.oid FROM objects WHERE parent = ".$s["root_menu"]." AND class_id = ".CL_PSEUDO." AND status = 2 ");
 			$parent = $s["root_menu"];
 		}
-		else
-		{
-			// some of the shop categories
-			$this->db_query("SELECT objects.name,objects.oid FROM objects WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
-		}
+		// some of the shop categories
+		$this->db_query("SELECT objects.name,objects.oid FROM objects WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
 		while ($row = $this->db_next())
 		{
-			$this->vars(array("name" => $row["name"], "id" => $row["oid"]));
+			$this->vars(array(
+				"name" => $row["name"], 
+				"id" => $row["oid"],
+				"cat_link" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $row["oid"]))
+			));
 			$this->parse("CAT");
 		}
 
@@ -137,7 +135,11 @@ class shop extends aw_template
 		$op = $this->get_object($p);
 		while ($p != $s["root_menu"] && $p)
 		{
-			$this->vars(array("id" => $op["oid"],"name" => $op["name"]));
+			$this->vars(array(
+				"id" => $op["oid"],
+				"name" => $op["name"],
+				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $op["oid"]))
+			));
 			$y = $this->parse("YAH").$y;
 			$p = $op["parent"];
 			$op = $this->get_object($p);
@@ -147,19 +149,22 @@ class shop extends aw_template
 			"YAH" => $y, 
 			"fp" => $s["root_menu"],
 			"s_name" => $s["name"],
-			"section" => $parent
+			"section" => $parent,
+			"location" => $this->mk_my_orb("show", array("id" => $shop, "parent" => $s["root_menu"]))
 		));
 		return $parent;
 	}
 
 	////
-	// !shows the shop $id on the suer side
-	function show($parent,$id,$from_shop = false)
+	// !shows the shop $id on the suer side, items under category $parent
+	function show($arr)
 	{
+//		$parent,$id
+		extract($arr);
 		$this->read_template("show_shop.tpl");
 
 		global $shopping_cart;
-		$parent = $this->do_shop_menus($id,$parent,$from_shop);
+		$parent = $this->do_shop_menus($id,$parent);
 
 		classload("form");
 
@@ -253,7 +258,8 @@ class shop extends aw_template
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
-			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id))
+			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id)),
+			"to_shop" => $this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
 		));
 		if ($items)
 		{
@@ -384,7 +390,8 @@ class shop extends aw_template
 								)),
 			"shop_id" => $shop_id,
 			"section" => $section,
-			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section))
+			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $shop_id, "section" => $section)),
+			"to_shop" => $this->mk_my_orb("show", array("id" => $shop_id, "parent" => $section))
 		));
 		return $this->parse();
 	}
@@ -731,7 +738,7 @@ class shop extends aw_template
 	{
 		extract($arr);
 		$this->read_template("order_item.tpl");
-		$parent = $this->do_shop_menus($shop,$parent,$from_shop);
+		$parent = $this->do_shop_menus($shop,$parent);
 
 		classload("form");
 
