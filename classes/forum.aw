@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.89 2004/06/11 09:16:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.90 2004/06/11 10:35:21 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -78,10 +78,10 @@ class forum extends class_base
 	// !Should be called for all functions that display a forum
 	function init_forum_display($args = array())
 	{
-		$forum_obj = $this->get_object($args["id"]);
-		if (!empty($forum_obj["meta"]["language"])) 
+		$forum_obj = new object($args["id"]);
+		if ($forum_obj->prop("language") != "") 
 		{
-			$this->lc_load("msgboard","lc_msgboard",$forum_obj["meta"]["language"]);
+			$this->lc_load("msgboard","lc_msgboard",$forum_obj->prop("language"));
 
 		};
 	}
@@ -268,13 +268,9 @@ class forum extends class_base
 				"name" => $newname,
 				"address" => $newaddress,
 			);
-		}
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "notifylist",
-			"overwrite" => 1,
-			"value" => $nflist,
-		));
+		};
+		
+		$tmp->set_meta("notifylist",$nflist);
 		return $this->mk_my_orb("notify_list",array("id" => $id));
 	}
 
@@ -416,8 +412,8 @@ class forum extends class_base
 		
 		if ($board)
 		{
-			$b_obj = $this->get_object($board);
-			if ($b_obj["class_id"] == CL_PERIODIC_SECTION)
+			$b_obj = new object($board);
+			if ($b_obj->class_id() == CL_PERIODIC_SECTION)
 			{
 				$topic_link = document::get_link($board);
 			};
@@ -477,12 +473,11 @@ class forum extends class_base
 		{
 			$this->section = $section;
 		};
-		$object = $this->get_object($id);
-		#$parent = $this->get_object($object["parent"]);
+		$object = new object($id);
 		// kui kaasa antakse section argument, siis peaks kontrollima
 		// kas see ikka kuulub selle foorumi juurde
 		$text = $this->mk_orb("configure",array("id" => $id));
-		$this->mk_path($object["parent"],"<a href='$text'>$object[name]</a> / Lisa teema");
+		$this->mk_path($object->parent(),"<a href='$text'>" . $object->name() . "</a> / Lisa teema");
 		$this->forum_id = $id;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"new
 topic");
@@ -582,24 +577,24 @@ topic");
 	function show($args = array())
 	{
 		extract($args);
-		$board_obj = $this->get_object($board);
-		$forum_obj = $this->get_object($board_obj["parent"]);
-		$this->init_forum_display(array("id" => $forum_obj["oid"]));
+		$board_obj = new object($board);
+		$forum_obj = new object($board_obj->parent());
+		$this->init_forum_display(array("id" => $forum_obj->id()));
 		global $HTTP_COOKIE_VARS;
 		$aw_mb_last = unserialize($HTTP_COOKIE_VARS["aw_mb_last"]);
-		$aw_mb_last[$board_obj["parent"]] = time();
-		$meta = $forum_obj["meta"];
-		$board_meta = $board_obj["meta"];
+		$aw_mb_last[$board_obj->parent()] = time();
+		$meta = $forum_obj->meta();
+		$board_meta = $board_obj->meta();
 		setcookie("aw_mb_last",serialize($aw_mb_last),time()+24*3600*1000);
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
-		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj->id())),$forum_obj->name());
+		$this->mk_path($forum_obj->parent(),$flink . " / " . $board_obj->name());
 		$this->_query_comments(array("board" => $board));
 		$this->comm_count = 0;
 		$this->section = $section;
 		$this->board = $board;
 		if (not($id))
 		{
-			$id = $forum_obj["oid"];
+			$id = $forum_obj->id();
 		};
 		$this->forum_id = $id;
 
@@ -658,18 +653,19 @@ topic");
 		// voi dokumendi sees oleva asjaga valjastaks sobiva lingi
 		if (not($id))
 		{
-			$id = $forum_obj["oid"];
+			$id = $forum_obj->id();
 		};
 
-		$comment = stripslashes($board_obj["comment"]);
+		$comment = stripslashes($board_obj->comment());
 		$comment = str_replace("'","",$comment);
+		$createdby = $board_obj->createdby();
 		$this->vars(array(
-			"topic" => $board_obj["name"],
-			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
-			"email" => $board_obj["meta"]["author_email"],
-			"created" => $this->time2date($board_obj["created"],2),
+			"topic" => $board_obj->name(),
+			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+			"email" => $board_obj->meta("author_email"),
+			"created" => $this->time2date($board_obj->created(),2),
 			"rated" => $rated,
-			"rate" => sprintf("%0.2f",$board_obj["rate"]),
+			"rate" => sprintf("%0.2f",$board_obj->prop("rate")),
 			"text" => nl2br(create_links($comment)),
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show")),
 		));
@@ -681,16 +677,16 @@ topic");
 
 		$voteblock = "";
 	
-		if ($forum_obj["meta"]["rated"])
+		if ($forum_obj->meta("rated") != "")
 		{	
 			// arvutame häälte arvu sellele foorumile
-			if ($board_obj["meta"]["voters"] == 0)
+			if ($board_obj->meta("voters") == 0)
 			{
 				$rate = 0;
 			}
 			else
 			{
-				$rate = $board_obj["meta"]["votesum"] / $board_obj["meta"]["voters"];
+				$rate = $board_obj->meta("votesum") / $board_obj->meta("voters");
 			};
 
 			$this->vars(array(
@@ -733,7 +729,7 @@ topic");
 		};
 
 		$this->vars(array(
-			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["parent"])),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj->parent())),
 		));
 		$retval = $this->parse();
 		$retval .= $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $section,"act" => "show"));
@@ -761,19 +757,11 @@ topic");
 		{
 			$forum_votes[$args["board"]] = rand();
 			session_register("forum_votes");
-			$board_obj = $this->get_object($board);
-			$voters = ++$board_obj["meta"]["voters"];
-			$votesum = $board_obj["meta"]["votesum"] + $vote;
-			$this->set_object_metadata(array(
-				"oid" => $board,
-				"key" => "voters",
-				"value" => $voters,
-			));
-			$this->set_object_metadata(array(
-				"oid" => $board,
-				"key" => "votesum",
-				"value" => $votesum,
-			));
+			$board_obj = new object($board);
+			$voters = $board_obj->meta("voters") + 1;
+			$votesum = $board_obj->meta("votesum") + $vote;
+			$board_obj->set_meta("voters",$voters);
+			$board_obj->set_meta("votesum",$votesum);
 		}
 
 		return $this->mk_my_orb("show",array("board" => $board));
@@ -803,17 +791,17 @@ topic");
 		$tabs = "";
 		extract($args);
 
-		$board_obj = $this->get_object($board);
-		$board_meta = $board_obj["meta"];
+		$board_obj = new object($board);
+		$board_meta = $board_obj->meta();
 
-		$forum_obj = $this->get_object($board_obj["parent"]);
-		$this->init_forum_display(array("id" => $forum_obj["oid"]));
-		$meta = $forum_obj["meta"];
+		$forum_obj = new object($board_obj->parent());
+		$this->init_forum_display(array("id" => $forum_obj->id()));
+		$meta = $forum_obj->meta();
 		// this is weird, I don't need that if the template is shown inside the site
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
-		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj->id())),$forum_obj->name());
+		$this->mk_path($forum_obj->parent(),$flink . " / " . $board_obj->name());
 
-		$this->forum_id = $forum_obj["oid"];
+		$this->forum_id = $forum_obj->id();
 		$this->board = $board;
 		$this->section = isset($section) ? $section : "";
 		
@@ -895,21 +883,23 @@ topic");
 		};
 		$this->mk_links(array(
 			"board" => $board,
-			"id" => $forum_obj["oid"],
+			"id" => $forum_obj->id(),
 		));
+
+		$createdby = $board_obj->createdby();
 
 		$this->vars(array(
 			"TABS" => $tabs,
 			"message" => $this->content,
 			"reforb" => $this->mk_reforb("submit_messages",array("board" => $board,"section" => $this->section,"act" => "show_threaded")),
-			"topic" => $board_obj["name"],
-			"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
-			"email" => $board_obj["meta"]["author_email"],
-			"created" => $this->time2date($board_obj["created"],2),
+			"topic" => $board_obj->name(),
+			"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+			"email" => $board_obj->meta("author_email"),
+			"created" => $this->time2date($board_obj->created(),2),
 			"rated" => $rated,
 			"board" => $board,
-			"rate" => sprintf("%0.2f",$board_obj["rate"]),
-			"text" => nl2br(create_links($board_obj["comment"])),
+			"rate" => sprintf("%0.2f",$board_obj->meta("rate")),
+			"text" => nl2br(create_links($board_obj->comment())),
 		));
 
 		if ($this->prog_acl("view", PRG_MENUEDIT))
@@ -925,7 +915,7 @@ topic");
 		};
 		$this->vars(array(
 			"TOPIC" => $this->parse("TOPIC"),
-			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["parent"])),
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj->parent())),
 		));
 		if ($cid)
 		{
@@ -1149,23 +1139,24 @@ topic");
 		$q = "SELECT * FROM comments WHERE id = '$parent'";
 		$this->db_query($q);
 		$row = $this->db_next();
-		$board_obj = $this->get_object($row["board_id"]);
-		$forum_obj = $this->get_object($board_obj["parent"]);
-		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj["oid"])),$forum_obj["name"]);
-		$this->mk_links(array("board" => $board_obj["oid"],"id" => $board_obj["parent"]));
-		$this->board = $board_obj["oid"];
-		$this->mk_path($forum_obj["parent"],$flink . " / $board_obj[name]");
+		$board_obj = new object($row["board_id"]);
+		$forum_obj = new object($board_obj->parent());
+		$flink = sprintf("<a href='%s'>%s</a>",$this->mk_my_orb("configure",array("id" => $forum_obj->id())),$forum_obj->name());
+		$this->mk_links(array("board" => $board_obj->id(),"id" => $board_obj->parent()));
+		$this->board = $board_obj->id();
+		$this->mk_path($forum_obj->parent(),$flink . " / " . $board_obj->name());
 		$this->section = $section;
 		$tabs = $this->tabs(array("addcomment","threadedcomments","threadedsubjects","no_response","search","details"),"addcomment");
 		 if ($row)
 		{
+			$createdby = $board_obj->createdby();
 			$this->read_template("messages.tpl");
 			$this->vars(array(
-				"topic" => $board_obj["name"],
-				"from" => ($board_obj["last"]) ? $board_obj["last"] : $board_obj["createdby"],
-				"created" => $this->time2date($board_obj["created"],2),
-				"rate" => sprintf("%0.2f",$board_obj["rate"]),
-				"text" => nl2br(create_links($board_obj["comment"])),
+				"topic" => $board_obj->name(),
+				"from" => ($board_obj->last() != "") ? $board_obj->last() : $createdby->name(),
+				"created" => $this->time2date($board_obj->created(),2),
+				"rate" => sprintf("%0.2f",$board_obj->meta("rate")),
+				"text" => nl2br(create_links($board_obj->comment())),
 			));
 			$content = $this->display_comment($row);
 		}
@@ -1348,7 +1339,7 @@ topic");
 		};
 
 
-		$forum_obj = $this->get_object($board);
+		$forum_obj = new object($board);
 
 		$_mx = aw_ini_get("forum.comments_mailto");
 		$mx = explode(",", $_mx);
@@ -1357,13 +1348,13 @@ topic");
 			foreach($mx as $val)
 			{
 				send_mail($val,
-					"Uus sissekanne teemal: $forum_obj[name]",
+					"Uus sissekanne teemal: " . $forum_obj->name(),
 					"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: ".aw_ini_get("baseurl")."/?class=forum&action=show_threaded&board=$board",
 					"From: $name <$email>");
 			}
 		};
 
-		$tmp = obj($forum_obj["parent"]);
+		$tmp = obj($forum_obj->parent());
 		$nflist = $tmp->meta("notifylist");
 
 		if ($parent)
@@ -1382,7 +1373,7 @@ topic");
 				foreach($mx as $key => $val)
 				{
 					send_mail($val["name"] . "<" . $val["address"] . ">",
-						"Uus sissekanne teemal: $forum_obj[name]",
+						"Uus sissekanne teemal: " . $forum_obj->name(),
 						"Nimi: $name\nE-post: $email\nTeema: $subj\nKommentaar:\n$comment\n\nVastamiseks kliki siia: http://sylvester.struktuur.ee/?class=forum&action=show_threaded&board=$board",
 						"From: $name <$email>");
 				}
@@ -1441,8 +1432,8 @@ topic");
 		$alias = false;
 		if ($section)
 		{
-			$so = $this->get_object($section);
-			if ($so["class_id"] == CL_DOCUMENT || $so["class_id"] == CL_PERIODIC_SECTION)
+			$so = new object($section);
+			if ($so->class_id() == CL_DOCUMENT || $so->class_id() == CL_PERIODIC_SECTION)
 			{
 				$alias = true;
 			}
@@ -1479,7 +1470,7 @@ topic");
 	function topics($args = array())
 	{
 		extract($args);
-		$o = $this->get_object($id);
+		$o = new object($id);
 		$this->init_forum_display(array("id" => $id));
 		$this->section = $section;
 
@@ -1497,9 +1488,9 @@ topic");
 
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),$act_tab);
 
-		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
+		$this->topicsonpage = ($o->prop("topicsonpage") != "") ? $o->prop("topicsonpage") : 5;
 
-		$this->mk_path($o["parent"], "Foorum");
+		$this->mk_path($o->parent(), "Foorum");
 		$this->read_template("list_topics.tpl");
 
 		global $HTTP_COOKIE_VARS;
@@ -1556,14 +1547,14 @@ topic");
 	function topics_detail($args = array())
 	{
 		extract($args);
-		$o = $this->get_object($id);
+		$o = new object($id);
 		$this->init_forum_display(array("id" => $id));
 
 		$this->forum_id = $id;
 		$this->from = $from;
 		$this->board = $id;
 		$this->section = $section;
-		$this->topicsonpage = ($o["meta"]["topicsonpage"]) ? $o["meta"]["topicsonpage"] : 5;
+		$this->topicsonpage = ($o->prop("topicsonpage") != "") ? $o->prop("topicsonpage") : 5;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"details");
 		$this->read_template("list_topics_detail.tpl");
 		
@@ -1656,11 +1647,9 @@ topic");
 		$this->forum_id = $id;
 		$tabs = $this->tabs(array("flat","details","newtopic","mark_all_read","archive","search"),"search");
 		$this->read_template("search.tpl");
-		$o = $this->get_object($board);
-		$board_obj = $this->get_object($board);
-		$forum_obj = $this->get_object($board_obj["parent"]);
+		$board_obj = new object($board);
 		$flink = $this->mk_my_orb("configure",array("id" => $board));
-		$this->mk_path($o["parent"], "<a href='$flink'>$o[name]</a> / Otsi");
+		$this->mk_path($board_obj->parent(), "<a href='$flink'> " . $board_obj->name() . "</a> / Otsi");
 		$this->mk_links(array(
 			"id" => $id,
 			"board" => $board,
@@ -1694,27 +1683,27 @@ topic");
 		{
 			$board = $id;
 		};
-		$board_obj = $this->get_object($board);
-		$forum_obj = $this->get_object($board_obj["parent"]);
+		$board_obj = new object($board);
+		$forum_obj = new object($board_obj->parent());
 		$c = "";
 
 		// koigepealt tuleb koostada topicute nimekiri mingi foorumi all
 		$blist[] = 0;
-		if ($board_obj["class_id"] == CL_MSGBOARD_TOPIC)
+		if ($board_obj->class() == CL_MSGBOARD_TOPIC)
 		{
-			$blist[] = $board_obj["oid"];
+			$blist[] = $board_obj->id();
 			$this->mk_links(array(
 				"board" => $board,
-				"parent" => $board_obj["parent"],
+				"parent" => $board_obj->parent(),
 			));
-			$this->forum_id = $forum_obj["oid"];
+			$this->forum_id = $forum_obj->id();
 		}
 		else
 		{	
 			$status = ($in_archive) ? "" : " AND status = 2";
 			$q = "SELECT * FROM objects WHERE parent = '$board' $status AND class_id = " . CL_MSGBOARD_TOPIC;
 			$this->db_query($q);
-			$this->forum_id = $board_obj["parent"];
+			$this->forum_id = $board_obj->parent();
 			$this->mk_links(array(
 				"id" => $board,
 			));
@@ -1812,9 +1801,9 @@ topic");
 		// we are inside the document, so we switch to embedded mode
 		$this->embedded = true;
 		$l = $alias;
-    $target = $l["target"];
-	  $tobj = $this->get_object($target);
-    $parent = $tobj["last"];
+		$target = $l["target"];
+		$tobj = new object($target);
+		$parent = $tobj->last();
 		$id = $target;
 		$section = $oid;
 
@@ -2228,13 +2217,13 @@ topic");
 		extract($arr);
 		$this->read_template("add_topic.tpl");
 
-		$top = $this->get_object($board);
+		$top = new object($board);
 
 		$this->vars(array(
-			"name" => $top["name"],
-			"comment" => $top["comment"],
-			"from" => $top["last"],
-			"email" => $top["meta"]["author_email"],
+			"name" => $top->name(),
+			"comment" => $top->comment(),
+			"from" => $top->last(),
+			"email" => $top->prop("author_email"),
 			"reforb" => $this->mk_reforb("save_topic", array("board" => $board))
 		));
 		return $this->parse();
@@ -2258,6 +2247,7 @@ topic");
 		$this->upd_object(array(
 			"oid" => $board,
 			"name" => $topic,
+			// would like to convert it, but the the fsck do I do with last?
 			"last" => $from,
 			"comment" => $comment
 		));
@@ -2267,10 +2257,11 @@ topic");
 			"value" => $email,
 		));
 
-		$pobj = $this->get_object($forum_id);
-		if ($pobj["class_id"] == CL_DOCUMENT)
+
+		$pobj = new object($forum_id);
+		if ($pobj->class_id() == CL_DOCUMENT)
 		{
-			$retval = $this->mk_link(array("section" => $pobj["oid"]));
+			$retval = $this->mk_link(array("section" => $pobj->id()));
 		}
 		else
 		{
@@ -2298,8 +2289,6 @@ topic");
 		extract($arr);
 
 		$this->db_query("DELETE FROM comments WHERE id = $comment");
-		$_tmp = $this->get_object($board);
-		$pobj = $this->get_object($_tmp["parent"]);
 		if ($section)
 		{
 			$retval = $this->mk_my_orb("show",array("_alias" => "forum","board" => $board,"section" => $section));
