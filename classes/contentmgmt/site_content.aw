@@ -198,15 +198,6 @@ class site_content extends menuedit
 
 		$this->do_sub_callbacks($sub_callbacks);
 
-		if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
-		{
-			// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
-			$doc_c = $this->show_documents($section,$docid);
-			$shp_c = $this->do_shop($section,$sh_id);
-			$this->vars(array("doc_content" => ($doc_c.$shp_c)));
-			$this->read_template($template);
-		}
-		else
 		if ($periodic && $text == "") 
 		{
 			$docc = $this->show_periodic_documents($section,$obj);
@@ -2050,44 +2041,6 @@ class site_content extends menuedit
 		return $links;
 	}
 
-	function is_shop($section)
-	{
-		$p = $section; 
-		$links = false;
-		$cnt = 0;
-		while ($p && ($cnt < 20))
-		{
-			$cnt++;
-			if (!is_array($this->mar[$p]))
-			{
-				//$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid = $p");
-				// no point in overwriting it
-				if (not($this->mar[$p]))
-				{
-					$this->mar[$p] = $this->get_menu($p);
-				};
-			}
-
-			if (isset($this->mar[$p]["is_shop"]) && $this->mar[$p]["is_shop"] == 1)
-			{
-				$sh_id = $this->mar[$p]["shop_id"];
-				$p = 0;
-				$links = true;
-			}	
-			isset($this->mar[$p]["parent"]) ? $p = $this->mar[$p]["parent"] : $p = 0;
-		}
-		if (!$links)
-		{
-			return false;
-		}
-		else
-		{
-			// so, if that's a shop, we turn off the right pane. right.	
-			$this->right_pane = false;
-			return $sh_id;
-		}
-	}
-
 	function show_periodic_documents($section,$obj)
 	{
 		$d = get_instance("document");
@@ -2225,8 +2178,7 @@ class site_content extends menuedit
 							$tpl = "ACTIVE_LINK";
 							$done = true;
 						};
-                                        }
-
+					}
 
 					$dobj = $this->get_object($did);
 					$this->vars(array(
@@ -2507,50 +2459,28 @@ class site_content extends menuedit
 	}
 
 
-	function _get_template_filename($id)
-	{
-		$q = "SELECT filename FROM template WHERE id = '$id'";
-		$this->db_query($q);
-		$row = $this->db_next();
-		return $row["filename"];
-	}
-
-
 	// builds HTML popups
 	function build_popups()
 	{
 		// that sucks. We really need to rewrite that
 		// I mean we always read information about _all_ the popups
-		$q = "SELECT * FROM objects WHERE status = 2 AND class_id = " . CL_HTML_POPUP;
-		$this->db_query($q);
-		$popups = "";
-		while($row = $this->db_next())
+		$pl = new object_list(array(
+			"status" => STAT_ACTIVE,
+			"class_id" => CL_HTML_POPUP
+		));
+		for ($o = $pl->begin(); !$pl->end(); $o = $pl->next())
 		{
-			$meta = aw_unserialize($row["meta"]);
-			if (is_array($meta["menus"]))
+			$ar = new aw_array($o->meta("menus"));
+			foreach($ar->get() as $key => $val)
 			{
-				foreach($meta["menus"] as $key => $val)
+				if ($val == $this->sel_section)
 				{
-					if ($val == $this->sel_section)
-					{
-						$popups .= "window.open('$meta[url]','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=$meta[width],height=$meta[height]');";
-					};
-				};
-			};
-		};
+					$popups .= sprintf("window.open('%s','popup','top=0,left=0,toolbar=0,location=0,menubar=0,scrollbars=0,width=%s,height=%s');", $o->meta("url"), $o->meta("width"), $o->meta("height"));
+				}
+			}
+		}
 		$retval = (strlen($popups) > 0) ? "<script language='Javascript'>$popups</script>" : "";
-		dbg::p("l = " . strlen($retval));
 		return $retval;
-	}
-
-	////
-	// !generates the ui for the shop
-	function do_shop($section,$shop_id)
-	{
-		$sh = get_instance("shop/shop");
-		$ret = $sh->show(array("section" => $section,"id" => $shop_id));
-		$this->vars(array("shop_menus" => $sh->shop_menus));
-		return $ret;
 	}
 
 	function make_langs()
@@ -2618,7 +2548,6 @@ class site_content extends menuedit
 
 		for ($i=0; $i < $cnt; $i++) 
 		{
-			#$path[$i+1] = $this->_pop();
 			$path[$i+1] = array_pop($tmp);
 		};
 		// and now in the $path array
