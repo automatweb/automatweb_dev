@@ -85,6 +85,19 @@ class selection extends class_base
 		);
 	}
 
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case BACKFORMS2:
+				$retval = array(CL_PILOT);
+			break;
+		};
+		return $retval;
+	}
+
+
 	function get_property($args)
 	{
 		$data = &$args['prop'];

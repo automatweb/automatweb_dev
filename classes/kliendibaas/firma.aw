@@ -91,6 +91,34 @@ class firma extends class_base
 			TOOTED => 'Tooted',
 		);
 	}
+	
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case ETTEVOTLUSVORM:
+				$retval = array(CL_ETTEVOTLUSVORM);
+			break;
+
+			case POHITEGEVUS:
+				$retval = array(CL_TEGEVUSALA);
+			break;
+			case FIRMAJUHT:
+				$retval = array(CL_ISIK);
+			break;
+			case KORVALTEGEVUSED:
+				$retval = array(CL_TEGEVUSALA);
+			break;
+			case TOOTED:
+				$retval = array(CL_TOODE);
+			break;
+			case ADDRESS:
+				$retval = array(CL_ADDRESS);
+			break;
+		};
+		return $retval;
+	}
 
 	function get_property($args)
 	{

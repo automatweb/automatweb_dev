@@ -71,6 +71,12 @@ define('MAAKOND',3);
 
 class address extends class_base
 {
+	function address()
+	{
+		$this->init(array(
+			'clid' => CL_ADDRESS,
+		));
+	}
 
 	function callback_get_rel_types()
 	{
@@ -81,11 +87,22 @@ class address extends class_base
 		);
 	}
 
-	function address()
+	function callback_get_classes_for_relation($args = array())
 	{
-		$this->init(array(
-			'clid' => CL_ADDRESS,
-		));
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case LINN:
+				$retval = array(CL_LINN);
+			break;
+			case RIIK:
+				$retval = array(CL_RIIK);
+			break;
+			case MAAKOND:
+				$retval = array(CL_MAAKOND);
+			break;
+		};
+		return $retval;
 	}
 
 	function get_property($args)

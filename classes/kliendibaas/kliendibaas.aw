@@ -247,13 +247,20 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		);
 	}
 
-	function callback_on_submit_relation_list($args)
+	function callback_get_classes_for_relation($args = array())
 	{
-
-	//print_r($args);//die();
-
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case VALIM:
+				$retval = array(CL_SELECTION);
+			break;
+			case 0:
+			break;
+			default: $retval = array(CL_PSEUDO);
+		};
+		return $retval;
 	}
-
 
 
 	function get_property($args)
