@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.16 2001/06/01 09:32:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.17 2001/06/04 12:03:13 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -3546,8 +3546,7 @@ classload("cache","validator","defs");
 				$cont = $d->gen_preview(array(
 							"docid" => $row["docid"],
 							"boldlead" => 1,
-							"tpl" => $template,
-							"doc" => $row));
+							"tpl" => $template));
 				$this->vars(array("docid" => $row["docid"]));
 				$PRINTANDSEND = $this->parse("PRINTANDSEND");
 			}
