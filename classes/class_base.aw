@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.323 2004/11/22 12:20:00 kristo Exp $
+// $Id: class_base.aw,v 2.324 2004/11/26 11:51:23 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3761,6 +3761,17 @@ class class_base extends aw_template
 
 				};
 
+			}
+			else
+			{
+				// foreach makes a copy of the array so this should be safe
+				foreach($cfg_props as $key => $val)
+				{
+					if (isset($val["user"]) && 1 == $val["user"])
+					{
+						unset($cfg_props[$key]);
+					};
+				};
 			};
 		};
 
