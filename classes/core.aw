@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.154 2003/02/13 14:42:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.155 2003/02/13 15:40:05 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1401,8 +1401,10 @@ class core extends db_connector
 		}
 		$this->save_handle();
 		$this->get_objects_by_class($arr);
+		$parens = array();
 		while ($row = $this->db_next())
 		{
+			$parens[$row['oid']] = $row['parent'];
 			if ($arr["return"] == ARR_ALL)
 			{
 				$ret[$row["oid"]] = $row;
@@ -1412,6 +1414,25 @@ class core extends db_connector
 				$ret[$row["oid"]] = $row["name"];
 			}
 		}
+
+		if ($arr['add_folders'] == true && $arr["return"] != RET_ALL)
+		{
+			$_tret = array();
+			$ml = $this->get_menu_list();
+			foreach($ret as $oid => $name)
+			{
+				if ($oid)
+				{
+					$_tret[$oid] = $ml[$parens[$oid]]."/".$name;
+				}
+				else
+				{
+					$_tret[""] = "";
+				}
+			}
+			$ret = $_tret;
+		}
+
 		$this->restore_handle();
 		return $ret;
 	}
