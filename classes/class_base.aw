@@ -1,11 +1,24 @@
 <?php
-// $Id: class_base.aw,v 2.10 2002/11/19 15:28:12 duke Exp $
+// $Id: class_base.aw,v 2.11 2002/11/19 17:41:24 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
+	@default corefield=yes
 
 	@property name type=textbox group=general
 	@caption Objekti nimi
+	
+	@property comment type=textbox group=general
+	@caption Kommentaar
+	
+	@property alias type=textbox group=general 
+	@caption Alias
+
+	@property status type=status group=general 
+	@caption Staatus
+
+	@property jrk type=textbox size=4 group=general
+	@caption Jrk
 
 	@property created type=date access=ro
 	@caption Loomise kuupäev
@@ -70,6 +83,7 @@ class class_base extends aliasmgr
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
 
+		// I need an easy way to turn off individual properties
 		$realprops = $this->get_active_properties(array(
 				"clfile" => $this->clfile,
 				"group" => $group,
@@ -178,13 +192,22 @@ class class_base extends aliasmgr
                         $cli->add_property($val);
                 };
 
+		$orb_class = $this->cfg["classes"][$this->clid]["file"];
+
+		if ($orb_class == "document")
+		{
+			$orb_class = "doc";
+		};
+
                 $cli->finish_output(array(
 					"action" => "submit",
 					"data" => array(
 						"id" => $id,
 						"group" => $group,
-						"orb_class" => $this->cfg["classes"][$this->clid]["file"],
-						"parent" => $parent),
+						"orb_class" => $orb_class,
+						"parent" => $parent,
+						"period" => $period,
+					),
 		));
 
 		if (!$content)
@@ -201,12 +224,27 @@ class class_base extends aliasmgr
 	function submit($args = array())
 	{
 		$this->quote($args);
-		extract($args);
 		$this->check_class();
-		$this->_init_object(array("id" => $id,"parent" => $parent));
+
+		$this->_init_object(array(
+			"id" => $args["id"],
+			"parent" => $args["parent"],
+		));
+	
+		if (method_exists($this->inst,"callback_pre_save"))
+		{
+			$this->inst->callback_pre_save(array(
+				"id" => $this->id,
+				"form_data" => &$args,
+			));
+		}
+		
+		extract($args);
+
 		if (!$id)
 		{
 			// create the object, if it wasn't already there
+			$status = (isset($status)) ? $status : 1;
 			$id = $this->new_object(array(
 				"parent" => $parent,
 				"name" => $name,
@@ -234,7 +272,7 @@ class class_base extends aliasmgr
 		$objdata = array();
 		$coredata = array();
 		$metadata = array();
-		// give the object a change to change the data that
+		// give the object a chance to change the data that
 		// before it's written out to the table
 		$callback = method_exists($this->inst,"set_property");
 
@@ -304,6 +342,10 @@ class class_base extends aliasmgr
 			$method = $property["method"];
 			$handler = $property["handler"];
 			$type = $property["type"];
+			if ($type == "text")
+			{
+				continue;
+			};
 			if (($type == "select") && $property["multiple"])
 			{
 				$savedata[$name] = $this->make_keys($savedata[$name]);
@@ -316,7 +358,6 @@ class class_base extends aliasmgr
 			else
 			if ($type == "imgupload")
 			{
-				// XXX: that is probably broken at the moment
 				// upload the bloody image.
 				$t = get_instance("image");
 				$key = $name . "_id";
@@ -330,13 +371,19 @@ class class_base extends aliasmgr
 			{
 				$metadata[$name] = $savedata[$name];
 			}
-			elseif ($args[$name] && ($table == "objects"))
+			elseif ($table == "objects")
 			{
-				$coredata[$name] = $savedata[$name];
+				if (isset($args["name"]))
+				{
+					$coredata[$name] = $savedata[$name];
+				};
 			}
-			elseif ($table == "menu")
+			else
 			{
-				$objdata[$name] = $savedata[$name];
+				if (isset($args["name"]))
+				{
+					$objdata[$name] = $savedata[$name];
+				};
 			};
 		};
 
@@ -413,6 +460,10 @@ class class_base extends aliasmgr
 			{
 				$this->clfile = "menu";
 			};
+			if ($this->coredata["class_id"] == 7)
+			{
+				$this->clfile = "doc";
+			};
 			
 		}
 		else
@@ -435,6 +486,10 @@ class class_base extends aliasmgr
 			if ($this->clid == 1)
 			{
 				$this->clfile = "menu";
+			};
+			if ($this->clid == 7)
+			{
+				$this->clfile = "doc";
 			};
 
 		}
@@ -570,7 +625,15 @@ class class_base extends aliasmgr
 		};
 		$all_props = $cfgu->load_properties(array("file" => $cfile));
 		$this->classinfo = $cfgu->get_classinfo();
-	
+
+		$corefields = array_flip(explode(",",$this->classinfo["corefields"]["text"]));
+
+		// by default only the name is shown
+		if ( sizeof($corefields) == 0 )
+		{
+			$corefields = array("name" => 0);
+		};
+
 		// I need names of all group and the contents of active group
 		$by_group = array();
 		$activegroup = ($args["group"]) ? $args["group"] : "general";
@@ -580,6 +643,7 @@ class class_base extends aliasmgr
 		foreach($all_props as $val)
 		{
 			$use = true;
+			$corefield = $val["corefield"]["text"];
 
 			if ($val["access"]["text"] == "ro")
 			{
@@ -587,7 +651,13 @@ class class_base extends aliasmgr
 			};
 
 			$name = $val["name"]["text"];
+
 			if (is_array($this->visible_properties) && (!$this->visible_properties[$name]))
+			{
+				$use = false;
+			};
+
+			if ($corefield && !isset($corefields[$name]))
 			{
 				$use = false;
 			};
