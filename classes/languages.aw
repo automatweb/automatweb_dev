@@ -256,7 +256,7 @@ class languages extends aw_template
 					//a reason for that, i checked on eures the values of the variables, and the
 					//if without the true seems to work too, if anything goes wrong, i can always
 					//write it back in, this why i'm writing this comment :)
-					if ($row["site_id"] == "" || in_array($this->cfg["site_id"], explode(",", $row["site_id"])))
+					if (trim($row["site_id"]) == "" || in_array($this->cfg["site_id"], explode(",", trim($row["site_id"]))))
 					{
 						aw_cache_set("languages", $row["id"],$row);
 					}
