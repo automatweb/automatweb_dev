@@ -4,7 +4,7 @@
 
 @classinfo syslog_type=ST_OBJECT_TREE relationmgr=yes
 
-@groupinfo folders caption=Menüüd
+@groupinfo folders caption=Kaustad
 @groupinfo clids caption=Objektit&uuml;&uuml;bid
 
 @default table=objects
@@ -221,6 +221,12 @@ class object_tree extends class_base
 			"type" => ($ob['meta']['js_tree'] ? TREE_JS : TREE_HTML)
 		));
 		// now, insert all folders defined
+		// but first, leave out all folders that are set don't show self
+		$ar = new aw_array($ob['meta']['ignoreself']);
+		foreach($ar->get() as $_oid)
+		{
+			unset($ob['meta']['folders'][$_oid]);
+		}
 		$ar = new aw_array($ob['meta']['folders']);
 		foreach($ar->get() as $fld)
 		{
@@ -296,6 +302,7 @@ class object_tree extends class_base
 		if ($prop["name"] == "folders")
 		{
 			$arr['metadata']["include_submenus"] = $arr["form_data"]["include_submenus"];
+			$arr['metadata']["ignoreself"] = $arr["form_data"]["ignoreself"];
 		};
 
 		return PROP_OK;
@@ -306,6 +313,7 @@ class object_tree extends class_base
 		$prop = $args["prop"];
 		$nodes = array();
 		$include_submenus = $args["obj"]["meta"]["include_submenus"];
+		$ignoreself = $args["obj"]["meta"]["ignoreself"];
 		// now I have to go through the process of setting up a generic table once again
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -328,6 +336,13 @@ class object_tree extends class_base
 		$this->t->define_field(array(
 			"name" => "check",
 			"caption" => "k.a. alammenüüd",
+			"talign" => "center",
+			"width" => 80,
+			"align" => "center",
+		));
+		$this->t->define_field(array(
+			"name" => "ignoreself",
+			"caption" => "&auml;ra n&auml;ita peamen&uuml;&uuml;d",
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
@@ -366,6 +381,11 @@ class object_tree extends class_base
 						"name" => "include_submenus[$row[oid]]",
 						"value" => $row["oid"],
 						"checked" => $include_submenus[$row["oid"]],
+					)),
+					"ignoreself" => html::checkbox(array(
+						"name" => "ignoreself[$row[oid]]",
+						"value" => $row["oid"],
+						"checked" => $ignoreself[$row["oid"]],
 					)),
 				));
 			};
