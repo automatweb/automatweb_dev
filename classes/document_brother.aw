@@ -260,6 +260,10 @@ class document_brother extends document
 					".join("AND",$se));
 			while ($row = $this->db_next())
 			{
+				if (!$this->can("view", $row["oid"]))
+				{
+					continue;
+				}
 				$row["name"] = html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $row["oid"])),
 					"caption" => $row["name"]
