@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.3 2002/11/02 23:07:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgmanager.aw,v 1.4 2002/11/04 21:15:00 duke Exp $
 // cfgmanager.aw - Object configuration manager
 // deals with drawing add and change forms and submitting data
 class cfgmanager extends aw_template
@@ -16,18 +16,40 @@ class cfgmanager extends aw_template
 	function change($args = array())
 	{
 		extract($args);
-		// retrieve the object
-		$this->coredata = $this->get_object($id);
 
-		// get an instance of the class that handles this object type
+		// load the selected configuration forms for each class
+		$cfg = get_instance("config");
+		$cs = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
+
 		$cp = $this->get_class_picker(array("field" => "file"));
-		$clfile = $cp[$this->coredata["class_id"]];
-		classload($clfile);
-		$inst = new $clfile();
 
-		$tp = get_instance("tabpanel");
+		if ($id)
+		{
+			// retrieve the object
+			$this->coredata = $this->get_object($id);
+			$parent = $this->coredata["parent"];
+			// get an instance of the class that handles this object type
+			$clfile = $cp[$this->coredata["class_id"]];
+			$title = "Muuda objekti";
+			
+			$filter = (int)$cs[$this->coredata["class_id"]];
+		}
+		else
+		{
+			$clfile = $cp[$class_id];
+			$parent = $args["parent"];
+			$title = "Lisa objekt";
+			
+			$filter = (int)$cs[$class_id];
+		};
+
+		$filter = 0;
+
+		$inst = get_instance($clfile);
+
+		$tp = get_instance("vcl/tabpanel");
 		
-		$this->mk_path($this->coredata["parent"],"Muuda objekti");
+		$this->mk_path($parent,$title);
 
 		$callback = false;
 		if (method_exists($inst,"get_property"))
@@ -35,16 +57,12 @@ class cfgmanager extends aw_template
 			$callback = true;
 		};
 
-		$cfg = get_instance("config");
-		$cs = aw_unserialize($cfg->get_simple_config("class_cfgforms"));
 
-		$filter = (int)$cs[$this->coredata["class_id"]];
-		$filter = 0;
 
 		$cfgu = get_instance("cfg/cfgutils");
-		
+	
 		$coreprops = $cfgu->load_properties(array("file" => "core"));
-		$objprops = $cfgu->load_properties(array("file" => $clfile));
+		$objprops = $cfgu->load_properties(array("file" => basename($clfile)));
 
 		if ($filter)
 		{
@@ -67,8 +85,11 @@ class cfgmanager extends aw_template
 
 		$this->group_magic(&$realprops,$group);
 		$grpnames = new aw_array($this->groupnames);
-		// XXX: what if it is not a menu?
-		$this->objdata = $this->get_menu($id);
+		// I really really need to get rid of class specific code
+		if ($clfile == "menuedit")
+		{
+			$this->objdata = $this->get_menu($id);
+		};
 		$active = ($group) ? $group : "general";
 		foreach($grpnames->get() as $key => $val)
 		{
@@ -92,6 +113,7 @@ class cfgmanager extends aw_template
 		// where needed and then cycle over the result and generate
 		// the output
 		$resprops = array();
+
 		foreach($realprops as $key => $val)
 		{
 			$val = $this->normalize_text_nodes($val);
@@ -102,10 +124,17 @@ class cfgmanager extends aw_template
 				"obj" => &$this->coredata,
 				"objdata" => &$this->objdata,
 			);
-			
+
 			if ($callback)
 			{
 				$inst->get_property($argblock);
+			};
+
+			// we can add better object pickers later
+			if (($val["type"] == "objpicker") && $val["clid"])
+			{
+				$val["type"] = "select";
+				$val["options"] = $this->list_objects(array("class" => constant($val["clid"]), "addempty" => true));
 			};
 
 			// if the property has a getter, call it directly
@@ -134,7 +163,11 @@ class cfgmanager extends aw_template
 
 		$cli->finish_output(array(
 					"action" => "submit",
-					"data" => array("id" => $id,"group" => $group),
+					"data" => array(
+						"id" => $id,
+						"group" => $group,
+						"orb_class" => $orb_class,
+						"parent" => $parent),
 		));
 
 		return $tp->get_tabpanel(array(
@@ -149,16 +182,27 @@ class cfgmanager extends aw_template
 	{
 		$this->quote($args);
 		extract($args);
+		if (!$id)
+		{
+			$id = $this->new_object(array(
+				"parent" => $parent,
+				"name" => $name,
+				"comment" => $comment,
+				"class_id" => $class_id,
+				"alias" => $alias,
+				"status" => $status,
+			));
+		};
+		$cp = $this->get_class_picker(array("field" => "file"));
 		// retrieve the object
 		$this->coredata = $this->get_object($id);
-
-		// figure out the name of the class file
-		$cp = $this->get_class_picker(array("field" => "file"));
 		$clfile = $cp[$this->coredata["class_id"]];
+		
+		// figure out the name of the class file
 
 		$cfgu = get_instance("cfg/cfgutils");
 		$coreprops = $cfgu->load_properties(array("file" => "core"));
-		$objprops = $cfgu->load_properties(array("file" => $clfile));
+		$objprops = $cfgu->load_properties(array("file" => basename($clfile)));
 		$realprops = array_merge($coreprops,$objprops);
 			
 		if ($clfile == "menuedit")
@@ -227,7 +271,8 @@ class cfgmanager extends aw_template
 			$q = "UPDATE menu SET $qparts WHERE id = '$id'";
 			$this->db_query($q);
 		};
-		return $this->mk_my_orb("change",array("id" => $id,"group" => $group));
+
+		return $this->mk_my_orb("change",array("id" => $id,"group" => $group),$class);
 	}
 
 	function group_magic($props,$group = "")
