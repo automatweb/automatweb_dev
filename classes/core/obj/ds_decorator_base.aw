@@ -112,7 +112,7 @@ class _int_obj_ds_decorator
 
 	function delete_object($oid)
 	{
-		return $this->contained->delete($oid);
+		return $this->contained->delete_object($oid);
 	}
 
 	function dequote(&$dat)
