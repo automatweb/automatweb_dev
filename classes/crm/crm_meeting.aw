@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.13 2004/08/02 10:48:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.14 2004/08/02 11:16:23 duke Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -42,6 +42,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 @property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
 @caption Kalendrid
 
+@property other_selector type=callback callback=cb_calendar_others store=no group=others
+@caption Teised
+
 @property project_selector type=callback callback=cb_project_selector store=no group=projects
 @caption Projektid
 
@@ -53,6 +56,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit
 
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
+@groupinfo others caption=Teised
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo participants caption=Osalejad
@@ -132,6 +136,12 @@ class crm_meeting extends class_base
 		$elib = get_instance("calendar/event_property_lib");
 		return $elib->calendar_selector($arr);
 	}
+	
+	function cb_calendar_others($arr)
+	{
+		$elib = get_instance("calendar/event_property_lib");
+		return $elib->calendar_others($arr);
+	}
 
 	function set_property($arr)
 	{
@@ -147,6 +157,11 @@ class crm_meeting extends class_base
 			case "calendar_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_calendar_selector($arr);
+				break;
+			
+			case "other_selector":
+				$elib = get_instance("calendar/event_property_lib");
+				$elib->process_other_selector($arr);
 				break;
 			
 			case "whole_day":
