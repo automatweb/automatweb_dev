@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.140 2003/09/08 11:20:45 duke Exp $
+// $Id: class_base.aw,v 2.141 2003/09/09 12:06:02 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1510,8 +1510,15 @@ class class_base extends aw_template
 
 		$this->cfgu = get_instance("cfg/cfgutils");
 
+		$remap_children = false;
+
 		foreach($properties as $key => $val)
 		{
+
+			if (!empty($val["parent"]))
+			{
+				$remap_children = true;
+			};
 
 			$name = $val["name"];
 			if (is_array($val))
@@ -1631,6 +1638,21 @@ class class_base extends aw_template
 				$resprops[$args["name_prefix"] . "_" . $key] = $el;
 			}
 		}
+
+		if ($remap_children)
+		{
+			$tmp = $resprops;
+			foreach($tmp as $key => $prop)
+			{
+				if (!empty($prop["parent"]))
+				{
+					$resprops[$prop["parent"]]["items"][] = $prop;
+					unset($resprops[$key]);
+				}
+			}
+		}
+
+		// now check, whether any properties had parents. if so, remap them
 		return $resprops;
 	}
 
