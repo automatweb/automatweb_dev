@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.36 2002/11/07 10:52:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.37 2002/11/15 18:07:44 kristo Exp $
 // table.aw - tabelite haldus
 class table extends aw_template
 {
@@ -309,7 +309,7 @@ class table extends aw_template
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 				
 				$this->vars(array(
-					"text"	=> htmlentities($cell["text"]),
+					"text"	=> str_replace("\"","&quot;",$cell["text"]),
 					"text2" => $cell["text"],
 					"col"		=> $map["col"],
 					"row"		=> $map["row"],
@@ -403,7 +403,7 @@ class table extends aw_template
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 					
 				$this->vars(array(
-					"text"	=> htmlentities(substr($cell["text"],0,10)),
+					"text"	=> str_replace("\"","&quot;",substr($cell["text"],0,10)),
 					"col"		=> $map["col"],
 					"row"		=> $map["row"],
 					"rows"	=> ($scell["rows"] < 1 ? 1 : $scell["rows"]),
