@@ -92,6 +92,7 @@ class tpledit extends aw_template {
 				"date" => $this->time2date($stat[$fullname][FILE_MODIFIED],6),
 				"size" => $stat[$fullname][FILE_SIZE],
 				"modifiedby" => $tdata[$relname]["modifiedby"],
+				"oid" => $tdata[$relname]["oid"],
 				"edlink" => $this->mk_orb("edit",array("file" => $relname)),
 				"dnlink" => $this->mk_orb("download",array("file" => $relname)),
 			));
@@ -151,29 +152,42 @@ class tpledit extends aw_template {
 		global $tpldirs,$HTTP_HOST;
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$fullpath = $tpldir . "/" . $args["file"];
-		$this->put_file(array(
-			"file" => $fullpath,
-			"content" => stripslashes($source),
-		));
 		$meta_obj = $this->_fetch_tpl_obj(array("name" => $file));
+			
+		classload("archive");
+		$arc = new archive();
+
 		if (not($meta_obj))
 		{
-			print "registering new object<br>";
 			// Objekti polnud, teeme uue
-			$this->new_object(array(
+			$oid = $this->new_object(array(
 					"class_id" => CL_TEMPLATE,
 					"name" => $file,
 			));
+			// create archive
+			$arc->add(array("oid" => $oid));
 		}
 		else
 		{
-			print "updagint existing object<br>";
 			// Uuendame olemasoleva objekti metainfot
 			$this->upd_object(array(
 					"oid" => $meta_obj["oid"],
 					"name" => $file,
 			));
+
+			$ser = $this->_archive(array("oid" => $meta_obj["oid"]));
+			// add a new copy of the template object to the archive
+			$arc->commit(array(
+				"oid" => $meta_obj["oid"],
+				"content" => $ser,
+			));
+
+			
 		}
+		$this->put_file(array(
+			"file" => $fullpath,
+			"content" => stripslashes($source),
+		));
 		return $this->mk_orb("edit",array("file" => $file));
 	}
 
@@ -197,7 +211,7 @@ class tpledit extends aw_template {
 		$tpldir = $tpldirs[$HTTP_HOST];
 		$source = join("",@file($tpldir . $file));
 		$realname = basename($file);
-		header("Content-Type: application/octet-stream");
+		header("Content-Type: text/plain");
 		header("Content-Disposition: filename=$realname");
 		print $source;
 		exit;
@@ -214,6 +228,31 @@ class tpledit extends aw_template {
 		header("Content-Disposition: filename=$realname");
 		print $source;
 		exit;
+	}
+
+	////
+	// !Fetches contents of a template file
+	function _fetch_template($args = array())
+	{
+		extract($args);
+		global $tpldirs,$HTTP_HOST;
+		$tpldir = $tpldirs[$HTTP_HOST];
+		$source = join("",@file($tpldir . "/" . $file));
+		return $source;
+	}
+		
+
+	// Arhiivi kasutamise prototüüp, antakse ette objekti ID, mille vastu
+	// huvi tuntakse, ning see klass tagastab ta serialiseeritud kujul
+	// argumendid. Arhiveerida saab ainult sellist objekti, millel objekti-
+	// tabelis kirje olemas on.
+	// oid(int) - objekti id
+	function _archive($args = array())
+	{
+		extract($args);
+		$obj = $this->get_object($args["oid"]);
+		$ser = $this->_fetch_template(array("file" => $obj["name"]));
+		return $ser;
 	}
 };
 ?>
