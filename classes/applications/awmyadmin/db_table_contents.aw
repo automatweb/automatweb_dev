@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.1 2004/05/21 11:08:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_contents.aw,v 1.2 2004/06/09 13:03:26 kristo Exp $
 // db_table_contents.aw - Andmebaasi tabeli sisu
 
 /*
@@ -369,6 +369,10 @@ class db_table_contents extends class_base
 
 	function get_fields($o, $params = array())
 	{
+		if (!$o->prop("db_base"))
+		{
+			return array();
+		}
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($o->prop('db_base'));
 		$tbl = $db->db_get_table($o->prop('db_table'));
@@ -383,6 +387,11 @@ class db_table_contents extends class_base
 
 	function get_objects($o, $params = array())
 	{
+		if (!$o->prop("db_base"))
+		{
+			return array();
+		}
+
 		$db = get_instance(CL_DB_LOGIN);
 		$db->login_as($o->prop('db_base'));
 		$db->db_query('SELECT * FROM '.$o->prop('db_table'));
