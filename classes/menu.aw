@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.115 2004/12/01 13:21:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.116 2004/12/01 14:49:35 ahti Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -24,7 +24,7 @@
 	@caption Ainult sisselogitud kasutajatele
 
 	@property color type=colorpicker field=meta method=serialize group=advanced
-	@caption Menüü värv
+	@caption Men&uuml;&uuml; v&auml;rv
 	
 	@property color2 type=colorpicker field=meta method=serialize group=advanced
 	@caption Menüü värv 2

@@ -54,7 +54,7 @@
             <field>meta</field>
             <method>serialize</method>
             <group>advanced</group>
-            <caption>Menüü värv</caption>
+            <caption>Men&amp;uuml;&amp;uuml; v&amp;auml;rv</caption>
       </property>
       <property>
             <name>color2</name>
