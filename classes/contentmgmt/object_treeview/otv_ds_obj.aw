@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.15 2004/12/10 10:06:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.16 2005/01/04 10:18:02 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -10,6 +10,9 @@
 
 @property show_notact type=checkbox ch_value=1 field=meta method=serialize
 @caption N&auml;ita mitteaktiivseid objekte
+
+@property show_notact_folder type=checkbox ch_value=1 field=meta method=serialize
+@caption N&auml;ita mitteaktiivseid katalooge
 
 @property show_notact_noclick type=checkbox ch_value=1 field=meta method=serialize
 @caption Mitteaktiivsed pole klikitavad
@@ -261,7 +264,7 @@ class otv_ds_obj extends class_base
 		$use_meta_as_folders = $ob->prop("use_meta_as_folders");
 		if(empty($use_meta_as_folders))
 		{
-			$opts['reltype'] = RELTYPE_FOLDER;
+			$opts['reltype'] = "RELTYPE_FOLDER";
 			$opts['class'] = CL_MENU;
 		}
 		else
@@ -277,7 +280,7 @@ class otv_ds_obj extends class_base
 		foreach($conns as $conn)
 		{
 			$c_o = $conn->to();
-				if (!isset($this->first_folder))
+			if (!isset($this->first_folder))
 			{
 				$this->first_folder = $c_o->id();
 			}
@@ -290,7 +293,7 @@ class otv_ds_obj extends class_base
 //				"class_id" => CL_MENU,
 					"class_id" => $opts['class'],
 					"parent" => $c_o->id(),
-					"status" => STAT_ACTIVE,
+					"status" => $ob->prop("show_notact_folder") ? array(STAT_ACTIVE,STAT_NOTACTIVE) : STAT_ACTIVE,
 					"lang_id" => array(),
 					"sort_by" => "objects.jrk"
 				));
@@ -305,6 +308,11 @@ class otv_ds_obj extends class_base
 			foreach($cur_ids as $t_id)
 			{
 				$t = obj($t_id);
+				if ($igns[$c_o->id()] && $t->parent() == $c_o->id())
+				{
+					$pt = 0;
+				}
+				else
 				if ($t_id == $c_o->id())
 				{
 					$pt = 0;
