@@ -167,5 +167,22 @@
                   <master_index>oid</master_index>
             </groups>
       </tableinfo>
+      <reltypes>
+            <SEARCHFORM>
+                  <value>1</value>
+                  <clid>CL_FORM</clid>
+                  <caption>otsinguvorm</caption>
+            </SEARCHFORM>
+            <MEMBER>
+                  <value>2</value>
+                  <clid>CL_USER</clid>
+                  <caption>liige</caption>
+            </MEMBER>
+            <ACL>
+                  <value>3</value>
+                  <clid>CL_ACL</clid>
+                  <caption>acl</caption>
+            </ACL>
+      </reltypes>
 </properties>
 

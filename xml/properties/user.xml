@@ -289,5 +289,12 @@
                   <master_index>brother_of</master_index>
             </users>
       </tableinfo>
+      <reltypes>
+            <GRP>
+                  <value>1</value>
+                  <clid>CL_GROUP</clid>
+                  <caption>Grupp</caption>
+            </GRP>
+      </reltypes>
 </properties>
 
