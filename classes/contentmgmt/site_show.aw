@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.39 2004/03/02 12:22:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.40 2004/03/05 11:36:35 kristo Exp $
 
 /*
 
@@ -1486,6 +1486,13 @@ class site_show extends class_base
 		$pcnt = count($this->title_yah_arr);
 		$site_title_rev = ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-1])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "");
 
+		$adt = "";
+		if ($this->active_doc)
+		{
+			$adt_o = obj($this->active_doc);
+			$adt = $adt_o->name();
+		}
+
 		$this->vars(array(
 			"ss" => gen_uniq_id(),		// bannerite jaox
 			"ss2" => gen_uniq_id(),
@@ -1500,7 +1507,8 @@ class site_show extends class_base
 			"IS_NOT_FRONTPAGE" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE") : ""),
 			"IS_NOT_FRONTPAGE2" => ($section != $frontpage ? $this->parse("IS_NOT_FRONTPAGE2") : ""),
 			"site_title" => strip_tags($this->site_title),
-			"site_title_rev" => $site_title_rev
+			"site_title_rev" => $site_title_rev,
+			"active_document_title" => $adt
 		));
 
 		if (aw_global_get("uid") == "")
