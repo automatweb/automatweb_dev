@@ -31,7 +31,7 @@
 
 <!-- SUB: SUB_TITLE -->
 <tr>
-	<td colspan='2' class='chformsubtitle' width='160'>
+	<td colspan='2' class='chformsubtitle'>
 	{VAR:value}
 	</td>
 </tr>
