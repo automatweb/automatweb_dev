@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.3 2001/06/10 20:56:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.4 2001/06/25 12:59:42 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends db_connector
 {
@@ -30,22 +30,22 @@ class msg_sql_driver extends db_connector
 	function msg_search($args = array())
 	{
 		extract($args);
-		if (!is_array($fields))
-		{
-			return false;
-		};
-		$flist = array();
-		foreach($fields as $fval)
-		{
-			$flist[] = "($fval LIKE '%$value%')";
-		};
-		$fl = join(" $connector ",$flist);
+		//if (!is_array($fields))
+		//{
+		//	return false;
+		//};
+		//$flist = array();
+		//foreach($fields as $fval)
+		//{
+		//	$flist[] = "($fval LIKE '%$value%')";
+		//};
+		//$fl = join(" $connector ",$flist);
 
 		$s = join(",",$folders);
 		$q = "SELECT *,objects.*
 			FROM messages
 			LEFT JOIN objects ON (messages.id = objects.oid) 
-			WHERE parent IN ($s) AND ($fl)
+			WHERE parent IN ($s) AND ($qs)
 			ORDER BY parent";
 		$this->db_query($q);
 		$rows = array();
