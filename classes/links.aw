@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.33 2003/07/25 16:00:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.34 2003/08/18 13:56:48 kristo Exp $
 
 /*
 
@@ -157,43 +157,49 @@ class links extends class_base
 	
 	function get_property(&$arr)
 	{
-	  $prop = &$arr["prop"];
-	  if ($prop["name"] == "link_image_show" && $arr["obj"]["oid"])
-	  {
-		$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
-		if ($foid)
+		$prop = &$arr["prop"];
+		if ($prop["name"] == "link_image_show" && $arr["obj"]["oid"])
 		{
-		  $f = get_instance("file");
-		  $fdat = $f->get_file_by_id($foid);
-		  if ($f->can_be_embedded($fdat))
+			$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
+			if ($foid)
 			{
-			  $prop['value'] = html::img(array(
-				 'url' => file::get_url($fdat['oid'],$fdat['name'])
-			  ));
+				$f = get_instance("file");
+				$fdat = $f->get_file_by_id($foid);
+				if ($f->can_be_embedded($fdat))
+				{
+					$prop['value'] = html::img(array(
+						'url' => file::get_url($fdat['oid'],$fdat['name'])
+					));
+				}
 			}
 		}
-	  }
-	  else
+		else
 		if ($prop["name"] == "url_int_text")
-		  {
+		{
 			$this->read_template("intlink.tpl");
 			$this->vars(array(
-							  'search_doc' => $this->mk_my_orb('search_doc')
-							  ));
+				'search_doc' => $this->mk_my_orb('search_doc')
+			));
 			$prop['value'] = $this->parse();
-		  }
-	  return PROP_OK;
-	}  
+		}
+		else
+		if ($prop["name"] == "name")
+		{
+			$this->dequote(&$prop["value"]);
+		}
+
+		return PROP_OK;
+	}
 
 	function set_property(&$arr)
 	{
 		$prop = $arr["prop"];
 		if ($prop["name"] == "link_image")
 		{
-		  $f = get_instance("file");
-		  $foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
-		  $nfoid = $f->add_upload_image("link_image", $arr['obj']['oid'], $foid);
-		  return PROP_IGNORE;
+			$f = get_instance("file");
+			$foid = $this->db_fetch_field("SELECT oid FROM objects WHERE parent = ".$arr["obj"]["oid"]." AND class_id =".CL_FILE." AND status != 0","oid");
+			$nfoid = $f->add_upload_image("link_image", $arr['obj']['oid'], $foid);
+			return PROP_IGNORE;
 		}
 		return PROP_OK;
 	}
@@ -241,6 +247,7 @@ class links extends class_base
 		{
 			return;
 		}
+		$this->dequote(&$link);
 
 		if (strpos($link["url"],"@") > 0)
 		{
