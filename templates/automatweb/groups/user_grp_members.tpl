@@ -1,24 +1,76 @@
 <form action='reforb.{VAR:ext}' method="POST" name='boo'>
-<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+
+
+<!--tabelraam-->
+<table width="100%" cellspacing="0" cellpadding="1">
+<tr><td class="tableborder">
+
+	<!--tabelshadow-->
+	<table width="100%" cellspacing="0" cellpadding="0">
+	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
+		<!--tabelsisu-->
+		<table width="100%" cellspacing="0" cellpadding="0">
+		<tr><td><td class="tableinside">
+
+
+<table border="0" cellpadding="0" cellspacing="2">
 <tr>
-	<td class="fcaption">All users:</td>
-	<td class="fcaption">&nbsp;</td>
-	<td class="fform">Members of this group:</td>
-</tr>
-<tr>
-	<td class="fcaption"><select name='users[]' style="width:200px" multiple size=12><option value=''>-----------------------------------------</select></td>
-	<td class="fcaption" valign=center align=center>
-		<a href='javascript:add_member(document.boo.elements[0],document.boo.elements[1])'>&gt;</a><br>
-		<a href='javascript:remove_member(document.boo.elements[0],document.boo.elements[1])'>&lt;</a><br>
-		<a href='javascript:add_all(document.boo.elements[0],document.boo.elements[1])'>&gt;&gt;&gt;</a><br>
-		<a href='javascript:remove_all(document.boo.elements[0],document.boo.elements[1])'>&lt;&lt;&lt;</a><br>
+<td align="center" class="icontext"><IMG SRC="{VAR:baseurl}/images/trans.gif" WIDTH="2" HEIGHT="2" BORDER=0 ALT=""><br><a href="javascript:this.document.boo.submit();" onClick="selectall(document.boo.elements[1])"
+onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('save','','{VAR:baseurl}/automatweb/images/blue/awicons/save_over.gif',1)"><img name="save" alt="Salvesta" border="0" SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" width="25" height="25"></a><br><a
+href="javascript:this.document.boo.submit(); " onClick="selectall(document.boo.elements[1])">Salvesta<!--{VAR:LC_EXTLINKS_ADD} {VAR:LC_EXTLINKS_LINK}--></a>
+</td></tr>
+</table>
+
+
+		</td>
+		</tr>
+		</table>
+
+
 	</td>
-	<td class="fform"><select name='members[]' style="width:200px" multiple size=12><option value=''>-----------------------------------------</select></td>
-</tr>
-<tr>
-<td class="fcaption" colspan=3><input class='small_button' type='submit' VALUE='Save' onClick="selectall(document.boo.elements[1])"></td>
+	</tr>
+	</table>
+
+</td>
 </tr>
 </table>
+
+
+
+<table width="100%" cellspacing="0" cellpadding="5">
+<tr><td>
+
+
+
+
+
+
+<table cellpadding=3 cellspacing=1 border=0>
+<tr>
+	<td class="celltext"><b>Kõik kasutajad:</b></td>
+	<td class="celltext">&nbsp;</td>
+	<td class="celltext"><b>Selle grupi liikmed:</b></td>
+</tr>
+<tr>
+	<td class="celltext"><select name='users[]' style="width:200px" multiple size=12 class="formselect2"><option value=''>-----------------------------------------</select></td>
+	<td class="celltext" valign=center align=center>
+	<b>
+		<a href='javascript:add_member(document.boo.elements[0],document.boo.elements[1])'>&gt;</a><br>
+		<a href='javascript:remove_member(document.boo.elements[0],document.boo.elements[1])'>&lt;</a><br>
+		<br>
+		<a href='javascript:add_all(document.boo.elements[0],document.boo.elements[1])'>&gt;&gt;&gt;</a><br>
+		<a href='javascript:remove_all(document.boo.elements[0],document.boo.elements[1])'>&lt;&lt;&lt;</a><br>
+		</b>
+	</td>
+	<td class="celltext"><select name='members[]' style="width:200px" multiple size=12 class="formselect2"><option value=''>-----------------------------------------</select></td>
+</tr>
+</table>
+
+</td>
+</tr>
+</table>
+
+
 {VAR:reforb}
 </form>
 <script language="javascript">

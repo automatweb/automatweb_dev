@@ -53,7 +53,9 @@ function MM_swapImage() { //v3.0
 <script language="Javascript">
 function generic_loader()
 {
+	// don't do anything. screw you.
 }
+
 function check_generic_loader()
 {
 	if (generic_loader)

@@ -14,13 +14,13 @@
 					</b></td>
 				</tr>
 				<tr>
-					<td align="center" class="title">&nbsp;Name&nbsp;</td>
-					<td align="center" class="title">&nbsp;Priority&nbsp;</td>
-					<td align="center" class="title">&nbsp;Type&nbsp;</td>
-					<td align="center" class="title">&nbsp;Members&nbsp;</td>
-					<td align="center" class="title">&nbsp;Changer&nbsp;</td>
-					<td align="center" class="title">&nbsp;Changed&nbsp;</td>
-					<td align="center" colspan="3" class="title">&nbsp;Action&nbsp;</td>
+					<td align="center" class="title">&nbsp;Nimi&nbsp;</td>
+					<td align="center" class="title">&nbsp;Prioriteet&nbsp;</td>
+					<td align="center" class="title">&nbsp;Tüüp&nbsp;</td>
+					<td align="center" class="title">&nbsp;Liikmeid&nbsp;</td>
+					<td align="center" class="title">&nbsp;Muutja&nbsp;</td>
+					<td align="center" class="title">&nbsp;Muudetud&nbsp;</td>
+					<td align="center" colspan="3" class="title">&nbsp;Tegevus&nbsp;</td>
 				</tr>
 
 			<!-- SUB: LINE -->

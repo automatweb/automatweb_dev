@@ -45,7 +45,7 @@ window.location=url
 
 <td width="30" class="celltext">
 <b>
-GROUPS:&nbsp;
+GRUPID:&nbsp;
 </b>
 </td>
 
@@ -116,13 +116,13 @@ href="#" onClick='window.location.reload()' onMouseOut="MM_swapImgRestore()" onM
 <table border="0" cellspacing="1" cellpadding="2" width=100%>
 <tr class="aste05">
 
-<td height="15" class="celltext" width="30%">&nbsp;Name&nbsp;</td>
-<td align="center" class="celltext" width="20%">&nbsp;Priority&nbsp;</td>
-<td align="center" class="celltext" width="30%">&nbsp;Type;p&nbsp;</td>
-<td align="center" class="celltext">&nbsp;Members&nbsp;</td>
-<td align="center" class="celltext">&nbsp;Changer&nbsp;</td>
-<td align="center" class="celltext">&nbsp;Changed&nbsp;</td>
-<td align="center" colspan="3" class="celltext"  width="9%">&nbsp;Action&nbsp;</td>
+<td height="15" class="celltext" width="30%">&nbsp;Nimi&nbsp;</td>
+<td align="center" class="celltext" width="20%">&nbsp;Prioriteet&nbsp;</td>
+<td align="center" class="celltext" width="30%">&nbsp;Tüüp&nbsp;</td>
+<td align="center" class="celltext">&nbsp;Liikmeid&nbsp;</td>
+<td align="center" class="celltext">&nbsp;Muutja&nbsp;</td>
+<td align="center" class="celltext">&nbsp;Muudetud&nbsp;</td>
+<td align="center" colspan="3" class="celltext"  width="9%">&nbsp;Tegevus&nbsp;</td>
 </tr>
 
 <!-- SUB: LINE -->
