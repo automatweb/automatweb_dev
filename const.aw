@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.74 2002/09/04 13:01:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.75 2002/09/25 13:44:16 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -129,14 +129,11 @@ if (empty($LC))
 	$LC="et";
 }
 
-// that's done in init.aw->init_config now
-//@include(aw_ini_get("basedir")."/lang/" . $LC . "/errors.".aw_ini_get("ext"));
-//@include(aw_ini_get("basedir")."/lang/" . $LC . "/common.".aw_ini_get("ext"));
-
 // other stuff
 
 // hmmz. meeza thinks whe should only read/define those constants if we actually
 // _need_ them. -- duke
+// yeah. please to be findink the common ground between tpledit.aw and document.aw -- terryf
 
 // stat function fields
 define("FILE_SIZE",7);
@@ -173,10 +170,8 @@ define("FTYPE_FILTER_SEARCH",4);
 define("FTYPE_CONFIG",5);
 
 // formide alamtyybid
-define("FSUBTYPE_JOIN",1);
-
-
 // subtype voiks bitmask olla tegelikult
+define("FSUBTYPE_JOIN",1);
 
 // kas seda vormi saab kasutada eventite sisestamiseks
 // mingisse kalendrisse?
@@ -251,7 +246,6 @@ define("ERR_MSGB_NOLOGIN",38);
 define("ERR_MSGB_NOCOMM",39);
 define("ERR_MNEDIT_NOACL",40);
 define("ERR_MNEDIT_NOFOLDER",41);
-define("ERR_MNEDIT_CMDREDIR",42);
 define("ERR_MNEDIT_NOCONF",43);
 define("ERR_MNEDIT_UCLASS",44);
 define("ERR_MNEDIT_ACL_NOADD",45);
@@ -348,7 +342,6 @@ $error_types = array(
 	ERR_MSGB_NOCOMM => "ERR_MSGB_NOCOMM",
 	ERR_MNEDIT_NOACL => "ERR_MNEDIT_NOACL",
 	ERR_MNEDIT_NOFOLDER => "ERR_MNEDIT_NOFOLDER",
-	ERR_MNEDIT_CMDREDIR => "ERR_MNEDIT_CMDREDIR",
 	ERR_MNEDIT_NOCONF => "ERR_MNEDIT_NOCONF",
 	ERR_MNEDIT_UCLASS => "ERR_MNEDIT_UCLASS",
 	ERR_MNEDIT_ACL_NOADD => "ERR_MNEDIT_ACL_NOADD",
@@ -404,5 +397,6 @@ $error_types = array(
 	ERR_FG_TBL_NOBASKET => "ERR_FG_TBL_NOBASKET",
 	ERR_BASKET_NO_TBL_SET => "ERR_BASKET_NO_TBL_SET",
 	ERR_BASKET_NO_OF_SET => "ERR_BASKET_NO_OF_SET",
+	ERR_MNED_NO_OBJS => "ERR_MNED_NO_OBJS",
 );
 ?>
