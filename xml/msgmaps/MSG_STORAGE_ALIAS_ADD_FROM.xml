@@ -21,33 +21,38 @@
       <param>CL_DOCUMENT</param>
 </num_3>
 <num_4>
+      <class>contentmgmt/timing</class>
+      <func>on_connect_obj</func>
+      <param>CL_MENU</param>
+</num_4>
+<num_5>
       <class>core/users/group</class>
       <func>on_add_alias_to_group</func>
       <param>CL_GROUP</param>
-</num_4>
-<num_5>
+</num_5>
+<num_6>
       <class>core/users/user</class>
       <func>on_add_alias</func>
       <param>CL_USER</param>
-</num_5>
-<num_6>
+</num_6>
+<num_7>
       <class>crm/crm_company</class>
       <func>on_connect_person_to_org</func>
       <param>CL_CRM_PERSON</param>
-</num_6>
-<num_7>
+</num_7>
+<num_8>
       <class>crm/crm_section</class>
       <func>on_connect_person_to_section</func>
       <param>CL_CRM_PERSON</param>
-</num_7>
-<num_8>
-      <class>crm/crm_person</class>
-      <func>on_connect_org_to_person</func>
-      <param>CL_CRM_COMPANY</param>
 </num_8>
 <num_9>
       <class>crm/crm_person</class>
+      <func>on_connect_org_to_person</func>
+      <param>CL_CRM_COMPANY</param>
+</num_9>
+<num_10>
+      <class>crm/crm_person</class>
       <func>on_connect_section_to_person</func>
       <param>CL_CRM_SECTION</param>
-</num_9>
+</num_10>
 </xml>
