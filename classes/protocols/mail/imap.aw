@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.5 2003/09/29 12:56:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.6 2003/09/29 13:11:51 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -43,14 +43,14 @@ class imap extends class_base
 		$this->connected = false;
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "test":
-				$data["value"] = $this->test_connection($args);
+				$data["value"] = $this->test_connection($arr);
 				break;
 
 		};
@@ -61,7 +61,7 @@ class imap extends class_base
 	{
 		$this->use_mailbox = "INBOX";
 
-		$ob = new object($arr["obj"][OID]);
+		$ob = $arr["obj_inst"];
 
 		$this->connect_server(array(
 			"obj_inst" => $ob,
