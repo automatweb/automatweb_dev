@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.187 2003/05/28 07:52:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.188 2003/05/29 08:27:42 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -999,6 +999,7 @@ class document extends aw_template
 			"doc_count" => $this->doc_count++,
 			"title_target" => $doc["newwindow"] ? "target=\"_blank\"" : "",
 			"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : (isset($GLOBALS["doc_file"]) ? $GLOBALS["doc_file"] :  "index.".$ext."/")."section=".$docid),
+			"site_title" => strip_tags($doc["title"])
 		));
 
 		if (is_object($si) && method_exists($si,"get_document_vars"))
