@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.82 2002/01/30 00:10:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.83 2002/01/30 01:22:51 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -631,11 +631,6 @@ class document extends aw_template
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		if (!isset($text) || $text != "undef") 
 		{
-			//$doc["content"] = $this->parse_aliases(array(
-			//				"text"	=> $doc["content"],
-			//				"oid"	=> $doc["docid"],
-			//		));
-			
 			classload("aliasmgr");
 			$al = new aliasmgr();
 			$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates));
@@ -2989,185 +2984,20 @@ class document extends aw_template
 		classload("form");
 		$f = new form;
 
-		$this->register_parsers();
-
 		$tx = $f->show(array(
 			"id" => $f->get_form_for_entry($meta["entry_id"]),
 			"entry_id" => $meta["entry_id"],
 			"op_id" => $tpl
 		));
+		
+		classload("aliasmgr");
+		$al = new aliasmgr();
+		$al->parse_oo_aliases($docid,&$tx,array());
 
-		return $this->parse_aliases(array(
-							"text"	=> $tx,
-							"oid"	=> $docid,
-					));
 	}
 
 	function register_parsers()
 	{
-		global $DUKE;
-
-		if ($DUKE)
-		{
-		};
-
-		$mp = $this->register_parser(array(
-					"reg" => "/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",
-					));
-
-		// pildid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "p",
-					"class" => "image",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-					"templates" => array("image","image_linked","image_inplace","image_flash"),
-				));
-		// välised lingid
-		// pildid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "d",
-					"class" => "document",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		// välised lingid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "l", // L
-					"class" => "extlinks",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-					"reset" => "reset_aliases",
-					"templates" => array("link"),
-				));
-		// tabelid	
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "t", // L
-					"class" => "table",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// guestbuugid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "b",
-					"class" => "guestbook",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// pollid
-		//$this->register_sub_parser(array(
-		//			"idx" => 2,
-		//			"match" => "k",
-		//			"class" => "poll",
-		//			"reg_id" => $mp,
-		//			"function" => "parse_alias",
-		//		));
-		
-		// failid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "v",
-					"class" => "file",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// vormid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "f",
-					"class" => "form",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// vormi p2rjad
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "c",
-					"class" => "form_chain",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// lingikogud
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "x",
-					"class" => "link_collection",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// foorumid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "o",
-					"class" => "forum",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// graafikud
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "g",
-					"class" => "graph",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		// galeriid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "y",
-					"class" => "gallery",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// formi entryd
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "r",
-					"class" => "form_alias",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// pulloudid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "q",
-					"class" => "pullout",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-		
-		// kalendrid
-		$this->register_sub_parser(array(
-					"idx" => 2,
-					"match" => "k",
-					"class" => "planner",
-					"reg_id" => $mp,
-					"function" => "parse_alias",
-				));
-
-		// menyyd.
-		$this->register_sub_parser(array(
-                        "idx" => 2,
-                        "match" => "m",
-                        "class" => "menu",
-                        "reg_id" => $mp,
-                        "function" => "parse_alias",
-                ));
-
 		
 		// keywordide list. bijaatch!
 		$mp = $this->register_parser(array(
