@@ -1154,7 +1154,7 @@ class search_conf extends aw_template
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
-				"time" => $this->time2date($row["tm"]),
+				"time" => date("d.m.Y / H:i", $row["tm"]),
 				"str" => $row["str"],
 				"s_parent" => $grps[$row["s_parent"]]["name"],
 				"numresults" => $row["numresults"],
