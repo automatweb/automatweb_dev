@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.35 2003/05/27 13:26:53 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.36 2003/05/27 14:29:57 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -452,8 +452,14 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "class_id":
-						if (is_array($val))
+
+						if (is_array($val) || (($va = explode(',',ltrim($val,','))) && (count($va)>0)))
 						{
+							if (is_array($va))
+							{
+								$val = $va;
+							}
+
 							$tmp = array();
 							foreach($val as $_v)
 							{
@@ -709,6 +715,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 									}
 
 								}
+
 								}
 
 
@@ -781,12 +788,13 @@ if (document.forms['searchform'].elements['s[class_id][]'])
 
 					case "class_id_hidden":
 
-						$element = html::hidden($fieldref).$scr.
+						echo $element = html::hidden($fieldref).$scr.
 "
 if (document.forms['searchform'].elements['s[class_id]'])
 {
 GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[class_id]'], 'textbox');
 }
+
 "
 .'</script>';
 
