@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.275 2004/06/03 17:47:13 duke Exp $
+// $Id: class_base.aw,v 2.276 2004/06/09 15:11:04 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -686,8 +686,8 @@ class class_base extends aw_template
 		if (!empty($id))
 		{
 			// aha .. so .. if we are editing an relation object, then set $this->is_rel to true
-			$_tmp = $this->get_object($id);
-			if ($_tmp["class_id"] == CL_RELATION)
+			$_tmp = new object($id);
+			if ($_tmp->class_id() == CL_RELATION)
 			{
 				$this->is_rel = true;
 			};
@@ -1816,7 +1816,7 @@ class class_base extends aw_template
 		$remap_children = false;
 
 		// how do I stop parsing of properties that _are_ already parsed?
-		
+
 		foreach($properties as $key => $val)
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -2114,10 +2114,13 @@ class class_base extends aw_template
 				continue;
 			};
 
+			$pname = $val["name"];
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
 			if ($callback)
 			{
+				$awt->start("get_property_${pname}");
 				$status = $this->inst->get_property($argblock);
+				$awt->stop("get_property_${pname}");
 			};
 			
 			$val["_parsed"] = 1;
@@ -2249,9 +2252,11 @@ class class_base extends aw_template
 						$tmp[] = $item;
 					};
 					$val["items"] = $tmp;
-				};
+				};	
 
+				$awt->start("convert_property_${pname}");
 				$this->convert_element(&$val);
+				$awt->stop("convert_property_${pname}");
 
 				// hm, how the fuck can the name be empty anyway?
 				if (empty($name))
@@ -3028,8 +3033,8 @@ class class_base extends aw_template
 		if ($this->is_rel && is_array($values) && sizeof($values) > 0)
 		{
 			$def = $this->_ct[$this->clid]["def"];
-			$_tmp = $this->get_object($this->id);
-			$old = $_tmp["meta"]["values"];
+			$_tmp = new object($this->id);
+			$old = $_tmp->meta("values");
 
 			$old2 = $old[$def];
 			$new = array_merge($old2,$values);
@@ -3209,7 +3214,7 @@ class class_base extends aw_template
 		{
 			$this->acl_error("edit", $args["id"]);
 		}
-		$ob = $this->get_object($args["id"]);
+		$ob = new object($args["id"]);
 		$self_url = aw_global_get("REQUEST_URI");
 		if ($args["return_url"] != "")
 		{
@@ -3217,7 +3222,7 @@ class class_base extends aw_template
 		}
 		else
 		{
-			$this->mk_path($ob["parent"], "<a href='$self_url'>Muuda $classname</a>");
+			$this->mk_path($ob->parent(), "<a href='$self_url'>Muuda $classname</a>");
 		}
 		if ($tpl != "")
 		{
