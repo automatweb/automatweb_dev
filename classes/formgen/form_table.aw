@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.32 2003/02/02 15:03:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_table.aw,v 1.33 2003/02/02 15:06:36 kristo Exp $
 classload("formgen/form_base");
 class form_table extends form_base
 {
@@ -2622,13 +2622,19 @@ class form_table extends form_base
 				$search_val = $_dat["search_val_el"] ? $_dat["search_val_el"] : $_dat["el"];
 				$url .= "&restrict_search_el[]=".$search_el;
 				$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$search_val]);
-				$url .= "&restrict_search_yah[]=".urlencode($row_data["ev_".$_dat["el"]]);
+				if ($this->table["has_yah"])
+				{
+					$url .= "&restrict_search_yah[]=".urlencode($row_data["ev_".$_dat["el"]]);
+				}
 			}
 		}
 
 		$url .= "&restrict_search_el[]=".$cc["search_el"];
 		$url .= "&restrict_search_val[]=".urlencode($row_data["ev_".$cc["search_map"]]);
-		$url .= "&restrict_search_yah[]=".urlencode($textvalue);
+		if ($this->table["has_yah"])
+		{
+			$url .= "&restrict_search_yah[]=".urlencode($textvalue);
+		}
 
 		$url.="&tbl_sk=".$new_sk."&old_sk=";
 		if (isset($GLOBALS["tbl_sk"]))
