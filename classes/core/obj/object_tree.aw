@@ -257,7 +257,7 @@ class object_tree extends _int_obj_container_base
 	{
 		global $awt;
 		$awt->start("ds_search");
-		$oids = $GLOBALS["object_loader"]->ds->search($filter);
+		list($oids) = $GLOBALS["object_loader"]->ds->search($filter);
 		$awt->stop("ds_search");
 		$acl_oids = array();
 		foreach($oids as $oid)
