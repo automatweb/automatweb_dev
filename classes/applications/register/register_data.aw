@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.24 2005/01/05 11:32:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.25 2005/01/05 14:39:39 dragut Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -183,19 +183,19 @@
 @property usersubtitle5 type=text store=no subtitle=1
 @caption Subtitle5
 
-@property usertext1 type=text field=meta method=serialize table=objects
+@property usertext1 type=text store=no
 @caption Usertext1
 
-@property usertext2 type=text field=meta method=serialize table=objects
+@property usertext2 type=text store=no
 @caption Usertext2
 
-@property usertext3 type=text field=meta method=serialize table=objects
+@property usertext3 type=text store=no
 @caption Usertext3
 
-@property usertext4 type=text field=meta method=serialize table=objects
+@property usertext4 type=text store=no
 @caption Usertext4
 
-@property usertext5 type=text field=meta method=serialize table=objects
+@property usertext5 type=text store=no
 @caption Usertext5
 
 @property usertext6 type=text store=no
@@ -223,6 +223,22 @@
 @default table=objects
 @default method=serialize
 @default field=meta
+
+@property usersel1 type=select
+@caption User-defined select 1
+
+@property usersel2 type=select
+@caption User-defined select 2
+
+@property usersel3 type=select
+@caption User-defined select 3 
+
+@property usersel4 type=select
+@caption User-defined select 4
+
+@property usersel5 type=select
+@caption User-defined select 5
+
 
 @property udefhidden1 type=hidden
 @property udefhidden2 type=hidden
