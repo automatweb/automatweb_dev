@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.264 2004/05/21 11:12:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.265 2004/06/11 09:18:30 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -239,96 +239,9 @@ class core extends acl_base
 		$this->flush_cache();
 	}
 
-	////
-	// !marks the object $oid as deleted
-	// parameters:
-	//   oid - the object to delete
-	//   class_id - optional, if specified, then the object's class id must match it, otherwise it is not deleted
-	function delete_object($oid,$class_id = false, $flush = true)
-	{
-		if (!$oid)
-		{
-			$this->raise_error(ERR_CORE_NO_OID,"core::delete_object() - no oid specified",false, true);
-		};
-
-		/*		if (!$this->can("delete", $oid))
-		{
-			$this->raise_error(ERR_ACL_ERR, "core::delete_object() - no can_delete access for $oid!", true, false);
-		}*/
-
-		$obj = $this->get_object($oid);
-		// give the class the option to hook into object deleteion
-		$this->_log(ST_CORE, SA_DELETE, "$obj[name], id = $oid, class_id = ".$this->cfg['classes'][$obj['class_id']]['name'], $oid);
-
-		$where = " oid = '$oid'";
-		if ($class_id)
-		{
-			$where .= " AND class_id = '$class_id'";
-		};
-		$q = "UPDATE objects
-			SET status = 0,
-			    modified = '".time()."',
-			    modifiedby = '".aw_global_get("uid")."'
-			WHERE $where";
-		$this->db_query($q);
-		$this->db_query("DELETE FROM aliases where target = '$oid'");
-
-		aw_cache_set("objcache",$oid,"");
-		if ($flush)
-		{
-			$this->flush_cache();
-		}
-	}
-
-
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	// Objekti metadata handlemine. Seda hoitakse objects tabelis metadata väljas serializetud kujul.
 	// Järgnevate funktsioonidega saab selle välja sisu kätte ja muuta
-
-	////
-	// !Reads object metadata
-	// oid - object's oid
-	// key - optional, the key of the metadata that we want, if not set, all metadata is returned
-	// metadata - optional, if set, this is used as the string to read the metadata from, not the database
-	// no_cache - optional, if oid is set, and this is true, then the object is not read from the cache, but from the db
-	// example usage:
-	// $data = $this->get_object_metadata(array(
-	//					"oid" => "666",
-	//					"key" => "notes"));
-	function get_object_metadata($args = array())
-	{
-		$args["oid"] = isset($args["oid"]) ? $args["oid"] : false;
-		$args["no_cache"] = isset($args["no_cache"]) ? $args["no_cache"] : false;
-		extract($args);
-		// if metadata is defined in the arguments, we will not read
-		// the object into memory.
-		if ($oid)
-		{
-			if (!($odata = $this->get_object($oid,$no_cache)))
-			{
-				return false;
-			}
-			$metadata = $odata['metadata'];
-		}
-
-		// load, and parse the information
-		$metadata = aw_unserialize($metadata);
-		
-		// if key is defined, return only that part of the metainfo
-		if (isset($key) && $key)
-		{	
-			if (is_array($metadata) && isset($metadata[$key]))
-			{
-				$metadata = $metadata[$key];
-			}
-			else
-			{
-				$metadata = false;
-			}
-		}
-		// otherwise the whole thing
-		return $metadata;
-	}
 
 	////
 	// !Modifies object's metadata
@@ -598,9 +511,7 @@ class core extends acl_base
 			}
 			else
 			{
-				$row["meta"] = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"]
-				));
+				$row["meta"] = aw_unserialize($row["metadata"]);
 				$groups[$row["oid"]] = $row;
 			}
 		};
