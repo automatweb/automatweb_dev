@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.69 2004/02/02 19:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.70 2004/02/11 17:22:52 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -130,60 +130,71 @@ class file extends class_base
 	{
 		$data = &$arr["prop"];
 		$form_data = &$arr["form_data"];
-		global $file, $file_type,$file_name;
 		$retval = PROP_OK;
-		if ($data["name"] == "name")
+		switch($data["name"])
 		{
-			$retval = PROP_IGNORE;
-		};
-		if ($data["name"] == "file_url")
-		{
-			if ($data["value"] != "")
-			{
-				$proto_find = get_instance("protocols/protocol_finder");
-				$proto_inst = $proto_find->inst($data["value"]);
-
-				$str = $proto_inst->get($data["value"]);
-				preg_match("/<title>(.*)<\/title>/isU", $str, $mt);
-				$this->file_name = $mt[1];
-			}
-		}
-		else
-		if ($data["name"] == "file")
-		{
-			if (is_uploaded_file($file))
-			{
-				// fail sisse
-				$fc = $this->get_file(array(
-					"file" => $file,
-				));
-		
-				if ($fc != "")
-				{
-					// stick the file in the filesystem
-					$fs = $this->_put_fs(array(
-						"type" => $file_type,
-						"content" => $fc,
-					));
-
-					$form_data["file"] = $fs;
-					// try and resolve the file type from file extension
-
-					$pathinfo = pathinfo($file_name);
-					$mimeregistry = get_instance("core/aw_mime_types");
-
-					$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
-					$form_data["type"] = $realtype;
-
-					$data["value"] = $fs;
-					$this->file_name = $file_name;
-				};
-		
-			}
-			else
-			{
+			case "name":
 				$retval = PROP_IGNORE;
-			};
+				break;
+
+			case "file_url":
+				if (!empty($data["value"]))
+				{
+					$proto_find = get_instance("protocols/protocol_finder");
+					$proto_inst = $proto_find->inst($data["value"]);
+
+					$str = $proto_inst->get($data["value"]);
+					preg_match("/<title>(.*)<\/title>/isU", $str, $mt);
+					$arr["obj_inst"]->set_name($mt[1]);
+				}
+				break;
+
+			case "file":
+				if (is_array($data["value"]))
+				{
+					$file = $data["value"]["tmp_name"];
+					$file_type = $data["value"]["type"];
+					$file_name = $data["value"]["name"];
+				}
+				else
+				{
+					$file = $_FILES["file"]["tmp_name"];
+					$file_name = $_FILES["file"]["name"];
+					$file_type = $_FILES["file"]["type"];
+
+				};
+				if (is_uploaded_file($file))
+				{
+					// fail sisse
+					$fc = $this->get_file(array(
+						"file" => $file,
+					));
+			
+					if ($fc != "")
+					{
+						// stick the file in the filesystem
+						$fs = $this->_put_fs(array(
+							"type" => $file_type,
+							"content" => $fc,
+						));
+
+						$pathinfo = pathinfo($file_name);
+						$mimeregistry = get_instance("core/aw_mime_types");
+
+						$realtype = $mimeregistry->type_for_ext($pathinfo["extension"]);
+						//$form_data["type"] = $realtype;
+
+						$data["value"] = $fs;
+						$arr["obj_inst"]->set_name($file_name);
+						//$this->file_name = $file_name;
+					};
+			
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
 		};
 		// cause everything is alreay handled here
 		return $retval;
@@ -192,10 +203,12 @@ class file extends class_base
 	function callback_pre_save($arr)
 	{
 		// overwrite the name if new file is uploaded
+		/*
 		if (isset($this->file_name))
 		{
 			$arr["obj_inst"]->set_prop("name",$this->file_name);
 		};
+		*/
 	}
 
 	////
