@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.100 2005/01/26 14:27:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.101 2005/02/03 11:59:01 ahti Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -944,7 +944,7 @@ class file extends class_base
 		}
 		else
 		{
-			error::throw(array(
+			error::raise(array(
 				"msg" => t("Need either id or parent"),
 			));
 		};
