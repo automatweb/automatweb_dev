@@ -97,12 +97,12 @@
       </property>
       <property>
             <name>kandideerin</name>
-            <type>callback</type>
-            <callback>my_candidature_get</callback>
+            <type>select</type>
             <field>meta</field>
             <method>serialize</method>
+            <store>no</store>
+            <group>minu_kandidatuur</group>
             <table>objects</table>
-            <group>general</group>
             <caption>Vali cv kandideerimiseks</caption>
       </property>
       <classinfo>
@@ -117,6 +117,9 @@
                   <caption>Tööpakkumine failina</caption>
                   <parent>info_about_job_main</parent>
             </info_about_job_file>
+            <minu_kandidatuur>
+                  <caption>Minu kandidatuur</caption>
+            </minu_kandidatuur>
             <kandideerinud>
                   <caption>Kandideerijad</caption>
             </kandideerinud>
