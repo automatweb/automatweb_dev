@@ -266,6 +266,8 @@ $lc_form["LC_FORMS_WHAT_OUTPUT_TO_USE"]="Which outputti to use";
 $lc_form["LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL"]="Choose in which form entries are searched when filleng the form";
 
 $lc_form["LC_FORMS_FORM_TRIED_FILL_USER_DATA"]="Can form tried to fill with data that user entered when joining";
+$lc_form["LC_FORMS_FORM_HAS_ALIASMGR"]="Alias manager?";
+$lc_form["LC_FORMS_FORM_INTRALINK"]="Intranet link";
 $lc_form["LC_FORMS_AFTER_FILLING"]="After filling";
 $lc_form["LC_FORMS_CHANGE_INPUT"]="change entry";
 $lc_form["LC_FORMS_GOT_TO_ADDRESS"]="go to address";
