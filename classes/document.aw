@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.301 2004/11/15 17:45:59 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.302 2004/11/16 13:38:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -835,14 +835,6 @@ class document extends aw_template
 
 				$awt->stop("phase722");
 			};
-
-			// this damn ugly-ass hack is here because we need to be able to put the last search value
-			// from form_table to document title
-			if (aw_global_get("set_doc_title") != "")
-			{
-				$doc["title"] = aw_global_get("set_doc_title");
-				aw_global_set("set_doc_title","");
-			}
 		}; 
 
 		$awt->stop("phase72");
@@ -877,6 +869,14 @@ class document extends aw_template
 		$this->vars($al->get_vars());
 
 		$awt->stop("phase73");
+
+		// this damn ugly-ass hack is here because we need to be able to put the last search value
+		// from form_table to document title
+		if (aw_global_get("set_doc_title") != "")
+		{
+			$doc["title"] = aw_global_get("set_doc_title");
+			aw_global_set("set_doc_title","");
+		}
 
 		$pb = "";
 
@@ -1883,7 +1883,7 @@ class document extends aw_template
 			(isset($oob["meta"]["cfgform_id"]) && ( ($oob["meta"]["cfgform_id"] > 0)))
 		)
 		{
-			return $this->mk_my_orb("change",array("id" => $oob["oid"]),"doc");
+			return $this->mk_my_orb("change",array("id" => $oob["oid"], "section" => $_GET["section"]),"doc");
 		};
 
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
