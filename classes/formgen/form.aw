@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.13 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.14 2002/12/30 11:02:53 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -5905,5 +5905,77 @@ class form extends form_base
 		)); 
 		return $this->do_menu_return();                                 
 	} 
+
+	function joins($arr)
+	{
+		extract($arr);
+		$this->if_init($id, "joins.tpl", "Seosed");
+		
+		$nms = $this->list_objects(array(
+			"class" => CL_FORM
+		));
+		$elnms = $this->list_objects(array(
+			"class" => CL_FORM_ELEMENT
+		));
+
+		$this->build_form_relation_tree($this->arr["start_search_relations_from"]);
+
+		foreach($this->form_rel_tree as $_ff_id => $_td)
+		{
+			foreach($_td as $_tf_id => $_jdat)
+			{
+				$froe = $_jdat["el_from"]; 
+				if ($froe != "chain_id")
+				{
+					$froe = $elnms[$froe];
+					if ($froe == "")
+					{
+						$froe = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$_jdat["el_from"], "name");
+					}
+				}
+				$toe = $_jdat["el_to"]; 
+				if ($toe != "chain_id")
+				{
+					$toe = $elnms[$toe];
+					if ($toe == "")
+					{
+						$toe = $this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$_jdat["el_to"], "name");
+					}
+				}
+
+				$relid = "rel_".$_jdat["form_from"]."_".$_jdat["form_to"]."_".$_jdat["el_from"]."_".$_jdat["el_to"];
+				$this->vars(array(
+					"from_change" => $this->mk_my_orb("change", array("id" => $_jdat["form_from"])),
+					"from_form" => $nms[$_jdat["form_from"]],
+					"to_change" => $this->mk_my_orb("change", array("id" => $_jdat["form_to"])),
+					"to_form" => $nms[$_jdat["form_to"]],
+					"from_el" => $froe,
+					"to_el" => $toe,
+					"relid" => $relid,
+					"checked" => checked($this->arr["leave_out_joins"][$relid] == $relid)
+				));
+				$l .= $this->parse("LINE");
+			}
+		}
+
+		$this->vars(array(
+			"LINE" => $l,
+			"reforb" => $this->mk_reforb("submit_joins", array("id" => $id))
+		));
+
+		return $this->do_menu_return();
+	}
+
+	function submit_joins($arr)
+	{
+		extract($arr);
+
+		$this->load($id);
+		$this->arr["leave_out_joins"] = $this->make_keys($no_join);
+		$this->save();
+
+		return $this->mk_my_orb("joins", array("id" => $id));
+	}
+
 };	// class ends
 ?>

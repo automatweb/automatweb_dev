@@ -134,6 +134,8 @@ function toggle1(layer1,layer2) {
 <a class="alamlingid" href='{VAR:translate}'>{VAR:LC_FORMS_LANGS}</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 
 <a class="alamlingid" href='{VAR:tables}'>{VAR:LC_FORMS_TABLES}</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
+
+<a class="alamlingid" href='{VAR:joins}'>Seosed</a><img src='{VAR:baseurl}/images/transa.gif' WIDTH=8 height=1 border=0>
 </div>
 <!-- end# menu 2 -->
 

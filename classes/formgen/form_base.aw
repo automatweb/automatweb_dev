@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.5 2002/12/20 11:39:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.6 2002/12/30 11:02:53 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -329,6 +329,7 @@ class form_base extends form_db_base
 			"tables" => $this->mk_my_orb("sel_tables", array("id" => $this->id),"form"),
 			"aliasmgr" => $this->mk_my_orb("form_aliasmgr", array("id" => $this->id),"form"),
 			"calendar" => $this->mk_my_orb("calendar",array("id" => $this->id),"form"),
+			"joins" => $this->mk_my_orb("joins",array("id" => $this->id),"form"),
 		));
 
 		if (in_array($action, array("change","preview_form","all_elements","sel_search","sel_filter_search","form_aliasmgr")))

@@ -590,6 +590,9 @@ class form_db_base extends aw_template
 		// recurse through the selected search form relations. boo-ya!
 		$this->build_form_relation_tree($start_relations_from, 0, $no_reverse_rels);
 
+		// now go over the rel tree and kick out the ones that are set as not to be inkluded
+		$this->prune_relation_tree();
+
 		$this->_joins = array();
 
 		if ($no_fetch_joins)
@@ -1817,6 +1820,26 @@ class form_db_base extends aw_template
 			return $tbl;
 		}
 		return substr($tbl,0,$_p);
+	}
+
+	function prune_relation_tree()
+	{
+		if (is_array($this->arr["leave_out_joins"]))
+		{
+			$nrt = array();
+			foreach($this->form_rel_tree as $_ff_id => $_td)
+			{
+				foreach($_td as $_tf_id => $_jdat)
+				{
+					$relid = "rel_".$_jdat["form_from"]."_".$_jdat["form_to"]."_".$_jdat["el_from"]."_".$_jdat["el_to"];
+					if ($this->arr["leave_out_joins"][$relid] != $relid)
+					{
+						$nrt[$_ff_id][$_tf_id] = $_jdat;
+					}
+				}
+			}
+			$this->form_rel_tree = $nrt;
+		}
 	}
 }
 ?>
