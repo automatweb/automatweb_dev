@@ -223,9 +223,10 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_id => $c_d)
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
+			if (
+			//	$GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
 				$GLOBALS["object_loader"]->ds->can("view", $c_d["to"]) && 
-				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
+			//	$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
 				$GLOBALS["object_loader"]->object_exists($c_d["to"])
 			)
 			{
@@ -297,10 +298,11 @@ class _int_object
 		$cs = $GLOBALS["object_loader"]->ds->find_connections($filter);
 		foreach($cs as $c_d)
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
-				$GLOBALS["object_loader"]->ds->can("view", $c_d["to"]) &&
-				$GLOBALS["object_loader"]->object_exists($c_d["from"]) && 
-				$GLOBALS["object_loader"]->object_exists($c_d["to"])
+			if (
+				$GLOBALS["object_loader"]->ds->can("view", $c_d["from"]) && 
+				//$GLOBALS["object_loader"]->ds->can("view", $c_d["to"]) &&
+				$GLOBALS["object_loader"]->object_exists($c_d["from"]) 
+				//$GLOBALS["object_loader"]->object_exists($c_d["to"])
 			)
 			{
 				$ret[] =& new connection($c_d);
