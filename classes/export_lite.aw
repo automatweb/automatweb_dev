@@ -400,7 +400,7 @@ class export_lite extends aw_template
 
 		if (!isset($this->type2ext[$ct]))
 		{
-			echo "<B><font color=red><br />VIGA! EI LEIDNUD ext for type $ct <br /></font></b>";
+			echo "<B><font color=red><br />hmVIGA! EI LEIDNUD ext for type $ct <br /></font></b>";
 		}
 
 		$this->link2type[$link] = $this->type2ext[$ct];
@@ -974,6 +974,10 @@ class export_lite extends aw_template
 			if (preg_match("/Content\-Type\: (.*)/", $hd, $mt))
 			{
 				$ct = trim($mt[1]);
+				if (strpos($ct,";"))
+				{
+					$ct = substr($ct,0,strpos($ct,";"));
+				};
 			}
 		}
 
