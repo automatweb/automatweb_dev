@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.17 2004/05/14 06:50:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.18 2004/05/14 06:53:06 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -249,6 +249,7 @@ class releditor extends aw_template
 		// so that the object can access the source object
 		aw_global_set("from_obj",$arr["obj_inst"]->id());
 
+		// maybe I can use the property name itself
 
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
@@ -460,6 +461,8 @@ class releditor extends aw_template
 		$emb["return"] = "id";
 
 		$reltype = $arr["prop"]["reltype"];
+
+		$emb["cb_existing_props_only"] = 1;
 
 		$obj_id = $clinst->submit($emb);
 
