@@ -133,11 +133,11 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s",$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a><br>%s</td></tr></table>",$vars["align"],$idata["link"],$vars["target"],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
-						$replacement = sprintf("<a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a>",$idata["link"],$vars["target"],$idata["url"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><a href='%s' %s><img src='%s' border='0' alt='$alt' title='$alt'></a></td></tr></table>",$vars['align'],$idata["link"],$vars["target"],$idata["url"]);
 					}
 				};
 			}
@@ -165,11 +165,11 @@ class image extends class_base
 				{
 					if ($idata["comment"] != "")
 					{
-						$replacement = sprintf("<img src='%s' alt='$alt' title='$alt'><br>%s",$idata["url"],$idata["comment"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><img src='%s' alt='$alt' title='$alt'><br>%s</td></tr></table>",$vars['align'],$idata["url"],$idata["comment"]);
 					}
 					else
 					{
-						$replacement = sprintf("<img src='%s' alt='$alt' title='$alt'>",$idata["url"]);
+						$replacement = sprintf("<table border=0 cellpadding=0 cellspacing=0 %s><tr><td><img src='%s' alt='$alt' title='$alt'></td></tr></table>",$vars['align'],$idata["url"]);
 					}
 				};
 			}	
