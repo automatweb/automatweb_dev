@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.8 2004/01/28 16:58:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/groupware/Attic/project.aw,v 1.9 2004/02/03 10:40:10 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -56,6 +56,10 @@ class project extends class_base
 		
 		$t = &$arr["prop"]["vcl_inst"];
 
+		$arr["prop"]["vcl_inst"]->configure(array(
+                        "overview_func" => array(&$this,"get_overview"),
+                ));
+
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
 			"viewtype" => $arr["request"]["viewtype"],
@@ -64,6 +68,8 @@ class project extends class_base
 		$start = $range["start"];
 		$end = $range["end"];
 		classload("icons");
+
+		$this->overview = array();
 
 		if (sizeof($lds) > 0)
 		{
@@ -82,12 +88,25 @@ class project extends class_base
 					"data" => array(
 						"name" => $o->prop("name"),
 						"icon" => icons::get_icon_url($o),
-						"url" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
+						"link" => $this->mk_my_orb("change",array("id" => $o->id()),$clinf["file"]),
 					),
 				));
+
+				if ($o->prop("start1") > $range["overview_start"])
+				{
+					$this->overview[$o->prop("start1")] = 1;
+				};
+
+
 			};
 		};
 	}
+
+	function get_overview($arr = array())
+        {
+                return $this->overview;
+        }
+
 
 	////
 	// !returns a list of events from the projects the user participates in
@@ -99,23 +118,27 @@ class project extends class_base
 	{
 		$ev_ids = array();
 		//if (empty($arr["project_id"]))
+		if (!empty($arr["project_id"]))
+		{
+			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
+		}
+		else
 		if ($arr["type"] == "my_projects")
 		{
 			// this returns a list of events from "My projects"
 			$users = get_instance("users");
-			$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
-			$conns = $user->connections_to(array(
-				"from.class_id" => CL_PROJECT,
-			));
-			$ev_ids = array();
-			foreach($conns as $conn)
+			if (aw_global_get("uid"))
 			{
-				$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
+				$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+				$conns = $user->connections_to(array(
+					"from.class_id" => CL_PROJECT,
+				));
+				$ev_ids = array();
+				foreach($conns as $conn)
+				{
+					$ev_ids = array_merge($ev_ids,$this->get_events_for_project(array("project_id" => $conn->prop("from"))));
+				};
 			};
-		}
-		elseif (!empty($arr["project_id"]))
-		{
-			$ev_ids = $this->get_events_for_project(array("project_id" => $arr["project_id"]));
 		};
 		return $ev_ids;
 	}
