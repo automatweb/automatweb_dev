@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.5 2004/07/26 14:34:18 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.6 2004/10/29 08:41:21 ahti Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -29,6 +29,7 @@ class comments extends class_base
 
 		$comms = $fcg->get_comment_list(array(
 			"parent" => $parent,
+			"sortby" => $prop["sortby"],
 		));
 		$prname = $prop["name"];
 		$pager = $this->pager(array(
@@ -67,6 +68,12 @@ class comments extends class_base
 		$pr1["name"] = $prname . "[list]";
 		$rv = array(
 			$prname . "_list" => $pr1,
+		);
+		if($prop["no_form"] == 1)
+		{
+			return $rv;
+		}
+		$rv2 = array(
 			$prname . "_capt2" => array(
 				"type" => "text",
 				"subtitle" => 1,
@@ -91,6 +98,7 @@ class comments extends class_base
 				"name" => $prname . "[obj_id]",
 			),
 		);
+		$rv = $rv + $rv2;
 		return $rv;
 	}
 
