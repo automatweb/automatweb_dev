@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.111 2002/10/09 09:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.112 2002/10/14 13:35:22 duke Exp $
 // core.aw - Core functions
 
 define("ARR_NAME", 1);
@@ -1237,7 +1237,14 @@ class core extends db_connector
 			$sqlparts[] = "parent = $parent";
 		}
 
-		$sqlparts[] = ($active) ? "status = 2 " : "status != 0 ";
+		if ($status)
+		{
+			$sqlparts[] = " status = '$status' ";
+		}
+		else
+		{
+			$sqlparts[] = ($active) ? "status = 2 " : "status != 0 ";
+		};
 
 		if ($subclass)
 		{
@@ -1293,9 +1300,10 @@ class core extends db_connector
 			$q = "SELECT objects.* FROM objects $where $ostr";
 		};
 
-		global $DBUG;
-		if ($DBUG)
+		global $DBX;
+		if ($DBX)
 		{
+			print_r($args);
 			print $q;
 		}
 		$this->db_query($q);
