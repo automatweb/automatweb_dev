@@ -719,7 +719,7 @@
 							};
 							// if ($GLOBALS["dbg_ft"]) echo "<pre>",var_dump($row),"</pre>" ;//dbg
 							$row["ev_change"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
-							$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
+							$row["ev_view"] = "<a href='".$this->ft->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"], "op_id" => $op_id,"section" => $section),"form_chain")."'>Vaata</a>";		
 							$row["ev_delete"] = "<a href='".$this->ft->mk_my_orb(
 								"delete_entry", 
 									array(
@@ -844,7 +844,7 @@
 				";
 			};
 			
-			$parse.="Otsingu tulemusena leiti ".(int)$num_rec_found." kirjet";
+			$parse.="Otsingu tulemusena leiti ".(int)$num_rec_found.((int)$num_rec_found==1?" kirje":" kirjet");
 			//siin teeb lingi csv outputile
 			if ($this_page)
 			{
@@ -938,6 +938,45 @@
 			return $this->mk_my_orb("output",array("id" => $id));
 		}
 		
+		function orb_output_use($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->db_query("SELECT name,parent FROM objects WHERE oid='$this->id'");
+			$r=$this->db_next();
+			$parent=$r["parent"];
+			
+
+			$this->get_objects_by_class(array("class" => CL_FORM_TABLE));
+			$obj_arr=array();
+			while($r=$this->db_next())
+			{
+				$obj_arr[$r["oid"]]=$r["name"];
+			};
+
+			$this->read_template("select_formtable.tpl");
+			$this->vars(array(
+							"obj_list" => $this->picker("",$obj_arr),
+							"reforb" => $this->mk_reforb("submit_output_use",array("id"=>$id)),
+							));
+			$this->mk_path($parent,"Filter");
+			return $this->make_upper_menu($arr,"").$this->parse();
+		}
+
+		function orb_submit_output_use($arr)
+		{
+			extract($arr);
+			$this->id=$id;
+			$this->__load_data();
+			$this->data["output_id"]=$use_ft;
+						
+			// Get rid of this s.it
+			unset($this->data["selected_forms"]);
+			unset($this->data["selected_fields"]);
+			$this->__save_data();
+			return $this->mk_my_orb("output",array("id"=>$id));
+		}
+
 		// Jube! siin tuleb ymber teha kudagi
 		function orb_output($arr)
 		{
@@ -968,21 +1007,25 @@
 					if (!$this->data["selected_fields"])
 					{
 						$this->read_template("select_fields.tpl");
+						$selforms=unserialize($this->hexbin($this->data["selected_forms"]));
 						$field_arr=array();
 						foreach($this->master_array as $faketname => $fdata)
 						{
-							if ($faketname && is_array($fdata["fields"]))
+							// Näita ainult nende formide välju mis valiti
+							if ($faketname && is_array($fdata["fields"]) &&
+								(isset($selforms[$faketname]) || $this->data["type"]!="chain"))
 							{
 								foreach($fdata["fields"] as $finame => $fidata)
 								{
 									$field_arr["$faketname.$finame"]="$faketname.$finame";
-
+									
 								};
 							};
 								
 						};
 						$this->vars(array(
-							"field_list"=> $this->multiple_option_list("",$field_arr),
+							"field_list" => $this->multiple_option_list("",$field_arr),
+							"ln_use_existing" => $this->mk_my_orb("output_use",array("id"=>$id)),
 							"reforb" => $this->mk_reforb("submit_select_fields",array("id"=>$id)),
 							));
 						$this->mk_path($parent,"Filter");
@@ -1033,7 +1076,7 @@
 						};
 
 						$arr=array(
-							"name" => "output_for_$name",
+							"name" => "output_for_".$name,
 							"parent" => $parent,
 							"comment" => "$id_$name",
 							"num_cols" => $num_cols,
@@ -1062,7 +1105,7 @@
 				{
 					//Vot siin tuleb nyyd valida formid, mida kasutada outputis
 					$this->read_template("select_forms.tpl");
-					//$this->mk_path($parent,"<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">Muuda filtrit</a> | Väljund | <a href=\"".$this->mk_my_orb("search",array("id"=>$id))."\">Otsi</a>");
+					
 					
 					$form_arr=array();
 					foreach($this->master_array as $faketname => $fdata)
@@ -1072,6 +1115,7 @@
 					};
 					$this->vars(array(
 						"form_list"=> $this->multiple_option_list("",$form_arr),
+						"ln_use_existing" => $this->mk_my_orb("output_use",array("id"=>$id)),
 						"reforb" => $this->mk_reforb("submit_select_forms",array("id"=>$id)),
 						));
 					$this->mk_path($parent,"Filter");
@@ -1083,6 +1127,8 @@
 			$cparse=preg_replace("/name='class' value='(.+?)'/","name='class' value='search_filter'",$cparse);
 			$cparse=preg_replace("/name='action' value='(.+?)'/","name='action' value='output_submit'",$cparse);
 			$cparse=preg_replace("/<input type='hidden' name='reforb'/","<input type='hidden' name='filter_id' value='$id'><input type='hidden' name='reforb'",$cparse);
+
+			$cparse="<a href='".$this->mk_my_orb("output_use",array("id"=>$id))."' class='fgtext'>Kasuta olemasolevat formitabelit</a>".$cparse;
 
 			$this->mk_path($parent,"Filter");
 
@@ -1140,6 +1186,8 @@
 				$sqlw = "WHERE form_".$GLOBALS["search_form"]."_entries.ev_".$GLOBALS["search_el"]." = '".$GLOBALS["search_val"]."'";
 				// phuk. here we must somehow exclude all other chains from the search besides the one the element is in
 				// how the hell do we do that?
+
+				// look at that line above: if ($vchain[1]==$limit_to_chain || count($vchain)<3)
 			}
 
 			if ($GLOBALS["dbg_ft"]) echo "<textarea cols=100 rows=1>$sqlw</textarea><br>";
