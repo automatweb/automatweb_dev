@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.57 2001/11/12 23:12:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.58 2001/11/14 19:18:39 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -620,9 +620,17 @@ class document extends aw_template
 		$mp = $this->register_parser(array(
 					"reg" => "/(#)event_(.+?)(#)/i",
 					));
-
+		
+		if (defined("PIKK"))
+		{
+			$class = "events3";
+		}
+		else
+		{
+			$class = "events";
+		};
 		$this->register_sub_parser(array(
-					"class" => "events",
+					"class" => $class,
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 					));
@@ -1094,7 +1102,10 @@ class document extends aw_template
 						"id" => $data["id"],
 						"data" => $data["content"],
 				));
+				// also update keyword brother docs
+				$kw->update_menu_keyword_bros(array("doc_ids" => array($data["id"])));
 			};
+
 		};
 
 		if ($data["clear_styles"] == 1)
@@ -2692,6 +2703,8 @@ class document extends aw_template
 		return $this->parse();
 	}
 
+	////
+	// !creates a brother of document $id under menu $parent 
 	function create_bro($arr)
 	{
 		extract($arr);
@@ -2702,10 +2715,25 @@ class document extends aw_template
 			$obj = $this->get_object($id);
 			if ($obj["parent"] != $parent)
 			{
-				$noid = $this->new_object(array("parent" => $parent,"class_id" => CL_BROTHER_DOCUMENT,"status" => 2,"brother_of" => $id,"name" => $obj["name"],"comment" => $obj["comment"]));
+				$noid = $this->new_object(array(
+					"parent" => $parent,
+					"class_id" => CL_BROTHER_DOCUMENT,
+					"status" => 2,
+					"brother_of" => $id,
+					"name" => $obj["name"],
+					"comment" => $obj["comment"],
+					"subclass" => $subclass
+				));
 			}
 		}
-		header("Location: ".$this->mk_orb("add_bro", array("parent" => $parent, "s_name" => $s_name,"s_content" => $s_content)));
+		if ($no_header)
+		{
+			return $noid;
+		}
+		else
+		{
+			header("Location: ".$this->mk_orb("add_bro", array("parent" => $parent, "s_name" => $s_name,"s_content" => $s_content)));
+		}
 	}
 
 	function _serialize($arr)
