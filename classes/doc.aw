@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.97 2004/12/14 10:23:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.98 2005/02/01 08:07:12 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -537,9 +537,9 @@ class doc extends class_base
 		// RTE also has a button to clear styles
 		if ($this->clear_styles)
 		{
-			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->get_prop("content")));	
-			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->get_prop("lead")));	
-			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->get_prop("moreinfo")));	
+			$obj_inst->set_prop("content",$this->_doc_strip_tags($obj_inst->prop("content")));	
+			$obj_inst->set_prop("lead",$this->_doc_strip_tags($obj_inst->prop("lead")));	
+			$obj_inst->set_prop("moreinfo",$this->_doc_strip_tags($obj_inst->prop("moreinfo")));	
 		};
 
 		$old_tm = $obj_inst->prop("tm");
@@ -932,6 +932,11 @@ class doc extends class_base
 	**/
 	function upg($arr)
 	{
+		//$this->db_query("ALTER TABLE documents ADD no_show_in_promo int default 0");
+		//die("all done");
+		$f = fopen("/tmp/viiger_test", "w");
+		fwrite($f, "viiger oli siin");
+		fclose($f);
 		$sc = get_instance("scheduler");
 		$sc->add(array(
 			"event" => $this->mk_my_orb("test_hash", array("a" => 56)),
