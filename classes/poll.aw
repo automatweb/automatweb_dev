@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.30 2003/02/28 14:00:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.31 2003/02/28 14:07:28 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -395,8 +395,9 @@ class poll extends aw_template
 
 		// so we only show stuff for one language only
 
+		$na = $obj["meta"]["name"][aw_global_get("lang_id")];
 		$this->vars(array(
-			"name" => $obj["meta"]["name"][aw_global_get("lang_id")],
+			"name" => ($na == "" ? $obj['name'] : $na),
 			"comment" => $obj["meta"]["comment"][aw_global_get("lang_id")],
 			"QUESTION" => $tmp,
 			"lang" => $ld["name"],
@@ -598,9 +599,10 @@ class poll extends aw_template
 		$qs = aw_unserialize($poll["questions"]);
 
 
+		$na = $poll["meta"]["name"][aw_global_get("lang_id")];
 		$this->vars(array(
 			"ANSWER" => $as,
-			"question" => $poll["meta"]["name"][aw_global_get("lang_id")], 
+			"question" => ($na == "" ? $poll["name"] : $na)
 			"date" => $this->time2date($poll["modified"],2),
 			"addcomment" => $t->add_comment(array("board" => $id)), 
 			"num_comments" => $t->get_num_comments($id), 
