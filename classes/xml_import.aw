@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.22 2003/11/13 15:49:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.23 2003/11/19 17:47:43 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -149,8 +149,9 @@ class xml_import extends class_base
 		};
 		// R.I.P. parser
 		xml_parser_free($parser);
-		$q = "DELETE FROM ut_tudengid";
-		$this->db_query($q);
+		//$q = "DELETE FROM ut_tudengid";
+		//$this->db_query($q);
+		$table = $this->create_temp_table("ut_tudengid");
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"]  == "tudeng") && $val["type"] == "complete" )
@@ -172,7 +173,7 @@ class xml_import extends class_base
 				$this->quote($nimi);
 				$this->quote($enimi);
 				$this->quote($pnimi);
-				$q = "INSERT INTO ut_tudengid (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta,nimi)
+				$q = "INSERT INTO $table (id,enimi,pnimi,struktuur,oppekava,oppeaste,oppevorm,aasta,nimi)
 					VALUES('$id','$enimi','$pnimi','$struktuur','$oppekava','$oppeaste','$oppevorm','$aasta','$nimi')";
 				print $q;
 				print "<br />";
@@ -181,6 +182,7 @@ class xml_import extends class_base
 
 
 		}
+		$this->sync_with_temp("ut_tudengid","temp_ut_tudengid");
 	}
 	
 	function import_struktuurid($args = array())
@@ -197,8 +199,9 @@ class xml_import extends class_base
 		xml_parse_into_struct($parser,$contents,&$values,&$tags);
 		// R.I.P. parser
 		xml_parser_free($parser);
-		$q = "DELETE FROM ut_struktuurid";
-		$this->db_query($q);
+		//$q = "DELETE FROM ut_struktuurid";
+		//$this->db_query($q);
+		$table = $this->create_temp_table("ut_struktuurid");	
 		$lastlevel = 0;
 		$ylem_list = array();
 		$ylem_ilist = array();
@@ -288,7 +291,7 @@ class xml_import extends class_base
 						$t3sort = $t3taseme_id . $str_level . sprintf("%02d",$jrk) . $nimetus;
 					};
 						
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylem_jrk,ylemyksus,jrk,jrknimetus,3taseme_ylem_id,3taseme_sort)
+					$q = "INSERT INTO $table (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylem_jrk,ylemyksus,jrk,jrknimetus,3taseme_ylem_id,3taseme_sort)
 							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$ylem_jrk','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem','$t3sort')";
 					$counter++;
 					if ($str_level == 3)
@@ -322,6 +325,7 @@ class xml_import extends class_base
 			} 
 		}
 		print "<h1>$counter</h1>";
+		$this->sync_with_temp("ut_struktuurid","temp_ut_struktuurid");
 	}
 	
 	function import_tootajad($args = array())
@@ -342,12 +346,17 @@ class xml_import extends class_base
 	
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$tootajad_table = $this->create_temp_table("ut_tootajad");	
+		$ametid_table = $this->create_temp_table("ut_ametid");	
+		$tootajad_view_table = $this->create_temp_table("tootajad_view");	
+		/*
 		$q = "DELETE FROM ut_tootajad";
 		$this->db_query($q);
 		$q = "DELETE FROM ut_ametid";
 		$this->db_query($q);
 		$q = "DELETE FROM tootajad_view";
 		$this->db_query($q);
+		*/
 		foreach($values as $token)
 		{
 			if ( ($token["tag"] == "tootaja") && ($token["type"] == "open") )
@@ -409,7 +418,7 @@ class xml_import extends class_base
 				$pikknimi = $eriala . $nimi . $koormus_view;
                                 $this->quote($pikknimi);
 
-				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid,st_id)
+				$q = "INSERT INTO $ametid_table (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid,st_id)
 					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
 						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid','$st_id')";
 				print $q;
@@ -466,7 +475,7 @@ class xml_import extends class_base
 
 			if ( ($token["tag"] == "tootaja") && ($token["type"] == "close") )
 			{
-				$q = "SELECT * FROM ut_tootajad WHERE id = '$tid'";
+				$q = "SELECT * FROM $tootajad_table WHERE id = '$tid'";
 				$this->db_query($q);
 				$row = $this->db_next();
 				$row = false;
@@ -480,7 +489,7 @@ class xml_import extends class_base
 				};
 				if (!$row)
 				{
-					$q = "INSERT INTO ut_tootajad (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
+					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
 						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad')";
 					print $q;
 					print "<br />";
@@ -496,7 +505,7 @@ class xml_import extends class_base
                                         if (sizeof($items) > 0)
                                         {
                                                 $amts = join(", ",$items);
-                                                $q = "UPDATE ut_ametid SET nimi_pikk = '$amts',jrk='$low_id' WHERE st_id = '$str_id'";
+                                                $q = "UPDATE $ametid_table SET nimi_pikk = '$amts',jrk='$low_id' WHERE st_id = '$str_id'";
                                         }
                                         if (!empty($q))
                                         {
@@ -518,7 +527,7 @@ class xml_import extends class_base
 							$amts = join(", ",$items);
 							if (strlen($amts) > 0)
 							{
-								$q = "UPDATE ut_ametid SET koht = '$amts' WHERE st_id = '$str_id'";
+								$q = "UPDATE $ametid_table SET koht = '$amts' WHERE st_id = '$str_id'";
 							};
 						}
 						if (!empty($q))
@@ -540,7 +549,7 @@ class xml_import extends class_base
 								// just write it out
 								$fieldnames = join(",",array_keys($items[0]));
 								$fieldvalues = join(",",map("'%s'",array_values($items[0])));
-								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
+								$q = "INSERT INTO $tootajad_view_table ($fieldnames) VALUES ($fieldvalues)";
 								$this->db_query($q);
 								print $q;
 								print "<br />";
@@ -560,7 +569,7 @@ class xml_import extends class_base
 								//$tmp["ruum"] = $ruum;
 								$fieldnames = join(",",array_keys($tmp));
 								$fieldvalues = join(",",map("'%s'",array_values($tmp)));
-								$q = "INSERT INTO tootajad_view ($fieldnames) VALUES ($fieldvalues)";
+								$q = "INSERT INTO $tootajad_view_table ($fieldnames) VALUES ($fieldvalues)";
 								$this->db_query($q);
 								print $q;
 								print "<br />";
@@ -575,7 +584,7 @@ class xml_import extends class_base
 		// kahjuks ma ei saa mysql-ist kätte ainult neid, millel count=0, niet ma teen
 		// tsükli
 		$q = "SELECT ut_struktuurid.id,nimetus,COUNT(nimi) AS cnt FROM ut_struktuurid
-			LEFT OUTER JOIN ut_ametid ON (ut_struktuurid.id = ut_ametid.struktuur_id)
+			LEFT OUTER JOIN $ametid_table ON (ut_struktuurid.id = ${ametid_table}.struktuur_id)
 			GROUP BY ut_struktuurid.id ORDER BY cnt";
 		$this->db_query($q);
 		$queries = array();
@@ -583,7 +592,7 @@ class xml_import extends class_base
 		{
 			if ($row["cnt"] == 0)
 			{
-				$q = "INSERT INTO ut_ametid (struktuur_id,st_id) 
+				$q = "INSERT INTO $ametid_table (struktuur_id,st_id) 
 					VALUES ('$row[id]','$row[id]')";
 				$queries[] = $q;
 			};
@@ -592,6 +601,9 @@ class xml_import extends class_base
 		{
 			$this->db_query($query);
 		};
+		$this->sync_with_temp("ut_ametid","temp_ut_ametid");
+		$this->sync_with_temp("ut_tootajad","temp_ut_tootajad");
+		$this->sync_with_temp("tootajad_view","temp_tootajad_view");
 		print "all done!<br />";
 
 	}
@@ -629,13 +641,16 @@ class xml_import extends class_base
 			$this->bitch_and_die($parser,$contents);
 		};
 
+		$table = $this->create_temp_table("ut_oppekavad");
+
+
 		print "<pre>";
 		print_r(htmlspecialchars($contents));
 		print "</pre>";
 		// R.I.P. parser
 		xml_parser_free($parser);
-		$q = "DELETE FROM ut_oppekavad";
-		$this->db_query($q);
+		//$q = "DELETE FROM ut_oppekavad";
+		//$this->db_query($q);
 		$oppekava_url = $oppeaasta_url = "";
 		$aasta_urls = array();
 		$st_id = array();
@@ -695,7 +710,7 @@ class xml_import extends class_base
 				$this->quote($aasta_url_str);
 				$st_id_str = join(",",$st_id);
 				$st_id = array();
-				$q = "INSERT INTO ut_oppekavad (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste,st_id)
+				$q = "INSERT INTO $table (id,kood,nimetus,nimetus_en,oppekava_url,oppeaasta_url,oppeaste,st_id)
 					VALUES('$id','$kood','$nimetus','$nimetus_en','$kava_url','$aasta_url_str','$oppeaste','$st_id_str')";				
 				print $q;
 				print "<br />";
@@ -707,6 +722,7 @@ class xml_import extends class_base
 
 
 		}
+		$this->sync_with_temp("ut_oppekavad","temp_ut_oppekavad");
 	}
 	
 	function import_oppeasted($args = array())
@@ -722,8 +738,11 @@ class xml_import extends class_base
 		};
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$table = $this->create_temp_table("ut_oppeasted");	
+		/*
 		$q = "DELETE FROM ut_oppeasted";
 		$this->db_query($q);
+		*/
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"] == "oppeaste")  && ($val["type"] == "complete") )
@@ -733,7 +752,7 @@ class xml_import extends class_base
 				$id = $attr["id"];
 				$jrk = $attr["jrk"];
 				$this->quote($nimetus);
-				$q = "INSERT INTO ut_oppeasted (id,nimetus,jrk)
+				$q = "INSERT INTO $table (id,nimetus,jrk)
 					VALUES('$id','$nimetus','$jrk')";
 				print $q;
 				print "<br />";
@@ -743,6 +762,7 @@ class xml_import extends class_base
 
 
 		}
+		$this->sync_with_temp("ut_oppeasted","temp_ut_oppeasted");
 	}
 	
 	function import_oppevormid($args = array())
@@ -758,8 +778,11 @@ class xml_import extends class_base
 		};
 		// R.I.P. parser
 		xml_parser_free($parser);
+		$table = $this->create_temp_table("ut_oppevormid");	
+		/*
 		$q = "DELETE FROM ut_oppevormid";
 		$this->db_query($q);
+		*/
 		foreach($values as $key => $val)
 		{
 			if ( ($val["tag"] == "oppevormid")  && ($val["type"] == "complete") )
@@ -769,7 +792,7 @@ class xml_import extends class_base
 				$id = $attr["id"];
 				$jrk = $attr["jrk"];
 				$this->quote($nimetus);
-				$q = "INSERT INTO ut_oppevormid (id,nimetus,jrk)
+				$q = "INSERT INTO $table (id,nimetus,jrk)
 					VALUES('$id','$nimetus','$jrk')";
 				print $q;
 				print "<br />";
@@ -779,6 +802,7 @@ class xml_import extends class_base
 
 
 		}
+		$this->sync_with_temp("ut_oppevormid","temp_ut_oppevormid");
 	}
 
 	function bitch_and_die(&$parser,&$contents)
@@ -793,6 +817,33 @@ class xml_import extends class_base
 		$offender = htmlspecialchars(substr($frag,100,1));
 		print "Tekstifragment: <pre>" .  $pref . "<font color='red'><strong> ---&gt;&gt;$offender&lt;&lt;---</strong></font>$suf" . "</pre>";
 		die();
+	}
+
+	function create_temp_table($table)
+	{
+		$q = "SHOW CREATE TABLE $table";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$dt = $row["Create Table"];
+		preg_match("/CREATE TABLE `(\w*)` \(/",$dt,$m);
+		$tablename = $m[1];
+		$tempname = "temp_" . $table;
+		$q = "DROP TABLE IF EXISTS $tempname";
+		$this->db_query($q);
+		$tempstruct = preg_replace("/(CREATE TABLE `)(\w*)(` \()/","\\1temp_\\2\\3",$dt);
+		print $tempstruct;
+		$this->db_query($tempstruct);
+		return "temp_" . $table;
+	}
+
+	function sync_with_temp($table,$temptable)
+	{
+		$q = "DELETE FROM $table";
+		$this->db_query($q);
+		$q = "INSERT INTO $table SELECT * FROM $temptable"; 
+		$this->db_query($q);
+		$q = "DROP TABLE $temptable";
+		$this->db_query($q);
 	}
 }
 ?>
