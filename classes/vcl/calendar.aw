@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.21 2004/09/10 12:07:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.22 2004/09/28 12:41:47 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -54,6 +54,16 @@ class vcalendar extends aw_template
 			$this->show_days_with_events = 1;
 		};
 
+		if (!empty($arr["skip_empty"]))
+		{
+			$this->skip_empty = $arr["skip_empty"];
+		};
+		
+		if (!empty($arr["full_weeks"]))
+		{
+			$this->full_weeks = $arr["full_weeks"];
+		};
+
 
 	}
 
@@ -91,6 +101,10 @@ class vcalendar extends aw_template
 		$m = date("m",$range["timestamp"]);
 		$y = date("Y",$range["timestamp"]);
 		$range["viewtype"] = $viewtype;
+		if ($arr["limit_events"])
+		{
+			$range["limit_events"] = $arr["limit_events"];
+		}
 
 		if ($this->overview_range == 3)
 		{
@@ -189,6 +203,10 @@ class vcalendar extends aw_template
 
 		$this->evt_tpl->tpl_init($this->cal_tpl_dir);
 		$tpl = $this->range["viewtype"] == "relative" ? "sub_event2.tpl" : "sub_event.tpl";
+		if ($arr["event_template"])
+		{
+			$tpl = $arr["event_template"];
+		};
 		$this->evt_tpl->read_template($tpl);
 		switch($this->range["viewtype"])
 		{
@@ -202,6 +220,7 @@ class vcalendar extends aw_template
 				break;
 
 			case "week":
+			case "last_events":
 				$content = $this->draw_week();
 				$ms = get_est_month(date("m",$this->range["start"]));
 				$me = get_est_month(date("m",$this->range["end"]));
@@ -212,6 +231,12 @@ class vcalendar extends aw_template
 				$content = $this->draw_relative();
 				$caption = date("j. ",$this->range["timestamp"]) . get_est_month(date("m",$this->range["timestamp"]));
 				break;
+
+			case "year":
+				$content = $this->draw_year();
+				$caption = "";
+				break;
+
 	
 			default:
 				$content = $this->draw_day();
@@ -330,7 +355,7 @@ class vcalendar extends aw_template
 		{
 			$this->vars(array(
 				"task_url" => $task["url"],
-				"task_name" => $task["name"],
+				"task_name" => parse_obj_name($task["name"]),
 			));
 			$tstr .= $this->parse("TASK");
 		};
@@ -400,6 +425,18 @@ class vcalendar extends aw_template
 			$header .= $this->parse("HEADER_CELL");
 		};
 
+		if ($this->full_weeks)
+		{
+			for ($i = 6; $i <= 7; $i++)
+			{
+				$dn = get_lc_weekday($i);
+				$this->vars(array(
+					"dayname" => strtoupper(substr($dn,0,1)),
+				));
+				$header .= $this->parse("HEADER_CELL");
+			};
+		};
+
 		$this->vars(array(
 			"HEADER_CELL" => $header,
 		));
@@ -428,7 +465,8 @@ class vcalendar extends aw_template
 				{
 					$wn = 7;
 				};
-				if ($wn > 5)
+
+				if (!$this->full_weeks && $wn > 5)
 				{
 					continue;
 				};
@@ -447,19 +485,37 @@ class vcalendar extends aw_template
 				$calendar_blocks[date("Ymd",$i)] .= $events_for_day;
 			};
 		};
-		
-		for ($j = $realstart; $j <= $realend; $j = $j + (7*86400))
+
+		$last = 0;
+
+		global $XX4;
+		if ($XX4)
 		{
+			print "rs = $realstart<br>";
+			print "re = $realend<br>";
+		};
+		
+		for ($j = $realstart; $j < $realend; $j = $j + (7*86400))
+		{
+			global $XX4;
+			if ($XX4)
+			{
+				print "j = $j<br>";
+			};
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
 				$dstamp = date("Ymd",$i);
+				if ($last == $dstamp)
+				{
+					continue;
+				};
 				$events_for_day = "";
 				$wn = date("w",$i);
 				if ($wn == 0)
 				{
 					$wn = 7;
 				};
-				if ($wn > 5)
+				if (!$this->full_weeks && $wn > 5)
 				{
 					continue;
 				};
@@ -475,6 +531,8 @@ class vcalendar extends aw_template
 				));
 				$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
 				$rv .= $this->parse($tpl);
+
+				$last = $dstamp;
 			};
 			$this->vars(array(
 				"DAY" => $rv,
@@ -486,7 +544,79 @@ class vcalendar extends aw_template
 		$this->vars(array(
 			"HEADER" => $header,
 			"WEEK" => $w,
+			"month_name" => ucfirst(get_lc_month($this->range["m"])),	
+			"year" => $this->range["y"],
 		));
+		return $this->parse();
+	}
+	
+	function draw_year()
+	{
+		$this->read_template("year_view.tpl");
+		//$rv = "";
+
+		$header = "";
+		$rv = "";
+
+		$this->vars(array(
+			"year" => $this->range["y"],
+		));
+
+		//dbg::p5($this->range);
+		list($d,$m,$y) = explode("-",date("d-m-Y",$this->range["timestamp"]));
+
+		for ($i = 1; $i <= 12; $i++)
+		{
+			$this->vars(array(
+				"month_name" => ucfirst(get_lc_month($i)),	
+			));
+			$header = $this->parse("HEADER");
+			$footer = $this->parse("FOOTER");
+			// nüüd on mul vaja iga kuu kohta algust ja lõppu
+
+			$ms = mktime(0,0,0,$i,1,$y);
+			$me = mktime(0,0,0,$i+1,0,$y);
+
+			$et = "";
+
+			$ev_count = 0;
+
+			for ($j = $ms; $j <= $me; $j = $j + 86400)
+			{
+				$dstamp = date("Ymd",$j);
+				$events_for_day = "";
+				if (is_array($this->items[$dstamp]))
+				{
+					$events = $this->items[$dstamp];
+					uasort($events,array($this,"__asc_sort"));
+					foreach($events as $event)
+					{
+						$sday = $this->draw_event($event);
+						$events_for_day .= $sday;
+						$ev_count++;
+					};
+				};
+				$et .= $events_for_day;
+
+			};
+
+			// XX: add optional skip_empty argument
+			if (!$this->skip_empty || $ev_count > 0)
+			{
+				$this->vars(array(
+					"HEADER" => $header,
+					"EVENT" => $et,
+					"FOOTER" => $footer,
+				));
+
+				$rv .= $this->parse("MONTH");
+			};
+		};
+
+		$this->vars(array(
+			"MONTH" => $rv,
+		));
+
 		return $this->parse();
 	}
 	
@@ -494,6 +624,10 @@ class vcalendar extends aw_template
 	{
 		$this->read_template("week_view.tpl");
 		$now = date("Ymd");
+		if ($this->skip_empty)
+		{
+			$this->show_days_with_events = 1;
+		};
 		for ($i = $this->range["start"]; $i <= $this->range["end"]; $i = $i + 86400)
 		{
 			$dstamp = date("Ymd",$i);
@@ -516,17 +650,28 @@ class vcalendar extends aw_template
 			{
 				$wn = 7;
 			};
+		
+			$dt = date("d",$i);
+                	$mn = get_lc_month(date("m",$i));
+                	$mn2 = $mn . " " . date("H:i",$i);
+
+
 			$this->vars(array(
 				"EVENT" => $events_for_day,
 				"daynum" => date("j",$i),
 				"dayname" => date("F d, Y",$i),
-				"lc_weekday" => get_lc_weekday($wn,$i),
+				"lc_weekday" => ucfirst(get_lc_weekday($wn,$i)),
 				"lc_month" => get_est_month(date("m",$i)),
 				"daylink" => aw_url_change_var(array("viewtype" => "day","date" => date("d-m-Y",$i))),
+                        	"date_and_time" => $dt . ". " . $mn2,
+				"day_name" => strtoupper(substr(get_lc_weekday($wn),0,1)),
+				"long_day_name" => ucfirst(get_lc_weekday($wn)),
+                        	"date" => $dt . ". " . $mn,
 			));
 			$tpl = date("Ymd",$i) == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
 		};
+
 		$this->vars(array(
 			"DAY" => $rv,
 		));
@@ -823,17 +968,22 @@ class vcalendar extends aw_template
 			$evt["first_image"] = $img_url;
 		};
 
+		$this->evt_tpl->vars(array(
+			"parent_1_name" => "",
+			"parent_2_name" => "",
+		));
+
 		$this->evt_tpl->vars($evt);
 
 		$dt = date("d",$evt["start1"]);
-                $mn = get_lc_month(date("m",$evt["start1"]));
+                $mn = ucfirst(get_lc_month(date("m",$evt["start1"])));
                 $mn .= " " . date("H:i",$evt["start1"]);
 
 		
 		$this->evt_tpl->vars(array(
 			"time" => date("H:i",$evt["timestamp"]),
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),
-			"datestamp" => date("d-m-Y",$evt["timestamp"]),
+			"datestamp" => date("d.m.Y",$evt["timestamp"]),
 			"lc_date" => date("j",$evt["timestamp"]) . ". " . $lc_month . " " . date("Y H:i",$evt["timestamp"]),
 			"name" => $evt["name"],
 			"id" => $evt["id"],
