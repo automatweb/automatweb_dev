@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.7 2004/12/02 14:36:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.8 2005/01/07 11:59:08 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -17,6 +17,10 @@
 
 @property author_email type=textbox field=meta method=serialize
 @caption Autori meil
+
+@property locked type=checkbox ch_value=1 field=meta method=serialize
+@caption Teema lukus
+@comment Lukus teemale uusi kommentaare lisada ei saa
 
 @property answers_to_mail type=checkbox ch_value=1 store=no
 @caption Soovin vastuseid e-mailile
