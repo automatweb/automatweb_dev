@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.2 2004/12/08 12:23:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.3 2004/12/09 11:49:53 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -441,14 +441,16 @@ class mrp_workspace extends class_base
 		));
 		$count_projects_in_work = $list->count ();
 
-		$list = new object_list (array (
+		/*$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
 			"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
 			"finished_date" => 0,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),
 		));
-		$count_projects_overdue = $list->count ();
+		$count_projects_overdue = $list->count ();*/
+		$od = $this->get_proj_overdue($this_object);
+		$count_projects_overdue = count($od);
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
@@ -565,12 +567,9 @@ class mrp_workspace extends class_base
 				break;
 
 			case "overdue":
+				echo dbg::dump($this->get_proj_overdue($this_object));
 				$list = new object_list (array (
-					"class_id" => CL_MRP_CASE,
-					"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
-					"finished_date" => 0,
-					"parent" => $this_object->prop ("projects_folder"),
-					// "createdby" => aw_global_get('uid'),
+					"oid" => $this->get_proj_overdue($this_object)
 				));
 				break;
 
@@ -645,6 +644,30 @@ class mrp_workspace extends class_base
 			"subgroup" => $arr["subgroup"],
 		), "mrp_workspace");
 		return $return_url;
+	}
+
+	function get_proj_overdue($this_object)
+	{
+		$ret = array();
+		$this->db_query("
+			SELECT 
+				objects.oid 
+			FROM 
+				objects 
+				LEFT JOIN mrp_case on mrp_case.oid = objects.oid
+				LEFT JOIN aliases ON (aliases.source = objects.oid AND aliases.reltype = 3)
+				LEFT JOIN mrp_job ON mrp_job.oid = aliases.target
+			WHERE
+				objects.status > 0 AND
+				objects.class_id = ".CL_MRP_CASE." AND
+				objects.parent = ".$this_object->prop ("projects_folder")." AND
+				mrp_job.starttime > mrp_case.due_date
+		");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["oid"]] = $row["oid"];
+		}
+		return $ret;
 	}
 }
 
