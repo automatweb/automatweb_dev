@@ -367,6 +367,7 @@
             <mode>manager</mode>
             <field>meta</field>
             <method>serialize</method>
+            <store>no</store>
             <caption>Pakendid</caption>
       </property>
       <property>
@@ -384,6 +385,7 @@
                   <num_2>status</num_2>
                   <num_3>file</num_3>
             </props>
+            <store>no</store>
             <caption>Pildid</caption>
       </property>
       <classinfo>

@@ -3,4 +3,3 @@
 	<class name="shop_order_cart_value" folder="applications/shop" extends="class_base">
 	</class>
 </orb>
-		
