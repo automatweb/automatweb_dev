@@ -346,6 +346,14 @@ class export_lite extends aw_template
 		{
 			$cur_sec = $data["parent"];
 		}
+	
+		if (!$cur_sec)
+		{
+			// parse the section from the url. since the url is always nicely formatted, it is relatively easy.
+			$urld = parse_url($url);
+			parse_str($urld["query"], $paramd);
+			$cur_sec = $paramd["section"];
+		}
 
 		$t_id = $this->db_fetch_field("SELECT id FROM static_content WHERE id = '$h_id'","id");
 
