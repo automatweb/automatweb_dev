@@ -60,6 +60,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function read_connection($id)
 	{
+		echo "readc $id <br>";
 		return $this->contained->read_connection($id);
 	}
 
@@ -67,6 +68,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !saves connection 
 	function save_connection($data)
 	{
+		echo "savec <br>";
 		return $this->contained->save_connection($data);
 	}
 
@@ -74,6 +76,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !deletes connection $id
 	function delete_connection($id)
 	{
+		echo "deletec $id <br>";
 		return $this->contained->delete_connection($id);
 	}
 
@@ -82,6 +85,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
+		echo "findc <br>";
 		return $this->contained->find_connections($arr);
 	}
 

@@ -19,7 +19,16 @@ define("OP_IF_COND", 11); 			// params {prop, value}
 define("OP_IF_END", 12);			// params {}
 define("OP_IF_ELSE", 13);			// params {}
 
-define("OP_CHECK_SUBITEMS_SEL", 14);// params { tpl }
+define("OP_CHECK_SUBITEMS_SEL", 14);// params { tpl, fq_tpl }
+
+define("OP_AREA_CACHE_CHECK", 15);	// params { a_parent,level }
+define("OP_AREA_CACHE_SET", 16);	// params { a_parent,level }
+
+define("OP_CHECK_NO_SUBITEMS_SEL", 17);// params { tpl, fq_tpl }
+
+define("OP_SHOW_ITEM_INSERT", 18);			// params { tpl (fully qualified name), has_image_tpl, no_image_tpl}
+
+define("OP_INSERT_SEL_IDS", 19);
 
 class site_template_compiler extends aw_template
 {
@@ -40,7 +49,12 @@ class site_template_compiler extends aw_template
 			11 => "OP_IF_COND", 
 			12 => "OP_IF_END",
 			13 => "OP_IF_ELSE",
-			14 => "OP_CHECK_SUBITEMS_SEL"
+			14 => "OP_CHECK_SUBITEMS_SEL",
+			15 => "OP_AREA_CACHE_CHECK",
+			16 => "OP_AREA_CACHE_SET",
+			17 => "OP_CHECK_NO_SUBITEMS_SEL",
+			18 => "OP_SHOW_ITEM_INSERT",
+			19 => "OP_INSERT_SEL_IDS"
 		);
 	}
 
@@ -121,7 +135,7 @@ class site_template_compiler extends aw_template
 					);
 				}
 				else
-				if (substr($parent_tpl, 0, strlen("HAS_SUBITEMS")) == "HAS_SUBITEMS")
+				if (substr($parent_tpl, 0, strlen("HAS_SUBITEMS")) == "HAS_SUBITEMS" || substr($parent_tpl, 0, strlen("NO_SUBITEMS")) == "NO_SUBITEMS")
 				{
 					// fetch the parent templates for that and try again
 					$parent_tpls2 = $this->get_parent_templates($parent_tpl);
@@ -168,10 +182,86 @@ class site_template_compiler extends aw_template
 		{
 			$parts = explode("_", $tpl);
 			$area = $parts[2];
+			$p_fqname = $this->v2_name_map[$tpl];
+	
+			$has_inside = false;
+
+			// check if the no subitems tpl has any menu templates inside it
+			foreach($this->v2_name_map as $shname => $fqname)
+			{
+				if (strlen($fqname) > strlen($p_fqname))
+				{
+					if (substr($fqname, 0, strlen($p_fqname)) == $p_fqname)
+					{
+						$has_inside = true;
+					}
+				}
+			}
+
+			$level = substr($parts[3], 1)+1;
+
+
+			if ($has_inside)
+			{
+				$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check"] = true;
+				$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check_tpl"] = $tpl;
+				$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
+			}
+			else
+			{
+				$this->menu_areas[$area]["levels"][($level-1)]["has_subitems_sel_check_after_item"] = true;
+				$this->menu_areas[$area]["levels"][($level-1)]["has_subitems_sel_check_tpl"] = $tpl;
+				$this->menu_areas[$area]["levels"][($level-1)]["has_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
+			}
+		}
+
+
+		// NO_SUBITEMS_AREA_L1 check - these will go after each level is inserted in the template
+		$tpls = $this->get_subtemplates_regex("(NO_SUBITEMS.*)");
+		
+		// now figure out the menu areas that are used
+		$_tpls = array();
+ 		foreach($tpls as $tpl)
+		{
+			list($tpl) = explode(".", $tpl);
+			$_tpls[] = $tpl;
+		}
+		$tpls = array_unique($_tpls);
+		foreach($tpls as $tpl)
+		{
+			$parts = explode("_", $tpl);
+			$area = $parts[2];
+
+			$p_fqname = $this->v2_name_map[$tpl];
+	
+			$has_inside = false;
+
+			// check if the no subitems tpl has any menu templates inside it
+			foreach($this->v2_name_map as $shname => $fqname)
+			{
+				if (strlen($fqname) > strlen($p_fqname))
+				{
+					if (substr($fqname, 0, strlen($p_fqname)) == $p_fqname)
+					{
+						$has_inside = true;
+					}
+				}
+			}
+
 			$level = substr($parts[3], 1)+1;
 			
-			$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check"] = true;
-			$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check_tpl"] = $tpl;
+			if ($has_inside)
+			{
+				$this->menu_areas[$area]["levels"][$level]["no_subitems_sel_check"] = true;
+				$this->menu_areas[$area]["levels"][$level]["no_subitems_sel_check_tpl"] = $tpl;
+				$this->menu_areas[$area]["levels"][$level]["no_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
+			}
+			else
+			{
+				$this->menu_areas[$area]["levels"][($level-1)]["no_subitems_sel_check_after_item"] = true;
+				$this->menu_areas[$area]["levels"][($level-1)]["no_subitems_sel_check_tpl"] = $tpl;
+				$this->menu_areas[$area]["levels"][($level-1)]["no_subitems_sel_check_tpl_fq"] = $this->v2_name_map[$tpl];
+			}
 		}
 	}
 
@@ -182,6 +272,15 @@ class site_template_compiler extends aw_template
 		$this->ops = array();
 		
 		$this->no_top_level_code_for = array();
+
+		$this->ops[] = array(
+			"op" => OP_INSERT_SEL_IDS,
+			"params" => array(
+				"data" => $this->menu_areas
+			)
+		);
+
+		$this->req_level = 0;
 
 		foreach($this->menu_areas as $area => $adat)
 		{
@@ -209,6 +308,8 @@ class site_template_compiler extends aw_template
 
 	function compile_template_level($area, $adat, $level, $ldat)
 	{
+		$this->req_level ++;
+
 		$end_block = false;
 
 		// figure out if we need to determine visibility
@@ -227,6 +328,18 @@ class site_template_compiler extends aw_template
 				"params" => array()
 			);
 			$end_block = true;
+		}
+
+
+		if ($this->req_level == 1)
+		{		
+			$this->ops[] = array(
+				"op" => OP_AREA_CACHE_CHECK,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level
+				)
+			);
 		}
 
 		// now figure out the code for displaying
@@ -332,11 +445,55 @@ class site_template_compiler extends aw_template
 						"no_image_tpl" => $ldat["no_image_tpl"],
 					)
 				);
+
+				if ($ldat["has_subitems_sel_check_after_item"])
+				{
+					$this->ops[] = array(
+						"op" => OP_CHECK_SUBITEMS_SEL,
+						"params" => array(
+							"tpl" => $ldat["has_subitems_sel_check_tpl"],
+							"fq_tpl" => $cur_tpl_fqn.".".$ldat["has_subitems_sel_check_tpl"],
+							"a_parent" => $adat["parent"],
+							"level" => $level+1
+						)
+					);
+				}
+
+				if ($ldat["no_subitems_sel_check_after_item"])
+				{
+					$this->ops[] = array(
+						"op" => OP_CHECK_NO_SUBITEMS_SEL,
+						"params" => array(
+							"tpl" => $ldat["no_subitems_sel_check_tpl"],
+							"fq_tpl" => $cur_tpl_fqn.".".$ldat["no_subitems_sel_check_tpl"],
+						)
+					);
+				}
+
+				$this->ops[] = array(
+					"op" => OP_SHOW_ITEM_INSERT,
+					"params" => array(
+						"tpl" => $cur_tpl_fqn,
+						"has_image_tpl" => $ldat["has_image_tpl"],
+						"no_image_tpl" => $ldat["no_image_tpl"],
+					)
+				);
 			}
 
 			$this->ops[] = array(
 				"op" => OP_END_BLK,
 				"params" => array()
+			);
+		}
+
+		if ($this->req_level == 1)
+		{
+			$this->ops[] = array(
+				"op" => OP_AREA_CACHE_SET,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level
+				)
 			);
 		}
 
@@ -352,7 +509,19 @@ class site_template_compiler extends aw_template
 			$this->ops[] = array(
 				"op" => OP_CHECK_SUBITEMS_SEL,
 				"params" => array(
-					"tpl" => $ldat["has_subitems_sel_check_tpl"]
+					"tpl" => $ldat["has_subitems_sel_check_tpl"],
+					"fq_tpl" => $ldat["has_subitems_sel_check_tpl_fq"],
+				)
+			);
+		}
+
+		if ($ldat["no_subitems_sel_check"])
+		{
+			$this->ops[] = array(
+				"op" => OP_CHECK_NO_SUBITEMS_SEL,
+				"params" => array(
+					"tpl" => $ldat["no_subitems_sel_check_tpl"],
+					"fq_tpl" => $ldat["no_subitems_sel_check_tpl_fq"]
 				)
 			);
 		}
@@ -364,6 +533,8 @@ class site_template_compiler extends aw_template
 				"params" => array()
 			);
 		}
+
+		$this->req_level --;
 	}	
 
 	function get_if_filter_from_tpl_opt($opt, $all_opts)
@@ -510,6 +681,7 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."\"text\" => ".$o_name."->name(),\n";
 		$ret .= $this->_gi()."\"link\" => \$this->make_menu_link($o_name),\n";
 		$ret .= $this->_gi()."\"target\" => (".$o_name."->prop(\"target\") ? \"target=\\\"_blank\\\"\" : \"\"),\n";
+		$ret .= $this->_gi()."\"section\" => ".$o_name."->id(),\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
 	
@@ -524,26 +696,32 @@ class site_template_compiler extends aw_template
 		$ret .= $this->_gi()."if (is_array(\$img) && count(\$img) > 0)\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
-		for($i = 0; $i < $n_img; $i++)
+		
+		$ret .= $this->_gi()."for(\$i = 0; \$i < $n_img; \$i++)\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+
+		$ret .= $this->_gi()."if (!empty(\$img[\$i][\"url\"]))\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$imgurl = image::check_url(\$img[\$i][\"url\"]);\n";
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"menu_image_\".\$i => \"<img src='\".\$imgurl.\"'>\",\n";
+		$ret .= $this->_gi()."\"menu_image_\".\$i.\"_url\" => \$imgurl\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		if ($arr["has_image_tpl"] || $arr["no_image_tpl"])
 		{
-			$ret .= $this->_gi()."if (!empty(\$img[".$i."][\"url\"]))\n";
-			$ret .= $this->_gi()."{\n";
-			$this->brace_level++;
-			$ret .= $this->_gi()."\$imgurl = image::check_url(\$img[".$i."][\"url\"]);\n";
-			$ret .= $this->_gi()."\$this->vars(array(\n";
-			$this->brace_level++;
-			$ret .= $this->_gi()."\"menu_image_".$i."\" => \"<img src='\".\$imgurl.\"'>\",\n";
-			$ret .= $this->_gi()."\"menu_image_".$i."_url\" => \$imgurl\n";
-			$this->brace_level--;
-			$ret .= $this->_gi()."));\n";
-			if ($arr["has_image_tpl"] || $arr["no_image_tpl"])
-			{
-				$ret .= $this->_gi()."\$has_images = true;\n";
-			}
-			
-			$this->brace_level--;
-			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."\$has_images = true;\n";
 		}
+			
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+		
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 
@@ -554,7 +732,7 @@ class site_template_compiler extends aw_template
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$this->vars(array(\n";
 			$this->brace_level++;
-			$ret .= $this->_gi()."\"HAS_IMAGE\" => \$this->parse(\"HAS_IMAGE\")\n";
+			$ret .= $this->_gi()."\"HAS_IMAGE\" => \$this->parse(\"".$arr["tpl"].".HAS_IMAGE\")\n";
 			$this->brace_level--;
 			$ret .= $this->_gi()."));\n";
 			$this->brace_level--;
@@ -578,7 +756,7 @@ class site_template_compiler extends aw_template
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$this->vars(array(\n";
 			$this->brace_level++;
-			$ret .= $this->_gi()."\"NO_IMAGE\" => \$this->parse(\"NO_IMAGE\")\n";
+			$ret .= $this->_gi()."\"NO_IMAGE\" => \$this->parse(\"".$arr["tpl"].".NO_IMAGE\")\n";
 			$this->brace_level--;
 			$ret .= $this->_gi()."));\n";
 			$this->brace_level--;
@@ -595,6 +773,16 @@ class site_template_compiler extends aw_template
 			$ret .= $this->_gi()."}\n";
 		}
 
+		return $ret;
+	}
+
+	function _g_op_show_item_insert($arr)
+	{
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$content_name = $dat["content_name"];
+
+		$ret = "";
 		$ret .= $this->_gi().$content_name." .= \$this->parse(\"".$arr["tpl"]."\");\n";
 		return $ret;
 	}
@@ -763,20 +951,139 @@ class site_template_compiler extends aw_template
 	function _g_op_check_subitems_sel($arr)
 	{
 		$ret = "";
-		$dat = $this->last_list_dat;
-		$list_name = $dat["list_name"];
+		if (isset($arr["a_parent"]))
+		{
+			$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
+		}
+		else
+		{
+			$dat = $this->last_list_dat;
+			$list_name = $dat["list_name"];
+			$content_name = $dat["content_name"];
+		}
 
-		$ret .= $this->_gi()."if (".$list_name."->count() > 0)\n";
+		$ret .= $this->_gi()."if (".$content_name." != \"\")\n";
 		$ret .= $this->_gi()."{\n";
 		$this->brace_level++;
 		$ret .= $this->_gi()."\$this->vars(array(\n";
 		$this->brace_level++;
-		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["tpl"]."\")\n";
+		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["fq_tpl"]."\")\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \"\"\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		return $ret;
+	}
+
+	function _g_op_check_no_subitems_sel($arr)
+	{
+		$ret = "";
+		$dat = $this->last_list_dat;
+		$list_name = $dat["list_name"];
+		$content_name = $dat["content_name"];
+
+		$ret .= $this->_gi()."if (".$content_name." == \"\")\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \$this->parse(\"".$arr["fq_tpl"]."\")\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."));\n";
+		$this->brace_level--;
+		$ret .= $this->_gi()."}\n";
+
+		$ret .= $this->_gi()."else\n";
+		$ret .= $this->_gi()."{\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\$this->vars(array(\n";
+		$this->brace_level++;
+		$ret .= $this->_gi()."\"".$arr["tpl"]."\" => \"\"\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."));\n";
 		$this->brace_level--;
 		$ret .= $this->_gi()."}\n";
 		return $ret;
+	}
+
+	function _g_op_area_cache_check($arr)
+	{
+		// assumes cache inst of $this->cache
+		$content_name = "\$content_".$arr["a_parent"]."_".$arr["level"];
+
+		$res = "";
+		$res .= $this->_gi()."if ((".$content_name." = \$this->cache->file_get_ts(\"site_show::menu_area_cache::section::\".\$this->sel_section_real.\"::".$arr["a_parent"]."::level::".$arr["level"]."\",\$this->_helper_get_objlastmod())) == \"\")\n";
+		$res .= $this->_gi()."{\n";
+		$this->brace_level++;
+		return $res;
+	}
+
+	function _g_op_area_cache_set($arr)
+	{
+		$dat = current($this->list_name_stack);
+		$content_name = $dat["content_name"];
+
+		$res = "";
+		$res .= $this->_gi()."\$this->cache->file_set(\"site_show::menu_area_cache::section::\".\$this->sel_section_real.\"::".$arr["a_parent"]."::level::".$arr["level"]."\", ".$content_name.");\n";
+		$this->brace_level --;
+		$res .= $this->_gi()."}\n";
+
+		return $res;
+	}
+
+	function _g_op_insert_sel_ids($arr)
+	{
+		$res = "";
+
+		$dat = $arr["data"];
+		foreach($dat as $area => $adat)
+		{
+			$res .= $this->_gi()."if (\$this->_helper_get_levels_in_path_for_area(".$adat["parent"].") > 0)\n";
+			$res .= "{\n";
+			$this->brace_level++;
+
+			$res .= $this->_gi()."\$vars = array();\n";
+
+			foreach($adat["levels"] as $level => $ldat)
+			{
+				$res .= $this->_gi()."\$tmp = \$this->_helper_find_parent(".$adat["parent"].", ".($level+1).");\n";
+				$res .= $this->_gi()."if (\$tmp)\n";
+				$res .= $this->_gi()."{\n";
+				$this->brace_level++;
+
+				$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_id\"] = \$tmp;\n";
+				$res .= $this->_gi()."\$tmp_o = obj(\$tmp);\n";
+				$res .= $this->_gi()."\$tmp_im = \$tmp_o->meta(\"menu_images\");\n";
+				// insert image urls
+				$ni = aw_ini_get("menuedit.num_menu_images");
+				for($i = 0; $i < $ni; $i++)
+				{
+					$res .= $this->_gi()."\$vars[\"sel_menu_".$area."_L".$level."_image_".$i."_url\"] = image::check_url(\$tmp_im[".$i."][\"url\"]);\n";
+				}
+				$this->brace_level--;
+				$res .= $this->_gi()."}\n";
+
+			}
+
+			$res .= $this->_gi()."\$this->vars(\$vars);\n";
+
+			$this->brace_level--;
+			$res .= $this->_gi()."}\n";
+		}
+
+		return $res;
 	}
 }
 ?>

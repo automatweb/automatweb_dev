@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.15 2003/10/14 12:21:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.16 2003/10/17 13:11:07 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -520,7 +520,7 @@ class promo extends class_base
 			{
 				// find the file for the template by id. sucks. we should join the template table
 				// on the menu template I guess
-				$tpl_filename = $tplmgr->get_template_file_by_id($o->prop("tpl_lead"));
+				$tpl_filename = $tplmgr->get_template_file_by_id(array("id" => $o->prop("tpl_lead")));
 			}
 
 			$found = false;

@@ -25,9 +25,12 @@ class site_show extends class_base
 	var $active_doc;		// if only a single document is shownm this will contain the docid
 	var $site_title;		// the title for the site should be put in here
 
+	var $cache;				// cache class instance
+
 	function site_show()
 	{
 		$this->init("automatweb/menuedit");
+		$this->cache = get_instance("cache");
 	}
 
 	////
@@ -1093,15 +1096,7 @@ class site_show extends class_base
 
 	function _helper_is_in_path($oid)
 	{
-		foreach($this->path as $o)
-		{
-			if ($o->id() == $oid)
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return array_search($oid, $this->path_ids);
 	}
 
 	////
@@ -1138,6 +1133,18 @@ class site_show extends class_base
 			
 		}
 		return $this->current_login_menu_id;
+	}
+
+	function _helper_get_objlastmod()
+	{
+		static $last_mod;
+		if (!$last_mod)
+		{
+			$last_mod = $this->db_fetch_field("SELECT MAX(modified) as m FROM objects", "m");
+			// also compiled menu template
+			$last_mod = max($last_mod, filemtime($this->compiled_filename));
+		}
+		return $last_mod;
 	}
 
 	function do_draw_menus($arr)
@@ -1586,7 +1593,6 @@ class site_show extends class_base
 		{
 			return $docc;
 		}
-
 		$this->import_class_vars($arr);
 
 		// here we must find the menu image, if it is not specified for this menu,

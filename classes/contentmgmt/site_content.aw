@@ -1461,7 +1461,7 @@ class site_content extends menuedit
 				"text" => str_replace("&nbsp;"," ",strip_tags($this->mar[$path[$i+1]]["name"])), 
 				"ysection" => $this->mar[$path[$i+1]]["oid"]
 			));
-			if ($this->mar[$path[$i+1]]["clickable"] == 1 && $check_subs)
+			if ($this->mar[$path[$i+1]]["clickable"] == 1)
 			{
 				if ($i == ($cnt-1) && $this->is_template("YAH_LINK_END"))
 				{

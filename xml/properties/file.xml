@@ -45,8 +45,8 @@
             <name>showal</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <group>settings</group>
             <table>files</table>
+            <group>general</group>
             <field>showal</field>
             <caption>Näita kohe</caption>
       </property>

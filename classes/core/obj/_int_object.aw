@@ -855,7 +855,6 @@ class _int_object
 		if (is_array($this->obj["properties"]))
 		{
 			$retval = $this->obj["properties"];
-			unset($this->obj["properties"]);
 		};
 		if (is_array($this->obj))
 		{
