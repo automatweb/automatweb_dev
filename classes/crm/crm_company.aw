@@ -2370,7 +2370,7 @@ class crm_company extends class_base
 			$crm_db = new object($crm_db_id);
 			$default_dir = $crm_db->prop("dir_default");
 			$parents[$RELTYPE_ADDRESS] = $crm_db->prop("dir_address") == "" ? $default_dir : $crm_db->prop('dir_address');
-			$parents[RELTYPE_WORKERS] = $crm_db->prop("dir_isik") == "" ? $default_dir : $crm_db->prop('dir_isik');
+			$parents[RELTYPE_WORKERS] = $crm_db->prop("folder_person") == "" ? $default_dir : $crm_db->prop('folder_person');
 		};
 
 		if (!empty($this->cal_id))
@@ -2769,21 +2769,23 @@ class crm_company extends class_base
 		{
 			$main_obj = new object($arr['unit']);
 		}
-		
-		foreach($arr['check'] as $key=>$value)
+	
+		if (is_array($check))
 		{
-			if ($main_obj->is_connected_to(array("to" => $value)))
+			foreach($arr['check'] as $key=>$value)
 			{
-				$main_obj->disconnect(array('from'=>$value));
+				if ($main_obj->is_connected_to(array("to" => $value)))
+				{
+					$main_obj->disconnect(array('from'=>$value));
+				}
 			}
-		}
+		};
 
-		return $this->mk_my_orb('change',array(
-			'id' => $arr['id'],
-			'group'=>'contacts',
-			'unit'=>$arr['unit'],),
-			CL_CRM_COMPANY
-		);
+		return $this->mk_my_orb("change",array(
+			"id" 	=> $arr["id"],
+			"group"	=> $arr["group"],
+			"unit"	=> $arr["unit"],
+		));
 	}
 
 	/**
