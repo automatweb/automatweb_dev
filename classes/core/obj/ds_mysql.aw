@@ -877,8 +877,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function delete_object($oid)
 	{
 		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."', modified = ".time().",modifiedby = '".aw_global_get("uid")."' WHERE oid = '$oid'");
-		$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
-		$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
+		//$this->db_query("DELETE FROM aliases WHERE target = '$oid'");
+		//$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
 	}
 
 	function req_make_sql($params, $logic = "AND", $dbg = false)
