@@ -91,5 +91,19 @@
 			</function>
 		</action>
 
+		<action name="get_site_info" >
+			<function name="get_site_info">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="fetch_site_data" >
+			<function name="fetch_site_data">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -107,6 +107,24 @@ class site_list extends class_base
 		return $str;
 	}
 
+	function get_site_list()
+	{
+		$ret = array();
+
+		$this->db_query("
+			SELECT aw_site_list.*, aw_server_list.name as server_name 
+			FROM aw_site_list
+				LEFT JOIN aw_server_list ON aw_server_list.id = aw_site_list.server_id
+			ORDER BY id
+		");
+		while ($row = $this->db_next())
+		{
+			$ret[$row["id"]] = $row;
+		}
+
+		return $ret;
+	}
+
 	function _get_server_stats()
 	{
 		load_vcl('table');
@@ -604,6 +622,58 @@ class site_list extends class_base
 		$this->db_query("UPDATE aw_server_list SET name = '$name', ip = '$ip', comment = '$comment' where id = '$id'");
 
 		return $this->mk_my_orb("change_server", array("id" => $id));
+	}
+
+	/** returns data about the current site 
+
+		@attrib name=get_site_info params=name
+
+		@comment
+			
+			returns an array with the current site's data:
+
+				server => ip of the server it is running on
+				code_path => the path of the aw installation it is running on
+				site_path => the path of the site installation it is running on
+				url => the url the site is accessible from
+	**/
+	function get_site_info($arr)
+	{
+		list($servname) = explode("/",str_replace("http://", "", str_replace("https://", "", aw_ini_get("baseurl"))));
+		
+		$servip = inet::name2ip($servname);
+		return array(
+			"server" => $servip,
+			"code_path" => aw_ini_get("basedir"),
+			"site_path" => aw_ini_get("site_basedir"),
+			"url" => aw_ini_get("baseurl")
+		);
+	}
+
+	/**
+
+		@attrib name=fetch_site_data
+	**/
+	function fetch_site_data($arr)
+	{
+		foreach($this->get_site_list() as $sid => $sd)
+		{
+			if ($sd["site_used"] != 1)
+			{
+				continue;
+			}
+			list($servname) = explode("/",str_replace("http://", "", str_replace("https://", "", $sd["url"])));
+			echo "server = $servname <br>";
+			echo dbg::dump($this->do_orb_method_call(array(
+				"class" => "site_list",
+				"action" => "get_site_info",
+				"server" => $servname,
+				"method" => "xmlrpc",
+				"no_errors" => 1
+			)));
+			echo "\n";
+			flush();
+		}
 	}
 }
 ?>
