@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.32 2004/09/14 13:40:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.33 2004/09/20 13:07:34 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -310,6 +310,9 @@ class releditor extends core
 			{
 				$params["cfgform"] = $arr["prop"]["cfgform"];
 			}
+			$params["alias_to"] = $arr["obj_inst"]->id();
+			$params["reltype"] = $arr["prop"]["reltype"];
+			$params["return_url"] = urlencode(aw_global_get("REQUEST_URI"));
 			$newurl = html::get_new_url($arr["prop"]["clid"][0], $arr["obj_inst"]->parent(), $params);
 		}
 		else
@@ -414,7 +417,7 @@ class releditor extends core
 			{
 				if ($arr["prop"]["direct_links"] == 1)
 				{
-					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to")),$conn->prop("to.class_id"));
+					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to"),"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
 				}
 				else
 				{
