@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.44 2005/03/29 10:56:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.45 2005/03/30 11:45:52 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -15,8 +15,7 @@ class releditor extends core
 
 	function init_rel_editor($arr)
 	{
-		global $awt;
-		$awt->start("init-rel-editor");
+		enter_function("init-rel-editor");
 		$prop = $arr["prop"];
 		$this->elname = $prop["name"];
 		$obj = $arr["obj_inst"];
@@ -153,18 +152,21 @@ class releditor extends core
 		
 		$form_type = $arr["request"][$this->elname];
 		$this->form_type = $form_type;
-		
-
 
 		#$this->all_props = $act_props;
 		$pcount = sizeof($props);
+
+		// act_props needs to contain properties, if
+		// 1) visual is form and form_type is empty, if a single relation (rel_id=first) is being edited
+		// 2) ....
 		foreach($all_props as $key => $_prop)
 		{
 			//if (!empty($use_form) || (is_array($props) && in_array($key,$props)))
 			//if ($all_props[$key])
 			//if (is_array($props) && in_array($key,$props))
 			//if ((!empty($form_type) && $all_props[$key]) || (is_array($props) && in_array($key,$props)))
-			if (!empty($form_type) && $all_props[$key] && is_array($props) && in_array($key,$props))
+			//if (!empty($form_type) && $all_props[$key] && is_array($props) && in_array($key,$props))
+			if ($all_props[$key] && is_array($props) && in_array($key,$props))
 			{
 				if (!empty($form_type) || $visual != "manager")
 				{
@@ -177,6 +179,16 @@ class releditor extends core
 			};
 			$this->all_props[$key] = $_prop;
 		};
+		
+		// "someone" has already used cfgform property, but for what purpose or why, is a big f'ing mystery to me,
+		// so i'll just implement something neater 
+		
+		$cfgform_id = $arr["prop"]["cfgform_id"];
+		if(is_oid($cfgform_id) && $this->can("view", $cfgform_id))
+		{
+			$cfg = get_instance(CL_CFGFORM);
+			$act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
+		}
 
 		if ($visual == "manager")
 		{
@@ -244,7 +256,6 @@ class releditor extends core
 
 
 
-
 		if (is_object($obj_inst))
 		{
 			$act_props["id"] = array(
@@ -254,6 +265,7 @@ class releditor extends core
 			);
 
 		};
+
 
 		if (($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
 		//if ($visual == "form" || ($visual == "manager" && (is_object($obj_inst) || $form_type == "new")))
@@ -299,15 +311,9 @@ class releditor extends core
 			"obj_inst" => $obj_inst,
 		));
 		
-		$awt->stop("init-rel-editor");
+		exit_function("init-rel-editor");
 		
 		return $xprops;
-	}
-
-	function parse_releditor($arr)
-	{
-
-
 	}
 
 	function init_rel_toolbar($arr)
@@ -337,16 +343,25 @@ class releditor extends core
 		$tb->add_button(array(
 			"name" => "new",
 			"img" => "new.gif",
-			"tooltip" => "Uus",
+			"tooltip" => t("Uus"),
 			"url" => $newurl,
 		));
 
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"confirm" => "Kustutada valitud objektid?",
+			"confirm" => t("Kustutada valitud objektid?"),
 			"action" => "submit_list",
 		));
+		if($arr["prop"]["clone_link"] == 1)
+		{
+			$tb->add_button(array(
+				"name" => "clone",
+				"img" => "save.gif",
+				"tooltip" => t("Klooni valitud objektid"),
+				"url" => "javascript:element = 'check[';len = document.changeform.elements.length;var count = 0;for (i=0; i < len; i++){if (document.changeform.elements[i].checked == true){count++;}}if(count == 1){num=prompt('Mitu objekti kloonida soovid?', '1');document.changeform.releditor_clones.value=num;document.changeform.submit();}else{alert('Sa oled kas liiga vähe või liiga palju objekte kloonimiseks valinud, proovi uuesti')}",
+			));
+		}
 		
 		$rv = array(
 			"name" => $this->elname . "_toolbar",
@@ -488,6 +503,7 @@ class releditor extends core
 					foreach($ed_fields->get() as $ed_field)
 					{
 						// fucking hackery! :(
+						
 						if ($this->all_props[$ed_field]["type"] == "textbox")
 						{
 							$export_props[$ed_field] = html::textbox(array(
@@ -502,6 +518,10 @@ class releditor extends core
 				$awt->define_data($rowdata);
 			};
 		};
+		if($arr["prop"]["clone_link"] == 1)
+		{
+			$awt->table_header = '<input type="hidden" name="releditor_clones" id="releditor_clones" value="0" />';
+		}
 
 		$rv = array(
 			"name" => $this->elname . "_table",
@@ -663,6 +683,23 @@ class releditor extends core
 				};
 			};
 		};
+		$num = (int) $arr["request"]["releditor_clones"];
+		if($arr["prop"]["clone_link"] == 1 && $num > 0)
+		{
+			foreach(safe_array($arr["request"]["check"]) as $check)
+			{
+				$conn = new connection($check);
+				$old_obj = $conn->to();
+				for($i = 1; $i <= $num; $i++)
+				{
+					$new_obj = obj($old_obj->save_new());
+					$obj->connect(array(
+						"to" => $new_obj->id(),
+						"reltype" => $arr["prop"]["reltype"],
+					));
+				}
+			}
+		}
 
 		$cache_inst = get_instance("cache");
 		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
