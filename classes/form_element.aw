@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.19 2001/08/12 23:21:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.20 2001/09/11 06:39:21 duke Exp $
 // form_element.aw - vormi element.
 lc_load("form");
 global $orb_defs;
@@ -17,23 +17,12 @@ class form_element extends aw_template
 	// !Loads the element from the array from inside the form
 	function load(&$arr,&$form,$col,$row)
 	{
-		// this looks horribly ineffective to me? repeat all the form data inside each element?
-		// the language constants, the remaining crap. HOLY CRAP.
-		//
-		// erm, dude, ever heard of REFERENCES? 
-		// and if you're thinking of $this->arr then that only contains info about this element
-		//  - terryf
-		global $awt;
-		$awt->start("form_element::load");
-		$awt->count("form_element::load");
-
 		$this->form = &$form;
 		$this->arr = $arr;
 		$this->id = $arr["id"];
 		$this->fid = $form->get_id();
 		$this->col = $col;
 		$this->row = $row;
-		$awt->stop("form_element::load");
 	}
 
 
@@ -121,7 +110,8 @@ class form_element extends aw_template
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
-					"lb_size" => $this->arr["lb_size"]
+					"lb_size" => $this->arr["lb_size"],
+					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","relation" => "Seoseelement"))
 				));
 				$this->vars(array("HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER")));
 				for ($b=0; $b < ($this->arr["listbox_count"]+1); $b++)
@@ -138,6 +128,16 @@ class form_element extends aw_template
 					));
 					$lb.=$this->parse("LISTBOX_ITEMS");
 				}	
+				$this->vars(array("HAS_SUBTYPE" => $this->parse("HAS_SUBTYPE")));
+				if ($this->arr["subtype"] == "relation")
+				{
+					$this->do_search_script(true);
+					$this->vars(array(
+						"rel_forms" => $this->picker($this->arr["rel_form"], $this->form->get_relation_targets()),
+						"rel_el" => $this->arr["rel_element"]
+					));
+					$this->vars(array("RELATION_LB" => $this->parse("RELATION_LB")));
+				}
 			}
 
 			$mu = "";
@@ -236,7 +236,10 @@ class form_element extends aw_template
 			$bt = "";
 			if ($this->arr["type"] == "submit" || $this->arr["type"] == "reset")
 			{
-				$this->vars(array("button_text" => $this->arr["button_text"]));
+				$this->vars(array(
+					"button_text" => $this->arr["button_text"],
+					"chain_forward" => checked($this->arr["chain_forward"]==1)
+				));
 				$bt = $this->parse("BUTTON_ITEMS");
 			}
 
@@ -256,6 +259,8 @@ class form_element extends aw_template
 					"button_text" => $this->arr["button_text"],
 					"subtypes" => $this->picker($this->arr["subtype"], array("" => "","submit" => "Submit", "reset" => "Reset","delete" => "Kustuta","url" => "URL","preview" => "Eelvaade")),
 					"button_url" => $this->arr["button_url"],
+					"chain_forward" => checked($this->arr["chain_forward"]==1),
+					"chain_backward" => checked($this->arr["chain_backward"]==1)
 				));
 				$bt = $this->parse("BUTTON_ITEMS");
 				$this->vars(array(
@@ -388,6 +393,39 @@ class form_element extends aw_template
 
 			// sort listbox
 			$this->sort_listbox();
+
+			// save relation elements
+			if ($this->arr["subtype"] == "relation")
+			{
+				// if we get here a relation has already been created, at least we can hope so :p
+				$rel_changed = false;
+				$var = $base."_rel_form";
+				if ($$var != $this->arr["rel_form"])
+				{
+					$this->arr["rel_form"] = $$var;
+					$rel_changed = true;
+				}
+				$var = $base."_rel_element";
+				if ($$var != $this->arr["rel_element"])
+				{
+					$this->arr["rel_element"] = $$var;
+					$rel_changed = true;
+				}
+
+				if ($rel_changed || !$this->arr["rel_table_id"])
+				{
+					// update the relation in the table
+					if ($this->arr["rel_table_id"])
+					{
+						$this->db_query("UPDATE form_relations SET form_from = '".$this->arr["rel_form"]."' , form_to = '".$this->form->id."' , el_from = '".$this->arr["rel_element"]."' , el_to = ".$this->id." WHERE id = ".$this->arr["rel_table_id"]);
+					}
+					else
+					{
+						$this->db_query("INSERT INTO form_relations (form_from,form_to,el_from,el_to) VALUES('".$this->arr["rel_form"]."','".$this->form->id."','".$this->arr["rel_element"]."','".$this->id."')");
+						$this->arr["rel_table_id"] = $this->db_last_insert_id();
+					}
+				}
+			}
 		}
 
 		if ($this->arr["type"] == "multiple")
@@ -531,6 +569,12 @@ class form_element extends aw_template
 
 			$var = $base."_bop";
 			$this->arr["button_op"] = $$var;
+
+			$var = $base."_chain_forward";
+			$this->arr["chain_forward"] = $$var;
+
+			$var = $base."_chain_backward";
+			$this->arr["chain_backward"] = $$var;
 		}
 
 		$var = $base."_separator_type";
@@ -754,6 +798,12 @@ class form_element extends aw_template
 	// this function deletes the element from this form only
 	function del()
 	{
+		// if this is a relation element, remove it from the list of relations
+		if ($this->arr["rel_table_id"])
+		{
+			$this->db_query("DELETE FROM form_relations WHERE id = '".$this->arr["rel_table_id"]."'");
+		}
+
 		// remove this form from the list of forms in which the element is
 		$this->db_query("DELETE FROM element2form WHERE el_id = ".$this->id." AND form_id = ".$this->fid);
 
@@ -884,21 +934,44 @@ class form_element extends aw_template
 		$elid = $this->id;
 		$ext = false;
 
+		global $fg_check_status;
+
+		$stat_check = "";
+
+		if ($fg_check_status)
+		{
+			$stat_check = " onChange='set_changed()' ";
+		};
+
 		switch($this->arr["type"])
 		{
 			case "textarea":
-				$html="<textarea NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]."'>";
+				$html="<textarea $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
 				$html .= htmlspecialchars($this->get_val($elvalues));
 				$html .= "</textarea>";
 				break;
 
 			case "radiobutton":
 				$ch = ($this->entry_id ? checked($this->entry == $this->id) : checked($this->arr["default"] == 1));
-				$html="<input type='radio' NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
+				$html="<input type='radio' $stat_check NAME='".$prefix."radio_group_".$this->arr["group"]."' VALUE='".$this->id."' $ch>";
 				break;
 
 			case "listbox":
-				$html="<select name='".$prefix.$elid."'";
+				// kui seoseelement siis feigime sisu
+				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+				{
+					$this->save_handle();
+					$this->db_query("SELECT form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"]." as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
+					$cnt=0; 
+					while($row = $this->db_next())
+					{
+						$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
+						$cnt++;
+					}
+					$this->arr["listbox_count"] = $cnt;
+					$this->restore_handle();
+				}
+				$html="<select $stat_check name='".$prefix.$elid."'";
 				if ($this->arr["lb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["lb_size"]."\"";
@@ -949,7 +1022,7 @@ class form_element extends aw_template
 				break;
 
 			case "multiple":
-				$html="<select NAME='".$prefix.$elid."[]' MULTIPLE";
+				$html="<select $stat_check NAME='".$prefix.$elid."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["mb_size"]."\"";
@@ -988,18 +1061,18 @@ class form_element extends aw_template
 
 			case "checkbox":
 				$sel = ($this->entry_id ? ($this->entry == 1 ? " CHECKED " : " " ) : ($this->arr["default"] == 1 ? " CHECKED " : ""));
-				$html = "<input type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
+				$html = "<input $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel>";
 				break;
 
 			case "textbox":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html = "<input type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
+				$html = "<input $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE='".($this->get_val($elvalues))."'>";
 				break;
 
 			case "button":
@@ -1017,7 +1090,15 @@ class form_element extends aw_template
 					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit")
 					{
-						$html = "<input type='submit' VALUE='".$butt."' onClick=\"return check_submit();\">";
+						if ($this->arr["chain_forward"] == 1)
+						{
+							$bname="name=\"no_chain_forward\"";
+						}
+						if ($this->arr["chain_backward"] == 1)
+						{
+							$bname="name=\"chain_backward\"";
+						}
+						$html = "<input $bname type='submit' VALUE='".$butt."' onClick=\"return check_submit();\">";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
@@ -1033,7 +1114,7 @@ class form_element extends aw_template
 				break;
 
 			case "file":
-				$html = "<input type='file' NAME='".$prefix.$elid."' value=''>";
+				$html = "<input type='file' $stat_check NAME='".$prefix.$elid."' value=''>";
 				break;
 
 			// yuck
@@ -1277,6 +1358,20 @@ class form_element extends aw_template
 				break;
 
 			case "listbox":
+				if ($this->arr["subtype"] == "relation" && $this->arr["rel_element"] && $this->arr["rel_form"])
+				{
+					$this->save_handle();
+					$this->db_query("SELECT form_".$this->arr["rel_form"]."_entries.ev_".$this->arr["rel_element"]." as ev_".$this->arr["rel_element"]." FROM form_".$this->arr["rel_form"]."_entries LEFT JOIN objects ON objects.oid = form_".$this->arr["rel_form"]."_entries.id  WHERE objects.status != 0");
+					$cnt=0; 
+					while($row = $this->db_next())
+					{
+						$this->arr["listbox_items"][$cnt] = $row["ev_".$this->arr["rel_element"]];
+						$cnt++;
+					}
+					$this->arr["listbox_count"] = $cnt;
+					$this->restore_handle();
+				}
+
 				$sp = split("_", $this->entry, 10);
 				$html = $this->arr["listbox_items"][$sp[3]];
 				break;
@@ -1507,6 +1602,51 @@ class form_element extends aw_template
 				$this->arr["multiple_items"][$cnt++] = $line;
 			}
 			$this->arr["multiple_count"] = $cnt;
+		}
+	}
+
+	function do_search_script($rel = false)
+	{
+		global $elements_created;
+
+		if (!$elements_created)
+		{
+			// make javascript arrays for form elements
+			$formcache = array(0 => "");
+			if (!$rel)
+			{
+				$tarr = $this->form->get_search_targets();
+			}
+			else
+			{
+				$tarr = $this->form->get_relation_targets();
+			}
+			$tarstr = join(",",$this->map2("%s",$tarr));
+			if ($tarstr != "")
+			{
+				$this->db_query("SELECT name, oid FROM objects WHERE status != 0 AND oid IN ($tarstr)");
+				while ($row = $this->db_next())
+				{
+					$formcache[$row["oid"]] = $row["name"];
+				}
+			
+				$el_num = 0;
+				$this->db_query("SELECT objects.name as el_name, element2form.el_id as el_id,element2form.form_id as form_id FROM element2form LEFT JOIN objects ON objects.oid = element2form.el_id WHERE element2form.form_id IN ($tarstr)");
+				while ($row = $this->db_next())
+				{
+					$this->vars(array(
+						"el_num" => $el_num++,
+						"el_id" => $row["el_id"],
+						"el_text" => $row["el_name"],
+						"form_id" => $row["form_id"]
+					));
+					$eds.=$this->parse("ELDEFS");
+				}
+			}
+			$this->vars(array("ELDEFS" => $eds));
+			$this->vars(array("SEARCH_SCRIPT" => $this->parse("SEARCH_SCRIPT")));
+			$GLOBALS["elements_created"] = true;
+			$GLOBALS["formcache"] = $formcache;
 		}
 	}
 }
