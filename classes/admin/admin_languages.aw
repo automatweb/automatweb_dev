@@ -52,11 +52,23 @@ class admin_languages extends languages
 		return $this->parse();
 	}
 
+	// the thing is .. you should not be able to enter random crap into "acceptlang" field,
+	// so I'm deprecating it and replacing it with a select which gets its contents
+	// from the languages.list ini setting (acceptlang key). Want to define a new language?
+	// first define it in the INI file. 
+
 	function add()
 	{
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Lisa");
 		$this->read_template("add.tpl");
+		$tmp = aw_ini_get("languages.list");
+		$lang_codes = array();
+		foreach($tmp as $langdata)
+		{
+			$lang_codes[$langdata["acceptlang"]] = $langdata["acceptlang"] . "(" . $langdata["name"] . ")";
+		};
 		$this->vars(array(
+			"lang_codes" => $lang_codes,
 			"reforb" => $this->mk_reforb("submit_add"),
 			"sites" => $this->mpicker(array(), $this->_get_sl())
 		));
@@ -69,10 +81,19 @@ class admin_languages extends languages
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Keeled</a> / Muuda");
 		$this->read_template("add.tpl");
 		$l = $this->fetch($id, true);
+		// ph33r my l33t copy 'n paste sk1llz
+		$tmp = aw_ini_get("languages.list");
+		$lang_codes = array();
+		foreach($tmp as $langdata)
+		{
+			$lang_codes[$langdata["acceptlang"]] = $langdata["acceptlang"] . " (" . $langdata["name"] . ")";
+		};
+
 		$this->vars(array(
 			"id" => $id, 
 			"name" => $l["name"], 
 			"charset" => $l["charset"],
+			"lang_codes" => $this->picker($l["acceptlang"],$lang_codes),
 			"acceptlang" => $l["acceptlang"],
 			"reforb" => $this->mk_reforb("submit_add",array("id" => $id)),
 			"sites" => $this->mpicker($this->make_keys(explode(",", $l["site_id"])), $this->_get_sl())
@@ -86,6 +107,7 @@ class admin_languages extends languages
 
 		$new = false;
 		$si = join(",", is_array($site_id) ? $site_id : array());
+		$acceptlang = $arr["lang_code"];
 		if ($id)
 		{
 			$this->db_query("UPDATE languages SET site_id = '$si' , name = '$name' , charset = '$charset' , acceptlang='$acceptlang', modified = ".time().", modifiedby = '".aw_global_get("uid")."' WHERE id = $id");
