@@ -7,6 +7,7 @@
 				<arguments>
 					<required name="parent"/>
 					<optional name="folder"/>
+					<optional name="date"/>
 				</arguments>
 			</function>
 		</action>
@@ -15,6 +16,7 @@
 			<function name="change">
 				<arguments>
 					<required name="id"/>
+					<optional name="date"/>
 				</arguments>
 			</function>
 		</action>
@@ -40,6 +42,27 @@
 				</arguments>
 			</function>
 		</action>
+		
+		<action name="search">
+			<function name="search">
+				<arguments>
+					<required name="id" type="int"/>
+					<optional name="s_name"/>
+					<optional name="s_type"/>
+					<optional name="s_comment"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="addalias">
+			<function name="addalias">
+				<arguments>
+					<required name="alias" type="int"/>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+		
 
 	</class>
 </orb>

@@ -1,299 +1,102 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="planner">
-		<action name="todo">
-			<function name="todo">
-				<arguments>
-					<optional name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_todo">
-			<function name="submit_todo">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="importfile">
-			<function name="importfile">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_pick_msg_event">
-			<function name="submit_pick_msg_event">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="edit_todo_item">
-			<function name="edit_todo_item">
-				<arguments>
-					<define name="op" value="edit"/>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_todo_menu">
-			<function name="add_todo_menu">
-				<arguments>
-					<required name="name"/>
-					<required name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="add_todo_item">
-			<function name="edit_todo_item">
-				<arguments>
-					<define name="op" value="add"/>
-					<optional name="date"/>
-					<required name="parent"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="export_event">
-			<function name="export_event">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_todo_item">
-			<function name="submit_todo_item">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="new">
 			<function name="add">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" type="int"/>
+					<optional name="return_url"/>
 				</arguments>
 			</function>
 		</action>
-		<action name="redir">
-			<function name="redir">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+		
 		<action name="submit_add">
 			<function name="submit_add">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
-
-		<action name="addevent">
-			<function name="adm_event">
-				<arguments>
-					<required name="parent"/>
-					<required name="date"/>
-					<define name="op" value="add"/>
-				</arguments>
-			</function>
-		</action>
 		
-		<action name="editevent">
-			<function name="adm_event">
-				<arguments>
-					<required name="id"/>
-					<define name="op" value="edit"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="repeaters">
-			<function name="repeaters">
-				<arguments>
-					<optional name="op"/>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
 		
-		<action name="submit_repeaters">
-			<function name="submit_repeaters">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_adm_event">
-			<function name="submit_adm_event">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="change">
-			<function name="admin_planner">
+			<function name="change">
 				<arguments>
-					<required name="id"/>
-					<optional name="disp"/>
-					<optional name="date"/>
+					<required name="id" type="int"/>
+					<optional name="return_url"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="day" default="1">
-			<function name="user_planner">
+		<action name="view">
+			<function name="view">
 				<arguments>
-					<define name="disp" value="day"/>
-					<required name="id"/>
+					<required name="id" type="int"/>
+					<optional name="date"/>
+					<optional name="type"/>
+				</arguments>
+			</function>
+		</action>
+		
+		
+		
+		<action name="redir">
+			<function name="redir">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		<action name="display_object">
+			<function name="display_object">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="new_event">
+			<function name="new_event">
+				<arguments>
+					<required name="parent" type="int"/>
 					<optional name="date"/>
 				</arguments>
 			</function>
 		</action>
 		
-		<action name="mark_as_closed">
-			<function name="set_status">
+		<action name="change_event">
+			<function name="change_event">
 				<arguments>
-					<define name="status" value="1"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="import">
-			<function name="import">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="dummy">
-			<function name="dummy">
-				<arguments>
-					<required name="date"/>
-				</arguments>
-			</function>
-		</action>
-
-
-		<action name="show_week">
-			<function name="user_planner">
-				<arguments>
-					<optional name="date"/>
-					<required name="id"/>
-					<define name="disp" value="week"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="week">
-			<function name="user_planner">
-				<arguments>
-					<optional name="date"/>
-					<required name="id"/>
-					<define name="disp" value="week"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="overview">
-			<function name="user_planner">
-				<arguments>
-					<optional name="date"/>
-					<required name="id"/>
-					<define name="disp" value="overview"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="show_month">
-			<function name="user_planner">
-				<arguments>
-					<define name="disp" value="month"/>
-					<required name="id"/>
+					<required name="id" type="int"/>
 					<optional name="date"/>
 				</arguments>
 			</function>
 		</action>
 		
-		<action name="month">
-			<function name="user_planner">
+		<action name="event_repeaters">
+			<function name="event_repeaters">
 				<arguments>
-					<define name="disp" value="month"/>
-					<optional name="date"/>
+					<required name="id" type="int"/>
 				</arguments>
 			</function>
 		</action>
 		
-		<action name="mark_as_problem">
-			<function name="set_status">
+		<action name="event_object_search">
+			<function name="event_object_search">
 				<arguments>
-					<define name="status" value="2"/>
+					<required name="id" type="int"/>
+					<optional name="s_name"/>
+					<optional name="s_type"/>
+					<optional name="s_comment"/>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="add_event">
-			<function name="edit_event">
-				<arguments>
-					<required name="date"/>
-					<required name="time"/>
-				</arguments>
-			</function>
-		</action>
-		
-		<action name="edit_event">
-			<function name="edit_event">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
 
-		<action name="show">
-			<function name="show_event">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_event">
-			<function name="submit_event">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="delete_events">
-			<function name="delete_events">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="accept">
-			<function name="_unserialize">
-				<arguments>
-					<required name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="draw_day">
-			<function name="draw_day">
-				<arguments>
-					<optional name="date"/>
-					<optional name="msgid"/>
-				</arguments>
-			</function>
-		</action>
-		
 </orb>
 		
