@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.262 2004/05/19 15:47:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.263 2004/05/19 15:57:14 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2197,6 +2197,15 @@ class core extends acl_base
 				"func" => array(&$this, "_get_menu_list_cb"),
 				"param" => ""
 			));
+		}
+		else
+		{
+			$_tmp = $ot->to_list();
+			$_tmp2 = $_tmp->names();
+			if (is_array($_tmp2))
+			{
+				$this->tt = $_tmp2;
+			};
 		};
 
 		exit_function("core::get_menu_list");
