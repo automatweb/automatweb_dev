@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.312 2004/11/01 15:26:07 ahti Exp $
+// $Id: class_base.aw,v 2.313 2004/11/02 09:59:51 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -4165,6 +4165,7 @@ class class_base extends aw_template
 			"group" => $arr["group"],
 			"_alias" => get_class($this),
 			"page" => $arr["page"],
+			"alias" => $arr["alias"],
 			"topic" => $arr["topic"],
 			"id" => $arr["id"],
 			"section" => $arr["section"],
