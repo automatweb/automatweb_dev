@@ -86,6 +86,12 @@ function setsel(el,val)
 	<td class="fgtext">Nimi:</td>
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_name' VALUE='{VAR:cell_name}'></td>
 </tr>
+<tr>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">&nbsp;</td>
+	<td class="fgtext">T&uuml;&uuml;bi nimi:</td>
+	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_type_name' VALUE='{VAR:cell_type_name}'></td>
+</tr>
 <!-- SUB: LISTBOX_SORT -->
 <tr>
 <td class="fgtext">Sortimine:</td>
