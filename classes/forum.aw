@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.22 2001/11/29 22:03:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.23 2001/12/04 18:03:09 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -50,6 +50,21 @@ class forum extends aw_template
 	// !Kuvab uue topicu lisamise vormi
 	function add_topic($args = array())
 	{
+		if ( defined("TOPIC_ADD_REQUIRES_LOGIN") && not(defined("UID")) )
+		{
+			classload("config");
+			$c = new db_config;
+			$doc = $c->get_simple_config("orb_err_mustlogin");
+			if ($doc != "")
+			{
+				header("Location: $doc");
+				die();
+			}
+			else
+			{
+				$this->raise_error(E_ORB_LOGIN_REQUIRED,$fatal,$silent);
+			}
+		};
 		extract($args);
 		$object = $this->get_object($id);
 		#$parent = $this->get_object($object["parent"]);
@@ -547,9 +562,12 @@ class forum extends aw_template
 		extract($args);
 		$this->read_template("search.tpl");
 		$o = $this->get_object($board);
+		$board_obj = $this->get_obj_meta($board);
+		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
 		$flink = $this->mk_my_orb("change",array("id" => $board));
 		$this->mk_path($o["parent"], "<a href='$flink'>$o[name]</a> / Otsi");
 		$this->vars(array(
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["oid"])),
 			"reforb" => $this->mk_reforb("submit_search",array("board" => $board)),
 		));
 		return $this->parse();
@@ -560,9 +578,49 @@ class forum extends aw_template
 	function submit_search($args = array())
 	{
 		extract($args);
-		print "<pre>";
-		print_r($args);
-		print "</pre>";
+		$this->read_template("search_results.tpl");
+		$board_obj = $this->get_obj_meta($board);
+		$forum_obj = $this->get_obj_meta($board_obj["parent"]);
+
+		// koigepealt tuleb koostada topicute nimekiri mingi foorumi all
+		$blist[] = 0;
+		$q = "SELECT * FROM objects WHERE parent = '$board' AND status = 2 AND class_id = " . CL_MSGBOARD_TOPIC;
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$blist[] = $row["oid"];
+		};
+		$bjlist = join(",",$blist);
+		// valjad: from,email,subj,comment
+		// baasis: name,email,subj,comment
+		$q = "SELECT * FROM comments WHERE
+			name LIKE '%$from%' AND
+			email LIKE '%$email%' AND
+			subj LIKE '%$subj%' AND	
+			comment LIKE '%$comment%' AND
+			board_id IN ($bjlist)
+			ORDER BY time DESC";
+		$this->db_query($q);
+		$cnt = 0;
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+				"from" => $row["name"],
+				"subj" => $row["subj"],
+				"email" => $row["email"],
+				"comment" => $row["comment"],
+			));
+			$c .= $this->parse("message");
+		};
+		$this->vars(array(
+			"count" => $cnt,
+			"message" => $c,
+			"forum_link" => $this->mk_my_orb("topics",array("id" => $board_obj["oid"])),
+			"search_link" => $this->mk_my_orb("search",array("board" => $board,"section" => $this->section)),
+		));
+		return $this->parse();
 
 	}
 
