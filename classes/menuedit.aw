@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.7 2001/05/22 02:29:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.8 2001/05/22 12:14:44 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -794,6 +794,7 @@ classload("cache","validator","defs");
 					objects.last as last,
 					objects.jrk as jrk,
 					objects.alias as alias,
+					objects.brother_of as brother_of,
 					menu.link as link,
 					menu.type as mtype,
 					menu.clickable as clickable,
@@ -2949,15 +2950,15 @@ classload("cache","validator","defs");
 			while (list(,$row) = each($this->mpr[$parent]))
 			{
 				// only show content menus
-				if ($row[mtype] != MN_CONTENT)
+				if ($row["mtype"] != MN_CONTENT)
 				{
 					continue;
 				}
-				if ($row[hide_noact])
+				if ($row["hide_noact"])
 				{
 					// also go through the menus below this one to find out if there are any documents beneath those
 					// since then we must show the menu
-					if (!$this->has_sub_dox($row[oid]))
+					if (!$this->has_sub_dox($row["oid"]))
 					{
 						continue;
 					}
@@ -2983,18 +2984,18 @@ classload("cache","validator","defs");
 					}
 				}
 
-				$n = $this->req_draw_menu($row[oid], $name, &$path,$parent_tpl);
+				$n = $this->req_draw_menu($row["oid"], $name, &$path,$parent_tpl);
 
 				if ($cnt == 0 && $this->is_template($mn."_BEGIN"))
 				{
 					$ap.="_BEGIN";	// first one of this level menus
 				};
-				if (in_array($row[oid],$path) && $row[clickable] == 1)
+				if (in_array($row["oid"],$path) && $row["clickable"] == 1)
 				{
 					$ap.="_SEL";		// a selected menu
 				};
 
-				if ($row[clickable] != 1)
+				if ($row["clickable"] != 1)
 				{
 					$ap.="_SEP";		// non-clickable menu
 				};
@@ -3009,7 +3010,7 @@ classload("cache","validator","defs");
 					$ap = "";	
 				};
 
-				if (is_array($this->mpr[$row[oid]]))
+				if (is_array($this->mpr[$row["oid"]]))
 				{
 					$hs = $this->parse("HAS_SUBITEMS_".$name);
 				}
@@ -3019,22 +3020,27 @@ classload("cache","validator","defs");
 				}
 				$this->vars(array("HAS_SUBITEMS_".$name => $hs));
 
-				if ($row[link] != "")
+				if ($row["brother_of"])
 				{
-					$link = $row[link];
+					$row = $this->mar[$row["brother_of"]];
+				}
+
+				if ($row["link"] != "")
+				{
+					$link = $row["link"];
 				}
 				else
 				{
 					$link = $baseurl."/";
-					$link .= ($row[alias] != "") ? $row[alias] : "index." . $ext . "/section=" . $row[oid];
+					$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
 				}
 
-				$target = ($row[target] == 1) ? sprintf("target='%s'","_new") : "";
-				$this->vars(array("text" 		=> $row[name],
+				$target = ($row["target"] == 1) ? sprintf("target='%s'","_new") : "";
+				$this->vars(array("text" 		=> $row["name"],
 													"link" 		=> $link,
-													"section"	=> $row[oid],
+													"section"	=> $row["oid"],
 													"target" 	=> $target,
-													"image"		=> ($row[img_url] != "" ? "<img src='".$row[img_url]."' border='0'>" : "")));
+													"image"		=> ($row["img_url"] != "" ? "<img src='".$row["img_url"]."' border='0'>" : "")));
 
 				$l.=$this->parse($mn.$ap);
 				$this->vars(array($mn.$ap => ""));

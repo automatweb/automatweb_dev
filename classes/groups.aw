@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.3 2001/05/17 15:09:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/groups.aw,v 2.4 2001/05/22 12:14:44 kristo Exp $
 load_vcl("table");
 classload("users_user","config");
 
@@ -935,9 +935,9 @@ class groups extends users_user
 		reset($yaha);
 		while (list(,$gid) = each($yaha))
 		{
-			$yah="<a href='".$this->mk_orb("list_grps",array("parent" => $gid))."'>".$this->grpcache2[$gid][name]."</a> / ".$yah;
+			$yah="<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => $gid))."'>".$this->grpcache2[$gid][name]."</a> / ".$yah;
 		}
-		$yah = "<a href='".$this->mk_orb("list_grps",array("parent" => 0))."'>Grupid</a> / ".$yah;
+		$yah = "<a target=\"list\" href='".$this->mk_orb("mk_grpframe",array("parent" => 0))."'>Grupid</a> / ".$yah;
 		$this->vars(array("yah" => $yah));
 		$this->vars(array("ADD_CAT" => $ac));
 
