@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.157 2003/10/28 12:08:05 duke Exp $
+// $Id: class_base.aw,v 2.158 2003/10/28 13:20:26 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -335,6 +335,7 @@ class class_base extends aw_template
 				"action" => &$action,
 				"args" => &$args,
 				"form_data" => &$form_data,
+				"request" => &$form_data,
 				"orb_class" => &$orb_class,
 				"clid" => $this->clid,
 			));
@@ -1311,6 +1312,7 @@ class class_base extends aw_template
 		
 		if (($val["type"] == "table") && is_object($val["vcl_inst"]))
 		{
+			$val["vcl_inst"]->sort_by();
 			$val["value"] = $val["vcl_inst"]->draw();
 		};
 
@@ -2110,6 +2112,7 @@ class class_base extends aw_template
                                 "objdata" => &$this->objdata,
                                 "metadata" => &$metadata,
                                 "form_data" => &$rawdata,
+				"request" => &$rawdata,
                                 "new" => $new,
 				"obj_inst" => &$this->obj_inst,
                         );
@@ -2292,6 +2295,7 @@ class class_base extends aw_template
 				"coredata" => &$this->coredata,
 				"objdata" => &$this->objdata,
 				"form_data" => &$args,
+				"request" => &$request,
 				"obj_inst" => &$this->obj_inst,
 				"object" => array_merge($this->coredata,$this->objdata),
 			));
@@ -2319,6 +2323,7 @@ class class_base extends aw_template
 				"obj_inst" => $this->obj_inst,
 				"objdata" => $this->objdata,
 				"form_data" => &$args,
+				"request" => &$request,
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
 			));
