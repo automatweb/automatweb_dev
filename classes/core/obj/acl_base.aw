@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.7 2004/12/29 13:54:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.8 2005/02/21 08:52:38 kristo Exp $
 
 lc_load("definition");
 
@@ -410,9 +410,7 @@ class acl_base extends db_connector
 					}
 
 					$fp = fopen($fqfn, "w");
-					flock($fp, LOCK_EX);
 					fwrite($fp, $str);
-					flock($fp, LOCK_UN);
 					fclose($fp);
 					@chmod($fqfn, 0666);
 				}
