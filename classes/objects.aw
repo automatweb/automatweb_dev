@@ -1,144 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.28 2002/01/22 14:04:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.29 2002/05/02 22:32:32 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
-
-global $orb_defs;
-$orb_defs["objects"] = "xml";
-
 classload("cache");
-
 class db_objects extends aw_template 
 {
 	function db_objects() 
 	{
-		$this->db_init();
-		$this->tpl_init();
-		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM,CL_OBJECT_CHAIN);		
-		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK,CL_FORUM,CL_OBJECT_CHAIN);	
-	lc_load("definition");
-	}
-
-	function browser($args = array())
-	{
-		extract($args);
-		$this->tpl_init("objects");
-		load_vcl("html_frameset");
-		$retval = "";
-		global $baseurl;
-		switch($type)
-		{
-			case "top":
-				$retval .= sprintf(LC_OBJECTS_OBJECTS_CAL,"$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid' target='content'","$baseurl/?class=planner&action=draw_day&msgid=$msgid' target='content'");
-
-				break;
-
-			case "middle":
-				$frames = array(
-					"mleft" => "$baseurl/?class=objects&action=browser&type=content&msgid=$msgid",
-					"mright" => "$baseurl/?class=objects&action=browser&type=search&msgid=$msgid",
-				);
-				
-				$frameset = new html_frameset(array(
-					"cols" => "60%,40%",
-					"rows" => "*",
-					"frames" => $frames,
-				));
-				$retval = $frameset->generate();
-
-				break;
-
-			case "content":
-				global $udata;
-				$this->read_template("homedir.tpl");
-				$prnt = ($parent) ? $parent : $udata["home_folder"];
-				$this->get_objects(array(
-						"parent" => $prnt,
-						"class_id" => array(CL_PSEUDO,CL_FILE),
-					));
-				$c = "";
-				$this->vars(array(
-						"msgid" => $msgid,
-				));
-				while($row = $this->db_next())
-				{
-
-					$this->vars(array(
-							"name" => $row["name"],
-							"oid" => $row["oid"],
-							"icon" => get_icon_url($row["class_id"],$row["name"]),
-					));
-					
-					$tpl = ($row["class_id"] == CL_PSEUDO) ? "line" : "object";
-					$c .= $this->parse($tpl);
-				};
-
-				$chain = $this->get_obj_chain(array(
-							"oid" => $prnt,
-							"stop" => $udata["home_folder"],
-						));
-
-				$fullpath = map2("<a href='$baseurl/?class=objects&action=browser&type=content&msgid=$msgid&parent=%s'>%s</a>",$chain);
-			        $fullpath = join(" &gt; " ,array_reverse($fullpath));
-
-				$this->vars(array(
-						"fullpath" => $fullpath,
-						"line" => $c,
-						"reforb" => $this->mk_reforb("submit_hd",array()),
-				));
-				$retval = $this->parse();
-				break;
-
-			case "search":
-				$this->read_template("search.tpl");
-				$flist = $this->gen_folders();
-				$this->vars(array(
-						"folders" => $this->multiple_option_list($flist,$flist),
-						"reforb" => $this->mk_reforb("hf_search",array("msgid" => $msgid)),
-						));
-				$retval = $this->parse();
-				break;
-
-			case "bottom":
-				$this->read_template("bottom.tpl");
-				$retval = $this->parse();
-				break;
-
-			default:
-				global $baseurl;
-				$frames = array(
-					"test1" => "$baseurl/?class=objects&action=browser&type=top&msgid=$msgid",
-					"content" => "$baseurl/?class=objects&action=browser&type=middle&msgid=$msgid",
-					"test3" => "$baseurl/?class=objects&action=browser&type=bottom",
-				);
-				
-				$frameset = new html_frameset(array(
-					"cols" => "*",
-					"rows" => "10%,80%,10%",
-					"frames" => $frames,
-				));
-
-				$retval = $frameset->generate();
-				
-		}
-		print $retval;
-		exit;
-	}
-
-	function submit_hd($args = array())
-	{
-		extract($args);
-		if (is_array($check))
-		{
-			classload("file");
-			$awf = new file();
-			// kopeerime koik lisatud objektid teate juurde
-			foreach($check as $id)
-			{
-				$awf->cp(array("id" => $id,"parent" => $msgid));
-			}
-		};
-		print "<script language='javascript'>parent.close();</script>";
-		exit;
+		$this->init("");
+		lc_load("definition");
 	}
 
 	function hf_search($args = array())
@@ -170,15 +39,15 @@ class db_objects extends aw_template
 
 			$lastparent = $row["parent"];
 			$this->vars(array(
-					"name" => $row["name"],
-					"oid" => $row["oid"],
-					"icon" => get_icon_url($row["class_id"],$row["name"]),
+				"name" => $row["name"],
+				"oid" => $row["oid"],
+				"icon" => get_icon_url($row["class_id"],$row["name"]),
 			));
 			$c .= $this->parse("object");
 		};
 		$this->vars(array(
-				"line" => $c,
-				"reforb" => $this->mk_reforb("submit_hd",array("msgid" => $msgid)),
+			"line" => $c,
+			"reforb" => $this->mk_reforb("submit_hd",array("msgid" => $msgid)),
 		));
 		$retval = $this->parse();
 		print $retval;
@@ -190,146 +59,13 @@ class db_objects extends aw_template
 		extract($args);
 		classload("menuedit_light");
 		$mnl = new menuedit_light();
-		global $udata;
+		$udata = $this->get_user();
 		$flist = $mnl->gen_rec_list(array(
-				"start_from" => $udata["home_folder"],
-				"add_start_from" => true,
-				"sq" => $sq,
-			));
+			"start_from" => $udata["home_folder"],
+			"add_start_from" => true,
+			"sq" => $sq,
+		));
 		return $flist;
-	}
-
-
-
-	function search_objs($docid)
-	{
-		$this->tpl_init("automatweb/objects");
-		$this->read_template("search_doc.tpl");
-		global $s_name, $s_comment,$s_type,$SITE_ID;
-		if ($s_name != "" || $s_comment != "" || $s_type > 0)
-		{
-			$se = array();
-			if ($s_name != "")
-			{
-				$se[] = " objects.name LIKE '%".$s_name."%' ";
-			}
-			if ($s_comment != "")
-			{
-				//$se[] = " objects.comment LIKE '%".$s_comment."%' ";
-			}
-			if ($s_type > 0)
-			{
-				$se[] = " objects.class_id = '".$s_type."' ";
-			}
-			else
-			{
-				$se[] = " objects.class_id IN (".join(",",$this->typearr).") ";
-			}
-			$q = "SELECT objects.name as name,objects.oid as oid,objects.class_id as class_id,objects.created as created,objects.createdby as createdby,objects.modified as modified,objects.modifiedby as modifiedby,pobjs.name as parent_name FROM objects, objects AS pobjs WHERE pobjs.oid = objects.parent AND objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND ".join("AND",$se);
-			$this->db_query($q);
-			while ($row = $this->db_next())
-			{
-				$this->vars(array(
-					"name" => $row["name"], 
-					"id" => $row["oid"],
-					"type"	=> $GLOBALS["class_defs"][$row["class_id"]]["name"],
-					"created" => $this->time2date($row["created"],2),
-					"modified" => $this->time2date($row["modified"], 2),
-					"createdby" => $row["createdby"],
-					"modifiedby" => $row["modifiedby"],
-					"parent_name" => $row["parent_name"],
-					"pickurl" => (in_array($row["class_id"],$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $row["oid"]),"document")."'>Pick this</a>" : "")));
-				$l.=$this->parse("LINE");
-			}
-			$this->vars(array("LINE" => $l));
-		}
-		else
-		{
-			$s_name = "%";
-			$s_comment = "%";
-			$s_type = 0;
-		}
-		$tar = array(0 => LC_OBJECTS_ALL);
-		reset($this->typearr);
-		while (list(,$v) = each($this->typearr))
-		{
-			$tar[$v] = $GLOBALS["class_defs"][$v]["name"];
-		}
-		$this->vars(array("docid" => $docid,
-											"s_name"	=> $s_name,
-											"s_type"	=> $s_type,
-											"s_comment"	=> $s_comment,
-											"types"	=> $this->picker($s_type, $tar)));
-		return $this->parse();
-	}
-
-	////
-	// !kasutatakse dokude juurde aliaste lisamiseks
-	function gen_pickable_list($parent,$docid,&$mstring) 
-	{
-		global $PHP_SELF;
-		global $ext;
-		$this->tpl_init("automatweb/objects");
-		if ($parent > 0) 
-		{
-			$parentlist = $this->get_object_chain($parent,true);
-			while(list($p_oid,$p_cap) = each($parentlist)) 
-			{
-				if ($p_oid == $parent) 
-				{
-					$mmap[] = $p_cap["name"];
-				} 
-				else 
-				{
-					$mmap[] = sprintf("<a href='%s?docid=%d&parent=%d'>%s</a>",$PHP_SELF,$docid,$p_oid,$p_cap["name"]);
-				};
-			};
-			$mstring = join(" &gt; ",array_reverse($mmap));
-		};
-
-		$this->read_template("pick.tpl");
-		$this->vars(array("search" => "pickobject.".$GLOBALS["ext"]."?docid=".$docid));
-		$this->listall_types($parent,$this->typearr2);
-		$lines = "";
-		$count = 0;
-		while($row = $this->db_next()) 
-		{
-			$count++;
-			$this->vars(array("oid" => $row[oid]));
-			extract($row);
-			// saveme handle, sest count_by_parent vajab handlerit
-      $this->save_handle();
-			$subs = $this->count_by_parent($oid,$this->typearr2);
-      $this->restore_handle();
-			// kui selle objekti all on veel elemente, siis saab expandida
-			if ($subs > 0) 
-			{
-				$expandurl = "<a href='$PHP_SELF?type=search&parent=$oid&docid=$docid'><b>+</b></a> ($subs)";
-			} 
-			else 
-			{
-				$expandurl = "($subs)";
-			};
-			$this->vars(array("oid" => $oid,
-						"parent"				=> $parent,
-						"name"					=> $name,
-						"rec"						=> $count,
-						"modifier"			=> $modifiers[$class_id],
-						"modifiedby"		=> $row[modifiedby],
-						"created"				=> $this->time2date($created),
-						"modified"			=> $this->time2date($modified),
-						"class"					=> $GLOBALS["class_defs"][$class_id][name],
-						"docid"					=> $docid,
-						"expandurl"     => $expandurl,
-						"pickurl"				=> (in_array($class_id,$this->typearr) ? "<a href='".$this->mk_orb("addalias",array("id" => $docid, "alias" => $oid),"document")."'>Võta see</a>" : "")));
-			$lines .= $this->parse("line");
-		};
-		$this->vars(array(
-			"line"    => $lines,
-		  "total"   => verbalize_number($count),
-      "parent"  => $parent,
-		  "message" => $message));
-    return $this->parse();
 	}
 
 	function mkah(&$arr, &$ret,$parent,$prefix)
@@ -413,17 +149,36 @@ class db_objects extends aw_template
 	// rootobj - mis objektist alustame
 	function get_list($ignore_langmenus = false,$empty = false,$rootobj = -1) 
 	{
-		global $awt;
-		$awt->start("objects::get_list");
-		$awt->count("objects::get_list");
+		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
+
+		$cf_name = "objects::get_list::ign::".((int)$ignore_langmenus)."::empty::".((int)$ignore_langmenus)."::rootobj::".$rootobj;
+		$cf_name.= "::adminroot::".$admin_rootmenu."::uid::".aw_global_get("uid");
 
 		if (!$ignore_langmenus)
 		{
-			if ($GLOBALS["lang_menus"] == 1)
+			if ($this->cfg["lang_menus"] == 1)
 			{
-				$aa = " AND (objects.lang_id = ".$GLOBALS["lang_id"]." OR menu.type = 69)";
+				$aa = " AND (objects.lang_id = ".aw_global_get("lang_id")." OR menu.type = 69)";
+				$cf_name.="::lm::1::lang_id::".aw_global_get("lang_id");
 			}
 		}
+
+		// 1st memory cache
+		if (($ret = aw_global_get($cf_name)))
+		{
+			return $ret;
+		}
+
+		// then disk cache
+		$cache = new cache;
+		if (($cont = $cache->file_get($cf_name)))
+		{
+			$dat = aw_unserialize($cont);
+			aw_global_set($cf_name, $dat);
+			return $dat;
+		}
+		
+		// and finally, the database
 		$this->db_query("SELECT objects.oid as oid, 
 														objects.parent as parent,
 														objects.name as name
@@ -442,7 +197,6 @@ class db_objects extends aw_template
 		{
 			$tt[] = "";
 		}
-		global $admin_rootmenu;
 		if ($rootobj == -1)
 		{
 			$rootobj = $admin_rootmenu;
@@ -451,11 +205,16 @@ class db_objects extends aw_template
 
 		if ($rootobj == $admin_rootmenu)
 		{
-			$hf = $this->db_fetch_field("SELECT home_folder FROM users WHERE uid = '".$GLOBALS["uid"]."'","home_folder");
-			$this->mkah(&$ret,&$tt,$hf,$GLOBALS["uid"]);
+			$hf = $this->db_fetch_field("SELECT home_folder FROM users WHERE uid = '".aw_global_get("uid")."'","home_folder");
+			$hf_name = $this->db_fetch_field("SELECT name FROM objects WHERE oid = '$hf'","name");
+			// but we must also add the home folder itself!
+			$tt[$hf] = $hf_name;
+			$this->mkah(&$ret,&$tt,$hf,aw_global_get("uid"));
 		}
 
-		$awt->stop("objects::get_list");
+		$cache->file_set($cf_name,aw_serialize($tt));
+		aw_global_set($cf_name, $tt);
+
 		return $tt;
 	}
 	
@@ -493,8 +252,27 @@ class objects extends db_objects
 	function search($arr)
 	{
 		$this->tpl_init("automatweb/objects");
-		$this->read_template("search.tpl");
-		global $s,$SITE_ID,$class_defs;
+		$this->sub_merge = 1;
+
+		// search types:
+		// 0 or not set	: the usual object search
+		// 1 : called from messenger to search for objects to attach
+		// the only difference between right now is a different template
+		if ($arr["stype"] == 1)
+		{
+			$this->read_template("search_messenger.tpl");
+			// target specifies the message to which the objects should be attached
+			$this->target = $arr["target"];
+		}
+		else
+		{
+			$this->read_template("search.tpl");
+		};
+
+		// FIXME: loeb globaalsest skoobist parameetreid (NB! need on arrayd)
+		global $s,$class_defs;
+
+		$SITE_ID = $this->cfg["site_id"];
 
 		$numfields = array("parent" => 1,"class_id" => 1,"created" => 1,"modified" => 1 ,"status" => 1);
 		$found = false;
@@ -529,6 +307,7 @@ class objects extends db_objects
 				}
 			}
 		}
+
 		if ($found)
 		{
 			$ses = join("AND",$se);
@@ -555,7 +334,16 @@ class objects extends db_objects
 				));
 				$l.=$this->parse("LINE");
 			}
-			$this->vars(array("LINE" => $l));
+		
+			classload("objects");
+			$ob = new db_objects;
+
+
+			$this->vars(array(
+				"LINE" => $l,
+				"moveto" => $this->picker(0,$ob->get_list(false,true)),
+			));
+			$this->parse("FOUND");
 		}
 		else
 		{
@@ -563,20 +351,20 @@ class objects extends db_objects
 			$s["comment"] = "%";
 			$s["type"] = 0;
 		}
-		$tar = array(0 => LC_OBJECTS_ALL);
+
+		$tar = array(0 => " " . LC_OBJECTS_ALL);
 		global $class_defs;
 		reset($class_defs);
 		while (list($v,) = each($class_defs))
 		{
 			$tar[$v] = $GLOBALS["class_defs"][$v]["name"];
 		}
+		asort($tar);
 		classload("users");
 		$u = new users;
 		$uids = $u->listall_acl();
 		$uids[""] = "";
 
-		classload("objects");
-		$ob = new db_objects;
 
 		$li = $this->get_list(false,true);
 		$li[1] = "Root";
@@ -589,8 +377,7 @@ class objects extends db_objects
 			"modifiedby" => $this->picker($s["modifiedby"],$uids),
 			"active"	=> checked($s["active"]),
 			"alias"		=> $s["alias"],
-			"reforb" => $this->mk_reforb("search_submit", array()),
-			"moveto" => $this->picker(0,$ob->get_list(false,true))
+			"reforb" => $this->mk_reforb("search_submit", array("stype" => $arr["stype"],"target" => $arr["target"])),
 		));
 		return $this->parse();
 	}
@@ -599,7 +386,14 @@ class objects extends db_objects
 	{
 		extract($arr);
 
-		// here we must move the selected objects and change names
+		if ($attach)
+		{
+			$this->_attach_objects($arr);
+			//print "<script>window.close();</script>";
+			exit;
+		};
+
+		// Renaming ...
 		if (is_array($old_text))
 		{
 			foreach($old_text as $oid => $name)
@@ -607,36 +401,17 @@ class objects extends db_objects
 				if ($text[$oid] != $name)
 				{
 					$this->upd_object(array("oid" => $oid, "name" => $text[$oid]));
+					
+					// form elements get special handling
 					if ($class_id[$oid] == CL_FORM_ELEMENT)
 					{
-						$this->db_query("SELECT * FROM element2form WHERE el_id = ".$oid);
-						while ($drow = $this->db_next())
-						{
-							$fup = new form;
-							$fup->load($drow["form_id"]);
-							for ($row = 0;$row < $fup->arr["rows"]; $row++)
-							{
-								for ($col = 0; $col < $fup->arr["cols"]; $col++)
-								{
-									if (is_array($fup->arr["elements"][$row][$col]))
-									{
-										foreach($fup->arr["elements"][$row][$col] as $k => $v)
-										{
-											if ($k == $oid)
-											{
-												$fup->arr["elements"][$row][$col][$k]["name"] = $name;
-											}
-										}
-									}
-								}
-							}
-							$fup->save();
-						}
+						$this->_search_rename_form_element($oid,$name);
 					}
 				}
 			}
 		}
 
+		// ..moving..
 		if (is_array($sel) && $moveto != 0)
 		{
 			foreach($sel as $oid => $one)
@@ -645,6 +420,7 @@ class objects extends db_objects
 			}
 		}
 
+		// ..and deleting..
 		if (is_array($sel) && $delete != "")
 		{
 			foreach($sel as $oid => $one)
@@ -659,17 +435,83 @@ class objects extends db_objects
 		// just in case if any menus were deleted or changed - I thought it would be too expensive to put checks in 
 		// core::delete_object and core::upd_object to check if menus were changed and then flush the cache 
 		// - yeah, that would be a lot safer, but is it really necessary?
-		global $lang_id,$SITE_ID;
-		classload("cache");
-		$cache = new cache;
-		$cache->db_invalidate("menuedit::menu_cache::lang::".$lang_id."::site_id::".$SITE_ID);
+		classload("menuedit");
+		$m = new menuedit;
+		$m->invalidate_menu_cache();
 
-		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"]));
+		return $this->mk_my_orb("search", array("s[name]" => $s["name"],"s[comment]" => $s["comment"],"s[class_id]" => $s["class_id"],"s[parent]" => $s["parent"],"s[createdby]" => $s["createdby"], "s[modifiedby]" => $s["modifiedby"], "s[active]" => $s["active"], "s[alias]" => $s["alias"],"stype" => $stype,"target" => $target));
+	}
+						
+	function _search_rename_form_element($oid,$name)
+	{
+		$this->db_query("SELECT * FROM element2form WHERE el_id = ".$oid);
+		while ($drow = $this->db_next())
+		{
+			$fup = new form;
+			$fup->load($drow["form_id"]);
+			for ($row = 0;$row < $fup->arr["rows"]; $row++)
+			{
+				for ($col = 0; $col < $fup->arr["cols"]; $col++)
+				{
+					if (is_array($fup->arr["elements"][$row][$col]))
+					{
+						foreach($fup->arr["elements"][$row][$col] as $k => $v)
+						{
+							if ($k == $oid)
+							{
+								$fup->arr["elements"][$row][$col][$k]["name"] = $name;
+							}
+						}
+					}
+				}
+			}
+			$fup->save();
+		}
+	}
+
+	function _attach_objects($args = array())
+	{
+		extract($args);
+		// sel nimelises arrays on meil objektide ID-d, mida siis tuleks, saaks, vmt attachida
+		// target sisaldab kirja id-d, mille kylge objekt attachida tuleb
+		if (is_array($sel))
+		{
+			classload("file");
+			$awf = new file();
+			foreach($sel as $key => $val)
+			{
+				$obj = $this->get_object($key);
+				if ($obj["class_id"] == CL_FILE)
+				{
+					// those get special handling
+					$awf->cp(array("id" => $key,"parent" => $target));
+				}
+				else
+				{
+					$html = $this->show(array("id" => $key));
+					$awf->put(array(
+						"type" => "text/html",
+						"content" => $html,
+						"parent" => $target,
+						// extension is for that stupid browser, that ignores mime types
+						// and looks only at the end of the filename. 
+						"filename" => $this->name . ".html",
+					));
+				};
+			};
+		};
+
+		// save[0], because the composer windows has two buttons with that name and therefore
+		// we cannot refer to it as just "save"
+		print "<script>window.opener.document.writemessage.save[0].click(); window.close();</script>";
+			
 	}
 
 
 	////
 	// !Displays an object. Any object.
+	// and yes. it's not very smart. all the functionality to generate a preview of an object
+	// should be inside the correspondending class
 	function show($args = array())
 	{
 		extract($args);
@@ -678,6 +520,9 @@ class objects extends db_objects
 		{
 			return false;
 		};
+
+		$this->name = strip_tags($obj["name"]);
+		$this->has_output = true;
 		// shouldn't we check ACL here?
 		switch($obj["class_id"])
 		{
@@ -706,7 +551,10 @@ class objects extends db_objects
 				$frm = $t->get_form_for_entry($obj["oid"]);
 				$ops = $t->get_op_list($frm);
 				list($x,$y) = each($ops);
-				list($id,$name) = each($y);
+				if (is_array($y))
+				{
+					list($id,$name) = each($y);
+				};
 
 				$replacement = $t->show(array(
 					"id" => $frm,
@@ -714,13 +562,31 @@ class objects extends db_objects
 					"op_id" => $id,
 				));
 				break;
+
+			case CL_FORM_OUTPUT:
+				classload("form");
+				$t = new form();
+				$frm = $t->get_op_forms($obj["oid"]);
+				$x = $y = 0;
+				if (is_array($frm))
+				{
+					list($x,$y) = each($frm);
+				};
+				
+				$replacement = $t->show(array(
+					"id" => $x,
+					"op_id" => $id,
+				));
+
+				break;
+
 			
 			case CL_FORM:
 				classload("form");
 				$t = new form();
 				$replacement = $t->gen_preview(array(
 					"id" => $obj["oid"],
-					"form_action" => "/reforb.".$GLOBALS["ext"],
+					"form_action" => "/reforb.".$this->cfg["ext"],
 				));
 				break;
 			
@@ -733,7 +599,7 @@ class objects extends db_objects
 				break;
 
 			case CL_GRAPH:
-				$replacement = "<img src='/graphs.aw?type=show&id=$obj[oid]'>";
+				$replacement = "<img src='".$this->mk_my_orb("show", array("id" => $obj["oid"]),"graph",false,true)."'>";
 				break;
 
 			case CL_GALLERY:
@@ -780,7 +646,8 @@ class objects extends db_objects
 						$comment = $fi["name"];
 					}
 
-					$replacement = "<a $ss class=\"sisutekst\" href='".$GLOBALS["baseurl"]."/files.aw/id=".$obj["oid"]."/".urlencode($fi["name"])."'>$comment</a>";
+					classload("file");
+					$replacement = "<a $ss class=\"sisutekst\" href='".file::get_url($obj["oid"],$fi["name"])."'>$comment</a>";
 				}	
 				break;
 
@@ -792,10 +659,11 @@ class objects extends db_objects
 				break;
 
 			case CL_PSEUDO:
-				$replacement = "<a href='/index.aw?section=$obj[oid]'>$obj[name]</a>";
+				$replacement = "<a href='/index.".$this->cfg["ext"]."?section=$obj[oid]'>$obj[name]</a>";
 				break;
 
 			default:
+				$this->has_output = false;
 				$replacement = "This object class has no output yet<br>";
 		}
 		return $replacement;
