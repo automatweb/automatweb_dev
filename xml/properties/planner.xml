@@ -207,6 +207,18 @@
             <caption>Tööpäevad</caption>
       </property>
       <property>
+            <name>navtoolbar</name>
+            <type>toolbar</type>
+            <group>
+                  <num_0>show_day</num_0>
+                  <num_1>show_week</num_1>
+                  <num_2>show_month</num_2>
+            </group>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Nav. toolbar</caption>
+      </property>
+      <property>
             <name>show_day</name>
             <callback>callback_show_day</callback>
             <group>show_day</group>
@@ -236,7 +248,6 @@
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
-            <toolbar>yes</toolbar>
       </classinfo>
       <groupinfo>
             <show_day>
