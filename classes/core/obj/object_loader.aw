@@ -44,7 +44,17 @@ class _int_object_loader
 		$this->cfgu = get_instance("cfg/cfgutils");
 		$this->cache = get_instance("cache");
 
-		$this->obj_inherit_props_conf = safe_array(aw_unserialize(@file_get_contents(aw_ini_get("site_basedir")."/files/obj_inherit_props.conf")));
+		$this->obj_inherit_props_conf = array();
+		$fn = aw_ini_get("site_basedir")."/files/obj_inherit_props.conf";
+		if (file_exists($fn) && is_readable($fn))
+		{
+			$f = fopen($fn, "r");
+			if ($f)
+			{
+				$this->obj_inherit_props_conf = safe_array(aw_unserialize(fread($f, filesize($fn))));
+				fclose($f);
+			}
+		}
 	}
 
 	function oid_for_alias($alias)
