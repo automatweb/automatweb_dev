@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.21 2003/11/08 08:17:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.22 2003/11/26 12:22:39 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -19,6 +19,7 @@
 	@caption E-post
 
 	@classinfo syslog_type=ST_MAILINGLIST_MEMBER
+	@classinfo no_status=1
 
 	@tableinfo ml_users index=id master_table=objects master_index=oid
 */
@@ -45,10 +46,12 @@ class ml_member extends class_base
 				break;
 
 			case "mail":
+				/*
 				if ("" == $arr["obj_inst"]->prop("conf_obj"))
 				{
 					$retval = PROP_IGNORE;
 				};
+				*/
 				break;
 			case "fchange":
 				if (strlen($arr["obj_inst"]->meta("email")) > 0)

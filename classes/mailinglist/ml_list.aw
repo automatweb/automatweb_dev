@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.30 2003/11/12 13:04:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.31 2003/11/26 12:22:39 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -47,9 +47,32 @@
 
 	@property import_textfile type=fileupload store=no group=general
 	@caption Impordi liikmed tekstifailist
-	
+
+	@property list_status_table type=table store=no group=list_status no_caption=1
+	@caption Listi staatus
+
+	@property list_report_table type=table store=no group=list_report no_caption=1
+	@caption Listi raport
+
+	@property mail_percentage type=text store=no group=mail_report
+	@caption Saadetud
+
+	@property mail_start_date type=text store=no group=mail_report
+	@caption Saatmise algus
+
+	@property mail_last_batch type=text store=no group=mail_report
+	@caption Viimane batch saadeti
+
+	@property mail_report table type=table store=no group=mail_report no_caption=1
+	@caption Meili raport
+
 	@groupinfo members caption=Liikmed submit=no
 	@groupinfo subscribing caption="Liitumine/lahkumine"
+	@groupinfo raports caption="Raportid"
+	@groupinfo list_status caption="Listi staatus" parent=raports submit=no
+	@groupinfo list_report caption="Listi raport" parent=raports submit=no
+	@groupinfo mail_report caption="Maili raport" parent=raports submit=no
+
 	@classinfo syslog_type=ST_MAILINGLIST
 	@classinfo relationmgr=yes
 
@@ -118,6 +141,46 @@ class ml_list extends class_base
 
 			case "member_list":
 				$this->gen_member_list($arr);
+				break;
+	
+			case "list_status_table":
+				$this->gen_list_status_table($arr);
+				break;
+			
+			case "list_report_table":
+				$this->gen_list_report_table($arr);
+				break;
+			
+			case "mail_report":
+				$this->gen_mail_report_table($arr);
+				break;
+
+			case "mail_percentage":
+				$data["value"] = $this->gen_percentage($arr);
+				break;
+
+			case "mail_start_date":
+			case "mail_last_batch":
+				$list_id = $arr["obj_inst"]->id();
+				$mail_id = $arr["request"]["mail_id"];
+				$q = "SELECT * FROM ml_queue WHERE lid = ${list_id} ANd mid = ${mail_id}";
+				$this->db_query($q);
+				$row = $this->db_next();
+				if ($data["name"] == "mail_start_date")
+				{
+					$data["value"] = $this->time2date($row["start_at"],2);
+				}
+				else
+				{
+					if ($row["last_sent"] == 0)
+					{
+						$data["value"] = "Midagi pole veel saadetud";
+					}
+					else
+					{
+						$data["value"] = $this->time2date($row["last_sent"],2);
+					};
+				};
 				break;
 				
 
@@ -267,6 +330,58 @@ class ml_list extends class_base
 
 			}
 		};		
+	}
+
+	function gen_list_status_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->parse_xml_def("mlist/queue");
+		$lists = $this->get_lists_and_groups(array());
+		$q = "SELECT * FROM ml_queue WHERE lid = " . $arr["obj_inst"]->id();
+                $this->db_query($q);
+                while ($row = $this->db_next())
+                {
+			$listname = $lists[$row["lid"].":0"];
+			$row["lid"] = "<a href='javascript:remote(0,450,270,\"".$this->mk_my_orb("queue_change",array
+("id"=>$row["qid"]),"ml_list_status")."\");'>$listname</a>";
+			$this->save_handle();
+                        $row["mid"] = $this->db_fetch_field("SELECT name FROM objects WHERE oid='".$row["mid"]."'","n
+ame")."(".$row["mid"].")";
+                        $this->restore_handle();
+                        if (!$row["patch_size"])
+                        {
+                                $row["patch_size"]="kõik";
+                        };
+                        $row["delay"]/=60;
+                        //$row["status"]=$this->a_status[$row["status"]];
+                        $row["status"]=$row["status"];
+                        $row["protsent"]=$this->queue_ready_indicator($row["position"],$row["total"]);
+                        $row["perf"] = sprintf("%.2f",$row["total"] / ($row["last_sent"] - $row["start_at"]) * 60);
+                        $row["vali"]="<input type='checkbox' NAME='sel[]' value='".$row["qid"]."'>";
+                        $t->define_data($row);
+		};
+	}
+
+	function gen_list_report_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->parse_xml_def("mlist/report_mails");
+		$id = $arr["obj_inst"]->id();
+		$q = "
+			SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id, mail
+			FROM ml_sent_mails
+			LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member
+			LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
+			WHERE lid  = $id GROUP BY mail";
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$row['subject'] = html::href(array(
+				'url' => $this->mk_my_orb("change", array("group" => "mail_report", "id" => $id,"mail_id" => $row['mail'])),
+				'caption' => $row['subject']
+			));
+			$t->define_data($row);
+		}
 	}
 
 	function _get_defined_user_folders($conf)
@@ -710,13 +825,19 @@ class ml_list extends class_base
 		{
 			if ($prnt > 0)
 			{
-				$ret+=$this->get_objects_below(array(
+				$member_list = new object_list(array(
 					"parent" => $prnt,
-					"class" => CL_ML_MEMBER,
-					"status" => STAT_ACTIVE,
-					"full" => true,
-					"fields" => "oid,parent",
+					"class_id" => CL_ML_MEMBER,
+					//"status" => STAT_ACTIVE,
 				));
+
+				for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+				{
+					$ret[$o->id()] = array(
+						"oid" => $o->id(),
+						"parent" => $o->parent(),
+					);
+				};
 			};
 		}
 		return $ret;
@@ -1001,6 +1122,110 @@ class ml_list extends class_base
 		}
 		return $this->cfg["baseurl"] . "/" . $retval;
 			
+	}
+
+	       ////
+        //! teeb progress bari
+        // tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
+        // see olex overkill kui on palju queue itemeid
+        function queue_ready_indicator($osa,$kogu)
+        {
+                if (!$kogu)
+                {
+                        $p=100;
+                }
+                else
+                {
+                        $p=(int)((int)$osa * 100 / (int)$kogu);
+                };
+                $not_p=100-$p;
+                //echo("qri($osa,$kogu)=$p");//dbg
+
+                // tekst pane sinna, kus on rohkem ruumi.
+                if ($p>$not_p)
+                {
+                        $p1t="<span Style='font-size:10px;font-face:verdana;'><font color='white'>".$p."%</font></span>";
+                }
+                else
+                {
+                        $p2t="<span Style='font-size:10px;font-face:verdana;'><font color='black'>".$p."%</font></span>";
+                };
+                // kommentaar on selleks, et sorteerimine töötaks (hopefully)
+                return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
+        }
+
+	////
+	// !This will generate a raport for a single mail sent to a list.
+	// Ungh, shouldn't this be a separate class then?
+	function gen_mail_report_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->parse_xml_def("mlist/report");
+		$_mid = $arr["request"]["mail_id"];
+		$id = $arr["obj_inst"]->id();
+		$q = "
+			SELECT m_objects.name as member, l_objects.name as lid, tm, subject, id
+			FROM ml_sent_mails
+			LEFT JOIN objects AS m_objects ON m_objects.oid = ml_sent_mails.member
+			LEFT JOIN objects AS l_objects ON l_objects.oid = ml_sent_mails.lid
+			WHERE lid = '$id' AND mail = '$_mid'";
+		$this->db_query($q);
+		while ($row = $this->db_next())
+		{
+			$row["member"] = "<a href='".$this->mk_my_orb("show_mail", array("id" => $id, "mail_id" => $row["id"]))."'>".$row["member"]."</a>";
+			$t->define_data($row);
+		}
+	}
+
+	function gen_percentage($arr)
+	{
+		// how many members does this list have?
+		$list_id = $arr["obj_inst"]->id();
+		$_members = $this->get_members($list_id);
+		$member_count = sizeof($_members);
+
+		$mail_id = $arr["request"]["mail_id"];
+
+		$mail_obj = new object($mail_id);
+		$name = $mail_obj->name();
+		// how many members have been served?	
+		$q = "SELECT count(*) AS cnt FROM ml_sent_mails WHERE lid = '$list_id' AND mail = '$mail_id'";
+		$this->db_query($q);
+		$row = $this->db_next();
+		$served_count = $row["cnt"];
+
+		$url = $_SERVER["REQUEST_URI"];
+
+		if (!headers_sent() && $served_count < $member_count)
+		{
+			header("Refresh: 30; url=$url");
+		};
+		return "Teema: ${name}, liikmeid: $member_count, saadetud: $served_count<br>";
+	}
+
+	function callback_mod_tab($arr)
+	{
+		// hide it, if no mail report is open
+		if ($arr["id"] == "mail_report" && empty($arr["request"]["mail_id"]))
+		{
+			return false;
+		};
+	}		
+
+	function show_mail($arr)
+	{
+                extract($arr);
+                $this->read_template("show_mail.tpl");
+                $ob = $this->get_object($id);
+                $this->mk_path($ob["parent"], "<a href='".$this->mk_my_orb("change", array("id" => $id))."'>Mailide nimekiri</a> / Vaata maili");
+
+                $row = $this->db_fetch_row("SELECT * FROM ml_sent_mails WHERE id = '$mail_id'");
+                $this->vars(array(
+                        "from" => $row["mailfrom"],
+                        "subject" => $row["subject"],
+                        "message" => nl2br($row["message"])
+                ));
+                return $this->parse();
 	}
 };
 ?>

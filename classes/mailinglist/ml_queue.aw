@@ -1,7 +1,15 @@
 <?php
-// needed defined constants
-classload("messenger");
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.17 2003/11/26 12:22:39 duke Exp $
+// ml_queue.aw - Deals with mailing list queues
 
+classload("messenger");
+define("ML_QUEUE_NEW",0);
+define("ML_QUEUE_IN_PROGRESS",1);
+define("ML_QUEUE_READY",2);
+define("ML_QUEUE_SENDING",3);
+define("ML_QUEUE_STOPPED",4);
+
+// see aid, mida siin pruugitakse on ml_avoidmids tabeli kirje id
 class ml_queue extends aw_template
 {
 	////
@@ -306,7 +314,6 @@ class ml_queue extends aw_template
 		}
 	}
 
-
 	////
 	//! teeb progress bari
 	// tegelt saax seda pitidega teha a siis tekib iga progress bari kohta oma query <img src=
@@ -337,24 +344,26 @@ class ml_queue extends aw_template
 		return "<!-- $p --><table bgcolor='#CCCCCC' Style='height:12;width:100%'><tr><td width=\"$p%\" bgcolor=\"blue\">$p1t</td><td width=\"$not_p%\">$p2t</td></tr></table>";
 	}
 
-	// suurenda avoidmids tabelis ready välja ja kui see on >= count väljaga siis võta see kirje tabelist ära
+	// vähendab avoidmids tabelis usagec välja ja kui see on 0, siis võtab selle kirje tabelist ära
 	function increase_avoidmids_ready($aid)
 	{
+		$this->save_handle();
 		$r=$this->db_fetch_field("SELECT usagec FROM ml_avoidmids WHERE aid='$aid'","usagec");
 		//decho("<i>inc_avoidmids $aid r=$r</i><br />");
 		if ($r<=1)
 		{
-			$this->db_query("DELETE FROM ml_avoidmids WHERE aid='$aid'");
+			//$this->db_query("DELETE FROM ml_avoidmids WHERE aid='$aid'");
 		} 
 		else
 		{
 			$this->db_query("UPDATE ml_avoidmids SET usagec=usagec-1 WHERE aid='$aid'");
 		};
+		$this->restote_handle();
 	}
 
 	////
-	//! Täidab queuet
-	// siit võix debugi asjad välja korjata (kus on //dbg) kui asi kasutusse läheb
+	//! Processes all active mailing list queues
+	// Invoked from the scheduler
 	function process_queue($arr)
 	{
 		set_time_limit(0);
@@ -376,89 +385,72 @@ class ml_queue extends aw_template
 			$qid=(int)$r["qid"];
 			//decho("doing item $qid<br />");flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
+
+			// preload members
+			$ml_list_inst = get_instance("mailinglist/ml_list");
+			$this->ml_list_members = $ml_list_inst->get_members($lid);
+
+			// so here I need to detect whether the last run was interrupted?
+			// how do I do that? some kind of cache?
 			$this->save_handle();
-			$status=$this->db_fetch_field("SELECT status FROM ml_queue WHERE qid ='$qid'","status");
-			$this->restore_handle();
-			if ($status!=0 && $status!=1)
-			{
-				continue;
-			};
 
-			// kui on vaja vahet pidada ja ei tohi kõiki korraga saata
-			if ($r["delay"] && $r["patch_size"])
-			{
-				$tm=time();
-				// vaata, kas on aeg saata
-				if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"])
-				{
-					//decho("saadan  meili<br />");flush();//dbg
-					$this->save_handle();
-					//lukusta queue item
-					$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
-					$stat=1;
-					$c=0;
-					while ($c<$r["patch_size"] && $stat==1)
-					{
-						$stat=$this->do_queue_item($r);//1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
-						$c++;
-					};
-					//decho("saadetud<br />");flush();//dbg
+			$patch_size = $r["patch_size"];
 
-					
-					//Kui on valmis, siis peab näitur näitama 100%
-					//Ta ei pruugi kunagi 100% muidu jõuda kui on valmis, sest neile liikmetele, mis on
-					//mingi teise sama meili samal saatmisel tekkinud queue itemi poolt saadetud ta uuesti
-					//meili ei saada, sest kes tahax saada kax sama meili. panjatna, ex?
-					if ($stat==2)
-					{
-						$pos=" ,position=total ";
-						$this->increase_avoidmids_ready($r["aid"]);
-					} 
-					else
-					{
-						$pos="";
-					};
-					//lukust lahti
-					$this->db_query("UPDATE ml_queue SET status = $stat $pos WHERE qid = '$qid'");
-					$this->restore_handle();
-				} 
-				else //dbg
-				{
-					$veel=$r["delay"]-($tm-$r["last_sent"]);
-					//decho("järgmise batchini on veel $veel sekundit<br />");flush();
-				};
-			} 
+			$all_at_once = false;
+
+			if ($r["delay"] && $patch_size)
+			{
+
+			}
 			else
 			{
-				// siin lõudib klassid sest äkki pole neid vajagi lõudida ja mis siis ikka aega raisata
-				// a siin on juba peaaegu kindel, et läheb saatmisex
+				// everything at once
+				$patch_size = sizeof($this->ml_list_members);
+				$all_at_once = true;
+			};
+
+			$tm=time();
+			// vaata, kas on aeg saata
+			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
+			{
+				//decho("saadan  meili<br />");flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
-				$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
-
-				//decho("saadan  meili<br />");flush();//dbg
-				$stat=1;
-				while ($stat==1)
+				$this->mark_queue_locked($qid);
+				// okey. since there is a chance that, the processing is interrupted
+				// _after_ the queue has been locked, I need to minimize the time
+				// during which the queue remains locked.
+				$stat = ML_QUEUE_IN_PROGRESS;
+				$c = 0;
+				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS)
 				{
-					$stat=$this->do_queue_item($r);
+					// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
+					$stat = $this->do_queue_item($r);
+					$c++;
+				};
+				//decho("saadetud<br />");flush();//dbg
+				
+				// Kui on valmis, siis peab näitur näitama 100%
+				// Ta ei pruugi kunagi 100% muidu jõuda kui on valmis, sest neile liikmetele,
+				// mis on mingi teise sama meili samal saatmisel tekkinud queue itemi poolt
+				// saadetud ta uuesti meili ei saada, sest kes tahax saada kax sama meili.
+				// panjatna, ex?
+				if (ML_QUEUE_READY == $stat)
+				{
+					//$pos=" ,position=total ";
+					$this->increase_avoidmids_ready($r["aid"]);
+					$this->mark_queue_finished($qid);
+				} 
+				else
+				{
+					// unlock it
+					$this->db_query("UPDATE ml_queue SET status = $stat WHERE qid = '$qid'");
+					//$pos="";
 				};
 
-				//decho("saadetud<br />");flush();//dbg
-				$this->increase_avoidmids_ready($r["aid"]);
-				$this->db_query("UPDATE ml_queue SET status = 2,position=total WHERE qid = '$qid'");
 				$this->restore_handle();
 			};
 		};
-		// impersonate original user
-		if (isset($this->originaluid))
-		{
-			aw_global_set("uid",$this->originaluid);
-			// neid gruppi kuuluvusi pole vist vaja uuesti processida, pohh nendega :)
-		};
-		// exec dynamic rules
-//		$rule_inst = get_instance("mailinglist/ml_rule");
-//		$rule_inst->exec_dynamic_rules();
-		//decho("valmis");//dbg
 		die("die");
 		return "";//hmhm
 	}
@@ -476,17 +468,15 @@ class ml_queue extends aw_template
 			$gidin=explode("|",$gid);
 		} 
 		$avoidmids=explode(",", $this->db_fetch_field("SELECT avoidmids FROM ml_avoidmids WHERE aid='$aid'","avoidmids"));
-
-		// tee nii kaua kuni sobiv liige on leitud või liikmed on otsas
+		// process until the member has been found or the member list has been exhausted
 		$ok=0;
 		while (!$ok)
 		{
-			// fetch next member
-			$ml_list_inst = get_instance("mailinglist/ml_list");
-			$ml_list_members = $ml_list_inst->get_members($lid);
+			// find next member to use
 			$found = false;
-			foreach($ml_list_members as $_mid => $_mdat)
+			foreach($this->ml_list_members as $_mid => $_mdat)
 			{
+				// mis trikk selle gid-iga on? I don't like it.
 				if (!in_array($_mid, $avoidmids) && (!is_array($gidin) || (in_array($_mdat["parent"], $gidin))))
 				{
 					$found = true;
@@ -495,58 +485,49 @@ class ml_queue extends aw_template
 				}
 			}
 			echo ("found member $_mid <br />");
-/*			if ($avoidmids != "")
-			{
-				$midnotin="AND mid NOT IN (".$avoidmids.")";
-			} 
-			else
-			{
-				$midnotin="";
-			};
-
-			$q="SELECT mid FROM ml_list2member WHERE lid='$lid' $gidin $midnotin LIMIT 1";
-			decho("q=$q<br />");//dbg
-			$this->db_query($q);
-			$member=$this->db_next();*/
 
 			if (!$found)// kui enam liikmeid ei ole
 			{
 				//decho("liikmed otsas<br />");
-				return 2;
+				return ML_QUEUE_READY;
 			}
 				
-			$member=$member["oid"];
-			$avoidmessages=$this->get_object_metadata(array("oid" => $member,"key" => "avoidmessages"));
+			// gets its value from the ml_queue thingie
+			$member_obj = new object($member["oid"]);
+			$avoidmessages = $member_obj->meta("avoidmessages");
 			if ($avoidmessages[$mid])
 			{
-				$ok=0;
+				$ok = 0;
 			} 
 			else
 			{
-				$this->send_message($mid,$member,$r);
-				$ok=1;
+				$this->send_message($mid,$member["oid"],$r);
+				$ok = 1;
 			};
 
 			// pane siia tabelisse kirja, et sellele liikmele enam ei saadaks
-			$aavoidmids=$avoidmids;
+			$aavoidmids = $avoidmids;
 			if (!$avoidmids)
 			{
-				$aavoidmids=array();// et ei tekiks seda tobedat 0 => "" entryt
+				$aavoidmids = array();// et ei tekiks seda tobedat 0 => "" entryt
 			};
 			//dprint_r($aavoidmids);
-			$aavoidmids[]=$member;
-			$avoidmids=join(",",$aavoidmids);
+			// this member has been served, don't send again! hohumm ... ml_avoidmids
+			// will be emptied at the end so I have no way to figure out which members
+			// got the message and which didn't. So, what to do, what to do?
+			$aavoidmids[] = $member["oid"];
+			$avoidmids = join(",",$aavoidmids);
 			//decho("pärast avoidmids=$avoidmids<br />");//dbg
 
 			$q="UPDATE ml_avoidmids SET avoidmids='$avoidmids' WHERE aid='$aid'";
 			$this->db_query($q);
 			
-			$tm=time();
-			$q="UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
+			$tm = time();
+			$q = "UPDATE ml_queue SET position=position+1,last_sent='$tm' WHERE qid='$qid'";
 			$this->db_query($q);
 		};
 		//decho("<b>out of do_queue_item</b><br />");
-		return 1;
+		return ML_QUEUE_IN_PROGRESS;
 	}
 
 	function replace_tags($text,$data)
@@ -558,7 +539,7 @@ class ml_queue extends aw_template
 			foreach($matches[1] as $v)
 			{
 				$this->used_variables[$v]=1;
-				$text=preg_replace("/#$v#/",$data[$v]?$data[$v]:"",$text);
+				$text = preg_replace("/#$v#/",$data[$v]?$data[$v]:"",$text);
 				//decho("matced $v<br />");
 			};
 		};
@@ -593,6 +574,7 @@ class ml_queue extends aw_template
 
 		$l = array();
 
+		// oh, so what's that? another sorry ass attempt to avoid race condition?
 		if (aw_cache_get("ml_queue::send_message::mails::$mid::$lid", $mailto))
 		{
 			return;
@@ -615,30 +597,33 @@ class ml_queue extends aw_template
 		{
 			$this->users = get_instance("users");
 		};
+
+		// I _think_ this mess with gids and users had something to do with
+		// generating a list of stamps that the user has a read access to
+
+		// damn, it's ugly  --duke
 		aw_global_set("gidlist",$this->users->get_gids_by_uid($r["uid"]));
 
 		
 		// tee listi obj
+		// but I don't see it being used anywhere
 		if (!isset($this->ml))
 		{
 			$this->ml=get_instance("mailinglist/ml_list");
 		};
 
 		$data=array();
-		
-		// võta need stambid, millele saatjal on "send" õigus
-		$this->get_objects_by_class(array("class" => CL_ML_STAMP));
-		while ($stamp = $this->db_next())
+		$stamp_list = new object_list(array(
+			"class_id" => CL_ML_STAMP, 
+		));
+		for($o = $stamp_list->begin(); !$stamp_list->end(); $o = $stamp_list->next())
 		{
-			$content=$this->get_object_metadata(array("metadata" => $stamp["metadata"], "key" => "content"));
-			$data[$stamp["name"]]=$content;
+			$data[$o->name()] = $o->prop("content");
 		};
-		//decho("stamps=<pre>");dprint_r($data);decho("</pre>");//dbg
 
 		// use all variables. 
-		$data = $memberdata;
+		$data = $data + $memberdata;
 		$data["sendtime"]=$this->time2date(time(),2);
-		//decho("data=<pre>");dprint_r($data);decho("</pre>");//dbg
 		
 		$this->used_variables=array();
 
@@ -646,24 +631,22 @@ class ml_queue extends aw_template
 		$message = str_replace("#member_id#",$member,$message);
 		$message = str_replace("#mail_id#",$mid,$message);
 
-		$message=$this->replace_tags($message,$data);
-		$subject=$this->replace_tags($msg["subject"],$data);
-		//decho("mail contans mfrom value of ".$msg["mfrom"]."<br />");//dbg
-		$mfrom=$this->replace_tags($msg["mfrom"],$data);
+		$message = $this->replace_tags($message,$data);
+		$subject = $this->replace_tags($msg["subject"],$data);
+		$mfrom = $this->replace_tags($msg["mfrom"],$data);
 
 		$used_vars=array_keys($this->used_variables);
 
-		//decho("used vars=<pre>");dprint_r($used_vars);decho("</pre>");
-		
 		//$message=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["message"]);
 		//$subject=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["subject"]);
 		$mailfrom=preg_replace("/#(.+?)#/e","\$data[\"\\1\"]",$msg["mfrom"]);
 
+		$this->quote($message);
+		$this->quote($subject);
+
 		// pane logi tablasse kirja meili saatmine
 		
 		$this->db_query("INSERT INTO ml_sent_mails (mail,member,uid,lid,tm,vars,message,subject,mailfrom) VALUES ('$mid','$member','".aw_global_get("uid")."','$lid','".time()."',',".join(",",$used_vars).",','$message','$subject','$mailfrom')");
-
-		//decho("<textarea cols=60 rows=40>mailfrom=$mfrom\nmailto=$mailto\nusbject=$subject\nmessage=$message</textarea>");//dbg
 
 		//tee awm objekt
 		if (!isset($this->awm))
@@ -675,6 +658,7 @@ class ml_queue extends aw_template
 		//decho("msg[type]=$msg[type] html=".($msg["type"] & MSG_HTML)."<br />");
 		$is_html=$msg["type"] & MSG_HTML;
 
+		// compatiblity with old messenger .. yikes
 		$messenger = get_instance("messenger");
 		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
 		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
@@ -694,6 +678,7 @@ class ml_queue extends aw_template
 		};
 
 		// kopeeritud messenger.aw rida 1265
+		// why, why, why, Delilah?
 		$this->get_objects_by_class(array("class" => CL_FILE,"parent" => $mid,));
 		while($row = $this->db_next())
 		{
@@ -717,16 +702,23 @@ class ml_queue extends aw_template
 
 		};
 		$this->awm->gen_mail();
-
-		// tsekka ruule
-		if (!isset($this->mlrule))
-		{
-			$this->mlrule=get_instance("mailinglist/ml_rule");
-		};
-
-		$this->mlrule->check_mailsent(array("mid" => $mid, "subject" => $subject, "vars" => ",".join(",",$used_vars).","),array($member));
 		//decho("<b>SENT!</b>");//dbg
 	}
+
+	function mark_queue_finished($qid)
+	{
+		$this->save_handle();
+		$this->db_query("UPDATE ml_queue SET status = 2, position=total WHERE qid = '$qid'");
+		$this->restore_handlE();
+	}
+
+	function mark_queue_locked($qid)
+	{
+		$this->save_handle();
+		$this->db_query("UPDATE ml_queue SET status = 3 WHERE qid = '$qid'");
+		$this->restore_handlE();
+	}
+		
 
 };
 ?>
