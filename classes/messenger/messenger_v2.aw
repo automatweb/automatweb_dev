@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.10 2003/10/27 12:42:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.11 2003/10/27 16:00:22 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -438,6 +438,9 @@ class messenger_v2 extends class_base
 		$tree = get_instance("vcl/treeview");
 		$tree->start_tree(array(
 			"type" => TREE_DHTML,
+			"tree_id" => "msgr_tree", // what if there are multiple messengers?
+			"persist_state" => 1,
+			"has_root" => true,
 		));
 		
 		$i = 1;
