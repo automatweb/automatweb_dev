@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.1 2001/05/24 15:47:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aw_mail.aw,v 2.2 2001/05/24 16:02:02 duke Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending mail. MIME compatible
 
@@ -246,9 +246,10 @@ class aw_mail {
 
 		$email .= $this->build_message();
 		$headers = join("\n",$this->headers);
-		$f = popen("/usr/sbin/sendmail -f " . $this->from,"w");
-		fwrite($f,$email);
-		pclose($f);
+		mail($this->headers["To"],$this->headers["Subject],$email,$headers);
+		//$f = popen("/usr/sbin/sendmail -f " . $this->from,"w");
+		//fwrite($f,$email);
+		//pclose($f);
 	}
 
 };
