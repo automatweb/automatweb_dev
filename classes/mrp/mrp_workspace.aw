@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.3 2004/12/09 11:49:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.4 2004/12/09 20:19:57 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -444,6 +444,7 @@ class mrp_workspace extends class_base
 		/*$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
 			"due_date" => new obj_predicate_compare (OBJ_COMP_LESS, time()),
+			//"CL_MRP_CASE.RELTYPE_MRP_PROJECT_JOB.starttime" => new obj_predicate_compare(OBJ_COMP_GREATER, new obj_predicate_prop("due_date")),
 			"finished_date" => 0,
 			"parent" => $this_object->prop ("projects_folder"),
 			// "createdby" => aw_global_get('uid'),

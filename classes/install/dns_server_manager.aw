@@ -43,7 +43,7 @@ class dns_server_manager extends class_base
 		extract($arr);
 		
 		// find the domain for the url
-		classload("dns");
+		classload("core/util/dns");
 		$dom = dns::get_domain_name_for_url($domain);
 
 		// find the zone file for the domain

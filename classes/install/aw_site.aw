@@ -1024,7 +1024,7 @@ class aw_site extends class_base
 
 	function get_dns_manager_for_url($url)
 	{
-		$dns = get_instance("dns");
+		$dns = get_instance("core/util/dns");
 		$ns = $dns->get_record_NS(array(
 			"domain" => $url,
 		));
