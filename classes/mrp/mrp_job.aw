@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.29 2005/03/24 09:28:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.30 2005/03/24 12:49:08 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -270,7 +270,7 @@ class mrp_job extends class_base
 		$toolbar =& $arr["prop"]["toolbar"];
 		$this_object =& $arr["obj_inst"];
 
-		if ($this_object->prop ("state") != MRP_STATUS_INPROGRESS)
+		if ($this_object->prop ("state") == MRP_STATUS_PLANNED)
 		{
 			if ($this->can_start(array("job" => $this_object->id())))
 			{
@@ -284,7 +284,7 @@ class mrp_job extends class_base
 			}
 		}
 
-		if ($this_object->prop ("state")  == MRP_STATUS_INPROGRESS)
+		if ($this_object->prop ("state") == MRP_STATUS_INPROGRESS)
 		{
 			$toolbar->add_button(array(
 				"name" => "done",
@@ -303,31 +303,29 @@ class mrp_job extends class_base
 				"onClick" => "if (document.changeform.pj_change_comment.value.replace(/\\s+/, '') != '') { submit_changeform('abort') } else { alert('" . t("Kommentaar peab olema t&auml;idetud!") . "'); }"
 			));
 
-			if ($this_object->prop("state") != MRP_STATUS_PAUSED)
-			{
-				$toolbar->add_button(array(
-					"name" => "pause",
-					//"img" => "pause.gif",
-					"tooltip" => t("Paus"),
-					"action" => "pause",
-				));
+			$toolbar->add_button(array(
+				"name" => "pause",
+				//"img" => "pause.gif",
+				"tooltip" => t("Paus"),
+				"action" => "pause",
+			));
 
-				$toolbar->add_button(array(
-					"name" => "end_shift",
-					//"img" => "end_shift.gif",
-					"tooltip" => t("Vahetuse l&otilde;pp"),
-					"action" => "end_shift",
-				));
-			}
-			else
-			{
-				$toolbar->add_button(array(
-					"name" => "scontinue",
-					//"img" => "continue.gif",
-					"tooltip" => t("J&auml;tka"),
-					"action" => "scontinue",
-				));
-			}
+			$toolbar->add_button(array(
+				"name" => "end_shift",
+				//"img" => "end_shift.gif",
+				"tooltip" => t("Vahetuse l&otilde;pp"),
+				"action" => "end_shift",
+			));
+		}
+
+		if ($this_object->prop("state") == MRP_STATUS_PAUSED)
+		{
+			$toolbar->add_button(array(
+				"name" => "scontinue",
+				//"img" => "continue.gif",
+				"tooltip" => t("J&auml;tka"),
+				"action" => "scontinue",
+			));
 		}
 	}
 
@@ -343,7 +341,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -376,11 +374,13 @@ class mrp_job extends class_base
 		}
 
 		### check if prerequisites are done
-		$prerequisites = trim($this_object->prop ("prerequisites")) != ""  ?explode (",", $this_object->prop ("prerequisites")) : array();
+		$prerequisites = trim($this_object->prop ("prerequisites")) ? explode(",", $this_object->prop("prerequisites")) : array();
 		$prerequisites_done = true;
 
 		foreach ($prerequisites as $prerequisite_oid)
 		{
+			$prerequisite_oid = (int) $prerequisite_oid;
+
 			if (is_oid ($prerequisite_oid))
 			{
 				$prerequisite = obj ($prerequisite_oid);
@@ -389,10 +389,14 @@ class mrp_job extends class_base
 				{
 					$prerequisites_done = false;
 				}
+				else
+				{
+					$errors[] = t("Eeldustööd tegemata");
+				}
 			}
 			else
 			{
-				$errors[] = t("Eeldustööd tegemata");
+				$errors[] = t("Eeldustöö definitsioon on katki");
 			}
 		}
 
@@ -416,7 +420,7 @@ class mrp_job extends class_base
 		else
 		{
 			### start project if first job
-			if (((int) $this_object->prop ("exec_order")) === 1)
+			if ($this_object->prop ("exec_order") == 1)
 			{
 				$mrp_case = get_instance(CL_MRP_CASE);
 				$project_start = $mrp_case->start(array("id" => $project->id ()));
@@ -440,9 +444,6 @@ class mrp_job extends class_base
 			### set project state & progress
 			$progress = time () + $this_object->prop ("planned_length");
 			$project->set_prop ("progress", $progress);
-
-			### set resource in use
-			$mrp_resource->start_job(array("resource" => $this_object->prop("resource")));
 
 			### start job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
@@ -471,7 +472,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -508,7 +509,12 @@ class mrp_job extends class_base
 
 			### set resource as free
 			$resource = get_instance(CL_MRP_RESOURCE);
-			$resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$resource_freed = $resource->stop_job(array("resource" => $this_object->prop("resource")));
+
+			if (!$resource_freed)
+			{
+				$errors[] = t("Ressursi vabastamine ebaõnnestus");
+			}
 
 			### log job change
 			$ws = get_instance (CL_MRP_WORKSPACE);
@@ -525,13 +531,13 @@ class mrp_job extends class_base
 				"project" => $project->id (),
 				"state" => MRP_STATUS_DONE,
 			));
-			$done_jobs = $list->count ();
+			$done_jobs = (int) $list->count ();
 
 			$list = new object_list (array (
 				"class_id" => CL_MRP_JOB,
 				"project" => $project->id (),
 			));
-			$all_jobs = $list->count ();
+			$all_jobs = (int) $list->count ();
 
 			if ($done_jobs === $all_jobs)
 			{
@@ -573,7 +579,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -610,13 +616,19 @@ class mrp_job extends class_base
 
 			### set resource as free
 			$resource = get_instance(CL_MRP_RESOURCE);
-			$resource->stop_job(array("resource" => $this_object->prop("resource")));
+			$resource_freed = $resource->stop_job(array("resource" => $this_object->prop("resource")));
+
+			if (!$resource_freed)
+			{
+				$errors[] = t("Ressursi vabastamine ebaõnnestus");
+			}
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
-			return $return_url;
+			$errors = urlencode(serialize($errors));
+			return aw_url_change_var ("errors", $errors, $return_url);
 		}
 	}
 
@@ -632,7 +644,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -692,7 +704,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{
@@ -761,7 +773,7 @@ class mrp_job extends class_base
 			"return_url" => urlencode ($arr["return_url"]),
 			"group" => $arr["group"],
 			"subgroup" => $arr["subgroup"],
-		), "mrp_case");
+		), "mrp_job");
 
 		if (is_oid ($arr["id"]))
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.26 2005/03/22 09:06:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.27 2005/03/24 12:49:08 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -792,17 +792,10 @@ class mrp_resource extends class_base
 
 		switch ($resource->prop ("state"))
 		{
-			case MRP_STATUS_RESOURCE_AVAILABLE:
-				return MRP_STATUS_RESOURCE_AVAILABLE;
-
 			case MRP_STATUS_RESOURCE_INUSE:
 				$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 				$resource->save ();
-				return MRP_STATUS_RESOURCE_INUSE;
-				break;
-
-			case MRP_STATUS_RESOURCE_OUTOFSERVICE:
-				return MRP_STATUS_RESOURCE_OUTOFSERVICE;
+				return true;
 				break;
 
 			default:

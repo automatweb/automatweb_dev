@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.56 2005/03/24 09:55:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.57 2005/03/24 12:49:08 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2233,7 +2233,7 @@ class mrp_workspace extends class_base
 				)).html::hidden(array(
 					"name" => "old_dept_resources[".$c->prop("to")."]",
                                         "value" => $dept_resources[$c->prop("to")]
-                                )),
+				)),
 				"change" => html::get_change_url($c->prop("to"), array(), "Muuda")
 			));
 		}

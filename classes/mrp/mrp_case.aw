@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.39 2005/03/22 20:54:14 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.40 2005/03/24 12:49:08 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -54,10 +54,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	@property progress type=hidden
 	@property extern_id type=hidden
-
-//!!! abordij22nus
-	// @property do_abort type=checkbox ch_value=1 table=objects field=meta method=serialize
-	// @caption L&otilde;peta
 
 @default table=objects
 @default field=meta
@@ -340,36 +336,6 @@ class mrp_case extends class_base
 				$this->_do_log($arr);
 				break;
 
-//!!! abordij22nus
-				// case "do_abort":
-				// if ($arr["obj_inst"]->prop("state") == MRP_STATUS_DONE || $arr["obj_inst"]->prop("state") == MRP_STATUS_NEW)
-				// {
-					// return PROP_IGNORE;
-				// }
-				// break;
-
-			// case "set_plannable":
-				// $state = $this_object->prop ("state");
-				// $applicable_states = array (
-					// MRP_STATUS_DELETED,
-					// MRP_STATUS_DONE,
-				// );
-
-				// if (in_array ($state, $applicable_states))
-				// {
-					// $prop["value"] = 0;
-					// $prop["disabled"] = true;
-				// }
-				// else
-				// {
-					// $applicable_states = array (
-						// MRP_STATUS_PLANNED,
-						// MRP_STATUS_INPROGRESS,
-					// );
-					// $prop["value"] = (in_array ($state, $applicable_states)) ? 1 : 0;
-				// }
-				// break;
-
 			case "chart_navigation":
 				$prop["value"] = $this->create_chart_navigation ($arr);
 				break;
@@ -416,38 +382,6 @@ class mrp_case extends class_base
 			case "workflow_table":
 				$this->save_workflow_data ($arr);
 				break;
-
-//!!! set_plannable j22nus
-			// case "set_plannable":
-				// $state = $this_object->prop ("state");
-
-				// if ($prop["value"] == 1)
-				// {
-					// $applicable_states = array (
-						// MRP_STATUS_ABORTED,
-						// MRP_STATUS_NEW,
-						// MRP_STATUS_INPROGRESS,
-						// MRP_STATUS_ONHOLD,
-					// );
-
-					// if (in_array ($state, $applicable_states))
-					// {
-						// $this_object->set_prop ("state", MRP_STATUS_PLANNED);
-					// }
-				// }
-				// else
-				// {
-					// $applicable_states = array (
-						// MRP_STATUS_INPROGRESS,
-						// MRP_STATUS_PLANNED,
-					// );
-
-					// if (in_array ($state, $applicable_states))
-					// {
-						// $this_object->set_prop ("state", MRP_STATUS_ONHOLD);
-					// }
-				// }
-				// break;
 		}
 
 		if ($arr["obj_inst"]->prop($prop["name"]) != $prop["value"] && in_array($prop["type"], array("textbox", "datetime_select")))
@@ -520,24 +454,6 @@ class mrp_case extends class_base
 
 			$this->order_jobs ($arr);
 		}
-
-//!!! abordij22nus
-		// if ($arr["obj_inst"]->prop("do_abort") == 1)
-		// {
-			// ### kill project - mark as done && all jobs as well
-			// $arr["obj_inst"]->set_prop("state", MRP_STATUS_DONE);
-			// $arr["obj_inst"]->save();
-
-			// $jl = new object_list(array(
-				// "class_id" => CL_MRP_JOB,
-				// "project" => $arr["obj_inst"]->id()
-			// ));
-			// foreach($jl->arr() as $jo)
-			// {
-				// $jo->set_prop("state", MRP_STATUS_DONE);
-				// $jo->save();
-			// }
-		// }
 	}
 
 	function &get_current_workspace ($arr)
@@ -844,7 +760,7 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "prerequisites",
-			"caption" => t("Eeldustööd"),
+			"caption" => t("Eeldus&shy;tööd"),
 		));
 		$table->define_field(array(
 			"name" => "name",
@@ -856,15 +772,15 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "pre_buffer",
-			"caption" => t("Eelpuhver (h)"),
+			"caption" => t("Eel&shy;puhver (h)"),
 		));
 		$table->define_field(array(
 			"name" => "post_buffer",
-			"caption" => t("Järelpuhver (h)"),
+			"caption" => t("Järel&shy;puhver (h)"),
 		));
 		$table->define_field(array(
 			"name" => "comment",
-			"caption" => t("Kommentaar"),
+			"caption" => t("Kommen&shy;taar"),
 			"align" => "center"
 		));
 		$table->define_field(array(
@@ -922,7 +838,7 @@ class mrp_case extends class_base
 					break;
 
 				case MRP_STATUS_INPROGRESS:
-					$stag = '<span style="color: yellow;">';
+					$stag = '<span style="color: #D79B00;">';
 					$disabled = true;
 					break;
 
@@ -979,21 +895,24 @@ class mrp_case extends class_base
 				"name" => $this_object->name () . " - " . $resource_name,
 				"length" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
-					"size" => "3",
+					"size" => "1",
+					"textsize" => "11px",
 					"value" => round ((($job->prop ("length"))/3600), 2),
 					"disabled" => $disabled,
 					)
 				),
 				"pre_buffer" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-pre_buffer",
-					"size" => "3",
+					"size" => "1",
+					"textsize" => "11px",
 					"value" => round ((($job->prop ("pre_buffer"))/3600), 2),
 					"disabled" => $disabled,
 					)
 				),
 				"post_buffer" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-post_buffer",
-					"size" => "3",
+					"size" => "1",
+					"textsize" => "11px",
 					"value" => round ((($job->prop ("post_buffer"))/3600), 2),
 					"disabled" => $disabled,
 					)
@@ -1001,16 +920,20 @@ class mrp_case extends class_base
 				"prerequisites" => html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-prerequisites",
 					"size" => "4",
+					"textsize" => "11px",
 					"value" => $prerequisites,
 					"disabled" => $disabled,
 					)
 				),
-				"minstart" => html::datetime_select(array(
+				"minstart" => '<span style="white-space: nowrap;">' . html::datetime_select(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-minstart",
-					"value" => $job->prop ("minstart"),
+					"value" => (($job->prop ("minstart")) ? $job->prop ("minstart") : time()),
 					"disabled" => $disabled,
+					"day" => "text",
+					"month" => "text",
+					"textsize" => "11px",
 					)
-				),
+				) . '</span>',
 				"exec_order" => $job->prop ("exec_order"),
 				"starttime" => $planned_start,
 				"status" => $status,

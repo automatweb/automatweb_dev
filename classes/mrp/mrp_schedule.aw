@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.23 2005/03/23 15:46:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.24 2005/03/24 12:49:08 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -283,6 +283,7 @@ class mrp_schedule extends class_base
 
 		$this->initialize ($arr);
 		$workspace = obj ($arr["mrp_workspace"]);
+
 
 /* timing */ timing ("initialize", "end");
 /* timing */ timing ("get used resources", "start");
