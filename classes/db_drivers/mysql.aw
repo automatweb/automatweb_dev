@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.22 2004/10/28 09:43:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.23 2004/12/01 20:45:44 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -62,6 +62,8 @@ class mysql
 		}
 		aw_global_set('qcount',aw_global_get('qcount')+1); 
 
+		enter_function("mysql::db_query");
+
 		if (not($this->dbh))
 		{
 			// try to acquire the database handle
@@ -105,6 +107,7 @@ class mysql
 			$tm = sprintf("%0.04f",$ts_e - $ts_s);
 			echo "query took $tm seconds <br />";
 		}
+		exit_function("mysql::db_query");
 		return true;
 	}
 
