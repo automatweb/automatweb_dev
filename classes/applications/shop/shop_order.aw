@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.8 2004/07/29 11:30:26 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.9 2004/07/29 13:30:09 rtoomas Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -534,6 +534,19 @@ class shop_order extends class_base
 			$prod = $c->to();
 			$inst = $prod->instance();
 			$pr = $inst->get_calc_price($prod);
+			
+			$product_info = reset($prod->connections_to(array(
+						"from.class_id" => CL_SHOP_PRODUCT,
+			)));
+			if(is_object($product_info))
+			{
+				$product_info = $product_info->from();
+				for($i=1;$i<21;$i++)
+				{
+					$this->vars(array('user'.$i=>$product_info->prop('user'.$i)));
+				}
+			}
+
 			$this->vars(array(
 				"name" => $prod->name(),
 				"quant" => $tp[$prod->id()],
