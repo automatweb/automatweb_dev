@@ -1,42 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.1 2001/05/19 21:51:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.2 2001/05/21 01:15:27 duke Exp $
+// form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
-$orb_defs["form"] = array("new"							=> array("function"	=> "add",							"params" => array("parent"), "opt" => array("alias_doc")),
-													"submit_add"			=> array("function" => "submit_add",			"params" => array()),
-													"change"					=> array("function" => "gen_grid",				"params" => array("id")),
-													"list_el_forms"		=> array("function" => "list_el_forms",		"params" => array("id")),
-													"add_col"					=> array("function" => "add_col",					"params" => array("id", "after", "count")),
-													"add_row"					=> array("function" => "add_row",					"params" => array("id", "after", "count")),
-													"del_col"					=> array("function" => "delete_column",		"params" => array("id", "col")),
-													"del_row"					=> array("function" => "delete_row",			"params" => array("id", "row")),
-													"exp_cell_left"		=> array("function" => "exp_cell_left",		"params" => array("id", "row", "col")),
-													"exp_cell_up"			=> array("function"	=> "exp_cell_up",			"params" => array("id", "row", "col")),
-													"exp_cell_down"		=> array("function"	=> "exp_cell_down",		"params" => array("id", "row", "col")),
-													"exp_cell_right"	=> array("function" => "exp_cell_right",	"params" => array("id", "row", "col")),
-													"split_cell_ver"	=> array("function" => "split_cell_ver",	"params" => array("id","row","col")),
-													"split_cell_hor"	=> array("function" => "split_cell_hor",	"params" => array("id","row","col")),
-													"admin_cell"			=> array("function"	=> "admin_cell",			"params" => array("id", "row","col")),
-													"submit_cell"			=> array("function"	=> "submit_cell",			"params" => array()),
-													"add_element"			=> array("function"	=> "add_element",			"params" => array("id", "row", "col")),
-													"submit_grid"			=> array("function" => "save_grid",				"params" => array()),
-													"show"						=> array("function"	=> "gen_preview",			"params" => array("id"), "opt" => array("entry_id","extraids","reforb")),
-													"table_settings"	=> array("function" => "gen_settings",		"params" => array("id")),
-													"save_settings"		=> array("function" => "save_settings",		"params" => array()),
-													"sel_cell_style"	=> array("function" => "sel_cell_style",	"params" => array("id","row","col")),
-													"save_cell_style" => array("function" => "save_cell_style", "params" => array()),
-													"process_entry"		=> array("function" => "process_entry",		"params" => array()),
-													"all_elements"		=> array("function" => "gen_all_elements","params" => array("id")),
-													"show_entry"			=> array("function" => "show",			"params" => array("id", "op_id", "entry_id")),
-													"delete"					=> array("function" => "delete",	  "params" => array("id", "parent")),
-													"sel_search"			=> array("function" => "gen_search_sel", "params" => array("id")),
-													"save_search_sel" => array("function" => "save_search_sel", "params" => array()),
-													"change_el_pos"		=> array("function" => "change_el_pos", "params" => array("id", "col", "row", "el_id")),
-													"submit_chpos"		=> array("function" => "submit_chpos", "params" => array()),
-													"metainfo"				=> array("function" => "metainfo", "params" => array("id")),
-													"submit_metainfo"				=> array("function" => "submit_metainfo", "params" => array())
-													);
-
+$orb_defs["form"] = "xml";
 
 	classload("form_base","form_element","form_entry_element","form_search_element","form_cell","images","style","acl");
 
@@ -47,7 +14,6 @@ $orb_defs["form"] = array("new"							=> array("function"	=> "add",							"param
 	define(FORM_SEARCH,2);
 	define(FORM_RATING,3);
 
-	// form.aw - Class for creating forms
 
 	class form extends form_base
 	{

@@ -1,26 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.2 2001/05/19 23:28:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.3 2001/05/21 01:15:27 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
-$orb_defs["menuedit"] = array(
-				"obj_list"				=>	array("function"	=> "gen_list_objs",	"params"	=> array("parent")),
-				"new"							=>	array("function"  => "add"					, "params"	=> array("parent")),
-				"submit"					=>	array("function"	=> "nsubmit"			, "params"	=> array()),
-				"menu_list"				=>	array("function"	=> "gen_list"			, "params"	=> array("parent")),
-				"submit_order"		=>	array("function"	=> "submit_order"	, "params"	=> array("parent")),
-				"submit_order_doc"=>	array("function"	=> "submit_order2", "params"	=> array("parent")),
-				"delete"					=>	array("function"	=> "ndelete"			, "params"	=> array("parent","id")),
-				"o_delete"					=>	array("function"	=> "o_delete"			, "params"	=> array("parent")),
-				"change"					=>	array("function"	=> "change"				, "params"	=> array("parent","id")),
-				"menuedit_redirect"	=> array("function" => "command_redirect", "params" => array()),
-				"menuedit_newobj"	=> array("function" => "menuedit_newobj", "params"	=> array()),
-				"export_menus"		=> array("function" => "export_menus"		, "params"	=> array("id")),
-				"import"					=> array("function" => "import"					, "params"	=> array("parent")),
-				"submit_import"		=> array("function" => "submit_import"	, "params"	=> array("parent")),
-				"cut"							=> array("function" => "cut"						,	"params"	=> array()),
-				"copy"						=> array("function" => "copy"						,	"params"	=> array()),
-				"paste"						=> array("function" => "paste"					, "params"	=> array())
-);
+$orb_defs["menuedit"] = "xml";
 
 // muh? mes number?
 // seep see nummer mille kaudu tuntakse 2ra kui tyyp klikkid kodukataloog/SHARED_FOLDERS peale
@@ -30,9 +12,7 @@ session_register("cut_objects");
 session_register("copied_objects");
 
 lc_load("menuedit");
-classload("cache");
-classload("validator");
-classload("defs");
+classload("cache","validator","defs");
 
 	class menuedit extends aw_template
 	{
@@ -53,8 +33,8 @@ classload("defs");
 			reset($this->menucache[$parent]);
 			while(list(,$v) = each($this->menucache[$parent]))
 			{
-				$name = $v[data][name];
-				if ($v[data][parent] == 1)
+				$name = $v["data"]["name"];
+				if ($v["data"]["parent"] == 1)
 				{
 					$words = explode(" ",$name);
 					if (count($words) == 1)
@@ -72,14 +52,14 @@ classload("defs");
 				$sep = ($str == "" ? "" : " / ");
 				$tstr = $str.$sep.$name;
 
-				if (is_array($this->extrarr[$v[data][oid]]))
+				if (is_array($this->extrarr[$v["data"]["oid"]]))
 				{
-					reset($this->extrarr[$v[data][oid]]);
-					while (list(,$v2) = each($this->extrarr[$v[data][oid]]))
-						$this->docs[$v2[docid]] = $tstr." / ".$v2[name];
+					reset($this->extrarr[$v["data"]["oid"]]);
+					while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
+						$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
 				}
 
-				$this->mk_folders($v[data][oid],$tstr);
+				$this->mk_folders($v["data"]["oid"],$tstr);
 			}
 		}
 
