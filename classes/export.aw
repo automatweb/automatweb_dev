@@ -1246,8 +1246,6 @@ class export extends aw_template
 			if (!is_number($secid))
 			{
 				$mned = get_instance("menuedit");
-//				$seco = $this->_get_object_by_alias($secid);
-//				$secid = $seco["oid"];
 				$secid = $mned->check_section($secid, false);
 			}
 
