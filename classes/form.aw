@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.10 2001/05/31 18:58:23 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.11 2001/05/31 19:42:31 cvs Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -777,7 +777,7 @@ $orb_defs["form"] = "xml";
 
 			if (!$entry_id)
 			{
-				$entry_id = $this->new_object(array("parent" => $this->arr["ff_folder"], "name" => "form_entry", "class_id" => CL_FORM_ENTRY));
+				$entry_id = $this->new_object(array("parent" => $this->arr["ff_folder"], "form_entry", "class_id" => CL_FORM_ENTRY));
 				$new = true;
 			}
 			else
@@ -793,6 +793,10 @@ $orb_defs["form"] = "xml";
 				}
 			}
 
+			if ($this->arr["name_el"])
+			{
+				$this->upd_object(array("oid" => $entry_id, "name" => $this->entry[$this->arr["name_el"]]));
+			}
 			$en = serialize($this->entry);
 			if ($new)
 			{
@@ -1852,6 +1856,7 @@ $orb_defs["form"] = "xml";
 			$oid = $this->new_object(array("parent" => $parent, "name" => $row["name"], "class_id" => CL_FORM, "status" => $row["status"], "comment" => $row["comment"], "last" => $row["last"], "jrk" => $row["jrk"], "visible" => $row["visible"], "period" => $period, "alias" => $row["alias"], "periodic" => $row["periodic"], "doc_template" => $row["doc_template"], "activate_at" => $row["activate_at"], "deactivate_at" => $row["deactivate_at"], "autoactivate" => $row["autoactivate"], "autodeactivate" => $row["autodeactivate"], "brother_of" => $row["brother_of"]));
 
 			// same with the form. 
+			$this->quote(&$row);
 			$this->db_query("INSERT INTO forms(id,content,type,cols,rows) values($oid,'".$row["content"]."','".$row["type"]."','".$row["cols"]."','".$row["rows"]."')");
 
 			// create form entries table
