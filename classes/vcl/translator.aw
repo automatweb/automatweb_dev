@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.4 2004/10/25 10:38:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.5 2004/11/16 18:22:56 duke Exp $
 class translator extends  core
 {
 	function translator()
@@ -286,9 +286,6 @@ class translator extends  core
 
 		$o->save();
 
-		post_message_with_param(MSG_TRANSLATION_UPDATED,$o->class_id(),array(
-			"oid" => $o->id(),
-		));
 	}
 
 	function _get_translations_for($id)
