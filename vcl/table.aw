@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.36 2002/11/12 15:26:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/vcl/Attic/table.aw,v 2.37 2002/11/12 15:33:38 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 
@@ -53,7 +53,7 @@ class aw_table
 
 	////
 	// !Clear the data
-	function clear_data($row)
+	function clear_data()
 	{
 		$this->data = array();
 	}
