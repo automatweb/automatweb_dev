@@ -62,11 +62,8 @@ background-color: #478EB6;
 <!--tabelraam-->
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0">
-<tr><td class="awtableobjectid" style="height:5"><div style="width:6;height:5" /></td></tr></table>
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0">
 <tr>
-<td align="left" valign="bottom" width="6" class="awtablecellbackdark"><img SRC="http://axel.dev.struktuur.ee/automatweb/images/blue/awtable_nurk.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td>
+
 <td>
 
 {VAR:toolbar}
@@ -163,9 +160,6 @@ function search_selall()
 	<td class='chformrightcol'>
 	<input type='submit' value='Otsi'/>
 </td>
-</tr>
-<tr>
-<td colspan="3" class="awtablecellbacklight"><div style="width:100%;height:5px" /></td>
 </tr>
 
 </table>
