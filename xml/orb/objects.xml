@@ -21,11 +21,13 @@
 			<function name="storage_query">
 				<arguments>
 					<optional name="name" />
-					<optional name="class_id" />
+					<optional name="class_id" type="int" />
 					<optional name="comment" />
 					<optional name="site_id" />
 					<optional name="createdby" />
 					<optional name="modifiedby" />
+					<optional name="status" type="int" />
+					<optional name="lang_id" type="int" />
 				</arguments>
 			</function>
 		</action>
