@@ -58,7 +58,7 @@
             <caption>Lingi nimi</caption>
       </property>
       <property>
-            <name>redir_afto</name>
+            <name>redirect</name>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
