@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.40 2004/07/02 09:40:32 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.41 2004/07/05 08:40:58 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -361,7 +361,7 @@ class crm_person extends class_base
 				}
 				*/
 				//i guess the list should be sorted
-				ksort($drop_down_list);
+				asort($drop_down_list);
 				$data['options'] = &$drop_down_list;
 				break;
 			}
