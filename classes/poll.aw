@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.5 2002/01/12 11:07:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/poll.aw,v 2.6 2002/01/12 11:15:40 duke Exp $
 session_register("poll_clicked");
 global $class_defs;
 $class_defs["poll"] = "xml";
@@ -126,6 +126,18 @@ class poll extends aw_template
 			"newpoll_url" => $this->mk_my_orb("new",array()),
 		));
 		return $this->parse();
+	}
+
+	////
+	// !Deletes a poll
+	function delete($args = array())
+	{
+		extract($args);
+		$this->upd_object(array(
+			"oid" => $id,
+			"status" => 0,
+		));
+		return $this->mk_my_orb("list",array());
 	}
 
 	////
