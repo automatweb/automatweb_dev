@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.10 2005/02/07 15:32:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.11 2005/02/11 07:31:23 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -341,7 +341,7 @@ class mrp_resource extends class_base
 	function _get_unavailable_dates ($dates, $start, $end)
 	{
 		$unavailable_dates = array ();
-		$dates = explode (";", $dates);
+		$dates = explode ("\n", $dates);
 		$start_year = date ("Y", $start);
 		$start_mon = date ("n", $start);
 		$start_day = date ("j", $start);
@@ -351,6 +351,7 @@ class mrp_resource extends class_base
 
 		foreach ($dates as $date)
 		{
+			$date = str_replace(";", "", $date);
 			list ($day, $mon) = explode (".", $date);
 			settype ($day, "integer");
 			settype ($mon, "integer");
@@ -436,13 +437,20 @@ class mrp_resource extends class_base
 					$interval = round (($interval ? $interval : 1) * 86400 * 365);
 					break;
 			}
+			
+			$recurrence_starttime = $recurrence->prop ("time");
+			$recurrence_starttime = explode (":", $recurrence_starttime);
+			$recurrence_starttime_hours = $recurrence_starttime[0] ? (int) $recurrence_starttime[0] : 0;
+			$recurrence_starttime_minutes = $recurrence_starttime[1] ? (int) $recurrence_starttime[1] : 0;
+			$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
 
 			$recurrent_unavailable_periods[] = array (
 				"length" => round ($recurrence->prop ("length") * 3600),
-				"start" => $recurrence->prop ("start") + round ($recurrence->prop ("time") * 3600),
-				"end" => $recurrence->prop ("end"),
-				"interval" => $interval,
-			);
+				"start" => $recurrence->prop ("start"),
+				"time" => $recurrence_starttime,
+                                "end" => $recurrence->prop ("end"),
+                                "interval" => $interval,
+                        );
 		}
 
 		### add workhours, transmute to unavailable periods
@@ -472,16 +480,23 @@ class mrp_resource extends class_base
 					break;
 			}
 
+			$recurrence_starttime = $recurrence->prop ("time");
+			$recurrence_starttime = explode (":", $recurrence_starttime);
+			$recurrence_starttime_hours = $recurrence_starttime[0] ? (int) $recurrence_starttime[0] : 0;
+			$recurrence_starttime_minutes = $recurrence_starttime[1] ? (int) $recurrence_starttime[1] : 0;
+			$recurrence_starttime = $recurrence_starttime_hours * 3600 + $recurrence_starttime_minutes * 60;
+
 			$recurrence_length = round ($recurrence->prop ("length") * 3600);
-			$start = $recurrence->prop ("start") + ($recurrence->prop ("time") * 3600) + $recurrence_length;
+			$start = $recurrence->prop ("start") + $recurrence_starttime + $recurrence_length;
 			$length = $interval - $recurrence_length;
 
 			$recurrent_unavailable_periods[] = array (
 				"length" => $length,
-				"start" => $start,
-				"end" => $recurrence->prop ("end"),
-				"interval" => $interval,
-			);
+				"start" => $recurrence->prop ("start"),
+				"time" => $recurrence_starttime,
+                                "end" => $recurrence->prop ("end"),
+                                "interval" => $interval,
+                        );
 		}
 
 		return $recurrent_unavailable_periods;
