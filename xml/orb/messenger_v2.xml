@@ -24,5 +24,19 @@
 			</function>
 		</action>
 
+		<action name="delete_messages" >
+			<function name="delete_messages">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="move_messages" >
+			<function name="move_messages">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
