@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.37 2001/06/29 00:00:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.38 2001/06/29 02:08:55 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -22,6 +22,66 @@ class planner extends calendar {
 		$this->date = ($date) ? $date : date("d-m-Y");
 		$this->tpl_init("planner");
 		$this->db_init();
+	}
+
+	function todo($args = array())
+	{
+		// todo list
+		$this->read_template("todo.tpl");
+		global $udata;
+		extract($args);
+		$parent = ($parent) ? $parent : $udata["home_folder"];
+		// koigepealt siis folderid
+		$q = "SELECT * FROM objects
+			LEFT JOIN menu ON (objects.oid = menu.id)
+			WHERE menu.type = " . MN_EVENT_FOLDER . " AND objects.parent = $parent";
+		$this->db_query($q);
+		$c = "";
+		while($row = $this->db_next())
+		{
+			$this->vars(array(
+					"name" => $row["name"],
+					"oid" => $row["oid"],
+				));
+			$c .= $this->parse("folderline");
+		};
+		
+		$q = "SELECT * FROM objects LEFT JOIN planner ON (objects.oid = planner.id) WHERE parent = $parent && type = 1";
+		$this->db_query($q);
+		$tc = "";
+		$cnt = 0;
+		while($row = $this->db_next())
+		{
+			$cnt++;
+			$this->vars(array(
+					"id" => $row["id"],
+					"title" => $row["title"],
+					"content" => (strlen($row["description"]) > 30) ? substr($row["description"],0,30) . "..." : $row["description"],
+					"num" => $cnt,
+				));
+				$tc .= $this->parse("todoline");
+		};
+		$this->vars(array(
+				"folderline" => $c,
+				"todoline" => $tc,
+				"parent" => $parent,
+		));
+		$retval = $this->parse();
+		return $retval;
+	}
+
+	function add_todo_menu($args = array())
+	{
+		extract($args);
+		$oid = $this->new_object(array(
+					"class_id" => CL_PSEUDO,
+					"name" => $name,
+					"parent" => $parent,
+				));
+
+		$q = "INSERT INTO menu (id,type) VALUES ('$oid'," . MN_EVENT_FOLDER . ")";
+		$this->db_query($q);
+		return $this->mk_site_orb(array("action" => "todo"));
 	}
 
 	////
@@ -130,7 +190,7 @@ class planner extends calendar {
 		global $status_msg;
 		$status_msg = "TODO on salvestatud";
 		session_register("status_msg");
-		return $this->mk_site_orb(array("date" => $date));
+		return $this->mk_site_orb(array("action" => "todo"));
 	}
 				
 
@@ -497,22 +557,6 @@ class planner extends calendar {
 					};
 				};
 
-				// todo list
-				$q = "SELECT * FROM planner WHERE ((start >= $di[start]) AND (start <= $di[end])) AND type = 1";
-				$this->db_query($q);
-				$tc = "";
-				$cnt = 0;
-				while($row = $this->db_next())
-				{
-					$cnt++;
-					$this->vars(array(
-						"id" => $row["id"],
-						"title" => $row["title"],
-						"content" => (strlen($row["description"]) > 30) ? substr($row["description"],0,30) . "..." : $row["description"],
-						"num" => $cnt,
-					));
-					$tc .= $this->parse("todoline");
-				};
 				$this->vars(array("line" => $c,
 						"date" => $date,
 						"todoline" => $tc,
