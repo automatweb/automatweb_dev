@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.10 2004/11/19 08:20:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.11 2004/11/19 11:32:18 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -42,9 +42,22 @@
 @property fnames type=textarea rows=30 cols=80 group=files
 @caption Failinimed
 
-@groupinfo folders caption="Kataloogid"
+@groupinfo foldersa caption="Kataloogid"
+
+@groupinfo folders caption="Kataloogid" parent=foldersa
 
 @property folders type=table store=no group=folders no_caption=1
+
+@property inf_pages type=textarea rows=3 cols=40 group=folders field=meta method=serialize table=objects
+@caption L&otilde;pmatus vaatega lehed
+
+@groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud" parent=foldersa
+
+@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
+@caption T&auml;htede prioriteedid
+
+@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
+@caption Landscape vaatega lehed
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog

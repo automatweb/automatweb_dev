@@ -109,6 +109,39 @@
             <no_caption>1</no_caption>
       </property>
       <property>
+            <name>inf_pages</name>
+            <table>objects</table>
+            <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>3</rows>
+            <cols>40</cols>
+            <caption>L&amp;otilde;pmatus vaatega lehed</caption>
+      </property>
+      <property>
+            <name>foldpri</name>
+            <table>objects</table>
+            <group>folderspri</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>20</cols>
+            <caption>T&amp;auml;htede prioriteedid</caption>
+      </property>
+      <property>
+            <name>sideways_pages</name>
+            <table>objects</table>
+            <group>folderspri</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>4</rows>
+            <cols>30</cols>
+            <caption>Landscape vaatega lehed</caption>
+      </property>
+      <property>
             <name>do_fixes</name>
             <table>objects</table>
             <group>post_import_fix</group>
@@ -128,9 +161,17 @@
             <files>
                   <caption>Failid</caption>
             </files>
+            <foldersa>
+                  <caption>Kataloogid</caption>
+            </foldersa>
             <folders>
                   <caption>Kataloogid</caption>
+                  <parent>foldersa</parent>
             </folders>
+            <folderspri>
+                  <caption>Kataloogide m&amp;auml;&amp;auml;rangud</caption>
+                  <parent>foldersa</parent>
+            </folderspri>
             <post_import_fix>
                   <caption>Parandused</caption>
             </post_import_fix>
