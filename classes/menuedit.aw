@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.86 2002/01/24 15:31:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.87 2002/01/28 14:12:19 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -125,6 +125,8 @@ class menuedit extends aw_template
 // template - mis template ga menyysid n2idataxe
 // vars - array kuhu saab sisu kirjutada, et seal
 //	olevad muutujad pannaxe menyyediti template sisse
+// $sub_callbacks - array template_name => funxiooninimi
+//  neid kutsutakse siis v2lja kui vastav sub on template sees olemas
 	function gen_site_html($params)
 	{
 		global $awt;
@@ -916,6 +918,8 @@ class menuedit extends aw_template
 		$this->make_nadalanagu();
 
 		$this->make_banners();
+	
+		$this->do_sub_callbacks($sub_callbacks);
 
 		$cd = ($this->can("edit",$section) && $this->active_doc && $GLOBALS["uid"] != "" && $this->prog_acl("view", PRG_MENUEDIT)) ? $this->parse("CHANGEDOCUMENT") : "";
 		global $sstring;
@@ -5611,6 +5615,20 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				));	
 			}
 			$this->restore_handle();
+		}
+	}
+
+	function do_sub_callbacks($sub_callbacks)
+	{
+		if (is_array($sub_callbacks))
+		{
+			foreach($sub_callbacks as $sub => $fun)
+			{
+				if ($this->is_template($sub))
+				{
+					$fun(&$this);
+				}
+			}
 		}
 	}
 }
