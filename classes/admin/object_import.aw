@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.21 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.22 2004/12/13 14:57:58 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -212,6 +212,7 @@ class object_import extends class_base
 				$arr["obj_inst"]->set_meta("userval", $arr["request"]["userval"]);
 				$arr["obj_inst"]->set_meta("has_ex", $arr["request"]["has_ex"]);
 				$arr["obj_inst"]->set_meta("ex", $arr["request"]["ex"]);
+				$arr["obj_inst"]->set_meta("dateformat", $arr["request"]["dateformat"]);
 				break;
 
 			case "connect_props":
@@ -328,7 +329,11 @@ class object_import extends class_base
 			"align" => "center"
 		));
 
-
+		$t->define_field(array(
+			"name" => "date_format",
+			"caption" => t("Kuup&auml;eva formaat"),
+			"align" => "center"
+		));
 		$t->set_default_sortby("prop");
 	}
 
@@ -341,6 +346,7 @@ class object_import extends class_base
 		$userval = $arr["obj_inst"]->meta("userval");
 		$has_ex = $arr["obj_inst"]->meta("has_ex");
 		$ex = $arr["obj_inst"]->meta("ex");
+		$dateformat = $arr["obj_inst"]->meta("dateformat");
 
 		$exes = array("" => t("--vali--"));
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EXCEPTION")) as $c)
@@ -354,7 +360,6 @@ class object_import extends class_base
 			{
 				continue;
 			}
-
 			$exs = "";
 			if ($has_ex[$pn] == 1)
 			{
@@ -363,6 +368,15 @@ class object_import extends class_base
 					"name" => "ex[$pn]",
 					"options" => $exes,
 					"selected" => $this->make_keys($ex[$pn])
+				));
+			}
+			$df = "";
+			if ($pd["type"] == "datetime_select")
+			{
+				$df = html::textbox(array(
+					"name" => "dateformat[$pn]",
+					"value" => $dateformat[$pn],
+					"size" => 10
 				));
 			}
 
@@ -383,7 +397,8 @@ class object_import extends class_base
 					"value" => 1,
 					"checked" => ($has_ex[$pn] == 1)
 				)),
-				"ex" => $exs
+				"ex" => $exis,
+				"date_format" => $df
 			));
 		}
 
@@ -392,6 +407,11 @@ class object_import extends class_base
 
 	function get_props_from_obj($o)
 	{
+		$cf = get_instance("cfg/cfgform");
+		return $cf->get_props_from_ot(array(
+			"ot" => $o->prop("object_type")
+		));
+
 		$type_o = obj($o->prop("object_type"));
 		$class_id = $type_o->prop("type");
 		if (!$type_o->prop("use_cfgform"))
@@ -566,6 +586,7 @@ class object_import extends class_base
 			$userval = $o->meta("userval");
 			$has_ex = $o->meta("has_ex");
 			$ex = $o->meta("ex");
+			$dateformat = $o->meta("dateformat");
 
 			$folder = $o->prop("folder");
 			if (!$folder)
@@ -687,6 +708,11 @@ class object_import extends class_base
 						{
 							$line[$idx] = $tmp;
 						}
+					}
+					else
+					if ($dateformat[$pn] != "")
+					{
+						$line[$idx] = $this->_get_date_value($line[$idx], $dateformat[$pn]);
 					}
 
 					$dat->set_prop($pn, $line[$idx]);
@@ -981,6 +1007,11 @@ class object_import extends class_base
 		$cur[] = date("d.m.Y / H:i").": ".$msg;
 		$o->set_meta("last_import_log", $cur);
 		$o->save();
+	}
+
+	function _get_date_value($date, $format)
+	{
+		return strptime($date, $format);
 	}
 }
 ?>

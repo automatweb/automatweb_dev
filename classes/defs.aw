@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.168 2004/12/10 10:49:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.169 2004/12/13 14:57:58 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1367,5 +1367,124 @@ if (!defined("DEFS"))
 	{
 		return $s;
 	}
+
+	if (!function_exists("strptime"))
+	{
+		function strptime($string, $format)
+		{
+			$hour = $minute = $second = $month = $day;
+			$year = date('Y');
+
+			if (preg_match('=(%[a-zA-Z]%[a-zA-Z])=', $format))
+			{
+				trigger_error("format string needs to have delimiting special chars between format chars");
+				return 0;
+			}
+
+			$format = str_replace(
+				array('%%', '%r',             '%R',       '%T'),
+				array('',   '%I:%M:%S %p',    '%H:%M',    '%H:%M:%S'),
+				$format
+			);
+			$string = str_replace('%', '', $string);
+
+			// %b - abbreviated month name
+			if ($tmp = strptime_extract($format, $string, 'b'))
+			{
+				for($i = 1, $months = array(); $i <= 12; $i++)
+				{
+					$months[$i] = strftime('%b', mktime(0, 0, 0, $i));
+				}
+				$month = array_search($tmp, $months);
+			}
+
+			// %B - full month name
+			if ($tmp = strptime_extract($format, $string, 'B'))
+			{
+				for($i = 1, $months = array(); $i <= 12; $i++)
+				{
+					$months[$i] = strftime('%B', mktime(0, 0, 0, $i));
+				}
+				$month = array_search($tmp, $months);
+			}
+																		// %d - day of month, two digits 01-31
+			if ($tmp = strptime_extract($format, $string, 'd'))
+			{
+				$day = $tmp;
+			}
+			// %H - hour, two digits 00-23
+			if ($tmp = strptime_extract($format, $string, 'H'))
+			{
+				$hour = $tmp;
+			}
+			// %I - hour, two digits 01-12
+			if ($tmp = strptime_extract($format, $string, 'I'))
+			{
+				$hour = $tmp;
+				if (strptime_extract($format, $string, 'p') == strftime('%p', mktime(13)))
+				{
+					$hour += 12;
+				}
+			}
+			
+			// %m - month number, two digits 01,12
+			if ($tmp = strptime_extract($format, $string, 'm'))
+			{
+				$month = $tmp;
+			}
+			
+			// %M - minute, two digits 00-59
+			if ($tmp = strptime_extract($format, $string, 'M'))
+			{
+				$minute = $tmp;
+			}
+			// %S - second, two digits 00-61
+			if ($tmp = strptime_extract($format, $string, 'S'))
+			{
+				$second = $tmp;
+			}
+
+			// %y - year as a decimal number without a century (range 00 to 99)
+			if ($tmp = strptime_extract($format, $string, 'y'))
+			{
+				$year = $tmp;
+				if ($year >= 70)
+				{
+					$year += 1900;
+				}
+				else
+				{
+					$year += 2000;
+				}
+			}
+			
+			// %Y - year as a decimal number including the century
+			if ($tmp = strptime_extract($format, $string, 'Y'))
+			{
+				$year = $tmp;
+			}
+			return mktime($hour, $minute, $second, $month, $day, $year);
+		}
+
+		function strptime_extract($format, $string, $char)
+		{
+			if (!$pos = strpos($format, $char))
+			{
+				return false;
+			}
+
+			$tmp = substr($format, 0, $pos);
+			if (preg_match_all('=([^a-zA-Z0-9%])=', $tmp, $m))
+			{
+				while($char = array_shift($m[1]))
+				{
+					$string = substr($string, strpos($string, $char) + 1);
+				}
+			}
+			
+			list($val) = preg_split('=([^a-zA-Z0-9%])=', $string, 2);
+			return $val;
+		}
+	}	
 };
 ?>

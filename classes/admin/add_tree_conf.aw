@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.22 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.23 2004/12/13 14:57:58 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -325,7 +325,7 @@ class add_tree_conf extends class_base
 		$us = $atc->meta("usable");
 		
 		$class_id = false;
-
+		
 		$clss = aw_ini_get("classes");
 		if (is_class_id($class))
 		{
@@ -342,13 +342,16 @@ class add_tree_conf extends class_base
 				}
 			}
 		}
-
 		if (!$class_id)
 		{
 			return true;
 		}
 
 		$ret = $us[$class_id] == 1;
+		/*if (aw_global_get("uid") == "kix")
+		{
+			echo "ret = ".dbg::dump($us);
+		}*/
 		if ($class_id != CL_MENU && $ret)
 		{
 			$v = $atc->meta("visible");
@@ -356,6 +359,10 @@ class add_tree_conf extends class_base
 			// do not show the alias
 			$grp = explode(",",$clss[$class_id]["parents"]);
 			$show = false;
+			/*if (aw_global_get("uid") == "kix")
+			{
+				echo dbg::dump($grp);
+			}*/
 			foreach($grp as $g)
 			{
 				// must check group parents as well :(
@@ -366,6 +373,10 @@ class add_tree_conf extends class_base
 					{
 						if (!$v["fld"][$g])
 						{
+						/*if (aw_global_get("uid") == "kix")
+						{
+							echo "set no has grp from $g <br>";
+						}*/
 							$has_grp = false;
 							break;
 						}
