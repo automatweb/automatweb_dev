@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.293 2004/08/17 11:17:48 ahti Exp $
+// $Id: class_base.aw,v 2.294 2004/08/23 09:42:34 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2727,6 +2727,10 @@ class class_base extends aw_template
 	//This function returns all controllers current configform has.
 	function get_all_controllers($config_id)
 	{
+		if (!$this->can("view", $config_id))
+		{
+			return false;
+		}
 		$obj = &obj($config_id);
 		return $obj->meta("controllers");		
 	}
