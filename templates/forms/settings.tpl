@@ -113,6 +113,10 @@ function setLink(li,title)
 <td class="celltext"><select class="formselect2" name='sql_writer_form'>{VAR:forms}</select></td>
 </tr>
 <tr class="aste01">
+<td class="celltext">Form otsib ainult aktiivse keele alt:</td>
+<td class="celltext"><input type="checkbox" name="search_act_lang_only" value="1" {VAR:search_act_lang_only}></td>
+</tr>
+<tr class="aste01">
 <td class="celltext" colspan=2>{VAR:LC_FORMS_SHOW_FORM_WITH_RESULTS}: <input type='checkbox' NAME='show_form_with_results' value='1' {VAR:show_form_with_results}></td>
 </tr>
 <!-- END SUB: SEARCH -->
