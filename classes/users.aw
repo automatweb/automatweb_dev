@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.4 2001/05/21 17:57:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.5 2001/05/21 18:03:26 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -27,6 +27,9 @@ class users extends users_user
 	// !Loeb kasutaja konfiguratsiooni sisse
 	// uid - kasutaja
 	// key - key, mille sisu teada soovitakse
+	// $data = $users->get_user_config(array(
+	//		"uid" => "duke",
+	//		"key" => "coolness_factor",));
 	function get_user_config($args = array())
 	{
 		extract($args);
@@ -56,6 +59,10 @@ class users extends users_user
 	// uid - kasutaja
 	// key - võtme nimi
 	// value - key väärtus. intenger, string, array, whatever
+	// $users->set_user_config(array(
+	//		"uid" => "duke",
+	//		"key" => "coolness_factor",
+	//		"value" => "99",));
 	function set_user_config($args = array())
 	{
 		$this->quote($args);
