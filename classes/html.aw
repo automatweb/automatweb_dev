@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.44 2004/02/09 14:08:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.45 2004/02/27 11:58:32 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -138,63 +138,6 @@ class html extends aw_template
 		$width = isset($width) ? $width : '300';
 		$height = isset($height) ? $height : '200';
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
-	}
-
-	//width - popup width
-	//height - popup height
-	//top, left
-	//options - array of id-s => names
-	//selected - array
-	//multiple
-
-	function popup_objmgr($args = array())
-	{
-		extract($args);
-		$str = '';
-		if (isset($multiple))
-		{
-			$mz = "multiple ";
-			$name .= "[]";
-			$pop_type='2';
-		}
-		else
-		{
-			$pop_type='1';
-		}
-
-		if ($multiple)
-		{
-			if (isset($options[0]))
-			{
-				unset($options[0]);
-			}
-			$options = $this->mpicker($selected,$options);
-		}
-		else
-		{
-			$options = $this->picker($selected,$options);
-		};
-
-		if (!isset($this->got_popup_objmgr))
-		{
-			$this->got_popup_objmgr=1;
-			$this->width = isset($width) ? $width : '600';
-			$this->height = isset($height) ? $height : '500';
-
-			$str.=localparse(implode('',file($this->cfg['tpldir'].'/popup_objmgr/popup_objmgr.script')),
-				array(
-					'params' => (isset($top) ? 'top='.$top.',' : '').(isset($left) ? 'left='.$left.',' : ''),
-				)
-
-			);
-		}
-		$width = isset($width) ? $width : $this->width;
-		$height = isset($height) ? $height : $this->height;
-
-		return 	$str.="<select name='".$name."' $mz id='".$name."'>\n".$options."</select>\n".
-			"<input type='button' value=' + ' onClick=\""."current_element='".$name."';pop_select('".$popup_objmgr."',$width,$height);"."\" />
-			".(isset($change) ? $change : '')."\n";
-
 	}
 
 	////
