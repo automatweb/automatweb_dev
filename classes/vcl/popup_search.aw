@@ -1,5 +1,11 @@
 <?php
+/*
 
+this message will be sent when the contents of the popup search listbox change
+so that clients can perform actions based on the change
+EMIT_MESSAGE(MSG_POPUP_SEARCH_CHANGE)
+
+*/
 class popup_search extends aw_template
 {
 	function popup_search()
@@ -170,7 +176,7 @@ class popup_search extends aw_template
 			}
 		}
 
-		if (count($filter) > 1)
+		if (count($filter) > 1 || $_GET["MAX_FILE_SIZE"])
 		{
 			$ol = new object_list($filter);
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -220,9 +226,38 @@ class popup_search extends aw_template
 			$o->set_prop($arr["pn"], $arr["sel"][0]);
 		}
 		$o->save();
+		// emit message so objects can update crap
+		post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
+			"oid" => $o->id(),
+			"prop" => $arr["pn"],
+			"options" => $this->make_keys($arr["sel"])
+		));
+
 		die("
 			<html><body><script language='javascript'>window.opener.location.reload();window.close();</script></body></html>
 		");
+	}
+
+	/** sets the options for the given objects given popup search property
+		
+		@param obj required
+		@param prop required
+		@param opts required
+
+		@comment
+			obj - the object whose options to set
+			prop - the property's options in that object to set
+			opts - array of object id's that the user can select from that property
+	**/
+	function set_options($arr)
+	{
+		$arr["obj"]->set_meta("popup_search[".$arr["prop"]."]", $this->make_keys($arr["opts"]));
+		if (count($arr["opts"]) == 1)
+		{
+			$first = reset($arr["opts"]);
+			$arr["obj"]->set_prop($arr["prop"], $first);
+		}
+		$arr["obj"]->save();
 	}
 }
 ?>
