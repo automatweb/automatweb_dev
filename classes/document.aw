@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.220 2003/11/26 18:58:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.221 2003/12/03 12:04:19 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -263,6 +263,7 @@ class document extends aw_template
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
+
 
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -915,7 +916,7 @@ class document extends aw_template
 			$doc["tm"] = $doc["modified"];
 		}
 
-		$_date = $doc["modified"] > 1 ? $doc["modified"] : $doc["created"];
+		$_date = $doc["doc_modified"] > 1 ? $doc["doc_modified"] : $doc["modified"];
 		$date_est = date("d", $_date).". ".get_est_month(date("m", $_date))." ".date("Y", $_date);
 
 		$r_docid = $docid;
