@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.57 2004/11/04 12:57:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.58 2004/11/15 15:41:56 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -9,9 +9,11 @@ class html extends aw_template
 	// options(array)
 	// selected(int)
 	// onchange(string)
+	// disabled(bool)
 	function select($args = array())
 	{
 		extract($args);
+		$disabled = ($disabled ? " disabled" : "");
 		$sz = $mz = $onc = $cl = "";
 		// things that make one go humm.. -- duke
 		if (empty($selected) && isset($value))
@@ -64,7 +66,7 @@ class html extends aw_template
 		{
 			$onc = 'onChange="'.$onchange.'"';
 		}
-		return "<select name='$name' $cl id='$name' $sz $mz $onc>\n$optstr</select>\n";
+		return "<select name='$name' $cl id='$name' $sz $mz $onc" . $disabled . ">\n$optstr</select>\n";
 	}
 
 	////
@@ -72,23 +74,18 @@ class html extends aw_template
 	// name(string)
 	// value(string)
 	// size(int)
+	// disabled(bool)
 	function textbox($args = array())
 	{
 		extract($args);
+		$disabled = ($disabled ? " disabled" : "");
 		$size = isset($size) ? $size : 40;
 		$maxlength = isset($maxlength) ? $maxlength : "";
-		if($args["id_no_change"] = 1)
-		{
-			$id = $name;
-		}
-		else
-		{
-			$id = str_replace("[","_",$name);
-			$id = str_replace("]","_",$id);
-		}
+		$id = str_replace("[","_",$name);
+		$id = str_replace("]","_",$id);
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
-		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"/>\n";
+		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\"" . $disabled . " />\n";
 	}
 
 	////
@@ -98,6 +95,7 @@ class html extends aw_template
 	// cols(int)
 	// rows(int)
 	// wrap(string)
+	// disabled(bool)
 	function textarea($args = array())
 	{
 		extract($args);
@@ -116,9 +114,10 @@ class html extends aw_template
 		}
 		else
 		{
+			$disabled = ($disabled ? " disabled" : "");
 			$wrap = isset($wrap) ? $wrap : "soft";
 			$style = isset($style) ? " style='$style' " : "";
-			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style>$value</textarea>\n";
+			$retval = "<textarea id='$name' name='$name' cols='$cols' rows='$rows' wrap='$wrap' $style" . $disabled . ">$value</textarea>\n";
 		};
 		return $retval;
 	}
@@ -181,15 +180,19 @@ class html extends aw_template
 
 	////
 	// !File upload
+	// disabled(bool)
 	function fileupload($args = array())
 	{
 		extract($args);
+		$disabled = ($disabled ? " disabled" : "");
 		$rv = "";
+
 		if (!empty($value))
 		{
 			$rv = $value . "<br />";
-		};
-		return $rv . "<input type='file' id='$name' name='$name' />\n";
+		}
+
+		return $rv . "<input type='file' id='$name' name='$name'" . $disabled . " />\n";
 	}
 
 	////
@@ -197,10 +200,12 @@ class html extends aw_template
 	// name(string)
 	// value(string)
 	// checked(bool)
+	// disabled(bool)
 	function checkbox($args = array())
 	{
 		extract($args);
 		$checked = isset($checked) ? checked($checked) : '';
+		$disabled = ($disabled ? " disabled" : "");
 		$capt = '';
 		if (empty($value))
 		{
@@ -214,7 +219,8 @@ class html extends aw_template
 		{
 			$capt .= " " . $caption;
 		};
-		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked/> $capt\n";
+
+		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked " . $disabled . "/> $capt\n";
 		return $rv;
 	}
 
@@ -223,11 +229,13 @@ class html extends aw_template
 	// name(string)
 	// value(string)
 	// checked(bool)
+	// disabled(bool)
 	function radiobutton($args = array())
 	{
 		extract($args);
 		$checked = checked($checked);
-		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick'/>\n $caption";
+		$disabled = ($disabled ? " disabled" : "");
+		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick'" . $disabled . " />\n $caption";
 	}
 
 	////
@@ -248,14 +256,17 @@ class html extends aw_template
 	// !Simple button
 	// value(string)
 	// onclick(string)
+	// disabled(bool)
 	function button($args = array())
 	{
 		extract($args);
-		return "<input type='button' value='$value' onClick=\"".$onclick."\" />\n";
+		$disabled = ($disabled ? " disabled" : "");
+		return "<input type='button' value='$value' onClick=\"".$onclick."\"" . $disabled . " />\n";
 	}
 
 	////
 	// !Time selector
+	// disabled(bool)
 	function time_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -263,11 +274,22 @@ class html extends aw_template
 		$selector->configure(array("hour" => 1, "minute" => 1));
 		list($d,$m,$y) = explode("-",date("d-m-Y"));
 		$val = mktime($args["value"]["hour"],$args["value"]["minute"],0,$m,$d,$y);
-		return $selector->gen_edit_form($args["name"], $val);
+
+		if ($disabled)
+		{
+			$name = array ("name" => $args["name"], "disabled" => true);
+		}
+		else
+		{
+			$name = $args["name"];
+		}
+
+		return $selector->gen_edit_form($name, $val);
 	}
 
 	////
 	// !Datetime selector
+	// disabled(bool)
 	function datetime_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -281,11 +303,22 @@ class html extends aw_template
 		{
 			$val = $args['value'];
 		}
-		return $selector->gen_edit_form($args["name"], $val, 2001, 2008, true);
+
+		if ($disabled)
+		{
+			$name = array ("name" => $args["name"], "disabled" => true);
+		}
+		else
+		{
+			$name = $args["name"];
+		}
+
+		return $selector->gen_edit_form($name, $val, 2001, 2008, true);
 	}
-	
+
 	////
 	// !Date selector
+	// disabled(bool)
 	function date_select($args = array())
 	{
 		load_vcl("date_edit");
@@ -301,7 +334,17 @@ class html extends aw_template
 		}
 		$year_from = isset($args["year_from"]) ? $args["year_from"] : 2001;
 		$year_to = isset($args["year_to"]) ? $args["year_to"] : 2008;
-		return $selector->gen_edit_form($args["name"], $val, $year_from, $year_to, true);
+
+		if ($disabled)
+		{
+			$name = array ("name" => $args["name"], "disabled" => true);
+		}
+		else
+		{
+			$name = $args["name"];
+		}
+
+		return $selector->gen_edit_form($name, $val, $year_from, $year_to, true);
 	}
 
 	function img($args = array())
@@ -333,7 +376,7 @@ class html extends aw_template
 
 	/*
 		$args
-			url - url, kuhu peale klikki peaks browser suuna võtma	
+			url - url, kuhu peale klikki peaks browser suuna võtma
 			target - kus freimis peax avanema
 			onClick - onClick aktsioon
 			title - Kui mouse hoverib peal, siis mis info juttu näidata
@@ -349,7 +392,7 @@ class html extends aw_template
 	}
 
 	////
-	// !html form, 
+	// !html form,
 	// params:
 	// method - form method
 	// action - form action
@@ -368,7 +411,7 @@ class html extends aw_template
 		extract($args);
 		return '<span class="'.$class.'">'.$content.'</span>';
 	}
-	
+
 	function get_change_url($oid, $params = array(), $caption = false)
 	{
 		if (!$this->can("view", $oid))
@@ -387,7 +430,7 @@ class html extends aw_template
 		}
 		return $retval;
 	}
-	
+
 	function get_new_url($class_id, $parent, $params = array(), $caption = false)
 	{
 		$params["parent"] = $parent;
@@ -399,7 +442,7 @@ class html extends aw_template
 				"caption" => $caption
 			));
 		}
-		return $retval;	
+		return $retval;
 	}
 };
 ?>

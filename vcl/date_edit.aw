@@ -2,14 +2,14 @@
 // klassile antakse ette "unix timestamp", ta konverdib
 // selle ajaühikuteks, ning tagastab nende muutmiseks
 // sobivad vormielemendid
-class date_edit 
+class date_edit
 {
 	// vormielementide nimed saavad olema kujul
 	// $varname[month] $varname[day] jne.
 
 	// kui aega ette ei anta, siis kuvame selleks kuupäeva
 	// ööpäev hiljem dokumendi avamisest. See on üsna suvaline muidugi
-	function date_edit($varname = "",$timestamp = "+24h") 
+	function date_edit($varname = "",$timestamp = "+24h")
 	{
 		$this->init($varname,$timestamp);
 		// default to all shown
@@ -30,7 +30,7 @@ class date_edit
 	function init($varname,$timestamp)
 	{
 		$this->varname = $varname;
-		if ($timestamp == "+24h") 
+		if ($timestamp == "+24h")
 		{
 			$timestamp = time() + (60 * 60 * 24);
 		};
@@ -48,13 +48,13 @@ class date_edit
 		$this->layout = $args;
 	}
 
-	function configure($fields) 
+	function configure($fields)
 	{
 		// millised väljad ja millises järjekorras kuvame
 		// ja mida me nende captioniteks näitame
 		//    month = Kuu
-		//    
-		if (!is_array($fields)) 
+		//
+		if (!is_array($fields))
 		{
 			return false;
 		};
@@ -66,13 +66,19 @@ class date_edit
 		$this->fields = $fields;
 	}
 
-	function gen_edit_form($varname,$timestamp,$range1 = 2001 , $range2 = 2008,$add_empty = false) 
+	function gen_edit_form($varname,$timestamp,$range1 = 2001 , $range2 = 2008,$add_empty = false)
 	{
-		if ($timestamp == "+24h") 
+		if (is_array ($varname))
+		{
+			$disabled = $varname["disabled"] ? " disabled" : "";
+			$varname = $varname["name"];
+		}
+
+		if ($timestamp == "+24h")
 		{
 			$timestamp = time() + (60 * 60 * 24);
 		};
-		if ($timestamp == "+48h") 
+		if ($timestamp == "+48h")
 		{
 			$timestamp = time() + (2 * 60 * 60 * 24);
 		};
@@ -101,15 +107,15 @@ class date_edit
 		$retval = "";
 		foreach( $this->fields as $k => $v)
 		{
-			switch($k) 
+			switch($k)
 			{
 				case "year":
-					$retval .= sprintf("<select $clid name='%s[year]'>\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[year]'" . $disabled . ">\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-					for ($i = $range1; $i <= $range2; $i++) 
+					for ($i = $range1; $i <= $range2; $i++)
 					{
 						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
 					};
@@ -117,11 +123,11 @@ class date_edit
 					break;
 
 				case "year_textbox":
-					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year'>\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[year]' size='4' maxlength='4' value='$year'" . $disabled . ">\n",$this->varname);
 					break;
-					
+
 				case "month":
-					$retval .= sprintf("<select $clid name='%s[month]'>\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[month]'" . $disabled . ">\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
@@ -139,7 +145,7 @@ class date_edit
 						"11" => LC_M11,
 						"12" => LC_M12
 					);
-					while(list($mk,$mv) = each($mnames)) 
+					while(list($mk,$mv) = each($mnames))
 					{
 						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$mk,selected($mk == $month && $this->timestamp != -1),$mv);
 					};
@@ -147,59 +153,59 @@ class date_edit
 					break;
 
 				case "month_textbox":
-					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month'>\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[month]' size='2' maxlength='2' value='$month'" . $disabled . ">\n",$this->varname);
 					break;
-					
+
 				case "day":
-					$retval .= sprintf("<select $clid name='%s[day]'>\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[day]'" . $disabled . ">\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-					for ($i = 1; $i <= 31; $i++) 
+					for ($i = 1; $i <= 31; $i++)
 					{
 						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $day && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select>\n";
 					break;
-				
+
 				case "day_textbox":
-					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day'>\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[day]' size='2' maxlength='2' value='$day'" . $disabled . ">\n",$this->varname);
 					break;
 
 				case "hour":
-					$retval .= sprintf("<select $clid name='%s[hour]'>\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[hour]'" . $disabled . ">\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-					for ($i = 0; $i <= 23; $i++) 
+					for ($i = 0; $i <= 23; $i++)
 					{
 						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $hour && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select> :\n";
 					break;
-				
+
 				case "hour_textbox":
-					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour'>\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[hour]' size='2' maxlength='2' value='$hour'" . $disabled . ">\n",$this->varname);
 					break;
 
 				case "minute":
-					$retval .= sprintf("<select $clid name='%s[minute]'>\n",$this->varname);
+					$retval .= sprintf("<select $clid name='%s[minute]'" . $disabled . ">\n",$this->varname);
 					if ($add_empty)
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
 					$step = isset($this->minute_step) ? $this->minute_step : 1;
-					for ($i = 0; $i <= 59; $i = $i + $step) 
+					for ($i = 0; $i <= 59; $i = $i + $step)
 					{
 						$retval .= sprintf("<option value='%s' %s>%02d</option>\n",$i,selected($i == $minute && $this->timestamp != -1),$i);
 					};
 					$retval .= "</select>\n";
 					break;
-				
+
 				case "minute_textbox":
-					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute'>\n",$this->varname);
+					$retval .= sprintf("<input type='text' name='%s[minute]' size='2' maxlength='2' value='$minute'" . $disabled . ">\n",$this->varname);
 					break;
 			}; // end switch
 		}; // end while
