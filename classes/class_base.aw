@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.320 2004/11/12 11:43:34 duke Exp $
+// $Id: class_base.aw,v 2.321 2004/11/18 17:37:12 sven Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -217,7 +217,7 @@ class class_base extends aw_template
 			$has_errors = true;
 			aw_session_del("cb_values");
 		};
-
+		
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
 		$this->is_rel = false;
@@ -310,7 +310,8 @@ class class_base extends aw_template
 			"cfgform_id" => $cfgform_id,
 			"cb_part" => $args["cb_part"],
 		);
-
+		
+		
 		if (!empty($args["form"]))
 		{
 			$filter["form"] = $args["form"];
@@ -555,10 +556,12 @@ class class_base extends aw_template
 		$properties = array("tabpanel" => $panel) + $properties;
 
 		$awt->start("parse-properties");
+		
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-
+		
+		
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 
@@ -1847,6 +1850,22 @@ class class_base extends aw_template
 		};
 	}
 
+	function process_view_controllers(&$properties, $controllers, $argblock)
+	{
+		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+		
+		foreach ($controllers as $key => $value)
+		{
+			if($value)
+			{
+				$retval = $view_controller_inst->check_property(&$properties[$key], $value, $argblock);
+				if($retval == PROP_IGNORE)
+				{
+					unset($properties[$key]);
+				}
+			}
+		}
+	}
 
 	function parse_properties($args = array())
 	{
@@ -1894,9 +1913,14 @@ class class_base extends aw_template
 		$this->cfgu = get_instance("cfg/cfgutils");
 
 		$remap_children = false;
-
+		
+		if($controllers = $this->get_all_view_controllers($this->cfgform_id))
+		{
+			$this->process_view_controllers(&$properties, $controllers, $argblock);
+		}
+		
 		// how do I stop parsing of properties that _are_ already parsed?
-
+		
 		foreach($properties as $key => $val)
 		{
 			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
@@ -2788,7 +2812,7 @@ class class_base extends aw_template
 		return $this->id;
 	}
 	
-	//This function returns all controllers current configform has.
+	//This function returns all submit controllers current configform has.
 	function get_all_controllers($config_id)
 	{
 		if (!$this->can("view", $config_id))
@@ -2799,11 +2823,23 @@ class class_base extends aw_template
 		return $obj->meta("controllers");		
 	}
 
+	function get_all_view_controllers($config_id)
+	{
+		if (!$this->can("view", $config_id))
+		{
+			return false;
+		}
+		$obj = &obj($config_id);
+		return $obj->meta("view_controllers");
+	}
+	
 	////
 	// !You give it a class id and a list of properties .. it performs a validation on all the data
 	// and returns something eatable
+
 	function validate_data($arr)
-	{
+	{	
+		//arr($arr);
 		if (empty($arr["props"]))
 		{
 			$props = $this->load_defaults(array(
@@ -2819,12 +2855,11 @@ class class_base extends aw_template
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
-			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
-			
+			$controllers = $this->get_all_controllers($arr["cfgform_id"]);	
 			$cf = get_instance("cfg/cfgform");
 			$props = $cf->get_props_from_cfgform(array("id" => $arr["cfgform_id"]));
 		};
-
+		
 		$res = array();
 
 		if (!is_array($arr["request"]))
@@ -2832,7 +2867,6 @@ class class_base extends aw_template
 			return $res;
 		};
 
-		
 		foreach($arr["request"] as $key => $val)
 		{
 			$prpdata = $props[$key];
