@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.10 2001/05/25 17:40:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.11 2001/05/25 22:54:25 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -307,7 +307,7 @@ class core extends db_connector
 		{
 			$this->create_obj_access($oid);
 		};
-		$this->situ_tais();
+		$this->flush_cache();
 		return $oid;
 	}
 
@@ -326,17 +326,8 @@ class core extends db_connector
 		$this->db_query($q);
 	}
 
-	////
-	// !'l337
-	// see sai mingis erilises deprekahoos kirjutet. tegelt voiks ymber nimetada.
-	//
-	// gee, you think? - terryf
-	// yeah. duke
-	function situ_tais()
-	{
-		return $this->flush_cache();
-	}
-
+	///
+	// !Margib koik saidi objektid dirtyks
 	function flush_cache()
 	{
 		$q = "UPDATE objects SET cachedirty = 1 WHERE objects.site_id = ".$GLOBALS["SITE_ID"]." or objects.site_id IS NULL";
@@ -366,7 +357,7 @@ class core extends db_connector
 		$q = " UPDATE objects SET " . join(",",$q_parts) . " WHERE oid = $params[oid] ";
 		$this->db_query($q);
 		// see on siis see vinge funktsioon
-		$this->situ_tais();
+		$this->flush_cache();
 	}
 
 	////
