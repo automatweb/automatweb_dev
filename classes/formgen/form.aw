@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.104 2004/06/28 19:50:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.105 2004/08/19 08:03:03 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1745,7 +1745,7 @@ class form extends form_base
 
 		if ($this->arr["js_default_element"])
 		{
-			$st .= "<script language=\"javascript\">__el = aw_get_el('fm_".$this->id."', '".$this->arr["js_default_element"]."');__el.focus();</script>";
+			$st .= "<script language=\"javascript\">__el = aw_get_el('fm_".$this->id."', '".$this->arr["js_default_element"]."');if (__el)  { __el.focus(); }</script>";
 		}
 
 		return $st;
