@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.299 2004/09/02 13:30:30 duke Exp $
+// $Id: class_base.aw,v 2.300 2004/09/09 14:59:32 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3720,7 +3720,12 @@ class class_base extends aw_template
 		{
 			$use_group = $default_group;
 		};
-			
+
+		if (!$use_group)
+		{
+			$use_group = "general";
+		};
+
 		$this->active_groups[] = $use_group;
 		// but .. if this is the case and the group is a first level group then I should
 		// right in this place calculate the correct group as well
@@ -3733,6 +3738,7 @@ class class_base extends aw_template
 			list($use_group,) = each($this->grpmap[$use_group]);
 			$this->active_groups[] = $use_group;
 		};
+
 
 		$grpinfo = $this->groupinfo[$use_group];
 		// and climb back down again, e.g. make sure we always have _all_ active groups 
@@ -3768,6 +3774,12 @@ class class_base extends aw_template
 			{
 				continue;
 			};
+
+			if (empty($val["group"]))
+			{
+				continue;
+			};
+
 
 			// defaults from class, cfgform can override things
 			// XXX: should I implement some kind of safety checks here?
@@ -3810,6 +3822,11 @@ class class_base extends aw_template
 
 			$propdata = array_merge($all_properties[$key],$val);
 			$propgroups = $property_groups[$key];
+
+			if (!is_array($propgroups))
+			{
+				continue;
+			};
 
 			// skip anything that is not in the active group
 			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
