@@ -25,20 +25,21 @@ class date
 				return $newdate;
 				
 			case 3:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
+				$newdate=date("d ", $timestamp).$this->month[date("m", $timestamp)-1].date(" y",$timestamp);
 				return $newdate;
 				
 			case 4:
-				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
+				$newdate=date("d ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
 			
 			case 5:
-				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp);
-				return $rv;
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1];
+				break;
 			
 			case 6:
-				$rv = ucfirst($this->month[date("m",$timestamp)-1]) . " " . date("d",$timestamp) . date(" Y",$timestamp);
-				return $rv;
+				$rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				break;
+			
 			case 7:
 				$newdate=date("H:i d.m.y", $timestamp);
 				return $newdate;
