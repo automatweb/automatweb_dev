@@ -19,6 +19,7 @@
 
 */
 
+// XXX: what exactly is the point of those constants?
 define("FTP_ERR_CONNECT", 1);
 define("FTP_ERR_LOGIN", 2);
 define("FTP_ERR_NOTCONNECTED", 3);
@@ -26,12 +27,17 @@ define("FTP_ERR_NOTCONNECTED", 3);
 class ftp extends class_base
 {
 	var $handle = null;
+	var $verbose = false;
 
-	function ftp()
+	function ftp($arr = array())
 	{
 		$this->init(array(
 			'clid' => CL_FTP_LOGIN
 		));
+		if (!empty($arr["verbose"]))
+		{
+			$this->verbose = $arr["verbose"];
+		};
 	}
 
 	function is_available()
@@ -39,13 +45,15 @@ class ftp extends class_base
 		return extension_loaded("ftp");
 	}
 
-	////
-	// !connects to ftp host
-	// parameters
-	//	host - ftp server
-	//	user - ftp username
-	//	pass - ftp password
-	//  timeout - optional, defaults to 10 seconds
+	/** creates connection to ftp server
+		@attrib api=1
+		@param host required
+		@param user required
+		@param pass required
+		@param timeout optional
+
+		@comment timeout defaults to 10 seconds
+	**/
 	function connect($arr)
 	{
 		extract($arr);
@@ -53,23 +61,37 @@ class ftp extends class_base
 		{
 			$timeout = 10;
 		}
-		
-		echo "connect, ".dbg::dump($arr)." <br />";
+	
+		if ($this->verbose)
+		{
+			echo "connect, ".dbg::dump($arr)." <br />";
+		};
 		if (($this->handle = ftp_connect($host)) == FALSE)
 		{
-			echo "err_connect! <br />";
+			if ($this->verbose)
+			{
+				echo "err_connect! <br />";
+			};
 			return FTP_ERR_CONNECT;
 		}
 		if (ftp_login($this->handle, $user, $pass) == FALSE)
 		{
-			echo "err login! <br />";
+			if ($this->verbose)
+			{
+				echo "err login! <br />";
+			};
 			return FTP_ERR_LOGIN;
 		}
-		echo "success , $this->handle <br />";
+		if ($this->verbose)
+		{
+			echo "success , $this->handle <br />";
+		};
 	}
 
-	////
-	// !returns a list of files in the current server in folder $folder
+	/** returns a list of files in the current server in folder $folder
+		@attrib api=1
+		@param folder required
+	**/
 	function dir_list($folder)
 	{
 		if (!$this->handle)
@@ -83,24 +105,49 @@ class ftp extends class_base
 		return $arr->get();
 	}
 
-	////
-	// !returns the contents of file $file in the current server
-	function o_get($file)
+	/** returns the contents of file $file in the current server
+		
+		@attrib api=1
+		@param file required
+
+	**/
+	function get_file($file)
 	{
 		if (!$this->handle)
 		{
 			return FTP_ERR_NOTCONNECTED;
 		}
 
-		// save the damn thing to a temp file for now.
 		$fn = tempnam(aw_ini_get("server.tmpdir"), "aw_ftp");
-		$fh = fopen($fn, "w");
-		$res = ftp_fget($this->handle, $fh, $file);
-		fclose($fh);
+		$res = ftp_get($this->handle, $fn, $file, FTP_BINARY);
 
 		$fc = file_get_contents($fn);
 		unlink($fn);
 		return $fc;
+	}
+
+	/** uploads $content to $remote_file on the current server
+
+		@attrib api=1
+		@param file required
+		@param content required
+
+	**/
+	function put_file($remote_file,$content)
+	{
+		if (!$this->handle)
+		{
+			return FTP_ERR_NOTCONNECTED;
+		};
+		$fn = tempnam(aw_ini_get("server.tmpdir"), "aw_ftp");
+
+		$fh = fopen($fn,"w");
+		fwrite($fh,$content);
+		fclose($fh);
+
+		$res = ftp_put($this->handle,$remote_file,$fn,FTP_BINARY);
+		unlink($fn);
+		return $res;
 	}
 
 	function get($url)
