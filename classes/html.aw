@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.34 2003/05/12 14:15:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.35 2003/05/12 17:30:43 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -34,7 +34,7 @@ class html extends aw_template
 		{
 			$sel_array = $selected;
 		}
-		elseif (!empty($selected))
+		elseif (isset($selected) && $selected !== false)
 		{
 			$sel_array = array($selected);
 		}
@@ -90,7 +90,7 @@ class html extends aw_template
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
 		$value = isset($value) ? $value : "";
-		if (isset($richtext) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
+		if (!empty($richtext) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
 		{
 			$args["type"] = "richtext";
 			$args["width"] = $cols * 10;
