@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.277 2004/06/25 21:01:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.278 2004/06/25 21:40:06 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -234,58 +234,6 @@ class core extends acl_base
 		$this->db_query($q);
 
 		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
-	}
-
-	////
-	// !tagastab koigi objekti juurde kuuluvate aliaste nimekirja. Alternatiiv eelmisele sisuliselt
-	// argumendid
-	// oid(int) - objekti id, mis meid huvitab
-	// type(int or array) - meid huvitavate objektide tyybiidentifikaatorid
-	// reltype - optional - relation type
-	function get_aliases($args = array())
-	{
-		extract($args);
-		
-		// map2 supports both arrays and strings and returns array
-		$aliases = array();
-		// what would you want with oid=0 anyway? but it does get called
-		if (empty($oid))
-		{
-			return $aliases;
-		};
-		$typestring = "";
-		if (isset($type))
-		{
-			$tlist = join(',',map('%d',$type));
-			$typestring = " AND objects.class_id IN ($tlist)";
-		};
-
-		if ($reltype)
-		{
-			$reltypestr = " aliases.reltype = '$reltype' ";
-		}
-		$q = "SELECT aliases.*,objects.*
-			FROM aliases
-			LEFT JOIN objects ON
-			(aliases.target = objects.oid)
-			WHERE source = '$oid' $typestring $reltstr
-			ORDER BY aliases.id";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			// note that the index inside the idx array is always one less than the 
-			// number in the alias. (e.g. oid of #f1# is stored at the position 0, etc)
-			if (sizeof($type) == 1)
-			{
-				$aliases[$row["idx"]-1] = $row;
-			}
-			else
-			{
-				$aliases[] = $row;
-			};
-		};
-		
-		return $aliases;
 	}
 
 	////
