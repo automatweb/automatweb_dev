@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.37 2004/06/27 13:21:17 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.38 2004/06/27 13:49:26 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -371,16 +371,24 @@ class crm_company extends class_base
 		$prof_connections = $obj->connections_from(array(
 			'type'=>'RELTYPE_PROFESSIONS',
 		));
+
+		$key = 'unit';
+		$value = '';
+		if($obj->prop('class_id')==CL_CRM_SECTION)
+		{
+			$value = $obj->id();
+		}
 		foreach($prof_connections as $prof_conn)
 		{
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
-			
+			$url = array();
+			$url = aw_url_change_var(array('cat'=>$prof_conn->prop('to'),$key=>$value));
 			$tree->add_item($this_level_id,
 						array('id'=>++$node_id,
 								'name'=>$name,
 								'iconurl'=>'images/scl.gif',
-								'url'=>aw_url_change_var(array('cat'=>$prof_conn->prop('to')))
+								'url'=>$url
 						));
 		}	
 	}
@@ -686,7 +694,7 @@ class crm_company extends class_base
                 ));
 		$t->define_field(array(
 								'name' => 'osakond',
-								'caption' => 'E-post',
+								'caption' => 'Osakond',
 								'sortable' => '1',
 					));
 		$t->define_field(array(
