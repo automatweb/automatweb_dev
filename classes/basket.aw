@@ -371,6 +371,7 @@ class basket extends aw_template
 			}
 			else
 			{
+				$_ft_basket = $this->_draw_basket_ft($ob, $basket, true);
 				$finst = get_instance("formgen/form");
 				$finst->load($ob["meta"]["order_form"]);
 				$htmlmail = $finst->show(array(
@@ -378,7 +379,7 @@ class basket extends aw_template
 					"entry_id" => $basket["of_entry"],
 					"op_id" => $ob["meta"]["order_form_op"]
 				));
-				$htmlmail.="<br><br>".$this->_draw_basket_ft($ob, $basket, true);
+				$htmlmail.="<br><br>".$_ft_basket;
 			}
 
 			foreach($mls as $ml)
