@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.47 2004/04/07 13:12:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.48 2004/04/12 13:48:09 kristo Exp $
 
 /*
 
@@ -69,40 +69,7 @@ class site_show extends class_base
 		//print "aa";
 		//flush();
 
-		$this->section_obj = obj(aw_global_get("section"));
-
-		if ($this->section_obj->class_id())
-		{
-			$obj_inst = $this->section_obj->instance();
-			if (method_exists($obj_inst, "request_execute"))
-			{
-				$arr["text"] = $obj_inst->request_execute($this->section_obj);
-			}
-		}
-
-		// until we can have class-static variables, this actually SETS current text content
-		classload("layout/active_page_data");
-		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
-
-		// save path
-		// get path from the real rootmenu so we catch props?
-		if (aw_ini_get("ini_rootmenu"))
-		{
-			$tmp = aw_ini_get("rootmenu");
-			$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
-		}
-		$this->path = $this->section_obj->path();
-
-		if (aw_ini_get("ini_rootmenu"))
-		{
-			$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
-		}
-		$this->path_ids = array();
-		foreach($this->path as $p_obj)
-		{
-			$this->path_ids[] = $p_obj->id();
-		}
-
+		$this->_init_path_vars($arr);
 
 		// figure out the menu that is active
 		$this->sel_section = $this->_get_sel_section(aw_global_get("section"));
@@ -1446,7 +1413,7 @@ class site_show extends class_base
 		}
 		else
 		{
-			$this->read_template("../../".$tpldir."/".$tpl);
+			$this->read_template("../../".$tpldir."/".$tpl,true);
 		}
 
 		if ($filename == "")
@@ -1457,10 +1424,33 @@ class site_show extends class_base
 			));
 		}
 	
+		// fake paths for default menus
+		$path_bak = $this->path_ids;
+
+		$menu_defaults = aw_ini_get("menuedit.menu_defaults");
+		if (aw_ini_get("menuedit.lang_defs"))
+		{
+			$menu_defaults = $menu_defaults[aw_global_get("lang_id")];
+		}
+		if (is_array($menu_defaults) && aw_global_get("section") == aw_ini_get("frontpage"))
+		{
+			foreach($menu_defaults as $_mar => $_mid)
+			{
+				$tmp = obj($_mid);
+				$this->path = $tmp->path();
+				$this->path_ids = array();
+				foreach($this->path as $p_obj)
+				{
+					$this->path_ids[] = $p_obj->id();
+				}
+			}
+		}
+
 		enter_function("site_show::do_draw_menus");
 		include_once($filename);
 		exit_function("site_show::do_draw_menus");
 
+		$this->path_ids = $path_bak;
 		if ($filename !== NULL)
 		{
 			return $this->parse();
@@ -1583,6 +1573,7 @@ class site_show extends class_base
 			"uid" => aw_global_get("uid"),
 			"date" => $this->time2date(time(), 2),
 			"date2" => $this->time2date(time(), 8),
+			"date_timestamp" => time(),
 			"date3" => date("d").". ".get_lc_month(date("n")).". ".date("Y"),
 			"IS_FRONTPAGE" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $frontpage ? $this->parse("IS_FRONTPAGE2") : ""),
@@ -1938,10 +1929,10 @@ class site_show extends class_base
 
 	////
 	// !compiles the template and saves the code in a cache file, returns the cache file
-	function cache_compile_template($path, $tpl)
+	function cache_compile_template($path, $tpl, $mdefs = NULL, $no_cache = false)
 	{
 		$co = get_instance("contentmgmt/site_template_compiler");
-		$code = $co->compile($path, $tpl);
+		$code = $co->compile($path, $tpl, $mdefs, $no_cache);
 
 		$tpl = $path."/".$tpl;
 		$fn = "compiled_menu_template-".str_replace("/","_",str_replace(".","_",$tpl))."-".aw_global_get("lang_id");
@@ -2058,6 +2049,78 @@ class site_show extends class_base
 			}
 		}
 		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
+	}
+
+	function _init_path_vars(&$arr)
+	{
+		$this->section_obj = obj(aw_global_get("section"));
+
+		if ($this->section_obj->class_id())
+		{
+			$obj_inst = $this->section_obj->instance();
+			if (method_exists($obj_inst, "request_execute"))
+			{
+				$arr["text"] = $obj_inst->request_execute($this->section_obj);
+			}
+		}
+
+		// until we can have class-static variables, this actually SETS current text content
+		classload("layout/active_page_data");
+		active_page_data::get_text_content(isset($arr["text"]) ? $arr["text"] : "");
+
+		// save path
+		// get path from the real rootmenu so we catch props?
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$tmp = aw_ini_get("rootmenu");
+			$GLOBALS["cfg"]["__default"]["rootmenu"] = aw_ini_get("ini_rootmenu");
+		}
+
+		//if (is_object($this->section_obj))
+		if (is_oid($this->section_obj->id()))
+		{
+			$this->path = $this->section_obj->path();
+		}
+		else
+		{
+			$this->path = array();
+		};
+
+
+		if (aw_ini_get("ini_rootmenu"))
+		{
+			$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
+		}
+		$this->path_ids = array();
+		foreach($this->path as $p_obj)
+		{
+			$this->path_ids[] = $p_obj->id();
+		}
+	}
+
+	/** compiles and displays a template containing menu subs
+
+		@comment
+		
+			parameters:
+				template required - template with path, example: contentmgmt/foo/blah.tpl
+				mdefs - optional -	if set, defines new menu areas for the template compiler. 
+									format is the same as in the ini file
+
+	**/
+	function do_show_menu_template($arr)
+	{
+		extract($arr);
+		if (!isset($mdefs))
+		{
+			$mdefs = NULL;
+		}
+		$this->_init_path_vars($arr);
+		$tpl_dir = dirname($template);
+		$tpl_fn = basename($template);
+		$cname = $this->cache_compile_template($tpl_dir, $tpl_fn, $mdefs, true);
+		$tmp = $this->do_draw_menus(array(), $cname, $tpl_dir, $tpl_fn);
+		return $tmp;
 	}
 }
 ?>
