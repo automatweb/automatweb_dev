@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.239 2003/02/21 05:15:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.240 2003/02/21 12:56:13 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -246,7 +246,7 @@ class menuedit extends aw_template
 		// redirect the user 
 		if (not($this->can("view", $section)))
 		{
-			$this->no_access_redir();
+			$this->no_access_redir($section);
 		}
 
 		// by default show both panes.
@@ -4811,7 +4811,7 @@ class menuedit extends aw_template
 
 	////
 	// !Redirect the user if he/she didn't have the right to view that section
-	function no_access_redir()
+	function no_access_redir($section)
 	{
 		$c = get_instance("config");
 		$ec = $c->get_simple_config("errors");
@@ -4847,7 +4847,7 @@ class menuedit extends aw_template
 					
 			}
 		}
-		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined!",true);
+		$this->raise_error(ERR_MNEDIT_NOACL,"No ACL error messages defined! no can_view access for object $section",true);
 	}
 
 	function _get_template_filename($id)
