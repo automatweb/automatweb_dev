@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="add_tree_conf" extends="class_base">
+	<class name="add_tree_conf" folder="admin" extends="class_base">
 	</class>
 </orb>
 		
