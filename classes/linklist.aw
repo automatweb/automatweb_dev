@@ -33,12 +33,13 @@ class linklist extends aw_template
 		}
 		$this->read_template("add.tpl");
 		$ob = new db_objects;
+
 		//get list of the rootmenus
 		$objects = get_instance("objects");
 		$root_list= $objects->get_list(); 
+
 		$this->vars(array(
 			"name" => "uus lingikogu",
-			"default_template" => $this->picker("", $this->get_templates(SHOW_TPL_DIR)),
 			"rootitems" => $this->picker("", $root_list),
 			"reforb" => 	$this->mk_reforb("submit", 
 				array(
@@ -66,7 +67,7 @@ class linklist extends aw_template
 		$toolbar->add_button(array(
 			"name" => "change",
 			"tooltip" => "konfigureeri",
-			"url" => $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url))),
+			"url" => $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)),$ob),
 			"imgover" => "conf.gif",
 			"img" => "conf.gif",
 		));
@@ -74,25 +75,14 @@ class linklist extends aw_template
 		$toolbar->add_separator();
 		$toolbar->add_button(array(
 			"name" => "stats",
-			"tooltip" => "stat conf",
-			"url" => $this->mk_my_orb("stats", array("id" => $id, "return_url" => urlencode($return_url))),
+			"tooltip" => $this->mk_my_orb("change", array("id" => $id, "sid"=>$sid, "return_url" => urlencode($return_url)), "linklist_stat"),
+			"url" => $this->mk_my_orb("change", array("id" => $id, "sid"=>$sid, "return_url" => urlencode($return_url)), "linklist_stat"),
 			"imgover" => "lists_over.gif",
 			"img" => "lists.gif",
 		));
-		$toolbar->add_button(array(
-			"name" => "show_stats",
-			"tooltip" => "show stats",
-			"url" => $this->mk_my_orb("show_stats", array("id" => $id, "return_url" => urlencode($return_url))),
-			"imgover" => "conf.gif",
-			"img" => "conf.gif",
-
-
-		));
-//		$toolbar->add_cdata($this->parse("aliaslist"));
+		$toolbar->add_cdata("kes ikoone meisterdab?");
 		return $toolbar->get_toolbar();
 	}
-
-
 
 
 	////
@@ -113,18 +103,22 @@ class linklist extends aw_template
 			$this->mk_path($ob["parent"], "Muuda lingikogu");
 		}
 		$this->read_template("change.tpl");
+
 		$objects = get_instance("objects");
 		$root_list= $objects->get_list(); 
 
-		// list of a link properties by wich we can order links
+		// list of a link object properties by wich we can order links
 		$sortim = array ( 
 			"name"		=> "lingi nime",
 			"jrk"		=> "lingi jrknr",
 			"modified"	=> "muutmise aja",
-//			"modified" => "modified",
-//			"created" => "created",
+			"modified" => "modified",
+			"created" => "created",
+			"oid" => "oid",
+
 		);
-		//list of properties, that we also can turn into a hyperlink
+		//list of object properties, that we also can turn into a hyperlink
+
 		$linkis=array(
 			"comment" => "comment",
 			"url" => "url",
@@ -136,26 +130,29 @@ class linklist extends aw_template
 			"created" => "created",
 			"jrk" => "jrk",
 			"hits" => "hits",
-/*  [oid] => 51395
-    [parent] => 51394
-    [class_id] => 21
-    [created] => 1033467989
-    [status] => 2
-    [lang_id] => 6
-    [last] => 
-    [jrk] => 222
-    [visible] => 1
-    [period] => 
-    [alias] => 
-    [periodic] => 0
-    [site_id] => 9
-    [doc_template] => 0
-    [activate_at] => 0
-    [deactivate_at] => 0
-    [autoactivate] => 0
-    [autodeactivate] => 0
-    [brother_of] => 0
-    [cachedirty] => 1
+//			"oma_tekst_1"=>"oma_tekst_1",
+//			"oma_tekst_2"=>"oma_tekst_2",
+/*  
+			"oid" => 
+			"parent" => 51394
+			"class_id" => 21
+			"created" => 1033467989
+			"status" => 2
+			"lang_id" => 6
+			"last" => 
+			"jrk" => 222
+			"visible" => 1
+			"period" => 
+			"alias" => 
+			"periodic" => 0
+			"site_id" => 9
+			"doc_template" => 0
+			"activate_at" => 0
+			"deactivate_at" => 0
+			"autoactivate" => 0
+			"autodeactivate" => 0
+			"brother_of" => 0
+			"cachedirty" => 1
 */
 		);
 
@@ -195,131 +192,163 @@ class linklist extends aw_template
 			$forms = $this->list_objects(array(
 					"class" => CL_FORM,
 					"orderby" => "name",
-//					"return" => ARR_ALL,
+					"return" => ARR_ALL,
 			));
 
-			//leiame stiilid
+			//leiame CSS stiilid
 			$stiilid= $this->list_objects(array(
 					"class" => CL_CSS,
 					"orderby" => "name",
 			));
 
-			if($ob["meta"]["forms"])
+/*			if($ob["meta"]["forms"])
 			{
 				$form = get_instance("form"); 
-
 				$form->load($ob["meta"]["forms"]); 
+//siin tekim mingi error kui fomi elemente ei leita
 				$felement = $form->get_form_elements(array(
 					"id" => $ob["meta"]["forms"],
 					"key" => "id",
 					"use_loaded" => true,
 					"all_data" => false,
 				));
-
-			}		
+			}
+*/
 
 //see on see tasandite konfinnimise süteem
 
 		$dir = $ob["meta"]["dir"];
+		$link = $ob["meta"]["link"];
 
 		//delete level(s)
+		if ($dir)
 			foreach($dir as $key => $val)
 			{
 				if ($val["kustuta"])
+				{
 					unset($dir[$key]);
+					unset($link[$key]);
+				}
 			}
-		// add level
-		if($adding = (int)$ob["meta"]["add_level"])
-		{
-			$dir[$adding]	= $dir[0];
-		}
-	
-		$list_templates = $this->get_templates(SHOW_TPL_DIR);
-		// parse levels
 
-if(!$dir[0])$dir[0]=array();
-		if ($dir)
+		// default levelit ei saa kustutada, vaja on ju kindlasti templatet jne
+		$dir[0]=$dir[0]?$dir[0]:array();
+		// aga stiiliinfo võib nullida küll
+//		$link[0]=$link[0]?$link[0]:array();
+
+
+		// add level
+		if($ob["meta"]["add_level"])
 		{
-			foreach($dir as $key =>  $val)
-			{
-				$this->vars(array(
-					"tas" => $key,//"val" => $val,
-					"sortby_dirs" => $this->picker($dir[$key]["sortby_dirs"], $sortim),
-					"sortby_links" => $this->picker($dir[$key]["sortby_links"], $sortim),
-					"tulpi" => $dir[$key]["tulpi"],
-					"jrk_columns" => checked($dir[$key]["jrk_columns"]),
-					"level_template" => $this->picker($dir[$key]["level_template"], $list_templates),
-					"sortby_jknr" => checked($dir[$key]["sortby_jknr"])));
-					$levels[$key] = $this->parse("levels");
-			}
+			$dir[(int)$ob["meta"]["add_level"]]= $dir[0];
+			$link[(int)$ob["meta"]["add_level"]]= $link[0];
+		}
+
+		$list_templates = $this->get_templates(SHOW_TPL_DIR);
+
+		foreach($dir as $key =>  $val)
+		{
+			$this->vars(array(
+				"level" => $key,
+				"sortby_dirs" => $this->picker($dir[$key]["sortby_dirs"], $sortim),
+				"show_links" => checked($dir[$key]["show_links"]),
+				"newwindow" => checked($dir[$key]["newwindow"]),
+				"sortby_links" => $this->picker($dir[$key]["sortby_links"], $sortim),
+				"tulpi" => (int)$dir[$key]["tulpi"], //0==1
+				"jrk_columns" => checked($dir[$key]["jrk_columns"]),
+				"level_template" => $this->picker($dir[$key]["level_template"], $list_templates),
+				"sortby_jknr" => checked($dir[$key]["sortby_jknr"]),
+			));
+			$levels[$key] = $this->parse("levels");
+		}
+
 			ksort($levels);
 			$levels = implode("",$levels);
-		}
-///end/tasandid
+
 
 	foreach($dir as $key=>$val)
 	{
-	$level=$key;
-	$level_style="";
-		foreach($linkis as $key => $val)
+		$level=$key;
+		$level_style="";
+
+
+		$oma=array(); //plah :| ... oma teksti jaoks key-d, + 1 uue tekstivälja jaoks on see jama siin
+		$i=1;
+		while(($link[$level]["oma_tekst_".$i]["text"]!=""))		
 		{
+			$oma["oma_tekst_".$i]="oma_tekst_".$i;
+			$i++;
+		}
+		$oma["oma_tekst_".$i]="oma_tekst_".$i;
+
+		$properti=$linkis + $oma; //textiväljade keyd siia otsa, igal levelil siis kujuneb eri arv tekstivälju, vastavalt vajadusele
+
+
+		foreach($properti as $key => $val)
+		{
+
+			$text="";
+			/// see on lame aga praegu vaadatakse kas key nimi algab "oma_" st siis on see enda sissestatav tekst
+			if ((strpos($key,"oma_")==0) and (strpos($key,"oma_")!==false))
+			{
+				$this->vars(array(
+					"mis" => $key,
+					"level" => $level,
+					"text"=>$link[$level][$key]["text"],
+				));
+				$text = $this->parse("add_text");
+			}
+
 			$this->vars(array(
 				"mis" => $key,
 				"level" => $level,
-				"jrk" => (int)$ob["meta"]["link"][$level][$key]["jrk"],
-				"hyper" => checked($ob["meta"]["link"][$level][$key]["hyper"]),
-				"show" => checked($ob["meta"]["link"][$level][$key]["show"]),
-				"stiilid" => $this->picker($ob["meta"]["link"][$level][$key]["style"],$stiilid),
-				"text_b" => $ob["meta"]["link"][$level][$key]["text_b"],
-				"text_a" => $ob["meta"]["link"][$level][$key]["text_a"],
-				"br" => checked($ob["meta"]["link"][$level][$key]["br"]),
-
+				"jrk" => (int)$link[$level][$key]["jrk"],
+				"hyper" => checked($link[$level][$key]["hyper"]),
+				"show" => checked($link[$level][$key]["show"]),
+				"stiilid" => $this->picker($link[$level][$key]["style"],array("vali") + $stiilid),
+				"br" => checked($link[$level][$key]["br"]),
+				"add_text" => $text,
 			));
 			$level_style.=$this->parse("level_style");
 		}
+
+
 			$this->vars(array(
 				"level"=>$level,
 				"level_style"=>$level_style,
-				"text_start"=>$ob["meta"]["link"][$level]["text_start"],
-				"text_end"=>$ob["meta"]["link"][$level]["text_end"],
 				));
 			$level_styles.=$this->parse("level_styles");
 	}
 
 
-//		$ref = $this->mk_reforb("submit", array("id" =>  $id, "return_url" => urlencode($return_url)));
-
-		//gets a list of templates (for linkslist "show")
 
 		$this->vars(array(
 //			"level" => $level,
-			"current_level"=>$ob["meta"]["current_level"],
-				"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
-				"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
-				"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
+//			"current_level"=>$ob["meta"]["current_level"],
+			"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
+			"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
+			"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
 
-			"jrk_columns_default" => checked($ob["meta"]["jrk_columns_default"]),
 			"dir_is_form_result" => checked($ob["meta"]["dir_is_form_result"]),
-			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
-			"default_tulpi" => $ob["meta"]["default_tulpi"],			// default column count
-			"abix" => $ob["meta"]["link"]["default"][jrk]."test", 
+			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id,"sid"=>$ob["meta"]["sid"])),
+//			"default_tulpi" => $ob["meta"]["default_tulpi"],			// default column count
+//			"abix" => $ob["meta"]["link"]["default"][jrk]."test", 
 			"is_formentry" => $ob["meta"]["is_formentry"]?checked($ob["meta"]["is_formentry"]):"",		// kas on vormisisestus (radio)
 			"is_not_formentry" => $ob["meta"]["is_formentry"]?"":checked(1),	// kas on vormisisestus (radio)
 			"vormisisestus" => $vormisisestus,				// formentry data (sub)
 			"levels" => $levels,
-			"tasand" => $ob["meta"]["tasand"]?$ob["meta"]["tasand"]:1,
+//			"tasand" => $ob["meta"]["tasand"]?$ob["meta"]["tasand"]:1,
 			"level_styles" => $level_styles,
 			"name" => $ob["name"],
 			"comment" => $ob["comment"],
 			"active_dirs" => checked($ob["meta"]["active_dirs"]),
 			"active_links" => checked($ob["meta"]["active_links"]),
-			"newwindow" => checked($ob["meta"]["newwindow"]),
-			"path" => checked($ob["meta"]["path"]),				//show path
-			"default_sortby_dirs" => $this->picker($ob["meta"]["default_sortby_dirs"], $sortim),
-			"default_sortby_links" => $this->picker($ob["meta"]["default_sortby_links"], $sortim),
-			"default_template" => $this->picker($ob["meta"]["default_template"], $this->get_templates(SHOW_TPL_DIR)),
+			"YAH" => checked($ob["meta"]["YAH"]),				//show path
+//			"default_sortby_dirs" => $this->picker($ob["meta"]["default_sortby_dirs"], $sortim),
+//			"default_sortby_links" => $this->picker($ob["meta"]["default_sortby_links"], $sortim),
+//			"default_template" => $this->picker($ob["meta"]["default_template"], $this->get_templates(SHOW_TPL_DIR)),
 			"rootitems" => $this->picker($ob["meta"]["lingiroot"], $root_list),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "return_url" => urlencode($return_url)))
+			"reforb" => $this->mk_reforb("submit", array("id" => $id, "sid"=> $ob["meta"]["sid"],"return_url" => urlencode($return_url)))
 		));
 		return $this->parse();
 	}
@@ -352,24 +381,6 @@ if(!$dir[0])$dir[0]=array();
 	function submit($arr)
 	{
 		extract($arr);
-		if ($statconf)
-		{
-			return $this->mk_my_orb("stats", array_merge($from_date,$till_date,array(
-			"yearly" => $yearly,
-			"monthly" => $monthly,
-			"dayly" => $dayly,
-			"weekly" => $weekly,
-			"hourly" => $hourly,
-			"minutely" => $minutely,
-			"secondly" => $secondly,
-
-
-				"oo"=>88, 
-				"id" => $id, 
-				"return_url" => urlencode($return_url)
-			)));		
-		}
-
 		if ($id)
 		{
 
@@ -380,42 +391,20 @@ if(!$dir[0])$dir[0]=array();
 				"comment" => $comment,
 				"metadata" => array(
 					"lingiroot" => $lingiroot,
-					"path" => $path,
-					"test"=>$test,
-					"current_level"=>$current_level,
-
+					"YAH" => $YAH,
 					"dir" => $dir,
 					"link"=> $link,
 
-					"jrk_columns" => $jrk_columns,
-					"level_template" => $level_template,
-				"sortby_dirs" => $sortby_dirs,
-				"sortby_links" => $sortby_links,
-					"kustuta" => $kustuta,
-					"stiil"=>$stiil,
 					"is_formentry" => $is_formentry,
 					"forms" => $forms,
 					"felement" => $felement,
 					"dir_is_form_result" => $dir_is_form_result,
 					"vordle" => $vordle,
 					"form_output_is" => $form_output_is,
-
-					"jrk_columns_default" => $jrk_columns_default,
-					"default_tulpi" => (int)$default_tulpi?(int)$default_tulpi:1,
-
-
-					"klikitav" => $klikitav,
-
-					"tas" => $tas,
 					"add_level" => $add_level,
 
 					"active_dirs" => $active_dirs,
 					"active_links" => $active_links,
-
-					"newwindow" => $newwindow,
-//					"default_template" => $default_template,
-//					"default_sortby_dirs" => $default_sortby_dirs,
-//					"default_sortby_links" => $default_sortby_links,
 				)
 			));
 		}
@@ -468,8 +457,8 @@ if(!$dir[0])$dir[0]=array();
 		$cd = $cd?$cd:$ob["meta"]["lingiroot"];
 		$this->add_hit($cd);
 		$ak = $cd;
-		//start YAH
 
+		//start YAH
 		if ($ob["meta"]["is_formentry"] && $ob["meta"]["dir_is_form_result"])
 		{	// kuidas ma saan yah menüü kui menüü lingid on kõik otsinguga leitud?
 		}
@@ -478,11 +467,11 @@ if(!$dir[0])$dir[0]=array();
 			while((($ak == $ob["meta"]["lingiroot"]))==false)
 			{
 				$ph = $this->get_object(array("oid" => $ak,"return" => ARR_ALL),false,false);
-				$ak = $ph["parent"];
 				//$tase++;
 				$YAH[++$tase] = array("name" => $ph["name"],
 					"link" => $this->mk_my_orb("show",array("cd" => $ak,"id" => $id))
 				);
+				$ak = $ph["parent"];
 			};
 		}
 
@@ -491,33 +480,35 @@ if(!$dir[0])$dir[0]=array();
 			"link" => $this->mk_my_orb("show",array("cd" => $ob["meta"]["lingiroot"],"id" => $id))
 		);
 
-		$templiit = $ob["meta"]["dir"][$tase]["level_template"]?$ob["meta"]["dir"][$tase]["level_template"]:$ob["meta"]["dir"][$tase][0];
-		$this->read_template("show/".$templiit);
-		$order_dirs = $ob["meta"]["dir"][$tase]["sortby_dirs"]?$ob["meta"]["dir"][$tase]["sortby_dirs"]:$ob["meta"]["dir"][$tase][0];
-		$order_links = $ob["meta"]["dir"][$tase]["sortby_links"]?$ob["meta"]["dir"][$tase]["sortby_links"]:$ob["meta"]["dir"][$tase][0];
-
-		if ($ob["meta"]["path"]) 		//if YAH then parse it
-		$nms=$this->parse_YAH($YAH,"show/".$templiit);
-
+		
+		if (!is_array($ob["meta"]["dir"][$tase]))
+			{
+			$tase=0; //käiku lähevad default taseme määrangud
+			}
+		$this_dir=$ob["meta"]["dir"][$tase];
+		$this_link=$ob["meta"]["link"][$tase];
+		
+		$templiit = $this_dir["level_template"];
+		$this->read_template("show/$templiit");
+		$order_dirs = $this_dir["sortby_dirs"];
+		$order_links = $this_dir["sortby_links"];
 
 		// kui  kasutame vormisisestust
 		if ($ob["meta"]["is_formentry"])
 		{
 			//kataloogi lingi väärtus võetakse vormisissestusest
-
-			$form = get_instance("form"); 
-			$form->load($ob["meta"]["forms"]); 
-			$form->set_element_value($ob["meta"]["felement"], urldecode($search)); 
+			$form = get_instance("form");
+			$form->load($ob["meta"]["forms"]);
+			$form->set_element_value($ob["meta"]["felement"], urldecode($search));
 			if ($ob["meta"]["dir_is_form_result"]) 
 			{
 				// leitud id järgi, kõik objektid
-
 				$arr = new aw_array($form->search());
 				foreach($arr->get() as $val)
 				{
 					$menus[$val] = $this->get_object($val);
 				}
-				//linke ei pane		
+				//linke ei pane
 			}
 			else
 			{
@@ -528,7 +519,7 @@ if(!$dir[0])$dir[0]=array();
 					"return" => ARR_ALL
 				));
 				//linkide asemel on vormi väljastus
-				$links = $form->new_do_search(array("output_id"=>$ob["meta"]["form_output_is"]));
+				$links = $form->new_do_search(array("output_id"=>2));//$ob["meta"]["form_output_is"]));
 	
 			}
 
@@ -545,146 +536,52 @@ if(!$dir[0])$dir[0]=array();
 				"return" => ARR_ALL
 			));
 		//lingid on aktiivses kataloogis olevad lingiobjektid
-			$objects = $this->list_objects(array(
-				"class" =>  CL_EXTLINK,
-				"parent" => $cd,
-				"active" => $ob["meta"]["active_links"],
-				"orderby" => $order_links,
-				"return" => ARR_ALL,
-			));
+			if($this_dir["show_links"])
+			{
+	
+				$objects = $this->list_objects(array(
+					"class" =>  CL_EXTLINK,
+					"parent" => $cd,
+					"active" => $ob["meta"]["active_links"],
+					"orderby" => $order_links,
+					"return" => ARR_ALL,
+				));
+			}
 		}
 
+		//kui menüüsid on siis parsime tulpadesse
 		if ($menus)
 		{
-		// pagan neid tulpi, mul läks kapitaalselt juhe kokku
-		// jääb nii praegult
-			if (!$ob["meta"]["dir"][$tase]["tulpi"])
-			{
-				$jrku=$ob["meta"]["dir"][$tase]["jrk_columns"];
-				$tlpi=$ob["meta"]["dir"][$tase]["tulpi"];
-			}
-			else
-			{
-				if ($ob["meta"]["dir"][$tase]["jrk_columns"])
-				{
-					$jrku=1;
-				}
-				$tlpi=$ob["meta"]["dir"][$tase]["tulpi"];
-			}
-		///////////
-			
-			foreach($menus as $key => $value) 
-			{
-				extract($value);
-				$sub_count = $this->count_objects(array(
-					"class" => CL_PSEUDO, 
-					"parent" => $oid,
-				));
-				if ($sub_count)
-				{
-					$this->vars(array("count"=>$sub_count));
-					$sub_count=$this->parse("sub_count");
-				}
-				$this->vars(array(
-					"hits" => $this->get_hit($oid),
-					"sub_count" => $sub_count?$sub_count:"",
-					"name" => $name,
-					"link" => $this->mk_my_orb(
-						"show",
-						array(
-							"cd" => $oid,
-							"id"  => $id,
-							"search" => $ob["meta"]["felement"]?urlencode($value[$ob["meta"]["vordle"]]):"",
-						)
-					)
-				));
-
-
-				if($jrku)  //see on see jagamine tulpadesse jrk järgi
-				{
-					$tulp = $value["jrk"][0]; //first character of jrk
-					if($tlpi<$tulp) $tulp = 1; //kui jrk algab suurema numbriga kui tulpade arv, siis lheb esimesse
-				} 
-				else
-				{
-					$tulp = ($total % $tlpi)+1; //siin peaks kuidagi võrdselt ära jagama
-				}
-
-				$tulp = $tulp?$tulp:1;
-				$tasand[$tulp][$value["jrk"]].= $this->parse("dir");
-				$total++;
-			}//foreach
-
-
-			ksort($tasand);				// level 1, level2 ...
-			foreach ($tasand as $key=> $val)	//parsime tulbad
-			{
-			//	ksort($val);			// sordime ühe tulba lingid?
-				$this->vars(array("dirs" => implode("",$val)));
-				$tulbad.= $this->parse("tulp");
-			}
-		}//if menus
-
-
-
-
+			$tulbad=$this->menus($menus,$this_dir,$id,$ob["meta"]["felement"]?$ob["meta"]["vordle"]:"");
+		}
 
 		//kui tahame linke
 
-
 			if ($objects)
 			{
-$level=(int)$tase;
-
 				classload("extlinks");
 				$total2=0;
 				$ll = new extlinks();
 
-				//parsime css
-				foreach($ob["meta"]["link"][$level] as $key => $val)
+				//makes css for link objects
+				$css=$this->mk_link_css($this_link);
+
+				//makes template for link objects
+				$link_tpl=$this->mk_link_obj_template($this_link);
+
+				// localparse 
+				foreach($objects as $key => $val)
 				{
-					$s = get_instance("css");
-					$style = $this->get_object($val["style"]);
-					if ($val["style"] && !$css[$val["style"]])
-					{
-						$css[$val["style"]]= "<style>\n".$s->_gen_css_style("style".$style["oid"],$style["meta"]["css"])."</style>";
-					}
-
-
-				}
-				$css=implode("",$css);
-
-					foreach($ob["meta"]["link"][$level] as $key => $val)
-					{
-						if (is_array($val) && $val["show"]){
-							$val["br"]=$val["br"]?"<br />":"";
-							$class=$val["style"]?"class=\"style".$val["style"]."\"":"";
-							if ($val["hyper"]){
-								$linktpl[(int)$val["jrk"]].=$val["text_b"]."<A $class HREF=\"{VAR:link}\" onMouseover=\"window.status='{VAR:url}'; return true\" {VAR:target}>{VAR:".$key."}</A>".$val["text_a"].$val["br"]."\n";
-							}
-							else 
-							{
-								$linktpl[(int)$val["jrk"]].=$val["text_b"]."<span $class>{VAR:".$key."}</span>".$val["text_a"].$val["br"]."\n";
-							}
-						}
-					};
-						ksort($linktpl);
-						$link_tpl=$ob["meta"]["link"][$level]["text_start"];
-						$link_tpl.=implode("",$linktpl);
-						$link_tpl.=$ob["meta"]["link"][$level]["text_end"];
-
-				foreach($objects as $o_key => $o_value)
-				{
-					extract($o_value); //link properties
+					extract($val); //link properties
 					$total2++;
-					list($url,$target,$caption) = $ll->draw_link($o_key);
+					list($url,$target,$caption) = $ll->draw_link($key);
 
-					$target=$ob["meta"]["newwindow"]?"target=_blank":"";
-					$my_arr=array(
+					$target=$this_dir["newwindow"]?"target=_blank":"";
+					$link=array(
 						"link" => $this->mk_my_orb("goto",array("id"  => $oid),""),
-						"hits" => $this->get_hit($o_key),
+						"hits" => $this->get_hit($key),
 						"url" => $url,
-//						$plain_url = $url;
+						"plain_url" => $url,
 						"caption" => $caption,
 						"comment" => $comment,
 						"target" => $target,
@@ -695,29 +592,38 @@ $level=(int)$tase;
 						"created" => $created,
 						"jrk" => $jrk,
 					);
-					$links.= $this->localparse($link_tpl,$my_arr); //parse links
+					$links.= $this->localparse($link_tpl,$link); //parse links
 				}
 			}
+
+
+		if ($ob["meta"]["YAH"]) 		//if YAH then parse it
+		{
+			$YE=$this->parse_YAH($YAH,"show/".$templiit);
+			$this->vars(array(
+				"total"=>$total,
+				"YAH"=>$YE,
+			));
+			$YEP=$this->parse("YAHBAR");
+
+		}
+
+
+
+
 
 
 
 		$this->vars(array(
 			"css" => $css,
-			"abix" => "",
-			"nms" => $nms,
+			"abix" => $tase,
+			"YAHBAR" => $YEP,
 			"total" => (int)$total,
 			"total2" => (int)$total2,
-			"lingiroot" => $ob["meta"]["lingiroot"],
-			"active_links" => $ob["meta"]["active_links"],
-			"active_dirs" => $ob["meta"]["active_dirs"],
-			"newwindow" => 	$ob["meta"]["newwindow"],
-			"default_sortby_dirs" => $ob["meta"]["default_sortby_dirs"],
-			"default_sortby_links" => $ob["meta"]["default_sortby_links"],
-			"default_template" => $ob["meta"]["default_template"],
 			"name" => $ob["name"],
 			"comment" => $ob["comment"],
 			"cd" => $cd,
-			"tulbad" => $tulbad,
+			"tulp" => $tulbad,
 //			"links" => $links?$links:"<tr><td>linke pole?</td></tr>"
 			"links" => $links
 		));
@@ -725,6 +631,132 @@ $level=(int)$tase;
 		return $this->parse();
 	}
 
+
+	////
+	// !make css for link object
+	// conf - level conf
+	//
+	function mk_link_css($conf)
+	{
+		if(!is_array($conf))
+		{
+			return false;
+		}
+		$s = get_instance("css");
+		foreach($conf as $key => $val)
+		{
+			if ($val["style"] && !$css[$val["style"]])
+			{//echo $val["style"];
+				$style = $this->get_object($val["style"]);
+				$css[$val["style"]] = $s->_gen_css_style("style".$style["oid"],$style["meta"]["css"]);
+			}
+		}
+		return $css?("<style>\n".implode("",$css)."</style>"):"";
+	}
+
+
+
+
+	////
+	// !make template for link object
+	// conf - level conf
+	//
+	function mk_link_obj_template($conf)
+	{
+		if(is_array($conf))				
+		{
+			foreach($conf as $key => $val)
+			{
+				if (is_array($val) && $val["show"]){
+					$val["br"]=$val["br"]?"<br />":"";
+					$class=$val["style"]?"class=\"style".$val["style"]."\"":"";
+
+					if ($val["hyper"]){
+						$linktpl[(int)$val["jrk"]].="<A $class HREF=\"{VAR:link}\" onMouseover=\"window.status='{VAR:url}'; return true\" {VAR:target}>{VAR:".$key."}".$val["text"]."</A>".$val["br"]."\n";
+					}
+					elseif ($val["style"])
+					{
+						$linktpl[(int)$val["jrk"]].="<span $class>{VAR:".$key."}".$val["text"]."</span>".$val["br"]."\n";
+					}
+					else
+					{
+						$linktpl[(int)$val["jrk"]].="{VAR:".$key."}".$val["text"].$val["br"]."\n";
+					}
+				}
+			};
+		}
+		@ksort($linktpl);
+		return @implode("",$linktpl);
+	}
+
+
+	////
+	// !menüü andmete tulpadesse jagamine
+	//  menus - menüü objectid
+	//  ob - tulpade confi andmed
+	//  optional:
+	//	$search - millise parameetri järgi otsime //name, oid, ...
+	function menus($menus,$conf,$id,$search="")
+		{
+		extract($conf);
+
+		$jrku=!$tulpi?$jrk_columns:($jrk_columns?1:""); //ühesõnaga, kui tulpi confis üldse kirjas pole siis paneme ühte tulpa
+			
+			foreach($menus as $key => $value) 
+			{
+				extract($value);
+				//leiame alammenüüs olevate objektidearvu // praegu leitakse alamenüüde arv, aga vaest oleks mõttekas leida (ka) linkide arv
+				$sub_count = $this->count_objects(array(
+					"class" => CL_PSEUDO, 
+					"parent" => $oid,
+				));
+				if ($sub_count)
+				{
+					$this->vars(array("count"=>$sub_count));
+					$subs=$this->parse("sub_count");
+				}
+				$this->vars(array(
+					"hits" => $this->get_hit($oid),
+					"sub_count" => $subs,
+					"name" => $name,
+					"link" => $this->mk_my_orb(
+						"show",
+						array(
+							"cd" => $oid,
+							"id"  => $id,
+							"search" => urlencode($value[$search]),
+						)
+					)
+				));
+
+				if($jrku)  //see on see jagamine tulpadesse jrk järgi
+				{
+					$tulp = $value["jrk"][0]; //first character of jrk
+					if($tulpi<$tulp) $tulp = 1; //kui jrk algab suurema numbriga kui tulpade arv, siis lheb esimesse
+				}
+				else
+				{
+					$tulp = ($total % $tulpi)+1; //siin peaks kuidagi võrdselt ära jagama
+				}
+
+				$tulp = $tulp?$tulp:1;
+				$tasand[$tulp][$value["jrk"]].= $this->parse("dir");
+				$total++;
+			}//foreach
+
+			//sordime ikka nii ära et esimene tulp on esimene
+			ksort($tasand);
+
+			foreach ($tasand as $val)	//parsime tulbad
+			{
+			//	ksort($val);			// sordime ühe tulba lingid?
+				$this->vars(array(
+					"dir" => implode("",$val)
+				));
+				$tulbad.= $this->parse("tulp");
+			}
+			return $tulbad;
+		}//if menus
 
 
 
@@ -738,7 +770,7 @@ $level=(int)$tase;
 					"name" => $val["name"],
 					"link" => $val["link"],
 				));
-				$yah_bar = $this->parse("tee").$yah_bar;
+				$yah_bar = $this->parse("YAH").$yah_bar;
 			}
 		return $yah_bar;
 	}	
@@ -816,102 +848,6 @@ function write_stat($arr)
 		$this->db_query($in);
 }
 
-/////////////////////////////////
-
-
-	function stats($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		$this->read_template("stats.tpl");
-
-function add_cero($dat,$len=2,$cero="0")
-{
-return $dat=strlen($dat)<$len?$cero.(int)$dat:$dat;
-}
-
-
-
-if (($from) && ($_till))
-{
-$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
-}
-elseif($from)
-{
-$q = "select * from lingikogu_stat where tm>='$t1'";
-}
-elseif($_till)
-{
-$q = "select * from lingikogu_stat where tm<='$t1'";
-}
-else
-$q = "select * from lingikogu_stat";
-
-/*
-$q = "select * from lingikogu_stat where tm>='$tm' limit 50";
-$q = "select * from lingikogu_stat where between '$t1' and '$t2'";
-*/
-
-
-$stat_out = $this->show_stats($id,$q);
-
-		load_vcl("date_edit");
-
-
-echo date_edit::get_timestamp($from_date);
-
-		$from_date = new date_edit("from_date",$tt);
-
-		$from_date->configure(array(
-			"day" => "",
-			"month" => "",
-			"year" => "",
-			"hour" => "",
-			"minute" => "",
-			"second" => "",
-		));
-
-
-		$this->vars(array(
-		"caunt"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat","caunt"),
-		"caunt_dirs"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=1","caunt"),
-		"caunt_links"=>$this->db_fetch_field("select count(id) as caunt from lingikogu_stat where action=2","caunt"),
-			"stat_out"=>$stat_out,
-			"from_date" => $from_date->gen_edit_form("from_date",0),
-			"toolbar" => $this->lingikogu_toolbar(array("id"=>$id)),
-			"abix" => $abix,
-			"name" => $ob["name"],
-			"link" => $this->mk_my_orb("stats", array("id" => $id, "return_url" => urlencode($return_url))),
-			"reforb" => $this->mk_reforb("submit", array("statconf"=>1, "id" => $id, "return_url" => urlencode($return_url))),
-		));
-		return $this->parse();
-}
-
-	
-	
-
-	
-	function show_stats($id,$q) //id,query,
-	{
-	
-	$this->db_query($q);
-
-			load_vcl("table");
-			$t = new aw_table(array(
-				"prefix" => "lingikogu_stats", 
-			));
-//echo $this->cfg["site_basedir"];
-//			$t->parse_xml_def($this->cfg["site_basedir"]."/xml/linklist/show_stats.xml"); 
-			$t->parse_xml_def("/www/automatweb_dev/xml/linklist/show_stats.xml"); 
-			while ($row= $this->db_next()) 
-			{ 
-				$t->define_data($row); 
-			} 
-			$t->sort_by(); 
-			return $t->draw();
-}
-
 
 }
-
 ?>
