@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.54 2002/10/21 10:10:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.55 2002/11/06 11:27:19 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -127,10 +127,9 @@ if (!defined("DEFS"))
 	// !Tagastab mingile klassile vastava ikooni
 	function get_icon_url($clid,$name)
 	{
-		classload("config");
 		if (!is_array(aw_global_get("d_icon_cache")))
 		{
-			$c = new db_config;
+			$c = get_instance("config");
 			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
 		}
 		$d_icon_cache = aw_global_get("d_icon_cache");
@@ -140,7 +139,7 @@ if (!defined("DEFS"))
 		{
 			if (!is_array(aw_global_get("d_fileicon_cache")))
 			{
-				$c = new db_config;
+				$c = get_instance("config");
 				aw_global_set("d_fileicon_cache",unserialize($c->get_simple_config("file_icons")));
 			}
 			$d_fileicon_cache = aw_global_get("d_fileicon_cache");
@@ -155,7 +154,7 @@ if (!defined("DEFS"))
 		{
 			if (!is_array(aw_global_get("d_othericon_cache")))
 			{
-				$c = new db_config;
+				$c = get_instance("config");
 				aw_global_set("d_othericon_cache",unserialize($c->get_simple_config("other_icons")));
 			}
 			$d_othericon_cache = aw_global_get("d_othericon_cache");
@@ -169,6 +168,7 @@ if (!defined("DEFS"))
 			}
 		}
 		$retval = $i == "" ? "/automatweb/images/icon_aw.gif" : $i;
+		classload("icons");
 		return icons::check_url($retval);
 	}
 
