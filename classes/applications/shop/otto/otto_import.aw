@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.5 2004/10/15 07:44:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.6 2004/10/15 07:44:31 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -170,9 +170,9 @@ class otto_import extends class_base
 			$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
 		}
 
-		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"))
+		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/files/status.txt"))
 		{
-			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"));
+			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 		else
@@ -352,7 +352,7 @@ class otto_import extends class_base
 					}
 				}
 			}
-			$stat = fopen($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt","w");
+			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
 		
 			fwrite($stat, $pcode);
 			fclose($stat);
@@ -407,7 +407,7 @@ class otto_import extends class_base
 		set_time_limit(0);
 		if ($o->prop("restart_pict_i"))
 		{
-			@unlink($this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt");
+			@unlink($this->cfg["site_basedir"]."/files/status.txt");
 		}
 		if ($o->prop("do_pict_i"))
 		{
@@ -424,14 +424,14 @@ class otto_import extends class_base
 
 		if (file_exists($imp_stat_file))
 		{
-			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/../htdocs/vv_pimg/status.txt"));
+			$skip_to = $this->get_file(array("file" => $this->cfg["site_basedir"]."/files/status.txt"));
 			echo "restarting from product $skip_to <br>";
 		}
 
 		$this->db_query("DELETE FROM otto_imp_t_prod");
 		$this->db_query("DELETE FROM otto_imp_t_codes");
 		$this->db_query("DELETE FROM otto_imp_t_prices");
-		$this->db_query("DELETE FROM otto_imp_t_p2p");
+		$this->db_query("DELETE FROM otto_imp_t_p2p WHERE lang_id = ".aw_global_get("lang_id"));
 
 		echo "from url ".$o->prop("folder_url")." read: <br>";
 
@@ -456,8 +456,8 @@ class otto_import extends class_base
 			foreach(explode(",",$row[1]) as $pg)
 			{
 				$this->db_query("
-					INSERT INTO otto_imp_t_p2p(pg,fld)
-					VALUES('$pg','$row[2]')
+					INSERT INTO otto_imp_t_p2p(pg,fld, lang_id)
+					VALUES('$pg','$row[2]','".aw_global_get("lang_id")."')
 				");
 				echo ".\n";
 				flush();
@@ -506,6 +506,16 @@ class otto_import extends class_base
 					$first = false;
 					continue;
 				}
+				if (count($row) < 2)
+				{
+					continue;
+				}
+
+				if ($row[2] == "" && $row[1] == "" && $row[3] == "")
+				{
+					continue;
+				}
+
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
 				$row[2] = $this->conv($row[2]);
@@ -521,6 +531,12 @@ class otto_import extends class_base
 				}
 				$num++;
 			}
+
+			if ($tmpf)
+			{
+				unlink($tmpf);
+			}
+
 			echo ".. got $num titles <br>";
 			$log[] = "lugesin failist $fld_url $num toodet";
 		}
@@ -565,10 +581,20 @@ class otto_import extends class_base
 					$first = false;
 					continue;
 				}
+				if (count($row) < 2)
+				{
+					continue;
+				}
+
+				if ($row[2] == "" && $row[1] == "" && $row[3] == "")
+				{
+					continue;
+				}
+
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
 				$full_code = str_replace(".","", $row[4]);
-				$full_code = str_replace(" ","", $row[4]);
+				$full_code = str_replace(" ","", $full_code);
 
 				$row[4] = substr(str_replace(".","", str_replace(" ","", $row[4])), 0, 6);
 				$color = $row[3];
@@ -587,11 +613,17 @@ class otto_import extends class_base
 					$log[] = "VIGA real $num failis $fld_url kood: $row[4]";
 				}
 			}
+
+			if ($tmpf)
+			{
+				unlink($tmpf);
+			}
+
 			echo ".. got $num codes <br>\n";
 			$log[] = "lugesin failist $fld_url $num koodi";
 			flush();
 		}
-//die();
+
 		foreach(explode("\n", $o->prop("fnames")) as $fname)
 		{
 			if ($fname == "")
@@ -632,6 +664,16 @@ class otto_import extends class_base
 					$first = false;
 					continue;
 				}
+				if (count($row) < 2)
+				{
+					continue;
+				}
+
+				if ($row[2] == "" && $row[1] == "" && $row[3] == "")
+				{
+					continue;
+				}
+
 				$orow = $row;
 				if (count($row) == 5)
 				{
@@ -663,6 +705,11 @@ class otto_import extends class_base
 					}
 				}
 				$num++;
+			}
+
+			if ($tmpf)
+			{
+				unlink($tmpf);
 			}
 			echo ".. got $num prices <br>\n";
 			$log[] = "lugesin failist $fld_url $num hinda";
@@ -784,7 +831,7 @@ class otto_import extends class_base
 			}
 
 			// try find correct folder
-			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]'", "fld");
+			$try_fld = $this->db_fetch_field("SELECT fld FROM otto_imp_t_p2p WHERE pg = '$row[pg]' and lang_id = ".aw_global_get("lang_id"), "fld");
 			if ($try_fld)
 			{
 				echo "found parent for prod as $try_fld <br>\n";
@@ -1075,6 +1122,8 @@ class otto_import extends class_base
 		{
 			unlink($file);
 		}
+
+		die("all done! <br>");
 	}
 
 	function conv($str)
