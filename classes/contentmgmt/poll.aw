@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.20 2004/08/11 10:29:41 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.21 2004/09/04 17:40:08 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -639,8 +639,9 @@ class poll extends class_base
 					{
 						$tval = $val;
 						$this->quote($tval);
-						$this->db_query("INSERT INTO poll_answers(answer,poll_id) values('".$tval."','".$arr["obj_inst"]->id()."')");
-						$id = $this->db_last_insert_id();
+						// manually find index
+						$id = $this->db_fetch_field("SELECT MAX(id) as id FROM poll_answers", "id")+1;
+						$this->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($id,'".$tval."','".$arr["obj_inst"]->id()."')");
 					}
 					$tmpa[$id] = $val;
 				}
