@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="banner_site" folder="banner" extends="banner">
+	<class name="banner_site" folder="applications/banner" extends="banner">
 		<action name="new" >
 			<function name="add">
 				<arguments>
