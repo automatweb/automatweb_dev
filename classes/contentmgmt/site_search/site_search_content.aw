@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.38 2005/02/21 08:53:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.39 2005/03/03 12:38:58 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -258,19 +258,22 @@ class site_search_content extends class_base
 
 			case "reledit":
 				$id = $prop["value"]["id"];
-				$rec = get_instance(CL_RECURRENCE);
-				$stamp = $rec->get_next_event(array(
-					"id" => $id
-				));
-				// set it to scheduler
-				$sc = get_instance("scheduler");
-				$sc->add(array(
-					"event" => $this->mk_my_orb("generate_static", array(
-						"id" => $arr["obj_inst"]->id(),
-						"stamp" => $stamp
-					)),
-					"time" => $stamp,
-				));
+				if (is_oid($id) && $this->can("view", $id))
+				{
+					$rec = get_instance(CL_RECURRENCE);
+					$stamp = $rec->get_next_event(array(
+						"id" => $id
+					));
+					// set it to scheduler
+					$sc = get_instance("scheduler");
+					$sc->add(array(
+						"event" => $this->mk_my_orb("generate_static", array(
+							"id" => $arr["obj_inst"]->id(),
+							"stamp" => $stamp
+						)),
+						"time" => $stamp,
+					));
+				}
 				break;
 		}
 		return $retval;
