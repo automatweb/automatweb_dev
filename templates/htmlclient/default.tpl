@@ -81,9 +81,13 @@
 
 {VAR:reforb}
 <script type="text/javascript">
-function submit_changeform()
+function submit_changeform(action)
 {
 	{VAR:submit_handler}
+	if (action)
+	{
+		document.changeform.action.value = action;
+	};
 	document.changeform.submit();
 }
 </script>
