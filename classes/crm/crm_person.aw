@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.24 2004/04/22 15:36:46 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.25 2004/05/07 11:22:06 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -312,6 +312,10 @@ class crm_person extends class_base
                         case "org_tasks":
                                 $this->do_org_actions(&$arr);
                                 break;
+
+			case "picture":
+				//$data["rel_id"] = "52960";
+				break;
 		}
 		return $retval;
 
@@ -798,6 +802,7 @@ class crm_person extends class_base
 			"phone" => $pdat["phone"],
 			"email" => $pdat["email"],
 		));
+		// show image if there is a placeholder for it in the current template
 		if ($this->template_has_var("imgurl"))
 		{
 			$conns = $to->connections_from(array(
@@ -813,17 +818,34 @@ class crm_person extends class_base
 				"imgurl" => html::img(array("url" => $imgurl)),
 			));
 		};
+
+		$at_once = 2;
+
+		// show document list, if there is a placeholder for it in the current template
+		// XXX: I need a navigator
 		if ($this->is_template("DOCLIST"))
 		{
+			$dt = aw_global_get("date");
+			if ((int)$dt == $dt)
+			{
+				$date = $dt;
+			};
 			$at = get_instance(CL_AUTHOR);
-			$doc_ids = $at->get_author_doc_ids(array(
+			list($nav,$doc_ids) = $at->get_docs_by_author(array(
 				"author" => $to->prop("name"),
+				"limit" => $at_once,
+				"date" => $date,
 			));
+
+			// okey, I think I'll do it with dates
+
 			$docs = "";
+			// XXX: I need comment counts for each document id
+			// how do I accomplish that?
 			if (sizeof($doc_ids) > 0)
 			{
 				$doc_list = new object_list(array(
-					"oid" => $doc_ids,
+					"oid" => array_keys($doc_ids),
 				));
 
 				for($o = $doc_list->begin(); !$doc_list->end(); $o = $doc_list->next())
@@ -833,6 +855,7 @@ class crm_person extends class_base
 							"url" => aw_ini_get("baseurl") . "/" . $o->id(),
 							"caption" => $o->prop("title"),
 						)),
+						"commcount" => $doc_ids[$o->id()]["commcount"],
 					));
 					$docs .= $this->parse("ITEM");
 				};
@@ -843,6 +866,25 @@ class crm_person extends class_base
 			$this->vars(array(
 				"DOCLIST" => $this->parse("DOCLIST"),
 			));
+			$nv = "";
+			if ($nav["prev"])
+			{
+				$this->vars(array(
+					"prevurl" => aw_url_change_var("date",$nav["prev"]),
+				));
+				$this->vars(array(
+					"prevlink" => $this->parse("prevlink"),
+				));
+			};
+			if ($nav["next"])
+			{
+				$this->vars(array(
+					"nexturl" => aw_url_change_var("date",$nav["next"]),
+				));
+				$this->vars(array(
+					"nextlink" => $this->parse("nextlink"),
+				));
+			};
 		};
 		return $this->parse();
 	}
