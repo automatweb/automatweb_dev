@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.43 2005/03/07 16:58:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.44 2005/03/10 11:58:54 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1100,7 +1100,7 @@ class event_search extends class_base
 					{
 						continue;
 					}
-					if($search["oid"] && empty($eval[$sname]))
+					if($search["oid"] && (empty($eval[$sname]) || $eval[$sname] == -1))
 					{
 						continue;
 					}
