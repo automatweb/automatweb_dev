@@ -1,5 +1,5 @@
 <?php
-
+ob_implicit_flush(true);
 
 function file_get_contents($name)
 {
@@ -58,19 +58,7 @@ if (file_exists("xml/orb/$class.xml"))
 	exit(1);
 }
 
-if (file_exists("templates/$tpnf/change.tpl"))
-{
-	echo "\nERROR: file templates/$tpnf/change.tpl already exists!\n\n";
-	exit(1);
-}
-
-if (file_exists("templates/$tpnf/show.tpl"))
-{
-	echo "\nERROR: file templates/$tpnf/show.tpl already exists!\n\n";
-	exit(1);
-}
-
-echo "\nmaking class $clnf...\n";
+echo "\nmaking class $clnf...\n\n";
 
 if ($class_folder != "")
 {
@@ -78,35 +66,21 @@ if ($class_folder != "")
 	if (!is_dir("classes/$class_folder"))
 	{
 		mkdir("classes/$class_folder",0775);
-		echo "\tcreated classes/$class_folder...\n";
+		echo "created classes/$class_folder...\n";
 	}
 }
 $fc = str_replace("__classdef", $class_def, file_get_contents("install/class_template/classes/base.aw"));
 $fc = str_replace("__tplfolder", $tpnf, $fc);
 file_put_contents("classes/$clnf",str_replace("__classname", $class, $fc));
-echo "\tcreated classes/$clnf...\n";
+echo "created classes/$clnf...\n";
 
 $folder = $class_folder != "" ? "folder=\"".$class_folder."\"" : "";
 $fc = str_replace("__classname", $class, file_get_contents("install/class_template/xml/orb/base.xml"));
 file_put_contents("xml/orb/$class.xml",str_replace("__classfolder", $folder, $fc));
-echo "\tcreated xml/orb/$class.xml...\n";
+echo "created xml/orb/$class.xml...\n";
 
-$sp = explode("/", $tpnf);
-$dir = "templates";
-foreach($sp as $v)
-{
-	$dir.="/".$v;
-	@mkdir($dir, 0775);
-	echo "\tcreated directory $dir...\n";
-}
+echo "making properties...\n\n";
+passthru('make properties');
 
-$fc = str_replace("__classdef", $class_def, file_get_contents("install/class_template/templates/base/change.tpl"));
-file_put_contents("templates/$tpnf/change.tpl",str_replace("__classname", $class, $fc));
-echo "\tcreated templates/$tpnf/change.tpl...\n";
-
-$fc = str_replace("__classdef", $class_def, file_get_contents("install/class_template/templates/base/show.tpl"));
-file_put_contents("templates/$tpnf/show.tpl",str_replace("__classname", $class, $fc));
-echo "\tcreated templates/$tpnf/show.tpl...\n";
-
-echo "all done! \n\n";
+echo "\n\nall done! \n\n";
 ?>
