@@ -1,9 +1,9 @@
 <?php
 $aw_dir = "{VAR:aw_dir}";
 $site_dir = __FILE__;
-$lsl = strrpos($site_dir, "/");
+$lsl = strrpos($site_dir, DIRECTORY_SEPARATOR);
 $site_dir = substr($site_dir, 0, $lsl);
-$lsl = strrpos($site_dir, "/");
+$lsl = strrpos($site_dir, DIRECTORY_SEPARATOR);
 $site_dir = substr($site_dir, 0, $lsl);
 
 include($aw_dir."/init.aw");
