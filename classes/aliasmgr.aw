@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.52 2002/10/08 14:24:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.53 2002/10/16 13:42:50 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -28,7 +28,7 @@ class aliasmgr extends aw_template
 		$args["clid"] = "aliasmgr";
 		$form = $search->show($args);
 
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 		
 		// generate a list of class => name pairs
 		$aliases = array();
@@ -54,6 +54,14 @@ class aliasmgr extends aw_template
 			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
+		
+		$toolbar->add_button(array(
+			"name" => "search",
+			"tooltip" => "Otsi",
+			"url" => "javascript:document.searchform.submit();",
+			"imgover" => "search_over.gif",
+			"img" => "search.gif",
+		));
 
 		$toolbar->add_separator();
 		
@@ -64,14 +72,17 @@ class aliasmgr extends aw_template
 			"imgover" => "refresh_over.gif",
 			"img" => "refresh.gif",
 		));
-		
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "Tee valitud objektidele aliased",
-			"url" => "javascript:aw_save()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
+
+		if ($search->get_opt("rescounter") > 0)
+		{
+			$toolbar->add_button(array(
+				"name" => "save",
+				"tooltip" => "Tee valitud objektidele aliased",
+				"url" => "javascript:aw_save()",
+				"imgover" => "save_over.gif",
+				"img" => "save.gif",
+			));
+		};
 		$id = $args["docid"];
 		$obj = $this->get_object($id);
 
@@ -91,6 +102,7 @@ class aliasmgr extends aw_template
 		$fields = array();
 		$this->make_alias_classarr();
 		asort($this->classarr);
+		$fields["special"] = "n/a";
 		$fields["class_id"] = array(
 			"type" => "select",
 			"caption" => "Klass",
@@ -102,7 +114,6 @@ class aliasmgr extends aw_template
 	function search_callback_modify_data($row,$args)
 	{
 		$row["change"] = "<input type='checkbox' name='check' value='$row[oid]'>";
-		//$row["name"] = "<a href='$url'>$row[name]</a>";
 	}
 
 	////
