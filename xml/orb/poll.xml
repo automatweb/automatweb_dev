@@ -77,6 +77,14 @@
 			</function>
 		</action>
 
+		<action name="clicks">
+			<function name="clicks">
+				<arguments>
+					<required name="id" type="int"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
