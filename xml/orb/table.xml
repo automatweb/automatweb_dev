@@ -1,0 +1,272 @@
+<?xml version='1.0'?>
+<orb>
+
+	<class name="table">
+	
+		<action name="change">
+			<function name="gen_admin_html">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="admin">
+			<function name="gen_admin2_html">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_col">
+			<function name="add_col">
+				<arguments>
+					<required name="id"/>
+					<required name="after"/>
+					<required name="num"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="del_col">
+			<function name="del_col">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="nadd_col">
+			<function name="nadd_col">
+				<arguments>
+					<required name="id"/>
+					<required name="after"/>
+					<required name="num"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="ndel_col">
+			<function name="ndel_col">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_row">
+			<function name="add_row">
+				<arguments>
+					<required name="id"/>
+					<required name="after"/>
+					<required name="num"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="del_row">
+			<function name="del_row">
+				<arguments>
+					<required name="id"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="nadd_row">
+			<function name="nadd_row">
+				<arguments>
+					<required name="id"/>
+					<required name="after"/>
+					<required name="num"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="ndel_row">
+			<function name="ndel_row">
+				<arguments>
+					<required name="id"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit">
+			<function name="submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_styles">
+			<function name="submit_styles">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_admin">
+			<function name="submit_admin">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_pickstyle">
+			<function name="submit_pickstyle">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="styles">
+			<function name="gen_styles">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="view">
+			<function name="show">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="pick_style">
+			<function name="pick_style">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="exp_right">
+			<function name="exp_right">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+					<required name="cnt"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="exp_left">
+			<function name="exp_left">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+					<required name="cnt"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="exp_up">
+			<function name="exp_up">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+					<required name="cnt"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="exp_down">
+			<function name="exp_down">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+					<required name="cnt"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="split_ver">
+			<function name="split_ver">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="split_hor">
+			<function name="split_hor">
+				<arguments>
+					<required name="id"/>
+					<required name="col"/>
+					<required name="row"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="gen_import">
+			<function name="gen_import">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="import">
+			<function name="import">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="new">
+			<function name="add">
+				<arguments>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="add_doc">
+			<function name="add_doc">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_doc">
+			<function name="submit_doc">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<required name="id"/>
+					<required name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		
+		<action name="submit_add">
+			<function name="submit_add">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+		
+	</class>
+</orb>
