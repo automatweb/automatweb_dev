@@ -3,7 +3,7 @@
 /** aw orb def generator
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_orb_gen.aw,v 1.1 2004/02/27 11:16:27 kristo Exp $
+	@cvs $Id: docgen_orb_gen.aw,v 1.2 2004/10/28 09:41:01 kristo Exp $
 
 	@comment 
 	generates orb defs, based on information from docgen_analyzer
@@ -116,6 +116,11 @@ class docgen_orb_gen extends class_base
 
 		foreach($files as $file)
 		{
+			$ignp = $this->cfg["basedir"]."/classes/core/locale";
+			if (substr($file, 0, strlen($ignp)) == $ignp)
+			{
+				continue;
+			}
 			// check if file is modified
 			$clmod = @filemtime($file);
 			$xmlmod = @filemtime($this->cfg["basedir"]."/xml/orb/".basename($file, ".aw").".xml");
