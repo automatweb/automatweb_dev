@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.16 2002/06/10 15:50:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/email.aw,v 2.17 2002/08/08 17:02:09 duke Exp $
 // mailinglist saadetavate mailide klass
 class email extends aw_template
 {
@@ -378,6 +378,19 @@ class email extends aw_template
 			};
 		};
 		return $retval;
+	}
+
+	function get_member($args = array())
+	{
+		extract($args);
+		if (not($mail))
+		{
+			return false;
+		};
+		$q = "SELECT * FROM ml_users LEFT JOIN objects ON (ml_users.id = objects.oid) 
+			WHERE ml_users.mail = '$mail' AND status = 2";
+		$this->db_query($q);
+		return $this->db_next();
 	}
 
 		
