@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.70 2001/10/02 10:05:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.71 2001/10/12 15:33:16 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -286,6 +286,10 @@ class form extends form_base
 		classload("style");
 		$style = new style;
 		$stylesel = $style->get_select(0,ST_CELL,true);
+		classload("css");
+		$css = new css;
+		$tmp = $css->get_select();
+		$stylesel = $stylesel + $tmp;
 
 		for ($c =0; $c < $this->arr["cols"]; $c++)
 		{
@@ -362,6 +366,11 @@ class form extends form_base
 
 		extract($arr);
 
+		if ($setstyle)
+		{
+			$style_obj = $this->get_object($setstyle);
+		}
+
 		$this->load($id);
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
@@ -369,7 +378,7 @@ class form extends form_base
 			{
 				if ($chk[$row][$col] == 1)
 				{
-					$this->arr["contents"][$row][$col]->set_style($setstyle,&$this);
+					$this->arr["contents"][$row][$col]->set_style($setstyle,$style_obj["class_id"]);
 					if ($addel)
 					{
 						// we must add an element of the specified type to this cell
@@ -747,6 +756,19 @@ class form extends form_base
 		return $ret;
 	}
 
+	function get_all_els()
+	{
+		$ret = array();
+		for ($row = 0; $row < $this->arr["rows"]; $row++)
+		{
+			for ($col = 0; $col < $this->arr["cols"]; $col++)
+			{
+				$this->arr["contents"][$row][$col]->get_els(&$ret);
+			}
+		}
+		return $ret;
+	}
+
 	////
 	// !Generates the form used in modifying the table settings
 	function gen_settings($arr)
@@ -835,6 +857,11 @@ class form extends form_base
 		};
 		global $baseurl;
 
+		if (!($this->can("view",$id) || $GLOBALS["SITE_ID"] == 11))
+		{
+			$this->acl_error("view",$id);
+		}
+
 		if ($form_action == "")
 		{
 			if (stristr($GLOBALS["REQUEST_URI"],"/automatweb")!=false)
@@ -855,6 +882,10 @@ class form extends form_base
 		}
 		if (isset($entry_id) && $entry_id)
 		{
+			if (!($this->can("edit",$entry_id) || $this->can("view",$entry_id)  || $GLOBALS["SITE_ID"] == 11))
+			{
+				$this->acl_error("edit",$entry_id);
+			}
 			$this->load_entry($entry_id,$silent_errors);
 		}
 		else
@@ -938,6 +969,19 @@ class form extends form_base
 
 		$check = $this->parse("stat_check_sub");
 
+		// siia array sisse pannaxe css stiilide nimed ja id'd form_cell::gen_user_html sees, mis vaja genereerida
+		if (is_array($this->styles))
+		{
+			$css_file = "";
+			classload("css");
+			$css = new css;
+			foreach($this->styles as $stylid => $stylname)
+			{
+				$css_info = $this->get_obj_meta($stylid);
+				$css_file .= $this->_gen_css_style($stylname,$css_info["meta"]["css"]);
+			}
+		}
+
 		$this->vars(array(
 			"LINE"							=> $c,
 			"EXTRAIDS"					=> $ei,
@@ -983,6 +1027,10 @@ class form extends form_base
 			));
 		}
 		$st = $this->parse();				
+		if ($css_file != "")
+		{
+			$st = "<style type=\"text/css\">".$css_file."</style>\n".$st;
+		}
 		$awt->stop("form::gen_preview");
 		return $st;
 	}
@@ -1041,7 +1089,7 @@ class form extends form_base
 			$this->load($id);
 		}
 
-		if ($entry_id)	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, siis ignoorime seda
+		if ($entry_id && !$this->arr["save_table"])	// tshekime et kas see entry on ikka loaditud formi jaox ja kui pole, siis ignoorime seda
 		{
 			$fid = $this->db_fetch_field("SELECT form_id FROM form_entries WHERE id = $entry_id","form_id");
 			if ($fid != $id)
@@ -1179,30 +1227,38 @@ class form extends form_base
 		}
 		else
 		{
-			// muudame olemasolevat entryt.
-			$this->db_query("UPDATE form_entries SET form_entries.tm = ".time().", contents = '$en' WHERE id = $entry_id");
-			// create sql 
-			reset($this->entry);
-			$ids = "id = $entry_id";
-			$first = true;
-
-			while (list($k, $v) = each($this->entry))
+			if ($this->arr["save_table"])
 			{
-				$el = $this->get_element_by_id($k);
-				if ($el)
-				{
-					$ev = $el->get_value();
-					if (is_array($v))
-					{
-						$v = serialize($v);
-					}
-					$ids.=",el_$k = '$v',ev_$k = '$ev'";
-				}
+				// here goes the clever bit
+				;
 			}
+			else
+			{
+				// muudame olemasolevat entryt.
+				$this->db_query("UPDATE form_entries SET form_entries.tm = ".time().", contents = '$en' WHERE id = $entry_id");
+				// create sql 
+				reset($this->entry);
+				$ids = "id = $entry_id";
+				$first = true;
 
-			$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
-			$this->db_query($sql);
-			$this->_log("form","Muutis formi $this->name sisestust $entry_id");
+				while (list($k, $v) = each($this->entry))
+				{
+					$el = $this->get_element_by_id($k);
+					if ($el)
+					{
+						$ev = $el->get_value();
+						if (is_array($v))
+						{
+							$v = serialize($v);
+						}
+						$ids.=",el_$k = '$v',ev_$k = '$ev'";
+					}
+				}
+
+				$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
+				$this->db_query($sql);
+				$this->_log("form","Muutis formi $this->name sisestust $entry_id");
+			}
 		}
 		// paneme kirja, et kasutaja t2itis selle formi et siis kasutajax regimisel saame seda kontrollida.
 		$this->entry_id = $entry_id;
@@ -1317,50 +1373,77 @@ class form extends form_base
 
 		$id = $this->id;
 
-		$q = "SELECT form_".$id."_entries.*,objects.created as created FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE id = $entry_id";
-		$this->db_query($q);
-
-		if (!($row = $this->db_next()))
+		if ($this->arr["save_table"] == 1)
 		{
-			if ($silent_errors)
+			// whee. loeme entry_id j2rgi valitud tabelist infi
+			if (is_array($this->arr["save_tables"]))
 			{
-				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),false,true);
-				$this->entry_id = 0;
-			}
-			else
-			{
-				$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),true);
-			}
-		};
-		$this->entry_created = $row["created"];
-		$row["form_".$id."_entry"] = $row["id"];
-
-		// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
-		$this->temp_ids = array();
-		$this->req_load_relations($id,&$row);
-
-		if ($row["chain_id"])
-		{
-			// kuna see entry on osa chaini entryst, siis tuleb laadida ka teised chaini entryd
-			$char = $this->get_chain_entry($row["chain_id"]);
-			foreach($char as $cfid => $ceid)
-			{
-				if ($ceid != $entry_id)
+				$row["form_".$id."_entry"] = $entry_id;
+				foreach($this->arr["save_tables"] as $tbl => $tblcol)
 				{
-					$this->db_query("SELECT * FROM form_".$cfid."_entries WHERE id = $ceid");
-					$crow = $this->db_next();
-					if (is_array($crow))
+					$q = "SELECT ".$tbl.".* FROM $tbl WHERE ".$tbl.".".$tblcol." = '$entry_id' ";
+					$this->db_query($q);
+					$row = $this->db_next();
+					// now we must map the table columns to elements in the form. whee. shite.
+					$els = $this->get_all_els();
+					foreach($els as $el)
 					{
-						$crow["form_".$cfid."_entry"] = $crow["id"];
-						$row= $row+$crow;
+						if ($el->arr["table"] == $tbl && $el->arr["table_col"] != "")
+						{
+							$row["el_".$el->get_id()] = $row[$el->arr["table_col"]];
+							$row["ev_".$el->get_id()] = $row[$el->arr["table_col"]];
+						}
 					}
 				}
 			}
-			$this->chain_entry_id = $row["chain_id"];
 		}
 		else
 		{
-			$this->chain_entry_id = 0;
+			$q = "SELECT form_".$id."_entries.*,objects.created as created FROM form_".$id."_entries LEFT JOIN objects ON objects.oid = form_".$id."_entries.id WHERE id = $entry_id";
+			$this->db_query($q);
+
+			if (!($row = $this->db_next()))
+			{
+				if ($silent_errors)
+				{
+					$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),false,true);
+					$this->entry_id = 0;
+				}
+				else
+				{
+					$this->raise_error(sprintf("No such entry %d for form %d",$entry_id,$id),true);
+				}
+			};
+			$this->entry_created = $row["created"];
+			$row["form_".$id."_entry"] = $row["id"];
+
+			// siin tuleb nyyd relatsioonitud formid ka sisse lugeda ja seda rekursiivselt. ugh. 
+			$this->temp_ids = array();
+			$this->req_load_relations($id,&$row);
+
+			if ($row["chain_id"])
+			{
+				// kuna see entry on osa chaini entryst, siis tuleb laadida ka teised chaini entryd
+				$char = $this->get_chain_entry($row["chain_id"]);
+				foreach($char as $cfid => $ceid)
+				{
+					if ($ceid != $entry_id)
+					{
+						$this->db_query("SELECT * FROM form_".$cfid."_entries WHERE id = $ceid");
+						$crow = $this->db_next();
+						if (is_array($crow))
+						{
+							$crow["form_".$cfid."_entry"] = $crow["id"];
+							$row= $row+$crow;
+						}
+					}
+				}
+				$this->chain_entry_id = $row["chain_id"];
+			}
+			else
+			{
+				$this->chain_entry_id = 0;
+			}
 		}
 
 		$this->load_entry_from_data($row,$entry_id,$eids);
@@ -1426,6 +1509,10 @@ class form extends form_base
 		
 		if (!$no_load_entry)
 		{
+			if (!($this->can("view",$id)  || $GLOBALS["SITE_ID"] == 11))
+			{
+				$this->acl_error("view",$id);
+			}
 			$this->load($id);
 		}
 
@@ -1446,11 +1533,19 @@ class form extends form_base
 
 		if (!$no_load_op)
 		{
+			if (!($this->can("view",$op_id)  || $GLOBALS["SITE_ID"] == 11))
+			{
+				$this->acl_error("view",$op_id);
+			}
 			$this->load_output($op_id);
 		}
 		
 		if (!$no_load_entry)
 		{
+			if (!($this->can("view",$entry_id)  || $GLOBALS["SITE_ID"] == 11))
+			{
+				$this->acl_error("view",$entry_id);
+			}
 			$this->load_entry($entry_id);
 			if (is_array($misc))
 			{
@@ -2081,6 +2176,14 @@ class form extends form_base
 					{
 						// blah
 					}
+					else 
+					if ($el->get_type() == "listbox")
+					{
+						$value = $el->get_value();
+						$elname = sprintf("ev_%s",$el->arr["linked_element"]);
+						$qstr = " $elname LIKE '%$value%' ";
+						$query.= "AND ($qstr)";
+					}
 					else if ($el->get_value() != "")	
 					{
 						$value = $el->get_value();
@@ -2184,48 +2287,62 @@ class form extends form_base
 						$jss=",".$jss;
 					}
 					$chenrties = array();
-					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,objects.created as created,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
+					$q = "SELECT objects.modifiedby as modifiedby,objects.modified as modified,objects.created as created,objects.parent as parent,form_".$form_id."_entries.id as entry_id $jss FROM form_".$form_id."_entries LEFT JOIN objects ON objects.oid = form_".$form_id."_entries.id WHERE form_".$form_id."_entries.id in ($eids) AND objects.status != 0";
 					$this->db_query($q);
 					$cnt = 0;
 					while ($row = $this->db_next())
 					{
-						$cnt++;
-						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>Muuda</a>";
-						$row["ev_created"] = $this->time2date($row["created"], 2);
-						$row["ev_uid"] = $row["modifiedby"];
-						$row["ev_modified"] = $this->time2date($row["modified"], 2);
-						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
-						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
-							"delete_entry", 
-								array(
-									"id" => $fid,
-									"entry_id" => $row["entry_id"], 
-									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
-								),
-							"form")."'>Kustuta</a>";
-						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+						if ($this->can("view",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 						{
-							$_link = $this->mk_my_orb("show_entry", array(
-										"id" => $form_id,
-										"entry_id" => $row["entry_id"],
-										"op_id" => $this->arr["search_outputs"][$form_id],
-										"section" => $section,
-							));
-
-							$_caption = $row["ev_".$ft->table["view_col"]];
-
-							if ($ft->table["view_new_win"])
+							$cnt++;
+							if ($this->can("edit",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 							{
-								$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
-							};
+								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>Muuda</a>";
 
-							$row["ev_".$ft->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
+								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],$ft->get_menu_picker())."</select>";
+							}
+
+							$row["ev_created"] = $this->time2date($row["created"], 2);
+							$row["ev_uid"] = $row["modifiedby"];
+							$row["ev_modified"] = $this->time2date($row["modified"], 2);
+							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$form_id],"section" => $section))."'>Vaata</a>";		
+
+							if ($this->can("delete",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+							{
+								$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+									"delete_entry", 
+										array(
+											"id" => $fid,
+											"entry_id" => $row["entry_id"], 
+											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
+										),
+									"form")."'>Kustuta</a>";
+							}
+
+							if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+							{
+								$_link = $this->mk_my_orb("show_entry", array(
+											"id" => $form_id,
+											"entry_id" => $row["entry_id"],
+											"op_id" => $this->arr["search_outputs"][$form_id],
+											"section" => $section,
+								));
+
+								$_caption = $row["ev_".$ft->table["view_col"]];
+
+								if ($ft->table["view_new_win"])
+								{
+									$_link = sprintf("javascript:ft_popup('%s&type=popup','popup',%d,%d,%d,%d)",$_link,$ft->table["new_win_scroll"],!$ft->table["new_win_fixedsize"],$ft->table["new_win_x"],$ft->table["new_win_y"]);
+								};
+
+								$row["ev_".$ft->table["view_col"]] = sprintf("<a href=\"%s\" %s>%s</a>",$_link,$_targetwin,$_caption);
+							}
+							if ($ft->table["change_col"] && $ft->table["change_col"] != "change" && ($this->can("edit",$row["entry_id"]) || $GLOBALS["SITE_ID"] == 11))
+							{
+								$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+							}
+							$ft->row_data($row);
 						}
-						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
-						{
-							$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["entry_id"],"section" => $section), "form")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
-						}
-						$ft->row_data($row);
 					}
 				}
 			}
@@ -2236,6 +2353,7 @@ class form extends form_base
 				$joins = array();
 				$q_els = array();
 				$has_eid = false;
+				$used_els = array($this->search_form => array()) + $used_els;
 				foreach($used_els as $form_id => $el_arr)
 				{
 					$joins[] = "LEFT JOIN form_".$form_id."_entries ON form_".$form_id."_entries.chain_id = form_chain_entries.id";
@@ -2269,30 +2387,41 @@ class form extends form_base
 					$cnt = 0;
 					while ($row = $this->db_next())
 					{
-						$cnt++;
-						// kui on p2rg, siis muudame p2rga
-						$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
-						$row["ev_created"] = $this->time2date($row["created"], 2);
-						$row["ev_uid"] = $row["modifiedby"];
-						$row["ev_modified"] = $this->time2date($row["modified"], 2);
-						$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>Vaata</a>";		
-						$row["ev_delete"] = "<a href='".$this->mk_my_orb(
-							"delete_entry", 
-								array(
-									"id" => $fid,
-									"entry_id" => $row["entry_id"], 
-									"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
-								),
-							"form")."'>Kustuta</a>";
-						if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+						if ($this->can("view",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
 						{
-							$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+							$cnt++;
+							// kui on p2rg, siis muudame p2rga
+							if ($this->can("edit",$row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+							{
+								$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>Muuda</a>";
+
+								$row["ev_chpos"] = "<input type='hidden' name='old_pos[$real_form_id][".$row["entry_id"]."]' value='".$row["parent"]."'><select name='chpos[$real_form_id][".$row["entry_id"]."]'>".$this->picker($row["parent"],$ft->get_menu_picker())."</select>";
+							}
+							$row["ev_created"] = $this->time2date($row["created"], 2);
+							$row["ev_uid"] = $row["modifiedby"];
+							$row["ev_modified"] = $this->time2date($row["modified"], 2);
+							$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>Vaata</a>";		
+							if ($this->can("delete", $row["entry_id"])  || $GLOBALS["SITE_ID"] == 11)
+							{
+								$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+									"delete_entry", 
+										array(
+											"id" => $fid,
+											"entry_id" => $row["entry_id"], 
+											"after" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id,"section" => $section)))
+										),
+									"form")."'>Kustuta</a>";
+							}
+							if ($ft->table["view_col"] && $ft->table["view_col"] != "view")
+							{
+								$row["ev_".$ft->table["view_col"]] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $real_form_id,"entry_id" => $row["entry_id"], "op_id" => $this->arr["search_outputs"][$real_form_id],"section" => $section))."'>".$row["ev_".$ft->table["view_col"]]."</a>";
+							}
+							if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
+							{
+								$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
+							}
+							$ft->row_data($row);
 						}
-						if ($ft->table["change_col"] && $ft->table["change_col"] != "change")
-						{
-							$row["ev_".$ft->table["change_col"]] = "<a href='".$this->mk_my_orb("show", array("id" => $this->chain_id,"section" => 1,"entry_id" => $row["chain_entry_id"],"section" => $section), "form_chain")."'>".$row["ev_".$ft->table["change_col"]]."</a>";
-						}
-						$ft->row_data($row);
 					}
 				}
 			}
@@ -2328,6 +2457,14 @@ class form extends form_base
 				$tbl.="&nbsp;<input type='submit' value='".$ft->table["user_button_text"]."' onClick=\"window.location='".$ft->table["user_button_url"]."';return false;\">";
 			}
 
+			if ($GLOBALS["get_csv_file"])
+			{
+				header('Content-type: Application/Octet-stream"');
+				header('Content-disposition: root_access; filename="csv_output_'.$id.'.csv"');
+				print $ft->t->get_csv_file();
+				die();
+			};
+
 			$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
 
 			$tbl.="</form>";
@@ -2345,7 +2482,9 @@ class form extends form_base
 
 			if ($GLOBALS["SITE_ID"] == 14)
 			{
-				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br>".$tbl;
+				global $REQUEST_URI;
+				$url = "&nbsp;&nbsp;<a href='".$REQUEST_URI."&get_csv_file=1' target=_blank>CSV</a><br>";
+				$tbl="Otsingu tulemusena leiti ".$cnt." kirjet. <br>".$url.$tbl;
 			}
 			return $tbl;
 		}
@@ -2671,7 +2810,7 @@ class form extends form_base
 		$this->dequote(&$arr);
 		extract($arr);
 		$this->load($id);
-		$this->arr["contents"][$row][$col]->set_style($style,&$this);
+		$this->arr["contents"][$row][$col]->set_style($style);
 		$this->save();
 		return $this->mk_orb("sel_cell_style", array("id" => $this->id, "row" => $row, "col" => $col));
 	}
