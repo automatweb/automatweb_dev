@@ -31,6 +31,16 @@
             <caption>T&amp;uuml;hi otsing n&amp;auml;itab k&amp;otilde;iki</caption>
       </property>
       <property>
+            <name>show_only_act</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;auml;ita ainult aktiivseid objekte</caption>
+      </property>
+      <property>
             <name>show_all_right_away</name>
             <table>objects</table>
             <group>general</group>
