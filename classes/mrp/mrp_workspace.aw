@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.27 2005/02/14 10:17:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.28 2005/02/14 10:57:41 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1038,11 +1038,35 @@ class mrp_workspace extends class_base
 			"chgbgcolor" => "bgcolour_overdue",
 			"sortable" => 1,
 		));
-		$table->define_field(array( //!!! teha sortableks, arvestada et prioriteet on float. v6imalus: <span style="display: none;">$priority</span><input ... value="$priority">. jama: sorter teeb integeriks kui numeric field
-			"name" => "priority",
-			"chgbgcolor" => "bgcolour_overdue",
-			"caption" => "Prioriteet",
-		));
+
+		switch ($list_request)
+		{
+			case "inwork":
+			case "planned_overdue":
+			case "overdue":
+			case "new":
+			case "planned":
+				$table->define_field(array( //!!! teha sortableks, arvestada et prioriteet on float. v6imalus: <span style="display: none;">$priority</span><input ... value="$priority">. jama: sorter teeb integeriks kui numeric field
+					"name" => "priority",
+					"chgbgcolor" => "bgcolour_overdue",
+					"caption" => "Prioriteet",
+					"callback" => array (&$this, "priority_field_callback"),
+					"callb_pass_row" => false,
+					"sortable" => 1,
+				));
+				break;
+
+			case "all":
+			case "done":
+				$table->define_field (array (
+					"name" => "priority",
+					"chgbgcolor" => "bgcolour_overdue",
+					"caption" => "Prioriteet",
+					"sortable" => 1,
+				));
+				break;
+		}
+
 		$table->define_field(array(
 			"name" => "sales_priority",
 			"caption" => "Müügi prioriteet",
@@ -1144,7 +1168,7 @@ class mrp_workspace extends class_base
 
 		foreach ($projects as $project_id => $project)
 		{
-			$priority = $project->prop ("priority");
+			$priority = $project->prop ("project_priority");
 			$change_url = $this->mk_my_orb("change", array(
 				"id" => $project_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
@@ -1180,24 +1204,9 @@ class mrp_workspace extends class_base
 				case "planned_overdue":
 				case "overdue":
 				case "new":
-					$disabled = false;
-					$priority = html::textbox (array (
-					"name" => "mrp_project_priority-" . $project_id,
-					"size" => "2",
-					"value" => $project->prop ("priority"),
-					"disabled" => $disabled,
-					));
 					break;
 
 				case "planned":
-					$disabled = false;
-					$priority = html::textbox (array (
-					"name" => "mrp_project_priority-" . $project_id,
-					"size" => "2",
-					"value" => $project->prop ("priority"),
-					"disabled" => $disabled,
-					));
-
 					### hilight for planned overdue
 					$bg_colour = ($project->prop ("due_date") < $planned_date) ? MRP_COLOUR_PLANNED_OVERDUE : false;
 
@@ -2552,6 +2561,16 @@ class mrp_workspace extends class_base
 		{
 			$this->cfgmanager = 17639;
 		}
+	}
+
+	function priority_field_callback ($row)
+	{
+		$cellcontents = html::textbox (array (
+			"name" => "mrp_project_priority-" . $row["project_id"],
+			"size" => "2",
+			"value" => $row["priority"],
+		));
+		return $cellcontents;
 	}
 }
 
