@@ -1,4 +1,5 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/icons.aw,v 2.24 2003/10/06 09:58:15 duke Exp $
 
 class icons extends aw_template
 {
@@ -784,6 +785,11 @@ class icons extends aw_template
 		}
 
 		return aw_ini_get("baseurl")."/automatweb/images/icon_aw.gif";
+	}
+	
+	function get_feature_icon_url($fid)
+	{
+		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
 
 	function save_class_icons()
