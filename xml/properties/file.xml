@@ -1,6 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>filename</name>
+            <type>text</type>
+            <store>no</store>
+            <group>general</group>
+            <caption>Faili nimi</caption>
+      </property>
+      <property>
             <name>file</name>
             <type>fileupload</type>
             <table>files</table>
