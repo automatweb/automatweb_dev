@@ -377,7 +377,7 @@ class languages extends aw_template
 				$la = $this->fetch($lang_id);
 			}
 		}
-		
+
 		// assign the correct language so we can find translations
 		$LC=$la["acceptlang"];
 		if ($LC == "")

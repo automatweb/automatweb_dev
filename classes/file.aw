@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.42 2003/02/06 13:44:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.43 2003/02/13 14:43:21 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -456,8 +456,6 @@ class file extends class_base
 		$ret = $row->get() + $ar->get();
 
 		$ret["file"] = basename($ret["file"]);
-
-
 		if ($ret["file"] != "")
 		{
 			// file saved in filesystem - fetch it
