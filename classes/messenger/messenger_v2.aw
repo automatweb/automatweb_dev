@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.30 2004/03/25 17:33:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.31 2004/03/25 19:40:05 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -54,7 +54,11 @@ caption Identiteet
 @property testfilters type=text 
 @caption Testi filtreid
 
+@property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules props=rule_from,rule_subject,target_folder
+@caption Reeglid
+
 @groupinfo main_view caption="Kirjad" submit=no
+@groupinfo rules caption=Ruulid submit=no
 
 @reltype MAIL_IDENTITY value=1 clid=CL_MESSENGER_IDENTITY
 @caption messengeri identiteet
