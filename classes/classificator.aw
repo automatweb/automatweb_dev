@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.6 2004/03/18 11:29:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.7 2004/03/18 11:32:08 duke Exp $
 
 /*
 
@@ -159,7 +159,7 @@ class classificator extends class_base
 		));
 
 		list($choices,,) = $this->get_choices(array(
-			"clid" => $property["clid"],
+			"clid" => $arr["clid"],
 			"name" => $property["name"],
 		));
 

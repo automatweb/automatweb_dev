@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.239 2004/03/17 17:12:35 duke Exp $
+// $Id: class_base.aw,v 2.240 2004/03/18 11:32:09 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2623,6 +2623,7 @@ class class_base extends aw_template
 			{
 				$vcl_inst = get_instance("classificator");
 				$argblock["prop"] = $property;
+				$argblock["clid"] = $this->clid;
 				$vcl_inst->process_classificator($argblock);
 
 			};
