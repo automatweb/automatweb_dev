@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.12 2001/11/14 20:09:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/forum.aw,v 2.13 2001/11/15 12:03:49 duke Exp $
 global $orb_defs;
 $orb_defs["forum"] = "xml";
 lc_load("msgboard");
@@ -70,7 +70,8 @@ class forum extends aw_template
 		$tid = $this->new_object(array(
 			"parent" => $id,
 			"name" => $topic,
-			"comment" => $comment,
+			"comment" => $text,
+			"last" => $from,
 			"class_id" => CL_MSGBOARD_TOPIC,
 			"status" => 2,
 		));
@@ -120,6 +121,11 @@ class forum extends aw_template
 
 		$this->vars(array(
 			"topic" => $board_obj["name"],
+			"from" => $board_obj["last"],
+			"created" => $this->time2date($board_obj["created"],2),
+			"rate" => sprintf("%0.2f",$board_obj["rate"]),
+			"text" => $board_obj["comment"],
+
 			"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board))
 		));
 
@@ -167,6 +173,7 @@ class forum extends aw_template
 			"search_link" => $this->mk_my_orb("search",array("board" => $id)),
 			"VOTE_FOR_TOPIC" => $voteblock,
 			"TOPIC" => $this->parse("TOPIC"),
+			
 		));
 		
 		return $this->parse() . $this->add_comment(array("board" => $board,"parent" => $parent,"section" => $section));
@@ -284,7 +291,7 @@ class forum extends aw_template
 			"subj" => $args["subj"],
 			"time" => $this->time2date($args["time"],2),
 			"comment" => $args["comment"],
-			"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"]))
+			//"del_msg" => $this->mk_my_orb("del_msg", array("board" => $args["board_id"], "comment" => $args["id"]))),
 			"reply_link" => $this->mk_my_orb("reply",array("parent" => $args["id"],"section" => $this->section)),
 			"open_link" => $this->mk_my_orb("topics_detail",array("id" => $this->forum_id,"cid" => $args["id"],"from" => $this->from,"section" => $this->section)),
 		));
@@ -698,7 +705,8 @@ class forum extends aw_template
 	function _draw_topic($args = array())
 	{
 		$this->topic_count++;
-
+		
+		$this->use_orb_for_links = 1;
 		if ($this->use_orb_for_links)
 		{
 			$topic_link = $this->mk_my_orb("show",array("board" => $args["oid"],"section" => $this->section));
@@ -719,13 +727,14 @@ class forum extends aw_template
 		$this->vars(array(
 			"topic" => ($args["name"]) ? $args["name"] : "nimetu",
 			"created" => $this->time2date($args["created"],2),
-			"createdby" => $args["createdby"],
+			"createdby" => ($args["last"]) ? $args["last"] : $args["createdby"],
 			"last" => $this->time2date($args["modified"],2),
 			"lastmessage" => $this->time2date($args["modified"],2),
 			"comments" => (int)$this->comments[$args["oid"]],
 			"cnt" => (int)$this->comments[$args["oid"]],
 			"topic_link" => $topic_link,
 			"NEW_MSGS" => $mark,
+			"rate" => (int)$args["rate"],
 			"DELETE" => ($this->prog_acl("view",PRG_MENUEDIT) ? $this->parse("DELETE") : "")
 		));
 		$even = ($this->topic_count % 2);
@@ -813,7 +822,7 @@ class forum extends aw_template
 		extract($arr);
 		$this->delete_object($board);
 
-		return $this->mk_my_orb("change",array("id" => $forum_id),"forum");
+		return $this->mk_my_orb("topics",array("id" => $forum_id),"forum");
 	}
 
 	function change_topic($arr)
