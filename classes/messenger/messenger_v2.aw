@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.34 2004/06/07 15:55:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.35 2004/06/07 15:56:57 kristo Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -42,7 +42,7 @@ caption Identiteet
 // muu mudru
 
 @property msg_outbox type=relpicker reltype=RELTYPE_FOLDER
-@caption Outbox
+@caption Saadetud kirjad
 
 @property msg_drafts type=relpicker reltype=RELTYPE_FOLDER
 @caption Mustandite kataloog
