@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.194 2003/06/05 08:22:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.195 2003/06/09 18:19:00 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1792,7 +1792,7 @@ class document extends aw_template
 											"keywords"  => $document["keywords"],
 										  "lead"    => ($is_ie ? str_replace("\"","&quot;",trim($document["lead"])) : $document["lead"]),
 											"alias" => $document["alias"],
-											"content" => ($is_ie ? str_replace("\"","&quot;",trim($document["content"])) : htmlentities($document["content"])),
+											"content" => ($is_ie ? str_replace("\"","&quot;",trim($document["content"])) : htmlspecialchars($document["content"])),
 											"channel"	=> trim($document["channel"]),
 											"nobreaks"	=> $document["nobreaks"],
 											"tm"			=> trim($document["tm"]),
