@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.284 2004/10/12 13:22:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.285 2004/10/12 13:29:34 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -272,6 +272,8 @@ class document extends aw_template
 
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
+
+		$lang_id = aw_global_get("lang_id");
 		
 		global $awt;
 
@@ -488,7 +490,7 @@ class document extends aw_template
 		if ($this->template_has_var("charset"))
 		{
 			$_langs = get_instance("languages");
-			$_ld = $_langs->fetch(aw_global_get("lang_id"));
+			$_ld = $_langs->fetch($lang_id);
 			$this->vars(array(
 				"charset" => $_ld["charset"]
 			));
@@ -1108,15 +1110,16 @@ class document extends aw_template
 			
 	     	)
 		{
+			$_sect = aw_global_get("section");
 			// calculate the amount of comments this document has
 			// XXX: I could use a way to figure out which variables are present in the template
 			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
-				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => aw_global_get("section")),"forum"),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => $_sect),"forum"),
 			));
 			$forum = get_instance("forum");
-			$fr = $forum->add_comment(array("board" => $docid,"section" => aw_global_get("section")));
+			$fr = $forum->add_comment(array("board" => $docid,"section" => $_sect));
 
 			if ($num_comments > 0)
 			{
@@ -1139,7 +1142,7 @@ class document extends aw_template
 			while (list(,$v) = each($larr))
 			{
 				$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"]));
-				if (aw_global_get("lang_id") == $v["id"])
+				if ($lang_id == $v["id"])
 				{
 					$langs.=$this->parse("SEL_LANG");
 				}
@@ -1212,7 +1215,7 @@ class document extends aw_template
 		if ($this->template_has_var("sel_lang_img_url"))
 		{
 			$l = get_instance("languages");
-			$ldata = $l->fetch(aw_global_get("lang_id"));
+			$ldata = $l->fetch($lang_id);
 			$sel_lang_img = $ldata["meta"]["lang_img"];
 
 			$i = get_instance("image");
@@ -1364,7 +1367,7 @@ class document extends aw_template
 				if ($lab[$v["id"]])
 				{
 					$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"section" => $lab[$v["id"]]));
-					if (aw_global_get("lang_id") == $v["id"])
+					if ($lang_id == $v["id"])
 					{
 						$langs.=$this->parse("SLANG_BRO");
 					}
