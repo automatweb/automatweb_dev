@@ -38,6 +38,10 @@ function varvivalik()
 <td class="fform"><input type='radio' NAME='after_submit' VALUE='3' {VAR:as_3}>{VAR:LC_FORMS_GOT_TO_ADDRESS}:</td>
 <td class="fform"><input type='text' NAME='after_submit_link' value='{VAR:after_submit_link}'></td>
 </tr>
+<tr>
+<td class="fform"><input type='radio' NAME='after_submit' VALUE='4' {VAR:as_4}>N&auml;ita sisestust:</td>
+<td class="fform"><select name="after_submit_op">{VAR:ops}</select></td>
+</tr>
 <!-- END SUB: NOSEARCH -->
 
 <!-- SUB: SEARCH -->
