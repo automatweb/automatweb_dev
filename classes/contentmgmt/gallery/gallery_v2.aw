@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.8 2003/03/28 17:42:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.9 2003/03/31 15:17:52 kristo Exp $
 
 /*
 
@@ -674,6 +674,12 @@ class gallery_v2 extends class_base
 			"PAGESEL_FWD" => $ps_fwd
 		));
 		
+		if ($sp > 1)
+		{
+			$this->vars(array(
+				"HAS_PAGESEL" => $this->parse("HAS_PAGESEL")
+			));
+		}
 		// now all images 
 		$this->rating = get_instance("contentmgmt/rate/rate");
 
@@ -801,7 +807,7 @@ class gallery_v2 extends class_base
 		
 		$this->add_hit($pd['img']['id']);
 
-		$email_link = $this->mk_my_orb("send", array("id" => $id, "page" => $page, "row" => $row, "col" => $col));
+		$email_link = $this->mk_my_orb("send", array("id" => $id, "page" => $page, "row" => $row, "col" => $col), "", false, true);
 
 		$r = get_instance("contentmgmt/rate/rate");
 		$this->vars(array(
