@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.20 2003/10/30 13:41:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_member.aw,v 1.21 2003/11/08 08:17:47 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
 	@default table=objects
 	@default group=general
 
-	@property conf_obj type=objpicker clid=CL_ML_LIST_CONF field=meta method=serialize
+	@property conf_obj type=objpicker clid=CL_ML_LIST_CONF field=meta method=serialize newonly=1
 	@caption Vali konfiguratsioon
 
 	@property fchange type=text store=no editonly=1 field=meta method=serialize
@@ -34,54 +34,46 @@ class ml_member extends class_base
 		lc_load("definition");
 	}
 
-	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "comment":
 				$retval = PROP_IGNORE;
 				break;
-			case "conf_obj":
-				if (isset($args["obj"]["oid"]))
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
+
 			case "mail":
-				if (!empty($args["obj"]["meta"]["conf_obj"]))
+				if ("" == $arr["obj_inst"]->prop("conf_obj"))
 				{
 					$retval = PROP_IGNORE;
 				};
 				break;
 			case "fchange":
-				if (empty($args["obj"]["oid"]))
+				if (strlen($arr["obj_inst"]->meta("email")) > 0)
 				{
 					return PROP_IGNORE;
 				};
-				if (strlen($args["obj"]["meta"]["email"]) > 0)
-				{
-					return PROP_IGNORE;
-				};
-				$conf_obj = $args["obj"]["meta"]["conf_obj"];
+				$conf_obj = $arr["obj_inst"]->prop("conf_obj");
 				if (!empty($conf_obj))
 				{
 					$mlc_inst = get_instance("mailinglist/ml_list_conf");
 					$fl = $mlc_inst->get_forms_by_id($conf_obj);
 
-					$fid = $args["request"]["fid"];
+					$fid = $arr["request"]["fid"];
 					// if fid is set, use that, if not, take the forst from the conf
 					if (!$fid)
 					{
 						list($fid, ) = each($fl);
 					}
 					$f = get_instance("formgen/form");
+					$meta = $arr["obj_inst"]->meta();
 					$fparse = $f->gen_preview(array(
 						"id" => $fid,
-						"entry_id" => $args["obj"]["meta"]["form_entries"][$fid],
+						"entry_id" => $meta["form_entries"][$fid],
 						"reforb" => $this->mk_reforb("submit",array(
-							"id" => $args["obj"]["oid"],
+							"id" => $arr["obj_inst"]->id(),
 							"fid" => $fid,
 							"group" => $this->group,
 				
@@ -92,8 +84,8 @@ class ml_member extends class_base
 					$this->group = $data["group"];
 					$this->vars(array(
 						"editform" => $fparse,
-						"selecter" => $this->make_form_selecter($fl, $args["obj"]["oid"], $fid),
-						"l_sent" => $this->mk_my_orb("sent",array("id" => $args["obj"]["oid"],"lid" => $lid)),
+						"selecter" => $this->make_form_selecter($fl, $arr["obj_inst"]->id(), $fid),
+						"l_sent" => $this->mk_my_orb("sent",array("id" => $arr["obj_inst"]->id(),"lid" => $lid)),
 					));
 					$data["value"] = $this->parse();
 				}
@@ -106,28 +98,21 @@ class ml_member extends class_base
 		return $retval;
 	}
 
-	function set_property($args = array())
+	function set_property($arr)
         {
-                $data = &$args["prop"];
+                $data = &$arr["prop"];
                 $retval = PROP_OK;
                 switch($data["name"])
                 {
 			case "conf_obj":
-				if (isset($args["obj"]["oid"]))
-				{
-					$retval = PROP_IGNORE;
-				}
-				else
-				{
-					// dunno really, but that was done in the old orb_submit_new
-					$ml_inst = get_instance("mailinglist/ml_list");
-					$ml_inst->flush_member_cache();
-				};
+				// dunno really, but that was done in the old orb_submit_new
+				$ml_inst = get_instance("mailinglist/ml_list");
+				$ml_inst->flush_member_cache();
 				break;
 			case "fchange":
-				if (isset($args["obj"]["meta"]["conf_obj"]))
+				if ("" != $arr["obj_inst"]->prop("conf_obj"))
 				{
-					$this->handle_submit($args["form_data"]);
+					$this->handle_submit($args["request"]);
 				};	
 				break;
 
@@ -609,7 +594,6 @@ class ml_member extends class_base
 	function callback_pre_save($arr)
 	{
 		$request = $arr["request"];
-		$formdata = $args["form_data"];
 		if (!empty($request["name"]) && !empty($request["mail"]))
 		{
 			$arr["obj_inst"]->set_name($request["name"] . " &lt;" .$request["mail"] . "&gt;");
