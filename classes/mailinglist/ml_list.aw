@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.42 2004/02/06 10:20:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.43 2004/02/12 09:57:08 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -471,13 +471,27 @@ class ml_list extends class_base
 		{
 			foreach($lines as $line)
 			{
+				$line = trim($line);
 				if (strlen($line) == 0)
 				{
 					continue;
 				};
-				list($name,$addr) = explode(",",$line);
+			       if (strpos($line,",") !== false)
+			       {
+				      list($name,$addr) = explode(",",$line);
+			       }
+			       elseif (strpos($line,";") !== false)
+			       {
+				      list($name,$addr) = explode(";",$line);
+			       }
+			       else
+			       {
+				      $name = "";
+				      $addr = $line;
+				};
 				$name = trim($name);
 				$addr = trim($addr);
+
 				if (is_email($addr))
 				{
 					print "OK - n:$name, a:$addr<br />";
@@ -527,13 +541,21 @@ class ml_list extends class_base
 				$addr = $m[1];
 				if (is_email($addr))
 				{
-					print "OK a:$addr<br />";
-					flush();
-					$cnt++;
 					$retval = $ml_member->unsubscribe_member_from_list(array(
 						"email" => $addr,
 						"list_id" => $list_obj->id(),
+						"ret_status" => true,
 					));
+					if ($retval)
+					{
+						$cnt++;
+						print "OK a:$addr<br />";
+					}
+					else
+					{
+						print "Ei leidnud $addr<br />";
+					};
+					flush();
 					usleep(500000);
 				}
 				else
@@ -731,27 +753,43 @@ class ml_list extends class_base
 		$ret = array();
 		$list_obj = new object($id);
 
+		$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0",$list_obj->prop("def_user_folder"),CL_ML_MEMBER);
+
+		// why oh why is it so bloody slow with 1600 objects :(
+		/*
 		$member_list = new object_list(array(
 			"parent" => $list_obj->prop("def_user_folder"),
 			"class_id" => CL_ML_MEMBER,
 			"lang_id" => array(),
+			"site_id" => array(),
 		));
+		*/
 
 		$cnt = 0;
 
-		$this->member_count = sizeof($member_list->ids());
+		//$this->member_count = sizeof($member_list->ids());
+		$this->db_query($q);
 
-		for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+		while($row = $this->db_next())
+		//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 		{
 			$cnt++;
 			if (0 == $to || (0 != $from && 0 != $to && between($cnt,$from,$to)))
 			{
+				/*
 				$ret[$o->id()] = array(
 					"oid" => $o->id(),
 					"parent" => $o->parent(),
 				);
+				*/
+				$ret[$row["oid"]] = array(
+					"oid" => $row["oid"],
+					"parent" => $row["parent"],
+				);
 			};
 		};
+
+		$this->member_count = $cnt;
 
 		return $ret;
 	}	
