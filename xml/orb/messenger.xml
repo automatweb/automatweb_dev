@@ -1,6 +1,35 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="messenger">
+		<action name="contacts">
+			<function name="contacts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_contact">
+			<function name="edit_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="edit_contact">
+			<function name="edit_contact">
+				<arguments>
+					<required name="id"/>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_contact">
+			<function name="submit_contact">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="folders">
 			<function name="show_folders">
 				<arguments>
