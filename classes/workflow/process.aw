@@ -179,6 +179,7 @@ class process extends class_base
 			"class_id" => CL_WORKFLOW_TRANSITION,
 			"process_id" => $process->id()
 		));
+
 		for ($transition = $transition_list->begin(); !$transition_list->end(); $transition = $transition_list->next())
 		{
 			$t->define_data(array(
