@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.69 2004/06/27 13:04:16 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.70 2004/07/07 12:20:56 rtoomas Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -390,6 +390,7 @@ class htmlclient extends aw_template
 		$this->vars(array(
 			"sbt_caption" => $arr["caption"] ? $arr["caption"] : "Salvesta",
 			"name" => $arr["name"] ? $arr["name"] : "",
+			'action' => $arr['action'] ? $arr['action']:"",
 		));
 		return $this->parse("SUBMIT");
 	}

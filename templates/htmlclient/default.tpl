@@ -59,7 +59,7 @@
 <tr>
 	<td class='aw04contentcellleft' align='center' width='80'>&nbsp;</td>
 	<td class='aw04contentcellright'>
-		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' class='aw04formbutton' onClick='submit_changeform(); return false;'>
+		<input type='submit' name='{VAR:name}' value='{VAR:sbt_caption}' class='aw04formbutton' onClick='submit_changeform('{VAR:action}'); return false;'>
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
@@ -83,7 +83,7 @@
 function submit_changeform(action)
 {
 	{VAR:submit_handler}
-	if (action)
+	if (typeof action == "string" && action.length>0)
 	{
 		document.changeform.action.value = action;
 	};
