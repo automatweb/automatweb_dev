@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.237 2003/02/21 04:38:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.238 2003/02/21 05:13:22 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2025,6 +2025,63 @@ class menuedit extends aw_template
 			else
 			{
 				$subcnt--;
+			}
+		}
+		// also, we do the parent-not-visible check for all menus if we are showing the root branch
+		if ($parent == $this->cfg["admin_rootmenu2"])
+		{
+			$this->x_mpr = array();
+			$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
+			// listib koik menyyd ja paigutab need arraysse
+			$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
+			while ($row = $this->db_next())
+			{
+				$row["name"] = str_replace("\"","&quot;", $row["name"]);
+				if ($this->can("view",$row["oid"]) || 
+					$row["oid"] == $this->cfg["admin_rootmenu2"]
+				)
+				{
+					$arr[$row["parent"]][] = $row;
+					$mpr[] = $row["parent"];
+				}
+				else
+				{
+					$this->x_mpr[$row['oid']] = $row;
+				}
+			}
+
+			// here we will make the parent of all objects that don't have parents in the tree,
+			// but have them in the excluded list, to be the root
+			// why is this? well, because then the folders that are somewhere deep in the tree and that the user
+			// has can_view acces for, but not their parent folders, can still see them
+			foreach($arr as $prnt => $data)
+			{
+				foreach($data as $d_idx => $d_row)
+				{
+					if (isset($this->x_mpr[$d_row["parent"]]))
+					{
+						$d_row["parent"] = $this->cfg["admin_rootmenu2"];
+						if (!isset($d_row["mtype"]) || $d_row["mtype"] != MN_HOME_FOLDER)
+						{
+							if ($d_row["class_id"] == CL_PROMO)
+							{
+								$iconurl = icons::get_icon_url("promo_box","");
+							}
+							else
+							if ($d_row["class_id"] == CL_BROTHER)
+							{
+								$iconurl = icons::get_icon_url("brother","");
+							}
+							else
+							{
+								$iconurl = $d_row["icon_id"] > 0 ? $baseurl."/automatweb/icon.".$ext."?id=".$d_row["icon_id"] : $baseurl."/automatweb/images/ftv2doc.gif";
+							}
+
+							$url = $this->mk_my_orb("right_frame",array("parent" => $d_row["oid"], "period" => $period));
+							$this->_send_branch_line($d_row["oid"],$subcnt,$d_row["name"],$url,$iconurl);
+						}
+					}
+				}
 			}
 		}
 	}
