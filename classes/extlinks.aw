@@ -1,10 +1,13 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.1 2001/05/19 23:31:12 duke Exp $
-// Väliste linkide haldamise klass
-if (!$GLOBALS[extlinks]) {
-	$GLOBALS[extlinks] = 1;
+// $Header: /home/cvs/automatweb_dev/classes/Attic/extlinks.aw,v 2.2 2001/06/05 11:43:26 duke Exp $
+// extlinks.aw - Väliste linkide haldamise klass
 class extlinks extends aw_template {
 
+	function extlinks($args = array())
+	{
+		$this->db_init();
+		$this->tpl_init();
+	}
   // lisab lingi objekti och dokumendi juurde
 	function add_link($args) {
 	  extract($args);
@@ -16,6 +19,31 @@ class extlinks extends aw_template {
 						VALUES('$id','$oid','$url','$name','$hits','$newwindow','$desc','$type','$docid','$doclinkcollection')";
 		$this->db_query($q);
 		$this->_log("link","Lisas lingi $name");
+	}
+
+	////
+	// !Hoolitseb ntx doku sees olevate extlinkide aliaste parsimise eest (#l2#)
+	function parse_alias($args = array())
+	{
+		extract($args);
+		// koigepealt siis kysime koigi extrnal linkide aliased
+		$aliases = $this->get_aliases(array(
+						"oid" => $oid,
+						"type" => CL_EXTLINK,
+				));
+		// now, match[3] contains the index inside the aliases array
+		$l = $aliases[$matches[3] - 1];
+		$link = $this->get_link($l["target"]);
+
+		global $baseurl;
+		$vars = array(
+				"url" => $baseurl . "/indexx.aw?id=$link[id]",
+				"caption" => $link["name"],
+				"target" => $link["newwindow"] ? "target='_blank'" : "",
+			);
+
+		$replacement = $this->localparse($tpls["link"],$vars);
+		return $replacement;
 	}
 
 	function save_link($args) {
@@ -67,6 +95,5 @@ class extlinks extends aw_template {
 		$this->_log("link","Klikkis lingil $name");
 	}
 
-};
 };
 ?>
