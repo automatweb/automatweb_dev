@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.41 2003/03/07 13:18:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.42 2003/03/13 14:13:56 duke Exp $
 // aw_template.aw - Templatemootor
 
 classload("acl_base");
@@ -10,7 +10,7 @@ class aw_template extends acl_base
 		parent::init($args);
 		if (is_array($args))
 		{
-			$this->tpl_init($args["tpldir"]);
+			$this->tpl_init(isset($args["tpldir"]) ? $args["tpldir"] : "");
 		}
 		else
 		{
