@@ -116,6 +116,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$ret[$prop["name"]] = $objdata[$prop["field"]];
 			}
+
+			if ($prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+			{
+				$ret[$prop["name"]] = "0";
+			}
 		}
 
 		// fix old broken databases where brother_of may be 0 for non-brother objects
@@ -213,6 +218,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
 
+					if ($prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+					{
+						$ret[$prop["name"]] = "0";
+					}
 				}
 			}
 		}
@@ -315,6 +324,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				else
 				{
 					$tbls[$data["table"]]["defaults"][$data["field"]] = $data["default"];
+				}
+
+				if ($data["datatype"] == "int" && $tbls[$data["table"]]["defaults"][$data["field"]] == "")
+				{
+					$tbls[$data["table"]]["defaults"][$data["field"]] = "0";
 				}
 			}
 		}
@@ -453,8 +467,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					{
 						$str = $propvalues[$prop["name"]];
 						$this->quote(&$str);
-	
 						$seta[$prop["field"]] = $str;
+					}
+
+					if ($prop["datatype"] == "int" && $seta[$prop["field"]] == "")
+					{
+						$seta[$prop["field"]] = "0";
 					}
 				}
 			}
@@ -708,8 +726,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
 		}
-
-
 		$joins = join("", $js).join(" ", $this->joins);
 
 		$ret = array();
@@ -1038,7 +1054,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
 		$this->quote(&$objdata);
-	
+
 		$objdata["createdby"] = aw_global_get("uid");		
 		$objdata["created"] = time();		
 
