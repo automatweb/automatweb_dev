@@ -1111,6 +1111,16 @@
                   <clid>CL_GROUP</clid>
                   <caption>organisatsiooni grupp</caption>
             </GROUP>
+            <CONTRACT>
+                  <value>37</value>
+                  <clid>CL_FILE</clid>
+                  <caption>leping</caption>
+            </CONTRACT>
+            <OFFER_FILE>
+                  <value>38</value>
+                  <clid>CL_FILE</clid>
+                  <caption>Pakkumise fail</caption>
+            </OFFER_FILE>
       </reltypes>
       <layout>
             <hbox_toolbar>
