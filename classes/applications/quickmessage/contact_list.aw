@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.1 2004/10/20 09:34:43 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/contact_list.aw,v 1.2 2004/10/20 09:36:04 ahti Exp $
 // contact_list.aw - Aadressiraamat 
 /*
 
@@ -9,7 +9,6 @@
 @default group=general
 
 
-
 @groupinfo contact_list caption="Aadressiraamat" submit=no
 
 @property contact_list_toolbar type=toolbar group=contact_list no_caption=1
@@ -17,7 +16,6 @@
 
 @property contact_list type=table group=contact_list no_caption=1
 @caption Aadressiraamat
-
 
 
 //@groupinfo search caption="Otsing"
