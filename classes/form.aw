@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.53 2001/08/13 19:14:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.54 2001/08/13 20:19:12 kristo Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -419,6 +419,7 @@ class form extends form_base
 		$this->arr["show_table"] = $show_table;
 		$this->arr["table"] = $table;
 		$this->arr["tablestyle"] = $tablestyle;
+		$this->arr["after_submit_op"] = $after_submit_op;
 		$this->save();
 		$awt->stop("form::save_settings");
 		return $this->mk_orb("table_settings", array("id" => $id));
@@ -727,6 +728,7 @@ class form extends form_base
 		$t = new style;
 		$o = new db_objects;
 		$menulist = $o->get_list();
+		$ops = $this->get_op_list($id);
 		$this->vars(array(
 			"form_bgcolor"				=> $this->arr["bgcolor"],
 			"form_border"					=> $this->arr["border"],
@@ -743,6 +745,8 @@ class form extends form_base
 			"as_1"								=> ($this->arr["after_submit"] == 1 ? "CHECKED" : ""),
 			"as_2"								=> ($this->arr["after_submit"] == 2 ? "CHECKED" : ""),
 			"as_3"								=> ($this->arr["after_submit"] == 3 ? "CHECKED" : ""),
+			"as_4"								=> ($this->arr["after_submit"] == 4 ? "CHECKED" : ""),
+			"ops" => $this->picker($this->arr["after_submit_op"], $ops[$id]),
 			"els"									=> $this->multiple_option_list(is_array($this->arr["name_els"]) ? $this->arr["name_els"] : $this->arr["name_el"] ,$this->get_all_elements()),
 			"try_fill"						=> checked($this->arr["try_fill"]),
 			"show_table_checked" => checked($this->arr["show_table"]),
@@ -1167,6 +1171,9 @@ class form extends form_base
 			case "search_results":
 				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => 1,"section" => $section));
 				break;
+			case "show_op":
+				$l = $this->mk_my_orb("show_entry", array("id" => $id, "entry_id" => $entry_id, "op_id" => $this->arr["after_submit_op"],"section" => $section));
+				break;
 			default:
 				if ($this->type == FTYPE_SEARCH)
 				{
@@ -1575,6 +1582,8 @@ class form extends form_base
 				return "text";
 			case 3:
 				return "redirect";
+			case 4:
+				return "show_op";
 		}
 	}
 
