@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.62 2004/10/27 12:03:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.63 2004/11/07 11:47:38 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1910,7 +1910,7 @@ class crm_person extends class_base
 	
 	function do_language_skills_table(&$arr)
 	{
-		$classificator = get_instance("classificator");
+		$classificator = get_instance(CL_CLASSIFICATOR);
 		
 		$options = $classificator->get_options_for(array(
 			"name" => "language_list",

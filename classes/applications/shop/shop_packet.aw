@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.7 2004/07/05 15:32:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.8 2004/11/07 11:47:38 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -216,7 +216,7 @@ class shop_packet extends class_base
 			if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
 			{
 				$itemd = $sct->get_item_in_cart($w->id());
-				$clssf = get_instance("classificator");
+				$clssf = get_instance(CL_CLASSIFICATOR);
 				for ($i = 1; $i < 11; $i++)
 				{
 					if ($l_inst->template_has_var("sel_prod_uservar".$i."_edit"))

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.30 2004/11/03 12:17:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.1 2004/11/07 11:47:38 kristo Exp $
 
 /*
 

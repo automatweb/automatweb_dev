@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.17 2004/10/27 12:24:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.18 2004/11/07 11:47:39 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -845,7 +845,7 @@ class object_import extends class_base
 	{
 		if (!is_array($this->classif_cache[$arr["name"]]))
 		{
-			$clf = get_instance("classificator");
+			$clf = get_instance(CL_CLASSIFICATOR);
 			$this->classif_cache[$arr["name"]] = $clf->get_options_for(array(
 				"name" => $arr["name"],
 				"clid" => $arr["clid"],

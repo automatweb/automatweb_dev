@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.8 2004/10/11 12:59:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/commune.aw,v 1.9 2004/11/07 11:47:38 kristo Exp $
 // commune.aw - Kommuun
 /*
 
@@ -3849,7 +3849,7 @@ class commune extends class_base
 			}
 		}
 		*/
-		$cl = get_instance("classificator");
+		$cl = get_instance(CL_CLASSIFICATOR);
 		$opts = $cl->get_options_for(array(
 			"name" => "friend_groups", 
 			"clid" => CL_PROFILE,

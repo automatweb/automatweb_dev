@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.14 2004/11/04 10:27:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.15 2004/11/07 11:47:38 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -321,7 +321,7 @@ class cb_search extends class_base
 		$opts = array("" => "");
 		if ($p["table"] != "" && $p["field"] != "")
 		{
-			$clsf = get_instance("classificator");
+			$clsf = get_instance(CL_CLASSIFICATOR);
 			$pr = array(
 				"name" => $pn,
 				"clid" => $clid
