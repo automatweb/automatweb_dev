@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.71 2003/06/26 15:36:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.72 2003/07/01 10:37:36 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5867,6 +5867,21 @@ class form extends form_base
 				"no_load_entry" => true,
 				"no_process_entry" => true
 			));
+		}
+
+		if (($butt_delete != "" || $butt_delete_x > 0) && is_array($sel))
+		{
+			foreach($sel as $id => $one)
+			{
+				if ($one == 1)
+				{
+					if (!$form_id_for_entries)
+					{
+						$form_id_for_entries = $this->get_form_for_entry($id);
+					}
+					$this->do_delete_entry($form_id_for_entries, $id);
+				}
+			}
 		}
 
 		// and finally, call the search func so the search results will be shown again
