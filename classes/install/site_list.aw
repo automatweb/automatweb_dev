@@ -920,17 +920,18 @@ class site_list extends class_base
 
 	**/
 	function get_local_list()
-	{	
+	{
+		$last_full_upd = $this->get_cval("site_list::local_list_update");
+		if (($last_full_upd + 10*3600) > time())
+		{
+			$this->_do_update_list_cache();
+			$this->set_cval("site_list::local_list_update", time());
+		}
+
 		$ret = array();
 		$this->db_query("SELECT * FROM aw_site_list WHERE site_used = 1");
 		while ($row = $this->db_next())
 		{
-			if ($row["last_update"] < (time()-24*3600))
-			{
-				$this->_do_update_list_cache();
-				$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$row[id]'");
-			}
-
 			$ret[$row["id"]] = $row;
 		}
 		if (!count($ret))
