@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.17 2003/10/28 12:08:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.18 2003/11/11 13:50:35 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -39,10 +39,10 @@
 	@property all_menus type=checkbox ch_value=1 value=1 group=menus method=serialize
 	@caption Näita igal pool
 
-	@property section type=table group=menus method=serialize
+	@property section type=table group=menus method=serialize store=no
 	@caption Vali menüüd, mille all kasti näidata
 	
-	@property last_menus type=table group=menus method=serialize
+	@property last_menus type=table group=menus method=serialize store=no
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
 
 	@property ndocs type=textbox size=4 group=menus table=menu field=ndocs 
@@ -170,6 +170,7 @@ class promo extends class_base
 
 			case "ndocs":
 				$arr["obj_inst"]->set_meta("as_name",$arr["form_data"]["as_name"]);
+				$arr["obj_inst"]->set_meta("src_submenus",$this->make_keys($arr["form_data"]["src_submenus"]));
 				break;
 		};
 		return $retval;
@@ -252,6 +253,13 @@ class promo extends class_base
 			"align" => "center",
 		));
 
+		$t->define_field(array(
+			"name" => "src_submenus",
+			"caption" => "k.a. alammen&uuml;&uuml;d",
+			"talign" => "center",
+			"align" => "center",
+		));
+
 		$obj = $arr["obj_inst"];
 
 		$conns = $obj->connections_from(array(
@@ -259,6 +267,7 @@ class promo extends class_base
 		));
 
 		$as_name = $obj->meta("as_name");
+		$ssm = $obj->meta("src_submenus");
 
 		foreach($conns as $c)
 		{
@@ -272,6 +281,11 @@ class promo extends class_base
 					"name" => "as_name",
 					"value" => $c_o->id(),
 						"checked" => ($as_name == $c_o->id())
+				)),
+				"src_submenus" => html::checkbox(array(
+					"name" => "src_submenus[]",
+					"value" => $c_o->id(),
+					"checked" => ($ssm[$c_o->id()] == $c_o->id())
 				))
 			));
 		}
@@ -348,6 +362,7 @@ class promo extends class_base
 		$obj->set_meta("last_menus",$last_menus);
 		$obj->set_meta("alias_reltype",$new_alias_reltype);
 
+
 		$obj->save();
 	}
 
@@ -389,7 +404,6 @@ class promo extends class_base
 		$def = new aw_array($ss->get_default_document(array(
 			"obj" => obj($alias["target"])
 		)));
-
 		$_ob = aw_ini_get("menuedit.document_list_order_by");
 		if (($_ob != "") && (sizeof($def->get()) > 0))
 		{
