@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.2 2003/06/26 17:26:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.3 2003/07/01 15:19:35 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -170,7 +170,7 @@ class forum_v2 extends class_base
 					"comment_count" => (int)$comment_count,
 					"last_createdby" => $last["createdby"],
 					"last_date" => $this->time2date($last["created"],2),
-					"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"folder" => $sdata["oid"],"group" => $args["request"]["group"])),
+					"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"folder" => $sdata["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 				));
 				$c .= $this->parse("L2_FOLDER");
 			};
@@ -202,7 +202,7 @@ class forum_v2 extends class_base
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"])),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			};
@@ -240,7 +240,7 @@ class forum_v2 extends class_base
 				"last_date" => $this->time2date($last["created"],2),
 				"last_createdby" => $last["createdby"],
 				"author" => $val["createdby"],
-				"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"topic" => $val["oid"])),
+				"open_topic_url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"topic" => $val["oid"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 			));
 
 			$c .= $this->parse("SUBTOPIC");
@@ -276,7 +276,7 @@ class forum_v2 extends class_base
 			if ($key == $fld)
 			{
 				$name = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"])),
+					"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 					"caption" => $name,
 				));
 			}
@@ -286,7 +286,7 @@ class forum_v2 extends class_base
 				if (($obj["class_id"] == CL_PSEUDO) && ($obj["parent"] != $fld))
 				{
 					$name = html::href(array(
-						"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"folder" => $obj["oid"])),
+						"url" => $this->mk_my_orb("change",array("id" => $args["obj"]["oid"],"group" => $args["request"]["group"],"folder" => $obj["oid"],"section" => aw_global_get("section"),"_alias" => get_class($this))),
 						"caption" => $name,
 					));
 				};
@@ -574,7 +574,18 @@ class forum_v2 extends class_base
 	function parse_alias($args)
 	{
 		extract($args);
-		return $this->show(array('id' => $alias['target']));
+		$this->classconfig = array(
+			"hide_tabs" => 1,
+			"relationmgr" => false,
+		);
+
+		return $this->change(array(
+			"id" => $alias["target"],
+			"action" => "view",
+			"folder" => $_GET["folder"],
+			"topic" => $_GET["topic"],
+			"group" => isset($_GET["group"]) ? $_GET["group"] : "container",
+		));
 	}
 
 	////
