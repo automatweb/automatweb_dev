@@ -1,0 +1,45 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <field>status</field>
+            <table>objects</table>
+            <method>serialize</method>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>conf</name>
+            <type>objpicker</type>
+            <clid>CL_DRONLINE_CONF</clid>
+            <table>objects</table>
+            <field>meta </field>
+            <method>serialize</method>
+            <caption>Konfiguratsioon</caption>
+      </property>
+      <property>
+            <name>numlines</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>meta </field>
+            <method>serialize</method>
+            <caption>Mitu rida</caption>
+      </property>
+      <property>
+            <name>from</name>
+            <type>date_select</type>
+            <table>objects</table>
+            <field>meta </field>
+            <method>serialize</method>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>to</name>
+            <type>date_select</type>
+            <table>objects</table>
+            <field>meta </field>
+            <method>serialize</method>
+            <caption>Kuni</caption>
+      </property>
+</properties>
+

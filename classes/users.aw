@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.65 2002/12/18 12:31:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.66 2002/12/18 15:03:46 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -2088,6 +2088,11 @@ class users extends users_user
 		// here be dragons .. or rather the code to set the
 		// variable in the site ini file
 
+	}
+
+	function get_user_picker()
+	{
+		return $this->make_keys(array_keys($this->_gen_usr_list()));
 	}
 }
 ?>
