@@ -774,7 +774,7 @@ class icons extends aw_template
 			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
 		}
 		$d_icon_cache = aw_global_get("d_icon_cache");
-		$i = $d_icon_cache["content"][$clid]["imgurl"];
+		$i = isset($d_icon_cache["content"][$clid]["imgurl"]) ? $d_icon_cache["content"][$clid]["imgurl"] : "";
 
 		if ($clid == CL_FILE)
 		{

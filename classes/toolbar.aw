@@ -1,28 +1,18 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.10 2003/03/06 14:54:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/toolbar.aw,v 2.11 2003/03/06 23:54:39 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
 	function toolbar($args = array())
 	{
 		$this->init("toolbar");
-		$styles = array(
-			"smallbuttons" => "buttons.tpl",
-		);
-
-		if (!$styles[$style])
-		{
-			$style = "smallbuttons";
-		};
-
-		$tpl = $styles[$style];
-
+		$tpl = "buttons.tpl";
 
 		$this->read_template($tpl);
 		$this->matrix = array();
 
 		extract($args);
-		if (!$imgbase)
+		if (empty($imgbase))
 		{
 			$imgbase = "/automatweb/images/icons";
 		};
@@ -84,15 +74,15 @@ class toolbar extends aw_template
 			switch($val["type"])
 			{
 				case "button":
-					if ($args["id"])
+					if (isset($args["id"]))
 					{
 						$val["name"] .= $args["id"];
 					};
-					if ($args["target"])
+					if (isset($args["target"]))
 					{
 						$val["target"] = $args["target"];
 					};
-					if (!$val["onClick"])
+					if (empty($val["onClick"]))
 					{
 						$val["onClick"] = "";
 					};

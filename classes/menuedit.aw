@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.251 2003/03/06 15:24:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.252 2003/03/06 23:54:39 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1548,7 +1548,7 @@ class menuedit extends aw_template
 		$ch = $this->get_object_chain($id);
 		foreach($ch as $oid => $od)
 		{
-			if ($od["meta"]["add_tree_conf"])
+			if (isset($od["meta"]["add_tree_conf"]))
 			{
 				$atc_id = $od["meta"]["add_tree_conf"];
 			}
@@ -1658,7 +1658,7 @@ class menuedit extends aw_template
 		$cldata = array();
 		foreach($this->cfg["classes"] as $clid => $_cldata)
 		{
-			if ($_cldata["name"] != "" && $_cldata["can_add"])
+			if (!empty($_cldata["name"]) && $_cldata["can_add"])
 			{
 				$cldata[$_cldata["name"][0]][$_cldata["file"]] = $_cldata["name"];
 			}
@@ -1666,6 +1666,7 @@ class menuedit extends aw_template
 
 		$cnt = 2000;
 		ksort($cldata);
+		$ret = "";
 		foreach($cldata as $letter => $clns)
 		{
 			$cnt++;
@@ -1691,7 +1692,7 @@ class menuedit extends aw_template
 			$tcnt = 0;
 			foreach($this->cfg["classes"] as $clid => $cldata)
 			{
-				if ($cldata["parents"] != "")
+				if (!empty($cldata["parents"]))
 				{
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
@@ -1709,7 +1710,7 @@ class menuedit extends aw_template
 		{
 			foreach($this->cfg["classes"] as $clid => $cldata)
 			{
-				if ($cldata["parents"] != "" && $cldata["can_add"])
+				if (!empty($cldata["parents"]) && $cldata["can_add"])
 				{
 					$parens = explode(",", $cldata["parents"]);
 					if (in_array($prnt, $parens))
@@ -1732,7 +1733,7 @@ class menuedit extends aw_template
 					$_fprnt = ($fdata["parent"] == 0 ? 0 : $fdata["parent"] + 4);
 					$ret .= $_fid."|".((int)$_fprnt)."|".$fdata["name"]."||list".$sep;
 					$ret .= $this->req_get_default_add_menu($fid, $parent, $period, $sep);
-					if ($fdata["all_objs"])
+					if (isset($fdata["all_objs"]))
 					{
 						$ret .= $this->get_az_def_menu($fid, $parent, $period, $sep);
 					}
@@ -1746,7 +1747,7 @@ class menuedit extends aw_template
 	function get_popup_data($args = array())
 	{
 		extract($args);
-		if ($addmenu == 1)
+		if (isset($addmenu) && $addmenu == 1)
 		{
 			$this->get_add_menu($args);
 		}
@@ -1760,6 +1761,7 @@ class menuedit extends aw_template
 		}
 
 		$baseurl = $this->cfg["baseurl"];
+		$retval = "";
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
@@ -5114,7 +5116,7 @@ class menuedit extends aw_template
 		$ch = $this->get_object_chain($parent);
 		foreach($ch as $oid => $od)
 		{
-			if ($od["meta"]["objtbl_conf"])
+			if (isset($od["meta"]["objtbl_conf"]))
 			{
 				$this->co_id = $od["meta"]["objtbl_conf"];
 			}
@@ -5134,6 +5136,7 @@ class menuedit extends aw_template
 
 	function new_right_frame($arr)
 	{
+		error_reporting(E_ALL);
 		extract($arr);
 		if (!$this->prog_acl("view", PRG_MENUEDIT))
 		{
@@ -5168,6 +5171,8 @@ class menuedit extends aw_template
 		{
 			$host = str_replace(":".$mt[1], "", $host);
 		}
+
+		$ps = "";
 
 		if ($period)
 		{
@@ -5221,9 +5226,8 @@ class menuedit extends aw_template
 				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "parent" => $row["parent"]),$this->cfg["classes"][$row["class_id"]]["file"]);
 				$row["is_menu"] = 2;
 			}
-			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "menuedit",true,true);
 
-			if ($sel_objs[$row["oid"]])
+			if (isset($sel_objs[$row["oid"]]))
 			{
 				$row["cutcopied"] = "#E2E2DB";
 			}
@@ -5274,7 +5278,6 @@ class menuedit extends aw_template
 			}
 
 			$row["change"] = $can_change ? "<a href=\"$chlink\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif\" border=\"0\"></a>" : "";
-			$row["delete"] = $can_delete ? "<a href=\"javascript:box2('Oled kindel, et soovid seda objekti kustutada?','$dellink')\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_delete.gif\" border=\"0\"></a>" : "";
 			$row["acl"] = $can_admin ? "<a href=\"editacl.aw?oid=".$row["oid"]."&file=menu.xml\"><img src=\"".$this->cfg["baseurl"]."/automatweb/images/blue/obj_acl.gif\" border=\"0\"></a>" : "";
 			if ($this->co_id)
 			{
@@ -5285,13 +5288,6 @@ class menuedit extends aw_template
 				$this->t->define_data($row);
 			}
 		}
-		$types = array();
-		foreach($this->cfg["classes"] as $clid => $cldat)
-		{
-			$types[$cldat["file"]] = $cldat["name"];
-		}
-		asort($types);
-
 
 		$content = $this->get_add_menu(array(
 			"id" => $parent,
@@ -5315,10 +5311,10 @@ class menuedit extends aw_template
 				$real_parent = (int)$m_parent;
 				if ($m_id)
 				{
-						  $by_parent[$real_parent][$m_id] = array(
-							  "link" => $m_link,
-							  "caption" => $m_caption,
-						  );
+					  $by_parent[$real_parent][$m_id] = array(
+						  "link" => $m_link,
+						  "caption" => $m_caption,
+					  );
 				};
 			};
 
@@ -5334,7 +5330,7 @@ class menuedit extends aw_template
 				foreach($item_collection as $el_id => $el_data)
 				{
 					// if this el_id has children, make it a submenu
-					$children = sizeof($by_parent[$el_id]);
+					$children = isset($by_parent[$el_id]) ? sizeof($by_parent[$el_id]) : 0;
 					if ($el_id == "separator")
 					{
 						$tpl = "MENU_SEPARATOR";
@@ -5438,7 +5434,6 @@ class menuedit extends aw_template
 		$this->vars(array(
 			"table" => $this->t->draw(),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
-			"types" => $this->picker(" ", $types),
 			"parent" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
@@ -5473,7 +5468,7 @@ class menuedit extends aw_template
 			};
 		};
 
-		if (!$no_save)
+		if (empty($no_save))
 		{
 			$toolbar->add_button(array(
 				"name" => "save",
@@ -5564,7 +5559,7 @@ class menuedit extends aw_template
 			"img" => "bugtrack.gif",
 		));
 	
-		if (is_array($callback) && sizeof($callback) == 2)
+		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
 		{
 			$callback[0]->$callback[1](array("toolbar" => &$toolbar));
 		};
