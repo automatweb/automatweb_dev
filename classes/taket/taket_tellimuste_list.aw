@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.3 2004/01/15 15:00:21 rtoomas Exp $
 // taket_tellimuste_list.aw - Taket tellimuste nimekiri 
 /*
 
@@ -20,6 +20,7 @@ class taket_tellimuste_list extends class_base
 			"tpldir" => "taket/taket_tellimuste_list",
 			"clid" => CL_TAKET_TELLIMUSTE_LIST
 		));
+		lc_site_load('taket_tellimuste_list',&$this);
 	}
 
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -102,6 +103,7 @@ class taket_tellimuste_list extends class_base
 					'parent' => aw_ini_get('taket_order.order_parent_id'),
 					'class_id' => CL_TAKET_ORDER,
 					'user_id' => users::get_oid_for_uid(aw_global_get('uid')),
+					'lang_id' => array(),
 					'sort_by' => 'taket_orders.'.$sortBy.' '.$dirs
 				));
 		/*$ol->sort_by(array(
@@ -206,6 +208,7 @@ class taket_tellimuste_list extends class_base
 					'class_id' => CL_TAKET_ORDER_ITEM,
 					'parent' => aw_ini_get('taket_order.order_item_parent_id'),
 					'order_id' => $o->id(),
+					'lang_id' => array(),
 					'sort_by'=> $sortBy
 				));
 		for($obj=$ol->begin();!$ol->end();$obj=$ol->next())

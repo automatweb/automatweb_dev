@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.4 2004/01/14 15:02:48 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.5 2004/01/15 15:00:21 rtoomas Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 
@@ -124,6 +124,7 @@ class taket_ebasket extends class_base
 						'parent'=>$this->ebasket_item_parent_id,
 						'class_id' => CL_TAKET_EBASKET_ITEM,
 						'ebasket_id' => $ebasket->id(),
+						'lang_id' => array(),
 						'sort_by' => $sortBy
 					));
 		$i=0;
@@ -278,6 +279,7 @@ class taket_ebasket extends class_base
 		$ol = new object_list(array(
 					'parent' => $this->ebasket_item_parent_id,
 					'class_id' => CL_TAKET_EBASKET_ITEM,
+					'lang_id' => array(),
 					'ebasket_id' => $ebasket->id()
 				));
 		$rows = array();
@@ -401,6 +403,7 @@ class taket_ebasket extends class_base
 		$ol = new object_list(array(
 				'parent' => $this->ebasket_item_parent_id,
 				'class_id' => CL_TAKET_EBASKET_ITEM,
+				'lang_id' => array(),
 				'ebasket_id' => $ebasket->id()
 				));
 		$tmpFound=false;
@@ -526,7 +529,8 @@ class taket_ebasket extends class_base
 		$user_id=users::get_oid_for_uid(aw_global_get('uid'));
 		//let's get all the ebasket_items
 		$ol = new object_list(array(
-					'parent' => $this->ebasket_item_parent_id
+					'parent' => $this->ebasket_item_parent_id,
+					'lang_id' => array()
 					));
 		//let's get the ebasket
 		$ebasket = $this->get_users_active_ebasket($user_id);
@@ -592,7 +596,9 @@ class taket_ebasket extends class_base
 	{
 		//get all the ebasket objects
 		$ol = new object_list(array(
-				'parent' => $this->ebasket_parent_id));
+				'parent' => $this->ebasket_parent_id,
+				'lang_id' => array()
+				));
 		$ebasket = null;
 		$user_id = users::get_oid_for_uid(aw_global_get('uid'));
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
@@ -624,7 +630,9 @@ class taket_ebasket extends class_base
 			return;
 		}
 		$ol = new object_list(array(
-			'parent' => $this->ebasket_item_parent_id));
+			'parent' => $this->ebasket_item_parent_id,
+			'lang_id' => array()
+			));
 		for($o=$ol->begin();!$ol->end();$o=$ol->next())
 		{
 			if($o->prop('ebasket_id')==$ebasket->id())
