@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.4 2005/03/14 17:27:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search_v2.aw,v 1.5 2005/03/18 11:43:53 ahti Exp $
 
 /*
 @default group=search
@@ -343,22 +343,19 @@ class search_v2 extends class_base
 	}
 
 	function _search_mk_call($class, $action, $params)
-        {
-                $_parms = array(
-                        "class" => $class,
-                        "action" => $action,
-                        "params" => $params
-                );
+	{
+		$_parms = array(
+			"class" => $class,
+			"action" => $action,
+			"params" => $params
+		);
 		if ($this->server_id)
-                {
-                        $_parms["method"] = "xmlrpc";
-                        $_parms["login_obj"] = $this->server_id;
-                }
-                $ret =  $this->do_orb_method_call($_parms);
-                return $ret;
-        }
-
-
-
-};
+		{
+			$_parms["method"] = "xmlrpc";
+			$_parms["login_obj"] = $this->server_id;
+		}
+		$ret =  $this->do_orb_method_call($_parms);
+		return $ret;
+	}
+}
 ?>
