@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.26 2004/04/27 11:21:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.27 2004/05/13 08:14:09 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -403,10 +403,12 @@ class treeview extends class_base
 			$this->r_path = array_unique($r_path);
 		};
 
+		$t = get_instance("languages");
 		$this->vars(array(
 			"target" => $this->tree_dat["url_target"],
 			"open_nodes" => is_array($opened_nodes) ? join(",",map("'%s'",$opened_nodes)) : "",
 			"tree_id" => $this->tree_id,
+			"charset" => $t->get_charset()
 		));
 
 		$rv = $this->draw_dhtml_tree($this->rootnode);
