@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.44 2001/10/02 10:16:57 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.45 2001/10/09 22:18:09 duke Exp $
 // ---------------------------------------------------------------------------
 // (C) OÜ Sruktuur Meedia 2000,2001
 // ---------------------------------------------------------------------------
@@ -570,6 +570,7 @@ define("PRG_CSS_SYS_EDITOR",49); // süsteemsete stiilide editor
 define("PRG_SYSCONF",50); // konfiguratsioonieditor
 define("PRG_CONFIG_REDIRECT",51);	// sisselogimist vajavate veateadete konfimine
 define("PRG_TPLEDIT",52); // templateeditor
+define("PRG_DOCMGR",53); // document manager
 
 // MN_* konstandid on defineeritud $basedir/lang/$lc/common.aw sees
 // $lc = keelekood, vaikimisi "ee"
@@ -625,6 +626,7 @@ PRG_SYSCONF				=> array("name" => "Automatweb config", "url" => "orb.aw?class=sy
 PRG_CONFIG_ERRORS	=> array("name" => "Config/Veateated",			"url" => "orb.aw?class=config&action=errors"),
 PRG_CONFIG_REDIRECT => array("name" => "Config/suunamine", "url" => "orb.aw?class=config&action=grp_redirect"),
 PRG_TPLEDIT => array("name" => "TemplateEditor", "url" => "orb.aw?class=tpledit&action=browse"),
+PRG_DOCMGR => array("name" => "Document manager", "url" => "orb.aw?class=docmgr&action=search"),
 );
 
 // formide tyybid
