@@ -33,6 +33,20 @@
 	background: #EEEEEE;
 	text-align: center;
 }
+
+.minical_cell_deact {
+	border: 1px solid #BCDCF0;
+	padding: 3px;
+	text-align: center;
+	color: #EEEEEE;
+}
+
+.minical_cell_today {
+	border: 1px solid #BCDCF0;
+	padding: 3px;
+	text-align: center;
+	background: #E0A2A2;
+}
 </style>
 
 <script type="text/javascript">
@@ -66,7 +80,7 @@ function navigate_to()
 </table>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td rowspan="2" valign="top" width="90%">
+<td rowspan="3" valign="top" width="90%">
 {VAR:content}
 </td>
 <td valign="top" width="10%">
@@ -86,6 +100,18 @@ function navigate_to()
 <a href="{VAR:today_url}">Täna</a>
 </form>
 </center>
+</td>
+</tr>
+<tr>
+<td valign="top" width="10%">
+<!-- SUB: TASKS -->
+<span style="font-size: 10px;">
+<center><b>{VAR:tasks_title}</b></center>
+<!-- SUB: TASK -->
+<a href="{VAR:task_url}">{VAR:task_name}</a><br>
+<!-- END SUB: TASK -->
+</span>
+<!-- END SUB: TASKS -->
 </td>
 </tr>
 </table>

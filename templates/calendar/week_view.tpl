@@ -1,15 +1,21 @@
-<table border="0" style="border-collapse: collapse; border: 1px solid #CCC;">
-<tr>
+<table border="0" width="100%" style="border-collapse: collapse; border: 1px solid #CCC;">
 <!-- SUB: DAY -->
-<td width="150" valign="top" style="border: 1px solid #CCC;">
-<strong>{VAR:daynum}</strong>
-<small>
+<tr>
+<td valign="top" style="border: 1px solid #CCC; background: #EEE;">
+<span style="font-size: 10px; font-weight: bold;">
+<a style="text-decoration: none; color: black;" href="{VAR:daylink}">{VAR:lc_weekday}, {VAR:daynum}. {VAR:lc_month}</a></strong>
+</span>
+</td>
+</tr>
+<tr>
+<td valign="top" style="border: 1px solid #CCC;">
+<span style="font-size: 11px;">
 <p>
 	<!-- SUB: EVENT -->
 		<strong>{VAR:time}</strong> - {VAR:name}<br>
 	<!-- END SUB: EVENT -->
-</small>
+</span>
 </td>
-<!-- END SUB: DAY -->
 </tr>
+<!-- END SUB: DAY -->
 </table>

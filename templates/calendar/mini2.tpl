@@ -22,6 +22,12 @@
 	<a href="{VAR:day_url}">{VAR:daynum}</a>
 	</td>
 	<!-- END SUB: cell -->
+
+	<!-- SUB: cell_deact -->
+	<td class="minical_cell_deact">
+	{VAR:daynum}
+	</td>
+	<!-- END SUB: cell_deact -->
 </tr>
 <!-- END SUB: line -->
 </table>
