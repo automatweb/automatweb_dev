@@ -275,6 +275,7 @@ class object_script_interpreter extends class_base
 		$line = $this->_replace_syms($line);
 		$toks = $this->_tokenize_line($line);
 		echo "exec line $line <br>\n";
+		flush();
 		$this->_exec_toks($toks);
 	}
 
