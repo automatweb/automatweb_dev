@@ -25,13 +25,6 @@
 </select></td>
 </tr>
 <tr>
-<td class="celltext" align="right">{VAR:LC_FORM_CONFIG_FILE}:<br>
-<i>Kasutatakse ainult siis, kui teed uue konfiguratsioonivormi</i>
-</td><td class="celltext"><select name="config_file" class="formselect2" disabled>
-{VAR:config_files}
-</select><input type="hidden" name="config_file" value="planner.xml"></td>
-</tr>
-<tr>
 <td class="celltext" align="right">{VAR:LC_FORM_EL_DEFAULT_FOLDER}:</td>
 <td class="celltext"><select name="el_default_folder" class="formselect2">
 {VAR:el_default_folders}
