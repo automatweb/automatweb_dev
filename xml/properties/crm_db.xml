@@ -74,7 +74,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_FIRMA_CAT</reltype>
-            <caption>Vaikimisi firmade kataloog</caption>
+            <caption>Vaikimisi firmade kaust</caption>
       </property>
       <property>
             <name>dir_isik</name>
@@ -84,7 +84,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ISIK_CAT</reltype>
-            <caption>Vaikimisi töötajate kataloog</caption>
+            <caption>Vaikimisi töötajate kaust</caption>
       </property>
       <property>
             <name>dir_address</name>
@@ -94,7 +94,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ADDRESS_CAT</reltype>
-            <caption>Vaikimisi aadresside kataloog</caption>
+            <caption>Vaikimisi aadresside kaust</caption>
       </property>
       <property>
             <name>dir_ettevotlusvorm</name>
@@ -104,7 +104,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_ETTEVOTLUSVORM_CAT</reltype>
-            <caption>Vaikimisi õiguslike vormide kataloog</caption>
+            <caption>Vaikimisi õiguslike vormide kaust</caption>
       </property>
       <property>
             <name>dir_linn</name>
@@ -114,7 +114,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_LINN_CAT</reltype>
-            <caption>Vaikimisi linnade kataloog</caption>
+            <caption>Vaikimisi linnade kaust</caption>
       </property>
       <property>
             <name>dir_maakond</name>
@@ -124,7 +124,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MAAKOND_CAT</reltype>
-            <caption>Vaikimisi maakondade kataloog</caption>
+            <caption>Vaikimisi maakondade kaust</caption>
       </property>
       <property>
             <name>dir_tegevusala</name>
@@ -134,7 +134,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_TEGEVUSALA_CAT</reltype>
-            <caption>Vaikimisi tegevusalade kataloog</caption>
+            <caption>Vaikimisi tegevusalade kaust</caption>
       </property>
       <property>
             <name>dir_toode</name>
@@ -144,7 +144,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_TOODE_CAT</reltype>
-            <caption>Vaikimisi toodete kataloog</caption>
+            <caption>Vaikimisi toodete kaust</caption>
       </property>
       <property>
             <name>dir_default</name>
@@ -154,7 +154,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_GENERAL_CAT</reltype>
-            <caption>Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
+            <caption>Vaikimisi kaust, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
       </property>
       <property>
             <name>flimit</name>
@@ -173,16 +173,6 @@
             <method>serialize</method>
             <type>checkbox</type>
             <caption>See on kasutaja default kliendibaas</caption>
-      </property>
-      <property>
-            <name>addtoolbar</name>
-            <table>objects</table>
-            <group>objects_manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
       </property>
       <property>
             <name>active_selection</name>
@@ -216,10 +206,6 @@
             <settings>
                   <caption>Seaded</caption>
             </settings>
-            <objects_manager>
-                  <caption>Objektide&amp;nbsp;lisamine</caption>
-                  <submit>no</submit>
-            </objects_manager>
       </groupinfo>
       <reltypes>
             <SELECTIONS>
@@ -230,47 +216,47 @@
             <FIRMA_CAT>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>Organisatsioonide kataloogid</caption>
+                  <caption>Organisatsioonide kaust</caption>
             </FIRMA_CAT>
             <ISIK_CAT>
                   <value>3</value>
                   <clid>CL_MENU</clid>
-                  <caption>Töötajate kataloogid</caption>
+                  <caption>Töötajate kaust</caption>
             </ISIK_CAT>
             <ADDRESS_CAT>
                   <value>4</value>
                   <clid>CL_MENU</clid>
-                  <caption>Aadresside kataloogid</caption>
+                  <caption>Aadresside kaust</caption>
             </ADDRESS_CAT>
             <LINN_CAT>
                   <value>5</value>
                   <clid>CL_MENU</clid>
-                  <caption>Linnade kataloogid</caption>
+                  <caption>Linnade kaust</caption>
             </LINN_CAT>
             <MAAKOND_CAT>
                   <value>6</value>
                   <clid>CL_MENU</clid>
-                  <caption>Maakondade kataloogid</caption>
+                  <caption>Maakondade kaust</caption>
             </MAAKOND_CAT>
             <RIIK_CAT>
                   <value>7</value>
                   <clid>CL_MENU</clid>
-                  <caption>Riikide kataloogid</caption>
+                  <caption>Riikide kaust</caption>
             </RIIK_CAT>
             <TEGEVUSALA_CAT>
                   <value>8</value>
                   <clid>CL_MENU</clid>
-                  <caption>Tegevusalade kataloogid</caption>
+                  <caption>Tegevusalade kaust</caption>
             </TEGEVUSALA_CAT>
             <TOODE_CAT>
                   <value>9</value>
                   <clid>CL_MENU</clid>
-                  <caption>Toodete kataloogid</caption>
+                  <caption>Toodete kataloogide kaust</caption>
             </TOODE_CAT>
             <GENERAL_CAT>
                   <value>10</value>
                   <clid>CL_MENU</clid>
-                  <caption>Üldkataloog</caption>
+                  <caption>Üldkaust</caption>
             </GENERAL_CAT>
             <CALENDAR>
                   <value>11</value>
@@ -280,7 +266,7 @@
             <ETTEVOTLUSVORM_CAT>
                   <value>12</value>
                   <clid>CL_MENU</clid>
-                  <caption>Õiguslike vormide kataloogid</caption>
+                  <caption>Õiguslike vormide kaust</caption>
             </ETTEVOTLUSVORM_CAT>
             <FORMS>
                   <value>13</value>
