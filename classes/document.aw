@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.70 2001/12/11 12:51:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.71 2001/12/18 19:02:25 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -216,7 +216,12 @@ class document extends aw_template
 		{
 			$sufix = "";
 		};
-		$q = "SELECT documents.*,
+
+		$q = "SELECT objects.*, documents.* FROM objects LEFT JOIN documents ON objects.brother_of = documents.docid WHERE objects.oid = $docid $sufix";
+		$this->db_query($q);
+		$data = $this->db_next();
+
+/*		$q = "SELECT documents.*,
 			objects.*
 			FROM documents
 			LEFT JOIN objects ON
@@ -224,17 +229,11 @@ class document extends aw_template
 			WHERE docid = '$docid' $sufix";
 		$this->db_query($q);
 		$data = $this->db_fetch_row();
-		
 		if (!$data)
 		{
 			// tshekime kas oli hoopis vend 2kki
 			$oo = $this->get_object($docid);
-			$q = "SELECT documents.*,
-					documents.keywords AS keywords,
-					objects.cachedirty AS cachedirty,
-					objects.parent AS parent,
-					objects.period AS period,
-					objects.modified AS modified
+			$q = "SELECT documents.*,objects.*
 				FROM documents
 					LEFT JOIN objects ON
 					(documents.docid = objects.oid)
@@ -242,7 +241,7 @@ class document extends aw_template
 			$this->db_query($q);
 			$data = $this->db_fetch_row();
 			$data["brother_of"] = $oo["brother_of"];
-		}
+		}*/
 
 		if (gettype($data) == "array") 
 		{
@@ -251,10 +250,6 @@ class document extends aw_template
 			 $data["cite"] = trim($data["cite"]);
 		};
 		$this->dequote($data);
-/*		if (preg_match("/<P(.*)>((&nbsp;)*)<\/P>/",$data["lead"]))
-		{
-			$data["lead"] = "";
-		}*/
 		$this->data = $data;
 		return $data;
 	}
@@ -483,7 +478,7 @@ class document extends aw_template
 				// ja stripime leadist *koik* objektitagid välja.
 				$doc["lead"] = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doc["lead"]);
 			};
-			$doc["content"] = "$doc[lead]<br>";
+			$doc["content"] = "$doc[lead]";
 		} 
 		else 
 		{
@@ -520,7 +515,7 @@ class document extends aw_template
 				{
 					$txt .= "</b>";
 				};
-				$txt .= ($GLOBALS["doc_lead_break"] ? "<br>" : "")."$doc[content]";
+				$txt .= ($GLOBALS["doc_lead_break"] && $no_doc_lead_break != 1 ? "<br>" : "")."$doc[content]";
 				$doc["content"] = $txt;
 			};
 		};
@@ -543,7 +538,7 @@ class document extends aw_template
 					"class" => "image",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
-					"templates" => array("image","image_linked","image_inplace"),
+					"templates" => array("image","image_linked","image_inplace","image_flash"),
 				));
 		// välised lingid
 		$this->register_sub_parser(array(
@@ -644,11 +639,11 @@ class document extends aw_template
 					"function" => "parse_alias",
 				));
 		
-		// formi entryd
+		// pulloudid
 		$this->register_sub_parser(array(
 					"idx" => 2,
-					"match" => "m",
-					"class" => "menu_chain",
+					"match" => "q",
+					"class" => "pullout",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
@@ -1281,7 +1276,7 @@ class document extends aw_template
 		$q_parts[] = "modified = $modified";
 
 		// see paneb siis paringu kokku. Whee.
-		$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '$id'"; 
+		$q = "UPDATE documents SET " . join(",\n",$q_parts) . " WHERE docid = '".$old["brother_of"]."'"; 
 		$this->db_query($q);
 		
 		// siia moodustame objektitabeli päringu osad
@@ -1312,7 +1307,7 @@ class document extends aw_template
 		}
 
 		$this->upd_object($oq_parts);
-		$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '$id'");
+		$this->db_query("UPDATE objects SET name='".$data["name"]."' WHERE brother_of = '".$old["brother_of"]."'");
 
 		// nih, updateme objekti metadata ka 2ra.
 		foreach($this->metafields as $m_name => $m_key)
@@ -2454,7 +2449,11 @@ class document extends aw_template
 	function del_alias($arr)
 	{
 		extract($arr);
-		$this->delete_alias($docid,$id);
+		$ids = explode(";",$id);
+		foreach($ids as $real_id)
+		{
+			$this->delete_alias($docid,$real_id);
+		};
 		header("Location: ".$this->mk_orb("list_aliases", array("id" => $docid),"aliasmgr"));
 	}
 
