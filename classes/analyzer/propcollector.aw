@@ -351,7 +351,7 @@ class propcollector extends aw_template
 		};
 
 		// things listed here have automatically set their store attribute to "no"
-		$no_store = array("table","container","calendar","toolbar","releditor");
+		$no_store = array("table","container","calendar","toolbar","releditor","treeview");
 		if (in_array($fields["type"],$no_store))
 		{
 			$fields["store"] = "no";
