@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.28 2003/05/02 13:29:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.29 2003/05/08 10:25:45 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -160,11 +160,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			case "s_site_id":
 				$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
-				$sites = array("0" => "");
+				$sid = aw_ini_get("site_id");
+				$sites = array($sid => $sid);
 				foreach($dat as $row)
 				{
-					$sites[$row["site_id"]] = $row["site_id"];
+					if ($row["site_id"] != $sid)
+					{
+						$sites[$row["site_id"]] = $row["site_id"];
+					}
 				}
+				$sites["0"] = "K&otilde;ik";
 				$data["options"] = $sites;
 				break;
 		}
