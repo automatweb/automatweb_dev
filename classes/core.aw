@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.187 2003/05/14 09:36:50 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.188 2003/05/14 09:45:52 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -496,70 +496,45 @@ class core extends db_connector
 		};
 	}
 
-	////
+	//// 
 	// !Returns user information
 	// parameters:
 	//	uid - required, the user to fetch
 	//	field - optional, if set, only this field's value is returned, otherwise the whole record
 	function get_user($args = false)
 	{
-		if (isset($args['oid']))
+		if (!is_array($args))
 		{
-			extract($args);
-			{
-				$q = "SELECT * FROM users WHERE oid = '$oid'";
-				$row = $this->db_fetch_row($q);
-			}
-			if (isset($field))
-			{
-				$row = $row[$field];
-			}
-			else
-			{
-				if (isset($row))
-				{
-					// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
-					$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
-				}
-			}
-			return $row;
+			$uid = aw_global_get("uid");
 		}
 		else
 		{
-			if (!is_array($args))
-			{
-				$uid = aw_global_get("uid");
-			}
-			else
-			{
-				extract($args);
-			}
-			if ($uid == "")
-			{
-				return false;
-			}
-			if (!is_array(($row = aw_cache_get("users_cache",$uid))))
-			{
-				$q = "SELECT * FROM users WHERE uid = '$uid'";
-				$row = $this->db_fetch_row($q);
-				aw_cache_set("users_cache",$uid,$row);
-			}
-
-			if (isset($field))
-			{
-				$row = $row[$field];
-			}
-			else
-			{
-				if (isset($row))
-				{
-					// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
-					$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
-				}
-			}
-			return $row;
+			extract($args);
+		}
+		if ($uid == "")
+		{
+			return false;
+		}
+		if (!is_array(($row = aw_cache_get("users_cache",$uid))))
+		{
+			$q = "SELECT * FROM users WHERE uid = '$uid'";
+			$row = $this->db_fetch_row($q);
+			aw_cache_set("users_cache",$uid,$row);
 		}
 
+		if (isset($field))
+		{
+			$row = $row[$field];
+		}
+		else
+		{
+			if (isset($row))
+			{
+				// inbox defauldib kodukataloogile, kui seda m‰‰ratud pole
+				$row["msg_inbox"] = isset($row["msg_inbox"]) ? $row["msg_inbox"] : $row["home_folder"];
+			}
+		}
+		return $row;
 	}
 
 	////
