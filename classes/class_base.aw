@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.60 2003/01/28 18:27:47 duke Exp $
+// $Id: class_base.aw,v 2.61 2003/01/30 15:26:26 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1566,6 +1566,16 @@ class class_base extends aliasmgr
 			"title" => $title,
 		));
 	}	
+
+	function submit_list($args = array())
+	{
+		$this->init_class_base();
+		if (method_exists($this->inst,"callback_submit_relation_list"))
+		{
+			$this->inst->callback_submit_relation_list($args);
+		};
+		return parent::submit_list($args);
+	}
 
 
 	//////////////////////////////////////////////////////////////////////
