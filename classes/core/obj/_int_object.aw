@@ -129,9 +129,11 @@ class _int_object
 				continue;
 			}
 
+			$to = obj($oid);
+
 			$c = new connection();
-			$param["from"] = $this->obj["oid"];
-			$param["to"] = $oid;
+			$param["from"] = $this->obj["brother_of"];
+			$param["to"] = $to->brother_of();
 			$c->change($param);
 		}
 	}
