@@ -668,7 +668,7 @@ class core extends acl_base
 	// crap, I hate this but I gotta do it - shoulda used array arguments or something -
 	// if $use_orb == 1 then the url will go through orb.aw, not index.aw - which means that it will be shown
 	// directly, without drawing menus and stuff
-	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&")
+	function mk_my_orb($fun,$arr=array(),$cl_name="",$force_admin = false,$use_orb = false,$sep = "&",$honor_r_orb = true)
 	{
 		// resolve to name
 		if (is_numeric($cl_name))
@@ -714,6 +714,11 @@ class core extends acl_base
 		{
 			$r_use_orb = basename($_SERVER["SCRIPT_NAME"],".aw") == "orb";
 		};
+
+		if (!$honor_r_orb)
+		{
+			$r_use_orb = false;
+		}
 
 		if (!isset($in_admin))
 		{

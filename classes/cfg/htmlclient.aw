@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.95 2005/02/16 19:21:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.96 2005/02/23 09:56:14 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -955,7 +955,10 @@ class htmlclient extends aw_template
 			// aha, but I have to put the linefeeds into the thing if it has been created with the plain
 			// old editor.
 		}
-		
+	
+		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
+		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
+	
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
 		if($this->tplmode == "groups")
 		{
