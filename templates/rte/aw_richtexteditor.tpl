@@ -25,14 +25,14 @@ function write_rte(el_name,width,height)
 	document.writeln('<script>setTimeout("enable_design_mode(\''+el_name+'\')",10); <' + '/script>');
 	
 	val = document.forms['changeform'].elements[el_name].value;
+	realvictim = document.getElementById(realname);
 	
         if (browser.isIE5up) {
-		apply_editor_style(frames(realname).document,val);
+		apply_editor_style(frames(realname).document,val,realvictim);
         }
         else
 	{
-		realvictim = document.getElementById(realname);
-		apply_editor_style(realvictim.contentWindow.document,val);
+		apply_editor_style(realvictim.contentWindow.document,val,realvictim);
         }
 	
 };
@@ -78,24 +78,27 @@ function enable_design_mode(frm)
 		realvictim = frames(victim).document;
                 frames(victim).document.designMode = "On";
 
-		//apply_editor_style(frames(victim).document,val);
+		tgt_frame = frames(victim).document;
 
-		frames(victim).document.aw_owner_frame = victim;
+		//frames(victim).document.aw_owner_frame = victim;
         }
         else {
 		realvictim = document.getElementById(victim);
                 realvictim.contentDocument.designMode = "on"
 
-		//apply_editor_style(realvictim.contentWindow.document,val);
 		realvictim.contentWindow.document.execCommand("useCSS",false,true);
+		tgt_frame = realvictim.contentWindow.document;
 
-                realvictim.contentWindow.document.aw_owner_frame = victim;
+                //realvictim.contentWindow.document.aw_owner_frame = victim;
                 realvictim.contentWindow.document.addEventListener("focus",activate_editor,true);
         }
 
+	tgt_frame.aw_owner_frame = victim;
+	awlib_addevent(tgt_frame,"keypress",function (event) {return kb_handler(event)});
+
 };
 
-function apply_editor_style(doc,val)
+function apply_editor_style(doc,val,iframe)
 {
 	doc.writeln("<html><head>");
 	doc.writeln("<style>");
@@ -103,11 +106,43 @@ function apply_editor_style(doc,val)
 	doc.writeln("</style></head>");
 	//doc.writeln("<body style='border: 1px; margin: 1px;'>");
 	doc.writeln("<body class='text'>");
-	//doc.write(val.replace(/\n/g,'<br>'));
 	doc.write(val);
 	doc.writeln("</body></html>");
 	doc.close();
 };
+
+function kb_handler(evt)
+{
+	var keyEvent = (evt.type == "keydown") || (evt.type == "keypress");
+	if (keyEvent && evt.ctrlKey)
+	{	
+		var key = String.fromCharCode(browser.isIE5up ? evt.keyCode : evt.charCode).toLowerCase();
+		cmd = '';
+		value = '';
+		switch (key)
+		{
+			case 'b': cmd = "bold"; break;
+			case 'i': cmd = "italic"; break;
+			case 'u': cmd = "underline"; break;
+		};
+
+		if (cmd) {
+			// execute simple command
+			document.getElementById(sel_el).contentWindow.document.execCommand(cmd, false, true);
+			//realvictim.contentWindow.document.execCommand("useCSS",false,true);
+			if (browser.isIE5up)
+			{
+				evt.cancelBubble = true;
+				evt.returnValue = false;
+			}
+			else
+			{
+				evt.preventDefault();
+				evt.stopPropagation();
+			}
+		}
+	};
+}
 
 function format_selection(huh)
 {
