@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.1 2005/01/21 12:55:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.2 2005/01/26 16:38:32 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -42,7 +42,11 @@
 @property crm_db_id type=relpicker reltype=RELTYPE_CRM_DB
 @caption Kasutatav kliendibaas
 
+@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb group=autoimport rel_id=first
+@caption Automaatse impordi seadistamine
+
 @groupinfo settings caption="Seaded"
+@groupinfo autoimport caption="Automaatne import"
 
 @reltype CRM_DB value=1 clid=CL_CRM_DB
 @caption kliendibaas
@@ -52,6 +56,12 @@
 
 @reltype FOLDER value=3 clid=CL_MENU
 @caption Kaust
+
+@reltype LOGFILE value=4 clid=CL_FILE
+@caption Logifail
+
+@reltype RECURRENCE value=5 clid=CL_RECURRENCE
+@caption Kordus
 
 */
 
@@ -77,7 +87,7 @@ class persona_import extends class_base
 			case "invk":
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("invoke_import",array("id" => $arr["obj_inst"]->id())),
-					"caption" => "Käivita import",
+					"caption" => t("Käivita import"),
 				));
 				break;
 
@@ -107,7 +117,7 @@ class persona_import extends class_base
 
 		if (sizeof($ftp_conns) == 0)
 		{
-			die("You forgot to enter server data");
+			die(t("You forgot to enter server data"));
 		};
 		$conn = reset($ftp_conns);
 		$ftp_serv = new object($conn->prop("to"));
@@ -128,7 +138,7 @@ class persona_import extends class_base
 	}
 
 	/**
-		@attrib name=invoke_import 
+		@attrib name=invoke_import nologin="1"
 		@param id required type=int
 	**/
 	function invoke_import($arr)
@@ -1085,6 +1095,25 @@ class persona_import extends class_base
 
 
 
+	}
+
+	function callback_post_save($arr)
+	{
+		$o = $arr["obj_inst"];
+		$conns = $o->connections_from(array(
+			"type" => RELTYPE_RECURRENCE,
+		));
+		// iga asja kohta on vaja teada seda, et millal ta välja kutsutakse
+		$sch = get_instance("scheduler");
+		foreach($conns as $conn)
+		{
+			$rep_id = $conn->prop("to");
+			$event_url = $this->mk_my_orb("invoke_import",array("id" => $o->id()));
+			$sch->add(array(
+			 	"event" => $event_url,
+				"rep_id" => $rep_id,
+			));
+		};
 	}
 
 }
