@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.52 2005/01/12 15:22:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.53 2005/01/21 13:18:46 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -201,22 +201,26 @@ class cfgform extends class_base
 		{
 			if ($prop["type"] == "checkbox")
 			{
+				$prx = $this->prplist[$prop["name"]];
+				// so, how do I determine whether this property has a default or not?
+				// kas ma pean kuhugi kirja panema selle asja?
+
+				// eino, asi on ikka näitamises ju eksole. mitte salvestamises
 				$pname = $arr["prop"]["name"];
 				$t->define_data(array(
-					"name" => $prop["name"],
+					"name" => $prop["caption"] . "(" . $prop["name"] . ")",
 					"type" => $prop["type"],
 					"value" => html::checkbox(array(
 						"name" => $pname."[".$prop["name"]."]",
 						"value" => 1,
-						"checked" => $this->prplist[$prop["name"]]["default"] == "" ? $prop["default"] : ($this->prplist[$prop["name"]]["default"] == 1),
+						//"checked" => $this->prplist[$prop["name"]]["default"] == "" ? $prop["default"] : ($this->prplist[$prop["name"]]["default"] == 1),
+						"checked" => $this->prplist[$prop["name"]]["default"] == 1,
 					)),
 				));
 			};
 
 
 		};
-
-		//arr($props);
 
 
 	}
@@ -329,11 +333,12 @@ class cfgform extends class_base
 
 		foreach($ol->arr() as $o)
 		{
+			$oid = $o->id();
 			$t->define_data(array(
 				"act" => html::radiobutton(array(
 					"name" => "sysdefault",
-					"value" => $o->id(),
-					"checked" => $o->id() == $active,
+					"value" => $oid,
+					"checked" => $oid == $active,
 				)),
 				"name" => $o->name(),
 			));
