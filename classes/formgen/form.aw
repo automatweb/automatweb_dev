@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.99 2004/06/19 10:12:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.100 2004/06/20 16:37:30 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -4675,7 +4675,6 @@ class form extends form_base
 		$o->set_class_id(CL_FORM);
 		$o->set_comment($row["comment"]);
 		$o->set_status(STAT_ACTIVE);
-		$o->set_jrk($row["jrk"]);
 		$o->set_alias($row["alias"]);
 		$oid = $o->save();
 
@@ -4740,7 +4739,7 @@ class form extends form_base
 			"created_by" => $cby->name(),
 			"modified" => $this->time2date($row->modified(),2),
 			"modified_by" => $mby->name(),
-			"views" => $row->hits(),
+			"views" => 1,
 			"num_entries" => $cnt["cnt"],
 			"position" => $ret,
 			"reforb" => $this->mk_reforb("submit_metainfo", array("id" => $this->id)),
