@@ -8,70 +8,110 @@
 <script type="application/x-javascript">
 <![CDATA[
 
-function rpc_request()
+// Create a structure member
+function rpc_add_member(request,str,name,value)
+{
+	el_name = request.createElement("name");
+	el_val = document.createTextNode(name);
+	el_name.appendChild(el_val);
+	
+	el_value = request.createElement("value");
+	el_val = document.createTextNode(value);
+	el_value.appendChild(el_val);
+
+	el_member = request.createElement("member");
+	el_member.appendChild(el_name);
+	el_member.appendChild(el_value);
+
+	str.appendChild(el_member);
+}
+
+function rpc_create_struct(request)
+{
+	el_struct = request.createElement("struct");
+	return el_struct;
+
+}
+
+function get_branch()
 {
 	var request = document.implementation.createDocument("", "methodCall", null);
-	method = request.createElement("methodName");
-	value = document.createTextNode("man");
-	method.appendChild(value);
+	el_name = request.createElement('methodName');
+	el_node = document.createTextNode("menuedit::get_branch");
+	el_name.appendChild(el_node);
+	request.firstChild.appendChild(el_name);
 
-	request.firstChild.appendChild(method);
+	el_str = rpc_create_struct(request);
+	rpc_add_member(request, el_str, 'format', 'xmlrpc');
 
-	params = request.createElement("params");
-	param = request.createElement("param");
-	value = request.createElement("value");
-	string = request.createElement("string");
-
-	var querystring = document.getElementById('word').value;
-	if (!querystring)
-	{
-		alert('Sisesta ka midagi..');
-		return false;
-	};
-	real = document.createTextNode(querystring);
-	string.appendChild(real);
-	value.appendChild(string);
-	param.appendChild(value);
-	params.appendChild(param);
+	el_params = request.createElement('params');
+	el_params.appendChild(el_str);
 	
-	request.firstChild.appendChild(params);
+	request.firstChild.appendChild(el_params);
 
 	var httpRequest = new XMLHttpRequest();
-	//httpRequest.open("POST", "http://bsd.ee/xmlrpc/vanaema2.php", false, null, null);
-	//httpRequest.open("POST", "http://linux.ee/tuxaator/RPC.php", false, null, null);
-	httpRequest.open("POST", "http://bsd.ee/xmlrpc/vanaema_exp.php", false, null, null);
+	httpRequest.open("POST", "http://aw.struktuur.ee/xmlrpc.aw", false, null, null);
 	httpRequest.send(request);
 	var response = httpRequest.responseText;
-	alert(response);
+	
 	var parser = new DOMParser();
 	var doc = parser.parseFromString(response,"text/xml");
-	var res = doc.getElementsByTagName("string");
 	
-	document.getElementById('word').value = "";
-
-	if (res[0])
+	var res = doc.getElementsByTagName("data");
+	var kala = "";
+	for (i = 0; i < res.length; i++)
 	{
-		el = document.getElementById('result');
-		if (el.firstChild)
+		el = res.item(i).childNodes;
+
+		// for each returned element, we create a treerow
+		trow = document.createElement("treerow");
+
+		// and add the elements as children into it
+
+		for (j = 0; j < el.length; j++)
 		{
-			el.removeChild(el.firstChild);
+			if ( (el[j].nodeName == "i4") || (el[j].nodeName == "string") )
+			{
+				firstname = document.createElement("treecell");
+				firstname.setAttribute('label',el[j].firstChild.nodeValue);
+				trow.appendChild(firstname);
+			};
 		};
+	
+		// and now I create the treeitem
+		titem = document.createElement("treeitem");
+		titem.appendChild(trow);
+	
+		// for this I need to figure out the correct parent
+		el = document.getElementById('maintree');
 
+		// now I need to get a reference to the treechildren element
+		// of that item
+		tc = el.getElementsByTagName("treechildren")[0];
 
-		res_str = document.createTextNode(querystring + " - " + res[0].firstChild.nodeValue);
-		el.appendChild(res_str);
+		tc.appendChild(titem);
+
 	};
-};
+
+}
 
 
 ]]></script>
 
-<keyset>
-	<key id="fetch" keycode="VK_RETURN" oncommand="rpc_request();"/>
-</keyset>
 <vbox>
-<hbox><textbox id="word" value=""/><button label="Fetch!" oncommand="rpc_request();"/></hbox>
-<html:div id="result" style="padding: 5px;"> </html:div>
+<hbox><!--<textbox id="word" value=""/>--><button label="Fetch!" oncommand="get_branch();"/></hbox>
 </vbox>
-<iframe width="100%" height="100px" src="">mingi kala</iframe>
+<tree id="maintree" flex="1">
+  <treecols>
+      <treecol id="oid" label="OID" primary="true" flex="3"/>
+      <treecol id="subcnt" label="Sub" flex="3"/>
+      <treecol id="name" label="name" flex="3"/>
+      <treecol id="url" label="url" flex="3"/>
+      <treecol id="iconurl" label="icon" flex="3"/>
+  </treecols>
+
+  <treechildren>
+  </treechildren>
+</tree>
+
 </window>
