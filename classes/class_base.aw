@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.96 2003/04/22 10:29:36 duke Exp $
+// $Id: class_base.aw,v 2.98 2003/04/23 16:06:13 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -204,8 +204,9 @@ class class_base extends aw_template
 		{
 			$this->inst->callback_pre_edit(array(
 				"id" => $this->id,
-				"object" => &$this->coredata,
+				"coredata" => &$this->coredata,
 			));
+
 		};
 
 
@@ -1164,9 +1165,6 @@ class class_base extends aw_template
 			};
 		};
 
-		// This concept of core fields sucks beams through a garden hose
-		$corefields = $this->get_visible_corefields();
-		
 		$retval = $tables = $fields = $realfields = array();
 
 		// I need to replace this with a better check if I want to be able
@@ -1502,6 +1500,7 @@ class class_base extends aw_template
 				"class" => constant($val["clid"]),
 				"subclass" => isset($val["subclass"]) ? constant($val["subclass"]) : "",
 				"addempty" => true,
+				"truncate_names" => 1,
 				"add_folders" => true,
 			));
 		};
@@ -1675,29 +1674,6 @@ class class_base extends aw_template
 		};
 	}
 
-	////
-	// !Figures out which corefields should be shown
-	function get_visible_corefields()
-	{
-		// figure out which core fields are to be shown
-		if (isset($this->classinfo["corefields"]["text"]))
-		{
-			$corefields = array_flip(explode(",",$this->classinfo["corefields"]["text"]));
-		}
-		else
-		{
-			$corefields = array("name" => 0);
-		};
-		
-		// by default only the name is shown
-		if ( sizeof($corefields) == 0 )
-		{
-			$corefields = array("name" => 0);
-		};
-
-		return $corefields;
-	}
-
 
 	function parse_properties($args = array())
 	{
@@ -1815,6 +1791,7 @@ class class_base extends aw_template
 				"id" => $this->id,
 			));
 		};
+		/*
 		if ($this->cfgform_id)
 		{
 			$toolbar->add_cdata(html::href(array(
@@ -1823,6 +1800,7 @@ class class_base extends aw_template
 				"target" => "_blank",
 			)));
 		};
+		*/
 		$this->toolbar = $toolbar->get_toolbar();
 		$this->toolbar2 = $toolbar->get_toolbar(array("id" => "bottom"));
 
