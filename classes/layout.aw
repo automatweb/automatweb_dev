@@ -56,10 +56,10 @@
 @caption Uploadi .csv fail
 
 @property import_remove_empty type=checkbox ch_value=1 group=import 
-@caption Kas eemaldame tühjad read lõpust
+@caption Kas eemaldame t&uuml;hjad read l&otilde;pust
 
 @property import_sep type=textbox size=1 group=import 
-@caption Mis märgiga on tulbad eraldatud?
+@caption Mis m&auml;rgiga on tulbad eraldatud?
 
 @property show_in_folders type=relpicker reltype=RELTYPE_SHOW_FOLDER multiple=1 rel=1 group=general
 @caption Millistes kataloogides n&auml;idatakse
@@ -312,6 +312,14 @@ class layout extends class_base
 					$ge->set_col_height($i, $arr["request"]["colh"][$i]);
 				}
 				$arr['obj_inst']->set_meta('grid',$ge->_get_table());
+				break;
+
+			case "import_sep":
+				if (trim($prop["value"]) === "")
+				{
+					$prop["error"] = "Eraldaja peab olema sisestatud!";
+					return PROP_ERROR;
+				}
 				break;
 		}
 		return $retval;
