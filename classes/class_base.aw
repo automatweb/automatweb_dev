@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.112 2003/06/03 14:35:37 duke Exp $
+// $Id: class_base.aw,v 2.113 2003/06/03 14:53:07 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -94,7 +94,7 @@ class class_base extends aw_template
 			$this->id = "";
 			$this->reltype = isset($args["reltype"]) ? $args["reltype"] : "";
 		}
-		elseif ($args["action"] == "change")
+		elseif (($args["action"] == "change") || ($args["action"] == "view"))
 		{
 			$this->id = $args["id"];
 			$obj = $this->get_object($this->id);
