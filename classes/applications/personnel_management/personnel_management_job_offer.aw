@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.3 2004/06/07 13:19:17 sven Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_JOB_OFFER relationmgr=yes no_yah=1
 
 @default table=objects
 @default group=general
@@ -22,13 +22,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 @property noudmised type=textarea field=requirements table=personnel_management_job  group=info_about_job
 @caption N&otilde;udmised kandidaadile
 
-@property asukoht type=relpicker reltype=RELTYPE_LINN automatic=1 editonly=1 method=serialize field=meta table=objects  group=info_about_job
+@property asukoht type=relpicker reltype=RELTYPE_LINN automatic=1 method=serialize field=meta table=objects  group=info_about_job
 @caption Asukoht
 
-@property deadline type=date_select year_from=2004 year_to=2010 field=meta method=serialize group=info_about_job
+@property deadline type=date_select table=personnel_management_job group=info_about_job
 @caption Konkursi tähtaeg
 
-@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 editonly=1 table=objects store=connect group=info_about_job reltype=RELTYPE_TEGEVUSVALDKOND orient=vertical
+@property tegevusvaldkond type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_TEGEVUSVALDKOND orient=vertical
 @caption Tegevusvaldkond
 
 @property cvfail type=text subtitle=1 group=info_about_job_file store=no
@@ -40,16 +40,16 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 @property candits type=table group=kandideerinud no_caption=1
 @caption Kandideerijad
 
-@property kandideerin type=select field=meta method=serialize store=no group=minu_kandidatuur
+@property kandideerin type=chooser field=meta method=serialize store=no group=minu_kandidatuur edit_links=1
 @caption Vali cv kandideerimiseks
 
 @property statistika type=table no_caption=1 group=statistika
 
-@property email type=relmanager reltype=RELTYPE_EMAIL props=name group=info_about_job field=meta method=serialize
-@caption E-mail
+property email type=relmanager reltype=RELTYPE_EMAIL props=name group=info_about_job field=meta method=serialize
+caption E-mail
 
-@property phone type=relmanager reltype=RELTYPE_PHONE props=name group=info_about_job field=meta method=serialize
-@caption Telefon
+property phone type=relmanager reltype=RELTYPE_PHONE props=name group=info_about_job field=meta method=serialize
+caption Telefon
 
 @property job_from type=date_select year_to=2010 field=meta method=serialize group=info_about_job
 @caption Tööleasumise aeg
@@ -60,13 +60,13 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 @property contact_person type=textarea field=meta method=serialize group=info_about_job
 @caption Kontaktisik ja kontaktandmed 
 
-@property tookoormused type=classificator field=meta method=serialize multiple=1 editonly=1 table=objects store=connect group=info_about_job reltype=RELTYPE_WORKLOAD orient=vertical
+@property tookoormused type=classificator field=meta method=serialize multiple=1 table=objects store=connect group=info_about_job reltype=RELTYPE_WORKLOAD orient=vertical
 @caption Töökoormused
 
 @property is_public type=checkbox field=meta method=serialize group=info_about_job ch_value=1
 @caption Avalik konkurss
 
-@property praktika type=classificator field=meta mehtod=serialize group=info_about_job reltype=RELTYPE_PRACTICE orient=vertical editonly=1 store=connect
+@property praktika type=classificator field=meta mehtod=serialize group=info_about_job reltype=RELTYPE_PRACTICE orient=vertical store=connect
 @caption  Liik
 
 @reltype WORKLOAD value=1 clid=CL_META
@@ -103,7 +103,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, o
 
 @groupinfo job_view caption="Vaata Tööpakkumist" submit=no
 @groupinfo minu_kandidatuur caption="Minu kandidatuur"
-@groupinfo kandideerinud caption="Kandideerijad"
+@groupinfo kandideerinud caption="Kandideerijad" submit=no
 @groupinfo statistika caption="Statistika" submit=no
 
 */
@@ -148,13 +148,28 @@ class personnel_management_job_offer extends class_base
 			$job_obj->save();
 		}
 	}
-	
+	/**
+		@attrib name=delete_rels
+	**/
+	function delete_rels($arr)
+	{
+		foreach ($arr["sel"] as $conn)
+		{
+			$conn=new connection($conn);
+			$conn->delete();
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
+	}
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "deadline":
+				$prop["year_from"] = date("Y", time());
+				$prop["year_to"] = date("Y", time()) + 10;
+			break;
 			case "job_nr":
 				if(!$prop["value"])
 				{
@@ -210,8 +225,97 @@ class personnel_management_job_offer extends class_base
 				$prop["options"] = $mycvs;
 			break;
 			
+			case "candits":
+				$this->do_candits_table($arr);
+			break;
+			
+			case "navtoolbar":
+				
+				$tb = &$prop["toolbar"];
+				
+				$tb->add_button(array(
+					"name" => "save",
+					"img" => "save.gif",
+					"tooltip" => "Salvesta hinded",
+					"url" => "javascript:document.changeform.submit()",
+				));
+
+				$tb->add_button(array(
+					"name" => "delete",
+					"img" => "delete.gif",
+					"tooltip" => "Kustuta kandieerijad",
+					"action" => "delete_rels",
+				));
+			break;
+			
 		};
 		return $retval;
+	}
+	
+	function do_candits_table($arr)
+	{
+		
+		$table=&$arr["prop"]["vcl_inst"];
+				
+		$table->define_field(array(
+			"name" => "nimi",
+			"caption" => "Nimi",
+			"sortable" => 1,
+		));
+				
+			
+		$table->define_field(array(
+			"name" => "date",
+			"caption" => "Kuupäev",
+			"sortable" => 1,
+		));
+						
+		$table->define_field(array(
+			"name" => "hinne",
+			"caption" => "Hinne",
+			"sortable" => 1,
+			"numeric" => 1,
+			"sortable" => 1,
+			"callback" => array(&$this, 'callb_jrk'),
+			"callb_pass_row" => true,
+		));	
+
+		$table->define_chooser(array(
+			"name" => "sel",
+			"field" => "from",
+		));
+				
+		
+		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_KANDIDAAT)) as $cv)
+		{
+				
+			$connection_id = $cv->id();
+			$connection_created= $cv->prop("created");
+				
+			$rel_obj = obj($cv->prop("relobj_id"));
+
+			$cv = obj($cv->prop("to"));
+			$conn = new connection();
+				
+			$conn = $conn->find(array(
+				"from.class_id" => CL_CRM_PERSON,
+				"to" => $cv->id(),	
+			));
+				
+			$conn = array_shift($conn);
+			$person =& obj($conn["from"]);
+						
+			$table->define_data(array(							
+				"nimi" => html::href(array(
+								"caption" => $person->prop("firstname")." ".$person->prop("lastname"),
+								"url" =>  $this->mk_my_orb("change", array("id" => $cv->id()) , CL_PERSONNEL_MANAGEMENT_CV),
+						)),
+				"date" => get_lc_date($connection_created),
+				"from" => $connection_id,
+				"to" => $connection_id,
+				"hinne" => $rel_obj->meta("hinne"),
+			));
+		}
 	}
 	
 	/**
@@ -228,7 +332,6 @@ class personnel_management_job_offer extends class_base
 			}
 		}
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
-
 	}
 	
 	function do_view_tb(&$arr)
@@ -241,39 +344,8 @@ class personnel_management_job_offer extends class_base
 			"tooltip" => "Genereeri pdf",
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id(), "oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
 		));
-		/*
-		$tb->add_button(array(
-			"name" => "print",
-			"img" => "print.gif",
-			"tooltip" => "Print vaade",
-			"action" => "gen_print_view",
-		));*/
 	}
-	function set_scheduler_call_time(&$arr)
-	{
-		$data = &$arr["prop"];
-		//$timestamp = mktime(0, 0, 0, $data["value"]["month"], $data["value"]["day"], $data["value"]["year"]);
-		
-		$timestamp = time() + 10;
-		
-		$scheduler = get_instance("scheduler");
-		
-		$scheduler->remove(array(
-			"event" => $this->mk_my_orb("job_to_not_act", array("oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
-			"uid" =>  "sven",
-			"password" => "ub74zk",
-		));
-	
-		if($timestamp > time())
-		{
-			$scheduler->add(array(
-				"event" => $this->mk_my_orb("job_to_not_act", array("oid" => $arr["obj_inst"]->id()), CL_PERSONNEL_MANAGEMENT_JOB_OFFER),
-				"time" => $timestamp,
-				"uid" =>  "sven",
-				"password" => "ub74zk",
-			));
-		}
-	}
+
 	
 	function set_property($arr = array())
 	{
@@ -284,9 +356,27 @@ class personnel_management_job_offer extends class_base
 			case "kandideerin":
 				$this->apply_for_job($arr);		
 			break;
+
+			case "candits":
+				$this->do_save_candits_table($arr);
+			break;
 		}
-		
 		return $retval;
+	}
+
+	function do_save_candits_table($arr)
+	{
+		if (!is_array($arr["request"]["hinne"]))
+		{
+			$arr["request"]["hinne"] = array();
+		}
+		foreach ($arr["request"]["hinne"] as $key => $value)
+		{
+			$conn = new connection($key);
+			$relobject = &obj($conn->prop("relobj_id"));
+			$relobject->set_meta("hinne", $value);
+			$relobject->save();
+		}
 	}
 
 	//Tuleb uuesti teha
@@ -335,19 +425,39 @@ class personnel_management_job_offer extends class_base
 		$this->db_query($query_str);
 		$results = array();
 		$results = $this->db_fetch_array();
-		$u_i = get_instance("core/users/user");
-
+		
+		
 		foreach($results as $row)
 		{
-			$person = obj($u_i->get_current_person());
-
-			$table->define_data(array(
-					"person" => html::href(array(
-						"url" => $this->mk_my_orb("change", array("id" => $person->id()), "crm_person"),
+			$user = obj(users::get_oid_for_uid($row["uid"]));
+			if(!is_object($user))
+			{
+				continue;
+			}
+			
+			$person = current($user->connections_from(array("type" => RELTYPE_PERSON)));
+			$person = $person->to();
+			if(!is_object($person))
+			{
+				continue;
+			}
+			
+			
+			if($person->prop("default_cv"))
+			{
+				$person_link = html::href(array(
+						"url" => $this->mk_my_orb("change", array("id" => $person->prop("default_cv")), CL_PERSONNEL_MANAGEMENT_CV),
 						"caption" => $person->name(),
-					)),
-					"views" => $row["vaatamisi"],
 				));
+			}
+			else
+			{
+				$person_link = $person->name();
+			}
+			$table->define_data(array(
+				"person" => $person_link,
+				"views" => $row["vaatamisi"],
+			));
 		}
 	}
 	
@@ -371,7 +481,12 @@ class personnel_management_job_offer extends class_base
 		
 		$company = current($ob->connections_to(array("from.class_id" => CL_CRM_COMPANY)));
 		$company = &obj($company->prop("from"));
-		$ob->prop("asukoht") ? $location = &obj($ob->prop("asukoht")): $location = "-"; 
+		$location = " - ";
+		if ($ob->prop("asukoht"))
+		{
+			$location = &obj($ob->prop("asukoht")); 
+			$location = $location->name();
+		}
 		$this->read_template("show.tpl");
 		
 		
@@ -433,29 +548,49 @@ class personnel_management_job_offer extends class_base
 			$tmp_sectors .= $this->parse("sectors_list");
 		}*/
 		
+		$ks = array();
+		if (is_array($ob->prop("tookoormused")))
+		{
+			foreach($ob->prop("tookoormused") as $tkm)
+			{
+				$_o = obj($tkm);
+				$ks[] = $_o->name();
+			}
+		}
 		
 		$this->vars(array(
 			"name" => @$ob->prop("name"),
 			"company" => $company_name,
-			//"loacation" => $location->name(),
+			"location" => $location,
 			"sectors" => $tmp_sectors,
 			"deadline" => get_lc_date($ob->prop("deadline")),
 			"description" => $ob->prop("toosisu"),
 			"requirements" => $ob->prop("noudmised"),
+			"start_date" => $ob->prop("job_from") > 100 ? get_lc_date($ob->prop("job_from")) : " - ",
+			"tookoormused" => join(",", $ks),
+			"contact_person" => $ob->prop("contact_person"),
+			"job_nr" => $ob->prop("job_nr")
 		));
 		
 		return $this->parse();
 	}
 	
+	
+	//This funcition will be called by scheduler every day and sets jobs where deadline is over unactive.
 	/**
 		@attrib name=job_to_not_act
-		@param oid required type=int acl="view;edit"
 	**/
 	function job_to_not_act($arr)
 	{
-		$cv_obj = & obj($arr["oid"]);
-		$cv_obj->set_status(STAT_NOTACTIVE);
-		$cv_obj->save(); 
+		$not_act_list = new object_list(array(
+			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"deadline" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
+		));
+		foreach ($not_act_list->arr() as $ob)
+		{
+			$ob->set_status(STAT_NOTACTIVE);
+			$ob->save();
+		}
 	}
 	
 	/**
@@ -488,6 +623,17 @@ class personnel_management_job_offer extends class_base
 			$this->db_query("INSERT INTO cv_hits VALUES(NULL,'$oid', '$uid', '$ip', '$time')");
 			$_SESSION["job_view".$arr["id"]] = true;
 		}
+	}
+
+	function callb_jrk($arr)
+	{
+		$toid=$arr["to"];	
+		return  html::textbox(array(
+					"size" => 4,
+					"maxlength" => 4,
+					"name" => "hinne[$toid]",
+					"value" => $arr['hinne'],
+                ));
 	}
 }
 ?>

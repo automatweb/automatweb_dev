@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.3 2004/06/07 13:16:40 sven Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -31,8 +31,6 @@
 @property my_join_offerer type=callback group=my_join_offerer,org_profile_info callback=callback_get_join_offerer store=no
 
 -------------------TÖÖOTSIJAD-----------------------
-// las nad olla üksteise peal
-property manager_person type=text no_caption=1 store=no wrapchildren=1 group=employee
 @property treeview_person type=text store=no group=employee no_caption=1
 @property personlist type=table store=no group=employee no_caption=1
 
@@ -61,7 +59,7 @@ property manager type=text no_caption=1 store=no wrapchildren=1 group=employers
 @groupinfo dir_setings caption="Kaustade seaded" parent=all_setings
 @groupinfo layout_setings caption="Seaded" parent=all_setings
 @groupinfo env_setings caption="Keskkonna seaded" parent=all_setings
-
+@groupinfo education_setings caption="Haridus seaded" parent=all_setings
 
 @groupinfo my_join caption="Registreeru" tabgroup=left
 @groupinfo my_join_worker caption="T&ouml;&ouml;otsija" parent=my_join tabgroup=left
@@ -88,6 +86,15 @@ property manager type=text no_caption=1 store=no wrapchildren=1 group=employers
 @property max_active_job type=textbox size=3 group=env_setings store=no
 @caption Tööpakkumine maksimaalselt aktiivne(päevades) 
 
+--------------------EDUCATION PROPERTIES----------------
+@property education_types type=text store=no group=education_setings subtitle=1
+@caption Vali milliseid hariduse liike saab lisada
+
+@property list_of_education_cfgform type=table store=no no_caption=1 group=education_setings
+
+@property additional_edu type=select group=education_setings store=no
+@caption Täienduskoolituse vorm
+-------------------------------------------------------------
 
 @property orgs type=relpicker group=dir_setings table=objects method=serialize field=meta reltype=RELTYPE_MENU
 @caption Organisatsioonide kaust
@@ -199,6 +206,8 @@ class personnel_management extends class_base
 		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]), $arr["class"]);
 	}
 	
+
+	
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -223,6 +232,25 @@ class personnel_management extends class_base
 					"background_image" => $t->get_url_by_id($first_bg->prop("to")),
 				));
 						
+			break;
+			
+			case "additional_edu":
+				$educaton_cfg_form = new object_list(array(
+					"class_id" => CL_CFGFORM,
+					"subclass" => CL_EDUCATION,
+				));
+		
+				$ch_values = $this->my_profile["org_obj"]->meta("add_edu_form");
+				$prop["options"][] = " ";
+				foreach ($educaton_cfg_form->arr() as $eduform)
+				{
+					$prop["options"][$eduform->id()] = $eduform->name();
+				}
+				$prop["value"] = $ch_values;
+			break;
+			
+			case "list_of_education_cfgform":
+				$this->do_list_of_education_cfgform($arr);
 			break;
 			
 			case "max_active_cv":
@@ -340,41 +368,131 @@ class personnel_management extends class_base
 				"sortable" => 1,
 		));
 		
-		/*
-		$table->define_field(array(
-				"name" => "sectors",
-				"caption" => "Valdkonnad",
-				"sortable" => 1,
-		));
-		*/
+	
 		$manager = current($this->my_profile["manager_list"]);
 		if (!is_object($manager))
 		{
 			return 0;
 		}
+
+		$user_inst = get_instance("core/users/user");
 		
 		foreach ($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $tootu)
 		{
-			$tootu = $tootu->to();
+			$tootu_ids[] = $tootu->prop("to");
+		}
+		
+		$tootsijad_obj_list = new object_list(array(
+			"oid" => $tootu_ids,
+			"class_id" => CL_CRM_PERSON,	
+		));
+		
+		$tootsijad_obj_list = $tootsijad_obj_list->arr();
+		
+		
+		foreach ($tootsijad_obj_list as $tootu)
+		{
+			if(!$tootu->prop("default_cv"))
+			{
+				continue;
+			}
+			$cv_ids[] = $tootu->prop("default_cv");
+			$userdata[$tootu->id()]["cv_id"] = $tootu->prop("default_cv");
+			$userdata[$tootu->id()]["person"] = $tootu;
+			
+		}
+				
+		$cvs_obj_list = new object_list(array(
+			"oid" => $cv_ids,
+			"class_id" => CL_PERSONNEL_MANAGEMENT_CV,
+			"status" => STAT_ACTIVE,
+		));
+		$cvs_obj_list = $cvs_obj_list->arr();
+		
+		foreach ($userdata as $key => $persondata)
+		{
+			$userdata[$key]["cv_obj"]=$cvs_obj_list[$persondata["cv_id"]];
+		}
+		
+		foreach ($userdata as $data)
+		{
+			if($data["cv_obj"])
+			{
+		
+				if($_GET["sector_id"])
+				{
+					$toosoovid = $data["cv_obj"]->connections_from(array("type" => 10));
+
+					foreach ($toosoovid as $toosoov)
+					{
+						$toosoovid_ids[] = $toosoov->prop("to");
+					}
+					
+					$toosoov_sector_conns = new connection(); 
+					$toosoov_sector_conns = $toosoov_sector_conns->find(array(
+						"from" => $toosoovid_ids,
+						"to" => $_GET["sector_id"],
+					));
+						
+					if($toosoov_sector_conns)
+					{
+						$count = true;
+					}
+					else
+					{
+						$count = false;
+					}
+				}
+				else
+				{
+					$count = true;
+				}
+				
+				if($count)
+				{
+					if($data["person"]->prop("birthday"))
+					{
+						$synd = get_lc_date($data["person"]->prop("birthday"));
+					}
+			
+					$table->define_data(array(
+						"nimi" => html::href(array(
+							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $data["cv_obj"]->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true). "\",\"cv\",800,600)",
+							"caption" => $data["person"]->name(),
+						)),
+						"modified" => get_lc_date($data["cv_obj"]->modified()),
+						"synd" => $synd,
+					));
+				}
+				$count = false;
+			}
+		}
+		/*
+		foreach ($tootsijad_obj_list as $tootu)
+		{
 			$default_cv = $tootu->prop("default_cv");
 			
 			if(!$default_cv)
 			{
-				$default_cv = current($tootu->connections_from(array("type" => RELTYPE_CV)));
-				if(is_object($default_cv))
-				{
-					$default_cv = $default_cv->prop("to");
-				}
+				continue;
 			}
 			
 			$default_cv_obj = &obj($default_cv);
-			if($this->my_profile["person_obj"]->prop("birthday"))
-			{
-				$date = get_lc_date($this->my_profile["person_obj"]->prop("birthday"));
-			}				
-				
 			if($default_cv_obj->status() == STAT_ACTIVE)
 			{
+				// $date is for the cv , not the current person
+
+				$creator = $default_cv_obj->createdby();
+				$_person_o = obj($user_inst->get_person_for_user($creator));
+				if ($_person_o->prop("birthday") < 100)
+				{
+					$date = "";
+				}
+				else
+				{
+					$date = get_lc_date($_person_o->prop("birthday"));
+				}
+
 				$job_cat_conns = new connection();
 						
 				$job_cat_conns = $job_cat_conns->find(array(
@@ -384,16 +502,54 @@ class personnel_management extends class_base
 				
 				if($job_cat_conns)
 				{
+					
 					$table->define_data(array(
 						"nimi" => html::href(array(
 							"url" => "javascript:aw_popup_scroll(\"".$this->mk_my_orb("change", array("id" => $default_cv_obj->id()), CL_PERSONNEL_MANAGEMENT_CV, true, true). "\",\"cv\",800,600)",
 							"caption" => $tootu->name(),
-					)),
-					"modified" => get_lc_date($default_cv_obj->modified()),
-					"synd" => $date,
+						)),
+						"modified" => get_lc_date($default_cv_obj->modified()),
+						"synd" => $date,
 					));
 				}		
 			}	
+		}*/
+	}
+	
+	function do_list_of_education_cfgform($arr)
+	{
+		
+		$table = &$arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "education_type",
+			"caption" => "Haridusliik",
+			"sortable" => 1,
+		));
+		
+		$table->define_field(array(
+			"name" => "education_check",
+			"caption" => "X",
+			"sortable" => 1,
+		));
+		
+		$educaton_cfg_form = new object_list(array(
+			"class_id" => CL_CFGFORM,
+			"subclass" => CL_EDUCATION,
+		));
+		
+		$ch_values = $this->my_profile["org_obj"]->meta("education_types");
+	
+		foreach ($educaton_cfg_form->arr() as $eduform)
+		{
+			$id = $eduform->id();
+			$table->define_data(array(
+				"education_type" => $eduform->name(),
+				"education_check" => html::checkbox(array(
+					"name" => "edu_cfg_form[$id]",
+					"checked" => $ch_values[$id],
+				)),
+			));
 		}
 	}
 	
@@ -447,7 +603,7 @@ class personnel_management extends class_base
 			"from" => $toopakkujad_ids,
 			"type" => RELTYPE_JOBS,
 			"to.status" => STAT_ACTIVE,
-			"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
+			//"deadline" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 		));
 		
 		foreach ($jobs_list as $job)
@@ -479,7 +635,8 @@ class personnel_management extends class_base
 		$job_ob_list = new object_list(array(
         	"status" => STAT_ACTIVE,
         	"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
-        	"oid" => $job_ids
+        	"oid" => $job_ids,
+        	"deadline" => new obj_predicate_compare(OBJ_COMP_GREATER, time()),
         ));
         
         $city_conns = new connection();
@@ -494,8 +651,20 @@ class personnel_management extends class_base
         	$city_data[$city_conn["from"]] = $city_conn["to.name"];
         }
         
-		foreach ($job_ob_list->arr() as $job)
+   
+		
+        foreach ($job_ob_list->arr() as $job)
 		{
+		
+			if($job->prop("deadline"))
+			{
+        		$deadline = get_lc_date($job->prop("deadline"));
+        	}
+        	else
+        	{
+        		$deadline = "Määramata";
+        	}
+        	
 			$table->define_data(array(
 				"amet" => html::href(array(
 							"caption" => $job->prop("name"),
@@ -504,7 +673,7 @@ class personnel_management extends class_base
 				
 				"pakkuja" => $job_data[$job->id()]["company"],
 				"asukoht" => $city_data[$job->id()],
-				"deadline" => get_lc_date($job->prop("deadline")),
+				"deadline" => $deadline,
 				"created" => $job->created(),
 			));
 		}
@@ -521,37 +690,59 @@ class personnel_management extends class_base
 		{
 			return 0;
 		}
-
+		
 		foreach($manager->connections_from(array("type" => RELTYPE_TOOTSIJA)) as $person)
 		{
-			$person = $person->to();
-			$default_cv = $person->prop("default_cv");
-			
-			if(!$default_cv)
+			$person_ids[] = $person->prop("to");
+		}
+		
+		if(!$person_ids)
+		{
+			return 0;
+		}
+		
+		$person_obj_list = new object_list(array(
+			"oid" => $person_ids,
+			"class_id" => CL_CRM_PERSON,
+		));
+				
+		foreach($person_obj_list->arr() as $person)
+		{
+			if($person->prop("default_cv"))
 			{
-				$default_cv = current($person->connections_from(array("type" => RELTYPE_CV)));
-				if(is_object($default_cv))
-				{
-					$default_cv = $default_cv->prop("to");
-				}
-			}
-			$default_cv_obj = &obj($default_cv);
-			
-			if($default_cv_obj->status() == STAT_ACTIVE)
-			{
-				$job_cat_conns = new connection();
-						
-				$job_cat_conns = $job_cat_conns->find(array(
-					"from" => $default_cv_obj->id(),
-					"to" => $sector_id,
-				));
-			
-				if($job_cat_conns)
-				{
-					$counter++;
-				}
+				$default_cv_ids[] = $person->prop("default_cv");
 			}
 		}
+		
+		if(!$default_cv_ids)
+		{
+			return 0;
+		}
+		
+		$jobs_wanted_conns = new connection();
+		
+		$jobs_wanted_conns = $jobs_wanted_conns->find(array(
+			"from" => $default_cv_ids,
+			"to.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_WANTED,
+		));
+		
+		foreach ($jobs_wanted_conns as $wanted)
+		{
+			$jobs_wanted_ids[] = $wanted["to"];
+		}
+		
+		if(!$jobs_wanted_ids)
+		{
+			return 0;
+		}
+		
+		$job_cat_conns = new connection();				
+		$job_cat_conns = $job_cat_conns->find(array(
+			"from" => $jobs_wanted_ids,
+			"to" => $sector_id,
+		));
+		
+		$counter = count($job_cat_conns);
 		if(!$counter)
 		{
 			return "0";
@@ -567,28 +758,31 @@ class personnel_management extends class_base
 		{
 			return 0;
 		}
+		
 		foreach ($manager->connections_from(array("type" => "RELTYPE_TOOPAKKUJA")) as $toopakkuja)
 		{
-			$toopakkuja = $toopakkuja->to();
-			
-			foreach ($toopakkuja->connections_from(array("type" => "RELTYPE_JOBS")) as $job)
-			{		
-				$job = $job->to();
-				if($job->prop("status") == STAT_ACTIVE)
-				{
-					$job_cat_conns = new connection();
-						
-					$job_cat_conns = $job_cat_conns->find(array(
-						"from" => $job->id(),
-						"to" => $sector_id,
-					));
-					if($job_cat_conns)
-					{
-						$counter++;
-					}
-				}
-			}
+			$toopakkujad_ids[] = $toopakkuja->prop("to");
 		}
+		
+		$job_conns_list = new connection();
+		$job_conns_list = $job_conns_list->find(array(
+			"from" => $toopakkujad_ids,
+			"to.class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER,
+			"to.status" => STAT_ACTIVE,
+		));
+		
+		foreach ($job_conns_list as $job)
+		{
+			$jobs_ids[] = $job["to"];
+		}
+		
+		$cat_jobs = new connection();
+		$cat_jobs = $cat_jobs->find(array(
+			"from" => $jobs_ids,
+			"to" => $sector_id,
+		));
+		
+		$counter = count($cat_jobs);
 		if(!$counter)
 		{
 			return "0";
@@ -1018,6 +1212,16 @@ class personnel_management extends class_base
 				}
 			break;
 			
+			case "additional_edu":
+				$this->my_profile["org_obj"]->set_meta("add_edu_form", $arr["request"]["additional_edu"]);	
+				$this->my_profile["org_obj"]->save();
+			break;
+			
+			case "list_of_education_cfgform":
+				$this->my_profile["org_obj"]->set_meta("education_types", $arr["request"]["edu_cfg_form"]);
+				$this->my_profile["org_obj"]->save();
+			break;
+			
 			case "my_join_offerer":
 				$j_oid = $arr["obj_inst"]->prop("join_obj_offerer");
 				if ($j_oid)
@@ -1188,7 +1392,7 @@ class personnel_management extends class_base
 		
 		$manager_profile["org_obj"] = obj($u_i->get_current_company());
 
-		$manager_profile["manager_list"] = array();		
+		$manager_profile["manager_list"][] = &$manager_profile["org_obj"]; 	
 
 		return $manager_profile;
 	}

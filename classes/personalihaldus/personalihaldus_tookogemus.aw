@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_tookogemus.aw,v 1.1 2004/03/16 14:07:00 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/personalihaldus_tookogemus.aw,v 1.2 2004/06/07 13:15:40 sven Exp $
 // personalihaldus_tookogemus.aw - Töökogemus 
 /*
 
@@ -13,10 +13,10 @@
 @property asutus type=textbox 
 @caption Asutus
 
-@property algus type=date_select
+@property algus type=date_select year_from=1930
 @caption Alates
 
-@property kuni type=date_select
+@property kuni type=date_select year_from=1930
 @caption Kuni
 
 @property ametikoht type=textbox
@@ -42,18 +42,20 @@ class personalihaldus_tookogemus extends class_base
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
 
-	/*
+	
 	function get_property($arr)
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-
+			case "kuni":
+				$data["year_to"] = date("Y", time());
+			break;
 		};
 		return $retval;
 	}
-	*/
+	
 
 	/*
 	function set_property($arr = array())

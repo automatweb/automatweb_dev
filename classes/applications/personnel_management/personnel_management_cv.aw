@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.2 2004/05/23 11:46:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.3 2004/06/07 13:17:54 sven Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
 
-@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV relationmgr=yes
+@classinfo syslog_type=ST_PERSONNEL_MANAGEMENT_CV relationmgr=yes no_yah=1
 
 @default table=objects
 @default group=general
@@ -15,62 +15,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_sa
 @property active_until type=date_select group=general table=staff_cv
 @caption Aktiivne kuni
 
-/////////////////////////////////////\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+-----------------------------
 @property comuter_skills_tb type=toolbar no_caption=1 store=no group=arvutioskus
 @property previous_jobs_tb type=toolbar no_caption=1 store=no group=tookogemus
 @property lang_skills_tb type=toolbar no_caption=1 store=no group=keeleoskused
-@property education_tb type=toolbar no_caption=1 store=no group=haridustee
-
-
-@property educationtabel type=table no_caption=1 store=no group=haridustee
-
-@property keeleoskused type=table store=no group=keeleoskused no_caption=1
-@property lang_skill_label type=text group=keeleoskused subtitle=1 value=Lisa&nbsp; store=no
-
-@property computer_skills type=table store=no group=arvutioskus no_caption=1
-@property comp_skill_label type=text group=arvutioskus subtitle=1 value=Arvutioskuste&nbsp;lisamine store=no
 
 @property jobs type=table store=no group=tookogemus no_caption=1
 @property comp_skill_label type=text group=arvutioskus subtitle=1 value=Lisa&nbsp;arvutioskus store=no
 
-@property haridus_label type=text group=haridustee subtitle=1 value=Kooli&nbsp;lisamine store=no
-
-@property education type=releditor reltype=RELTYPE_EDUCATION props=lisainfo_edu,loppaasta,algusaasta,eriala,kool,education_type group=haridustee store=no
-
-@property language_skills type=releditor reltype=RELTYPE_LANG props=keel,tase  group=keeleoskused store=no
-@caption Keeleoskus
-
-
-@property kogemused type=releditor reltype=RELTYPE_KOGEMUS props=asutus,algus,kuni,ametikoht,tasks group=tookogemus rel_id=57486 store=no
+@property kogemused type=releditor reltype=RELTYPE_KOGEMUS props=asutus,algus,kuni,ametikoht,tasks group=tookogemus store=no
 @caption Kogemused
-
-@property arvutioskus type=releditor reltype=RELTYPE_ARVUTIOSKUS props=oskus,tase group=arvutioskus store=no
-@caption Arvutioskus
 
 @property juhiload type=classificator method=serialize group=driving_licenses store=connect reltype=RELTYPE_JUHILUBA
 @caption Juhiload
-
-//////////////////// TAB Tï¿½SOOV \\\\\\\\\\\\\\\\\\\\\\\\\
-@property ametinimetus type=textbox field=meta method=serialize group=toosoov
-@caption Ametinimetus
-
-@property palgasoov type=textbox field=meta method=serialize group=toosoov size=5
-@caption Palgasoov
-
-@property valdkond type=classificator group=toosoov method=serialize multiple=1 orient=vertical store=connect reltype=RELTYPE_TEGEVUSVALDKOND
-@caption Tegevusala
-
-@property liik type=classificator multiple=1 group=toosoov method=serialize store=connect reltype=RELTYPE_LIIK
-@caption T&ouml;&ouml; liik
-
-@property asukoht type=relpicker multiple=1 automatic=1 reltype=RELTYPE_LINN group=toosoov field=meta method=serialize orient=vertical
-@caption Ttamise piirkond
-
-@property koormus type=classificator group=toosoov field=meta method=serialize multiple=1 orient=vertical
-@caption T&ouml;&ouml; koormus
-
-@property job_addinfo type=textarea group=toosoov field=addinfo table=staff_cv
-@caption Lisainfo soovitava t&ouml;&ouml; kohta
 
 @property soovitajad type=textarea group=soovitajad field=recommenders table=staff_cv
 @caption Soovitajad
@@ -83,28 +40,75 @@ caption Sain t&ouml;&ouml;d teie kaudu
 @property cv_view_tb type=toolbar no_caption=1 store=no wrapchildren=1 group=cv_view
 @property cv_view type=text no_caption=1 store=no wrapchildren=1 group=cv_view
 
-//////////////////////////////TABID\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+------------------ARVUTIOSKUSED---------------------
+@property computer_skills type=table store=no group=arvutioskus no_caption=1
+@property comp_skill_label type=text group=arvutioskus subtitle=1 value=Arvutioskuste&nbsp;lisamine store=no
+@property arvutioskus type=releditor reltype=RELTYPE_ARVUTIOSKUS props=oskus,tase group=arvutioskus store=no
+@caption Arvutioskus
+
+@property other_computer_skills type=textarea table=staff_cv group=arvutioskus
+
+@property other_compterskills_label type=text group=arvutioskus store=no
+@caption Teised arvutioskused
+
+------------------KEELEOSKUS-------------------------
+@property keeleoskused type=table store=no group=keeleoskused no_caption=1
+@property lang_skill_label type=text group=keeleoskused subtitle=1 value=Lisa&nbsp; store=no
+@property language_skills type=releditor reltype=RELTYPE_LANG props=keel,tase  group=keeleoskused store=no
+@caption Keeleoskus
+@property other_languages_label type=text group=keeleoskused store=no
+@property other_languages type=textarea group=keeleoskused table=staff_cv
+@caption Teised keeled
+
+------------------TÖÖSOOVID--------------------------
+@property jobs_wanted_tb type=toolbar no_caption=1 store=no group=toosoov
+@property jobs_wanted_table type=table no_caption=1 group=toosoov
+@property jobs_wanted type=releditor reltype=RELTYPE_JOBWANTED props=name,palgasoov,valdkond,liik,asukoht,koormus,lisainfo,sbutton group=toosoov store=no
+@property jobs_wanted_label type=text store=no subtitle=1 group=toosoov
+@caption Lisa uus töösoov
+
+-------------------HARIDUS----------------------------
+@property education_tb type=toolbar no_caption=1 store=no group=haridustee
+@property educationtabel type=table no_caption=1 store=no group=haridustee
+@property haridus_label type=text group=haridustee subtitle=1 store=no
+@property education type=releditor reltype=RELTYPE_EDUCATION props=lisainfo_edu,loppaasta,algusaasta,eriala,kool,education_type group=haridustee store=no
+
+-----------------TÄIENDUSKOOLITUS---------------------
+@property education_additional_tb type=toolbar no_caption=1 group=taienduskoolitus
+@property education_additional_table type=table no_caption=1 group=taienduskoolitus
+@property education_additional type=releditor reltype=RELTYPE_EDUCATION props=lisainfo_edu,date_from,date_to,kool,education_type,submit_edu group=taienduskoolitus store=no group=taienduskoolitus
+
+-------------------OSKUSED----------------------------
+@property additional_skills type=textarea group=other_skills table=staff_cv
+@caption Muud oskused 
+
+@property driving_since type=select table=staff_cv group=driving_licenses
+@caption Juhistaa¾ alates aastast
+
+--------------------TABID----------------------------
 @groupinfo skills caption="Oskused"
 @groupinfo arvutioskus caption="Arvutioskus" parent=skills
 @groupinfo keeleoskused caption="Keeleoskus" parent=skills
+
 @groupinfo driving_licenses caption="Juhiload" parent=skills
-@groupinfo haridustee caption="Hariduskï¿½k"
+@groupinfo other_skills caption="Muud oskused" parent=skills
+
+@groupinfo education_main caption="Hariduskäik" submit=no 
+@groupinfo haridustee caption="Hariduskäik" submit=no parent=education_main
+@groupinfo taienduskoolitus caption="Täienduskoolitus" submit=no parent=education_main
+
+
 @groupinfo soovitajad caption="Soovitajad"
 
-
-@groupinfo tookogemus caption="Tkogemused"
-@groupinfo toosoov caption="Soovitud t"
-
-
+@groupinfo tookogemus caption="Töökogemused"
+@groupinfo toosoov caption="Soovitud töö" submit=no
 
 @groupinfo statistika caption="Statistika" submit=no
 @groupinfo cv_view caption="Vaata CV-d" submit=no
-////////////////////////////SEOSED\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+---------------------SEOSED---------------------
 @reltype EDUCATION value=1 clid=CL_EDUCATION 
 @caption Haridus
-
-@reltype KOGEMUS value=4 clid=CL_PERSONALIHALDUS_TOOKOGEMUS
-@caption Kogemus
 
 @reltype LANG value=2 clid=CL_PERSONALIHALDUS_LANG
 @caption Keeleoskus
@@ -112,17 +116,14 @@ caption Sain t&ouml;&ouml;d teie kaudu
 @reltype ARVUTIOSKUS value=3 clid=CL_PERSONALIHALDUS_ARVUTIOSKUS
 @caption Arvutioskus
 
-@reltype LINN value=5 clid=CL_CRM_CITY
-@caption Linn
-
-@reltype TEGEVUSVALDKOND value=6 clid=CL_META
-@caption Tegevusala
+@reltype KOGEMUS value=4 clid=CL_PERSONALIHALDUS_TOOKOGEMUS
+@caption Kogemus
 
 @reltype JUHILUBA value=8 clid=CL_META
 @caption Juhiluba
 
-@reltype LIIK value=9 clid=CL_META
-@caption liik
+@reltype JOBWANTED value=10 clid=CL_PERSONNEL_MANAGEMENT_JOB_WANTED
+@caption Töösoov
 
 */
 
@@ -151,7 +152,7 @@ class personnel_management_cv extends class_base
 		
 	}
 
-	
+
 	//When new cv is saved, this function is called by message. Creates relation betweeb current logged user and cv.
 	function on_new_cv($arr)
 	{
@@ -164,10 +165,6 @@ class personnel_management_cv extends class_base
 			));
 		}	
 	}
-	
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
-
 
 	function get_property($arr)
 	{
@@ -175,7 +172,73 @@ class personnel_management_cv extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-		
+			case "education_additional_table":
+				$this->do_education_additional_table($arr);
+			break;
+			
+			case "education_additional_tb":
+				$this->do_education_additional_tb($arr);
+			break;
+			
+			case "other_computer_skills":
+				if(!$arr["request"]["ocomp"])
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "other_compterskills_label":
+				if($arr["request"]["ocomp"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::href(array(
+					"caption" => "Teised arvutioskused",
+					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "ocomp" => true), CL_PERSONNEL_MANAGEMENT_CV),
+				));
+			break;
+			case "comp_skill_label":
+				if($arr["request"]["eoid"])
+				{
+					$prop["value"] = "Arvutioskuse muutmine";
+				} 
+			break;
+			case "other_languages":
+				if(!$arr["request"]["olang"])
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case "other_languages_label":
+				if($arr["request"]["olang"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::href(array(
+					"caption" => "Mõni muu keel",
+					"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "olang" => true), CL_PERSONNEL_MANAGEMENT_CV),
+				));
+			
+			break;
+			case "driving_since":
+				for($i=date("Y"); $i>date("Y") - 80; $i--)
+				{
+					$prop["options"][$i]=$i;
+				}
+			break;
+			case "jobs_wanted_label":
+				if(!$arr["request"]["eoid"])
+				{
+					return PROP_IGNORE;
+				}
+				elseif(is_numeric($arr["request"]["eoid"]))
+				{
+					$prop["caption"] = "Muuda töösoovi";
+				}
+			break;
+			case "jobs_wanted_tb":
+				$this->jobs_wanted_tb($arr);
+			break;
+			
 			case "computer_skills":
 				$this->do_computer_skills_table(&$arr);
 			break;
@@ -183,6 +246,10 @@ class personnel_management_cv extends class_base
 				$this->do_comuter_skills_tb(&$arr);
 			break;
 			case "arvutioskus":
+				if($arr["request"]["ocomp"])
+				{
+					return PROP_IGNORE;
+				}
 				$prop["rel_id"] = $arr["request"]["eoid"];
 			break;
 			case "jobs":
@@ -210,6 +277,10 @@ class personnel_management_cv extends class_base
 			break;
 
 			case "language_skills":
+				if($arr["request"]["olang"])
+				{
+					return PROP_IGNORE;
+				}
 				$prop["rel_id"] = $arr["request"]["eoid"];
 			break;
 
@@ -219,6 +290,23 @@ class personnel_management_cv extends class_base
 
 			case "educationtabel":
 				$this->do_educationtabel($arr);
+			break;
+			
+			case "jobs_wanted":
+				$prop["rel_id"] = $arr["request"]["eoid"];
+				if(!$arr["request"]["eoid"]=="new")
+				{
+					$prop["rel_id"] = $arr["request"]["eoid"];
+					return PROP_IGNORE;
+				}
+			break;
+			
+			case "jobs_wanted_table":
+				
+				if($this->do_jobs_wanted_table($arr) == 0)
+				{
+					return PROP_IGNORE;
+				}
 			break;
 			
 			case "active_until":
@@ -236,6 +324,10 @@ class personnel_management_cv extends class_base
 				}
 			break;
 			
+			case "haridus_label":
+				return PROP_IGNORE;
+			break;
+			
 			case "education":
 				$prop["rel_id"] = $arr["request"]["eoid"];
 				if($arr["request"]["eoid"])
@@ -247,36 +339,29 @@ class personnel_management_cv extends class_base
 				
 				if(!$arr["request"]["type"])
 				{
-					$arr["request"]["type"] = 2;
+					return PROP_IGNORE;
 				}
 				
-				switch($arr["request"]["type"])
+				$manager = current($this->my_profile["manager_list"]);		
+				$configform = &obj($arr["request"]["type"]);
+				
+				$prop["props"] = array();
+				
+				foreach ($configform->meta("cfg_proplist") as $key=>$value)
 				{
-					//Phiharidus
-					case 1:
-						$prop["props"] = array("kool", "algusaasta", "loppaasta", "lisainfo_edu", "education_type");
-					break;
-					//Keskharidus
-					case 2:
-						$prop["props"] = array("kool", "algusaasta", "loppaasta", "lisainfo_edu", "education_type");
-					break;
-					//Krgharidus
-					case 3:
-						$prop["props"] = array("kool", "eriala", "algusaasta", "loppaasta", "lisainfo_edu", "education_type");
-					break;
-					//Tï¿½haridus
-					case 4:
-						$prop["props"] = array("eriala", "algusaasta", "loppaasta", "teaduskond", "oppekava", "lisainfo_edu");
-					break;
-					//Tï¿½enduskoolitus
-					case 5:
-						$prop["props"] = array("kool", "lisainfo_edu");	
-					break;
+					
+					$prop["props"][] = $key;
+					$value;
 				}
+				
 			break;
 			
 			case "stats_table":
 				$this->do_stats_table($arr);
+			break;
+			
+			case "education_additional":
+				$prop["rel_id"] = $arr["request"]["eoid"];
 			break;
 			
 			case "cv_view":
@@ -317,15 +402,42 @@ class personnel_management_cv extends class_base
 			"tooltip" => "Genereeri pdf",
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
 		));
-		/*
-		$tb->add_button(array(
-			"name" => "print",
-			"img" => "print.gif",
-			"tooltip" => "Print vaade",
-			"action" => "gen_print_view",
-		));*/
+	
 	}
+	
+	function do_jobs_wanted_table(&$arr)
+	{
+		$jobswanted = $arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBWANTED));
+		if(!$jobswanted)
+		{
+			return false;
+		}
+		$table =& $arr["prop"]["vcl_inst"];
 
+		$table->define_field(array(
+			"name" => "ametinimetus",
+			"caption" => "Ametinimetus",
+			"sortable" => 1
+		));
+		
+		$table->define_chooser(array(
+			"name" => "sel",
+			"field" => "from",
+		));
+		
+		foreach ($jobswanted as $jobwanted)
+		{
+			$table->define_data(array(
+				"ametinimetus" => html::href(array(
+								"caption" => $jobwanted->prop("to.name"),
+								"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "eoid" => $jobwanted->id()), CL_PERSONNEL_MANAGEMENT_CV)
+							)),
+				"from" => $jobwanted->id(),
+			));
+		}
+		return true;
+	}
+	
 	function do_educationtabel(&$arr)
 	{
 		$table =& $arr["prop"]["vcl_inst"];
@@ -358,16 +470,37 @@ class personnel_management_cv extends class_base
 		{
 			$connection_id = $haridus->id();
 
-			$haridus = obj($haridus->prop("to"));
+			$haridus = $haridus->to();
 			
-			$haridusliigid = array("Phiharidus", "Keskharidus", "Krgharidus", "Krgharidus", "Tï¿½enduskoolitus");
-			$liik = $haridus->prop("education_type");
-
+			//Just for old version support
+			if($haridus->prop("education_type") <= 6)
+			{
+				continue;
+			}
+			
+			$liik = &obj($haridus->prop("education_type"));
+			
+			if(is_object($liik))
+			{
+				$liik = $liik->name();
+			}
+			
+			if($haridus->prop("algusaasta"))
+			{
+				$periood = $haridus->prop("algusaasta") ."-". $haridus->prop("loppaasta");
+			}
+			elseif ($haridus->prop("date_from") && $haridus->prop("date_to"))
+			{
+				$periood = get_lc_date($haridus->prop("date_from")) . " - " . get_lc_date($haridus->prop("date_to"));
+			}			
 			$table->define_data(array(
-				"kool" => $haridus->prop("kool"),
-				"periood" => $haridus->prop("algusaasta") ."-". $haridus->prop("loppaasta"),
+				"kool" => html::href(array(
+							"caption" => $haridus->prop("kool"),
+							"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "eoid" => $connection_id), CL_PERSONNEL_MANAGEMENT_CV)
+						)),
+				"periood" => $periood,
 				"from" => $connection_id,
-				"type" => $haridusliigid[$haridus->prop("education_type") - 1],
+				"type" => $liik,
 			));
 
 		}
@@ -375,7 +508,117 @@ class personnel_management_cv extends class_base
 		$table->set_default_sortby("periood");
 		$table->sort_by();
 	}
+	
+	function do_education_additional_tb(&$arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+		
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => "Kustuta pingud",
+			"action" => "delete_rels",
+			"confirm" => "Kas soovid kustutada valitud täienduskoolitused?"
+		));
 
+		$tb->add_button(array(
+			"name" => "edit",
+			"img" => "edit.gif",
+			"tooltip" => "Muuda valitud täienduskoolitust",
+			"action" => "edit_something",
+		));
+	}
+	
+	function jobs_wanted_tb(&$arr)
+	{
+		$tb = &$arr["prop"]["toolbar"];
+
+		$tb->add_menu_button(array(
+   			"name" => "new",
+   			"img" => "new.gif",
+   			"tooltip" => "Uus",
+		));
+		
+		$tb->add_menu_item(array(
+    		"parent" => "new",
+    		"text" => "Töösoov",
+    		"title" => "Töösoov",
+    		"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "eoid" => "new"), "personnel_management_cv", true, true),
+    		"disabled" => false,
+		));
+		
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => "Kustuta pingud",
+			"action" => "delete_rels",
+			"confirm" => "Kas soovid kustutada valitud töösoovid?"
+		));
+
+		$tb->add_button(array(
+			"name" => "edit",
+			"img" => "edit.gif",
+			"tooltip" => "Muuda valitud töösoovi",
+			"action" => "edit_something",
+		));
+	}
+	
+	function do_education_additional_table(&$arr)
+	{
+		$table =& $arr["prop"]["vcl_inst"];
+		
+		$table->define_field(array(
+			"name" => "school",
+			"caption" => "Haridusasutus",
+			"sortable" => 1
+		));
+		
+		$table->define_field(array(
+			"name" => "periood",
+			"caption" => "Periood",
+			"sortable" => 1
+		));
+		
+		$table->define_chooser(array(
+			"name" => "sel",
+			"field" => "from",
+		));
+		
+		$manager = current($this->my_profile["manager_list"]);		
+		
+		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_EDUCATION)) as $haridus)
+		{
+			$conn_id = $haridus->id();
+			$haridus = $haridus->to();
+			if($haridus->prop("education_type") == $manager->meta("add_edu_form"))
+			{
+				$table->define_data(array(
+					"school" => html::href(array(
+									"caption" => $haridus->prop("kool"),
+									"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "eoid" => $conn_id), CL_PERSONNEL_MANAGEMENT_CV),
+								)),
+					"periood" => get_lc_date($haridus->prop("date_from"))."-".get_lc_date($haridus->prop("date_to")),
+					"from" => $conn_id,
+				));				
+			}
+		}
+	}
+	
+	function callback_mod_tab($arr)
+	{
+		//Täienduskoolituse tabi peitmiseks
+		switch ($arr["id"])
+		{
+			case "taienduskoolitus":
+				$manager = current($this->my_profile["manager_list"]);		
+				if(!$manager->meta("add_edu_form"))
+				{
+					return false;
+				}
+			break;
+		}
+	}
+	
 	function do_education_tb(&$arr)
 	{
 
@@ -392,56 +635,42 @@ class personnel_management_cv extends class_base
 			"img" => "delete.gif",
 			"tooltip" => "Kustuta pingud",
 			"action" => "delete_rels",
-			"confirm" => "Kas soovid kustutada valitud pingud?"
+			"confirm" => "Kas soovid kustutada valitud õpingud?"
 		));
 
 		$tb->add_button(array(
 			"name" => "edit",
 			"img" => "edit.gif",
-			"tooltip" => "Muuda keeleoskust",
+			"tooltip" => "Muuda valitud haridust",
 			"action" => "edit_something",
 		));
 
-		$tb->add_menu_item(array(
-    			"parent" => "new",
-    			"text" => "Phiharidus",
-    			"title" => "Phiharidus",
-    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => 1), "personnel_management_cv", true, true),
-    			"disabled" => false,
+		$manager = current($this->my_profile["manager_list"]);		
+		
+		foreach ($manager->meta("education_types") as $key=>$value)
+		{
+			$key_list[] = $key;
+		}
+		
+		$educations_list = new object_list(array(
+			"oid" => $key_list 
 		));
-
-		$tb->add_menu_item(array(
+		
+		$educations_list->sort_by(array(
+        	"prop" => "jrk",
+        	"order" => "desc",
+        ));
+        
+		foreach ($educations_list->arr() as $configform)
+		{
+			$tb->add_menu_item(array(
     			"parent" => "new",
-    			"text" => "Keskharidus",
-    			"title" => "Keskharidus",
-    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => 2), "personnel_management_cv", true, true),
+    			"text" => $configform->name(),
+    			"title" => $configform->name(),
+    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => $configform->id()), "personnel_management_cv", true, true),
     			"disabled" => false,
-		));
-
-		$tb->add_menu_item(array(
-    			"parent" => "new",
-    			"text" => "Krgharidus",
-    			"title" => "Krgharidus",
-    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => 3), "personnel_management_cv", true, true),
-    			"disabled" => false,
-		));
-
-
-		$tb->add_menu_item(array(
-    			"parent" => "new",
-    			"text" => "T&auml;ienduskoolitus",
-    			"title" => "T&auml;ienduskoolitus",
-    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => 5), "personnel_management_cv", true, true),
-    			"disabled" => false,
-		));
-
-		$tb->add_menu_item(array(
-    			"parent" => "new",
-    			"text" => "T&Uuml; Haridus",
-    			"title" => "T&Uuml; Haridus",
-    			"url" => $this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id(), "group" => $arr["request"]["group"], "type" => 4), "personnel_management_cv", true, true),
-    			"disabled" => false,
-		));
+			));
+		}
 	}
 
 	function do_lang_tb(&$arr)
@@ -492,7 +721,10 @@ class personnel_management_cv extends class_base
 			$tase = obj($keeleoskus->prop("tase"));
 
 			$table->define_data(array(
-				"keel" => $keel->name(),
+				"keel" => html::href(array(
+							"caption" => $keel->name(),
+							"url" => $this->mk_my_orb("change", array("group" => $arr["request"]["group"], "id" => $arr["obj_inst"]->id(), "eoid" => $connection_id), CL_PERSONNEL_MANAGEMENT_CV),
+						)),
 				"tase" => $tase->name(),
 				"from" => $connection_id,
 			));
@@ -553,16 +785,13 @@ class personnel_management_cv extends class_base
 			"field" => "from",
 		));
 
-
+		
 		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_KOGEMUS)) as $kogemus)
 		{
 			$connection_id=$kogemus->id();
 			$kogemus = obj($kogemus->prop("to"));
 			$table->define_data(array(
-				"asutus" => $kogemus->prop("asutus")/*html::href(array(
-						"caption" => $kogemus->prop("asutus"),
-						"url" => $this->mk_my_orb("change", array("id" => $kogemus->id()), "personalihaldus_tookogemus"),
-					))*/,
+				"asutus" => $kogemus->prop("asutus"),
 				"ametikoht" => $kogemus->prop("ametikoht"),
 				"alates" => get_lc_date($kogemus->prop("algus")),
 				"kuni" => get_lc_date($kogemus->prop("kuni")),
@@ -619,11 +848,13 @@ class personnel_management_cv extends class_base
 		$table->define_field(array(
 			"name" => "oskus",
 			"caption" => "Oskus",
+			"sortable" => true,
 		));
 
 		$table->define_field(array(
 			"name" => "tase",
 			"caption" => "Tase",
+			"sortable" => true,
 		));
 
 		$table->define_chooser(array(
@@ -638,9 +869,12 @@ class personnel_management_cv extends class_base
 
 			$oskus = obj($c_skill->prop("oskus"));
 			$tase = obj($c_skill->prop("tase"));
-
+		
 			$table->define_data(array(
-				"oskus" => $oskus->name(),
+				"oskus" => html::href(array(
+							"caption" => $oskus->name(),
+							"url" => $this->mk_my_orb("change", array("group" => $arr["request"]["group"], "id" => $arr["obj_inst"]->id(), "eoid" => $connection_id), CL_PERSONNEL_MANAGEMENT_CV),
+						)),
 				"tase" => $tase->name(),
 				"from" => $connection_id,
 			));
@@ -649,23 +883,19 @@ class personnel_management_cv extends class_base
 	}
 
 	/**
-	@attrib name=cv_to_not_act
+		@attrib name=cv_to_not_act
 	**/
 	function cv_to_not_act($arr)
 	{
-		$now = time();
-		$ol = new object_list(array(
+		$not_act_list = new object_list(array(
 			"class_id" => CL_PERSONNEL_MANAGEMENT_CV,
-			"status" => STAT_ACTIVE,
+			"active_until" => new obj_predicate_compare(OBJ_COMP_LESS, time()),
 		));
-
-		foreach($ol->arr() as $cv)
+		
+		foreach ($not_act_list->arr() as $ob)
 		{
-			if($cv->prop("active_until")< time())
-			{
-				$cv->set_status(STAT_NOTACTIVE);
-				$cv->save();
-			}
+			$ob->set_status(STAT_NOTACTIVE);
+			$ob->save();
 		}
 	}
 
@@ -729,21 +959,11 @@ class personnel_management_cv extends class_base
 	}
 
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["id"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -871,7 +1091,8 @@ class personnel_management_cv extends class_base
 		foreach($ob->connections_from(array("type" => "RELTYPE_JUHILUBA")) as $c)
 		{
 			$this->vars(array(
-				"skill_name" => $c->prop("to.name")
+				"skill_name" => $c->prop("to.name"),
+				"driving_since" => $ob->prop("driving_since")
 			));
 			$dsk[] = $this->parse("DRIVE_SKILL");
 		}
@@ -880,9 +1101,19 @@ class personnel_management_cv extends class_base
 		foreach($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $c)
 		{
 			$to = $c->to();
+			$d_from = $to->prop("algusaasta");
+			if ($to->prop("date_from") > 100)
+			{
+				$d_from = get_lc_date($to->prop("date_from"),LC_DATE_FORMAT_LONG_FULLYEAR);
+			}
+			$d_to = $to->prop("loppaasta");
+			if ($to->prop("date_to") > 100)
+			{
+				$d_to = get_lc_date($to->prop("date_to"),LC_DATE_FORMAT_LONG_FULLYEAR);
+			}
 			$this->vars(array(
-				"from" => $to->prop("algusaasta"),
-				"to" => $to->prop("loppaasta"),
+				"from" => $d_from,
+				"to" => $d_to,
 				"where" => $to->prop("kool"),
 				"extra" => nl2br($to->prop("lisainfo_edu"))
 			));
@@ -897,7 +1128,7 @@ class personnel_management_cv extends class_base
 			"recommenders" => nl2br($ob->prop("soovitajad")),
 			"name" => $person_obj->name(),
 			"modified" => get_lc_date($ob->modified()),
-			"birtday" => $person_obj->prop("birthday"),
+			"birthday" => date("d.m.Y", $person_obj->prop("birthday")),
 			"social_status" => $person_obj->prop("social_status"),
 			"mail" => html::href(array(
 				"url" => "mailto:" . $email_obj->prop("mail"),
@@ -942,13 +1173,6 @@ class personnel_management_cv extends class_base
 			"tooltip" => "Genereeri pdf",
 			"url" => $this->mk_my_orb("gen_job_pdf", array("id" => $arr["obj_inst"]->id()))
 		));
-		/*
-		$tb->add_button(array(
-			"name" => "print",
-			"img" => "print.gif",
-			"tooltip" => "Print vaade",
-			"action" => "gen_print_view",
-		));*/
 	}
 	
 	function add_view($arr)
@@ -1004,10 +1228,10 @@ class personnel_management_cv extends class_base
 						$company = array_pop($company);
 
 						$table->define_data(array(
-							"who" => html::href(array(
+							"who" => $company->prop("to.name")/*html::href(array(
 										"url" => $this->mk_my_orb("change", array("id" => $company->prop("to")), "crm_company"),
 										"caption" => $company->prop("to.name")
-									)),
+									))*/,
 							"count" => $row["vaatamisi"],
 						));
 					}
