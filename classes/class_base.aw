@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.48 2003/01/16 13:17:01 duke Exp $
+// $Id: class_base.aw,v 2.49 2003/01/16 13:17:34 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -522,7 +522,10 @@ class class_base extends aliasmgr
 		// can use class_base
 		$cfgu = get_instance("cfg/cfgutils");
 		$orb_class = $this->cfg["classes"][$this->clid]["file"];
-		//$has_properties = $cfgu->has_properties(array("file" => get_class($orb_class)));
+		if (!$orb_class)
+		{
+			$orb_class = get_class($this->orb_class);
+		};
 		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
 		if (!$has_properties)
 		{
@@ -533,8 +536,11 @@ class class_base extends aliasmgr
 		// and this is how I will do it (unless I get a better idea)
 		$this->ds = get_instance("datasource/" . $this->ds_name);
 
-		#$clid = $this->orb_class->get_opt("clid");
 		$clid = $this->clid;
+		if (!$clid)
+		{
+			$clid = $this->orb_class->get_opt("clid");
+		};
 		$clfile = $this->cfg["classes"][$clid]["file"];
 
 		// temporary - until we are sure that will will not go back to
