@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.115 2004/03/30 12:33:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.116 2004/03/31 10:37:15 duke Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
-session_register("add_state");
+if (!headers_sent())
+{
+	session_register("add_state");
+};
 define("PER_PAGE", 20);
 
 classload("users_user");

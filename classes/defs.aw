@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.129 2004/03/16 10:11:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.130 2004/03/31 10:37:15 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -787,6 +787,14 @@ if (!defined("DEFS"))
 	// session vars are automatically registered as globals as well, so for retrieval you can use aw_global_get()
 	function aw_session_set($name,$value)
 	{
+		if (headers_sent())
+		{
+			return false;
+		};
+		if (empty($value))
+		{
+			return false;
+		};
 		$GLOBALS[$name] = $value;
 		session_register($name);
 		aw_global_set($name,$value);
