@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.12 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_output.aw,v 2.13 2001/07/26 16:49:57 duke Exp $
 
 global $orb_defs;
 $orb_defs["form_output"] = "xml";
-
+lc_load("form");
 class form_output extends form_base 
 {
 	function form_output()
@@ -12,6 +12,10 @@ class form_output extends form_base
 		$this->db_init();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 	}
 
 	////
@@ -30,7 +34,7 @@ class form_output extends form_base
 	}
 
 	////
-	// Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta
+	// !Soltuvalt eelnevast vormist valitud tüübile teeb redirecti oigesse kohta
 	function choose_output_type($args = array())
 	{
 		extract($args);
@@ -51,8 +55,7 @@ class form_output extends form_base
 	{
 		extract($args);
 		$this->read_template("add_xml_output.tpl");
-		$pid = ($parent) ? $parent : $id;
-		$this->mk_path($pid,"Koosta XML väljund");
+		$this->mk_path($id,"Koosta XML väljund");
 		if ($id)
 		{
 			$odata = $this->get_object($id);
@@ -279,6 +282,8 @@ class form_output extends form_base
 							foreach($elarr as $el)
 							{
 								$this->output[$base_row+$row][$base_col+$col]["elements"][$num] = $el->get_props();
+								$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_form"] = $bfid;
+								$this->output[$base_row+$row][$base_col+$col]["elements"][$num]["linked_element"] = $el->get_id();
 								$num++;
 							}
 							$this->output[$base_row+$row][$base_col+$col]["el_count"] = $num;
@@ -423,8 +428,8 @@ class form_output extends form_base
 					"exp_down"	=> $this->mk_orb("exp_down", array("id" => $op_id, "col" => $col, "row" => $row)),
 					"split_ver"	=> $this->mk_orb("split_cell_ver", array("id" => $id, "col" => $col, "row" => $row)),
 					"split_hor"	=> $this->mk_orb("split_cell_hor", array("id" => $id, "col" => $col, "row" => $row)),
-					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $col, "row" => $row)),
-					"addel" => $this->mk_my_orb("add_el", array("id" => $id, "col" => $col, "row" => $row)),
+					"ch_cell" => $this->mk_my_orb("ch_cell", array("id" => $id, "col" => $rcol, "row" => $rrow)),
+					"addel" => $this->mk_my_orb("add_element", array("id" => $id, "col" => $rcol, "row" => $rrow)),
 					"style_name" => $style_select[$cell["style"]]
 				));
 
@@ -491,6 +496,7 @@ class form_output extends form_base
 			"reforb"	=> $this->mk_reforb("submit_admin", array("id" => $id, "op_id" => $op_id)),
 			"addr_reforb" => $this->mk_reforb("add_n_rows", array("id" => $id,"after" => $this->output["rows"]-1)),
 			"addc_reforb" => $this->mk_reforb("add_n_cols", array("id" => $id,"after" => $this->output["cols"]-1)),
+			"translate" => $this->mk_my_orb("translate", array("id" => $id))
 		));
 		return $this->parse();
 	}
@@ -963,6 +969,343 @@ class form_output extends form_base
 			}
 			return $this->mk_orb("ch_cell", array("id" => $id, "row" => $row, "col" => $col));
 		}
+	}
+
+	////
+	// !shows the form texts translation form
+	function translate($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+		$this->read_template("op_translate.tpl");
+		$this->mk_path($this->parent,sprintf(LC_FORM_OUTPUT_OUTPUT_ADMIN,$this->mk_orb("change", array("id" => $id))));
+
+		classload("languages");
+		$la = new languages;
+		$langs = $la->listall();
+
+		foreach($langs as $lar)
+		{
+			$this->vars(array(
+				"lang_name" => $lar["name"]
+			));
+			$lah.=$this->parse("LANGH");
+		}
+		$this->vars(array("LANGH" => $lah));
+
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+
+					$lcol = "";
+					foreach($langs as $lar)
+					{
+						$this->vars(array(
+							"text" => $el->get_lang_text($lar["id"]),
+							"col" => $col,
+							"row" => $row,
+							"elid" => $i,
+							"lang_id" => $lar["id"]
+						));
+						$lcol.=$this->parse("LCOL");
+					}
+					$this->vars(array("LCOL" => $lcol));
+					$lrow.=$this->parse("LROW");
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					if ($el->get_type() == "listbox")
+					{
+						for ($a=0; $a < $el->arr["listbox_count"]; $a++)
+						{
+							$lcol1 = "";
+							foreach($langs as $lar)
+							{
+								if ($lar["id"] != $this->lang_id)
+								{
+									$txt = $el->arr["listbox_lang_items"][$lar["id"]][$a];
+								}
+								else
+								{
+									$txt = $el->arr["listbox_items"][$a];
+								}
+								$this->vars(array(
+									"text" => $txt,
+									"col" => $col,
+									"row" => $row,
+									"elid" => $i,
+									"lang_id" => $lar["id"],
+									"item" => $a
+								));
+								$lcol1.=$this->parse("LCOL1");
+							}
+							$this->vars(array("LCOL1" => $lcol1));
+							$lrow1.=$this->parse("LROW1");
+						}
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					if ($el->get_type() == "multiple")
+					{
+						for ($a=0; $a < $el->arr["multiple_count"]; $a++)
+						{
+							$lcol2 = "";
+							foreach($langs as $lar)
+							{
+								if ($lar["id"] != $this->lang_id)
+								{
+									$txt = $el->arr["multiple_lang_items"][$lar["id"]][$a];
+								}
+								else
+								{
+									$txt = $el->arr["multiple_items"][$a];
+								}
+								$this->vars(array(
+									"text" => $txt,
+									"col" => $col,
+									"row" => $row,
+									"elid" => $i,
+									"lang_id" => $lar["id"],
+									"item" => $a
+								));
+								$lcol2.=$this->parse("LCOL2");
+							}
+							$this->vars(array("LCOL2" => $lcol2));
+							$lrow2.=$this->parse("LROW2");
+						}
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					$lcol3 = "";
+					foreach($langs as $lar)
+					{
+						if ($lar["id"] != $this->lang_id)
+						{
+							$txt = $el->arr["lang_info"][$lar["id"]];
+						}
+						else
+						{
+							$txt = $el->arr["info"];
+						}
+						$this->vars(array(
+							"text" => $txt,
+							"col" => $col,
+							"row" => $row,
+							"elid" => $i,
+							"lang_id" => $lar["id"],
+						));
+						$lcol3.=$this->parse("LCOL3");
+					}
+					$this->vars(array("LCOL3" => $lcol3));
+					$lrow3.=$this->parse("LROW3");
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					if ($el->get_type() == "textbox" || $el->get_type() == "textarea")
+					{
+						$lcol4 = "";
+						foreach($langs as $lar)
+						{
+							if ($lar["id"] != $this->lang_id)
+							{
+								$txt = $el->arr["lang_default"][$lar["id"]];
+							}
+							else
+							{
+								$txt = $el->arr["default"];
+							}
+							$this->vars(array(
+								"text" => $txt,
+								"col" => $col,
+								"row" => $row,
+								"elid" => $i,
+								"lang_id" => $lar["id"],
+							));
+							$lcol4.=$this->parse("LCOL4");
+						}
+						$this->vars(array("LCOL4" => $lcol4));
+						$lrow4.=$this->parse("LROW4");
+					}
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					$lcol5 = "";
+					foreach($langs as $lar)
+					{
+						if ($lar["id"] != $this->lang_id)
+						{
+							$txt = $el->arr["lang_must_error"][$lar["id"]];
+						}
+						else
+						{
+							$txt = $el->arr["must_error"];
+						}
+						$this->vars(array(
+							"text" => $txt,
+							"col" => $col,
+							"row" => $row,
+							"elid" => $i,
+							"lang_id" => $lar["id"],
+						));
+						$lcol5.=$this->parse("LCOL5");
+					}
+					$this->vars(array("LCOL5" => $lcol5));
+					$lrow5.=$this->parse("LROW5");
+				}
+			}
+		}
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					if ($el->get_type() == "button")
+					{
+						$lcol6 = "";
+						foreach($langs as $lar)
+						{
+							if ($lar["id"] != $this->lang_id)
+							{
+								$txt = $el->arr["lang_button_text"][$lar["id"]];
+							}
+							else
+							{
+								$txt = $el->arr["button_text"];
+							}
+							$this->vars(array(
+								"text" => $txt,
+								"col" => $col,
+								"row" => $row,
+								"elid" => $i,
+								"lang_id" => $lar["id"],
+							));
+							$lcol6.=$this->parse("LCOL6");
+						}
+						$this->vars(array("LCOL6" => $lcol6));
+						$lrow6.=$this->parse("LROW6");
+					}
+				}
+			}
+		}
+		$this->vars(array(
+			"LROW" => $lrow,
+			"LROW1" => $lrow1,
+			"LROW2" => $lrow2,
+			"LROW3" => $lrow3,
+			"LROW4" => $lrow4,
+			"LROW5" => $lrow5,
+			"LROW6" => $lrow6,
+			"reforb" => $this->mk_reforb("submit_translate", array("id" => $id))
+		));
+
+		return $this->parse();
+	}
+
+	function submit_translate($arr)
+	{
+		extract($arr);
+		$this->load_output($id);
+
+		classload("languages");
+		$la = new languages;
+		$langs = $la->listall();
+
+		for ($row=0; $row < $this->output["rows"]; $row++)
+		{
+			for ($col=0; $col < $this->output["cols"]; $col++)
+			{
+				for($i=0; $i < $this->output[$row][$col]["el_count"]; $i++)
+				{
+					$el=new form_entry_element;
+					$el->load($this->output[$row][$col]["elements"][$i],&$this,$col,$row);
+					foreach($langs as $lar)
+					{
+						$this->output[$row][$col]["elements"][$i]["lang_text"][$lar["id"]] = $r[$row][$col][$lar["id"]][$i];
+						$this->output[$row][$col]["elements"][$i]["lang_info"][$lar["id"]] = $s[$row][$col][$lar["id"]][$i];
+						$this->output[$row][$col]["elements"][$i]["lang_default"][$lar["id"]] = $d[$row][$col][$lar["id"]][$i];
+						$this->output[$row][$col]["elements"][$i]["lang_must_error"][$lar["id"]] = $e[$row][$col][$lar["id"]][$i];
+						if ($el->get_type() == "button")
+						{
+							$this->output[$row][$col]["elements"][$i]["lang_button_text"][$lar["id"]] = $b[$row][$col][$lar["id"]][$i];
+						}
+					}
+					if ($el->get_type() == "listbox")
+					{
+						foreach($langs as $lar)
+						{
+							for ($a=0; $a < $el->arr["listbox_count"]; $a++)
+							{
+								$this->output[$row][$col]["elements"][$i]["listbox_lang_items"][$lar["id"]][$a] = $l[$row][$col][$lar["id"]][$i][$a];
+							}
+						}
+					}
+					else
+					if ($el->get_type() == "multiple")
+					{
+						foreach($langs as $lar)
+						{
+							for ($a=0; $a < $el->arr["multiple_count"]; $a++)
+							{
+								$this->output[$row][$col]["elements"][$i]["multiple_lang_items"][$lar["id"]][$a] = $m[$row][$col][$lar["id"]][$i][$a];
+							}
+						}
+					}
+				}
+			}
+		}
+		$this->save_output($id);
+
+		return $this->mk_my_orb("translate", array("id" => $id));
 	}
 }
 ?>

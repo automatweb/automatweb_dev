@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.19 2001/07/19 22:11:28 duke Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop_item.aw,v 2.20 2001/07/26 16:49:57 duke Exp $
+lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_item"] = "xml";
 
@@ -516,7 +516,8 @@ class shop_item extends shop_base
 				"to" => $de->gen_edit_form("to[".$row["id"]."]",$row["tto"]),
 				"id" => $row["id"],
 				"week_check" => checked($row["per_type"] == PRICE_PER_WEEK),
-				"2week_check" => checked($row["per_type"] == PRICE_PER_2WEEK)
+				"2week_check" => checked($row["per_type"] == PRICE_PER_2WEEK),
+				"avail" => $row["max_items"]
 			));
 			$prices = unserialize($row["price"]);
 			$cc = "";
@@ -578,7 +579,7 @@ class shop_item extends shop_base
 				$this->save_handle();
 				$pricsstr = serialize($price[$row["id"]]);
 				$this->quote(&$pricsstr);
-				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$pricsstr."',per_type = '".$price_type[$row["id"]]."' WHERE id = ".$row["id"]);
+				$this->db_query("UPDATE shop_item2per_prices SET tfrom = $tfrom, tto = $tto, price ='".$pricsstr."',per_type = '".$price_type[$row["id"]]."',max_items='".$available[$row["id"]]."' WHERE id = ".$row["id"]);
 				$this->restore_handle();
 			}
 		}
@@ -598,7 +599,7 @@ class shop_item extends shop_base
 			$tto = mktime(0,0,0,$to[0]["month"],$to[0]["day"],$to[0]["year"]);
 			$pricsstr = serialize($price[0]);
 			$this->quote(&$pricsstr);
-			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type) VALUES($id,$tfrom,$tto,'".$pricsstr."','".$price_type[0]."')");
+			$this->db_query("INSERT INTO shop_item2per_prices(item_id,tfrom,tto,price,per_type,max_items) VALUES($id,$tfrom,$tto,'".$pricsstr."','".$price_type[0]."','".$available[0]."')");
 		}
 		return $this->mk_my_orb("set_per_prices", array("id" => $id,"page" => $page));
 	}

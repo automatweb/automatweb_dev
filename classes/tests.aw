@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tests.aw,v 2.1 2001/07/17 20:51:48 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tests.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
 global $orb_defs,$astmed,$punktid;
 $orb_defs["tests"] = 
 array("list_questions"	=> array("function" => "list_questions", "params" =>array()),
@@ -31,6 +31,7 @@ class tests extends quiz
 		$this->db_init();
 		$this->tpl_init("tests"); 
 		$this->sub_merge = 1;
+		lc_load("definition");
 	}
 
 	function list_questions($arr)

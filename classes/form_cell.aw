@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.14 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.15 2001/07/26 16:49:56 duke Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -11,6 +11,7 @@
 // no public interface here. everything goes through form.aw
 // why? iizi. cause the element properies are saved in the form and therefore the form must always be loaded
 // so we have to go through form->load to get the cells' elements.
+lc_load("form");
 class form_cell extends form_base
 {
 	function form_cell()
@@ -19,6 +20,15 @@ class form_cell extends form_base
 		$this->db_init();
 		$this->sub_merge = 1;
 		lc_load("definition");
+
+		// we need to know whether we are inside an interactive session and 
+		// only load the language constants if we really need them. This saves
+		// us some memory, albeit not too much.
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);
+		}
 	}
 
 	////
@@ -35,7 +45,7 @@ class form_cell extends form_base
 				$tmp = new form_search_element();
 				break;
 			case FORM_RATING:
-				$tmp = new form_rating_element();
+				$tmp = new form_entry_element();
 				break;
 			default:
 				$this->raise_error("form_cell->mk_element($type) , error in type!",true);
@@ -156,9 +166,11 @@ class form_cell extends form_base
 				}
 			}
 			
-			$this->vars(array("reforb"		=> $this->mk_reforb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col,"wizard_step" => 1),"form"),
-												"folders"		=> $this->picker($this->parent, $mlist),
-												"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))));
+			$this->vars(array(
+				"reforb"		=> $this->mk_reforb("add_element", array("id" => $this->id, "row" => $this->row, "col" => $this->col,"wizard_step" => 1),"form"),
+				"folders"		=> $this->picker($this->parent, $mlist),
+				"elements"	=> $this->picker(0,$this->listall_elements(&$this->form))
+			));
 			return $this->parse();
 		}
 		else
@@ -221,10 +233,17 @@ class form_cell extends form_base
 		$el = $this->new_object(array("parent" => $parent, "name" => $name, "class_id" => CL_FORM_ELEMENT));
 		$this->db_query("INSERT INTO form_elements (id) values($el)");
 		$this->_do_add_element($this->id,$el);
-		$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$based_on,"props");
-		classload("xml");
-		$xml = new xml;
-		$arr = $xml->xml_unserialize(array("source" => $props));
+		if (!is_array($props))
+		{
+			$props = $this->db_fetch_field("SELECT props FROM form_elements WHERE id = ".$based_on,"props");
+			classload("xml");
+			$xml = new xml;
+			$arr = $xml->xml_unserialize(array("source" => $props));
+		}
+		else
+		{
+			$arr = $props;
+		}
 		$arr["id"] = $el;
 		$arr["name"] = $name;
 		$arr["ord"] = $ord;
@@ -241,7 +260,8 @@ class form_cell extends form_base
 		{
 			// we must also update the form_$id_entries table
 			$this->db_query("ALTER TABLE form_".$fid."_entries add el_$el text");
-	
+			$this->db_query("ALTER TABLE form_".$fid."_entries add ev_$el text");
+
 			// and add this form to the list of forms in which the element is
 			$this->db_query("INSERT INTO element2form(el_id,form_id) values($el,$fid)");
 		}
@@ -308,11 +328,25 @@ class form_cell extends form_base
 		
 		return $cs;
 	}
+	
+	function proc_entry(&$entry, $id)
+	{
+		// iterate over all the elements in the cell
+		for ($i=0; $i < $this->cnt; $i++)
+		{
+			// call process_entry for each
+			$this->arr[$i] -> process_entry(&$entry, $id,$prefix);
+		};
+	}
 
 	function process_entry(&$entry, $id,$prefix = "")
 	{
+		// iterate over all the elements in the cell
 		for ($i=0; $i < $this->cnt; $i++)
+		{
+			// call process_entry for each
 			$this->arr[$i] -> process_entry(&$entry, $id,$prefix);
+		};
 	}
 
 	function set_entry(&$arr, $e_id,&$form)
@@ -415,6 +449,15 @@ class form_cell extends form_base
 		for ($i=0; $i < $this->cnt; $i++)
 			$ret.=$this->arr[$i] -> gen_check_html();
 		return $ret;
+	}
+
+	function set_lang_text($lid,$lar)
+	{
+		for ($i=0; $i < $this->cnt; $i++)
+		{
+			$this->arr[$i]->set_lang_text($lid,$lar[$this->arr[$i]->get_id()]);
+			echo "set txt for row = ", $this->row, " , col = ", $this->col, " el = ", $this->arr[$i]->get_id()," , txt = ",$lar[$this->arr[$i]->get_id()],"<br>";
+		}
 	}
 };
 ?>

@@ -1,5 +1,5 @@
 <?php
-
+lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_stat"] = "xml";
 
@@ -9,8 +9,15 @@ class shop_stat extends shop
 	function shop_stat()
 	{
 		$this->shop();
-	}
+		lc_load("definition");
+		lc_load("shop");
 
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+	}
+	}
 	////
 	// !shows adding form
 	function add($arr)

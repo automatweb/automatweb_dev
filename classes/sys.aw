@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.3 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
 // system.aw - various system related functions
+lc_load("syslog");
 global $orb_defs;
 $orb_defs["sys"] = "xml";
 
@@ -9,6 +10,11 @@ class sys extends aw_template
 	function sys($args = array())
 	{
 		$this->db_init();
+		global $lc_syslog;
+		if (is_array($lc_syslog))
+		{
+			$this->vars($lc_syslog);
+	}
 	}
 
 	////
@@ -84,7 +90,7 @@ class sys extends aw_template
 					return "Table ".$op_table["name"]." differs from correct version, modified from: <br>".$s1."<br>to:<br>".$s2."<br>";
 				}
 			}
-		}
+		lc_load("definition");}
 	}
 
 	////

@@ -14,6 +14,7 @@ class db_stat extends aw_template
 		$this->start = mktime(0,0,0,$this->month,1,2000);
 		$this->dm = date("t",$this->start);
 		$this->end = mktime(23,59,59,$this->month+1,0,2000);
+		lc_load("definition");
 	}
 
 	// kuvab vormi, mille abil erinevaid perioode vorrelda

@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.4 2001/07/17 20:53:13 duke Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/vars.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
+lc_load("mailinglist");
 	global $orb_defs;
 	$orb_defs["variables"] = array(
 		"new" => array("function" => "add_list", "params"=> array("parent")),
@@ -17,6 +17,12 @@
 		{
 			$this->tpl_init("mailinglist");
 			$this->db_init();
+			lc_load("definition");
+			global $lc_mailinglist;
+		if (is_array($lc_mailinglist))
+		{
+			$this->vars($lc_mailinglist);
+		}
 		}
 
 		function add_var($parent)

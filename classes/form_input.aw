@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.1 2001/07/25 03:15:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_input.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
 // form_input.aw - Tegeleb vormi sisestustega, hetkel ainult XML.
 global $orb_defs;
 $orb_defs["form_input"] = "xml";
@@ -111,6 +111,9 @@ class form_input extends form_base
 		$f = "";
 		$els = array();
 		$elements = $meta["elements"];
+		print "<pre>";
+		print_r($meta);
+		print "</pre>";
 		if (is_array($meta["forms"]))
 		{
 			foreach($meta["forms"] as $fid)
@@ -165,7 +168,10 @@ class form_input extends form_base
 			// store only active elements
 			if ($active[$key])
 			{
-				$data[$key] = array("name" => $extname[$key]);
+				$data[$key] = array(
+						"name" => $extname[$key],
+						"type" => $type[$key],
+				);
 			};
 		};
 		$this->set_object_metadata(array(

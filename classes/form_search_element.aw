@@ -1,6 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.6 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_search_element.aw,v 2.7 2001/07/26 16:49:57 duke Exp $
 
+lc_load("form");
 	class form_search_element extends form_element
 	{
 		function form_search_element()
@@ -10,6 +11,10 @@
 
 			$this->entry_id = 0;
 			$this->sub_merge = 1;
+			global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 		}
 
 		function gen_admin_html()
@@ -87,6 +92,14 @@
 		{
 			if ($this->arr["ver2"])	// backward compatibility sucks ass, but whut can I do...
 			{
+				if ($this->get_type() == 'listbox')
+				{
+					// add an empty element to the listbox so we can tell the difference, 
+					// if nothing was selected and we can then ignore the lb in the search
+					$this->arr["listbox_items"][$this->arr["listbox_count"]] = "";
+					$this->arr["listbox_default"] = $this->arr["listbox_count"];
+					$this->arr["listbox_count"]++;
+				}
 				return $this->do_core_userhtml($prefix,$elvalues,$no_submit);
 			}
 			else

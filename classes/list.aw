@@ -1,21 +1,30 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.12 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.13 2001/07/26 16:49:57 duke Exp $
+lc_load("mailinglist");
 class mlist extends aw_template
 {
 	function mlist($id = 0)
 	{
+		lc_load("automatweb");
 		$this->tpl_init("mailinglist");
 		$this->db_init();
 		$this->id = $id;
 		$this->db_query("SELECT * FROM objects WHERE oid = $id");
-		//if (!($row = $this->db_next()))
-		//	$this->raise_error("mlist->mlist($id): no such list!",true);
 
 		$this->name = $row["name"];
 		$this->l_vars = unserialize($row["last"]);
 		$this->vars(array("list_name" => $this->name, "list_id" => $this->id));
 		lc_load("definition");
-
+		global $lc_mailinglist;
+		if (is_array($lc_mailinglist))
+		{
+			$this->vars($lc_mailinglist);
+		}
+		global $lc_autamatweb;
+		if (is_array($lc_automatweb))
+		{
+			$this->vars($lc_automatweb);
+		}
 	}
 	
 	function list_users()
@@ -23,11 +32,21 @@ class mlist extends aw_template
 		$this->read_template("list_users.tpl");
 		
 		$c=""; $cnt=0; $s = ""; 
+		global $sortby, $order;
+		if ($sortby != "")
+		{
+			$sb="ORDER BY ".$sortby;
+			if ($order == "")
+			{
+				$order = "ASC";
+			}
+			$sb.=" " .$order;
+		}
 		$this->db_query("SELECT objects.oid as oid, objects.name as name,ml_users.mail as mail,ml_users.is_cut as is_cut, ml_users.is_copied as is_copied,acl FROM objects
 										 LEFT JOIN acl ON acl.oid = objects.oid
 										 LEFT JOIN ml_users ON ml_users.id = objects.oid
-										 WHERE objects.parent = $this->id AND objects.status != 0 AND objects.class_id = 17
-										 GROUP BY objects.oid");
+										 WHERE objects.parent = $this->id AND objects.status != 0 AND objects.class_id = 17 
+										 $sb");
 		while ($row = $this->db_next())
 		{
 			if ($row["is_copied"] == 1)
@@ -56,7 +75,21 @@ class mlist extends aw_template
 
 		$ua = $this->parse("U_ADD");
 		$ui = $this->parse("U_IMPORT");
-		$this->vars(array("LINE" => $c, "SELLINE" => $s, "PASTE" => $p,"U_ADD" => $ua,"U_IMPORT"=>$ui,"count" => $cnt));
+		$revo = ($order == "ASC" ? "DESC" : "ASC" );
+		$up = "<img src='".$GLOBALS["baseurl"]."/images/up.gif'>";
+		$down = "<img src='".$GLOBALS["baseurl"]."/images/down.gif'>";
+		$this->vars(array(
+			"LINE" => $c, 
+			"SELLINE" => $s, 
+			"PASTE" => $p,
+			"U_ADD" => $ua,
+			"U_IMPORT"=>$ui,
+			"count" => $cnt,
+			"is_so" => $revo,
+			"id_sort_img" => ($sortby == "oid" ? ($order == "ASC" ? $up : $down) : "" ),
+			"name_sort_img" => ($sortby == "name" ? ($order == "ASC" ? $up : $down) : "" ),
+			"email_sort_img" => ($sortby == "email" ? ($order == "ASC" ? $up : $down) : "" )
+		));
 		return $this->parse();
 	}
 	

@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.3 2001/05/22 05:07:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/pop3.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
 class pop3 extends aw_template
 {
 	function pop3()
 	{
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	function get_messages($server,$user,$pass,$delete,$uidls)

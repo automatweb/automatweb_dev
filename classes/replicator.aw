@@ -9,6 +9,7 @@ class replicator_host extends db_connector
 		$this->key=$key;
 		$this->table=$table;
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	function parse_request($arr)

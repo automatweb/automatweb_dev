@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.9 2001/07/16 06:01:38 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msgboard.aw,v 2.10 2001/07/26 16:49:57 duke Exp $
+lc_load("msgboard");
 define("PER_PAGE",10);
 define("PER_FLAT_PAGE",20);
 define("TOPICS_PER_PAGE",7);
@@ -11,6 +11,12 @@ class msgboard extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("msgboard");
+		lc_load("definition");
+		global $lc_msgboard;
+		if (is_array($lc_msgboard))
+		{
+			$this->vars($lc_msgboard);
+		}
 	}
 
 
@@ -849,12 +855,15 @@ class msgboard extends aw_template
 			$board[$row["board_id"]]=$row["board_id"];
 		};
 
-		foreach ($board as $k => $v)
+		if (is_array($board))
 		{
-			if ($a[$v])
+			foreach ($board as $k => $v)
 			{
-				$tm= $a[$v];
-				$arr[$v]=$this->db_fetch_field("SELECT COUNT(*) as cnt FROM comments WHERE board_id= '$v' AND comments.time>= '$tm'","cnt");
+				if ($a[$v])
+				{
+					$tm= $a[$v];
+					$arr[$v]=$this->db_fetch_field("SELECT COUNT(*) as cnt FROM comments WHERE board_id= '$v' AND comments.time>= '$tm'","cnt");
+				};
 			};
 		};
 

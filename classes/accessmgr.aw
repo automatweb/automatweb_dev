@@ -1,10 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.5 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/accessmgr.aw,v 2.6 2001/07/26 16:49:56 duke Exp $
 
 global $orb_defs;
-$orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array())
+$orb_defs["accessmgr"] = array("list_access" => array("function" => "list_access", "params" => array()));
 																
-			lc_load("accessmsg");												);
+lc_load("accessmsg");
 classload("config");
 class accessmgr extends aw_template
 {

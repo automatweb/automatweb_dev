@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.5 2001/07/16 06:01:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/mysql.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
 // mysql.aw - MySQL draiver
 include("$classdir/root.$ext");
 class db_connector extends root 
@@ -16,6 +16,7 @@ class db_connector extends root
 		$this->dbh = $db_core->dbh;
 		$this->db_base = $db_core->db_base;
 		$this->watch = 1;
+		lc_load("definition");
 	}
 		
 	function db_connect($server,$base,$username,$password) 

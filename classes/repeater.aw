@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.3 2001/06/18 13:19:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
 class repeater {
 	////
 	// !Konstruktor.
@@ -11,6 +11,7 @@ class repeater {
 		// koigepealt moodustame yhe pika vektori
 		#extract($args);
 		#$this->_init($start,$end);
+		lc_load("definition");
 	}
 
 	////

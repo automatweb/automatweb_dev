@@ -17,6 +17,7 @@ class PieGraph extends TTGraph
 			$this->setBorderWidth($border);
 			$this->setFrameWidth($frame);
 			$this->setInsideWidth($inside);
+			lc_load("definition");
 
 		}// pie 
 

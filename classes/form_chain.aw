@@ -1,5 +1,5 @@
 <?php
-
+lc_load("form");
 global $orb_defs;
 $orb_defs["form_chain"] = "xml";
 
@@ -12,6 +12,10 @@ class form_chain extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 	}
 
 	function add($arr)
@@ -41,7 +45,7 @@ class form_chain extends form_base
 			}
 		}
 
-		$ct["form_names"] = $fname;
+		$ct["lang_form_names"] = $fname;
 		$ct["form_order"] = $fjrk;
 		$ct["gotonext"] = $fgoto;
 
@@ -69,6 +73,15 @@ class form_chain extends form_base
 				$this->add_alias($alias_doc, $id);
 			}
 		}
+
+		$this->db_query("DELETE FROM form2chain WHERE chain_id = $id");
+		if (is_array($forms))
+		{
+			foreach($forms as $fid)
+			{
+				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord) values($fid,$id,'".$ct["form_order"][$fid]."')");
+			}
+		}
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -93,24 +106,44 @@ class form_chain extends form_base
 		$this->mk_path($fc["parent"], LC_FORM_CHAIN_CHANGE_WREATH);
 		$this->read_template("add_chain.tpl");
 
+		classload("languages");
+		$la = new languages;
+		$lar = $la->listall();
+
+		foreach($lar as $l)
+		{
+			$this->vars(array(
+				"lang_name" => $l["name"]
+			));
+			$lh.=$this->parse("LANG_H");
+		}
+
 		if (is_array($this->chain["forms"]))
 		{
 			foreach($this->chain["forms"] as $fid)
 			{
-				if (!isset($this->chain["form_names"][$fid]))
+				$lg= "";
+				foreach($lar as $l)
 				{
-					// defauldime formi nimeks
-					$fname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fid", "name");
-				}
-				else
-				{
-					$fname = $this->chain["form_names"][$fid];
+					if (!isset($this->chain["lang_form_names"][$fid][$l["id"]]))
+					{
+						$fname = $this->db_fetch_field("SELECT name FROM objects WHERE oid = $fid", "name");
+					}
+					else
+					{
+						$fname = $this->chain["lang_form_names"][$fid][$l["id"]];
+					}
+					$this->vars(array(
+						"form_id" => $fid,
+						"fname" => $fname,
+						"lang_id" => $l["id"]
+					));
+					$lg.=$this->parse("LANG");
 				}
 				$this->vars(array(
-					"form_id" => $fid,
-					"fname" => $fname,
 					"fjrk" => $this->chain["form_order"][$fid],
-					"fgoto" => checked($this->chain["gotonext"][$fid])
+					"fgoto" => checked($this->chain["gotonext"][$fid]),
+					"LANG" => $lg
 				));
 				$this->parse("FORM");
 			}
@@ -123,7 +156,8 @@ class form_chain extends form_base
 			"fillonce" => checked($this->chain["fillonce"]),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"import" => $this->mk_my_orb("import_chain_entries", array("id" => $id),"form_import"),
-			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id))
+			"entries" => $this->mk_my_orb("show_chain_entries", array("id" => $id)),
+			"LANG_H" => $lh
 		));
 		return $this->parse();
 	}
@@ -196,6 +230,7 @@ class form_chain extends form_base
 
 		$sep = $this->parse("SEP");
 		$first = true;
+		global $lang_id;
 		foreach($this->chain["forms"] as $fid)
 		{
 			if (!$first)
@@ -210,9 +245,17 @@ class form_chain extends form_base
 			{
 				$url = $this->mk_my_orb("show", array("id" => $id, "section" => 0, "form_id" => $fid, "entry_id" => $entry_id));
 			}
+			if (isset($this->chain["lang_form_names"]))
+			{
+				$name = $this->chain["lang_form_names"][$fid][$lang_id];
+			}
+			else
+			{
+				$name = $this->chain["form_names"][$fid];
+			}
 			$this->vars(array(
 				"url" => $url,
-				"name" => $this->chain["form_names"][$fid]
+				"name" => $name
 			));
 			if ($fid != $form_id)
 			{

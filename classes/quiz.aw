@@ -25,6 +25,7 @@ class quiz extends aw_template
 	{
 		$this->tpl_init("quiz");
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	function upload($arr)

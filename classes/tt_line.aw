@@ -17,6 +17,7 @@ class LineGraph extends TTGraph
 		$this->setBorderWidth($border);
 		$this->setFrameWidth($frame);
 		$this->setInsideWidth($inside);
+		lc_load("definition");
 	}
 
 	//Joonistab base pildi peale jooned, sisendiks tahab saada v‰‰rtusi arrayna ja v‰rvi

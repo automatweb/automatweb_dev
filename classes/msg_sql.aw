@@ -1,11 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.7 2001/07/03 02:39:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/msg_sql.aw,v 2.8 2001/07/26 16:49:57 duke Exp $
 // msg_sql.aw - sql draiver messengeri jaoks
 class msg_sql_driver extends core
 {
 	function msg_sql_driver()
 	{
 		$this->db_init();
+		lc_load("definition");
 	}
 
 	////
@@ -15,6 +16,8 @@ class msg_sql_driver extends core
 	function msg_get($args = array())
 	{
 		// Will show only users own messages
+		$q = sprintf("UPDATE messages SET status = %d WHERE id = %d",MSG_STATUS_READ,$args["id"]);
+		$this->db_query($q);
 		$q = sprintf("SELECT *,objects.* 
 				FROM messages
 				LEFT JOIN objects ON (messages.id = objects.oid)

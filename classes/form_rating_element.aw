@@ -1,4 +1,6 @@
 <?php
+
+lc_load("form");
 	session_register("clipboard");
 	class form_rating_element extends aw_template
 	{
@@ -11,6 +13,10 @@
 			$this->id = $id;
 			if ($id != -1)
 				$this->load($id);
+			global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 		}
 
 		function load_from(&$r,&$acl)

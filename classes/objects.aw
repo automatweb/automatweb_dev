@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.17 2001/07/17 20:53:41 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/objects.aw,v 2.18 2001/07/26 16:49:57 duke Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 
 global $orb_defs;
@@ -11,8 +11,9 @@ class db_objects extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init();
-		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN);		
-		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN);	
+		$this->typearr = array(CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK);		
+		$this->typearr2 = array(CL_PSEUDO,CL_FORM,CL_IMAGE,CL_FORM_ENTRY,CL_GRAPH,CL_GALLERY,CL_TABLE,CL_FILE,CL_FORM_CHAIN,CL_EXTLINK);	
+	lc_load("definition");
 	}
 
 	function browser($args = array())
@@ -512,7 +513,10 @@ class objects extends db_objects
 					}
 					else
 					{
-						$se[] = " objects.$k LIKE '%".$v."%' ";
+						if ($v != "%")
+						{
+							$se[] = " objects.$k LIKE '%".$v."%' ";
+						}
 					}
 				}
 			}
@@ -563,11 +567,13 @@ class objects extends db_objects
 		classload("objects");
 		$ob = new db_objects;
 
+		$li = $this->get_list(false,true);
+		$li[1] = "Root";
 		$this->vars(array(
 			"s_name"	=> $s["name"],
 			"s_comment"	=> $s["comment"],
 			"types"	=> $this->picker($s["class_id"], $tar),
-			"parents" => $this->picker($s["parent"],$this->get_list(false,true)),
+			"parents" => $this->picker($s["parent"],$li),
 			"createdby" => $this->picker($s["createdby"],$uids),
 			"modifiedby" => $this->picker($s["modifiedby"],$uids),
 			"active"	=> checked($s["active"]),

@@ -1,5 +1,6 @@
 <?php
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shop.aw,v 2.31 2001/07/26 16:49:57 duke Exp $
+lc_load("shop");
 global $orb_defs;
 $orb_defs["shop"] = "xml";
 
@@ -34,7 +35,9 @@ class shop extends shop_base
 		if (is_array($lc_shop))
 		{
 			$this->vars($lc_shop);
-		}
+		
+	lc_load("definition");
+	}
 	}
 
 	////
@@ -409,6 +412,7 @@ class shop extends shop_base
 			$this->save_handle();
 			if (!$this->is_item_available($row,1,new form(), $min_p))
 			{
+				$c.=$this->parse("NOT_AVAILABLE");
 				continue;
 			}
 			$itt = $ityp->get_item_type($row["type_id"]);
@@ -441,6 +445,7 @@ class shop extends shop_base
 			"reforb" => $this->mk_reforb("add_cart", array("shop_id" => $id, "section" => $section)),
 			"cart" => $this->mk_site_orb(array("action" => "view_cart", "shop_id" => $id, "section" => $section)),
 			"ITEM" => $c,
+			"NOT_AVAILABLE" => "",
 			"add_item" => $this->mk_my_orb("new", array("parent" => $section),"shop_item"),
 			"HAS_ITEMS" => ($has_items ? $this->parse("HAS_ITEMS") : ""),
 			"cancel_current" => $this->mk_my_orb("cancel_current", array("shop" => $id, "section" => $section))
@@ -549,6 +554,7 @@ class shop extends shop_base
 
 	function get_cart_min_period()
 	{
+		global $shopping_cart;
 		$min_p = 2147483648;
 		if (!is_array($shopping_cart["items"]))
 		{
@@ -695,6 +701,7 @@ class shop extends shop_base
 	{
 		$els = $this->parse_eq_variables($eq["comment"]);
 
+		$replaces = array();
 		$eq = $eq["comment"];
 		foreach($els as $elname)
 		{
@@ -716,12 +723,24 @@ class shop extends shop_base
 			{
 				$elval = "0.0";
 			}
-			$eq = str_replace($elname,$elval,$eq);
+			$replaces[$elname] = $elval;
+//			$eq = str_replace($elname,$elval,$eq);
+		}
+		uksort($replaces, array($this,"_sort_repl"));
+		foreach($replaces as $k => $v)
+		{
+//			echo "$k => $v <br>";
+			$eq = str_replace($k,$v,$eq);
 		}
 //		echo "eq = $eq <br>";
-		eval("\$price = ".$eq.";");
+		eval($eq.";");
 //		echo "calc price = $price <br>";
 		return $price;
+	}
+
+	function _sort_repl($a,$b)
+	{
+		return strlen($b) - strlen($a);
 	}
 
 	function get($id)
@@ -945,7 +964,7 @@ class shop extends shop_base
 
 					if ($itt["has_voucher"])
 					{
-						$mail.="Hotel: ".($this->db_query("SELECT name FROM objects WHERE oid = ".$it["parent"],"name"))."\n";
+						$mail.="Hotel: ".($this->db_fetch_field("SELECT name FROM objects WHERE oid = ".$it["parent"],"name"))."\n";
 					}
 					foreach($selrows as $rownum)
 					{
@@ -997,13 +1016,16 @@ class shop extends shop_base
 		// nyt paneme tellimusega kaasa tulnud order formid ka kirja
 		global $order_forms;
 		$ename = "";
-		foreach($order_forms["entries"] as $ar)
+		if (is_array($order_forms["entries"]))
 		{
-			if ($ename == "")
+			foreach($order_forms["entries"] as $ar)
 			{
-				$ename = $ar["name"];
+				if ($ename == "")
+				{
+					$ename = $ar["name"];
+				}
+				$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id,num,name) values($ord_id,'".$ar["form"]."','".$ar["entry"]."','".$ar["num"]."','".$ar["name"]."')");
 			}
-			$this->db_query("INSERT INTO order2form_entries(order_id,form_id,entry_id,num,name) values($ord_id,'".$ar["form"]."','".$ar["entry"]."','".$ar["num"]."','".$ar["name"]."')");
 		}
 
 		// now we must also send an email to somebody notifying them of the new order.
@@ -1014,11 +1036,14 @@ class shop extends shop_base
 		$this->db_query("UPDATE orders SET t_price = '$t_price', name='$ename' WHERE id = $ord_id");
 		
 		$mail.=LC_SHOP_ORDERES_DATA;
-		foreach($order_forms["entries"] as $ar)
+		if (is_array($order_forms["entries"]))
 		{
-			$f->load($ar["form"]);
-			$f->load_entry($ar["entry"]);
-			$mail.=$f->show_text();
+			foreach($order_forms["entries"] as $ar)
+			{
+				$f->load($ar["form"]);
+				$f->load_entry($ar["entry"]);
+				$mail.=$f->show_text();
+			}
 		}
 
 		$emails = explode(",",$sh["emails"]);
@@ -1417,12 +1442,14 @@ class shop extends shop_base
 			if ($row["status"] != ORD_FILLED)
 			{
 				$is_f = $this->parse("IS_F");
+				$isp = "";
 			}
 			else
 			{
 				$is_f = $this->parse("FILLED");
+				$isp = $this->parse("IS_PAID");
 			}
-			$this->vars(array("IS_F" => $is_f,"FILLED" => ""));
+			$this->vars(array("IS_F" => $is_f,"FILLED" => "","IS_PAID" => $isp));
 			$this->parse("LINE");
 		}
 		$this->vars(array(
@@ -1688,7 +1715,10 @@ class shop extends shop_base
 				{
 					// muutuja nimi l6ppes
 					$in_var = false;
-					$ret[] = $cur_var;
+					if ($cur_var != "echo")
+					{
+						$ret[] = $cur_var;
+					}
 					$cur_var = "";
 				}
 			}
@@ -1713,7 +1743,10 @@ class shop extends shop_base
 		}
 		if ($in_var)
 		{
-			$ret[] = $cur_var;
+			if ($cur_var != "echo")
+			{
+				$ret[] = $cur_var;
+			}
 		}
 		return $ret;
 	}
@@ -1727,6 +1760,11 @@ class shop extends shop_base
 		if ($it["has_max"])
 		{
 			// check if there still are $count items available. 
+			$hm = $this->db_fetch_field("SELECT max_items FROM shop_item2per_prices WHERE tfrom <= $period AND tto >= $period","max_items");
+			if ($hm > 0)
+			{
+				$it["max_items"] = $hm;
+			}
 			if ($it["has_period"])
 			{
 				// if the item has periods and has objects for each period then we figure out for which time span the

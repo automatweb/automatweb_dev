@@ -1,5 +1,5 @@
 <?php
-
+lc_load("languages");
 class languages extends aw_template
 {
 	function languages()
@@ -7,6 +7,10 @@ class languages extends aw_template
 		$this->db_init();
 		$this->tpl_init("languages");
 		lc_load("definition");
+		global $lc_languages;
+		if (is_array($lc_languages))
+		{
+			$this->vars($lc_languages);}
 	}
 
 	function gen_list()

@@ -1,5 +1,5 @@
 <?php
-
+lc_load("shop");
 define("FOR_SELECT",1);
 define("ALL_PROPS",2);
 
@@ -14,6 +14,15 @@ class shop_base extends aw_template
 		$this->tpl_init("shop");
 		$this->db_init();
 		$this->sub_merge = 1;
+		lc_load("definition");
+		lc_load("shop");
+
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+	}
+
 	}
 
 	////

@@ -6,6 +6,7 @@ class sitemap extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("sitemap");
+		lc_load("definition");
 	}
 
 	function mk_map()

@@ -6,6 +6,7 @@ class tvkavad extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("tvkavad");
+		lc_load("definition");
 	}
 
 	function hetkel_eetris()

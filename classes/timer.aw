@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.2 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.3 2001/07/26 16:49:57 duke Exp $
 // klass taimerite jaoks
 class aw_timer 
 {
@@ -13,6 +13,7 @@ class aw_timer
 		$this->timers = array();
 		$this->counters = array();
 		$this->start("__global");
+		lc_load("definition");
 	}
 	
 	function count($name) 

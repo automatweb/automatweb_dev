@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.85 2001/07/18 16:22:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.86 2001/07/26 16:49:57 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
-
+lc_load("messenger");
+lc_load("definition");
 classload("defs","menuedit_light","xml","msg_sql");
 global $orb_defs;
 $orb_defs["messenger"] = "xml";
@@ -16,7 +17,6 @@ define('MSG_EXTERNAL',2);
 define('MSG_STATUS_UNREAD',0);
 define('MSG_STATUS_READ',1);
 
-lc_load("messenger");
 // siit algab messengeri põhiklass
 class messenger extends menuedit_light 
 {
@@ -28,6 +28,11 @@ class messenger extends menuedit_light
 	function messenger($args = array())
 	{
 		$this->db_init();
+		global $lc_messenger;
+		if (is_array($lc_messenger))
+		{
+			$this->vars($lc_messenger);
+		}
 		$this->tpl_init("messenger");
 		$driverclass = "msg_" . $this->drivername . "_driver";
 
@@ -521,9 +526,14 @@ class messenger extends menuedit_light
 					if ($msg["type"] == MSG_EXTERNAL)
 					{
 						$from = $this->MIME_decode($msg["mfrom"]);
+						$ofrom = $mfrom;
 						if ($this->msgconf["msg_filter_address"])
 						{
 							$from = preg_replace("/[<|\(|\[].*[>|\)|\]]/","",$from);
+							if (strlen($from) == 0)
+							{
+								$from = $ofrom;
+							};
 						};
 						$from = htmlspecialchars($from);
 						$msg["from"] = $from;
@@ -793,7 +803,7 @@ class messenger extends menuedit_light
 			
 			if ($msg["type"] == MSG_EXTERNAL)
 			{
-				$msg["mtargets1"] = $msg["mfrom"];
+				$msg["mtargets1"] = str_replace("\"","",$msg["mfrom"]);
 			}
 			else
 			{
@@ -811,6 +821,7 @@ class messenger extends menuedit_light
 		{
 			$msg_id = $args["id"];
 			$msg = $this->driver->msg_get(array("id" => $msg_id));
+			$msg["mtargets1"] = str_replace("\"","",$msg["mtargets1"]);
 			$sprefix = "";
 		};
 
@@ -1668,7 +1679,7 @@ class messenger extends menuedit_light
 						"cnt" => $c,
 						"msgid" => $args["id"],
 						"icon" => get_icon_url(CL_FILE,$row["name"]),
-						"name" => $row["name"],
+						"name" => $this->MIME_decode($row["name"]),
 					));
 			};
 			$attaches .= $this->parse($subtpl);

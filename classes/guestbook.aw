@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.5 2001/07/12 04:23:45 kristo Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
+lc_load("guestbook");
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
 															 "submit_gb" => array("function" => "submit_gb", "params" => array()),
@@ -16,6 +16,10 @@ class guestbook extends aw_template
 		$this->db_init();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_guestbook;
+		if (is_array($lc_guestbook))
+		{
+			$this->vars($lc_guestbook);}
 	}
 
 	////

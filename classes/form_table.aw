@@ -2,7 +2,7 @@
 
 global $orb_defs;
 $orb_defs["form_table"] = "xml";
-
+lc_load("form");
 class form_table extends form_base
 {
 	function form_table()
@@ -10,6 +10,10 @@ class form_table extends form_base
 		$this->form_base();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 	}
 
 	////
@@ -65,9 +69,43 @@ class form_table extends form_base
 							$this->table["defs"][$col]["el"][$elid] = $elid;
 						}
 					}
-					$this->table["defs"][$col]["title"] = $names[$col];
+					$this->table["defs"][$col]["lang_title"] = $names[$col];
 					$this->table["defs"][$col]["sortable"] = $sortable[$col];
 				}
+			}
+
+			if (is_array($del))
+			{
+				$td = array();
+				$nc = 0;
+				for ($i=0; $i < $num_cols; $i++)
+				{
+					if ($del[$i] != 1)
+					{
+						$td[$nc] = $this->table["defs"][$i];
+						$nc++;
+					}
+				}
+				$num_cols = $nc;
+				$this->table["defs"] = $td;
+			}
+
+			if (is_array($addaf))
+			{
+				$td = array();
+				$nc = 0;
+				for ($i=0; $i < $num_cols; $i++)
+				{
+					if ($addaf[$i-1] == 1)
+					{
+						$nc++;
+					}
+					
+					$td[$nc] = $this->table["defs"][$i];
+					$nc++;
+				}
+				$num_cols = $nc;
+				$this->table["defs"] = $td;
 			}
 
 			$this->table["moveto"] = array();
@@ -123,6 +161,7 @@ class form_table extends form_base
 		extract($arr);
 		$this->read_template("add_table.tpl");
 		$tb = $this->load_table($id);
+		$tbo = $this->get_object($id);
 		$this->mk_path($this->table_parent, LC_FORM_TABLE_CHANGE_FORM_TABLE);
 
 		$forms = $this->get_forms_for_table($id);
@@ -138,14 +177,43 @@ class form_table extends form_base
 			$this->parse("TITLE");
 		}
 
+		classload("languages");
+		$lang = new languages;
+		$lar = $lang->listall();
+		foreach($lar as $la)
+		{
+			$this->vars(array(
+				"lang_name" => $la["name"]
+			));
+			$this->parse("LANG_H");
+		}
+
 		for ($col=0; $col < $this->table["cols"]; $col++)
 		{
 			$this->vars(array(
 				"column" => $col,
-				"c_name" => $this->table["defs"][$col]["title"],
 				"sortable" => checked($this->table["defs"][$col]["sortable"])
 			));
-			
+		
+			$lit = "";
+			foreach($lar as $la)
+			{
+				if ($tbo["lang_id"] == $la["id"] && $this->table["defs"][$col]["lang_title"][$la["id"]] == "")
+				{
+					$lt = $this->table["defs"][$col]["title"];
+				}
+				else
+				{
+					$lt = $this->table["defs"][$col]["lang_title"][$la["id"]];
+				}
+				$this->vars(array(
+					"lang_id" => $la["id"],
+					"c_name" => $lt
+				));
+				$lit.=$this->parse("LANG");
+			}
+			$this->vars(array("LANG" => $lit));
+
 			$c = "";
 			foreach($els as $elid => $elname)
 			{
@@ -270,9 +338,9 @@ class form_table extends form_base
 				$str = array();
 				foreach($cc["el"] as $elid)
 				{
-					$str[]=$dat["el_".$elid];
+					$str[]=$dat["ev_".$elid];
 				}
-				$dat["el_col_".$col] = join(",",$str);
+				$dat["ev_col_".$col] = join(",",$str);
 			}
 		}
 		$this->t->define_data($dat);
@@ -285,9 +353,9 @@ class form_table extends form_base
 		$rds = array();
 		foreach($forms as $form)
 		{
-			$rds["el_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form->id, "entry_id" => $form->entry_id), "form")."'>Muuda</a>";
-			$rds["el_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]),"form")."'>Vaata</a>";
-			$rds["el_special"] = $special;
+			$rds["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form->id, "entry_id" => $form->entry_id), "form")."'>Muuda</a>";
+			$rds["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $form->arr["search_outputs"][$form->id]),"form")."'>Vaata</a>";
+			$rds["ev_special"] = $special;
 			for ($row = 0; $row < $form->arr["rows"]; $row++)
 			{
 				for ($col = 0; $col < $form->arr["cols"]; $col++)
@@ -296,7 +364,7 @@ class form_table extends form_base
 					reset($elar);
 					while (list(,$el) = each($elar))
 					{
-						$rds["el_".$el->get_id()] = $el->get_value();
+						$rds["ev_".$el->get_id()] = $el->get_value();
 					}
 				}
 			}
@@ -323,99 +391,135 @@ class form_table extends form_base
 	function show_user_entries($arr)
 	{
 		extract($arr);
-		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id));
-
-		classload("form");
-		$far = array();
 		if ($form_id)
 		{
-			// teeme nimekirja yhe formi sisestustest
-			$far[0] = new form;
-			$far[0]->load($form_id);
-			$cnt=1;
-			$this->db_query("SELECT objects.*,form_".$form_id."_entries.* FROM objects LEFT JOIN form_".$form_id."_entries ON objects.oid = form_".$form_id."_entries.id WHERE objects.status = 2 AND createdby = '".$GLOBALS["uid"]."'");
+			return $this->show_user_form_entries($arr);
 		}
-		else
-		if ($chain_id)
-		{
-			$this->load_chain($chain_id);
-			$ftables = array();
-			$fjoins = array();
-			$ftables[] = "form_chain_entries.*";
-			$cnt=0;
-			foreach($this->chain["forms"] as $fid)
-			{
-				$ftables[] = "form_".$fid."_entries.*";
-				$fjoins[] = "LEFT JOIN form_".$fid."_entries ON form_".$fid."_entries.chain_id = form_chain_entries.id";
-				$far[$cnt] = new form;
-				$far[$cnt]->load($fid);
-				$cnt++;
-			}
-			$fts = join(",",$ftables);
-			$fjs = join(" ",$fjoins);
-			$this->db_query("SELECT $fts FROM form_chain_entries $fjs WHERE form_chain_entries.uid = '".$GLOBALS["uid"]."' GROUP BY form_chain_entries.id");
-		}
-		classload("xml");
-		$x = new xml;
-		$chainentries = array();
+
+		global $section;
+		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
+
+		// leiame k6ik sisestused mis on tehtud $uid poolt $chain_id jaox.
+		$this->load_chain($chain_id);
+
+		$eids = array();
+		$this->db_query("SELECT id FROM form_chain_entries WHERE uid = '".$GLOBALS["uid"]."'");
 		while ($row = $this->db_next())
 		{
-			if ($chain_id && $row["chain_id"])
+			$eids[] = $row["id"];
+		}
+
+		$tbls = "";
+		$joins = "";
+		reset($this->chain["forms"]);
+		list($fid,) = each($this->chain["forms"]);
+		while(list($ch_fid,) = each($this->chain["forms"]))
+		{
+			if ($ch_fid != $fid)
 			{
-				if (isset($chainentries[$row["chain_id"]]))
-				{
-					continue;
-				}
-				$chainentries[$row["chain_id"]] = 1;
-
-				// get chain entry ids
-				$char = $x->xml_unserialize(array("source" => $row["ids"]));
-				$rds = array();
-				for ($i=0; $i < $cnt; $i++)
-				{
-					$form = &$far[$i];
-					if (1 == 1)
-					{
-						// this will never be true, as db->next always returns an array
-						if (!is_array($row))
-						{
-							continue;
-						}
-
-						$form->load_entry_from_data($row,$char[$form->id]);
-
-						$rds["el_change"] = sprintf(LC_FORM_TABLE_CHAIN_CHANGE,$this->mk_my_orb("show", array("id" => $chain_id, "section" => "0","entry_id" => $row["chain_id"]), "form_chain"));
-
-						$rds["el_view"] = sprintf(LC_FORM_TABLE_SHOW_ENTRY,$this->mk_my_orb("show_entry", array("id" => $form->id,"entry_id" => $form->entry_id, "op_id" => $op_id),"form"));
-
-/*						for ($row = 0; $row < $form->arr["rows"]; $row++)
-						{
-							for ($col = 0; $col < $form->arr["cols"]; $col++)
-							{
-								$form->arr["contents"][$row][$col]->get_els(&$elar);
-								reset($elar);
-								while (list(,$el) = each($elar))
-							{
-								$rds["el_".$el->get_id()] = $el->get_value();
-							}
-						}
-					}*/
-						$rds=$rds+$form->values;
-					};
-				}
-				if ($form->entry_id)
-				{
-					$this->t->define_data($rds);
-				};
-			}
-			else
-			if ($form_id)
-			{
-				$far[0]->load_entry_from_data($row,$row["id"]);
-				$this->row_data_from_form($far);
+				$tbls.=",form_".$ch_fid."_entries.*";
+				$joins.=" LEFT JOIN form_".$ch_fid."_entries ON form_".$ch_fid."_entries.chain_id = form_".$fid."_entries.chain_id ";
 			}
 		}
-		return $this->finish_table();
+		
+		$eids = join(",", $eids);
+		if ($eids != "")
+		{
+			$this->db_query("SELECT form_".$fid."_entries.id as entry_id, form_".$fid."_entries.chain_id as chain_entry_id, form_".$fid."_entries.* $tbls FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id $joins WHERE objects.status != 0 AND form_".$fid."_entries.chain_id in ($eids)");
+			while ($row = $this->db_next())
+			{
+				$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $chain_id,"entry_id" => $row["chain_entry_id"]), "form_chain")."'>Muuda</a>";
+				$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $fid,"entry_id" => $row["entry_id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
+				$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+					"delete_entry", 
+						array(
+							"id" => $fid,
+							"entry_id" => $row["entry_id"], 
+							"after" => $this->binhex($this->mk_my_orb("show_user_entries", array("chain_id" => $chain_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
+						),
+					"form")."'>Kustuta</a>";
+				$this->row_data($row);
+			}
+		}
+
+		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$tbl = $this->get_css();
+		$tbl.="<form action='reforb.aw' method='POST'>\n";
+		if ($this->table["submit_top"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+		if ($this->table["user_button_top"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.=$this->t->draw();
+
+		if ($this->table["submit_bottom"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+		if ($this->table["user_button_bottom"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+		$tbl.="</form>";
+		return $tbl;
+	}
+
+	////
+	// !shows all the entries for the logged in user of form ($form_id) with table $table_id
+	function show_user_form_entries($arr)
+	{
+		extract($arr);
+
+		global $section;
+		$this->start_table($table_id,array("class" => "form_table", "action" => "show_user_entries", "form_id" => $form_id, "chain_id" => $chain_id, "table_id" => $table_id,"section" => $section,"op_id" => $op_id));
+
+		// leiame k6ik sisestused mis on tehtud $uid poolt $form_id jaox.
+		$this->load($form_id);
+
+		$this->db_query("SELECT form_".$fid."_entries.* FROM form_".$fid."_entries LEFT JOIN objects ON objects.oid = form_".$fid."_entries.id WHERE objects.status != 0 AND objects.createdby = '".$GLOBALS["uid"]."'");
+		while ($row = $this->db_next())
+		{
+			$row["ev_change"] = "<a href='".$this->mk_my_orb("show", array("id" => $form_id,"entry_id" => $row["id"]), "form")."'>Muuda</a>";
+			$row["ev_view"] = "<a href='".$this->mk_my_orb("show_entry", array("id" => $form_id,"entry_id" => $row["id"], "op_id" => $op_id,"section" => $section),"form")."'>Vaata</a>";		
+			$row["ev_delete"] = "<a href='".$this->mk_my_orb(
+				"delete_entry", 
+					array(
+						"id" => $fid,
+						"entry_id" => $row["entry_id"], 
+						"after" => $this->binhex($this->mk_my_orb("show_user_entries", array("form_id" => $form_id, "table_id" => $table_id, "op_id" => $op_id,"section" => $section)))
+					),
+				"form")."'>Kustuta</a>";
+			$this->row_data($row);
+		}
+
+		$this->t->sort_by(array("field" => $GLOBALS["sortby"],"sorder" => $GLOBALS["sort_order"]));
+		$tbl = $this->get_css();
+		$tbl.="<form action='reforb.aw' method='POST'>\n";
+		if ($this->table["submit_top"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+		if ($this->table["user_button_top"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.=$this->t->draw();
+
+		if ($this->table["submit_bottom"])
+		{
+			$tbl.="<input type='submit' value='".$this->table["submit_text"]."'>";
+		}
+		if ($this->table["user_button_bottom"])
+		{
+			$tbl.="&nbsp;<input type='submit' value='".$this->table["user_button_text"]."' onClick=\"window.location='".$this->table["user_button_url"]."';return false;\">";
+		}
+		$tbl.= $this->mk_reforb("submit_table", array("return" => $this->binhex($this->mk_my_orb("show_entry", array("id" => $this->id, "entry_id" => $entry_id, "op_id" => $output_id)))));
+		$tbl.="</form>";
+		return $tbl;
 	}
 
 	////
@@ -471,7 +575,16 @@ class form_table extends form_base
 			{
 				$eln = $cc["el"];
 			}
-			$xml.="<field name=\"el_".$eln."\" caption=\"".$cc["title"]."\" talign=\"center\" align=\"center\"";
+			global $lang_id;
+			if (isset($cc["lang_title"]))
+			{
+				$title = $cc["lang_title"][$lang_id];
+			}
+			else
+			{
+				$title = $cc["title"];
+			}
+			$xml.="<field name=\"ev_".$eln."\" caption=\"".$title."\" talign=\"center\" align=\"center\"";
 			if ($cc["sortable"])
 			{
 				$xml.=" sortable=\"1\" ";

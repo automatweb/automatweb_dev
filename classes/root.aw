@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.4 2001/06/14 08:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
 /*
 	AW Foundation Classes
 	(C) StruktuurMeedia 2000,2001
@@ -13,6 +13,7 @@ class root
 	{
 		$this->errorlevel = 0;
 		$this->stacks = array();
+		lc_load("definition");
 	}
 
 	//  siit algavad pinu funktsioonid

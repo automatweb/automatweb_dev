@@ -1,6 +1,6 @@
 <?php
 classload("images");
-
+lc_load("gallery");
 global $orb_defs;
 $orb_defs["gallery"] = "xml";
 

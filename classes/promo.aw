@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.7 2001/07/17 20:56:50 duke Exp $
-
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.8 2001/07/26 16:49:57 duke Exp $
+lc_load("promo");
 global $orb_defs;
 $orb_defs["promo"] = "xml";
 
@@ -12,6 +12,11 @@ class promo extends aw_template
 	{
 		$this->tpl_init("promo");
 		$this->db_init();
+		lc_load("definition");
+		global $lc_promo;
+		if (is_array($lc_promo))
+		{
+			$this->vars($lc_promo);}
 	}
 
 	function add($arr)

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.15 2001/07/18 17:04:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.16 2001/07/26 16:49:57 duke Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -17,6 +17,7 @@ class users extends users_user
 	{
 		$this->db_init();
 		$this->tpl_init("automatweb/users");
+		lc_load("definition");
 	}
 
 	// users tabelis on väli config, tyypi text, kuhu saab salvestada
@@ -444,6 +445,12 @@ class users extends users_user
 		static $indent = 0;
 		$indent++;
 		static $cnt = 0;
+		if (!is_array($items))
+		{
+			$indent--;
+			return;
+		};
+
 		while(list($key,$val) = each($items[$section]))
 		{
 			$cnt++;
@@ -1041,7 +1048,15 @@ class users extends users_user
 			// now elvalues is array el_id => el_value
 			// but we need it to be el_name => el_value
 			// so we do a bigass query to find all the names of the elements
-			$elsss = join(",",$this->map2("%s",$elvs));
+			$tmp = array();
+			foreach($elvs as $k => $v)
+			{
+				if (is_number($k) && is_number($v))
+				{
+					$tmp[$k] = $v;
+				}
+			}
+			$elsss = join(",",$this->map2("%s",$tmp));
 
 			if ($elsss != "")
 			{

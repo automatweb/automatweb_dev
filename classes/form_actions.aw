@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.3 2001/07/12 04:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_actions.aw,v 2.4 2001/07/26 16:49:56 duke Exp $
 
 // form_actions.aw - creates and executes form actions
-
+lc_load("form");
 global $orb_defs;
 $orb_defs["form_actions"] = 
 array("list_actions"	=> array("function" => "list_actions", "params" => array("id")),
@@ -19,6 +19,10 @@ class form_actions extends form_base
 		$this->db_init();
 		$this->sub_merge = 1;
 		lc_load("definition");
+		global $lc_form;
+		if (is_array($lc_form))
+		{
+			$this->vars($lc_form);}
 	}
 
 	////

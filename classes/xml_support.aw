@@ -1,11 +1,10 @@
 <?php
-// $Version$
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_support.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
 // xml_support.aw - XML support functions
 // the goal is to gather all xml related functions which do not belong
 // to any class in this file.
 
 // formeerib xml andmestruktuuri identifikaator
-classload("defs");
 function xml_gen_header($version = "1.0") 
 {
 	return "<" . "?xml version='$version'?" . ">\r\n";
@@ -91,7 +90,7 @@ function _rpc_extract_struct(&$arr)
 {
 	$result = array();
 	$name = "";
-	static $in_value;
+	$in_value = false;
 	static $i = 0;
 
 	$continue = $i < sizeof($arr);
@@ -99,6 +98,12 @@ function _rpc_extract_struct(&$arr)
 	while ($continue)
 	{
 		$token = $arr[$i];
+		$i++;
+
+		if ( ($token["tag"] == "methodName") && ($token["type"] == "complete") )
+		{
+			$result["methodName"] = $token["value"];
+		};
 
 		if ($in_value && ($token["type"] == "complete") )
 		{
@@ -110,7 +115,12 @@ function _rpc_extract_struct(&$arr)
 		{
 			$in_value = false;
 			$result[$name] = _rpc_extract_struct(&$arr);
-		}
+		};
+
+		if ( ($token["tag"] == "struct") && ($token["type"] == "close") )
+		{
+			return $result;
+		};
 
 		if ($token["tag"] == "member")
 		{
@@ -136,7 +146,6 @@ function _rpc_extract_struct(&$arr)
 			$in_value = true;
 		};
 
-		$i++;
 		$continue = $i < sizeof($arr);
 	};
 	

@@ -1,5 +1,5 @@
 <?php
-
+lc_load("shop");
 global $orb_defs;
 $orb_defs["shop_eq"] = "xml";
 
@@ -14,7 +14,15 @@ class shop_eq extends shop_base
 		if (is_array($lc_shop))
 		{
 			$this->vars($lc_shop);
-		}
+		lc_load("definition");}
+		lc_load("shop");
+
+		global $lc_shop;
+		if (is_array($lc_shop))
+		{
+			$this->vars($lc_shop);
+	}
+	
 	}
 
 	function add($arr)

@@ -127,7 +127,7 @@ class links extends extlinks
 				{
 					$se[] = " content LIKE '%".$s_content."%' ";
 				}
-				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0 AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
+				$this->db_query("SELECT documents.title as name,objects.oid as oid,objects.parent as parent FROM objects LEFT JOIN documents ON documents.docid=objects.oid WHERE objects.status != 0  AND (objects.site_id = $SITE_ID OR objects.site_id IS NULL) AND (objects.class_id = ".CL_DOCUMENT." OR objects.class_id = ".CL_PERIODIC_SECTION." ) AND ".join("AND",$se));
 			}
 			while ($row = $this->db_next())
 			{
@@ -140,8 +140,11 @@ class links extends extlinks
 				{
 					$url = "/".$index_file.".".$ext."/section=".$row["oid"];
 				}
+				$name = strip_tags($row["name"]);
+				$name = str_replace("'","",$name);
 				$this->vars(array(
-					"name" => htmlentities($row["name"],ENT_QUOTES), 
+					"name" => $name, 
+					//"name" => htmlentities($row["name"],ENT_QUOTES), 
 					"id" => $row["oid"],
 					"url" => $url
 				));

@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.43 2001/07/19 22:11:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.44 2001/07/26 16:49:57 duke Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
+lc_load("planner");
 classload("calendar","defs");
 global $orb_defs;
 $orb_defs["planner"] = "xml";
@@ -23,6 +24,11 @@ class planner extends calendar {
 		$this->tpl_init("planner");
 		$this->db_init();
 		lc_load("definition");
+		global $lc_planner;
+		if (is_array($lc_planner))
+		{
+			$this->vars($lc_planner);
+		}
 	}
 
 	function todo($args = array())

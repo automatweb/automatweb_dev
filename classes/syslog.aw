@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.5 2001/07/17 20:55:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/syslog.aw,v 2.6 2001/07/26 16:49:57 duke Exp $
 // syslogi vaatamine ja analüüs
-
+lc_load("syslog");
 class db_syslog extends aw_template
 {
 	
@@ -9,6 +9,12 @@ class db_syslog extends aw_template
 	{
 		$this->db_init();
 		$this->tpl_init("syslog");
+		lc_load("definition");
+		global $lc_syslog;
+		if (is_array($lc_syslog))
+		{
+			$this->vars($lc_syslog);
+	}
 	}
 	
 	function display_last_10()

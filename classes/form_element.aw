@@ -190,7 +190,10 @@ class form_element extends aw_template
 			$dc="";
 			if ($this->arr["type"] == "checkbox")
 			{
-				$this->vars(array("default_checked"	=> checked($this->arr["default"] == 1)));
+				$this->vars(array(
+					"default_checked"	=> checked($this->arr["default"] == 1),
+					"ch_value" => $this->arr["ch_value"]
+				));
 				$dc = $this->parse("CHECKBOX_ITEMS");
 			}
 
@@ -448,6 +451,8 @@ class form_element extends aw_template
 			$this->arr["default"] = $$var;
 			$var=$base."_length";
 			$this->arr["length"] = $$var;
+			$var = $base."_ch_value";
+			$this->arr["ch_value"] = $$var;
 		}
 
 		if ($this->arr["type"] == "textbox" || $this->arr["type"] == "listbox")
@@ -521,13 +526,22 @@ class form_element extends aw_template
 
 	function gen_check_html()
 	{
+		global $lang_id;
+		if ($this->form->lang_id == $lang_id)
+		{
+			$mue = $this->arr["must_error"];
+		}
+		else
+		{
+			$mue = $this->arr["lang_must_error"][$lang_id];
+		}
 		if ($this->arr["type"] == "textbox" && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
 		{
 			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
-			return  $str."{ alert(\"".$this->arr["must_error"]."\");return false; }}\n";
+			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
 		else
 		if ($this->arr["type"] == "listbox" && isset($this->arr["must_fill"]) && $this->arr["must_fill"] == 1)
@@ -536,7 +550,7 @@ class form_element extends aw_template
 			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
 			$str .=$this->id;
 			$str .= "\" && document.fm_".$this->fid.".elements[i].selectedIndex == 0)";
-			return  $str."{ alert(\"".$this->arr["must_error"]."\");return false; }}\n";
+			return  $str."{ alert(\"".$mue."\");return false; }}\n";
 		}
 		return "";
 	}
@@ -802,8 +816,17 @@ class form_element extends aw_template
 	function do_core_userhtml($prefix,$elvalues,$no_submit)
 	{
 		$html="";
-		$info = $this->arr["info"]; 
-		$text = $this->arr["text"];
+		global $lang_id;
+		if ($this->form->lang_id == $lang_id)
+		{
+			$text = $this->arr["text"];
+			$info = $this->arr["info"]; 
+		}
+		else
+		{
+			$text = $this->arr["lang_text"][$lang_id];
+			$info = $this->arr["lang_info"][$lang_id]; 
+		}
 
 		$elid = $this->id;
 		$ext = false;
@@ -840,6 +863,15 @@ class form_element extends aw_template
 					$cnt = $this->arr["listbox_count"];
 				};
 
+				if ($lang_id != $this->form->lang_id)
+				{
+					$larr = $this->arr["listbox_lang_items"][$lang_id];
+				}
+				else
+				{
+					$larr = $this->arr["listbox_items"];
+				}
+
 				for ($b=0; $b < $cnt; $b++)
 				{	
 					if ($this->entry_id)
@@ -847,15 +879,18 @@ class form_element extends aw_template
 					else
 						$lbsel = ($this->arr["listbox_default"] == $b ? " SELECTED " : "");
 		
-					list($key,$value) = each($this->arr["listbox_items"]);
-					if ($ext)
+					if (is_array($larr))
 					{
-						$html .= "<option $lbsel value='$key'>$value</option>\n";
+						list($key,$value) = each($larr);
+						if ($ext)
+						{
+							$html .= "<option $lbsel value='$key'>$value</option>\n";
+						}
+						else
+						{
+							$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
+						};
 					}
-					else
-					{
-						$html.="<option $lbsel VALUE='element_".$this->id."_lbopt_".$b."'>".$value;
-					};
 				}
 				$html.="</select>";
 				break;
@@ -871,6 +906,15 @@ class form_element extends aw_template
 				if ($this->entry_id)
 					$ear = explode(",",$this->entry);
 
+				if ($lang_id != $this->form->lang_id)
+				{
+					$larr = $this->arr["multiple_lang_items"][$lang_id];
+				}
+				else
+				{
+					$larr = $this->arr["multiple_items"];
+				}
+
 				for ($b=0; $b < $this->arr["multiple_count"]; $b++)
 				{
 					$sel = false;
@@ -884,7 +928,7 @@ class form_element extends aw_template
 					else
 						$sel = ($this->arr["multiple_defaults"][$b] == 1 ? true : false);
 
-					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$this->arr["multiple_items"][$b];
+					$html.="<option ".($sel == true ? " SELECTED " : "")." VALUE='$b'>".$larr[$b];
 				}
 				$html.="</select>";
 				break;
@@ -910,19 +954,27 @@ class form_element extends aw_template
 			case "reset":
 				if (!$no_submit)
 				{
+					if ($lang_id == $this->form->lang_id)
+					{
+						$butt = $this->arr["button_text"];
+					}
+					else
+					{
+						$butt = $this->arr["lang_button_text"][$lang_id];
+					}
 					if ($this->arr["subtype"] == "submit" || $this->arr["type"] == "submit")
 					{
-						$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
+						$html = "<input type='submit' VALUE='".$butt."' onClick=\"return check_submit();\">";
 					}
 					else
 					if ($this->arr["subtype"] == "reset" || $this->arr["type"] == "reset")
 					{
-						$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
+						$html = "<input type='reset' VALUE='".$butt."'>";
 					}
 					else
 					if ($this->arr["subtype"] == "url")
 					{
-						$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
+						$html = "<input type='submit' VALUE='".$butt."' onClick=\"window.location='".$this->arr["button_url"]."';return false;\">";
 					}
 				}
 				break;
@@ -995,6 +1047,8 @@ class form_element extends aw_template
 	// tagastab mingi elemendi väärtuse
 	function get_val($elvalues = array())
 	{
+		global $lang_id;
+
 		// kui entry on laetud, siis voetakse see sealt.
 		if ($this->entry_id)
 		{
@@ -1009,17 +1063,27 @@ class form_element extends aw_template
 		// finally, if nothing else succeeded, we will just use the default.
 		else
 		{
-			$val = $this->arr["default"];
+			if ($lang_id != $this->form->lang_id)
+			{
+				$val = $this->arr["lang_default"][$lang_id];
+			}
+			else
+			{
+				$val = $this->arr["default"];
+			}
 		}
 		return $val;
 	}
 
 	function core_process_entry(&$entry, $id,$prefix = "")
 	{
+		//// This is called for every single element in the form.
+
 		if ($this->arr["type"] == 'link')
 		{
 			$var = $prefix.$this->id."_text";
 			$var2= $prefix.$this->id."_address";
+			// fuck you. fuck YOU. 
 			global $$var, $$var2;
 			$entry[$this->id] = array("text" => $$var, "address" => $$var2);
 			$this->entry_id = $id;
@@ -1118,7 +1182,14 @@ class form_element extends aw_template
 			case "radiobutton":
 				if (!$numeric)
 				{
-					$html = ($this->entry == $this->id ? " (X) " : " (-) ");
+					if ($this->arr["ch_value"] != "")
+					{
+						$html=$this->entry == $this->id ? $this->arr["ch_value"] : "";
+					}
+					else
+					{
+						$html=($this->entry == $this->id ? " (X) " : " (-) ");
+					}
 				}
 				else
 				{
@@ -1143,7 +1214,14 @@ class form_element extends aw_template
 			case "checkbox":
 				if (!$numeric)
 				{
-					$html = $this->entry == 1 ? "(X) " : " (-) ";
+					if ($this->arr["ch_value"] != "")
+					{
+						$html=$this->entry == 1 ? $this->arr["ch_value"] : "";
+					}
+					else
+					{
+						$html=$this->entry == 1 ? "(X) " : " (-) ";
+					}
 				}
 				else
 				{
@@ -1155,7 +1233,7 @@ class form_element extends aw_template
 				$html = trim($this->entry);
 				break;
 
-			case "date:":
+			case "date":
 				// FIXME: kui mingil hetkel kasutaja kuupäeva formaat muutub
 				// konfitavaks, siis muuda ka siit ära
 				$html = $this->time2date($this->entry,5);

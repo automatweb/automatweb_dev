@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.3 2001/06/08 19:25:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.4 2001/07/26 16:49:57 duke Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,
@@ -79,6 +79,7 @@ class TTGraph
 		$this->setBorderWidth($border);
 		$this->setFrameWidth($frame);
 		$this->setInsideWidth($inside);
+		lc_load("definition");
 	}
 	function GraphBase($width=400,$height=200,$bg="FFFFFF")
 	{

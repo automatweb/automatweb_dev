@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.16 2001/07/25 02:08:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_base.aw,v 2.17 2001/07/26 16:49:56 duke Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 lc_load("form");
@@ -62,6 +62,7 @@ class form_base extends aw_template
 			// see tuleb form klassi konstruktorist
 			$id = $this->fid;
 		};
+
 		$q = "SELECT forms.*,objects.* FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE forms.id = $id";
 		$this->db_query($q);
 		if (!($row = $this->db_next(false)))
@@ -483,6 +484,7 @@ class form_base extends aw_template
 		$this->name = $row["name"];
 		$this->comment = $row["comment"];
 		$this->parent = $row["parent"];
+		$this->lang_id = $row["lang_id"];
 	}
 
 	////
@@ -1083,10 +1085,10 @@ class form_base extends aw_template
 				$els = $cell->get_elements();
 				foreach($els as $key => $val)
 				{
-					if ($val["name"])
+					// we only want elements with type set, the rest
+					// is probably just captions 'n stuff
+					if ($val["type"])
 					{
-						// we only want elements with names, the rest
-						// is probably just captions 'n stuff
 						$retval[$val["name"]] = $val;
 					};
 				};

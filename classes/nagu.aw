@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/nagu.aw,v 2.1 2001/05/25 22:53:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/nagu.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
 
 classload("periods","images", "msgboard","config");
-
+lc_load("nagu");
 class nagu extends aw_template
 {
 	// need kuuluvad keelekonstantide alla ja on mdx seal ka defineeritud
@@ -12,6 +12,11 @@ class nagu extends aw_template
 	{
 		$this->tpl_init("nagu");
 		$this->db_init();
+		lc_load("definition");
+		global $lc_nagu;
+		if (is_array($lc_nagu))
+		{
+			$this->vars($lc_nagu);}
 	}
 
 	function list_n2od($oid)

@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.6 2001/07/12 04:23:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/lists.aw,v 2.7 2001/07/26 16:49:57 duke Exp $
 // list.aw - listide haldus
-
+lc_load("mailinglist");
 	global $orb_defs;
 	$orb_defs["lists"] = array(
 		"new" => array("function" => "add_list", "params"=> array("parent")),
@@ -17,6 +17,11 @@
 			$this->tpl_init("mailinglist");
 			$this->db_init();
 			lc_load("definition");
+			global $lc_mailinglist;
+		if (is_array($lc_mailinglist))
+		{
+			$this->vars($lc_mailinglist);
+		}
 		}
 
 		function add_list($ar)

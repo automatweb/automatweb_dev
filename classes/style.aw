@@ -1,5 +1,5 @@
 <?php
-
+lc_load("style");
 global $orb_defs;
 // hey I just thought of another thing! you can have several aliases for 1 function :) wooho!
 $orb_defs["style"] = array("add"		=> array("function"	=> "add",			"params"	=> array("parent")),
@@ -26,6 +26,12 @@ $style_cache = array();
 			$this->tpl_init("style");
 			$this->sub_merge = 1;
 			$this->db_init();
+			lc_load("definition");
+			global $lc_style;
+		if (is_array($lc_style))
+		{
+			$this->vars($lc_style);
+	}
 		}
 
 		function db_listall($parent,$type = -1)

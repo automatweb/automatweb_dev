@@ -1,5 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.4 2001/07/17 20:55:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
+lc_load("periods");	
 class db_periods extends aw_template 
 {
 	function db_periods($oid) 
@@ -7,6 +8,12 @@ class db_periods extends aw_template
 		$this->db_init();
 		$this->tpl_init("admin/periods");
 		$this->oid = $oid;
+		lc_load("definition");
+		global $lc_periods;
+		if (is_array($lc_periods))
+		{
+			$this->vars($lc_periods);}
+
 	}
 	
 	function clist($arc_only = -1) 

@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.8 2001/07/19 21:17:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry.aw,v 2.9 2001/07/26 16:49:57 duke Exp $
 
 global $orb_defs;
-lc_load("automatweb");
+lc_load("form");
 $orb_defs["form_entry"] = "xml";
 
 // basically this is an interface class :)
@@ -17,10 +17,10 @@ class form_entry extends aw_template
 		$this->db_init();
 		$this->tpl_init("forms");
 		lc_load("definition");
-		global $lc_automatweb;
-		if (is_array($lc_automatweb))
+		global $lc_form;
+		if (is_array($lc_form))
 		{
-			$this->vars($lc_automatweb);}
+			$this->vars($lc_form);}
 	}
 
 	function change($arr)
@@ -62,6 +62,7 @@ class form_entry extends aw_template
 		};
  
 		$block = array();
+
 		foreach($els as $form_id => $entry_id)
 		{
 			$block = $block + $this->get_record("form_" . $form_id . "_entries","id",$entry_id);

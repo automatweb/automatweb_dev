@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.4 2001/07/04 23:01:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.5 2001/07/26 16:49:57 duke Exp $
 // xml.aw - generic class for handling data in xml format.
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
+// now, I'm working on adding XML-RPC format support for this.
 class xml {
 	////
 	// !Konstruktor

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.26 2001/07/18 18:08:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.27 2001/07/26 16:49:57 duke Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
-
+lc_load("form");
 load_vcl("date_edit");
 
 	class form_entry_element extends form_element
@@ -18,6 +18,11 @@ load_vcl("date_edit");
 			$this->id = 0;
 			$this->currency = new currency;
 			lc_load("definition");
+			global $lc_form;
+			if (is_array($lc_form))
+			{
+				$this->vars($lc_form);
+			}
 		}
 
 		function gen_admin_html()
@@ -53,18 +58,37 @@ load_vcl("date_edit");
 				return "";
 
 			$t = new db_images;
-			$html = $this->arr["text"];
 
+			global $lang_id;
+			$html = "";
 			if ($this->arr["type"] == "textarea")
-				$html .= htmlspecialchars($this->entry);
+			{
+				$html = htmlspecialchars($this->entry);
+			}
 					
 			if ($this->arr["type"] == "radiobutton")
-				$html.=($this->entry == $this->id ? " (X) " : " (-) ");
+			{
+				if ($this->arr["ch_value"] != "")
+				{
+					$html=$this->entry == $this->id ? $this->arr["ch_value"] : "";
+				}
+				else
+				{
+					$html=($this->entry == $this->id ? " (X) " : " (-) ");
+				}
+			}
 					
 			if ($this->arr["type"] == "listbox")
 			{
 				$sp = split("_", $this->entry, 10);
-				$html.=$this->arr["listbox_items"][$sp[3]];
+				if ($this->form->lang_id != $lang_id)
+				{
+					$html=$this->arr["listbox_lang_items"][$lang_id][$sp[3]];
+				}
+				else
+				{
+					$html=$this->arr["listbox_items"][$sp[3]];
+				}
 			}
 					
 			if ($this->arr["type"] == "multiple")
@@ -72,14 +96,34 @@ load_vcl("date_edit");
 				$ec=explode(",",$this->entry);
 				reset($ec);
 				while (list(, $v) = each($ec))
-					$html.=($this->arr["multiple_items"][$v]." ");
+				{
+					if ($this->form->lang_id != $lang_id)
+					{
+						$html.=($this->arr["multiple_lang_items"][$lang_id][$v]." ");
+					}
+					else
+					{
+						$html.=($this->arr["multiple_items"][$v]." ");
+					}
+				}
 			}
 
 			if ($this->arr["type"] == "checkbox")
-				$html.=$this->entry == 1 ? "(X) " : " (-) ";
+			{
+				if ($this->arr["ch_value"] != "")
+				{
+					$html=$this->entry == 1 ? $this->arr["ch_value"] : "";
+				}
+				else
+				{
+					$html=$this->entry == 1 ? "(X) " : " (-) ";
+				}
+			}
 					
 			if ($this->arr["type"] == "textbox")
-				$html .= htmlspecialchars($this->entry);
+			{
+				$html = htmlspecialchars($this->entry);
+			}
 
 			if ($this->arr["type"] == "price")
 			{
@@ -128,25 +172,83 @@ load_vcl("date_edit");
 				if (is_array($this->entry))	// if this is an array, then there is a file that must be shown in place
 				{
 					$row = $im->get_img_by_id($this->entry["id"]);
-
 					if ($this->arr["ftype"] == 1)
+					{
 						$html.="<img src='".$row["url"]."'>";
+					}
 					else
+					{
 						$html.="<a href='".$row["url"]."'>".$this->arr["flink_text"]."</a>";
+					}
 				}
 			}
 
 			if ($this->arr["type"] == "link")
+			{
 				$html.="<a href='".$this->entry["address"]."'>".$this->entry["text"]."</a>";
+			}
 
-
+			if ($this->form->lang_id == $lang_id)
+			{
+				$text = $this->arr["text"];
+				$info = $this->arr["info"]; 
+			}
+			else
+			{
+				$text = $this->arr["lang_text"][$lang_id];
+				$info = $this->arr["lang_info"][$lang_id]; 
+			}
 			global $baseurl;
+
+			if ($this->arr["type"] != "")
+			{
+				$sep_ver = ($this->arr["text_distance"] > 0 ? "<br><img src='$baseurl/images/transa.gif' width='1' height='".$this->arr["text_distance"]."' border='0'><br>" : "<br>");
+				$sep_hor = ($this->arr["text_distance"] > 0 ? "<img src='$baseurl/images/transa.gif' height='1' width='".$this->arr["text_distance"]."' border='0'>" : "");
+			}
+			if ($this->arr["text_pos"] == "up")
+			{
+				$html = $text.$sep_ver.$html;
+			}
+			else
+			if ($this->arr["text_pos"] == "down")
+			{	
+				$html = $html.$sep_ver.$text;
+			}
+			else
+			if ($this->arr["text_pos"] == "right")
+			{
+				$html = $html.$sep_hor.$text;
+			}
+			else
+			{
+				$html = $text.$sep_hor.$html;		// default is on left of element
+			}
+			if ($info != "")
+			{
+				$html .= "<br><font face='arial, geneva, helvetica' size='1'>&nbsp;&nbsp;$info</font>";
+			}
+
 			if ($this->arr["sep_type"] == 1)	// reavahetus
+			{
 				$html.="<br>";
+			}
+			else
+			if ($this->arr["sep_pixels"] > 0)
+			{
+				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+			}
+
+			if ($this->arr["sep_type"] == 1)	// reavahetus
+			{
+				$html.="<br>";
+			}
 			else
 			// this is bad too. We need an image called transa.gif for each site.
+			// so? of course we need an image like that? what the fuck is wrong with that? - terryf
 			if ($this->arr["sep_pixels"] > 0)
+			{
 				$html.="<img src='$baseurl/images/transa.gif' width=".$this->arr["sep_pixels"]." height=1 border=0>";
+			}
 
 			return $html;
 		}
@@ -156,11 +258,21 @@ load_vcl("date_edit");
 			if (!$this->entry_id)
 				return "";
 
-			$html = trim($this->arr["text"])." ";
+			global $lang_id;
+			if ($this->form->lang_id == $lang_id)
+			{
+				$text = $this->arr["text"];
+			}
+			else
+			{
+				$text = $this->arr["lang_text"][$lang_id];
+			}
+
+			$html = trim($text)." ";
 
 			$html.=$this->get_value();
 
 			return $html;
 		}
-}
+	}
 ?>

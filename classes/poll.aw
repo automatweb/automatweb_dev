@@ -1,12 +1,17 @@
 <?php
 session_register("poll_clicked");
-
+lc_load("poll");
 class poll extends aw_template 
 {
 	function poll()
 	{
 		$this->db_init();
 		$this->tpl_init("poll");
+		lc_load("definition");
+		global $lc_poll;
+		if (is_array($lc_poll))
+		{
+			$this->vars($lc_poll);}
 	}
 
 	function admin()

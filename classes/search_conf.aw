@@ -1,5 +1,5 @@
 <?php
-
+lc_load("search_conf");
 classload("objects");
 classload("config");
 
@@ -14,6 +14,11 @@ class search_conf extends aw_template
 	{
 		$this->tpl_init("search_conf");
 		$this->db_init();
+		lc_load("definition");
+		global $lc_search_conf;
+		if (is_array($lc_search_conf))
+		{
+			$this->vars($lc_search_conf);}
 	}
 
 	function gen_admin($level)

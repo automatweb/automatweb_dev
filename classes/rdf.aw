@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.1 2001/05/24 21:12:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/rdf.aw,v 2.2 2001/07/26 16:49:57 duke Exp $
 // miski simpel klass rss-i väljastamiseks
 
 define(ITEM_TPL,"
@@ -26,6 +26,7 @@ class rdf {
 		$this->title = $this->_convert($title);
 		$this->description = $this->_convert($description);
 		$this->about = $about;
+		lc_load("definition");
 	}
 
 	////
