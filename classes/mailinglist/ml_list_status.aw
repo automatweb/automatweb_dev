@@ -122,17 +122,11 @@ class ml_list_status extends ml_queue
 		}
 		$this->read_template("change.tpl");
 	
-
-
-
-
-
 		load_vcl("table");
 		$t = new aw_table(array(
-			"prefix" => "ml_queue",
+			"xml_def" => "mlist/queue",
+			"layout" => "generic",
 		));
-		
-		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/queue.xml");
 
 		$ml = get_instance("mailinglist/ml_list");
 		$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
@@ -169,6 +163,7 @@ class ml_list_status extends ml_queue
 			$row["delay"]/=60;
 			$row["status"]=$this->a_status[$row["status"]];
 			$row["protsent"]=$this->queue_ready_indicator($row["position"],$row["total"]);
+			$row["perf"] = sprintf("%.2f",($row["last_sent"] - $row["start_at"]) / ($row["total"] * 60));
 			$row["vali"]="<input type='checkbox' NAME='sel[]' value='".$row["qid"]."'>";
 			$t->define_data($row);
 		};
