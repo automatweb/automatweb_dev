@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.351 2005/01/04 14:55:34 duke Exp $
+// $Id: class_base.aw,v 2.352 2005/01/05 10:59:59 dragut Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2910,10 +2910,11 @@ class class_base extends aw_template
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
 			// seems that i need to do that --dragut
-//			if($tmp["type"] == "text")
-//			{
-//				continue;
-//			}
+			// seems it CANNOT be removed! --dragut
+			if($tmp["type"] == "text")
+			{
+				continue;
+			}
 
 			$val = $arr["request"][$key];
 			$prpdata = &$props[$key];
@@ -3282,10 +3283,11 @@ class class_base extends aw_template
 
 			// don't care about text elements
 			// but i do --dragut
-//			if ($type == "text")
-//			{
-//				continue;	
-//			};
+			// seems that it CANNOT be removed! --dragut
+			if ($type == "text")
+			{
+				continue;	
+			};
 			
 			if ($property["type"] == "releditor")
 			{
