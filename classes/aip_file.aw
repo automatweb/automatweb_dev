@@ -40,5 +40,17 @@ class aip_file extends file
 		));
 		return $this->parse();
 	}
+
+	function submit_change($arr)
+	{
+		parent::submit_change($arr);
+		return $this->mk_my_orb("change",array("id" => $arr['id']),'',false,true);
+	}
+
+	function submit_add($arr)
+	{
+		parent::submit_add($arr);
+		return $this->mk_my_orb("change",array("id" => $this->pid),'',false,true);
+	}
 }
 ?>

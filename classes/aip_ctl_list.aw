@@ -75,13 +75,15 @@ class aip_ctl_list extends aw_template
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
+
 		$tb->add_button(array(
-			"name" => "skriptid",
-			"tooltip" => "PDF-de üleslaadimine",
-			"url" => $this->mk_my_orb("log", array("section" => get_root()),"aip_pdf", false,true),
-			"imgover" => "pdf_upload_over.gif",
-			"img" => "pdf_upload.gif"
+			"name" => "import",
+			"tooltip" => "Impordi kaustad",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"imgover" => "import_over.gif",
+			"img" => "import.gif"
 		));
+
 		$this->vars(array(
 			"LINE" => $l,
 			"upload" => $this->mk_my_orb("upload"),
@@ -149,12 +151,13 @@ class aip_ctl_list extends aw_template
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
+
 		$tb->add_button(array(
-			"name" => "skriptid",
-			"tooltip" => "PDF-de üleslaadimine",
-			"url" => $this->mk_my_orb("log", array("section" => get_root()),"aip_pdf", false,true),
-			"imgover" => "pdf_upload_over.gif",
-			"img" => "pdf_upload.gif"
+			"name" => "import",
+			"tooltip" => "Impordi kaustad",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"imgover" => "import_over.gif",
+			"img" => "import.gif"
 		));
 
 		$this->vars(array(
@@ -228,7 +231,8 @@ class aip_ctl_list extends aw_template
 		$ret .= "1|0|Lisa PDF|".$this->mk_my_orb("new", array("is_aip" => 1, "parent" => $section,"return_url" => urlencode(aw_ini_get("baseurl")."/index.aw?aip=1&section=$section")),"file",false,true)."|_top#";
 
 		$ret .= "2|0|Lisa kaust|".aw_ini_get("baseurl")."/index.aw?action=addfolder&parent=$ob[parent]"."|_top#";
-		$ret .= "3|0|Impordi kaustad|".aw_ini_get("baseurl")."/index.aw?section=".$section."&action=importmenus"."|_top#";
+//		$ret .= "3|0|Impordi kaustad|".aw_ini_get("baseurl")."/index.aw?section=".$section."&action=importmenus"."|_top#";
+		$ret .= "3|0|Konfigureeri|".$this->mk_my_orb("configure", array(), "aip_pdf", false, true)."|_top#";
 
 		$ret .= "4|0|Muudatused||_top#";
 		$ret .= "5|4|Lisa muudatus|".$this->mk_my_orb("new", array("parent" => 6885), "aip_change", false, true)."|_top#";
@@ -237,6 +241,12 @@ class aip_ctl_list extends aw_template
 		$ret .= "7|0|Kontrollnimekiri||_top#";
 		$ret .= "8|7|Lisa kontrollnimekiri|".$this->mk_my_orb("upload", array(), "aip_ctl_list", false, true)."|_top#";
 		$ret .= "9|7|Nimekiri|".$this->mk_my_orb("log", array(), "aip_ctl_list", false, true)."|_top#";
+	
+		$ret .= "11|0|PDF Üleslaadimine||_top#";
+		$ret .= "12|11|Log|".$this->mk_my_orb("log", array(), "aip_pdf", false, true)."|_top#";
+		$ret .= "13|11|Failide raport|".$this->mk_my_orb("report", array(), "aip_pdf", false, true)."|_top#";
+		$ret .= "14|11|Uute failide toimetamine|".$this->mk_my_orb("listfiles", array(), "aip_pdf", false, true)."|_top#";
+
 
 		return $ret;
 	}
@@ -303,12 +313,13 @@ class aip_ctl_list extends aw_template
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
+
 		$tb->add_button(array(
-			"name" => "skriptid",
-			"tooltip" => "PDF-de üleslaadimine",
-			"url" => $this->mk_my_orb("log", array("section" => get_root()),"aip_pdf", false,true),
-			"imgover" => "pdf_upload_over.gif",
-			"img" => "pdf_upload.gif"
+			"name" => "import",
+			"tooltip" => "Impordi kaustad",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"imgover" => "import_over.gif",
+			"img" => "import.gif"
 		));
 
 		$tb->add_button(array(

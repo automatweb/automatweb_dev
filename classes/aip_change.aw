@@ -39,9 +39,11 @@ class aip_change extends aw_template
 			"j_time" => $de->gen_edit_form("j_time", time()),
 			"files" => $this->multiple_option_list(array(), $this->get_chfile_list()),
 			"types" => $this->picker(0,array("1" => "AIP AMDT", "2" => "AIRAC AIP AMDT")),
-			"reforb" => $this->mk_reforb("submit"),
+			"reforb" => $this->mk_reforb("submit", array("parent" => $parent)),
 			"toolbar" => $this->make_toolbar("javascript:document.q.submit()"),
 			"rootmenu" => get_root(),
+			"changes" => $this->mk_my_orb("list"),
+			"YAH_LINK" => mk_yah_link($parent, $this),
 			"date" => $this->time2date(time(), 2)
 		));
 		return $this->parse();
@@ -194,6 +196,8 @@ class aip_change extends aw_template
 			"toolbar" => $this->make_toolbar("javascript:this.document.q.submit()"),
 			"reforb" => $this->mk_reforb("submit", array("id" => $id)),
 			"rootmenu" => get_root(),
+			"YAH_LINK" => mk_yah_link($ch["parent"], $this),
+			"changes" => $this->mk_my_orb("list"),
 			"comment" => $ch["comment"],
 			"date" => $this->time2date(time(), 2)
 		));
@@ -220,21 +224,27 @@ class aip_change extends aw_template
 				"time" => $this->time2date($meta["act_time"], 2),
 				"j_time" => $this->time2date($meta["j_time"], 2),
 				"id" => $row["oid"],
+				"modifiedby" => $row["modifiedby"],
+				"modified" => $this->time2date($row["modified"],2),
 				"checked_1" => checked($act_1 == $row["oid"]),
 				"checked_2" => checked($act_2 == $row["oid"]),
 				"change" => $this->mk_my_orb("change", array("id" => $row["oid"])),
 				"delete" => $this->mk_my_orb("delete", array("id" => $row["oid"])),
 				"activate" => $this->mk_my_orb("do_change", array("id" => $row["oid"]))
 			));
+			$this->vars(array(
+				"CH1" => ($meta["upd_type"] == 1 ? $this->parse("CH1") : ""),
+				"CH2" => ($meta["upd_type"] == 2 ? $this->parse("CH2") : ""),
+			));
 			$l.= $this->parse("LINE");
 		}
 		$this->vars(array(
-			"change_dir" => $chd,
 			"LINE" => $l,
 			"add" => $this->mk_my_orb("new", array("parent" => 1)),
-			"reforb" => $this->mk_reforb("submit_list"),
+			"reforb" => $this->mk_reforb("submit_list", array("is_del" => false)),
 			"toolbar" => $this->make_toolbar("javascript:document.q.submit()"),
 			"date" => $this->time2date(time(), 2),
+			"YAH_LINK" => mk_yah_link($parent, $this),
 			"rootmenu" => get_root()
 		));
 		return $this->parse();
@@ -292,12 +302,21 @@ class aip_change extends aw_template
 			"imgover" => "kaust_tagasi_over.gif",
 			"img" => "kaust_tagasi.gif"
 		));
+
 		$tb->add_button(array(
-			"name" => "skriptid",
-			"tooltip" => "PDF-de üleslaadimine",
-			"url" => $this->mk_my_orb("log", array(),"aip_pdf", false,true),
-			"imgover" => "pdf_upload_over.gif",
-			"img" => "pdf_upload.gif"
+			"name" => "import",
+			"tooltip" => "Impordi kaustad",
+			"url" => aw_ini_get("baseurl")."/index.aw?section=".get_root()."&action=importmenus",
+			"imgover" => "import_over.gif",
+			"img" => "import.gif"
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => "Kustuta",
+			"url" => "javascript:dodelete()",
+			"imgover" => "delete_over.gif",
+			"img" => "delete.gif"
 		));
 		return $tb->get_toolbar();
 	}
@@ -307,10 +326,20 @@ class aip_change extends aw_template
 		extract($arr);
 
 		$co = get_instance("config");
-		$co->set_simple_config("aip_change::change_dir", $change_dir);
 		$co->set_simple_config("aip_change::act_change_1", $act_1);
 		$co->set_simple_config("aip_change::act_change_2", $act_2);
 
+		if ($is_del && is_array($sel))
+		{
+			foreach($sel as $id)
+			{
+				$sched = get_instance("scheduler");
+				$sched->remove(array(
+					"event" => $this->mk_my_orb("do_change", array("id" => $id))
+				));
+				$this->delete_object($id);
+			}
+		}
 		return $this->mk_my_orb("list", array(), "", false, true);
 	}
 
@@ -517,7 +546,7 @@ class aip_change extends aw_template
 				if ($act["action"] == UPDATE_FILE)
 				{
 					// find file id
-					$id = $this->db_fetch_field("SELECT id FROM aip_files WHERE name = '".$act["file"]."'","id");
+					$id = $this->db_fetch_field("SELECT id FROM aip_files WHERE filename = '".$act["file"]."'","id");
 
 					if (!$id)
 					{
@@ -610,29 +639,30 @@ class aip_change extends aw_template
 		{
 			foreach($ch["meta"]["files"] as $fi)
 			{
-				$id = $this->db_fetch_field("SELECT id FROM aip_files WHERE filename LIKE '%".$fi."%'","id");
-				if ($id)
-				{
-					$ids[] = $id;
-				}
+				$ids[] = $fi;
 			}
 		}
+
+		$change_o = $this->get_object($ch);
+		$j_time = $this->time2date($ch["meta"]["j_time"], 2);
+		$act_time = $this->time2date($ch["meta"]["act_time"], 2);
 
 		$idss = join(",",$ids);
 		if ($idss != "")
 		{
-			$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FILE." AND status = 2 AND oid IN (".$idss.")");
-			while ($row = $this->db_next())
+//			$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_FILE." AND status = 2 AND oid IN (".$idss.")");
+//			while ($row = $this->db_next())
+			foreach($ids as $fil)
 			{
 				$meta = $this->get_object_metadata(array(
 					"metadata" => $row["metadata"]
 				));
 
 				$this->vars(array(
-					"name" => str_replace(".pdf","",$row["name"]),
-					"j_time" => $this->time2date($meta["j_time"], 2),
-					"act_time" => $this->time2date($meta["act_time"], 2),
-					"link" => aw_ini_get("baseurl")."/files.aw/id=".$row["oid"]."/".$row["name"]
+					"name" => str_replace(".pdf","",$fil),
+					"j_time" => $j_time,
+					"act_time" => $act_time,
+					"link" => aw_ini_get("baseurl")."/index.aw?action=showchangefile&id=".$fil
 				));
 				$l.=$this->parse("LINE");
 			}
@@ -883,7 +913,9 @@ class aip_change extends aw_template
 		$ret .= "1|0|Lisa PDF|".$this->mk_my_orb("new", array("is_aip" => 1, "parent" => $section,"return_url" => urlencode(aw_ini_get("baseurl")."/index.aw?aip=1&section=$section")),"file",false,true)."|_top#";
 
 		$ret .= "2|0|Lisa kaust|".aw_ini_get("baseurl")."/index.aw?action=addfolder&parent=$ob[parent]"."|_top#";
-		$ret .= "3|0|Impordi kaustad|".aw_ini_get("baseurl")."/index.aw?section=".$section."&action=importmenus"."|_top#";
+//		$ret .= "3|0|Impordi kaustad|".aw_ini_get("baseurl")."/index.aw?section=".$section."&action=importmenus"."|_top#";
+		$ret .= "3|0|Konfigureeri|".$this->mk_my_orb("configure", array(), "aip_pdf", false, true)."|_top#";
+
 		$ret .= "4|0|Muudatused||_top#";
 		$ret .= "5|4|Lisa muudatus|".$this->mk_my_orb("new", array("parent" => 6885), "aip_change", false, true)."|_top#";
 		$ret .= "6|4|Nimekiri|".$this->mk_my_orb("list", array(), "aip_change", false, true)."|_top#";
@@ -891,6 +923,13 @@ class aip_change extends aw_template
 		$ret .= "7|0|Kontrollnimekiri||_top#";
 		$ret .= "8|7|Lisa kontrollnimekiri|".$this->mk_my_orb("upload", array(), "aip_ctl_list", false, true)."|_top#";
 		$ret .= "9|7|Nimekiri|".$this->mk_my_orb("log", array(), "aip_ctl_list", false, true)."|_top#";
+
+
+		$ret .= "11|0|PDF Üleslaadimine||_top#";
+		$ret .= "12|11|Log|".$this->mk_my_orb("log", array(), "aip_pdf", false, true)."|_top#";
+		$ret .= "13|11|Failide raport|".$this->mk_my_orb("report", array(), "aip_pdf", false, true)."|_top#";
+		$ret .= "14|11|Uute failide toimetamine|".$this->mk_my_orb("listfiles", array(), "aip_pdf", false, true)."|_top#";
+
 
 		return $ret;
 	}

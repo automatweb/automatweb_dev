@@ -38,20 +38,15 @@ class aip_pdf extends aw_template
 
 		$folder = $this->get_cval("aip_pdf_upload_folder");
 		$parent = $this->get_cval("aip_pdf_aw_folder");
-		$this->section = $section;
+		$this->section = ($section ? $section : get_root());
 
+		$this->vars(array(
+			"log" => $this->mk_my_orb("log"),
+			"act" => "Toimeta PDFe"
+		));
 		if ($folder != "" && $parent)
 		{
 			$fd = $this->mk_file_list($folder,$parent);
-			foreach($fd as $fn => $fstat)
-			{
-				$this->vars(array(
-					"file" => $fn,
-					"file_status" => $this->statuses[$fstat]
-				));
-				$f.=$this->parse("FILE");
-			}
-
 			global $actions;
 			session_register("actions");
 			$actions = array();
@@ -111,7 +106,7 @@ class aip_pdf extends aw_template
 						"file" => $fn,
 						"action" => "Fail kustutati, kustutame AW'st",
 						"action_id" => $aid,
-						"checked" => checked(true)
+						"checked" => checked(false)
 					));
 					$actions[$aid] = array("action" => DELETE_FILE,"file" => $fn);
 					$a.=$this->parse("CHANGE");
@@ -125,9 +120,11 @@ class aip_pdf extends aw_template
 			"CHANGE" => $a,
 			"header" => $this->mk_header(),
 			"folder" => $folder,
-			"folders" => $this->picker($parent,$ob->get_list()),
 			"reforb" => $this->mk_reforb("submit_list", array("section" => $section)),
-			"rootmenu" => get_root()
+			"rootmenu" => get_root(),
+		));
+		$this->vars(array(
+			"NO_ADMIN" => $this->parse("NO_ADMIN")
 		));
 		exit_function("aip_pdf::listfiles");
 		return $this->parse();
@@ -139,26 +136,23 @@ class aip_pdf extends aw_template
 		extract($arr);
 
 		set_time_limit(0);
-		$co = get_instance("config");
-		$co->set_simple_config("aip_pdf_upload_folder", $folder);
-		$co->set_simple_config("aip_pdf_aw_folder", $parent);
+		$folder = $this->get_cval("aip_pdf_upload_folder");
+		$parent = $this->get_cval("aip_pdf_aw_folder");
 
 		// here we do the actions that are selected.
 		global $actions;
 
 		$data = "";
-		if (is_array($sactions) && $do_actions == 1)
+		if (is_array($sactions))
 		{
 			foreach($sactions as $aid)
 			{
 				// now get the action from the array in the session so we won't have to find the damn things again
 				// and possibly fuck up the order or something. 
 				$act = $actions[$aid];
-				echo "processing action type ",$act["action"]," for file ",$act["file"]," <br>";
 				$data.= "processing action type ".$act["action"]." for file ".$act["file"]." <br>";
 				if ($act["action"] == CREATE_FOLDER)
 				{
-					echo "createfolder <br>";
 					$data .= "createfolder <br>";
 					$m = get_instance("menuedit");
 					// create new menu
@@ -168,7 +162,6 @@ class aip_pdf extends aw_template
 
 					if (!($par = $this->find_parent_for_file($nar[0],$parent,strlen($nar[0]))))
 					{
-						echo "no parent for $nar[0] creating under $parent <br>";
 						$data .= "no parent for $nar[0] creating under $parent <br>";
 						// no 1st level menu,create it
 						$par = $m->add_new_menu(array(
@@ -185,7 +178,6 @@ class aip_pdf extends aw_template
 
 					if (!($par2 = $this->find_parent_for_file($nar[0]." ".$nar[1],$par,strlen($nar[0]." ".$nar[1]))))
 					{
-						echo "no parent for $nar[1] creating under $par <br>";
 						$data .= "no parent for $nar[1] creating under $par <br>";
 						// no 2nd level menu,create it
 						$par2 = $m->add_new_menu(array(
@@ -203,7 +195,6 @@ class aip_pdf extends aw_template
 
 					if (!($par3 = $this->find_parent_for_file($nar[0]." ".$nar[1].".".$nar[2],$par2,strlen($nar[0]." ".$nar[1].".".$nar[2]))))
 					{
-						echo "no parent for $nar[2] creating under $par2 <br>";
 						$data .= "no parent for $nar[2] creating under $par2 <br>";
 						// no 3rd level menu,create it
 						$par3 = $m->add_new_menu(array(
@@ -239,7 +230,7 @@ class aip_pdf extends aw_template
 
 					$this->quote(&$fc);
 					$this->quote(&$fc);
-					$this->db_query("INSERT INTO files (id,type,content)
+					@$this->db_query("INSERT INTO files (id,type,content)
 							VALUES('$pid','application/pdf','$fc')");
 	
 					$_sz = filesize($folder."/".$act["file"]);
@@ -252,7 +243,7 @@ class aip_pdf extends aw_template
 					// and now, also add the file's size to the parent folder's size and to all parent folders above it.
 //					$f->add_size_to_parents($pr,$_sz);
 
-					$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$act[file]','".time()."',$pr)");
+					$this->db_query("INSERT INTO aip_files(id,filename,tm,menu_id) VALUES($pid,'$act[file]','".time()."','$pr')");
 				}
 				else
 				if ($act["action"] == UPDATE_FILE)
@@ -298,6 +289,10 @@ class aip_pdf extends aw_template
 				else
 				if ($act["action"] == DELETE_FILE)
 				{
+					// delete from aw
+					$row = $this->db_fetch_row("SELECT * FROM aip_files WHERE filename = '$fn'");
+					$this->delete_object($row["id"]);
+					$this->db_query("DELETE FROM aip_files WHERE id = '$row[id]'");
 				}
 				flush();
 			}
@@ -307,7 +302,8 @@ class aip_pdf extends aw_template
 		// add log entry for pdf upload
 		$this->quote(&$data);
 		$this->db_query("INSERT INTO aip_pdf_log (createdby, created, content) VALUES('".aw_global_get("uid")."','".time()."','$data')");
-		die("<a href='".$this->mk_my_orb("listfiles", array("section" => $section),"",false,true)."'>Tagasi</a>");
+		//die("<a href='".$this->mk_my_orb("listfiles", array("section" => $section),"",false,true)."'>Tagasi</a>");
+		return $this->mk_my_orb("listfiles", array("section" => $section),"",false,true);
 	}
 
 	function get_file_data($parent)
@@ -577,6 +573,7 @@ class aip_pdf extends aw_template
 			"act" => ($row["id"] == $mid ? "Aktuaalne" : ""),
 			"ajalugu" => $row["log"],
 			"rootmenu" => get_root(),
+			"log" => $this->mk_my_orb("log"),
 			"toolbar" => $this->mk_header()
 		));
 		return $this->parse();
@@ -654,6 +651,117 @@ class aip_pdf extends aw_template
 		}
 
 		return true;
+	}
+
+	function configure($arr)
+	{
+		extract($arr);
+		$this->read_template("config.tpl");
+
+		$this->section = get_root();
+		$o = get_instance("objects");
+		$this->vars(array(
+			"pdf_folder" => $this->get_cval("aip_pdf_upload_folder"),
+			"change_folder" => $this->get_cval("aip_change::change_dir"),
+			"folders" => $this->picker($this->get_cval("aip_pdf_aw_folder"), $o->get_list()),
+			"reforb" => $this->mk_reforb("submit_configure"),
+			"toolbar" => $this->mk_header(),
+			"rootmenu" => get_root()
+		));
+		return $this->parse();
+	}
+
+	function submit_configure($arr)
+	{
+		extract($arr);
+		$c = get_instance("config");
+		$c->set_simple_config("aip_pdf_upload_folder", $pdf_folder);
+		$c->set_simple_config("aip_pdf_aw_folder", $aip_root);
+		$c->set_simple_config("aip_change::change_dir", $change_folder);
+
+		return $this->mk_my_orb("configure", array(), "", false, true);
+	}
+
+	function report($arr)
+	{
+		extract($arr);
+		$this->read_template("file_list.tpl");
+
+		$folder = $this->get_cval("aip_pdf_upload_folder");
+		$parent = $this->get_cval("aip_pdf_aw_folder");
+		$this->section = ($section ? $section : get_root());
+
+		$this->vars(array(
+			"log" => $this->mk_my_orb("log"),
+			"act" => "Failide staatus FTP serveris"
+		));
+		if ($folder != "" && $parent)
+		{
+			$fd = $this->mk_file_list($folder,$parent);
+			foreach($fd as $fn => $fstat)
+			{
+				$show = false;
+				if ($fstat == FILE_STAT_NEW && $added)
+				{
+					$show = true;
+				}
+				if ($fstat == FILE_STAT_MODIFIED && $changed)
+				{
+					$show = true;
+				}
+				if ($fstat == FILE_STAT_DELETED && $deleted)
+				{
+					$show = true;
+				}
+				if ($fstat == FILE_STAT_SAME && $nochange)
+				{
+					$show = true;
+				}
+				if ($show)
+				{
+					$this->vars(array(
+						"file" => $fn,
+						"file_status" => $this->statuses[$fstat]
+					));
+					$f.=$this->parse("FILE");
+				}
+			}
+		}
+
+		$ob = get_instance("objects");
+		$this->vars(array(
+			"FILE" => $f,
+			"CHANGE" => $a,
+			"header" => $this->mk_header(),
+			"folder" => $folder,
+			"reforb" => $this->mk_reforb("submit_report", array("section" => $section)),
+			"rootmenu" => get_root(),
+			"nochange" => checked($nochange),
+			"added" => checked($added),
+			"changed" => checked($changed),
+			"deleted" => checked($deleted)
+		));
+	
+		$this->vars(array(
+			"ADMIN" => $this->parse("ADMIN")
+		));
+
+		exit_function("aip_pdf::listfiles");
+		return $this->parse();
+	}
+
+	function submit_report($arr)
+	{
+		extract($arr);
+
+		return $this->mk_my_orb("report", array(
+				"changed" => $changed,
+				"deleted" => $deleted,
+				"added" => $added,
+				"nochange" => $nochange
+			), 
+			"aip_pdf", false, true
+		);
 	}
 }
 
