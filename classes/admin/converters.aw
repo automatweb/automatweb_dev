@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.22 2003/08/01 13:27:46 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.23 2003/10/06 11:24:56 duke Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -196,6 +196,85 @@ class converters extends aw_template
 			sleep(1);
 			flush();
 		};
+	}
+
+	////
+	// some nonfunctional code here, that will convert the data stored in object metadata
+	// to relations ... thrown out from the main class. I don't think anyone will miss
+	// that code, b
+	function convert_promo_relations($promo_box_id)
+	{
+	       // now, check, whether we have to convert the current contents of comment and sss to relation objects
+                // we use a flag in object metainfo for that
+
+                // and still, it would be nice if we could convert all the promo boxes at once.
+                // then I wouldn't have to check for this shit each fucking time, for each
+                // fucking promo box. But maybe it's not as bad as I imagine it
+		$obj = new object($promo_box_id);
+                if ($obj->meta("uses_relationmgr"))
+                {
+                        return true;
+                };
+
+		$oldaliases = $obj->connections_from(array(
+			"class" => CL_MENU,
+		));
+
+                $flatlist = array();
+
+                foreach($oldaliases as $alias)
+                {
+                        //$flatlist[$alias->to(] = $alias_reltype[$alias["target"]];
+                };
+
+		// basically, I have to get a list of menus in $args["object"]["meta"]["section"]
+		// and create a relation of type RELTYPE_ASSIGNED_MENU for each of those
+
+                $sections = $args["obj_inst"]->meta("section");
+                if ( is_array($sections) && (sizeof($sections) > 0) )
+                {
+                        foreach($sections as $key => $val)
+                        {
+                                // beiskli I need to check whether that relation exists, and if so
+                                // then I should not create a new one
+                                if (!$flatlist[$val])
+                                {
+                                        $this->addalias(array(
+                                                "id" => $id,
+                                                "alias" => $val,
+                                                "reltype" => RELTYPE_ASSIGNED_MENU,
+                                        ));
+                                };
+                        };
+                }
+
+		               // then I have to get a list of menus in $args["object"]["meta"]["last_menus"] and
+                // create a relation of type RELTYPE_DOC_SOURCE for each of those.
+
+                // I also want to keep the old representation around, so that old code keeps working
+                $last_menus = $args["obj_inst"]->meta("last_menus");
+                if ( is_array($last_menus) && (sizeof($last_menus) > 0) )
+                {
+                        foreach($last_menus as $key => $val)
+                        {
+                                if (!$flatlist[$val])
+                                {
+                                        $this->addalias(array(
+                                                "id" => $id,
+                                                "alias" => $val,
+                                                "reltype" => RELTYPE_DOC_SOURCE,
+                                        ));
+                                };
+                        };
+                }
+
+                // update reltype information, that is only if there is anything to update
+                if (sizeof($alias_reltype) > 0)
+                {
+                        $args["obj_inst"]->set_meta("uses_relationmgr",1);
+                        $args["obj_inst"]->save();
+                };
+
 	}
 	
 	function convert_aliases()
