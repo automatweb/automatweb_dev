@@ -3,9 +3,10 @@
 	<class name="forum">
 
 		<action name="new">
-			<function name="add">
+			<function name="change">
 				<arguments>
-					<required name="parent"/>
+					<required name="parent" type="int"/>
+					<define name="new" value="1"/>
 				</arguments>
 			</function>
 		</action>
@@ -18,16 +19,17 @@
 		</action>
 
 		<action name="change">
-			<function name="edit_properties">
+			<function name="change">
 				<arguments>
-					<required name="id"/>
+					<required name="id" type="int"/>
+					<optional name="parent" type="int"/>
 					<optional name="from"/>
 				</arguments>
 			</function>
 		</action>
 		
 		<action name="topics" nologin="1">
-			<function name="change">
+			<function name="topics">
 				<arguments>
 					<required name="id"/>
 					<optional name="from"/>
