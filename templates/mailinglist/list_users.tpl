@@ -16,6 +16,14 @@ function submitForm(val)
 	document.members.submit();
 }
 </script>
+Vali lehek&uuml;lg: 
+<!-- SUB: PAGE -->
+<a href='{VAR:link}'>{VAR:from} - {VAR:to}</a> |
+<!-- END SUB: PAGE -->
+
+<!-- SUB: SEL_PAGE -->
+{VAR:from} - {VAR:to} |
+<!-- END SUB: SEL_PAGE -->
 <form name="members" action="reforb.{VAR:ext}" method="POST">
 <table border="0" cellspacing="0" cellpadding="0"  width=100%>
 <tr>
