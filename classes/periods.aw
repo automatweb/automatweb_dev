@@ -1,6 +1,5 @@
 <?php
-/*********************************************************************************/
-/*********************************************************************************/
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.1 2001/05/25 22:52:28 duke Exp $
 class db_periods extends aw_template 
 {
 	function db_periods($oid) 
@@ -21,12 +20,12 @@ class db_periods extends aw_template
 			$parent = $this->oid;
 			while ($parent > 1)
 			{
-				if ($ochain[$parent][active_period])
+				if ($ochain[$parent]["active_period"])
 				{
 					$valid_period = $parent;
 					break;
 				}
-				$parent = $ochain[$parent][parent];
+				$parent = $ochain[$parent]["parent"];
 			}
 /*			while(list($k,$v) = each($ochain)) {
 				if ($v[active_period]) {
@@ -47,10 +46,10 @@ class db_periods extends aw_template
 		$select = 0;
 		while($row = $this->db_next()) {
 			if ($select == 1) {
-				$next = $row[id];
+				$next = $row["id"];
 				$select = 0;
 			};
-			if ($row[id] == $id) {
+			if ($row["id"] == $id) {
 				$select = 1;
 			};
 		};
@@ -63,10 +62,10 @@ class db_periods extends aw_template
 		$select = 0;
 		while($row = $this->db_next()) {
 			if ($select == 1) {
-				$prev = $row[id];
+				$prev = $row["id"];
 				$select = 0;
 			};
-			if ($row[id] == $id) {
+			if ($row["id"] == $id) {
 				$select = 1;
 			};
 		};
@@ -106,14 +105,14 @@ class db_periods extends aw_template
 			};
 		};
 
-		if ($data[oldactiveperiod] != $data[activeperiod]) {
-			$this->activate_period($data[activeperiod],$this->oid);
+		if ($data["oldactiveperiod"] != $data["activeperiod"]) {
+			$this->activate_period($data["activeperiod"],$this->oid);
 			$this->_log("period","aktiveeris perioodi $data[activeperiod]");
 			print "#";
 		};
 
 		$oldjrk = $data[oldjrk];
-		$jrk = $data[jrk];
+		$jrk = $data["jrk"];
 
 		// salvestame jarjekorranumbrid
 		while(list($k,$v) = each($oldjrk)) {
@@ -137,7 +136,7 @@ class db_periods extends aw_template
 	function activate_period($id,$oid) {
 		$q = "UPDATE menu SET active_period = '$id' WHERE id = '$oid'";
 		$this->db_query($q);
-		$this->situ_tais();
+		$this->flush_cache();
 	}
 
 	function get_active_period($oid = 0) {
@@ -158,10 +157,10 @@ class db_periods extends aw_template
 		$q = "SELECT menu.active_period as active_period,objects.parent as parent FROM menu left join objects on objects.oid = menu.id WHERE id = "  . $oid;
 		$this->db_query($q);
 		$row = $this->db_fetch_row();
-		$oid = $row[parent];
-		} while (!$row[active_period] && $row[parent] > 1);
+		$oid = $row["parent"];
+		} while (!$row["active_period"] && $row["parent"] > 1);
 
-		return $row[active_period];
+		return $row["active_period"];
 	}
 
 	// see funktsioon tagastab kõigi eksisteerivate perioodide nimekirja
@@ -176,7 +175,7 @@ class db_periods extends aw_template
 		$this->clist();
 		$elements = array();
 		while($row = $this->db_next()) {
-			$elements[$row[id]] = $row[description];
+			$elements[$row["id"]] = $row["description"];
 		};
 		return $this->option_list($active,$elements);
 	}
@@ -189,7 +188,7 @@ class db_periods extends aw_template
 		$this->clist();
 		$elements = array();
 		while($row = $this->db_next()) {
-			$elements[$row[id]] = $row[description];
+			$elements[$row["id"]] = $row["description"];
 		};
 		return $this->multiple_option_list($active,$elements);
 	}
