@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/education.aw,v 1.2 2004/03/17 22:25:12 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/personalihaldus/Attic/education.aw,v 1.3 2004/03/18 01:56:19 sven Exp $
 // education.aw - Education 
 /*
 
@@ -11,32 +11,48 @@
 @property kool type=textbox field=meta method=serialize
 @caption Haridusasutus
 
-@property eriala type=classificator field=meta method=serialize orient=vertical
-@caption Eriala
-
 @property algusaasta type=select field=meta method=serialize
 @caption Sisseastumis aasta
 
 @property loppaasta type=select field=meta method=serialize
 @caption L&otilde;petamise aasta
 
-@property teaduskond type=classificator field=meta method=serialize orient=vertical
+
+
+@property eriala type=classificator field=meta method=serialize  store=connect reltype=RELTYPE_ERIALA orient=vertical
+@caption Eriala
+
+@property teaduskond type=classificator field=meta method=serialize store=connect reltype=RELTYPE_TEADUSKOND orient=vertical
 @caption Teaduskond
 
-@property oppekava type=classificator field=meta method=serialize orient=vertical
+@property oppekava type=classificator field=meta method=serialize store=connect reltype=RELTYPE_OPPEKAVA orient=vertical
 @caption Õppekava
 
-@property oppeaste type=classificator field=meta method=serialize orient=vertical
+@property oppeaste type=classificator field=meta method=serialize reltype=RELTYPE_OPPEASTE orient=vertical
 @caption Õppeaste
 
-@property oppevorm type=classificator field=meta method=serialize orient=vertical
+@property oppevorm type=classificator field=meta method=serialize reltype=RELTYPE_OPPEVORM orient=vertical
 @caption Õppevorm
 
 @property lisainfo_edu type=textarea field=meta method=serialize
 @caption Lisainfo
 
-@property client_status type=classificator orient=vertical
-@caption Kliendi staatus
+
+@reltype ERIALA value=1 clid=CL_META
+@caption Tegevusvaldkond
+
+@reltype TEADUSKOND value=2 clid=CL_META
+@caption Teaduskond
+
+@reltype OPPEKAVA value=3 clid=CL_META
+@caption Õppekava
+
+@reltype OPPEASTE value=4 clid=CL_META
+@caption Õppeaste
+
+@reltype OPPEVORM value=5 clid=CL_META
+@caption Õppevorm
+
 */
 
 class education extends class_base

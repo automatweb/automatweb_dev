@@ -10,16 +10,6 @@
             <caption>Haridusasutus</caption>
       </property>
       <property>
-            <name>eriala</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>classificator</type>
-            <field>meta</field>
-            <method>serialize</method>
-            <orient>vertical</orient>
-            <caption>Eriala</caption>
-      </property>
-      <property>
             <name>algusaasta</name>
             <table>objects</table>
             <group>general</group>
@@ -38,12 +28,26 @@
             <caption>L&amp;otilde;petamise aasta</caption>
       </property>
       <property>
+            <name>eriala</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>classificator</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>connect</store>
+            <reltype>RELTYPE_ERIALA</reltype>
+            <orient>vertical</orient>
+            <caption>Eriala</caption>
+      </property>
+      <property>
             <name>teaduskond</name>
             <table>objects</table>
             <group>general</group>
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
+            <store>connect</store>
+            <reltype>RELTYPE_TEADUSKOND</reltype>
             <orient>vertical</orient>
             <caption>Teaduskond</caption>
       </property>
@@ -54,6 +58,8 @@
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
+            <store>connect</store>
+            <reltype>RELTYPE_OPPEKAVA</reltype>
             <orient>vertical</orient>
             <caption>Õppekava</caption>
       </property>
@@ -64,6 +70,7 @@
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
+            <reltype>RELTYPE_OPPEASTE</reltype>
             <orient>vertical</orient>
             <caption>Õppeaste</caption>
       </property>
@@ -74,6 +81,7 @@
             <type>classificator</type>
             <field>meta</field>
             <method>serialize</method>
+            <reltype>RELTYPE_OPPEVORM</reltype>
             <orient>vertical</orient>
             <caption>Õppevorm</caption>
       </property>
@@ -86,19 +94,37 @@
             <method>serialize</method>
             <caption>Lisainfo</caption>
       </property>
-      <property>
-            <name>client_status</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>classificator</type>
-            <orient>vertical</orient>
-            <field>client_status</field>
-            <caption>Kliendi staatus</caption>
-      </property>
       <classinfo>
             <syslog_type>ST_EDUCATION</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
+      <reltypes>
+            <ERIALA>
+                  <value>1</value>
+                  <clid>CL_META</clid>
+                  <caption>Tegevusvaldkond</caption>
+            </ERIALA>
+            <TEADUSKOND>
+                  <value>2</value>
+                  <clid>CL_META</clid>
+                  <caption>Teaduskond</caption>
+            </TEADUSKOND>
+            <OPPEKAVA>
+                  <value>3</value>
+                  <clid>CL_META</clid>
+                  <caption>Õppekava</caption>
+            </OPPEKAVA>
+            <OPPEASTE>
+                  <value>4</value>
+                  <clid>CL_META</clid>
+                  <caption>Õppeaste</caption>
+            </OPPEASTE>
+            <OPPEVORM>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>Õppevorm</caption>
+            </OPPEVORM>
+      </reltypes>
 </properties>
 
