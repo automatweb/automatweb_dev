@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.36 2004/08/30 13:30:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.37 2004/09/08 14:09:19 sven Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 
@@ -1125,6 +1125,7 @@ class forum_v2 extends class_base
 
 	function _add_style($name)
 	{
+		classload("layout/active_page_data");
 		// this right now takes data from the currently loaded object
 		if (is_object($this->style_donor_obj))
 		{
