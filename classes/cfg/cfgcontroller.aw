@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.1 2004/08/11 11:06:14 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgcontroller.aw,v 1.2 2004/08/25 17:09:04 duke Exp $
 // cfgcontroller.aw - Kontroller(Classbase) 
 /*
 
@@ -12,6 +12,10 @@
 
 @property formula type=textarea rows=20 cols=80
 @caption Valem
+
+@property errmsg type=textbox
+@caption Veateade
+@comment Kuvatakse, kui kontroller blokeerib sisestuse
 
 property show_error type=checkbox ch_value=1
 caption Kas näitamise kontroller näitab elemendi asemel veateadet? 
@@ -51,7 +55,7 @@ class cfgcontroller extends class_base
 		return $retval;
 	}
 	
-	function check_property($controller_oid, $obj_id, $prop, $data)
+	function check_property($controller_oid, $obj_id, $prop, $request)
 	{
 		$retval["status"] = PROP_OK;
 		$controller_inst = &obj($controller_oid);
