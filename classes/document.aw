@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.294 2004/11/02 12:22:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.295 2004/11/03 12:16:48 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -3170,11 +3170,11 @@ class document extends aw_template
 		{
 			if (aw_ini_get("menuedit.long_section_url"))
 			{
-				$replacement = sprintf("<a href='%s/?section=%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+				$replacement = sprintf("<a class=\"documentlink\" href='%s/?section=%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
 			}
 			else
 			{
-				$replacement = sprintf("<a href='%s/%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
+				$replacement = sprintf("<a class=\"documentlink\" href='%s/%d'>%s</a>",$this->cfg["baseurl"],$d["target"],$d["name"]);
 			}
 		}
 		else
