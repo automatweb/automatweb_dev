@@ -1,18 +1,17 @@
-<form action='orb.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data'>
-<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='15000000'>
+<form action='orb.{VAR:ext}' method='post' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
+<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>
 <table border='0' width='100%' cellspacing='1' cellpadding='1' bgcolor='#FFFFFF'>
-
 
 {VAR:content}
 
 <!-- SUB: LINE -->
 <tr>
-	<td class='chformleftcol' width='160' nowrap>
-	{VAR:caption} 
-	</td>
-	<td class='chformrightcol'>
-	{VAR:element}
-	</td>
+        <td class='chformleftcol' width='160' nowrap>
+        {VAR:caption}
+        </td>
+        <td class='chformrightcol'>
+        {VAR:element}
+        </td>
 </tr>
 <!-- END SUB: LINE -->
 
@@ -45,6 +44,25 @@
 </tr>
 <!-- END SUB: CONTENT -->
 
+<!-- SUB: XCONTENT -->
+<tr>
+	<td blah="xcontent" colspan='2' class='chformrightcol'>
+	{VAR:caption}:<br>
+	{VAR:value}
+	</td>
+</tr>
+<!-- END SUB: XCONTENT -->
+
+<!-- SUB: BLOCK -->
+	<!-- block starts -->
+	{VAR:value}
+	<!-- block ends -->
+<!-- END SUB: BLOCK -->
+
+<!-- SUB: IFRAME -->
+<iframe id='contentarea' name='contentarea' src='{VAR:src}' style='width: 100%; height: 95%; border-top: 1px solid black;' frameborder='no' scrolling="yes"></iframe>
+<!-- END SUB: IFRAME -->
+
 
 <!-- SUB: SUBMIT -->
 <tr>
@@ -54,14 +72,22 @@
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
-</table>
+
 {VAR:reforb}
 <script type="text/javascript">
 function submit_changeform()
 {
-	//alert('submitting form');
 	{VAR:submit_handler}
 	document.changeform.submit();
 }
 </script>
 </form>
+
+<!-- SUB: iframe_body_style -->
+body {
+        background-color: #FFFFFF;
+        margin: 0px;
+        overflow-y: hidden;
+        overflow:hidden;
+}
+<!-- END SUB: iframe_body_style -->
