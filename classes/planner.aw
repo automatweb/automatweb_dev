@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.96 2003/03/14 15:42:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.97 2003/03/14 16:04:11 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -2053,23 +2053,37 @@ class planner extends class_base
 				// draws single cells inside the day
 				// I need to replace this with calls to doc->gen_preview() -- duke
 				$pv = "";
-				if ($e["class_id"] == CL_DOCUMENT)
-				{
-					$section = $e["id"];
-					if ($this->type == CAL_SHOW_DAY)
-					{
-						$pv = $d->gen_preview(array(
-							"docid" => $e["id"],
-						));
-					};
-				};
-
+				$objlink = "";
 				$daylink = $this->mk_my_orb("view",array(
 					"section" => $section,
 					"id" => $this->id,
 					"type" => "day",
 					"date" => date("d-m-Y",$e["start"]),
 				));
+				if ($e["class_id"] == CL_DOCUMENT)
+				{
+					$section = $e["id"];
+					if ($this->type == CAL_SHOW_DAY)
+					{
+						if ($e["forum_id"])
+						{
+							$this->vars(array(
+								"url" => $daylink . "&objid=$e[forum_id]",
+								"caption" => "Foorum",
+							));
+							$objlink .= $this->parse("objlink");
+						};
+						$this->vars(array(
+							"objlink" => $objlink,
+						));
+                                                $pv = $this->parse("objlinks");
+                                                $pv .= $d->gen_preview(array(
+                                                        "docid" => $e["id"],
+                                                ));
+
+					};
+				};
+
 
                                 $this->vars(array(
 					"event_content" => $pv,
