@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.14 2004/10/22 10:48:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.15 2004/10/22 15:04:38 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -916,6 +916,8 @@ class object_treeview_v2 extends class_base
 
 		$saved_filters = new aw_array($arr['obj_inst']->meta("saved_filters"));
 
+
+
 		$max_id = 0;
 		foreach($saved_filters->get() as $id => $filter_data)
 		{
@@ -935,20 +937,22 @@ class object_treeview_v2 extends class_base
 						"checked" => ($filter_data['is_strict'] == 1) ? true : false,
 					)),
 			));
-//			$max_id = max($max_id, $id);
+
+			$max_id = max($max_id, $id);
 		}
-//		$max_id++;
-//		$t->define_data(array(
-//			"filter_field" => html::select(array(
-//					"name" => "filters[".$max_id."][field]",
-//					"options" => $cols,
-//					"selected" => "",
-//				)),
-//			"filter_value" => html::textbox(array(
-//					"name" => "filters[".$max_id."][value]",
-//					"value" => "",
-//				)),
-//		));
+		$max_id++;
+
+		$t->define_data(array(
+			"filter_field" => html::select(array(
+					"name" => "filters[".$max_id."][field]",
+					"options" => $cols,
+					"selected" => "",
+				)),
+			"filter_value" => html::textbox(array(
+					"name" => "filters[".$max_id."][value]",
+					"value" => "",
+				)),
+		));
 
 		$t->set_sortable(false);
 
