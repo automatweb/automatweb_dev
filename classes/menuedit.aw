@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.330 2004/08/23 09:38:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.331 2004/09/09 11:13:49 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -312,6 +312,8 @@ class menuedit extends aw_template
 		$section = aw_global_get("section");
 		$realsect = $this->check_section($section);
 		$set_lang_id = false;
+		if ($this->can("view",$realsect))
+		{
 		$_obj = obj($realsect);
 		if ($_obj->class_id() == CL_MENU)
 		{
@@ -330,6 +332,7 @@ class menuedit extends aw_template
 				$dt = get_instance("contentmgmt/document_statistics");
 				$dt->add_hit($realsect);
 			}
+		};
 		};
 
 		// let logged-in users see not-active language stuff
@@ -489,7 +492,8 @@ class menuedit extends aw_template
 				$ol = new object_list(array(
 					"alias" => $section,
 					"status" => STAT_ACTIVE,
-					"site_id" => aw_ini_get("site_id")
+					"site_id" => aw_ini_get("site_id"),
+					"lang_id" => array()
 				));
 				if ($ol->count() < 1)
 				{
@@ -644,6 +648,17 @@ class menuedit extends aw_template
 
 	function _do_error_redir($section)
 	{
+		$si = __get_site_instance();
+		if (is_object($si) && method_exists($si, "handle_error_redir"))
+		{
+			$tmp = $si->handle_error_redir($section);
+			if ($tmp != "")
+			{
+				header("Location: $tmp");
+				die();
+			}
+		}
+
 		$this->_log(ST_MENUEDIT, SA_ACL_ERROR,sprintf(LC_MENUEDIT_TRIED_ACCESS,$section), $section);
 		// neat :), kui objekti ei leita, siis saadame 404 koodi
 		$r404 = $this->cfg["404redir"];
