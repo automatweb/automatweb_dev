@@ -107,7 +107,7 @@ class ml_queue extends aw_template
 		$t->define_header("Queue $title",$headerarray);
 		$t->parse_xml_def($this->cfg["basedir"] . "/xml/mlist/queue.xml");
 
-		$ml = get_instance("ml_list");
+		$ml = get_instance("mailinglist/ml_list");
 		$lists = $ml->get_lists_and_groups(array());//võta kõik listide & gruppide nimed, et polex vaja iga kord queryda
 
 		$q = "SELECT * FROM ml_queue $filt";
@@ -614,7 +614,7 @@ class ml_queue extends aw_template
 		// tee listi obj
 		if (!isset($this->ml))
 		{
-			$this->ml=get_instance("ml_list");
+			$this->ml=get_instance("mailinglist/ml_list");
 		};
 
 		$data=array();
