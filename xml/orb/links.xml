@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="links" folder="" extends="class_base">
+	<class name="links" folder="contentmgmt" extends="class_base">
 		<action name="search_doc">
 			<function name="search_doc">
 				<arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/links.aw,v 2.61 2004/11/23 13:19:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.1 2004/12/01 11:19:45 kristo Exp $
 
 /*
 
@@ -118,26 +118,26 @@ class links extends class_base
 			));
 			$t->define_field(array(
 				"name" => "pick",
-				"caption" => "Vali see",
+				"caption" => t("Vali see"),
 			));
 			$t->define_field(array(
 				"name" => "name",
-				"caption" => "Nimetus",
+				"caption" => t("Nimetus"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "parent",
-				"caption" => "Asukoht",
+				"caption" => t("Asukoht"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "createdby",
-				"caption" => "Looja",
+				"caption" => t("Looja"),
 				"sortable" => 1
 			));
 			$t->define_field(array(
 				"name" => "modified",
-				"caption" => "Viimati muudetud",
+				"caption" => t("Viimati muudetud"),
 				"type" => "time",
 				"format" => "d.m.Y / H:i",
 				"sortable" => 1
@@ -163,7 +163,7 @@ class links extends class_base
 
 				$row["pick"] = html::href(array(
 					"url" => 'javascript:ss("'.$url.'","'.$o->name().'")',
-					"caption" => "Vali see"
+					"caption" => t("Vali see")
 				));
 				$row["name"] = html::href(array(
 					"url" => $this->mk_my_orb("change", array("id" => $o->id())),

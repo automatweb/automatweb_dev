@@ -1,6 +1,6 @@
 <?php
 
-classload("links","config");
+classload("config");
 
 class export_lite extends aw_template
 {
@@ -526,7 +526,7 @@ class export_lite extends aw_template
 			{
 				preg_match("/id=(\d*)/", $link,$mt);
 
-				$el = get_instance("links");
+				$el = get_instance(CL_EXTLINK);
 				$ld = $el->get_link($mt[1]);
 				$link = $ld["url"];
 				if (substr($link,0,4) == "http" && strpos($link,$baseurl) === false)

@@ -1,6 +1,6 @@
 <?php
 
-classload("links","config","planner");
+classload("config","planner");
 
 define("FN_TYPE_SECID",1);
 define("FN_TYPE_NAME",2);
