@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.89 2003/06/17 11:59:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.90 2003/07/01 10:20:15 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -415,6 +415,7 @@ class users extends users_user
 	function submit_user_site($arr)
 	{
 		extract($arr);
+		set_time_limit(0);
 
 		global $add_state;
 		$add_state["pass"] = $pass;
@@ -714,6 +715,8 @@ class users extends users_user
 
 	function get_join_form($after_join)
 	{
+		aw_global_set("no_cache_content", 1);
+
 		// siin hoitaxe forme, mis kasutaja on selle sessiooni jooxul t2itnud.
 		$session_filled_forms = aw_global_get("session_filled_forms");
 
@@ -764,6 +767,24 @@ class users extends users_user
 		if ($group_filled)
 		{
 			global $add_state;
+
+			if ($add_state["email"] == "")
+			{
+				// kui pole emailiaadressi, siis yritame seda leida liitumisformidest
+				foreach($groups[$add_group] as $fid => $eid)
+				{
+					$f = get_instance("formgen/form");
+					$f->load($fid);
+					$f->load_entry($eid);
+					$em = $f->get_element_value_by_name("E-mail");
+					if ($em != false)
+					{
+						$add_state["email"] = $em;
+						break;
+					}
+				}
+			}
+
 			// n2itame kasutaja tegemise formi
 			$this->read_template("add_site.tpl");
 			$this->vars(array(

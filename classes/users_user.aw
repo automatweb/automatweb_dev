@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.59 2003/06/17 13:40:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.60 2003/07/01 10:20:15 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -596,7 +596,7 @@ class users_user extends aw_template
 	}
 
 	// removes the user from this group and all below it
-	function remove_users_from_group_rec($gid,$users,$checkdyn = false)
+	function remove_users_from_group_rec($gid,$users,$checkdyn = false, $normalize = true)
 	{
 		$this->remove_users_from_group($gid,$users,$checkdyn);
 
@@ -607,7 +607,11 @@ class users_user extends aw_template
 		{
 			$this->remove_users_from_group($v,$users,$checkdyn);
 		}
-		$this->normalize_user_objects();
+
+		if ($normalize)
+		{
+			$this->normalize_user_objects();
+		}
 	}
 
 	function remove_users_from_group($gid,$users,$checkdyn = false) 
@@ -661,7 +665,7 @@ class users_user extends aw_template
 	}
 
 	// recursively addss users to group, iow adds the user to this group and all above it
-	function add_users_to_group_rec($gid,$users,$permanent = false,$check = true)
+	function add_users_to_group_rec($gid,$users,$permanent = false,$check = true, $normalize = true)
 	{
 		$grps = array();
 		$this->getgroupsabove($gid,&$grps);
@@ -671,7 +675,10 @@ class users_user extends aw_template
 			$this->add_users_to_group($v,$users,$permanent,$check);
 		}
 		
-		$this->normalize_user_objects();
+		if ($normalize)
+		{
+			$this->normalize_user_objects();
+		}
 	}
 
 	function add_users_to_group($gid,$users,$permanent = 0,$check = false) 
@@ -980,7 +987,7 @@ class users_user extends aw_template
 		{
 			if (!$excludes[$v])
 			{
-				$this->add_users_to_group_rec($v,$auid);
+				$this->add_users_to_group_rec($v,$auid, false, true, false);
 			}
 		}
 
@@ -993,9 +1000,10 @@ class users_user extends aw_template
 		{
 			if ($perms[$v] != $v)
 			{
-				$this->remove_users_from_group_rec($v,$auid);
+				$this->remove_users_from_group_rec($v,$auid, false, true);
 			}
 		}
+		$this->normalize_user_objects();
 	}
 
 	function getpermanentmembers($gid)
@@ -1282,6 +1290,7 @@ class users_user extends aw_template
 	// this should be called, when user/group tables change, to update object table
 	function normalize_user_objects()
 	{
+		set_time_limit(0);	// for a large number of users, this can take quite a while.
 		// first, get all groups that are of the correct type
 		$group_objs = $this->get_group_list(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)));
 
@@ -1311,18 +1320,19 @@ class users_user extends aw_template
 		while($row = $this->db_next())
 		{
 			$members[$row["oid"]] = $row["oid"];
-//			echo "real group member is $row[oid] <br>";
 		}
 
 		// now, get all user-bro objects that are under this groups' object
-		$u_objs = $this->list_objects(array(
-			"class" => CL_USER,
-			"return" => ARR_ALL,
-			"parent" => $gd["oid"]
-		));
+		$u_objs = array();
+		$r_u_o = array();
+		$this->db_query("SELECT oid,brother_of FROM objects WHERE class_id = ".CL_USER." AND parent = '$gd[oid]'");
+		while ($row = $this->db_next())
+		{
+			$u_objs[$row["oid"]] = $row;
+			$r_u_o[$row["brother_of"]] = $row;
+		}
 
 		// now, diff the two lists
-
 		// first, remove all duplicates from u_objs
 		$_u_objs = array();
 		$used = array();
@@ -1339,7 +1349,7 @@ class users_user extends aw_template
 			}
 			$used[$d["brother_of"]] = 1;
 		}
-		
+
 		// now, remove all objects that are users that are not in this group
 		foreach($u_objs as $oid => $d)
 		{
@@ -1354,19 +1364,7 @@ class users_user extends aw_template
 		// and now add all thad are members, but are not in object list
 		foreach($members as $oid)
 		{
-//			echo "trying to find real member $oid in object list! <br>";
-			$found = false;
-			foreach($u_objs as $_oid => $d)
-			{
-				if ($d["brother_of"] == $oid)
-				{
-					$found = true;
-//					echo "found! <br>";
-					break;
-				}
-			}
-
-			if (!$found)
+			if (!isset($r_u_o[$oid]))
 			{
 //				echo "did not find object $oid under $gd[oid] <br>";
 				$o_uid = $this->get_uid_for_oid($oid);
@@ -1383,50 +1381,45 @@ class users_user extends aw_template
 		}
 
 		// right, now check the aliases for the group object
-		$aliases = $this->get_aliases_for($gd["oid"]);
-
-		// make real user objects of aliased objects that are brothers
-		$_aliases = array();	
-		foreach($aliases as $idx => $alias)
+		$q = "
+			SELECT 
+				aliases.target as id,
+				objects.oid,
+				objects.brother_of
+			FROM aliases
+				LEFT JOIN objects ON (aliases.target = objects.oid)
+			WHERE 
+				aliases.source = '$gd[oid]'
+		";
+		$this->db_query($q);
+		$aliases = array();
+		while($row = $this->db_next())
 		{
-			// get the user object
-			$u_oid = $alias["id"];
-			$alias["old_id"] = $alias["id"];
-			$u_o = $this->get_object($u_oid);
-			$alias["id"] = $u_o["brother_of"];
-			$_aliases[$idx] = $alias;
+			$aliases[$row["brother_of"]] = $row;
 		}
-		$aliases = $_aliases;
 
 		// check if there are any aliases that are for members no longer in the group
-		foreach($aliases as $idx => $alias)
+		foreach($aliases as $alias)
 		{
 			if (!isset($members[$alias["id"]]))
 			{
-//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[old_id] <br>";
-				$this->delete_alias($gd["oid"], $alias["old_id"], true, true);
+//				echo "delete alias from group $gd[oid] $gd[name] , alias id = $alias[id] , old id = $alias[oid] <br>";
+				$this->delete_alias($gd["oid"], $alias["oid"], true, true);
 			}
 		}
 
 		// now, go over members and check if any aliases are missing
 		foreach($members as $member)
 		{
-			$found = false;
-			foreach($aliases as $alias)
-			{
-				if ($alias["id"] == $member)
-				{
-					$found = true;
-				}
-			}
-			if (!$found)
+			if (!isset($aliases[$member]))
 			{
 //				echo "did not find member $member in aliases for group $gd[oid] $gd[name], adding alias<br>";
 				// add the user as alias
 				core::addalias(array(
 					"id" => $gd["oid"],
 					"alias" => $member,
-					"reltype" => 2 // RELTYPE_MEMBER in group.aw
+					"reltype" => 2, // RELTYPE_MEMBER in group.aw
+					"no_cache" => true
 				));
 			}
 		}
