@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.40 2004/11/12 11:21:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.41 2004/11/12 11:44:08 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -193,26 +193,29 @@ class cfgform extends class_base
 		));
 
 		$o = $arr["obj_inst"];
+		$active = 0;
+
+		// 2 passes, because I need to know which element is active before 
+		// doing the table
 		$ol = new object_list(array(
 			"class_id" => $this->clid,
 			"subclass" => $o->subclass(),
 			"lang_id" => array(),
-			"site_id" => array(),
+			"flags" => array(
+				"mask" => OBJ_FLAG_IS_SELECTED,
+				"flags" => OBJ_FLAG_IS_SELECTED
+			)
 		));
-
-		$active = 0;
-		foreach ($ol->arr() as $item)
+		if (sizeof($ol->ids()) > 0)
 		{
-			$flg = $item->flag(OBJ_FLAG_IS_SELECTED);
-			if ($flg)
-			{
-				$active = $item->id();
-			};
+			$first = $ol->begin();
+			$active = $first->id();
 		};
 
 		$ol = new object_list(array(
 			"class_id" => $this->clid,
 			"subclass" => $o->subclass(),
+			"lang_id" => array(),
 		));
 
 		$t->set_sortable(false);
