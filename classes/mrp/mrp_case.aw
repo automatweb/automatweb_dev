@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.46 2005/03/29 20:31:59 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.47 2005/03/29 20:36:53 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -642,13 +642,13 @@ class mrp_case extends class_base
 				$length = $job->prop ("planned_length");
 				$resource = obj ($resource_id);
 				$start = $job->prop ("starttime");
-				$hilight = ($job->prop ("project") == $hilighted_project) ? "hilighted" : "";
+				$colour = $this->state_colours[$job->prop ("state")];
 				$job_name = $this_object->name () . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
 					"start" => $start,
-					"type" => $hilight,
+					"colour" => $colour,
 					"length" => $length,
 					"uri" => html::get_change_url ($job["oid"]),
 					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
