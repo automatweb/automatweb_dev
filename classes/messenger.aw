@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.58 2001/06/08 18:53:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.59 2001/06/09 00:03:20 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -195,79 +195,27 @@ class messenger extends menuedit_light
 	}
 
 	////
-	// !Joonistab XML-is defineeritud menüü
+	// !Joonistab menüü
 	// argumendid:
 	// activelist(array), levelite kaupa info selle kohta, millised elemendid aktiivsed on
 	// vars(array) - muutujad mida xml-i sisse pannakse
-	// veel natuke, ja selle koodi voib siit välja visata, ning eraldi klassiks
-	// vormistada. 
 	function gen_msg_menu($args = array())
 	{
 		extract($args);
 		global $basedir;
-		$fname = $basedir . "/xml/messenger/menucode.xml";
-		$menudef = $this->get_file(array(
-					"file" => $basedir . "/xml/messenger/menucode.xml",
+		load_vcl("xmlmenu");
+		$xm = new xmlmenu();
+		$xm->vars($vars);
+		$xm->load_from_files(array(
+					"xml" => $basedir . "/xml/messenger/menucode.xml",
+					"tpl" => $this->template_dir . "/menus.tpl",
 				));
-		if (!is_array($vars))
-		{
-			$vars = array("folder" => "");
-		};
-		$menudef = $this->localparse($menudef,$args["vars"]);
-		classload("xml");
-		$xml = new xml();
-		$this->menudefs = $xml->xml_unserialize(array(
-					"source" => $menudef,
-		));
-		
-		$this->read_template("menus.tpl");
-	
-		// seda teeme selleks, et funktsioonile saaks activelist argumendi ette anda
-		// kujul array("foo","bar"). Ntx.
-		$nil = array();
-		$nil[] = "";
 
-		$this->activelist = array_merge($nil,$args["activelist"]);
-		$this->level = 1;
-	
-		// genereerime menüü
-		$this->_gen_msg_menu($this->menudefs);
-		
-		$retval = $this->parse();
-		return $retval;
+		return $xm->create(array(
+				"activelist" => $activelist,
+			));
 	}
 
-
-	////
-	// !Kutsutakse välja gen_msg_menu seest, ning kutsub iseennast rekursiivselt välja
-	function _gen_msg_menu($menudefs = array())
-	{
-		// foreach-i ei saa rekursiivsete funktsioonide sees kasutada, sest see loob iga
-		// kord uue koopia arrayst
-		while(list($key,$val) = each($menudefs))
-		{
-			if ($this->activelist[$this->level] == $key)
-			{
-				$tpl = "level" . $this->level . "_act";
-			}
-			else
-			{
-				$tpl = "level" . $this->level;
-			};
-			$var = "level" . $this->level;
-			$this->vars(array(
-					"link" => $val["link"],
-					"caption" => $val["caption"],
-				));
-			$this->vars_merge(array($var => $this->parse($tpl)));
-			if (is_array($val["sublinks"]) && ($key == $this->activelist[$this->level]))
-			{	
-				$this->level++;
-				$this->_gen_msg_menu($val["sublinks"]);
-				$this->level--;
-			};
-		};
-	}
 
 	////
 	// !Contact manager
