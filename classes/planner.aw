@@ -1,7 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.19 2001/06/12 18:20:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.20 2001/06/12 23:38:21 duke Exp $
+// fuck, this is such a mess
 // planner.aw - päevaplaneerija
-// CL_CAL_EVEN on kalendri event
+// CL_CAL_EVENT on kalendri event
 classload("calendar","defs");
 global $orb_defs;
 $orb_defs["planner"] = "xml";
@@ -80,14 +81,6 @@ class planner extends calendar {
 	{
 		extract($args);
 		$this->tpl_init("planner");
-		$args["act"] = "user";
-		$ids = "uid=" . UID;
-		$args["ids"] = $ids;
-		$args["ctype"] = "uid";
-		if (!$date)
-		{
-			$date = date("d-m-Y");
-		};
 		return $this->change($args);
 	}
 
@@ -113,8 +106,15 @@ class planner extends calendar {
 	// date - millisele kuupäevale keskenduda
 	function change($args = array())
 	{
-		
+
 		extract($args);
+
+		// kui kuupäeva pole defineeritud, siis defaultime tänasele
+		if (!$date)
+		{
+			$date = date("d-m-Y");
+		};
+
 		if ($disp == "day")
 		{
 			$act = ($date == date("d-m-Y")) ? "today" : "day";
@@ -123,10 +123,12 @@ class planner extends calendar {
 		{
 			$act = $disp;
 		};
+		
 		$menubar = $this->gen_menu(array(
 				"activelist" => array($act),
 				"vars" => array("date" => $date),
 			));
+
 		$object = $this->get_object($id);
 
 			
@@ -137,15 +139,6 @@ class planner extends calendar {
 
 		$this->mk_path($object["parent"],CAL_CH_TITLE);
 
-
-		$titles = array(
-			"week" => CAL_WEEK,
-			"month" => CAL_MONTH,
-			"overview" => CAL_OVERVIEW,
-			"day" => CAL_DAY,
-			"new" => "Lisa uus",
-			"today" => "Täna",
-		);
 
 		if (!$disp)
 		{
@@ -800,12 +793,169 @@ class planner extends calendar {
 			"activelist" => array("add","repeaters"),
 			"vars" => array("id" => $id),
 		));
+		$caldata = $this->get_object_metadata(array(
+						"oid" => $id,
+						"key" => "calconfig",
+				));
+		extract($caldata);
 		$this->tpl_init("planner");
 		$this->read_template("reps.tpl");
+		// oh, I know, this is sooo ugly
 		$this->vars(array(
+				"pri1" => ($pri[1]) ? $pri[1] : 1,
+				"pri2" => ($pri[2]) ? $pri[2] : 2,
+				"pri3" => ($pri[3]) ? $pri[3] : 3,
+				"pri4" => ($pri[4]) ? $pri[4] : 4,
+				"pri5" => ($pri[5]) ? $pri[5] : 5,
+				"pri6" => ($pri[6]) ? $pri[6] : 6,
+				"pri7" => ($pri[7]) ? $pri[7] : 7,
+				"pri8" => ($pri[8]) ? $pri[8] : 8,
+				"use1" => checked($use[1]),
+				"use2" => checked($use[2]),
+				"use3" => checked($use[3]),
+				"use4" => checked($use[4]),
+				"use5" => checked($use[5]),
+				"use6" => checked($use[6]),
+				"use7" => checked($use[7]),
+				"use8" => checked($use[8]),
+				"weekpwhen1" => checked($weekpwhen[1]),
+				"weekpwhen2" => checked($weekpwhen[2]),
+				"weekpwhen3" => checked($weekpwhen[3]),
+				"weekpwhen4" => checked($weekpwhen[4]),
+				"weekpwhen5" => checked($weekpwhen[5]),
+				"weekpwhen6" => checked($weekpwhen[6]),
+				"weekpwhen7" => checked($weekpwhen[7]),
+				"monpwhen1" => checked($monpwhen[1]),
+				"monpwhen2" => checked($monpwhen[2]),
+				"monpwhen3" => checked($monpwhen[3]),
+				"monpwhen4" => checked($monpwhen[4]),
+				"monpwhen5" => checked($monpwhen[5]),
+				"monpwhen6" => checked($monpwhen[6]),
+				"mp2" => $monpwhen2,
+				"yearpwhen" => $yearpwhen,
+				"dayskip" => ($skip["day"]) ? $skip["day"] : 1,
+				"weekskip" => ($skip["week"]) ? $skip["week"] : 1,
+				"monthskip" => ($skip["month"]) ? $skip["month"] : 1,
+				"yearskip" => ($skip["year"]) ? $skip["year"] : 1,
 				"menubar" => $menubar,
+				"reforb" => $this->mk_reforb("submit_repeaters",array("id" => $id)),
 			));
 		return $this->parse();
+	}
+
+	function submit_repeaters($args = array())
+	{
+		extract($args);
+		// reap the old repeaters
+		$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
+		$this->db_query($q);
+		// first we will calculate the end date for those repeaters
+		switch($rep)
+		{
+			case "3":
+				$repend_date = sprintf("%02d-%02d-%04d",$repend["day"],$repend["mon"],$repend["year"]);
+				break;
+
+			case "2":
+				// kui joudsime siia, siis on meil kordade arv $repeats muutujas ja me peame välja arvutama
+				// selle, kui kaugele tulevikku kordused lähevad
+				
+				break;
+
+			default:
+				$repend_date = "31-12-2037";
+				break;
+		};
+		// right now we will just stick with events repeating forever
+		$repend_date = "31-12-2037";
+		list($d,$m,$y) = explode("-",$repend_date);
+		$rep_until = mktime(0,0,0,$m,$d,$y);
+
+		$uid = ($oid) ? "" : UID;
+		// blah. But we really really don't have to do it. We only have to calculate the dates when the events take
+		// place.
+		
+		if ($use[1])
+		{
+			$_type = REP_DAY;
+			$_skip = $skip["day"];
+			$q = "INSERT INTO planner_repeaters (eid,type,skip) VALUES ('$id','$_type','$_skip')";
+			$this->db_query($q);
+		};
+
+		if ($use[5] && is_array($weekpwhen))
+		{
+			$weekpwhen = join(",",array_keys($weekpwhen));
+		}
+		else
+		{
+			$weekpwhen = "";
+		};
+
+		if ($use[2] || $weekpwhen)
+		{
+			$_type = REP_WEEK;
+			$_skip = ($weekpwhen) ? 0 : $skip["week"];
+			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen) VALUES ('$id','$_type','$_skip','$weekpwhen')";
+			$this->db_query($q);
+		};
+
+		if ($use[6] && is_array($monpwhen))
+		{
+			$monpwhen = join(",",array_keys($monpwhen));
+		}
+		else
+		{
+			$monpwhen = "";
+		};
+
+		$monpwhen2 = ($use[7]) ? $monpwhen2 : "";
+
+		if ($use[3] || $monpwhen || $monpwhen2)
+		{
+			$_type = REP_MONTH;
+			$_skip = ($monpwhen) ? 0 : $skip["month"];
+			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen,pwhen2) VALUES ('$id','$_type','$_skip','$monpwhen','$monpwhen2')";
+			$this->db_query($q);
+		};
+
+		$yearpwhen = ($use[8]) ? $yearpwhen : "";
+
+		if ($use[4] || $yearpwhen)
+		{
+			$_type = REP_YEAR;
+			$_skip = ($yearpwhen) ? 0 : $skip["year"];
+			$q = "INSERT INTO planner_repeaters (eid,type,skip,pwhen) VALUES ('$id','$_type','$_skip','$yearpwhen')";
+			$this->db_query($q);
+		};
+
+		// and now we will update the record for event itself
+		$q = "UPDATE planner SET rep_until = '$rep_until' WHERE id = '$id'";
+
+		$caldata = array(
+					"pri" => $pri,
+					"use" => is_array($use) ? $use : array(),
+					"skip" => $skip,
+					"weekpwhen" => is_array($args["weekpwhen"]) ? $args["weekpwhen"] : array(),
+					"monpwhen" => is_array($args["monpwhen"]) ? $args["monpwhen"] : array(),
+					"monpwhen2" => $args["monpwhen2"],
+					"yearpwhen" => $args["yearpwhen"],
+					"rep" => $rep,
+					"repeats" => $repeats,
+					"repend" => $repend,
+				);
+		$this->set_object_metadata(array(
+					"oid" => $id,
+					"key" => "calconfig",
+					"value" => $caldata,
+				));
+				
+					
+		$this->db_query($q);
+		return $this->mk_site_orb(array(
+				"action" => "repeaters",
+				"id" => $id,
+			));
 	}
 
 	function submit_adm_event($args = array())
@@ -918,6 +1068,8 @@ class planner extends calendar {
 			$status_msg = "Event on lisatud";
 		};
 		$this->db_query($q);
+
+		// siin tuleks koigepealt vanad repeaterid mine visata, sest nende kontroll voib osutuda liiga tylikaks
 		if ($repeater && (!$delete))
 		{
 			// vanad minema
@@ -971,18 +1123,9 @@ class planner extends calendar {
 			$q = "DELETE FROM planner_repeaters WHERE eid = '$id'";
 			$this->db_query($q);
 		};
-				
 
 		session_register("status_msg");
-		// suunab tagasi default lehele, ehk tänasele päevale
-		if ($parent)
-		{
-			return $this->mk_my_orb("change",array("id" => $parent,"date" => $date));
-		}
-		else
-		{
-			return $this->mk_my_orb("day",array("date" => $date));
-		};
+		return $this->mk_my_orb("editevent",array("id" => $id));
 	}
 
 	////
