@@ -1994,6 +1994,7 @@ class export extends aw_template
 
 	function fix_fn($fn)
 	{
+		$fn = str_replace(" ", "_", $fn);
 		$fn = str_replace("?", "_", $fn);
 		$fn = str_replace("\n", "", str_replace("\r", "", $fn));
 		$fn = str_replace("ä","a", $fn);
@@ -2010,6 +2011,7 @@ class export extends aw_template
 		$fn = str_replace("'","_",$fn);
 		$fn = str_replace("\"","_",$fn);
 		$fn = str_replace("&nbsp;", "_", $fn);
+		$fn = str_replace(":", "_", $fn);
 		return $fn;
 	}
 }
