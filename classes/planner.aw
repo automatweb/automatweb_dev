@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.88 2003/03/07 16:36:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.89 2003/03/12 11:09:49 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -100,6 +100,8 @@ define(REP_MONTH,3);
 define(REP_YEAR,4);
 
 define(RELTYPE_SUMMARY_PANE,1);
+define(RELTYPE_EVENT_SOURCE,2);
+define(RELTYPE_EVENT,3);
 lc_load("calendar");
 // Klassi sees me kujutame koiki kuupäevi kujul dd-mm-YYYY (ehk d-m-Y date format)
 
@@ -130,6 +132,8 @@ class planner extends class_base
         {
                 return array(
 			RELTYPE_SUMMARY_PANE => "näita kokkuvõtte paanis",
+			RELTYPE_EVENT_SOURCE => "võta sündmusi teistest kalendritest",
+			RELTYPE_EVENT => "sündmus",
 		);
         }
 
@@ -382,6 +386,12 @@ class planner extends class_base
 
 			$event_id = $new_id;
 			$row = array();
+
+			$this->addalias(array(
+				"id" =>	$args["request"]["id"],
+				"alias" => $event_id,
+				"reltype" => RELTYPE_EVENT,
+			)); 
 		}
 		else
 		{
@@ -389,7 +399,8 @@ class planner extends class_base
 			$this->db_query($q);
 			$row = $this->db_next();
 		};
-	
+
+
 		$this->event_id = $event_id;
 
 		if ($event_cfgform)
@@ -562,6 +573,7 @@ class planner extends class_base
 
 		
 		$actlink = $this->mk_my_orb("view",array("id" => $id,"date" => $date,"ctrl" => $ctrl,"type" => $act));
+
 		$this->conf = $obj["meta"];
 		if (is_array($this->overrides))
 		{
@@ -570,7 +582,7 @@ class planner extends class_base
 				$this->conf[$key] = $val;
 			};
 		};
-		
+
 		if (not($type))
 		{
 			$type = $this->viewtypes[$this->conf["default_view"]];
@@ -721,10 +733,12 @@ class planner extends class_base
 		else
 		// otherwise just load the plain old event objects
 		{
+			$folder = isset($this->conf["event_folder"]) ? $this->conf["event_folder"] : $id;
 			$events = $this->get_events2(array(
 				"start" => $di["start"],
 				"end" => $di["end"],
-				"folder" => $id,
+				"id" => $id,
+				"folder" => $folder,
 				"conf" => $this->conf,
 			));
 		};
@@ -905,13 +919,16 @@ class planner extends class_base
 		);
 		$mlist = explode("|",LC_MONTH);
 		unset($mlist[0]);
-		$prev = $this->mk_my_orb("view",array("id" => $id,"type" => $type,"date" => $di["prev"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
-		$next = $this->mk_my_orb("view",array("id" => $id,"type" => $type,"date" => $di["next"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
+		$section = aw_global_get("section");
+		$prev = $this->mk_my_orb("view",array("section" => $section,"id" => $id,"type" => $type,"date" => $di["prev"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
+		$next = $this->mk_my_orb("view",array("section" => $section,"id" => $id,"type" => $type,"date" => $di["next"],"id" => $id,"ctrl" => $ctrl,"ctrle" => $ctrle));
 		$this->vars(array(
 			"menudef" => $menudef,
 			"caption" => $caption,
 			"navigator" => $navigator,
 			"disp"	=> $disp,
+			"month_name" => $mlist[(int)$m],
+                        "year_name" => $ylist[$y],
 			"id" => $id,
 			"content" => $content,
 			"mreforb" => $this->mk_reforb("redir",array("day" => $d,"disp" => $disp,"id" => $id,"type" => $type,"ctrl" => $ctrl,"ctrle" => $ctrle)),
@@ -1082,7 +1099,7 @@ class planner extends class_base
 		extract($args);
 		// figure out which other calendars we are interested in
 		$alias_reltype = new aw_array($conf["alias_reltype"]);
-		$calendars = array($folder);
+		$calendars = array($folder,$id);
 		foreach($alias_reltype->get() as $key => $val)
 		{
 			if ($val == 2)
@@ -2156,6 +2173,7 @@ class planner extends class_base
 					"cellwidth" => $width . "%",
 					"hcell" => strtoupper(substr(get_lc_weekday($w),0,1)) . " " . date("d-M",$thisday),
 					"hcell_weekday" => strtoupper(substr(get_lc_weekday($w),0,1)),
+					"daynum" => $d,
 					"hcell_date" =>  date("d-M",$thisday),
 					"dayorblink" => $day_orb_link,
 					"cell" => $c1,
