@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.21 2004/10/08 15:53:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.22 2004/11/18 23:23:59 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -123,11 +123,11 @@ class imap extends class_base
 			$this->servspec = sprintf($mask,$server,$port);
 			$mbox = str_replace("*","&",$this->use_mailbox);
 			$this->mboxspec = $this->servspec . $mbox;
-			$this->mbox = imap_open($this->mboxspec, $user, $password);
+			$this->mbox = @imap_open($this->mboxspec, $user, $password);
 			$err = imap_errors();
 			if (is_array($err))
 			{
-				die(join("<br>",$err));
+				return join("<br>",$err);
 			};
 			$this->connected = true;
 		}
