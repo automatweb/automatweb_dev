@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.44 2005/03/10 11:58:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.45 2005/03/18 11:34:27 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -223,8 +223,50 @@ class event_search extends class_base
 			$id = $prj_conn->prop("to");
 			$name = $prj_conn->prop("to.name");
 			$prj_opts[$id] = $name;
-		};
-		
+		}
+		$rn1 = $formconfig["project1"]["rootnode"];
+		$rn1 = is_array($rn1) ? $rn1 : array($rn1); 
+		$cnt1 = count($rn1);
+		foreach($rn1 as $key => $val)
+		{
+			if(empty($val))
+			{
+				$cnt1--;
+			}
+		}
+		for($i = 0; $i <= $cnt1; $i++)
+		{
+			$datas .= html::select(array(
+				"name" => "project1[rootnode][$i]",
+				"options" => $prj_opts,
+				"value" => $rn1[$i],
+			))."<br />";
+		}
+		$rn2 = $formconfig["project2"]["rootnode"];
+		$rn2 = is_array($rn2) ? $rn2 : array($rn2);
+		$cnt2 = count($rn2);
+		foreach($rn2 as $key => $val)
+		{
+			if(empty($val))
+			{
+				$cnt2--;
+			}
+		}
+		for($i = 0; $i <= $cnt2; $i++)
+		{
+			$datas2 .= html::select(array(
+				"name" => "project2[rootnode][$i]",
+				"options" => $prj_opts,
+				"value" => $rn2[$i],
+			))."<br />";
+		}
+		/*
+html::select(array(
+				"name" => "project2[rootnode]",
+				"options" => $prj_opts,
+				"value" => $formconfig["project2"]["rootnode"],
+			))
+		*/
 		$t->define_data(array(
 			"name" => t("Projekt 1"),
 			"caption" => html::textbox(array(
@@ -236,11 +278,7 @@ class event_search extends class_base
 				"value" => $formconfig["project1"]["active"],
 				"checked" => $formconfig["project1"]["active"],
 			)),
-			"data" => html::select(array(
-				"name" => "project1[rootnode]",
-				"options" => $prj_opts,
-				"value" => $formconfig["project1"]["rootnode"],
-			)),
+			"data" => $datas,
 		));
 		
 		$t->define_data(array(
@@ -249,11 +287,7 @@ class event_search extends class_base
 				"name" => "project2[caption]",
 				"value" => $formconfig["project2"]["caption"] ? $formconfig["project2"]["caption"] : t("Projekt 2"),
 			)),
-			"data" => html::select(array(
-				"name" => "project2[rootnode]",
-				"options" => $prj_opts,
-				"value" => $formconfig["project2"]["rootnode"],
-			)),
+			"data" => $datas2,
 			"active" => html::checkbox(array(
 				"name" => "project2[active]",
 				"value" => $formconfig["project2"]["active"],
@@ -628,137 +662,183 @@ class event_search extends class_base
 		}
 		$search_p1 = false;
 		$search_p2 = false;
-		if(is_oid($formconfig["project1"]["rootnode"]) && $this->can("view", $formconfig["project1"]["rootnode"]))
+		$p_rn1 = $formconfig["project1"]["rootnode"];
+		$p_rn2 = $formconfig["project2"]["rootnode"];
+		$p_rn1 = is_array($p_rn1) ? $p_rn1 : array($p_rn1);
+		$p_rn2 = is_array($p_rn2) ? $p_rn2 : array($p_rn2);
+		foreach($p_rn1 as $pkey => $pval)
 		{
-			$rn1 = $formconfig["project1"]["rootnode"];
-			$tmp = obj($rn1);
-			if($tmp->class_id() == CL_MENU)
+			if(!is_oid($pval) || !$this->can("view", $pval))
 			{
-				$prj_cx = $this->_get_project_choices($rn1);
-				// if there are projects to choose from, search from them, else assume that it's a event folder
-				if(!empty($prj_cx))
-				{
-					$search_p1 = true;
-					asort($prj_cx);
-					$prj_ch1 = array(0 => t("k&otilde;ik")) + $prj_cx;
-				}
-				else
-				{
-					$rn1 = $tmp->id();
-				}
+				unset($p_rn1[$pkey]);
 			}
-			elseif($tmp->class_id() == CL_PLANNER)
+		}
+		foreach($p_rn2 as $pkey => $pval)
+		{
+			if(!is_oid($pval) || !$this->can("view", $pval))
 			{
-				$rn1 = array();
-				$r = $tmp->prop("event_folder");
-				if(is_oid($r) && $this->can("view", $r))
+				unset($p_rn2[$pkey]);
+			}
+		}
+		if(count($p_rn1) > 0)
+		{
+			$prj_ch1 = array();
+			$optgnames1 = array();
+			$rn1 = array();
+			foreach($p_rn1 as $trn1)
+			{
+				$tmp = obj($trn1);
+				if($tmp->class_id() == CL_MENU)
 				{
-					$rn1[] = $r;
-				}
-				// this goddamn calendar has to manage the 
-				// events from other calendars and projects aswell.. oh hell..
-				$sources = $tmp->connections_from(array(
-					"type" => "RELTYPE_EVENT_SOURCE",
-				));
-				foreach($sources as $source)
-				{
-					if($source->prop("to.class_id") == CL_PLANNER)
+					$prj_cx = $this->_get_project_choices($trn1);
+					// if there are projects to choose from, search from them, else assume that it's a event folder
+					if(!empty($prj_cx))
 					{
-						$_tmp = $source->to();
-						$rn1[] = $_tmp->prop("event_folder");
+						$search_p1 = true;
+						$prj_ch1[] = $prj_cx;
+						$optgnames1[] = $tmp->name();
 					}
 					else
+					{
+						$rn1[] = $tmp->id();
+					}
+				}
+				elseif($tmp->class_id() == CL_PLANNER)
+				{
+					$r = $tmp->prop("event_folder");
+					if(is_oid($r) && $this->can("view", $r))
+					{
+						$rn1[] = $r;
+					}
+					// this goddamn calendar has to manage the 
+					// events from other calendars and projects aswell.. oh hell..
+					$sources = $tmp->connections_from(array(
+						"type" => "RELTYPE_EVENT_SOURCE",
+					));
+					foreach($sources as $source)
+					{
+						if($source->prop("to.class_id") == CL_PLANNER)
+						{
+							$_tmp = $source->to();
+							$rn1[] = $_tmp->prop("event_folder");
+						}
+						else
+						{
+							$rn1[] = $source->prop("to");
+						}
+					}
+				}
+				elseif($tmp->class_id() == CL_PROJECT)
+				{
+					$rn1[] = $trn1;
+					$sources = $tmp->connections_from(array(
+						"type" => "RELTYPE_SUBPROJECT",
+					));
+					foreach($sources as $source)
 					{
 						$rn1[] = $source->prop("to");
 					}
 				}
 			}
-			elseif($tmp->class_id() == CL_PROJECT)
-			{
-				$rn1 = array($rn1);
-				$sources = $tmp->connections_from(array(
-					"type" => "RELTYPE_SUBPROJECT",
-				));
-				foreach($sources as $source)
-				{
-					$rn1[] = $source->prop("to");
-				}
-			}
 		}
-		if(is_oid($formconfig["project2"]["rootnode"]) && $this->can("view", $formconfig["project2"]["rootnode"]))
+		if(count($p_rn2) > 0)
 		{
-			$rn2 = $formconfig["project2"]["rootnode"];
-			$tmp = obj($rn2);
-			if($tmp->class_id() == CL_MENU)
+			$rn2 = array();
+			$prj_ch2 = array();
+			$optgnames2 = array();
+			foreach($p_rn2 as $trn2)
 			{
-				$prj_cx = $this->_get_project_choices($rn2);
-				if(!empty($prj_cx))
+				$tmp = obj($trn2);
+				if($tmp->class_id() == CL_MENU)
 				{
-					$search_p2 = true;
-					asort($prj_cx);
-					$prj_ch2 = array(0 => t("k&otilde;ik")) + $prj_cx;
-				}
-				else
-				{
-					$rn2 = $tmp->id();
-				}
-			}
-			elseif($tmp->class_id() == CL_PLANNER)
-			{
-				$rn2 = array();
-				$r = $tmp->prop("event_folder");
-				if(is_oid($r) && $this->can("view", $r))
-				{
-					$rn2[] = $r;
-				}
-				$sources = $tmp->connections_from(array(
-					"type" => "RELTYPE_EVENT_SOURCE",
-				));
-				foreach($sources as $source)
-				{
-					if($source->prop("to.class_id") == CL_PLANNER)
+					$prj_cx = $this->_get_project_choices($trn2);
+					if(!empty($prj_cx))
 					{
-						$_tmp = $source->to();
-						$rn2[] = $_tmp->prop("event_folder");
+						$optgnames2[] = $tmp->name();
+						$search_p2 = true;
+						$prj_ch2[] = $prj_cx;
 					}
 					else
+					{
+						$rn2[] = $tmp->id();
+					}
+				}
+				elseif($tmp->class_id() == CL_PLANNER)
+				{
+					$r = $tmp->prop("event_folder");
+					if(is_oid($r) && $this->can("view", $r))
+					{
+						$rn2[] = $r;
+					}
+					$sources = $tmp->connections_from(array(
+						"type" => "RELTYPE_EVENT_SOURCE",
+					));
+					foreach($sources as $source)
+					{
+						if($source->prop("to.class_id") == CL_PLANNER)
+						{
+							$_tmp = $source->to();
+							$rn2[] = $_tmp->prop("event_folder");
+						}
+						else
+						{
+							$rn2[] = $source->prop("to");
+						}
+					}
+				}
+				elseif($tmp->class_id() == CL_PROJECT)
+				{
+					$rn2[] = $trn2;
+					$sources = $tmp->connections_from(array(
+						"type" => "RELTYPE_SUBPROJECT",
+					));
+					foreach($sources as $source)
 					{
 						$rn2[] = $source->prop("to");
 					}
 				}
 			}
-			elseif($tmp->class_id() == CL_PROJECT)
-			{
-				$rn1 = array($rn1);
-				$sources = $tmp->connections_from(array(
-					"type" => "RELTYPE_SUBPROJECT",
-				));
-				foreach($sources as $source)
-				{
-					$rn1[] = $source->prop("to");
-				}
-			}
 		}
 		if($search_p1)
 		{
-			$htmlc->add_property(array(
+			//"options" => $prj_ch1,
+			$vars = array(
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
 				"type" => "select",
-				"options" => $prj_ch1,
 				"value" => $arr["project1"],
-			));
+			);
+			if(count($prj_ch1) > 1)
+			{
+				$vars["optgnames"] = $optgnames1;
+				$vars["optgroup"] = $prj_ch1;
+			}
+			else
+			{
+				$vars["options"] = reset($prj_ch1);
+			}
+			$htmlc->add_property($vars);
 		}
 		
 		if($search_p2)
 		{
-			$htmlc->add_property(array(
+			//"options" => $prj_ch2,
+			$vars = array(
 				"name" => "project2",
 				"caption" => $formconfig["project2"]["caption"],
 				"type" => "select",
-				"options" => $prj_ch2,
 				"value" => $arr["project2"],
-			));
+			);
+			if(count($prj_ch2) > 1)
+			{
+				$vars["optgnames"] = $optgnames2;
+				$vars["optgroup"] = $prj_ch2;
+			}
+			else
+			{
+				$vars["options"] = reset($prj_ch2);
+			}
+			$htmlc->add_property($vars);
 		}
 		
 		$htmlc->add_property(array(
@@ -784,7 +864,7 @@ class event_search extends class_base
 				elseif($search_p1)
 				{
 					$all_projects1 = new object_list(array(
-						"parent" => array($formconfig["project1"]["rootnode"]),
+						"parent" => $p_rn1,
 						"class_id" => array(CL_PROJECT, CL_PLANNER),
 					));
 					
@@ -797,7 +877,7 @@ class event_search extends class_base
 				elseif($search_p2)
 				{
 					$all_projects2 = new object_list(array(
-						"parent" => array($formconfig["project2"]["rootnode"]),
+						"parent" => $p_rn2,
 						"class_id" => array(CL_PROJECT, CL_PLANNER),
 					));
 					$parx2 = $par2 = $all_projects2->ids();
@@ -1382,13 +1462,14 @@ class event_search extends class_base
 
 	function _get_project_choices($parent)
 	{
-		if (!is_oid($parent))
+		if (!is_oid($parent) || !$this->can("view", $parent))
 		{
 			return array();
 		};
 		$ol = new object_list(array(
 			"parent" => $parent,
 			"class_id" => array(CL_PROJECT, CL_PLANNER),
+			"sort_by" => "objects.jrk",
 		));
 		return $ol->names();
 
