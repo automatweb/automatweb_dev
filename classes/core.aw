@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.23 2001/06/09 00:54:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.24 2001/06/13 03:35:24 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -907,6 +907,7 @@ class core extends db_connector
 		else
 		{
 			do { 
+				$section = (int)$section;
 				$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_lead LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 				$row = $this->db_next();
 				$template = $row["filename"];
@@ -933,6 +934,7 @@ class core extends db_connector
 			$section = $obj["parent"];
 
 		do { 
+			$section = (int)$section;
 			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_view LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section", "filename");
 			$row = $this->db_next();
 			$template = $row["filename"];
@@ -949,6 +951,7 @@ class core extends db_connector
 	function get_edit_template($section)
 	{
 		do { 
+			$section = (int)$section;
 			$this->db_query("SELECT template.filename AS filename, objects.parent AS parent FROM menu LEFT JOIN template ON template.id = menu.tpl_edit LEFT JOIN objects ON objects.oid = menu.id WHERE menu.id = $section");
 			$row = $this->db_next();
 			$template = $row["filename"];

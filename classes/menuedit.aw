@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.19 2001/06/05 17:40:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -133,6 +133,11 @@ classload("cache","validator","defs");
 			{
 				$cp[] = $GLOBALS["act_per_id"];
 			};
+			if ($GLOBALS["page"])
+			{
+				$cp[] = $GLOBALS["page"];
+			}
+			$cp[] = $GLOBALS["lang_id"];
 		
 			// format=rss ntx
 			if (!($res = $this->cache->get($section,$cp)) || $params["format"])
@@ -260,7 +265,9 @@ classload("cache","validator","defs");
 			if ($obj["class_id"] == CL_PSEUDO && (($sh_id = $this->is_shop($section)) > 0) && $text == "")
 			{
 				// tshekime et kas 2kki on selle menyy all pood. kui on, siis joonistame selle.
-				$this->vars(array("doc_content" => $this->do_shop($section,$sh_id)));
+				$doc_c = $this->show_documents($section,$docid);
+				$shp_c = $this->do_shop($section,$sh_id);
+				$this->vars(array("doc_content" => ($doc_c.$shp_c)));
 				$this->read_template($template);
 			}
 			else
@@ -632,6 +639,7 @@ classload("cache","validator","defs");
 				"sstring" => $sstring,
 				"uid" => $GLOBALS["uid"], 
 				"date" => $this->time2date(time(), 2),
+				"date2" => $this->time2date(time(), 8),
 				"PRINTANDSEND" => $PRINTANDSEND,
 				"CHANGEDOCUMENT" => $this->active_doc ? $this->parse("CHANGEDOCUMENT") : ""
 			));
@@ -1155,7 +1163,7 @@ classload("cache","validator","defs");
 			$mpr = array();
 			$this->listacl("objects.status != 0 AND objects.class_id = ".CL_PSEUDO);
 			// listib koik menyyd ja paigutab need arraysse
-			$this->db_listall("objects.status != 0",true);
+			$this->db_listall("objects.status != 0 AND menu.type != ".MN_FORM_ELEMENT,true);
 			while ($row = $this->db_next())
 			{
 				if ($this->can("view",$row["oid"]))
@@ -2341,11 +2349,14 @@ classload("cache","validator","defs");
 					$sa = unserialize($menu["seealso"]);	// v6tame vana
 					$sa[$lang_id] = array();							// nullime sealt k2esoleva keele 2ra
 
+					$tsa = array();
 					reset($seealso);
 					while (list(,$sid) = each($seealso))
 					{
-						$sa[$lang_id][$sid] = $sid;					// ja paneme uued itemid asemele
+						$tsa[$sid] = $sa_ord[$sid];					// ja paneme uued itemid asemele
 					}
+					asort($tsa,SORT_NUMERIC);
+					$sa[$lang_id] = $tsa;
 					$seealso = serialize($sa);
 				}
 				else
@@ -2754,10 +2765,27 @@ classload("cache","validator","defs");
 			classload("periods");
 			$dbp = new db_periods($GLOBALS["per_oid"]);
 
-			$sa = unserialize($row["seealso"]);
 			$oblist = $ob->get_list();
+
+			$sa = unserialize($row["seealso"]);
+			if (is_array($sa))
+			{
+				$sar = $sa[$GLOBALS["lang_id"]];
+				$rsar = array();
+				foreach($sar as $said => $saord)
+				{
+					$this->vars(array(
+						"sa_name" => $oblist[$said],
+						"sa_id" => $said,
+						"sa_ord" => $saord
+					));
+					$sal.=$this->parse("SA_ITEM");
+					$rsar[$said] = $said;
+				}
+			}
 			$this->vars(array("parent"			=> $row["parent"], 
-												"seealso"			=> $this->multiple_option_list($sa[$GLOBALS["lang_id"]],$oblist),
+												"SA_ITEM"			=> $sal,
+												"seealso"			=> $this->multiple_option_list($rsar,$oblist),
 												"ADMIN_FEATURE"	=> $af,
 												"name"				=> $row["name"], 
 												"number"			=> $row["number"],
@@ -2851,7 +2879,7 @@ classload("cache","validator","defs");
 			reset($ch);
 			while (list(,$row) = each($ch))
 			{
-				$path="<a target='list' href='menuedit_right.$ext?parent=".$row[oid]."&period=".$period."'>".$row[name]."</a> / ".$path;
+				$path="<a target='list' href='menuedit_right.$ext?parent=".$row["oid"]."&period=".$period."'>".strip_tags($row["name"])."</a> / ".$path;
 			}
 
 			if ($set)
@@ -3134,7 +3162,7 @@ classload("cache","validator","defs");
 				$this->vars(array(
 					"target" => $samenu["target"] ? "target=\"blank\"" : "",
 					"link" => $link,
-					"text" => $samenu["name"]
+					"text" => str_replace("&nbsp;","",strip_tags($samenu["name"]))
 				));
 				$this->parse("MENU_".$name."_SEEALSO_ITEM");
 			}
@@ -3668,7 +3696,11 @@ classload("cache","validator","defs");
 		{
 			if ($show)
 			{
-				$this->vars(array("link" => "/index.".$GLOBALS["ext"]."/section=".$this->mar[$path[$i+1]][oid],"text" => $this->mar[$path[$i+1]][name], "ysection" => $this->mar[$path[$i+1]][oid]));
+				$this->vars(array(
+					"link" => "/index.".$GLOBALS["ext"]."/section=".$this->mar[$path[$i+1]]["oid"],
+					"text" => str_replace("&nbsp;","",strip_tags($this->mar[$path[$i+1]]["name"])), 
+					"ysection" => $this->mar[$path[$i+1]]["oid"]
+				));
 
 				$ya.=$this->parse("YAH_LINK");
 			}

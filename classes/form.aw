@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.19 2001/06/07 23:08:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
 // form.aw - Class for creating forms
 lc_load("form");
 global $orb_defs;
@@ -678,11 +678,17 @@ $orb_defs["form"] = "xml";
 			$images = new db_images;
 
 			$c="";
-			for ($i=0; $i < $this->arr[rows]; $i++)
+			for ($i=0; $i < $this->arr["rows"]; $i++)
 			{
 				$html=$this->mk_row_html($i,&$images,$prefix,$elvalues);
 				$this->vars(array("COL" => $html));
 				$c.=$this->parse("LINE");
+
+				// generate all entry checking html
+				for ($a = 0; $a < $this->arr["cols"]; $a++)
+				{
+					$chk_js .= $this->arr["contents"][$i][$a]->gen_check_html();
+				}
 			}
 
 			$pic = "";
@@ -732,7 +738,9 @@ $orb_defs["form"] = "xml";
 												"action"						=> $action,
 												"form_action"				=> $form_action,
 												"submit_text"				=> $this->arr[submit_text],
-												"reforb"						=> $reforb));
+												"reforb"						=> $reforb,
+												"checks"						=> $chk_js
+			));
 			$st = $this->parse();				
 			return $st;
 		}
@@ -966,7 +974,14 @@ $orb_defs["form"] = "xml";
 			}
 			else
 			{
-				$this->read_template("show_user.tpl");
+				if ($no_html)
+				{
+					$this->read_template("show_user_nohtml.tpl");
+				}
+				else
+				{
+					$this->read_template("show_user.tpl");
+				}
 			}
 			$this->add_hit($entry_id);
 			$this->add_hit($op_id);
@@ -1003,13 +1018,20 @@ $orb_defs["form"] = "xml";
 						}
 					}
 
-					if ($style_id != 0)
+					if ($no_html)
 					{
-						$html.= $t_style->get_cell_begin_str($style_id,$arr[colspan],$arr[rowspan]).$chtml.$t_style->get_cell_end_str($style_id)."</td>";
+						$html.=$chtml." ";
 					}
 					else
 					{
-						$html.= "<td colspan=\"".$arr[colspan]."\" rowspan=\"".$arr[rowspan]."\">".$chtml."</td>";
+						if ($style_id != 0)
+						{
+							$html.= $t_style->get_cell_begin_str($style_id,$arr[colspan],$arr[rowspan]).$chtml.$t_style->get_cell_end_str($style_id)."</td>";
+						}
+						else
+						{
+							$html.= "<td colspan=\"".$arr[colspan]."\" rowspan=\"".$arr[rowspan]."\">".$chtml."</td>";
+						}
 					}
 				}
 				$this->vars(array("COL" => $html));

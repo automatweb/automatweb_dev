@@ -129,7 +129,13 @@ load_vcl("date_edit");
 			
 			$dt="";
 			if ($this->arr["type"] == "textbox")
+			{
+				$this->vars(array(
+					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
+					"must_error" => $this->arr["must_error"]
+				));
 				$dt = $this->parse("DEFAULT_TEXT");
+			}
 
 			$dc="";
 			if ($this->arr["type"] == "checkbox")
@@ -278,6 +284,14 @@ load_vcl("date_edit");
 				$this->arr["length"] = $$var;
 			}
 
+			if ($this->arr[type] == "textbox")
+			{
+				$var=$base."_must_fill";
+				$this->arr["must_fill"] = $$var;
+				$var=$base."_must_error";
+				$this->arr["must_error"] = $$var;
+			}
+
 			if ($this->arr[type] == 'file')
 			{
 				$var=$base."_filetype";
@@ -422,7 +436,7 @@ load_vcl("date_edit");
 			}
 
 			if ($this->arr["type"] == "submit")
-				$html = "<input type='submit' VALUE='".$this->arr["button_text"]."'>";
+				$html = "<input type='submit' VALUE='".$this->arr["button_text"]."' onClick=\"return check_submit();\">";
 
 			if ($this->arr["type"] == "reset")
 				$html = "<input type='reset' VALUE='".$this->arr["button_text"]."'>";
@@ -519,6 +533,14 @@ load_vcl("date_edit");
 			if ($this->arr["type"] == "radiobutton")
 			{
 				$var = $prefix."radio_group_".$this->arr["group"];
+			}
+			else
+			if ($this->arr["type"] == "multiple")
+			{
+				$var = $prefix.$this->id;
+				global $$var;
+				$entry[$this->id] = join(",",$$var);
+				return;
 			}
 			else
 			if ($this->arr["type"] == "date")

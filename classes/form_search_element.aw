@@ -37,7 +37,16 @@ define(FORM_SELEMENT_LOADED,1);
 												 GROUP BY objects.oid");
 				while ($row = $this->db_next())
 				{
-					$form = unserialize($row[content]);
+					if (substr($row["content"],0,14) == "<?xml version=")
+					{
+						classload("xml");
+						$x = new xml;
+						$form = $x->xml_unserialize(array("source" => $row["content"]));
+					}
+					else
+					{
+						$form = unserialize($row[content]);
+					}
 					$fid = $row[id];
 					$formcache[$row[id]] = array("id" => $row[id], "name" => $row[name], "content" => $form);
 

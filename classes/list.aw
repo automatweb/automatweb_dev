@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.9 2001/06/10 22:45:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/list.aw,v 2.10 2001/06/13 03:35:24 kristo Exp $
 class mlist extends aw_template
 {
 	function mlist($id = 0)
@@ -50,7 +50,7 @@ class mlist extends aw_template
 			$s.= $this->parse("SELLINE");
 		}
 		$p = "";
-		if ($this->db_fetch_field("SELECT count(*) as cnt from ml_users WHERE is_cut = 1 OR is_copied = 1", "cnt") > 0 && $this->acl->get(can_add))
+		if ($this->db_fetch_field("SELECT count(*) as cnt from ml_users WHERE is_cut = 1 OR is_copied = 1", "cnt") > 0)
 			$p = $this->parse("PASTE");
 
 		$ua = $this->parse("U_ADD");

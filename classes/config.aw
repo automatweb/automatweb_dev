@@ -1,5 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.9 2001/05/31 13:38:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.10 2001/06/13 03:35:24 kristo Exp $
+
+global $orb_defs;
+$orb_defs["config"] = "xml";
+
 class db_config extends aw_template 
 {
 	function db_config() 
@@ -150,11 +154,15 @@ class db_config extends aw_template
 					forms.subtype AS subtype,
 					forms.grp AS grp,
 					forms.j_order as j_order,
-					forms.j_name AS j_name
+					forms.j_name AS j_name,
+					forms.j_op AS j_op
 				FROM forms
 				LEFT JOIN objects ON objects.oid = forms.id
 				WHERE objects.status != 0 AND forms.type = ".FTYPE_ENTRY);
-					
+			
+		classload("form");
+		$f = new form;
+		$ops = $f->get_op_list();
 		while ($row = $this->db_next())
 		{
 			$this->vars(array(
@@ -163,18 +171,23 @@ class db_config extends aw_template
 				"form_comment"	=> $row["comment"],
 				"checked" 	=> ($row["subtype"] == FSUBTYPE_JOIN) ? "checked" : "",
 				"group"		=> $row["grp"],
-				"change"	=> $this->mk_orb("change", array("id" => $row[oid]), "form"),
-				"name"		=> $row[j_name],
-				"order"		=> $row[j_order]));
+				"change"	=> $this->mk_orb("change", array("id" => $row["oid"]), "form"),
+				"name"		=> $row["j_name"],
+				"order"		=> $row["j_order"],
+				"jops"			=> $this->picker($row["j_op"],$ops[$row["oid"]])
+			));
 			if ($row["subtype"] == FSUBTYPE_JOIN)
 			{
-				$this->vars(array("GROUP" => $this->parse("GROUP"),
-													"ORDER" => $this->parse("ORDER"),
-													"NAME"	=> $this->parse("NAME")));
+				$this->vars(array(
+					"GROUP" => $this->parse("GROUP"),
+					"ORDER" => $this->parse("ORDER"),
+					"NAME"	=> $this->parse("NAME"),
+					"OPS"	=> $this->parse("OPS")
+				));
 			}
 			else
 			{
-				$this->vars(array("GROUP" => "","NAME" => "", "ORDER" => ""));
+				$this->vars(array("GROUP" => "","NAME" => "", "ORDER" => "","OPS" => ""));
 			}
 			$l.=$this->parse("LINE");
 		}
@@ -195,11 +208,12 @@ class db_config extends aw_template
 			reset($sf);
 			// fid-id on vormide id-d
 			// fg on vormide grupid
+			// fp on vormide outputid
 			$this->quote($fg);
 			while(list($fid,$v) = each($sf))
 			{
-				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s' WHERE id = $fid",
-					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid]);
+				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s', j_op = '%s' WHERE id = $fid",
+					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid],$fp[$fid]);
 				$this->db_query($q);
 			}
 		}
@@ -859,28 +873,6 @@ class db_config extends aw_template
 		return $this->parse();
 	}
 
-	function save_jf($arr)
-	{
-		extract($arr);
-
-		// k6igepealt v6tame k6ik maha
-		$this->db_query("UPDATE forms SET subtype = 0, grp = '' WHERE subtype = ".FSUBTYPE_JOIN);
-
-		if (is_array($sf))
-		{
-			reset($sf);
-			// fid-id on vormide id-d
-			// fg on vormide grupid
-			$this->quote($fg);
-			while(list($fid,$v) = each($sf))
-			{
-				$q = sprintf("UPDATE forms SET subtype = '%s', grp = '%s',j_name = '%s', j_order='%s' WHERE id = $fid",
-					FSUBTYPE_JOIN,$fg[$fid],$fn[$fid],$fo[$fid]);
-				$this->db_query($q);
-			}
-		}
-	}
-
 	function submit_loaginaddr($arr)
 	{
 		extract($arr);
@@ -888,4 +880,40 @@ class db_config extends aw_template
 		$this->set_simple_config("orb_err_mustlogin",$orb_err_mustlogin);
 	}
 };
+
+// urk. orb requires class name to be == file name
+class config extends db_config
+{
+	function config()
+	{
+		$this->db_config();
+	}
+
+	function join_mail($arr)
+	{
+		$this->read_template("join_mail.tpl");
+
+		$this->vars(array(
+			"join_mail" => $this->get_simple_config("join_mail"),
+			"pwd_mail" => $this->get_simple_config("remind_pwd_mail"),
+			"join_mail_subj" => $this->get_simple_config("join_mail_subj"),
+			"pwd_mail_subj" => $this->get_simple_config("remind_pwd_mail_subj"),
+			"reforb" => $this->mk_reforb("submit_join_mail", array())
+		));
+
+		return $this->parse();
+	}
+
+	function submit_join_mail($arr)
+	{
+		extract($arr);
+
+		$this->set_simple_config("join_mail",$join_mail);
+		$this->set_simple_config("remind_pwd_mail",$pwd_mail);
+		$this->set_simple_config("join_mail_subj",$join_mail_subj);
+		$this->set_simple_config("remind_pwd_mail_subj",$pwd_mail_subj);
+
+		return $this->mk_orb("join_mail", array());
+	}
+}
 ?>

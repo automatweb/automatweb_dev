@@ -22,6 +22,18 @@ class form_element extends aw_template
 		$this->row = $row;
 	}
 
+	function gen_check_html()
+	{
+		if ($this->arr["type"] == "textbox" && $this->arr["must_fill"] == 1)
+		{
+			$str = "for (i=0; i < document.fm_".$this->fid.".elements.length; i++) ";
+			$str .= "{ if (document.fm_".$this->fid.".elements[i].name == \"";
+			$str .=$this->id;
+			$str .= "\" && document.fm_".$this->fid.".elements[i].value == \"\")";
+			return  $str."{ alert(\"".$this->arr["must_error"]."\");return false; }}\n";
+		}
+		return "";
+	}
 	function get_text()		{	return $this->arr[text]; }
 	function get_el_name()		{	return $this->arr[name]; }
 	function get_style()	{	return $this->arr[style]; }

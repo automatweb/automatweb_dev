@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.20 2001/06/12 23:38:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.21 2001/06/13 03:35:24 kristo Exp $
 // fuck, this is such a mess
 // planner.aw - päevaplaneerija
 // CL_CAL_EVENT on kalendri event
@@ -193,7 +193,7 @@ class planner extends calendar {
 		};
 		$q = "SELECT * FROM planner
 			LEFT JOIN objects ON (planner.id = objects.oid)
-			WHERE $supp  AND objects.status = 2 AND ((start >= '$di[start]' AND start <= '$di[end]') $rinlist) 
+			WHERE objects.status = 2 AND ((start >= '$di[start]' AND start <= '$di[end]')) 
 			ORDER BY start";
 		$this->db_query($q);
 		while($row = $this->db_next())
@@ -757,9 +757,6 @@ class planner extends calendar {
 				"title" => $row["title"],
 				"wd" => $rep["pwhen"],
 				"caption" => $caption,
-				"rep_type" => $row["rep_type"],
-				"rep_dur" => $row["rep_dur"],
-				"rep_forever" => $row["rep_forever"],
 				"rep_until" => $row["rep_until"],
 				"repcheck" => ($rc > 0) ? "checked" : "",
 				"color" => $this->picker($row["color"],$colors),
@@ -1036,10 +1033,6 @@ class planner extends calendar {
 					color = '$color',
 					place = '$place',
 					private = '$private',
-					rep_type = '$rep_type',
-					rep_dur = '$rep_dur',
-					rep_forever = '$rep_forever',
-					rep_until = '$rep_until',
 					reminder = '$reminder',
 					description = '$description'
 				WHERE id = '$id'";

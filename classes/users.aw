@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.5 2001/05/21 18:03:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.6 2001/06/13 03:35:24 kristo Exp $
 classload("users_user","config","form");
 
 load_vcl("table");
@@ -517,8 +517,22 @@ class users extends users_user
 			$this->add(array("join_form_entry" => $jfs, "uid" => $add_state[uid], "password" => $add_state[pass],"email" => $add_state[email], "join_grp" => $join_grp));
 			$this->update_dyn_user($add_state[uid]);
 
+			global $last_join_uid;
+			$last_join_uid = $add_state["uid"];
+			session_register("last_join_uid");
+
+			// send him some email as well
+			classload("config");
+			$c = new config;
+			$mail = $c->get_simple_config("join_mail");
+			$mail = str_replace("#parool#", $add_state["pass"],$mail);
+			$mail = str_replace("#kasutaja#", $add_state["uid"],$mail);
+			$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true))),$mail);
+
+			mail($add_state["email"],$c->get_simple_config("join_mail_subj"),$mail,"From: ".MAIL_FROM);
 			$add_state = "";
 			$GLOBALS["session_filled_forms"] = array();
+
 			return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after_join;
 		}
 		else
@@ -587,7 +601,7 @@ class users extends users_user
 			return false;
 		}
 
-		if (!$this->check_chars($a_uid))
+		if (!is_valid("uid",$a_uid))
 		{
 			$add_state[error] = "Kasutajanimes tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
 			return false;
@@ -599,7 +613,7 @@ class users extends users_user
 			return false;
 		}
 
-		if (!$this->check_chars($pass))
+		if (!is_valid("password", $pass))
 		{
 			$add_state[error] = "Passwordis tohib kasutada ainult t&auml;hti, numbreid ja allkriipsu.";
 		return false;
@@ -785,6 +799,98 @@ class users extends users_user
 
 		$t = new form;
 		return $t->gen_preview(array("id" => $fid, "entry_id" => $fs[$fid], "extraids" => array("redirect_after" => $GLOBALS["baseurl"]."/?special=2&fid=$fid")));
+	}
+
+	////
+	// !shows the data the user entered when he joined if the user is logged in
+	// if he is not logged in, but just joined, then the session contains the variable $last_join_uid and then that will be used
+	// the for outputs for the data will be taken from config where when selecting join forms the user can select the output for all join forms
+	// paramtaters:
+	//  nohtml - if true, the output generated can be sent to an email
+	//  user - the username for whom to show the data
+	function show_join_data($arr)
+	{
+		extract($arr);
+		global $uid,$last_join_uid;
+		$uuid = $uid;
+		if ($uuid == "")
+		{
+			$uuid = $user;
+		}
+		if ($uuid == "")
+		{
+			$uuid = $last_join_uid;
+		}
+		if ($uuid == "")
+		{
+			return "";
+		}
+
+		// now get all the join forms for thew users join group and show dem!
+		$ops = array();
+		$this->db_query("SELECT id,j_op FROM forms WHERE subtype = ".FSUBTYPE_JOIN);
+		while ($row = $this->db_next())
+		{
+			$ops[$row["id"]] = $row["j_op"];
+		}
+
+		$udata = $this->get_user(array("uid" => $uuid));
+		$jf = unserialize($udata["join_form_entry"]);
+		if (is_array($jf))
+		{
+			$f = new form();
+			foreach($jf as $joinform => $joinentry)
+			{
+				$ret.=$f->show(array("id" => $joinform,"entry_id" => $joinentry, "op_id" => $ops[$joinform],"no_html" => $nohtml));
+			};
+		};
+		if ($nohtml)
+		{
+			$this->read_template("show_join_data_nohtml.tpl");
+		}
+		else
+		{
+			$this->read_template("show_join_data.tpl");
+		}
+		$this->vars(array(
+			"username" => $uuid,
+			"password" => $udata["password"]
+		));
+		$ret.=$this->parse();
+		return $ret;
+	}
+
+	////
+	// !shows the form where the user can enter his/her password and then sends a pre-defined email to the user
+	function pwd_remind($arr)
+	{
+		extract($arr);
+		$this->read_template("pwd_remind_form.tpl");
+
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("submit_pwd_remind", array("after" => $matches[1]))
+		));
+
+		return $this->parse();
+	}
+
+	////
+	// !this actually sends the reminder-email
+	function submit_pwd_remind($arr)
+	{
+		extract($arr);
+		$udata = $this->fetch($username);
+
+		classload("config");
+		$c = new config;
+		$mail = $c->get_simple_config("remind_pwd_mail");
+		$mail = str_replace("#parool#", $udata["password"],$mail);
+		$mail = str_replace("#kasutaja#", $username,$mail);
+		$mail = str_replace("#liituja_andmed#", str_replace("\n\n","\n",$this->show_join_data(array("nohtml" => true,"user" => $username))),$mail);
+
+		mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj"),$mail,"From: ".MAIL_FROM);
+
+		return $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$after;
 	}
 }
 ?>

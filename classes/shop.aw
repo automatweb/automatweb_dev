@@ -123,19 +123,30 @@ class shop extends aw_template
 
 		// we must detect if we are outside of the shop menu hierarchy
 		// make yah link
+		global $baseurl,$ext;
 		$p = $parent;
-		$op = $this->get_object($p);
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid=$p");
+		$op = $this->db_next();
 		while ($p != $s["root_menu"] && $p)
 		{
+			if ($op["link"] != "")
+			{
+				$link = $op["link"];
+			}
+			else
+			{
+				$link = $baseurl."/";
+				$link .= ($op["alias"] != "") ? $op["alias"] : "index." . $ext . "/section=" . $op["oid"];
+			}
 			$this->vars(array(
 				"id" => $op["oid"],
 				"name" => $op["name"],
-//				"yah_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $op["oid"]))
-				"yah_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$op["oid"]
+				"yah_link" => $link
 			));
 			$y = $this->parse("YAH").$y;
 			$p = $op["parent"];
-			$op = $this->get_object($p);
+			$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE oid=$p");
+			$op = $this->db_next();
 		}
 
 		if ($p != $s["root_menu"])
@@ -146,14 +157,22 @@ class shop extends aw_template
 		}
 
 		// some of the shop categories
-		$this->db_query("SELECT objects.name,objects.oid FROM objects WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
+		$this->db_query("SELECT objects.*,menu.* FROM objects LEFT JOIN menu ON menu.id = objects.oid WHERE parent = $parent AND class_id = ".CL_PSEUDO." AND status = 2 ");
 		while ($row = $this->db_next())
 		{
+			if ($row["link"] != "")
+			{
+				$link = $row["link"];
+			}
+			else
+			{
+				$link = $baseurl."/";
+				$link .= ($row["alias"] != "") ? $row["alias"] : "index." . $ext . "/section=" . $row["oid"];
+			}
 			$this->vars(array(
 				"name" => $row["name"], 
 				"id" => $row["oid"],
-//				"cat_link" => $this->mk_my_orb("show", array("id" => $shop, "section" => $row["oid"]))
-				"cat_link" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$row["oid"]
+				"cat_link" => $link
 			));
 			$this->shop_menus.=$this->parse("CAT");
 		}
@@ -282,7 +301,7 @@ class shop extends aw_template
 			"shop_id" => $shop_id,
 			"section" => $section,
 			"order"	=> $this->mk_site_orb(array("action" => "order", "shop_id" => $shop_id, "section" => $section)),
-			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id)),
+			"order_hist" => $this->mk_my_orb("order_history", array("id" => $shop_id,"section" => $section)),
 			"t_price" => $t_price,
 			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
 		));
@@ -946,8 +965,8 @@ class shop extends aw_template
 				"user" => $row["user"],
 				"ip" => $row["ip"],
 				"price" => $row["price"],
-				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"])),
-				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"]))
+				"view"	=> $this->mk_my_orb("view_order", array("shop" => $id, "order_id" => $row["id"],"section" => $section)),
+				"fill"	=> $this->mk_my_orb("mark_order_filled", array("shop" => $id, "order_id" => $row["id"],"section" => $section))
 			));
 			$is_f = "";
 			if ($row["status"] != ORD_FILLED)
@@ -961,6 +980,9 @@ class shop extends aw_template
 			$this->vars(array("IS_F" => $is_f,"FILLED" => ""));
 			$this->parse("LINE");
 		}
+		$this->vars(array(
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+		));
 		return $this->parse();
 	}
 
@@ -970,7 +992,7 @@ class shop extends aw_template
 	{
 		extract($arr);
 		$this->db_query("UPDATE orders SET status = ".ORD_FILLED." WHERE id = $order_id");
-		header("Location: ".$this->mk_orb("admin_orders", array("id" => $shop)));
+		header("Location: ".$this->mk_orb("admin_orders", array("id" => $shop,"section" => $section)));
 		die();
 	}
 
@@ -980,6 +1002,9 @@ class shop extends aw_template
 	{
 		extract($arr);
 		$this->read_template("view_order.tpl");
+		$this->vars(array(
+			"to_shop" => $GLOBALS["baseurl"]."/index.".$GLOBALS["ext"]."/section=".$section
+		));
 		$sh = $this->get($shop);
 		$this->mk_path($sh["parent"], "<a href='".$this->mk_orb("change", array("id" => $id))."'>Muuda poodi</a> / <a href='".$this->mk_orb("admin_orders", array("id" => $shop))."'>Tellimused</a> / Vaata tellimust");
 

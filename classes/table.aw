@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.2 2001/06/05 12:08:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/table.aw,v 2.3 2001/06/13 03:35:24 kristo Exp $
 // table.aw - tabelite haldus
 
 global $orb_defs;
@@ -65,7 +65,19 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 							));
 			};
 			$t = $this->tablealiases[$matches[3] - 1]; 
-			$replacement = $this->show(array("id" => $t["target"]));
+			if ($matches[4] == "v")
+			{
+				$align = "left";
+			}
+			if ($matches[4] == "k")
+			{
+				$align = "center";
+			}
+			if ($matches[4] == "p")
+			{
+				$align = "right";
+			}
+			$replacement = $this->show(array("id" => $t["target"],"align" => $align));
 			return $replacement;
 		}
 		
@@ -923,16 +935,20 @@ $orb_defs["table"] = array("change"						=> array("function"	=> "gen_admin_html"
 				$table.= $header_style ? $stc->get_text_begin_str($header_style).$header.$stc->get_text_end_str($header_style) : $header;
 			}
 
+			if ($arr["align"] != "")
+			{
+				$al = "align=\"".$arr["align"]."\"";
+			}
 			if ($this->arr["table_style"])
 			{
 				$frow_style = $stc->get_frow_style($this->arr["table_style"]);
 				$fcol_style = $stc->get_fcol_style($this->arr["table_style"]);
 				$num_frows = $stc->get_num_frows($this->arr["table_style"]);
 				$num_fcols = $stc->get_num_fcols($this->arr["table_style"]);
-				$table.= "<table ".$stc->get_table_string($this->arr[table_style]).">";
+				$table.= "<table $al ".$stc->get_table_string($this->arr[table_style]).">";
 			}
 			else
-				$table.= "<table>";
+				$table.= "<table $al>";
 
 			for ($row=0; $row < $this->arr[rows]; $row++)
 			{

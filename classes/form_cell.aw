@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.5 2001/05/29 16:44:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.6 2001/06/13 03:35:24 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -438,6 +438,14 @@ class form_cell extends aw_template
 				$form->arr["elements"][$this->row][$this->col][$this->arr[$i]->get_id()] = $this->arr[$i]->get_props();
 			}
 		}
+	}
+
+	function gen_check_html()
+	{
+		$ret = "";
+		for ($i=0; $i < $this->cnt; $i++)
+			$ret.=$this->arr[$i] -> gen_check_html();
+		return $ret;
 	}
 };
 ?>

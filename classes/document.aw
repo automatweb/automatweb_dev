@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.19 2001/06/09 00:54:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.20 2001/06/13 03:35:24 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -540,6 +540,28 @@ class document extends aw_template
 					"reg_id" => $mp,
 					"function" => "parse_aliases",
 					));
+
+		// liituja info. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/(#)liituja_andmed(#)/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "users",
+					"reg_id" => $mp,
+					"function" => "show_join_data",
+					));
+
+		// parooli meeldetuletus. bijaatch!
+		$mp = $this->register_parser(array(
+					"reg" => "/#parooli_meeldetuletus edasi=\"(.*)\"#/i",
+					));
+
+		$this->register_sub_parser(array(
+					"class" => "users",
+					"reg_id" => $mp,
+					"function" => "pwd_remind",
+					));
 	
 
 		if ($notitleimg != 1)
@@ -571,10 +593,10 @@ class document extends aw_template
 		
 		if (!$doc["nobreaks"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 			{
-				$doc[content] = str_replace("\r\n","<br>",$doc[content]);
+				$doc["content"] = str_replace("\r\n","<br>",$doc["content"]);
 			}
 		
-		$doc[content] = str_replace("\n","",$doc[content]);
+		$doc["content"] = str_replace("\n","",$doc["content"]);
 //		
 		if ($doc[photos])
 		{
@@ -604,7 +626,7 @@ class document extends aw_template
 				$this->vars(array("photos" => $author));
 			 	$pb = $this->parse("pblock");
 			  } else {
-				$this->vars(array("photos" => $doc[photos]));
+				$this->vars(array("photos" => $doc["photos"]));
 			 	$pb = $this->parse("pblock");
 			};
 		//		};
@@ -770,8 +792,6 @@ class document extends aw_template
 					"title_link"  => ($doc["link_text"] != "" ? $doc["link_text"] : $GLOBALS["doc_file"]."section=".$docid),
 
 ));
-		$this->ignore("image");
-
 		if ($leadonly > -1 && $doc[title_clickable])
 			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
 
