@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.278 2003/04/09 12:37:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.279 2003/04/10 11:57:38 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -1578,7 +1578,6 @@ class menuedit extends aw_template
 	function get_add_menu($arr)
 	{
 		extract($arr);
-		$ret = "";
 
 		$this->add_menu = array();
 		// check if any parent menus have config objects attached
@@ -1625,7 +1624,10 @@ class menuedit extends aw_template
 					if (!isset($counts[$prnt]))
 					{
 						$counts[$prnt] = $cnt;
-				 		$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
+						$this->add_menu[((int)$counts[$arr[$prnt]["parent"]])][$cnt] = array(
+							"caption" => $mn[$prnt],
+							"link" => ""
+						);
 					}
 					if (is_array($arr))
 					{
@@ -1648,7 +1650,10 @@ class menuedit extends aw_template
 								foreach($cldata as $letter => $clns)
 								{
 									$cnt++;
-									$ret .= $cnt."|".((int)$counts[$prnt])."|".$letter."||".$sep;
+									$this->add_menu[((int)$counts[$prnt])][$cnt] = array(
+										"caption" => $letter,
+										"link" => ""
+									);
 									$cp = $cnt;
 									asort($clns);
 									foreach($clns as $cl_file => $cl_name)
@@ -1656,7 +1661,10 @@ class menuedit extends aw_template
 										$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $cl_file, true, true);
 
 										$cnt++;
-										$ret .= $cnt."|".((int)$cp)."|".$cl_name."|$addlink|list".$sep;
+										$this->add_menu[((int)$cp)][$cnt] = array(
+											"caption" => $cl_name,
+											"link" => $addlink
+										);
 									}
 								}
 							}
@@ -1664,12 +1672,15 @@ class menuedit extends aw_template
 							{
 								$addlink = $this->mk_my_orb("new", array("parent" => $id, "period" => $period), $this->cfg["classes"][$meta["type"]]["file"], true, true);
 								$cnt++;
-								$ret .= $cnt."|".((int)$counts[$row["parent"]])."|".$row["name"]."|$addlink|list".$sep;
+								$this->add_menu[((int)$counts[$row["parent"]])][$cnt] = array(
+									"caption" => $row["name"],
+									"link" => $addlink
+								);
 							}
 						}
 					}
 				}
-				return $ret;
+				return;
 			}
 		}
 		return ($this->req_get_default_add_menu(0, $id, $period, 0));
