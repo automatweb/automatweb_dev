@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.124 2003/06/19 15:39:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.125 2003/06/20 14:45:48 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -63,6 +63,9 @@
 	
 	@property event_max_items type=textbox size=4 group=advanced rel=1
 	@caption Max. sündmusi 
+
+	@property use_template type=select group=advanced rel=1
+	@caption Template
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption Sündmuste kataloog
@@ -142,10 +145,10 @@ class planner extends class_base
 			
 		$this->viewtypes = array(
 				"0" => "default",
-				"1" => "päev",
-				"3" => "nädal",
-				"4" => "kuu",
-				"5" => "suhteline",
+				"1" => "day",
+				"3" => "week",
+				"4" => "month",
+				"5" => "relative",
 		);
 	}
 
@@ -237,6 +240,14 @@ class planner extends class_base
 
 			case "navtoolbar":
 				$this->gen_navtoolbar($args);
+				break;
+
+			case "use_template":
+				$data["options"] = array(
+					"" => "",
+					"show_relative.tpl" => "Suhteline",
+					"disp_day2.tpl" => "Päev",
+				);
 				break;
 
 		}
@@ -883,8 +894,6 @@ class planner extends class_base
 
 		$xdate = $d . $m . $y;
 
-		//$this->mk_path($object["parent"],"Kalender $object[name]");
-		
 		$_cal = get_instance("calendar",array("tpldir" => "planner"));
 		classload("date_calc");
 		$di = get_date_range(array(
@@ -988,6 +997,7 @@ class planner extends class_base
 		// template has to come from calendar config
 		$this->ev->actlink = $this->actlink;
 		$this->ev->start(array("tpl" => "simple_event.tpl"));
+
 
 		switch($type)
 		{
@@ -1491,41 +1501,6 @@ class planner extends class_base
 		return $diff;
 	}
 
-
-	////
-	// !Listib koik eventid mingis vahemikus
-	// date - dd-mm-yyyy
-	// delta - string, määratleb perioodi lopu
-	// clsid - klassifikaator (eventeid saab jagada kategooriatesse) (optional)
-	function _get_events_in_range($args = array())
-	{
-		extract($args);
-		$date = ($date) ? $date : $this->date;
-
-		list($d1,$m1,$y1) = split("-",$date);
-		$start = mktime(0,0,0,$m1,$d1,$y1);
-
-		if ($oid)
-		{
-			$where = " oid = '$oid'";
-		}
-		else
-		{
-			$where = " uid = '".aw_global_get("uid")."'";
-		};
-	
-		if (!$delta)
-		{
-			$delta = "now";
-		};
-
-		$end = strtotime($delta,$start) + 86399; //23h59m59s
-		$q = "SELECT * FROM planner
-			WHERE $where AND start >= '$start' AND start <= '$end'
-			ORDER BY start";
-		$this->db_query($q);
-	}
-
 	function _get_event_repeaters($args = array())
 	{
 		extract($args);
@@ -1548,46 +1523,6 @@ class planner extends class_base
 		return $res;
 	}
 
-	////
-	// !Joonistab kuu kalendri
-	function draw_mon($args = array())
-	{
-		extract($args);
-		$navigator = $this->draw_navigator(array(
-			"active" => "month",
-		));
-		list($year,$mon) = split("-",date("Y-m"));
-		$start = mktime(0,0,0,$mon,1,$year);
-		$end = mktime(23,59,59,$mon+1,0,$year);
-		$events = $this->_get_events_in_range(array(
-			"start" => $start,
-			"end" => $end,
-			"raw" => 1,
-		));
-		$contents = array();
-		$this->read_template("month.tpl");
-		while($row = $this->db_next())
-		{
-			$this->vars(array(
-				"start" => date("H:i",$row["start"]),
-				"end" => date("H:i",$row["end"]),
-				"id" => $row["id"],
-				"title" => $row["title"],
-			));
-			$contents[date("j",$row["start"])] .= $this->parse("event");
-		};
-		$content = $this->draw_month(array(
-			"year" => $year,
-			"mon" => $mon,
-			"contents" => $contents,
-		));
-		$this->read_template("month.tpl");
-		$this->vars(array(
-			"navigator" => $navigator,
-			"content" => $content,
-		));
-		return $this->parse();
-	}
 
 	function disp_relative($args = array())
 	{
@@ -1672,50 +1607,6 @@ class planner extends class_base
 			LEFT JOIN aliases AS aliases2 ON (aliases.target = aliases2.relobj_id)
 			WHERE aliases.relobj_id = '$rel_id'";
 		return $this->db_fetch_field($q,"source");
-	}
-
-	//// joonistab navigaatori
-	//
-	function draw_navigator($args = array())
-	{
-		$baseurl = $this->cfg["baseurl"];
-		$navs = array(
-			"today" => array(
-				"link" => "$baseurl/?class=planner",
-				"caption" => LC_PLANNER_TODAY,
-			),
-			"day" => array(
-				"link" => "$baseurl/?class=planner",
-				"caption" => LC_PLANNER_DAY,
-			),
-			"week" => array(
-				"link" => "$baseurl/?class=planner&action=show_week",
-				"caption" => LC_PLANNER_WEEK,
-			),
-			"month" => array(
-				"link" => "$baseurl/?class=planner&action=show_month",
-				"caption" => LC_PLANNER_MONTH,
-			),
-			"add" => array(
-				"link" => "$baseurl/?class=planner&action=add_event",
-				"caption" => LC_PLANNER_ADD_NEW,
-			),
-		);
-		load_vcl("smenu");
-		$this->tpl_init("planner");
-		$this->read_template("navigator.tpl");
-		$smenu = new smenu(array(
-			"tpl_act" => $this->templates["active_menu"],
-			"tpl_deact" => $this->templates["deactive_menu"],
-		));
-		reset($navs);
-		while(list($nav_id,$contents) = each($navs))
-		{
-			$contents["active"] = ($nav_id == $args["active"]);
-			$smenu->add_menu($contents);
-		};
-		$this->vars(array("menu" => $smenu->get_menu()));
-		return $this->parse();
 	}
 
 	////
