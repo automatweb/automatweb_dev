@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.22 2003/04/10 14:19:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.23 2003/04/11 16:37:24 duke Exp $
 // ml_list.aw - Mailing list
 /*
 	@default table=objects
@@ -7,8 +7,11 @@
 	@default method=serialize
 	@default group=general
 	
-	@property def_user_folder type=popup_objmgr clid=CL_PSEUDO editonly=1
+	@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
 	@caption Vali kataloog, kuhu pannakse uued liikmed 
+
+	@property sub_form_type type=select rel=1
+	@caption Vormi tüüp
 
 	@property user_form_conf type=objpicker clid=CL_ML_LIST_CONF
 	@caption Vali konfiguratsioon
@@ -27,8 +30,11 @@
 	
 	@groupinfo members caption=Liikmed submit=no
 	@classinfo syslog_type=ST_MAILINGLIST
+	@classinfo relationmgr=yes
 	
 */
+define("RELTYPE_MEMBER_PARENT",1);
+
 
 class ml_list extends class_base
 {
@@ -43,6 +49,14 @@ class ml_list extends class_base
 		$this->dbconf=get_instance("config");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 	}
+
+	function callback_get_rel_types()
+        {
+                return array(
+                        RELTYPE_MEMBER_PARENT => "listi liikmete kataloog",
+                );
+        }
+
 
 	function get_property($args = array())
 	{
@@ -75,6 +89,12 @@ class ml_list extends class_base
 					}
 				}
 				$data["options"] = $fl;
+				break;
+			case "sub_form_type":
+				$data["options"] = array(
+					"0" => "liitumine",
+					"1" => "lahkumine",
+				);
 				break;
 
 			case "member_list":
@@ -822,7 +842,8 @@ class ml_list extends class_base
 	function parse_alias($args = array())
 	{
 		$tobj = $this->get_object($args["alias"]["target"]);
-		$this->read_template("subscribe.tpl");
+		$tpl = ($tobj["meta"]["sub_form_type"] == 0) ? "subscribe.tpl" : "unsubscribe.tpl";
+		$this->read_template($tpl);
 		$this->vars(array(
 			"listname" => $tobj["name"],
 			"reforb" => $this->mk_reforb("subscribe",array("id" => $args["alias"]["target"],"section" => aw_global_get("section"))),
