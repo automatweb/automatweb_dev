@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.99 2005/03/10 15:28:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.100 2005/03/18 11:31:35 ahti Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -197,10 +197,7 @@ class htmlclient extends aw_template
 				{
 					if ($i == 1)
 					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "<table border='0' width='100%'><tr><td valign='top' width='200'><small>",
-						));
+						$res .= "<table border='0' width='100%'><tr><td valign='top' width='200'><small>";
 					};
 				};
 	 			$this->mod_property(&$el);
@@ -210,17 +207,11 @@ class htmlclient extends aw_template
 				{
 					if ($i == $cnt)
 					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "</td></tr></table>",
-						));
+						$res .= "</td></tr></table>";
 					}
 					else
 					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "</td><td valign='top'>",
-						));
+						$res .= "</td><td valign='top'>";
 					};
 				};
 				$i++;
@@ -542,6 +533,7 @@ class htmlclient extends aw_template
 		$tpl_vars = array(
 			"caption" => $args["caption"],
 			"element" => $this->draw_element($args),
+			"space" => $args["space"],
 		);
 		// SUBITEM - element first, caption right next to it
 		// SUBITEM2 - caption first, element right next to it

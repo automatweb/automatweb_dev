@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.69 2005/03/10 12:36:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.70 2005/03/18 11:31:35 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -23,12 +23,12 @@ class html extends aw_template
 
 		if (isset($size))
 		{
-			$sz = "size='$size' ";
+			$sz = "size=\"$size\" ";
 		};
 
 		if (!empty($class))
 		{
-			$cl = "class=\"".$class."\"";
+			$cl = "class=\"$class\"";
 		}
 
 		if (isset($multiple))
@@ -53,20 +53,29 @@ class html extends aw_template
 		$sel_array = @array_flip($sel_array);
 
 		$optstr = "";
-		if (isset($options) && is_array($options))
+		
+		// implementing a thing called optgroup -- ahz
+		foreach(safe_array($optgroup) as $key => $val)
 		{
-			while(list($k,$v) = each($options))
+			$optstr .= "<optgroup label=\"".$optgnames[$key]."\">\n";
+			foreach(safe_array($val) as $key2 => $val2)
 			{
-				$selected = isset($sel_array[$k]) ? " selected " : "";
-				$optstr .= "<option $selected value='$k'>$v</option>\n";
-			};
-		};
-
+				$selected = isset($sel_array[$key2]) ? " selected " : "";
+				$optstr .= "<option $selected value=\"$key2\">$val2</option>\n";
+			}
+			$optstr .= "</optgroup>\n";
+		}
+		
+		foreach(safe_array($options) as $k => $v)
+		{
+			$selected = isset($sel_array[$k]) ? " selected " : "";
+			$optstr .= "<option $selected value=\"$k\">$v</option>\n";
+		}
 		if (!empty($onchange))
 		{
-			$onc = 'onChange="'.$onchange.'"';
+			$onc = 'onchange="'.$onchange.'"';
 		}
-		return "<select name='$name' $cl id='$name' $sz $mz $onc" . $disabled . ">\n$optstr</select>\n";
+		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled>\n$optstr</select>\n";
 	}
 
 	////
