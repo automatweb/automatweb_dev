@@ -45,6 +45,7 @@
 			<function name="repeaters">
 				<arguments>
 					<optional name="op"/>
+					<required name="id"/>
 				</arguments>
 			</function>
 		</action>
