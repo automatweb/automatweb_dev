@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.10 2001/05/25 09:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.11 2001/05/28 16:15:25 cvs Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1551,6 +1551,12 @@ class document extends aw_template
 
 	function change($arr)
 	{
+		global $baseurl;
+		if (!$this->prog_acl("view",PRG_MENUEDIT))
+		{
+			header("Location: $baseurl");
+			exit;
+		}
 		extract($arr);
 
 		$oob = $this->get_object($id);
