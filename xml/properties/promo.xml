@@ -35,6 +35,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <trans>1</trans>
             <caption>Kasti tüüp</caption>
       </property>
       <property>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.56 2005/01/14 11:49:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.57 2005/03/08 13:24:44 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -15,7 +15,7 @@
 	@property tpl_lead type=select table=menu group=show
 	@caption Template näitamiseks
 	
-	@property type type=select table=objects field=meta method=serialize
+	@property type type=select table=objects field=meta method=serialize trans=1
 	@caption Kasti tüüp
 
 	@property tpl_edit type=select table=menu group=show
@@ -757,7 +757,7 @@ class promo extends class_base
 			{
 				if ($_GET["PROMO_DBG"] == 1)
 				{
-					echo "showing promo ".$o->name()." (".$o->id().") <br>";
+					echo "showing promo ".$o->name()." (".$o->id().")  type = ".$o->meta("type")."<br>";
 				}
 				enter_function("show_promo::".$o->name());
 				// visible. so show it
