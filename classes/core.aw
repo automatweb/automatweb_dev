@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.176 2003/04/11 16:15:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.177 2003/04/13 17:04:47 duke Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -2591,5 +2591,22 @@ class core extends db_connector
                 $this->quote($ser);
                 $q = "UPDATE objects SET meta = '$ser' WHERE oid = $oid";
                 $this->db_query($q);
-        }};
+        }
+
+	////
+	// !this takes an array and goes through it and makes another array that has as keys the values of the given array and also
+	// tha velues of the given array
+	function make_keys($arr)
+	{
+		$ret = array();
+		if (is_array($arr))
+		{
+			foreach($arr as $v)
+			{
+				$ret[$v] = $v;
+			}
+		}
+		return $ret;
+	}
+};
 ?>
