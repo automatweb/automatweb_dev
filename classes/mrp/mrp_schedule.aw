@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.3 2005/01/14 10:34:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.4 2005/01/29 12:22:34 voldemar Exp $
 // mrp_schedule.aw - Ajaplaan?
 /*
 
@@ -13,9 +13,8 @@
 */
 
 ### resource types
-define ("MRP_RESOURCE_PHYSICAL", 1);
+define ("MRP_RESOURCE_MACHINE", 1);
 define ("MRP_RESOURCE_OUTSOURCE", 2);
-define ("MRP_RESOURCE_GLOBAL_BUFFER", 3);
 
 ### states
 define ("MRP_STATUS_NEW", 1);
@@ -25,24 +24,33 @@ define ("MRP_STATUS_ABORTED", 4);
 define ("MRP_STATUS_DONE", 5);
 define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
+define ("MRP_STATUS_DELETED", 8);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
-define ("MRP_AVAIL_TIME_FIXED", 1);
-define ("MRP_AVAIL_TIME_MOVABLE", 2);
 
-define ("MRP_GLOBAL_BUFFER_PERIOD", 86400);
-
-
-
-class mrp_schedule extends class_base
+class mrp_schedule #!extends class_base
 {
-	var $schedule_start = 300; // how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
-	var $schedule_length = 2; // years (float)
-	var $resource_data = array (); // resource_id => array (global_buffer)
-	var $available_times = array (); // unscheduled "slots" for each resource.
-	var $schedule = array (); // scheduled jobs : id => starttime
+	# how many seconds from time() to start schedule, should be at least scheduler's maximum execution time (int)
+	var $schedule_start = 300;
+
+	# years (float)
+	var $schedule_length = 2;
+
+	# for each resource. resource_id1 => array (start_range1 => array (start1 => length1, ...), ...), ....
+	var $reserved_times = array ();
+
+	# scheduled jobs : resource_id1 => array (id1 => array (starttime1, length1), ...), ...
+	var $schedule = array ();
+
+	var $project_schedule = array ();
+	var $schedulable_resources = array ();
+	var $workspace_id;
+	var $jobs_table = "mrp_job";
+
+	# array (res_id => array (), ...)
+	var $resource_data = array ();
 
 	var $parameter_due_date_overdue_slope = 0.5;
 	var $parameter_due_date_overdue_intercept = 10;
@@ -50,9 +58,8 @@ class mrp_schedule extends class_base
 	var $parameter_due_date_intercept = 0.1;
 	var $parameter_priority_slope = 0.8;
 
-	var $jobs_table = "mrp_job";
-
-	var $timescale = array (
+	var $range_scale = array (//!!! tihedamalt, kogu planeeritava perioodi peale need piirkonnad teha vbl automaatselt.
+		0,
 		86400,
 		172800,
 		259200,
@@ -65,17 +72,29 @@ class mrp_schedule extends class_base
 		1814400,
 		3456000,
 		6048000,
-		12096000,// tihedamalt, kogu planeeritava perioodi peale need piirkonnad teha vbl automaatselt.!!!
+		12096000,
 	);
 
-	function mrp_schedule()
-	{
-		$this->init(array(
-			"tpldir" => "mrp/mrp_schedule",
-			"clid" => CL_MRP_SCHEDULE,
-		));
+	#! function mrp_schedule ()
+	// {
+		// $this->init (array (
+			// "tpldir" => "mrp/mrp_schedule",
+			// "clid" => CL_MRP_SCHEDULE,
+		// ));
+	// }
 
-		$workspace = obj ($arr["mrp_workspace"]);
+	function initialize ($arr)
+	{
+		if (is_oid ($arr["mrp_workspace"]))
+		{
+			$workspace = obj ($arr["mrp_workspace"]);
+			$this->workspace_id = $workspace->id ();
+		}
+		else
+		{
+			exit (VIGA1);//!!!
+		}
+
 		$this->schedule_start = time () + $this->schedule_start;
 
 		### get parameters
@@ -117,14 +136,24 @@ class mrp_schedule extends class_base
 			$timescale = $this->timescale;
 		}
 
-		array_unshift ($timescale, 0);
 		sort ($timescale, SORT_NUMERIC);
 		$this->timescale = $timescale;
-	}
 
-	function compute_due_date ()
-	{
-		$this->create ();
+		### get schedulable resources
+		$resources_folder = $workspace->prop ("resources_folder");
+		$resource_tree = new object_tree (array (
+			"parent" => $resources_folder,
+			"class_id" => array (CL_MRP_RESOURCE),
+		));
+		$resource_list = $resource_tree->to_list ();
+
+		for ($resource = $resource_list->begin (); !$resource_list->end (); $resource = $resource_list->next ())
+		{
+			if ($resource->prop ("type") == MRP_RESOURCE_MACHINE)
+			{
+				$this->schedulable_resources[] = $resource->id ();
+			}
+		}
 	}
 
 /**
@@ -133,19 +162,28 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
-		$workspace = obj ($arr["workspace"]);
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$time = gettime ();                                                                                                                                                                 ////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+		$this->initialize ($arr);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$times["initialize"] = gettime () - $time;                                                                                                                              ////////
 $time = gettime ();                                                                                                                                                                 ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		### get used resources
 		$resources = array ();
-		$this->db_query("SELECT DISTINCT `resource` FROM `" . $this->jobs_table . "` WHERE state = " . MRP_STATUS_NEW . " OR state = " . MRP_STATUS_PLANNED . " ORDER BY `resource`");
+		// $this->db_query("SELECT DISTINCT `resource` FROM `" . $this->jobs_table . "` WHERE state = " . MRP_STATUS_NEW . " OR state = " . MRP_STATUS_PLANNED . " ORDER BY `resource`");
+		$this->db_query("SELECT DISTINCT `resource` FROM `" . $this->jobs_table . "` WHERE (state = " . MRP_STATUS_NEW . " OR state = " . MRP_STATUS_PLANNED . ") AND project=139433 ORDER BY `resource`");
 
 		while ($job = $this->db_next())
 		{
-			$resources[] = $job["resource"];
+			if (in_array ($job["resource"], $schedulable_resources))
+			{
+				$resources[] = $job["resource"];
+			}
 		}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -153,39 +191,29 @@ $times["get used resources"] = gettime () - $time;                              
 $time = gettime ();                                                                                                                                                                 ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		### initiate resource free space index
+		### initiate resource reserved times index
 		if ($resources)
 		{
 			foreach ($resources as $resource_id)
 			{
-				$index = array ();
-
-				foreach ($this->timescale as $key => $start)
+				if (is_oid ($resource_id) and in_array ($resource_id, $schedulable_resources))
 				{
-					if ($this->timescale[$key + 1])
+					foreach ($this->timescale as $key => $start)
 					{
-						$length = $this->timescale[$key + 1] - $start - 1;
+						$this->reserved_times[$resource_id][$key] = array ($start => 0);
 					}
-					else
-					{
-						$length = $this->schedule_length - $this->timescale[$key];
-			}
-
-					$resource = obj ($resource_id);
-					$this->resource_data[$resource_id]["global_buffer"] = $resource->prop ("global_buffer") * 3600;
-					$this->resource_data[$resource_id]["day_counter"] = 0;
-					$this->available_times[$resource_id][$key] = array ($start => array ($length, MRP_AVAIL_TIME_FIXED));
 				}
 			}
 
-			$this->init_resource_schedules($resources);
-
-			### add locked jobs, if any
-			$this->db_query ("SELECT `starttime`,`length`,`resource` FROM `" . $this->jobs_table . "` where `state`=" . MRP_STATUS_LOCKED);
+			### reserve locked projects, if any
+			$this->db_query ("SELECT `starttime`,`length`,`resource` FROM `" . $this->jobs_table . "` where `state`=" . MRP_STATUS_LOCKED . " AND `starttime`> " . $this->schedule_start . " AND `length` > 0");
 
 			while ($job = $this->db_next ())
 			{
-				$this->reserve_time ($job["resource"], $job["starttime"], $job["length"]);//!!! mida teha lukustatud t88de puhul Gpuhvriga???
+				if (is_oid ($resource_id) and in_array ($resource_id, $schedulable_resources))
+				{
+					$this->reserve_time ($job["resource"], $job["starttime"], $job["length"]);
+				}
 			}
 		}
 
@@ -195,9 +223,11 @@ $time = gettime ();                                                             
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		### get all projects from db
-		$this->db_query ("SELECT DISTINCT mrp_case.* FROM mrp_case,aliases WHERE
+		$this->db_query ("SELECT DISTINCT mrp_case.* FROM mrp_case,aliases,objects WHERE
+		objects.oid = mrp_case.oid AND
+		objects.status != 0 AND
 		aliases.source = mrp_case.oid AND
-		aliases.target = " . $workspace->id () . " AND
+		aliases.target = " . $this->workspace_id . " AND
 		aliases.reltype = 5 AND
 		(mrp_case.state = " . MRP_STATUS_NEW . " OR mrp_case.state = " . MRP_STATUS_PLANNED .")"
 		);
@@ -221,7 +251,8 @@ $time = gettime ();                                                             
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		### get all jobs from db
-		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE `state`=" . MRP_STATUS_NEW . " OR `state`=" . MRP_STATUS_PLANNED);
+		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE (`state`=" . MRP_STATUS_NEW . " OR `state`=" . MRP_STATUS_LOCKED . " OR `state`=" . MRP_STATUS_PLANNED . ") AND `length` > 0 AND `project` != 0 AND `resource` != 0 AND `project` IS NOT NULL AND `resource` IS NOT NULL");
+		$this->db_query ("SELECT * FROM `" . $this->jobs_table . "` WHERE (`state`=" . MRP_STATUS_NEW . " OR `state`=" . MRP_STATUS_PLANNED . ") AND `length` > 0 AND `project` = 139433 AND `resource` != 0 AND `project` IS NOT NULL AND `resource` IS NOT NULL");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $times["get all jobs from db"] = gettime () - $time;                                                                                                            ////////
@@ -275,7 +306,7 @@ $time = gettime ();                                                             
 		{
 			if (!is_array ($project["jobs"]))
 			{
-				break;
+				continue;
 			}
 
 			$next_job_earliest_starttime = $projects[$project_id]["starttime"];
@@ -286,48 +317,54 @@ $sc1 = 0;                                                                       
 $sc2 = 0;                                                                                                                                                                                  ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-			foreach ($project["jobs"] as $job)
+			foreach ($project["jobs"] as $key => $job)
 			{
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $t2 = gettime ();                                                                                                                                                                     ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-				### schedule next job in line
-				// $minstart = $starttime_index[$job["oid"]] ? $starttime_index[$job["oid"]] : $next_job_earliest_starttime;
-				$minstart = $next_job_earliest_starttime;
-				$relative_minstart = $minstart - $this->schedule_start;
-				$starttime = $this->reserve_time ($job["resource"], $relative_minstart, $job["length"]);
-				$this->schedule[$job["oid"]] = $starttime;
-///!!! vaadata mis saab erinevate workflow graafide korral -- mitu eeldust88d, 1 t88 mitmele eeldust88ks
+				$job_length = $job["pre_buffer"] + $job["length"] + $job["post_buffer"];
+				$minstart = max ($next_job_earliest_starttime, $starttime_index[$job["oid"]]);
+
+				if ( (in_array ($job["resource"], $schedulable_resources)) or ($project["state"] == MRP_STATUS_NEW) )
+				{
+					### schedule next job in line
+					list ($scheduled_start, $job_length) = $this->reserve_time ($job["resource"], $minstart, $job_length);
+					$this->schedule[$job["resource"]][$job["oid"]] = $scheduled_start;
+
+					### modify earliest starttime for next unscheduled job in array.
+					$next_job_earliest_starttime = $scheduled_start + $job_length;
+				}
+				else
+				{
+					### modify earliest starttime for next unscheduled job in array.
+					$scheduled_start = $job["starttime"];
+					$next_job_earliest_starttime = max (($minstart + $job_length), ($job["starttime"] + $job_length));
+				}
+					///!!! vaadata mis saab erinevate workflow graafide korral -- mitu eeldust88d, 1 t88 mitmele eeldust88ks
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 $st2 += (gettime () - $t2);                                                                                                                                                    ////////
 $t2 = gettime ();                                                                                                                                                                     ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-				### modify earliest starttime for next unscheduled job .///!!! vaja yldse?
-				if ( !($next_job_earliest_starttime > ($starttime + $job["pre_buffer"] + $job["length"] + $job["post_buffer"])) )
-				{
-					$next_job_earliest_starttime = $starttime + $job["pre_buffer"] + $job["length"] + $job["post_buffer"];
-				}
-
 				### modify earliest starttime for unscheduled jobs next in workflow
 				if (is_array ($successor_index[$job["oid"]]))
 				{
 					foreach ($successor_index[$job["oid"]] as $successor_id)
 					{
-						if ( !($starttime_index[$successor_id] > ($starttime + $job["pre_buffer"] + $job["length"] + $job["post_buffer"])) )
+						if ($starttime_index[$successor_id] <= ($scheduled_start + $job_length))
 						{
-							$starttime_index[$successor_id] = $starttime + $job["pre_buffer"] + $job["length"] + $job["post_buffer"];
+							$starttime_index[$successor_id] = $scheduled_start + $job_length;
 						}
 					}
 				}
 
 				### set planned finishing date for project
-				if (!next($project["jobs"]))
+				if (!isset ($project["jobs"][$key + 1]))
 				{
-					$this->project_schedule[$project_id] = $starttime + $job["pre_buffer"] + $job["length"] + $job["post_buffer"];
+					$this->project_schedule[$project_id] = $scheduled_start + $job_length;
 				}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -353,44 +390,67 @@ $times["schedule jobs total"] = gettime () - $time;                             
 $time = gettime ();                                                                                                                                                                 ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+		$this->insert_unavailable_times ();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+$times["insert_unavailable_times"] = gettime () - $time;                                                                                                   ////////
+$time = gettime ();                                                                                                                                                                  ////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		$this->save ();
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// $times["save schedule data"] = gettime () - $time;                                                                                                             ////////
-// $time = gettime ();                                                                                                                                                                  ////////
+$times["save schedule data"] = gettime () - $time;                                                                                                             ////////
+echo "Valmis.";                                                                                                                                                                         ////////
 // arr ($times);                                                                                                                                                                            ////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-		echo "Valmis.";
+	}
+
+	function compute_due_date ()
+	{
+		$this->create ();
 	}
 
 	function save ()
 	{
-		foreach ($this->project_schedule as $project_id => $date)
+		if (is_array ($this->project_schedule) and is_array ($this->schedule))
 		{
-			if (!is_oid($project_id) || !$this->can("view", $project_id))
+			aw_disable_acl ();
+
+			foreach ($this->project_schedule as $project_id => $date)
 			{
-				continue;
+				if (!is_oid($project_id))
+				{
+					continue;
+				}
+
+				$project = obj ($project_id);
+				$project->set_prop ("planned_date", $date);
+				$project->set_prop ("state", MRP_STATUS_PLANNED);
+				$project->save ();
 			}
 
-			$project = obj ($project_id);
-			$project->set_prop ("planned_date", $date);
-			$project->set_prop ("state", MRP_STATUS_PLANNED);
-			$project->save ();
-		}
-
-		foreach ($this->schedule as $job_id => $starttime)
-		{
-			if (!is_oid($job_id) || !$this->can("view", $job_id))
+			foreach ($this->schedule as $resource_jobs)
 			{
-				continue;
+				foreach ($resource_jobs as $starttime => $job_data)
+				{
+					$job_id = $job_data[0];
+
+					if (!is_oid($job_id) || !(is_integer ($starttime)))
+					{
+						continue;
+					}
+
+					$job = obj ($job_id);
+					$job->set_prop ("starttime", $starttime);
+					$job->set_prop ("state", MRP_STATUS_PLANNED);
+					$job->save ();
+					echo $job_id . ":" . $starttime . "<br>";
+				}
 			}
 
-			$job = obj ($job_id);
-			$job->set_prop ("starttime", $starttime);
-			$job->set_prop ("state", MRP_STATUS_PLANNED);
-			$job->save ();
-			// echo $job_id . ":" . $starttime . "<br>";
+			aw_restore_acl ();
 		}
 	}
 
@@ -400,16 +460,14 @@ $time = gettime ();                                                             
 	{
 		$due_date1 = $project1["due_date"] - $this->schedule_start;
 		$due_date2 = $project2["due_date"] - $this->schedule_start;
-		$customer_priority1 = $project1["customer_priority"];
-		$customer_priority2 = $project2["customer_priority"];
 		$project_priority1 = $project1["project_priority"];
 		$project_priority2 = $project2["project_priority"];
-		// $L1 = $project1["project_length"];
-		// $L2 = $project2["project_length"];
+		// $length1 = $project1["project_length"];
+		// $length2 = $project2["project_length"];
 
 		### function
-		$value1 = $this->combined_priority ($due_date1, $customer_priority1, $project_priority1);
-		$value2 = $this->combined_priority ($due_date2, $customer_priority2, $project_priority2);
+		$value1 = $this->combined_priority ($due_date1, $project_priority1);
+		$value2 = $this->combined_priority ($due_date2, $project_priority2);
 
 		### return result
 		if ($value1 > $value2)
@@ -428,139 +486,198 @@ $time = gettime ();                                                             
 		return $result;
 	}
 
-	function combined_priority ($x, $y, $z)
-			{
-		$y = $y + $z;
-
+	function combined_priority ($x, $y)
+	{
 		if ($x <= 0)
-				{
+		{
 			$value = (((-1*$this->parameter_due_date_overdue_slope)*$x) + $this->parameter_due_date_overdue_intercept) + ($this->parameter_priority_slope*$y);
 		}
 		else
 		{
-			if ((($x*$this->parameter_due_date_decay)+$this->parameter_due_date_intercept) == 0)
+			if ((($x*$this->parameter_due_date_decay) + $this->parameter_due_date_intercept) == 0)
 			{
 				echo $x . "-" . $this->parameter_due_date_decay . "-" . $this->parameter_due_date_intercept;
 			}
 
-			$value = (1/(($x*$this->parameter_due_date_decay)+$this->parameter_due_date_intercept)) + ($this->parameter_priority_slope*$y);
+			$value = (1/(($x*$this->parameter_due_date_decay) + $this->parameter_due_date_intercept)) + ($this->parameter_priority_slope*$y);
 		}
 
 		return $value;
 	}
 
-	function init_resource_schedules ($resources)
-					{
-		foreach ($resources as $resource_id)
-		{
-			$resource = obj ($resource_id);
-			$i = $resource->instance ();
-			$unavailable_times = $i->get_unavailable_times ($resource);
-
-			foreach ($unavailable_times as $start => $length)
-			{
-				$this->reserve_time ($resource_id, $start, $length, true);
-					}
-				}
-			}
-
-	function reserve_time ($resource, $min_starttime, $length, $buffer = false)
+	function reserve_time ($resource_id, $start, $length)
 	{
+		### find range for given starttime
 		$reserved_time = NULL;
-		$time_range = $this->find_range ($min_starttime);
-		ksort ($this->available_times[$resource][$time_range], SORT_NUMERIC);
+		$start = ($start >= $this->schedule_start) ? ($start - $this->schedule_start) : 0;
+		$time_range = $this->find_range ($start);
 
 		### find free space with right length/start
-		while ($this->available_times[$resource][$time_range])
+		while (isset ($this->reserved_times[$resource_id][$time_range]))
 		{
-			foreach ($this->available_times[$resource][$time_range] as $slot_start => $slot_properties)
+			ksort ($this->reserved_times[$resource_id][$time_range], SORT_NUMERIC);
+			reset ($this->reserved_times[$resource_id][$time_range]);
+
+			foreach ($this->reserved_times[$resource_id][$time_range] as $start1 => $length1)
 			{
-				if ( ($slot_start <= $min_starttime) and (($slot_start + $slot_properties[0]) <= ($min_starttime + $length)) )
+				### get next reserved time start
+				$start2 = false;
+				$i = 0;
+
+				while (isset ($this->reserved_times[$resource_id][$time_range + $i]))
 				{
-					### reserve time
-					if ($space_start < $starttime)
+					if ($i > 0)
 					{
-						$reserved_time = $starttime;
+						ksort ($this->reserved_times[$resource_id][$time_range + $i], SORT_NUMERIC);
+						reset ($this->reserved_times[$resource_id][$time_range + $i]);
+
+						if (current ($this->reserved_times[$resource_id][$time_range + $i]))
+						{
+							$start2 = key ($this->reserved_times[$resource_id][$time_range + $i]);
+						}
+						else
+						{
+							next ($this->reserved_times[$resource_id][$time_range + $i]);
+							$start2 = key ($this->reserved_times[$resource_id][$time_range + $i]);
+						}
 					}
 					else
 					{
-						$reserved_time = $space_start;
-		}
+						if (next ($this->reserved_times[$resource_id][$time_range + $i]))
+						{
+							$start2 = key ($this->reserved_times[$resource_id][$time_range + $i]);
+						}
+						else
+						{
+							next ($this->reserved_times[$resource_id][$time_range + $i]);
+							$start2 = key ($this->reserved_times[$resource_id][$time_range + $i]);
+							prev ($this->reserved_times[$resource_id][$time_range + $i]);
+						}
 
-					### delete or reduce free space in array
-					$slot_size = $slot_properties[0];
-					$slot_type = $slot_properties[1];
-					$new_preceding_slot_start = $slot_start;
-					$new_preceding_slot_length = $reserved_time - $slot_start;
-					$new_succeeding_slot_start = $reserved_time + $length;
-					$new_succeeding_slot_length = ($slot_start + $slot_size) - $new_succeeding_slot_start;
-					unset ($this->available_times[$resource][$time_range][$slot_start]);
-
-					### insert new preceding & succeeding space to available_times array
-					if ($new_preceding_slot_length > 0)
-					{
-						$this->available_times[$resource][$time_range][$new_preceding_slot_start] = array ($new_preceding_slot_length, $slot_type);
-	}
-
-					if ($new_succeeding_slot_length > 0)
-	{
-						$this->available_times[$resource][$time_range][$new_succeeding_slot_start] = array ($new_succeeding_slot_length, $slot_type);
+						prev ($this->reserved_times[$resource_id][$time_range + $i]);
 					}
 
-					if (!$buffer)
+					if ($start2)
 					{
-						### reserve time for global buffer if last job in a day
-						$time = $this->schedule_start + $reserved_time;
-						$date = getdate ($time);
-						$day_start = $time - ($date["hours"] * 3600 + $date["minutes"] * 60 + $date["seconds"]);
+						break;
+					}
+					else
+					{
+						$i++;
+					}
+				}
 
-						if ( ($reserved_time + $length) >= ($day_start + $global_buffer) )
+				if (!$start2)
+				{
+					$start2 = $this->schedule_length;
+				}
+
+				$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
+
+				### check if requested space is available between start1 & start2
+				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+				{
+					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
+					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
+
+					### check if reserved starttime is in an unavailable period & make starttime correction, shifting it to the end of that unavail. period
+					if ($reserved_time < ($unavailable_start + $unavailable_length))
+					{
+						if (($unavailable_start + $unavailable_length + $length) <= $start2)
 						{
-//!!! vbl v6iks nii teha : global_buffer_length = (length/86400) * global_buffer ???// see hajutaks Gpuhvri laiali -- hea? halb ???
-							// $global_buffer_start = $day_start + (86400 - $global_buffer);
-							// $overflow = ($length + 1) - ($global_buffer_start - $reserved_time);
-							// $buffer_factor = ceil ($overflow / 86400);
-							// $global_buffer_length = $buffer_factor * $global_buffer;
-							$global_buffer_length = ceil ((($length + 1) - (($day_start + (86400 - $global_buffer)) - $reserved_time)) / 86400) * $global_buffer;
-
-							$this->reserve_time ($resource, $global_buffer_start, $global_buffer_length, true);
+							$reserved_time = ($unavailable_start + $unavailable_length);
+							list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
+						}
+						else
+						{
+							continue;
 						}
 					}
 
-//!!! kas on vaja neid relatiivseid aegu?
+					### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
+					while (($reserved_time + $unavailable_length + $length) <= $start2)
+					{
+						$length += $unavailable_length;
+						list ($unavailable_start2, $unavailable_length2) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length + 1));
+
+						if (($reserved_time + $length) <= $unavailable_start2)
+						{
+							break;
+						}
+						else
+						{
+							$unavailable_length = $unavailable_length2;
+							$unavailable_start = $unavailable_start2;
+						}
+					}
+
+					### insert reserved time into schedule
+					if ($reserved_time)
+					{
+						$this->reserved_times[$resource_id][$time_range][$reserved_time] = $length;
+					}
+					else
+					{
+						continue;
+					}
+					//!!! allhankeid tuleb planeerida ainult esimene kord, st kui state on new.
+
+					### make corrections to timerange starting-times
+					$i = 1;
+
+					while (isset ($this->reserved_times[$resource_id][$time_range + $i]))
+					{
+						$next_range_start = array_keys ($this->reserved_times[$resource_id][$time_range + $i], 0);
+						$next_range_start = reset ($next_range_start);
+
+						if ( (($reserved_time + $length) > $next_range_start) and $next_range_start )
+						{
+							unset ($this->reserved_times[$resource_id][$time_range + $i][$next_range_start]);
+							$next_range_start = $this->range_scale[$time_range + $i + 1];
+
+							if ( (($reserved_time + $length) < $next_range_start) and (($reserved_time + $length) < $start2) )
+							{
+								$this->reserved_times[$resource_id][$time_range + $i][($reserved_time + $length)] = 0;
+							}
+						}
+
+						$i++;
+					}
 
 					### return planned starttime
 					$reserved_time = $this->schedule_start + $reserved_time;
-					return $reserved_time;
+					return array ($reserved_time, $length);
 				}
+
+				next ($this->reserved_times[$resource_id][$time_range]);
 			}
 
-			### if suitable space found in this start range, move to search next range
+			### if suitable slot not found in this start range, search next range
 			$time_range++;
 		}
 
 		### ... slot not found
-		return NULL;//!!! mis teha?
-		//!!! teha et kui konfigureeritakse ajaskaala laiemaks kui sched. length siis ....
+		return VIGA2;//!!! mis teha?
 	}
+		//!!! teha et kui konfigureeritakse ajaskaala laiemaks kui sched. length siis ....
 
 	function find_range ($starttime)
 	{
 		$low = 0;
-		$high = count ($this->timescale) - 1;
+		$high = count ($this->range_scale) - 1;
 
 		while ($low <= $high)
 		{
 			$mid = floor (($low + $high) / 2);
-			$upper = ($this->timescale[$mid + 1]) ? $this->timescale[$mid + 1] : ($this->schedule_length + 1);
+			$next = isset ($this->range_scale[$mid + 1]) ? $this->range_scale[$mid + 1] : ($this->schedule_length + 1);
 
-			if ( ($starttime >= $this->timescale[$mid]) and ($starttime < $upper) )
-		{
+			if ( ($starttime >= $this->range_scale[$mid]) and ($starttime < $next) )
+			{
 				return $mid;
-		}
-		else
-		{
-				if ($starttime < $this->timescale[$mid])
+			}
+			else
+			{
+				if ($starttime < $this->range_scale[$mid])
 				{
 					$high = $mid - 1;
 				}
@@ -568,6 +685,143 @@ $time = gettime ();                                                             
 				{
 					$low = $mid + 1;
 				}
+			}
+		}
+	}
+
+	## returns start and length of next unavailable period after $start. if $start is in an unavail. period, that period's data is returned.
+	function get_closest_unavailable_period ($resource_id, $start)
+	{
+		///!!! allhankeressurssidega on mingi asi.
+		$closest_periods = array ();
+
+		### get dateinfo
+		$start += $this->schedule_start;
+		$start_dateinfo = getdate ($start);
+		$timeunit_start = $time - ($start_dateinfo["hours"] * 3600 + $start_dateinfo["minutes"] * 60 + $start_dateinfo["seconds"]);
+
+		### get closest global buffer
+		if ($start > 86400)
+		{
+			$global_buffer_start = $timeunit_start + (86400 - $global_buffer_length);
+		}
+		else
+		{
+			$global_buffer_start = $timeunit_start + 86400 + (86400 - $global_buffer_length);
+		}
+
+		$closest_periods[$global_buffer_start] = $global_buffer_start + $this->resource_data[$resource_id]["global_buffer"];
+
+		### get recurrences
+		$closest_recurrences = array ();
+
+		foreach ($this->resource_data["recurrence_definitions"] as $recurrence)
+		{
+			if ($start > $recurrence["end"])
+			{
+				$recurrence_start = $recurrence["start"] + (floor (($start - $recurrence["start"]) / $recurrence["interval"])) * $recurrence["interval"];
+				$recurrence_end = $recurrence_start + $recurrence["length"];
+
+				if ($recurrence_end <= $start)
+				{
+					$recurrence_start += $recurrence["interval"];
+				}
+
+				$closest_recurrences[$recurrence_start] = $recurrence_end;
+			}
+		}
+
+		list ($recurrence_start, $recurrence_end) = $this->find_combined_range ($closest_recurrences, $start);
+		$closest_periods[$recurrence_start] = $recurrence_end;
+
+		### get closest separate unavailable period
+		$first = true;
+
+		foreach ($this->resource_data["unavailable_periods"] as $period_start => $period_length)
+		{
+			if (($period_start > $start) and $first)
+			{
+				break;
+			}
+
+			$first = false;
+			$period_end = $period_start + $period_length;
+
+			if ($period_end > $start)
+			{
+				$closest_periods[$period_start] = $period_end;
+				break;
+			}
+		}
+
+		### combine buffer, recurrence & period
+		list ($period_start, $period_end) = $this->find_combined_range ($closest_periods, $start);
+		return array (($period_start - $this->schedule_start), ($period_end - $period_start));
+	}
+
+	### find and combine ranges closest to $value, exclude ranges that don't exceed $value directly or through overlapping ranges
+	function find_combined_range ($ranges, $value)
+	{
+		sort ($ranges, SORT_NUMERIC);
+		reset ($ranges);
+		$first = true;
+		$start = false;
+		$end = false;
+
+		foreach ($ranges as $range_start => $range_end)
+		{
+			if ($first)
+			{
+				$start = $range_start;
+				$end = $range_end;
+				$first = false;
+			}
+
+			$nextend = next ($ranges);
+
+			if ($nextend)
+			{
+				$nextstart = key ($ranges);
+
+				if ($range_end < $nextstart)
+				{
+					if ($range_end > $value)
+					{
+						break;
+					}
+					else
+					{
+						$start = $nextstart;
+						$end = $nextend;
+					}
+				}
+				else
+				{
+					$end = max ($nextend, $range_end, $end);
+				}
+			}
+		}
+
+		if ((!$start) or (!$end) or ($end <= $value))
+		{
+			$start = $value;
+			$end = $value;
+		}
+
+		return array ($start, $end);
+	}
+
+	function init_resource_data ($resources)
+	{
+		foreach ($resources as $resource_id)
+		{
+			if (is_oid ($resource_id))
+			{
+				$resource = obj ($resource_id);
+				$this->resource_data[$resource_id]["global_buffer"] = $resource->prop ("global_buffer");
+				$i = $resource->instance ();
+				$this->resource_data[$resource_id]["unavailable_periods"] = $i->get_unavailable_periods ($resource, $this->schedule_start, ($this->schedule_start + $this->schedule_length));
+				$this->resource_data[$resource_id]["recurrence_definitions"] = $i->get_recurrent_unavailable_periods ($resource, $this->schedule_start, ($this->schedule_start + $this->schedule_length));
 			}
 		}
 	}

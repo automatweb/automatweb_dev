@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.6 2005/01/25 12:30:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.7 2005/01/29 12:22:33 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -8,7 +8,10 @@
 @groupinfo grp_resource_schedule caption="Kalender"
 @groupinfo grp_resource_joblist caption="Tööleht"
 @groupinfo grp_resource_settings caption="Seaded"
-@groupinfo grp_resource_unavailable caption="Kinnised ajad"
+@groupinfo grp_resource_unavailable caption="Tööajad"
+	@groupinfo grp_resource_unavailable_work caption="T&ouml;&ouml;ajad" parent=grp_resource_unavailable
+	@groupinfo grp_resource_unavailable_una caption="Kinnised ajad" parent=grp_resource_unavailable
+
 
 @default table=objects
 @default field=meta
@@ -46,9 +49,12 @@
 	@caption Päeva üldpuhver (h)
 
 
-@default group=grp_resource_unavailable
-	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager
-	@caption Kinnised ajad
+@default group=grp_resource_unavailable_work
+
+	@property work_hrs_recur type=releditor reltype=RELTYPE_RECUR_WRK use_form=emb mode=manager
+	@caption T&ouml;&ouml;ajad
+
+@default group=grp_resource_unavailable_una
 
 	@property unavailable_weekends type=checkbox ch_value=1
 	@caption Ei t&ouml;&ouml;ta n&auml;dalavahetustel
@@ -56,6 +62,8 @@
 	@property unavailable_dates type=textarea rows=5 cols=50
 	@caption Kinnised p&auml;evad (formaat: p&auml;ev.kuu p&auml;ev.kuu)
 
+	@property unavailable_recur type=releditor reltype=RELTYPE_RECUR use_form=emb mode=manager
+	@caption Kinnised ajad
 
 
 // --------------- RELATION TYPES ---------------------
@@ -71,6 +79,9 @@
 
 @reltype RECUR value=4 clid=CL_RECURRENCE
 @caption Kordus
+
+@reltype RECUR_WRK value=5 clid=CL_RECURRENCE
+@caption T&ouml;&ouml;aja kordus
 
 */
 
@@ -106,60 +117,6 @@ class mrp_resource extends class_base
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		$this_object = &$arr["obj_inst"];
-
-//
-				foreach ($this_object->connections_from(array("type" => RELTYPE_RECUR)) as $connection)
-				{
-					if ($connection and !$this->kd)
-					{
-						$e = $connection->to ();
-						arr ($e->properties ());
-						$this->kd = true;
-						break;
-					}
-				}
-
-//recur props:
-// Array
-// (
-    // [name] => t88aeg
-    // [comment] =>
-    // [status] => 1
-    // [time] => 18 //starttime
-    // [length] => 15
-    // [recur_type] => 1- p2ev|2 -ndl|4 - aasta 3-kuu
-    // [interval_daily] => 1  iga x p2eva j2rel
-    // [interval_weekly] =>  ...
-    // [interval_monthly] =>
-    // [interval_yearly] =>
-    // [weekdays] =>
-
-// kui recur type on ndl siis valitud p2evad:
-// [weekdays] => Array
-        // (
-            // [2] => 2 - teisip2ev
-            // [3] => 3 - ...
-            // [4] => 4
-            // [5] => 5
-        // )
-
-    // [month_days] =>
-    // [month_rel_weekdays] =>
-    // [month_weekdays] =>
-    // [start] => 1106344800 //algus
-    // [end] => 1230674400 //l6pp
-    // [brother_of] => 139457
-    // [parent] => 139151
-    // [class_id] => 286
-    // [lang_id] => 1
-    // [period] => 0
-    // [created] => 1106421605
-    // [modified] => 1106421791
-    // [periodic] => 0
-// )
-
-
-//
 
 		if ($arr["new"])
 		{
@@ -380,72 +337,166 @@ class mrp_resource extends class_base
 		return $ret;
 	}
 
-	function get_unavailable_times ($resource, $workspace_id)
+	function _get_unavailable_dates ($dates, $start, $end)
 	{
-		$ret = array ();
+		$unavailable_dates = array ();
+		$parts = preg_split('/\s+/', $dates);
+		$start_year = date ("Y", $start);
+		$start_mon = date ("n", $start);
+		$start_day = date ("j", $start);
+		$end_year = date ("Y", $end);
+		$end_mon = date ("n", $end);
+		$end_day = date ("j", $end);
+
+		foreach($parts as $part)
+		{
+			list($day, $mon) = explode (".", $part);
+			$year = $start_year;
+
+			while ($year <= $end_year)
+			{
+				if (
+					(($year != $start_year) and ($year != $end_year)) or
+					(($year == $start_year) and ($mon >= $start_mon) and ($day >= $start_day)) or
+					(($year == $end_year) and ($mon <= $end_mon) and ($day <= $end_day))
+				)
+				{
+					$start = mktime (0,0,0, $mon, $day, ($year++));
+
+					if (array_key_exists ($start - 86400))
+					{
+						$unavailable_dates[$start - 86400] += 86400;
+					}
+					else
+					{
+						$unavailable_dates[$start] = 86400;
+					}
+				}
+			}
+		}
+
+		ksort ($unavailable_dates);
+		return $unavailable_dates;
+	}
+
+	function get_unavailable_periods ($resource, $start, $end)
+	{
+		$unavailable_periods = array ();
+		$unavailable_periods = $this->_get_unavailable_dates ($resource->prop ("unavailable_dates"), $start, $end);
+		return $unavailable_periods;
+	}
+
+	function get_recurrent_unavailable_periods ($resource, $start, $end)
+	{
+		$recurrent_unavailable_periods = array ();
 
 		if ($resource->prop ("unavailable_weekends"))
 		{
-			$this->_get_weekends ($ret, $workspace_id);
+			$recurrent_unavailable_periods[] = array (
+				"offset" => 6,
+				"length" => (2 * 86400),
+				"type" => "w",
+			);
 		}
 
-		$this->_get_dates ($ret, $resource->prop ("unavailable_dates"));
-
-		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR")) as $c)
+		### unavailable recurrences
+		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR")) as $connection)
 		{
-			$this->_get_recur ($ret, $c->to ());
+			$recurrence = $connection->to ();
+
+			switch ($recurrence->prop ("recur_type"))
+			{
+				case "1": //day
+					$interval = $recurrence->prop ("interval_daily") * 86400;
+					break;
+
+				case "2": //week
+					$interval = $recurrence->prop ("interval_weekly") * 86400 * 7;
+					break;
+
+				case "3": //month
+					continue;
+					break;
+
+				case "4": //year
+					$interval = $recurrence->prop ("interval_yearly") * 86400 * 365;
+					break;
+			}
+
+			$recurrent_unavailable_periods[] = array (
+				"length" => $recurrence->prop ("length"),
+				"start" => $recurrence->prop ("start") + $recurrence->prop ("time") * 3600,
+				"end" => $recurrence->prop ("end"),
+				"interval" => $interval,
+			);
 		}
 
-		ksort ($ret);
-		return $ret;
-	}
-
-	function _get_weekends(&$ret, $workspace_id)
-	{
-		### get workspace object "owning" current object
-		$workspace = obj ($workspace_id);
-		$weeks = ceil ($workspace->prop ("parameter_schedule_length") * 52);
-		$wd = date("w");
-		$sat = mktime(0,0,0, date("m"), date("d") + (($wd == 0) ? -1 : 6 - $wd), date("Y"));
-
-		for ($i = 0; $i < $weeks; $i++)
+		### add workhours, transmute to unavailable periods
+		foreach ($resource->connections_from (array ("type" => "RELTYPE_RECUR_WRK")) as $connection)
 		{
-			$tm = $sat + ($i * 7 * 24 * 3600);
-			$ret[$tm] = 24 * 3600;
+			$recurrence = $connection->to ();
 
-			$tm = $sat + ($i * 7 * 24 * 3600) + 24 * 3600;
-			$ret[$tm] = 24 * 3600;
+			switch ($recurrence->prop ("recur_type"))
+			{
+				case "1": //day
+					$interval = $recurrence->prop ("interval_daily") * 86400;
+					break;
+
+				case "2": //week
+					$interval = $recurrence->prop ("interval_weekly") * 86400 * 7;
+					break;
+
+				case "3": //month
+					continue;
+					break;
+
+				case "4": //year
+					$interval = $recurrence->prop ("interval_yearly") * 86400 * 365;
+					break;
+			}
+
+			$start = $recurrence->prop ("start") + ($recurrence->prop ("time") * 3600) + $recurrence->prop ("length");
+			$length = $interval - $recurrence->prop ("length");
+
+			$recurrent_unavailable_periods[] = array (
+				"length" => $length,
+				"start" => $start,
+				"end" => $recurrence->prop ("end"),
+				"interval" => $interval,
+			);
 		}
-	}
 
-	function _get_dates(&$ret, $dates)
-	{
-		$parts = preg_split('/\s+/', $dates);
-		foreach($parts as $part)
-		{
-			list($day, $mon) = explode(".", $part);
-
-			$tm = mktime(0,0,0, $mon, $day, date("Y"));
-			$ret[$tm] = 24 * 3600;
-
-			$tm = mktime(0,0,0, $mon, $day, date("Y")+1);
-			$ret[$tm] = 24 * 3600;
-		}
-	}
-
-	function _get_recur(&$ret, $recur)
-	{
-		$rec = get_instance(CL_RECURRENCE);
-		$tmp =  $rec->get_event_range(array(
-			"id" => $recur->id(),
-			"start" => time(),
-			"end" => mktime(0,0,0, date("m"), date("d"), date("Y")+2)
-		));
-		foreach($tmp as $time => $row)
-		{
-			$ret[$time] = $row["recur_end"] - $time;
-		}
+		return $recurrent_unavailable_periods;
 	}
 }
+
+//recur props:
+// Array
+// (
+    // [name] => t88aeg
+    // [time] => 18 //starttime
+    // [length] => 15
+    // [recur_type] => 1- p2ev|2 -ndl|4 - aasta 3-kuu
+    // [interval_daily] => 1  iga x p2eva j2rel
+    // [interval_weekly] =>  ...
+    // [interval_monthly] =>
+    // [interval_yearly] =>
+    // [weekdays] =>
+
+// kui recur type on ndl siis valitud p2evad:
+// [weekdays] => Array
+        // (
+            // [2] => 2 - teisip2ev
+            // [3] => 3 - ...
+            // [4] => 4
+            // [5] => 5
+        // )
+
+    // [month_days] =>
+    // [month_rel_weekdays] =>
+    // [month_weekdays] =>
+    // [start] => 1106344800 //algus
+    // [end] => 1230674400 //l6pp
+// )
 
 ?>

@@ -20,7 +20,6 @@
 		<action name="delete">
 			<function name="delete">
 				<arguments>
-					<required name="oid" type="int" />
 				</arguments>
 			</function>
 		</action>

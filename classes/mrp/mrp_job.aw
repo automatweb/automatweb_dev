@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.6 2005/01/27 08:35:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.7 2005/01/29 12:22:34 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -119,14 +119,6 @@ class mrp_job extends class_base
 			"tpldir" => "mrp/mrp_job",
 			"clid" => CL_MRP_JOB,
 		));
-
-		$this->states = array (
-			MRP_STATUS_NEW => "Uus",
-			MRP_STATUS_PLANNED => "Töösse planeeritud",
-			MRP_STATUS_INPROGRESS => "Töös",
-			MRP_STATUS_ABORTED => "Katkestatud",
-			MRP_STATUS_DONE => "Valmis",
-		);
 	}
 
 	function get_property ($arr)
@@ -149,7 +141,14 @@ class mrp_job extends class_base
 				break;
 
 			case "state":
-				$prop["value"] = $this->states[$prop["value"]] ? $this->states[$prop["value"]] : "Määramata";
+				$states = array (
+					MRP_STATUS_NEW => "Uus",
+					MRP_STATUS_PLANNED => "Töösse planeeritud",
+					MRP_STATUS_INPROGRESS => "Töös",
+					MRP_STATUS_ABORTED => "Katkestatud",
+					MRP_STATUS_DONE => "Valmis",
+				);
+				$prop["value"] = $states[$prop["value"]] ? $states[$prop["value"]] : "Määramata";
 				break;
 
 			case "job_toolbar":
@@ -340,8 +339,7 @@ class mrp_job extends class_base
 		// $project->set_prop ("state", MRP_STATUS_ABORTED);
 		// $project->save ();
 //!!! siin vist tuleks panna projektile ka abort aga ainult siis kui leidub t8id mis eeldavad antud t88 valmimist
-
-///!!! siin tuleb ka abordikommentaare n6uda kuidagi
+//!!! siin tuleb ka abordikommentaare n6uda kuidagi
 
 		$this_object->set_prop ("state", MRP_STATUS_ABORTED);
 		$this_object->save ();
@@ -353,7 +351,23 @@ class mrp_job extends class_base
 		$job->set_prop ("state", MRP_STATUS_DELETED);
 		$job->save ();
 
-
+		### correct project's job order if project wasn't deleted
+		foreach ($job->connections_to () as $connection)
+		{
+			if ($connection->prop("from.class_id") == CL_MRP_CASE)
+			{
+				$project = $connection->from ();
+				$this->do_orb_method_call (array (
+					"action" => "order_jobs",
+					"class" => "mrp_case",
+					"params" => array (
+						"oid" => $project->id ()
+					)
+				));
+				break;
+			}
+		}
 	}
 }
+
 ?>

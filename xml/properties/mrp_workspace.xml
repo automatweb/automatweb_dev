@@ -728,7 +728,6 @@
             </grp_customers>
             <grp_projects>
                   <caption>Projektid</caption>
-                  <submit>no</submit>
             </grp_projects>
             <grp_resources>
                   <caption>Ressursid</caption>

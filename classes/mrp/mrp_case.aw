@@ -1,9 +1,10 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.10 2005/01/27 08:58:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.11 2005/01/29 12:22:34 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes
@@ -166,6 +167,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
 @default group=grp_case_schedule
 	@property schedule_chart type=text store=no no_caption=1
 
+
 @default group=grp_case_log
 	@property log type=table store=no no_caption=1
 
@@ -197,7 +199,6 @@ CREATE TABLE `mrp_case` (
   `oid` int(11) NOT NULL default '0',
   `starttime` int(10) unsigned default NULL,
   `due_date` int(10) unsigned default NULL,
-  `customer_priority` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
   `state` tinyint(2) unsigned default '1',
   `extern_id` int(11) unsigned default NULL,
@@ -797,12 +798,7 @@ class mrp_case extends class_base
 						case "length":
 						case "pre_buffer":
 						case "post_buffer":
-							$decimal = strstr ($value, ",") ? strstr ($value, ",") : strstr ($value, ".");
-							$decimal = substr ($decimal, 1);
-							settype ($decimal, "int");
-							settype ($value, "int");
-							$value = $value . "." . $decimal;
-							settype ($value, "float");
+							$value = $this->safe_settype_float ($value);
 
 							switch ($property)
 							{
@@ -1053,12 +1049,10 @@ class mrp_case extends class_base
 
 	/**
 		@attrib name=delete
-		@param oid required type=int
 	**/
 	function delete ($arr)
 	{
 		$sel = $arr["selection"];
-		$this_object = obj ($arr["oid"]);
 
 		if (is_array($sel))
 		{
@@ -1103,23 +1097,6 @@ class mrp_case extends class_base
 					".((int)$proj).",".((int)$job).",'".aw_global_get("uid")."',".time().",'$msg','$comment'
 				)
 		");
-	}
-
-	function on_delete_case ($arr)
-	{
-		$project = obj ($arr["oid"]);
-		$project->set_prop ("state", MRP_STATUS_DELETED);
-		$project->save ();
-
-		### delete project's jobs
-		$connections = $o->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-
-		foreach ($connections as $connection)
-		{
-			$job = $connection->to ();
-			$job->set_prop ("state", MRP_STATUS_DELETED);
-			$job->delete ();
-		}
 	}
 
 	function _init_log_t(&$t)
@@ -1191,7 +1168,33 @@ class mrp_case extends class_base
 					$case_id,NULL,'".aw_global_get("uid")."',".time().",'Projekt lisati'
 				)
 		");
-				
+
+	}
+
+	function on_delete_case ($arr)
+	{
+		$project = obj ($arr["oid"]);
+		$project->set_prop ("state", MRP_STATUS_DELETED);
+		$project->save ();
+
+		### delete project's jobs
+		$connections = $o->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+
+		foreach ($connections as $connection)
+		{
+			$job = $connection->to ();
+			$connection->delete ();
+			$job->delete ();
+		}
+	}
+
+	function safe_settype_float ($value)
+	{
+		$parts1 = explode (",", $value, 2);
+		$parts2 = explode (".", $value, 2);
+		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
+		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
+		return $value;
 	}
 }
 

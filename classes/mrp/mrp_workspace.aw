@@ -1,27 +1,25 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.13 2005/01/27 08:43:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.14 2005/01/29 12:22:34 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
 @classinfo syslog_type=ST_MRP_WORKSPACE relationmgr=yes
 
 @groupinfo grp_customers caption="Kliendid" submit=no
-@groupinfo grp_projects caption="Projektid" submit=no
+@groupinfo grp_projects caption="Projektid"
 @groupinfo grp_resources caption="Ressursid" submit=no
 @groupinfo grp_schedule caption="Kalender" submit=no
 @groupinfo grp_users caption="Kasutajad"
 	@groupinfo grp_users_tree caption="Kasutajate puu" parent=grp_users submit=no
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_users submit=no
-
 @groupinfo grp_settings caption="Seaded"
-
 @groupinfo grp_printer caption="Tr&uuml;kkali vaade" submit=no
+
+
 
 @default table=objects
 @default field=meta
 @default method=serialize
-
-
 
 @default group=general
 	@property configuration type=relpicker reltype=RELTYPE_MRP_CONFIGURATION
@@ -121,8 +119,8 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer
 
+@default group=grp_printer
 	@property printer_jobs type=table no_caption=1
 
 	// these are shown when a job is selected
@@ -152,7 +150,7 @@
 
 	@property pj_project type=text store=no
 	@caption Projekt
-	
+
 	@property pj_state type=text store=no
 	@caption Staatus
 
@@ -297,8 +295,8 @@ class mrp_workspace extends class_base
 
 					case "starttime":
 						$prop["value"] = date("d.m.Y H:i", $job->prop("starttime"));
-						break;	
-				
+						break;
+
 					case "length":
 						$len  = sprintf("%02d", floor($job->prop("length") / 3600)).":";
 						$len .= sprintf("%02d", floor(($job->prop("length") % 3600) / 60));
@@ -321,14 +319,14 @@ class mrp_workspace extends class_base
 					case "resource":
 						$tmp = obj($job->prop($rpn));
 						$prop["value"] = html::get_change_url(
-							$tmp->id(), 
+							$tmp->id(),
 							array(
 								"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 							),
 							$tmp->name()
 						);
 						break;
-				
+
 					case "state":
 						$j = get_instance(CL_MRP_JOB);
 						$prop["value"] = $j->states[$job->prop($rpn)];
@@ -415,7 +413,7 @@ class mrp_workspace extends class_base
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
-					"workspace" => $this_object->id (),
+					"mrp_workspace" => $this_object->id (),
 				), "mrp_schedule");
 				$plan_href = html::href(array(
 					"caption" => "[Planeeri]",
@@ -457,6 +455,21 @@ class mrp_workspace extends class_base
 				$this->_printer_jobs($arr);
 				break;
 		}
+		return $retval;
+	}
+
+	function set_property ($arr = array ())
+	{
+		$prop =& $arr["prop"];
+		$retval = PROP_OK;
+
+		switch ($prop["name"])
+		{
+			case "projects_list":
+				$this->save_custom_form_data ($arr);
+				break;
+		}
+
 		return $retval;
 	}
 
@@ -708,6 +721,12 @@ class mrp_workspace extends class_base
 			"mrp_projects_show" => "all",
 			"mrp_tree_active_item" => 1,
 		), "mrp_workspace");
+		$url_projects_planned = $this->mk_my_orb("change", array(
+			"id" => $this_object->id (),
+			"group" => "grp_projects",
+			"mrp_projects_show" => "planned",
+			"mrp_tree_active_item" => 7,
+		), "mrp_workspace");
 		$url_projects_in_work = $this->mk_my_orb("change", array(
 			"id" => $this_object->id (),
 			"group" => "grp_projects",
@@ -738,7 +757,16 @@ class mrp_workspace extends class_base
 			"mrp_projects_show" => "done",
 			"mrp_tree_active_item" => 6,
 		), "mrp_workspace");
+
 ///!!! appdeitida need count listid table listide j2rgi
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => MRP_STATUS_PLANNED,
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_planned = $list->count ();
+
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
 			"state" => MRP_STATUS_INPROGRESS,
@@ -790,7 +818,13 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (1, array (
-			"name" => "Töösolevad" . "(" . $count_projects_in_work . ")",
+			"name" => "Kõik plaanisolevad" . "(" . $count_projects_planned . ")",
+			"id" => 2,
+			"url" => $url_projects_planned,
+		));
+
+		$tree->add_item (1, array (
+			"name" => "Hetkel töösolevad" . "(" . $count_projects_in_work . ")",
 			"id" => 2,
 			"url" => $url_projects_in_work,
 		));
@@ -827,7 +861,13 @@ class mrp_workspace extends class_base
 	{
 		$table =& $arr["prop"]["vcl_inst"];
 		$this_object =& $arr["obj_inst"];
+		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "overdue";
 
+		$table->define_field (array (
+			"name" => "customer",
+			"caption" => "Klient",
+			"sortable" => 1
+		));
 		$table->define_field (array (
 			"name" => "name",
 			"caption" => "Projekt",
@@ -839,13 +879,22 @@ class mrp_workspace extends class_base
 			"sortable" => 1
 		));
 		$table->define_field(array(
+			"name" => "planned_date",
+			"caption" => "Planeeritud valmimine",
+			"sortable" => 1
+		));
+		$table->define_field(array(
 			"name" => "due_date",
 			"caption" => "Tähtaeg",
 			"sortable" => 1
 		));
 		$table->define_field(array(
-			"name" => "planned_date",
-			"caption" => "Planeeritud valmimine",
+			"name" => "priority",
+			"caption" => "Prioriteet",
+		));
+		$table->define_field(array(
+			"name" => "sales_priority",
+			"caption" => "Müügi prioriteet",
 			"sortable" => 1
 		));
 		$table->define_field(array(
@@ -864,13 +913,21 @@ class mrp_workspace extends class_base
 			"records_per_page" => 50,
 		));
 
-		$list_request = $arr["request"]["mrp_projects_show"] ? $arr["request"]["mrp_projects_show"] : "overdue";
 
 		switch ($list_request)
 		{
 			case "all":
 				$list = new object_list (array (
 					"class_id" => CL_MRP_CASE,
+					"parent" => $this_object->prop ("projects_folder"),
+					// "createdby" => aw_global_get('uid'),
+				));
+				break;
+
+			case "planned":
+				$list = new object_list (array (
+					"class_id" => CL_MRP_CASE,
+					"state" => MRP_STATUS_PLANNED,
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
@@ -934,32 +991,70 @@ class mrp_workspace extends class_base
 
 		foreach ($projects as $project_id => $project)
 		{
+			$priority = $project->prop ("priority");
 			$change_url = $this->mk_my_orb("change", array(
 				"id" => $project_id,
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
 				"group" => "grp_case_schedule",
 			), "mrp_case");
 
-			$connections = $project->connections_from(array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-			$jobs = count ($connections);
+			### get planned project finishing date
+			$planned_date = $project->prop ("planned_date");
 
-			$list = new object_list (array (
-				"class_id" => CL_MRP_JOB,
-				"state" => MRP_STATUS_PLANNED,
-				"parent" => $this_object->prop ("jobs_folder"),
-				"exec_order" => $jobs,
-				"project" => $project_id,
-			));
-			$last_job = $list->begin ();
-			$planned_date = is_object ($last_job) ? date (MRP_DATE_FORMAT, ($last_job->prop ("length") + $last_job->prop ("starttime"))) : "-";
+			if (!$planned_date)
+			{
+				$connections = $project->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
+				$jobs = count ($connections);
 
+				$list = new object_list (array (
+					"class_id" => CL_MRP_JOB,
+					"state" => MRP_STATUS_PLANNED,
+					"parent" => $this_object->prop ("jobs_folder"),
+					"exec_order" => $jobs,
+					"project" => $project_id,
+				));
+				$last_job = $list->begin ();
+				$planned_date = is_object ($last_job) ? date (MRP_DATE_FORMAT, ($last_job->prop ("pre_buffer") + $last_job->prop ("length") + $last_job->prop ("post_buffer") + $last_job->prop ("starttime"))) : "-";
+			}
+
+			### get project customer
+			$connections = $project->connections_from (array ("type" => RELTYPE_CUSTOMER, "class_id" => CL_CRM_COMPANY));
+			$connection = reset ($connections);
+			$customer = is_object ($connection) ? $connnection->to () : obj ();
+
+			### do request specific operations
+			switch ($list_request)
+			{
+				case "inwork":
+				case "planned_overdue":
+				case "overdue":
+				case "new":
+				case "planned":
+					$disabled = false;
+					$priority = html::textbox (array (
+					"name" => "mrp_project_priority-" . $project_id,
+					"size" => "2",
+					"value" => $project->prop ("priority"),
+					"disabled" => $disabled,
+					));
+					break;
+
+				case "all":
+				case "done":
+					break;
+			}
+
+			### define data for html table row
 			$table->define_data(array(
 				"modify" => html::href(array(
 					"caption" => "Ava",
 					"url" => $change_url,
 					)
 				),
+				"customer" => $customer->name (),
 				"name" => $project->name (),
+				"priority" => $priority,
+				"sales_priority" => $project->prop ("sales_priority"),
 				"starttime" => date (MRP_DATE_FORMAT, $project->prop ("starttime")),
 				"due_date" => date (MRP_DATE_FORMAT, $project->prop ("due_date")),
 				"planned_date" => $planned_date,
@@ -1118,6 +1213,30 @@ class mrp_workspace extends class_base
 		return $navigation;
 	}
 
+	function save_custom_form_data ($arr = array ())
+	{
+		foreach ($arr["request"] as $name => $value)
+		{
+			$prop = explode ("-", $name);
+			$name = $prop[0];
+			$oid = $prop[1];
+
+			if (!is_oid ($oid))
+			{
+				continue;
+			}
+
+			switch ($name)
+			{
+				case "mrp_project_priority":
+					$project = obj ($oid);
+					$project->set_prop ("project_priority", $this->safe_settype_float ($value));
+					$project->save ();
+					break;
+			}
+		}
+	}
+
 	/**
 		@attrib name=delete
 	**/
@@ -1133,20 +1252,6 @@ class mrp_workspace extends class_base
 
 			for ($o = $ol->begin (); !$ol->end (); $o = $ol->next ())
 			{
-				$class = $o->class_id ();
-
-				if ($class = CL_MRP_CASE)
-				{
-					$connections = $o->connections_from (array ("type" => RELTYPE_MRP_PROJECT_JOB, "class_id" => CL_MRP_JOB));
-
-					foreach ($connections as $connection)
-					{
-						$job = $connection->to ();
-						$job->set_prop ("state", MRP_STATUS_DELETED);
-						$job->delete ();
-					}
-				}
-
 				if ($this->can ("delete", $o->id()))
 				{
 					$o->delete ();
@@ -1814,7 +1919,7 @@ class mrp_workspace extends class_base
 		$this->_init_printer_jobs_t($t);
 
 		$res = $this->get_cur_printer_resources();
-	
+
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => 30
@@ -1857,7 +1962,7 @@ class mrp_workspace extends class_base
 				)
 			));
 		}
-	
+
 		$t->set_default_sortby("tm");
 		$t->sort_by();
 	}
@@ -1876,7 +1981,7 @@ class mrp_workspace extends class_base
 		// if current person has no rank, return all resources
 		if (!$profs->count())
 		{
-			$ol = new object_list(array(	
+			$ol = new object_list(array(
 				"class_id" => CL_MRP_RESOURCE,
 				"lang_id" => array(),
 				"site_id" => array()
@@ -1932,8 +2037,8 @@ class mrp_workspace extends class_base
 	}
 
 	/** reverse lookup, from resources to persons
-		
-		@comment 
+
+		@comment
 			res - array of resource id's to look up
 	**/
 	function get_workers_for_resources($res)
@@ -2031,7 +2136,7 @@ class mrp_workspace extends class_base
 
 		$job = obj($arr["id"]);
 		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
-		
+
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
@@ -2052,7 +2157,7 @@ class mrp_workspace extends class_base
 
 		$job = obj($arr["id"]);
 		$this->mrp_log($job->prop("project"), $job->id(), "T&ouml;&ouml; ".$job->name()." staatus muudeti ".$j->states[$job->prop("state")], $arr["pj_change_comment"]);
-		
+
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
 			"group" => "grp_printer",
@@ -2071,6 +2176,15 @@ class mrp_workspace extends class_base
 					".((int)$proj).",".((int)$job).",'".aw_global_get("uid")."',".time().",'$msg','$comment'
 				)
 		");
+	}
+
+	function safe_settype_float ($value)
+	{
+		$parts1 = explode (",", $value, 2);
+		$parts2 = explode (".", $value, 2);
+		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
+		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
+		return $value;
 	}
 }
 
