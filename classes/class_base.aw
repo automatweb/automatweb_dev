@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.285 2004/07/02 12:13:55 duke Exp $
+// $Id: class_base.aw,v 2.286 2004/07/07 18:21:41 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3946,5 +3946,20 @@ class class_base extends aw_template
 	{
 		return $this->features[$name];
 	}
+
+	/** helper method to generate return url-s for actions
+
+	**/
+	function finish_action($arr)
+	{
+		return $this->mk_my_orb("change",array(
+			"group" => $arr["group"],
+			"page" => $arr["page"],
+			"topic" => $arr["topic"],
+			"id" => $arr["id"],
+			"section" => $arr["section"],
+		));
+	}
+
 };
 ?>
