@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.76 2001/12/18 00:09:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.77 2001/12/18 10:55:15 duke Exp $
 // menuedit.aw - menuedit. heh.
 global $orb_defs;
 $orb_defs["menuedit"] = "xml";
@@ -2651,40 +2651,17 @@ class menuedit extends aw_template
 			// 2 updates, this is so wrong.
 			$this->set_object_metadata(array(
 				"oid" => $id,
-				"key" => "users_only",
-				"value" => $arr["users_only"],
+				"data" => array(
+					"users_only" => $arr["users_only"],
+					"img_timing" => $arr["img_timing"],
+					"show_lead" => $arr["show_lead"],
+					"tpl_dir" => $arr["tpl_dir"],
+					"keywords" => $arr["keywords"],
+					"description" => $arr["description"],
+					"color" => $arr["color"],
+				),
 			));
 			
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "img_timing",
-				"value" => $arr["img_timing"],
-			));
-			
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "show_lead",
-				"value" => $arr["show_lead"],
-			));
-			
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "tpl_dir",
-				"value" => $arr["tpl_dir"],
-			));
-
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "keywords",
-				"value" => $arr["keywords"],
-			));
-			
-			$this->set_object_metadata(array(
-				"oid" => $id,
-				"key" => "description",
-				"value" => $arr["description"],
-			));
-
 			if ($arr["keywords"] || $arr["description"])
 			{
 				classload("file","php");
@@ -3473,6 +3450,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"image_act"		=> $img2,
 			"seealso"			=> $this->multiple_option_list($rsar,$oblist),
 			"seealso_order" => $meta["seealso_order"],
+			"color" => $meta["color"],
 			"ADMIN_FEATURE"	=> $af,
 			"name"				=> $row["name"], 
 			"number"			=> $row["number"],
@@ -3989,7 +3967,8 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				"target" 	=> $target,
 				"image"		=> $imgurl,
 				"cnt" => $cnt,
-				"sel_image_url" => $imgurl2
+				"sel_image_url" => $imgurl2,
+				"color" => $meta["color"]
 			));
 
 			if ($has_image)
@@ -4875,9 +4854,24 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 					"link_caption" => $meta["link_caption"]
 				));
 
+				// which promo to use? we need to know this to use
+				// the correct SHOW_TITLE subtemplate
+				if ($ar["scroll"] == 1)
+				{
+					$use_tpl = "SCROLL_PROMO";
+				}
+				elseif ($ar["right"] == 1)
+				{
+					$use_tpl = "RIGHT_PROMO";
+				}
+				else
+				{
+					$use_tpl = "LEFT_PROMO";
+				};
+
 				if ($meta["no_title"] != 1)
 				{
-					$this->vars(array("SHOW_TITLE" => $this->parse("SHOW_TITLE")));
+					$this->vars(array("SHOW_TITLE" => $this->parse($use_tpl . ".SHOW_TITLE")));
 				}
 				else
 				{
