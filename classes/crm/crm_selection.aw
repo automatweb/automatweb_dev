@@ -225,6 +225,22 @@ class crm_selection extends class_base
 			'checked' => ((int)$arr['status']==1)
 		));
 	}
+	
+	function delete_from_selection($args)
+	{
+		//arr($args,1);
+		$uri=$args['return_url'];
+
+		//if ($args['active_selection'])
+		//{
+			if (is_array($args['sel']))
+			{
+				$this->remove_objects_from_selection($args['id'],$args['sel']);
+			}
+		//}
+		header('Location: '.$uri);
+		die;
+	}
 
 	function save_selection($args)
 	{
@@ -278,10 +294,9 @@ class crm_selection extends class_base
 				$this->set_selection($o->id(), $args['sel'],false);
 			}
 
-		
-			$data = $this->get_object($args['id']);
-			$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
-			$ins = get_instance($data['class_file']);
+	
+			$data = new object($args["id"]);
+			$ins = $data->instance();
 
 			$source_object = new object($args["id"]);
 			$source_object->connect(array(
@@ -439,7 +454,7 @@ class crm_selection extends class_base
 	function remove_objects_from_selection($oid,$arr=array())
 	{
 		$items = new aw_array($arr);
-		$this->db_query("DELETE FROM selection WHERE oid = '$oid AND object IN (" . $items->to_sql() . ")");
+		$this->db_query("DELETE FROM selection WHERE oid = '$oid' AND object IN (" . $items->to_sql() . ")");
 	}
 
 
@@ -477,8 +492,7 @@ class crm_selection extends class_base
 			{
 				$item = new object($val["object"]);
 				// figure out which class processes the aliases.. dunno, really
-				$classfile = isset($this->cfg['classes'][$item->class_id()]['alias_class']) ? $this->cfg['classes'][$item->class_id()]['alias_class'] : $this->cfg['classes'][$item->class_id()]['file'];
-				$inst = get_instance($classfile);
+				$inst = $item->instance();
 
 				if (method_exists($inst,'show_in_selection'))
 				{
