@@ -270,7 +270,7 @@ class grid_editor extends class_base
 
 		$this->_process_command($cmds);
 	
-		if ($params['cell_content_callback'])
+/*		if ($params['cell_content_callback'])
 		{
 			// call the save content handler for each cell
 			for($_row = 0; $_row < $this->arr["rows"]; $_row++)
@@ -288,7 +288,7 @@ class grid_editor extends class_base
 					$this->arr['aliases'][$map['row']][$map['col']] =  $that->$fun($parms, $map['row'], $map['col'], $post);
 				}
 			}
-		}
+		}*/
 
 		// delete selected rows/cols
 /*		$cdelete = array();
@@ -341,6 +341,25 @@ class grid_editor extends class_base
 		{
 			for ($nnn=0; $nnn < $num; $nnn++)
 			{
+				for ($row = 0; $row < $this->arr["rows"]; $row++)
+				{
+					for ($col = $this->arr["cols"]; $col > $after; $col--)
+					{
+						$this->arr["aliases"][$row][$col] = $this->arr["aliases"][$row][$col-1];
+						$this->arr["styles"][$row][$col] = $this->arr["styles"][$row][$col-1];
+					}
+				}
+			
+				if ($after != -1)
+				{	
+					for ($row = 0; $row < $this->arr["rows"]; $row++)
+					{
+						$this->arr["aliases"][$row][$after+1] = "";
+						$this->arr["styles"][$row][$after+1] = "";
+					}
+				}
+
+
 				$this->arr["cols"]++;
 
 				$nm = array();
@@ -483,6 +502,25 @@ class grid_editor extends class_base
 		{
 			for ($nnn=0; $nnn < $num; $nnn++)
 			{
+				for ($col = 0; $col < $this->arr["cols"]; $col++)
+				{
+					for ($row = $this->arr["rows"]; $row > $after; $row--)
+					{
+						$this->arr["aliases"][$row][$col] = $this->arr["aliases"][$row-1][$col];
+						$this->arr["styles"][$row][$col] = $this->arr["styles"][$row-1][$col];
+					}
+				}
+			
+				if ($after != -1)
+				{
+					for ($col = 0; $col < $this->arr["cols"]; $col++)
+					{
+						$this->arr["aliases"][$after+1][$col] = "";
+						$this->arr["styles"][$after+1][$col] = "";
+					}
+				}
+
+
 				$this->arr["rows"]++;
 
 				$nm = array();
@@ -625,6 +663,10 @@ class grid_editor extends class_base
 	function _del_col($arr)
 	{
 		extract($arr);
+		if (!isset($d_col))
+		{
+			$d_col  = $col;
+		}
 		for ($row = 0; $row < $this->arr["rows"]; $row++)
 		{
 			for ($c = $col+1; $c < $this->arr["cols"]; $c++)
@@ -651,8 +693,13 @@ class grid_editor extends class_base
 				if ($this->arr["map"][$row][$col]["col"] > $d_col)
 				{
 					$nm[$row][$col-1] = array("row" => $this->arr["map"][$row][$col]["row"], "col" => $this->arr["map"][$row][$col]["col"]-1);
-					$changes[] = array("from" => $this->arr["map"][$row][$col], 
-														 "to" => array("row" => $this->arr["map"][$row][$col]["row"], "col" => $this->arr["map"][$row][$col]["col"]-1));
+					$changes[] = array(
+						"from" => $this->arr["map"][$row][$col], 
+						"to" => array(
+							"row" => $this->arr["map"][$row][$col]["row"], 
+							"col" => $this->arr["map"][$row][$col]["col"]-1
+						)
+					);
 				}
 				else
 				{
@@ -683,6 +730,10 @@ class grid_editor extends class_base
 	function _del_row($arr)
 	{
 		extract($arr);
+		if (!isset($d_row))
+		{
+			$d_row = $row;
+		}
 		for ($col = 0; $col < $this->arr["cols"]; $col++)
 		{
 			for ($r = $row+1; $r < $this->arr["rows"]; $r++)
@@ -709,8 +760,13 @@ class grid_editor extends class_base
 				if ($this->arr["map"][$row][$col]["row"] > $d_row)
 				{
 					$nm[$row-1][$col] = array("row" => $this->arr["map"][$row][$col]["row"]-1, "col" => $this->arr["map"][$row][$col]["col"]);
-					$changes[] = array("from" => $this->arr["map"][$row][$col], 
-														 "to" => array("row" => $this->arr["map"][$row][$col]["row"]-1, "col" => $this->arr["map"][$row][$col]["col"]));
+					$changes[] = array(
+						"from" => $this->arr["map"][$row][$col], 
+						"to" => array(
+							"row" => $this->arr["map"][$row][$col]["row"]-1, 
+							"col" => $this->arr["map"][$row][$col]["col"]
+						)
+					);
 				}
 				else
 				{
