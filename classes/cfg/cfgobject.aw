@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.6 2004/04/29 12:20:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/cfgobject.aw,v 1.7 2004/04/30 08:47:47 kristo Exp $
 // cfgobject.aw - configuration objects
 // adds, changes and in general handles configuration objects
 
@@ -482,7 +482,8 @@ class cfgobject extends aw_template
 	function _remap_classes($args = array())
 	{
 		$res = array();
-		foreach(aw_ini_get("classes") as $id => $data)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $id => $data)
 		{
 			$res[$data["file"]] = $id;
 		};

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.43 2004/04/29 12:20:59 kristo Exp $
+// $Id: cfgutils.aw,v 1.44 2004/04/30 08:47:47 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -18,7 +18,8 @@ class cfgutils extends aw_template
 		};
 
 		$this->clist = array();
-		foreach(aw_ini_get("classes") as $key => $val)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $key => $val)
 		{
 			if (empty($val["file"]))
 			{
@@ -79,13 +80,15 @@ class cfgutils extends aw_template
 		$value = ($value) ? $value : "name";
 		$clist = aw_ini_get("classes");
 
-		foreach(aw_ini_get("classes") as $clid => $desc)
+		$tmp = aw_ini_get("classes");
+		foreach($tmp as $clid => $desc)
 		{
 			if ($this->has_properties(array("clid" => $clid)))
 			{
 				$result[$clid] = $desc[$value];
 			};
 		}
+		asort($result);
 		return $result;
 	}
 

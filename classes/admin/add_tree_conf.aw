@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.13 2004/04/29 12:20:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.14 2004/04/30 08:48:50 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -89,7 +89,8 @@ class add_tree_conf extends class_base
 			{
 				$visible["fld"][$id] = 1;
 			}
-			foreach(aw_ini_get("classes") as $id => $d)
+			$tmp = aw_ini_get("classes");
+			foreach($tmp as $id => $d)
 			{
 				$visible["obj"][$id] = 1;
 				$usable[$id] = 1;
@@ -110,7 +111,8 @@ class add_tree_conf extends class_base
 	{
 		if ($this->level == -1)
 		{
-			foreach(aw_ini_get("classes") as $cl_id => $cld)
+			$tmp = aw_ini_get("classes");
+			foreach($tmp as $cl_id => $cld)
 			{
 				if (!$cld["can_add"] || !isset($cld["parents"]))
 				{
@@ -162,7 +164,8 @@ class add_tree_conf extends class_base
 					
 				));
 
-				foreach(aw_ini_get("classes") as $cl_id => $cld)
+				$tmp = aw_ini_get("classes");
+				foreach($tmp as $cl_id => $cld)
 				{
 					if ($cld["parents"] == "" || !$cld["can_add"])
 					{
