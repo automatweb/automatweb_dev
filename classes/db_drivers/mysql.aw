@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.7 2002/12/03 14:49:52 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.8 2002/12/05 11:26:09 axel Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -375,18 +375,18 @@ class mysql
 	// !this returns the sql for creating the field
 	function mk_field_len($type,$length)
 	{
+		$type=strtoupper($type);
 		switch ($type)
 		{
-			case 'tinyint':
-			case 'smallint':
-			case 'mediumint':
-			case 'int':
-			case 'integer':
-			case 'bigint':
-			case 'char':
-			case 'varchar':
+			CASE 'TINYINT':
+			CASE 'SMALLINT':
+			CASE 'MEDIUMINT':
+			CASE 'INT':
+			CASE 'INTEGER':
+			CASE 'BIGINT':
+			CASE 'CHAR':
+			CASE 'VARCHAR':
 				return $type.'('.$length.')';
-
 			default:
 				return $type;
 		}
