@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.266 2004/05/06 12:38:26 duke Exp $
+// $Id: class_base.aw,v 2.267 2004/05/14 06:54:41 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -110,6 +110,11 @@ class class_base extends aw_template
 			"relpicker" => "vcl/relpicker",
 			"tabpanel" => "vcl/tabpanel",
 		);
+
+		// XXX: this is temporary
+		$this->vcl_delayed_init = array(
+			"comments" => 1,
+		);
 		parent::init($arg);
 	}
 
@@ -217,6 +222,11 @@ class class_base extends aw_template
 				"request" => $args,
 			));
 		}
+
+		if ($args["no_active_tab"])
+		{
+			$this->no_active_tab = 1;
+		};
 
 		if (empty($use_form))
 		{
@@ -1080,13 +1090,18 @@ class class_base extends aw_template
 				{
 					// so, how do I figure out
 					//$this->tp->add_tab(array(
+					$active = !empty($val["active"]) || ($key == $this->subgroup);
+					if ($this->no_active_tab)
+					{
+						$active = false;
+					};
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
 						"level" => empty($val["parent"]) ? 1 : 2,
 						"parent" => $val["parent"],
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
-						"active" => !empty($val["active"]) || ($key == $this->subgroup),
+						"active" => $active,
 						"tabgroup" => $val["tabgroup"],
 					));
 
@@ -1827,7 +1842,7 @@ class class_base extends aw_template
 
 			// eventually all VCL components will have to implement their
                         // own init_vcl_property method
-                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]))
+                        if ($this->vcl_register[$val["type"]] && empty($val["_parsed"]) && empty($this->vcl_delayed_init[$val["type"]]))
                         {
                                 $reginst = $this->vcl_register[$val["type"]];
 				if ($val["type"] == "table")
@@ -1861,23 +1876,6 @@ class class_base extends aw_template
                                 };
 
                         }
-			/*
-                        else
-			if (isset($val["callback"]) && method_exists($this->inst,$val["callback"]))
-			{
-				$meth = $val["callback"];
-				$argblock["prop"] = &$val;
-				$vx = $this->inst->$meth($argblock);
-				if (is_array($vx))
-				{
-					foreach($vx as $ekey => $eval)
-					{
-						$this->convert_element(&$eval);
-						$resprops[$ekey] = $eval;
-					};
-				}
-			}
-			*/
 			elseif ($val["type"] == "form")
 			{
 				// I need a list of those bloody properties, eh?
@@ -1907,6 +1905,13 @@ class class_base extends aw_template
 
 				$clx_inst->orb_class = $clx_name;
 				$clx_inst->init_class_base();
+
+				$forminfo = $cfgu->get_forminfo();
+				$form_onload = $forminfo[$val["sform"]]["onload"];
+				if (isset($form_onload) && is_callable(array($clx_inst,$form_onload)))
+				{
+					$clx_inst->$form_onload(array());
+				};
 
 				// this needs to change the form method, urk, urk
 				//$clx_inst->request = $this->request[$val["name"]];
@@ -2103,6 +2108,35 @@ class class_base extends aw_template
 			else
 			{
 			
+				if ($this->vcl_register[$val["type"]] && isset($this->vcl_delayed_init[$val["type"]]))
+				{
+					$reginst = $this->vcl_register[$val["type"]];
+					$ot = get_instance($reginst);
+					if (is_callable(array($ot,"init_vcl_property")))
+					{
+						$res = $ot->init_vcl_property(array(
+							"property" => &$val,
+							"id" => $this->id,
+							"clid" => $this->clid,
+							"obj_inst" => &$this->obj_inst,
+							"columns" => $this->columninfo,
+							"relinfo" => $this->relinfo,
+						));
+
+						if (is_array($res))
+						{
+							foreach($res as $rkey => $rval)
+							{
+								$this->convert_element(&$rval);
+								$resprops[$rkey] = $rval;
+							};
+						};
+					};
+
+					continue;
+
+				}
+
 				if ($val["type"] == "releditor")
 				{
 					if (!is_object($val["vcl_inst"]))
@@ -2665,6 +2699,13 @@ class class_base extends aw_template
 		// first, gather all the values.
 		foreach($properties as $key => $property)
 		{
+			// XXX: temporary workaround to save only these properties which were present in the form
+			// required by releditor
+			if ($args["cb_existing_props_only"] && empty($args[$key]))
+			{
+				continue;
+			};
+
 			//do not call set_property for edit_only properties when a new
 			// object is created.
 			if ($new && isset($property["editonly"]))
@@ -3158,6 +3199,9 @@ class class_base extends aw_template
 		// create an instance of the datasource ($this->ds)
 		// set $this->clid and $this->clfile (Do I need the latter at all?)
 		$this->init_class_base();
+		
+		$cli = get_instance("cfg/" . $this->output_client);
+		$this->cli = &$cli;
 
 		extract($args);
 
