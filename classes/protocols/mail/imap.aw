@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.2 2003/09/11 13:12:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.3 2003/09/12 11:44:05 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -36,19 +36,12 @@ class imap extends class_base
 {
 	function imap()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. the default folder does not actually exist, 
-		// it just points to where it should be, if it existed
 		$this->init(array(
-			"tpldir" => "protocols/mail/imap",
 			"clid" => CL_PROTO_IMAP
 		));
 
 		$this->connected = false;
 	}
-
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 
 	function get_property($args)
 	{
@@ -191,10 +184,9 @@ class imap extends class_base
 			imap_expunge($this->mbox);
 		}
 	}
-	
+
 	////
-	// !This should move to the IMAP class, but hey .. I have enough time to do that
-	// needs 2 arguments, mailbox name and msgid .. arr,arr
+	// !Fetches a single message from the currently connected mailbox
 	function fetch_message($arr)
 	{
 		$msgid = $arr["msgid"];
@@ -210,135 +202,103 @@ class imap extends class_base
 		);
 		
 		$overview = imap_fetchstructure($this->mbox,$msgid,FT_UID);
+
 		$rv = "";
 
 		$this->rv = "";
 		$this->msgid = $msgid;
 
-		$this->dissect_part($overview,1);
+		$this->partlist = array();
+		$this->attachments = array();
+
+		$this->dissect_part($overview,"");
 
 		$rv = $this->rv;
-
 		$msgdata["content"] = $rv;
+
+		if (sizeof($this->attachments) > 0)
+		{
+			$msgdata["attachments"] = $this->attachments;
+		}
 
 		return $msgdata;
 	}
 
-	function dissect_part($this_part,$part_no,$rv = "")
+	function dissect_part($this_part,$part_no)
 	{
-		if ($this_part->ifdisposition)
+		switch ($this_part->type)
 		{
-			// See if it has a disposition
-			// The only thing I know of that this
-			// would be used for would be an attachment
-			// Lets check anyway
-			if ($this_part->disposition == "attachment")
-			{
-				// If it is an attachment, then we let people download it
-				// First see if they sent a filename
-				$att_name = "unknown";
-            			for ($lcv = 0; $lcv < count($this_part->parameters); $lcv++)
+			case TYPETEXT:
+				$mime_type = "text";
+				break;	
+
+			case TYPEMULTIPART:
+				$mime_type = "multipart";
+				for ($i = 0; $i < count($this_part->parts); $i++)
 				{
-                			$param = $this_part->parameters[$lcv];
-                			if ($param->attribute == "name")
+					if ($part_no != "")
 					{
-                    				$att_name = $param->value;
-                    				break;
-	            			}
-	        		}
-				$size = $this_part->bytes;
-				$this->rv .= "Attachment: $att_name ($size bytes)\n";
-				// You could give a link to download the attachment here....
-        		}
-			else
+						$part_no = $part_no.".";
+					}
+					for ($i = 0; $i < count($this_part->parts); $i++)
+					{
+						$this->dissect_part($this_part->parts[$i], $part_no.($i + 1));
+					}
+				}
+				break;
+
+			case TYPEMESSAGE:
+				$mime_type = "message";
+				break;
+			case TYPEAPPLICATION:
+				$mime_type = "application";
+				break;
+			case TYPEAUDIO:
+				$mime_type = "audio";
+				break;
+			case TYPEIMAGE:
+				$mime_type = "image";
+				break;
+			case TYPEVIDEO:
+				$mime_type = "video";
+				break;
+			case TYPEMODEL:
+				$mime_type = "model";
+				break;
+			default:
+				$mime_type = "unknown";
+				// hmmm....
+		}
+
+		$full_mime_type = $mime_type."/".$this_part->subtype;
+			
+		$this->partlist[$part_no] = $full_mime_type;
+
+		// fetching body with no part_no retrieves the raw contents of the message,
+		// I don't want that
+		$body = imap_fetchbody($this->mbox,$this->msgid,empty($part_no) ? 1 : $part_no,FT_UID);
+			
+		$params = $this->_decode_parameters($this_part->parameters);
+
+		if ($mime_type == "text")
+		{
+			$tmp = $this->_decode($body,$this_part->encoding);
+			if ($params["charset"] == "UTF-8")
 			{
-				// disposition can also be used for images in HTML (Inline)
-			}
+				$tmp = utf8_decode($tmp);
+			};
+			$this->rv .= $tmp;
 		}
 		else
 		{
-			// Not an attachment, lets see what this part is...
-			switch ($this_part->type)
+			if ($this_part->ifdisposition)
 			{
-				case TYPETEXT:
-					$mime_type = "text";
-					break;	
-
-				case TYPEMULTIPART:
-					$mime_type = "multipart";
-					// Hey, why not use this function to deal with all the parts
-					// of this multipart part :)
-					for ($i = 0; $i < count($this_part->parts); $i++)
-					{
-						if ($part_no != "")
-						{
-							$part_no = $part_no.".";
-						}
-						for ($i = 0; $i < count($this_part->parts); $i++)
-						{
-							$this->dissect_part($this_part->parts[$i], $part_no.($i + 1));
-						}
-					}
-					break;
-
-				case TYPEMESSAGE:
-					$mime_type = "message";
-					break;
-				case TYPEAPPLICATION:
-					$mime_type = "application";
-					break;
-				case TYPEAUDIO:
-					$mime_type = "audio";
-					break;
-				case TYPEIMAGE:
-					$mime_type = "image";
-					break;
-				case TYPEVIDEO:
-					$mime_type = "video";
-					break;
-				case TYPEMODEL:
-					$mime_type = "model";
-					break;
-				default:
-					$mime_type = "unknown";
-					// hmmm....
-			}
-
-			$full_mime_type = $mime_type."/".$this_part->subtype;
-			
-			// Decide what you what to do with this part
-			// If you want to show it, figure out the encoding and echo away
-
-
-			//print "printing part $full_mime_type / $part_no<br>";
-			/*
-			print "part_no = $part_no, mime = $full_mime_type<br>";
-			*/
-
-			if (substr($part_no,-1) == ".")
-			{
-				$part_no = substr($part_no,0,-1);
-			};
-
-			$body = imap_fetchbody($this->mbox,$this->msgid,$part_no,FT_UID);
-
-			switch ($this_part->encoding)
-			{
-				case ENCBASE64:
-					// use imap_base64 to decode
-					$this->rv .= $body;
-					break;
-				case ENCQUOTEDPRINTABLE:
-					$this->rv .= quoted_printable_decode($body);
-					break;
-				case ENCOTHER:
-				default:
-					$this->rv .= quoted_printable_decode($body);
-					#$this->rv .= $body;
-					break;
-					// it is either not encoded or we don't know about it
-			}
-		}
+				$att_name = isset($params["name"]) ? $params["name"] : "unknown";
+				$size = $this_part->bytes;
+				$caption = "$att_name ($size bytes)\n";
+				$this->attachments[$part_no] = $caption;
+        		}
+		};
 	}
 
 	function _parse_subj($str)
@@ -348,8 +308,63 @@ class imap extends class_base
 		{
 			$rv .= $elements[$i]->text;
 		};
-		$rv = wordwrap($rv,20,"\n",1);
 		return $rv;
+	}
+
+	function _decode_parameters($arr)
+	{
+		$rv = array();
+		$params = new aw_array($arr);
+		foreach($params->get() as $key => $val)
+		{
+			$rv[$val->attribute] = $val->value;
+		}
+		return $rv;
+	}
+
+	function _get_mime_type($type,$subtype = false)
+	{
+		$primary_mime_type = array("text", "multipart","message", "application", "audio","image", "video", "other");
+	        if ($subtype)
+		{
+			$rv = $primary_mime_type[(int) $type] . '/' .$subtype;
+		}
+		else
+		{
+			$rv = "text/plain";
+		}
+		return $rv;
+	}
+
+	function _decode($text,$encoding)
+	{
+		if ($encoding == ENCBASE64)
+		{
+			$rv = imap_base64($text);
+		}
+		else
+		if ($encoding == ENCQUOTEDPRINTABLE)
+		{
+			$rv = imap_qprint($text);
+		}
+		else
+		{
+			$rv = $text;
+		};
+		return $rv;
+	}
+
+	function fetch_part($arr) 
+	{
+		$struct = imap_bodystruct($this->mbox, imap_msgno($this->mbox, $arr["msgid"]), $arr["part"]);
+		$mime_type = $this->_get_mime_type($struct->type,$struct->subtype);
+		$params = $this->_decode_parameters($struct->parameters);
+		$att_name = isset($params["name"]) ? $params["name"] : "unknown";
+		$body = imap_fetchbody($this->mbox,$arr["msgid"],$arr["part"],FT_UID);
+		$decbody = $this->_decode($body,$struct->encoding);
+		header("Content-type: ".$mime_type);
+                header("Content-Disposition: filename=$att_name");
+		die($decbody);
 	}
 
 };
