@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.121 2003/06/10 16:43:12 duke Exp $
+// $Id: class_base.aw,v 2.122 2003/06/12 14:32:28 duke Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -318,7 +318,7 @@ class class_base extends aw_template
 		// try to load the bastard
 		$this->cfgform_id = 0;
 		$this->cfgform = array();
-		if ($id)
+		if ($id && is_numeric($id))
 		{
 			$_tmp = $this->get_object(array(
 				"oid" => $id,
@@ -334,15 +334,34 @@ class class_base extends aw_template
 		}
 		elseif ($this->clid == CL_DOCUMENT)
 		{
-			$cfgu = get_instance("cfg/cfgutils");
-			$def = file_get_contents(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml");
-			list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
-			$this->cfg_proplist = $proplist;
-			$this->cfg_groups = $grplist;
-			$this->cfgform["meta"]["cfg_groups"] = $grplist;
-			$this->cfgform["meta"]["cfg_proplist"] = $proplist;
-			// heh
-			$this->cfgform_id = "notempty";
+			// I should be able to override this from the doc class somehow
+			if (aw_ini_get("document.default_cfgform") != 0)
+			{
+				$_xid = aw_ini_get("document.default_cfgform");
+				$_tmp = $this->get_object(array(
+					"oid" => $_xid,
+					"class" => CL_CFGFORM,
+					"subclass" => $this->clid,
+				));
+
+				if ($_tmp)
+				{
+					$this->cfgform_id = $_tmp["oid"];
+					$this->cfgform = $_tmp;
+				};
+			}
+			else
+			{
+				$cfgu = get_instance("cfg/cfgutils");
+				$def = file_get_contents(aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml");
+				list($proplist,$grplist) = $cfgu->parse_cfgform(array("xml_definition" => $def));
+				$this->cfg_proplist = $proplist;
+				$this->cfg_groups = $grplist;
+				$this->cfgform["meta"]["cfg_groups"] = $grplist;
+				$this->cfgform["meta"]["cfg_proplist"] = $proplist;
+				// heh
+				$this->cfgform_id = "notempty";
+			};
 		};
 	}
 
@@ -1877,7 +1896,8 @@ class class_base extends aw_template
 		}
 
                 // it is set (or not) on validate_cfgform
-                if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
+                //if (isset($this->cfgform_id) && is_numeric($this->cfgform_id))
+                if (isset($this->cfgform_id))
                 {
                         $this->coredata["metadata"]["cfgform_id"] = $this->cfgform_id;
                 };
