@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.16 2004/05/06 12:31:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.17 2004/05/14 06:50:38 duke Exp $
 /*
 	Displays a form for editing an connection
 */
@@ -230,6 +230,15 @@ class releditor extends aw_template
 				"name" => "sbt",
 				"value" => "Salvesta",
 			);
+
+			if ($arr["prop"]["cfgform"])
+			{
+				$act_props["eb_cfgform"] = array(
+					"type" => "hidden",
+					"name" => "cfgform",
+					"value" => $arr["prop"]["cfgform"],
+				);
+			};
 		};
 
 		if (!$obj_inst)
@@ -330,13 +339,21 @@ class releditor extends aw_template
 
 		foreach($conns as $conn)
 		{
+			if ($arr["prop"]["direct_links"] == 1)
+			{
+				$url = $this->mk_my_orb("change",array("id" => $conn->prop("to")),$conn->prop("to.class_id"));
+			}
+			else
+			{
+				$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
+			};
 			$awt->define_data(array(
 				"id" => $conn->prop("to"),
 				"conn_id" => $conn->id(),
 				"name" => $conn->prop("to.name"),
 				"edit" => html::href(array(
 					"caption" => "Muuda",
-					"url" => aw_url_change_var(array($this->elname => $conn->prop("to"))),
+					"url" => $url,
 				)),
 				"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
 			));
