@@ -46,14 +46,14 @@
 			</function>
 		</action>
 
-		<action name="select_keywords">
+		<action name="select_keywords" nologin="1">
 			<function name="select_keywords">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_interests2">
+		<action name="submit_interests2" nologin="1">
 			<function name="submit_interests2">
 				<arguments>
 				</arguments>
