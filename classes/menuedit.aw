@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.184 2002/12/11 12:46:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.185 2002/12/12 16:09:33 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1463,7 +1463,7 @@ class menuedit extends aw_template
 					if (!isset($counts[$prnt]))
 					{
 						$counts[$prnt] = $cnt;
-						$ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
+				 $ret .= $cnt."|".((int)$counts[$arr[$prnt]["parent"]])."|".$menus[$prnt]["name"]."||".$sep;
 					}
 					if (is_array($arr))
 					{
@@ -1574,7 +1574,7 @@ class menuedit extends aw_template
 					{
 						$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
 						$tcnt++;
-						$ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list".$sep;
+				 $ret .= ($tcnt)."|0|".$cldata["name"]."|$addlink|list".$sep;
 					}
 				}
 			}
@@ -5911,6 +5911,77 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$this->read_template("java_popup_menu.tpl");
 
+		$content = $this->get_add_menu(array(
+			"id" => $parent,
+			"ret_data" => true,
+			"sharp" => true,
+			"addmenu" => 1,
+			"period" => $period,
+			"js" => 1,
+		));
+
+		$items = explode("#",$content);
+
+		// id|parent|caption|link
+
+		$byparent = array();
+		foreach($items as $item)
+		{
+			list($m_id,$m_parent,$m_caption,$m_link) = explode("|",$item);
+			$real_parent = (int)$m_parent;
+			if ($m_id)
+			{
+					  $by_parent[$real_parent][$m_id] = array(
+						  "link" => $m_link,
+						  "caption" => $m_caption,
+					  );
+			};
+		};
+
+		$this->read_template("js_add_menu.tpl");
+
+		$whole_menu = "";
+
+
+		// each parent starts a new menu
+		foreach($by_parent as $item_id => $item_collection)
+		{
+			$menu_data = "";
+			foreach($item_collection as $el_id => $el_data)
+			{
+				// if this el_id has children, make it a submenu
+				$children = sizeof($by_parent[$el_id]);
+				if ($el_id == "separator")
+				{
+					$tpl = "MENU_SEPARATOR";
+				}
+				elseif ($children > 0)
+				{
+					$tpl = "MENU_ITEM_SUB";
+				}
+				else
+				{
+					$tpl = "MENU_ITEM";
+				};
+				$this->vars(array(
+					"caption" => $el_data["caption"],
+					"url" => $el_data["link"],
+					"sub_menu_id" => "aw_menu_" . $el_id,
+				));
+				$menu_data .= $this->parse($tpl);
+			};
+			$this->vars(array(
+				"MENU_ITEM" => $menu_data,
+				"menu_id" => "aw_menu_" . $item_id,
+			));
+			$whole_menu .= $this->parse("MENU");
+		};
+
+//      print "<pre>";
+//      print_r($by_parent);
+//      print "</pre>";
+
+
 		// make applet for adding objects
 		$this->vars(array(
 			"icon_over" => $this->cfg["baseurl"]."/automatweb/images/icons/new2_over.gif",
@@ -5924,7 +5995,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"height" => 22,
 			"width" => 23,
 			"url" => $host,
-			"content" => $this->get_add_menu(array("id" => $parent, "ret_data" => true, "sharp" => true, "addmenu" => 1, "period" => $period))
+			"content" => $content,
 		));
 		$up = $this->parse("URLPARAM");
 		$this->vars(array(
@@ -5962,7 +6033,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
-			"add_applet" => $add_applet,
+			"add_applet" => $whole_menu,
 			"sel_count" => count($sel_objs),
 		));
 
@@ -5974,7 +6045,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 			"parent" => $parent,
 			"period" => $period,
 			"lang_name" => $la->get_langid(),
-			"toolbar" => $toolbar->get_toolbar(),
+			"toolbar" => $toolbar->get_toolbar() . $whole_menu,
 		));
 
 		return $this->parse();
@@ -5987,7 +6058,15 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		
 		if ($this->can("add", $parent))
 		{
-			$toolbar->add_cdata($add_applet);
+			$toolbar->add_button(array(
+				"name" => "add",
+				"tooltop" => "Uus",
+				"url" => "#",
+				"onClick" => "return buttonClick(event, 'aw_menu_0');",
+				"img" => "new.gif",
+				"imgover" => "new_over.gif",
+				"class" => "menuButton",
+			));
 		};
 
 		if (!$no_save)
