@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.21 2003/11/26 16:27:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.22 2003/12/03 15:18:27 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -168,10 +168,6 @@ class messenger_v2 extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
                 {
-			case "write_mail":
-				$this->submit_write_mail($arr);
-				break;
-
 			case "autofilter_delay":
 				$this->schedule_filtering($arr);
 				break;
@@ -311,10 +307,7 @@ class messenger_v2 extends class_base
 			$wname = "msgr" . $key;
 
 			$t->define_data(array(
-				"mark" => html::checkbox(array(
-					"name" => "mark[" . $key . "]",
-					"value" => 1,
-				)),
+				"id" => $key,
 				"from" => $this->_format($fromline,$seen),
 				"subject" => html::href(array(
 					"url" => "javascript:aw_popup_scroll(\"" . $this->mk_my_orb("change",array(
@@ -331,7 +324,10 @@ class messenger_v2 extends class_base
 				"attach" => $message["has_attachments"] ? html::img(array("url" => $this->cfg["baseurl"] . "/automatweb/images/attach.gif")) : "",
 			));
 		};
-
+		$t->define_chooser(array(
+			"name" => "mark",
+			"field" => "id",
+		));
 		$t->set_default_sortby("date");
 		$t->set_default_sorder("desc");
 
@@ -584,152 +580,6 @@ class messenger_v2 extends class_base
 
 	}
 	
-	function submit_write_mail($arr)
-	{
-                $emb = $arr["form_data"]["emb"];
-		// I will not submit data, instead I'll store it into the "Sent" folder
-		// on the IMAP server .. yeees, yees, that is really cool
-
-		$obj_id = $arr["form_data"]["id"];
-		$this->_connect_server(array(
-			"msgr_id" => $arr["form_data"]["id"],
-		));
-
-		$to_addr = $emb["mto"];
-
-		// heh, this means you can send mail directly to any object just by writing it's id here
-		// it's bad, and I'll fix it later --duke
-		if (is_numeric($to_addr))
-		{
-			$target_obj = new object($to_addr);
-			if ($target_obj->prop("class_id") == CL_ML_LIST)
-			{
-				if (isset($emb["group"]))
-				{
-					$this->emb_group = $emb["group"];
-				};
-
-				$lists = array(":" . $target_obj->prop("name"));
-				
-				// store it in the server outbox as well
-				$this->drv_inst->store_message(array(
-					"from" => $emb["mfrom"],
-					"to" => join(",",$lists),
-					"subject" => $emb["name"],
-					"message" => $emb["message"],
-				));
-
-				$t = get_instance("messenger/mail_message");
-                		$t->id_only = true;
-				unset($emb["send"]);
-				$msg_id = $t->submit($emb);
-				$mllist=get_instance("mailinglist/ml_list");
-                        	$route_back=$this->mk_my_orb("change",array("id" => $obj_id,"group" => "message_view"));
-                        	aw_session_set("route_back",$route_back);
-                        	// scheduleerib kirjade saatmise
-                        	$url=$mllist->route_post_message(array("id" => $msg_id, "targets" => $lists));
-                        	Header("Location: $url");
-                        	die();
-			};
-		}
-		else
-		{
-			$t = get_instance("messenger/mail_message");
-                	$t->id_only = true;
-			unset($emb["send"]);
-			$msg_id = $t->submit($emb);
-
-			if ($emb["savedraft"])
-			{
-				// this should redirect us right back to at where we were before
-				$this->msgobj = $emb["id"];
-				return;
-			};
-
-			$this->messageobj = new object($emb["id"]);
-			$conns = $this->messageobj->connections_from();
-			
-
-			$partnum = 1;
-
-			$awf = get_instance("file");
-
-			if (sizeof($conns) > 0)
-			{
-				$partdata = array(
-					"type" => TYPEMULTIPART,
-					"subtype" => "mixed",
-				);
-				$body[$partnum] = $partdata;
-				$partnum++;
-			};
-			
-			$part1["type"]= "TEXT";
-			$part1["subtype"]="PLAIN";
-			$part1["charset"] = "ISO-8859-4";
-			$part1["contents.data"] = $emb["message"];
-
-			$body[$partnum] = $part1;
-			$partnum++;
-
-			// right now it only deals with a single server.
-			foreach($conns as $connection)
-			{
-
-				// the general idea here is to create a specially crafted attachment,
-				// which will contain meta information about all the attached objects
-				// .. non-AW clients will then show the plain old attachments
-				// but AW messenger will then be able to extract required information
-				// from that special block and use it when saving objects inside AW
-				$sdat = new object($connection->to());
-				// so, yes, I really need to get rid of that cycle here
-				if ($sdat->prop("class_id") == CL_FILE)
-				{
-					$contents = $awf->get_file_by_id($sdat->id());
-					$type = explode("/",$contents["type"]);
-
-					$partdata = array(
-						"type" => $type[0],
-						"encoding" => ENCBINARY,
-						"subtype" => $type[1],
-						"description" => $sdat->name(),
-						"contents.data" => $contents["content"],
-						"disposition.type" => "attachment",
-						"disposition" => array("filename" => $sdat->name()),
-					);
-
-					$body[$partnum] = $partdata;
-					$partnum++;
-
-				};
-			};
-
-
-			$envelope = array();
-			$envelope["from"] = $emb["mfrom"];
-			$envelope["subject"] = $emb["name"];
-			$envelope["date"] = date('r');
-
-			$msg = imap_mail_compose($envelope,$body);
-
-			mail($emb["mto"],$emb["name"],"",$msg);
-			
-			// store it in the server outbox as well
-			$this->drv_inst->store_message(array(
-				"from" => $emb["mfrom"],
-				"to" => $emb["mto"],
-				"subject" => $emb["name"],
-				"message" => $msg,
-			));
-				
-
-			// redirect to inbox .. not the smartest thing to do, but hey
-			$this->redir_to_group = "main_view";
-		};
-
-                return PROP_OK;
-
-	}
 
 	function schedule_filtering($arr)
 	{
