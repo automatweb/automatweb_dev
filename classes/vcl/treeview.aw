@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.15 2003/09/29 12:38:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.16 2003/10/05 17:21:15 duke Exp $
 // treeview.aw - tree generator
 /*
         @default table=objects
@@ -335,6 +335,7 @@ class treeview extends class_base
 	{
 		$level = 0;
 		$this->rv = "";
+		$this->set_parse_method("eval");
 		$this->read_template("dhtml_tree.tpl");
 
 		$this->vars(array("target" => $this->tree_dat["url_target"]));
