@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.6 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/banner.aw,v 2.7 2002/01/31 00:29:22 kristo Exp $
 global $orb_defs;
 $orb_defs["banner"] = "xml";
 lc_load("banner");
@@ -1313,15 +1313,26 @@ class banner extends aw_template
 		extract($arr);
 		$xv = explode(",",$xvals);
 		$yv = explode(",",$yvals);
-		classload("tt_bar");
-		$Im = new BarGraph(1,40,1);
+		classload("tt_bar","tt_line","tt_pie");
+		if (!$typestr)
+		{
+			$typestr = "BarGraph";
+		}
+		$Im = new $typestr(1,40,1);
 		$Im->GraphBase(500,350);
-		$Im->parseData($xv,$yv);
 
-		$Im->grid(5);
+		if ($typestr != "PieGraph")
+		{
+			$Im->parseData($xv,$yv);
+		}
+
 		$Im->title($title,"000000");
-		$Im->xaxis($xv,$xtitle,"000000");
-		$Im->yaxis($yv,$ytitle,"000000","000000");
+		if ($typestr != "PieGraph")
+		{
+			$Im->grid(5);
+			$Im->xaxis($xv,$xtitle,"000000");
+			$Im->yaxis($yv,$ytitle,"000000","000000");
+		}
 		$da = explode(",",$data);
 		$c = "00ff00";
 		if ($data2 != "")
@@ -1345,7 +1356,16 @@ class banner extends aw_template
 
 			$c["ycol_3"] = "ff00ff";
 		}
-		$Im->makeBar($da,$c);
+
+		if ($typestr != "PieGraph")
+		{
+			$Im->makeGraph($da,$c);
+		}
+		else
+		{
+			$Im->parsedata(array("labels" => $xvals,"data" => $data));
+			$Im->create();
+		}
 
 		$image=$Im->getImage();
 		header("Content-type: image/png");
