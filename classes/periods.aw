@@ -1,5 +1,5 @@
 <?php
-// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.12 2001/08/27 14:01:11 duke Exp $
+// a$Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.13 2001/08/27 15:37:39 duke Exp $
 
 class db_periods extends aw_template 
 {
@@ -309,6 +309,7 @@ class db_periods extends aw_template
 		$img = get_instance("image");
 		$old["data"]["image"] = $img->add_upload_image("image",0,$old["data"]["image"]["id"]);
 		$old["data"]["image_link"] = $image_link;
+		$old["data"]["pyear"] = $pyear;
 
 		$dstr = aw_serialize($old["data"]);
 		$this->quote($dstr);
@@ -342,25 +343,34 @@ class periods extends db_periods
 		$this->read_template("list.tpl");
 		$active = $this->rec_get_active_period();
 		$this->clist();
+		load_vcl("table");
+		$table = new aw_table(array(
+			"prefix" => "periods",
+		));
+	
+		$table->parse_xml_def($this->cfg["basedir"]."/xml/periods/list.xml");
+
+
 		while($row = $this->db_next()) 
 		{
-			$style = ($row["id"] == $active) ? "selected" : "plain";
-			$this->vars(array(
-				"id" => $row["id"],
-				"archived"    => checked($row["archived"] == 1),
-				"active"	   => checked($row["id"] == $active),
-				"jrk"	   => $row["jrk"],
-				"oldarc"      => $row["archived"],
-				"created"     => $this->time2date($row["created"],1),
-				"description" => $row["description"],
-				"rs"	   => $style,
-				"change" => $this->mk_my_orb("change", array("id" => $row["id"]))
-			));
-			$content .= $this->parse("LINE");
+			$jrk_html = "<input type='text' size='3' maxlength='3' name='jrk[$row[id]]' value='$row[jrk]'><input type='hidden' name='oldjrk[$row[id]]' value='$row[jrk]'>";
+			$archived = checked($row["archived"]);
+			$arc_html = "<input type='checkbox' name='arc[$row[id]]' $archived><input type='hidden' name='oldarc[$row[id]]' value='$row[archived]'>";
+			$active = checked($row["id"] == $active);
+			$act_html = "<input type='radio' name='activeperiod' $active value='$row[id]'>";
+			$row["jrk"] = $jrk_html;
+			$row["archived"] = $arc_html;
+			$row["active"] = $act_html;
+			$ch_url = $this->mk_my_orb("change",array("id" => $row["id"]));
+			$row["change"] = "<a href='$ch_url'>Muuda</a>";
+			$table->define_data($row);
 		};
+		
+		$table->sort_by(array("sortby" => $sortby));
+
 		$this->vars(array(
-			"LINE" => $content,
 			"add" => $this->mk_my_orb("add"),
+			"table" => $table->draw(),
 			"reforb" => $this->mk_reforb("savestatus", array("oldactiveperiod" => $active, "oid" => $this->oid))
 		));
 		return $this->parse();
@@ -372,6 +382,7 @@ class periods extends db_periods
 		$this->mk_path(0,"<a href='".$this->mk_my_orb("admin_list")."'>Perioodid</a> / Lisa uus");
 		$this->read_template("add.tpl");
 		$this->vars(array(
+			"pyear" => $this->picker(-1,array("0" => "--vali--") + range(2000,2010)),
 			"reforb" => $this->mk_reforb("submit_add", array("oid" => $this->oid))
 		));
 		return $this->parse();
@@ -383,11 +394,9 @@ class periods extends db_periods
 		if (!$id)
 		{
 			$id = $this->add($archived,$description);
-		}
-		else
-		{
-			$this->save($arr);
-		}
+		};
+		$arr["id"] = $id;
+		$this->save($arr);
 		return $this->mk_my_orb("change", array("id" => $id));
 	}
 
@@ -404,6 +413,7 @@ class periods extends db_periods
 	    "arc" => $this->option_list($cper["archived"],array("0" => "Ei","1" => "Jah")),
 			"image" => image::make_img_tag(image::check_url($cper["data"]["image"]["url"])),
 			"image_link" => $cper["data"]["image_link"],
+			"pyear" => $this->picker($cper["data"]["pyear"],array("0" => "--vali--") + range(2000,2010)),
 			"reforb" => $this->mk_reforb("submit_add", array("id" => $id))
 		));
 		return $this->parse();
