@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.18 2005/01/12 10:17:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.19 2005/01/13 17:15:11 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -367,6 +367,8 @@ class otv_ds_obj extends class_base
 				}
 				else
 				{
+		
+
 					$ret[$pn] = $pd["caption"];
 				}
 			}
@@ -375,8 +377,20 @@ class otv_ds_obj extends class_base
 		$ret["jrk"] = "J&auml;rjekord";
 		return $ret;
 	}
+	
+	function has_feature($str)
+	{
+		if ($str == "filter")
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
-	function get_objects($ob)
+	function get_objects($ob, $fld = NULL, $tv_sel = NULL, $params = array())
 	{
 		$ret = array();
 
@@ -451,7 +465,15 @@ class otv_ds_obj extends class_base
 		{
 			$sby = $ob->prop("sort_by");
 		}
+// seems that if i want to filter something - i need to do it here:
+// --> $filters - and this filters which are set in otv and will be passed on here as 
+//   -- eh, kui üheja sama väljapeale on salvestatud mingi filter ja selle sama välja
+//   -- peale on määratud ka see, et filtreerimine peaks toima vastavalt esitähele
+//   -- siis antud juhul filtreeritakse ainult esitähe järgi, kuna see tuleb pärast
+//   !!! tuleks teha variant, et saab mingit AND ja OR konstruktsioone kasutada !!!
+// --> and i think it would be nice to check if the ds is able to filter something at all
 
+		
 		$_ft = array(
 			"parent" => $parent,
 			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
@@ -459,10 +481,37 @@ class otv_ds_obj extends class_base
 			"sort_by" => $sby,
 			"lang_id" => array()
 		);
-	
+		// if there is $params['filters'] array then lets filter
+		if(!empty($params['filters']) && is_array($params['filters']))
+		{
+			// filtering by these filters which are saved in otv
+			foreach($params['filters']['saved_filters']->get() as $filter)
+			{
+				if ($filter['is_strict'] == 1)
+				{
+					$_ft[$filter['field']] = $filter['value'];
+				}
+				else
+				{
+					$_ft[$filter['field']] = "%".$filter['value']."%";
+				}
+			}
+			// filtering by $tv_sel
+			if (($ob->prop("use_meta_as_folders") == 1) && empty($params['filters']['char']) && !empty($tv_sel))
+			{
+				$_ft[$params['filters']['group_by_folder']] = $tv_sel;
+			}
+			else
+			// filtering by char
+			if (!empty($params['filters']['char']) && empty($tv_sel))
+			{
+				$_ft[$params['filters']['filter_by_char_field']] = $params['filters']['char']."%";
+			}
+
+		}
+
 		$ol = new object_list($_ft);
 		$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
-
 		$classlist = aw_ini_get("classes");
 		$fields = $this->get_fields($ob, true);
 

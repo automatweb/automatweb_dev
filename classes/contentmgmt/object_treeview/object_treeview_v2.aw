@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.44 2005/01/12 10:37:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.45 2005/01/13 17:15:11 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -280,13 +280,45 @@ class object_treeview_v2 extends class_base
 		// get all objects to show
 		// if is checked, that objects won't be shown by default, then don't show them, unless
 		// there are set some url params (tv_sel, char)
-		if (($ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		$params = array();
+		if (($ob->prop("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
 		{
 			$ol = array();
 		}
 		else
 		{
-			$ol = $d_inst->get_objects($d_o, $fld, $_GET["tv_sel"]);
+			///
+			// here i have to check, if datasource can filter the data
+			// if it can, then i pass filter to datasource via get_objects method
+			// if it cannot, i will filter the data here, in otv class (which is 
+			// going to be pretty slow when there is a lot of data to deal with - 
+			// cause it takes place in memory, and everytime, ALL objects will be 
+			// queried from datasource, no matter how much of it passes the filtering
+			if ($d_inst->has_feature("filter"))
+			{
+			
+			
+				$params = array(
+					"filters" => array(
+						"saved_filters" => new aw_array($ob->meta("saved_filters")),
+						"group_by_folder" => $ob->prop("group_by_folder"),
+						"filter_by_char_field" => $ob->prop("filter_by_char_field"),
+						"char" =>  $_GET['char']{0}, 	// I'll take only the first character
+										// from the char URL parameter
+					),
+				);
+				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
+			}
+			else
+			{
+				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
+				$ol = $this->filter_data(array(
+					"ol" => $ol,
+					"otv_obj" => $ob,
+					"ds_obj" => $d_o,
+					"folders" => $fld,
+				));
+			}
 		}
 
 		// make folders
@@ -308,73 +340,7 @@ class object_treeview_v2 extends class_base
 		}
 
 
-
-// do some filtering in $ol
-		$filters = $ob->meta("saved_filters");
-// filtering is taking place if one of the following conditions are present:
-// -> $filter variable is array and its element count is bigger than zero
-// -> $_GET['tv_sel'] is not empty
-// -> $_GET['char'] is not empty
-		if ((is_array($filters) && count($filters) > 0) || !empty($_GET['tv_sel']) || !empty($_GET['char']))
-		{
-
-//			$ol_result = array();
-			foreach($ol as $ol_key => $ol_value)
-			{
-				foreach(safe_array($filters) as $filter)
-				{
-					if($filter['is_strict'] == 1)
-					{
-						if($ol_value[$filter['field']] != $filter['value'])
-						{
-//							array_push($ol_result, $ol_item);
-
-							unset($ol[$ol_key]);
-
-							break;
-						}
-					}
-					else
-					{
-						if(strpos(strtolower($ol_value[$filter['field']]), strtolower($filter['value'])) === false)
-						{
-//							array_push($ol_result, $ol_item);
-							unset($ol[$ol_key]);
-							break;
-						}
-					}
-				}
-
-// if meta data fields are used as folders, then i need to do
-// some filtering according to $_GET['tv_sel']
-
-// damn - it doesn't work the way i'd like to :S
-				if(($d_o->prop("use_meta_as_folders") == 1) && empty($_GET['char']))
-				{
-
-					if(!empty($_GET['tv_sel']) && ($fld[$_GET['tv_sel']]['name'] != $ol_value[$ob->meta("group_by_folder")]))
-					{
-						unset($ol[$ol_key]);
-					}
-				}
-// if there is char param set in the url, then filter objects by this fields value which is set by
-// filter_by_char_field property
-				if(!empty($_GET['char']))
-				{
-					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
-					if((strlen($_GET['char']) == 1) && ($f{0} != strtolower($_GET['char'])))
-					{
-						unset($ol[$ol_key]);
-					}
-				}
-			}
-
-		}
-
-		// some filtering according to url parameter. Only needed if folders are
-		// meta data groups
-
-
+		
 		// if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ob->meta("sel_columns_fields"));
@@ -1556,6 +1522,76 @@ class object_treeview_v2 extends class_base
 			$_name = $name;
 		}
 		return $_name;
+	}
+
+// "ol" => object list which should be filtered
+// "otv_obj" => otv object
+	function filter_data($arr)
+	{
+
+		$ol = $arr['ol'];
+		$ob = $arr['otv_obj'];
+		$d_o = $arr['ds_obj'];
+		$fld = $arr['folders'];
+		$filters = $ob->meta("saved_filters");
+
+		// filtering is taking place if one of the following conditions are present:
+		// -> $filter variable is array and its element count is bigger than zero
+		// -> $_GET['tv_sel'] is not empty
+		// -> $_GET['char'] is not empty
+		if ((is_array($filters) && count($filters) > 0) || !empty($_GET['tv_sel']) || !empty($_GET['char']))
+		{
+
+//			$ol_result = array();
+			foreach($ol as $ol_key => $ol_value)
+			{
+				foreach(safe_array($filters) as $filter)
+				{
+					if($filter['is_strict'] == 1)
+					{
+						if($ol_value[$filter['field']] != $filter['value'])
+						{
+							unset($ol[$ol_key]);
+							break;
+						}
+					}
+					else
+					{
+						if(strpos(strtolower($ol_value[$filter['field']]), strtolower($filter['value'])) === false)
+						{
+							unset($ol[$ol_key]);
+							break;
+						}
+					}
+				}
+
+				// if meta data fields are used as folders, then i need to do
+				// some filtering according to $_GET['tv_sel']
+
+				if(($d_o->prop("use_meta_as_folders") == 1) && empty($_GET['char']))
+				{
+
+					if(!empty($_GET['tv_sel']) && ($fld[$_GET['tv_sel']]['name'] != $ol_value[$ob->prop("group_by_folder")]))
+					{
+						unset($ol[$ol_key]);
+					}
+					else{arr($fld[$_GET['tv_sel']]['name']);}
+				}
+				// if there is char param set in the url, then filter objects by this fields value which is set by
+				// filter_by_char_field property
+				if(!empty($_GET['char']))
+				{
+					$f = strtolower($ol_value[$ob->meta("filter_by_char_field")]);
+					if((strlen($_GET['char']) == 1) && ($f{0} != strtolower($_GET['char'])))
+					{
+						unset($ol[$ol_key]);
+					}
+				}
+			}
+			return $ol;
+
+		}
+
 	}
 }
 ?>
