@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.32 2003/06/04 10:44:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/promo.aw,v 2.33 2003/06/04 11:21:12 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -534,6 +534,10 @@ class promo extends class_base
 		if (!$ob['meta']['use_fld_tpl'])
 		{
 			$parms["tpl"] = $row["filename"];
+		}
+		else
+		{
+			$parms["tpl_auto"] = 1;
 		}
 	
 		foreach($def->get() as $key => $val)

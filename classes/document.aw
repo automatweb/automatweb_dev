@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.189 2003/06/03 12:06:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.190 2003/06/04 11:21:12 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -299,6 +299,8 @@ class document extends aw_template
 	// tpls - selle votmega antakse ette template source, mille sisse kood paigutada
 	// doc - kui tehakse p2ring dokude tabelisse, siis v6ib ju sealt saadud inffi kohe siia kaasa panna ka
 	//       s22stap yhe p2ringu.
+	// tpl_auto - if tpl is not set and this is true, then the template is autodetected from the document location
+	//       lead/full is based on leadonly parameter
 	function gen_preview($params)
 	{
 		extract($params);
@@ -323,6 +325,19 @@ class document extends aw_template
 			//	$docid = $doc["docid"];
 		};
 
+
+		if ($params["tpl_auto"] && !$params["tpl"])
+		{
+			// do template autodetect from parent
+			if ($leadonly)
+			{
+				$tpl = $this->get_lead_template($doc["parent"]);
+			}
+			else
+			{
+				$tpl = $this->get_long_template($doc["parent"]);
+			}
+		}
 
 
 		$this->dequote(&$doc["lead"]);
