@@ -53,6 +53,14 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="submit_select_alias">
+			<function name="submit_select_alias">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
