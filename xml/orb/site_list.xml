@@ -105,5 +105,22 @@
 			</function>
 		</action>
 
+		<action name="create_session_key">
+			<function name="create_session_key">
+				<arguments>
+					<required name="site_id" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="do_auto_update">
+			<function name="do_auto_update">
+				<arguments>
+					<required name="site_id" type="int" />
+					<required name="data" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

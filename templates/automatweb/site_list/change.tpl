@@ -35,10 +35,10 @@
 		<td class="celltext">ID:</td><td class="celltext">{VAR:id}</td>
 	</tr>
 	<tr>
-		<td class="celltext">Nimi:</td><td class="celltext"><input type='text' NAME='name' VALUE='{VAR:name}' class="formtext"></td>
+		<td class="celltext">Nimi:</td><td class="celltext"><input type='text' NAME='name' size=50 VALUE='{VAR:name}' class="formtext"></td>
 	</tr>
 	<tr>
-		<td class="celltext">URL:</td><td class="celltext"><input type='text' NAME='url' VALUE='{VAR:url}' class="formtext"></td>
+		<td class="celltext">URL:</td><td class="celltext"><input type='text' NAME='url' size=50 VALUE='{VAR:url}' class="formtext"></td>
 	</tr>
 	<tr>
 		<td class="celltext">Server:</td><td class="celltext"><select NAME='server_id' class="formselect">{VAR:server_id}</select></td>
@@ -47,7 +47,16 @@
 		<td class="celltext">Used?</td><td class="celltext"><input type='checkbox' NAME='site_used' VALUE='1' {VAR:site_used} class="formtext"></td>
 	</tr>
 	<tr>
-		<td class="celltext">Code branch:</td><td class="celltext"><input type='text' NAME='code_branch' VALUE='{VAR:code_branch}' class="formtext"></td>
+		<td class="celltext">Code branch:</td><td class="celltext"><input type='text' NAME='code_branch' VALUE='{VAR:code_branch}' class="formtext" size="60"></td>
+	</tr>
+	<tr>
+		<td class="celltext">Basedir:</td><td class="celltext">{VAR:basedir}</td>
+	</tr>
+	<tr>
+		<td class="celltext">Updater:</td><td class="celltext">{VAR:updater_uid}</td>
+	</tr>
+	<tr>
+		<td class="celltext">Last update:</td><td class="celltext">{DATE:last_update|d.m.Y / H:i}</td>
 	</tr>
 </table>
 

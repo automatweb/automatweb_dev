@@ -59,6 +59,14 @@ class site_list extends class_base
 			'sortable' => 1,
 		));
 		$t->define_field(array(
+			'name' => 'last_update',
+			'caption' => 'Viimane uuendus',
+			'sortable' => 1,
+			'type' => 'time',
+			'numberic' => 1,
+			'format' => "d.m.Y / H:i"
+		));
+		$t->define_field(array(
 			'name' => 'change',
 			'caption' => 'Muuda',
 		));
@@ -649,6 +657,120 @@ class site_list extends class_base
 			flush();
 		}
 		echo "sucess = $suc <br>";
+	}
+
+	/** creates a new session key for the given site, if it does not already exist
+
+		@attrib name=create_session_key
+
+		@param site_id required type=int
+
+	**/
+	function create_session_key($arr)
+	{
+		// check if the site exists
+		$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$arr[site_id]'");
+		if (!is_array($row) || $row["id"] != $arr["site_id"])
+		{
+			return -1;
+		}
+
+		// check that it already does not have a session key
+		if (trim($row["session_key"]) != "")
+		{
+			return -2;
+		}
+
+		// create new key
+		$key = gen_uniq_id();
+
+		$td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
+		$iv = base64_encode(mcrypt_create_iv(mcrypt_enc_get_iv_size($td), MCRYPT_DEV_RANDOM));
+		mcrypt_module_close($td);
+
+		// save to database
+		$this->db_query("UPDATE aw_site_list SET session_key = '$key', iv = '$iv' WHERE id = '$arr[site_id]'");
+
+		// return it
+		return array($key, $iv);
+	}
+
+	/**
+
+		@attrib name=do_auto_update
+
+		@param site_id required type=int
+		@param data required
+
+	**/
+	function do_auto_update($arr)
+	{
+		$data = aw_unserialize($this->_decrypt(base64_decode($arr["data"]), $arr["site_id"]));
+
+		if ($data["id"] != $arr["site_id"])
+		{
+			return -1;
+		}
+
+		// save to database
+
+		// get url from baseurl
+		$url = trim(preg_replace("/(.*)\:\/\/(.*)/imsU", "\\2", $data["baseurl"]));
+		if ($url == "")
+		{
+			$url = $data["baseurl"];
+		}
+
+		if ($url == "")
+		{
+			return -2;
+		}
+
+		// resolve url to ip
+		$ip = gethostbyname($url);
+		$server_url = gethostbyaddr($ip);
+
+		// check if such server exists
+		if (!($serv_id = $this->get_server_id_by_ip(array("ip" => $ip))))
+		{
+			// if not, add it
+			$serv_id = $this->db_query("SELECT MAX(id) as id FROM aw_server_list", "id")+1;
+			$this->db_query("INSERT INTO aw_server_list(id,name,ip) values($serv_id,'$ip','$url')");
+		}
+
+		// url, used => 1, code path, basedir, updater uid, time of update, server_id
+		$this->db_query("
+			UPDATE
+				aw_site_list
+			SET
+				url = '$data[baseurl]',
+				site_used = 1,
+				code_branch = '".$server_url.":".$data["code"]."',
+				basedir = '$data[site_basedir]',
+				updater_uid = '$data[uid]',
+				last_update = '".time()."',
+				server_id = '$serv_id'
+			WHERE
+				id = '$arr[site_id]'
+		");
+		return true;
+	}
+
+	function _decrypt($data, $site_id)
+	{
+		$row = $this->db_fetch_row("SELECT session_key,iv FROM aw_site_list WHERE id = '$site_id'");
+		if (!$row)
+		{
+			return false;
+		}
+
+		$td = mcrypt_module_open('rijndael-256', '', 'ofb', '');
+		mcrypt_generic_init($td, $row["session_key"], base64_decode($row["iv"]));
+		$decrypted = mdecrypt_generic($td, $data);
+		mcrypt_generic_deinit($td);
+		mcrypt_module_close($td);
+
+		return $decrypted;
 	}
 }
 ?>
