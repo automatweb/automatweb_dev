@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.32 2004/11/22 14:04:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.33 2004/11/25 12:20:55 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -22,7 +22,7 @@ class vcalendar extends aw_template
 	{
 		$retval = false;
 		// call this after configure ..
-		if ($feature == "first_image")
+		if (is_object($this->evt_tpl) && $feature == "first_image")
 		{
 			if ($this->evt_tpl->template_has_var("first_image"))
 			{
