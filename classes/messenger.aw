@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.63 2001/06/18 17:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/messenger.aw,v 2.64 2001/06/19 00:57:47 duke Exp $
 // messenger.aw - teadete saatmine
 // klassid - CL_MESSAGE. Teate objekt
 
@@ -220,29 +220,78 @@ class messenger extends menuedit_light
 	// !Imports a contact
 	function importcontact($args = array())
 	{
-		classload("form");
-		$f = new form();
+		extract($args);
 		global $ext,$udata;
 		$folder = ($folder) ? $folder : $udata["home_folder"];
-		$f->load(CONTACT_FORM);
-		$el = $f->get_element_by_name("name");
-		$ef = &$f->get_element_by_id($el->id);
-		print gettype($ef);
-		$ef->set_content(array("content" => "blah"));
+		$fldr = $udata["home_folder"];
+		do
+		{
+			// kysime koik sellel levelil asuvad objektid
+			$groups = $this->_get_groups_by_level($fldr);
+			
+			// sorteerime nad parentite jargi ära
+			// ja paigutame ka flat massiivi
+			foreach($groups as $key => $val)
+			{
+				$grps_by_parent[$val["parent"]][$key] = $val["name"];
+				$grps[$key] = $val["name"];
+			};
 		
+			// koostame parentite nimekirja jargmise tsykli jaoks
+			$fldr = array_keys($groups);
+	
+		// kordame nii kaua, kuni yhtegi objekti enam ei leitud
+		} while(sizeof($groups) > 0);
+	
+		// nyyd on dropdowni jaoks vaja koostada idenditud nimekiri koigist objektidest
+		$this->flatlist = array($udata["home_folder"] => "sorteerimata");
+		$this->_indent_array($grps_by_parent,$udata["home_folder"]);
+		
+		classload("form");
+		$f = new form();
+		$f->load(CONTACT_FORM);
+		$el = $f->get_element_by_name("grupp");
+		$ef = &$f->get_element_by_id($el->id);
+
+		$gr = array("3" => "kala", "5" => "tursk");
+		$ef->set_content(array(
+				"content" => $gr,
+			));
+	
+		$addr = rawurldecode($addr);
+		$this->dequote($addr);
+		preg_match("/(.+?)[<|\(|\[](.+?)[>|\)|\]]/",$addr,$matches);
+		$name = str_replace("\"","",$matches[1]);
+		list($name,$surname) = explode(" ",$name);
+		$elvalues = array(
+				"name" => $name,
+				"surname" => $surname,
+				"email" => $matches[2],
+				"grupp" => $this->flatlist,
+			);
 		$form = $f->gen_preview(array(
 						"id" => CONTACT_FORM,
-						"reforb" => $this->mk_reforb("submit_contact",array("folder" => $folder)),
+						"reforb" => $this->mk_reforb("submitimport",array("folder" => $folder)),
+						"elvalues" => $elvalues,
 						"form_action" => "/index.$ext",
 					));
-		print "<pre>";
-		print_r($ef);
-		print "</pre>";
-		
 		print $form;
 		exit;
 	}
 
+	function submitimport($args = array())
+	{
+		extract($args);
+		classload("form");
+		$f = new form(CONTACT_FORM);
+		// save the form entry, and now .. should we show it?
+		$args["id"] = CONTACT_FORM;
+		$args["parent"] = $args[0];
+		$f->process_entry($args);
+		// I realize that this a little ugly
+		print "<script language='javascript'>window.close()</script>";
+		exit;
+	}
 
 	////
 	// !Contact manager
