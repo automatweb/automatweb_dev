@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.1 2004/02/17 15:09:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.2 2004/02/18 10:42:19 duke Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 
 // and pray tell .. how to I embed this into crm_db now?
@@ -239,7 +239,7 @@ class crm_org_search extends class_base
 		for ($o = $results->begin(); !$results->end(); $o = $results->next())
 		{
 			// aga ülejäänud on kõik seosed!
-			$vorm = $tegevus = $contact = $juht = "";
+			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
 			if (is_oid($o->prop("ettevotlusvorm")))
 			{
 				$tmp = new object($o->prop("ettevotlusvorm"));
