@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.70 2003/02/12 18:28:56 duke Exp $
+// $Id: class_base.aw,v 2.71 2003/02/13 09:21:46 kristo Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1559,13 +1559,13 @@ class class_base extends aliasmgr
 				// do nothing
 			}
 			else
-			if ($status == PROP_ERROR)
+/*			if ($status == PROP_ERROR)
 			{
 				$val["type"] = "text";
 				$val["value"] = "Viga: $val[error]";
 				$resprops[$key] = $val;
 			}
-			else
+			else*/
 			if ( ($val["editonly"] == 1) && !$this->id)
 			{
 				// do nothing
