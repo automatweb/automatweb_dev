@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.10 2004/06/30 10:36:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.11 2004/11/17 16:52:19 duke Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -11,11 +11,11 @@
 @property users_only type=checkbox ch_value=1 field=meta method=serialize
 @caption Ainult sisse logitud kasutajatele
 
-@property menus type=text store=no callback=callback_get_menus editonly=1
+@property menus type=table editonly=1
 @caption Vali men&uuml;&uuml;d
 
-@reltype MENU value=1 clid=CL_MENU
-@caption menüü, mille alt otsitakse
+@reltype SEARCH_LOCATION value=1 clid=CL_MENU
+@caption Otsingu lähtekoht
 
 */
 
@@ -24,53 +24,52 @@ class site_search_content_grp extends class_base
 	function site_search_content_grp()
 	{
 		$this->init(array(
-			"tpldir" => "contentmgmt/site_search/site_search_content_grp",
 			"clid" => CL_SITE_SEARCH_CONTENT_GRP
 		));
 	}
 
-/*	function get_property($args)
+	function get_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "menus":
-				
+				$this->do_submenus($arr);
 				break;
 		};
 		return $retval;
-	}*/
+	}
 
-	function set_property($args = array())
+	function set_property($arr)
 	{
-		$data = &$args["prop"];
+		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "menus":
-				$args["obj_inst"]->set_meta("section_include_submenus", $args["request"]["include_submenus"]);
+				$arr["obj_inst"]->set_meta("section_include_submenus", $arr["request"]["include_submenus"]);
 				break;
 		}
 		return $retval;
 	}	
 
-	function callback_get_menus($args = array())
+	function do_submenus($arr)
 	{
-		if (!is_oid($args["obj_inst"]->id()))
+		if (!is_oid($arr["obj_inst"]->id()))
 		{
 			return;
 		}
-		$prop = $args["prop"];
-		$nodes = array();
-		$section_include_submenus = $args["obj_inst"]->meta("section_include_submenus");
+		$prop = $arr["prop"];
+		$obj = $arr["obj_inst"];
+		$section_include_submenus = $obj->meta("section_include_submenus");
 		// now I have to go through the process of setting up a generic table once again
-		load_vcl("table");
-		$this->t = new aw_table(array(
-			"prefix" => "sgrp_menus",
-			"layout" => "generic"
-		));
-		$this->t->define_field(array(
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "class",
+			"caption" => "Klass",
+		));			
+		$t->define_field(array(
 			"name" => "oid",
 			"caption" => "ID",
 			"talign" => "center",
@@ -78,81 +77,46 @@ class site_search_content_grp extends class_base
 			"nowrap" => "1",
 			"width" => "30",
 		));
-		$this->t->define_field(array(
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => "Nimi",
 			"talign" => "center",
 		));
-		$this->t->define_field(array(
+		$t->define_field(array(
 			"name" => "check",
 			"caption" => "k.a. alammenüüd",
 			"talign" => "center",
 			"width" => 80,
 			"align" => "center",
 		));
+		
+		$clinf = aw_ini_get("classes");
 
-		$obj = $args["obj_inst"];
 		$conns = $obj->connections_from(array(
-			"type" => RELTYPE_MENU
+			"type" => RELTYPE_SEARCH_LOCATION,
 		));
+
+
 		foreach($conns as $c)
 		{
 			$c_o = $c->to();
+			$cid = $c_o->id();
+			$clid = $c_o->class_id();
 
-			$this->t->define_data(array(
-				"oid" => $c_o->id(),
+			$el_arr = array(
+				"oid" => $cid,
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
 				))."/".$c_o->name(),
+				"class" => $clinf[$clid]["name"],
 				"check" => html::checkbox(array(
-					"name" => "include_submenus[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $section_include_submenus[$c_o->id()],
+					"name" => "include_submenus[".$cid."]",
+					"value" => $cid,
+					"checked" => $section_include_submenus[$cid],
 				)),
-			));
+			);
+			$t->define_data($el_arr);
 		}
- 
-		$nodes[$prop["name"]] = array(
-			"type" => "text",
-			"caption" => $prop["caption"],
-			"value" => $this->t->draw(),
-		);
-		return $nodes;
-	}
-
-	function callback_on_submit_relation_list($args = array())
-	{
-		// this is where we put data back into object metainfo, for backwards compatibility
-		$obj =& obj($args["id"]);
-
-		$oldaliases = $obj->connections_from(array(
-			"type" => RELTYPE_MENU
-		));
-		
-		$section = array();
-		foreach($oldaliases as $alias)
-		{
-			$section[$alias->prop("to")] = $alias->prop("to");
-		}
-
-		$obj->set_meta("section",$section);
-		$obj->save();
-	}
-
-	function callback_on_addalias($args = array())
-	{
-		$obj_list = explode(",",$args["alias"]);
-		$obj =&obj($args["id"]);
-
-		$data = $obj->meta("section");
-
-		foreach($obj_list as $val)
-		{
-			$data[$val] = $val;
-		};
-
-		$obj->set_meta("section",$data);
-		$obj->save();
 	}
 
 	////
@@ -163,8 +127,19 @@ class site_search_content_grp extends class_base
 	{
 		$o = obj($arr["id"]);
 
-		$se = $o->meta("section");
+		$conns = $o->connections_from(array(
+			"reltype" => "RELTYPE_SEARCH_LOCATION",
+		));
+		$se = array();
+		foreach($conns as $conn)
+		{
+			$se[] = $conn->prop("to");
+		};
+
 		$sub = $o->meta("section_include_submenus");
+
+		// bloody hell .. this thing should differentiate menus and event searches ..
+		// and possibly other objects as well. HOW?
 
 		$ret = array();
 
@@ -200,7 +175,7 @@ class site_search_content_grp extends class_base
 				"oid" => $ret,
 			));
 			$ret = array();
-			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			foreach($ol->arr() as $o)
 			{
 				if (!$o->prop("users_only"))
 				{
@@ -210,5 +185,6 @@ class site_search_content_grp extends class_base
 		}
 		return $ret;
 	}
+	
 }
 ?>
