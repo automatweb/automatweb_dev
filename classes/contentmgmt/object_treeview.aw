@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.38 2004/12/22 19:50:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.39 2005/01/03 16:15:15 kristo Exp $
 
 /*
 
@@ -594,7 +594,7 @@ class object_treeview extends class_base
 				$_ot = new object_tree(array(
 					"class_id" => CL_MENU,
 					"parent" => $c_o->id(),
-					"status" => array(STAT_ACTI,STAT_NOTACTI),
+					"status" => array(STAT_ACTIVE,STAT_NOTACTIVE),
 					"lang_id" => array()
 				));
 				$cur_ids = $_ot->ids();
@@ -635,7 +635,6 @@ class object_treeview extends class_base
 				}
 			}
 		}
-
 		return $ret;
 	}
 
