@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.127 2005/03/30 10:17:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.128 2005/04/05 10:42:17 kristo Exp $
 
 /*
 
@@ -680,7 +680,7 @@ class site_show extends class_base
 			$rsid = aw_ini_get("site_id");
 			
 			$tc = 0;
-			for($o = $documents->begin(); !$documents->end(); $o = $documents->next())
+			foreach($documents->arr() as $o)
 			{
 				if ($o->site_id() != $rsid && !$o->is_brother())
 				{
