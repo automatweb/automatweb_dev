@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.23 2004/06/11 09:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.24 2004/07/15 12:38:22 rtoomas Exp $
 // period.aw - periods 
 /*
 
@@ -359,6 +359,10 @@ class period extends class_base
 	// !returns period $id
 	function get($id) 
 	{
+		if (!$id)
+		{
+			return;
+		}
 		// 1st, the in-memory cache
 		if (($pr = aw_cache_get("per_by_id", $id)))
 		{
