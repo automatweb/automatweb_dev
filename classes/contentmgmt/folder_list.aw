@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.8 2004/09/20 13:04:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/folder_list.aw,v 1.9 2004/10/05 09:18:53 kristo Exp $
 // folder_list.aw - Kaustade nimekiri 
 /*
 
@@ -174,7 +174,7 @@ class folder_list extends class_base
 				}
 				$doco = obj($doc);
 				$this->vars(array(
-					"comment" => $doco->prop("lead")
+					"comment" => preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$doco->prop("lead"))
 				));
 				$this->vars(array(
 					"SHOW_COMMENT" => $this->parse("SHOW_COMMENT")
