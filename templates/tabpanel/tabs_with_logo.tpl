@@ -1,5 +1,6 @@
 {VAR:toolbar}
 
+
 <style type="text/css">
 .tabpanelheaderstyle {
 	border-top: 1px solid #FFFFFF;
@@ -7,9 +8,9 @@
 	padding-top: 6px;
 	padding-left: 6px;
 	background-color: #E1E1E1;
-	background-repeat: repeat-x;
-	background-image: url('{VAR:baseurl}/automatweb/images/aw04/tab2_table_back.gif');
-	height: 24px;
+	background-repeat: no-repeat;
+	background-image: url('http://klient.struktuur.ee/personal/www/01/img/banner_bg_2.jpg');
+	height: 68px;
 }
 </style>
 
@@ -18,6 +19,11 @@
 <tr>
 
 <td valign="bottom" class="tabpanelheaderstyle">
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td valign="bottom">
+
 <table border="0" cellpadding="0" cellspacing="0">
 <tr>
 
@@ -40,10 +46,14 @@
   <td nowrap><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2_sel2_right.gif" WIDTH="13" HEIGHT="24" BORDER="0" ALT=""></td>
   <!-- END SUB: sel_tab_L1 -->
 
-  </table>
-  </td>
   </tr>
+  </table>
 
+</td>
+<td><img src="http://klient.struktuur.ee/personal/www/01/img/logo.gif"></td>
+</tr>
+</table>
+</td>
 </tr>
 </table>
 
