@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.2 2003/12/15 14:46:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/shell/shell.aw,v 1.3 2003/12/29 19:36:17 kristo Exp $
 echo "Welcome to AW shell!\n";
 // now I have to figure out a way to execute this from site directory.
 // so that I can actually parse an INI file
@@ -19,6 +19,10 @@ else
 	classload("defs","aw_template","class_base");
 	aw_startup();
 };
+
+classload("timer");
+$awt = new aw_timer;
+
 $continue = true;
 while ($continue)
 {
@@ -50,7 +54,7 @@ while ($continue)
 	{
 		$awt->start("shellcommand");
 		eval($str);
-		$awt->stop("shellcommand");
+		echo "cmd took ".$awt->elapsed("shellcommand")." seconds \n";
 	};
 };
 echo "bye then ..\n";
