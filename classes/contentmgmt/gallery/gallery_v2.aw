@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.51 2004/06/14 09:11:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.52 2004/07/13 08:05:46 kristo Exp $
 
 /*
 
@@ -633,12 +633,17 @@ class gallery_v2 extends class_base
 		// also upload images
 		$img_n = "g_".$page."_".$row."_".$col."_img";
 
+		$imgfolder = $obj->meta("image_folder");
+		if (!$imgfolder)
+		{
+			$imgfolder = $obj->parent();
+		}
 		if (trim($_FILES[$img_n]["type"]) == "application/pdf" || ($old["img"]["is_file"] == 1 && $_FILES[$img_n]["tmp_file"] == ""))
 		{
 			$f = get_instance("file");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
-				$obj->meta('image_folder'),
+				$imgfolder,
 				$old['img']['id']
 			);
 			$this->_page_content[$row][$col]["img"]["is_file"] = 1;
@@ -649,7 +654,7 @@ class gallery_v2 extends class_base
 			$f = get_instance("image");
 			$this->_page_content[$row][$col]["img"] = $f->add_upload_image(
 				$img_n, 
-				$obj->meta('image_folder'),
+				$imgfolder,
 				$old['img']['id']
 			);
 			$this->_page_content[$row][$col]["img"]["is_file"] = 0;
@@ -660,7 +665,7 @@ class gallery_v2 extends class_base
 		$f = get_instance("image");
 		$this->_page_content[$row][$col]["tn"] = $f->add_upload_image(
 			$img_n, 
-			$obj->meta('image_folder'),
+			$imgfolder,
 			$old['tn']['id']
 		);
 
