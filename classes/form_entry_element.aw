@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.22 2001/07/04 23:05:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_entry_element.aw,v 2.23 2001/07/04 23:06:49 kristo Exp $
 // form_entry_element.aw - 
 session_register("clipboard");
 classload("currency");
@@ -740,7 +740,6 @@ load_vcl("date_edit");
 					global $$ft;
 					$fn = $var."_name";
 					global $$fn;
-					print $$fn;
 
 					$im = new db_images;
 					if ($this->arr["fshow"] == 1)
@@ -758,6 +757,8 @@ load_vcl("date_edit");
 					}
 					else
 					{
+						print "inserting<br>";
+						print $$fn;
 						$im->upload($$var, $$ft, $id, "",true,$$fn);
 					}
 					$this->entry = $entry[$this->id];
