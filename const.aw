@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.70 2002/08/16 15:24:38 duke Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.71 2002/08/16 21:31:28 duke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -34,6 +34,7 @@ if ($pi)
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
 //		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
 		extract($HTTP_GET_VARS);
+		$GLOBALS["fastcall"] = $HTTP_GET_VARS["fastcall"];
 	} 
 
 	if (($_pos = strpos($pi, "section=")) === false)
@@ -133,6 +134,9 @@ if (empty($LC))
 
 // other stuff
 
+// hmmz. meeza thinks whe should only read/define those constants if we actually
+// _need_ them. -- duke
+
 // stat function fields
 define("FILE_SIZE",7);
 define("FILE_MODIFIED",9);
@@ -188,7 +192,6 @@ define("FSUBTYPE_CAL_CONF",8);
 
 // for CL_BROTHER_DOCUMENT 
 define("SC_BROTHER_DOC_KEYWORD", 1);	// kui dokumendi vend on tehtud t2nu menuu keywordile
-
 
 define("ERR_ML_VAR_NO_VAR",1);
 define("ERR_ML_VAR_NO_STAMP",2);

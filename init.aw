@@ -1,5 +1,12 @@
 <?php
 
+// this should be here, url parsing and variable initialization
+// should be the first thing that is done
+
+// apparently __FILE__ does not work with Zend Encoder. But since
+// don't use that anyway, it's of no concern. At least now.
+
+include_once(dirname(__FILE__)."/const.aw");
 
 class _config_dummy {};
 
@@ -112,6 +119,9 @@ function init_config($arr)
 //	$ts_s = $sec + $micro;
 
 	$is_cached = false;
+	// bloody catch22 situation. It would be nice to get the name of
+	// the cache directory from the initialization file, but we are 
+	// trying to read it.
 	if (isset($cache_file))
 	{
 		// get the modification date on the ini cache
@@ -174,6 +184,8 @@ function init_config($arr)
 //		$ts_e = $sec + $micro;
 //		echo "ini parsing & cache writing took ",($ts_e - $ts_s), " seconds <br>";
 //		result: 0.022812 - not exactly a showstopper, but still, glad to be rid of it
+// 		yeah, not a showstopper, but still there are a whole freaking lot of preg_*
+//		calls, getting rid of those was the real win -- duke
 	}
 
 	// siin ei saa veel aw_global_get'i kasutada, kuna defsi pole veel laetud
@@ -185,17 +197,22 @@ function init_config($arr)
 	} 
 	// kui saidi "sees", siis votame templated tolle saidi juurest, ehk siis ei puutu miskit
 
-	// and here do the defs for classes
-	foreach($_config_instance->data["__default"]["classes"] as $clid => $cld)
+	// only load those definitions if fastcall is not set. This shouldnt break anything
+	// and should save us a little memory. -- duke
+	if (!$GLOBALS["fastcall"])
 	{
-		define($cld["def"], $clid);
-	}
+		// and here do the defs for classes
+		foreach($_config_instance->data["__default"]["classes"] as $clid => $cld)
+		{
+			define($cld["def"], $clid);
+		}
 
-	// and here do the defs for programs
-	foreach($_config_instance->data["__default"]["programs"] as $prid => $prd)
-	{
-		define($prd["def"], $prid);
-	}
+		// and here do the defs for programs
+		foreach($_config_instance->data["__default"]["programs"] as $prid => $prd)
+		{
+			define($prd["def"], $prid);
+		}
+	};
 }
 
 function aw_ini_set($key,$value)
@@ -432,4 +449,5 @@ function exit_function($name,$ret = "")
 	}
 	$GLOBALS["exit_function_calls"]++;
 }
+
 ?>
