@@ -231,6 +231,13 @@ class _int_object
 			)
 			{
 				$ret[$c_id] =& new connection($c_d);
+				// preload the object on assumption that it will be used
+				// later on anyway. Calendar uses connections_* methods
+				// a lot and this gives a nice win. 
+				// Actually, it would be even more nicer, if I could
+				// load the object first, and then to acl an exists checks 
+				// on the already loaded object. -- duke
+				$tmp = new object($c_d["to"]);
 			}
 		}
 
@@ -306,6 +313,8 @@ class _int_object
 			)
 			{
 				$ret[] =& new connection($c_d);
+				// see the comments in connections_to -- duke
+				$tmp = new object($c_d["from"]);
 			}
 		}
 
