@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.199 2004/01/19 11:46:30 duke Exp $
+// $Id: class_base.aw,v 2.200 2004/01/20 16:46:49 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -594,29 +594,31 @@ class class_base extends aw_template
 				"subclass" => $this->clid,
 			));
 
-			if ($_tmp)
+
+			if ($_tmp && $_tmp["status"] != 0)
 			{
 				$this->cfgform_id = $_tmp["oid"];
 				$this->cfgform = $_tmp;
+
+				if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
+				{
+					$this->classinfo["fixed_toolbar"] = 1;
+				};
+				
+				if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
+				{
+					$this->classinfo["allow_rte"] = 1;
+				};
+				
+				if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
+				{
+					$this->classinfo["disable_relationmgr"] = 1;
+				};
 			};
 
-			if ($_tmp["meta"]["classinfo_fixed_toolbar"] == 1)
-			{
-				$this->classinfo["fixed_toolbar"] = 1;
-			};
-			
-			if ($_tmp["meta"]["classinfo_allow_rte"] == 1)
-			{
-				$this->classinfo["allow_rte"] = 1;
-			};
-			
-			if ($_tmp["meta"]["classinfo_disable_relationmgr"] == 1)
-			{
-				$this->classinfo["disable_relationmgr"] = 1;
-			};
+		};
 
-		}
-		elseif ($this->clid == CL_DOCUMENT)
+		if (sizeof($this->cfgform) == 0 && $this->clid == CL_DOCUMENT)
 		{
 			// I should be able to override this from the doc class somehow
 			if (aw_ini_get("document.default_cfgform") != 0)
