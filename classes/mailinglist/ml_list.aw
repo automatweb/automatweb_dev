@@ -1,196 +1,190 @@
 <?php
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_list.aw,v 1.20 2003/04/02 17:19:18 duke Exp $
+// ml_list.aw - Mailing list
+/*
+	@default table=objects
+	@default field=meta
+	@default method=serialize
+	@default group=general
 
-class ml_list extends aw_template
+	@property user_form_conf type=objpicker clid=CL_ML_LIST_CONF
+	@caption Vali konfiguratsioon
+
+	@property vars type=callback callback=callback_gen_list_variables editonly=1
+	@caption Muutujad
+
+	@property user_folders type=select multiple=1 size=15 editonly=1
+	@caption Vali kataloogid, kust võetakse listi liikmed
+
+	@property def_user_folder type=select editonly=1
+	@caption Vali kataloog, kuhu pannakse automaatselt lisatud liikmed 
+
+	@property automatic_form type=select editonly=1
+	@caption Vali vorm, mille sisestustest tehakse automaatselt liikmed
+
+	@classinfo syslog_type=ST_MAILINGLIST
+	
+*/
+
+class ml_list extends class_base
 {
 	function ml_list()
 	{
-		$this->init("automatweb/mlist");
+		$this->init(array(
+			"tpldir" => "automatweb/mlist",
+			"clid" => CL_ML_LIST,
+		));
 		lc_load("definition");
 
 		$this->dbconf=get_instance("config");
 		$this->searchformid=$this->dbconf->get_simple_config("ml_search_form");
 	}
 
-	function orb_new($arr)
+	function get_property($args = array())
 	{
-		is_array($arr)? extract($arr) : $parent=$arr;
-
-		$this->mk_path($parent,"Lisa meililist");
-
-		$this->read_template("list_new.tpl");
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.foo.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
-		));
-
-		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
-			"name" => "", 
-			"comment" => "",
-			"vars" => $this->multiple_option_list(array(),$this->get_all_varnames()),
-			"ufc" => $this->picker(0, $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
-			"reforb" => $this->mk_reforb("submit_omadused",array("parent" => $parent,"id" => 0))
-		));
-		return $this->parse();
-	}
-
-	////
-	//! Listi omaduste vaatamise submit
-	function orb_submit_omadused($arr)
-	{
-		extract($arr);
-		if ($id)
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
 		{
-			$ob = $this->load_list($id);
-
-			if ($user_form_conf != $ob["meta"]["user_form_conf"])
-			{
-				// if form has changed, delete all pseudo vars
-				$arr = new aw_array($ob["meta"]["vars"]);
-				foreach ($arr->get() as $k => $v)
+			case "user_folders":
+			case "def_user_folder":
+                		$data["options"] = $this->_get_defined_user_folders($args["obj"]["meta"]["user_form_conf"]);
+				break;
+	
+			case "automatic_form":
+				$fl = array("0" => "");
+				$ll = new aw_array($this->get_forms_for_list($args["obj"]["oid"]));
+				$llstr = join(",",$ll->get());
+				if ($llstr != "")
 				{
-					$this->del_pseudo_var($id,$k);
-				};
-			}
-
-			if ($this->can("change_variables",$id))
-			{
-				$vars = $this->make_keys($vars);
-				// leia ära võetud muutujad
-				$arr = new aw_array($ob["meta"]["vars"]);
-				foreach ($arr->get() as $k => $v)
-				{
-					if (!isset($vars[$k]))
+					$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".$llstr.")");
+					while ($_row = $this->db_next())
 					{
-						$this->del_pseudo_var($id,$k);
-					};
-				};
-				// leia lisatud muutujad
-				foreach ($vars as $k => $v)
-				{
-					if (!isset($ob["meta"]["vars"][$k]))
-					{
-						$this->add_pseudo_var($id,$k);
-					};
-				};
-			};
-				
-			$this->upd_object(array(
-				"name" => $name,
-				"comment" => $comment,
-				"oid" => $id,
-				"metadata" => array(
-					"vars" => $vars,
-					"user_form_conf" => $user_form_conf,
-					"user_folders" => $this->make_keys($user_folders),
-					"def_user_folder" => $def_user_folder,
-					"automatic_form" => $automatic_form,
-				)
-			));
-			$this->list_ob = $this->get_object($id, true);
+						$fl[$_row["oid"]] = $_row["name"];
+					}
+				}
+				$data["options"] = $fl;
+				break;
 
-			$tr = $this->db_fetch_row("SELECT * FROM ml_list2automatic_form WHERE lid = '$id'");
-			if (is_array($tr))
-			{
-				$this->db_query("UPDATE ml_list2automatic_form SET fid = '$automatic_form'");
-			}
-			else
-			{
-				$this->db_query("INSERT INTO ml_list2automatic_form (lid, fid) VALUES('$id','$automatic_form')");
-			}
-			if ($automatic_form)
-			{
-				$this->update_automatic_list($id);
-			}
-
-			$this->_log(ST_MAILINGLIST, SA_CHANGE, $name, $id);
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"class_id" => CL_ML_LIST,
-				"name" => $name,
-				"comment" => $comment,
-				"parent" => $parent,
-				"metadata" => array(
-					"user_form_conf" => $user_form_conf
-				)
-			));
-			$this->_log(ST_MAILINGLIST, SA_ADD, $name, $id);
-		}
-		return $this->mk_my_orb("omadused",array("id" => $id));
-	}
-
-	////
-	//! Tagastab sinna lehekülje ülesse pandava lingi jaoks
-	function _get_lf_path($id,$name="")
-	{
-		if (!$name)
-		{
-			$name="Meililist";
 		};
-		return "<a href=\"".$this->mk_my_orb("change",array("id"=>$id))."\">$name</a>&nbsp;/&nbsp;";
+		return $retval;
 	}
 
-	////
-	//! Listi omaduste vaatamine
-	function orb_omadused($ar)
+	function set_property($args = array())
 	{
-		extract($ar);
-		$this->read_template("list_omadused.tpl");
-		$row = $this->load_list($id);
-		$this->mk_path($row["parent"],"Muuda");
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			// possible race condition here, because when dealing with config forms,
+			// you do not really know in which order the elements come in.
 
-		$allvars=$this->get_all_varnames();
+			// and since those element depend on each other directly, I think 
+			// they should be one element. But right now, I _hope_ this will work
+			// -- duke
+			case "user_form_conf":
+				$ob = $this->load_list($args["obj"]["oid"]);
+				if ($data["value"] != $ob["meta"]["user_form_conf"])
+				{
+					// if form has changed, delete all pseudo vars
+					$arr = new aw_array($ob["meta"]["vars"]);
+					foreach ($arr->get() as $k => $v)
+					{
+						$this->del_pseudo_var($args["obj"]["oid"],$k);
+					};
+				}
+				break;
+
+			case "vars":
+				if ($this->can("change_variables",$args["obj"]["oid"]))
+				{
+					$vars = $data["value"];
+					$obj = $this->load_list($args["obj"]["oid"]);
+		
+					$arr = new aw_array($obj["meta"]["vars"]);
+					foreach ($arr->get() as $k => $v)
+					{
+						if (!isset($vars[$k]))
+						{
+							$this->del_pseudo_var($args["obj"]["oid"],$k);
+						};
+					};
+					// leia lisatud muutujad
+					foreach ($vars as $k => $v)
+					{
+						if (!isset($obj["meta"]["vars"][$k]))
+						{
+							$this->add_pseudo_var($args["obj"]["oid"],$k);
+						};
+					};
+				};
+				break;
+			
+			case "automatic_form":
+					$id = $args["obj"]["oid"];
+					$this->list_ob = $this->get_object($args["obj"]["oid"], true);
+
+					$tr = $this->db_fetch_row("SELECT * FROM ml_list2automatic_form WHERE lid = '$id'");
+					if (is_array($tr))
+					{
+						$this->db_query("UPDATE ml_list2automatic_form SET fid = '$prop[value]' WHERE lid = '$id'");
+					}
+					else
+					{
+						$this->db_query("INSERT INTO ml_list2automatic_form (lid, fid) VALUES('$id','$prop[value]')");
+					}
+					if ($prop["value"])
+					{
+						$this->update_automatic_list($id);
+					}
+					break;
+
+
+		};
+		return $retval;
+	}
+
+
+
+	function _get_defined_user_folders($conf)
+	{
+		if (!is_array($this->defined_user_folders))
+		{
+			$ufc_inst = get_instance("mailinglist/ml_list_conf");
+			$this->defined_user_folders = $ufc_inst->get_folders_by_id($conf);
+			// just to make sure we don't invoke that function twice
+			if (!is_array($this->defined_user_folders))
+			{
+				$this->defined_user_folders = array();
+			};
+		};
+		return $this->defined_user_folders;
+	}
+
+	function callback_gen_list_variables($args = array())
+	{
+		$this->read_template("list_omadused.tpl");
+		$meta = $args["obj"]["meta"];
+		$allvars=$this->get_all_varnames(false,$meta["user_form_conf"]);
+
 		foreach ($allvars as $k => $name)
 		{
 			$this->vars(array(
 				"name" => $name,
-				"checked" => checked($row["meta"]["vars"][$k]),
-				"acl" => (isset($row["meta"]["vars"][$k]))? "ACL" : "",
+				"checked" => checked($meta["vars"][$k]),
+				"acl" => (isset($meta["vars"][$k]))? "ACL" : "",
 				"vid" => $k,
-				"l_acl" => (isset($row["meta"]["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($id,$k)."&file=ml_var.xml") : "",
+				"l_acl" => (isset($meta["vars"][$k])) ? ("editacl.".$this->cfg["ext"]."?oid=".$this->get_pseudo_var($args["obj"]["oid"],$k)."&file=ml_var.xml") : "",
 			));
 			$varparse.=$this->parse("variable");
 		};
-
-		$tb = get_instance("toolbar");
-		$tb->add_button(array(
-			"name" => "save",
-			"tooltip" => "Salvesta",
-			"url" => "javascript:document.foo.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif"
-		));
-
-		$fl = array("0" => "");
-		$ll = new aw_array($this->get_forms_for_list($id));
-		$llstr = join(",",$ll->get());
-		if ($llstr != "")
-		{
-			$this->db_query("SELECT oid, name FROM objects WHERE oid IN(".$llstr.")");
-			while ($_row = $this->db_next())
-			{
-				$fl[$_row["oid"]] = $_row["name"];
-			}
-		}
-		$this->vars(array(
-			"toolbar" => $tb->get_toolbar(),
-			"name" => $row["name"],
-			"comment" => $row["comment"],
-			"variable" => $varparse,
-			"automatic_form" => $this->picker($row["meta"]["automatic_form"], $fl),
-			"ufc" => $this->picker($row["meta"]["user_form_conf"], $this->list_objects(array("class" => CL_ML_LIST_CONF, "addempty" => true))),
-			"user_folders" => $this->mpicker($row["meta"]["user_folders"], $this->get_all_user_folders_defined()),
-			"def_user_folder" => $this->picker($row["meta"]["def_user_folder"], $this->get_all_user_folders_defined()),
-			"reforb" => $this->mk_reforb("submit_omadused",array("id" => $id)),
-		));
-
-		return $this->parse();
+		$this->vars(array("variable" => $varparse));
+		$tmp = array(
+			"type" => "text",
+			"caption" => $args["prop"]["caption"],
+			"value" => $this->parse(),
+		);
+		return array($args["prop"]["name"] => $tmp);
 	}
 
 	////
