@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.47 2002/07/23 12:59:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.48 2002/08/16 17:59:22 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -332,6 +332,13 @@ if (!defined("DEFS"))
 	function selected($arg)
 	{
 		return ($arg) ? "SELECTED" : "";
+	}
+	
+	////
+	// !Kasutamiseks vormides elementide juures, mis võivad olla disabled olekus
+	function disabled($arg)
+	{
+		return ($arg) ? "DISABLED" : "";
 	}
 
 	////
