@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.82 2004/09/09 10:58:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.83 2004/10/18 13:51:58 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -813,7 +813,8 @@ class doc extends class_base
 		extract($args);
 		if (!is_object($inst))
 		{
-			$_long = $this->get_long_template($parent);
+			$tplmgr = get_instance("templatemgr");
+			$_long = $tplmgr->get_long_template($parent);
 			$inst = get_instance("document");
 			$inst->read_any_template($_long);
 		};
