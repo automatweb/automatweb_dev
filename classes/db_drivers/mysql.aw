@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.23 2004/12/01 20:45:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.24 2005/01/24 14:06:12 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {
@@ -41,7 +41,13 @@ class mysql
 
 	function db_query($qtext,$errors = true) 
 	{
-		global $DUKE, $INTENSE_DUKE;
+		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
+		if ($SLOW_DUKE == 1)
+		{
+			list($micro,$sec) = split(' ',microtime());
+			$ts_s = $sec + $micro;
+		}
+
 		if ( (aw_ini_get("debug_mode") != 0) && $DUKE)
 		{
 			print '<pre>';
@@ -106,6 +112,17 @@ class mysql
 			$ts_e = $sec + $micro;
 			$tm = sprintf("%0.04f",$ts_e - $ts_s);
 			echo "query took $tm seconds <br />";
+		}
+
+		if ($SLOW_DUKE == 1)
+		{
+			list($micro,$sec) = split(' ',microtime());
+			$ts_e = $sec + $micro;
+
+			if (($ts_e - $ts_s) > 1)
+			{
+				echo "SLOW QUERY $qtext <br>took ".sprintf("%0.04f",$ts_e - $ts_s)." seconds <br>";
+			}
 		}
 		exit_function("mysql::db_query");
 		return true;
