@@ -10,6 +10,25 @@
             <caption>Initsialiseeri objekt</caption>
       </property>
       <property>
+            <name>form_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <newonly>1</newonly>
+            <method>serialize</method>
+            <field>meta</field>
+            <caption>Vormi tüüp</caption>
+      </property>
+      <property>
+            <name>form_type_value</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>form_type_value</field>
+            <caption>Vormi tüüp</caption>
+      </property>
+      <property>
             <name>def_name</name>
             <table>objects</table>
             <group>general</group>
@@ -68,6 +87,18 @@
             <caption>Vorm</caption>
       </property>
       <property>
+            <name>subaction</name>
+            <table>objects</table>
+            <group>
+                  <num_0>form</num_0>
+                  <num_1>props</num_1>
+            </group>
+            <type>hidden</type>
+            <store>no</store>
+            <field>subaction</field>
+            <caption>Subaction</caption>
+      </property>
+      <property>
             <name>availtoolbar</name>
             <table>objects</table>
             <group>props</group>
@@ -86,49 +117,6 @@
             <no_caption>1</no_caption>
             <field>props</field>
             <caption>Omadused</caption>
-      </property>
-      <property>
-            <name>preview</name>
-            <table>objects</table>
-            <group>preview</group>
-            <type>callback</type>
-            <callback>callback_preview</callback>
-            <no_caption>1</no_caption>
-            <field>preview</field>
-            <caption>Eelvaade</caption>
-      </property>
-      <property>
-            <name>entries_toolbar</name>
-            <table>objects</table>
-            <group>
-                  <num_0>entries</num_0>
-                  <num_1>search</num_1>
-            </group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>entries_toolbar</field>
-            <caption>Sisestuste toolbar</caption>
-      </property>
-      <property>
-            <name>entries</name>
-            <table>objects</table>
-            <group>entries</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>entries</field>
-            <caption>Sisestused</caption>
-      </property>
-      <property>
-            <name>search</name>
-            <table>objects</table>
-            <group>search</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>search</field>
-            <caption>Otsing</caption>
       </property>
       <property>
             <name>style_folder</name>
@@ -178,24 +166,47 @@
             <caption>Stiilid</caption>
       </property>
       <property>
-            <name>get_controller_folder</name>
+            <name>preview</name>
             <table>objects</table>
-            <group>get_controllers</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_CONTROLLER_FOLDER</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Kontrollerite kaust</caption>
+            <group>preview</group>
+            <type>callback</type>
+            <callback>callback_preview</callback>
+            <no_caption>1</no_caption>
+            <field>preview</field>
+            <caption>Eelvaade</caption>
       </property>
       <property>
-            <name>view_controllers</name>
+            <name>entries_toolbar</name>
             <table>objects</table>
-            <group>get_controllers</group>
-            <type>callback</type>
-            <callback>callback_view_controllers</callback>
+            <group>
+                  <num_0>entries</num_0>
+                  <num_1>search</num_1>
+            </group>
+            <type>toolbar</type>
             <no_caption>1</no_caption>
-            <field>view_controllers</field>
-            <caption>Kontrollerid</caption>
+            <store>no</store>
+            <field>entries_toolbar</field>
+            <caption>Sisestuste toolbar</caption>
+      </property>
+      <property>
+            <name>entries</name>
+            <table>objects</table>
+            <group>entries</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>entries</field>
+            <caption>Sisestused</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>search</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>search</field>
+            <caption>Otsing</caption>
       </property>
       <property>
             <name>set_controller_folder</name>
@@ -218,20 +229,29 @@
             <caption>Kontrollerid</caption>
       </property>
       <property>
-            <name>subaction</name>
+            <name>get_controller_folder</name>
             <table>objects</table>
-            <group>
-                  <num_0>form</num_0>
-                  <num_1>props</num_1>
-            </group>
-            <type>hidden</type>
-            <store>no</store>
-            <field>subaction</field>
-            <caption>Subaction</caption>
+            <group>get_controllers</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER_FOLDER</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kontrollerite kaust</caption>
+      </property>
+      <property>
+            <name>view_controllers</name>
+            <table>objects</table>
+            <group>get_controllers</group>
+            <type>callback</type>
+            <callback>callback_view_controllers</callback>
+            <no_caption>1</no_caption>
+            <field>view_controllers</field>
+            <caption>Kontrollerid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_WEBFORM</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <form>
@@ -333,6 +353,16 @@
                   <clid>CL_OBJECT_EXPORT</clid>
                   <caption>Objektide eksport</caption>
             </OBJECT_EXPORT>
+            <CAL_REG_FORM>
+                  <value>12</value>
+                  <clid>CL_CALENDAR_REGISTRATION_FORM</clid>
+                  <caption>Sündmuse vorm</caption>
+            </CAL_REG_FORM>
+            <CAL_REG_FORM_CONF>
+                  <value>13</value>
+                  <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
+                  <caption>Sündmuse vormi konf</caption>
+            </CAL_REG_FORM_CONF>
       </reltypes>
 </properties>
 

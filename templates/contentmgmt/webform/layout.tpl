@@ -21,6 +21,11 @@ function selall()
 		<td width="100" bgcolor="{VAR:bgcolor}">Tüüp</td>
 		<td width="30" align="center" bgcolor="{VAR:bgcolor}"><a href="javascript:selall()">Vali</a></td>
 	</tr>
+	<!-- SUB: subt -->
+	<tr>
+		<td colspan="5" bgcolor={VAR:bgcolor}">{VAR:subtitle}</td>
+	</tr>
+	<!-- END SUB: subt -->
 	<!-- SUB: property -->
 	<tr>
 		<td width="50" bgcolor="{VAR:bgcolor}"><input type="text" name="prop_ord[{VAR:prp_key}]" value="{VAR:prp_order}" size="2" style="border: 1px solid #EEE; padding: 2px; background-color: #FCFCEC;"></td>
