@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.4 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_export.aw,v 1.5 2004/12/10 10:09:31 kristo Exp $
 // object_export.aw - Objektide eksport 
 /*
 
@@ -215,10 +215,13 @@ class object_export extends class_base
 		$awa = new aw_array($o->meta("dat"));
 		foreach($awa->get() as $pn => $pd)
 		{
-			$t->define_field(array(
-				"name" => $pn,
-				"caption" => $pd["caption"]
-			));
+			if ($pd["visible"])
+			{
+				$t->define_field(array(
+					"name" => $pn,
+					"caption" => $pd["caption"]
+				));
+			}
 		}
 	}
 
