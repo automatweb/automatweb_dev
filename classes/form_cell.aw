@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.22 2001/10/16 04:29:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_cell.aw,v 2.23 2001/11/02 11:35:10 kristo Exp $
 
 // ysnaga. asi peab olema nii lahendatud, et formi juures on elemendi properitd kirjas
 // st forms.contents sees on ka selle elemendi propertid selle fomi sees kirjas
@@ -425,8 +425,8 @@ class form_cell extends form_base
 
 	function set_style($id,$style_class = 0)
 	{
-		$form->arr["elements"][$this->row][$this->col]["style"] = $id;
-		$form->arr["elements"][$this->row][$this->col]["style_class"] = $style_class;
+		$this->form->arr["elements"][$this->row][$this->col]["style"] = $id;
+		$this->form->arr["elements"][$this->row][$this->col]["style_class"] = $style_class;
 	}
 
 	function admin_cell_controllers()
