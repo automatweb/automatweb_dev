@@ -1,0 +1,9 @@
+<?xml version='1.0'?>
+<tabledef>
+<data>
+<field name="id" caption="ID" width="50"/>
+<field name="name" caption="Nimi" sortable="1"/>
+<field name="email" caption="Aadress" sortable="1"/>
+</data>
+
+</tabledef>
