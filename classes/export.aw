@@ -145,7 +145,7 @@ class export extends aw_template
 		$fc = str_replace("\"/index.".$ext,"\"".$baseurl."/index.".$ext,$fc);
 		$fc = str_replace("'/index.".$ext,"'".$baseurl."/index.".$ext,$fc);
 
-		while (($pos = strpos($fc,$baseurl)) !== false)
+		while (($pos = $this->get_next_link_pos($fc,$baseurl)) !== false)
 		{
 			// now find all of the link - we do that by looking for ' " > or space
 			$begin = $pos;
@@ -160,6 +160,7 @@ class export extends aw_template
 
 			$link = $this->rewrite_link($link);
 
+//			echo "link = $link <br>";
 			if (!isset($this->hashes[$link]))
 			{
 //				echo "found link $link , fetching it..<br>\n";
@@ -264,6 +265,39 @@ class export extends aw_template
 //			echo "rewrote gallery link to $link <br>\n";
 		}
 		return $link;
+	}
+
+	function get_next_link_pos($fc,$baseurl)
+	{
+		$pos = strpos($fc,$baseurl);
+		if ($pos === false)
+		{
+			// if no normal links are left, check for badly-made links, like <a href="/111">
+			$pos = strpos(strtolower($fc),"href=\"/");
+			if ($pos !== false)
+			{
+				return $pos+6;
+			}
+
+			$pos = strpos(strtolower($fc),"href='/");
+			if ($pos !== false)
+			{
+				return $pos+6;
+			}
+
+			$pos = strpos(strtolower($fc),"src=\"/");
+			if ($pos !== false)
+			{
+				return $pos+5;
+			}
+
+			$pos = strpos(strtolower($fc),"src='/");
+			if ($pos !== false)
+			{
+				return $pos+5;
+			}
+		}
+		return $pos;
 	}
 }
 ?>
