@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.37 2005/01/06 15:52:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.38 2005/01/06 15:55:16 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1305,7 +1305,7 @@ class webform extends class_base
 		if ($arr["link"] == 1 && $_GET["show"] != 1 && is_oid($ef_id))
 		{
 			$this->vars(array(
-				"reg_form" => html::href(array(
+				"form" => html::href(array(
 					"url" => aw_url_change_var("show", 1),
 					"caption" => ($form_conf->prop("link_caption") != "" ? $form_conf->prop("link_caption") : t("Registreeru"))
 				))
