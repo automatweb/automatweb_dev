@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.303 2004/11/18 14:07:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.304 2004/11/23 13:20:14 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1221,7 +1221,7 @@ class document extends aw_template
 		{
 			$date_est_n = $date_est;
 		}
-		$date_est_print = date("j", time()).". ".get_lc_month(date("m", time()))." ".date("Y", time());
+		$date_est_print = locale::get_lc_date(time(), LC_DATE_FORMAT_SHORT_FULLYEAR);
 
 		$r_docid = $docid;
 
