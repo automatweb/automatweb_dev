@@ -608,7 +608,7 @@ class search_conf extends aw_template
 	function do_pageselector($cnt,$arr)
 	{
 		$page = $arr["page"];
-		$num_pages = $cnt / PER_PAGE;
+		$num_pages = floor(($cnt / PER_PAGE) + 0.5);
 		$pa = $arr;
 		$pg = "";
 		$prev = "";
