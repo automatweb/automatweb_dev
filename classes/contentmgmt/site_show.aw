@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.126 2005/03/24 10:10:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.127 2005/03/30 10:17:59 kristo Exp $
 
 /*
 
@@ -943,6 +943,13 @@ class site_show extends class_base
 		$this->vars(array(
 			"doc_content" => $docc
 		));
+
+		if ($docc != "")
+		{
+			$this->vars(array(
+				"HAS_DOC_CONTENT" => $this->parse("HAS_DOC_CONTENT")
+			));
+		}
 	}
 
 	function do_menu_images()
