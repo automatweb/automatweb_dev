@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.15 2003/06/10 15:42:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.16 2003/06/12 16:51:54 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -33,6 +33,12 @@
 
 	@property availprops type=callback callback=callback_gen_avail_props store=no group=avail no_caption=1
 	@caption Kõik omadused
+
+	@property cfg_proplist type=hidden field=meta method=serialize
+	@caption Omadused
+	
+	@property cfg_groups type=hidden field=meta method=serialize
+	@caption Grupid
 
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
@@ -76,6 +82,7 @@ class cfgform extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+
 			case "xml_definition":
 				// I don't want to show the contents of the file here
 				$data["value"] = "";
@@ -152,6 +159,14 @@ class cfgform extends class_base
 
 		switch($data["name"])
 		{
+			case "cfg_proplist":
+			case "cfg_groups":
+				if (empty($data["value"]))
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
+
 			case "xml_definition":
 				if ($_FILES[$data["name"]]["type"] !== "text/xml")
 				{
@@ -182,7 +197,9 @@ class cfgform extends class_base
 				{
 					$retval = PROP_IGNORE;
 				}
-				elseif ($args["new"])
+				// cfg_proplist is in "formdata" only if this a serialized object
+				// being unserialized
+				elseif ($args["new"] && empty($args["form_data"]["cfg_proplist"]))
 				{
 					// fool around a bit to get the correct data
 					$subclass = $args["form_data"]["subclass"];
@@ -190,6 +207,8 @@ class cfgform extends class_base
 						"subclass" => $args["form_data"]["subclass"],
 					);
 
+					// now that's the tricky part ... this thingsbum overrides
+					// all the settings in the document config form
 					$this->_init_cfgform_data($obj);
 					if ($subclass == CL_DOCUMENT)
 					{
