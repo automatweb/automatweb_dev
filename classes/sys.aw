@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.38 2004/10/28 09:47:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.39 2004/11/07 12:08:49 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -657,6 +657,59 @@ class sys extends aw_template
 		echo "open tables: ".$data["Open_tables"]." vs opened tables: ".$data["Opened_tables"]." <br>";
 		echo "------------------AW <br>";
 		echo "class count = ".count(aw_ini_get("classes"))." <br>";
+		echo "------------------STATS <br>\n";
+		flush();
+
+		// slurp in files, count by date and site 
+		for($i = 0; $i < 30; $i++)
+		{
+			$date = mktime(0,0,0, date("m"), date("d")-$i, date("Y"));
+			$fn = aw_ini_get("basedir")."/files/logs/".date("Y-m-d", $date).".log";
+			if (!file_exists($fn))
+			{
+				continue;
+			}
+
+			echo "<B>".date("d.m.Y", $date)."</b><br>\n";
+			flush();
+			$lines = file($fn);
+			$sites = array();
+			$urls = array();
+			$sid2url = array();
+			$total = count($lines);
+			foreach($lines as $line)
+			{
+				list($dp, $tm, $sid, $bu, $url) = explode(" ", $line);
+				$sites[$sid]++;
+				$sid2url[$sid] = $bu;
+				$urls[$bu.$url]++;
+			}
+
+			arsort($sites);
+			arsort($urls);
+	
+			echo "total pageviews: $total<Br>top sites: <br>";
+			$num = 0;
+			foreach($sites as $site => $cnt)
+			{
+				echo "site ".$sid2url[$site]." got $cnt pageviews <Br>";
+				if (++$num > 10)
+				{
+					break;
+				}
+			}
+			echo "top urls: <br>";
+			$num = 0;
+			foreach($urls as $url => $cnt)
+			{
+				echo "url <a href='$url'>$url</a> got $cnt pageviews <Br>";
+				if (++$num > 10)
+				{
+					break;
+				}
+			}
+			echo "------------------------------------<br>";
+		}
 		die();
 	}
 
