@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.17 2004/04/07 13:48:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.18 2004/04/13 08:23:34 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -39,8 +39,6 @@ caption Õiguslik vorm
 @property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
 @caption Kaubamärgid
 
-@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
-@caption Aadress
 
 @property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
 @caption Tegevuse kirjeldus
@@ -49,17 +47,24 @@ caption Õiguslik vorm
 @caption Organisatsiooni logo(url)
 
 @property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
-@caption Organisatsiooni juht
+@caption Kontaktisik
 
 @default group=humanres
+
+
+
+@default group=contacts2
+@property addresslist type=text store=no 
+@caption Aadress
 
 @property human_resources type=table store=no 
 @caption Inimesed
 
-@default group=contacts
+@default group=cedit
 
-@property addresslist type=text store=no 
-@caption Aadressid
+@property contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_firma
+@caption Vaikimisi aadress
+
 
 @property phone_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_PHONE props=name
 @caption Telefon
@@ -95,21 +100,40 @@ caption Õiguslik vorm
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
-@property jobsact type=table no_caption=1 group=jobsact
-@property jobsnotact type=table no_caption=1 group=notact
+@property t1 type=text subtitle=1 group=jobs store=no
+@caption Aktiivsed
 
+@property jobsact type=table no_caption=1 group=jobs
+
+@property t2 type=text subtitle=1 group=jobs store=no
+@caption Mitteaktiivsed
+
+@property jobsnotact type=table no_caption=1 group=jobs
+
+@property org_toolbar type=toolbar group=customers store=no no_caption=1
+@caption Org. toolbar
+
+@property customer type=table group=customers store=no no_caption=1
+@caption Kliendid
 
 @groupinfo contacts caption="Kontaktid" 
-@groupinfo humanres caption="Inimesed" submit=no
+@groupinfo contacts2 caption="Kontaktid" parent=contacts submit=no
+@groupinfo cedit caption="Kontaktide muutmine" parent=contacts
+groupinfo humanres caption="Inimesed" submit=no
 @groupinfo overview caption="Tegevused" 
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
 @groupinfo calls caption="Kõned" parent=overview submit=no
 @groupinfo meetings caption="Kohtumised" parent=overview submit=no
 @groupinfo tasks caption="Toimetused" parent=overview submit=no
-@groupinfo tasks_overview caption="Ülevaade"
-@groupinfo jobs caption="Tööpakkumised"
-@groupinfo jobsact caption="Aktiivsed" parent=jobs
-@groupinfo notact caption="Mitteaktiivsed" parent=jobs
+@groupinfo tasks_overview caption="Ülevaade" parent=overview
+@groupinfo personal caption="Personal"
+@groupinfo jobs caption="Tööpakkumised" parent=personal
+@groupinfo relorg caption="Seotud organisatsioonid"
+@groupinfo customers caption="Kliendid" parent=relorg
+@groupinfo fcustomers caption="Tulevased kliendid" parent=relorg
+@groupinfo partners caption="Partnerid" parent=relorg
+@groupinfo fpartners caption="Tulevased partnerid" parent=relorg
+@groupinfo competitors caption="Konkurendid" parent=relorg
 
 @reltype ETTEVOTLUSVORM value=1 clid=CL_CRM_CORPFORM
 @caption Õiguslik vorm
@@ -165,6 +189,21 @@ caption Õiguslik vorm
 @reltype TOOTSIJA value=21 clid=CL_CRM_PERSON
 @caption Tööotsija
 
+@reltype CUSTOMER value=22 clid=CL_CRM_COMPANY
+@caption Klient
+
+@reltype POTENTIONAL_CUSTOMER value=23 clid=CL_CRM_COMPANY
+@caption Tulevane klient
+
+@reltype PARTNER value=24 clid=CL_CRM_COMPANY
+@caption Partner
+
+@reltype POTENTIONAL_PARTNER value=25 clid=CL_CRM_COMPANY
+@caption Tulevate partner
+
+@reltype COMPETITOR value=26 clid=CL_CRM_COMPANY
+@caption Konkurent
+
 @classinfo no_status=1
 			
 */
@@ -203,6 +242,18 @@ class crm_company extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
+			case "customer":
+				$this->org_table(&$arr);
+				break;
+
+			case "org_toolbar":
+				$vcl_inst = &$arr["prop"]["toolbar"];
+				$vcl_inst->add_button(array(
+					"name" => "delete",
+					"img" => "delete.gif",
+				));
+				break;
+
 			case "firmajuht":
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => RELTYPE_WORKERS,
@@ -856,6 +907,144 @@ class crm_company extends class_base
 			$org_obj->connect(array(
 				"to" => $arr["event_id"],
 				"reltype" => $reltype,
+			));
+		}
+	}
+
+	function org_table(&$arr)
+	{
+		$tf = &$arr["prop"]["vcl_inst"];
+		$tf->define_field(array(
+                        "name" => "name",
+                        "caption" => "Organisatsioon",
+                        "sortable" => 1,
+                ));
+
+                $tf->define_field(array(
+                        "name" => "pohitegevus",
+                        "caption" => "Põhitegevus",
+                        "sortable" => 1,
+                ));
+
+                $tf->define_field(array(
+                        "name" => "corpform",
+                        "caption" => "Õiguslik vorm",
+                        "sortable" => 1,
+                ));
+
+                $tf->define_field(array(
+                        "name" => "address",
+                        "caption" => "Aadress",
+                        "sortable" => 1,
+                ));
+	
+                $tf->define_field(array(
+                        "name" => "email",
+                        "caption" => "E-post",
+                        "sortable" => 1,
+                ));
+
+                $tf->define_field(array(
+                        "name" => "url",
+                        "caption" => "WWW",
+                        "sortable" => 1,
+                ));
+                $tf->define_field(array(
+                        "name" => "phone",
+                        "caption" => 'Telefon',
+                ));
+
+                $tf->define_field(array(
+                        "name" => "ceo",
+                        "caption" => "Juht",
+                        "sortable" => 1,
+                ));
+
+		$tf->define_chooser(array(
+                        "field" => "id",
+                        "name" => "sel",
+                ));
+
+		$orgs = $arr["obj_inst"]->connections_from(array(
+			"type" => RELTYPE_CUSTOMER,
+		));
+		
+		foreach($orgs as $org)
+		{
+			$o = $org->to();
+			// aga ülejäänud on kõik seosed!
+			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
+			if (is_oid($o->prop("ettevotlusvorm")))
+			{
+				$tmp = new object($o->prop("ettevotlusvorm"));
+				$vorm = $tmp->name();
+			};
+
+			if (is_oid($o->prop("pohitegevus")))
+			{
+				$tmp = new object($o->prop("pohitegevus"));
+				$tegevus = $tmp->name();
+			};
+			
+			if (is_oid($o->prop("contact")))
+			{
+				$tmp = new object($o->prop("contact"));
+				$contact = $tmp->name();
+			};
+
+			if (is_oid($o->prop("firmajuht")))
+			{
+				$juht_obj = new object($o->prop("firmajuht"));
+				$juht = $juht_obj->name();
+				$juht_id = $juht_obj->id();
+			};
+
+			if (is_oid($o->prop("phone_id")))
+			{
+				$ph_obj = new object($o->prop("phone_id"));
+				$phone = $ph_obj->name();
+			};
+			
+			if (is_oid($o->prop("url_id")))
+			{
+				$url_obj = new object($o->prop("url_id"));
+				$url = $url_obj->prop("url");
+			};
+
+			if (is_oid($o->prop("email_id")))
+			{
+				$mail_obj = new object($o->prop("email_id"));
+				$mail = html::href(array(
+					"url" => "mailto:" . $mail_obj->prop("mail"),
+					"caption" => $mail_obj->prop("mail"),
+				));
+
+			};
+
+			$tf->define_data(array(
+				"id" => $o->id(),
+				"name" => html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $o->id(),
+					),$o->class_id()),
+					"caption" => $o->name(),
+				)),
+				"reg_nr" => $o->prop("reg_nr"),
+				"pohitegevus" => $tegevus,
+				"corpform" => $vorm,
+				"address" => $contact,
+				"ceo" => html::href(array(
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $juht_id,
+					),CL_CRM_PERSON),
+					"caption" => $juht,
+				)),
+				"phone" => $phone,
+				"url" => html::href(array(
+					"url" => $url,
+					"caption" => $url,
+				)),
+				"email" => $mail,
 			));
 		}
 	}

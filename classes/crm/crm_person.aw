@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.19 2004/04/12 13:35:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.20 2004/04/13 08:23:34 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -9,7 +9,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disc
 @tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
 @default table=objects
-@default group=general
+@default group=general2
 
 @property navtoolbar type=toolbar store=no no_caption=1 group=general,overview editonly=1
 
@@ -24,14 +24,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disc
 @property lastname type=textbox size=15 maxlength=50
 @caption Perekonnanimi
 
-@property title type=textbox size=5 maxlength=10
-@caption Tiitel
+@property personal_id type=textbox size=13 maxlength=11
+@caption Isikukood
 
 @property gender type=chooser 
 @caption Sugu
 
-@property personal_id type=textbox size=13 maxlength=11
-@caption Isikukood
+@property title type=chooser
+@caption Tiitel
 
 @property nickname type=textbox size=10 maxlength=20
 @caption Hüüdnimi
@@ -39,38 +39,40 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_COMPANY, on_disc
 property messenger type=textbox size=30 maxlength=200
 caption Msn/yahoo/aol/icq
 
-@property birthday type=textbox size=10 maxlength=20
+@property birthday type=date_select year_from=1930 year_to=2010
 @caption Sünnipäev
 
-@property social_status type=textbox size=20 maxlength=20
+@property social_status type=chooser 
 @caption Perekonnaseis
 
-@property spouse type=textbox size=25 maxlength=50
+@property spouse type=textbox size=25 maxlength=50 group=relatives
 @caption Abikaasa
 
-@property children type=relpicker reltype=RELTYPE_CHILDREN
+@property children type=relpicker reltype=RELTYPE_CHILDREN group=relatives
 @caption Lapsed
 
-@property pictureurl type=textbox size=40 maxlength=200
-@caption Pildi/foto url
+property pictureurl type=textbox size=40 maxlength=200
+caption Pildi/foto url
 
 @property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first use_form=emb 
 @caption Pilt/foto
 
+@property notes type=textarea cols=60 rows=10 group=description
+@caption Vabas vormis tekst
+
+@property aliasmgr type=aliasmgr group=description no_caption=1 store=no
+@caption Seostehaldur
 @property work_contact type=relpicker reltype=RELTYPE_WORK table=kliendibaas_isik group=contact
 @caption Organisatsioon
 
 @property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
-@property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
-@caption Kodused kontaktandmed
+property personal_contact type=relpicker reltype=RELTYPE_ADDRESS table=kliendibaas_isik
+caption Kodused kontaktandmed
 
-@property comment type=textarea cols=40 rows=3 table=objects field=comment
-@caption Kommentaar
 
 @default group=contact
-@caption Kontaktandmed
 	
 @property email type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_EMAIL props=mail
 @caption Meiliaadressid
@@ -80,6 +82,9 @@ caption Msn/yahoo/aol/icq
 
 @property url type=relmanager table=objects field=meta method=serialize group=contact reltype=RELTYPE_URL props=url
 @caption Veebiaadressid
+
+@property comment type=textarea cols=40 rows=3 table=objects field=comment group=contact
+@caption Kontakt
 
 //property email type=textbox store=no 
 //caption E-post
@@ -98,6 +103,9 @@ caption Msn/yahoo/aol/icq
 @property org_tasks type=calendar no_caption=1 group=tasks viewtype=relative
 @caption Toimetused
 
+@groupinfo general2 caption="Üldine" parent=general
+@groupinfo description caption="Kirjeldus" parent=general
+@groupinfo relatives caption="Sugulased" parent=general
 @groupinfo contact caption="Kontaktandmed"
 @groupinfo overview caption=Tegevused
 @groupinfo all_actions caption="Kõik" parent=overview submit=no
@@ -245,6 +253,14 @@ class crm_person extends class_base
 
 		switch($data["name"])
 		{
+			case "title":
+				$data["options"] = array("Härra","Proua","Preili");
+				break;
+
+			case "social_status":
+				$data["options"] = array("Vallaline","Abielus","Vabaabielus");
+				break;
+
 			case "templates":
 				$data["options"] = array(
 					"1" => "Pilt, kontakt, artiklid",
