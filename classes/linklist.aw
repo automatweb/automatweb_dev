@@ -1,7 +1,6 @@
 <?php
 global $orb_defs;
 $orb_defs["linkslist"] = "xml";
-//define("PERPAGE",20); //max count of links per page
 define("SHOW_TPL_DIR",aw_ini_get("tpldir")."/linklist/show");
 class linklist extends aw_template
 {
@@ -51,6 +50,11 @@ class linklist extends aw_template
 		return $this->parse();
 	}
 
+
+
+
+
+
 	////
 	// !this gets called when the user clicks on change object 
 	// parameters:
@@ -60,6 +64,26 @@ class linklist extends aw_template
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
+		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
+		$toolbar->add_button(array(
+			"name" => "save",
+			"tooltip" => "salvesta",
+			"url" => "javascript:document.add.submit()",
+			"imgover" => "save_over.gif",
+			"img" => "save.gif",
+		));
+		$toolbar->add_button(array(
+			"name" => "stat",
+			"tooltip" => "statistika",
+			"url" => $this->mk_my_orb("stat", array("id" => $id, "return_url" => urlencode($return_url))),
+			"imgover" => "lists_over.gif",
+			"img" => "lists.gif",
+		));
+		$toolbar->add_separator();
+//		$toolbar->add_cdata($this->parse("aliaslist"));
+		$toolbar = $toolbar->get_toolbar();
+
+
 		if ($return_url != "")
 		{
 			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda linklist");
@@ -87,7 +111,7 @@ class linklist extends aw_template
 			"caption" => "caption",
 			"modifiedby" => "modifiedby",
 			"createdby" => "createdby",
-//			"name" => "name", //name is actually the same as caption
+//			"name" => "name", //name is actually the same as the caption
 			"modified" => "modified",
 			"created" => "created",
 			"jrk" => "jrk",
@@ -97,7 +121,6 @@ class linklist extends aw_template
     [class_id] => 21
     [created] => 1033467989
     [status] => 2
-
     [lang_id] => 6
     [last] => 
     [jrk] => 222
@@ -154,10 +177,9 @@ class linklist extends aw_template
 					"orderby" => "name",
 //					"return" => ARR_ALL,
 			));
-/**/
+
 			if($ob["meta"]["forms"])
 			{
-
 				$form = get_instance("form"); 
 
 				$form->load($ob["meta"]["forms"]); 
@@ -169,14 +191,6 @@ class linklist extends aw_template
 				));
 
 			}		
-/**/
-			$this->vars(array(
-				"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
-				"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
-				"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
-			));		
-			$vormisisestus = $this->parse("vormisisestus");
-
 
 //see on see tasandite konfinnimise süteem
 
@@ -194,11 +208,12 @@ class linklist extends aw_template
 		// add level
 		if($adding = (int)$ob["meta"]["add_level"])
 		{
-			$tulpi[$adding] = $ob["meta"]["default_tulpi"];  //anname tasandile algus default tulpade arvu
+			$tulpi[$adding]	= $ob["meta"]["default_tulpi"];  //anname tasandile algus default tulpade arvu
 			$ob["meta"]["sortby_links"][$adding] = $ob["meta"]["default_sortby_links"];
 			$ob["meta"]["sortby_dirs"][$adding] = $ob["meta"]["default_sortby_dirs"];
 			$ob["meta"]["tulpi"][$adding] = $ob["meta"]["default_tulpi"];
-			$ob["meta"]["level_template"] = $ob["meta"]["default_template"];
+			$ob["meta"]["level_template"][$adding] = $ob["meta"]["default_template"];
+			$ob["meta"]["jrk_columns"][$adding] = $ob["meta"]["jrk_columns_template"];
 		}
 	
 		$list_templates = $this->get_templates(SHOW_TPL_DIR);
@@ -211,7 +226,7 @@ class linklist extends aw_template
 				"sortby_dirs" => $this->picker($ob["meta"]["sortby_dirs"][$key], $sortim),
 				"sortby_links" => $this->picker($ob["meta"]["sortby_links"][$key], $sortim),
 				"tulpi" => (int)$ob["meta"]["tulpi"][$key]?(int)$ob["meta"]["tulpi"][$key]:$ob["meta"]["default_tulpi"],
-				"act" => checked($ob["meta"]["act_tasand"][$key]),
+				"jrk_columns" => checked($ob["meta"]["jrk_columns"][$key]),
 				"level_template" => $this->picker($ob["meta"]["level_template"][$key], $list_templates),
 				"sortby_jknr" => checked($ob["meta"]["sortby_jknr"][$key])));
 				$levels[$key] = $this->parse("levels");
@@ -221,8 +236,6 @@ class linklist extends aw_template
 		}
 ///end/tasandid
 
-		
-		
 		//selecting wich link property we wanna see as hyperlink	
 		foreach($linkis as $key =>  $val)
 		{
@@ -239,6 +252,14 @@ class linklist extends aw_template
 		$list_templates = $this->get_templates(SHOW_TPL_DIR);
 
 		$this->vars(array(
+		
+				"forms" => $this->picker($ob["meta"]["forms"], $forms),		//all the form objects we can find
+				"felement" => $this->picker($ob["meta"]["felement"],$felement),	//current active form element
+				"vordle" => $this->picker($ob["meta"]["vordle"],$propertid),	//
+
+			"jrk_columns_default" => checked($ob["meta"]["jrk_columns_default"]),
+			"dir_is_form_result" => checked($ob["meta"]["dir_is_form_result"]),
+			"toolbar" => $toolbar,
 			"default_tulpi" => $ob["meta"]["default_tulpi"],			// default column count
 			"abix" => "", 
 			"is_formentry" => $ob["meta"]["is_formentry"]?checked($ob["meta"]["is_formentry"]):"",		// kas on vormisisestus (radio)
@@ -264,7 +285,9 @@ class linklist extends aw_template
 
 	////
 	// !gets list of the files in given path (eg templates)
-	//  "filename.ext" => filename.ext, because numeric key may differ after file add/delete
+	// parameters:
+	//  $path - directory where to search the files
+	//  returns key and value as "filename.ext", because numeric key may differ after file add/delete
 	function get_templates($path,$ext="")
 	{
 		if ($dir = @opendir($path))
@@ -299,15 +322,18 @@ class linklist extends aw_template
 					"path" => $path,
 
 					"tulpi" => $tulpi,
+					"jrk_columns" => $jrk_columns,
 					"level_template" => $level_template,
 					"sortby_dirs" => $sortby_dirs,
 					"sortby_links" => $sortby_links,
 					"kustuta" => $kustuta,
-//					"list_templates"=> $list_templates,
-					"vordle" => $vordle,
+
 					"is_formentry" => $is_formentry,
 					"forms" => $forms,
 					"felement" => $felement,
+					"dir_is_form_result" => $dir_is_form_result,
+					"vordle" => $vordle,
+					"jrk_columns_default" => $jrk_columns_default,
 					"default_tulpi" => (int)$default_tulpi?(int)$default_tulpi:1,
 					"klikitav" => $klikitav,
 
@@ -338,6 +364,7 @@ class linklist extends aw_template
 			));
 		}
 
+
 		if ($alias_to)
 		{
 			$this->add_alias($alias_to, $id);
@@ -345,10 +372,6 @@ class linklist extends aw_template
 		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
@@ -361,92 +384,165 @@ class linklist extends aw_template
 		return $this->show(array("id" => $alias["target"]));
 	}
 
+
 	////
 	// !linklist, currently shows a predefined catalogs at the top and below links of the active catalog or 
 	// form output maching the serach criteria
 	//
 	function show($arr)
 	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		$aktiivne = $aktiivne?$aktiivne:$ob["meta"]["lingiroot"];
-		//hit
-		$this->add_hit($aktiivne);
-		$ak = $aktiivne;
-//		$i=0;
+		extract($arr); // cd = current directory
 
+		$this->write_stat(array("oid"=>$id,"uid"=>$uid,"action"=>1));
+
+		$ob = $this->get_object($id);
+		$cd = $cd?$cd:$ob["meta"]["lingiroot"];
+		$this->add_hit($cd);
+		$ak = $cd;
 		//start YAH
-		while((($ak == $ob["meta"]["lingiroot"]))==false)
+
+		if ($ob["meta"]["is_formentry"] && $ob["meta"]["dir_is_form_result"])
+		{	// kuidas ma saan yah menüü kui menüü lingid on kõik otsinguga leitud?
+		}
+		else
 		{
-			$ph = $this->get_object(array("oid" => $ak,"return" => ARR_ALL),false,false);
-			$ak = $ph["parent"];
-			//$tase++;
-			$YAH[++$tase] = array("name" => $ph["name"],
-				"link" => $this->mk_my_orb("show",array("aktiivne" => $ak,"id" => $id))
-			);
-		};
-		$YAH[++$tase]= array("name" => "juur",
-			"link" => $this->mk_my_orb("show",array("aktiivne" => $ob["meta"]["lingiroot"],"id" => $id))
+			while((($ak == $ob["meta"]["lingiroot"]))==false)
+			{
+				$ph = $this->get_object(array("oid" => $ak,"return" => ARR_ALL),false,false);
+				$ak = $ph["parent"];
+				//$tase++;
+				$YAH[++$tase] = array("name" => $ph["name"],
+					"link" => $this->mk_my_orb("show",array("cd" => $ak,"id" => $id))
+				);
+			};
+		}
+
+		$YAH[++$tase]= array( //taseme number on igaljuhul vajalik siit kätte saada
+			"name" => $ob["name"],
+			"link" => $this->mk_my_orb("show",array("cd" => $ob["meta"]["lingiroot"],"id" => $id))
 		);
-		$tase++; //taseme number on igaljuhul vajalik 
-		//end YAH
 
 		$templiit = $ob["meta"]["level_template"][$tase]?$ob["meta"]["level_template"][$tase]:$ob["meta"]["default_template"];
 		$this->read_template("show/".$templiit);
+		$order_dirs = $ob["meta"]["sortby_dirs"][$tase]?$ob["meta"]["sortby_dirs"][$tase]:$ob["meta"]["default_sortby_dirs"];
+		$order_links = $ob["meta"]["sortby_links"][$tase]?$ob["meta"]["sortby_links"][$tase]:$ob["meta"]["default_sortby_links"];
 
-		//if YAH then parse it
-		if ($ob["meta"]["path"]) 
+		if ($ob["meta"]["path"]) 		//if YAH then parse it
+		$nms=$this->parse_YAH($YAH,"show/".$templiit);
+
+
+
+		// kui  kasutame vormisisestust
+		if ($ob["meta"]["is_formentry"])
 		{
-			foreach($YAH as $val)
-			{
-				$this->vars(array(
-					"name" => $val["name"],
-					"link" => $val["link"],
-				));
-				$nms = $this->parse("tee").$nms;
-			}
-		}
-		$order = $ob["meta"]["sortby_dirs"][$tase]?$ob["meta"]["sortby_dirs"][$tase]:$ob["meta"]["default_sortby_dirs"];
+			//kataloogi lingi väärtus võetakse vormisissestusest
 
-		$menus = $this->list_objects(array("class" => CL_PSEUDO, 
-					"parent" => $aktiivne,
+			$form = get_instance("form"); 
+			$form->load($ob["meta"]["forms"]); 
+			$form->set_element_value($ob["meta"]["felement"], urldecode($search)); 
+			if ($ob["meta"]["dir_is_form_result"]) 
+			{
+				// leitud id järgi, kõik objektid
+
+				$arr = new aw_array($form->search());
+				foreach($arr->get() as $val)
+				{
+					$menus[$val] = $this->get_object($val);
+				}
+				//linke ei pane		
+			}
+			else
+			{
+				$menus = $this->list_objects(array("class" => CL_PSEUDO, 
+					"parent" => $cd,
 					"active" => $ob["meta"]["active_dirs"],
-					"orderby" => $order,
+					"orderby" => $order_dirs,
 					"return" => ARR_ALL
-					));
+				));
+				//linkide asemel on vormi väljastus
+				$links = $form->new_do_search(array()); 
+	
+			}
+
+		}
+
+		//tavaline lingikogu
+		if (!$ob["meta"]["is_formentry"]) 
+		{
+		// menüüd on "füüsilised" kataloogid
+			$menus = $this->list_objects(array("class" => CL_PSEUDO, 
+				"parent" => $cd,
+				"active" => $ob["meta"]["active_dirs"],
+				"orderby" => $order_dirs,
+				"return" => ARR_ALL
+			));
+		//lingid on aktiivses kataloogis olevad lingiobjektid
+			$objects = $this->list_objects(array(
+				"class" =>  CL_EXTLINK,
+				"parent" => $cd,
+				"active" => $ob["meta"]["active_links"],
+				"orderby" => $order_links,
+				"return" => ARR_ALL,
+			));
+		}
+
 		if ($menus)
 		{
+		// pagan neid tulpi, mul läks kapitaalselt juhe kokku
+		// jääb nii praegult
+			if (!$ob["meta"]["tulpi"][$tase])
+			{
+				$jrku=$ob["meta"]["jrk_columns_default"];
+				$tlpi=$ob["meta"]["default_tulpi"];
+			}
+			else
+			{
+				if ($ob["meta"]["jrk_columns"][$tase])
+				{
+					$jrku=1;
+				}
+				$tlpi=$ob["meta"]["tulpi"][$tase];
+			}
+		///////////
+			
 			foreach($menus as $key => $value) 
 			{
-//print_r($value);
 				extract($value);
 				$sub_count = $this->count_objects(array(
 					"class" => CL_PSEUDO, 
 					"parent" => $oid,
 				));
+				if ($sub_count)
+				{
+					$this->vars(array("count"=>$sub_count));
+					$sub_count=$this->parse("sub_count");
+				}
 				$this->vars(array(
 					"hits" => $this->get_hit($oid),
-					"sub_count" => $sub_count?" <small>[$sub_count]</small>":"", // tagid peaks vast templiiti panema? 
+					"sub_count" => $sub_count?$sub_count:"",
 					"name" => $name,
 					"link" => $this->mk_my_orb(
 						"show",
 						array(
-							"aktiivne" => $oid,
+							"cd" => $oid,
 							"id"  => $id,
-							"otsi" => $ob["meta"]["felement"]?urlencode($value[$ob["meta"]["vordle"]]):"",
+							"search" => $ob["meta"]["felement"]?urlencode($value[$ob["meta"]["vordle"]]):"",
 						)
 					)
 				));
 
-				if($ob["meta"]["tulpi"][$tase])  //see on see jagamine tulpadesse
+
+				if($jrku)  //see on see jagamine tulpadesse jrk järgi
 				{
 					$tulp = $value["jrk"][0]; //first character of jrk
-					if(($ob["meta"]["tulpi"][$tase]<$tulp)) $tulp = 1; //kui jrk algab suurema numbriga kui tulpade arv, siis lheb esimesse
+					if($tlpi<$tulp) $tulp = 1; //kui jrk algab suurema numbriga kui tulpade arv, siis lheb esimesse
 				} 
 				else
 				{
-					$tulp = ($total % $ob["meta"]["default_tulpi"])+1; //siin peaks kuidagi võrdselt ära jagama
+					$tulp = ($total % $tlpi)+1; //siin peaks kuidagi võrdselt ära jagama
 				}
+
+
 				$tulp = $tulp?$tulp:1;
 				$tasand[$tulp][$value["jrk"]].= $this->parse("dir");
 				$total++;
@@ -464,18 +560,10 @@ class linklist extends aw_template
 
 
 
-		$order = $ob["meta"]["sortby_links"][$tase]?$ob["meta"]["sortby_links"][$tase]:$ob["meta"]["default_sortby_links"];
+
 
 		//kui tahame linke
-		if (!$ob["meta"]["is_formentry"]) 
-		{
-			$objects = $this->list_objects(array(
-				"class" =>  CL_EXTLINK,
-				"parent" => $aktiivne,
-				"active" => $ob["meta"]["active_links"],
-				"orderby" => $order,
-				"return" => ARR_ALL,
-			));
+
 
 			if ($objects)
 			{
@@ -512,24 +600,14 @@ class linklist extends aw_template
 						"created" => $created,
 						"jrk" => $jrk,
 						));
-
 					$links.= $this->parse("links"); //parse links
 				}
 			}
 
-		} 
-		else //kui tahame vormisissestusi
-		{
-			$form = get_instance("form"); 
-			$form->load($ob["meta"]["forms"]); 
-			$form->set_element_value($ob["meta"]["felement"], urldecode($otsi)); 
-			$links = $form->new_do_search(array()); 
-//			$abix = $form->get_search_output();
-		}
+		
 
 		$this->vars(array(
-			"abix"=>$abix,
-			"link_status" => "<SCRIPT LANGUAGE=\"JavaScript\" TYPE=\"text/javascript\"> function show_status(dat) { window.status = dat; return true} </script>",
+			"abix"=>$tase,
 			"nms" => $nms,
 			"total" => (int)$total,
 			"total2" => (int)$total2,
@@ -541,7 +619,8 @@ class linklist extends aw_template
 			"default_sortby_links" => $ob["meta"]["default_sortby_links"],
 			"default_template" => $ob["meta"]["default_template"],
 			"name" => $ob["name"],
-			"aktiivne" => $aktiivne,
+			"comment" => $ob["comment"],
+			"cd" => $cd,
 			"tulbad" => $tulbad,
 //			"links" => $links?$links:"<tr><td>linke pole?</td></tr>"
 			"links" => $links
@@ -550,6 +629,24 @@ class linklist extends aw_template
 		return $this->parse();
 	}
 
+
+
+
+
+	function parse_YAH($YAH,$templiit)
+	{
+		$this->read_template($templiit);
+			foreach($YAH as $val)
+			{
+				$this->vars(array(
+					"name" => $val["name"],
+					"link" => $val["link"],
+				));
+				$yah_bar = $this->parse("tee").$yah_bar;
+			}
+		return $yah_bar;
+	}	
+	
 	
 	////
 	// !this adds a hit to the external link (and possibli some information about user) and redirects user to to this link, 
@@ -558,11 +655,13 @@ class linklist extends aw_template
 	function link_redirect($arr)
 	{
 		extract($arr); //id = link id
+		$this->write_stat(array("oid"=>$id,"uid"=>$uid,"action"=>2));
 		$ob = $this->get_object($id);
 		$this->add_hit($id);
 		classload("extlinks");
 		$ll = new extlinks();
 		list($url,$target,$caption) = $ll->draw_link($id);
+//		echo $uid." ";
 		header("Location: $url");
 		die();
 	}
@@ -612,5 +711,101 @@ class linklist extends aw_template
 		$this->add_alias($id,$alias);
 		header("Location: ".$this->mk_my_orb("list_aliases",array("id" => $id),"aliasmgr"));
 	}*/
+
+function write_stat($arr)
+{
+		extract($arr);
+		$in = "insert into lingikogu_stat (oid, uid, action) values ('$oid','$uid','$action')";
+		$this->db_query($in);
 }
+
+/////////////////////////////////
+
+/*
+			"stat"=>$this->get_stat(array()),
+
+
+
+function stat($arr)
+{
+extract($arr);
+if ($)
+
+
+
+
+
+}
+
+
+
+
+function get_stat($arr)
+{
+		extract($arr);
+		$this->read_template("stat.tpl");
+
+	$sekund=date("s");
+	$minut=date("i");
+	$tund=date("H");
+	$paev=date("d");
+	$kuu=date("m");
+	$aasta=date("Y");
+
+
+
+
+$now=$aasta.$kuu.$paev.$tund.$minut.$sekund;
+
+$t1="20020115110011";
+$t2="20021015110011";
+
+
+$q = "select oid from lingikogu_stat where tm between $t1 and $t2"; //vahemik
+//$q = "select oid from lingikogu_stat where tm >= $t1"; //alates
+//$q = "select oid from lingikogu_stat where tm <= $t1"; //kuni
+//$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
+//$q = "select oid from lingikogu_stat where tm = '????????10????'"; //tundide lõikes ntx kl 10
+
+	
+	$this->db_query($q);
+
+while ($row=$this->db_fetch_row())
+{
+
+			print_r($row);
+
+}
+		
+
+
+
+
+		$q = "select count(id) as caunt from lingikogu_stat";
+		$caunt=$this->db_fetch_field($q,"caunt");
+		$q = "select count(id) as caunt from lingikogu_stat where action=1";
+		$caunt_dirs=$this->db_fetch_field($q,"caunt");
+		$q = "select count(id) as caunt from lingikogu_stat where action=2";
+		$caunt_links=$this->db_fetch_field($q,"caunt");
+
+		$this->vars(array(
+			"caunt"=>$caunt,
+			"caunt_links"=>$caunt_links,
+			"caunt_dirs"=>$caunt_dirs,
+//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,//""=>$,
+			));
+
+		return $this->parse();
+
+
+//		$this->db_query($q);
+
+//return $html;
+}
+
+
+
+*/
+}
+
 ?>
