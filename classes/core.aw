@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.2 2001/05/18 15:31:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.3 2001/05/19 23:37:16 duke Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -101,16 +101,17 @@ class core extends db_connector
 		
 	// write to syslog
 	// DEPRECATED
-	function log_action($uid,$type,$action)
-	{
-		global $REMOTE_HOST;
-		global $REMOTE_ADDR;
-		$ip = "$REMOTE_HOST / $REMOTE_ADDR";
-		$when = time();
-		$this->quote($action);
-		$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip) VALUES ('$when','$uid','$type','$action','$ip')";
-		$this->db_query($q);
-	}
+	// Don't use this. Use _log instead
+	// function log_action($uid,$type,$action)
+	// {
+	//	global $REMOTE_HOST;
+	//	global $REMOTE_ADDR;
+	//	$ip = "$REMOTE_HOST / $REMOTE_ADDR";
+	//	$when = time();
+	//	$this->quote($action);
+	//	$q = "INSERT DELAYED INTO syslog (syslog.tm,uid,type,action,ip) VALUES ('$when','$uid','$type','$action','$ip')";
+	//	$this->db_query($q);
+	//}
 
 	// outputs debug information if $HTTP_SESSION_VARS["debugging"] is set
 	function dmsg($msg)
@@ -417,7 +418,7 @@ class core extends db_connector
 			    modified = '$t',
 			    modifiedby = '$uid'
 			WHERE oid = '$oid'";
-		$this->log_action($uid,"object","$oid kustutati");
+		$this->_log("OBJECT","$oid kustutati");
 		$this->db_query($q);
 	}
 
@@ -511,7 +512,7 @@ class core extends db_connector
 		$q = "INSERT INTO aliases (source,target,type,data)	VALUES('$source','$target','$target_data[class_id]','$extra')";
 
 		$this->db_query($q);
-		$this->log_action(UID,"alias","Lisas objektile $source aliase");
+		$this->_log("alias","Lisas objektile $source aliase");
 	}
 
 	function delete_alias($source,$target)
