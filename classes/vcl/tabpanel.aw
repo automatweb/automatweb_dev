@@ -1,5 +1,5 @@
 <?php
-// $Id: tabpanel.aw,v 1.9 2004/05/03 11:22:50 duke Exp $
+// $Id: tabpanel.aw,v 1.10 2004/05/03 13:46:24 duke Exp $
 // tabpanel.aw - class for creating tabbed dialogs
 class tabpanel extends aw_template
 {
@@ -81,11 +81,11 @@ class tabpanel extends aw_template
 		{
 			$this->tabs[$tab_prefix . $level] = "";
 		};
-		
+
 
 		//$this->tabs[$level] .= $this->parse($subtpl . "_L" . $level);
 		$this->tabs[$tab_prefix . $level] .= $this->parse($use_subtpl);
-
+		
 		// so, I need a way to specify other tab groups.
 	}
 
@@ -95,6 +95,7 @@ class tabpanel extends aw_template
 	{
 		$prop = $arr["property"];
 		$prop["vcl_inst"] = $this;
+
 
 		return array($prop["name"] => $prop);
 		//print "initializing tab panel<br>";
@@ -117,6 +118,23 @@ class tabpanel extends aw_template
 			$this->read_template("tabs_with_logo.tpl");
 		};
 	}
+	
+	function configure($arr)
+	{
+		if (isset($arr["logo_image"]))
+		{
+			$this->vars(array(
+				"logo_image" => $arr["logo_image"],
+			));
+		};
+
+		if (isset($arr["background_image"]))
+		{
+			$this->vars(array(
+				"background_image" => $arr["background_image"],
+			));
+		};
+	}
 
 	////
 	// !Generates and returns the tabpanel
@@ -124,6 +142,7 @@ class tabpanel extends aw_template
 	function get_tabpanel($args = array())
 	{
 		$tabs = "";
+		$panels = array();
 		foreach($this->tabcount as $level => $val)
 		{
 			if (($val > 1) || !$this->hide_one_tab)
@@ -143,12 +162,24 @@ class tabpanel extends aw_template
 					$prefix . "tabs_L" . $lnr => $this->parse($prefix . "tabs_L" . $lnr),
 				));
 
+				if ($args["panels_only"])
+				{
+					$r_prefix = str_replace("_","",$prefix);
+					$panels[$r_prefix][] = $this->parse($prefix . "tabs_L" . $lnr);
+				};
 			};
 		};
+
+		if ($args["panels_only"])
+		{
+			return $panels;
+		};
+
 
 		$toolbar = isset($args["toolbar"]) ? $args["toolbar"] : "";
 		$toolbar2 = isset($args["toolbar2"]) ? $args["toolbar2"] : "";
 
+		// how do I return different subtemplates?
 
 		$this->vars(array(
 			//"tabs" => $tabs,
