@@ -1,3 +1,13 @@
-{VAR:title} <br>
-{VAR:content}<bR>
+<table border="1">
+<!-- SUB: SHOW_TITLE -->
+<Tr>
+	<Td>
+		Pealkiri: {VAR:title}
+	</tr>
+</tr>
+<!-- END SUB: SHOW_TITLE -->
+<tr>
+	<td>{VAR:content}</td>
+</tr>
+</table>
 
