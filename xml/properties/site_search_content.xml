@@ -81,7 +81,7 @@
       <reltypes>
             <REPEATER>
                   <value>1</value>
-                  <clid>CL_REPEATER_OBJ</clid>
+                  <clid>CL_RECURRENCE</clid>
                   <caption>kordus staatilise koopia genereerimiseks</caption>
             </REPEATER>
             <SEARCH_GRP>
