@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.17 2001/05/23 18:21:59 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.18 2001/05/23 18:22:35 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 global $orb_defs;
 $orb_defs["keywords"] = "xml";
@@ -40,16 +40,19 @@ class keywords extends aw_template {
 		if (is_array($oidlist))
 		{
 			$objects = join(",",$oidlist);
-			$q = "SELECT * FROM objects WHERE oid IN ($objects)";
-			$this->db_query($q);
-			while($row = $this->db_next())
+			if ($objects != "")
 			{
-				$this->vars(array(
-						"id" => $row["oid"],
-						"title" => $row["name"],
-				));
-				$c .= $this->parse("LINE");
-			};
+				$q = "SELECT * FROM objects WHERE oid IN ($objects)";
+				$this->db_query($q);
+				while($row = $this->db_next())
+				{
+					$this->vars(array(
+							"id" => $row["oid"],
+							"title" => $row["name"],
+					));
+					$c .= $this->parse("LINE");
+				};
+			}
 		}
 		$this->vars(array(
 				"keyword" => $keyword,

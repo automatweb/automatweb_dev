@@ -237,6 +237,7 @@ function del_gallery()
 			Aktiivne:	<input type='checkbox' name='status' value='2' {VAR:cstatus}>
 	| Näita leadi: <input type='checkbox' name='showlead' value=1 {VAR:showlead}>
 	| Näita pealkirja: <input type='checkbox' name='show_title' value=1 {VAR:show_title}>
+	| Näita kuup&auml;eva: <input type='checkbox' name='show_modified' value=1 {VAR:show_modified}>
 	| Ilma parema paanita: <input type='checkbox' name='no_right_pane' value=1 {VAR:no_right_pane}>
 	| Ilma vasaku paanita: <input type='checkbox' name='no_left_pane' value=1 {VAR:no_left_pane}>
 	| Copyright: <input type='checkbox' name='copyright' value=1 {VAR:copyright}>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.11 2001/05/22 10:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/documents.aw,v 2.12 2001/05/23 18:22:35 kristo Exp $
 classload("msgboard","aw_style");
 classload("acl","styles","form","tables","extlinks","images","gallery","file");
 class db_documents extends aw_template
@@ -1166,6 +1166,10 @@ class db_documents extends aw_template
 		$this->vars(array(
 			"tm" => $tm
 		));
+		if ($doc["show_modified"])
+		{
+			$this->vars(array("SHOW_MODIFIED" => $this->parse("SHOW_MODIFIED")));
+		}
 
 		// failide ikoonid kui on template olemas, namely www.stat.ee jaox
 		if ($this->is_template("FILE"))

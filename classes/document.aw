@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.8 2001/05/22 10:54:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.9 2001/05/23 18:22:35 kristo Exp $
 // document.aw - Dokumentide haldus. ORB compatible. Should be used instead of documents.aw
 // defineerime orbi funktsioonid
 global $orb_defs;
@@ -1022,6 +1022,22 @@ class document extends aw_template
 			if ($ts)
 			{
 				$modified = $ts;
+			}
+			else
+			{
+				// 2kki on punktidega eraldatud
+				list($day,$mon,$year) = explode(".",$row["tm"]);
+				$ts = mktime(0,0,0,$mon,$day,$year);
+				if ($ts)
+				{
+					$modified = $ts;
+				}
+				else
+				{
+					// 2kki on hoopis - 'ga eraldatud?
+					list($day,$mon,$year) = explode("-",$row["tm"]);
+					$ts = mktime(0,0,0,$mon,$day,$year);
+				}
 			}
 		}
 		$q_parts[] = "modified = $modified";
