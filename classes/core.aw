@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.64 2001/11/05 12:41:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.65 2001/11/06 07:18:16 kristo Exp $
 // core.aw - Core functions
 
 classload("connect");
@@ -918,11 +918,11 @@ class core extends db_connector
 							{
 								$this->vars(array($inplace => $replacement));	
 								$inplace = false;
-								$text = preg_replace($parser["reg"],"",$text);
+								$text = preg_replace($parser["reg"],"",$text,1);
 							}
 							else
 							{
-								$text = preg_replace($parser["reg"],$replacement,$text);
+								$text = preg_replace($parser["reg"],$replacement,$text,1);
 							};
 							$replacement = "";
 						};

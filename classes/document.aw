@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.53 2001/11/01 14:04:02 cvs Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.54 2001/11/06 07:15:35 kristo Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -540,6 +540,24 @@ class document extends aw_template
 					"idx" => 2,
 					"match" => "c",
 					"class" => "form_chain",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// lingikogud
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "x",
+					"class" => "link_collection",
+					"reg_id" => $mp,
+					"function" => "parse_alias",
+				));
+		
+		// foorumid
+		$this->register_sub_parser(array(
+					"idx" => 2,
+					"match" => "o",
+					"class" => "forum",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 				));
@@ -1765,11 +1783,90 @@ class document extends aw_template
 		{
 			$hl = $this->parse("NO_LINKS");
 		}
+
+		$this->vars(array(
+			"addlink" => $this->mk_orb("pick_branch",array("parent" => $id),"link_collection"),
+		));
 		$this->vars(array("HAS_LINKS" => $hl, "NO_LINKS" => ""));
 
-		// lingikogud
-		$this->vars(array("NO_LINK_COLLECTION" => $this->parse("NO_LINK_COLLECTION")));
 
+		$link_collections = $this->get_aliases_for($id,CL_LINK_COLLECTION,0,0);
+		$lcoll = "";
+
+		if (is_array($link_collections))
+		{
+			$c = "";
+			$lcc = 0;
+
+			foreach($link_collections as $key => $val)
+			{
+				$lcc++;
+				$this->vars(array(
+					"name" => $val["name"],
+					"comment" => $val["comment"],
+					"alias" => "#x$lcc#",
+					"modified" => $this->time2date($val["modified"],2),
+					"modifiedby" => $val["modifiedby"],
+				));
+
+				$c .= $this->parse("LINK_COLLECTION_LINE");
+			}
+
+			$this->vars(array(
+				"LINK_COLLECTION_LINE" => $c,
+			));
+
+			$lcoll = $this->parse("HAS_LINK_COLLECTION");
+		}
+		else
+		{
+			$lcoll = $this->parse("NO_LINK_COLLECTION");
+		};
+		
+		// lingikogud
+		$this->vars(array("HAS_LINK_COLLECTION" => $lcoll));
+		
+		$forums = $this->get_aliases_for($id,CL_FORUM,0,0);
+		$lcoll = "";
+
+		$this->vars(array(
+			"addlink" => $this->mk_my_orb("new",array("parent" => $id),"forum"),
+		));
+
+
+		if (is_array($forums) && (sizeof($forums) > 0))
+		{
+			$c = "";
+			$fcc = 0;
+
+			foreach($forums as $key => $val)
+			{
+				$fcc++;
+				$this->vars(array(
+					"name" => $val["name"],
+					"comment" => $val["comment"],
+					"alias" => "#o$fcc#",
+					"edlink" => $this->mk_my_orb("edit_properties",array("id" => $val["oid"]),"forum"),
+					"modified" => $this->time2date($val["modified"],2),
+					"modifiedby" => $val["modifiedby"],
+				));
+
+				$c .= $this->parse("FORUM_LINE");
+			}
+
+			$this->vars(array(
+				"FORUM_LINE" => $c,
+			));
+
+			$lcoll = $this->parse("HAS_FORUM");
+		}
+		else
+		{
+			$lcoll = $this->parse("NO_FORUM");
+		};
+
+		$this->vars(array("NO_FORUM" => $lcoll));
+				
 		$tables = $this->get_aliases_for($id,CL_TABLE,$s_table_sortby, $s_table_order);
 		$tc = 0;
 		$tblist = array();
