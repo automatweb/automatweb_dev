@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.130 2003/12/10 15:44:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.131 2003/12/17 11:39:48 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -238,7 +238,10 @@ class aliasmgr extends aw_template
 		{
 			return;
 		}
-		$this->recover_idx_enumeration($oid);
+		// lets' remove this for now. If there is a problem with alias enumeration
+		// somewhere, then it should be fixed case by case basis instead of doing
+		// it blindly over and over and over and over again
+		//$this->recover_idx_enumeration($oid);
 
 		$obj = obj($oid);
 		$als = $obj->meta("aliaslinks");
@@ -569,7 +572,7 @@ class aliasmgr extends aw_template
 
 		$return_url = urlencode($return_url);
 
-		$this->recover_idx_enumeration($id);
+		//$this->recover_idx_enumeration($id);
 
 		if (aw_ini_get("config.object_translation") == 1)
 		{
