@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.28 2005/03/23 11:45:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.29 2005/03/30 21:47:16 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -497,11 +497,26 @@ class calendar_view extends class_base
 					"type" => $range["viewtype"],
 					"flatlist" => 1,
 					"date" => date("d-m-Y",$range["timestamp"]),
+					"range" => $range,
 				));
+
+				if ($range["viewtype"] == "last_events")
+				{
+					foreach($events as $key => $val)
+					{
+						if ($val["start"] < $range["start"])
+						{
+							unset($events[$key]);
+						};
+					};
+				};
+
 				if (is_numeric($range["limit_events"]))
 				{
 					$num = $range["limit_events"];
 					$count = count($events);
+					// this does not work, because PLANNER does not yet have a method
+					// to returns events from a specified range
 					$events = array_slice($events, 0, $num);
 				};
 				break;
