@@ -1458,28 +1458,24 @@ class grid_editor extends class_base
 			'name' => 'merge_down',
 			'tooltip' => 'Merge alla',
 			'url' => 'javascript:exec_cmd(\'merge_down\')',
-			'imgover' => 'down_r_arr.png',
 			'img' => 'down_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_up',
 			'tooltip' => 'Merge &uuml;les',
 			'url' => 'javascript:exec_cmd(\'merge_up\')',
-			'imgover' => 'up_r_arr.png',
 			'img' => 'up_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_left',
 			'tooltip' => 'Merge vasakule',
 			'url' => 'javascript:exec_cmd(\'merge_left\')',
-			'imgover' => 'left_r_arr.png',
 			'img' => 'left_r_arr.png'
 		));
 		$tb->add_button(array(
 			'name' => 'merge_right',
 			'tooltip' => 'Merge paremale',
 			'url' => 'javascript:exec_cmd(\'merge_right\')',
-			'imgover' => 'right_r_arr.png',
 			'img' => 'right_r_arr.png'
 		));
 
@@ -1487,28 +1483,24 @@ class grid_editor extends class_base
 			'name' => 'split_down',
 			'tooltip' => 'Split alla',
 			'url' => 'javascript:exec_cmd(\'split_down\')',
-			'imgover' => 'merge_down.png',
 			'img' => 'merge_down.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_up',
 			'tooltip' => 'Split &uuml;les',
 			'url' => 'javascript:exec_cmd(\'split_up\')',
-			'imgover' => 'merge_up.png',
 			'img' => 'merge_up.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_left',
 			'tooltip' => 'Split vasakule',
 			'url' => 'javascript:exec_cmd(\'split_left\')',
-			'imgover' => 'merge_left.png',
 			'img' => 'merge_left.png'
 		));
 		$tb->add_button(array(
 			'name' => 'split_right',
 			'tooltip' => 'Split paremale',
 			'url' => 'javascript:exec_cmd(\'split_right\')',
-			'imgover' => 'merge_right.png',
 			'img' => 'merge_right.png'
 		));
 
