@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.87 2002/02/01 00:08:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.88 2002/02/01 01:24:25 duke Exp $
 // document.aw - Dokumentide haldus. 
 global $orb_defs;
 $orb_defs["document"] = "xml";
@@ -348,14 +348,21 @@ class document extends aw_template
 			if (defined("PRINT_CAP"))
 			{
 				$pc = localparse(PRINT_CAP,array("link" => "/section=$docid" . "&print=1"));
-				if (!($doc["showlead"] == 1 || $showlead == 1))
+				if (defined("PC_BOTTOM"))
 				{
-					$doc["content"] = $pc . $doc["content"];
+					$doc["content"] .= $pc;
 				}
 				else
 				{
-					$doc["lead"] = $pc . $doc["lead"];
-				}
+					if (!($doc["showlead"] == 1 || $showlead == 1))
+					{
+						$doc["content"] = $pc . $doc["content"];
+					}
+					else
+					{
+						$doc["lead"] = $pc . $doc["lead"];
+					}
+				};
 			}
 			else
 			{
@@ -1156,6 +1163,8 @@ class document extends aw_template
 		return $this->mk_my_orb("change", array("id" => $docid));
 	}
 
+	////
+	// !Send a link to someone
 	function send_link()
 	{
 		global $from_name, $from, $baseurl, $ext, $section, $copy,$to_name, $to,$SITE_ID;
@@ -1200,6 +1209,8 @@ class document extends aw_template
 		}
 	}
 
+	////
+	// !buu
 	function add_rating($docid, $hinne)
 	{
 		$hinne = $hinne+0;
@@ -1312,7 +1323,6 @@ class document extends aw_template
 		extract($arr);
 		global $per_oid,$period;
 
-		// ok, instead of all this, just add the damn thing and redirect to changing.
 		$ret = $this->submit_add(array(
 			"section" => $section,
 			"period" => $period,
@@ -1321,42 +1331,6 @@ class document extends aw_template
 		));
 		header("Location: ".$ret);
 		die();
-
-/*		global $per_oid,$period;
-
-		$this->mk_path($parent,LC_DOCUMENT_ADD_DOC);
-		$this->tpl_init("automatweb/documents");
-		$this->read_template("nadd.tpl");
-		$par_data = $this->get_object($parent);
-		$section = $par_data["name"];
-		if ($period > 0) 
-		{
-			classload("periods");
-			$periods = new db_periods($per_oid);
-			$pdata = $periods->get($period);
-			$pername = $pdata["description"];			
-		} else {
-			$period = 0;
-			$pername = "staatiline";
-		};
-
-		$conf = new config;
-		$df = $conf->get_simple_config("docfolders".$GLOBALS["LC"]);
-		if ($df != "")
-		{
-			$xml = new xml;
-			$_df = $xml->xml_unserialize(array("source" => $df));
-		}
-
-		$this->vars(array(
-			"section" => $section,
-			"period"  => $period,
-			"parent"  => $parent,
-			"pername" => $pername,
-			"reforb"	=> $this->mk_reforb("submit_add", array("parent" => $parent, "period" => $period, "user" => $user)),
-			"docfolders" => $this->picker($parent,$_df)
-		));
-		return $this->parse();*/
 	}
 
 	function submit_add($arr)
