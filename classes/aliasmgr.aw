@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.111 2003/07/09 14:52:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.112 2003/07/09 15:26:05 duke Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -756,6 +756,7 @@ class aliasmgr extends aw_template
 				"class_id" => CL_RELATION,
 				"status" => STAT_ACTIVE,
 				"subclass" => $al["class_id"],
+				"no_flush" => 1,
 			));
 
 			// let the correct class override the alias adding if it wants to
