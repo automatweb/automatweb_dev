@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.3 2004/03/25 12:44:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/document_statistics.aw,v 1.4 2004/03/25 13:40:06 kristo Exp $
 // document_statistics.aw - Dokumentide vaatamise statistika 
 /*
 
@@ -293,8 +293,46 @@ class document_statistics extends class_base
 		$timespan = $obj->prop("timespan");
 		$count = $obj->prop("count");
 
-		$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d").".txt";
-		$fc = explode("\n", $this->get_file(array("file" => $fp)));
+		if ($timespan == "week")
+		{
+			$fc = array();
+			$tm = get_week_start();
+			while ($tm < time())
+			{
+				$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $tm).".txt";
+				$tmp = explode("\n", $this->get_file(array("file" => $fp)));
+				if (is_array($tmp))
+				{
+					$fc += $tmp;
+				}
+				$tm += 24*3600;
+			}
+		}
+		else
+		if ($timespan == "mon")
+		{
+			$fc = array();
+			$tm = get_month_start();
+			while ($tm < time())
+			{
+				$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d", $tm).".txt";
+				$tmp = explode("\n", $this->get_file(array("file" => $fp)));
+				if (is_array($tmp))
+				{
+					$fc += $tmp;
+				}
+				$tm += 24*3600;
+			}
+		}
+		else
+		{
+			// day
+			$fp = $this->cfg["site_basedir"]."/files/docstats/".date("Y-m-d").".txt";
+			$fc = explode("\n", $this->get_file(array("file" => $fp)));
+		}
+
+		// now, get list of documents 
+		$c_dids = $this->_get_document_list($obj);
 
 		$ds_arr = array();
 
@@ -305,7 +343,10 @@ class document_statistics extends class_base
 				continue;
 			}
 			list($did, $hc) = explode(",", $line);
-			$ds_arr[$did] = $hc;
+			if ($c_dids[$did])
+			{
+				$ds_arr[$did] += $hc;
+			}
 		}
 		
 		arsort($ds_arr);
@@ -322,6 +363,65 @@ class document_statistics extends class_base
 			$i++;
 		}
 		return $ret;
+	}
+
+	/** returns a list of document id's that this object can show stats for
+	**/
+	function _get_document_list($o)
+	{
+		$menus = array();
+
+		$subs = $o->meta("subs");
+		foreach($o->connections_from(array("type" => 1 /* RELTYPE_SHOW_FOLDER */)) as $c)
+		{	
+			$menus[$c->prop("to")] = $c->prop("to");
+
+			if ($subs[$c->prop("to")] == 1)
+			{
+				$tmp = $this->get_menu_list(false, false, $c->prop("to"));
+				foreach($tmp as $_id => $_pt)
+				{
+					$menus[$_id] = $_id;
+				}
+			}
+		}
+
+		switch($o->prop("period_type"))
+		{
+			case "all": /* all periods */
+				$pl = new object_list(array(
+					"class_id" => CL_PERIOD
+				));
+				$pc = $pl->ids();
+				break;
+
+			case "not": /* not periodic */
+				$pc = "0";
+				break;
+
+			case "act": /* active period only */
+				$pc = aw_global_get("act_per_id");
+				break;
+
+			case "rel": /* connected poeriods */
+			default:
+				$pc = array();
+				foreach($o->connections_from(array("type" => 2 /* RELTYPE_SHOW_PERIOD */)) as $c)
+				{
+					$pc[] = $c->prop("to");
+				}
+				break;
+		}
+
+		// now get docs
+		$ret = array();
+		$ol = new object_list(array(
+			"class_id" => array(CL_DOCUMENT, CL_DOCUMENT_BROTHER, CL_PERIODIC_SECTION),
+			"parent" => $menus,
+			"period" => $pc
+		));
+
+		return $this->make_keys($ol->ids());
 	}
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.11 2004/01/29 17:36:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.12 2004/03/25 13:40:05 kristo Exp $
 
 ////
 // !get_date_range
@@ -224,5 +224,22 @@ function get_day_diff($time1,$time2)
 	$diff = $time2 - $time1;
 	$days = (int)($diff / 86400);
 	return $days;
+}
+
+/** returns the timestamp for 00:00 on the last monday
+**/
+function get_week_start()
+{
+	$wd_lut = array(0 => 6, 1 => 0, 2 => 1, 3 => 2, 4 => 3, 5 => 4, 6 => 5);
+	$wday = $wd_lut[date("w")];
+
+	return mktime(0,0,0, date("m"), date("d")-$wday, date("Y"));
+}
+
+/** returns the timestamp for 00:00 on the 1st of the current month
+**/
+function get_month_start()
+{
+	return mktime(0,0,0, date("m"), 1, date("Y"));
 }
 ?>
