@@ -1,8 +1,8 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.18 2003/11/27 16:10:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mailinglist/Attic/ml_queue.aw,v 1.19 2003/12/16 15:36:24 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
-classload("messenger");
+classload("messenger/messenger_v2");
 define("ML_QUEUE_NEW",0);
 define("ML_QUEUE_IN_PROGRESS",1);
 define("ML_QUEUE_READY",2);
@@ -379,6 +379,7 @@ class ml_queue extends aw_template
 		while ($r = $this->db_next())
 		{
 			$qid=(int)$r["qid"];
+			$lid = (int)$r["lid"];
 			//decho("doing item $qid<br />");flush();//dbg
 			// vaata kas see item on ikka lahti (ntx seda skripti võib kogemata 2 tk korraga joosta)
 
@@ -633,7 +634,7 @@ class ml_queue extends aw_template
 		$is_html=$msg["type"] & MSG_HTML;
 
 		// compatiblity with old messenger .. yikes
-		$messenger = get_instance("messenger");
+		$messenger = get_instance(CL_MESSENGER);
 		$froma = $mfrom != "" ? $mfrom : $messenger->get_default_froma($msg_meta["identity"]);
 		$fromn = $mfrom != "" ? "" : $messenger->get_default_fromn($msg_meta["identity"]);
 		echo "froma = $froma , fromn = $fromn  <br />";
