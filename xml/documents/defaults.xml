@@ -165,3 +165,10 @@
 <table border="0" cellspacing="0" cellpadding="0"><tr><td class="blocktitle">\1</td></tr></table>
 ]]>
 </tag>
+
+<tag id='ap'>
+<![CDATA[
+<span class="alapealkiri">\1</span>
+]]>
+</tag>
+
