@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.166 2004/02/03 12:48:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.167 2004/02/03 15:42:17 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -312,7 +312,7 @@ class planner extends class_base
 		else
 		{
 			$_start = $arr["start"];
-			$end = $arr["end"];
+			$_end = $arr["end"];
 		};
 		
 		// generate a list of folders from which to take events
@@ -351,6 +351,7 @@ class planner extends class_base
 		};
 
 		$eidstr = $parstr = "";
+
 		if (sizeof($event_ids) > 0)
 		{
 			$eidstr = " objects.oid IN (" . join(",",$event_ids) . ")";
@@ -366,7 +367,8 @@ class planner extends class_base
 
 		if (sizeof($folders) > 0)
 		{
-			$parstr = " AND objects.parent IN (" . join(",",$folders) . ")";
+			$parprefix = " AND ";
+			$parstr = "objects.parent IN (" . join(",",$folders) . ")";
 		};
 
 
@@ -378,6 +380,7 @@ class planner extends class_base
 			WHERE planner.start >= '${_start}' AND
 			(planner.end <= '${_end}' OR planner.end IS NULL) AND
 			objects.status != 0";
+
 
 		// I could probably optimize this even further by not processing folders,
 		// if events from a projects were requested.
@@ -392,8 +395,9 @@ class planner extends class_base
 		// include events from all folders and all projects
 		else
 		{
-			$q .= $parstr . $eidstr;
+			$q .= $parprefix . "(" . $parstr . $eidstr . ")";
 		}
+
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
