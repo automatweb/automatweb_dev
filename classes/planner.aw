@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.145 2003/12/02 17:09:08 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.146 2003/12/03 13:58:09 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 
@@ -352,6 +352,9 @@ class planner extends class_base
 			"ctrl" => $ctrl,
 		));
 
+		$_start = $di["start"];
+		$_end = $di["end"];
+
 
 		// generate a list of folders from which to take events
 		$cal_conns = $obj->connections_from(array(
@@ -379,22 +382,22 @@ class planner extends class_base
 			if (empty($project))
 			{
 				$add = " OR objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE (objects.parent IN (%s) $add) AND planner.start >= '${_start}' AND planner.end <= '${_end}' AND objects.status != 0",join(",",$folders));
 			}
 			else
 			{
 				$add = " AND objects.oid IN ( " . join(",",$additional_ids) . ")";
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add");
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.status != 0 $add AND planner.start >= '${_start}' AND planner.end <= '${_end}'");
 			};
 		}
 		else
 		if (!empty($project))
 		{
-			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND objects.status != 0";
+			$q = "SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent = -1 AND planner.start >= '${_start}' AND planner.end <= '${_end}' objects.status != 0";
 		}
 		else
 		{
-				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND objects.status != 0",join(",",$folders));
+				$q = sprintf("SELECT * FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE objects.parent IN (%s) AND planner.start >= '${_start}' AND planner.end <= '${_end}' AND objects.status != 0",join(",",$folders));
 
 
 		};
@@ -439,10 +442,14 @@ class planner extends class_base
 				$this->save_handle();
 				$real_obj = $this->get_object($row["brother_of"]);
 				$row["name"] = $real_obj["name"];
+				$row["status"] = $real_obj["status"];
 				$this->restore_handle();
 			};
-			$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
-			$events[$gx][$row["brother_of"]] = $row;
+			if ($row["status"] != 0)
+			{
+				$row["event_icon_url"] = icons::get_icon_url($row["class_id"]);
+				$events[$gx][$row["brother_of"]] = $row;
+			};
 		};
 		$this->day_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_day"));
 		$this->week_orb_link = $this->mk_my_orb("change",array("id" => $id,"group" => "show_week"));
