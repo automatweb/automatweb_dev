@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.163 2004/02/02 17:01:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.164 2004/02/03 10:59:27 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -162,7 +162,7 @@ class planner extends class_base
 	
 	/**  
 		
-		@attrib name=my_calendar params=name is_public="1" caption="Minu kalender" default="0"
+		@attrib name=my_calendar params=name is_public="1" caption="Minu kalender" all_args="1"
 		
 		
 		@returns
@@ -183,6 +183,7 @@ class planner extends class_base
 			return "kulla mees, sa pole omale default kalendrit ju valinud?";
 		};
 		$arr["id"] = $obj_id;
+		$arr["action"] = "change";
 		$arr["group"] = "views";
 		return $this->change($arr);
 	}
@@ -1146,6 +1147,7 @@ class planner extends class_base
 		
 		$range = $vcal->get_range(array(
 			"viewtype" => "day",
+			"date" => aw_global_get("date"),
 		));
 		
 		$this->calendar_inst = new object($alias["to"]);
@@ -1164,6 +1166,7 @@ class planner extends class_base
 			$vcal->add_item(array(
 				"timestamp" => $event["start"],
 				"data" => array(
+					"id" => $event["id"],
 					"name" => $event["name"],
 					"icon" => $event["event_icon_url"],
 					"link" => $event["link"],
@@ -2914,6 +2917,14 @@ class planner extends class_base
 		));
 
 		$viewtype = $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+
+		global $XX3;
+		if ($XX3)
+		{
+			print "<pre>";
+			print_r($arr);
+			print "</pre>";
+		};
 
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
