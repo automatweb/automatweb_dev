@@ -118,7 +118,7 @@ class admin_languages extends languages
 	{
 		extract($arr);
 
-		$this->set_active($selected);
+		$this->set_active($selected, true);
 
 		$lar = $this->listall(true);
 		foreach($lar as $l)

@@ -128,7 +128,7 @@ class languages extends aw_template
 
 		// milleks see cookie vajalik oli?
 		// sest et keele eelistus v6ix ju j22da meelde ka p2rastr seda kui browseri kinni paned
-		setcookie("lang_id",$id,time()+$this->cfg["cookie_lifetime"],"/");
+		setcookie("lang_id",$id,time()+aw_ini_get("languages.cookie_lifetime"),"/");
 		aw_global_set("lang_id", $id);
 		return $id;
 	}
