@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.73 2004/08/17 06:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.74 2004/08/23 09:36:18 kristo Exp $
 
 /*
 
@@ -434,6 +434,11 @@ class site_show extends class_base
 		if (($obj->class_id() == CL_DOCUMENT) || ($obj->class_id() == CL_PERIODIC_SECTION) || $obj->class_id() == CL_BROTHER_DOCUMENT)
 		{
 			return $obj->id();	// most important not to change this, it is!
+		}
+
+		if ($obj->is_brother())
+		{
+			$obj = $obj->get_original();
 		}
 
 
@@ -1484,7 +1489,7 @@ class site_show extends class_base
 		}
 
 		enter_function("site_show::do_draw_menus");
-		@include_once($this->compiled_filename);
+		include_once($this->compiled_filename);
 		exit_function("site_show::do_draw_menus");
 
 		$this->path_ids = $path_bak;
@@ -2204,10 +2209,20 @@ class site_show extends class_base
 		{
 			$GLOBALS["cfg"]["__default"]["rootmenu"] = $tmp;
 		}
+
+		$pfp = aw_ini_get("shop.prod_fld_path");
+
 		$this->path_ids = array();
 		foreach($this->path as $p_obj)
 		{
 			$this->path_ids[] = $p_obj->id();
+			if ($pfp && $p_obj->id() == $pfp && !aw_global_get("class"))
+			{
+				// uh-oh. we are in shop menu but not in shop mode. redirect
+				$url = $this->mk_my_orb("show_items", array("section" => aw_global_get("section"), "id" => aw_ini_get("shop.prod_fld_path_oc")), "shop_order_center");
+				header("Location: $url");
+				die();
+			}
 		}
 	}
 
