@@ -27,7 +27,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
-            <caption>Protsedduri parameetrid</caption>
+            <caption>Protseduuri parameetrid</caption>
       </property>
       <property>
             <name>per_page</name>
