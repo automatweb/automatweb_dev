@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.56 2004/04/12 13:05:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.57 2004/04/13 12:17:02 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -240,6 +240,12 @@ class htmlclient extends aw_template
 				STAT_NOTACTIVE => "Ei",
 			);
 		};
+
+
+		if (empty($args["value"]) && is_callable(array($args["vcl_inst"],"get_html")))
+		{
+			$args["value"] = $args["vcl_inst"]->get_html();
+		}
 		
 		if ($args["type"] == "s_status")
 		{
