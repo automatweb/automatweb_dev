@@ -570,6 +570,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		return $ret;
 	}
+
+	function delete_object($oid)
+	{
+		$this->db_query("UPDATE objects SET status = '".STAT_DELETED."' WHERE oid = '$oid'");
+	}
 }
 
 ?>

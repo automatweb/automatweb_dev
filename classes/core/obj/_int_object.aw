@@ -1031,6 +1031,10 @@ class _int_object
 	{
 		return isset($this->properties[$prop]) && is_array($this->properties[$prop]);
 	}
-}
 
+	function _int_do_delete($oid)
+	{
+		$GLOBALS["object_loader"]->ds->delete_object($oid);
+	}
+}
 ?>
