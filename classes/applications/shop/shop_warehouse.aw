@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.7 2004/05/27 08:51:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.8 2004/05/30 13:09:47 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -411,8 +411,8 @@ class shop_warehouse extends class_base
 
 		$t->define_field(array(
 			"name" => "del",
-			"caption" => "Vali",
-			"align" => "center"
+			"caption" => "<a href='javascript:aw_sel_chb(document.changeform,\"sel\")'>Vali</a>",
+			"align" => "center",
 		));
 	}
 
