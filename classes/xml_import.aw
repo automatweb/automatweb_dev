@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.13 2003/04/04 15:04:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.14 2003/04/17 12:26:46 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -283,21 +283,31 @@ class xml_import extends class_base
 						
 
 					$jrknimetus = sprintf("%02d%s",$jrk,$nimetus);
-					if ($str_level > 3)
+					if ($str_level >= 3)
 					{
 						$t3_ylem = $t3taseme_ylem_id;
 					}
 					else
 					{
-						$t3_ylem = '';
+						$t3_ylem = $real_ylem_id;
+					};
+
+					if ($str_level < 4)
+					{
+						$t3sort = $id . $str_level . sprintf("%02d",$jrk) . $nimetus;
+					}
+					else
+					{
+						$t3sort = $t3taseme_id . $str_level . sprintf("%02d",$jrk) . $nimetus;
 					};
 						
-					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus,3taseme_ylem_id)
-							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem')";
+					$q = "INSERT INTO ut_struktuurid (id,kood,nimetus,aadress,email,veeb,telefon,faks,osakond,ylem_id,ylemyksus,jrk,jrknimetus,3taseme_ylem_id,3taseme_sort)
+							VALUES('$id','$kood','$nimetus','$aadress','$email','$veeb','$telefon','$faks','$osakond','$real_ylem_id','$real_ylem_name','$jrk','$jrknimetus','$t3_ylem','$t3sort')";
 					$counter++;
 					if ($str_level == 3)
 					{
 						$t3taseme_ylem_id = $real_ylem_id;
+						$t3taseme_id = $id;
 					};
 					print $q;
 					print "<h1>$str_level</h1>";
@@ -395,9 +405,10 @@ class xml_import extends class_base
 				{
 					$koormus_view = " " . $koormus . " k";
 				};
-				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid)
+				$st_id = $attr["struktuur"] . $tid;
+				$q = "INSERT INTO ut_ametid (struktuur_id,nimi,koormus,jrk,markus,tootaja_id,eriala,tel,koht,koormus_view,ysid,st_id)
 					VALUES ('$attr[struktuur]','$nimi','$attr[koormus]','$attr[jrk]',
-						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid')";
+						'$markus','$tid','$eriala','$attr[tel]','$koht','$koormus_view','$ysid','$st_id')";
 				print $q;
 				$this->db_query($q);
 				$tootajad_view[$attr[struktuur]][] = array(
@@ -489,6 +500,19 @@ class xml_import extends class_base
 			print "<bR>";
 
 		}
+		print "sünkroniseerin ut_struktuurid tabeliga (MySQL imeb (TM))<br>";
+		print "NOT!<br>";
+		$str_info = array();
+		$q = "SELECT id,3taseme_ylem_id FROM ut_struktuurid";
+		$this->db_query($q);
+		while($row = $this->db_next())
+		{
+			$str_info[$row["id"]] = $row["3taseme_ylem_id"];
+		};
+		// write to ametid table
+		foreach($str_info as $key => $val)
+		{
+		};
 	}
 
 	function convert_unicode($source)

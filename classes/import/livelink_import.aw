@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.2 2003/04/08 13:29:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/import/livelink_import.aw,v 1.3 2003/04/17 12:27:12 kristo Exp $
 // livelink_import.aw - Import livelingist
 
 /*
@@ -10,8 +10,11 @@
 	@default field=meta
 	@default method=serialize
 
-	@property rootnode type=textbox size=10 maxlength=10
-	@caption Juurika ID
+	@property rootnode type=textbox size=40 maxlength=10
+	@caption Juurika ID (eralda komadega)
+	
+	@property exception_node type=textbox size=40 maxlength=10
+	@caption Erandite ID (eralda komadega)
 
 	@property outdir type=textbox 
 	@caption Kataloog, kuhu failid kirjutada
@@ -111,17 +114,25 @@ class livelink_import extends class_base
 
 		print "<pre>";
 
-		$this->import_livelink_structure(array(
-			"outdir" => $outdir,
-			"rootnode" => (int)$obj["meta"]["rootnode"],
-			"fileprefix" => $obj["meta"]["fileprefix"],
-		));
+		$rootnodes = explode(",",$obj["meta"]["rootnode"]);
+
+		$this->exceptions = explode(",",$obj["meta"]["exception_node"]);
+
+		foreach($rootnodes as $rootnode)
+		{
+			$this->import_livelink_structure(array(
+				"outdir" => $outdir,
+				"rootnode" => (int)$rootnode,
+				"fileprefix" => $obj["meta"]["fileprefix"],
+			));
+		};
 
 		print "</pre>";
 	}
 
 	function import_livelink_structure($args = array())
 	{
+		set_time_limit(0);
 		$this->tmpdir = aw_ini_get("server.tmpdir");
 		$this->outdir = $args["outdir"];
 		$this->rootnode = $args["rootnode"];
@@ -171,6 +182,11 @@ class livelink_import extends class_base
 			$modified = strtotime($attribs["modified"]);
 
 			$old = $this->db_fetch_row("SELECT * FROM livelink_folders WHERE id = '$id'");
+			if (in_array($id,$this->exceptions))
+			{
+				$this->need2update[] = $id;
+			}
+			else
 			if (empty($old))
 			{
 				# so it must be new
@@ -185,7 +201,8 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			if ($modified > $old["modified"])
+			//if ($modified > $old["modified"])
+			if (1)
 			{
 				# update existing one
 				print "renewing $name\n";
@@ -288,6 +305,11 @@ class livelink_import extends class_base
 			$modified = $this->modified;
 			$filename = $this->fileprefix . $this->filename;
 			$old = $this->db_fetch_row("SELECT modified FROM livelink_files WHERE id = '$id'");
+			if (in_array($parent,$this->exceptions))
+			{
+				$this->write_outfile();
+			}
+			else
 			if (empty($old))
 			{
 				print "creating file $filename\n";
@@ -300,7 +322,8 @@ class livelink_import extends class_base
 				$this->db_query($q);
 			}
 			else
-			if ($modified > $old["modified"])
+			//if ($modified > $old["modified"])
+			if (1)
 			{
 				print "updating file $filename";
 				$this->quote($name);
@@ -347,7 +370,12 @@ class livelink_import extends class_base
                 if (($name == "llnode") && isset($attribs["parentid"]))
                 {
                         $this->parentid = $attribs["parentid"];
-                        $this->desc = $attribs["description"];
+                        #$this->desc = $attribs["description"];
+			print "setting name to $attribs[name]<br>";
+			print "<pre>";
+			print_r($attribs);
+			print "</pre>";
+                        $this->desc = $attribs["name"];
                 };
         }
 
