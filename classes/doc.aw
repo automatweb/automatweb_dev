@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.96 2004/12/10 10:11:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.97 2004/12/14 10:23:09 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -932,17 +932,12 @@ class doc extends class_base
 	**/
 	function upg($arr)
 	{
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user6 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user7 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user8 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user9 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user10 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user11 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user12 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user13 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user14 varchar(255)", false);
-		$this->db_query("ALTER TABLE aw_shop_packaging ADD user15 varchar(255)", false);
-		die("all done");
+		$sc = get_instance("scheduler");
+		$sc->add(array(
+			"event" => $this->mk_my_orb("test_hash", array("a" => 56)),
+			"time" => time()-60,
+			"auth_as_local_user" => true
+		));
 	}
 };
 ?>
