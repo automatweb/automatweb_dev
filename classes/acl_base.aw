@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.74 2004/06/04 11:25:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/acl_base.aw,v 2.75 2004/06/08 14:34:06 kristo Exp $
 
 lc_load("definition");
 
@@ -14,10 +14,10 @@ class acl_base extends db_connector
 		// of course, now that we only have 5 acl settings, we don't have to do this in the db no more. 
 		// anyone wanna rewrite it? ;) - terryf
 		$qstr = array();
-                if (!is_array($this->cfg["acl"]["ids"]))
-                {
-                        $this->cfg["acl"]["ids"] = $GLOBALS["cfg"]["acl"]["ids"];
-                }
+		if (!is_array($this->cfg["acl"]["ids"]))
+		{
+			$this->cfg["acl"]["ids"] = $GLOBALS["cfg"]["acl"]["ids"];
+		}
 
 		reset($this->cfg["acl"]["ids"]);
 		while (list($bitpos, $name) = each($this->cfg["acl"]["ids"]))
@@ -53,9 +53,14 @@ class acl_base extends db_connector
 			// set default acl if not specified otherwise
 			$aclarr = $GLOBALS["cfg"]["acl"]["default"];
 		};
-		$this->save_acl($oid,$gid,$aclarr);		
+		$this->save_acl($oid,$gid,$aclarr, $invd);		
 		if ($invd)
 		{
+			if ($GLOBALS["acl_log"])
+			{
+				fwrite($GLOBALS["acl_log"], date("d.m.Y H:i:s").": acl cache clear from\n");
+				fwrite($GLOBALS["acl_log"], dbg::short_backtrace()."\n\n");
+			}
 			aw_session_set("__acl_cache", array());
 			$c = get_instance("cache");
 			$c->file_invalidate_regex("acl-cache(.*)");
@@ -65,12 +70,19 @@ class acl_base extends db_connector
 	function remove_acl_group_from_obj($gid,$oid)
 	{
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
+
+		if ($GLOBALS["acl_log"])
+		{
+			fwrite($GLOBALS["acl_log"], date("d.m.Y H:i:s").": acl cache clear from\n");
+			fwrite($GLOBALS["acl_log"], dbg::short_backtrace()."\n\n");
+		}
+
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
 		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 
-	function save_acl($oid,$gid,$aclarr)
+	function save_acl($oid,$gid,$aclarr, $invd = true)
 	{
 		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
 		reset($acl_ids);
@@ -88,9 +100,20 @@ class acl_base extends db_connector
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
-		aw_session_set("__acl_cache", array());
-		$c = get_instance("cache");
-		$c->file_invalidate_regex("acl-cache(.*)");
+
+
+		if ($invd)
+		{
+			if ($GLOBALS["acl_log"])
+			{
+				fwrite($GLOBALS["acl_log"], date("d.m.Y H:i:s").": acl cache clear from\n");
+				fwrite($GLOBALS["acl_log"], dbg::short_backtrace()."\n\n");
+			}
+
+			aw_session_set("__acl_cache", array());
+			$c = get_instance("cache");
+			$c->file_invalidate_regex("acl-cache(.*)");
+		}
 	}
 
 	////
@@ -122,6 +145,13 @@ class acl_base extends db_connector
 			$qstr[] = " ( $a << $bitpos ) ";
 		}
 		$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
+
+		if ($GLOBALS["acl_log"])
+		{
+			fwrite($GLOBALS["acl_log"], date("d.m.Y H:i:s").": acl cache clear from\n");
+			fwrite($GLOBALS["acl_log"], dbg::short_backtrace()."\n\n");
+		}
+
 		aw_session_set("__acl_cache", array());
 		$c = get_instance("cache");
 		$c->file_invalidate_regex("acl-cache(.*)");
@@ -404,7 +434,6 @@ class acl_base extends db_connector
 			{
 				$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr, false);
 			}
-			//$this->save_acl($oid,$gr["gid"], $aclarr);		// give full access to the creator
 		}
 	}
 
