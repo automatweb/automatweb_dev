@@ -621,6 +621,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->stat = false;
 		$this->sby = "";
 		$this->limit = "";
+		$this->has_lang_id = false;
 
 		$this->meta_filter = array();
 
@@ -636,7 +637,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$where .= ($where != "" ? " AND " : "")." objects.site_id = '".aw_ini_get("site_id")."' ";
 		}
 
-		if (!isset($params["lang_id"]))
+		if (!$this->has_lang_id)
 		{
 			$where .= ($where != "" ? " AND " : "")." objects.lang_id = '".aw_global_get("lang_id")."' ";
 		}
@@ -656,7 +657,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		if ($where != "")
 		{
 			$q = "SELECT objects.oid FROM objects $joins WHERE $where ".$this->sby." ".$this->limit;
-//			echo "q = $q <br />";
 			$this->db_query($q);
 			while ($row = $this->db_next())
 			{
@@ -719,6 +719,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if ("status" == (string)($key))
 			{
 				$this->stat = true;
+			}
+
+			if ("lang_id" == (string)($key))
+			{
+				$this->has_lang_id = true;
 			}
 
 			$tbl = "objects";

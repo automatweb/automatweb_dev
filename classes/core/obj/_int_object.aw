@@ -1230,8 +1230,19 @@ class _int_object
 		$ret = array();
 		$parent = $this->id();
 		$cnt = 0;
-		$add = true;
-		while ($parent && $parent != $GLOBALS["cfg"]["__default"]["rootmenu"])
+
+		if (is_admin())
+		{
+			$rootmenu = $GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
+			$add = false;
+		}
+		else
+		{
+			$rootmenu = $GLOBALS["cfg"]["__default"]["rootmenu"];
+			$add = true;
+		}
+
+		while ($parent && $parent != $rootmenu)
 		{
 			if ($GLOBALS["object_loader"]->ds->can("view", $parent))
 			{
@@ -1268,9 +1279,9 @@ class _int_object
 
 		if ($add && !aw_global_get("__is_install"))
 		{
-			if ($GLOBALS["object_loader"]->ds->can("view", $GLOBALS["cfg"]["__default"]["rootmenu"]))
+			if ($GLOBALS["object_loader"]->ds->can("view", $rootmenu))
 			{
-				$ret[] = obj($GLOBALS["cfg"]["__default"]["rootmenu"]);
+				$ret[] = obj($rootmenu);
 			}
 		}
 		return array_reverse($ret);
