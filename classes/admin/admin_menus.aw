@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.17 2003/07/09 09:13:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.18 2003/07/09 10:19:35 kristo Exp $
 class admin_menus extends aw_template
 {
 	// this will be set to document id if only one document is shown, a document which can be edited
@@ -324,8 +324,8 @@ class admin_menus extends aw_template
 
 		if ($obj["class_id"] == CL_PSEUDO)
 		{
-			//$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "admin_menus",true,true);
-			$ourl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=right_frame&id=$id&period=".$period."&parent=".$obj["oid"];
+			$ourl = $this->mk_my_orb("right_frame", array("id" => $id, "parent" => $obj["oid"],"period" => $period), "admin_menus",true,true);
+			//$ourl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=right_frame&id=$id&period=".$period."&parent=".$obj["oid"];
 
 			$this->vars(array(
 				"link" => $ourl,
@@ -336,20 +336,20 @@ class admin_menus extends aw_template
 
 		if ($this->can("edit", $id))
 		{
-			//$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
-			$clss = $this->cfg["classes"][$obj["class_id"]]["file"];
+			$churl = $this->mk_my_orb("change", array("id" => $id, "parent" => $obj["parent"],"period" => $period), $this->cfg["classes"][$obj["class_id"]]["file"],true,true);
+			/*$clss = $this->cfg["classes"][$obj["class_id"]]["file"];
 			preg_match("/(\w*)$/",$clss,$m);
 			$clss = $m[1];
 			
-			$churl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=".$clss."&action=change&id=".$id."&parent=".$obj["parent"]."&period=".$period;
+			$churl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=".$clss."&action=change&id=".$id."&parent=".$obj["parent"]."&period=".$period;*/
 			$this->vars(array(
 				"link" => $churl,
 				"text" => "Change"
 			));
 			$retval .= $this->parse("MENU_ITEM");
 
-			//$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "admin_menus",true,true);
-			$churl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=cut&id=".$id."&parent=".$obj["parent"]."&reforb=1&sel[$id]=1";
+			$cuturl = $this->mk_my_orb("cut", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1"), "admin_menus",true,true);
+			//$cuturl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=cut&id=".$id."&parent=".$obj["parent"]."&reforb=1&sel[$id]=1";
 			$this->vars(array(
 				"link" => $cuturl,
 				"text" => "Cut"
@@ -357,8 +357,8 @@ class admin_menus extends aw_template
 			$retval .= $this->parse("MENU_ITEM");
 		}
 
-		//$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
-		$copyurl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=copy&reforb=1&id=".$id."&parent=".$obj["parent"]."&period=".$period."&sel[$id]=1";
+		$copyurl = $this->mk_my_orb("copy", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+		//$copyurl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=copy&reforb=1&id=".$id."&parent=".$obj["parent"]."&period=".$period."&sel[$id]=1";
 
 		$this->vars(array(
 			"link" => $copyurl,
@@ -368,8 +368,8 @@ class admin_menus extends aw_template
 
 		if ($this->can("delete", $id))
 		{
-			//$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
-			$delurl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=delete&reforb=1&id=".$id."&parent=".$obj["parent"]."&period=".$period."&sel[$id]=1";
+			$delurl = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $id, "parent" => $obj["parent"],"sel[$id]" => "1","period" => $period), "admin_menus",true,true);
+			//$delurl = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=delete&reforb=1&id=".$id."&parent=".$obj["parent"]."&period=".$period."&sel[$id]=1";
 		
 			$this->vars(array(
 				"link" => $delurl,
@@ -875,21 +875,35 @@ class admin_menus extends aw_template
 		// by the way, mk_my_orb is pretty expensive and all those calls to it
 		// here take up to 10% of the time used to create the page -- duke
 
+		$per_page = 100;
+		$ft_page = $GLOBALS["ft_page"];
+		$lim = "LIMIT ".($ft_page * $per_page).",".$per_page;
+
 		$where = "objects.parent = '$parent' AND 
 				(lang_id = '$lang_id' OR m.type = ".MN_CLIENT." OR objects.class_id IN(".CL_PERIOD .",".CL_USER.",".CL_GROUP.",".CL_MSGBOARD_TOPIC."))
 				 AND 
 				status != 0 
 				$cls $ps ";
 
-		$q = "
-			SELECT objects.* 
-			FROM objects 
+		$query = "FROM objects 
 				LEFT JOIN menu m ON m.id = objects.oid
 			WHERE 
 				$where";
-		$this->db_query($q);
 
-		$this->listacl($where, array("menu m" => "m.id = objects.oid"));
+		// total count
+		$q = "SELECT count(*) as cnt $query";
+		//echo "q = $q <br>";
+
+		// make pageselector.
+		$_t = new aw_table;
+		$_t->d_row_cnt = $this->db_fetch_field($q, "cnt");
+		//echo "total = ".$_t->d_row_cnt." <br>";
+		$pageselector = $_t->draw_lb_pageselector(array(
+			"records_per_page" => $per_page
+		));
+
+		$q = "SELECT objects.* $query $lim";
+		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
 		$containers = array(CL_PSEUDO,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
@@ -909,27 +923,27 @@ class admin_menus extends aw_template
 			$row["is_menu"] = 0;
 			if (in_array($row["class_id"],$containers))
 			{
-				//$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
-				$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=right_frame&parent=".$row["oid"]."&period=".$period;
+				$chlink = $this->mk_my_orb("right_frame", array("parent" => $row["oid"], "period" => $period));
+				//$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=right_frame&parent=".$row["oid"]."&period=".$period;
 				$row["is_menu"] = 1;
 			}
 			else
 			if ($row["class_id"] == CL_PLANNER)
 			{
-				//$chlink = $this->mk_my_orb("change",array("id" => $row["oid"]),"planner");
-				$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=planner&action=change&id=".$row["oid"];
+				$chlink = $this->mk_my_orb("change",array("id" => $row["oid"]),"planner");
+				//$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=planner&action=change&id=".$row["oid"];
 			}
 			else
 			{
-				//$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
-				$clss = $this->cfg["classes"][$row["class_id"]]["file"];
+				$chlink = $this->mk_my_orb("view", array("id" => $row["oid"], "period" => $period),$this->cfg["classes"][$row["class_id"]]["file"]);
+				/*$clss = $this->cfg["classes"][$row["class_id"]]["file"];
 				preg_match("/(\w*)$/",$clss,$m);
 				$clss = $m[1];
-				$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=".$clss."&action=view&id=".$row["oid"]."&period=".$period;
+				$chlink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=".$clss."&action=view&id=".$row["oid"]."&period=".$period;*/
 			}
 
-			//$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
-			$dellink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=delete&id=".$row["oid"]."&reforb=1&parent=".$row["parent"]."&sel[".$row["oid"]."]=1";
+			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
+			//$dellink = $this->cfg["baseurl"]."/automatweb/orb.aw?class=admin_menus&action=delete&id=".$row["oid"]."&reforb=1&parent=".$row["parent"]."&sel[".$row["oid"]."]=1";
 			
 			if (isset($sel_objs[$row["oid"]]))
 			{
@@ -1096,21 +1110,8 @@ class admin_menus extends aw_template
 		$toolbar_data = $toolbar->get_toolbar();
 		$toolbar_data .= $whole_menu;
 
-		if ($num_records < 50)
-		{
-			$arg = array();
-		}
-		else
-		{
-			$arg = array(
-				"has_pages" => true,
-				"records_per_page" => 50,
-				"pageselector" => "lb"
-			);
-		}
-
 		$this->vars(array(
-			"table" => $this->t->draw($arg),
+			"table" => $pageselector.$this->t->draw(),
 			"reforb" => $this->mk_reforb("submit_rf", array("parent" => $parent, "period" => $period, "sortby" => $sortby, "sort_order" => $sort_order)),
 			"parent" => $parent,
 			"period" => $period,
