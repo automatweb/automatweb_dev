@@ -53,7 +53,9 @@
 <!-- END SUB: ELEMENT -->
 <tr>
 <td align=right class=fgen_text>Stiil:</td>
-<td><select class='small_button' name='stylesel_{VAR:cell_id}'><option value=''>{VAR:stylesel}</select></td>
+<td class=fgen_text><select class='small_button' name='stylesel_{VAR:cell_id}'><option value=''>{VAR:stylesel}</select><br>
+<a href='{VAR:ch_cell}'>Muuda</a>
+</td>
 </tr>
 <!-- SUB: SPLITS -->
 <tr>
