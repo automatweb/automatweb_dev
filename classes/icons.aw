@@ -746,10 +746,10 @@ class icons extends aw_template
 	// prepends baseurl 
 	function check_url($url)
 	{
-		if ($url == "")
-		{
+/*		if ($url == "")
+		{*/
 			return $url;
-		}
+/*		}
 		$retval = preg_replace("/^http:\/\/(.*)\//","/",$url);
 		if (substr($retval,0,5) == "/icon")
 		{
@@ -761,55 +761,275 @@ class icons extends aw_template
 			// prepend site baseurl, in case we are running in a subdirectory
 			$retval = aw_ini_get("baseurl").$retval;
 		}
-		return $retval;
+		return $retval;*/
 	}
 
 	////
 	// !Tagastab mingile klassile vastava ikooni
 	function get_icon_url($clid,$name)
 	{
-		if (!is_array(aw_global_get("d_icon_cache")))
-		{
-			$c = get_instance("config");
-			aw_global_set("d_icon_cache",unserialize($c->get_simple_config("menu_icons")));
-		}
-		$d_icon_cache = aw_global_get("d_icon_cache");
-		$i = isset($d_icon_cache["content"][$clid]["imgurl"]) ? $d_icon_cache["content"][$clid]["imgurl"] : "";
-
 		if ($clid == CL_FILE)
 		{
-			if (!is_array(aw_global_get("d_fileicon_cache")))
+			enter_function("file_icon::test");
+			$extt = substr($name,strrpos($name,".")+1);
+			$test = @fopen(aw_ini_get("icons.server")."/ftype_".$extt.".gif", "r");
+			if ($test)
 			{
-				$c = get_instance("config");
-				aw_global_set("d_fileicon_cache",unserialize($c->get_simple_config("file_icons")));
+				fclose($test);
+				exit_function("file_icon::test");
+				return aw_ini_get("icons.server")."/ftype_".$extt.".gif";
 			}
-			$d_fileicon_cache = aw_global_get("d_fileicon_cache");
-			$extt = substr($name,strpos($name,"."));
-			if ($d_fileicon_cache[$extt]["url"] != "")
-			{
-				$i = $d_fileicon_cache[$extt]["url"];
-			}
+			exit_function("file_icon::test");
 		}
-
+		else
 		if ($clid == "promo_box" || $clid == "brother" || $clid == "conf_icon_other" || $clid == "conf_icon_programs" || $clid == "conf_icon_classes" || $clid == "conf_icon_ftypes" || $clid == "conf_icons" || $clid == "conf_jf" || $clid == "conf_users" || $clid == "conf_icon_import" || $clid == "conf_icon_db" || $clid == "homefolder" || $clid == "shared_folders" || $clid == "hf_groups" || $clid == "bugtrack" )
 		{
-			if (!is_array(aw_global_get("d_othericon_cache")))
+			return aw_ini_get("icons.server")."/iother_".$clid.".gif";
+		}
+		else
+		{
+			return aw_ini_get("icons.server")."/class_".$clid.".gif";
+		}
+
+		return aw_ini_get("baseurl")."/automatweb/images/icon_aw.gif";
+	}
+
+	function save_class_icons()
+	{
+		classload("icons");
+		$c = get_instance("config");
+		$il = unserialize($c->get_simple_config("menu_icons"));
+
+		$d = fopen(aw_ini_get("basedir")."/automatweb/images/icon_aw.gif", "r");
+		$fc = fread($d, filesize(aw_ini_get("basedir")."/automatweb/images/icon_aw.gif"));
+		fclose($d);
+
+		/*reset($this->cfg["classes"]);
+		while (list($clid,$desc) = each($this->cfg["classes"]))
+		{
+			if ($il["content"][$clid]["imgurl"] == "")
 			{
-				$c = get_instance("config");
-				aw_global_set("d_othericon_cache",unserialize($c->get_simple_config("other_icons")));
-			}
-			$d_othericon_cache = aw_global_get("d_othericon_cache");
-			if ($d_othericon_cache[$clid]["url"] != "")
-			{
-				$i = $d_othericon_cache[$clid]["url"];
+				// save as aw icon
+				//"/automatweb/images/icon_aw.gif" 
+				echo "clid $clid icon is default icon_aw.gif <br>";
+
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+				fwrite($f, $fc);
+				fclose($f);
 			}
 			else
 			{
-				$i = "/automatweb/images/ftv2doc.gif";
+				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br>";
+				// save!
+				echo "writing clid $clids as ".aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif <Br>";
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/class_".$clid.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+
+
+				$ic = $this->get($il["content"][$clid]["imgid"]);
+				fwrite($f, $ic["file"]);
+				fclose($f);
+			}
+		}*/
+
+		/*$c = get_instance("config");
+		$d = unserialize($c->get_simple_config("file_icons"));
+		echo dbg::dump($d);
+		foreach($d as $ext => $dat)
+		{
+			if ($dat["id"])
+			{
+				echo "writing ftype iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif <Br>";
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+
+
+				$ic = $this->get($dat["id"]);
+				fwrite($f, $ic["file"]);
+				fclose($f);
+			}
+			else
+			{
+				echo "ftype $ext icon is default <br>";
+
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/ftype_".$ext.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+				fwrite($f, $fc);
+				fclose($f);
+			}
+		}*/
+
+		// other icons
+		/*$ar = unserialize($c->get_simple_config("other_icons"));
+		$v = $ar["promo_box"];
+		if (!$v["id"])
+		{
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			fwrite($f, $fc);
+			fclose($f);
+		}
+		else
+		{
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif <Br>";
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_promo_box.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			$ic = $this->get($v["id"]);
+			fwrite($f, $ic["file"]);
+			fclose($f);
+		}
+
+
+		$v = $ar["brother"];
+		if (!$v["id"])
+		{
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			fwrite($f, $fc);
+			fclose($f);
+		}
+		else
+		{
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif <Br>";
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_brother.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			$ic = $this->get($v["id"]);
+			fwrite($f, $ic["file"]);
+			fclose($f);
+		}
+
+		$v = $ar["homefolder"];
+		if (!$v["id"])
+		{
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			fwrite($f, $fc);
+			fclose($f);
+		}
+		else
+		{
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif <Br>";
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_homefolder.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			$ic = $this->get($v["id"]);
+			fwrite($f, $ic["file"]);
+			fclose($f);
+		}
+
+		$v = $ar["shared_folders"];
+		if (!$v["id"])
+		{
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			fwrite($f, $fc);
+			fclose($f);
+		}
+		else
+		{
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif <Br>";
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_shared_folders.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			$ic = $this->get($v["id"]);
+			fwrite($f, $ic["file"]);
+			fclose($f);
+		}
+
+		$v = $ar["hf_groups"];
+		if (!$v["id"])
+		{
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			fwrite($f, $fc);
+			fclose($f);
+		}
+		else
+		{
+			echo "writing other iconf for ext $ext as ".aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif <Br>";
+			$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/iother_hf_groups.gif", "w");
+			if (!$f)
+			{
+				echo "can!t open ya bassstardooo!! $clid<br>";
+			}
+			$ic = $this->get($v["id"]);
+			fwrite($f, $ic["file"]);
+			fclose($f);
+		}*/
+
+		$ar = aw_unserialize($c->get_simple_config("program_icons"));
+		foreach($this->cfg["programs"] as $prid => $pd)
+		{
+			if (!$ar[$prid]["id"])
+			{
+				// save as aw icon
+				//"/automatweb/images/icon_aw.gif" 
+				echo "prid $prid icon is default icon_aw.gif <br>";
+
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+				fwrite($f, $fc);
+				fclose($f);
+			}
+			else
+			{
+				//echo "clid $clid data ".dbg::dump($il["content"][$clid])." <br>";
+				// save!
+				echo "writing prid $prid as ".aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif <Br>";
+				$f = fopen(aw_ini_get("basedir")."/automatweb/images/icons/prog_".$prid.".gif", "w");
+				if (!$f)
+				{
+					echo "can!t open ya bassstardooo!! $clid<br>";
+				}
+
+
+				$ic = $this->get($ar[$prid]["id"]);
+				fwrite($f, $ic["file"]);
+				fclose($f);
 			}
 		}
-		$retval = $i == "" ? "/automatweb/images/icon_aw.gif" : $i;
-		return icons::check_url($retval);
 	}
+
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.271 2003/04/01 14:49:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.272 2003/04/04 07:23:18 kristo Exp $
 // menuedit.aw - menuedit. heh.
 // meeza thinks we should split this class. One part should handle showing stuff
 // and the other the admin side -- duke
@@ -2509,14 +2509,15 @@ class menuedit extends aw_template
 
 	function get_feature_icon_url($fid)
 	{
-		if (!is_array($this->pr_icons))
+/*		if (!is_array($this->pr_icons))
 		{
 			$c = get_instance("config");
 			$this->pr_icons = aw_unserialize($c->get_simple_config("program_icons"));
 		}
 		$i = $this->pr_icons[$fid]["url"];
 		classload("icons");
-		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);
+		return icons::check_url($i == "" ? "/automatweb/images/icon_aw.gif" : $i);*/
+		return aw_ini_get("icons.server")."/prog_".$fid.".gif";
 	}
 
 	////

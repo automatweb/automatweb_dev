@@ -145,6 +145,13 @@
 				</arguments>
 			</function>
 		</action>
+
+		<action name="save_class_icons">
+			<function name="save_class_icons">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
 		
