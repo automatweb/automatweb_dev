@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.35 2003/09/17 14:01:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.36 2003/10/02 10:05:53 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -24,6 +24,10 @@ class htmlclient extends aw_template
 		$this->read_template("default.tpl");
 		$this->orb_vars = array();
 		$this->submit_done = false;
+
+		// I need some handler code in the output form, if we have any RTE-s
+		$this->rte = false;
+
 	}
 
 	function add_property($args = array())
@@ -305,7 +309,24 @@ class htmlclient extends aw_template
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
 		$data = $data + $this->orb_vars;
+
+		$submit_handler = $txt = "";
+		if ($this->rte)
+		{
+			// make a list of of all RTE-s
+			foreach($this->rtes as $rte)
+			{
+				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+			};
+
+
+
+			// miks see raip enkooditud on. mai taha seda
+			//$submit_handler = "document.changeform.elements['content'].value=document.getElementById('content_edit').contentWindow.document.body.innerHTML;";
+			$submit_handler = $txt;
+		}
 		$this->vars(array(
+			"submit_handler" => $submit_handler,
 			"content" => $this->res,
 			"reforb" => $this->mk_reforb($action,$data,$orb_class),
 			"SUBMIT" => $sbt,
@@ -343,6 +364,11 @@ class htmlclient extends aw_template
 				break;
 
 			case "textarea":
+				if ($arr["richtext"])
+				{
+					$this->rte = true;
+					$this->rtes[] = $arr["name"];
+				}
 				$retval = html::textarea($arr);
 				break;
 
@@ -364,7 +390,7 @@ class htmlclient extends aw_template
 					"name" => $arr["name"],
 					"value" => isset($arr["ch_value"]) ? $arr["ch_value"] : "",
 					"caption" => $arr["caption"],
-					"checked" => isset($arr["value"]) && isset($arr["ch_value"]) && ($arr["value"] == $arr["ch_value"])
+					"checked" => ($arr["value"]) && isset($arr["ch_value"]) && ($arr["value"] == $arr["ch_value"])
 				));
 				break;
 
@@ -378,6 +404,9 @@ class htmlclient extends aw_template
 				break;
 
 			case "submit":
+				// but what if there is more than 1 of those?
+				// attaching this might just break something somewhere
+				$arr["onclick"] = "submit_changeform();";
 				$retval = html::submit($arr);
 				break;
 

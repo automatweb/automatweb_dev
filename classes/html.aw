@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.39 2003/09/09 12:05:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.40 2003/10/02 10:03:55 duke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -90,11 +90,12 @@ class html extends aw_template
 		$cols = isset($cols) ? $cols : 40;
 		$rows = isset($rows) ? $rows : 5;
 		$value = isset($value) ? $value : "";
-		if (!empty($richtext) && (strpos(aw_global_get("HTTP_USER_AGENT"),"MSIE") > 0) )
+		// now, the browser detection is best done in javascript
+		if (!empty($richtext))
 		{
 			$args["type"] = "richtext";
-			$args["width"] = $cols * 10;
-			$args["height"] = $rows * 10;
+			$args["width"] = $cols;
+			$args["height"] = $rows;
 			$args["value"] = str_replace("\"" , "&quot;",$args["value"]); //"
 			$retval = html::richtext($args);
 		}
@@ -249,7 +250,8 @@ class html extends aw_template
 		{
 			$capt .= " " . $caption;
 		};
-		return "<input type='checkbox' id='$name' name='$name' value='$value' $checked/> $capt\n";
+		$rv = "<input type='checkbox' id='$name' name='$name' value='$value' $checked/> $capt\n";
+		return $rv;
 	}
 
 	////
@@ -370,20 +372,13 @@ class html extends aw_template
 		$rtcounter++;
 		$awt = get_instance("aw_template");
 		$awt->init(array("tpldir" => "html"));
-		/*
-		$this->init(array(
-			"tpldir" => "html",
-		));
-		*/
 		$retval = "";
 		$awt->vars($args);
-		$awt->read_template("ie_richtexteditor.tpl");
+		$awt->read_template("aw_richtexteditor.tpl");
 		if ($rtcounter == 1)
 		{
 			$this->rt_elements = array($args["name"]);
-			#$this->read_template("ie_richtexteditor.tpl");
-			#$awt->read_template("ie_richtexteditor.tpl");
-			#$retval .= $this->parse("toolbar");
+			$retval .= $awt->parse("writer");
 			$retval .= $awt->parse("toolbar");
 		};
 		#$retval .= $this->parse("field");
