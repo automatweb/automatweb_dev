@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.8 2001/05/17 07:27:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/planner.aw,v 2.9 2001/05/17 10:49:12 duke Exp $
 // planner.aw - päevaplaneerija
 // CL_CAL_EVEN on kalendri event
 classload("calendar","defs");
@@ -1230,7 +1230,7 @@ class planner extends calendar {
 			),
 		);
 		load_vcl("smenu");
-		$this->tpl_init("automatweb/planner");
+		$this->tpl_init("planner");
 		$this->read_template("navigator.tpl");
 		$smenu = new smenu(array(
 			"tpl_act" => $this->templates["active_menu"],
