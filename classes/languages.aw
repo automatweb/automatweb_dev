@@ -40,6 +40,7 @@ class languages extends aw_template
 	function get_list($arr = array())
 	{
 		extract($arr);
+		$this->init_cache(true);
 		$dat = $this->listall(isset($ignore_status) ? $ignore_status : false);
 
 		if (isset($addempty))

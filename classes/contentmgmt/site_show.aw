@@ -1220,6 +1220,25 @@ class site_show extends class_base
 			{
 				$url = $this->mk_my_orb("show_trans", array("set_lang_id" => $ld["id"], "section" => $obj->id()), "object_translation");
 			}
+
+			// if the language has an image
+			if ($ld["meta"]["lang_img"])
+			{
+				if ($lc == $lang_id && $ld["meta"]["lang_img_act"])
+				{
+					$name = $this->image->make_img_tag(
+						$this->image->get_url_by_id($ld["meta"]["lang_img_act"]),
+						$name
+					);
+				}
+				else
+				{
+					$name = $this->image->make_img_tag(
+						$this->image->get_url_by_id($ld["meta"]["lang_img"]),
+						$name
+					);
+				}
+			}
 		
 			$this->vars(array(
 				"name" => $name,

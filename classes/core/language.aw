@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.2 2004/02/12 11:48:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/language.aw,v 1.3 2004/02/12 14:57:36 kristo Exp $
 // language.aw - Keel 
 /*
 
@@ -82,6 +82,7 @@ class language extends class_base
 		{
 			case "lang_site_id":
 				$prop["options"] = $this->adm->_get_sl();
+				$prop["value"] = $this->make_keys(explode(",",$prop["value"]));
 				break;
 
 			case "langs":
@@ -172,9 +173,20 @@ class language extends class_base
 
 			case "lang_charset":
 				return PROP_IGNORE;
+
+			case "lang_site_id":
+				$prop["value"] = join(",", array_keys(is_array($prop["value"]) ? $prop["value"] : array()));
+				break;
+
 		}
 		return $retval;
 	}	
+
+	function callback_pre_save($arr)
+	{
+		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("lang_name"));
+		$arr["obj_inst"]->set_prop("lang_site_id", join(",", array_keys(is_array($prop["value"]) ? $arr["obj_inst"]->prop("lang_site_id") : array())));
+	}
 
 	function _get_langs_tbl($arr)
 	{

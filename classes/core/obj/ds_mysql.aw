@@ -132,13 +132,26 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		foreach($tables as $table)
 		{
 			$fields = array();
+			$_got_fields = array();
 			foreach($tbl2prop[$table] as $prop)
 			{
 				if ($prop['field'] == "meta" && $prop["table"] == "objects")
 				{
 					$prop['field'] = "metadata";
 				}
-				$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+
+				if ($prop["method"] == "serialize")
+				{
+					if (!$_got_fields[$prop["field"]])
+					{
+						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
+						$_got_fields[$prop["field"]] = true;
+					}
+				}
+				else
+				{
+					$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+				}
 			}
 
 			if (count($fields) > 0)
@@ -160,7 +173,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 							$prop['field'] = "metadata";
 						}
 
+						//echo "unser for prop ".dbg::dump($prop)." <br>";
 						$unser = aw_unserialize($ret[$prop["field"]]);
+						//echo "unser = ".dbg::dump($unser)." <br>";
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
 

@@ -98,16 +98,16 @@ class aw_site extends class_base
 				break;
 
 			case "gen_site":
-				if ($arr['obj']['oid'])
+				if ($arr['obj_inst']->id())
 				{
-					$site = $this->get_site_def($arr['obj']['oid']);
+					$site = $this->get_site_def($arr['obj_inst']->id());
 					if (!$this->is_site_ok($site))
 					{
 						return PROP_IGNORE;
 					}
 				}
 	
-				if ($arr['obj']['meta']['site_url'] == '')
+				if ($arr['obj_inst']->meta('site_url') == '')
 				{
 					$this->err_str = "Saidi url on m&auml;&auml;ramata!";
 					return PROP_IGNORE;
@@ -115,7 +115,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_db":
-				if ($arr['obj']['meta']['use_existing_database'] == 1)
+				if ($arr['obj_inst']->meta('use_existing_database') == 1)
 				{
 					if (!is_array($this->server_site_list))
 					{
@@ -146,10 +146,10 @@ class aw_site extends class_base
 				break;
 
 			case "select_parent_folder":
-				if ($arr['obj']['meta']['use_existing_database'] == 1 && $arr['obj']['meta']['select_db'] != "")
+				if ($arr['obj_inst']->meta('use_existing_database') == 1 && $arr['obj_inst']->meta('select_db') != "")
 				{
 					// get list of folders for the site
-					$serv = str_replace("http://","",$arr['obj']['meta']['select_db']);
+					$serv = str_replace("http://","",$arr['obj_inst']->meta('select_db'));
 					$flds = $this->do_orb_method_call(array(
 						"class" => "objects",
 						"action" => "get_list",
@@ -173,7 +173,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_tpl_sites":
-				if ($arr['obj']['meta']['use_existing_templates'] != 1)
+				if ($arr['obj_inst']->meta('use_existing_templates') != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -202,7 +202,7 @@ class aw_site extends class_base
 				break;
 
 			case "select_imgcss_sites":
-				if ($arr['obj']['meta']['use_existing_templates'] != 1)
+				if ($arr['obj_inst']->meta('use_existing_templates') != 1)
 				{
 					return PROP_IGNORE;
 				}
@@ -239,7 +239,7 @@ class aw_site extends class_base
 
 				// now get list for all selected sites
 				$fl = array();
-				foreach($arr['obj']['meta']['select_tpl_sites'] as $sn)
+				foreach($arr['obj_inst']->meta('select_tpl_sites') as $sn)
 				{
 					$sn = str_replace("http://","",$sn);
 
@@ -268,9 +268,25 @@ class aw_site extends class_base
 				break;
 
 			case "select_layout":
-				if (!($arr['obj']['meta']['use_existing_database'] && $arr['obj']['meta']['select_db'] == "http://aw.struktuur.ee"))
+				if (!($arr['obj_inst']->meta('use_existing_database') && $arr['obj_inst']->meta('select_db') == "http://aw.struktuur.ee"))
 				{
 					return PROP_IGNORE;
+				}
+				break;
+		}
+		return PROP_OK;
+	}
+
+	function set_property($arr)
+	{
+		$prop =& $arr["prop"];
+		switch($prop["name"])
+		{
+			case "site_url":
+				if (!is_valid("url", $prop["value"]))
+				{
+					$prop["error"] = "Saidi urlis v&otilde;ivad sisalduda ainult numbrid, t&auml;hed, punkt ja sidekriips. URL'i ette pole vaja panna http://'d!";
+					return PROP_FATAL_ERROR;
 				}
 				break;
 		}
@@ -1221,6 +1237,58 @@ class aw_site extends class_base
 
 				$pt = $o->id();
 			}
+		}
+
+		// make demo promo boxes 
+		$tpl = new aw_template;
+		$tpl->read_tpl(file($site["docroot"]."/templates/automatweb/menuedit/main.tpl"));
+		$tpls = $tpl->get_subtemplates_regex("(.*_PROMO)");
+		$_tpls = array();
+ 		foreach($tpls as $tpl)
+		{
+			list($tpl) = array_reverse(explode(".", $tpl));
+			if (substr($tpl, -5) == "PROMO")
+			{
+				$_tpls[] = $tpl;
+			}
+		}
+		$tpls = array_unique($_tpls);
+		
+		$templates = array(
+			"scroll" => "SCROLL_PROMO",
+			"0" => "LEFT_PROMO",
+			"1" => "RIGHT_PROMO",
+			"2" => "UP_PROMO",
+			"3" => "DOWN_PROMO",
+		);
+
+		foreach($tpls as $tpl)
+		{
+			list($pre) = explode("_", $tpl);
+			
+			$astr = strtoupper($pre{0}).strtolower(substr($pre, 1));
+			$astr = str_replace("6", "&otilde;", $astr);
+			$astr = str_replace("y", "&uuml;", $astr);
+			$astr = str_replace("Y", "&Uuml;", $astr);
+
+			$o = obj();
+			$o->set_class_id(CL_PROMO);
+			$o->set_parent($osi_vars["cont"]);
+			$o->set_status(STAT_ACTIVE);
+			$o->set_name($astr." konteiner");
+			$o->set_prop("tpl_lead", 2);
+			$o->set_prop("type", array_search($tpl, $templates));
+			$o->set_prop("all_menus", 1);
+			$o->save();
+
+			$do = obj();
+			$do->set_class_id(CL_DOCUMENT);
+			$do->set_parent($o->id());
+			$do->set_status(STAT_ACTIVE);
+			$do->set_prop("lead", "$astr konteineri sisu");
+			$do->set_prop("title", "pealkiri");
+			$do->set_name("pealkiri");
+			$do->save();
 		}
 	}
 }
