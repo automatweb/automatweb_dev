@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.227 2003/02/06 10:11:34 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.228 2003/02/06 14:49:45 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -2365,7 +2365,7 @@ class menuedit extends aw_template
 					"name" => $val["description"],
 					"comment" => $val["data"]["comment"],
 					"type" => MN_CONTENT,
-					"link" => $this->mk_my_orb("show",array("id" => $val["id"]),"contents"),
+					"link" => $this->mk_my_orb("show",array("parent" => $val["id"]),"contents"),
 				);
 			};
 		};
