@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.28 2001/11/22 22:12:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.29 2002/02/18 13:40:45 kristo Exp $
 
 global $orb_defs;
 $orb_defs["config"] = "xml";
@@ -55,16 +55,23 @@ class db_config extends aw_template
 		$err = $this->get_simple_config("error_redirect");
 		$if = $this->get_simple_config("user_info_form");
 		$op = $this->get_simple_config("user_info_op");
+		$bt = $this->get_simple_config("bugtrack_developergid");
+		$btadm = $this->get_simple_config("bugtrack_admgid");
 
 		classload("form_base");
 		$fb = new form_base;
 		$ops = $fb->get_op_list($if);
+
+		classload("users");
+		$us = new users;
 
 		$this->vars(array(
 			"after_login" => $al,
 			"forms" => $this->picker($if,$fb->get_list(FTYPE_ENTRY,true)),
 			"ops" => $this->picker($op,$ops[$if]),
 			"search_doc" => $this->mk_orb("search_doc", array(),"links"),
+			"bt_gid" => $this->picker($bt,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
+			"bt_adm" => $this->picker($btadm,$us->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
 			"mustlogin" => $doc,
 			"error_redirect" => $err
 		));
@@ -117,7 +124,7 @@ class db_config extends aw_template
 
 		if (not(defined("LOGIN_MENUS")))
 		{
-			$this->raise_error("LOGIN_MENUS on defineerimata.",true);
+			$this->raise_error(ERR_CONF_NLOGIN,"LOGIN_MENUS on defineerimata.",true);
 		};
 	
 		global $lang_id;	
@@ -454,7 +461,7 @@ class db_config extends aw_template
 		global $fail;
 		if (!($f = fopen($fail,"r")))
 		{
-			$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
+			$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
 		}
 
 		$fc = fread($f,filesize($fail));
@@ -775,7 +782,7 @@ class db_config extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
+				$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -872,7 +879,7 @@ class db_config extends aw_template
 		{
 			global $fail;
 			if (!($f = fopen($fail,"r")))
-				$this->raise_error(LC_CONFIG_SOMETHING_IS_WRONG,true);
+				$this->raise_error(ERR_CONFIG_IMPORT,LC_CONFIG_SOMETHING_IS_WRONG,true);
 
 			$fc = fread($f,filesize($fail));
 			fclose($f);
@@ -939,6 +946,8 @@ class db_config extends aw_template
 		$this->set_simple_config("user_info_op",$user_info_op);
 		$this->set_simple_config("orb_err_mustlogin",$mustlogin);
 		$this->set_simple_config("error_redirect",$error_redirect);
+		$this->set_simple_config("bugtrack_developergid",$bt_gid);
+		$this->set_simple_config("bugtrack_admgid",$bt_adm);
 	}
 };
 
