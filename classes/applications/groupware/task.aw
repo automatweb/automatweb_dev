@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.8 2004/10/07 21:22:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.9 2004/10/29 15:54:28 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -37,14 +37,13 @@
 
 @property recurrence type=releditor reltype=RELTYPE_RECURRENCE group=recurrence rel_id=first props=start,recur_type,end,weekdays,interval_daily,interval_weekly,interval_montly,interval_yearly,
 @caption Kordused
-
-@property calendar_selector type=callback callback=cb_calendar_selector store=no group=calendars
+@property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
 @property other_selector type=callback callback=cb_calendar_others store=no group=others
 @caption Teised
 
-@property project_selector type=callback callback=cb_project_selector store=no group=projects
+@property project_selector type=project_selector store=no group=projects
 @caption Projektid
 
 @property comment_list type=comments group=comments no_caption=1
@@ -53,7 +52,10 @@
 @property rmd type=reminder group=reminders store=no
 @caption Meeldetuletus
 
-@property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+property participant type=callback callback=cb_participant_selector store=no group=participants no_caption=1
+caption Osalejad
+
+@property participant type=participant_selector store=no group=participants no_caption=1
 @caption Osalejad
 
 @property search_contact_company type=textbox store=no group=participants
@@ -207,18 +209,6 @@ class task extends class_base
 		return $retval;
 	}
 	
-	function cb_project_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->project_selector($arr);
-	}
-
-	function cb_calendar_selector($arr)
-	{
-		$elib = get_instance("calendar/event_property_lib");
-		return $elib->calendar_selector($arr);
-	}
-	
 	function cb_calendar_others($arr)
 	{
 		$elib = get_instance("calendar/event_property_lib");
@@ -247,16 +237,6 @@ class task extends class_base
 		
 		switch($data["name"])
 		{
-			case "project_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_project_selector($arr);
-				break;
-
-			case "calendar_selector":
-				$elib = get_instance("calendar/event_property_lib");
-				$elib->process_calendar_selector($arr);
-				break;
-
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);
