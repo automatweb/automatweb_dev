@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.183 2003/04/25 16:29:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.184 2003/04/29 17:00:19 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -1516,10 +1516,15 @@ class core extends db_connector
 
 		// try to find the user's email;
 		$head = "";
-		if (aw_global_get("uid") != "")
+		if (($uid = aw_global_get("uid")) != "")
 		{
 			$udata = $this->get_user(array("uid" => $uid));
-			$head="From: $uid<".$udata["email"].">\n";
+			$eml = $udata["email"];
+			if ($eml == "")
+			{
+				$eml = "error@autoimatweb.com";
+			}
+			$head="From: $uid<".$eml.">\n";
 		}
 		else
 		{
