@@ -3,6 +3,7 @@
 <HEAD>
 <TITLE> automatweb | com</TITLE>
 <link REL="icon" HREF="/favicon.ico" TYPE="image/x-icon">
+<meta http-equiv="Content-Type" content="text/html; charset={VAR:charset}">
 <META NAME="Generator" CONTENT="AutomatWeb&trade;">
 <META NAME="Author" CONTENT="Struktuur Meedia">
 
