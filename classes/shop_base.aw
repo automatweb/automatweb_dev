@@ -134,7 +134,7 @@ class shop_base extends aw_template
 
 		if (!$shop)
 		{
-			$this->raise_error("can't find the matching shop for the item!", true);
+			$this->raise_error(ERR_SHOP_NMITEM,"can't find the matching shop for the item!", true);
 		}
 		return $shop;
 	}
