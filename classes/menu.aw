@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.44 2003/04/21 08:02:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.45 2003/04/23 13:59:34 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -84,6 +84,9 @@
 	
 	@property pers type=select multiple=1 size=15 table=objects field=meta method=serialize group=relations
 	@caption Perioodid, mille alt dokumendid võetakse
+	
+	@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=relations
+	@caption K&otilde;ikide perioodide alt
 	
 	@property docs_per_period type=textbox size=3 group=relations table=objects field=meta method=serialize
 	@caption Dokumente perioodist
@@ -648,6 +651,7 @@ class menu extends class_base
 			$this->delete_object($oidar[$oid]);
 		}
 		reset($added);
+
 
 		while(list($oid,) = each($added))
 		{
