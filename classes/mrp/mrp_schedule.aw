@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.11 2005/02/15 11:59:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.12 2005/02/17 13:12:38 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -266,13 +266,14 @@ class mrp_schedule extends class_base
 		aliases.source = mrp_case.oid AND
 		aliases.target = " . $this->workspace_id . " AND
 		aliases.reltype = 5 AND
-		(mrp_case.state = " . MRP_STATUS_NEW . " OR mrp_case.state = " . MRP_STATUS_PLANNED .")"
+		(mrp_case.state = " . MRP_STATUS_NEW . " OR mrp_case.state = " . MRP_STATUS_PLANNED ." OR mrp_case.state = 0)"
 		);
 		$projects = array ();
 
 		### initiate project array
 		while ($project = $this->db_next ())
 		{
+//			echo "read proj $project[oid] <br>";
 			$projects[$project["oid"]] = array (
 				"jobs" => array (),
 				"starttime" => $project["starttime"],
