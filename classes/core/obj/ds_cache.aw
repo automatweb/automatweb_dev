@@ -17,6 +17,12 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function get_objdata($oid, $param = array())
 	{
+		// check if it is in the cache
+		if (isset($this->contained->read_properties_data_cache[$oid]))
+		{
+			return $this->contained->get_objdata($oid, $param);
+		}
+
 		$ret = $this->_get_cache("get_objdata", $oid);
 		if (is_array($ret))
 		{
@@ -32,6 +38,12 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 
 	function read_properties($arr)
 	{
+		// check if it is in the cache
+		if (isset($this->contained->read_properties_data_cache[$arr["objdata"]["oid"]]))
+		{
+			return $this->contained->get_objdata($arr["objdata"]["oid"], $param);
+		}
+
 		$ret = $this->_get_cache("read_properties", $arr["objdata"]["oid"]);
 		if (is_array($ret))
 		{

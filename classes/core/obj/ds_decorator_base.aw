@@ -124,6 +124,11 @@ class _int_obj_ds_decorator
 	{
 		return $this->contained->create_brother($arr);
 	}
+
+	function fetch_list($arr)
+	{
+		return $this->contained->fetch_list($arr);
+	}
 }
 
 ?>

@@ -161,6 +161,16 @@ class _int_obj_ds_base extends acl_base
 			"msg" => "called abstract function ds_base::create_brother"
 		));
 	}
+
+	////
+	// !fetch list of objects data given oid's and class id's
+	function fetch_list($list)
+	{
+		error::raise(array(
+			"id" => ERR_ABSTRACT,
+			"msg" => "called abstract function ds_base::fetch_list"
+		));
+	}
 }
 
 ?>

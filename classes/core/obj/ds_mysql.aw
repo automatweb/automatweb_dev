@@ -39,8 +39,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
-		$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
-		return $this->_get_objdata_proc($ret, $param);
+		if (isset($this->read_properties_data_cache[$oid]))
+		{
+			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param);
+		}
+		else
+		{
+			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
+			$ret = $this->_get_objdata_proc($ret, $param);
+		}
+
+		return $ret;
 	}
 
 	function _get_objdata_proc($ret, $param)
@@ -229,7 +238,15 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					//echo "q = $q <br />";
 				}
-				$data = $this->db_fetch_row($q);
+				
+				if (isset($this->read_properties_data_cache[$object_id]))
+				{
+					$data = $this->read_properties_data_cache[$object_id];
+				}
+				else
+				{
+					$data = $this->db_fetch_row($q);
+				}
 				if (is_array($data))
 				{
 					$ret += $data;
@@ -306,6 +323,152 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}*/
 		return $ret;
 	}
+
+
+	// parameters:
+	//	properties - property array
+	//	tableinfo - tableinfo from propreader
+	//  object_id - array of object id's
+	// class_id - class id
+	// full - bool, true - read objdata, false - just tables
+	function get_read_properties_sql($arr)
+	{
+		extract($arr);
+
+		$ret = array();
+
+		// then read the properties from the db
+		// find all the tables that the properties are in
+		$tables = array();
+		$tbl2prop = array();
+		$objtblprops = array();
+		foreach($properties as $prop => $data)
+		{
+			if ($data["store"] == "no")
+			{
+				continue;
+			}
+
+			if ($data["table"] == "")
+			{
+				$data["table"] = "objects";
+			}
+
+			if ($data["table"] != "objects")
+			{
+				$tables[$data["table"]] = $data["table"];
+				if ($data["store"] != "no")
+				{
+					$tbl2prop[$data["table"]][] = $data;
+				}
+			}
+			else
+			{
+				$objtblprops[] = $data;
+			}
+		}
+
+		$conn_prop_fetch = array();
+
+		// do a query for each table
+		foreach($tables as $table)
+		{
+			$fields = array();
+			$_got_fields = array();
+			foreach($tbl2prop[$table] as $prop)
+			{
+				if ($prop['field'] == "meta" && $prop["table"] == "objects")
+				{
+					$prop['field'] = "metadata";
+				}
+
+				if ($prop["method"] == "serialize")
+				{
+					if (!$_got_fields[$prop["field"]])
+					{
+						$fields[] = $table.".".$prop["field"]." AS ".$prop["field"];
+						$_got_fields[$prop["field"]] = true;
+					}
+				}
+				else
+				if ($prop["store"] == "connect")
+				{
+					if ($GLOBALS["cfg"]["__default"]["site_id"] != 139)
+					{
+					// resolve reltype and do find_connections
+					//$values = array();
+					$_co_reltype = $prop["reltype"];
+					$_co_reltype = $GLOBALS["relinfo"][$class_id][$_co_reltype]["value"];
+
+					$conn_prop_fetch[$prop["name"]] = $_co_reltype;
+
+					//$conn_prop_vals[$prop["name"]] = $values;
+					//echo "resolved reltype to ".dbg::dump($_co_reltype)." <br>";
+					}
+				}
+				else
+				{
+					$fields[] = $table.".".$prop["field"]." AS ".$prop["name"];
+				}
+			}
+
+			if ($q != "")
+			{
+				return array();
+			}
+
+			if ($full)
+			{
+				$q = "SELECT objects.* ";
+				if (count($fields) > 0)
+				{
+					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.oid = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
+					$q .= " objects.oid ";
+				}
+				else
+				{
+					$q .= " FROM objects WHERE oid";
+				}
+			}
+			else
+			if (count($fields) > 0)
+			{
+				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"];
+			}
+
+			if (!$full)
+			{
+				if (is_array($object_id))
+				{
+					$q .= " IN (".join(",", $object_id).")";
+				}
+				else
+				{
+					$q .= " = '".$object_id."'";
+				}
+			}
+		}
+
+
+		if (count($conn_prop_fetch))
+		{
+			$q2 = "
+				SELECT 
+					target,
+					reltype
+				FROM 
+					aliases 
+				LEFT JOIN objects ON objects.oid = aliases.target
+				WHERE 
+					source = '".$object_id."' AND 
+					reltype IN (".join(",", map("'%s'", $conn_prop_fetch)).") AND 
+					objects.status != 0
+			";
+		}
+
+		return array("q" => $q, "q2" => $q2, "conn_prop_fetch" => $conn_prop_fetch);
+	}
+
 
 	// creates new, empty object 
 	// params:
@@ -819,7 +982,19 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "SELECT objects.oid as oid,objects.name as name,objects.parent as parent, objects.brother_of as brother_of,objects.status as status  $acld FROM $joins WHERE $where ".$this->sby." ".$this->limit;
+			$q = "
+				SELECT 
+					objects.oid as oid,
+					objects.name as name,
+					objects.parent as parent, 
+					objects.brother_of as brother_of,
+					objects.status as status,
+					objects.class_id as class_id
+					$acld 
+				FROM 
+					$joins 
+				WHERE 
+					$where ".$this->sby." ".$this->limit;
 
 			$acldata = array();
 			$parentdata = array();
@@ -832,7 +1007,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$parentdata[$row["oid"]] = $row["parent"];
 				$objdata[$row["oid"]] = array(
 					"brother_of" => $row["brother_of"],
-					"status" => $row["status"]
+					"status" => $row["status"],
+					"class_id" => $row["class_id"]
 				);
 				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 				{
@@ -842,35 +1018,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			}
 		}
 
-		// try this - get list of special objects fiest time around
-		// then if we later do a search-by-parent, let the class handle it
-		/*if (!is_array($GLOBALS["obj_fs_globals"]["container_objs"]))
-		{
-			$GLOBALS["obj_fs_globals"]["container_objs"] = array();
-			list($data) = $this->search(array("class_id" => CL_OTV_DS_POSTIPOISS));
-			foreach($data as $d_oid)
-			{
-				$GLOBALS["obj_fs_globals"]["container_objs"][$d_oid] = obj($d_oid);
-			}
-		}
-
-		if (!empty($params["parent"]) && !is_array($params["parent"]))
-		{
-		echo dbg::dump($GLOBALS["obj_fs_globals"]);
-			foreach($GLOBALS["obj_fs_globals"]["container_objs"] as $c_oid => $c_obj)
-			{
-				if ($c_obj->id() == $params["parent"])
-				{
-					$inst = $c_obj->instance();
-					$tmp = $inst->get_objects($c_obj);
-					foreach($tmp as $t_id => $t_dat)
-					{
-						$full_oid = $c_oid.":".$t_id;
-						$ret[$full_oid] = $full_oid;
-					}
-				}
-			}
-		}*/
 		return array($ret, $this->meta_filter, $acldata, $parentdata, $objdata);
 	}
 
@@ -1541,6 +1688,60 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$js[] = " LEFT JOIN aliases $aj[name] ON $aj[on] ";
 			}
 			return join("", $js).join(" ", $this->joins);
+		}
+	}
+
+	function fetch_list($to_fetch)
+	{
+		$this->used_tables = array();
+
+		$this->properties = array();
+		$this->tableinfo = array();
+
+		// make list of uniq class_id's
+		$clids = array();
+		$cl2obj = array();	
+		foreach($to_fetch as $oid => $clid)
+		{
+			$clids[$clid] = $clid;
+			$cl2obj[$clid][$oid] = $oid;
+		}
+
+		// read props
+		$this->_do_add_class_id($clids);
+
+		// do joins on the data objects for those
+		$joins = array();
+		foreach($clids as $clid)
+		{
+			if (!($sql = aw_cache_get("storage::get_read_properties_sql",$clid)))
+			{
+				$sql = $this->get_read_properties_sql(array(
+					"properties" => $GLOBALS["properties"][$clid],
+					"tableinfo" => $GLOBALS["tableinfo"][$clid],
+					"class_id" => $clid,
+					"object_id" => $cl2obj[$clid],
+					"full" => true
+				));
+				aw_cache_set("storage::get_read_properties_sql",$clid,$sql);
+				//echo "sql = ".dbg::dump($sql)." <br>";
+			}
+		
+			if ($sql["q"] != "")
+			{
+				$sql["q"] .= " IN (".join(",", $cl2obj[$clid]).")";
+			}
+
+			if ($sql["q"] != "" && $sql["q2"] == "")
+			{
+				// query
+				$this->db_query($sql["q"]);
+				while ($row = $this->db_next())
+				{
+					$this->read_properties_data_cache[$row["oid"]] = $row;
+				}
+			}
+			
 		}
 	}
 }

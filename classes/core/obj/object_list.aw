@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.42 2004/12/14 10:19:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.43 2005/01/24 13:40:52 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -132,6 +132,8 @@ class object_list extends _int_obj_container_base
 
 	function begin()
  	{
+		$this->_int_fetch_full_list();
+
 		// here's how begin/next are supposed to work:
 		// begin returns the first item, does not advance iterator
 		// next 1st advances the iterator, them returns current item
@@ -557,6 +559,22 @@ class object_list extends _int_obj_container_base
 			unset($this->list_names[$oid]);
 			unset($this->list_objdata[$oid]);
 		}
+	}
+
+	function _int_fetch_full_list()
+	{
+		// go over list, gather inf on what objects need to be fetched
+		$to_fetch = array();
+
+		foreach($this->list as $oid => $obj)
+		{
+			if (!is_object($obj) && is_oid($oid) && $GLOBALS["object_loader"]->ds->can("view", $oid))
+			{
+				$to_fetch[$oid] = $this->list_objdata[$oid]["class_id"];
+			}
+		}
+
+		$data = $GLOBALS["object_loader"]->ds->fetch_list($to_fetch);
 	}
 }
 ?>
