@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.7 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.8 2005/03/30 21:53:39 duke Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -7,13 +7,29 @@
 
 @default table=objects
 @default group=general
-@default field=meta
-@default method=serialize
+
+@property is_registered type=checkbox ch_value=1 field=meta method=serialize
+@caption Klass on registreeritud
 
 @property visualize type=text store=no
 @caption 
 
 @default group=settings
+@property reg_class_id type=text table=aw_class field=class_id
+@caption CLID
+
+@property object_name type=select field=meta method=serialize
+@caption Objekti nime omadus
+
+@property can_add type=checkbox ch_value=1 table=aw_class
+@caption Saab lisada
+
+@property class_folder type=textbox table=aw_class
+@caption classfolder
+
+@default field=meta
+@default method=serialize
+
 @property relationmgr type=checkbox ch_value=1 default=1
 @caption Seostehaldur
 
@@ -63,6 +79,8 @@
 
 @reltype RELATION value=1 clid=CL_CLASS_DESIGNER_RELATION
 @caption seos
+
+@tableinfo aw_class index=aw_id master_table=objects master_index=brother_of
 
 */
 
@@ -164,27 +182,61 @@ class class_designer extends class_base
 
 			case "visualize":
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("view",array("id" => $arr["obj_inst"]->id()),"class_visualizer"),
+					"url" => $this->mk_my_orb("view",array("class" => $arr["obj_inst"]->id()),"class_visualizer"),
 					"caption" => t("Visualiseeri"),
 				));
 				break;
+
+			case "is_registered":
+				if (1 == $prop["value"])
+				{
+					$prop["type"] = "text";
+					$prop["value"] = "<b>Klass on registreeritud!</b>";
+				};
+				break;
+
+			case "object_name":
+				$otree = new object_tree(array(
+					"parent" => $arr["obj_inst"],
+					// not much point in using a checkbox as name is there?
+					//"class_id" => CL_PROPERTY_TEXTBOX,
+				));
+				$olist = $otree->to_list();
+				foreach($olist->arr() as $o)
+				{
+					if (CL_PROPERTY_TEXTBOX == $o->class_id())
+					{
+						$prop["options"][$o->id()] = $o->name();
+					};
+
+				};
+				break;
+
 
 		};
 		return $retval;
 	}
 
-	/*
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "is_registered":
+				if (1 == $prop["value"])
+				{
+					$this->do_register_class($arr);
+				}
+				else
+				{
+					$retval = PROP_IGNORE;
+				};
+				break;
 
 		}
 		return $retval;
 	}	
-	*/
 
 	/** Creates a hierarchy of groups and grids
 	**/
@@ -561,17 +613,26 @@ class class_designer extends class_base
 		$clsrc = file_get_contents($path);
 		$clid = "CL_" . strtoupper($this->_valid_id($c->name()));
 
+		$clid = $c->prop("reg_class_id");
+
+
+
 		$clsrc = str_replace("__classname",$clname,$clsrc);
 		$clsrc = str_replace("__name",$c->name(),$clsrc);
 		$clsrc = str_replace("__classdef",$clid,$clsrc);
 
-		$gpblock = "";
+		$gpblock = $spblock = "";
 		$methods = "";
 
 		// sort elements according to order in metadata
 		$this->__elord = $c->meta("element_ords");
 		$ellist = $cl_list->arr();
 		usort($ellist, array(&$this, "__ellist_comp"));
+
+		$saver = "";
+
+		$saveable = array(CL_PROPERTY_TEXTBOX,CL_PROPERTY_TEXTAREA,CL_PROPERTY_CHOOSER,CL_PROPERTY_CHECKBOX);
+		$name_prop = $c->prop("object_name");
 
 		foreach($ellist as $el)
 		{
@@ -602,6 +663,8 @@ class class_designer extends class_base
 					{
 						$generate_methods = array_merge($generate_methods,$gpdata["generate_methods"]);
 					};
+
+
 				};
 
 				if ($el_clid == CL_PROPERTY_CHOOSER)
@@ -626,6 +689,7 @@ class class_designer extends class_base
 				$rv .= "\n";
 				$rv .= "@caption $name\n\n";
 
+
 				if (sizeof($generate_methods) > 0 && method_exists($inst,"generate_method"))
 				{
 					foreach($generate_methods as $method_name)
@@ -638,6 +702,15 @@ class class_designer extends class_base
 					//print "additionally generate methods";
 					//arr($generate_methods);
 				};
+				$spblock .= "\n\t\t\tcase '${sys_name}':\n";
+				$spblock .= "\t\t\t\t\$retval = PROP_IGNORE;\n";
+				$spblock .= "\t\t\t\tbreak;\n";
+
+				if (in_array($el_clid,$saveable))
+				{
+					$saver .= "\t\t\$o->set_meta('${sys_name}',\$arr[\"request\"][\"${sys_name}\"]);\n";
+				};
+
 			};
 			if ($el_clid == CL_PROPERTY_GROUP)
 			{
@@ -645,8 +718,17 @@ class class_designer extends class_base
 				$grps .= "@groupinfo $grpid caption=\"$name\"\n";
 			};
 		};
-		$clsrc = str_replace("/* get_property */",$gpblock,$clsrc);
-		$clsrc = str_replace("/* methods */",$methods,$clsrc);
+		$methods .= "\tfunction callback_pre_save(\$arr)\n";
+		$methods .= "\t{\n";
+		$methods .= "\t\t\$o = \$arr[\"obj_inst\"];\n";
+		$methods .= $saver;
+
+		$methods .= "\t}\n";
+		$clsrc = str_replace("//-- get_property --//",$gpblock,$clsrc);
+		$clsrc = str_replace("//-- set_property --//",$spblock,$clsrc);
+		$clsrc = str_replace("/*/* --remove--","",$clsrc);
+		$clsrc = str_replace("--remove-- */","",$clsrc);
+		$clsrc = str_replace("//-- methods --//",$methods,$clsrc);
 		$clsrc = str_replace("@default group=general",$rv . $grps,$clsrc);
 		return $clsrc;
 	}
@@ -704,6 +786,43 @@ class class_designer extends class_base
 		}
 		$_SESSION["cd_cut"] = array();
 		return $arr["return_url"];
+	}
+
+	// register class in central register
+	function do_register_class($arr)
+	{
+		$c = $arr["obj_inst"];
+		$class_name = $this->_valid_id($c->name());
+		$clid = "CL_" . strtoupper($class_name);
+		$st = "ST_" . strtoupper($class_name);
+		$class = array(
+			"def" => $clid,
+			"file" => $class_name,
+			"syslog_type" => $st,
+			"name" => $c->name(),
+		);
+		$classlist = get_instance("core/class_list");
+		$new_clid = $classlist->register_new_class_id(array(
+			"data" => $class
+		));
+
+		$c->set_prop("reg_class_id",$new_clid);
+
+	}
+
+	function callback_post_save($arr)
+	{
+		//print "generating class file";
+		$cldef = $this->gen_classdef(array(
+			"obj_inst" => $arr["obj_inst"],
+		));
+		$fld = $this->cfg["site_basedir"]."/files/classes";
+		$this->put_file(array(
+			"file" => $fld . "/" . $arr["obj_inst"]->id() . ".aw",
+			"content" => $cldef,
+		));
+		//print "done, I think";
+
 	}
 }
 ?>
