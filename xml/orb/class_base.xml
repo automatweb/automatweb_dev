@@ -2,7 +2,7 @@
 <orb>
 	<class name="class_base">
 		<action name="new" all_args="1">
-			<function name="change">
+			<function name="add">
 				<arguments>
 					<required name="parent"/>
 				</arguments>
