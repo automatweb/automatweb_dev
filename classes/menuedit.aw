@@ -1,15 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.109 2002/03/07 22:46:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.110 2002/03/07 23:24:54 duke Exp $
 // menuedit.aw - menuedit. heh.
-global $orb_defs;
-$orb_defs["menuedit"] = "xml";
 
-// muh? mes number?
-// seep see nummer mille kaudu tuntakse 2ra kui tyyp klikkid kodukataloog/SHARED_FOLDERS peale
+// number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
 define("SHARED_FOLDER_ID",2147483647);
 
-session_register("cut_objects");
-session_register("copied_objects");
+session_register("cut_objects","copied_objects");
 
 lc_load("menuedit");
 classload("cache","defs","php");
@@ -24,7 +20,10 @@ class menuedit extends aw_template
 		$this->db_init();
 		$this->cache = new cache;
 		$this->feature_icons_loaded = false;
+
+		// this is set if only one document is shown, a document which can be edited
 		$this->active_doc = false;
+
 		global $lc_menuedit;
 		if (is_array($lc_menuedit))
 		{
@@ -525,7 +524,6 @@ class menuedit extends aw_template
 	
 		$this->do_sub_callbacks($sub_callbacks);
 
-		$cd = ($this->can("edit",$section) && $this->active_doc && $GLOBALS["uid"] != "" && $this->prog_acl("view", PRG_MENUEDIT)) ? $this->parse("CHANGEDOCUMENT") : "";
 		global $sstring;
 		$this->vars(array(
 			"ss" => $this->gen_uniq_id(),		// bannerite jaox
@@ -533,15 +531,15 @@ class menuedit extends aw_template
 			"ss3" => $this->gen_uniq_id(),
 			"link" => "",
 			"section"	=> $section,
+			   "uid" => aw_global_get("uid"),
+			   "date" => $this->time2date(time(), 2),
+			   "date2" => $this->time2date(time(), 8),
 			"sstring" => $sstring,
-			"uid" => $GLOBALS["uid"], 
-			"date" => $this->time2date(time(), 2),
-			"date2" => $this->time2date(time(), 8),
-			"CHANGEDOCUMENT" => $cd,
 			"IS_FRONTPAGE" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE") : ""),
 			"IS_FRONTPAGE2" => ($section == $GLOBALS["frontpage"] ? $this->parse("IS_FRONTPAGE2") : "")
 		));
 
+		// sucks.
 		if ($this->mar[$section]["parent"] == 34506 || $this->mar[$this->mar[$section]["parent"]]["parent"] == 34506 || $section == $GLOBALS["frontpage"])
 		{
 			$this->vars(array(
@@ -550,6 +548,7 @@ class menuedit extends aw_template
 			));
 		}
 
+		// what's that for?
 		if (is_array($vars))
 		{
 			$vars["LEFT_PROMO"] .= $this->vars["LEFT_PROMO"];
@@ -557,11 +556,20 @@ class menuedit extends aw_template
 		}
 
 		// eek.
-		if ($GLOBALS["uid"] != "")
+
+		$cd = "";
+
+		if (aw_global_get("uid") == "")
+		{
+			$login = $this->parse("login");
+			$this->vars(array("login" => $login, "logged" => ""));
+		}
+		else
 		{
 			classload("users");
 			$t = new users;
-			$udata = $t->fetch($GLOBALS["uid"]);
+			// but why? we already should have the info about that?
+			$udata = $this->get_user(array("uid" => aw_global_get("uid")));
 			$jfar = $t->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
 			$jfs = "";
 			reset($jfar);
@@ -576,6 +584,12 @@ class menuedit extends aw_template
 			if ($this->prog_acl("view", PRG_MENUEDIT))
 			{
 				$this->vars(array("MENUEDIT_ACCESS" => $this->parse("MENUEDIT_ACCESS")));
+				// so if this is the only document shown and the user has edit right
+				// to it, parse and show the CHANGEDOCUMENT sub
+				if ($this->can("edit",$section) && $this->active_doc)
+				{
+					$cd = $this->parse("CHANGEDDOCUMENT");
+				};
 			}
 			else
 			{
@@ -589,12 +603,7 @@ class menuedit extends aw_template
 				"logged3" => $this->parse("logged3"),
 				"login" => ""
 			));
-		}
-		else
-		{
-			$login = $this->parse("login");
-			$this->vars(array("login" => $login, "logged" => ""));
-		}
+		};
 
 		$lp = "";
 		$rp = "";
@@ -614,6 +623,10 @@ class menuedit extends aw_template
 		}
 
 		$popups = $this->build_popups();
+
+		$this->vars(array(
+			   "CHANGEDOCUMENT" => $cd,
+		));
 		return $this->parse() . $popups;
 	}
 
