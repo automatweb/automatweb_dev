@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.14 2004/09/17 12:18:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.15 2004/10/14 13:31:03 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -39,6 +39,15 @@
 
 @property use_controller type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption N&auml;itamiseks kasuta kontrollerit
+
+@property mail_from_addr type=textbox field=meta method=serialize table=objects 
+@caption Meili From aadress
+
+@property mail_from_name type=textbox field=meta method=serialize table=objects 
+@caption Meili From nimi
+
+@property mail_cust_content type=textarea field=meta method=serialize table=objects rows=10 cols=80
+@caption Meili sisu (kui t&uuml;hi, siis templatest)
 
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
@@ -427,7 +436,7 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $parent->id(),
 				"class_id" => CL_MENU,
-				"sort_by" => "objects.jrk",
+				"sort_by" => "objects.jrk,objects.created",
 				"status" => STAT_ACTIVE
 			));
 		}
@@ -436,7 +445,7 @@ class shop_order_center extends class_base
 			$ol = new object_list(array(
 				"parent" => $conf->prop("pkt_fld"),
 				"class_id" => CL_MENU,
-				"sort_by" => "objects.jrk",
+				"sort_by" => "objects.jrk,objects.created",
 				"status" => STAT_ACTIVE
 			));
 		}

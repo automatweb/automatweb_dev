@@ -94,6 +94,35 @@
             <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
+            <name>mail_from_addr</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili From aadress</caption>
+      </property>
+      <property>
+            <name>mail_from_name</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Meili From nimi</caption>
+      </property>
+      <property>
+            <name>mail_cust_content</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <rows>10</rows>
+            <cols>80</cols>
+            <caption>Meili sisu (kui t&amp;uuml;hi, siis templatest)</caption>
+      </property>
+      <property>
             <name>controller</name>
             <table>objects</table>
             <group>appear</group>
