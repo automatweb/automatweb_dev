@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.47 2004/07/05 13:21:15 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_company.aw,v 1.48 2004/07/06 06:36:00 rtoomas Exp $
 /*
 //on_connect_person_to_org handles the connection from person to section too
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_PERSON, on_connect_person_to_org)
@@ -1327,7 +1327,7 @@ class crm_company extends class_base
 		));
 		foreach($conns as $conn)
 		{
-			$data[] = $conn->prop('to');	
+			$data[$conn->prop('to')] = $conn->prop('to');	
 		}
 		if($workers_too)
 		{
@@ -1336,7 +1336,7 @@ class crm_company extends class_base
 			));
 			foreach($conns as $conn)
 			{
-				$data[] = $conn->prop('to');
+				$data[$conn->prop('to')] = $conn->prop('to');
 			}
 		}
 		//getting all the sections
