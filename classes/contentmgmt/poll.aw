@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.8 2004/02/26 10:25:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.9 2004/03/04 14:23:56 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -145,6 +145,7 @@ class poll extends class_base
 
 		$this->vars(array(
 			"poll_id" => $ap->id(), 
+			"section" => aw_global_get("section"),
 			"question" => ($namear[$lid] == "" ? $ap->name() : $namear[$lid]),
 			"set_lang_id" => $lid
 		));
@@ -183,10 +184,10 @@ class poll extends class_base
 		{
 			$au = "/?section=".$section."&poll_id=".$ap->id();
 		}
+
 		$this->vars(array(
 			"ANSWER" => $as,
 			"show_url" => str_replace("&", "&amp;", $au),
-			"section" => aw_global_get("section")
 		));
 		$str =  $this->parse();
 		return $str;
