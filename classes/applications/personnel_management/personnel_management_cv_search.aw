@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.3 2004/06/17 13:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_cv_search.aw,v 1.4 2005/03/10 12:40:10 ahti Exp $
 // personnel_management_cv_search.aw - CV Otsing 
 /*
 
@@ -166,7 +166,7 @@ class personnel_management_cv_search extends class_base
 			die();
 		}
 		
-		$tootsijad = $manager->connections_from(array("type" => RELTYPE_TOOTSIJA));
+		$tootsijad = $manager->connections_from(array("type" => "RELTYPE_TOOTSIJA"));
 		
 		foreach ($tootsijad as $otsija)
 		{

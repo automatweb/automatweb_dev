@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.4 2004/06/17 13:28:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.5 2005/03/10 12:40:10 ahti Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
@@ -414,7 +414,7 @@ class personnel_management_cv extends class_base
 	
 	function do_jobs_wanted_table(&$arr)
 	{
-		$jobswanted = $arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBWANTED));
+		$jobswanted = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOBWANTED"));
 		if(!$jobswanted)
 		{
 			return false;
@@ -473,7 +473,7 @@ class personnel_management_cv extends class_base
 		));
 		
 		//Tuleks ymber teha
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_EDUCATION)) as $haridus)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
 		{
 			$connection_id = $haridus->id();
 
@@ -593,7 +593,7 @@ class personnel_management_cv extends class_base
 		
 		$manager = current($this->my_profile["manager_list"]);		
 		
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_EDUCATION)) as $haridus)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
 		{
 			$conn_id = $haridus->id();
 			$haridus = $haridus->to();
@@ -720,7 +720,7 @@ class personnel_management_cv extends class_base
 			"field" => "from",
 		));
 
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_LANG)) as $keeleoskus)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LANG")) as $keeleoskus)
 		{
 			$connection_id=$keeleoskus->id();
 			$keeleoskus = obj($keeleoskus->prop("to"));
@@ -793,7 +793,7 @@ class personnel_management_cv extends class_base
 		));
 
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_KOGEMUS)) as $kogemus)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_KOGEMUS")) as $kogemus)
 		{
 			$connection_id=$kogemus->id();
 			$kogemus = obj($kogemus->prop("to"));
@@ -869,7 +869,7 @@ class personnel_management_cv extends class_base
 			"field" => "from",
 		));
 
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_ARVUTIOSKUS)) as $c_skill)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ARVUTIOSKUS")) as $c_skill)
 		{
 			$connection_id=$c_skill->id();
 			$c_skill = obj($c_skill->prop("to"));
@@ -992,7 +992,7 @@ class personnel_management_cv extends class_base
 			$gender ="Naine";
 		}
 		
-		foreach ($ob->connections_from(array("type" => RELTYPE_KOGEMUS)) as $kogemus)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_KOGEMUS")) as $kogemus)
 		{
 			$kogemus = $kogemus->to();
 
@@ -1006,7 +1006,7 @@ class personnel_management_cv extends class_base
 		}
 		
 		//Valdkondade nimekiri
-		foreach ($ob->connections_from(array("type" => RELTYPE_TEGEVUSVALDKOND)) as $sector)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_TEGEVUSVALDKOND")) as $sector)
 		{
 			$this->vars(array(
 				"sector" => $sector->prop("to.name"),
@@ -1016,14 +1016,14 @@ class personnel_management_cv extends class_base
 		
 		
 		//Hariduste nimekiri
-		foreach ($ob->connections_from(array("type" => RELTYPE_EDUCATION)) as $haridus)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_EDUCATION")) as $haridus)
 		{
 			$haridus = $haridus->to();
 			$haridus->prop("algusaasta");
 			$period = $haridus->prop("algusaasta")." - ". $haridus->prop("loppaasta");
 			
 			
-			$eriala = array_pop($haridus->connections_from(array("type" => RELTYPE_ERIALA)));
+			$eriala = array_pop($haridus->connections_from(array("type" => "RELTYPE_ERIALA")));
 			if (is_object($eriala))
 			{
 				$ename = $eriala->prop("to.name");
@@ -1044,7 +1044,7 @@ class personnel_management_cv extends class_base
 			$temp_edu.= $this->parse("education");
 		}
 		
-		foreach ($ob->connections_from(array("type" => RELTYPE_JUHILUBA)) as $driving_license)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_JUHILUBA")) as $driving_license)
 		{
 			$driving_licenses.= ",".$driving_license->prop("to.name");
 		}
@@ -1241,7 +1241,7 @@ class personnel_management_cv extends class_base
 					$person = array_pop($person);
 					$person = $person->to();
 
-					$company = $person->connections_from(array("type" => RELTYPE_WORK));
+					$company = $person->connections_from(array("type" => "RELTYPE_WORK"));
 					if($company)
 					{
 						$company = array_pop($company);

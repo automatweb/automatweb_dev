@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.6 2004/10/08 01:32:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_offer.aw,v 1.7 2005/03/10 12:40:10 ahti Exp $
 // personnel_management_job_offer.aw - Tööpakkumine 
 /*
 //HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_JOB_OFFER, on_job_save)
@@ -351,7 +351,7 @@ class personnel_management_job_offer extends class_base
 				));
 			break;
 			case "cv_file_rel":
-				if($jobfile = current($arr["obj_inst"]->connections_from(array("type" => RELTYPE_JOBFILE))))
+				if($jobfile = current($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOBFILE"))))
 				{
 					$prop["rel_id"] = $jobfile->id();
 					$prop["props"] = array("file", "filename");
@@ -374,7 +374,7 @@ class personnel_management_job_offer extends class_base
 			
 			case "kandideerin":
 
-				foreach($this->my_profile["person_obj"]->connections_from(array("type" => RELTYPE_CV)) as $cv)
+				foreach($this->my_profile["person_obj"]->connections_from(array("type" => "RELTYPE_CV")) as $cv)
 				{
 					$mycvs[$cv->prop("to")] = $cv->prop("to.name"); 
 				}
@@ -461,7 +461,7 @@ class personnel_management_job_offer extends class_base
 		));
 				
 		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => RELTYPE_KANDIDAAT)) as $cv)
+		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_KANDIDAAT")) as $cv)
 		{
 				
 			$connection_id = $cv->id();
@@ -514,7 +514,7 @@ class personnel_management_job_offer extends class_base
 		$ob = &obj($arr["id"]);
 		if(is_object($ob))
 		{
-			foreach ($ob->connections_from(array("type" => RELTYPE_JOBFILE)) as $jobfile)
+			foreach ($ob->connections_from(array("type" => "RELTYPE_JOBFILE")) as $jobfile)
 			{
 				$jobfile->delete();
 			}
@@ -585,7 +585,7 @@ class personnel_management_job_offer extends class_base
 	function apply_for_job(&$arr)
 	{
 		//Kustutame seosed kasutaja cv de ja tööpakkumiste vahle... juhul kui tööotsija on pakkumisele ka enne kandideerinud
-		foreach($this->my_profile["person_obj"]->connections_from(array("type" => RELTYPE_CV)) as $cv)
+		foreach($this->my_profile["person_obj"]->connections_from(array("type" => "RELTYPE_CV")) as $cv)
 		{
 			if($cv = current($arr["obj_inst"]->connections_from(array("to" => $cv->prop("to")))))
 			{
@@ -596,7 +596,7 @@ class personnel_management_job_offer extends class_base
 		if($arr["prop"]["value"])
 		{
 			$newconn = new connection();
-			$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["prop"]["value"], "reltype" => RELTYPE_KANDIDAAT));
+			$newconn->change(array("from" => $arr["obj_inst"]->id(), "to" => $arr["prop"]["value"], "reltype" => "RELTYPE_KANDIDAAT"));
 		}
 		//Salvestame kaaskirja seoseobjekti juurde
 		$kaaskiri_obj = &obj($newconn->prop("relobj_id"));
@@ -641,7 +641,7 @@ class personnel_management_job_offer extends class_base
 				continue;
 			}
 			
-			$person = current($user->connections_from(array("type" => RELTYPE_PERSON)));
+			$person = current($user->connections_from(array("type" => "RELTYPE_PERSON")));
 			$person = $person->to();
 			if(!is_object($person))
 			{
@@ -746,7 +746,7 @@ class personnel_management_job_offer extends class_base
 		//
 		//Valdkondade nimekiri
 		/*
-		foreach ($ob->connections_from(array("type" => RELTYPE_TEGEVUSVALDKOND)) as $sector)
+		foreach ($ob->connections_from(array("type" => "RELTYPE_TEGEVUSVALDKOND")) as $sector)
 		{
 			$this->vars(array(
 				"sector" => $sector->prop("to.name"),
