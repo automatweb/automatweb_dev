@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.22 2004/06/04 11:42:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.23 2004/06/11 09:14:37 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -217,29 +217,25 @@ class period extends class_base
 
 	function clist($arc_only = -1) 
 	{
-
-								
 		$this->mk_percache();
 
 		// read all periods from db and then compare the oids to the ones in the object chain for $oid
 		$oid = $this->oid;
 		$sufix = ($arc_only > -1) ? " AND status = 2 " : " AND status != 0 ";
-		$ochain = $this->get_object_chain($this->oid);
 		$valid_period = 0;
-		if (is_array($ochain)) 
+		if ($this->oid)
 		{
+			$tmp = obj($this->oid);
+			$ochain = array_reverse($tmp->path());
 			// hm, but we must make sure we go from bottom to top always
-			$parent = $this->oid;
-			while ($parent > 1)
+			foreach($ochain as $chaino)
 			{
 				// now, if some periods exist for this object, use that object. 
-				if (is_array($this->period_cache[$parent]))
+				if (is_array($this->period_cache[$chaino->id()]))
 				{
-					$valid_period = $parent;
+					$valid_period = $chaino->id();
 					break;
 				}
-
-				$parent = $ochain[$parent]["parent"];
 			}
 		}
 
