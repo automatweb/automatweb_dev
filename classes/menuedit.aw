@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.186 2002/12/16 16:02:57 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.187 2002/12/17 19:20:56 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 // meeza thinks we should split this class. One part should handle showing stuff
@@ -1166,7 +1166,18 @@ class menuedit extends aw_template
 	// no, that $popup is really not needed anymore anylonger
 	function gen_folders($period,$popup = 0)
 	{
-		if ($this->cfg["tree_type"] == "java")
+		$u = get_instance("users");
+		$treetype = $u->get_user_config(array(
+			"uid" => aw_global_get("uid"),
+			"key" => "treetype",
+		));
+
+		if (!$treetype)
+		{
+			$treetype = $this->cfg["tree_type"];
+		};
+
+		if ($treetype == "java")
 		{
 			return $this->gen_java_tree($period);
 		};
