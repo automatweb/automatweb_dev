@@ -913,5 +913,32 @@ class site_list extends class_base
 			}
 		}
 	}
+
+	/** returns a list of active sites
+
+		@attrib api=1
+
+	**/
+	function get_local_list()
+	{	
+		$ret = array();
+		$this->db_query("SELECT * FROM aw_site_list WHERE site_used = 1");
+		while ($row = $this->db_next())
+		{
+			if ($row["last_update"] < (time()-24*3600))
+			{
+				$this->_do_update_list_cache();
+				$row = $this->db_fetch_row("SELECT * FROM aw_site_list WHERE id = '$row[id]'");
+			}
+
+			$ret[$row["id"]] = $row;
+		}
+		if (!count($ret))
+		{
+			$this->_do_update_list_cache();
+			return $this->get_local_list();
+		}
+		return $ret;
+	}
 }
 ?>
