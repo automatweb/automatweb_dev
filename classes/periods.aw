@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.27 2003/04/25 09:21:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/periods.aw,v 2.28 2003/05/01 17:29:15 kristo Exp $
 // this is here so that orb will work...
 class periods extends aw_template
 {
@@ -146,6 +146,10 @@ class periods extends aw_template
 			// contain the cache flushing pretty well
 			$q = "SELECT active_period FROM menu WHERE id = '".$oid."'";
 			$ap = $this->db_fetch_field($q,"active_period");
+			if (!$ap)
+			{
+				$ap = $this->rec_get_active_period(($oid ? $oid : -1));
+			}
 
 			// now add this period to the cache
 			aw_cache_set("active_period", $oid,($ap == 0 ? -1 : $ap));
