@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.49 2002/08/16 22:28:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.50 2002/08/20 10:57:58 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -624,6 +624,9 @@ if (!defined("DEFS"))
 
 	// oh, dammit. Shouldn't the aw_globals also be initalized and accesed
 	// through the aw_dir/init.aw - ?
+
+	// well. our own stuff kinda.. I dunno, feels better. but yeah, it also feels a lot slower. 
+	// and yeah. we shouldn't need these before aw_startup() and we could init it in there.. - terryf
 	function &_aw_global_init()
 	{
 		global $aw_globals_instance;
@@ -751,6 +754,12 @@ if (!defined("DEFS"))
 		session_unregister($name);
 		aw_global_set($name, "");
 	}
+
+	function get_ts_from_arr($var)
+	{
+		return mktime($var["hour"], $var["minute"], $var["second"], $var["month"], $var["day"], $var["year"]);
+	}
+
 };
 
 ?>
