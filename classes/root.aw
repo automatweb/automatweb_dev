@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.7 2001/07/28 03:27:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/root.aw,v 2.8 2001/10/16 04:15:57 kristo Exp $
 // root.aw - the root class
 // this contains all the supplementary functions
 
@@ -57,9 +57,9 @@ class root
 	// !Right now this is only a wrapper for the function with
 	// the same name in defs.aw. This should probably be removed
 	// at a later time
-	function map2($format,$array,$type = 0)
+	function map2($format,$array,$type = 0,$empty = false)
 	{
-		return map2($format,$array,$type);
+		return map2($format,$array,$type,$empty);
 	}
 
 	////
