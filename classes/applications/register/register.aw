@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.6 2004/06/04 11:12:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register.aw,v 1.7 2004/06/09 12:54:23 kristo Exp $
 // register.aw - Register 
 /*
 
@@ -316,6 +316,10 @@ class register extends class_base
 	// !shows the register
 	function show($arr)
 	{
+		if ($GLOBALS["print"] == 1)
+		{
+			return "";
+		}
 		$o = obj($arr["id"]);
 
 		$html = "";

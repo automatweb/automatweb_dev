@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.5 2004/06/04 11:12:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.6 2004/06/09 12:54:23 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -18,6 +18,12 @@
 
 @property show_all_in_empty_search type=checkbox ch_value=1
 @caption T&uuml;hi otsing n&auml;itab k&otilde;iki
+
+@property notfound_text type=textarea rows=5 cols=40
+@caption Mida n&auml;idatakse kui midagi ei leita (%s on otsing)
+
+@property show_date type=checkbox ch_value=1
+@caption Tulemuste all on kuup&auml;ev
 
 /////////
 @groupinfo mkfrm caption="Koosta otsinguvorm"
@@ -362,7 +368,19 @@ class register_search extends class_base
 			"obj_inst" => &$ob,
 			"request" => $request,
 		));
-		$table = $t->draw();
+		if (count($t->data) < 1 && $request["search_butt"] != "" && $ob->prop("notfound_text") != "")
+		{
+			$table = nl2br(sprintf($ob->prop("notfound_text"), $request["rsf"][$this->fts_name]));
+		}
+		else
+		{
+			$table = $t->draw();
+		}
+
+		if ($ob->prop("show_date") && $request["search_butt"] != "")
+		{
+			$table .= "<br>".date("d.m.Y H:i:s");
+		}
 		
 		if ($arr["no_form"])
 		{
@@ -647,6 +665,7 @@ class register_search extends class_base
 		$can_delete = false;
 
 		list($ol, $ol_cnt) = $this->get_search_results($arr["obj_inst"], $arr["request"]);
+
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$data = array();
