@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.70 2003/06/26 14:14:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.71 2003/06/26 15:36:27 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -490,17 +490,20 @@ class form extends form_base
 			}
 		}
 
-		if (join(",",map("%s",$old_namels)) != join(",",map("%s",$this->arr["name_els"])))
+		if ($this->type != FTYPE_SEARCH)
 		{
-			// now go through all entries and rename them
-			$this->db_query("SELECT oid FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND form_entries.form_id = ".$this->id." AND status != 0");
-			while ($row = $this->db_next())
+			if (join(",",map("%s",$old_namels)) != join(",",map("%s",$this->arr["name_els"])))
 			{
-				$this->save_handle();
-				$this->entry_name = "";
-				$this->load_entry($row["oid"]);
-				$this->update_entry_name($row["oid"]);
-				$this->restore_handle();
+				// now go through all entries and rename them
+				$this->db_query("SELECT oid FROM objects LEFT JOIN form_entries ON form_entries.id = objects.oid WHERE class_id = ".CL_FORM_ENTRY." AND form_entries.form_id = ".$this->id." AND status != 0");
+				while ($row = $this->db_next())
+				{
+					$this->save_handle();
+					$this->entry_name = "";
+					$this->load_entry($row["oid"]);
+					$this->update_entry_name($row["oid"]);
+					$this->restore_handle();
+				}
 			}
 		}
 
