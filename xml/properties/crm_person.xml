@@ -16,7 +16,7 @@
       <property>
             <name>name</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general2</group>
             <type>text</type>
             <field>name</field>
             <caption>Nimi</caption>
@@ -24,7 +24,7 @@
       <property>
             <name>firstname</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>general2</group>
             <type>textbox</type>
             <size>15</size>
             <maxlength>50</maxlength>
@@ -34,7 +34,7 @@
       <property>
             <name>lastname</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>general2</group>
             <type>textbox</type>
             <size>15</size>
             <maxlength>50</maxlength>
@@ -42,27 +42,9 @@
             <caption>Perekonnanimi</caption>
       </property>
       <property>
-            <name>title</name>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>5</size>
-            <maxlength>10</maxlength>
-            <field>title</field>
-            <caption>Tiitel</caption>
-      </property>
-      <property>
-            <name>gender</name>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>chooser</type>
-            <field>gender</field>
-            <caption>Sugu</caption>
-      </property>
-      <property>
             <name>personal_id</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>general2</group>
             <type>textbox</type>
             <size>13</size>
             <maxlength>11</maxlength>
@@ -70,9 +52,25 @@
             <caption>Isikukood</caption>
       </property>
       <property>
+            <name>gender</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>chooser</type>
+            <field>gender</field>
+            <caption>Sugu</caption>
+      </property>
+      <property>
+            <name>title</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>chooser</type>
+            <field>title</field>
+            <caption>Tiitel</caption>
+      </property>
+      <property>
             <name>nickname</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>general2</group>
             <type>textbox</type>
             <size>10</size>
             <maxlength>20</maxlength>
@@ -82,27 +80,25 @@
       <property>
             <name>birthday</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>10</size>
-            <maxlength>20</maxlength>
+            <group>general2</group>
+            <type>date_select</type>
+            <year_from>1930</year_from>
+            <year_to>2010</year_to>
             <field>birthday</field>
             <caption>Sünnipäev</caption>
       </property>
       <property>
             <name>social_status</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>20</size>
-            <maxlength>20</maxlength>
+            <group>general2</group>
+            <type>chooser</type>
             <field>social_status</field>
             <caption>Perekonnaseis</caption>
       </property>
       <property>
             <name>spouse</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>relatives</group>
             <type>textbox</type>
             <size>25</size>
             <maxlength>50</maxlength>
@@ -112,32 +108,42 @@
       <property>
             <name>children</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>relatives</group>
             <type>relpicker</type>
             <reltype>RELTYPE_CHILDREN</reltype>
             <field>children</field>
             <caption>Lapsed</caption>
       </property>
       <property>
-            <name>pictureurl</name>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>textbox</type>
-            <size>40</size>
-            <maxlength>200</maxlength>
-            <field>pictureurl</field>
-            <caption>Pildi/foto url</caption>
-      </property>
-      <property>
             <name>picture</name>
             <table>kliendibaas_isik</table>
-            <group>general</group>
+            <group>general2</group>
             <type>releditor</type>
             <reltype>RELTYPE_PICTURE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
             <field>picture</field>
             <caption>Pilt/foto</caption>
+      </property>
+      <property>
+            <name>notes</name>
+            <table>kliendibaas_isik</table>
+            <group>description</group>
+            <type>textarea</type>
+            <cols>60</cols>
+            <rows>10</rows>
+            <field>notes</field>
+            <caption>Vabas vormis tekst</caption>
+      </property>
+      <property>
+            <name>aliasmgr</name>
+            <table>kliendibaas_isik</table>
+            <group>description</group>
+            <type>aliasmgr</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>aliasmgr</field>
+            <caption>Seostehaldur</caption>
       </property>
       <property>
             <name>work_contact</name>
@@ -157,25 +163,6 @@
             <automatic>1</automatic>
             <field>rank</field>
             <caption>Ametinimetus</caption>
-      </property>
-      <property>
-            <name>personal_contact</name>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS</reltype>
-            <field>personal_contact</field>
-            <caption>Kodused kontaktandmed</caption>
-      </property>
-      <property>
-            <name>comment</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>textarea</type>
-            <cols>40</cols>
-            <rows>3</rows>
-            <field>comment</field>
-            <caption>Kontaktandmed</caption>
       </property>
       <property>
             <name>email</name>
@@ -209,6 +196,16 @@
             <reltype>RELTYPE_URL</reltype>
             <props>url</props>
             <caption>Veebiaadressid</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>contact</group>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>3</rows>
+            <field>comment</field>
+            <caption>Kontakt</caption>
       </property>
       <property>
             <name>org_actions</name>
@@ -268,6 +265,18 @@
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <general2>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general2>
+            <description>
+                  <caption>Kirjeldus</caption>
+                  <parent>general</parent>
+            </description>
+            <relatives>
+                  <caption>Sugulased</caption>
+                  <parent>general</parent>
+            </relatives>
             <contact>
                   <caption>Kontaktandmed</caption>
             </contact>

@@ -85,15 +85,6 @@
             <caption>Kaubamärgid</caption>
       </property>
       <property>
-            <name>contact</name>
-            <table>kliendibaas_firma</table>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_ADDRESS</reltype>
-            <field>contact</field>
-            <caption>Aadress</caption>
-      </property>
-      <property>
             <name>tegevuse_kirjeldus</name>
             <table>kliendibaas_firma</table>
             <group>general</group>
@@ -121,30 +112,39 @@
             <orient>vertical</orient>
             <editonly>1</editonly>
             <field>firmajuht</field>
-            <caption>Organisatsiooni juht</caption>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>addresslist</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>text</type>
+            <store>no</store>
+            <field>addresslist</field>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>human_resources</name>
             <table>objects</table>
-            <group>humanres</group>
+            <group>contacts2</group>
             <type>table</type>
             <store>no</store>
             <field>human_resources</field>
             <caption>Inimesed</caption>
       </property>
       <property>
-            <name>addresslist</name>
-            <table>objects</table>
-            <group>contacts</group>
-            <type>text</type>
-            <store>no</store>
-            <field>addresslist</field>
-            <caption>Aadressid</caption>
+            <name>contact</name>
+            <table>kliendibaas_firma</table>
+            <group>cedit</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ADDRESS</reltype>
+            <field>contact</field>
+            <caption>Vaikimisi aadress</caption>
       </property>
       <property>
             <name>phone_id</name>
             <table>kliendibaas_firma</table>
-            <group>contacts</group>
+            <group>cedit</group>
             <type>relmanager</type>
             <reltype>RELTYPE_PHONE</reltype>
             <props>name</props>
@@ -154,7 +154,7 @@
       <property>
             <name>url_id</name>
             <table>kliendibaas_firma</table>
-            <group>contacts</group>
+            <group>cedit</group>
             <type>relmanager</type>
             <reltype>RELTYPE_URL</reltype>
             <props>name</props>
@@ -164,7 +164,7 @@
       <property>
             <name>email_id</name>
             <table>kliendibaas_firma</table>
-            <group>contacts</group>
+            <group>cedit</group>
             <type>relmanager</type>
             <reltype>RELTYPE_EMAIL</reltype>
             <props>mail</props>
@@ -174,7 +174,7 @@
       <property>
             <name>telefax_id</name>
             <table>kliendibaas_firma</table>
-            <group>contacts</group>
+            <group>cedit</group>
             <type>relmanager</type>
             <reltype>RELTYPE_TELEFAX</reltype>
             <props>name</props>
@@ -253,22 +253,62 @@
             <caption>Toimetused</caption>
       </property>
       <property>
+            <name>t1</name>
+            <table>objects</table>
+            <group>jobs</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>t1</field>
+            <caption>Aktiivsed</caption>
+      </property>
+      <property>
             <name>jobsact</name>
             <table>objects</table>
-            <group>jobsact</group>
+            <group>jobs</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>jobsact</field>
       </property>
       <property>
+            <name>t2</name>
+            <table>objects</table>
+            <group>jobs</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <store>no</store>
+            <field>t2</field>
+            <caption>Mitteaktiivsed</caption>
+      </property>
+      <property>
             <name>jobsnotact</name>
             <table>objects</table>
-            <group>notact</group>
+            <group>jobs</group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>jobsnotact</field>
+      </property>
+      <property>
+            <name>org_toolbar</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>org_toolbar</field>
+            <caption>Org. toolbar</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>customer</field>
+            <caption>Kliendid</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -278,10 +318,15 @@
             <contacts>
                   <caption>Kontaktid</caption>
             </contacts>
-            <humanres>
-                  <caption>Inimesed</caption>
+            <contacts2>
+                  <caption>Kontaktid</caption>
+                  <parent>contacts</parent>
                   <submit>no</submit>
-            </humanres>
+            </contacts2>
+            <cedit>
+                  <caption>Kontaktide muutmine</caption>
+                  <parent>contacts</parent>
+            </cedit>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
@@ -307,18 +352,38 @@
             </tasks>
             <tasks_overview>
                   <caption>Ülevaade</caption>
+                  <parent>overview</parent>
             </tasks_overview>
+            <personal>
+                  <caption>Personal</caption>
+            </personal>
             <jobs>
                   <caption>Tööpakkumised</caption>
+                  <parent>personal</parent>
             </jobs>
-            <jobsact>
-                  <caption>Aktiivsed</caption>
-                  <parent>jobs</parent>
-            </jobsact>
-            <notact>
-                  <caption>Mitteaktiivsed</caption>
-                  <parent>jobs</parent>
-            </notact>
+            <relorg>
+                  <caption>Seotud organisatsioonid</caption>
+            </relorg>
+            <customers>
+                  <caption>Kliendid</caption>
+                  <parent>relorg</parent>
+            </customers>
+            <fcustomers>
+                  <caption>Tulevased kliendid</caption>
+                  <parent>relorg</parent>
+            </fcustomers>
+            <partners>
+                  <caption>Partnerid</caption>
+                  <parent>relorg</parent>
+            </partners>
+            <fpartners>
+                  <caption>Tulevased partnerid</caption>
+                  <parent>relorg</parent>
+            </fpartners>
+            <competitors>
+                  <caption>Konkurendid</caption>
+                  <parent>relorg</parent>
+            </competitors>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -418,6 +483,31 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Tööotsija</caption>
             </TOOTSIJA>
+            <CUSTOMER>
+                  <value>22</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Klient</caption>
+            </CUSTOMER>
+            <POTENTIONAL_CUSTOMER>
+                  <value>23</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tulevane klient</caption>
+            </POTENTIONAL_CUSTOMER>
+            <PARTNER>
+                  <value>24</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Partner</caption>
+            </PARTNER>
+            <POTENTIONAL_PARTNER>
+                  <value>25</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Tulevate partner</caption>
+            </POTENTIONAL_PARTNER>
+            <COMPETITOR>
+                  <value>26</value>
+                  <clid>CL_CRM_COMPANY</clid>
+                  <caption>Konkurent</caption>
+            </COMPETITOR>
       </reltypes>
 </properties>
 
