@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.9 2004/12/30 15:56:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.10 2005/01/21 10:13:42 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -180,18 +180,18 @@ class ml_queue extends aw_template
 
 		if ($manager)
 		{
-			$title="Meililistid";
+			$title = "Meililistid";
 
-			$fb=get_instance("formgen/form_base");
-			$flist=$fb->get_list(FTYPE_ENTRY);
-			$sflist=$fb->get_list(FTYPE_SEARCH);
+			$fb = get_instance("formgen/form_base");
+			$flist = $fb->get_list(FTYPE_ENTRY);
+			$sflist = $fb->get_list(FTYPE_SEARCH);
 
 			$this->vars(array(
-				"form" => $this->picker($this->formid,$flist),
-				"searchform" => $this->picker($this->searchformid,$sflist),
-				"mailel" => $this->picker($this->mailel,$ml->get_all_varnames()),
+				"form" => $this->picker($this->formid, $flist),
+				"searchform" => $this->picker($this->searchformid, $sflist),
+				"mailel" => $this->picker($this->mailel, $ml->get_all_varnames()),
 			));
-			$mparse=$this->parse("MGR");
+			$mparse = $this->parse("MGR");
 		};
 
 		$this->vars(array(
@@ -584,7 +584,7 @@ class ml_queue extends aw_template
 		};
 
 		$this->awm->gen_mail();
-		echo("<b>SENT!</b><br />\n"); //dbg
+		echo "<b>SENT!</b><br />\n";
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);
@@ -594,14 +594,14 @@ class ml_queue extends aw_template
 
 	function replace_tags($text,$data)
 	{
-		$nohtml=$text;
-		preg_match_all("/#(.+?)#/e",$nohtml,$matches);
+		$nohtml = $text;
+		preg_match_all("/#(.+?)#/e", $nohtml, $matches);
 		if (is_array($matches) && is_array($matches[1]))
 		{
 			foreach($matches[1] as $v)
 			{
-				$this->used_variables[$v]=1;
-				$text = preg_replace("/#$v#/",$data[$v]?$data[$v]:"",$text);
+				$this->used_variables[$v] = 1;
+				$text = preg_replace("/#$v#/", $data[$v] ? $data[$v] : "", $text);
 				//decho("matced $v<br />");
 			};
 		};
@@ -708,12 +708,12 @@ class ml_queue extends aw_template
 				"key" => "real_name",
 			));
 		}
-		$message = $arr["msg"]["message"];
+		$message = nl2br($arr["msg"]["message"]);
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $message);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);
 		$message = $this->replace_tags($message, $data);
-		$subject = $this->replace_tags($arr["msg"]["subject"],$data);
-		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"],$data);
+		$subject = $this->replace_tags($arr["msg"]["subject"], $data);
+		$mailfrom = $this->replace_tags($arr["msg"]["mfrom"], $data);
 		$mailfrom = trim($mailfrom);
 		$subject = trim($subject);
 		$mailfrom = $arr["msg"]["meta"]["mfrom_name"] . " <" . $mailfrom . ">";
