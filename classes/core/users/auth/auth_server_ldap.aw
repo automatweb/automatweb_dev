@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.12 2004/12/01 14:06:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.13 2005/01/18 10:36:44 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -12,6 +12,12 @@
 
 @property server type=textbox
 @caption LDAP server
+
+@property server_port type=textbox
+@caption Port
+
+@property server_ldaps type=checkbox ch_value=1
+@caption SSL &Uuml;hendus
 
 @property ad_domain type=textbox
 @caption Active Directory domeen
@@ -116,7 +122,13 @@ class auth_server_ldap extends class_base
 			));
 			return array(false, "LDAP Moodul pole installeeritud!");
 		}
-		$res = ldap_connect($server->prop("server"));
+
+		$srv = $server->prop("server");
+		if ($server->prop("server_ldaps"))
+		{
+			$srv = "https://".$srv;
+		}
+		$res = ldap_connect($srv, $server->prop("server_port"));
 		if (!$res)
 		{
 			return array(false, "Ei saanud &uuml;hendust LDAP serveriga ".$server->prop("server"));
@@ -169,7 +181,13 @@ class auth_server_ldap extends class_base
 		{
 			return array();
 		}
-		$res = ldap_connect($o->prop("server"));
+
+		$srv = $o->prop("server");
+		if ($o->prop("server_ldaps"))
+		{
+			$srv = "https://".$srv;
+		}
+		$res = ldap_connect($srv, $o->prop("server_port"));
 		if (!$res)
 		{
 			$this->last_error = "Ei saanud serveriga &uuml;hendust!";
