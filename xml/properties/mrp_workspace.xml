@@ -598,6 +598,16 @@
             <caption>Ajaplaani ulatus (a)</caption>
       </property>
       <property>
+            <name>parameter_min_planning_jobstart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <default>300</default>
+            <caption>Ajavahemik planeerimise alguse hetkest milles algavaid t&amp;ouml;id ei planeerita (s)</caption>
+      </property>
+      <property>
             <name>parameter_schedule_start</name>
             <table>objects</table>
             <field>meta</field>

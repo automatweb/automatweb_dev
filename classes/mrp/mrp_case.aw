@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.31 2005/03/14 10:06:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.32 2005/03/15 11:01:02 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -241,6 +241,10 @@ define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+
+define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
+define ("MRP_STATUS_RESOURCE_INUSE", 11);
+define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -640,13 +644,13 @@ class mrp_case extends class_base
 				$length = $job->prop ("planned_length");
 				$resource = obj ($resource_id);
 				$start = $job->prop ("starttime");
-				$hilight = ($job->prop ("project") == $hilighted_project) ? true : false;
+				$hilight = ($job->prop ("project") == $hilighted_project) ? "hilighted" : "";
 				$job_name = $this_object->name () . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
 					"start" => $start,
-					"hilight" => $hilight,
+					"type" => $hilight,
 					"length" => $length,
 					"uri" => html::get_change_url ($job["oid"]),
 					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"

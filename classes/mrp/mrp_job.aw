@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.16 2005/03/13 20:21:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.17 2005/03/15 11:01:02 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -123,6 +123,10 @@ define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+
+define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
+define ("MRP_STATUS_RESOURCE_INUSE", 11);
+define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### sub states
 define ("MRP_SUBSTATUS_PAUSED", 9);

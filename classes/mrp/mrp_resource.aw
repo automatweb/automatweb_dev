@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.17 2005/03/13 20:21:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.18 2005/03/15 11:01:02 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -25,6 +25,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 
 	@property type type=select
 	@caption Tüüp
+
+	@property state type=chooser editonly=1 multiple=0
+	@caption Ressursi staatus
 
 
 @default group=grp_resource_schedule
@@ -96,6 +99,10 @@ define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
 
+define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
+define ("MRP_STATUS_RESOURCE_INUSE", 11);
+define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
+
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
 
@@ -156,6 +163,21 @@ class mrp_resource extends class_base
 					MRP_RESOURCE_SCHEDULABLE => "Ressursi kasutust planeeritakse",
 					MRP_RESOURCE_NOT_SCHEDULABLE => "Ressursi kasutust ei planeerita",
 					MRP_RESOURCE_SUBCONTRACTOR => "Ressurss on allhange",
+				);
+				break;
+
+			case "state":
+				$applicable_states = array (
+					MRP_STATUS_RESOURCE_AVAILABLE,
+					MRP_STATUS_RESOURCE_INUSE,
+					MRP_STATUS_RESOURCE_OUTOFSERVICE,
+				);
+				$prop["value"] = (in_array ($prop["value"], $applicable_states)) ? $prop["value"] : 0;
+				$prop["options"] = array (
+					0 => "M&auml;&auml;ramata",
+					MRP_STATUS_RESOURCE_AVAILABLE => "Ressursi kasutust planeeritakse",
+					MRP_STATUS_RESOURCE_INUSE => "Ressursi kasutust ei planeerita",
+					MRP_STATUS_RESOURCE_OUTOFSERVICE => "Ressurss on allhange",
 				);
 				break;
 
@@ -514,19 +536,26 @@ class mrp_resource extends class_base
 			);
 		}
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ arr ($recurrent_unavailable_periods);
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "recurrent_available_periods:";
+// /* dbg */ arr ($recurrent_available_periods);
+/* dbg */ }
 
 		### transmute recurrently available periods to unavailables
 		### throw away erroneous definitions
 		foreach ($recurrent_available_periods as $key => $available_period)
 		{
-			if ( ($available_period["start"] >= $available_period["end"]) or !is_integer ($available_period["end"]) or !is_integer ($available_period["end"]) or !$available_period["length"] or ($available_period["length"] > 86400) )
+			if ( ($available_period["start"] >= $available_period["end"]) or ($available_period["length"] > 86400) or ($available_period["length"] < 1) )
 			{
 				unset ($recurrent_available_periods[$key]);
 			}
 		}
+
+/* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "recurrent_available_periods after errorcheck:";
+// /* dbg */ arr ($recurrent_available_periods);
+// /* dbg */ exit;
+/* dbg */ }
 
 		### sort available recurrences by their starting time
 		usort ($recurrent_available_periods, array ($this, "sort_recurrences_by_start"));
@@ -587,7 +616,6 @@ class mrp_resource extends class_base
 					break;
 			}
 
-
 			if (count ($combination) >= 1)
 			{
 				ksort ($combination);
@@ -600,6 +628,11 @@ class mrp_resource extends class_base
 
 			$combination_start = $next_start;
 		}
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "combinations:";
+// /* dbg */ arr ($combinations);
+// /* dbg */ }
 
 		### make unavailable recurrence definitions according to these combinations
 		$interval = 86400;
@@ -666,6 +699,11 @@ class mrp_resource extends class_base
 				);
 			}
 		}
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "return recurrent_unavailable_periods:";
+// /* dbg */ arr ($recurrent_unavailable_periods);
+// /* dbg */ }
 
 		return $recurrent_unavailable_periods;
 	}

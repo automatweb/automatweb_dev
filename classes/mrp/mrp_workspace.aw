@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.42 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.43 2005/03/15 11:01:02 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -182,6 +182,9 @@ EMIT_MESSAGE(MSG_MRP_RESCHEDULING_NEEDED)
 	@property parameter_schedule_length type=textbox default=2
 	@caption Ajaplaani ulatus (a)
 
+	@property parameter_min_planning_jobstart type=textbox default=300
+	@caption Ajavahemik planeerimise alguse hetkest milles algavaid t&ouml;id ei planeerita (s)
+
 	@property parameter_schedule_start type=textbox default=300
 	@caption Ajaplaani alguse vahe planeerimise alguse hetkega (s)
 
@@ -314,6 +317,10 @@ define ("MRP_STATUS_LOCKED", 6);
 define ("MRP_STATUS_OVERDUE", 7);
 define ("MRP_STATUS_DELETED", 8);
 define ("MRP_STATUS_ONHOLD", 9);
+
+define ("MRP_STATUS_RESOURCE_AVAILABLE", 10);
+define ("MRP_STATUS_RESOURCE_INUSE", 11);
+define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
@@ -1216,10 +1223,10 @@ class mrp_workspace extends class_base
 
 		if ($list_request != "search")
 		{
-			$table->define_chooser(array(
-				"name" => "selection",
-				"field" => "project_id",
-			));
+		$table->define_chooser(array(
+			"name" => "selection",
+			"field" => "project_id",
+		));
 		}
 		$table->set_default_sortby ("modified");
 		$table->set_default_sorder ("desc");
@@ -1626,27 +1633,38 @@ class mrp_workspace extends class_base
 		foreach ($jobs as $job)
 		// for ($job =& $list->begin (); !$list->end (); $job =& $list->next ())
 		{
-			// $length = $job->prop ("pre_buffer") + $job->prop ("length") + $job->prop ("post_buffer");
 			if ($this->can ("view", $job["oid"]))
 			{
 				$job = obj ($job["oid"]);
+				$project_id = $job->prop ("project");
+				$project = obj ($project_id);
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_OVERDUE,
+					MRP_STATUS_DONE,
+				);
+
+				if (!in_array ($project->prop ("state"), $applicable_states))
+				{
+					continue;
+				}
+
 				$length = $job->prop ("planned_length");
 				$resource_id = $job->prop ("resource");
 				$resource = obj ($resource_id);
-				$project_id = $job->prop ("project");
-				$project = obj ($project_id);
 				$start = $job->prop ("starttime");
-				$hilight = in_array ($job->id (), $hilighted_jobs) ? true : false;
+				$type = in_array ($job->id (), $hilighted_jobs) ? "hilighted" : "";
 				$job_name = $project->name () . " - " . $resource->name ();
 
 				$bar = array (
 					"row" => $resource_id,
 					"start" => $start,
-					"hilight" => $hilight,
+					"type" => $type,
 					"length" => $length,
 					"uri" => aw_url_change_var ("mrp_hilight", $project_id),
 					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-// /* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
+/* dbg */ . " [res: " . $resource_id . " job: " . $job->id () . " proj: " . $project_id . "]"
 				);
 
 				$chart->add_bar ($bar);
@@ -3077,29 +3095,29 @@ class mrp_workspace extends class_base
 			$results = new object_list();
 		}
 		else
-		{
+	{
 			$filt = array(
 				"class_id" => CL_CRM_COMPANY,
 				"name" => "%".$arr["request"]["cs_name"]."%",
 				"reg_nr" => "%".$arr["request"]["cs_reg_nr"]."%",
 			);
 			if ($arr["request"]["cs_firmajuht"] != "")
-			{
+		{
 				$filt["CL_CRM_COMPANY.firmajuht.name"] = "%".$arr["request"]["cs_firmajuht"]."%";
-			}
+		}
 			if ($arr["request"]["cs_contact"] != "")
 			{
 				$filt["CL_CRM_COMPANY.contact.name"] = "%".$arr["request"]["cs_contact"]."%";
-			}
+	}
 			if ($arr["request"]["cs_phone"] != "")
-			{
+	{
 				$filt["CL_CRM_COMPANY.phone.name"] = "%".$arr["request"]["cs_phone"]."%";
 			}
 			$results = new object_list($filt);
-		}
+	}
 
 		foreach($results->arr() as $cust)
-		{
+	{
 			$t->define_data(array(
 				"name" => html::get_change_url($cust->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $cust->name()),
 				"address" => $cust->prop_str("contact"),
@@ -3107,7 +3125,7 @@ class mrp_workspace extends class_base
 				"email" => $cust->prop_str("email_id"),
 				"oid" => $cust->id(),
 				"priority" => $cust->prop("priority")
-			));
+		));
 		}
 	}
 }

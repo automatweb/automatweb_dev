@@ -20,6 +20,16 @@
             <caption>Tüüp</caption>
       </property>
       <property>
+            <name>state</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>chooser</type>
+            <editonly>1</editonly>
+            <caption>Ressursi staatus</caption>
+      </property>
+      <property>
             <name>resource_calendar</name>
             <table>objects</table>
             <field>meta</field>
