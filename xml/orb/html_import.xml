@@ -1,26 +1,6 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="html_import">
-
-		<action name="new">
-			<function name="change">
-				<arguments>
-					<required name="parent"/>
-					<optional name="alias_to"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change">
-			<function name="change">
-				<arguments>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="html_import" extends="class_base">
 		<action name="tiri">
 			<function name="tiri">
 				<arguments>
@@ -28,7 +8,6 @@
 				</arguments>
 			</function>
 		</action>
-
 		<action name="ruul_test">
 			<function name="ruul_test">
 				<arguments>
@@ -37,58 +16,5 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="submit">
-			<function name="submit">
-				<arguments>
-					<optional name="id"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="conf">
-			<function name="conf">
-				<arguments>
-					<optional name="reset"/>
-					<optional name="starts"/>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="output_conf">
-			<function name="output_conf">
-				<arguments>
-					<optional name="starts"/>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sqlconf">
-			<function name="sqlconf">
-				<arguments>
-					<optional name="create_table"/>
-					<optional name="drop_table"/>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sql_data">
-			<function name="sql_data">
-				<arguments>
-					<optional name="empty_table"/>
-					<optional name="drop_table"/>
-					<required name="id"/>
-					<optional name="return_url"/>
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>
-		

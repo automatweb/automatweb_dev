@@ -1,33 +1,379 @@
 <?php
 
-//todo:
-// logi tabel 
-// 
+/*
+	@default table=objects
+	@default group=general
 
-class ob_gen extends aw_template
+	@property comment type=textarea field=comment cols=40 rows=3
+	@caption Kommentaar
+
+	@default field=meta
+	@default method=serialize
+
+	@property source_table type=select
+	@caption source_table
+
+	@property limit type=select
+	@caption korraga baasist
+
+	@property source_table type=select
+	@caption source table
+
+
+	@property use_object type=checkbox ch_value=on
+	@caption kasuta objektitabelit
+
+	@property my_class_id type=select
+	@caption tehakse selle klassi objektid
+
+	@property my_status type=status
+	@caption uute objektide aktiivsus vaikimisi
+
+	@property my_parent type=select
+	@caption uued objektid salvesta kataloogi:
+
+
+	@property use_sisu type=checkbox ch_value=on
+	@caption kasuta sisutabelit
+
+	@property sisu_table type=select
+	@caption sisutabel
+
+
+	@default group=genereeri
+
+	@property gen_all type=text
+	@caption GENEREERI TERVEST ANDMETABELIST OBJEKTID
+
+	@property gen_x type=text
+	@caption GENEREERI ANDMETABELIST ESIMESED x OBJEKTI
+
+	@property gen_broken type=text
+	@caption JÄTKA KATKENUD IMPORTI
+
+	@default group=obgennn
+
+	@property ob_conf type=text
+	@caption testdfgh
+	@property multiple type=text
+
+
+	@default group=log
+	@property log_display type=checkbox ch_value=on
+	@caption log_display
+	@property log_db_table type=checkbox ch_value=on
+	@caption log_db_table
+	@property log_made_objects type=checkbox ch_value=on
+	@caption log_made_objects
+	@property log_a_source_field type=checkbox ch_value=on
+	@caption log_a_source_field
+	@property log_log_warnings type=checkbox ch_value=on
+	@caption log_log_warnings
+
+*/
+
+/*
+	@property meta
+	@property dejoin
+	@property multiple
+	@property add
+*/
+
+class ob_gen extends class_base
 {
-	////////////////////////////////////
-	// the next functions are REQUIRED for all classes that can be added from menu editor interface
-	////////////////////////////////////
-
 	function ob_gen()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be 
-		$this->init("ob_gen");
+		$this->init(array(
+			'clid' => CL_OB_GEN,
+		));
 	}
 
-	////
-	// !this gets called when the user submits the object's form
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+//			print_r($args);die();
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+/*			case 'meta':
+			print_r($args);
+				$args['prop']['value']=serialize($args['prop']['value']);
+			break;*/
+			case 'multiple':
+				die();
+				$args['prop']['value']=serialize($args['prop']['value']);
+			break;
+		};
+		return $retval;
+	}
+
+
+	function get_property($args)
+	{
+		$data = &$args['prop'];
+		$retval = true;
+
+		static $list_tables;
+		if (!is_array($list_tables))
+		{
+			$list_tables=$this->picker_list_db_tables();
+  		}
+		$id=$args['obj']['oid'];
+		$meta=$args['obj']['meta'];
+
+		switch($data["name"])
+		{
+/*			case '':
+				$retval = PROP_IGNORE;
+			break;*/
+			case 'sisu_table':
+   				if (!$args['obj']['meta']['use_sisu'])
+				{
+					return PROP_IGNORE;
+				}
+				$data['options'] = $list_tables;
+				$data['selected'] = $args['obj']['meta']['sisu_table'];
+			break;
+
+			case 'my_status':
+				if (!$args['obj']['meta']['use_object'])
+				{
+					return PROP_IGNORE;
+				}
+			break;
+			case 'my_parent':
+				if (!$args['obj']['meta']['use_object'])
+				{
+					return PROP_IGNORE;
+				}
+				$par = get_instance("objects");
+				$parents = $par->get_list(false,true,50477);//$parents = $par->get_list(false,true);
+				$data['options'] = $parents;
+				$data['selected'] = $args['obj']['meta']['my_parent'];
+
+			break;
+
+			case 'my_class_id':
+				if (!$args['obj']['meta']['use_object'])
+				{
+					return PROP_IGNORE;
+				}
+
+				$list_classes[]=" - ";
+				foreach ($this->cfg["classes"] as $key => $val)
+				{
+					$list_classes[$key]=$val["def"];
+				}
+				asort($list_classes);
+
+				$data['options'] = $list_classes;
+				$data['selected'] = $args['obj']['meta']['my_class_id'];
+			break;
+			case 'source_table':
+				$data['selected'] = $args['obj']['meta']['source_table'];
+				$data['options'] = $list_tables;
+			break;
+			case 'limit':
+				$chunks=array("1" => 1,"10" => 10,"100" => 100);
+				$data['selected'] = $args['obj']['meta']['limit'];
+				$data['options'] = $chunks;
+			break;
+			case 'ob_conf':
+				$data['value'] = $this->callback_get_ob_conf($args['obj']);
+			break;
+
+			case 'gen_all':
+				$data['value'] =html::href(array(
+					'url'=>$this->mk_my_orb('generate_objects', array(
+					'id' => $id,
+					)),
+				'target'=>'_blank',
+				'caption'=>' nupp all',
+				));
+			break;
+			case 'gen_x':
+				$data['value'] =html::href(array(
+					'url'=>$this->mk_my_orb('generate_objects', array(
+					'id' => $id,
+					'test_limit' => $many=8,
+					)),
+				'target'=>'_blank',
+				'caption'=>' nupp '.$many,
+				));
+			break;
+			case 'gen_broken':
+				$source_pointer=$this->db_fetch_field("select max(id)as maks from ".$meta['source_table'],"maks");
+				$log_pointer=$this->db_fetch_field('select max(source_id)as maks from ob_gen_log where generator_oid="'.$id.'"','maks');
+				if($source_pointer > $log_pointer)
+				{
+					$data['value'] =html::href(array(
+						'url'=>$this->mk_my_orb('generate_objects', array(
+						'id' => $id,
+						'alg' => $log_pointer,
+						)),
+					'target'=>'_blank',
+					'caption'=>'JÄTKA KATKENUD IMPORTI '.$log_pointer,
+					));
+				};
+
+			break;
+		};
+		return $retval;
+	}
+
+
+	// !this gets called when the user clicks on ob_conf
 	// parameters:
-	//    id - if set, object will be changed, if not set, new object will be created
+	//    id - the id of the object to change
+	//    return_url - optional, if set, "back" link should point to it
+	function callback_get_ob_conf($ob)
+	{
+
+
+		$id=$ob['oid'];
+
+$object_tpl=<<<TPL
+		<table border=1><tr><td>
+		<select name='object[{VAR:field_name}][{VAR:nr}]'  class="formselect">
+		{VAR:object_f}
+		</select>
+		<input {VAR:dejoin_object} type="checkbox" name="dejoin[object][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
+		{VAR:dejoin_object_conf}
+		<input {VAR:multiple} type="checkbox" name="multiple[object][{VAR:field_name}][{VAR:nr}]" title="multiple values">
+		<input {VAR:add} type="checkbox" name="add[object][{VAR:field_name}][{VAR:nr}]" title="extra rida">
+		{VAR:d_conf}
+		</td></tr></table>
+TPL;
+
+$meta_tpl=<<<TPL
+		<table border=1><tr><td>
+		<input value="{VAR:meta_f}" type="text" name="meta[{VAR:field_name}][{VAR:nr}]" size=8 class="formtext">
+		<input {VAR:dejoin_meta} type="checkbox" name="dejoin[meta][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
+		{VAR:dejoin_meta_conf}
+		<input {VAR:multiple} type="checkbox" name="multiple[meta][{VAR:field_name}][{VAR:nr}]" title="multiple values">
+		<input {VAR:add} type="checkbox" name="add[meta][{VAR:field_name}][{VAR:nr}]" title="extra rida"><br />
+		{VAR:d_conf}
+		</td></tr></table>
+TPL;
+
+$sisu_tpl=<<<TPL
+		<table border=1><tr><td>
+		<select name="sisu[{VAR:field_name}][{VAR:nr}]"  class="formselect">
+		{VAR:sisu_f}
+		</select>
+		<input {VAR:dejoin_sisu} type="checkbox" name="dejoin[sisu][{VAR:field_name}][{VAR:nr}]" title="leia id teisest tabelist">
+		{VAR:dejoin_sisu_conf}
+		<input {VAR:multiple} type="checkbox" name="multiple[sisu][{VAR:field_name}][{VAR:nr}]" title="multiple values">
+		<input {VAR:add} type="checkbox" name="add[sisu][{VAR:field_name}][{VAR:nr}]" title="extra rida"><br />
+		{VAR:d_conf}
+		</td></tr></table>
+TPL;
+
+$dejoin_tpl=<<<TPL
+<br>
+<select name="dejoin_table[{VAR:what}][{VAR:field_name}][{VAR:nr}]" class="formselect" title="sellest tabelist">
+	{VAR:dejoin_tables}
+</select>
+<select name="dejoin_field[{VAR:what}][{VAR:field_name}][{VAR:nr}]" class="formselect" title="see veerg">
+	{VAR:dejoin_fields}
+</select><br />
+TPL;
+
+$remember_tpl=<<<TPL
+<input {VAR:remember} type="checkbox" name="remember[{VAR:what}][{VAR:field_name}][{VAR:nr}]">
+<small>remember join result</small>
+TPL;
+
+$unique_tpl=<<<TPL
+	<input {VAR:unique} type="checkbox" name="unique[{VAR:field_name}]">
+TPL;
+
+
+		if ($ob['meta']['sisu_table'])
+		{
+			$list_sisu_fields=$this->db_get_fieldnames($ob['meta']['sisu_table'],1);
+		}
+
+		if ($ob['meta']['dejoin'])
+		{
+			$list_tables=$this->picker_list_db_tables();
+		}
+
+		$object_fields = $this->db_get_fieldnames('objects',1);
+		$fnames = $this->db_get_fieldnames($ob['meta']['source_table']);
+		$whats=array("object","sisu","meta");
+
+		foreach($fnames as $field)
+		{
+			$aargh=array();
+			foreach($whats as $what)
+			{
+
+$ob['meta']['add'][$what][$field][]='';
+
+foreach ($ob['meta']['add'][$what][$field] as $nr => $xxx)
+{
+				$dejoin_conf[$what]="";
+				if ($ob['meta']['dejoin'][$what][$field][$nr])
+				{
+					if (!$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]] && $ob['meta']['dejoin_table'][$what][$field][$nr])
+					{
+						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]=$this->db_get_fieldnames($ob['meta']['dejoin_table'][$what][$field][$nr],1);
+					}
+					else
+					{
+						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]=array(0=>" - ");
+					}
+					$vars=array(
+				"field_name" => $field,
+						'nr' => $nr,
+						"what" => $what,
+						"dejoin_tables" => $this->picker($ob['meta']['dejoin_table'][$what][$field][$nr],$list_tables),
+						"dejoin_fields" => $this->picker($ob['meta']['dejoin_field'][$what][$field][$nr],$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$nr]]),
+						"remember" =>checked($ob['meta']['remember'][$what][$field][$nr]),
+					);
+					$dejoin_conf[$what] = localparse($dejoin_tpl,$vars);
+					$oncemore=1;
+				}
+
+
+				$vars=array(
+				"field_name" => $field,
+					'nr' => $nr,
+					"dejoin_".$what => checked($ob['meta']['dejoin'][$what][$field][$nr]),
+					"object_f" => $this->picker($ob['meta']['object'][$field][$nr],$object_fields),
+					"meta_f" => $ob['meta']['meta'][$field][$nr],
+					"sisu_f" => $this->picker($ob['meta']['sisu'][$field][$nr],$list_sisu_fields),
+					"add"=>checked($ob['meta']['add'][$what][$field][$nr]),
+					'd_conf' =>$dejoin_conf[$what],
+				);
+				$tpl=$what.'_tpl';
+				$aargh[$what] .=  localparse($$tpl, $vars);
+}
+			}
+			$vars=array(
+				"field_name" => $field,
+				'nr' => $nr,
+				"dejoini" => $dejoin,
+				"unique" => checked($ob['meta']['unique'][$field]),
+			);
+			$data[]=array(
+				"source" => $field,
+				"unique" => localparse($unique_tpl, $vars),
+//				"dejoin" => $this->parse("dejoin"),
+			)+ $aargh;
+		}
+
+
+		return $this->ob_conf_table($data);
+
+	}
+
+
+/*
 	function submit($arr)
 	{
-		extract($arr);
-		if ($id)
-		{
-			if($do=="change")
-			{
-				$this->upd_object(array(
 					"oid" => $id,
 					"name" => $name,
 					"comment" => $comment,
@@ -40,23 +386,7 @@ class ob_gen extends aw_template
 						"my_class_id" => $my_class_id,
 						"use_object" => $use_object,
 						"use_sisu" => $use_sisu,
-					),
-				));
-			}
-			elseif($do=="log_setup")
-			{
-				$this->upd_object(array(
-					"oid" => $id,
-					"metadata" =>array(
 						"log" => $log,
-					),
-				));
-			}
-			else
-			{
-				$this->upd_object(array(
-					"oid" => $id,
-					"metadata" =>array(
 						"object" => $object,
 						"meta" => $meta,
 						"sisu" => $sisu,
@@ -66,45 +396,25 @@ class ob_gen extends aw_template
 						"dejoin_table" => $dejoin_table,
 						"dejoin_field" => $dejoin_field,
 						"remember" => $remember,
-					),
-				));
 
-			}
-		}
-		else
-		{
-			$id = $this->new_object(array(
-				"my_parent" => $my_parent,
-				"name" => $name,
-				"comment" => $comment,
-				"class_id" => CL_OB_GEN,
-				"metadata" =>array(
-					"limit" => $limit,
-					"source_table" => $source_table,
-					"use_object" => $use_object,
-					"use_sisu" => $use_sisu,
-				),
-			));
-			$do="change";
-		}
+*/
+	function clear_log($arr)
+	{
+		extract($oid);
+		$q="delete from ob_gen_log where generator_oid=$oid";
+		//$this->db_query();
 
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
-		}
-
-		return $this->mk_my_orb($do, array("id" => $id, "return_url" => urlencode($return_url)));
 	}
 
 	////
 	// ! object generator
-	// makes new object 
+	// makes new object
 	// object - array(
-	// 	name => value,
-	//	class => CL_CLASS_NAME,
-	//	parent => int,
-	//	status => 0|2,
-	//	...
+	//		name => value,
+	//		class => CL_CLASS_NAME,
+	//		parent => int,
+	//		status => 0|2,
+	//		...
 	//	)
 	// meta - array (
 	//		key => val,
@@ -123,21 +433,24 @@ class ob_gen extends aw_template
 	{
 //		print "<pre>";
 //		print_r($arr);
-		
+/*
 		extract($arr);
 
 		if (is_array($object))
 		{
 			$object['metadata']=$meta;
 		}
+		$object['no_flush']=1;
+
 		//teeme objekti objektitabelisse
-		$oid = $this->new_object($object);
+
+		$oid = $this->new_object($object,false);
 
 		// ja kui on andmeid sisu tabeli kohta, siis ka sisutabelisse kirje
 		if (is_array($sql))
-		{	
+		{
 			extract($sql);
-			if (!$table_name) 
+			if (!$table_name)
 			{
 				break;
 			}
@@ -149,7 +462,7 @@ class ob_gen extends aw_template
 					$values[]="'".$val."'";
 				}
 			}
-$timed=time();
+			$timed=time();
 			if ($oid)
 			{
 				$fields[]="oid";
@@ -159,76 +472,101 @@ $timed=time();
 			{
 				//ühesõnaga lisatakse kirje tabelisse ilma oid-ta, kui see ongi soov siis on ok, muidu on jama majas
 			}
-			
+
 			$q='insert into '.$table_name.' ('.implode(',',$fields).') values ('.implode(',',$values).')';
-	
+
 			$this->db_query($q);
 		}
-		
+
 
 		$oid=$oid?$oid:$this->db_last_insert_id;
-				$this->newcount++;
+		$this->newcount++;
 /**/
 		return array('oid'=>$oid, "msg"=>$msg,"timed"=>$timed,);
 	}
+/**/
 
-
-//see on kirvemeetodil tabeli normaliseerimine
+//see on kirvemeetodil tabeli normaliseerimine, ei osand praegu kuhugi mujale panna
 /*
 	function normalizer($arr)
 	{
 		extract($arr);
-		$ob = $this->get_object($id);
-		echo "<pre>";	
-$mitu=0;		
-		$ob['meta']['source_table']="imported_firmad";
-		$field="tooted";
+//		$ob = $this->get_object($id);
+		echo "<pre>";
+		$mitu=0;
+		$source_table="html_import_firmad";
+		$lookup='kliendibaas_toode';
+//		$lookup='kliendibaas_tegevusala';
+		$field='tooted';
+//		$field='tooted';
 
-		$row = $this->db_fetch_row("select max(id),min(id) from ".$ob['meta']['source_table']);
+		$row = $this->db_fetch_row("select max(id),min(id) from ".$source_table);
 		$min=$row["min(id)"];
 		$max=$row["max(id)"];
-//		for ($id=$min;$id<=3;$id++)
+//		for ($id=$min;$id<=10;$id++)
 		for ($id=$min;$id<=$max;$id++)
 		{
-			$val = $this->db_fetch_field("select ".$field." from ".$ob['meta']['source_table']." where id=".$id, $field);
-			if ($val!=NULL)
+			$val = $this->db_fetch_field("select ".$field." from ".$source_table." where id=".$id, $field);
+
+			if ($val)
 			{
 				$value="";
-				if ($mitu)
+				switch ($tyyp)
+{
+case 'get_nrs':
 				{
-					preg_match_all("/([0-9]{2,})&nbsp;/", $val, $r);
-	
+					preg_match_all("/([0-9]{2,})&nbsp;/", $val, $r);// leiab kõik pikemad kui 2digit numbrid
 					foreach($r[1] as $key=>$vv)
 					{
-						$oooid = $this->db_fetch_field("select oid from klindibaas_tegevusala where kood='".$va."'", "oid");
-						$value.=$oooid.";";
+						//echo $vv;
+//						$oooid = $this->db_fetch_field("select oid from ".$lookup." where kood='".$vv."'", "oid");
+						$value.=$vv.";";
+//						$value.=$oooid.";";
 					}
 				}
-				else
+break;
+
+case 'get_nr':
+
 				{
-				
-					preg_match("/([0-9]){2,}/", $val, $r);
-					$value= $this->db_fetch_field("select oid from klindibaas_tegevusala where kood='".$r[0]."'", "oid");;
+					preg_match("/([0-9]){2,}/", $val, $r);// leiab pikema kui 2digit numbri
+					$value = $r[0];
+//					$value= $this->db_fetch_field("select oid from ".$lookup." where kood='".$r[0]."'", "oid");
 				}
-	
-				$q="update ".$ob['meta']['source_table']." set ".$field."='".$value."' where id=".$id;
+break;
+
+case 'strip_dots':
+				$value=trim(str_replace('.','',$val));
+break;
+
+}
+
+				$q="update ".$source_table." set ".$field."='".$value."' where id=".$id;
+				echo $q.' > ';
+//				$this->db_query($q);
+
+
 				echo $id.">".$value."\n";
 				flush();
-				$this->db_query($q);
-			}
-		}
 
-		echo "</pre>";			
+
+			}//if val
+
+
+		}// switch
+
+		echo "</pre>";
 		die();
 	}
-*/
+
+/**/
+
+
 	function write_log($source_id,$generator_oid,$object_oid,$timed,$msg="",$source_info="",$object_info="")
 	{
-
 		$q="insert into ob_gen_log (source_id,generator_oid,object_oid,timed,msg,source_info,object_info)
 		values('$source_id','$generator_oid','$object_oid','$timed','$msg','$source_info','$object_info')";
 		$this->db_query($q);
-		
 	}
 
 	function display_log($source_id,$gen_oid,$ob_oid,$timed,$msg,$source_info="",$object_info="")
@@ -236,16 +574,30 @@ $mitu=0;
 		echo "$source_id ($object_info) => made object: $object_oid / message: $msg <br />";
 	}
 
+
+
+	function get_oid($table,$field,$val)
+	{
+		$q='select oid from '.$table.' where '.$field.'="'.$val.'" limit 1';
+		return $this->db_fetch_field($q, 'oid');
+	}
+
+// vat siin hakataksegi neid objekte kokku panema....
+
 	function generate_objects($arr)
 	{
 		extract($arr);
 		$ob = $this->get_object($id);
 //print_r($ob['meta']['log']);
 //		echo "<pre>";
-		$alg=0;
+		$alg=$alg?$alg:0;
+		if ($alg>0) echo "continuing imort from $alg<br>";else echo "stating import from 0<br>";
+//die();
+//	echo 	"starting from: ".$this->db_fetch_field("select max(source_id)as maks from ob_gen_log where generator_oid=$id","maks");
+
 		$lopp=$ob['meta']['limit'];
 		$this->newcount=0;
-		$whats=array("object","sisu","meta");			
+		$whats=array("object","sisu","meta");
 
 		if ($ob['meta']['use_object'])
 		{
@@ -256,7 +608,7 @@ $mitu=0;
 			);
 		}
 
-		if ($ob['meta']['log']['display']||$ob['meta']['log']['db_table'])
+		if ($ob['meta']['log_display']||$ob['meta']['log_db_table'])
 		{
 			//setup log
 		}
@@ -264,7 +616,7 @@ $mitu=0;
 		do
 		{
 			$q="select * from ".$ob['meta']['source_table']." limit $alg,$lopp \n";
-
+//			$q="select ".$ob['meta']['source_table'].".* from ".$ob['meta']['source_table']." as t1 left join ob_gen_log as t2 where t2.source_id==limit $alg,$lopp \n";
 			$data=$this->db_fetch_array($q);
 			$count2=0;
 			$skipped=0;
@@ -272,17 +624,18 @@ $mitu=0;
 			foreach ($data as $row)
 			{
 
-				
-				
+
+
 				$object=array();
 				$sisu=array();
 				$meta=array();
+				$msg='';
 				if($test_limit && ($this->newcount >= $test_limit ))
 				{
 					break 2; // vsjoo, rohkem pole vaja midagi teha
 				}
 				$skipit=0;
-				if (!is_array($row)) 
+				if (!is_array($row))
 				{
 					break; // see select on ammendunud
 				}
@@ -306,45 +659,70 @@ $mitu=0;
 						{
 							$unique[$field][$val]=$val;
 						}
-						
+
 					}
 
 					foreach($whats as $what)
 					{
-$c=0;
-for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
+
+foreach(count($ob['meta']['add'][$what][$field]) as $nr => $xxx)
+//$nr=0;
+//for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
 {
-						
-						if ($ob['meta'][$what][$field][$c]){
-							if ($ob['meta']['dejoin'][$what][$field][$c] && $ob['meta']['dejoin_table'][$what][$field][$c] && $ob['meta']['dejoin_field'][$what][$field][$c] && $val)
+						if ($ob['meta'][$what][$field][$nr]){
+							if ($ob['meta']['dejoin'][$what][$field][$nr] && $ob['meta']['dejoin_table'][$what][$field][$nr] && $ob['meta']['dejoin_field'][$what][$field][$nr] && $val)
 							{
 								// kui meil on eelnevalt sama asja baasist küsitud
-								if ($ob['meta']['remember'][$what][$field][$c] && $remembered[$what][$field][$c][$val])
+								if ($ob['meta']['remember'][$what][$field][$nr] && $remembered[$what][$field][$nr][$val])
 								{
-									$$what+=array($ob['meta'][$what][$field][$c] => $remembered[$what][$field][$val]);
+									$$what+=array($ob['meta'][$what][$field][$nr] => $remembered[$what][$field][$val]);
 								}
 								else
 								{
-									$q='select oid from '.$ob['meta']['dejoin_table'][$what][$field][$c].' where '.$ob['meta']['dejoin_field'][$what][$field][$c].'="'.$val.'" limit 1';
-	
-									$get_oid=$this->db_fetch_field($q, 'oid');
+									///vääga geeruline, t2hendab küsitakse teisest tablist oid
+if ($ob['meta']['multiple'][$what][$field][$nr])
+{
+	$vals=explode($val);
 
-									if($ob['meta']['remember'][$what][$field][$c]) //jätame meelde mida baasist küsisime
+	foreach ($vals as $kkk => $vvv)
+	{
+					$get_oid=$this->get_oid($ob['meta']['dejoin_table'][$what][$field][$nr],$ob['meta']['dejoin_field'][$what][$field][$nr],$vvv);
+
+									if($ob['meta']['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
 									{
-										$remembered[$what][$field][$c][$val]=$get_oid;
+										$remembered[$what][$field][$nr][$vvv]=$get_oid;
 									}
-		
-									$$what+=array($ob['meta'][$what][$field][$c] => $get_oid?$get_oid:NULL);
+									if (!$get_oid)
+									{
+										$msg.="could not find oid for '$val' from table ".$ob['meta']['dejoin_table'][$what][$field][$nr]."\n";
+									}
+$get_oids.=$get_oid.';';
+
+	}
+									$$what+=array($ob['meta'][$what][$field][$nr] => $get_oids?$get_oids:NULL);
+} else {
+			$get_oid=$this->get_oid($ob['meta']['dejoin_table'][$what][$field][$nr],$ob['meta']['dejoin_field'][$what][$field][$nr],$val);
+									if($ob['meta']['remember'][$what][$field][$nr]) //jätame meelde mida baasist küsisime
+									{
+										$remembered[$what][$field][$nr][$val]=$get_oid;
+									}
+					if (!$get_oid)
+									{
+										$msg.="could not find oid for '$val' from table ".$ob['meta']['dejoin_table'][$what][$field][$nr]."\n";
+									}
+									$$what+=array($ob['meta'][$what][$field][$nr] => $get_oid?$get_oid:NULL);
+}
+
 								}
 
 							}
 							else
 							{
-								$$what+=array($ob['meta'][$what][$field][$c] => $val);
+								$$what+=array($ob['meta'][$what][$field][$nr] => $val);
 							}
 						}
 
-$c++;
+//$nr++;
 }
 
 
@@ -359,19 +737,19 @@ $c++;
 					),
 				));
 
-				$msg=$gen_ob['oid']?"":"!!!could not make object";
-				
-				if (($ob['meta']['log']['log_warnings']&&$msg)||($ob['meta']['log']['made_objects']&&$gen_ob['oid']))
+				$msg.=$gen_ob['oid']?"":"!!!could not make object";
+
+				if (($ob['meta']['log_log_warnings']&&$msg)||($ob['meta']['log_made_objects']&&$gen_ob['oid']))
 				{
-					if($ob['meta']['log']['db_table'])
+					if($ob['meta']['log_db_table'])
 					{
 						$this->write_log($row['id'],$ob['oid'],$gen_ob['oid'],
-							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log']['a_source_field']]);
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log_a_source_field']]);
 					}
-					if($ob['meta']['log']['display'])
+					if($ob['meta']['log_display'])
 					{
 						$this->display_log($row['id'],$ob['oid'],$gen_ob['oid'],
-							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log']['a_source_field']]);
+							$gen_ob['timed'],$msg,$row['source'],$row[$ob['meta']['log_a_source_field']]);
 					}
 				}
 
@@ -381,9 +759,10 @@ $c++;
 				$count2++;
 			}
 
-			$alg+=$lopp;
+			$alg+=$lopp; //alg=row[id]
 //		break;
 		} while ($count2 || $skipped);
+		$this->flush_cache();
 		die("\n\n total objects generated: ".$this->newcount."</pre>");
 	}
 
@@ -392,7 +771,7 @@ $c++;
 
 	function db_get_fieldnames($table,$addempty="",$get_all="")
 	{
-		$this->db_query('select * from '.$table.' limit 1');		
+		$this->db_query('select * from '.$table.' limit 1');
 		if($addempty)
 		{
 			$all[] = ' - ';
@@ -416,175 +795,6 @@ $c++;
 
 
 
-	////
-	// ! make toolbar
-	// oid - if not set only save button will be shown
-	// got_source bool if true add obj conf tab and log_setup tab
-	// return_url
-	function my_toolbar($arr)
-	{
-		extract($arr);
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-		if ($oid)
-		{
-			$toolbar->add_button(array(
-				"name" => "change",
-				"tooltip" => "üld määrangud",
-				"url" => $this->mk_my_orb("change",array("id" => $oid,"return_url" => urlencode($return_url))),
-				"imgover" => "settings_over.gif",
-				"img" => "settings.gif",
-			));
-
-			if ($got_source)
-			{
-				$toolbar->add_button(array(
-					"name" => "ob_conf",
-					"tooltip" => "objekti conf",
-					"url" => $this->mk_my_orb("ob_conf",array("id" => $oid,"return_url" => urlencode($return_url))),
-					"imgover" => "promo_over.gif",
-					"img" => "promo.gif",
-				));
-				$toolbar->add_button(array(
-					"name" => "log_setup",
-					"tooltip" => "logi setup",
-					"url" => $this->mk_my_orb("log_setup",array("id" => $oid,"return_url" => urlencode($return_url))),
-					"imgover" => "blaa_over.gif",
-					"img" => "blaa.gif",
-				));
-			}
-
-		}
-		return $toolbar->get_toolbar();
-	}
-
-
-	////
-	// !this gets called when the user clicks on ob_conf 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function ob_conf($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ob_gen");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda ob_gen");
-		}
-		$this->read_template("ob_conf.tpl");
-
-		if ($ob['meta']['sisu_table'])
-		{
-			$list_sisu_fields=$this->db_get_fieldnames($ob['meta']['sisu_table'],1);
-		}
-
-		if ($ob['meta']['dejoin'])	
-		{
-			$list_tables=$this->picker_list_db_tables();
-		}
-
-		$object_fields = $this->db_get_fieldnames('objects',1);
-		$fnames = $this->db_get_fieldnames($ob['meta']['source_table']);
-		$whats=array("object","sisu","meta");
-
-//print_r($ob);
-
-		foreach($fnames as $field)
-		{
-//print_r($ob);
-
-			$this->vars(array(
-				"field_name" => $field,
-			));
-			$aargh=array();
-			foreach($whats as $what)
-			{
-
-$c=0;
-for ($j=0;$j<(count($ob['meta']['add'][$what][$field])+1);$j++)
-{
-
-
-				$dejoin_conf[$what]="";
-
-				if ($ob['meta']['dejoin'][$what][$field][$c])
-				{
-					if (!$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]] && $ob['meta']['dejoin_table'][$what][$field][$c])
-					{
-						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]=$this->db_get_fieldnames($ob['meta']['dejoin_table'][$what][$field][$c],1);
-					}
-					else 
-					{
-						$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]=array(0=>" - ");
-					}
-					$this->vars(array(
-						"what" => $what,
-						"dejoin_tables" => $this->picker($ob['meta']['dejoin_table'][$what][$field][$c],$list_tables),
-						"dejoin_fields" => $this->picker($ob['meta']['dejoin_field'][$what][$field][$c],$dejoin_fields[$ob['meta']['dejoin_table'][$what][$field][$c]]),
-						"remember" =>checked($ob['meta']['remember'][$what][$field][$c]),
-					));
-					$dejoin_conf[$what]= $this->parse("dejoin");
-					$oncemore=1;
-				}
-
-
-				$this->vars(array(
-					"dejoin_".$what => checked($ob['meta']['dejoin'][$what][$field][$c]),
-					"object_f" => $this->picker($ob['meta']['object'][$field][$c],$object_fields),
-					"meta_f" => $ob['meta']['meta'][$field][$c],
-					"sisu_f" => $this->picker($ob['meta']['sisu'][$field][$c],$list_sisu_fields),
-					"add"=>checked($ob['meta']['add'][$what][$field][$c]),
-				));
-
-				$aargh[$what].=$this->parse($what).$dejoin_conf[$what];
-
-$c++;
-}
-
-			}
-			$this->vars(array(
-				"dejoini" => $dejoin,
-				"unique" => checked($ob['meta']['unique'][$field]),
-			));
-
-
-			$data[]=array(
-				"source" => $field,
-				"unique" => $this->parse("unique"),
-//				"dejoin" => $this->parse("dejoin"),
-			)+ $aargh;		
-
-		}		
-
-
-
-
-		$this->vars(array(
-			"ob_conf_table" => $this->ob_conf_table($data),
-			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
-			"genereeri" => $this->mk_my_orb("generate_objects", array("id" => $id)),
-			"genereeri5" => $this->mk_my_orb("generate_objects", array("id" => $id, "test_limit" => 3)),
-			"normalizer" => $this->mk_my_orb("normalizer", array("id" => $id)),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "do" => "ob_conf","return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
-	}
-
-
-
-
 	function picker_list_db_tables()
 	{
 		$this->db_list_tables();
@@ -596,128 +806,6 @@ $c++;
 		return $list_tables;
 	}
 
-	////
-	// !this gets called when the user clicks on change object 
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function change($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ob_gen");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda ob_gen");
-		}
-		$this->read_template("change.tpl");
-	
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-
-		$list_tables=$this->picker_list_db_tables();
-
-		$chunks=array("1" => 1,"10" => 10,"100" => 100);
-		
-
-		if ($ob['meta']['use_object'])
-		{
-
-			$par = get_instance("objects");
-			$parents = $par->get_list(false,true,50477);
-	//		$parents = $par->get_list(false,true);
-
-			$list_classes[]=" - ";
-			foreach ($this->cfg["classes"] as $key => $val)
-			{
-				$list_classes[$key]=$val["def"];
-			}
-			asort($list_classes);
-
-			$this->vars(array(
-				"list_classes" => $this->picker($ob['meta']['my_class_id'],$list_classes),		
-				"status" => $this->picker($ob['meta']['my_status'],array(0=> 'mitteaktiivsed',2=> 'aktiivsed')),		
-				"parents" => $this->picker($ob['meta']['my_parent'], $parents),
-			));
-	
-			$object=$this->parse("object");
-
-		}
-
-		if ($ob['meta']['use_sisu'])
-		{
-			$this->vars(array(
-				"sisu_table" => $this->picker($ob['meta']['sisu_table'],$list_tables),		
-			));
-	
-			$sisu=$this->parse("sisu");
-
-		}
-
-		$this->vars(array(
-
-			"name" => $ob["name"],
-			"comment" => $ob['comment'],
-			"chunks" => $this->picker($ob["meta"]["limit"],$chunks),
-			"source_tables" => $this->picker($ob['meta']['source_table'],$list_tables),
-			"use_object" =>checked($ob['meta']['use_object']),
-			"use_sisu" =>checked($ob['meta']['use_sisu']),
-			"sisu" => $sisu,
-			"object" => $object,
-			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent" => $parent, "do" => "change","return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
-	}
-
-	////
-	// !setup logging
-	// parameters:
-	//    id - the id of the object to change
-	//    return_url - optional, if set, "back" link should point to it
-	function log_setup($arr)
-	{
-		extract($arr);
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda ob_gen");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda ob_gen");
-		}
-		$this->read_template("log_setup.tpl");
-	
-		$this->vars(array(
-			"display" => checked($ob['meta']['log']['display']),
-			"db_table" => checked($ob['meta']['log']['db_table']),
-			"made_objects" => checked($ob['meta']['log']['made_objects']),
-			"a_source_field" => $this->picker($ob['meta']['log']['a_source_field'],$this->db_get_fieldnames($ob['meta']['source_table'],true)),
- 			"log_warnings" => checked($ob['meta']['log']['log_warnings']),
-
-			"toolbar" => $this->my_toolbar(array("oid"=>$id, "return_url"=>$return_url,"got_source"=>$ob['meta']['source_table']?true:false)),
-			"reforb" => $this->mk_reforb("submit", array("id" => $id, "parent" => $parent, "do" => "log_setup","return_url" => urlencode($return_url)))
-		));
-
-		return $this->parse();
-	}
-
-
-	////////////////////////////////////
-	// object persistance functions - used when copying/pasting object
-	// if the object does not support copy/paste, don't define these functions
-	////////////////////////////////////
 
 	////
 	// !this should create a string representation of the object
@@ -761,10 +849,10 @@ $c++;
 //	print_r($data);
 		load_vcl("table");
 		$t = new aw_table(array(
-			"prefix" => "ob_conf_table", 
+			"prefix" => "ob_conf_table",
 		));
 
-		$t->parse_xml_def($this->cfg["basedir"]."/xml/ob_gen/conf_table.xml");
+		$t->parse_xml_def($this->cfg["basedir"]."/xml/generic_table.xml");
 
 		$t->define_field(array(
 			"name" => "source",
@@ -784,7 +872,6 @@ $c++;
 //				"width" => "10",
 			));
 		}
-
 
 		{
 			$t->define_field(array(
@@ -834,9 +921,9 @@ $c++;
 		{
 			$t->define_data(//array()
 				$row
-			); 
-		} 
-//		$t->sort_by(); 
+			);
+		}
+//		$t->sort_by();
 		return $t->draw();
 	}
 }

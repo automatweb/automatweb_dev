@@ -1,89 +1,150 @@
 <?php
 /*
+	@default table=objects
+	@default group=general
+
+	@property comment type=textarea field=comment cols=40 rows=3
+	@caption Kommentaar
+
+	@default table=kliendibaas_firma
+
+	@property reg_nr type=textbox size=10 maxlenght=20
+	@caption registri nr
+
+	@property pohitegevus type=textbox size=10 maxlenght=20
+	@caption põhitegevus
+	@property pohitegevus_b type=button
+	@caption pohitegevus
+
+	@property korvaltegevused type=textbox size=10 maxlenght=20
+	@caption kõrvaltegevused
+	@property korvaltegevused_b type=button
+	@caption korvaltegevused
+
+	@property ettevotlusvorm type=textbox size=10 maxlenght=20
+	@caption ettevõtlusvorm
+	@property ettevotlusvorm_b type=button
+	@caption ettevõtlusvorm
+
+	@property firma_nimetus type=textbox size=10 maxlenght=20
+	@caption fima nimetus
+
+	@property tooted type=textbox size=10 maxlenght=20
+	@caption tooted
+	@property tooted_b type=button
+	@caption tooted
+
+	@property kaubamargid type=textbox size=10 maxlenght=20
+	@caption kaubamärgid
+
+	@property contact type=textbox size=10 maxlenght=20
+	@caption kontakt
+
+	@property tegevuse_kirjeldus type=textbox size=10 maxlenght=20
+	@caption tegevuse kirjeldus
+
+	@property firmajuht type=textbox size=10 maxlenght=20
+	@caption firmajuht
+
+	@property popups type=text
+	@caption pop
+
+	@classinfo objtable=kliendibaas_firma
+	@classinfo objtable_index=oid
 */
-/*
-create table kliendibaas_firma
-(
-oid int primary key unique,
-firma_nimetus varchar(255),
-reg_nr varchar(20),
-ettevotlusvorm int,
-pohitegevus varchar(20),
-tegevuse_kirjeldus text,
-contact int,
-firmajuht int,
-korvaltegevused text,
-kaubamargid text,
-tooted text
-)
-*/
-class firma extends aw_template
+
+class firma extends class_base
 {
 
 	function firma()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be
 		$this->init("kliendibaas");
+		$this->init(array(
+			'clid' => CL_FIRMA,
+		));
+	}
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		switch($data["name"])
+		{
+			case 'blaa':
+
+			break;
+
+		};
+		return $retval;
+	}
+
+	function get_property($args)
+	{
+		$data = &$args['prop'];
+		$retval = true;
+		switch($data['name'])
+		{
+			case 'popups':
+
+$data['value']=<<<SCR
+<script language='javascript'>
+
+function put_value(target,value)
+{
+	if (target == "ettevotlusvorm")
+		document.changeform.ettevotlusvorm.value = value;
+	else
+	if (target == "korvaltegevused")
+		document.changeform.korvaltegevused.value = value;
+	else
+	if (target == "tooted")
+		document.changeform.tooted.value = value;
+	else
+	if (target == "pohitegevus")
+		document.changeform.pohitegevus.value = value;
+	else
+	{}
+	document.changeform.submit();
+}
+
+function pop_select(url)
+{
+	aken=window.open(url,"selector","HEIGHT=300,WIDTH=310,TOP=400,LEFT=500")
+ 	aken.focus()
+}
+</script>
+SCR;
+			break;
+
+			case 'ettevotlusvorm_b':
+				$data['value']='vali ettevotlusvorm';
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'ettevotlusvorm', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+			break;
+			case 'korvaltegevused_b':
+				$data['value']='vali kõrvaltegevused';
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma', 'tyyp' => 'korvaltegevused', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+			break;
+			case 'tooted_b':
+				$data['value']='vali tooted';
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'tooted', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+			break;
+			case 'pohitegevus_b':
+				$data['value']='vali põhitegevus';
+				$data['onclick']="javascript:pop_select('".$this->mk_my_orb('pop_select', array('id' => $id, 'table' => 'kliendibaas_firma','tyyp' => 'pohitegevus', 'return_url' => urlencode($return_url)),'kliendibaas/kliendibaas')."')";
+			break;
+
+			case 'plaaah':
+			break;
+		};
+		return $retval;
 	}
 
 
+/*
 	function change($arr)
 	{
-		extract($arr);
-
-		$ob = $this->get_object($id);
-		if ($return_url != "")
-		{
-			$this->mk_path(0,"<a href='$return_url'>Tagasi</a> / Muuda firma");
-		}
-		else
-		{
-			$this->mk_path($ob["parent"], "Muuda firma");
-		}
-		$this->read_template("firma_change.tpl");
-
-		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/blue/awicons"));
-		$toolbar->add_button(array(
-			"name" => "save",
-			"tooltip" => "salvesta",
-			"url" => "javascript:document.add.submit()",
-			"imgover" => "save_over.gif",
-			"img" => "save.gif",
-		));
-
-		if ($delsub)
-		{
-			$q="select korvaltegevused from kliendibaas_firma where oid='$id'";
-			$resul=$this->db_fetch_field($q,"korvaltegevused");
-			$korva=explode(";",$resul);
-			$del=array_search($delsub,$korva);
-			$korva[$del]=NULL;
-			$q='update kliendibaas_firma set korvaltegevused="'.implode(";",$korva).'" where oid='.$id;
-			$this->db_query($q);
-		}
-
-		if ($deltoode)
-		{
-			$q="select tooted from kliendibaas_firma where oid='$id'";
-			$resul=$this->db_fetch_field($q,"tooted");
-			$tood=explode(";",$resul);
-			$del=array_search($deltoode,$tood);
-			$tood[$del]=NULL;
-			$q='update kliendibaas_firma set tooted="'.implode(";",$tood).'" where oid='.$id;
-			$this->db_query($q);
-		}
-
-
 		if ($id)
 		{
-			$toolbar->add_button(array(
-				"name" => "lisa",
-				"tooltip" => "lisa isik",
-				"url" => $this->mk_my_orb("change", array("return_url" => urlencode($return_url),"parent" => $ob["parent"],)),
-				"imgover" => "new_over.gif",
-				"img" => "new.gif",
-			));
-
 			$q="select  t.* ,
 			t9.aadress as s_contact,
 			t10.name as s_contact2,
@@ -99,19 +160,9 @@ class firma extends aw_template
 			left join kliendibaas_linn as t10 on t10.oid=t9.linn
 			left join kliendibaas_riik as t11 on t11.oid=t9.riik
 			where t.oid='$id'"
-			; //where t*.status=2
-//			concat(t9.aadress,', ',t10.name) as s_contact,
-//			concat(t9.aadress,', ',t10.name,', ',t11.name) as s_contact,
-//			concat(t9.aadress,', ',t9.linn,', ',t9.riik) as s_contact,
+			;
 
 			$res=$this->db_query($q);
-			$res=$this->db_next();
-			extract($res, EXTR_PREFIX_ALL, "f");
-
-
-
-			$korval=explode(";",$f_korvaltegevused);
-			$f_korvaltegevused=implode(";",$korval);
 
 			if(is_array($korval))
 			foreach($korval as $key => $val)
@@ -160,9 +211,6 @@ class firma extends aw_template
 				}
 			}
 
-
-
-
 			if (!$f_contact)
 			{
 				get_instance("kliendibaas/contact");
@@ -201,227 +249,19 @@ class firma extends aw_template
 
 		}
 
-		$this->vars(array(
-			"f_oid"=>$f_oid,
-			"f_reg_nr" =>$f_reg_nr,
-			"f_pohitegevus"=>$f_pohitegevus,
-			"f_korvaltegevused"=>$f_korvaltegevused,
-			"f_ettevotlusvorm"=>$f_ettevotlusvorm,
-			"f_firma_nimetus"=>$f_firma_nimetus,
-			"f_tooted"=>$f_tooted,
-			"f_kaubamargid"=>$f_kaubamargid,
-			"f_contact"=>$f_contact,
-			"f_tegevuse_kirjeldus"=>$f_tegevuse_kirjeldus,
-			"f_tooted"=>$f_tooted,
-			"f_kaubamargid"=>$f_kaubamargid,
-
-			"contact_change"=>$contact_change,
-			"firmajuht_change"=>$firmajuht_change,
-
-			"f_firmajuht"=>$f_firmajuht,
-//			"f_sourcefile"=>$f_sourcefile,
-//			"f_olek"=>$f_olek,
-			"s_tooted"=>$s_tootedd,
-			"s_korvaltegevused"=>$s_korvaltegevusedd,
-			"s_pohitegevus"=>$f_s_pohitegevus,
-			"s_ettevotlusvorm"=>$f_s_ettevotlusvorm,
-			"s_contact"=>$f_s_contact.', '.$f_s_contact2.', '.$f_s_contact3,
-			"f_ettevotlusvorm_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "ettevotlusvorm", "return_url" => urlencode($return_url))),
-//change		"f_firmajuht_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "firmajuht", "return_url" => urlencode($return_url))),
-			"f_korvaltegevused_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "korvaltegevused", "return_url" => urlencode($return_url))),
-			"f_tooted_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "tooted", "return_url" => urlencode($return_url))),
-			"f_pohitegevus_pop"=>$this->mk_my_orb("pop_select", array("id" => $id,"tyyp" => "pohitegevus", "return_url" => urlencode($return_url))),
-
-			"abx"=>$abx,
-			"comment"=>$ob["comment"],
-			"toolbar"=>$toolbar->get_toolbar(),
-			"id"=>$firma["id"],
-			"reforb" => $this->mk_reforb("submit", array(
-				"id" => $id,
-				"return_url" => urlencode($return_url),
-				"parent" => $parent,
-			)),
-		));
-		return $this->parse();
-	}
+*/
 
 
-	function parse_alias($args)
-	{
-		extract($args);
-
-		return $this->show(array("id" => $alias["target"]));
-	}
-
-
-
-	////
-	// !this gets called when the user submits the object's form
-	// parameters:
-	// id - if set, object will be changed, if not set, new object will be created
-	function submit($arr)
-	{
-		extract($arr);
-		
-		if ($id)
+		function delsub()
 		{
-
-			foreach ($firma as $key=>$val)
-			{
-				if ($key=="korvaltegevused")
-				{
-					$f[]=" $key=\"".implode(";",array_unique(explode(";",$val)))."\"";
-				}
-				else
-				{
-					$f[]=" $key=\"$val\"";
-				}
-				
-			}
-			$vv=implode(" , ",$f);
-			$q='update kliendibaas_firma set '.$vv.' where oid='.$id;
-
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $firma["firma_nimetus"],
-				"comment" => $comment,
-				"metadata" => array(
-					"firma"=>$firma,
-				)
-			));
-
+			//$field,$table='kliendibaas_firma',$id
+			extract($arr);
+			$resul=$this->db_fetch_field("select $field from $table where oid=$id",$field);
+			$arr=explode(";",$resul);
+			$del=array_search($delsub,$arr);
+			$arr[$del]=NULL;
+			$q='update $table set korvaltegevused="'.implode(";",$arr).'" where oid='.$id;
+//			$this->db_query($q);
 		}
-		else
-		{
-//			$exclude=array("1","oid","id");
-			foreach ($firma as $key=>$val)
-			{
-//				if(!array_search($key,$exclude))
-				{
-					$f[]=$key;
-					$v[]="'".$val."'";
-				}
-			}
-	
-			$ff=implode(",",$f);
-			$vv=implode(",",$v);
-			$id = $this->new_object(array(
-				"name" => $firma["firma_nimetus"],
-				"parent" => $parent,
-				"class_id" => CL_FIRMA,
-				"comment" => $comment,
-				"metadata" => array(
-//					"firma"=>$firma,
-				)
-			));
-			$q="insert into kliendibaas_firma($ff,oid)values($vv,'$id')";
-
-		}
-//echo $q;
-//if($q)
-$this->db_query($q);
-
-
-		if ($alias_to)
-		{
-			$this->add_alias($alias_to, $id);
-		}
-
-		return $this->mk_my_orb("change", array("id" => $id, "return_url" => urlencode($return_url)));
-	}
-
-
-	function pop_select($arr)
-	{
-		extract($arr);
-		$this->read_template("pop_select.tpl");
-		if ($id)
-		{
-			$selected=$this->db_fetch_field("select $tyyp from kliendibaas_firma where oid=$id",$tyyp);
-			$ob = $this->get_object($id);
-		}
-
-		switch($tyyp)
-		{
-			case "firmajuht":
-				{
-					$q="select t1.oid,concat(t1.firstname,' ',t1.lastname) as name from kliendibaas_isik as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["oid"]] = substr($row["name"],0,30).".";
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/isik");
-				}
-			break;
-			case "korvaltegevused":
-				{
-					$q="select t1.kood,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["kood"]] = substr($row["tegevusala"],0,50);
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
-				}
-			break;
-			case "tooted":
-				{
-					$q="select t1.kood,t1.toode from kliendibaas_toode as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["kood"]] = substr($row["toode"],0,50);
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/toode");
-				}
-			break;
-			case "pohitegevus":
-				{
-					$q="select t1.kood,t1.tegevusala from kliendibaas_tegevusala as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["kood"]] = substr($row["tegevusala"],0,50);
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/tegevusala");
-				}
-			break;
-			case "ettevotlusvorm":
-				{
-					$q="select t1.oid,t1.name from kliendibaas_ettevotlusvorm as t1, objects as t2 where t1.oid=t2.oid and t2.status=2";
-
-					$this->db_query($q);
-					while($row = $this->db_next())
-					{
-						$data[$row["oid"]] = $row["name"];
-					};
-					$add=$this->mk_my_orb("new",array("parent"=>$ob["parent"]),"kliendibaas/ettevotlusvorm");
-				}
-			break;
-
-			default: $data=array(1=>"nosource");
-
-		}
-		if (is_array($data))
-		{
-			asort($data);
-		}
-
-		$options=$this->picker($selected,array(0=>" - ")+(array)$data);
-
-
-		$this->vars=array(
-			"add"=>$add,
-			"tyyp"=>$tyyp,
-			"mida"=>$tyyp,
-			"options"=>$options,
-			"multiple"=>"multiple",
-		);
-
-		echo $this->parse();
-
-		die();//et mingit jama ei väljastaks
-	}
 }
 ?>

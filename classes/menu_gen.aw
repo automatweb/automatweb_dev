@@ -370,26 +370,6 @@ class menu_gen extends class_base
 		die();
 	}
 
-	/*
-	////
-	// !generates the toolbar for this class
-	// default toolbar includes only one button - save button
-	function mk_toolbar()
-	{
-		$tb = get_instance('toolbar');
-
-		$tb->add_button(array(
-			'name' => 'save',
-			'tooltip' => 'Salvesta',
-			'url' => 'javascript:document.add.submit()',
-			'imgover' => 'save_over.gif',
-			'img' => 'save.gif'
-		));
-
-		return $tb->get_toolbar();
-	}
-/**/
-
 	////
 	// !this should create a string representation of the object
 	// parameters

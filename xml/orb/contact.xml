@@ -8,16 +8,6 @@
 				</arguments>
 			</function>
 		</action>
-
-		<action name="pop_select">
-			<function name="pop_select">
-				<arguments>
-					<required name="tyyp"/>
-					<optional name="id"/>
-					<optional name="default"/>
-				</arguments>
-			</function>
-		</action>
 	</class>
 </orb>
 		
