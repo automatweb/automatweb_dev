@@ -1,4 +1,5 @@
-<form action='reforb.{VAR:ext}' method=post name="add">
+<form action='reforb.{VAR:ext}' method=post name="add" enctype="multipart/form-data">
+<input type="hidden" name="MAX_FILE_SIZE" value="10000000">
 	<!--tabelraam-->
 	<table width="100%" cellspacing="0" cellpadding="1">
 		<tr>
@@ -64,6 +65,9 @@
 											</tr>
 											<tr>
 												<td colspan="2" class="celltext"><input {VAR:has_groupacl} type="checkbox" name="settings[has_groupacl]" value="1" class="formcheck"> ?igused tulpadele piiratud gruppide kaupa</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="celltext"><input type="checkbox" {VAR:no_titlebar} name="settings[no_titlebar]" value="1" class="formcheck">&Auml;ra n&auml;ita tulpade pealkirju</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="celltext"><input type="checkbox" {VAR:has_grpnames} name="settings[has_grpnames]" value="1" class="formcheck">N?ita tulpade nimesid iga grupeerimiselemendi all</td>
@@ -245,7 +249,7 @@
 												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[no_grpels_in_restrict]" value="1" {VAR:no_grpels_in_restrict}> &Auml;ra pane grupeerimislemente uude otsingusse</td>
 											</tr>
 											<tr>
-												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[show_second_table]" value="1" {VAR:show_second_table}> Tabeli all on teine tabel</td>
+												<td class="celltext" colspan="2"><input type="checkbox" class="formcheck" name="settings[show_second_table]" value="1" {VAR:show_second_table}> Tabeli <input type='radio' name='settings[show_second_table_where]' value='below' {VAR:second_table_below}>all <input type='radio' name='settings[show_second_table_where]' value='above' {VAR:second_table_above}>&uuml;leval on teine tabel</td>
 											</tr>
 											<tr>
 												<td colspan="2" class="celltext">Tabelite vahel: <select class="formselect" name="settings[show_second_table_tables_sep][]" multiple size="5">{VAR:show_second_table_tables_sep}</select> </td>
@@ -289,14 +293,18 @@
 															<td class="celltext">Nupud:</td>
 															<td class="celltext">Nupu tekst:</td>
 															<td class="celltext">Jrk.:</td>
-															<td class="celltext">?leval/all:</td>
+															<td class="celltext">&Uuml;leval/all:</td>
+															<td class="celltext">Pilt:</td>
+															<td class="celltext">Kustuta pilt</td>
 														</tr>
 														<!-- SUB: BUTTON -->
 														<tr>
 															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][check]" value="1" {VAR:button_check}> {VAR:bt_name}</td>
 															<td class="celltext"><input class="formtext" type="text" name="buttons[{VAR:bt_id}][text]" value="{VAR:button_text}" ></td>
 															<td class="celltext"><input class="formtext"  size="4" type="text" name="buttons[{VAR:bt_id}][ord]" value="{VAR:button_ord}"></td>
-															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][pos][up]" value="1" {VAR:button_up}> ?leval <input type="checkbox" name="buttons[{VAR:bt_id}][pos][down]" value="1" {VAR:button_down}> All</td>
+															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][pos][up]" value="1" {VAR:button_up}> &Uuml;leval <input type="checkbox" name="buttons[{VAR:bt_id}][pos][down]" value="1" {VAR:button_down}> All</td>
+															<td class="celltext">{VAR:image}<input class="formfile" type="file" name="buttons_{VAR:bt_id}_image"></td>
+															<td class="celltext"><input type="checkbox" name="buttons[{VAR:bt_id}][delimage]" value="1" ></td>
 														<!-- END SUB: BUTTON -->
 													</table>
 												</td>
