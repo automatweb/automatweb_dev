@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.2 2005/01/14 07:44:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.3 2005/02/07 12:58:40 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -81,6 +81,8 @@ class mrp_prisma_import extends class_base
 	function import($arr)
 	{
 		aw_disable_messages();
+		set_time_limit(0);
+		
 		$db = $this->_get_conn();
 
 		// now. sync from them to us
@@ -234,6 +236,11 @@ class mrp_prisma_import extends class_base
 				));
 			}
 
+			$t = $ol->begin();
+			if (!$t)
+			{
+				continue;
+			}
 			// added
 			$o = obj();	
 			$o->set_class_id(CL_CRM_COMPANY);
@@ -357,6 +364,14 @@ class mrp_prisma_import extends class_base
 		");
 		while ($row = $db->db_next())
 		{
+			if ($row["TööAlgus"] < 100000)
+			{
+				$row["TööAlgus"] = -1;
+			}
+			if ($row["TellimuseTähtaeg"] < 100000)
+			{
+				$row["TellimuseTähtaeg"] = -1;
+			}
 			$proj[$row["TellimuseNr"]] = $row;
 		}
 
@@ -374,10 +389,13 @@ class mrp_prisma_import extends class_base
 		{
 			if (!isset($proj[$o->prop("extern_id")]))
 			{
-				// removed
-				$o->delete();
-				echo "project ".$o->name()." (".$o->id().") deleted! <br>\n";
-				flush();
+				if ($o->prop("extern_id"))
+				{
+					// removed
+					$o->delete();
+					echo "project ".$o->name()." (".$o->id().") deleted! <br>\n";
+					flush();
+				}
 			}
 			else
 			{
@@ -412,7 +430,10 @@ class mrp_prisma_import extends class_base
 			));
 			$t = $ol->begin();
 
-		
+			if (!$t)
+			{
+				continue;
+			}
 			// added
 			$o = obj();	
 			$o->set_class_id(CL_MRP_CASE);
@@ -443,6 +464,7 @@ class mrp_prisma_import extends class_base
 		$o->set_name($dat["TellimuseNr"]);
 		foreach($this->prj_flds as $p => $f)
 		{
+//			echo "set prop $p => ".$dat[$f]." <br>";
 			$o->set_prop($p, $dat[$f]);
 		}
 	}
@@ -480,6 +502,7 @@ class mrp_prisma_import extends class_base
 				TellimuseNr = ".$o->prop("extern_id");
 
 		$db = $this->_get_conn();
+//echo "sql = $sql <br>";
 		$db->db_query($sql);
 	}
 
@@ -492,8 +515,25 @@ class mrp_prisma_import extends class_base
 		$db = $this->_get_conn();
 		$co = $this->_get_co();
 
-		$dat = $db->db_fetch_row("SELECT * FROM tellimused WHERE TellimuseNr = '$id'");
-
+		$dat = $db->db_fetch_row("
+			SELECT 
+				*,
+				unix_timestamp(TööAlgus) as TööAlgus,
+                                unix_timestamp(TellimuseTähtaeg) as TellimuseTähtaeg
+			FROM 
+				tellimused 
+			WHERE 
+				TellimuseNr = '$id'
+		");
+		if ($dat["TööAlgus"] < 100000)
+		{
+			$dat["TööAlgus"] = -1;
+		}
+		if ($dat["TellimuseTähtaeg"] < 100000)
+		{
+			$dat["TellimuseTähtaeg"] = -1;
+		}
+//echo (dbg::dump($dat));
 		// check if we got it
 		$ol = new object_list(array(
 			"class_id" => CL_MRP_CASE,
@@ -523,6 +563,11 @@ class mrp_prisma_import extends class_base
 				"to" => $o->id(),
 				"reltype" => "RELTYPE_CUSTOMER"
 			));
+
+			$o->connect(array(
+				"to" => aw_ini_get("prisma.ws"),
+				"reltype" => "RELTYPE_MRP_OWNER"
+			));
 		}
 		else
 		{
@@ -531,8 +576,18 @@ class mrp_prisma_import extends class_base
 			$o->set_prop("customer", $t->id());
 			$o->set_prop("customer_priority", $t->prop("priority"));
 			$this->_upd_proj_o($o, $dat);
+
+			if (!$o->is_connected_to(array("to" => aw_ini_get("prisma.ws"))))
+			{
+				$o->connect(array(
+					"to" => aw_ini_get("prisma.ws"),
+					"reltype" => "RELTYPE_MRP_OWNER"
+				));
+			}
+
 			$o->save();
 		}
+
 		aw_restore_messages();
 
 		return $o->id();
