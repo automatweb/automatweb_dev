@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.30 2003/05/13 12:58:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.31 2003/05/19 15:06:20 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -239,7 +239,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
                 $_all_props = $cfgu->load_properties(array(
                         "clid" => $args["obj"]["meta"]["s_class_id"],
                 ));
-		
+
 		$params = array();
 		foreach($meta->get() as $key => $val)
 		{
@@ -387,7 +387,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						break;
 
 					case "location":
-						if ($val == 0)
+
+						if ($val === 0)
 						{
 							/*$tmp = join(",",array_filter(array_keys($obj_list),create_function('$v','return $v ? true : false;')));
 							if (!empty($tmp))
@@ -397,8 +398,22 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						}
 						else
 						{
-							$_part = " parent = '$val' ";
-							$partcount++;
+							if (is_numeric($val))
+							{
+								$_part = " parent = '$val' ";
+								$partcount++;
+							}
+							elseif (strlen($val) > 0)
+							{
+								$q = "select ".OID." from objects where class_id=".CL_PSEUDO." and name like '%".$val."%' limit 100";
+								$locs = $this->db_fetch_array($q);
+								foreach($locs as $val)
+								{
+									$loc[] = $val[OID];
+								}
+								$_part = " parent in (".implode(',',$loc).") ";
+								$partcount++;
+							}
 						};
 						if (!empty($_part))
 						{
@@ -591,7 +606,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					$row["change"] = "<input type='checkbox' name='sel[$row[oid]]' value='$row[oid]'>";
 				};
 
-
 				$this->t->define_data($row);
 				$results++;
 			};
@@ -624,20 +638,28 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 		};
 
-
-
-		$fields = array();
+		//ain't the best solution but the simplest right now
+		// disable some search fileds in search used by menuedit
+		if (($args['class'] == 'search') && ($args['action'] == 'search'))
+		{
+			$fields = array("location" => "n/a");
+		}
+		else
+		{
+			$fields = array();
+		}
 
 		$this->search_callback(array("name" => "get_fields","fields" => &$fields,"args" => $args));
 
 		$this->modify_fields($args,&$fields);
-		
+
 		//foreach($real_fields as $key => $val)
 		foreach($fields as $key => $val)
 		{
 			if (is_array($fields[$key]))
 			{
 				$fieldref = $fields[$key];
+				$fieldref['name'] = 's['.$key.']';
 				switch($fieldref["type"])
 				{
 					case "select":
@@ -657,7 +679,73 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 						$caption = $fieldref["caption"];
 						break;
-					
+
+					case "class_id_multiple":
+						if (is_array($fieldref["selected"]))
+						{
+							$sel = array_flip($fieldref["selected"]);
+						}
+						else
+						{
+							$sel = array();
+						};
+						//$items = $this->mpicker($fieldref["selected"],$fieldref["options"]);
+						$items = $this->mpicker($sel,$fieldref["options"]);
+						$size = ($fieldref["size"]) ? $fieldref["size"] : 5;
+
+
+						$scr = <<<SCR
+							<script language= "javascript">
+							function GetOptions(from, tu)
+							{
+								len = tu.options.length;
+								for (i=0; i < len; i++)
+								{
+									tu.options[0] = null
+								}
+								var j = 0;
+								len = from.options.length;
+								for (var i=0; i < len; i++)
+								{
+									if ((from.options[i].value != 'capt_new_object') && (from.options[i].value != '0'))
+									{
+										tu.options[j] = new Option(from.options[i].text, from.options[i].value, false, false)
+										j = j + 1;
+									}
+								}
+							}
+							GetOptions(document.forms[0].elements['aselect'],document.forms['searchform'].elements['s[$key][]']);
+							</script>
+SCR;
+						//$mselectbox = sprintf("<select multiple size='$size' name='s[%s][]' onChange='%s'>%s</select>",$key,$fieldref["onChange"],$items);
+
+						$mselectbox = '<select multiple size="'.$size.'" name="s['.$key.'][]" ></select>'.$scr;
+
+						if (isset($fieldref["filter"]))
+						{
+							$element = '<table border="0"><tr><td>'.
+							$mselectbox.
+							'</td><td><small>'.
+							implode('<br />',array(
+								'vali milles sisaldub',
+								html::textbox(array('name'=>'pattern1', 'size' => '9')).
+								html::button(array('name'=>'selectmatching1', 'value'=>'vali', 'onclick' => "selectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern1.value.toLowerCase())")),
+								'vali ainult sisalduvad',
+								html::textbox(array('name'=>'pattern2', 'size' => '9')).
+								html::button(array('name'=>'selectmatching2', 'value'=>'vali', 'onclick' => "selectOnlyMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern2.value.toLowerCase())")),
+								'ära vali mis sisaldavad',
+								html::textbox(array('name'=>'pattern3', 'size' => '9')).
+								html::button(array('name'=>'selectmatching3', 'value'=>'vali', 'onclick' => "unSelectMatchingOptions(document.forms[1].elements['s[class_id][]'],document.forms[1].pattern3.value.toLowerCase())")),
+							)).
+							'</td></tr></table>';
+						}
+						else
+						{
+							$element = $mselectbox;
+						}
+						$caption = $fieldref["caption"];
+						break;
+
 					case "multiple":
 						if (is_array($fieldref["selected"]))
 						{
@@ -674,8 +762,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$caption = $fieldref["caption"];
 						break;
 
+
+
 					case "textbox":
-						$element = "<input type='text' name='s[$key]' size='40' value='$fieldref[value]'>";
+						//$element = "<input type='text' name='s[$key]' size='40' value='$fieldref[value]'>";
+						$element = html::textbox($fieldref);
 						$caption = $fieldref["caption"];
 						break;
 
@@ -683,6 +774,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						$element = "<input type='checkbox' name='s[$key]' $fieldref[checked]>";
 						$caption = $fieldref["caption"];
 						break;
+
+					case 'text':
+						$element = $fieldref['value'];
+						$caption = $fieldref["caption"];
+						break;
+					case 'hidden':
+						$element = html::hidden($fieldref).$fieldref['value'];
+						$caption = $fieldref["caption"];
+						break;
+
 
 					default:
 						$element = "n/a";
@@ -704,7 +805,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$header = $this->search_callback(array("name" => "table_header","args" => $args));
 			if (!$header)
 			{
-				$header = "<form name='searchform'>";
+				$header = "<form name='searchform_'>";
 			};
 			
 			$footer = $this->search_callback(array("name" => "table_footer","args" => $args));
@@ -713,7 +814,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$footer = "</form>";
 			};
 
-			$table = $header . $table . $footer;
+			$table = $header .$table . $footer;
 		}
 		else
 		{
@@ -874,15 +975,21 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"value" => $args["s"]["oid"],
 			);
 		};
-		
+
 
 		if (!$fields["location"])
 		{
-			$fields["location"] = array(
+/*			$fields["location"] = array(
 				"type" => "select",
 				"caption" => "Asukoht",
 				"options" => $this->_get_s_parent($args),
 				"selected" => $args["s"]["location"],
+			);*/
+			$fields["location"] = array(
+				"type" => "textbox",
+				"caption" => "Asukoht",
+				"size" => '25',
+				"value" => $args["s"]["location"],
 			);
 		};
 
@@ -892,6 +999,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"type" => "textbox",
 				"caption" => "Looja",
 				"value" => $args["s"]["createdby"],
+				'size' => '15',
 			);
 		};
 
@@ -901,6 +1009,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"type" => "textbox",
 				"caption" => "Muutja",
 				"value" => $args["s"]["modifiedby"],
+				'size' => '15',
 			);
 		};
 
@@ -922,19 +1031,21 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"value" => $args["s"]["alias"],
 			);
 		};
-		
+
 		if (!$fields["lang_id"])
 		{
 			$lg = get_instance("languages");
-			$li = $lg->get_list(array("addempty" => true, "ignore_status" => true));
+//			$li = $lg->get_list(array("addempty" => true, "ignore_status" => true));
+			$li = $lg->get_list(array("ignore_status" => true));
 			$fields["lang_id"] = array(
-				"type" => "select",
+//				"type" => "select",
+				"type" => 'radiogroup',
 				"caption" => "Keel",
 				"options" => $li,
 				"selected" => $args["s"]["lang_id"],
 			);
 		};
-		
+
 		if (!$fields["period"])
 		{
 			$lg = get_instance("period");
@@ -961,6 +1072,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				"selected" => ($args["s"]["site_id"] ? $args["s"]["site_id"] : aw_ini_get("site_id")),
 			);
 		};
+		
 	}
 
 	// generates contents for the class picker drop-down menu
@@ -1053,7 +1165,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"talign" => "center",
 			"sortable" => 1,
 		));
-			
+
 		$this->t->define_field(array(
 			"name" => "modified",
 			"caption" => "Muudetud",
@@ -1111,7 +1223,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$retval = false;
 		};
-			
+
 		$name = $prefix . $args["name"];
 
 		if (method_exists($this->obj_ref,$name))

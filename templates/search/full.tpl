@@ -1,30 +1,77 @@
+<style type="text/css">
+.awtab {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #1664B9;
+background-color: #CDD5D9;
+}
+.awtab a {color: #1664B9; text-decoration:none;}
+.awtab a:hover {color: #000000; text-decoration:none;}
+
+.awtabdis {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #686868;
+background-color: #CDD5D9;
+}
+
+.awtabsel {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #478EB6;
+}
+.awtabsel a {color: #FFFFFF; text-decoration:none;}
+.awtabsel a:hover {color: #000000; text-decoration:none;}
+
+.awtabseltext {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #478EB6;
+}
+.awtabseltext a {color: #FFFFFF; text-decoration:none;}
+.awtabseltext a:hover {color: #000000; text-decoration:none;}
+
+.awtablecellbackdark {
+font-family: verdana, sans-serif;
+font-size: 10px;
+background-color: #478EB6;
+}
+
+.awtablecellbacklight {
+background-color: #DAE8F0;
+}
+
+.awtableobjectid {
+font-family: verdana, sans-serif;
+font-size: 10px;
+text-align: left;
+color: #DBE8EE;
+background-color: #478EB6;
+}
+
+
+</style>
+
 <form method="GET" action="orb.{VAR:ext}" name="searchform">
 <!--tabelraam-->
-<table width="100%" cellspacing="0" cellpadding="1">
-<tr><td class="tableborder">
 
-	<!--tabelshadow-->
-	<table width="100%" cellspacing="0" cellpadding="0">
-	<tr><td width="1" class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""></td><td class="tableshadow"><IMG SRC="{VAR:baseurl}/automatweb/images/trans.gif" WIDTH="1" HEIGHT="1" BORDER=0 ALT=""><br>
-		<!--tabelsisu-->
-		<table width="100%" cellspacing="0" cellpadding="0">
-		<tr><td><td class="tableinside">
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="awtableobjectid"><img
+SRC="http://axel.dev.struktuur.ee/automatweb/images/blue/trans.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td></tr></table>
+
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr>
+<td align="left" valign="bottom" width="6" class="awtablecellbackdark"><img SRC="http://axel.dev.struktuur.ee/automatweb/images/blue/awtable_nurk.gif" WIDTH="6" HEIGHT="5" BORDER=0 ALT=""></td>
+<td>
+
 {VAR:toolbar}
 
-
-
-		</td>
-		</tr>
-		</table>
-
-
-	</td>
-	</tr>
-	</table>
-
-</td>
-</tr>
-</table>
 
 <script type="text/javascript">
 var redir_targets = new Array();
@@ -91,17 +138,25 @@ function search_selall()
 </script>
 
 
-
-
-
 <table border=0 cellspacing=1 cellpadding=2>
 <!-- SUB: field -->
 <tr>
-	<td class="celltext">{VAR:caption}</td>
-	<td class="celltext">{VAR:element}</td>
+	<td class='chformleftcol' width='160' nowrap>
+	{VAR:caption}
+	</td>
+	<td class='chformrightcol'>
+	{VAR:element}
+	</td>
 </tr>
 <!-- END SUB: field -->
 </table>
+</td></tr>
+<tr><td></td>
+<td colspan="3" class="awtablecellbacklight"><div style="width:100%;height:5px" /></td>
+</tr>
+
+</table>
+
 {VAR:reforb}
 </form>
 {VAR:table}

@@ -135,3 +135,7 @@ function saveform()
 // alert(window.parent.frames["aliasmgr"].innerHeight);
 
 </script>
+		<script language= "javascript">
+			init();
+		</script>
+

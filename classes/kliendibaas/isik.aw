@@ -110,7 +110,7 @@ CREATE TABLE `kliendibaas_isik` (
   `picture` blob,
   PRIMARY KEY  (`oid`),
   UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM
+) TYPE=MyISAM;
 
 */
 
@@ -119,11 +119,97 @@ define ('HOMEADDRESS',1);
 define ('WORKADDRESS',2);
 define ('PICTURE',3);
 define ('BACKFORMS',4);
-define ('TEMPLATES',5);
+//define ('TEMPLATES',5);
 
 
 class isik extends class_base
 {
+
+	function isik()
+	{
+		$this->init(array(
+			"tpldir" => "isik",
+			'clid' => CL_ISIK,
+		));
+	}
+
+	function callback_get_rel_types()
+	{
+		return array(
+			HOMEADDRESS => 'Kodune aadress',
+			WORKADDRESS => 'Töökoha aadress',
+			PICTURE => 'Pilt',
+			BACKFORMS => 'Tagasiside vorm', //pilootobjekt praegu
+//			TEMPLATES => 'Templiit',
+		);
+	}
+
+	function callback_get_classes_for_relation($args = array())
+	{
+		$retval = false;
+                switch($args["reltype"])
+                {
+			case HOMEADDRESS:
+				$retval = array(CL_ADDRESS);
+			break;
+			case WORKADDRESS:
+				$retval = array(CL_ADDRESS);
+			break;
+			case PICTURE:
+				$retval = array(CL_IMAGE);
+			break;
+			case BACKFORMS:
+				$retval = array(CL_PILOT);
+			break;
+		};
+		return $retval;
+	}
+
+
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+
+		switch($data["name"])
+		{
+			case 'name':
+				if ($args['objdata']['firstname'] || $args['objdata']['lastname'])
+				{
+					$data['value'] =  $args['objdata']['firstname']." ".$args['objdata']['lastname'];
+				}
+			break;
+		};
+		return $retval;
+	}
+
+	function get_property($args)
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+
+		switch($data["name"])
+		{
+			case 'templates':
+				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/isik/visit/'));
+				$data['options'] = $tpls;
+			break;
+			case 'name':
+				$data['value'] = $args['obj']['name'];
+			break;
+			case 'jrk':
+				$retval=PROP_IGNORE;
+			break;
+			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+			case 'forms':
+				$data['multiple'] = 1;
+			break;
+		}
+		return $retval;
+
+	}
 
 	function show_isik($args)
 	{
@@ -155,8 +241,15 @@ class isik extends class_base
 		$row = $this->fetch_all_data($id);
 
 		$forms = '';
-		if (isset($obj['meta']['forms']) && is_array($obj['meta']['forms']))
+		if (is_array($this->deafult_forms))
 		{
+			$obj['meta']['forms'] = array_merge($this->deafult_forms, $obj['meta']['forms']);
+		}
+
+
+		if (is_array($obj['meta']['forms']))
+		{
+			$obj['meta']['forms'] = array_unique($obj['meta']['forms']);
 			foreach($obj['meta']['forms'] as $val)
 //			$val = $obj['meta']['forms'];
 			{
@@ -170,41 +263,13 @@ class isik extends class_base
 					'id' => $form[OID],
 					'feedback' => $id,
 					'feedback_cl' => rawurlencode('kliendibaas/isik'),
-
 					),'pilot_object'))).'<br />';
 			}
 		}
 
-/*
-		if (isset($obj['meta']['form']))
-		{
-			$forms = '';
-			foreach($obj['meta']['form'] as $val)
-			{
-				$form = $this->get_object($val);
-				$forms.= html::href(array('caption' => $form['name'], 'url' => $this->mk_my_orb('show', array(
-					'id' => $form[OID],
-					'tagasiside' => $id,
-					'tagasiside_class' => 'isik',
-
-					)))).'<br />';
-			}
-		}
-*/
-
-
 		if ($row['picture'])
 		{
 			$img = get_instance('image');
-//			$idata = $img->get_image_by_id($id);
-			//$this->mk_path($idata["parent"],"Vaata pilti");
-//			arr($idata,1);
-//			$row['picture'] = html::img(array(
-//				"url" => $idata["url"],
-//				'height' => '50',
-//			));
-
-
 			$row['picture'] = $img->view(array('id' => $row['picture'], 'height' => '65'));
 		}
 		else
@@ -212,11 +277,9 @@ class isik extends class_base
 			$row['picture'] = '';
 		}
 
-
-
 //		$row['picture']=$row['picture']?html::img(array('src' => $row['picture'])):'';
-
 		//$row['picture'].=$row['pictureurl']?html::img(array('url' => $row['pictureurl'])):'';
+
 		if (($row['lastname'] == '') &&($row['firstname'] == ''))
 		{
 			$row['firstname'] = $row['name'];
@@ -238,6 +301,7 @@ class isik extends class_base
 	{
 //vot siuke päring, ära küsi
 		return  $this->db_fetch_row("select
+			t1.oid as oid,
 			t2.name as name,
 			firstname,
 			lastname,
@@ -293,18 +357,19 @@ class isik extends class_base
 			left join kliendibaas_linn as t9 on t9.oid=t4.linn
 			left join kliendibaas_riik as t10 on t10.oid=t4.riik
 
-
 			where t1.oid=".$id);
 
 	//left join images as t5 on t2.picture=t5.id
 //			t5.link as picture,
 	}
 
+	////
+	// !callback, used by selection
+	// id - object to show
 	function show_in_selection($args)
 	{
 		return $this->show(array('id' => $args['id']));
 	}
-
 
 	function parse_alias($args)
 	{
@@ -312,69 +377,5 @@ class isik extends class_base
 		return $this->show(array('id' => $alias['target']));
 	}
 
-
-	function callback_get_rel_types()
-	{
-		return array(
-			HOMEADDRESS => 'kodune aadress',
-			WORKADDRESS => 'töökoha aadress',
-			PICTURE => 'pilt',
-			BACKFORMS => 'tagasiside vorm', //pilootobjekt siis ühesõnaga
-			TEMPLATES => 'templiit',
-		);
-	}
-
-	function isik()
-	{
-		$this->init(array(
-			"tpldir" => "isik",
-			'clid' => CL_ISIK,
-		));
-	}
-
-	function set_property($args = array())
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-
-		switch($data["name"])
-		{
-			case 'name':
-				if ($args['objdata']['firstname'] || $args['objdata']['lastname'])
-				{
-					$data['value'] =  $args['objdata']['firstname']." ".$args['objdata']['lastname'];
-				}
-			break;
-		};
-		return $retval;
-	}
-
-	function get_property($args)
-	{
-		$data = &$args["prop"];
-		$retval = PROP_OK;
-
-		switch($data["name"])
-		{
-			case 'templates':
-				$tpls = $this->get_directory(array('dir' => $this->cfg['tpldir'].'/isik/visit/'));
-				$data['options'] = $tpls;
-			break;
-			case 'name':
-				$data['value'] = $args['obj']['name'];
-			break;
-			case 'jrk':
-				$retval=PROP_IGNORE;
-			break;
-			case 'alias':
-				$retval=PROP_IGNORE;
-			break;
-			case 'forms':
-				$data['multiple'] = 1;
-			break;
-		}
-		return $retval;
-
-	}
 }
 ?>

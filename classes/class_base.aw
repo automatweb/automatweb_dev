@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.106 2003/05/16 15:31:23 duke Exp $
+// $Id: class_base.aw,v 2.107 2003/05/19 15:06:20 axel Exp $
 // Common properties for all classes
 /*
 	@default table=objects
@@ -1021,7 +1021,7 @@ class class_base extends aw_template
 				};
 			};
 		};
-		
+
 		if (isset($this->classinfo["relationmgr"]) && empty($this->request["cb_view"]) && !$this->is_rel)
 		{
 			$link = "";
@@ -1826,15 +1826,27 @@ class class_base extends aw_template
 
 		$reltypes = $this->get_rel_types();
 
+		$clid_list = array();
+		if (method_exists($this->inst,"callback_get_classes_for_relation"))
+		{
+			foreach ($reltypes as $key => $val)
+			{
+				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
+					"reltype" => $key,
+				));
+			}
+		}
+//arr($rel_type_classes);
 		$gen = $almgr->list_aliases(array(
 			"id" => $id,
 			"reltypes" => $reltypes,
+			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
 			"return_url" => $this->mk_my_orb("list_aliases",array("id" => $id),get_class($this->orb_class)),
 		));
 		return $this->gen_output(array("content" => $gen));
 	}
 
-	////
+	////"log.txt"
 	// !Displays alias manager search form inside the configuration manager interface
 	function search_aliases($args = array())
 	{
@@ -1862,12 +1874,22 @@ class class_base extends aw_template
 			$clid_list = $this->inst->callback_get_classes_for_relation(array(
 				"reltype" => $reltype,
 			));
+			foreach ($reltypes as $key => $val)
+			{
+				$rel_type_classes[$key] = $this->inst->callback_get_classes_for_relation(array(
+					"reltype" => $key,
+				));
 
+			}
 		}
+
 		$args["clid_list"] = $clid_list;
 
 		$args["return_url"] = $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
-		$gen = $almgr->search($args + array("reltypes" => $this->get_rel_types()));
+		$gen = $almgr->search($args + array(
+			"reltypes" => $this->get_rel_types(),
+			'rel_type_classes' => $rel_type_classes,//$this->get_rel_type_classes(),
+		));
 		$classname = get_class($this->orb_class);
 		if (isset($reltype))
 		{
@@ -1977,8 +1999,24 @@ class class_base extends aw_template
 		};
 
 		$reltypes[0] = "alias";
+
+		$this->rel_type_classes = $this->get_rel_type_classes();
 		return $reltypes;
 	}
+
+	function get_rel_type_classes()
+	{
+		if (method_exists($this->inst,"callback_get_rel_type_classes"))
+		{
+			$reltypes = $this->inst->callback_get_rel_type_classes();
+		}
+		else
+		{
+			$reltypes = array();
+		};
+		return $reltypes;
+	}
+
 
 	////
 	function view($args = array())

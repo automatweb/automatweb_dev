@@ -1,3 +1,62 @@
+<style type="text/css">
+.awtab {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #1664B9;
+background-color: #CDD5D9;
+}
+.awtab a {color: #1664B9; text-decoration:none;}
+.awtab a:hover {color: #000000; text-decoration:none;}
+
+.awtabdis {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #686868;
+background-color: #CDD5D9;
+}
+
+.awtabsel {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #478EB6;
+}
+.awtabsel a {color: #FFFFFF; text-decoration:none;}
+.awtabsel a:hover {color: #000000; text-decoration:none;}
+
+.awtabseltext {
+font-family: verdana, sans-serif;
+font-size: 11px;
+font-weight: bold;
+color: #FFFFFF;
+background-color: #478EB6;
+}
+.awtabseltext a {color: #FFFFFF; text-decoration:none;}
+.awtabseltext a:hover {color: #000000; text-decoration:none;}
+
+.awtablecellbackdark {
+font-family: verdana, sans-serif;
+font-size: 10px;
+background-color: #478EB6;
+}
+
+.awtablecellbacklight {
+background-color: #DAE8F0;
+}
+
+.awtableobjectid {
+font-family: verdana, sans-serif;
+font-size: 10px;
+text-align: left;
+color: #DBE8EE;
+background-color: #478EB6;
+}
+
+
+</style>
 <table width="100%" cellspacing="0" cellpadding="0" border="0">
 <form method="GET" name="foo">
 <tr><td class="tableborder">
@@ -108,6 +167,10 @@ function search_selall()
 </form>
 <form method="GET" name="searchform" action="reforb.{VAR:ext}">
 {VAR:form}
+
 {VAR:reforb}
 {VAR:table}
 </form>
+		<script language= "javascript">
+			init();
+		</script>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.35 2003/05/12 17:30:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.36 2003/05/19 15:06:20 axel Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -127,8 +127,8 @@ class html extends aw_template
 	function iframe($args = array())
 	{
 		extract($args);
-		$width = isset($width) ? $width : 300;
-		$height = isset($height) ? $height : 200;
+		$width = isset($width) ? $width : '300';
+		$height = isset($height) ? $height : '200';
 		return "<iframe src='$src' name='$name' width='$width' height='$height'></iframe>\n";
 	}
 
@@ -170,8 +170,8 @@ class html extends aw_template
 		if (!isset($this->got_popup_objmgr))
 		{
 			$this->got_popup_objmgr=1;
-			$this->width = isset($width) ? $width : '';
-			$this->height = isset($height) ? $height : '';
+			$this->width = isset($width) ? $width : '600';
+			$this->height = isset($height) ? $height : '500';
 
 			$str.=localparse(implode('',file($this->cfg['tpldir'].'/popup_objmgr/popup_objmgr.script')),
 				array(
@@ -224,7 +224,7 @@ class html extends aw_template
 	function fileupload($args = array())
 	{
 		extract($args);
-		return "$value <input type='file' id='$name' name='$name'>\n";
+		return "$value <input type='file' id='$name' name='$name' />\n";
 	}
 
 	////

@@ -1,22 +1,21 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.91 2003/04/29 15:40:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.92 2003/05/19 15:06:20 axel Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
 define("GET_ALIASES_FLAT",2);
 
-class aliasmgr extends aw_template 
+class aliasmgr extends aw_template
 {
 	function aliasmgr($args = array())
 	{
 		extract($args);
 		$this->use_class = isset($args["use_class"]) ? $args["use_class"] : get_class($this);
 		$this->init("aliasmgr");
-
 		$this->contents = "";
 		$this->lc_load("aliasmgr","lc_aliasmgr");
-		
+
 		// we need a better way to do a version upgrade or smth.
 		$this->do_check_tables();
 	}
@@ -27,14 +26,28 @@ class aliasmgr extends aw_template
 	function search($args = array())
 	{
 		extract($args);
+		$GLOBALS['site_title'] = "Seostehaldur";
 		$this->read_template("search.tpl");
 		$search = get_instance("search");
+
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
 
-		$this->clid_list = $clid_list;
+//		$this->rel_type_classes = $rel_type_classes;
+
+		//$this->clid_list = $clid_list;
+
+		$this->make_alias_classarr();
 		
+		if (is_array($rel_type_classes))
+		{
+			foreach ($rel_type_classes as $key => $val)
+			{
+				$this->rel_type_classes[$key] = $this->make_alias_classarr2($val);
+			}
+		}
+
 		$args["clid"] = &$this;
 		$form = $search->show($args);
 		$this->search = &$search;
@@ -58,21 +71,69 @@ class aliasmgr extends aw_template
 		));
 		$results = $search->get_results();
 		return $this->parse();
-	}	
+	}
 
 	function search_callback_get_fields(&$fields,$args)
 	{
+		if (isset($args['complex']))
+		{
+			aw_session_set('complex',"1");
+		}
+		if (isset($args['simple']))
+		{
+			aw_session_del('complex');
+		}
+
 		$fields = array();
 		$this->make_alias_classarr($this->clid_list);
 		asort($this->classarr);
 		$options = (sizeof($this->classarr) == 1) ? $this->classarr : array(""=>"") + $this->classarr;
 		$fields["special"] = "n/a";
-		$fields["class_id"] = array(
-			"type" => "select",
-			"caption" => "Klass",
-			"options" => $options,
-			"selected" => $args["s"]["class_id"],
-		);
+
+		$request = str_replace('&complex=1','',aw_global_get("REQUEST_URI"));
+		$request = str_replace('&simple=1','',$request);
+
+		if (aw_global_get('complex') == '1')
+		{
+			$fields["complexity"] = array(
+				"type" => "text",
+				"caption" => "",
+				'value' => html::href(array(
+					'caption' =>'lihtsam otsing',
+					'url' => $request.'&simple=1',
+				)),
+			);
+
+			$fields["class_id"] = array(
+				"type" => "class_id_multiple",
+				"caption" => "Klass",
+				"size" => "8",
+				"options" => isset($this->rel_type_classes[$this->reltype]) ? $this->rel_type_classes[$this->reltype] : $options,
+				"selected" => $args["s"]["class_id"],
+				"filter" => "1",
+			);
+
+
+		}
+		else
+		{
+			$fields["server"] = "n/a";
+			$fields["location"] = "n/a";
+			$fields["alias"] = "n/a";
+			$fields["period"] = "n/a";
+			$fields["site_id"] = "n/a";
+			$fields["complexity"] = array(
+				"type" => "text",
+				"caption" => "",
+				'value' => html::href(array(
+					'caption' =>'täpsem otsing',
+					'url' => $request.'&complex=1',
+				)),
+			);
+			$fields["class_id"] = 'n/a';
+		}
+
+
 	}
 
 	function search_callback_modify_data($row,$args)
@@ -476,11 +537,13 @@ class aliasmgr extends aw_template
 	function list_aliases($args)
 	{
 		extract($args);
+		$GLOBALS['site_title'] = "Seostehaldur";
 		classload('icons');
 		$this->read_template("lists_new.tpl");
+
 		$obj = $this->get_object($id);
 		$this->id = $id;
-	
+
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
@@ -493,8 +556,16 @@ class aliasmgr extends aw_template
 		// creates $this->aliasarr
 		$this->make_alias_classarr();
 
-		$this->search_url = $search_url;
+		if (is_array($rel_type_classes))
+		{
+			foreach ($rel_type_classes as $key => $val)
+			{
+				$this->rel_type_classes[$key] = $this->make_alias_classarr2($val);
+			}
+		}
+		//arr($this->rel_type_classes);
 
+		$this->search_url = $search_url;
 
 		// this will be an array of class => name pairs for all object types that can be embedded
 		$aliases = array();
@@ -552,7 +623,7 @@ class aliasmgr extends aw_template
 			// it has a meaning only for embedded aliases
 			if ($reltype_id == 0)
 			{
-				$alias["alias"] = sprintf("<input type='text' size='5' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
+				$alias["alias"] = sprintf("<input type='text' size='10' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			};
 
 			$alias["link"] = html::checkbox(array(
@@ -584,7 +655,7 @@ class aliasmgr extends aw_template
 			{
 				$alias["reltype"] = $this->reltypes[$reltype_id];
 			};
-				
+
 
 
 			$alias["cache"] = html::checkbox(array(
@@ -638,6 +709,7 @@ class aliasmgr extends aw_template
 		$aliases = explode(",",$alias);
 		$obj = $this->get_object($id);
 		$alias_reltype = $obj["meta"]["alias_reltype"];
+
 		foreach($aliases as $onealias)
 		{
 			$_al = (int)$onealias;
@@ -645,7 +717,7 @@ class aliasmgr extends aw_template
 			{
 				$al = $this->get_object($_al);
 			}
-			
+
 			// parent will be the parent of the object from which the relation
 			// goes out.
 			$relobj_id = $this->new_object(array(
@@ -731,9 +803,29 @@ class aliasmgr extends aw_template
 				{
 					$this->classarr[$clid] = $cldat["name"];
 				};
-			
+
 			}
 		}
+	}
+	
+	function make_alias_classarr2($rel_arr)
+	{
+		if (!is_array($rel_arr))
+			return NULL;
+		$classes = $this->cfg["classes"];
+		$arr = array();
+		foreach($rel_arr as $val)
+		{
+			if (isset($classes[$val]) && isset($classes[$val]["alias"]))
+			{
+				$fil = ($classes[$val]["alias_class"] != "") ? $classes[$val]["alias_class"] : $classes[$val]["file"];
+				//preg_match("/(\w*)$/",$fil,$m);
+				//$lib = $m[1];
+				//$arr[$val] = $classes[$val]['name'];
+				$arr[basename($fil)] = $classes[$val]['name'];
+			}
+		}
+		return $arr;
 	}
 
 	////
@@ -824,9 +916,10 @@ class aliasmgr extends aw_template
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 
 		$choices = array();
-		$spacer = "&nbsp;&nbsp;&nbsp;";
-		
-		$ch["capt_new_object"] = "Objekti tüüp";
+		//$spacer = "&nbsp;&nbsp;&nbsp;";
+		$spacer = "   ";
+
+		//$ch["capt_new_object"] = "Objekti tüüp";
 
 		$classes = $this->cfg["classes"];
 		// generate a list of class => name pairs
@@ -844,21 +937,55 @@ class aliasmgr extends aw_template
 		asort($choices);
 		$choices = array_merge($ch,$choices);
 
-		$reltypes = html::select(array(
-			"options" => $this->reltypes,
-			"name" => "reltype",
-			"selected" => $this->reltype,
-		));
+		$boxesscript = $this->get_file(array('file' => $this->cfg['tpldir'].'/aliasmgr/selectboxes.tpl'));
 
-		$toolbar->add_cdata($reltypes);
 
-		$aliases = html::select(array(
-			"options" => $choices,
-			"name" => "aselect",
-			"selected" => $selected,
-		));
+		foreach($this->reltypes as $k => $v)
+		{
+			$dvals = ',"Objekti tüüp","capt_new_object"';
 
-		$toolbar->add_cdata($aliases);
+			if (!isset($this->rel_type_classes[$k]))
+			{
+				$vals = $this->mk_kstring($choices);
+				$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+			}
+			else
+			{
+				if (count($this->rel_type_classes[$k])==1)
+				{
+					$dvals = '';
+					$defaults1 .= 'listB.setDefaultOption("'.$k.'","capt_new_object");'."\n";
+				}
+				$vals = $this->mk_kstring($this->rel_type_classes[$k]);
+				$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+			}
+			//$defaults1 .= 'listB.setDefaultOption("'.$k.'","0");'."\n";
+		}
+
+		$rels1 .= 'listB.addOptions("_"'.$dvals.");\n";
+		$defaults1 .= 'listB.setDefaultOption("_","capt_new_object");'."\n";
+
+		$boxesscript = localparse($boxesscript, array('rels1' => $rels1, 'defaults1' =>  $defaults1));
+		$boxesscript .= $this->get_file(array('file'=> $this->cfg['tpldir'].'/aliasmgr/selectbox_selector.tpl'));
+		$toolbar->add_cdata($boxesscript);
+
+		$toolbar->add_cdata(
+			html::select(array(
+				"options" => array('_' => 'Seose tüüp') + $this->reltypes,
+				"name" => "reltype",
+				"selected" => $this->reltype,
+				"selected" => (count($this->reltypes) == 1) ? 0 : NULL,
+				'onchange' => "listB.populate();",
+			))
+		);
+
+		$ht = <<<HTM
+			<select NAME="aselect" style="width:200px">
+				<script LANGUAGE="JavaScript">listB.printOptions()</SCRIPT>
+			</select>
+HTM;
+
+		$toolbar->add_cdata($ht);
 
 		$toolbar->add_button(array(
 			"name" => "new",
@@ -867,7 +994,7 @@ class aliasmgr extends aw_template
 			"imgover" => "new_over.gif",
 			"img" => "new.gif",
 		));
-		
+
 
 		if (is_object($this->search))
 		{
@@ -891,7 +1018,7 @@ class aliasmgr extends aw_template
 		};
 
 		$toolbar->add_separator();
-		
+
 		$toolbar->add_button(array(
 			"name" => "refresh",
 			"tooltip" => "Reload",
@@ -922,7 +1049,7 @@ class aliasmgr extends aw_template
 				"imgover" => "save_over.gif",
 				"img" => "save.gif",
 			));
-			
+
 			$toolbar->add_button(array(
 				"name" => "delete",
 				"tooltip" => "Kustuta valitud seos(ed)",
@@ -931,12 +1058,23 @@ class aliasmgr extends aw_template
 				"img" => "delete.gif",
 			));
 		};
-	
+
 		$this->vars(array(
 			"create_relation_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
 		));
 
 		return $toolbar->get_toolbar();
+	}
+
+
+	function mk_kstring($arr)
+	{
+		foreach($arr as $key => $val)
+		{
+			$alls[] ='"'.$val.'"';
+			$alls[] ='"'.$key.'"';
+		}
+		return implode(',', $alls);
 	}
 
 	function get_alias_cache($adata, &$emb_inst, &$cache_inst)
