@@ -13,21 +13,23 @@
 <!-- END SUB: start -->
 
 <!-- SUB: smallbutton -->
-<td><a href="{VAR:url}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="25" HEIGHT="25" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}"></a></td>
+<td valign='center'><a href="{VAR:url}" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('{VAR:name}','','{VAR:imgbase}/{VAR:imgover}',1)"><IMG name="{VAR:name}" SRC="{VAR:imgbase}/{VAR:img}" WIDTH="23" HEIGHT="22" BORDER=0 ALT="{VAR:tooltip}" title="{VAR:tooltip}"></a></td>
 <td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 <!-- END SUB: smallbutton -->
 
 
 <!-- SUB: smallseparator -->
-<td><IMG SRC="images/icons/seperator.gif" WIDTH="2" HEIGHT="22" BORDER=0 ALT=""></td>
+<td valign='center'><IMG SRC="images/icons/seperator.gif" WIDTH="2" HEIGHT="22" BORDER=0 ALT=""></td>
 <td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 <!-- END SUB: smallseparator -->
 
-<!-- SUB: end -->
 
 <!-- SUB: cdata -->
-<td>{VAR:data}</td>
+<td valign='center'>{VAR:data}</td>
+<td><IMG SRC="images/trans.gif" WIDTH="5" HEIGHT="1" BORDER=0 ALT=""></td>
 <!-- END SUB: cdata -->
+
+<!-- SUB: end -->
       </tr>
         </table>
 
