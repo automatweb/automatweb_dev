@@ -10,7 +10,7 @@ if (!$tt->prog_acl("view", PRG_LISTS))
 }
 
 classload("lists");
-classload("list");
+classload("mlist");
 classload("variables");
 classload("email");
 classload("acl");
@@ -43,42 +43,6 @@ switch($type) {
 				$content =$t->new_mail($parent);
 				break;
 		}
-		break;
-
-	case "add_cat":
-		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Lisa kategooria";
-		$t = new lists;
-		$content = $t->add_cat($parent);
-		break;
-
-	case "change_cat":
-		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Muuda kategooriat";
-		$t = new lists;
-		$content = $t->change_cat($id);
-		break;
-
-	case "delete_cat":
-		$t = new lists;
-		$t->delete_cat($id);
-		header("Location: list.$ext?parent=$parent");
-		break;
-
-	case "add_list":
-		$site_title = "<a href='list.$ext?parent=$parent'>Listid</a> / Lisa list";
-		$t = new lists;
-		$content = $t->add_list($parent);
-		break;
-
-	case "change_list":
-		$t = new lists;
-		$content = $t->change_list($id);
-		$site_title = "<a href='list.$ext?parent=$t->parent'>Listid</a> / Muuda listi";
-		break;
-
-	case "delete_list":
-		$t = new lists;
-		$t->delete_list($id);
-		header("location: list.$ext?type=list_lists?parent=$parent");
 		break;
 
 	case "list_mails":
@@ -128,46 +92,6 @@ switch($type) {
 		die("<a href='list.$ext'>Tagasi</a>");
 		break;
 	
-	case "list_inimesed":
-		$t = new mlist($id);
-		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
-		$site_title = "<a href='list.$ext?parent=$pid'>Listid</a> / Listi ".$t->name." liikmed";
-		$content = $t->list_users($id);
-		break;
-				
-	case "add_user":
-		$t = new mlist($id);
-		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
-		$site_title = "<a href='list.$ext?parent=$pid'>Listid</a> / <a href='list.$ext?type=list_inimesed&id=$id'>Listi $t->name liikmed</a> / Lisa kasutaja";
-		$content = $t->add_user();
-		break;
-		
-	case "change_user":
-		$t = new mlist($id);
-		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
-		$site_title = "<a href='list.$ext?parent=$pid'>Listid</a> / <a href='list.$ext?type=list_inimesed&id=$id'>Listi $t->name liikmed</a> / Muuda kasutajat";
-		$content = $t->change_user($user_id);
-		break;
-			
-	case "paste_user":
-		$t = new mlist($id);
-		$t->paste($id);
-		header("Location: list.$ext?type=list_inimesed&id=$id");
-		break;
-
-	case "import_file":
-		$t = new mlist($id);
-		$pid = $t->db_fetch_field("SELECT parent FROM objects WHERE oid = $id","parent");
-		$site_title = "<a href='list.$ext?parent=$pid'>Listid</a> / Impordime failist mailiaadresse listi $t->name";
-		$content = $t->import_mails();
-		break;
-
-	case "export_file":
-		$t = new mlist($id);
-		$t->export_mails();
-		die();
-		break;
-
 	case "add_var":
 		$site_title = "<a href='list.$ext?type=list_vars&parent=$parent'>Muutujate nimekiri</a> / Lisa muutuja";
 		$t = new variables;
@@ -203,31 +127,6 @@ switch($type) {
 		$site_title = "<a href='list.$ext?type=list_stamps'>Stampide nimekiri</a> / Lisa stamp";
 		$t = new variables;
 		$content = $t->add_stamp();
-		break;
-
-	case "checkit":
-		$site_title = "<a href='list.$ext?parent=$parent'>Listide nimekiri</a> / Kontrolli listi liikmeid";
-		$t = new mlist($id);
-		$content = $t->checkit();
-		break;
-		
-	case "change_list_vars":
-		$site_title = "<a href='list.$ext?parent=$parent'>Listide nimekiri</a> / Vali listi muutujad";
-		$t = new mlist($id);
-		$content = $t->change_vars($parent);
-		break;
-	
-	case "submit_default_list":
-		$t = new lists;
-		$t->submit_default_list($HTTP_POST_VARS);
-		header("Location: list.$ext?parent=$parent&op=open");
-		print "\n\n";
-		exit;
-
-	case "del_comp":
-		$t = new mlist($lid);
-		$t->del_user($usid);
-		header("Location: list.$ext?type=checkit&id=$lid");
 		break;
 
 	case "list_lists":

@@ -104,43 +104,6 @@ switch($action)
 			header("Location: list.$ext?type=change_mail&id=$id&parent=$parent");
 		break;
 			
-	case "new_user":
-		classload("list");
-		classload("vars");
-		$t = new mlist($id);
-		$t->add_user_submit($HTTP_POST_VARS);
-		header("Location: list.$ext?type=list_inimesed&id=$id");
-		break;
-
-	case "submit_list_cat":
-		classload("lists");
-		$t = new lists;
-		$t->submit_cat($HTTP_POST_VARS);
-		header("Location: list.$ext?parent=$parent");
-		break;
-
-	case "people_list":
-		classload("list");
-		$t = new mlist($list_id);
-		if ($delete == 1)
-			$t->delete($HTTP_POST_VARS);
-		else
-		if ($copy == 1)
-			$t->copy($HTTP_POST_VARS);
-		else
-		if ($cut == 1)
-			$t->cut($HTTP_POST_VARS);
-
-		header("Location: list.$ext?type=list_inimesed&id=$list_id");
-		break;
-
-	case "import_mails":
-		classload("list");
-		$t = new mlist($id);
-		$t->import_mail_submit($HTTP_POST_VARS);
-		die("<a href='list.$ext?list_inimesed&id=$id'>Tagasi</a>");
-		break;
-
 	case "admin_var":
 		classload("vars");
 		$t = new variables;
@@ -160,13 +123,6 @@ switch($action)
 		{
 			header("Location: menuedit.$ext?parent=$parent&menu=menu");
 		}
-		break;
-
-	case "sel_vars":
-		classload("list");
-		$t = new mlist($list_id);
-		$t->submit_change_vars($HTTP_POST_VARS);
-		header("Location: list.$ext?parent=$parent");
 		break;
 
 	//Graafikute asjad
