@@ -1,85 +1,38 @@
-<script language=javascript>
-var st=1;
-function selall()
-{
-<!-- SUB: SELLINE -->
-	document.forms[0].elements[{VAR:row}].checked=st;
-<!-- END SUB: SELLINE -->
-st = !st;
-return false;
-}
-</script>
-<form action='reforb.{VAR:ext}' METHOD=post>
-{VAR:LC_FORMS_PAGE}: 
-<!-- SUB: PAGE -->
-<a href='{VAR:pageurl}'>{VAR:from} - {VAR:to}</a> |
-<!-- END SUB: PAGE -->
 
-<!-- SUB: SEL_PAGE -->
-{VAR:from} - {VAR:to} |
-<!-- END SUB: SEL_PAGE -->
 
-<br>{VAR:LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL}:<br>
-<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
-<tr bgcolor="#C9EFEF">
-<td class="title">ID</td>
-<td class="title">{VAR:LC_FORMS_NAME}</td>
-<td class="title">{VAR:LC_FORMS_COMMENT}</td>
-<td class="title">{VAR:LC_FORMS_POSITION}</td>
-<td class="title"><a href='#' onClick="selall();return false;">{VAR:LC_FORMS_ALL}</a></td>
-<td class="title">{VAR:LC_FORMS_WHAT_OUTPUT_TO_USE}</td>
-</tr>
 
-<!-- SUB: LINE -->
-<tr>
-<td class="plain">{VAR:form_id}</td>
-<td class="plain"><a href='{VAR:form_change}'>{VAR:form_name}</a></td>
-<td class="plain">{VAR:form_comment}</td>
-<td class="plain">{VAR:form_location}</td>
-<td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}><input type='hidden' name='inpage[{VAR:form_id}]' value='1'><input type='hidden' name='prev[{VAR:form_id}]' value='{VAR:prev}'></td>
-<td class="chkbox"><SELECT class='small_button' NAME='sel_{VAR:form_id}'>{VAR:ops}</select>
-</td>
-</tr>
-<!-- END SUB: LINE -->
-</table>
-{VAR:LC_FORMS_SEARCH_ONLY_FRM_FORM}: <input type='checkbox' name='formsonly' value=1 {VAR:formsonly}><br><br>
-{VAR:LC_FORMS_SEARCH_FROM_CHAIN}: <select name='se_chain'>{VAR:chains}</select><Br><br>
-<input type=submit NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'>
-{VAR:reforb}
-</form>
-    
-----------------------------------------------<br>
-NB! palun hetkel &uuml;lemist formi kasutada, siit edasi ei pretendeeri veel t&ouml;&ouml;tamisele. <br>
-<br><br>
+
 <script language="javascript">
 function ssrch()
 {
-/*	if (document.selsrch.search_from[0].checked)
+	document.selsrch.elements[1].disabled=true;
+	if (document.selsrch.form_op)
+	{
+		document.selsrch.form_op.disabled=true;
+	}
+	document.selsrch.search_chain.disabled=true;
+	if (document.selsrch.chain_op)
+	{
+		document.selsrch.chain_op.disabled=true;
+	}
+
+	if (document.selsrch.search_from[0].checked)
 	{
 		document.selsrch.elements[1].disabled=false;
 		if (document.selsrch.form_op)
 		{
 			document.selsrch.form_op.disabled=false;
 		}
-		document.selsrch.search_chain.disabled=true;
-		if (document.selsrch.chain_op)
-		{
-			document.selsrch.chain_op.disabled=true;
-		}
 	}
 	else
+	if (document.selsrch.search_from[1].checked)
 	{
-		document.selsrch.elements[1].disabled=true;
-		if (document.selsrch.form_op)
-		{
-			document.selsrch.form_op.disabled=true;
-		}
 		document.selsrch.search_chain.disabled=false;
 		if (document.selsrch.chain_op)
 		{
 			document.selsrch.chain_op.disabled=false;
 		}
-	}*/
+	}
 }
 </script>
 
@@ -129,5 +82,65 @@ function ssrch()
 </form>
 
 <script language="javascript">
-//ssrch();
+ssrch();
 </script>
+
+
+<br><br>
+-------------------------------------------------------------------------<br>
+NB! edasist paluks kasutada ainult vana otsingut n6udvate asjade jaoks (dyn grupid, meilinglistid) <Br><br>
+
+
+
+
+
+
+<script language=javascript>
+var st=1;
+function selall()
+{
+<!-- SUB: SELLINE -->
+	document.forms[0].elements[{VAR:row}].checked=st;
+<!-- END SUB: SELLINE -->
+st = !st;
+return false;
+}
+</script>
+<form action='reforb.{VAR:ext}' METHOD=post>
+{VAR:LC_FORMS_PAGE}: 
+<!-- SUB: PAGE -->
+<a href='{VAR:pageurl}'>{VAR:from} - {VAR:to}</a> |
+<!-- END SUB: PAGE -->
+
+<!-- SUB: SEL_PAGE -->
+{VAR:from} - {VAR:to} |
+<!-- END SUB: SEL_PAGE -->
+
+<br>{VAR:LC_FORMS_CHOOSE_WHTA_INPUT_FORM_FILL}:<br>
+<table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
+<tr bgcolor="#C9EFEF">
+<td class="title">ID</td>
+<td class="title">{VAR:LC_FORMS_NAME}</td>
+<td class="title">{VAR:LC_FORMS_COMMENT}</td>
+<td class="title">{VAR:LC_FORMS_POSITION}</td>
+<td class="title"><a href='#' onClick="selall();return false;">{VAR:LC_FORMS_ALL}</a></td>
+<td class="title">{VAR:LC_FORMS_WHAT_OUTPUT_TO_USE}</td>
+</tr>
+
+<!-- SUB: LINE -->
+<tr>
+<td class="plain">{VAR:form_id}</td>
+<td class="plain"><a href='{VAR:form_change}'>{VAR:form_name}</a></td>
+<td class="plain">{VAR:form_comment}</td>
+<td class="plain">{VAR:form_location}</td>
+<td class="chkbox"><input type='checkbox' NAME='ch_{VAR:form_id}' VALUE=1 {VAR:checked}><input type='hidden' name='inpage[{VAR:form_id}]' value='1'><input type='hidden' name='prev[{VAR:form_id}]' value='{VAR:prev}'></td>
+<td class="chkbox"><SELECT class='small_button' NAME='sel_{VAR:form_id}'>{VAR:ops}</select>
+</td>
+</tr>
+<!-- END SUB: LINE -->
+</table>
+{VAR:LC_FORMS_SEARCH_ONLY_FRM_FORM}: <input type='checkbox' name='formsonly' value=1 {VAR:formsonly}><br><br>
+{VAR:LC_FORMS_SEARCH_FROM_CHAIN}: <select name='se_chain'>{VAR:chains}</select><Br><br>
+<input type=submit NAME='save' VALUE='{VAR:LC_FORMS_SAVE}'>
+{VAR:reforb}
+</form>
