@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.16 2004/02/17 12:23:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.17 2004/10/08 16:09:53 duke Exp $
 set_time_limit(0);
 include("const.aw");
 
@@ -33,6 +33,11 @@ if (is_array($_AW_GET_VARS))
 
 $class = $vars["class"];
 $action = $vars["action"];
+
+if (empty($class) && isset($vars["alias"]))
+{
+	$class = $vars["alias"];
+};
 
 if ($vars["fastcall"] == 1)
 {
