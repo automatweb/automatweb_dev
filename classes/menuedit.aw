@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.292 2003/06/03 13:52:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.293 2003/06/04 12:36:49 duke Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -96,8 +96,8 @@ class menuedit extends aw_template
 		$act_per_id = aw_global_get("act_per_id");
 		if ($format == "rss")
 		{
-			$d = get_instance("document");
-			$d->gen_rss_feed(array("period" => $act_per_id,"parent" => $section));
+			$rss = get_instance("output/xml/rss");
+			$rss->gen_rss_feed(array("period" => $act_per_id,"parent" => $section));
 		};
 
 		// koostame array vajalikest parameetritest, mis identifitseerivad cachetava objekti

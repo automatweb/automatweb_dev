@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.190 2003/06/04 11:21:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.191 2003/06/04 12:36:49 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -238,48 +238,6 @@ class document extends aw_template
 		$this->data = $data;
 		return $data;
 	}
-
-	////
-	// !Generates a RSS feed from all documents under a menu. Or from all articles
-	// in the current period, if a menu is not specified
-	function gen_rss_feed($args = array())
-	{
-		$baseurl = $this->cfg["baseurl"];
-		$stitle = $this->cfg["stitle"]; 
-		$ext = $this->cfg["ext"];
-		$rdf = get_instance("rdf",array(
-			"about" => "$baseurl/index.$ext/format=rss",
-			"link" => "$baseurl/index.$ext",
-			"title" => $stitle,
-			"description" => $this->cfg["publisher"],
-    ));
-
-		extract($args);
-		$rootmenu = $this->cfg["rootmenu"];
-		$parent = (int)$parent;
-		if ($parent && ($parent != $rootmenu))
-		{
-			$pstr = " AND objects.parent = '$parent' ";
-		}
-		else
-		{
-			$pstr = "";
-		};
-		$q = "SELECT documents.docid AS docid,title,lead,author,objects.modified AS modified FROM objects 
-			LEFT JOIN documents ON objects.oid = documents.docid
-			WHERE objects.period = '$period' AND objects.status = 2 $pstr";
-		$this->db_query($q);
-		while($row = $this->db_next())
-		{
-			$row["title"] = strip_tags($row["title"]);
-			$rdf->add_item($row);
-		};
-		header("Content-Type: text/xml");
-		print $rdf->gen_output();
-		die();
-  }
-
-
 
 	// see on lihtsalt wrapper backwards compatibility jaoks
 	function show($docid,$text = "undef",$tpl="plain.tpl",$leadonly = -1,$secID = -1) 
