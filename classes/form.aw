@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.40 2001/07/26 12:55:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form.aw,v 2.41 2001/07/26 16:38:47 duke Exp $
 // form.aw - Class for creating forms
 
 // This class should be split in 2, one that handles editing of forms, and another that allows
@@ -78,22 +78,6 @@ class form extends form_base
 		return $replacement;
 	}
 
-	////
-	function get_xml_input($args = array())
-	{
-		$alias = $args[0];
-		$q = sprintf("SELECT * FROM objects WHERE name = '%s' AND class_id = %d",$alias,CL_FORM_XML_INPUT);
-		$this->db_query($q);
-		$row = $this->db_next();
-		$meta = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"],
-		));
-		classload("xml_support");
-		$struct = rpc_create_struct($meta);
-		return $struct;
-	}
-
-			
 	////
 	// !Generates form admin interface
 	// $arr[id] - form id, required
@@ -826,13 +810,35 @@ class form extends form_base
 
 	function rpc_handle($args = array())
 	{
-		print "rpc handler starts<br>";
+		// fetchime XML sisendi andmed
+		$meta = $this->get_xml_input(array(
+				"alias" => $args["alias"],
+		));
+
+		$form_id = $meta["forms"][0];
+
+		$el_values = array();
+
+		foreach($meta["elements"] as $id => $props)
+		{
+			$el_values[$id] = $args["elements"][$props["name"]];
+		}
+
+		$el_values["form_id"] = $form_id;
+
+		$datablock = array(
+			"form_id" => $form_id,
+		);
+
+
+
 		print "<pre>";
-		print_r($args);
+		print_r($retval);
 		print "</pre>";
+
+		// entry tuleb salvestada parenti RPC_ENTRIES alla
 		$retval = array(
-			"name" => "success",
-			"value" => "yes",
+			"success" => "yes",
 		);
 		return $retval;
 	}
@@ -982,12 +988,15 @@ class form extends form_base
 			while (list($k, $v) = each($this->entry))
 			{
 				$el = $this->get_element_by_id($k);
-				$ev = $el->get_value();
-				if (is_array($v))
+				if ($el)
 				{
-					$v = serialize($v);
+					$ev = $el->get_value();
+					if (is_array($v))
+					{
+						$v = serialize($v);
+					}
+					$ids.=",el_$k = '$v',ev_$k = '$ev'";
 				}
-				$ids.=",el_$k = '$v',ev_$k = '$ev'";
 			}
 
 			$sql = "UPDATE form_".$this->id."_entries SET $ids WHERE id = $entry_id";
@@ -3133,110 +3142,5 @@ class form extends form_base
 		return $this->mk_my_orb("translate", array("id" => $id));
 	}
 
-	// the following functions will eventuall be moved out from this class.
-	////
-	// !
-	function rpc_listentries($args = array())
-	{
-		preg_match("/^(\w*)/",$args[0],$matches);
-		$alias = $matches[1];
-		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
-		$this->db_query($q);
-		$entry_list = array();
-		classload("xml");
-		$xml = new xml();
-		$blacklist = array();
-		$row = $this->db_next();
-		if ($row)
-		{
-			$xdata = $this->get_object_metadata(array(
-					"metadata" => $row["metadata"],
-			));
-			if (is_array($xdata["forms"]))
-			{
-				foreach($xdata["forms"] as $key => $val)
-				{
-					$q = "SELECT * FROM form_" . $val . "_entries";
-					$this->db_query($q);
-					// if the entry is a part of form_chain, 
-					while($row = $this->db_next())
-					{
-						if (!$blacklist[$row["id"]])
-						{
-							$entry_list[] = $row["id"];
-						};
-
-						if ($row["chain_id"])
-						{
-							$this->save_handle();
-							$q = "SELECT * FROM form_chain_entries WHERE id = '$row[chain_id]'";
-							$this->db_query($q);
-							$crow = $this->db_next();
-							$blacklist = $blacklist + array_flip($xml->xml_unserialize(array("source" => $crow["ids"])));
-							$this->restore_handle();
-						};
-					};
-				};
-			};
-			$retval = array(
-					"data" => $entry_list,
-					"type" => "array",
-			);
-		}
-		else
-		{
-			$retval = array(
-					"error" => "Name/alias not found",
-					"errno" => "1",
-			);
-		};
-		return $retval;
-	}
-
-	function rpc_getentry($args = array())
-	{
-		$eid = $args[0];
-		$alias = $args[1];
-
-		classload("form_entry");
-		$form_entry = new form_entry();
-		$block = $form_entry->get_entry(array("eid" => $eid));
-
-		$q = "SELECT * FROM objects WHERE name = '$alias' AND class_id = " . CL_FORM_XML_OUTPUT;
-		$this->db_query($q);
-		
-		$row = $this->db_next();
-			
-		$xdata = $this->get_object_metadata(array(
-				"metadata" => $row["metadata"],
-		));
-
-		$jrk = $xdata["data"]["jrk"];
-		$active = $xdata["data"]["active"];
-		$tags = $xdata["data"]["tag"];
-
-		$this->pstruct = array();
-
-		asort($jrk);
-		
-		foreach($jrk as $key => $val)
-		{
-			if ($active[$key])
-			{
-				$idx = "el_" . $key;
-				$keyblock = array(
-						"name" => $tags[$key],
-						"value" => $block[$idx],
-				);
-				$this->pstruct[] = $keyblock;
-			};
-		};
-
-		$retval = array(
-			"data" => $this->pstruct,
-			"type" => "struct",
-		);
-		return $retval;
-	}
 };	// class ends
 ?>
