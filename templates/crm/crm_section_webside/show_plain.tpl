@@ -1,9 +1,4 @@
-<!-- SUB: WORKERS -->
-{VAR:person_name}
-{VAR:person_pic_url}
-{VAR:person_email}
-{VAR:person_position}
-{VAR:person_phone}
-{VAR:person_desc}
-<!-- END SUB: WORKERS -->
 
+	<tr>
+		<td>{VAR:name}</td><td>{VAR:rank}</td><td>{VAR:phone}</td><td>{VAR:email}</td>
+	</tr>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.1 2004/09/15 06:29:14 sven Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_section_webside.aw,v 1.2 2004/09/15 12:50:33 sven Exp $
 // crm_section_webside.aw - ÃÃœksus weebis 
 /*
 
@@ -50,8 +50,8 @@ class crm_section_webside extends class_base
 		{
 			case "view":
 				$prop["options"] = array(
-					0 => "Tabeli vaade",
-					1 => "Ühel lehel",
+					0 => "Piltidega vaade",
+					1 => "Tabelina",
 				);
 			break;
 			case "cols":
@@ -77,9 +77,9 @@ class crm_section_webside extends class_base
 	}	
 	*/
 
-	function parse_person($person)
+	function parse_person($person, $person_tpl)
 	{
-		$this->read_template("show_table.tpl");
+		$this->read_template($person_tpl);
 		
 		$this->vars(array(
 			"email" => "",
@@ -175,26 +175,33 @@ class crm_section_webside extends class_base
 		$ob = new object($arr["id"]);
 		if($ob->prop("view") == 0)
 		{
-			$this->read_template("frame.tpl");
-			foreach ($workers->arr() as $worker)
-			{
-				$cur_col++;
-				$this->vars(array(
-					"person" => $this->parse_person($worker),
-				));
-				$this->read_template("frame.tpl");
-				$person_list .= $this->parse("persons");
-				//Parse new row
-				if($cur_col == $cols)
-				{
-					$person_list.= $this->parse("ROW_SEP");
-					$cur_col = 0;	
-				}
-			}
-			$this->vars(array(
-				"persons" => $person_list,
-			));			
+			$person_tpl = "show_table.tpl";	
 		}
+		else
+		{
+			$person_tpl = "show_plain.tpl";
+		}
+		
+		$this->read_template("frame.tpl");
+		foreach ($workers->arr() as $worker)
+		{
+			$cur_col++;
+			$this->vars(array(
+				"person" => $this->parse_person($worker, $person_tpl),
+			));
+			$this->read_template("frame.tpl");
+			$person_list .= $this->parse("persons");
+			//Parse new row
+			if($cur_col == $cols && $ob->prop("view") != 1)
+			{
+				$person_list.= $this->parse("ROW_SEP");
+				$cur_col = 0;	
+			}
+		}
+		$this->vars(array(
+			"persons" => $person_list,
+		));			
+		
 		return $this->parse();
 	}
 }
