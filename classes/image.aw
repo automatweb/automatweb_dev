@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.131 2005/01/28 08:42:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.132 2005/01/28 09:42:56 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1225,7 +1225,31 @@ class image extends class_base
 		if ($arr["id"] == "resize" || $arr["id"] == "resize_big")
 		{
 			$cv = get_instance("core/converters/image_convert");
-			return $cv->can_convert();
+			$ret = $cv->can_convert();
+			if ($ret)
+			{
+				$cv->set_error_reporting(false);
+
+				$prop = "file2";
+				if ($arr["id"] == "resize")
+				{
+					$prop = "file";
+				}
+
+				if ($arr["obj_inst"]->prop($prop) == "")
+				{
+					$ret = false;
+				}
+				else
+				{
+					$cv->load_from_file($arr["obj_inst"]->prop($prop));
+					if ($cv->is_error())
+					{
+						$ret = false;
+					}
+				}
+			}
+			return $ret;
 		}
 		return true;
 	}

@@ -28,7 +28,6 @@ class image_convert extends class_base
 		));
 
 		$this->driver = new $driver;
-		$this->dirver->ref =& $this;
 	}
 
 	// this is here, because the authors of the php gd module are stupid idiots.
@@ -175,14 +174,18 @@ class image_convert extends class_base
 
 	function is_error()
 	{
-		return $this->is_error;
+		return $this->driver->is_error;
 	}
 }
 
 class _int_image_convert_driver_gd extends aw_template
 {
 	var $image;
-	var $ref;
+
+	function _int_image_convert_driver_gd()
+	{
+		$this->error_rep = true;
+	}
 
 	function load_from_string($str)
 	{
@@ -206,7 +209,7 @@ class _int_image_convert_driver_gd extends aw_template
 		{
 			if ($this->error_rep == false)
 			{
-				$this->ref->is_error = true;
+				$this->is_error = true;
 			}
 			else
 			{
@@ -235,10 +238,17 @@ class _int_image_convert_driver_gd extends aw_template
 		}
 		if (!$this->image)
 		{
-			error::raise(array(
-				"id" => ERR_IMAGE_FORMAT,
-				"msg" => "image_convert::gd_driver::load_from_file(): could not detect image format!"
-			));
+			if ($this->error_rep == false)
+			{
+				$this->is_error = true;
+			}
+			else
+			{
+				error::raise(array(
+					"id" => ERR_IMAGE_FORMAT,
+					"msg" => "image_convert::gd_driver::load_from_file(): could not detect image format!"
+				));
+			}
 		}
 	}
 
@@ -301,7 +311,14 @@ class _int_image_convert_driver_gd extends aw_template
 				imagewbmp($this->image, $tn);
 				break;
 			default:
-				$this->raise_error(ERR_IMAGE_TYPE, "image_convert::save($filename,$type): unknown image type!");
+				if ($this->error_rep == false)
+				{
+					$this->is_error = true;
+				}
+				else
+				{
+					$this->raise_error(ERR_IMAGE_TYPE, "image_convert::save($filename,$type): unknown image type!");
+				}
 		}
 	}
 
@@ -345,6 +362,7 @@ class _int_image_convert_driver_imagick extends aw_template
 		$this->identify = aw_ini_get("server.identify_dir");
 		$this->convert = aw_ini_get("server.convert_dir");
 		$this->composite = aw_ini_get("server.composite_dir");
+		$this->error_rep = true;
 	}
 
 	function load_from_string($str)
@@ -364,7 +382,14 @@ class _int_image_convert_driver_imagick extends aw_template
 		$str = $this->get_file(array("file" => $str));
 		if ($str === false)
 		{
-			$this->raise_error(ERR_NO_FILE, "image_convert::load_from_file($str): no such file!");
+			if ($this->error_rep == false)
+			{
+				$this->is_error = true;
+			}
+			else
+			{
+				$this->raise_error(ERR_NO_FILE, "image_convert::load_from_file($str): no such file!");
+			}
 		}
 		$this->load_from_string($str);
 	}
@@ -409,7 +434,14 @@ class _int_image_convert_driver_imagick extends aw_template
 				shell_exec($this->convert." ".$this->filename." wbmp:".$tn);
 				break;
 			default:
-				$this->raise_error(ERR_IMAGE_TYPE, "image_convert::get($type): unknown image type!");
+				if ($this->error_rep == false)
+				{
+					$this->is_error = true;
+				}
+				else
+				{
+					$this->raise_error(ERR_IMAGE_TYPE, "image_convert::get($type): unknown image type!");
+				}
 		}
 		$fc = $this->get_file(array("file" => $tn));
 		unlink($tn);
@@ -434,7 +466,14 @@ class _int_image_convert_driver_imagick extends aw_template
 				shell_exec($this->convert." ".$tn." wbmp:".$filename);
 				break;
 			default:
-				$this->raise_error(ERR_IMAGE_TYPE, "image_convert::save($filename,$type): unknown image type!");
+				if ($this->error_rep == false)
+				{
+					$this->is_error = true;
+				}
+				else
+				{
+					$this->raise_error(ERR_IMAGE_TYPE, "image_convert::save($filename,$type): unknown image type!");
+				}
 		}
 	}
 
