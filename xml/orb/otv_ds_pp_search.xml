@@ -3,4 +3,3 @@
 	<class name="otv_ds_pp_search" folder="contentmgmt/object_treeview" extends="class_base">
 	</class>
 </orb>
-		
