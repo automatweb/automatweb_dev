@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.205 2004/02/04 14:22:02 duke Exp $
+// $Id: class_base.aw,v 2.206 2004/02/05 13:27:14 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1690,20 +1690,12 @@ class class_base extends aw_template
 			$val["no_caption"] = 1;
 		};
 
-		if (($val["type"] == "relpicker") && isset($val["clid"]))
-		{
-			$this->cfgu->el_relpicker_clid(array(
-				"id" => $this->target_obj,
-				"val" => &$val,
-			));
-		};
-
 		if (($val["type"] == "relpicker") && ($val["reltype"]))
 		{
 			$this->cfgu->el_relpicker_reltype(array(
 				"id" => $this->target_obj,
-				"meta" => $this->coredata["meta"],
 				"val" => &$val,
+				"relinfo" => $this->relinfo[$val["reltype"]],
 			));
 		};
 
@@ -2672,6 +2664,41 @@ class class_base extends aw_template
 			if ($property["store"] == "no")
 			{
 				continue;
+			};
+
+			if ($property["type"] == "relpicker" && $property["automatic"] == 1)
+			{
+				$conns = $this->obj_inst->connections_from(array(
+					"type" => $this->relinfo[$property["reltype"]]["value"],
+				));
+
+				// no existing connection, create a new one
+				if (sizeof($conns) == 0)
+				{
+					if ($property["value"] != 0)
+					{
+						$this->obj_inst->connect(array(
+							"to" => $property["value"],
+							"reltype" => $this->relinfo[$property["reltype"]]["value"],
+						));
+					};
+				}
+				else
+				{
+					// alter existing connection
+					list(,$existing) = each($conns);
+					if ($property["value"] == 0)
+					{
+						$existing->delete();
+					}
+					else
+					{
+						$existing->change(array(
+							"to" => $property["value"],
+						));
+					};
+				};
+
 			};
 		
 			/*

@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.36 2004/02/04 13:26:24 duke Exp $
+// $Id: cfgutils.aw,v 1.37 2004/02/05 13:27:15 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -204,6 +204,7 @@ class cfgutils extends aw_template
 					};
 					$relx["clid"] = $_clidlist;
 					$tmp[$key] = $relx;
+					$tmp[$_name] = $relx;
 					// define the constant
 					define($_name,$tmp[$key]["value"]);
 					$tmp[$tmp[$key]["value"]] = $relx;
@@ -492,28 +493,10 @@ class cfgutils extends aw_template
 	}
 
 	////
-	// !Generates contents for type=relpicker clid=CL_XXX
-	function el_relpicker_clid($args = array())
+	// !Generates contents for relpicker
+	function el_relpicker_reltype($arr)
 	{
-		$o = obj($args["id"]);
-		$conns = $o->connections_from(array(
-			"to.class_id" => constant($val["clid"])
-		));
-
-		$options = array("0" => "--vali--");
-		// generate option list
-		foreach($conns as $c)
-		{
-			$options[$c->prop("to")] = $c->prop("to.name");
-		}
-
-		$val["type"] = "select";
-		$val["options"] = $options;
-	}
-
-	function el_relpicker_reltype($args = array())
-	{
-		$val = &$args["val"];
+		$val = &$arr["val"];
 
 		$options = array("0" => "--vali--");
 		// generate option list
@@ -526,9 +509,19 @@ class cfgutils extends aw_template
 			$reltype = $val["reltype"];
 		};
 
-		if ($args["id"])
+		// if automatic is set, then create a list of all properties of that type
+		if (isset($val["automatic"]))
 		{
-			$o = obj($args["id"]);
+			$olist = new object_list(array(
+				"class_id" => $arr["relinfo"]["clid"],
+			));
+			$val["type"] = "select";
+			$val["options"] = $options + $olist->names();
+		}
+		else
+		if ($arr["id"])
+		{
+			$o = obj($arr["id"]);
 			$conn = $o->connections_from(array(
 				"type" => $reltype
 			));
