@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.256 2004/05/18 13:44:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.257 2004/05/19 10:07:52 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1248,6 +1248,15 @@ class document extends aw_template
 				"TITLE_NOT_EMPTY" => ""
 			));
 		}
+
+		$nll = "";
+		if ($not_last_in_list)
+		{
+			$nll = $this->parse("NOT_LAST_IN_LIST");
+		}
+		$this->vars(array(
+			"NOT_LAST_IN_LIST" => $nll
+		));
 
 		if ($doc["title_clickable"])
 		{

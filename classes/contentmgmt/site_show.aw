@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.56 2004/05/12 12:39:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.57 2004/05/19 10:07:52 kristo Exp $
 
 /*
 
@@ -60,7 +60,6 @@ class site_show extends class_base
 		}
 
 		global $awt;
-		$awt->start("xshow");
 
 		// init left pane/right pane
 		$this->left_pane = (isset($arr["no_left_pane"]) && $arr["no_left_pane"] == true) ? false : true;
@@ -100,8 +99,11 @@ class site_show extends class_base
 		$this->do_check_properties(&$arr);
 
 		$apd = get_instance("layout/active_page_data");
-		$awt->stop("xshow");
-		return $this->do_show_template($arr).$apd->on_shutdown_get_styles();
+		$awt->start("xshow2");
+		$rv = $this->do_show_template($arr);
+		$awt->stop("xshow2");
+		$rv .= $apd->on_shutdown_get_styles();
+		return $rv;
 	}
 
 	function show_type($arr)
@@ -696,8 +698,11 @@ class site_show extends class_base
 
 			$this->vars(array("DOCUMENT_LIST" => $this->parse("DOCUMENT_LIST")));
 
+			$_numdocs = count($docid);
+			$_curdoc = 1;
 			foreach($docid as $dk => $did)
 			{
+				// resets the template
 				$d->_init_vars();
 
 				$ct .= $d->gen_preview(array(
@@ -707,8 +712,10 @@ class site_show extends class_base
 					"section" => $this->section_obj->id(),
 					"strip_img" => false,
 					"keywords" => 1,
-					"no_strip_lead" => aw_global_get("document.no_strip_lead")
+					"no_strip_lead" => aw_global_get("document.no_strip_lead"),
+					"not_last_in_list" => ($_curdoc < $_numdocs)
 				));
+				$_curdoc++;
 			}
 		} 
 		else 
@@ -2017,10 +2024,12 @@ class site_show extends class_base
 
 		$arr["tpldir"] = $tpldir;
 		// right. now, do the template compiler bit
+		$awt->start("build-popups");
 		if (!($this->compiled_filename = $this->get_cached_compiled_filename($arr)))
 		{
 			$this->compiled_filename = $this->cache_compile_template($tpldir, $arr["template"]);
 		}
+		$awt->stop("build-popups");
 
 
 		$this->read_template($arr["template"]);
@@ -2051,6 +2060,7 @@ class site_show extends class_base
 		{
 			$this->make_langs();
 		};
+		
 
 		// execute menu drawing code
 		$awt->start("part2");
@@ -2059,16 +2069,24 @@ class site_show extends class_base
 
 		$awt->start("part3");
 		$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array(), true);
-
-		$this->exec_subtemplate_handlers($arr);
-
-		$this->make_banners();
-
-		$this->make_final_vars();		
 		$awt->stop("part3");
 
+		$awt->start("part4");
+		$this->exec_subtemplate_handlers($arr);
+		$awt->stop("part4");
 
-		return $this->parse().$this->build_popups();
+		$awt->start("part5");
+		$this->make_banners();
+		$awt->stop("part5");
+
+		$awt->start("part6");
+		$this->make_final_vars();		
+		$awt->stop("part6");
+
+		$rv = $this->parse();
+
+		$rv .= $this->build_popups();
+		return $rv;
 	}
 
 	////

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.34 2004/05/12 15:04:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.35 2004/05/19 10:07:52 kristo Exp $
 // promo.aw - promokastid.
 
 /*
@@ -481,12 +481,17 @@ class promo extends class_base
 		{
 			$parms["tpl_auto"] = 1;
 		}
-
+	
+		
+		$_numdocs = count($def->get());
+		$_curdoc = 1;
 		foreach($def->get() as $key => $val)
 		{
 			$_parms = $parms;
 			$_parms["docid"] = $val;
+			$_parms["not_last_in_list"] = ($_curdoc < $_numdocs);
 			$content .= $doc->gen_preview($_parms);
+			$_curdoc ++;
 		}
 
 		if ($ob->meta('as_name') && $ob->meta("caption") == "")
@@ -513,6 +518,7 @@ class promo extends class_base
 			"content" => $content,
 			"align" => $align[$args["matches"][4]],
 			"link" => $ob->prop("link"),
+			"link_caption" => $ob->prop("link_caption"),
 			"image" => $image,
 			"image_url" => $image_url
 		));
@@ -539,7 +545,10 @@ class promo extends class_base
 			{
 				$first = reset($conns);
 				$this->vars(array(
-					"add_item_url" => $this->mk_my_orb("new",array("parent" => $first->prop("to")),"doc",true),
+					"add_item_url" => $this->mk_my_orb("new",array(
+						"parent" => $first->prop("to"),
+						"period" => aw_global_get("current_period"),
+					),"doc",true),
 				));
 				$this->vars(array(
 					"ADD_ITEM" => $this->parse("ADD_ITEM"),
