@@ -127,7 +127,6 @@ class image extends class_base
 				}
 				else if (isset($tpls["image_linked"]))
 				{
-					echo "yeah <br>";
 					$replacement = localparse($tpls["image_linked"],$vars);
 				}
 				else
