@@ -679,7 +679,18 @@ class msgboard extends aw_template
 		$this->quote(&$arr);
 		extract($arr);
 
-		$this->new_object(array("name" => $topic, "last" => $from, "comment" => $text,"class_id" => CL_MSGBOARD_TOPIC,"status" => 2));
+		global $ext, $baseurl;
+
+		$tid = $this->new_object(array("name" => $topic, "last" => $from, "comment" => $text,"class_id" => CL_MSGBOARD_TOPIC,"status" => 2));
+		// siin tuleb meili saata ka
+		if (MSGBOARD_MAIL_TOPIC_TO != "")
+		{
+			mail(
+				MSGBOARD_MAIL_TOPIC_TO,
+				MSGBORARD_NOTIFY_SUBJ,
+				sprintf(MSGBOARD_NOTIFY_BODY,$from,$topic,($baseurl."/comments.$ext?section=".$tid."&type=threaded"))
+			);
+		}
 	}
 
 	function delete_topic($id)
