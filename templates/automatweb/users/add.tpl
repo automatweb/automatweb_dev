@@ -16,37 +16,67 @@ function gp()
 </script>
 <form method="POST" ACTION='reforb.{VAR:ext}' name='ua'>
 {VAR:error}
-<table border=0 cellspacing=1 cellpadding=2 bgcolor="#CCCCCC">
+
+<style>
+.tablehead {
+font-family: Verdana;
+font-size: 10px;
+font-weight: bold;
+background-color: #00988F;
+text-align: center;
+}
+
+.tablehead a {color: #FFFFFF; text-decoration:none;}
+.tablehead a:hover {color: #FFFFFF; text-decoration:underline;}
+
+.tabletext {
+font-family: Verdana;
+font-size: 10px;
+background-color: #FFFFFF;
+}
+.tabletext a {color: #191F58; text-decoration:underline;}
+.tabletext a:hover {color: #00988F; text-decoration:underline;}
+
+.tabletext2 {
+font-family: Verdana;
+font-size: 10px;
+background-color: #EFEFEF;
+}
+.tabletext2 a {color: #191F58; text-decoration:underline;}
+.tabletext2 a:hover {color: #00988F; text-decoration:underline;}
+</style>
+
+<table border=0 cellspacing=1 cellpadding=2 bgcolor="#A5DAD8">
 <tr>
-<td class="fcaption">Nimi liitumisformist:</td>
-<td class="fcaption">{VAR:name}</td>
+<td class="tabletext">Nimi liitumisformist:</td>
+<td class="tabletext">{VAR:name}</td>
 </tr>
 <tr>
-<td class="fcaption">Kasutajanimi:</td>
-<td class="fcaption"><input type="text" name="a_uid" VALUE='{VAR:uid}'></td>
+<td class="tabletext">Kasutajanimi:</td>
+<td class="tabletext"><input type="text" name="a_uid" VALUE='{VAR:uid}'></td>
 </tr>
 <tr>
-<td class="fcaption">E-mail:</td>
-<td class="fcaption"><input type="text" name="email" VALUE='{VAR:email}'></td>
+<td class="tabletext">E-mail:</td>
+<td class="tabletext"><input type="text" name="email" VALUE='{VAR:email}'></td>
 </tr>
 <tr>
-<td class="fcaption">Parool:</td>
-<td class="fform"><input type="password" name="pass"> (<a href='#' onClick='gp();'>Genereeri</a>)</td>
+<td class="tabletext">Parool:</td>
+<td class="tabletext"><input type="password" name="pass"> (<a href='#' onClick='gp();'>Genereeri</a>)</td>
 </tr>
 <tr>
-<td class="fcaption">Parool veelkord:</td>
-<td class="fform"><input type="password" name="pass2"></td>
+<td class="tabletext">Parool veelkord:</td>
+<td class="tabletext"><input type="password" name="pass2"></td>
 </tr>
 <tr>
-<td class="fcaption">Genereeritud parool:</td>
-<td class="fform"><input type="text" name="genpwd"></td>
+<td class="tabletext">Genereeritud parool:</td>
+<td class="tabletext"><input type="text" name="genpwd"></td>
 </tr>
 <tr>
-<td class="fcaption">Saada tervitusmeil:</td>
-<td class="fform"><input type="checkbox" name="send_welcome_mail" value="1"></td>
+<td class="tabletext">Saada tervitusmeil:</td>
+<td class="tabletext"><input type="checkbox" name="send_welcome_mail" value="1"></td>
 </tr>
 <tr>
-<td class="fform" align="center" colspan="2">
+<td class="tabletext" align="center" colspan="2">
 <input type="submit" value="Edasi">
 {VAR:reforb}
 </td>
