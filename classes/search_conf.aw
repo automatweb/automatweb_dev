@@ -714,6 +714,10 @@ class search_conf extends aw_template
 			"menus" => $this->multiple_option_list($grps[$id]["menus"],$ml),
 			"no_usersonly" => checked($grps[$id]["no_usersonly"] == 1),
 			"users_only" => checked($grps[$id]["users_only"] == 1),
+			"min_len" => $grps[$id]["min_len"],
+			"max_len" => $grps[$id]["max_len"],
+			"empty_no_docs" => checked($grps[$id]["empty_search"] < 2),
+			"empty_all_docs" => checked($grps[$id]["empty_search"] == 2),
 			"reforb" => $this->mk_reforb("submit_change_grp", array("id" => $id))
 		));
 		return $this->parse();
@@ -729,6 +733,9 @@ class search_conf extends aw_template
 		$grps[$id]["ord"] = $ord;
 		$grps[$id]["no_usersonly"] = $no_usersonly;
 		$grps[$id]["users_only"] = $users_only;
+		$grps[$id]["min_len"] = $min_len;
+		$grps[$id]["max_len"] = $max_len;
+		$grps[$id]["empty_search"] = $empty_search;
 		$grps[$id]["menus"] = array();
 		if (is_array($menus))
 		{
