@@ -158,7 +158,6 @@
 <span class="text2">\1</span>
 ]]>
 </tag>
-</doctags>
 
 <tag id='blocktitle'>
 <![CDATA[
@@ -172,3 +171,10 @@
 ]]>
 </tag>
 
+<tag id='heading3'>
+<![CDATA[
+<span class="heading3">\1</span>
+]]>
+</tag>
+
+</doctags>
