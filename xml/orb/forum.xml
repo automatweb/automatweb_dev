@@ -86,15 +86,6 @@
 			</function>
 		</action>
 		
-		<action name="change_rate">
-			<function name="change_rate">
-				<arguments>
-					<required name="id"/>
-					<required name="rate_id"/>
-				</arguments>
-			</function>
-		</action>
-		
 		<action name="submit_rate">
 			<function name="submit_rate">
 				<arguments>
