@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.5 2001/05/22 02:40:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.6 2001/05/22 03:14:08 kristo Exp $
 /*       _\|/_
          (o o)
  +----oOO-{_}-OOo----------------------------------+
@@ -87,7 +87,7 @@ class core extends db_connector
 		global $uid;
 		global $REMOTE_ADDR,$HTTP_X_FORWARDED_FOR;
 		$ip = $HTTP_X_FORWARDED_FOR;
-		if ($ip == "" || !(strpos($ip,"unknown") === false))
+		if (!is_ip($ip))
 		{
 			$ip = $REMOTE_ADDR;
 		}
