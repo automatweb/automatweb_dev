@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.167 2003/03/27 10:58:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.168 2003/04/01 10:20:07 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -1785,6 +1785,13 @@ class document extends aw_template
 			$id = $oob["brother_of"];
 		
 		}
+
+		// if a config form was used to create this document, redirect to the
+		// class that can actually CAN use config forms
+		if (isset($oob["meta"]["cfgform_id"]) && ($oob["meta"]["cfgform_id"] > 0))
+		{
+			return $this->mk_my_orb("change",array("id" => $oob["oid"]),"doc");
+		};
 
 		// jargnev funktsioon kaib rekursiivselt mooda menyysid, kuni leitakse
 		// menyy, mille juures on m??ratud edimistemplate
