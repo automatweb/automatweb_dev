@@ -1,5 +1,5 @@
 <?php                  
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.36 2004/06/29 09:43:09 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.37 2004/06/29 10:04:59 rtoomas Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -75,7 +75,7 @@ caption Pildi/foto url
 //@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 //@caption Ametinimetus
 
-@property rank type=objpicker clid=CL_CRM_PROFESSION table=kliendibaas_isik automatic=1 group=contact
+@property rank type=relpicker reltype=RELTYPE_RANK table=kliendibaas_isik automatic=1 group=contact
 @caption Ametinimetus
 
 @property sect type=relpicker reltype=RELTYPE_SECTION table=kliendibaas_isik automatic=1 group=general field=section
@@ -625,12 +625,12 @@ class crm_person extends class_base
 			$to_obj = $conn->to();
 			$emails[] = $to_obj->prop("mail");
 		};
-		
 		$conns = $o->connections_from(array(
                         "type" => RELTYPE_RANK,
                 ));
 		foreach($conns as $conn)
 		{
+			echo "<!-- a".$conn->prop('to.name')." -->";
 			$ranks[] = $conn->prop("to.name");
 			$ranks_arr[$conn->prop('to')] = $conn->prop('to.name');
 		};
