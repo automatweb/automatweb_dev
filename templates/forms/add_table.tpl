@@ -40,13 +40,10 @@
 <td class="fform">Vali kataloogid, kuhu saab sisestusi liigutada:</td><td class="fform"><select class='small_button' name='moveto[]' size=10 multiple>{VAR:moveto}</select></td>
 </tr>
 <tr>
-<td class="fform">Submit nupu asukoht:</td><td class="fform"><input type='checkbox' name='submit_top' value='1' {VAR:top_checked}> &uuml;leval <input type='checkbox' name='submit_bottom' value='1' {VAR:bottom_checked}> all </td>
+<td class="fform">Submit nupp</td><td class="fform">Tekst: <input type='text' name='submit_text' value='{VAR:submit_text}'> Jrk: <input type='text' class='small_button' size=3 value='{VAR:submit_jrk}'> &uuml;leval <input type='checkbox' name='submit_top' value='1' {VAR:top_checked}>  all  <input type='checkbox' name='submit_bottom' value='1' {VAR:bottom_checked}> </td>
 </tr>
 <tr>
-<td class="fform">Submit nupu tekst:</td><td class="fform"><input type='text' name='submit_text' value='{VAR:submit_text}'></td>
-</tr>
-<tr>
-<td class="fform">Lisa nupp:</td><td class="fform"><input type='checkbox' name='user_button_top' value='1' {VAR:user_button_top}> &uuml;leval <input type='checkbox' name='user_button_bottom' value='1' {VAR:user_button_bottom}> all &nbsp;Aadress:<input type='text' name='user_button_url' value='{VAR:user_button_url}'> Tekst:<input type='text' name='user_button_text' value='{VAR:user_button_text}'></td>
+<td class="fform">Lisa nupp:</td><td class="fform">Tekst: <input type='text' name='user_button_text' value='{VAR:user_button_text}'> Jrk: <input type='text' class='small_button' size=3 value='{VAR:but_jrk}'> &uuml;leval <input type='checkbox' name='user_button_top' value='1' {VAR:user_button_top}>  all <input type='checkbox' name='user_button_bottom' value='1' {VAR:user_button_bottom}>  &nbsp;Aadress:<input type='text' name='user_button_url' value='{VAR:user_button_url}'> </td>
 </tr>
 <!-- SUB: CHANGE -->
 <tr>

@@ -1,15 +1,15 @@
 <form action='reforb.{VAR:ext}' method=post>
 <table bgcolor="#CCCCCC" cellpadding=3 cellspacing=1 border=0>
 <tr>
-<td class="fcaption">Nimi:</td><td class="fform"><input type='text' NAME='name'></td>
+<td class="fcaption">{VAR:LC_FORM_NAME}:</td><td class="fform"><input type='text' NAME='name'></td>
 </tr>
 <tr>
-<td class="fcaption">Kommentaar:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment></textarea></td>
+<td class="fcaption">{VAR:LC_FORM_COMM}:</td><td class="fform"><textarea cols=50 rows=5 NAME=comment></textarea></td>
 </tr>
 <tr>
-<td class="fcaption">T&uuml;&uuml;p:</td><td class="fform"><select  NAME=type><option VALUE='entry'>Sisestus
-<option VALUE='search'>Otsingu
-<option VALUE='rating'>Reitimis
+<td class="fcaption">{VAR:LC_FORM_TYPE}:</td><td class="fform"><select  NAME=type><option VALUE='entry'>{VAR:LC_FORM_INPUT}
+<option VALUE='search'>{VAR:LC_FORM_SEARCH}
+<option VALUE='rating'>{VAR:LC_FORM_RESEARCH}
 </select>
 </td>
 </tr>

@@ -12,8 +12,7 @@
     <option {VAR:type_active_multiple} VALUE='multiple'>Multiple listbox
     <option {VAR:type_active_file} VALUE='file'>Faili lisamine
     <option {VAR:type_active_link} VALUE='link'>H&uuml;perlink
-    <option {VAR:type_active_submit} VALUE='submit'>Submit nupp
-    <option {VAR:type_active_reset} VALUE='reset'>Reset nupp
+    <option {VAR:type_active_button} VALUE='button'>Nupp
     <option {VAR:type_active_price} VALUE='price'>Hind
     <option {VAR:type_active_date} VALUE='date'>Kuup&auml;ev
 <!-- SUB: CAN_DELETE -->
@@ -28,10 +27,25 @@
 	<td class="fgtext">Nimi:</td>
 	<td class="fgtext"><input type='text' class="small_button" NAME='{VAR:cell_id}_name' VALUE='{VAR:cell_name}'></td>
 </tr>
+<!-- SUB: LISTBOX_SORT -->
+<tr>
+<td class="fgtext">Sortimine:</td>
+<td class="fgtext"><input class="small_button" type='checkbox' NAME='{VAR:cell_id}_sort_order' value='1' {VAR:sort_by_order}>&nbsp;J&auml;rjekorra j&auml;gi <input type='checkbox' NAME='{VAR:cell_id}_sort_alpha' VALUE='1'  {VAR:sort_by_alpha}>&nbsp;T&auml;hestiku j&auml;rgi</td>
+<td class="fgtext">Impordi:</td>
+<td class="fgtext"><input type='file' name='{VAR:cell_id}_import' class='small_button'></td>
+</tr>
+<tr>
+<td class="fgtext">Kas m&auml;rgitud elemendid:</td>
+<td class="fgtext"><input class="small_button" type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' value='del' >&nbsp;Kustutatakse <input type='radio' NAME='{VAR:cell_id}_lbitems_dowhat' VALUE='add'>&nbsp;Lisatakse uued</td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: LISTBOX_SORT -->
+
 <!-- SUB: LISTBOX_ITEMS -->
 <tr>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><input class="small_button" type='text' NAME='{VAR:listbox_item_id}' VALUE='{VAR:listbox_item_value}'>&nbsp;<input type='radio' NAME='{VAR:listbox_radio_name}' VALUE='{VAR:listbox_radio_value}' {VAR:listbox_radio_checked}></td>
+<td class="fgtext"><input class="small_button" type='text' NAME='{VAR:listbox_item_id}' VALUE='{VAR:listbox_item_value}'>&nbsp;<input type='radio' NAME='{VAR:listbox_radio_name}' VALUE='{VAR:listbox_radio_value}' {VAR:listbox_radio_checked}>&nbsp;<input type='text' name='{VAR:listbox_order_name}' value='{VAR:listbox_order_value}' class='small_button' size=4>&nbsp;<input type='checkbox' name='{VAR:cell_id}_sel[{VAR:num}]' value='1'></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
@@ -40,7 +54,7 @@
 <!-- SUB: MULTIPLE_ITEMS -->
 <tr>
 <td class="fgtext">&nbsp;</td>
-<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}></td>
+<td class="fgtext"><input CLASS="small_button" type='text' NAME='{VAR:multiple_item_id}' VALUE='{VAR:multiple_item_value}'>&nbsp;<input CLASS="small_button" type='checkbox' NAME='{VAR:multiple_check_name}' VALUE='{VAR:multiple_check_value}' {VAR:multiple_check_checked}>&nbsp;<input type='text' name='{VAR:multiple_order_name}' value='{VAR:multiple_order_value}' class='small_button' size=4></td>
 <td class="fgtext">&nbsp;</td>
 <td class="fgtext">&nbsp;</td>
 </tr>
@@ -105,6 +119,24 @@
 <td class="fgtext"><input type='text' CLASS="small_button" SIZE=3 NAME='{VAR:cell_id}_length' VALUE='{VAR:length}'></td>
 </tr>
 <!-- END SUB: DEFAULT_TEXT -->
+
+<!-- SUB: BUTTON_SUB_URL -->
+<tr>
+<td class="fgtext">URL:</td>
+<td class="fgtext"><input type='text' CLASS="small_button" NAME='{VAR:cell_id}_burl' VALUE='{VAR:button_url}'></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_SUB_URL -->
+
+<!-- SUB: BUTTON_SUB_OP -->
+<tr>
+<td class="fgtext">V&auml;ljund:</td>
+<td class="fgtext"><select CLASS="small_button" NAME='{VAR:cell_id}_bop'>{VAR:bops}</select></td>
+<td class="fgtext">&nbsp;</td>
+<td class="fgtext">&nbsp;</td>
+</tr>
+<!-- END SUB: BUTTON_SUB_OP -->
 
 <!-- SUB: BUTTON_ITEMS -->
 <tr>

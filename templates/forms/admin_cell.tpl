@@ -1,6 +1,6 @@
 <br>
-<form action='reforb.{VAR:ext}' METHOD=post name=f1>
-
+<form action='reforb.{VAR:ext}' METHOD=post name=f1 enctype='multipart/form-data'>
+<input type='hidden' name='MAX_FILE_SIZE' value='10000000'>
 <table border="0" cellspacing="0" cellpadding="0" width=100%>
 <tr>
 <td bgcolor="#CCCCCC" width=100%>

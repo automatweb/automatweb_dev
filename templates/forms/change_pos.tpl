@@ -16,8 +16,15 @@
 <tr>
 	<td class="fform" colspan=2>
 		<table border=1 cellpadding=0 cellspacing=0>
+			<tr>
+				<td class="fform">&nbsp;</td>
+				<!-- SUB: COLNUM -->
+				<td class="fform" align="center">{VAR:col}</td>
+				<!-- END SUB: COLNUM -->
+			</tr>
 			<!-- SUB: ROW -->
 			<tr>
+				<td class="fform">{VAR:row}</td>
 				<!-- SUB: COL -->
 					<td class="fform"><input type='radio' name='s_cell' value='{VAR:row}_{VAR:col}' {VAR:checked}></td>
 				<!-- END SUB: COL -->
@@ -32,8 +39,15 @@
 <tr>
 	<td class="fform" colspan=2>
 		<table border=1 cellpadding=0 cellspacing=0>
+			<tr>
+				<td class="fform">&nbsp;</td>
+				<!-- SUB: COLNUMC -->
+				<td class="fform" align="center">{VAR:col}</td>
+				<!-- END SUB: COLNUMC -->
+			</tr>
 			<!-- SUB: ROWC -->
 			<tr>
+				<td class="fform">{VAR:row}</td>
 				<!-- SUB: COLC -->
 					<td class="fform"><input type='checkbox' name='c_cell[{VAR:cnt}]' value='{VAR:row}_{VAR:col}'}></td>
 				<!-- END SUB: COLC -->
@@ -41,6 +55,10 @@
 			<!-- END SUB: ROWC -->
 		</table>
 	</td>
+</tr>
+<tr>
+	<td class="fform">Mitu elementi teha:</td>
+	<td class="fform"><input type='text' name='el_count' value='1' size=3></td>
 </tr>
 <tr>
 	<td class="fform" colspan="3" align="center">
