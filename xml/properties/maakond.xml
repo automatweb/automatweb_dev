@@ -1,29 +1,23 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
-      </property>
-      <property>
             <name>name</name>
             <type>textbox</type>
             <size>20</size>
-            <table>kliendibaas_maakond</table>
+            <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>Nimetus (tmp)</caption>
+            <caption>Maakonna nimetus</caption>
       </property>
       <property>
-            <name>location</name>
+            <name>comment</name>
             <type>textarea</type>
-            <table>kliendibaas_maakond</table>
+            <cols>40</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <field>comment</field>
             <group>general</group>
-            <field>location</field>
-            <caption>Asukoha kirjeldus</caption>
+            <caption>Kommentaar</caption>
       </property>
       <tableinfo>
             <kliendibaas_maakond>

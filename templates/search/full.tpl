@@ -131,6 +131,20 @@ function search_selall()
 	}
 	chk_status = !chk_status;
 }
+
+function selall()
+{
+	len = document.resulttable.elements.length;
+	for (i=0; i < len; i++)
+	{
+		if (document.resulttable.elements[i].name.indexOf("sel") != -1)
+		{
+			document.resulttable.elements[i].checked=chk_status;
+		}
+	}
+	chk_status = !chk_status;
+}
+
 </script>
 
 

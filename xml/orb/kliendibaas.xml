@@ -1,6 +1,20 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="kliendibaas" folder="kliendibaas" extends="class_base">
+		<action name="change">
+			<function name="change">
+				<arguments>
+					<optional name="kood"/>
+					<optional name="tase"/>
+					<optional name="id"/>
+					<optional name="group"/>
+					<optional name="action"/>
+					<optional name="teg_oid"/>
+					<optional name="letter"/>
+					<optional name="fpage"/>
+					<optional name="no_search"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
-		

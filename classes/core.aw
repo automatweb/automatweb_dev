@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.214 2003/08/08 13:10:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.215 2003/08/21 10:23:49 axel Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -899,6 +899,7 @@ class core extends acl_base
 	//   relobj_id - reference to the relation object
 	//   reltype - type of the relation
 	//   no_cache - if true, cache is not updated
+	//   add_obj_type_history - if set, save object type in session for use in aliasmgr obj type listbox
 	function addalias($arr)
 	{
 		//arr($arr);
@@ -925,30 +926,34 @@ class core extends acl_base
 
 		$cl = $target_data['class_id'];
 
-		if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
-		{
-			$hist[time()] = $cl;
-			array_unique($hist);
-			krsort($hist);
-			while(count($hist) > 10)
+		// aliasmgr object type history
+		if (isset($add_obj_type_history))
+		{		
+			if (is_array($hist = aw_global_get('aliasmgr_obj_history')))
 			{
-				array_pop($hist);
+				$hist[time()] = $cl;
+				array_unique($hist);
+				krsort($hist);
+				while(count($hist) > 10)
+				{
+					array_pop($hist);
+				}
 			}
+			else
+			{
+				$hist = array(time() => $cl);
+			}
+
+			aw_session_set('aliasmgr_obj_history',$hist);
+
+			$usr = get_instance('users_user');
+
+			$usr->set_user_config(array(
+				'uid' => aw_global_get('uid'),
+				'key' => 'aliasmgr_obj_history',
+				'value' => $hist
+			));
 		}
-		else
-		{
-			$hist = array(time() => $cl);
-		}
-
-		aw_session_set('aliasmgr_obj_history',$hist);
-
-		$usr = get_instance('users_user');
-
-		$usr->set_user_config(array(
-			'uid' => aw_global_get('uid'),
-			'key' => 'aliasmgr_obj_history',
-			'value' => $hist
-		));
 
 		$this->db_query($q);
 

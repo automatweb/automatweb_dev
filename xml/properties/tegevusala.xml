@@ -1,12 +1,30 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>tegevusala</name>
+            <type>textbox</type>
+            <size>55</size>
+            <table>kliendibaas_tegevusala</table>
+            <group>general</group>
+            <field>tegevusala</field>
+            <caption>Tegevusala nimetus</caption>
+      </property>
+      <property>
+            <name>tegevusala_en</name>
+            <type>textbox</type>
+            <size>55</size>
+            <table>kliendibaas_tegevusala</table>
+            <group>general</group>
+            <field>tegevusala_en</field>
+            <caption>Inglise keelne nimetus</caption>
+      </property>
+      <property>
             <name>comment</name>
             <type>textarea</type>
             <field>comment</field>
             <table>objects</table>
             <group>general</group>
-            <caption>Kommentaar</caption>
+            <caption>Kirjeldus</caption>
       </property>
       <property>
             <name>kood</name>
@@ -16,32 +34,6 @@
             <group>general</group>
             <field>kood</field>
             <caption>Tegevusala kood</caption>
-      </property>
-      <property>
-            <name>tegevusala</name>
-            <type>textbox</type>
-            <size>40</size>
-            <table>kliendibaas_tegevusala</table>
-            <group>general</group>
-            <field>tegevusala</field>
-            <caption>Tegevusala</caption>
-      </property>
-      <property>
-            <name>tegevusala_en</name>
-            <type>textbox</type>
-            <size>40</size>
-            <table>kliendibaas_tegevusala</table>
-            <group>general</group>
-            <field>tegevusala_en</field>
-            <caption>Tegevusala (i.k.)</caption>
-      </property>
-      <property>
-            <name>kirjeldus</name>
-            <type>textarea</type>
-            <table>kliendibaas_tegevusala</table>
-            <group>general</group>
-            <field>kirjeldus</field>
-            <caption>Tegevusala kirjeldus</caption>
       </property>
       <tableinfo>
             <kliendibaas_tegevusala>

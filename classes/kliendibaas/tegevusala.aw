@@ -5,22 +5,17 @@
 	@default table=objects
 	@default group=general
 
+	@property tegevusala type=textbox size=55 table=kliendibaas_tegevusala
+	@caption Tegevusala nimetus
+
+	@property tegevusala_en type=textbox size=55 table=kliendibaas_tegevusala
+	@caption Inglise keelne nimetus
+		
 	@property comment type=textarea field=comment
-	@caption Kommentaar
+	@caption Kirjeldus
 
-	@default table=kliendibaas_tegevusala
-
-	@property kood type=textbox size=8
+	@property kood type=textbox size=8 table=kliendibaas_tegevusala
 	@caption Tegevusala kood
-
-	@property tegevusala type=textbox size=40
-	@caption Tegevusala
-
-	@property tegevusala_en type=textbox size=40
-	@caption Tegevusala (i.k.)
-
-	@property kirjeldus type=textarea
-	@caption Tegevusala kirjeldus
 */
 
 /*
@@ -57,8 +52,31 @@ class tegevusala extends class_base
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'name':
+				$retval=PROP_IGNORE;
+			break;
+			
 		}
 		return  $retval;
 	}
+	
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		$form = &$args["form_data"];
+		$obj = &$args["obj"];		
+//arr($args);
+		switch($data["name"])
+		{
+			case 'kood':
+				$obj['name'] =  ($form['kood'] ? ''.$form['kood'].' ' : '').$form['tegevusala'];
+			break;
+		};
+		return $retval;
+	}	
 }
 ?>

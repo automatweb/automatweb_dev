@@ -32,8 +32,8 @@
       <property>
             <name>files</name>
             <type>textarea</type>
-            <cols>60</cols>
-            <rows>3</rows>
+            <cols>75</cols>
+            <rows>5</rows>
             <table>objects</table>
             <group>general</group>
             <field>meta</field>
@@ -43,7 +43,7 @@
       <property>
             <name>example</name>
             <type>textarea</type>
-            <cols>60</cols>
+            <cols>75</cols>
             <rows>3</rows>
             <table>objects</table>
             <group>general</group>

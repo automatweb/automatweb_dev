@@ -1,52 +1,42 @@
 <?php
 /*
-	@classinfo relationmgr=yes
-	@default table=objects
-	@default group=general
+@classinfo relationmgr=yes
+@default table=objects
+@default group=general
 
-	@default field=meta
-	@default method=serialize
+@default field=meta
+@default method=serialize
 
 //	@property pilot type=relpicker reltype=PILOT
 //	@caption näitamise pilootobjekt
 
-	@property template type=select
-	@caption Näitamise templiit
+@property template type=select
+@caption Näitamise templiit
 
 //	@property use_existing_pilot type=checkbox
 //	@caption näitamisel kasuta konkreetse objekti pilootobjekti kui on olemas
 
-	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600
-	@caption majanda valimeid
 
-	@property active_selection type=textbox group=objects,selectione
+@property active_selection type=textbox group=selectione
 
-	@property forms type=checkbox
-	@caption Näita tagasisisde linke
+@property forms type=checkbox
+@caption Näita tagasisisde linke
 
-	@property forms type=relpicker reltype=BACKFORMS2
-	@caption tagasiside vormid
+@property forms type=relpicker reltype=BACKFORMS2
+@caption tagasiside vormid
 
 ////////////////////////////////////////////////////////////
 
-	@default group=objects
-	@groupinfo objects submit=no caption="Selle valimi objektid"
+@default group=selectione
+@groupinfo selectione submit=no caption="Seotud valimid"
 
-	@property obj_list type=text callback=obj_list
-
-/////////////////////////////////////////////////////////////
-
-	@default group=selectione
-	@groupinfo selectione submit=no caption="Seotud valimid"
-
-	@property active_selection_objects type=text callback=callback_obj_list
-
+@property active_selection_objects type=text callback=callback_obj_list
 
 /////////////////////////////////////////////////////////////
 
-	@default group=shou
-	@groupinfo shou caption="Näita"
-	@property dokus type=text callback=show_selection
+@default group=shou
+@groupinfo shou caption="Näita"
+@property dokus type=text callback=show_selection
 
 */
 
@@ -65,23 +55,27 @@ CREATE TABLE `selection` (
 //define ('PILOT', 1);
 
 define ('BACKFORMS2',1);
+define ('RELATED_SELECTIONS',2);
+
 
 class selection extends class_base
 {
-
+	var $selections_reltype;
+	
 	function selection()
 	{
 		$this->init(array(
 			'clid' => CL_SELECTION,
 			'tpldir' => 'selection',
-		));//	arr(get_defined_vars(),1);
+		));
+		$this->selections_reltype = RELATED_SELECTIONS;
 	}
-
 
 	function callback_get_rel_types()
 	{
 		return array(
 			BACKFORMS2 => 'Tagasisidevorm',
+			RELATED_SELECTIONS => 'Seotud valimid',
 		);
 	}
 
@@ -93,10 +87,12 @@ class selection extends class_base
 			case BACKFORMS2:
 				$retval = array(CL_PILOT);
 			break;
+			case RELATED_SELECTIONS:
+				$retval = array(CL_SELECTION);
+			break;
 		};
 		return $retval;
 	}
-
 
 	function get_property($args)
 	{
@@ -128,7 +124,7 @@ class selection extends class_base
 			case 'alias':
 				$retval = PROP_IGNORE;
 			break;
-			case 'selections':
+			/*case 'selections':
 				if (isset($data['value']) && is_array($data['value']))
 				{
 				//$data['value']=(array)$data['value'];
@@ -140,17 +136,18 @@ class selection extends class_base
 //				$data['value'] = array_unique($data['value']);
 				}
 
-			break;
+			break;*/
 		}
 		return  $retval;
 	}
 
 	function callback_obj_list($args)
 	{
-		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? $args['obj']['meta']['active_selection'] : NULL;
+		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
+		$args['obj']['meta']['active_selection'] : $args['obj'][OID];
 		$arg2['obj']['parent'] = $args['obj']['parent'];
 		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
-		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
+		$arg2['sel']['oid'] = $args['obj'][OID];
 		return $dat = $this->obj_list($arg2);
 	}
 
@@ -167,6 +164,7 @@ class selection extends class_base
 
 	function obj_list($args)
 	{
+		//arr($args);	
 		$ob = $args['obj'];
 		$meta = $ob['meta'];
 
@@ -241,10 +239,11 @@ class selection extends class_base
 		}
 		$t->sort_by();
 		$nodes = array();
+
 		$nodes['manager'] = array(
 			"value" =>
 			$this->mk_toolbar(array(
-				'arr' =>$meta['selections'],
+				'selection' => $args['sel'][OID],
 				'parent' => $args['obj']['parent'],
 				'selected' => $meta['active_selection'],
 				'show_buttons' => array('activate','add','change','save','delete'),
@@ -252,7 +251,6 @@ class selection extends class_base
 			$t->draw().
 			html::hidden(array('name' => 'this_selection', 'value' => $args['obj'][OID])).
 			html::hidden(array('name' => 'active_selection', 'value' => $meta['active_selection'])),
-
 		);
 		return $nodes;
 	}
@@ -329,6 +327,7 @@ class selection extends class_base
 		die;
 	}
 
+
 	function add_to_selection($args)
 	{
 		$uri = $args['return_url'];
@@ -361,6 +360,22 @@ class selection extends class_base
 				"key" => 'selections',
 				"value" => $selections,
 			));
+
+		
+$data = $this->get_object($args['id']);
+$data['class_file'] =  (isset($this->cfg['classes'][$data['class_id']]['alias_class'])) ? $this->cfg['classes'][$data['class_id']]['alias_class'] : $this->cfg['classes'][$data['class_id']]['file'];
+$ins = get_instance($data['class_file']);
+
+			
+			
+			$this->addalias(array(
+				'id' => $args['id'],
+				'alias' => $newoid,
+				'no_cache' => true,
+				'reltype' => $ins->selections_reltype,
+			));
+			
+
 //arr($args,1);
 //		põhimõtteliselt siin võiks minna uue objekti muutmise peale, ja tagasi nupuga saaks tagasi minna
 //			$newuri = $this->mk_my_orb('change',array('id' => $newoid, 'return_url' => $uri),'selection');
@@ -387,14 +402,35 @@ class selection extends class_base
 		$align = isset($align)?$align:'left';
 		$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 
-		if (is_array($arr))
+		/*if (is_array($args['arr']))
 		{
-			foreach ($arr as $key => $val)
+			foreach ($args['arr'] as $key => $val)
 			{
 				$dat = $this->get_object($val);
 				$ops[$val] = $dat['name'];
 			}
+		}*/
+		
+		$arr = $this->get_aliases(array(
+			'oid' => $args['selection'],
+			'type' => CL_SELECTION,
+		));
+		
+		$this_obj = $this->get_object($args['selection']);
+		if ($this_obj['class_id'] == CL_SELECTION)
+		{
+			$arr[] = $this_obj;
 		}
+		
+		
+				
+		if (is_array($arr))
+		foreach ($arr as $key => $val)
+		{
+			$ops[$val[OID]] = $val['name'];
+		}		
+		
+		
 		$ops[0] = '- lisa uude valimisse -';
 		$str .= html::select(array(
 			'name' => 'add_to_selection',

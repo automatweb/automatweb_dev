@@ -5,13 +5,17 @@
 	@default table=objects
 	@default group=general
 
-	@default table=kliendibaas_linn
-
 	@property name type=textbox size=20
-	@caption Nimetus
+	@caption Linna nimetus
 
-	@property location type=textarea
-	@caption Asukoha kirjeldus
+@property comment type=textarea cols=40 rows=3 table=objects field=comment
+@caption Kommentaar
+	
+	//@property location type=textarea
+	//@caption Asukoha kirjeldus
+
+	//@default table=kliendibaas_linn	
+	
 */
 /*
 CREATE TABLE `kliendibaas_linn` (
@@ -42,6 +46,9 @@ class linn extends class_base
 				$retval=PROP_IGNORE;
 			break;
 			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+			case 'status':
 				$retval=PROP_IGNORE;
 			break;
 		}

@@ -2,21 +2,11 @@
 <properties>
       <property>
             <name>name</name>
-            <type>textbox</type>
+            <type>text</type>
             <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>nimi</caption>
-      </property>
-      <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <cols>40</cols>
-            <rows>3</rows>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
+            <caption>Nimi</caption>
       </property>
       <property>
             <name>firstname</name>
@@ -26,7 +16,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>firstname</field>
-            <caption>eesnimi</caption>
+            <caption>Eesnimi</caption>
       </property>
       <property>
             <name>lastname</name>
@@ -36,7 +26,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>lastname</field>
-            <caption>perekonnanimi</caption>
+            <caption>Perekonnanimi</caption>
       </property>
       <property>
             <name>title</name>
@@ -46,7 +36,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>title</field>
-            <caption>tiitel</caption>
+            <caption>Tiitel</caption>
       </property>
       <property>
             <name>gender</name>
@@ -56,7 +46,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>gender</field>
-            <caption>sugu</caption>
+            <caption>Sugu</caption>
       </property>
       <property>
             <name>personal_id</name>
@@ -66,7 +56,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>personal_id</field>
-            <caption>isikukood</caption>
+            <caption>Isikukood</caption>
       </property>
       <property>
             <name>nickname</name>
@@ -76,7 +66,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>nickname</field>
-            <caption>hüüdnimi</caption>
+            <caption>Hüüdnimi</caption>
       </property>
       <property>
             <name>messenger</name>
@@ -86,7 +76,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>messenger</field>
-            <caption>msn/yahoo/aol/icq</caption>
+            <caption>Msn/yahoo/aol/icq</caption>
       </property>
       <property>
             <name>birthday</name>
@@ -96,7 +86,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>birthday</field>
-            <caption>sünnipäev</caption>
+            <caption>Sünnipäev</caption>
       </property>
       <property>
             <name>social_status</name>
@@ -106,7 +96,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>social_status</field>
-            <caption>perekonnaseis</caption>
+            <caption>Perekonnaseis</caption>
       </property>
       <property>
             <name>spouse</name>
@@ -116,27 +106,16 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>spouse</field>
-            <caption>abikaasa</caption>
+            <caption>Abikaasa</caption>
       </property>
       <property>
             <name>children</name>
-            <type>textarea</type>
-            <cols>20</cols>
-            <rows>2</rows>
+            <type>relpicker</type>
+            <reltype>CHILDREN</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>children</field>
-            <caption>lapsed</caption>
-      </property>
-      <property>
-            <name>digitalID</name>
-            <type>textbox</type>
-            <size>20</size>
-            <maxlength>300</maxlength>
-            <table>kliendibaas_isik</table>
-            <group>general</group>
-            <field>digitalID</field>
-            <caption>digitaalallkiri(fail vms)?</caption>
+            <caption>Lapsed</caption>
       </property>
       <property>
             <name>pictureurl</name>
@@ -146,7 +125,7 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>pictureurl</field>
-            <caption>pildi/foto url</caption>
+            <caption>Pildi/foto url</caption>
       </property>
       <property>
             <name>picture</name>
@@ -155,25 +134,44 @@
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>picture</field>
-            <caption>pilt/foto</caption>
+            <caption>Pilt/foto</caption>
       </property>
       <property>
             <name>work_contact</name>
             <type>relpicker</type>
-            <reltype>WORKADDRESS</reltype>
+            <reltype>WORK</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>work_contact</field>
-            <caption>töökoha kontakt andmed</caption>
+            <caption>Organisatsioon</caption>
+      </property>
+      <property>
+            <name>rank</name>
+            <type>relpicker</type>
+            <reltype>RANK</reltype>
+            <table>kliendibaas_isik</table>
+            <group>general</group>
+            <field>rank</field>
+            <caption>Ametinimetus</caption>
       </property>
       <property>
             <name>personal_contact</name>
             <type>relpicker</type>
-            <reltype>HOMEADDRESS</reltype>
+            <reltype>ADDRESS</reltype>
             <table>kliendibaas_isik</table>
             <group>general</group>
             <field>personal_contact</field>
-            <caption>kodused kontakt andmed</caption>
+            <caption>Kodused kontaktandmed</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <cols>40</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <field>comment</field>
+            <group>general</group>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>forms</name>

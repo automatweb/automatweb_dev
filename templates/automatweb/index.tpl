@@ -71,7 +71,7 @@ function check_generic_loader()
 </script>
 </head>
 <body onmousedown="activate_window();" bgcolor='#FFFFFF' link='#0000ff' vlink='#0000ff' onLoad="update_window_title();create_objects(); check_generic_loader();">
-<table border="0" width="100%" cellspacing="0" cellpadding="2">
+<table border="0" width="100%" cellspacing="0" cellpadding="2" style="border-bottom:solid 2px white;">
 <tr>
 <td align="left" class="yah">&nbsp;
 {VAR:site_title}

@@ -4,18 +4,20 @@
             <name>name</name>
             <type>textbox</type>
             <size>20</size>
-            <table>kliendibaas_linn</table>
+            <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>Nimetus</caption>
+            <caption>Linna nimetus</caption>
       </property>
       <property>
-            <name>location</name>
+            <name>comment</name>
             <type>textarea</type>
-            <table>kliendibaas_linn</table>
+            <cols>40</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <field>comment</field>
             <group>general</group>
-            <field>location</field>
-            <caption>Asukoha kirjeldus</caption>
+            <caption>Kommentaar</caption>
       </property>
       <tableinfo>
             <kliendibaas_linn>

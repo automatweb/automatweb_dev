@@ -7,109 +7,100 @@
 	@default field=meta
 	@default method=serialize
 
-//////////////////////////////////////////////////////
 
-	@default group=manager
-	@groupinfo manager caption=Ettevõtted
+	@property selections type=relpicker reltype=SELECTIONS group=general
+	@caption Vaikimisi valim
 
-//	@property test1 type=text
-//	@caption submit valimid
+//////////////////////////////////////////////////////	
+
+	@default group=firmad
+	@groupinfo firmad submit=no caption=Ettevõtted
+
+@property navtoolbar type=toolbar store=no no_caption=1
+@caption 
 	
-/////valimi nupud lisamiseks
-	@property selection_manage_buttons type=text callback=selection_manage_bar
+	@property search_form type=text no_caption=1
+	@caption otsing
+	
+	@property sfield type=textbox
+	@property exclude type=textbox
+	@property make_search type=textbox size=1
 
+		
+	//valimi nupud	
+	@property selection_manage_buttons type=text callback=selection_manage_bar
+	
 	@property manageri type=text callback=firma_manager
 
-	@property page type=textbox size=3
-	@caption page
-
-	@property search_form type=text
-	@caption otsing
-
-	@property search type=textbox size=3
-
-	@property search_require type=textbox size=3
-
-	@property do_search type=textbox size=3
-	@caption do otsing
-
-	@property search_history type=textbox size=3
-	@property search_require_history type=textbox size=3
-
-	@property actions type=text
-	@caption actions
-
-	@property select type=textbox size=3
-	@property objs type=textbox size=3
-	@property sele type=checkbox ch_value=on
+	
+//	@property page type=textbox size=3
+//	@caption page
+//	@property search type=textbox size=3
+/	@property search_require type=textbox size=3
+/	@property do_search type=textbox size=3
+/	@caption do otsing
+/	@property search_history type=textbox size=3
+/	@property search_require_history type=textbox size=3
+/	@property actions type=text
+/	@caption actions
+/	@property select type=textbox size=3
+/	@property objs type=textbox size=3
+/	@property sele type=checkbox ch_value=on
 
 ////////////////////////////////////////////////////////////
 
 	@default group=tegevusalad
 	@groupinfo tegevusalad caption=Tegevusalad
 
-	@property teg_page type=textbox size=3
-	@caption teg_page
-
 	@property tegevusala_manager type=text callback=tegevusala_manager
 
-	@property teg_do_search type=textbox size=3
-	@caption do otsing
-	@property teg_search type=textbox size=3
+//	@property teg_page type=textbox size=3
+//	@caption teg_page
+//	@property teg_do_search type=textbox size=3
+//	@caption do otsing
+//	@property teg_search type=textbox size=3
 
 ////////////////////////////////////////////////////////////
 	@default group=settings
 	@groupinfo settings caption=Seaded
 
-//	@property valim type=popup_objmgr clid=CL_SELECTION method=serialize field=meta table=objects
-//	@property valim type=relpicker reltype=VALIM
-//	@caption vali aktiivne valim
-
-//	@property valimid type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects
-//	@caption valimid
-
-	@property limit_per_page type=textbox size=8
-	@caption mitu rida näita
-
-	@property show_columns type=select multiple=1
-	@caption ettevõtete tabelis näita neid veerge
+//	@property limit_per_page type=textbox size=8
+//	@caption mitu rida näita
+//	@property show_columns type=select multiple=1
+//	@caption ettevõtete tabelis näita neid veerge
 	
 	@property order_by_columns type=select
 	@caption sorteeri veeru järgi
 
-	@property dir_firmad type=popup_objmgr clid=CL_PSEUDO multiple=1 method=serialize field=meta table=objects
-//	@property dir_firmad type=relpicker reltype=F_CAT multiple=1
-	@caption firmade kataloog(id)
+	@property dir_firmad type=relpicker reltype=FIRMA_CAT
+	@caption Vaikimisi firmade kataloog
 
-	@property dir_isik type=popup_objmgr clid=CL_PSEUDO multiple=1 method=serialize field=meta table=objects
-//	@property dir_isik type=relpicker reltype=I_CAT  multiple=1
-	@caption isikute kataloog(id)
+	@property dir_isik type=relpicker reltype=ISIK_CAT
+	@caption Vaikimisi töötajate kataloog
 
-	@property dir_address type=popup_objmgr clid=CL_PSEUDO multiple=1 method=serialize field=meta table=objects
-//	@property dir_address type=relpicker reltype=A_CAT multiple=1
-	@caption aadresside kataloog(id)
+	@property dir_address type=relpicker reltype=ADRESS_CAT
+	@caption Vaikimisi aadresside kataloog
 
-	@property dir_linn type=popup_objmgr clid=CL_PSEUDO multiple=1 method=serialize field=meta table=objects
-//	@property dir_linn type=relpicker reltype=L_CAT multiple=1
-	@caption linnade kataloog(id)
+//	@property dir_linn type=relpicker reltype=LINN_CAT
+//	@caption linnade kataloog(id)
 
-	@property dir_maakond type=relpicker reltype=M_CAT multiple=1
-	@caption maakondade kataloog(id)
+//	@property dir_maakond type=relpicker reltype=MAAKOND_CAT
+//	@caption maakondade kataloog(id)
 
-	@property dir_riik type=relpicker reltype=R_CAT multiple=1
-	@caption riikide kataloog(id)
+//	@property dir_riik type=relpicker reltype=RIIK_CAT
+//	@caption riikide kataloog(id)
 
-	@property dir_tegevusala type=relpicker reltype=TE_CAT multiple=1
-	@caption tegevusalade kataloog(id)
+	@property dir_tegevusala type=relpicker reltype=TEGEVUSALA_CAT
+	@caption Vaikimisi tegevusalade kataloog
 
-	@property dir_toode type=relpicker reltype=TO_CAT multiple=1
-	@caption toodete kataloog(id)
+//	@property dir_toode type=relpicker reltype=TOODE_CAT
+//	@caption toodete kataloog(id)
 
-	@property dir_default type=relpicker reltype=G_CAT multiple=1
-	@caption üld kataloog
+	@property dir_default type=relpicker reltype=GENERAL_CAT
+	@caption Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda
 
-	@property where_firm type=checkbox ch_value=on
-	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
+//	@property where_firm type=checkbox ch_value=on
+//	@caption näita ainult tegevusalasid, kus alal on ka ettevõtteid
 
 ////////////////////////////////////////////////////////////
 /	@default group=tests
@@ -122,10 +113,10 @@
 ////////////////////////////////////////////////////////////
 
 
-	@default group=objects_manager
-	@groupinfo objects_manager caption=Objektide&nbsp;lisamine
-
-	@property objects_manager type=text callback=objects_manager
+//	@default group=objects_manager
+//	@groupinfo objects_manager caption=Objektide&nbsp;lisamine
+//
+//	@property objects_manager type=text callback=objects_manager
 
 ////////////////////////////////////////////////////////////
 
@@ -137,57 +128,116 @@
 //////////////valimite kraam////////////////////////////////////////////////////////////////////////////
 
 	@default group=selectione
-	@groupinfo selectione caption=Valimid submit=no
-
+	@groupinfo selectione submit=no caption=Valimid
 	@property active_selection_objects type=text callback=callback_obj_list
-
-	@property selections type=popup_objmgr clid=CL_SELECTION multiple=1 method=serialize field=meta table=objects width=600 group=general
-	@caption majanda valimeid
-
-	@property active_selection type=textbox group=manager,selectione
-
+	@property active_selection type=textbox group=firmad,selectione
+	
 
 
 */
 
-define ('VALIM',1);
-define ('F_CAT',2);
-define ('I_CAT',3);
-define ('A_CAT',4);
-define ('L_CAT',5);
-define ('M_CAT',6);
-define ('R_CAT',7);
-define ('TE_CAT',8);
-define ('TO_CAT',9);
-define ('G_CAT',10);
+define ('SELECTIONS',1);
+define ('FIRMA_CAT',2);
+define ('ISIK_CAT',3);
+define ('ADRESS_CAT',4);
+define ('LINN_CAT',5);
+define ('MAAKOND_CAT',6);
+define ('RIIK_CAT',7);
+define ('TEGEVUSALA_CAT',8);
+define ('TOODE_CAT',9);
+define ('GENERAL_CAT',10);
+define ('CALENDAR',11);
+
+define('SELECTIONS_RELTYPE',SELECTIONS);
+		
+//define ('',11);
+//define ('',);
+//define ('',);
+//define ('',);
+//define ('',);
+
+
 
 class kliendibaas extends class_base
 {
 	var $show_columns;
+	var $selections_reltype;
+	
 
+	function kliendibaas()
+	{
+		$this->init(array(
+			'clid' => CL_KLIENDIBAAS,
+			'tpldir' => 'kliendibaas',
+		));
+		$this->selections_reltype = SELECTIONS_RELTYPE;
+		$this->show_columns= array(
+			////////firma
+//			'firma_oid' => 'firma id',
+			'firma_nimetus' => 'firma nimi',
+			'firma_reg_nr' => 'reg nr',
+			'firma_ettevotlusvorm' => 'ettevõtlusvorm',
+			'pohitegevus' => 'põhitegevus',
+			'tegevusala_kood' => 'tegevusala kood',
+			'tegevuse_kirjeldus' => 'tegevuse kirjeldus',
+			'firma_juht' => 'firmajuht',
+			'kaubamargid' => 'kaubamärgid',
+			'f_aadress' => 'aadress',
+			'f_riik' => ' asukoha riik',
+			'f_linn' => 'linn',
+			'f_maakond' => 'maakond',
+			'f_postiindeks' => 'postiindeks',
+			'f_telefon' => 'telefon',
+			'f_mobiil' => 'mobiiltelefon',
+			'f_faks' => 'faks',
+			'f_piipar' => 'piipar',
+			'f_e_mail' => 'e-mail',
+			'f_kodulehekylg' => 'kodulehekülg',
+//			'korvaltegevused' => '',
+//			'tooted' => '',
 
+/////////// isik
+// oid   | firstname | lastname | name | gender | personal_id | title | nickname | messenger | birthday | social_status |
+//spouse | children | personal_contact | work_contact | digitalID | notes | pictureurl | picture |
 
+/////////// aadress
+// oid   | name | tyyp | riik | linn  | maakond | postiindeks | telefon | mobiil | faks | piipar |
+// aadress | e_mail | kodulehekylg
+		);
+	}	
+		
 //// valim///
 /* ühesõnaga valimi klassiga näitame valimeid ja manageerime neid
 põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 */
+
 	function callback_obj_list($args)
 	{
 		classload('kliendibaas/selection');
-
 		$arg2['obj'][OID] = $args['obj']['meta']['active_selection'];
 		$arg2['obj']['parent'] = $args['obj']['parent'];
 		$arg2['obj']['meta']['active_selection'] = $args['obj']['meta']['active_selection'];
-		$arg2['obj']['meta']['selections'] = $args['obj']['meta']['selections'];
+		$arg2['sel']['oid'] = $args['obj'][OID];	
 		return $this->selection_object->obj_list($arg2);
 	}
+	
+/*	function callback_obj_list_($args)
+	{
+		$arg2['obj'][OID] = isset($args['obj']['meta']['active_selection']) ? 
+			$args['obj']['meta']['active_selection'] : $args['obj'][OID];
+		$arg2['obj']['parent'] = $args['obj']['parent'];
+		$arg2['obj']['meta']['active_selection'] = $arg2['obj'][OID] ? $arg2['obj'][OID] : $args['obj']['meta']['selections'][0];
+		$arg2['sel']['oid'] = $args['obj'][OID];
+		return $dat = $this->obj_list($arg2);
+	}	*/
 
+	
 	function selection_manage_bar($args = array())
 	{
 		$nodes = array();
 		$nodes['toolbar'] = array(
 			'value' => $this->selection_object->mk_toolbar(array(
-				'arr' =>$this->selection['meta']['selections'],
+				'selection' => $args['obj'][OID],
 				'parent' => $this->selection['parent'],
 				'selected' => $this->selection['meta']['active_selection'],
 				'align' => 'right',
@@ -199,7 +249,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 //// end:valim///
 
 
-	function objects_manager($args)
+	/*function objects_manager($args)
 	{
 		$arr = array(
 			'linn' => 'linn',
@@ -228,22 +278,23 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			"value" => $str,
 		);
 		return $nodes;
-	}
+	}*/
 
 
 	function callback_get_rel_types()
 	{
 		return array(
-			VALIM => 'valimid',
-			F_CAT => 'firmade kataloog(id)',
-			I_CAT => 'isikute kataloog(id)',
-			A_CAT => 'aadresside kataloog(id)',
-			L_CAT => 'linnade kataloog(id)',
-			M_CAT => 'maakondade kataloog(id)',
-			R_CAT => 'riikide kataloog(id)',
-			TE_CAT => 'tegevusalade kataloog(id)',
-			TO_CAT => 'toodete kataloog(id)',
-			G_CAT => 'üld kataloog',
+			SELECTIONS => 'Valimid',
+			FIRMA_CAT => 'Firmade kataloogid',
+			ISIK_CAT => 'Töötajate kataloogid',
+			ADRESS_CAT => 'Aadresside kataloogid',
+			LINN_CAT => 'Linnade kataloogid',
+			MAAKOND_CAT => 'Maakondade kataloogid',
+			RIIK_CAT => 'Riikide kataloogid',
+			TEGEVUSALA_CAT => 'Tegevusalade kataloogid',
+			TOODE_CAT => 'Toodete kataloogid',
+			GENERAL_CAT => 'Üldkataloog',
+			CALENDAR => 'Kalender',
 		);
 	}
 
@@ -252,18 +303,47 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$retval = false;
                 switch($args["reltype"])
                 {
-			case VALIM:
+			case SELECTIONS:
 				$retval = array(CL_SELECTION);
 			break;
-			case 0:
+			case FIRMA_CAT:
+				$retval = array(CL_PSEUDO);
 			break;
+			case ISIK_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case ADRESS_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case LINN_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case MAAKOND_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case RIIK_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case TEGEVUSALA_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case TOODE_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case GENERAL_CAT:
+				$retval = array(CL_PSEUDO);
+			break;
+			case CALENDAR:
+				$retval = array(CL_PLANNER);
+			break;
+
 			default: $retval = array(CL_PSEUDO);
 		};
 		return $retval;
 	}
 
 
-	function get_property($args)
+	function get_property(&$args)
 	{
 		$data = &$args['prop'];
 		$retval = PROP_OK;
@@ -280,6 +360,15 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			$this->selection = $args['obj'];
 		}
 
+		if (!is_array($this->got_aliases))
+		{
+			$arr = $this->get_aliases(array('oid' => $args['obj'][OID]));
+			foreach($arr as $key => $val)
+			{
+				$this->got_aliases[$val['reltype']][] = $val['target'];
+			}
+		}
+
 		switch($data["name"])
 		{
 			//// valim///
@@ -288,7 +377,21 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$retval=PROP_IGNORE;
 				break;
 
-			case 'test1':
+			
+			
+			case 'navtoolbar':
+				/*if (!aw_global_get('user_calender') || kliendibaasiga seotud kalender)
+				{
+					$retval=PROP_IGNORE;
+				}
+				else*/
+				{
+					//$args['kliendibaas'] = aw_global_get('kliendibaas');
+					$this->kliendibaas_toolbar($args);
+				}
+			break;
+				
+			/*case 'test1':
 			
 				if(is_array($meta['valimid']))
 				{
@@ -313,7 +416,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			case 'test':
 				$retval=PROP_IGNORE;
-			break;
+			break;*/
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
@@ -322,14 +425,33 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			break;
 			case 'search_form':
 
-				if (isset($req['do_search']))
+/*				if (isset($req['do_search']))
 				{
 					$meta['do_search'] = true;
 					$meta['search'] = $meta['search_history'][$req['search_history']];
-				}
+				}*/
 				$data['value'] = $this->search_form($args);
 			break;
-			case 'search':
+			case 'sfield':
+				$retval=PROP_IGNORE;
+			break;
+			case 'exclude':
+				$retval=PROP_IGNORE;
+			break;
+			case 'make_search':
+
+				/*$this->set_object_metadata(array(
+					OID => $args['obj']['oid'],
+					'key'=>'make_search',
+					'value'=>'0',
+				));*/
+				$data['value'] = '0';
+				$args['obj']['oid']['meta']['make_search'] = '0';
+				
+			break;
+		
+						
+			/*case 'search':
 //				foreach ($meta['select'] as $key => $val)
 				{
 //					echo $key.'<br />';
@@ -337,7 +459,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				}
 				$retval=PROP_IGNORE;
 //				die('kk');
-			break;
+			break;*/
 //			case 'manager':
 //				$data['value']=$this->selall().$this->firma_manager($args);
 //			break;
@@ -350,14 +472,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			case 'objs':
 				$retval=PROP_IGNORE;
 			break;
-			case 'valim':
-				$data['data']='test';
-				//$retval=PROP_IGNORE;
-			break;
-			case 'teg_search':
+			/*case 'teg_search':
 				$retval=PROP_IGNORE;
-			break;
-			case 'teg_do_search':
+			break;*/
+/*			case 'teg_do_search':
 				$data['value']='';
 			break;
 			case 'search_require':
@@ -369,10 +487,10 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			case 'limit_per_page':
 				$data['value']=$data['value']?$data['value']:20;
-			break;
-			case 'do_search':
+			break;*/
+			/*case 'do_search':
 				$data['value']='';
-			break;
+			break;*/
 			case 'order_by_columns':
 				$data['options'] =  array(
 					'firma_nimetus' => 'firma nimi',
@@ -408,48 +526,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 	}
 
 
-	function kliendibaas()
-	{
-		$this->init(array(
-			'clid' => CL_KLIENDIBAAS,
-		));
-
-		$this->show_columns= array(
-			////////firma
-//			'firma_oid' => 'firma id',
-			'firma_nimetus' => 'firma nimi',
-			'firma_reg_nr' => 'reg nr',
-			'firma_ettevotlusvorm' => 'ettevõtlusvorm',
-			'pohitegevus' => 'põhitegevus',
-			'tegevusala_kood' => 'tegevusala kood',
-			'tegevuse_kirjeldus' => 'tegevuse kirjeldus',
-			'firma_juht' => 'firmajuht',
-			'kaubamargid' => 'kaubamärgid',
-			'f_aadress' => 'aadress',
-			'f_riik' => ' asukoha riik',
-			'f_linn' => 'linn',
-			'f_maakond' => 'maakond',
-			'f_postiindeks' => 'postiindeks',
-			'f_telefon' => 'telefon',
-			'f_mobiil' => 'mobiiltelefon',
-			'f_faks' => 'faks',
-			'f_piipar' => 'piipar',
-			'f_e_mail' => 'e-mail',
-			'f_kodulehekylg' => 'kodulehekülg',
-//			'korvaltegevused' => '',
-//			'tooted' => '',
-
-/////////// isik
-// oid   | firstname | lastname | name | gender | personal_id | title | nickname | messenger | birthday | social_status |
-//spouse | children | personal_contact | work_contact | digitalID | notes | pictureurl | picture |
-
-/////////// aadress
-// oid   | name | tyyp | riik | linn  | maakond | postiindeks | telefon | mobiil | faks | piipar |
-// aadress | e_mail | kodulehekylg
-		);
-	}
-
-
 	function set_property($args = array())
 	{
 		$data = &$args["prop"];
@@ -461,7 +537,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		die();
 */
 		switch($data['name'])
-		{
+		{case 'dfgh':break;
+		/*
 			case 'select':
 			if ($meta['valim'])
 			{
@@ -485,9 +562,9 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$retval = PROP_IGNORE;
 
 			}
-			break;
+			break;*/
 
-			case 'search':
+/*			case 'search':
 				if ($form['do_search'])
 				{
 					$oo = $this->get_object_metadata(array('no_cashe' => 1,OID => $args['obj'][OID],'key' => 'search_history'));
@@ -506,16 +583,188 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					//$this->set_object_metadata(array(OID => $args['obj'][OID], 'key' => 'search_require_history', 'value' => $pp));
 					$retval = PROP_IGNORE;
 				}
-			break;
+			break;*/
 
 		};
 
 		return $retval;
 	}
 
+	function tegevusala_manager($args)
+	{//arr($args,1);
+	
+		$tase = $args['request']['tase'] ? $args['request']['tase'] : 1;
+		$kood = $args['request']['kood'] ? $args['request']['kood'] : '0';
+		$teg_oid = $args['request']['teg_oid'] ? $args['request']['teg_oid'] : 0;
+		
+		$tase = ($tase>3)?3:$tase;
+		//arr($args);
+		$limit = 25;
 
+	
+		
+		$teg_parent = ' t1.parent'.$this->parent_in($this->got_aliases[TEGEVUSALA_CAT]).' and ';
+			
+		if ($tase == 1)
+{
+		$arr = $this->db_fetch_array('
+		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
+		where '.$teg_parent.' 
+		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		length(t2.kood)<=2
+		order by t2.kood
+		limit '.$limit.'
+		');
+}
+elseif ($tase == 2)
+{
+		$arr = $this->db_fetch_array('
+		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
+		where '.$teg_parent.' 		
+		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		length(t2.kood)>2 and length(t2.kood)<=4 and
+		
+		t2.kood like("'.$kood.'%")
+		order by t2.kood
+		limit '.$limit.'
+		');
+}
+elseif ($tase == 3)
+{
+		$arr = $this->db_fetch_array('
+		select t1.oid as oid, t1.name as name, t2.kood as kood from objects t1 left join kliendibaas_tegevusala t2 on t1.oid=t2.oid
+		where '.$teg_parent.' 
+		t1.status>0 and class_id='.CL_TEGEVUSALA.' and
+		length(t2.kood)>4 and length(t2.kood)<=6 and
+		
+		t2.kood like("'.$kood.'%")
+		order by t2.kood
+		limit '.$limit.'
+		');
+}
 
-	function tegevusala_manager($ob)
+		$t = new aw_table(array(
+			'prefix' => 'kliendibaas_manager',
+		));
+		$t->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
+
+		/*$t->define_field(array(
+			'name' => 'kood',
+			'caption' => 'Kood',
+		));*/
+		$t->define_field(array(
+			'name' => 'tegevusala',
+			'caption' => 'Tegevusala',
+		));
+
+		$t->define_field(array(
+			'name' => 'fcount',
+			'caption' => 'Firmasid',
+		));
+
+		$t->define_field(array(
+			'name' => 'check',
+			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
+			'width'=> 15,
+		));
+		
+		if (is_array($arr))
+		foreach($arr as $val)
+		{
+		$cnt = $this->db_fetch_field('select count(*) as cnt from aliases as t1 left join objects as t2 on t1.target=t2.oid 
+		left join objects as t3 on t1.source=t3.oid		
+		where t1.target="'.$val[OID].'" and reltype=5 and t1.source<>0 and t2.status=1
+		and t3.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+		','cnt');
+		
+			$t->define_data(
+				array(
+					//'kood' => $val['kood'],
+					'tegevusala' => '<a href="'.$this->mk_my_orb('change', array(
+				'id' => $args['obj'][OID],
+				'group' => 'tegevusalad',
+				'tase' => ($tase + 1),
+				'kood' => $val['kood'],
+				'teg_oid' => $val[OID],
+				)).'">'.$val['name'],'</a>',
+				'fcount' => $cnt,
+				)
+			);
+		}
+		
+		//select * from objects t1 left join kliendibaas_firma t2 left join aliases where 
+		
+		// t1 = aliases
+		// t2 = tegevusala
+		// t3 = firma
+
+	
+		
+		$q = '
+		select t3.* from aliases as t1 left join objects as t2 on t1.target=t2.oid 
+		left join objects as t3 on t1.source=t3.oid		
+		where t1.target="'.$teg_oid.'" and t1.reltype=5 and t1.source<>0 and t2.status=1 
+		and t3.parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+		order by t3.name
+		';
+		$arr = $this->db_fetch_array($q);
+		
+		//source=firma
+		//target=tegevusala
+
+		//arr($arr);
+
+		$tf = new aw_table(array(
+			'prefix' => 'kliendibaas_frimad',
+		));
+		$tf->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
+
+		$tf->define_field(array(
+			'name' => 'fname',
+			'caption' => 'Firma',
+		));
+
+		if (is_array($arr))
+		foreach($arr as $val)
+		{
+			$tf->define_data(
+				array(
+					//'kood' => $val['kood'],
+					'fname' => html::href(array(
+						'url' => $this->mk_my_orb('change',array('id' => $val[OID]), 'kliendibaas/firma'),
+						'caption' => $val['name'],
+					))
+				)
+			);
+		}
+		
+		$nodes = array();
+		$nodes['teg'] = array(
+			"value" => $t->draw().$tf->draw(),
+		);
+		return $nodes;
+
+	}
+	
+	function parent_in($arr)
+	{
+		if (is_array($arr))
+		{
+			foreach($arr as $val)
+			$parents[] = $val;
+		}
+
+		if (count($parents) == 1)
+			return '='.$parents[0];
+
+		if (count($parents) > 1)
+			return ' in ('.implode(',',$parents).') ';
+
+		return '<>0';
+	}
+	
+	/*
+	function tegevusala_manager_($ob)
 	{
 		$meta=$ob['obj']['meta'];
 		$limit=$meta['limit_per_page']?$meta['limit_per_page']:20;
@@ -608,16 +857,16 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			$q = 'select count(distinct kood) as cnt from kliendibaas_tegevusala '.$where.'';
 			$cnt = $this->db_fetch_field($q,'cnt');
-
+*/
 /*			$q = 'select t1.oid,t1.tegevusala,t1.kood,count(t2.reg_nr) as fcount from
 		 	kliendibaas_tegevusala as t1
 		 	'.$leftright.' join kliendibaas_firma as t2
 		 	on t2.pohitegevus=t1.oid '.$where.
 		 	'   group by t1.kood order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);*/
-
+/*
 			$q = 'select t1.oid,t1.tegevusala,t1.kood from
-		 	kliendibaas_tegevusala as t1 '.$where.
-		 	' group by t1.kood   order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);
+			kliendibaas_tegevusala as t1 '.$where.
+			' group by t1.kood   order by t1.kood LIMIT '.($page*$limit).','.((int)$limit);
 
 			$data = $this->db_fetch_array($q);
 
@@ -667,8 +916,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 
 
-
-
 		$nodes = array();
 		$nodes['teg'] = array(
 			"value" => $nav.$lks.'total :'.$cnt.'.  '.$back.$t.$search,
@@ -678,7 +925,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 //		$data['value']=$this->selall().$this->tegevusala_manager($args);
 	}
 
-
+*/
 
 	function tegevusalad_table($data,$selection,$t,$oid,$level)
 	{
@@ -686,7 +933,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		foreach($arr->get() as $row)
 		{
 			$row['check']=html::checkbox(array('name'=>'sel['.$row[OID].']'));
-//			$row['change']=html::href(array('caption'=>'muuda','target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
+//			$row['change']=html::href(array('caption'=>'muuda','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
 			$row['fcount']=$row['fcount']?(html::href(array('caption'=>'<b> [ '.$row['fcount'].' ] </b>',
 				'url'=>$this->mk_my_orb('change',
 					array('id'=>$oid, 'group'=>'manager', 'kood'=>$row['kood'])
@@ -698,7 +945,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					array('id'=>$oid, 'group'=>'tegevusalad', 'kood'=>$row['kood'],'page'=>0,'level'=> $level, 'section' =>$section)//'prev'=>$req['kood'])
 				)
 			));
-			$row['tegevusala']=html::href(array('caption'=>$row['tegevusala'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
+			$row['tegevusala']=html::href(array('caption'=>$row['tegevusala'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/tegevusala')));
 
 			$t->define_data(
 				$row
@@ -706,9 +953,172 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		}
 		return $t->draw();
 	}
-
-
+	
 	function firma_manager($args)
+	{
+	
+		$letter = $args['request']['letter'] ? $args['request']['letter'] : 'A';
+		$fpage = $args['request']['fpage'] ? $args['request']['fpage'] : '1';
+		$flimit = 20;
+		$letters = '';
+		$pages = '';
+		
+		//echo 
+		$make_search = ($args['obj']['meta']['make_search'] && !$args['request']['no_search']) ? true : false;
+		
+		
+		if ($make_search)
+		{	
+			$search_params = 'name like ("'.$args['obj']['meta']['sfield']['name'].'%")';
+
+			$cnt = $this->db_fetch_field('
+			select count(*) as cnt from objects
+			where 
+			class_id='.CL_FIRMA.' and status<>0 and
+			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and '.$search_params.'
+			','cnt');
+		}
+		else
+		{
+			$cnt = $this->db_fetch_field('
+			select count(*) as cnt from objects
+			where 
+			class_id='.CL_FIRMA.' and status<>0 and
+			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and name like ("'.$letter.'%")
+			','cnt');
+		}
+		
+		if ($cnt>$flimit)
+		{
+			for($i = 1; $i <= ceil($cnt/$flimit); $i++)
+			{
+			$uri = "'".$this->mk_my_orb('change',
+					array(
+						'id' => $args['obj'][OID],
+						'group' => 'firmad',
+						'fpage' => $i,
+						'letter' => $letter,
+						'no_search' => $make_search ? '0' : '1',
+					)
+				)."'";
+				
+				$pages .= '<button style="width:23px" onclick="document.location='.$uri.';return false;">'.
+			(($i == $fpage) ? '<b><u>'.$i.'</u></b>' : $i).
+			'</button>';
+			}
+		}
+		
+		$limit = 'limit '.(($fpage-1) * $flimit).','.$flimit;
+		//$limit = 'limit 10';
+		
+		
+		if ($make_search)
+		{
+			$q = '
+			select * from objects
+			where 
+			class_id='.CL_FIRMA.' and status<>0 and
+			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and '.$search_params.'
+			order by name
+			'.$limit.'
+			';
+		}
+		else
+		{		
+			$q = '
+			select * from objects
+			where 
+			class_id='.CL_FIRMA.' and status<>0 and
+			parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).'
+			and name like ("'.$letter.'%")
+			order by name
+			'.$limit.'
+			';
+		}
+		$arr = $this->db_fetch_array($q);
+
+		$tf = new aw_table(array(
+			'prefix' => 'kliendibaas_frimad',
+		));
+		$tf->parse_xml_def($this->cfg['basedir'].'/xml/generic_table.xml');
+
+		$tf->define_field(array(
+			'name' => 'fname',
+			'caption' => 'Firma',
+		));
+		
+		$tf->define_field(array(
+			'name' => 'check',
+			'caption' => "<a href='javascript:selall(\"sel\")'>Vali</a>",
+			'width'=> 15,
+		));
+
+		if (is_array($arr))
+		foreach($arr as $val)
+		{
+			$check = html::checkbox(array('name'=>'sel['.$val[OID].']','checked' => isset($selection[$val[OID]]) ? $selection[$val[OID]] : false,'value' => $val[OID]));
+			$check.= html::hidden(array('name'=>'objs['.$val[OID].']' ,'value'=>1));
+		
+			$tf->define_data(
+				array(
+					//'kood' => $val['kood'],
+					'fname' => html::href(array(
+						'url' => $this->mk_my_orb('change',array('id' => $val[OID]), 'kliendibaas/firma'),
+						'caption' => $val['name'],
+					)),
+					'check' => $check,
+				)
+			);
+		}
+
+
+		$arr = $this->db_fetch_array('select substring(name,1,1) as letter from objects 
+		where class_id='.CL_FIRMA.' and status<>0 and parent'.$this->parent_in($this->got_aliases[FIRMA_CAT]).' 
+		group by substring(name,1,1)
+		order by substring(name,1,1)
+		limit 50
+		'
+		);
+		
+		if (is_array($arr))
+		foreach($arr as $val)
+		{
+			$uri = "'".$this->mk_my_orb('change',
+					array(
+						'id' => $args['obj'][OID],
+						'group' => 'firmad',
+//						'kood'=>$row['kood'],
+						'page' => $i,
+						'letter' => $val['letter'],
+						'no_search' => '1',						
+//						'level'=> $level,
+//						'section' =>$req['section'],
+					)
+				)."'";
+			
+			
+			$letters.='<button style="width:21px" onclick="document.location='.$uri.';return false;">'.
+			(($val['letter']==$letter) ? '<b><u>'.$val['letter'].'</u></b>' : $val['letter']).
+			'</button>';
+		
+		}
+
+	//arr($arr);
+
+		//echo count($arr);
+		$nodes = array();
+		$nodes['teg'] = array(
+			"value" => $letters.'<br />'.$pages.$tf->draw(),
+		);
+		return $nodes;
+	
+	}
+	
+
+	function firma_manager_($args)
 	{
 	//arr($args,1);
 //error_reporting(E_ALL);
@@ -718,7 +1128,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		$page = isset($meta['page']) ? $meta['page'] : 0;
 		$page = isset($req['page']) ? $req['page'] : $page;
 		$order_by = isset($meta['order_by_columns']) ? $meta['order_by_columns'] : 'objects.name';
-		$where = ' where objects.status<>0 ';
+		$where = ' where objects.status<>0 && objects.parent="'.FIRMA_CAT.'" ';
 
 		$sele = isset($meta['sele']) ? $meta['sele'] : false ;
 
@@ -1050,8 +1460,39 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 }
 
 
-	function search_form($ob)
+	function search_form($args)
 	{
+		$this->read_template('search_form.tpl');
+		
+		
+		$this->vars(array(
+			'id' => 'name',
+			'value' => $args['obj']['meta']['sfield']['name'],
+			'exclude' => '',
+		));
+		$name = $this->parse('search_field_textbox');
+
+/*		$this->vars(array(
+			'id' => 'name',
+			'value' => '',
+			'exclude' => '',
+		));
+		$name = $this->parse('search_field_textbox');
+*/
+
+		$this->vars(array(
+			'search_field_textbox' => $name,
+		));
+		
+		
+		
+		return $this->parse();
+	
+	}
+	
+	function search_form_($ob)
+	{
+		
 		$meta=$ob['obj']['meta'];
 		load_vcl('table');
 
@@ -1102,7 +1543,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 			if (isset($row['firma_nimetus']))
 			{
-				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'target'=>'_blank','url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
+				$row['firma_nimetus'] = html::href(array('caption'=>$row['firma_nimetus'],'url'=>$this->mk_my_orb('change',array('id'=>$row[OID]),'kliendibaas/firma')));
 			}
 			if (isset($row['f_kodulehekylg']))
 			{
@@ -1196,6 +1637,69 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		return $nodes;
 	}
 
+	function kliendibaas_toolbar(&$args)
+	{
+                if ($args['obj'][OID])
+                {
+			$toolbar = &$args["prop"]["toolbar"];
+
+			$this->read_template('js_popup_menu.tpl');
+			
+			$kliendibaas = $this->get_object($args['obj'][OID]);
+			//arr($kliendibaas);
+
+$firma_parent = $kliendibaas['meta']['dir_firmad'] ? $kliendibaas['meta']['dir_firmad'] : $kliendibaas['meta']['dir_default'];
+			
+			$alist = array(
+				array('caption' => 'Lisa Firma','class' => 'firma', 'parent' => $firma_parent),
+//				array('caption' => 'Lisa tegevusala','class' => 'tegevusala', 'reltype' => TEGEVUSALAD),
+				
+				//array('caption' => '','class' => '', 'reltype' => ),				
+			);
+			$menudata = '';
+			if (is_array($alist))
+			{
+				foreach($alist as $key => $val)
+				{
+					if (!$val['parent']) continue;
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+//							'alias_to' => $args['obj']['oid'],
+//							'reltype' => $val['reltype'],
+							'class' => $val['class'],
+							'parent' => $val['parent'],
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						)),
+						'text' => $val['caption'],
+					));
+
+					$menudata .= $this->parse("MENU_ITEM");
+				};
+			};
+			
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "create_event",
+			));
+
+			$menu = $this->parse();
+
+                	$toolbar->add_cdata($menu);
+	
+			$toolbar->add_button(array(
+                                "name" => "add",
+                                "tooltip" => "Uus",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'create_event');",
+                                "img" => "new.gif",
+                                "imgover" => "new_over.gif",
+                                "class" => "menuButton",
+                        ));
+			
+		
+                };
+	}	
+	
 /*
 
 			$q = 'select oid,kood from kliendibaas_tegevusala where length(kood)=5';

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.65 2003/08/08 13:10:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.66 2003/08/21 10:23:49 axel Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -325,8 +325,31 @@ class users_user extends aw_template
 		{
 			setcookie("tafkap",$uid,strtotime("+7 years"));
 		};
+		
 		session_register("uid");
 		aw_global_set("uid", $uid);
+
+		$user_calendar = $this->get_user_config(array(
+			'uid' => aw_global_get('uid'),
+			'key' => 'user_calendar',
+		));
+
+		if ($user_calendar)
+		{
+			session_register('user_calendar');
+			aw_global_set('user_calendar', $user_calendar);
+		}
+		
+		$kliendibaas = $this->get_user_config(array(
+			'uid' => aw_global_get('uid'),
+			'key' => 'kliendibaas',
+		));
+
+		if ($kliendibaas)
+		{
+			session_register('kliendibaas');
+			aw_global_set('kliendibaas', $kliendibaas);
+		}
 
 		$aliasmgr_hist = $this->get_user_config(array(
 			'uid' => aw_global_get('uid'),

@@ -118,6 +118,27 @@
             <caption>Kalender</caption>
       </property>
       <property>
+            <name>helpdocument</name>
+            <type>relpicker</type>
+            <reltype>HELPDOCUMENT</reltype>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Desktopi abiinfo objekt</caption>
+      </property>
+      <property>
+            <name>showhome</name>
+            <type>checkbox</type>
+            <value>1</value>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Desktopil näita kodukataloogi</caption>
+      </property>
+      <property>
             <name>backgroundtype</name>
             <type>select</type>
             <table>objects</table>

@@ -1,6 +1,16 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>navtoolbar</name>
+            <type>toolbar</type>
+            <group>general</group>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <field>navtoolbar</field>
+            <caption></caption>
+      </property>
+      <property>
             <name>name</name>
             <type>textbox</type>
             <size>30</size>
@@ -8,7 +18,17 @@
             <table>objects</table>
             <group>general</group>
             <field>name</field>
-            <caption>firma nimetus</caption>
+            <caption>Organisatsiooni nimi</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textarea</type>
+            <cols>65</cols>
+            <rows>3</rows>
+            <table>objects</table>
+            <group>general</group>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
       </property>
       <property>
             <name>reg_nr</name>
@@ -18,106 +38,87 @@
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>reg_nr</field>
-            <caption>registri nr</caption>
+            <caption>Registri number</caption>
       </property>
       <property>
             <name>pohitegevus</name>
-            <type>popup_objmgr</type>
-            <clid>CL_TEGEVUSALA</clid>
-            <height>550</height>
-            <width>650</width>
+            <type>relpicker</type>
+            <reltype>TEGEVUSALAD</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>pohitegevus</field>
-            <caption>põhitegevus</caption>
-      </property>
-      <property>
-            <name>korvaltegevused</name>
-            <type>popup_objmgr</type>
-            <clid>CL_TEGEVUSALA</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>kõrvaltegevused</caption>
+            <caption>Põhitegevus</caption>
       </property>
       <property>
             <name>ettevotlusvorm</name>
-            <type>popup_objmgr</type>
-            <clid>CL_ETTEVOTLUSVORM</clid>
+            <type>relpicker</type>
+            <reltype>ETTEVOTLUSVORM</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>ettevotlusvorm</field>
-            <caption>ettevõtlusvorm</caption>
+            <caption>Õiguslik vorm</caption>
       </property>
       <property>
             <name>tooted</name>
-            <type>popup_objmgr</type>
-            <clid>CL_TOODE</clid>
-            <multiple>1</multiple>
+            <type>relpicker</type>
+            <reltype>TOOTED</reltype>
             <method>serialize</method>
             <field>meta</field>
             <table>objects</table>
             <group>general</group>
-            <caption>tooted</caption>
+            <caption>Tooted</caption>
       </property>
       <property>
             <name>kaubamargid</name>
             <type>textarea</type>
-            <cols>25</cols>
-            <rows>2</rows>
+            <cols>65</cols>
+            <rows>3</rows>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>kaubamargid</field>
-            <caption>kaubamärgid</caption>
+            <caption>Kaubamärgid</caption>
       </property>
       <property>
             <name>contact</name>
-            <type>popup_objmgr</type>
-            <clid>CL_ADDRESS</clid>
-            <change>1</change>
+            <type>relpicker</type>
+            <reltype>ADDRESS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>contact</field>
-            <caption>aadress</caption>
+            <caption>Aadress</caption>
       </property>
       <property>
             <name>tegevuse_kirjeldus</name>
             <type>textarea</type>
-            <cols>25</cols>
-            <rows>2</rows>
+            <cols>65</cols>
+            <rows>3</rows>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>tegevuse_kirjeldus</field>
-            <caption>tegevuse kirjeldus</caption>
+            <caption>Tegevuse kirjeldus</caption>
+      </property>
+      <property>
+            <name>logo</name>
+            <type>textbox</type>
+            <size>40</size>
+            <method>serialize</method>
+            <field>meta</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Organisatsiooni logo(url)</caption>
       </property>
       <property>
             <name>firmajuht</name>
-            <type>popup_objmgr</type>
-            <change>1</change>
+            <type>relpicker</type>
+            <reltype>WORKERS</reltype>
             <table>kliendibaas_firma</table>
             <group>general</group>
             <field>firmajuht</field>
-            <caption>firmajuht</caption>
-      </property>
-      <property>
-            <name>look</name>
-            <type>text</type>
-            <callback>look_firma</callback>
-            <table>objects</table>
-            <method>serialize</method>
-            <field>meta</field>
-            <group>look</group>
+            <caption>Organisatsiooni juht</caption>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
       </classinfo>
-      <groupinfo>
-            <look>
-                  <caption>Vaata</caption>
-            </look>
-      </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
                   <index>oid</index>

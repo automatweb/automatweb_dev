@@ -2067,8 +2067,8 @@ ondblclick="javascript:pop('{VAR:default_url}',{VAR:xy},'{VAR:name}','{VAR:clid}
 onmouseover="buttonMouseover(event, 'context{VAR:oid}',-2);"
 class="boxB"
 onmousedown="dragStart(event,'dra{VAR:oid}');"
-src="{VAR:icons_path}/class_{VAR:clid}.gif"
-height="32" width="32" border="0" alt=""
+src="{VAR:icons_path}/{VAR:icon}"
+width="32" border="0" alt=""
 style="z-index:1;"
  /></a>
 </td></tr>

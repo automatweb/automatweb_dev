@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.44 2003/08/01 12:48:17 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.45 2003/08/21 10:23:49 axel Exp $
 // search.aw - Search Manager
 
 /*
@@ -784,9 +784,11 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 					break;
 
 					case "multiple":
+						
 						if (is_array($fieldref["selected"]))
 						{
-							$sel = array_flip($fieldref["selected"]);
+							//$sel = array_flip($fieldref["selected"]);
+							$sel = $fieldref["selected"];	
 						}
 						else
 						{

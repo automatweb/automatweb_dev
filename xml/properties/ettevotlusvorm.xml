@@ -10,21 +10,5 @@
             <group>general</group>
             <caption>Kommentaar</caption>
       </property>
-      <property>
-            <name>vorm</name>
-            <type>textbox</type>
-            <size>10</size>
-            <table>kliendibaas_ettevotlusvorm</table>
-            <group>general</group>
-            <field>vorm</field>
-            <caption>vorm</caption>
-      </property>
-      <tableinfo>
-            <kliendibaas_ettevotlusvorm>
-                  <index>oid</index>
-                  <master_table>objects</master_table>
-                  <master_index>oid</master_index>
-            </kliendibaas_ettevotlusvorm>
-      </tableinfo>
 </properties>
 

@@ -1,86 +1,86 @@
 <?php
 /*
+@classinfo relationmgr=yes
+@groupinfo general caption=Üldine	
+@tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
 
-	@classinfo relationmgr=yes
-	@groupinfo general caption=Üldine	
-	@tableinfo kliendibaas_isik index=oid master_table=objects master_index=oid
+@default table=objects
+@default group=general
 
-	@default table=objects
-	@default group=general
+@property name type=text
+@caption Nimi
 
-	@property name type=textbox
-	@caption nimi
+@default table=kliendibaas_isik
 
-	@property comment type=textarea field=comment cols=40 rows=3
-	@caption Kommentaar
+@property firstname type=textbox size=15 maxlength=50
+@caption Eesnimi
 
-	@default table=kliendibaas_isik
+@property lastname type=textbox size=15 maxlength=50
+@caption Perekonnanimi
 
-	@property firstname type=textbox size=15 maxlength=50
-	@caption eesnimi
+@property title type=textbox size=5 maxlength=10
+@caption Tiitel
 
-	@property lastname type=textbox size=15 maxlength=50
-	@caption perekonnanimi
+@property gender type=textbox size=5 maxlength=10
+@caption Sugu
 
-	@property title type=textbox size=5 maxlength=10
-	@caption tiitel
+@property personal_id type=textbox size=13 maxlength=11
+@caption Isikukood
 
-	@property gender type=textbox size=5 maxlength=10
-	@caption sugu
+@property nickname type=textbox size=10 maxlength=20
+@caption Hüüdnimi
 
-	@property personal_id type=textbox size=13 maxlength=11
-	@caption isikukood
+@property messenger type=textbox size=30 maxlength=200
+@caption Msn/yahoo/aol/icq
 
-	@property nickname type=textbox size=10 maxlength=20
-	@caption hüüdnimi
+@property birthday type=textbox size=10 maxlength=20
+@caption Sünnipäev
 
-	@property messenger type=textbox size=30 maxlength=200
-	@caption msn/yahoo/aol/icq
+@property social_status type=textbox size=20 maxlength=20
+@caption Perekonnaseis
 
-	@property birthday type=textbox size=10 maxlength=20
-	@caption sünnipäev
+@property spouse type=textbox size=25 maxlength=50
+@caption Abikaasa
 
-	@property social_status type=textbox size=20 maxlength=20
-	@caption perekonnaseis
+@property children type=relpicker reltype=CHILDREN
+@caption Lapsed
 
-	@property spouse type=textbox size=25 maxlength=50
-	@caption abikaasa
+//	@property digitalID type=textbox size=20 maxlength=300
+//	@caption Digitaalallkiri(fail vms)?
 
-	@property children type=textarea cols=20 rows=2
-	@caption lapsed
+@property pictureurl type=textbox size=40 maxlength=200
+@caption Pildi/foto url
 
-	@property digitalID type=textbox size=20 maxlength=300
-	@caption digitaalallkiri(fail vms)?
+@property picture type=relpicker reltype=PICTURE
+@caption Pilt/foto
 
-	@property pictureurl type=textbox size=40 maxlength=200
-	@caption pildi/foto url
+@property work_contact type=relpicker reltype=WORK table=kliendibaas_isik
+@caption Organisatsioon
 
-	@property picture type=relpicker reltype=PICTURE
-	@caption pilt/foto
+@property rank type=relpicker reltype=RANK table=kliendibaas_isik
+@caption Ametinimetus
 
-//	@property work_contact type=popup_objmgr clid=CL_TEGEVUSALA multiple=1 method=serialize field=meta table=objects
-	@property work_contact type=relpicker reltype=WORKADDRESS
-	@caption töökoha kontakt andmed
+@property personal_contact type=relpicker reltype=ADDRESS table=kliendibaas_isik
+@caption Kodused kontaktandmed
 
-	@property personal_contact type=relpicker reltype=HOMEADDRESS
-	@caption kodused kontakt andmed
+@property comment type=textarea cols=40 rows=3 table=objects field=comment
+@caption Kommentaar
 
+@default group=forms
+@default field=meta
+@default table=objects
+@default method=serialize
+@groupinfo forms caption=Väljundid
 
-	@default group=forms
-	@default field=meta
-	@default table=objects
-	@default method=serialize
-	@groupinfo forms caption=Väljundid
+@property forms type=relpicker reltype=BACKFORMS
+@caption tagasiside vormid
+selection.aw
+@property templates type=select
+@caption templiidid
 
-	@property forms type=relpicker reltype=BACKFORMS
-	@caption tagasiside vormid
-
-	@property templates type=select
-	@caption templiidid
-
-	@default group=show
-	@groupinfo show caption=Visiitkaart submit=no
-	@property dokus type=text callback=show_isik
+@default group=show
+@groupinfo show caption=Visiitkaart submit=no
+@property dokus type=text callback=show_isik
 
 
 */
@@ -103,6 +103,7 @@ CREATE TABLE `kliendibaas_isik` (
   `children` varchar(100) default NULL,
   `personal_contact` int(11) default NULL,
   `work_contact` int(11) default NULL,
+  `rank` int(11) default NULL,  
   `digitalID` text,
   `notes` text,
   `pictureurl` varchar(200) default NULL,
@@ -114,10 +115,15 @@ CREATE TABLE `kliendibaas_isik` (
 */
 
 
-define ('HOMEADDRESS',1);
-define ('WORKADDRESS',2);
+define ('ADDRESS',1);
 define ('PICTURE',3);
 define ('BACKFORMS',4);
+define ('CHILDREN',5);
+define ('WORK',6);
+define ('RANK',7);
+//define ('',);
+//define ('',);
+
 //define ('TEMPLATES',5);
 
 
@@ -135,10 +141,12 @@ class isik extends class_base
 	function callback_get_rel_types()
 	{
 		return array(
-			HOMEADDRESS => 'Kodune aadress',
-			WORKADDRESS => 'Töökoha aadress',
+			ADDRESS => 'Aadressid',
 			PICTURE => 'Pilt',
 			BACKFORMS => 'Tagasiside vorm', //pilootobjekt praegu
+			WORK => 'Töökoht',
+			RANK => 'Ametinimetus',
+			CHILDREN => 'Lapsed',
 //			TEMPLATES => 'Templiit',
 		);
 	}
@@ -148,10 +156,7 @@ class isik extends class_base
 		$retval = false;
                 switch($args["reltype"])
                 {
-			case HOMEADDRESS:
-				$retval = array(CL_ADDRESS);
-			break;
-			case WORKADDRESS:
+			case ADDRESS:
 				$retval = array(CL_ADDRESS);
 			break;
 			case PICTURE:
@@ -160,6 +165,16 @@ class isik extends class_base
 			case BACKFORMS:
 				$retval = array(CL_PILOT);
 			break;
+			case WORK:
+				$retval = array(CL_FIRMA);
+			break;
+			case CHILDREN:
+				$retval = array(CL_ISIK);
+			break;
+			case RANK:
+				$retval = array(CL_AMET);
+			break;
+			
 		};
 		return $retval;
 	}
@@ -169,13 +184,15 @@ class isik extends class_base
 	{
 		$data = &$args["prop"];
 		$retval = PROP_OK;
-
+		$form = &$args["form_data"];
+		$obj = &$args["obj"];
+		
 		switch($data["name"])
 		{
-			case 'name':
-				if ($args['objdata']['firstname'] || $args['objdata']['lastname'])
+			case 'lastname':
+				if ($form['firstname'] || $form['lastname'])
 				{
-					$data['value'] =  $args['objdata']['firstname']." ".$args['objdata']['lastname'];
+					$obj['name'] = $form['firstname']." ".$form['lastname'];
 				}
 			break;
 		};
@@ -200,6 +217,9 @@ class isik extends class_base
 				$retval=PROP_IGNORE;
 			break;
 			case 'alias':
+				$retval=PROP_IGNORE;
+			break;
+			case 'status':
 				$retval=PROP_IGNORE;
 			break;
 			case 'forms':

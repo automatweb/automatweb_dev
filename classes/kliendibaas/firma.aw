@@ -1,58 +1,54 @@
 <?php
 /*
-	@classinfo relationmgr=yes
+@classinfo relationmgr=yes
 
-	@tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
+@tableinfo kliendibaas_firma index=oid master_table=objects master_index=oid
+@default table=objects
+@default group=general
 
-	@default table=objects
-	@default group=general
+@property navtoolbar type=toolbar group=general store=no no_caption=1
+@caption 
 
-	@property name type=textbox size=30 maxlenght=255
-	@caption firma nimetus
+@property name type=textbox size=30 maxlenght=255 table=objects
+@caption Organisatsiooni nimi
 
-	@default table=kliendibaas_firma
+@property comment type=textarea cols=65 rows=3 table=objects
+@caption Kommentaar
 
-	@property reg_nr type=textbox size=10 maxlenght=20
-	@caption registri nr
+@property reg_nr type=textbox size=10 maxlenght=20 table=kliendibaas_firma
+@caption Registri number
 
-	@property pohitegevus type=popup_objmgr clid=CL_TEGEVUSALA height=550 width=650
-	@caption põhitegevus
+@property pohitegevus type=relpicker reltype=TEGEVUSALAD table=kliendibaas_firma
+@caption Põhitegevus
 
-	@property korvaltegevused type=popup_objmgr clid=CL_TEGEVUSALA multiple=1 method=serialize field=meta table=objects
-//	@property korvaltegevused type=popup_objmgr method=serialize multiple=1
-	@caption kõrvaltegevused
+@property ettevotlusvorm type=relpicker reltype=ETTEVOTLUSVORM table=kliendibaas_firma
+@caption Õiguslik vorm
 
-	@property ettevotlusvorm type=popup_objmgr clid=CL_ETTEVOTLUSVORM
-	@caption ettevõtlusvorm
+@property tooted type=relpicker reltype=TOOTED method=serialize field=meta table=objects
+@caption Tooted
 
-	@property tooted type=popup_objmgr clid=CL_TOODE multiple=1 method=serialize field=meta table=objects
-//	@property tooted type=popup_objmgr clid=CL_TOODE multiple=1 field=meta method=serialize table=objects
-	@caption tooted
+@property kaubamargid type=textarea cols=65 rows=3 table=kliendibaas_firma
+@caption Kaubamärgid
 
-	@property kaubamargid type=textarea cols=25 rows=2
-	@caption kaubamärgid
+@property contact type=relpicker reltype=ADDRESS table=kliendibaas_firma
+@caption Aadress
 
-	@property contact type=popup_objmgr clid=CL_ADDRESS change=1
-	@caption aadress
+@property tegevuse_kirjeldus type=textarea cols=65 rows=3 table=kliendibaas_firma
+@caption Tegevuse kirjeldus
 
-	@property tegevuse_kirjeldus type=textarea cols=25 rows=2
-	@caption tegevuse kirjeldus
+@property logo type=textbox size=40 method=serialize field=meta table=objects
+@caption Organisatsiooni logo(url)
 
-	@property firmajuht type=popup_objmgr change=1
-	@caption firmajuht
-	
-	
-	@default group=look
-	@groupinfo look caption=Vaata
-	
-	@property look type=text callback=look_firma table=objects method=serialize field=meta
+@property firmajuht type=relpicker reltype=WORKERS table=kliendibaas_firma
+@caption Organisatsiooni juht
+
+//@default group=look
+//@groupinfo look caption=Vaata
+//@property look type=text callback=look_firma table=objects method=serialize field=meta
 	
 	
 */
-
-
 /*
-
 CREATE TABLE `kliendibaas_firma` (
   `oid` int(11) NOT NULL default '0',
   `firma_nim` varchar(255) default NULL,
@@ -69,15 +65,18 @@ CREATE TABLE `kliendibaas_firma` (
   UNIQUE KEY `oid` (`oid`),
   KEY `teg_i` (`pohitegevus`)
 ) TYPE=MyISAM;
-
 */
 
 define ('ETTEVOTLUSVORM',1);
-define ('POHITEGEVUS',2);
 define ('ADDRESS',3);
-define ('FIRMAJUHT',4);
-define ('KORVALTEGEVUSED',5);
+//define ('FIRMAJUHT',4);
+define ('TEGEVUSALAD',5);
 define ('TOOTED',6);
+define ('CHILD_ORG',7);
+define ('WORKERS',8);
+define ('PAKKUMINE',9);
+define ('TEHING',10);
+//define ('',);
 
 class firma extends class_base
 {
@@ -87,7 +86,7 @@ class firma extends class_base
 
 		$nodes = array();
 		$nodes['firma'] = array(
-			"value" => 'firm andmed tulevad siia',
+			"value" => 'Firma andmed tulevad siia',
 		);
 		return $nodes;
 
@@ -97,18 +96,22 @@ class firma extends class_base
 	{
 		$this->init(array(
 			'clid' => CL_FIRMA,
+			'tpldir' => 'firma',
 		));
 	}
 
 	function callback_get_rel_types()
 	{
 		return array(
-			ETTEVOTLUSVORM => 'Ettevõtlusvorm',
-			POHITEGEVUS => 'Põhitegevus',
+			ETTEVOTLUSVORM => 'Õiguslik vorm',
 			ADDRESS => 'Kontaktaadress',
-			FIRMAJUHT => 'Firmajuht',
-			KORVALTEGEVUSED => 'Kõrvaltegevusalad',
+			//FIRMAJUHT => 'Organisatsiooni juht',
+			WORKERS => 'Töötajad',
+			TEGEVUSALAD => 'Tegevusalad',
 			TOOTED => 'Tooted',
+			CHILD_ORG => 'Tütar-organisatsioonid',
+			PAKKUMINE => 'Pakkumine',
+			TEHING => 'Tehing',
 		);
 	}
 	
@@ -120,14 +123,13 @@ class firma extends class_base
 			case ETTEVOTLUSVORM:
 				$retval = array(CL_ETTEVOTLUSVORM);
 			break;
-
-			case POHITEGEVUS:
-				$retval = array(CL_TEGEVUSALA);
-			break;
-			case FIRMAJUHT:
+			/*case FIRMAJUHT:
+				$retval = array(CL_ISIK);
+			break;*/
+			case WORKERS:
 				$retval = array(CL_ISIK);
 			break;
-			case KORVALTEGEVUSED:
+			case TEGEVUSALAD:
 				$retval = array(CL_TEGEVUSALA);
 			break;
 			case TOOTED:
@@ -135,6 +137,9 @@ class firma extends class_base
 			break;
 			case ADDRESS:
 				$retval = array(CL_ADDRESS);
+			break;
+			case CHILD_ORG:
+				$retval = array(CL_FIRMA);
 			break;
 		};
 		return $retval;
@@ -144,19 +149,115 @@ class firma extends class_base
 	{
 		$data = &$args['prop'];
 		$retval = PROP_OK;
-		$meta=$args['obj']['meta'];
-		$id=$args['obj']['oid'];
-		$parent=$args['obj']['parent'];
+//		$meta=$args['obj']['meta'];
+//		$parent=$args['obj']['parent'];
 		switch($data['name'])
 		{
 			case 'jrk':
 				$retval=PROP_IGNORE;
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
+			/*case 'tooted':
+			
+			break;*/
+			case 'navtoolbar':
+				if (!aw_global_get('kliendibaas') || !$args['obj'][OID])
+				{
+					$retval=PROP_IGNORE;
+				}
+				else
+				{
+					$args['kliendibaas'] = aw_global_get('kliendibaas');
+					$this->firma_toolbar($args);
+				}
+			break;
+			
 		};
 		return $retval;
 	}
+	
+
+	function firma_toolbar(&$args)
+	{
+                if ($args['obj']['oid'])
+                {
+			$toolbar = &$args["prop"]["toolbar"];
+
+			$this->read_template('js_popup_menu.tpl');
+			
+			$kliendibaas = $this->get_object($args['kliendibaas']);
+			//arr($kliendibaas);
+$parents[ADDRESS] = $kliendibaas['meta']['dir_address'] ? $kliendibaas['meta']['dir_address'] : $kliendibaas['meta']['dir_default'];
+$parents[TEGEVUSALAD] = $kliendibaas['meta']['dir_tegevusala'] ? $kliendibaas['meta']['dir_tegevusala'] : $kliendibaas['meta']['dir_default'];
+$parents[WORKERS] = $kliendibaas['meta']['dir_isik'] ? $kliendibaas['meta']['dir_isik'] : $kliendibaas['meta']['dir_default'];
+			
+			$alist = array(
+				array('caption' => 'Lisa töötaja','class' => 'isik', 'reltype' => WORKERS),
+				array('caption' => 'Lisa tegevusala','class' => 'tegevusala', 'reltype' => TEGEVUSALAD),
+				array('caption' => 'Lisa aadress','class' => 'address', 'reltype' => ADDRESS),
+				array('caption' => 'Lisa Pakkumine','class' => 'toode', 'reltype' => TEHING),
+				array('caption' => 'Lisa Tehing','class' => 'toode', 'reltype' => PAKKUMINE),
+				
+				//array('caption' => '','class' => '', 'reltype' => ),				
+			);
+			$menudata = '';
+			if (is_array($alist))
+			{
+				foreach($alist as $key => $val)
+				{
+					if (!$parents[$val['reltype']]) continue;
+					$this->vars(array(
+						'link' => $this->mk_my_orb('new',array(
+							'alias_to' => $args['obj']['oid'],
+							'reltype' => $val['reltype'],
+							'class' => $val['class'],
+							'parent' => $parents[$val['reltype']],
+							'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+						)),
+						'text' => $val['caption'],
+					));
+
+					$menudata .= $this->parse("MENU_ITEM");
+				};
+			};
+
+			$action = array(
+				array('caption' => 'Lisa Kohtumine','class' => 0, 'reltype' => 0),
+				array('caption' => 'Lisa Kõne','class' => 0, 'reltype' => 0),				
+			);
+/*			
+- Eraldi toolbari nupp on, kus ma saan lisada Kõnet, Kohtumist, Pakkumist ja Tehingut. 
+Pakkumise ja Tehingu "objekt" on "toode" seosetüübiga Pakkumine või Tehing.			
+*/			
+			
+			$this->vars(array(
+				"MENU_ITEM" => $menudata,
+				"id" => "create_event",
+			));
+
+			$menu = $this->parse();
+
+                	$toolbar->add_cdata($menu);
+	
+			$toolbar->add_button(array(
+                                "name" => "add",
+                                "tooltip" => "Uus",
+				"url" => "",
+				"onClick" => "return buttonClick(event, 'create_event');",
+                                "img" => "new.gif",
+                                "imgover" => "new_over.gif",
+                                "class" => "menuButton",
+                        ));
+			
+		
+                };
+	}
+
+
 }
 ?>

@@ -15,7 +15,7 @@
             <table>kliendibaas_riik</table>
             <group>general</group>
             <field>name</field>
-            <caption>Nimetus (tmp)</caption>
+            <caption>Riigi nimetus</caption>
       </property>
       <property>
             <name>name_en</name>
@@ -24,7 +24,7 @@
             <table>kliendibaas_riik</table>
             <group>general</group>
             <field>name_en</field>
-            <caption>Nimetus (i.k.)</caption>
+            <caption>Nimetus inglise keeles</caption>
       </property>
       <property>
             <name>name_native</name>
@@ -34,32 +34,6 @@
             <group>general</group>
             <field>name_native</field>
             <caption>Niemtus kohalikus keeles</caption>
-      </property>
-      <property>
-            <name>languages</name>
-            <type>textbox</type>
-            <size>30</size>
-            <table>kliendibaas_riik</table>
-            <group>general</group>
-            <field>languages</field>
-            <caption>Keeled</caption>
-      </property>
-      <property>
-            <name>lyhend</name>
-            <type>textbox</type>
-            <size>10</size>
-            <table>kliendibaas_riik</table>
-            <group>general</group>
-            <field>lyhend</field>
-            <caption>Lühend</caption>
-      </property>
-      <property>
-            <name>location</name>
-            <type>textarea</type>
-            <table>kliendibaas_riik</table>
-            <group>general</group>
-            <field>location</field>
-            <caption>Asukoha kirjeldus</caption>
       </property>
       <tableinfo>
             <kliendibaas_riik>

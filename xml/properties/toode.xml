@@ -1,30 +1,13 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>comment</name>
-            <type>textarea</type>
-            <field>comment</field>
-            <table>objects</table>
-            <group>general</group>
-            <caption>Kommentaar</caption>
-      </property>
-      <property>
-            <name>kood</name>
-            <type>textbox</type>
-            <size>8</size>
-            <table>kliendibaas_toode</table>
-            <group>general</group>
-            <field>kood</field>
-            <caption>Toote kood</caption>
-      </property>
-      <property>
             <name>toode</name>
             <type>textbox</type>
             <size>40</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
             <field>toode</field>
-            <caption>Toode</caption>
+            <caption>Toote nimetus</caption>
       </property>
       <property>
             <name>toode_en</name>
@@ -33,15 +16,24 @@
             <table>kliendibaas_toode</table>
             <group>general</group>
             <field>toode_en</field>
-            <caption>Toode (i.k.)</caption>
+            <caption>Inglise keelne tootenimetus</caption>
       </property>
       <property>
-            <name>kirjeldus</name>
+            <name>comment</name>
             <type>textarea</type>
+            <field>comment</field>
+            <table>objects</table>
+            <group>general</group>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>kood</name>
+            <type>textbox</type>
+            <size>8</size>
             <table>kliendibaas_toode</table>
             <group>general</group>
-            <field>kirjeldus</field>
-            <caption>Toote kirjeldus</caption>
+            <field>kood</field>
+            <caption>Toote kood	</caption>
       </property>
       <tableinfo>
             <kliendibaas_toode>

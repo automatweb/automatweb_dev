@@ -5,6 +5,8 @@
 			<function name="tiri">
 				<arguments>
 					<required name="id"/>
+					<optional name="samm"/>
+					<optional name="next"/>
 				</arguments>
 			</function>
 		</action>

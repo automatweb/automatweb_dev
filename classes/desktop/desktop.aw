@@ -2,10 +2,7 @@
 /*
 
 /////////////////////////////////////////////
-
-todo:
-
-"send to" contextmenus, saab objekti saata kuhugi kausta
+"sent to" on contextmenus, saab objekti saata kuhugi kausta
 "cut"
 "copy"
 
@@ -13,26 +10,15 @@ menueditoris võiks olla paste nupp vaikimisi hidden, et siis saaks teisest aknas
 
 "save"
 "documents" - recently opened, changed documents
-"programs"
-
 
 "prügikast"
 "otsing"
-"my computer" rootkaust
-"my home" kodukaust
 
-
-"minimiseeri kõik aknad"
-
-
+"mimimiseeri kõik aknad"
 "new ..." submenu:document, image, link ...
-
-
 "print" võiks olla näiteks dokumendil, pildil ...
 
-kalendri päevavaade taustale
-
-
+kalendri päevavaade taustale?
 /////////////////////
 
 
@@ -85,16 +71,20 @@ kalendri päevavaade taustale
 @property calendar type=relpicker reltype=CALENDAR
 @caption Kalender
 
+@property helpdocument type=relpicker reltype=HELPDOCUMENT
+@caption Desktopi abiinfo objekt
+
+@property showhome type=checkbox value=1 ch_value=1
+@caption Desktopil näita kodukataloogi
+
 @property backgroundtype type=select
 @caption Tausta pilt on ...
 
 @property max_icons_in_column type=textbox size=4
 @caption Desktopil tulpa max ikoone
 
-
 @property startdesktop type=text
 @caption Käivita
-
 
 
 
@@ -131,6 +121,7 @@ define('LAUNCHBAR', 3);
 define('NEWOBJECTS', 4);
 define('CALENDAR', 5);
 define('DESKTOPOBJECTS', 6);
+define('HELPDOCUMENT', 7);
 
 class desktop extends class_base
 {
@@ -151,6 +142,7 @@ class desktop extends class_base
 			NEWOBJECTS => 'Uute objektide kaust',
 			CALENDAR => 'Kalender',
 			DESKTOPOBJECTS => 'Taustal olevad objektid',
+			HELPDOCUMENT => 'Desktopi abiinfo document',
 		);
 	}
 
@@ -176,6 +168,9 @@ class desktop extends class_base
 			break;
 			case CALENDAR:
 				$retval = array(CL_PLANNER);
+			break;
+			case HELPDOCUMENT:
+				$retval = array(CL_DOCUMENT,CL_FORUM);
 			break;
 		};
 		return $retval;
@@ -380,16 +375,28 @@ function pop(url,w,h)
 		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
 
 		//help
-		$this->vars(array(
-			'url' => "javascript:document.write(666);document.close()",
-			'caption' => 'Abi',
-			'title' => 'Abi info desktopi kohta',
-			'clid' => 'icons/prog_11.gif',
-			'icon' => 'prog_11.gif',
-		));
-		$cnt += 1;
-		$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
+		if (isset($ob['meta']['helpdocument']) && is_numeric($ob['meta']['helpdocument']) && ($ob['meta']['helpdocument'] > 0))
+		{
+		
+			$help = $this->get_object($ob['meta']['helpdocument']);
+						
+			$cldat = $classes[$help['class_id']];
+			if ($cldat['alias_class'])
+			{
+				$cldat['file'] = $cldat['alias_class'];
+				$classes[$clid]['file'] = $cldat['alias_class'];
+			}
 
+			$this->vars(array(
+				'url' => $this->mk_my_orb('change', array('id' => $help[OID]),$cldat['file']),
+				'caption' => 'Abi',
+				'title' => $help['name'].' - '.$help['comment'],
+				'clid' => $help['class_id'],
+				'icon' => 'prog_11.gif',
+			));
+			$cnt += 1;
+			$this->levelcontent[1]['items'].= $this->parse('MENU_ITEM');
+		}
 
 
 		//run
@@ -535,6 +542,24 @@ function pop(url,w,h)
 				'lang_id' => aw_global_get('lang_id'),
 			));//'orderby' => 'jrk'
 
+			
+/*
+		//"my computer" rootkaust	$this->cfg['rootmenu']
+		$rootm = $this->get_object($this->cfg['rootmenu']);
+		$rootm['icon'] = 'iother_homefolder.gif';
+		//array_unshift($arr,$rootm);//array_push($arr,$rootm);
+		$arr[$rootm[OID]] = $rootm;
+*/
+		if (isset($ob['meta']['showhome']) && ($ob['meta']['showhome'] == '1'))
+		{
+			$this->homeid = $this->db_fetch_field('select home_folder from users where uid="'.$GLOBALS['uid'].'"','home_folder');
+			$home = $this->get_object($this->homeid);
+			$home['icon'] = 'iother_homefolder.gif';
+			$home['name'] = $GLOBALS['uid'].' kodukataloog';
+			//array_push($arr,$home);
+			//$arr[$home[OID]] = $home;
+			array_unshift($arr,$home);
+		}	
 			if (count($arr)>0)
 			{
 
@@ -573,7 +598,7 @@ function pop(url,w,h)
 							'caption' => 'Ava puuga',
 							'url' => $this->cfg['baseurl'].'/automatweb/index.aw?parent='.$val[OID],
 							'wxy' => $this->xy,
-							'iconfile' => 'class_1.gif',
+							'iconfile' => 'class_1.gif',							
 						);
 
 						$val['change_url'] = $this->mk_my_orb('change', array('id' => $val[OID]),'menu');
@@ -600,14 +625,16 @@ function pop(url,w,h)
 						'iconfile' => 'small_settings.gif',
 					);
 
-					$context_items['delete'] = array(
-						'title' => 'Kustuta',
-						'caption' => 'Kustuta',
-						'url' => $this->mk_my_orb('dodelete', array('id' => $val[OID], 'class_id' => $val['class_id'])),
-						'iconfile' => 'small_delete.gif',
-						'tpl' => 'ICON_CONTEXT_ITEM2',
-					);
-
+					if ($val[OID]!=$this->homeid)
+					{
+						$context_items['delete'] = array(
+							'title' => 'Kustuta',
+							'caption' => 'Kustuta',
+							'url' => $this->mk_my_orb('dodelete', array('id' => $val[OID], 'class_id' => $val['class_id'])),
+							'iconfile' => 'small_delete.gif',
+							'tpl' => 'ICON_CONTEXT_ITEM2',
+						);
+					}
 					$icon_context_items =  '';
 
 					foreach($context_items as $cval)
@@ -634,8 +661,6 @@ function pop(url,w,h)
 					else
 					{
 						//tuleb leida vaba ruum
-
-
 						for($i = 0;$i < $maxw;$i++)
 						{
 							for($j = 0;$j < $maxh;$j++)
@@ -655,7 +680,8 @@ function pop(url,w,h)
 					$val['title'] = $val['comment'] ? ($val['name'].' - '.$val['comment']) : $val['name'];
 					$val['icon_caption'] = wordwrap( $val['name'], 15, '<br />');
 					$val['clid'] = $val['class_id'];
-
+					$val['icon'] = isset($val['icon']) ? $val['icon'] : 'class_'.$val['clid'].'.gif';
+							
 					$this->vars($val);
 
 					$desktop_items .= $this->parse('DESKTOP_ITEM');
@@ -804,8 +830,15 @@ function pop(url,w,h)
 				'lang_id' => aw_global_get('lang_id'),	
 			));
 
+			if (isset($ob['meta']['showhome']) && ($ob['meta']['showhome'] == '1'))
+			{
+				$homeid = $this->db_fetch_field('select home_folder from users where uid="'.$GLOBALS['uid'].'"','home_folder');
+				array_unshift($arr, array(OID => $homeid));
+			}
 			$i=0;
 			$j=0;
+			
+
 			foreach($arr as $val)
 			{
 				$key = 'dra'.$val[OID];

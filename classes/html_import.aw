@@ -16,10 +16,10 @@
 	@property source_path type=textbox size=50
 	@caption kohalikud failid asuvad siin
 
-	@property files type=textarea cols=60 rows=3
+	@property files type=textarea cols=75 rows=5
 	@caption urlid/failid
 
-	@property example type=textarea cols=60 rows=3
+	@property example type=textarea cols=75 rows=3
 	@caption näitefailid töötlemiseks
 
 	@property single type=select
@@ -179,7 +179,7 @@ html::textbox(array('name'=> 'ruul['.$key.'][desc]', 'value'=>$rule[$key]["desc"
 ."<br /><b>sql veerg</b>".
 html::textbox(array('name'=> 'ruul['.$key.'][mk_field]', 'value'=>$rule[$key]['mk_field']))
 .'<nobr>strip html'.
-html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'checked' => $what['ruul_'.$i]['strip_html']))
+html::checkbox(array('name'=>'ruul['.$key.'][strip_html]', 'value' => '1','checked' => $rule[$key]['strip_html']))
 .'</nobr></td></tr></table>',
 						'end'=>
 html::textarea(array('name'=> 'ruul['.$key.'][end]', 'cols'=>25, 'rows' => 4, 'value' => $rule[$key]['end'])),
@@ -305,23 +305,27 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 
 		if (!isset($tables))
 		{
-			$all_db_tables=$this->db_query('show tables');
-			while ($row = $this->db_next())
+			//$all_db_tables = $this->db_query('show tables;');
+			$all_db_tables = $this->db_fetch_array('show tables;');
+			//arr($GLOBALS['db']['base'],1);
+			$tables = array();
+			foreach($all_db_tables as $val)
 			{
-				$rowname='Tables_in_'.$GLOBAL['db']['base'];
-				if (is_int(strpos($row[$rowname],PREFIX)))
+				$val = $val['Tables_in_'.$GLOBALS['cfg']['db']['base']];
+				if (is_int(strpos($val,PREFIX)))
 				{
-					$tables[$row[$rowname]] = $row[$rowname];
-					if ($row[$rowname]==PREFIX.$meta["mk_my_table"])
+					$tables[$val] = $val;
+					if ($val == PREFIX.$meta["mk_my_table"])
 					{
 						$tbl_exists=true;
 					//break 1;
 					}
 				}
-
 			}
 		}
-
+		//arr($tables,1);
+		
+		
 		switch($data["name"])
 		{
 
@@ -678,11 +682,12 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 						"comment" => $ruul[$key]["desc"],
 						"sqlfield" => $ruul[$key]["mk_field"],
 						"unique"=>html::checkbox(array('name'=>$mis."[unique]",'value'=>1,'checked'=>$sql_ruul[$key]["unique"])),
-						"fieldtype" => html::select(array('name' => $mis."[type]", 'options' => $tyyp, 	'selected' => $sql_ruul[$key]["type"])),
+						"fieldtype" => html::select(array('name' => $mis."[type]", 'options' => $tyyp, 	'selected' => strtoupper($sql_ruul[$key]["type"]))),
 						"size"=>html::textbox(array('name'=>$mis."[size]", 'size'=>5,'maxlength' => 5, 'value' => $sql_ruul[$key]['size'])),
 					);
 				}
 			}
+
 			$arr = new aw_array($data);
 			foreach($arr->get() as $row)
 			{
@@ -783,6 +788,15 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 			die("could not get files, check if if they really excist and can be opened");
 		}
 
+		
+		$next = isset($arr['next']) ? $arr['next'] : 0;
+		$samm = isset($arr['samm']) ? $arr['samm'] : 50;
+		
+		$from = $next;
+		$next = $next + $samm;
+
+		echo $from.' - '.$next."<br />";
+
 		//tabeli jrk nr
 		$starts=$ob["meta"]["starts"];
 		$what=$ob["meta"]["ruul"];
@@ -793,14 +807,23 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 		{
 			$cells[]=$val["mk_field"];
 			$strip_html[$val["mk_field"]] = $val['strip_html']?true:false;
+			$strip_html2[$key] = $val['strip_html']?true:false;
 		}
+		
 
 		$fields=$this->field_list($cells);
 		echo "<html><body><pre>";
 
 		if (6<7){
-			foreach($files as $key=>$val)
+		
+			for($s = $from; $s < $next; $s++)
+		//	foreach($files as $key=>$val)
 			{
+				if (!isset($files[$s])) break;
+
+				$val = $files[$s];
+				//echo ;continue;
+			
 				$this->pinu=array();//need peavad globaalselt iga kord nulli minema
 				$this->tblnr=0;
 				$file=$path.$val;
@@ -819,7 +842,9 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 								$end=preg_quote($val["end"],'/');
 								preg_match("/($begin)(.*)($end)/sU", $source, $mm);
 								//striptags?
-								$tbl[1][]=$mm[2];
+								
+								
+								$tbl[1][] = $strip_html2[$key] ? strip_tags($mm[2]) : $mm[2];
 							}
 						}
 
@@ -831,6 +856,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 						$tbl=$this->table_to_array($source,$cells,$strip_html);
 					}
 //print_r($tbl);
+
 
 
 					$exec=($ob["meta"]["output"]=="mk_my_table")?true:false;
@@ -853,7 +879,17 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 			echo "kui errorit ei tekkinud, siis andmed läksid vist baasi";
 		if ($ob["meta"]["output"]=="mk_my_query")
 			echo "";
-		echo "</pre></body></html>";
+		echo "</pre>";
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=10)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=25)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=50)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=100)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=200)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=300)).'#end">järgmised '.$samm.'</a><br />';
+echo '<a href="'.$this->mk_my_orb('import', array('id' => $arr['id'],'next' => $next, 'samm' => $samm=500)).'#end">järgmised '.$samm.'</a><br />';
+		
+		echo "<a name=end></a><script>alert('valma');</script></body></html>";
 		die();
 	}
 
@@ -935,7 +971,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 	// gets - list of columns to return (0 .. ), if not specified all columns will be returned
 
 	function table_to_array($table,$gets=array(),$strip_html=array())
-	{
+	{	
 		$html=preg_replace("/<\/td>/i", "#%#", $table);
 		$html=preg_replace("/<td[^>]*?>/i", "", $html);
 		$html=preg_replace("/<\/tr>/i", "#&#", $html);
@@ -1018,7 +1054,7 @@ html::checkbox(array('name'=>'ruul[ruul_'.$i.'][strip_html]', 'value' => 1,'chec
 					if ($insert)
 					{
 //						echo $q."\n";
-						$this->db_query($q);
+						$this->db_query($q, false);
 					}
 					else
 					{

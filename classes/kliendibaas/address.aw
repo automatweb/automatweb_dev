@@ -6,40 +6,47 @@
 	@default table=objects
 	@default group=general
 
+	@property name type=text
+	@caption Nimi
+	
 	@default table=kliendibaas_address
-
+	
+	@property aadress type=textbox size=50 maxlength=100
+	@caption Tänav/Küla
+	
 	@property postiindeks type=textbox size=5 maxlength=5
-	@caption postinindex
+	@caption Postinindex
+	
+	@property linn type=relpicker reltype=LINN table=kliendibaas_address
+	@caption Linn/Vald
 
-	@property telefon type=textbox size=10 maxlength=15
-	@caption telefon
+	@property maakond type=relpicker reltype=MAAKOND table=kliendibaas_address
+	@caption Maakond
 
-	@property mobiil type=textbox size=10 maxlength=15
-	@caption mobiiltelefon
+	@property riik type=relpicker reltype=RIIK table=kliendibaas_address
+	@caption Riik
+	
+	@property telefon type=relpicker reltype=TELEFON
+	@caption Telefon
 
-	@property faks type=textbox size=10 maxlength=20
-	@caption faks
+	@property mobiil type=relpicker reltype=MOBIIL
+	@caption Mobiiltelefon
 
-	@property piipar type=textbox size=10 maxlength=20
-	@caption piipar
+	@property faks type=relpicker reltype=FAKS
+	@caption Faks
 
-	@property aadress type=textbox size=30 maxlength=100
-	@caption aadress
+	@property piipar type=textbox size=20 maxlength=20
+	@caption Piipar
+	
+	@property e_mail type=relpicker reltype=EMAIL
+	@caption E-mail
 
-	@property e_mail type=textbox size=25 maxlength=100
-	@caption e-mail
-
-	@property kodulehekylg type=textbox size=40 maxlength=300
-	@caption kodulehekülg
-
-	@property linn type=relpicker reltype=LINN
-	@caption linn
-
-	@property maakond  type=relpicker reltype=MAAKOND
-	@caption maakond
-
-	@property riik type=relpicker reltype=RIIK
-	@caption riik
+	@property kodulehekylg type=relpicker reltype=WWW
+	@caption Kodulehekülg
+			
+	@property comment type=textarea cols=65 rows=3 table=objects field=comment
+	@caption Kommentaar
+	
 */
 
 /*
@@ -68,6 +75,13 @@ CREATE TABLE `kliendibaas_address` (
 define('LINN',1);
 define('RIIK',2);
 define('MAAKOND',3);
+define('BELONGTO',4);
+define('EMAIL',5);
+define('WWW',6);
+define('TELEFON',7);
+define('MOBIIL',8);
+define('FAKS',9);
+//define('',);
 
 class address extends class_base
 {
@@ -81,9 +95,15 @@ class address extends class_base
 	function callback_get_rel_types()
 	{
 		return array(
-			LINN => 'linn',
-			RIIK => 'riik',
-			MAAKOND => 'maakond',
+			LINN => 'Linn',
+			RIIK => 'Riik',
+			MAAKOND => 'Maakond',
+			BELONGTO => 'Seosobjekt',
+			EMAIL => 'E-mail',
+			WWW => 'Kodulehekülg',
+			TELEFON => 'Telefon',
+			MOBIIL => 'Mobiil',
+			FAKS => 'Faks',
 		);
 	}
 
@@ -101,6 +121,24 @@ class address extends class_base
 			case MAAKOND:
 				$retval = array(CL_MAAKOND);
 			break;
+			case BELONGTO:
+				$retval = array(CL_ISIK, CL_FIRMA);
+			break;
+			case EMAIL:
+				$retval = array(CL_EXTLINK);
+			break;
+			case WWW:
+				$retval = array(CL_EXTLINK);
+			break;
+			case TELEFON:
+				$retval = array(CL_PHONE);
+			break;
+			case MOBIIL:
+				$retval = array(CL_PHONE);
+			break;
+			case FAKS:
+				$retval = array(CL_PHONE);
+			break;
 		};
 		return $retval;
 	}
@@ -116,8 +154,50 @@ class address extends class_base
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'name':
+				$retval=PROP_IGNORE;
+			break;
 		}
 		return $retval;
 	}
+	
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		$form = &$args["form_data"];
+		$obj = &$args["obj"];
+
+		switch($data["name"])
+		{
+			case 'riik':
+				
+				if ($form['aadress'])
+					$name[] = $form['aadress'];
+				if ($form['linn'])
+					$name[] = $this->db_fetch_field('select name from objects where oid="'.$form['linn'].'"','name');
+				if ($form['maakond'])
+					$name[] = $this->db_fetch_field('select name from objects where oid="'.$form['maakond'].'"','name');
+				
+				if (count($name) < 1)
+				{
+					if ($form['e_mail'])
+						$name[] = $form['e_mail'];
+				}
+				
+				if (count($name) < 1)
+				{
+					if ($form['telefon'])
+						$name[] = 'tel:'.$form['telefon'];
+				}
+					
+				$obj['name'] =  implode(', ',$name);
+			break;
+		};
+		return $retval;
+	}	
 }
 ?>

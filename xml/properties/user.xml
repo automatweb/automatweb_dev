@@ -121,6 +121,26 @@
             <caption>Aktiivne kuni</caption>
       </property>
       <property>
+            <name>user_calendar</name>
+            <type>relpicker</type>
+            <reltype>USER_CALENDAR</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasutaja kalender</caption>
+      </property>
+      <property>
+            <name>kliendibaas</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_KLIENDIBAAS</reltype>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <caption>Kasutaja hallatav kliendibaas</caption>
+      </property>
+      <property>
             <name>passwd</name>
             <field>password</field>
             <type>password</type>

@@ -4,22 +4,18 @@
 	@default table=objects
 	@default group=general
 
+	@property toode type=textbox size=40 table=kliendibaas_toode
+	@caption Toote nimetus
+
+	@property toode_en type=textbox size=40 table=kliendibaas_toode
+	@caption Inglise keelne tootenimetus
+		
 	@property comment type=textarea field=comment
-	@caption Kommentaar
+	@caption Kirjeldus
 
-	@default table=kliendibaas_toode
-
-	@property kood type=textbox size=8
-	@caption Toote kood
-
-	@property toode type=textbox size=40
-	@caption Toode
-
-	@property toode_en type=textbox size=40
-	@caption Toode (i.k.)
-
-	@property kirjeldus type=textarea
-	@caption Toote kirjeldus
+	@property kood type=textbox size=8 table=kliendibaas_toode
+	@caption Toote kood	
+	
 */
 
 
@@ -57,8 +53,31 @@ class toode extends class_base
 			case 'alias':
 				$retval = PROP_IGNORE;
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			case 'name':
+				$retval=PROP_IGNORE;
+			break;			
 		}
 		return  $retval;
 	}
+	
+	
+	function set_property($args = array())
+	{
+		$data = &$args["prop"];
+		$retval = PROP_OK;
+		$form = &$args["form_data"];
+		$obj = &$args["obj"];		
+		switch($data["name"])
+		{
+			case 'kood':
+				$obj['name'] =  ($form['kood'] ? ''.$form['kood'].' ' : '').$form['toode'];
+			break;
+		};
+		return $retval;
+	}		
+	
 }
 ?>

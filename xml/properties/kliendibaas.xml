@@ -1,11 +1,66 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>selections</name>
+            <type>relpicker</type>
+            <reltype>SELECTIONS</reltype>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi valim</caption>
+      </property>
+      <property>
+            <name>navtoolbar</name>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption></caption>
+      </property>
+      <property>
+            <name>search_form</name>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>otsing</caption>
+      </property>
+      <property>
+            <name>sfield</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>exclude</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>make_search</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>firmad</group>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>selection_manage_buttons</name>
             <type>text</type>
             <callback>selection_manage_bar</callback>
             <table>objects</table>
-            <group>manager</group>
+            <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
       </property>
@@ -14,120 +69,9 @@
             <type>text</type>
             <callback>firma_manager</callback>
             <table>objects</table>
-            <group>manager</group>
+            <group>firmad</group>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>page</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>page</caption>
-      </property>
-      <property>
-            <name>search_form</name>
-            <type>text</type>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>otsing</caption>
-      </property>
-      <property>
-            <name>search</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>search_require</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>do_search</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>do otsing</caption>
-      </property>
-      <property>
-            <name>search_history</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>search_require_history</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>actions</name>
-            <type>text</type>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>actions</caption>
-      </property>
-      <property>
-            <name>select</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>objs</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>sele</name>
-            <type>checkbox</type>
-            <ch_value>on</ch_value>
-            <table>objects</table>
-            <group>manager</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>teg_page</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>tegevusalad</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>teg_page</caption>
       </property>
       <property>
             <name>tegevusala_manager</name>
@@ -137,45 +81,6 @@
             <group>tegevusalad</group>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>teg_do_search</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>tegevusalad</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>do otsing</caption>
-      </property>
-      <property>
-            <name>teg_search</name>
-            <type>textbox</type>
-            <size>3</size>
-            <table>objects</table>
-            <group>tegevusalad</group>
-            <field>meta</field>
-            <method>serialize</method>
-      </property>
-      <property>
-            <name>limit_per_page</name>
-            <type>textbox</type>
-            <size>8</size>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>mitu rida näita</caption>
-      </property>
-      <property>
-            <name>show_columns</name>
-            <type>select</type>
-            <multiple>1</multiple>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>ettevõtete tabelis näita neid veerge</caption>
       </property>
       <property>
             <name>order_by_columns</name>
@@ -188,121 +93,53 @@
       </property>
       <property>
             <name>dir_firmad</name>
-            <type>popup_objmgr</type>
-            <clid>CL_PSEUDO</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>FIRMA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
-            <caption>firmade kataloog(id)</caption>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi firmade kataloog</caption>
       </property>
       <property>
             <name>dir_isik</name>
-            <type>popup_objmgr</type>
-            <clid>CL_PSEUDO</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
+            <type>relpicker</type>
+            <reltype>ISIK_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
-            <caption>isikute kataloog(id)</caption>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi töötajate kataloog</caption>
       </property>
       <property>
             <name>dir_address</name>
-            <type>popup_objmgr</type>
-            <clid>CL_PSEUDO</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>settings</group>
-            <caption>aadresside kataloog(id)</caption>
-      </property>
-      <property>
-            <name>dir_linn</name>
-            <type>popup_objmgr</type>
-            <clid>CL_PSEUDO</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <group>settings</group>
-            <caption>linnade kataloog(id)</caption>
-      </property>
-      <property>
-            <name>dir_maakond</name>
             <type>relpicker</type>
-            <reltype>M_CAT</reltype>
-            <multiple>1</multiple>
+            <reltype>ADRESS_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>maakondade kataloog(id)</caption>
-      </property>
-      <property>
-            <name>dir_riik</name>
-            <type>relpicker</type>
-            <reltype>R_CAT</reltype>
-            <multiple>1</multiple>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>riikide kataloog(id)</caption>
+            <caption>Vaikimisi aadresside kataloog</caption>
       </property>
       <property>
             <name>dir_tegevusala</name>
             <type>relpicker</type>
-            <reltype>TE_CAT</reltype>
-            <multiple>1</multiple>
+            <reltype>TEGEVUSALA_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>tegevusalade kataloog(id)</caption>
-      </property>
-      <property>
-            <name>dir_toode</name>
-            <type>relpicker</type>
-            <reltype>TO_CAT</reltype>
-            <multiple>1</multiple>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>toodete kataloog(id)</caption>
+            <caption>Vaikimisi tegevusalade kataloog</caption>
       </property>
       <property>
             <name>dir_default</name>
             <type>relpicker</type>
-            <reltype>G_CAT</reltype>
-            <multiple>1</multiple>
+            <reltype>GENERAL_CAT</reltype>
             <table>objects</table>
             <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <caption>üld kataloog</caption>
-      </property>
-      <property>
-            <name>where_firm</name>
-            <type>checkbox</type>
-            <ch_value>on</ch_value>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>näita ainult tegevusalasid, kus alal on ka ettevõtteid</caption>
-      </property>
-      <property>
-            <name>objects_manager</name>
-            <type>text</type>
-            <callback>objects_manager</callback>
-            <table>objects</table>
-            <group>objects_manager</group>
-            <field>meta</field>
-            <method>serialize</method>
+            <caption>Vaikimisi kataloog, kui mõni eelnevatest pole määratud, siis kasutatakse seda</caption>
       </property>
       <property>
             <name>active_selection_objects</name>
@@ -314,22 +151,10 @@
             <method>serialize</method>
       </property>
       <property>
-            <name>selections</name>
-            <type>popup_objmgr</type>
-            <clid>CL_SELECTION</clid>
-            <multiple>1</multiple>
-            <method>serialize</method>
-            <field>meta</field>
-            <table>objects</table>
-            <width>600</width>
-            <group>general</group>
-            <caption>majanda valimeid</caption>
-      </property>
-      <property>
             <name>active_selection</name>
             <type>textbox</type>
             <group>
-                  <num_0>manager</num_0>
+                  <num_0>firmad</num_0>
                   <num_1>selectione</num_1>
             </group>
             <table>objects</table>
@@ -340,21 +165,19 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <manager>
+            <firmad>
+                  <submit>no</submit>
                   <caption>Ettevõtted</caption>
-            </manager>
+            </firmad>
             <tegevusalad>
                   <caption>Tegevusalad</caption>
             </tegevusalad>
             <settings>
                   <caption>Seaded</caption>
             </settings>
-            <objects_manager>
-                  <caption>Objektide&amp;nbsp;lisamine</caption>
-            </objects_manager>
             <selectione>
-                  <caption>Valimid</caption>
                   <submit>no</submit>
+                  <caption>Valimid</caption>
             </selectione>
       </groupinfo>
 </properties>

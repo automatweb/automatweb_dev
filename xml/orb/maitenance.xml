@@ -9,7 +9,23 @@
 				</arguments>
 			</function>
 		</action>
-	
+		<action name="kb_convert">
+			<function name="kb_convert">
+				<arguments>
+					<optional name="next"/>
+					<optional name="samm"/>
+					<optional name="convert"/>
+					<optional name="parent"/>
+				</arguments>
+			</function>
+		</action>
+		<action name="ta_convert">
+			<function name="ta_convert">
+				<arguments>
+					<optional name="next"/>
+					<optional name="samm"/>
+				</arguments>
+			</function>
+		</action>
 	</class>
 </orb>
-		

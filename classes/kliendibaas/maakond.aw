@@ -5,21 +5,15 @@
 	@default table=objects
 	@default group=general
 
-	@property comment type=textarea field=comment
-	@caption Kommentaar
-
-	@default table=kliendibaas_maakond
-
 	@property name type=textbox size=20
-	@caption Nimetus (tmp)
+	@caption Maakonna nimetus
+	
+@property comment type=textarea cols=40 rows=3 table=objects field=comment
+@caption Kommentaar
+	
+//	@default table=kliendibaas_maakond
 
-//	@property comment type=textarea
-//	@caption Keeled
-
-	@property location type=textarea
-	@caption Asukoha kirjeldus
 */
-
 
 /*
 
@@ -53,6 +47,10 @@ class maakond extends class_base
 			case 'alias':
 				$retval=PROP_IGNORE;
 			break;
+			case 'status':
+				$retval=PROP_IGNORE;
+			break;
+			
 		}
 		return  $retval;
 	}
