@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.37 2005/01/27 11:51:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.38 2005/02/20 11:06:42 ahti Exp $
 // event_search.aw - Sündmuste otsing 
 /*
 
@@ -374,6 +374,11 @@ class event_search extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "fullview",
+			"caption" => t("Täisvaates"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("Jrk"),
 			"align" => "center",
@@ -445,6 +450,11 @@ class event_search extends class_base
 					"name" => "${pname}[${sname}][clickable]",
 					"value" => 1,
 					"checked" => ($oldvals[$sname]["clickable"] == 1),
+				)),
+				"fullview" => html::checkbox(array(
+					"name" => "${pname}[${sname}][fullview]",
+					"value" => 1,
+					"checked" => ($oldvals[$sname]["fullview"] == 1),
 				)),
 				"ord" => html::textbox(array(
 					"name" => "${pname}[${sname}][ord]",
@@ -935,7 +945,6 @@ class event_search extends class_base
 			}
 			exit_function("event_search::search_speed");
 			$res = "";
-			
 			$aliasmrg = get_instance("aliasmgr");
 			foreach($edata as $ekey => $eval)
 			{
@@ -944,7 +953,7 @@ class event_search extends class_base
 				$cdat = "";
 				foreach($tabledef as $sname => $propdef)
 				{
-					if($sname == "content" || (!$propdef["active"]))
+					if($sname == "content" || ((!$propdef["active"]) ||($search["oid"] && !($propdef["fullview"]))))
 					{
 						continue;
 					}
@@ -1036,23 +1045,26 @@ class event_search extends class_base
 					$this->vars(array("CELL" => $cdat));
 				}
 				$nmx = "content";
-				if(!empty($eval["content"]) && $tabledef["content"]["active"])
+				if($tabledef["content"]["active"] || ($tabledef["content"]["fullview"] && $search["oid"]))
 				{
-					$eval["content"] = nl2br($eval["content"]);
-					$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
-					$content = $eval["content"];
-				}
-				elseif(!empty($eval["utextarea1"]) && $tabledef["content"]["active"])
-				{
-					$eval["utextarea1"] = nl2br($eval["utextarea1"]);
-					$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
-					$content = $eval["utextarea1"];
+					if(!empty($eval["content"]))
+					{
+						$eval["content"] = nl2br($eval["content"]);
+						$aliasmrg->parse_oo_aliases($ekey, $eval["content"]);
+						$content = $eval["content"];
+					}
+					elseif(!empty($eval["utextarea1"]))
+					{
+						$eval["utextarea1"] = nl2br($eval["utextarea1"]);
+						$aliasmrg->parse_oo_aliases($ekey, $eval["utextarea1"]);
+						$content = $eval["utextarea1"];
+					}
 				}
 				$i++;
 				$this->vars(array(
 					"num" => $i % 2 ? 1 : 2,
 				));
-				if($search["oid"] or ((!$clickable) && $tabledef["content"]["active"] && !empty($content)))
+				if(($tabledef["content"]["fullview"] && $search["oid"]) || ((!$clickable) && $tabledef["content"]["active"] && !empty($content)))
 				{
 					$this->vars(array(
 						"fulltext_name" => $tabledef[$nmx]["caption"],
@@ -1065,7 +1077,7 @@ class event_search extends class_base
 					$fulltext = "";
 				}
 				$this->vars(array(
-						"FULLTEXT" => $fulltext,
+					"FULLTEXT" => $fulltext,
 				));
 				$res .= $this->parse("EVENT");
 			};
