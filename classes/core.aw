@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.234 2003/12/03 12:03:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core.aw,v 2.235 2003/12/04 10:03:55 kristo Exp $
 // core.aw - Core functions
 
 // if a function can either return all properties for something or just a name, then use 
@@ -720,8 +720,6 @@ class core extends acl_base
 					WHERE id = '$id'";
 
 		$this->db_query($q);
-		$aliasmgr = get_instance("aliasmgr");
-		$_aliases = $aliasmgr->cache_oo_aliases($source);
 
 		$this->_log(ST_CORE, SA_CHANGE_ALIAS, "Muutis objekti $source aliast $target", $source);
 	}
@@ -744,12 +742,6 @@ class core extends acl_base
 				"id" => $source,
 				"alias" => $target
 			));
-		}
-
-		if (!$no_cache)
-		{
-			$ainst = get_instance("aliasmgr");
-			$ainst->cache_oo_aliases($source);
 		}
 	}
 
@@ -950,12 +942,6 @@ class core extends acl_base
 		}
 
 		$this->db_query($q);
-
-		if (!$no_cache)
-		{
-			$aliasmgr = get_instance("aliasmgr");
-			$aliasmgr->cache_oo_aliases($id);
-		}
 
 		$this->_log(ST_CORE, SA_ADD_ALIAS,"Lisas objektile $id aliase $alias", $id);
 	}

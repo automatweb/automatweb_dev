@@ -477,7 +477,9 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				o_t.modified as `to.modified`,
 				o_s.modified as `from.modified`,
 				o_t.name as `to.name`,
-				o_s.name as `from.name`
+				o_s.name as `from.name`,
+				o_t.class_id as `to.class_id`,
+				o_s.class_id as `from.class_id`
 		";
 	}
 
@@ -523,6 +525,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$sql .= " AND o_s.".substr($k, 5)." = '$v' ";
 			}
 		}
+
+		$sql .= " ORDER BY a.id ";
 
 		$this->db_query($sql);
 		$ret = array();

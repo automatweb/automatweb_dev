@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.62 2003/11/13 11:11:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_element.aw,v 1.63 2003/12/04 10:03:56 kristo Exp $
 // form_element.aw - vormi element.
 class form_element extends aw_template
 {
@@ -597,23 +597,17 @@ class form_element extends aw_template
 			$al = "";
 			if ($this->arr["type"] == "alias")
 			{
-				$am = get_instance("aliasmgr");
 				// fid, if we are editing a form
 				// output_id, if we are editing an output
 				$id = ($this->fid) ? $this->fid : $this->form->output_id;
-				$alist = $am->get_oo_aliases(array(
-					"oid" => $id,
-					"ret_type" => GET_ALIASES_FLAT,
-				));
+
+				$o = obj($id);
+				$conn = $o->connections_from();
 
 				$aliaslist = array();
-
-				if (is_array($alist))
+				foreach($conn as $c)
 				{
-					foreach($alist as $key => $val)
-					{
-						$aliaslist[$val["target"]] = $val["name"];
-					};
+					$aliaslist[$c->prop("to")] = $c->prop("to.name");
 				};
 
 				$atypelist = array(
@@ -2376,14 +2370,13 @@ class form_element extends aw_template
 				// igal entryle on võimalik sisestada oma alias
 				if ( $this->arr["alias_type"] == 1)
 				{
-					$am = get_instance("aliasmgr");
-
-					// There can be only one
-					$alias = $am->get_oo_aliases(array("oid" => $this->arr["id"],"ret_type" => GET_ALIASES_FLAT));
+					$o = obj($this->arr["id"]);
+					$conn = $o->connections_from();
+					$c = $conn[0];
 
 					$def = $defs[$this->arr["alias_subtype"]];
 
-					if ($alias[0]["class_id"] != $def["class_id"])
+					if ($c->prop("to.class_id") != $def["class_id"])
 					{
 						$link = $def["addlink"];
 						$caption = "Lisa objekt ($def[title])";
@@ -2391,7 +2384,7 @@ class form_element extends aw_template
 					else
 					{
 						$link = $def["chlink"];
-						$link .= "&id=" . $alias[0]["target"];
+						$link .= "&id=" . $c->prop("to");
 						$caption = "Muuda objekti ($def[title])";
 					};
 

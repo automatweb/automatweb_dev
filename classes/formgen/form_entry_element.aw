@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.10 2003/10/13 12:24:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_entry_element.aw,v 1.11 2003/12/04 10:03:57 kristo Exp $
 // form_entry_element.aw - 
 load_vcl("date_edit");
 lc_load("definition");
@@ -355,12 +355,11 @@ class form_entry_element extends form_element
 			if ( ($this->arr["alias_type"] == 1) && (strlen($this->arr["alias_subtype"]) > 2) )
 			{
 				// we need to show the actual aliased object, not the one added to the output
-				$am = get_instance("aliasmgr");
-				// There can be only one
-				$alias = $am->get_oo_aliases(array("oid" => $this->arr["id"],"ret_type" => GET_ALIASES_FLAT));
-				if (sizeof($alias) > 0)
+				$o = obj($this->arr["id"]);
+				$conn = $o->connections_from();
+				if (sizeof($conn) > 0)
 				{
-					$html = $obj->show(array("id" => $alias[0]["target"]));
+					$html = $obj->show(array("id" => $conn[0]->prop("to")));
 				}
 				else
 				{
@@ -373,7 +372,6 @@ class form_entry_element extends form_element
 				// yeah!
 				$html = $obj->show(array("id" => $this->arr["alias"]));
 			};
-
 		}
 
 		if ($this->arr["type"] == "timeslice")

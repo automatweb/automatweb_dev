@@ -67,6 +67,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !saves connection 
 	function save_connection($data)
 	{
+		$this->_clear_cache(0, "connection");
 		return $this->contained->save_connection($data);
 	}
 
@@ -74,6 +75,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !deletes connection $id
 	function delete_connection($id)
 	{
+		$this->_clear_cache(0, "connection");
 		return $this->contained->delete_connection($id);
 	}
 
@@ -82,7 +84,13 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	// !returns all connections that match filter
 	function find_connections($arr)
 	{
-		return $this->contained->find_connections($arr);
+		$res = $this->_get_cache("search", 0, "connection");
+		if (!$res)
+		{
+			$res = $this->contained->find_connections($arr);
+			$this->_set_cache("search", 0, $res, "connection");
+		}
+		return $res;
 	}
 
 
@@ -121,9 +129,9 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	////////////////////////////////
 	// internal cache funcs
 
-	function _get_cache($fn, $oid)
+	function _get_cache($fn, $oid, $cfn = "objcache")
 	{
-		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/objcache::$fn::$oid";
+		$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$cfn."::$fn::$oid";
 		if (file_exists($fqfn))
 		{
 			include($fqfn);
@@ -133,23 +141,23 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		return false;
 	}
 
-	function _set_cache($fn, $oid, $dat)
+	function _set_cache($fn, $oid, $dat, $cfn = "objcache")
 	{
 		$GLOBALS["object_loader"]->ds->dequote(&$dat);
 		$str = "<?php\n";
 		$str .= aw_serialize($dat, SERIALIZE_PHP_FILE);
 		$str .= "?>";
 
-		$this->cache->file_set("objcache::$fn::$oid", $str);
+		$this->cache->file_set($cfn."::$fn::$oid", $str);
 	}
 
-	function _clear_cache($oid)
+	function _clear_cache($oid, $cfn = "objcache")
 	{
 		foreach($this->funcs as $func)
 		{
-			$this->cache->file_invalidate("objcache::$func::$oid");
+			$this->cache->file_invalidate($cfn."::$func::$oid");
 		}
-		$this->cache->file_invalidate_regex("objcache::search::(.*)::0");
+		$this->cache->file_invalidate_regex($cfn."::search::(.*)::0");
 	}
 
 	function object_exists($oid)

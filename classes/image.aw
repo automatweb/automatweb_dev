@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.77 2003/11/27 13:10:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.78 2003/12/04 10:03:55 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -131,7 +131,7 @@ class image extends class_base
 		return $retval;
 	}
 
-	function parse_alias_list($arr)
+/*	function parse_alias_list($arr)
 	{
 		extract($arr);
 		$ret = array();
@@ -145,7 +145,7 @@ class image extends class_base
 			));
 		}
 		return $ret;
-	}
+	}*/
 
 	///
 	// !Kasutatakse ntx dokumendi sees olevate aliaste asendamiseks. Kutsutakse välja callbackina

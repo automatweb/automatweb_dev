@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.181 2003/12/03 12:30:35 duke Exp $
+// $Id: class_base.aw,v 2.182 2003/12/04 10:03:54 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1240,7 +1240,8 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		
-		$this->classinfo = $this->classinfo + $cfgu->get_classinfo();
+		$clif = new aw_array($cfgu->get_classinfo());
+		$this->classinfo = $this->classinfo + $clif->get();
 		$this->relinfo = $cfgu->get_relinfo();
 		if (is_array($this->classconfig))
 		{

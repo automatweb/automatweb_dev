@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.30 2003/11/09 18:19:09 duke Exp $
+// $Id: cfgutils.aw,v 1.31 2003/12/04 10:03:56 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -469,37 +469,16 @@ class cfgutils extends aw_template
 	// !Generates contents for type=relpicker clid=CL_XXX
 	function el_relpicker_clid($args = array())
 	{
-		// retrieve the list of all aliases first time this is invoked
-		$val = &$args["val"];
-		if (empty($this->alist))
-		{
-			$almgr = get_instance("aliasmgr");
-			if (!empty($args["id"]))
-			{
-				$this->alist = $almgr->get_oo_aliases(array(
-					"oid" => $args["id"],
-				));
-			}
-			else
-			{
-				$this->alist = array();
-			};
-		};
-
-		if (defined($val["clid"]) && isset($this->alist[constant($val["clid"])]))
-		{
-			$objlist = new aw_array($this->alist[constant($val["clid"])]);
-		}
-		else
-		{
-			$objlist = new aw_array();
-		};
+		$o = obj($args["id"]);
+		$conns = $o->connections_from(array(
+			"to.class_id" => constant($val["clid"])
+		));
 
 		$options = array("0" => "--vali--");
 		// generate option list
-		foreach($objlist->get() as $okey => $oval)
+		foreach($conns as $c)
 		{
-			$options[$oval["target"]] = $oval["name"];
+			$options[$c->prop("to")] = $c->prop("to.name");
 		}
 
 		$val["type"] = "select";
@@ -509,32 +488,6 @@ class cfgutils extends aw_template
 	function el_relpicker_reltype($args = array())
 	{
 		$val = &$args["val"];
-		if (isset($args["meta"]["alias_reltype"]))
-		{
-			$reltypes = $args["meta"]["alias_reltype"];
-		}
-		else
-		{
-			$reltypes = array();
-		};
-		// retrieve the list of all aliases first time this is invoked
-		if (empty($this->alist))
-		{
-			$almgr = get_instance("aliasmgr");
-			if (!empty($args["id"]))
-			{
-				$this->alist = $almgr->get_oo_aliases(array(
-					"oid" => $args["id"],
-					"ret_type" => GET_ALIASES_FLAT,
-				));
-			}
-			else
-			{
-				$this->alist = array();
-			};
-		};
-
-		$objlist = new aw_array($this->alist);
 
 		$options = array("0" => "--vali--");
 		// generate option list
@@ -547,12 +500,14 @@ class cfgutils extends aw_template
 			$reltype = $val["reltype"];
 		};
 
-		foreach($objlist->get() as $okey => $oval)
+		$o = obj($args["id"]);
+		$conn = $o->connections_from(array(
+			"type" => $reltype
+		));
+
+		foreach($conn as $c)
 		{
-			if ($oval["reltype"] == $reltype)
-			{
-				$options[$oval["target"]] = $oval["name"];
-			};
+			$options[$c->prop("to")] = $c->prop("to.name");
 		}
 
 		$val["type"] = "select";

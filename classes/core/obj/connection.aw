@@ -1,5 +1,13 @@
 <?php
 
+/*
+
+this message will get posted whenever an alias is about to be deleted
+the message will get the connection object as the "conenction" parameter
+EMIT_MESSAGE(MSG_STORAGE_ALIAS_DELETE)
+
+*/
+
 class connection
 {
 	////////////////////////////
@@ -73,7 +81,11 @@ class connection
 		{
 			$this->conn = array();
 		}
-		$this->conn += $param;
+
+		foreach($param as $k => $v)
+		{
+			$this->conn[$k] = $v;
+		}
 
 		$this->_int_save();
 	}
@@ -97,6 +109,13 @@ class connection
 			));
 		}
 
+		post_message(
+			MSG_STORAGE_ALIAS_DELETE, 
+			array(
+				"connection" => &$this
+			)
+		);
+
 		$GLOBALS["object_loader"]->ds->delete_connection($this->conn["id"]);
 	}
 
@@ -105,8 +124,12 @@ class connection
 		return $this->conn["id"];
 	}
 
-	function prop($key)
+	function prop($key = NULL)
 	{
+		if ($key === NULL)
+		{
+			return $this->conn;
+		}
 		return $this->conn[$key];
 	}
 

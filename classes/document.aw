@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.221 2003/12/03 12:04:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.222 2003/12/04 10:03:55 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 // erinevad dokumentide muutmise templated.
@@ -2797,16 +2797,8 @@ class document extends aw_template
 					"reg" => "/(#)event_(.+?)(#)/i",
 					));
 
-		if (defined("PIKK"))
-		{
-			$class = "events3";
-		}
-		else
-		{
-			$class = "events";
-		};
 		$this->register_sub_parser(array(
-					"class" => $class,
+					"class" => "events",
 					"reg_id" => $mp,
 					"function" => "parse_alias",
 		));

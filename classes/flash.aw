@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.4 2003/10/06 14:32:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/flash.aw,v 1.5 2003/12/04 10:03:55 kristo Exp $
 // flash.aw - Deals with flash applets
 /*
 
@@ -35,9 +35,9 @@ class flash extends class_base
 	}
 
 	function get_property($arr = array())
-        {
-                $data = &$arr["prop"];
-                $retval = PROP_OK;
+	{
+		$data = &$arr["prop"];
+		$retval = PROP_OK;
 		switch($data["name"])
 		{
 			case "preview":
@@ -119,7 +119,7 @@ class flash extends class_base
 	{
 		if ($url)
 		{
-                	$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"flash",false,true,"/");
+			$url = $this->mk_my_orb("show", array("fastcall" => 1,"file" => basename($url)),"flash",false,true,"/");
 			$url = str_replace("automatweb/","",$url);
 		}
 		else
@@ -127,7 +127,7 @@ class flash extends class_base
 			$url = "";
 		};
 		return $url;
-        }
+	}
 
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown

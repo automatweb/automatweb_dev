@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.124 2003/12/02 10:34:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.125 2003/12/04 10:03:54 kristo Exp $
 
 // used to specify how get_oo_aliases should return the list
 define("GET_ALIASES_BY_CLASS",1);
@@ -10,11 +10,9 @@ class aliasmgr extends aw_template
 {
 	function aliasmgr($args = array())
 	{
-//		arr($this->cfg,1);
 		extract($args);
 		$this->use_class = isset($args["use_class"]) ? $args["use_class"] : get_class($this);
 		$this->init("aliasmgr");
-		$this->contents = "";
 		$this->lc_load("aliasmgr","lc_aliasmgr");
 
 		// we need a better way to do a version upgrade or smth.
@@ -29,7 +27,6 @@ class aliasmgr extends aw_template
 		extract($args);
 
 		$this->reltype = isset($args['s']['reltype']) ? $args['s']['reltype']: $reltype;
-//		$this->reltype = isset($args['objtype']) ? $args['objtype']: NULL;
 
 		$GLOBALS['site_title'] = "Seostehaldur";
 		$search = get_instance("search");
@@ -69,30 +66,26 @@ class aliasmgr extends aw_template
 
 		$id = ($args["id"]) ? $args["id"] : $args["docid"];
 		$this->id = $id;
-		$obj = $this->get_object($id);
 
+		$obj = obj($id);
 
 		if (is_object($this->ref))
 		{
 			$this->ref = $ref;
 		};
 		
-		
-
-		$return_url = $this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class);
-		$return_url = urlencode($return_url);
-		//$return_url = urlencode(aw_global_get('REQUEST_URI'));
-		
+		$return_url = urlencode($this->mk_my_orb("list_aliases", array("id" => $id),$this->use_class));
+	
 		$tb = $this->mk_toolbar($args['s']['class_id'], $args['objtype']);
+
 		$this->read_template("search.tpl");
 		$this->vars(array(
 			"create_relation_url" => $this->mk_my_orb("search_aliases",array("id" => $this->id),$this->use_class),
 		));
 		
-
 		$this->vars(array(
 			'class_ids' => $clids,
-			"parent" => $obj["parent"],
+			"parent" => $obj->parent(),
 			"period" => $period,
 			"id" => $id,
 			"return_url" => $return_url,
@@ -108,7 +101,6 @@ class aliasmgr extends aw_template
 			"form" => $form,
 			"table" => $search->get_results(),
 		));
-		//$results = $search->get_results();
 		return $this->parse();
 	}
 
@@ -182,9 +174,6 @@ class aliasmgr extends aw_template
 				'value' => '0',
 			);
 		}
-
-
-
 	}
 
 	function search_callback_modify_data($row,$args)
@@ -204,69 +193,37 @@ class aliasmgr extends aw_template
 	function submit_list($args = array())
 	{
 		extract($args);
+		$o = obj($id);
+
 		if ($subaction == "delete")
 		{
 			$to_delete = new aw_array($check);
 			foreach($to_delete->get() as $alias_id)
 			{
-				// now, get the alias. if it has reltype of 10000, then get the object it points TO
-				// then find any brothers of the object the relation comes from and delete them
-				$o = obj($id);
 				$conns = $o->connections_from(array(
 					"to" => $alias_id
 				));
 				$c = $conns[0];
-				if ($c->prop("reltype") == 10000)
-				{
-					$ol = new object_list(array(
-						"parent" => $alias_id,
-						"brother_of" => $id
-					));
-					for($o =& $ol->begin(); !$ol->end(); $o = $ol->next())
-					{
-						$o->delete();
-					}
-				}
-				
-				$this->delete_alias($id,$alias_id);
-				unset($link[$alias_id]);
+				$c->delete();
 			};
 		};
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"key" => "aliaslinks",
-			"value" => $link,
-			"overwrite" => 1,
-		));
 
 
 		$cache_inst = get_instance("cache");
-		$alist = $this->get_aliases_for($id);
-
-		/*
-			$aclid = $alias["class_id"];
-			list($astr) = explode(",",$classes[$aclid]["alias"]);
-			// oh no. this is BAD. if I have a document with a lot of images
-			// for example and delete one of those - ALL other images
-			// will shift. I mean, fuck
-			$astr = sprintf("#%s%d#",$astr,++$this->acounter[$aclid]);
-
-
-		*/
-
+		$alist = $o->connections_from();
 		foreach($alist as $ad)
 		{
-			if ($ad['cached'] != $cache[$ad['target']])
+			if ($ad->prop('cached') != $cache[$ad->prop('to')])
 			{
-				if (!$cache[$ad['target']])
+				if (!$cache[$ad->prop('to')])
 				{
-					$cache_inst->file_invalidate_regex('alias_cache::source::'.$id.'::target::'.$ad['target'].'.*');
+					$cache_inst->file_invalidate_regex('alias_cache::source::'.$id.'::target::'.$ad->prop('to').'.*');
 				}
-				$q = "UPDATE aliases SET cached = '".$cache[$ad['target']]."' WHERE target = '".$ad['target']."' AND source = '$id'";
-				$this->db_query($q);
+				$ad->change(array(
+					"cached" => $cache[$ad->prop('to')]
+				));
 			}
 		}
-		$this->cache_oo_aliases($id);
 		return $this->mk_my_orb("list_aliases",array("id" => $id),$this->use_class);
 	}
 		
@@ -274,49 +231,25 @@ class aliasmgr extends aw_template
 	// !Gets all aliases for an object
 	// params:
 	//   oid - the object whose aliases we must return
-	//   ret_type - if GET_ALIASES_BY_CLASS, return array is indexed by class and index, otherwise just index, default is GET_ALIASES_BY_CLASS
-	//   filter - array(classref,funcref) - if defined, this is called for each returned record
-	//   modifier(string) - allows to modify the sql clause to return only the data you need
 	function get_oo_aliases($args = array())
 	{
 		extract($args);
 
-		$oid = (int)$oid;
 		$this->recover_idx_enumeration($oid);
-		$ret_type = isset($ret_type) ? $ret_type : GET_ALIASES_BY_CLASS;
-		$this->alias_rel_type = array();
 
-		$obj = $this->get_object($oid);
-		// with this you can alter the sql clause to fetch only the data you are
-		// actually going to use
-		$modifier = isset($modifier) ? $modifier : "aliases.*";
-		$q = "SELECT $modifier, objects.class_id AS class_id, objects.name AS name
-			FROM aliases
-			LEFT JOIN objects ON (aliases.target = objects.oid)
-			WHERE source = '$oid' AND objects.status != 0 ORDER BY aliases.id";
-		$this->db_query($q);
-		$retval = array();
-		while($row = $this->db_next())
+		$obj = obj($oid);
+		$als = $obj->meta("aliaslinks");
+
+		foreach($obj->connections_from() as $c)
 		{
-			$row["aliaslink"] = $obj["meta"]["aliaslinks"][$row["target"]];
-			if (isset($filter))
-			{
-				$row = &$filter[0]->$filter[1]($row);
-				if (is_array($row))
-				{
-					$retval = $retval + $row;
-				};
-			}
-			elseif ($ret_type == GET_ALIASES_BY_CLASS)
-			{
-				$retval[$row["class_id"]][$row["idx"]] = $row;
-				$this->alias_rel_type[$row["target"]] = $row["reltype"];
-			}
-			else
-			{
-				$retval[] = $row;
-			};
-		};
+			$tp = $c->prop();
+			$tp["aliaslink"] = $als[$c->prop("to")];
+			$tp["source"] = $tp["from"];
+			$tp["target"] = $tp["to"];
+			$tp["class_id"] = $tp["to.class_id"];
+			$tp["name"] = $tp["to.name"];
+			$retval[$c->prop("to.class_id")][$c->prop("idx")] = $tp;
+		}
 		return $retval;
 	}
 
@@ -367,95 +300,60 @@ class aliasmgr extends aw_template
 			}
 		}
 
+		$cache_inst = get_instance("cache");
+
 		// try to find aliases until we no longer find any. 
 		// why is this? well, to enable the user to add aliases bloody anywhere. like in files that are to be shown right away
 		while (1)
 		{
 
-		$_cnt++;
-		if ($_cnt > 20)
-		{
-			// make sure we don't end up in an endless loop
-			break;
-		}
-
-		$_res = preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
-		if (!$_res)
-		{
-			// if no more aliases are found, then break out of the loop.
-			break;
-		}
-
-		$cache_inst = get_instance("cache");
-
-		if (is_array($matches))
-		{
-			// we gather all aliases in here, grouped by class so we gan give them to parse_alias_list()
-			$toreplace = array();
-			foreach ($matches as $key => $val)
+			$_cnt++;
+			if ($_cnt > 20)
 			{
-				$clid = $by_alias[$val[2]]["class_id"];
-				// dammit, this sucks. I need some way to figure out
-				// whether there is a correct idx set in the aliases, and if so
-				// use that, instead of the one in the list.
-				//$idx = $val[3] - 1;
-				$idx = $val[3];
-				$target = $aliases[$clid][$idx]["target"];
-
-				$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
-				$toreplace[$clid][$val[0]]["val"] = $val;
+				// make sure we don't end up in an endless loop
+				break;
 			}
 
-			// here we do the actual parse/replace bit
-
-			foreach($toreplace as $clid => $claliases)
+			$_res = preg_match_all("/(#)(\w+?)(\d+?)(v|k|p|)(#)/i",$source,$matches,PREG_SET_ORDER);
+			if (!$_res)
 			{
-				$emb_obj_name = "emb" . $clid;
-				$cldat = $this->cfg["classes"][$clid];
-				$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+				// if no more aliases are found, then break out of the loop.
+				break;
+			}
 
-				if ($class_name)
+			if (is_array($matches))
+			{
+				// we gather all aliases in here, grouped by class so we gan give them to parse_alias_list()
+				$toreplace = array();
+				foreach ($matches as $key => $val)
 				{
-					// load and create the class needed for that alias type
-					$$emb_obj_name = get_instance($class_name);
-					$$emb_obj_name->embedded = true;
+					$clid = $by_alias[$val[2]]["class_id"];
+					// dammit, this sucks. I need some way to figure out
+					// whether there is a correct idx set in the aliases, and if so
+					// use that, instead of the one in the list.
+					//$idx = $val[3] - 1;
+					$idx = $val[3];
+					$target = $aliases[$clid][$idx]["to"];
+
+					$toreplace[$clid][$val[0]] = $aliases[$clid][$idx];
+					$toreplace[$clid][$val[0]]["val"] = $val;
 				}
 
-				if (method_exists($$emb_obj_name, "parse_alias_list"))
+				// here we do the actual parse/replace bit
+
+				foreach($toreplace as $clid => $claliases)
 				{
-					// if the class supports alias list parsing, do it
-					$repl = $$emb_obj_name->parse_alias_list(array(
-						"oid" => $oid,
-						"aliases" => $claliases,
-						"tpls" => &$args["templates"],
-					));
-					if (is_array($repl))
+					$emb_obj_name = "emb" . $clid;
+					$cldat = $this->cfg["classes"][$clid];
+					$class_name = $cldat["alias_class"] != "" ? $cldat["alias_class"] : $cldat["file"];
+
+					if ($class_name)
 					{
-						foreach($repl as $aname => $avalue)
-						{
-							$inplace = false;
-							if (is_array($avalue))
-							{
-								$replacement = $avalue["replacement"];
-								$inplace = $avalue["inplace"];
-							}
-							else
-							{
-								$replacement = $avalue;
-							}
-
-							if ($inplace)
-							{
-								$this->tmp_vars = array($inplace => $replacement);
-								$replacement = "";
-							};
-								
-							$source = str_replace($aname,$replacement,$source);
-						}
+						// load and create the class needed for that alias type
+						$$emb_obj_name = get_instance($class_name);
+						$$emb_obj_name->embedded = true;
 					}
-				}
-				else
-				{
+
 					// if not, then parse all the aliases one by one
 					foreach($claliases as $avalue => $adata)
 					{
@@ -463,7 +361,6 @@ class aliasmgr extends aw_template
 						// if nothing comes up, we just replace it with a empty string
 						$replacement = $this->get_alias_cache($adata, $$emb_obj_name, &$cache_inst);
 						$from_cache = true;
-
 						if (method_exists($$emb_obj_name,"parse_alias") && ($replacement === false))
 						{
 							$repl = $$emb_obj_name->parse_alias(array(
@@ -498,7 +395,6 @@ class aliasmgr extends aw_template
 					}
 				}
 			}
-		}
 		}	// while (1)
 	}
 
@@ -615,16 +511,13 @@ class aliasmgr extends aw_template
 		$GLOBALS['site_title'] = "Seostehaldur";
 		classload('icons');
 
-		$obj = $this->get_object($id);
+		$obj = obj($id);
 		$this->id = $id;
-		$this->parent = $obj["parent"];
-
 
 		$reltypes[0] = "alias";
 		$reltypes = new aw_array($reltypes);
 		$this->reltypes = $reltypes->get();
 		
-
 		// init vcl table to $this->t and define columns
 		$this->_init_la_tbl();
 
@@ -640,7 +533,6 @@ class aliasmgr extends aw_template
 				$this->rel_type_classes[$key] = $this->make_alias_classarr2($val);
 			}
 		}
-		//arr($this->rel_type_classes);
 
 		$this->search_url = $search_url;
 
@@ -659,7 +551,6 @@ class aliasmgr extends aw_template
 				}
 
 				preg_match("/(\w*)$/",$cldat["file"],$m);
-				//$aliases[$m[1]] = $cldat["name"];
 				$types[] = $clid;
 			}
 			$clids .= 'clids['.$clid.'] = "'.basename($cldat["file"]).'";'."\n";
@@ -668,7 +559,6 @@ class aliasmgr extends aw_template
 		if (!$return_url)
 		{
 			$return_url = $this->mk_my_orb("list_aliases", array("id" => $id));
-			//$return_url = aw_global_get('REQUEST_URI');
 		};
 		
 		$toolbar = $this->mk_toolbar($args['s']['class_id']);
@@ -685,17 +575,15 @@ class aliasmgr extends aw_template
 		};
 
 		// fetch a list of all the aliases for this object
-		$alist = $this->get_aliases(array(
-			"oid" => $id,
-			//"type" => $types
-		));
+
+		$alinks = $obj->meta("aliaslinks");
 
 		$chlinks = array();
-		foreach($alist as $alias)
+		foreach($obj->connections_from() as $alias)
 		{
-			$aclid = $alias["class_id"];
-			list($astr) = explode(",",$classes[$aclid]["alias"]);
-			$astr = sprintf("#%s%d#",$astr,$alias["idx"]);
+			$adat = array();
+
+			$aclid = $alias->prop("to.class_id");
 
 			// yuck. I wish the static document editing forms were gone already
 			$edfile = $classes[$aclid]["file"];
@@ -704,36 +592,38 @@ class aliasmgr extends aw_template
 				$edfile = "doc";
 			};
 
-			$ch = $this->mk_my_orb("change", array("id" => $alias["target"], "return_url" => $return_url),$edfile);
-			$chlinks[$alias["target"]] = $ch;
-			$reltype_id = $alias["reltype"];
+			$ch = $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => $return_url),$edfile);
+			$chlinks[$alias->prop("to")] = $ch;
+			$reltype_id = $alias->prop("reltype");
 
-			$alias["icon"] = html::img(array(
-				"url" => icons::get_icon_url($aclid,$alias["name"]),
+			$adat["icon"] = html::img(array(
+				"url" => icons::get_icon_url($aclid,$alias->prop("to.name")),
 			));
 
 			// it has a meaning only for embedded aliases
 			if ($reltype_id == 0)
 			{
-				$alias["alias"] = sprintf("<input type='text' size='10' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
+				list($astr) = explode(",",$classes[$aclid]["alias"]);
+				$astr = sprintf("#%s%d#",$astr,$alias->prop("idx"));
+				$adat["alias"] = sprintf("<input type='text' size='10' value='%s' onClick='this.select()' onBlur='this.value=\"%s\"'>",$astr,$astr);
 			};
 
-			$alias["link"] = html::checkbox(array(
-				"name" => "link[" . $alias["target"] . "]",
+			$adat["link"] = html::checkbox(array(
+				"name" => "link[" . $alias->prop("to") . "]",
 				"value" => 1,
-				"checked" => $obj["meta"]["aliaslinks"][$alias["target"]],
+				"checked" => $alinks[$alias->prop("to")],
 			));
 
-			$alias["title"] = $classes[$aclid]["name"];
+			$adat["title"] = $classes[$aclid]["name"];
 
-			$alias["check"] = html::checkbox(array(
-				"name" => "check[" . $alias["target"] . "]",
-				"value" => $alias["target"],
+			$adat["check"] = html::checkbox(array(
+				"name" => "check[" . $alias->prop("to") . "]",
+				"value" => $alias->prop("to"),
 			));
 
-			$alias["name"] = html::href(array(
+			$adat["name"] = html::href(array(
 				"url" => $ch,
-				"caption" => ($alias["name"] == "") ? "(no name)" : $alias["name"],
+				"caption" => parse_obj_name($alias->prop("to.name")),
 			));
 
 			$type_str = $this->reltypes[$reltype_id];
@@ -742,34 +632,32 @@ class aliasmgr extends aw_template
 			//  -- duke
 			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_TRANSLATION))
 			{
-				$type_str = "tõlge (" . $langinfo[$alias["lang_id"]] . ")";
+				$type_str = "tõlge (" . $langinfo[$alias->prop("to.lang_id")] . ")";
 			};
 			if ((aw_ini_get("config.object_translation") == 1) && ($reltype_id == RELTYPE_ORIGINAL))
 			{
-				$type_str = "originaal (" . $langinfo[$alias["lang_id"]] . ")";
+				$type_str = "originaal (" . $langinfo[$alias->prop("lang_id")] . ")";
 			};
 
-			if ($alias["relobj_id"])
+			if ($alias->prop("relobj_id"))
 			{
-				$alias["reltype"] = html::href(array(
-					"url" => $this->mk_my_orb("change",array("id" => $alias["relobj_id"],"return_url" => $return_url),$classes[$aclid]["file"]),
+				$adat["reltype"] = html::href(array(
+					"url" => $this->mk_my_orb("change",array("id" => $alias->prop("relobj_id"),"return_url" => $return_url),$classes[$aclid]["file"]),
 					"caption" => $type_str,
 				));
 			}
 			else
 			{
-				$alias["reltype"] = $type_str;
+				$adat["reltype"] = $type_str;
 			};
 
-
-
-			$alias["cache"] = html::checkbox(array(
-				'name' => 'cache['.$alias['target'].']',
+			$adat["cache"] = html::checkbox(array(
+				'name' => 'cache['.$alias->prop('to').']',
 				'value' => 1,
-				'checked' => ($alias['cached'] == 1)
+				'checked' => ($alias->prop('cached') == 1)
 			));
 
-			$this->t->define_data($alias);
+			$this->t->define_data($adat);
 		}
 
 		$this->t->set_default_sortby("title");
@@ -792,7 +680,7 @@ class aliasmgr extends aw_template
 			'class_ids' => $clids,
 			"table" => $this->t->draw(),
 			"id" => $id,
-			"parent" => $obj["parent"],
+			"parent" => $obj->parent(),
 			"reforb" => $reforb,
 			"chlinks" => join("\n",map2("chlinks[%s] = \"%s\";",$chlinks)),
 			"toolbar" => $toolbar,
@@ -800,7 +688,7 @@ class aliasmgr extends aw_template
 			"period" => $period,
 			"search_url" => $this->mk_my_orb("search_aliases",array(
 				"id" => $this->id,
-				"return_url" => $return_url,//axel
+				"return_url" => $return_url,
 			),$this->use_class),
 		));
 
@@ -933,7 +821,9 @@ class aliasmgr extends aw_template
 	function make_alias_classarr2($rel_arr)
 	{
 		if (!is_array($rel_arr) || ($rel_arr == array()))
+		{
 			return NULL;
+		}
 		$classes = $this->cfg["classes"];
 		$arr = array();
 		foreach($rel_arr as $val)
@@ -941,10 +831,6 @@ class aliasmgr extends aw_template
 			if (isset($classes[$val]))// && isset($classes[$val]["alias"]))
 			{
 				$fil = ($classes[$val]["alias_class"] != "") ? $classes[$val]["alias_class"] : $classes[$val]["file"];
-				//preg_match("/(\w*)$/",$fil,$m);
-				//$lib = $m[1];
-				//$arr[$val] = $classes[$val]['name'];
-				//$arr[basename($fil)] = $classes[$val]['name'];
 				$arr[$val] = $classes[$val]['name'];
 			}
 		}
@@ -965,23 +851,6 @@ class aliasmgr extends aw_template
 			$ret[$ad["id"]] = "#".$astr.(++$cnts[$ad["class_id"]])."#";
 		}
 		return $ret;
-	}
-
-	////
-	// !updates the alias list cache for object $oid
-	function cache_oo_aliases($oid)
-	{
-		// paneme aliases kirja
-		if (!empty($oid))
-		{
-			$this->upd_object(array(
-				"oid" => $oid,
-				"metadata" => array(
-					"aliases" => "",
-					"alias_reltype" => $this->alias_rel_type,
-				),
-			));
-		};
 	}
 
 	function recover_idx_enumeration($id)
@@ -1027,7 +896,6 @@ class aliasmgr extends aw_template
 				$q = "UPDATE aliases SET idx = '$idx' WHERE id = '$id'";
 				$this->db_query($q);
 			};
-			$this->cache_oo_aliases($oid);
 		};
 	}
 
@@ -1035,7 +903,6 @@ class aliasmgr extends aw_template
 	// !Search and list share the same toolbar
 	function mk_toolbar($objtype = '', $selectedot = '')
 	{
-		//$toolbar = get_instance("toolbar",array("imgbase" => "/automatweb/images/icons"));
 		$toolbar = get_instance("toolbar");
 
 		if (is_array($objtype) && (count($objtype) == 1))
@@ -1060,12 +927,11 @@ class aliasmgr extends aw_template
 		{
 			if (isset($cldat["alias"]))
 			{
-				//$fil = ($cldat["alias_class"] != "") ? $cldat["alias_class"] : $cldat["file"];
-				//preg_match("/(\w*)$/",$fil,$m);
-				//$lib = $m[1];
 				//indent the names
 				if (empty($cldat["disable_alias"]))
+				{
 					$choices[$clid] = $cldat["name"];
+				}
 
 				$choices2[$clid] = $cldat["name"];
 			}
@@ -1292,7 +1158,7 @@ HTM;
 				$this->url_hash = gen_uniq_id($this->REQUEST_URI);
 			}
 
-			$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
+			$key = 'alias_cache::source::'.$adata['from'].'::target::'.$adata['to'].'::urlhash::'.$this->url_hash;
 			if (($replacement = $cache_inst->file_get($key)) !== false)
 			{
 				return $replacement;
@@ -1323,11 +1189,11 @@ HTM;
 				if (method_exists($emb_inst, "callback_alias_cache_get_groups"))
 				{
 					$groups = $emb_inst->callback_alias_cache_get_groups(array(
-						'id' => $adata['source']
+						'id' => $adata['from']
 					));
 				}
 
-				$key = 'alias_cache::source::'.$adata['source'].'::target::'.$adata['target'].'::urlhash::'.$this->url_hash;
+				$key = 'alias_cache::source::'.$adata['from'].'::target::'.$adata['to'].'::urlhash::'.$this->url_hash;
 				$cache_inst->file_set($key,$replacement);
 			}
 		}
