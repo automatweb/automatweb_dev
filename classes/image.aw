@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.44 2003/03/13 13:46:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.45 2003/03/14 13:35:52 kristo Exp $
 // image.aw - image management
 /*
 	@default group=general
@@ -489,6 +489,56 @@ class image extends class_base
 			};
 		};
 		return $retval;
+	}
+
+	////
+	// !adds an image to the system
+	// parameters:
+	//	from - either "file" or "string"
+	//	str - if from is string, then this is the file content
+	//	file - if from is file, then this is the filename for file content
+	//	orig_name - the original name of the file, used as the object name
+	//	parent - the folder where to save the image
+	//	id - the if of the image to change, optional
+	function add_image($arr)
+	{
+		extract($arr);
+		if ($from == "file")
+		{
+			$str = $this->get_file(array("file" => $file));
+		}
+
+		if (!$id)
+		{
+			$oid = $this->new_object(array(
+				"parent" => $parent,
+				"class_id" => CL_IMAGE,
+				"status" => 2,
+				"name" => $orig_name,
+			));
+		}
+		else
+		{
+			$oid = $id;
+		}
+
+		$_fi = get_instance("file");
+		$mime = get_instance("core/aw_mime_types");
+		$fl = $_fi->_put_fs(array(
+			"type" => $mime->type_for_file($orig_name),
+			"content" => $str
+		));
+
+		if (!$id)
+		{
+			$this->db_query("INSERT INTO images(id,file) VALUES($oid,'$fl')");
+		}
+		else
+		{
+			$this->db_query("UPDATE images SET file = '$fl' WHERE id = '$oid'");
+		}
+		$sz = getimagesize($fl);
+		return array("id" => $oid,"url" => $this->get_url($fl), "sz" => $sz);
 	}
 }
 ?>
