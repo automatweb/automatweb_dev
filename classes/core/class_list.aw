@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.2 2004/05/17 07:30:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/class_list.aw,v 1.3 2004/05/17 07:36:23 kristo Exp $
 // class_list.aw - Klasside nimekiri 
 /*
 
@@ -25,6 +25,7 @@ class class_list extends class_base
 
 		@attrib name=register_new_class_id nologin="1"
 
+		@param id optional
 		@param def required
 		@param name required
 		@param file required
@@ -39,7 +40,14 @@ class class_list extends class_base
 	**/
 	function register_new_class_id($arr)
 	{
-		$new_id = $this->db_fetch_field("SELECT max(id) as id FROM aw_class_list", "id")+1;
+		if ($arr["id"])
+		{
+			$new_id = $arr["id"];
+		}
+		else
+		{
+			$new_id = $this->db_fetch_field("SELECT max(id) as id FROM aw_class_list", "id")+1;
+		}
 		$this->db_query("INSERT INTO aw_class_list(id) VALUES($new_id)");
 		$this->update_class_def(array(
 			"id" => $new_id
