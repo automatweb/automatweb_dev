@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.67 2002/08/28 15:22:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/form_element.aw,v 2.68 2002/08/29 03:14:28 kristo Exp $
 // form_element.aw - vormi element.
 classload("image");
 
@@ -278,7 +278,8 @@ class form_element extends aw_template
 						"listbox_order_value" => $this->arr["listbox_order"][$b],
 						"listbox_activity_name" => "element_".$this->id."_lbact_".$b,
 						"listbox_activity_value" => $this->arr["listbox_activity"][$b],
-						"num" => $b
+						"num" => $b,
+						"user_entries_only" => checked($this->arr["user_entries_only"] == 1)
 					));
 					$at = "";
 					if ($this->arr["subtype"] == "activity")
@@ -406,6 +407,14 @@ class form_element extends aw_template
 			$dt="";
 			if ($this->arr["type"] == "textbox")
 			{
+				if ($this->arr["up_down_count_el_form"])
+				{
+					$udcel_els = $this->form->get_elements_for_forms(array($this->arr["up_down_count_el_form"]), false,true);
+				}
+				else
+				{
+					$udcel_els = array(0 => "");
+				}
 				$this->vars(array(
 					"must_fill_checked" => checked($this->arr["must_fill"] == 1),
 					"must_error" => $this->arr["must_error"],
@@ -419,7 +428,10 @@ class form_element extends aw_template
 					"check_length" => checked($this->arr["check_length"]),
 					"max_length" => $this->arr["max_length"],
 					"check_length_error" => $this->arr["check_length_error"],
-
+					"up_down_button" => checked($this->arr["up_down_button"]),
+					"up_down_count" => $this->arr["up_down_count"],
+					"udcel_forms" => $this->picker($this->arr["up_down_count_el_form"], $this->form->get_flist(array("type" => FTYPE_ENTRY, "addempty" => true))),
+					"udcel_els" => $this->picker($this->arr["up_down_count_el_el"], $udcel_els),
 				));
 				$this->vars(array(
 					"HAS_SIMPLE_CONTROLLER" => $this->parse("HAS_SIMPLE_CONTROLLER"),
@@ -877,6 +889,9 @@ class form_element extends aw_template
 				$var = $base."_unique";
 				$this->arr["rel_unique"] = $$var;
 
+				$var = $base."_user_entries_only";
+				$this->arr["user_entries_only"] = $$var;
+
 				$rel_changed = false;
 				$var = $base."_rel_form";
 				$this->arr["rel_form"] = $$var;
@@ -1048,6 +1063,14 @@ class form_element extends aw_template
 			$this->arr["max_length"] = $$var;
 			$var=$base."_check_length_error";
 			$this->arr["check_length_error"] = $$var;
+			$var=$base."_up_down_button";
+			$this->arr["up_down_button"] = $$var;
+			$var=$base."_up_down_count";
+			$this->arr["up_down_count"] = $$var;
+			$var=$base."_up_down_count_el_form";
+			$this->arr["up_down_count_el_form"] = $$var;
+			$var=$base."_up_down_count_el_el";
+			$this->arr["up_down_count_el_el"] = $$var;
 		}
 
 		if ($this->arr["type"] == 'file')
@@ -1678,7 +1701,7 @@ class form_element extends aw_template
 		return ($a < $b) ? -1 : 1;
 	}
 
-	function do_core_userhtml($prefix,$elvalues,$no_submit)
+	function do_core_userhtml($prefix,$elvalues,$no_submit, $element_name = false, $udcnt_values = false)
 	{
 		// check if this element is supposed to be shown right now
 		$show = true;
@@ -1693,6 +1716,13 @@ class form_element extends aw_template
 		if (!$show)
 		{
 			return "";
+		}
+
+		$elid = $this->id;
+
+		if ($element_name === false)
+		{
+			$element_name = $prefix.$elid;
 		}
 
 		$html="";
@@ -1715,7 +1745,6 @@ class form_element extends aw_template
 			$info = $this->arr["lang_info"][$lang_id]; 
 		}
 
-		$elid = $this->id;
 		$ext = false;
 
 		$stat_check = "";
@@ -1729,7 +1758,7 @@ class form_element extends aw_template
 
 		if ($disabled)
 		{
-			$html.="<input type='hidden' name='".$prefix.$elid."' value='".$this->get_val($elvalues)."' />";
+			$html.="<input type='hidden' name='".$element_name."' value='".$this->get_val($elvalues)."' />";
 		}
 
 		switch($this->arr["type"])
@@ -1738,17 +1767,17 @@ class form_element extends aw_template
 				// only IE supports wysiwyg editor
 				if (($this->arr["wysiwyg"] == 1) && ($this->is_ie))
 				{
-					$html.="<input type=\"hidden\" name=\"_el_".$prefix.$elid."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\" />";
-					$html.="<iframe name=\"_ifr_".$prefix.$elid."\" onFocus=\"sel_el='_el_".$prefix.$elid."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>\n";
+					$html.="<input type=\"hidden\" name=\"_el_".$element_name."\" value=\"".htmlspecialchars($this->get_val($elvalues))."\" />";
+					$html.="<iframe name=\"_ifr_".$element_name."\" onFocus=\"sel_el='_el_".$element_name."'\" frameborder=\"1\" width=\"".($this->arr["ta_cols"]*10)."\" height=\"".($this->arr["ta_rows"]*10)."\"></iframe>\n";
 					$html.="<script for=window event=onload>\n";
-					$html.="_ifr_".$prefix.$elid.".document.designMode='On';\n";
-					$html.="_ifr_".$prefix.$elid.".document.write(\"<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>\");\n";
-					$html.="_ifr_".$prefix.$elid.".document.write(document.fm_".$this->form->id."._el_".$prefix.$elid.".value);\n";
+					$html.="_ifr_".$element_name.".document.designMode='On';\n";
+					$html.="_ifr_".$element_name.".document.write(\"<body style='font-family: Verdana, Arial, Helvetica, sans-serif;font-size: 12px;background-color: #FFFFFF; border: #CCCCCC solid; border-width: 1px 1px 1px 1px; margin-left: 0px;padding-left: 3px;	padding-top: 0px;	padding-right: 3px; padding-bottom: 0px;'>\");\n";
+					$html.="_ifr_".$element_name.".document.write(document.fm_".$this->form->id."._el_".$element_name.".value);\n";
 					$html.="</script>\n";
 				}
 				else
 				{
-					$html.="<textarea $disabled $stat_check NAME='".$prefix.$elid."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
+					$html.="<textarea $disabled $stat_check NAME='".$element_name."' COLS='".$this->arr["ta_cols"]."' ROWS='".$this->arr["ta_rows"]. "'>";
 					$html .= htmlspecialchars($this->get_val($elvalues));
 					$html .= "</textarea>";
 				}
@@ -1767,7 +1796,7 @@ class form_element extends aw_template
 					$rel = true;
 					$this->make_relation_listbox_content();
 				}
-				$html .="<select $disabled $stat_check name='".$prefix.$elid."'";
+				$html .="<select $disabled $stat_check name='".$element_name."'";
 				if ($this->arr["lb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["lb_size"]."\"";
@@ -1786,9 +1815,11 @@ class form_element extends aw_template
 
 				$lb_opts = "";
 
-				if ($this->entry_id)
+				if ($this->entry != "")
 				{
-					$_lbsel = $this->entry;
+					// in case the element id is incorrect in the entry, this can happen with relation elements
+					list($__1,$__2,$__3,$__def) = explode("_",$this->entry);
+					$_lbsel = "element_".$this->id."_lbopt_".$__def;
 				}
 				else
 				{
@@ -1855,7 +1886,7 @@ class form_element extends aw_template
 				break;
 
 			case "multiple":
-				$html.="<select $disabled $stat_check NAME='".$prefix.$elid."[]' MULTIPLE";
+				$html.="<select $disabled $stat_check NAME='".$element_name."[]' MULTIPLE";
 				if ($this->arr["mb_size"] > 1)
 				{
 					$html.=" size=\"".$this->arr["mb_size"]."\"";
@@ -1918,7 +1949,7 @@ class form_element extends aw_template
 
 			case "checkbox":
 				$sel = ($this->entry_id ? checked($this->entry == 1) : checked($this->arr["default"] == 1));
-				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$prefix.$elid."' VALUE='1' $sel />\n";
+				$html .= "<input $disabled $stat_check type='checkbox' NAME='".$element_name."' VALUE='1' $sel />\n";
 				break;
 
 			case "textbox":
@@ -1928,13 +1959,28 @@ class form_element extends aw_template
 				{
 					$tb_type = "password";
 				}
-				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
+
+				$aft = "";
+				if ($this->arr["subtype"] == "int" && $this->arr["up_down_button"])
+				{
+					$udcnt = $this->arr["up_down_count"];
+					if ($this->arr["up_down_count_el_form"] && $this->arr["up_down_count_el_el"])
+					{
+						// now figure out the damn value. but how the hell do we do that??!!
+						// damn, this is not good, but I see no other way. 
+						// the data where the value for the element should be, gets passed as $udcnt_values 
+						$udcnt = $udcnt_values["ev_".$this->arr["up_down_count_el_el"]];
+					}
+					$aft = "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",".$udcnt.");' value='+'>";
+					$aft .= "<input type='button' onClick='fg_increment(\"".$this->form->get_form_html_name()."\",\"".$element_name."\",-".$udcnt.");' value='-'>";
+				}
+				$html .= "<input $disabled $stat_check type='$tb_type' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />$aft\n";
 				break;
 
 
 			case "price":
 				$l = $this->arr["length"] ? "SIZE='".$this->arr["length"]."'" : "";
-				$html .= "<input $disabled $stat_check type='text' NAME='".$prefix.$elid."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
+				$html .= "<input $disabled $stat_check type='text' NAME='".$element_name."' $l VALUE=\"".(htmlentities($this->get_val($elvalues)))."\" />\n";
 				break;
 
 			case "alias":
@@ -1978,8 +2024,8 @@ class form_element extends aw_template
 
 			case "timeslice":
 				$values = aw_unserialize($this->get_val($elvalues));
-				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d' />\n",$prefix.$elid,$values["count"]);
-				$html .= sprintf("<select name='%s_type'>%s</select>\n",$prefix.$elid,$this->picker($values["type"],$this->timeslice_types));
+				$html = sprintf("<input type='text' name='%s_count' size='3' maxlength='3' value='%d' />\n",$element_name,$values["count"]);
+				$html .= sprintf("<select name='%s_type'>%s</select>\n",$element_name,$this->picker($values["type"],$this->timeslice_types));
 				break;
 
 			case "button":
@@ -2066,7 +2112,7 @@ class form_element extends aw_template
 				{
 					$html.=$this->get_value();
 				}
-				$html .= "<input type='file' $disabled $stat_check NAME='".$prefix.$elid."' value='' />\n";
+				$html .= "<input type='file' $disabled $stat_check NAME='".$element_name."' value='' />\n";
 				break;
 
 			case "link":
@@ -2077,20 +2123,20 @@ class form_element extends aw_template
 					if ($cchain)
 					{
 						// somehow I must be able to configure the appearance of this link (aw or not aw, orb or not orb)
-						$_link = $this->mk_my_orb("view",array("id" => $cchain,"ctrl" => $this->entry_id),"planner",0,0);
+						$_link = $this->mk_my_orb("view",array("id" => $cchain,"ctrl" => $this->entry_id),"planner",0,1);
 					}
 					else
 					{
 						$_link = "#";
 					};
-					$html .= "<a target='_new' href='$_link'>$_text</a>";
+					$html .= "<a target='_blank' href='$_link'>$_text</a>";
 				}
 				else
 				if ($this->arr["subtype"] != "show_op")
 				{
-					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$prefix.$elid."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."' /></td></tr>";
-					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$prefix.$elid."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."' /></td></tr></table>";
-					$html.="<a onClick=\"e_".$this->fid."_elname='".$prefix.$elid."_text';e_".$this->fid."_elname2='".$prefix.$elid."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
+					$html.="<table border=0><tr><td align=right>".$this->arr["link_text"]."</td><td><input type='text' NAME='".$element_name."_text' VALUE='".($this->entry_id ? $this->entry["text"] : "")."' /></td></tr>";
+					$html.="<tr><td align=right>".$this->arr["link_address"]."</td><td><input type='text' NAME='".$element_name."_address' VALUE='".($this->entry_id ? $this->entry["address"] : "")."' /></td></tr></table>";
+					$html.="<a onClick=\"e_".$this->fid."_elname='".$element_name."_text';e_".$this->fid."_elname2='".$element_name."_address';\" href=\"javascript:remote('no',500,400,'".$this->mk_orb("search_doc", array(),"links")."')\">Vali dokument</a>";
 				}
 				break;
 
@@ -2156,7 +2202,7 @@ class form_element extends aw_template
 				}
 //				echo "aentry_id = $this->entry_id , $this->entry <br>";
 				$vl = $this->get_val($elvalues);
-				$html .= $de->gen_edit_form($prefix.$elid, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
+				$html .= $de->gen_edit_form($element_name, ($vl ? $vl : $def),($fy ? $fy : 2000),($ty ? $ty : 2005),true);
 				break;
 		};
 		
@@ -2201,7 +2247,7 @@ class form_element extends aw_template
 	}
 
 	////
-	// tagastab mingi elemendi väärtuse
+	// tagastab mingi elemendi väärtuse - formgen internal representation (el_xxx)
 	function get_val($elvalues = array(), $do_val_ctrl = false)
 	{
 		$lang_id = aw_global_get("lang_id");
@@ -2448,7 +2494,7 @@ class form_element extends aw_template
 	}
 
 	////
-	// !returns the elements value in the currently loaded entry in a form that can be presented to the user
+	// !returns the elements value in the currently loaded entry in a form that can be presented to the user (ev_xxx)
 	function get_value($numeric = false)
 	{
 		switch($this->arr["type"])
