@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.1 2001/05/21 14:15:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/guestbook.aw,v 2.2 2001/06/05 14:13:51 duke Exp $
 
 global $orb_defs;
 $orb_defs["guestbook"] = array("new" => array("function" => "add" , "params" => array("parent"), "opt" => array("docid")),
@@ -15,6 +15,23 @@ class guestbook extends aw_template
 		$this->tpl_init("guestbook");
 		$this->db_init();
 		$this->sub_merge = 1;
+	}
+
+	////
+	// Oh, puh-lease, by now you really ought to know what this function is for
+	function parse_alias($args = array())
+	{
+		extract($args);
+		if (!is_array($this->gbaliases))
+		{
+			$this->gbaliases = $this->get_aliases(array(
+							"oid" => $oid,
+							"type" => CL_GUESTBOOK,
+					));
+		};
+		$g = $this->gbaliases[$matches[3] - 1];
+		$replacement = $this->draw($g["target"]);
+		return $replacement;
 	}
 
 	function add($arr)
