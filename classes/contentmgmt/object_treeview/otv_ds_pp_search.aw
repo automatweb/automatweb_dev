@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.4 2004/10/07 21:30:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.5 2004/10/07 22:37:53 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -386,6 +386,13 @@ class otv_ds_pp_search extends class_base
 			$ptss = " AND 1 = 0 ";
 		}
 
+		if (!$o->prop("pp"))
+		{
+			error::throw(array(
+				"id" => "ERR_NO_PP",
+				"msg" => "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
+			));
+		}
 		return "SELECT * FROM aw_otv_ds_pp_cache WHERE aw_pp_id = ".$o->prop("pp")." ".$ptss;
 	}
 
