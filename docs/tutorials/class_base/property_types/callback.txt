@@ -37,3 +37,18 @@ function callback_gen_example($arr)
 	return $retval;
 }
 #/php#
+
+How do the callbacks work? - gotchas
+
+First of all, if a form is shown then callbacks are processed before get_property calls.
+
+Let's suppose you define properties t1, t2, c1, r1 where c1 is a callback which returns properties el1 and el2
+now your property list looks like this:
+
+t1, t2, el1, el2, r1 (e.g. the callback property will be replaced with it's contents). get_property WILL NOT be 
+called for the callback element, but it WILL be called for el1 and el2 in the above example.
+
+Also, if you submit that form then set_property method will be invoked for t1, t2, c1 and r1. It will not
+be invoked for el1 and el2, you have to read values for those directly from the $request variable.
+
+
