@@ -283,16 +283,16 @@ function get_instance($class,$args = array())
 //	enter_function("__global::get_instance",array());
 	$classdir = $GLOBALS["cfg"]["__default"]["classdir"];
 	$ext = $GLOBALS["cfg"]["__default"]["ext"];
+
 	$id = sprintf("instance::%s",$class);
 	$instance = aw_global_get($id);
+
+	preg_match("/(\w*)$/",$class,$m);
+	$lib = $m[1];
+
 	if (not($instance))
 	{
-		$lib = str_replace(".","", $class);
-		$libfile = $classdir."/".$lib.".".$ext;
-		@include_once($libfile);
-
-		preg_match("/(\w*)$/",$class,$m);
-		$lib = $m[1];
+		@include_once($classdir."/".str_replace(".","", $class).".".$ext);
 		if (class_exists($lib))
 		{
 			if (sizeof($args) > 0)
@@ -310,6 +310,17 @@ function get_instance($class,$args = array())
 			$instance = false;
 		};
 	};
+	// now register default members - we do this here, because they might have changed
+	// from the last time that the instance was created
+	$members = aw_cache_get("__aw_default_class_members", $lib);
+	if (is_array($members))
+	{
+		foreach($members as $k => $v)
+		{
+			$instance->$k = $v;
+		}
+	}
+
 //	exit_function("__global::get_instance",array());
 	return $instance;
 }
