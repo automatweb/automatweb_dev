@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.1 2004/04/29 12:21:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.2 2004/04/29 14:15:46 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2 
 /*
 
@@ -98,6 +98,7 @@ class object_treeview_v2 extends class_base
 		{
 			case "columns":
 				$arr["obj_inst"]->set_meta("sel_columns", $arr["request"]["column"]);
+				$arr["obj_inst"]->set_meta("sel_columns_ord", $arr["request"]["column_ord"]);
 				break;
 		}
 		return $retval;
@@ -153,11 +154,14 @@ class object_treeview_v2 extends class_base
 		$c = "";
 		$sel_cols = $ob->meta("sel_columns");
 
+		$col_list = $this->_get_col_list($ob);
+
 		foreach($ol as $odata)
 		{
 			$c .= $this->_do_parse_file_line($odata, $d_inst, $d_o, array(
 				"tree_obj" => $ob, 
-				"sel_cols" => $sel_cols
+				"sel_cols" => $sel_cols,
+				"col_list" => $col_list
 			));
 		}
 
@@ -182,17 +186,25 @@ class object_treeview_v2 extends class_base
 		));
 
 		// columns
-		foreach($this->all_cols as $colid => $coln)
+		$h_str = "";
+		foreach($col_list as $colid => $coln)
 		{
 			$str = "";
 			if ($sel_cols[$colid] == 1)
 			{
-				$str = $this->parse("HEADER_".$colid);
+				$this->vars(array(
+					"h_text" => $coln
+				));
+				$str = $this->parse("HEADER");
+				$this->vars(array(
+					"HEADER" => $str
+				));
+				$h_str .= $this->parse("HEADER");
 			}
-			$this->vars(array(
-				"HEADER_".$colid => $str
-			));
 		}
+		$this->vars(array(
+			"HEADER" => $h_str
+		));
 
 		$res = $this->parse();
 		if ($ob->prop("show_add"))
@@ -205,22 +217,67 @@ class object_treeview_v2 extends class_base
 	function callback_get_columns($arr)
 	{
 		$cols = $arr["obj_inst"]->meta("sel_columns");
+		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
 
 		$ret = array();
+		$ret[] = array(
+			"name" => "foo_foo",
+			"store" => "no",
+			"group" => "columns",
+			"items" => array(
+				array(
+					'name' => "aaa111",
+					'caption' => "",
+					'type' => 'text',
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => "Kas n&auml;idata",
+				),
+				array(
+					'name' => "aaa112",
+					'caption' => "",
+					'type' => 'text',
+					'store' => 'no',
+					'group' => 'columns',
+					'value' => "Jrk",
+				),
+			),
+			"caption" => $coln
+		);
 
-		foreach($this->all_cols as $colid => $coln)
+		$cold = $this->_get_col_list($arr["obj_inst"]);
+		foreach($cold as $colid => $coln)
 		{
-
 			$rt = "column[".$colid."]";
-			$ret[$rt] = array(
-				'name' => $rt,
-				'caption' => $coln,
-				'type' => 'checkbox',
-				'ch_value' => 1,
-				'store' => 'no',
-				'group' => 'columns',
-				'value' => $cols[$colid]
+			$rto = "column_ord[".$colid."]";
+
+			$ret[] = array(
+				"name" => "foo_".$colid,
+				"store" => "no",
+				"group" => "columns",
+				"items" => array(
+					array(
+						'name' => $rt,
+						'caption' => "",
+						'type' => 'checkbox',
+						'ch_value' => 1,
+						'store' => 'no',
+						'group' => 'columns',
+						'value' => $cols[$colid],
+					),
+					array(
+						'name' => $rto,
+						'caption' => "",
+						'type' => 'textbox',
+						"size" => 5,
+						'store' => 'no',
+						'group' => 'columns',
+						'value' => $cols_ord[$colid],
+					)
+				),
+				"caption" => $coln
 			);
+
 		}
 		return $ret;
 	}
@@ -389,26 +446,29 @@ class object_treeview_v2 extends class_base
 	{
 		extract($parms);
 		extract($arr);
-		$this->vars(array(
+		$formatv = array(
 			"show" => $url,
-			"name" => $name,
+			"name" => html::href(array(
+				"url" => $url,
+				"caption" => $name,
+			)),
 			"oid" => $oid,
 			"target" => $target,
 			"sizeBytes" => $fileSizeBytes,
 			"sizeKBytes" => $fileSizeKBytes,
 			"sizeMBytes" => $fileSizeMBytes,
 			"comment" => $comment,
-			"type" => $type,
-			"add_date" => date("d.m.Y H:i", $add_date),
-			"mod_date" => date("d.m.Y H:i", $mod_date),
-			"adder" => $adder,
-			"modder" => $modder,
+			"class_id" => $type,
+			"created" => date("d.m.Y H:i", $add_date),
+			"modified" => date("d.m.Y H:i", $mod_date),
+			"createdby" => $adder,
+			"modifiedby" => $modder,
 			"icon" => $icon,
 			"act" => $act,
 			"delete" => $delete,
 			"bgcolor" => $bgcolor,
 			"size" => ($fileSizeMBytes > 1 ? $fileSizeMBytes."MB" : ($fileSizeKBytes > 1 ? $fileSizeKBytes."kb" : $fileSizeBytes."b"))
-		));
+		);
 
 		$del = "";
 		if ($drv->check_acl("delete", $d_o, $arr["id"]))
@@ -435,21 +495,55 @@ class object_treeview_v2 extends class_base
 		));
 
 		// columns
-		foreach($this->all_cols as $colid => $coln)
+		$str = "";
+		foreach($col_list as $colid => $coln)
 		{
-			$str = "";
 			if ($sel_cols[$colid] == 1)
 			{
-				$str = $this->parse("FILE_".$colid);
+				$this->vars(array(
+					"content" => (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid])
+				));
+				$str .= $this->parse("COLUMN");
 			}
-			$this->vars(array(
-				"FILE_".$colid => $str
-			));
 		}
 		
 		$this->cnt++;
 
+		$this->vars(array(
+			"COLUMN" => $str
+		));		
 		return $this->parse("FILE");
+	}
+
+	function _get_col_list($o)
+	{
+		$cold = $this->all_cols;
+		if ($o->prop("ds"))
+		{
+			$dso = obj($o->prop("ds"));
+			$ds_i = $dso->instance();
+			if (method_exists($ds_i, "get_fields"))
+			{
+				foreach($ds_i->get_fields() as $fn => $fs)
+				{
+					$cold[$fn] = $fs;
+				}
+			}
+		}
+
+		// sort
+		$this->__sby = $o->meta("sel_columns_ord");
+		uksort($cold, array(&$this, "__sby"));
+		return $cold;
+	}
+
+	function __sby($a, $b)
+	{
+		if ($this->__sby[$a] == $this->__sby[$b])
+		{
+			return 0;
+		}
+		return $this->__sby[$a] >  $this->__sby[$b] ? 1 : 0;
 	}
 }
 ?>

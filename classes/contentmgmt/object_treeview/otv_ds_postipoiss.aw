@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.2 2004/04/29 12:53:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.3 2004/04/29 14:15:46 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -26,6 +26,33 @@
 
 class otv_ds_postipoiss extends class_base
 {
+	var $all_cols = array(
+		"dok_nr" => "Dokumendi Nr",
+		"serial_nr" => "Serial Nr",
+		"alg_dok_nr" => "Alg dok Nr",
+		"jrk_nr" => "J&auml;rjekord",
+		"juurdepaasupiirang" => "Juurdep&auml;&auml;s",
+		"paritolu" => "P&auml;ritolu",
+		"liik" => "Liik",
+		"indeks" => "Indeks",
+		"suund" => "Suund",
+		"teemad" => "Teemad",
+		"info" => "Info",
+		"kellele" => "Kellele",
+		"kellelt" => "Kellelt",
+		"koostaja" => "Koostaja",
+		"osakond" => "Osakond",
+		"pealkiri" => "Pealkiri",
+		"registreerimiskuupaev" => "Registreerimiskuup&aumll;ev",
+		"registreerimisnumber" => "Registreerimisnumber",
+		"saatja_indeks" => "Saatja indeks",
+		"saatja_kuupaev" => "Saatja kuupaev",
+		"sisu" => "Sisu",
+		"tahtaeg" => "Tahtaeg",
+		"toimik" => "Toimik",
+		"vastamiskuupaev" => "Vastamiskuupaev"
+	);
+
 	function otv_ds_postipoiss()
 	{
 		$this->init(array(
@@ -130,7 +157,7 @@ class otv_ds_postipoiss extends class_base
 
 			list($fn) = explode(",", $fd["viide"]);
 			$fsb = filesize($o->prop("ct_fld")."/".$fn);
-			$ret[$fd["dok_nr"]] = array(
+			$rowd = $fd + array(
 				"id" => $fd["dok_nr"],
 				"name" => $fd["pealkiri"],
 				"url" => aw_ini_get("baseurl")."/".$o->id().":".str_replace(".xml", "", $fe) ,
@@ -146,6 +173,7 @@ class otv_ds_postipoiss extends class_base
 				"fileSizeKBytes" => number_format($fsb / 1024, 2),
 				"fileSizeMBytes" => number_format($fsb / (1024 * 1024))
 			);
+			$ret[$fd["dok_nr"]] = $rowd;
 		}
 		return $ret;
 	}
@@ -279,6 +307,11 @@ class otv_ds_postipoiss extends class_base
 		return $this->show(array(
 			"id" => aw_global_get("section")
 		));
+	}
+
+	function get_fields()
+	{
+		return $this->all_cols;
 	}
 }
 ?>
