@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.54 2004/10/05 09:22:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.55 2004/10/12 14:07:56 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -220,7 +220,7 @@ class html extends aw_template
 	{
 		extract($args);
 		$checked = checked($checked);
-		return "<input type='radio' name='$name' value='$value' $checked/>\n $caption";
+		return "<input type='radio' name='$name' value='$value' $checked onClick='$onclick'/>\n $caption";
 	}
 
 	////
