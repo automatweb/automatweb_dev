@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.140 2002/07/23 16:40:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.141 2002/07/24 20:33:13 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -5000,11 +5000,9 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 		if ($GLOBALS["tbl_sk"] != "")
 		{
 			$tbld = aw_global_get("fg_table_sessions");
-//			echo "truu <pre>", var_dump($tbld[$GLOBALS["tbl_sk"]]),"</pre><br>";
 			foreach($tbld[$GLOBALS["tbl_sk"]] as $url)
 			{
-//				echo "url = $url <br>";
-				preg_match_all("/restrict_search_val\[\]=([^&$]*)/",$url,$mt);
+				preg_match_all("/restrict_search_yah\[\]=([^&$]*)/",$url,$mt);
 				$this->vars(array(
 					"link" => $url,
 					"text" => urldecode($mt[1][count($mt[1])-1])
