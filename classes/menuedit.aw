@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.125 2002/07/12 13:21:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.126 2002/07/12 16:57:23 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 // number mille kaudu tuntakse 2ra kui tyyp klikib kodukataloog/SHARED_FOLDERS peale
@@ -4147,7 +4147,7 @@ values($noid,'$menu[link]','$menu[type]','$menu[is_l3]','$menu[is_copied]','$men
 				};
 				if (not($err))
 				{
-					$link = $this->mk_my_orb($_act,$values,$_cl,false,1);
+					$link = $this->mk_my_orb($_act,$values,$_cl,false,false);
 				}
 				else
 				{
