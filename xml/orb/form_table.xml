@@ -24,7 +24,18 @@
 				</arguments>
 			</function>
 		</action>
-		
+
+		<action name="show_user_entries">
+			<function name="show_user_entries">
+				<arguments>
+					<required name="table_id"/>
+					<optional name="form_id"/>
+					<optional name="chain_id"/>
+					<optional name="op_id"/>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
 		
