@@ -283,7 +283,7 @@ function savemenu() {
 		<!--tabelsisu-->
 		<table width="100%" cellspacing="0" cellpadding="0">
 		<tr><td class="tableinside" width="29" height="29"><a
-		href="javascript:savemenu()"><IMG SRC="images/blue/awicons/save.gif" WIDTH="25" HEIGHT="25" BORDER=0 ALT="SAVE"></a></td><td class="tableinside" valign="bottom">
+		href="javascript:savemenu()"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/awicons/save.gif" WIDTH="25" HEIGHT="25" BORDER=0 ALT="SAVE"></a></td><td class="tableinside" valign="bottom">
 
 
 		<table cellspacing="0" cellpadding="0">
@@ -298,10 +298,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1284','dip1284','visible','dd1284');">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1284','dip1284','visible','dd1284');">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1284"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1284"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_MENU_GENERAL}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 1 general -->
@@ -314,10 +314,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1285','dip1285','visible','dd1285');">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1285','dip1285','visible','dd1285');">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1285"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1285"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_DISPLAY}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 2 templates -->
@@ -340,10 +340,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1290','dip1290','visible','dd1290');">{VAR:LC_MENUEDIT_PICTURE}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1290','dip1290','visible','dd1290');">{VAR:LC_MENUEDIT_PICTURE}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1290"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_PICTURE}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1290"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_PICTURE}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 6 END PICTURE  -->
@@ -357,10 +357,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1291','dip1291','visible','dd1291');">{VAR:LC_MENUEDIT_EXPORT}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1291','dip1291','visible','dd1291');">{VAR:LC_MENUEDIT_EXPORT}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1291"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_EXPORT}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1291"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_EXPORT}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 7 EXPORT  -->
@@ -374,10 +374,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1293','dip1293','visible','dd1293');">{VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1293','dip1293','visible','dd1293');">{VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1293"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1293"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_CHOOSE_KEYWORDS}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 9 KEYWORDS  -->
@@ -390,10 +390,10 @@ function savemenu() {
 					document.write("<table border=0 cellpadding=0 cellspacing=0>");
 				else
 					document.write("<table align=left border=0 cellpadding=0 cellspacing=0>");
-			</script><tr><td class="tab"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1294','dip1294','visible','dd1294');">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tab"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
+			</script><tr><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="19" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tab" valign="bottom"><a href="#" onClick="onOff('bob1294','dip1294','visible','dd1294');">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tab"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="19" BORDER=0 ALT=""></td></tr></table>		
 			
 
-				<span id="dip1294"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tabsel"><IMG SRC="images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
+				<span id="dip1294"><table border=0 cellpadding=0 cellspacing=0><tr><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_left_begin.gif" WIDTH="8" HEIGHT="20" BORDER=0 ALT=""></td><td nowrap background="{VAR:baseurl}/automatweb/images/blue/tab_taust.gif" class="tabsel" valign="bottom"><a href="#">{VAR:LC_MENUEDIT_OTHER_SETTINGS}</a></td><td class="tabsel"><IMG SRC="{VAR:baseurl}/automatweb/images/blue/tab_right.gif" WIDTH="6" HEIGHT="20" BORDER=0 ALT=""></td></tr></table></span>
 			</span>
 		</td>
 		<!-- 10 MUUD MAARANGUD  -->
@@ -419,7 +419,7 @@ function savemenu() {
 <span id="down">
 
 <span id="dd5">
-<img src="images/trans.gif" width=550 height=17>
+<img SRC="{VAR:baseurl}/automatweb/images/trans.gif" width=550 height=17>
 </span>
 
 
