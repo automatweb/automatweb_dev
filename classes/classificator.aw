@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.5 2004/03/17 17:13:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/classificator.aw,v 1.6 2004/03/18 11:29:41 duke Exp $
 
 /*
 
@@ -66,26 +66,8 @@ class classificator extends class_base
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
-		/*
-		$ot = get_instance(CL_OBJECT_TYPE);
-		$ff = $ot->get_obj_for_class(array(
-			"clid" => $arr["clid"],
-		));
-		$oft = new object($ff);
-		$clf = $oft->meta("classificator");
-		$clf_type = $oft->meta("clf_type");
-		$use_type = $clf_type[$prop["name"]];
-
-		$ofto = new object($clf[$prop["name"]]);
-		$olx = new object_list(array(
-			"parent" => $ofto->id(),
-			"class_id" => CL_META,
-			"lang_id" => array(),
-		));
-		*/
-		
 		list($choices,$name,$use_type) = $this->get_choices(array(
-			"clid" => $prop["clid"],
+			"clid" => $arr["clid"],
 			"name" => $prop["name"],
 		));
 
