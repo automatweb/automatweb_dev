@@ -1,11 +1,27 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml_import.aw,v 2.6 2002/07/24 16:12:58 duke Exp $
+// $Id: xml_import.aw,v 2.7 2002/11/04 21:40:16 duke Exp $
+/*
+	@default table=objects
+	@default group=general
+	@property datasource type=objpicker clid=CL_DATASOURCE field=meta method=serialize
+	@caption XML datasource
+
+	@property import_function type=select field=meta method=serialize
+	@caption Impordifunktsioon
+
+	@property run_import type=text
+	@caption Käivita import
+
+*/
 class xml_import extends aw_template
 {
 
 	function xml_import($args = array())
 	{
-		$this->init("xml_import");
+		$this->init(array(
+			"tpldir" => "xml_import",
+			"clid" => CL_DATASOURCE,
+		));
 		$this->methods = array(
 			"import_tudengid" => "import_tudengid",
 			"import_struktuurid" => "import_struktuurid",
@@ -16,102 +32,46 @@ class xml_import extends aw_template
 		);
 	}
 
-	////
-	// !Displays form for adding new or modifying an existing XML import objekt
-	function change($args = array())
+//                        $this->vars(array(
+//                                "rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
+//                        ));
+
+	function get_property($args)
 	{
-		extract($args);
-		$this->read_template("change.tpl");
-		$datasources = array();
-		$this->get_objects_by_class(array(
-				"class" => CL_DATASOURCE,
-		));
+		$data = &$args["prop"];
+		switch($data["name"])
+		{
+			case "import_function":
+                                $data["options"] = $this->methods;
+                                break;
 
-		while($row = $this->db_next())
-		{
-			$datasources[$row["oid"]] = $row["name"];
-		}
+			case "run_import":
+                                classload("html");
+                                $id = $args["obj"]["oid"];
+                                if ($id)
+                                {
+					$url = $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1);
+                                        $data["value"] = html::href(array("url" => $url,"caption" => "Käivita import","target" => "_blank"));
+                                };
+                                break;
 
-		if ($parent)
-		{
-			$caption = "Lisa uus XML import objekt";
-			$prnt = $parent;
-			$chn = "";
-			$meta = array();
-		}
-		else
-		{
-			$caption = "Muuda XML import objekti";
-			$obj = $this->get_object($id);
-			$meta = $obj["meta"];
-			$this->vars(array(
-				"rep_link" => $this->mk_my_orb("repeaters",array("id" => $id)),
-			));
-			$chn = $this->parse("change");
-			$prnt = $obj["parent"];
+			
+
 		};
-
-		$this->mk_path($prnt,$caption);
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("submit",array("id" => $id,"parent" => $parent)),
-			"name" => $obj["name"],
-			"change" => $chn,
-			"datasources" => $this->picker($meta["datasource"],$datasources),
-			"run_import" => $this->mk_my_orb("invoke",array("id" => $id),"xml_import",0,1),
-			"import_functions" => $this->picker($meta["import_function"],$this->methods),
-		));
-		return $this->parse();
 	}
 
-	////
-	// !Adds new or submits changes to an existing XML import objekt
-	function submit($args = array())
-	{
-		$this->quote($args);
-		extract($args);
-		if ($parent)
-		{
-			$id = $this->new_object(array(
-				"parent" => $parent,
-				"class_id" => CL_XML_IMPORT,
-				"name" => $name,
-				"status" => 2,
-			));
-			$this->_log("xml_import","Lisas XML import objekti nimega '$name'",$id);
-		}
-		else
-		{
-			$this->upd_object(array(
-				"oid" => $id,
-				"name" => $name,
-			));
-			$this->_log("xml_import","Muutis XML import objekti nimega '$name'",$id);
-		};
-
-		$this->set_object_metadata(array(
-			"oid" => $id,
-			"data" => array(
-				"datasource" => $datasource,
-				"import_function" => $import_function,
-			),
-		));
-
-		return $this->mk_my_orb("change",array("id" => $id));
-
-	}
 
 	////
 	// !Wrapper to display the repeater editing interface inside this classes frame
 	function repeaters($args = array())
 	{
 		extract($args);
-		classload("cal_event");
-                $ce = new cal_event();
-                $html = $ce->repeaters(array(
-                        "id" => $id,
-                        "cycle" => $cycle,
+		$ce = get_instance("cal_event");
+		$html = $ce->repeaters(array(
+			"id" => $id,
+			"cycle" => $cycle,
 			"hide_menubar" => true,
-                ));
+    ));
 		$this->read_template("repeaters.tpl");
 		$this->vars(array(
 			"ch_link" => $this->mk_my_orb("change",array("id" => $id)),
@@ -465,7 +425,7 @@ class xml_import extends aw_template
 		$this->db_query($q);
 		foreach($values as $key => $val)
 		{
-			if ( ($val["tag"] == "oppevorm")  && ($val["type"] == "complete") )
+			if ( ($val["tag"] == "oppevormid")  && ($val["type"] == "complete") )
 			{
 				$attr = $val["attributes"];		
 				$nimetus = $this->convert_unicode($attr["nimetus"]);
