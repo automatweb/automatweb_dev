@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.1 2003/03/19 18:05:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/cal_content.aw,v 1.2 2003/05/29 15:40:11 duke Exp $
 /*
 
 	@classinfo syslog_type=ST_CAL_CONTENT
@@ -65,7 +65,6 @@ class cal_content extends class_base
 		if (isset($obj["meta"]["show_class"]))
 		{
 			list($pf,$pm) = explode("/",$obj["meta"]["show_class"]);
-			$t = get_instance($pf);
 			/// XXX: I need to check whether that class really has
 			// content interface and whether that method really is a
 			// content provider -- duke

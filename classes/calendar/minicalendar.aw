@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/minicalendar.aw,v 1.1 2003/01/09 23:04:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/minicalendar.aw,v 1.2 2003/05/29 15:40:11 duke Exp $
 // minicalendar
 
 /*
@@ -115,6 +115,7 @@ class minicalendar extends class_base
 
 	function parse_alias($args = array())
 	{
+		return "";
 		$cal = $this->get_object($args["alias"]["target"]);
 		if (!is_array($cal["meta"]))
 		{
