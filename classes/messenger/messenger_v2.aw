@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.32 2004/03/25 21:18:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/messenger/Attic/messenger_v2.aw,v 1.33 2004/06/04 11:28:14 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -33,10 +33,10 @@ caption Identiteet
 @property msg_cont type=text group=main_view no_caption=1 wrapchildren=1
 @caption Konteiner
 
-@property treeview type=text parent=msg_cont group=main_view
+@property treeview type=text parent=msg_cont group=main_view no_caption=1
 @caption Folderid
 
-@property message_list type=table no_caption=1 group=main_view parent=msg_cont 
+@property message_list type=table no_caption=1 group=main_view parent=msg_cont no_caption=1
 @caption Kirjad
 
 // muu mudru
