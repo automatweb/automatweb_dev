@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.4 2002/11/14 16:11:35 duke Exp $
+// $Id: class_base.aw,v 2.5 2002/11/14 18:39:38 duke Exp $
 classload("aliasmgr");
 class class_base extends aliasmgr
 {
@@ -17,7 +17,6 @@ class class_base extends aliasmgr
 		extract($args);
 		$this->_init_object(array("id" => $id,"parent" => $parent));
 
-		$callback = method_exists($this->inst,"get_property");
 		
 		$active = ($group) ? $group : "general";
 		$this->group = $active;
@@ -26,6 +25,16 @@ class class_base extends aliasmgr
 				"clfile" => $this->clfile,
 				"group" => $group,
 		));
+
+		$this->load_object();
+
+		global $XXX;
+		if ($XXX)
+		{
+			print "<pre>";
+			print_r($this->coredata);
+			print "</pre>";
+		};
 
 		// here be some magic to determine the correct output client
 		// this means we could create a TTY client for AW :)
@@ -45,13 +54,16 @@ class class_base extends aliasmgr
 		// fields of the property - common use is to set the contents
 		// of an select field
 
-		// 2 - getter - which should return full property definitions
+		// 2 - generator - which should return full property definitions
 		// in the same format they come from load_properties.
 		// those can be called dynamic properties I suppose
 		// since they don't have to exist anywhere in the property
 		// definitions
+	
+		// I really doubt that get_property appears out of blue
+		// while we are generating the output form
+		$callback = method_exists($this->inst,"get_property");
 
-		// XXX: clean up this get_property/getter/array handling mess
                 foreach($realprops as $key => $val)
                 {
                         if (is_array($val))
@@ -90,33 +102,6 @@ class class_base extends aliasmgr
 			{
 				// do nothing
 			}
-			else
-                        // if the property has a getter, call it directly
-                        if (is_array($val) && $val["getter"])
-                        {
-                                $meth = $val["getter"];
-                                if (method_exists($this->inst,$meth))
-                                {
-                                        while($prop = $this->inst->$meth($argblock))
-                                        {
-                                                if ($prop["type"] == "subnodes")
-                                                {
-                                                        foreach($prop["content"] as $subkey => $subval)
-                                                        {
-                                                                $resprops[] = $subval;
-                                                        };
-                                                }
-                                                else
-                                                {
-                                                        if (sizeof($prop) != 0)
-                                                        {
-                                                                $resprops[] = $prop;
-                                                        };
-                                                };
-                                        };
-
-                                };
-                        }
                         else
                         {
                                 $resprops[] = $val;
@@ -200,14 +185,35 @@ class class_base extends aliasmgr
 		$objdata = array();
 		$coredata = array();
 		$metadata = array();
+		// give the object a change to change the data that
+		// before it's written out to the table
+		$callback = method_exists($this->inst,"set_property");
                 foreach($realprops as $property)
                 {
-			$name = $property["name"]["text"];
-			$table = $property["table"]["text"];
-			$field = $property["field"]["text"];
-			$method = $property["method"]["text"];
-			$handler = $property["handler"]["text"];
-			$type = $property["type"]["text"];
+                        if (is_array($property))
+                        {
+                                $property = $this->normalize_text_nodes($property);
+                                $this->get_value(&$property);
+                        };
+
+                        $argblock = array(
+                                "prop" => &$property,
+                                "obj" => &$this->coredata,
+                                "objdata" => &$this->objdata,
+                        );
+
+			// callbackiga saad teha mingeid operatsioone,
+			// kui mingit omadust salvestatakse
+                        if ($callback)
+                        {
+                                $retval = $this->inst->set_property($argblock);
+                        };
+			$name = $property["name"];
+			$table = $property["table"];
+			$field = $property["field"];
+			$method = $property["method"];
+			$handler = $property["handler"];
+			$type = $property["type"];
 			if ($handler == "callback")
 			{
 				// how on earth to I get the values
@@ -244,17 +250,10 @@ class class_base extends aliasmgr
 			$coredata["metadata"] = $metadata;
 		};
 		$coredata["oid"] = $id;
+
 		$this->upd_object($coredata);
-		if ($clfile == "menuedit" && (sizeof($objdata) > 0))
-		{
-			foreach($objdata as $key => $val)
-			{
-				$qpart[] = " $key = '$val' ";
-			};
-			$qparts = join(",",$qpart);
-			$q = "UPDATE menu SET $qparts WHERE id = '$id'";
-			$this->db_query($q);
-		};
+
+		$this->save_object(array("data" => $objdata));
 
                 return $this->mk_my_orb("change",array("id" => $id,"group" => $group),get_class($this->orb_class));
 	}
@@ -291,6 +290,11 @@ class class_base extends aliasmgr
 
 			$this->id = $this->coredata["oid"];
                         $this->clfile = $cp[$this->coredata["class_id"]];
+			// temporary - until we switch menu editing over to new interface
+			if ($this->coredata["class_id"] == 1)
+			{
+				$this->clfile = "menu";
+			};
 			
 		}
 		else
@@ -305,6 +309,11 @@ class class_base extends aliasmgr
 
 			$this->parent = $parobj["oid"];
 			$this->clfile = $cp[$this->clid];
+			// temporary - until we switch menu editing over to new interface
+			if ($this->clid == 1)
+			{
+				$this->clfile = "menu";
+			};
 
 		}
 
@@ -321,9 +330,9 @@ class class_base extends aliasmgr
 		$use_form = $classconf[$this->clid];
 		$cfgform = $this->get_object($use_form);
 
-		$def = $this->cfg["classes"][$this->clid]["def"];
-		$this->visible_properties = $cfgform["meta"]["properties"][$def];
-		$this->el_ord = $cfgform["meta"]['ord'][$def];
+//                $def = $this->cfg["classes"][$this->clid]["def"];
+//                $this->visible_properties = $cfgform["meta"]["properties"][$def];
+//                $this->el_ord = $cfgform["meta"]['ord'][$def];
 
 		
 		// get an instance of the class that handles this object type
@@ -384,6 +393,40 @@ class class_base extends aliasmgr
 		));
 
 
+	}
+
+	function load_object($args = array())
+	{
+		$objtable = $this->classinfo["objtable"]["text"];
+		$objtable_index = $this->classinfo["objtable_index"]["text"];
+		$id = $this->id;
+		if ($id && $objtable && $objtable_index)
+		{
+			$q = "SELECT * FROM $objtable WHERE $objtable_index = '$id'";
+			$this->objdata = $this->db_fetch_row($q);
+		};
+	}
+
+	function save_object($args = array())
+	{
+		$objtable = $this->classinfo["objtable"]["text"];
+		$objtable_index = $this->classinfo["objtable_index"]["text"];
+		$id = $this->id;
+		$data = new aw_array($args["data"]);
+		$parts = array();
+		foreach($data->get() as $key => $val)
+		{
+			$parts[] = " $key = '$val' ";
+		};
+		if ((sizeof($parts) > 0) && $id && $objtable && $objtable_index)
+		{
+			$q = sprintf("UPDATE %s SET %s WHERE %s = %d",
+				$objtable,
+				join(",",$parts),
+				$objtable_index,
+				$id);
+			$this->db_query($q);
+		};
 	}
 	
 	function get_active_properties($args = array())
