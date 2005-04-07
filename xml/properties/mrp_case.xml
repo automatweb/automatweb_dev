@@ -14,6 +14,18 @@
             <field>workflow_toolbar</field>
       </property>
       <property>
+            <name>workflow_errors</name>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <group>
+                  <num_0>grp_case_schedule</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
+            </group>
+            <field>workflow_errors</field>
+      </property>
+      <property>
             <name>header</name>
             <group>
                   <num_0>grp_general</num_0>
@@ -57,6 +69,15 @@
             <caption>Valmimistähtaeg</caption>
       </property>
       <property>
+            <name>planned_date</name>
+            <group>grp_general</group>
+            <table>mrp_case</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>planned_date</field>
+            <caption>Planeeritud valmimisaeg</caption>
+      </property>
+      <property>
             <name>project_priority</name>
             <group>grp_general</group>
             <table>mrp_case</table>
@@ -95,16 +116,6 @@
             <table>mrp_case</table>
             <type>hidden</type>
             <field>extern_id</field>
-      </property>
-      <property>
-            <name>planned_date</name>
-            <group>grp_general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <editonly>1</editonly>
-            <caption>Planeeritud valmimisaeg</caption>
       </property>
       <property>
             <name>sales_priority</name>

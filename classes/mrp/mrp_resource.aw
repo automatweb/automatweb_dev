@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.44 2005/04/06 09:24:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.45 2005/04/07 15:07:54 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -123,9 +123,9 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_PAUSED", "#AFAFAF");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
-define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
@@ -194,15 +194,18 @@ class mrp_resource extends class_base
 				$this->mrp_error .= t("Ressurss ei kuulu ühessegi ressursihaldussüsteemi. ");
 			}
 		}
+
+		if ($this->mrp_error)
+		{
+			echo t("Viga! ") . $this->mrp_error;
+		}
 	}
 
 	function get_property($arr)
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
-			return PROP_FATAL_ERROR;
+			return PROP_IGNORE;
 		}
 
 		$prop = &$arr["prop"];
@@ -298,8 +301,6 @@ class mrp_resource extends class_base
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
 			return PROP_FATAL_ERROR;
 		}
 
@@ -392,7 +393,6 @@ class mrp_resource extends class_base
 						if ($prop["value"] == 1)
 						{
 							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna. ";
-/* dbg */ echo $prop["error"];
 							$retval = PROP_ERROR;
 						}
 						break;

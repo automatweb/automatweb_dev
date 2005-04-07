@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.85 2005/04/07 09:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.86 2005/04/07 15:07:54 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -405,52 +405,6 @@ class mrp_workspace extends class_base
 		$retval = PROP_OK;
 		$this_object =& $arr["obj_inst"];
 
-/* dbg */ if ($prop["name"] == "test" and aw_global_get('uid') == "voldemar")
-/* dbg */ {
-/* dbg */
-// set all  PLANNED projects INPROGRESS that have jobs inprogress, done ...
-// if ($_GET["mrp_set_all_inprogress"])
-// {
-	// $list = new object_list(array(
-		// "parent" => $this_object->prop ("projects_folder"),
-		// "class_id" => CL_MRP_CASE,
-		// "state" => MRP_STATUS_PLANNED,
-	// ));
-	// $list = $list->arr();
-
-	// foreach ($list as $project)
-	// {
-		// $connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
-		// $inconsistent = false;
-
-		// foreach ($connections as $connection)
-		// {
-			// $job = $connection->to();
-
-			// $applicable_states = array (
-				// MRP_STATUS_INPROGRESS,
-				// MRP_STATUS_PAUSED,
-				// MRP_STATUS_DONE,
-			// );
-
-			// if ((!in_array ($job->prop ("state"), $applicable_states)) or ( (((int) $job->prop ("state")) == MRP_STATUS_ABORTED) and (((int) $project->prop ("state")) != MRP_STATUS_ABORTED) ) )
-			// {
-				// $inconsistent = true;
-			// }
-		// }
-
-		// if ($inconsistent)
-		// {
-			// echo "project id: " . $project->id() ."<br>";
-			// $project->set_prop("state", MRP_STATUS_INPROGRESS);
-			// $project->save();
-			// echo "state set to: [" . MRP_STATUS_INPROGRESS . "]<br><br>";
-		// }
-	// }
-
-// }
-
-
 /* dbg */ //finish all jobs in progress and set_all_resources_available
 // if ($_GET["mrp_set_all_resources_available"])
 // {
@@ -494,8 +448,7 @@ class mrp_workspace extends class_base
 		// echo "state set to: [" . MRP_STATUS_RESOURCE_AVAILABLE . "]<br><br>";
 	// }
 // }
-/* dbg */
-/* dbg */ }
+// /* dbg */
 
 		if (substr($prop["name"], 0, 3) == "pjp")
 		{
@@ -576,7 +529,7 @@ class mrp_workspace extends class_base
 								"id" => $tmp->id(),
 								"return_url" => get_ru()
 							)),
-							"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"//!!!
+							"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"
 						));
 						break;
 
@@ -1241,8 +1194,18 @@ class mrp_workspace extends class_base
 		));
 		$count_projects_overdue = $list->count ();
 
-		$od = $this->get_proj_overdue($this_object);
-		$count_projects_planned_overdue = count ($od);
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PLANNED,
+		);
+		$list = new object_list (array (
+			"class_id" => CL_MRP_CASE,
+			"state" => $applicable_states,
+			"planned_date" => new obj_predicate_prop (OBJ_COMP_GREATER, "due_date"),
+			"parent" => $this_object->prop ("projects_folder"),
+			// "createdby" => aw_global_get('uid'),
+		));
+		$count_projects_planned_overdue = $list->count ();
 
 		$list = new object_list (array (
 			"class_id" => CL_MRP_CASE,
@@ -1310,13 +1273,13 @@ class mrp_workspace extends class_base
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Kõik plaanisolevad") . " (" . $count_projects_planned . ")",
+			"name" => t("Plaanisolevad") . " (" . $count_projects_planned . ")",
 			"id" => "planned",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "planned"),
 		));
 
 		$tree->add_item (0, array (
-			"name" => t("Hetkel töösolevad") . " (" . $count_projects_in_work . ")",
+			"name" => t("Hetkel töös") . " (" . $count_projects_in_work . ")",
 			"id" => "inwork",
 			"url" => aw_url_change_var ("mrp_tree_active_item", "inwork"),
 		));
@@ -1531,18 +1494,6 @@ class mrp_workspace extends class_base
 					"parent" => $this_object->prop ("projects_folder"),
 					// "createdby" => aw_global_get('uid'),
 				));
-
-				// $od = $this->get_proj_overdue($this_object);
-				// if (count($od) == 0)
-				// {
-					// $list = new object_list();
-				// }
-				// else
-				// {
-					// $list = new object_list (array (
-						// "oid" => $od
-					// ));
-				// }
 				break;
 
 			case "overdue":
@@ -1645,12 +1596,12 @@ class mrp_workspace extends class_base
 			### do request specific operations
 			switch ($list_request)
 			{
-				case "inwork":
 				case "planned_overdue":
 				case "overdue":
 				case "new":
 					break;
 
+				case "inwork":
 				case "planned":
 					### hilight for planned overdue
 					$bg_colour = ($project->prop ("due_date") < $planned_date) ? MRP_COLOUR_PLANNED_OVERDUE : false;
@@ -2221,7 +2172,8 @@ class mrp_workspace extends class_base
 				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$navigation .= t(' &nbsp;&nbsp;Valitud projekt:').' <span style="color: ' . MRP_COLOUR_HILIGHTED . ';">' . $project->name () . '</span> (' . $deselect . ')';
+			$change_url = html::get_change_url ($project->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $project->name ());
+			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
 		}
 
 		return $navigation;
@@ -2330,7 +2282,7 @@ class mrp_workspace extends class_base
 				objects.status > 0 AND
 				objects.class_id = ".CL_MRP_CASE." AND
 				objects.parent = " . $this_object->prop ("projects_folder") . " AND
-				mrp_job.starttime > mrp_case.due_date
+				(mrp_job.starttime + mrp_job.length) > mrp_case.due_date
 		");
 		while ($row = $this->db_next())
 		{
@@ -3962,5 +3914,15 @@ class mrp_workspace extends class_base
 		return new object_list();
 	}
 }
+
+#set all  PLANNED projects INPROGRESS that have jobs INPROGRESS, DONE, PAUSED or ABORTED
+// UPDATE mrp_case, mrp_job, objects SET mrp_case.state=3 WHERE
+// mrp_case.oid=mrp_job.oid AND
+// mrp_case.oid=objects.oid AND
+// objects.status > 0 AND
+// objects.parent = this_object->prop(projects_folder) AND
+// mrp_case.state=2 AND
+// mrp_job.state in (3,5,7,4)
+//    lisada parenti kontrollimine
 
 ?>

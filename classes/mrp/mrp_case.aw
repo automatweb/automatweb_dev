@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.61 2005/04/07 09:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.62 2005/04/07 15:07:54 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -23,6 +23,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 
 	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
+	@property workflow_errors type=text store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow
 
 
 @default group=grp_general
@@ -42,6 +43,9 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property due_date type=datetime_select
 	@caption Valmimistähtaeg
 
+	@property planned_date type=text editonly=1
+	@caption Planeeritud valmimisaeg
+
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
@@ -57,9 +61,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @default table=objects
 @default field=meta
 @default method=serialize
-	@property planned_date type=text editonly=1
-	@caption Planeeritud valmimisaeg
-
 	@property sales_priority type=textbox size=5
 	@caption Prioriteedihinnang müügimehelt
 
@@ -192,6 +193,7 @@ CREATE TABLE `mrp_case` (
   `oid` int(11) NOT NULL default '0',
   `starttime` int(10) unsigned default NULL,
   `progress` int(10) unsigned default NULL,
+  `planned_date` int(10) unsigned default NULL,
   `due_date` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
   `state` tinyint(2) unsigned default '1',
@@ -299,6 +301,11 @@ class mrp_case extends class_base
 				$this->mrp_error .= t("Projektil puudub ressursihalduskeskkond. ");
 			}
 		}
+
+		if ($this->mrp_error)
+		{
+			echo t("Viga! ") . $this->mrp_error;
+		}
 	}
 
 	function callback_mod_reforb ($arr)
@@ -313,8 +320,6 @@ class mrp_case extends class_base
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
 			return PROP_IGNORE;
 		}
 
@@ -332,6 +337,21 @@ class mrp_case extends class_base
 				}
 
 				$prop["value"] = $this->get_header($arr);
+				break;
+
+			case "workflow_errors":
+				if (!empty ($arr["request"]["errors"]))
+				{
+					$errors = $arr["request"]["errors"];
+					$this->dequote ($errors);
+					$errors = unserialize ($errors);
+
+					if (!empty ($errors))
+					{
+						$prop["value"] = ' <div style="color: #DF0D12; margin: 5px;">' . t('Esinenud tõrked: ') . implode (". ", $errors) . '.</div>';
+						unset ($arr["request"]["errors"]);
+					}
+				}
 				break;
 
 			case "state":
@@ -434,8 +454,6 @@ class mrp_case extends class_base
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
 			return PROP_FATAL_ERROR;
 		}
 
@@ -479,7 +497,6 @@ class mrp_case extends class_base
 				if ($ol->count() > 0)
 				{
 					$prop["error"] = t("Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!");
-/* dbg */ echo $prop["error"];
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -490,7 +507,6 @@ class mrp_case extends class_base
 				if ($save !== PROP_OK)
 				{
 					$prop["error"] = $save;
-/* dbg */ echo $prop["error"];
 					return PROP_FATAL_ERROR;
 				}
 				break;
@@ -598,11 +614,40 @@ class mrp_case extends class_base
 
 	function create_schedule_chart ($arr)
 	{
+		$time =  time();
 		$this_object =& $arr["obj_inst"];
 		$chart = get_instance ("vcl/gantt_chart");
-		$columns = 7;
+		$columns = (int) (($arr["request"]["mrp_chart_length"] == 1) ? 1 : 7);
+
+		### get range start according to project state
+		switch ($this_object->prop ("state"))
+		{
+			case MRP_STATUS_PLANNED:
+				$project_start = $this_object->prop ("starttime");
+				break;
+			case MRP_STATUS_INPROGRESS:
+			case MRP_STATUS_DONE:
+			case MRP_STATUS_ARCHIVED:
+				$project_start = $this_object->prop ("started");
+				break;
+		}
+
+		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
+		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
+		$range_end = (int) ($range_start + $columns * 86400);
 		$hilighted_project = $this_object->id ();
 		$hilighted_jobs = array();
+
+		### subdivisions
+		switch ($columns)
+		{
+			case 1:
+				$subdivisions = 24;
+				break;
+
+			default:
+				$subdivisions = 3;
+		}
 
 		### add row dfn-s, resource names
 		$connections = $this_object->connections_from(array("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
@@ -617,15 +662,9 @@ class mrp_case extends class_base
 			$project_start = ($project_start === "NA") ? $starttime : min($starttime, $project_start);
 		}
 
-		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
-
-		### ...
-		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
-		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
-		$range_end = (int) ($range_start + $columns * 86400);
-
 		### add rows
 		$project_resources = array_unique ($project_resources);
+		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
 
 		foreach ($project_resources as $resource_id)
 		{
@@ -664,60 +703,127 @@ class mrp_case extends class_base
 		}
 
 		### get jobs in requested range & add bars
-		// $list = new object_list (array (
-			// "class_id" => CL_MRP_JOB,
-			// "parent" => $this_object->prop ("jobs_folder"),
-			// "state" => new obj_predicate_not (MRP_STATUS_DELETED),
-			// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, $range_start, $range_end),
-		// ));
 		$res = $this->db_fetch_array (
-			"SELECT job.planned_length FROM mrp_job as job ".
-			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
-			"job.length > 0 ".
-			"ORDER BY job.planned_length DESC ".
-			"LIMIT  1".
-		"");
-		$max_length = isset ($res[0]["planned_length"]) ? $res[0]["planned_length"] : 0;
-
-		$jobs = $this->db_fetch_array (
-			"SELECT job.oid FROM mrp_job as job ".
+			"SELECT MAX(job.planned_length), MAX(job.finished-job.started) FROM mrp_job as job ".
 			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
 			"job.length > 0 AND ".
-			"job.starttime > " . ($range_start - $max_length) . " AND ".
-			"job.starttime < " . $range_end . " AND ".
 			"job.resource > 0 ".
 		"");
+		rsort ($res[0]);
+		$max_length = reset ($res[0]);
+
+		### job states that are shown in chart past
+		$applicable_states = array (
+			MRP_STATUS_DONE,
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
+		);
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"state" => $applicable_states,
+			"parent" => $this_object->prop ("jobs_folder"),
+			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+		));
+		$jobs = $list->arr ();
+
+		### job states that are shown in chart future
+		$applicable_states = array (
+			MRP_STATUS_PLANNED,
+		);
+
+		$list = new object_list (array (
+			"class_id" => CL_MRP_JOB,
+			"parent" => $this_object->prop ("jobs_folder"),
+			"state" => $applicable_states,
+			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
+			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+		));
+		$jobs = array_merge ($list->arr (), $jobs);
 
 		foreach ($jobs as $job)
 		{
-			if ($this->can ("view", $job["oid"]))
+			$project = obj ($job->prop ("project"));
+			$resource = obj ($job->prop ("resource"));
+
+			if (!in_array ($resource->id (), $project_resources))
 			{
-				$job = obj ($job["oid"]);
-				$project= obj ($job->prop ("project"));
-				$resource_id = $job->prop ("resource");
+				continue;
+			}
 
-				if (!in_array ($resource_id, $project_resources))
+			### project states that are shown in chart
+			$applicable_states = array (
+				MRP_STATUS_PLANNED,
+				MRP_STATUS_INPROGRESS,
+				MRP_STATUS_DONE,
+				MRP_STATUS_ARCHIVED,
+			);
+
+			if (!in_array ($project->prop ("state"), $applicable_states))
+			{
+				continue;
+			}
+
+			### get start&length according to job state
+			switch ($job->prop ("state"))
+			{
+				case MRP_STATUS_DONE:
+				case MRP_STATUS_ARCHIVED:
+					$start = $job->prop ("started");
+					$length = $job->prop ("finished") - $job->prop ("started");
+					break;
+
+				case MRP_STATUS_PLANNED:
+					$start = $job->prop ("starttime");
+					$length = $job->prop ("planned_length");
+					break;
+
+				case MRP_STATUS_PAUSED:
+				case MRP_STATUS_INPROGRESS:
+					$start = $job->prop ("started");
+					$length = (($start + $job->prop ("planned_length")) < $time) ? ($time - $start) : $job->prop ("planned_length");
+					break;
+			}
+
+			$job_name = $project->name () . "-" . $job->prop ("exec_order") . " - " . $resource->name ();
+
+			### set bar colour
+			$colour = $this->state_colours[$job->prop ("state")];
+			$colour = ($job->prop ("project") == $this_object->id ()) ? MRP_COLOUR_HILIGHTED : $this->state_colours[$job->prop ("state")];
+
+			$bar = array (
+				"row" => $resource->id (),
+				"start" => $start,
+				"colour" => $colour,
+				"length" => $length,
+				"uri" => html::get_change_url ($job->id ()),
+				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
+// /* dbg */ . " [res:" . $resource->id () . " töö:" . $job->id () . " proj:" . $project->id () . "]"
+			);
+
+			$chart->add_bar ($bar);
+
+			### add paused bars
+			foreach(safe_array($job->meta("paused_times")) as $pd)
+			{
+				if ($pd["start"] && $pd["end"])
 				{
-					continue;
+					$bar = array (
+						"row" => $resource->id (),
+						"start" => $pd["start"],
+						"nostartmark" => true,
+						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
+						"length" => ($pd["end"] - $pd["start"]),
+						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
+						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
+					);
+
+					$chart->add_bar ($bar);
 				}
-
-				$length = $job->prop ("planned_length");
-				$resource = obj ($resource_id);
-				$start = $job->prop ("starttime");
-				$colour = ($job->prop ("project") == $this_object->id ()) ? MRP_COLOUR_HILIGHTED : $this->state_colours[$job->prop ("state")];
-				$job_name = $project->name () . "-" . $job->prop ("exec_order") . " - " . $resource->name ();
-
-				$bar = array (
-					"row" => $resource_id,
-					"start" => $start,
-					"colour" => $colour,
-					"length" => $length,
-					"uri" => html::get_change_url ($job["oid"]),
-					"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-// /* dbg */ . " [res:" . $resource_id . " töö:" . $job->id () . " proj:" . $project_id . "]"
-				);
-
-				$chart->add_bar ($bar);
 			}
 		}
 
@@ -728,7 +834,10 @@ class mrp_case extends class_base
 			"start" => $range_start,
 			"end" => $range_end,
 			"columns" => $columns,
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
 			"width" => 950,
+			"row_height" => 10,
 		));
 
 		### define columns
@@ -740,9 +849,12 @@ class mrp_case extends class_base
 			$day_start = ($range_start + ($i * 86400));
 			$day = date ("w", $day_start);
 			$date = date ("j/m/Y", $day_start);
+			$uri = ($columns == 1) ? aw_url_change_var ("mrp_chart_length", 7) : aw_url_change_var ("mrp_chart_length", 1);
+			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
 			$chart->define_column (array (
 				"col" => ($i + 1),
 				"title" => $days[$day] . " - " . $date,
+				"uri" => $uri,
 			));
 			$i++;
 		}
@@ -754,14 +866,20 @@ class mrp_case extends class_base
 	{
 		$start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : time ());
 		$start_nav = array ();
-		$period_length = 7 * 86400;
+		$start_uri = aw_url_change_var ("mrp_chart_length", "");
+		$start_uri = aw_url_change_var ("mrp_chart_start", "", $uri);
+		$period_length = (isset ($arr["request"]["mrp_chart_length"]) ? $arr["request"]["mrp_chart_length"] : 7) * 86400;
 
 		$start_nav[] = html::href (array (
-			"caption" => t("<< N&auml;dal tagasi"),
+			"caption" => t("<< Tagasi"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start - $period_length)),
 		));
 		$start_nav[] = html::href (array (
-			"caption" => t("N&auml;dal edasi >>"),
+			"caption" => t("Algusesse"),
+			"url" => $start_uri,
+		));
+		$start_nav[] = html::href (array (
+			"caption" => t("Edasi >>"),
 			"url" => aw_url_change_var ("mrp_chart_start", ($start + $period_length + 1)),
 		));
 
@@ -850,7 +968,7 @@ class mrp_case extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "plan_btn",
-			// "img" => "save.gif",
+			// "img" => "plan.gif",
 			"tooltip" => t("Planeeri"),
 			"action" => "plan",
 			"disabled" => $disabled,
@@ -873,7 +991,7 @@ class mrp_case extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "onhold_btn",
-			// "img" => "save.gif",
+			// "img" => "set_on_hold.gif",
 			"tooltip" => t("Plaanist v&auml;lja"),
 			"action" => "set_on_hold",
 			"disabled" => $disabled,
@@ -895,10 +1013,33 @@ class mrp_case extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "abort_btn",
-			// "img" => "save.gif",
-			"tooltip" => t("Projekti katkestamine"),
+			// "img" => "abort.gif",
+			"tooltip" => t("Katkesta"),
 			"confirm" => t("Katkesta projekt?"),
 			"action" => "abort",
+			"disabled" => $disabled,
+		));
+
+		### states for finishing a project
+		$applicable_states = array(
+			MRP_STATUS_INPROGRESS,
+		);
+
+		if (in_array($this_object->prop("state"), $applicable_states))
+		{
+			$disabled = false;
+		}
+		else
+		{
+			$disabled = true;
+		}
+
+		$toolbar->add_button(array(
+			"name" => "finish_btn",
+			// "img" => "finish.gif",
+			"tooltip" => t("Valmis"),
+			"action" => "finish",
+			"confirm" => t("Projekt on töös. Olete kindel, et soovite määrata projekti staatuseks \'valmis\' ?"),
 			"disabled" => $disabled,
 		));
 
@@ -918,7 +1059,7 @@ class mrp_case extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "archive_btn",
-			// "img" => "save.gif",
+			// "img" => "archive.gif",
 			"tooltip" => t("Arhiveeri"),
 			"action" => "archive",
 			"disabled" => $disabled,
@@ -1739,21 +1880,23 @@ class mrp_case extends class_base
 			"class_id" => CL_MRP_JOB,
 			"project" => $project->id (),
 		));
-		$jobs = (int) $job_list->count ();
+		$all_jobs = (int) $job_list->count ();
 
 		### states for jobs that allow finishing a project
 		$applicable_states = array (
 			MRP_STATUS_DONE,
+			MRP_STATUS_ABORTED,
 		);
-		$jobs_done = (int) $job_list->filter (array (
+		$job_list = new object_list (array (
 			"class_id" => CL_MRP_JOB,
 			"state" => $applicable_states,
 			"project" => $project->id()
 		));
+		$done_jobs = (int) $job_list->count ();
 
-		if ($jobs_done != $jobs)
+		if ($done_jobs != $all_jobs)
 		{
-			$errors[] = t("Projekti tööd pole kõik valmis");
+			$errors[] = t("Kõik projekti tööd pole valmis");
 		}
 
 		### states for finishing a project

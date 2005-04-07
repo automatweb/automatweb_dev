@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.51 2005/04/07 09:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.52 2005/04/07 15:07:55 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -148,9 +148,9 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_PAUSED", "#AFAFAF");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
-define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
@@ -220,14 +220,17 @@ class mrp_job extends class_base
 				$this->mrp_error .= t("Tööl puudub ressurss või projekt. ");
 			}
 		}
+
+		if ($this->mrp_error)
+		{
+			echo t("Viga! ") . $this->mrp_error;
+		}
 	}
 
 	function get_property ($arr)
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
 			return PROP_IGNORE;
 		}
 
@@ -311,8 +314,6 @@ class mrp_job extends class_base
 	{
 		if ($this->mrp_error)
 		{
-			$prop["error"] = $this->mrp_error;
-/* dbg */ echo $prop["error"];
 			return PROP_FATAL_ERROR;
 		}
 
@@ -691,7 +692,7 @@ class mrp_job extends class_base
 			));
 			$all_jobs = (int) $list->count ();
 
-			if ($done_jobs === $all_jobs)
+			if ($done_jobs == $all_jobs)
 			{
 				### finish project
 				$mrp_case = get_instance(CL_MRP_CASE);
@@ -703,7 +704,9 @@ class mrp_job extends class_base
 
 				if ($project_errors)
 				{
-					$errors[] = t("Projekti lõpetamine ebaõnnestus");
+					$project_state = $project->prop ("state");
+
+					$errors[] = t(sprintf ("Projekti lõpetamine ebaõnnestus. Projekti staatus oli '%s'", $project_state));
 					$errors = array_merge($errors, $project_errors);
 				}
 			}
