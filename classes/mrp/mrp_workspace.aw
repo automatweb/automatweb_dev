@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.84 2005/04/06 11:14:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.85 2005/04/07 09:25:26 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -593,7 +593,7 @@ class mrp_workspace extends class_base
 
 					case "state":
 						$j = get_instance(CL_MRP_JOB);
-						$prop["value"] = $j->states[$job->prop($rpn)];
+						$prop["value"] = "<span style='padding: 5px; background: ".$this->state_colours[$job->prop($rpn)]."'>".$j->states[$job->prop($rpn)]."<span>";
 						break;
 
 					case "case_header":

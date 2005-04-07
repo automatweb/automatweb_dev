@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.50 2005/04/06 09:24:34 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.51 2005/04/07 09:25:26 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -18,7 +18,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@property name type=text
 	@caption Nimi
 
-	@property comment type=textarea
+	@property comment type=textarea table=objects field=comment
 	@caption Kommentaar
 
 @default group=workflow

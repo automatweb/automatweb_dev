@@ -11,6 +11,7 @@
             <name>comment</name>
             <group>general</group>
             <type>textarea</type>
+            <table>objects</table>
             <field>comment</field>
             <caption>Kommentaar</caption>
       </property>

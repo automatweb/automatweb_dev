@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.60 2005/04/06 09:24:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.61 2005/04/07 09:25:26 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -234,9 +234,9 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#0066CC");
+define ("MRP_COLOUR_PAUSED", "#AFAFAF");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
-define ("MRP_COLOUR_ARCHIVED", "#AFAFAF");
+define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
@@ -617,6 +617,13 @@ class mrp_case extends class_base
 			$project_start = ($project_start === "NA") ? $starttime : min($starttime, $project_start);
 		}
 
+		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
+
+		### ...
+		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
+		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
+		$range_end = (int) ($range_start + $columns * 86400);
+
 		### add rows
 		$project_resources = array_unique ($project_resources);
 
@@ -630,13 +637,31 @@ class mrp_case extends class_base
 					"title" => $resource->name (),
 					"uri" => html::get_change_url ($resource_id),
 				));
+
+				### add reserved times for resources, cut off past
+				$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
+					"mrp_resource" => $resource->id(),
+					"mrp_start" => $range_start,
+					"mrp_length" => $range_end - $range_start
+				));
+				foreach($reserved_times as $rt_start => $rt_end)
+				{
+					if ($rt_end > $time)
+					{
+						$rt_start = ($rt_start < $time) ? $time : $rt_start;
+						$chart->add_bar(array(
+							"row" => $resource->id(),
+							"start" => $rt_start,
+							"length" => $rt_end - $rt_start,
+							"nostartmark" => true,
+							"colour" => MRP_COLOUR_PAUSED,
+							"url" => "#",
+							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
+						));
+					}
+				}
 			}
 		}
-
-		### ...
-		$range_start = mktime (0, 0, 0, date ("m", $project_start), date ("d", $project_start), date("Y", $project_start));
-		$range_start = (int) ($arr["request"]["mrp_chart_start"] ? $arr["request"]["mrp_chart_start"] : $range_start);
-		$range_end = (int) ($range_start + $columns * 86400);
 
 		### get jobs in requested range & add bars
 		// $list = new object_list (array (
@@ -871,7 +896,7 @@ class mrp_case extends class_base
 		$toolbar->add_button(array(
 			"name" => "abort_btn",
 			// "img" => "save.gif",
-			"tooltip" => t("Katkesta"),
+			"tooltip" => t("Projekti katkestamine"),
 			"confirm" => t("Katkesta projekt?"),
 			"action" => "abort",
 			"disabled" => $disabled,
