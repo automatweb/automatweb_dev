@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.25 2005/03/30 12:17:11 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.26 2005/04/07 12:33:37 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -89,14 +89,19 @@
 
 @groupinfo jm caption="J&auml;relmaks"
 
-@property jm_clothes type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
-@caption R&otilde;ivad
+	@property jm_clothes type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+	@caption R&otilde;ivad
 
-@property jm_lasting type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
-@caption Kestvuskaubad
+	@property jm_lasting type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+	@caption Kestvuskaubad
 
-@property jm_furniture type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
-@caption M&ouml;&ouml;bel
+	@property jm_furniture type=textarea rows=5 cols=50 table=objects field=meta method=serialize group=jm
+	@caption M&ouml;&ouml;bel
+
+@groupinfo delete caption="Kustutamine"
+
+	@property del_prods type=textarea rows=10 cols=50 store=no group=delete
+	@caption Kustuta tooted koodidega (komaga eraldatud)
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -181,6 +186,13 @@ class otto_import extends class_base
 							imnr IN (".join(",", map("'%s'", $toims)).")
 					";
 					$this->db_query($q);
+				}
+				break;
+			
+			case "del_prods":
+				if ($prop["value"] != "")
+				{
+					$this->_do_del_prods(explode(",", $prop["value"]));
 				}
 				break;
 		}
@@ -2058,6 +2070,52 @@ class otto_import extends class_base
 		echo "SITE $url seems to be <font color=red>DOWN</font> <br>\n";
 		flush();
 		return "";
+	}
+
+	function _do_del_prods($prods)
+	{
+		$ol = new object_list(array(
+			"class_id" => CL_SHOP_PRODUCT,
+			"user20" => $prods
+		));
+
+		if (!$ol->count())
+		{
+			return;
+		}
+
+		foreach($ol->arr() as $o)
+		{
+			$pkol = new object_list($o->connections_from(array("type" => "RELTYPE_PACKAGING")));
+			echo "kusututan pakendid ".join(",", $pkol->names())." <br>";
+			$pkol->delete();
+		}
+
+		// get all packagings that have the prods
+		$c = new connection();
+		$list = $c->find(array(
+			"from.class_id" => CL_SHOP_PACKET,
+			"type" => 1,
+			"to.oid" => $ol->ids()
+		));
+
+		echo "kusututan tooted ".join(",", $ol->names())." <br>";
+		$ol->delete();
+
+		// go over packets and see if some have no prods
+		foreach($list as $conn)
+		{
+			if ($this->can("view", $conn["from"]))
+			{
+				$pkt = obj($conn["from"]);
+				if (count($pkt->connections_from(array("type" => 1))) == 0)
+				{
+					echo "kustutan paketi ".$pkt->name()." <br>";
+					$pkt->delete();
+				}
+			}
+		}
+		echo "valmis! <br>";
 	}
 }
 
