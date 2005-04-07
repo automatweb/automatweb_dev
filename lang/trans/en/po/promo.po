@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:38 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 16:51:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -388,59 +388,80 @@ msgstr ""
 msgid "Seose &auml;ra näita menüü juures (RELTYPE_NO_SHOW_MENU) tekst"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:148
 msgid "Vali template"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:165
 msgid "Vasakul"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:166
 msgid "Paremal"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:167
 msgid "Üleval"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:168
 msgid "All"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:169
 msgid "Skrolliv"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:185
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:186
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:187
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:188
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:189
 msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:190
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:196
 msgid "Suurem (uuem) enne"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:197
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:261 classes/contentmgmt/promo.aw:310
+#: classes/contentmgmt/promo.aw:357
 msgid "ID"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:269 classes/contentmgmt/promo.aw:318
+#: classes/contentmgmt/promo.aw:366
 msgid "Nimi"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:274 classes/contentmgmt/promo.aw:323
 msgid "k.a. alammenüüd"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:373
 msgid "Pane pealkirjaks"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:380
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""

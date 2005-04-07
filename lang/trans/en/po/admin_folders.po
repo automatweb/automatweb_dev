@@ -12,17 +12,17 @@ msgstr ""
 
 #: classes/admin/admin_folders.aw:134
 msgid "<b>AutomatWeb</b>"
-msgstr ""
+msgstr "AutomatWeb"
 
 #: classes/admin/admin_folders.aw:329
 msgid "Mitteperioodilised"
-msgstr ""
+msgstr "Non-periodic"
 
 #: classes/admin/admin_folders.aw:339
 msgid "Reload"
-msgstr ""
+msgstr "Refresh"
 
 #: classes/admin/admin_folders.aw:345
 msgid "Logi v&auml;lja"
-msgstr ""
+msgstr "Log out"
 

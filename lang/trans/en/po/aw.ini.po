@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 15:13:09 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 21:45:40 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,1424 +9,1654 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: aw.ini:class_1
+# aw.ini:class_1
 msgid "Klassi Kaust (1) nimi"
-msgstr ""
+msgstr "Folder"
 
-#: aw.ini:class_2
+# aw.ini:class_2
 msgid "Klassi Vorm (2) nimi"
-msgstr ""
+msgstr "Form"
 
-#: aw.ini:class_3
+# aw.ini:class_3
 msgid "Klassi Tabel (3) nimi"
-msgstr ""
+msgstr "Table"
 
-#: aw.ini:class_6
+# aw.ini:class_6
 msgid "Klassi Pilt (6) nimi"
-msgstr ""
+msgstr "Image"
 
-#: aw.ini:class_7
+# aw.ini:class_7
 msgid "Klassi Dokument (7) nimi"
-msgstr ""
+msgstr "Document"
 
-#: aw.ini:class_8
+# aw.ini:class_8
 msgid "Klassi Sisestus (8) nimi"
-msgstr ""
+msgstr "Entry"
 
-#: aw.ini:class_10
+# aw.ini:class_10
 msgid "Klassi Element (10) nimi"
-msgstr ""
+msgstr "Element"
 
-#: aw.ini:class_11
+# aw.ini:class_11
 msgid "Klassi Stiil (11) nimi"
-msgstr ""
+msgstr "Style"
 
-#: aw.ini:class_12
+# aw.ini:class_12
 msgid "Klassi Lamev&auml;ljund (12) nimi"
-msgstr ""
+msgstr "Output"
 
-#: aw.ini:class_14
+# aw.ini:class_14
 msgid "Klassi Toiming (14) nimi"
-msgstr ""
+msgstr "Action"
 
-#: aw.ini:class_21
+# aw.ini:class_21
 msgid "Klassi Link (21) nimi"
-msgstr ""
+msgstr "Link"
 
-#: aw.ini:class_22
+# aw.ini:class_22
 msgid "Klassi Konteiner (22) nimi"
-msgstr ""
+msgstr "Container"
 
-#: aw.ini:class_28
+# aw.ini:class_28
 msgid "Klassi Graafik (vana) (28) nimi"
-msgstr ""
+msgstr "Graph"
 
-#: aw.ini:class_29
+# aw.ini:class_29
 msgid "Klassi Dokument(p) (29) nimi"
-msgstr ""
+msgstr "Document (p)"
 
-#: aw.ini:class_31
+# aw.ini:class_31
 msgid "Klassi Vana galerii (31) nimi"
-msgstr ""
+msgstr "Old gallery"
 
-#: aw.ini:class_33
+# aw.ini:class_33
 msgid "Klassi Kiirk&uuml;sitlus (33) nimi"
-msgstr ""
+msgstr "Poll"
 
-#: aw.ini:class_34
+# aw.ini:class_34
 msgid "Klassi Foorumi teema (34) nimi"
-msgstr ""
+msgstr "Forum topic"
 
-#: aw.ini:class_37
+# aw.ini:class_37
 msgid "Klassi Kasutajagrupp (37) nimi"
-msgstr ""
+msgstr "User group"
 
-#: aw.ini:class_38
+# aw.ini:class_38
 msgid "Klassi Kasutaja1 (38) nimi"
-msgstr ""
+msgstr "User1"
 
-#: aw.ini:class_39
+# aw.ini:class_39
 msgid "Klassi Men&uuml;&uuml;(vend) (39) nimi"
-msgstr ""
+msgstr "Folder (brother)"
 
-#: aw.ini:class_40
+# aw.ini:class_40
 msgid "Klassi Dokument(vend) (40) nimi"
-msgstr ""
+msgstr "Document (brother)"
 
-#: aw.ini:class_41
+# aw.ini:class_41
 msgid "Klassi Fail (41) nimi"
-msgstr ""
+msgstr "File"
 
-#: aw.ini:class_45
+# aw.ini:class_45
 msgid "Klassi XML v&auml;ljund (45) nimi"
-msgstr ""
+msgstr "XML Output"
 
-#: aw.ini:class_52
+# aw.ini:class_52
 msgid "Klassi Message (52) nimi"
-msgstr ""
+msgstr "Message"
 
-#: aw.ini:class_53
+# aw.ini:class_53
 msgid "Klassi Kalendri event (53) nimi"
-msgstr ""
+msgstr "Calendar event"
 
-#: aw.ini:class_54
+# aw.ini:class_54
 msgid "Klassi Banner (54) nimi"
-msgstr ""
+msgstr "Banner"
 
-#: aw.ini:class_55
+# aw.ini:class_55
 msgid "Klassi Banneri asukoht (55) nimi"
-msgstr ""
+msgstr "Banner location"
 
-#: aw.ini:class_59
+# aw.ini:class_59
 msgid "Klassi Kalendrivaade (59) nimi"
-msgstr ""
+msgstr "Calendar view"
 
-#: aw.ini:class_66
+# aw.ini:class_66
 msgid "Klassi Tabelv&auml;ljund (66) nimi"
-msgstr ""
+msgstr "Table output"
 
-#: aw.ini:class_67
+# aw.ini:class_67
 msgid "Klassi Valuutakurss (67) nimi"
-msgstr ""
+msgstr "Exchange rate"
 
-#: aw.ini:class_68
+# aw.ini:class_68
 msgid "Klassi Vormip&auml;rg (68) nimi"
-msgstr ""
+msgstr "Form chain"
 
-#: aw.ini:class_69
+# aw.ini:class_69
 msgid "Klassi Foorum (vana) (69) nimi"
-msgstr ""
+msgstr "Forum (old)"
 
-#: aw.ini:class_71
+# aw.ini:class_71
 msgid "Klassi Stiil CSS (71) nimi"
-msgstr ""
+msgstr "Style CSS"
 
-#: aw.ini:class_72
+# aw.ini:class_72
 msgid "Klassi Mailinglist (72) nimi"
-msgstr ""
+msgstr "Mailinglist"
 
-#: aw.ini:class_73
+# aw.ini:class_73
 msgid "Klassi Meiliaadress (73) nimi"
-msgstr ""
+msgstr "Mail address"
 
-#: aw.ini:class_74
+# aw.ini:class_74
 msgid "Klassi Stamp (74) nimi"
-msgstr ""
+msgstr "Stamp"
 
-#: aw.ini:class_78
+# aw.ini:class_78
 msgid "Klassi Otsimise filter (78) nimi"
-msgstr ""
+msgstr "Searh Filter"
 
-#: aw.ini:class_80
+# aw.ini:class_80
 msgid "Klassi Popup (80) nimi"
-msgstr ""
+msgstr "Pop-up"
 
-#: aw.ini:class_82
+# aw.ini:class_82
 msgid "Klassi V&otilde;tmes&otilde;na (82) nimi"
-msgstr ""
+msgstr "Keyword"
 
-#: aw.ini:class_83
+# aw.ini:class_83
 msgid "Klassi V&otilde;tmes&otilde;nade baas (83) nimi"
-msgstr ""
+msgstr "Keyword database"
 
-#: aw.ini:class_85
+# aw.ini:class_85
 msgid "Klassi Pullout (85) nimi"
-msgstr ""
+msgstr "Pullout"
 
-#: aw.ini:class_86
+# aw.ini:class_86
 msgid "Klassi Objektigrupp (86) nimi"
-msgstr ""
+msgstr "Object group"
 
-#: aw.ini:class_87
+# aw.ini:class_87
 msgid "Klassi Roll (87) nimi"
-msgstr ""
+msgstr "Role"
 
-#: aw.ini:class_88
+# aw.ini:class_88
 msgid "Klassi Privileeg (88) nimi"
-msgstr ""
+msgstr "Privilege"
 
-#: aw.ini:class_89
+# aw.ini:class_89
 msgid "Klassi Men&uuml;&uuml; alias (89) nimi"
-msgstr ""
+msgstr "Folder alias"
 
-#: aw.ini:class_90
+# aw.ini:class_90
 msgid "Klassi AW sissep&auml;&auml;s (90) nimi"
-msgstr ""
+msgstr "AW Login"
 
-#: aw.ini:class_92
+# aw.ini:class_92
 msgid "Klassi P&auml;rja sisestus (92) nimi"
-msgstr ""
+msgstr "Chain Entry"
 
-#: aw.ini:class_93
+# aw.ini:class_93
 msgid "Klassi Sisukaart (93) nimi"
-msgstr ""
+msgstr "Site Map"
 
-#: aw.ini:class_94
+# aw.ini:class_94
 msgid "Klassi Kontroller (94) nimi"
-msgstr ""
+msgstr "Controller"
 
-#: aw.ini:class_95
+# aw.ini:class_95
 msgid "Klassi Siseraam (95) nimi"
-msgstr ""
+msgstr "Inner Frame"
 
-#: aw.ini:class_96
+# aw.ini:class_96
 msgid "Klassi AIP Muudatus (96) nimi"
-msgstr ""
+msgstr "AIP Change"
 
-#: aw.ini:class_97
+# aw.ini:class_97
 msgid "Klassi XML import (97) nimi"
-msgstr ""
+msgstr "XML Import"
 
-#: aw.ini:class_98
+# aw.ini:class_98
 msgid "Klassi Datasource (98) nimi"
-msgstr ""
+msgstr "Datasource"
 
-#: aw.ini:class_99
+# aw.ini:class_99
 msgid "Klassi Stat table (99) nimi"
-msgstr ""
+msgstr "Statistics table"
 
-#: aw.ini:class_103
+# aw.ini:class_103
 msgid "Klassi Ekspordi ruul (103) nimi"
-msgstr ""
+msgstr "Export rule"
 
-#: aw.ini:class_108
+# aw.ini:class_108
 msgid "Klassi Scheduler (108) nimi"
-msgstr ""
+msgstr "Scheduler"
 
-#: aw.ini:class_110
+# aw.ini:class_110
 msgid "Klassi Apache alias (110) nimi"
-msgstr ""
+msgstr "Apache alias"
 
-#: aw.ini:class_113
+# aw.ini:class_113
 msgid "Klassi Objektitabeli seaded (113) nimi"
-msgstr ""
+msgstr "Object table settings"
 
-#: aw.ini:class_114
+# aw.ini:class_114
 msgid "Klassi Prioriteet (114) nimi"
-msgstr ""
+msgstr "Priority"
 
-#: aw.ini:class_115
+# aw.ini:class_115
 msgid "Klassi Objekti t&uuml;&uuml;p (115) nimi"
-msgstr ""
+msgstr "Object Type"
 
-#: aw.ini:class_116
+# aw.ini:class_116
 msgid "Klassi Puu rootmen&uuml;&uuml; (116) nimi"
-msgstr ""
+msgstr "Root menu"
 
-#: aw.ini:class_118
+# aw.ini:class_118
 msgid "Klassi Lisamise puu seaded (118) nimi"
-msgstr ""
+msgstr "Add tree settings"
 
-#: aw.ini:class_119
+# aw.ini:class_119
 msgid "Klassi Seadete vorm (119) nimi"
-msgstr ""
+msgstr "Configuration form"
 
-#: aw.ini:class_120
+# aw.ini:class_120
 msgid "Klassi Salvestatud seaded (120) nimi"
-msgstr ""
+msgstr "Saved settings"
 
-#: aw.ini:class_121
+# aw.ini:class_121
 msgid "Klassi Objekti otsing (121) nimi"
-msgstr ""
+msgstr "Object search"
 
-#: aw.ini:class_122
+# aw.ini:class_122
 msgid "Klassi Seadete haldur (122) nimi"
-msgstr ""
+msgstr "Configuration manager"
 
-#: aw.ini:class_123
+# aw.ini:class_123
 msgid "Klassi Ikoon (123) nimi"
-msgstr ""
+msgstr "Icon"
 
-#: aw.ini:class_126
+# aw.ini:class_126
 msgid "Klassi Kalender (126) nimi"
-msgstr ""
+msgstr "Calendar"
 
-#: aw.ini:class_129
+# aw.ini:class_129
 msgid "Klassi Organisatsioon (129) nimi"
-msgstr ""
+msgstr "Organisation"
 
-#: aw.ini:class_130
+# aw.ini:class_130
 msgid "Klassi Kliendibaas (130) nimi"
-msgstr ""
+msgstr "Client database"
 
-#: aw.ini:class_131
+# aw.ini:class_131
 msgid "Klassi Tegevusala (131) nimi"
-msgstr ""
+msgstr "Activity area"
 
-#: aw.ini:class_133
+# aw.ini:class_133
 msgid "Klassi Mailinglisti seaded (133) nimi"
-msgstr ""
+msgstr "Mailing list settings"
 
-#: aw.ini:class_134
+# aw.ini:class_134
 msgid "Klassi Riik (134) nimi"
-msgstr ""
+msgstr "Country"
 
-#: aw.ini:class_135
+# aw.ini:class_135
 msgid "Klassi Õiguslik vorm (135) nimi"
-msgstr ""
+msgstr "Corporate type"
 
-#: aw.ini:class_136
+# aw.ini:class_136
 msgid "Klassi Raamistus (136) nimi"
-msgstr ""
+msgstr "Frameset"
 
-#: aw.ini:class_137
+# aw.ini:class_137
 msgid "Klassi Puu (137) nimi"
-msgstr ""
+msgstr "Tree"
 
-#: aw.ini:class_138
+# aw.ini:class_138
 msgid "Klassi Alamsait (138) nimi"
-msgstr ""
+msgstr "Sub-website"
 
-#: aw.ini:class_139
+# aw.ini:class_139
 msgid "Klassi Linn (139) nimi"
-msgstr ""
+msgstr "Town"
 
-#: aw.ini:class_140
+# aw.ini:class_140
 msgid "Klassi Maakond (140) nimi"
-msgstr ""
+msgstr "County"
 
-#: aw.ini:class_141
+# aw.ini:class_141
 msgid "Klassi Lehek&uuml;lg (141) nimi"
-msgstr ""
+msgstr "Page"
 
-#: aw.ini:class_145
+# aw.ini:class_145
 msgid "Klassi Isik (145) nimi"
-msgstr ""
+msgstr "Person"
 
-#: aw.ini:class_146
+# aw.ini:class_146
 msgid "Klassi Aadress (146) nimi"
-msgstr ""
+msgstr "Address"
 
-#: aw.ini:class_148
+# aw.ini:class_148
 msgid "Klassi Andmebaasi sissep&auml;&auml;s (148) nimi"
-msgstr ""
+msgstr "Database login"
 
-#: aw.ini:class_149
+# aw.ini:class_149
 msgid "Klassi Andmebaasiserveri sissep&auml;&auml;s (149) nimi"
-msgstr ""
+msgstr "Database server login"
 
-#: aw.ini:class_150
+# aw.ini:class_150
 msgid "Klassi DB Server explorer conf (150) nimi"
-msgstr ""
+msgstr "DB Server explored conf"
 
-#: aw.ini:class_151
+# aw.ini:class_151
 msgid "Klassi DB Server explorer (151) nimi"
-msgstr ""
+msgstr "DB Server Explorer"
 
-#: aw.ini:class_152
+# aw.ini:class_152
 msgid "Klassi Andmebaasitabeli muutmine (152) nimi"
-msgstr ""
+msgstr "Database table"
 
-#: aw.ini:class_153
+# aw.ini:class_153
 msgid "Klassi Andmebaasitabeli sisu (153) nimi"
-msgstr ""
+msgstr "Database table content"
 
-#: aw.ini:class_154
+# aw.ini:class_154
 msgid "Klassi SQL P&auml;ring (154) nimi"
-msgstr ""
+msgstr "SQL Query"
 
-#: aw.ini:class_156
+# aw.ini:class_156
 msgid "Klassi Objekti omaduste grupp (156) nimi"
-msgstr ""
+msgstr "Object property group"
 
-#: aw.ini:class_157
+# aw.ini:class_157
 msgid "Klassi Kordus (157) nimi"
-msgstr ""
+msgstr "Repeater"
 
-#: aw.ini:class_158
+# aw.ini:class_158
 msgid "Klassi Objekti omadus (158) nimi"
-msgstr ""
+msgstr "Object property"
 
-#: aw.ini:class_160
+# aw.ini:class_160
 msgid "Klassi Kaustade generaator (160) nimi"
-msgstr ""
+msgstr "Folder generator"
 
-#: aw.ini:class_161
+# aw.ini:class_161
 msgid "Klassi Toode (161) nimi"
-msgstr ""
+msgstr "Product"
 
-#: aw.ini:class_162
+# aw.ini:class_162
 msgid "Klassi Statistika (162) nimi"
-msgstr ""
+msgstr "Statistics"
 
-#: aw.ini:class_163
+# aw.ini:class_163
 msgid "Klassi Statistika seaded (163) nimi"
-msgstr ""
+msgstr "Statistics configuration"
 
-#: aw.ini:class_164
+# aw.ini:class_164
 msgid "Klassi AW_Log (164) nimi"
-msgstr ""
+msgstr "AW_Log"
 
-#: aw.ini:class_165
+# aw.ini:class_165
 msgid "Klassi Poll (uus) (165) nimi"
-msgstr ""
+msgstr "Poll (new)"
 
-#: aw.ini:class_166
+# aw.ini:class_166
 msgid "Klassi Polli vastus (166) nimi"
-msgstr ""
+msgstr "Poll answer"
 
-#: aw.ini:class_167
+# aw.ini:class_167
 msgid "Klassi Graafik (167) nimi"
-msgstr ""
+msgstr "Graph"
 
-#: aw.ini:class_168
+# aw.ini:class_168
 msgid "Klassi IP Aadress (168) nimi"
-msgstr ""
+msgstr "IP Address"
 
-#: aw.ini:class_169
+# aw.ini:class_169
 msgid "Klassi Valim (169) nimi"
-msgstr ""
+msgstr "Selection"
 
-#: aw.ini:class_170
+# aw.ini:class_170
 msgid "Klassi AW Sait (170) nimi"
-msgstr ""
+msgstr "AW Site"
 
-#: aw.ini:class_171
+# aw.ini:class_171
 msgid "Klassi Popup objekti haldur (171) nimi"
-msgstr ""
+msgstr "Popup object manager"
 
-#: aw.ini:class_172
+# aw.ini:class_172
 msgid "Klassi Tegija (172) nimi"
-msgstr ""
+msgstr "Actor"
 
-#: aw.ini:class_173
+# aw.ini:class_173
 msgid "Klassi Tegevus (173) nimi"
-msgstr ""
+msgstr "Action"
 
-#: aw.ini:class_174
+# aw.ini:class_174
 msgid "Klassi Juhtumi t&uuml;&uuml;p (174) nimi"
-msgstr ""
+msgstr "Case type"
 
-#: aw.ini:class_175
+# aw.ini:class_175
 msgid "Klassi Protsess (175) nimi"
-msgstr ""
+msgstr "Process"
 
-#: aw.ini:class_176
+# aw.ini:class_176
 msgid "Klassi Protsessivaade (176) nimi"
-msgstr ""
+msgstr "Process view"
 
-#: aw.ini:class_177
+# aw.ini:class_177
 msgid "Klassi Protsessivaate seaded (177) nimi"
-msgstr ""
+msgstr "Process view settings"
 
-#: aw.ini:class_178
+# aw.ini:class_178
 msgid "Klassi Tabel (178) nimi"
-msgstr ""
+msgstr "Table"
 
-#: aw.ini:class_179
+# aw.ini:class_179
 msgid "Klassi Seoseobjekt (179) nimi"
-msgstr ""
+msgstr "Connection object"
 
-#: aw.ini:class_180
+# aw.ini:class_180
 msgid "Klassi Men&uuml;&uuml;piirkond (180) nimi"
-msgstr ""
+msgstr "Folder area"
 
-#: aw.ini:class_181
+# aw.ini:class_181
 msgid "Klassi Asukohariba (181) nimi"
-msgstr ""
+msgstr "Location bar"
 
-#: aw.ini:class_182
+# aw.ini:class_182
 msgid "Klassi Sisu (182) nimi"
-msgstr ""
+msgstr "Content"
 
-#: aw.ini:class_183
+# aw.ini:class_183
 msgid "Klassi Men&uuml;&uuml;piirkonna tase (183) nimi"
-msgstr ""
+msgstr "Folder area level"
 
-#: aw.ini:class_184
+# aw.ini:class_184
 msgid "Klassi AIP Konfiguratsioon (184) nimi"
-msgstr ""
+msgstr "AIP configuration"
 
-#: aw.ini:class_185
+# aw.ini:class_185
 msgid "Klassi AIP (185) nimi"
-msgstr ""
+msgstr "AIP"
 
-#: aw.ini:class_186
+# aw.ini:class_186
 msgid "Klassi AIP Muudatuse vaade (186) nimi"
-msgstr ""
+msgstr "AIP Change view"
 
-#: aw.ini:class_187
+# aw.ini:class_187
 msgid "Klassi Galerii seaded (187) nimi"
-msgstr ""
+msgstr "Gallery configuration"
 
-#: aw.ini:class_188
+# aw.ini:class_188
 msgid "Klassi H&auml;&auml;letuse skaala (188) nimi"
-msgstr ""
+msgstr "Vote scale"
 
-#: aw.ini:class_189
+# aw.ini:class_189
 msgid "Klassi H&auml;&auml;letus (189) nimi"
-msgstr ""
+msgstr "Voting"
 
-#: aw.ini:class_190
+# aw.ini:class_190
 msgid "Klassi Galerii (190) nimi"
-msgstr ""
+msgstr "Gallery"
 
-#: aw.ini:class_191
+# aw.ini:class_191
 msgid "Klassi Tegevuste tabel (191) nimi"
-msgstr ""
+msgstr "Action table"
 
-#: aw.ini:class_192
+# aw.ini:class_192
 msgid "Klassi Kalendri sisu (192) nimi"
-msgstr ""
+msgstr "Calendar contents"
 
-#: aw.ini:class_193
+# aw.ini:class_193
 msgid "Klassi Pilootobjekt (193) nimi"
-msgstr ""
+msgstr "Pilot object"
 
-#: aw.ini:class_194
+# aw.ini:class_194
 msgid "Klassi Flash (194) nimi"
-msgstr ""
+msgstr "Flash"
 
-#: aw.ini:class_195
+# aw.ini:class_195
 msgid "Klassi FTP sissep&auml;&auml;s (195) nimi"
-msgstr ""
+msgstr "FTP Login"
 
-#: aw.ini:class_196
+# aw.ini:class_196
 msgid "Klassi Livelinki import (196) nimi"
-msgstr ""
+msgstr "Livelink import"
 
-#: aw.ini:class_197
+# aw.ini:class_197
 msgid "Klassi Kasutaja (197) nimi"
-msgstr ""
+msgstr "User"
 
-#: aw.ini:class_203
+# aw.ini:class_203
 msgid "Klassi Klassifikaator (203) nimi"
-msgstr ""
+msgstr "Classificator"
 
-#: aw.ini:class_204
+# aw.ini:class_204
 msgid "Klassi AW Saidi loomise log (204) nimi"
-msgstr ""
+msgstr "AW Site creation log"
 
-#: aw.ini:class_205
+# aw.ini:class_205
 msgid "Klassi Saidi otsing (205) nimi"
-msgstr ""
+msgstr "Site search"
 
-#: aw.ini:class_207
+# aw.ini:class_207
 msgid "Klassi Periood (207) nimi"
-msgstr ""
+msgstr "Period"
 
-#: aw.ini:class_208
+# aw.ini:class_208
 msgid "Klassi Kommentaar (208) nimi"
-msgstr ""
+msgstr "Comment"
 
-#: aw.ini:class_209
+# aw.ini:class_209
 msgid "Klassi Objektide nimekiri (209) nimi"
-msgstr ""
+msgstr "Object list"
 
-#: aw.ini:class_211
+# aw.ini:class_211
 msgid "Klassi Foorum (211) nimi"
-msgstr ""
+msgstr "Forum"
 
-#: aw.ini:class_212
+# aw.ini:class_212
 msgid "Klassi Ekomar (212) nimi"
-msgstr ""
+msgstr "Ekomar"
 
-#: aw.ini:class_213
+# aw.ini:class_213
 msgid "Klassi Klassi t&otilde;lge (213) nimi"
-msgstr ""
+msgstr "Class translation"
 
-#: aw.ini:class_214
+# aw.ini:class_214
 msgid "Klassi Men&uuml;&uuml; eraldusjoon (214) nimi"
-msgstr ""
+msgstr "Menu separator"
 
-#: aw.ini:class_215
+# aw.ini:class_215
 msgid "Klassi Shortcut (215) nimi"
-msgstr ""
+msgstr "Shortcut"
 
-#: aw.ini:class_217
+# aw.ini:class_217
 msgid "Klassi T&otilde;lkekeskkond (217) nimi"
-msgstr ""
+msgstr "Translation environment"
 
-#: aw.ini:class_218
+# aw.ini:class_218
 msgid "Klassi Saidi hooldus (218) nimi"
-msgstr ""
+msgstr "Site maitenance"
 
-#: aw.ini:class_219
+# aw.ini:class_219
 msgid "Klassi Telefon (219) nimi"
-msgstr ""
+msgstr "Phone"
 
-#: aw.ini:class_220
+# aw.ini:class_220
 msgid "Klassi Ametinimetus (220) nimi"
-msgstr ""
+msgstr "Rank"
 
-#: aw.ini:class_221
+# aw.ini:class_221
 msgid "Klassi Dokumentide import (221) nimi"
-msgstr ""
+msgstr "Document import"
 
-#: aw.ini:class_222
+# aw.ini:class_222
 msgid "Klassi Tehing (222) nimi"
-msgstr ""
+msgstr "Deal"
 
-#: aw.ini:class_223
+# aw.ini:class_223
 msgid "Klassi K&otilde;ne (223) nimi"
-msgstr ""
+msgstr "Phonecall"
 
-#: aw.ini:class_224
+# aw.ini:class_224
 msgid "Klassi Kohtumine (224) nimi"
-msgstr ""
+msgstr "Meeting"
 
-#: aw.ini:class_225
+# aw.ini:class_225
 msgid "Klassi Pakkumine (225) nimi"
-msgstr ""
+msgstr "Offer"
 
-#: aw.ini:class_226
+# aw.ini:class_226
 msgid "Klassi Meiliseaded (226) nimi"
-msgstr ""
+msgstr "Mail settings"
 
-#: aw.ini:class_227
+# aw.ini:class_227
 msgid "Klassi Meilikast (227) nimi"
-msgstr ""
+msgstr "Mailbox"
 
-#: aw.ini:class_228
+# aw.ini:class_228
 msgid "Klassi POP3 sissep&auml;&auml;s (228) nimi"
-msgstr ""
+msgstr "POP3 Login"
 
-#: aw.ini:class_229
+# aw.ini:class_229
 msgid "Klassi IMAP sissep&auml;&auml;s (229) nimi"
-msgstr ""
+msgstr "IMAP Login"
 
-#: aw.ini:class_230
+# aw.ini:class_230
 msgid "Klassi Maili reegel (230) nimi"
-msgstr ""
+msgstr "Mail rule"
 
-#: aw.ini:class_231
+# aw.ini:class_231
 msgid "Klassi Saidi sisu otsing (231) nimi"
-msgstr ""
+msgstr "Site content search"
 
-#: aw.ini:class_232
+# aw.ini:class_232
 msgid "Klassi Saidi sisu otsingu grupp (232) nimi"
-msgstr ""
+msgstr "Site content search group"
 
-#: aw.ini:class_233
+# aw.ini:class_233
 msgid "Klassi Intranet (233) nimi"
-msgstr ""
+msgstr "Intranet"
 
-#: aw.ini:class_234
+# aw.ini:class_234
 msgid "Klassi T&ouml;&ouml;laud (234) nimi"
-msgstr ""
+msgstr "Desktop"
 
-#: aw.ini:class_235
+# aw.ini:class_235
 msgid "Klassi Rich Text Editor (235) nimi"
-msgstr ""
+msgstr "Rich Text Editor"
 
-#: aw.ini:class_236
+# aw.ini:class_236
 msgid "Klassi Taket Spikker (236) nimi"
 msgstr ""
 
-#: aw.ini:class_237
+# aw.ini:class_237
 msgid "Klassi Taket tellimuste nimekiri (237) nimi"
 msgstr ""
 
-#: aw.ini:class_238
+# aw.ini:class_238
 msgid "Klassi Dokument CODE (238) nimi"
 msgstr ""
 
-#: aw.ini:class_239
+# aw.ini:class_239
 msgid "Klassi Projekt (239) nimi"
-msgstr ""
+msgstr "Project"
 
-#: aw.ini:class_240
+# aw.ini:class_240
 msgid "Klassi Messengeri identiteet (240) nimi"
-msgstr ""
+msgstr "Messenger Identity"
 
-#: aw.ini:class_241
+# aw.ini:class_241
 msgid "Klassi Taket Ostukorv (241) nimi"
 msgstr ""
 
-#: aw.ini:class_242
+# aw.ini:class_242
 msgid "Klassi Taketi Otsing (242) nimi"
 msgstr ""
 
-#: aw.ini:class_243
+# aw.ini:class_243
 msgid "Klassi Taketi tellimus (243) nimi"
 msgstr ""
 
-#: aw.ini:class_244
+# aw.ini:class_244
 msgid "Klassi Toimetus (244) nimi"
-msgstr ""
+msgstr "Task"
 
-#: aw.ini:class_245
+# aw.ini:class_245
 msgid "Klassi Taketi Ostukorvi Rida (245) nimi"
 msgstr ""
 
-#: aw.ini:class_246
+# aw.ini:class_246
 msgid "Klassi Taketi Ostukorvi Objekt (246) nimi"
 msgstr ""
 
-#: aw.ini:class_247
+# aw.ini:class_247
 msgid "Klassi Taketi kasutajate import (247) nimi"
 msgstr ""
 
-#: aw.ini:class_248
+# aw.ini:class_248
 msgid "Klassi Taketi JS Parser (248) nimi"
 msgstr ""
 
-#: aw.ini:class_249
+# aw.ini:class_249
 msgid "Klassi Taketi tellimuse item (249) nimi"
 msgstr ""
 
-#: aw.ini:class_250
+# aw.ini:class_250
 msgid "Klassi Taketi Otsingu piirangud (250) nimi"
 msgstr ""
 
-#: aw.ini:class_251
+# aw.ini:class_251
 msgid "Klassi Login men&uuml;&uuml;d (251) nimi"
-msgstr ""
+msgstr "Login menus"
 
-#: aw.ini:class_252
+# aw.ini:class_252
 msgid "Klassi Dokumendi Template (252) nimi"
-msgstr ""
+msgstr "Template"
 
-#: aw.ini:class_253
+# aw.ini:class_253
 msgid "Klassi J&auml;rgnevus (253) nimi"
-msgstr ""
+msgstr "Transition"
 
-#: aw.ini:class_254
+# aw.ini:class_254
 msgid "Klassi Protsessi kulg (254) nimi"
-msgstr ""
+msgstr "Process workflow"
 
-#: aw.ini:class_255
+# aw.ini:class_255
 msgid "Klassi Kaustade nimekiri (255) nimi"
-msgstr ""
+msgstr "Folder list"
 
-#: aw.ini:class_256
+# aw.ini:class_256
 msgid "Klassi Profiil (256) nimi"
-msgstr ""
+msgstr "Profile"
 
-#: aw.ini:class_266
+# aw.ini:class_266
 msgid "Klassi Keel (266) nimi"
-msgstr ""
+msgstr "Language"
 
-#: aw.ini:class_275
+# aw.ini:class_275
 msgid "Klassi Personalikeskkond (275) nimi"
-msgstr ""
+msgstr "Personnell center"
 
-#: aw.ini:class_276
+# aw.ini:class_276
 msgid "Klassi CV (276) nimi"
-msgstr ""
+msgstr "CV"
 
-#: aw.ini:class_285
+# aw.ini:class_285
 msgid "Klassi Tööpakkumine (285) nimi"
-msgstr ""
+msgstr "Job offer"
 
-#: aw.ini:class_277
+# aw.ini:class_277
 msgid "Klassi Muutuja (277) nimi"
-msgstr ""
+msgstr "Variable"
 
-#: aw.ini:class_278
+# aw.ini:class_278
 msgid "Klassi Serveri Kataloog (278) nimi"
-msgstr ""
+msgstr "Server folder"
 
-#: aw.ini:class_279
+# aw.ini:class_279
 msgid "Klassi Muutujate haldus (279) nimi"
-msgstr ""
+msgstr "Variable manager"
 
-#: aw.ini:class_286
+# aw.ini:class_286
 msgid "Klassi Kordus (286) nimi"
-msgstr ""
+msgstr "Repeater"
 
-#: aw.ini:class_287
+# aw.ini:class_287
 msgid "Klassi Saidiga Liitumine (287) nimi"
-msgstr ""
+msgstr "Join site"
 
-#: aw.ini:class_288
+# aw.ini:class_288
 msgid "Klassi Liitumise Reegel (288) nimi"
-msgstr ""
+msgstr "Join site rule"
 
-#: aw.ini:class_289
+# aw.ini:class_289
 msgid "Klassi Ladu (289) nimi"
-msgstr ""
+msgstr "Warehouse"
 
-#: aw.ini:class_290
+# aw.ini:class_290
 msgid "Klassi Tootekoodid (290) nimi"
-msgstr ""
+msgstr "Product codes"
 
-#: aw.ini:class_291
+# aw.ini:class_291
 msgid "Klassi Ajaseaded (291) nimi"
-msgstr ""
+msgstr "Time settings"
 
-#: aw.ini:class_292
+# aw.ini:class_292
 msgid "Klassi Maksud (292) nimi"
-msgstr ""
+msgstr "Taxes"
 
-#: aw.ini:class_293
+# aw.ini:class_293
 msgid "Klassi Toote Hind (293) nimi"
-msgstr ""
+msgstr "Product price"
 
-#: aw.ini:class_294
+# aw.ini:class_294
 msgid "Klassi Hinnakujundus (294) nimi"
-msgstr ""
+msgstr "Rpduct price settings"
 
-#: aw.ini:class_295
+# aw.ini:class_295
 msgid "Klassi Lao toode (295) nimi"
-msgstr ""
+msgstr "Warehouse product"
 
-#: aw.ini:class_296
+# aw.ini:class_296
 msgid "Klassi Lao konfiguratsioon (296) nimi"
-msgstr ""
+msgstr "Warehouse configuration"
 
-#: aw.ini:class_297
+# aw.ini:class_297
 msgid "Klassi Pakett (297) nimi"
-msgstr ""
+msgstr "Package"
 
-#: aw.ini:class_298
+# aw.ini:class_298
 msgid "Klassi Lao sissetulek (298) nimi"
-msgstr ""
+msgstr "Warehouse delivery"
 
-#: aw.ini:class_299
+# aw.ini:class_299
 msgid "Klassi Lao v&auml;ljaminek (299) nimi"
-msgstr ""
+msgstr "Warehouse export"
 
-#: aw.ini:class_300
+# aw.ini:class_300
 msgid "Klassi Toote t&uuml;&uuml;p (300) nimi"
-msgstr ""
+msgstr "Product type"
 
-#: aw.ini:class_301
+# aw.ini:class_301
 msgid "Klassi Autori artiklid (301) nimi"
-msgstr ""
+msgstr "Authors articles"
 
-#: aw.ini:class_302
+# aw.ini:class_302
 msgid "Klassi Tellimus (302) nimi"
-msgstr ""
+msgstr "Order"
 
-#: aw.ini:class_303
+# aw.ini:class_303
 msgid "Klassi Dokumentide vaatamise statistika (303) nimi"
-msgstr ""
+msgstr "Document view statistics"
 
-#: aw.ini:class_304
+# aw.ini:class_304
 msgid "Klassi Stati aruannete upload (304) nimi"
 msgstr ""
 
-#: aw.ini:class_305
+# aw.ini:class_305
 msgid "Klassi Saidi sisukord (305) nimi"
-msgstr ""
+msgstr "Site contents"
 
-#: aw.ini:class_306
+# aw.ini:class_306
 msgid "Klassi Kommuun (306) nimi"
-msgstr ""
+msgstr "Commune"
 
-#: aw.ini:class_313
+# aw.ini:class_313
 msgid "Klassi Dokumendiarhiiv (313) nimi"
-msgstr ""
+msgstr "Document archive"
 
-#: aw.ini:class_314
+# aw.ini:class_314
 msgid "Klassi Tellimiskeskkond (314) nimi"
-msgstr ""
+msgstr "Ordering center"
 
-#: aw.ini:class_315
+# aw.ini:class_315
 msgid "Klassi Lao toote kujundus (315) nimi"
-msgstr ""
+msgstr "Warehouse product layout"
 
-#: aw.ini:class_316
+# aw.ini:class_316
 msgid "Klassi Lao toodete tabeli kujundus (316) nimi"
-msgstr ""
+msgstr "Warehouse product table layout"
 
-#: aw.ini:class_317
+# aw.ini:class_317
 msgid "Klassi AW Saitide nimekiri (317) nimi"
-msgstr ""
+msgstr "AW Site List"
 
-#: aw.ini:class_318
+# aw.ini:class_318
 msgid "Klassi Minigalerii (318) nimi"
-msgstr ""
+msgstr "Minigallery"
 
-#: aw.ini:class_319
+# aw.ini:class_319
 msgid "Klassi Poe ostukorv (319) nimi"
-msgstr ""
+msgstr "Shopping cart"
 
-#: aw.ini:class_320
+# aw.ini:class_320
 msgid "Klassi Klassidisainer (320) nimi"
-msgstr ""
+msgstr "Class designer"
 
-#: aw.ini:class_321
+# aw.ini:class_321
 msgid "Klassi Üksus (321) nimi"
-msgstr ""
+msgstr "Unit"
 
-#: aw.ini:class_322
+# aw.ini:class_322
 msgid "Klassi Teadete tahvel (322) nimi"
-msgstr ""
+msgstr "Message board"
 
-#: aw.ini:class_323
+# aw.ini:class_323
 msgid "Klassi AWDocGen (323) nimi"
 msgstr ""
 
-#: aw.ini:class_324
+# aw.ini:class_324
 msgid "Klassi Objektide nimekiri v2 (324) nimi"
-msgstr ""
+msgstr "Object list v2"
 
-#: aw.ini:class_325
+# aw.ini:class_325
 msgid "Klassi Objektinimekirja AW andmeallikas (325) nimi"
-msgstr ""
+msgstr "Object list datasource AW objects"
 
-#: aw.ini:class_326
+# aw.ini:class_326
 msgid "Klassi Objektinimekirja Postipoisi andmeallikas (326) nimi"
-msgstr ""
+msgstr "Object list datasource Postipoiss"
 
-#: aw.ini:class_327
+# aw.ini:class_327
 msgid "Klassi Toote pakend (327) nimi"
-msgstr ""
+msgstr "Product packaging"
 
-#: aw.ini:class_328
+# aw.ini:class_328
 msgid "Klassi CV Otsing (328) nimi"
-msgstr ""
+msgstr "CV Search"
 
-#: aw.ini:class_329
+# aw.ini:class_329
 msgid "Klassi Objektide Import (329) nimi"
-msgstr ""
+msgstr "Object import"
 
-#: aw.ini:class_330
+# aw.ini:class_330
 msgid "Klassi Taket Sendmail (330) nimi"
 msgstr ""
 
-#: aw.ini:class_331
+# aw.ini:class_331
 msgid "Klassi Klasside nimekiri (331) nimi"
-msgstr ""
+msgstr "Class list"
 
-#: aw.ini:class_335
+# aw.ini:class_335
 msgid "Klassi Kiirteade (335) nimi"
-msgstr ""
+msgstr "Quickmessage"
 
-#: aw.ini:class_336
+# aw.ini:class_336
 msgid "Klassi Sisseastujate haldus (336) nimi"
-msgstr ""
+msgstr "Applicants manager"
 
-#: aw.ini:class_337
+# aw.ini:class_337
 msgid "Klassi Avaldus (337) nimi"
-msgstr ""
+msgstr "Application"
 
-#: aw.ini:class_338
+# aw.ini:class_338
 msgid "Klassi Sisseastuja (338) nimi"
-msgstr ""
+msgstr "Applicant"
 
-#: aw.ini:class_339
+# aw.ini:class_339
 msgid "Klassi Andmeallikas (339) nimi"
-msgstr ""
+msgstr "Datasource"
 
-#: aw.ini:class_340
+# aw.ini:class_340
 msgid "Klassi Tundmatud andmed (340) nimi"
-msgstr ""
+msgstr "Unknown data"
 
-#: aw.ini:class_341
+# aw.ini:class_341
 msgid "Klassi Register (341) nimi"
-msgstr ""
+msgstr "Register"
 
-#: aw.ini:class_342
+# aw.ini:class_342
 msgid "Klassi Registri andmed (342) nimi"
-msgstr ""
+msgstr "Register data"
 
-#: aw.ini:class_343
+# aw.ini:class_343
 msgid "Klassi Registri otsing (343) nimi"
-msgstr ""
+msgstr "Register search"
 
-#: aw.ini:class_344
+# aw.ini:class_344
 msgid "Klassi Poe eripakkumine (344) nimi"
-msgstr ""
+msgstr "Shop special offer"
 
-#: aw.ini:class_345
+# aw.ini:class_345
 msgid "Klassi Poe ostukorvi v&auml;&auml;rtus (345) nimi"
-msgstr ""
+msgstr "Shop cart value"
 
-#: aw.ini:class_346
+# aw.ini:class_346
 msgid "Klassi Projekti tulu (346) nimi"
-msgstr ""
+msgstr "Project income"
 
-#: aw.ini:class_347
+# aw.ini:class_347
 msgid "Klassi Projekti kulu (347) nimi"
-msgstr ""
+msgstr "Project expenses"
 
-#: aw.ini:class_348
+# aw.ini:class_348
 msgid "Klassi Projekti kuluartikkel (348) nimi"
-msgstr ""
+msgstr "Prooject expense article"
 
-#: aw.ini:class_349
+# aw.ini:class_349
 msgid "Klassi Ankeet (349) nimi"
-msgstr ""
+msgstr "Questionnaire"
 
-#: aw.ini:class_350
+# aw.ini:class_350
 msgid "Klassi Ankeetide haldur (350) nimi"
-msgstr ""
+msgstr "Questionnaire namanger"
 
-#: aw.ini:class_351
+# aw.ini:class_351
 msgid "Klassi T&ouml;&ouml; soov (351) nimi"
-msgstr ""
+msgstr "Job application"
 
-#: aw.ini:class_428
+# aw.ini:class_428
 msgid "Klassi Classbase otsing (428) nimi"
-msgstr ""
+msgstr "Classbase search"
 
-#: aw.ini:class_449
+# aw.ini:class_449
 msgid "Klassi Kirja template (449) nimi"
-msgstr ""
+msgstr "Letter template"
 
-#: aw.ini:class_477
+# aw.ini:class_477
 msgid "Klassi Objektide eksport (477) nimi"
-msgstr ""
+msgstr "Object export"
 
-#: aw.ini:class_478
+# aw.ini:class_478
 msgid "Klassi Objektide impordi erand (478) nimi"
-msgstr ""
+msgstr "Object import exception"
 
-#: aw.ini:class_479
+# aw.ini:class_479
 msgid "Klassi AW Sysconfig (479) nimi"
-msgstr ""
+msgstr "AW Sysconfig"
 
-#: aw.ini:class_480
+# aw.ini:class_480
 msgid "Klassi AW skript (480) nimi"
-msgstr ""
+msgstr "AW Script"
 
-#: aw.ini:class_482
+# aw.ini:class_482
 msgid "Klassi Meeldetuletuse reegel (482) nimi"
-msgstr ""
+msgstr "Reminder rule"
 
-#: aw.ini:class_483
+# aw.ini:class_483
 msgid "Klassi Kategooria (483) nimi"
-msgstr ""
+msgstr "Category"
 
-#: aw.ini:class_484
+# aw.ini:class_484
 msgid "Klassi Kalendri meeldetuletus (484) nimi"
-msgstr ""
+msgstr "Calendar reminder"
 
-#: aw.ini:class_485
+# aw.ini:class_485
 msgid "Klassi Kogukond (485) nimi"
-msgstr ""
+msgstr "Community"
 
-#: aw.ini:class_486
+# aw.ini:class_486
 msgid "Klassi Registri otsingu tulemused (486) nimi"
-msgstr ""
+msgstr "Register search results"
 
-#: aw.ini:class_487
+# aw.ini:class_487
 msgid "Klassi Haridus (487) nimi"
-msgstr ""
+msgstr "Education"
 
-#: aw.ini:class_488
+# aw.ini:class_488
 msgid "Klassi Otto toodete import (488) nimi"
-msgstr ""
+msgstr "Otto product import"
 
-#: aw.ini:class_489
+# aw.ini:class_489
 msgid "Klassi Keeleoskus (489) nimi"
-msgstr ""
+msgstr "Language skill"
 
-#: aw.ini:class_490
+# aw.ini:class_490
 msgid "Klassi Programmeerija (490) nimi"
-msgstr ""
+msgstr "Programmer"
 
-#: aw.ini:class_519
+# aw.ini:class_519
 msgid "Klassi Töökogemus (519) nimi"
-msgstr ""
+msgstr "Work experience"
 
-#: aw.ini:class_558
+# aw.ini:class_558
 msgid "Klassi Pank (558) nimi"
-msgstr ""
+msgstr "Bank"
 
-#: aw.ini:class_640
+# aw.ini:class_640
 msgid "Klassi Konto (640) nimi"
-msgstr ""
+msgstr "Account"
 
-#: aw.ini:class_641
+# aw.ini:class_641
 msgid "Klassi Kõrgharidus (641) nimi"
-msgstr ""
+msgstr "Higher education"
 
-#: aw.ini:class_642
+# aw.ini:class_642
 msgid "Klassi Põhiharidus (642) nimi"
-msgstr ""
+msgstr "Main education"
 
-#: aw.ini:class_643
+# aw.ini:class_643
 msgid "Klassi Keskharidus (643) nimi"
-msgstr ""
+msgstr "Secondary education"
 
-#: aw.ini:class_644
+# aw.ini:class_644
 msgid "Klassi Kutseharidus (644) nimi"
-msgstr ""
+msgstr "Vocational education"
 
-#: aw.ini:class_645
+# aw.ini:class_645
 msgid "Klassi Täienduskoolitus (645) nimi"
-msgstr ""
+msgstr "Extra training"
 
-#: aw.ini:class_650
+# aw.ini:class_650
 msgid "Klassi Ülekanne (650) nimi"
-msgstr ""
+msgstr "Transfer"
 
-#: aw.ini:class_655
+# aw.ini:class_655
 msgid "Klassi Objektinimekirja Maanteeinfo andmeallikas (655) nimi"
-msgstr ""
+msgstr "Object list Road info datasource"
 
-#: aw.ini:class_770
+# aw.ini:class_770
 msgid "Klassi Tehnoloogia (770) nimi"
-msgstr ""
+msgstr "Technology"
 
-#: aw.ini:class_771
+# aw.ini:class_771
 msgid "Klassi Programmeerimisoskus (771) nimi"
-msgstr ""
+msgstr "Programming skill"
 
-#: aw.ini:class_775
+# aw.ini:class_775
 msgid "Klassi Tööpakkumiste nimekiri (775) nimi"
-msgstr ""
+msgstr "Job offer list"
 
-#: aw.ini:class_798
+# aw.ini:class_798
 msgid "Klassi Otto toodete otsing (798) nimi"
-msgstr ""
+msgstr "Otto product search"
 
-#: aw.ini:class_801
+# aw.ini:class_801
 msgid "Klassi Minu kandideerimised (801) nimi"
-msgstr ""
+msgstr "My applications"
 
-#: aw.ini:class_802
+# aw.ini:class_802
 msgid "Klassi Vakants (802) nimi"
-msgstr ""
+msgstr "Vacancy"
 
-#: aw.ini:class_804
+# aw.ini:class_804
 msgid "Klassi Abitekst (804) nimi"
-msgstr ""
+msgstr "Help text"
 
-#: aw.ini:class_807
+# aw.ini:class_807
 msgid "Klassi Maks (807) nimi"
-msgstr ""
+msgstr "Tax"
 
-#: aw.ini:class_806
+# aw.ini:class_806
 msgid "Klassi Maanteeinfo otsing (806) nimi"
-msgstr ""
+msgstr "Roadinfo search"
 
-#: aw.ini:class_808
+# aw.ini:class_808
 msgid "Klassi Maksu pärg (808) nimi"
-msgstr ""
+msgstr "Tax chain"
 
-#: aw.ini:class_809
+# aw.ini:class_809
 msgid "Klassi Piltide muundaja (809) nimi"
-msgstr ""
+msgstr "Image transformer"
 
-#: aw.ini:class_810
+# aw.ini:class_810
 msgid "Klassi Kontroller(Classbase) (810) nimi"
-msgstr ""
+msgstr "Controller (Classbase)"
 
-#: aw.ini:class_811
+# aw.ini:class_811
 msgid "Klassi Aadressiraamat (811) nimi"
-msgstr ""
+msgstr "Address book"
 
-#: aw.ini:class_812
+# aw.ini:class_812
 msgid "Klassi Kandidatuur (812) nimi"
-msgstr ""
+msgstr "Candidature"
 
-#: aw.ini:class_814
+# aw.ini:class_814
 msgid "Klassi Saidi backup (814) nimi"
-msgstr ""
+msgstr "Site backup"
 
-#: aw.ini:class_816
+# aw.ini:class_816
 msgid "Klassi Kiirteadete haldus (816) nimi"
-msgstr ""
+msgstr "Quick message manager"
 
-#: aw.ini:class_817
+# aw.ini:class_817
 msgid "Klassi XML editor (817) nimi"
-msgstr ""
+msgstr "XML Editor"
 
-#: aw.ini:class_818
+# aw.ini:class_818
 msgid "Klassi Klientide manageerija (818) nimi"
-msgstr ""
+msgstr "Client manager"
 
-#: aw.ini:class_819
+# aw.ini:class_819
 msgid "Klassi Kalendri sündmus (819) nimi"
-msgstr ""
+msgstr "Calendar event"
 
-#: aw.ini:class_820
+# aw.ini:class_820
 msgid "Klassi Objektinimekirja pp andmeallika otsing (820) nimi"
-msgstr ""
+msgstr "Object list pp datasource search"
 
-#: aw.ini:class_825
+# aw.ini:class_825
 msgid "Klassi Ressurss (825) nimi"
-msgstr ""
+msgstr "Resource"
 
-#: aw.ini:class_826
+# aw.ini:class_826
 msgid "Klassi Tegevus (826) nimi"
-msgstr ""
+msgstr "Job"
 
-#: aw.ini:class_827
+# aw.ini:class_827
 msgid "Klassi Ressursiplaneerija (827) nimi"
-msgstr ""
+msgstr "Resource planner"
 
-#: aw.ini:class_828
+# aw.ini:class_828
 msgid "Klassi Arendustoode (828) nimi"
-msgstr ""
+msgstr "Case"
 
-#: aw.ini:class_830
+# aw.ini:class_830
 msgid "Klassi Classbase otsingu s&uuml;non&uuml;mid (830) nimi"
-msgstr ""
+msgstr "Classbase search synonyms"
 
-#: aw.ini:class_831
+# aw.ini:class_831
 msgid "Klassi Lavastus (831) nimi"
-msgstr ""
+msgstr "Show"
 
-#: aw.ini:class_832
+# aw.ini:class_832
 msgid "Klassi Üksus veebis (832) nimi"
-msgstr ""
+msgstr "Unit in website"
 
-#: aw.ini:class_833
+# aw.ini:class_833
 msgid "Klassi Video (833) nimi"
-msgstr ""
+msgstr "Video"
 
-#: aw.ini:class_834
+# aw.ini:class_834
 msgid "Klassi Omaduste p&auml;rimise reegel (834) nimi"
-msgstr ""
+msgstr "Property inheritance rule"
 
-#: aw.ini:class_835
+# aw.ini:class_835
 msgid "Klassi Maja XML-i editor (835) nimi"
-msgstr ""
+msgstr "House XML Editor"
 
-#: aw.ini:class_836
+# aw.ini:class_836
 msgid "Klassi Kalendri sündmusele registreerumine (836) nimi"
-msgstr ""
+msgstr "Calendar event registration"
 
-#: aw.ini:class_839
+# aw.ini:class_839
 msgid "Klassi Tellimus 2 (839) nimi"
-msgstr ""
+msgstr "Order 2"
 
-#: aw.ini:class_840
+# aw.ini:class_840
 msgid "Klassi Tellimuse rida (840) nimi"
-msgstr ""
+msgstr "Order line"
 
-#: aw.ini:class_841
+# aw.ini:class_841
 msgid "Klassi Tellimuse vorm (841) nimi"
-msgstr ""
+msgstr "Order form"
 
-#: aw.ini:class_842
+# aw.ini:class_842
 msgid "Klassi Tellimuste haldus (842) nimi"
-msgstr ""
+msgstr "Order manager"
 
-#: aw.ini:class_843
+# aw.ini:class_843
 msgid "Klassi Autentimise Seaded (843) nimi"
-msgstr ""
+msgstr "Authentication settings"
 
-#: aw.ini:class_844
+# aw.ini:class_844
 msgid "Klassi Autentimisserver LDAP (844) nimi"
-msgstr ""
+msgstr "Authentication server LDAP"
 
-#: aw.ini:class_845
+# aw.ini:class_845
 msgid "Klassi Autentimsserver Kohalik (845) nimi"
-msgstr ""
+msgstr "Authentication server Local"
 
-#: aw.ini:class_846
+# aw.ini:class_846
 msgid "Klassi Autentimisserver AutomatWeb (846) nimi"
-msgstr ""
+msgstr "Authentication server AutomatWeb"
 
-#: aw.ini:class_847
+# aw.ini:class_847
 msgid "Klassi CSS Stiilide generaator (847) nimi"
-msgstr ""
+msgstr "CSS Style generator"
 
-#: aw.ini:class_848
+# aw.ini:class_848
 msgid "Klassi S&uuml;ndmusele registreerimise sisestus (848) nimi"
-msgstr ""
+msgstr "Event registration entry"
 
-#: aw.ini:class_849
+# aw.ini:class_849
 msgid "Klassi S&uuml;ndmusele registreerimine (849) nimi"
-msgstr ""
+msgstr "Event registration"
 
-#: aw.ini:class_856
+# aw.ini:class_856
 msgid "Klassi Pr&uuml;gikast (856) nimi"
-msgstr ""
+msgstr "Trash can"
 
-#: aw.ini:class_850
+# aw.ini:class_850
 msgid "Klassi Sündmuste otsing (850) nimi"
-msgstr ""
+msgstr "Event search"
 
-#: aw.ini:class_852
+# aw.ini:class_852
 msgid "Klassi Ressursihalduskeskkond (852) nimi"
-msgstr ""
+msgstr "Resource manager"
 
-#: aw.ini:class_857
+# aw.ini:class_857
 msgid "Klassi Hindamise modereerimine (857) nimi"
-msgstr ""
+msgstr "Rating moderation"
 
-#: aw.ini:class_858
+# aw.ini:class_858
 msgid "Klassi Ajaline aktiivsus (858) nimi"
-msgstr ""
+msgstr "Timed activity"
 
-#: aw.ini:class_864
+# aw.ini:class_864
 msgid "Klassi Rolli kirje (864) nimi"
-msgstr ""
+msgstr "Role entry"
 
-#: aw.ini:class_865
+# aw.ini:class_865
 msgid "Klassi N&auml;itamise kontroller (865) nimi"
-msgstr ""
+msgstr "Display controller"
 
-#: aw.ini:class_866
+# aw.ini:class_866
 msgid "Klassi Veebivorm (866) nimi"
-msgstr ""
+msgstr "Webform"
 
-#: aw.ini:class_867
+# aw.ini:class_867
 msgid "Klassi BugTrack (867) nimi"
-msgstr ""
+msgstr "BugTrack"
 
-#: aw.ini:class_868
+# aw.ini:class_868
 msgid "Klassi Bugi (868) nimi"
-msgstr ""
+msgstr "Bug"
 
-#: aw.ini:class_869
+# aw.ini:class_869
 msgid "Klassi Gantti diagramm (869) nimi"
-msgstr ""
+msgstr "Gantt chart"
 
-#: aw.ini:class_871
+# aw.ini:class_871
 msgid "Klassi Meeldetuletus (871) nimi"
-msgstr ""
+msgstr "Reminder"
 
-#: aw.ini:class_872
+# aw.ini:class_872
 msgid "Klassi Operaator (872) nimi"
-msgstr ""
+msgstr "Operator"
 
-#: aw.ini:class_874
+# aw.ini:class_874
 msgid "Klassi Autentimisserver NDS (874) nimi"
-msgstr ""
+msgstr "Authentication server NDS"
 
-#: aw.ini:class_875
+# aw.ini:class_875
 msgid "Klassi Persona import (875) nimi"
-msgstr ""
+msgstr "Persona import"
 
-#: aw.ini:class_876
+# aw.ini:class_876
 msgid "Klassi Puhkus (876) nimi"
-msgstr ""
+msgstr "Vacation"
 
-#: aw.ini:class_877
+# aw.ini:class_877
 msgid "Klassi Töölepingu peatamine (877) nimi"
-msgstr ""
+msgstr "Employment contract termination"
 
-#: aw.ini:class_878
+# aw.ini:class_878
 msgid "Klassi Prisma import (878) nimi"
-msgstr ""
+msgstr "Prisma import"
 
-#: aw.ini:class_879
+# aw.ini:class_879
 msgid "Klassi Automaatne sissep&auml;&auml;s (879) nimi"
-msgstr ""
+msgstr "Automatic login"
 
-#: aw.ini:class_880
+# aw.ini:class_880
 msgid "Klassi Vormi grupp (880) nimi"
-msgstr ""
+msgstr "Form group"
 
-#: aw.ini:class_881
+# aw.ini:class_881
 msgid "Klassi Tekstiväli (881) nimi"
-msgstr ""
+msgstr "Text field"
 
-#: aw.ini:class_882
+# aw.ini:class_882
 msgid "Klassi Grid (882) nimi"
-msgstr ""
+msgstr "Grid"
 
-#: aw.ini:class_883
+# aw.ini:class_883
 msgid "Klassi Valik (883) nimi"
-msgstr ""
+msgstr "Selection box"
 
-#: aw.ini:class_884
+# aw.ini:class_884
 msgid "Klassi Valikuruut (884) nimi"
-msgstr ""
+msgstr "Checkbox"
 
-#: aw.ini:class_885
+# aw.ini:class_885
 msgid "Klassi Uudistevoog (885) nimi"
-msgstr ""
+msgstr "Newsfeed"
 
-#: aw.ini:class_886
+# aw.ini:class_886
 msgid "Klassi Tabel (886) nimi"
-msgstr ""
+msgstr "Table"
 
-#: aw.ini:class_887
+# aw.ini:class_887
 msgid "Klassi Tabeli veerg (887) nimi"
-msgstr ""
+msgstr "Table column"
 
-#: aw.ini:class_888
+# aw.ini:class_888
 msgid "Klassi Tekstikast (888) nimi"
-msgstr ""
+msgstr "Textbox"
 
-#: aw.ini:class_889
+# aw.ini:class_889
 msgid "Klassi Loend (889) nimi"
-msgstr ""
+msgstr "Array"
 
-#: aw.ini:class_890
+# aw.ini:class_890
 msgid "Klassi Import Kultuuriaknast (890) nimi"
 msgstr ""
 
-#: aw.ini:class_891
+# aw.ini:class_891
 msgid "Klassi Cache uuendamine (891) nimi"
-msgstr ""
+msgstr "Cache clearing"
 
-#: aw.ini:class_892
+# aw.ini:class_892
 msgid "Klassi Puu (892) nimi"
-msgstr ""
+msgstr "Tree"
 
-#: aw.ini:class_893
+# aw.ini:class_893
 msgid "Klassi Seos (893) nimi"
-msgstr ""
+msgstr "Connection"
 
-#: aw.ini:class_894
+# aw.ini:class_894
 msgid "Klassi Toolbar (894) nimi"
-msgstr ""
+msgstr "Toolbar"
 
-#: aw.ini:class_895
+# aw.ini:class_895
 msgid "Klassi Toolbari nupp (895) nimi"
-msgstr ""
+msgstr "Toolbar button"
 
-#: aw.ini:class_898
+# aw.ini:class_898
 msgid "Klassi Andmeallika andmete muundaja (898) nimi"
-msgstr ""
+msgstr "Datasource data transformer"
 
-#: aw.ini:class_900
+# aw.ini:class_900
 msgid "Klassi Puu oks (900) nimi"
-msgstr ""
+msgstr "Tree branch"
 
-#: aw.ini:class_901
+# aw.ini:class_901
 msgid "Klassi Objektinimekirja otsing (901) nimi"
-msgstr ""
+msgstr "Object list search"
 
-#: aw.ini:class_902
+# aw.ini:class_902
 msgid "Klassi Kasutaja parooli muutmine (902) nimi"
-msgstr ""
+msgstr "Password change"
 
-#: aw.ini:class_903
+# aw.ini:class_903
 msgid "Klassi Pakkumiste haldus (903) nimi"
-msgstr ""
+msgstr "Offer manager"
 
-#: aw.ini:class_907
+# aw.ini:class_907
 msgid "Klassi Pakkumise peat&uuml;kk (907) nimi"
-msgstr ""
+msgstr "Offer chapter"
 
-#: aw.ini:class_908
+# aw.ini:class_908
 msgid "Klassi Pakkumise eesm&auml;rk (908) nimi"
-msgstr ""
+msgstr "Offer goal"
 
-#: aw.ini:class_909
+# aw.ini:class_909
 msgid "Klassi Pakkumise maksetingimused (909) nimi"
+msgstr "Offer payment terms"
+
+# aw.ini:classfolder_29
+msgid "Klassi kataloogi Dokumendid (29) nimi"
+msgstr "Documents"
+
+# aw.ini:classfolder_1
+msgid "Klassi kataloogi Sisuhaldus (1) nimi"
+msgstr "Contentmanagement"
+
+# aw.ini:classfolder_36
+msgid "Klassi kataloogi Liikuv kontor (36) nimi"
+msgstr "Mobile office"
+
+# aw.ini:classfolder_43
+msgid "Klassi kataloogi Tugiteenused (43) nimi"
+msgstr "Support services"
+
+# aw.ini:classfolder_39
+msgid "Klassi kataloogi Sisuobjektid (39) nimi"
+msgstr "Content objects"
+
+# aw.ini:classfolder_56
+msgid "Klassi kataloogi Kiirteade (56) nimi"
+msgstr "Quickmessage"
+
+# aw.ini:classfolder_3
+msgid "Klassi kataloogi Ajahaldus (3) nimi"
+msgstr "Time management"
+
+# aw.ini:classfolder_5
+msgid "Klassi kataloogi Meilinglistid (5) nimi"
+msgstr "Mailinglists"
+
+# aw.ini:classfolder_6
+msgid "Klassi kataloogi Tõlked (6) nimi"
+msgstr "Translations"
+
+# aw.ini:classfolder_7
+msgid "Klassi kataloogi Poed (7) nimi"
+msgstr "Shops"
+
+# aw.ini:classfolder_8
+msgid "Klassi kataloogi Bannerid (8) nimi"
+msgstr "Banners"
+
+# aw.ini:classfolder_13
+msgid "Klassi kataloogi Import / eksport (13) nimi"
+msgstr "Import / export"
+
+# aw.ini:classfolder_14
+msgid "Klassi kataloogi Seadistused (14) nimi"
+msgstr "Settings"
+
+# aw.ini:classfolder_15
+msgid "Klassi kataloogi Kasutajate haldus (15) nimi"
+msgstr "User management"
+
+# aw.ini:classfolder_16
+msgid "Klassi kataloogi Stiilid (16) nimi"
+msgstr "Styles"
+
+# aw.ini:classfolder_17
+msgid "Klassi kataloogi Visuaalne arenduskeskkond (17) nimi"
+msgstr "Visual development environment"
+
+# aw.ini:classfolder_20
+msgid "Klassi kataloogi Klientide objektid (20) nimi"
+msgstr "Client objects"
+
+# aw.ini:classfolder_24
+msgid "Klassi kataloogi Kliendihaldus (24) nimi"
+msgstr "CRM"
+
+# aw.ini:classfolder_25
+msgid "Klassi kataloogi MySQL (25) nimi"
+msgstr "MySQL"
+
+# aw.ini:classfolder_26
+msgid "Klassi kataloogi Kasutusstatistika (26) nimi"
+msgstr "Statistics"
+
+# aw.ini:classfolder_28
+msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
+msgstr "Workflow management"
+
+# aw.ini:classfolder_31
+msgid "Klassi kataloogi Kujundus (31) nimi"
+msgstr "Layout"
+
+# aw.ini:classfolder_32
+msgid "Klassi kataloogi Galeriid (32) nimi"
+msgstr "Galleries"
+
+# aw.ini:classfolder_34
+msgid "Klassi kataloogi SWOT (34) nimi"
+msgstr "SWOT"
+
+# aw.ini:classfolder_37
+msgid "Klassi kataloogi Arendajatele (37) nimi"
+msgstr "Developers"
+
+# aw.ini:classfolder_38
+msgid "Klassi kataloogi Meilid (38) nimi"
+msgstr "Mails"
+
+# aw.ini:classfolder_40
+msgid "Klassi kataloogi Foorumid (40) nimi"
+msgstr "Forums"
+
+# aw.ini:classfolder_4
+msgid "Klassi kataloogi Varia & Vanad (4) nimi"
+msgstr "Various"
+
+# aw.ini:classfolder_10
+msgid "Klassi kataloogi Süsteemi haldus (10) nimi"
+msgstr "Sytem settings"
+
+# aw.ini:classfolder_33
+msgid "Klassi kataloogi Muu sisu (33) nimi"
+msgstr "Other content"
+
+# aw.ini:classfolder_27
+msgid "Klassi kataloogi Saidi ehitamine (27) nimi"
+msgstr "Site components"
+
+# aw.ini:classfolder_18
+msgid "Klassi kataloogi Varia & Vanad (18) nimi"
+msgstr "Various and old"
+
+# aw.ini:classfolder_41
+msgid "Klassi kataloogi Võtmesõnad (41) nimi"
+msgstr "Keywords"
+
+# aw.ini:classfolder_30
+msgid "Klassi kataloogi Varia & Vanad (30) nimi"
+msgstr "Various and old"
+
+# aw.ini:classfolder_2
+msgid "Klassi kataloogi Toetavad objektid (2) nimi"
+msgstr "Supporting objects"
+
+# aw.ini:classfolder_42
+msgid "Klassi kataloogi Objektide haldus (42) nimi"
+msgstr "Object management"
+
+# aw.ini:classfolder_23
+msgid "Klassi kataloogi Objektid A-Z (23) nimi"
+msgstr "Objects A-Z"
+
+# aw.ini:classfolder_35
+msgid "Klassi kataloogi Otsingud (35) nimi"
+msgstr "Searches"
+
+# aw.ini:classfolder_19
+msgid "Klassi kataloogi Töösolevad klassid (19) nimi"
+msgstr "In-progress classes"
+
+# aw.ini:classfolder_21
+msgid "Klassi kataloogi Nähtamatud objektid (21) nimi"
+msgstr "Invisible objects"
+
+# aw.ini:classfolder_12
+msgid "Klassi kataloogi Proovitööd (12) nimi"
+msgstr "Classes in testing"
+
+# aw.ini:classfolder_22
+msgid "Klassi kataloogi Sissepääsud (22) nimi"
+msgstr "Logins"
+
+# aw.ini:classfolder_11
+msgid "Klassi kataloogi Sorteerimata (11) nimi"
+msgstr "Un-sorted"
+
+# aw.ini:classfolder_44
+msgid "Klassi kataloogi Taket (44) nimi"
 msgstr ""
 
+# aw.ini:classfolder_45
+msgid "Klassi kataloogi Profiil (45) nimi"
+msgstr "Profile"
+
+# aw.ini:classfolder_46
+msgid "Klassi kataloogi Ladu (46) nimi"
+msgstr "Warehouse"
+
+# aw.ini:classfolder_47
+msgid "Klassi kataloogi Personalihaldus (47) nimi"
+msgstr "Personnell management"
+
+# aw.ini:classfolder_48
+msgid "Klassi kataloogi Kommuun (48) nimi"
+msgstr "Commune"
+
+# aw.ini:classfolder_49
+msgid "Klassi kataloogi Objektide nimekiri (49) nimi"
+msgstr "Object list"
+
+# aw.ini:classfolder_50
+msgid "Klassi kataloogi Prisma (50) nimi"
+msgstr "Prisma"
+
+# aw.ini:classfolder_51
+msgid "Klassi kataloogi Registrid (51) nimi"
+msgstr "Registers"
+
+# aw.ini:classfolder_52
+msgid "Klassi kataloogi Otto (52) nimi"
+msgstr "Otto"
+
+# aw.ini:classfolder_53
+msgid "Klassi kataloogi Pank (53) nimi"
+msgstr "Bank"
+
+# aw.ini:classfolder_54
+msgid "Klassi kataloogi Ressursihaldus (54) nimi"
+msgstr "Resource management"
+
+# aw.ini:classfolder_55
+msgid "Klassi kataloogi Autentimine (55) nimi"
+msgstr "Authentication"
+
+# aw.ini:classfolder_57
+msgid "Klassi kataloogi Toetavad objektid (57) nimi"
+msgstr "Support objects"
+
+# aw.ini:classfolder_58
+msgid "Klassi kataloogi Tellimused (58) nimi"
+msgstr "Orders"
+
+# aw.ini:classfolder_59
+msgid "Klassi kataloogi Bug-o-matic 3000 (59) nimi"
+msgstr ""

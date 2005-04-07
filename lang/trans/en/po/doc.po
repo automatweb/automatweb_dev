@@ -808,9 +808,9 @@ msgstr ""
 
 #: classes/doc.aw:764
 msgid "Dokument 2.0"
-msgstr ""
+msgstr "Document 2.0"
 
 #: classes/doc.aw:777
 msgid "Dokument (vend)"
-msgstr ""
+msgstr "Document (brother)"
 

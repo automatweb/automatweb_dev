@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 15:13:04 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 12:45:13 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -58,16 +58,16 @@ msgstr ""
 msgid "Omaduse  (job_toolbar) help"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_advised_starttime
-msgid "Omaduse Soovitav algusaeg (advised_starttime) caption"
+#: classes/mrp/mrp_job.aw:prop_workflow_errors
+msgid "Omaduse  (workflow_errors) caption"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_advised_starttime_comment
-msgid "Omaduse Soovitav algusaeg (advised_starttime) kommentaar"
+#: classes/mrp/mrp_job.aw:prop_workflow_errors_comment
+msgid "Omaduse  (workflow_errors) kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_advised_starttime_help
-msgid "Omaduse Soovitav algusaeg (advised_starttime) help"
+#: classes/mrp/mrp_job.aw:prop_workflow_errors_help
+msgid "Omaduse  (workflow_errors) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_started
@@ -104,6 +104,66 @@ msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_resource_help
 msgid "Omaduse Ressurss (resource) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_project
+msgid "Omaduse Projekt (project) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_project_comment
+msgid "Omaduse Projekt (project) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_project_help
+msgid "Omaduse Projekt (project) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_exec_order
+msgid "Omaduse Töö jrk. nr. (exec_order) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_exec_order_comment
+msgid "Omaduse Töö jrk. nr. (exec_order) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_exec_order_help
+msgid "Omaduse Töö jrk. nr. (exec_order) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_starttime
+msgid "Omaduse Plaanitud töösseminekuaeg (starttime) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_starttime_comment
+msgid "Omaduse Plaanitud töösseminekuaeg (starttime) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_starttime_help
+msgid "Omaduse Plaanitud töösseminekuaeg (starttime) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_planned_length
+msgid "Omaduse Planeeritud kestus (h) (planned_length) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_planned_length_comment
+msgid "Omaduse Planeeritud kestus (h) (planned_length) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_planned_length_help
+msgid "Omaduse Planeeritud kestus (h) (planned_length) help"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_state
+msgid "Omaduse Staatus (state) caption"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_state_comment
+msgid "Omaduse Staatus (state) kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:prop_state_help
+msgid "Omaduse Staatus (state) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:prop_length
@@ -154,30 +214,6 @@ msgstr ""
 msgid "Omaduse Varaseim alustusaeg (minstart) help"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_project
-msgid "Omaduse Projekt (project) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_project_comment
-msgid "Omaduse Projekt (project) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_project_help
-msgid "Omaduse Projekt (project) help"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_exec_order
-msgid "Omaduse Töö jrk. nr. (exec_order) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_exec_order_comment
-msgid "Omaduse Töö jrk. nr. (exec_order) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_exec_order_help
-msgid "Omaduse Töö jrk. nr. (exec_order) help"
-msgstr ""
-
 #: classes/mrp/mrp_job.aw:prop_prerequisites
 msgid "Omaduse Eeldustööd (prerequisites) caption"
 msgstr ""
@@ -190,40 +226,16 @@ msgstr ""
 msgid "Omaduse Eeldustööd (prerequisites) help"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_starttime
-msgid "Omaduse Plaanitud töösseminekuaeg (starttime) caption"
+#: classes/mrp/mrp_job.aw:prop_advised_starttime
+msgid "Omaduse Soovitav algusaeg (advised_starttime) caption"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_starttime_comment
-msgid "Omaduse Plaanitud töösseminekuaeg (starttime) kommentaar"
+#: classes/mrp/mrp_job.aw:prop_advised_starttime_comment
+msgid "Omaduse Soovitav algusaeg (advised_starttime) kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:prop_starttime_help
-msgid "Omaduse Plaanitud töösseminekuaeg (starttime) help"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_planned_length
-msgid "Omaduse Planeeritud kestus (h) (planned_length) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_planned_length_comment
-msgid "Omaduse Planeeritud kestus (h) (planned_length) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_planned_length_help
-msgid "Omaduse Planeeritud kestus (h) (planned_length) help"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_state
-msgid "Omaduse Staatus (state) caption"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_state_comment
-msgid "Omaduse Staatus (state) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_job.aw:prop_state_help
-msgid "Omaduse Staatus (state) help"
+#: classes/mrp/mrp_job.aw:prop_advised_starttime_help
+msgid "Omaduse Soovitav algusaeg (advised_starttime) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:group_general
@@ -232,6 +244,10 @@ msgstr ""
 
 #: classes/mrp/mrp_job.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:group_workflow
+msgid "Grupi Töövoog (workflow) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE

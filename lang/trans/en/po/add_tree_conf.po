@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/add_tree_conf.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/admin/add_tree_conf.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/add_tree_conf.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
+msgstr "Comment"
 
 #: classes/admin/add_tree_conf.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/admin/add_tree_conf.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/admin/add_tree_conf.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
@@ -60,21 +60,21 @@ msgstr ""
 
 #: classes/admin/add_tree_conf.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/admin/add_tree_conf.aw:68
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/admin/add_tree_conf.aw:73
 msgid "N&auml;htav"
-msgstr ""
+msgstr "Visible"
 
 #: classes/admin/add_tree_conf.aw:79
 msgid "Kasutatav"
-msgstr ""
+msgstr "Usable"
 
 #: classes/admin/add_tree_conf.aw:86
 msgid "Aliasena lisatav"
-msgstr ""
+msgstr "Can be used as alias"
 

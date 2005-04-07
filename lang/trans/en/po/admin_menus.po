@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:17 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 12:45:12 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,92 +9,118 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/admin/admin_menus.aw:239
 msgid "Ava"
-msgstr ""
+msgstr "Open"
 
 #: classes/admin/admin_menus.aw:249 classes/admin/admin_menus.aw:1372
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/admin/admin_menus.aw:257 classes/admin/admin_menus.aw:1341
 msgid "L&otilde;ika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/admin/admin_menus.aw:266 classes/admin/admin_menus.aw:1348
 msgid "Kopeeri"
-msgstr ""
+msgstr "Copy"
 
 #: classes/admin/admin_menus.aw:274
 msgid "Kustutada valitud objektid?"
-msgstr ""
+msgstr "Delete selected objects?"
 
 #: classes/admin/admin_menus.aw:278 classes/admin/admin_menus.aw:1365
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/admin/admin_menus.aw:516
 msgid "Vali kuidas objekte kopeerida"
-msgstr ""
+msgstr "Select object copying method"
 
 #: classes/admin/admin_menus.aw:705
 msgid "Menyyde importimisel tekkis viga real %s "
-msgstr ""
+msgstr "Error on line %s in the menu import file"
 
 #: classes/admin/admin_menus.aw:722
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s "
-msgstr ""
+msgstr "Could not find parent menu on line %s of the menu import file"
 
 #: classes/admin/admin_menus.aw:1162
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: classes/admin/admin_menus.aw:1177
 msgid "Mitteaktiivne"
-msgstr ""
+msgstr "Not active"
 
-#: classes/admin/admin_menus.aw:1177
+#: classes/admin/admin_menus.aw:1177 classes/admin/admin_menus.aw:1611
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/admin/admin_menus.aw:1281
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/admin/admin_menus.aw:1323
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/admin/admin_menus.aw:1331
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/admin/admin_menus.aw:1357
 msgid "Kleebi"
-msgstr ""
+msgstr "Paste"
 
 #: classes/admin/admin_menus.aw:1381
 msgid "Uuenda"
-msgstr ""
+msgstr "Refresh"
 
 #: classes/admin/admin_menus.aw:1388
 msgid "Impordi"
-msgstr ""
+msgstr "Import"
 
 #: classes/admin/admin_menus.aw:1394
 msgid "Suured ikoonid"
-msgstr ""
+msgstr "Big icons"
 
 #: classes/admin/admin_menus.aw:1395
 msgid "Väiksed ikoonid"
-msgstr ""
+msgstr "Small icons"
 
 #: classes/admin/admin_menus.aw:1396
 msgid "Detailne vaade"
-msgstr ""
+msgstr "Detail view"
 
 #: classes/admin/admin_menus.aw:1519
 msgid "Valitud pole &uuml;htegi objekti!"
-msgstr ""
+msgstr "No objects selected!"
 
+#: classes/admin/admin_menus.aw:1596
+msgid "Nimi"
+msgstr "Name"
+
+#: classes/admin/admin_menus.aw:1605
+msgid "Jrk"
+msgstr "Ord"
+
+#: classes/admin/admin_menus.aw:1620
+msgid "Muutja"
+msgstr "Modifiedby"
+
+#: classes/admin/admin_menus.aw:1630
+msgid "Muudetud"
+msgstr "Modified"
+
+#: classes/admin/admin_menus.aw:1643
+msgid "T&uuml;&uuml;p"
+msgstr "Type"
+
+#: classes/admin/admin_menus.aw:1653
+msgid "Tegevus"
+msgstr "Action"
+
+#: classes/admin/admin_menus.aw:1662
+msgid "<a href='javascript:selall()'>Vali</a>"
+msgstr "<a href='javascript:selall()'>Select&nbsp;all</a>"

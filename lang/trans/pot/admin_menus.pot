@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:44 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 12:45:12 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1177
+#: classes/admin/admin_menus.aw:1177 classes/admin/admin_menus.aw:1611
 msgid "Aktiivne"
 msgstr ""
 
@@ -96,5 +96,33 @@ msgstr ""
 
 #: classes/admin/admin_menus.aw:1519
 msgid "Valitud pole &uuml;htegi objekti!"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1596
+msgid "Nimi"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1605
+msgid "Jrk"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1620
+msgid "Muutja"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1630
+msgid "Muudetud"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1643
+msgid "T&uuml;&uuml;p"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1653
+msgid "Tegevus"
+msgstr ""
+
+#: classes/admin/admin_menus.aw:1662
+msgid "<a href='javascript:selall()'>Vali</a>"
 msgstr ""
 

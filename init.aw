@@ -280,6 +280,11 @@ function init_config($arr)
 				{
 					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = t("Klassi ".$cld["name"]." ($clid) nimi");
 				}
+
+				foreach($GLOBALS["cfg"]["__default"]["classfolders"] as $clid => $cld)
+				{
+					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = t("Klassi kataloogi ".$cld["name"]." ($clid) nimi");
+				}
 			}
 		}
 	};
@@ -406,7 +411,7 @@ function classload($args)
 
 				if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
-					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".$lib.".aw";
+					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
 					if (file_exists($trans_fn))
 					{
 						require_once($trans_fn);
@@ -490,7 +495,7 @@ function get_instance($class,$args = array(), $errors = true)
 		// also load translations
 		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
-			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".$class.".aw";
+			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);

@@ -1,0 +1,31 @@
+<?php
+$GLOBALS["TRANS"]["Ava"] = "Open";
+$GLOBALS["TRANS"]["Muuda"] = "Change";
+$GLOBALS["TRANS"]["L&otilde;ika"] = "Cut";
+$GLOBALS["TRANS"]["Kopeeri"] = "Copy";
+$GLOBALS["TRANS"]["Kustutada valitud objektid?"] = "Delete selected objects?";
+$GLOBALS["TRANS"]["Kustuta"] = "Delete";
+$GLOBALS["TRANS"]["Vali kuidas objekte kopeerida"] = "Select object copying method";
+$GLOBALS["TRANS"]["Menyyde importimisel tekkis viga real %s "] = "Error on line %s in the menu import file";
+$GLOBALS["TRANS"]["Menyyde importimisel ei leidnud parent menyyd real %s "] = "Could not find parent menu on line %s of the menu import file";
+$GLOBALS["TRANS"]["Link"] = "Link";
+$GLOBALS["TRANS"]["Mitteaktiivne"] = "Not active";
+$GLOBALS["TRANS"]["Aktiivne"] = "Active";
+$GLOBALS["TRANS"]["Uus"] = "New";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
+$GLOBALS["TRANS"]["Otsi"] = "Search";
+$GLOBALS["TRANS"]["Kleebi"] = "Paste";
+$GLOBALS["TRANS"]["Uuenda"] = "Refresh";
+$GLOBALS["TRANS"]["Impordi"] = "Import";
+$GLOBALS["TRANS"]["Suured ikoonid"] = "Big icons";
+$GLOBALS["TRANS"]["Väiksed ikoonid"] = "Small icons";
+$GLOBALS["TRANS"]["Detailne vaade"] = "Detail view";
+$GLOBALS["TRANS"]["Valitud pole &uuml;htegi objekti!"] = "No objects selected!";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Jrk"] = "Ord";
+$GLOBALS["TRANS"]["Muutja"] = "Modifiedby";
+$GLOBALS["TRANS"]["Muudetud"] = "Modified";
+$GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
+$GLOBALS["TRANS"]["Tegevus"] = "Action";
+$GLOBALS["TRANS"]["<a href='javascript:selall()'>Vali</a>"] = "<a href='javascript:selall()'>Select&nbsp;all</a>";
+?>

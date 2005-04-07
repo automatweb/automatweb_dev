@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 15:13:09 +0300\n"
+"POT-Creation-Date: Wed,  6 Apr 2005 21:45:40 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1428,5 +1428,237 @@ msgstr ""
 
 #: aw.ini:class_909
 msgid "Klassi Pakkumise maksetingimused (909) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_29
+msgid "Klassi kataloogi Dokumendid (29) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_1
+msgid "Klassi kataloogi Sisuhaldus (1) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_36
+msgid "Klassi kataloogi Liikuv kontor (36) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_43
+msgid "Klassi kataloogi Tugiteenused (43) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_39
+msgid "Klassi kataloogi Sisuobjektid (39) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_56
+msgid "Klassi kataloogi Kiirteade (56) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_3
+msgid "Klassi kataloogi Ajahaldus (3) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_5
+msgid "Klassi kataloogi Meilinglistid (5) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_6
+msgid "Klassi kataloogi Tõlked (6) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_7
+msgid "Klassi kataloogi Poed (7) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_8
+msgid "Klassi kataloogi Bannerid (8) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_13
+msgid "Klassi kataloogi Import / eksport (13) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_14
+msgid "Klassi kataloogi Seadistused (14) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_15
+msgid "Klassi kataloogi Kasutajate haldus (15) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_16
+msgid "Klassi kataloogi Stiilid (16) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_17
+msgid "Klassi kataloogi Visuaalne arenduskeskkond (17) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_20
+msgid "Klassi kataloogi Klientide objektid (20) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_24
+msgid "Klassi kataloogi Kliendihaldus (24) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_25
+msgid "Klassi kataloogi MySQL (25) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_26
+msgid "Klassi kataloogi Kasutusstatistika (26) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_28
+msgid "Klassi kataloogi Töövoogude juhtimine (28) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_31
+msgid "Klassi kataloogi Kujundus (31) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_32
+msgid "Klassi kataloogi Galeriid (32) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_34
+msgid "Klassi kataloogi SWOT (34) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_37
+msgid "Klassi kataloogi Arendajatele (37) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_38
+msgid "Klassi kataloogi Meilid (38) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_40
+msgid "Klassi kataloogi Foorumid (40) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_4
+msgid "Klassi kataloogi Varia & Vanad (4) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_10
+msgid "Klassi kataloogi Süsteemi haldus (10) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_33
+msgid "Klassi kataloogi Muu sisu (33) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_27
+msgid "Klassi kataloogi Saidi ehitamine (27) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_18
+msgid "Klassi kataloogi Varia & Vanad (18) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_41
+msgid "Klassi kataloogi Võtmesõnad (41) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_30
+msgid "Klassi kataloogi Varia & Vanad (30) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_2
+msgid "Klassi kataloogi Toetavad objektid (2) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_42
+msgid "Klassi kataloogi Objektide haldus (42) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_23
+msgid "Klassi kataloogi Objektid A-Z (23) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_35
+msgid "Klassi kataloogi Otsingud (35) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_19
+msgid "Klassi kataloogi Töösolevad klassid (19) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_21
+msgid "Klassi kataloogi Nähtamatud objektid (21) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_12
+msgid "Klassi kataloogi Proovitööd (12) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_22
+msgid "Klassi kataloogi Sissepääsud (22) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_11
+msgid "Klassi kataloogi Sorteerimata (11) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_44
+msgid "Klassi kataloogi Taket (44) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_45
+msgid "Klassi kataloogi Profiil (45) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_46
+msgid "Klassi kataloogi Ladu (46) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_47
+msgid "Klassi kataloogi Personalihaldus (47) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_48
+msgid "Klassi kataloogi Kommuun (48) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_49
+msgid "Klassi kataloogi Objektide nimekiri (49) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_50
+msgid "Klassi kataloogi Prisma (50) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_51
+msgid "Klassi kataloogi Registrid (51) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_52
+msgid "Klassi kataloogi Otto (52) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_53
+msgid "Klassi kataloogi Pank (53) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_54
+msgid "Klassi kataloogi Ressursihaldus (54) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_55
+msgid "Klassi kataloogi Autentimine (55) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_57
+msgid "Klassi kataloogi Toetavad objektid (57) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_58
+msgid "Klassi kataloogi Tellimused (58) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_59
+msgid "Klassi kataloogi Bug-o-matic 3000 (59) nimi"
 msgstr ""
 

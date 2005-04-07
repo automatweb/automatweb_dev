@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.98 2005/04/04 10:29:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.99 2005/04/07 09:53:52 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -850,7 +850,7 @@ class admin_menus extends aw_template
 
 		if (!$this->co_id)
 		{
-			$this->t->parse_xml_def($this->cfg["basedir"]."/xml/menuedit/right_frame_default.xml");
+			$this->_init_default_rf_table($this->t);
 		}
 		else
 		{
@@ -1576,6 +1576,95 @@ class admin_menus extends aw_template
 				}
 			}
 		}
+	}
+
+	function _init_default_rf_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "icon",
+			"align" => "center",
+			"chgbgcolor" => "cutcopied" ,
+			"width" => "22"
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"align" => "left",
+			"talign" => "center",
+			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
+			"caption" => t("Nimi")
+		));
+		
+		$t->define_field(array(
+			"name" => "jrk",
+			"align" => "center",
+			"width" => 10,
+			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
+			"caption" => t("Jrk"),
+			"numeric" => "yea"
+		));
+		
+		$t->define_field(array(
+			"name" => "status",
+			"caption" => t("Aktiivne"),
+			"width" => 10,
+			"align" => "center",
+			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
+		));
+		
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"width" => 50,
+			"align" => "center",
+			"talign" => "center",
+			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
+		));
+
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"width" => 100,
+			"align" => "center",
+			"talign" => "center",
+			"type" => "time",
+			"format" => "d-M-y / H:i",
+			"sortable" => 1,
+			"numeric" => "yea",
+			"chgbgcolor" => "cutcopied",
+		));
+		
+		$t->define_field(array(
+			"name" => "class_id",
+			"caption" => t("T&uuml;&uuml;p"),
+			"width" => 100,
+			"align" => "center",
+			"talign" => "center",
+			"sortable" => 1,
+			"chgbgcolor" => "cutcopied",
+		));
+
+		$t->define_field(array(
+			"name" => "java",
+			"caption" => t("Tegevus"),
+			"width" => 30,
+			"align" => "center",
+			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
+		));
+
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("<a href='javascript:selall()'>Vali</a>"),
+			"width" => 30,
+			"align" => "center",
+			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
+		));
 	}
 }
 ?>
