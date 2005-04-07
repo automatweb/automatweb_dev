@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.39 2005/04/04 08:46:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.40 2005/04/07 12:48:41 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -742,6 +742,16 @@ class aw_site extends class_base
 
 		echo t("did user object names <br>\n");
 		flush();
+
+		echo t("Convert acl to new version");
+		flush();
+		// convert acl to new version
+		$c = get_instance("admin/converters");
+		$c->acl_to_objtbl(array("no_die" => 1));
+		$ini_opts["acl.use_new_acl"] = 1;
+		$ini_opts["document.use_new_parser"] = 1;
+		$ini_opts["promo.version"] = 2;
+
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
