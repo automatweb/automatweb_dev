@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.9 2005/04/07 13:52:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.10 2005/04/07 14:32:06 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -343,11 +343,11 @@ class otv_ds_pp_search extends class_base
 				$tdef["numeric"] = 1;
 			}
 			$t->define_field($tdef);
+		}
 
-			if ($td["__defaultsort"] == $tf)
-			{
-				$t->set_default_sortby($tf);
-			}
+		if ($td["__defaultsort"] != "")
+		{	
+			$t->set_default_sortby("aw_".$td["__defaultsort"]);
 		}
 	}
 
@@ -382,7 +382,13 @@ class otv_ds_pp_search extends class_base
 				list($_d, $_m, $_y) = explode(".", $row[$date_col]);
 				$row[$date_col] = mktime(4,0,0, $_m, $_d, $_y);
 			}
-			$t->define_data($row);
+
+			$ta = array();
+			foreach($row as $k => $v)
+			{
+				$ta[$k] = convert_unicode($v);
+			}
+			$t->define_data($ta);
 		}
 		$t->sort_by();
 		return;
