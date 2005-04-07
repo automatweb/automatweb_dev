@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.66 2005/04/05 13:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.67 2005/04/07 07:49:20 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -861,19 +861,22 @@ class promo extends class_base
 				{
 					$docid = array_values(safe_array($o->meta("content_documents")));
 
-					// prefetch docs in list so we get them in one query
-					$ol = new object_list(array("oid" => $docid));
-					$ol->arr();
-					$nids = $this->make_keys($ol->ids());
-					$tmp = array();	
-					foreach($docid as $_id)
+					if (count($docid))
 					{
-						if (isset($nids[$_id]))
+						// prefetch docs in list so we get them in one query
+						$ol = new object_list(array("oid" => $docid));
+						$ol->arr();
+						$nids = $this->make_keys($ol->ids());
+						$tmp = array();	
+						foreach($docid as $_id)
 						{
-							$tmp[] = $_id;
+							if (isset($nids[$_id]))
+							{
+								$tmp[] = $_id;
+							}
 						}
+						$docid = $tmp;
 					}
-					$docid = $tmp;
 				}
 				else
 				{
@@ -1231,9 +1234,14 @@ class promo extends class_base
 		// get list of docs for promo
 		$si = get_instance("contentmgmt/site_show");
 		
-		$o->set_meta("content_documents", $this->make_keys($si->get_default_document(array(
+		$dd = $si->get_default_document(array(
 			"obj" => $o
-		))));
+		));
+		if (!is_array($dd))
+		{
+			$dd = array($dd);
+		}
+		$o->set_meta("content_documents", $this->make_keys($dd));
 
 		$o->set_meta("version", 2);
 		$o->save();
