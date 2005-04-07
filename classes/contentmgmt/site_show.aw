@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.129 2005/04/07 12:14:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.130 2005/04/07 12:22:03 kristo Exp $
 
 /*
 
@@ -1939,7 +1939,7 @@ class site_show extends class_base
 	// builds HTML popups
 	function build_popups()
 	{
-		if ($_GET["print"] == 1)
+		if ($_GET["print"] == 1 || true)
 		{
 			return;
 		}
