@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.2 2005/04/05 13:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/vcl/multi_calendar.aw,v 1.3 2005/04/07 14:21:50 duke Exp $
 class multi_calendar extends aw_template
 {
 	function multi_calendar()
@@ -21,6 +21,8 @@ class multi_calendar extends aw_template
 
 		$search_calendars = aw_global_get($prop["name"] . "_calendars");
 		$search_duration = aw_global_get($prop["name"] . "_duration");
+		$search_from = aw_global_get($prop["name"] . "_from");
+		$search_to = aw_global_get($prop["name"] . "_to");
 
 		//aw_session_del($prop["name"] . "_calendars");
 		//aw_session_del($prop["name"] . "_duration");
@@ -39,6 +41,10 @@ class multi_calendar extends aw_template
 			"type" => "RELTYPE_OTHER_CALENDAR",
 		));
 
+		load_vcl("date_edit");
+		$search_from_tm = date_edit::get_timestamp($search_from);
+		$search_to_tm = date_edit::get_timestamp($search_to);
+
 		$options = array();
 
 		foreach($other_conns as $conn)
@@ -54,17 +60,58 @@ class multi_calendar extends aw_template
 			"orient" => "vertical",
 			"multiple" => 1,
 			"options" => $options,
+			"edit_links" => 1,
 			"value" => $search_calendars,
+		);
+		
+		// set default search range
+		if (!$search_from)
+		{
+			$search_from = time();
+		};
+		
+		if (!$search_to)
+		{
+			$search_to = $search_from + 7 * 86400;
+		};
+
+		$name = $prop["name"] . "_from";
+
+		$rv[$name] = array(
+			"name" => $name,
+			"caption" => t("Alates"),
+			"type" => "date_select",
+			"value" => $search_from,
+		);
+		
+		$name = $prop["name"] . "_to";
+
+		$rv[$name] = array(
+			"name" => $name,
+			"caption" => t("Kuni"),
+			"type" => "date_select",
+			"value" => $search_to,
 		);
 
 
 		$name = $prop["name"] . "_duration";
+		if (empty($search_duration))
+		{
+			$search_duration = array("hour" => 2,"minute" => 0);
+		};
 		$rv[$name] = array(
 			"name" => $name,
 			"caption" => t("Otsitava aja pikkus (hh:mm)"),
-			"type" => "textbox",
-			"size" => 5,
+			"type" => "time_select",
 			"value" => $search_duration,
+			"minute_step" => 15,
+		);
+		
+		$name = $prop["name"] . "_sbt";
+		$rv[$name] = array(
+			"name" => $name,
+			"caption" => t("Otsi"),
+			"type" => "submit",
 		);
 
 		// search only of there were any calendars chosen
@@ -72,8 +119,8 @@ class multi_calendar extends aw_template
 		{
 			$ol = new object_list(array(
 				"class_id" => CL_PLANNER,
-				"lang_id" => array(),
 				"oid" => $search_calendars,
+				"lang_id" => array(),
 				"site_id" => array(),
 			));
 
@@ -107,11 +154,18 @@ class multi_calendar extends aw_template
 
 				// start from midnight today
 				list($d,$m,$y) = explode("-",date("d-m-Y"));
-				$start_tm = date("U",mktime(0,0,0,$m,$d,$y));
-				// and look ahead for the next 7 days
-				$end_tm = time() + (7 * 86400);
 
-				list($hour,$minute) = explode(":",$search_duration);
+				$start_tm = $search_from_tm;
+				$end_tm = $search_to_tm;
+
+				// and look ahead for the next 7 days
+				//$start_tm = date("U",mktime(0,0,0,$m,$d,$y));
+				//$end_tm = time() + (7 * 86400);
+
+				$hour = $search_duration["hour"];
+				$minute = $search_duration["minute"];
+
+				//list($hour,$minute) = explode(":",$search_duration);
 
 				$diff = ($hour * 3600) + ($minute * 60);
 				$slices = array();
@@ -213,6 +267,13 @@ class multi_calendar extends aw_template
 					"options" => $opts,
 					"caption" => t("Leitud ajad"),
 				);
+		
+				$name = $prop["name"] . "_sbt_confirm";
+				$rv[$name] = array(
+					"name" => $name,
+					"caption" => t("Kinnita"),
+					"type" => "submit",
+				);
 
 
 				/*
@@ -232,20 +293,12 @@ class multi_calendar extends aw_template
 	function process_vcl_property($arr)
 	{
 		$name = $arr["prop"]["name"];
-		//print "interesting data<br>";
 
 		$calendars = $arr["request"]["${name}_calendars"];
 		$duration = $arr["request"]["{$name}_duration"];
 		$selected_date = $arr["request"]["{$name}_select_date"];
-
-		
-
-		
-
-		//print "sd = $selected_date<br>";
-		//print "kalendrid, millest otsida";
-		//arr($calendars);
-
+		$search_from = $arr["request"]["{$name}_from"];
+		$search_to = $arr["request"]["{$name}_to"];
 
 		if (sizeof($calendars) > 0)
 		{
@@ -256,56 +309,25 @@ class multi_calendar extends aw_template
 				{
 					$cal_obj = new object($calendar);
 					$parent = $cal_obj->prop("event_folder");
-					//print "pr = $parent<br>";
 					$event_brother = $event_obj->create_brother($parent);
 					$event_bo = new object($event_brother);
 					$event_bo->set_prop("start1",$selected_date);
 					$event_bo->save();
-					//print "<br>";
 				};
-				//print "sd = $selected_date<br>";
-				//arr($arr);
 				$event_obj->set_prop("start1",$selected_date);
 				$event_obj->save();
 
 
 			};
-			aw_session_set("${name}_calendars",$calendars);
-			aw_session_set("${name}_duration",$duration);
-			// nii, aga ma pean mingit datat edasi andma ju. 
-			// kuidas ma seda teen?
 
 		}
+
+		// XXX: that sucks.
+		aw_session_set("${name}_calendars",$calendars);
+		aw_session_set("${name}_duration",$duration);
+		aw_session_set("${name}_from",$search_from);
+		aw_session_set("${name}_to",$search_to);
 			
-
-		//print "kestvus";
-		//arr($duration);
-
-
-
-
-
-		/*
-		$event_obj  = $arr["obj_inst"];
-
-		$parents = array();
-		
-		$planners = new object_list(array(
-			"class_id" => CL_PLANNER,
-			"status" => STAT_ACTIVE,
-			"site_id" => array(),
-		));
-
-		foreach($planners->arr() as $planner_obj)
-		{
-			if (is_oid($planner_obj->prop("event_folder")))
-			{
-				$parents[] = $planner_obj->prop("event_folder");
-			};
-		};		
-		*/
-
-		//arr($arr);
 	}
 
 
