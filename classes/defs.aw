@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.183 2005/04/07 07:48:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.184 2005/04/07 11:30:49 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -45,6 +45,16 @@ if (!defined("DEFS"))
 		$retval = str_replace(chr(195).chr(182), "&ouml;", $retval);
 		$retval = str_replace(chr(195).chr(150), "&Ouml;", $retval);
 
+		$retval = str_replace(chr(197).chr(161), "&scaron;", $retval);
+
+		/*if (aw_global_get("uid") == "struktuur")
+		{
+			echo "source = $source <br>";
+			for ($i = 0; $i < strlen($source); $i++)
+			{
+				echo "char at pos $i = ".ord($source{$i})." let = ".$source{$i}." <br>";
+			}
+		}*/
 
 		$retval = str_replace(chr(154), "&Scaron;", $retval);
 
