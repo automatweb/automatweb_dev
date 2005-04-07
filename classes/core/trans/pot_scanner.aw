@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.19 2005/04/07 07:51:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.20 2005/04/07 07:56:59 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -339,6 +339,7 @@ class pot_scanner extends core
 
 		$lines = file($from_file);
 		$cnt = count($lines);
+		$first_msg = true;
 		for($i = 0; $i < $cnt;  $i++)
 		{
 			$line = $lines[$i];
@@ -365,20 +366,31 @@ class pot_scanner extends core
 				// write msgid/msgstr pair
 				if ($str != "")
 				{
-					$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($msgid)."\"] = \"".$this->_code_quote($str)."\";\n";
+					if (!$first_msg)
+					{
+						$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($msgid)."\"] = \"".$this->_code_quote($str)."\";\n";
+					}
+					else
+					{
+						// skip the po header
+						$first_msg = false;
+					}
 				}
 			}
 		}
 
-		$fp = fopen($to_file, "w");
-		fwrite($fp, "<?php\n");
-		foreach($f as $e)
+		if (count($f))
 		{
-			fwrite($fp, $e);
+			$fp = fopen($to_file, "w");
+			fwrite($fp, "<?php\n");
+			foreach($f as $e)
+			{
+				fwrite($fp, $e);
+			}
+			fwrite($fp, "?>");
+			fclose($fp);
+			echo "wrote file $to_file \n";
 		}
-		fwrite($fp, "?>");
-		fclose($fp);
-		echo "wrote file $to_file \n";
 	}
 
 	function _code_quote($str)
