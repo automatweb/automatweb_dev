@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:48 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,46 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/vcl/rte.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/vcl/rte.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-#: classes/vcl/rte.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
 
 #: classes/vcl/rte.aw:75
 msgid "Bold"
@@ -90,35 +50,35 @@ msgstr ""
 msgid "Tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:159
+#: classes/vcl/rte.aw:160
 msgid "Lisa tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:167
+#: classes/vcl/rte.aw:168
 msgid "Lisa tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:173
+#: classes/vcl/rte.aw:174
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:181
+#: classes/vcl/rte.aw:182
 msgid "Kustuta tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:187
+#: classes/vcl/rte.aw:188
 msgid "Kustuta rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:195
+#: classes/vcl/rte.aw:196
 msgid "Poolita rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:200
+#: classes/vcl/rte.aw:201
 msgid "Poolita tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:210
+#: classes/vcl/rte.aw:211
 msgid "HTML"
 msgstr ""
 

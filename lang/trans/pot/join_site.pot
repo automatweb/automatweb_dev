@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:30 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/join/join_site.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url
 msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
@@ -248,10 +212,6 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_jm_texts_help
 msgid "Omaduse  (jm_texts) help"
-msgstr ""
-
-#: classes/contentmgmt/join/join_site.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_props

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:06 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:27 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,18 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:prop_header
 msgid "Omaduse  (header) caption"
@@ -82,18 +70,6 @@ msgstr ""
 msgid "Omaduse  (file) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_name
-msgid "Omaduse  (name) caption"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_name_comment
-msgid "Omaduse  (name) kommentaar"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_name_help
-msgid "Omaduse  (name) help"
-msgstr ""
-
 #: classes/applications/stat_report/stat_uploader.aw:prop_email
 msgid "Omaduse  (email) caption"
 msgstr ""
@@ -104,18 +80,6 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:prop_email_help
 msgid "Omaduse  (email) help"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_comment
-msgid "Omaduse  (comment) caption"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_comment_comment
-msgid "Omaduse  (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:prop_comment_help
-msgid "Omaduse  (comment) help"
 msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE
@@ -140,10 +104,6 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:prop_submit_help
 msgid "Omaduse  (submit) help"
-msgstr ""
-
-#: classes/applications/stat_report/stat_uploader.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:group_

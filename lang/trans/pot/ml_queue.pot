@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:45 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,63 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: :prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: :prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: :prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: :prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: :prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: :prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: :prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: :prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-#: :prop_q_status
+#: classes/applications/mailinglist/ml_queue.aw:prop_q_status
 msgid "Omaduse Staatus (q_status) caption"
 msgstr ""
 
-#: :prop_q_status_comment
+#: classes/applications/mailinglist/ml_queue.aw:prop_q_status_comment
 msgid "Omaduse Staatus (q_status) kommentaar"
 msgstr ""
 
-#: :prop_q_status_help
+#: classes/applications/mailinglist/ml_queue.aw:prop_q_status_help
 msgid "Omaduse Staatus (q_status) help"
 msgstr ""
 
-#: :group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: :group_
+#: classes/applications/mailinglist/ml_queue.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
 
-#: :550
+#: classes/applications/mailinglist/ml_queue.aw:550
 msgid "done\n<br>"
 msgstr ""
 

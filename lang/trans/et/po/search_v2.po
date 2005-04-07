@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:52 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -32,30 +32,6 @@ msgstr ""
 
 #: classes/search_v2.aw:prop_server_help
 msgid "Omaduse  (server) help"
-msgstr ""
-
-#: classes/search_v2.aw:prop_name
-msgid "Omaduse  (name) caption"
-msgstr ""
-
-#: classes/search_v2.aw:prop_name_comment
-msgid "Omaduse  (name) kommentaar"
-msgstr ""
-
-#: classes/search_v2.aw:prop_name_help
-msgid "Omaduse  (name) help"
-msgstr ""
-
-#: classes/search_v2.aw:prop_comment
-msgid "Omaduse  (comment) caption"
-msgstr ""
-
-#: classes/search_v2.aw:prop_comment_comment
-msgid "Omaduse  (comment) kommentaar"
-msgstr ""
-
-#: classes/search_v2.aw:prop_comment_help
-msgid "Omaduse  (comment) help"
 msgstr ""
 
 #: classes/search_v2.aw:prop_class_id
@@ -104,18 +80,6 @@ msgstr ""
 
 #: classes/search_v2.aw:prop_modifiedby_help
 msgid "Omaduse  (modifiedby) help"
-msgstr ""
-
-#: classes/search_v2.aw:prop_status
-msgid "Omaduse  (status) caption"
-msgstr ""
-
-#: classes/search_v2.aw:prop_status_comment
-msgid "Omaduse  (status) kommentaar"
-msgstr ""
-
-#: classes/search_v2.aw:prop_status_help
-msgid "Omaduse  (status) help"
 msgstr ""
 
 #: classes/search_v2.aw:prop_alias
@@ -188,10 +152,6 @@ msgstr ""
 
 #: classes/search_v2.aw:prop_result_table_help
 msgid "Omaduse  (result_table) help"
-msgstr ""
-
-#: classes/search_v2.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/search_v2.aw:group_search

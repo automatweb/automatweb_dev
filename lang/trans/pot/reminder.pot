@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:37 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,139 +10,111 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: :prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: :prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: :prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: :prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: :prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: :prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: :prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: :prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-#: :prop_remind
+#: classes/contentmgmt/reminder.aw:prop_remind
 msgid "Omaduse Millal meelde tuletab (remind) caption"
 msgstr ""
 
-#: :prop_remind_comment
+#: classes/contentmgmt/reminder.aw:prop_remind_comment
 msgid "Omaduse Millal meelde tuletab (remind) kommentaar"
 msgstr ""
 
-#: :prop_remind_help
+#: classes/contentmgmt/reminder.aw:prop_remind_help
 msgid "Omaduse Millal meelde tuletab (remind) help"
 msgstr ""
 
-#: :prop_sender
+#: classes/contentmgmt/reminder.aw:prop_sender
 msgid "Omaduse Saatja e-mail  (sender) caption"
 msgstr ""
 
-#: :prop_sender_comment
+#: classes/contentmgmt/reminder.aw:prop_sender_comment
 msgid "Omaduse Saatja e-mail  (sender) kommentaar"
 msgstr ""
 
-#: :prop_sender_help
+#: classes/contentmgmt/reminder.aw:prop_sender_help
 msgid "Omaduse Saatja e-mail  (sender) help"
 msgstr ""
 
-#: :prop_emails_text
+#: classes/contentmgmt/reminder.aw:prop_emails_text
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) caption"
 msgstr ""
 
-#: :prop_emails_text_comment
+#: classes/contentmgmt/reminder.aw:prop_emails_text_comment
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) kommentaar"
 msgstr ""
 
-#: :prop_emails_text_help
+#: classes/contentmgmt/reminder.aw:prop_emails_text_help
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) help"
 msgstr ""
 
-#: :prop_subject
+#: classes/contentmgmt/reminder.aw:prop_subject
 msgid "Omaduse Teade (subject) caption"
 msgstr ""
 
-#: :prop_subject_comment
+#: classes/contentmgmt/reminder.aw:prop_subject_comment
 msgid "Omaduse Teade (subject) kommentaar"
 msgstr ""
 
-#: :prop_subject_help
+#: classes/contentmgmt/reminder.aw:prop_subject_help
 msgid "Omaduse Teade (subject) help"
 msgstr ""
 
-#: :prop_objects_toolbar
+#: classes/contentmgmt/reminder.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
 msgstr ""
 
-#: :prop_objects_toolbar_comment
+#: classes/contentmgmt/reminder.aw:prop_objects_toolbar_comment
 msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
 msgstr ""
 
-#: :prop_objects_toolbar_help
+#: classes/contentmgmt/reminder.aw:prop_objects_toolbar_help
 msgid "Omaduse Objektide toolbar (objects_toolbar) help"
 msgstr ""
 
-#: :prop_objects
+#: classes/contentmgmt/reminder.aw:prop_objects
 msgid "Omaduse Seotud objektid (objects) caption"
 msgstr ""
 
-#: :prop_objects_comment
+#: classes/contentmgmt/reminder.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
 msgstr ""
 
-#: :prop_objects_help
+#: classes/contentmgmt/reminder.aw:prop_objects_help
 msgid "Omaduse Seotud objektid (objects) help"
 msgstr ""
 
-#: :group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: :group_objects
+#: classes/contentmgmt/reminder.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
 msgstr ""
 
-#: :rel_RELTYPE_REMINDER_OBJECT
+#: classes/contentmgmt/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_REMINDER_OBJECT) tekst"
 msgstr ""
 
-#: :38
-msgid "Meeldetuletus e-postiga"
+#: classes/contentmgmt/reminder.aw:180
+msgid "Eemalda valitud objektid"
 msgstr ""
 
-#: :55
-msgid "E-posti aadress"
+#: classes/contentmgmt/reminder.aw:182
+msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
 msgstr ""
 
-#: :62
-msgid "Minutid"
+#: classes/contentmgmt/reminder.aw:192
+msgid "ID"
 msgstr ""
 
-#: :77
-msgid "Saadetud?"
+#: classes/contentmgmt/reminder.aw:193
+msgid "Nimi"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:194
+msgid "Tüüp"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:270
+msgid "aw"
+msgstr ""
+
+#: classes/contentmgmt/reminder.aw:271
+msgid "Meeldetuletus"
 msgstr ""
 

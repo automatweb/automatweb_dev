@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:52:44 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:14 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,18 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/crm/crm_person.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/crm/crm_person.aw:prop_navtoolbar
 msgid "Omaduse  (navtoolbar) caption"
@@ -44,18 +32,6 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_friend_groups_help
 msgid "Omaduse Sõbragrupid (friend_groups) help"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:prop_firstname
@@ -358,18 +334,6 @@ msgstr ""
 msgid "Omaduse Veebiaadressid (url) help"
 msgstr ""
 
-#: classes/crm/crm_person.aw:prop_comment
-msgid "Omaduse Kontakt (comment) caption"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_comment_comment
-msgid "Omaduse Kontakt (comment) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_person.aw:prop_comment_help
-msgid "Omaduse Kontakt (comment) help"
-msgstr ""
-
 #: classes/crm/crm_person.aw:prop_default_cv
 msgid "Omaduse  (default_cv) caption"
 msgstr ""
@@ -548,10 +512,6 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_templates_help
 msgid "Omaduse Väljund (templates) help"
-msgstr ""
-
-#: classes/crm/crm_person.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_general2

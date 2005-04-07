@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:41 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/file.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/file.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/file.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/file.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/file.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -92,18 +68,6 @@ msgstr ""
 
 #: classes/file.aw:prop_type_help
 msgid "Omaduse  (type) help"
-msgstr ""
-
-#: classes/file.aw:prop_comment
-msgid "Omaduse Faili allkiri (comment) caption"
-msgstr ""
-
-#: classes/file.aw:prop_comment_comment
-msgid "Omaduse Faili allkiri (comment) kommentaar"
-msgstr ""
-
-#: classes/file.aw:prop_comment_help
-msgid "Omaduse Faili allkiri (comment) help"
 msgstr ""
 
 #: classes/file.aw:prop_file_url
@@ -176,10 +140,6 @@ msgstr ""
 
 #: classes/file.aw:prop_act_date_help
 msgid "Omaduse Avaldamise kuupäev (act_date) help"
-msgstr ""
-
-#: classes/file.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/file.aw:group_settings

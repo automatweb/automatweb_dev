@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:45 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,79 +10,79 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :136 :171 :487
+#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:487
 msgid ""
 msgstr ""
 
-#: :145
+#: classes/aliasmgr.aw:145
 msgid "Klass"
 msgstr ""
 
-#: :495
+#: classes/aliasmgr.aw:495
 msgid "Nimi"
 msgstr ""
 
-#: :501
+#: classes/aliasmgr.aw:501
 msgid "Keel"
 msgstr ""
 
-#: :508
+#: classes/aliasmgr.aw:508
 msgid "Muu info"
 msgstr ""
 
-#: :514
+#: classes/aliasmgr.aw:514
 msgid "Alias"
 msgstr ""
 
-#: :522
+#: classes/aliasmgr.aw:522
 msgid "Link"
 msgstr ""
 
-#: :531
+#: classes/aliasmgr.aw:531
 msgid "Cache"
 msgstr ""
 
-#: :540
+#: classes/aliasmgr.aw:540
 msgid "Muutja"
 msgstr ""
 
-#: :548
+#: classes/aliasmgr.aw:548
 msgid "Muudetud"
 msgstr ""
 
-#: :559
+#: classes/aliasmgr.aw:559
 msgid "Tüüp"
 msgstr ""
 
-#: :567
+#: classes/aliasmgr.aw:567
 msgid "Seose tüüp"
 msgstr ""
 
-#: :1132
+#: classes/aliasmgr.aw:1132
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: :1142 :1151
+#: classes/aliasmgr.aw:1142 classes/aliasmgr.aw:1151
 msgid "Otsi"
 msgstr ""
 
-#: :1168
+#: classes/aliasmgr.aw:1168
 msgid "Tõlgi"
 msgstr ""
 
-#: :1179
+#: classes/aliasmgr.aw:1179
 msgid "Reload"
 msgstr ""
 
-#: :1190
+#: classes/aliasmgr.aw:1190
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: :1200
+#: classes/aliasmgr.aw:1200
 msgid "Salvesta"
 msgstr ""
 
-#: :1207
+#: classes/aliasmgr.aw:1207
 msgid "Kustuta valitud seos(ed)"
 msgstr ""
 

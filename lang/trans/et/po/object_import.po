@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:22:52 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/admin/object_import.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/admin/object_import.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/admin/object_import.aw:prop_folder
 msgid "Omaduse Kataloog, kuhu pannakse objektid (folder) caption"
@@ -262,10 +226,6 @@ msgstr ""
 msgid "Omaduse Maksimaalne objektide arv mida kustutada (del_max) help"
 msgstr ""
 
-#: classes/admin/object_import.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/admin/object_import.aw:group_props
 msgid "Grupi Omadused (props) pealkiri"
 msgstr ""
@@ -414,27 +374,27 @@ msgstr ""
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:953
+#: classes/admin/object_import.aw:954
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:954
+#: classes/admin/object_import.aw:955
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:960
+#: classes/admin/object_import.aw:961
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:966
+#: classes/admin/object_import.aw:967
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:968
+#: classes/admin/object_import.aw:969
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1006
+#: classes/admin/object_import.aw:1007
 msgid "Importi alustati "
 msgstr ""
 

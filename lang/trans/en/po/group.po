@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:13 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/core/users/group.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/core/users/group.aw:prop_gid
 msgid "Omaduse Grupi ID (gid) caption"
@@ -44,18 +20,6 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_gid_help
 msgid "Omaduse Grupi ID (gid) help"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
 msgstr ""
 
 #: classes/core/users/group.aw:prop_priority
@@ -286,10 +250,6 @@ msgstr ""
 msgid "Omaduse  (gp_gid) help"
 msgstr ""
 
-#: classes/core/users/group.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/core/users/group.aw:group_dyn_search
 msgid "Grupi Otsing (dyn_search) pealkiri"
 msgstr ""
@@ -322,15 +282,15 @@ msgstr ""
 msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:182
+#: classes/core/users/group.aw:166
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:183
+#: classes/core/users/group.aw:167
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:192
+#: classes/core/users/group.aw:176
 msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
@@ -343,47 +303,47 @@ msgid "
 				"
 msgstr ""
 
-#: classes/core/users/group.aw:230
+#: classes/core/users/group.aw:214
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:388
+#: classes/core/users/group.aw:372
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:417
+#: classes/core/users/group.aw:401
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:426
+#: classes/core/users/group.aw:410
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:435
+#: classes/core/users/group.aw:419
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:444
+#: classes/core/users/group.aw:428
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:464
+#: classes/core/users/group.aw:448
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:567
+#: classes/core/users/group.aw:551
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:592
+#: classes/core/users/group.aw:576
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:613
+#: classes/core/users/group.aw:597
 msgid " / Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:842
+#: classes/core/users/group.aw:826
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

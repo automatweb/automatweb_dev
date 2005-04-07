@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:23 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:11 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/crm/crm_country.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_name
-msgid "Omaduse Riigi nimetus (name) caption"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_name_comment
-msgid "Omaduse Riigi nimetus (name) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_name_help
-msgid "Omaduse Riigi nimetus (name) help"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_country.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
 
 #: classes/crm/crm_country.aw:prop_name_en
 msgid "Omaduse Nimetus inglise keeles (name_en) caption"
@@ -68,9 +32,5 @@ msgstr ""
 
 #: classes/crm/crm_country.aw:prop_name_native_help
 msgid "Omaduse Nimetus kohalikus keeles (name_native) help"
-msgstr ""
-
-#: classes/crm/crm_country.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 

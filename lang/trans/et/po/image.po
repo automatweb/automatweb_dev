@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:52 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/image.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/image.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/image.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/image.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -116,18 +92,6 @@ msgstr ""
 
 #: classes/image.aw:prop_file2_del_help
 msgid "Omaduse Kustuta suur pilt (file2_del) help"
-msgstr ""
-
-#: classes/image.aw:prop_comment
-msgid "Omaduse Pildi allkiri (comment) caption"
-msgstr ""
-
-#: classes/image.aw:prop_comment_comment
-msgid "Omaduse Pildi allkiri (comment) kommentaar"
-msgstr ""
-
-#: classes/image.aw:prop_comment_help
-msgid "Omaduse Pildi allkiri (comment) help"
 msgstr ""
 
 #: classes/image.aw:prop_author
@@ -284,10 +248,6 @@ msgstr ""
 
 #: classes/image.aw:prop_resize_warn_help
 msgid "Omaduse Info (resize_warn) help"
-msgstr ""
-
-#: classes/image.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/image.aw:group_settings

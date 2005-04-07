@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 12:26:23 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:23 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,92 +9,76 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# :13
+
 #: classes/formgen/form_table.aw:13
 msgid "Change"
 msgstr ""
 
-# :14
 #: classes/formgen/form_table.aw:14
 msgid "View"
 msgstr ""
 
-# :15
 #: classes/formgen/form_table.aw:15
 msgid "Special"
 msgstr ""
 
-# :16
 #: classes/formgen/form_table.aw:16
 msgid "Delete"
 msgstr ""
 
-# :17
 #: classes/formgen/form_table.aw:17
 msgid "Created"
 msgstr ""
 
-# :18
 #: classes/formgen/form_table.aw:18
 msgid "Modified"
 msgstr ""
 
-# :19
 #: classes/formgen/form_table.aw:19
 msgid "UID"
 msgstr ""
 
-# :20
 #: classes/formgen/form_table.aw:20
 msgid "Active"
 msgstr ""
 
-# :21
 #: classes/formgen/form_table.aw:21
 msgid "Move"
 msgstr ""
 
-# :22
 #: classes/formgen/form_table.aw:22
 msgid "Order"
 msgstr ""
 
-# :23
 #: classes/formgen/form_table.aw:23
 msgid "Select"
 msgstr ""
 
-# :24
 #: classes/formgen/form_table.aw:24
 msgid "Peidetud Select"
 msgstr ""
 
-# :25
 #: classes/formgen/form_table.aw:25
 msgid "Jrk"
 msgstr ""
 
-# :26
 #: classes/formgen/form_table.aw:26
 msgid "Count"
 msgstr ""
 
-# :27
 #: classes/formgen/form_table.aw:27
 msgid "Koguse element"
 msgstr ""
 
-# :28
 #: classes/formgen/form_table.aw:28
 msgid "Hinna element"
 msgstr ""
 
-# :29
 #: classes/formgen/form_table.aw:29
 msgid "Sisestuse ID"
 msgstr ""
 
-# :30
 #: classes/formgen/form_table.aw:30
 msgid "Tekst"
 msgstr ""
+

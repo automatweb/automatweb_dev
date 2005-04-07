@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:33 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/orders/orders_form.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_form.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_postal_fee
 msgid "Omaduse Postikulu (postal_fee) caption"
@@ -68,6 +32,18 @@ msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_orders_post_to_help
 msgid "Omaduse Mail kuhu tellimus saata (orders_post_to) help"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_add_attach
+msgid "Omaduse Lisa tellimus manusena (add_attach) caption"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_add_attach_comment
+msgid "Omaduse Lisa tellimus manusena (add_attach) kommentaar"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:prop_add_attach_help
+msgid "Omaduse Lisa tellimus manusena (add_attach) help"
 msgstr ""
 
 #: classes/applications/orders/orders_form.aw:prop_orders_to_mail
@@ -262,10 +238,6 @@ msgstr ""
 msgid "Omaduse Makseperioodid (rent_item_types) help"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/applications/orders/orders_form.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
@@ -298,27 +270,27 @@ msgstr ""
 msgid "Seose Mail (RELTYPE_MAIL) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:803
+#: classes/applications/orders/orders_form.aw:806
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:852
+#: classes/applications/orders/orders_form.aw:855
 msgid "Kauba t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:858
+#: classes/applications/orders/orders_form.aw:861
 msgid "Min. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:864
+#: classes/applications/orders/orders_form.aw:867
 msgid "Max. Kuud"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:870
+#: classes/applications/orders/orders_form.aw:873
 msgid "Esmase sissemakse %"
 msgstr ""
 
-#: classes/applications/orders/orders_form.aw:876
+#: classes/applications/orders/orders_form.aw:879
 msgid "Intressi %"
 msgstr ""
 

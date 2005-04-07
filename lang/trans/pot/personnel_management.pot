@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:38 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_my_manager_profile_persons_tb
 msgid "Omaduse  (my_manager_profile_persons_tb) caption"
@@ -428,10 +392,6 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_search_cv_help
 msgid "Omaduse Otsi CV-sid (search_cv) help"
-msgstr ""
-
-#: classes/applications/personnel_management/personnel_management.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile

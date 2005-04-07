@@ -1,6 +1,4 @@
 <?php
-$GLOBALS["TRANS"]["Omaduse Kommentaar (comment) caption"] = "Comment";
-$GLOBALS["TRANS"]["Omaduse Nimi (name) caption"] = "Name";
 $GLOBALS["TRANS"]["Omaduse Staatus (status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Aeg (default_view) caption"] = "Default view";
 $GLOBALS["TRANS"]["Omaduse Päev algab (day_start) caption"] = "Day start";

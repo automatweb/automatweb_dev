@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:38 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,52 +9,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/contentmgmt/site_content.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
+
+#: classes/contentmgmt/site_content.aw:2074
+msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-# classes/contentmgmt/site_content.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_status
-msgid "Omaduse Staatus (status) caption"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_status_comment
-msgid "Omaduse Staatus (status) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:prop_status_help
-msgid "Omaduse Staatus (status) help"
-msgstr ""
-
-# classes/contentmgmt/site_content.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-# :2074
-msgid ""
-"Access denied and error redirects are defined.incorrectly. Please report "
-"this to the site administrator"
-msgstr ""
-
-# :2079
+#: classes/contentmgmt/site_content.aw:2079
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
+

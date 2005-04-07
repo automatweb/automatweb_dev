@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:39 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:15 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,31 +10,31 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :218
+#: classes/calendar/event_property_lib.aw:218
 msgid "Nimi"
 msgstr ""
 
-#: :225
+#: classes/calendar/event_property_lib.aw:225
 msgid "Telefon"
 msgstr ""
 
-#: :231
+#: classes/calendar/event_property_lib.aw:231
 msgid "E-post"
 msgstr ""
 
-#: :236
+#: classes/calendar/event_property_lib.aw:236
 msgid "Ametinimetus"
 msgstr ""
 
-#: :290
+#: classes/calendar/event_property_lib.aw:290
 msgid "Muuda"
 msgstr ""
 
-#: :317
+#: classes/calendar/event_property_lib.aw:317
 msgid "Vaata"
 msgstr ""
 
-#: :373
+#: classes/calendar/event_property_lib.aw:373
 msgid "osalejad.xls"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 12:26:15 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:46 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "user object is of wrong type! %s props = %s"
 msgstr ""
 
-#: classes/users_user.aw:1086
+#: classes/users_user.aw:1088
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
 msgstr ""
 

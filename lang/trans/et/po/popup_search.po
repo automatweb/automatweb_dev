@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 12:26:25 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,37 +9,32 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# :48 :109
+
 #: classes/vcl/popup_search.aw:48 classes/vcl/popup_search.aw:109
 msgid "Otsi"
 msgstr ""
 
-# :88 :146
 #: classes/vcl/popup_search.aw:88 classes/vcl/popup_search.aw:146
 msgid "Nimi"
 msgstr ""
 
-# :95
 #: classes/vcl/popup_search.aw:95
 msgid "Kommentaar"
 msgstr ""
 
-# :102 :140
 #: classes/vcl/popup_search.aw:102 classes/vcl/popup_search.aw:140
 msgid "OID"
 msgstr ""
 
-# :151
 #: classes/vcl/popup_search.aw:151
 msgid "Muutja"
 msgstr ""
 
-# :155
 #: classes/vcl/popup_search.aw:155
 msgid "Muudetud"
 msgstr ""
 
-# :162
 #: classes/vcl/popup_search.aw:162
 msgid "Vali"
 msgstr ""
+

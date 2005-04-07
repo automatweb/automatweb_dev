@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.55 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.56 2005/04/07 13:39:37 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -1658,7 +1658,7 @@ class converters extends aw_template
 		@attrib name=acl_to_objtbl 
 
 	**/
-	function acl_to_objtbl()
+	function acl_to_objtbl($arr)
 	{
 		$aclids = aw_ini_get("acl.ids");
 
@@ -1713,7 +1713,10 @@ class converters extends aw_template
 			}
 		}
 
-		die("all done");
+		if (!$arr["no_die"])
+		{
+			die("all done");
+		}
 	}	
 
 	/**

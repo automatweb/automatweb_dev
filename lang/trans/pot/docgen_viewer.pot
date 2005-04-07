@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:40 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:16 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,139 +10,99 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: :prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: :prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: :prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: :prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: :prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: :prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: :prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: :prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: :prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-#: :prop_foorum
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum
 msgid "Omaduse  (foorum) caption"
 msgstr ""
 
-#: :prop_foorum_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
 msgid "Omaduse  (foorum) kommentaar"
 msgstr ""
 
-#: :prop_foorum_help
+#: classes/core/docgen/docgen_viewer.aw:prop_foorum_help
 msgid "Omaduse  (foorum) help"
 msgstr ""
 
-#: :prop_view
+#: classes/core/docgen/docgen_viewer.aw:prop_view
 msgid "Omaduse  (view) caption"
 msgstr ""
 
-#: :prop_view_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_view_comment
 msgid "Omaduse  (view) kommentaar"
 msgstr ""
 
-#: :prop_view_help
+#: classes/core/docgen/docgen_viewer.aw:prop_view_help
 msgid "Omaduse  (view) help"
 msgstr ""
 
-#: :prop_refresh_text
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
 msgid "Omaduse Uuenda (refresh_text) caption"
 msgstr ""
 
-#: :prop_refresh_text_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
 msgid "Omaduse Uuenda (refresh_text) kommentaar"
 msgstr ""
 
-#: :prop_refresh_text_help
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
 msgid "Omaduse Uuenda (refresh_text) help"
 msgstr ""
 
-#: :prop_refresh_properties
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
 msgid "Omaduse Uuenda (refresh_properties) caption"
 msgstr ""
 
-#: :prop_refresh_properties_comment
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
 msgid "Omaduse Uuenda (refresh_properties) kommentaar"
 msgstr ""
 
-#: :prop_refresh_properties_help
+#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
 msgid "Omaduse Uuenda (refresh_properties) help"
 msgstr ""
 
-#: :group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-#: :group_more_options
+#: classes/core/docgen/docgen_viewer.aw:group_more_options
 msgid "Grupi Seaded (more_options) pealkiri"
 msgstr ""
 
-#: :rel_RELTYPE_FORUM
+#: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 msgid "Seose foorum (RELTYPE_FORUM) tekst"
 msgstr ""
 
-#: :70
+#: classes/core/docgen/docgen_viewer.aw:70
 msgid "Open DocGen"
 msgstr ""
 
-#: :98 :647 :716 :989 :1059 :1157
+#: classes/core/docgen/docgen_viewer.aw:98 classes/core/docgen/docgen_viewer.aw:647 classes/core/docgen/docgen_viewer.aw:716 classes/core/docgen/docgen_viewer.aw:989 classes/core/docgen/docgen_viewer.aw:1059 classes/core/docgen/docgen_viewer.aw:1157
 msgid "Classes"
 msgstr ""
 
-#: :860
+#: classes/core/docgen/docgen_viewer.aw:860
 msgid "ALL DONE"
 msgstr ""
 
-#: :922
+#: classes/core/docgen/docgen_viewer.aw:922
 msgid "K&otilde;ik klassid"
 msgstr ""
 
-#: :928
+#: classes/core/docgen/docgen_viewer.aw:928
 msgid "Dokumenteeritud klassid"
 msgstr ""
 
-#: :934
+#: classes/core/docgen/docgen_viewer.aw:934
 msgid "API klassid"
 msgstr ""
 
-#: :940
+#: classes/core/docgen/docgen_viewer.aw:940
 msgid "Eraldi dokumentatsioon"
 msgstr ""
 
-#: :946
+#: classes/core/docgen/docgen_viewer.aw:946
 msgid "Classbase tagid"
 msgstr ""
 
-#: :952
+#: classes/core/docgen/docgen_viewer.aw:952
 msgid "Uuenda API andmebaas"
 msgstr ""
 
-#: :963
+#: classes/core/docgen/docgen_viewer.aw:963
 msgid "Foorum"
 msgstr ""
 

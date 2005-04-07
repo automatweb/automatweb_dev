@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:22:59 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:12 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/crm/crm_product.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/crm/crm_product.aw:prop_toode
 msgid "Omaduse Toote nimetus (toode) caption"
@@ -58,18 +34,6 @@ msgstr ""
 msgid "Omaduse Inglise keelne tootenimetus (toode_en) help"
 msgstr ""
 
-#: classes/crm/crm_product.aw:prop_comment
-msgid "Omaduse Kirjeldus (comment) caption"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_comment_comment
-msgid "Omaduse Kirjeldus (comment) kommentaar"
-msgstr ""
-
-#: classes/crm/crm_product.aw:prop_comment_help
-msgid "Omaduse Kirjeldus (comment) help"
-msgstr ""
-
 #: classes/crm/crm_product.aw:prop_kood
 msgid "Omaduse Toote kood	 (kood) caption"
 msgstr ""
@@ -80,9 +44,5 @@ msgstr ""
 
 #: classes/crm/crm_product.aw:prop_kood_help
 msgid "Omaduse Toote kood	 (kood) help"
-msgstr ""
-
-#: classes/crm/crm_product.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:07:11 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,11 +10,11 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/defs.aw:516
+#: classes/defs.aw:526
 msgid ""
 msgstr ""
 
-#: classes/defs.aw:601
+#: classes/defs.aw:611
 msgid "(nimetu)"
 msgstr ""
 

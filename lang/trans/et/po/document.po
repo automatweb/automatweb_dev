@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:46 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,53 +9,68 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/document.aw:414
 msgid "Viimati muudetud:"
 msgstr ""
 
+#: classes/document.aw:616
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
+#: classes/document.aw:640
 msgid "Loe edasi"
 msgstr ""
 
+#: classes/document.aw:1067 classes/document.aw:1116
 msgid "Vaata lisaks:"
 msgstr ""
 
+#: classes/document.aw:1072 classes/document.aw:1121
 msgid "Samal teemal:"
 msgstr ""
 
+#: classes/document.aw:2864 classes/document.aw:3444
 msgid "Pealkiri"
 msgstr ""
 
+#: classes/document.aw:2871
 msgid "Kuup&auml;ev"
 msgstr ""
 
+#: classes/document.aw:2879 classes/document.aw:3462
 msgid "Autor"
 msgstr ""
 
-msgid ""
-"<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
-"<br /><br />\n"
-"\n"
+#: classes/document.aw:3402
+msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
 msgstr ""
 
+#: classes/document.aw:3432
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
+#: classes/document.aw:3434
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
+#: classes/document.aw:3450
 msgid "Lead"
 msgstr ""
 
+#: classes/document.aw:3456
 msgid "Sisu"
 msgstr ""
 
+#: classes/document.aw:3472
 msgid "Periood"
 msgstr ""
 
+#: classes/document.aw:3532
 msgid "Objektiotsing"
 msgstr ""
 
+#: classes/document.aw:3532
 msgid "Dokumentide otsing"
 msgstr ""
+

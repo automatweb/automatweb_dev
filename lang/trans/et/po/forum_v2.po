@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon,  4 Apr 2005 14:20:21 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,521 +9,468 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
+msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_comment
+msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_help
+msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
-msgid ""
-"Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-"(show_logged) caption"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_comment
-msgid ""
-"Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-"(show_logged) kommentaar"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_help
-msgid ""
-"Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
-"(show_logged) help"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder
 msgid "Omaduse Teemade kaust (topic_folder) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_comment
 msgid "Omaduse Teemade kaust (topic_folder) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_help
 msgid "Omaduse Teemade kaust (topic_folder) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_address_folder
+#: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder
 msgid "Omaduse Listiliikmete kaust (address_folder) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_address_folder_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder_comment
 msgid "Omaduse Listiliikmete kaust (address_folder) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_address_folder_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder_help
 msgid "Omaduse Listiliikmete kaust (address_folder) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page
 msgid "Omaduse Teemasid lehel (topics_on_page) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page_comment
 msgid "Omaduse Teemasid lehel (topics_on_page) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page_help
 msgid "Omaduse Teemasid lehel (topics_on_page) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
 msgid "Omaduse Kommentaare lehel (comments_on_page) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page_comment
 msgid "Omaduse Kommentaare lehel (comments_on_page) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page_help
 msgid "Omaduse Kommentaare lehel (comments_on_page) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
 msgid "Omaduse Teemade sügavus (topic_depth) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_comment
 msgid "Omaduse Teemade sügavus (topic_depth) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_help
 msgid "Omaduse Teemade sügavus (topic_depth) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
 msgid "Omaduse Teemade tasemed (topic_selector) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_comment
 msgid "Omaduse Teemade tasemed (topic_selector) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_help
 msgid "Omaduse Teemade tasemed (topic_selector) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic
 msgid "Omaduse Topic ID (sys) (topic) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_comment
 msgid "Omaduse Topic ID (sys) (topic) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_topic_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_topic_help
 msgid "Omaduse Topic ID (sys) (topic) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_show
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show
 msgid "Omaduse Foorumi sisu (show) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_show_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_comment
 msgid "Omaduse Foorumi sisu (show) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_show_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_show_help
 msgid "Omaduse Foorumi sisu (show) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_donor
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor
 msgid "Omaduse Stiilidoonor (style_donor) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_donor_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor_comment
 msgid "Omaduse Stiilidoonor (style_donor) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_donor_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor_help
 msgid "Omaduse Stiilidoonor (style_donor) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row
 msgid "Omaduse Teema lisamise stiil (style_new_topic_row) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row_comment
 msgid "Omaduse Teema lisamise stiil (style_new_topic_row) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row_help
 msgid "Omaduse Teema lisamise stiil (style_new_topic_row) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_caption
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_caption
 msgid "Omaduse Tabeli pealkirja stiil (style_caption) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_caption_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_caption_comment
 msgid "Omaduse Tabeli pealkirja stiil (style_caption) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_caption_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_caption_help
 msgid "Omaduse Tabeli pealkirja stiil (style_caption) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder
 msgid "Omaduse Teema kausta stiil (style_l1_folder) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder_comment
 msgid "Omaduse Teema kausta stiil (style_l1_folder) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder_help
 msgid "Omaduse Teema kausta stiil (style_l1_folder) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption
 msgid "Omaduse Teema kausta pealkirja stiil (style_folder_caption) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption_comment
 msgid "Omaduse Teema kausta pealkirja stiil (style_folder_caption) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption_help
 msgid "Omaduse Teema kausta pealkirja stiil (style_folder_caption) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count
 msgid "Omaduse Teema kausta arvu stiil (style_folder_topic_count) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count_comment
 msgid "Omaduse Teema kausta arvu stiil (style_folder_topic_count) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count_help
 msgid "Omaduse Teema kausta arvu stiil (style_folder_topic_count) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) "
-"kommentaar"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
-msgid ""
-"Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_help
+msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) "
-"kommentaar"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
-msgid ""
-"Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_help
+msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah
 msgid "Omaduse Foorumi asukohariba stiil (style_forum_yah) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah_comment
 msgid "Omaduse Foorumi asukohariba stiil (style_forum_yah) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah_help
 msgid "Omaduse Foorumi asukohariba stiil (style_forum_yah) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption
 msgid "Omaduse Teema pealkirja stiil (style_topic_caption) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption_comment
 msgid "Omaduse Teema pealkirja stiil (style_topic_caption) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption_help
 msgid "Omaduse Teema pealkirja stiil (style_topic_caption) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies
 msgid "Omaduse Teema vastuste arvu stiil (style_topic_replies) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies_comment
 msgid "Omaduse Teema vastuste arvu stiil (style_topic_replies) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies_help
 msgid "Omaduse Teema vastuste arvu stiil (style_topic_replies) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author
 msgid "Omaduse Teema autori stiil (style_topic_author) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author_comment
 msgid "Omaduse Teema autori stiil (style_topic_author) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author_help
 msgid "Omaduse Teema autori stiil (style_topic_author) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post
 msgid "Omaduse Teema viimase vastuse stiil (style_topic_last_post) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post_comment
 msgid "Omaduse Teema viimase vastuse stiil (style_topic_last_post) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post_help
 msgid "Omaduse Teema viimase vastuse stiil (style_topic_last_post) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count
 msgid "Omaduse Vastuste arvu stiil (style_comment_count) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count_comment
 msgid "Omaduse Vastuste arvu stiil (style_comment_count) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count_help
 msgid "Omaduse Vastuste arvu stiil (style_comment_count) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator
 msgid "Omaduse Teema autori stiil (style_comment_creator) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator_comment
 msgid "Omaduse Teema autori stiil (style_comment_creator) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator_help
 msgid "Omaduse Teema autori stiil (style_comment_creator) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user
 msgid "Omaduse Vastuse autori stiil (style_comment_user) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user_comment
 msgid "Omaduse Vastuse autori stiil (style_comment_user) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user_help
 msgid "Omaduse Vastuse autori stiil (style_comment_user) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time
 msgid "Omaduse Vastuse aja stiil (style_comment_time) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time_comment
 msgid "Omaduse Vastuse aja stiil (style_comment_time) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time_help
 msgid "Omaduse Vastuse aja stiil (style_comment_time) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text
 msgid "Omaduse Vastuse teksti stiil (style_comment_text) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text_comment
 msgid "Omaduse Vastuse teksti stiil (style_comment_text) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text_help
 msgid "Omaduse Vastuse teksti stiil (style_comment_text) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption
 msgid "Omaduse Sisestusvormi pealkirja stiil (style_form_caption) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption_comment
 msgid "Omaduse Sisestusvormi pealkirja stiil (style_form_caption) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption_help
 msgid "Omaduse Sisestusvormi pealkirja stiil (style_form_caption) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text
 msgid "Omaduse Sisestusvormi teksti stiil (style_form_text) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text_comment
 msgid "Omaduse Sisestusvormi teksti stiil (style_form_text) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text_help
 msgid "Omaduse Sisestusvormi teksti stiil (style_form_text) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element
 msgid "Omaduse Sisestusvormi elemendi stiil (style_form_element) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element_comment
 msgid "Omaduse Sisestusvormi elemendi stiil (style_form_element) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element_help
 msgid "Omaduse Sisestusvormi elemendi stiil (style_form_element) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file
+#: classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file
 msgid "Omaduse Vali XML fail (import_xml_file) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file_comment
 msgid "Omaduse Vali XML fail (import_xml_file) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file_help
 msgid "Omaduse Vali XML fail (import_xml_file) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail
+#: classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail
 msgid "Omaduse Soovi korral vastused meiliga (answers_to_mail) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail_comment
 msgid "Omaduse Soovi korral vastused meiliga (answers_to_mail) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail_help
 msgid "Omaduse Soovi korral vastused meiliga (answers_to_mail) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_from
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from
 msgid "Omaduse E-mail kellelt (mail_from) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_comment
 msgid "Omaduse E-mail kellelt (mail_from) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_help
 msgid "Omaduse E-mail kellelt (mail_from) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_address
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address
 msgid "Omaduse E-maili aadress kellelt (mail_address) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_comment
 msgid "Omaduse E-maili aadress kellelt (mail_address) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_help
 msgid "Omaduse E-maili aadress kellelt (mail_address) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject
 msgid "Omaduse Maili subject (mail_subject) caption"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_comment
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_comment
 msgid "Omaduse Maili subject (mail_subject) kommentaar"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_help
+#: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_help
 msgid "Omaduse Maili subject (mail_subject) help"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
-# classes/contentmgmt/forum/forum_v2.aw:group_contents
+#: classes/contentmgmt/forum/forum_v2.aw:group_contents
 msgid "Grupi Sisu (contents) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_styles
+#: classes/contentmgmt/forum/forum_v2.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_settings
+#: classes/contentmgmt/forum/forum_v2.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_topic_selector
+#: classes/contentmgmt/forum/forum_v2.aw:group_topic_selector
 msgid "Grupi Teemad (topic_selector) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_import
+#: classes/contentmgmt/forum/forum_v2.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:group_mail_settings
+#: classes/contentmgmt/forum/forum_v2.aw:group_mail_settings
 msgid "Grupi Meiliseaded (mail_settings) pealkiri"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_TOPIC_FOLDER
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_TOPIC_FOLDER
 msgid "Seose Teemade kaust (RELTYPE_TOPIC_FOLDER) tekst"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_ADDRESS_FOLDER
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_ADDRESS_FOLDER
 msgid "Seose Listiliikmete kaust (RELTYPE_ADDRESS_FOLDER) tekst"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE_DONOR
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE_DONOR
 msgid "Seose Stiilidoonor (RELTYPE_STYLE_DONOR) tekst"
 msgstr ""
 
-# classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_FORUM_ADMIN
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_FORUM_ADMIN
 msgid "Seose Administraator (RELTYPE_FORUM_ADMIN) tekst"
 msgstr ""
 
@@ -550,3 +497,4 @@ msgstr ""
 #: classes/contentmgmt/forum/forum_v2.aw:1586
 msgid "Lisa"
 msgstr ""
+

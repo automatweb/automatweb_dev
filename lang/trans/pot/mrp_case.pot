@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 12:45:13 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:50 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,18 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/mrp/mrp_case.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_workflow_toolbar
 msgid "Omaduse  (workflow_toolbar) caption"
@@ -44,30 +32,6 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_header_help
 msgid "Omaduse  (header) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_name
-msgid "Omaduse Projekti nr. (name) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_name_comment
-msgid "Omaduse Projekti nr. (name) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_name_help
-msgid "Omaduse Projekti nr. (name) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_comment
-msgid "Omaduse Projekti nimetus (comment) caption"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_comment_comment
-msgid "Omaduse Projekti nimetus (comment) kommentaar"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:prop_comment_help
-msgid "Omaduse Projekti nimetus (comment) help"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_starttime
@@ -548,10 +512,6 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_log_help
 msgid "Omaduse  (log) help"
-msgstr ""
-
-#: classes/mrp/mrp_case.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:group_grp_general

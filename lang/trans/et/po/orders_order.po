@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:23 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/orders/orders_order.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_firstname
 msgid "Omaduse Eesnimi (firstname) caption"
@@ -418,10 +382,6 @@ msgstr ""
 msgid "Omaduse Edasi (forward) help"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/applications/orders/orders_order.aw:group_orderinfo
 msgid "Grupi Tellimuse andmed (orderinfo) pealkiri"
 msgstr ""
@@ -438,35 +398,43 @@ msgstr ""
 msgid "Seose Tellija (RELTYPE_PERSON) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:151
-msgid "Toode"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:156
-msgid "Toote kood"
-msgstr ""
-
-#: classes/applications/orders/orders_order.aw:161
-msgid "Värv"
+#: classes/applications/orders/orders_order.aw:rel_RELTYPE_CFGMANAGER
+msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
 #: classes/applications/orders/orders_order.aw:166
-msgid "Suurus"
+msgid "Toode"
 msgstr ""
 
 #: classes/applications/orders/orders_order.aw:171
-msgid "Kogus"
+msgid "Toote kood"
 msgstr ""
 
 #: classes/applications/orders/orders_order.aw:176
+msgid "Värv"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:181
+msgid "Suurus"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:186
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:191
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:443
+#: classes/applications/orders/orders_order.aw:458
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:463
+#: classes/applications/orders/orders_order.aw:478
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
+msgstr ""
+
+#: classes/applications/orders/orders_order.aw:575
+msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:55 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:46 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/period.aw:prop_name
-msgid "Omaduse Nimetus (aasta,kuu) (name) caption"
-msgstr ""
-
-#: classes/period.aw:prop_name_comment
-msgid "Omaduse Nimetus (aasta,kuu) (name) kommentaar"
-msgstr ""
-
-#: classes/period.aw:prop_name_help
-msgid "Omaduse Nimetus (aasta,kuu) (name) help"
-msgstr ""
-
-#: classes/period.aw:prop_comment
-msgid "Omaduse Kommentaar (teema) (comment) caption"
-msgstr ""
-
-#: classes/period.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (teema) (comment) kommentaar"
-msgstr ""
-
-#: classes/period.aw:prop_comment_help
-msgid "Omaduse Kommentaar (teema) (comment) help"
-msgstr ""
 
 #: classes/period.aw:prop_perimage
 msgid "Omaduse Pilt2 (perimage) caption"
@@ -44,18 +20,6 @@ msgstr ""
 
 #: classes/period.aw:prop_perimage_help
 msgid "Omaduse Pilt2 (perimage) help"
-msgstr ""
-
-#: classes/period.aw:prop_status
-msgid "Omaduse Arhiivis (status) caption"
-msgstr ""
-
-#: classes/period.aw:prop_status_comment
-msgid "Omaduse Arhiivis (status) kommentaar"
-msgstr ""
-
-#: classes/period.aw:prop_status_help
-msgid "Omaduse Arhiivis (status) help"
 msgstr ""
 
 #: classes/period.aw:prop_syear
@@ -152,10 +116,6 @@ msgstr ""
 
 #: classes/period.aw:prop_activity_help
 msgid "Omaduse Aktiivsus (activity) help"
-msgstr ""
-
-#: classes/period.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/period.aw:group_activity

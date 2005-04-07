@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 12:26:18 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,67 +9,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# :29
+
 #: classes/core/obj/ds_base.aw:29
 msgid "called abstract function ds_base::get_oid_by_alias"
 msgstr ""
 
-# :40
 #: classes/core/obj/ds_base.aw:40
 msgid "called abstract function ds_base::get_objdata"
 msgstr ""
 
-# :54
 #: classes/core/obj/ds_base.aw:54
 msgid "called abstract function ds_base::read_properties"
 msgstr ""
 
-# :70
 #: classes/core/obj/ds_base.aw:70
 msgid "called abstract function ds_base::create_new_object"
 msgstr ""
 
-# :87
 #: classes/core/obj/ds_base.aw:87
 msgid "called abstract function ds_base::save_properties"
 msgstr ""
 
-# :97
 #: classes/core/obj/ds_base.aw:97
 msgid "called abstract function ds_base::read_connection"
 msgstr ""
 
-# :107
 #: classes/core/obj/ds_base.aw:107
 msgid "called abstract function ds_base::save_connection"
 msgstr ""
 
-# :117
 #: classes/core/obj/ds_base.aw:117
 msgid "called abstract function ds_base::delete_connection"
 msgstr ""
 
-# :128
 #: classes/core/obj/ds_base.aw:128
 msgid "called abstract function ds_base::find_connections"
 msgstr ""
 
-# :141
 #: classes/core/obj/ds_base.aw:141
 msgid "called abstract function ds_base::search"
 msgstr ""
 
-# :151
 #: classes/core/obj/ds_base.aw:151
 msgid "called abstract function ds_base::delete_object"
 msgstr ""
 
-# :161
 #: classes/core/obj/ds_base.aw:161
 msgid "called abstract function ds_base::create_brother"
 msgstr ""
 
-# :171
 #: classes/core/obj/ds_base.aw:171
 msgid "called abstract function ds_base::fetch_list"
 msgstr ""
+

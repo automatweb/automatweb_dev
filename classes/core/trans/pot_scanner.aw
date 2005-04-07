@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.21 2005/04/07 12:01:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.22 2005/04/07 13:39:37 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -258,6 +258,10 @@ class pot_scanner extends core
 		//  3) property help
 		foreach($props as $pn => $pd)
 		{
+			if ((($pn == "name" && $pd["caption"] == "Nimi") || ($pn == "comment" && $pd["caption"] == "Kommentaar") || ($pn == "status" && $pd["caption"] == "Aktiivne")) && basename($file_from) != "class_base.aw")
+			{
+				continue;
+			}
 			$strings[] = array(
 				"line" => "prop_".$pn,
 				"str" => "Omaduse ".$pd["caption"]." ($pn) caption",
@@ -276,6 +280,10 @@ class pot_scanner extends core
 		$grps = $cu->get_groupinfo();
 		foreach($grps as $gn => $gd)
 		{
+			if (($gn == "general" && $gd["caption"] == "Üldine") && basename($file_from) != "class_base.aw")
+			{
+				continue;
+			}
 			$strings[] = array(
 				"line" => "group_".$gn,
 				"str" => "Grupi ".$gd["caption"]." ($gn) pealkiri",
@@ -347,6 +355,16 @@ class pot_scanner extends core
 			if (substr($line, 0, 5) == "msgid")
 			{
 				$msgid = substr($line, 7, strlen($line)-9);
+				while (substr(trim($lines[$i+1]), 0, 6) != "msgstr")
+				{
+					$i++;
+					$line = $lines[$i];
+					$tmp = substr(trim($line), 1, strlen($line)-3);
+					if (trim($tmp) != "")
+					{
+						$msgid .= $tmp;
+					}
+				}
 			}
 			else
 			if (substr($line, 0, 6) == "msgstr")

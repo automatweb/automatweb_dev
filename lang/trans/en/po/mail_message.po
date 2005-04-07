@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:37 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:36 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/messenger/mail_message.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_edit_toolbar
 msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"
@@ -116,18 +92,6 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_bcc_help
 msgid "Omaduse Pimekoopia (bcc) help"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_name
-msgid "Omaduse Teema (name) caption"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_name_comment
-msgid "Omaduse Teema (name) kommentaar"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:prop_name_help
-msgid "Omaduse Teema (name) help"
 msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_html_mail
@@ -284,10 +248,6 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_msg_attachments_help
 msgid "Omaduse  (msg_attachments) help"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:group_

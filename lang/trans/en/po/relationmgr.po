@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:07:08 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -30,12 +30,20 @@ msgstr ""
 msgid "Uuenda"
 msgstr ""
 
+#: classes/vcl/relationmgr.aw:283
+msgid "Loo seos(ed)"
+msgstr ""
+
 #: classes/vcl/relationmgr.aw:294
 msgid "Salvesta"
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:301
 msgid "Kustuta seos(ed)"
+msgstr ""
+
+#: classes/vcl/relationmgr.aw:335
+msgid ""
 msgstr ""
 
 #: classes/vcl/relationmgr.aw:343

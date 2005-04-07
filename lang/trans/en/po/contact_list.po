@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:36 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:35 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/quickmessage/contact_list.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:prop_contact_list_toolbar
 msgid "Omaduse  (contact_list_toolbar) caption"
@@ -82,10 +46,6 @@ msgstr ""
 msgid "Omaduse Aadressiraamat (contact_list) help"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/applications/quickmessage/contact_list.aw:group_contact_list
 msgid "Grupi Aadressiraamat (contact_list) pealkiri"
 msgstr ""
@@ -118,23 +78,23 @@ msgstr ""
 msgid "Oled kindel, et tahad valitud eemaldada?"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:163
+#: classes/applications/quickmessage/contact_list.aw:164
 msgid "ID"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:167
+#: classes/applications/quickmessage/contact_list.aw:168
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:171
+#: classes/applications/quickmessage/contact_list.aw:172
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:175
+#: classes/applications/quickmessage/contact_list.aw:176
 msgid ""
 msgstr ""
 
-#: classes/applications/quickmessage/contact_list.aw:220
+#: classes/applications/quickmessage/contact_list.aw:221
 msgid "Saada sõnum"
 msgstr ""
 

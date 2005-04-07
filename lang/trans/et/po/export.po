@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 12:26:19 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,27 +9,24 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# :237
+
 #: classes/export/export.aw:237
 msgid "Folder %s does not exist on server!"
 msgstr ""
 
-# :250
 #: classes/export/export.aw:250
 msgid "eksport juba k&auml;ib!"
 msgstr ""
 
-# :471
 #: classes/export/export.aw:471
 msgid "Found stop flag as %s, shutting down."
 msgstr ""
 
-# :494
 #: classes/export/export.aw:494
 msgid "VIGA, tyhi url!"
 msgstr ""
 
-# :783
 #: classes/export/export.aw:783
 msgid "VIGA! EI LEIDNUD ext for type %s"
 msgstr ""
+

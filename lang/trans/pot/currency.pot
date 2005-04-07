@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 10:53:05 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:41:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,30 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/formgen/currency.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/formgen/currency.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/formgen/currency.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/formgen/currency.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/formgen/currency.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/formgen/currency.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment
 msgid "Omaduse Kurss saksa marga suhtes (comment) caption"
@@ -44,9 +20,5 @@ msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment_help
 msgid "Omaduse Kurss saksa marga suhtes (comment) help"
-msgstr ""
-
-#: classes/formgen/currency.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 

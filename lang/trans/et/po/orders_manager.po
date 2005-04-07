@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:23:23 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/orders/orders_manager.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/applications/orders/orders_manager.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:prop_export_folder
 msgid "Omaduse Ekspordi kataloog (export_folder) caption"
@@ -82,123 +46,123 @@ msgstr ""
 msgid "Omaduse Tellimuste tabel (orders_table) help"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 #: classes/applications/orders/orders_manager.aw:group_ordermnager
 msgid "Grupi Tellimused (ordermnager) pealkiri"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:61
+#: classes/applications/orders/orders_manager.aw:rel_RELTYPE_CFGMANAGER
+msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:73
 msgid "Kustuta tellimusi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:63
+#: classes/applications/orders/orders_manager.aw:75
 msgid "Oled kindel, et soovid valitud tellimused kustutada?"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:72
+#: classes/applications/orders/orders_manager.aw:84
 msgid "Tellija"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:76
+#: classes/applications/orders/orders_manager.aw:88
 msgid "Kuupäev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:85 classes/applications/orders/orders_manager.aw:111
+#: classes/applications/orders/orders_manager.aw:97 classes/applications/orders/orders_manager.aw:123
 msgid "Vaata tellimust"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:207
+#: classes/applications/orders/orders_manager.aw:219
 msgid "Toote nimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:208
+#: classes/applications/orders/orders_manager.aw:220
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:209
+#: classes/applications/orders/orders_manager.aw:221
 msgid "V&auml;rvus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:210
+#: classes/applications/orders/orders_manager.aw:222
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:211
+#: classes/applications/orders/orders_manager.aw:223
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:212
+#: classes/applications/orders/orders_manager.aw:224
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:213
+#: classes/applications/orders/orders_manager.aw:225
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:214
+#: classes/applications/orders/orders_manager.aw:226
 msgid "Pilt"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:217
+#: classes/applications/orders/orders_manager.aw:229
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:218
+#: classes/applications/orders/orders_manager.aw:230
 msgid "Perekonnanimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:219
+#: classes/applications/orders/orders_manager.aw:231
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:220
+#: classes/applications/orders/orders_manager.aw:232
 msgid "S&uuml;nnip&auml;ev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:221
+#: classes/applications/orders/orders_manager.aw:233
 msgid "E-mail"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:222
+#: classes/applications/orders/orders_manager.aw:234
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:225
+#: classes/applications/orders/orders_manager.aw:237
 msgid "Kliendi number"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:226
+#: classes/applications/orders/orders_manager.aw:238
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:227
+#: classes/applications/orders/orders_manager.aw:239
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:228
+#: classes/applications/orders/orders_manager.aw:240
 msgid "Telefon t&ouml;&ouml;l"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:229
+#: classes/applications/orders/orders_manager.aw:241
 msgid "Mobiil"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:230
+#: classes/applications/orders/orders_manager.aw:242
 msgid "Kliendo t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:237
+#: classes/applications/orders/orders_manager.aw:249
 msgid "OID"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:237
+#: classes/applications/orders/orders_manager.aw:249
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:290
+#: classes/applications/orders/orders_manager.aw:302
 msgid "all done!"
 msgstr ""
 

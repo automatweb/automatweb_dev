@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:57 +0300\n"
+"POT-Creation-Date: Thu,  7 Apr 2005 16:09:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,42 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name
-msgid "Omaduse Nimi (name) caption"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name_comment
-msgid "Omaduse Nimi (name) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_name_help
-msgid "Omaduse Nimi (name) help"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment
-msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment_comment
-msgid "Omaduse Kommentaar (comment) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_comment_help
-msgid "Omaduse Kommentaar (comment) help"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status
-msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status_comment
-msgid "Omaduse Aktiivne (status) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_status_help
-msgid "Omaduse Aktiivne (status) help"
-msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld
 msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) caption"
@@ -104,10 +68,6 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_help
 msgid "Omaduse Sisu (ct) help"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:group_content
