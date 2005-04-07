@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/plugins/document/add_link.aw:13 classes/plugins/document/add_link.aw:33
 msgid "Lisa link nähtav"
-msgstr ""
+msgstr "Add link visible"
 

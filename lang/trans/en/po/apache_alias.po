@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
-msgstr ""
+msgstr "Alias"
 
 #: classes/applications/apache/apache_alias.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:prop_dir
 msgid "Omaduse Kataloog serveris (dir) caption"
-msgstr ""
+msgstr "Folder in server"
 
 #: classes/applications/apache/apache_alias.aw:prop_dir_comment
 msgid "Omaduse Kataloog serveris (dir) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:prop_tbl
 msgid "Omaduse Tabel (tbl) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/applications/apache/apache_alias.aw:prop_tbl_comment
 msgid "Omaduse Tabel (tbl) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:prop_list
 msgid "Omaduse Apache konfiguratsioon (list) caption"
-msgstr ""
+msgstr "Apache configuration"
 
 #: classes/applications/apache/apache_alias.aw:prop_list_comment
 msgid "Omaduse Apache konfiguratsioon (list) kommentaar"
@@ -60,49 +60,49 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:group_list
 msgid "Grupi Nimekiri (list) pealkiri"
-msgstr ""
+msgstr "List"
 
 #: classes/applications/apache/apache_alias.aw:62
 msgid "Alias ei saa olla tühi!"
-msgstr ""
+msgstr "Alias can not be empty"
 
 #: classes/applications/apache/apache_alias.aw:76
 msgid "Sellise nimega alias on juba olemas!"
-msgstr ""
+msgstr "An alias with that name already exists!"
 
 #: classes/applications/apache/apache_alias.aw:84
 msgid "Kataloog ei saa olla tühi!!"
-msgstr ""
+msgstr "Folder can not be empty"
 
 #: classes/applications/apache/apache_alias.aw:97
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/applications/apache/apache_alias.aw:103
 msgid "Alias"
-msgstr ""
+msgstr "Alias"
 
 #: classes/applications/apache/apache_alias.aw:109
 msgid "Kataloog serveris"
-msgstr ""
+msgstr "Folder in server"
 
 #: classes/applications/apache/apache_alias.aw:115
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/apache/apache_alias.aw:124
 msgid "Autor"
-msgstr ""
+msgstr "Author"
 
 #: classes/applications/apache/apache_alias.aw:130
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/apache/apache_alias.aw:139
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/applications/apache/apache_alias.aw:170
 msgid "Faili %s ei saanud kirjutamiseks avada! <br>-------------------<br><br>"
-msgstr ""
+msgstr "File %s could not be opened for writing! <br>-------------------<br><br>"
 

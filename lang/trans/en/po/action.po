@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/action.aw:prop_description
 msgid "Omaduse Kirjeldus (description) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/workflow/action.aw:prop_description_comment
 msgid "Omaduse Kirjeldus (description) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/workflow/action.aw:prop_goal
 msgid "Omaduse Eesmärk (goal) caption"
-msgstr ""
+msgstr "Goal"
 
 #: classes/workflow/action.aw:prop_goal_comment
 msgid "Omaduse Eesmärk (goal) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/workflow/action.aw:prop_entity_actor
 msgid "Omaduse Tegija (entity_actor) caption"
-msgstr ""
+msgstr "Actor"
 
 #: classes/workflow/action.aw:prop_entity_actor_comment
 msgid "Omaduse Tegija (entity_actor) kommentaar"
@@ -48,9 +48,9 @@ msgstr ""
 
 #: classes/workflow/action.aw:rel_RELTYPE_INSTRUCTION
 msgid "Seose instruktsioon (RELTYPE_INSTRUCTION) tekst"
-msgstr ""
+msgstr "instructions"
 
 #: classes/workflow/action.aw:rel_RELTYPE_ACTOR
 msgid "Seose tegija (RELTYPE_ACTOR) tekst"
-msgstr ""
+msgstr "actor"
 

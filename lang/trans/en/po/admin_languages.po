@@ -12,13 +12,13 @@ msgstr ""
 
 #: classes/admin/admin_languages.aw:30 classes/admin/admin_languages.aw:85 classes/admin/admin_languages.aw:116
 msgid "Keeled"
-msgstr ""
+msgstr "Languages"
 
 #: classes/admin/admin_languages.aw:85
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/admin/admin_languages.aw:116
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 

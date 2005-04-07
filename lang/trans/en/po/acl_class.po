@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:prop_chain
 msgid "Omaduse Vali p&auml;rg (chain) caption"
-msgstr ""
+msgstr "Select chain"
 
 #: classes/core/acl/acl_class.aw:prop_chain_comment
 msgid "Omaduse Vali p&auml;rg (chain) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:prop_role
 msgid "Omaduse Vali roll (role) caption"
-msgstr ""
+msgstr "Select role"
 
 #: classes/core/acl/acl_class.aw:prop_role_comment
 msgid "Omaduse Vali roll (role) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:prop_groups
 msgid "Omaduse Vali grupid (groups) caption"
-msgstr ""
+msgstr "Select groups"
 
 #: classes/core/acl/acl_class.aw:prop_groups_comment
 msgid "Omaduse Vali grupid (groups) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:prop_priority
 msgid "Omaduse Prioriteet (priority) caption"
-msgstr ""
+msgstr "Priority"
 
 #: classes/core/acl/acl_class.aw:prop_priority_comment
 msgid "Omaduse Prioriteet (priority) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:prop_update_acl
 msgid "Omaduse Uuenda ACL (update_acl) caption"
-msgstr ""
+msgstr "Update ACL"
 
 #: classes/core/acl/acl_class.aw:prop_update_acl_comment
 msgid "Omaduse Uuenda ACL (update_acl) kommentaar"
@@ -72,13 +72,13 @@ msgstr ""
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_CHAIN
 msgid "Seose pärg (RELTYPE_CHAIN) tekst"
-msgstr ""
+msgstr "chain"
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_ROLE
 msgid "Seose roll (RELTYPE_ROLE) tekst"
-msgstr ""
+msgstr "role"
 
 #: classes/core/acl/acl_class.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "group"
 

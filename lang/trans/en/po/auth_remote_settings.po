@@ -48,41 +48,41 @@ msgstr ""
 
 #: classes/core/users/auth/auth_remote_settings.aw:group_sel_sites
 msgid "Grupi Vali saidid (sel_sites) pealkiri"
-msgstr ""
+msgstr "Select sites"
 
 #: classes/core/users/auth/auth_remote_settings.aw:group_sel_users
 msgid "Grupi Vali kasutajad (sel_users) pealkiri"
-msgstr ""
+msgstr "Select users"
 
 #: classes/core/users/auth/auth_remote_settings.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
-msgstr ""
+msgstr "Activity"
 
 #: classes/core/users/auth/auth_remote_settings.aw:rel_RELTYPE_USER
 msgid "Seose kasutaja (RELTYPE_USER) tekst"
-msgstr ""
+msgstr "user"
 
 #: classes/core/users/auth/auth_remote_settings.aw:122
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/core/users/auth/auth_remote_settings.aw:130
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
 #: classes/core/users/auth/auth_remote_settings.aw:137
 msgid "Lubatud automaatne ligip&auml;&auml;s"
-msgstr ""
+msgstr "Automatic access allowed"
 
 #: classes/core/users/auth/auth_remote_settings.aw:173
 msgid "Sait"
-msgstr ""
+msgstr "Site"
 
 #: classes/core/users/auth/auth_remote_settings.aw:180
 msgid "Kasutaja, kellena teise saidi kasutajad ligi saavad"
-msgstr ""
+msgstr "User that the other users will gain access as"
 
 #: classes/core/users/auth/auth_remote_settings.aw:310
 msgid "Antud link ei võimalda abikeskkonda siseneda, palun kontakteeruge <a href='mailto:support@automatweb.com'>administraatoriga</a> "
-msgstr ""
+msgstr "The given link does not allow you to enter the help center, please contact <a href='mailto:support@automatweb.com'>administraatoriga</a>"
 

@@ -16,73 +16,73 @@ msgstr ""
 
 #: classes/aliasmgr.aw:145
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/aliasmgr.aw:495
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/aliasmgr.aw:501
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/aliasmgr.aw:508
 msgid "Muu info"
-msgstr ""
+msgstr "Other info"
 
 #: classes/aliasmgr.aw:514
 msgid "Alias"
-msgstr ""
+msgstr "Alias"
 
 #: classes/aliasmgr.aw:522
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: classes/aliasmgr.aw:531
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: classes/aliasmgr.aw:540
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/aliasmgr.aw:548
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/aliasmgr.aw:559
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/aliasmgr.aw:567
 msgid "Seose tüüp"
-msgstr ""
+msgstr "Connection type"
 
 #: classes/aliasmgr.aw:1132
 msgid "Lisa uus objekt"
-msgstr ""
+msgstr "Add new object"
 
 #: classes/aliasmgr.aw:1142 classes/aliasmgr.aw:1151
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/aliasmgr.aw:1168
 msgid "Tõlgi"
-msgstr ""
+msgstr "Translate"
 
 #: classes/aliasmgr.aw:1179
 msgid "Reload"
-msgstr ""
+msgstr "Reload"
 
 #: classes/aliasmgr.aw:1190
 msgid "Loo seos(ed)"
-msgstr ""
+msgstr "Add connection(s)"
 
 #: classes/aliasmgr.aw:1200
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/aliasmgr.aw:1207
 msgid "Kustuta valitud seos(ed)"
-msgstr ""
+msgstr "Delete selected connection(s)"
 

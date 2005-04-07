@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/core/obj/acl_base.aw:342
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
-msgstr ""
+msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 
 #: classes/core/obj/acl_base.aw:537
 msgid "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
-msgstr ""
+msgstr "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 

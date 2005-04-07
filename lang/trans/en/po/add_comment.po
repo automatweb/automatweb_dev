@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/plugins/document/add_comment.aw:13 classes/plugins/document/add_comment.aw:33
 msgid "Lisa kommentaar nähtav"
-msgstr ""
+msgstr "Add comment visible"
 
