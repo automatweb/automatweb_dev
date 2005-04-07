@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.7 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.8 2005/04/07 11:09:20 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -19,6 +19,8 @@
 @property sform_t type=table no_caption=1
 @caption Otsinguvorm
 
+@property no_submit type=checkbox ch_value=1 
+@caption &Auml;ra n&auml;ita otsi nuppu
 
 @groupinfo stbl caption="Tulemuste tabel"
 @default group=stbl
@@ -169,6 +171,16 @@ class otv_ds_pp_search extends class_base
 			"align" => "center"
 		));
 		$t->define_field(array(
+			"name" => "is_date",
+			"caption" => t("Kuup&auml;ev"),
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "is_number",
+			"caption" => t("Number"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "defaultsort",
 			"caption" => t("Vaikimisi sorteeritud"),
 			"align" => "center"
@@ -239,6 +251,16 @@ class otv_ds_pp_search extends class_base
 					"value" => 1,
 					"checked" => ($td[$fldid]["sortable"] == 1)
 				)),
+				"is_date" => html::checkbox(array(
+					"name" => "td[$fldid][is_date]",
+					"value" => 1,
+					"checked" => ($td[$fldid]["is_date"] == 1)
+				)),
+				"is_number" => html::checkbox(array(
+					"name" => "td[$fldid][is_number]",
+					"value" => 1,
+					"checked" => ($td[$fldid]["is_number"] == 1)
+				)),
 				"defaultsort" => $defs,
 				"viewcol" => $vc,
 				"ord" => html::textbox(array(
@@ -299,12 +321,25 @@ class otv_ds_pp_search extends class_base
 				continue;
 			}
 
-			$t->define_field(array(
+			$tdef = array(
 				"name" => "aw_".$tf,
 				"caption" => $tf_dat["caption"],
 				"align" => "center",
 				"sortable" => $tf_dat["sortable"]
-			));
+			);
+
+			if ($tf_dat["is_date"] == 1)
+			{
+				$tdef["type"] = "time";
+				$tdef["numeric"] = 1;
+				$tdef["format"] = "d.m.Y";
+			}
+			else
+			if ($tf_dat["is_number"] == 1)
+			{
+				$tdef["numeric"] = 1;
+			}
+			$t->define_field($tdef);
 
 			if ($td["__defaultsort"] == $tf)
 			{
@@ -317,6 +352,15 @@ class otv_ds_pp_search extends class_base
 	{
 		$td = safe_array($o->meta("stbl"));
 
+		$datecols = array();
+		foreach($td as $tf_n => $tf_d)
+		{
+			if ($tf_d["is_date"] == 1)
+			{
+				$datecols[] = "aw_".$tf_n;
+			}
+		}
+
 		$sql = $this->get_search_sql($o, $req);
 
 		$this->db_query($sql);
@@ -328,6 +372,12 @@ class otv_ds_pp_search extends class_base
 					"url" => $row["aw_url"],
 					"caption" => $row["aw_".$td["__viewcol"]]
 				));
+			}
+
+			foreach($datecols as $date_col)
+			{
+				list($_d, $_m, $_y) = explode(".", $row[$date_col]);
+				$row[$date_col] = mktime(4,0,0, $_m, $_d, $_y);
 			}
 			$t->define_data($row);
 		}
@@ -425,12 +475,16 @@ class otv_ds_pp_search extends class_base
 		{
 			$htmlc->add_property($pd);
 		}
-		$htmlc->add_property(array(
-			"name" => "search",
-			"caption" => t("Otsi"),
-			"type" => "submit",
-			"store" => "no"
-		));
+
+		if (!$ob->prop("no_submit"))
+		{
+			$htmlc->add_property(array(
+				"name" => "search",
+				"caption" => t("Otsi"),
+				"type" => "submit",
+				"store" => "no"
+			));
+		}
 		$htmlc->finish_output();
 
 		$html = $htmlc->get_result(array(
