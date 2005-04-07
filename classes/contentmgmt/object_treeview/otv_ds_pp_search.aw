@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.8 2005/04/07 11:09:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_pp_search.aw,v 1.9 2005/04/07 13:52:07 kristo Exp $
 // otv_ds_pp_search.aw - Objektinimekirja pp andmeallika otsing 
 /*
 
@@ -21,6 +21,9 @@
 
 @property no_submit type=checkbox ch_value=1 
 @caption &Auml;ra n&auml;ita otsi nuppu
+
+@property no_search_form type=checkbox ch_value=1 
+@caption &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu)
 
 @groupinfo stbl caption="Tulemuste tabel"
 @default group=stbl
@@ -469,27 +472,33 @@ class otv_ds_pp_search extends class_base
 			"request" => $request
 		));
 
-		$htmlc = get_instance("cfg/htmlclient");
-		$htmlc->start_output();
-		foreach($props as $pn => $pd)
-		{
-			$htmlc->add_property($pd);
-		}
+		$html = "";
 
-		if (!$ob->prop("no_submit"))
+		if (!$ob->prop("no_search_form"))
 		{
-			$htmlc->add_property(array(
-				"name" => "search",
-				"caption" => t("Otsi"),
-				"type" => "submit",
-				"store" => "no"
+			$htmlc = get_instance("cfg/htmlclient");
+			$htmlc->start_output();
+			foreach($props as $pn => $pd)
+			{
+				$htmlc->add_property($pd);
+			}
+
+			if (!$ob->prop("no_submit"))
+			{
+				$htmlc->add_property(array(
+					"name" => "search",
+					"caption" => t("Otsi"),
+					"type" => "submit",
+					"store" => "no"
+				));
+			}
+			$htmlc->finish_output();
+	
+			$html = $htmlc->get_result(array(
+				"raw_output" => 1
 			));
 		}
-		$htmlc->finish_output();
 
-		$html = $htmlc->get_result(array(
-			"raw_output" => 1
-		));
 
 		classload("vcl/table");
 		$t = new aw_table(array(
