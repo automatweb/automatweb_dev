@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.67 2005/04/07 07:49:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.68 2005/04/07 08:52:19 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1132,14 +1132,19 @@ class promo extends class_base
 					// and give the id's and sort by and length to an object_list and let the database sort it all out
 					$ids = safe_array($box->meta("content_documents"));
 					$ids[$o->id()] = $o->id();
-	
-					$ol = new object_list(array(
+
+					$filt = array(
 						"oid" => $ids,
 						"limit" => $box->prop("ndocs"),
-						"sort_by" => $this->_get_ordby($box),
 						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
 						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
-					));
+					);
+					$ob = $this->_get_ordby($box);
+					if (trim($ob) != "")
+					{
+						$filt["sort_by"] = $ob;
+					}
+					$ol = new object_list($filt);
 
 					// now we know the whole list, so just set that
 					$box->set_meta("content_documents", $this->make_keys($ol->ids()));
@@ -1165,12 +1170,17 @@ class promo extends class_base
 				if ($box->prop("sort_by") != "")
 				{
 					// need to reorder list
-					$ol = new object_list(array(
+					$filt = array(
 						"oid" => $mt,
-						"sort_by" => $this->_get_ordby($box),
 						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
 						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
-					));
+					);
+					$ob = $this->_get_ordby($box);
+					if (trim($ob) != "")
+					{
+						$filt["sort_by"] = $ob;
+					}
+					$ol = new object_list($filt);
 					$mt = $this->make_keys($ol->ids());
 				}
 
@@ -1211,7 +1221,7 @@ class promo extends class_base
 
 	function _get_ordby($box)
 	{
-		$ordby = "";
+		$ordby = NULL;
 		if ($box->meta("sort_by") != "")
 		{
 			$ordby = $box->meta("sort_by");
