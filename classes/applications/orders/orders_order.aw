@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.12 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.13 2005/04/07 09:51:57 ahti Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -74,6 +74,9 @@
 @reltype PERSON value=2 clid=CL_CRM_PERSON
 @caption Tellija
 
+@reltype CFGMANAGER value=3 clid=CL_CFGMANAGER
+@caption Seadete haldur
+
 @groupinfo orderinfo caption="Tellimuse andmed"
 @groupinfo orderitems caption="Tellitud tooted"
 */
@@ -88,6 +91,18 @@ class orders_order extends class_base
 			"tpldir" => "applications/orders",
 			"clid" => CL_ORDERS_ORDER
 		));
+	}
+	
+	function callback_on_load($arr)
+	{
+		if(is_oid($arr["request"]["id"]) && $this->can("view", $arr["request"]["id"]))
+		{
+			$obj = obj($arr["request"]["id"]);
+			if($cfgmanager = $obj->get_first_conn_by_reltype("RELTYPE_CFGMANAGER"))
+			{
+				$this->cfgmanager = $cfgmanager->prop("to");
+			}
+		}
 	}
 	
 	//////
@@ -510,17 +525,10 @@ class orders_order extends class_base
 	
 	function send_mail_to_admin()
 	{
-		$form = &obj($_SESSION["order_form_id"]);
+		$form = obj($_SESSION["order_form_id"]);
 		$admin_mail = $form->prop("orders_post_to");
-		
-		$msg = &obj();
-		$msg->set_class_id(CL_MESSAGE);
-		$msg->set_parent($_SESSION["order_form_id"]);
-		$msg->save();
-		
-		
 		$form_inst = get_instance(CL_ORDERS_FORM);
-		$order = &obj($_SESSION["order_cart_id"]);
+		$order = obj($_SESSION["order_cart_id"]);
 		$vars = array("order" => $order);
 		if($form->prop("no_pdata_check") == 1)
 		{
@@ -543,29 +551,41 @@ class orders_order extends class_base
 		}
 		else
 		{
-			$person = $order->get_first_obj_by_reltype('RELTYPE_PERSON');
+			$person = $order->get_first_obj_by_reltype("RELTYPE_PERSON");
 		}
 		if($person && $person->prop("email"))
 		{
-			$person_email = &obj($person->prop("email"));
-			$msg->set_prop("mfrom", $person_email->prop("mail"));
+			$person_email = obj($person->prop("email"));
+			$froma = $person_email->prop("mail");
+			$person_name = $person->name();
 		}
 		
-		$msg->set_prop("mto", $admin_mail);
-		$msg->set_prop("name", $form->name());
-		$msg->set_prop("html_mail", 1);
 			
 		$_SESSION["show_order"] = 1;
 		$vars["show_order"] = 1;
 		$content = $form_inst->get_confirm_persondata($vars)."<br />".($_SESSION["orders_form"]["payment"]["type"] == "rent" ? $form_inst->get_rent_table() : $form_inst->get_cart_table());
 		unset($_SESSION["show_order"]);
-		$msg->set_prop("message", $content);
 		
-		$msg->save();
-		$mail_inst = get_instance(CL_MESSAGE);
-		$mail_inst->send_message(array(
-			"id" => $msg->id(),
+		$awm = get_instance("protocols/mail/aw_mail");
+
+		$awm->create_message(array(
+			"froma" => $froma,
+			"subject" => $form->name(),
+			"to" => $admin_mail,
+			"body" => t("Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"),
 		));
+		$awm->htmlbodyattach(array(
+			"data" => $content,
+		));
+		if($form->prop("add_attach") == 1)
+		{
+			$awm->fattach(array(
+				"contenttype" => "application/vnd.ms-excel",
+				"name" => $order->id()."_".date("dmy")."_$person_name.xls",
+				"content" => $content,
+			));
+		}
+		$awm->gen_mail();
 	}
 	
 	function send_mail_to_orderer()

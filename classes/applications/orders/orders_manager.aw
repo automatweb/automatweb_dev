@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.4 2005/03/22 15:47:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.5 2005/04/07 09:51:57 ahti Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -19,7 +19,8 @@
 @property orders_table type=table no_caption=1
 @caption Tellimuste tabel
 
-
+@reltype CFGMANAGER value=1 clid=CL_CFGMANAGER
+@caption Seadete haldur
 */
 
 class orders_manager extends class_base
@@ -30,10 +31,21 @@ class orders_manager extends class_base
 			"clid" => CL_ORDERS_MANAGER
 		));
 	}
+	
+	function callback_on_load($arr)
+	{
+		if(is_oid($arr["request"]["id"]) && $this->can("view", $arr["request"]["id"]))
+		{
+			$obj = obj($arr["request"]["id"]);
+			if($cfgmanager = $obj->get_first_conn_by_reltype("RELTYPE_CFGMANAGER"))
+			{
+				$this->cfgmanager = $cfgmanager->prop("to");
+			}
+		}
+	}
 
 	//////
 	// class_base classes usually need those, uncomment them if you want to use them
-
 	
 	function get_property($arr)
 	{
@@ -109,7 +121,7 @@ class orders_manager extends class_base
 				"date" => $order->created(),
 				"view" => html::href(array(
 					"caption" => t("Vaata tellimust"),
-					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "return_url" => get_ru()), CL_ORDERS_ORDER)
+					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "group" => "orderitems", "return_url" => get_ru(), ), CL_ORDERS_ORDER)
 				)),
 			));
 		}

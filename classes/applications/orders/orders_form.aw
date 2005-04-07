@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.12 2005/03/22 15:47:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.13 2005/04/07 09:51:57 ahti Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -16,6 +16,9 @@
 
 @property orders_post_to type=textbox
 @caption Mail kuhu tellimus saata
+
+@property add_attach type=checkbox ch_value=1
+@caption Lisa tellimus manusena
 
 @property orders_to_mail type=checkbox ch_value=1
 @caption Saada e-mail tellijale
