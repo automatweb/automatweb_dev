@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.20 2005/04/07 07:56:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.21 2005/04/07 12:01:30 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -302,7 +302,7 @@ class pot_scanner extends core
 	{
 		echo "creating aw files from translated po files\n\n";
 		// for each language dir
-		$langs = $this->_get_langs();
+		$langs = $this->get_langs();
 
 		foreach($langs as $lang)
 		{
@@ -398,7 +398,7 @@ class pot_scanner extends core
 		return str_replace("\"", "\\\"", $str);
 	}
 
-	function _get_langs()
+	function get_langs()
 	{
 		$langs = array();
 		$dir = aw_ini_get("basedir")."/lang/trans";
@@ -520,7 +520,7 @@ class pot_scanner extends core
 
 	function _do_update_po($file_to)
 	{
-		$langs = $this->_get_langs();
+		$langs = $this->get_langs();
 		foreach($langs as $lang)
 		{
 			$fn = aw_ini_get("basedir")."/lang/trans/$lang/po/".basename($file_to,".pot").".po";
