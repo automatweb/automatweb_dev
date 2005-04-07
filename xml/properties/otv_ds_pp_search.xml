@@ -22,6 +22,26 @@
             <caption>Otsinguvorm</caption>
       </property>
       <property>
+            <name>no_submit</name>
+            <table>objects</table>
+            <group>sform</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;Auml;ra n&amp;auml;ita otsi nuppu</caption>
+      </property>
+      <property>
+            <name>no_search_form</name>
+            <table>objects</table>
+            <group>sform</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;Auml;ra n&amp;auml;ita otsingu vormi (otsing ainult urli kaudu)</caption>
+      </property>
+      <property>
             <name>stbl_t</name>
             <table>objects</table>
             <group>stbl</group>
