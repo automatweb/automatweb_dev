@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.128 2005/04/05 10:42:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.129 2005/04/07 12:14:13 kristo Exp $
 
 /*
 
@@ -1939,6 +1939,10 @@ class site_show extends class_base
 	// builds HTML popups
 	function build_popups()
 	{
+		if ($_GET["print"] == 1)
+		{
+			return;
+		}
 		// that sucks. We really need to rewrite that
 		// I mean we always read information about _all_ the popups
 		$pl = new object_list(array(

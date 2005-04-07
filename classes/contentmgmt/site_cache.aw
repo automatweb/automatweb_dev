@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.21 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.22 2005/04/07 12:14:13 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -205,6 +205,10 @@ class site_cache extends aw_template
 	// builds HTML popups
 	function build_popups()
 	{
+		if ($_GET["print"] == 1)
+		{
+			return;
+		}
 		$so = obj(aw_global_get("section"));
 		$this->path = $so->path();
 
