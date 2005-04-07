@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.9 2005/04/04 08:44:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.10 2005/04/07 10:32:12 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -78,13 +78,28 @@ class mini_gallery extends class_base
 			"class_id" => CL_IMAGE,
 			"parent" => $ob->prop("folder"),
 			"sort_by" => "objects.jrk",
-			"lang_id" => array()
+			"lang_id" => array(),
+			"site_id" => array()
 		));
 
 		$img_c = $images->count();
-		$rows = $img_c / $ob->prop("cols");
+		$rows = $ob->prop("rows") ? $ob->prop("rows") : $img_c / $ob->prop("cols");
 		$cols = $ob->prop("cols");
 		$img = $images->begin(); 
+
+		if ($ob->prop("rows"))
+		{
+			$this->_do_pageselector($ob, $img_c, $rows, $cols);
+		}
+
+		if ($_GET["mg_pg"])
+		{
+			for($i = 0; $i < ($_GET["mg_pg"] * $rows * $cols); $i++)
+			{
+				$img = $images->next();
+				$img_c--;
+			}
+		}
 
 		$ii = get_instance(CL_IMAGE);
 
@@ -208,6 +223,46 @@ class mini_gallery extends class_base
 		}
 
 		@rmdir($tn);
+	}
+
+	function _do_pageselector($ob, $img_c, $rows, $cols)
+	{
+		if ($rows * $cols >= $img_c)
+		{
+			if (aw_global_get("uid") == "kix")
+			{
+				echo "reta r*c = ".($rows * $cols)." imgc = $img_c <br>";
+			}
+			return;
+		}
+
+		$num_pgs = $img_c / ($rows * $cols);
+		for($i = 0; $i < $num_pgs; $i++)
+		{
+			$this->vars(array(
+				"page_link" => aw_url_change_var("mg_pg", $i),
+				"page_nr" => $i+1
+			));
+
+			if ($_GET["mg_pg"] == $i)
+			{
+				$pgs[] = $this->parse("PAGE_SEL");
+			}
+			else
+			{
+				$pgs[] = $this->parse("PAGE");
+			}
+		}
+
+		$this->vars(array(
+			"PAGE" => join($this->parse("PAGE_SEPRATOR"), $pgs),
+			"PAGE_SEPARATOR" => "",
+			"PAGE_SEL" => ""
+		));
+
+		$this->vars(array(
+			"PAGESELECTOR" => $this->parse("PAGESELECTOR")
+		));
 	}
 }
 ?>

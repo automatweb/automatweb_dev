@@ -6,6 +6,22 @@
 }
 </style>
 
+<!-- SUB: PAGESELECTOR -->
+Vali lehek&uuml;lg: 
+<!-- SUB: PAGE -->
+<a href='{VAR:page_link}'>{VAR:page_nr}</a>
+<!-- END SUB: PAGE -->
+
+<!-- SUB: PAGE_SEL -->
+{VAR:page_nr}
+<!-- END SUB: PAGE_SEL -->
+
+<!-- SUB: PAGE_SEPARATOR -->
+|
+<!-- END SUB: PAGE_SEPARATOR -->
+
+<!-- END SUB: PAGESELECTOR -->
+
 <table border="0" cellpadding="0" cellspacing="10" width="100%" >
 <!-- SUB: ROW -->
 	<tr>
