@@ -268,25 +268,6 @@ function init_config($arr)
 				define($tdef,$tid);
 			}
 		}
-
-		// translate class names if it is so said
-		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
-		{
-			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
-			if (file_exists($trans_fn))
-			{
-				require_once($trans_fn);
-				foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
-				{
-					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = t("Klassi ".$cld["name"]." ($clid) nimi");
-				}
-
-				foreach($GLOBALS["cfg"]["__default"]["classfolders"] as $clid => $cld)
-				{
-					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = t("Klassi kataloogi ".$cld["name"]." ($clid) nimi");
-				}
-			}
-		}
 	};
 
 	// db driver quoting settings
@@ -301,6 +282,35 @@ function init_config($arr)
 	unset($td["errors"]);
 	
 	$GLOBALS["cfg"]["__default__short"] = $td;
+}
+
+// this is separate from ini parsing, because the session is not started yet, when ini file is parsed :(
+function lc_init()
+{
+	// see if user has an ui language pref
+	if (($_tmp = $_SESSION["user_adm_ui_lc"]) != "")
+	{
+		$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
+	}
+
+	// translate class names if it is so said
+	if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	{
+		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
+		if (file_exists($trans_fn))
+		{
+			require_once($trans_fn);
+			foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
+			{
+				$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = t("Klassi ".$cld["name"]." ($clid) nimi");
+			}
+
+			foreach($GLOBALS["cfg"]["__default"]["classfolders"] as $clid => $cld)
+			{
+				$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = t("Klassi kataloogi ".$cld["name"]." ($clid) nimi");
+			}
+		}
+	}
 }
 
 // this will not save the new value to the ini file

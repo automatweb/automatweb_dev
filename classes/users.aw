@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.140 2005/04/05 13:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.141 2005/04/07 12:00:50 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1661,7 +1661,13 @@ class users extends users_user
 				// do quick login
 				$_SESSION["uid"] = $arr["uid"];
 				aw_global_set("uid", $arr["uid"]);
-				aw_session_set("uid_oid", $this->get_oid_for_uid($arr["uid"]));
+				$oid = $this->get_oid_for_uid($arr["uid"]);
+				aw_session_set("uid_oid", $oid);
+				if (is_oid($oid) && $this->can("view", $oid))
+				{
+					$o = obj($oid);
+					aw_session_set("user_adm_ui_lc", $o->prop("ui_language"));
+				}
 				$this->request_startup();
 
 				// remove hash from usable hashes

@@ -9,6 +9,9 @@ if (empty($_COOKIE["nocache"]) && aw_ini_get("config.use_squid"))
 
 session_name("automatweb");
 session_start();
+
+lc_init();
+
 classload("aw_template");
 classload("defs");
 classload("cache");

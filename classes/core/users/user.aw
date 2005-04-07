@@ -137,6 +137,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property aclwizard_a type=text store=no
 @caption 
 
+@property ui_language type=select table=objects field=meta method=serialize
+@caption Liidese keel
+
 @groupinfo userdef caption="User-defined"
 
 @property userch1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=userdef user=1
@@ -324,6 +327,11 @@ class user extends class_base
 					));
 				}
 				break;
+
+			case "ui_language":
+				$i = get_instance("core/trans/pot_scanner");
+				$prop["options"] = array("" => "") + $i->get_langs();
+				break;
 		}
 		return PROP_OK;
 	}	
@@ -445,6 +453,17 @@ class user extends class_base
 					}
 				}
 				$prop["value"] = $arr["request"]["aclwizard"];
+				break;
+
+			case "ui_language":
+				if ($prop["value"] == "")
+				{
+					aw_session_del("user_adm_ui_lc");
+				}
+				else
+				{
+					aw_session_set("user_adm_ui_lc", $prop["value"]);
+				}
 				break;
 		}
 		return PROP_OK;

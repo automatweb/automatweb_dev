@@ -2,6 +2,7 @@
 $uid = "";	// for the extra paranoid 
 session_name("automatweb");
 session_start();
+lc_init();
 
 classload("timer");
 classload("aw_template");

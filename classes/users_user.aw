@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.111 2005/04/05 13:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.112 2005/04/07 12:00:50 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -249,6 +249,8 @@ class users_user extends aw_template
 			$user_obj->save(); 
 		}
 		aw_restore_acl();
+
+		aw_session_set("user_adm_ui_lc", $user_obj->prop("ui_language"));
 		
 		$this->_log(ST_USERS, SA_LOGIN, $uid);
 		if (aw_ini_get("TAFKAP"))
