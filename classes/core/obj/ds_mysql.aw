@@ -1509,7 +1509,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					// join from rel to prop
 					$prev_t = "aliases_".$prev["from_class"];
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
-					if (!is_array($new_t))
+					if (!is_array($new_t) || $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["table"] == "objects")
 					{
 						// class only has objects table, so join that
 						$tbl = "objects_rel_".$prev["reltype"];
