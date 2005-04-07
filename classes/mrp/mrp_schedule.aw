@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.41 2005/04/07 15:07:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.42 2005/04/07 18:52:17 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -656,6 +656,8 @@ class mrp_schedule extends class_base
 				}
 			}
 		}
+
+/* dbg */ if ($_GET["mrp_scheduler_dbg"]) { echo "planned."; }
 	}
 
 /* --------------------------  PRIVATE METHODS ----------------------------- */

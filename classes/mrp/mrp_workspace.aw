@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.86 2005/04/07 15:07:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.87 2005/04/07 18:52:17 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -898,30 +898,30 @@ class mrp_workspace extends class_base
 				switch ($project->prop ("state"))
 				{
 					case MRP_STATUS_PLANNED:
-						$starttime_column = "starttime";
+						$starttime_prop = "starttime";
 						break;
 					case MRP_STATUS_INPROGRESS:
 					case MRP_STATUS_DONE:
 					case MRP_STATUS_ARCHIVED:
-						$starttime_column = "started";
+						$starttime_prop = "started";
 						break;
 				}
 
 				$this_object = obj($arr["args"]["id"]);
 				$list = new object_list (array (
 					"class_id" => CL_MRP_JOB,
+					"project" => $project_id,
 					"parent" => $this_object->prop ("jobs_folder"),
 					"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 					"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 					$starttime_prop => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-					"project" => $project_id,
 				));
 				$list->sort_by (array(
 					"prop" => $starttime_prop,
 					"order" => "asc" ,
 				));
 				$list->begin();
-				$first_job = $list->next();
+				$first_job = $list->next ();
 
 				if (is_object ($first_job))
 				{

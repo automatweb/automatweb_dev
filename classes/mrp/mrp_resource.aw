@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.45 2005/04/07 15:07:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.46 2005/04/07 18:52:17 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 

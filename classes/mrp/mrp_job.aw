@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.52 2005/04/07 15:07:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.53 2005/04/07 18:52:17 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -441,7 +441,7 @@ class mrp_job extends class_base
 		}
 
 		$toolbar->add_button(array(
-			"name" => "scontinue",
+			"name" => "continue",
 			//"img" => "continue.gif",
 			"tooltip" => t("J&auml;tka"),
 			"action" => $action,
@@ -668,6 +668,10 @@ class mrp_job extends class_base
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
 			}
+			else
+			{
+				$errors[] = t("Ressursihalduskeskkond defineerimata.");
+			}
 
 			### log job change
 			$ws = get_instance (CL_MRP_WORKSPACE);
@@ -789,6 +793,10 @@ class mrp_job extends class_base
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
+			}
+			else
+			{
+				$errors[] = t("Ressursihalduskeskkond defineerimata.");
 			}
 
 			### log event
@@ -968,7 +976,7 @@ class mrp_job extends class_base
 		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
 			MRP_STATUS_INPROGRESS,
-			// MRP_STATUS_ONHOLD,
+			MRP_STATUS_PLANNED,
 		);
 		$applicable_job_states = array (
 			MRP_STATUS_ABORTED,
@@ -1206,6 +1214,10 @@ class mrp_job extends class_base
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
+			}
+			else
+			{
+				return t("Ressursihalduskeskkond defineerimata.");
 			}
 		}
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.62 2005/04/07 15:07:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.63 2005/04/07 18:52:17 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1340,7 +1340,7 @@ class mrp_case extends class_base
 							}
 							else
 							{
-								$errors .= "Viga: ressursi objekti-id katkine. ";//!!! mida see t2hendada v6iks?
+								$errors .= t("Ressursi objekti-id katkine. ");//!!! mida see t2hendada v6iks?
 							}
 							break;
 
@@ -1354,7 +1354,7 @@ class mrp_case extends class_base
 				}
 				else
 				{
-					$errors .= "Viga: töö objekti-id katkine";
+					$errors .= t("Töö objekti-id katkine");
 				}
 			}
 		}
@@ -1379,6 +1379,10 @@ class mrp_case extends class_base
 				{
 					$workspace->set_prop("rescheduling_needed", 1);
 					$workspace->save();
+				}
+				else
+				{
+					return t("Ressursihalduskeskkond defineerimata");
 				}
 			}
 
@@ -1755,6 +1759,10 @@ class mrp_case extends class_base
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
 			}
+			else
+			{
+				return t("Ressursihalduskeskkond defineerimata");
+			}
 		}
 	}
 
@@ -1988,6 +1996,10 @@ class mrp_case extends class_base
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
 			}
+			else
+			{
+				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
+			}
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -2113,6 +2125,10 @@ class mrp_case extends class_base
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
 			}
+			else
+			{
+				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
+			}
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -2181,6 +2197,10 @@ class mrp_case extends class_base
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
 				$workspace->save();
+			}
+			else
+			{
+				return aw_url_change_var ("errors", array (t("Ressursihalduskeskkond defineerimata.")), $return_url);
 			}
 
 			### log event
