@@ -937,6 +937,7 @@ class _int_object
 		$val = $this->_int_get_prop($param);
 		switch($type)
 		{
+			// YOU *CAN NOT* convert dates to strings here - it fucks up dates in vcl tables 
 			case "relmanager":
 			case "relpicker": 
 			case "classificator":
