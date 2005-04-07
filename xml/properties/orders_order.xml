@@ -306,6 +306,11 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Tellija</caption>
             </PERSON>
+            <CFGMANAGER>
+                  <value>3</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete haldur</caption>
+            </CFGMANAGER>
       </reltypes>
 </properties>
 

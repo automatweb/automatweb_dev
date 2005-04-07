@@ -39,5 +39,12 @@
                   <submit>no</submit>
             </ordermnager>
       </groupinfo>
+      <reltypes>
+            <CFGMANAGER>
+                  <value>1</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete haldur</caption>
+            </CFGMANAGER>
+      </reltypes>
 </properties>
 

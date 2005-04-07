@@ -19,6 +19,16 @@
             <caption>Mail kuhu tellimus saata</caption>
       </property>
       <property>
+            <name>add_attach</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisa tellimus manusena</caption>
+      </property>
+      <property>
             <name>orders_to_mail</name>
             <table>objects</table>
             <group>general</group>
