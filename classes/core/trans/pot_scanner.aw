@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.18 2005/04/06 12:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.19 2005/04/07 07:51:06 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -310,17 +310,17 @@ class pot_scanner extends core
 
 			// get .po files
 			$po_files = array();
-			$this->_files_from_folder($dir."/".$lang."/po", "po", $po_files);
+			$po_fld = aw_ini_get("basedir")."/lang/trans/".$lang."/po";
+			$this->_files_from_folder($po_fld, "po", $po_files);
 
 			// get .aw files
 			$aw_files = array();
-			$this->_files_from_folder($dir."/".$lang."/aw", "aw", $aw_files);
+			$this->_files_from_folder(aw_ini_get("basedir")."/lang/trans/".$lang."/aw", "aw", $aw_files);
 
 			// compare times 
 			foreach($po_files as $fn => $tm)
 			{
-				$awfn = $dir."/".$lang."/aw/".basename($fn, ".po").".aw";
-
+				$awfn = aw_ini_get("basedir")."/lang/trans/".$lang."/aw/".basename($fn, ".po").".aw";
 				// if .po is newer
 				if (!isset($aw_files[$awfn]) || $aw_files[$awfn] < $tm)
 				{
@@ -472,6 +472,14 @@ class pot_scanner extends core
 				);
 			}
 
+			$clss = aw_ini_get("classfolders");
+			foreach($clss as $clid => $cld)
+			{
+				$strings[] = array(
+					"line" => "classfolder_".$clid,
+					"str" => "Klassi kataloogi ".$cld["name"]." ($clid) nimi",
+				);
+			}
 			$this->_cond_write_file($inipot, $strings, $inif);
 			$this->_do_update_po($inipot);
 			echo "wrote ini file translation\n";
@@ -490,6 +498,7 @@ class pot_scanner extends core
 				$this->_write_file($file_to, $strings, date("r"), $file_from);
 			}
 			@unlink($tmpf);
+			touch($file_to);
 		}
 		else
 		{
@@ -510,7 +519,7 @@ class pot_scanner extends core
 			else
 			{
 				// -U updates file in place, and real men do not need a backup
-				shell_exec("msgmerge -U --backup=off $fn $file_to 2>/dev/null");
+				shell_exec("msgmerge -N -U --backup=off $fn $file_to 2>/dev/null");
 				//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
 			}
 		}
