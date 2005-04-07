@@ -268,6 +268,20 @@ function init_config($arr)
 				define($tdef,$tid);
 			}
 		}
+
+		// translate class names if it is so said
+		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		{
+			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
+			if (file_exists($trans_fn))
+			{
+				require_once($trans_fn);
+				foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
+				{
+					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = t("Klassi ".$cld["name"]." ($clid) nimi");
+				}
+			}
+		}
 	};
 
 	// db driver quoting settings
@@ -875,6 +889,16 @@ function log_pv($mt)
 		fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")." $time \n");
 		fclose($f);
 	}
+}
+
+function t($s)
+{
+	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : $s;
+}
+
+function t2($s)
+{
+	return isset($GLOBALS["TRANS"][$s]) ? $GLOBALS["TRANS"][$s] : NULL;
 }
 
 //error_reporting(E_ALL ^ E_NOTICE);
