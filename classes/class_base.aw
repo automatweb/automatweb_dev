@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.380 2005/04/06 12:19:20 kristo Exp $
+// $Id: class_base.aw,v 2.381 2005/04/07 12:18:40 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -125,7 +125,8 @@ class class_base extends aw_template
 		// XXX: this is temporary
 		$this->vcl_delayed_init = array(
 			"comments" => 1,
-			"popup_search" => 1
+			"popup_search" => 1,
+			"relationmgr" => 1,
 		);
 
 		// XXX: this is also temporary
@@ -210,6 +211,7 @@ class class_base extends aw_template
 		$awt->start("cb-change");
 		$this->init_class_base();
 
+
 		$cb_values = aw_global_get("cb_values");
 
 		$has_errors = false;
@@ -227,6 +229,7 @@ class class_base extends aw_template
 		$this->orb_action = $args["action"];
 		
 		$this->is_translated = 0;
+
 
 		if (!isset($args["action"]))
 		{
@@ -297,6 +300,8 @@ class class_base extends aw_template
 				"obj_inst" => $this->obj_inst,
 				"args" => $args,
 			));
+
+
 		};
 
 
@@ -521,6 +526,11 @@ class class_base extends aw_template
 				};
 			};
 
+			if ($o_arr["no_form"])
+			{
+				$cli->set_opt("no_form",1);
+			};
+
 			$use_layout = $this->classinfo["layout"];
 			// XXX: cfgform seemingly overwrites classinfo
 			if ($use_layout == "boxed")
@@ -633,6 +643,12 @@ class class_base extends aw_template
 		if ($orb_class == "document")
 		{
 			$orb_class = "doc";
+		};
+
+		$cls_id = aw_global_get("class");
+		if (is_oid($cls_id))
+		{
+			$orb_class = $cls_id;
 		};
 
 		$argblock = array(
@@ -840,6 +856,11 @@ class class_base extends aw_template
 			$action = "change";
 		};
 		$orb_class = get_class($this->orb_class);
+		$class = aw_global_get("class");
+		if (is_oid($class))
+		{
+			$orb_class = $class;
+		};
 	
 		if ($save_ok)
 		{
@@ -889,6 +910,11 @@ class class_base extends aw_template
 			if ($this->new && isset($_POST["cfgform"]))
 			{
 				$args["cfgform"] = $_POST["cfgform"];
+			};
+			$retval = $this->mk_my_orb($action,$args,$orb_class);
+			if (is_numeric($class))
+			{
+				$retval = aw_url_change_var("class",$class,$retval);
 			};
 			$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
 			if ($args["return"] == "id")
@@ -980,6 +1006,13 @@ class class_base extends aw_template
 		{
 			return $this->tmp_cfgform;
 		}
+
+		// XXX: this happens for classes created with class_designer
+		if (empty($this->clid))
+		{
+			return false;
+		};
+
 		
 		$ol = new object_list(array(
 			"class_id" => CL_CFGFORM,
@@ -996,7 +1029,6 @@ class class_base extends aw_template
 			$first = $ol->begin();
 			return $first->id();
 		};
-
 
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
@@ -1036,12 +1068,33 @@ class class_base extends aw_template
 			$orb_class = $this->orb_class;
 		};
 
+		if (is_object($this->orb_class))
+		{
+			$orb_class = get_class($this->orb_class);
+		};
+
 		if ($orb_class == "document")
 		{
 			$orb_class = "doc";
 		};
 
-		$has_properties = $cfgu->has_properties(array("file" => $orb_class));
+		// XXX: think I should only deal with clid's anyway
+		$requested_class = aw_global_get("class");
+		if (is_oid($requested_class))
+		{
+			// XXX: check whether this is actually a valid class_id .. but how do I do that?
+			// I know the numeric registered class_id .. but I do not now what object it is
+			$class_obj = new object($requested_class);
+			if (CL_CLASS_DESIGNER == $class_obj->class_id())
+			{
+				$has_properties = true;
+			};
+		}
+		else
+		{
+			// has_properties only checks whether the file has a XML property file
+			$has_properties = $cfgu->has_properties(array("file" => $orb_class));
+		};
 		if (empty($has_properties))
 		{
 			die(sprintf("this class (%s/%d) does not have any defined properties ",$orb_class, $this->clid));
@@ -1182,6 +1235,11 @@ class class_base extends aw_template
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
 		$hide_tabs = $this->classinfo["hide_tabs"];
+		$orb_class = get_class($this->orb_class);
+		if (is_oid(aw_global_get("class")))
+		{
+			$orb_class = aw_global_get("class");
+		};
 		if (!$hide_tabs)
 		{
 			$groupinfo = $this->get_visible_groups();
@@ -1202,12 +1260,16 @@ class class_base extends aw_template
 					{
 						$link_args->set_at("_alias",get_class($this));
 					};
-					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+					$link = $this->mk_my_orb($orb_action,$link_args->get(),$orb_class);
+					if (is_numeric($orb_class))
+					{
+						$link = aw_url_change_var("class",$orb_class,$link);
+					};
 				}
 				elseif (!empty($this->use_form) && $this->use_form != "new")
 				{
 					$link_args->set_at("group",$key);
-					$link = $this->mk_my_orb($orb_action,$link_args->get(),get_class($this->orb_class));
+					$link = $this->mk_my_orb($orb_action,$link_args->get(),$orb_class);
 				}
 				else
 				{
@@ -1222,6 +1284,7 @@ class class_base extends aw_template
 						$val["caption"] = $commtrans;
 					};
 				};
+
 
 				$tabinfo = array(
 					"link" => &$link,
@@ -1316,14 +1379,17 @@ class class_base extends aw_template
 				);
 			};
 
-			//$this->tp->add_tab(array(
-			$this->cli->add_tab(array(
-				"id" => "list_aliases",
-				"link" => $link,
-				"caption" => t("Seostehaldur"),
-				"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
-				"disabled" => empty($this->id),
-			));
+			// experimental hook for new relationmgr
+			if (empty($this->classinfo["r2"]))
+			{
+				$this->cli->add_tab(array(
+					"id" => "list_aliases",
+					"link" => $link,
+					"caption" => t("Seostehaldur"),
+					"active" => isset($this->action) && (($this->action == "list_aliases") || ($this->action == "search_aliases")),
+					"disabled" => empty($this->id),
+				));
+			};
 		};
 		//if (empty($args["content"]))
 		//{
@@ -2368,6 +2434,7 @@ class class_base extends aw_template
 							"columns" => $this->columninfo,
 							"relinfo" => $this->relinfo,
 							"view" => $this->view,
+							"request" => $this->request,
 						));
 
 						if (is_array($res))
@@ -3792,12 +3859,16 @@ class class_base extends aw_template
 		{
 			$arr["clid"] = $this->clid;
 		};
+
+		$cls_id = aw_global_get("class");
 		// XXX: add some checks
 		$all_properties = $this->load_defaults(array(
 			"clid" => $arr["clid"],
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
+
+		// nii .. ja kuidas ma nüüd saan teada kõik omadused, mis mind huvitavad?
 
 
 		// I could use a different approach here ... for example, if I'm saving then
@@ -3809,6 +3880,33 @@ class class_base extends aw_template
 
 		$tmp = array();
 
+		if (is_numeric($cls_id) && $this->can("view", $cls_id))
+		{
+			$cl_vis = get_instance("applications/class_designer/class_visualizer");
+			$this->groupinfo = $cl_vis->get_class_groups(array(
+				"obj_id" => $cls_id,
+			));
+
+			// XXX: the only reason we load all properties is to figure out
+			// which groups are empty, this could probably be in some other way
+
+			// shouldn't do that here
+			$cfg_props = $cl_vis->get_group_properties(array(
+				"id" => $cls_id,
+			));
+			$designer_obj = new object($this->id);
+			$meta = $designer_obj->meta();
+			foreach($cfg_props as $key => $val)
+			{
+				if ($meta[$key])
+				{
+					$cfg_props[$key]["value"] = $meta[$key];
+				};
+			};
+			$all_properties = $cfg_props;
+
+		}
+		else
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
 			$cfg_props = $this->load_from_storage(array(
@@ -3827,8 +3925,6 @@ class class_base extends aw_template
 		else
 		{
 			// no config form? alright, load the default one then!
-
-
 			if ($arr["clid"] == CL_DOCUMENT )
 			{
 				global $CFG_DEBUG;
@@ -3972,6 +4068,7 @@ class class_base extends aw_template
 			};
 		}
 
+
 		// the very default group comes from arr
 		// groupinfo contains a flat list of all groups
 		// I need to figure out which group should I actually be using
@@ -4074,10 +4171,13 @@ class class_base extends aw_template
 				};
 			};
 
-			$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
+			//$this->prop_by_group = array_merge($this->prop_by_group,array_flip($propgroups));
+			$this->prop_by_group = $this->prop_by_group + array_flip($propgroups);
+
 			$property_groups[$key] = $propgroups;
 		};
-//$tmp = array();
+
+
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -4134,6 +4234,7 @@ class class_base extends aw_template
 			// shouldn't I do some kind of overriding?
 			$tmp[$key] = $propdata;
 		};
+
 
 		$this->use_group = $use_group;
 		return $tmp;
@@ -4294,6 +4395,7 @@ class class_base extends aw_template
 	}
 
 	// Defaults always get loaded, even if only for validation purposes
+	// holy fuck, this sucks
 	function load_defaults($arr = array())
 	{
 		$cfgu = get_instance("cfg/cfgutils");
@@ -4313,6 +4415,23 @@ class class_base extends aw_template
 			$this->classinfo = array();
 		};
 		$this->classinfo = array_merge($this->classinfo,$cfgu->normalize_text_nodes($cfgu->get_classinfo()));
+		if (isset($this->classinfo["r2"]))
+		{
+			$this->groupinfo["relationmgr"] = array(
+				"caption" => t("Seostehaldur"),
+				"no_form" => 1,
+				"submit" => "no",
+			);
+
+			$defaults["relationmgr"] = array(
+				"name" => "relationmgr",
+				"type" => "relationmgr",
+				"caption" => t("Seostehaldur"),
+				"store" => "no",
+				"group" => "relationmgr",
+			);
+
+		};
 
 		$this->layoutinfo = $cfgu->get_layoutinfo();
 
@@ -4408,6 +4527,7 @@ class class_base extends aw_template
 			$rv[$vgr] = $gval;
 		};
 
+
 		return $rv;
 	}
 
@@ -4437,6 +4557,7 @@ class class_base extends aw_template
 			"topic" => $arr["topic"],
 			"id" => $arr["id"],
 			"section" => $arr["section"],
+			"group_parent" => $arr["group_parent"],
 		));
 		// XXX: I need to lose class from the url
 		if (!empty($arr["_alias"]))
