@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.15 2005/04/06 07:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.16 2005/04/07 09:09:19 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -605,6 +605,11 @@ class mrp_prisma_import extends class_base
 			$o->set_prop("state", 1); // MRP_STATUS_NEW
 			if ($t)
 			{
+				$o->connect(array(
+					"to" => $t->id(),
+					"reltype" => "RELTYPE_MRP_CUSTOMER"
+				));
+				$o->set_meta("popup_search[customer]", array($t->id() => $t->id()));
 				$o->set_prop("customer", $t->id());
 			}
 			$o->save();
@@ -630,6 +635,11 @@ class mrp_prisma_import extends class_base
 			$o = $ol->begin();
 			if ($t)
 			{
+				$o->connect(array(
+					"to" => $t->id(),
+					"reltype" => "RELTYPE_MRP_CUSTOMER"
+				));
+				$o->set_meta("popup_search[customer]", array($t->id() => $t->id()));
 				$o->set_prop("customer", $t->id());
 			}
 			$this->_upd_proj_o($o, $dat);
