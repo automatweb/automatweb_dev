@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.87 2005/04/07 18:52:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.88 2005/04/08 08:10:08 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -920,8 +920,7 @@ class mrp_workspace extends class_base
 					"prop" => $starttime_prop,
 					"order" => "asc" ,
 				));
-				$list->begin();
-				$first_job = $list->next ();
+				$first_job = $list->begin();
 
 				if (is_object ($first_job))
 				{
