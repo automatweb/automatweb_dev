@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.11 2005/04/08 14:53:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.12 2005/04/08 14:55:50 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -151,7 +151,7 @@ class rte extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "indent",
-			"tooltip" => T("Indent"),
+			"tooltip" => t("Indent"),
 			"url" => "javascript:${js_url_prefix}format_selection('indent');",
 			"img" => "rte_indent.gif",
 		));
@@ -165,13 +165,13 @@ class rte extends class_base
 			"img" => "rte_link.gif",
 		));
 
+
 		$toolbar->add_separator();
 
 		$toolbar->add_menu_button(array(
 			"name" => "table_props",
 			"tooltip" => t("Tabel"),
 			"img" => "rte_table.gif",
-			//"img" => "rte_table_props.gif",
 		));
 		
 		$toolbar->add_menu_item(array(
