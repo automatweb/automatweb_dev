@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.30 2005/04/06 12:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.31 2005/04/08 09:15:40 ahti Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -149,42 +149,41 @@ class cb_search extends class_base
 		$t->define_field(array(
 			"name" => "classn",
 			"caption" => t("Klass"),
-		));	
-
+		));
 		$t->define_field(array(
 			"name" => "property",
 			"caption" => t("Omadus"),
-		));	
-		
+		));
 		$t->define_field(array(
 			"name" => "in_form",
 			"caption" => t("Näita vormis"),
 			"align" => "center",
-		));	
-
+		));
 		$t->define_field(array(
 			"name" => "search_mult",
 			"caption" => t("Otsing komaga eraldatud"),
 			"align" => "center",
-		));	
-
+		));
 		$t->define_field(array(
 			"name" => "search_tb",
 			"caption" => t("Tekstikast otsimiseks"),
 			"align" => "center",
-		));	
-
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Tüüp"),
+			"align" => "center",
+		));
 		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tekst"),
 			"align" => "center",
-		));	
-
+		));
 		$t->define_field(array(
 			"name" => "ord",
 			"caption" => t("J&auml;rjekord"),
 			"align" => "center",
-		));	
+		));
 	}
 
 	function mk_prop_table($arr)
@@ -192,19 +191,23 @@ class cb_search extends class_base
 		$t = &$arr["prop"]["vcl_inst"];
 		$o = $arr["obj_inst"];
 		$this->_init_prop_table($t);
-
 		$form_dat = $o->meta("form_dat");
-
 		$clist = aw_ini_get("classes");
 		list($props, $clid, $relinfo) = $this->get_props_from_obj($o);
 		$cll = $clist[$clid]["name"];
+		$opts = array(
+			"select" => t("Rippmen&uuml;&uuml;"),
+			"mselect" => t("Mitmerealine rippmen&uuml;&uuml;"),
+			"checkboxes" => t("M&auml;rkeruut"),
+			"radiobuttons" => t("Raadionupp"),
+		);
 		foreach($props as $pn => $item)
 		{
 			if (!is_array($form_dat[$pn]))
 			{
 				$form_dat[$pn]["caption"] = $item["caption"];
 			}
-			$t->define_data(array(
+			$row = array(
 				"classn" => $cll,
 				"property" => $item["caption"],
 				"in_form" => html::checkbox(array(
@@ -231,7 +234,16 @@ class cb_search extends class_base
 					"size" => 5,
 					"value" => $form_dat[$clid][$pn]["jrk"]
 				))
-			));
+			);
+			if($item["type"] == "classificator")
+			{
+				$row["type"] = html::select(array(
+					"name" => "form_dat[$clid][$pn][type]",
+					"options" => $opts,
+					"value" => $form_dat[$clid][$pn]["type"],
+				));
+			}
+			$t->define_data($row);
 		};
 
 		if ($o->prop("next_connection"))
@@ -308,6 +320,19 @@ class cb_search extends class_base
 
 		// would be nice to separate things by blah
 		$res = array();
+		$vars = array(
+			"checkboxes" => array(
+				"type" => "chooser",
+				"multiple" => 1,
+			),
+			"radiobuttons" => array(
+				"type" => "chooser",
+			),
+			"mselect" => array(
+				"type" => "select",
+				"multiple" => 1,
+			),
+		);
 		foreach($this->in_form as $iname => $item)
 		{
 			$name = $item["name"];
@@ -343,6 +368,14 @@ class cb_search extends class_base
 
 			if ($item["type"] == "classificator")
 			{
+				if(array_key_exists($fd[$item["clid"]][$iname]["type"], $vars))
+				{
+					$res[$iname] = $vars[$fd[$item["clid"]][$iname]["type"]] + $res[$iname];
+				}
+				else
+				{
+					$res[$iname]["type"] = "select";
+				}
 				$this->mod_chooser_prop($res, $iname, $item["clid"], $arr["obj_inst"]);
 			}
 		};
@@ -371,9 +404,14 @@ class cb_search extends class_base
 			}
 			$opts = $clsf->get_options_for($pr);
 		}
-
-		$p["type"] = "select";
-		$p["options"] = array("" => "") + $opts;
+		if($p["type"] == "select")
+		{
+			$p["options"] = array("" => "") + $opts;
+		}
+		else
+		{
+			$p["options"] = $opts;
+		}
 		exit_function("cb_search::mod_chooser_prop");
 	}
 
@@ -417,7 +455,7 @@ class cb_search extends class_base
 		$this->_prepare_form_data($arr);
 		$this->_prepare_search($arr);
 		$t = &$arr["prop"]["vcl_inst"];
-
+		$ctrl = array();
 		foreach($this->in_results as $iname => $item)
 		{
 			$dat = array(
@@ -432,7 +470,38 @@ class cb_search extends class_base
 			{
 				$dat["align"] = "center";
 			}
+			if($item["type"] == "date_select")
+			{
+				$dat = $dat + array(
+					"type" => "time",
+					"format" => "d-m-Y",
+					"numeric" => 1,
+				);
+			}
+			if(count($item["controllers"]) > 0)
+			{
+				$ctrl[$iname] = $item["controllers"];
+			}
+
 			$t->define_field($dat);
+		}
+		$add_f = array();
+		if(count($ctrl) > 0)
+		{
+			$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+			foreach($ctrl as $key => $v)
+			{
+				foreach($v as $value)
+				{
+					$rval = null;
+					$view_controller_inst->check_property(&$rval, $value, $this->search_data);
+					if(is_array($rval))
+					{
+						$t->define_field($rval["field"]);
+						$add_f[$rval["field"]["name"]] = $value;
+					}
+				}
+			}
 		}
 
 		if ($this->__tdata["__defaultsort"])
@@ -467,6 +536,8 @@ class cb_search extends class_base
 
 		$clss = aw_ini_get("classes");
 
+		//$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+		$controller_inst = get_instance(CL_CFGCONTROLLER);
 		// now do the actual bloody search
 		foreach($this->search_data as $clid => $data)
 		{
@@ -522,14 +593,25 @@ class cb_search extends class_base
 							$sdata[$key] = $val;
 						}
 					}
-					else
-					if ($this->form_dat[$clid][$key]["search_mult"])
+					elseif($this->in_form[$key]["type"] == "date_select")
+					{
+						//$sdata[$key] = new object
+					}
+					elseif ($this->form_dat[$clid][$key]["search_mult"])
 					{
 						$sdata[$key] = map('%s%%', explode(",", $val));
 					}
 					else
 					{
 						$sdata[$key] = $val . "%";
+					}
+					if(count($this->in_form[$key]["controllers"]) > 0)
+					{
+						$this->in_form[$key]["sdata"] = &$sdata;
+						foreach($this->in_form[$key]["controllers"] as $value)
+						{
+							$controller_inst->check_property($value, $args["id"], &$this->in_form[$key], $this->search_data, $val, $arr["obj_inst"]);
+						}
 					}
 				};
 
@@ -567,10 +649,9 @@ class cb_search extends class_base
 						"records_per_page" => $data["per_page"]
 					));
 				}
-
 				$olist = new object_list($sdata);
 				enter_function("cb_search::mk_result_table::objloop");
-				for($o = $olist->begin(); !$olist->end(); $o = $olist->next())
+				foreach($olist->arr() as $o)
 				{
 					$row = array();
 					foreach($this->in_results as $iname => $item)
@@ -603,6 +684,10 @@ class cb_search extends class_base
 						"caption" => $this->in_results["del_link"]["caption"]
 					));
 					$row["oid"] = $o->id();
+					foreach($add_f as $val)
+					{
+						$view_controller_inst->check_property(&$row, $val, $this->search_data);
+					}
 					$t->define_data($row);
 				};
 				exit_function("cb_search::mk_result_table::objloop");
@@ -635,6 +720,14 @@ class cb_search extends class_base
 
 		$this->in_form = array();
 		$res = array();
+		$controllers = array();
+		$cf = $o->prop("root_class_cf");
+		if(is_oid($cf) && $this->can("view", $cf))
+		{
+			$obj = obj($cf);
+			$controllers = $obj->meta("controllers");
+			$view_controllers = $obj->meta("view_controllers");
+		}
 		foreach(safe_array($this->form_dat[$clid]) as $pn => $pd)
 		{
 			if (!$pd["visible"])
@@ -645,6 +738,10 @@ class cb_search extends class_base
 			$this->in_form[$pn] = $props[$pn];
 			$this->in_form[$pn]["clid"] = $clid;
 			$this->in_form[$pn]["caption"] = $pd["caption"];
+			if($controllers[$pn])
+			{
+				$this->in_form[$pn]["controllers"] = is_array($controllers[$pn]) ? $controllers[$pn] : array($controllers[$pn]);
+			}
 		};
 
 		$this->__tdata = $o->meta("form_dat");
@@ -660,6 +757,10 @@ class cb_search extends class_base
 			$this->in_results[$pn] = $props[$pn];
 			$this->in_results[$pn]["clid"] = $clid;
 			$this->in_results[$pn]["caption"] = $pd["caption"];
+			if($view_controllers[$pn])
+			{
+				$this->in_results[$pn]["controllers"] = is_array($view_controllers[$pn]) ? $view_controllers[$pn] : array($view_controllers[$pn]);
+			}
 		}
 
 		$this->__tdata = $o->meta("tdata");
@@ -754,10 +855,12 @@ class cb_search extends class_base
 
 		if ($ret["name"])
 		{
-			$ret["name"]["type"] = "textbox";
-			$ret["name"]["name"] = "name";
-			$ret["name"]["table"] = "objects";
-			$ret["name"]["field"] = "name";
+			$ret["name"] = $ret["name"] + array(
+				"type" => "textbox",
+				"name" => "name",
+				"table" => "objects",
+				"field" => "name",
+			);
 		}
 		exit_function("cb_search::get_props_from_obj");
 		return array($ret, $o->prop("root_class"), $cfgx->get_relinfo());
