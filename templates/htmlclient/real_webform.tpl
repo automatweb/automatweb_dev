@@ -88,7 +88,7 @@
 <!-- SUB: SUBMIT -->
 <tr>
 	<td class="{VAR:webform_element}" colspan="2">
-		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="submit_changeform('{VAR:faction}');return false;">
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="submit_changeform();return false;">
 	</td>
 </tr>
 <!-- END SUB: SUBMIT -->
@@ -98,7 +98,7 @@
 	<td class="{VAR:webform_caption}">
 	</td>
 	<td class="{VAR:webform_element}">
-		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="submit_changeform('{VAR:faction}');return false;">
+		<input type="submit" name="{VAR:name}" value="{VAR:sbt_caption}" class="{VAR:webform_element}" onclick="submit_changeform();return false;">
 	</td>
 </tr>
 <!-- END SUB: SUBMIT_RIGHT -->
@@ -119,13 +119,8 @@
 
 {VAR:reforb}
 <script type="text/javascript">
-function submit_changeform(action)
+function submit_changeform()
 {
-	{VAR:submit_handler}
-	if (typeof action == "string" && action.length>0)
-	{
-		document.changeform.action.value = action;
-	};
 	document.changeform.submit();
 }
 </script>
