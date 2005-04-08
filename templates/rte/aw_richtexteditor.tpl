@@ -320,6 +320,12 @@ function table_dialog()
 
 };
 
+function link_dialog()
+{
+	victim = document.getElementById(sel_el).contentWindow;
+	window.open("/automatweb/orb.aw?class=rte&action=link_dialog","insert_table","width=360,height=180");
+};
+
 function get_closest_tag(tagName)
 {
         var editor = sel_el;
