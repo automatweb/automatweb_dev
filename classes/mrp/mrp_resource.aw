@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.47 2005/04/08 08:10:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.48 2005/04/08 09:31:09 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -345,32 +345,36 @@ class mrp_resource extends class_base
 
 			case "thread_data":
 				$thread_data = $this_object->prop ("thread_data");
-				$concurrent_threads = isset ($thread_data[0]["state"]) ? count ($thread_data) : 0;
-				$prop["value"] = ($prop["value"] < 1) ? 1 : (int) $prop["value"];
+				$concurrent_threads = isset ($thread_data[0]["state"]) ? count ($thread_data) : false;
+				$desired_count = ($prop["value"] < 1) ? 1 : (int) $prop["value"];
 
-				if (($concurrent_threads != $prop["value"]) and $prop["value"])
+				if ($concurrent_threads != $desired_count)
 				{
-					if (!$concurrent_threads or empty ($thread_data[0]["state"]))
+					if (!$concurrent_threads)
 					{
-						$thread_data = array_fill (0, (int) $prop["value"], array (
+						$thread_data = array_fill (0, $desired_count, array (
 							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
 							"job" => NULL,
 						));
 					}
-					elseif ($prop["value"] > $concurrent_threads)
+					elseif ($desired_count > $concurrent_threads)
 					{
-						$new_threads = (int) $prop["value"] - $concurrent_threads;
+						$new_threads = $desired_count - $concurrent_threads;
 						$thread_data = array_merge ($thread_data, array_fill ($concurrent_threads, $new_threads, array (
 							"state" => MRP_STATUS_RESOURCE_AVAILABLE,
 							"job" => NULL,
 						)));
 					}
-					elseif ($prop["value"] < $concurrent_threads)
+					elseif ($desired_count < $concurrent_threads)
 					{
-						$thread_data = array_slice ($thread_data, 0, (int) $prop["value"]);
+						$thread_data = array_slice ($thread_data, 0, $desired_count);
 					}
 
 					$prop["value"] = $thread_data;
+				}
+				else
+				{
+					return PROP_IGNORE;
 				}
 				break;
 
@@ -981,7 +985,7 @@ class mrp_resource extends class_base
 				if (!is_array($thread_data))
 				{
 					$thread_data = array ();
-					for($i = 1; $i <= max(1,$resource->prop("thread_info")); $i++)
+					for ($i = 1; $i <= max(1, $resource->prop("thread_data")); $i++)
 					{
 						$thread_data[$i] = array("state" => MRP_STATUS_RESOURCE_AVAILABLE);
 					}
