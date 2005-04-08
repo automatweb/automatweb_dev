@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.54 2005/04/08 08:10:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.55 2005/04/08 09:01:05 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1007,6 +1007,7 @@ class mrp_job extends class_base
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 			$project->save ();
 
 			### log event
