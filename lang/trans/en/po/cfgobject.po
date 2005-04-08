@@ -12,33 +12,33 @@ msgstr ""
 
 #: classes/cfg/cfgobject.aw:42
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/cfg/cfgobject.aw:73 classes/cfg/cfgobject.aw:395
 msgid "Muuda konfiobjekti"
-msgstr ""
+msgstr "Change config object"
 
 #: classes/cfg/cfgobject.aw:78 classes/cfg/cfgobject.aw:400
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/cfg/cfgobject.aw:84
 msgid "Vali objektid"
-msgstr ""
+msgstr "Select objects"
 
 #: classes/cfg/cfgobject.aw:356
 msgid "Rakenda"
-msgstr ""
+msgstr "Apply"
 
 #: classes/cfg/cfgobject.aw:361
 msgid "Vali konfiguratsiooniobjektid"
-msgstr ""
+msgstr "Select configuration objects"
 
 #: classes/cfg/cfgobject.aw:407
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/cfg/cfgobject.aw:414
 msgid "Muuda"
-msgstr ""
+msgstr "Modify"
 

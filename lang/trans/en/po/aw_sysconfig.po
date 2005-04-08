@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/aw_sysconfig.aw:prop_matchmaker
 msgid "Omaduse Seadistamise tabel (matchmaker) caption"
-msgstr ""
+msgstr "Configuration table"
 
 #: classes/core/aw_sysconfig.aw:prop_matchmaker_comment
 msgid "Omaduse Seadistamise tabel (matchmaker) kommentaar"
@@ -24,17 +24,17 @@ msgstr ""
 
 #: classes/core/aw_sysconfig.aw:group_configure
 msgid "Grupi Seadistamine (configure) pealkiri"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/core/aw_sysconfig.aw:rel_RELTYPE_SCRIPT
 msgid "Seose Skript (RELTYPE_SCRIPT) tekst"
-msgstr ""
+msgstr "Script"
 
 #: classes/core/aw_sysconfig.aw:61
 msgid "Teade"
-msgstr ""
+msgstr "Message"
 
 #: classes/core/aw_sysconfig.aw:78
 msgid "Vali skriptid"
-msgstr ""
+msgstr "Select scripts"
 

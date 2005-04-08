@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/cfg_view_controller.aw:prop_formula
 msgid "Omaduse Valem (formula) caption"
-msgstr ""
+msgstr "Expression"
 
 #: classes/cfg/cfg_view_controller.aw:prop_formula_comment
 msgid "Omaduse Valem (formula) kommentaar"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/banner/banner_client.aw:prop_html
 msgid "Omaduse Asukoha HTML (html) caption"
-msgstr ""
+msgstr "Location HTML"
 
 #: classes/applications/banner/banner_client.aw:prop_html_comment
 msgid "Omaduse Asukoha HTML (html) kommentaar"

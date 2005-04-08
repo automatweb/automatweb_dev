@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/cb_search_synonyms.aw:prop_syntb
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) caption"
-msgstr ""
+msgstr "Synonym entry"
 
 #: classes/cfg/cb_search_synonyms.aw:prop_syntb_comment
 msgid "Omaduse S&uuml;non&uuml;mise sisestamine (syntb) kommentaar"

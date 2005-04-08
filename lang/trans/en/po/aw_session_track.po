@@ -12,89 +12,89 @@ msgstr ""
 
 #: classes/core/aw_session_track.aw:25 classes/core/aw_session_track.aw:172
 msgid "Saidid"
-msgstr ""
+msgstr "Sites"
 
 #: classes/core/aw_session_track.aw:99
 msgid "<b>KOKKU:</b><Br>Sessioone: %s<br>Tr&auml;kitud sessioone: %s<br>Logitud: %s<br>60 sek: %s<br>600 sek: %s<br>"
-msgstr ""
+msgstr "<b>TOTALS:</b><Br>Sessions: %s<br>Tracked sessions: %s<br>Logged: %s<br>60 sec: %s<br>600 sec: %s<br>"
 
 #: classes/core/aw_session_track.aw:111
 msgid "Sait"
-msgstr ""
+msgstr "Site"
 
 #: classes/core/aw_session_track.aw:118
 msgid "Mitu tr2kitud kasutajat"
-msgstr ""
+msgstr "How many tracked users"
 
 #: classes/core/aw_session_track.aw:126
 msgid "Mitu sisse loginud tr2kitud kasutajat"
-msgstr ""
+msgstr "How many logged on tracked users"
 
 #: classes/core/aw_session_track.aw:134
 msgid "Viimati minuti jooksul"
-msgstr ""
+msgstr "Last minute"
 
 #: classes/core/aw_session_track.aw:142
 msgid "Viimati 10 minuti jooksul"
-msgstr ""
+msgstr "Last 10 minutes"
 
 #: classes/core/aw_session_track.aw:150
 msgid "Sisse loginud kasutajad"
-msgstr ""
+msgstr "Logged in users"
 
 #: classes/core/aw_session_track.aw:210 classes/core/aw_session_track.aw:351
 msgid "Logi v&auml;lja"
-msgstr ""
+msgstr "Log out"
 
 #: classes/core/aw_session_track.aw:229 classes/core/aw_session_track.aw:339
 msgid "Saada teade"
-msgstr ""
+msgstr "Send message"
 
 #: classes/core/aw_session_track.aw:237 classes/core/aw_session_track.aw:345
 msgid "Suuna"
-msgstr ""
+msgstr "Redirect"
 
 #: classes/core/aw_session_track.aw:238
 msgid "Aadress, kuhu suunata"
-msgstr ""
+msgstr "Address to redirect to"
 
 #: classes/core/aw_session_track.aw:261 classes/core/aw_session_track.aw:287
 msgid "Kasutaja ip"
-msgstr ""
+msgstr "User IP"
 
 #: classes/core/aw_session_track.aw:265 classes/core/aw_session_track.aw:291
 msgid "Kellele"
-msgstr ""
+msgstr "To whom"
 
 #: classes/core/aw_session_track.aw:269
 msgid "Teade"
-msgstr ""
+msgstr "Message"
 
 #: classes/core/aw_session_track.aw:295
 msgid "Kuhu suunata"
-msgstr ""
+msgstr "Where to redirect"
 
 #: classes/core/aw_session_track.aw:308
 msgid "<br>Saatmata teated: %s <br>Tegemata suunamised: %s"
-msgstr ""
+msgstr "<br>Un-sent messages: %s <br>Un-done redirects: %s"
 
 #: classes/core/aw_session_track.aw:315
 msgid "Kasutaja IP aadress"
-msgstr ""
+msgstr "User's IP address"
 
 #: classes/core/aw_session_track.aw:322
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/core/aw_session_track.aw:332
 msgid "Millal viimati"
-msgstr ""
+msgstr "Last access"
 
 #: classes/core/aw_session_track.aw:357
 msgid "Url, mida vaadatakse"
-msgstr ""
+msgstr "Url that the user is viewing"
 
 #: classes/core/aw_session_track.aw:363
 msgid "Referer"
-msgstr ""
+msgstr "Referer"
 

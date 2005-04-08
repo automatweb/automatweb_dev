@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_start
 msgid "Omaduse Algab (start) caption"
-msgstr ""
+msgstr "Starts"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_start_comment
 msgid "Omaduse Algab (start) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
-msgstr ""
+msgstr "Ends"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_info_on_object
 msgid "Omaduse Osalejad (info_on_object) caption"
-msgstr ""
+msgstr "PArticipants"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_info_on_object_comment
 msgid "Omaduse Osalejad (info_on_object) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_morph_to
 msgid "Omaduse Muuda (morph_to) caption"
-msgstr ""
+msgstr "Change"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_morph_to_comment
 msgid "Omaduse Muuda (morph_to) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_task_toolbar
 msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
-msgstr ""
+msgstr "Toolbar"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_task_toolbar_comment
 msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_participant
 msgid "Omaduse Osalejad (participant) caption"
-msgstr ""
+msgstr "Paricipants"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_participant_comment
 msgid "Omaduse Osalejad (participant) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_company
 msgid "Omaduse Organisatsioon (search_contact_company) caption"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_company_comment
 msgid "Omaduse Organisatsioon (search_contact_company) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_firstname
 msgid "Omaduse Eesnimi (search_contact_firstname) caption"
-msgstr ""
+msgstr "First name"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_firstname_comment
 msgid "Omaduse Eesnimi (search_contact_firstname) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_lastname
 msgid "Omaduse Perenimi (search_contact_lastname) caption"
-msgstr ""
+msgstr "Last name"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_lastname_comment
 msgid "Omaduse Perenimi (search_contact_lastname) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_code
 msgid "Omaduse Isikukood (search_contact_code) caption"
-msgstr ""
+msgstr "Personal code"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_code_comment
 msgid "Omaduse Isikukood (search_contact_code) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_button
 msgid "Omaduse Otsi (search_contact_button) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_button_comment
 msgid "Omaduse Otsi (search_contact_button) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_results
 msgid "Omaduse Tulemuste tabel (search_contact_results) caption"
-msgstr ""
+msgstr "Result table"
 
 #: classes/applications/calendar/calendar_vacancy.aw:prop_search_contact_results_comment
 msgid "Omaduse Tulemuste tabel (search_contact_results) kommentaar"
@@ -156,29 +156,29 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_vacancy.aw:group_participants
 msgid "Grupi Osalejad (participants) pealkiri"
-msgstr ""
+msgstr "Participants"
 
 #: classes/applications/calendar/calendar_vacancy.aw:143
 msgid "Uus kohtumine"
-msgstr ""
+msgstr "New meeting"
 
 #: classes/applications/calendar/calendar_vacancy.aw:150
 msgid "Uus k&otilde;ne"
-msgstr ""
+msgstr "New call"
 
 #: classes/applications/calendar/calendar_vacancy.aw:157
 msgid "Uus toimetus"
-msgstr ""
+msgstr "New event"
 
 #: classes/applications/calendar/calendar_vacancy.aw:236
 msgid "Kustuta valitud"
-msgstr ""
+msgstr "Delete selected"
 
 #: classes/applications/calendar/calendar_vacancy.aw:245
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/calendar/calendar_vacancy.aw:254
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 

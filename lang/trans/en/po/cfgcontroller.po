@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/cfg/cfgcontroller.aw:prop_formula
 msgid "Omaduse Valem (formula) caption"
-msgstr ""
+msgstr "Expression"
 
 #: classes/cfg/cfgcontroller.aw:prop_formula_comment
 msgid "Omaduse Valem (formula) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/cfgcontroller.aw:prop_errmsg
 msgid "Omaduse Veateade (errmsg) caption"
-msgstr ""
+msgstr "Error message"
 
 #: classes/cfg/cfgcontroller.aw:prop_errmsg_comment
 msgid "Omaduse Veateade (errmsg) kommentaar"

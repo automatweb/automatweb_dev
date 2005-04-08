@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/calendar/cal_event.aw:prop_start
 msgid "Omaduse Algab (start) caption"
-msgstr ""
+msgstr "Starts"
 
 #: classes/calendar/cal_event.aw:prop_start_comment
 msgid "Omaduse Algab (start) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/calendar/cal_event.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
-msgstr ""
+msgstr "Ends"
 
 #: classes/calendar/cal_event.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/calendar/cal_event.aw:prop_repeater_obj
 msgid "Omaduse Korduste kontroller (repeater_obj) caption"
-msgstr ""
+msgstr "Recurrence controller"
 
 #: classes/calendar/cal_event.aw:prop_repeater_obj_comment
 msgid "Omaduse Korduste kontroller (repeater_obj) kommentaar"
@@ -48,41 +48,41 @@ msgstr ""
 
 #: classes/calendar/cal_event.aw:42
 msgid "korduste kontroller"
-msgstr ""
+msgstr "recurrence controller"
 
 #: classes/calendar/cal_event.aw:118
 msgid "must"
-msgstr ""
+msgstr "black"
 
 #: classes/calendar/cal_event.aw:119
 msgid "punane"
-msgstr ""
+msgstr "red"
 
 #: classes/calendar/cal_event.aw:120
 msgid "roheline"
-msgstr ""
+msgstr "green"
 
 #: classes/calendar/cal_event.aw:121
 msgid "sinine"
-msgstr ""
+msgstr "blue"
 
 #: classes/calendar/cal_event.aw:143
 msgid "linki objektile"
-msgstr ""
+msgstr "link to object"
 
 #: classes/calendar/cal_event.aw:143
 msgid "objekti ennast"
-msgstr ""
+msgstr "object itself"
 
 #: classes/calendar/cal_event.aw:166
 msgid "Lisa kalendrisündmus"
-msgstr ""
+msgstr "Add calendar event"
 
 #: classes/calendar/cal_event.aw:311
 msgid "%s | Muuda kalendrisündmust"
-msgstr ""
+msgstr "%s | Change calendar event"
 
 #: classes/calendar/cal_event.aw:372
 msgid "Muuda eventit"
-msgstr ""
+msgstr "Change event"
 

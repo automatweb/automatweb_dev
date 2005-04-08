@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/backup/backup.aw:prop_folder
 msgid "Omaduse Serveri kataloog, kuhu backupi fail kirjutatakse (folder) caption"
-msgstr ""
+msgstr "Server folder where the backup file will be written to"
 
 #: classes/applications/backup/backup.aw:prop_folder_comment
 msgid "Omaduse Serveri kataloog, kuhu backupi fail kirjutatakse (folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/backup/backup.aw:prop_do_bup
 msgid "Omaduse Loo backup (do_bup) caption"
-msgstr ""
+msgstr "Create backup"
 
 #: classes/applications/backup/backup.aw:prop_do_bup_comment
 msgid "Omaduse Loo backup (do_bup) kommentaar"
@@ -36,5 +36,5 @@ msgstr ""
 
 #: classes/applications/backup/backup.aw:60
 msgid "backup::do_backup(): no server folder set for backup!"
-msgstr ""
+msgstr "backup::do_backup(): no server folder set for backup!"
 

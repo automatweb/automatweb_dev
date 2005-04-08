@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/aw_script.aw:prop_script
 msgid "Omaduse Vali skript (script) caption"
-msgstr ""
+msgstr "Select script"
 
 #: classes/core/aw_script.aw:prop_script_comment
 msgid "Omaduse Vali skript (script) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/core/aw_script.aw:prop_configure_script
 msgid "Omaduse Seadistused (configure_script) caption"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/core/aw_script.aw:prop_configure_script_comment
 msgid "Omaduse Seadistused (configure_script) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/aw_script.aw:prop_run_script
 msgid "Omaduse Käivita skript (run_script) caption"
-msgstr ""
+msgstr "Run script"
 
 #: classes/core/aw_script.aw:prop_run_script_comment
 msgid "Omaduse Käivita skript (run_script) kommentaar"
@@ -48,9 +48,9 @@ msgstr ""
 
 #: classes/core/aw_script.aw:group_configure
 msgid "Grupi Seadistused (configure) pealkiri"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/core/aw_script.aw:rel_RELTYPE_CONFIG_OPTION
 msgid "Seose Seadistus (RELTYPE_CONFIG_OPTION) tekst"
-msgstr ""
+msgstr "Configuration"
 

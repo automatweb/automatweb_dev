@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_url
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) caption"
-msgstr ""
+msgstr "URL To redirect to when clicked"
 
 #: classes/applications/banner/banner.aw:prop_url_comment
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_banner_file
 msgid "Omaduse Banneri sisu (banner_file) caption"
-msgstr ""
+msgstr "Banner content"
 
 #: classes/applications/banner/banner.aw:prop_banner_file_comment
 msgid "Omaduse Banneri sisu (banner_file) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_banner_file_2
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) caption"
-msgstr ""
+msgstr "Additional banner content"
 
 #: classes/applications/banner/banner.aw:prop_banner_file_2_comment
 msgid "Omaduse Banneri sisu lisaks (banner_file_2) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_html
 msgid "Omaduse Banneri html (html) caption"
-msgstr ""
+msgstr "Banner html"
 
 #: classes/applications/banner/banner.aw:prop_html_comment
 msgid "Omaduse Banneri html (html) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_probability_tbl
 msgid "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) caption"
-msgstr ""
+msgstr "Display probability"
 
 #: classes/applications/banner/banner.aw:prop_probability_tbl_comment
 msgid "Omaduse N&auml;itamise t&otilde;en&auml;osus (probability_tbl) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_max_views
 msgid "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) caption"
-msgstr ""
+msgstr "Maximum number of banner views"
 
 #: classes/applications/banner/banner.aw:prop_max_views_comment
 msgid "Omaduse Mitu korda bannerit maksimaalselt n&auml;idata (max_views) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_max_clicks
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) caption"
-msgstr ""
+msgstr "Maximum number of banner clicks"
 
 #: classes/applications/banner/banner.aw:prop_max_clicks_comment
 msgid "Omaduse Mitu klikki maksimaalselt (max_clicks) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_clicks
 msgid "Omaduse Klikke (clicks) caption"
-msgstr ""
+msgstr "Clicks"
 
 #: classes/applications/banner/banner.aw:prop_clicks_comment
 msgid "Omaduse Klikke (clicks) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_views
 msgid "Omaduse Vaatamisi (views) caption"
-msgstr ""
+msgstr "Views"
 
 #: classes/applications/banner/banner.aw:prop_views_comment
 msgid "Omaduse Vaatamisi (views) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:prop_click_through
 msgid "Omaduse Click-through ratio (click_through) caption"
-msgstr ""
+msgstr "Click-through ratio"
 
 #: classes/applications/banner/banner.aw:prop_click_through_comment
 msgid "Omaduse Click-through ratio (click_through) kommentaar"
@@ -144,29 +144,29 @@ msgstr ""
 
 #: classes/applications/banner/banner.aw:group_display
 msgid "Grupi N&auml;itamine (display) pealkiri"
-msgstr ""
+msgstr "Display"
 
 #: classes/applications/banner/banner.aw:group_stats
 msgid "Grupi Statistika (stats) pealkiri"
-msgstr ""
+msgstr "Statistics"
 
 #: classes/applications/banner/banner.aw:rel_RELTYPE_LOCATION
 msgid "Seose banneri asukoht (RELTYPE_LOCATION) tekst"
-msgstr ""
+msgstr "banner location"
 
 #: classes/applications/banner/banner.aw:rel_RELTYPE_BANNER_FILE
 msgid "Seose banneri sisu (RELTYPE_BANNER_FILE) tekst"
-msgstr ""
+msgstr "banner content"
 
 #: classes/applications/banner/banner.aw:127
 msgid "Banner"
-msgstr ""
+msgstr "Banner"
 
 #: classes/applications/banner/banner.aw:133
 msgid "N&auml;itamise t&otilde;en&auml;osuse %"
-msgstr ""
+msgstr "Display probability %"
 
 #: classes/applications/banner/banner.aw:348
 msgid "No banner location id given"
-msgstr ""
+msgstr "No banner location id given"
 

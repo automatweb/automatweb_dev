@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_start1
 msgid "Omaduse Algab (start1) caption"
-msgstr ""
+msgstr "Starts"
 
 #: classes/applications/calendar/calendar_event.aw:prop_start1_comment
 msgid "Omaduse Algab (start1) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
-msgstr ""
+msgstr "Ends"
 
 #: classes/applications/calendar/calendar_event.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/calendar_event.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_project_selector2
 msgid "Omaduse Projektid 2 (project_selector2) caption"
-msgstr ""
+msgstr "Projects 2"
 
 #: classes/applications/calendar/calendar_event.aw:prop_project_selector2_comment
 msgid "Omaduse Projektid 2 (project_selector2) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:prop_recurrence
 msgid "Omaduse Kordused (recurrence) caption"
-msgstr ""
+msgstr "Recurrences"
 
 #: classes/applications/calendar/calendar_event.aw:prop_recurrence_comment
 msgid "Omaduse Kordused (recurrence) kommentaar"
@@ -396,25 +396,25 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/calendar_event.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
-msgstr ""
+msgstr "Reccurence"
 
 #: classes/applications/calendar/calendar_event.aw:group_projects22
 msgid "Grupi projects22 (projects22) pealkiri"
-msgstr ""
+msgstr "projects22"
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_PICTURE
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_SEEALSO
 msgid "Seose Vaata lisaks (RELTYPE_SEEALSO) tekst"
-msgstr ""
+msgstr "See also"
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
-msgstr ""
+msgstr "Recurrence"
 

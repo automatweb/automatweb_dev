@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/cfg/cfgmanager.aw:prop_def_cfgmanager
 msgid "Omaduse Default seadete haldur (def_cfgmanager) caption"
-msgstr ""
+msgstr "Default config manager for property"
 
 #: classes/cfg/cfgmanager.aw:prop_def_cfgmanager_comment
 msgid "Omaduse Default seadete haldur (def_cfgmanager) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/cfgmanager.aw:prop_config
 msgid "Omaduse Tabel (config) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/cfg/cfgmanager.aw:prop_config_comment
 msgid "Omaduse Tabel (config) kommentaar"
@@ -36,21 +36,21 @@ msgstr ""
 
 #: classes/cfg/cfgmanager.aw:group_config
 msgid "Grupi Seaded (config) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/cfg/cfgmanager.aw:rel_RELTYPE_C_GROUP
 msgid "Seose Grupp (RELTYPE_C_GROUP) tekst"
-msgstr ""
+msgstr "Group"
 
 #: classes/cfg/cfgmanager.aw:rel_RELTYPE_C_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/cfg/cfgmanager.aw:74
 msgid "Grupp"
-msgstr ""
+msgstr "Group"
 
 #: classes/cfg/cfgmanager.aw:80
 msgid "Seadete vorm"
-msgstr ""
+msgstr "Configuration form"
 

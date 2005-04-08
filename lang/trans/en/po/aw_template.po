@@ -12,13 +12,13 @@ msgstr ""
 
 #: classes/aw_template.aw:191
 msgid "Template '%s/%s' not found"
-msgstr ""
+msgstr "Template '%s/%s' not found"
 
 #: classes/aw_template.aw:222 classes/aw_template.aw:247
 msgid "Template '%s' not found"
-msgstr ""
+msgstr "Template '%s' not found"
 
 #: classes/aw_template.aw:277
 msgid "Template '%s' not found in admin or site folder"
-msgstr ""
+msgstr "Template '%s' not found in admin or site folder"
 

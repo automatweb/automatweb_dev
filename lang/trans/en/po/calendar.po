@@ -12,29 +12,29 @@ msgstr ""
 
 #: classes/vcl/calendar.aw:495
 msgid "Päev"
-msgstr ""
+msgstr "Day"
 
 #: classes/vcl/calendar.aw:496
 msgid "Nädal"
-msgstr ""
+msgstr "Week"
 
 #: classes/vcl/calendar.aw:497
 msgid "Kuu"
-msgstr ""
+msgstr "Month"
 
 #: classes/vcl/calendar.aw:498
 msgid "Ülevaade"
-msgstr ""
+msgstr "Overview"
 
 #: classes/vcl/calendar.aw:540
 msgid "Toimetused"
-msgstr ""
+msgstr "Events"
 
 #: classes/vcl/calendar.aw:1210
 msgid "Eelmine kuu"
-msgstr ""
+msgstr "Last month"
 
 #: classes/vcl/calendar.aw:1211
 msgid "Järgmine kuu"
-msgstr ""
+msgstr "Next month"
 

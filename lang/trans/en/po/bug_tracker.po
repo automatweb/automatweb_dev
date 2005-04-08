@@ -48,33 +48,33 @@ msgstr ""
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:88
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:93
 msgid "Lisa bugi"
-msgstr ""
+msgstr "Add bug"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:101
 msgid "Lisa kategooria"
-msgstr ""
+msgstr "Add category"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:129
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:135
 msgid "Looja"
-msgstr ""
+msgstr "Createdby"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:141
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:150
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:156
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 

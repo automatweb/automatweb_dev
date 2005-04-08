@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_root_class
 msgid "Omaduse Juurklass (root_class) caption"
-msgstr ""
+msgstr "Root class"
 
 #: classes/cfg/cb_search.aw:prop_root_class_comment
 msgid "Omaduse Juurklass (root_class) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_root_class_cf
 msgid "Omaduse Seadete vorm (root_class_cf) caption"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/cfg/cb_search.aw:prop_root_class_cf_comment
 msgid "Omaduse Seadete vorm (root_class_cf) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_root_class_ot
 msgid "Omaduse Objektit&uuml;&uuml;p (root_class_ot) caption"
-msgstr ""
+msgstr "Object type"
 
 #: classes/cfg/cb_search.aw:prop_root_class_ot_comment
 msgid "Omaduse Objektit&uuml;&uuml;p (root_class_ot) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_next_connection
 msgid "Omaduse Where do you want to go from here? (next_connection) caption"
-msgstr ""
+msgstr "Where do you want to go from here?"
 
 #: classes/cfg/cb_search.aw:prop_next_connection_comment
 msgid "Omaduse Where do you want to go from here? (next_connection) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_view_cf
 msgid "Omaduse Vaatamise seadete vorm (view_cf) caption"
-msgstr ""
+msgstr "Display configuration form"
 
 #: classes/cfg/cb_search.aw:prop_view_cf_comment
 msgid "Omaduse Vaatamise seadete vorm (view_cf) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_choose_fields
 msgid "Omaduse Vali omadused (choose_fields) caption"
-msgstr ""
+msgstr "Select properties"
 
 #: classes/cfg/cb_search.aw:prop_choose_fields_comment
 msgid "Omaduse Vali omadused (choose_fields) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_parents
 msgid "Omaduse Kataloogid, ksut otsida (parents) caption"
-msgstr ""
+msgstr "Folders where to search from"
 
 #: classes/cfg/cb_search.aw:prop_parents_comment
 msgid "Omaduse Kataloogid, ksut otsida (parents) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_search
 msgid "Omaduse Otsi (search) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/cfg/cb_search.aw:prop_search_comment
 msgid "Omaduse Otsi (search) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_sbt
 msgid "Omaduse Otsi (sbt) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/cfg/cb_search.aw:prop_sbt_comment
 msgid "Omaduse Otsi (sbt) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_results
 msgid "Omaduse Tulemused (results) caption"
-msgstr ""
+msgstr "Results"
 
 #: classes/cfg/cb_search.aw:prop_results_comment
 msgid "Omaduse Tulemused (results) kommentaar"
@@ -144,129 +144,129 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:group_props
 msgid "Grupi Väljad (props) pealkiri"
-msgstr ""
+msgstr "Fields"
 
 #: classes/cfg/cb_search.aw:group_mktbl
 msgid "Grupi Koosta tulemuste tabel (mktbl) pealkiri"
-msgstr ""
+msgstr "Create result table"
 
 #: classes/cfg/cb_search.aw:group_parents
 msgid "Grupi Kataloogid (parents) pealkiri"
-msgstr ""
+msgstr "Folders"
 
 #: classes/cfg/cb_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_SYN
 msgid "Seose s&uuml;non&uuml;mid (RELTYPE_SYN) tekst"
-msgstr ""
+msgstr "synonyms"
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_PARENT
 msgid "Seose kataloog, kust otsida (RELTYPE_PARENT) tekst"
-msgstr ""
+msgstr "folder to search"
 
 #: classes/cfg/cb_search.aw:151
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/cfg/cb_search.aw:156
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/cfg/cb_search.aw:161
 msgid "Näita vormis"
-msgstr ""
+msgstr "Display in form"
 
 #: classes/cfg/cb_search.aw:167
 msgid "Otsing komaga eraldatud"
-msgstr ""
+msgstr "Search separated by comma"
 
 #: classes/cfg/cb_search.aw:173
 msgid "Tekstikast otsimiseks"
-msgstr ""
+msgstr "Textbox for search"
 
 #: classes/cfg/cb_search.aw:179
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 
 #: classes/cfg/cb_search.aw:185 classes/cfg/cb_search.aw:770
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/cfg/cb_search.aw:273
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/cfg/cb_search.aw:731
 msgid "T&auml;istekstiotsing"
-msgstr ""
+msgstr "Fulltext search"
 
 #: classes/cfg/cb_search.aw:737
 msgid "Kataloog"
-msgstr ""
+msgstr "Folder"
 
 #: classes/cfg/cb_search.aw:743
 msgid "Mitu kirjet lehel"
-msgstr ""
+msgstr "How many rows per page"
 
 #: classes/cfg/cb_search.aw:777
 msgid "Element"
-msgstr ""
+msgstr "Element"
 
 #: classes/cfg/cb_search.aw:783
 msgid "Tabelis"
-msgstr ""
+msgstr "In table"
 
 #: classes/cfg/cb_search.aw:789
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/cfg/cb_search.aw:795
 msgid "Sorditav"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/cfg/cb_search.aw:801
 msgid "Vaikimisi sort"
-msgstr ""
+msgstr "Default sort"
 
 #: classes/cfg/cb_search.aw:807
 msgid "Vaata tulp"
-msgstr ""
+msgstr "View column"
 
 #: classes/cfg/cb_search.aw:813
 msgid "Tulba pealkiri"
-msgstr ""
+msgstr "Column title"
 
 #: classes/cfg/cb_search.aw:829
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/cfg/cb_search.aw:830
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
 #: classes/cfg/cb_search.aw:831
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/cfg/cb_search.aw:931
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/cfg/cb_search.aw:1170
 msgid "OID"
-msgstr ""
+msgstr "OID"
 
 #: classes/cfg/cb_search.aw:1177
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/cfg/cb_search.aw:1184
 msgid "Kasuta?"
-msgstr ""
+msgstr "Use?"
 
 #: classes/cfg/cb_search.aw:1190
 msgid "K.A. Alamkataloogid?"
-msgstr ""
+msgstr "Incl. subfolders?"
 
