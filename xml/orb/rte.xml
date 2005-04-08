@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="link_dialog">
+			<function name="link_dialog">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
