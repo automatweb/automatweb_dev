@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_queue.aw:prop_q_status
 msgid "Omaduse Staatus (q_status) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/mailinglist/ml_queue.aw:prop_q_status_comment
 msgid "Omaduse Staatus (q_status) kommentaar"

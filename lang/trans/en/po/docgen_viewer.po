@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
 msgid "Omaduse Uuenda (refresh_text) caption"
-msgstr ""
+msgstr "Refresh"
 
 #: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
 msgid "Omaduse Uuenda (refresh_text) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
 msgid "Omaduse Uuenda (refresh_properties) caption"
-msgstr ""
+msgstr "Refresh"
 
 #: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
 msgid "Omaduse Uuenda (refresh_properties) kommentaar"
@@ -60,49 +60,49 @@ msgstr ""
 
 #: classes/core/docgen/docgen_viewer.aw:group_more_options
 msgid "Grupi Seaded (more_options) pealkiri"
-msgstr ""
+msgstr "Options"
 
 #: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 msgid "Seose foorum (RELTYPE_FORUM) tekst"
-msgstr ""
+msgstr "forum"
 
 #: classes/core/docgen/docgen_viewer.aw:70
 msgid "Open DocGen"
-msgstr ""
+msgstr "Open DocGen"
 
 #: classes/core/docgen/docgen_viewer.aw:98 classes/core/docgen/docgen_viewer.aw:647 classes/core/docgen/docgen_viewer.aw:716 classes/core/docgen/docgen_viewer.aw:989 classes/core/docgen/docgen_viewer.aw:1059 classes/core/docgen/docgen_viewer.aw:1157
 msgid "Classes"
-msgstr ""
+msgstr "Classes"
 
 #: classes/core/docgen/docgen_viewer.aw:860
 msgid "ALL DONE"
-msgstr ""
+msgstr "ALL DONE"
 
 #: classes/core/docgen/docgen_viewer.aw:922
 msgid "K&otilde;ik klassid"
-msgstr ""
+msgstr "All classes"
 
 #: classes/core/docgen/docgen_viewer.aw:928
 msgid "Dokumenteeritud klassid"
-msgstr ""
+msgstr "Documented classes"
 
 #: classes/core/docgen/docgen_viewer.aw:934
 msgid "API klassid"
-msgstr ""
+msgstr "API classes"
 
 #: classes/core/docgen/docgen_viewer.aw:940
 msgid "Eraldi dokumentatsioon"
-msgstr ""
+msgstr "Seprate documentation"
 
 #: classes/core/docgen/docgen_viewer.aw:946
 msgid "Classbase tagid"
-msgstr ""
+msgstr "Classbase tags"
 
 #: classes/core/docgen/docgen_viewer.aw:952
 msgid "Uuenda API andmebaas"
-msgstr ""
+msgstr "Renew API database"
 
 #: classes/core/docgen/docgen_viewer.aw:963
 msgid "Foorum"
-msgstr ""
+msgstr "Forum"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:14 +0300\n"
+"POT-Creation-Date: Fri,  8 Apr 2005 21:44:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,52 +9,51 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar
+# classes/crm/crm_offer_mgr.aw:prop_offers_toolbar
 msgid "Omaduse  (offers_toolbar) caption"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_comment
+# classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_comment
 msgid "Omaduse  (offers_toolbar) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_help
+# classes/crm/crm_offer_mgr.aw:prop_offers_toolbar_help
 msgid "Omaduse  (offers_toolbar) help"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_tree
+# classes/crm/crm_offer_mgr.aw:prop_offers_tree
 msgid "Omaduse Puu (offers_tree) caption"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_tree_comment
+# classes/crm/crm_offer_mgr.aw:prop_offers_tree_comment
 msgid "Omaduse Puu (offers_tree) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_tree_help
+# classes/crm/crm_offer_mgr.aw:prop_offers_tree_help
 msgid "Omaduse Puu (offers_tree) help"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_list
+# classes/crm/crm_offer_mgr.aw:prop_offers_list
 msgid "Omaduse Pakkumised (offers_list) caption"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_list_comment
+# classes/crm/crm_offer_mgr.aw:prop_offers_list_comment
 msgid "Omaduse Pakkumised (offers_list) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:prop_offers_list_help
+# classes/crm/crm_offer_mgr.aw:prop_offers_list_help
 msgid "Omaduse Pakkumised (offers_list) help"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:group_offers
+# classes/crm/crm_offer_mgr.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_MGR_CO
+# classes/crm/crm_offer_mgr.aw:rel_RELTYPE_MGR_CO
 msgid "Seose haldaja (RELTYPE_MGR_CO) tekst"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:rel_RELTYPE_WAREHOUSE
+# classes/crm/crm_offer_mgr.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
@@ -90,19 +89,18 @@ msgstr ""
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:208
+#: classes/crm/crm_offer_mgr.aw:210
 msgid "Lisa pakkumine"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:217
+#: classes/crm/crm_offer_mgr.aw:241
 msgid "T&uuml;ppakkumised"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:239
+#: classes/crm/crm_offer_mgr.aw:250
 msgid "Kustuta valitud tellimused"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:240
+#: classes/crm/crm_offer_mgr.aw:251
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
 msgstr ""
-

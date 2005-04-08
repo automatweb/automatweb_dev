@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer.aw:prop_conf
 msgid "Omaduse Vali konfiguratsioon (conf) caption"
-msgstr ""
+msgstr "Select configuration"
 
 #: classes/applications/awmyadmin/db_server_explorer.aw:prop_conf_comment
 msgid "Omaduse Vali konfiguratsioon (conf) kommentaar"
@@ -48,9 +48,9 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer.aw:group_explorer
 msgid "Grupi Explorer (explorer) pealkiri"
-msgstr ""
+msgstr "Explorer"
 
 #: classes/applications/awmyadmin/db_server_explorer.aw:rel_RELTYPE_CONF
 msgid "Seose konfiguratsioon (RELTYPE_CONF) tekst"
-msgstr ""
+msgstr "configuration"
 

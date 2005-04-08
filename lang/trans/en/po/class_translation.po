@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:prop_lang_code
 msgid "Omaduse Keel (lang_code) caption"
-msgstr ""
+msgstr "Language"
 
 #: classes/translate/class_translation.aw:prop_lang_code_comment
 msgid "Omaduse Keel (lang_code) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:prop_subclass
 msgid "Omaduse Klass (subclass) caption"
-msgstr ""
+msgstr "Class"
 
 #: classes/translate/class_translation.aw:prop_subclass_comment
 msgid "Omaduse Klass (subclass) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:prop_info
 msgid "Omaduse Info  (info) caption"
-msgstr ""
+msgstr "Info"
 
 #: classes/translate/class_translation.aw:prop_info_comment
 msgid "Omaduse Info  (info) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/translate/class_translation.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:prop_workbench
 msgid "Omaduse Tõlkimine (workbench) caption"
-msgstr ""
+msgstr "Translation"
 
 #: classes/translate/class_translation.aw:prop_workbench_comment
 msgid "Omaduse Tõlkimine (workbench) kommentaar"
@@ -72,5 +72,5 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:group_workbench
 msgid "Grupi Tõlgi (workbench) pealkiri"
-msgstr ""
+msgstr "Translate"
 

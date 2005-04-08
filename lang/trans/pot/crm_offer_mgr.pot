@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:14 +0300\n"
+"POT-Creation-Date: Fri,  8 Apr 2005 21:44:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -90,19 +90,19 @@ msgstr ""
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:208
+#: classes/crm/crm_offer_mgr.aw:210
 msgid "Lisa pakkumine"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:217
+#: classes/crm/crm_offer_mgr.aw:241
 msgid "T&uuml;ppakkumised"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:239
+#: classes/crm/crm_offer_mgr.aw:250
 msgid "Kustuta valitud tellimused"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:240
+#: classes/crm/crm_offer_mgr.aw:251
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
 msgstr ""
 

@@ -12,13 +12,13 @@ msgstr ""
 
 #: classes/mrp/mrp_prisma_import.aw:104
 msgid "all done"
-msgstr ""
+msgstr "all done"
 
 #: classes/mrp/mrp_prisma_import.aw:696
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/mrp/mrp_prisma_import.aw:700
 msgid "Ei"
-msgstr ""
+msgstr "No"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/formgen/currency.aw:prop_comment
 msgid "Omaduse Kurss saksa marga suhtes (comment) caption"
-msgstr ""
+msgstr "Exchange rate for deutch mark"
 
 #: classes/formgen/currency.aw:prop_comment_comment
 msgid "Omaduse Kurss saksa marga suhtes (comment) kommentaar"

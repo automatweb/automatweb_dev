@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_admin.aw:prop_db_base
 msgid "Omaduse Vali andmebaas (db_base) caption"
-msgstr ""
+msgstr "Select database"
 
 #: classes/applications/awmyadmin/db_table_admin.aw:prop_db_base_comment
 msgid "Omaduse Vali andmebaas (db_base) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_admin.aw:prop_db_table
 msgid "Omaduse Vali tabel (db_table) caption"
-msgstr ""
+msgstr "Select table"
 
 #: classes/applications/awmyadmin/db_table_admin.aw:prop_db_table_comment
 msgid "Omaduse Vali tabel (db_table) kommentaar"

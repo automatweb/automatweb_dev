@@ -12,45 +12,45 @@ msgstr ""
 
 #: classes/core/class_list.aw:117
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: classes/core/class_list.aw:123
 msgid "def"
-msgstr ""
+msgstr "def"
 
 #: classes/core/class_list.aw:128
 msgid "name"
-msgstr ""
+msgstr "name"
 
 #: classes/core/class_list.aw:133
 msgid "file"
-msgstr ""
+msgstr "file"
 
 #: classes/core/class_list.aw:138
 msgid "can_add"
-msgstr ""
+msgstr "can_add"
 
 #: classes/core/class_list.aw:143
 msgid "parents"
-msgstr ""
+msgstr "parents"
 
 #: classes/core/class_list.aw:148
 msgid "alias"
-msgstr ""
+msgstr "alias"
 
 #: classes/core/class_list.aw:153
 msgid "alias_class"
-msgstr ""
+msgstr "alias_class"
 
 #: classes/core/class_list.aw:158
 msgid "old_alias"
-msgstr ""
+msgstr "old_alias"
 
 #: classes/core/class_list.aw:163
 msgid "is_remoted"
-msgstr ""
+msgstr "is_remoted"
 
 #: classes/core/class_list.aw:168
 msgid "subtpl_handler"
-msgstr ""
+msgstr "subtpl_handler"
 

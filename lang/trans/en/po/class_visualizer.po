@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/applications/class_designer/class_visualizer.aw:26
 msgid "I'm so depessed"
-msgstr ""
+msgstr "I'm so depessed"
 
 #: classes/applications/class_designer/class_visualizer.aw:230
 msgid "this will not work"
-msgstr ""
+msgstr "this will not work"
 

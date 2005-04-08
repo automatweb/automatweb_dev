@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
 msgid "Omaduse Piltide kataloog (folder) caption"
-msgstr ""
+msgstr "Image folder"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_comment
 msgid "Omaduse Piltide kataloog (folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
 msgid "Omaduse Tulpi (cols) caption"
-msgstr ""
+msgstr "Solumns"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
 msgid "Omaduse Tulpi (cols) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
 msgid "Omaduse ridu (rows) caption"
-msgstr ""
+msgstr "Rows"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
 msgid "Omaduse ridu (rows) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
 msgid "Omaduse Uploadi ZIP fail (zip_file) caption"
-msgstr ""
+msgstr "Upload ZIP file"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
 msgid "Omaduse Uploadi ZIP fail (zip_file) kommentaar"
@@ -60,9 +60,9 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
-msgstr ""
+msgstr "Import"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
 msgid "Seose piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
-msgstr ""
+msgstr "image folder"
 

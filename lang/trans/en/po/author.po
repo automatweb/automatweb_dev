@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/author.aw:prop_limit
 msgid "Omaduse Mitu viimast (limit) caption"
-msgstr ""
+msgstr "Number of last items"
 
 #: classes/contentmgmt/author.aw:prop_limit_comment
 msgid "Omaduse Mitu viimast (limit) kommentaar"

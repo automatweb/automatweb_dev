@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_phone.aw:prop_type
 msgid "Omaduse Numbri tüüp (type) caption"
-msgstr ""
+msgstr "Number type"
 
 #: classes/crm/crm_phone.aw:prop_type_comment
 msgid "Omaduse Numbri tüüp (type) kommentaar"
@@ -24,29 +24,29 @@ msgstr ""
 
 #: classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"
-msgstr ""
+msgstr "Number belongs to"
 
 #: classes/crm/crm_phone.aw:45
 msgid "tööl"
-msgstr ""
+msgstr "at work"
 
 #: classes/crm/crm_phone.aw:46
 msgid "kodus"
-msgstr ""
+msgstr "at home"
 
 #: classes/crm/crm_phone.aw:47
 msgid "lühinumber"
-msgstr ""
+msgstr "short number"
 
 #: classes/crm/crm_phone.aw:48
 msgid "mobiil"
-msgstr ""
+msgstr "mobile"
 
 #: classes/crm/crm_phone.aw:49
 msgid "faks"
-msgstr ""
+msgstr "fax"
 
 #: classes/crm/crm_phone.aw:50
 msgid "skype"
-msgstr ""
+msgstr "skype"
 

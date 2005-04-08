@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_member.aw:prop_mail
 msgid "Omaduse E-post (mail) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/mailinglist/ml_member.aw:prop_mail_comment
 msgid "Omaduse E-post (mail) kommentaar"
@@ -348,5 +348,5 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_member.aw:group_udef_fields
 msgid "Grupi Muud (udef_fields) pealkiri"
-msgstr ""
+msgstr "Other"
 

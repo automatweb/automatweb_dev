@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_ext_id
 msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
-msgstr ""
+msgstr "External ID"
 
 #: classes/crm/crm_profession.aw:prop_ext_id_comment
 msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_name_in_plural
 msgid "Omaduse Nimi mitmuses (name_in_plural) caption"
-msgstr ""
+msgstr "Name in plural"
 
 #: classes/crm/crm_profession.aw:prop_name_in_plural_comment
 msgid "Omaduse Nimi mitmuses (name_in_plural) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:prop_trans
 msgid "Omaduse Tõlkimine (trans) caption"
-msgstr ""
+msgstr "Translation"
 
 #: classes/crm/crm_profession.aw:prop_trans_comment
 msgid "Omaduse Tõlkimine (trans) kommentaar"
@@ -48,17 +48,17 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
-msgstr ""
+msgstr "Translation"
 
 #: classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION
 msgid "Seose Sarnane amet (RELTYPE_SIMILARPROFESSION) tekst"
-msgstr ""
+msgstr "Similal profession"
 
 #: classes/crm/crm_profession.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "Group"
 
 #: classes/crm/crm_profession.aw:rel_RELTYPE_DESC_FILE
 msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
-msgstr ""
+msgstr "Job description"
 

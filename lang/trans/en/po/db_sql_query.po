@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_sql_query.aw:prop_db_base
 msgid "Omaduse Andmebaas (db_base) caption"
-msgstr ""
+msgstr "Database"
 
 #: classes/applications/awmyadmin/db_sql_query.aw:prop_db_base_comment
 msgid "Omaduse Andmebaas (db_base) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_sql_query.aw:prop_sql
 msgid "Omaduse SQL (sql) caption"
-msgstr ""
+msgstr "SQL"
 
 #: classes/applications/awmyadmin/db_sql_query.aw:prop_sql_comment
 msgid "Omaduse SQL (sql) kommentaar"

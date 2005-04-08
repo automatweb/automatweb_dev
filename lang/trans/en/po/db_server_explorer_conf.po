@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_all_servers
 msgid "Omaduse K&otilde;ik serverid (all_servers) caption"
-msgstr ""
+msgstr "All servers"
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_all_servers_comment
 msgid "Omaduse K&otilde;ik serverid (all_servers) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_servers
 msgid "Omaduse Serverid, millest baase n&auml;idatakse (servers) caption"
-msgstr ""
+msgstr "Servers from which to show databases"
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_servers_comment
 msgid "Omaduse Serverid, millest baase n&auml;idatakse (servers) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_all_databases
 msgid "Omaduse K&otilde;ik andmebaasid (all_databases) caption"
-msgstr ""
+msgstr "All databases"
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_all_databases_comment
 msgid "Omaduse K&otilde;ik andmebaasid (all_databases) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_databases
 msgid "Omaduse Andmebaasid, mida n&auml;idatakse (databases) caption"
-msgstr ""
+msgstr "Select databases to show"
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:prop_databases_comment
 msgid "Omaduse Andmebaasid, mida n&auml;idatakse (databases) kommentaar"
@@ -60,9 +60,9 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:rel_RELTYPE_SERVER
 msgid "Seose andmebaasi serveri login (RELTYPE_SERVER) tekst"
-msgstr ""
+msgstr "database server login"
 
 #: classes/applications/awmyadmin/db_server_explorer_conf.aw:rel_RELTYPE_DBLOGIN
 msgid "Seose andmebaasi login (RELTYPE_DBLOGIN) tekst"
-msgstr ""
+msgstr "database login"
 

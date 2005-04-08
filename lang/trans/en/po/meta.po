@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/meta/meta.aw:prop_ord
 msgid "Omaduse Jrk. (ord) caption"
-msgstr ""
+msgstr "Ord"
 
 #: classes/meta/meta.aw:prop_ord_comment
 msgid "Omaduse Jrk. (ord) kommentaar"

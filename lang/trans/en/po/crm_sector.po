@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_tegevusala
 msgid "Omaduse Tegevusala nimetus (tegevusala) caption"
-msgstr ""
+msgstr "Area of activity"
 
 #: classes/crm/crm_sector.aw:prop_tegevusala_comment
 msgid "Omaduse Tegevusala nimetus (tegevusala) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_tegevusala_en
 msgid "Omaduse Inglise keelne nimetus (tegevusala_en) caption"
-msgstr ""
+msgstr "Area of activity (en)"
 
 #: classes/crm/crm_sector.aw:prop_tegevusala_en_comment
 msgid "Omaduse Inglise keelne nimetus (tegevusala_en) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_sector.aw:prop_kood
 msgid "Omaduse Tegevusala kood (kood) caption"
-msgstr ""
+msgstr "Area of activity code"
 
 #: classes/crm/crm_sector.aw:prop_kood_comment
 msgid "Omaduse Tegevusala kood (kood) kommentaar"

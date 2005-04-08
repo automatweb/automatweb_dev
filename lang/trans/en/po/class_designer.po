@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_is_registered
 msgid "Omaduse Klass on registreeritud (is_registered) caption"
-msgstr ""
+msgstr "Class is registered"
 
 #: classes/applications/class_designer/class_designer.aw:prop_is_registered_comment
 msgid "Omaduse Klass on registreeritud (is_registered) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_reg_class_id
 msgid "Omaduse CLID (reg_class_id) caption"
-msgstr ""
+msgstr "CLID"
 
 #: classes/applications/class_designer/class_designer.aw:prop_reg_class_id_comment
 msgid "Omaduse CLID (reg_class_id) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_object_name
 msgid "Omaduse Objekti nime omadus (object_name) caption"
-msgstr ""
+msgstr "Object name property"
 
 #: classes/applications/class_designer/class_designer.aw:prop_object_name_comment
 msgid "Omaduse Objekti nime omadus (object_name) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_can_add
 msgid "Omaduse Saab lisada (can_add) caption"
-msgstr ""
+msgstr "Can add"
 
 #: classes/applications/class_designer/class_designer.aw:prop_can_add_comment
 msgid "Omaduse Saab lisada (can_add) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_class_folder
 msgid "Omaduse classfolder (class_folder) caption"
-msgstr ""
+msgstr "classfolder"
 
 #: classes/applications/class_designer/class_designer.aw:prop_class_folder_comment
 msgid "Omaduse classfolder (class_folder) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_relationmgr
 msgid "Omaduse Seostehaldur (relationmgr) caption"
-msgstr ""
+msgstr "Connection manager"
 
 #: classes/applications/class_designer/class_designer.aw:prop_relationmgr_comment
 msgid "Omaduse Seostehaldur (relationmgr) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_no_comment
 msgid "Omaduse Kommentaari muuta ei saa (no_comment) caption"
-msgstr ""
+msgstr "Comment can not be changed"
 
 #: classes/applications/class_designer/class_designer.aw:prop_no_comment_comment
 msgid "Omaduse Kommentaari muuta ei saa (no_comment) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_no_status
 msgid "Omaduse Aktiivsust muuta ei saa (no_status) caption"
-msgstr ""
+msgstr "Activity can not be changed"
 
 #: classes/applications/class_designer/class_designer.aw:prop_no_status_comment
 msgid "Omaduse Aktiivsust muuta ei saa (no_status) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_classdef
 msgid "Omaduse Klassi definitsioon (classdef) caption"
-msgstr ""
+msgstr "Class definition"
 
 #: classes/applications/class_designer/class_designer.aw:prop_classdef_comment
 msgid "Omaduse Klassi definitsioon (classdef) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_designer_toolbar
 msgid "Omaduse Designer toolbar (designer_toolbar) caption"
-msgstr ""
+msgstr "Designer toolbar"
 
 #: classes/applications/class_designer/class_designer.aw:prop_designer_toolbar_comment
 msgid "Omaduse Designer toolbar (designer_toolbar) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_layout_tree
 msgid "Omaduse Grupid (layout_tree) caption"
-msgstr ""
+msgstr "Groups"
 
 #: classes/applications/class_designer/class_designer.aw:prop_layout_tree_comment
 msgid "Omaduse Grupid (layout_tree) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_element_list
 msgid "Omaduse Elemendid (element_list) caption"
-msgstr ""
+msgstr "Elements"
 
 #: classes/applications/class_designer/class_designer.aw:prop_element_list_comment
 msgid "Omaduse Elemendid (element_list) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_relations_mgr
 msgid "Omaduse Seosed (relations_mgr) caption"
-msgstr ""
+msgstr "Connections"
 
 #: classes/applications/class_designer/class_designer.aw:prop_relations_mgr_comment
 msgid "Omaduse Seosed (relations_mgr) kommentaar"
@@ -228,77 +228,77 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/class_designer/class_designer.aw:group_designer
 msgid "Grupi Disainer (designer) pealkiri"
-msgstr ""
+msgstr "Designer"
 
 #: classes/applications/class_designer/class_designer.aw:group_relations
 msgid "Grupi Seosed (relations) pealkiri"
-msgstr ""
+msgstr "Connections"
 
 #: classes/applications/class_designer/class_designer.aw:group_classdef
 msgid "Grupi Klassi definitsioon (classdef) pealkiri"
-msgstr ""
+msgstr "Class definition"
 
 #: classes/applications/class_designer/class_designer.aw:rel_RELTYPE_RELATION
 msgid "Seose seos (RELTYPE_RELATION) tekst"
-msgstr ""
+msgstr "connection"
 
 #: classes/applications/class_designer/class_designer.aw:186
 msgid "Visualiseeri"
-msgstr ""
+msgstr "Visualize"
 
 #: classes/applications/class_designer/class_designer.aw:311
 msgid "Uus tab"
-msgstr ""
+msgstr "New tab"
 
 #: classes/applications/class_designer/class_designer.aw:322
 msgid "Uus grid"
-msgstr ""
+msgstr "New grid"
 
 #: classes/applications/class_designer/class_designer.aw:358
 msgid "Save"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/class_designer/class_designer.aw:368
 msgid "Cut"
-msgstr ""
+msgstr "Cut"
 
 #: classes/applications/class_designer/class_designer.aw:378
 msgid "Paste"
-msgstr ""
+msgstr "Paste"
 
 #: classes/applications/class_designer/class_designer.aw:387
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/class_designer/class_designer.aw:390
 msgid "Kustutada valitud objektid?"
-msgstr ""
+msgstr "Delete selected objects?"
 
 #: classes/applications/class_designer/class_designer.aw:400
 msgid "Jrk"
-msgstr ""
+msgstr "Ord"
 
 #: classes/applications/class_designer/class_designer.aw:406
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/class_designer/class_designer.aw:411
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/class_designer/class_designer.aw:416 classes/applications/class_designer/class_designer.aw:460
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/applications/class_designer/class_designer.aw:492
 msgid "Grupp "
-msgstr ""
+msgstr "Group "
 
 #: classes/applications/class_designer/class_designer.aw:523
 msgid "vbox "
-msgstr ""
+msgstr "vbox "
 

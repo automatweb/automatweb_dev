@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/core/docgen/docgen_analyzer.aw:542
 msgid "error: do_parse_parameters failed for string %s <br>\n"
-msgstr ""
+msgstr "error: do_parse_parameters failed for string %s <br>\n"
 
 #: classes/core/docgen/docgen_analyzer.aw:1026
 msgid "horrible parse error!"
-msgstr ""
+msgstr "horrible parse error!"
 

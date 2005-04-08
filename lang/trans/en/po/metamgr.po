@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:prop_mgrtoolbar
 msgid "Omaduse Toolbar (mgrtoolbar) caption"
-msgstr ""
+msgstr "Toolbar"
 
 #: classes/meta/metamgr.aw:prop_mgrtoolbar_comment
 msgid "Omaduse Toolbar (mgrtoolbar) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:prop_manager
 msgid "Omaduse Manager (manager) caption"
-msgstr ""
+msgstr "Manager"
 
 #: classes/meta/metamgr.aw:prop_manager_comment
 msgid "Omaduse Manager (manager) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:prop_mupload
 msgid "Omaduse Vali muutujatega fail (mupload) caption"
-msgstr ""
+msgstr "Select file with variables"
 
 #: classes/meta/metamgr.aw:prop_mupload_comment
 msgid "Omaduse Vali muutujatega fail (mupload) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:prop_meta
 msgid "Omaduse Metainfo (meta) caption"
-msgstr ""
+msgstr "Metainfo"
 
 #: classes/meta/metamgr.aw:prop_meta_comment
 msgid "Omaduse Metainfo (meta) kommentaar"
@@ -84,41 +84,41 @@ msgstr ""
 
 #: classes/meta/metamgr.aw:group_manager
 msgid "Grupi Muutujad (manager) pealkiri"
-msgstr ""
+msgstr "Variables"
 
 #: classes/meta/metamgr.aw:group_import
 msgid "Grupi Import (import) pealkiri"
-msgstr ""
+msgstr "Import"
 
 #: classes/meta/metamgr.aw:140
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/meta/metamgr.aw:145
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/meta/metamgr.aw:152
 msgid "V‰‰rtus"
-msgstr ""
+msgstr "Value"
 
 #: classes/meta/metamgr.aw:159
 msgid "Jrk"
-msgstr ""
+msgstr "Ord"
 
 #: classes/meta/metamgr.aw:315
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/meta/metamgr.aw:323
 msgid "Liiguta valitud omadused gruppi"
-msgstr ""
+msgstr "Move selected properties to group"
 
 #: classes/meta/metamgr.aw:378
 msgid "Kustuta valitud muutujad"
-msgstr ""
+msgstr "Delete selected variables"
 
 #: classes/meta/metamgr.aw:379
 msgid "Kustuta valitud muutujad?"
-msgstr ""
+msgstr "Delete selected variables?"
 

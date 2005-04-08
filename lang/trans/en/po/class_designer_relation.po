@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer_relation.aw:prop_r_class_id
 msgid "Omaduse Seostatav klass (r_class_id) caption"
-msgstr ""
+msgstr "Related class"
 
 #: classes/applications/class_designer/class_designer_relation.aw:prop_r_class_id_comment
 msgid "Omaduse Seostatav klass (r_class_id) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/class_designer_relation.aw:prop_value
 msgid "Omaduse Number (value) caption"
-msgstr ""
+msgstr "Number"
 
 #: classes/applications/class_designer/class_designer_relation.aw:prop_value_comment
 msgid "Omaduse Number (value) kommentaar"

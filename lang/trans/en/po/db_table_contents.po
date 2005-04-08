@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_db_base
 msgid "Omaduse Andmebaas (db_base) caption"
-msgstr ""
+msgstr "Database"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_db_base_comment
 msgid "Omaduse Andmebaas (db_base) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_db_table
 msgid "Omaduse Tabel (db_table) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_db_table_comment
 msgid "Omaduse Tabel (db_table) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_sproc_params
 msgid "Omaduse Protseduuri parameetrid (sproc_params) caption"
-msgstr ""
+msgstr "Procedure parameters"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_sproc_params_comment
 msgid "Omaduse Protseduuri parameetrid (sproc_params) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_per_page
 msgid "Omaduse Mitu rida lehel (per_page) caption"
-msgstr ""
+msgstr "Lines per page"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:prop_per_page_comment
 msgid "Omaduse Mitu rida lehel (per_page) kommentaar"
@@ -132,17 +132,17 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:group_admcontent
 msgid "Grupi Muuda sisu (admcontent) pealkiri"
-msgstr ""
+msgstr "Change content"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:rel_RELTYPE_DB_LOGIN
 msgid "Seose andmebaasi login (RELTYPE_DB_LOGIN) tekst"
-msgstr ""
+msgstr "database login"
 
 #: classes/applications/awmyadmin/db_table_contents.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
-msgstr ""
+msgstr "data transformer"
 

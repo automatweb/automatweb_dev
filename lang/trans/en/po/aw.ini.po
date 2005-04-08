@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed,  6 Apr 2005 21:45:40 +0300\n"
+"POT-Creation-Date: Fri,  8 Apr 2005 21:44:38 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1428,6 +1428,10 @@ msgstr "Offer goal"
 # aw.ini:class_909
 msgid "Klassi Pakkumise maksetingimused (909) nimi"
 msgstr "Offer payment terms"
+
+# aw.ini:class_910
+msgid "Klassi Pakkumise toodete nimekiri (910) nimi"
+msgstr ""
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"

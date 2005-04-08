@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/db.aw:104
 msgid "this driver is not supported"
-msgstr ""
+msgstr "this driver is not supported"
 

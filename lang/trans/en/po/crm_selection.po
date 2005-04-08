@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_selection.aw:prop_template
 msgid "Omaduse Näitamise template (template) caption"
-msgstr ""
+msgstr "Diaply template"
 
 #: classes/crm/crm_selection.aw:prop_template_comment
 msgid "Omaduse Näitamise template (template) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_selection.aw:prop_forms
 msgid "Omaduse Tagasiside vormid (forms) caption"
-msgstr ""
+msgstr "Feedback forms"
 
 #: classes/crm/crm_selection.aw:prop_forms_comment
 msgid "Omaduse Tagasiside vormid (forms) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_selection.aw:prop_selection_toolbar
 msgid "Omaduse Objektide toolbar (selection_toolbar) caption"
-msgstr ""
+msgstr "Objects toolbar"
 
 #: classes/crm/crm_selection.aw:prop_selection_toolbar_comment
 msgid "Omaduse Objektide toolbar (selection_toolbar) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/crm/crm_selection.aw:prop_selection_objects
 msgid "Omaduse Objektid (selection_objects) caption"
-msgstr ""
+msgstr "Objects"
 
 #: classes/crm/crm_selection.aw:prop_selection_objects_comment
 msgid "Omaduse Objektid (selection_objects) kommentaar"
@@ -72,73 +72,73 @@ msgstr ""
 
 #: classes/crm/crm_selection.aw:group_contents
 msgid "Grupi Objektid (contents) pealkiri"
-msgstr ""
+msgstr "Objects"
 
 #: classes/crm/crm_selection.aw:group_preview
 msgid "Grupi Näita (preview) pealkiri"
-msgstr ""
+msgstr "Display"
 
 #: classes/crm/crm_selection.aw:rel_RELTYPE_BACKFORMS2
 msgid "Seose Tagasisidevorm (RELTYPE_BACKFORMS2) tekst"
-msgstr ""
+msgstr "Feedback form"
 
 #: classes/crm/crm_selection.aw:rel_RELTYPE_RELATED_SELECTIONS
 msgid "Seose Seotud valimid (RELTYPE_RELATED_SELECTIONS) tekst"
-msgstr ""
+msgstr "Connected selections"
 
 #: classes/crm/crm_selection.aw:145
 msgid "nimi"
-msgstr ""
+msgstr "name"
 
 #: classes/crm/crm_selection.aw:153
 msgid "jrk"
-msgstr ""
+msgstr "ord"
 
 #: classes/crm/crm_selection.aw:170
 msgid "tüüp"
-msgstr ""
+msgstr "type"
 
 #: classes/crm/crm_selection.aw:176
 msgid "kommentaar"
-msgstr ""
+msgstr "comment"
 
 #: classes/crm/crm_selection.aw:278
 msgid "Objektide kopeerimine valimisse "
-msgstr ""
+msgstr "Copy objects to selection"
 
 #: classes/crm/crm_selection.aw:308
 msgid "Objektide liigutamine valimisse "
-msgstr ""
+msgstr "Move objects to selection"
 
 #: classes/crm/crm_selection.aw:461
 msgid "Liiguta"
-msgstr ""
+msgstr "Move"
 
 #: classes/crm/crm_selection.aw:469
 msgid "Kopeeri"
-msgstr ""
+msgstr "Copy"
 
 #: classes/crm/crm_selection.aw:475
 msgid "aktiveeri"
-msgstr ""
+msgstr "activate"
 
 #: classes/crm/crm_selection.aw:484
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/crm/crm_selection.aw:491
 msgid "Kustuta valitud objektid valimist"
-msgstr ""
+msgstr "Delete selected objects from selection"
 
 #: classes/crm/crm_selection.aw:492
 msgid "Kustutada valitud objektid sellest valimist?"
-msgstr ""
+msgstr "Delete selected objects from selection?"
 
 #: classes/crm/crm_selection.aw:577
 msgid "templiit määramata"
-msgstr ""
+msgstr "no template set"
 
 #: classes/crm/crm_selection.aw:617
 msgid " valim tühi, või objekte pole aktiivseks tehtud"
-msgstr ""
+msgstr " selection empty or objects have not been activated"
 

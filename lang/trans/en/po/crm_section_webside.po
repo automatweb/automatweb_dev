@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_section_picker
 msgid "Omaduse Üksus (section_picker) caption"
-msgstr ""
+msgstr "Section"
 
 #: classes/crm/crm_section_webside.aw:prop_section_picker_comment
 msgid "Omaduse Üksus (section_picker) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_sub_sections
 msgid "Omaduse Võta alamüksustest (show_sub_sections) caption"
-msgstr ""
+msgstr "Get from subsections"
 
 #: classes/crm/crm_section_webside.aw:prop_show_sub_sections_comment
 msgid "Omaduse Võta alamüksustest (show_sub_sections) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_cols
 msgid "Omaduse Tulpasid (cols) caption"
-msgstr ""
+msgstr "Columns"
 
 #: classes/crm/crm_section_webside.aw:prop_cols_comment
 msgid "Omaduse Tulpasid (cols) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_label
 msgid "Omaduse Milliseid alljärgnevaid omadusi näidata?  (show_label) caption"
-msgstr ""
+msgstr "Which of the following properies to show"
 
 #: classes/crm/crm_section_webside.aw:prop_show_label_comment
 msgid "Omaduse Milliseid alljärgnevaid omadusi näidata?  (show_label) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_name
 msgid "Omaduse Nimi (show_name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_section_webside.aw:prop_show_name_comment
 msgid "Omaduse Nimi (show_name) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_rank
 msgid "Omaduse Ametikoht (show_rank) caption"
-msgstr ""
+msgstr "Rank"
 
 #: classes/crm/crm_section_webside.aw:prop_show_rank_comment
 msgid "Omaduse Ametikoht (show_rank) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_picture
 msgid "Omaduse Pilt (show_picture) caption"
-msgstr ""
+msgstr "Picture"
 
 #: classes/crm/crm_section_webside.aw:prop_show_picture_comment
 msgid "Omaduse Pilt (show_picture) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_phone
 msgid "Omaduse Telefon (show_phone) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/crm/crm_section_webside.aw:prop_show_phone_comment
 msgid "Omaduse Telefon (show_phone) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:prop_show_email
 msgid "Omaduse E-mail (show_email) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/crm/crm_section_webside.aw:prop_show_email_comment
 msgid "Omaduse E-mail (show_email) kommentaar"
@@ -132,33 +132,33 @@ msgstr ""
 
 #: classes/crm/crm_section_webside.aw:group_order
 msgid "Grupi Järjekord (order) pealkiri"
-msgstr ""
+msgstr "Order"
 
 #: classes/crm/crm_section_webside.aw:group_view
 msgid "Grupi Näitamine (view) pealkiri"
-msgstr ""
+msgstr "Display"
 
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_SECTION
 msgid "Seose &uuml;ksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Section"
 
 #: classes/crm/crm_section_webside.aw:rel_RELTYPE_ORG
 msgid "Seose Organisatsioon (RELTYPE_ORG) tekst"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/crm/crm_section_webside.aw:104
 msgid "Piltidega vaade"
-msgstr ""
+msgstr "Image view"
 
 #: classes/crm/crm_section_webside.aw:105
 msgid "Tabelina"
-msgstr ""
+msgstr "As table"
 
 #: classes/crm/crm_section_webside.aw:135
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_section_webside.aw:141
 msgid "Järjekord"
-msgstr ""
+msgstr "Order"
 

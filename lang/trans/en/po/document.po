@@ -12,65 +12,65 @@ msgstr ""
 
 #: classes/document.aw:414
 msgid "Viimati muudetud:"
-msgstr ""
+msgstr "Last modified"
 
 #: classes/document.aw:616
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
-msgstr ""
+msgstr "<br /><B>continue reading from the magazine!</b></font>"
 
 #: classes/document.aw:640
 msgid "Loe edasi"
-msgstr ""
+msgstr "Read on"
 
 #: classes/document.aw:1067 classes/document.aw:1116
 msgid "Vaata lisaks:"
-msgstr ""
+msgstr "See also"
 
 #: classes/document.aw:1072 classes/document.aw:1121
 msgid "Samal teemal:"
-msgstr ""
+msgstr "On the same subject:"
 
 #: classes/document.aw:2864 classes/document.aw:3444
 msgid "Pealkiri"
-msgstr ""
+msgstr "Title"
 
 #: classes/document.aw:2871
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/document.aw:2879 classes/document.aw:3462
 msgid "Autor"
-msgstr ""
+msgstr "Author"
 
 #: classes/document.aw:3402
 msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
-msgstr ""
+msgstr "<font face='arial'>Static page generation is taking place, please wait!<br /><br />\n\n"
 
 #: classes/document.aw:3432
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
-msgstr ""
+msgstr "Static pages created"
 
 #: classes/document.aw:3434
 msgid "tagasi dokumendi muutmise juurde"
-msgstr ""
+msgstr "back to document editing"
 
 #: classes/document.aw:3450
 msgid "Lead"
-msgstr ""
+msgstr "Lead"
 
 #: classes/document.aw:3456
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/document.aw:3472
 msgid "Periood"
-msgstr ""
+msgstr "Period"
 
 #: classes/document.aw:3532
 msgid "Objektiotsing"
-msgstr ""
+msgstr "Object search"
 
 #: classes/document.aw:3532
 msgid "Dokumentide otsing"
-msgstr ""
+msgstr "Document search"
 

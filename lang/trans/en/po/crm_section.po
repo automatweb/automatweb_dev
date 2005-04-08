@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_jrk
 msgid "Omaduse Järk (jrk) caption"
-msgstr ""
+msgstr "Rank"
 
 #: classes/crm/crm_section.aw:prop_jrk_comment
 msgid "Omaduse Järk (jrk) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_ext_id
 msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
-msgstr ""
+msgstr "External ID"
 
 #: classes/crm/crm_section.aw:prop_ext_id_comment
 msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_grp_crea
 msgid "Omaduse Kas teen grupid ja kasutajad (grp_crea) caption"
-msgstr ""
+msgstr "Create users and groups"
 
 #: classes/crm/crm_section.aw:prop_grp_crea_comment
 msgid "Omaduse Kas teen grupid ja kasutajad (grp_crea) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_has_group
 msgid "Omaduse Kas tehakse kasutajagrupp (has_group) caption"
-msgstr ""
+msgstr "Create groups"
 
 #: classes/crm/crm_section.aw:prop_has_group_comment
 msgid "Omaduse Kas tehakse kasutajagrupp (has_group) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_has_group_subs
 msgid "Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) caption"
-msgstr ""
+msgstr "Create groups for subsections"
 
 #: classes/crm/crm_section.aw:prop_has_group_subs_comment
 msgid "Omaduse Kas tehakse kasutajagrupp alamsektsioonidele (has_group_subs) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:prop_has_group_subs_prof
 msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) caption"
-msgstr ""
+msgstr "Create groups for subprofessions"
 
 #: classes/crm/crm_section.aw:prop_has_group_subs_prof_comment
 msgid "Omaduse Kas tehakse kasutajagrupp alamametinimetustele (has_group_subs_prof) kommentaar"
@@ -84,21 +84,21 @@ msgstr ""
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_SECTION
 msgid "Seose Alamüksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Subsection"
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_WORKERS
 msgid "Seose Liige (RELTYPE_WORKERS) tekst"
-msgstr ""
+msgstr "Employee"
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_PROFESSIONS
 msgid "Seose Roll (RELTYPE_PROFESSIONS) tekst"
-msgstr ""
+msgstr "Role"
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_JOB_OFFER
 msgid "Seose Tööpakkumine (RELTYPE_JOB_OFFER) tekst"
-msgstr ""
+msgstr "Job offer"
 
 #: classes/crm/crm_section.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "Group"
 

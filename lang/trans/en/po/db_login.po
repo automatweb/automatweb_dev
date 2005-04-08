@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_server
 msgid "Omaduse Server (db_server) caption"
-msgstr ""
+msgstr "Server"
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_server_comment
 msgid "Omaduse Server (db_server) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_base
 msgid "Omaduse Andmebaas (db_base) caption"
-msgstr ""
+msgstr "database"
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_base_comment
 msgid "Omaduse Andmebaas (db_base) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_user
 msgid "Omaduse Kasutajanimi (db_user) caption"
-msgstr ""
+msgstr "Username"
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_user_comment
 msgid "Omaduse Kasutajanimi (db_user) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_pass
 msgid "Omaduse Parool (db_pass) caption"
-msgstr ""
+msgstr "Password"
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_pass_comment
 msgid "Omaduse Parool (db_pass) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_create_ifnexist
 msgid "Omaduse Loo kui olemas pole (db_create_ifnexist) caption"
-msgstr ""
+msgstr "Create if not exists"
 
 #: classes/applications/awmyadmin/db_login.aw:prop_db_create_ifnexist_comment
 msgid "Omaduse Loo kui olemas pole (db_create_ifnexist) kommentaar"
@@ -72,9 +72,9 @@ msgstr ""
 
 #: classes/applications/awmyadmin/db_login.aw:rel_RELTYPE_SERVER_LOGIN
 msgid "Seose db serveri login (RELTYPE_SERVER_LOGIN) tekst"
-msgstr ""
+msgstr "db server login"
 
 #: classes/applications/awmyadmin/db_login.aw:51
 msgid "The admin user for the database server has not been set!"
-msgstr ""
+msgstr "The admin user for the database server has not been set!"
 

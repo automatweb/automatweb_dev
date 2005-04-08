@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:03 +0300\n"
+"POT-Creation-Date: Fri,  8 Apr 2005 21:44:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -22,15 +22,15 @@ msgstr ""
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2337
+#: classes/contentmgmt/site_show.aw:2341
 msgid "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2373
+#: classes/contentmgmt/site_show.aw:2377
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2378
+#: classes/contentmgmt/site_show.aw:2382
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""
 

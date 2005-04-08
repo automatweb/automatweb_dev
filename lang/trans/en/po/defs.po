@@ -16,5 +16,5 @@ msgstr ""
 
 #: classes/defs.aw:611
 msgid "(nimetu)"
-msgstr ""
+msgstr "(unnamed)"
 

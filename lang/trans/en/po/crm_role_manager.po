@@ -12,41 +12,41 @@ msgstr ""
 
 #: classes/crm/crm_role_manager.aw:134
 msgid "Vali roll"
-msgstr ""
+msgstr "Select role"
 
 #: classes/crm/crm_role_manager.aw:179
 msgid "Anna rollid"
-msgstr ""
+msgstr "Give roles"
 
 #: classes/crm/crm_role_manager.aw:275
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/crm/crm_role_manager.aw:281
 msgid "Halda"
-msgstr ""
+msgstr "Manage"
 
 #: classes/crm/crm_role_manager.aw:295
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/crm/crm_role_manager.aw:309
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_role_manager.aw:315
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/crm/crm_role_manager.aw:321
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/crm/crm_role_manager.aw:327
 msgid "&Uuml;ksus"
-msgstr ""
+msgstr "Unit"
 
 #: classes/crm/crm_role_manager.aw:333
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Profession"
 

@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_size
 msgid "Omaduse Kirja suurus (px) (size) caption"
-msgstr ""
+msgstr "Text size (px)"
 
 #: classes/contentmgmt/css.aw:prop_size_comment
 msgid "Omaduse Kirja suurus (px) (size) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_fgcolor
 msgid "Omaduse Teksti v&auml;rv (fgcolor) caption"
-msgstr ""
+msgstr "Text colour"
 
 #: classes/contentmgmt/css.aw:prop_fgcolor_comment
 msgid "Omaduse Teksti v&auml;rv (fgcolor) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_bgcolor
 msgid "Omaduse Tausta v&auml;rv (bgcolor) caption"
-msgstr ""
+msgstr "Background colour"
 
 #: classes/contentmgmt/css.aw:prop_bgcolor_comment
 msgid "Omaduse Tausta v&auml;rv (bgcolor) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_lineheight
 msgid "Omaduse Joone k&otilde;rgus  (lineheight) caption"
-msgstr ""
+msgstr "Line height"
 
 #: classes/contentmgmt/css.aw:prop_lineheight_comment
 msgid "Omaduse Joone k&otilde;rgus  (lineheight) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_border
 msgid "Omaduse &Auml;&auml;rejoone j&auml;medus (border) caption"
-msgstr ""
+msgstr "Border width"
 
 #: classes/contentmgmt/css.aw:prop_border_comment
 msgid "Omaduse &Auml;&auml;rejoone j&auml;medus (border) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_bordercolor
 msgid "Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) caption"
-msgstr ""
+msgstr "Border colour"
 
 #: classes/contentmgmt/css.aw:prop_bordercolor_comment
 msgid "Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_align
 msgid "Omaduse Align (align) caption"
-msgstr ""
+msgstr "Align"
 
 #: classes/contentmgmt/css.aw:prop_align_comment
 msgid "Omaduse Align (align) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_width
 msgid "Omaduse Laius (width) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/contentmgmt/css.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_height
 msgid "Omaduse K&otilde;rgus (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/contentmgmt/css.aw:prop_height_comment
 msgid "Omaduse K&otilde;rgus (height) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_padding
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) caption"
-msgstr ""
+msgstr "Cell spacing"
 
 #: classes/contentmgmt/css.aw:prop_padding_comment
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_margin
 msgid "Omaduse Sisu kaugus joontest (cellspadding) (px) (margin) caption"
-msgstr ""
+msgstr "Cell padding"
 
 #: classes/contentmgmt/css.aw:prop_margin_comment
 msgid "Omaduse Sisu kaugus joontest (cellspadding) (px) (margin) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_a_style
 msgid "Omaduse Lingi stiil (a_style) caption"
-msgstr ""
+msgstr "Link style"
 
 #: classes/contentmgmt/css.aw:prop_a_style_comment
 msgid "Omaduse Lingi stiil (a_style) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_a_hover_style
 msgid "Omaduse Lingi stiil (hover) (a_hover_style) caption"
-msgstr ""
+msgstr "Link style (hover)"
 
 #: classes/contentmgmt/css.aw:prop_a_hover_style_comment
 msgid "Omaduse Lingi stiil (hover) (a_hover_style) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_a_visited_style
 msgid "Omaduse Lingi stiil (visited) (a_visited_style) caption"
-msgstr ""
+msgstr "Link style (visited)"
 
 #: classes/contentmgmt/css.aw:prop_a_visited_style_comment
 msgid "Omaduse Lingi stiil (visited) (a_visited_style) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_a_active_style
 msgid "Omaduse Lingi stiil (active) (a_active_style) caption"
-msgstr ""
+msgstr "Link style (active)"
 
 #: classes/contentmgmt/css.aw:prop_a_active_style_comment
 msgid "Omaduse Lingi stiil (active) (a_active_style) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_user_css
 msgid "Omaduse Kasutaja css (user_css) caption"
-msgstr ""
+msgstr "User css"
 
 #: classes/contentmgmt/css.aw:prop_user_css_comment
 msgid "Omaduse Kasutaja css (user_css) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_site_css
 msgid "Omaduse Saidi css failis defineeritud stiil (site_css) caption"
-msgstr ""
+msgstr "Name of style defined in the site css file"
 
 #: classes/contentmgmt/css.aw:prop_site_css_comment
 msgid "Omaduse Saidi css failis defineeritud stiil (site_css) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_frow_style
 msgid "Omaduse Esimeste ridade stiil (frow_style) caption"
-msgstr ""
+msgstr "First row style"
 
 #: classes/contentmgmt/css.aw:prop_frow_style_comment
 msgid "Omaduse Esimeste ridade stiil (frow_style) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_num_frows
 msgid "Omaduse Mitmele esimesele reale (num_frows) caption"
-msgstr ""
+msgstr "Howm many first rows"
 
 #: classes/contentmgmt/css.aw:prop_num_frows_comment
 msgid "Omaduse Mitmele esimesele reale (num_frows) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_fcol_style
 msgid "Omaduse Esimeste tulpade stiil (fcol_style) caption"
-msgstr ""
+msgstr "First column style"
 
 #: classes/contentmgmt/css.aw:prop_fcol_style_comment
 msgid "Omaduse Esimeste tulpade stiil (fcol_style) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_num_fcols
 msgid "Omaduse Mitmele esimesele tulbale (num_fcols) caption"
-msgstr ""
+msgstr "How many first columns"
 
 #: classes/contentmgmt/css.aw:prop_num_fcols_comment
 msgid "Omaduse Mitmele esimesele tulbale (num_fcols) kommentaar"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_lrow_style
 msgid "Omaduse Viimaste ridade stiil (lrow_style) caption"
-msgstr ""
+msgstr "Last row style"
 
 #: classes/contentmgmt/css.aw:prop_lrow_style_comment
 msgid "Omaduse Viimaste ridade stiil (lrow_style) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_num_lrows
 msgid "Omaduse Mitmele viimasele reale (num_lrows) caption"
-msgstr ""
+msgstr "How many last rows"
 
 #: classes/contentmgmt/css.aw:prop_num_lrows_comment
 msgid "Omaduse Mitmele viimasele reale (num_lrows) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_lcol_style
 msgid "Omaduse Viimaste tulpade stiil (lcol_style) caption"
-msgstr ""
+msgstr "Last column style"
 
 #: classes/contentmgmt/css.aw:prop_lcol_style_comment
 msgid "Omaduse Viimaste tulpade stiil (lcol_style) kommentaar"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_num_lcols
 msgid "Omaduse Mitmele viimasele tulbale (num_lcols) caption"
-msgstr ""
+msgstr "How many last columns"
 
 #: classes/contentmgmt/css.aw:prop_num_lcols_comment
 msgid "Omaduse Mitmele viimasele tulbale (num_lcols) kommentaar"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_header_style
 msgid "Omaduse P&auml;ise stiil (header_style) caption"
-msgstr ""
+msgstr "Header style"
 
 #: classes/contentmgmt/css.aw:prop_header_style_comment
 msgid "Omaduse P&auml;ise stiil (header_style) kommentaar"
@@ -420,7 +420,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_footer_style
 msgid "Omaduse Jaluse stiil (footer_style) caption"
-msgstr ""
+msgstr "Footer style"
 
 #: classes/contentmgmt/css.aw:prop_footer_style_comment
 msgid "Omaduse Jaluse stiil (footer_style) kommentaar"
@@ -432,7 +432,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_odd_style
 msgid "Omaduse Paaritu rea stiil (odd_style) caption"
-msgstr ""
+msgstr "Odd line style"
 
 #: classes/contentmgmt/css.aw:prop_odd_style_comment
 msgid "Omaduse Paaritu rea stiil (odd_style) kommentaar"
@@ -444,7 +444,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_even_style
 msgid "Omaduse Paaris rea stiil (even_style) caption"
-msgstr ""
+msgstr "Even line style"
 
 #: classes/contentmgmt/css.aw:prop_even_style_comment
 msgid "Omaduse Paaris rea stiil (even_style) kommentaar"
@@ -456,7 +456,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_pre
 msgid "Omaduse Eelvaade (pre) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/contentmgmt/css.aw:prop_pre_comment
 msgid "Omaduse Eelvaade (pre) kommentaar"
@@ -468,13 +468,13 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:group_table
 msgid "Grupi Tabel (table) pealkiri"
-msgstr ""
+msgstr "Table"
 
 #: classes/contentmgmt/css.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
-msgstr ""
+msgstr "Preview"
 
 #: classes/contentmgmt/css.aw:rel_RELTYPE_CSS
 msgid "Seose css stiil (RELTYPE_CSS) tekst"
-msgstr ""
+msgstr "css style"
 
