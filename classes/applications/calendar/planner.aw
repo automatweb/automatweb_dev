@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.57 2005/04/08 11:27:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.58 2005/04/08 15:52:47 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2542,9 +2542,11 @@ class planner extends class_base
 			"names" => 1,
 		));
 
+		$cal_obj = new object($arr["id"]);
+
 		$tasklist = new object_list(array(
 			"class_id" => CL_TASK,
-			"parent" => array_keys($folders),
+			"parent" => $cal_obj->prop("event_folder"),
 			"flags" => array(
 				"mask" => OBJ_IS_DONE,
 				"flags" => 0,
@@ -2576,14 +2578,17 @@ class planner extends class_base
 
 		$rv = array();
 
+		// we do it in 2 passes
+		$parents = array();
+
 		foreach($tasklist->arr() as $task_o)
 		{
 			$id = $task_o->id();
-			$loc_o = new object($task_o->parent());
+			$parents[$id] = $task_o->parent();
 			$rv[$id] = array(
 				"name" => $task_o->name(),
 				"start" => $task_o->prop("start1"),
-				"location" => $folders[$task_o->parent()],
+				"modified" => $task_o->modified(),
 				"content" => $task_o->prop("content"),
 				"url" => $this->get_event_edit_link(array(
 					"cal_id" => $arr["id"],
@@ -2591,13 +2596,40 @@ class planner extends class_base
 				)),
 			);
 		};
-		return $rv;
 
-
+		if (sizeof($parents) > 0)
+		{
+			// now lets figure out the parents
+			$parent_list = new object_list(array(
+				"oid" => $parents,
+				"site_id" => array(),
+			));
+			
+			$locations = $parent_list->names();
 		
+			// now find all planners
+			$conn = new connection();
+			$all_conns = $conn->find(array(
+				"from.class_id" => CL_PLANNER,
+				"to" => $parent_list->ids(),
+			));
+
+			foreach($all_conns as $conn)
+			{
+				if ($locations[$conn["to"]])
+				{
+					$locations[$conn["to"]] = $conn["from.name"];
+				};
+			};
 
 
-
+			foreach($parents as $key => $val)
+			{
+				// how do I know into which calendar this 
+				$rv[$key]["location"] = $locations[$val];
+			};
+		};
+		return $rv;
 	}
 
 	/** generates task overview list
@@ -2617,7 +2649,16 @@ class planner extends class_base
 			"name" => "start",
 			"caption" => t("Algus"),
 			"type" => "time",
-			"format" => "H:i d.m.Y",
+			"format" => "H:i d.m",
+			"sortable" => 1,
+			"nowrap" => 1,
+		));
+		
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"type" => "time",
+			"format" => "H:i d.m",
 			"sortable" => 1,
 		));
 
@@ -2631,7 +2672,7 @@ class planner extends class_base
 			"name" => "content",
 			"caption" => t("Sisu"),
 		));
-		
+	
 		$t->define_field(array(
 			"name" => "location",
 			"caption" => t("Asukoht"),
@@ -2659,6 +2700,7 @@ class planner extends class_base
 				"start" => $task_data["start"],
 				"location" => $task_data["location"],
 				"content" => substr($task_data["content"],0,100),
+				"modified" => $task_data["modified"],
 			));
 
 
