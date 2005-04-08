@@ -302,12 +302,18 @@ function lc_init()
 			require_once($trans_fn);
 			foreach($GLOBALS["cfg"]["__default"]["classes"] as $clid => $cld)
 			{
-				$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = t("Klassi ".$cld["name"]." ($clid) nimi");
+				if (($_tmp = t2("Klassi ".$cld["name"]." ($clid) nimi")) != "")
+				{
+					$GLOBALS["cfg"]["__default"]["classes"][$clid]["name"] = $_tmp;
+				}
 			}
 
 			foreach($GLOBALS["cfg"]["__default"]["classfolders"] as $clid => $cld)
 			{
-				$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = t("Klassi kataloogi ".$cld["name"]." ($clid) nimi");
+				if (($_tmp = t2("Klassi kataloogi ".$cld["name"]." ($clid) nimi")) != "")
+				{
+					$GLOBALS["cfg"]["__default"]["classfolders"][$clid]["name"] = $_tmp;
+				}
 			}
 		}
 	}
