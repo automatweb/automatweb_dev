@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.65 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.66 2005/04/08 09:46:08 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -612,7 +612,7 @@ class webform extends class_base
 		$object_type = obj();
 		$object_type->set_parent($parent);
 		$object_type->set_class_id(CL_OBJECT_TYPE);
-		$object_type->set_name("Objekti tp ".$arr["obj_inst"]->id());
+		$object_type->set_name("Objekti t&uuml;&uuml;p ".$arr["obj_inst"]->id());
 		$object_type->set_status(STAT_ACTIVE);
 		$object_type->set_prop("use_cfgform", $cfgform->id());
 		$object_type->set_prop("type", $this->p_clid);
@@ -1417,6 +1417,7 @@ class webform extends class_base
 
 	function show($arr)
 	{
+		enter_function("webform::show");
 		$this->read_template("show_form.tpl");
 		$obj_inst = obj($arr["id"]);
 		$ftype = $obj_inst->prop("form_type");
@@ -1500,6 +1501,7 @@ class webform extends class_base
 			aw_session_del("wf_errors");
 			aw_session_del("wf_data");
 		}
+		exit_function("webform::show");
 		return $rval;
 	}
 	
@@ -1540,6 +1542,10 @@ class webform extends class_base
 			{
 				foreach($chk_prps as $ke => $vad)
 				{
+					if($pd["value"] && $vad == "defaultx")
+					{
+						continue;
+					}
 					if($all_props[$pn][$vad])
 					{
 						$pd[$ke] = $all_props[$pn][$vad];
