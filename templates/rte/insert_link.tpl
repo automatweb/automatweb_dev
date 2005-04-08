@@ -15,13 +15,13 @@ function AddLink() {
 		return false;
 	}
 	
-	var prefix = '<a href="' + document.linkForm.url.value; 
+	var prefix = '<a href="' + document.linkForm.url.value + '"'; 
 	if (oForm.newwin.checked)
 	{
- 		prefix = prefix + ' target=_new ';
+ 		prefix = prefix + ' target="_new" ';
 	}
 
-	prefix = prefix + '">';
+	prefix = prefix + '>';
 
 	var sufix = '</a>';
 	
