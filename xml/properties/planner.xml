@@ -303,6 +303,16 @@
             <type>table</type>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>task_list</name>
+            <table>objects</table>
+            <group>tasks</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>table</type>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_PLANNER</syslog_type>
@@ -354,6 +364,10 @@
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
             </search>
+            <tasks>
+                  <caption>Toimetused</caption>
+                  <submit>no</submit>
+            </tasks>
       </groupinfo>
       <reltypes>
             <EVENT_SOURCE>
