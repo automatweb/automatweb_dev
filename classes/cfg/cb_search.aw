@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.31 2005/04/08 09:15:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.32 2005/04/08 12:22:27 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -657,6 +657,10 @@ class cb_search extends class_base
 					foreach($this->in_results as $iname => $item)
 					{
 						$row[$iname] = create_email_links($o->prop_str($iname));
+						if ($f_props[$iname]["type"] == "textarea")
+						{
+							$row[$iname] = nl2br($row[$iname]);
+						}
 					}
 
 					foreach($price_props as $p_pn)
