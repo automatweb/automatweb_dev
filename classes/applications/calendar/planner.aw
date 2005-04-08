@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.56 2005/04/06 13:00:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.57 2005/04/08 11:27:00 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -89,29 +89,28 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@default group=views
 	@default store=no
 	
-	property search type=hidden store=no
-	
-	@property event_search_name type=textbox group=search
+	@default group=search
+	@property event_search_name type=textbox 
 	@caption S&uuml;ndmuse nimi
 	
-	@property event_search_content type=textbox group=search
+	@property event_search_content type=textbox 
 	@caption S&uuml;ndmuse sisu
 	
-	@property event_search_comment type=textbox group=search
+	@property event_search_comment type=textbox 
 	@caption S&uuml;ndmuse kommentaar
 	
-	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical group=search
+	@property event_search_type type=chooser multiple=1 ch_value=1 orient=vertical 
 	@caption S&uuml;ndmuse t&uuml;&uuml;p
 	
-	@property event_search_add type=chooser multiple=1 orient=vertical group=search
+	@property event_search_add type=chooser multiple=1 orient=vertical 
 	@caption Lisatingimused
 	
-	@property event_search_button type=submit group=search
+	@property event_search_button type=submit 
 	@caption Otsi
 
-	@property event_search_results_table type=table store=no no_caption=1 group=search
-	
-	
+	@property event_search_results_table type=table store=no no_caption=1 
+
+	@property task_list type=table store=no no_caption=1 group=tasks
 	
 	@groupinfo general caption=Seaded
 	@groupinfo general2 caption=&Uuml;ldine parent=general
@@ -125,6 +124,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@groupinfo time_settings caption=Ajaseaded parent=general
 	@groupinfo add_event caption="Muuda s&uuml;ndmust"
 	@groupinfo search caption="Otsing" submit_method=get
+	@groupinfo tasks caption="Toimetused" submit=no
 */
 
 // naff, naff. I need to create different views that contain different properties. That's something
@@ -407,7 +407,11 @@ class planner extends class_base
 					"not_done" => t("Otsi tegemata sündmusi"),
 					"all_cal" => t("Otsi kõigist kalendritest"),
 				);
-			break;
+				break;
+
+			case "task_list":
+				$this->do_task_list($arr);
+				break;
 		}
 		return $retval;
 	}
@@ -2491,16 +2495,19 @@ class planner extends class_base
 	}
 
 	/** returns a list of folders for a specified calendar, this is more efficient that returning a list of events
+	
 	**/
 	function get_event_folders($arr)
 	{
+		// if given names argument, then return a list of id => name pairs,
+		// otherwise just id-s - suitable for feeding to object_list
 		$cal_obj = new object($arr["id"]);
 		$folders = array();
 		
 		$evt_folder = $cal_obj->prop("event_folder");
 		if (is_oid($evt_folder))
 		{
-			$folders[] = $evt_folder;
+			$folders[$evt_folder] = $cal_obj->name();
 		};
 
 		// get others as well
@@ -2517,15 +2524,147 @@ class planner extends class_base
 				$evt_folder = $_tmp->prop("event_folder");
 				if (is_oid($evt_folder))
 				{
-					$folders[] = $evt_folder;
+					$folders[$evt_folder] = $_tmp->name();
 				};
 			};
 			if ($clid == CL_PROJECT)
 			{
-				$folders[] = $_tmp->id();
+				$folders[$_tmp->id()] = $_tmp->name();
 			};
 		};
-		return $folders;
+		return isset($arr["names"]) ? $folders : array_keys($folders);
+	}
+
+	function _get_open_tasks($arr)
+	{
+		$folders = $this->get_event_folders(array(
+			"id" => $arr["id"],
+			"names" => 1,
+		));
+
+		$tasklist = new object_list(array(
+			"class_id" => CL_TASK,
+			"parent" => array_keys($folders),
+			"flags" => array(
+				"mask" => OBJ_IS_DONE,
+				"flags" => 0,
+			),
+		));
+		if (0 == $tasklist->count())
+		{
+			return array();
+		};
+
+		$tasklist = new object_list(array(
+			new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"brother_of" => $tasklist->brother_ofs(),
+				)
+			)),
+			new object_list_filter(array(
+				"logic" => "AND",
+				"conditions" => array(
+					"brother_of" => new obj_predicate_prop("id"),
+				)
+			)),
+				"flags" => array(
+					"mask" => OBJ_IS_DONE,
+					"flags" => 0
+			)
+		));
+
+		$rv = array();
+
+		foreach($tasklist->arr() as $task_o)
+		{
+			$id = $task_o->id();
+			$loc_o = new object($task_o->parent());
+			$rv[$id] = array(
+				"name" => $task_o->name(),
+				"start" => $task_o->prop("start1"),
+				"location" => $folders[$task_o->parent()],
+				"content" => $task_o->prop("content"),
+				"url" => $this->get_event_edit_link(array(
+					"cal_id" => $arr["id"],
+					"event_id" => $id,
+				)),
+			);
+		};
+		return $rv;
+
+
+		
+
+
+
+	}
+
+	/** generates task overview list
+	**/
+	function do_task_list(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+
+		/*
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+		*/
+		
+		$t->define_field(array(
+			"name" => "start",
+			"caption" => t("Algus"),
+			"type" => "time",
+			"format" => "H:i d.m.Y",
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Pealkiri"),
+			"sortable" => 1,
+		));
+		
+		$t->define_field(array(
+			"name" => "content",
+			"caption" => t("Sisu"),
+		));
+		
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+			"sortable" => 1,
+		));
+
+		$t->define_chooser(array(
+			"field" => "id",
+			"caption" => t("Vali"),
+		));
+		
+		$t->set_default_sortby("start");
+		$t->set_default_sorder("asc");
+
+		$open_tasks = $this->_get_open_tasks(array("id" => $arr["obj_inst"]->id()));
+
+		foreach($open_tasks as $task_id => $task_data)
+		{
+			$t->define_data(array(
+				"id" => $task_id,
+				"name" => html::href(array(
+					"url" => $task_data["url"],
+					"caption" => parse_obj_name($task_data["name"]),
+				)),
+				"start" => $task_data["start"],
+				"location" => $task_data["location"],
+				"content" => substr($task_data["content"],0,100),
+			));
+
+
+		};
+
+
 	}
 };
 ?>
