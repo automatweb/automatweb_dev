@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.9 2005/03/30 11:36:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.10 2005/04/08 11:44:26 kristo Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -88,7 +88,7 @@ class staging extends class_base
 
 		// check if this is a copy and then show connections from the original object
 		$copy_conns = $o->connections_to(array(
-			"type" => "RELTYPE_COPY",
+			"type" => 2 // "RELTYPE_COPY",
 		));
 
 		if (sizeof($copy_conns) > 0)
@@ -256,7 +256,7 @@ class staging extends class_base
 		
 		// check if this is a copy and then show connections from the original object
 		$copy_conns = $o->connections_to(array(
-			"type" => "RELTYPE_COPY",
+			"type" => 2 //"RELTYPE_COPY",
 		));
 
 		if (sizeof($copy_conns) > 0)
@@ -356,7 +356,7 @@ class staging extends class_base
 					// can later manage copies
 					$o->connect(array(
 						"to" => $new_obj->id(),
-						"reltype" => "RELTYPE_COPY",
+						"reltype" => 2 //"RELTYPE_COPY",
 					));
 
 					obj_set_opt("no_auto_translation",1);
