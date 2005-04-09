@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.17 2005/04/07 09:25:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.18 2005/04/09 09:49:25 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -605,13 +605,10 @@ class mrp_prisma_import extends class_base
 			$o->set_prop("state", 1); // MRP_STATUS_NEW
 			if ($t)
 			{
-				if (!$o->is_connected_to(array("to" => $t->id(), "type" => "RELTYPE_MRP_CUSTOMER")))
-				{
-					$o->connect(array(
-						"to" => $t->id(),
-						"reltype" => "RELTYPE_MRP_CUSTOMER"
-					));
-				}
+				$o->connect(array(
+					"to" => $t->id(),
+					"reltype" => "RELTYPE_MRP_CUSTOMER"
+				));
 				$o->set_meta("popup_search[customer]", array($t->id() => $t->id()));
 				$o->set_prop("customer", $t->id());
 			}
