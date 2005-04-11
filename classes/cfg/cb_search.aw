@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.32 2005/04/08 12:22:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.33 2005/04/11 07:28:51 ahti Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -726,11 +726,13 @@ class cb_search extends class_base
 		$res = array();
 		$controllers = array();
 		$cf = $o->prop("root_class_cf");
+		$prop_cfg = array();
 		if(is_oid($cf) && $this->can("view", $cf))
 		{
 			$obj = obj($cf);
 			$controllers = $obj->meta("controllers");
 			$view_controllers = $obj->meta("view_controllers");
+			$prop_cfg = safe_array($obj->meta("cfg_proplist"));
 		}
 		foreach(safe_array($this->form_dat[$clid]) as $pn => $pd)
 		{
@@ -746,6 +748,7 @@ class cb_search extends class_base
 			{
 				$this->in_form[$pn]["controllers"] = is_array($controllers[$pn]) ? $controllers[$pn] : array($controllers[$pn]);
 			}
+			$this->in_form[$pn] = $prop_cfg[$pn] + $this->in_form[$pn];
 		};
 
 		$this->__tdata = $o->meta("form_dat");
