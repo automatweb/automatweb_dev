@@ -1,5 +1,9 @@
 deletes the currently loaded object
 
+<b>parameters:</b>
+- whether to really delete the object or just set the status to deleted, defaults to false
+type: boolean
+
 <b>errors:</b>
 - if the current user has no access rights to the object, acl error is thrown
 - if no object is loaded, error is thrown
@@ -11,5 +15,12 @@ the id of the deleted object
 
 #php#
 $o = obj(89);
-$o->delete();
+$o->delete(); // now the object exists in the database, but it's status is deleted
+
+$o = obj();
+$o->set_parent(1);
+$o->set_class_id(CL_MENU);
+$o->save();
+
+$o->delete(true); // now the database contains no traces of the just-created object
 #/php#
