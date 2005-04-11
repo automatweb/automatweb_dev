@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
-msgstr ""
+msgstr "Alias"
 
 #: classes/contentmgmt/newsfeed.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_feedtype
 msgid "Omaduse Tüüp (feedtype) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/contentmgmt/newsfeed.aw:prop_feedtype_comment
 msgid "Omaduse Tüüp (feedtype) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_limittype
 msgid "Omaduse Milliseid uudiseid näidata? (limittype) caption"
-msgstr ""
+msgstr "What kind of news to display?"
 
 #: classes/contentmgmt/newsfeed.aw:prop_limittype_comment
 msgid "Omaduse Milliseid uudiseid näidata? (limittype) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_count
 msgid "Omaduse Mitu viimast (count) caption"
-msgstr ""
+msgstr "Number of entries"
 
 #: classes/contentmgmt/newsfeed.aw:prop_count_comment
 msgid "Omaduse Mitu viimast (count) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:prop_days
 msgid "Omaduse Mitme viimase päeva omad (days) caption"
-msgstr ""
+msgstr "Number of last days to display"
 
 #: classes/contentmgmt/newsfeed.aw:prop_days_comment
 msgid "Omaduse Mitme viimase päeva omad (days) kommentaar"
@@ -72,13 +72,13 @@ msgstr ""
 
 #: classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
-msgstr ""
+msgstr "feed source folder"
 
 #: classes/contentmgmt/newsfeed.aw:58
 msgid "RSS 2.0"
-msgstr ""
+msgstr "RSS 2.0"
 
 #: classes/contentmgmt/newsfeed.aw:59
 msgid "Atom (implementeerimata)"
-msgstr ""
+msgstr "Atom (not implemented)"
 

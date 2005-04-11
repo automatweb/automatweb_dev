@@ -47,11 +47,11 @@ msgstr "Outdent"
 
 #: classes/vcl/rte.aw:154
 msgid "Indent"
-msgstr ""
+msgstr "Indent"
 
 #: classes/vcl/rte.aw:163
 msgid "link"
-msgstr ""
+msgstr "link"
 
 #: classes/vcl/rte.aw:173
 msgid "Tabel"

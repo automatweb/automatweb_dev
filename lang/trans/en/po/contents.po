@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/contents.aw:prop_intro_folder
 msgid "Omaduse Juhtkirja kataloog (intro_folder) caption"
-msgstr ""
+msgstr "Intro document folder"
 
 #: classes/contentmgmt/contents.aw:prop_intro_folder_comment
 msgid "Omaduse Juhtkirja kataloog (intro_folder) kommentaar"
@@ -24,5 +24,5 @@ msgstr ""
 
 #: classes/contentmgmt/contents.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 

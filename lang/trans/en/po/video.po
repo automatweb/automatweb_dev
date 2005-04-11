@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/contentmgmt/video.aw:prop_image_comment
 msgid "Omaduse Pilt (image) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_caption
 msgid "Omaduse Allkiri (caption) caption"
-msgstr ""
+msgstr "Caption"
 
 #: classes/contentmgmt/video.aw:prop_caption_comment
 msgid "Omaduse Allkiri (caption) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_author
 msgid "Omaduse Autor (author) caption"
-msgstr ""
+msgstr "Author"
 
 #: classes/contentmgmt/video.aw:prop_author_comment
 msgid "Omaduse Autor (author) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_origin
 msgid "Omaduse Allikas (origin) caption"
-msgstr ""
+msgstr "Origin"
 
 #: classes/contentmgmt/video.aw:prop_origin_comment
 msgid "Omaduse Allikas (origin) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_origin_url
 msgid "Omaduse Allika URL (origin_url) caption"
-msgstr ""
+msgstr "Origin URL"
 
 #: classes/contentmgmt/video.aw:prop_origin_url_comment
 msgid "Omaduse Allika URL (origin_url) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_date
 msgid "Omaduse Kuup&auml;ev (date) caption"
-msgstr ""
+msgstr "Date"
 
 #: classes/contentmgmt/video.aw:prop_date_comment
 msgid "Omaduse Kuup&auml;ev (date) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_src_rp
 msgid "Omaduse URL (RealPlayer) (src_rp) caption"
-msgstr ""
+msgstr "URL (RealPlayer)"
 
 #: classes/contentmgmt/video.aw:prop_src_rp_comment
 msgid "Omaduse URL (RealPlayer) (src_rp) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_capt_rp
 msgid "Omaduse Lingi tekst (RealPlayer) (capt_rp) caption"
-msgstr ""
+msgstr "Link text (Real Player)"
 
 #: classes/contentmgmt/video.aw:prop_capt_rp_comment
 msgid "Omaduse Lingi tekst (RealPlayer) (capt_rp) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_src_wm
 msgid "Omaduse URL (Windows Media) (src_wm) caption"
-msgstr ""
+msgstr "URL (Windows Media)"
 
 #: classes/contentmgmt/video.aw:prop_src_wm_comment
 msgid "Omaduse URL (Windows Media) (src_wm) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:prop_capt_wm
 msgid "Omaduse Lingi tekst (Windows Media) (capt_wm) caption"
-msgstr ""
+msgstr "Link caption (Windows Media)"
 
 #: classes/contentmgmt/video.aw:prop_capt_wm_comment
 msgid "Omaduse Lingi tekst (Windows Media) (capt_wm) kommentaar"
@@ -132,5 +132,5 @@ msgstr ""
 
 #: classes/contentmgmt/video.aw:rel_RELTYPE_IMAGE
 msgid "Seose Video pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "Video image"
 

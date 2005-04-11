@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/contentmgmt/site_template_compiler.aw:862
 msgid "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
-msgstr ""
+msgstr "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
 

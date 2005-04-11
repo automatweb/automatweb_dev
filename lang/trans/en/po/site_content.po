@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/contentmgmt/site_content.aw:2074
 msgid "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
-msgstr ""
+msgstr "Access denied and error redirects are defined.incorrectly. Please report this to the site administrator"
 
 #: classes/contentmgmt/site_content.aw:2079
 msgid "No ACL error messages defined! no can_view access for object %s"
-msgstr ""
+msgstr "No ACL error messages defined! no can_view access for object %s"
 

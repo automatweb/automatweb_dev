@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_pp
 msgid "Omaduse Postipoisi andmeallikas, kust otsida (pp) caption"
-msgstr ""
+msgstr "Postipoiss datasource"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_pp_comment
 msgid "Omaduse Postipoisi andmeallikas, kust otsida (pp) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_sform_t
 msgid "Omaduse Otsinguvorm (sform_t) caption"
-msgstr ""
+msgstr "Search form"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_sform_t_comment
 msgid "Omaduse Otsinguvorm (sform_t) kommentaar"
@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit
 msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) caption"
-msgstr ""
+msgstr "Do not display search button"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit_comment
 msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) kommentaar"
@@ -50,6 +50,7 @@ msgid ""
 "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) "
 "(no_search_form) caption"
 msgstr ""
+"Do not display search form (search via url only)"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form_comment
 msgid ""
@@ -65,7 +66,7 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_stbl_t
 msgid "Omaduse Otsinguvormi tulemuste tabel (stbl_t) caption"
-msgstr ""
+msgstr "Results table"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_stbl_t_comment
 msgid "Omaduse Otsinguvormi tulemuste tabel (stbl_t) kommentaar"
@@ -101,71 +102,71 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_sform
 msgid "Grupi Otsinguvorm (sform) pealkiri"
-msgstr ""
+msgstr "Search form"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_stbl
 msgid "Grupi Tulemuste tabel (stbl) pealkiri"
-msgstr ""
+msgstr "Result table"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_srch
 msgid "Grupi Otsi (srch) pealkiri"
-msgstr ""
+msgstr "Search"
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:rel_RELTYPE_PP
 msgid "Seose postipoisi andmeallikas (RELTYPE_PP) tekst"
-msgstr ""
+msgstr "postipoiss datasource"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:101
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:164
 msgid "Element"
-msgstr ""
+msgstr "Element"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:105
 msgid "Otsitav"
-msgstr ""
+msgstr "Searchable"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:110
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:198
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:115
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:203
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:130
 msgid "T&auml;istekstiotsing"
-msgstr ""
+msgstr "Fulltext search"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:168
 msgid "Tabelis"
-msgstr ""
+msgstr "In table"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:173
 msgid "Sorditav"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:178
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:183
 msgid "Number"
-msgstr ""
+msgstr "Number"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:188
 msgid "Vaikimisi sorteeritud"
-msgstr ""
+msgstr "Default sort"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:193
 msgid "Vaatamise tulp"
-msgstr ""
+msgstr "View column"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:452
 msgid "otv_ds_pp_search: postipoisi andmeallikas on valimata!"
-msgstr ""
+msgstr "otv_ds_pp_search: postipoiss datasource not selected!"
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:496
 msgid "Otsi"
-msgstr ""
+msgstr "Search"

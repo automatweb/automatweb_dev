@@ -1,4 +1,10 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Font 1 (ffamily1) caption"] = "Font 1";
+$GLOBALS["TRANS"]["Omaduse Font 3 (ffamily2) caption"] = "Font 2";
+$GLOBALS["TRANS"]["Omaduse Font 3 (ffamily3) caption"] = "Font 3";
+$GLOBALS["TRANS"]["Omaduse <i>Italic</i> (italic) caption"] = "<i>Italic</i>";
+$GLOBALS["TRANS"]["Omaduse <b>Bold</b> (bold) caption"] = "<b>Bold</b>";
+$GLOBALS["TRANS"]["Omaduse <u>Underline</u> (underline) caption"] = "<u>Underline</u>";
 $GLOBALS["TRANS"]["Omaduse Kirja suurus (px) (size) caption"] = "Text size (px)";
 $GLOBALS["TRANS"]["Omaduse Teksti v&auml;rv (fgcolor) caption"] = "Text colour";
 $GLOBALS["TRANS"]["Omaduse Tausta v&auml;rv (bgcolor) caption"] = "Background colour";
@@ -6,6 +12,7 @@ $GLOBALS["TRANS"]["Omaduse Joone k&otilde;rgus  (lineheight) caption"] = "Line h
 $GLOBALS["TRANS"]["Omaduse &Auml;&auml;rejoone j&auml;medus (border) caption"] = "Border width";
 $GLOBALS["TRANS"]["Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) caption"] = "Border colour";
 $GLOBALS["TRANS"]["Omaduse Align (align) caption"] = "Align";
+$GLOBALS["TRANS"]["Omaduse Valign (valign) caption"] = "Valign";
 $GLOBALS["TRANS"]["Omaduse Laius (width) caption"] = "Width";
 $GLOBALS["TRANS"]["Omaduse K&otilde;rgus (height) caption"] = "Height";
 $GLOBALS["TRANS"]["Omaduse Elementide vahe (cellspacing) (px) (padding) caption"] = "Cell spacing";

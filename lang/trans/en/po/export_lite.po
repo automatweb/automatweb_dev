@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/export/export_lite.aw:52
 msgid "eksport juba k&auml;ib!"
-msgstr ""
+msgstr "export already running"
 

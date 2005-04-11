@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/contentmgmt/server_folder.aw:71
 msgid "server_folder::show_file(%s): the fid parameter does not contain a valid object id!"

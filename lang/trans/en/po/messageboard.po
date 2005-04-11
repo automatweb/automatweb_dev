@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/messageboard.aw:prop_comments
 msgid "Omaduse Kommentaarid (comments) caption"
-msgstr ""
+msgstr "Comments"
 
 #: classes/contentmgmt/messageboard.aw:prop_comments_comment
 msgid "Omaduse Kommentaarid (comments) kommentaar"
@@ -24,5 +24,5 @@ msgstr ""
 
 #: classes/contentmgmt/messageboard.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 

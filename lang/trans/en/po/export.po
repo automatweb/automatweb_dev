@@ -12,21 +12,21 @@ msgstr ""
 
 #: classes/export/export.aw:237
 msgid "Folder %s does not exist on server!"
-msgstr ""
+msgstr "Folder %s does not exist on server!"
 
 #: classes/export/export.aw:250
 msgid "eksport juba k&auml;ib!"
-msgstr ""
+msgstr "export already running"
 
 #: classes/export/export.aw:471
 msgid "Found stop flag as %s, shutting down."
-msgstr ""
+msgstr "Found stop flag as %s, shutting down."
 
 #: classes/export/export.aw:494
 msgid "VIGA, tyhi url!"
-msgstr ""
+msgstr "ERROR, empty url"
 
 #: classes/export/export.aw:783
 msgid "VIGA! EI LEIDNUD ext for type %s"
-msgstr ""
+msgstr "ERROR! could nto find ext for type %s"
 

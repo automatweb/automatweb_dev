@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_show_obj
 msgid "Omaduse Sisu  (show_obj) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/contentmgmt/html_popup.aw:prop_show_obj_comment
 msgid "Omaduse Sisu  (show_obj) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_popup_type
 msgid "Omaduse Kasuta layerit (popup_type) caption"
-msgstr ""
+msgstr "Use layer"
 
 #: classes/contentmgmt/html_popup.aw:prop_popup_type_comment
 msgid "Omaduse Kasuta layerit (popup_type) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_width
 msgid "Omaduse Laius (width) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/contentmgmt/html_popup.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_height
 msgid "Omaduse Kõrgus (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/contentmgmt/html_popup.aw:prop_height_comment
 msgid "Omaduse Kõrgus (height) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_scrollbars
 msgid "Omaduse Kerimisribad (scrollbars) caption"
-msgstr ""
+msgstr "Scrollbars"
 
 #: classes/contentmgmt/html_popup.aw:prop_scrollbars_comment
 msgid "Omaduse Kerimisribad (scrollbars) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_only_once
 msgid "Omaduse Ainult &uuml;he korra sessiooni jooksul (only_once) caption"
-msgstr ""
+msgstr "Only once in session"
 
 #: classes/contentmgmt/html_popup.aw:prop_only_once_comment
 msgid "Omaduse Ainult &uuml;he korra sessiooni jooksul (only_once) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:prop_menus
 msgid "Omaduse Menüüd (menus) caption"
-msgstr ""
+msgstr "Folders"
 
 #: classes/contentmgmt/html_popup.aw:prop_menus_comment
 msgid "Omaduse Menüüd (menus) kommentaar"
@@ -96,21 +96,21 @@ msgstr ""
 
 #: classes/contentmgmt/html_popup.aw:rel_RELTYPE_OBJ
 msgid "Seose sisu objekt (RELTYPE_OBJ) tekst"
-msgstr ""
+msgstr "content object"
 
 #: classes/contentmgmt/html_popup.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/contentmgmt/html_popup.aw:81
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/html_popup.aw:89
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/html_popup.aw:94
 msgid "k.a. alammenüüd"
-msgstr ""
+msgstr "incl. submenus"
 

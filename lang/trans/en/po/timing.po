@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/timing.aw:prop_activate
 msgid "Omaduse Aktiveerida (activate) caption"
-msgstr ""
+msgstr "Activate at"
 
 #: classes/contentmgmt/timing.aw:prop_activate_comment
 msgid "Omaduse Aktiveerida (activate) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/timing.aw:prop_deactivate
 msgid "Omaduse Deaktiveerida (deactivate) caption"
-msgstr ""
+msgstr "Deactivate at"
 
 #: classes/contentmgmt/timing.aw:prop_deactivate_comment
 msgid "Omaduse Deaktiveerida (deactivate) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/timing.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
-msgstr ""
+msgstr "Object toolbar"
 
 #: classes/contentmgmt/timing.aw:prop_objects_toolbar_comment
 msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/timing.aw:prop_objects
 msgid "Omaduse Seotud objektid (objects) caption"
-msgstr ""
+msgstr "Connected objects"
 
 #: classes/contentmgmt/timing.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
@@ -60,29 +60,29 @@ msgstr ""
 
 #: classes/contentmgmt/timing.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
-msgstr ""
+msgstr "Connected objects"
 
 #: classes/contentmgmt/timing.aw:rel_RELTYPE_TIMING_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_TIMING_OBJECT) tekst"
-msgstr ""
+msgstr "connected object"
 
 #: classes/contentmgmt/timing.aw:187
 msgid "Eemalda valitud objektid"
-msgstr ""
+msgstr "Remove selected objects"
 
 #: classes/contentmgmt/timing.aw:189
 msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
-msgstr ""
+msgstr "Are you sure you want to delete the relected objects from this reminder?"
 
 #: classes/contentmgmt/timing.aw:199
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/timing.aw:200
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/timing.aw:201
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 

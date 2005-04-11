@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld
 msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) caption"
-msgstr ""
+msgstr "Server folder where xml files are stored"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_xml_fld_comment
 msgid "Omaduse Serveri kataloog, kus asuvad xml failid (xml_fld) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_fld
 msgid "Omaduse Serveri kataloog, kus asuvad sisu failid (ct_fld) caption"
-msgstr ""
+msgstr "Server folder where content files are stored"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_fld_comment
 msgid "Omaduse Serveri kataloog, kus asuvad sisu failid (ct_fld) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_subj_xml
 msgid "Omaduse Teemade xml fail (subj_xml) caption"
-msgstr ""
+msgstr "Subject xml file"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_subj_xml_comment
 msgid "Omaduse Teemade xml fail (subj_xml) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct
 msgid "Omaduse Sisu (ct) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:prop_ct_comment
 msgid "Omaduse Sisu (ct) kommentaar"
@@ -72,29 +72,29 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
-msgstr ""
+msgstr "data transformer"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:115
 msgid "Uuenda cache"
-msgstr ""
+msgstr "Renew cache"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:137
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:147
 msgid "<b>Kataloogid</b>"
-msgstr ""
+msgstr "<b>Folders</b>"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:158
 msgid "<b>Failid</b>"
-msgstr ""
+msgstr "<b>Files</b>"
 
 #: classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw:318
 msgid "the subject xml file (%s) does not exist!"
-msgstr ""
+msgstr "the subject xml file (%s) does not exist!"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_menus
 msgid "Omaduse Menüüd (menus) caption"
-msgstr ""
+msgstr "Folders"
 
 #: classes/contentmgmt/menu_tree.aw:prop_menus_comment
 msgid "Omaduse Menüüd (menus) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_children_only
 msgid "Omaduse Ainult alammenüüd (children_only) caption"
-msgstr ""
+msgstr "Oly submenus"
 
 #: classes/contentmgmt/menu_tree.aw:prop_children_only_comment
 msgid "Omaduse Ainult alammenüüd (children_only) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_template
 msgid "Omaduse Template (template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/contentmgmt/menu_tree.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_num_levels
 msgid "Omaduse Tasemeid (num_levels) caption"
-msgstr ""
+msgstr "Levels"
 
 #: classes/contentmgmt/menu_tree.aw:prop_num_levels_comment
 msgid "Omaduse Tasemeid (num_levels) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/menu_tree.aw:prop_no_unclickable
 msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) caption"
-msgstr ""
+msgstr "Do not display unclickable menus"
 
 #: classes/contentmgmt/menu_tree.aw:prop_no_unclickable_comment
 msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) kommentaar"

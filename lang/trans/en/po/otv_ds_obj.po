@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) caption"
-msgstr ""
+msgstr "Display not active objects"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_comment
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder
 msgid "Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) caption"
-msgstr ""
+msgstr "Display not active folders"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder_comment
 msgid "Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick
 msgid "Omaduse Mitteaktiivsed pole klikitavad (show_notact_noclick) caption"
-msgstr ""
+msgstr "Not active are not clicable"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick_comment
 msgid "Omaduse Mitteaktiivsed pole klikitavad (show_notact_noclick) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) caption"
-msgstr ""
+msgstr "Comment instead of name"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_comment
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by
 msgid "Omaduse Objekte sorteeritakse (sort_by) caption"
-msgstr ""
+msgstr "Sort by"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by_comment
 msgid "Omaduse Objekte sorteeritakse (sort_by) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders
 msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) caption"
-msgstr ""
+msgstr "Use variables as folders"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders_comment
 msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform
 msgid "Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) caption"
-msgstr ""
+msgstr "Object is displayed via config form"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform_comment
 msgid "Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders
 msgid "Omaduse Kataloogid (folders) caption"
-msgstr ""
+msgstr "Folders"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders_comment
 msgid "Omaduse Kataloogid (folders) kommentaar"
@@ -108,57 +108,57 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
-msgstr ""
+msgstr "Folders"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_ADD_TYPE
 msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
-msgstr ""
+msgstr "addable object type"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_TYPE
 msgid "Seose n&auml;idatav objektit&uuml;&uuml;p (RELTYPE_SHOW_TYPE) tekst"
-msgstr ""
+msgstr "displayed object type"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_CFGFORM
 msgid "Seose v&auml;ljundi seadete vorm (RELTYPE_SHOW_CFGFORM) tekst"
-msgstr ""
+msgstr "display config form"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_META
 msgid "Seose Muutuja (RELTYPE_META) tekst"
-msgstr ""
+msgstr "Variable"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
-msgstr ""
+msgstr "data transformer"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:73
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "By object modified date"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:74
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
-msgstr ""
+msgstr "By object order"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:123
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:131
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:136
 msgid "k.a. alammen&uuml;&uuml;d"
-msgstr ""
+msgstr "incl. submenus"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:143
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
-msgstr ""
+msgstr "do not display root menu"
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:390
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 

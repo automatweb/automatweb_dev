@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_url
 msgid "Omaduse URL (url) caption"
-msgstr ""
+msgstr "URL"
 
 #: classes/contentmgmt/iframe.aw:prop_url_comment
 msgid "Omaduse URL (url) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_width
 msgid "Omaduse Laius (width) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/contentmgmt/iframe.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_height
 msgid "Omaduse Kõrgus (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/contentmgmt/iframe.aw:prop_height_comment
 msgid "Omaduse Kõrgus (height) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder
 msgid "Omaduse Ümbritseda raamiga (frameborder) caption"
-msgstr ""
+msgstr "Frame border"
 
 #: classes/contentmgmt/iframe.aw:prop_frameborder_comment
 msgid "Omaduse Ümbritseda raamiga (frameborder) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_scrolling
 msgid "Omaduse Kerimisribad (scrolling) caption"
-msgstr ""
+msgstr "Scrollbars"
 
 #: classes/contentmgmt/iframe.aw:prop_scrolling_comment
 msgid "Omaduse Kerimisribad (scrolling) kommentaar"

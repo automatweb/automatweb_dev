@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_ffamily1
 msgid "Omaduse Font 1 (ffamily1) caption"
-msgstr ""
+msgstr "Font 1"
 
 #: classes/contentmgmt/css.aw:prop_ffamily1_comment
 msgid "Omaduse Font 1 (ffamily1) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_ffamily2
 msgid "Omaduse Font 3 (ffamily2) caption"
-msgstr ""
+msgstr "Font 2"
 
 #: classes/contentmgmt/css.aw:prop_ffamily2_comment
 msgid "Omaduse Font 3 (ffamily2) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_ffamily3
 msgid "Omaduse Font 3 (ffamily3) caption"
-msgstr ""
+msgstr "Font 3"
 
 #: classes/contentmgmt/css.aw:prop_ffamily3_comment
 msgid "Omaduse Font 3 (ffamily3) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_italic
 msgid "Omaduse <i>Italic</i> (italic) caption"
-msgstr ""
+msgstr "<i>Italic</i>"
 
 #: classes/contentmgmt/css.aw:prop_italic_comment
 msgid "Omaduse <i>Italic</i> (italic) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_bold
 msgid "Omaduse <b>Bold</b> (bold) caption"
-msgstr ""
+msgstr "<b>Bold</b>"
 
 #: classes/contentmgmt/css.aw:prop_bold_comment
 msgid "Omaduse <b>Bold</b> (bold) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_underline
 msgid "Omaduse <u>Underline</u> (underline) caption"
-msgstr ""
+msgstr "<u>Underline</u>"
 
 #: classes/contentmgmt/css.aw:prop_underline_comment
 msgid "Omaduse <u>Underline</u> (underline) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/contentmgmt/css.aw:prop_valign
 msgid "Omaduse Valign (valign) caption"
-msgstr ""
+msgstr "Valign"
 
 #: classes/contentmgmt/css.aw:prop_valign_comment
 msgid "Omaduse Valign (valign) kommentaar"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/contentmgmt/poll.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/contentmgmt/poll.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_clicks
 msgid "Omaduse Klikid (clicks) caption"
-msgstr ""
+msgstr "Clicks"
 
 #: classes/contentmgmt/poll.aw:prop_clicks_comment
 msgid "Omaduse Klikid (clicks) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_clicks_stats
 msgid "Omaduse Statistika (clicks_stats) caption"
-msgstr ""
+msgstr "Statistics"
 
 #: classes/contentmgmt/poll.aw:prop_clicks_stats_comment
 msgid "Omaduse Statistika (clicks_stats) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_in_archive
 msgid "Omaduse Arhiivis (in_archive) caption"
-msgstr ""
+msgstr "In archive"
 
 #: classes/contentmgmt/poll.aw:prop_in_archive_comment
 msgid "Omaduse Arhiivis (in_archive) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_question
 msgid "Omaduse K&uuml;simus (question) caption"
-msgstr ""
+msgstr "Question"
 
 #: classes/contentmgmt/poll.aw:prop_question_comment
 msgid "Omaduse K&uuml;simus (question) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_answers
 msgid "Omaduse Vastused (answers) caption"
-msgstr ""
+msgstr "Answers"
 
 #: classes/contentmgmt/poll.aw:prop_answers_comment
 msgid "Omaduse Vastused (answers) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_activity
 msgid "Omaduse Aktiivsus (activity) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/contentmgmt/poll.aw:prop_activity_comment
 msgid "Omaduse Aktiivsus (activity) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:prop_translate
 msgid "Omaduse T&otilde;lgi (translate) caption"
-msgstr ""
+msgstr "Translate"
 
 #: classes/contentmgmt/poll.aw:prop_translate_comment
 msgid "Omaduse T&otilde;lgi (translate) kommentaar"
@@ -120,47 +120,47 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_clicks
 msgid "Grupi Klikke (clicks) pealkiri"
-msgstr ""
+msgstr "Clicks"
 
 #: classes/contentmgmt/poll.aw:group_clicks_stats
 msgid "Grupi Statistika (clicks_stats) pealkiri"
-msgstr ""
+msgstr "Statistics"
 
 #: classes/contentmgmt/poll.aw:group_clicks_detail
 msgid "Grupi Vastajad (clicks_detail) pealkiri"
-msgstr ""
+msgstr "Answerers"
 
 #: classes/contentmgmt/poll.aw:group_translate
 msgid "Grupi T&otilde;lgi (translate) pealkiri"
-msgstr ""
+msgstr "Translate"
 
 #: classes/contentmgmt/poll.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
-msgstr ""
+msgstr "Activity"
 
 #: classes/contentmgmt/poll.aw:470
 msgid "UID"
-msgstr ""
+msgstr "UID"
 
 #: classes/contentmgmt/poll.aw:477
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: classes/contentmgmt/poll.aw:484
 msgid "Kuup&auml;ev"
-msgstr ""
+msgstr "Date"
 
 #: classes/contentmgmt/poll.aw:494 classes/contentmgmt/poll.aw:524
 msgid "Vastus"
-msgstr ""
+msgstr "Answer"
 
 #: classes/contentmgmt/poll.aw:531
 msgid "Klikke"
-msgstr ""
+msgstr "Clicks"
 
 #: classes/contentmgmt/poll.aw:540
 msgid "Protsent"
-msgstr ""
+msgstr "Percent"
 
 #: classes/contentmgmt/poll.aw:549 classes/contentmgmt/poll.aw:800
 msgid ""
@@ -168,13 +168,13 @@ msgstr ""
 
 #: classes/contentmgmt/poll.aw:627 classes/contentmgmt/poll.aw:639
 msgid "Vastus nr %s"
-msgstr ""
+msgstr "Answer nr %s"
 
 #: classes/contentmgmt/poll.aw:808
 msgid "K&uuml;simus"
-msgstr ""
+msgstr "Question"
 
 #: classes/contentmgmt/poll.aw:818
 msgid "Vastus nr %s "
-msgstr ""
+msgstr "Answer nr %s"
 

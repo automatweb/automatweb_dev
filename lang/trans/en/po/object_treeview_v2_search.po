@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_tv
 msgid "Omaduse Objektinimekiri (tv) caption"
-msgstr ""
+msgstr "Object list"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_tv_comment
 msgid "Omaduse Objektinimekiri (tv) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_fields
 msgid "Omaduse Otsingu v&auml;ljad (search_fields) caption"
-msgstr ""
+msgstr "Search fields"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_fields_comment
 msgid "Omaduse Otsingu v&auml;ljad (search_fields) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_tbl_fields
 msgid "Omaduse Tabeli v&auml;ljad (search_tbl_fields) caption"
-msgstr ""
+msgstr "Table fields"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_tbl_fields_comment
 msgid "Omaduse Tabeli v&auml;ljad (search_tbl_fields) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_show
 msgid "Omaduse Tabeli v&auml;ljad (search_show) caption"
-msgstr ""
+msgstr "Table fields"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:prop_search_show_comment
 msgid "Omaduse Tabeli v&auml;ljad (search_show) kommentaar"
@@ -72,73 +72,73 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:group_search_form
 msgid "Grupi Koosta vorm (search_form) pealkiri"
-msgstr ""
+msgstr "Create form"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:group_search_table
 msgid "Grupi Koosta tulemuste tabel (search_table) pealkiri"
-msgstr ""
+msgstr "Create result table"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:group_search_show
 msgid "Grupi Otsi (search_show) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:rel_RELTYPE_OTV
 msgid "Seose objektinimekiri (RELTYPE_OTV) tekst"
-msgstr ""
+msgstr "object list"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:rel_RELTYPE_CTR
 msgid "Seose kontroller (RELTYPE_CTR) tekst"
-msgstr ""
+msgstr "controller"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:153
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:159
 msgid "N&auml;ita vormis"
-msgstr ""
+msgstr "Display in form"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:165
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:171 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:219
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:190
 msgid "T&auml;istekstiotsing"
-msgstr ""
+msgstr "Fulltext search"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:226
 msgid "Element"
-msgstr ""
+msgstr "Element"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:232
 msgid "Tabelis"
-msgstr ""
+msgstr "In table"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:238
 msgid "Sorditav"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:244
 msgid "Vaata tulp"
-msgstr ""
+msgstr "View column"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:250
 msgid "Tulba pealkiri"
-msgstr ""
+msgstr "Column caption"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:256
 msgid "Kontroller"
-msgstr ""
+msgstr "Controller"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:271
 msgid "--Vali--"
-msgstr ""
+msgstr "--Select--"
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:344 classes/contentmgmt/object_treeview/object_treeview_v2_search.aw:345
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/archive/document_archive.aw:prop_date_format
 msgid "Omaduse Kuupäeva formaat (date_format) caption"
-msgstr ""
+msgstr "Date format"
 
 #: classes/contentmgmt/archive/document_archive.aw:prop_date_format_comment
 msgid "Omaduse Kuupäeva formaat (date_format) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/archive/document_archive.aw:prop_contents
 msgid "Omaduse Test (contents) caption"
-msgstr ""
+msgstr "Test"
 
 #: classes/contentmgmt/archive/document_archive.aw:prop_contents_comment
 msgid "Omaduse Test (contents) kommentaar"
@@ -36,9 +36,9 @@ msgstr ""
 
 #: classes/contentmgmt/archive/document_archive.aw:group_test
 msgid "Grupi Test (test) pealkiri"
-msgstr ""
+msgstr "Test"
 
 #: classes/contentmgmt/archive/document_archive.aw:rel_RELTYPE_SOURCE
 msgid "Seose Võta dokumente (RELTYPE_SOURCE) tekst"
-msgstr ""
+msgstr "document source"
 

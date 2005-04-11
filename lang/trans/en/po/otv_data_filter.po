@@ -36,25 +36,25 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:group_str_replace
 msgid "Grupi Teksti asendused (str_replace) pealkiri"
-msgstr ""
+msgstr "Text replacements"
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:group_char_replace
 msgid "Grupi T&auml;htede asendused (char_replace) pealkiri"
-msgstr ""
+msgstr "Character replacements"
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:72
 msgid "Mis asendada"
-msgstr ""
+msgstr "Replace what"
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:78
 msgid "Millega asendada"
-msgstr ""
+msgstr "Replace with what"
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:124
 msgid "T&auml;hekoodid, mis asendada"
-msgstr ""
+msgstr "Character codes to replace"
 
 #: classes/contentmgmt/object_treeview/otv_data_filter.aw:130
 msgid "T&auml;hekoodid, millega asendada"
-msgstr ""
+msgstr "Carater codes to replace with"
 

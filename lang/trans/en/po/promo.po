@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/contentmgmt/promo.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/contentmgmt/promo.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_caption
 msgid "Omaduse Pealkiri (caption) caption"
-msgstr ""
+msgstr "Caption"
 
 #: classes/contentmgmt/promo.aw:prop_caption_comment
 msgid "Omaduse Pealkiri (caption) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/contentmgmt/promo.aw:prop_image_comment
 msgid "Omaduse Pilt (image) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead
 msgid "Omaduse Template näitamiseks (tpl_lead) caption"
-msgstr ""
+msgstr "Display template"
 
 #: classes/contentmgmt/promo.aw:prop_tpl_lead_comment
 msgid "Omaduse Template näitamiseks (tpl_lead) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_type
 msgid "Omaduse Kasti tüüp (type) caption"
-msgstr ""
+msgstr "Container type"
 
 #: classes/contentmgmt/promo.aw:prop_type_comment
 msgid "Omaduse Kasti tüüp (type) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_link
 msgid "Omaduse Link (link) caption"
-msgstr ""
+msgstr "Link"
 
 #: classes/contentmgmt/promo.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_link_caption
 msgid "Omaduse Lingi kirjeldus (link_caption) caption"
-msgstr ""
+msgstr "Link description"
 
 #: classes/contentmgmt/promo.aw:prop_link_caption_comment
 msgid "Omaduse Lingi kirjeldus (link_caption) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_dyn
 msgid "Omaduse Sisu ei cacheta (is_dyn) caption"
-msgstr ""
+msgstr "Content is not cached"
 
 #: classes/contentmgmt/promo.aw:prop_is_dyn_comment
 msgid "Omaduse Sisu ei cacheta (is_dyn) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"
-msgstr ""
+msgstr "Content displayed in all languages"
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs_comment
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
-msgstr ""
+msgstr "Content displayed in all languages"
 
 #: classes/contentmgmt/promo.aw:prop_content_all_langs_comment
 msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_promo_tpl
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) caption"
-msgstr ""
+msgstr "Template (in document)"
 
 #: classes/contentmgmt/promo.aw:prop_promo_tpl_comment
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_no_title
 msgid "Omaduse Ilma pealkirjata (no_title) caption"
-msgstr ""
+msgstr "No caption"
 
 #: classes/contentmgmt/promo.aw:prop_no_title_comment
 msgid "Omaduse Ilma pealkirjata (no_title) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_groups
 msgid "Omaduse Grupid, kellele kasti näidata (groups) caption"
-msgstr ""
+msgstr "Groups to show the container to"
 
 #: classes/contentmgmt/promo.aw:prop_groups_comment
 msgid "Omaduse Grupid, kellele kasti näidata (groups) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) caption"
-msgstr ""
+msgstr "Use document location template"
 
 #: classes/contentmgmt/promo.aw:prop_use_fld_tpl_comment
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_all_menus
 msgid "Omaduse Näita igal pool (all_menus) caption"
-msgstr ""
+msgstr "Display everywhere"
 
 #: classes/contentmgmt/promo.aw:prop_all_menus_comment
 msgid "Omaduse Näita igal pool (all_menus) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"
-msgstr ""
+msgstr "Select folders where the container will be displayed"
 
 #: classes/contentmgmt/promo.aw:prop_section_comment
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"
-msgstr ""
+msgstr "Select folders where the container will NOT be displayed"
 
 #: classes/contentmgmt/promo.aw:prop_section_noshow_comment
 msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_last_menus
 msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) caption"
-msgstr ""
+msgstr "Select folders where to get the last documents"
 
 #: classes/contentmgmt/promo.aw:prop_last_menus_comment
 msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_ndocs
 msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
-msgstr ""
+msgstr "How many last documents"
 
 #: classes/contentmgmt/promo.aw:prop_ndocs_comment
 msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
-msgstr ""
+msgstr "How many to skip in the beginning"
 
 #: classes/contentmgmt/promo.aw:prop_start_ndocs_comment
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_sort_by
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
-msgstr ""
+msgstr "Documents sorted by"
 
 #: classes/contentmgmt/promo.aw:prop_sort_by_comment
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_show_inact
 msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
-msgstr ""
+msgstr "Show not active documents as text"
 
 #: classes/contentmgmt/promo.aw:prop_show_inact_comment
 msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
@@ -300,101 +300,101 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:group_menus
 msgid "Grupi Kaustad (menus) pealkiri"
-msgstr ""
+msgstr "Folders"
 
 #: classes/contentmgmt/promo.aw:group_show
 msgid "Grupi Näitamine (show) pealkiri"
-msgstr ""
+msgstr "Display settings"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU
 msgid "Seose näita menüü juures (RELTYPE_ASSIGNED_MENU) tekst"
-msgstr ""
+msgstr "assigned folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_DOC_SOURCE
 msgid "Seose võta dokumente selle menüü alt (RELTYPE_DOC_SOURCE) tekst"
-msgstr ""
+msgstr "document source folder"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_NO_SHOW_MENU
 msgid "Seose &auml;ra näita menüü juures (RELTYPE_NO_SHOW_MENU) tekst"
-msgstr ""
+msgstr "do not display folder"
 
 #: classes/contentmgmt/promo.aw:148
 msgid "Vali template"
-msgstr ""
+msgstr "Select template"
 
 #: classes/contentmgmt/promo.aw:165
 msgid "Vasakul"
-msgstr ""
+msgstr "Left"
 
 #: classes/contentmgmt/promo.aw:166
 msgid "Paremal"
-msgstr ""
+msgstr "Right"
 
 #: classes/contentmgmt/promo.aw:167
 msgid "Üleval"
-msgstr ""
+msgstr "Top"
 
 #: classes/contentmgmt/promo.aw:168
 msgid "All"
-msgstr ""
+msgstr "Bottom"
 
 #: classes/contentmgmt/promo.aw:169
 msgid "Skrolliv"
-msgstr ""
+msgstr "Scrollable"
 
 #: classes/contentmgmt/promo.aw:185
 msgid "J&auml;rjekorra j&auml;rgi"
-msgstr ""
+msgstr "By order"
 
 #: classes/contentmgmt/promo.aw:186
 msgid "Loomise kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "By created date"
 
 #: classes/contentmgmt/promo.aw:187
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "By modified date"
 
 #: classes/contentmgmt/promo.aw:188
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "By document date"
 
 #: classes/contentmgmt/promo.aw:189
 msgid "Objekti nime j&auml;rgi"
-msgstr ""
+msgstr "By object name"
 
 #: classes/contentmgmt/promo.aw:190
 msgid "Kalendris valitud aja j&auml;rgi"
-msgstr ""
+msgstr "By time selected in calendar"
 
 #: classes/contentmgmt/promo.aw:196
 msgid "Suurem (uuem) enne"
-msgstr ""
+msgstr "Bigger (newer) first"
 
 #: classes/contentmgmt/promo.aw:197
 msgid "V&auml;iksem (vanem) enne"
-msgstr ""
+msgstr "Smaller (older) first"
 
 #: classes/contentmgmt/promo.aw:261 classes/contentmgmt/promo.aw:310 classes/contentmgmt/promo.aw:357
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/promo.aw:269 classes/contentmgmt/promo.aw:318 classes/contentmgmt/promo.aw:366
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/promo.aw:274 classes/contentmgmt/promo.aw:323
 msgid "k.a. alammenüüd"
-msgstr ""
+msgstr "incl. submenus"
 
 #: classes/contentmgmt/promo.aw:373
 msgid "Pane pealkirjaks"
-msgstr ""
+msgstr "Set as title"
 
 #: classes/contentmgmt/promo.aw:380
 msgid "k.a. alammen&uuml;&uuml;d"
-msgstr ""
+msgstr "incl. submenus"
 
