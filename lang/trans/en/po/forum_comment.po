@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uname
 msgid "Omaduse Nimi (uname) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uname_comment
 msgid "Omaduse Nimi (uname) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uemail
 msgid "Omaduse E-post (uemail) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_uemail_comment
 msgid "Omaduse E-post (uemail) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_remember
 msgid "Omaduse Jäta nimi ja e-post meelde (remember) caption"
-msgstr ""
+msgstr "Remember name and e-mail"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_remember_comment
 msgid "Omaduse Jäta nimi ja e-post meelde (remember) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_commtext
 msgid "Omaduse Kommentaar (commtext) caption"
-msgstr ""
+msgstr "Comment"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_commtext_comment
 msgid "Omaduse Kommentaar (commtext) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_ip
 msgid "Omaduse IP (ip) caption"
-msgstr ""
+msgstr "IP"
 
 #: classes/contentmgmt/forum/forum_comment.aw:prop_ip_comment
 msgid "Omaduse IP (ip) kommentaar"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_server
 msgid "Omaduse Server (server) caption"
-msgstr ""
+msgstr "Server"
 
 #: classes/protocols/mail/imap.aw:prop_server_comment
 msgid "Omaduse Server (server) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_port
 msgid "Omaduse Port (port) caption"
-msgstr ""
+msgstr "Port"
 
 #: classes/protocols/mail/imap.aw:prop_port_comment
 msgid "Omaduse Port (port) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_user
 msgid "Omaduse Kasutaja (user) caption"
-msgstr ""
+msgstr "Username"
 
 #: classes/protocols/mail/imap.aw:prop_user_comment
 msgid "Omaduse Kasutaja (user) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_password
 msgid "Omaduse Parool (password) caption"
-msgstr ""
+msgstr "Password"
 
 #: classes/protocols/mail/imap.aw:prop_password_comment
 msgid "Omaduse Parool (password) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_use_ssl
 msgid "Omaduse Kasuta SSL-i (use_ssl) caption"
-msgstr ""
+msgstr "Use SSL"
 
 #: classes/protocols/mail/imap.aw:prop_use_ssl_comment
 msgid "Omaduse Kasuta SSL-i (use_ssl) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:prop_test
 msgid "Omaduse Testi tulemused (test) caption"
-msgstr ""
+msgstr "Test results"
 
 #: classes/protocols/mail/imap.aw:prop_test_comment
 msgid "Omaduse Testi tulemused (test) kommentaar"
@@ -84,5 +84,5 @@ msgstr ""
 
 #: classes/protocols/mail/imap.aw:group_test
 msgid "Grupi Testi (test) pealkiri"
-msgstr ""
+msgstr "Test"
 

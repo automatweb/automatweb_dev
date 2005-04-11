@@ -12,19 +12,19 @@ msgstr ""
 
 #: classes/vcl/comments.aw:48
 msgid " kommentaari<br><br>"
-msgstr ""
+msgstr " comments<br><br>"
 
 #: classes/vcl/comments.aw:80
 msgid "Lisa kommentaar"
-msgstr ""
+msgstr "Add comment"
 
 #: classes/vcl/comments.aw:85
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/vcl/comments.aw:91
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/vcl/comments.aw:96
 msgid ""

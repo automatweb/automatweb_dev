@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/intranet/intranet.aw:prop_showlink
 msgid "Omaduse Näita (showlink) caption"
-msgstr ""
+msgstr "Display"
 
 #: classes/intranet/intranet.aw:prop_showlink_comment
 msgid "Omaduse Näita (showlink) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/intranet/intranet.aw:prop_tpldata
 msgid "Omaduse alamtemplated (tpldata) caption"
-msgstr ""
+msgstr "subtemplates"
 
 #: classes/intranet/intranet.aw:prop_tpldata_comment
 msgid "Omaduse alamtemplated (tpldata) kommentaar"

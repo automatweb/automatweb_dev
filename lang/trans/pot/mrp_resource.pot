@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:51 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:01:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -294,39 +294,43 @@ msgstr ""
 msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:226
+#: classes/mrp/mrp_resource.aw:200
+msgid "Viga! "
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:229
 msgid "/Ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:243
+#: classes/mrp/mrp_resource.aw:246
 msgid "Ressursi kasutust planeeritakse"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:244
+#: classes/mrp/mrp_resource.aw:247
 msgid "Ressursi kasutust ei planeerita"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:245
+#: classes/mrp/mrp_resource.aw:248
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:446 classes/mrp/mrp_resource.aw:524
+#: classes/mrp/mrp_resource.aw:450 classes/mrp/mrp_resource.aw:528
 msgid "Ava"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:451
+#: classes/mrp/mrp_resource.aw:455
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:456
+#: classes/mrp/mrp_resource.aw:460
 msgid "Alustamisaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:462
+#: classes/mrp/mrp_resource.aw:466
 msgid "Projekt-Töö nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:468
+#: classes/mrp/mrp_resource.aw:472
 msgid "Klient"
 msgstr ""
 

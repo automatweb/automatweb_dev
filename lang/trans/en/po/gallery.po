@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/contentmgmt/gallery/gallery.aw:135
 msgid "load_gallery(%s): no such gallery!"
-msgstr ""
+msgstr "load_gallery(%s): no such gallery!"
 

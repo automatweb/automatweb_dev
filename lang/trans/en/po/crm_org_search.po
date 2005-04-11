@@ -124,33 +124,33 @@ msgstr ""
 
 #: classes/crm/crm_org_search.aw:93
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/crm/crm_org_search.aw:99
 msgid "Õiguslik vorm"
-msgstr ""
+msgstr "Legal form"
 
 #: classes/crm/crm_org_search.aw:105
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
 #: classes/crm/crm_org_search.aw:111
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/crm/crm_org_search.aw:117
 msgid "WWW"
-msgstr ""
+msgstr "WWW"
 
 #: classes/crm/crm_org_search.aw:122
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/crm/crm_org_search.aw:128
 msgid "Juht"
-msgstr ""
+msgstr "Director"
 
 #: classes/crm/crm_org_search.aw:375
 msgid "Otsing ei leidnud ühtegi objekti"
-msgstr ""
+msgstr "Search did not find any objects"
 

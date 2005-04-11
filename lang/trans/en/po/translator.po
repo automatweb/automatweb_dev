@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/vcl/translator.aw:110
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 

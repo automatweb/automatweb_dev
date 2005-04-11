@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
 msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) caption"
-msgstr ""
+msgstr "Display logged in user's e-mail and name automatically"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_logged_comment
 msgid "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder
 msgid "Omaduse Teemade kaust (topic_folder) caption"
-msgstr ""
+msgstr "Topic folder"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_folder_comment
 msgid "Omaduse Teemade kaust (topic_folder) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder
 msgid "Omaduse Listiliikmete kaust (address_folder) caption"
-msgstr ""
+msgstr "List member folder"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_address_folder_comment
 msgid "Omaduse Listiliikmete kaust (address_folder) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page
 msgid "Omaduse Teemasid lehel (topics_on_page) caption"
-msgstr ""
+msgstr "Topics per page"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page_comment
 msgid "Omaduse Teemasid lehel (topics_on_page) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page
 msgid "Omaduse Kommentaare lehel (comments_on_page) caption"
-msgstr ""
+msgstr "Comments per page"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_comments_on_page_comment
 msgid "Omaduse Kommentaare lehel (comments_on_page) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth
 msgid "Omaduse Teemade sügavus (topic_depth) caption"
-msgstr ""
+msgstr "Topic depth"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_depth_comment
 msgid "Omaduse Teemade sügavus (topic_depth) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector
 msgid "Omaduse Teemade tasemed (topic_selector) caption"
-msgstr ""
+msgstr "Topic selector"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_selector_comment
 msgid "Omaduse Teemade tasemed (topic_selector) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic
 msgid "Omaduse Topic ID (sys) (topic) caption"
-msgstr ""
+msgstr "Topic ID"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topic_comment
 msgid "Omaduse Topic ID (sys) (topic) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show
 msgid "Omaduse Foorumi sisu (show) caption"
-msgstr ""
+msgstr "Forum content"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_show_comment
 msgid "Omaduse Foorumi sisu (show) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor
 msgid "Omaduse Stiilidoonor (style_donor) caption"
-msgstr ""
+msgstr "Style donor"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_donor_comment
 msgid "Omaduse Stiilidoonor (style_donor) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row
 msgid "Omaduse Teema lisamise stiil (style_new_topic_row) caption"
-msgstr ""
+msgstr "Add topic style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_new_topic_row_comment
 msgid "Omaduse Teema lisamise stiil (style_new_topic_row) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_caption
 msgid "Omaduse Tabeli pealkirja stiil (style_caption) caption"
-msgstr ""
+msgstr "Table header style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_caption_comment
 msgid "Omaduse Tabeli pealkirja stiil (style_caption) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder
 msgid "Omaduse Teema kausta stiil (style_l1_folder) caption"
-msgstr ""
+msgstr "Topic folder style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_l1_folder_comment
 msgid "Omaduse Teema kausta stiil (style_l1_folder) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption
 msgid "Omaduse Teema kausta pealkirja stiil (style_folder_caption) caption"
-msgstr ""
+msgstr "Topic folder title style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_caption_comment
 msgid "Omaduse Teema kausta pealkirja stiil (style_folder_caption) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count
 msgid "Omaduse Teema kausta arvu stiil (style_folder_topic_count) caption"
-msgstr ""
+msgstr "Topic folder count style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_topic_count_comment
 msgid "Omaduse Teema kausta arvu stiil (style_folder_topic_count) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count
 msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) caption"
-msgstr ""
+msgstr "Topic folder response number style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_comment_count_comment
 msgid "Omaduse Teema kausta vastuste arvu stiil (style_folder_comment_count) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post
 msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) caption"
-msgstr ""
+msgstr "Topic folder last answer style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_folder_last_post_comment
 msgid "Omaduse Teema kausta viimase vastuse stiil (style_folder_last_post) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah
 msgid "Omaduse Foorumi asukohariba stiil (style_forum_yah) caption"
-msgstr ""
+msgstr "Forum location bar style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_forum_yah_comment
 msgid "Omaduse Foorumi asukohariba stiil (style_forum_yah) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption
 msgid "Omaduse Teema pealkirja stiil (style_topic_caption) caption"
-msgstr ""
+msgstr "Topic title style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_caption_comment
 msgid "Omaduse Teema pealkirja stiil (style_topic_caption) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies
 msgid "Omaduse Teema vastuste arvu stiil (style_topic_replies) caption"
-msgstr ""
+msgstr "Topic number of answers style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_replies_comment
 msgid "Omaduse Teema vastuste arvu stiil (style_topic_replies) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author
 msgid "Omaduse Teema autori stiil (style_topic_author) caption"
-msgstr ""
+msgstr "Topic author style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_author_comment
 msgid "Omaduse Teema autori stiil (style_topic_author) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post
 msgid "Omaduse Teema viimase vastuse stiil (style_topic_last_post) caption"
-msgstr ""
+msgstr "Topic last answer style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_topic_last_post_comment
 msgid "Omaduse Teema viimase vastuse stiil (style_topic_last_post) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count
 msgid "Omaduse Vastuste arvu stiil (style_comment_count) caption"
-msgstr ""
+msgstr "Number of answers style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_count_comment
 msgid "Omaduse Vastuste arvu stiil (style_comment_count) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator
 msgid "Omaduse Teema autori stiil (style_comment_creator) caption"
-msgstr ""
+msgstr "Topic author style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_creator_comment
 msgid "Omaduse Teema autori stiil (style_comment_creator) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user
 msgid "Omaduse Vastuse autori stiil (style_comment_user) caption"
-msgstr ""
+msgstr "Answer author style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_user_comment
 msgid "Omaduse Vastuse autori stiil (style_comment_user) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time
 msgid "Omaduse Vastuse aja stiil (style_comment_time) caption"
-msgstr ""
+msgstr "Answer time style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_time_comment
 msgid "Omaduse Vastuse aja stiil (style_comment_time) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text
 msgid "Omaduse Vastuse teksti stiil (style_comment_text) caption"
-msgstr ""
+msgstr "Answer text style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_comment_text_comment
 msgid "Omaduse Vastuse teksti stiil (style_comment_text) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption
 msgid "Omaduse Sisestusvormi pealkirja stiil (style_form_caption) caption"
-msgstr ""
+msgstr "Entry form title style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_caption_comment
 msgid "Omaduse Sisestusvormi pealkirja stiil (style_form_caption) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text
 msgid "Omaduse Sisestusvormi teksti stiil (style_form_text) caption"
-msgstr ""
+msgstr "Entry form text style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_text_comment
 msgid "Omaduse Sisestusvormi teksti stiil (style_form_text) kommentaar"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element
 msgid "Omaduse Sisestusvormi elemendi stiil (style_form_element) caption"
-msgstr ""
+msgstr "Entry form element tyle"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_style_form_element_comment
 msgid "Omaduse Sisestusvormi elemendi stiil (style_form_element) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file
 msgid "Omaduse Vali XML fail (import_xml_file) caption"
-msgstr ""
+msgstr "Select XML file"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_import_xml_file_comment
 msgid "Omaduse Vali XML fail (import_xml_file) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail
 msgid "Omaduse Soovi korral vastused meiliga (answers_to_mail) caption"
-msgstr ""
+msgstr "Answers to e-mail if the user wishes"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_answers_to_mail_comment
 msgid "Omaduse Soovi korral vastused meiliga (answers_to_mail) kommentaar"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from
 msgid "Omaduse E-mail kellelt (mail_from) caption"
-msgstr ""
+msgstr "E-mail from name"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_from_comment
 msgid "Omaduse E-mail kellelt (mail_from) kommentaar"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address
 msgid "Omaduse E-maili aadress kellelt (mail_address) caption"
-msgstr ""
+msgstr "E-mail from address"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_address_comment
 msgid "Omaduse E-maili aadress kellelt (mail_address) kommentaar"
@@ -420,7 +420,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject
 msgid "Omaduse Maili subject (mail_subject) caption"
-msgstr ""
+msgstr "E-mail subject"
 
 #: classes/contentmgmt/forum/forum_v2.aw:prop_mail_subject_comment
 msgid "Omaduse Maili subject (mail_subject) kommentaar"
@@ -432,69 +432,69 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_contents
 msgid "Grupi Sisu (contents) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
-msgstr ""
+msgstr "Styles"
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_topic_selector
 msgid "Grupi Teemad (topic_selector) pealkiri"
-msgstr ""
+msgstr "Topics"
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_import
 msgid "Grupi Import (import) pealkiri"
-msgstr ""
+msgstr "Import"
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_mail_settings
 msgid "Grupi Meiliseaded (mail_settings) pealkiri"
-msgstr ""
+msgstr "Mail settings"
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_TOPIC_FOLDER
 msgid "Seose Teemade kaust (RELTYPE_TOPIC_FOLDER) tekst"
-msgstr ""
+msgstr "Topic folder"
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_ADDRESS_FOLDER
 msgid "Seose Listiliikmete kaust (RELTYPE_ADDRESS_FOLDER) tekst"
-msgstr ""
+msgstr "List member folder"
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
-msgstr ""
+msgstr "Style"
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_STYLE_DONOR
 msgid "Seose Stiilidoonor (RELTYPE_STYLE_DONOR) tekst"
-msgstr ""
+msgstr "Style donor"
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_FORUM_ADMIN
 msgid "Seose Administraator (RELTYPE_FORUM_ADMIN) tekst"
-msgstr ""
+msgstr "Administrator"
 
 #: classes/contentmgmt/forum/forum_v2.aw:198
 msgid "Teemade kaust on valimata"
-msgstr ""
+msgstr "Topic folder is not selected"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1378
 msgid "Teema"
-msgstr ""
+msgstr "Topic"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1383
 msgid "Jäta välja"
-msgstr ""
+msgstr "Exclude"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1390
 msgid "k.a. alamkaustad"
-msgstr ""
+msgstr "incl. subfolders"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1549
 msgid "Uus teema"
-msgstr ""
+msgstr "New topic"
 
 #: classes/contentmgmt/forum/forum_v2.aw:1586
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 

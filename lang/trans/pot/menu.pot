@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:49 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:01:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1058,15 +1058,15 @@ msgstr ""
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/menu.aw:1425
+#: classes/menu.aw:1431
 msgid "Dokument"
 msgstr ""
 
-#: classes/menu.aw:1432
+#: classes/menu.aw:1438
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
-#: classes/menu.aw:1438
+#: classes/menu.aw:1444
 msgid "Vali asukoht"
 msgstr ""
 

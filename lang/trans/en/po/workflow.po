@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_config
 msgid "Omaduse Konfiguratsioon (config) caption"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/workflow/workflow.aw:prop_config_comment
 msgid "Omaduse Konfiguratsioon (config) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_show_entities
 msgid "Omaduse Juhtumid (show_entities) caption"
-msgstr ""
+msgstr "Entities"
 
 #: classes/workflow/workflow.aw:prop_show_entities_comment
 msgid "Omaduse Juhtumid (show_entities) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_show_actions
 msgid "Omaduse Tegevused (show_actions) caption"
-msgstr ""
+msgstr "Actions"
 
 #: classes/workflow/workflow.aw:prop_show_actions_comment
 msgid "Omaduse Tegevused (show_actions) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_show_processes
 msgid "Omaduse Protsessid (show_processes) caption"
-msgstr ""
+msgstr "Processes"
 
 #: classes/workflow/workflow.aw:prop_show_processes_comment
 msgid "Omaduse Protsessid (show_processes) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_show_actors
 msgid "Omaduse Tegijad (show_actors) caption"
-msgstr ""
+msgstr "Actors"
 
 #: classes/workflow/workflow.aw:prop_show_actors_comment
 msgid "Omaduse Tegijad (show_actors) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:prop_show_documentation
 msgid "Omaduse Juhendmaterjalid (show_documentation) caption"
-msgstr ""
+msgstr "Documentation"
 
 #: classes/workflow/workflow.aw:prop_show_documentation_comment
 msgid "Omaduse Juhendmaterjalid (show_documentation) kommentaar"
@@ -96,97 +96,97 @@ msgstr ""
 
 #: classes/workflow/workflow.aw:group_show_entities
 msgid "Grupi Juhtumid (show_entities) pealkiri"
-msgstr ""
+msgstr "Entities"
 
 #: classes/workflow/workflow.aw:group_show_processes
 msgid "Grupi Protessid (show_processes) pealkiri"
-msgstr ""
+msgstr "Processes"
 
 #: classes/workflow/workflow.aw:group_show_actions
 msgid "Grupi Tegevused (show_actions) pealkiri"
-msgstr ""
+msgstr "Actions"
 
 #: classes/workflow/workflow.aw:group_show_actors
 msgid "Grupi Tegijad (show_actors) pealkiri"
-msgstr ""
+msgstr "Actors"
 
 #: classes/workflow/workflow.aw:group_show_documentation
 msgid "Grupi Juhendmaterjalid (show_documentation) pealkiri"
-msgstr ""
+msgstr "Documentation"
 
 #: classes/workflow/workflow.aw:rel_RELTYPE_WORKFLOW_CONFIG
 msgid "Seose Konfiguratsioon  (RELTYPE_WORKFLOW_CONFIG) tekst"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/workflow/workflow.aw:69
 msgid "Näita"
-msgstr ""
+msgstr "Display"
 
 #: classes/workflow/workflow.aw:119
 msgid "Konfiguratsiooniobjekt on valimata!"
-msgstr ""
+msgstr "configuration object not selected!"
 
 #: classes/workflow/workflow.aw:129
 msgid "Juhtumite rootmenüü on valimata!"
-msgstr ""
+msgstr "Entity rootmenu not selected!"
 
 #: classes/workflow/workflow.aw:140
 msgid "Juhtumite sisestuste rootmenüü on valimata!"
-msgstr ""
+msgstr "Entity instance rootmenu not selected!"
 
 #: classes/workflow/workflow.aw:151
 msgid "Tegevuste rootmenüü on valimata!"
-msgstr ""
+msgstr "Action rootmenu not selected!"
 
 #: classes/workflow/workflow.aw:161
 msgid "Protsesside rootmenüü on valimata!"
-msgstr ""
+msgstr "Process rootmenu not selected!"
 
 #: classes/workflow/workflow.aw:171
 msgid "Tegijate rootmenüü on valimata!"
-msgstr ""
+msgstr "Actor rootmenu not selected!"
 
 #: classes/workflow/workflow.aw:250 classes/workflow/workflow.aw:351 classes/workflow/workflow.aw:471 classes/workflow/workflow.aw:662
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/workflow/workflow.aw:439 classes/workflow/workflow.aw:875
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/workflow/workflow.aw:543 classes/workflow/workflow.aw:799
 msgid "you did not pick a process<br />"
-msgstr ""
+msgstr "you did not pick a process<br />"
 
 #: classes/workflow/workflow.aw:588
 msgid "Log"
-msgstr ""
+msgstr "Log"
 
 #: classes/workflow/workflow.aw:672
 msgid "Uus protsess"
-msgstr ""
+msgstr "New process"
 
 #: classes/workflow/workflow.aw:796
 msgid "create ent"
-msgstr ""
+msgstr "create ent"
 
 #: classes/workflow/workflow.aw:996
 msgid "Protsess on l&otilde;ppenud!"
-msgstr ""
+msgstr "Process has finished!"
 
 #: classes/workflow/workflow.aw:1214
 msgid "Juhtumid"
-msgstr ""
+msgstr "Entities"
 
 #: classes/workflow/workflow.aw:1215
 msgid "Protsessid"
-msgstr ""
+msgstr "Processes"
 
 #: classes/workflow/workflow.aw:1216
 msgid "Tegevused"
-msgstr ""
+msgstr "Actions"
 
 #: classes/workflow/workflow.aw:1217
 msgid "Tegijad"
-msgstr ""
+msgstr "Actors"
 

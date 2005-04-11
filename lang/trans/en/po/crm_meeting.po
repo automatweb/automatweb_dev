@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_info_on_object
 msgid "Omaduse Osalejad (info_on_object) caption"
-msgstr ""
+msgstr "Participants"
 
 #: classes/crm/crm_meeting.aw:prop_info_on_object_comment
 msgid "Omaduse Osalejad (info_on_object) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_is_done
 msgid "Omaduse Tehtud (is_done) caption"
-msgstr ""
+msgstr "Done"
 
 #: classes/crm/crm_meeting.aw:prop_is_done_comment
 msgid "Omaduse Tehtud (is_done) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_start1
 msgid "Omaduse Algab  (start1) caption"
-msgstr ""
+msgstr "Starts"
 
 #: classes/crm/crm_meeting.aw:prop_start1_comment
 msgid "Omaduse Algab  (start1) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
-msgstr ""
+msgstr "Ends"
 
 #: classes/crm/crm_meeting.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_whole_day
 msgid "Omaduse Kestab terve päeva (whole_day) caption"
-msgstr ""
+msgstr "Lasts all day"
 
 #: classes/crm/crm_meeting.aw:prop_whole_day_comment
 msgid "Omaduse Kestab terve päeva (whole_day) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/crm/crm_meeting.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_summary
 msgid "Omaduse Kokkuvõte (summary) caption"
-msgstr ""
+msgstr "Summary"
 
 #: classes/crm/crm_meeting.aw:prop_summary_comment
 msgid "Omaduse Kokkuvõte (summary) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_aliasmgr
 msgid "Omaduse Aliastehaldur (aliasmgr) caption"
-msgstr ""
+msgstr "Connection manager"
 
 #: classes/crm/crm_meeting.aw:prop_aliasmgr_comment
 msgid "Omaduse Aliastehaldur (aliasmgr) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_task_toolbar
 msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
-msgstr ""
+msgstr "Toolbar"
 
 #: classes/crm/crm_meeting.aw:prop_task_toolbar_comment
 msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_recurrence
 msgid "Omaduse Kordused (recurrence) caption"
-msgstr ""
+msgstr "Recurrences"
 
 #: classes/crm/crm_meeting.aw:prop_recurrence_comment
 msgid "Omaduse Kordused (recurrence) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_calendar_selector
 msgid "Omaduse Kalendrid (calendar_selector) caption"
-msgstr ""
+msgstr "Calendars"
 
 #: classes/crm/crm_meeting.aw:prop_calendar_selector_comment
 msgid "Omaduse Kalendrid (calendar_selector) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_other_selector
 msgid "Omaduse Teised (other_selector) caption"
-msgstr ""
+msgstr "Others"
 
 #: classes/crm/crm_meeting.aw:prop_other_selector_comment
 msgid "Omaduse Teised (other_selector) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
-msgstr ""
+msgstr "Projects"
 
 #: classes/crm/crm_meeting.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_comment_list
 msgid "Omaduse Kommentaarid (comment_list) caption"
-msgstr ""
+msgstr "Comments"
 
 #: classes/crm/crm_meeting.aw:prop_comment_list_comment
 msgid "Omaduse Kommentaarid (comment_list) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_participant
 msgid "Omaduse Osalejad (participant) caption"
-msgstr ""
+msgstr "Participants"
 
 #: classes/crm/crm_meeting.aw:prop_participant_comment
 msgid "Omaduse Osalejad (participant) kommentaar"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_company
 msgid "Omaduse Organisatsioon (search_contact_company) caption"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_company_comment
 msgid "Omaduse Organisatsioon (search_contact_company) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_firstname
 msgid "Omaduse Eesnimi (search_contact_firstname) caption"
-msgstr ""
+msgstr "First name"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_firstname_comment
 msgid "Omaduse Eesnimi (search_contact_firstname) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_lastname
 msgid "Omaduse Perenimi (search_contact_lastname) caption"
-msgstr ""
+msgstr "Last name"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_lastname_comment
 msgid "Omaduse Perenimi (search_contact_lastname) kommentaar"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_code
 msgid "Omaduse Isikukood (search_contact_code) caption"
-msgstr ""
+msgstr "Personal code"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_code_comment
 msgid "Omaduse Isikukood (search_contact_code) kommentaar"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_button
 msgid "Omaduse Otsi (search_contact_button) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_button_comment
 msgid "Omaduse Otsi (search_contact_button) kommentaar"
@@ -420,7 +420,7 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_results
 msgid "Omaduse Tulemuste tabel (search_contact_results) caption"
-msgstr ""
+msgstr "Result table"
 
 #: classes/crm/crm_meeting.aw:prop_search_contact_results_comment
 msgid "Omaduse Tulemuste tabel (search_contact_results) kommentaar"
@@ -432,45 +432,45 @@ msgstr ""
 
 #: classes/crm/crm_meeting.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
-msgstr ""
+msgstr "Recurrence"
 
 #: classes/crm/crm_meeting.aw:group_calendars
 msgid "Grupi Kalendrid (calendars) pealkiri"
-msgstr ""
+msgstr "Calendars"
 
 #: classes/crm/crm_meeting.aw:group_others
 msgid "Grupi Teised (others) pealkiri"
-msgstr ""
+msgstr "Others"
 
 #: classes/crm/crm_meeting.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
-msgstr ""
+msgstr "Projects"
 
 #: classes/crm/crm_meeting.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 
 #: classes/crm/crm_meeting.aw:group_participants
 msgid "Grupi Osalejad (participants) pealkiri"
-msgstr ""
+msgstr "Participants"
 
 #: classes/crm/crm_meeting.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
-msgstr ""
+msgstr "Recurrence"
 
 #: classes/crm/crm_meeting.aw:227
 msgid "Kustuta valitud"
-msgstr ""
+msgstr "Delete selected"
 
 #: classes/crm/crm_meeting.aw:229
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
-msgstr ""
+msgstr "Are you sure you want to remove the selected participants?"
 
 #: classes/crm/crm_meeting.aw:237
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/crm/crm_meeting.aw:246
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 

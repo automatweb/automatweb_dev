@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/cfg/classificator.aw:prop_folders
 msgid "Omaduse Kus kehtib (folders) caption"
-msgstr ""
+msgstr "Folders where the setting applies"
 
 #: classes/cfg/classificator.aw:prop_folders_comment
 msgid "Omaduse Kus kehtib (folders) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/cfg/classificator.aw:prop_clids
 msgid "Omaduse Klassid millele kehtib (clids) caption"
-msgstr ""
+msgstr "Classes where the setting applies"
 
 #: classes/cfg/classificator.aw:prop_clids_comment
 msgid "Omaduse Klassid millele kehtib (clids) kommentaar"
@@ -36,5 +36,5 @@ msgstr ""
 
 #: classes/cfg/classificator.aw:rel_RELTYPE_FOLDER
 msgid "Seose hallatav kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "managed folder"
 

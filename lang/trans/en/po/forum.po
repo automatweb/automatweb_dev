@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_topicsonpage
 msgid "Omaduse Teemasid lehel (topicsonpage) caption"
-msgstr ""
+msgstr "Topics per page"
 
 #: classes/contentmgmt/forum/forum.aw:prop_topicsonpage_comment
 msgid "Omaduse Teemasid lehel (topicsonpage) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_comments
 msgid "Omaduse Kommenteeritav (comments) caption"
-msgstr ""
+msgstr "Comments enabled"
 
 #: classes/contentmgmt/forum/forum.aw:prop_comments_comment
 msgid "Omaduse Kommenteeritav (comments) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_onpage
 msgid "Omaduse Kommentaare lehel (onpage) caption"
-msgstr ""
+msgstr "Comments per page"
 
 #: classes/contentmgmt/forum/forum.aw:prop_onpage_comment
 msgid "Omaduse Kommentaare lehel (onpage) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_rated
 msgid "Omaduse Hinnatav (rated) caption"
-msgstr ""
+msgstr "Ratable"
 
 #: classes/contentmgmt/forum/forum.aw:prop_rated_comment
 msgid "Omaduse Hinnatav (rated) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_template
 msgid "Omaduse Template (template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/contentmgmt/forum/forum.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/contentmgmt/forum/forum.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_export
 msgid "Omaduse Ekspordi XML (export) caption"
-msgstr ""
+msgstr "Export XML"
 
 #: classes/contentmgmt/forum/forum.aw:prop_export_comment
 msgid "Omaduse Ekspordi XML (export) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_rates
 msgid "Omaduse Hinded (rates) caption"
-msgstr ""
+msgstr "Ratings"
 
 #: classes/contentmgmt/forum/forum.aw:prop_rates_comment
 msgid "Omaduse Hinded (rates) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_addresslist
 msgid "Omaduse E-posti aadressid (addresslist) caption"
-msgstr ""
+msgstr "E-mail addresses"
 
 #: classes/contentmgmt/forum/forum.aw:prop_addresslist_comment
 msgid "Omaduse E-posti aadressid (addresslist) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:prop_language
 msgid "Omaduse Keel (language) caption"
-msgstr ""
+msgstr "Language"
 
 #: classes/contentmgmt/forum/forum.aw:prop_language_comment
 msgid "Omaduse Keel (language) kommentaar"
@@ -132,33 +132,33 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:group_rates
 msgid "Grupi Hinded (rates) pealkiri"
-msgstr ""
+msgstr "Ratings"
 
 #: classes/contentmgmt/forum/forum.aw:group_languages
 msgid "Grupi Keel (languages) pealkiri"
-msgstr ""
+msgstr "Language"
 
 #: classes/contentmgmt/forum/forum.aw:195
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/forum/forum.aw:203
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
 #: classes/contentmgmt/forum/forum.aw:211
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/contentmgmt/forum/forum.aw:2352
 msgid "Näita"
-msgstr ""
+msgstr "Display"
 
 #: classes/contentmgmt/forum/forum.aw:2360
 msgid "Ekspordi XML"
-msgstr ""
+msgstr "Export XML"
 
 #: classes/contentmgmt/forum/forum.aw:2366
 msgid "E-posti aadressid"
-msgstr ""
+msgstr "E-mail addresses"
 

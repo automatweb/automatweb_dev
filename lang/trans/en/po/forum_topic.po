@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_name
 msgid "Omaduse Autori nimi (author_name) caption"
-msgstr ""
+msgstr "Author name"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_name_comment
 msgid "Omaduse Autori nimi (author_name) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email
 msgid "Omaduse Autori meil (author_email) caption"
-msgstr ""
+msgstr "Author e-mail"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_author_email_comment
 msgid "Omaduse Autori meil (author_email) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_locked
 msgid "Omaduse Teema lukus (locked) caption"
-msgstr ""
+msgstr "Topic locked"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_locked_comment
 msgid "Omaduse Teema lukus (locked) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail
 msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) caption"
-msgstr ""
+msgstr "Answers to my e-mail"
 
 #: classes/contentmgmt/forum/forum_topic.aw:prop_answers_to_mail_comment
 msgid "Omaduse Soovin vastuseid e-mailile (answers_to_mail) kommentaar"
@@ -72,9 +72,9 @@ msgstr ""
 
 #: classes/contentmgmt/forum/forum_topic.aw:group_subscribers
 msgid "Grupi Mailinglist (subscribers) pealkiri"
-msgstr ""
+msgstr "Mailinglist"
 
 #: classes/contentmgmt/forum/forum_topic.aw:rel_RELTYPE_SUBSCRIBER
 msgid "Seose Tellija (RELTYPE_SUBSCRIBER) tekst"
-msgstr ""
+msgstr "Subscriber"
 

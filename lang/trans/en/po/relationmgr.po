@@ -12,35 +12,35 @@ msgstr ""
 
 #: classes/vcl/relationmgr.aw:57 classes/vcl/relationmgr.aw:59 classes/vcl/relationmgr.aw:63
 msgid "Objekti tüüp"
-msgstr ""
+msgstr "Object type"
 
 #: classes/vcl/relationmgr.aw:234
 msgid "Lisa uus objekt"
-msgstr ""
+msgstr "Add new object"
 
 #: classes/vcl/relationmgr.aw:241 classes/vcl/relationmgr.aw:250
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/vcl/relationmgr.aw:261
 msgid "Tõlgi"
-msgstr ""
+msgstr "Translave"
 
 #: classes/vcl/relationmgr.aw:272
 msgid "Uuenda"
-msgstr ""
+msgstr "Renew"
 
 #: classes/vcl/relationmgr.aw:283
 msgid "Loo seos(ed)"
-msgstr ""
+msgstr "Create connection(s)"
 
 #: classes/vcl/relationmgr.aw:294
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/vcl/relationmgr.aw:301
 msgid "Kustuta seos(ed)"
-msgstr ""
+msgstr "Delete connection(s)"
 
 #: classes/vcl/relationmgr.aw:335
 msgid ""
@@ -48,41 +48,41 @@ msgstr ""
 
 #: classes/vcl/relationmgr.aw:343
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/vcl/relationmgr.aw:349
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/vcl/relationmgr.aw:356
 msgid "Muu info"
-msgstr ""
+msgstr "Other info"
 
 #: classes/vcl/relationmgr.aw:362
 msgid "Alias"
-msgstr ""
+msgstr "Alias"
 
 #: classes/vcl/relationmgr.aw:370
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: classes/vcl/relationmgr.aw:379
 msgid "Cache"
-msgstr ""
+msgstr "Cache"
 
 #: classes/vcl/relationmgr.aw:388
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/vcl/relationmgr.aw:396
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/vcl/relationmgr.aw:407
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/vcl/relationmgr.aw:415
 msgid "Seose tüüp"
-msgstr ""
+msgstr "Connection type"
 

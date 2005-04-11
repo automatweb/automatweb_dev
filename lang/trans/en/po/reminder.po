@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_remind
 msgid "Omaduse Millal meelde tuletab (remind) caption"
-msgstr ""
+msgstr "When to remind"
 
 # classes/vcl/reminder.aw:prop_remind_comment
 msgid "Omaduse Millal meelde tuletab (remind) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_sender
 msgid "Omaduse Saatja e-mail  (sender) caption"
-msgstr ""
+msgstr "Sender e-mail"
 
 # classes/vcl/reminder.aw:prop_sender_comment
 msgid "Omaduse Saatja e-mail  (sender) kommentaar"
@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_emails_text
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) caption"
-msgstr ""
+msgstr "Reciever e-mail"
 
 # classes/vcl/reminder.aw:prop_emails_text_comment
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) kommentaar"
@@ -47,7 +47,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_subject
 msgid "Omaduse Teade (subject) caption"
-msgstr ""
+msgstr "Subject"
 
 # classes/vcl/reminder.aw:prop_subject_comment
 msgid "Omaduse Teade (subject) kommentaar"
@@ -59,7 +59,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
-msgstr ""
+msgstr "Objects toolbar"
 
 # classes/vcl/reminder.aw:prop_objects_toolbar_comment
 msgid "Omaduse Objektide toolbar (objects_toolbar) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects
 msgid "Omaduse Seotud objektid (objects) caption"
-msgstr ""
+msgstr "Connected bbjects"
 
 # classes/vcl/reminder.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
@@ -83,36 +83,36 @@ msgstr ""
 
 # classes/vcl/reminder.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
-msgstr ""
+msgstr "Connected objects"
 
 # classes/vcl/reminder.aw:rel_RELTYPE_REMINDER_OBJECT
 msgid "Seose Seotud objekt (RELTYPE_REMINDER_OBJECT) tekst"
-msgstr ""
+msgstr "Connected object"
 
 #: classes/contentmgmt/reminder.aw:180
 msgid "Eemalda valitud objektid"
-msgstr ""
+msgstr "Remove selected objects"
 
 #: classes/contentmgmt/reminder.aw:182
 msgid "Oled kindel, et soovid valitud objektid ajastamiselt eemaldada?"
-msgstr ""
+msgstr "Are you sure you want to remove selected objects from the reminder?"
 
 #: classes/contentmgmt/reminder.aw:192
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/reminder.aw:193
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/reminder.aw:194
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/contentmgmt/reminder.aw:270
 msgid "aw"
-msgstr ""
+msgstr "aw"
 
 #: classes/contentmgmt/reminder.aw:271
 msgid "Meeldetuletus"
-msgstr ""
+msgstr "Reminder"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url
 msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
-msgstr ""
+msgstr "Go to address after joining"
 
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url_comment
 msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_obj_folder
 msgid "Omaduse Kataloog, kuhu salvestatakse objektid (obj_folder) caption"
-msgstr ""
+msgstr "Folder where objects are stored"
 
 #: classes/contentmgmt/join/join_site.aw:prop_obj_folder_comment
 msgid "Omaduse Kataloog, kuhu salvestatakse objektid (obj_folder) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_autologin
 msgid "Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) caption"
-msgstr ""
+msgstr "Log the user in automatically after join"
 
 #: classes/contentmgmt/join/join_site.aw:prop_autologin_comment
 msgid "Omaduse Kas kasutaja logitakse automaatselt sisse liitumisel (autologin) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_send_join_mail
 msgid "Omaduse Kas liitumisel saadetakse meil (send_join_mail) caption"
-msgstr ""
+msgstr "Send e-mail on join"
 
 #: classes/contentmgmt/join/join_site.aw:prop_send_join_mail_comment
 msgid "Omaduse Kas liitumisel saadetakse meil (send_join_mail) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties
 msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) caption"
-msgstr ""
+msgstr "Join data properties"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_comment
 msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_sep_pages
 msgid "Omaduse Eraldi lehtedel (join_sep_pages) caption"
-msgstr ""
+msgstr "Seprate pages"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_sep_pages_comment
 msgid "Omaduse Eraldi lehtedel (join_sep_pages) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_but_text
 msgid "Omaduse Liitumise nupu tekst (join_but_text) caption"
-msgstr ""
+msgstr "Join button text"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_but_text_comment
 msgid "Omaduse Liitumise nupu tekst (join_but_text) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages
 msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) caption"
-msgstr ""
+msgstr "Join properties pages"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_pages_comment
 msgid "Omaduse Liitumisel k&uuml;sitavad v&auml;ljad (join_properties_pages) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles
 msgid "Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) caption"
-msgstr ""
+msgstr "Join properties page titles"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_properties_page_titles_comment
 msgid "Omaduse Liitumise Lehtede Pealkirjad (join_properties_page_titles) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_seps
 msgid "Omaduse Vahepealkirjad (join_seps) caption"
-msgstr ""
+msgstr "Separators"
 
 #: classes/contentmgmt/join/join_site.aw:prop_join_seps_comment
 msgid "Omaduse Vahepealkirjad (join_seps) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_rules_show
 msgid "Omaduse Reeglid (rules_show) caption"
-msgstr ""
+msgstr "Rules"
 
 #: classes/contentmgmt/join/join_site.aw:prop_rules_show_comment
 msgid "Omaduse Reeglid (rules_show) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_rule_name
 msgid "Omaduse Reegli nimi (rule_name) caption"
-msgstr ""
+msgstr "Rule name"
 
 #: classes/contentmgmt/join/join_site.aw:prop_rule_name_comment
 msgid "Omaduse Reegli nimi (rule_name) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_rules_add
 msgid "Omaduse Lisa Reegel (rules_add) caption"
-msgstr ""
+msgstr "Add rule"
 
 #: classes/contentmgmt/join/join_site.aw:prop_rules_add_comment
 msgid "Omaduse Lisa Reegel (rules_add) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_rule_to_grp
 msgid "Omaduse Vali grupp, kuhu reegel kasutaja paneb (rule_to_grp) caption"
-msgstr ""
+msgstr "Select group where rule moves user"
 
 #: classes/contentmgmt/join/join_site.aw:prop_rule_to_grp_comment
 msgid "Omaduse Vali grupp, kuhu reegel kasutaja paneb (rule_to_grp) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:prop_joinmail_legend
 msgid "Omaduse Meili legend (joinmail_legend) caption"
-msgstr ""
+msgstr "E-mail legend"
 
 #: classes/contentmgmt/join/join_site.aw:prop_joinmail_legend_comment
 msgid "Omaduse Meili legend (joinmail_legend) kommentaar"
@@ -216,133 +216,133 @@ msgstr ""
 
 #: classes/contentmgmt/join/join_site.aw:group_props
 msgid "Grupi Vormid (props) pealkiri"
-msgstr ""
+msgstr "Forms"
 
 #: classes/contentmgmt/join/join_site.aw:group_sel_props
 msgid "Grupi Vali elemendid (sel_props) pealkiri"
-msgstr ""
+msgstr "Select elements"
 
 #: classes/contentmgmt/join/join_site.aw:group_mk_pages
 msgid "Grupi Koosta lehed (mk_pages) pealkiri"
-msgstr ""
+msgstr "Create pages"
 
 #: classes/contentmgmt/join/join_site.aw:group_page_titles
 msgid "Grupi Lehtede Pealkirjad (page_titles) pealkiri"
-msgstr ""
+msgstr "Page titles"
 
 #: classes/contentmgmt/join/join_site.aw:group_seps
 msgid "Grupi Vahepealkirjad (seps) pealkiri"
-msgstr ""
+msgstr "Separators"
 
 #: classes/contentmgmt/join/join_site.aw:group_rules
 msgid "Grupi Reeglid (rules) pealkiri"
-msgstr ""
+msgstr "Rules"
 
 #: classes/contentmgmt/join/join_site.aw:group_rules_show
 msgid "Grupi Nimekiri reeglitest (rules_show) pealkiri"
-msgstr ""
+msgstr "List of rules"
 
 #: classes/contentmgmt/join/join_site.aw:group_rules_add
 msgid "Grupi Lisa Reegel (rules_add) pealkiri"
-msgstr ""
+msgstr "Add rule"
 
 #: classes/contentmgmt/join/join_site.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
-msgstr ""
+msgstr "Preview"
 
 #: classes/contentmgmt/join/join_site.aw:group_joinmail
 msgid "Grupi Meil (joinmail) pealkiri"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_JOIN_CLASS
 msgid "Seose liitumise vorm (RELTYPE_JOIN_CLASS) tekst"
-msgstr ""
+msgstr "join form"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_JOIN_RULE
 msgid "Seose gruppi kuuluvuse reegel (RELTYPE_JOIN_RULE) tekst"
-msgstr ""
+msgstr "group membership rule"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_OBJ_FOLDER
 msgid "Seose objektide kataloog (RELTYPE_OBJ_FOLDER) tekst"
-msgstr ""
+msgstr "objects folder"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_RULE_GRP
 msgid "Seose reegli grupp (RELTYPE_RULE_GRP) tekst"
-msgstr ""
+msgstr "rule group"
 
 #: classes/contentmgmt/join/join_site.aw:rel_RELTYPE_REL_OBJ
 msgid "Seose default seoste objektid (RELTYPE_REL_OBJ) tekst"
-msgstr ""
+msgstr "default connection objects"
 
 #: classes/contentmgmt/join/join_site.aw:152
 msgid "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#)."
-msgstr ""
+msgstr "E-mail content that gets sent on join (username alias #kasutaja#, password alias #parool#, password change link alias #pwd_hash#)."
 
 #: classes/contentmgmt/join/join_site.aw:235
 msgid "Reegel"
-msgstr ""
+msgstr "Rule"
 
 #: classes/contentmgmt/join/join_site.aw:241
 msgid "Grupp"
-msgstr ""
+msgstr "Group"
 
 #: classes/contentmgmt/join/join_site.aw:247 classes/contentmgmt/join/join_site.aw:268
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/contentmgmt/join/join_site.aw:278 classes/contentmgmt/join/join_site.aw:297
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/contentmgmt/join/join_site.aw:282
 msgid "T&auml;idetav"
-msgstr ""
+msgstr "Fillable"
 
 #: classes/contentmgmt/join/join_site.aw:287
 msgid "N&otilde;utav"
-msgstr ""
+msgstr "Required"
 
 #: classes/contentmgmt/join/join_site.aw:301
 msgid "Lehek&uuml;lg"
-msgstr ""
+msgstr "Page"
 
 #: classes/contentmgmt/join/join_site.aw:306
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/join/join_site.aw:316
 msgid "Sisestatud number"
-msgstr ""
+msgstr "Number entered"
 
 #: classes/contentmgmt/join/join_site.aw:321
 msgid "Lehe nimi"
-msgstr ""
+msgstr "Page name"
 
 #: classes/contentmgmt/join/join_site.aw:347
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 
 #: classes/contentmgmt/join/join_site.aw:454
 msgid "<b>Vahepealkirjad</b>"
-msgstr ""
+msgstr "<b>Subtitles</b>"
 
 #: classes/contentmgmt/join/join_site.aw:691
 msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
-msgstr ""
+msgstr "<font color='#FF0000'>Following field must be filled!</font>"
 
 #: classes/contentmgmt/join/join_site.aw:743
 msgid "Liitun"
-msgstr ""
+msgstr "Join"
 
 #: classes/contentmgmt/join/join_site.aw:1430
 msgid "Liitumise meili from aadress (%s)"
-msgstr ""
+msgstr "Join mail from address (%s)"
 
 #: classes/contentmgmt/join/join_site.aw:1441
 msgid "Liitumise meili subjekt (%s)"
-msgstr ""
+msgstr "Join mail subject (%s)"
 
 #: classes/contentmgmt/join/join_site.aw:1454
 msgid "Liitumise meil (%s)"
-msgstr ""
+msgstr "Join mail (%s)"
 

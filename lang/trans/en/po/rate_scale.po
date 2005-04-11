@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid
 msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) caption"
-msgstr ""
+msgstr "Object type for which scale applies"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid_comment
 msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders
 msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) caption"
-msgstr ""
+msgstr "Folders where scale applies"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_folders_comment
 msgid "Omaduse Mis kataloogidele skaala kehtib (rate_folders) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr
 msgid "Omaduse Numbriline skaala (type_nr) caption"
-msgstr ""
+msgstr "Numeric scale"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_type_nr_comment
 msgid "Omaduse Numbriline skaala (type_nr) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from
 msgid "Omaduse Alates (nr_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_from_comment
 msgid "Omaduse Alates (nr_from) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_to
 msgid "Omaduse Kuni (nr_to) caption"
-msgstr ""
+msgstr "to"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_to_comment
 msgid "Omaduse Kuni (nr_to) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_step
 msgid "Omaduse Aste (nr_step) caption"
-msgstr ""
+msgstr "Step"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_nr_step_comment
 msgid "Omaduse Aste (nr_step) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud
 msgid "Omaduse Kasutaja defineeritud skaala (type_ud) caption"
-msgstr ""
+msgstr "User defined scale"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_type_ud_comment
 msgid "Omaduse Kasutaja defineeritud skaala (type_ud) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate
 msgid "Omaduse Lisa \"ei hinda\" valik (no_rate) caption"
-msgstr ""
+msgstr "Add "no rate" option"
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_no_rate_comment
 msgid "Omaduse Lisa \"ei hinda\" valik (no_rate) kommentaar"
@@ -108,13 +108,13 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:group_scale
 msgid "Grupi Skaala (scale) pealkiri"
-msgstr ""
+msgstr "Scale"
 
 #: classes/contentmgmt/rate/rate_scale.aw:rel_RELTYPE_FOLDER
 msgid "Seose Kehtiv kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/contentmgmt/rate/rate_scale.aw:195
 msgid "ei hinda"
-msgstr ""
+msgstr "no rating"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_corpform.aw:prop_shortname
 msgid "Omaduse Lühend (shortname) caption"
-msgstr ""
+msgstr "Short name"
 
 #: classes/crm/crm_corpform.aw:prop_shortname_comment
 msgid "Omaduse Lühend (shortname) kommentaar"

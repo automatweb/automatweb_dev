@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_person
 msgid "Omaduse Isik (person) caption"
-msgstr ""
+msgstr "Person"
 
 #: classes/crm/crm_company_role_entry.aw:prop_person_comment
 msgid "Omaduse Isik (person) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_role
 msgid "Omaduse Roll (role) caption"
-msgstr ""
+msgstr "Role"
 
 #: classes/crm/crm_company_role_entry.aw:prop_role_comment
 msgid "Omaduse Roll (role) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_company
 msgid "Omaduse Organisatsioon (company) caption"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/crm/crm_company_role_entry.aw:prop_company_comment
 msgid "Omaduse Organisatsioon (company) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_client
 msgid "Omaduse Klient (client) caption"
-msgstr ""
+msgstr "Customer"
 
 #: classes/crm/crm_company_role_entry.aw:prop_client_comment
 msgid "Omaduse Klient (client) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_unit
 msgid "Omaduse &Uuml;ksus (unit) caption"
-msgstr ""
+msgstr "Unit"
 
 #: classes/crm/crm_company_role_entry.aw:prop_unit_comment
 msgid "Omaduse &Uuml;ksus (unit) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:prop_project
 msgid "Omaduse &Uuml;ksus (project) caption"
-msgstr ""
+msgstr "Project"
 
 #: classes/crm/crm_company_role_entry.aw:prop_project_comment
 msgid "Omaduse &Uuml;ksus (project) kommentaar"
@@ -84,21 +84,21 @@ msgstr ""
 
 #: classes/crm/crm_company_role_entry.aw:rel_RELTYPE_PERSON
 msgid "Seose isik (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "person"
 
 #: classes/crm/crm_company_role_entry.aw:rel_RELTYPE_ROLE
 msgid "Seose amet (RELTYPE_ROLE) tekst"
-msgstr ""
+msgstr "rank"
 
 #: classes/crm/crm_company_role_entry.aw:rel_RELTYPE_COMPANY
 msgid "Seose organisatsioon (RELTYPE_COMPANY) tekst"
-msgstr ""
+msgstr "organisation"
 
 #: classes/crm/crm_company_role_entry.aw:rel_RELTYPE_UNIT
 msgid "Seose &uuml;ksus (RELTYPE_UNIT) tekst"
-msgstr ""
+msgstr "unit"
 
 #: classes/crm/crm_company_role_entry.aw:rel_RELTYPE_PROJECT
 msgid "Seose &uuml;ksus (RELTYPE_PROJECT) tekst"
-msgstr ""
+msgstr "project"
 

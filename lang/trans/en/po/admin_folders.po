@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/admin_folders.aw:134
 msgid "<b>AutomatWeb</b>"
-msgstr "AutomatWeb"
+msgstr "<b>AutomatWeb</b>"
 
 #: classes/admin/admin_folders.aw:329
 msgid "Mitteperioodilised"

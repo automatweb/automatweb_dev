@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/vcl/page.aw:prop_background
 msgid "Omaduse Taustapilt (background) caption"
-msgstr ""
+msgstr ""Background image
 
 #: classes/vcl/page.aw:prop_background_comment
 msgid "Omaduse Taustapilt (background) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/vcl/page.aw:prop_bgcolor
 msgid "Omaduse Tausta värv (bgcolor) caption"
-msgstr ""
+msgstr "Background colour"
 
 #: classes/vcl/page.aw:prop_bgcolor_comment
 msgid "Omaduse Tausta värv (bgcolor) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/vcl/page.aw:prop_margin
 msgid "Omaduse Servade laius (margin) caption"
-msgstr ""
+msgstr "Margin"
 
 #: classes/vcl/page.aw:prop_margin_comment
 msgid "Omaduse Servade laius (margin) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/vcl/page.aw:prop_defayltstyle
 msgid "Omaduse Default stiil (defayltstyle) caption"
-msgstr ""
+msgstr "Default style"
 
 #: classes/vcl/page.aw:prop_defayltstyle_comment
 msgid "Omaduse Default stiil (defayltstyle) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/vcl/page.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/vcl/page.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
@@ -72,17 +72,17 @@ msgstr ""
 
 #: classes/vcl/page.aw:rel_RELTYPE_BACKGROUND_IMAGE
 msgid "Seose Taustapilt (RELTYPE_BACKGROUND_IMAGE) tekst"
-msgstr ""
+msgstr "Background image"
 
 #: classes/vcl/page.aw:rel_RELTYPE_PAGESTYLE
 msgid "Seose Stiil (RELTYPE_PAGESTYLE) tekst"
-msgstr ""
+msgstr "Style"
 
 #: classes/vcl/page.aw:52
 msgid "Näita lehte"
-msgstr ""
+msgstr "Display page"
 
 #: classes/vcl/page.aw:79
 msgid "kõtt"
-msgstr ""
+msgstr "shoo"
 

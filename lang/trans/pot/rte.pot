@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:00:56 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,75 +10,83 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/rte.aw:75
+#: classes/vcl/rte.aw:85
 msgid "Bold"
 msgstr ""
 
-#: classes/vcl/rte.aw:82
+#: classes/vcl/rte.aw:92
 msgid "Italic"
 msgstr ""
 
-#: classes/vcl/rte.aw:89
+#: classes/vcl/rte.aw:99
 msgid "Underline"
 msgstr ""
 
-#: classes/vcl/rte.aw:98
+#: classes/vcl/rte.aw:108
 msgid "Align left"
 msgstr ""
 
-#: classes/vcl/rte.aw:105
+#: classes/vcl/rte.aw:115
 msgid "Align center"
 msgstr ""
 
-#: classes/vcl/rte.aw:112
+#: classes/vcl/rte.aw:122
 msgid "Align right"
 msgstr ""
 
-#: classes/vcl/rte.aw:121
+#: classes/vcl/rte.aw:131
 msgid "Numbered list"
 msgstr ""
 
-#: classes/vcl/rte.aw:128
+#: classes/vcl/rte.aw:138
 msgid "Bulleted list"
 msgstr ""
 
-#: classes/vcl/rte.aw:137
+#: classes/vcl/rte.aw:147
 msgid "Outdent"
 msgstr ""
 
-#: classes/vcl/rte.aw:153
+#: classes/vcl/rte.aw:154
+msgid "Indent"
+msgstr ""
+
+#: classes/vcl/rte.aw:163
+msgid "link"
+msgstr ""
+
+#: classes/vcl/rte.aw:173
 msgid "Tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:160
+#: classes/vcl/rte.aw:179
 msgid "Lisa tabel"
 msgstr ""
 
-#: classes/vcl/rte.aw:168
+#: classes/vcl/rte.aw:187
 msgid "Lisa tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:174
+#: classes/vcl/rte.aw:193
 msgid "Lisa rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:182
+#: classes/vcl/rte.aw:201
 msgid "Kustuta tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:188
+#: classes/vcl/rte.aw:207
 msgid "Kustuta rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:196
+#: classes/vcl/rte.aw:215
 msgid "Poolita rida"
 msgstr ""
 
-#: classes/vcl/rte.aw:201
+#: classes/vcl/rte.aw:220
 msgid "Poolita tulp"
 msgstr ""
 
-#: classes/vcl/rte.aw:211
+#: classes/vcl/rte.aw:230
 msgid "HTML"
 msgstr ""
 

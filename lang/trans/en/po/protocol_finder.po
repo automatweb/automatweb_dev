@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/protocols/protocol_finder.aw:19
 msgid "protocol_fnider::inst(%s): no protocol implemented for url"
-msgstr ""
+msgstr "protocol_finder::inst(%s): no protocol implemented for url"
 

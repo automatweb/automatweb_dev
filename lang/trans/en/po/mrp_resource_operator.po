@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/mrp/mrp_resource_operator.aw:prop_profession
 msgid "Omaduse Ametinimetus (profession) caption"
-msgstr ""
+msgstr "Profession"
 
 #: classes/mrp/mrp_resource_operator.aw:prop_profession_comment
 msgid "Omaduse Ametinimetus (profession) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/mrp/mrp_resource_operator.aw:prop_resource
 msgid "Omaduse Resurss (resource) caption"
-msgstr ""
+msgstr "Resource"
 
 #: classes/mrp/mrp_resource_operator.aw:prop_resource_comment
 msgid "Omaduse Resurss (resource) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/mrp/mrp_resource_operator.aw:prop_unit
 msgid "Omaduse &Uuml;ksus (unit) caption"
-msgstr ""
+msgstr "Unit"
 
 #: classes/mrp/mrp_resource_operator.aw:prop_unit_comment
 msgid "Omaduse &Uuml;ksus (unit) kommentaar"
@@ -48,13 +48,13 @@ msgstr ""
 
 #: classes/mrp/mrp_resource_operator.aw:rel_RELTYPE_PROFESSION
 msgid "Seose ametinimetus (RELTYPE_PROFESSION) tekst"
-msgstr ""
+msgstr "profession"
 
 #: classes/mrp/mrp_resource_operator.aw:rel_RELTYPE_RESOURCE
 msgid "Seose resurss (RELTYPE_RESOURCE) tekst"
-msgstr ""
+msgstr "resource"
 
 #: classes/mrp/mrp_resource_operator.aw:rel_RELTYPE_UNIT
 msgid "Seose osakond (RELTYPE_UNIT) tekst"
-msgstr ""
+msgstr "unit"
 

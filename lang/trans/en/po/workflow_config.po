@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:prop_actor_rootmenu
 msgid "Omaduse Tegijate juurmenüü (actor_rootmenu) caption"
-msgstr ""
+msgstr "Actor rootmenu"
 
 #: classes/workflow/workflow_config.aw:prop_actor_rootmenu_comment
 msgid "Omaduse Tegijate juurmenüü (actor_rootmenu) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:prop_action_rootmenu
 msgid "Omaduse Tegevuste juurmenüü (action_rootmenu) caption"
-msgstr ""
+msgstr "Action rootmenu"
 
 #: classes/workflow/workflow_config.aw:prop_action_rootmenu_comment
 msgid "Omaduse Tegevuste juurmenüü (action_rootmenu) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:prop_entity_rootmenu
 msgid "Omaduse Juhtumite juurmenüü (entity_rootmenu) caption"
-msgstr ""
+msgstr "Entity rootmenu"
 
 #: classes/workflow/workflow_config.aw:prop_entity_rootmenu_comment
 msgid "Omaduse Juhtumite juurmenüü (entity_rootmenu) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:prop_entity_instance_rootmenu
 msgid "Omaduse Juhtumite sisestuste juurmenüü (entity_instance_rootmenu) caption"
-msgstr ""
+msgstr "Entity instance rootmenu"
 
 #: classes/workflow/workflow_config.aw:prop_entity_instance_rootmenu_comment
 msgid "Omaduse Juhtumite sisestuste juurmenüü (entity_instance_rootmenu) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:prop_process_rootmenu
 msgid "Omaduse Protsesside juurmenüü (process_rootmenu) caption"
-msgstr ""
+msgstr "Process root menu"
 
 #: classes/workflow/workflow_config.aw:prop_process_rootmenu_comment
 msgid "Omaduse Protsesside juurmenüü (process_rootmenu) kommentaar"
@@ -72,21 +72,21 @@ msgstr ""
 
 #: classes/workflow/workflow_config.aw:group_config_actor
 msgid "Grupi Tegijate seaded (config_actor) pealkiri"
-msgstr ""
+msgstr "Actor config"
 
 #: classes/workflow/workflow_config.aw:group_config_action
 msgid "Grupi Tegevuste seaded (config_action) pealkiri"
-msgstr ""
+msgstr "Action config"
 
 #: classes/workflow/workflow_config.aw:group_config_entity
 msgid "Grupi Juhtumite seaded (config_entity) pealkiri"
-msgstr ""
+msgstr "Entity config"
 
 #: classes/workflow/workflow_config.aw:group_config_process
 msgid "Grupi Protsesside seaded (config_process) pealkiri"
-msgstr ""
+msgstr "Process config"
 
 #: classes/workflow/workflow_config.aw:rel_RELTYPE_ROOTMENU
 msgid "Seose juurmenüü (RELTYPE_ROOTMENU) tekst"
-msgstr ""
+msgstr "root menu"
 

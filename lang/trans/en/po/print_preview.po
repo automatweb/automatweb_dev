@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/plugins/document/print_preview.aw:26
 msgid "Prindi nähtav"
-msgstr ""
+msgstr "Print button visible"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_county.aw:prop_name
 msgid "Omaduse Maakonna nimetus (name) caption"
-msgstr ""
+msgstr "County name"
 
 #: classes/crm/crm_county.aw:prop_name_comment
 msgid "Omaduse Maakonna nimetus (name) kommentaar"

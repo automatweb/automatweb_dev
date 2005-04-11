@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/protocols/file/ftp.aw:prop_server
 msgid "Omaduse Server (server) caption"
-msgstr ""
+msgstr "Server"
 
 #: classes/protocols/file/ftp.aw:prop_server_comment
 msgid "Omaduse Server (server) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/protocols/file/ftp.aw:prop_username
 msgid "Omaduse Kasutajanimi (username) caption"
-msgstr ""
+msgstr "Username"
 
 #: classes/protocols/file/ftp.aw:prop_username_comment
 msgid "Omaduse Kasutajanimi (username) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/protocols/file/ftp.aw:prop_password
 msgid "Omaduse Parool (password) caption"
-msgstr ""
+msgstr "Password"
 
 #: classes/protocols/file/ftp.aw:prop_password_comment
 msgid "Omaduse Parool (password) kommentaar"

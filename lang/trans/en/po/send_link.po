@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/plugins/document/send_link.aw:26
 msgid "Saada link nähtav"
-msgstr ""
+msgstr "Send link visible"
 

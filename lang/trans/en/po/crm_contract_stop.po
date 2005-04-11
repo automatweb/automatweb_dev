@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_start1
 msgid "Omaduse Algab (start1) caption"
-msgstr ""
+msgstr "Starts"
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_start1_comment
 msgid "Omaduse Algab (start1) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_end
 msgid "Omaduse Lõpeb (end) caption"
-msgstr ""
+msgstr "Ends"
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_end_comment
 msgid "Omaduse Lõpeb (end) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_person_ref
 msgid "Omaduse Viit isikule (person_ref) caption"
-msgstr ""
+msgstr "Person reference"
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_person_ref_comment
 msgid "Omaduse Viit isikule (person_ref) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_type
 msgid "Omaduse Peatumise liik (type) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/crm/crm_contract_stop.aw:prop_type_comment
 msgid "Omaduse Peatumise liik (type) kommentaar"
@@ -60,5 +60,5 @@ msgstr ""
 
 #: classes/applications/crm/crm_contract_stop.aw:rel_RELTYPE_CONTRACT_STOP_TYPE
 msgid "Seose Peatumise liik (RELTYPE_CONTRACT_STOP_TYPE) tekst"
-msgstr ""
+msgstr "type"
 

@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_starttime
 msgid "Omaduse Alustamisaeg (materjalide saabumine) (starttime) caption"
-msgstr ""
+msgstr "Start time (materials arrive)"
 
 #: classes/mrp/mrp_case.aw:prop_starttime_comment
 msgid "Omaduse Alustamisaeg (materjalide saabumine) (starttime) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_due_date
 msgid "Omaduse Valmimistähtaeg (due_date) caption"
-msgstr ""
+msgstr "Due date"
 
 #: classes/mrp/mrp_case.aw:prop_due_date_comment
 msgid "Omaduse Valmimistähtaeg (due_date) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_project_priority
 msgid "Omaduse Projekti prioriteet (project_priority) caption"
-msgstr ""
+msgstr "Project priority"
 
 #: classes/mrp/mrp_case.aw:prop_project_priority_comment
 msgid "Omaduse Projekti prioriteet (project_priority) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_state
 msgid "Omaduse Staatus (state) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/mrp/mrp_case.aw:prop_state_comment
 msgid "Omaduse Staatus (state) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_customer
 msgid "Omaduse Klient (customer) caption"
-msgstr ""
+msgstr "Client"
 
 #: classes/mrp/mrp_case.aw:prop_customer_comment
 msgid "Omaduse Klient (customer) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_planned_date
 msgid "Omaduse Planeeritud valmimisaeg (planned_date) caption"
-msgstr ""
+msgstr "Planned completion date"
 
 #: classes/mrp/mrp_case.aw:prop_planned_date_comment
 msgid "Omaduse Planeeritud valmimisaeg (planned_date) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sales_priority
 msgid "Omaduse Prioriteedihinnang müügimehelt (sales_priority) caption"
-msgstr ""
+msgstr "Priority assessment from salesperson"
 
 #: classes/mrp/mrp_case.aw:prop_sales_priority_comment
 msgid "Omaduse Prioriteedihinnang müügimehelt (sales_priority) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_format
 msgid "Omaduse Formaat (format) caption"
-msgstr ""
+msgstr "Format"
 
 #: classes/mrp/mrp_case.aw:prop_format_comment
 msgid "Omaduse Formaat (format) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sisu_lk_arv
 msgid "Omaduse Sisu lk arv (sisu_lk_arv) caption"
-msgstr ""
+msgstr "Content pages"
 
 #: classes/mrp/mrp_case.aw:prop_sisu_lk_arv_comment
 msgid "Omaduse Sisu lk arv (sisu_lk_arv) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kaane_lk_arv
 msgid "Omaduse Kaane lk arv (kaane_lk_arv) caption"
-msgstr ""
+msgstr "Cover pages"
 
 #: classes/mrp/mrp_case.aw:prop_kaane_lk_arv_comment
 msgid "Omaduse Kaane lk arv (kaane_lk_arv) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sisu_varvid
 msgid "Omaduse Sisu v&auml;rvid (sisu_varvid) caption"
-msgstr ""
+msgstr "Content colours"
 
 #: classes/mrp/mrp_case.aw:prop_sisu_varvid_comment
 msgid "Omaduse Sisu v&auml;rvid (sisu_varvid) kommentaar"
@@ -420,7 +420,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_user_comments
 msgid "Omaduse Kommentaarid juhtumi ja tööde kohta (user_comments) caption"
-msgstr ""
+msgstr "Comments about the case and jobs"
 
 #: classes/mrp/mrp_case.aw:prop_user_comments_comment
 msgid "Omaduse Kommentaarid juhtumi ja tööde kohta (user_comments) kommentaar"
@@ -492,7 +492,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_chart_legend
 msgid "Omaduse Legend (chart_legend) caption"
-msgstr ""
+msgstr "Legend"
 
 #: classes/mrp/mrp_case.aw:prop_chart_legend_comment
 msgid "Omaduse Legend (chart_legend) kommentaar"
@@ -516,237 +516,237 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:group_grp_general
 msgid "Grupi &Uuml;ldine (grp_general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/mrp/mrp_case.aw:group_grp_case_data
 msgid "Grupi Projekti andmed (grp_case_data) pealkiri"
-msgstr ""
+msgstr "Project data"
 
 #: classes/mrp/mrp_case.aw:group_grp_case_workflow
 msgid "Grupi Ressursid ja töövoog (grp_case_workflow) pealkiri"
-msgstr ""
+msgstr "Resources and workflow"
 
 #: classes/mrp/mrp_case.aw:group_grp_case_schedule
 msgid "Grupi Kalender (grp_case_schedule) pealkiri"
-msgstr ""
+msgstr "Calendar"
 
 #: classes/mrp/mrp_case.aw:group_grp_case_comments
 msgid "Grupi Kommentaarid (grp_case_comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 
 #: classes/mrp/mrp_case.aw:group_grp_case_log
 msgid "Grupi Ajalugu (grp_case_log) pealkiri"
-msgstr ""
+msgstr "History"
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_MANAGER
 msgid "Seose Müügimees/Projektijuht (RELTYPE_MRP_MANAGER) tekst"
-msgstr ""
+msgstr "Salesman/Project manager"
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_CUSTOMER
 msgid "Seose Klient (RELTYPE_MRP_CUSTOMER) tekst"
-msgstr ""
+msgstr "Customer"
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_PROJECT_JOB
 msgid "Seose Töö (RELTYPE_MRP_PROJECT_JOB) tekst"
-msgstr ""
+msgstr "Job"
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_USED_RESOURCE
 msgid "Seose Kasutatav ressurss (RELTYPE_MRP_USED_RESOURCE) tekst"
-msgstr ""
+msgstr "Used resource"
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_OWNER
 msgid "Seose Projekti omanik (RELTYPE_MRP_OWNER) tekst"
-msgstr ""
+msgstr "Project owner"
 
 #: classes/mrp/mrp_case.aw:250
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/mrp/mrp_case.aw:251
 msgid "Planeeritud"
-msgstr ""
+msgstr "Planned"
 
 #: classes/mrp/mrp_case.aw:252
 msgid "Töös"
-msgstr ""
+msgstr "In progress"
 
 #: classes/mrp/mrp_case.aw:253
 msgid "Katkestatud"
-msgstr ""
+msgstr "Aborted"
 
 #: classes/mrp/mrp_case.aw:254
 msgid "Valmis"
-msgstr ""
+msgstr "Ready"
 
 #: classes/mrp/mrp_case.aw:255
 msgid "Lukustatud"
-msgstr ""
+msgstr "Locked"
 
 #: classes/mrp/mrp_case.aw:256
 msgid "Paus"
-msgstr ""
+msgstr "Pause"
 
 #: classes/mrp/mrp_case.aw:257
 msgid "Kustutatud"
-msgstr ""
+msgstr "Deleted"
 
 #: classes/mrp/mrp_case.aw:258
 msgid "Plaanist väljas"
-msgstr ""
+msgstr "Not scheduled"
 
 #: classes/mrp/mrp_case.aw:259
 msgid "Arhiveeritud"
-msgstr ""
+msgstr "Archived"
 
 #: classes/mrp/mrp_case.aw:289
 msgid "Uut projekti saab luua vaid ressursihalduskeskkonnast. "
-msgstr ""
+msgstr "New projects can only be added from manager"
 
 #: classes/mrp/mrp_case.aw:299
 msgid "Projektil puudub ressursihalduskeskkond. "
-msgstr ""
+msgstr "Project has no manager"
 
 #: classes/mrp/mrp_case.aw:388
 msgid "Projekt pole plaanis"
-msgstr ""
+msgstr "Project is not planned"
 
 #: classes/mrp/mrp_case.aw:481
 msgid "Ei tohi olla rohkem kui &uuml;ks sama nimega projekt!"
-msgstr ""
+msgstr "Project name must be unique!"
 
 #: classes/mrp/mrp_case.aw:659
 msgid "Kinnine aeg %s - %s"
-msgstr ""
+msgstr "Unusable time %s - %s"
 
 #: classes/mrp/mrp_case.aw:760
 msgid "<< N&auml;dal tagasi"
-msgstr ""
+msgstr "<< Back one week"
 
 #: classes/mrp/mrp_case.aw:764
 msgid "N&auml;dal edasi >>"
-msgstr ""
+msgstr "Forward one week >>"
 
 #: classes/mrp/mrp_case.aw:820
 msgid "Kustuta valitud töö(d)"
-msgstr ""
+msgstr "Delete selected job(s)"
 
 #: classes/mrp/mrp_case.aw:821
 msgid "Kustutada kõik valitud tööd?"
-msgstr ""
+msgstr "Delete all selected jobs?"
 
 #: classes/mrp/mrp_case.aw:831
 msgid "Testi/hinda valmimisaega"
-msgstr ""
+msgstr "Test/assess completion date"
 
 #: classes/mrp/mrp_case.aw:854
 msgid "Planeeri"
-msgstr ""
+msgstr "Plan"
 
 #: classes/mrp/mrp_case.aw:877
 msgid "Plaanist v&auml;lja"
-msgstr ""
+msgstr "Take out of plannig"
 
 #: classes/mrp/mrp_case.aw:899
 msgid "Projekti katkestamine"
-msgstr ""
+msgstr "Abort project"
 
 #: classes/mrp/mrp_case.aw:900
 msgid "Katkesta projekt?"
-msgstr ""
+msgstr "Abort project?"
 
 #: classes/mrp/mrp_case.aw:922
 msgid "Arhiveeri"
-msgstr ""
+msgstr "Archive"
 
 #: classes/mrp/mrp_case.aw:936
 msgid "Nr."
-msgstr ""
+msgstr "Nr."
 
 #: classes/mrp/mrp_case.aw:940
 msgid "Eeldus&shy;tööd"
-msgstr ""
+msgstr "Prerequisite jobs"
 
 #: classes/mrp/mrp_case.aw:944
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/mrp/mrp_case.aw:948
 msgid "Pikkus (h)"
-msgstr ""
+msgstr "Length (h)"
 
 #: classes/mrp/mrp_case.aw:952
 msgid "Eel&shy;puhver (h)"
-msgstr ""
+msgstr "Pre-buffer (h)"
 
 #: classes/mrp/mrp_case.aw:956
 msgid "Järel&shy;puhver (h)"
-msgstr ""
+msgstr "Post-buffer (h)"
 
 #: classes/mrp/mrp_case.aw:960
 msgid "Kommen&shy;taar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/mrp/mrp_case.aw:965
 msgid "Min. algusaeg"
-msgstr ""
+msgstr "Min. start time"
 
 #: classes/mrp/mrp_case.aw:970
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/mrp/mrp_case.aw:974
 msgid "Töösse"
-msgstr ""
+msgstr "Start"
 
 #: classes/mrp/mrp_case.aw:1033
 msgid "JAH"
-msgstr ""
+msgstr "YES"
 
 #: classes/mrp/mrp_case.aw:1518
 msgid "Millal"
-msgstr ""
+msgstr "When"
 
 #: classes/mrp/mrp_case.aw:1528
 msgid "T&ouml;&ouml"
-msgstr ""
+msgstr "Job"
 
 #: classes/mrp/mrp_case.aw:1535
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/mrp/mrp_case.aw:1542
 msgid "sisu"
-msgstr ""
+msgstr "content"
 
 #: classes/mrp/mrp_case.aw:1549
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/mrp/mrp_case.aw:1675 classes/mrp/mrp_case.aw:1732 classes/mrp/mrp_case.aw:1813 classes/mrp/mrp_case.aw:1877 classes/mrp/mrp_case.aw:1936 classes/mrp/mrp_case.aw:2006
 msgid "Projekti id vale"
-msgstr ""
+msgstr "Wrong project id"
 
 #: classes/mrp/mrp_case.aw:1687
 msgid "Projekt pole planeeritud"
-msgstr ""
+msgstr "Project is not planned"
 
 #: classes/mrp/mrp_case.aw:1756
 msgid "Projekti tööd pole kõik valmis"
-msgstr ""
+msgstr "Not all of project's jobs are complete"
 
 #: classes/mrp/mrp_case.aw:1766 classes/mrp/mrp_case.aw:1825
 msgid "Projekt pole töös"
-msgstr ""
+msgstr "Project is not in progress"
 
 #: classes/mrp/mrp_case.aw:1889
 msgid "Projekt pole valmis"
-msgstr ""
+msgstr "Project is not done"
 
 #: classes/mrp/mrp_case.aw:1950
 msgid "Projekt pole planeerimiseks valmis"
-msgstr ""
+msgstr "Project is not ready to be planned"
 
 #: classes/mrp/mrp_case.aw:2019
 msgid "Projekti staatus sobimatu"
-msgstr ""
+msgstr "Project status wrong"
 

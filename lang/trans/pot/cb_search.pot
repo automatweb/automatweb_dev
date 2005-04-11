@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:20 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:00:58 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -170,103 +170,123 @@ msgstr ""
 msgid "Klass"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:156
+#: classes/cfg/cb_search.aw:155
 msgid "Omadus"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:161
+#: classes/cfg/cb_search.aw:159
 msgid "Näita vormis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:167
+#: classes/cfg/cb_search.aw:164
 msgid "Otsing komaga eraldatud"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:173
+#: classes/cfg/cb_search.aw:169
 msgid "Tekstikast otsimiseks"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:174
+msgid "Tüüp"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:179
 msgid "Tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:185 classes/cfg/cb_search.aw:770
+#: classes/cfg/cb_search.aw:184 classes/cfg/cb_search.aw:880
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:273
+#: classes/cfg/cb_search.aw:199
+msgid "Rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:200
+msgid "Mitmerealine rippmen&uuml;&uuml;"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:201
+msgid "M&auml;rkeruut"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:202
+msgid "Raadionupp"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:285
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:731
+#: classes/cfg/cb_search.aw:839
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:737
+#: classes/cfg/cb_search.aw:845
 msgid "Kataloog"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:743
+#: classes/cfg/cb_search.aw:851
 msgid "Mitu kirjet lehel"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:777
+#: classes/cfg/cb_search.aw:887
 msgid "Element"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:783
+#: classes/cfg/cb_search.aw:893
 msgid "Tabelis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:789
+#: classes/cfg/cb_search.aw:899
 msgid "Hind"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:795
+#: classes/cfg/cb_search.aw:905
 msgid "Sorditav"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:801
+#: classes/cfg/cb_search.aw:911
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:807
+#: classes/cfg/cb_search.aw:917
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:813
+#: classes/cfg/cb_search.aw:923
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:829
+#: classes/cfg/cb_search.aw:939
 msgid "Muuda"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:830
+#: classes/cfg/cb_search.aw:940
 msgid "Vaata"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:831
+#: classes/cfg/cb_search.aw:941
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:931
+#: classes/cfg/cb_search.aw:1041
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1170
+#: classes/cfg/cb_search.aw:1280
 msgid "OID"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1177
+#: classes/cfg/cb_search.aw:1287
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1184
+#: classes/cfg/cb_search.aw:1294
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1190
+#: classes/cfg/cb_search.aw:1300
 msgid "K.A. Alamkataloogid?"
 msgstr ""
 

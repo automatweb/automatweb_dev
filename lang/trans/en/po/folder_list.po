@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_rootmenu
 msgid "Omaduse Juurkaust (rootmenu) caption"
-msgstr ""
+msgstr "Root folder"
 
 #: classes/contentmgmt/folder_list.aw:prop_rootmenu_comment
 msgid "Omaduse Juurkaust (rootmenu) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_template
 msgid "Omaduse Kujundusmall (template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/contentmgmt/folder_list.aw:prop_template_comment
 msgid "Omaduse Kujundusmall (template) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_sort_by
 msgid "Omaduse Kuidas sortida (sort_by) caption"
-msgstr ""
+msgstr "Sort by"
 
 #: classes/contentmgmt/folder_list.aw:prop_sort_by_comment
 msgid "Omaduse Kuidas sortida (sort_by) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_show_comment
 msgid "Omaduse N&auml;ita kausta all (show_comment) caption"
-msgstr ""
+msgstr "Show under folder"
 
 #: classes/contentmgmt/folder_list.aw:prop_show_comment_comment
 msgid "Omaduse N&auml;ita kausta all (show_comment) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_no_folder_links
 msgid "Omaduse &Auml;ra lingi kaustu (no_folder_links) caption"
-msgstr ""
+msgstr "Do not link folders"
 
 #: classes/contentmgmt/folder_list.aw:prop_no_folder_links_comment
 msgid "Omaduse &Auml;ra lingi kaustu (no_folder_links) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_only_act
 msgid "Omaduse N&auml;ita ainult aktiivseid kaustu (only_act) caption"
-msgstr ""
+msgstr "Show only active folders"
 
 #: classes/contentmgmt/folder_list.aw:prop_only_act_comment
 msgid "Omaduse N&auml;ita ainult aktiivseid kaustu (only_act) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:prop_link_only_act
 msgid "Omaduse Lingi ainult aktiivsed kaustad (link_only_act) caption"
-msgstr ""
+msgstr "Link only active folders"
 
 #: classes/contentmgmt/folder_list.aw:prop_link_only_act_comment
 msgid "Omaduse Lingi ainult aktiivsed kaustad (link_only_act) kommentaar"
@@ -96,5 +96,5 @@ msgstr ""
 
 #: classes/contentmgmt/folder_list.aw:rel_RELTYPE_FOLDER
 msgid "Seose juurkaust (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "root folder"
 

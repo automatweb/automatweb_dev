@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_top
 msgid "Omaduse Mitu topis (top) caption"
-msgstr ""
+msgstr "Number of entries in top"
 
 #: classes/contentmgmt/rate/rate.aw:prop_top_comment
 msgid "Omaduse Mitu topis (top) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_top_type
 msgid "Omaduse J&auml;rjestatakse (top_type) caption"
-msgstr ""
+msgstr "Sort by"
 
 #: classes/contentmgmt/rate/rate.aw:prop_top_type_comment
 msgid "Omaduse J&auml;rjestatakse (top_type) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from
 msgid "Omaduse Millistele objektidele kehtib (objects_from) caption"
-msgstr ""
+msgstr "Which obects rating applies to"
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_comment
 msgid "Omaduse Millistele objektidele kehtib (objects_from) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid
 msgid "Omaduse Vali klass (objects_from_clid) caption"
-msgstr ""
+msgstr "Select class"
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_comment
 msgid "Omaduse Vali klass (objects_from_clid) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder
 msgid "Omaduse Vali kataloogid (objects_from_folder) caption"
-msgstr ""
+msgstr "Select folders"
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_comment
 msgid "Omaduse Vali kataloogid (objects_from_folder) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid
 msgid "Omaduse Vali objekt (objects_from_oid) caption"
-msgstr ""
+msgstr "Select object"
 
 #: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_comment
 msgid "Omaduse Vali objekt (objects_from_oid) kommentaar"
@@ -84,41 +84,41 @@ msgstr ""
 
 #: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_FOLDER
 msgid "Seose Hinnatavate objektide kataloog (RELTYPE_RATE_FOLDER) tekst"
-msgstr ""
+msgstr "Ratable objects folder"
 
 #: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_OID
 msgid "Seose Hinnatav objekt (RELTYPE_RATE_OID) tekst"
-msgstr ""
+msgstr "ratable object"
 
 #: classes/contentmgmt/rate/rate.aw:72
 msgid "Klassi järgi"
-msgstr ""
+msgstr "By class"
 
 #: classes/contentmgmt/rate/rate.aw:73
 msgid "Kataloogi järgi"
-msgstr ""
+msgstr "By folder"
 
 #: classes/contentmgmt/rate/rate.aw:74
 msgid "Objektist"
-msgstr ""
+msgstr "From object"
 
 #: classes/contentmgmt/rate/rate.aw:103
 msgid "K&otilde;rgeima hinde j&auml;rgi"
-msgstr ""
+msgstr "Highest rating"
 
 #: classes/contentmgmt/rate/rate.aw:104
 msgid "Keskmise hinde j&auml;rgi"
-msgstr ""
+msgstr "Average rating"
 
 #: classes/contentmgmt/rate/rate.aw:105
 msgid "Vaatamiste j&auml;rgi"
-msgstr ""
+msgstr "Number of views"
 
 #: classes/contentmgmt/rate/rate.aw:106
 msgid "Madalaima hinde j&auml;rgi"
-msgstr ""
+msgstr "Lowest rating"
 
 #: classes/contentmgmt/rate/rate.aw:107
 msgid "V&auml;him vaadatud"
-msgstr ""
+msgstr "Least viewed"
 

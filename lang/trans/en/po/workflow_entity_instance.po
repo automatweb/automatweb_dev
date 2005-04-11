@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/workflow_entity_instance.aw:prop_entity_type
 msgid "Omaduse Juhtumi t&uuml;&uuml;p (entity_type) caption"
-msgstr ""
+msgstr "Entity type"
 
 #: classes/workflow/workflow_entity_instance.aw:prop_entity_type_comment
 msgid "Omaduse Juhtumi t&uuml;&uuml;p (entity_type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/workflow/workflow_entity_instance.aw:prop_state
 msgid "Omaduse Olek (state) caption"
-msgstr ""
+msgstr "State"
 
 #: classes/workflow/workflow_entity_instance.aw:prop_state_comment
 msgid "Omaduse Olek (state) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/workflow/workflow_entity_instance.aw:prop_obj_id
 msgid "Omaduse Sisuobjekt (obj_id) caption"
-msgstr ""
+msgstr "Content object"
 
 #: classes/workflow/workflow_entity_instance.aw:prop_obj_id_comment
 msgid "Omaduse Sisuobjekt (obj_id) kommentaar"

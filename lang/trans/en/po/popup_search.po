@@ -12,29 +12,29 @@ msgstr ""
 
 #: classes/vcl/popup_search.aw:48 classes/vcl/popup_search.aw:109
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/vcl/popup_search.aw:88 classes/vcl/popup_search.aw:146
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/vcl/popup_search.aw:95
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/vcl/popup_search.aw:102 classes/vcl/popup_search.aw:140
 msgid "OID"
-msgstr ""
+msgstr "OID"
 
 #: classes/vcl/popup_search.aw:151
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/vcl/popup_search.aw:155
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/vcl/popup_search.aw:162
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/workflow_resource.aw:prop_is_subcontract
 msgid "Omaduse allhange (is_subcontract) caption"
-msgstr ""
+msgstr "subcontract"
 
 #: classes/workflow/workflow_resource.aw:prop_is_subcontract_comment
 msgid "Omaduse allhange (is_subcontract) kommentaar"
@@ -48,13 +48,13 @@ msgstr ""
 
 #: classes/workflow/workflow_resource.aw:group_overview
 msgid "Grupi &Uuml;levaade (overview) pealkiri"
-msgstr ""
+msgstr "Overview"
 
 #: classes/workflow/workflow_resource.aw:group_calendar
 msgid "Grupi Kalender (calendar) pealkiri"
-msgstr ""
+msgstr "Calendar"
 
 #: classes/workflow/workflow_resource.aw:rel_RELTYPE_EVENT
 msgid "Seose t&ouml;&ouml; (RELTYPE_EVENT) tekst"
-msgstr ""
+msgstr "event"
 

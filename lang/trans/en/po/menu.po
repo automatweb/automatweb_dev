@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue,  5 Apr 2005 17:01:48 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:01:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -784,10 +784,6 @@ msgstr ""
 msgid "Omaduse Vaatalisaks dokumendid (seealso_docs_t) help"
 msgstr ""
 
-# classes/menu.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
-
 # classes/menu.aw:group_advanced
 msgid "Grupi Spetsiaal (advanced) pealkiri"
 msgstr ""
@@ -910,140 +906,186 @@ msgstr ""
 msgid "Seose Aeg (RELTYPE_TIMING) tekst"
 msgstr ""
 
+#: classes/menu.aw:359
 msgid "Vasak"
 msgstr ""
 
+#: classes/menu.aw:360
 msgid "Parem"
 msgstr ""
 
+#: classes/menu.aw:383
 msgid "kasuta parenti valikut"
 msgstr ""
 
+#: classes/menu.aw:419
 msgid "(no icon set)"
 msgstr ""
 
+#: classes/menu.aw:449
 msgid "Väli"
 msgstr ""
 
+#: classes/menu.aw:453
 msgid "Järjekord"
 msgstr ""
 
+#: classes/menu.aw:458 classes/menu.aw:511
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:459 classes/menu.aw:512
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:460 classes/menu.aw:513
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:461 classes/menu.aw:514
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:462 classes/menu.aw:515
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:463
 msgid "Nime j&auml;rgi"
 msgstr ""
 
+#: classes/menu.aw:467 classes/menu.aw:521
 msgid "Suurem (uuem) enne"
 msgstr ""
 
+#: classes/menu.aw:468 classes/menu.aw:522
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
+#: classes/menu.aw:530
 msgid "OID"
 msgstr ""
 
+#: classes/menu.aw:537 classes/menu.aw:1226 classes/menu.aw:1278
 msgid "Nimi"
 msgstr ""
 
+#: classes/menu.aw:557
 msgid "IP Nimi"
 msgstr ""
 
+#: classes/menu.aw:563
 msgid "IP Aadress"
 msgstr ""
 
+#: classes/menu.aw:569
 msgid "Lubatud"
 msgstr ""
 
+#: classes/menu.aw:575
 msgid "Keelatud"
 msgstr ""
 
+#: classes/menu.aw:638
 msgid "Vali pilt.."
 msgstr ""
 
+#: classes/menu.aw:657 classes/menu.aw:1071
 msgid "Muuda"
 msgstr ""
 
+#: classes/menu.aw:691
 msgid "NR"
 msgstr ""
 
+#: classes/menu.aw:697
 msgid "J&auml;rjekord"
 msgstr ""
 
+#: classes/menu.aw:703
 msgid "Eelvaade"
 msgstr ""
 
+#: classes/menu.aw:709
 msgid "Vali Pilt"
 msgstr ""
 
+#: classes/menu.aw:715
 msgid "Kustuta"
 msgstr ""
 
+#: classes/menu.aw:730
 msgid "Vali menüüd"
 msgstr ""
 
+#: classes/menu.aw:740
 msgid "Märgi kõik menüüd aktiivseks"
 msgstr ""
 
+#: classes/menu.aw:747
 msgid "Ekspordi ikoonid"
 msgstr ""
 
+#: classes/menu.aw:752
 msgid "Ekspordi"
 msgstr ""
 
+#: classes/menu.aw:771
 msgid "Vali meetod"
 msgstr ""
 
+#: classes/menu.aw:784
 msgid "Vali meetodiga seotud objekt"
 msgstr ""
 
+#: classes/menu.aw:794
 msgid "Vali meetodiga seotud grupp"
 msgstr ""
 
+#: classes/menu.aw:803
 msgid "Meetod viitab adminni"
 msgstr ""
 
+#: classes/menu.aw:811
 msgid "Meetodi väljundi kuvamisel näidatakse menüüsid"
 msgstr ""
 
+#: classes/menu.aw:958
 msgid "Selline alias on juba olemas!"
 msgstr ""
 
+#: classes/menu.aw:991
 msgid "-- vali --"
 msgstr ""
 
+#: classes/menu.aw:1075
 msgid "Lisa"
 msgstr ""
 
+#: classes/menu.aw:1084 classes/menu.aw:1104
 msgid "--vali--"
 msgstr ""
 
+#: classes/menu.aw:1218 classes/menu.aw:1270
 msgid "ID"
 msgstr ""
 
+#: classes/menu.aw:1231
 msgid "kustuta"
 msgstr ""
 
+#: classes/menu.aw:1283
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
+#: classes/menu.aw:1431
 msgid "Dokument"
 msgstr ""
 
+#: classes/menu.aw:1438
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
+#: classes/menu.aw:1444
 msgid "Vali asukoht"
 msgstr ""

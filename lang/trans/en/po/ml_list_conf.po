@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list_conf.aw:prop_folders
 msgid "Omaduse Root kataloogid (folders) caption"
-msgstr ""
+msgstr "Root folders"
 
 #: classes/applications/mailinglist/ml_list_conf.aw:prop_folders_comment
 msgid "Omaduse Root kataloogid (folders) kommentaar"

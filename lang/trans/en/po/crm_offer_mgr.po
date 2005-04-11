@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_tree
 msgid "Omaduse Puu (offers_tree) caption"
-msgstr ""
+msgstr "Tree"
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_tree_comment
 msgid "Omaduse Puu (offers_tree) kommentaar"
@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_list
 msgid "Omaduse Pakkumised (offers_list) caption"
-msgstr ""
+msgstr "Offers"
 
 # classes/crm/crm_offer_mgr.aw:prop_offers_list_comment
 msgid "Omaduse Pakkumised (offers_list) kommentaar"
@@ -47,60 +47,60 @@ msgstr ""
 
 # classes/crm/crm_offer_mgr.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
-msgstr ""
+msgstr "Offers"
 
 # classes/crm/crm_offer_mgr.aw:rel_RELTYPE_MGR_CO
 msgid "Seose haldaja (RELTYPE_MGR_CO) tekst"
-msgstr ""
+msgstr "manager"
 
 # classes/crm/crm_offer_mgr.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
-msgstr ""
+msgstr "warehouse"
 
 #: classes/crm/crm_offer_mgr.aw:90
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_offer_mgr.aw:95
 msgid "Kellele"
-msgstr ""
+msgstr "To whom"
 
 #: classes/crm/crm_offer_mgr.aw:100
 msgid "Millal"
-msgstr ""
+msgstr "When"
 
 #: classes/crm/crm_offer_mgr.aw:109
 msgid "T&uuml;&uuml;ppakkumine?"
-msgstr ""
+msgstr "Typical offer?"
 
 #: classes/crm/crm_offer_mgr.aw:154
 msgid "Eemalda t&uuml;&uuml;ppakkumistest"
-msgstr ""
+msgstr "Remove from typical offer list"
 
 #: classes/crm/crm_offer_mgr.aw:162
 msgid "Tee t&uuml;&uuml;ppakkumiseks"
-msgstr ""
+msgstr "Mark as typical"
 
 #: classes/crm/crm_offer_mgr.aw:174
 msgid "K&otilde;ik pakkumised"
-msgstr ""
+msgstr "All offers"
 
 #: classes/crm/crm_offer_mgr.aw:192
 msgid "Lisa"
-msgstr ""
+msgstr "Add"
 
 #: classes/crm/crm_offer_mgr.aw:210
 msgid "Lisa pakkumine"
-msgstr ""
+msgstr "Add offer"
 
 #: classes/crm/crm_offer_mgr.aw:241
 msgid "T&uuml;ppakkumised"
-msgstr ""
+msgstr "Typical offers"
 
 #: classes/crm/crm_offer_mgr.aw:250
 msgid "Kustuta valitud tellimused"
-msgstr ""
+msgstr "Delete selected offers"
 
 #: classes/crm/crm_offer_mgr.aw:251
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected offers?

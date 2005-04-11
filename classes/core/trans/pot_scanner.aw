@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.22 2005/04/07 13:39:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.23 2005/04/11 10:25:12 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -343,15 +343,40 @@ class pot_scanner extends core
 
 	function _make_aw_from_po($from_file, $to_file)
 	{
-		$f = array();
+		$a = $this->parse_po_file($from_file);
 
+		$f = array();
+		foreach($a as $line)
+		{
+			if ($line["msgstr"] != "")
+			{
+				$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($line["msgid"])."\"] = \"".$this->_code_quote($line["msgstr"])."\";\n";
+			}
+		}
+
+		if (count($f))
+		{
+			$fp = fopen($to_file, "w");
+			fwrite($fp, "<?php\n");
+			foreach($f as $e)
+			{
+				fwrite($fp, $e);
+			}
+			fwrite($fp, "?>");
+			fclose($fp);
+			echo "wrote file $to_file \n";
+		}
+	}
+
+	function parse_po_file($from_file)
+	{
 		$lines = file($from_file);
 		$cnt = count($lines);
 		$first_msg = true;
+		$f = array();
 		for($i = 0; $i < $cnt;  $i++)
 		{
 			$line = $lines[$i];
-
 			if (substr($line, 0, 5) == "msgid")
 			{
 				$msgid = substr($line, 7, strlen($line)-9);
@@ -382,38 +407,31 @@ class pot_scanner extends core
 				}
 
 				// write msgid/msgstr pair
-				if ($str != "")
+				if (!$first_msg)
 				{
-					if (!$first_msg)
+					if ($str{strlen($str)-1} == "\"")
 					{
-						$f[] = "\$GLOBALS[\"TRANS\"][\"".$this->_code_quote($msgid)."\"] = \"".$this->_code_quote($str)."\";\n";
+						$str = substr($str, 0, strlen($str)-1);
 					}
-					else
-					{
-						// skip the po header
-						$first_msg = false;
-					}
+					$f[] = array(
+						"msgid" => $msgid,
+						"msgstr" => $str
+					);
+				}
+				else
+				{
+					// skip the po header
+					$first_msg = false;
 				}
 			}
 		}
 
-		if (count($f))
-		{
-			$fp = fopen($to_file, "w");
-			fwrite($fp, "<?php\n");
-			foreach($f as $e)
-			{
-				fwrite($fp, $e);
-			}
-			fwrite($fp, "?>");
-			fclose($fp);
-			echo "wrote file $to_file \n";
-		}
+		return $f;
 	}
 
 	function _code_quote($str)
 	{
-		return str_replace("\"", "\\\"", $str);
+		return str_replace("\"", "\\\"", str_replace("\\\"", "\"", $str));
 	}
 
 	function get_langs()
@@ -553,5 +571,67 @@ class pot_scanner extends core
 				//shell_exec("msgmerge -U --backup=off $fn $file_to -o $fn");
 			}
 		}
+	}
+
+	function list_untrans_strings()
+	{
+		// go over languages
+		$langs = $this->get_langs();
+
+		foreach($langs as $lang)
+		{
+			echo "scanning language $lang \n";
+			// go over po files
+			$dir = aw_ini_get("basedir")."/lang/trans/$lang/po";
+			$files = array();
+			$this->_files_from_folder($dir, "po", $files);
+
+			foreach($files as $file => $ts)
+			{
+				$data = $this->parse_po_file($file);
+
+				$first = true;
+				// go over lines
+				foreach($data as $line)
+				{
+					// if msgstr is empty
+					if ($line["msgstr"] == "" && $line["msgid"] != "")
+					{
+						// and the msgid is not for property help/comment
+						if (!$this->_is_prop_help_or_comment($line["msgid"]))
+						{
+							// display it	
+							if ($first)
+							{
+								echo "in file $file: \n";
+							}
+							echo "\tuntranslated msgid $line[msgid] \n";
+							$cnt++;
+						}
+					}
+				}
+			}
+			die(sprintf(t("number of untranslated strings: %s"), $cnt));
+		}
+	}
+
+	function _is_prop_help_or_comment($msgid)
+	{
+		if (preg_match("/Omaduse (.*) \(.*\) caption/imsU", $msgid, $mt))
+		{
+			if ($mt[1] == "")
+			{
+				return true;
+			}
+		}
+		if (preg_match("/Omaduse .* \(.*\) kommentaar/imsU", $msgid))
+		{
+			return true;
+		}
+		if (preg_match("/Omaduse .* \(.*\) help/imsU", $msgid))
+		{
+			return true;
+		}
+		return false;
 	}
 }

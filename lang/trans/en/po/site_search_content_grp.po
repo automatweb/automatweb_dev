@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) caption"
-msgstr ""
+msgstr "Only logged in users"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only_comment
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
 msgid "Omaduse Vali men&uuml;&uuml;d (menus) caption"
-msgstr ""
+msgstr "Select folders"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
 msgid "Omaduse Vali men&uuml;&uuml;d (menus) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive
 msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) caption"
-msgstr ""
+msgstr "Search non-active documents"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive_comment
 msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) kommentaar"
@@ -48,25 +48,25 @@ msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
 msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
-msgstr ""
+msgstr "Search location"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:75
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:79
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:87
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:92
 msgid "k.a. alammenüüd"
-msgstr ""
+msgstr "incl. submenus"
 
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:100
 msgid "mitteaktiivsed"
-msgstr ""
+msgstr "not-active"
 

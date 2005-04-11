@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/entity.aw:prop_description
 msgid "Omaduse Kirjeldus (description) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/workflow/entity.aw:prop_description_comment
 msgid "Omaduse Kirjeldus (description) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/workflow/entity.aw:prop_entity_cfgform
 msgid "Omaduse Konfivorm (entity_cfgform) caption"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/workflow/entity.aw:prop_entity_cfgform_comment
 msgid "Omaduse Konfivorm (entity_cfgform) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/workflow/entity.aw:prop_entity_process
 msgid "Omaduse Protsess (entity_process) caption"
-msgstr ""
+msgstr "Process"
 
 #: classes/workflow/entity.aw:prop_entity_process_comment
 msgid "Omaduse Protsess (entity_process) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/workflow/entity.aw:prop_entity_actor
 msgid "Omaduse Tegija (entity_actor) caption"
-msgstr ""
+msgstr "Actor"
 
 #: classes/workflow/entity.aw:prop_entity_actor_comment
 msgid "Omaduse Tegija (entity_actor) kommentaar"
@@ -60,21 +60,21 @@ msgstr ""
 
 #: classes/workflow/entity.aw:rel_RELTYPE_INSTRUCTION
 msgid "Seose instruktsioon (RELTYPE_INSTRUCTION) tekst"
-msgstr ""
+msgstr "instructions"
 
 #: classes/workflow/entity.aw:rel_RELTYPE_ENT_CFGFORM
 msgid "Seose konfiguratsioonivorm (RELTYPE_ENT_CFGFORM) tekst"
-msgstr ""
+msgstr "configuration form"
 
 #: classes/workflow/entity.aw:rel_RELTYPE_ACTOR
 msgid "Seose tegija (RELTYPE_ACTOR) tekst"
-msgstr ""
+msgstr "actor"
 
 #: classes/workflow/entity.aw:rel_RELTYPE_PROCESS
 msgid "Seose protsess (RELTYPE_PROCESS) tekst"
-msgstr ""
+msgstr "process"
 
 #: classes/workflow/entity.aw:rel_RELTYPE_RESOURCE
 msgid "Seose ressurss (RELTYPE_RESOURCE) tekst"
-msgstr ""
+msgstr "resource"
 

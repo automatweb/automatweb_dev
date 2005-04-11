@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_stamp.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/mailinglist/ml_stamp.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"

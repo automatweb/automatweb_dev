@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/vcl/frameset.aw:prop_template
 msgid "Omaduse Frameseti template (template) caption"
-msgstr ""
+msgstr "Frameset template"
 
 #: classes/vcl/frameset.aw:prop_template_comment
 msgid "Omaduse Frameseti template (template) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/vcl/frameset.aw:prop_framedata
 msgid "Omaduse Raamide sisu (framedata) caption"
-msgstr ""
+msgstr "Frame content"
 
 #: classes/vcl/frameset.aw:prop_framedata_comment
 msgid "Omaduse Raamide sisu (framedata) kommentaar"
@@ -36,25 +36,25 @@ msgstr ""
 
 #: classes/vcl/frameset.aw:104
 msgid "1 vasakul, 2 paremal"
-msgstr ""
+msgstr "1 left, 2 right"
 
 #: classes/vcl/frameset.aw:208
 msgid "Raam <b>'%s'</b>"
-msgstr ""
+msgstr "Frame <b>'%s'</b>"
 
 #: classes/vcl/frameset.aw:210
 msgid "Default sisu"
-msgstr ""
+msgstr "Default content"
 
 #: classes/vcl/frameset.aw:217
 msgid "Default lehe stiil"
-msgstr ""
+msgstr "Default page style"
 
 #: classes/vcl/frameset.aw:224
 msgid "Border"
-msgstr ""
+msgstr "Border"
 
 #: classes/vcl/frameset.aw:230
 msgid "Keritav"
-msgstr ""
+msgstr "Scrollable"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
+"POT-Creation-Date: Mon, 11 Apr 2005 13:00:57 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -614,15 +614,15 @@ msgstr ""
 msgid "Veateate stiil"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1479
+#: classes/contentmgmt/webform.aw:1480
 msgid "Registreeru"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:1596
+#: classes/contentmgmt/webform.aw:1602
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2009
+#: classes/contentmgmt/webform.aw:2015
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

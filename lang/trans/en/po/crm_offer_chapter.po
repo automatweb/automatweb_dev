@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/crm/crm_offer_chapter.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 # classes/crm/crm_offer_chapter.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"

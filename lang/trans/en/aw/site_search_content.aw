@@ -1,0 +1,36 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Otsing märksõnadest (do_keyword_search) caption"] = "Search keywords";
+$GLOBALS["TRANS"]["Omaduse Klassid (keyword_search_classes) caption"] = "Classes";
+$GLOBALS["TRANS"]["Omaduse Otsing staatilisse koopiasse (search_static) caption"] = "Search static copy";
+$GLOBALS["TRANS"]["Omaduse Otsing aktiivsest saidist (search_live) caption"] = "Search live site";
+$GLOBALS["TRANS"]["Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) caption"] = "Search shows multiple groups";
+$GLOBALS["TRANS"]["Omaduse Mitu tulemust lehel (per_page) caption"] = "Results per page";
+$GLOBALS["TRANS"]["Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"] = "Default sort order";
+$GLOBALS["TRANS"]["Omaduse Otsingugruppide konfigureerimine (grpcfg) caption"] = "Search group configuration";
+$GLOBALS["TRANS"]["Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) caption"] = "Default search type";
+$GLOBALS["TRANS"]["Omaduse Seos (reledit) caption"] = "Connection";
+$GLOBALS["TRANS"]["Omaduse Staatilise genereerimise link (static_gen_link) caption"] = "Generate static copy link";
+$GLOBALS["TRANS"]["Grupi Staatiline otsing (static) pealkiri"] = "Static search";
+$GLOBALS["TRANS"]["Grupi Märksõnade järgi otsing (keywords) pealkiri"] = "Keyword search";
+$GLOBALS["TRANS"]["Grupi Otsingu grupid (searchgroups) pealkiri"] = "Search groups";
+$GLOBALS["TRANS"]["Seose kordus staatilise koopia genereerimiseks (RELTYPE_REPEATER) tekst"] = "recurrence for static search generation";
+$GLOBALS["TRANS"]["Seose otsingu grupp (RELTYPE_SEARCH_GRP) tekst"] = "search group";
+$GLOBALS["TRANS"]["&uuml;ksk&otilde;ik milline s&otilde;nadest"] = "any word";
+$GLOBALS["TRANS"]["koos k&otilde;igi s&otilde;nadega"] = "all words";
+$GLOBALS["TRANS"]["t&auml;pne fraas"] = "exact phrase";
+$GLOBALS["TRANS"]["K&otilde;ik"] = "All";
+$GLOBALS["TRANS"]["Muutmise kuup&auml;eva j&auml;rgi"] = "By modification date";
+$GLOBALS["TRANS"]["Pealkirja j&auml;rgi"] = "By title";
+$GLOBALS["TRANS"]["Sisu j&auml;rgi"] = "By content";
+$GLOBALS["TRANS"]["uuenda staatiline koopia"] = "renew static copy";
+$GLOBALS["TRANS"]["&Uuml;ksk&otilde;ik milline s&otilde;na"] = "Ano word";
+$GLOBALS["TRANS"]["K&otilde;ik s&otilde;nad"] = "All words";
+$GLOBALS["TRANS"]["Fraas"] = "Phrase";
+$GLOBALS["TRANS"]["Vaikimisi"] = "Default";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Vaikimisi järjestus"] = "Default order";
+$GLOBALS["TRANS"]["Pealkiri"] = "Title";
+$GLOBALS["TRANS"]["--vali--"] = "--select--";
+$GLOBALS["TRANS"]["Kuupäeva järgi (uuem enne)"] = "By date (newest first)";
+$GLOBALS["TRANS"]["Kuupäeva järgi (vanem enne)"] = "By date (oldest first)";
+?>

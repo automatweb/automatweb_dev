@@ -12,41 +12,41 @@ msgstr ""
 
 #: classes/vcl/releditor.aw:49 classes/vcl/releditor.aw:59 classes/vcl/releditor.aw:98
 msgid " "
-msgstr ""
+msgstr " "
 
 #: classes/vcl/releditor.aw:50
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
-msgstr ""
+msgstr "Error in the definition of %s (properties not defined!)"
 
 #: classes/vcl/releditor.aw:60
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
-msgstr ""
+msgstr "Error in the definition of %s (connection type undefined!)"
 
 #: classes/vcl/releditor.aw:99
 msgid "Seda seost ei saa redigeerida!"
-msgstr ""
+msgstr "This connection can not be edited"
 
 #: classes/vcl/releditor.aw:346
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/vcl/releditor.aw:353
 msgid "Kustutada valitud objektid?"
-msgstr ""
+msgstr "Delete selected objects?"
 
 #: classes/vcl/releditor.aw:361
 msgid "Klooni valitud objektid"
-msgstr ""
+msgstr "Clone selected objects"
 
 #: classes/vcl/releditor.aw:418 classes/vcl/releditor.aw:528
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/vcl/releditor.aw:492 classes/vcl/releditor.aw:517
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/vcl/releditor.aw:522
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 

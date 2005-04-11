@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/workflow/workflow_transition.aw:prop_predicate
 msgid "Omaduse Predikaat (predicate) caption"
-msgstr ""
+msgstr "Predicate"
 
 #: classes/workflow/workflow_transition.aw:prop_predicate_comment
 msgid "Omaduse Predikaat (predicate) kommentaar"
@@ -60,5 +60,5 @@ msgstr ""
 
 #: classes/workflow/workflow_transition.aw:rel_RELTYPE_PROCESS
 msgid "Seose protsess (RELTYPE_PROCESS) tekst"
-msgstr ""
+msgstr "process"
 

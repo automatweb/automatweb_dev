@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/vcl/relmanager.aw:86
 msgid "Vali üks"
-msgstr ""
+msgstr "Pick one"
 
