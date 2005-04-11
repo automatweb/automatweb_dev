@@ -129,6 +129,11 @@ class _int_obj_ds_decorator
 	{
 		return $this->contained->fetch_list($arr);
 	}
+
+	function final_delete_object($arr)
+	{
+		return $this->contained->final_delete_object($arr);
+	}
 }
 
 ?>

@@ -86,7 +86,7 @@ class _int_object
 		return $this->obj;
 	}
 
-	function delete()
+	function delete($full_delete = false)
 	{
 		if (!$this->obj["oid"])
 		{
@@ -104,7 +104,7 @@ class _int_object
 			));
 		}
 
-		$this->_int_do_delete($this->obj["oid"]);
+		$this->_int_do_delete($this->obj["oid"], $full_delete);
 	}
 
 	function connect($param)
@@ -1578,7 +1578,7 @@ class _int_object
 		return isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]) && is_array($GLOBALS["properties"][$this->obj["class_id"]][$prop]);
 	}
 
-	function _int_do_delete($oid)
+	function _int_do_delete($oid, $full_delete = false)
 	{
 		// load the object to see of its brother status
 		$obj = $GLOBALS["object_loader"]->ds->get_objdata($oid);
@@ -1633,8 +1633,16 @@ class _int_object
 			}
 			$nm = $tmpo->name();
 
-			$GLOBALS["object_loader"]->ds->delete_object($oid);
-			$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
+			if ($full_delete)
+			{
+				$GLOBALS["object_loader"]->ds->final_delete_object($oid);
+				$GLOBALS["object_loader"]->cache->_log($type, SA_FINAL_DELETE, $nm, $oid, false);
+			}
+			else
+			{
+				$GLOBALS["object_loader"]->ds->delete_object($oid);
+				$GLOBALS["object_loader"]->cache->_log($type, SA_DELETE, $nm, $oid, false);
+			}
 		}
 
 		// must clear acl cache for all objects below it

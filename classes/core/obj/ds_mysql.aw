@@ -1028,6 +1028,44 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		//$this->db_query("DELETE FROM aliases WHERE source = '$oid'");
 	}
 
+	function final_delete_object($oid)
+	{
+		$clid = $this->db_fetch_field("SELECT class_id FROM objects WHERE oid = '$oid'", "class_id");
+		if (!$clid)
+		{
+			error::raise(array(
+				"id" => "ERR_NO_OBJECT",
+				"msg" => sprintf(t("ds_mysql::final_delete_object(%s): no suct object exists!"), $oid)
+			));
+		}
+			
+		// load props by clid
+		$cl = aw_ini_get("classes");
+		$file = $cl[$clid]["file"];
+		if ($clid == 29)
+		{
+			$file = "doc";
+		}
+
+		list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
+			"file" => $file,
+			"clid" => $clid
+		));
+
+		$tableinfo = safe_array($tableinfo);
+		$tableinfo["objects"] = array(
+			"index" => "oid"
+		);
+		foreach($tableinfo as $tbl => $inf)
+		{
+			$sql = "DELETE FROM $tbl WHERE $inf[index] = '$oid' LIMIT 1";
+			$this->db_query($sql);
+		}
+
+		// also, aliases
+		$this->db_query("DELETE FROM aliases WHERE source = '$oid' OR target = '$oid'");
+	}
+
 	function req_make_sql($params, $logic = "AND", $dbg = false)
 	{
 		$sql = array();

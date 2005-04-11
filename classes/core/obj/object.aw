@@ -98,9 +98,9 @@ class object
 		return $GLOBALS["objects"][$this->oid]->arr($param);
 	}
 
-	function delete()
+	function delete($full_delete = false)
 	{
-		return $GLOBALS["objects"][$this->oid]->delete($param);
+		return $GLOBALS["objects"][$this->oid]->delete($full_delete);
 	}
 
 	function connect($param)
