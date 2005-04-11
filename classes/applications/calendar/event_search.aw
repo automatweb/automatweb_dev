@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.54 2005/04/06 07:27:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.55 2005/04/11 08:05:30 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -927,7 +927,7 @@ class event_search extends class_base
 				{
 					$ol = new object_list($search);
 					$oris = $ol->brother_ofs();
-					if($rn2)
+					if($arr["project2"])
 					{
 						$search2 = $search;
 						$search2["parent"] = $parx2;
