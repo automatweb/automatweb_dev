@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.24 2005/03/22 15:47:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.25 2005/04/11 10:29:14 duke Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -408,6 +408,7 @@ class ml_list extends class_base
 		));
 		$fld = $list_obj->prop("def_user_folder");
 		$members = $this->get_all_members($fld);
+		$erx = array();
 		if(in_array($args["mail"], $members) || in_array($args["email"], $members) || empty($args["mail"]))
 		{
 			$allow = false;
@@ -709,7 +710,7 @@ class ml_list extends class_base
 				break;
 			*/
 			case "import_textfile":
-				$imp = $_FILES["import_text_file"]["tmp_name"];
+				$imp = $_FILES["import_textfile"]["tmp_name"];
 				if (!is_uploaded_file($imp))
 				{
 					return PROP_OK;
@@ -1253,6 +1254,13 @@ class ml_list extends class_base
 
 	function gen_list_status_table($arr)
 	{
+		/*
+		$sched = get_instance("scheduler");
+		$sched->add(array(
+			"event" => $this->mk_my_orb("process_queue", array(), "", false, true),
+			"time" => time()+120, // every 2 minutes
+		));
+		*/
 		$mq = get_instance("applications/mailinglist/ml_queue");
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/queue");
