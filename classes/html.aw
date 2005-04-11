@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.73 2005/03/30 10:17:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.74 2005/04/11 13:49:49 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -56,6 +56,11 @@ class html extends aw_template
 
 		$optstr = "";
 
+		foreach(safe_array($options) as $k => $v)
+		{
+			$selected = isset($sel_array[$k]) ? " selected " : "";
+			$optstr .= "<option $selected value=\"$k\">$v</option>\n";
+		}
 		// implementing a thing called optgroup -- ahz
 		foreach(safe_array($optgroup) as $key => $val)
 		{
@@ -66,12 +71,6 @@ class html extends aw_template
 				$optstr .= "<option $selected value=\"$key2\">$val2</option>\n";
 			}
 			$optstr .= "</optgroup>\n";
-		}
-
-		foreach(safe_array($options) as $k => $v)
-		{
-			$selected = isset($sel_array[$k]) ? " selected " : "";
-			$optstr .= "<option $selected value=\"$k\">$v</option>\n";
 		}
 		if (!empty($onchange))
 		{
