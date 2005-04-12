@@ -170,8 +170,17 @@ class core extends acl_base
 		{
 			$oid = aw_global_get("section");
 		}
-		$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0 ".$hoid;
-		$this->db_query($q);
+
+		if (aw_ini_get("cache.table_is_sep"))
+		{
+			$q = "UPDATE objects_cache_data SET cachedirty = 1, cachedata = '' ".($hoid != "" ? " WHERE ".$hoid : "");
+			$this->db_query($q);
+		}
+		else
+		{
+			$q = "UPDATE objects SET cachedirty = 1, cachedata = '' where status != 0 ".$hoid;
+			$this->db_query($q);
+		}
 	}
 		
 	////
@@ -183,7 +192,15 @@ class core extends acl_base
 			return true;
 		}
 
-		$q = "SELECT cachedirty,cachedata FROM objects WHERE oid = '$oid'";
+		if (aw_ini_get("cache.table_is_sep"))
+		{
+			$q = "SELECT cachedirty,cachedata FROM objects_cache_data WHERE oid = '$oid'";
+		}
+		else
+		{
+			$q = "SELECT cachedirty,cachedata FROM objects WHERE oid = '$oid'";
+		}
+
 		$this->db_query($q);
 		$row = $this->db_next();
 
@@ -206,7 +223,16 @@ class core extends acl_base
 		{
 			return;
 		}
-		$ccd = $this->db_fetch_field("SELECT cachedata FROM objects WHERE oid = '$oid'","cachedata");
+
+		if (aw_ini_get("cache.table_is_sep"))
+		{
+			$ccd = $this->db_fetch_field("SELECT cachedata FROM objects_cache_data WHERE oid = '$oid'","cachedata");
+		}
+		else
+		{
+			$ccd = $this->db_fetch_field("SELECT cachedata FROM objects WHERE oid = '$oid'","cachedata");
+		}
+
 		$dat = aw_unserialize($ccd);
 		if ($fname != "")
 		{
@@ -214,7 +240,16 @@ class core extends acl_base
 		}
 		$ds = aw_serialize($dat);
 		$this->quote($ds);
-		$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
+
+
+		if (aw_ini_get("cache.table_is_sep"))
+		{
+			$q = "UPDATE objects_cache_data SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
+		}
+		else
+		{
+			$q = "UPDATE objects SET cachedirty = 0 , cachedata = '$ds' WHERE oid = '$oid'";
+		}
 		//XXX the following query was commented out on eau, have to watch out for this one
 
 		$this->db_query($q);

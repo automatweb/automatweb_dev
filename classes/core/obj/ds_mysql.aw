@@ -535,6 +535,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		// hits
 		$this->db_query("INSERT INTO hits(oid,hits,cachehits) VALUES($oid, 0, 0 )");
 
+		// cache data
+		if (aw_ini_get("cache.table_is_sep"))
+		{
+			$this->db_query("INSERT INTO objects_cache_data(oid) values($oid)");
+		}
+
 		// now we need to create entries in all tables that are in properties as well.
 		$tbls = array();
 		foreach($properties as $prop => $data)

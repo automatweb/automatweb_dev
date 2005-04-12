@@ -207,5 +207,12 @@
 			</function>
 		</action>
 
+		<action name="cache_data_to_sep_tbl">
+			<function name="cache_data_to_sep_tbl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
