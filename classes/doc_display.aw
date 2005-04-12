@@ -35,6 +35,18 @@ class doc_display extends aw_template
 
 		$text = $this->_get_text($arr, $doc);
 
+		$al = get_instance("aliasmgr");
+		$mt = $doc->meta();
+		$al->parse_oo_aliases(
+			$doc->id(),
+			&$text,
+			array(
+				"templates" => &$this->templates,
+				"meta" => &$mt
+			)
+		);
+		$this->vars($al->get_vars());
+
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 
 		$this->vars(array(
@@ -82,18 +94,6 @@ class doc_display extends aw_template
 		));
 
 		$str = $this->parse();
-
-		$al = get_instance("aliasmgr");
-		$mt = $doc->meta();
-		$al->parse_oo_aliases(
-			$doc->id(),
-			&$str,
-			array(
-				"templates" => &$this->templates,
-				"meta" => &$mt
-			)
-		);
-		
 		return $str;
 	}
 
