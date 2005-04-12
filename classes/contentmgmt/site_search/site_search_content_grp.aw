@@ -1,7 +1,22 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.19 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.20 2005/04/12 07:01:11 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
+
+- when a menu is saved, search groups are scanned to see if any of them should display the just-saved menu
+  if so, then the menu is added to the list in meta[search_menus], else it is removed
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_MENU, on_save_menu)
+
+
+- when a search group is saved, the list of menus for it's display is regenerated
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE,CL_SITE_SEARCH_CONTENT_GRP, on_save_grp)
+
+- when a menu is deleted, the list of menud needs to be regenerated
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_menu)
+
 
 @classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP relationmgr=yes
 
@@ -148,6 +163,16 @@ class site_search_content_grp extends class_base
 			return array();
 		}
 		$o = obj($arr["id"]);
+		if ($o->meta("version") == 2)
+		{
+			return safe_array($o->meta("grp_menus"));
+		}
+		return $this->_get_menus($arr);
+	}
+
+	function _get_menus($arr)
+	{
+		$o = obj($arr["id"]);
 
 		$conns = $o->connections_from(array(
 			"reltype" => "RELTYPE_SEARCH_LOCATION",
@@ -253,6 +278,127 @@ class site_search_content_grp extends class_base
 		}
 		return $ret;
 	}
-	
+
+	function on_save_menu($arr)
+	{
+		$o = obj($arr["oid"]);
+		$path = $o->path();
+
+		$grps = new object_list(array(
+			"class_id" => CL_SITE_SEARCH_CONTENT_GRP,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($grps->arr() as $grp)
+		{
+			$fld = $this->_get_folders_for_grp($grp);
+			$is_in_grp = false;
+			foreach($fld as $f => $subs)
+			{
+				if ($f == $o->id() || ($subs && $this->_is_in_path($path, $f)))
+				{
+					$is_in_grp = true;
+					break;
+				}
+			}
+
+			if ($o->status() == STAT_NOTACTIVE)
+			{
+				// check if the menu is searchable when notactive
+				$na_s = $grp->meta("notact");
+				$p = $o->path();
+				foreach($p as $p_o)
+				{
+					if (isset($fld[$p_o->id()]))
+					{
+						if (!$na_s[$p_o->id()])
+						{
+							$is_in_grp = false;
+							break;
+						}
+					}
+				}
+			}
+			
+			if ($is_in_grp)
+			{
+				$mt = safe_array($grp->meta("grp_menus"));
+				$mt[$o->id()] = $o->id();
+				$grp->set_meta("grp_menus", $mt);
+				$grp->save();
+			}
+			else
+			{
+				$mt = safe_array($grp->meta("grp_menus"));
+				if (isset($mt[$o->id()]))
+				{
+					unset($mt[$o->id()]);
+					$grp->set_meta("grp_menus", $mt);
+					$grp->save();
+				}
+			}
+		}
+	}
+
+	function _get_folders_for_grp($grp)
+	{
+		$ret = array();
+		$subs = safe_array($grp->meta("section_include_submenus"));
+		foreach($grp->connections_from(array("type" => "RELTYPE_SEARCH_LOCATION")) as $c)
+		{
+			$ret[$c->prop("to")] = $subs[$c->prop("to")] == $c->prop("to");
+		}
+
+		if (!count($ret))
+		{
+			return array();
+		}
+
+		return $ret;
+	}
+
+	function _is_in_path($path, $f)
+	{
+		foreach($path as $o)
+		{
+			if ($o->id() == $f)
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	function _regen_grp($grp)
+	{
+		$grp->set_meta("grp_menus", $this->_get_menus(array("id" => $grp->id())));
+		$grp->set_meta("version", 2);
+		$grp->save();
+	}
+
+	function on_save_grp($arr)
+	{
+		$o = obj($arr["oid"]);
+		$this->_regen_grp($o);
+	}
+
+	function on_delete_menu($arr)
+	{
+		$o = obj($arr["oid"]);
+		
+		$grps = new object_list(array(
+			"class_id" => CL_SITE_SEARCH_CONTENT_GRP,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($grps->arr() as $grp)
+		{
+			$mt = safe_array($grp->meta("grp_menus"));
+			if (isset($mt[$o->id()]))
+			{
+				$this->_regen_grp($grp);
+			}
+		}
+	}	
 }
 ?>
