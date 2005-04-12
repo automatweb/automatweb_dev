@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.45 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.46 2005/04/12 10:07:35 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -305,6 +305,7 @@ class site_search_content extends class_base
 
 	function get_groups($obj)
 	{
+		enter_function("site_search_content::get_groups");
 		$ret = array();
 		$co = $obj->connections_from(array(
 			"type" => 2 //RELTYPE_SEARCH_GRP
@@ -327,6 +328,7 @@ class site_search_content extends class_base
 			$rret[$v["oid"]] = $v["name"];
 		}
 
+		exit_function("site_search_content::get_groups");
 		return $rret;
 	}
 
@@ -357,6 +359,7 @@ class site_search_content extends class_base
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
+		enter_function("site_search_content::show");
 		extract($arr);
 		$ob = new object($id);
 		$this->read_template("search.tpl");
@@ -406,6 +409,7 @@ class site_search_content extends class_base
 			"limit_opts" => $this->picker($opts["limit"], $this->limit_opts)
 		));
 
+		exit_function("site_search_content::show");
 		return $this->parse();
 	}
 
@@ -474,6 +478,7 @@ class site_search_content extends class_base
 	//	menus - the menus to search under
 	function fetch_static_search_results($arr)
 	{
+		enter_function("site_search_content::fetch_static_search_results");
 		// rewrite fucked-up letters
 		// IE
 		$arr["str"] = str_replace(chr(0x9a), "&#0352;", $arr["str"]);
@@ -503,11 +508,14 @@ class site_search_content extends class_base
 			FROM 
 				static_content 
 			WHERE 
-				".$this->_get_sstring($str, $opts["str"], "content")." AND 
+				".$this->_get_sstring($str, $opts["str"], "content",true)." AND 
 				section IN (".$ams->to_sql().") AND
 				lang_id = '".aw_global_get("lang_id")."'
 		";
+		enter_function("site_search_content::fetch_static_search_results::query");
 		$this->db_query($sql);
+		exit_function("site_search_content::fetch_static_search_results::query");
+		enter_function("site_search_content::fetch_static_search_results::q_results");
 		while ($row = $this->db_next())
 		{
 			$ret[] = array(
@@ -517,6 +525,8 @@ class site_search_content extends class_base
 				"content" => $row["content"]
 			);
 		}
+		exit_function("site_search_content::fetch_static_search_results::q_results");
+		exit_function("site_search_content::fetch_static_search_results");
 		return $ret;
 	}
 
@@ -528,6 +538,7 @@ class site_search_content extends class_base
 	//	menus - the menus to search under
 	function fetch_live_search_results($arr)
 	{
+		enter_function("site_search_content::fetch_live_search_results");
 		extract($arr);
 	
 		$ret = array();
@@ -620,6 +631,7 @@ class site_search_content extends class_base
 				$ret = $keyresults;
 			}
 		}
+		exit_function("site_search_content::fetch_live_search_results");
 		return $ret;
 	}
 
@@ -627,6 +639,7 @@ class site_search_content extends class_base
 	// !merges two result sets together and returns the merged set. results are merged based on titles
 	function merge_result_sets($orig, $add)
 	{
+		enter_function("site_search_content::merge_result_sets");
 		$lut = array();
 		foreach($orig as $i)
 		{
@@ -642,11 +655,13 @@ class site_search_content extends class_base
 			}
 		}
 
+		exit_function("site_search_content::merge_result_sets");
 		return $ret;
 	}
 	
 	function search_keywords($str, $menus, $obj, $date)
 	{
+		enter_function("site_search_content::search_keywords");
 		$keyword_list = new object_list(array(
 			"class_id" => CL_KEYWORD,
 			"name" => "%$str%",
@@ -656,12 +671,14 @@ class site_search_content extends class_base
 		//If keyword not found, no point to process it futher
 		if($keyword_list->count() == 0)
 		{
+			exit_function("site_search_content::search_keywords");
 			return;
 		}
 		
 		$classes = $obj->prop("keyword_search_classes");
 		if (!is_array($classes) || count($classes) == 0)
 		{
+			exit_function("site_search_content::search_keywords");
 			return;
 		}
 		$keyword_to_file_conns = new connection();
@@ -673,6 +690,7 @@ class site_search_content extends class_base
 		//arr($keyword_to_file_conns);	
 		if(!$keyword_to_file_conns)
 		{
+			exit_function("site_search_content::search_keywords");
 			return;
 		}
 			
@@ -697,6 +715,7 @@ class site_search_content extends class_base
 		
 		if(!$doc_ids)
 		{
+			exit_function("site_search_content::search_keywords");
 			return;
 		}
 		
@@ -728,6 +747,7 @@ class site_search_content extends class_base
 				"doc_modified" => $obj->prop("doc_modified")
 			);
 		}
+		exit_function("site_search_content::search_keywords");
 		return $ret;
 	}
 	
@@ -741,6 +761,7 @@ class site_search_content extends class_base
 	//  opts - search options
 	function fetch_search_results($arr)
 	{
+		enter_function("site_search_content::fetch_search_results");
 		extract($arr);
 		$g = get_instance(CL_SITE_SEARCH_CONTENT_GRP);
 
@@ -782,6 +803,7 @@ class site_search_content extends class_base
 			$_ret[$d["title"]] = $d;
 		}
 
+		exit_function("site_search_content::fetch_search_results");
 		return $_ret;
 	}
 
@@ -822,6 +844,7 @@ class site_search_content extends class_base
 	//	sort_by - the order to sort by
 	function sort_results($arr)
 	{
+		enter_function("site_search_content::sort_results");
 		switch($arr["sort_by"])
 		{
 			case S_ORD_TITLE:
@@ -841,6 +864,7 @@ class site_search_content extends class_base
 				usort($arr["results"], array(&$this, "_sort_time"));
 				break;
 		}
+		exit_function("site_search_content::sort_results");
 	}
 
 	////
@@ -850,6 +874,7 @@ class site_search_content extends class_base
 	//	cur_page - the currently selected page
 	function display_sorting_links($arr)
 	{
+		enter_function("site_search_content::display_sorting_links");
 		extract($arr);
 
 		$params["page"] = $arr["cur_page"];
@@ -902,6 +927,7 @@ class site_search_content extends class_base
 			"SORT_TITLE" => $so_title,
 			"SORT_TITLE_SEL" => "",
 		));
+		exit_function("site_search_content::display_sorting_links");
 	}
 
 	////
@@ -913,6 +939,7 @@ class site_search_content extends class_base
 	//	params - search params, to make the next page link from
 	function display_pageselector($arr)
 	{
+		enter_function("site_search_content::display_pageselector");
 		$page = $arr["cur_page"];
 		$cnt = $arr["num_results"];
 		$per_page = $arr["per_page"];
@@ -974,6 +1001,7 @@ class site_search_content extends class_base
 			"cur_page" => $arr["cur_page"],
 			"params" => $arr["params"]
 		));
+		exit_function("site_search_content::display_pageselector");
 	}
 
 	function _get_content($ct)
@@ -994,6 +1022,7 @@ class site_search_content extends class_base
 	//	per_page - number of results to show
 	function display_result_page($arr)
 	{
+		enter_function("site_search_content::display_result_page");
 		extract($arr);
 		
 		// calc the offsets in the array 
@@ -1037,6 +1066,7 @@ class site_search_content extends class_base
 		$this->vars(array(
 			"MATCH" => $res
 		));
+		exit_function("site_search_content::display_result_page");
 	}
 
 	////
@@ -1050,6 +1080,7 @@ class site_search_content extends class_base
 	//	params - the parameters to use to make the next/prev page links
 	function display_results($arr)
 	{
+		enter_function("site_search_content::display_results");
 		extract($arr);
 
 		lc_site_load("search_conf", &$this);
@@ -1060,6 +1091,7 @@ class site_search_content extends class_base
 			$this->vars(array(
 				"str" => $str
 			));
+			exit_function("site_search_content::display_results");
 			return $this->parse();
 		}
 
@@ -1088,6 +1120,7 @@ class site_search_content extends class_base
 			"per_page" => $per_page
 		));
 
+		exit_function("site_search_content::display_results");
 		return $this->parse();
 	}
 
@@ -1095,6 +1128,7 @@ class site_search_content extends class_base
 	// !sets the default values to $arr
 	function set_defaults($arr)
 	{
+		enter_function("site_search_content::set_defaults");
 		$o = obj($arr["id"]);
 
 		if (empty($arr["group"]))
@@ -1136,6 +1170,7 @@ class site_search_content extends class_base
 			$arr["date"]["to"] = -1;
 		}
 
+		exit_function("site_search_content::set_defaults");
 		return $arr;
 	}
 
@@ -1159,8 +1194,7 @@ class site_search_content extends class_base
 	**/
 	function do_search($arr)
 	{
-//		return "Otsinguv&otilde;imalus on tehnilistel p&otilde;hjustel ajutiselt piiratud! Palun proovige hiljem uuesti";
-//		return "Search has been disabled temporarily for technical reasons. Please check back later";
+		enter_function("site_search_content::do_search");
 		error::view_check($arr["id"]);
 		extract($this->set_defaults($arr));
 		$o = obj($id);
@@ -1287,6 +1321,7 @@ class site_search_content extends class_base
 
 		};
 		
+		exit_function("site_search_content::do_search");
 		return $ret;
 	}
 
@@ -1310,9 +1345,28 @@ class site_search_content extends class_base
 		}
 	}
 
-	function _get_sstring($str, $opt, $field)
+	function _get_sstring($str, $opt, $field, $static = false)
 	{
 		$words = explode(" ", $str);
+		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1 ) && $static)
+		{
+			switch($opt)
+			{
+			case S_OPT_ANY_WORD:
+				$content_s = "( ".join(" OR ", map("MATCH(content) AGAINST ('%s')", $words))." ) ";
+				break;
+				
+			case S_OPT_ALL_WORDS:
+				$content_s = "( ".join(" AND ", map("MATCH(content) AGAINST ('%s')", $words))." ) ";
+				break;
+				
+			case S_OPT_PHRASE:
+				$content_s = " MATCH(content) AGAINST('$str') ";
+				break;
+				}
+		}
+		else
+		{
 		switch($opt)
 		{
 			case S_OPT_ANY_WORD:
@@ -1328,7 +1382,7 @@ class site_search_content extends class_base
 				$content_s = $field." like '%".$str."%'";
 				break;
 		}
-
+		}
 		return $content_s;
 	}
 
