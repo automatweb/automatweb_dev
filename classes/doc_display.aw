@@ -27,6 +27,12 @@ class doc_display extends aw_template
 		$this->tpl_init("automatweb/documents");
 		$this->read_any_template($this->_get_template($arr));
 
+		$si = __get_site_instance();
+		if ($si)
+		{
+			$si->parse_document_new($doc);
+		}
+
 		$text = $this->_get_text($arr, $doc);
 
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
@@ -40,7 +46,9 @@ class doc_display extends aw_template
 			"date_est" => locale::get_lc_date($_date, LC_DATE_FORMAT_LONG),
 			"modified" => date("d.m.Y", $doc->modified()),
 			"parent_id" => $doc->parent(),
-			"parent_name" => $doc_parent->name()
+			"parent_name" => $doc_parent->name(),
+			"user1" => $doc->prop("user1"),
+			"page_title" => strip_tags($doc->prop("title"))
 		));
 
 		$ablock = "";
@@ -51,6 +59,16 @@ class doc_display extends aw_template
 			));
 		}
 
+		$nll = "";
+		if ($arr["not_last_in_list"])
+		{
+			$nll = $this->parse("NOT_LAST_IN_LIST");
+		}
+		$this->vars(array(
+			"NOT_LAST_IN_LIST" => $nll
+		));
+
+
 		$ps = "";
 		if (( ($doc->prop("show_print")) && (!$_GET["print"]) && $arr["leadonly"] != 1))
 		{
@@ -59,7 +77,8 @@ class doc_display extends aw_template
 
 		$this->vars(array(
 			"SHOW_TITLE" => ($doc->prop("show_title") == 1 && $doc->prop("title") != "") ? $this->parse("SHOW_TITLE") : "",
-			"PRINTANDSEND" => $ps
+			"PRINTANDSEND" => $ps,
+			"SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
 		));
 
 		$str = $this->parse();

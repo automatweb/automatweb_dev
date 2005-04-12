@@ -68,6 +68,14 @@ class site_base extends aw_template
 	}
 
 	////
+	// !stub for parse_document, you get the chance to modify the contents of
+	// the document for a particular site needs if you override this in subclass
+	function parse_document_new($doc)
+	{
+
+	}
+
+	////
 	// !this gets called when showing documents - if it returns false, the document is not shown
 	function can_show_document(&$doc)
 	{
