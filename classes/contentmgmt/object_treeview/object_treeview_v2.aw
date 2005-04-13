@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.73 2005/04/13 13:11:17 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.74 2005/04/13 13:16:02 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -492,7 +492,7 @@ class object_treeview_v2 extends class_base
 						$sc[$___v["field"]] = 1;
 					}
 				}
-				foreach($ih_ob->meta("itemsorts") as $item)
+				foreach(safe_array($ih_ob->meta("itemsorts")) as $item)
 				{
 					$sc[$item['element']] = 1;
 				}
