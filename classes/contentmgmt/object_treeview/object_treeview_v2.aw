@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.74 2005/04/13 13:16:02 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.75 2005/04/13 13:48:43 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -25,10 +25,6 @@
 
 @property inherit_view_props_from type=select 
 @caption P&auml;ri n&auml;itamise omadused objektist
-
-@property add_table_anchor_to_url type=checkbox ch_value=1
-@caption Lisa #table URL-i l&otilde;ppu
-@comment Lisab #table kataloogide URL-i l&otilde;ppu
 
 @property show_folders type=checkbox ch_value=1
 @caption N&auml;ita katalooge
@@ -80,6 +76,10 @@
 
 @property alphabet_in_lower_case type=checkbox ch_value=1 
 @caption T&auml;hestiku kuvamisel kasutada v&auml;iket&auml;hti 
+
+@property add_table_anchor_to_url type=checkbox ch_value=1
+@caption Lisa #table URL-i l&otilde;ppu
+@comment Lisab #table kataloogide URL-i l&otilde;ppu
 
 @property sproc_params type=textbox
 @caption Andmeallika parameetrid
