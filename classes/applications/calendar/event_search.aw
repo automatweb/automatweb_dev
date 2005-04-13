@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.56 2005/04/13 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.57 2005/04/13 10:59:31 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -852,15 +852,19 @@ class event_search extends class_base
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
-							"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
-							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86400)),
+							"CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							"CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
+							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86399)),
 						),
 					)),
 					new object_list_filter(array(
 						"logic" => "AND",
 						"conditions" => array(
-							"end" => -1,
-							"start" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86400)),
+							"CL_CRM_MEETING.end" => -1,
+							"CL_CALENDAR_EVENT.end" => -1,
+							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
 						),
 					)),
 				),
