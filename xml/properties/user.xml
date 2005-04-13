@@ -285,6 +285,15 @@
             <caption></caption>
       </property>
       <property>
+            <name>ui_language</name>
+            <table>objects</table>
+            <group>aclwizard</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Liidese keel</caption>
+      </property>
+      <property>
             <name>userch1</name>
             <table>objects</table>
             <group>userdef</group>
