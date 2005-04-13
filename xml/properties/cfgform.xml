@@ -141,8 +141,7 @@
             <group>avail</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_gen_avail_props</callback>
+            <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Kõik omadused</caption>
