@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.61 2005/04/13 15:15:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.62 2005/04/13 15:50:14 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -543,6 +543,7 @@ class cfgform extends class_base
 		{
 			$obj_inst->set_prop("subclass",$arr["request"]["subclass"]);
 		};
+
 		if (isset($this->cfg_proplist) && is_array($this->cfg_proplist))
 		{
 			$tmp = array();
@@ -617,8 +618,11 @@ class cfgform extends class_base
 					}
 					else
 					{
-						list(,$first) = each($property["group"]);
-						$by_group[$first][] = $property;
+						foreach($property["group"] as $gkey)
+						{
+							//list(,$first) = each($property["group"]);
+							$by_group[$gkey][] = $property;
+						};
 					};
 
 				};
@@ -727,14 +731,15 @@ class cfgform extends class_base
 
 		foreach($this->all_props as $key => $property)
 		{
-			if (empty($used_props[$property["name"]]))
-			{
+			// A single property might be located in multiple groups
+			//if (empty($used_props[$property["name"]]))
+			//{
 				$t->define_data(array(
 					"caption" => $property["caption"],
 					"type" => $property["type"],
 					"name" => $property["name"],
 				));
-			};
+			//};
 		}
 	}
 
@@ -846,18 +851,41 @@ class cfgform extends class_base
 			{
 				foreach($mark as $pkey => $pval)
 				{
+					// if this is a valid property, then add it to the list
 					if ($this->all_props[$pkey])
 					{
-						$prplist[$pkey] = array(
-							"name" => $pkey,
-							"caption" => $this->all_props[$pkey]["caption"],
-							"group" => $target,
-						);
+						// need to add another group
+						if ($prplist[$pkey])
+						{
+							$groups = $prplist[$pkey]["group"];
+							if (is_array($groups))
+							{
+								$prplist[$pkey]["group"][$target] = $target;
+							}
+							else
+							{	
+								$prplist[$pkey]["group"] = array(
+									$groups => $groups,
+									$target => $target,
+								);
+							};
+
+						}
+						else
+						{
+							// add for the very first time
+							$prplist[$pkey] = array(
+								"name" => $pkey,
+								"caption" => $this->all_props[$pkey]["caption"],
+								"group" => array($target => $target),
+							);
+						};
 					};
 				};
 				$this->cfg_proplist = $prplist;
 			};
 		};
+
 	}
 
 	function save_layout($arr)
