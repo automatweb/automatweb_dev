@@ -13,7 +13,7 @@ The code in CVS is held in a central repository and all developers check out a c
 
 <i>Checking out a copy of AW code:</i>
 
-cvs -z3 -d :pserver:[username]@dev.struktuur.ee:/www/cvs login
+cvs -z3 -d :ext:[username]@dev.struktuur.ee:/home/cvs login
 .. enter password ..
 
 Password will be stored (encrypted) in a file named .cvspass in your home directory, so that you do not have
@@ -21,7 +21,7 @@ to enter the password for each subsequent command. If you have received a new ac
 checked out anything while using that account, then you have to "touch ~/.cvspass" before you can log in.
 This will create an empty file to hold the passwords.
 
-cvs -z3 -d :pserver:[username]@dev.struktuur.ee:/www/cvs checkout automatweb_dev
+cvs -z3 -d :ext:[username]@dev.struktuur.ee:/home/cvs checkout automatweb_dev
 
 now, a folder named "automatweb_dev" will be created to the current directory and the latest AW version will be put in that folder. 
 
