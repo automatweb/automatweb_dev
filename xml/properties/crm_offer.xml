@@ -18,14 +18,6 @@
             <caption>Algus</caption>
       </property>
       <property>
-            <name>end</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>datetime_select</type>
-            <field>end</field>
-            <caption>L&amp;otilde;pp</caption>
-      </property>
-      <property>
             <name>preformer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
@@ -99,6 +91,48 @@
             <caption>Tehtud</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>L&amp;otilde;pp</caption>
+      </property>
+      <property>
+            <name>content_toolbar</name>
+            <table>objects</table>
+            <group>content</group>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>content_toolbar</field>
+      </property>
+      <property>
+            <name>content_tree</name>
+            <table>objects</table>
+            <group>content</group>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>vbox_tree</parent>
+            <field>content_tree</field>
+            <caption>Puu</caption>
+      </property>
+      <property>
+            <name>content_list</name>
+            <table>objects</table>
+            <group>content</group>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_tbl</parent>
+            <field>content_list</field>
+            <caption>Pakkumised</caption>
+      </property>
+      <property>
             <name>calendar_selector</name>
             <table>objects</table>
             <group>calendars</group>
@@ -119,66 +153,6 @@
             <caption>Projektid</caption>
       </property>
       <property>
-            <name>package_toolbar</name>
-            <table>objects</table>
-            <group>
-                  <num_0>packages_show</num_0>
-                  <num_1>products_show</num_1>
-            </group>
-            <method>serialize</method>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>package_toolbar</field>
-      </property>
-      <property>
-            <name>package_table</name>
-            <table>objects</table>
-            <group>packages_show</group>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>package_table</field>
-      </property>
-      <property>
-            <name>products_table</name>
-            <table>objects</table>
-            <group>products_show</group>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>products_table</field>
-      </property>
-      <property>
-            <name>packages_search</name>
-            <table>objects</table>
-            <group>
-                  <num_0>packages_show</num_0>
-                  <num_1>products_show</num_1>
-            </group>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>do_packages_search_form</callback>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>packages_search</field>
-      </property>
-      <property>
-            <name>packages_search_results</name>
-            <table>objects</table>
-            <group>
-                  <num_0>packages_show</num_0>
-                  <num_1>products_show</num_1>
-            </group>
-            <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>packages_search_results</field>
-      </property>
-      <property>
             <name>offer_history</name>
             <table>objects</table>
             <group>history</group>
@@ -188,12 +162,25 @@
             <store>no</store>
             <field>offer_history</field>
       </property>
+      <property>
+            <name>offer</name>
+            <table>objects</table>
+            <group>offer</group>
+            <method>serialize</method>
+            <type>text</type>
+            <no_caption>1</no_caption>
+            <field>offer</field>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_OFFER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <content>
+                  <caption>Sisu</caption>
+                  <submit>no</submit>
+            </content>
             <recurrence>
                   <caption>Kordumine</caption>
             </recurrence>
@@ -203,10 +190,6 @@
             <projects>
                   <caption>Projektid</caption>
             </projects>
-            <packages_show>
-                  <caption>Paketid</caption>
-                  <submit>no</submit>
-            </packages_show>
             <products_show>
                   <caption>Tooted</caption>
                   <submit>no</submit>
@@ -215,6 +198,10 @@
                   <caption>Ajalugu</caption>
                   <submit>no</submit>
             </history>
+            <offer>
+                  <caption>Pakkumine</caption>
+                  <submit>no</submit>
+            </offer>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -254,11 +241,28 @@
                   <clid>CL_SHOP_PRODUCT</clid>
                   <caption>Toode</caption>
             </PRODUCT>
-            <PACKAGE>
-                  <value>6</value>
-                  <clid>CL_SHOP_PACKET</clid>
-                  <caption>Pakett</caption>
-            </PACKAGE>
+            <OFFER_MGR>
+                  <value>7</value>
+                  <clid>CL_CRM_OFFER_MGR</clid>
+                  <caption>Pakkumiste haldus</caption>
+            </OFFER_MGR>
       </reltypes>
+      <layout>
+            <vbox_others>
+                  <type>hbox</type>
+                  <group>content</group>
+                  <width>20%:80%</width>
+            </vbox_others>
+            <vbox_tree>
+                  <type>vbox</type>
+                  <group>content</group>
+                  <parent>vbox_others</parent>
+            </vbox_tree>
+            <vbox_tbl>
+                  <type>vbox</type>
+                  <group>content</group>
+                  <parent>vbox_others</parent>
+            </vbox_tbl>
+      </layout>
 </properties>
 

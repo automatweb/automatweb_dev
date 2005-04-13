@@ -1,81 +1,97 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.30 2005/04/04 08:44:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.31 2005/04/13 12:49:15 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
 @classinfo syslog_type=ST_CRM_OFFER relationmgr=yes no_status=1
 
+@tableinfo planner index=id master_table=objects master_index=brother_of
+@tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=oid
+
 @default table=objects
+
 @default group=general
 
-@property orderer type=select table=aw_crm_offer datatype=int
-@caption Tellija
+	@property orderer type=select table=aw_crm_offer datatype=int
+	@caption Tellija
 
-@property start1 type=datetime_select field=start table=planner
-@caption Algus
+	@property start1 type=datetime_select field=start table=planner
+	@caption Algus
 
-@property end type=datetime_select field=end table=planner
-@caption L&otilde;pp
+	@property preformer type=hidden table=aw_crm_offer datatype=int
 
-@property preformer type=hidden table=aw_crm_offer datatype=int
+	@property preformer_cap type=text store=no
+	@caption Täitja
 
-@property preformer_cap type=text store=no
-@caption Täitja
+	@property salesman type=select table=aw_crm_offer datatype=int
+	@caption Pakkumise koostaja
 
-@property salesman type=select table=aw_crm_offer datatype=int
-@caption Pakkumise koostaja
+	@property offer_status type=select table=aw_crm_offer datatype=int
+	@caption Staatus
 
-@property offer_status type=select table=aw_crm_offer datatype=int
-@caption Staatus
+	@property content type=textarea cols=60 rows=20 table=planner field=description
+	@caption Sisu
 
-@property content type=textarea cols=60 rows=20 table=planner field=description
-@caption Sisu
+	@property prev_status type=hidden store=no
 
-@property prev_status type=hidden store=no
+	@property sum type=textbox table=aw_crm_offer size=7 datatype=int
+	@caption Hind (ilma KM)
 
-@property sum type=textbox table=aw_crm_offer size=7 datatype=int
-@caption Hind (ilma KM)
+	@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
+	@caption Tehtud
 
-@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
-@caption Tehtud
+	@property end type=datetime_select field=end table=planner
+	@caption L&otilde;pp
 
-@tableinfo planner index=id master_table=objects master_index=brother_of
+	@property preformer type=hidden table=aw_crm_offer datatype=int
 
-@default method=serialize
 
-@property calendar_selector type=calendar_selector store=no group=calendars
-@caption Kalendrid
+	@default method=serialize
+-------- Sisu ----
+@default group=content
 
-@property project_selector type=project_selector store=no group=projects
-@caption Projektid
+	@layout vbox_others type=hbox group=content width=20%:80%
 
-------- Paketid --------
+	@layout vbox_tree type=vbox group=content parent=vbox_others
+	@layout vbox_tbl type=vbox group=content parent=vbox_others 
 
-@property package_toolbar type=toolbar no_caption=1 store=no group=packages_show,products_show
-@property package_table type=table no_caption=1 store=no group=packages_show
+	@property content_toolbar type=toolbar no_caption=1 store=no 
 
-@property products_table type=table no_caption=1 store=no group=products_show
+	@property content_tree type=treeview no_caption=1 store=no parent=vbox_tree
+	@caption Puu
 
-@property packages_search type=callback callback=do_packages_search_form no_caption=1 store=no group=packages_show,products_show
-@property packages_search_results type=table no_caption=1 store=no group=packages_show,products_show
+	@property content_list type=table store=no no_caption=1 parent=vbox_tbl
+	@caption Pakkumised
+
+-------- Kalendrid ----
+
+	@property calendar_selector type=calendar_selector store=no group=calendars
+	@caption Kalendrid
+
+-------- Projektid -----
+
+	@property project_selector type=project_selector store=no group=projects
+	@caption Projektid
 
 
 
 -------PAKKUMISE AJALUGU---------
 @default group=history
-@property offer_history type=table no_caption=1 store=no group=history
-------- Tooted --------
 
+	@property offer_history type=table no_caption=1 store=no group=history
+
+
+@default group=offer
+
+	@property offer type=text no_caption=1
+
+@groupinfo content caption="Sisu" submit=no
 @groupinfo recurrence caption=Kordumine
 @groupinfo calendars caption=Kalendrid
 @groupinfo projects caption=Projektid
-@groupinfo packages_show caption=Paketid submit=no
 @groupinfo products_show caption=Tooted submit=no
 @groupinfo history caption=Ajalugu submit=no
-
-
-@tableinfo planner index=id master_table=objects master_index=brother_of
-@tableinfo aw_crm_offer index=aw_oid master_table=objects master_index=oid
+@groupinfo offer caption="Pakkumine" submit=no
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
@@ -92,8 +108,8 @@
 @reltype PRODUCT value=5 clid=CL_SHOP_PRODUCT
 @caption Toode
 
-@reltype PACKAGE value=6 clid=CL_SHOP_PACKET
-@caption Pakett
+@reltype OFFER_MGR value=7 clid=CL_CRM_OFFER_MGR
+@caption Pakkumiste haldus
 */
 
 /*
@@ -121,7 +137,8 @@ class crm_offer extends class_base
 	function crm_offer()
 	{
 		$this->init(array(
-			"clid" => CL_CRM_OFFER
+			"clid" => CL_CRM_OFFER,
+			"tpldir" => "crm/crm_offer"
 		));
 		$this->u_i = get_instance(CL_USER);
 		$this->statuses =  array(
@@ -131,6 +148,13 @@ class crm_offer extends class_base
 			t("Tagasilükatud"), 
 			t("Positiivelt lõppenud")
 		);		
+
+		$this->addable = array(
+			CL_CRM_OFFER_CHAPTER, 
+			CL_CRM_OFFER_GOAL, 
+			CL_CRM_OFFER_PAYMENT_TERMS,
+			CL_CRM_OFFER_PRODUCTS_LIST
+		);
 	}
 
 	function get_property($arr)
@@ -233,26 +257,41 @@ class crm_offer extends class_base
 			
 			case "package_toolbar":
 				$this->do_package_toolbar($arr);
-			break;
+				break;
 			
 			case "packages_search_results":
 				if($arr["request"]["search_package_name"])
 				{
 					$this->do_packages_search_results($arr);
 				}
-			break;
+				break;
 			
 			case "offer_status":
 				$prop["options"] = $this->statuses;
-			break;
+				break;
 			
 			case "prev_status":
 				if(is_object($arr["obj_inst"]))
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("offer_status");
 				}
-			break;
-			
+				break;
+
+			case "content_toolbar":
+				$this->_content_toolbar($arr);
+				break;
+
+			case "content_tree":
+				$this->_content_tree($arr);
+				break;
+
+			case "content_list":
+				$this->_content_list($arr);
+				break;
+
+			case "offer";
+				$prop["value"] = $this->generate_offer($arr["obj_inst"]);
+				break;
 		};
 		return $retval;
 	}
@@ -709,6 +748,176 @@ class crm_offer extends class_base
 			}
 		}
 		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
+	}
+
+	function _content_toolbar($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$t->add_menu_button(array(
+			"name" => "new",
+			"tooltip" => t("Lisa")
+		));
+
+		$clss = aw_ini_get("classes");
+
+		foreach($this->addable as $clid)
+		{
+			$t->add_menu_item(array(
+				"parent" => "new",
+				"text" => sprintf(t("Lisa %s"), $clss[$clid]["name"]),
+				"link" => html::get_new_url($clid, $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), array("return_url" => get_ru()))
+			));
+		}
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_parts",
+			"tooltip" => t("Kustuta valitud osad"),
+			"confirm" => t("Oled kindel et soovid valitud osad kustutada?")
+		));
+	}
+
+	function _content_tree($arr)
+	{
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML, 
+				"persist_state" => true,
+				"tree_id" => "offer_t",
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => $this->addable,
+				"parent" => $arr["obj_inst"]->id(),
+			)),
+			"var" => "tf"
+		));
+	}
+
+	function _init_content_list_t(&$t)
+	{	
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "class_id",
+			"caption" => t("T&uuml;&uuml;p"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center"
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _content_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_content_list_t($t);
+
+		$ol = new object_list(array(
+			"parent" => $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
+		));
+		$t->data_from_ol($ol);
+	}
+
+	/**
+
+		@attrib name=del_parts
+
+	**/
+	function del_parts($arr)
+	{
+		if (count(safe_array($arr["sel"])))
+		{
+			$ol = new object_list(array(
+				"oid" => $arr["sel"]
+			));
+			$ol->delete();
+		}
+		return $arr["post_ru"];
+	}
+
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
+	function _get_wh($o)
+	{
+		$mgr = $o->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
+		if ($mgr)
+		{
+			$wh = $mgr->get_first_obj_by_reltype("RELTYPE_WAREHOUSE");
+			if ($wh)
+			{
+				return $wh;
+			}
+		}
+	}
+
+	function generate_offer($o)
+	{
+		$this->read_template("offer_html.tpl");
+
+		$html = "";
+
+		// get offer subobjects
+		$ot = new object_tree(array(
+			"parent" => $o->id(),
+			"class_id" => $this->addable
+		));
+
+		// go over tree and generate html
+		$list = $ot->to_list();
+		foreach($list->arr() as $item)
+		{
+			$item_i = $item->instance();
+			$html .= $item_i->generate_html($o, $item);
+		}
+		
+		$orderer = "";
+		if (is_oid($o->prop("orderer")) && $this->can("view", $o->prop("orderer")))
+		{
+			$orderer_o = obj($o->prop("orderer"));
+			$orderer = $orderer_o->name();
+		}
+		$implementor = "";
+		$imp_o = $o->get_first_obj_by_reltype("RELTYPE_PREFORMER");
+		if (is_object($imp_o))
+		{
+			$implementor = $imp_o->name();
+		}
+
+		$lg = "";
+		if (($lg = $imp_o->prop("logo")))
+		{
+			$lg = html::img(array(
+				"url" => $lg
+			));
+		}
+		$this->vars(array(
+			"content" => $html,
+			"name" => $o->name(),
+			"orderer" => $orderer,
+			"implementor" => $implementor,
+			"date" => locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
+			"logo" => $lg
+		));
+
+		return $this->parse();
 	}
 }
 ?>

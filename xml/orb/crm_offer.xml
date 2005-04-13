@@ -22,5 +22,12 @@
 			</function>
 		</action>
 
+		<action name="del_parts">
+			<function name="del_parts">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

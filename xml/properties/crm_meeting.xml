@@ -247,7 +247,8 @@
                   <num_5>interval_weekly</num_5>
                   <num_6>interval_montly</num_6>
                   <num_7>interval_yearly</num_7>
-                  <num_8></num_8>
+                  <num_8>interval_hourly</num_8>
+                  <num_9>interval_minutely</num_9>
             </props>
             <store>no</store>
             <caption>Kordused</caption>
