@@ -1,10 +1,10 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="class_visualizer" folder="applications/class_designer" extends="aw_template">
+	<class name="class_visualizer" folder="applications/class_designer" extends="class_base">
 		<action name="view" default="1">
 			<function name="view">
 				<arguments>
-					<required name="id" type="int" />
+					<optional name="id" type="int" />
 					<optional name="group" />
 				</arguments>
 			</function>
