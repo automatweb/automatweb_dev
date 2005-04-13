@@ -1,14 +1,57 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>is_registered</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Klass on registreeritud</caption>
+      </property>
+      <property>
             <name>visualize</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>text</type>
             <store>no</store>
+            <field>visualize</field>
             <caption></caption>
+      </property>
+      <property>
+            <name>reg_class_id</name>
+            <table>aw_class</table>
+            <group>settings</group>
+            <type>text</type>
+            <field>class_id</field>
+            <caption>CLID</caption>
+      </property>
+      <property>
+            <name>object_name</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objekti nime omadus</caption>
+      </property>
+      <property>
+            <name>can_add</name>
+            <table>aw_class</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>can_add</field>
+            <caption>Saab lisada</caption>
+      </property>
+      <property>
+            <name>class_folder</name>
+            <table>aw_class</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>class_folder</field>
+            <caption>classfolder</caption>
       </property>
       <property>
             <name>relationmgr</name>
@@ -166,6 +209,13 @@
                   <submit>no</submit>
             </classdef>
       </groupinfo>
+      <tableinfo>
+            <aw_class>
+                  <index>aw_id</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_class>
+      </tableinfo>
       <reltypes>
             <RELATION>
                   <value>1</value>
