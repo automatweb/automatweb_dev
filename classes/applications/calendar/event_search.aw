@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.55 2005/04/11 08:05:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.56 2005/04/13 10:13:00 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -846,38 +846,28 @@ class event_search extends class_base
 					}
 				}
 			}
-			$search["CL_CRM_MEETING.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 3600*24));
-			$search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 3600*24));
-			//$search["CL_CRM_MEETING.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-			//$search["CL_CALENDAR_EVENT.end"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm);
-			$search["CL_CRM_MEETING.end"] = new object_list_filter(array(
+			$search[] = new object_list_filter(array(
 				"logic" => "OR",
 				"conditions" => array(
 					new object_list_filter(array(
 						"logic" => "AND",
-						"conditions" => array("CL_CRM_MEETING.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
+						"conditions" => array(
+							"end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm),
+							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 86400)),
+						),
 					)),
 					new object_list_filter(array(
 						"logic" => "AND",
-						"conditions" => array("CL_CRM_MEETING.end" => -1),
-					)),
-				),
-			));
-			$search["CL_CALENDAR_EVENT.end"] = new object_list_filter(array(
-				"logic" => "OR",
-				"conditions" => array(
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array("CL_CALENDAR_EVENT.end" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start_tm)),
-					)),
-					new object_list_filter(array(
-						"logic" => "AND",
-						"conditions" => array("CL_CALENDAR_EVENT.end" => -1),
+						"conditions" => array(
+							"end" => -1,
+							"start" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86400)),
+						),
 					)),
 				),
 			));
 			$search["lang_id"] = array();
 			$search["site_id"] = array();
+
 			$ft_fields = $ob->prop("ftsearch_fields");
 			$ft_fields2 = $ob->prop("ftsearch_fields2");
 			if ($arr["fulltext"])
@@ -944,8 +934,7 @@ class event_search extends class_base
 						$ol = new object_list(array(
 							"oid" => $ids,
 							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
-							"CL_CRM_MEETING.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
-							"CL_CALENDAR_EVENT.start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
+							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
 							"site_id" => array(),
@@ -986,7 +975,6 @@ class event_search extends class_base
 					{
 						continue;
 					}
-
 					if($propdef["clickable"])
 					{
 						$clickable = true;
