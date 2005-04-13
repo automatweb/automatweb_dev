@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.40 2005/04/07 12:48:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.41 2005/04/13 11:45:26 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -850,10 +850,15 @@ class aw_site extends class_base
 			//echo "exec $q <br />";
 			$dbi->db_query($q);
 
+
+			$q = "ALTER TABLE static_content ADD FULLTEXT content(content)";
+			$dbi->db_query($q);
+
 			$ini_opts['db.user'] = $site['db_user'];
 			$ini_opts['db.host'] = aw_ini_get("install.mysql_host");
 			$ini_opts['db.base'] = $site['db_name'];
 			$ini_opts['db.pass'] = $site['db_pwd'];
+			$ini_opts["site_search_content.has_fulltext_index"] = 1;
 			$log->add_line(array(
 				"uid" => aw_ini_get('install.mysql_user'),
 				"msg" => t("L&otilde;i saidi andmebaasi"),
