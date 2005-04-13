@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.23 2005/04/11 10:25:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.24 2005/04/13 12:52:50 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -588,6 +588,10 @@ class pot_scanner extends core
 
 			foreach($files as $file => $ts)
 			{
+				if (basename($file) == "crm_offer.po")
+				{
+					continue;
+				}
 				$data = $this->parse_po_file($file);
 
 				$first = true;
@@ -609,9 +613,13 @@ class pot_scanner extends core
 							$cnt++;
 						}
 					}
+					if (!$this->_is_prop_help_or_comment($line["msgid"]))
+					{
+						$all_cnt++;
+					}
 				}
 			}
-			die(sprintf(t("number of untranslated strings: %s"), $cnt));
+			die(sprintf(t("\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n "), $cnt, $all_cnt));
 		}
 	}
 
@@ -629,6 +637,11 @@ class pot_scanner extends core
 			return true;
 		}
 		if (preg_match("/Omaduse .* \(.*\) help/imsU", $msgid))
+		{
+			return true;
+		}
+
+		if (preg_match("/User-defined/imsU", $msgid))
 		{
 			return true;
 		}
