@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.41 2005/04/13 11:45:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.42 2005/04/13 11:51:30 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -752,6 +752,10 @@ class aw_site extends class_base
 		$ini_opts["document.use_new_parser"] = 1;
 		$ini_opts["promo.version"] = 2;
 
+		echo "create separate cache data table<br>\n";
+		flush();
+		$dbi->db_query("INSERT INTO objects_cache_data SELECT oid,cachedirty,cachedata FROM objects");
+		$ini_opts["cache.table_is_sep"] = 1;
 
 		$GLOBALS["cfg"]["__default"]["site_id"] = $osid;
 
