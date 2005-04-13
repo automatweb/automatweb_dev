@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.58 2005/04/08 15:52:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.59 2005/04/13 14:48:44 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -502,15 +502,8 @@ class planner extends class_base
 				{
 					$user_ids[] = $owner->prop("to");
 				};
-				// XXX: get_events_from_projects should use current date range as well
-				/*
-				$event_ids = $event_ids + $prj->get_events_from_projects(array(
-					"user_ids" => $user_ids,
-					"project_id" => aw_global_get("project"),
-					"type" => "my_projects",
-				));
-				*/
-				$tmp = $prj->get_events_from_projects(array(
+
+				$tmp = $prj->get_event_folders(array(
 					"user_ids" => $user_ids,
 					"project_id" => aw_global_get("project"),
 					"type" => "my_projects",
@@ -578,12 +571,25 @@ class planner extends class_base
 
 		// that is the basic query
 		// I need to add different things to it
-		$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
+		$old_query = 0;
+		if ($old_query)
+		{
+			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
+				FROM planner
+				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
+				WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
+				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND
+				".$this->db_fn("objects.status")." != 0";
+		}
+		else
+		{
+			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 			FROM planner
 			LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
-			WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
+			WHERE ".$this->db_fn("planner.end")." >= '${_start}' AND
 			(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND
 			".$this->db_fn("objects.status")." != 0";
+		};
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
 		// I need to connect that god damn recurrence table into this fucking place.
@@ -1534,6 +1540,7 @@ class planner extends class_base
 				$full_weeks = true;
 			}
 		}
+
 		$o = $arr["obj_inst"];
 
 
