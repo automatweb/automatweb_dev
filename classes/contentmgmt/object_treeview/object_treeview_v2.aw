@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.71 2005/04/06 12:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.72 2005/04/13 09:13:52 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -25,6 +25,10 @@
 
 @property inherit_view_props_from type=select 
 @caption P&auml;ri n&auml;itamise omadused objektist
+
+@property add_table_anchor_to_url type=checkbox ch_value=1
+@caption Lisa #table URL-i l&otilde;ppu
+@comment Lisab #table kataloogide URL-i l&otilde;ppu
 
 @property show_folders type=checkbox ch_value=1
 @caption N&auml;ita katalooge
@@ -737,6 +741,13 @@ class object_treeview_v2 extends class_base
 		if(!empty($filter_by_char_field))
 		{
 			$alphabet_parsed = "";
+			
+			// if table anchor should be added at the end of the url
+			$anchor = "";
+			if ($ih_ob->prop("add_table_anchor_to_url"))
+			{
+				$anchor = "#table";
+			}
 			foreach($this->alphabet as $character)
 			{
 /*
@@ -754,7 +765,7 @@ class object_treeview_v2 extends class_base
 */
 				$this->vars(array(
 					"char" => ($ih_ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
-					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character,
+					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character.$anchor,
 				));
 				if ($character == htmlentities(urldecode($_GET['char'])))
 				{
@@ -769,7 +780,7 @@ class object_treeview_v2 extends class_base
 			// lets put a link at the end of the alphabet to make all fields to show
 			$this->vars(array(
 				"char" => t("K&otilde;ik"),
-				"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all",
+				"char_url" => aw_ini_get("baseurl")."/".$oid."?char=all".$anchor,
 			));
 			// and of course we need to make it selected if is selected
 			if ($_GET['char'] == "all")
@@ -1172,6 +1183,13 @@ class object_treeview_v2 extends class_base
 		{
 			$tree_type = TREE_DHTML;
 		}
+		
+		// if #table anchor should be added to url
+		$anchor = "";
+		if ($ob->prop("add_table_anchor_to_url"))
+		{
+			$anchor = "#table";
+		}
 		switch ($tree_type)
 		{
 			case "TREE_TABLE":
@@ -1202,7 +1220,7 @@ class object_treeview_v2 extends class_base
 					{
 						$row["col_".$j] = html::href(array(
 							"caption" => $tmp_fld[$j][$i]['name'],
-							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id']."#table",
+							"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$tmp_fld[$j][$i]['id'].$anchor,
 						));
 					}	
 					$table->define_data($row);
@@ -1229,7 +1247,7 @@ class object_treeview_v2 extends class_base
 					$tv->add_item($fld["parent"], array(
 						"id" => $fld["id"],
 						"name" => $fld["name"],
-						"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id']."#table",
+						"url" => aw_ini_get("baseurl")."/".$oid."?tv_sel=".$fld['id'].$anchor,
 						"icon" => $fld["icon"],
 						"comment" => $fld["comment"],
 						"data" => array(
@@ -1749,7 +1767,6 @@ class object_treeview_v2 extends class_base
 			}
 			$comp_a = $a[$isd["element"]];
 			$comp_b = $b[$isd["element"]];
-
 			if (1 == $isd["is_date"])
 			{
 				list($d, $m,$y) = explode(".", $comp_a);
