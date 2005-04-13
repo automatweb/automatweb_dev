@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_graph_type
 msgid "Omaduse Graafiku t&uuml;&uuml;p (graph_type) caption"
-msgstr ""
+msgstr "Graph type"
 
 #: classes/graph/graph_ng.aw:prop_graph_type_comment
 msgid "Omaduse Graafiku t&uuml;&uuml;p (graph_type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_data_y
 msgid "Omaduse Y telje v&auml;&auml;rtused (data_y) caption"
-msgstr ""
+msgstr "Y axis values"
 
 #: classes/graph/graph_ng.aw:prop_data_y_comment
 msgid "Omaduse Y telje v&auml;&auml;rtused (data_y) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_data_x
 msgid "Omaduse X telje v&auml;&auml;rtused (data_x) caption"
-msgstr ""
+msgstr "X axis values"
 
 #: classes/graph/graph_ng.aw:prop_data_x_comment
 msgid "Omaduse X telje v&auml;&auml;rtused (data_x) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_data_cvs
 msgid "Omaduse Uploadi CSV fail (data_cvs) caption"
-msgstr ""
+msgstr "Upload CSV file"
 
 #: classes/graph/graph_ng.aw:prop_data_cvs_comment
 msgid "Omaduse Uploadi CSV fail (data_cvs) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_data_cvs_sep
 msgid "Omaduse CSV failis eraldaja (data_cvs_sep) caption"
-msgstr ""
+msgstr "CSV file separator"
 
 #: classes/graph/graph_ng.aw:prop_data_cvs_sep_comment
 msgid "Omaduse CSV failis eraldaja (data_cvs_sep) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_typeconf
 msgid "Omaduse Konf (typeconf) caption"
-msgstr ""
+msgstr "Conf"
 
 #: classes/graph/graph_ng.aw:prop_typeconf_comment
 msgid "Omaduse Konf (typeconf) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_title
 msgid "Omaduse Pealkiri (title) caption"
-msgstr ""
+msgstr "Title"
 
 #: classes/graph/graph_ng.aw:prop_title_comment
 msgid "Omaduse Pealkiri (title) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_title_color
 msgid "Omaduse Pealkirja v&auml;rv (title_color) caption"
-msgstr ""
+msgstr "Title colour"
 
 #: classes/graph/graph_ng.aw:prop_title_color_comment
 msgid "Omaduse Pealkirja v&auml;rv (title_color) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_bg_color
 msgid "Omaduse Tausta v&auml;rv (bg_color) caption"
-msgstr ""
+msgstr "Background colour"
 
 #: classes/graph/graph_ng.aw:prop_bg_color_comment
 msgid "Omaduse Tausta v&auml;rv (bg_color) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_height
 msgid "Omaduse Laius (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/graph/graph_ng.aw:prop_height_comment
 msgid "Omaduse Laius (height) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_int_height
 msgid "Omaduse Sisemine k&otilde;rgus (int_height) caption"
-msgstr ""
+msgstr "Inner height"
 
 #: classes/graph/graph_ng.aw:prop_int_height_comment
 msgid "Omaduse Sisemine k&otilde;rgus (int_height) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_int_width
 msgid "Omaduse Sisemine laius (int_width) caption"
-msgstr ""
+msgstr "Inner width"
 
 #: classes/graph/graph_ng.aw:prop_int_width_comment
 msgid "Omaduse Sisemine laius (int_width) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:prop_show_values
 msgid "Omaduse N&auml;itan v&auml;&auml;rtusi (show_values) caption"
-msgstr ""
+msgstr "Display values"
 
 #: classes/graph/graph_ng.aw:prop_show_values_comment
 msgid "Omaduse N&auml;itan v&auml;&auml;rtusi (show_values) kommentaar"
@@ -168,13 +168,13 @@ msgstr ""
 
 #: classes/graph/graph_ng.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/graph/graph_ng.aw:group_conf
 msgid "Grupi &Uuml;dine_konfiguratsioon (conf) pealkiri"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/graph/graph_ng.aw:group_specific
 msgid "Grupi T&uuml;&uuml;bi_konfiguratsioon (specific) pealkiri"
-msgstr ""
+msgstr "Type configuration"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_gid
 msgid "Omaduse Grupi ID (gid) caption"
-msgstr ""
+msgstr "Group ID"
 
 #: classes/core/users/group.aw:prop_gid_comment
 msgid "Omaduse Grupi ID (gid) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_priority
 msgid "Omaduse Prioriteet (priority) caption"
-msgstr ""
+msgstr "Priority"
 
 #: classes/core/users/group.aw:prop_priority_comment
 msgid "Omaduse Prioriteet (priority) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_modified
 msgid "Omaduse Muudetud (modified) caption"
-msgstr ""
+msgstr "Modified"
 
 #: classes/core/users/group.aw:prop_modified_comment
 msgid "Omaduse Muudetud (modified) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_mmodifiedby
 msgid "Omaduse Kes muutis (mmodifiedby) caption"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/core/users/group.aw:prop_mmodifiedby_comment
 msgid "Omaduse Kes muutis (mmodifiedby) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_created
 msgid "Omaduse Loodud (created) caption"
-msgstr ""
+msgstr "Created"
 
 #: classes/core/users/group.aw:prop_created_comment
 msgid "Omaduse Loodud (created) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_mcreatedby
 msgid "Omaduse Kes l&otilde;i (mcreatedby) caption"
-msgstr ""
+msgstr "Createdby"
 
 #: classes/core/users/group.aw:prop_mcreatedby_comment
 msgid "Omaduse Kes l&otilde;i (mcreatedby) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_type
 msgid "Omaduse T&uuml;&uuml;p (type) caption"
-msgstr ""
+msgstr "Type"
 
 #: classes/core/users/group.aw:prop_type_comment
 msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_search_form
 msgid "Omaduse Otsinguvorm (search_form) caption"
-msgstr ""
+msgstr "Search form"
 
 #: classes/core/users/group.aw:prop_search_form_comment
 msgid "Omaduse Otsinguvorm (search_form) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_admin_rootmenu2
 msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) caption"
-msgstr ""
+msgstr "Admin root folder"
 
 #: classes/core/users/group.aw:prop_admin_rootmenu2_comment
 msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_grp_frontpage
 msgid "Omaduse Esileht (grp_frontpage) caption"
-msgstr ""
+msgstr "Frontpage"
 
 #: classes/core/users/group.aw:prop_grp_frontpage_comment
 msgid "Omaduse Esileht (grp_frontpage) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_can_admin_interface
 msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) caption"
-msgstr ""
+msgstr "Can access admin interface"
 
 #: classes/core/users/group.aw:prop_can_admin_interface_comment
 msgid "Omaduse Kas saab administreerimiskeskkonda (can_admin_interface) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_require_change_pass
 msgid "Omaduse N&otilde;ua parooli vahetust esimesel logimisel (require_change_pass) caption"
-msgstr ""
+msgstr "Password must be changed on first login"
 
 #: classes/core/users/group.aw:prop_require_change_pass_comment
 msgid "Omaduse N&otilde;ua parooli vahetust esimesel logimisel (require_change_pass) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_default_acl
 msgid "Omaduse Default ACL (default_acl) caption"
-msgstr ""
+msgstr "Default ACL"
 
 #: classes/core/users/group.aw:prop_default_acl_comment
 msgid "Omaduse Default ACL (default_acl) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_import
 msgid "Omaduse Impordi kasutajaid (import) caption"
-msgstr ""
+msgstr "Import users"
 
 #: classes/core/users/group.aw:prop_import_comment
 msgid "Omaduse Impordi kasutajaid (import) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_objects
 msgid "Omaduse Objektid (objects) caption"
-msgstr ""
+msgstr "Objects"
 
 #: classes/core/users/group.aw:prop_objects_comment
 msgid "Omaduse Objektid (objects) kommentaar"
@@ -252,98 +252,106 @@ msgstr ""
 
 #: classes/core/users/group.aw:group_dyn_search
 msgid "Grupi Otsing (dyn_search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/core/users/group.aw:group_import
 msgid "Grupi Import (import) pealkiri"
-msgstr ""
+msgstr "Import"
 
 #: classes/core/users/group.aw:group_objects
 msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
-msgstr ""
+msgstr "Objects and ACLs"
 
 #: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM
 msgid "Seose otsinguvorm (RELTYPE_SEARCHFORM) tekst"
-msgstr ""
+msgstr "Search form"
 
 #: classes/core/users/group.aw:rel_RELTYPE_MEMBER
 msgid "Seose liige (RELTYPE_MEMBER) tekst"
-msgstr ""
+msgstr "Member"
 
 #: classes/core/users/group.aw:rel_RELTYPE_ACL
 msgid "Seose acl (RELTYPE_ACL) tekst"
-msgstr ""
+msgstr "ACL"
 
 #: classes/core/users/group.aw:rel_RELTYPE_ADMIN_ROOT
 msgid "Seose rootmen&uuml;&uuml; (RELTYPE_ADMIN_ROOT) tekst"
-msgstr ""
+msgstr "Root folder"
 
 #: classes/core/users/group.aw:rel_RELTYPE_ADD_TREE
 msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
-msgstr ""
+msgstr "Add tree config"
 
 #: classes/core/users/group.aw:166
 msgid "Tavaline"
-msgstr ""
+msgstr "Regular"
 
 #: classes/core/users/group.aw:167
 msgid "D&uuml;naamiline"
-msgstr ""
+msgstr "Dynamic"
 
 #: classes/core/users/group.aw:176
 msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
 					v&auml;ljad on eraldatud komadega, iga kasutaja on eraldi real <br />
-					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href=\\"http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html\\">siin</a> <br />
+					kuup&auml;evade formaadi t&auml;pne kirjeldus on <a href="http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html">siin</a> <br />
 					n&auml;ide: <br />
 					kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />
 					<br />
 					v&auml;ljad nimi,email,aktiivne_alates, aktiivne kuni v&otilde;ib soovi korral &auml;ra j&auml;tta<br />
 				"
 msgstr ""
+"User import file format is following:<br>"
+"Username,password,name,e-mail,active from, active until<br>"
+"fields are separated by commas, each user is on a separate line<br>"
+"date format description is <a href="http://www.gnu.org/software/tar/manual/html_chapter/tar_7.html">here</a><br>"
+"example:<br>"
+"kix,parool,Kristo Iila, kristo@struktuur.ee, 2003-09-17, 2005-09-17 <br />"
+"<br>"
+"the fields name,e-mail,active from,active until can be omitted<br>"
 
 #: classes/core/users/group.aw:214
 msgid "Impordin kasutajaid ... <br />"
-msgstr ""
+msgstr "Importing users...<br>""
 
 #: classes/core/users/group.aw:372
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/core/users/group.aw:401
 msgid "Objekti Nimi"
-msgstr ""
+msgstr "Object name"
 
 #: classes/core/users/group.aw:410
 msgid "Objekti Asukoht"
-msgstr ""
+msgstr "Object location"
 
 #: classes/core/users/group.aw:419
 msgid "Grupi Nimi"
-msgstr ""
+msgstr "Group name"
 
 #: classes/core/users/group.aw:428
 msgid "&Otilde;igused"
-msgstr ""
+msgstr "ACL"
 
 #: classes/core/users/group.aw:448
 msgid "Muuda objekti %s &otilde;igusi"
-msgstr ""
+msgstr "Change object %s ACL"
 
 #: classes/core/users/group.aw:551
 msgid "Administreerimisliidese juurkaust (%s)"
-msgstr ""
+msgstr "Admin interface root folder"
 
 #: classes/core/users/group.aw:576
 msgid "Esileht (%s)"
-msgstr ""
+msgstr "Frontpage (%s)"
 
 #: classes/core/users/group.aw:597
 msgid " / Muuda"
-msgstr ""
+msgstr " / Change"
 
 #: classes/core/users/group.aw:826
 msgid "Default &otilde;igused seose loomisel"
-msgstr ""
+msgstr "Default ACL on connection create"
 

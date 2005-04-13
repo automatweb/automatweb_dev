@@ -12,21 +12,21 @@ msgstr ""
 
 #: classes/core/pkmgr/packagemgr_server.aw:30
 msgid "Lisa uus"
-msgstr ""
+msgstr "Add new"
 
 #: classes/core/pkmgr/packagemgr_server.aw:37
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/core/pkmgr/packagemgr_server.aw:42
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/pkmgr/packagemgr_server.aw:47
 msgid "Viimane versioon"
-msgstr ""
+msgstr "Last version"
 
 #: classes/core/pkmgr/packagemgr_server.aw:52 classes/core/pkmgr/packagemgr_server.aw:69
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 

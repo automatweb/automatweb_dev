@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_category.aw:prop_img_upload
 msgid "Omaduse Pilt (img_upload) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/crm/crm_category.aw:prop_img_upload_comment
 msgid "Omaduse Pilt (img_upload) kommentaar"
@@ -36,13 +36,13 @@ msgstr ""
 
 #: classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/crm/crm_category.aw:rel_RELTYPE_CATEGORY
 msgid "Seose Alam kategooria (RELTYPE_CATEGORY) tekst"
-msgstr ""
+msgstr "subcategory"
 
 #: classes/crm/crm_category.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
-msgstr ""
+msgstr "customer"
 

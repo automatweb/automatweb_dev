@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/crm/crm_org_search.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/crm/crm_org_search.aw:93
 msgid "Organisatsioon"

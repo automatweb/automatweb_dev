@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_from
 msgid "Omaduse Alates (from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/syslog/dronline_conf.aw:prop_from_comment
 msgid "Omaduse Alates (from) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_to
 msgid "Omaduse Kuni (to) caption"
-msgstr ""
+msgstr "Until"
 
 #: classes/syslog/dronline_conf.aw:prop_to_comment
 msgid "Omaduse Kuni (to) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_user
 msgid "Omaduse kasutaja (user) caption"
-msgstr ""
+msgstr "User"
 
 #: classes/syslog/dronline_conf.aw:prop_user_comment
 msgid "Omaduse kasutaja (user) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_address
 msgid "Omaduse IP Aadress (address) caption"
-msgstr ""
+msgstr "IP Address"
 
 #: classes/syslog/dronline_conf.aw:prop_address_comment
 msgid "Omaduse IP Aadress (address) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_email_uid
 msgid "Omaduse Listi UID (email_uid) caption"
-msgstr ""
+msgstr "List UID"
 
 #: classes/syslog/dronline_conf.aw:prop_email_uid_comment
 msgid "Omaduse Listi UID (email_uid) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_email_email
 msgid "Omaduse Listi email (email_email) caption"
-msgstr ""
+msgstr "List e-mail"
 
 #: classes/syslog/dronline_conf.aw:prop_email_email_comment
 msgid "Omaduse Listi email (email_email) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_textfilter
 msgid "Omaduse Mida tegi  (textfilter) caption"
-msgstr ""
+msgstr "Did what"
 
 #: classes/syslog/dronline_conf.aw:prop_textfilter_comment
 msgid "Omaduse Mida tegi  (textfilter) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_numlines
 msgid "Omaduse Mitu rida (numlines) caption"
-msgstr ""
+msgstr "Number of lines"
 
 #: classes/syslog/dronline_conf.aw:prop_numlines_comment
 msgid "Omaduse Mitu rida (numlines) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_sites
 msgid "Omaduse Saidid (sites) caption"
-msgstr ""
+msgstr "Sites"
 
 #: classes/syslog/dronline_conf.aw:prop_sites_comment
 msgid "Omaduse Saidid (sites) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_languages
 msgid "Omaduse Keeled (languages) caption"
-msgstr ""
+msgstr "Languages"
 
 #: classes/syslog/dronline_conf.aw:prop_languages_comment
 msgid "Omaduse Keeled (languages) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_use_filter
 msgid "Omaduse Kas kasutada Tegevuste filtrit (use_filter) caption"
-msgstr ""
+msgstr "Use action filter"
 
 #: classes/syslog/dronline_conf.aw:prop_use_filter_comment
 msgid "Omaduse Kas kasutada Tegevuste filtrit (use_filter) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_filter_types
 msgid "Omaduse T&uuml;&uuml;bid (filter_types) caption"
-msgstr ""
+msgstr "Types"
 
 #: classes/syslog/dronline_conf.aw:prop_filter_types_comment
 msgid "Omaduse T&uuml;&uuml;bid (filter_types) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_filter_actions
 msgid "Omaduse Tegevused (filter_actions) caption"
-msgstr ""
+msgstr "Actions"
 
 #: classes/syslog/dronline_conf.aw:prop_filter_actions_comment
 msgid "Omaduse Tegevused (filter_actions) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_filter_combo
 msgid "Omaduse Tegevused (filter_combo) caption"
-msgstr ""
+msgstr "Actions"
 
 #: classes/syslog/dronline_conf.aw:prop_filter_combo_comment
 msgid "Omaduse Tegevused (filter_combo) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_ip_save_folder
 msgid "Omaduse Kataloog, kuhu salvestatakse IP aadressid (ip_save_folder) caption"
-msgstr ""
+msgstr "Folder where IP addresses will be saved"
 
 #: classes/syslog/dronline_conf.aw:prop_ip_save_folder_comment
 msgid "Omaduse Kataloog, kuhu salvestatakse IP aadressid (ip_save_folder) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_ip_block_folders
 msgid "Omaduse Blokeeritavate aadresside kataloogid (ip_block_folders) caption"
-msgstr ""
+msgstr "Blocked addresses folder"
 
 #: classes/syslog/dronline_conf.aw:prop_ip_block_folders_comment
 msgid "Omaduse Blokeeritavate aadresside kataloogid (ip_block_folders) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_ip_block_folders_subs
 msgid "Omaduse Kas kehtestada ka alamkaustadele (ip_block_folders_subs) caption"
-msgstr ""
+msgstr "Apply to subfolders"
 
 #: classes/syslog/dronline_conf.aw:prop_ip_block_folders_subs_comment
 msgid "Omaduse Kas kehtestada ka alamkaustadele (ip_block_folders_subs) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_ip_allow_folders
 msgid "Omaduse N&auml;idatavate aadresside kataloogid (ip_allow_folders) caption"
-msgstr ""
+msgstr "Displayed address folders"
 
 #: classes/syslog/dronline_conf.aw:prop_ip_allow_folders_comment
 msgid "Omaduse N&auml;idatavate aadresside kataloogid (ip_allow_folders) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:prop_ip_allow_folders_subs
 msgid "Omaduse Kas n&auml;idata ka alamkataloogid (ip_allow_folders_subs) caption"
-msgstr ""
+msgstr "Display subfolders"
 
 #: classes/syslog/dronline_conf.aw:prop_ip_allow_folders_subs_comment
 msgid "Omaduse Kas n&auml;idata ka alamkataloogid (ip_allow_folders_subs) kommentaar"
@@ -240,17 +240,17 @@ msgstr ""
 
 #: classes/syslog/dronline_conf.aw:group_types
 msgid "Grupi T&uuml;&uuml;bid (types) pealkiri"
-msgstr ""
+msgstr "Types"
 
 #: classes/syslog/dronline_conf.aw:group_actions
 msgid "Grupi Tegevused (actions) pealkiri"
-msgstr ""
+msgstr "Actions"
 
 #: classes/syslog/dronline_conf.aw:group_combo
 msgid "Grupi Kombineeritud (combo) pealkiri"
-msgstr ""
+msgstr "Combined"
 
 #: classes/syslog/dronline_conf.aw:group_ipfilter
 msgid "Grupi IPfilter (ipfilter) pealkiri"
-msgstr ""
+msgstr "IP Filter"
 

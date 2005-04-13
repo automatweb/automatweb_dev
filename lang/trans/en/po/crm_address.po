@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_aadress
 msgid "Omaduse Tänav/Küla (aadress) caption"
-msgstr ""
+msgstr "Street/Village"
 
 #: classes/crm/crm_address.aw:prop_aadress_comment
 msgid "Omaduse Tänav/Küla (aadress) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_postiindeks
 msgid "Omaduse Postinindex (postiindeks) caption"
-msgstr ""
+msgstr "Pstal index"
 
 #: classes/crm/crm_address.aw:prop_postiindeks_comment
 msgid "Omaduse Postinindex (postiindeks) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_linn
 msgid "Omaduse Linn/Vald/Alev (linn) caption"
-msgstr ""
+msgstr "City/State/Village"
 
 #: classes/crm/crm_address.aw:prop_linn_comment
 msgid "Omaduse Linn/Vald/Alev (linn) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_maakond
 msgid "Omaduse Maakond (maakond) caption"
-msgstr ""
+msgstr "County"
 
 #: classes/crm/crm_address.aw:prop_maakond_comment
 msgid "Omaduse Maakond (maakond) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:prop_riik
 msgid "Omaduse Riik (riik) caption"
-msgstr ""
+msgstr "State"
 
 #: classes/crm/crm_address.aw:prop_riik_comment
 msgid "Omaduse Riik (riik) kommentaar"
@@ -72,25 +72,25 @@ msgstr ""
 
 #: classes/crm/crm_address.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_LINN
 msgid "Seose Linn (RELTYPE_LINN) tekst"
-msgstr ""
+msgstr "City"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_RIIK
 msgid "Seose Riik (RELTYPE_RIIK) tekst"
-msgstr ""
+msgstr "State"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_MAAKOND
 msgid "Seose Maakond (RELTYPE_MAAKOND) tekst"
-msgstr ""
+msgstr "County"
 
 #: classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
-msgstr ""
+msgstr "belongs to"
 
 #: classes/crm/crm_address.aw:136
 msgid "tel:"
-msgstr ""
+msgstr "phone:"
 

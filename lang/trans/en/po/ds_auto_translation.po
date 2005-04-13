@@ -12,17 +12,17 @@ msgstr ""
 
 #: classes/core/obj/ds_auto_translation.aw:100
 msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation to object %s!"
-msgstr ""
+msgstr "ds_auto_translation::get_objdata(%s): found more than one translation relation to object %s!"
 
 #: classes/core/obj/ds_auto_translation.aw:221
 msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation from object %s pointing to an object with lang id %s!"
-msgstr ""
+msgstr "ds_auto_translation::get_objdata(%s): found more than one translation relation from object %s pointing to an object with lang id %s!"
 
 #: classes/core/obj/ds_auto_translation.aw:295
 msgid "ds_auto_translation::read_properties(): no original object id for object %s in get_objdata cache!"
-msgstr ""
+msgstr "ds_auto_translation::read_properties(): no original object id for object %s in get_objdata cache!"
 
 #: classes/core/obj/ds_auto_translation.aw:327
 msgid "ds_auto_translation::read_properties(): no info about object %s in get_objdata cache!"
-msgstr ""
+msgstr "ds_auto_translation::read_properties(): no info about object %s in get_objdata cache!"
 

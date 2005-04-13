@@ -12,53 +12,53 @@ msgstr ""
 
 #: classes/core/obj/ds_base.aw:29
 msgid "called abstract function ds_base::get_oid_by_alias"
-msgstr ""
+msgstr "called abstract function ds_base::get_oid_by_alias"
 
 #: classes/core/obj/ds_base.aw:40
 msgid "called abstract function ds_base::get_objdata"
-msgstr ""
+msgstr "called abstract function ds_base::get_objdata"
 
 #: classes/core/obj/ds_base.aw:54
 msgid "called abstract function ds_base::read_properties"
-msgstr ""
+msgstr "called abstract function ds_base::read_properties"
 
 #: classes/core/obj/ds_base.aw:70
 msgid "called abstract function ds_base::create_new_object"
-msgstr ""
+msgstr "called abstract function ds_base::create_new_object"
 
 #: classes/core/obj/ds_base.aw:87
 msgid "called abstract function ds_base::save_properties"
-msgstr ""
+msgstr "called abstract function ds_base::save_properties"
 
 #: classes/core/obj/ds_base.aw:97
 msgid "called abstract function ds_base::read_connection"
-msgstr ""
+msgstr "called abstract function ds_base::read_connection"
 
 #: classes/core/obj/ds_base.aw:107
 msgid "called abstract function ds_base::save_connection"
-msgstr ""
+msgstr "called abstract function ds_base::save_connection"
 
 #: classes/core/obj/ds_base.aw:117
 msgid "called abstract function ds_base::delete_connection"
-msgstr ""
+msgstr "called abstract function ds_base::delete_connection"
 
 #: classes/core/obj/ds_base.aw:128
 msgid "called abstract function ds_base::find_connections"
-msgstr ""
+msgstr "called abstract function ds_base::find_connections"
 
 #: classes/core/obj/ds_base.aw:141
 msgid "called abstract function ds_base::search"
-msgstr ""
+msgstr "called abstract function ds_base::search"
 
 #: classes/core/obj/ds_base.aw:151
 msgid "called abstract function ds_base::delete_object"
-msgstr ""
+msgstr "called abstract function ds_base::delete_object"
 
 #: classes/core/obj/ds_base.aw:161
 msgid "called abstract function ds_base::create_brother"
-msgstr ""
+msgstr "called abstract function ds_base::create_brother"
 
 #: classes/core/obj/ds_base.aw:171
 msgid "called abstract function ds_base::fetch_list"
-msgstr ""
+msgstr "called abstract function ds_base::fetch_list"
 

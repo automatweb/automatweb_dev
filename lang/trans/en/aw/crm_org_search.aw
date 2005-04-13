@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Grupi  () pealkiri"] = " ";
 $GLOBALS["TRANS"]["Organisatsioon"] = "Organisation";
 $GLOBALS["TRANS"]["Õiguslik vorm"] = "Legal form";
 $GLOBALS["TRANS"]["Aadress"] = "Address";

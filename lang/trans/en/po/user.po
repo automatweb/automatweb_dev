@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_uid
 msgid "Omaduse Kasutajanimi (uid) caption"
-msgstr ""
+msgstr "Username"
 
 # classes/core/users/user.aw:prop_uid_comment
 msgid "Omaduse Kasutajanimi (uid) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_uid_entry
 msgid "Omaduse Kasutajanimi (uid_entry) caption"
-msgstr ""
+msgstr "Username"
 
 # classes/core/users/user.aw:prop_uid_entry_comment
 msgid "Omaduse Kasutajanimi (uid_entry) kommentaar"
@@ -263,7 +263,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_objects_own
 msgid "Omaduse Objektid (objects_own) caption"
-msgstr ""
+msgstr "Objects"
 
 # classes/core/users/user.aw:prop_objects_own_comment
 msgid "Omaduse Objektid (objects_own) kommentaar"
@@ -275,7 +275,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_objects_other
 msgid "Omaduse Objektid (objects_other) caption"
-msgstr ""
+msgstr "Objects"
 
 # classes/core/users/user.aw:prop_objects_other_comment
 msgid "Omaduse Objektid (objects_other) kommentaar"
@@ -335,7 +335,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_jdata
 msgid "Omaduse Liitumise andmed (jdata) caption"
-msgstr ""
+msgstr "Join data"
 
 # classes/core/users/user.aw:prop_jdata_comment
 msgid "Omaduse Liitumise andmed (jdata) kommentaar"
@@ -359,7 +359,7 @@ msgstr ""
 
 # classes/core/users/user.aw:prop_aclwizard_q
 msgid "Omaduse Millised on kasutaja (aclwizard_q) caption"
-msgstr ""
+msgstr "What are user"
 
 # classes/core/users/user.aw:prop_aclwizard_q_comment
 msgid "Omaduse Millised on kasutaja (aclwizard_q) kommentaar"
@@ -479,11 +479,11 @@ msgstr "Objects and rights"
 
 # classes/core/users/user.aw:group_objects_own
 msgid "Grupi Enda tehtud (objects_own) pealkiri"
-msgstr ""
+msgstr "Created by me"
 
 # classes/core/users/user.aw:group_objects_other
 msgid "Grupi Teiste tehtud (objects_other) pealkiri"
-msgstr ""
+msgstr "Created by others"
 
 # classes/core/users/user.aw:group_groups
 msgid "Grupi Grupid (groups) pealkiri"
@@ -491,7 +491,7 @@ msgstr "Groups"
 
 # classes/core/users/user.aw:group_jdata
 msgid "Grupi Liitumise info (jdata) pealkiri"
-msgstr ""
+msgstr "Join data"
 
 # classes/core/users/user.aw:group_stat
 msgid "Grupi Statistika (stat) pealkiri"
@@ -499,27 +499,27 @@ msgstr "Statistics"
 
 # classes/core/users/user.aw:group_aclwizard
 msgid "Grupi ACL Maag (aclwizard) pealkiri"
-msgstr ""
+msgstr "ACL Wizard"
 
 # classes/core/users/user.aw:group_userdef
 msgid "Grupi User-defined (userdef) pealkiri"
-msgstr ""
+msgstr "User defined"
 
 # classes/core/users/user.aw:rel_RELTYPE_GRP
 msgid "Seose Grupp (RELTYPE_GRP) tekst"
-msgstr ""
+msgstr "Group"
 
 # classes/core/users/user.aw:rel_RELTYPE_PERSON
 msgid "Seose isik (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "person"
 
 # classes/core/users/user.aw:rel_RELTYPE_EMAIL
 msgid "Seose Email (RELTYPE_EMAIL) tekst"
-msgstr ""
+msgstr "E-mail"
 
 # classes/core/users/user.aw:rel_RELTYPE_FG_PROFILE
 msgid "Seose FG profiil (RELTYPE_FG_PROFILE) tekst"
-msgstr ""
+msgstr "FG profile"
 
 #: classes/core/users/user.aw:299
 msgid "Genereeri parool"
@@ -552,7 +552,7 @@ msgstr "Dynamic"
 
 #: classes/core/users/user.aw:475
 msgid "Tavaline"
-msgstr ""
+msgstr "Regular"
 
 #: classes/core/users/user.aw:630
 msgid "Nimi"
@@ -568,27 +568,27 @@ msgstr "Priority"
 
 #: classes/core/users/user.aw:650
 msgid "Mitu liiget"
-msgstr ""
+msgstr "Number of members"
 
 #: classes/core/users/user.aw:657
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/core/users/user.aw:665
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/core/users/user.aw:673 classes/core/users/user.aw:1164
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/core/users/user.aw:875
 msgid "Muuda"
-msgstr ""
+msgstr "Modify"
 
 #: classes/core/users/user.aw:909
 msgid "Muuda objekti %s  &otilde;igusi"
-msgstr ""
+msgstr "Modify object %s acl"
 
 #: classes/core/users/user.aw:1141
 msgid "Nr"
@@ -636,17 +636,17 @@ msgstr "Object does not exist and never has, permission denied!"
 
 #: classes/core/users/user.aw:1631
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
-msgstr ""
+msgstr "Object's parent object (%s) is deleted. No access!"
 
 #: classes/core/users/user.aw:1641
 msgid ""
 "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
 "kehtib default.<br>N&auml;gemis&otilde;inus ainult."
-msgstr ""
+msgstr "Object has no acl set, default applies. View access only."
 
 #: classes/core/users/user.aw:1677
 msgid ""
 "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
 "rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "
 "m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
-msgstr ""
+msgstr "Info on object's acl:<br><br>Access is set by access-relation between object %s and group %s<br><br>ACL set for that relation are: %s"

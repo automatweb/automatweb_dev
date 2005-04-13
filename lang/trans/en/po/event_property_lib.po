@@ -12,29 +12,29 @@ msgstr ""
 
 #: classes/calendar/event_property_lib.aw:218
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/calendar/event_property_lib.aw:225
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/calendar/event_property_lib.aw:231
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/calendar/event_property_lib.aw:236
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Profession"
 
 #: classes/calendar/event_property_lib.aw:290
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/calendar/event_property_lib.aw:317
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
 #: classes/calendar/event_property_lib.aw:373
 msgid "osalejad.xls"
-msgstr ""
+msgstr "participants.xls"
 

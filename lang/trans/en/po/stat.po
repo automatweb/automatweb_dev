@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/syslog/stat.aw:355
 msgid "Top %s logijat"
-msgstr ""
+msgstr "Top %s loggers"
 

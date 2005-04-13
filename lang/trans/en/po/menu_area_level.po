@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_first_item_style
 msgid "Omaduse Esimese men&uuml;&uuml; stiil (first_item_style) caption"
-msgstr ""
+msgstr "First item style"
 
 #: classes/layout/menu_area_level.aw:prop_first_item_style_comment
 msgid "Omaduse Esimese men&uuml;&uuml; stiil (first_item_style) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_item_style
 msgid "Omaduse Men&uuml;&uuml; stiil (item_style) caption"
-msgstr ""
+msgstr "Item style"
 
 #: classes/layout/menu_area_level.aw:prop_item_style_comment
 msgid "Omaduse Men&uuml;&uuml; stiil (item_style) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_last_item_style
 msgid "Omaduse Viimase men&uuml;&uuml; stiil (last_item_style) caption"
-msgstr ""
+msgstr "Last item style"
 
 #: classes/layout/menu_area_level.aw:prop_last_item_style_comment
 msgid "Omaduse Viimase men&uuml;&uuml; stiil (last_item_style) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_sel_item_style
 msgid "Omaduse Valitud men&uuml;&uuml; stiil (sel_item_style) caption"
-msgstr ""
+msgstr "Selected item style"
 
 #: classes/layout/menu_area_level.aw:prop_sel_item_style_comment
 msgid "Omaduse Valitud men&uuml;&uuml; stiil (sel_item_style) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_first_sel_item_style
 msgid "Omaduse Valitud esimese men&uuml;&uuml; stiil (first_sel_item_style) caption"
-msgstr ""
+msgstr "Selected first item style"
 
 #: classes/layout/menu_area_level.aw:prop_first_sel_item_style_comment
 msgid "Omaduse Valitud esimese men&uuml;&uuml; stiil (first_sel_item_style) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_last_sel_item_style
 msgid "Omaduse Valitud viimase men&uuml;&uuml; stiil (last_sel_item_style) caption"
-msgstr ""
+msgstr "Seleted last item style"
 
 #: classes/layout/menu_area_level.aw:prop_last_sel_item_style_comment
 msgid "Omaduse Valitud viimase men&uuml;&uuml; stiil (last_sel_item_style) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_separator
 msgid "Omaduse Erldaja (separator) caption"
-msgstr ""
+msgstr "Separator"
 
 #: classes/layout/menu_area_level.aw:prop_separator_comment
 msgid "Omaduse Erldaja (separator) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_has_sub_menus
 msgid "Omaduse Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel (has_sub_menus) caption"
-msgstr ""
+msgstr "Next level menus are between this menu area's items"
 
 #: classes/layout/menu_area_level.aw:prop_has_sub_menus_comment
 msgid "Omaduse Kas j&auml;rgmise taseme men&uuml&uuml;d on selle taseme men&uuml;&uuml;de vahel (has_sub_menus) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_has_sub_menus_sep
 msgid "Omaduse J&auml;rgmise taseme men&uuml;&uuml;de eraldaja (has_sub_menus_sep) caption"
-msgstr ""
+msgstr "Next level menu separator"
 
 #: classes/layout/menu_area_level.aw:prop_has_sub_menus_sep_comment
 msgid "Omaduse J&auml;rgmise taseme men&uuml;&uuml;de eraldaja (has_sub_menus_sep) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_pre_image
 msgid "Omaduse Men&uuml;&uuml; pilt (pre_image) caption"
-msgstr ""
+msgstr "Item image"
 
 #: classes/layout/menu_area_level.aw:prop_pre_image_comment
 msgid "Omaduse Men&uuml;&uuml; pilt (pre_image) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_show_comment
 msgid "Omaduse N&auml;ita kommentaari (show_comment) caption"
-msgstr ""
+msgstr "Show comment"
 
 #: classes/layout/menu_area_level.aw:prop_show_comment_comment
 msgid "Omaduse N&auml;ita kommentaari (show_comment) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:prop_comment_sep
 msgid "Omaduse Kommentaari eraldaja (comment_sep) caption"
-msgstr ""
+msgstr "Comment separator"
 
 #: classes/layout/menu_area_level.aw:prop_comment_sep_comment
 msgid "Omaduse Kommentaari eraldaja (comment_sep) kommentaar"
@@ -156,9 +156,9 @@ msgstr ""
 
 #: classes/layout/menu_area_level.aw:rel_RELTYPE_STYLE
 msgid "Seose stiil (RELTYPE_STYLE) tekst"
-msgstr ""
+msgstr "style"
 
 #: classes/layout/menu_area_level.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 

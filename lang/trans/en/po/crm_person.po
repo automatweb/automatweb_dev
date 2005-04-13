@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_org_actions
 msgid "Omaduse org_actions (org_actions) caption"
-msgstr ""
+msgstr "org_actions"
 
 #: classes/crm/crm_person.aw:prop_org_actions_comment
 msgid "Omaduse org_actions (org_actions) kommentaar"
@@ -636,7 +636,7 @@ msgstr "Section"
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_HANDLER
 msgid "Seose  (RELTYPE_HANDLER) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_EDUCATION
 msgid "Seose Haridus (RELTYPE_EDUCATION) tekst"

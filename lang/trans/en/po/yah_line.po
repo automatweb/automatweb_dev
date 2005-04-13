@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/layout/yah_line.aw:prop_separator
 msgid "Omaduse Eraldaja (separator) caption"
-msgstr ""
+msgstr "Separator"
 
 #: classes/layout/yah_line.aw:prop_separator_comment
 msgid "Omaduse Eraldaja (separator) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/layout/yah_line.aw:prop_show_nosubs
 msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) caption"
-msgstr ""
+msgstr "Display menus with no documents"
 
 #: classes/layout/yah_line.aw:prop_show_nosubs_comment
 msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) kommentaar"

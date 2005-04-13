@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/layout/menu_area.aw:prop_root_folder
 msgid "Omaduse Root kataloog (root_folder) caption"
-msgstr ""
+msgstr "root folder"
 
 #: classes/layout/menu_area.aw:prop_root_folder_comment
 msgid "Omaduse Root kataloog (root_folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/layout/menu_area.aw:prop_num_levels
 msgid "Omaduse Mitu taset (num_levels) caption"
-msgstr ""
+msgstr "Number of levels"
 
 #: classes/layout/menu_area.aw:prop_num_levels_comment
 msgid "Omaduse Mitu taset (num_levels) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/layout/menu_area.aw:prop_mod_levels
 msgid "Omaduse Tasemed (mod_levels) caption"
-msgstr ""
+msgstr "Levels"
 
 #: classes/layout/menu_area.aw:prop_mod_levels_comment
 msgid "Omaduse Tasemed (mod_levels) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/layout/menu_area.aw:prop_show_name
 msgid "Omaduse Kas n&auml;idata nime (show_name) caption"
-msgstr ""
+msgstr "Display name"
 
 #: classes/layout/menu_area.aw:prop_show_name_comment
 msgid "Omaduse Kas n&auml;idata nime (show_name) kommentaar"
@@ -60,5 +60,5 @@ msgstr ""
 
 #: classes/layout/menu_area.aw:rel_RELTYPE_ROOT_FOLDER
 msgid "Seose root kataloog (RELTYPE_ROOT_FOLDER) tekst"
-msgstr ""
+msgstr "root folder"
 
