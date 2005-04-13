@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.6 2004/12/10 10:08:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.7 2005/04/13 12:54:10 kristo Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
