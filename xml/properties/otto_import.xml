@@ -249,6 +249,18 @@
             <caption>M&amp;ouml;&amp;ouml;bel</caption>
       </property>
       <property>
+            <name>del_prods</name>
+            <table>objects</table>
+            <group>delete</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <store>no</store>
+            <caption>Kustuta tooted koodidega (komaga eraldatud)</caption>
+      </property>
+      <property>
             <name>do_fixes</name>
             <table>objects</table>
             <group>post_import_fix</group>
@@ -288,6 +300,9 @@
             <jm>
                   <caption>J&amp;auml;relmaks</caption>
             </jm>
+            <delete>
+                  <caption>Kustutamine</caption>
+            </delete>
             <post_import_fix>
                   <caption>Parandused</caption>
             </post_import_fix>
