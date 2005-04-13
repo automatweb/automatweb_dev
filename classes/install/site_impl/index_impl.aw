@@ -17,7 +17,6 @@ else
 }
 
 enter_function("index_impl::after_init");
-
 // get an instance if the site class
 $si =&__get_site_instance();
 
