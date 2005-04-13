@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.34 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.35 2005/04/13 13:51:09 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -295,6 +295,7 @@ class project extends class_base
 
 
 		$req = urlencode(aw_global_get("REQUEST_URI"));
+		$clss = aw_ini_get("classes");
 
 		foreach($ol->arr() as $o)
 		{
@@ -307,15 +308,16 @@ class project extends class_base
 
 
 			$start = $o->prop("start1");
+			$end = $o->prop("end");
 			$clid = $o->class_id();
 			
-			$clss = aw_ini_get("classes");
 			$clinf = $clss[$clid];
 
 			$link = $this->mk_my_orb("change",array("id" => $id,"return_url" => $req),$clid);
 
 			$t->add_item(array(
-				"timestamp" => $start,
+				"item_start" => $start,
+				"item_end" => $end,
 				"data" => array(
 					"name" => $o->prop("name"),
 					"icon" => icons::get_icon_url($o),
@@ -325,7 +327,14 @@ class project extends class_base
 
 			if ($start > $range["overview_start"])
 			{
-				$this->overview[$start] = 1;
+				// show event on all days it occurs and not only the first
+				if ($start < $end)
+				{
+					for ($i = $start; $i <= $end; $i = $i + 86400)
+					{
+						$this->overview[$i] = 1;
+					};
+				};
 			};
 		};
 	}
@@ -342,7 +351,7 @@ class project extends class_base
 	// from that project only
 
 	// XXX: split this into separate methods
-	function get_events_from_projects($arr = array())
+	function get_event_folders($arr = array())
 	{
 		$ev_ids = array();
 		if (!empty($arr["project_id"]))
