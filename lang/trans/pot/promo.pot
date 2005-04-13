@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:04 +0300\n"
+"POT-Creation-Date: Wed, 13 Apr 2005 15:49:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -322,79 +322,79 @@ msgstr ""
 msgid "Seose &auml;ra näita menüü juures (RELTYPE_NO_SHOW_MENU) tekst"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:148
+#: classes/contentmgmt/promo.aw:151
 msgid "Vali template"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:165
+#: classes/contentmgmt/promo.aw:168
 msgid "Vasakul"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:166
+#: classes/contentmgmt/promo.aw:169
 msgid "Paremal"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:167
+#: classes/contentmgmt/promo.aw:170
 msgid "Üleval"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:168
+#: classes/contentmgmt/promo.aw:171
 msgid "All"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:169
+#: classes/contentmgmt/promo.aw:172
 msgid "Skrolliv"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:185
+#: classes/contentmgmt/promo.aw:188
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:186
+#: classes/contentmgmt/promo.aw:189
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:187
+#: classes/contentmgmt/promo.aw:190
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:188
+#: classes/contentmgmt/promo.aw:191
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:189
+#: classes/contentmgmt/promo.aw:192
 msgid "Objekti nime j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:190
+#: classes/contentmgmt/promo.aw:193
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:196
+#: classes/contentmgmt/promo.aw:199
 msgid "Suurem (uuem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:197
+#: classes/contentmgmt/promo.aw:200
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:261 classes/contentmgmt/promo.aw:310 classes/contentmgmt/promo.aw:357
+#: classes/contentmgmt/promo.aw:264 classes/contentmgmt/promo.aw:313 classes/contentmgmt/promo.aw:360
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:269 classes/contentmgmt/promo.aw:318 classes/contentmgmt/promo.aw:366
+#: classes/contentmgmt/promo.aw:272 classes/contentmgmt/promo.aw:321 classes/contentmgmt/promo.aw:369
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:274 classes/contentmgmt/promo.aw:323
+#: classes/contentmgmt/promo.aw:277 classes/contentmgmt/promo.aw:326
 msgid "k.a. alammenüüd"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:373
+#: classes/contentmgmt/promo.aw:376
 msgid "Pane pealkirjaks"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:380
+#: classes/contentmgmt/promo.aw:383
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:18 +0300\n"
+"POT-Creation-Date: Wed, 13 Apr 2005 15:49:41 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -18,43 +18,47 @@ msgstr ""
 msgid "ds_mysql::read_properties(): no prop name for reltype %s in store=connect fetch!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1100
+#: classes/core/obj/ds_mysql.aw:1044
+msgid "ds_mysql::final_delete_object(%s): no suct object exists!"
+msgstr ""
+
+#: classes/core/obj/ds_mysql.aw:1144
 msgid "filter cannot contain properties (%s) that are in serialized fields other than metadata!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1212
+#: classes/core/obj/ds_mysql.aw:1256
 msgid "obj_predicate_compare's comparator operand must be either OBJ_COMP_LESS,OBJ_COMP_GREATER,OBJ_COMP_LESS_OR_EQ,OBJ_COMP_GREATER_OR_EQ. the value supplied, was: %s!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1264
+#: classes/core/obj/ds_mysql.aw:1308
 msgid "OBJ_COMP_BETWEEN does not make sense with obj_predicate_prop!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1437
+#: classes/core/obj/ds_mysql.aw:1481
 msgid "ds_mysql::do_proc_complex_param(%s, %s): if a complex join parameter is given without a class id as the first element, the class_id parameter must be set!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1580
+#: classes/core/obj/ds_mysql.aw:1624
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1606
+#: classes/core/obj/ds_mysql.aw:1650
 msgid "ds_mysql::_req_do_pcp(): no property %s in class %s "
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1619
+#: classes/core/obj/ds_mysql.aw:1663
 msgid "ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1624
+#: classes/core/obj/ds_mysql.aw:1668
 msgid "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property %s in class %s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1637
+#: classes/core/obj/ds_mysql.aw:1681
 msgid "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1646
+#: classes/core/obj/ds_mysql.aw:1690
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr ""
 

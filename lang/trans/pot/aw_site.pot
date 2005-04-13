@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:46 +0300\n"
+"POT-Creation-Date: Wed, 13 Apr 2005 15:49:46 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -242,7 +242,7 @@ msgstr ""
 msgid "<br><br><b>Valmis! sait on kasutatav 30 sekundi p&auml;rast!</b><br />\n"
 msgstr ""
 
-#: classes/install/aw_site.aw:412 classes/install/aw_site.aw:448 classes/install/aw_site.aw:472 classes/install/aw_site.aw:498 classes/install/aw_site.aw:514 classes/install/aw_site.aw:548 classes/install/aw_site.aw:567 classes/install/aw_site.aw:793 classes/install/aw_site.aw:861 classes/install/aw_site.aw:1116 classes/install/aw_site.aw:1162
+#: classes/install/aw_site.aw:412 classes/install/aw_site.aw:448 classes/install/aw_site.aw:472 classes/install/aw_site.aw:498 classes/install/aw_site.aw:514 classes/install/aw_site.aw:548 classes/install/aw_site.aw:567 classes/install/aw_site.aw:797 classes/install/aw_site.aw:870 classes/install/aw_site.aw:1125 classes/install/aw_site.aw:1171
 msgid "OK"
 msgstr ""
 
@@ -262,7 +262,7 @@ msgstr ""
 msgid "Kopeeris default kujunduse"
 msgstr ""
 
-#: classes/install/aw_site.aw:501 classes/install/aw_site.aw:570 classes/install/aw_site.aw:1119
+#: classes/install/aw_site.aw:501 classes/install/aw_site.aw:570 classes/install/aw_site.aw:1128
 msgid "Faili ei ole!"
 msgstr ""
 
@@ -294,163 +294,163 @@ msgstr ""
 msgid "Convert acl to new version"
 msgstr ""
 
-#: classes/install/aw_site.aw:762
+#: classes/install/aw_site.aw:766
 msgid "init classes exit <br>\n"
 msgstr ""
 
-#: classes/install/aw_site.aw:791
+#: classes/install/aw_site.aw:795
 msgid "Konfigureeris nimeserveri"
 msgstr ""
 
-#: classes/install/aw_site.aw:859
+#: classes/install/aw_site.aw:868
 msgid "L&otilde;i saidi andmebaasi"
 msgstr ""
 
-#: classes/install/aw_site.aw:872
+#: classes/install/aw_site.aw:881
 msgid "Saidi baaskataloog on juba olemas! (%s) "
 msgstr ""
 
-#: classes/install/aw_site.aw:879
+#: classes/install/aw_site.aw:888
 msgid "Saidi logide kataloog on juba olemas! (%s) "
 msgstr ""
 
-#: classes/install/aw_site.aw:886
+#: classes/install/aw_site.aw:895
 msgid "Saidi apache konfiguratsioon on juba olemas! (%s) "
 msgstr ""
 
-#: classes/install/aw_site.aw:895
+#: classes/install/aw_site.aw:904
 msgid "Saidid, kust templatesid kopeerida on valimata! "
 msgstr ""
 
-#: classes/install/aw_site.aw:901
+#: classes/install/aw_site.aw:910
 msgid "Kataloogid, kust templatesid kopeerida on valimata! "
 msgstr ""
 
-#: classes/install/aw_site.aw:912
+#: classes/install/aw_site.aw:921
 msgid "Kasutatav andmebaas on valimata!"
 msgstr ""
 
-#: classes/install/aw_site.aw:918
+#: classes/install/aw_site.aw:927
 msgid "Uue saidi root kataloog olemasolevas andmebaasis on valimata!"
 msgstr ""
 
-#: classes/install/aw_site.aw:933
+#: classes/install/aw_site.aw:942
 msgid "Sait on liiga vana koodiversiooniga et selle p&otilde;hjal uut luua!"
 msgstr ""
 
-#: classes/install/aw_site.aw:962
+#: classes/install/aw_site.aw:971
 msgid "Saidi andmebaas on juba olemas! (%s) "
 msgstr ""
 
-#: classes/install/aw_site.aw:975
+#: classes/install/aw_site.aw:984
 msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeeni pole registreeritud! (%s) "
 msgstr ""
 
-#: classes/install/aw_site.aw:979
+#: classes/install/aw_site.aw:988
 msgid "Saidi domeeni nimeserver ei ole Automatwebi poolt hallatav ja saidi domeen viitab valele IP aadressile! (vajalik = %s domeeni ip = %s)"
 msgstr ""
 
-#: classes/install/aw_site.aw:986
+#: classes/install/aw_site.aw:995
 msgid "Saidi domeen on juba registreeritud! (domeen = %s ip = %s) Kui selle domeeni pealt k&auml;ib m&otilde;ni teine sait, siis seda ei saa p&auml;rast uue saidi loomist kasutada!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1002
+#: classes/install/aw_site.aw:1011
 msgid "Saitide registris on juba sait, mille url on %s !"
 msgstr ""
 
-#: classes/install/aw_site.aw:1018
+#: classes/install/aw_site.aw:1027
 msgid "IP aadressi %s jaoks pole serverite registris kirjet!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1026
+#: classes/install/aw_site.aw:1035
 msgid "Ei saa root kasutaja &otilde;iguseid kasutada!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1123
+#: classes/install/aw_site.aw:1132
 msgid "Tegi ini faili"
 msgstr ""
 
-#: classes/install/aw_site.aw:1160
+#: classes/install/aw_site.aw:1169
 msgid "K&uuml;sis uue saidi id"
 msgstr ""
 
-#: classes/install/aw_site.aw:1181
+#: classes/install/aw_site.aw:1190
 msgid "Ei saanud lugeda serveri id'd! (vali andmebaas)"
 msgstr ""
 
-#: classes/install/aw_site.aw:1455
+#: classes/install/aw_site.aw:1464
 msgid "Skrolliv"
 msgstr ""
 
-#: classes/install/aw_site.aw:1456
+#: classes/install/aw_site.aw:1465
 msgid "Vasak"
 msgstr ""
 
-#: classes/install/aw_site.aw:1457
+#: classes/install/aw_site.aw:1466
 msgid "Parem"
 msgstr ""
 
-#: classes/install/aw_site.aw:1458
+#: classes/install/aw_site.aw:1467
 msgid "&Uuml;lemine"
 msgstr ""
 
-#: classes/install/aw_site.aw:1459
+#: classes/install/aw_site.aw:1468
 msgid "Alumine"
 msgstr ""
 
-#: classes/install/aw_site.aw:1483
+#: classes/install/aw_site.aw:1492
 msgid "%s konteiner"
 msgstr ""
 
-#: classes/install/aw_site.aw:1493
+#: classes/install/aw_site.aw:1502
 msgid "%s konteineri sisu"
 msgstr ""
 
-#: classes/install/aw_site.aw:1494 classes/install/aw_site.aw:1495
+#: classes/install/aw_site.aw:1503 classes/install/aw_site.aw:1504
 msgid "pealkiri"
 msgstr ""
 
-#: classes/install/aw_site.aw:1519
+#: classes/install/aw_site.aw:1528
 msgid "Saidi url muutus %s => %s"
 msgstr ""
 
-#: classes/install/aw_site.aw:1525
+#: classes/install/aw_site.aw:1534
 msgid "HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated &uuml;le!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1526
+#: classes/install/aw_site.aw:1535
 msgid "Templated muutusid default templatedest teise saidi omadeks!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1532
+#: classes/install/aw_site.aw:1541
 msgid "Templatede kataloogide nimekiri muutus!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1538
+#: classes/install/aw_site.aw:1547
 msgid "Templatede linkimine muutus!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1544
+#: classes/install/aw_site.aw:1553
 msgid "Piltide ja css sait muutus (%s => %s)!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1622
+#: classes/install/aw_site.aw:1631
 msgid "aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1697
+#: classes/install/aw_site.aw:1706
 msgid "Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n"
 msgstr ""
 
-#: classes/install/aw_site.aw:1730
+#: classes/install/aw_site.aw:1739
 msgid "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (%s)!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1738
+#: classes/install/aw_site.aw:1747
 msgid "aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"
 msgstr ""
 
-#: classes/install/aw_site.aw:1789
+#: classes/install/aw_site.aw:1798
 msgid "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
 msgstr ""
 

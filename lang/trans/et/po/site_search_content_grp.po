@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
+"POT-Creation-Date: Wed, 13 Apr 2005 15:49:38 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,64 +9,64 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) caption"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only_comment
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only_comment
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only_help
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only_help
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus
 msgid "Omaduse Vali men&uuml;&uuml;d (menus) caption"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_comment
 msgid "Omaduse Vali men&uuml;&uuml;d (menus) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_help
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_menus_help
 msgid "Omaduse Vali men&uuml;&uuml;d (menus) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive
-msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) caption"
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive
+msgid ""
+"Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) caption"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive_comment
-msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) kommentaar"
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive_comment
+msgid ""
+"Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive_help
+# classes/contentmgmt/site_search/site_search_content_grp.aw:prop_seach_notactive_help
 msgid "Omaduse Otsi ka mitteaktiivsetest dokumentidest (seach_notactive) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
+# classes/contentmgmt/site_search/site_search_content_grp.aw:rel_RELTYPE_SEARCH_LOCATION
 msgid "Seose Otsingu lähtekoht (RELTYPE_SEARCH_LOCATION) tekst"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:75
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:90
 msgid "Klass"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:79
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:94
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:87
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:102
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:92
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:107
 msgid "k.a. alammenüüd"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content_grp.aw:100
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:115
 msgid "mitteaktiivsed"
 msgstr ""
-
