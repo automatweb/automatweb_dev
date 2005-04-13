@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.68 2005/04/07 08:52:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.69 2005/04/13 08:07:50 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -44,6 +44,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	
 	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Sisu ei cacheta
+
+	@property not_in_search type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption &Auml;ra n&auml;ita otsingu tulemuste lehel
 	
 	@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
@@ -837,6 +840,10 @@ class promo extends class_base
 				$show_promo = false;
 			};
 
+			if ($o->meta("not_in_search") == 1 && $_GET["class"] == "site_search_content")
+			{
+				$show_promo = false;
+			}
 			// this line decides, whether we should show this promo box here or not.
 			// now, how do I figure out whether the promo box is actually in my path?
 			if ($show_promo)
@@ -857,7 +864,7 @@ class promo extends class_base
 					obj_set_opt("no_cache", 1);
 				}
 
-				if ($o->meta("version") == 2 && $this->cfg["version"] == 2)
+				if ($o->meta("version") == 2 && ($this->cfg["version"] == 2 || true))
 				{
 					$docid = array_values(safe_array($o->meta("content_documents")));
 
@@ -926,7 +933,9 @@ class promo extends class_base
 						"not_last_in_list" => (($d_cnt+1) < $d_total)
 					));
 					exit_function("promo-prev");
-					$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
+					$pr_c .= $cont;
+					// X marks the spot
+					//$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
 				}
 
@@ -984,7 +993,6 @@ class promo extends class_base
 				{
 					$use_tpl = "LEFT_PROMO";
 				};
-
 				$hlc = "";
 				if ($o->meta("link_caption") != "")
 				{

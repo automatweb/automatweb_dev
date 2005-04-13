@@ -22,7 +22,6 @@ class doc_display extends aw_template
 	{
 		$doc = obj($arr["docid"]);
 		$doc_parent = obj($doc->parent());
-
 		$this->tpl_reset();
 		$this->tpl_init("automatweb/documents");
 		$this->read_any_template($this->_get_template($arr));
@@ -46,7 +45,6 @@ class doc_display extends aw_template
 			)
 		);
 		$this->vars($al->get_vars());
-
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 
 		$this->vars(array(
@@ -130,7 +128,7 @@ class doc_display extends aw_template
 		}
 		else
 		{
-			if ($doc->prop("showlead"))
+			if ($doc->prop("showlead") || $arr["showlead"])
 			{
 				$text = $doc->prop("lead").$this->cfg["lead_splitter"].$doc->prop("content");
 			}
