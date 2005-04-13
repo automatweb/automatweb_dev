@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.60 2005/04/04 08:47:18 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.61 2005/04/13 15:15:53 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -49,7 +49,7 @@
 	@property availtoolbar type=toolbar group=avail store=no no_caption=1 editonly=1
 	@caption Av. Toolbar
 
-	@property availprops type=callback callback=callback_gen_avail_props store=no group=avail no_caption=1
+	@property availprops type=table store=no group=avail no_caption=1
 	@caption Kõik omadused
 
 	@property cfg_proplist type=hidden field=meta method=serialize
@@ -167,6 +167,10 @@ class cfgform extends class_base
 			
 			case "availtoolbar":
 				$this->gen_availtoolbar($arr);
+				break;
+
+			case "availprops":
+				$this->gen_avail_props($arr);
 				break;
 
 			case "default_table":
@@ -684,9 +688,32 @@ class cfgform extends class_base
 
 	////
 	// !
-	function callback_gen_avail_props($arr = array())
+	function gen_avail_props($arr = array())
 	{
-		$this->read_template("avail_props.tpl");
+		$t = &$arr["prop"]["vcl_inst"];
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Tüüp"),
+		));
+
+		$t->define_field(array(
+			"name" => "caption",
+			"caption" => t("Pealkiri"),
+		));
+
+		$t->define_chooser(array(
+			"name" => "mark",
+			"field" => "name",
+		));
+
+		$t->set_sortable(false);
+
 		$used_props = array();
 
 		if (is_array($this->prplist))
@@ -698,32 +725,17 @@ class cfgform extends class_base
 			};
 		};
 
-		$av = "";
-		$sc = "";
 		foreach($this->all_props as $key => $property)
 		{
 			if (empty($used_props[$property["name"]]))
 			{
-				$this->vars(array(
-					"prp_caption" => $property["caption"],
-					"prp_type" => $property["type"],
-					"prp_key" => $property["name"],
+				$t->define_data(array(
+					"caption" => $property["caption"],
+					"type" => $property["type"],
+					"name" => $property["name"],
 				));
-				$sc .= $this->parse("avail_property");
 			};
 		}
-
-		$this->vars(array(
-			"avail_property" => $sc,
-		));
-
-		$this->vars(array(
-			"avail" => $this->parse("avail"),
-		));
-
-		$item = $arr["prop"];
-		$item["value"] = $this->parse();
-		return array($item);
 	}
 
 	function gen_navtoolbar($arr)
