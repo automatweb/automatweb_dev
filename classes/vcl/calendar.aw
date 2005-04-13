@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.48 2005/02/18 12:54:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.49 2005/04/13 14:16:15 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1018,8 +1018,7 @@ class vcalendar extends aw_template
 	// XXX: this can and should be done without any templates. so it can be faster
 	function draw_s_month($arr)
 	{
-		//$this->read_template("mini2.tpl");
-		$rv = "";
+		$this->read_template("minical.tpl");
 
 
 		// the idea here is that drawing of month always starts from
@@ -1105,6 +1104,7 @@ class vcalendar extends aw_template
 		while($j <= $realend)
 		{
 			$i = $j;
+			$day = "";
 			while($i <= $j + (7*86400)-1)
 			{
 				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
@@ -1161,62 +1161,52 @@ class vcalendar extends aw_template
 				// and that pretty much is it.
 
 				// I set default styles in the container template and let them be overriden
-
-				$rv .= "<td class='$style'>";
-
-				if ($mode == 0)
+				if($mode == 0)
 				{
-					$rv .= "<a href='$day_url'>";
-				};
-
-				// daynum
-				$rv .= date("j",$reals);
-
-				if ($mode == 0)
+					$link = "<a href='$day_url'>".date("j",$reals)."</a>";
+				}
+				else
 				{
-					$rv .= "</a>";
-				};
-				$rv .= "</td>";
+					$link = date("j",$reals);
+				}
+				$this->vars(array(
+					"style" => $style,
+					"link" => $link,
+				));
+				$day .= $this->parse("DAY");
 				$i = $i + 86400;
 			};
-
-			$w .= "<tr>" . $rv . "</tr>";
 			$rv = "";
+			$this->vars(array(
+				"DAY" => $day,
+			));
+			$week .= $this->parse("WEEK");
 			$j = $j + (7*86400);
 		};
 
 		// now, how to make those configurable?
-		$mon = locale::get_lc_month(date("m",$arr["timestamp"]));
-		$caption =  $mon . " " . date("y",$arr["timestamp"]);
-
-		$caption_url = aw_url_change_var(array(
-			"viewtype" => "month",
-			"date" => date("d-m-Y",$arr["timestamp"]),
-			"section" => $this->target_section,
+		$this->vars(array(
+			"WEEK" => $week,
+			"style_title" => $style_title,
+			"style_background" => $style_background,
+			"caption" => locale::get_lc_month(date("m", $arr["timestamp"])) . " " . date("y",$arr["timestamp"]),
+			"caption_url" => aw_url_change_var(array(
+				"viewtype" => "month",
+				"date" => date("d-m-Y",$arr["timestamp"]),
+				"section" => $this->target_section,
+			)),
+			"next_url" => aw_url_change_var(array(
+				"viewtype" => "month",
+				"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
+				"section" => $this->target_section,
+			)),
+			"prev_url" => aw_url_change_var(array(
+				"viewtype" => "month",
+				"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
+				"section" => $this->target_section,
+			))
 		));
-
-		$prev_url = aw_url_change_var(array(
-			"viewtype" => "month",
-			"date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
-			"section" => $this->target_section,
-		));
-		
-		$next_url = aw_url_change_var(array(
-			"viewtype" => "month",
-			"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
-			"section" => $this->target_section,
-		));
-
-		$prev_month = t("Eelmine kuu");
-		$next_month = t("Järgmine kuu");
-
-		$baseurl = aw_ini_get("baseurl");
-
-		$prev_img = "<img border='0' src='" . $baseurl . "/automatweb/images/blue/cal_nool_left.gif" . "'>";
-		$next_img = "<img border='0' src='" . $baseurl . "/automatweb/images/blue/cal_nool_right.gif" . "'>";
-
-		$caption = "<div class='$style_title'><a href='$prev_url' alt='$prev_month' title='$prev_month'>$prev_img</a><a href='$caption_url'>$caption</a><a href='$next_url' alt='$next_month' title='$next_month'>$next_img</a>";
-		return $caption . "<table border=0 cellspacing=0 cellpadding=0 width='100%'><tr><td class='$style_background'><table border=0 cellpadding=0 cellspacing=1 width='100%'>" . $w . "</table></td></tr></table>";
+		return $this->parse();
 	}
 
 	function draw_event($evt)
