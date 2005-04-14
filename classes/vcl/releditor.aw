@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.51 2005/04/14 13:53:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.52 2005/04/14 13:55:46 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
