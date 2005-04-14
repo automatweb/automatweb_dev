@@ -790,6 +790,15 @@ class group extends class_base
 		$gid = $this->users->get_gid_for_oid($oid);
 		if ($gid)
 		{
+			// check if this is the user's default group and if so, block delete
+			aw_disable_acl();
+			$g_o = obj($oid);
+			if ($g_o->prop("type") == 1)
+			{
+				die(t("Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"));
+			}
+			aw_restore_acl();
+
 			$this->users->deletegroup($gid);
 			$c = get_instance("cache");
 			$c->file_invalidate_regex("acl-cache(.*)");

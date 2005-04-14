@@ -955,97 +955,82 @@ class user extends class_base
 		return $acls;
 	}
 
-	function on_delete_user($arr)
+	function on_delete_user_bro($arr)
 	{
 		extract($arr);
 
 		// check if we are deleting the real thing
 		$o = obj($oid);
-		if (!$o->is_brother())
+		// get the parent obj for the user's brother
+		// and remove the user from that group
+		$o = obj($oid);
+		$real_user = $o->get_original();
+
+		if (!is_oid($o->parent()))
 		{
-			// block user
-			$this->users->do_delete_user($this->users->get_uid_for_oid($oid));
-			if ($this->can("view", $oid))
-			{
-				$ol = new object_list(array(
-					"brother_of" => $oid
-				));
-				$ol->delete();
-			}
+			return;
 		}
-		else
+		$grp_o = obj($o->parent());
+
+		$gid = $this->users->get_gid_for_oid($o->parent());
+		$uid = $this->users->get_uid_for_oid($o->brother_of());
+		if ($gid)
 		{
-			// get the parent obj for the user's brother
-			// and remove the user from that group
-			$o = obj($oid);
-			$real_user = $o->get_original();
+			$this->users->remove_users_from_group_rec(
+				$gid, 
+				array($uid),
+				false,
+				false
+			);
 
-			if (!is_oid($o->parent()))
+			// sync manually here.
+			// remove alias from user to group
+			if ($real_user->is_connected_to(array("to" => $grp_o->id())))
 			{
-				return;
+				$real_user->disconnect(array(
+					"from" => $grp_o->id()
+				));
 			}
-			$grp_o = obj($o->parent());
 
-			$gid = $this->users->get_gid_for_oid($o->parent());
-			$uid = $this->users->get_uid_for_oid($o->brother_of());
-			if ($gid)
+			// remove alias from group to user
+			if ($grp_o->is_connected_to(array("to" => $real_user->id())))
 			{
-				$this->users->remove_users_from_group_rec(
-					$gid, 
-					array($uid),
-					false,
-					false
-				);
+				$grp_o->disconnect(array(
+					"from" => $real_user->id()
+				));
+			}
 
-				// sync manually here.
-				// remove alias from user to group
+			// go over all the groups below this one and remove all aliases to this user
+			// and also all user brothers
+			$ot = new object_tree(array(
+				"parent" => $o->parent(),
+				"class_id" => CL_GROUP
+			));
+				
+			$ol = $ot->to_list();
+			for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
+			{
+				// get all connections from the group to the user object
+				foreach($grp_o->connections_from(array("to" => $real_user->id())) as $c)
+				{
+					$c->delete();
+				}
+
+				// disconnect user from group as well
 				if ($real_user->is_connected_to(array("to" => $grp_o->id())))
 				{
 					$real_user->disconnect(array(
 						"from" => $grp_o->id()
 					));
 				}
-
-				// remove alias from group to user
-				if ($grp_o->is_connected_to(array("to" => $real_user->id())))
-				{
-					$grp_o->disconnect(array(
-						"from" => $real_user->id()
-					));
-				}
-
-				// go over all the groups below this one and remove all aliases to this user
-				// and also all user brothers
-				$ot = new object_tree(array(
-					"parent" => $o->parent(),
-					"class_id" => CL_GROUP
-				));
-				
-				$ol = $ot->to_list();
-				for($grp_o = $ol->begin(); !$ol->end(); $grp_o = $ol->next())
-				{
-					// get all connections from the group to the user object
-					foreach($grp_o->connections_from(array("to" => $real_user->id())) as $c)
-					{
-						$c->delete();
-					}
-
-					// disconnect user from group as well
-					if ($real_user->is_connected_to(array("to" => $grp_o->id())))
-					{
-						$real_user->disconnect(array(
-							"from" => $grp_o->id()
-						));
-					}
 	
-					// get all objects below that point to the current user
-					$inside_ol = new object_list(array(
-						"parent" => $grp_o->id(),
-						"class_id" => CL_USER,
-						"brother_of" => $real_user->id()
-					));
-					$inside_ol->delete();
-				}
+				// get all objects below that point to the current user
+				$inside_ol = new object_list(array(
+					"parent" => $grp_o->id(),
+					"class_id" => CL_USER,
+					"brother_of" => $real_user->id()
+				));
+				$inside_ol->delete();
 			}
 		}
 		$c = get_instance("cache");
@@ -1889,6 +1874,100 @@ class user extends class_base
 				"value" => $ml_m->prop("name")
 			));
 		}
+	}
+
+	/** handler for user delete. does the delete itself and deletes all other needed objects as well.
+		all in all, a very final function. 
+	**/
+	function on_delete_user($arr)
+	{
+		obj_set_opt("no_cache", 1);
+
+		$u = get_instance("users");
+
+		aw_disable_acl();
+		$user = obj($arr["oid"]);
+		if ($user->is_brother())
+		{
+			return $this->on_delete_user_bro($arr);
+		}
+		aw_restore_acl();
+
+		// final delete home folder
+		$home_folder = $this->db_fetch_field("SELECT home_folder FROM users WHERE oid = ".$user->id(), "home_folder");
+		if (is_oid($home_folder) && $this->_object_ex($home_folder))
+		{
+			aw_disable_acl();
+			$hf = obj($home_folder);
+			$hf->delete(true);
+			aw_restore_acl();
+		}
+
+		// final delete default group
+		$def_gid = $u->get_gid_by_uid($user->prop("uid"));
+		$def_gid_oid = $u->get_oid_for_gid($def_gid);
+		if (is_oid($def_gid_oid) && $this->_object_ex($def_gid_oid))
+		{
+			aw_disable_acl();
+			$def_gid_o = obj($def_gid_oid);
+			$def_gid_o->delete(true);
+			aw_restore_acl();
+		}
+
+		if ($def_gid)
+		{
+			// delete all acl's from the acl table for this user
+			$this->db_query("DELETE FROM acl WHERE gid = $def_gid");
+		}
+
+		// remove from all groups
+		$this->db_query("DELETE FROM groupmembers WHERE uid = '".$user->prop("uid")."'");
+
+		// remove groupmembers from def group
+		if ($def_gid)
+		{
+			$this->db_query("DELETE FROM groupmembers WHERE gid = $def_gid");
+		}
+
+		// final delete person
+		$person_c = $user->connections_from(array(
+			"type" => "RELTYPE_PERSON",
+		));
+		foreach($person_c as $p_c)
+		{
+			aw_disable_acl();
+			$person = obj($p_c->prop("to"));
+			$person->delete(true);
+			aw_restore_acl();
+		}
+
+		// user's e-mail object
+		$mail_c = $user->connections_from(array(
+			"type" => "RELTYPE_EMAIL"
+		));
+		foreach($mail_c as $m_c)
+		{
+			aw_disable_acl();
+			$mail = obj($m_c->prop("to"));
+			$mail->delete(true);
+			aw_restore_acl();
+		}
+
+		// final delete all brothers
+		// final delete user object
+		aw_disable_acl();
+		$user->delete(true);
+		aw_restore_acl();
+
+		obj_set_opt("no_cache", 0);
+
+		$c = get_instance("cache");
+		$c->full_flush();
+	}
+
+	function _object_ex($oid)
+	{
+		return $this->db_fetch_field("SELECT oid FROM objects WHERE oid = '$oid'", "oid") ? true : false;
 	}
 }
 ?>

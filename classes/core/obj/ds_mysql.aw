@@ -1054,7 +1054,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
-			"file" => $file,
+			"file" => basename($file),
 			"clid" => $clid
 		));
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.16 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.17 2005/04/14 13:22:26 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -405,7 +405,7 @@ class recycle_bin extends class_base
 			}
 
 			list($properties, $tableinfo, $relinfo) = $GLOBALS["object_loader"]->load_properties(array(
-				"file" => $file,
+				"file" => basename($file),
 				"clid" => $clid
 			));
 
