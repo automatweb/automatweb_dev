@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.26 2005/04/07 12:33:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.27 2005/04/14 09:14:52 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -33,6 +33,9 @@
 
 @property restart_prod_i type=checkbox ch_value=1
 @caption Alusta toodete importi algusest
+
+@property just_update_prod_data type=checkbox ch_value=1
+@caption Uuenda ainult toote andmed
 
 @property last_import_log type=text store=no
 @caption Viimase impordi logi
@@ -1189,6 +1192,9 @@ class otto_import extends class_base
 
 		$log[] = "importisin $items_done toodet";
 
+		if ($o->prop("just_update_prod_data") != 1)
+		{
+
 		flush();
 		// to make packages, group by image number and for all images where cnt > 1 create a package for all those prods
 
@@ -1309,6 +1315,8 @@ class otto_import extends class_base
 			$this->restore_handle();
 		}
 
+		} // just update prod data
+
 		// fix-missing images
 		echo "try fix missing images! <br>";
 
@@ -1365,38 +1373,53 @@ class otto_import extends class_base
 		if (aw_global_get("lang_id") == 6)
 		{
 			/* uus */
-			$needle = array(
-			chr(236),
-			chr(240),
-			chr(165),
-			chr(207),
-			chr(191),
-			chr(199),
-			chr(148),
-			chr(239),
-			chr(134),
-			chr(174),
-			chr(149),
-			chr(192),
-			chr(228),
-			chr(180),
-			chr(250),
-			chr(137),
-			chr(208),
-			chr(130),
-			chr(207),
-			chr(153),
-			chr(179),
-			chr(129),
-			chr(210),
-			chr(211),
-			chr(178));
+			$needle = array();
+			$haystack = array();
 
+			$needle = array(
+			chr(207), //254
+			chr(240), //251
+			chr(165), //238
+			chr(236), //234
+			chr(191), //242
+			chr(199), //226
+			chr(148), //199
+			chr(239), //231
+			chr(134), //239
+			chr(174), //236
+			chr(149), //231
+			chr(192), //242
+			chr(228), //240
+			chr(180), //238
+			chr(250), //237
+			chr(137), //200
+			chr(208), //45
+			chr(130), //226
+			chr(153), //237
+			chr(179), //34
+			chr(129), //194
+			chr(210), //34
+			chr(211), //34
+			chr(178), //34
+			chr(175), //236
+			chr(183), //208
+			chr(177), //206
+			chr(185), //207
+			chr(225), //208
+			chr(186), //239
+			chr(158) //236
+			);
+
+			
+			
+			
+				
+			
 			$haystack = array(
-			chr(207),
+			chr(254),
 			chr(251),
 			chr(238),
-			chr(254),
+			chr(234),
 			chr(242),
 			chr(226),
 			chr(199),
@@ -1411,14 +1434,20 @@ class otto_import extends class_base
 			chr(200),
 			chr(45),
 			chr(226),
-			chr(254),
 			chr(237),
 			chr(34),
 			chr(194),
 			chr(34),
 			chr(34),
-			chr(34));
-
+			chr(34),
+			chr(236),
+			chr(208),
+			chr(206),
+			chr(207),
+			chr(208),
+			chr(239),
+			chr(234)
+			);
 		}
 		else
 		{

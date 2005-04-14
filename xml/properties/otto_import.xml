@@ -78,6 +78,16 @@
             <caption>Alusta toodete importi algusest</caption>
       </property>
       <property>
+            <name>just_update_prod_data</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Uuenda ainult toote andmed</caption>
+      </property>
+      <property>
             <name>last_import_log</name>
             <table>objects</table>
             <group>general</group>
