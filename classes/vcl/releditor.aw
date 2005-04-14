@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.52 2005/04/14 13:55:46 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.53 2005/04/14 14:17:59 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -636,11 +636,15 @@ class releditor extends core
 					}
 					else
 					{
-						$emb[$item["name"]]["contents"] = $this->get_file(array(
-							"file" => $emb[$item["name"]]["tmp_name"],
-						));
+						$tmpname = $emb[$item["name"]]["tmp_name"];	
+						if (is_uploaded_file($tmpname))
+						{
+							$emb[$item["name"]]["contents"] = $this->get_file(array(
+								"file" => $tmpname,
+							));
 
-						$el_count++;
+							$el_count++;
+						};
 					};
 				}
 				else
@@ -673,15 +677,18 @@ class releditor extends core
 			if ($prop["rel_id"] == "first" && empty($emb["id"]))
 			{
 				// I need to disconnect, no?
-				$old = $obj->connections_from(array(
-					"type" => $arr["prop"]["reltype"],
-				));
-
-				foreach($old as $conn)
+				if (is_oid($obj->id()))
 				{
-					$obj->disconnect(array(
-						"from" => $conn->prop("to"),
+					$old = $obj->connections_from(array(
+						"type" => $arr["prop"]["reltype"],
 					));
+
+					foreach($old as $conn)
+					{
+						$obj->disconnect(array(
+							"from" => $conn->prop("to"),
+						));
+					};
 				};
 			};
 
