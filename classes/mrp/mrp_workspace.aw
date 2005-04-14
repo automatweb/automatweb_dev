@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.92 2005/04/14 10:32:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.93 2005/04/14 10:34:38 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -530,24 +530,38 @@ class mrp_workspace extends class_base
 
 					case "project":
 						$tmp = obj($job->prop($rpn));
-						$prop["value"] = html::href(array(
-							"url" => $this->mk_my_orb("change", array(
-								"id" => $tmp->id(),
-								"return_url" => get_ru()
-							)),
-							"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"
-						));
+						if ($this->can("edit", $tmp->id()))
+						{
+							$prop["value"] = html::href(array(
+								"url" => $this->mk_my_orb("change", array(
+									"id" => $tmp->id(),
+									"return_url" => get_ru()
+								)),
+								"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"
+							));
+						}
+						else
+						{
+							$prop["value"] = $tmp->name();
+						}
 						break;
 
 					case "resource":
 						$tmp = obj($job->prop($rpn));
-						$prop["value"] = html::get_change_url(
-							$tmp->id(),
-							array(
-								"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-							),
-							$tmp->name()
-						);
+						if ($this->can("edit", $tmp->id()))
+						{
+							$prop["value"] = html::get_change_url(
+								$tmp->id(),
+								array(
+									"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+								),
+								$tmp->name()
+							);
+						}
+						else
+						{
+							$prop["value"] = $tmp->name();
+						}
 						break;
 
 					case "state":
