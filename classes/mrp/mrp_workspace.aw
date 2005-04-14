@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.90 2005/04/14 10:12:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.91 2005/04/14 10:31:01 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3132,11 +3132,18 @@ class mrp_workspace extends class_base
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
 			if (is_object($cust))
 			{
-				$custo = html::get_change_url($cust->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$cust->name()
-				);
+				if ($this->can("view", $cust->id()))
+				{
+					$custo = html::get_change_url($cust->id(), array(
+							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						),
+						$cust->name()
+					);
+				}
+				else
+				{
+					$custo = $cust->name();
+				}
 			}
 
 			### set colours
@@ -3184,6 +3191,25 @@ class mrp_workspace extends class_base
 			$len  = sprintf ("%02d", floor($length / 3600)).":";
 			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
 
+			$resource_str = $res->name();
+			if ($this->can("view", $res->id()))
+			{
+				$resource_str = html::get_change_url($res->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$res->name()
+				);
+			}
+
+			$project_str = $proj->name();
+			if ($this->can("view", $proj->id()))
+			{
+				$project_str = html::get_change_url($proj->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$proj->name()
+				);
+			}
 			### ...
 			$t->define_data(array(
 				"tm" => $start,
@@ -3196,17 +3222,9 @@ class mrp_workspace extends class_base
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					)),
 				)),
-				"resource" => html::get_change_url($res->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$res->name()
-				),
+				"resource" => $resource_str,
 				"worker" => join(", ",$workers_str),
-				"project" => html::get_change_url($proj->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$proj->name()
-				),
+				"project" => $project_str,
 				"proj_pri" => $proj->prop("project_priority"),
 				"customer" => $custo,
 				"status" => $state,
