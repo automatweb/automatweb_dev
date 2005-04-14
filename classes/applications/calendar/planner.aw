@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.59 2005/04/13 14:48:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.60 2005/04/14 07:04:44 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -586,8 +586,8 @@ class planner extends class_base
 			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
 			FROM planner
 			LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
-			WHERE ".$this->db_fn("planner.end")." >= '${_start}' AND
-			(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND
+			WHERE (".$this->db_fn("planner.end")." >= '${_start}' OR ".$this->db_fn("planner.end")." IS NULL OR ".$this->db_fn("planner.end")." = 0) AND
+			(".$this->db_fn("planner.start")." <= '${_end}' ) AND
 			".$this->db_fn("objects.status")." != 0";
 		};
 
