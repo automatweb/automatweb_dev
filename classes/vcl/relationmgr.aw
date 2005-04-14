@@ -56,7 +56,6 @@ class relationmgr extends aw_template
 		}
 		$this->rel_classes[0] = array("capt_new_object" => t("Objekti tüüp")) + $tmp;
 		$this->rel_classes[RELTYPE_ACL] = array(
-			"capt_new_object" => t("Objekti tüüp"),
 			CL_GROUP => $classes[CL_GROUP]["name"]
 		);
 		$this->rel_classes[RELTYPE_BROTHER] = array(
