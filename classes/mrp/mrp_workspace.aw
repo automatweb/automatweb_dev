@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.88 2005/04/08 08:10:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.89 2005/04/14 10:03:08 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -25,6 +25,7 @@
 	@groupinfo grp_users_mgr caption="Kasutajate rollid" parent=grp_settings submit=no
 	@groupinfo grp_resources caption="Ressursside haldus" parent=grp_settings
 
+@groupinfo grp_login_select_res caption="Vali kasutatav ressurss"
 
 
 @default table=objects
@@ -300,6 +301,11 @@
 
 	@property pjp_naidis type=text store=no
 	@caption N&auml;idis
+
+@default group=grp_login_select_res
+
+	@property select_session_resource type=select store=no
+	@caption Vali kasutatav ressurss
 
 // --------------- RELATION TYPES ---------------------
 
@@ -809,6 +815,17 @@ class mrp_workspace extends class_base
 				);
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
+
+			case "select_session_resource":
+				$resids = $this->get_cur_printer_resources(array(
+					"ws" => $arr["obj_inst"],
+					"ign_glob" => true
+				));
+				$ol = new object_list(array("oid" => $resids));
+
+				$prop["options"] = array("" => "") + $ol->names();
+				$prop["value"] = aw_global_get("mrp_operator_use_resource");
+				break;
 		}
 		return $retval;
 	}
@@ -850,6 +867,17 @@ class mrp_workspace extends class_base
 
 			case "max_subcontractor_timediff":
 				$prop["value"] = round ($prop["value"] * 3600);
+				break;
+
+			case "select_session_resource":
+				if ($prop["value"])
+				{
+					aw_session_set("mrp_operator_use_resource", $prop["value"]);
+				}
+				else
+				{
+					aw_session_del("mrp_operator_use_resource");
+				}
 				break;
 		}
 
@@ -3189,6 +3217,11 @@ class mrp_workspace extends class_base
 
 	function get_cur_printer_resources_desc($arr)
 	{
+		if (aw_global_get("mrp_operator_use_resource"))
+		{
+			$o = obj(aw_global_get("mrp_operator_use_resource"));
+			return $o->name();
+		}
 		// get person
 		$u = get_instance(CL_USER);
 		$person = obj($u->get_current_person());
@@ -3251,6 +3284,11 @@ class mrp_workspace extends class_base
 
 	function get_cur_printer_resources($arr)
 	{
+		if (aw_global_get("mrp_operator_use_resource") && !$arr["ign_glob"])
+		{
+			return array(aw_global_get("mrp_operator_use_resource") => aw_global_get("mrp_operator_use_resource"));
+		}
+
 		// get person
 		$u = get_instance(CL_USER);
 		$person = obj($u->get_current_person());
@@ -3722,9 +3760,18 @@ class mrp_workspace extends class_base
 	function callback_on_load($arr)
 	{
 		if ($this->can("view", 17639))
-	{
+		{
 			$this->cfgmanager = 17639;
 		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "grp_login_select_res")
+		{
+			return false;
+		}
+		return true;
 	}
 
 	function priority_field_callback ($row)

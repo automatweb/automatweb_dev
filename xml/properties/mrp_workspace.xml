@@ -1081,6 +1081,16 @@
             <store>no</store>
             <caption>N&amp;auml;idis</caption>
       </property>
+      <property>
+            <name>select_session_resource</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_login_select_res</group>
+            <type>select</type>
+            <store>no</store>
+            <caption>Vali kasutatav ressurss</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_MRP_WORKSPACE</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -1156,6 +1166,9 @@
                   <caption>Ressursside haldus</caption>
                   <parent>grp_settings</parent>
             </grp_resources>
+            <grp_login_select_res>
+                  <caption>Vali kasutatav ressurss</caption>
+            </grp_login_select_res>
       </groupinfo>
       <reltypes>
             <MRP_FOLDER>
