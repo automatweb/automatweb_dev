@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.60 2005/04/14 07:04:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.61 2005/04/14 13:56:18 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -191,7 +191,7 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
-		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY,CL_CALENDAR_EVENT);
+		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY,CL_CALENDAR_EVENT,CL_PARTY,CL_COMICS);
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -936,6 +936,7 @@ class planner extends class_base
 			return PROP_ERROR;
 		};
 		$emb = $args["request"]["emb"];
+		// fail tuleb eraldi sise lugeda
 		$is_doc = false;
 		if (!empty($emb["clid"]))
 		{
@@ -964,6 +965,21 @@ class planner extends class_base
 		};
 
 		$emb["return"] = "id";
+
+		if (is_array($_FILES["emb"]))
+		{
+			foreach($_FILES["emb"] as $ekey => $eval)
+			{
+				foreach($eval as $ekey1 => $eval1)
+				{
+					foreach($eval1 as $eval2 => $ekey2)
+					{
+						$emb[$ekey1][$eval2][$ekey] = $ekey2;
+					};
+
+				};
+			};
+		};
 
 		$this->event_id = $t->submit($emb);
 		
