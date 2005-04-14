@@ -84,5 +84,5 @@ msgstr ""
 
 #: classes/taket/taket_order.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 

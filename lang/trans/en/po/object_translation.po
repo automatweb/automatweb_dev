@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/translate/object_translation.aw:124
 msgid "object_translation::create(): could not clone object %s"
-msgstr ""
+msgstr "object_translation::create(): could not clone object %s"
 

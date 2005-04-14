@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/formgen/form_base.aw:57
 msgid "form->load(%s): no such form!"
-msgstr ""
+msgstr "form->load(%s): no such form!"
 

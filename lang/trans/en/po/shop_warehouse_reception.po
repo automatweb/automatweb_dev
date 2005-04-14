@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_reception.aw:prop_confirm
 msgid "Omaduse Kinnita (confirm) caption"
-msgstr ""
+msgstr "Confirm"
 
 #: classes/applications/shop/shop_warehouse_reception.aw:prop_confirm_comment
 msgid "Omaduse Kinnita (confirm) kommentaar"
@@ -36,17 +36,17 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_reception.aw:group_income
 msgid "Grupi Sissetuleku sisu (income) pealkiri"
-msgstr ""
+msgstr "Income content"
 
 #: classes/applications/shop/shop_warehouse_reception.aw:rel_RELTYPE_PRODUCT
 msgid "Seose sissetulnud toode (RELTYPE_PRODUCT) tekst"
-msgstr ""
+msgstr "product"
 
 #: classes/applications/shop/shop_warehouse_reception.aw:79
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/shop/shop_warehouse_reception.aw:84
 msgid "Mitu tuli"
-msgstr ""
+msgstr "Amount"
 

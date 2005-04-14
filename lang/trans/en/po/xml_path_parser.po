@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/xml/xml_path_parser.aw:87
 msgid "<br>Cannot continue like this"
-msgstr ""
+msgstr "<br>Cannot continue like this"
 

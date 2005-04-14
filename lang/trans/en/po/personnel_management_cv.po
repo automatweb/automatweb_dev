@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_active_until
 msgid "Omaduse Aktiivne kuni (active_until) caption"
-msgstr ""
+msgstr "Active until"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_active_until_comment
 msgid "Omaduse Aktiivne kuni (active_until) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_kogemused
 msgid "Omaduse Kogemused (kogemused) caption"
-msgstr ""
+msgstr "Experience"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_kogemused_comment
 msgid "Omaduse Kogemused (kogemused) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_juhiload
 msgid "Omaduse Juhiload (juhiload) caption"
-msgstr ""
+msgstr "Drivers licence"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_juhiload_comment
 msgid "Omaduse Juhiload (juhiload) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_soovitajad
 msgid "Omaduse Soovitajad (soovitajad) caption"
-msgstr ""
+msgstr "Reccommenders"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_soovitajad_comment
 msgid "Omaduse Soovitajad (soovitajad) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_arvutioskus
 msgid "Omaduse Arvutioskus (arvutioskus) caption"
-msgstr ""
+msgstr "Computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_arvutioskus_comment
 msgid "Omaduse Arvutioskus (arvutioskus) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_other_compterskills_label
 msgid "Omaduse Teised arvutioskused (other_compterskills_label) caption"
-msgstr ""
+msgstr "Other computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_other_compterskills_label_comment
 msgid "Omaduse Teised arvutioskused (other_compterskills_label) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_language_skills
 msgid "Omaduse Keeleoskus (language_skills) caption"
-msgstr ""
+msgstr "Language skill"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_language_skills_comment
 msgid "Omaduse Keeleoskus (language_skills) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_other_languages
 msgid "Omaduse Teised keeled (other_languages) caption"
-msgstr ""
+msgstr "Other languages"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_other_languages_comment
 msgid "Omaduse Teised keeled (other_languages) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_jobs_wanted_label
 msgid "Omaduse Lisa uus töösoov (jobs_wanted_label) caption"
-msgstr ""
+msgstr "Add new job wanted ad"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_jobs_wanted_label_comment
 msgid "Omaduse Lisa uus töösoov (jobs_wanted_label) kommentaar"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_additional_skills
 msgid "Omaduse Muud oskused  (additional_skills) caption"
-msgstr ""
+msgstr "Other skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_additional_skills_comment
 msgid "Omaduse Muud oskused  (additional_skills) kommentaar"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_driving_since
 msgid "Omaduse Juhistaa¾ alates aastast (driving_since) caption"
-msgstr ""
+msgstr "Driver since"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:prop_driving_since_comment
 msgid "Omaduse Juhistaa¾ alates aastast (driving_since) kommentaar"
@@ -420,213 +420,213 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_skills
 msgid "Grupi Oskused (skills) pealkiri"
-msgstr ""
+msgstr "Skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_arvutioskus
 msgid "Grupi Arvutioskus (arvutioskus) pealkiri"
-msgstr ""
+msgstr "Computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_keeleoskused
 msgid "Grupi Keeleoskus (keeleoskused) pealkiri"
-msgstr ""
+msgstr "Language skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_driving_licenses
 msgid "Grupi Juhiload (driving_licenses) pealkiri"
-msgstr ""
+msgstr "Drivers licence"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_other_skills
 msgid "Grupi Muud oskused (other_skills) pealkiri"
-msgstr ""
+msgstr "Other skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_education_main
 msgid "Grupi Hariduskäik (education_main) pealkiri"
-msgstr ""
+msgstr "Education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_haridustee
 msgid "Grupi Hariduskäik (haridustee) pealkiri"
-msgstr ""
+msgstr "Education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_taienduskoolitus
 msgid "Grupi Täienduskoolitus (taienduskoolitus) pealkiri"
-msgstr ""
+msgstr "Additional education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_soovitajad
 msgid "Grupi Soovitajad (soovitajad) pealkiri"
-msgstr ""
+msgstr "Recommenders"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_tookogemus
 msgid "Grupi Töökogemused (tookogemus) pealkiri"
-msgstr ""
+msgstr "Work experience"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_toosoov
 msgid "Grupi Soovitud töö (toosoov) pealkiri"
-msgstr ""
+msgstr "Job wanted"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_statistika
 msgid "Grupi Statistika (statistika) pealkiri"
-msgstr ""
+msgstr "Statistics"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_cv_view
 msgid "Grupi Vaata CV-d (cv_view) pealkiri"
-msgstr ""
+msgstr "View CV"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_EDUCATION
 msgid "Seose Haridus (RELTYPE_EDUCATION) tekst"
-msgstr ""
+msgstr "Education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_LANG
 msgid "Seose Keeleoskus (RELTYPE_LANG) tekst"
-msgstr ""
+msgstr "Language skill"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_ARVUTIOSKUS
 msgid "Seose Arvutioskus (RELTYPE_ARVUTIOSKUS) tekst"
-msgstr ""
+msgstr "Computer skill"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_KOGEMUS
 msgid "Seose Kogemus (RELTYPE_KOGEMUS) tekst"
-msgstr ""
+msgstr "Experience"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_JUHILUBA
 msgid "Seose Juhiluba (RELTYPE_JUHILUBA) tekst"
-msgstr ""
+msgstr "Driver's licence"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_JOBWANTED
 msgid "Seose Töösoov (RELTYPE_JOBWANTED) tekst"
-msgstr ""
+msgstr "Job wanted"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:202
 msgid "Teised arvutioskused"
-msgstr ""
+msgstr "Other computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:209
 msgid "Arvutioskuse muutmine"
-msgstr ""
+msgstr "Change computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:224
 msgid "Mõni muu keel"
-msgstr ""
+msgstr "Some other language"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:242
 msgid "Muuda töösoovi"
-msgstr ""
+msgstr "Change job wanted"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:409 classes/applications/personnel_management/personnel_management_cv.aw:1192
 msgid "Genereeri pdf"
-msgstr ""
+msgstr "Generate pdf"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:426
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:454
 msgid "Kool"
-msgstr ""
+msgstr "School"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:460 classes/applications/personnel_management/personnel_management_cv.aw:585
 msgid "Periood"
-msgstr ""
+msgstr "Period"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:466
 msgid "Hariduse liik"
-msgstr ""
+msgstr "Education type"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:526 classes/applications/personnel_management/personnel_management_cv.aw:560 classes/applications/personnel_management/personnel_management_cv.aw:643
 msgid "Kustuta &otilde;pingud"
-msgstr ""
+msgstr "Delete studies"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:528
 msgid "Kas soovid kustutada valitud täienduskoolitused?"
-msgstr ""
+msgstr "do you wish to delete selected additional education?"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:534
 msgid "Muuda valitud täienduskoolitust"
-msgstr ""
+msgstr "Change selected additional education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:546 classes/applications/personnel_management/personnel_management_cv.aw:637
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:551 classes/applications/personnel_management/personnel_management_cv.aw:552
 msgid "Töösoov"
-msgstr ""
+msgstr "Job wanted"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:562
 msgid "Kas soovid kustutada valitud töösoovid?"
-msgstr ""
+msgstr "Delete selected job wanteds?"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:568
 msgid "Muuda valitud töösoovi"
-msgstr ""
+msgstr "Change selected job wanted"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:579
 msgid "Haridusasutus"
-msgstr ""
+msgstr "Educational institution"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:645
 msgid "Kas soovid kustutada valitud õpingud?"
-msgstr ""
+msgstr "Delete selected studies?"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:651
 msgid "Muuda valitud haridust"
-msgstr ""
+msgstr "Change selected education"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:690
 msgid "Kustuta keeleoskused"
-msgstr ""
+msgstr "Delete language skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:697
 msgid "Muuda keeleoskust"
-msgstr ""
+msgstr "Change language skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:708
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:714 classes/applications/personnel_management/personnel_management_cv.aw:863
 msgid "Tase"
-msgstr ""
+msgstr "Level"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:750
 msgid "Kustuta t&ouml;&ouml;kogemused"
-msgstr ""
+msgstr "Delete job experience"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:757
 msgid "Muuda t&ouml;&ouml;kogemust"
-msgstr ""
+msgstr "Change job experience"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:768
 msgid "Asutus"
-msgstr ""
+msgstr "Institution"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:774
 msgid "Ametikoht"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:780
 msgid "Alates"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:786
 msgid "Kuni"
-msgstr ""
+msgstr "To"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:818
 msgid "Kustuta arvutioskused"
-msgstr ""
+msgstr "Delete computer skills"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:825
 msgid "Muuda oskust"
-msgstr ""
+msgstr "Change skill"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:857
 msgid "Oskus"
-msgstr ""
+msgstr "Skill"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:1217
 msgid "Kes vaatas:"
-msgstr ""
+msgstr "Viewed by:"
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:1223
 msgid "Vaatamisi"
-msgstr ""
+msgstr "Views"
 

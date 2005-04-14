@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/core/orb/xmlrpc.aw:93
 msgid "Viga XML-RPC p2ringu vastuse dekodeerimisel: %s!"
-msgstr ""
+msgstr "Error during decoding of XMLRPC message: %s!"
 

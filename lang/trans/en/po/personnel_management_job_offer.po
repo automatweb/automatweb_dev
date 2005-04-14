@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession
 msgid "Omaduse Ametikoht (profession) caption"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_comment
 msgid "Omaduse Ametikoht (profession) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline
 msgid "Omaduse Konkursi tähtaeg (deadline) caption"
-msgstr ""
+msgstr "Deadline"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_comment
 msgid "Omaduse Konkursi tähtaeg (deadline) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning
 msgid "Omaduse Konkursi algusaeg (beginning) caption"
-msgstr ""
+msgstr "Start time"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_comment
 msgid "Omaduse Konkursi algusaeg (beginning) kommentaar"
@@ -48,49 +48,49 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_SECTION
 msgid "Seose Üksus (RELTYPE_SECTION) tekst"
-msgstr ""
+msgstr "Section"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:349
 msgid "Kustuta fail"
-msgstr ""
+msgstr "Delete file"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:408
 msgid "Salvesta hinded"
-msgstr ""
+msgstr "Save grades"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:415
 msgid "Kustuta kandieerijad"
-msgstr ""
+msgstr "Delete applicants"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:431 classes/applications/personnel_management/personnel_management_job_offer.aw:619
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:438
 msgid "Kuupäev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:444
 msgid "Kaaskiri"
-msgstr ""
+msgstr "Additional letter"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:450
 msgid "Hinne"
-msgstr ""
+msgstr "Grade"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:486
 msgid "kaaskiri"
-msgstr ""
+msgstr "additional letter"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:492
 msgid "Puudub"
-msgstr ""
+msgstr "Missing"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:532
 msgid "Genereeri pdf"
-msgstr ""
+msgstr "Generate PDF"
 
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:625
 msgid "Vaatamisi"
-msgstr ""
+msgstr "Views"
 

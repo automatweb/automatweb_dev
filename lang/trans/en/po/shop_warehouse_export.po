@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_export.aw:prop_confirm
 msgid "Omaduse Kinnita (confirm) caption"
-msgstr ""
+msgstr "Confirm"
 
 #: classes/applications/shop/shop_warehouse_export.aw:prop_confirm_comment
 msgid "Omaduse Kinnita (confirm) kommentaar"
@@ -36,21 +36,21 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_export.aw:group_export
 msgid "Grupi V&auml;ljamineku sisu (export) pealkiri"
-msgstr ""
+msgstr "Export content"
 
 #: classes/applications/shop/shop_warehouse_export.aw:rel_RELTYPE_PRODUCT
 msgid "Seose v&auml;lja l&auml;inud toode (RELTYPE_PRODUCT) tekst"
-msgstr ""
+msgstr "product"
 
 #: classes/applications/shop/shop_warehouse_export.aw:rel_RELTYPE_ORDER
 msgid "Seose tellimus (RELTYPE_ORDER) tekst"
-msgstr ""
+msgstr "order"
 
 #: classes/applications/shop/shop_warehouse_export.aw:82
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/shop/shop_warehouse_export.aw:87
 msgid "Mitu l&auml;ks"
-msgstr ""
+msgstr "Amount"
 

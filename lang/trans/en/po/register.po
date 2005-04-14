@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_cfgform
 msgid "Omaduse Andmete seadete vorm (data_cfgform) caption"
-msgstr ""
+msgstr "Data form"
 
 #: classes/applications/register/register.aw:prop_data_cfgform_comment
 msgid "Omaduse Andmete seadete vorm (data_cfgform) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_default_cfgform
 msgid "Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) caption"
-msgstr ""
+msgstr "Form is default for data"
 
 #: classes/applications/register/register.aw:prop_default_cfgform_comment
 msgid "Omaduse Tee seadete vorm andmetele default'iks (default_cfgform) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_return_url
 msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) caption"
-msgstr ""
+msgstr "Redirect after data save"
 
 #: classes/applications/register/register.aw:prop_data_return_url_comment
 msgid "Omaduse Kuhu ümbersuunata peale andmete salvestamist (data_return_url) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_rootmenu
 msgid "Omaduse Andmete kataloog (data_rootmenu) caption"
-msgstr ""
+msgstr "Data folder"
 
 #: classes/applications/register/register.aw:prop_data_rootmenu_comment
 msgid "Omaduse Andmete kataloog (data_rootmenu) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_data_tree_field
 msgid "Omaduse Andmete puu struktuuri v&auml;li (data_tree_field) caption"
-msgstr ""
+msgstr "Data tree structure field"
 
 #: classes/applications/register/register.aw:prop_data_tree_field_comment
 msgid "Omaduse Andmete puu struktuuri v&auml;li (data_tree_field) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_search_o
 msgid "Omaduse Otsingu konfiguratsioon (search_o) caption"
-msgstr ""
+msgstr "Search configuration"
 
 #: classes/applications/register/register.aw:prop_search_o_comment
 msgid "Omaduse Otsingu konfiguratsioon (search_o) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_show_all
 msgid "Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) caption"
-msgstr ""
+msgstr "If not selected, show all entries"
 
 #: classes/applications/register/register.aw:prop_show_all_comment
 msgid "Omaduse Kui pole valitud, n&auml;ita k&otilde;iki sisestusi (show_all) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_per_page
 msgid "Omaduse Mitu kirjet lehel (per_page) caption"
-msgstr ""
+msgstr "Rows per page"
 
 #: classes/applications/register/register.aw:prop_per_page_comment
 msgid "Omaduse Mitu kirjet lehel (per_page) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_cfgform_name_in_field
 msgid "Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja (cfgform_name_in_field) caption"
-msgstr ""
+msgstr "On add, write configuration form name in field"
 
 #: classes/applications/register/register.aw:prop_cfgform_name_in_field_comment
 msgid "Omaduse Kirje lisamisel pane seadete vormi nimi v&auml;lja (cfgform_name_in_field) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_mail_address_to
 msgid "Omaduse E-maili aadress, (to) (mail_address_to) caption"
-msgstr ""
+msgstr "E-mail address (to)"
 
 #: classes/applications/register/register.aw:prop_mail_address_to_comment
 msgid "Omaduse E-maili aadress, (to) (mail_address_to) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_mail_address_from
 msgid "Omaduse E-maili aadress, (from) (mail_address_from) caption"
-msgstr ""
+msgstr "E-mail address (from)"
 
 #: classes/applications/register/register.aw:prop_mail_address_from_comment
 msgid "Omaduse E-maili aadress, (from) (mail_address_from) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/applications/register/register.aw:prop_mail_subject
 msgid "Omaduse Subject (mail_subject) caption"
-msgstr ""
+msgstr "E-mail subject"
 
 #: classes/applications/register/register.aw:prop_mail_subject_comment
 msgid "Omaduse Subject (mail_subject) kommentaar"
@@ -204,61 +204,61 @@ msgstr ""
 
 #: classes/applications/register/register.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/register/register.aw:group_mail_send_settings
 msgid "Grupi E-maili saatmise seaded (mail_send_settings) pealkiri"
-msgstr ""
+msgstr "E-mail settings"
 
 #: classes/applications/register/register.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/register/register.aw:rel_RELTYPE_CFGFORM
 msgid "Seose andmete seadete vorm (RELTYPE_CFGFORM) tekst"
-msgstr ""
+msgstr "data configuration form"
 
 #: classes/applications/register/register.aw:rel_RELTYPE_MENU
 msgid "Seose andmete kataloog (RELTYPE_MENU) tekst"
-msgstr ""
+msgstr "data folder"
 
 #: classes/applications/register/register.aw:rel_RELTYPE_SEARCH
 msgid "Seose registri otsing (RELTYPE_SEARCH) tekst"
-msgstr ""
+msgstr "register search"
 
 #: classes/applications/register/register.aw:rel_RELTYPE_MAIL
 msgid "Seose e-maili aadress (RELTYPE_MAIL) tekst"
-msgstr ""
+msgstr "e-mail address"
 
 #: classes/applications/register/register.aw:120
 msgid "Otsingu konfiguratsioon valimatta!"
-msgstr ""
+msgstr "Search configuration form not selected!"
 
 #: classes/applications/register/register.aw:172
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/register/register.aw:198
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/register/register.aw:204
 msgid "Looja"
-msgstr ""
+msgstr "Createdby"
 
 #: classes/applications/register/register.aw:211
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/applications/register/register.aw:220
 msgid "Muutja"
-msgstr ""
+msgstr "Modifiedby"
 
 #: classes/applications/register/register.aw:227
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/register/register.aw:236 classes/applications/register/register.aw:324
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 

@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/core/error.aw:44 classes/core/error.aw:45 classes/core/error.aw:46
 msgid "not specified"
-msgstr ""
+msgstr "not specified"
 
 #: classes/core/error.aw:49
 msgid "Acl error, access %s was denied for object %s in function %s"
-msgstr ""
+msgstr "Acl error, access %s was denied for object %s in function %s"
 

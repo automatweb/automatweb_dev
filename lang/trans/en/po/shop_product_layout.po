@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_layout.aw:prop_template
 msgid "Omaduse Template (template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/applications/shop/shop_product_layout.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"

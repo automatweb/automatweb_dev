@@ -1,0 +1,30 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Kinnitatud (confirmed) caption"] = "Confirmed";
+$GLOBALS["TRANS"]["Omaduse Tellija esindaja (orderer_person) caption"] = "Orderer representative";
+$GLOBALS["TRANS"]["Omaduse Tellija (orderer_company) caption"] = "Orderer";
+$GLOBALS["TRANS"]["Omaduse M&uuml;&uuml;ja esindaja (seller_person) caption"] = "Seller representative";
+$GLOBALS["TRANS"]["Omaduse M&uuml;&uuml;ja (seller_company) caption"] = "Seller";
+$GLOBALS["TRANS"]["Omaduse Tellimiskeskkond (oc) caption"] = "Ordering center";
+$GLOBALS["TRANS"]["Omaduse Ladu (warehouse) caption"] = "Warehouse";
+$GLOBALS["TRANS"]["Omaduse Tellimuste toolbar (items_toolbar) caption"] = "Order toolbar";
+$GLOBALS["TRANS"]["Omaduse Tellija andmed (items_orderer) caption"] = "Orderer info";
+$GLOBALS["TRANS"]["Omaduse Tellitud tooted (items) caption"] = "Ordered products";
+$GLOBALS["TRANS"]["Omaduse Summa (sum) caption"] = "Sum";
+$GLOBALS["TRANS"]["Grupi Tellimuse sisu (items) pealkiri"] = "Order content";
+$GLOBALS["TRANS"]["Seose tellimuse toode (RELTYPE_PRODUCT) tekst"] = "order product";
+$GLOBALS["TRANS"]["Seose lao v&auml;ljaminek (RELTYPE_EXPORT) tekst"] = "warehouse export";
+$GLOBALS["TRANS"]["Seose tellija esindaja (RELTYPE_PERSON) tekst"] = "orderer prepresentative";
+$GLOBALS["TRANS"]["Seose tellija organisatsioon (RELTYPE_ORG) tekst"] = "orderer company";
+$GLOBALS["TRANS"]["Seose ladu (RELTYPE_WAREHOUSE) tekst"] = "warehouse";
+$GLOBALS["TRANS"]["Seose tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"] = "ordering center";
+$GLOBALS["TRANS"]["Seose Tellimuste tabeli kujundus (RELTYPE_ORDER_TABLE_LAYOUT) tekst"] = "order table layout";
+$GLOBALS["TRANS"]["Eemalda tellimusest tooted"] = "Remove products from order";
+$GLOBALS["TRANS"]["Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"] = "Are you sure you wish to remove the selected products from the order?";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Mitu"] = "Count";
+$GLOBALS["TRANS"]["Pakend: "] = "Packaging: ";
+$GLOBALS["TRANS"]["Toode: "] = "Product: ";
+$GLOBALS["TRANS"]["shop_order::do_confirm(): could not find parent folder for warehouse export!"] = "shop_order::do_confirm(): could not find parent folder for warehouse export!";
+$GLOBALS["TRANS"]["Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"] = "Warehouse export based on order %s";
+$GLOBALS["TRANS"]["Tellimus laost %s"] = "Order from warehouse %s";
+?>

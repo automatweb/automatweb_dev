@@ -12,29 +12,29 @@ msgstr ""
 
 #: classes/formgen/form.aw:2291
 msgid "Sessioonist lugemise formi pole valitud v&auml;ljundile %s "
-msgstr ""
+msgstr "No session reading form is set for output %s"
 
 #: classes/formgen/form.aw:3065
 msgid "No table selected for showing search results for form %s!"
-msgstr ""
+msgstr "No table selected for showing search results for form %s!"
 
 #: classes/formgen/form.aw:3414
 msgid "form->search(%s): no forms selected as search targets!"
-msgstr ""
+msgstr "form->search(%s): no forms selected as search targets!"
 
 #: classes/formgen/form.aw:3602
 msgid "No forms selected as search targets!"
-msgstr ""
+msgstr "No forms selected as search targets!"
 
 #: classes/formgen/form.aw:3808
 msgid "No table selected for showing data!"
-msgstr ""
+msgstr "No table selected for showing data!"
 
 #: classes/formgen/form.aw:3856
 msgid "Tulemuste kuvamise tabelis pole yhtegi elementi!"
-msgstr ""
+msgstr "No elements in result table!"
 
 #: classes/formgen/form.aw:4763
 msgid "form->metainfo(): weird error!"
-msgstr ""
+msgstr "form->metainfo(): weird error!"
 

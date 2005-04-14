@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/register/register_search_result.aw:prop_search
 msgid "Omaduse Registri otsing (search) caption"
-msgstr ""
+msgstr "Register search"
 
 #: classes/applications/register/register_search_result.aw:prop_search_comment
 msgid "Omaduse Registri otsing (search) kommentaar"
@@ -48,13 +48,13 @@ msgstr ""
 
 #: classes/applications/register/register_search_result.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/register/register_search_result.aw:group_search_res
 msgid "Grupi Tulemused (search_res) pealkiri"
-msgstr ""
+msgstr "Results"
 
 #: classes/applications/register/register_search_result.aw:rel_RELTYPE_SEARCH
 msgid "Seose registri otsing (RELTYPE_SEARCH) tekst"
-msgstr ""
+msgstr "register search"
 

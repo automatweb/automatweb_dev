@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
-msgstr ""
+msgstr "Numer in stock"
 
 #: classes/applications/shop/shop_product.aw:prop_item_count_comment
 msgid "Omaduse Mitu laos (item_count) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_item_type
 msgid "Omaduse Toote t&uuml;&uuml;p (item_type) caption"
-msgstr ""
+msgstr "Product type"
 
 #: classes/applications/shop/shop_product.aw:prop_item_type_comment
 msgid "Omaduse Toote t&uuml;&uuml;p (item_type) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/shop/shop_product.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_must_order_num
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) caption"
-msgstr ""
+msgstr "Amount must be divisible by this"
 
 #: classes/applications/shop/shop_product.aw:prop_must_order_num_comment
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) kommentaar"
@@ -660,7 +660,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_packaging
 msgid "Omaduse Pakendid (packaging) caption"
-msgstr ""
+msgstr "Packaging"
 
 #: classes/applications/shop/shop_product.aw:prop_packaging_comment
 msgid "Omaduse Pakendid (packaging) kommentaar"
@@ -672,7 +672,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/shop/shop_product.aw:prop_images_comment
 msgid "Omaduse Pildid (images) kommentaar"
@@ -684,7 +684,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_files
 msgid "Omaduse Failid (files) caption"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/shop/shop_product.aw:prop_files_comment
 msgid "Omaduse Failid (files) kommentaar"
@@ -696,7 +696,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_docs
 msgid "Omaduse Dokumendid (docs) caption"
-msgstr ""
+msgstr "Documents"
 
 #: classes/applications/shop/shop_product.aw:prop_docs_comment
 msgid "Omaduse Dokumendid (docs) kommentaar"
@@ -708,7 +708,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:prop_lnk
 msgid "Omaduse Lingid (lnk) caption"
-msgstr ""
+msgstr "Links"
 
 #: classes/applications/shop/shop_product.aw:prop_lnk_comment
 msgid "Omaduse Lingid (lnk) kommentaar"
@@ -720,69 +720,69 @@ msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_data
 msgid "Grupi Toote info (data) pealkiri"
-msgstr ""
+msgstr "Product info"
 
 #: classes/applications/shop/shop_product.aw:group_packaging
 msgid "Grupi Pakendid (packaging) pealkiri"
-msgstr ""
+msgstr "Packaging"
 
 #: classes/applications/shop/shop_product.aw:group_img
 msgid "Grupi Pildid (img) pealkiri"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/shop/shop_product.aw:group_fls
 msgid "Grupi Failid (fls) pealkiri"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/shop/shop_product.aw:group_doc
 msgid "Grupi Dokumendid (doc) pealkiri"
-msgstr ""
+msgstr "Documents"
 
 #: classes/applications/shop/shop_product.aw:group_lnk
 msgid "Grupi Lingid (lnk) pealkiri"
-msgstr ""
+msgstr "Links"
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_PACKAGING
 msgid "Seose pakend (RELTYPE_PACKAGING) tekst"
-msgstr ""
+msgstr "packaging"
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM1
 msgid "Seose kasutajadefineeritud muutuja 1 (RELTYPE_VARUSERM1) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM2
 msgid "Seose kasutajadefineeritud muutuja 2 (RELTYPE_VARUSERM2) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM3
 msgid "Seose kasutajadefineeritud muutuja 3 (RELTYPE_VARUSERM3) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM4
 msgid "Seose kasutajadefineeritud muutuja 4 (RELTYPE_VARUSERM4) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM5
 msgid "Seose kasutajadefineeritud muutuja 5 (RELTYPE_VARUSERM5) tekst"
-msgstr ""
+msgstr " "
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_FILE
 msgid "Seose fail (RELTYPE_FILE) tekst"
-msgstr ""
+msgstr "file"
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_DOC
 msgid "Seose dokument (RELTYPE_DOC) tekst"
-msgstr ""
+msgstr "document"
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_LNK
 msgid "Seose link (RELTYPE_LNK) tekst"
-msgstr ""
+msgstr "link"
 
 #: classes/applications/shop/shop_product.aw:459
 msgid "shop_product::draw(): no layout set!"
-msgstr ""
+msgstr "shop_product::draw(): no layout set!"
 

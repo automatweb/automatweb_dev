@@ -12,37 +12,37 @@ msgstr ""
 
 #: classes/core/converters/image_convert.aw:111 classes/core/converters/image_convert.aw:120 classes/core/converters/image_convert.aw:130 classes/core/converters/image_convert.aw:142 classes/core/converters/image_convert.aw:151 classes/core/converters/image_convert.aw:168 classes/core/converters/image_convert.aw:177 classes/core/converters/image_convert.aw:188 classes/core/converters/image_convert.aw:199 classes/core/converters/image_convert.aw:212 classes/core/converters/image_convert.aw:221
 msgid "image_covert: could not detect any supported imagehandlers!"
-msgstr ""
+msgstr "image_covert: could not detect any supported imagehandlers!"
 
 #: classes/core/converters/image_convert.aw:274
 msgid "image_convert::gd_driver::load_from_string(): could not detect image format!"
-msgstr ""
+msgstr "image_convert::gd_driver::load_from_string(): could not detect image format!"
 
 #: classes/core/converters/image_convert.aw:305
 msgid "image_convert::gd_driver::load_from_file(): could not detect image format!"
-msgstr ""
+msgstr "image_convert::gd_driver::load_from_file(): could not detect image format!"
 
 #: classes/core/converters/image_convert.aw:346 classes/core/converters/image_convert.aw:499 classes/core/converters/image_convert.aw:680
 msgid "image_convert::get(%s): unknown image type!"
-msgstr ""
+msgstr "image_convert::get(%s): unknown image type!"
 
 #: classes/core/converters/image_convert.aw:376
 msgid "image_convert::save(%s,%s): unknown image type!"
-msgstr ""
+msgstr "image_convert::save(%s,%s): unknown image type!"
 
 #: classes/core/converters/image_convert.aw:447
 msgid "image_convert::load_from_file(%s): no such file!"
-msgstr ""
+msgstr "image_convert::load_from_file(%s): no such file!"
 
 #: classes/core/converters/image_convert.aw:531
 msgid "image_convert::save(%s, %s): unknown image type!"
-msgstr ""
+msgstr "image_convert::save(%s, %s): unknown image type!"
 
 #: classes/core/converters/image_convert.aw:595
 msgid "image_convert::load_from_string(): could not read image from string! reason = %s, desc = %s"
-msgstr ""
+msgstr "image_convert::load_from_string(): could not read image from string! reason = %s, desc = %s"
 
 #: classes/core/converters/image_convert.aw:611 classes/core/converters/image_convert.aw:628
 msgid "image_convert::load_from_file(%s): could not read image from file! reason = %s, desc = %s"
-msgstr ""
+msgstr "image_convert::load_from_file(%s): could not read image from file! reason = %s, desc = %s"
 

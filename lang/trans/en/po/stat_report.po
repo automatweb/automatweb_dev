@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:prop_filesize
 msgid "Omaduse Faili max. suurus (KB) (filesize) caption"
-msgstr ""
+msgstr "File max size"
 
 #: classes/applications/stat_report/stat_report.aw:prop_filesize_comment
 msgid "Omaduse Faili max. suurus (KB) (filesize) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:prop_whitelist
 msgid "Omaduse Lubatud laiend (iga laiend eraldi real) (whitelist) caption"
-msgstr ""
+msgstr "Allowed extensions (on separate lines)"
 
 #: classes/applications/stat_report/stat_report.aw:prop_whitelist_comment
 msgid "Omaduse Lubatud laiend (iga laiend eraldi real) (whitelist) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:prop_final
 msgid "Omaduse Õnnestunud uploadi kviteeriv tekst (final) caption"
-msgstr ""
+msgstr "Successful upload text"
 
 #: classes/applications/stat_report/stat_report.aw:prop_final_comment
 msgid "Omaduse Õnnestunud uploadi kviteeriv tekst (final) kommentaar"
@@ -48,9 +48,9 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:group_settings
 msgid "Grupi Seadistamine (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/stat_report/stat_report.aw:rel_RELTYPE_REPORT_TYPE
 msgid "Seose Aruannete tyybid (RELTYPE_REPORT_TYPE) tekst"
-msgstr ""
+msgstr "Report types"
 

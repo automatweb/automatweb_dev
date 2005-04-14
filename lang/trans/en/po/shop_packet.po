@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
-msgstr ""
+msgstr "Items in warehouse"
 
 #: classes/applications/shop/shop_packet.aw:prop_item_count_comment
 msgid "Omaduse Mitu laos (item_count) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:prop_separate_items
 msgid "Omaduse Kas tooted on eraldi (separate_items) caption"
-msgstr ""
+msgstr "Products are separate"
 
 #: classes/applications/shop/shop_packet.aw:prop_separate_items_comment
 msgid "Omaduse Kas tooted on eraldi (separate_items) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/shop/shop_packet.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/shop/shop_packet.aw:prop_images_comment
 msgid "Omaduse Pildid (images) kommentaar"
@@ -252,29 +252,29 @@ msgstr ""
 
 #: classes/applications/shop/shop_packet.aw:group_packet
 msgid "Grupi Paketi sisu (packet) pealkiri"
-msgstr ""
+msgstr "Packet content"
 
 #: classes/applications/shop/shop_packet.aw:group_data
 msgid "Grupi Toote info (data) pealkiri"
-msgstr ""
+msgstr "Product info"
 
 #: classes/applications/shop/shop_packet.aw:group_img
 msgid "Grupi Pildid (img) pealkiri"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/shop/shop_packet.aw:rel_RELTYPE_PRODUCT
 msgid "Seose paketi toode (RELTYPE_PRODUCT) tekst"
-msgstr ""
+msgstr "product"
 
 #: classes/applications/shop/shop_packet.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 
 #: classes/applications/shop/shop_packet.aw:125
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/shop/shop_packet.aw:130
 msgid "Mitu paketis"
-msgstr ""
+msgstr "Amount"
 

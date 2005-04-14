@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_palgasoov
 msgid "Omaduse Palgasoov (palgasoov) caption"
-msgstr ""
+msgstr "Salary wanted"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_palgasoov_comment
 msgid "Omaduse Palgasoov (palgasoov) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_valdkond
 msgid "Omaduse Tegevusala (valdkond) caption"
-msgstr ""
+msgstr "Area of acitvity"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_valdkond_comment
 msgid "Omaduse Tegevusala (valdkond) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_liik
 msgid "Omaduse T&ouml;&ouml; liik (liik) caption"
-msgstr ""
+msgstr "Job type"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_liik_comment
 msgid "Omaduse T&ouml;&ouml; liik (liik) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_asukoht
 msgid "Omaduse T&ouml;&ouml;tamise piirkond (asukoht) caption"
-msgstr ""
+msgstr "Job area"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_asukoht_comment
 msgid "Omaduse T&ouml;&ouml;tamise piirkond (asukoht) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_koormus
 msgid "Omaduse T&ouml;&ouml; koormus (koormus) caption"
-msgstr ""
+msgstr "Workload"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_koormus_comment
 msgid "Omaduse T&ouml;&ouml; koormus (koormus) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_lisainfo
 msgid "Omaduse Lisainfo soovitava t&ouml;&ouml; kohta (lisainfo) caption"
-msgstr ""
+msgstr "Additional info about job wanted"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_lisainfo_comment
 msgid "Omaduse Lisainfo soovitava t&ouml;&ouml; kohta (lisainfo) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sbutton
 msgid "Omaduse Lisa (sbutton) caption"
-msgstr ""
+msgstr "Add"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_sbutton_comment
 msgid "Omaduse Lisa (sbutton) kommentaar"
@@ -96,17 +96,17 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_LINN
 msgid "Seose Linn (RELTYPE_LINN) tekst"
-msgstr ""
+msgstr "Town"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_LIIK
 msgid "Seose liik (RELTYPE_LIIK) tekst"
-msgstr ""
+msgstr "type"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_TEGEVUSVALDKOND
 msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
-msgstr ""
+msgstr "Area of activity"
 
 #: classes/applications/personnel_management/personnel_management_job_wanted.aw:rel_RELTYPE_KOORMUS
 msgid "Seose Koormus (RELTYPE_KOORMUS) tekst"
-msgstr ""
+msgstr "Workload"
 

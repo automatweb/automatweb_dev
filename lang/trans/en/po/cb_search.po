@@ -187,7 +187,7 @@ msgstr "Textbox for search"
 
 #: classes/cfg/cb_search.aw:174
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/cfg/cb_search.aw:179
 msgid "Tekst"
@@ -199,19 +199,19 @@ msgstr "Order"
 
 #: classes/cfg/cb_search.aw:199
 msgid "Rippmen&uuml;&uuml;"
-msgstr ""
+msgstr "Select"
 
 #: classes/cfg/cb_search.aw:200
 msgid "Mitmerealine rippmen&uuml;&uuml;"
-msgstr ""
+msgstr "Multiple select"
 
 #: classes/cfg/cb_search.aw:201
 msgid "M&auml;rkeruut"
-msgstr ""
+msgstr "Checkbox"
 
 #: classes/cfg/cb_search.aw:202
 msgid "Raadionupp"
-msgstr ""
+msgstr "Radiobutton"
 
 #: classes/cfg/cb_search.aw:285
 msgid "--vali--"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_name
 msgid "Omaduse Nimi (lang_name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/language.aw:prop_lang_name_comment
 msgid "Omaduse Nimi (lang_name) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_status
 msgid "Omaduse Aktiivne (lang_status) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/core/language.aw:prop_lang_status_comment
 msgid "Omaduse Aktiivne (lang_status) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_sel_lang
 msgid "Omaduse Keel (lang_sel_lang) caption"
-msgstr ""
+msgstr "Language"
 
 #: classes/core/language.aw:prop_lang_sel_lang_comment
 msgid "Omaduse Keel (lang_sel_lang) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_charset
 msgid "Omaduse Charset (lang_charset) caption"
-msgstr ""
+msgstr "Charset"
 
 #: classes/core/language.aw:prop_lang_charset_comment
 msgid "Omaduse Charset (lang_charset) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_acceptlang
 msgid "Omaduse Keele kood (lang_acceptlang) caption"
-msgstr ""
+msgstr "Language code"
 
 #: classes/core/language.aw:prop_lang_acceptlang_comment
 msgid "Omaduse Keele kood (lang_acceptlang) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_site_id
 msgid "Omaduse Saidid kus keel on valitav (lang_site_id) caption"
-msgstr ""
+msgstr "Sites where the language is active"
 
 #: classes/core/language.aw:prop_lang_site_id_comment
 msgid "Omaduse Saidid kus keel on valitav (lang_site_id) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_id
 msgid "Omaduse Keele ID (lang_id) caption"
-msgstr ""
+msgstr "Language ID"
 
 #: classes/core/language.aw:prop_lang_id_comment
 msgid "Omaduse Keele ID (lang_id) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_trans_msg
 msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) caption"
-msgstr ""
+msgstr "Untranslated content message"
 
 #: classes/core/language.aw:prop_lang_trans_msg_comment
 msgid "Omaduse T&otilde;lkimata sisu teade (lang_trans_msg) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_img
 msgid "Omaduse Keele pilt (lang_img) caption"
-msgstr ""
+msgstr "Language image"
 
 #: classes/core/language.aw:prop_lang_img_comment
 msgid "Omaduse Keele pilt (lang_img) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_lang_img_act
 msgid "Omaduse Aktiivse keele pilt (lang_img_act) caption"
-msgstr ""
+msgstr "Active language image"
 
 #: classes/core/language.aw:prop_lang_img_act_comment
 msgid "Omaduse Aktiivse keele pilt (lang_img_act) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_fp_text
 msgid "Omaduse Esilehe nimi (fp_text) caption"
-msgstr ""
+msgstr "Frontpage name"
 
 #: classes/core/language.aw:prop_fp_text_comment
 msgid "Omaduse Esilehe nimi (fp_text) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_temp_redir_url
 msgid "Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele (temp_redir_url) caption"
-msgstr ""
+msgstr "Temporary address for not logged in users"
 
 #: classes/core/language.aw:prop_temp_redir_url_comment
 msgid "Omaduse Ajutine AW-v&auml;line aadress sisse logimata kasutajatele (temp_redir_url) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/core/language.aw:prop_langs
 msgid "Omaduse Keeled (langs) caption"
-msgstr ""
+msgstr "Languages"
 
 #: classes/core/language.aw:prop_langs_comment
 msgid "Omaduse Keeled (langs) kommentaar"
@@ -180,37 +180,37 @@ msgstr ""
 
 #: classes/core/language.aw:group_langs
 msgid "Grupi K&otilde;ik keeled (langs) pealkiri"
-msgstr ""
+msgstr "All languages"
 
 #: classes/core/language.aw:group_texts
 msgid "Grupi Tekstid (texts) pealkiri"
-msgstr ""
+msgstr "Texts"
 
 #: classes/core/language.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 
 #: classes/core/language.aw:81
 msgid "siit"
-msgstr ""
+msgstr "here"
 
 #: classes/core/language.aw:235
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/core/language.aw:240
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/core/language.aw:245
 msgid "Valitud"
-msgstr ""
+msgstr "Selected"
 
 #: classes/core/language.aw:289
 msgid "Muutuja nimi"
-msgstr ""
+msgstr "Variable name"
 
 #: classes/core/language.aw:294
 msgid "Muutuja v&auml;&auml;rtus"
-msgstr ""
+msgstr "Variable value"
 

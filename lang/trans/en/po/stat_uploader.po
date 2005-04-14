@@ -108,5 +108,5 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_uploader.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 

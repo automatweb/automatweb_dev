@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/core/obj/object_complex_query.aw:34
 msgid "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
-msgstr ""
+msgstr "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
 
 #: classes/core/obj/object_complex_query.aw:97
 msgid "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
-msgstr ""
+msgstr "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
 

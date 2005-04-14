@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/core/remote_login.aw:prop_login_uid
 msgid "Omaduse Kasutajanimi (login_uid) caption"
-msgstr ""
+msgstr "Username"
 
 #: classes/core/remote_login.aw:prop_login_uid_comment
 msgid "Omaduse Kasutajanimi (login_uid) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/core/remote_login.aw:prop_login_password
 msgid "Omaduse Parool (login_password) caption"
-msgstr ""
+msgstr "Password"
 
 #: classes/core/remote_login.aw:prop_login_password_comment
 msgid "Omaduse Parool (login_password) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/core/remote_login.aw:prop_server
 msgid "Omaduse Server (server) caption"
-msgstr ""
+msgstr "Server"
 
 #: classes/core/remote_login.aw:prop_server_comment
 msgid "Omaduse Server (server) kommentaar"
@@ -48,5 +48,5 @@ msgstr ""
 
 #: classes/core/remote_login.aw:71
 msgid "Relax, take a cookie."
-msgstr ""
+msgstr "Relax, take a cookie."
 

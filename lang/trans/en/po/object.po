@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/core/obj/object.aw:68
 msgid "object loader is not object!!"
-msgstr ""
+msgstr "object loader is not object!!"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_rootnode
 msgid "Omaduse Juurika ID (eralda komadega) (rootnode) caption"
-msgstr ""
+msgstr "Root ID (separate with commas)"
 
 #: classes/import/livelink_import.aw:prop_rootnode_comment
 msgid "Omaduse Juurika ID (eralda komadega) (rootnode) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_exception_node
 msgid "Omaduse Erandite ID (eralda komadega) (exception_node) caption"
-msgstr ""
+msgstr "Exception ID (separate with comma)"
 
 #: classes/import/livelink_import.aw:prop_exception_node_comment
 msgid "Omaduse Erandite ID (eralda komadega) (exception_node) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_outdir
 msgid "Omaduse Kataloog, kuhu failid kirjutada (outdir) caption"
-msgstr ""
+msgstr "Folder, where to write files"
 
 #: classes/import/livelink_import.aw:prop_outdir_comment
 msgid "Omaduse Kataloog, kuhu failid kirjutada (outdir) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_fileprefix
 msgid "Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) caption"
-msgstr ""
+msgstr "Prefix for files in table"
 
 #: classes/import/livelink_import.aw:prop_fileprefix_comment
 msgid "Omaduse Prefiks tabelisse kirjutatavatele failinimedele (fileprefix) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_message
 msgid "Omaduse Objekti staatus (message) caption"
-msgstr ""
+msgstr "Object status"
 
 #: classes/import/livelink_import.aw:prop_message_comment
 msgid "Omaduse Objekti staatus (message) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_invoke
 msgid "Omaduse Käivita (invoke) caption"
-msgstr ""
+msgstr "Invoke"
 
 #: classes/import/livelink_import.aw:prop_invoke_comment
 msgid "Omaduse Käivita (invoke) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_ll_username
 msgid "Omaduse Livelink kasutaja (ll_username) caption"
-msgstr ""
+msgstr "Livelink username"
 
 #: classes/import/livelink_import.aw:prop_ll_username_comment
 msgid "Omaduse Livelink kasutaja (ll_username) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_ll_password
 msgid "Omaduse Livelink parool (ll_password) caption"
-msgstr ""
+msgstr "Livelink password"
 
 #: classes/import/livelink_import.aw:prop_ll_password_comment
 msgid "Omaduse Livelink parool (ll_password) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:prop_ll_http_auth
 msgid "Omaduse HTTP autoriseerimisel samad andmed (ll_http_auth) caption"
-msgstr ""
+msgstr "Same data on HTTP auth"
 
 #: classes/import/livelink_import.aw:prop_ll_http_auth_comment
 msgid "Omaduse HTTP autoriseerimisel samad andmed (ll_http_auth) kommentaar"
@@ -120,9 +120,9 @@ msgstr ""
 
 #: classes/import/livelink_import.aw:group_auth
 msgid "Grupi Autoriseerimine (auth) pealkiri"
-msgstr ""
+msgstr "Authorization"
 
 #: classes/import/livelink_import.aw:rel_RELTYPE_LOGFILE
 msgid "Seose Logifail (RELTYPE_LOGFILE) tekst"
-msgstr ""
+msgstr "Log file"
 

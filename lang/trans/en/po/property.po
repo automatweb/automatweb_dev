@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/cfg/property.aw:prop_test
 msgid "Omaduse Test (test) caption"
-msgstr ""
+msgstr "Test"
 
 #: classes/cfg/property.aw:prop_test_comment
 msgid "Omaduse Test (test) kommentaar"
@@ -24,5 +24,5 @@ msgstr ""
 
 #: classes/cfg/property.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 

@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_base_url
 msgid "Omaduse Toodete csv failide baasaadress (base_url) caption"
-msgstr ""
+msgstr "Product csv file base address"
 
 # classes/applications/shop/otto/otto_import.aw:prop_base_url_comment
 msgid "Omaduse Toodete csv failide baasaadress (base_url) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_folder_url
 msgid "Omaduse Kataloogideks jagamise csv url (folder_url) caption"
-msgstr ""
+msgstr "URL for folder csv file"
 
 # classes/applications/shop/otto/otto_import.aw:prop_folder_url_comment
 msgid "Omaduse Kataloogideks jagamise csv url (folder_url) kommentaar"
@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_prod_folder
 msgid "Omaduse Toodete kataloog (prod_folder) caption"
-msgstr ""
+msgstr "Product foler"
 
 # classes/applications/shop/otto/otto_import.aw:prop_prod_folder_comment
 msgid "Omaduse Toodete kataloog (prod_folder) kommentaar"
@@ -47,7 +47,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_file_ext
 msgid "Omaduse Failide laiend (file_ext) caption"
-msgstr ""
+msgstr "File extension"
 
 # classes/applications/shop/otto/otto_import.aw:prop_file_ext_comment
 msgid "Omaduse Failide laiend (file_ext) kommentaar"
@@ -59,7 +59,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_i
 msgid "Omaduse Teosta import (do_i) caption"
-msgstr ""
+msgstr "Do import"
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_i_comment
 msgid "Omaduse Teosta import (do_i) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_pict_i
 msgid "Omaduse Teosta piltide import (do_pict_i) caption"
-msgstr ""
+msgstr "Do image import"
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_pict_i_comment
 msgid "Omaduse Teosta piltide import (do_pict_i) kommentaar"
@@ -83,7 +83,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_restart_pict_i
 msgid "Omaduse Alusta piltide importi algusest (restart_pict_i) caption"
-msgstr ""
+msgstr "Restart image import"
 
 # classes/applications/shop/otto/otto_import.aw:prop_restart_pict_i_comment
 msgid "Omaduse Alusta piltide importi algusest (restart_pict_i) kommentaar"
@@ -95,7 +95,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_restart_prod_i
 msgid "Omaduse Alusta toodete importi algusest (restart_prod_i) caption"
-msgstr ""
+msgstr "Restart product import"
 
 # classes/applications/shop/otto/otto_import.aw:prop_restart_prod_i_comment
 msgid "Omaduse Alusta toodete importi algusest (restart_prod_i) kommentaar"
@@ -107,7 +107,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_last_import_log
 msgid "Omaduse Viimase impordi logi (last_import_log) caption"
-msgstr ""
+msgstr "Last import log"
 
 # classes/applications/shop/otto/otto_import.aw:prop_last_import_log_comment
 msgid "Omaduse Viimase impordi logi (last_import_log) kommentaar"
@@ -119,7 +119,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_orig_img
 msgid "Omaduse Algne pilt (orig_img) caption"
-msgstr ""
+msgstr "Original image"
 
 # classes/applications/shop/otto/otto_import.aw:prop_orig_img_comment
 msgid "Omaduse Algne pilt (orig_img) kommentaar"
@@ -143,7 +143,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_to_img
 msgid "Omaduse Mis pildid asendada (to_img) caption"
-msgstr ""
+msgstr "Replace which images"
 
 # classes/applications/shop/otto/otto_import.aw:prop_to_img_comment
 msgid "Omaduse Mis pildid asendada (to_img) kommentaar"
@@ -155,7 +155,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_fnames
 msgid "Omaduse Failinimed (fnames) caption"
-msgstr ""
+msgstr "Filenames"
 
 # classes/applications/shop/otto/otto_import.aw:prop_fnames_comment
 msgid "Omaduse Failinimed (fnames) kommentaar"
@@ -179,7 +179,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_inf_pages
 msgid "Omaduse L&otilde;pmatus vaatega lehed (inf_pages) caption"
-msgstr ""
+msgstr "Pages with infinite view"
 
 # classes/applications/shop/otto/otto_import.aw:prop_inf_pages_comment
 msgid "Omaduse L&otilde;pmatus vaatega lehed (inf_pages) kommentaar"
@@ -191,7 +191,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_foldpri
 msgid "Omaduse T&auml;htede prioriteedid (foldpri) caption"
-msgstr ""
+msgstr "Letter priorities"
 
 # classes/applications/shop/otto/otto_import.aw:prop_foldpri_comment
 msgid "Omaduse T&auml;htede prioriteedid (foldpri) kommentaar"
@@ -203,7 +203,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_sideways_pages
 msgid "Omaduse Landscape vaatega lehed (sideways_pages) caption"
-msgstr ""
+msgstr "Pages with landscape view"
 
 # classes/applications/shop/otto/otto_import.aw:prop_sideways_pages_comment
 msgid "Omaduse Landscape vaatega lehed (sideways_pages) kommentaar"
@@ -215,7 +215,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_7_view
 msgid "Omaduse 7 pildiga lehed (force_7_view) caption"
-msgstr ""
+msgstr "pages with 7 view"
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_7_view_comment
 msgid "Omaduse 7 pildiga lehed (force_7_view) kommentaar"
@@ -227,7 +227,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_inf_view
 msgid "Omaduse L&otilde;pmatute pildiga lehehed (force_inf_view) caption"
-msgstr ""
+msgstr "Pages with infinite images"
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_inf_view_comment
 msgid "Omaduse L&otilde;pmatute pildiga lehehed (force_inf_view) kommentaar"
@@ -239,7 +239,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_10_view
 msgid "Omaduse 10 pildiga lehed (force_10_view) caption"
-msgstr ""
+msgstr "Pages with 10 images"
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_10_view_comment
 msgid "Omaduse 10 pildiga lehed (force_10_view) kommentaar"
@@ -251,7 +251,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_8_view
 msgid "Omaduse 8 pildiga lehed (force_8_view) caption"
-msgstr ""
+msgstr "Pages with 8 images"
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_8_view_comment
 msgid "Omaduse 8 pildiga lehed (force_8_view) kommentaar"
@@ -265,6 +265,7 @@ msgstr ""
 msgid ""
 "Omaduse Ilma detailvaate lisapiltideta lehed (force_no_side_view) caption"
 msgstr ""
+"Pages with no extra images in detailed view"
 
 # classes/applications/shop/otto/otto_import.aw:prop_force_no_side_view_comment
 msgid ""
@@ -277,7 +278,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_clothes
 msgid "Omaduse R&otilde;ivad (jm_clothes) caption"
-msgstr ""
+msgstr "Clothes"
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_clothes_comment
 msgid "Omaduse R&otilde;ivad (jm_clothes) kommentaar"
@@ -289,7 +290,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_lasting
 msgid "Omaduse Kestvuskaubad (jm_lasting) caption"
-msgstr ""
+msgstr "Lasting goods"
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_lasting_comment
 msgid "Omaduse Kestvuskaubad (jm_lasting) kommentaar"
@@ -301,7 +302,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_furniture
 msgid "Omaduse M&ouml;&ouml;bel (jm_furniture) caption"
-msgstr ""
+msgstr "Furniture"
 
 # classes/applications/shop/otto/otto_import.aw:prop_jm_furniture_comment
 msgid "Omaduse M&ouml;&ouml;bel (jm_furniture) kommentaar"
@@ -313,7 +314,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_del_prods
 msgid "Omaduse Kustuta tooted koodidega (komaga eraldatud) (del_prods) caption"
-msgstr ""
+msgstr "Delete products with codes (comma separated)"
 
 # classes/applications/shop/otto/otto_import.aw:prop_del_prods_comment
 msgid ""
@@ -326,7 +327,7 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_fixes
 msgid "Omaduse Soorita parandus (do_fixes) caption"
-msgstr ""
+msgstr "Do fixes"
 
 # classes/applications/shop/otto/otto_import.aw:prop_do_fixes_comment
 msgid "Omaduse Soorita parandus (do_fixes) kommentaar"
@@ -338,56 +339,56 @@ msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:group_imgs
 msgid "Grupi Pildid (imgs) pealkiri"
-msgstr ""
+msgstr "Images"
 
 # classes/applications/shop/otto/otto_import.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
-msgstr ""
+msgstr "Files"
 
 # classes/applications/shop/otto/otto_import.aw:group_foldersa
 msgid "Grupi Kataloogid (foldersa) pealkiri"
-msgstr ""
+msgstr "Folders"
 
 # classes/applications/shop/otto/otto_import.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
-msgstr ""
+msgstr "Folders"
 
 # classes/applications/shop/otto/otto_import.aw:group_folderspri
 msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"
-msgstr ""
+msgstr "Folder settings"
 
 # classes/applications/shop/otto/otto_import.aw:group_views
 msgid "Grupi Vaated (views) pealkiri"
-msgstr ""
+msgstr "Views"
 
 # classes/applications/shop/otto/otto_import.aw:group_jm
 msgid "Grupi J&auml;relmaks (jm) pealkiri"
-msgstr ""
+msgstr "Rent"
 
 # classes/applications/shop/otto/otto_import.aw:group_delete
 msgid "Grupi Kustutamine (delete) pealkiri"
-msgstr ""
+msgstr "Deleting"
 
 # classes/applications/shop/otto/otto_import.aw:group_post_import_fix
 msgid "Grupi Parandused (post_import_fix) pealkiri"
-msgstr ""
+msgstr "Repairs"
 
 # classes/applications/shop/otto/otto_import.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/applications/shop/otto/otto_import.aw:500
 msgid "otto_import::images(): could not fetch html for url %s!"
-msgstr ""
+msgstr "otto_import::images(): could not fetch html for url %s!"
 
 #: classes/applications/shop/otto/otto_import.aw:1341
 msgid "all done! <br>"
-msgstr ""
+msgstr "All done! <br>"
 
 #: classes/applications/shop/otto/otto_import.aw:1747
 msgid "Lehed komaga eraldatult"
-msgstr ""
+msgstr "Pages separated with commas"
 
 #: classes/applications/shop/otto/otto_import.aw:1753
 msgid "AW Kataloogi ID"
-msgstr ""
+msgstr "AW Folder ID"

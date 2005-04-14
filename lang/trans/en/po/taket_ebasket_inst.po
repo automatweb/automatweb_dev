@@ -24,9 +24,9 @@ msgstr ""
 
 #: classes/taket/taket_ebasket_inst.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/taket/taket_ebasket_inst.aw:rel_RELTYPE_TaketiOstukorviRida
 msgid "Seose  (RELTYPE_TaketiOstukorviRida) tekst"
-msgstr ""
+msgstr " "
 

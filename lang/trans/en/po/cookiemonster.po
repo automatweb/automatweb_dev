@@ -48,13 +48,13 @@ msgstr ""
 
 #: classes/core/dbg/cookiemonster.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/core/dbg/cookiemonster.aw:50
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/core/dbg/cookiemonster.aw:56
 msgid "V‰‰rtus"
-msgstr ""
+msgstr "Value"
 

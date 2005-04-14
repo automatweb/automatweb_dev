@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_register
 msgid "Omaduse Register, millest otsida (register) caption"
-msgstr ""
+msgstr "Register to search"
 
 #: classes/applications/register/register_search.aw:prop_register_comment
 msgid "Omaduse Register, millest otsida (register) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_per_page
 msgid "Omaduse Mitu kirjet lehel (per_page) caption"
-msgstr ""
+msgstr "Records per page"
 
 #: classes/applications/register/register_search.aw:prop_per_page_comment
 msgid "Omaduse Mitu kirjet lehel (per_page) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_show_all_in_empty_search
 msgid "Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki (show_all_in_empty_search) caption"
-msgstr ""
+msgstr "Empty search displays all records"
 
 #: classes/applications/register/register_search.aw:prop_show_all_in_empty_search_comment
 msgid "Omaduse T&uuml;hi otsing n&auml;itab k&otilde;iki (show_all_in_empty_search) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_show_only_act
 msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) caption"
-msgstr ""
+msgstr "Display only active objects"
 
 #: classes/applications/register/register_search.aw:prop_show_only_act_comment
 msgid "Omaduse N&auml;ita ainult aktiivseid objekte (show_only_act) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_show_all_right_away
 msgid "Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki (show_all_right_away) caption"
-msgstr ""
+msgstr "Search shows all entries by default"
 
 #: classes/applications/register/register_search.aw:prop_show_all_right_away_comment
 msgid "Omaduse Otsingus n&auml;idatakse ilma otsimata k&otilde;iki (show_all_right_away) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_notfound_text
 msgid "Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) (notfound_text) caption"
-msgstr ""
+msgstr "Text to display if nothing is found (%s is search string)"
 
 #: classes/applications/register/register_search.aw:prop_notfound_text_comment
 msgid "Omaduse Mida n&auml;idatakse kui midagi ei leita (%s on otsing) (notfound_text) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_show_date
 msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) caption"
-msgstr ""
+msgstr "Display date below results"
 
 #: classes/applications/register/register_search.aw:prop_show_date_comment
 msgid "Omaduse Tulemuste all on kuup&auml;ev (show_date) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:prop_butt_text
 msgid "Omaduse Otsi nupu tekst (butt_text) caption"
-msgstr ""
+msgstr "Search button text"
 
 #: classes/applications/register/register_search.aw:prop_butt_text_comment
 msgid "Omaduse Otsi nupu tekst (butt_text) kommentaar"
@@ -156,85 +156,85 @@ msgstr ""
 
 #: classes/applications/register/register_search.aw:group_mkfrm
 msgid "Grupi Koosta otsinguvorm (mkfrm) pealkiri"
-msgstr ""
+msgstr "Create search form"
 
 #: classes/applications/register/register_search.aw:group_mktbl
 msgid "Grupi Koosta tulemuste tabel (mktbl) pealkiri"
-msgstr ""
+msgstr "create result table"
 
 #: classes/applications/register/register_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/register/register_search.aw:rel_RELTYPE_REGISTER
 msgid "Seose register millest otsida (RELTYPE_REGISTER) tekst"
-msgstr ""
+msgstr "register to search"
 
 #: classes/applications/register/register_search.aw:rel_RELTYPE_SEARCH_FOLDER
 msgid "Seose kaust millest otsida (RELTYPE_SEARCH_FOLDER) tekst"
-msgstr ""
+msgstr "folder to search"
 
 #: classes/applications/register/register_search.aw:134 classes/applications/register/register_search.aw:229
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/register/register_search.aw:141 classes/applications/register/register_search.aw:236
 msgid "Element"
-msgstr ""
+msgstr "Element"
 
 #: classes/applications/register/register_search.aw:147
 msgid "Otsitav"
-msgstr ""
+msgstr "Searchable"
 
 #: classes/applications/register/register_search.aw:153
 msgid "Numbrite vahemiku otsing"
-msgstr ""
+msgstr "Number range search"
 
 #: classes/applications/register/register_search.aw:159
 msgid "Valik olemasolevatest"
-msgstr ""
+msgstr "Select from existing"
 
 #: classes/applications/register/register_search.aw:165
 msgid "Elemendi tekst"
-msgstr ""
+msgstr "Element text"
 
 #: classes/applications/register/register_search.aw:182
 msgid "T&auml;istekstiotsing"
-msgstr ""
+msgstr "Fulltext search"
 
 #: classes/applications/register/register_search.aw:242
 msgid "Tabelis"
-msgstr ""
+msgstr "In table"
 
 #: classes/applications/register/register_search.aw:248
 msgid "Sorditav"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/applications/register/register_search.aw:254
 msgid "Vaikimisi sort"
-msgstr ""
+msgstr "Default sort"
 
 #: classes/applications/register/register_search.aw:260
 msgid "Vaata tulp"
-msgstr ""
+msgstr "View column"
 
 #: classes/applications/register/register_search.aw:266
 msgid "Tulba pealkiri"
-msgstr ""
+msgstr "Column title"
 
 #: classes/applications/register/register_search.aw:784
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/applications/register/register_search.aw:798
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
 #: classes/applications/register/register_search.aw:809
 msgid "Kustutada objekt?"
-msgstr ""
+msgstr "Delete object?"
 
 #: classes/applications/register/register_search.aw:810
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 

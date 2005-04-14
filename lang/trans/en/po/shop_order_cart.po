@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:prop_prod_layout
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) caption"
-msgstr ""
+msgstr "Layout to use in cart"
 
 #: classes/applications/shop/shop_order_cart.aw:prop_prod_layout_comment
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:prop_postal_price
 msgid "Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) caption"
-msgstr ""
+msgstr "Postage fee"
 
 #: classes/applications/shop/shop_order_cart.aw:prop_postal_price_comment
 msgid "Omaduse Postikulu (liidetakse korvi hinnale) (postal_price) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:prop_email_subj
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) caption"
-msgstr ""
+msgstr "Order e-mail subject"
 
 #: classes/applications/shop/shop_order_cart.aw:prop_email_subj_comment
 msgid "Omaduse Tellimuse e-maili subjekt (email_subj) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:prop_update_handler
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) caption"
-msgstr ""
+msgstr "Basket update controller"
 
 #: classes/applications/shop/shop_order_cart.aw:prop_update_handler_comment
 msgid "Omaduse Korvi uuendamise kontroller (update_handler) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:prop_finish_handler
 msgid "Omaduse Tellimise kontroller (finish_handler) caption"
-msgstr ""
+msgstr "Order controller"
 
 #: classes/applications/shop/shop_order_cart.aw:prop_finish_handler_comment
 msgid "Omaduse Tellimise kontroller (finish_handler) kommentaar"
@@ -72,21 +72,21 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_PROD_LAYOUT
 msgid "Seose toote kujundus (RELTYPE_PROD_LAYOUT) tekst"
-msgstr ""
+msgstr "product layout"
 
 #: classes/applications/shop/shop_order_cart.aw:rel_RELTYPE_CONTROLLER
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
-msgstr ""
+msgstr "controller"
 
 #: classes/applications/shop/shop_order_cart.aw:149 classes/applications/shop/shop_order_cart.aw:778 classes/applications/shop/shop_order_cart.aw:999
 msgid "shop_order_cart::show(): no product layout set for cart (%s) "
-msgstr ""
+msgstr "shop_order_cart::show(): no product layout set for cart (%s) "
 
 #: classes/applications/shop/shop_order_cart.aw:342
 msgid "%s peab tellima %s kaupa, hetkel kokku %s!"
-msgstr ""
+msgstr "For product %s, you must order an amount that is divisble by %s, currently you ordered %s"
 
 #: classes/applications/shop/shop_order_cart.aw:603
 msgid "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
-msgstr ""
+msgstr "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 

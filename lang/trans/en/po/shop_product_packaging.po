@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_jrk
 msgid "Omaduse J&auml;rjekord (jrk) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_jrk_comment
 msgid "Omaduse J&auml;rjekord (jrk) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_images
 msgid "Omaduse Pildid (images) caption"
-msgstr ""
+msgstr "Images"
 
 #: classes/applications/shop/shop_product_packaging.aw:prop_images_comment
 msgid "Omaduse Pildid (images) kommentaar"
@@ -408,13 +408,13 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/shop/shop_product_packaging.aw:group_img
 msgid "Grupi img (img) pealkiri"
-msgstr ""
+msgstr "img"
 
 #: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt  (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 

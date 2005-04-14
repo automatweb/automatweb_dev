@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_cv_acitvity_prop
 msgid "Omaduse CVde aktiivsus (cv_acitvity_prop) caption"
-msgstr ""
+msgstr "CV status"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_cv_acitvity_prop_comment
 msgid "Omaduse CVde aktiivsus (cv_acitvity_prop) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_cv
 msgid "Omaduse CV maksimaalselt aktiivne(päevades) (max_active_cv) caption"
-msgstr ""
+msgstr "Max number of days the CV is active"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_cv_comment
 msgid "Omaduse CV maksimaalselt aktiivne(päevades) (max_active_cv) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_cv_def
 msgid "Omaduse CV maksimaalselt aktiivne(päevades) (max_active_cv_def) caption"
-msgstr ""
+msgstr "Max number of days the CV is active"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_cv_def_comment
 msgid "Omaduse CV maksimaalselt aktiivne(päevades) (max_active_cv_def) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_job
 msgid "Omaduse Tööpakkumine maksimaalselt aktiivne(päevades)  (max_active_job) caption"
-msgstr ""
+msgstr "Max number of days the job offer is active"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_max_active_job_comment
 msgid "Omaduse Tööpakkumine maksimaalselt aktiivne(päevades)  (max_active_job) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_education_types
 msgid "Omaduse Vali milliseid hariduse liike saab lisada (education_types) caption"
-msgstr ""
+msgstr "Select addable education types"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_education_types_comment
 msgid "Omaduse Vali milliseid hariduse liike saab lisada (education_types) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_additional_edu
 msgid "Omaduse Täienduskoolituse vorm (additional_edu) caption"
-msgstr ""
+msgstr "Additional education form"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_additional_edu_comment
 msgid "Omaduse Täienduskoolituse vorm (additional_edu) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_orgs
 msgid "Omaduse Organisatsioonide kaust (orgs) caption"
-msgstr ""
+msgstr "Company folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_orgs_comment
 msgid "Omaduse Organisatsioonide kaust (orgs) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_persons
 msgid "Omaduse Isikute kaust (persons) caption"
-msgstr ""
+msgstr "Person folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_persons_comment
 msgid "Omaduse Isikute kaust (persons) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_cvparent
 msgid "Omaduse CV-de kaust (cvparent) caption"
-msgstr ""
+msgstr "CV folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_cvparent_comment
 msgid "Omaduse CV-de kaust (cvparent) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_offers
 msgid "Omaduse Tööpakkumiste kaust (offers) caption"
-msgstr ""
+msgstr "Job offers folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_offers_comment
 msgid "Omaduse Tööpakkumiste kaust (offers) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_tegevusvaldkonnad
 msgid "Omaduse Tegevusvaldkondade kaust (tegevusvaldkonnad) caption"
-msgstr ""
+msgstr "Activities folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_tegevusvaldkonnad_comment
 msgid "Omaduse Tegevusvaldkondade kaust (tegevusvaldkonnad) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_join_obj_worker
 msgid "Omaduse T&ouml;&ouml;taja liitumisvorm (join_obj_worker) caption"
-msgstr ""
+msgstr "Join form for employee"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_join_obj_worker_comment
 msgid "Omaduse T&ouml;&ouml;taja liitumisvorm (join_obj_worker) kommentaar"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_join_obj_offerer
 msgid "Omaduse T&ouml;&ouml;pakkuja liitumisvorm (join_obj_offerer) caption"
-msgstr ""
+msgstr "Job offerer join form"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_join_obj_offerer_comment
 msgid "Omaduse T&ouml;&ouml;pakkuja liitumisvorm (join_obj_offerer) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_locations
 msgid "Omaduse Asukohad (locations) caption"
-msgstr ""
+msgstr "Locations"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_locations_comment
 msgid "Omaduse Asukohad (locations) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_search_cv
 msgid "Omaduse Otsi CV-sid (search_cv) caption"
-msgstr ""
+msgstr "Search for cv"
 
 #: classes/applications/personnel_management/personnel_management.aw:prop_search_cv_comment
 msgid "Omaduse Otsi CV-sid (search_cv) kommentaar"
@@ -396,281 +396,281 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile
 msgid "Grupi Minu profiil (my_profile) pealkiri"
-msgstr ""
+msgstr "My profile"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile
 msgid "Grupi Tööpakkuja profiil (org_profile) pealkiri"
-msgstr ""
+msgstr "Job offerer profile"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_employee
 msgid "Grupi Tööotsijad (employee) pealkiri"
-msgstr ""
+msgstr "Job seekers"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_employers
 msgid "Grupi Tööpakkumised (employers) pealkiri"
-msgstr ""
+msgstr "Job offers"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_managers
 msgid "Grupi Halduri profiil (managers) pealkiri"
-msgstr ""
+msgstr "Manager profile"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_mycvs
 msgid "Grupi Minu CV-d (my_profile_mycvs) pealkiri"
-msgstr ""
+msgstr "My CV's"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_candits
 msgid "Grupi Kandideerin (my_profile_candits) pealkiri"
-msgstr ""
+msgstr "Apply"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_personal
 msgid "Grupi Minu andmed (my_profile_personal) pealkiri"
-msgstr ""
+msgstr "My data"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_jobs
 msgid "Grupi Tööpakkumised (org_profile_jobs) pealkiri"
-msgstr ""
+msgstr "Job offers"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_candits
 msgid "Grupi Kandideerijad (org_profile_candits) pealkiri"
-msgstr ""
+msgstr "Applicants"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_info
 msgid "Grupi Tööpakkuja andmed (org_profile_info) pealkiri"
-msgstr ""
+msgstr "Job offerer data"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_all_setings
 msgid "Grupi Seadistused (all_setings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_dir_setings
 msgid "Grupi Kaustade seaded (dir_setings) pealkiri"
-msgstr ""
+msgstr "Folder settings"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_layout_setings
 msgid "Grupi Seaded (layout_setings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_env_setings
 msgid "Grupi Keskkonna seaded (env_setings) pealkiri"
-msgstr ""
+msgstr "Manager settings"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_education_setings
 msgid "Grupi Haridus seaded (education_setings) pealkiri"
-msgstr ""
+msgstr "Education settings"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join
 msgid "Grupi Registreeru (my_join) pealkiri"
-msgstr ""
+msgstr "Register"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join_worker
 msgid "Grupi T&ouml;&ouml;otsija (my_join_worker) pealkiri"
-msgstr ""
+msgstr "Job seeker"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join_offerer
 msgid "Grupi T&ouml;&ouml;pakkuja (my_join_offerer) pealkiri"
-msgstr ""
+msgstr "Job offerer"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile
 msgid "Grupi Halduri profiil (manager_profile) pealkiri"
-msgstr ""
+msgstr "Manager profile"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_persons
 msgid "Grupi Tööotsijad (manager_profile_persons) pealkiri"
-msgstr ""
+msgstr "Job seekers"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_orgs
 msgid "Grupi Tööpakkujad (manager_profile_orgs) pealkiri"
-msgstr ""
+msgstr "Job offerers"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_search_cv
 msgid "Grupi Otsi CV'sid (search_cv) pealkiri"
-msgstr ""
+msgstr "Search CV's"
 
 #: classes/applications/personnel_management/personnel_management.aw:group_search_offer
 msgid "Grupi Otsi pakkumisi (search_offer) pealkiri"
-msgstr ""
+msgstr "Search offers"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_MENU
 msgid "Seose Kaust (RELTYPE_MENU) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_SECTORS
 msgid "Seose Tegevusvaldkonnad (RELTYPE_SECTORS) tekst"
-msgstr ""
+msgstr "Activity area"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_JOIN_OBJ
 msgid "Seose liitumisvorm (RELTYPE_JOIN_OBJ) tekst"
-msgstr ""
+msgstr "join form"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_CONTENT
 msgid "Seose Sisuelement (RELTYPE_CONTENT) tekst"
-msgstr ""
+msgstr "Content element"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_LAYOUT_BACKGROUND
 msgid "Seose Kujunduse taustapilt (RELTYPE_LAYOUT_BACKGROUND) tekst"
-msgstr ""
+msgstr "Design background image"
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_LAYOUT_LOGO
 msgid "Seose Kujunduse logo (RELTYPE_LAYOUT_LOGO) tekst"
-msgstr ""
+msgstr "Design logo"
 
 #: classes/applications/personnel_management/personnel_management.aw:286
 msgid "Tööotsija saab CV tähtaega ise määrata"
-msgstr ""
+msgstr "Jon seeker can set CV deadline"
 
 #: classes/applications/personnel_management/personnel_management.aw:286
 msgid "Tööotsija ei saa CV tähtaega ise määrata"
-msgstr ""
+msgstr "Job seeker can not set CV deadline"
 
 #: classes/applications/personnel_management/personnel_management.aw:352 classes/applications/personnel_management/personnel_management.aw:882
 msgid "Kustuta kandidaadid"
-msgstr ""
+msgstr "Delete applicants"
 
 #: classes/applications/personnel_management/personnel_management.aw:363
 msgid "Kood"
-msgstr ""
+msgstr "Code"
 
 #: classes/applications/personnel_management/personnel_management.aw:367 classes/applications/personnel_management/personnel_management.aw:925 classes/applications/personnel_management/personnel_management.aw:995
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/personnel_management/personnel_management.aw:380 classes/applications/personnel_management/personnel_management.aw:938
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/applications/personnel_management/personnel_management.aw:386
 msgid "Sündinud"
-msgstr ""
+msgstr "Born"
 
 #: classes/applications/personnel_management/personnel_management.aw:557
 msgid "Haridusliik"
-msgstr ""
+msgstr "Education type"
 
 #: classes/applications/personnel_management/personnel_management.aw:563
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: classes/applications/personnel_management/personnel_management.aw:593
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/personnel_management/personnel_management.aw:599
 msgid "Tööpakkuja"
-msgstr ""
+msgstr "Jon offerer"
 
 #: classes/applications/personnel_management/personnel_management.aw:605 classes/applications/personnel_management/personnel_management.aw:1582
 msgid "Asukoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/applications/personnel_management/personnel_management.aw:612 classes/applications/personnel_management/personnel_management.aw:1201
 msgid "Tähtaeg"
-msgstr ""
+msgstr "Deadline"
 
 #: classes/applications/personnel_management/personnel_management.aw:696
 msgid "Määramata"
-msgstr ""
+msgstr "Not set"
 
 #: classes/applications/personnel_management/personnel_management.aw:830
 msgid "AutomatWeb"
-msgstr ""
+msgstr "AutomatWeb"
 
 #: classes/applications/personnel_management/personnel_management.aw:895
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/personnel_management/personnel_management.aw:900 classes/applications/personnel_management/personnel_management.aw:901 classes/applications/personnel_management/personnel_management.aw:1001
 msgid "Tööpakkumine"
-msgstr ""
+msgstr "Job offer"
 
 #: classes/applications/personnel_management/personnel_management.aw:908
 msgid "Kustuta tööpakkumised"
-msgstr ""
+msgstr "Delete job offers"
 
 #: classes/applications/personnel_management/personnel_management.aw:920
 msgid "Default cv"
-msgstr ""
+msgstr "Default CV"
 
 #: classes/applications/personnel_management/personnel_management.aw:931
 msgid "Aktiivne kuni"
-msgstr ""
+msgstr "Active until"
 
 #: classes/applications/personnel_management/personnel_management.aw:1007
 msgid "Kuupäev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/personnel_management/personnel_management.aw:1013
 msgid "Kaaskiri"
-msgstr ""
+msgstr "Additional letter"
 
 #: classes/applications/personnel_management/personnel_management.aw:1019
 msgid "Hinne"
-msgstr ""
+msgstr "Grade"
 
 #: classes/applications/personnel_management/personnel_management.aw:1051
 msgid "kaaskiri"
-msgstr ""
+msgstr "Additional letter"
 
 #: classes/applications/personnel_management/personnel_management.aw:1092
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Company"
 
 #: classes/applications/personnel_management/personnel_management.aw:1098 classes/applications/personnel_management/personnel_management.aw:1195
 msgid "Ametikoht"
-msgstr ""
+msgstr "Position"
 
 #: classes/applications/personnel_management/personnel_management.aw:1104
 msgid "Kandideerimise lõpptähtaeg"
-msgstr ""
+msgstr "End of application"
 
 #: classes/applications/personnel_management/personnel_management.aw:1149
 msgid "Uus CV"
-msgstr ""
+msgstr "New CV"
 
 #: classes/applications/personnel_management/personnel_management.aw:1155 classes/applications/personnel_management/personnel_management.aw:1183
 msgid "Kustuta CV-d"
-msgstr ""
+msgstr "Delete CV's"
 
 #: classes/applications/personnel_management/personnel_management.aw:1157 classes/applications/personnel_management/personnel_management.aw:1185
 msgid "Kas soovid valitud objektid kustutada?"
-msgstr ""
+msgstr "Do you wish to delete the selected object?"
 
 #: classes/applications/personnel_management/personnel_management.aw:1163
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/personnel_management/personnel_management.aw:1169 classes/applications/personnel_management/personnel_management.aw:1170
 msgid "CV"
-msgstr ""
+msgstr "CV"
 
 #: classes/applications/personnel_management/personnel_management.aw:1208
 msgid "Kandidaate"
-msgstr ""
+msgstr "Applicants"
 
 #: classes/applications/personnel_management/personnel_management.aw:1215
 msgid "Staatus"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/personnel_management/personnel_management.aw:1241
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/applications/personnel_management/personnel_management.aw:1241
 msgid "Mitteaktiivne"
-msgstr ""
+msgstr "Not active"
 
 #: classes/applications/personnel_management/personnel_management.aw:1514 classes/applications/personnel_management/personnel_management.aw:1544
 msgid "Liitu!"
-msgstr ""
+msgstr "Join!"
 
 #: classes/applications/personnel_management/personnel_management.aw:1522 classes/applications/personnel_management/personnel_management.aw:1552
 msgid "Uuenda andmed!"
-msgstr ""
+msgstr "Renew data!"
 
 #: classes/applications/personnel_management/personnel_management.aw:1575
 msgid "Objekt"
-msgstr ""
+msgstr "Object"
 

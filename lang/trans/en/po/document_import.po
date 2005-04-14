@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_file
 msgid "Omaduse XML Fail (file) caption"
-msgstr ""
+msgstr "XML File"
 
 #: classes/import/document_import.aw:prop_file_comment
 msgid "Omaduse XML Fail (file) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_d_period
 msgid "Omaduse Periood (d_period) caption"
-msgstr ""
+msgstr "Period"
 
 #: classes/import/document_import.aw:prop_d_period_comment
 msgid "Omaduse Periood (d_period) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_found
 msgid "Omaduse Leitud dokumendid (found) caption"
-msgstr ""
+msgstr "Found documents"
 
 #: classes/import/document_import.aw:prop_found_comment
 msgid "Omaduse Leitud dokumendid (found) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_do_import
 msgid "Omaduse Impordi (do_import) caption"
-msgstr ""
+msgstr "Import"
 
 #: classes/import/document_import.aw:prop_do_import_comment
 msgid "Omaduse Impordi (do_import) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_location_tags
 msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) caption"
-msgstr ""
+msgstr "Location tags (format: section_events=890,section_news=900)"
 
 #: classes/import/document_import.aw:prop_location_tags_comment
 msgid "Omaduse Asukohta m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (location_tags) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_field_tags
 msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) caption"
-msgstr ""
+msgstr "Content tags (format: section_events=890,section_news=900)"
 
 #: classes/import/document_import.aw:prop_field_tags_comment
 msgid "Omaduse Sisuv&auml;lju m&auml;&auml;ravad tagid (formaat: rubriik_aktuaalne=890,rubriik_kala=900) (field_tags) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/import/document_import.aw:prop_end_tag
 msgid "Omaduse dokumenti l&otilde;petav tag (end_tag) caption"
-msgstr ""
+msgstr "Document end tag"
 
 #: classes/import/document_import.aw:prop_end_tag_comment
 msgid "Omaduse dokumenti l&otilde;petav tag (end_tag) kommentaar"
@@ -108,33 +108,33 @@ msgstr ""
 
 #: classes/import/document_import.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/import/document_import.aw:rel_RELTYPE_DOCIMP_PERIOD
 msgid "Seose Periood (RELTYPE_DOCIMP_PERIOD) tekst"
-msgstr ""
+msgstr "Period"
 
 #: classes/import/document_import.aw:192
 msgid "Asukoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/import/document_import.aw:196
 msgid "Pealkiri"
-msgstr ""
+msgstr "Title"
 
 #: classes/import/document_import.aw:200
 msgid "Autor"
-msgstr ""
+msgstr "Author"
 
 #: classes/import/document_import.aw:204
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/import/document_import.aw:268
 msgid "Tagi %s sisu ette pane "
-msgstr ""
+msgstr "Prepend tag %s content with"
 
 #: classes/import/document_import.aw:280
 msgid "Tagi %s sisu taha pane "
-msgstr ""
+msgstr "Append tag %s content with"
 

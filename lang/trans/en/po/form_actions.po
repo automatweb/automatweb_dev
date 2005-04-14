@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/formgen/form_actions.aw:240
 msgid "form->gen_change_action(%s, %s, %s): no such action!"
-msgstr ""
+msgstr "form->gen_change_action(%s, %s, %s): no such action!"
 

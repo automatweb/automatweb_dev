@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld
 msgid "Omaduse Toodete kataloog (prod_fld) caption"
-msgstr ""
+msgstr "Product folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld_comment
 msgid "Omaduse Toodete kataloog (prod_fld) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_pkt_fld
 msgid "Omaduse Pakettide kataloog (pkt_fld) caption"
-msgstr ""
+msgstr "Package folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_pkt_fld_comment
 msgid "Omaduse Pakettide kataloog (pkt_fld) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_reception_fld
 msgid "Omaduse Lao sissetulekute kataloog (reception_fld) caption"
-msgstr ""
+msgstr "Warehouse income folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_reception_fld_comment
 msgid "Omaduse Lao sissetulekute kataloog (reception_fld) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_export_fld
 msgid "Omaduse Lao v&auml;jaminekute kataloog (export_fld) caption"
-msgstr ""
+msgstr "Warehouse export folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_export_fld_comment
 msgid "Omaduse Lao v&auml;jaminekute kataloog (export_fld) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_fld
 msgid "Omaduse Lao toodete t&uuml;&uuml;bid (prod_type_fld) caption"
-msgstr ""
+msgstr "Warehouse product types"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_fld_comment
 msgid "Omaduse Lao toodete t&uuml;&uuml;bid (prod_type_fld) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_cfgform
 msgid "Omaduse Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) caption"
-msgstr ""
+msgstr "Product type add form"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_type_cfgform_comment
 msgid "Omaduse Lao tootet&uuml;&uuml;pide lisamise vormi seadete vorm (prod_type_cfgform) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_conf_folder
 msgid "Omaduse Toodete lisaobjektide seadetevormide kataloog (prod_conf_folder) caption"
-msgstr ""
+msgstr "Product information objects configuration form folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_conf_folder_comment
 msgid "Omaduse Toodete lisaobjektide seadetevormide kataloog (prod_conf_folder) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_order_fld
 msgid "Omaduse Lao tellimuste kataloog (order_fld) caption"
-msgstr ""
+msgstr "Warehouse order folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_order_fld_comment
 msgid "Omaduse Lao tellimuste kataloog (order_fld) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_buyers_fld
 msgid "Omaduse Lao tellijate kataloog (buyers_fld) caption"
-msgstr ""
+msgstr "Warehouse orderer folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_buyers_fld_comment
 msgid "Omaduse Lao tellijate kataloog (buyers_fld) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_search_form
 msgid "Omaduse Lao otsinguvorm (search_form) caption"
-msgstr ""
+msgstr "Warehouse search form"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_search_form_comment
 msgid "Omaduse Lao otsinguvorm (search_form) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos
 msgid "Omaduse Haldurfirmad (manager_cos) caption"
-msgstr ""
+msgstr "Manager companies"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_manager_cos_comment
 msgid "Omaduse Haldurfirmad (manager_cos) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods
 msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) caption"
-msgstr ""
+msgstr "Warehouse selles packages, not products"
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_comment
 msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) kommentaar"
@@ -156,17 +156,17 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_SEARCH_FORM
 msgid "Seose otsinguvorm (RELTYPE_SEARCH_FORM) tekst"
-msgstr ""
+msgstr "search form"
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_MANAGER_CO
 msgid "Seose haldaja firma (RELTYPE_MANAGER_CO) tekst"
-msgstr ""
+msgstr "manager company"
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_CFGFORM) tekst"
-msgstr ""
+msgstr "configuration form"
 

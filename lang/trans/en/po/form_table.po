@@ -12,73 +12,73 @@ msgstr ""
 
 #: classes/formgen/form_table.aw:13
 msgid "Change"
-msgstr ""
+msgstr "Change"
 
 #: classes/formgen/form_table.aw:14
 msgid "View"
-msgstr ""
+msgstr "View"
 
 #: classes/formgen/form_table.aw:15
 msgid "Special"
-msgstr ""
+msgstr "Special"
 
 #: classes/formgen/form_table.aw:16
 msgid "Delete"
-msgstr ""
+msgstr "Delete"
 
 #: classes/formgen/form_table.aw:17
 msgid "Created"
-msgstr ""
+msgstr "Created"
 
 #: classes/formgen/form_table.aw:18
 msgid "Modified"
-msgstr ""
+msgstr "Modified"
 
 #: classes/formgen/form_table.aw:19
 msgid "UID"
-msgstr ""
+msgstr "UID"
 
 #: classes/formgen/form_table.aw:20
 msgid "Active"
-msgstr ""
+msgstr "Active"
 
 #: classes/formgen/form_table.aw:21
 msgid "Move"
-msgstr ""
+msgstr "Move"
 
 #: classes/formgen/form_table.aw:22
 msgid "Order"
-msgstr ""
+msgstr "Order"
 
 #: classes/formgen/form_table.aw:23
 msgid "Select"
-msgstr ""
+msgstr "Select"
 
 #: classes/formgen/form_table.aw:24
 msgid "Peidetud Select"
-msgstr ""
+msgstr "Hidden select"
 
 #: classes/formgen/form_table.aw:25
 msgid "Jrk"
-msgstr ""
+msgstr "Jrk"
 
 #: classes/formgen/form_table.aw:26
 msgid "Count"
-msgstr ""
+msgstr "Count"
 
 #: classes/formgen/form_table.aw:27
 msgid "Koguse element"
-msgstr ""
+msgstr "Amount element"
 
 #: classes/formgen/form_table.aw:28
 msgid "Hinna element"
-msgstr ""
+msgstr "Price element"
 
 #: classes/formgen/form_table.aw:29
 msgid "Sisestuse ID"
-msgstr ""
+msgstr "Entry ID"
 
 #: classes/formgen/form_table.aw:30
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 

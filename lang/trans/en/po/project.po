@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_start
 msgid "Omaduse Algus (start) caption"
-msgstr ""
+msgstr "Start"
 
 #: classes/applications/groupware/project.aw:prop_start_comment
 msgid "Omaduse Algus (start) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_end
 msgid "Omaduse L&otilde;pp (end) caption"
-msgstr ""
+msgstr "End"
 
 #: classes/applications/groupware/project.aw:prop_end_comment
 msgid "Omaduse L&otilde;pp (end) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_deadline
 msgid "Omaduse Deadline (deadline) caption"
-msgstr ""
+msgstr "Deadline"
 
 #: classes/applications/groupware/project.aw:prop_deadline_comment
 msgid "Omaduse Deadline (deadline) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_doc
 msgid "Omaduse Loe lähemalt (doc) caption"
-msgstr ""
+msgstr "Read more"
 
 #: classes/applications/groupware/project.aw:prop_doc_comment
 msgid "Omaduse Loe lähemalt (doc) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_skip_subproject_events
 msgid "Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) caption"
-msgstr ""
+msgstr "Do not display sub-project events"
 
 #: classes/applications/groupware/project.aw:prop_skip_subproject_events_comment
 msgid "Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_project_navigator
 msgid "Omaduse Näita projektide navigaatorit (project_navigator) caption"
-msgstr ""
+msgstr "Display project navigator"
 
 #: classes/applications/groupware/project.aw:prop_project_navigator_comment
 msgid "Omaduse Näita projektide navigaatorit (project_navigator) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_use_template
 msgid "Omaduse Välimus (use_template) caption"
-msgstr ""
+msgstr "Template"
 
 #: classes/applications/groupware/project.aw:prop_use_template_comment
 msgid "Omaduse Välimus (use_template) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_prj_image
 msgid "Omaduse Pilt (prj_image) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/groupware/project.aw:prop_prj_image_comment
 msgid "Omaduse Pilt (prj_image) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_event_toolbar
 msgid "Omaduse Sündmuste toolbar  (event_toolbar) caption"
-msgstr ""
+msgstr "Event toolbar"
 
 #: classes/applications/groupware/project.aw:prop_event_toolbar_comment
 msgid "Omaduse Sündmuste toolbar  (event_toolbar) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_event_list
 msgid "Omaduse Sündmused (event_list) caption"
-msgstr ""
+msgstr "Events"
 
 #: classes/applications/groupware/project.aw:prop_event_list_comment
 msgid "Omaduse Sündmused (event_list) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_add_event
 msgid "Omaduse Lisa sündmus (add_event) caption"
-msgstr ""
+msgstr "Add event"
 
 #: classes/applications/groupware/project.aw:prop_add_event_comment
 msgid "Omaduse Lisa sündmus (add_event) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_file_editor
 msgid "Omaduse Failid (file_editor) caption"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/groupware/project.aw:prop_file_editor_comment
 msgid "Omaduse Failid (file_editor) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:prop_trans
 msgid "Omaduse Tõlkimine (trans) caption"
-msgstr ""
+msgstr "Translation"
 
 #: classes/applications/groupware/project.aw:prop_trans_comment
 msgid "Omaduse Tõlkimine (trans) kommentaar"
@@ -288,101 +288,101 @@ msgstr ""
 
 #: classes/applications/groupware/project.aw:group_general2
 msgid "Grupi Üldine (general2) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/applications/groupware/project.aw:group_web_settings
 msgid "Grupi Veebiseadistused (web_settings) pealkiri"
-msgstr ""
+msgstr "Web settings"
 
 #: classes/applications/groupware/project.aw:group_prj_image
 msgid "Grupi Pilt (prj_image) pealkiri"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/groupware/project.aw:group_event_list
 msgid "Grupi Sündmused (event_list) pealkiri"
-msgstr ""
+msgstr "Events"
 
 #: classes/applications/groupware/project.aw:group_add_event
 msgid "Grupi Muuda sündmust (add_event) pealkiri"
-msgstr ""
+msgstr "Change event"
 
 #: classes/applications/groupware/project.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
-msgstr ""
+msgstr "Files"
 
 #: classes/applications/groupware/project.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
-msgstr ""
+msgstr "Translation"
 
 #: classes/applications/groupware/project.aw:group_userdefined
 msgid "Grupi Andmed (userdefined) pealkiri"
-msgstr ""
+msgstr "Data"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_SUBPROJECT
 msgid "Seose alamprojekt (RELTYPE_SUBPROJECT) tekst"
-msgstr ""
+msgstr "subproject"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PARTICIPANT
 msgid "Seose osaleja (RELTYPE_PARTICIPANT) tekst"
-msgstr ""
+msgstr "participant"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_EVENT
 msgid "Seose Sündmus (RELTYPE_PRJ_EVENT) tekst"
-msgstr ""
+msgstr "event"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_FILE
 msgid "Seose Fail (RELTYPE_PRJ_FILE) tekst"
-msgstr ""
+msgstr "file"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_TAX_CHAIN
 msgid "Seose Maksu pärg (RELTYPE_TAX_CHAIN) tekst"
-msgstr ""
+msgstr "tax chain"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_PRJ_CFGFORM) tekst"
-msgstr ""
+msgstr "configuration form"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_DOCUMENT
 msgid "Seose Kirjeldus (RELTYPE_PRJ_DOCUMENT) tekst"
-msgstr ""
+msgstr "description"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_IMAGE
 msgid "Seose Pilt (RELTYPE_PRJ_IMAGE) tekst"
-msgstr ""
+msgstr "image"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_ORDERER
 msgid "Seose tellija (RELTYPE_ORDERER) tekst"
-msgstr ""
+msgstr "orderer"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_IMPLEMENTOR
 msgid "Seose teostaja (RELTYPE_IMPLEMENTOR) tekst"
-msgstr ""
+msgstr "implementor"
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_PRJ_VIDEO
 msgid "Seose Video (RELTYPE_PRJ_VIDEO) tekst"
-msgstr ""
+msgstr "video"
 
 #: classes/applications/groupware/project.aw:171
 msgid "Nädala vaade"
-msgstr ""
+msgstr "Week view"
 
 #: classes/applications/groupware/project.aw:1027
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/groupware/project.aw:1059
 msgid "Alamprojekt"
-msgstr ""
+msgstr "Subproject"
 
 #: classes/applications/groupware/project.aw:1164
 msgid "Etendus"
-msgstr ""
+msgstr "Show"
 
 #: classes/applications/groupware/project.aw:1388
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
-msgstr ""
+msgstr "This class can not be used for entering events"
 
 #: classes/applications/groupware/project.aw:1449
 msgid "header"
-msgstr ""
+msgstr "header"
 

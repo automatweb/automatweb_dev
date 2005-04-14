@@ -3436,5 +3436,5 @@ msgstr ""
 
 #: classes/applications/register/register_data.aw:rel_RELTYPE_REGISTER
 msgid "Seose Seostatud register (RELTYPE_REGISTER) tekst"
-msgstr ""
+msgstr "Register"
 

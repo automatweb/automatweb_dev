@@ -120,17 +120,17 @@ msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv_search.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_TEGEVUSVALDKOND
 msgid "Seose Tegevusala (RELTYPE_TEGEVUSVALDKOND) tekst"
-msgstr ""
+msgstr "Area of activity"
 
 #: classes/applications/personnel_management/personnel_management_cv_search.aw:rel_RELTYPE_LINN
 msgid "Seose Linn (RELTYPE_LINN) tekst"
-msgstr ""
+msgstr "Town"
 
 #: classes/applications/personnel_management/personnel_management_cv_search.aw:344
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 

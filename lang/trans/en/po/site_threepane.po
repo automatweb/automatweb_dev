@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:prop_frameset
 msgid "Omaduse Frameseti objekt (frameset) caption"
-msgstr ""
+msgstr "Frameset object"
 
 #: classes/site/site_threepane.aw:prop_frameset_comment
 msgid "Omaduse Frameseti objekt (frameset) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:prop_treeview
 msgid "Omaduse Puu objekt (treeview) caption"
-msgstr ""
+msgstr "Tree object"
 
 #: classes/site/site_threepane.aw:prop_treeview_comment
 msgid "Omaduse Puu objekt (treeview) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:prop_logo
 msgid "Omaduse Logo (logo) caption"
-msgstr ""
+msgstr "Logo"
 
 #: classes/site/site_threepane.aw:prop_logo_comment
 msgid "Omaduse Logo (logo) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:prop_info
 msgid "Omaduse Metainfo (info) caption"
-msgstr ""
+msgstr "Metainfo"
 
 #: classes/site/site_threepane.aw:prop_info_comment
 msgid "Omaduse Metainfo (info) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:prop_preview
 msgid "Omaduse Näita (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/site/site_threepane.aw:prop_preview_comment
 msgid "Omaduse Näita (preview) kommentaar"
@@ -72,21 +72,21 @@ msgstr ""
 
 #: classes/site/site_threepane.aw:rel_RELTYPE_SITE_FRAMESET
 msgid "Seose Frameset (RELTYPE_SITE_FRAMESET) tekst"
-msgstr ""
+msgstr "Frameset"
 
 #: classes/site/site_threepane.aw:rel_RELTYPE_SITE_TREEVIEW
 msgid "Seose Puu seadistused (RELTYPE_SITE_TREEVIEW) tekst"
-msgstr ""
+msgstr "Tree settings"
 
 #: classes/site/site_threepane.aw:rel_RELTYPE_SITE_LOGO
 msgid "Seose Logo (RELTYPE_SITE_LOGO) tekst"
-msgstr ""
+msgstr "Logo"
 
 #: classes/site/site_threepane.aw:60
 msgid "Näita saiti"
-msgstr ""
+msgstr "Display site"
 
 #: classes/site/site_threepane.aw:194
 msgid "Metainfo"
-msgstr ""
+msgstr "Metainfo"
 

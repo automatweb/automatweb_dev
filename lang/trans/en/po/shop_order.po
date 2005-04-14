@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_confirmed
 msgid "Omaduse Kinnitatud (confirmed) caption"
-msgstr ""
+msgstr "Confirmed"
 
 #: classes/applications/shop/shop_order.aw:prop_confirmed_comment
 msgid "Omaduse Kinnitatud (confirmed) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_orderer_person
 msgid "Omaduse Tellija esindaja (orderer_person) caption"
-msgstr ""
+msgstr "Orderer representative"
 
 #: classes/applications/shop/shop_order.aw:prop_orderer_person_comment
 msgid "Omaduse Tellija esindaja (orderer_person) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_orderer_company
 msgid "Omaduse Tellija (orderer_company) caption"
-msgstr ""
+msgstr "Orderer"
 
 #: classes/applications/shop/shop_order.aw:prop_orderer_company_comment
 msgid "Omaduse Tellija (orderer_company) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_seller_person
 msgid "Omaduse M&uuml;&uuml;ja esindaja (seller_person) caption"
-msgstr ""
+msgstr "Seller representative"
 
 #: classes/applications/shop/shop_order.aw:prop_seller_person_comment
 msgid "Omaduse M&uuml;&uuml;ja esindaja (seller_person) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_seller_company
 msgid "Omaduse M&uuml;&uuml;ja (seller_company) caption"
-msgstr ""
+msgstr "Seller"
 
 #: classes/applications/shop/shop_order.aw:prop_seller_company_comment
 msgid "Omaduse M&uuml;&uuml;ja (seller_company) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_oc
 msgid "Omaduse Tellimiskeskkond (oc) caption"
-msgstr ""
+msgstr "Ordering center"
 
 #: classes/applications/shop/shop_order.aw:prop_oc_comment
 msgid "Omaduse Tellimiskeskkond (oc) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_warehouse
 msgid "Omaduse Ladu (warehouse) caption"
-msgstr ""
+msgstr "Warehouse"
 
 #: classes/applications/shop/shop_order.aw:prop_warehouse_comment
 msgid "Omaduse Ladu (warehouse) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_items_toolbar
 msgid "Omaduse Tellimuste toolbar (items_toolbar) caption"
-msgstr ""
+msgstr "Order toolbar"
 
 #: classes/applications/shop/shop_order.aw:prop_items_toolbar_comment
 msgid "Omaduse Tellimuste toolbar (items_toolbar) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_items_orderer
 msgid "Omaduse Tellija andmed (items_orderer) caption"
-msgstr ""
+msgstr "Orderer info"
 
 #: classes/applications/shop/shop_order.aw:prop_items_orderer_comment
 msgid "Omaduse Tellija andmed (items_orderer) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_items
 msgid "Omaduse Tellitud tooted (items) caption"
-msgstr ""
+msgstr "Ordered products"
 
 #: classes/applications/shop/shop_order.aw:prop_items_comment
 msgid "Omaduse Tellitud tooted (items) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:prop_sum
 msgid "Omaduse Summa (sum) caption"
-msgstr ""
+msgstr "Sum"
 
 #: classes/applications/shop/shop_order.aw:prop_sum_comment
 msgid "Omaduse Summa (sum) kommentaar"
@@ -144,69 +144,69 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:group_items
 msgid "Grupi Tellimuse sisu (items) pealkiri"
-msgstr ""
+msgstr "Order content"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_PRODUCT
 msgid "Seose tellimuse toode (RELTYPE_PRODUCT) tekst"
-msgstr ""
+msgstr "order product"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_EXPORT
 msgid "Seose lao v&auml;ljaminek (RELTYPE_EXPORT) tekst"
-msgstr ""
+msgstr "warehouse export"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_PERSON
 msgid "Seose tellija esindaja (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "orderer prepresentative"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_ORG
 msgid "Seose tellija organisatsioon (RELTYPE_ORG) tekst"
-msgstr ""
+msgstr "orderer company"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
-msgstr ""
+msgstr "warehouse"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_ORDER_CENTER
 msgid "Seose tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"
-msgstr ""
+msgstr "ordering center"
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_ORDER_TABLE_LAYOUT
 msgid "Seose Tellimuste tabeli kujundus (RELTYPE_ORDER_TABLE_LAYOUT) tekst"
-msgstr ""
+msgstr "order table layout"
 
 #: classes/applications/shop/shop_order.aw:98
 msgid "Eemalda tellimusest tooted"
-msgstr ""
+msgstr "Remove products from order"
 
 #: classes/applications/shop/shop_order.aw:99
 msgid "Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"
-msgstr ""
+msgstr "Are you sure you wish to remove the selected products from the order?"
 
 #: classes/applications/shop/shop_order.aw:199
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/shop/shop_order.aw:203
 msgid "Mitu"
-msgstr ""
+msgstr "Count"
 
 #: classes/applications/shop/shop_order.aw:263
 msgid "Pakend: "
-msgstr ""
+msgstr "Packaging: "
 
 #: classes/applications/shop/shop_order.aw:263
 msgid "Toode: "
-msgstr ""
+msgstr "Product: "
 
 #: classes/applications/shop/shop_order.aw:303
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
-msgstr ""
+msgstr "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 
 #: classes/applications/shop/shop_order.aw:310
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
-msgstr ""
+msgstr "Warehouse export based on order %s"
 
 #: classes/applications/shop/shop_order.aw:392 classes/applications/shop/shop_order.aw:523
 msgid "Tellimus laost %s"
-msgstr ""
+msgstr "Order from warehouse %s"
 
