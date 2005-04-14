@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.91 2005/04/14 10:31:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.92 2005/04/14 10:32:22 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3132,7 +3132,7 @@ class mrp_workspace extends class_base
 			$cust = $proj->get_first_obj_by_reltype("RELTYPE_MRP_CUSTOMER");
 			if (is_object($cust))
 			{
-				if ($this->can("view", $cust->id()))
+				if ($this->can("edit", $cust->id()))
 				{
 					$custo = html::get_change_url($cust->id(), array(
 							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
@@ -3192,7 +3192,7 @@ class mrp_workspace extends class_base
 			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
 
 			$resource_str = $res->name();
-			if ($this->can("view", $res->id()))
+			if ($this->can("edit", $res->id()))
 			{
 				$resource_str = html::get_change_url($res->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
@@ -3202,7 +3202,7 @@ class mrp_workspace extends class_base
 			}
 
 			$project_str = $proj->name();
-			if ($this->can("view", $proj->id()))
+			if ($this->can("edit", $proj->id()))
 			{
 				$project_str = html::get_change_url($proj->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
