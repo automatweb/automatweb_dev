@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.50 2005/04/14 09:54:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.51 2005/04/14 13:53:49 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -571,7 +571,8 @@ class releditor extends core
 		{
 			$use_clid = $clid;
 		};
-
+			
+	
 		$clinst = get_instance($use_clid);
 
 		$elname = $prop["name"];
@@ -608,26 +609,37 @@ class releditor extends core
 			{
 				if ($item["type"] == "fileupload")
 				{
-					$name = $item["name"];
-					$_fileinf = $_FILES[$elname];
-					$filename = $_fileinf["name"][$name];
-					$filetype = $_fileinf["type"][$name];
-					$tmpname = $_fileinf["tmp_name"][$name];
-					// tundub, et polnud sellist faili, eh?
-					if(empty($tmpname) || !is_uploaded_file($tmpname))
+					if (!is_array($emb[$item["name"]]))
 					{
+						$name = $item["name"];
+						$_fileinf = $_FILES[$elname];
+						$filename = $_fileinf["name"][$name];
+						$filetype = $_fileinf["type"][$name];
+						$tmpname = $_fileinf["tmp_name"][$name];
+						// tundub, et polnud sellist faili, eh?
+						if(empty($tmpname) || !is_uploaded_file($tmpname))
+						{
+						}
+						else
+						{
+							$contents = $this->get_file(array(
+								"file" => $tmpname,
+							));
+							$emb[$name] = array(
+								"tmp_name" => $tmpname,
+								"type" => $filetype,
+								"name" => $filename,
+								"contents" => $contents,
+							);
+							$el_count++;
+						};
 					}
 					else
 					{
-						$contents = $this->get_file(array(
-							"file" => $tmpname,
+						$emb[$item["name"]]["contents"] = $this->get_file(array(
+							"file" => $emb[$item["name"]]["tmp_name"],
 						));
-						$emb[$name] = array(
-							"tmp_name" => $tmpname,
-							"type" => $filetype,
-							"name" => $filename,
-							"contents" => $contents,
-						);
+
 						$el_count++;
 					};
 				}
@@ -654,6 +666,7 @@ class releditor extends core
 			$reltype = $arr["prop"]["reltype"];
 
 			$emb["cb_existing_props_only"] = 1;
+
 
 			$obj_id = $clinst->submit($emb);
 
