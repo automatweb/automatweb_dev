@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.89 2005/04/14 10:03:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.90 2005/04/14 10:12:34 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -878,6 +878,9 @@ class mrp_workspace extends class_base
 				{
 					aw_session_del("mrp_operator_use_resource");
 				}
+				// aaaand redirect
+				header("Location: ".$this->mk_my_orb("change", array("id" => $arr["obj_inst"]->id())));
+				die();
 				break;
 		}
 
