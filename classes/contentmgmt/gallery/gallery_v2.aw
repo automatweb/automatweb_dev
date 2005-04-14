@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.57 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.58 2005/04/14 08:57:24 kristo Exp $
 
 /*
 
@@ -704,7 +704,13 @@ class gallery_v2 extends class_base
 		}
 		// get it from conf
 		$cf = get_instance(CL_GALLERY_CONF);
-		return $cf->get_image_folder($this->_get_conf_for_folder($parent));
+		$tmp = $cf->get_image_folder($this->_get_conf_for_folder($parent));
+
+		if ($tmp)
+		{
+			return $tmp;
+		}
+		return $parent;
 	}
 
 	function _show_rate_objs($ob,$robj)
