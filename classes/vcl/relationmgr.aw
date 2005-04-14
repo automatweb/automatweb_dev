@@ -91,7 +91,7 @@ class relationmgr extends aw_template
 		if($filt)
 		{
 			$tmp = array();
-			foreach($tmp as $key => $val)
+			foreach($this->rel_classes as $key => $val)
 			{
 				foreach($val as $key2 => $val2)
 				{
@@ -196,7 +196,10 @@ class relationmgr extends aw_template
 			{
 				$sele = key($this->true_rel_classes[$k]);
 			}
-			$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+			if(!empty($vals))
+			{
+				$rels1 .= 'listB.addOptions("'.$k.'"'.$dvals.','.$vals.");\n";
+			}
 			if ($objtype && $this->reltype == $k)
 			{
 				$defaults1 .= 'listB.setDefaultOption("'.$k.'","'.$objtype.'");'."\n";
