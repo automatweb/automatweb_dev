@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.49 2005/04/06 10:15:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.50 2005/04/14 09:54:40 ahti Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -433,14 +433,17 @@ class releditor extends core
 					$prop = $_pd;
 					$prop["value"] = $target->prop($_pn);
 					// now lets call get_property on that beast
-					$test = $clinst->get_property(array(
-						"prop" => &$prop,
-						"obj_inst" => $target,
-					));
-					if (PROP_OK != $test)
+					if(method_exists($clinst, "get_property"))
 					{
-						continue;
-					};
+						$test = $clinst->get_property(array(
+							"prop" => &$prop,
+							"obj_inst" => $target,
+						));
+						if (PROP_OK != $test)
+						{
+							continue;
+						};
+					}
 					if ($_pd["type"] == "date_select")
 					{
 						$prop["value"] = date("d.m.Y", $prop["value"]);
