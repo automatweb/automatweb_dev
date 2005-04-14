@@ -66,6 +66,16 @@
             <caption>Sisu ei cacheta</caption>
       </property>
       <property>
+            <name>not_in_search</name>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>&amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel</caption>
+      </property>
+      <property>
             <name>trans_all_langs</name>
             <group>general</group>
             <type>checkbox</type>
