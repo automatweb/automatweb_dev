@@ -24,9 +24,9 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar.aw:group_buttons
 msgid "Grupi Nupud (buttons) pealkiri"
-msgstr ""
+msgstr "Buttons"
 
 #: classes/applications/class_designer/property_toolbar.aw:rel_RELTYPE_BUTTON
 msgid "Seose nupp (RELTYPE_BUTTON) tekst"
-msgstr ""
+msgstr "button"
 

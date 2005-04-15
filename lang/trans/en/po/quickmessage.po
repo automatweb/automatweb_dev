@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_user_from
 msgid "Omaduse Kellelt (user_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_user_from_comment
 msgid "Omaduse Kellelt (user_from) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_user_to
 msgid "Omaduse Kellele (user_to) caption"
-msgstr ""
+msgstr "To"
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_user_to_comment
 msgid "Omaduse Kellele (user_to) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_subject
 msgid "Omaduse Teema (subject) caption"
-msgstr ""
+msgstr "Subject"
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_subject_comment
 msgid "Omaduse Teema (subject) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/quickmessage/quickmessage.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"

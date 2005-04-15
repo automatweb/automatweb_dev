@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/applications/calendar/staging.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/applications/calendar/staging.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_start1
 msgid "Omaduse Algab (start1) caption"
-msgstr ""
+msgstr "Start"
 
 #: classes/applications/calendar/staging.aw:prop_start1_comment
 msgid "Omaduse Algab (start1) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_img
 msgid "Omaduse Pilt (img) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/staging.aw:prop_img_comment
 msgid "Omaduse Pilt (img) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_utextarea1
 msgid "Omaduse Kirjeldus (utextarea1) caption"
-msgstr ""
+msgstr "Description"
 
 #: classes/applications/calendar/staging.aw:prop_utextarea1_comment
 msgid "Omaduse Kirjeldus (utextarea1) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/staging.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_trans
 msgid "Omaduse Tõlkimine (trans) caption"
-msgstr ""
+msgstr "Translation"
 
 #: classes/applications/calendar/staging.aw:prop_trans_comment
 msgid "Omaduse Tõlkimine (trans) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:prop_times
 msgid "Omaduse Ajad (times) caption"
-msgstr ""
+msgstr "Times"
 
 #: classes/applications/calendar/staging.aw:prop_times_comment
 msgid "Omaduse Ajad (times) kommentaar"
@@ -108,49 +108,49 @@ msgstr ""
 
 #: classes/applications/calendar/staging.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/staging.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
-msgstr ""
+msgstr "Translation"
 
 #: classes/applications/calendar/staging.aw:group_times
 msgid "Grupi Ajad (times) pealkiri"
-msgstr ""
+msgstr "Times"
 
 #: classes/applications/calendar/staging.aw:rel_RELTYPE_PICTURE
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/staging.aw:rel_RELTYPE_COPY
 msgid "Seose Koopia (RELTYPE_COPY) tekst"
-msgstr ""
+msgstr "Copy"
 
 #: classes/applications/calendar/staging.aw:110
 msgid "Aktiivne objekt"
-msgstr ""
+msgstr "Active object"
 
 #: classes/applications/calendar/staging.aw:118
 msgid "Originaalobjekt"
-msgstr ""
+msgstr "Original"
 
 #: classes/applications/calendar/staging.aw:126
 msgid "Koopia"
-msgstr ""
+msgstr "Copy"
 
 #: classes/applications/calendar/staging.aw:129
 msgid " (Aktiivne)"
-msgstr ""
+msgstr " (Active)"
 
 #: classes/applications/calendar/staging.aw:147
 msgid "Uued"
-msgstr ""
+msgstr "New"
 
 #: classes/applications/calendar/staging.aw:156
 msgid "Uus %s"
-msgstr ""
+msgstr "New %s"
 
 #: classes/applications/calendar/staging.aw:166
 msgid "Tee sündmus %s"
-msgstr ""
+msgstr "Create event %s"
 

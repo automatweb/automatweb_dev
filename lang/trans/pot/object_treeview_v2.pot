@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 13 Apr 2005 15:49:39 +0300\n"
+"POT-Creation-Date: Thu, 14 Apr 2005 14:31:04 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -56,6 +56,18 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_inherit_view_props_from_help
 msgid "Omaduse P&auml;ri n&auml;itamise omadused objektist (inherit_view_props_from) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_table_anchor_to_url
+msgid "Omaduse Lisa #table URL-i l&otilde;ppu (add_table_anchor_to_url) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_table_anchor_to_url_comment
+msgid "Omaduse Lisa #table URL-i l&otilde;ppu (add_table_anchor_to_url) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_add_table_anchor_to_url_help
+msgid "Omaduse Lisa #table URL-i l&otilde;ppu (add_table_anchor_to_url) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/object_treeview_v2.aw:prop_show_folders
@@ -490,7 +502,7 @@ msgstr ""
 msgid "Ikoon"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:161 classes/contentmgmt/object_treeview/object_treeview_v2.aw:864
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:161 classes/contentmgmt/object_treeview/object_treeview_v2.aw:868
 msgid "Nimi"
 msgstr ""
 
@@ -526,99 +538,99 @@ msgstr ""
 msgid "Tabel"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:782
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:786
 msgid "K&otilde;ik"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:871
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:875
 msgid "Kas n&auml;idata"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:878
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:882
 msgid "Jrk"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:885
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:889
 msgid "Eraldaja enne"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:892
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:896
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:899
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:903
 msgid "Eraldaja p&auml;rast"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:906
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:910
 msgid "Muudetav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:913
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:917
 msgid "Milliste v&auml;ljade sisu n&auml;idata<br>Eraldaja&nbsp;&nbsp;|&nbsp;&nbsp;Vasak&nbsp;tekst&nbsp;&nbsp;|&nbsp;&nbsp;V&auml;li&nbsp;&nbsp;|&nbsp;&nbsp;Parem&nbsp;tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1211
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1215
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1293
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1297
 msgid "Uus"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1316
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1320
 msgid "Kustuta"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1321
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1325
 msgid "Oled kindel et tahad objekte kustutada?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1331
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1335
 msgid "Salvesta"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1685 classes/contentmgmt/object_treeview/object_treeview_v2.aw:1706
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1689 classes/contentmgmt/object_treeview/object_treeview_v2.aw:1710
 msgid "Kasvav"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1685 classes/contentmgmt/object_treeview/object_treeview_v2.aw:1706
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1689 classes/contentmgmt/object_treeview/object_treeview_v2.aw:1710
 msgid "Kahanev"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1735
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1739
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1741
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1745
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1747
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1751
 msgid "Kuup&auml;ev tekstina?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1806
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1810
 msgid "Grupp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1812
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1816
 msgid "Filtreeritav v&auml;li"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1818
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1822
 msgid "Filtreeritav v&auml;&auml;rtus"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1824
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:1828
 msgid "Kas t&auml;pne?"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2176
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2180
 msgid "Tulp"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2182
+#: classes/contentmgmt/object_treeview/object_treeview_v2.aw:2186
 msgid "Muundaja"
 msgstr ""
 

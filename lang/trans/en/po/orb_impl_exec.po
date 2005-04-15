@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/install/site_impl/orb_impl_exec.aw:76
 msgid "Kliki siia jätkamiseks"
-msgstr ""
+msgstr "Click here to continue"
 

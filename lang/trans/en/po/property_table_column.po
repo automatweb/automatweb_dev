@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_sortable
 msgid "Omaduse Sorteeritav (sortable) caption"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_sortable_comment
 msgid "Omaduse Sorteeritav (sortable) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_width
 msgid "Omaduse Laius (width) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_nowrap
 msgid "Omaduse Poolitamine keelatud (nowrap) caption"
-msgstr ""
+msgstr "No wrapping"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_nowrap_comment
 msgid "Omaduse Poolitamine keelatud (nowrap) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_align
 msgid "Omaduse Joondamine (align) caption"
-msgstr ""
+msgstr "Align"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_align_comment
 msgid "Omaduse Joondamine (align) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:prop_c_parent
 msgid "Omaduse &Uuml;lemtulp (c_parent) caption"
-msgstr ""
+msgstr "Parent column"
 
 #: classes/applications/class_designer/property_table_column.aw:prop_c_parent_comment
 msgid "Omaduse &Uuml;lemtulp (c_parent) kommentaar"
@@ -84,5 +84,5 @@ msgstr ""
 
 #: classes/applications/class_designer/property_table_column.aw:rel_RELTYPE_PARENT
 msgid "Seose &uuml;lemtulp (RELTYPE_PARENT) tekst"
-msgstr ""
+msgstr "parent column"
 

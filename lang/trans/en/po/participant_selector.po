@@ -12,21 +12,21 @@ msgstr ""
 
 #: classes/applications/calendar/vcl/participant_selector.aw:34
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/calendar/vcl/participant_selector.aw:42
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/calendar/vcl/participant_selector.aw:48
 msgid "E-post"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/calendar/vcl/participant_selector.aw:54
 msgid "Ametinimetus"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/calendar/vcl/participant_selector.aw:95
 msgid "osalejad.xls"
-msgstr ""
+msgstr "participants.xls"
 

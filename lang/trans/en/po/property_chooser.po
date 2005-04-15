@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_chooser.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/class_designer/property_chooser.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_chooser.aw:prop_multiple
 msgid "Omaduse Saab teha mitu valikut (multiple) caption"
-msgstr ""
+msgstr "Multiple"
 
 #: classes/applications/class_designer/property_chooser.aw:prop_multiple_comment
 msgid "Omaduse Saab teha mitu valikut (multiple) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_chooser.aw:prop_orient
 msgid "Omaduse Elemendid on vertikaalis (orient) caption"
-msgstr ""
+msgstr "Elements vertically oriented"
 
 #: classes/applications/class_designer/property_chooser.aw:prop_orient_comment
 msgid "Omaduse Elemendid on vertikaalis (orient) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_chooser.aw:prop_options
 msgid "Omaduse Valikud (iga valik eraldi real) (options) caption"
-msgstr ""
+msgstr "Options (on separate lines)"
 
 #: classes/applications/class_designer/property_chooser.aw:prop_options_comment
 msgid "Omaduse Valikud (iga valik eraldi real) (options) kommentaar"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_select.aw:prop_multiple
 msgid "Omaduse Saab teha mitu valikut (multiple) caption"
-msgstr ""
+msgstr "Multiple"
 
 #: classes/applications/class_designer/property_select.aw:prop_multiple_comment
 msgid "Omaduse Saab teha mitu valikut (multiple) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_select.aw:prop_size
 msgid "Omaduse Pikkus (kui on mitu valikut) (size) caption"
-msgstr ""
+msgstr "Length"
 
 #: classes/applications/class_designer/property_select.aw:prop_size_comment
 msgid "Omaduse Pikkus (kui on mitu valikut) (size) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_select.aw:prop_options
 msgid "Omaduse Valikud (options) caption"
-msgstr ""
+msgstr "Options"
 
 #: classes/applications/class_designer/property_select.aw:prop_options_comment
 msgid "Omaduse Valikud (options) kommentaar"

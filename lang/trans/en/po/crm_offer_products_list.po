@@ -47,41 +47,41 @@ msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:group_packages_show
 msgid "Grupi Paketid (packages_show) pealkiri"
-msgstr ""
+msgstr "Packages"
 
 # classes/crm/crm_offer_products_list.aw:rel_RELTYPE_PACKET
 msgid "Seose pakett (RELTYPE_PACKET) tekst"
-msgstr ""
+msgstr "package"
 
 #: classes/crm/crm_offer_products_list.aw:89
 msgid "Lisa pakkumisse"
-msgstr ""
+msgstr "Add to offer"
 
 #: classes/crm/crm_offer_products_list.aw:96
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/crm/crm_offer_products_list.aw:106
 msgid "no warhoos"
-msgstr ""
+msgstr "no warehouse"
 
 #: classes/crm/crm_offer_products_list.aw:129
 #: classes/crm/crm_offer_products_list.aw:287
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_offer_products_list.aw:135
 msgid "Orignaalhind"
-msgstr ""
+msgstr "Original price"
 
 #: classes/crm/crm_offer_products_list.aw:141
 msgid "Pakutav hind"
-msgstr ""
+msgstr "Offered price"
 
 #: classes/crm/crm_offer_products_list.aw:187
 msgid "Eemalda pakkumisest"
-msgstr ""
+msgstr "Remove from offer"
 
 #: classes/crm/crm_offer_products_list.aw:293
 msgid "Hind"
-msgstr ""
+msgstr "Price"

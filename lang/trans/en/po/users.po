@@ -12,25 +12,25 @@ msgstr ""
 
 #: classes/users.aw:308
 msgid "Parool on edukalt vahetatud"
-msgstr ""
+msgstr "Password successfully changed"
 
 #: classes/users.aw:1066
 msgid "Vigane kasutajanimi"
-msgstr ""
+msgstr "Erroneous username"
 
 #: classes/users.aw:1078
 msgid "Sellist kasutajat pole registreeritud"
-msgstr ""
+msgstr "No such user"
 
 #: classes/users.aw:1092
 msgid "Sellist võtit pole väljastatud"
-msgstr ""
+msgstr "No such key"
 
 #: classes/users.aw:1107
 msgid "See võti on juba aegunud"
-msgstr ""
+msgstr "This key has expired"
 
 #: classes/users.aw:1107
 msgid "Telli uusi v&otilde;ti"
-msgstr ""
+msgstr "Order new key"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/object_export.aw:prop_object_type
 msgid "Omaduse Objektit&uuml;&uuml;p mida eksportida (object_type) caption"
-msgstr ""
+msgstr "Object type to export"
 
 #: classes/admin/object_export.aw:prop_object_type_comment
 msgid "Omaduse Objektit&uuml;&uuml;p mida eksportida (object_type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/object_export.aw:prop_root_folder
 msgid "Omaduse Kaust, kust objektid v&otilde;tta (root_folder) caption"
-msgstr ""
+msgstr "Folder to get objects from"
 
 #: classes/admin/object_export.aw:prop_root_folder_comment
 msgid "Omaduse Kaust, kust objektid v&otilde;tta (root_folder) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/admin/object_export.aw:prop_csv_separator
 msgid "Omaduse CSV Faili tulpade eraldaja (csv_separator) caption"
-msgstr ""
+msgstr "CSV file column separator"
 
 #: classes/admin/object_export.aw:prop_csv_separator_comment
 msgid "Omaduse CSV Faili tulpade eraldaja (csv_separator) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/admin/object_export.aw:prop_export_table
 msgid "Omaduse Esimesed 10 rida (export_table) caption"
-msgstr ""
+msgstr "First 10 lines"
 
 #: classes/admin/object_export.aw:prop_export_table_comment
 msgid "Omaduse Esimesed 10 rida (export_table) kommentaar"
@@ -96,41 +96,41 @@ msgstr ""
 
 #: classes/admin/object_export.aw:group_mktbl
 msgid "Grupi Koosta tabel (mktbl) pealkiri"
-msgstr ""
+msgstr "Create table"
 
 #: classes/admin/object_export.aw:group_export
 msgid "Grupi Ekspordi (export) pealkiri"
-msgstr ""
+msgstr "Export"
 
 #: classes/admin/object_export.aw:rel_RELTYPE_OBJECT_TYPE
 msgid "Seose objektit&uuml;&uuml;p (RELTYPE_OBJECT_TYPE) tekst"
-msgstr ""
+msgstr "object type"
 
 #: classes/admin/object_export.aw:rel_RELTYPE_FOLDER
 msgid "Seose kaust (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/admin/object_export.aw:92
 msgid "Ekspordi CSV fail"
-msgstr ""
+msgstr "Export CSV file"
 
 #: classes/admin/object_export.aw:103
 msgid "Ekspordi XLS fail"
-msgstr ""
+msgstr "Export XLS file"
 
 #: classes/admin/object_export.aw:137
 msgid "Element"
-msgstr ""
+msgstr "Element"
 
 #: classes/admin/object_export.aw:142
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/admin/object_export.aw:148
 msgid "Eksporditav"
-msgstr ""
+msgstr "Exportable"
 
 #: classes/admin/object_export.aw:153
 msgid "Tulba pealkiri"
-msgstr ""
+msgstr "Column title"
 

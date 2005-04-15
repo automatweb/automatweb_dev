@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_notfound
 msgid "Omaduse Kuhu suunata kui ei leitud &uuml;htegi tulemust (notfound) caption"
-msgstr ""
+msgstr "Redirect to when no results found"
 
 #: classes/applications/clients/stat/ekomar/ekomar_show.aw:prop_notfound_comment
 msgid "Omaduse Kuhu suunata kui ei leitud &uuml;htegi tulemust (notfound) kommentaar"
@@ -24,5 +24,5 @@ msgstr ""
 
 #: classes/applications/clients/stat/ekomar/ekomar_show.aw:rel_RELTYPE_FOLDER
 msgid "Seose kuhu suunata (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "redirect to"
 

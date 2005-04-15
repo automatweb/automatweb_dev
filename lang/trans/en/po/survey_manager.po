@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_folder
 msgid "Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) caption"
-msgstr ""
+msgstr "Filled survey folder"
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_folder_comment
 msgid "Omaduse Millisesse kataloogi täidetud ankeedid salvestada? (survey_folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_use_cfgform
 msgid "Omaduse Millist seadete vormi kasutada? (use_cfgform) caption"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/applications/survey/survey_manager.aw:prop_use_cfgform_comment
 msgid "Omaduse Millist seadete vormi kasutada? (use_cfgform) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_redirect_to
 msgid "Omaduse Kuhu ümber suunata (redirect_to) caption"
-msgstr ""
+msgstr "Redirect to"
 
 #: classes/applications/survey/survey_manager.aw:prop_redirect_to_comment
 msgid "Omaduse Kuhu ümber suunata (redirect_to) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_users_only
 msgid "Omaduse Täita saavad ainult registreeritud kasutajad (users_only) caption"
-msgstr ""
+msgstr "Only registered users can fill survey"
 
 #: classes/applications/survey/survey_manager.aw:prop_users_only_comment
 msgid "Omaduse Täita saavad ainult registreeritud kasutajad (users_only) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_name
 msgid "Omaduse Ankeedi nimi (survey_name) caption"
-msgstr ""
+msgstr "Survey name"
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_name_comment
 msgid "Omaduse Ankeedi nimi (survey_name) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_toolbar
 msgid "Omaduse Nimekirja toolbar (survey_toolbar) caption"
-msgstr ""
+msgstr "List toolbar"
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_toolbar_comment
 msgid "Omaduse Nimekirja toolbar (survey_toolbar) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_list
 msgid "Omaduse Täidetud ankeedid (survey_list) caption"
-msgstr ""
+msgstr "List of filled surveys"
 
 #: classes/applications/survey/survey_manager.aw:prop_survey_list_comment
 msgid "Omaduse Täidetud ankeedid (survey_list) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_search_form
 msgid "Omaduse Otsi (search_form) caption"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/survey/survey_manager.aw:prop_search_form_comment
 msgid "Omaduse Otsi (search_form) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_search_results_toolbar
 msgid "Omaduse Otsingutulemuste toolbar (search_results_toolbar) caption"
-msgstr ""
+msgstr "Search result toolbar"
 
 #: classes/applications/survey/survey_manager.aw:prop_search_results_toolbar_comment
 msgid "Omaduse Otsingutulemuste toolbar (search_results_toolbar) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:prop_search_results
 msgid "Omaduse Tulemus (search_results) caption"
-msgstr ""
+msgstr "Reult"
 
 #: classes/applications/survey/survey_manager.aw:prop_search_results_comment
 msgid "Omaduse Tulemus (search_results) kommentaar"
@@ -132,57 +132,57 @@ msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:group_survey_list
 msgid "Grupi Nimekiri (survey_list) pealkiri"
-msgstr ""
+msgstr "List"
 
 #: classes/applications/survey/survey_manager.aw:group_survey_search
 msgid "Grupi Otsing (survey_search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_SURVEY_FOLDER
 msgid "Seose Kataloog (RELTYPE_SURVEY_FOLDER) tekst"
-msgstr ""
+msgstr "Folder"
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_SURVEY_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_SURVEY_CFGFORM) tekst"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_REDIRECT_TO
 msgid "Seose Kuhu peale täitmist suunata (RELTYPE_REDIRECT_TO) tekst"
-msgstr ""
+msgstr "Redirect after"
 
 #: classes/applications/survey/survey_manager.aw:125 classes/applications/survey/survey_manager.aw:142
 msgid "Kustuta valitud ankeedid"
-msgstr ""
+msgstr "Delete selected surveys"
 
 #: classes/applications/survey/survey_manager.aw:127 classes/applications/survey/survey_manager.aw:144
 msgid "Kustutada valitud ankeedid?"
-msgstr ""
+msgstr "Delete selected surveys?"
 
 #: classes/applications/survey/survey_manager.aw:150
 msgid "Ekspordi ankeedid"
-msgstr ""
+msgstr "Export surveys"
 
 #: classes/applications/survey/survey_manager.aw:202
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/survey/survey_manager.aw:233 classes/applications/survey/survey_manager.aw:299 classes/applications/survey/survey_manager.aw:494
 msgid "Vaata"
-msgstr ""
+msgstr "View"
 
 #: classes/applications/survey/survey_manager.aw:447
 msgid "id"
-msgstr ""
+msgstr "id"
 
 #: classes/applications/survey/survey_manager.aw:456
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/survey/survey_manager.aw:480
 msgid "Host"
-msgstr ""
+msgstr "Host"
 
 #: classes/applications/survey/survey_manager.aw:485
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 

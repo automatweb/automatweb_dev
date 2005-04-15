@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_category
 msgid "Omaduse Kategooriad (category) caption"
-msgstr ""
+msgstr "Categories"
 
 #: classes/applications/commune/community.aw:prop_category_comment
 msgid "Omaduse Kategooriad (category) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_forum_settings
 msgid "Omaduse Foorumi seaded (forum_settings) caption"
-msgstr ""
+msgstr "Forum settings"
 
 #: classes/applications/commune/community.aw:prop_forum_settings_comment
 msgid "Omaduse Foorumi seaded (forum_settings) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_calendar_settings
 msgid "Omaduse Kalendri seaded (calendar_settings) caption"
-msgstr ""
+msgstr "Calendar settings"
 
 #: classes/applications/commune/community.aw:prop_calendar_settings_comment
 msgid "Omaduse Kalendri seaded (calendar_settings) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/commune/community.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_members_toolbar
 msgid "Omaduse Liikmete toolbar (members_toolbar) caption"
-msgstr ""
+msgstr "Members toolbar"
 
 #: classes/applications/commune/community.aw:prop_members_toolbar_comment
 msgid "Omaduse Liikmete toolbar (members_toolbar) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_members
 msgid "Omaduse Liikmed (members) caption"
-msgstr ""
+msgstr "Memebers"
 
 #: classes/applications/commune/community.aw:prop_members_comment
 msgid "Omaduse Liikmed (members) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_moderators_toolbar
 msgid "Omaduse Moderaatorite toolbar (moderators_toolbar) caption"
-msgstr ""
+msgstr "Moderator toolbar"
 
 #: classes/applications/commune/community.aw:prop_moderators_toolbar_comment
 msgid "Omaduse Moderaatorite toolbar (moderators_toolbar) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_moderators
 msgid "Omaduse Moderaatorid (moderators) caption"
-msgstr ""
+msgstr "Moderators"
 
 #: classes/applications/commune/community.aw:prop_moderators_comment
 msgid "Omaduse Moderaatorid (moderators) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_blocked_toolbar
 msgid "Omaduse Blokeeritute toolbar (blocked_toolbar) caption"
-msgstr ""
+msgstr "Blocked toolbar"
 
 #: classes/applications/commune/community.aw:prop_blocked_toolbar_comment
 msgid "Omaduse Blokeeritute toolbar (blocked_toolbar) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:prop_blocked
 msgid "Omaduse Blokeeritud (blocked) caption"
-msgstr ""
+msgstr "Blocked"
 
 #: classes/applications/commune/community.aw:prop_blocked_comment
 msgid "Omaduse Blokeeritud (blocked) kommentaar"
@@ -144,97 +144,97 @@ msgstr ""
 
 #: classes/applications/commune/community.aw:group_general2
 msgid "Grupi Üldised seaded (general2) pealkiri"
-msgstr ""
+msgstr "General settings"
 
 #: classes/applications/commune/community.aw:group_forum_settings
 msgid "Grupi Foorumi seaded (forum_settings) pealkiri"
-msgstr ""
+msgstr "Forum settings"
 
 #: classes/applications/commune/community.aw:group_calendar_settings
 msgid "Grupi Kalendri seaded (calendar_settings) pealkiri"
-msgstr ""
+msgstr "Calendar settings"
 
 #: classes/applications/commune/community.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/commune/community.aw:group_connected
 msgid "Grupi Seotud isikud (connected) pealkiri"
-msgstr ""
+msgstr "Connected persons"
 
 #: classes/applications/commune/community.aw:group_members
 msgid "Grupi Liikmed (members) pealkiri"
-msgstr ""
+msgstr "Members"
 
 #: classes/applications/commune/community.aw:group_moderators
 msgid "Grupi Moderaatorid (moderators) pealkiri"
-msgstr ""
+msgstr "Moderators"
 
 #: classes/applications/commune/community.aw:group_blocked
 msgid "Grupi Blokeeritud (blocked) pealkiri"
-msgstr ""
+msgstr "Blocked"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_MODERATOR
 msgid "Seose Moderaator (RELTYPE_MODERATOR) tekst"
-msgstr ""
+msgstr "Moderator"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_MEMBER
 msgid "Seose Kogukonna liige (RELTYPE_MEMBER) tekst"
-msgstr ""
+msgstr "Member of community"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_BLOCKED
 msgid "Seose Blokeeritud kasutaja (RELTYPE_BLOCKED) tekst"
-msgstr ""
+msgstr "Blocked user"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_FORUM
 msgid "Seose Foorum (RELTYPE_FORUM) tekst"
-msgstr ""
+msgstr "Forum"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_CALENDAR
 msgid "Seose Kalender (RELTYPE_CALENDAR) tekst"
-msgstr ""
+msgstr "Calendar"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_CALENDAR_VIEW
 msgid "Seose Kalendri vaade (RELTYPE_CALENDAR_VIEW) tekst"
-msgstr ""
+msgstr "Calendar view"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_CATEGORIES
 msgid "Seose Kogukondade kategooriad (RELTYPE_CATEGORIES) tekst"
-msgstr ""
+msgstr "Community categories"
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_CFG_MANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"
-msgstr ""
+msgstr "Connection manager"
 
 #: classes/applications/commune/community.aw:140 classes/applications/commune/community.aw:149
 msgid "Blokeeri"
-msgstr ""
+msgstr "Block"
 
 #: classes/applications/commune/community.aw:141 classes/applications/commune/community.aw:145
 msgid "Tee moderaatoriks"
-msgstr ""
+msgstr "Make moderator"
 
 #: classes/applications/commune/community.aw:144 classes/applications/commune/community.aw:148
 msgid "Tee liikmeks"
-msgstr ""
+msgstr "Make member"
 
 #: classes/applications/commune/community.aw:165
 msgid "Eemalda "
-msgstr ""
+msgstr "Remove "
 
 #: classes/applications/commune/community.aw:288
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/applications/commune/community.aw:293
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/commune/community.aw:297
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/commune/community.aw:301
 msgid "Lisamisaeg"
-msgstr ""
+msgstr "Added"
 

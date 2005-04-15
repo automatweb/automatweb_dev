@@ -11,38 +11,38 @@ msgstr ""
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:58
 msgid "Kalendrid, millest otsida"
-msgstr ""
+msgstr "Calendars to search"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:82
 #: classes/applications/calendar/vcl/multi_calendar.aw:234
 msgid "Alates"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:91
 #: classes/applications/calendar/vcl/multi_calendar.aw:239
 msgid "Kuni"
-msgstr ""
+msgstr "To"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:104
 msgid "Otsitava aja pikkus (hh:mm)"
-msgstr ""
+msgstr "Legth of time to search for (hh:mm)"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:113
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:229
 msgid "Kalender"
-msgstr ""
+msgstr "Calendar"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:244
 msgid "XX"
-msgstr ""
+msgstr "XX"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:268
 msgid "Leitud ajad"
-msgstr ""
+msgstr "Found times"
 
 #: classes/applications/calendar/vcl/multi_calendar.aw:274
 msgid "Kinnita"
-msgstr ""
+msgstr "Confirm"

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_rule.aw:prop_rule_from
 msgid "Omaduse From (rule_from) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/messenger/mail_rule.aw:prop_rule_from_comment
 msgid "Omaduse From (rule_from) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_rule.aw:prop_rule_subject
 msgid "Omaduse Subject (rule_subject) caption"
-msgstr ""
+msgstr "Subject"
 
 #: classes/applications/messenger/mail_rule.aw:prop_rule_subject_comment
 msgid "Omaduse Subject (rule_subject) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_rule.aw:prop_target_folder
 msgid "Omaduse Liiguta folderisse (target_folder) caption"
-msgstr ""
+msgstr "Move to folder"
 
 #: classes/applications/messenger/mail_rule.aw:prop_target_folder_comment
 msgid "Omaduse Liiguta folderisse (target_folder) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_rule.aw:prop_on_server
 msgid "Omaduse Salvesta serverisse (on_server) caption"
-msgstr ""
+msgstr "Save to server"
 
 #: classes/applications/messenger/mail_rule.aw:prop_on_server_comment
 msgid "Omaduse Salvesta serverisse (on_server) kommentaar"

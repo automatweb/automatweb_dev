@@ -271,7 +271,7 @@ msgstr "Job has no case or resource"
 
 #: classes/mrp/mrp_job.aw:226
 msgid "Viga! "
-msgstr ""
+msgstr "Error! "
 
 #: classes/mrp/mrp_job.aw:269
 msgid "Esinenud tõrked: "
@@ -371,7 +371,7 @@ msgstr "Freeing the resource failed"
 #: classes/mrp/mrp_job.aw:673 classes/mrp/mrp_job.aw:799
 #: classes/mrp/mrp_job.aw:1221
 msgid "Ressursihalduskeskkond defineerimata."
-msgstr ""
+msgstr "Resource manager undefined."
 
 #: classes/mrp/mrp_job.aw:761 classes/mrp/mrp_job.aw:843
 #: classes/mrp/mrp_job.aw:1053

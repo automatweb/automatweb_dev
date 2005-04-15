@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree_branch.aw:prop_apply_level
 msgid "Omaduse Kehtib tervele tasemele (apply_level) caption"
-msgstr ""
+msgstr "Applies to whole level"
 
 #: classes/applications/class_designer/property_tree_branch.aw:prop_apply_level_comment
 msgid "Omaduse Kehtib tervele tasemele (apply_level) kommentaar"
@@ -48,25 +48,25 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree_branch.aw:group_add
 msgid "Grupi Lisatavad objektid (add) pealkiri"
-msgstr ""
+msgstr "Addable objects"
 
 #: classes/applications/class_designer/property_tree_branch.aw:group_filter
 msgid "Grupi Andmete filter (filter) pealkiri"
-msgstr ""
+msgstr "Data filter"
 
 #: classes/applications/class_designer/property_tree_branch.aw:90
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/applications/class_designer/property_tree_branch.aw:96
 msgid "Seoset&uuml;&uuml;p"
-msgstr ""
+msgstr "Connection type"
 
 #: classes/applications/class_designer/property_tree_branch.aw:229
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/applications/class_designer/property_tree_branch.aw:234
 msgid "V&auml;&auml;rtus"
-msgstr ""
+msgstr "Value"
 

@@ -192,29 +192,29 @@ msgstr ""
 
 #: classes/applications/commune/image_rate.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/applications/commune/image_rate.aw:229
 msgid "Saada sõnum"
-msgstr ""
+msgstr "Send message"
 
 #: classes/applications/commune/image_rate.aw:239
 msgid "lisa sõprade hulka"
-msgstr ""
+msgstr "add to friends"
 
 #: classes/applications/commune/image_rate.aw:249
 msgid "Ignoreeri"
-msgstr ""
+msgstr "Ignore"
 
 #: classes/applications/commune/image_rate.aw:259
 msgid "Blokeeri"
-msgstr ""
+msgstr "Block"
 
 #: classes/applications/commune/image_rate.aw:269
 msgid "Lisa kontaktidesse"
-msgstr ""
+msgstr "Add to contact list"
 
 #: classes/applications/commune/image_rate.aw:321
 msgid "pildi"
-msgstr ""
+msgstr "image"
 

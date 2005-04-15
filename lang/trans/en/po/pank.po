@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_account_balance
 msgid "Omaduse Kontod (account_balance) caption"
-msgstr ""
+msgstr "Accounts"
 
 #: classes/pank/pank.aw:prop_account_balance_comment
 msgid "Omaduse Kontod (account_balance) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_accounts_table
 msgid "Omaduse Kontod (accounts_table) caption"
-msgstr ""
+msgstr "Accounts"
 
 #: classes/pank/pank.aw:prop_accounts_table_comment
 msgid "Omaduse Kontod (accounts_table) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_main_toolbar
 msgid "Omaduse Suurepärane toolbar (main_toolbar) caption"
-msgstr ""
+msgstr "TB"
 
 #: classes/pank/pank.aw:prop_main_toolbar_comment
 msgid "Omaduse Suurepärane toolbar (main_toolbar) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_main_treeview
 msgid "Omaduse Treeview (main_treeview) caption"
-msgstr ""
+msgstr "TV"
 
 #: classes/pank/pank.aw:prop_main_treeview_comment
 msgid "Omaduse Treeview (main_treeview) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_main_company_info
 msgid "Omaduse Firma info (main_company_info) caption"
-msgstr ""
+msgstr "Company info"
 
 #: classes/pank/pank.aw:prop_main_company_info_comment
 msgid "Omaduse Firma info (main_company_info) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_main_company_projects_info
 msgid "Omaduse Firma projektide info (main_company_projects_info) caption"
-msgstr ""
+msgstr "Company project info"
 
 #: classes/pank/pank.aw:prop_main_company_projects_info_comment
 msgid "Omaduse Firma projektide info (main_company_projects_info) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_main_table
 msgid "Omaduse Tabel (main_table) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/pank/pank.aw:prop_main_table_comment
 msgid "Omaduse Tabel (main_table) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_konto_caption
 msgid "Omaduse kapten (konto_caption) caption"
-msgstr ""
+msgstr "captain"
 
 #: classes/pank/pank.aw:prop_konto_caption_comment
 msgid "Omaduse kapten (konto_caption) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_from_account
 msgid "Omaduse Konto (from_account) caption"
-msgstr ""
+msgstr "Account"
 
 #: classes/pank/pank.aw:prop_from_account_comment
 msgid "Omaduse Konto (from_account) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_to_company_caption
 msgid "Omaduse kapten (to_company_caption) caption"
-msgstr ""
+msgstr "captain"
 
 #: classes/pank/pank.aw:prop_to_company_caption_comment
 msgid "Omaduse kapten (to_company_caption) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_to_company
 msgid "Omaduse Kellele (to_company) caption"
-msgstr ""
+msgstr "To whom"
 
 #: classes/pank/pank.aw:prop_to_company_comment
 msgid "Omaduse Kellele (to_company) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_summa_caption
 msgid "Omaduse kapten (summa_caption) caption"
-msgstr ""
+msgstr "captain"
 
 #: classes/pank/pank.aw:prop_summa_caption_comment
 msgid "Omaduse kapten (summa_caption) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_summa
 msgid "Omaduse Summa (summa) caption"
-msgstr ""
+msgstr "Amount"
 
 #: classes/pank/pank.aw:prop_summa_comment
 msgid "Omaduse Summa (summa) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/pank/pank.aw:prop_submit
 msgid "Omaduse Soorita (submit) caption"
-msgstr ""
+msgstr "Make transfer"
 
 #: classes/pank/pank.aw:prop_submit_comment
 msgid "Omaduse Soorita (submit) kommentaar"
@@ -192,25 +192,25 @@ msgstr ""
 
 #: classes/pank/pank.aw:group_account_overview
 msgid "Grupi Konto ülevaade (account_overview) pealkiri"
-msgstr ""
+msgstr "Account overview"
 
 #: classes/pank/pank.aw:group_accounts
 msgid "Grupi Kontod (accounts) pealkiri"
-msgstr ""
+msgstr "Accounts"
 
 #: classes/pank/pank.aw:group_pank_owner_group
 msgid "Grupi ... (pank_owner_group) pealkiri"
-msgstr ""
+msgstr "..."
 
 #: classes/pank/pank.aw:group_pank_owner_group_main_sub
 msgid "Grupi ... (pank_owner_group_main_sub) pealkiri"
-msgstr ""
+msgstr "..."
 
 #: classes/pank/pank.aw:group_pank_make_trans
 msgid "Grupi Tee ülekanne (pank_make_trans) pealkiri"
-msgstr ""
+msgstr "Make transfer"
 
 #: classes/pank/pank.aw:rel_RELTYPE_OWNER
 msgid "Seose Kellele kuulub (RELTYPE_OWNER) tekst"
-msgstr ""
+msgstr "Belonging to"
 

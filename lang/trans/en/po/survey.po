@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/applications/survey/survey.aw:prop_remote_host
 msgid "Omaduse Remote host (remote_host) caption"
-msgstr ""
+msgstr "Remote host"
 
 #: classes/applications/survey/survey.aw:prop_remote_host_comment
 msgid "Omaduse Remote host (remote_host) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/applications/survey/survey.aw:prop_sbt
 msgid "Omaduse Submit (sbt) caption"
-msgstr ""
+msgstr "Submit"
 
 #: classes/applications/survey/survey.aw:prop_sbt_comment
 msgid "Omaduse Submit (sbt) kommentaar"
@@ -336,9 +336,9 @@ msgstr ""
 
 #: classes/applications/survey/survey.aw:group_survey
 msgid "Grupi Küsimused (survey) pealkiri"
-msgstr ""
+msgstr "Questions"
 
 #: classes/applications/survey/survey.aw:rel_RELTYPE_OWNER
 msgid "Seose Omanik (RELTYPE_OWNER) tekst"
-msgstr ""
+msgstr "Owner"
 

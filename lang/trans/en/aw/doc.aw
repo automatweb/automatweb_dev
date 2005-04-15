@@ -49,6 +49,7 @@ $GLOBALS["TRANS"]["Omaduse Keel (language) caption"] = "Language";
 $GLOBALS["TRANS"]["Omaduse Kestab (duration) caption"] = "Duration";
 $GLOBALS["TRANS"]["Omaduse P&otilde;hikalender (calendar_relation) caption"] = "Main calendar";
 $GLOBALS["TRANS"]["Omaduse Genereeri staatiline (gen_static) caption"] = "Generate static";
+$GLOBALS["TRANS"]["Omaduse cb_part (cb_part) caption"] = " ";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) caption"] = "No same topic links";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra arvesta muutmist (no_last) caption"] = "Do not change modified date";
 $GLOBALS["TRANS"]["Omaduse Muutmise kuupaev dokumendi sees (show_last_changed) caption"] = "Last modified date in document";

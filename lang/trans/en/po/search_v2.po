@@ -156,47 +156,47 @@ msgstr ""
 
 #: classes/search_v2.aw:group_search
 msgid "Grupi Lihtne otsing (search) pealkiri"
-msgstr ""
+msgstr "Simple search"
 
 #: classes/search_v2.aw:group_advsearch
 msgid "Grupi Põhjalik otsing (advsearch) pealkiri"
-msgstr ""
+msgstr "Advanced search"
 
 #: classes/search_v2.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/search_v2.aw:139
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/search_v2.aw:146
 msgid "Lõika"
-msgstr ""
+msgstr "Cut"
 
 #: classes/search_v2.aw:152
 msgid "Kopeeri"
-msgstr ""
+msgstr "Copy"
 
 #: classes/search_v2.aw:158
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/search_v2.aw:180
 msgid "Kõik"
-msgstr ""
+msgstr "All"
 
 #: classes/search_v2.aw:181
 msgid "Aktiivsed"
-msgstr ""
+msgstr "Active"
 
 #: classes/search_v2.aw:182
 msgid "Deaktiivsed"
-msgstr ""
+msgstr "Deactive"
 
 #: classes/search_v2.aw:211
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/search_v2.aw:216
 msgid ""
@@ -204,37 +204,37 @@ msgstr ""
 
 #: classes/search_v2.aw:221
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/search_v2.aw:225
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/search_v2.aw:230
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/search_v2.aw:234
 msgid "Asukoht"
-msgstr ""
+msgstr "Location"
 
 #: classes/search_v2.aw:238
 msgid "Loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/search_v2.aw:244
 msgid "Looja"
-msgstr ""
+msgstr "Created by"
 
 #: classes/search_v2.aw:248
 msgid "Muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/search_v2.aw:254
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/search_v2.aw:260
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 

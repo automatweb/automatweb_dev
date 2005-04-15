@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/graph.aw:78 classes/graph.aw:342
 msgid "Tiitel"
-msgstr ""
+msgstr "Title"
 

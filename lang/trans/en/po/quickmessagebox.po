@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_maxsize
 msgid "Omaduse Kirja maksimaalne suurus (märkides) (maxsize) caption"
-msgstr ""
+msgstr "Maximum message size"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_maxsize_comment
 msgid "Omaduse Kirja maksimaalne suurus (märkides) (maxsize) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox
 msgid "Omaduse Sissetulnud kirjad (inbox) caption"
-msgstr ""
+msgstr "Inbox"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_inbox_comment
 msgid "Omaduse Sissetulnud kirjad (inbox) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_toolbar
 msgid "Omaduse Outboxi toolbar (outbox_toolbar) caption"
-msgstr ""
+msgstr "ob tb"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_toolbar_comment
 msgid "Omaduse Outboxi toolbar (outbox_toolbar) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox
 msgid "Omaduse Välja saadetud kirjad (outbox) caption"
-msgstr ""
+msgstr "Sent messages"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_outbox_comment
 msgid "Omaduse Välja saadetud kirjad (outbox) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_toolbar
 msgid "Omaduse Arhiivi toolbar (archive_toolbar) caption"
-msgstr ""
+msgstr "Archive toolbar"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_toolbar_comment
 msgid "Omaduse Arhiivi toolbar (archive_toolbar) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_archive
 msgid "Omaduse Arhiiv (archive) caption"
-msgstr ""
+msgstr "Archive"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:prop_archive_comment
 msgid "Omaduse Arhiiv (archive) kommentaar"
@@ -120,109 +120,109 @@ msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_newmessage
 msgid "Grupi Uus teade (newmessage) pealkiri"
-msgstr ""
+msgstr "New message"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_inbox
 msgid "Grupi Inbox (inbox) pealkiri"
-msgstr ""
+msgstr "Inbox"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_outbox
 msgid "Grupi Outbox (outbox) pealkiri"
-msgstr ""
+msgstr "Outbox"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_archive
 msgid "Grupi Arhiiv (archive) pealkiri"
-msgstr ""
+msgstr "Archive"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:rel_RELTYPE_OWNER
 msgid "Seose Omanik (RELTYPE_OWNER) tekst"
-msgstr ""
+msgstr "Owner"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:rel_RELTYPE_CONTACT_LIST
 msgid "Seose Aadressiraamat (RELTYPE_CONTACT_LIST) tekst"
-msgstr ""
+msgstr "Addressbook"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:80
 msgid "Priit on jobu!"
-msgstr ""
+msgstr "JERK!"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:92
 msgid "Uus kiri"
-msgstr ""
+msgstr "New message"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:104
 msgid "Vasta kirjale"
-msgstr ""
+msgstr "Answer"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:116
 msgid "Edasta kiri"
-msgstr ""
+msgstr "Forward"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:127 classes/applications/quickmessage/quickmessagebox.aw:154
 msgid "Arhiveeri valitud kirjad"
-msgstr ""
+msgstr "Archive selected messages"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:139 classes/applications/quickmessage/quickmessagebox.aw:161
 msgid "Kustuta valitud kirjad"
-msgstr ""
+msgstr "Delete selected messages"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:147
 msgid "oled sa kindel, et tahad valitud kirja kustutada?"
-msgstr ""
+msgstr "are you sure you wasnt to delete selected messages?"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:164
 msgid "Oled kindel, et tahad valitud kirjad kustutada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected messages?"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:210
 msgid "sellist kasutajat ei ole olemas!"
-msgstr ""
+msgstr "no such user!"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:274
 msgid "Kellelt"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:282
 msgid "Kellele"
-msgstr ""
+msgstr "To"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:286
 msgid "Saadetud"
-msgstr ""
+msgstr "Sent"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:290 classes/applications/quickmessage/quickmessagebox.aw:337
 msgid "Pealkiri"
-msgstr ""
+msgstr "Subject"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:294
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:334
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:335
 msgid "Aeg"
-msgstr ""
+msgstr "When"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:336
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:377
 msgid "teadet ei õnnestunud saata, proovi uuesti"
-msgstr ""
+msgstr "message could not be sent, please try again"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:377
 msgid "teade edukalt kohale toimetatud!"
-msgstr ""
+msgstr "message delivered!"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:414
 msgid "Aadressiraamat"
-msgstr ""
+msgstr "Addressbook"
 
 #: classes/applications/quickmessage/quickmessagebox.aw:437
 msgid "kirjutas"
-msgstr ""
+msgstr "wrote"
 

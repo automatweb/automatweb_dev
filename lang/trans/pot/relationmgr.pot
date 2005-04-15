@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:00 +0300\n"
+"POT-Creation-Date: Thu, 14 Apr 2005 14:31:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,79 +10,79 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relationmgr.aw:57 classes/vcl/relationmgr.aw:59 classes/vcl/relationmgr.aw:63
+#: classes/vcl/relationmgr.aw:57 classes/vcl/relationmgr.aw:62
 msgid "Objekti tüüp"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:234
+#: classes/vcl/relationmgr.aw:236
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:241 classes/vcl/relationmgr.aw:250
+#: classes/vcl/relationmgr.aw:243 classes/vcl/relationmgr.aw:252
 msgid "Otsi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:261
+#: classes/vcl/relationmgr.aw:263
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:272
+#: classes/vcl/relationmgr.aw:274
 msgid "Uuenda"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:283
+#: classes/vcl/relationmgr.aw:285
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:294
+#: classes/vcl/relationmgr.aw:296
 msgid "Salvesta"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:301
+#: classes/vcl/relationmgr.aw:303
 msgid "Kustuta seos(ed)"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:335
+#: classes/vcl/relationmgr.aw:337
 msgid ""
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:343
+#: classes/vcl/relationmgr.aw:345
 msgid "Nimi"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:349
+#: classes/vcl/relationmgr.aw:351
 msgid "Keel"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:356
+#: classes/vcl/relationmgr.aw:358
 msgid "Muu info"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:362
+#: classes/vcl/relationmgr.aw:364
 msgid "Alias"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:370
+#: classes/vcl/relationmgr.aw:372
 msgid "Link"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:379
+#: classes/vcl/relationmgr.aw:381
 msgid "Cache"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:388
+#: classes/vcl/relationmgr.aw:390
 msgid "Muutja"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:396
+#: classes/vcl/relationmgr.aw:398
 msgid "Muudetud"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:407
+#: classes/vcl/relationmgr.aw:409
 msgid "Tüüp"
 msgstr ""
 
-#: classes/vcl/relationmgr.aw:415
+#: classes/vcl/relationmgr.aw:417
 msgid "Seose tüüp"
 msgstr ""
 

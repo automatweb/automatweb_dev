@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/period.aw:prop_perimage
 msgid "Omaduse Pilt2 (perimage) caption"
-msgstr ""
+msgstr "Image 2"
 
 #: classes/period.aw:prop_perimage_comment
 msgid "Omaduse Pilt2 (perimage) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/period.aw:prop_per_id
 msgid "Omaduse Perioodi id. (per_id) caption"
-msgstr ""
+msgstr "Period id"
 
 #: classes/period.aw:prop_per_id_comment
 msgid "Omaduse Perioodi id. (per_id) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/period.aw:prop_per_oid
 msgid "Omaduse Oid (per_oid) caption"
-msgstr ""
+msgstr "Oid"
 
 #: classes/period.aw:prop_per_oid_comment
 msgid "Omaduse Oid (per_oid) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/period.aw:prop_image_link
 msgid "Omaduse Pildi link (image_link) caption"
-msgstr ""
+msgstr "Image link"
 
 #: classes/period.aw:prop_image_link_comment
 msgid "Omaduse Pildi link (image_link) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/period.aw:prop_pyear
 msgid "Omaduse Aasta (pyear) caption"
-msgstr ""
+msgstr "Year"
 
 #: classes/period.aw:prop_pyear_comment
 msgid "Omaduse Aasta (pyear) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/period.aw:prop_contents_doc
 msgid "Omaduse Sisukorra dokument (contents_doc) caption"
-msgstr ""
+msgstr "Content document"
 
 #: classes/period.aw:prop_contents_doc_comment
 msgid "Omaduse Sisukorra dokument (contents_doc) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/period.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/period.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/period.aw:prop_activity
 msgid "Omaduse Aktiivsus (activity) caption"
-msgstr ""
+msgstr "Activity"
 
 #: classes/period.aw:prop_activity_comment
 msgid "Omaduse Aktiivsus (activity) kommentaar"
@@ -120,13 +120,13 @@ msgstr ""
 
 #: classes/period.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
-msgstr ""
+msgstr "Activity"
 
 #: classes/period.aw:rel_RELTYPE_IMAGE
 msgid "Seose Perioodi pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "Period image"
 
 #: classes/period.aw:rel_RELTYPE_CONTENTS_DOC
 msgid "Seose Sisukorra dokument (RELTYPE_CONTENTS_DOC) tekst"
-msgstr ""
+msgstr "Content document"
 

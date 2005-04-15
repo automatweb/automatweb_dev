@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/messenger/messenger_config.aw:prop_msgs_on_page
 msgid "Omaduse Kirju lehel (msgs_on_page) caption"
-msgstr ""
+msgstr "Messages per page"
 
 #: classes/applications/messenger/messenger_config.aw:prop_msgs_on_page_comment
 msgid "Omaduse Kirju lehel (msgs_on_page) kommentaar"

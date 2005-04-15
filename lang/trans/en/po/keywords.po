@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/keywords.aw:prop_keyword
 msgid "Omaduse Märksõna (keyword) caption"
-msgstr ""
+msgstr "Keyword"
 
 #: classes/keywords.aw:prop_keyword_comment
 msgid "Omaduse Märksõna (keyword) kommentaar"
@@ -24,13 +24,13 @@ msgstr ""
 
 #: classes/keywords.aw:rel_RELTYPE_KEYWORD
 msgid "Seose Dokument (RELTYPE_KEYWORD) tekst"
-msgstr ""
+msgstr "Document"
 
 #: classes/keywords.aw:rel_RELTYPE_FILE
 msgid "Seose Fail (RELTYPE_FILE) tekst"
-msgstr ""
+msgstr "File"
 
 #: classes/keywords.aw:rel_RELTYPE_LINK
 msgid "Seose Link (RELTYPE_LINK) tekst"
-msgstr ""
+msgstr "Link"
 

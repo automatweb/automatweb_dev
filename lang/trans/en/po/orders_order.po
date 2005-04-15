@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_firstname
 msgid "Omaduse Eesnimi (firstname) caption"
-msgstr ""
+msgstr "First name"
 
 #: classes/applications/orders/orders_order.aw:prop_firstname_comment
 msgid "Omaduse Eesnimi (firstname) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_lastname
 msgid "Omaduse Perekonnanimi (lastname) caption"
-msgstr ""
+msgstr "Last name"
 
 #: classes/applications/orders/orders_order.aw:prop_lastname_comment
 msgid "Omaduse Perekonnanimi (lastname) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_personal_id
 msgid "Omaduse Isikukood (personal_id) caption"
-msgstr ""
+msgstr "Personal code"
 
 #: classes/applications/orders/orders_order.aw:prop_personal_id_comment
 msgid "Omaduse Isikukood (personal_id) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_person_email
 msgid "Omaduse E-mail (person_email) caption"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/orders/orders_order.aw:prop_person_email_comment
 msgid "Omaduse E-mail (person_email) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_person_phone
 msgid "Omaduse Telefon (person_phone) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/orders/orders_order.aw:prop_person_phone_comment
 msgid "Omaduse Telefon (person_phone) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_person_contact
 msgid "Omaduse Aadress (person_contact) caption"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/orders/orders_order.aw:prop_person_contact_comment
 msgid "Omaduse Aadress (person_contact) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_person_birthday
 msgid "Omaduse Sünnipäev (person_birthday) caption"
-msgstr ""
+msgstr "Birthday"
 
 #: classes/applications/orders/orders_order.aw:prop_person_birthday_comment
 msgid "Omaduse Sünnipäev (person_birthday) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_submit2
 msgid "Omaduse Kinnita tellimus (submit2) caption"
-msgstr ""
+msgstr "Confirm order"
 
 #: classes/applications/orders/orders_order.aw:prop_submit2_comment
 msgid "Omaduse Kinnita tellimus (submit2) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_submit
 msgid "Omaduse Lisa tellimus (submit) caption"
-msgstr ""
+msgstr "Add order"
 
 #: classes/applications/orders/orders_order.aw:prop_submit_comment
 msgid "Omaduse Lisa tellimus (submit) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:prop_forward
 msgid "Omaduse Edasi (forward) caption"
-msgstr ""
+msgstr "Forward"
 
 #: classes/applications/orders/orders_order.aw:prop_forward_comment
 msgid "Omaduse Edasi (forward) kommentaar"
@@ -384,57 +384,57 @@ msgstr ""
 
 #: classes/applications/orders/orders_order.aw:group_orderinfo
 msgid "Grupi Tellimuse andmed (orderinfo) pealkiri"
-msgstr ""
+msgstr "Order data"
 
 #: classes/applications/orders/orders_order.aw:group_orderitems
 msgid "Grupi Tellitud tooted (orderitems) pealkiri"
-msgstr ""
+msgstr "Ordered products"
 
 #: classes/applications/orders/orders_order.aw:rel_RELTYPE_ORDER
 msgid "Seose Tellitud asi (RELTYPE_ORDER) tekst"
-msgstr ""
+msgstr "ordered product"
 
 #: classes/applications/orders/orders_order.aw:rel_RELTYPE_PERSON
 msgid "Seose Tellija (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "orderer"
 
 #: classes/applications/orders/orders_order.aw:rel_RELTYPE_CFGMANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
-msgstr ""
+msgstr "configuration manager"
 
 #: classes/applications/orders/orders_order.aw:166
 msgid "Toode"
-msgstr ""
+msgstr "Product"
 
 #: classes/applications/orders/orders_order.aw:171
 msgid "Toote kood"
-msgstr ""
+msgstr "Product code"
 
 #: classes/applications/orders/orders_order.aw:176
 msgid "Värv"
-msgstr ""
+msgstr "Colour"
 
 #: classes/applications/orders/orders_order.aw:181
 msgid "Suurus"
-msgstr ""
+msgstr "Size"
 
 #: classes/applications/orders/orders_order.aw:186
 msgid "Kogus"
-msgstr ""
+msgstr "Amount"
 
 #: classes/applications/orders/orders_order.aw:191
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/orders/orders_order.aw:458
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
-msgstr ""
+msgstr "To order you must accept the ordering conditions!"
 
 #: classes/applications/orders/orders_order.aw:478
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
-msgstr ""
+msgstr "To order you must accept the ordering conditions"
 
 #: classes/applications/orders/orders_order.aw:575
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
-msgstr ""
+msgstr "Unfortunately, your mail reader can not display HTML e-mails"
 

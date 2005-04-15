@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/converters.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/admin/converters.aw:prop_name_comment
 msgid "Omaduse Nimi (name) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/converters.aw:prop_comment
 msgid "Omaduse Kommentaar (comment) caption"
-msgstr ""
+msgstr "Comment"
 
 #: classes/admin/converters.aw:prop_comment_comment
 msgid "Omaduse Kommentaar (comment) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/admin/converters.aw:prop_status
 msgid "Omaduse Aktiivne (status) caption"
-msgstr ""
+msgstr "Status"
 
 #: classes/admin/converters.aw:prop_status_comment
 msgid "Omaduse Aktiivne (status) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/admin/converters.aw:prop_
 msgid "Omaduse  () caption"
-msgstr ""
+msgstr " "
 
 #: classes/admin/converters.aw:prop__comment
 msgid "Omaduse  () kommentaar"
@@ -60,9 +60,9 @@ msgstr ""
 
 #: classes/admin/converters.aw:group_general
 msgid "Grupi Üldine (general) pealkiri"
-msgstr ""
+msgstr "General"
 
 #: classes/admin/converters.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 

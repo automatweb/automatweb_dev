@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/image.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/image.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/image.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/image.aw:prop_file
 msgid "Omaduse Pilt (file) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/image.aw:prop_file_comment
 msgid "Omaduse Pilt (file) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/image.aw:prop_dimensions
 msgid "Omaduse Mõõtmed (dimensions) caption"
-msgstr ""
+msgstr "Dimensions"
 
 #: classes/image.aw:prop_dimensions_comment
 msgid "Omaduse Mõõtmed (dimensions) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/image.aw:prop_file2
 msgid "Omaduse Suur pilt (file2) caption"
-msgstr ""
+msgstr "Big image"
 
 #: classes/image.aw:prop_file2_comment
 msgid "Omaduse Suur pilt (file2) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/image.aw:prop_file2_del
 msgid "Omaduse Kustuta suur pilt (file2_del) caption"
-msgstr ""
+msgstr "Delete big image"
 
 #: classes/image.aw:prop_file2_del_comment
 msgid "Omaduse Kustuta suur pilt (file2_del) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/image.aw:prop_author
 msgid "Omaduse Pildi autor (author) caption"
-msgstr ""
+msgstr "Image author"
 
 #: classes/image.aw:prop_author_comment
 msgid "Omaduse Pildi autor (author) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/image.aw:prop_alt
 msgid "Omaduse Alt (alt) caption"
-msgstr ""
+msgstr "Alt"
 
 #: classes/image.aw:prop_alt_comment
 msgid "Omaduse Alt (alt) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/image.aw:prop_link
 msgid "Omaduse Link (link) caption"
-msgstr ""
+msgstr "Lnk"
 
 #: classes/image.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/image.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
-msgstr ""
+msgstr "New window"
 
 #: classes/image.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/image.aw:prop_no_print
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) caption"
-msgstr ""
+msgstr "Do not display in print view"
 
 #: classes/image.aw:prop_no_print_comment
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/image.aw:prop_new_w
 msgid "Omaduse Uus laius (new_w) caption"
-msgstr ""
+msgstr "New width"
 
 #: classes/image.aw:prop_new_w_comment
 msgid "Omaduse Uus laius (new_w) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/image.aw:prop_new_h
 msgid "Omaduse Uus k&otilde;rgus (new_h) caption"
-msgstr ""
+msgstr "New height"
 
 #: classes/image.aw:prop_new_h_comment
 msgid "Omaduse Uus k&otilde;rgus (new_h) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/image.aw:prop_dimensions_big
 msgid "Omaduse Mõõtmed (dimensions_big) caption"
-msgstr ""
+msgstr "Dimensions"
 
 #: classes/image.aw:prop_dimensions_big_comment
 msgid "Omaduse Mõõtmed (dimensions_big) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/image.aw:prop_new_w_big
 msgid "Omaduse Uus laius (suur) (new_w_big) caption"
-msgstr ""
+msgstr "New width (big)"
 
 #: classes/image.aw:prop_new_w_big_comment
 msgid "Omaduse Uus laius (suur) (new_w_big) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/image.aw:prop_new_h_big
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) caption"
-msgstr ""
+msgstr "New height (big)"
 
 #: classes/image.aw:prop_new_h_big_comment
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/image.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/image.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/image.aw:prop_resize_warn
 msgid "Omaduse Info (resize_warn) caption"
-msgstr ""
+msgstr "Info"
 
 #: classes/image.aw:prop_resize_warn_comment
 msgid "Omaduse Info (resize_warn) kommentaar"
@@ -252,25 +252,25 @@ msgstr ""
 
 #: classes/image.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/image.aw:group_img2
 msgid "Grupi Suur pilt (img2) pealkiri"
-msgstr ""
+msgstr "Big image"
 
 #: classes/image.aw:group_resize
 msgid "Grupi Muuda suurust (resize) pealkiri"
-msgstr ""
+msgstr "Change size"
 
 #: classes/image.aw:group_resize_big
 msgid "Grupi Muuda suure pildi suurust (resize_big) pealkiri"
-msgstr ""
+msgstr "Change big image size"
 
 #: classes/image.aw:rel_RELTYPE_MOD_COMMENT
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
-msgstr ""
+msgstr "Moderator comment"
 
 #: classes/image.aw:646
 msgid "Piltide automaatset suurendamist kontrollib objekt "
-msgstr ""
+msgstr "Image automatic resizing is controlled by object "
 

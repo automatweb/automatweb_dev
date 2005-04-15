@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/role.aw:prop_changes_desc
 msgid "Omaduse Muudetavad &otilde;igused (changes_desc) caption"
-msgstr ""
+msgstr "Modifiable access"
 
 #: classes/role.aw:prop_changes_desc_comment
 msgid "Omaduse Muudetavad &otilde;igused (changes_desc) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/role.aw:prop_changes
 msgid "Omaduse Muudetavad &otilde;igused (changes) caption"
-msgstr ""
+msgstr "Modified access"
 
 #: classes/role.aw:prop_changes_comment
 msgid "Omaduse Muudetavad &otilde;igused (changes) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/role.aw:prop_acls
 msgid "Omaduse Lubatud (acls) caption"
-msgstr ""
+msgstr "Allowed"
 
 #: classes/role.aw:prop_acls_comment
 msgid "Omaduse Lubatud (acls) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/role.aw:prop_save_acl
 msgid "Omaduse Uuenda ACL (save_acl) caption"
-msgstr ""
+msgstr "Renew ACL"
 
 #: classes/role.aw:prop_save_acl_comment
 msgid "Omaduse Uuenda ACL (save_acl) kommentaar"
@@ -72,5 +72,5 @@ msgstr ""
 
 #: classes/role.aw:group_acls
 msgid "Grupi Lubatud &otilde;igused (acls) pealkiri"
-msgstr ""
+msgstr "ACLS"
 

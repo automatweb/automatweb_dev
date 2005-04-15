@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/object_chain.aw:prop_objs
 msgid "Omaduse Vali objektid (objs) caption"
-msgstr ""
+msgstr "Select objects"
 
 #: classes/object_chain.aw:prop_objs_comment
 msgid "Omaduse Vali objektid (objs) kommentaar"
@@ -24,5 +24,5 @@ msgstr ""
 
 #: classes/object_chain.aw:rel_RELTYPE_OBJECT
 msgid "Seose objekt (RELTYPE_OBJECT) tekst"
-msgstr ""
+msgstr "object"
 

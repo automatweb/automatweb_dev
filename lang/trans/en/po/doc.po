@@ -660,7 +660,7 @@ msgstr ""
 
 #: classes/doc.aw:prop_cb_part
 msgid "Omaduse cb_part (cb_part) caption"
-msgstr ""
+msgstr " "
 
 #: classes/doc.aw:prop_cb_part_comment
 msgid "Omaduse cb_part (cb_part) kommentaar"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
+"POT-Creation-Date: Thu, 14 Apr 2005 14:31:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -38,15 +38,15 @@ msgstr ""
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:418 classes/vcl/releditor.aw:528
+#: classes/vcl/releditor.aw:418 classes/vcl/releditor.aw:531
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:492 classes/vcl/releditor.aw:517
+#: classes/vcl/releditor.aw:495 classes/vcl/releditor.aw:520
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:522
+#: classes/vcl/releditor.aw:525
 msgid "Nimi"
 msgstr ""
 

@@ -12,101 +12,101 @@ msgstr ""
 
 #: classes/install/site_list.aw:25
 msgid "AW Saitide list"
-msgstr ""
+msgstr "AW Site list"
 
 #: classes/install/site_list.aw:33 classes/install/site_list.aw:221 classes/install/site_list.aw:510
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/install/site_list.aw:39 classes/install/site_list.aw:228 classes/install/site_list.aw:517
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/install/site_list.aw:44 classes/install/site_list.aw:525
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: classes/install/site_list.aw:49 classes/install/site_list.aw:154 classes/install/site_list.aw:533
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: classes/install/site_list.aw:54
 msgid "Kasutusel"
-msgstr ""
+msgstr "In use"
 
 #: classes/install/site_list.aw:59
 msgid "Koodi versioon"
-msgstr ""
+msgstr "Code version"
 
 #: classes/install/site_list.aw:64
 msgid "Viimane uuendus"
-msgstr ""
+msgstr "Last update"
 
 #: classes/install/site_list.aw:72 classes/install/site_list.aw:240 classes/install/site_list.aw:248
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/install/site_list.aw:107
 msgid "Jah"
-msgstr ""
+msgstr "Yes"
 
 #: classes/install/site_list.aw:107
 msgid "Ei"
-msgstr ""
+msgstr "No"
 
 #: classes/install/site_list.aw:118
 msgid "Kokku %s saiti<br />\n"
-msgstr ""
+msgstr "Total number of sites: %s<Br>\n"
 
 #: classes/install/site_list.aw:119
 msgid "Kasutusel %s saiti <br />\n"
-msgstr ""
+msgstr "In use %s sites <br>\n"
 
 #: classes/install/site_list.aw:120
 msgid "Serverite kaupa: <br />\n"
-msgstr ""
+msgstr "By server: <br>\n"
 
 #: classes/install/site_list.aw:122
 msgid "Koodiversioonide kaupa: <br />\n"
-msgstr ""
+msgstr "By code version: <br>\n"
 
 #: classes/install/site_list.aw:159 classes/install/site_list.aw:189
 msgid "Mitu"
-msgstr ""
+msgstr "How many"
 
 #: classes/install/site_list.aw:184
 msgid "Koodiversioon"
-msgstr ""
+msgstr "Code version"
 
 #: classes/install/site_list.aw:213 classes/install/site_list.aw:613
 msgid "AW Serverite list"
-msgstr ""
+msgstr "AW Server list"
 
 #: classes/install/site_list.aw:234
 msgid "IP aadress"
-msgstr ""
+msgstr "IP Address"
 
 #: classes/install/site_list.aw:541
 msgid "Used?"
-msgstr ""
+msgstr "Used?"
 
 #: classes/install/site_list.aw:549
 msgid "Code branch"
-msgstr ""
+msgstr "Code branch"
 
 #: classes/install/site_list.aw:556
 msgid "Basedir"
-msgstr ""
+msgstr "Basedir"
 
 #: classes/install/site_list.aw:563
 msgid "Updater"
-msgstr ""
+msgstr "Updater"
 
 #: classes/install/site_list.aw:570
 msgid "Last update"
-msgstr ""
+msgstr "Last update"
 
 #: classes/install/site_list.aw:614
 msgid " / Muuda serverit "
-msgstr ""
+msgstr " / Change server"
 

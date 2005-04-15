@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/pank/tax.aw:prop_jrk
 msgid "Omaduse Järjekord (jrk) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/pank/tax.aw:prop_jrk_comment
 msgid "Omaduse Järjekord (jrk) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/pank/tax.aw:prop_tax_type
 msgid "Omaduse Maksu tüüp (tax_type) caption"
-msgstr ""
+msgstr "Tax type"
 
 #: classes/pank/tax.aw:prop_tax_type_comment
 msgid "Omaduse Maksu tüüp (tax_type) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/pank/tax.aw:prop_tax_percentage
 msgid "Omaduse Suhtarv (tax_percentage) caption"
-msgstr ""
+msgstr "Percentace"
 
 #: classes/pank/tax.aw:prop_tax_percentage_comment
 msgid "Omaduse Suhtarv (tax_percentage) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/pank/tax.aw:prop_tax_amount
 msgid "Omaduse Tüüparv (tax_amount) caption"
-msgstr ""
+msgstr "Amount"
 
 #: classes/pank/tax.aw:prop_tax_amount_comment
 msgid "Omaduse Tüüparv (tax_amount) kommentaar"

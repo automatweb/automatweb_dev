@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/file.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
-msgstr ""
+msgstr "Needs translation"
 
 #: classes/file.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/file.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
-msgstr ""
+msgstr "Translation confirmed"
 
 #: classes/file.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/file.aw:prop_filename
 msgid "Omaduse Faili nimi (filename) caption"
-msgstr ""
+msgstr "File name"
 
 #: classes/file.aw:prop_filename_comment
 msgid "Omaduse Faili nimi (filename) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/file.aw:prop_file
 msgid "Omaduse Vali fail (file) caption"
-msgstr ""
+msgstr "Select file"
 
 #: classes/file.aw:prop_file_comment
 msgid "Omaduse Vali fail (file) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/file.aw:prop_file_url
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) caption"
-msgstr ""
+msgstr "Url to get file content from"
 
 #: classes/file.aw:prop_file_url_comment
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/file.aw:prop_showal
 msgid "Omaduse Näita kohe (showal) caption"
-msgstr ""
+msgstr "Display immediately"
 
 #: classes/file.aw:prop_showal_comment
 msgid "Omaduse Näita kohe (showal) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/file.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
-msgstr ""
+msgstr "New window"
 
 #: classes/file.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/file.aw:prop_show_framed
 msgid "Omaduse Näita saidi raamis (show_framed) caption"
-msgstr ""
+msgstr "Display in site frame"
 
 #: classes/file.aw:prop_show_framed_comment
 msgid "Omaduse Näita saidi raamis (show_framed) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/file.aw:prop_j_time
 msgid "Omaduse Jõustumise kuupäev (j_time) caption"
-msgstr ""
+msgstr "Activation date"
 
 #: classes/file.aw:prop_j_time_comment
 msgid "Omaduse Jõustumise kuupäev (j_time) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/file.aw:prop_act_date
 msgid "Omaduse Avaldamise kuupäev (act_date) caption"
-msgstr ""
+msgstr "Publication date"
 
 #: classes/file.aw:prop_act_date_comment
 msgid "Omaduse Avaldamise kuupäev (act_date) kommentaar"
@@ -144,21 +144,21 @@ msgstr ""
 
 #: classes/file.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/file.aw:group_dates
 msgid "Grupi Ajad (dates) pealkiri"
-msgstr ""
+msgstr "Times"
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD
 msgid "Seose Märksõna (RELTYPE_KEYWORD) tekst"
-msgstr ""
+msgstr "Keyword"
 
 #: classes/file.aw:106
 msgid "fail puudub"
-msgstr ""
+msgstr "file missing"
 
 #: classes/file.aw:948
 msgid "Need either id or parent"
-msgstr ""
+msgstr "Need either id or parent"
 

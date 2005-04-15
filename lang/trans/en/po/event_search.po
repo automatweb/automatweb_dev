@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_event_cfgform
 msgid "Omaduse Kasutatav vorm (event_cfgform) caption"
-msgstr ""
+msgstr "Use form"
 
 #: classes/applications/calendar/event_search.aw:prop_event_cfgform_comment
 msgid "Omaduse Kasutatav vorm (event_cfgform) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_use_output
 msgid "Omaduse N&auml;itamise vorm (use_output) caption"
-msgstr ""
+msgstr "Display form"
 
 #: classes/applications/calendar/event_search.aw:prop_use_output_comment
 msgid "Omaduse N&auml;itamise vorm (use_output) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_show_type
 msgid "Omaduse N&auml;ta vaikimisi s&uuml;ndmusi (show_type) caption"
-msgstr ""
+msgstr "Display events by default"
 
 #: classes/applications/calendar/event_search.aw:prop_show_type_comment
 msgid "Omaduse N&auml;ta vaikimisi s&uuml;ndmusi (show_type) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_navigator_range
 msgid "Omaduse Ajavahemiku navigaator (navigator_range) caption"
-msgstr ""
+msgstr "Range navigator"
 
 #: classes/applications/calendar/event_search.aw:prop_navigator_range_comment
 msgid "Omaduse Ajavahemiku navigaator (navigator_range) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_ftsearch_fields
 msgid "Omaduse Vabateksti v&auml;jad (ftsearch_fields) caption"
-msgstr ""
+msgstr "Fulltext search fields"
 
 #: classes/applications/calendar/event_search.aw:prop_ftsearch_fields_comment
 msgid "Omaduse Vabateksti v&auml;jad (ftsearch_fields) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_ftsearch_fields2
 msgid "Omaduse Vabateksti v&auml;jad 2 (ftsearch_fields2) caption"
-msgstr ""
+msgstr "Fulltext search fields 2"
 
 #: classes/applications/calendar/event_search.aw:prop_ftsearch_fields2_comment
 msgid "Omaduse Vabateksti v&auml;jad 2 (ftsearch_fields2) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_ftform
 msgid "Omaduse Vorm (ftform) caption"
-msgstr ""
+msgstr "Form"
 
 #: classes/applications/calendar/event_search.aw:prop_ftform_comment
 msgid "Omaduse Vorm (ftform) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_search_form
 msgid "Omaduse Otsinguvorm (search_form) caption"
-msgstr ""
+msgstr "Search form"
 
 #: classes/applications/calendar/event_search.aw:prop_search_form_comment
 msgid "Omaduse Otsinguvorm (search_form) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_month_navigator_style
 msgid "Omaduse Kuu navigaatori stiil (month_navigator_style) caption"
-msgstr ""
+msgstr "Month navigator style"
 
 #: classes/applications/calendar/event_search.aw:prop_month_navigator_style_comment
 msgid "Omaduse Kuu navigaatori stiil (month_navigator_style) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_week_navigator_style
 msgid "Omaduse N&auml;dala navigaatori stiil (week_navigator_style) caption"
-msgstr ""
+msgstr "Week navigator style"
 
 #: classes/applications/calendar/event_search.aw:prop_week_navigator_style_comment
 msgid "Omaduse N&auml;dala navigaatori stiil (week_navigator_style) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_sform_table_style
 msgid "Omaduse Otsinguvormi tabeli stiil (sform_table_style) caption"
-msgstr ""
+msgstr "Search form table style"
 
 #: classes/applications/calendar/event_search.aw:prop_sform_table_style_comment
 msgid "Omaduse Otsinguvormi tabeli stiil (sform_table_style) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_sform_submit_style
 msgid "Omaduse Otsinguvormi nupu stiil (sform_submit_style) caption"
-msgstr ""
+msgstr "Search form button style"
 
 #: classes/applications/calendar/event_search.aw:prop_sform_submit_style_comment
 msgid "Omaduse Otsinguvormi nupu stiil (sform_submit_style) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:prop_result_table
 msgid "Omaduse Tulemuste tabel (result_table) caption"
-msgstr ""
+msgstr "Result table"
 
 #: classes/applications/calendar/event_search.aw:prop_result_table_comment
 msgid "Omaduse Tulemuste tabel (result_table) kommentaar"
@@ -168,157 +168,157 @@ msgstr ""
 
 #: classes/applications/calendar/event_search.aw:group_ftsearch
 msgid "Grupi Otsinguvorm (ftsearch) pealkiri"
-msgstr ""
+msgstr "Search form"
 
 #: classes/applications/calendar/event_search.aw:group_ftform
 msgid "Grupi Otsinguvorm seadistamine (ftform) pealkiri"
-msgstr ""
+msgstr "Search form settings"
 
 #: classes/applications/calendar/event_search.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
-msgstr ""
+msgstr "Styles"
 
 #: classes/applications/calendar/event_search.aw:group_ftresults
 msgid "Grupi Tulemuste seadistamine (ftresults) pealkiri"
-msgstr ""
+msgstr "Result settings"
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_CFGFORM
 msgid "Seose S&uuml;ndmuse vorm (RELTYPE_EVENT_CFGFORM) tekst"
-msgstr ""
+msgstr "Event form"
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SOURCE
 msgid "Seose S&uuml;ndmuste allikas (RELTYPE_EVENT_SOURCE) tekst"
-msgstr ""
+msgstr "Event source"
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_EVENT_SHOW
 msgid "Seose N&auml;itamise vorm (RELTYPE_EVENT_SHOW) tekst"
-msgstr ""
+msgstr "Display form"
 
 #: classes/applications/calendar/event_search.aw:rel_RELTYPE_STYLE
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
-msgstr ""
+msgstr "Style"
 
 #: classes/applications/calendar/event_search.aw:136
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/applications/calendar/event_search.aw:141 classes/applications/calendar/event_search.aw:363
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/calendar/event_search.aw:146 classes/applications/calendar/event_search.aw:367
 msgid "Pealkiri"
-msgstr ""
+msgstr "Title"
 
 #: classes/applications/calendar/event_search.aw:151
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/calendar/event_search.aw:156 classes/applications/calendar/event_search.aw:371
 msgid "Aktiivne"
-msgstr ""
+msgstr "Active"
 
 #: classes/applications/calendar/event_search.aw:162
 msgid "Tekstiotsing"
-msgstr ""
+msgstr "Fulltext search"
 
 #: classes/applications/calendar/event_search.aw:174
 msgid "Tekstiotsing 2"
-msgstr ""
+msgstr "Fulltext search 2"
 
 #: classes/applications/calendar/event_search.aw:188
 msgid "Ainult kuup&auml;ev"
-msgstr ""
+msgstr "Just date"
 
 #: classes/applications/calendar/event_search.aw:189
 msgid "Kuup&auml;ev, kellaajad"
-msgstr ""
+msgstr "Date, time"
 
 #: classes/applications/calendar/event_search.aw:197 classes/applications/calendar/event_search.aw:200
 msgid "Alguskuup&auml;ev"
-msgstr ""
+msgstr "Starting date"
 
 #: classes/applications/calendar/event_search.aw:211 classes/applications/calendar/event_search.aw:214
 msgid "L&otilde;ppkuup&auml;ev"
-msgstr ""
+msgstr "End date"
 
 #: classes/applications/calendar/event_search.aw:228
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/applications/calendar/event_search.aw:237 classes/applications/calendar/event_search.aw:240
 msgid "Projekt 1"
-msgstr ""
+msgstr "Project 1"
 
 #: classes/applications/calendar/event_search.aw:256 classes/applications/calendar/event_search.aw:259
 msgid "Projekt 2"
-msgstr ""
+msgstr "Project 2"
 
 #: classes/applications/calendar/event_search.aw:274 classes/applications/calendar/event_search.aw:277
 msgid "Otsi nupp"
-msgstr ""
+msgstr "Search button"
 
 #: classes/applications/calendar/event_search.aw:297
 msgid "Kuu navigaator"
-msgstr ""
+msgstr "Month navigator"
 
 #: classes/applications/calendar/event_search.aw:298
 msgid "N&auml;dala navigaator"
-msgstr ""
+msgstr "Week navigator"
 
 #: classes/applications/calendar/event_search.aw:303
 msgid "Kuu j&auml;rgi"
-msgstr ""
+msgstr "By month"
 
 #: classes/applications/calendar/event_search.aw:304
 msgid "P&auml;eva j&auml;rgi"
-msgstr ""
+msgstr "By day"
 
 #: classes/applications/calendar/event_search.aw:376
 msgid "Klikitav"
-msgstr ""
+msgstr "Clickable"
 
 #: classes/applications/calendar/event_search.aw:381
 msgid "T&auml;isvaates"
-msgstr ""
+msgstr "Full view"
 
 #: classes/applications/calendar/event_search.aw:386
 msgid "Reavahetused"
-msgstr ""
+msgstr "Line breaks"
 
 #: classes/applications/calendar/event_search.aw:391
 msgid "Eraldaja enne"
-msgstr ""
+msgstr "Seprator before"
 
 #: classes/applications/calendar/event_search.aw:396
 msgid "Eraldaja pärast"
-msgstr ""
+msgstr "Separator after"
 
 #: classes/applications/calendar/event_search.aw:401
 msgid "Jrk"
-msgstr ""
+msgstr "Ord"
 
 #: classes/applications/calendar/event_search.aw:406
 msgid "Seaded"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/calendar/event_search.aw:411
 msgid "V&auml;ljade eraldaja"
-msgstr ""
+msgstr "Field separator"
 
 #: classes/applications/calendar/event_search.aw:416
 msgid "Lisav&auml;ljad"
-msgstr ""
+msgstr "Additional fields"
 
 #: classes/applications/calendar/event_search.aw:432
 msgid "V&auml;ljundvorm on valimata"
-msgstr ""
+msgstr "Output form not selected"
 
 #: classes/applications/calendar/event_search.aw:749 classes/applications/calendar/event_search.aw:755 classes/applications/calendar/event_search.aw:770 classes/applications/calendar/event_search.aw:776
 msgid "kõik"
-msgstr ""
+msgstr "all"
 
 #: classes/applications/calendar/event_search.aw:783
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 

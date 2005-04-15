@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_from_object
 msgid "Omaduse Kandja (trans_from_object) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/pank/transaction.aw:prop_trans_from_object_comment
 msgid "Omaduse Kandja (trans_from_object) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_from_account_hr
 msgid "Omaduse Kandja konto (trans_from_account_hr) caption"
-msgstr ""
+msgstr "From account"
 
 #: classes/pank/transaction.aw:prop_trans_from_account_hr_comment
 msgid "Omaduse Kandja konto (trans_from_account_hr) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_from_account
 msgid "Omaduse Kandja konto (trans_from_account) caption"
-msgstr ""
+msgstr "From account"
 
 #: classes/pank/transaction.aw:prop_trans_from_account_comment
 msgid "Omaduse Kandja konto (trans_from_account) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_to_object
 msgid "Omaduse Saaja (trans_to_object) caption"
-msgstr ""
+msgstr "Reciever"
 
 #: classes/pank/transaction.aw:prop_trans_to_object_comment
 msgid "Omaduse Saaja (trans_to_object) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_to_account_hr
 msgid "Omaduse Saaja konto (trans_to_account_hr) caption"
-msgstr ""
+msgstr "Reciever account"
 
 #: classes/pank/transaction.aw:prop_trans_to_account_hr_comment
 msgid "Omaduse Saaja konto (trans_to_account_hr) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_trans_to_account
 msgid "Omaduse Saaja konto (trans_to_account) caption"
-msgstr ""
+msgstr "Reciever account"
 
 #: classes/pank/transaction.aw:prop_trans_to_account_comment
 msgid "Omaduse Saaja konto (trans_to_account) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_sum
 msgid "Omaduse Summa (sum) caption"
-msgstr ""
+msgstr "Sum"
 
 #: classes/pank/transaction.aw:prop_sum_comment
 msgid "Omaduse Summa (sum) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_time
 msgid "Omaduse Kellaaeg (time) caption"
-msgstr ""
+msgstr "Time"
 
 #: classes/pank/transaction.aw:prop_time_comment
 msgid "Omaduse Kellaaeg (time) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_time_hr
 msgid "Omaduse Kellaaeg (time_hr) caption"
-msgstr ""
+msgstr "Time"
 
 #: classes/pank/transaction.aw:prop_time_hr_comment
 msgid "Omaduse Kellaaeg (time_hr) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_is_completed
 msgid "Omaduse Kinnitatud (is_completed) caption"
-msgstr ""
+msgstr "Confirmed"
 
 #: classes/pank/transaction.aw:prop_is_completed_comment
 msgid "Omaduse Kinnitatud (is_completed) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_completion_confirmation
 msgid "Omaduse Completion confirmation (completion_confirmation) caption"
-msgstr ""
+msgstr "Completion confirmation"
 
 #: classes/pank/transaction.aw:prop_completion_confirmation_comment
 msgid "Omaduse Completion confirmation (completion_confirmation) kommentaar"

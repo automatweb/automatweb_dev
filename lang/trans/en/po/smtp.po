@@ -12,33 +12,33 @@ msgstr ""
 
 #: classes/smtp.aw:18
 msgid "smtp: error, something wrong with server"
-msgstr ""
+msgstr "smtp: error, something wrong with server"
 
 #: classes/smtp.aw:24
 msgid "smtp: error '%s' after HELO %s"
-msgstr ""
+msgstr "smtp: error '%s' after HELO %s"
 
 #: classes/smtp.aw:30
 msgid "smtp: error '%s' after MAIL FROM:<%s>"
-msgstr ""
+msgstr "smtp: error '%s' after MAIL FROM:<%s>"
 
 #: classes/smtp.aw:36
 msgid "smtp: error '%s' after RCPT TO:<%s>"
-msgstr ""
+msgstr "smtp: error '%s' after RCPT TO:<%s>"
 
 #: classes/smtp.aw:42
 msgid "smtp: error '%s' after DATA"
-msgstr ""
+msgstr "smtp: error '%s' after DATA"
 
 #: classes/smtp.aw:60
 msgid "smtp: error '%s' after message"
-msgstr ""
+msgstr "smtp: error '%s' after message"
 
 #: classes/smtp.aw:66
 msgid "smtp: error '%s' after QUIT"
-msgstr ""
+msgstr "smtp: error '%s' after QUIT"
 
 #: classes/smtp.aw:77
 msgid "smtp: error connecting, %s , %s"
-msgstr ""
+msgstr "smtp: error connecting, %s , %s"
 

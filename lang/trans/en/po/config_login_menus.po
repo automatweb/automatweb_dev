@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/config/config_login_menus.aw:prop_activity
 msgid "Omaduse Aktiivsus (activity) caption"
-msgstr ""
+msgstr "Activity"
 
 #: classes/admin/config/config_login_menus.aw:prop_activity_comment
 msgid "Omaduse Aktiivsus (activity) kommentaar"
@@ -36,13 +36,13 @@ msgstr ""
 
 #: classes/admin/config/config_login_menus.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
-msgstr ""
+msgstr "Activity"
 
 #: classes/admin/config/config_login_menus.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "folder"
 
 #: classes/admin/config/config_login_menus.aw:146
 msgid " menyy"
-msgstr ""
+msgstr " folder"
 

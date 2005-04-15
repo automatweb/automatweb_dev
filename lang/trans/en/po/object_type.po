@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/object_type.aw:prop_type
 msgid "Omaduse Objektitüüp (type) caption"
-msgstr ""
+msgstr "Object type"
 
 #: classes/admin/object_type.aw:prop_type_comment
 msgid "Omaduse Objektitüüp (type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/object_type.aw:prop_use_cfgform
 msgid "Omaduse Kasuta seadete vormi (use_cfgform) caption"
-msgstr ""
+msgstr "Use configuration form"
 
 #: classes/admin/object_type.aw:prop_use_cfgform_comment
 msgid "Omaduse Kasuta seadete vormi (use_cfgform) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/admin/object_type.aw:prop_configuration
 msgid "Omaduse Klassi konfiguratsioon (configuration) caption"
-msgstr ""
+msgstr "Class configuration"
 
 #: classes/admin/object_type.aw:prop_configuration_comment
 msgid "Omaduse Klassi konfiguratsioon (configuration) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/admin/object_type.aw:prop_default_object
 msgid "Omaduse Vaikimisi objekt (default_object) caption"
-msgstr ""
+msgstr "Default object"
 
 #: classes/admin/object_type.aw:prop_default_object_comment
 msgid "Omaduse Vaikimisi objekt (default_object) kommentaar"
@@ -60,49 +60,49 @@ msgstr ""
 
 #: classes/admin/object_type.aw:group_settings
 msgid "Grupi Klassi konfiguratsioon (settings) pealkiri"
-msgstr ""
+msgstr "Class configuration"
 
 #: classes/admin/object_type.aw:group_defobj
 msgid "Grupi Aktiivne objekt (defobj) pealkiri"
-msgstr ""
+msgstr "Active object"
 
 #: classes/admin/object_type.aw:rel_RELTYPE_OBJECT_CFGFORM
 msgid "Seose Seadete vorm (RELTYPE_OBJECT_CFGFORM) tekst"
-msgstr ""
+msgstr "Configuration form"
 
 #: classes/admin/object_type.aw:rel_RELTYPE_META_ELEMENTS
 msgid "Seose Muutuja (RELTYPE_META_ELEMENTS) tekst"
-msgstr ""
+msgstr "Variable"
 
 #: classes/admin/object_type.aw:181
 msgid "-vali-"
-msgstr ""
+msgstr "-select-"
 
 #: classes/admin/object_type.aw:182
 msgid "multiple select"
-msgstr ""
+msgstr "multiple select"
 
 #: classes/admin/object_type.aw:183
 msgid "select"
-msgstr ""
+msgstr "select"
 
 #: classes/admin/object_type.aw:184
 msgid "checkboxid"
-msgstr ""
+msgstr "checkboxes"
 
 #: classes/admin/object_type.aw:185
 msgid "radiobuttons"
-msgstr ""
+msgstr "radiobuttons"
 
 #: classes/admin/object_type.aw:201
 msgid "Oks"
-msgstr ""
+msgstr "Branch"
 
 #: classes/admin/object_type.aw:209
 msgid "Tüüp"
-msgstr ""
+msgstr "Type"
 
 #: classes/admin/object_type.aw:231
 msgid "K&otilde;ik"
-msgstr ""
+msgstr "All"
 

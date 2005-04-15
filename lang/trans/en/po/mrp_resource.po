@@ -312,7 +312,7 @@ msgstr "Resource is not part of any manager"
 
 #: classes/mrp/mrp_resource.aw:200
 msgid "Viga! "
-msgstr ""
+msgstr "Error! "
 
 #: classes/mrp/mrp_resource.aw:229
 msgid "/Ressursid"

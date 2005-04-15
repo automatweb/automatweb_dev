@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_group.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/class_designer/property_group.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_group.aw:prop_no_submit
 msgid "Omaduse Salvesta nuppu pole tarvis (no_submit) caption"
-msgstr ""
+msgstr "No submit button"
 
 #: classes/applications/class_designer/property_group.aw:prop_no_submit_comment
 msgid "Omaduse Salvesta nuppu pole tarvis (no_submit) kommentaar"

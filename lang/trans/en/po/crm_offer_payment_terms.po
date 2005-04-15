@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_offer_payment_terms.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/crm/crm_offer_payment_terms.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"

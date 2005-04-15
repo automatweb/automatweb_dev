@@ -40,6 +40,7 @@ $GLOBALS["TRANS"]["Plaanist väljas"] = "Out of planning";
 $GLOBALS["TRANS"]["Arhiveeritud"] = "Archived";
 $GLOBALS["TRANS"]["Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "] = "New resources can only be created via the manager";
 $GLOBALS["TRANS"]["Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "] = "Resource is not part of any manager";
+$GLOBALS["TRANS"]["Viga! "] = "Error! ";
 $GLOBALS["TRANS"]["/Ressursid"] = "/Resources";
 $GLOBALS["TRANS"]["Ressursi kasutust planeeritakse"] = "Resource useage is planned";
 $GLOBALS["TRANS"]["Ressursi kasutust ei planeerita"] = "Resource usage is not planned";

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource
 msgid "Omaduse XML datasource (datasource) caption"
-msgstr ""
+msgstr "XML datasource"
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource_comment
 msgid "Omaduse XML datasource (datasource) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function
 msgid "Omaduse Impordifunktsioon (import_function) caption"
-msgstr ""
+msgstr "Import function"
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function_comment
 msgid "Omaduse Impordifunktsioon (import_function) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import
 msgid "Omaduse Käivita import (run_import) caption"
-msgstr ""
+msgstr "Run import"
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_comment
 msgid "Omaduse Käivita import (run_import) kommentaar"
@@ -48,5 +48,5 @@ msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:52
 msgid "Käivita import"
-msgstr ""
+msgstr "Run import"
 

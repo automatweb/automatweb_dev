@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/config/config_aw_document_template.aw:prop_type
 msgid "Omaduse Template t&uuml;&uuml;p (type) caption"
-msgstr ""
+msgstr "Template type"
 
 #: classes/admin/config/config_aw_document_template.aw:prop_type_comment
 msgid "Omaduse Template t&uuml;&uuml;p (type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/admin/config/config_aw_document_template.aw:prop_filename
 msgid "Omaduse Template fail (filename) caption"
-msgstr ""
+msgstr "Template file"
 
 #: classes/admin/config/config_aw_document_template.aw:prop_filename_comment
 msgid "Omaduse Template fail (filename) kommentaar"
@@ -72,9 +72,9 @@ msgstr ""
 
 #: classes/admin/config/config_aw_document_template.aw:44
 msgid "Lead"
-msgstr ""
+msgstr "Lead"
 
 #: classes/admin/config/config_aw_document_template.aw:45
 msgid "Vaatamine"
-msgstr ""
+msgstr "View"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_grid.aw:prop_grid_type
 msgid "Omaduse Gridi tüüp (grid_type) caption"
-msgstr ""
+msgstr "Grid type"
 
 #: classes/applications/class_designer/property_grid.aw:prop_grid_type_comment
 msgid "Omaduse Gridi tüüp (grid_type) kommentaar"

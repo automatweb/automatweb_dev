@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_start
 msgid "Omaduse Alates (start) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/calendar/recurrence.aw:prop_start_comment
 msgid "Omaduse Alates (start) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_time
 msgid "Omaduse Kellaaeg (tund:minut) (time) caption"
-msgstr ""
+msgstr "Time (hour:minute)"
 
 #: classes/applications/calendar/recurrence.aw:prop_time_comment
 msgid "Omaduse Kellaaeg (tund:minut) (time) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_length
 msgid "Omaduse Pikkus (h) (length) caption"
-msgstr ""
+msgstr "Length (h)"
 
 #: classes/applications/calendar/recurrence.aw:prop_length_comment
 msgid "Omaduse Pikkus (h) (length) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_recur_type
 msgid "Omaduse Korduse tüüp (recur_type) caption"
-msgstr ""
+msgstr "Recurrence type"
 
 #: classes/applications/calendar/recurrence.aw:prop_recur_type_comment
 msgid "Omaduse Korduse tüüp (recur_type) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_minutely
 msgid "Omaduse Iga X minuti järel (interval_minutely) caption"
-msgstr ""
+msgstr "Every X minutes"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_minutely_comment
 msgid "Omaduse Iga X minuti järel (interval_minutely) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_hourly
 msgid "Omaduse Iga X tunni järel (interval_hourly) caption"
-msgstr ""
+msgstr "Every X hours"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_hourly_comment
 msgid "Omaduse Iga X tunni järel (interval_hourly) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_daily
 msgid "Omaduse Iga X päeva järel (interval_daily) caption"
-msgstr ""
+msgstr "Every X days"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_daily_comment
 msgid "Omaduse Iga X päeva järel (interval_daily) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_weekly
 msgid "Omaduse Iga X nädala järel (interval_weekly) caption"
-msgstr ""
+msgstr "Every X weeks"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_weekly_comment
 msgid "Omaduse Iga X nädala järel (interval_weekly) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_monthly
 msgid "Omaduse Iga X kuu järel (interval_monthly) caption"
-msgstr ""
+msgstr "Every X months"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_monthly_comment
 msgid "Omaduse Iga X kuu järel (interval_monthly) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_yearly
 msgid "Omaduse Iga X aasta järel (interval_yearly) caption"
-msgstr ""
+msgstr "Every X years"
 
 #: classes/applications/calendar/recurrence.aw:prop_interval_yearly_comment
 msgid "Omaduse Iga X aasta järel (interval_yearly) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_weekdays
 msgid "Omaduse Nendel päevadel (weekdays) caption"
-msgstr ""
+msgstr "Weekdays"
 
 #: classes/applications/calendar/recurrence.aw:prop_weekdays_comment
 msgid "Omaduse Nendel päevadel (weekdays) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_month_days
 msgid "Omaduse Kindlatel päevadel (month_days) caption"
-msgstr ""
+msgstr "Month days"
 
 #: classes/applications/calendar/recurrence.aw:prop_month_days_comment
 msgid "Omaduse Kindlatel päevadel (month_days) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_month_rel_weekdays
 msgid "Omaduse Valitud nädalapäevadel (month_rel_weekdays) caption"
-msgstr ""
+msgstr "Selected weekdays"
 
 #: classes/applications/calendar/recurrence.aw:prop_month_rel_weekdays_comment
 msgid "Omaduse Valitud nädalapäevadel (month_rel_weekdays) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_month_weekdays
 msgid "Omaduse Nädalapäevad (month_weekdays) caption"
-msgstr ""
+msgstr "Weekdays"
 
 #: classes/applications/calendar/recurrence.aw:prop_month_weekdays_comment
 msgid "Omaduse Nädalapäevad (month_weekdays) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:prop_end
 msgid "Omaduse Kuni (end) caption"
-msgstr ""
+msgstr "Until"
 
 #: classes/applications/calendar/recurrence.aw:prop_end_comment
 msgid "Omaduse Kuni (end) kommentaar"
@@ -192,49 +192,49 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:group_test
 msgid "Grupi Test (test) pealkiri"
-msgstr ""
+msgstr "Test"
 
 #: classes/applications/calendar/recurrence.aw:147
 msgid "esimesel"
-msgstr ""
+msgstr "first"
 
 #: classes/applications/calendar/recurrence.aw:148
 msgid "teisel"
-msgstr ""
+msgstr "second"
 
 #: classes/applications/calendar/recurrence.aw:149
 msgid "kolmandal"
-msgstr ""
+msgstr "third"
 
 #: classes/applications/calendar/recurrence.aw:150
 msgid "neljandal"
-msgstr ""
+msgstr "fourth"
 
 #: classes/applications/calendar/recurrence.aw:151
 msgid "viimasel"
-msgstr ""
+msgstr "fifth"
 
 #: classes/applications/calendar/recurrence.aw:158
 msgid "päev"
-msgstr ""
+msgstr "day"
 
 #: classes/applications/calendar/recurrence.aw:159
 msgid "nädal"
-msgstr ""
+msgstr "week"
 
 #: classes/applications/calendar/recurrence.aw:160
 msgid "kuu"
-msgstr ""
+msgstr "month"
 
 #: classes/applications/calendar/recurrence.aw:161
 msgid "aasta"
-msgstr ""
+msgstr "year"
 
 #: classes/applications/calendar/recurrence.aw:162
 msgid "minut"
-msgstr ""
+msgstr "minute"
 
 #: classes/applications/calendar/recurrence.aw:163
 msgid "tund"
-msgstr ""
+msgstr "hour"
 

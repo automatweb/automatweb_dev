@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_edit_toolbar
 msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"
-msgstr ""
+msgstr "Edit toolbar"
 
 #: classes/applications/messenger/mail_message.aw:prop_edit_toolbar_comment
 msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_uidl
 msgid "Omaduse UIDL (uidl) caption"
-msgstr ""
+msgstr "UIDL"
 
 #: classes/applications/messenger/mail_message.aw:prop_uidl_comment
 msgid "Omaduse UIDL (uidl) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_mfrom_name
 msgid "Omaduse Kellelt nimi (mfrom_name) caption"
-msgstr ""
+msgstr "From name"
 
 #: classes/applications/messenger/mail_message.aw:prop_mfrom_name_comment
 msgid "Omaduse Kellelt nimi (mfrom_name) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_mfrom
 msgid "Omaduse Kellelt (mfrom) caption"
-msgstr ""
+msgstr "From"
 
 #: classes/applications/messenger/mail_message.aw:prop_mfrom_comment
 msgid "Omaduse Kellelt (mfrom) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_mto
 msgid "Omaduse Kellele (mto) caption"
-msgstr ""
+msgstr "To"
 
 #: classes/applications/messenger/mail_message.aw:prop_mto_comment
 msgid "Omaduse Kellele (mto) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_cc
 msgid "Omaduse Koopia (cc) caption"
-msgstr ""
+msgstr "CC"
 
 #: classes/applications/messenger/mail_message.aw:prop_cc_comment
 msgid "Omaduse Koopia (cc) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_bcc
 msgid "Omaduse Pimekoopia (bcc) caption"
-msgstr ""
+msgstr "BCC"
 
 #: classes/applications/messenger/mail_message.aw:prop_bcc_comment
 msgid "Omaduse Pimekoopia (bcc) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_html_mail
 msgid "Omaduse HTML kiri (html_mail) caption"
-msgstr ""
+msgstr "HTML Message"
 
 #: classes/applications/messenger/mail_message.aw:prop_html_mail_comment
 msgid "Omaduse HTML kiri (html_mail) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_message
 msgid "Omaduse Sisu (message) caption"
-msgstr ""
+msgstr "Message"
 
 #: classes/applications/messenger/mail_message.aw:prop_message_comment
 msgid "Omaduse Sisu (message) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_attachments
 msgid "Omaduse Manused (attachments) caption"
-msgstr ""
+msgstr "Attachments"
 
 #: classes/applications/messenger/mail_message.aw:prop_attachments_comment
 msgid "Omaduse Manused (attachments) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_msgrid
 msgid "Omaduse Msgrid (msgrid) caption"
-msgstr ""
+msgstr "Msgrid"
 
 #: classes/applications/messenger/mail_message.aw:prop_msgrid_comment
 msgid "Omaduse Msgrid (msgrid) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_msgid
 msgid "Omaduse Msgid (msgid) caption"
-msgstr ""
+msgstr "Msgid"
 
 #: classes/applications/messenger/mail_message.aw:prop_msgid_comment
 msgid "Omaduse Msgid (msgid) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_mailbox
 msgid "Omaduse Mailbox (mailbox) caption"
-msgstr ""
+msgstr "Mailbox"
 
 #: classes/applications/messenger/mail_message.aw:prop_mailbox_comment
 msgid "Omaduse Mailbox (mailbox) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_cb_part
 msgid "Omaduse Cb part (cb_part) caption"
-msgstr ""
+msgstr "Cb part"
 
 #: classes/applications/messenger/mail_message.aw:prop_cb_part_comment
 msgid "Omaduse Cb part (cb_part) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_msg_contener_title
 msgid "Omaduse Konteineri pealkiri (msg_contener_title) caption"
-msgstr ""
+msgstr "Container title"
 
 #: classes/applications/messenger/mail_message.aw:prop_msg_contener_title_comment
 msgid "Omaduse Konteineri pealkiri (msg_contener_title) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_msg_contener_content
 msgid "Omaduse Konteineri sisu (msg_contener_content) caption"
-msgstr ""
+msgstr "Container content"
 
 #: classes/applications/messenger/mail_message.aw:prop_msg_contener_content_comment
 msgid "Omaduse Konteineri sisu (msg_contener_content) kommentaar"
@@ -252,85 +252,85 @@ msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:group_
 msgid "Grupi  () pealkiri"
-msgstr ""
+msgstr " "
 
 #: classes/applications/messenger/mail_message.aw:rel_RELTYPE_ATTACHMENT
 msgid "Seose Manus (RELTYPE_ATTACHMENT) tekst"
-msgstr ""
+msgstr "Attachment"
 
 #: classes/applications/messenger/mail_message.aw:143
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
-msgstr ""
+msgstr "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 
 #: classes/applications/messenger/mail_message.aw:248
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
-msgstr ""
+msgstr "Unfortunately your mail reader can not display HTML messages"
 
 #: classes/applications/messenger/mail_message.aw:509
 msgid "Saada"
-msgstr ""
+msgstr "Sent"
 
 #: classes/applications/messenger/mail_message.aw:516
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/messenger/mail_message.aw:539
 msgid "Vasta"
-msgstr ""
+msgstr "Reply"
 
 #: classes/applications/messenger/mail_message.aw:546
 msgid "Vasta/kõigile"
-msgstr ""
+msgstr "Reply to all"
 
 #: classes/applications/messenger/mail_message.aw:553
 msgid "Edasta"
-msgstr ""
+msgstr "Forward"
 
 #: classes/applications/messenger/mail_message.aw:561
 msgid "Kustutada see kiri? (tagasi ei saa!)"
-msgstr ""
+msgstr "Delete this message? (can not be undone!)"
 
 #: classes/applications/messenger/mail_message.aw:562
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/messenger/mail_message.aw:580
 msgid "Lisa kalendrisse"
-msgstr ""
+msgstr "Add to calendar"
 
 #: classes/applications/messenger/mail_message.aw:615
 msgid "Päised"
-msgstr ""
+msgstr "Headers"
 
 #: classes/applications/messenger/mail_message.aw:620
 msgid "Tavaline"
-msgstr ""
+msgstr "Regular"
 
 #: classes/applications/messenger/mail_message.aw:626
 msgid "Kõik päised"
-msgstr ""
+msgstr "All headers"
 
 #: classes/applications/messenger/mail_message.aw:785
 msgid "err, ei leidnud kalendrit"
-msgstr ""
+msgstr "could not find calendar!"
 
 #: classes/applications/messenger/mail_message.aw:802
 msgid "Toimetus lisatud<br>"
-msgstr ""
+msgstr "Task added<br>"
 
 #: classes/applications/messenger/mail_message.aw:824
 msgid "kustutatud!"
-msgstr ""
+msgstr "deleted!"
 
 #: classes/applications/messenger/mail_message.aw:826 classes/applications/messenger/mail_message.aw:879
 msgid "sulge aken"
-msgstr ""
+msgstr "close window"
 
 #: classes/applications/messenger/mail_message.aw:878
 msgid "saadetud<p>"
-msgstr ""
+msgstr "sent<p>"
 
 #: classes/applications/messenger/mail_message.aw:995
 msgid "----Forwarded message-----\n"
-msgstr ""
+msgstr "----Forwarded message-----\n"
 

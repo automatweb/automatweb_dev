@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sisu_varvid_notes
 msgid "Omaduse Sisu v&auml;rvid Notes (sisu_varvid_notes) caption"
-msgstr ""
+msgstr "Content colour notes"
 
 #: classes/mrp/mrp_case.aw:prop_sisu_varvid_notes_comment
 msgid "Omaduse Sisu v&auml;rvid Notes (sisu_varvid_notes) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sisu_lakk_muu
 msgid "Omaduse Sisu lakk/muu (sisu_lakk_muu) caption"
-msgstr ""
+msgstr "Content other"
 
 #: classes/mrp/mrp_case.aw:prop_sisu_lakk_muu_comment
 msgid "Omaduse Sisu lakk/muu (sisu_lakk_muu) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kaane_varvid
 msgid "Omaduse Kaane v&auml;rvid (kaane_varvid) caption"
-msgstr ""
+msgstr "Cover colours"
 
 #: classes/mrp/mrp_case.aw:prop_kaane_varvid_comment
 msgid "Omaduse Kaane v&auml;rvid (kaane_varvid) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kaane_varvid_notes
 msgid "Omaduse Kaane v&auml;rvid Notes (kaane_varvid_notes) caption"
-msgstr ""
+msgstr "cover colours notes"
 
 #: classes/mrp/mrp_case.aw:prop_kaane_varvid_notes_comment
 msgid "Omaduse Kaane v&auml;rvid Notes (kaane_varvid_notes) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kaane_lakk_muu
 msgid "Omaduse Kaane lakk/muu (kaane_lakk_muu) caption"
-msgstr ""
+msgstr "Cover finish"
 
 #: classes/mrp/mrp_case.aw:prop_kaane_lakk_muu_comment
 msgid "Omaduse Kaane lakk/muu (kaane_lakk_muu) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_sisu_paber
 msgid "Omaduse Sisu paber (sisu_paber) caption"
-msgstr ""
+msgstr "Content paper"
 
 #: classes/mrp/mrp_case.aw:prop_sisu_paber_comment
 msgid "Omaduse Sisu paber (sisu_paber) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kaane_paber
 msgid "Omaduse Kaane paber (kaane_paber) caption"
-msgstr ""
+msgstr "Cover paper"
 
 #: classes/mrp/mrp_case.aw:prop_kaane_paber_comment
 msgid "Omaduse Kaane paber (kaane_paber) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_trykiarv
 msgid "Omaduse Tr&uuml;kiarv (trykiarv) caption"
-msgstr ""
+msgstr "Number to print"
 
 #: classes/mrp/mrp_case.aw:prop_trykiarv_comment
 msgid "Omaduse Tr&uuml;kiarv (trykiarv) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_trykise_ehitus
 msgid "Omaduse Tr&uuml;kise ehitus (trykise_ehitus) caption"
-msgstr ""
+msgstr "Buildup"
 
 #: classes/mrp/mrp_case.aw:prop_trykise_ehitus_comment
 msgid "Omaduse Tr&uuml;kise ehitus (trykise_ehitus) kommentaar"
@@ -300,7 +300,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_kromaliin
 msgid "Omaduse Kromalin (kromaliin) caption"
-msgstr ""
+msgstr "Cromaline"
 
 #: classes/mrp/mrp_case.aw:prop_kromaliin_comment
 msgid "Omaduse Kromalin (kromaliin) kommentaar"
@@ -312,7 +312,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_makett
 msgid "Omaduse Makett (makett) caption"
-msgstr ""
+msgstr "Mock-up"
 
 #: classes/mrp/mrp_case.aw:prop_makett_comment
 msgid "Omaduse Makett (makett) kommentaar"
@@ -324,7 +324,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_naidis
 msgid "Omaduse N&auml;idis (naidis) caption"
-msgstr ""
+msgstr "Example"
 
 #: classes/mrp/mrp_case.aw:prop_naidis_comment
 msgid "Omaduse N&auml;idis (naidis) kommentaar"
@@ -336,7 +336,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_plaate
 msgid "Omaduse Plaate (plaate) caption"
-msgstr ""
+msgstr "Plates"
 
 #: classes/mrp/mrp_case.aw:prop_plaate_comment
 msgid "Omaduse Plaate (plaate) kommentaar"
@@ -348,7 +348,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_transport
 msgid "Omaduse Transport (transport) caption"
-msgstr ""
+msgstr "Transport"
 
 #: classes/mrp/mrp_case.aw:prop_transport_comment
 msgid "Omaduse Transport (transport) kommentaar"
@@ -360,7 +360,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_soodustus
 msgid "Omaduse Soodustus (soodustus) caption"
-msgstr ""
+msgstr "Discount"
 
 #: classes/mrp/mrp_case.aw:prop_soodustus_comment
 msgid "Omaduse Soodustus (soodustus) kommentaar"
@@ -372,7 +372,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_markused
 msgid "Omaduse M&auml;rkused (markused) caption"
-msgstr ""
+msgstr "Comments"
 
 #: classes/mrp/mrp_case.aw:prop_markused_comment
 msgid "Omaduse M&auml;rkused (markused) kommentaar"
@@ -384,7 +384,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_allahindlus
 msgid "Omaduse Allahindlus (allahindlus) caption"
-msgstr ""
+msgstr "Discount"
 
 #: classes/mrp/mrp_case.aw:prop_allahindlus_comment
 msgid "Omaduse Allahindlus (allahindlus) kommentaar"
@@ -396,7 +396,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_vahendustasu
 msgid "Omaduse Vahendustasu (vahendustasu) caption"
-msgstr ""
+msgstr "Fee"
 
 #: classes/mrp/mrp_case.aw:prop_vahendustasu_comment
 msgid "Omaduse Vahendustasu (vahendustasu) kommentaar"
@@ -408,7 +408,7 @@ msgstr ""
 
 #: classes/mrp/mrp_case.aw:prop_myygi_hind
 msgid "Omaduse M&uuml;&uuml;gi hind (myygi_hind) caption"
-msgstr ""
+msgstr "Sales price"
 
 #: classes/mrp/mrp_case.aw:prop_myygi_hind_comment
 msgid "Omaduse M&uuml;&uuml;gi hind (myygi_hind) kommentaar"

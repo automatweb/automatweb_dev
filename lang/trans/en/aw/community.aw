@@ -1,0 +1,36 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Kategooriad (category) caption"] = "Categories";
+$GLOBALS["TRANS"]["Omaduse Foorumi seaded (forum_settings) caption"] = "Forum settings";
+$GLOBALS["TRANS"]["Omaduse Kalendri seaded (calendar_settings) caption"] = "Calendar settings";
+$GLOBALS["TRANS"]["Omaduse Sisu (content) caption"] = "Content";
+$GLOBALS["TRANS"]["Omaduse Liikmete toolbar (members_toolbar) caption"] = "Members toolbar";
+$GLOBALS["TRANS"]["Omaduse Liikmed (members) caption"] = "Memebers";
+$GLOBALS["TRANS"]["Omaduse Moderaatorite toolbar (moderators_toolbar) caption"] = "Moderator toolbar";
+$GLOBALS["TRANS"]["Omaduse Moderaatorid (moderators) caption"] = "Moderators";
+$GLOBALS["TRANS"]["Omaduse Blokeeritute toolbar (blocked_toolbar) caption"] = "Blocked toolbar";
+$GLOBALS["TRANS"]["Omaduse Blokeeritud (blocked) caption"] = "Blocked";
+$GLOBALS["TRANS"]["Grupi Üldised seaded (general2) pealkiri"] = "General settings";
+$GLOBALS["TRANS"]["Grupi Foorumi seaded (forum_settings) pealkiri"] = "Forum settings";
+$GLOBALS["TRANS"]["Grupi Kalendri seaded (calendar_settings) pealkiri"] = "Calendar settings";
+$GLOBALS["TRANS"]["Grupi Sisu (content) pealkiri"] = "Content";
+$GLOBALS["TRANS"]["Grupi Seotud isikud (connected) pealkiri"] = "Connected persons";
+$GLOBALS["TRANS"]["Grupi Liikmed (members) pealkiri"] = "Members";
+$GLOBALS["TRANS"]["Grupi Moderaatorid (moderators) pealkiri"] = "Moderators";
+$GLOBALS["TRANS"]["Grupi Blokeeritud (blocked) pealkiri"] = "Blocked";
+$GLOBALS["TRANS"]["Seose Moderaator (RELTYPE_MODERATOR) tekst"] = "Moderator";
+$GLOBALS["TRANS"]["Seose Kogukonna liige (RELTYPE_MEMBER) tekst"] = "Member of community";
+$GLOBALS["TRANS"]["Seose Blokeeritud kasutaja (RELTYPE_BLOCKED) tekst"] = "Blocked user";
+$GLOBALS["TRANS"]["Seose Foorum (RELTYPE_FORUM) tekst"] = "Forum";
+$GLOBALS["TRANS"]["Seose Kalender (RELTYPE_CALENDAR) tekst"] = "Calendar";
+$GLOBALS["TRANS"]["Seose Kalendri vaade (RELTYPE_CALENDAR_VIEW) tekst"] = "Calendar view";
+$GLOBALS["TRANS"]["Seose Kogukondade kategooriad (RELTYPE_CATEGORIES) tekst"] = "Community categories";
+$GLOBALS["TRANS"]["Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"] = "Connection manager";
+$GLOBALS["TRANS"]["Blokeeri"] = "Block";
+$GLOBALS["TRANS"]["Tee moderaatoriks"] = "Make moderator";
+$GLOBALS["TRANS"]["Tee liikmeks"] = "Make member";
+$GLOBALS["TRANS"]["Eemalda "] = "Remove ";
+$GLOBALS["TRANS"]["ID"] = "ID";
+$GLOBALS["TRANS"]["Kasutaja"] = "User";
+$GLOBALS["TRANS"]["Nimi"] = "Name";
+$GLOBALS["TRANS"]["Lisamisaeg"] = "Added";
+?>

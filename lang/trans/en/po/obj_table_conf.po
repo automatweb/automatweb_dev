@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/admin/obj_table_conf.aw:prop_sep
 msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) caption"
-msgstr ""
+msgstr "Seprator between one column's elements"
 
 #: classes/admin/obj_table_conf.aw:prop_sep_comment
 msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) kommentaar"
@@ -48,189 +48,189 @@ msgstr ""
 
 #: classes/admin/obj_table_conf.aw:group_proptab
 msgid "Grupi Objektitabel (proptab) pealkiri"
-msgstr ""
+msgstr "Objects table"
 
 #: classes/admin/obj_table_conf.aw:rel_RELTYPE_GROUP
 msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
-msgstr ""
+msgstr "User group"
 
 #: classes/admin/obj_table_conf.aw:30
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/admin/obj_table_conf.aw:31
 msgid "parent"
-msgstr ""
+msgstr "parent"
 
 #: classes/admin/obj_table_conf.aw:32
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/admin/obj_table_conf.aw:33
 msgid "Looja"
-msgstr ""
+msgstr "Createdby"
 
 #: classes/admin/obj_table_conf.aw:34
 msgid "Millal loodud"
-msgstr ""
+msgstr "Created"
 
 #: classes/admin/obj_table_conf.aw:35
 msgid "Muutja"
-msgstr ""
+msgstr "Modified by"
 
 #: classes/admin/obj_table_conf.aw:36
 msgid "Millal muudetud"
-msgstr ""
+msgstr "Modified"
 
 #: classes/admin/obj_table_conf.aw:37
 msgid "T&uuml;&uuml;p"
-msgstr ""
+msgstr "Type"
 
 #: classes/admin/obj_table_conf.aw:38
 msgid "Aktiivsus"
-msgstr ""
+msgstr "Status"
 
 #: classes/admin/obj_table_conf.aw:39
 msgid "Keel"
-msgstr ""
+msgstr "Language"
 
 #: classes/admin/obj_table_conf.aw:40
 msgid "Kommentaar"
-msgstr ""
+msgstr "Comment"
 
 #: classes/admin/obj_table_conf.aw:41
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/admin/obj_table_conf.aw:42
 msgid "Periood"
-msgstr ""
+msgstr "Period"
 
 #: classes/admin/obj_table_conf.aw:43
 msgid "Alias"
-msgstr ""
+msgstr "Alias"
 
 #: classes/admin/obj_table_conf.aw:44
 msgid "Periodic"
-msgstr ""
+msgstr "Periodic"
 
 #: classes/admin/obj_table_conf.aw:45
 msgid "Saidi ID"
-msgstr ""
+msgstr "Site ID"
 
 #: classes/admin/obj_table_conf.aw:46
 msgid "Aktiveeri millal"
-msgstr ""
+msgstr "Activate at"
 
 #: classes/admin/obj_table_conf.aw:47
 msgid "Deaktiveeri millal"
-msgstr ""
+msgstr "Deactivate at"
 
 #: classes/admin/obj_table_conf.aw:48
 msgid "Aktiveeri automaatselt"
-msgstr ""
+msgstr "Automatic activation"
 
 #: classes/admin/obj_table_conf.aw:49
 msgid "Deaktiveeri automaatselt"
-msgstr ""
+msgstr "Automatic deactivation"
 
 #: classes/admin/obj_table_conf.aw:50
 msgid "---- actions"
-msgstr ""
+msgstr "---- actions"
 
 #: classes/admin/obj_table_conf.aw:51
 msgid "Ikoon"
-msgstr ""
+msgstr "Icon"
 
 #: classes/admin/obj_table_conf.aw:52
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: classes/admin/obj_table_conf.aw:53
 msgid "Vali"
-msgstr ""
+msgstr "Select"
 
 #: classes/admin/obj_table_conf.aw:54
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/admin/obj_table_conf.aw:55
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/admin/obj_table_conf.aw:56
 msgid "Muuda ACLi"
-msgstr ""
+msgstr "Change ACL"
 
 #: classes/admin/obj_table_conf.aw:57
 msgid "Java menu"
-msgstr ""
+msgstr "Java menu"
 
 #: classes/admin/obj_table_conf.aw:58
 msgid "---- use next ones with caution!"
-msgstr ""
+msgstr "---- use next ones with caution!"
 
 #: classes/admin/obj_table_conf.aw:59
 msgid "hits"
-msgstr ""
+msgstr "hits"
 
 #: classes/admin/obj_table_conf.aw:60
 msgid "last"
-msgstr ""
+msgstr "last"
 
 #: classes/admin/obj_table_conf.aw:61
 msgid "visible"
-msgstr ""
+msgstr "visible"
 
 #: classes/admin/obj_table_conf.aw:62
 msgid "doc_template"
-msgstr ""
+msgstr "doc_template"
 
 #: classes/admin/obj_table_conf.aw:63
 msgid "Mille vend"
-msgstr ""
+msgstr "Brother of"
 
 #: classes/admin/obj_table_conf.aw:64
 msgid "Cache dirty"
-msgstr ""
+msgstr "Cache dirty"
 
 #: classes/admin/obj_table_conf.aw:65
 msgid "metadata"
-msgstr ""
+msgstr "metadata"
 
 #: classes/admin/obj_table_conf.aw:66
 msgid "meta"
-msgstr ""
+msgstr "meta"
 
 #: classes/admin/obj_table_conf.aw:67
 msgid "Subclass"
-msgstr ""
+msgstr "Subclass"
 
 #: classes/admin/obj_table_conf.aw:68
 msgid "cachedata"
-msgstr ""
+msgstr "cachedata"
 
 #: classes/admin/obj_table_conf.aw:69
 msgid "Flags"
-msgstr ""
+msgstr "Flags"
 
 #: classes/admin/obj_table_conf.aw:102
 msgid "Salvesta muudatused"
-msgstr ""
+msgstr "Save changes"
 
 #: classes/admin/obj_table_conf.aw:122
 msgid "Pealkiri"
-msgstr ""
+msgstr "Caption"
 
 #: classes/admin/obj_table_conf.aw:128
 msgid "Järjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/admin/obj_table_conf.aw:134
 msgid "Sorteeritav"
-msgstr ""
+msgstr "Sortable"
 
 #: classes/admin/obj_table_conf.aw:139
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 

@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/poll_ng.aw:prop_choices
 msgid "Omaduse Variandid (choices) caption"
-msgstr ""
+msgstr "Choices"
 
 #: classes/poll_ng.aw:prop_choices_comment
 msgid "Omaduse Variandid (choices) kommentaar"
@@ -24,37 +24,37 @@ msgstr ""
 
 #: classes/poll_ng.aw:group_choices
 msgid "Grupi Vastusevariandid (choices) pealkiri"
-msgstr ""
+msgstr "Choices"
 
 #: classes/poll_ng.aw:rel_RELTYPE_ANSWER
 msgid "Seose polli vastus (RELTYPE_ANSWER) tekst"
-msgstr ""
+msgstr "poll answer"
 
 #: classes/poll_ng.aw:40
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/poll_ng.aw:48
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/poll_ng.aw:54
 msgid "Klikke"
-msgstr ""
+msgstr "Clicks"
 
 #: classes/poll_ng.aw:62
 msgid "Protsent"
-msgstr ""
+msgstr "Percent"
 
 #: classes/poll_ng.aw:81
 msgid "Variandid"
-msgstr ""
+msgstr "Choices"
 
 #: classes/poll_ng.aw:144
 msgid "there is no relation between those objects"
-msgstr ""
+msgstr "there is no relation between those objects"
 
 #: classes/poll_ng.aw:156
 msgid "invalid choice"
-msgstr ""
+msgstr "invalid choice"
 

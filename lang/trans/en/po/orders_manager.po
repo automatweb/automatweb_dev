@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:prop_export_folder
 msgid "Omaduse Ekspordi kataloog (export_folder) caption"
-msgstr ""
+msgstr "Export folder"
 
 #: classes/applications/orders/orders_manager.aw:prop_export_folder_comment
 msgid "Omaduse Ekspordi kataloog (export_folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:prop_orders_toolbar
 msgid "Omaduse Tellimuste toolbar (orders_toolbar) caption"
-msgstr ""
+msgstr "Order toolbar"
 
 #: classes/applications/orders/orders_manager.aw:prop_orders_toolbar_comment
 msgid "Omaduse Tellimuste toolbar (orders_toolbar) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:prop_orders_table
 msgid "Omaduse Tellimuste tabel (orders_table) caption"
-msgstr ""
+msgstr "Order table"
 
 #: classes/applications/orders/orders_manager.aw:prop_orders_table_comment
 msgid "Omaduse Tellimuste tabel (orders_table) kommentaar"
@@ -48,121 +48,121 @@ msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:group_ordermnager
 msgid "Grupi Tellimused (ordermnager) pealkiri"
-msgstr ""
+msgstr "Orders"
 
 #: classes/applications/orders/orders_manager.aw:rel_RELTYPE_CFGMANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
-msgstr ""
+msgstr "configuration manager"
 
 #: classes/applications/orders/orders_manager.aw:73
 msgid "Kustuta tellimusi"
-msgstr ""
+msgstr "Delete orders"
 
 #: classes/applications/orders/orders_manager.aw:75
 msgid "Oled kindel, et soovid valitud tellimused kustutada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected orders?"
 
 #: classes/applications/orders/orders_manager.aw:84
 msgid "Tellija"
-msgstr ""
+msgstr "Orderer"
 
 #: classes/applications/orders/orders_manager.aw:88
 msgid "Kuupäev"
-msgstr ""
+msgstr "Date"
 
 #: classes/applications/orders/orders_manager.aw:97 classes/applications/orders/orders_manager.aw:123
 msgid "Vaata tellimust"
-msgstr ""
+msgstr "View order"
 
 #: classes/applications/orders/orders_manager.aw:219
 msgid "Toote nimi"
-msgstr ""
+msgstr "Product name"
 
 #: classes/applications/orders/orders_manager.aw:220
 msgid "Kood"
-msgstr ""
+msgstr "Code"
 
 #: classes/applications/orders/orders_manager.aw:221
 msgid "V&auml;rvus"
-msgstr ""
+msgstr "Colour"
 
 #: classes/applications/orders/orders_manager.aw:222
 msgid "Suurus"
-msgstr ""
+msgstr "Size"
 
 #: classes/applications/orders/orders_manager.aw:223
 msgid "Kogus"
-msgstr ""
+msgstr "Amount"
 
 #: classes/applications/orders/orders_manager.aw:224
 msgid "Hind"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/orders/orders_manager.aw:225
 msgid "Lehek&uuml;lg"
-msgstr ""
+msgstr "Page"
 
 #: classes/applications/orders/orders_manager.aw:226
 msgid "Pilt"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/orders/orders_manager.aw:229
 msgid "Eesnimi"
-msgstr ""
+msgstr "First name"
 
 #: classes/applications/orders/orders_manager.aw:230
 msgid "Perekonnanimi"
-msgstr ""
+msgstr "Last name"
 
 #: classes/applications/orders/orders_manager.aw:231
 msgid "Aadress"
-msgstr ""
+msgstr "Address"
 
 #: classes/applications/orders/orders_manager.aw:232
 msgid "S&uuml;nnip&auml;ev"
-msgstr ""
+msgstr "Birthday"
 
 #: classes/applications/orders/orders_manager.aw:233
 msgid "E-mail"
-msgstr ""
+msgstr "E-mail"
 
 #: classes/applications/orders/orders_manager.aw:234
 msgid "Telefon"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/orders/orders_manager.aw:237
 msgid "Kliendi number"
-msgstr ""
+msgstr "Customer number"
 
 #: classes/applications/orders/orders_manager.aw:238
 msgid "Postiindeks"
-msgstr ""
+msgstr "Postal index"
 
 #: classes/applications/orders/orders_manager.aw:239
 msgid "Linn"
-msgstr ""
+msgstr "Town"
 
 #: classes/applications/orders/orders_manager.aw:240
 msgid "Telefon t&ouml;&ouml;l"
-msgstr ""
+msgstr "Phone at work"
 
 #: classes/applications/orders/orders_manager.aw:241
 msgid "Mobiil"
-msgstr ""
+msgstr "Mobile"
 
 #: classes/applications/orders/orders_manager.aw:242
 msgid "Kliendo t&uuml;&uuml;p"
-msgstr ""
+msgstr "Customer type"
 
 #: classes/applications/orders/orders_manager.aw:249
 msgid "OID"
-msgstr ""
+msgstr "OID"
 
 #: classes/applications/orders/orders_manager.aw:249
 msgid "Millal"
-msgstr ""
+msgstr "When"
 
 #: classes/applications/orders/orders_manager.aw:302
 msgid "all done!"
-msgstr ""
+msgstr "all done!"
 

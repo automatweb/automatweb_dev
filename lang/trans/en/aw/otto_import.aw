@@ -7,6 +7,7 @@ $GLOBALS["TRANS"]["Omaduse Teosta import (do_i) caption"] = "Do import";
 $GLOBALS["TRANS"]["Omaduse Teosta piltide import (do_pict_i) caption"] = "Do image import";
 $GLOBALS["TRANS"]["Omaduse Alusta piltide importi algusest (restart_pict_i) caption"] = "Restart image import";
 $GLOBALS["TRANS"]["Omaduse Alusta toodete importi algusest (restart_prod_i) caption"] = "Restart product import";
+$GLOBALS["TRANS"]["Omaduse Uuenda ainult toote andmed (just_update_prod_data) caption"] = "Just update product data";
 $GLOBALS["TRANS"]["Omaduse Viimase impordi logi (last_import_log) caption"] = "Last import log";
 $GLOBALS["TRANS"]["Omaduse Algne pilt (orig_img) caption"] = "Original image";
 $GLOBALS["TRANS"]["Omaduse Mis pildid asendada (to_img) caption"] = "Replace which images";

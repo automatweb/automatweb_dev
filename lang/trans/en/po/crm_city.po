@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/crm/crm_city.aw:prop_name
 msgid "Omaduse Linna nimetus (name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/crm/crm_city.aw:prop_name_comment
 msgid "Omaduse Linna nimetus (name) kommentaar"

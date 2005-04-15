@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/admin/workbench.aw:prop_preview
 msgid "Omaduse Näita (preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/admin/workbench.aw:prop_preview_comment
 msgid "Omaduse Näita (preview) kommentaar"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 13 Apr 2005 15:49:48 +0300\n"
+"POT-Creation-Date: Thu, 14 Apr 2005 14:31:12 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -651,15 +651,15 @@ msgstr "Rich Text Editor"
 
 # aw.ini:class_236
 msgid "Klassi Taket Spikker (236) nimi"
-msgstr ""
+msgstr "Taket cheat"
 
 # aw.ini:class_237
 msgid "Klassi Taket tellimuste nimekiri (237) nimi"
-msgstr ""
+msgstr "Taket order list"
 
 # aw.ini:class_238
 msgid "Klassi Dokument CODE (238) nimi"
-msgstr ""
+msgstr "Document CODE"
 
 # aw.ini:class_239
 msgid "Klassi Projekt (239) nimi"
@@ -671,15 +671,15 @@ msgstr "Messenger Identity"
 
 # aw.ini:class_241
 msgid "Klassi Taket Ostukorv (241) nimi"
-msgstr ""
+msgstr "Taket basket"
 
 # aw.ini:class_242
 msgid "Klassi Taketi Otsing (242) nimi"
-msgstr ""
+msgstr "Taket search"
 
 # aw.ini:class_243
 msgid "Klassi Taketi tellimus (243) nimi"
-msgstr ""
+msgstr "Taket order"
 
 # aw.ini:class_244
 msgid "Klassi Toimetus (244) nimi"
@@ -687,27 +687,27 @@ msgstr "Task"
 
 # aw.ini:class_245
 msgid "Klassi Taketi Ostukorvi Rida (245) nimi"
-msgstr ""
+msgstr "Taket basket line"
 
 # aw.ini:class_246
 msgid "Klassi Taketi Ostukorvi Objekt (246) nimi"
-msgstr ""
+msgstr "Taket basket object"
 
 # aw.ini:class_247
 msgid "Klassi Taketi kasutajate import (247) nimi"
-msgstr ""
+msgstr "Taket users import"
 
 # aw.ini:class_248
 msgid "Klassi Taketi JS Parser (248) nimi"
-msgstr ""
+msgstr "Taket JS parser"
 
 # aw.ini:class_249
 msgid "Klassi Taketi tellimuse item (249) nimi"
-msgstr ""
+msgstr "Taket order item"
 
 # aw.ini:class_250
 msgid "Klassi Taketi Otsingu piirangud (250) nimi"
-msgstr ""
+msgstr "Taket search restricton"
 
 # aw.ini:class_251
 msgid "Klassi Login men&uuml;&uuml;d (251) nimi"
@@ -835,7 +835,7 @@ msgstr "Document view statistics"
 
 # aw.ini:class_304
 msgid "Klassi Stati aruannete upload (304) nimi"
-msgstr ""
+msgstr "Stat report upload"
 
 # aw.ini:class_305
 msgid "Klassi Saidi sisukord (305) nimi"
@@ -887,7 +887,7 @@ msgstr "Message board"
 
 # aw.ini:class_323
 msgid "Klassi AWDocGen (323) nimi"
-msgstr ""
+msgstr "AWDocGen"
 
 # aw.ini:class_324
 msgid "Klassi Objektide nimekiri v2 (324) nimi"
@@ -915,7 +915,7 @@ msgstr "Object import"
 
 # aw.ini:class_330
 msgid "Klassi Taket Sendmail (330) nimi"
-msgstr ""
+msgstr "Taket sendmail"
 
 # aw.ini:class_331
 msgid "Klassi Klasside nimekiri (331) nimi"
@@ -1375,7 +1375,7 @@ msgstr "Array"
 
 # aw.ini:class_890
 msgid "Klassi Import Kultuuriaknast (890) nimi"
-msgstr ""
+msgstr "Culture window import"
 
 # aw.ini:class_891
 msgid "Klassi Cache uuendamine (891) nimi"
@@ -1431,23 +1431,27 @@ msgstr "Offer payment terms"
 
 # aw.ini:class_910
 msgid "Klassi Pakkumise toodete nimekiri (910) nimi"
-msgstr ""
+msgstr "Offer products list"
 
 # aw.ini:class_911
 msgid "Klassi Lihtne tootekataloog (911) nimi"
-msgstr ""
+msgstr "Simple shop"
 
 # aw.ini:class_912
 msgid "Klassi Lihtne toode (912) nimi"
-msgstr ""
+msgstr "Simple product"
 
 # aw.ini:class_913
 msgid "Klassi Koomiks (913) nimi"
-msgstr ""
+msgstr "Comic"
 
 # aw.ini:class_914
 msgid "Klassi Pidu (914) nimi"
-msgstr ""
+msgstr "Party"
+
+# aw.ini:class_915
+msgid "Klassi Koomiksi skript (915) nimi"
+msgstr "Comic script"
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
@@ -1623,7 +1627,7 @@ msgstr "Un-sorted"
 
 # aw.ini:classfolder_44
 msgid "Klassi kataloogi Taket (44) nimi"
-msgstr ""
+msgstr "Taket"
 
 # aw.ini:classfolder_45
 msgid "Klassi kataloogi Profiil (45) nimi"
@@ -1679,4 +1683,4 @@ msgstr "Orders"
 
 # aw.ini:classfolder_59
 msgid "Klassi kataloogi Bug-o-matic 3000 (59) nimi"
-msgstr ""
+msgstr "Bug-o-matic 3000"

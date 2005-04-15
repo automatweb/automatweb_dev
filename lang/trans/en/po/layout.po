@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_rows
 msgid "Omaduse Ridu (rows) caption"
-msgstr ""
+msgstr "Rows"
 
 #: classes/layout.aw:prop_rows_comment
 msgid "Omaduse Ridu (rows) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_columns
 msgid "Omaduse Tulpi (columns) caption"
-msgstr ""
+msgstr "Solumns"
 
 #: classes/layout.aw:prop_columns_comment
 msgid "Omaduse Tulpi (columns) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_cell_style_folders
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) caption"
-msgstr ""
+msgstr "Style folders"
 
 #: classes/layout.aw:prop_cell_style_folders_comment
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_grid
 msgid "Omaduse Tabel (grid) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/layout.aw:prop_grid_comment
 msgid "Omaduse Tabel (grid) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_table_style
 msgid "Omaduse Vali vaikimisi tabeli stiil (table_style) caption"
-msgstr ""
+msgstr "Select default table style"
 
 #: classes/layout.aw:prop_table_style_comment
 msgid "Omaduse Vali vaikimisi tabeli stiil (table_style) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_sel_style
 msgid "Omaduse Vali elemendi stiil (sel_style) caption"
-msgstr ""
+msgstr "Select element style"
 
 #: classes/layout.aw:prop_sel_style_comment
 msgid "Omaduse Vali elemendi stiil (sel_style) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_grid_styles
 msgid "Omaduse Vali element (grid_styles) caption"
-msgstr ""
+msgstr "Select element"
 
 #: classes/layout.aw:prop_grid_styles_comment
 msgid "Omaduse Vali element (grid_styles) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_row_widths
 msgid "Omaduse Ridade laiused (row_widths) caption"
-msgstr ""
+msgstr "Row widths"
 
 #: classes/layout.aw:prop_row_widths_comment
 msgid "Omaduse Ridade laiused (row_widths) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_row_heights
 msgid "Omaduse Ridade k&otilde;rgused (row_heights) caption"
-msgstr ""
+msgstr "Row heights"
 
 #: classes/layout.aw:prop_row_heights_comment
 msgid "Omaduse Ridade k&otilde;rgused (row_heights) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_grid_aliases
 msgid "Omaduse Aliased (grid_aliases) caption"
-msgstr ""
+msgstr "Connections"
 
 #: classes/layout.aw:prop_grid_aliases_comment
 msgid "Omaduse Aliased (grid_aliases) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_grid_aliases_list
 msgid "Omaduse Aliaste manager (grid_aliases_list) caption"
-msgstr ""
+msgstr "Connection manager"
 
 #: classes/layout.aw:prop_grid_aliases_list_comment
 msgid "Omaduse Aliaste manager (grid_aliases_list) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_grid_preview
 msgid "Omaduse Eelvaade (grid_preview) caption"
-msgstr ""
+msgstr "Preview"
 
 #: classes/layout.aw:prop_grid_preview_comment
 msgid "Omaduse Eelvaade (grid_preview) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_import_file
 msgid "Omaduse Uploadi .csv fail (import_file) caption"
-msgstr ""
+msgstr "Upload .csv file"
 
 #: classes/layout.aw:prop_import_file_comment
 msgid "Omaduse Uploadi .csv fail (import_file) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_import_remove_empty
 msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) caption"
-msgstr ""
+msgstr "Remove empty lines from the end"
 
 #: classes/layout.aw:prop_import_remove_empty_comment
 msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_import_sep
 msgid "Omaduse Mis m&auml;rgiga on tulbad eraldatud? (import_sep) caption"
-msgstr ""
+msgstr "Column separator"
 
 #: classes/layout.aw:prop_import_sep_comment
 msgid "Omaduse Mis m&auml;rgiga on tulbad eraldatud? (import_sep) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_show_in_folders
 msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
-msgstr ""
+msgstr "Show in folders"
 
 #: classes/layout.aw:prop_show_in_folders_comment
 msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_header
 msgid "Omaduse P&auml;is (header) caption"
-msgstr ""
+msgstr "Header"
 
 #: classes/layout.aw:prop_header_comment
 msgid "Omaduse P&auml;is (header) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/layout.aw:prop_footer
 msgid "Omaduse Jalus (footer) caption"
-msgstr ""
+msgstr "Footer"
 
 #: classes/layout.aw:prop_footer_comment
 msgid "Omaduse Jalus (footer) kommentaar"
@@ -228,37 +228,37 @@ msgstr ""
 
 #: classes/layout.aw:group_settings
 msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/layout.aw:group_layout
 msgid "Grupi Tabel (layout) pealkiri"
-msgstr ""
+msgstr "Table"
 
 #: classes/layout.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
-msgstr ""
+msgstr "Styles"
 
 #: classes/layout.aw:group_aliases
 msgid "Grupi Tabeli sisu (aliases) pealkiri"
-msgstr ""
+msgstr "Table contents"
 
 #: classes/layout.aw:group_hfoot
 msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
-msgstr ""
+msgstr "Header and footer"
 
 #: classes/layout.aw:group_import
 msgid "Grupi Import (import) pealkiri"
-msgstr ""
+msgstr "Import"
 
 #: classes/layout.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
-msgstr ""
+msgstr "Preview"
 
 #: classes/layout.aw:rel_RELTYPE_CELLSTYLE_FOLDER
 msgid "Seose celli stiilide kataloog (RELTYPE_CELLSTYLE_FOLDER) tekst"
-msgstr ""
+msgstr "cell style folder"
 
 #: classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
 msgid "Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
-msgstr ""
+msgstr "display in this folder"
 

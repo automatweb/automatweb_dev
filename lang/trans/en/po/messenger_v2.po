@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/applications/messenger/messenger_v2.aw:prop_no_reforb
 msgid "Omaduse lolo (no_reforb) caption"
-msgstr ""
+msgstr " lolo "
 
 #: classes/applications/messenger/messenger_v2.aw:prop_no_reforb_comment
 msgid "Omaduse lolo (no_reforb) kommentaar"

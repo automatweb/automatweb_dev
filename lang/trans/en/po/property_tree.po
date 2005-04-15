@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree.aw:prop_no_caption
 msgid "Omaduse Ilma tekstita (no_caption) caption"
-msgstr ""
+msgstr "No caption"
 
 #: classes/applications/class_designer/property_tree.aw:prop_no_caption_comment
 msgid "Omaduse Ilma tekstita (no_caption) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree.aw:prop_ct_tree
 msgid "Omaduse Puu (ct_tree) caption"
-msgstr ""
+msgstr "Tree"
 
 #: classes/applications/class_designer/property_tree.aw:prop_ct_tree_comment
 msgid "Omaduse Puu (ct_tree) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree.aw:prop_ct_list
 msgid "Omaduse Tabel (ct_list) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/applications/class_designer/property_tree.aw:prop_ct_list_comment
 msgid "Omaduse Tabel (ct_list) kommentaar"
@@ -60,29 +60,29 @@ msgstr ""
 
 #: classes/applications/class_designer/property_tree.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/class_designer/property_tree.aw:99
 msgid "Lisa uus oks"
-msgstr ""
+msgstr "New branch"
 
 #: classes/applications/class_designer/property_tree.aw:105
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/class_designer/property_tree.aw:111
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 
 #: classes/applications/class_designer/property_tree.aw:112
 msgid "Oled kindel et soovid valitud objekte kustutada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected objects?"
 
 #: classes/applications/class_designer/property_tree.aw:122
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/class_designer/property_tree.aw:128
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 

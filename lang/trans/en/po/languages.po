@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/languages.aw:360
 msgid "Lisas keele"
-msgstr ""
+msgstr "Added language"
 

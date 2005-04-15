@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_textarea.aw:prop_cols
 msgid "Omaduse Laius (cols) caption"
-msgstr ""
+msgstr "Width"
 
 #: classes/applications/class_designer/property_textarea.aw:prop_cols_comment
 msgid "Omaduse Laius (cols) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_textarea.aw:prop_rows
 msgid "Omaduse Kõrgus (rows) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/applications/class_designer/property_textarea.aw:prop_rows_comment
 msgid "Omaduse Kõrgus (rows) kommentaar"

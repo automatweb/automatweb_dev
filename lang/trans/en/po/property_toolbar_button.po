@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_b_type
 msgid "Omaduse Nupu t&uuml;&uuml;p (b_type) caption"
-msgstr ""
+msgstr "Button type"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_b_type_comment
 msgid "Omaduse Nupu t&uuml;&uuml;p (b_type) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_action
 msgid "Omaduse Action (but_action) caption"
-msgstr ""
+msgstr "Action"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_action_comment
 msgid "Omaduse Action (but_action) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_tooltip
 msgid "Omaduse Tooltip (but_tooltip) caption"
-msgstr ""
+msgstr "Tooltip"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_tooltip_comment
 msgid "Omaduse Tooltip (but_tooltip) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_img
 msgid "Omaduse Pilt (but_img) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_img_comment
 msgid "Omaduse Pilt (but_img) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_confirm
 msgid "Omaduse Kinnitus (but_confirm) caption"
-msgstr ""
+msgstr "Confirmation"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_but_confirm_comment
 msgid "Omaduse Kinnitus (but_confirm) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_men_tree
 msgid "Omaduse Puu (men_tree) caption"
-msgstr ""
+msgstr "Tree"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_men_tree_comment
 msgid "Omaduse Puu (men_tree) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_men_list
 msgid "Omaduse Tabel (men_list) caption"
-msgstr ""
+msgstr "Table"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:prop_men_list_comment
 msgid "Omaduse Tabel (men_list) kommentaar"
@@ -120,45 +120,45 @@ msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:group_but_props
 msgid "Grupi Nupu m&auml;&auml;rangud (but_props) pealkiri"
-msgstr ""
+msgstr "Button settings"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:group_men_props
 msgid "Grupi Nupu m&auml;&auml;rangud (men_props) pealkiri"
-msgstr ""
+msgstr "Button settings"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:65
 msgid "Eraldaja"
-msgstr ""
+msgstr "Separator"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:66
 msgid "Nupp"
-msgstr ""
+msgstr "Button"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:67
 msgid "Menu&uuml;&uuml;"
-msgstr ""
+msgstr "Folder"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:291
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:297
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:303
 msgid "URL"
-msgstr ""
+msgstr "URL"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:309
 msgid "Eraldaja?"
-msgstr ""
+msgstr "Separator?"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:389
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/class_designer/property_toolbar_button.aw:396
 msgid "Kustuta"
-msgstr ""
+msgstr "Delete"
 

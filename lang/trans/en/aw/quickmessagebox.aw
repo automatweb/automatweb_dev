@@ -1,0 +1,35 @@
+<?php
+$GLOBALS["TRANS"]["Omaduse Kirja maksimaalne suurus (märkides) (maxsize) caption"] = "Maximum message size";
+$GLOBALS["TRANS"]["Omaduse Sissetulnud kirjad (inbox) caption"] = "Inbox";
+$GLOBALS["TRANS"]["Omaduse Outboxi toolbar (outbox_toolbar) caption"] = "ob tb";
+$GLOBALS["TRANS"]["Omaduse Välja saadetud kirjad (outbox) caption"] = "Sent messages";
+$GLOBALS["TRANS"]["Omaduse Arhiivi toolbar (archive_toolbar) caption"] = "Archive toolbar";
+$GLOBALS["TRANS"]["Omaduse Arhiiv (archive) caption"] = "Archive";
+$GLOBALS["TRANS"]["Grupi Uus teade (newmessage) pealkiri"] = "New message";
+$GLOBALS["TRANS"]["Grupi Inbox (inbox) pealkiri"] = "Inbox";
+$GLOBALS["TRANS"]["Grupi Outbox (outbox) pealkiri"] = "Outbox";
+$GLOBALS["TRANS"]["Grupi Arhiiv (archive) pealkiri"] = "Archive";
+$GLOBALS["TRANS"]["Seose Omanik (RELTYPE_OWNER) tekst"] = "Owner";
+$GLOBALS["TRANS"]["Seose Aadressiraamat (RELTYPE_CONTACT_LIST) tekst"] = "Addressbook";
+$GLOBALS["TRANS"]["Priit on jobu!"] = "JERK!";
+$GLOBALS["TRANS"]["Uus kiri"] = "New message";
+$GLOBALS["TRANS"]["Vasta kirjale"] = "Answer";
+$GLOBALS["TRANS"]["Edasta kiri"] = "Forward";
+$GLOBALS["TRANS"]["Arhiveeri valitud kirjad"] = "Archive selected messages";
+$GLOBALS["TRANS"]["Kustuta valitud kirjad"] = "Delete selected messages";
+$GLOBALS["TRANS"]["oled sa kindel, et tahad valitud kirja kustutada?"] = "are you sure you wasnt to delete selected messages?";
+$GLOBALS["TRANS"]["Oled kindel, et tahad valitud kirjad kustutada?"] = "Are you sure you want to delete selected messages?";
+$GLOBALS["TRANS"]["sellist kasutajat ei ole olemas!"] = "no such user!";
+$GLOBALS["TRANS"]["Kellelt"] = "From";
+$GLOBALS["TRANS"]["Kellele"] = "To";
+$GLOBALS["TRANS"]["Saadetud"] = "Sent";
+$GLOBALS["TRANS"]["Pealkiri"] = "Subject";
+$GLOBALS["TRANS"]["Sisu"] = "Content";
+$GLOBALS["TRANS"]["ID"] = "ID";
+$GLOBALS["TRANS"]["Aeg"] = "When";
+$GLOBALS["TRANS"]["Kasutaja"] = "User";
+$GLOBALS["TRANS"]["teadet ei õnnestunud saata, proovi uuesti"] = "message could not be sent, please try again";
+$GLOBALS["TRANS"]["teade edukalt kohale toimetatud!"] = "message delivered!";
+$GLOBALS["TRANS"]["Aadressiraamat"] = "Addressbook";
+$GLOBALS["TRANS"]["kirjutas"] = "wrote";
+?>

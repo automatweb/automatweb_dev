@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_textbox.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
-msgstr ""
+msgstr "Ord"
 
 #: classes/applications/class_designer/property_textbox.aw:prop_ord_comment
 msgid "Omaduse Jrk (ord) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_textbox.aw:prop_size
 msgid "Omaduse Pikkus (size) caption"
-msgstr ""
+msgstr "Length"
 
 #: classes/applications/class_designer/property_textbox.aw:prop_size_comment
 msgid "Omaduse Pikkus (size) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/class_designer/property_textbox.aw:prop_maxlength
 msgid "Omaduse Max. pikkus (maxlength) caption"
-msgstr ""
+msgstr "Max. Length"
 
 #: classes/applications/class_designer/property_textbox.aw:prop_maxlength_comment
 msgid "Omaduse Max. pikkus (maxlength) kommentaar"

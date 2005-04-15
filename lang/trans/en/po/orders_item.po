@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_code
 msgid "Omaduse Kood (product_code) caption"
-msgstr ""
+msgstr "code"
 
 #: classes/applications/orders/orders_item.aw:prop_product_code_comment
 msgid "Omaduse Kood (product_code) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_color
 msgid "Omaduse Värvus (product_color) caption"
-msgstr ""
+msgstr "colour"
 
 #: classes/applications/orders/orders_item.aw:prop_product_color_comment
 msgid "Omaduse Värvus (product_color) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_size
 msgid "Omaduse Suurus (product_size) caption"
-msgstr ""
+msgstr "Size"
 
 #: classes/applications/orders/orders_item.aw:prop_product_size_comment
 msgid "Omaduse Suurus (product_size) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_count
 msgid "Omaduse Kogus (product_count) caption"
-msgstr ""
+msgstr "Amount"
 
 #: classes/applications/orders/orders_item.aw:prop_product_count_comment
 msgid "Omaduse Kogus (product_count) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_price
 msgid "Omaduse Hind (product_price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/orders/orders_item.aw:prop_product_price_comment
 msgid "Omaduse Hind (product_price) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_page
 msgid "Omaduse Lehekülg (product_page) caption"
-msgstr ""
+msgstr "Page"
 
 #: classes/applications/orders/orders_item.aw:prop_product_page_comment
 msgid "Omaduse Lehekülg (product_page) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/orders/orders_item.aw:prop_product_image
 msgid "Omaduse Pilt (product_image) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/orders/orders_item.aw:prop_product_image_comment
 msgid "Omaduse Pilt (product_image) kommentaar"

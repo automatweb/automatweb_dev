@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_online
 msgid "Omaduse Online (online) caption"
-msgstr ""
+msgstr "Online"
 
 #: classes/applications/commune/profile.aw:prop_online_comment
 msgid "Omaduse Online (online) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_age
 msgid "Omaduse Vanus (age) caption"
-msgstr ""
+msgstr "Age"
 
 #: classes/applications/commune/profile.aw:prop_age_comment
 msgid "Omaduse Vanus (age) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_avatar_image
 msgid "Omaduse Avatar (avatar_image) caption"
-msgstr ""
+msgstr "Avatar"
 
 #: classes/applications/commune/profile.aw:prop_avatar_image_comment
 msgid "Omaduse Avatar (avatar_image) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_text1
 msgid "Omaduse Telefon (user_text1) caption"
-msgstr ""
+msgstr "Phone"
 
 #: classes/applications/commune/profile.aw:prop_user_text1_comment
 msgid "Omaduse Telefon (user_text1) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_text2
 msgid "Omaduse ICQ (user_text2) caption"
-msgstr ""
+msgstr "ICQ"
 
 #: classes/applications/commune/profile.aw:prop_user_text2_comment
 msgid "Omaduse ICQ (user_text2) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_text3
 msgid "Omaduse MSN (user_text3) caption"
-msgstr ""
+msgstr "MSN"
 
 #: classes/applications/commune/profile.aw:prop_user_text3_comment
 msgid "Omaduse MSN (user_text3) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_blob1
 msgid "Omaduse Lisainfo (user_blob1) caption"
-msgstr ""
+msgstr "Additional info"
 
 #: classes/applications/commune/profile.aw:prop_user_blob1_comment
 msgid "Omaduse Lisainfo (user_blob1) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_blob2
 msgid "Omaduse Lisainfo sõpradele (user_blob2) caption"
-msgstr ""
+msgstr "Additional info for friends"
 
 #: classes/applications/commune/profile.aw:prop_user_blob2_comment
 msgid "Omaduse Lisainfo sõpradele (user_blob2) kommentaar"
@@ -108,7 +108,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_check1
 msgid "Omaduse E-post varjatud (user_check1) caption"
-msgstr ""
+msgstr "E-mail hidden"
 
 #: classes/applications/commune/profile.aw:prop_user_check1_comment
 msgid "Omaduse E-post varjatud (user_check1) kommentaar"
@@ -120,7 +120,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_height
 msgid "Omaduse Kasv (height) caption"
-msgstr ""
+msgstr "Height"
 
 #: classes/applications/commune/profile.aw:prop_height_comment
 msgid "Omaduse Kasv (height) kommentaar"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_weight
 msgid "Omaduse Kaal (weight) caption"
-msgstr ""
+msgstr "Weight"
 
 #: classes/applications/commune/profile.aw:prop_weight_comment
 msgid "Omaduse Kaal (weight) kommentaar"
@@ -144,7 +144,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_eyes_color
 msgid "Omaduse Silmade värv (eyes_color) caption"
-msgstr ""
+msgstr "Eye coluour"
 
 #: classes/applications/commune/profile.aw:prop_eyes_color_comment
 msgid "Omaduse Silmade värv (eyes_color) kommentaar"
@@ -156,7 +156,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_hair_color
 msgid "Omaduse Juuksevärv (hair_color) caption"
-msgstr ""
+msgstr "Hair colour"
 
 #: classes/applications/commune/profile.aw:prop_hair_color_comment
 msgid "Omaduse Juuksevärv (hair_color) kommentaar"
@@ -168,7 +168,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_hair_type
 msgid "Omaduse Juuste tüüp (hair_type) caption"
-msgstr ""
+msgstr "Hair type"
 
 #: classes/applications/commune/profile.aw:prop_hair_type_comment
 msgid "Omaduse Juuste tüüp (hair_type) kommentaar"
@@ -180,7 +180,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_body_type
 msgid "Omaduse Keha tüüp (body_type) caption"
-msgstr ""
+msgstr "Body type"
 
 #: classes/applications/commune/profile.aw:prop_body_type_comment
 msgid "Omaduse Keha tüüp (body_type) kommentaar"
@@ -192,7 +192,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_text5
 msgid "Omaduse Koduleht (user_text5) caption"
-msgstr ""
+msgstr "Homepage"
 
 #: classes/applications/commune/profile.aw:prop_user_text5_comment
 msgid "Omaduse Koduleht (user_text5) kommentaar"
@@ -204,7 +204,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_hobbies
 msgid "Omaduse Huvid/harrastused (hobbies) caption"
-msgstr ""
+msgstr "Hobbies/Interests"
 
 #: classes/applications/commune/profile.aw:prop_hobbies_comment
 msgid "Omaduse Huvid/harrastused (hobbies) kommentaar"
@@ -216,7 +216,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_sexual_orientation
 msgid "Omaduse Seksuaalne orientatsioon (sexual_orientation) caption"
-msgstr ""
+msgstr "Sexual orientation"
 
 #: classes/applications/commune/profile.aw:prop_sexual_orientation_comment
 msgid "Omaduse Seksuaalne orientatsioon (sexual_orientation) kommentaar"
@@ -228,7 +228,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_alcohol
 msgid "Omaduse Alkoholi tarbimine (alcohol) caption"
-msgstr ""
+msgstr "Drinking"
 
 #: classes/applications/commune/profile.aw:prop_alcohol_comment
 msgid "Omaduse Alkoholi tarbimine (alcohol) kommentaar"
@@ -240,7 +240,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_tobacco
 msgid "Omaduse Tubaka tarbimine (tobacco) caption"
-msgstr ""
+msgstr "Smoking"
 
 #: classes/applications/commune/profile.aw:prop_tobacco_comment
 msgid "Omaduse Tubaka tarbimine (tobacco) kommentaar"
@@ -252,7 +252,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_field2
 msgid "Omaduse Haridustase (user_field2) caption"
-msgstr ""
+msgstr "Education level"
 
 #: classes/applications/commune/profile.aw:prop_user_field2_comment
 msgid "Omaduse Haridustase (user_field2) kommentaar"
@@ -264,7 +264,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_occupation
 msgid "Omaduse Tegevusala (occupation) caption"
-msgstr ""
+msgstr "Occupation"
 
 #: classes/applications/commune/profile.aw:prop_occupation_comment
 msgid "Omaduse Tegevusala (occupation) kommentaar"
@@ -276,7 +276,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_user_text4
 msgid "Omaduse Elukutse (user_text4) caption"
-msgstr ""
+msgstr "Profession"
 
 #: classes/applications/commune/profile.aw:prop_user_text4_comment
 msgid "Omaduse Elukutse (user_text4) kommentaar"
@@ -288,7 +288,7 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:prop_comments
 msgid "Omaduse Kommentaarid (comments) caption"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/commune/profile.aw:prop_comments_comment
 msgid "Omaduse Kommentaarid (comments) kommentaar"
@@ -300,81 +300,81 @@ msgstr ""
 
 #: classes/applications/commune/profile.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
-msgstr ""
+msgstr "Settings"
 
 #: classes/applications/commune/profile.aw:group_settings_general
 msgid "Grupi Üldandmed (settings_general) pealkiri"
-msgstr ""
+msgstr "General data"
 
 #: classes/applications/commune/profile.aw:group_settings_outlook
 msgid "Grupi Välimus (settings_outlook) pealkiri"
-msgstr ""
+msgstr "Looks"
 
 #: classes/applications/commune/profile.aw:group_settings_hobbies
 msgid "Grupi Harrastused (settings_hobbies) pealkiri"
-msgstr ""
+msgstr "Hobbies"
 
 #: classes/applications/commune/profile.aw:group_settings_habits
 msgid "Grupi Harjumused (settings_habits) pealkiri"
-msgstr ""
+msgstr "Habits"
 
 #: classes/applications/commune/profile.aw:group_settings_occupation
 msgid "Grupi Kool/Töö (settings_occupation) pealkiri"
-msgstr ""
+msgstr "Job/School"
 
 #: classes/applications/commune/profile.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
-msgstr ""
+msgstr "Comments"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_EYES_COLOR
 msgid "Seose Silmade värv (RELTYPE_PRF_EYES_COLOR) tekst"
-msgstr ""
+msgstr "Eye colour"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HAIR_COLOR
 msgid "Seose Juuksevärv (RELTYPE_PRF_HAIR_COLOR) tekst"
-msgstr ""
+msgstr "Hair colour"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HAIR_TYPE
 msgid "Seose Juuksetüüp (RELTYPE_PRF_HAIR_TYPE) tekst"
-msgstr ""
+msgstr "Hair type"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_BODY_TYPE
 msgid "Seose Keha tüüp (RELTYPE_PRF_BODY_TYPE) tekst"
-msgstr ""
+msgstr "Body type"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_SEX_ORIENT
 msgid "Seose Seksuaalne kalduvus (RELTYPE_PRF_SEX_ORIENT) tekst"
-msgstr ""
+msgstr "Sexial orientation"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_ALCOHOL
 msgid "Seose Alkoholi tarbimine (RELTYPE_PRF_ALCOHOL) tekst"
-msgstr ""
+msgstr "Drinking"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_TOBACCO
 msgid "Seose Tubaka tarbimine (RELTYPE_PRF_TOBACCO) tekst"
-msgstr ""
+msgstr "Smoking"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PERSON
 msgid "Seose Isikuobjekt (RELTYPE_PERSON) tekst"
-msgstr ""
+msgstr "Person object"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_HEIGHT
 msgid "Seose Pikkus (RELTYPE_PRF_HEIGHT) tekst"
-msgstr ""
+msgstr "Height"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_WEIGHT
 msgid "Seose Kaal (RELTYPE_PRF_WEIGHT) tekst"
-msgstr ""
+msgstr "Weight"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_AVATAR
 msgid "Seose Avatar (RELTYPE_AVATAR) tekst"
-msgstr ""
+msgstr "Avatar"
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_CFG_MANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFG_MANAGER) tekst"
-msgstr ""
+msgstr "Connection manager"
 

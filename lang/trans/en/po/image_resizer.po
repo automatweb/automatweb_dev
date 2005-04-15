@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_input_type
 msgid "Omaduse Sisendi tüüp (input_type) caption"
-msgstr ""
+msgstr "Input type"
 
 #: classes/applications/image_resizer.aw:prop_input_type_comment
 msgid "Omaduse Sisendi tüüp (input_type) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_from_folder
 msgid "Omaduse Süsteemi kaust (from_folder) caption"
-msgstr ""
+msgstr "System folder"
 
 #: classes/applications/image_resizer.aw:prop_from_folder_comment
 msgid "Omaduse Süsteemi kaust (from_folder) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_from_folder_aw
 msgid "Omaduse AW kaust (from_folder_aw) caption"
-msgstr ""
+msgstr "AW folder"
 
 #: classes/applications/image_resizer.aw:prop_from_folder_aw_comment
 msgid "Omaduse AW kaust (from_folder_aw) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_width_bigger_than
 msgid "Omaduse Laiuse tingimus (width_bigger_than) caption"
-msgstr ""
+msgstr "Width bigger than"
 
 #: classes/applications/image_resizer.aw:prop_width_bigger_than_comment
 msgid "Omaduse Laiuse tingimus (width_bigger_than) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_new_width
 msgid "Omaduse Uus laius (new_width) caption"
-msgstr ""
+msgstr "New width"
 
 #: classes/applications/image_resizer.aw:prop_new_width_comment
 msgid "Omaduse Uus laius (new_width) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_from_folder_contents
 msgid "Omaduse Info table (from_folder_contents) caption"
-msgstr ""
+msgstr "Info table"
 
 #: classes/applications/image_resizer.aw:prop_from_folder_contents_comment
 msgid "Omaduse Info table (from_folder_contents) kommentaar"
@@ -96,7 +96,7 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:prop_do_resize
 msgid "Omaduse Töötle (do_resize) caption"
-msgstr ""
+msgstr "Process"
 
 #: classes/applications/image_resizer.aw:prop_do_resize_comment
 msgid "Omaduse Töötle (do_resize) kommentaar"
@@ -108,13 +108,13 @@ msgstr ""
 
 #: classes/applications/image_resizer.aw:group_config
 msgid "Grupi Võimalused (config) pealkiri"
-msgstr ""
+msgstr "Configuration"
 
 #: classes/applications/image_resizer.aw:group_status
 msgid "Grupi Staatus (status) pealkiri"
-msgstr ""
+msgstr "Status"
 
 #: classes/applications/image_resizer.aw:rel_RELTYPE_IMAGE_FOLDER
 msgid "Seose Piltide kaust (RELTYPE_IMAGE_FOLDER) tekst"
-msgstr ""
+msgstr "Image folder"
 

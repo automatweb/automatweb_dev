@@ -24,13 +24,13 @@ msgstr ""
 
 #: classes/admin/object_import_exception.aw:group_exc
 msgid "Grupi Erandid (exc) pealkiri"
-msgstr ""
+msgstr "Exceptions"
 
 #: classes/admin/object_import_exception.aw:74
 msgid "Mis asendada"
-msgstr ""
+msgstr "Replace what"
 
 #: classes/admin/object_import_exception.aw:79
 msgid "Millega asendada"
-msgstr ""
+msgstr "With what"
 

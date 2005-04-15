@@ -15,6 +15,7 @@ $GLOBALS["TRANS"]["Omaduse Otsingu toolbar (s_toolbar) caption"] = "Search toolb
 $GLOBALS["TRANS"]["Omaduse From (s_from) caption"] = "From";
 $GLOBALS["TRANS"]["Omaduse Subject (s_subject) caption"] = "Subject";
 $GLOBALS["TRANS"]["Omaduse Otsi (s_submit) caption"] = "Search";
+$GLOBALS["TRANS"]["Omaduse lolo (no_reforb) caption"] = " lolo ";
 $GLOBALS["TRANS"]["Omaduse Tulemused (s_results) caption"] = "Results";
 $GLOBALS["TRANS"]["Omaduse Reeglid (rule_editor) caption"] = "Rules";
 $GLOBALS["TRANS"]["Grupi Kirjad (main_view) pealkiri"] = "Messages";

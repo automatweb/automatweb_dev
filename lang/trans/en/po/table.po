@@ -12,9 +12,9 @@ msgstr ""
 
 #: classes/table.aw:115
 msgid "no such table %s (tables.class->load_table)!"
-msgstr ""
+msgstr "no such table %s (tables.class->load_table)!"
 
 #: classes/table.aw:2472
 msgid "table->import: No file uploaded!"
-msgstr ""
+msgstr "table->import: No file uploaded!"
 
