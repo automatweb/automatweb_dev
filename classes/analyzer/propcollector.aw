@@ -390,10 +390,12 @@ class propcollector extends aw_template
 
 	}
 
+
 	function add_layout($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
 		$this->layout[$name] = $fields;
+		$this->name = $name;
 		$this->last_element = "layout";
 	}
 
@@ -479,6 +481,11 @@ class propcollector extends aw_template
 			case "column":
 				$this->classdef["column"][$this->name]["caption"] = $caption;
 				break;
+
+			case "layout":
+				$this->layout[$this->name]["caption"] = $caption;
+				break;
+
 		};
 	}
 	
@@ -585,6 +592,10 @@ class propcollector extends aw_template
 				{
 					$fields[$fname] = $fvalue;
 				};
+			}
+			else
+			{
+				print "Invalid syntax: $field\n";
 			};
 		};
 		return $fields;
