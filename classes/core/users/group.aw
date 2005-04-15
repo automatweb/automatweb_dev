@@ -129,6 +129,10 @@ class group extends class_base
 				{
 					return PROP_IGNORE;
 				}
+				if ($prop["value"] == "" && $arr["obj_inst"]->name() != "")
+				{
+					$prop["value"] = $arr["obj_inst"]->name();
+				}
 				break;
 
 			case "data":
