@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.21 2005/04/12 10:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.22 2005/04/15 10:12:53 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -162,7 +162,6 @@ class site_search_content_grp extends class_base
 		{
 			return array();
 		}
-		enter_function("site_search_content_grp::get_menus");
 		$o = obj($arr["id"]);
 		if ($o->meta("version") == 2)
 		{
@@ -227,35 +226,38 @@ class site_search_content_grp extends class_base
 		}
 
 		$gidlist = aw_global_get("gidlist");
-		$ol = new object_list(array(
-			"class_id" => array(CL_PROMO),
-			"oid" => $ret,
-			"site_id" => array(),
-			"lang_id"  => array()
-		));
-		foreach($ol->arr() as $o)
+		if (count($ret))
 		{
-			// filter list by groups to whom the promo can be shown
-			$found = false;
-			$groups = $o->meta("groups");
-			if (!is_array($groups) || count($groups) < 1)
+			$ol = new object_list(array(
+				"class_id" => array(CL_PROMO),
+				"oid" => $ret,
+				"site_id" => array(),
+				"lang_id"  => array()
+			));
+			foreach($ol->arr() as $o)
 			{
-				$found = true;
-			}
-			else
-			{
-				foreach($groups as $gid)
+				// filter list by groups to whom the promo can be shown
+				$found = false;
+				$groups = $o->meta("groups");
+				if (!is_array($groups) || count($groups) < 1)
 				{
-					if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
+					$found = true;
+				}
+				else
+				{
+					foreach($groups as $gid)
 					{
-						$found = true;
+						if (isset($gidlist[$gid]) && $gidlist[$gid] == $gid)
+						{
+							$found = true;
+						}
 					}
 				}
-			}
 
-			if (!$found)
-			{
-				unset($ret[$o->id()]);
+				if (!$found)
+				{
+					unset($ret[$o->id()]);
+				}
 			}
 		}
 		
