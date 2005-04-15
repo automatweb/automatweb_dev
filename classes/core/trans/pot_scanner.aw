@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.24 2005/04/13 12:52:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.25 2005/04/15 11:19:44 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -588,7 +588,7 @@ class pot_scanner extends core
 
 			foreach($files as $file => $ts)
 			{
-				if (basename($file) == "crm_offer.po")
+				if (basename($file) == "register_data.po" || basename($file) == "survey.po" || basename($file) == "calendar_registration_form.po")
 				{
 					continue;
 				}
@@ -619,7 +619,7 @@ class pot_scanner extends core
 					}
 				}
 			}
-			die(sprintf(t("\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n "), $cnt, $all_cnt));
+			die(sprintf(t("\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"), (int)$cnt, (int)$all_cnt));
 		}
 	}
 
@@ -642,6 +642,10 @@ class pot_scanner extends core
 		}
 
 		if (preg_match("/User-defined/imsU", $msgid))
+		{
+			return true;
+		}
+		if (preg_match("/udef/imsU", $msgid))
 		{
 			return true;
 		}
