@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.96 2005/04/15 10:42:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.97 2005/04/15 15:03:24 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -373,6 +373,13 @@ class mrp_workspace extends class_base
 
 	function mrp_workspace()
 	{
+		$this->resource_states = array(
+			0 => "M&auml;&auml;ramata",
+			MRP_STATUS_RESOURCE_AVAILABLE => t("Vaba"),
+			MRP_STATUS_RESOURCE_INUSE => t("Kasutusel"),
+			MRP_STATUS_RESOURCE_OUTOFSERVICE => t("Suletud"),
+		);
+
 		$this->states = array (
 			MRP_STATUS_NEW => t("Uus"),
 			MRP_STATUS_PLANNED => t("Planeeritud"),
@@ -532,13 +539,13 @@ class mrp_workspace extends class_base
 						$tmp = obj($job->prop($rpn));
 						if ($this->can("edit", $tmp->id()))
 						{
-							$prop["value"] = html::href(array(
-								"url" => $this->mk_my_orb("change", array(
-									"id" => $tmp->id(),
-									"return_url" => get_ru()
-								)),
-								"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"
-							));
+						$prop["value"] = html::href(array(
+							"url" => $this->mk_my_orb("change", array(
+								"id" => $tmp->id(),
+								"return_url" => get_ru()
+							)),
+							"caption" => "<span style='font-size:20px'>" . $tmp->name() . "</span>"
+						));
 						}
 						else
 						{
@@ -550,13 +557,13 @@ class mrp_workspace extends class_base
 						$tmp = obj($job->prop($rpn));
 						if ($this->can("edit", $tmp->id()))
 						{
-							$prop["value"] = html::get_change_url(
-								$tmp->id(),
-								array(
-									"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-								),
-								$tmp->name()
-							);
+						$prop["value"] = html::get_change_url(
+							$tmp->id(),
+							array(
+								"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+							),
+							$tmp->name()
+						);
 						}
 						else
 						{
@@ -628,8 +635,8 @@ class mrp_workspace extends class_base
 				break;
 
 			case "legend":
-				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja planeeritud").'</div>';
-				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;</span> '.t("&Uuml;le t&auml;htaja l&auml;inud").'</div>';
+				$prop["value"] = '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_PLANNED_OVERDUE . '; border: 1px solid black;">&nbsp;&nbsp;&nbsp;</span> '.t("&Uuml;le t&auml;htaja planeeritud").'</div>';
+				$prop["value"] .= '<div style="display: block; margin: 4px;"><span style="width: 25px; height: 15px; margin-right: 5px; background-color: ' . MRP_COLOUR_OVERDUE . '; border: 1px solid black;">&nbsp;&nbsp;&nbsp;</span> '.t("&Uuml;le t&auml;htaja l&auml;inud").'</div>';
 				break;
 
 			### users tab
@@ -1091,7 +1098,7 @@ class mrp_workspace extends class_base
 				),
 				"order" => $resource->ord (),
 				"operator" => join(",",$operators),
-				"status" => $resource->prop("state"),
+				"status" => $this->resource_states[$resource->prop("state")],
 				"resource_id" => $resource->id(),
 			));
 		}
@@ -1948,6 +1955,7 @@ class mrp_workspace extends class_base
 			$id = $category->id ();
 			$chart->add_row (array (
 				"name" => $id,
+				"title" => $category->name(),
 				"type" => "separator",
 			));
 
@@ -3141,8 +3149,8 @@ class mrp_workspace extends class_base
 			{
 				if ($this->can("edit", $person->id()))
 				{
-					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-				}
+				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+			}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3155,12 +3163,12 @@ class mrp_workspace extends class_base
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-					$custo = html::get_change_url($cust->id(), array(
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-						),
-						$cust->name()
-					);
-				}
+				$custo = html::get_change_url($cust->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$cust->name()
+				);
+			}
 				else
 				{
 					$custo = $cust->name();
@@ -3802,7 +3810,7 @@ class mrp_workspace extends class_base
 	function callback_on_load($arr)
 	{
 		if ($this->can("view", 17639))
-		{
+	{
 			$this->cfgmanager = 17639;
 		}
 	}

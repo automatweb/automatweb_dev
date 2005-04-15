@@ -1,7 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.48 2005/04/08 09:31:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.49 2005/04/15 15:03:24 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
+
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 
 @classinfo syslog_type=ST_MRP_RESOURCE relationmgr=yes no_status=1 confirm_save_data=1
 
@@ -436,6 +438,7 @@ class mrp_resource extends class_base
 				"reltype" => "RELTYPE_MRP_OWNER",
 			));
 			$this_object->set_parent ($resources_folder);
+			$this_object->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 			$this_object->save ();
 		}
 	}
@@ -1055,6 +1058,20 @@ class mrp_resource extends class_base
 		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 		$resource->save ();
 		return true;
+	}
+
+	function on_create_resource ($arr)
+	{
+		$resource = obj ($arr["oid"]);
+
+		### set state
+		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
+
+		### init thread_data
+		$thread_data = array(1 => array ("state" => MRP_STATUS_RESOURCE_AVAILABLE, "job" => NULL));
+		$resource->set_prop ("thread_data", $thread_data);
+
+		$resource->save ();
 	}
 }
 
