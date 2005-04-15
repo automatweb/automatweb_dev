@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.46 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.47 2005/04/15 09:54:14 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -532,8 +532,7 @@ class aw_table extends aw_template
 			"sel_row_style" => $this->tr_sel,
 		));
 		
-
-		if ($this->use_chooser)
+		if ($this->use_chooser && !$arr["no_chooser_script"])
 		{
 			$tbl .= $this->parse("selallscript");
 			if ($this->chooser_hilight)
