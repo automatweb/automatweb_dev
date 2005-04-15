@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.93 2005/04/14 10:34:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.94 2005/04/15 09:01:28 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3139,7 +3139,14 @@ class mrp_workspace extends class_base
 			$workers_str = array();
 			foreach(safe_array($workers[$res->id()]) as $person)
 			{
-				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				if ($this->can("edit", $person->id()))
+				{
+					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				}
+				else
+				{
+					$workers_str[] = $person->name();
+				}
 			}
 
 			$custo = "";
