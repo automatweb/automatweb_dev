@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.325 2005/04/05 13:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.326 2005/04/15 08:57:30 ahti Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -456,9 +456,18 @@ class document extends aw_template
 		$awt->start("phase3");
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
+			// another wonderful way of showing a link
+			$link2 = aw_ini_get("baseurl").aw_url_change_var(array(
+				"class" => "document",
+				"action" => "print",
+				"print" => 1,
+				"tv_sel" => $_GET["tv_sel"],
+				"section" => $docid
+			));
 			if ($this->cfg["print_cap"] != "")
 			{
 				$pc = localparse($this->cfg["print_cap"],array(
+					"link2" => $link2,
 					"link" => $this->mk_my_orb("print", array("section" => $docid)),
 					"docid" => $docid
 				));
@@ -491,14 +500,6 @@ class document extends aw_template
 				{
 					$link = $request_uri . "&print=1";
 				}
-				// another wonderful way of showing a link
-				$link2 = aw_url_change_var(array(
-					"class" => "document",
-					"action" => "print",
-					"print" => 1,
-					"tv_sel" => $_GET["tv_sel"],
-					"section" => $docid
-				));
 				$this->vars(array(
 					"docid" => $docid,
 					"printlink" => $link,
