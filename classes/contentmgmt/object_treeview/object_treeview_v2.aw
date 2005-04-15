@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.75 2005/04/13 13:48:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.76 2005/04/15 16:18:55 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -147,6 +147,9 @@
 
 @reltype TRANSFORM value=4 clid=CL_OTV_DATA_FILTER
 @caption andmete muundaja
+
+@reltype VIEW_CONTROLLER value=5 clid=CL_CFG_VIEW_CONTROLLER
+@caption N&auml;itamise kontroller
 
 */
 
@@ -367,6 +370,7 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_sep_before", $arr["request"]["column_sep_before"]);
 				$arr["obj_inst"]->set_meta("sel_columns_sep_after", $arr["request"]["column_sep_after"]);
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
+				$arr["obj_inst"]->set_meta("sel_columns_controller", $arr["request"]["column_view_controller"]);
 ////
 // don't save empty fields
 				$valid_column_fields = array();
@@ -492,6 +496,7 @@ class object_treeview_v2 extends class_base
 						$sc[$___v["field"]] = 1;
 					}
 				}
+				// make itemsorts fields also selected, no matter if they actually are selected or not
 				foreach(safe_array($ih_ob->meta("itemsorts")) as $item)
 				{
 					$sc[$item['element']] = 1;
@@ -613,6 +618,23 @@ class object_treeview_v2 extends class_base
 		$c = "";
 		$sel_cols = $ih_ob->meta("sel_columns");
 
+		// if the controller sets $retval to PROP_IGNORE then this column will not
+		// be shown in table
+		// later, if some other data will be needed in controller, then use the first or
+		// third param of the check_property fn.
+		$controllers = $ih_ob->meta("sel_columns_controller");
+		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
+		foreach ($controllers as $controller_key => $controller_value)
+		{
+			// the controller have to be connected 
+			if (!empty($controller_value) && $ih_ob->is_connected_to(array("to" => $controller_value)))
+			{
+				if ($view_controller_inst->check_property(null, $controller_value, array()) == PROP_IGNORE)
+				{
+					unset($sel_cols[$controller_key]);
+				}
+			}	
+		}
 		$col_list = $this->_get_col_list(array(
 			"o" => $ih_ob,
 			"hidden_cols" => true,
@@ -754,19 +776,6 @@ class object_treeview_v2 extends class_base
 			}
 			foreach($this->alphabet as $character)
 			{
-/*
-				$character_value = $character;
-				if(!empty($_GET['char']) && $character == $_GET['char'])
-				{
-					$character_value = "<strong>".$character."</strong>";
-				}
-*/
-/*
-				if($ih_ob->prop("alphabet_in_lower_case"))
-				{
-					$character_value = strtolower($character_value);
-				}
-*/
 				$this->vars(array(
 					"char" => ($ih_ob->prop("alphabet_in_lower_case")) ? strtolower($character) : $character, 
 					"char_url" => aw_ini_get("baseurl")."/".$oid."?char=".$character.$anchor,
@@ -861,7 +870,7 @@ class object_treeview_v2 extends class_base
 		return $res;
 	}
 
-	function _init_cols_tbl(&$t)
+	function _init_cols_tbl(&$t, $o)
 	{
 		$t->define_field(array(
 			"name" => "name",
@@ -876,7 +885,14 @@ class object_treeview_v2 extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
-
+		if (count($o->connections_from(array("type" => "RELTYPE_VIEW_CONTROLLER"))) > 0)
+		{
+			$t->define_field(array(
+				"name" => "controller",
+				"caption" => t("Kontroller"),
+				"align" => "center",
+			));
+		}
 		$t->define_field(array(
 			"name" => "jrk",
 			"caption" => t("Jrk"),
@@ -923,7 +939,7 @@ class object_treeview_v2 extends class_base
 	function _do_columns($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_cols_tbl($t);
+		$this->_init_cols_tbl($t, $arr['obj_inst']);
 
 		$cols = $arr["obj_inst"]->meta("sel_columns");
 		$cols_ord = $arr["obj_inst"]->meta("sel_columns_ord");
@@ -932,6 +948,7 @@ class object_treeview_v2 extends class_base
 		$cols_sep_after = $arr["obj_inst"]->meta("sel_columns_sep_after");
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
+		$cols_view_controllers = $arr['obj_inst']->meta("sel_columns_controller");
 
 		$ob = $arr["obj_inst"];
 		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
@@ -947,7 +964,15 @@ class object_treeview_v2 extends class_base
 			"o" => $ih_ob,
 			"hidden_cols" => true,
 		));
-
+		$conns_to_controllers = $ih_ob->connections_from(array(
+			"type" => "RELTYPE_VIEW_CONTROLLER",
+		));
+		
+		$controller_list = array("" => "");
+		foreach ($conns_to_controllers as $conn_to_controller)
+		{
+			$controller_list[$conn_to_controller->prop("to")] = $conn_to_controller->prop("to.name");
+		}
 		if (!is_array($cols_text))
 		{
 			$cols_text = $cold;
@@ -955,7 +980,7 @@ class object_treeview_v2 extends class_base
 
 		foreach($cold as $colid => $coln)
 		{
-			$text = $editable = $fields = $sep_before = $sep_after = "";
+			$text = $editable = $fields = $sep_before = $sep_after = $controller = "";
 
 
 			if ($cols[$colid])
@@ -963,7 +988,7 @@ class object_treeview_v2 extends class_base
 				$text = html::textbox(array(
 					"name" => "column_text[".$colid."]",
 					"value" => $cols_text[$colid],
-					"size" => 40
+					"size" => 20
 				));
 
 				$sep_before = html::textbox(array(
@@ -981,10 +1006,13 @@ class object_treeview_v2 extends class_base
 				$editable = html::checkbox(array(
 					"name" => "column_edit[".$colid."]",
 					"value" => 1,
-					"size" => 40,
-					"checked" => $cols_edit[$colid]
+					"checked" => $cols_edit[$colid],
 				));
-
+				$controller = html::select(array(
+					"name" => "column_view_controller[".$colid."]",
+					"options" => $controller_list,
+					"selected" => $cols_view_controllers[$colid],	
+				));
 				$max_id = 0;
 				$fields = "";
 
@@ -1064,7 +1092,8 @@ class object_treeview_v2 extends class_base
 				"editable" => $editable,
 				"fields" => $fields,
 				"sep_before" => $sep_before,
-				"sep_after" => $sep_after
+				"sep_after" => $sep_after,
+				"controller" => $controller,
 			));
 		}
 
