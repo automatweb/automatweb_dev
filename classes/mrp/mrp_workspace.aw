@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.95 2005/04/15 09:05:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.96 2005/04/15 10:42:35 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3068,13 +3068,13 @@ class mrp_workspace extends class_base
 			"sortable" => 1
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "worker",
 			"caption" => t("Teostaja"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
 			"sortable" => 1
-		));
+		));*/
 
 		$t->define_field(array(
 			"name" => "job",
@@ -3852,7 +3852,7 @@ class mrp_workspace extends class_base
 		$hdr = "<span style=\"font-size: 18px; color: red;\">".$person->prop("name")." | ".html::href(array(
 				"url" => $this->mk_my_orb("logout", array(), "users"),
 				"caption" => t("Logi v&auml;lja")
-			))."  | ".$this->get_cur_printer_resources_desc(array("ws" => obj(aw_ini_get("prisma.ws"))))." | </span>";
+			))."  | ".$this->get_cur_printer_resources_desc(array("ws" => obj(aw_ini_get("prisma.ws"))))." </span>";
 
 		return $hdr;
 	}
