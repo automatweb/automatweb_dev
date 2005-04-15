@@ -68,7 +68,7 @@
 
 <!-- SUB: separator_row -->
 <tr>
-<td colspan="{VAR:colspan}" class="awmenuedittabletext VclGanttChartCell" style="height: 3px; font-size: 2px;">&nbsp;</td>
+<td class="awmenuedittabletext VclGanttChartRowName" style="vertical-align: middle;" colspan="{VAR:colspan}"><a href="{VAR:expand_collapse_link}"><img src="{VAR:baseurl}/automatweb/images/{VAR:row_state}node_small.gif" style="border: none;" alt="{VAR:expand_collapse_title}"></a>&nbsp;{VAR:row_title}</td>
 </tr>
 <!-- END SUB: separator_row -->
 

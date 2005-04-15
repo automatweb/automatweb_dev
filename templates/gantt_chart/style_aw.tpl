@@ -55,9 +55,9 @@ a.VclGanttChartBarLink:hover span
 	white-space: nowrap;
 	padding-right: 3px;
 	padding-left: 3px;
-	border: none;
 	border-bottom: 1px solid;
-	border-left: 1px solid;
+	border-right: none;
+	border-top: none;
 }
 
 .VclGanttChartDataImg

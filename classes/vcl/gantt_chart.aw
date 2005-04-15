@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.13 2005/04/02 19:05:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.14 2005/04/15 15:26:09 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -65,9 +65,9 @@ class gantt_chart extends class_base
 		// $this->row_anchors = $arr["row_anchors"] ? "anchors" : "noanchors";
 		// $this->bar_anchors = $arr["bar_anchors"] ? "anchors" : "noanchors";
 
-		$this->scale_quotient = (count ($this->columns) * $this->column_length) / $this->chart_width;
+		$this->pixel_length = ($this->end - $this->start) / $this->chart_width;
 		$this->cell_length = (int) ($this->column_length / $this->subdivisions);
-		$this->cell_width = ceil ($this->cell_length / $this->scale_quotient);
+		$this->cell_width = ceil ($this->cell_length / $this->pixel_length);
 	}
 
 	// Configure chart navigation
@@ -81,6 +81,7 @@ class gantt_chart extends class_base
 	// Adds one row.
 	// Arguments:
 	// string type - row type data|separator. default is data.
+	// bool expanded - whether to initially show consequent rows after separator or not. applicable when row type is "separator". default is TRUE.
 	// string name - identifier for the row
 	// string title - title for the row
 	// string uri - uri for row title. Applies if row_anchors property is set to true for chart.
@@ -90,15 +91,18 @@ class gantt_chart extends class_base
 		$row_name = $arr["name"];
 		$row_title = $arr["title"];
 		$row_type = empty ($arr["type"]) ? "data" : $arr["type"];
+		$expanded = (bool) (empty ($arr["expanded"]) ? true : $arr["expanded"]);
 		$row_title_uri = empty ($arr["uri"]) ? false : $arr["uri"];
 		$row_title_uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
 		$this->rows[$row_name] = array (
 			"type" => $row_type,
+			"expanded" => $expanded,
 			"name" => $row_name,
 			"title" => $row_title,
 			"uri" => $row_title_uri,
 			"target" => $row_title_uri_target,
+			"id" => ++$this->row_id_counter,
 		);
 	}
 
@@ -168,9 +172,9 @@ class gantt_chart extends class_base
 		$style = $this->parse ();
 
 		### compose chart table
-		$bar_switch = 0;
 		$rows = "";
-		$this->scale_quotient = (($this->end - $this->start) / $this->chart_width);
+		$collapsed = false;
+		$this->pending_bars = array ();
 		$this->read_template ("chart_" . $this->style . ".tpl");
 		$this->sort_data ();
 
@@ -178,17 +182,46 @@ class gantt_chart extends class_base
 		{
 			$row_contents = "";
 			$cell_end = $this->start + $this->cell_length;
-			$pointer = $this->start ;
+			$this->pointer = $this->start;
 			$columns = count ($this->columns);
 
 			switch ($row["type"])
 			{
 				case "data":
+					if ($collapsed)
+					{
+						### go to next row
+						continue 2;
+					}
 					break;
 
 				case "separator":
+					if ( ($row["expanded"] == false) or (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) == "y") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] == "y") )//!!! kust siin _GET asemel v6tta see?
+					{
+						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "y");
+						$collapsed = true;
+					}
+					else
+					{
+						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "n");
+						$collapsed = false;
+					}
+
+					if ( (aw_global_get("aw_gantt_chart_collapsed_" . $row["id"]) == "n") or ($_GET["aw_gantt_chart_collapsed_" . $row["id"]] == "n") )//!!! kust siin _GET asemel v6tta see?
+					{
+						aw_session_set("aw_gantt_chart_collapsed_" . $row["id"], "n");
+						$collapsed = false;
+					}
+
+					$collapse_toggle_value = $collapsed ? "n" : "y";
+					$row_state = $collapsed ? "plus" : "minus";
+					$expand_collapse_title = $collapsed ? t("Näita") : t("Peida");
 					$this->vars (array (
-						"colspan" => $columns + 1,
+						"expand_collapse_link" => aw_url_change_var ("aw_gantt_chart_collapsed_" . $row["id"], $collapse_toggle_value),
+						"expand_collapse_title" => $expand_collapse_title,
+						"row_state" => $row_state,
+						"row_title" => $row["title"],
+						"colspan" => $columns*$this->subdivisions + 1,
 					));
 					$rows .= trim ($this->parse ("separator_row"));
 					continue 2;
@@ -202,9 +235,9 @@ class gantt_chart extends class_base
 				while ($subdivisions)
 				{
 					$cell_contents = "";
-					$content_length = 0;
+					$this->content_length = 0;
 
-					while ($pointer < $cell_end)
+					while ($this->pointer < $cell_end)
 					{
 						if (!is_array ($this->data[$row["name"]]))
 						{
@@ -214,7 +247,7 @@ class gantt_chart extends class_base
 						{
 							$bar = array_shift ($this->data[$row["name"]]);
 
-							if (($bar["start"] >= $cell_end) or !$bar or ((($cell_end - $bar["start"]) / $this->scale_quotient) < 0.6))
+							if (!$bar or ((($cell_end - $bar["start"]) / $this->pixel_length) < 0.5))
 							{
 								### no bars or no bars left in cell
 								array_unshift ($this->data[$row["name"]], $bar);
@@ -246,7 +279,7 @@ class gantt_chart extends class_base
 						### trim bars starting/ending before chart start
 						if ($bar["start"] < $this->start)
 						{
-							if (($bar["start"] + $bar["length"]) > $this->start)
+							if ((($bar["start"] + $bar["length"]) - $this->pixel_length) >= $this->start)
 							{
 								### trim bar ending after chart start
 								$bar["length"] = ($bar["start"] + $bar["length"]) - $this->start;
@@ -261,60 +294,69 @@ class gantt_chart extends class_base
 						}
 
 						### split bars longer than free space in one cell
-						if ( (($bar["start"] + $bar["length"]) > $cell_end) and ($bar["start"] < $cell_end) )
+						if (($bar["start"] + $bar["length"]) > $cell_end)
 						{
-							$split_bar = $bar;
-							$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
-							$split_bar["start"] = $cell_end;
-							$split_bar["force_colour"] = $bar_colour;
-							array_unshift ($this->data[$row["name"]], $split_bar);
-							$bar["length"] = $cell_end - $bar["start"];
-						}
+							if (($bar["start"] + $bar["length"] - $this->pixel_length) >= $cell_end)
+							{
+								### push overflow to next cell
+								$split_bar = $bar;
+								$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
+								$split_bar["start"] = $cell_end;
+								$split_bar["force_colour"] = $bar_colour;
+								array_unshift ($this->data[$row["name"]], $split_bar);
+							}
 
-						### insert preceeding whitespace
-						if ( ($bar["start"] > $pointer) and ($bar["start"] < $cell_end) )
-						{
-							$length = ceil (($bar["start"] - $pointer) / $this->scale_quotient);
-							$this->vars (array (
-								"length" => $length,
-								"baseurl" => $this->cfg["baseurl"],
-							));
-							$cell_contents .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_empty"));
-							$pointer += $bar["start"];
-							$content_length += $length;
+							### set length to fill rest of the cell
+							$length = $cell_end - $bar["start"];
+							$remainder = ($cell_end - $bar["start"]) % $this->pixel_length;
+							$bar["length"] = $remainder ? ($length + $this->pixel_length) : $length;
 						}
-
-// /* dbg */ if (strstr ($bar["title"], "job: 6978")){ arr ($bar); echo "[".date ("j/m/Y H.i", $bar["start"]) . "] - [".date ("j/m/Y H.i", $bar["start"] + $bar["length"]) . "]"; echo htmlentities ($row_contents);}
 
 						### parse bar
-						$length = ceil ($bar["length"] / $this->scale_quotient);
-						$this->vars (array (
-							"length" => $length,
-							"bar_colour" => $bar_colour,
-							"title" => $bar["title"],
-							"bar_uri" => $bar["bar_uri"],
-							"bar_uri_target" => $bar["bar_uri_target"],
-							"baseurl" => $this->cfg["baseurl"],
-						));
-						$bar_rendered = trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_normal_" . $bar_type));
-						$cell_contents .= $bar_rendered;
+						if ($bar["length"] < $this->pixel_length)
+						{
+							### leave decision for bars that don't cross to next pixel to later
+							$this->pending_bars[] = $bar;
+						}
+						else
+						{
+							$pending_start = false;
+							$pending_length = 0;
 
-						### ...
-						$pointer = $bar["start"] + $bar["length"];
-						$content_length += $length;
-						$bar_switch = $bar_switch ? 0 : 1;
+							while ($this->pending_bars)
+							{
+								$pending_bar = array_shift ($this->pending_bars);
+								$pending_length += $pending_bar["length"];
+
+								if ($pending_start !== false)
+								{
+									$pending_start = $pending_bar["start"];
+								}
+
+								if ($pending_length >= $this->pixel_length)
+								{
+									$pending_bar["start"] = $pending_start;
+									$pending_bar["length"] = $this->pixel_length;
+									$cell_contents .= $this->draw_bar ($pending_bar, $cell_type, $bar_type, $bar_colour);
+									$pending_start = false;
+									$pending_length = 0;
+								}
+							}
+
+							$cell_contents .= $this->draw_bar ($bar, $cell_type, $bar_type, $bar_colour);
+						}
 					}
 
 					### fill remaining empty space
-					if ($content_length < $this->cell_width)
+					if ($this->content_length < $this->cell_width)
 					{
-						$length = $this->cell_width - $content_length;
+						$length = $this->cell_width - $this->content_length;
 						$this->vars (array (
 							"length" => $length,
 							"baseurl" => $this->cfg["baseurl"],
 						));
 						$cell_contents .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_empty"));
-						$pointer = $cell_end;
+						$this->pointer = $cell_end;
 					}
 
 					### parse cell
@@ -406,10 +448,45 @@ class gantt_chart extends class_base
 		return $chart;
 	}
 
+	function draw_bar ($bar, $cell_type, $bar_type, $bar_colour)
+	{
+		$drawn_content = "";
+
+		### insert preceeding whitespace
+		if ($bar["start"] >= ($this->pointer + $this->pixel_length))
+		{
+			$length = (int) floor (($bar["start"] - $this->pointer) / $this->pixel_length);
+			$this->vars (array (
+				"length" => $length,
+				"baseurl" => $this->cfg["baseurl"],
+			));
+			$drawn_content .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_empty"));
+			$this->pointer += $length * $this->pixel_length;
+			$this->content_length += $length;
+		}
+
+		### parse bar
+		$length = (int) floor ($bar["length"] / $this->pixel_length);
+		$this->vars (array (
+			"length" => $length,
+			"bar_colour" => $bar_colour,
+			"title" => $bar["title"],
+			"bar_uri" => $bar["bar_uri"],
+			"bar_uri_target" => $bar["bar_uri_target"],
+			"baseurl" => $this->cfg["baseurl"],
+		));
+		$drawn_content .= trim ($this->parse ("MAIN.data_row.data_cell_" . $cell_type . ".cell_contents.bar_normal_" . $bar_type));
+
+		### ...
+		$this->pointer += $length * $this->pixel_length;
+		$this->content_length += $length;
+		return $drawn_content;
+	}
+
 	////
 	// !this will be called if the object is put in a document by an alias and the document is being shown
 	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	// alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
