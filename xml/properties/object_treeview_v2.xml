@@ -429,6 +429,11 @@
                   <clid>CL_OTV_DATA_FILTER</clid>
                   <caption>andmete muundaja</caption>
             </TRANSFORM>
+            <VIEW_CONTROLLER>
+                  <value>5</value>
+                  <clid>CL_CFG_VIEW_CONTROLLER</clid>
+                  <caption>N&amp;auml;itamise kontroller</caption>
+            </VIEW_CONTROLLER>
       </reltypes>
 </properties>
 
