@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.14 2005/04/15 15:26:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.15 2005/04/17 20:05:17 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -148,6 +148,7 @@ class gantt_chart extends class_base
 		$uri_target = empty ($arr["target"]) ? "_self" : $arr["target"];
 
 		$this->data[$row][] = array (
+			"id" => $arr["id"],
 			"start" => $start,
 			"length" => $length,
 			"title" => $title,
@@ -172,11 +173,11 @@ class gantt_chart extends class_base
 		$style = $this->parse ();
 
 		### compose chart table
+		$this->sort_data ();
 		$rows = "";
 		$collapsed = false;
 		$this->pending_bars = array ();
 		$this->read_template ("chart_" . $this->style . ".tpl");
-		$this->sort_data ();
 
 		foreach ($this->rows as $row)
 		{
@@ -545,48 +546,93 @@ class gantt_chart extends class_base
 	{
 		foreach ($this->data as $row => $data)
 		{
+			### sort bars
 			usort ($this->data[$row], array ($this, "bar_start_sort"));
 
-			$tmp = $this->data[$row];
-			$key = 0;
+			### filter bars with same start time
+			$same_start_key = false;
 
 			while (isset($this->data[$row][$key]))
 			{
-				$key2 = $key + 1;
-				$overlap_end = 0;
-
-				while ( isset($this->data[$row][$key2]) and ($this->data[$row][$key2]["start"] < ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"])) )
+				if ($this->data[$row][$key]["start"] == $this->data[$row][$key + 1]["start"])
 				{
-					$overlap_end = max ($overlap_end, ($this->data[$row][$key2]["start"] + $this->data[$row][$key2]["length"]));
-
-					if ($this->data[$row][$key2 + 1]["start"] > $overlap_end)
-					{
-						break;
-					}
-					else
-					{
-						$key2++;
-					}
-				}
-
-				if ($overlap_end)
-				{
-					if ($overlap_end < ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"]))
-					{
-						$remainder = $this->data[$row][$key];
-						$remainder["start"] = $overlap_end;
-						$remainder["length"] = ($this->data[$row][$key]["start"] + $this->data[$row][$key]["length"]) - $overlap_end;
-						array_splice ($this->data[$row], $key2, 1, array ($this->data[$row][$key2], $remainder));
-					}
-
-					if ($this->data[$row][$key]["start"] == $this->data[$row][$key + 1]["start"])
+					if ($this->data[$row][$key]["length"] == $this->data[$row][$key + 1]["length"])
 					{
 						unset ($this->data[$row][$key]);
 					}
 					else
-					{
-						$this->data[$row][$key]["length"] = $this->data[$row][$key + 1]["start"] - $this->data[$row][$key]["start"];
+					{ ### show shorter bars upon longer
+						$same_start_key = $key + 1;
+						$last_end = $this->data[$row][$key]["start"] + $this->data[$row][$key]["length"];
+
+						while ($this->data[$row][$key]["start"] == $this->data[$row][$same_start_key]["start"])
+						{
+							$start = $this->data[$row][$same_start_key]["start"];
+							$length = $this->data[$row][$same_start_key]["length"];
+							$this->data[$row][$same_start_key]["length"] = $start + $length - $last_end;
+							$this->data[$row][$same_start_key]["start"] = $last_end;
+							$this->data[$row][$same_start_key]["nostartmark"] = true;
+							$last_end = $start + $length;
+							$same_start_key++;
+						}
 					}
+				}
+
+				$key++;
+			}
+
+			if ($same_start_key !== false)
+			{
+				### sort bars again
+				usort ($this->data[$row], array ($this, "bar_start_sort"));
+			}
+
+			### filter overlaps
+			$key = 0;
+
+			while (isset($this->data[$row][$key]))
+			{
+// /* dbg */ if ($this->data[$row][$key]["id"] == 8580) { $this->mrpdbg = 1;}
+
+				$key2 = $key + 1;
+				$overlap_end = NULL;
+				$overlap_start = NULL;
+				$current_bar_end = $this->data[$row][$key]["start"] + $this->data[$row][$key]["length"];
+
+				### find out whether successive bars exist that continuously overlap current. find farthest overlaping bar end.
+				while ( isset($this->data[$row][$key2]) and ($this->data[$row][$key2]["start"] < $current_bar_end) and (empty ($overlap_end) or ($this->data[$row][$key2]["start"] <= $overlap_end)) )
+				{ ### next bar exists, next bar starts before current ends, overlap_end is set and next bar starts before it.
+					$overlap_start = empty ($overlap_start) ? $this->data[$row][$key2]["start"] : $overlap_start;
+					$overlap_end = max ($overlap_end, ($this->data[$row][$key2]["start"] + $this->data[$row][$key2]["length"]));
+					$key2++;
+				}
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "overlap_end:" . date (MRP_DATE_FORMAT, $overlap_end) . "<br>";
+// /* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
+// /* dbg */ }
+
+				if (!empty ($overlap_end))
+				{
+					if ($overlap_end < $current_bar_end)
+					{
+						### insert remaining end of current bar after last continuously overlapping bar. see if remainder is overlapped by successive when array pointer gets there.
+						$key2--;
+						$remainder = $this->data[$row][$key];
+						$remainder["start"] = $overlap_end;
+						$remainder["length"] = $current_bar_end - $overlap_end;
+						$remainder["nostartmark"] = true;
+						array_splice ($this->data[$row], $key2, 1, array ($this->data[$row][$key2], $remainder));
+					}
+
+					### trim current bar to overlap start.
+					$this->data[$row][$key]["length"] = $overlap_start - $this->data[$row][$key]["start"];
+
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "trimmed bar:";
+// /* dbg */ arr ($this->data[$row][$key]);
+// /* dbg */ echo "remainder start:" . date (MRP_DATE_FORMAT, $remainder["start"]) . "<br>";
+// /* dbg */ }
 				}
 
 				$key++;
@@ -598,27 +644,18 @@ class gantt_chart extends class_base
 	{
 		if ($a["start"] == $b["start"])
 		{
-			return 0;
+			### sort by length
+			if ($a["length"] == $b["length"])
+			{
+				return 0;
+			}
+			else
+			{
+				return ($a["length"] > $b["length"] ? 1 : -1);
+			}
 		}
 
 		return ($a["start"] > $b["start"] ? 1 : -1);
-	}
-
-	function sort_data_old()
-	{
-		usort($this->data, create_function('$a,$b','if ($a["start"] == $b["start"]) { return 0; } return ($a["start"] > $b["start"] ? 1 : -1);'));
-		$tmpr = $this->rows;
-		$tmpd = array();
-		$this->rows = array();
-		foreach($this->data as $bar)
-		{
-			if (!isset($this->rows[$bar["row"]]))
-			{
-				$this->rows[$bar["row"]] = $tmpr[$bar["row"]];
-			}
-			$tmpd[$bar["row"]][$bar["start"]] = $bar;
-		}
-		$this->data = $tmpd;
 	}
 }
 
