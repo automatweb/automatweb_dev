@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.381 2005/04/07 12:18:40 duke Exp $
+// $Id: class_base.aw,v 2.382 2005/04/17 18:03:02 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -345,8 +345,6 @@ class class_base extends aw_template
 
 		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group($filter);
-
-
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
 		{
 			$o_t = get_instance("translate/object_translation");
@@ -4324,9 +4322,11 @@ class class_base extends aw_template
 				));
 			}
 
-			$prps = $cfgform_obj->meta("cfg_proplist");
+			$ci = $cfgform_obj->instance();
+			$prps = $ci->get_cfg_proplist($cfgform_obj->id());
+
 			$rv = $prps;
-			$grps = $cfgform_obj->meta("cfg_groups");
+			$grps = $ci->get_cfg_groups($cfgform_obj->id());
 
 			foreach($cfg_flags as $key => $val)
 			{

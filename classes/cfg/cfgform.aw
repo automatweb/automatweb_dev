@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.62 2005/04/13 15:50:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.63 2005/04/17 18:03:02 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -73,6 +73,16 @@
 	@property sysdefault type=table group=system no_caption=1
 	@caption Süsteemi seaded
 
+	@property trans_tbl_capt type=text subtitle=1 group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 
+	@caption Omadused
+
+	@property trans_tbl type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
+
+	@property trans_tbl_grp_capt type=text group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 subtitle=1
+	@caption Grupid
+
+	@property trans_tbl_grps type=table group=lang_1,lang_2,lang_3,lang_4,lang_5,lang_6,lang_7,lang_8,lang_9,lang_10,lang_11,lang_12 no_caption=1
+	
 	@groupinfo groupdata caption=Grupid 
 	@groupinfo layout caption=Layout submit=no
 	@groupinfo avail caption="Kõik omadused" submit=no
@@ -84,6 +94,20 @@
 	@groupinfo settings caption="Seaded"
 	@groupinfo defaults caption="Omaduste väärtused" parent=settings
 	@groupinfo system caption="Vormi seaded" parent=settings
+	@groupinfo translate caption="T&otilde;lgi" 
+		@groupinfo lang_1 caption="lang" parent=translate
+		@groupinfo lang_2 caption="lang" parent=translate
+		@groupinfo lang_3 caption="lang" parent=translate
+		@groupinfo lang_4 caption="lang" parent=translate
+		@groupinfo lang_5 caption="lang" parent=translate
+		@groupinfo lang_6 caption="lang" parent=translate
+		@groupinfo lang_7 caption="lang" parent=translate
+		@groupinfo lang_8 caption="lang" parent=translate
+		@groupinfo lang_9 caption="lang" parent=translate
+		@groupinfo lang_10 caption="lang" parent=translate
+		@groupinfo lang_11 caption="lang" parent=translate
+		@groupinfo lang_12 caption="lang" parent=translate
+
 
 	@classinfo relationmgr=yes syslog_type=ST_CFGFORM
 
@@ -176,8 +200,94 @@ class cfgform extends class_base
 			case "default_table":
 				$this->gen_default_table($arr);
 				break;
+
+			case "trans_tbl":
+				$this->_trans_tbl($arr);
+				break;
+
+			case "trans_tbl_grps":
+				$this->_trans_tbl_grps($arr);
+				break;
 		};
 		return $retval;
+	}
+
+	function _init_trans_tbl(&$t, $o, $req, $str = "Omadus")
+	{
+		$l = get_instance("languages");
+		$ld = $l->fetch($o->lang_id(), false);
+
+		$t->define_field(array(
+			"name" => "property",
+			"caption" => $str,
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "orig_str",
+			"caption" => $ld["name"],
+			"align" => "center"
+		));
+
+		$lid = substr($req["group"], 5);
+		$tmp = $l->get_list(array("ignore_status" => 1));
+		unset($tmp[$o->lang_id()]);
+		$this->lang_inf = array(
+			"ids" => array_keys($tmp),
+			"names" => array_values($tmp)
+		);
+		$lid = $this->lang_inf["ids"][max((int)$lid-1,0)];
+		$ld = $l->fetch($lid, false);
+		$t->define_field(array(
+			"name" => "trans_str",
+			"caption" => $ld["name"],
+			"align" => "center"
+		));
+		return $ld;
+	}
+
+	function _trans_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ld = $this->_init_trans_tbl($t, $arr["obj_inst"], $arr["request"]);
+		$lid = $ld["acceptlang"];
+
+		$trans = $arr["obj_inst"]->meta("translations");
+
+		$ps = $arr["obj_inst"]->meta("cfg_proplist");
+		foreach($ps as $pn => $pd)
+		{
+			$t->define_data(array(
+				"property" => $pn,
+				"orig_str" => $pd["caption"],
+				"trans_str" => html::textbox(array(
+					"name" => "dat[".$lid."][$pn]",
+					"value" => $trans[$lid][$pn]
+				))
+			));
+		}
+	}
+
+	function _trans_tbl_grps($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$ld = $this->_init_trans_tbl($t, $arr["obj_inst"], $arr["request"], "Grupp");
+		$lid = $ld["acceptlang"];
+
+		$trans = $arr["obj_inst"]->meta("grp_translations");
+
+		$ps = $arr["obj_inst"]->meta("cfg_groups");
+		foreach($ps as $pn => $pd)
+		{
+			$t->define_data(array(
+				"property" => $pn,
+				"orig_str" => $pd["caption"],
+				"trans_str" => html::textbox(array(
+					"name" => "dat[".$lid."][$pn]",
+					"value" => $trans[$lid][$pn]
+				))
+			));
+		}
 	}
 
 	function gen_default_table($arr)
@@ -518,6 +628,24 @@ class cfgform extends class_base
 				$this->_init_cfgform_data($arr["obj_inst"]);
 				$this->cfg_proplist = $this->prplist;
 				break;
+
+			case "trans_tbl":
+				$trans = safe_array($arr["obj_inst"]->meta("translations"));
+				foreach(safe_array($arr["request"]["dat"]) as $lid => $ldat)
+				{
+					$trans[$lid] = $ldat;
+				}
+				$arr["obj_inst"]->set_meta("translations", $trans);
+				break;
+
+			case "trans_tbl_grps":
+				$trans = safe_array($arr["obj_inst"]->meta("grp_translations"));
+				foreach(safe_array($arr["request"]["dat"]) as $lid => $ldat)
+				{
+					$trans[$lid] = $ldat;
+				}
+				$arr["obj_inst"]->set_meta("grp_translations", $trans);
+				break;
 		}
 		return $retval;
 	}
@@ -580,6 +708,32 @@ class cfgform extends class_base
 		{
 			$obj_inst->set_meta("cfg_groups",$this->cfg_groups);
 		};
+		return true;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if (!isset($this->lang_inf))
+		{
+			$l = get_instance("languages");
+			$tmp = $l->get_list(array("ignore_status" => 1));
+			unset($tmp[$arr["obj_inst"]->lang_id()]);
+			$this->lang_inf = array(
+				"ids" => array_keys($tmp),
+				"names" => array_values($tmp)
+			);
+		}
+
+		if (substr($arr["id"], 0, 5) == "lang_")
+		{
+			$num = substr($arr["id"], 5);
+
+			$arr["caption"] = $this->lang_inf["names"][$num-1];
+			if ($num > count($this->lang_inf["ids"])) 
+			{
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -1392,6 +1546,46 @@ class cfgform extends class_base
 
 		uasort($pl,array($this,"__sort_props_by_ord"));
 		$o->set_meta("cfg_proplist", $pl);
+	}
+
+	function get_cfg_proplist($id)
+	{
+		$o = obj($id);
+		$ret = $o->meta("cfg_proplist");
+		$lc = aw_ini_get("user_interface.default_language");
+		$trans = $o->meta("translations");
+		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
+		{
+			$tc = $trans[$lc];
+			foreach($ret as $pn => $pd)
+			{
+				if ($tc[$pn] != "")
+				{
+					$ret[$pn]["caption"] = $tc[$pn];
+				}
+			}
+		}
+		return $ret;
+	}
+
+	function get_cfg_groups($id)
+	{
+		$o = obj($id);
+		$ret = $o->meta("cfg_groups");
+		$lc = aw_ini_get("user_interface.default_language");
+		$trans = $o->meta("grp_translations");
+		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
+		{
+			$tc = $trans[$lc];
+			foreach($ret as $pn => $pd)
+			{
+				if ($tc[$pn] != "")
+				{
+					$ret[$pn]["caption"] = $tc[$pn];
+				}
+			}
+		}
+		return $ret;
 	}
 };
 ?>
