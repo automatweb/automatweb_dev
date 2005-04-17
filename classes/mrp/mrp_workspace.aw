@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.97 2005/04/15 15:03:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.98 2005/04/17 20:03:57 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1021,15 +1021,15 @@ class mrp_workspace extends class_base
 
 		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
 		{
-			$parent = obj ($arr["request"]["mrp_tree_active_item"]);
+			$active_item = obj ($arr["request"]["mrp_tree_active_item"]);
 
-			if ($parent->class_id () != CL_MENU)
+			if ($active_item->class_id () != CL_MENU)
 			{
-				$parent = $parent->parent ();
+				$parent = $active_item->parent ();
 			}
 			else
 			{
-				$parent = $parent->id ();
+				$parent = $active_item->id ();
 			}
 		}
 		else
@@ -1111,15 +1111,15 @@ class mrp_workspace extends class_base
 
 		if (is_oid ($arr["request"]["mrp_tree_active_item"]))
 		{
-			$parent = obj ($arr["request"]["mrp_tree_active_item"]);
+			$active_item = obj ($arr["request"]["mrp_tree_active_item"]);
 
-			if ($parent->class_id () != CL_MENU)
+			if ($active_item->class_id () != CL_MENU)
 			{
-				$parent = $parent->parent ();
+				$parent = $active_item->parent ();
 			}
 			else
 			{
-				$parent = $parent->id ();
+				$parent = $active_item->id ();
 			}
 		}
 		else
@@ -1130,7 +1130,7 @@ class mrp_workspace extends class_base
 		$add_resource_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			"mrp_workspace" => $this_object->id (),
-			"parent" => $parent,
+			"mrp_parent" => $parent,
 		), "mrp_resource");
 		$add_category_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
@@ -2102,6 +2102,7 @@ class mrp_workspace extends class_base
 			$colour = in_array ($job->id (), $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
+				"id" => $job->id (),
 				"row" => $resource->id (),
 				"start" => $start,
 				"colour" => $colour,

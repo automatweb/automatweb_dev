@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.49 2005/04/15 15:03:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.50 2005/04/17 20:03:56 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -180,6 +180,7 @@ class mrp_resource extends class_base
 			if (is_oid ($arr["request"]["mrp_workspace"]))
 			{
 				$this->workspace = obj ($arr["request"]["mrp_workspace"]);
+				$this->resource_parent = $arr["request"]["mrp_parent"];
 			}
 			else
 			{
@@ -296,6 +297,11 @@ class mrp_resource extends class_base
 		if ($this->workspace)
 		{
 			$arr["mrp_workspace"] = $this->workspace->id ();
+		}
+
+		if ($this->resource_parent)
+		{
+			$arr["mrp_parent"] = $this->resource_parent;
 		}
 	}
 
@@ -432,12 +438,12 @@ class mrp_resource extends class_base
 		if ($arr["new"] and is_oid ($arr["request"]["mrp_workspace"]))
 		{
 			$workspace = obj ($arr["request"]["mrp_workspace"]);
-			$resources_folder = $workspace->prop ("resources_folder");
+			$parent = is_oid ($arr["request"]["mrp_parent"]) ? $arr["request"]["mrp_parent"] : $workspace->prop ("resources_folder");
 			$this_object->connect (array (
 				"to" => $workspace,
 				"reltype" => "RELTYPE_MRP_OWNER",
 			));
-			$this_object->set_parent ($resources_folder);
+			$this_object->set_parent ($parent);
 			$this_object->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
 			$this_object->save ();
 		}
@@ -665,10 +671,10 @@ class mrp_resource extends class_base
 			}
 		}
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "unavailable_dates:";
 // /* dbg */ arr ($unavailable_dates);
-/* dbg */ }
+// /* dbg */ }
 
 		ksort ($unavailable_dates);
 		return $unavailable_dates;
@@ -676,9 +682,9 @@ class mrp_resource extends class_base
 
 	function get_unavailable_periods ($resource, $start, $end)
 	{
-/* dbg */ if ($resource->id () == 6670  ) {
-/* dbg */ $this->mrpdbg=1;
-/* dbg */ }
+// /* dbg */ if ($resource->id () == 6670  ) {
+// /* dbg */ $this->mrpdbg=1;
+// /* dbg */ }
 
 		$unavailable_periods = array ();
 		$unavailable_periods = $this->_get_unavailable_dates ($resource->prop ("unavailable_dates"), $start, $end);
@@ -687,9 +693,9 @@ class mrp_resource extends class_base
 
 	function get_recurrent_unavailable_periods ($resource, $start, $end)
 	{
-/* dbg */ if ($resource->id () == 6670  ) {
-/* dbg */ $this->mrpdbg=1;
-/* dbg */ }
+// /* dbg */ if ($resource->id () == 6670  ) {
+// /* dbg */ $this->mrpdbg=1;
+// /* dbg */ }
 
 		### unavailable recurrences
 		$recurrent_unavailable_periods = array ();
@@ -780,10 +786,10 @@ class mrp_resource extends class_base
 			}
 		}
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "recurrent_available_periods:";
 // /* dbg */ arr ($recurrent_available_periods);
-/* dbg */ }
+// /* dbg */ }
 
 		### transmute recurrently available periods to unavailables
 		### throw away erroneous definitions
@@ -795,11 +801,11 @@ class mrp_resource extends class_base
 			}
 		}
 
-/* dbg */ if ($this->mrpdbg){
+// /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "recurrent_available_periods after errorcheck:";
 // /* dbg */ arr ($recurrent_available_periods);
 // /* dbg */ exit;
-/* dbg */ }
+// /* dbg */ }
 
 		### find combinations of available periods
 		$combination_breakpoints = array ($start, $end);
