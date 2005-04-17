@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri,  8 Apr 2005 21:44:37 +0300\n"
+"POT-Creation-Date: Sun, 17 Apr 2005 21:13:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -73,27 +73,27 @@ msgstr ""
 msgid "Grupi Üldine (general) pealkiri"
 msgstr "General"
 
-#: classes/class_base.aw:591
+#: classes/class_base.aw:589
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:1198
+#: classes/class_base.aw:1196
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1388 classes/class_base.aw:4421
+#: classes/class_base.aw:1386 classes/class_base.aw:4421
 #: classes/class_base.aw:4429
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3042
+#: classes/class_base.aw:3040
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3051
+#: classes/class_base.aw:3049
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4322
+#: classes/class_base.aw:4320
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"

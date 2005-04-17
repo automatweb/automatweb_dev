@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 09:39:10 +0300\n"
+"POT-Creation-Date: Sun, 17 Apr 2005 21:12:54 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -309,23 +309,42 @@ msgstr "Add"
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_offer.aw:429
+#: classes/crm/crm_offer.aw:434
+msgid "T&uuml;&uuml;pkomponendid"
+msgstr "Typical components"
+
+#: classes/crm/crm_offer.aw:456
+msgid "Salvesta"
+msgstr "Save"
+
+#: classes/crm/crm_offer.aw:463
 msgid "Kustuta valitud osad"
 msgstr "Delete selected parts"
 
-#: classes/crm/crm_offer.aw:430
+#: classes/crm/crm_offer.aw:464
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr "Are you sure you want to delete the selected parts?"
 
-#: classes/crm/crm_offer.aw:455
+#: classes/crm/crm_offer.aw:522
+msgid "J&auml;rjekord"
+msgstr "Order"
+
+#: classes/crm/crm_offer.aw:530
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_offer.aw:461
+#: classes/crm/crm_offer.aw:536
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/crm/crm_offer.aw:467
+#: classes/crm/crm_offer.aw:542
 msgid "Muuda"
 msgstr "Change"
 
+#: classes/crm/crm_offer.aw:582
+msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
+msgstr "Remove from typical component list"
+
+#: classes/crm/crm_offer.aw:593
+msgid "Tee t&uuml;&uuml;pkomponendiks"
+msgstr "Mark as typical"

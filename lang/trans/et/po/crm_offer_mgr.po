@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 09:39:10 +0300\n"
+"POT-Creation-Date: Sun, 17 Apr 2005 21:12:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -57,50 +57,54 @@ msgstr ""
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:90
+# classes/crm/crm_offer_mgr.aw:rel_RELTYPE_TYPICAL_COMPONENT
+msgid "Seose t&uuml;piline komponent (RELTYPE_TYPICAL_COMPONENT) tekst"
+msgstr ""
+
+#: classes/crm/crm_offer_mgr.aw:93
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:95
+#: classes/crm/crm_offer_mgr.aw:98
 msgid "Kellele"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:100
+#: classes/crm/crm_offer_mgr.aw:103
 msgid "Millal"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:109
+#: classes/crm/crm_offer_mgr.aw:112
 msgid "T&uuml;&uuml;ppakkumine?"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:154
+#: classes/crm/crm_offer_mgr.aw:157
 msgid "Eemalda t&uuml;&uuml;ppakkumistest"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:162
+#: classes/crm/crm_offer_mgr.aw:165
 msgid "Tee t&uuml;&uuml;ppakkumiseks"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:174
+#: classes/crm/crm_offer_mgr.aw:177
 msgid "K&otilde;ik pakkumised"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:192
+#: classes/crm/crm_offer_mgr.aw:195
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:200
+#: classes/crm/crm_offer_mgr.aw:203
 msgid "Lisa pakkumine"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:231
+#: classes/crm/crm_offer_mgr.aw:234
 msgid "T&uuml;ppakkumised"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:240
+#: classes/crm/crm_offer_mgr.aw:243
 msgid "Kustuta valitud tellimused"
 msgstr ""
 
-#: classes/crm/crm_offer_mgr.aw:241
+#: classes/crm/crm_offer_mgr.aw:244
 msgid "Oled kindel et soovid valitud tellimused kustutada?"
 msgstr ""

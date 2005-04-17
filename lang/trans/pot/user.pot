@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:16 +0300\n"
+"POT-Creation-Date: Sun, 17 Apr 2005 21:12:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -574,7 +574,7 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:692 classes/core/users/user.aw:1183
+#: classes/core/users/user.aw:692 classes/core/users/user.aw:1168
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
@@ -586,59 +586,59 @@ msgstr ""
 msgid "Muuda objekti %s  &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/user.aw:1160
+#: classes/core/users/user.aw:1145
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1164
+#: classes/core/users/user.aw:1149
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1173
+#: classes/core/users/user.aw:1158
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1178
+#: classes/core/users/user.aw:1163
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1188
+#: classes/core/users/user.aw:1173
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1195
+#: classes/core/users/user.aw:1180
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1201
+#: classes/core/users/user.aw:1186
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1206
+#: classes/core/users/user.aw:1191
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1568
+#: classes/core/users/user.aw:1553
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1640
+#: classes/core/users/user.aw:1625
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1645
+#: classes/core/users/user.aw:1630
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1650
+#: classes/core/users/user.aw:1635
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1660
+#: classes/core/users/user.aw:1645
 msgid "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1696
+#: classes/core/users/user.aw:1681
 msgid "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"
 msgstr ""
 

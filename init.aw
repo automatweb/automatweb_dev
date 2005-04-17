@@ -428,6 +428,7 @@ function classload($args)
 				if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
 					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
+//echo "classload: tf = $trans_fn <br>";
 					if (file_exists($trans_fn))
 					{
 						require_once($trans_fn);
@@ -512,6 +513,7 @@ function get_instance($class,$args = array(), $errors = true)
 		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
 			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
+//echo "get_instance: tf = $trans_fn <br>";
 			if (file_exists($trans_fn))
 			{
 				require_once($trans_fn);

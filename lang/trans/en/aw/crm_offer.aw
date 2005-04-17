@@ -36,9 +36,14 @@ $GLOBALS["TRANS"]["Muutuse aeg"] = "Change time";
 $GLOBALS["TRANS"]["Muutja"] = "Modified by";
 $GLOBALS["TRANS"]["Lisa"] = "Add";
 $GLOBALS["TRANS"]["Lisa %s"] = "Add %s";
+$GLOBALS["TRANS"]["T&uuml;&uuml;pkomponendid"] = "Typical components";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Kustuta valitud osad"] = "Delete selected parts";
 $GLOBALS["TRANS"]["Oled kindel et soovid valitud osad kustutada?"] = "Are you sure you want to delete the selected parts?";
+$GLOBALS["TRANS"]["J&auml;rjekord"] = "Order";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["T&uuml;&uuml;p"] = "Type";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
+$GLOBALS["TRANS"]["Eemalda t&uuml;&uuml;pkomonentide nimekirjast"] = "Remove from typical component list";
+$GLOBALS["TRANS"]["Tee t&uuml;&uuml;pkomponendiks"] = "Mark as typical";
 ?>

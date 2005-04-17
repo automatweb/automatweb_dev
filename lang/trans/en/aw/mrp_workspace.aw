@@ -89,6 +89,9 @@ $GLOBALS["TRANS"]["Seose Ressursihalduse seaded (RELTYPE_MRP_CONFIGURATION) teks
 $GLOBALS["TRANS"]["Seose Keskkonna seaded (RELTYPE_MRP_WORKSPACE_CFGMGR) tekst"] = "Workspace settings";
 $GLOBALS["TRANS"]["Seose Keskkonna omanik (Organisatsioon) (RELTYPE_MRP_OWNER) tekst"] = "Workspace owner";
 $GLOBALS["TRANS"]["Seose Projekti headeri kontroller (RELTYPE_MRP_HEADER_CONTROLLER) tekst"] = "Project header controller";
+$GLOBALS["TRANS"]["Vaba"] = "Available";
+$GLOBALS["TRANS"]["Kasutusel"] = "In use";
+$GLOBALS["TRANS"]["Suletud"] = "Closed";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Planeeritud"] = "Planned";
 $GLOBALS["TRANS"]["Töös"] = "In progress";
