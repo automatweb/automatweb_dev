@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.55 2005/04/08 09:01:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.56 2005/04/18 12:24:51 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -594,7 +594,9 @@ class mrp_job extends class_base
 
 			### all went well, save and say OK
 			$this_object->save ();
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			return $return_url;
 		}
@@ -718,7 +720,9 @@ class mrp_job extends class_base
 			{
 				### update progress
 				$project->set_prop ("progress", time ());
+				aw_disable_acl();
 				$project->save ();
+				aw_restore_acl();
 			}
 
 			$errors = urlencode(serialize($errors));
@@ -864,7 +868,9 @@ class mrp_job extends class_base
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance (CL_MRP_WORKSPACE);
@@ -938,7 +944,9 @@ class mrp_job extends class_base
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -1008,7 +1016,9 @@ class mrp_job extends class_base
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
 			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -1068,7 +1078,9 @@ class mrp_job extends class_base
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);

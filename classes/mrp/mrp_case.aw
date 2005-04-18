@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.64 2005/04/08 08:10:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.65 2005/04/18 12:24:51 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1847,7 +1847,9 @@ class mrp_case extends class_base
 			### start project
 			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
 			$project->set_prop ("progress", time ());
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log change
 			$ws = get_instance (CL_MRP_WORKSPACE);
@@ -1927,7 +1929,9 @@ class mrp_case extends class_base
 		{
 			### finish project
 			$project->set_prop ("state", MRP_STATUS_DONE);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -1986,7 +1990,9 @@ class mrp_case extends class_base
 		{
 			### abort project
 			$project->set_prop ("state", MRP_STATUS_ABORTED);
+			aw_disable_acl();
 			$project->save ();
+			aw_restore_acl();
 
 			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
@@ -2054,7 +2060,9 @@ class mrp_case extends class_base
 		{
 			### archive project
 			$project->set_prop("state", MRP_STATUS_ARCHIVED);
+			aw_disable_acl();
 			$project->save();
+			aw_restore_acl();
 
 			### log event
 			$ws = get_instance(CL_MRP_WORKSPACE);
@@ -2115,7 +2123,9 @@ class mrp_case extends class_base
 		{
 			### plan project
 			$project->set_prop("state", MRP_STATUS_PLANNED);
+			aw_disable_acl();
 			$project->save();
+			aw_restore_acl();
 
 			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
@@ -2188,7 +2198,9 @@ class mrp_case extends class_base
 		{
 			### set project on hold
 			$project->set_prop("state", MRP_STATUS_ONHOLD);
+			aw_disable_acl();
 			$project->save();
+			aw_restore_acl();
 
 			### post rescheduling msg
 			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");

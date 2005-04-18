@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.102 2005/04/18 11:13:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.103 2005/04/18 12:24:51 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3559,7 +3559,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3587,7 +3587,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3615,7 +3615,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3643,7 +3643,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3671,7 +3671,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3699,7 +3699,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}
@@ -3727,7 +3727,7 @@ class mrp_workspace extends class_base
 
 		return $this->mk_my_orb("change", array(
 			"id" => $tmp["id"],
-			"group" => "grp_printer",
+			"group" => "grp_printer_current",
 			"pj_job" => $tmp["pj_job"]
 		));
 	}

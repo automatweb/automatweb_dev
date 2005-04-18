@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.51 2005/04/18 10:43:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.52 2005/04/18 12:24:51 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -1024,7 +1024,9 @@ class mrp_resource extends class_base
 				}
 
 				$resource->set_prop ("thread_data", $thread_data);
+				aw_disable_acl();
 				$resource->save ();
+				aw_restore_acl();
 				return $started;
 
 			default:
@@ -1062,7 +1064,9 @@ class mrp_resource extends class_base
 
 		$resource->set_prop ("thread_data", $thread_data);
 		$resource->set_prop ("state", MRP_STATUS_RESOURCE_AVAILABLE);
+		aw_disable_acl();
 		$resource->save ();
+		aw_restore_acl();
 		return true;
 	}
 
