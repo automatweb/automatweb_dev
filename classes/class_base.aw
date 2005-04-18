@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.382 2005/04/17 18:03:02 kristo Exp $
+// $Id: class_base.aw,v 2.383 2005/04/18 15:19:39 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -658,11 +658,15 @@ class class_base extends aw_template
 			"section" => aw_global_get("section"),
 			"period" => isset($this->request["period"]) ? $this->request["period"] : "",
 			"alias_to" => isset($this->request["alias_to"]) ? $this->request["alias_to"] : "",
-			"reltype" => $this->reltype,
 			"cfgform" => empty($this->auto_cfgform) && isset($this->cfgform_id) && is_numeric($this->cfgform_id) ? $this->cfgform_id : "",
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
+		
+		if(!empty($this->reltype))
+		{
+			$argblock["reltype"] = $this->reltype;
+		}
 
 		if (is_oid($this->request["object_type"]) && $this->can("view",$this->request["object_type"]))
 		{
@@ -1911,8 +1915,40 @@ class class_base extends aw_template
 			);
 			$val["value"] = "<iframe width='100%' name='aliasmgr' height='800' frameborder='0' src='$link'></iframe>";
 			$val["no_caption"] = 1;
-		};
+		}
+		elseif ($val["type"] == "form")
+		{
+			$filter = array("form" => $val["sform"]);
+			$cfgu = get_instance("cfg/cfgutils");
+			$_all_props = $cfgu->load_properties(array(
+				"file" => basename($val["sclass"]),
+				"filter" => $filter,
+			));
+			// and how I get the class_instance?
+			$clx_name = $val["sclass"];
+			//$clx_name = "crm/" . $val["sclass"];
+			$clx_inst = get_instance($clx_name);
+			$clx_inst->orb_class = $clx_name;
+			$clx_inst->init_class_base();
+			$forminfo = $cfgu->get_forminfo();
+			$form_onload = $forminfo[$val["sform"]]["onload"];
+			if (isset($form_onload) && is_callable(array($clx_inst,$form_onload)))
+			{
+				$clx_inst->$form_onload(array());
+			};
+			$clx_inst->request = $_REQUEST[$val["name"]];
 
+			$xprops = $clx_inst->parse_properties(array(
+				"properties" => $_all_props,
+				"name_prefix" => $val["name"],
+			));
+			$val = array();
+			foreach($xprops as $rkey => $rprop)
+			{
+				$rprop["emb"] = 1;
+				$val[$rkey] = $rprop;
+			}
+		}
 	}
 
 	////
@@ -2440,7 +2476,17 @@ class class_base extends aw_template
 							foreach($res as $rkey => $rval)
 							{
 								$this->convert_element(&$rval);
-								$resprops[$rkey] = $rval;
+								if(is_array(reset($rval)))
+								{
+									foreach($rval as $rkey2 => $rval2)
+									{
+										$resprops[$rkey2] = $rval2;
+									}
+								}
+								else
+								{
+									$resprops[$rkey] = $rval;
+								}
 							};
 						};
 					};
@@ -4419,9 +4465,12 @@ class class_base extends aw_template
 		{
 			$this->groupinfo["relationmgr"] = array(
 				"caption" => t("Seostehaldur"),
-				"no_form" => 1,
 				"submit" => "no",
 			);
+			if($_REQUEST["srch"] == 1)
+			{
+				$this->groupinfo["relationmgr"]["submit_method"] = "get";
+			}
 
 			$defaults["relationmgr"] = array(
 				"name" => "relationmgr",
