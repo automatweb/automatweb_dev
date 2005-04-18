@@ -57,6 +57,16 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>ladu</caption>
             </WAREHOUSE>
+            <TYPICAL_COMPONENT>
+                  <value>3</value>
+                  <clid>
+                        <num_0>CL_CRM_OFFER_CHAPTER</num_0>
+                        <num_1>CL_CRM_OFFER_GOAL</num_1>
+                        <num_2>CL_CRM_OFFER_PAYMENT_TERMS</num_2>
+                        <num_3>CL_CRM_OFFER_PRODUCTS_LIST</num_3>
+                  </clid>
+                  <caption>t&amp;uuml;piline komponent</caption>
+            </TYPICAL_COMPONENT>
       </reltypes>
       <layout>
             <vbox_others>

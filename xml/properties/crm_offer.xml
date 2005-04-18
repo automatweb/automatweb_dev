@@ -21,17 +21,9 @@
             <name>preformer</name>
             <table>aw_crm_offer</table>
             <group>general</group>
-            <type>hidden</type>
-            <datatype>int</datatype>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PREFORMER</reltype>
             <field>preformer</field>
-      </property>
-      <property>
-            <name>preformer_cap</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>preformer_cap</field>
             <caption>Täitja</caption>
       </property>
       <property>
@@ -81,6 +73,14 @@
             <caption>Hind (ilma KM)</caption>
       </property>
       <property>
+            <name>end</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>end</field>
+            <caption>L&amp;otilde;pp</caption>
+      </property>
+      <property>
             <name>is_done</name>
             <table>objects</table>
             <group>general</group>
@@ -89,14 +89,6 @@
             <method>bitmask</method>
             <ch_value>8</ch_value>
             <caption>Tehtud</caption>
-      </property>
-      <property>
-            <name>end</name>
-            <table>planner</table>
-            <group>general</group>
-            <type>datetime_select</type>
-            <field>end</field>
-            <caption>L&amp;otilde;pp</caption>
       </property>
       <property>
             <name>content_toolbar</name>

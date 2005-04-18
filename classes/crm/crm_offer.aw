@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.31 2005/04/13 12:49:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.32 2005/04/18 08:49:51 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -18,9 +18,7 @@
 	@property start1 type=datetime_select field=start table=planner
 	@caption Algus
 
-	@property preformer type=hidden table=aw_crm_offer datatype=int
-
-	@property preformer_cap type=text store=no
+	@property preformer type=relpicker reltype=RELTYPE_PREFORMER table=aw_crm_offer 
 	@caption Täitja
 
 	@property salesman type=select table=aw_crm_offer datatype=int
@@ -37,14 +35,11 @@
 	@property sum type=textbox table=aw_crm_offer size=7 datatype=int
 	@caption Hind (ilma KM)
 
-	@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
-	@caption Tehtud
-
 	@property end type=datetime_select field=end table=planner
 	@caption L&otilde;pp
 
-	@property preformer type=hidden table=aw_crm_offer datatype=int
-
+	@property is_done type=checkbox table=objects field=flags method=bitmask ch_value=8 // OBJ_IS_DONE
+	@caption Tehtud
 
 	@default method=serialize
 -------- Sisu ----
@@ -115,8 +110,8 @@
 /*
 CREATE TABLE `aw_crm_offer` (
 `aw_oid` INT UNSIGNED NOT NULL ,
-`preformer` INT UNSIGNED NOT NULL ,
 `orderer` INT UNSIGNED NOT NULL ,
+`preformer` INT UNSIGNED NOT NULL,
 `salesman` INT UNSIGNED NOT NULL ,
 `sum` INT NOT NULL ,
 `offer_status` TINYINT NOT NULL ,
@@ -169,11 +164,18 @@ class crm_offer extends class_base
 			break;
 		
 			case "orderer":
+				$my_org = false;
+
 				if(!($arr["new"] == 1))
 				{
-					$my_org = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PREFORMER');
+					$id = $arr["obj_inst"]->prop("preformer");
+					if (is_oid($id) && $this->can("view", $id))
+					{
+						$my_org = obj($id);
+					}
 				}
-				else
+
+				if (!$my_org)
 				{
 					$my_org = $this->u_i->get_current_company();
 					$my_org = &obj($my_org);
@@ -208,26 +210,6 @@ class crm_offer extends class_base
 				$this->do_offer_history($arr);
 			break;
 			
-			case "packages_search_toolbar":
-				$arr["request"]["search_package_name"]?$this->do_packages_search_toolbar($arr):$retval=PROP_IGNORE;
-			break;
-			
-			case "is_done":
-				return PROP_IGNORE;
-			break;
-			
-			case "preformer":
-				$org_id = $this->u_i->get_current_company();
-				$org = &obj($org_id);
-				$prop["value"] = $org->id();
-			break;
-			
-			case "preformer_cap":
-				$org_id = $this->u_i->get_current_company();
-				$org = &obj($org_id);
-				$prop["value"] = $org->name();
-			break;
-					
 			case "salesman":
 				$my_company = $this->u_i->get_current_company();
 				$org = &obj($my_company);
@@ -244,25 +226,6 @@ class crm_offer extends class_base
 					$person_id = $this->u_i->get_current_person();
 					$person_obj = &obj($person_id);
 					$prop["value"] = $person_obj->id();
-				}
-			break;
-			
-			case "package_table":
-				$this->do_package_table($arr);
-			break;
-			
-			case "products_table":
-				$this->do_products_table($arr);
-			break;
-			
-			case "package_toolbar":
-				$this->do_package_toolbar($arr);
-				break;
-			
-			case "packages_search_results":
-				if($arr["request"]["search_package_name"])
-				{
-					$this->do_packages_search_results($arr);
 				}
 				break;
 			
@@ -292,198 +255,12 @@ class crm_offer extends class_base
 			case "offer";
 				$prop["value"] = $this->generate_offer($arr["obj_inst"]);
 				break;
+
+			case "is_done":
+				return PROP_IGNORE;
+
 		};
 		return $retval;
-	}
-	
-	function do_packages_search_toolbar($arr)
-	{
-		$toolbar = &$arr["prop"]["vcl_inst"];
-		
-		$toolbar->add_button(array(
-			'name' => 'save',
-			'img' => 'save.gif',
-			'tooltip' => t('Salvesta valitud paketid pakkumisse'),
-			'action' => 'connect_selected_packages_to_offer',
-		));	
-	}
-	/**
-		@attrib name=connect_selected_packages_to_offer
-	**/
-	function connect_selected_packages_to_offer($arr)
-	{
-		extract($arr);
-		$obj = &obj($id);
-		
-		foreach ($sel as $pack)
-		{
-			$obj->connect(array(
-				"to" => $pack,
-				"reltype" => $group == "products_show" ? "RELTYPE_PRODUCT" : "RELTYPE_PACKAGE",
-			));
-		}
-		
-		return  $this->mk_my_orb("change", array(
-			"id" => $id,
-			"group" => $group,
-			), 
-			CL_CRM_OFFER
-		);
-	}
-	
-	function get_packages_total_sum($obj_id)
-	{
-		$obj = &obj($obj_id);
-		foreach ($obj->connections_from(array("type" => "RELTYPE_PACKAGE")) as $conn)
-		{
-			$packet = $conn->to();
-			$sum = $sum+ $packet->prop("price");
-		}
-		return $sum;
-	}
-
-	function get_products_total_sum($obj_id)
-	{
-		$obj = &obj($obj_id);
-		foreach ($obj->connections_from(array("type" => "RELTYPE_PRODUCT")) as $conn)
-		{
-			$product = $conn->to();
-			$sum = $sum + $product->prop("price");
-		}
-		return $sum;
-	}
-	
-	function total_sum($obj_id)
-	{
-		return $this->get_products_total_sum($obj_id) + $this->get_packages_total_sum($obj_id);
-	}
-	
-	function do_packages_search_results($arr)
-	{
-		$ol  = new object_list(array(
-			"class_id" => $arr['request']['group'] == "products_show" ? CL_SHOP_PRODUCT:CL_SHOP_PACKET,
-			"name" => "%".$arr['request']["search_package_name"]."%",
-		));
-		
-		//If there is no search results
-		if(!($ol->count() > 0))
-		{
-			$this->go_no_search_results();	
-		}	
-		
-		$table = &$arr["prop"]["vcl_inst"];
-		
-		$table->define_field(array(
-			"name" => "package",
-		 	"caption" => t("Pakett"),
-			"sortable" => 1,
-		));
-		 
-		$table->define_field(array(
-			"name" => "price",
-		 	"caption" => t("Hind"),
-		 	"sortable" => 1,
-		 	"align" => "center",
-		 	"width" => 50,
-		));
-		
-		$table->define_chooser(array(
-			"name" => "sel",
-		 	"field" => "package_id",
-		 	"caption" => t("X"),
-		));
-		
-		
-		foreach ($ol->arr() as $obj)
-		{
-			$table->define_data(array(
-				"package" => $obj->name(),
-				"price" => $obj->prop("price"),
-				"package_id" => $obj->id(),
-			));
-		}
-		
-	}
-	
-	function do_packages_search_form($arr)
-	{
-		if($arr["request"]["search"] == 1)
-		{
-			extract($arr);
-			
-			$retval[] = array(
-				"name" => "package_search_label", 
-				"type" => "text", 
-				"subtitle" => 1,
-				"caption" => t("Otsing"),
-			);
-			
-			$retval["search_package_name"] = array(
-				"name" => "search_package_name",
-				"type" => "textbox",
-				"caption" => t("Nimetus"),
-			);
-			
-			$retval[] = array(
-				"name" => "search_offer_submit",
-				"type" => "submit",
-				"caption" => t("Otsi"),
-				"action" => "get_search_packets_url", //"get_search_offers_url",
-			);	
-			return $retval;
-		}
-		if($arr["request"]["search_package_name"])
-		{
-			$retval[] = array(
-				"name" => "package_search_label", 
-				"type" => "text", 
-				"subtitle" => 1,
-				"caption" => t("Otsingutulemused"),
-			);	
-			return $retval;
-		}
-	}
-	
-	/**	
-		@attrib name=get_search_packets_url
-	**/	
-	function get_search_packets_url($arr)
-	{
-		return $this->mk_my_orb("change", array(
-			"id" => $arr["id"],
-			"group" => $arr["group"],
-			"search_package_name" => $arr["search_package_name"], 
-		), $arr["class"]);
-	}
-	
-	function do_package_toolbar($arr)
-	{
-		$tb = &$arr["prop"]["vcl_inst"];
-		
-		$tb->add_button(array(
-			'name' => 'del',
-			'img' => 'delete.gif',
-			'tooltip' => t('Kustuta valitud paketid'),
-			'action' => 'delete_selected_packages',
-			'confirm' => t("Soovid kustutada valitud paketid?")
-		));
-		
-		$tb->add_button(array(
-			'name' => 'search',
-			'img' => 'search.gif',
-			'tooltip' => t('Otsi pakette'),
-			'url' => aw_url_change_var(array("search" => 1)),
-		));
-		
-		if($arr["request"]["search_package_name"])
-		{
-			$tb->add_button(array(
-				'name' => 'save',
-				'img' => 'save.gif',
-				'tooltip' => t('Liida paketid pakkumisse'),
-				'action' => 'connect_selected_packages_to_offer',
-			));
-		}	
 	}
 	
 	function set_property($arr)
@@ -492,9 +269,6 @@ class crm_offer extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
-			case "start1":
-				//$data["value"] = $arr["obj_inst"]->created();
-			break;
 			case "salesman":
 				if($data["value"])
 				{
@@ -503,7 +277,7 @@ class crm_offer extends class_base
 						"reltype" => "RELTYPE_SALESMAN",
 					));
 				}
-			break;
+				break;
 			
 			case "orderer":
 				if($data["value"])
@@ -513,17 +287,7 @@ class crm_offer extends class_base
 						"reltype" => "RELTYPE_ORDERER",
 					));
 				}
-			break;
-					
-			case "preformer":
-				if($data["value"])
-				{
-					$arr["obj_inst"]->connect(array(
-						"to" => $data["value"],
-						"reltype" => "RELTYPE_PREFORMER",
-					));
-				}
-			break;
+				break;
 		};
 		return $retval;
 	}
@@ -542,45 +306,6 @@ class crm_offer extends class_base
 			));
 			return $ol;
 		}
-	}
-	
-	function do_products_table($arr)
-	{
-		$table = &$arr["prop"]["vcl_inst"];
-		$table->define_field(array(
-			"name" => "product",
-			"caption" => t("Toode"),
-			"sortable" => "1",
-		));
-		$table->define_field(array(
-			"name" => "price",
-			"caption" => t("Hind"),
-			"sortable" => "1",
-		));
-		
-		$table->define_chooser(array(
-			"name" => "select",
-			"field" => "product_id",
-			"caption" => t("X"),
-			"align" => "center"
-		));
-		
-		$table->set_sortable(false);
-		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $conn)
-		{
-			$obj = $conn->to();
-			$table->define_data(array(
-				"product" => html::get_change_url($obj->id(), array(), $obj->name()),
-				"price" => $obj->prop("price"),
-				"product_id" => $conn->id(),
-			));
-		}
-
-		$table->define_data(array(
-			"product" => "<b>Kokku:</b>",
-			"price" => $this->get_products_total_sum($arr["obj_inst"]->id()),
-		));
 	}
 	
 	function callback_pre_save($arr)
@@ -625,8 +350,6 @@ class crm_offer extends class_base
 					$arr["obj_inst"]->create_brother($parent);
 				}
 			}
-			//$arr["obj_inst"]->set_prop("start1", $arr["obj_inst"]->created());
-			//$arr["obj_inst"]->save();
 		}
 	}
 	
@@ -679,77 +402,6 @@ class crm_offer extends class_base
 		}
 	}
 	
-	function do_package_table($arr)
-	{
-		$table = &$arr["prop"]["vcl_inst"];
-		$table->define_field(array(
-			"name" => "name",
-			"caption" => t("Pakett"),
-			"sortable" => "1",
-			"width" => "90%"
-		));
-		
-		$table->define_field(array(
-			"name" => "price",
-			"caption" => t("Hind"),
-			"sortable" => "1",
-			"width" => "5%",
-			"align" => "center",
-		));
-		
-		$table->define_chooser(array(
-			"name" => "select",
-			"field" => "product_id",
-			"caption" => t("X"),
-			"align" => "center"
-		));
-		
-		
-		$table->set_sortable(false);
-		
-		foreach ($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PACKAGE")) as $conn)
-		{
-			$obj = $conn->to();
-			$table->define_data(array(
-				"name" => html::get_change_url($obj->id(), array(), $obj->name()),
-				"price" => $obj->prop("price"),
-				"product_id" => $conn->id(),
-			));
-			
-			
-			foreach ($obj->connections_from(array("type" => "RELTYPE_PRODUCT")) as $product_conn)
-			{
-				$product_obj = $product_conn->to();
-				$table->define_data(array(
-					"name" => "- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;". html::get_change_url($product_obj->id(), array(), $product_obj->name()),
-					"price" => $product_obj->prop("price"),
-					//"product_id" => $product_obj->id(),
-				));
-			}
-		}
-		
-		$table->define_data(array(
-			"name" => "<b>".t("Kokku")."</b>",
-			"price" => "<b>".$this->get_packages_total_sum($arr["obj_inst"]->id())."</b>",
-		));
-	}
-	
-	/**
-		@attrib name=delete_selected_packages
-	**/
-	function delete_selected_packages($arr)
-	{
-		if(is_array($arr["select"]))
-		{
-			foreach ($arr["select"] as $item)
-			{
-				$conn = new connection($item);
-				$conn->delete();
-			}
-		}
-		return html::get_change_url($arr["id"], array("group" => $arr["group"]));
-	}
-
 	function _content_toolbar($arr)
 	{
 		$t =& $arr["prop"]["vcl_inst"];
@@ -770,6 +422,40 @@ class crm_offer extends class_base
 			));
 		}
 
+		$omgr = get_instance(CL_CRM_OFFER_MGR);
+		$mgr_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
+		$typicals = $omgr->get_typical_components($mgr_o);
+
+		if (count($typicals))
+		{
+			$t->add_sub_menu(array(
+				"parent" => "new",
+				"name" => "new_tp",
+				"text" => t("T&uuml;&uuml;pkomponendid")
+			));
+
+			foreach($typicals as $t_id => $t_nm)
+			{
+				$t->add_menu_item(array(
+					"parent" => "new_tp",
+					"text" => $t_nm,
+					"link" => $this->mk_my_orb("add_based_on_typical", array(
+						"id" => $arr["obj_inst"]->id(),
+						"parent" => $arr["request"]["tf"],
+						"based_on" => $t_id,
+						"ru" => get_ru()
+					))
+				));
+			}
+		}		
+
+		$t->add_button(array(
+			"name" => "save",
+			"img" => "save.gif",
+			"action" => "save_cl",
+			"tooltip" => t("Salvesta"),
+		));
+
 		$t->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
@@ -781,6 +467,7 @@ class crm_offer extends class_base
 
 	function _content_tree($arr)
 	{
+		classload("core/icons");
 		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
 			"tree_opts" => array(
 				"type" => TREE_DHTML, 
@@ -792,12 +479,52 @@ class crm_offer extends class_base
 				"class_id" => $this->addable,
 				"parent" => $arr["obj_inst"]->id(),
 			)),
-			"var" => "tf"
+			"var" => "tf",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
+	}
+
+	/**
+
+		@attrib name=save_cl
+
+	**/
+	function save_cl($arr)
+	{
+		foreach(safe_array($arr["dat"]) as $oid => $inf)
+		{
+			if (is_oid($oid) && $this->can("view", $oid))
+			{
+				$o = obj($oid);
+				if ($o->ord() != $inf["ord"])
+				{
+					$o->set_ord($inf["ord"]);
+					$o->save();
+				}
+			}
+		}
+		return $arr["post_ru"];
+	}
+
+	function _cb_cl_ord($arr)
+	{
+		return html::textbox(array(
+			"name" => "dat[".$arr["oid"]."][ord]",
+			"value" => $arr["ord"],
+			"size" => 5
 		));
 	}
 
 	function _init_content_list_t(&$t)
 	{	
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center",
+			"callback" => array(&$this, "_cb_cl_ord"),
+			"callb_pass_row" => 1
+		));
+
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -816,6 +543,11 @@ class crm_offer extends class_base
 			"align" => "center"
 		));
 
+		$t->define_field(array(
+			"name" => "typical",
+			"align" => "center"
+		));
+
 		$t->define_chooser(array(
 			"field" => "oid",
 			"name" => "sel"
@@ -827,10 +559,51 @@ class crm_offer extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_content_list_t($t);
 
+		$omgr = get_instance(CL_CRM_OFFER_MGR);
+		$mgr_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
+		$typicals = $omgr->get_typical_components($mgr_o);
+
+		$clss = aw_ini_get("classes");
+
 		$ol = new object_list(array(
 			"parent" => $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
+			"class_id" => $this->addable
 		));
-		$t->data_from_ol($ol);
+		foreach($ol->arr() as $o)
+		{
+			if (isset($typicals[$o->id()]))
+			{
+				$typical = html::href(array(
+					"url" => $this->mk_my_orb("remove_from_typical_component_list", array(
+						"id" => $arr["obj_inst"]->id(), 
+						"co" => $o->id(), 
+						"ru" => get_ru()
+					)),
+					"caption" => t("Eemalda t&uuml;&uuml;pkomonentide nimekirjast")
+				));
+			}
+			else
+			{
+				$typical = html::href(array(
+					"url" => $this->mk_my_orb("add_to_typical_component_list", array(
+						"id" => $arr["obj_inst"]->id(), 
+						"co" => $o->id(), 
+						"ru" => get_ru()
+					)),
+					"caption" => t("Tee t&uuml;&uuml;pkomponendiks")
+				));
+			}
+			$t->define_data(array(
+				"ord" => $o->ord(),
+				"name" => parse_obj_name($o->name()),
+				"class_id" => $clss[$o->class_id()]["name"],
+				"change" => html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($o->name())),
+				"typical" => $typical,
+				"oid" => $o->id()
+			));
+		}
+		$t->set_default_sortby("ord");
+		$t->sort_by();
 	}
 
 	/**
@@ -877,7 +650,8 @@ class crm_offer extends class_base
 		// get offer subobjects
 		$ot = new object_tree(array(
 			"parent" => $o->id(),
-			"class_id" => $this->addable
+			"class_id" => $this->addable,
+			"sort_by" => "objects.jrk"
 		));
 
 		// go over tree and generate html
@@ -918,6 +692,73 @@ class crm_offer extends class_base
 		));
 
 		return $this->parse();
+	}
+
+	/**
+
+		@attrib name=add_to_typical_component_list
+
+		@param id required type=int acl=view
+		@param co required type=int acl=view
+		@param ru required
+
+	**/
+	function add_to_typical_component_list($arr)
+	{
+		// get manager
+		$o = obj($arr["id"]);
+		$mgr = $o->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
+		// connect to obj
+		if (!$mgr->is_connected_to(array("to" => $arr["co"], "type" => "RELTYPE_TYPICAL_COMPONENT")))
+		{
+			$mgr->connect(array(
+				"to" => $arr["co"],
+				"reltype" => "RELTYPE_TYPICAL_COMPONENT"
+			));
+		}
+		return $arr["ru"];
+	}
+
+	/**
+
+		@attrib name=remove_from_typical_component_list
+
+		@param id required type=int acl=view
+		@param co required type=int acl=view
+		@param ru required
+
+	**/
+	function remove_from_typical_component_list($arr)
+	{
+		// get manager
+		$o = obj($arr["id"]);
+		$mgr = $o->get_first_obj_by_reltype("RELTYPE_OFFER_MGR");
+
+		// connect to obj
+		if ($mgr->is_connected_to(array("to" => $arr["co"], "type" => "RELTYPE_TYPICAL_COMPONENT")))
+		{
+			$mgr->disconnect(array(
+				"from" => $arr["co"],
+			));
+		}
+		return $arr["ru"];
+	}
+
+	/**
+
+		@attrib name=add_based_on_typical
+
+		@param id required type=int
+		@param parent optional
+		@param based_on required type=int acl=view
+		@param ru optional
+	**/
+	function add_based_on_typical($arr)
+	{
+		// copy object
+		$mgr = get_instance(CL_CRM_OFFER_MGR);
+		$new = $mgr->_copy_object(obj($arr["based_on"]), $arr["parent"] ? $arr["parent"] : $arr["id"]);
+		return $arr["ru"];
 	}
 }
 ?>

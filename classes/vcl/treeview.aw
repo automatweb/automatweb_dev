@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.43 2005/03/14 17:27:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.44 2005/04/18 08:49:52 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1208,11 +1208,19 @@ class treeview extends class_base
 			{
 				$parent = 0;
 			}
+			if (!$arr["icon"])
+			{
+				$icon = (($o->class_id() == CL_MENU) ? NULL : $ic->get_icon_url($o->class_id(),""));
+			}	
+			else
+			{
+				$icon = $arr["icon"];
+			}
 			$tv->add_item($parent,array(
 				"name" => $oname,
 				"id" => $o->id(),
 				"url" => $url,
-				"iconurl" => (($o->class_id() == CL_MENU) ? NULL : $ic->get_icon_url($o->class_id(),"")),
+				"iconurl" => $icon,
 				"checkbox" => $checkbox_status,
 			));
 		}

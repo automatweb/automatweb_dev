@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.1 2005/04/13 12:49:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.2 2005/04/18 08:49:51 kristo Exp $
 // crm_offer_mgr.aw - Pakkumiste haldus 
 /*
 
@@ -34,6 +34,9 @@
 
 @reltype WAREHOUSE value=2 clid=CL_SHOP_WAREHOUSE
 @caption ladu
+
+@reltype TYPICAL_COMPONENT value=3 clid=CL_CRM_OFFER_CHAPTER,CL_CRM_OFFER_GOAL,CL_CRM_OFFER_PAYMENT_TERMS,CL_CRM_OFFER_PRODUCTS_LIST
+@caption t&uuml;piline komponent
 
 */
 
@@ -196,17 +199,7 @@ class crm_offer_mgr extends class_base
 
 		$t->add_menu_item(array(
 			"parent" => "new",
-			"link" => $this->mk_my_orb("add_new_offer", array("id" => $arr["obj_inst"]->id()))
-
-			/*html::get_new_url(
-				CL_CRM_OFFER, 
-				$arr["obj_inst"]->id(), 
-				array(
-					"return_url" => get_ru(),
-					"alias_to" => $co->id(),
-					"reltype" => 9 // CL_CRM_COMPANY.RELTYPE_OFFER
-				)
-			)*/,
+			"link" => $this->mk_my_orb("add_new_offer", array("id" => $arr["obj_inst"]->id(), "ru" => get_ru())),
 			"text" => t("Lisa pakkumine")
 		));
 
@@ -355,7 +348,76 @@ class crm_offer_mgr extends class_base
 			"reltype" => "RELTYPE_PREFORMER"
 		));
 
+		// go over connections and do the new one
+		foreach($o->connections_from() as $c)
+		{
+			if (!$n->is_connected_to(array("to" => $c->prop("to"), "type" => $c->prop("reltype"))))
+			{
+				$n->connect(array(
+					"to" => $c->prop("to"),
+					"reltype" => $c->prop("reltype")
+				));
+			}
+		}
+
+		// copy subobjects
+		$ot = new object_tree(array(
+			"parent" => $o->id()
+		));
+		$this->_rec_copy_objects($o, $n, $ot);
+
 		return html::get_change_url($id, array("return_url" => urlencode($arr["return_url"])));
+	}
+
+	function _rec_copy_objects($o, $n, $ot)
+	{
+		$level = $ot->level($o->id());
+		foreach($level as $obj)
+		{
+			$new = $this->_copy_object($obj, $n->id());
+			
+			// recurse with subtree
+			$subtree = $ot->subtree($obj->id());
+			$this->_rec_copy_objects($obj, $new, $subtree);
+		}
+	}
+
+	function _copy_object($old, $parent)
+	{
+		$o = obj();
+		$o->set_class_id($old->class_id());
+		$o->set_parent($parent);
+		$o->set_comment($old->comment());
+
+		// meta
+		foreach($old->meta() as $k => $v)
+		{
+			$o->set_meta($k, $v);
+		}
+
+		// props
+		foreach($old->properties() as $k => $v)
+		{
+			if ($o->is_property($k))
+			{
+				$o->set_prop($k, $v);
+			}
+		}
+		$o->save();
+
+		// conns
+		foreach($old->connections_from() as $c)
+		{
+			if (!$o->is_connected_to(array("to" => $c->prop("to"), "type" => $c->prop("reltype"))))
+			{
+				$o->connect(array(
+					"to" => $c->prop("to"),
+					"reltype" => $c->prop("reltype")
+				));
+			}
+		}
+
+		return $o;
 	}
 
 	/** 
@@ -363,7 +425,7 @@ class crm_offer_mgr extends class_base
 		@attrib name=add_new_offer
 
 		@param id required type=int acl=view
-
+		@param ru required
 	**/
 	function add_new_offer($arr)
 	{
@@ -392,7 +454,13 @@ class crm_offer_mgr extends class_base
 			"reltype" => "RELTYPE_OFFER"
 		));
 
-		return html::get_change_url($o->id(), array("return_url" => get_ru()));
+		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["ru"])));
+	}
+
+	function get_typical_components($o)
+	{
+		$ol = new object_list($o->connections_from(array("type" => "RELTYPE_TYPICAL_COMPONENT")));
+		return $ol->names();
 	}
 }
 ?>

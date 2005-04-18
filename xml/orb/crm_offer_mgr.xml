@@ -42,6 +42,7 @@
 			<function name="add_new_offer">
 				<arguments>
 					<required name="id" type="int" acl="view" />
+					<required name="ru" />
 				</arguments>
 			</function>
 		</action>
