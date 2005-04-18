@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.50 2005/04/17 20:03:56 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.51 2005/04/18 10:43:40 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -58,7 +58,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_RESOURCE, on_create_resource)
 	@property default_post_buffer type=textbox
 	@caption Vaikimisi järelpuhveraeg (h)
 
-	@property global_buffer type=textbox default=4
+	@property global_buffer type=textbox default=14400
 	@caption Päeva üldpuhver (h)
 
 
