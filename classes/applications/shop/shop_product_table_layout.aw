@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.9 2005/01/18 11:53:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_table_layout.aw,v 1.10 2005/04/18 12:31:10 ahti Exp $
 // shop_product_table_layout.aw - Lao toodete tabeli kujundus 
 /*
 
@@ -122,7 +122,7 @@ class shop_product_table_layout extends class_base
 
 			if (!($this->cnt >= $from && $this->cnt < $to))
 			{
-				return false;;
+				return false;
 			}
 		}
 		return true;
@@ -147,9 +147,9 @@ class shop_product_table_layout extends class_base
 		if (($this->cnt % $this->t->prop("columns")) == 0)
 		{
 			$this->r_template = "ROW";
-			if ($this->is_template("ROW1"))
-			{	
-				if (($this->r_cnt % 2) == 0)
+			if($this->is_template("ROW1"))
+			{
+				if(($this->r_cnt % 2) == 0)
 				{
 					$this->r_template = "ROW2";
 				}
