@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.99 2005/04/18 08:45:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.100 2005/04/18 10:20:50 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -934,6 +934,7 @@ class mrp_workspace extends class_base
 
 				switch ($project->prop ("state"))
 				{
+					default:
 					case MRP_STATUS_PLANNED:
 						$starttime_prop = "starttime";
 						break;
