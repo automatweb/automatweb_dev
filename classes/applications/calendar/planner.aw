@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.61 2005/04/14 13:56:18 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.62 2005/04/18 10:18:28 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -578,8 +578,15 @@ class planner extends class_base
 				FROM planner
 				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
 				WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
-				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND
-				".$this->db_fn("objects.status")." != 0";
+				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND ". $this->db_fn("objects.status")." ";
+			if(is_array($arr["status"]))
+			{
+				$q .= "IN (".implode(",", $arr["status"]).")";
+			}
+			else
+			{
+			 	$q .= "!= 0";
+			}
 		}
 		else
 		{
@@ -588,7 +595,15 @@ class planner extends class_base
 			LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
 			WHERE (".$this->db_fn("planner.end")." >= '${_start}' OR ".$this->db_fn("planner.end")." IS NULL OR ".$this->db_fn("planner.end")." = 0) AND
 			(".$this->db_fn("planner.start")." <= '${_end}' ) AND
-			".$this->db_fn("objects.status")." != 0";
+			".$this->db_fn("objects.status")." ";
+			if(is_array($arr["status"]))
+			{
+				$q .= "IN (".implode(",", $arr["status"]).")";
+			}
+			else
+			{
+			 	$q .= "!= 0";
+			}
 		};
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
@@ -612,7 +627,10 @@ class planner extends class_base
 				$q .= $parprefix . "(" . $parstr . $eidstr . ")";
 			};
 		//}
-
+		if($arr["group_by"])
+		{
+			$q .= "GROUP BY ".$this->db_fn("planner.start");
+		}
 
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
@@ -663,6 +681,57 @@ class planner extends class_base
 		};
 		exit_function("get_event_list::recur");
 		return $rv;
+	}
+	
+	function get_event_sources($id)
+	{
+		$obj = new object($id);
+		$sources = array();
+		$sources = $this->make_keys($this->get_event_folders(array("id" => $id)));
+		if ($obj->prop("my_projects") == 1)
+		{
+			$project = aw_global_get("project");
+			$prj = get_instance(CL_PROJECT);
+			// this is wrong, I need to figure out the users this calendar belongs to
+			$owners = $obj->connections_from(array(
+				"type" => "RELTYPE_CALENDAR_OWNERSHIP",
+			));
+			// ignore projects, if there are no users connected to this calendar
+			if (sizeof($owners) == 0)
+			{
+				$pr = aw_global_get("project");
+				if(is_oid($pr))
+				{
+					$sources = array($pr => $pr);
+				}
+			}
+			else
+			{
+				$user_ids = array();
+				foreach($owners as $owner)
+				{
+					$user_ids[] = $owner->prop("to");
+				}
+				$tmp = $prj->get_event_folders(array(
+					"user_ids" => $user_ids,
+					"project_id" => aw_global_get("project"),
+					"type" => "my_projects",
+				));
+				if (!is_array($tmp))
+				{
+					$tmp = array($tmp => $tmp);
+				}
+				if (aw_global_get("project"))
+				{
+					$sources = $tmp;
+				}
+				else
+				{
+					$sources = $sources + $tmp;
+				}
+			}
+		}
+		return $sources;
 	}
 
 	// this is called from calendar "properties"
@@ -936,7 +1005,6 @@ class planner extends class_base
 			return PROP_ERROR;
 		};
 		$emb = $args["request"]["emb"];
-		// fail tuleb eraldi sise lugeda
 		$is_doc = false;
 		if (!empty($emb["clid"]))
 		{
@@ -965,7 +1033,6 @@ class planner extends class_base
 		};
 
 		$emb["return"] = "id";
-
 		if (is_array($_FILES["emb"]))
 		{
 			foreach($_FILES["emb"] as $ekey => $eval)
@@ -975,12 +1042,10 @@ class planner extends class_base
 					foreach($eval1 as $eval2 => $ekey2)
 					{
 						$emb[$ekey1][$eval2][$ekey] = $ekey2;
-					};
-
-				};
-			};
-		};
-
+					}
+				}
+			}
+		}
 		$this->event_id = $t->submit($emb);
 		
 		// register event_id in global scope also -- ahz
