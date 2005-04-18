@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.29 2005/03/30 21:47:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.30 2005/04/18 10:51:48 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -478,6 +478,11 @@ class calendar_view extends class_base
 			};
 		};
 	}
+	
+	function __sort_events_by_time($el1, $el2)
+	{
+		return (int)($el1["start1"] - $el2["start1"]);
+	}
 
 	// common interface for getting events out of any class that can contain events
 	// probably should not even be in this class
@@ -499,7 +504,6 @@ class calendar_view extends class_base
 					"date" => date("d-m-Y",$range["timestamp"]),
 					"range" => $range,
 				));
-
 				if ($range["viewtype"] == "last_events")
 				{
 					foreach($events as $key => $val)
@@ -510,7 +514,7 @@ class calendar_view extends class_base
 						};
 					};
 				};
-
+				uasort($events, array($this, "__sort_events_by_time"));
 				if (is_numeric($range["limit_events"]))
 				{
 					$num = $range["limit_events"];
