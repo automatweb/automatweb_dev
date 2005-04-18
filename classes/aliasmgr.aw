@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.176 2005/04/18 15:12:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.177 2005/04/18 15:16:21 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -311,7 +311,7 @@ class aliasmgr extends aw_template
 	function parse_oo_aliases($oid,&$source,$args = array())
 	{
 		// should eliminate 99% of the texts that don't contain aliases -- ahz
-		if(strpos($source, "#") !== false)
+		if(strpos($source, "#") === false)
 		{
 			return;
 		}
