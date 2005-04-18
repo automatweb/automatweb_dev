@@ -111,7 +111,7 @@
             <method>serialize</method>
             <group>grp_resource_settings</group>
             <type>textbox</type>
-            <default>4</default>
+            <default>14400</default>
             <caption>Päeva üldpuhver (h)</caption>
       </property>
       <property>
