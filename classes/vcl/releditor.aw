@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.53 2005/04/14 14:17:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.54 2005/04/18 11:21:22 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -179,7 +179,9 @@ class releditor extends core
 			};
 			$this->all_props[$key] = $_prop;
 		};
-		
+
+		$this->table_props = $props;
+
 		// "someone" has already used cfgform property, but for what purpose or why, is a big f'ing mystery to me,
 		// so i'll just implement something neater 
 		
@@ -310,7 +312,7 @@ class releditor extends core
 			"name_prefix" => $this->elname,
 			"obj_inst" => $obj_inst,
 		));
-		
+
 		exit_function("init-rel-editor");
 		
 		return $xprops;
@@ -389,6 +391,12 @@ class releditor extends core
 		{
 			$ed_fields = array("name" => "name");
 		}
+		if ($arr["prop"]["props"])
+		{
+			$tmp = new aw_array($arr["prop"]["props"]);
+			$tb_fields = $tmp->get();
+		};
+
 		$fdata = array();
 		$conns = array();
 		$filt_props = array();
@@ -424,6 +432,10 @@ class releditor extends core
 				$export_props = array();
 				foreach($property_list as $_pn => $_pd)
 				{
+					if (!in_array($_pn,$tb_fields))
+					{
+						continue;
+					};
 					/*
 					if (empty($fdata[$_pn]))
 					{
