@@ -362,14 +362,14 @@
             <caption>Mine valitud projekti algusesse</caption>
       </property>
       <property>
-            <name>chart_project_hilight</name>
+            <name>chart_search</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>grp_schedule</group>
-            <type>select</type>
+            <type>text</type>
             <store>no</store>
-            <caption>Valitud projekt</caption>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>chart_start_date</name>

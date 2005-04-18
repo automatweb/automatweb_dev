@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:13:03 +0300\n"
+"POT-Creation-Date: Mon, 18 Apr 2005 11:46:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -435,16 +435,16 @@ msgid ""
 "help"
 msgstr ""
 
-# classes/mrp/mrp_workspace.aw:prop_chart_project_hilight
-msgid "Omaduse Valitud projekt (chart_project_hilight) caption"
+# classes/mrp/mrp_workspace.aw:prop_chart_search
+msgid "Omaduse Otsi (chart_search) caption"
 msgstr ""
 
-# classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_comment
-msgid "Omaduse Valitud projekt (chart_project_hilight) kommentaar"
+# classes/mrp/mrp_workspace.aw:prop_chart_search_comment
+msgid "Omaduse Otsi (chart_search) kommentaar"
 msgstr ""
 
-# classes/mrp/mrp_workspace.aw:prop_chart_project_hilight_help
-msgid "Omaduse Valitud projekt (chart_project_hilight) help"
+# classes/mrp/mrp_workspace.aw:prop_chart_search_help
+msgid "Omaduse Otsi (chart_search) help"
 msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_chart_start_date
@@ -1309,11 +1309,11 @@ msgstr ""
 msgid "Suletud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:384 classes/mrp/mrp_workspace.aw:2758
+#: classes/mrp/mrp_workspace.aw:384 classes/mrp/mrp_workspace.aw:2762
 msgid "Uus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:385 classes/mrp/mrp_workspace.aw:2951
+#: classes/mrp/mrp_workspace.aw:385 classes/mrp/mrp_workspace.aw:2955
 msgid "Planeeritud"
 msgstr ""
 
@@ -1321,13 +1321,13 @@ msgstr ""
 msgid "Töös"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:387 classes/mrp/mrp_workspace.aw:834
-#: classes/mrp/mrp_workspace.aw:1357
+#: classes/mrp/mrp_workspace.aw:387 classes/mrp/mrp_workspace.aw:801
+#: classes/mrp/mrp_workspace.aw:1342
 msgid "Katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:388 classes/mrp/mrp_workspace.aw:802
-#: classes/mrp/mrp_workspace.aw:1369
+#: classes/mrp/mrp_workspace.aw:388 classes/mrp/mrp_workspace.aw:769
+#: classes/mrp/mrp_workspace.aw:1354
 msgid "Valmis"
 msgstr ""
 
@@ -1343,11 +1343,11 @@ msgstr ""
 msgid "Kustutatud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:392 classes/mrp/mrp_workspace.aw:1363
+#: classes/mrp/mrp_workspace.aw:392 classes/mrp/mrp_workspace.aw:1348
 msgid "Plaanist väljas"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:393 classes/mrp/mrp_workspace.aw:1375
+#: classes/mrp/mrp_workspace.aw:393 classes/mrp/mrp_workspace.aw:1360
 msgid "Arhiveeritud"
 msgstr ""
 
@@ -1359,320 +1359,321 @@ msgstr ""
 msgid "&Uuml;le t&auml;htaja l&auml;inud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:739
+#: classes/mrp/mrp_workspace.aw:706
 msgid "[Planeeri]"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:749
+#: classes/mrp/mrp_workspace.aw:716
 msgid "Päev"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:750
+#: classes/mrp/mrp_workspace.aw:717
 msgid "Minut"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:751
+#: classes/mrp/mrp_workspace.aw:718
 msgid "Sekund"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:803
+#: classes/mrp/mrp_workspace.aw:770
 msgid "T&ouml;&ouml;s / v&otilde;ib alustada"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:804
+#: classes/mrp/mrp_workspace.aw:771
 msgid "Ei saa alustada"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:833
+#: classes/mrp/mrp_workspace.aw:800
 msgid "Tehtud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:835
+#: classes/mrp/mrp_workspace.aw:802
 msgid "Avatud"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1042 classes/mrp/mrp_workspace.aw:2532
-#: classes/mrp/mrp_workspace.aw:2847
+#: classes/mrp/mrp_workspace.aw:1027 classes/mrp/mrp_workspace.aw:2536
+#: classes/mrp/mrp_workspace.aw:2851
 msgid "Nimi"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1047
+#: classes/mrp/mrp_workspace.aw:1032
 msgid "Operaator"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1052 classes/mrp/mrp_workspace.aw:3041
+#: classes/mrp/mrp_workspace.aw:1037 classes/mrp/mrp_workspace.aw:3045
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1057
+#: classes/mrp/mrp_workspace.aw:1042
 msgid "Jrk."
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1143
+#: classes/mrp/mrp_workspace.aw:1128
 msgid "Lisa uus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1147 classes/mrp/mrp_workspace.aw:1715
-#: classes/mrp/mrp_workspace.aw:1829 classes/mrp/mrp_workspace.aw:3073
+#: classes/mrp/mrp_workspace.aw:1132 classes/mrp/mrp_workspace.aw:1700
+#: classes/mrp/mrp_workspace.aw:1814 classes/mrp/mrp_workspace.aw:3077
 msgid "Ressurss"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1152
+#: classes/mrp/mrp_workspace.aw:1137
 msgid "Ressurssikategooria"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1160
+#: classes/mrp/mrp_workspace.aw:1145
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1167
+#: classes/mrp/mrp_workspace.aw:1152
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1177
+#: classes/mrp/mrp_workspace.aw:1162
 msgid "Kleebi"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1188 classes/mrp/mrp_workspace.aw:2787
+#: classes/mrp/mrp_workspace.aw:1173 classes/mrp/mrp_workspace.aw:2791
 msgid "Kustuta"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1190
+#: classes/mrp/mrp_workspace.aw:1175
 msgid "Kustutada kõik valitud ressursid?"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1206
+#: classes/mrp/mrp_workspace.aw:1191
 msgid "Lisa uus projekt"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1212
+#: classes/mrp/mrp_workspace.aw:1197
 msgid "Kustuta valitud projekt(id)"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1213
+#: classes/mrp/mrp_workspace.aw:1198
 msgid "Kustutada kõik valitud projektid?"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1327
+#: classes/mrp/mrp_workspace.aw:1312
 msgid "Plaanisolevad"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1333
+#: classes/mrp/mrp_workspace.aw:1318
 msgid "Hetkel töös"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1339
+#: classes/mrp/mrp_workspace.aw:1324
 msgid "Planeeritud üle tähtaja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1345
+#: classes/mrp/mrp_workspace.aw:1330
 msgid "Üle tähtaja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1351
+#: classes/mrp/mrp_workspace.aw:1336
 msgid "Uued"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1381
+#: classes/mrp/mrp_workspace.aw:1366
 msgid "Kõik projektid"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1387
+#: classes/mrp/mrp_workspace.aw:1372
 msgid "Allhanket&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1393
+#: classes/mrp/mrp_workspace.aw:1378
 msgid "Katkestatud t&ouml;&ouml;d"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1419 classes/mrp/mrp_workspace.aw:1703
-#: classes/mrp/mrp_workspace.aw:1819 classes/mrp/mrp_workspace.aw:3049
+#: classes/mrp/mrp_workspace.aw:1404 classes/mrp/mrp_workspace.aw:1688
+#: classes/mrp/mrp_workspace.aw:1804 classes/mrp/mrp_workspace.aw:3053
+#: classes/mrp/mrp_workspace.aw:4027
 msgid "Klient"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1425
+#: classes/mrp/mrp_workspace.aw:1410
 msgid "Pro&shy;jekt"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1442
+#: classes/mrp/mrp_workspace.aw:1427
 msgid "Materjalide saabumine"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1450
+#: classes/mrp/mrp_workspace.aw:1435
 msgid "Planeeritud valmimine"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1458
+#: classes/mrp/mrp_workspace.aw:1443
 msgid "Tähtaeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1467 classes/mrp/mrp_workspace.aw:1480
+#: classes/mrp/mrp_workspace.aw:1452 classes/mrp/mrp_workspace.aw:1465
 msgid "Prio&shy;ri&shy;teet"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1488
+#: classes/mrp/mrp_workspace.aw:1473
 msgid "Müü&shy;gi prio&shy;ri&shy;teet"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1709 classes/mrp/mrp_workspace.aw:1824
-#: classes/mrp/mrp_workspace.aw:3057
+#: classes/mrp/mrp_workspace.aw:1694 classes/mrp/mrp_workspace.aw:1809
+#: classes/mrp/mrp_workspace.aw:3061
 msgid "Projekt"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1724
+#: classes/mrp/mrp_workspace.aw:1709
 msgid "Planeeritud algusaeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1730
+#: classes/mrp/mrp_workspace.aw:1715
 msgid "Soovitav algusaeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1735 classes/mrp/mrp_workspace.aw:1790
-#: classes/mrp/mrp_workspace.aw:1850 classes/mrp/mrp_workspace.aw:1903
-#: classes/mrp/mrp_workspace.aw:3089 classes/mrp/mrp_workspace.aw:3248
+#: classes/mrp/mrp_workspace.aw:1720 classes/mrp/mrp_workspace.aw:1775
+#: classes/mrp/mrp_workspace.aw:1835 classes/mrp/mrp_workspace.aw:1888
+#: classes/mrp/mrp_workspace.aw:3093 classes/mrp/mrp_workspace.aw:3252
 msgid "Ava"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1837
+#: classes/mrp/mrp_workspace.aw:1822
 msgid "Projekti tähtaeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1842
+#: classes/mrp/mrp_workspace.aw:1827
 msgid "Vara&shy;seim jätka&shy;mis&shy;aeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1846
+#: classes/mrp/mrp_workspace.aw:1831
 msgid "Tagasta planeerimisse"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:1998
+#: classes/mrp/mrp_workspace.aw:1985
 msgid "Kinnine aeg %s - %s"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2196
+#: classes/mrp/mrp_workspace.aw:2200
 msgid "<<"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2197
+#: classes/mrp/mrp_workspace.aw:2201
 msgid "5 tagasi"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2201
+#: classes/mrp/mrp_workspace.aw:2205
 msgid "Eelmine"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2205
+#: classes/mrp/mrp_workspace.aw:2209
 msgid "Täna"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2209
+#: classes/mrp/mrp_workspace.aw:2213
 msgid "Järgmine"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2213
+#: classes/mrp/mrp_workspace.aw:2217
 msgid ">>"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2214
+#: classes/mrp/mrp_workspace.aw:2218
 msgid "5 edasi"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2218
+#: classes/mrp/mrp_workspace.aw:2222
 msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2224
+#: classes/mrp/mrp_workspace.aw:2228
 msgid "Kaota valik"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2228
+#: classes/mrp/mrp_workspace.aw:2232
 msgid " &nbsp;&nbsp;Valitud projekt: "
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2507
+#: classes/mrp/mrp_workspace.aw:2511
 msgid "Salvesta"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2539
+#: classes/mrp/mrp_workspace.aw:2543
 msgid "Vali ressurss"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2545
+#: classes/mrp/mrp_workspace.aw:2549
 msgid "N&auml;ita k&otilde;ikide ressurside t&ouml;id"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2551
+#: classes/mrp/mrp_workspace.aw:2555
 msgid "N&auml;ita osakonna ressurside t&ouml;id"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2557
+#: classes/mrp/mrp_workspace.aw:2561
 msgid "Muuda"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2763
+#: classes/mrp/mrp_workspace.aw:2767
 msgid "Lisa kategooria"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2775
+#: classes/mrp/mrp_workspace.aw:2779
 msgid "Lisa klient"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2854
+#: classes/mrp/mrp_workspace.aw:2858
 msgid "Aadress"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2861
+#: classes/mrp/mrp_workspace.aw:2865
 msgid "Telefon"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2868
+#: classes/mrp/mrp_workspace.aw:2872
 msgid "E-mail"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2875 classes/mrp/mrp_workspace.aw:3065
+#: classes/mrp/mrp_workspace.aw:2879 classes/mrp/mrp_workspace.aw:3069
 msgid "Prioriteet"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2920
+#: classes/mrp/mrp_workspace.aw:2924
 msgid "Number"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2927
+#: classes/mrp/mrp_workspace.aw:2931
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2933 classes/mrp/mrp_workspace.aw:3010
+#: classes/mrp/mrp_workspace.aw:2937 classes/mrp/mrp_workspace.aw:3014
 msgid "Algus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:2942
+#: classes/mrp/mrp_workspace.aw:2946
 msgid "T&auml;htaeg"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3021
+#: classes/mrp/mrp_workspace.aw:3025
 msgid "Pikkus"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3030
+#: classes/mrp/mrp_workspace.aw:3034
 msgid "L&otilde;pp"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3081
+#: classes/mrp/mrp_workspace.aw:3085
 msgid "Teostaja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3319
+#: classes/mrp/mrp_workspace.aw:3323
 msgid "K&otilde;ik ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3328
+#: classes/mrp/mrp_workspace.aw:3332
 msgid "Osakonna ressursid"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3862
+#: classes/mrp/mrp_workspace.aw:3866
 msgid "Logi v&auml;lja"
 msgstr ""
 
-#: classes/mrp/mrp_workspace.aw:3962
+#: classes/mrp/mrp_workspace.aw:3966 classes/mrp/mrp_workspace.aw:4019
 msgid "Valitud projekt"
 msgstr ""

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.98 2005/04/17 20:03:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.99 2005/04/18 08:45:12 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -119,8 +119,8 @@
 	@property chart_project_hilight_gotostart type=checkbox store=no
 	@caption Mine valitud projekti algusesse
 
-	@property chart_project_hilight type=select store=no
-	@caption Valitud projekt
+	@property chart_search type=text store=no
+	@caption Otsi
 
 	@property chart_start_date type=date_select store=no
 	@caption N&auml;idatava perioodi algus
@@ -696,39 +696,6 @@ class mrp_workspace extends class_base
 				$prop["value"] = empty ($arr["request"]["mrp_chart_start"]) ? $this->get_week_start () : $arr["request"]["mrp_chart_start"];
 				break;
 
-			case "chart_project_hilight":
-				if (is_oid ($arr["request"]["mrp_hilight"]))
-				{
-					$options = array ();
-					$prop["value"] = $arr["request"]["mrp_hilight"];
-				}
-				else
-				{
-					$options = array ("0" => " ");
-				}
-
-				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_DONE,
-					MRP_STATUS_ARCHIVED,
-					MRP_STATUS_INPROGRESS,
-				);
-
-				$list = new object_list (array (
-					"class_id" => CL_MRP_CASE,
-					"state" => $applicable_states,
-					"parent" => $this_object->prop ("projects_folder"),
-					// "createdby" => aw_global_get('uid'),
-				));
-
-				for ($project =& $list->begin (); !$list->end (); $project =& $list->next ())
-				{
-					$options[$project->id ()] = $project->name ();
-				}
-
-				$prop["options"] = $options;
-				break;
-
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
@@ -847,6 +814,10 @@ class mrp_workspace extends class_base
 				$prop["options"] = array("" => "") + $ol->names();
 				$prop["value"] = aw_global_get("mrp_operator_use_resource");
 				break;
+
+			case "chart_search":
+				$this->_chart_search($arr);
+				break;
 		}
 		return $retval;
 	}
@@ -925,7 +896,21 @@ class mrp_workspace extends class_base
 		### gantt chart project hilight
 		if ($arr["request"]["chart_project_hilight"])
 		{
-			$arr["args"]["mrp_hilight"] = $arr["request"]["chart_project_hilight"];
+			$ol = new object_list(array(
+				"class_id" => CL_MRP_CASE,
+				"name" => $arr["request"]["chart_project_hilight"]
+			));
+			if ($ol->count())
+			{
+				$tmp = $ol->begin();
+				$arr["args"]["mrp_hilight"] = $tmp->id();
+			}
+			$arr["args"]["chart_project_hilight"] = $arr["request"]["chart_project_hilight"];
+		}
+
+		if ($arr["request"]["chart_customer"])
+		{
+			$arr["args"]["chart_customer"] = $arr["request"]["chart_customer"];
 		}
 
 		### gantt chart start move to project start
@@ -1977,26 +1962,29 @@ class mrp_workspace extends class_base
 					)
 				));
 
-				### add reserved times for resources, cut off past
-				$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
-					"mrp_resource" => $resource->id(),
-					"mrp_start" => $range_start,
-					"mrp_length" => $range_end - $range_start
-				));
-				foreach($reserved_times as $rt_start => $rt_end)
+				if (!$arr["request"]["chart_customer"])
 				{
-					if ($rt_end > $time)
+					### add reserved times for resources, cut off past
+					$reserved_times = $mrp_schedule->get_unavailable_periods_for_range(array(
+						"mrp_resource" => $resource->id(),
+						"mrp_start" => $range_start,
+						"mrp_length" => $range_end - $range_start
+					));
+					foreach($reserved_times as $rt_start => $rt_end)
 					{
-						$rt_start = ($rt_start < $time) ? $time : $rt_start;
-						$chart->add_bar(array(
-							"row" => $resource->id(),
-							"start" => $rt_start,
-							"length" => $rt_end - $rt_start,
-							"nostartmark" => true,
-							"colour" => MRP_COLOUR_PAUSED,
-							"url" => "#",
-							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
-						));
+						if ($rt_end > $time)
+						{
+							$rt_start = ($rt_start < $time) ? $time : $rt_start;
+							$chart->add_bar(array(
+								"row" => $resource->id(),
+								"start" => $rt_start,
+								"length" => $rt_end - $rt_start,
+								"nostartmark" => true,
+								"colour" => MRP_COLOUR_PAUSED,
+								"url" => "#",
+								"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
+							));
+						}
 					}
 				}
 			}
@@ -2030,14 +2018,21 @@ class mrp_workspace extends class_base
 			MRP_STATUS_PAUSED,
 		);
 
-		$list = new object_list (array (
+		$filt = array (
 			"class_id" => CL_MRP_JOB,
 			"state" => $applicable_states,
 			"parent" => $this_object->prop ("jobs_folder"),
 			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-		));
+		);
+
+		if ($arr["request"]["chart_customer"])
+		{
+			// filter by customer as well
+			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+		}
+		$list = new object_list ($filt);
 		$jobs = $list->arr ();
 
 		### job states that are shown in chart future
@@ -2045,7 +2040,7 @@ class mrp_workspace extends class_base
 			MRP_STATUS_PLANNED,
 		);
 
-		$list = new object_list (array (
+		$filt = array (
 			"class_id" => CL_MRP_JOB,
 			"parent" => $this_object->prop ("jobs_folder"),
 			"state" => $applicable_states,
@@ -2053,7 +2048,15 @@ class mrp_workspace extends class_base
 			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-		));
+		);
+
+		if ($arr["request"]["chart_customer"])
+		{
+			// filter by customer as well
+			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+		}
+
+		$list = new object_list ($filt);
 		$jobs = array_merge ($list->arr (), $jobs);
 
 		foreach ($jobs as $job)
@@ -2225,7 +2228,7 @@ class mrp_workspace extends class_base
 				"caption" => t("Kaota valik"),
 				"url" => aw_url_change_var ("mrp_hilight", ""),
 			));
-			$change_url = html::get_change_url ($project->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $project->name ());
+			$change_url = html::get_change_url ($project->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), parse_obj_name($project->name ()));
 			$navigation .= t(' &nbsp;&nbsp;Valitud projekt: ') . $change_url . ' (' . $deselect . ')';
 		}
 
@@ -4009,6 +4012,30 @@ class mrp_workspace extends class_base
 			return $list;
 		}
 		return new object_list();
+	}
+
+	function _chart_search($arr)
+	{
+		if ($arr["request"]["mrp_hilight"] && !$arr["request"]["chart_project_hilight"])
+		{
+			$o = obj($arr["request"]["mrp_hilight"]);
+			$arr["request"]["chart_project_hilight"] = $o->name();
+		}
+		$str  = t("Valitud projekt");
+		$str .= " ";
+		$str .= html::textbox(array(
+			"name" => "chart_project_hilight",
+			"value" => $arr["request"]["chart_project_hilight"],
+			"size" => 6
+		));
+		$str .= " ";
+		$str .= t("Klient");
+		$str .= " ";
+		$str .= html::textbox(array(
+			"name" => "chart_customer",
+			"value" => $arr["request"]["chart_customer"]
+		));
+		$arr["prop"]["value"] = $str;
 	}
 }
 
