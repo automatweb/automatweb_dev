@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.100 2005/04/18 10:20:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.101 2005/04/18 10:26:50 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1117,6 +1117,7 @@ class mrp_workspace extends class_base
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			"mrp_workspace" => $this_object->id (),
 			"mrp_parent" => $parent,
+			"parent" => $parent
 		), "mrp_resource");
 		$add_category_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
