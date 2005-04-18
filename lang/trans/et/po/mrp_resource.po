@@ -1,0 +1,348 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Mon, 18 Apr 2005 11:46:25 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+# classes/mrp/mrp_resource.aw:prop_state
+msgid "Omaduse Ressursi staatus (state) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_state_comment
+msgid "Omaduse Ressursi staatus (state) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_state_help
+msgid "Omaduse Ressursi staatus (state) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_category
+msgid "Omaduse Kategooria (category) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_category_comment
+msgid "Omaduse Kategooria (category) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_category_help
+msgid "Omaduse Kategooria (category) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_resource_calendar
+msgid "Omaduse Tööd (resource_calendar) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_resource_calendar_comment
+msgid "Omaduse Tööd (resource_calendar) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_resource_calendar_help
+msgid "Omaduse Tööd (resource_calendar) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_job_list
+msgid "Omaduse Tööleht (job_list) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_job_list_comment
+msgid "Omaduse Tööleht (job_list) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_job_list_help
+msgid "Omaduse Tööleht (job_list) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_out_of_service
+msgid "Omaduse Ressurss hoolduses (out_of_service) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_out_of_service_comment
+msgid "Omaduse Ressurss hoolduses (out_of_service) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_out_of_service_help
+msgid "Omaduse Ressurss hoolduses (out_of_service) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_maintenance_history
+msgid "Omaduse Hoolduskommentaarid (maintenance_history) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_maintenance_history_comment
+msgid "Omaduse Hoolduskommentaarid (maintenance_history) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_maintenance_history_help
+msgid "Omaduse Hoolduskommentaarid (maintenance_history) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_type
+msgid "Omaduse Tüüp (type) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_type_comment
+msgid "Omaduse Tüüp (type) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_type_help
+msgid "Omaduse Tüüp (type) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_thread_data
+msgid "Omaduse Samaaegseid töid enim (thread_data) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_thread_data_comment
+msgid "Omaduse Samaaegseid töid enim (thread_data) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_thread_data_help
+msgid "Omaduse Samaaegseid töid enim (thread_data) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_pre_buffer
+msgid "Omaduse Vaikimisi eelpuhveraeg (h) (default_pre_buffer) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_pre_buffer_comment
+msgid "Omaduse Vaikimisi eelpuhveraeg (h) (default_pre_buffer) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_pre_buffer_help
+msgid "Omaduse Vaikimisi eelpuhveraeg (h) (default_pre_buffer) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_post_buffer
+msgid "Omaduse Vaikimisi järelpuhveraeg (h) (default_post_buffer) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_post_buffer_comment
+msgid "Omaduse Vaikimisi järelpuhveraeg (h) (default_post_buffer) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_default_post_buffer_help
+msgid "Omaduse Vaikimisi järelpuhveraeg (h) (default_post_buffer) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_global_buffer
+msgid "Omaduse Päeva üldpuhver (h) (global_buffer) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_global_buffer_comment
+msgid "Omaduse Päeva üldpuhver (h) (global_buffer) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_global_buffer_help
+msgid "Omaduse Päeva üldpuhver (h) (global_buffer) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_work_hrs_recur
+msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_work_hrs_recur_comment
+msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_work_hrs_recur_help
+msgid "Omaduse T&ouml;&ouml;ajad (work_hrs_recur) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_recur
+msgid "Omaduse Kinnised ajad (unavailable_recur) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_recur_comment
+msgid "Omaduse Kinnised ajad (unavailable_recur) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_recur_help
+msgid "Omaduse Kinnised ajad (unavailable_recur) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_weekends
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
+"caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_weekends_comment
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) "
+"kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_weekends_help
+msgid ""
+"Omaduse Ei t&ouml;&ouml;ta n&auml;dalavahetustel (unavailable_weekends) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_dates
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) caption"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_dates_comment
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:prop_unavailable_dates_help
+msgid ""
+"Omaduse Kinnised päevad (Formaat: <span style=\"white-space: nowrap;\">p.k, "
+"h:m - p.k, h:m;</span><br /><span style=\"white-space: nowrap;\">p.k, h:m - "
+"p.k, h:m;</span><br /> ...) (unavailable_dates) help"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_schedule
+msgid "Grupi Kalender (grp_resource_schedule) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_joblist
+msgid "Grupi Tööleht (grp_resource_joblist) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_settings
+msgid "Grupi Seaded (grp_resource_settings) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_maintenance
+msgid "Grupi Hooldus (grp_resource_maintenance) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_unavailable
+msgid "Grupi Tööajad (grp_resource_unavailable) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
+msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_una
+msgid "Grupi Kinnised ajad (grp_resource_unavailable_una) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:rel_RELTYPE_MRP_SCHEDULE
+msgid "Seose Ressursi kalender (RELTYPE_MRP_SCHEDULE) tekst"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:rel_RELTYPE_MRP_OWNER
+msgid "Seose Ressursi omanik (RELTYPE_MRP_OWNER) tekst"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:rel_RELTYPE_RECUR
+msgid "Seose Kordus (RELTYPE_RECUR) tekst"
+msgstr ""
+
+# classes/mrp/mrp_resource.aw:rel_RELTYPE_RECUR_WRK
+msgid "Seose T&ouml;&ouml;aja kordus (RELTYPE_RECUR_WRK) tekst"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:141
+msgid "Vaba"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:142
+msgid "Kasutusel"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:143
+msgid "Suletud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:147
+msgid "Uus"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:148
+msgid "Planeeritud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:149
+msgid "Töös"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:150
+msgid "Katkestatud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:151
+msgid "Valmis"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:152
+msgid "Lukustatud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:153
+msgid "Paus"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:154
+msgid "Kustutatud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:155
+msgid "Plaanist väljas"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:156
+msgid "Arhiveeritud"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:187
+msgid "Uut ressurssi saab luua vaid ressursihalduskeskkonnast. "
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:197
+msgid "Ressurss ei kuulu ühessegi ressursihaldussüsteemi. "
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:203
+msgid "Viga! "
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:232
+msgid "/Ressursid"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:249
+msgid "Ressursi kasutust planeeritakse"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:250
+msgid "Ressursi kasutust ei planeerita"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:251
+msgid "Ressurss on allhange"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:537
+msgid "Ava"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:464
+msgid "Staatus"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:469
+msgid "Alustamisaeg"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:475
+msgid "Projekt-Töö nr."
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:481
+msgid "Klient"
+msgstr ""

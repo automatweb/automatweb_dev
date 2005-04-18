@@ -1,0 +1,16 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Sun, 17 Apr 2005 21:12:56 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/core/trans/pot_scanner.aw:622
+msgid "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
+msgstr ""
+

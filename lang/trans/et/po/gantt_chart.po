@@ -1,0 +1,18 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Mon, 18 Apr 2005 11:46:18 +0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+#: classes/vcl/gantt_chart.aw:219
+msgid "Näita"
+msgstr ""
+
+#: classes/vcl/gantt_chart.aw:219
+msgid "Peida"
+msgstr ""
