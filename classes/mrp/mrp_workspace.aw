@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.101 2005/04/18 10:26:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.102 2005/04/18 11:13:18 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -921,11 +921,6 @@ class mrp_workspace extends class_base
 			if (is_oid ($arr["args"]["mrp_hilight"]))
 			{
 				$project_id = $arr["args"]["mrp_hilight"];
-			}
-
-			if (is_oid ($arr["request"]["chart_project_hilight"]))
-			{
-				$project_id = $arr["request"]["chart_project_hilight"];
 			}
 
 			if ($project_id)
