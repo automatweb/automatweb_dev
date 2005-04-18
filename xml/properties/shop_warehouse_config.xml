@@ -121,6 +121,16 @@
             <ch_value>1</ch_value>
             <caption>Ladu m&amp;uuml;&amp;uuml;b tooteid, mitte pakendeid</caption>
       </property>
+      <property>
+            <name>no_packets</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ladu ei müü pakette</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SHOP_WAREHOUSE_CONFIG</syslog_type>
             <relationmgr>yes</relationmgr>

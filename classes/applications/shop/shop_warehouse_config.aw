@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.8 2005/03/30 13:01:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_config.aw,v 1.9 2005/04/18 12:17:49 ahti Exp $
 // shop_warehouse_config.aw - Lao konfiguratsioon 
 /*
 
@@ -45,6 +45,9 @@
 
 @property sell_prods type=checkbox ch_value=1
 @caption Ladu m&uuml;&uuml;b tooteid, mitte pakendeid
+
+@property no_packets type=checkbox ch_value=1
+@caption Ladu ei müü pakette
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
