@@ -286,45 +286,49 @@ class connection
 			if (!$this->conn["relobj_id"])
 			{
 				// if it wasn't, then create the relobj
-				$from = obj($this->conn["from"]);
 				$to = obj($this->conn["to"]);
 
-				$o = obj();
-				if ($GLOBALS["object_loader"]->ds->can("add", $from->parent()))
+				// only create connection objects, IF
+				if ($this->conn["reltype"] == RELTYPE_ACL || $to->class_id() == CL_CALENDAR_VIEW || $to->class_id() == CL_ML_LIST)
 				{
-					$o->set_parent($from->parent());
-				}
-				else
-				if ($GLOBALS["object_loader"]->ds->can("add", $from->id()))
-				{
-					$o->set_parent($from->id());
-				}
-				if ($GLOBALS["object_loader"]->ds->can("add", $to->parent()))
-				{
-					$o->set_parent($to->parent());
-				}
-				else
-				if ($GLOBALS["object_loader"]->ds->can("add", $to->id()))
-				{
-					$o->set_parent($to->id());
-				}
-				else
-				{
-					$noc = true;
-				}
+					$from = obj($this->conn["from"]);
 
-				if (!$noc)
-				{
-					// [cs-rel-create] => 5.5006 (40.27%)
-					$o->set_class_id(CL_RELATION);
-					$o->set_status(STAT_ACTIVE);
-					$o->set_subclass($to->class_id());
-					$awt->start("cs-rel-save");
-					$this->conn["relobj_id"] = $o->save();
-					$awt->stop("cs-rel-save");
+					$o = obj();
+					if ($GLOBALS["object_loader"]->ds->can("add", $from->parent()))
+					{
+						$o->set_parent($from->parent());
+					}
+					else
+					if ($GLOBALS["object_loader"]->ds->can("add", $from->id()))
+					{
+						$o->set_parent($from->id());
+					}
+					if ($GLOBALS["object_loader"]->ds->can("add", $to->parent()))
+					{
+						$o->set_parent($to->parent());
+					}
+					else
+					if ($GLOBALS["object_loader"]->ds->can("add", $to->id()))
+					{
+						$o->set_parent($to->id());
+					}
+					else
+					{
+						$noc = true;
+					}
+
+					if (!$noc)
+					{
+						// [cs-rel-create] => 5.5006 (40.27%)
+						$o->set_class_id(CL_RELATION);
+						$o->set_status(STAT_ACTIVE);
+						$o->set_subclass($to->class_id());
+						$awt->start("cs-rel-save");
+						$this->conn["relobj_id"] = $o->save();
+						$awt->stop("cs-rel-save");
+					}
 				}
 			}
-
 		}
 
 		// now that everything is ok, save the damn thing
