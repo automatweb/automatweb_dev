@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.3 2005/03/10 12:49:12 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/archive/document_archive.aw,v 1.4 2005/04/19 17:57:03 ahti Exp $
 // document_archive.aw - Dokumendiarhiiv 
 /*
 
@@ -47,6 +47,21 @@ class document_archive extends class_base
 				break;
 		};
 		return $retval;
+	}
+	
+	//// create a list of events that should be used
+	function get_event_sources($id)
+	{
+		$o = new object($id);
+		$conns = $o->connections_from(array(
+			"type" => "RELTYPE_SOURCE",
+		));
+		$sources = array();
+		foreach($conns as $conn)
+		{
+			$sources[$conn->prop("to")] = $conn->prop("to");
+		}
+		return $sources;
 	}
 
 	//// create a list of events that should be used
