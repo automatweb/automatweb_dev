@@ -30,8 +30,8 @@ function aw_save()
 
 	if (res.length > 0)
 	{
-		document.changeform.alias.value = res;
-		document.changeform.submit();
+		link = '{VAR:saveurl}&alias=' + res;
+		window.location = link;
 	}
 	else
 	{
@@ -84,8 +84,6 @@ function search_for_object()
 	window.location.href=search_url + "&reltype=" + reltype + "&aselect=" + objtype;
 }
 </script>
-<input name="alias" id="alias" value="" type="hidden" />
-<input name="no_reforb" value="1" type="hidden" />
 <script language= "javascript">
 init();
 </script>
