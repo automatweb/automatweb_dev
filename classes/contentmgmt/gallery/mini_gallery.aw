@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.10 2005/04/07 10:32:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.11 2005/04/19 10:05:47 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -176,6 +176,10 @@ class mini_gallery extends class_base
 
 	function _do_zip_import($o, $zip)
 	{
+		if (!$this->can("add", $o->prop("folder")))
+		{
+			die(t("Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"));
+		}
 		$zf = escapeshellarg($zip);
 		$zip = aw_ini_get("server.unzip_path");
 		$tn = aw_ini_get("server.tmpdir")."/".gen_uniq_id();
@@ -236,6 +240,7 @@ class mini_gallery extends class_base
 			return;
 		}
 
+		$prev_page = $next_page = "";
 		$num_pgs = $img_c / ($rows * $cols);
 		for($i = 0; $i < $num_pgs; $i++)
 		{
@@ -252,12 +257,23 @@ class mini_gallery extends class_base
 			{
 				$pgs[] = $this->parse("PAGE");
 			}
+
+			if ($i+1 == $_GET["mg_pg"])
+			{
+				$prev_page = $this->parse("PREV_PAGE");
+			}
+			if ($i-1 == $_GET["mg_pg"])
+			{
+				$next_page = $this->parse("NEXT_PAGE");
+			}
 		}
 
 		$this->vars(array(
 			"PAGE" => join($this->parse("PAGE_SEPRATOR"), $pgs),
 			"PAGE_SEPARATOR" => "",
-			"PAGE_SEL" => ""
+			"PAGE_SEL" => "",
+			"PREV_PAGE" => $prev_page,
+			"NEXT_PAGE" => $next_page
 		));
 
 		$this->vars(array(
