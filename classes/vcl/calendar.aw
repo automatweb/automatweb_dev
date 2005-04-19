@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.49 2005/04/13 14:16:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.50 2005/04/19 18:08:03 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -10,7 +10,6 @@ class vcalendar extends aw_template
 		$this->init(array(
 			"tpldir" => $this->cal_tpl_dir,
 		));
-
 
 		$this->container_template = "container.tpl";
 
@@ -84,7 +83,7 @@ class vcalendar extends aw_template
 	{
 		$attribs = array("tasklist_func","overview_func","overview_range",
 			"container_template","show_days_with_events","skip_empty",
-			"full_weeks","target_section","day_start","day_end");
+			"full_weeks","target_section","day_start","day_end", "show_ec");
 
 		foreach($attribs as $attrib)
 		{
@@ -128,7 +127,6 @@ class vcalendar extends aw_template
 
 		$this->past_limit = 15;
 		$this->future_limit = 5;
-
 		$range = get_date_range($range_args);
 		$m = date("m",$range["timestamp"]);
 		$y = date("Y",$range["timestamp"]);
@@ -158,8 +156,13 @@ class vcalendar extends aw_template
 			$range["future"] = $this->future_limit;
 			$range["end"] += 86400 * 60;
 		};
+		
 		$this->el_count = 0;
 		$this->evt_list = array();
+		if($arr["show_ec"])
+		{
+			$range = $arr["show_ec"] + $range;
+		}
 		$this->range = $range;
 		return $range;
 	}
@@ -343,6 +346,7 @@ class vcalendar extends aw_template
 	{
 		global $awt;
 		$awt->start("gen-calendar-html");
+		$this->aliasmgr = get_instance("aliasmgr");
 		$this->styles = array();
 		if (is_array($arr["style"]))
 		{
@@ -401,9 +405,7 @@ class vcalendar extends aw_template
 					$content = $this->draw_year();
 					$caption = "";
 					break;
-
-	
-		
+					
 				default:
 					$content = $this->draw_day($arr);
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
@@ -875,7 +877,7 @@ class vcalendar extends aw_template
 			}
 			elseif ($this->show_days_with_events == 1)
 			{
-				continue;	
+				continue;
 			};
 			$wn = date("w",$reals);
 			if ($wn == 0)
@@ -943,7 +945,7 @@ class vcalendar extends aw_template
 			"daynum" => date("j",$this->range["start"]),
 			"dayname" => date("F d, Y",$this->range["start"]),
 			"long_day_name" => locale::get_lc_weekday($this->range["wd"]),
-                       	"date" => locale::get_lc_date($this->range["start"],5),
+			"date" => locale::get_lc_date($this->range["start"],5),
 			"caption" => $arr["caption"],
 			"lc_weekday" => locale::get_lc_weekday(date("w",$this->range["start"])),
 		));
@@ -1195,6 +1197,9 @@ class vcalendar extends aw_template
 				"date" => date("d-m-Y",$arr["timestamp"]),
 				"section" => $this->target_section,
 			)),
+			"prev_date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
+			"next_date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
+			"section_id" => $this->target_section,
 			"next_url" => aw_url_change_var(array(
 				"viewtype" => "month",
 				"date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
@@ -1223,6 +1228,55 @@ class vcalendar extends aw_template
 			"parent_2_name" => "",
 			"parent_3_name" => "",
 		));
+		if($evt["class_id"] == CL_PARTY)
+		{
+			$fa = safe_array($evt["from_artist"]);
+			$obj = obj($evt["id"]);
+			$objs = new object_list(array(
+				"brother_of" => $obj->brother_of(),
+			));
+			$proj = array();
+			foreach($objs->arr() as $obz)
+			{
+				$obx = obj($obz->parent());
+				if($obx->class_id() == CL_PROJECT)
+				{
+					$proj[] = $obx->name();
+				}
+			}
+			$evt["project"] = implode(", ", $proj);
+			unset($fa[0]);
+			if(count($fa) > 0 && ($artist = $obj->get_first_obj_by_reltype("RELTYPE_ARTIST")))
+			{
+				if($fa["content"])
+				{
+					$evt["content"] = $artist->prop("notes");
+				}
+				if($fa["image"])
+				{
+					$evt["image"] = $artist->prop("picture");
+				}
+			}
+			else
+			{
+				foreach($artists = $obj->connections_from(array("type" => "RELTYPE_ARTIST")) as $artist)
+				{
+					$evt["artist"] .= html::href(array(
+						"url" => obj_link($artist->prop("to")),
+						"caption" => $artist->prop("to.name"),
+					))."<br />"; 
+				}
+			}
+			if(is_oid($evt["image"]) && $this->can("view", $evt["image"]))
+			{
+				$img_i = get_instance(CL_IMAGE);
+				$imgdata = $img_i->get_image_by_id($evt["image"]);
+				$evt["image"] = $imgdata["url"];
+			}
+			$evt["content"] = nl2br($evt["content"]);
+			$this->aliasmgr->parse_oo_aliases($evt["id"], $evt["content"]);
+		}
+		
 
 		$this->evt_tpl->vars($evt);
 
@@ -1254,7 +1308,7 @@ class vcalendar extends aw_template
 		else
 		{
 			$time = $evt["time"];
-		};
+		}
 		
 		$this->evt_tpl->vars(array(
 			"odd" => $this->event_counter % 2,
@@ -1275,7 +1329,6 @@ class vcalendar extends aw_template
 			"date_and_time" => $dt . ". " . $mn,
 			"section" => aw_global_get("section")
 		));
-						
 		$this->event_counter++;
 
 
@@ -1298,6 +1351,7 @@ class vcalendar extends aw_template
 				"project_media" => $x,
 			));
 		};
+		
 
 		return $this->evt_tpl->parse();
 	}
