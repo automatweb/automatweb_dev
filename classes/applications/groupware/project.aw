@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.35 2005/04/13 13:51:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.36 2005/04/19 18:03:59 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -109,7 +109,7 @@
 @reltype PARTICIPANT clid=CL_USER,CL_CRM_COMPANY value=2
 @caption osaleja
 
-@reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING
+@reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING,CL_PARTY,CL_COMICS
 @caption Sündmus
 
 @reltype PRJ_FILE value=4 clid=CL_FILE
@@ -149,7 +149,7 @@ class project extends class_base
 		
 		lc_site_load("project",&$this);
 
-		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING,CL_CRM_MEETING,CL_TASK,CL_CRM_CALL);
+		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING,CL_CRM_MEETING,CL_TASK,CL_CRM_CALL,CL_PARTY,CL_COMICS);
 	}
 
 	function get_property($arr)
@@ -489,6 +489,36 @@ class project extends class_base
 		die();
 
 	}
+	
+	function get_event_sources($id)
+	{
+		$o = new object($id);
+		$orig_conns = $o->connections_from(array(
+			"type" => 103,
+		));
+		if (sizeof($orig_conns) > 0)
+		{
+			$first = reset($orig_conns);
+			$id = $first->prop("to");
+		};
+		$sources = array($id => $id);
+		if ($o->prop("skip_subproject_events") != 1)
+		{
+			$this->used = array();
+			$this->_recurse_projects(0, $id);
+		};
+		if (is_array($this->prj_map))
+		{
+			foreach($this->prj_map as $key => $val)
+			{
+				foreach($val as $k1 => $v1)
+				{
+					$sources[$k1] = $k1;
+				}
+			}
+		}
+		return $sources;
+	}
 
 	function get_events($arr)
 	{
@@ -550,7 +580,11 @@ class project extends class_base
 		$lang_id = aw_global_get("lang_id");
 		$stat_str = "objects.status != 0";
 
-		if ($arr["status"] && aw_global_get("uid") == "")
+		if(is_array($arr["status"]))
+		{
+			$stat_str = "objects.status IN (".implode(",", $arr["status"]).")";
+		}
+		elseif($arr["status"] && aw_global_get("uid") == "")
 		{
 			$stat_str = "objects.status = " . $arr["status"];
 		};
