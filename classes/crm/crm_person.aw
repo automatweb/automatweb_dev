@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.79 2005/03/24 11:13:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.80 2005/04/19 17:52:37 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1218,7 +1218,7 @@ class crm_person extends class_base
 			"notes" => nl2br($notes),
 		));
 		// show image if there is a placeholder for it in the current template
-		if ($this->template_has_var("imgurl"))
+		if ($this->template_has_var("imgurl") || $this->is_template("IMAGE"))
 		{
 			$conns = $to->connections_from(array(
 				"type" => "RELTYPE_PICTURE",
@@ -1232,6 +1232,12 @@ class crm_person extends class_base
 			$this->vars(array(
 				"imgurl" => $imgurl,
 			));
+			if(strlen($imgurl) > 0)
+			{
+				$this->vars(array(
+					"IMAGE" => $this->parse("IMAGE"),
+				));
+			}
 		};
 
 		$at_once = 20;
