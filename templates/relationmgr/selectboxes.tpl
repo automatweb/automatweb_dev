@@ -8,10 +8,11 @@ var listB = new DynamicOptionList("aselect","reltype");
 
 {VAR:defaults1}
 
-function init() {
-	var theform = document.forms[0];
+function init()
+{
+	var theform = document.changeform;
 	listB.init(theform);
-	}
+}
 
 </script>
 

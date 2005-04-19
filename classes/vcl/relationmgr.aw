@@ -11,6 +11,7 @@ class relationmgr extends aw_template
 	
 	function init_vcl_property($arr)
 	{
+		$arr["request"] = safe_array($arr["request"]) + $_REQUEST;
 		if(in_array($arr["obj_inst"]->class_id() , array(CL_MENU, CL_GROUP, CL_PROMO)))
 		{
 			$this->parent = $arr["obj_inst"]->id();
@@ -54,12 +55,11 @@ class relationmgr extends aw_template
 				$this->clids[$key] = basename($class["file"]);
 			}
 		}
-		$this->rel_classes[0] = array("capt_new_object" => t("Objekti tüüp")) + $tmp;
+		$this->rel_classes[0] = $tmp;
 		$this->rel_classes[RELTYPE_ACL] = array(
 			CL_GROUP => $classes[CL_GROUP]["name"]
 		);
 		$this->rel_classes[RELTYPE_BROTHER] = array(
-			"capt_new_object" => t("Objekti tüüp"),
 			CL_MENU => $classes[CL_MENU]["name"],
 			CL_SHOP_PRODUCT => $classes[CL_SHOP_PRODUCT]['name'],
 			CL_SHOP_PACKET => $classes[CL_SHOP_PACKET]['name'],
@@ -118,48 +118,372 @@ class relationmgr extends aw_template
 		{
 			$this->clid_list .= 'clids['.$key.'] = "'.$val.'";'."\n";
 		}
+		foreach($this->true_rel_classes as $id => $val)
+		{
+			asort($val);
+			if($id == 0 || $id == RELTYPE_BROTHER)
+			{
+				$val = array("capt_new_object" => t("Objekti tüüp")) + $val;
+			}
+			$this->true_rel_classes[$id] = $val;
+		}
 	}
 	
 	function _show_search($arr)
 	{
 		$pr = array();
-		$this->reltype = $arr["request"]["s"]["reltype"] ? $arr["request"]["s"]["reltype"] : $arr["request"]["reltype"];
-		$search = get_instance(CL_SEARCH);
-		$arr = array_merge($arr, $arr["request"]);
-		$arr["clid"] = get_instance("aliasmgr");
-		$this->search = &$search;
-		$form = $search->show($arr);
+		$this->reltype = $arr["request"]["reltype"];
+		$props = $this->_init_search($arr);
+		
 		$tb = &$this->_make_toolbar($arr);
 		$this->read_template("rel_search.tpl");
-		$req = $arr["request"];
+		$req = safe_array($arr["request"]);
 		unset($req["action"]);
-		unset($req["s"]);
 		$reforb = $this->mk_reforb("change", array("no_reforb" => 1, "search" => 1) + $req, $req["class"]);
 		$this->vars(array(
-			"form" => $form,
-			"table" => $search->get_results(),
-			"toolbar" => $tb->get_toolbar(),
 			"parent" => $this->parent,
-			"reforb" => $reforb,
 			"clids" => $this->clid_list,
 			"period" => $arr["request"]["period"],
 			"id" => $arr["obj_inst"]->id(),
 			"saveurl" => $this->mk_my_orb("submit", array("reltype" => $this->reltype, "group" => $req["group"], "return_url" => get_ru(), "reforb" => 1, "id" => $req["id"]), $req["class"]),
 		));
+		$tb->add_cdata($this->parse());
 		$pr = array(
-			"relations" => array(
-				"name" => "relations",
-				"type" => "text",
-				"value" => $this->parse(),
+			"rel_toolbar" => array(
+				"name" => "rel_toolbar",
+				"type" => "toolbar",
 				"no_caption" => 1,
-		));
+				"vcl_inst" => $tb,
+			),
+		) + $props;
 		return $pr;
+	}
+	
+	function _init_search($arr)
+	{
+//@property server type=select group=advsearch
+//@caption Server
+		$rval = array();
+		$rval["srch"] = array(
+			"name" => "srch",
+			"type" => "hidden",
+			"value" => 1,
+		);
+		/*
+		$rval["class_id"] = array(
+			"name" => "class_id",
+			"type" => "hidden",
+			"value" => $arr["request"]["class_id"],
+		);
+		*/
+		$rval["name"] = array(
+			"name" => "name",
+			"type" => "textbox",
+			"caption" => t("Nimi"),
+			"value" => $arr["request"]["name"],
+		); 
+		$rval["comment"] = array(
+			"name" => "comment",
+			"type" => "textbox",
+			"caption" => t("Kommentaar"),
+			"value" => $arr["request"]["comment"],
+		); 
+//@property class_id type=select multiple=1 size=10 group=search,advsearch
+//@caption Tüüp
+		$rval["oid"] = array(
+			"name" => "oid",
+			"type" => "textbox",
+			"caption" => t("OID"),
+			"value" => $arr["request"]["oid"],
+		);
+		$rval["createdby"] = array(
+			"name" => "createdby",
+			"type" => "textbox",
+			"caption" => t("Looja"),
+			"value" => $arr["request"]["createdby"],
+		);
+		$rval["modifiedby"] = array(
+			"name" => "modifiedby",
+			"type" => "textbox",
+			"caption" => t("Muutja"),
+			"value" => $arr["request"]["modifiedby"],
+		);
+		$rval["status"] = array(
+			"name" => "status",
+			"type" => "chooser",
+			"caption" => t("Staatus"),
+			"options" => array(
+				"3" => t("Kõik"),
+				"2" => t("Aktiivsed"),
+				"1" => t("Deaktiivsed"),
+			),
+			"value" => $arr["request"]["status"],
+		);
+//@property alias type=textbox group=advsearch
+//@caption Alias
+		$lg = get_instance("languages");
+		$rval["lang_id"] = array(
+			"name" => "lang_id",
+			"type" => "chooser",
+			"caption" => t("Keel"),
+			"options" => $lg->get_list(array("ignore_status" => true)),
+			"value" => $arr["request"]["lang_id"],
+		);
+//@property site_id type=select group=advsearch
+//@caption Saidi ID
+		$rval["search_bros"] = array(
+			"name" => "search_bros",
+			"type" => "checkbox",
+			"ch_value" => 1,
+			"caption" => t("Otsi vendi"),
+			"checked" => ($arr["request"]["search_bros"]),
+		);
+		$rval["sbt"] = array(
+			"name" => "sbt",
+			"type" => "submit",
+			"caption" => t("Otsi"),
+		);
+/*
+			case "server":
+				$ol = new object_list(array(
+					"class_id" => CL_AW_LOGIN,
+					"site_id" => array(),
+					"lang_id" => array()
+				));
+				$prop["options"] =  array("" => "") + $ol->names();
+				break;
+
+			case "class_id":
+				$prop["options"] = $this->_get_s_class_id();
+				break;
+*/
+		$this->_init_search_fields($arr["request"]);
+		if($this->do_search)
+		{
+			$tbl = &$this->_get_search_table($arr);
+			$rval["result_table"] = array(
+				"name" => "result_table",
+				"type" => "table",
+				"no_caption" => 1,
+				"vcl_inst" => $tbl,
+			);
+		}
+		return $rval;
+	}
+	
+	function _get_search_table($arr)
+	{
+		classload("vcl/table");
+		$t = new vcl_table();
+		$t->define_field(array(
+			"name" => "oid",
+			"caption" => t("ID"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "icon",
+			"caption" => t(""),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "lang_id",
+			"caption" => t("Keel"),
+			"align" => "center",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "class_id",
+			"caption" => t("Tüüp"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "location",
+			"caption" => t("Asukoht"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "created",
+			"caption" => t("Loodud"),
+			"type" => "time",
+			"format" => "d.m.y / H:i",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "createdby",
+			"caption" => t("Looja"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "modified",
+			"caption" => t("Muudetud"),
+			"type" => "time",
+			"format" => "d.m.y / H:i",
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "modifiedby",
+			"caption" => t("Muutja"),
+			"sortable" => 1,
+		));
+
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("<a href='javascript:selall(\"sel\")'>Vali</a>"),
+			"align" => "center",
+			"talign" => "center",
+			"chgbgcolor" => "cutcopied",
+		));
+		/*
+		$t->define_chooser(array(
+			"name" => "check",
+			"field" => "oid",
+			"caption" => t("Vali"),
+		));
+		*/
+
+		classload("core/icons");
+
+		if ($this->do_search)
+		{
+			$s_args = array(
+				"lang_id" => array(),
+				"site_id" => array(),
+			);
+			foreach($this->qparts as $qkey => $qvalue)
+			{
+				$s_args[$qkey] = $qvalue;
+			};
+
+			// 3 - ignore status
+			if ($s_args["status"] == 3)
+			{
+				unset($s_args["status"]);
+			};
+
+			$s_args["limit"] = 500;
+
+			$_tmp = $this->_search_mk_call("objects", "storage_query", $s_args);
+
+			$this->search_results = count($_tmp);
+			//arr($_tmp);
+
+			$clinf = aw_ini_get("classes");
+
+			foreach($_tmp as $id => $item)
+			{
+				$type = $clinf[$item["class_id"]]["name"];
+				$icon = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($item["class_id"]));
+				$t->define_data(array(
+					"name" => html::href(array(
+						"caption" => $item["name"],
+						"url" => $this->mk_my_orb("change",array("id" => $id),$item["class_id"]),
+					)),
+					"lang_id" => $item["lang_id"],
+					"oid" => $id,
+					"icon" => $icon,
+					"created" => $item["created"],
+					"createdby" => $item["createdby"],
+					"modifiedby" => $item["modifiedby"],
+					"modified" => $item["modified"],
+					"class_id" => $clinf[$item["class_id"]]["name"],
+					"location" => $item["path_str"],
+					"change" => "<input type='checkbox' name='check' value='$id'>",
+				));
+			}
+		}
+		return $t;
+	}
+	
+	// generates contents for the class picker drop-down menu
+	function _get_s_class_id()
+	{
+		$tar = array(0 => LC_OBJECTS_ALL) + get_class_picker(array(
+			"only_addable" => 1
+		));
+
+		$atc_inst = get_instance(CL_ADD_TREE_CONF);
+		$atc_id = $atc_inst->get_current_conf();
+		if (is_oid($atc_id) && $this->can("view", $atc_id))
+		{
+			$atc = obj($atc_id);
+
+			$tmp = array();
+			foreach($tar as $clid => $cln)
+			{
+				if ($atc_inst->can_access_class($atc, $clid))
+				{
+					$tmp[$clid] = $cln;
+				}
+			}
+			$tar = $tmp;
+		}
+
+		return $tar;
+	}
+
+	function _search_mk_call($class, $action, $params)
+	{
+		$_parms = array(
+			"class" => $class,
+			"action" => $action,
+			"params" => $params
+		);
+		if ($this->server_id)
+		{
+			$_parms["method"] = "xmlrpc";
+			$_parms["login_obj"] = $this->server_id;
+		}
+		$ret =  $this->do_orb_method_call($_parms);
+		return $ret;
+	}
+	
+	function _init_search_fields($arr)
+	{
+		$this->do_search = false;
+		$parts = array();
+		$string_fields = array("name","createdby","modifiedby","comment","alias");
+		$numeric_fields = array("oid","status","lang_id");
+		foreach($string_fields as $string_field)
+		{
+			if (!empty($arr[$string_field]))
+			{
+				$parts[$string_field] = "%" . $arr[$string_field] . "%";
+
+			}
+		}
+		foreach($numeric_fields as $numeric_field)
+		{
+			if (!empty($arr[$numeric_field]))
+			{
+				$parts[$numeric_field] = $arr[$numeric_field];
+			}
+		}
+
+		if (!empty($arr["aselect"]))
+		{
+			$parts["class_id"] = $arr["aselect"];
+		}
+
+		$this->server_id = false;
+		if (!empty($arr["server"]))
+		{
+			$this->server_id = $arr["server"];
+		}
+
+		$this->qparts = $parts;
+		$this->do_search = true;
 	}
 	
 	function _make_toolbar($arr)
 	{
 		$tb = get_instance("vcl/toolbar");
-		$objtype = $arr["s"]["class_id"] ? $arr["s"]["class_id"] : $arr["request"]["objtype"];
+		$objtype = $arr["request"]["aselect"];
 		if (is_array($objtype) && (count($objtype) == 1))
 		{
 			$objtype = array_pop($objtype);
@@ -241,7 +565,7 @@ class relationmgr extends aw_template
 				"name" => "search",
 				"img" => "search.gif",
 				"tooltip" => t("Otsi"),
-				"url" => "javascript:if (document.foo.reltype.value!='_') {document.searchform.submit();} else alert('Vali seosetüüp!')",
+				"url" => "javascript:if (document.changeform.reltype.value!='_') {document.changeform.submit();} else alert('Vali seosetüüp!')",
 			));
 		}
 		else
@@ -275,10 +599,9 @@ class relationmgr extends aw_template
 			"url" => "javascript:window.location.reload()",
 		));
 		
-		
 		if($arr["request"]["srch"] == 1)
 		{
-			if ($this->search->get_opt("rescounter") > 0)
+			if ($this->search_results > 0)
 			{
 				$tb->add_button(array(
 					"name" => "save",
@@ -313,7 +636,6 @@ class relationmgr extends aw_template
 		foreach($arr as $key => $val)
 		{
 			$alls[] ='"'.$val.'"';
-			//$alls[] ='"'.htmlspecialchars($val).'"';
 			$alls[] ='"'.$key.'"';
 		}
 		return implode(',', $alls);
@@ -511,32 +833,37 @@ class relationmgr extends aw_template
 			}
 			$tbl->define_data($adat);
 		}
-		$tbl->set_default_sortby("title");
-		$tbl->sort_by();
-		$req = $arr["request"];
+		$req = safe_array($arr["request"]);
 		unset($req["action"]);
 		$reforb = $this->mk_reforb("submit", $req + array("reforb" => 1), $req["class"]);
 		$this->vars(array(
 			"class_ids" => $this->clid_list,
-			"table" => $tbl->draw(),
 			"id" => $arr["obj_inst"]->id(),
-			"reforb" => $reforb,
-			"toolbar" => $tb->get_toolbar(),
 			"return_url" => get_ru(),
 			"period" => $period,
 			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array("srch" => 1)),
 		));
-		$pr["form"] = array(
-			"name" => "show_aliases",
-			"type" => "text",
+		$tbl->table_header = $this->parse();
+		$tbl->set_default_sortby("title");
+		$tbl->sort_by();
+		$pr["rel_toolbar"] = array(
+			"name" => "rel_toolbar",
+			"type" => "toolbar",
 			"no_caption" => 1,
-			"value" => $this->parse(),
+			"vcl_inst" => $tb,
+		);
+		$pr["rel_table"] = array(
+			"name" => "rel_table",
+			"type" => "table",
+			"vcl_inst" => $tbl,
+			"no_caption" => 1,
 		);
 		return $pr;
 	}
 	
 	function process_vcl_property($arr)
 	{
+		$arr["request"] = safe_array($arr["request"]) + $_REQUEST;
 		if ($arr["request"]["subaction"] == "delete")
 		{
 			$to_delete = new aw_array($arr["request"]["check"]);
