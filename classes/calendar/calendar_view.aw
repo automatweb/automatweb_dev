@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.30 2005/04/18 10:51:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.31 2005/04/19 18:06:51 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -28,6 +28,12 @@
 
 @property show_days_with_events type=checkbox ch_value=1
 @caption Näita ainult sündmustega päevi
+
+@property show_event_content type=checkbox ch_value=1
+@caption Näita kalendrivaates kohe sündmuse sisu
+
+@property actives_only type=checkbox ch_value=1
+@caption Näita ainult aktiivseid sündmusi
 
 @groupinfo style caption=Stiilid
 @default group=style
@@ -100,7 +106,7 @@ class calendar_view extends class_base
 			"tpldir" => "calendar/calendar_view",
 			"clid" => CL_CALENDAR_VIEW
 		));
-		
+		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING,CL_CRM_MEETING,CL_TASK,CL_CRM_CALL,CL_PARTY,CL_COMICS);
 		lc_site_load("calendar_view",&$this);
 	}
 
@@ -492,7 +498,6 @@ class calendar_view extends class_base
 		$o = $arr["obj_inst"];
 		$range = $arr["range"];
 		$clid = $o->class_id();
-
 		switch($clid)
 		{
 			case CL_PLANNER:
@@ -503,6 +508,7 @@ class calendar_view extends class_base
 					"flatlist" => 1,
 					"date" => date("d-m-Y",$range["timestamp"]),
 					"range" => $range,
+					"status" => $arr["status"],
 				));
 				if ($range["viewtype"] == "last_events")
 				{
@@ -530,7 +536,8 @@ class calendar_view extends class_base
 				$events = $da->get_events(array(
 					"id" => $o->id(),
 					"range" => $range,
-				));	
+					"status" => $arr["status"],
+				));
 				break;
 
 			case CL_PROJECT:
@@ -547,6 +554,29 @@ class calendar_view extends class_base
 		};
 
 		return $events;
+	}
+	
+	function get_event_sources($o)
+	{
+		$sources = array();
+		switch($o->class_id())
+		{
+			case CL_PLANNER:
+				$pl = get_instance(CL_PLANNER);
+				$sources = $pl->get_event_sources($o->id());
+				break;
+
+			case CL_DOCUMENT_ARCHIVE:
+				$da = get_instance(CL_DOCUMENT_ARCHIVE);
+				$sources = $da->get_event_sources($o->id());
+				break;
+
+			case CL_PROJECT:
+				$pr = get_instance(CL_PROJECT);
+				$sources = $pr->get_event_sources($o->id());
+				break;
+		}
+		return $sources;
 	}
 
 	////
@@ -636,6 +666,12 @@ class calendar_view extends class_base
 		{
 			$args["target_section"] = $this->target_doc;
 		};
+		$status = array(STAT_ACTIVE, STAT_NOTACTIVE);
+		if($this->obj_inst->prop("actives_only") == 1)
+		{
+			$status = array(STAT_ACTIVE);
+			$args["active_only"] = 1;
+		}
 
 
 		$vcal->configure($args);
@@ -650,6 +686,8 @@ class calendar_view extends class_base
 		{
 			$viewtype = $arr["viewtype"];
 		};
+		
+
 
 		if ($_GET["viewtype"])
 		{
@@ -679,9 +717,85 @@ class calendar_view extends class_base
 			$range_p["viewtype"] = "last_events";
 			$range_p["type"] = "last_events";
 		}
-
+		
 		$range = $vcal->get_range($range_p);
-
+		if($this->obj_inst->prop("show_event_content") == 1)
+		{
+			enter_function("calendar_view::show_event_content");
+			$conns = $this->obj_inst->connections_from(array(
+				"type" => "RELTYPE_EVENT_SOURCE",
+			));
+			$ec = array();
+			foreach($conns as $conn)
+			{
+				$to_o = $conn->to();
+				$events = $this->get_events_from_object(array(
+					"obj_inst" => $to_o,
+					"range" => $range,
+					"status" => $status,
+				));
+				
+				$sources = $this->get_event_sources($to_o);
+				$first = reset($events);
+				if($first)
+				{
+					$objs = new object_list(array(
+						"parent" => $sources,
+						"class_id" => $this->event_entry_classes,
+						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $first["start1"]),
+						"brother_of" => new obj_predicate_prop("id"),
+						"status" => $status,
+						"limit" => 1,
+					));
+					if($day = $objs->begin())
+					{
+						$ec["overview_start"] = $ec["start"] = $day->prop("start1");
+						$ec["prev"] = date("d-m-Y", $day->prop("start1"));
+					}
+					else
+					{
+						$ec["overview_start"] = $ec["start"] = $first["start1"];
+						$ec["prev"] = date("d-m-Y", $first["start1"]);
+					}
+				}
+				$last = end($events);
+				if($last)
+				{
+					$objs = new object_list(array(
+						"parent" => $sources,
+						"class_id" => $this->event_entry_classes,
+						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER, $last["start1"]),
+						"brother_of" => new obj_predicate_prop("id"),
+						"status" => $status,
+						"limit" => 1,
+					));
+					if($day = $objs->begin())
+					{
+						$ec["overview_end"] = $ec["end"]  = $day->prop("start1");
+						$ec["next"] = date("d-m-Y", $day->prop("start1"));
+					}
+					else
+					{
+						$ec["overview_end"] = $ec["end"]  = $last["start1"];
+						$ec["next"] = date("d-m-Y", $last["start1"]);
+					}
+				}
+				$vcal->items = array();
+				foreach($events as $event)
+				{
+					$o = new object($event["id"]);
+					$i = $o->instance();
+					$text .= $i->request_execute($o);
+				};
+			}
+			if(!empty($ec))
+			{
+				$range_p["show_ec"] = $ec;
+			}
+			$viewtype = "day";
+			exit_function("calendar_view::show_event_content");
+		}
+		$range = $vcal->get_range($range_p);
 		if ($arr["start_from"])
 		{
 			// this is used by project to limit the year view to start from the current month
@@ -774,7 +888,6 @@ class calendar_view extends class_base
 				"type" => "RELTYPE_EVENT_SOURCE",
 			));
 
-
 			$rv = "";
 
 			$rv = html::href(array(
@@ -801,7 +914,6 @@ class calendar_view extends class_base
 				));
 
 				$vcal->items = array();
-				
 				foreach($events as $event)
 				{
 					$data = $event;
