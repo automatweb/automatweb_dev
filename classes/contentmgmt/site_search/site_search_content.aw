@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.46 2005/04/12 10:07:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.47 2005/04/19 06:47:00 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1361,7 +1361,7 @@ class site_search_content extends class_base
 				break;
 				
 			case S_OPT_PHRASE:
-				$content_s = " MATCH(content) AGAINST('$str') ";
+				$content_s = " MATCH(content) AGAINST('\"$str\"' IN BOOLEAN MODE) ";
 				break;
 				}
 		}
