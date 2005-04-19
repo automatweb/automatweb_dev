@@ -498,8 +498,8 @@ CREATE TABLE `kliendibaas_firma` (
 
 class crm_company extends class_base
 {
-	var $unit=0;
-	var $category=0;
+	var $unit = 0;
+	var $category = 0;
 	var $active_node = 0;
 	var $group_not_shown = true;
 	var $data = null;
@@ -606,34 +606,12 @@ class crm_company extends class_base
 		{
 			$skip = array();
 		}
-
-		$customer_reltype = 3;//crm_category.reltype_customer 
-		if($obj->prop('class_id')==CL_CRM_COMPANY)
+		if($conn_type != "RELTYPE_CATEGORY")
 		{
-			$customer_reltype = 22; //crm_company.reltye_customer
-			if($conn_type=='RELTYPE_CATEGORY')
-			{
-				$conn_type = $this->crm_company_reltype_category;
-			}
-			else
-			{
-				$conn_type = $this->crm_company_reltype_section;
-			}
+			$conn_type = "RELTYPE_SECTION";
 		}
-		else if($obj->prop('class_id')==CL_CRM_SECTION)
-		{
-			if($conn_type=='RELTYPE_CATEGORY')
-			{
-				$conn_type = $this->crm_category_reltype_category;
-			}
-			else
-			{
-				$conn_type = $this->crm_section_reltype_section;
-			}
-		}
-	
 		$conns = $obj->connections_from(array(
-			'type'=>$conn_type,
+			'type' => $conn_type,
 			'sort_by' => 'from.jrk',
 			'sort_dir' => 'asc',
 		));
@@ -678,7 +656,7 @@ class crm_company extends class_base
 			//get all the company for the current leaf
 			$blah = $conn->to();
 			$conns_tmp = $blah->connections_from(array(
-				'type'=>$customer_reltype
+				"type" => "RELTYPE_CUSTOMER",
 			));
 			$oids = array();
 			foreach($conns_tmp as $conn_tmp)
@@ -687,7 +665,7 @@ class crm_company extends class_base
 			}
 			$tree_node_info['oid'] = $oids;
 			//let's find the picture for this obj
-			$img_conns = $tmp_obj->connections_from(array('type'=>'RELTYPE_IMAGE'));
+			$img_conns = $tmp_obj->connections_from(array("type" => "RELTYPE_IMAGE"));
 			//uuuuu, we have a pic
 			if(is_object(current($img_conns)))
 			{
@@ -728,24 +706,15 @@ class crm_company extends class_base
 	//hardcoded
 	function tree_node_items($tree,$obj,$this_level_id,$node_id)
 	{
-		$type = 'RELTYPE_PROFESSIONS';
-		if($obj->prop('class_id')==CL_CRM_COMPANY)
-		{
-			$type = $this->crm_company_reltype_professions;
-		}
-		else if($obj->prop('class_id')==CL_CRM_SECTION)
-		{
-			$type = $this->crm_section_reltype_professions;
-		}
 		//getting the list of professions for the current
 		//unit/organization
 		$prof_connections = $obj->connections_from(array(
-			'type'=>$type,
+			"type"=> "RELTYPE_PROFESSIONS",
 		));
 
 		$key = 'unit';
 		$value = '';
-		if($obj->prop('class_id')==CL_CRM_SECTION)
+		if($obj->prop("class_id") == CL_CRM_SECTION)
 		{
 			$value = $obj->id();
 		}
@@ -1116,7 +1085,7 @@ class crm_company extends class_base
 				$us = get_instance(CL_USER);
 				$person = obj($us->get_current_person());
 				$conns = $person->connections_from(array(
-					'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+					'type' => "RELTYPE_HANDLER",
 				));
 				
 				foreach($conns as $conn)
@@ -1175,7 +1144,7 @@ class crm_company extends class_base
 				$us = get_instance(CL_USER);
 				$person = obj($us->get_current_person());
 				$conns = $person->connections_from(array(
-					'type'=>22, //crm_person.reltype_CLIENT_IM_HANDLING
+					"type" => "RELTYPE_HANDLER",
 				));
 				$filter = array();
 				foreach($conns as $conn)
@@ -1713,7 +1682,7 @@ class crm_company extends class_base
 		{
 			$tmp_obj = new object($arr['request']['unit']);
 			$conns = $tmp_obj->connections_from(array(
-				'type' => 'RELTYPE_PROFESSIONS'
+				"type" => "RELTYPE_PROFESSIONS"
 			));
 			foreach($conns as $conn)
 			{
@@ -1739,13 +1708,13 @@ class crm_company extends class_base
 			{
 				$obj = new object((int)$arr['request']['unit']);
 				$conns = $obj->connections_from(array(
-					'type' => $this->crm_section_reltype_workers,
+					"type" => "RELTYPE_WORKERS",
 				));
 			}
 			else
 			{
 				$conns = $arr["obj_inst"]->connections_from(array(
-					"type" => $this->crm_company_reltype_workers,
+					"type" => "RELTYPE_WORKERS",
 				));
 			}
 
@@ -1801,7 +1770,7 @@ class crm_company extends class_base
 				{
 					$tmp_obj = new object($key);
 					$conns=$tmp_obj->connections_from(array(
-						'type' => 1,
+						'type' => "RELTYPE_SIMILARPROFESSION",
 					));
 					$tmp_arr = array();
 					foreach($conns as $conn)
@@ -1877,7 +1846,7 @@ class crm_company extends class_base
 	{	
 		//getting all the workers for the $obj
 		$conns = $obj->connections_from(array(
-			"type" => $this->crm_section_reltype_workers,
+			"type" => "RELTYPE_WORKERS",
 		));
 		foreach($conns as $conn)
 		{
@@ -1973,15 +1942,15 @@ class crm_company extends class_base
 		switch($arr["prop"]["name"])
 		{
 			case "org_calls":
-				$args["type"] = 12; //RELTYPE_CALL
+				$args["type"] = "RELTYPE_CALL";
 				break;
 			
 			case "org_meetings":
-				$args["type"] = 11; //RELTYPE_KOHTUMINE;
+				$args["type"] = "RELTYPE_KOHTUMINE";
 				break;
 			
 			case "org_tasks":
-				$args["type"] = 13; //RELTYPE_TASK;
+				$args["type"] = "RELTYPE_TASK";
 				break;
 		};
 		$conns = $ob->connections_from($args);
@@ -2117,7 +2086,7 @@ class crm_company extends class_base
 			{
 				$target_obj->connect(array(
 					"to" => $conn->prop("from"),
-					"reltype" => $this->crm_company_reltype_workers,
+					"reltype" => "RELTYPE_WORKERS",
 				));
 			}
 		}
@@ -2125,7 +2094,7 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => $this->crm_section_reltype_workers,
+				"reltype" => "RELTYPE_WORKERS",
 			));
 		
 		}
@@ -2141,7 +2110,7 @@ class crm_company extends class_base
 		{
 			$target_obj->connect(array(
 				"to" => $conn->prop("from"),
-				"reltype" => $this->crm_section_reltype_workers,
+				"reltype" => "RELTYPE_WORKERS",
 			));
 		}
 	}
@@ -2778,11 +2747,11 @@ class crm_company extends class_base
 	
 		if (is_array($arr["check"]))
 		{
-			foreach($arr['check'] as $key=>$value)
+			foreach($arr['check'] as $key => $value)
 			{
 				if ($main_obj->is_connected_to(array("to" => $value)))
 				{
-					$main_obj->disconnect(array('from'=>$value));
+					$main_obj->disconnect(array('from' => $value));
 				}
 			}
 		};
@@ -3072,7 +3041,7 @@ class crm_company extends class_base
 			//kinnitame aadressi kompaniiga
 			$new_company->connect(array(
 				'to' => $address->id(),
-				'reltype' => 3, //crm_company.reltype_address
+				'reltype' => "RELTYPE_ADDRESS", //crm_company.reltype_address
 			));
 		}
 		$new_company->save();
@@ -3401,9 +3370,7 @@ class crm_company extends class_base
 	*/
 	function do_search($arr, $results)
 	{
-		global $awt;
-
-		$awt->start("crm-company-org-search");
+		enter_function("crm_company::do_search");
 		
 		$tf = &$arr["prop"]["vcl_inst"];
 		$tf->define_field(array(
@@ -3453,7 +3420,7 @@ class crm_company extends class_base
 		));
 
 		$count = 0;
-		for ($o = $results->begin(); !$results->end(); $o = $results->next())
+		foreach($results->arr() as $o)
 		{
 			if($no_results)
 			{
@@ -3540,7 +3507,7 @@ class crm_company extends class_base
 		{
 			$tf->set_header("Otsing ei leidnud ühtegi objekti");
 		};
-		$awt->stop("cmr-company-org-search");
+		exit_function("crm_company::do_search");
 		return $count;
 	}
 
@@ -3682,7 +3649,7 @@ class crm_company extends class_base
 				//genereerin listi persooni kõikidest firmadest
 				$person = new object($person);
 				$conns=$person->connections_from(array(
-					'type' => 22,//crm_person.reltype_CLIENT_IM_HANDLING
+					"type" => "RELTYPE_HANDLER",
 				));
 				foreach($conns as $conn)
 				{
@@ -3825,7 +3792,7 @@ class crm_company extends class_base
 		$person = get_instance(CL_CRM_PERSON);
 		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
 
-		for($o=$ol->begin();!$ol->end();$o=$ol->next())
+		foreach($ol->arr() as $o)
 		{
 			$person_data = $person->fetch_person_by_id(array(
 				'id' => $o->id(),
@@ -3932,40 +3899,20 @@ class crm_company extends class_base
 	*/
 
 	//goes through all the relations and builds a set of id into $data
-	function get_customers_for_company($obj, $data, $category=false)
+	function get_customers_for_company($obj, $data, $category = false)
 	{
-		//if the $obj is a category
-		if($category)
-		{
-			$conns = $obj->connections_from(array(
-				'type' => 3,//crm_category.reltype_CUSTOMER
-			));
-		}
-		//if the $obj is a company
-		else
-		{
-			$conns = $obj->connections_from(array(
-				'type' => "RELTYPE_CUSTOMER",
-			));
-		}
+		$conns = $obj->connections_from(array(
+			"type" => "RELTYPE_CUSTOMER",
+		));
 		foreach($conns as $conn)
 		{
 			$data[$conn->prop('to')] = $conn->prop('to');
 		}
 
 		//let's look through the categories
-		if($category)
-		{
-			$conns = $obj->connections_from(array(
-				'type' => 2, //crm_category.RELTYPE_CATEGORY
-			));
-		}
-		else
-		{
-			$conns = $obj->connections_from(array(
-				'type' => "RELTYPE_CATEGORY",
-			));
-		}
+		$conns = $obj->connections_from(array(
+			"type" => "RELTYPE_CATEGORY",
+		));
 		
 		foreach($conns as $conn)
 		{
@@ -3985,7 +3932,7 @@ class crm_company extends class_base
 			$company = new object($arr['id']);
 
 			$conns = $company->connections_from(array(
-				'type' => "RELTYPE_PROJECT",
+				"type" => "RELTYPE_PROJECT",
 			));
 
 			$projects = array();
@@ -4867,7 +4814,7 @@ class crm_company extends class_base
 				{
 					$p->disconnect(array(
 						"from" => $p_from["unit"],
-						"type" => 21 // crm_person.reltype_section
+						"type" => "RELTYPE_SECTION",
 					));
 				}
 			}
@@ -4984,7 +4931,7 @@ class crm_company extends class_base
 
 	function customer_listing_tree($arr)
 	{
-		$tree_inst = &$arr['prop']['vcl_inst'];	
+		$tree_inst = &$arr['prop']['vcl_inst'];
 		$node_id = 0;
 		$this->active_node = (int)$arr['request']['category'];
 		$tree_inst->set_only_one_level_opened(1);
