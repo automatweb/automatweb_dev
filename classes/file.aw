@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.104 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.105 2005/04/19 12:50:03 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -292,9 +292,10 @@ class file extends class_base
 			return "";
 		}
 
-		$fi = $this->get_file_by_id($alias["target"]);
+		$fi = $this->get_file_by_id($alias["target"], false);
 		if ($fi["showal"] == 1 && $fi["meta"]["show_framed"])
 		{
+			$fi = $this->get_file_by_id($alias["target"], true);
 			// so what if we have it twice?
 			$this->dequote(&$fi["content"]);
 			$fi["content"] .= "</body>";
@@ -312,6 +313,7 @@ class file extends class_base
 		else
 		if ($fi["showal"] == 1)
 		{
+			$fi = $this->get_file_by_id($alias["target"], true);
 			// n2itame kohe
 			// kontrollime koigepealt, kas headerid on ehk väljastatud juba.
 			// dokumendi preview vaatamisel ntx on.
@@ -421,6 +423,10 @@ class file extends class_base
 		$site_basedir = $this->cfg["site_basedir"];
 		// find the extension for the file
 		list($major,$minor) = explode("/",$args["type"]);
+		if ($minor == "pjpeg" || $minor == "jpeg")
+		{
+			$minor = "jpg";
+		}
 
 		// first, we need to find a path to put the file
 		$filename = gen_uniq_id();
@@ -608,42 +614,43 @@ class file extends class_base
 
 	////
 	// !returns file by id
-	function get_file_by_id($id) 
+	function get_file_by_id($id, $fetch_file = true) 
 	{
 		$tmp = obj($id);
 		if ($tmp->class_id() != CL_FILE)
 		{
 			return array();
 		}
-		$row = new aw_array($tmp->fetch());
-		$this->db_query("SELECT * FROM files WHERE id = $id");
-		$ar = new aw_array($this->db_next());
-		$ret = $row->get() + $ar->get();
+		$ret = $tmp->fetch();
+		$ret["id"] = $id;
 
 		$ret["file"] = basename($ret["file"]);
-		if ($ret["meta"]["file_url"] != "")
+		if ($fetch_file)
 		{
-			$proto_find = get_instance("protocols/protocol_finder");
-			$proto_inst = $proto_find->inst($ret["meta"]["file_url"]);
-
-			$ret["content"] = $proto_inst->get($ret["meta"]["file_url"]);
-			$ret["type"] = $proto_inst->get_type();
-		}
-		else
-		if ($ret["file"] != "")
-		{
-			// file saved in filesystem - fetch it
-			$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
-			$tmp = $this->get_file(array("file" => $file));
-			if ($tmp !== false)
+			if ($ret["meta"]["file_url"] != "")
 			{
-				$ret["content"] = $tmp;
+				$proto_find = get_instance("protocols/protocol_finder");
+				$proto_inst = $proto_find->inst($ret["meta"]["file_url"]);
+
+				$ret["content"] = $proto_inst->get($ret["meta"]["file_url"]);
+				$ret["type"] = $proto_inst->get_type();
 			}
+			else
+			if ($ret["file"] != "")
+			{
+				// file saved in filesystem - fetch it
+				$file = $this->cfg["site_basedir"]."/files/".$ret["file"][0]."/".$ret["file"];
+				$tmp = $this->get_file(array("file" => $file));
+				if ($tmp !== false)
+				{
+					$ret["content"] = $tmp;
+				}
+			}
+			else
+			{
+				$this->dequote($ret["content"]);
+			};
 		}
-		else
-		{
-			$this->dequote($ret["content"]);
-		};
 		return $ret;
 	}
 
