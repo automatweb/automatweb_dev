@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.177 2005/04/18 15:16:21 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.178 2005/04/19 17:48:36 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -245,11 +245,16 @@ class aliasmgr extends aw_template
 		{
 			$act = "list_aliases";
 		};
+		$xargs = array("reforb", "check", "subaction", "emb", "alias_to", "cfgform", "ret_to_orb", "artists", "MAX_FILE_SIZE");
+		foreach($xargs as $arg)
+		{
+			unset($args[$arg]);
+		}
 		// so how should this thing work? if there is a special argument, then put the current
 		// url into the new url as a return_url
 
 		// except that if there already is one, then add do it. eh?
-		return $this->mk_my_orb($act,array("id" => $id,"group" => $group,"return_url" => $orig_return_url, "no_op" => $no_op),$this->use_class);
+		return $this->mk_my_orb($act, $args + array("id" => $id,"group" => $group,"return_url" => $orig_return_url, "no_op" => $no_op), $this->use_class);
 	}
 		
 	////
