@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.62 2005/04/18 10:18:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.63 2005/04/19 17:58:45 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -627,10 +627,6 @@ class planner extends class_base
 				$q .= $parprefix . "(" . $parstr . $eidstr . ")";
 			};
 		//}
-		if($arr["group_by"])
-		{
-			$q .= "GROUP BY ".$this->db_fn("planner.start");
-		}
 
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
@@ -947,7 +943,10 @@ class planner extends class_base
 				$this->emb_group = $emb_group;
 			
 				$t->id = $this->event_id;
-
+				
+				// the request has to be handled the other way also, in order to use things, that should be used.. -- ahz
+				
+				$t->request = $args["request"] + array("group" => $args["request"]["cb_group"], "class" => $clfile);
 				// aga vaata see koht siin peaks arvestama ka seadete vormi, nicht war?
 
 				$all_props = $t->get_property_group(array(
@@ -1046,8 +1045,10 @@ class planner extends class_base
 				}
 			}
 		}
-		$this->event_id = $t->submit($emb);
-		
+		if($t)
+		{
+			$this->event_id = $t->submit($emb);
+		}
 		// register event_id in global scope also -- ahz
 		aw_global_set("event_id", $this->event_id);
 		
