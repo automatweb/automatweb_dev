@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.104 2005/04/20 09:46:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.105 2005/04/20 10:36:11 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1022,8 +1022,33 @@ if ($_GET['show_thread_data'] == 1)
 
 	foreach ($list as $res_id => $r)
 	{
-		echo "res id: " . $res_id ." state:" .$r->prop("state");
-		arr($r->prop("thread_data"));
+		if ($r->class_id() == CL_MRP_RESOURCE)
+		{
+			$thread_data = $r->prop("thread_data");
+			$available = false;
+
+			foreach ($thread_data as $key => $value)
+			{
+				if ($value["state"] == MRP_STATUS_RESOURCE_AVAILABLE)
+				{
+					$available = true;
+				}
+			}
+
+			if ($available)
+			{
+				$r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+				$r->save();
+			}
+			else
+			{
+				$r->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
+				$r->save();
+			}
+
+			echo "res id: " . $res_id ." state:" .$r->prop("state");
+			arr($r->prop("thread_data"));
+		}
 	}
 }
 /* dbg */
