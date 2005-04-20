@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.103 2005/04/18 12:24:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.104 2005/04/20 09:46:37 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -164,6 +164,11 @@
 	@property max_subcontractor_timediff type=textbox default=1
 	@comment Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.
 	@caption Allhanke suurim ajanihe (h)
+
+	// @property default_global_buffer type=textbox default=4
+	// @comment Uutele loodavatele ressurssidele vaikimisi pandav päeva üldpuhver.
+	// @caption Vaikimisi üldpuhver (h)
+
 
 
 	@property title_sceduler_parameters type=text store=no subtitle=1
@@ -696,6 +701,38 @@ class mrp_workspace extends class_base
 				$prop["value"] = empty ($arr["request"]["mrp_chart_start"]) ? $this->get_week_start () : $arr["request"]["mrp_chart_start"];
 				break;
 
+			// case "chart_project_hilight":
+				// if (is_oid ($arr["request"]["mrp_hilight"]))
+				// {
+					// $options = array ();
+					// $prop["value"] = $arr["request"]["mrp_hilight"];
+				// }
+				// else
+				// {
+					// $options = array ("0" => " ");
+				// }
+
+				// $applicable_states = array (
+					// MRP_STATUS_PLANNED,
+					// MRP_STATUS_DONE,
+					// MRP_STATUS_ARCHIVED,
+					// MRP_STATUS_INPROGRESS,
+				// );
+
+				// $list = new object_list (array (
+					// "class_id" => CL_MRP_CASE,
+					// "state" => $applicable_states,
+					// "parent" => $this_object->prop ("projects_folder"),
+				// ));
+
+				// for ($project =& $list->begin (); !$list->end (); $project =& $list->next ())
+				// {
+					// $options[$project->id ()] = $project->name ();
+				// }
+
+				// $prop["options"] = $options;
+				// break;
+
 			case "replan":
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
@@ -929,7 +966,6 @@ class mrp_workspace extends class_base
 
 				switch ($project->prop ("state"))
 				{
-					default:
 					case MRP_STATUS_PLANNED:
 						$starttime_prop = "starttime";
 						break;
@@ -976,6 +1012,21 @@ class mrp_workspace extends class_base
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
 		));
+
+
+/* dbg */
+if ($_GET['show_thread_data'] == 1)
+{
+	$list = $resource_tree->to_list();
+	$list = $list->arr();
+
+	foreach ($list as $res_id => $r)
+	{
+		echo "res id: " . $res_id ." state:" .$r->prop("state");
+		arr($r->prop("thread_data"));
+	}
+}
+/* dbg */
 
 		classload("vcl/treeview");
 		$tree = treeview::tree_from_objects(array(
@@ -1112,7 +1163,7 @@ class mrp_workspace extends class_base
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 			"mrp_workspace" => $this_object->id (),
 			"mrp_parent" => $parent,
-			"parent" => $parent
+			"parent" => $parent,
 		), "mrp_resource");
 		$add_category_url = $this->mk_my_orb("new", array(
 			"return_url" => urlencode(aw_global_get('REQUEST_URI')),
