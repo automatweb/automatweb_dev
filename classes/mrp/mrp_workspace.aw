@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.105 2005/04/20 10:36:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.106 2005/04/20 10:39:48 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1024,28 +1024,30 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		if ($r->class_id() == CL_MRP_RESOURCE)
 		{
-			$thread_data = $r->prop("thread_data");
-			$available = false;
+			### fix
+			// $thread_data = $r->prop("thread_data");
+			// $available = false;
 
-			foreach ($thread_data as $key => $value)
-			{
-				if ($value["state"] == MRP_STATUS_RESOURCE_AVAILABLE)
-				{
-					$available = true;
-				}
-			}
+			// foreach ($thread_data as $key => $value)
+			// {
+				// if ($value["state"] == MRP_STATUS_RESOURCE_AVAILABLE)
+				// {
+					// $available = true;
+				// }
+			// }
 
-			if ($available)
-			{
-				$r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
-				$r->save();
-			}
-			else
-			{
-				$r->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
-				$r->save();
-			}
+			// if ($available)
+			// {
+				// $r->set_prop("state", MRP_STATUS_RESOURCE_AVAILABLE);
+				// $r->save();
+			// }
+			// else
+			// {
+				// $r->set_prop("state", MRP_STATUS_RESOURCE_INUSE);
+				// $r->save();
+			// }
 
+			### show
 			echo "res id: " . $res_id ." state:" .$r->prop("state");
 			arr($r->prop("thread_data"));
 		}
