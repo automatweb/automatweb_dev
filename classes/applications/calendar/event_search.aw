@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.59 2005/04/21 09:41:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.60 2005/04/21 12:14:09 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -736,7 +736,7 @@ class event_search extends class_base
 				}
 			}
 		}
-		if($search_p1)
+		if($search_p1 && $formconfig["project1"]["active"])
 		{
 			$vars = array(
 				"name" => "project1",
@@ -757,7 +757,7 @@ class event_search extends class_base
 			$htmlc->add_property($vars);
 		}
 		
-		if($search_p2)
+		if($search_p2 && $formconfig["project2"]["active"])
 		{
 			$vars = array(
 				"name" => "project2",

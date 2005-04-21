@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.383 2005/04/18 15:19:39 ahti Exp $
+// $Id: class_base.aw,v 2.384 2005/04/21 12:14:10 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2196,7 +2196,6 @@ class class_base extends aw_template
 						"relinfo" => $this->relinfo,
 						"view" => $this->view,
 					));
-					
 					if (is_array($res))
 					{
 						foreach($res as $rkey => $rval)
