@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.15 2005/04/05 13:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.16 2005/04/21 09:48:27 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -565,7 +565,11 @@ class ml_queue extends aw_template
 		$msg_obj = new object($msg["mail"]);
 		$is_html = $msg_obj->prop("html_mail") == 1024;
 		//$is_html=$msg["type"] & MSG_HTML;
-		$message = nl2br($msg["message"]);
+		$message = $msg["message"];
+		if($is_html)
+		{
+			$message = nl2br($message);
+		}
 
 		$c_title = $msg_obj->prop("msg_contener_title");
 		$c_content = $msg_obj->prop("msg_contener_content");
@@ -587,7 +591,6 @@ class ml_queue extends aw_template
 			$message = str_replace("#content#", $message, $template);
 		}
 
-		//arr($is_html);
 		// compatiblity with old messenger .. yikes
 		echo "from = {$msg["mailfrom"]}  <br />";
 		$this->awm->create_message(array(

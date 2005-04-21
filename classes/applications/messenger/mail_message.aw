@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.9 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.10 2005/04/21 09:48:27 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -479,7 +479,6 @@ class mail_message extends class_base
 			{
 				$message = str_replace($source,$target,$message);
 			}
-
 		}
 		
 		$awm = get_instance("protocols/mail/aw_mail");
@@ -494,8 +493,7 @@ class mail_message extends class_base
 		$awm->gen_mail();
 
 	}
-				
-			
+	
 	function edit_toolbar($arr)
 	{
 		$tb = &$arr["toolbar"];
