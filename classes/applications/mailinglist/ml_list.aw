@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.25 2005/04/11 10:29:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.26 2005/04/21 12:48:45 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -11,7 +11,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_TO, CL_MENU, on_mconnect_to)
 ------------------------------------------------------------------------
 @default group=general
 
-@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1
+@property def_user_folder type=relpicker reltype=RELTYPE_MEMBER_PARENT editonly=1 rel=1 multiple=1
 @caption Listi liikmete allikas
 
 @property multiple_folders type=checkbox ch_value=1
@@ -815,17 +815,26 @@ class ml_list extends class_base
 	{
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
-		$fld = $list_obj->prop("def_user_folder");
-		if(!is_oid($fld) || !$this->can("add", $fld))
+		$fld = new aw_array($list_obj->prop("def_user_folder"));
+		foreach($fld as $fold)
+		{
+			if(!is_oid($fold) || !$this->can("add", $fold))
+			{
+				continue;
+			}
+			$fld_obj = new object($fold);
+			if($fld_obj->class_id() != CL_MENU)
+			{
+				continue;
+			}
+			$is_fold = true;
+			break;
+		}
+		if(!$is_fold)
 		{
 			return false;
 		}
-		$fld_obj = new object($fld);
-		if($fld_obj->class_id() != CL_MENU)
-		{
-			return false;
-		}
-		$members = $this->get_all_members($fld);
+		$members = $this->get_all_members($fold);
 		$name = $fld_obj->name();
 		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
 		set_time_limit(0);
@@ -865,6 +874,7 @@ class ml_list extends class_base
 						"name" => $name,
 						"email" => $addr,
 						"list_id" => $list_obj->id(),
+						"use_folders" => $fold,
 					));
 					usleep(500000);
 					$members[] = $addr;
@@ -891,9 +901,22 @@ class ml_list extends class_base
 	{
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
-		$fld = $list_obj->prop("def_user_folder");
-		$fld_obj = new object($fld);
-		if($fld_obj->class_id() != CL_MENU)
+		$fld = new aw_array($list_obj->prop("def_user_folder"));
+		foreach($fold->get() as $fld)
+		{
+			if(!is_oid($fld) || !$this->can("add", $fld))
+			{
+				continue;
+			}
+			$fld_obj = new object($fld);
+			if($fld_obj->class_id() != CL_MENU)
+			{
+				continue;
+			}
+			$is_fold = true;
+			break;
+		}
+		if(!$is_fold)
 		{
 			return false;
 		}
@@ -920,6 +943,7 @@ class ml_list extends class_base
 						"email" => $addr,
 						"list_id" => $list_obj->id(),
 						"ret_status" => true,
+						"use_folders" => $fold,
 					));
 					if ($retval)
 					{
@@ -1351,125 +1375,137 @@ class ml_list extends class_base
 	function get_members_ol($id)
 	{
 		$obj = &obj($id);
-		$folder_id = $obj->prop("def_user_folder");
-		if(!is_oid($folder_id) || !$this->can("view", $folder_id))
+		$fld = new aw_array($obj->prop("def_user_folder"));
+		$objects = new object_list();
+		foreach($fld->get() as $folder_id)
 		{
-			return $ret;
-		}
-		$source_obj = &obj($folder_id);
-		if($source_obj->class_id() == CL_MENU)
-		{
-			$member_list = new object_list(array(
-				"parent" => $source_obj->id(),
-				"class_id" => CL_ML_MEMBER,
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-		}
-		elseif ($source_obj->class_id() == CL_GROUP)
-		{
-			$users_list = new object_list(($source_obj->connections_from(array(
-				"type" => "RELTYPE_MEMBER",
-			))));
-			
-			$member_list = new object_list();
-			
-			foreach ($users_list->arr() as $user)
+			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 			{
-				if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				continue;
+			}
+			$source_obj = obj($folder_id);
+			if($source_obj->class_id() == CL_MENU)
+			{
+				$member_list = new object_list(array(
+					"parent" => $source_obj->id(),
+					"class_id" => CL_ML_MEMBER,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
+				foreach($member_list->arr() as $member)
 				{
-					$member_list->add($tmp);
+					$objects->add($member);
 				}
-				unset($tmp);
 			}
-		}
-		elseif($source_obj->class_id() == CL_USER)
-		{
-			$member_list = new object_list();
-			if($tmp = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+			elseif ($source_obj->class_id() == CL_GROUP)
 			{
-				$member_list->add($tmp);
+				$users_list = new object_list(($source_obj->connections_from(array(
+					"type" => "RELTYPE_MEMBER",
+				))));
+				
+				$member_list = new object_list();
+				
+				foreach ($users_list->arr() as $user)
+				{
+					if($tmp = $user->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+					{
+						$objects->add($tmp);
+					}
+					unset($tmp);
+				}
+			}
+			elseif($source_obj->class_id() == CL_USER)
+			{
+				$member_list = new object_list();
+				if($tmp = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				{
+					$objects->add($tmp);
+				}
 			}
 		}
-		return $member_list;
+		return $objects;
 	}
 	
 	function get_members($id, $from = 0, $to = 0)
 	{
-		$obj_inst = &obj($id);
+		$obj_inst = obj($id);
 		$ret = array();
-		$folder_id = $obj_inst->prop("def_user_folder");
-		if(!is_oid($folder_id) || !$this->can("view", $folder_id))
+		$cnt = 0;
+		$fld = new aw_array($obj_inst->prop("def_user_folder"));
+		foreach($fld->get() as $folder_id)
 		{
-			return $ret;
-		}
-		$source_obj = &obj($folder_id);
-		//$this->get_members_ol($source_obj);
-		if($source_obj->class_id() == CL_MENU)
-		{
-			$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
-
-			// why oh why is it so bloody slow with 1600 objects :(
-			/*
-			$member_list = new object_list(array(
-				"parent" => $list_obj->prop("def_user_folder"),
-				"class_id" => CL_ML_MEMBER,
-				"lang_id" => array(),
-				"site_id" => array(),
-			));
-			*/
-
-			$cnt = 0;
-
-			//$this->member_count = sizeof($member_list->ids());
-			$this->db_query($q);
-
-			while($row = $this->db_next())
-			//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
+			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 			{
-				$cnt++;
-				if (0 == $to || (0 != $from && 0 != $to && between($cnt, $from, $to)))
-				{
+				continue;
+			}
+			$source_obj = obj($folder_id);
+			//$this->get_members_ol($source_obj);
+			if($source_obj->class_id() == CL_MENU)
+			{
+				$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
+	
+				// why oh why is it so bloody slow with 1600 objects :(
 				/*
-				$ret[$o->id()] = array(
-					"oid" => $o->id(),
-					"parent" => $o->parent(),
-				);
+				$member_list = new object_list(array(
+					"parent" => $list_obj->prop("def_user_folder"),
+					"class_id" => CL_ML_MEMBER,
+					"lang_id" => array(),
+					"site_id" => array(),
+				));
 				*/
-					$ret[$row["oid"]] = array(
-						"oid" => $row["oid"],
-						"parent" => $row["parent"],
-					);
-				}
-			}
-		}
-		elseif ($source_obj->class_id() == CL_GROUP)
-		{
-			$members = $source_obj->connections_from(array(
-				"type" => "RELTYPE_MEMBER",
-			));
-			foreach ($members as $member)
-			{
-				$member = $member->to();
-				$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
-				if(!$email)
+	
+				//$this->member_count = sizeof($member_list->ids());
+				$this->db_query($q);
+	
+				while($row = $this->db_next())
+				//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 				{
-					continue;
+					$cnt++;
+					if (0 == $to || (0 != $from && 0 != $to && between($cnt, $from, $to)))
+					{
+					/*
+					$ret[$o->id()] = array(
+						"oid" => $o->id(),
+						"parent" => $o->parent(),
+					);
+					*/
+						$ret[$row["oid"]] = array(
+							"oid" => $row["oid"],
+							"parent" => $row["parent"],
+						);
+					}
 				}
-				$ret[] = array(
-					"oid" => $email->id(),
-					"parent" => $email->parent(),
-				);
 			}
-		}
-		elseif($source_obj->class_id() == CL_USER)
-		{
-			if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+			elseif ($source_obj->class_id() == CL_GROUP)
 			{
-				$ret[] = array(
-					"oid" => $email->id(),
-					"parent" => $email->parent(),
-				);
+				$members = $source_obj->connections_from(array(
+					"type" => "RELTYPE_MEMBER",
+				));
+				foreach ($members as $member)
+				{
+					$member = $member->to();
+					$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
+					if(!$email)
+					{
+						continue;
+					}
+					$ret[] = array(
+						"oid" => $email->id(),
+						"parent" => $email->parent(),
+					);
+					$cnt++;
+				}
+			}
+			elseif($source_obj->class_id() == CL_USER)
+			{
+				if($email = $source_obj->get_first_obj_by_reltype("RELTYPE_EMAIL"))
+				{
+					$ret[] = array(
+						"oid" => $email->id(),
+						"parent" => $email->parent(),
+					);
+					$cnt++;
+				}
 			}
 		}
 		$this->member_count = $cnt;

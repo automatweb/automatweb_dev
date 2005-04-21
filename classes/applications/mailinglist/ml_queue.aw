@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.16 2005/04/21 09:48:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.17 2005/04/21 12:48:45 ahti Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -673,9 +673,6 @@ class ml_queue extends aw_template
 
 		$ml_list_inst = get_instance(CL_ML_LIST);
 		$list_obj = new object($arr["list_id"]);
-		$def_user_folder = $list_obj->prop("def_user_folder");
-		// 2) retrieves a list of mailing list users
-		$source_obj = &obj($def_user_folder);
 		$member_list = $ml_list_inst->get_members_ol($list_obj);
 		$this->read_template("send_mail.tpl");
 		// 3) calls preprocess_one_message for each one
