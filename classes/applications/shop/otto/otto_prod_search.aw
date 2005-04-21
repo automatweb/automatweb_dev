@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.10 2005/02/01 15:22:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.11 2005/04/21 09:31:15 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -122,7 +122,7 @@ class otto_prod_search extends class_base
 					"name" => "%".$arr["str"]."%",
 					"user3" => "%".$arr["str"]."%",
 					"userta2" => "%".$arr["str"]."%",
-					"user20" => "%".substr($arr["str"], 0,7)."%",
+					"user20" => "%".substr($arr["str"], 0,6)."%",
 				)
 			)),
 			"price" => new obj_predicate_not(10000000),
