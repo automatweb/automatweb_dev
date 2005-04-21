@@ -9,7 +9,7 @@ class html2pdf extends class_base
 
 	function can_convert()
 	{
-		if (is_file(aw_ini_get("html2pdf.htmldoc_path"))
+		if (is_file(aw_ini_get("html2pdf.htmldoc_path")))
 		{
 			return true;
 		}
