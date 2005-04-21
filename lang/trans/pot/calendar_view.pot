@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:15 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,6 +68,30 @@ msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_show_days_with_events_help
 msgid "Omaduse Näita ainult sündmustega päevi (show_days_with_events) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_event_content
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_event_content_comment
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_show_event_content_help
+msgid "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) help"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_actives_only
+msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_actives_only_comment
+msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) kommentaar"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:prop_actives_only_help
+msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) help"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:prop_minical_day_with_events
@@ -254,83 +278,83 @@ msgstr ""
 msgid "Seose Otsing (RELTYPE_SEARCH) tekst"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:115
+#: classes/calendar/calendar_view.aw:121
 msgid "Kuuvaade & nädala sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:116
+#: classes/calendar/calendar_view.aw:122
 msgid "Kuukalender"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:117
+#: classes/calendar/calendar_view.aw:123
 msgid "Algavad sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:118
+#: classes/calendar/calendar_view.aw:124
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:119
+#: classes/calendar/calendar_view.aw:125
 msgid "Järgmised sündmused"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:120
+#: classes/calendar/calendar_view.aw:126
 msgid "Grupeeri allika järgi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:131
+#: classes/calendar/calendar_view.aw:137
 msgid "päev"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:132
+#: classes/calendar/calendar_view.aw:138
 msgid "nädal"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:133
+#: classes/calendar/calendar_view.aw:139
 msgid "kuu"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:134
+#: classes/calendar/calendar_view.aw:140
 msgid "Järgmised"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:173
+#: classes/calendar/calendar_view.aw:179
 msgid "Nimi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:178
+#: classes/calendar/calendar_view.aw:184
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:183
+#: classes/calendar/calendar_view.aw:189
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:189
+#: classes/calendar/calendar_view.aw:195
 msgid "Jrk"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:194
+#: classes/calendar/calendar_view.aw:200
 msgid "Seaded"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:199
+#: classes/calendar/calendar_view.aw:205
 msgid "Väljade eraldaja"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:204
+#: classes/calendar/calendar_view.aw:210
 msgid "Lisaväljad"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:220
+#: classes/calendar/calendar_view.aw:226
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:778
+#: classes/calendar/calendar_view.aw:895
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:785
+#: classes/calendar/calendar_view.aw:902
 msgid "&gt;&gt;"
 msgstr ""
 

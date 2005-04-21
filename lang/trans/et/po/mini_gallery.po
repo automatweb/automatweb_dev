@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:02 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:43 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,60 +9,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
 msgid "Omaduse Piltide kataloog (folder) caption"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_comment
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_comment
 msgid "Omaduse Piltide kataloog (folder) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_help
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_folder_help
 msgid "Omaduse Piltide kataloog (folder) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_cols
 msgid "Omaduse Tulpi (cols) caption"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_comment
 msgid "Omaduse Tulpi (cols) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_help
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_cols_help
 msgid "Omaduse Tulpi (cols) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
 msgid "Omaduse ridu (rows) caption"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
 msgid "Omaduse ridu (rows) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_help
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_help
 msgid "Omaduse ridu (rows) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
 msgid "Omaduse Uploadi ZIP fail (zip_file) caption"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_comment
 msgid "Omaduse Uploadi ZIP fail (zip_file) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_help
+# classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file_help
 msgid "Omaduse Uploadi ZIP fail (zip_file) help"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:group_import
+# classes/contentmgmt/gallery/mini_gallery.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
+# classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
 msgid "Seose piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:181
+msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
+msgstr ""

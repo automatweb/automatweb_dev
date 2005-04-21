@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:25 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -152,6 +152,18 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:prop_sell_prods_help
 msgid "Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) help"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets
+msgid "Omaduse Ladu ei müü pakette (no_packets) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_comment
+msgid "Omaduse Ladu ei müü pakette (no_packets) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_help
+msgid "Omaduse Ladu ei müü pakette (no_packets) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_config.aw:rel_RELTYPE_FOLDER

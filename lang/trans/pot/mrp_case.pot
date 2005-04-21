@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:01:02 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -786,7 +786,7 @@ msgstr ""
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1824 classes/mrp/mrp_case.aw:1881 classes/mrp/mrp_case.aw:1964 classes/mrp/mrp_case.aw:2032 classes/mrp/mrp_case.aw:2091 classes/mrp/mrp_case.aw:2165
+#: classes/mrp/mrp_case.aw:1824 classes/mrp/mrp_case.aw:1883 classes/mrp/mrp_case.aw:1968 classes/mrp/mrp_case.aw:2038 classes/mrp/mrp_case.aw:2099 classes/mrp/mrp_case.aw:2175
 msgid "Projekti id vale"
 msgstr ""
 
@@ -794,27 +794,27 @@ msgstr ""
 msgid "Projekt pole planeeritud"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1907
+#: classes/mrp/mrp_case.aw:1909
 msgid "Kõik projekti tööd pole valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:1917 classes/mrp/mrp_case.aw:1976
+#: classes/mrp/mrp_case.aw:1919 classes/mrp/mrp_case.aw:1980
 msgid "Projekt pole töös"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:2001 classes/mrp/mrp_case.aw:2130 classes/mrp/mrp_case.aw:2203
+#: classes/mrp/mrp_case.aw:2007 classes/mrp/mrp_case.aw:2140 classes/mrp/mrp_case.aw:2215
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:2044
+#: classes/mrp/mrp_case.aw:2050
 msgid "Projekt pole valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:2105
+#: classes/mrp/mrp_case.aw:2113
 msgid "Projekt pole planeerimiseks valmis"
 msgstr ""
 
-#: classes/mrp/mrp_case.aw:2178
+#: classes/mrp/mrp_case.aw:2188
 msgid "Projekti staatus sobimatu"
 msgstr ""
 

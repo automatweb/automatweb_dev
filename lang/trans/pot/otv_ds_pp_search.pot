@@ -58,6 +58,30 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) help"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit
+msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit_comment
+msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit_help
+msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) help"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form
+msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) caption"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form_comment
+msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form_help
+msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_stbl_t
 msgid "Omaduse Otsinguvormi tulemuste tabel (stbl_t) caption"
 msgstr ""

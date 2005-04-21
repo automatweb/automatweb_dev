@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:48 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,6 +68,18 @@ msgstr ""
 
 #: classes/file.aw:prop_type_help
 msgid "Omaduse  (type) help"
+msgstr ""
+
+#: classes/file.aw:prop_comment
+msgid "Omaduse Faili allkiri (comment) caption"
+msgstr ""
+
+#: classes/file.aw:prop_comment_comment
+msgid "Omaduse Faili allkiri (comment) kommentaar"
+msgstr ""
+
+#: classes/file.aw:prop_comment_help
+msgid "Omaduse Faili allkiri (comment) help"
 msgstr ""
 
 #: classes/file.aw:prop_file_url
@@ -158,7 +170,7 @@ msgstr ""
 msgid "fail puudub"
 msgstr ""
 
-#: classes/file.aw:948
+#: classes/file.aw:955
 msgid "Need either id or parent"
 msgstr ""
 

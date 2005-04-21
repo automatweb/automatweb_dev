@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:01:03 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -330,7 +330,7 @@ msgstr ""
 msgid "Kommentaar peab olema t&auml;idetud!"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:483 classes/mrp/mrp_job.aw:623 classes/mrp/mrp_job.aw:749 classes/mrp/mrp_job.aw:831 classes/mrp/mrp_job.aw:897 classes/mrp/mrp_job.aw:971 classes/mrp/mrp_job.aw:1041
+#: classes/mrp/mrp_job.aw:483 classes/mrp/mrp_job.aw:625 classes/mrp/mrp_job.aw:753 classes/mrp/mrp_job.aw:835 classes/mrp/mrp_job.aw:903 classes/mrp/mrp_job.aw:979 classes/mrp/mrp_job.aw:1051
 msgid "Töö id vale"
 msgstr ""
 
@@ -358,31 +358,31 @@ msgstr ""
 msgid "Projekti alustamine ebaõnnestus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:635
+#: classes/mrp/mrp_job.aw:637
 msgid "Töö staatus sobimatu"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:660 classes/mrp/mrp_job.aw:785
+#: classes/mrp/mrp_job.aw:662 classes/mrp/mrp_job.aw:789
 msgid "Ressursi vabastamine ebaõnnestus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:673 classes/mrp/mrp_job.aw:799 classes/mrp/mrp_job.aw:1221
+#: classes/mrp/mrp_job.aw:675 classes/mrp/mrp_job.aw:803 classes/mrp/mrp_job.aw:1233
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:761 classes/mrp/mrp_job.aw:843 classes/mrp/mrp_job.aw:1053
+#: classes/mrp/mrp_job.aw:765 classes/mrp/mrp_job.aw:847 classes/mrp/mrp_job.aw:1063
 msgid "Töö pole tegemisel"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:912
+#: classes/mrp/mrp_job.aw:918
 msgid "Töö pole pausil"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:917 classes/mrp/mrp_job.aw:992
+#: classes/mrp/mrp_job.aw:923 classes/mrp/mrp_job.aw:1000
 msgid "Projekt pole jätkatav"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:987
+#: classes/mrp/mrp_job.aw:995
 msgid "Töö pole katkestatud"
 msgstr ""
 

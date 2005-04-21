@@ -54,7 +54,6 @@ $GLOBALS["TRANS"]["Omaduse &Auml;ra tee Samal teemal linke (no_topic_links) capt
 $GLOBALS["TRANS"]["Omaduse &Auml;ra arvesta muutmist (no_last) caption"] = "Do not change modified date";
 $GLOBALS["TRANS"]["Omaduse Muutmise kuupaev dokumendi sees (show_last_changed) caption"] = "Last modified date in document";
 $GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) caption"] = "Do not show in container";
-$GLOBALS["TRANS"]["Grupi Üldine (general) pealkiri"] = "General";
 $GLOBALS["TRANS"]["Grupi Kalender (calendar) pealkiri"] = "Calendar";
 $GLOBALS["TRANS"]["Grupi Vennastamine (vennastamine) pealkiri"] = "Brothers";
 $GLOBALS["TRANS"]["Grupi Seadistused (settings) pealkiri"] = "Settings";

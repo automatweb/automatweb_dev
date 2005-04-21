@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 14:31:03 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:46 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -26,26 +26,26 @@ msgstr "Error in the definition of %s (connection type undefined!)"
 msgid "Seda seost ei saa redigeerida!"
 msgstr "This connection can not be edited"
 
-#: classes/vcl/releditor.aw:346
+#: classes/vcl/releditor.aw:348
 msgid "Uus"
 msgstr "New"
 
-#: classes/vcl/releditor.aw:353
+#: classes/vcl/releditor.aw:355
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/vcl/releditor.aw:361
+#: classes/vcl/releditor.aw:363
 msgid "Klooni valitud objektid"
 msgstr "Clone selected objects"
 
-#: classes/vcl/releditor.aw:418 classes/vcl/releditor.aw:531
+#: classes/vcl/releditor.aw:426 classes/vcl/releditor.aw:543
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/vcl/releditor.aw:495 classes/vcl/releditor.aw:520
+#: classes/vcl/releditor.aw:507 classes/vcl/releditor.aw:532
 msgid "ID"
 msgstr "ID"
 
-#: classes/vcl/releditor.aw:525
+#: classes/vcl/releditor.aw:537
 msgid "Nimi"
 msgstr "Name"

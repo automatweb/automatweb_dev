@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 14:31:09 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:40 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -374,27 +374,27 @@ msgstr ""
 msgid "Seose Video (RELTYPE_PRJ_VIDEO) tekst"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:171
+#: classes/applications/groupware/project.aw:175
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1036
+#: classes/applications/groupware/project.aw:1074
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1068
+#: classes/applications/groupware/project.aw:1106
 msgid "Alamprojekt"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1173
+#: classes/applications/groupware/project.aw:1211
 msgid "Etendus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1397
+#: classes/applications/groupware/project.aw:1435
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1458
+#: classes/applications/groupware/project.aw:1496
 msgid "header"
 msgstr ""
 

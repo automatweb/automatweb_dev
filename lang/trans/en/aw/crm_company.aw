@@ -112,7 +112,6 @@ $GLOBALS["TRANS"]["Seose Projekt (RELTYPE_PROJECT) tekst"] = "Project";
 $GLOBALS["TRANS"]["Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"] = "Clent manager";
 $GLOBALS["TRANS"]["Seose Üksus veebis (RELTYPE_SECTION_WEBSIDE) tekst"] = "Section webside";
 $GLOBALS["TRANS"]["Seose organisatsiooni grupp (RELTYPE_GROUP) tekst"] = "Organisation group";
-$GLOBALS["TRANS"]["Seose leping (RELTYPE_CONTRACT) tekst"] = "Contract";
 $GLOBALS["TRANS"]["Seose Pakkumise fail (RELTYPE_OFFER_FILE) tekst"] = "Offer file";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Otsi kogu süsteemist"] = "Search everywhere";

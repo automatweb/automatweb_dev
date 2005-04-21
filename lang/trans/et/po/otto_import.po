@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 14:31:08 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:40 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -392,14 +392,14 @@ msgstr ""
 msgid "otto_import::images(): could not fetch html for url %s!"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1349
+#: classes/applications/shop/otto/otto_import.aw:1364
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1776
+#: classes/applications/shop/otto/otto_import.aw:1796
 msgid "Lehed komaga eraldatult"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1782
+#: classes/applications/shop/otto/otto_import.aw:1802
 msgid "AW Kataloogi ID"
 msgstr ""

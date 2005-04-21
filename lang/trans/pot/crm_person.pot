@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:14 +0300\n"
+"POT-Creation-Date: Tue, 19 Apr 2005 21:47:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -332,6 +332,18 @@ msgstr ""
 
 #: classes/crm/crm_person.aw:prop_url_help
 msgid "Omaduse Veebiaadressid (url) help"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_comment
+msgid "Omaduse Kontakt (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_comment_comment
+msgid "Omaduse Kontakt (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_person.aw:prop_comment_help
+msgid "Omaduse Kontakt (comment) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:prop_default_cv
@@ -742,7 +754,7 @@ msgstr ""
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/crm/crm_person.aw:708 classes/crm/crm_person.aw:762 classes/crm/crm_person.aw:1476
+#: classes/crm/crm_person.aw:708 classes/crm/crm_person.aw:762 classes/crm/crm_person.aw:1482
 msgid "Uus"
 msgstr ""
 
@@ -762,127 +774,127 @@ msgstr ""
 msgid "Kasutaja kalender"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1482
+#: classes/crm/crm_person.aw:1488
 msgid "Kustuta valitud tööpakkumised"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1488 classes/crm/crm_person.aw:1592
+#: classes/crm/crm_person.aw:1494 classes/crm/crm_person.aw:1598
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1500
+#: classes/crm/crm_person.aw:1506
 msgid "Arvutioskused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1506
+#: classes/crm/crm_person.aw:1512
 msgid "Rakendused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1512
+#: classes/crm/crm_person.aw:1518
 msgid "Programmeerimine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1522
+#: classes/crm/crm_person.aw:1528
 msgid "Muu"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1528
+#: classes/crm/crm_person.aw:1534
 msgid "<b>Keeled</b>"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1532
+#: classes/crm/crm_person.aw:1538
 msgid "Keeled"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1547
+#: classes/crm/crm_person.aw:1553
 msgid "Juhiload"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1565
+#: classes/crm/crm_person.aw:1571
 msgid "Lisa uus töökogemus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1576
+#: classes/crm/crm_person.aw:1582
 msgid "Kustuta töökogemused"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1578 classes/crm/crm_person.aw:1718
+#: classes/crm/crm_person.aw:1584 classes/crm/crm_person.aw:1724
 msgid "Oled kindel, et kustutada?"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1584
+#: classes/crm/crm_person.aw:1590
 msgid "Muuda tkogemust"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1603
+#: classes/crm/crm_person.aw:1609
 msgid "Asutus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1609
+#: classes/crm/crm_person.aw:1615
 msgid "Ametikoht"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1615 classes/crm/crm_person.aw:1775
+#: classes/crm/crm_person.aw:1621 classes/crm/crm_person.aw:1781
 msgid "Alates"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1621 classes/crm/crm_person.aw:1785
+#: classes/crm/crm_person.aw:1627 classes/crm/crm_person.aw:1791
 msgid "Kuni"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1710
+#: classes/crm/crm_person.aw:1716
 msgid "Hariduse lisamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1716
+#: classes/crm/crm_person.aw:1722
 msgid "Kustuta haridus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1723
+#: classes/crm/crm_person.aw:1729
 msgid "Põhiharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1734 classes/crm/crm_person.aw:1847
+#: classes/crm/crm_person.aw:1740 classes/crm/crm_person.aw:1853
 msgid "Keskharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1744 classes/crm/crm_person.aw:1868
+#: classes/crm/crm_person.aw:1750 classes/crm/crm_person.aw:1874
 msgid "Kõrgharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1754 classes/crm/crm_person.aw:1889
+#: classes/crm/crm_person.aw:1760 classes/crm/crm_person.aw:1895
 msgid "Kutseharidus"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1769
+#: classes/crm/crm_person.aw:1775
 msgid "Kool"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1795
+#: classes/crm/crm_person.aw:1801
 msgid "Haridusliik"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1801
+#: classes/crm/crm_person.aw:1807
 msgid "Eriala"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1914
+#: classes/crm/crm_person.aw:1920
 msgid "Keel"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1919
+#: classes/crm/crm_person.aw:1925
 msgid "Rääkimine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1925
+#: classes/crm/crm_person.aw:1931
 msgid "Kirjutamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1931
+#: classes/crm/crm_person.aw:1937
 msgid "Arusaamine"
 msgstr ""
 
-#: classes/crm/crm_person.aw:1937
+#: classes/crm/crm_person.aw:1943
 msgid "Mitu aastat kogemusi"
 msgstr ""
 
