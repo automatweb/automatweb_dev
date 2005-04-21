@@ -1,4 +1,4 @@
-function Browser() {
+function XBrowser() {
 
   var ua, s, i;
 
@@ -33,7 +33,7 @@ function Browser() {
 }
 
 // browserdetect.js is loaded anyway, don't perform an inferior detection here
-var pp_browser = new Browser();
+var pp_browser = new XBrowser();
 
 //----------------------------------------------------------------------------
 // Code for handling the menu bar and active button.
