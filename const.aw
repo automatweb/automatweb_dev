@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.98 2004/11/05 14:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.99 2005/04/21 08:25:44 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
-set_time_limit(200);
+if (!ini_get("safe_mode"))
+{
+	set_time_limit(200);
+}
 ini_set("memory_limit", "300M");
 ini_set("display_errors", "1");
 if (get_magic_quotes_gpc() && !defined("GPC_HANDLER")) 
