@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.33 2005/04/11 07:28:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.34 2005/04/21 09:47:17 ahti Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -665,7 +665,10 @@ class cb_search extends class_base
 
 					foreach($price_props as $p_pn)
 					{
-						$row[$p_pn] = number_format($row[$p_pn], 2);
+						if(is_numeric($row[$p_pn]) && !empty($row[$p_pn]))
+						{
+							$row[$p_pn] = number_format($row[$p_pn], 2);
+						}
 					}
 					$vparms = array(
 						"id" => $o->id(),
@@ -743,12 +746,12 @@ class cb_search extends class_base
 
 			$this->in_form[$pn] = $props[$pn];
 			$this->in_form[$pn]["clid"] = $clid;
-			$this->in_form[$pn]["caption"] = $pd["caption"];
 			if($controllers[$pn])
 			{
 				$this->in_form[$pn]["controllers"] = is_array($controllers[$pn]) ? $controllers[$pn] : array($controllers[$pn]);
 			}
-			$this->in_form[$pn] = $prop_cfg[$pn] + $this->in_form[$pn];
+			$this->in_form[$pn] = safe_array($prop_cfg[$pn]) + $this->in_form[$pn];
+			$this->in_form[$pn]["caption"] = $pd["caption"];
 		};
 
 		$this->__tdata = $o->meta("form_dat");
