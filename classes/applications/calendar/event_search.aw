@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.58 2005/04/13 11:05:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.59 2005/04/21 09:41:58 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1120,6 +1120,14 @@ class event_search extends class_base
 								continue;
 							}
 							$v = create_links($eval[$nms]);
+							if($nms == "image")
+							{
+								if(is_oid($v) && $this->can("view", $v))
+								{
+									$asd = obj($v);
+									//$
+								}
+							}
 							if ($nms == "start1" || $nms == "end")
 							{
 								if($skip)
