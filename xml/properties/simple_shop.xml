@@ -1,0 +1,78 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Toodete kaust</caption>
+      </property>
+      <property>
+            <name>import_file</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>fileupload</type>
+            <store>no</store>
+            <caption>Andmed failist</caption>
+      </property>
+      <property>
+            <name>replace_prods</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <caption>Asenda tooted</caption>
+      </property>
+      <property>
+            <name>orders_toolbar</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>orders_table</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SIMPLE_SHOP</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <orders>
+                  <caption>Tellimused</caption>
+            </orders>
+      </groupinfo>
+      <reltypes>
+            <WAREHOUSE>
+                  <value>1</value>
+                  <clid>CL_SHOP_WAREHOUSE</clid>
+                  <caption>Tootekataloog</caption>
+            </WAREHOUSE>
+            <FOLDER>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Toodete kaust</caption>
+            </FOLDER>
+      </reltypes>
+</properties>
+
