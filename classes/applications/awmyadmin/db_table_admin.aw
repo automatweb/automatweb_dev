@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.3 2004/06/25 20:13:05 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_table_admin.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
 
 /*
 

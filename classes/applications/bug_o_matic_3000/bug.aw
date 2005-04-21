@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.2 2005/01/18 10:34:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/bug_o_matic_3000/bug.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
 // bug.aw - Bugi 
 /*
 

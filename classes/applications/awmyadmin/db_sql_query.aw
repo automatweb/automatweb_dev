@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.2 2004/06/11 08:51:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_sql_query.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
 /*
 
 	@default table=objects

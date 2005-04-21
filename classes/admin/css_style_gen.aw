@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.1 2004/10/22 11:47:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/css_style_gen.aw,v 1.2 2005/04/21 08:39:14 kristo Exp $
 // css_style_gen.aw - CSS Stiilide generaator 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.2 2004/08/05 16:36:39 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/Attic/image_resizer.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
 // image_resizer.aw - Piltide muutja 
 
 /*

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.2 2005/01/26 12:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/awmyadmin/db_server_login.aw,v 1.3 2005/04/21 08:39:14 kristo Exp $
 // db_server_login.aw - Andmebaasi serveri login
 
 /*

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.8 2004/01/13 16:24:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_periods.aw,v 1.9 2005/04/21 08:39:14 kristo Exp $
 // this is here so that orb will work...
 classload("period");
 class admin_periods extends period

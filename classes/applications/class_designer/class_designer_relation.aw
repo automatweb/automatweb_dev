@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_relation.aw,v 1.1 2005/03/03 15:20:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_relation.aw,v 1.2 2005/04/21 08:39:14 kristo Exp $
 // class_designer_relation.aw - Seos 
 /*
 

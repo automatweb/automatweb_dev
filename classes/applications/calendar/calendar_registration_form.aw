@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.3 2005/02/09 13:31:42 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration_form.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
 // calendar_registration_form.aw - Kalendri s&uuml;ndmusele registreerimise vorm 
 /*
 

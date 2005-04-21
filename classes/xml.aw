@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.15 2003/07/16 16:43:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/xml.aw,v 2.16 2005/04/21 08:39:13 kristo Exp $
 // xml.aw - xml serializer
 // at the moment (Apr 25, 2001) it can serialize PHP arrays to XML and vice versa
 class xml 

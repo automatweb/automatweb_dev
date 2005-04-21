@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.7 2003/08/01 12:48:19 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/tt.aw,v 2.8 2005/04/21 08:39:13 kristo Exp $
 /*
 
 	QOTD: Real programmers do not comment their code - it was hard to write,

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.10 2005/04/04 13:33:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.11 2005/04/21 08:39:14 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -731,6 +731,7 @@ class class_designer extends class_base
 			$rv .= $this->generate_reltypes($arr["obj_inst"]->id());
 
 		};
+
 		$methods .= "\tfunction callback_pre_save(\$arr)\n";
 		$methods .= "\t{\n";
 		$methods .= "\t\t\$o = \$arr[\"obj_inst\"];\n";
@@ -897,7 +898,7 @@ class class_designer extends class_base
 
 	function callback_post_save($arr)
 	{
-		//print "generating class file";
+		print "generating class file";
 		$cldef = $this->gen_classdef(array(
 			"obj_inst" => $arr["obj_inst"],
 		));

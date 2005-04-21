@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.5 2005/01/18 10:52:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_vacancy.aw,v 1.6 2005/04/21 08:39:14 kristo Exp $
 // calendar_vacancy.aw - Vakants 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.10 2004/11/22 11:36:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/timer.aw,v 2.11 2005/04/21 08:39:13 kristo Exp $
 // klass taimerite jaoks
 class aw_timer 
 {

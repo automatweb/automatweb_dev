@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.3 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import_exception.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
 // object_import_exception.aw - Objektide impordi erand 
 /*
 

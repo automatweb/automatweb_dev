@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_chooser.aw,v 1.1 2005/02/28 10:45:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_chooser.aw,v 1.2 2005/04/21 08:39:14 kristo Exp $
 // property_chooser.aw - Element - valik 
 /*
 

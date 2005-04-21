@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.13 2005/02/21 15:13:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.14 2005/04/21 08:39:14 kristo Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 

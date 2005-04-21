@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.5 2004/12/01 13:21:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/workbench.aw,v 1.6 2005/04/21 08:39:14 kristo Exp $
 // workbench.aw - Töölaud 
 /*
 

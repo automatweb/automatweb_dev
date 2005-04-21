@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.7 2004/12/07 11:35:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_aw_document_template.aw,v 1.8 2005/04/21 08:39:14 kristo Exp $
 // config_aw_document_template.aw - Dokumendi Template 
 /*
 
