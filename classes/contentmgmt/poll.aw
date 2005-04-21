@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.27 2005/03/24 12:04:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.28 2005/04/21 09:18:30 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -428,7 +428,7 @@ class poll extends class_base
 		));
 		foreach($ol->arr() as $o)
 		{
-			if (true || $o->meta('in_archive') == 1)
+			if ($o->meta('in_archive') == 1)
 			{
 				$this->vars(array(
 					"question" => $o->name(), 
