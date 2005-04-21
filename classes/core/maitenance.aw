@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/maitenance.aw,v 1.15 2005/03/22 11:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/maitenance.aw,v 1.1 2005/04/21 08:22:10 kristo Exp $
 // maitenance.aw - Saidi hooldus 
 /*
 

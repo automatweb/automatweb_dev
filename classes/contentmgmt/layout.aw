@@ -102,20 +102,19 @@ class layout extends class_base
 		// if oid is in the arguments check whether that object is attached to
 		// this document and display it instead of document
 		$oid = aw_global_get("oid");
-		if ($oid)
+		if (is_oid($oid) && $this->can("view", $oid))
 		{
-			$q = "SELECT * FROM aliases WHERE source = '$alias[target]' AND target = '$oid' AND type =" . CL_FILE;
-			$this->db_query($q);
-			$row = $this->db_next();
-			if ($row)
+			$obj = obj($oid);
+			foreach($obj->connections_to(array("from" => $alias["target"])) as $c)
 			{
-				$fi = get_instance(CL_FILE);
-				$fl = $fi->get_file_by_id($oid);
-				return $fl["content"];
-			};
+				if ($c->prop("from.class_id") == CL_FILE)
+				{
+					$fi = get_instance(CL_FILE);
+					$fl = $fi->get_file_by_id($c->prop("to"));
+					return $fl["content"];
+				}
+			}
 		}
-
-
 
 		$ob = obj($alias["target"]);
 		$ge = get_instance("vcl/grid_editor");
