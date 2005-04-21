@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.64 2005/04/21 10:33:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.65 2005/04/21 11:59:20 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -876,9 +876,9 @@ class planner extends class_base
 		// planner configuration
 		$event_cfgform = $args["request"]["cfgform_id"];
 		// are we editing an existing event?
-		if (!empty($args["request"]["event_id"]))
+		$event_id = $args["request"]["event_id"];
+		if (is_oid($event_id) && $this->can("view", $event_id))
 		{
-			$event_id = $args["request"]["event_id"];
 			$event_obj = new object($event_id);
 			if ($event_obj->is_brother())
 			{
