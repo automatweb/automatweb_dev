@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.28 2005/04/01 12:06:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.29 2005/04/21 09:32:19 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -983,7 +983,7 @@ class shop_order extends class_base
 					$pr_price = ($quant * $inst->get_price($prod));
 				}
 
-				if ( $cl_pgs[$pr->parent()])
+				if ( $cl_pgs[$pr->parent()] || (!$ft_pgs[$pr->parent()] && !$ls_pgs[$pr->parent()]))
 				{
 					$cl_total += $pr_price;
 					$cl_str .= $this->parse("PROD");

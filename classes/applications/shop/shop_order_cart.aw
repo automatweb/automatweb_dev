@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.30 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.31 2005/04/21 09:32:03 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1178,7 +1178,7 @@ class shop_order_cart extends class_base
 					$pr_price = ($quant * $inst->get_price($i));
 				}
 
-				if ( $cl_pgs[$pr->parent()])
+				if ( $cl_pgs[$pr->parent()] || (!$ft_pgs[$pr->parent()] && !$ls_pgs[$pr->parent()]))
 				{
 					$cl_total += $pr_price;
 					$cl_str .= $this->parse("PROD");
