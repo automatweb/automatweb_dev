@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.28 2005/04/21 08:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.29 2005/04/21 09:31:38 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -898,7 +898,7 @@ class otto_import extends class_base
 
 		echo "make existing prod lut <br>\n";
 		flush();
-		$exist = new object_list(array(
+		/*$exist = new object_list(array(
 			"class_id" => CL_SHOP_PRODUCT,
 		));
 		$pl = array();
@@ -909,7 +909,7 @@ class otto_import extends class_base
 		{
 			$pl[$t->prop("user20")] = $t->id();
 			$pl_full[$t->prop("user20")][$t->id()] = $t;
-		}
+		}*/
 		
 		$total = $this->db_fetch_field("
 			SELECT  
@@ -980,13 +980,15 @@ class otto_import extends class_base
 			echo "import prod $row[title] ($row[code]) , ".($total - $items_done)." items to go , estimated time remaining: $rem_hr hrs, $rem_min minutes <br>\n";
 			flush();
 			// check if it exists
-			echo "checking if \$pl[".$row['code']."] is oid<br>\n";
+			$prod_id = $this->_get_id_by_code($row["code"]);
+
+			echo "checking if $prod_id is oid<br>\n";
 			flush();
 			$new = true;
-			if (is_oid($pl[$row["code"]]))
+			if (is_oid($prod_id))
 			{
-				echo "oid = ".$pl[$row["code"]]." <br>";
-				$dat = obj($pl[$row["code"]]);
+				echo "oid = ".$prod_id." <br>";
+				$dat = obj($prod_id);
 				echo "found existing ".$dat->id()."   ".$row['code']."<br>\n";
 				flush();
 				$new = false;
@@ -1001,7 +1003,6 @@ class otto_import extends class_base
 
 				echo "created new ".$dat->id()."  ".$row['code']." <br>\n";
 				flush();
-				$pl[$row["code"]] = $dat->id();
 			}
 
 			// try find correct folder
@@ -1025,11 +1026,15 @@ class otto_import extends class_base
 
 			if (!$new)
 			{
-				foreach(safe_array($pl_full[$row["code"]]) as $tmp_dat)
+				$_ids = $this->_get_ids_by_code($row["code"]);
+				foreach($_ids as $tmp_dat)
 				{	
 					echo "also set ".$tmp_dat->id()." to page $row[pg] <br>";
-					$tmp_dat->set_prop("user18", $row["pg"]);
-					$tmp_dat->save();
+					if ($tmp_dat->prop("user18") != $row["pg"])
+					{
+						$tmp_dat->set_prop("user18", $row["pg"]);
+						$tmp_dat->save();
+					}
 				}
 			}
 
@@ -1200,15 +1205,20 @@ class otto_import extends class_base
 
 		echo "make existing packet lut <br>\n";
 		flush();
-		$exist = new object_list(array(
+		$pktl = array();
+		/*$exist = new object_list(array(
 			"class_id" => CL_SHOP_PACKET,
 			"parent" => $o->prop("prod_folder")
 		));
-		$pktl = array();
 		foreach($exist->arr() as $t)
 		{
 			// user5 is image nr
 			$pktl[$t->prop("user3")] = $t->id();
+		}*/
+		$this->db_query("SELECT aw_oid,user3 FROM aw_shop_packets");
+		while ($row = $this->db_next())
+		{
+			$pktl[$row["user3"]] = $row["aw_oid"];
 		}
 		
 		$query ="select *, count(*) as cnt from otto_prod_img ".
@@ -1254,15 +1264,20 @@ class otto_import extends class_base
 			$this->db_query("SELECT pcode FROM otto_prod_img WHERE imnr = '$row[imnr]' group by pcode");
 			while ($row = $this->db_next())
 			{
+				if (!$row["pcode"])
+				{
+					continue;
+				}
 				$used[$row["pcode"]] = 1;
 
 				echo "connected packet ".$pko->id()." to prod ".$row["pcode"]." <br>";
 				if (!$cprods[$row["pcode"]])
 				{
-					if ($pl[$row["pcode"]])
+					$_id = $this->_get_id_by_code($row["pcode"]);
+					if (is_oid($_id) && $this->can("view", $_id))
 					{
 						$pko->connect(array(
-							"to" => $pl[$row["pcode"]],
+							"to" => $_id,
 							"reltype" => 1 // PRODUCT
 						));
 					}
@@ -1600,11 +1615,16 @@ class otto_import extends class_base
 	**/
 	function fix_image_codes()
 	{
+		return;
 		echo "fixing image pages <br>\n";
 		flush();
 		$this->db_query("SELECT * FROM otto_prod_img WHERE p_pg IS NULL or p_nr IS NULL ");
 		while ($row = $this->db_next())
 		{
+			if ($row["pcode"] == "hall" || substr($row["pcode"], 0, 3) == "bee")
+			{
+				continue;
+			}
 			echo "pcode = $row[pcode] <br>\n";
 			flush();			
 			$this->save_handle();
@@ -2117,7 +2137,7 @@ class otto_import extends class_base
 		{
 			$pkol = new object_list($o->connections_from(array("type" => "RELTYPE_PACKAGING")));
 			echo "kusututan pakendid ".join(",", $pkol->names())." <br>";
-			$pkol->delete();
+			$pkol->delete(true);
 		}
 
 		// get all packagings that have the prods
@@ -2129,7 +2149,7 @@ class otto_import extends class_base
 		));
 
 		echo "kusututan tooted ".join(",", $ol->names())." <br>";
-		$ol->delete();
+		$ol->delete(true);
 
 		// go over packets and see if some have no prods
 		foreach($list as $conn)
@@ -2140,11 +2160,28 @@ class otto_import extends class_base
 				if (count($pkt->connections_from(array("type" => 1))) == 0)
 				{
 					echo "kustutan paketi ".$pkt->name()." <br>";
-					$pkt->delete();
+					$pkt->delete(true);
 				}
 			}
 		}
 		echo "valmis! <br>";
+	}
+
+	function _get_id_by_code($code)
+	{
+		$id = $this->db_fetch_field("SELECT aw_oid FROM aw_shop_products WHERE user20 = '$code'", "aw_oid");
+		return $id;
+	}
+
+	function _get_ids_by_code($code)
+	{
+		$ret = array();
+		$this->db_query("SELECT aw_oid FROM aw_shop_products WHERE user20 = '$code'");
+		while ($row = $this->db_next())
+		{
+			$ret[] = obj($row["aw_oid"]);
+		}
+		return $ret;
 	}
 }
 
