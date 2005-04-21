@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/shm.aw,v 2.4 2003/08/01 12:48:18 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/shm.aw,v 2.5 2005/04/21 08:33:32 kristo Exp $
 // shm.aw - shared memory functions here
 // all variable keys should be SHM_BASE + number
 

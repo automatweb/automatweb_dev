@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.7 2003/08/01 12:48:17 axel Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/repeater.aw,v 2.8 2005/04/21 08:33:11 kristo Exp $
 class repeater 
 {
 	////

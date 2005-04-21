@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.6 2003/11/10 19:00:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/priority.aw,v 2.7 2005/04/21 08:32:46 kristo Exp $
 // priority.aw - prioriteedi objekt
 /*
 	@default table=objects

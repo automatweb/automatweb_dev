@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.11 2004/06/11 09:13:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sitemap.aw,v 2.12 2005/04/21 08:33:55 kristo Exp $
 // sitemap.aw - Site Map
 
 // DEPRECATED - duke's new menu tree showing class deprecates this one. 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.10 2004/06/26 10:03:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/sql_filter.aw,v 2.11 2005/04/21 08:34:43 kristo Exp $
 
 class sql_filter extends aw_template 
 {
