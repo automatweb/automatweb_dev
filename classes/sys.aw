@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.49 2005/04/01 12:06:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.50 2005/04/21 09:22:59 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -198,6 +198,7 @@ class sys extends aw_template
 			"rate.automatweb.com" => "rate.automatweb.com",
 			"www.kiosk.ee" => "www.kiosk.ee",
 			"prisma.struktuur.ee" => "prisma.struktuur.ee",
+			"linnaehitus.struktuur.ee" => "linnaehitus.struktuur.ee",
 			"envir.struktuur.ee" => "envir.struktuur.ee"
 		);
 		
@@ -487,7 +488,7 @@ class sys extends aw_template
 		{
 			// do a dbsync from aw.struktuur.ee
 			$block = $this->db_sync(array(
-				"server" => "aw.struktuur.ee",
+				"server" => "intranet.automatweb.com",
 				"url" => "/?class=sys&action=gen_create_tbl",
 			));
 			$tbls = aw_unserialize($block);
@@ -496,6 +497,9 @@ class sys extends aw_template
 			{
 				$dbi->db_query($sql);
 			}
+
+			$q = "ALTER TABLE static_content ADD FULLTEXT content(content)";
+			$dbi->db_query($q);
 
 			$log->add_line(array(
 				"uid" => aw_global_get("uid"),

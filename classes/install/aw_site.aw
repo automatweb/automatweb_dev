@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.42 2005/04/13 11:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.43 2005/04/21 09:22:59 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -852,10 +852,6 @@ class aw_site extends class_base
 					IDENTIFIED BY '$site[db_pwd]'
 			";
 			//echo "exec $q <br />";
-			$dbi->db_query($q);
-
-
-			$q = "ALTER TABLE static_content ADD FULLTEXT content(content)";
 			$dbi->db_query($q);
 
 			$ini_opts['db.user'] = $site['db_user'];
