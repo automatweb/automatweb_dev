@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.4 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.5 2005/04/21 10:32:45 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -72,6 +72,8 @@ class persona_import extends class_base
 		$this->init(array(
 			"clid" => CL_PERSONA_IMPORT
 		));
+
+		$this->stat_file = aw_ini_get("site_basedir")."/files/persona_import_in_progress.txt";
 	}
 
 	function get_property($arr)
@@ -88,6 +90,34 @@ class persona_import extends class_base
 				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("invoke_import",array("id" => $arr["obj_inst"]->id())),
 					"caption" => t("Käivita import"),
+				));
+				// now check whether we have a half completed status file
+				$status_file_content = $this->get_file(array(
+					"file" => $this->stat_file,
+				));
+				if ($status_file_content)
+				{
+					$sdata = aw_unserialize($status_file_content);
+					$done = 0;
+					$total = sizeof($sdata);
+					foreach($sdata as $key => $val)
+					{
+						if ($val == 1)
+						{
+							$done++;
+						};
+					};
+
+					$capt = " $done / $total";
+					$prop["value"] = html::href(array(
+						"url" => $this->mk_my_orb("invoke_import",array("id" => $arr["obj_inst"]->id())),
+						"caption" => t("Jätka poolikut importi") . $capt,
+					));
+				};
+				$prop["value"] .= " | ";
+				$prop["value"] .= html::href(array(
+					"url" => $this->mk_my_orb("import_images",array("id" => $arr["obj_inst"]->id())),
+					"caption" => t("Impordi pildid"),
 				));
 				break;
 
@@ -145,6 +175,7 @@ class persona_import extends class_base
 	{
 		$obj = new object($arr["id"]);
 
+
 		$config = $this->get_config($arr);
 
 		//arr($config);
@@ -191,6 +222,33 @@ class persona_import extends class_base
 		{
 			die(t("Kliendibaasil puudub muutujate haldur"));
 		};
+
+		/*
+		
+		$olist = new object_list(array(
+			"class_id" => array(CL_CRM_PERSON),
+		));
+		foreach($olist->arr() as $o)
+		{
+			print "deleting ". $o->name() . "<br>";
+			$o->delete();
+
+
+		};
+		$olist = new object_list(array(
+			"parent" => $dir_default,
+		));
+		foreach($olist->arr() as $o)
+		{
+			print "deleting ". $o->name() . "<br>";
+			flush();
+			$o->delete();
+
+
+		};
+		exit;
+		*/
+
 		$first = reset($mt_conns);
 		$metamgr = new object($first->prop("to"));
 
@@ -204,6 +262,8 @@ class persona_import extends class_base
 		print "creating variable categories, if any ...";
 		flush();
 
+		// doing this by name sucks of course, but since this is a one-time application ..
+		// well .. it just has to work
 		if (!$meta1["Puhkuste liigid"])
 		{
 			$m1 = new object();
@@ -263,6 +323,7 @@ class persona_import extends class_base
 		print t("parse finished, processing starts<br>");
 		flush();
 
+
 		$workers = array();
 
 		$process_workers = $process_stops = false;
@@ -278,6 +339,17 @@ class persona_import extends class_base
 		$data = array();
 
 		$processing = array();
+
+		// I have to monitor how much time has passed from the start of the exection
+		// and for this ... I have to write a file. Would like to create an object, but
+		// that takes some time
+
+		// so a file is preferred
+
+		// status - check .. open the file, count data. if > 1 persons left, 
+		// do the import
+
+		$stat_file = $this->stat_file;
 
 		foreach($vals as $val)
 		{
@@ -315,13 +387,60 @@ class persona_import extends class_base
 				$tmp[$val["tag"]] = $val["value"];
 			};
 
+
+		};
+
+
+		$persona_import_started = aw_global_get("persona_import_started");
+
+		$persona_to_process = array();
+
+		$stat_file_content = $this->get_file(array(
+			"file" => $stat_file,
+		));
+
+		if (!$stat_file_content)
+		{
+			foreach($data["TOOTAJAD"] as $worker)
+			{
+				$ext_id = $worker["TOOTAJA_ID"];
+				$persona_to_process[$ext_id] = 0;
+			};
+		
+			$this->put_file(array(
+				"file" => $stat_file,
+				"content" => aw_serialize($persona_to_process),
+			));
+		}
+		else
+		{
+			print "Trying to continue aborted import process<br>";
+			$persona_to_process = aw_unserialize($stat_file_content);
 		};
 
 		$person_list = new object_list(array(
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
 		));
-	
+		
+		foreach($person_list->arr() as $person_obj)
+		{
+			$ext_id = $person_obj->prop("ext_id");
+			$ext_id = $person_obj->subclass();
+			/*
+			var_dump($person_obj->id());
+			print " = ";
+			var_dump($ext_id);
+			var_dump($person_obj->prop("ext_id"));
+			print "<br>";
+			arr($person_obj->properties());
+			*/
+			if ($ext_id)
+			{
+				$person_match[$ext_id] = $person_obj->id();
+			};
+		};
+
 		// list of addresses
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
@@ -352,15 +471,7 @@ class persona_import extends class_base
 		$phones = array_flip($phone_list->names());
 		// -------------------------------
 
-		$person_match = array();
-		foreach($person_list->arr() as $person_obj)
-		{
-			$ext_id = $person_obj->prop("ext_id");
-			if ($ext_id)
-			{
-				$person_match[$ext_id] = $person_obj->id();
-			};
-		};
+		//$person_match = array();
 
 		$phone_type = array(
 			"TELEFON" => "work",
@@ -421,7 +532,8 @@ class persona_import extends class_base
 		$sections = array();
 		foreach($seco->arr() as $sec_obj)
 		{
-			$sections[$sec_obj->prop("ext_id")] = $sec_obj->id();
+			//$sections[$sec_obj->prop("ext_id")] = $sec_obj->id();
+			$sections[$sec_obj->subclass()] = $sec_obj->id();
 		};
 
 		//arr($data["YKSUSED"]);
@@ -478,10 +590,12 @@ class persona_import extends class_base
 			"type" => 1 // RELTYPE_SECTION, ehk alamüksus
 		));
 
+		/*
 		foreach($existing as $conn)
 		{
 			arr($conn);
 		};
+		*/
 
 		foreach($links as $parent_section => $link_section)
 		{
@@ -506,16 +620,39 @@ class persona_import extends class_base
 			};
 		};	
 
+		classload("timer");
+		$aw_timer = new aw_timer();
+
+
 		print t("<h1>sections</h1>");
 		arr($sections);
 		print t("<h1>sections done</h1>");
 
+		$persona_persons_done = aw_global_get("persona_persons_done");
+
+		print "pmatch";
+		arr($person_match);
+		print "match done<br>";
+
 		$persons = array();
 
-		print t("creating person objects<br>");
+		print t("creating person)objects<br>");
+		obj_set_opt("no_cache",1);
+		$persons_per_batch = 10;
+		$batchcounter = 0;
+
+		// if we exceed this, restart import
+		$time_limit = 90;
+
+		$aw_timer->start("personimport");
 		foreach($data["TOOTAJAD"] as $worker)
 		{
 			$ext_id = $worker["TOOTAJA_ID"];
+			if ($persona_to_process[$ext_id] == 1)
+			{
+				print "This person has already been imported in this import, skipping<br>";
+				continue;
+			};
 			if (empty($person_match[$ext_id]))
 			{
 				// create new object
@@ -646,18 +783,57 @@ class persona_import extends class_base
 					$po->set_prop("type",$pval);
 					$po->save();
 				};
-				print "all done<bR>";
 			};
+			print "phones connected<bR>";
+			flush();
 
 			$person_obj->save();
 
 			// let us keep track of all existing workers, so I can properly assign vacations and contract_stops
 			$persons[$ext_id] = $person_obj->id();
 
-			arr($worker);
+			print "person done<br>";
+			flush();
+
+			//arr($worker);
+			$persona_persons_done[$ext_id] = $ext_id;
 			// mul on vaja seda folderi id, mille alla töötaja objekte teha
+	
+			// 1 means done
+			$persona_to_process[$ext_id] = 1;
+			$batchcounter++;
+
+			if ($batchcounter >= $persons_per_batch)
+			{
+				print "<h2>Batch completed, writing status</h2>";
+				$this->put_file(array(
+					"file" => $stat_file,
+					"content" => aw_serialize($persona_to_process),
+				));
+				$batchcounter = 0;
+				//print "aitab kah";
+				//exit;
+
+				if ($aw_timer->get("personimport") >= $time_limit)
+				{
+					print "Getting too close to time limit, restarting import from beginning<br>";
+					$request_uri = aw_ini_get("baseurl") . "/" . aw_global_get("REQUEST_URI");
+					header("Location: $request_uri");
+					exit;
+					
+
+
+				};
+			};
+
+
+			// ja siia siis .. kui on möödas rohkem kui XX ühikut, siis die ja 
+			// header("Location: self");
 
 		};
+
+		print "deleting non-existing persons<br>";
+		flush();
 
 		// siia jäävad ainult jäägid, need märgime deaktiivseks ja ongi kõik
 		foreach($person_match as $ext_id => $obj_id)
@@ -666,6 +842,22 @@ class persona_import extends class_base
 			$person_obj->set_status(STAT_NOTACTIVE);
 			$person_obj->save();
 		};
+
+		print "Unlinking status file<br>";
+		unlink($stat_file);
+
+	
+		aw_session_del("persona_import_started");
+		aw_session_del("persona_persons_done");
+		
+		print "flushing cache";
+		flush();
+		$cache = get_instance("cache");
+		$cache->full_flush();
+
+		print "everything is done";
+		exit;
+		exit;
 
 		exit;
 	
@@ -917,7 +1109,7 @@ class persona_import extends class_base
 		$c = get_instance(CL_FTP_LOGIN);
 
 
-		$config["ftp"]["host"] = "ftp.envir.ee";
+		//$config["ftp"]["host"] = "ftp.envir.ee";
 
 		$c->connect($config["ftp"]);
 
@@ -933,7 +1125,9 @@ class persona_import extends class_base
 		$px = array();
 		foreach($persons->arr() as $person_obj)
 		{
-			$px[$person_obj->prop("ext_id")] = $person_obj->id();
+			//$px[$person_obj->prop("ext_id")] = $person_obj->id();
+			$px[$person_obj->subclass()] = $person_obj->id();
+			
 		};
 
 		$rpx = array_flip($px);
