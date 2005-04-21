@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.4 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum.aw,v 1.5 2005/04/21 09:23:25 duke Exp $
 // forum.aw - forums/messageboards
 /*
         // stuff that goes into the objects table
@@ -422,7 +422,7 @@ class forum extends class_base
 			};
 			$this->vars(array(
 				"topic_link" => $topic_link,
-				"threaded_link" => $this->mk_my_orb("show_threaded", array("board" => $board,"_alias" => $alias,"section" => $this->section)),
+				"threaded_link" => $this->mk_my_orb("show_threaded", array("board" => $board,"__alias" => $alias,"section" => $this->section)),
 				"threaded_topic_link" => $this->mk_my_orb("show_threaded", array("board" => $board,"_alias" => $alias,"section" => $this->section)),
 				"change_topic" => $this->mk_my_orb("change_topic", array("board" => $board,"_alias" => $alias,"section" => $this->section)),
 				"flat_link" => $this->mk_my_orb("show",array("board" => $board,"_alias" => $alias,"section" => $this->section)),
