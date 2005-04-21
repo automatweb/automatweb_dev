@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.14 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.15 2005/04/21 10:34:00 duke Exp $
 // task.aw - TODO item
 /*
 
@@ -40,7 +40,7 @@
 @property calendar_selector type=calendar_selector store=no group=calendars
 @caption Kalendrid
 
-@property other_selector type=callback callback=cb_calendar_others store=no group=others
+@property other_selector type=multi_calendar store=no group=others no_caption=1
 @caption Teised
 
 @property project_selector type=project_selector store=no group=projects
@@ -78,7 +78,7 @@ caption Osalejad
 
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
-@groupinfo others caption=Teised
+@groupinfo others caption=Teised submit_method=get
 @groupinfo projects caption=Projektid
 @groupinfo comments caption=Kommentaarid
 @groupinfo reminders caption=Meeldetuletused
