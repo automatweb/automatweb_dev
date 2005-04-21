@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.48 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview.aw,v 1.49 2005/04/21 10:07:17 kristo Exp $
 
 /*
 
@@ -1023,7 +1023,7 @@ class object_treeview extends class_base
 
 	function _insert_row_styles($o)
 	{
-		if ($o->prop("style_donor"))
+		if (is_oid($o->prop("style_donor")) && $this->can("view", $o->prop("style_donor")))
 		{
 			$o = obj($o->prop("style_donor"));
 		}
@@ -1057,7 +1057,7 @@ class object_treeview extends class_base
 
 	function _get_bgcolor($ob, $line)
 	{
-		if ($ob->prop("style_donor"))
+		if (is_oid($ob->prop("style_donor")) && $this->can("view", $ob->prop("style_donor")))
 		{
 			$ob = obj($ob->prop("style_donor"));
 		}
