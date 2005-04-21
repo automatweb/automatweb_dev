@@ -469,7 +469,7 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @caption organisatsiooni grupp
 
 @reltype CONTRACT value=37 clid=CL_FILE
-@caption leping
+@caption Leping
 
 @reltype OFFER_FILE value=38 clid=CL_FILE
 @caption Pakkumise fail
