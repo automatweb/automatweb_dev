@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.28 2005/04/21 09:18:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.29 2005/04/21 09:29:06 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -433,7 +433,7 @@ class poll extends class_base
 				$this->vars(array(
 					"question" => $o->name(), 
 					"poll_id" => $o_id, 
-					"link" => $this->mk_my_orb("show", array("poll_id" => $o->id()))
+					"link" => $this->mk_my_orb("show", array("poll_id" => $o->id(), "section" => aw_global_get("section")))
 				));
 				$p.=$this->parse("QUESTION");
 			}
