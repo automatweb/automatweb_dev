@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.65 2005/04/18 12:24:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.66 2005/04/21 18:39:41 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -580,8 +580,6 @@ class mrp_case extends class_base
 					$this->add_job ($arr);
 				}
 			}
-
-			$this->order_jobs ($arr);
 		}
 	}
 
@@ -1239,6 +1237,7 @@ class mrp_case extends class_base
 		$errors = false;
 		$connections = $this_object->connections_from(array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
 		$jobs = array ();
+		$workflow = array ();
 
 		foreach ($connections as $connection)
 		{
@@ -1267,36 +1266,17 @@ class mrp_case extends class_base
 					{
 						case "prerequisites":
 							### translate prerequisites from execution orders to object id-s
-							$prerequisites = $job->prop ("prerequisites");
-							$prerequisites = explode (",", $prerequisites);
-							$prerequisites_translated = array ();
+							$prerequisites_userdata = explode (",", $value);
+							$prerequisites = array ();
 
-							foreach ($prerequisites as $oid)
+							foreach ($prerequisites_userdata as $prerequisite)
 							{
-								if (is_oid ($oid))
-								{
-									$prerequisite_job = obj ($oid);
-									$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
-								}
+								settype ($prerequisite, "integer");
+								$job_id = $jobs[$prerequisite];
+								$prerequisites[] = $job_id;
 							}
 
-							$prerequisites = implode (",", $prerequisites_translated);
-
-							if ($value != $prerequisites)
-							{
-								$prerequisites_userdata = explode (",", $value);
-								$prerequisites = array ();
-
-								foreach ($prerequisites_userdata as $prerequisite)
-								{
-									settype ($prerequisite, "integer");
-									$job_id = $jobs[$prerequisite];
-									$prerequisites[] = $job_id;
-								}
-
-								$prerequisites = implode (",", $prerequisites);
-								$job->set_prop ("prerequisites", $prerequisites);
-							}
+							$workflow[$job->id ()] = $prerequisites;
 							break;
 
 						case "length":
@@ -1386,6 +1366,26 @@ class mrp_case extends class_base
 				}
 			}
 
+			### check & save workflow
+			if (!empty ($workflow))
+			{
+				$error = $this->order_jobs ($arr, $workflow);
+
+				if ($error)
+				{
+					return $error;
+				}
+				else
+				{
+					foreach ($workflow as $job_id => $prerequisites)
+					{
+						$job = obj ($job_id);
+						$job->set_prop ("prerequisites", implode (",", $prerequisites));
+						$job->save ();
+					}
+				}
+			}
+
 			return PROP_OK;
 		}
 	}
@@ -1394,7 +1394,124 @@ class mrp_case extends class_base
 		@attrib name=order_jobs
 		@param oid required type=int
 	**/
-	function order_jobs ($arr = array ())
+	function order_jobs ($arr = array (), $workflow = false)
+	{
+		### get project object
+		if (is_oid ($arr["oid"]))
+		{
+			$project = obj ($arr["oid"]);
+		}
+
+		if (is_object ($arr["obj_inst"]))
+		{
+			$project =& $arr["obj_inst"];
+		}
+
+		$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB", "class_id" => CL_MRP_JOB));
+
+		if (!is_array ($workflow))
+		{
+			### read project jobs
+			$workflow = array ();
+
+			foreach ($connections as $connection)
+			{
+				$job = $connection->to ();
+
+				### exclude jobs just about to be deleted
+				if ($job->prop ("state") != MRP_STATUS_DELETED)
+				{
+					$prerequisites = explode (",", $job->prop ("prerequisites"));
+					$workflow[$job->id ()] = $prerequisites;
+				}
+			}
+		}
+		elseif (count ($workflow) != count ($connections))
+		{
+			return t("Töövoog ei sisalda kõiki projekti töid");
+		}
+
+		foreach ($workflow as $job_id => $prerequisites)
+		{
+			### throw away erroneous definitions
+			foreach ($prerequisites as $key => $prerequisite)
+			{
+				if (!is_oid ((int) $prerequisite))
+				{
+					unset ($prerequisites[$key]);
+				}
+			}
+
+			### explicitly indicate absence of prerequisites
+			if (empty ($prerequisites))
+			{
+				$prerequisites[] = "none";
+			}
+
+			$workflow[$job_id] = $prerequisites;
+		}
+
+		### sort workflow topologically, halt on cycle
+		$jobs = array ();
+
+		foreach ($workflow as $job_id => $prerequisites)
+		{
+			$degree = 0;
+			$nodes = array ($job_id);
+
+			### recursively go through all current job's prerequisites
+			do
+			{
+				if ($degree > count ($workflow))
+				{
+					return t("Töövoog sisaldab tsüklit");
+				}
+
+				$current_nodes = $nodes;
+
+				foreach ($current_nodes as $current_node)
+				{
+					if ($workflow[$current_node][0] != "none")
+					{ ### prerequisites exist for current node
+						### add new prerequisites
+						$nodes = array_merge ($nodes, $workflow[$current_node]);
+					}
+
+					### remove current node from nodes to visit
+					$checked_node = array_keys ($nodes, $current_node);
+					$checked_node = $checked_node[0];
+					unset ($nodes[$checked_node]);
+				}
+
+				### increment arc count
+				$degree++;
+			}
+			while (!empty ($nodes));
+
+			$jobs[$degree][] = $job_id;
+		}
+
+		### sort by degree
+		ksort ($jobs);
+
+		### convert topology to sequence
+		$order = array ();
+
+		foreach ($jobs as $degree => $degree_jobs)
+		{
+			$order = array_merge ($order, $degree_jobs);
+		}
+
+		### save job orders
+		foreach ($order as $key => $job_id)
+		{
+			$job = obj ($job_id);
+			$job->set_prop ("exec_order", ($key + 1));
+			$job->save ();
+		}
+	}
+
+	function order_jobs_old ($arr = array ())// unused function
 	{
 		if (is_oid ($arr["oid"]))
 		{
@@ -1442,7 +1559,7 @@ class mrp_case extends class_base
 	// Input: $workflow = array (job_id_1 => array (prerequisite_job_id_m, ...), ...)
 	// if job n has no prerequisites then: job_id_n => array (0)
 	// Output: ordered non-associative array of job id-s: array (0 => job_id_1, ...)
-	function workflow2sequence ($workflow_input = array ())
+	function workflow2sequence ($workflow_input = array ())// unused function
 	{
 		$workflow = array ();
 
@@ -1622,7 +1739,6 @@ class mrp_case extends class_base
 			}
 
 			$arr["oid"] = $arr["id"];
-			$this->order_jobs ($arr);
 		}
 
 		$return_url = $this->mk_my_orb("change", array(

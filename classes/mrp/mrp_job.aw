@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.56 2005/04/18 12:24:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.57 2005/04/21 18:39:41 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1168,8 +1168,7 @@ class mrp_job extends class_base
 
 	function on_delete_job ($arr)
 	{
-		$job_id = (int) $arr["oid"];
-		$job = obj ($job_id);
+		$job = obj ((int) $arr["oid"]);
 		$job->set_prop ("state", MRP_STATUS_DELETED);
 		$job->save ();
 
@@ -1188,23 +1187,33 @@ class mrp_job extends class_base
 			"project" => $project->id (),
 			"state" => new obj_predicate_not (MRP_STATUS_DELETED),
 		));
+		$other_jobs = $list->arr ();
 
-		for ($successive_job =& $list->begin (); !$list->end (); $successive_job =& $list->next ())
+		foreach ($other_jobs as $other_job)
 		{
-			$successor_prerequisites = explode (",", $successive_job->prop ("prerequisites"));
+			$other_job_prerequisites = explode (",", $other_job->prop ("prerequisites"));
 
-			if (in_array ($job_id, $successor_prerequisites))
+			if (in_array ($job->id (), $other_job_prerequisites))
 			{
-				$successor_prerequisites = array_merge ($successor_prerequisites, $prerequisites);
+				$successor_prerequisites = array_merge ($other_job_prerequisites, $prerequisites);
 				$successor_prerequisites = array_unique ($successor_prerequisites);
-				$keys = array_keys ($successor_prerequisites, $job_id);
-				unset ($successor_prerequisites[$keys[0]]);
+
+				### remove deleted job from prerequisites
+				$keys = array_keys ($successor_prerequisites, $job->id ());
+
+				foreach ($keys as $key)
+				{
+					unset ($successor_prerequisites[$key]);
+				}
+
+				### ...
 				$successor_prerequisites = implode (",", $successor_prerequisites);
-				$successive_job->set_prop ("prerequisites", $successor_prerequisites);
+				$other_job->set_prop ("prerequisites", $successor_prerequisites);
+				$other_job->save ();
 			}
 		}
 
-		### correct project's job order if project wasn't deleted
+		### correct project's job order
 		$this->do_orb_method_call (array (
 			"action" => "order_jobs",
 			"class" => "mrp_case",

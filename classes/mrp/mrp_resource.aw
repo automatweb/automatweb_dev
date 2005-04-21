@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.52 2005/04/18 12:24:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.53 2005/04/21 18:39:41 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -1005,13 +1005,13 @@ class mrp_resource extends class_base
 
 				foreach ($thread_data as $key => $thread)
 				{
-					if ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started === false))
+					if ( ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE) and ($started === false) )
 					{
 						$thread_data[$key]["state"] = MRP_STATUS_RESOURCE_INUSE;
 						$thread_data[$key]["job"] = $arr["job"];
 						$started = $key;
 					}
-					elseif ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE and ($started !== false))
+					elseif ( ($thread["state"] == MRP_STATUS_RESOURCE_AVAILABLE) and ($started !== false) )
 					{
 						$last_thread = false;
 						break;
