@@ -579,6 +579,10 @@ class propcollector extends aw_template
 		$fields = array();
 		foreach($_x->get() as $field)
 		{
+			if (!$field)
+			{
+				continue;
+			};
 			list($fname,$fvalue) = explode("=",$field);
 			if ($fname && $fvalue)
 			{
