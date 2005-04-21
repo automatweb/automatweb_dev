@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.63 2005/04/19 17:58:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.64 2005/04/21 10:33:24 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -191,7 +191,7 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
-		$this->event_entry_classes = array(CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_MEETING,CL_CALENDAR_VACANCY,CL_CALENDAR_EVENT,CL_PARTY,CL_COMICS);
+		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY, CL_COMICS /* -- temporarily put back until configurable - ahz*/ );
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -571,7 +571,7 @@ class planner extends class_base
 
 		// that is the basic query
 		// I need to add different things to it
-		$old_query = 0;
+		$old_query = 1;
 		if ($old_query)
 		{
 			$q = "SELECT ".$this->db_fn("objects.oid")." AS id,".$this->db_fn("objects.brother_of").",".$this->db_fn("objects.name").",".$this->db_fn("planner.start").",".$this->db_fn("planner.end")."
