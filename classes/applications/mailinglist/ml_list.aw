@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.26 2005/04/21 12:48:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.27 2005/04/21 12:55:18 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -816,13 +816,13 @@ class ml_list extends class_base
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = new aw_array($list_obj->prop("def_user_folder"));
-		foreach($fld as $fold)
+		foreach($fold as $fld)
 		{
-			if(!is_oid($fold) || !$this->can("add", $fold))
+			if(!is_oid($fld) || !$this->can("add", $fld))
 			{
 				continue;
 			}
-			$fld_obj = new object($fold);
+			$fld_obj = new object($fld);
 			if($fld_obj->class_id() != CL_MENU)
 			{
 				continue;
@@ -834,7 +834,7 @@ class ml_list extends class_base
 		{
 			return false;
 		}
-		$members = $this->get_all_members($fold);
+		$members = $this->get_all_members($fld);
 		$name = $fld_obj->name();
 		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
 		set_time_limit(0);
@@ -943,7 +943,7 @@ class ml_list extends class_base
 						"email" => $addr,
 						"list_id" => $list_obj->id(),
 						"ret_status" => true,
-						"use_folders" => $fold,
+						"use_folders" => $fld,
 					));
 					if ($retval)
 					{
