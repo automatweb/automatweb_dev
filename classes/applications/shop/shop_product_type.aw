@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.4 2004/07/02 13:13:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_type.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
 // shop_product_type.aw - Toote t&uuml;&uuml;p 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_data_class.aw,v 1.1 2004/05/12 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_data_class.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 // abstract_data_class.aw - Tundmatud andmed 
 /*
 

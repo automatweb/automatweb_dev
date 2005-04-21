@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.1 2004/06/25 19:28:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_identity.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
 // messenger_identity.aw - Messengeri identiteet 
 /*
 

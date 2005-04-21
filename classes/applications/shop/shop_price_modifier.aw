@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_price_modifier.aw,v 1.1 2004/03/17 16:06:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_price_modifier.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
 // shop_price_modifier.aw - Hinnakujundus 
 /*
 

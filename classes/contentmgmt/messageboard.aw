@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/messageboard.aw,v 1.1 2004/04/19 16:15:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/messageboard.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 // messageboard.aw - Teadete tahvel 
 /*
 

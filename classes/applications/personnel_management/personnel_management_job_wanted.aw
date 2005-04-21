@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.2 2004/10/08 01:32:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management_job_wanted.aw,v 1.3 2005/04/21 08:48:49 kristo Exp $
 // personnel_management_job_wanted.aw - T&ouml;&ouml; soov 
 /*
 

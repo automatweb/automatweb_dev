@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_script.aw,v 1.1 2004/06/10 18:38:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_script.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 // aw_script.aw - AW skript 
 /*
 

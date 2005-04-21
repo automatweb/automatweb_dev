@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.4 2004/10/05 09:21:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
 // shop_order_cart_value.aw - Poe ostukorvi v&auml;&auml;rtus 
 /*
 

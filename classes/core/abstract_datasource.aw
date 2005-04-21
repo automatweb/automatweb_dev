@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.6 2004/10/08 15:24:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.7 2005/04/21 08:48:48 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_layout.aw,v 1.1 2004/04/13 12:36:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_layout.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
 // shop_product_layout.aw - Lao toote kujundus 
 /*
 

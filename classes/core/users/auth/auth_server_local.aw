@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.4 2005/03/03 10:45:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.5 2005/04/21 08:48:48 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 

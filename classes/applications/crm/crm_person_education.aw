@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.1 2005/01/21 13:05:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_person_education.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 // crm_person_education.aw - Haridus 
 /*
 

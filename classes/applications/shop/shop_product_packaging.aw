@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.14 2005/02/17 13:10:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.15 2005/04/21 08:48:47 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 

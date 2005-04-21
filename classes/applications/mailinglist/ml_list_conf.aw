@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list_conf.aw,v 1.1 2004/10/29 21:13:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list_conf.aw,v 1.2 2005/04/21 08:48:47 kristo Exp $
 // ml_list_conf.aw - List configuration
 // right now this is not used anywhere, but maybe we need something like this in the future,
 // so I'm leaving this in the tree -- duke

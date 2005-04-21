@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.8 2004/11/18 17:21:47 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/quickmessage/quickmessage.aw,v 1.9 2005/04/21 08:48:49 kristo Exp $
 // quickmessage.aw - Kiirteade  
 /*
 

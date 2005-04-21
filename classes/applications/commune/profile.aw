@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.7 2004/11/18 17:21:46 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/commune/Attic/profile.aw,v 1.8 2005/04/21 08:48:47 kristo Exp $
 // profile.aw - Profiil 
 /*
 @classinfo syslog_type=ST_PROFILE relationmgr=yes

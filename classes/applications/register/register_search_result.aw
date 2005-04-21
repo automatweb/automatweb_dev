@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search_result.aw,v 1.1 2004/07/06 09:34:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search_result.aw,v 1.2 2005/04/21 08:48:49 kristo Exp $
 // register_search_result.aw - Registri otsingu tulemused 
 /*
 

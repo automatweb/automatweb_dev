@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search_synonyms.aw,v 1.1 2004/09/09 11:01:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search_synonyms.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 // cb_search_synonyms.aw - Classbase otsingu s&uuml;non&uuml;mid 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.5 2004/04/01 11:25:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/stat_report/Attic/stat_report.aw,v 1.6 2005/04/21 08:48:48 kristo Exp $
 // stat_report.aw - Stati aruannete upload 
 /*
 

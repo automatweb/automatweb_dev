@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.2 2004/11/10 12:44:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_config.aw,v 1.3 2005/04/21 08:48:47 kristo Exp $
 // messenger_config.aw - Messengeri config 
 /*
 

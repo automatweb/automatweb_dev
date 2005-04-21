@@ -1,6 +1,6 @@
 <?php
 // dns.aw - various DNS related functionality, whois queries
-// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.1 2004/12/09 20:19:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/util/dns.aw,v 1.2 2005/04/21 08:48:48 kristo Exp $
 class dns extends aw_template
 {
 	// ns query types

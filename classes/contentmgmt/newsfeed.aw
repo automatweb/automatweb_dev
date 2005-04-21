@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.6 2005/02/28 15:28:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.7 2005/04/21 08:48:48 kristo Exp $
 // newsfeed.aw - Newsfeed 
 /*
 

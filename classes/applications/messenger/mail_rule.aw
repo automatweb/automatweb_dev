@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.4 2004/12/02 14:04:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_rule.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
 // mail_rule.aw - Maili ruul 
 /*
 @classinfo syslog_type=ST_MAIL_RULE relationmgr=yes

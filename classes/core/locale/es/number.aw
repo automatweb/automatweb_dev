@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/es/number.aw,v 1.2 2004/03/09 11:13:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/es/number.aw,v 1.3 2005/04/21 08:48:49 kristo Exp $
 // es.aw - localizatione de espaniola la la la
 class number
 {

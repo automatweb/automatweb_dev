@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/locale/lv/number.aw,v 1.1 2004/10/14 13:43:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/locale/lv/number.aw,v 1.2 2005/04/21 08:48:49 kristo Exp $
 // et.aw - Estonian localization
 class number
 {
