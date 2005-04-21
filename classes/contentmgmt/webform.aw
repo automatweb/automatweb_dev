@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.66 2005/04/08 09:46:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.67 2005/04/21 09:21:58 ahti Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -582,7 +582,6 @@ class webform extends class_base
 		$this->p_clid = $arr["request"]["form_type"];
 		$form = obj();
 		$parent = $this->p_clid == CL_SHOP_PRODUCT ? $arr["request"]["parent"] : $arr["obj_inst"]->id();
-		//arr($this->p_clid);
 		$form->set_name($this->p_clid == CL_SHOP_PRODUCT ? $arr["request"]["name"] : $this->form_types[$this->p_clid]." ".$arr["obj_inst"]->id());
 		$form->set_parent($parent);
 		$form->set_class_id($this->p_clid);
