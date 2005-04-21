@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.10 2005/04/21 09:48:27 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.11 2005/04/21 11:51:50 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -470,8 +470,8 @@ class mail_message extends class_base
 			LEFT JOIN messages ON (objects.oid = messages.id)
 			WHERE objects.oid = $oid";
 		$this->db_query($q);
+		
 		$row = $this->db_next();
-
 		$message = $row["message"];
 		if (is_array($args["replacements"]))
 		{

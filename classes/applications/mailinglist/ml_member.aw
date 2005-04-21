@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.5 2005/03/10 09:00:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.6 2005/04/21 11:51:49 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -205,13 +205,13 @@ class ml_member extends class_base
 		{
 			if (!$this->check_member(array("email" => $email,"folder" => $user_folder)))
 			{
-				$objname = htmlspecialchars($objname);
+				$xobjname = htmlspecialchars($objname);
 				// Why do we duplicate name and email in object metadata?
 				$member_obj = new object();
 				$member_obj->set_class_id($this->clid);
 				$member_obj->set_parent($user_folder);
 				$member_obj->set_status($status);
-				$member_obj->set_name($objname);
+				$member_obj->set_name($xobjname);
 
 				$member_obj->set_prop("name",$name);
 				$member_obj->set_prop("mail",$email);
@@ -260,9 +260,8 @@ class ml_member extends class_base
 				$member_obj->save();
 		
 				$added = true;
-			};
-		};
-		
+			}
+		}
 		if ($added && $list_obj->prop("confirm_subscribe") != "" && $list_obj->prop("confirm_subscribe_msg") != "")
 		{
 			// now generate and send the bloody message
