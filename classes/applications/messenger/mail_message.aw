@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.11 2005/04/21 11:51:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.12 2005/04/21 12:59:26 ahti Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -109,23 +109,22 @@ class mail_message extends class_base
 	{
 		$msgr = get_instance(CL_MESSENGER_V2);
 		$msgr->set_opt("use_mailbox",$arr["mailbox"]);
-                $msgr->_connect_server(array(
-                        "msgr_id" => $arr["msgrid"],
-                ));
+		$msgr->_connect_server(array(
+			"msgr_id" => $arr["msgrid"],
+		));
                 
 		$rv = $msgr->drv_inst->fetch_message(array(
-                                "msgid" => $arr["msgid"],
-                ));
+			"msgid" => $arr["msgid"],
+			));
 
 		if ($rv && isset($arr["fullheaders"]))
 		{
 			$rv["fullheaders"] = $msgr->drv_inst->fetch_headers(array(
 				"msgid" => $arr["msgid"],
-			));	
+			));
 		};
 
 		return $rv;
-			
 	}
 
 	function load_remote_message($arr)
