@@ -116,9 +116,9 @@
             <group>others</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>callback</type>
-            <callback>cb_calendar_others</callback>
+            <type>multi_calendar</type>
             <store>no</store>
+            <no_caption>1</no_caption>
             <caption>Teised</caption>
       </property>
       <property>
@@ -239,6 +239,7 @@
             </calendars>
             <others>
                   <caption>Teised</caption>
+                  <submit_method>get</submit_method>
             </others>
             <projects>
                   <caption>Projektid</caption>
