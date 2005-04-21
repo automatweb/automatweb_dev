@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.18 2005/03/20 15:38:23 kristo Exp $
-set_time_limit(0);
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.19 2005/04/21 08:27:20 kristo Exp $
+if (!ini_get("safe_mode"))
+{
+	set_time_limit(0);
+}
 include("const.aw");
 
 
@@ -79,7 +82,7 @@ if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["refor
 	{
 		print html::href(array(
 			"url" => $content,
-			"caption" => "Kliki siia jätkamiseks",
+			"caption" => t("Kliki siia jätkamiseks"),
 		));		
 	}
 	else
