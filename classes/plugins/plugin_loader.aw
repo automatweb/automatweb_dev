@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/plugins/plugin_loader.aw,v 1.1 2003/05/15 14:52:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/plugins/plugin_loader.aw,v 1.2 2005/04/21 08:54:57 kristo Exp $
 // base for all the plugins
 // provides methods for loading different plugins and retrieving data from them
 class plugin_loader extends aw_template

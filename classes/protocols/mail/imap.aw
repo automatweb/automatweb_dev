@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.22 2004/11/18 23:23:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.23 2005/04/21 08:54:57 kristo Exp $
 // imap.aw - IMAP login 
 /*
 

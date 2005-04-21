@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.3 2005/01/14 14:42:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_phone.aw,v 1.4 2005/04/21 08:54:56 kristo Exp $
 // phone.aw - Telefon 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_item.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket_item.aw,v 1.3 2005/04/21 08:54:58 kristo Exp $
 // taket_ebasket_item.aw - Taketi Ostukorvi Rida 
 /*
 @tableinfo taket_ebasket_item index=id master_table=objects master_index=oid

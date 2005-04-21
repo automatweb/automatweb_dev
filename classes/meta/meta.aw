@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.1 2004/02/20 11:28:56 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/meta/meta.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
 // meta.aw - Vidin 
 /*
 

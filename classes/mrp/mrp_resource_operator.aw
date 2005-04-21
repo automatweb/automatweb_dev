@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.1 2005/01/07 08:40:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource_operator.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
 // mrp_resource_operator.aw - Operaator 
 /*
 

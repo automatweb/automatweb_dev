@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_block_conf.aw,v 1.1 2004/01/02 02:58:30 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_block_conf.aw,v 1.2 2005/04/21 08:54:58 kristo Exp $
 // taket_block_conf.aw - Otsingu piirangud 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.8 2005/01/21 13:10:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.9 2005/04/21 08:54:56 kristo Exp $
 // crm_profession.aw - Ametinimetus 
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes

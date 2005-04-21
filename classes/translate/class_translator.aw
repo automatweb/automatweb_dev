@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translator.aw,v 1.2 2003/09/24 16:28:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translator.aw,v 1.3 2005/04/21 08:54:57 kristo Exp $
 // deals with loading the correct translation object
 class class_translator extends core
 {

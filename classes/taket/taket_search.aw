@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.4 2004/03/27 20:14:33 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_search.aw,v 1.5 2005/04/21 08:54:58 kristo Exp $
 // taket_search.aw - Taketi Otsing 
 /*
 

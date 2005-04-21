@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.19 2005/03/02 13:47:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/syslog/dronline_conf.aw,v 1.20 2005/04/21 08:54:57 kristo Exp $
 /*
 
 @default table=objects

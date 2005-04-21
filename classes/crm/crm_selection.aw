@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.18 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.19 2005/04/21 08:54:56 kristo Exp $
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION
 @default table=objects

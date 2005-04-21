@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.5 2005/01/13 19:47:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_category.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
 // crm_category.aw - Kategooria 
 /*
 

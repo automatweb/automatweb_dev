@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.4 2003/12/09 18:34:39 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.5 2005/04/21 08:54:56 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 

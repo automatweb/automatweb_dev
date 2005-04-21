@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.5 2004/06/08 19:08:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/show_site_content.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE_CONTENT

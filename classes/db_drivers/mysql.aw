@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.27 2005/02/21 08:51:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.28 2005/04/21 08:54:57 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql 
 {

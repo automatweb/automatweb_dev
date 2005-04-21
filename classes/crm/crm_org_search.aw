@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.11 2004/11/24 15:13:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.12 2005/04/21 08:54:56 kristo Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/container.aw,v 1.2 2004/04/12 14:07:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/container.aw,v 1.3 2005/04/21 08:54:57 kristo Exp $
 // this is used to use contentmgmt classes inside class_base forms
 
 class container extends class_base

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax_chain.aw,v 1.1 2004/07/22 11:20:43 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax_chain.aw,v 1.2 2005/04/21 08:54:56 kristo Exp $
 // tax_chain.aw - Maksu pärg 
 /*
 

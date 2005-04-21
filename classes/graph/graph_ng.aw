@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/graph/Attic/graph_ng.aw,v 1.3 2004/02/11 21:46:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/graph/Attic/graph_ng.aw,v 1.4 2005/04/21 08:54:57 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GRAPH_NG

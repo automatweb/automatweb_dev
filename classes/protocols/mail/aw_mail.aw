@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.3 2005/02/08 14:56:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/aw_mail.aw,v 1.4 2005/04/21 08:54:57 kristo Exp $
 // Thanks to Kartic Krishnamurthy <kaygee@netset.com> for ideas and sample code
 // mail.aw - Sending and parsing mail. MIME compatible
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/date_chooser.aw,v 1.1 2004/10/16 22:34:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/Attic/date_chooser.aw,v 1.2 2005/04/21 08:54:57 kristo Exp $
 // date_chooser
 class date_chooser extends core
 {

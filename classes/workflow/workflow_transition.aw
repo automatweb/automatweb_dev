@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_transition.aw,v 1.1 2004/01/14 15:21:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/workflow/workflow_transition.aw,v 1.2 2005/04/21 08:54:58 kristo Exp $
 // workflow_transition.aw - J&auml;rgnevus 
 /*
 

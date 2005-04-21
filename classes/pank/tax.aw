@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.3 2004/10/08 01:32:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/tax.aw,v 1.4 2005/04/21 08:54:56 kristo Exp $
 // tax.aw - Maks 
 /*
 

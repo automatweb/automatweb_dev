@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.5 2005/03/02 13:11:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_corpform.aw,v 1.6 2005/04/21 08:54:56 kristo Exp $
 /*
 	@tableinfo kliendibaas_ettevotlusvorm index=oid master_table=objects master_index=oid
 

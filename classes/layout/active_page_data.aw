@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.10 2004/11/07 19:26:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/layout/active_page_data.aw,v 1.11 2005/04/21 08:54:56 kristo Exp $
 class active_page_data extends class_base
 {
 	function active_page_data()

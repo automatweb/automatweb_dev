@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order.aw,v 1.2 2004/10/08 01:32:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_order.aw,v 1.3 2005/04/21 08:54:58 kristo Exp $
 // taket_order.aw - Taketi tellimus 
 /*
 @tableinfo taket_orders index=id master_table=objects master_index=oid

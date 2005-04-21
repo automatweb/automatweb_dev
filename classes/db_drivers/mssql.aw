@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.4 2005/01/26 12:09:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mssql.aw,v 1.5 2005/04/21 08:54:57 kristo Exp $
 // mysql.aw - MySQL draiver
 class mssql
 {

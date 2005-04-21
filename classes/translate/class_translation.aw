@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.4 2004/10/27 12:04:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/translate/Attic/class_translation.aw,v 1.5 2005/04/21 08:54:57 kristo Exp $
 // translation.aw - Tõlge 
 /*
 

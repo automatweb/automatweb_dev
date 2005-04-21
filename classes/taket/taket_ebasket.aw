@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.5 2004/01/15 15:00:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_ebasket.aw,v 1.6 2005/04/21 08:54:58 kristo Exp $
 // taket_ebasket.aw - Ostukorv
 /*
 

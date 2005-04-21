@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.12 2005/04/08 14:55:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.13 2005/04/21 08:54:57 kristo Exp $
 // rte.aw - Rich Text Editor 
 /*
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.3 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_users_import.aw,v 1.4 2005/04/21 08:54:58 kristo Exp $
 // taket_users_import.aw - Taketi kasutajate import 
 /*
 HANDLE_MESSAGE(MSG_USER_LOGIN, update_user_info)

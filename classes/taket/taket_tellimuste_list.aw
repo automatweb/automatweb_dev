@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.3 2004/01/15 15:00:21 rtoomas Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_tellimuste_list.aw,v 1.4 2005/04/21 08:54:58 kristo Exp $
 // taket_tellimuste_list.aw - Taket tellimuste nimekiri 
 /*
 

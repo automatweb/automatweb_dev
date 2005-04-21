@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_js_parser.aw,v 1.2 2004/01/13 16:24:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/taket/Attic/taket_js_parser.aw,v 1.3 2005/04/21 08:54:58 kristo Exp $
 // taket_js_parser.aw - Taketi JS Parser 
 /*
 
