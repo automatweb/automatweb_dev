@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.50 2005/04/19 18:08:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.51 2005/04/21 10:30:26 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -172,7 +172,7 @@ class vcalendar extends aw_template
 	// data - arr
 	function add_item($arr)
 	{
-		if ($GLOBALS["DD"] == 1)
+		if ($_GET["DD"] == 1)
 		{
 			arr($arr);
 			//echo "id = ".$arr["data"]["id"]." name = ".$arr["data"]["name"]." start = ".date("d.m.Y H:i", $arr["data"]["start1"])." <br>";
@@ -226,20 +226,11 @@ class vcalendar extends aw_template
 		$data["utextarea1"] = nl2br($data["utextarea1"]);
 
 
-		//if (aw_global_get("uid") == "duke")
-		//{
-			if ($end_tm > $start_tm)
-			{
-				$data["item_end"] = mktime($this->day_end["hour"],$this->day_end["minute"],59,$em,$ed,$ey);
-				//$data["time"] = "Algab: " . date("H:i",$data["item_start"]);
-			};
-			/*
-			print "adding data";
-			print "start_tm = $start_tm<br>";
-			print "end_tm = $end_tm<br>";
-			arr($data);
-			*/
-	//	};
+		if ($end_tm > $start_tm)
+		{
+			$data["item_end"] = mktime($this->day_end["hour"],$this->day_end["minute"],59,$em,$ed,$ey);
+			//$data["time"] = "Algab: " . date("H:i",$data["item_start"]);
+		};
 
 		$this->evt_list[$this->el_count] = $data;
 		$this->items[$use_date][] = &$this->evt_list[$this->el_count];
