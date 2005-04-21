@@ -50,7 +50,7 @@
             <name>relman</name>
             <table>planner</table>
             <group>general</group>
-            <type>aliasnmgr</type>
+            <type>aliasmgr</type>
             <no_caption>1</no_caption>
             <store>no</store>
             <field>relman</field>

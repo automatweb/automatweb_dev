@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.2 2005/04/19 18:34:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.3 2005/04/21 09:41:32 ahti Exp $
 // party.aw - Pidu 
 /*
 
@@ -26,7 +26,7 @@
 @property from_artist type=select multiple=1 table=objects field=meta method=serialize
 @caption Võta esineja objektist ürituse
 
-@property relman type=aliasnmgr no_caption=1 store=no
+@property relman type=aliasmgr no_caption=1 store=no
 @caption Seostehaldur
 
 @groupinfo artists caption="Esinejad"
