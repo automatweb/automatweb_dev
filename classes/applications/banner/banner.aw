@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.8 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.9 2005/04/21 09:33:50 kristo Exp $
 
 /*
 
@@ -430,6 +430,14 @@ class banner extends class_base
 			$r = $i->get_image_by_id($f_o->id());
 			$i->show(array(
 				"file" => basename($r["file"])
+			));
+		}
+		else
+		if ($f_o->class_id() == CL_FLASH)
+		{
+			$i = get_instance(CL_FLASH);
+			$i->show(array(
+				"file" => basename($f_o->prop("file"))
 			));
 		}
 	}
