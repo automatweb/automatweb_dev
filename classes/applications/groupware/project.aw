@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.36 2005/04/19 18:03:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.37 2005/04/21 10:34:21 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -149,7 +149,7 @@ class project extends class_base
 		
 		lc_site_load("project",&$this);
 
-		$this->event_entry_classes = array(CL_CALENDAR_EVENT,CL_STAGING,CL_CRM_MEETING,CL_TASK,CL_CRM_CALL,CL_PARTY,CL_COMICS);
+		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
 	}
 
 	function get_property($arr)
