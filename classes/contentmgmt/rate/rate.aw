@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.23 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/rate/rate.aw,v 1.24 2005/04/21 09:25:45 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_RATE relationmgr=yes
@@ -113,7 +113,7 @@ class rate extends class_base
 
 	function get_rating_for_object($oid, $type = RATING_AVERAGE)
 	{
-		if (!is_oid($oid))
+		if (!is_oid($oid) || !$this->can("view", $oid))
 		{
 			return 0;
 		}
