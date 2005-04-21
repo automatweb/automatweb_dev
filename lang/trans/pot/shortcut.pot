@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Thu, 21 Apr 2005 13:27:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/admin/shortcut.aw:prop_status
+msgid "Omaduse Staatus (status) caption"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_status_comment
+msgid "Omaduse Staatus (status) kommentaar"
+msgstr ""
+
+#: classes/admin/shortcut.aw:prop_status_help
+msgid "Omaduse Staatus (status) help"
+msgstr ""
 
 #: classes/admin/shortcut.aw:75
 msgid " (kiirviide)"

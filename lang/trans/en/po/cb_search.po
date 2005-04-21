@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:00:58 +0300\n"
+"POT-Creation-Date: Thu, 21 Apr 2005 13:27:24 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -193,7 +193,7 @@ msgstr "Type"
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/cfg/cb_search.aw:184 classes/cfg/cb_search.aw:880
+#: classes/cfg/cb_search.aw:184 classes/cfg/cb_search.aw:883
 msgid "J&auml;rjekord"
 msgstr "Order"
 
@@ -217,74 +217,74 @@ msgstr "Radiobutton"
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/cfg/cb_search.aw:839
+#: classes/cfg/cb_search.aw:842
 msgid "T&auml;istekstiotsing"
 msgstr "Fulltext search"
 
-#: classes/cfg/cb_search.aw:845
+#: classes/cfg/cb_search.aw:848
 msgid "Kataloog"
 msgstr "Folder"
 
-#: classes/cfg/cb_search.aw:851
+#: classes/cfg/cb_search.aw:854
 msgid "Mitu kirjet lehel"
 msgstr "How many rows per page"
 
-#: classes/cfg/cb_search.aw:887
+#: classes/cfg/cb_search.aw:890
 msgid "Element"
 msgstr "Element"
 
-#: classes/cfg/cb_search.aw:893
+#: classes/cfg/cb_search.aw:896
 msgid "Tabelis"
 msgstr "In table"
 
-#: classes/cfg/cb_search.aw:899
+#: classes/cfg/cb_search.aw:902
 msgid "Hind"
 msgstr "Price"
 
-#: classes/cfg/cb_search.aw:905
+#: classes/cfg/cb_search.aw:908
 msgid "Sorditav"
 msgstr "Sortable"
 
-#: classes/cfg/cb_search.aw:911
+#: classes/cfg/cb_search.aw:914
 msgid "Vaikimisi sort"
 msgstr "Default sort"
 
-#: classes/cfg/cb_search.aw:917
+#: classes/cfg/cb_search.aw:920
 msgid "Vaata tulp"
 msgstr "View column"
 
-#: classes/cfg/cb_search.aw:923
+#: classes/cfg/cb_search.aw:926
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/cfg/cb_search.aw:939
+#: classes/cfg/cb_search.aw:942
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/cfg/cb_search.aw:940
+#: classes/cfg/cb_search.aw:943
 msgid "Vaata"
 msgstr "View"
 
-#: classes/cfg/cb_search.aw:941
+#: classes/cfg/cb_search.aw:944
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/cfg/cb_search.aw:1041
+#: classes/cfg/cb_search.aw:1044
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/cfg/cb_search.aw:1280
+#: classes/cfg/cb_search.aw:1283
 msgid "OID"
 msgstr "OID"
 
-#: classes/cfg/cb_search.aw:1287
+#: classes/cfg/cb_search.aw:1290
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/cfg/cb_search.aw:1294
+#: classes/cfg/cb_search.aw:1297
 msgid "Kasuta?"
 msgstr "Use?"
 
-#: classes/cfg/cb_search.aw:1300
+#: classes/cfg/cb_search.aw:1303
 msgid "K.A. Alamkataloogid?"
 msgstr "Incl. subfolders?"

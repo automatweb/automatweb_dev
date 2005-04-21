@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:12 +0300\n"
+"POT-Creation-Date: Thu, 21 Apr 2005 13:27:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/crm/crm_org_search.aw:prop_name
+msgid "Omaduse  (name) caption"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:prop_name_comment
+msgid "Omaduse  (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_org_search.aw:prop_name_help
+msgid "Omaduse  (name) help"
+msgstr ""
 
 #: classes/crm/crm_org_search.aw:prop_reg_nr
 msgid "Omaduse  (reg_nr) caption"

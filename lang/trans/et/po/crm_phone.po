@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:12 +0300\n"
+"POT-Creation-Date: Thu, 21 Apr 2005 13:27:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,20 +9,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_phone.aw:prop_name
+msgid "Omaduse Number (name) caption"
+msgstr ""
 
-#: classes/crm/crm_phone.aw:prop_type
+# classes/crm/crm_phone.aw:prop_name_comment
+msgid "Omaduse Number (name) kommentaar"
+msgstr ""
+
+# classes/crm/crm_phone.aw:prop_name_help
+msgid "Omaduse Number (name) help"
+msgstr ""
+
+# classes/crm/crm_phone.aw:prop_type
 msgid "Omaduse Numbri tüüp (type) caption"
 msgstr ""
 
-#: classes/crm/crm_phone.aw:prop_type_comment
+# classes/crm/crm_phone.aw:prop_type_comment
 msgid "Omaduse Numbri tüüp (type) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_phone.aw:prop_type_help
+# classes/crm/crm_phone.aw:prop_type_help
 msgid "Omaduse Numbri tüüp (type) help"
 msgstr ""
 
-#: classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
+# classes/crm/crm_phone.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"
 msgstr ""
 
@@ -49,4 +60,3 @@ msgstr ""
 #: classes/crm/crm_phone.aw:50
 msgid "skype"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 14 Apr 2005 14:31:12 +0300\n"
+"POT-Creation-Date: Thu, 21 Apr 2005 13:27:31 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1452,6 +1452,10 @@ msgstr "Party"
 # aw.ini:class_915
 msgid "Klassi Koomiksi skript (915) nimi"
 msgstr "Comic script"
+
+# aw.ini:class_920
+msgid "Klassi Lao toodete otsing (920) nimi"
+msgstr ""
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
