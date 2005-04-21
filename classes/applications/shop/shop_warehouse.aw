@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.29 2005/04/01 12:06:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.30 2005/04/21 14:23:55 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2449,6 +2449,62 @@ class shop_warehouse extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["tree_filter"] = $_GET["tree_filter"];
+	}
+
+	/** returns a list of config forms that can be used to enter products
+	
+		@comment
+			takes warehouse oid as parameter
+
+	**/
+	function get_prod_add_config_forms($arr)
+	{
+		$wh = obj($arr["warehouse"]);
+		$conf = obj($wh->prop("conf"));
+
+		$ret = array();
+		$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "sp_cfgform");
+		return $ret;
+	}
+
+	/** returns a list of config forms that can be used to enter product packagings
+	
+		@comment
+			takes warehouse oid as parameter
+
+	**/
+	function get_prod_packaging_add_config_forms($arr)
+	{
+		$wh = obj($arr["warehouse"]);
+		$conf = obj($wh->prop("conf"));
+
+		$ret = array();
+		$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "packaging_cfgform");
+		return $ret;
+	}
+
+	function _req_get_prod_add_config_forms($parent, &$ret, $prop)
+	{
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => array(CL_MENU, CL_SHOP_PRODUCT_TYPE),
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() != CL_MENU)
+			{
+				if (is_oid($cf_id = $o->prop($prop)) && $this->can("view", $cf_id))
+				{
+					$ret[$cf_id] = $cf_id;
+				}
+			}
+			else
+			{
+				$this->_req_get_prod_add_config_forms($o->id(), $ret, $prop);
+			}
+		}
 	}
 }
 ?>
