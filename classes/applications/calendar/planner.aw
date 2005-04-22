@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.66 2005/04/22 06:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.67 2005/04/22 07:06:54 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -196,7 +196,7 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
-		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY, CL_COMICS /* -- temporarily put back until configurable - ahz*/ );
+		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT/*, CL_PARTY , CL_COMICS  -- temporarily put back until configurable - ahz - yeah. DO NOT do that please, at least not in cvs - terryf*/ );
 
 		$this->default_day_start = array(
 			"hour" => 9,
