@@ -30,7 +30,7 @@
 <td class="awmenuedittabletext VclGanttChartRowName"><a href="{VAR:row_uri}" class="VclGanttChartLink" target="{VAR:row_uri_target}">{VAR:row_name}</a></td>
 
 <!-- SUB: data_cell_column -->
-<td class="awmenuedittabletext VclGanttChartColumn VclGanttChartCell">
+<td class="awmenuedittabletext VclGanttChartColumn VclGanttChartCell" width="1%">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_normal_start -->
 <a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" class="VclGanttChartDataImg VclGanttChartStartBar" style="background-color: {VAR:bar_colour};"></a>
@@ -46,7 +46,7 @@
 <!-- END SUB: data_cell_column -->
 
 <!-- SUB: data_cell_subdivision -->
-<td class="awmenuedittabletext VclGanttChartSubdivision VclGanttChartCell">
+<td class="awmenuedittabletext VclGanttChartSubdivision VclGanttChartCell" width="1%">
 <!-- SUB: cell_contents -->
 <!-- SUB: bar_normal_start -->
 <a href="{VAR:bar_uri}" target="{VAR:bar_uri_target}" class="VclGanttChartBarLink"><span>{VAR:title}</span><img src="{VAR:baseurl}/automatweb/images/ganttbar_empty.gif" width="{VAR:length}" class="VclGanttChartDataImg VclGanttChartStartBar" style="background-color: {VAR:bar_colour};"></a>
