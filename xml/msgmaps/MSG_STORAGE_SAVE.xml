@@ -1,73 +1,73 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_save_grp</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>core/users/user</class>
-      <func>on_save_user</func>
-      <param>CL_USER</param>
-</num_1>
-<num_2>
-      <class>core/users/user</class>
-      <func>on_save_addr</func>
-      <param>CL_ML_MEMBER</param>
-</num_2>
-<num_3>
-      <class>core/obj_inherit_props_conf</class>
-      <func>on_save_conf</func>
-      <param>CL_OBJ_INHERIT_PROPS_CONF</param>
-</num_3>
-<num_4>
-      <class>crm/crm_user_creator</class>
-      <func>on_save_person</func>
-      <param>CL_CRM_PERSON</param>
-</num_4>
-<num_5>
-      <class>crm/crm_user_creator</class>
-      <func>on_save_co</func>
-      <param>CL_CRM_COMPANY</param>
-</num_5>
-<num_6>
-      <class>applications/personnel_management/personnel_management_cv</class>
-      <func>on_cv_save</func>
-      <param>CL_PERSONNEL_MANAGEMENT_CV</param>
-</num_6>
-<num_7>
-      <class>applications/personnel_management/personnel_management_job_offer</class>
-      <func>on_job_save</func>
-      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
-</num_7>
-<num_8>
       <class>contentmgmt/site_search/site_search_content_grp</class>
       <func>on_save_menu</func>
       <param>CL_MENU</param>
-</num_8>
-<num_9>
+</num_0>
+<num_1>
       <class>contentmgmt/site_search/site_search_content_grp</class>
       <func>on_save_grp</func>
       <param>CL_SITE_SEARCH_CONTENT_GRP</param>
-</num_9>
-<num_10>
+</num_1>
+<num_2>
       <class>contentmgmt/promo</class>
       <func>on_save_document</func>
       <param>CL_DOCUMENT</param>
-</num_10>
-<num_11>
+</num_2>
+<num_3>
       <class>contentmgmt/promo</class>
       <func>on_save_promo</func>
       <param>CL_PROMO</param>
-</num_11>
-<num_12>
-      <class>doc</class>
-      <func>on_save_document</func>
-      <param>CL_DOCUMENT</param>
-</num_12>
-<num_13>
+</num_3>
+<num_4>
+      <class>core/users/group</class>
+      <func>on_save_grp</func>
+      <param>CL_GROUP</param>
+</num_4>
+<num_5>
+      <class>core/users/user</class>
+      <func>on_save_user</func>
+      <param>CL_USER</param>
+</num_5>
+<num_6>
+      <class>core/users/user</class>
+      <func>on_save_addr</func>
+      <param>CL_ML_MEMBER</param>
+</num_6>
+<num_7>
+      <class>core/obj_inherit_props_conf</class>
+      <func>on_save_conf</func>
+      <param>CL_OBJ_INHERIT_PROPS_CONF</param>
+</num_7>
+<num_8>
+      <class>crm/crm_user_creator</class>
+      <func>on_save_person</func>
+      <param>CL_CRM_PERSON</param>
+</num_8>
+<num_9>
+      <class>crm/crm_user_creator</class>
+      <func>on_save_co</func>
+      <param>CL_CRM_COMPANY</param>
+</num_9>
+<num_10>
       <class>mrp/mrp_case</class>
       <func>on_save_case</func>
       <param>CL_MRP_CASE</param>
+</num_10>
+<num_11>
+      <class>doc</class>
+      <func>on_save_document</func>
+      <param>CL_DOCUMENT</param>
+</num_11>
+<num_12>
+      <class>applications/personnel_management/personnel_management_cv</class>
+      <func>on_cv_save</func>
+      <param>CL_PERSONNEL_MANAGEMENT_CV</param>
+</num_12>
+<num_13>
+      <class>applications/personnel_management/personnel_management_job_offer</class>
+      <func>on_job_save</func>
+      <param>CL_PERSONNEL_MANAGEMENT_JOB_OFFER</param>
 </num_13>
 </xml>

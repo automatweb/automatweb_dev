@@ -1,24 +1,24 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>core/users/group</class>
-      <func>on_delete_grp</func>
-      <param>CL_GROUP</param>
-</num_0>
-<num_1>
-      <class>core/users/user</class>
-      <func>on_delete_user</func>
-      <param>CL_USER</param>
-</num_1>
-<num_2>
       <class>contentmgmt/site_search/site_search_content_grp</class>
       <func>on_delete_menu</func>
       <param>CL_DOCUMENT</param>
-</num_2>
-<num_3>
+</num_0>
+<num_1>
       <class>contentmgmt/promo</class>
       <func>on_delete_document</func>
       <param>CL_DOCUMENT</param>
+</num_1>
+<num_2>
+      <class>core/users/group</class>
+      <func>on_delete_grp</func>
+      <param>CL_GROUP</param>
+</num_2>
+<num_3>
+      <class>core/users/user</class>
+      <func>on_delete_user</func>
+      <param>CL_USER</param>
 </num_3>
 <num_4>
       <class>mrp/mrp_case</class>
