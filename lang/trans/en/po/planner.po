@@ -562,7 +562,6 @@ msgstr "New"
 #: classes/applications/calendar/planner.aw:1522
 msgid "Otsi kalendri sündmust"
 msgstr "Search for calendar event"
-msgstr "Search calendar events"
 
 #: classes/applications/calendar/planner.aw:1530
 msgid "Täna"
