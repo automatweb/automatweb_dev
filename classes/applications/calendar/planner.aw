@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.67 2005/04/22 07:06:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.68 2005/04/22 11:18:05 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -27,6 +27,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
 	caption Def. s&uuml;ndmuse sisetamise vorm
 
+
 	@property day_start type=time_select group=time_settings rel=1
 	@caption Päev algab
 
@@ -53,6 +54,10 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	
 	@property tab_views type=chooser multiple=1 group=advanced
 	@caption Vaate tabid
+	
+	@property event_entry_classes type=chooser multiple=1 orient=vertical group=advanced
+	@caption Sündmuste klassid
+	@comment Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks
 
 	@property vac_count type=textbox size=2 group=vac_settings default=10
 	@caption Vabu aegu
@@ -196,7 +201,10 @@ class planner extends class_base
 				"5" => "relative",
 		);
 
+		//  list all clids here, that can be added to the calendar (those should at least have a referenfe to planner.start)
 		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT/*, CL_PARTY , CL_COMICS  -- temporarily put back until configurable - ahz - yeah. DO NOT do that please, at least not in cvs - terryf*/ );
+		// list all clids, that should be shown by default
+		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING);
 
 		$this->default_day_start = array(
 			"hour" => 9,
@@ -225,7 +233,15 @@ class planner extends class_base
 		return $arr['return_url'];
 	}
 
-
+	function get_event_entry_classes($o)
+	{
+		$rv = $o->prop("event_entry_classes");
+		if (!is_array($rv) || empty($rv))
+		{
+			$rv = $this->make_keys($this->default_entry_classes);
+		};
+		return $rv;
+	}
 
 	function get_event_classes()
 	{
@@ -451,6 +467,19 @@ class planner extends class_base
 			case "task_list":
 				$this->do_task_list($arr);
 				break;
+
+			case "event_entry_classes":
+				$clinf = aw_ini_get("classes");
+				// if property has no value, then use the defaults
+				if (empty($data["value"]))
+				{
+					$data["value"] = $this->make_keys($this->default_entry_classes);
+				};
+				foreach($this->event_entry_classes as $clid)
+				{
+					$data["options"][$clid] = $clinf[$clid]["name"];
+				};
+				break;
 		}
 		return $retval;
 	}
@@ -567,45 +596,17 @@ class planner extends class_base
 		
 		
 		$rv = array();
-		// a project is selected, but no events in range? Just return
-		// an empty array!
-		/*
-		if ($project && sizeof($folders) == 0)
-		{
-			return $rv;
-		};
-		*/
-
 		$eidstr = $parstr = "";
-
-		/*
-		if (sizeof($event_ids) > 0)
-		{
-			$eidstr = " objects.oid IN (" . join(",",$event_ids) . ")";
-			if ($project)
-			{
-				$eidstr = " AND" . $eidstr;
-			}
-			else
-			{
-				$eidstr = " OR" . $eidstr;
-			};
-		};
-		*/
-
-		if (sizeof($folders) > 0)
-		{
-			$parprefix = " AND ";
-			$parstr = "objects.parent IN (" . join(",",$folders) . ")";
-		};
-
-		$this->folders = $folders;
-
+		
 		if (sizeof($folders) == 0)
 		{
 			return array();
 		};
 
+		$parprefix = " AND ";
+		$parstr = "objects.parent IN (" . join(",",$folders) . ")";
+
+		$this->folders = $folders;
 
 
 		// that is the basic query
@@ -618,14 +619,6 @@ class planner extends class_base
 				LEFT JOIN objects ON (".$this->db_fn("planner.id")." = ".$this->db_fn("objects.brother_of").")
 				WHERE ".$this->db_fn("planner.start")." >= '${_start}' AND
 				(".$this->db_fn("planner.start")." <= '${_end}' OR ".$this->db_fn("planner.end")." IS NULL) AND ". $this->db_fn("objects.status")." ";
-			if(is_array($arr["status"]))
-			{
-				$q .= "IN (".implode(",", $arr["status"]).")";
-			}
-			else
-			{
-			 	$q .= "!= 0";
-			}
 		}
 		else
 		{
@@ -635,21 +628,23 @@ class planner extends class_base
 			WHERE (".$this->db_fn("planner.end")." >= '${_start}' OR ".$this->db_fn("planner.end")." IS NULL OR ".$this->db_fn("planner.end")." = 0) AND
 			(".$this->db_fn("planner.start")." <= '${_end}' ) AND
 			".$this->db_fn("objects.status")." ";
-			if(is_array($arr["status"]))
-			{
-				$q .= "IN (".implode(",", $arr["status"]).")";
-			}
-			else
-			{
-			 	$q .= "!= 0";
-			}
 		};
+
+		// see on 1 case.
+
+		// and I have a second one too
+			
+		if(is_array($arr["status"]))
+		{
+			$q .= "IN (".implode(",", $arr["status"]).")";
+		}
+		else
+		{
+		 	$q .= "!= 0";
+		}
 
 		// lyhidalt. planneri tabelis peaks kirjas olema. No, but it can't be there 
 		// I need to connect that god damn recurrence table into this fucking place.
-
-		// I could probably optimize this even further by not processing folders,
-		// if events from a projects were requested.
 
 		// if events from a project were requested, then include events
 		// from that projects only - id's are in event_ids array()
@@ -667,14 +662,15 @@ class planner extends class_base
 			};
 		//}
 
+		if($arr["group_by"])
+		{
+			$q .= "GROUP BY ".$this->db_fn("planner.start");
+		}
+
 		// now, I need another clue string .. perhaps even in that big fat ass query?
 
 		enter_function("get_event_list::query");
 		$this->db_query($q);
-		if ($_GET["XX5"])
-		{
-			print $q;
-		};
 		while($row = $this->db_next())
 		{
 			$rv[$row["brother_of"]] = array(
@@ -959,7 +955,8 @@ class planner extends class_base
 
 		if (isset($clid))
 		{
-			if (!in_array($clid,$this->event_entry_classes))
+			$entry_classes = $this->get_event_entry_classes($obj);
+			if (!in_array($clid,$entry_classes))
 			{
 				return array(array(
 					"type" => "text",
@@ -1486,7 +1483,8 @@ class planner extends class_base
 			};
 
 			// now I need to figure out which other classes are valid for that relation type
-			$clidlist = $this->event_entry_classes;
+			//$clidlist = $this->event_entry_classes;
+			$clidlist = $this->get_event_entry_classes($arr["obj_inst"]);
 			$tmp = aw_ini_get("classes");
 			if ($conn_count == 0)
 			{
@@ -1497,10 +1495,13 @@ class planner extends class_base
 					continue;
 				}
 				//Dont show at all
+				// this is bogus, you can turn it off from the settings
+				/*
 				if($clid == CL_CRM_OFFER)
 				{
 					continue;
 				}
+				*/
 				$toolbar->add_menu_item(array(
 					"parent" => "create_event",
 					"link" => $this->mk_my_orb("change",array(
