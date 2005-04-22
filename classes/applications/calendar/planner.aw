@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.65 2005/04/21 11:59:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.66 2005/04/22 06:11:31 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -50,6 +50,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property workdays type=chooser multiple=1 group=advanced
 	@caption Näidatavad päevad
+	
+	@property tab_views type=chooser multiple=1 group=advanced
+	@caption Vaate tabid
 
 	@property vac_count type=textbox size=2 group=vac_settings default=10
 	@caption Vabu aegu
@@ -107,6 +110,8 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	
 	@property event_search_button type=submit 
 	@caption Otsi
+	
+	@property event_search_tb type=toolbar no_caption=1
 
 	@property event_search_results_table type=table store=no no_caption=1 
 
@@ -289,6 +294,15 @@ class planner extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "tab_views":
+				$data["options"] = array(
+					"day" => t("Päev"),
+					"week" => t("Nädal"),
+					"month" => t("Kuu"),
+					"relative" => t("Ülevaade"),
+				);
+				break;
+				
 			case "minute_step":
 				$data["options"] = array(
 					1 => 1,
@@ -385,9 +399,34 @@ class planner extends class_base
 					return PROP_IGNORE;
 				}
 				break;
+				
+			case "event_search_tb":
+				$tb = safe_array($arr["obj_inst"]->prop("del_views"));
+				if(count($tb) > 0)
+				{
+					$tab_views = $tb;
+				}
+				elseif($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"])
+				{
+					$true = true;
+				}
+				if(($true or in_array($arr["request"]["group"], $tab_view) && $this->can("edit", $arr["obj_inst"]->id())))
+				{
+					$data["vcl_inst"]->add_button(array(
+						"name" => "delete",
+						"tooltip" => t("Kustuta märgitud sündmused"),
+						"action" => "delete_events",
+						"confirm" => t("Oled kindel, et soovid valitud sündmused kustutada?"),
+						"img" => "delete.gif",
+						"class" => "menuButton",
+					));
+				}
+				break;
+				
 			case "search":
 				$data["value"] = $arr["request"]["search"];
 				break;
+				
 			case "event_search_add":
 				if($arr["request"]["event_search_add"])
 				{
@@ -1633,6 +1672,7 @@ class planner extends class_base
 			// päeva algus ja päeva lõpp on vaja ette anda!
 			"day_start" => $o->prop("day_start"),
 			"day_end" => $o->prop("day_end"),
+			"filt_views" => $o->prop("tab_views"),
 		));
 		
 		$def = $arr["obj_inst"]->prop("default_view");
@@ -2197,10 +2237,17 @@ class planner extends class_base
 			"align" => "center",
 			"nowrap" => 1,
 		));
+		if($this->can("edit", $arr["obj_inst"]->id()))
+		{
+			$table->define_chooser(array(
+				"field" => "id",
+				"name" => "sel",
+			));
+		}
 		
 		get_instance("core/icons");
 		
-		$user_inst = get_instance(CL_USER);		
+		$user_inst = get_instance(CL_USER);
 		$users_i = get_instance("users");
 		foreach ($data->arr() as $result)
 		{	
@@ -2255,13 +2302,14 @@ class planner extends class_base
 			{
 				$href_to_event = html::href(array(
 					"url" => $this->mk_my_orb("change", array(
-						"id" => $result->brother_of()),
-						CL_CRM_OFFER),
+						"id" => $result->brother_of(),
+					), CL_CRM_OFFER),
 					"caption" => $result->name(),
 				));
 			}
 			
 			$table->define_data(array(
+				"id" => $result->brother_of(),
 				"name" => $href_to_event.$comment,
 				"date" => $result->prop("start1"),
 				"createdby" => html::href(array(

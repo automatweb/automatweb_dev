@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.27 2005/04/21 12:55:18 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.28 2005/04/22 06:11:31 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -618,12 +618,17 @@ class ml_list extends class_base
 				if(is_oid($m_id) && $this->can("view", $m_id))
 				{
 					$msg = obj($m_id);
-					$s_id = $msg->meta("list_source");
-					if(is_oid($s_id) && $this->can("view", $s_id))
+					$s = new aw_array($msg->meta("list_source"));
+					$val = array();
+					foreach($s->get() as $s_id)
 					{
-						$source = obj($s_id);
-						$prop["value"] = $source->name();
+						if(is_oid($s_id) && $this->can("view", $s_id))
+						{
+							$source = obj($s_id);
+							$val[] = $source->name();
+						}
 					}
+					$prop["value"] = implode(", ", $val);
 				}
 				break;
 				
@@ -816,13 +821,13 @@ class ml_list extends class_base
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = new aw_array($list_obj->prop("def_user_folder"));
-		foreach($fold as $fld)
+		foreach($fld as $fold)
 		{
-			if(!is_oid($fld) || !$this->can("add", $fld))
+			if(!is_oid($fold) || !$this->can("add", $fold))
 			{
 				continue;
 			}
-			$fld_obj = new object($fld);
+			$fld_obj = new object($fold);
 			if($fld_obj->class_id() != CL_MENU)
 			{
 				continue;
@@ -834,7 +839,7 @@ class ml_list extends class_base
 		{
 			return false;
 		}
-		$members = $this->get_all_members($fld);
+		$members = $this->get_all_members($fold);
 		$name = $fld_obj->name();
 		echo "Impordin kasutajaid kataloogi $fld / $name... <br />";
 		set_time_limit(0);
@@ -943,7 +948,7 @@ class ml_list extends class_base
 						"email" => $addr,
 						"list_id" => $list_obj->id(),
 						"ret_status" => true,
-						"use_folders" => $fld,
+						"use_folders" => $fold,
 					));
 					if ($retval)
 					{
@@ -1184,17 +1189,6 @@ class ml_list extends class_base
 			"field" => "id",
 		));
 
-		$t->d_row_cnt = $this->member_count;
-		$pageselector = "";
-
-		if ($t->d_row_cnt > $perpage)
-		{
-			$pageselector = $t->draw_lb_pageselector(array(
-				"records_per_page" => $perpage
-			));
-		};
-	
-		$t->table_header = $pageselector;
 		$ml_member_inst = get_instance(CL_ML_MEMBER);
 
 		if (is_array($ml_list_members))
@@ -1234,6 +1228,16 @@ class ml_list extends class_base
 		
 			}
 		}
+		$t->d_row_cnt = $this->member_count;
+		$pageselector = "";
+
+		if($t->d_row_cnt > $perpage)
+		{
+			$pageselector = $t->draw_lb_pageselector(array(
+				"records_per_page" => $perpage
+			));
+		}
+		$t->table_header = $pageselector;
 		$t->sort_by();
 	}
 
@@ -1434,6 +1438,10 @@ class ml_list extends class_base
 		$fld = new aw_array($obj_inst->prop("def_user_folder"));
 		foreach($fld->get() as $folder_id)
 		{
+			if($cnt > ($to - $from))
+			{
+				break;
+			}
 			if(!is_oid($folder_id) || !$this->can("view", $folder_id))
 			{
 				continue;
@@ -1442,7 +1450,14 @@ class ml_list extends class_base
 			//$this->get_members_ol($source_obj);
 			if($source_obj->class_id() == CL_MENU)
 			{
-				$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
+				if ($from != 0 && $to != 0)
+				{
+					$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC LIMIT %d,%d", $folder_id, CL_ML_MEMBER, $from, $to);
+				}
+				else
+				{
+					$q = sprintf("SELECT oid,parent FROM objects WHERE parent = %d AND class_id = %d AND status != 0 ORDER BY objects.created DESC", $folder_id, CL_ML_MEMBER);
+				}
 	
 				// why oh why is it so bloody slow with 1600 objects :(
 				/*
@@ -1454,26 +1469,23 @@ class ml_list extends class_base
 				));
 				*/
 	
-				//$this->member_count = sizeof($member_list->ids());
+				//$this->member_count = $member_list->count();
 				$this->db_query($q);
 	
 				while($row = $this->db_next())
 				//for($o = $member_list->begin(); !$member_list->end(); $o = $member_list->next())
 				{
-					$cnt++;
-					if (0 == $to || (0 != $from && 0 != $to && between($cnt, $from, $to)))
-					{
 					/*
 					$ret[$o->id()] = array(
 						"oid" => $o->id(),
 						"parent" => $o->parent(),
 					);
 					*/
-						$ret[$row["oid"]] = array(
-							"oid" => $row["oid"],
-							"parent" => $row["parent"],
-						);
-					}
+					$ret[$row["oid"]] = array(
+						"oid" => $row["oid"],
+						"parent" => $row["parent"],
+					);
+					$cnt++;
 				}
 			}
 			elseif ($source_obj->class_id() == CL_GROUP)
@@ -1483,6 +1495,10 @@ class ml_list extends class_base
 				));
 				foreach ($members as $member)
 				{
+					if($cnt > ($to - $from))
+					{
+						break;
+					}
 					$member = $member->to();
 					$email = $member->get_first_obj_by_reltype("RELTYPE_EMAIL");
 					if(!$email)
@@ -1632,25 +1648,19 @@ class ml_list extends class_base
 	// Ungh, shouldn't this be a separate class then?
 	function gen_mail_report_table($arr)
 	{
+		$perpage = 100;
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->parse_xml_def("mlist/report");
 		$_mid = $arr["request"]["mail_id"];
 		$qid = $arr["request"]["qid"];
 		$id = $arr["obj_inst"]->id();
-		if(strtolower(aw_ini_get("db.driver")) == "mssql")
-		{
-			$lim1 = " TOP 50 ";
-			$lim2 = "";
-		}
-		else
-		{
-			$lim1 = "";
-			$lim2 = " LIMIT 50 ";
-		}
+		$q1 = "SELECT COUNT(*) as cnt FROM ml_sent_mails WHERE lid = '$id' AND mail='$_mid' AND qid = '$qid' AND mail_sent = 1";
+		$cnt = $this->db_fetch_field($q1, "cnt");
+		
 		$q = "
-			SELECT $lim1 target, tm, subject, id, vars
+			SELECT target, tm, subject, id, vars
 			FROM ml_sent_mails
-			WHERE lid = '$id' AND mail = '$_mid' AND qid = '$qid' AND mail_sent = 1 ORDER BY tm DESC $lim2";
+			WHERE lid = '$id' AND mail = '$_mid' AND qid = '$qid' AND mail_sent = 1 ORDER BY tm DESC LIMIT ".(100*$arr["request"]["ft_page"]).", 100";
 		$this->db_query($q);
 		while ($row = $this->db_next())
 		{
@@ -1667,6 +1677,11 @@ class ml_list extends class_base
 			$row["clicked"] = ($row["vars"] == 1 ? t("jah") : t("ei"));
 			$t->define_data($row);
 		}
+		$t->d_row_cnt = $cnt;
+		$t->table_header = $t->draw_text_pageselector(array(
+			"records_per_page" => $perpage
+		));
+		$t->sort_by();
 	}
 
 	function gen_mail_subject($arr)

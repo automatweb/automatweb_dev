@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.67 2005/04/21 09:21:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.68 2005/04/22 06:11:31 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1928,7 +1928,6 @@ class webform extends class_base
 			$awm = get_instance("protocols/mail/aw_mail");
 			foreach($emails as $eml)
 			{
-				
 				$awm->create_message(array(
 					"subject" => $obj_inst->name(),
 					"to" => $eml,

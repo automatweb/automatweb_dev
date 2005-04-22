@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.384 2005/04/21 12:14:10 ahti Exp $
+// $Id: class_base.aw,v 2.385 2005/04/22 06:11:31 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3741,7 +3741,6 @@ class class_base extends aw_template
 			// for a reason
 			$this->inst->callback_post_save(array(
 				"id" => $this->obj_inst->id(),
-				"obj_inst" => $this->obj_inst,
 				"request" => &$args,
 				"obj_inst" => &$this->obj_inst,
 				"new" => $new,
@@ -3870,10 +3869,16 @@ class class_base extends aw_template
 	// needs either clid or clfile
 	function get_property_group($arr)
 	{
+		/* well, fuck that
 		// if the cfgmanager hasn't been defined, then try to load a default one --
 		if(!is_oid($this->inst->cfgmanager))
 		{
 			enter_function("class_base::load_def_cfgmanager");
+			
+			if($oid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id='".CL_CFGMANAGER."' AND objects.status > 0 AND objects.subclass = 1 LIMIT 1", "oid"))
+			{
+				$this->inst->cfgmanager = $oid;
+			}
 			$ol = new object_list(array(
 				"class_id" => CL_CFGMANAGER,
 				"def_cfgmanager" => 1,
@@ -3885,6 +3890,7 @@ class class_base extends aw_template
 			}
 			exit_function("class_base::load_def_cfgmanager");
 		}
+		*/
 	
 		// load defaults (from the generated properties XML file) first
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.51 2005/04/21 10:30:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.52 2005/04/22 06:11:31 kristo Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -83,7 +83,7 @@ class vcalendar extends aw_template
 	{
 		$attribs = array("tasklist_func","overview_func","overview_range",
 			"container_template","show_days_with_events","skip_empty",
-			"full_weeks","target_section","day_start","day_end", "show_ec");
+			"full_weeks","target_section","day_start","day_end", "show_ec", "filt_views");
 
 		foreach($attribs as $attrib)
 		{
@@ -491,9 +491,21 @@ class vcalendar extends aw_template
 			"relative" => t("Ülevaade"),
 		);
 		$ts = "";
+		if(count($this->filt_views) > 0)
+		{
+			$funcs = $this->filt_views;
+		}
+		else
+		{
+			$funcs = array_keys($types);
+		}
 
 		foreach($types as $type => $name)
 		{
+			if(!in_array($type, $funcs))
+			{
+				continue;
+			}
 			$link = aw_url_change_var("viewtype",$type);
 			$this->vars(array(
 				"link" => aw_url_change_var("viewtype",$type),

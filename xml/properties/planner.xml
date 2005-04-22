@@ -106,6 +106,16 @@
             <caption>Näidatavad päevad</caption>
       </property>
       <property>
+            <name>tab_views</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <caption>Vaate tabid</caption>
+      </property>
+      <property>
             <name>vac_count</name>
             <table>objects</table>
             <group>vac_settings</group>
@@ -292,6 +302,16 @@
             <store>no</store>
             <type>submit</type>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>event_search_tb</name>
+            <table>objects</table>
+            <group>search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <store>no</store>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>event_search_results_table</name>

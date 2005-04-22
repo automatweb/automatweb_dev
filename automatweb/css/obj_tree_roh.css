@@ -1,12 +1,4 @@
-BODY{
-	scrollbar-face-color : #A4A4A4; 
-	scrollbar-shadow-color : #A4A4A4; 
-	scrollbar-highlight-color : #FFFFFF; 
-	scrollbar-3dlight-color : #000000; 
-	scrollbar-darkshadow-color : #000000; 
-	scrollbar-arrow-color : #FFFFFF;
-	margin:0px;
-}
+
 
 .chformleftcol {
 font-family: verdana, sans-serif;
@@ -70,6 +62,22 @@ text-decoration: none;
 .msgboardtab a {color: #FFFFFF;}
 .msgboardtab a:hover {color: #CFFF60; text-decoration: none;}
 
+.text {
+font-family: Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 13px;
+text-decoration: none;
+}
+.text a {color: #002F8E;}
+.text a:hover {color: #002F8E; text-decoration: underline;}
+
+.text2 {
+font-family: Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 13px;
+text-decoration: none;
+background: #ebebeb;
+}
 
 
 .mboardtextsmall {
@@ -206,13 +214,6 @@ background: #DBE8EE;
 	text-decoration: none;
 }
 
-.cellcomment {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	color: #6D7477;
-	text-decoration: none;
-}
-
 
 .icontext {
 	font-family: Arial, Helvetica, sans-serif;
@@ -244,16 +245,6 @@ text-decoration: none;
 background: #FFFFFF;
 height: 22px
 border-style: solid;
-border-color: #D9D9D9;
-border-width: 1px;
-}
-
-.formtext21 {
-font-family: Verdana, Arial, Helvetica, sans-serif;
-color: #000000;
-font-size: 11px;
-text-decoration: none;
-background: #FFFFFF;
 border-color: #D9D9D9;
 border-width: 1px;
 }
@@ -336,7 +327,6 @@ border-width: 1px;
 }
 
 
-
 .ftitle2 {
         font-family: Verdana,Arial,Helvetica,sans-serif;
         font-weight: bold;
@@ -345,7 +335,6 @@ border-width: 1px;
         text-decoration: none;
         background: #E5E8F7;
 }
-
 
 .title {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -394,14 +383,7 @@ border-width: 1px;
         text-decoration: none;
         background: #66CC66;
 }
-a {
-        text-decoration: none;
-        color: #041CB2;
-}
-a:hover {
-        color: #041CB2;
-        text-decoration: underline;
-}
+
 .header1 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
@@ -410,7 +392,6 @@ a:hover {
 	background: #EEEEEE;
 	text-decoration: none;
 }
-
 
 .cut {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -438,7 +419,10 @@ a:hover {
 .fgtitle {
 BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Verdana,Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
 }
+.fgtext {
 
+BACKGROUND: #FFFFFF; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
+}
 .fgtextsel {
 
 BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
@@ -524,11 +508,6 @@ COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEI
 BACKGROUND: #f5f5f5; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
 
-.fgtext_bold {
-
-BACKGROUND: #FFFFFF; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: bold; TEXT-DECORATION: none
-}
-
 .fgtext2 {
 
 BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 0.6em; TEXT-DECORATION: none
@@ -580,6 +559,28 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 	border-width: 0px 0px 0px 0px; 
 }
 
+.messengermenu {
+font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 0.7em;
+text-decoration: none;
+}
+.messengermenu a {color: #FFFFFF;}
+.messengermenu a:hover {color: #FFCC00;}
+
+
+.messengermenusub {
+font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+color: #000000;
+font-size: 0.6em;
+font-weight: bold;
+text-decoration: none;
+}
+
+
+.messengermenusub a {color: #929FB3;}
+.messengermenusub a:hover {color: #39537C;}
+
 
 .titlesel {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -593,6 +594,10 @@ BACKGROUND: #eeeeee; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 
 BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT-SIZE: 11px; FONT-WEIGHT: normal; TEXT-DECORATION: none
 }
+
+
+
+
 
 
 .alamLingid {  font-family: Verdana, Arial, Helvetica, sans-serif; color: #0000f0; text-decoration: none}
@@ -618,8 +623,6 @@ BACKGROUND: #EEEEEE; COLOR: black; FONT-FAMILY: Arial,Helvetica,sans-serif; FONT
 .menyy1 {position: absolute; left: 7px; top: 28px; text-decoration: none; visibility: hidden;}
 .menyy2 {position: absolute; left: 58px; top: 28px; text-decoration: none; visibility: hidden;}
 
-
-
 .textsmall {
 font-family: verdana, sans-serif;
 font-size: 10px;
@@ -627,6 +630,7 @@ color: #B58D47;
 }
 .textsmall a {color: #B58D47; text-decoration:none;}
 .textsmall a:hover {color: #000000; text-decoration:none;}
+
 
 
 .awmenuedittableborder {
@@ -661,19 +665,18 @@ font-size: 10px;
 background-color: #FCFCF4;
 }
 .awmenuedittablerowsel {
-background-color: #F2E2DB;
-/*background-color: #E2E2DB;*/
+background-color: #E2E2DB;
 }
 
-.awmenuedittablerowsel {
-background-color: #F2E2DB;
-/*background-color: #E2E2DB;*/
+.cooltablerow {
+background-color: #FFFFFF;
 }
 
-.awmenuedittablerowactive {
-background-color: #12E2DB;
-/*background-color: #E2E2DB;*/
+.cooltablerow2 {
+background-color: #EEEEEE;
 }
+
+
 
 div.menuBar,
 div.menuBar a.menuButton,
@@ -683,7 +686,6 @@ div.menu a.menuItem {
   font-size: 12px;
   font-style: normal;
   font-weight: normal;
-  text-align: left;
   color: #000000;
 }
 
@@ -771,16 +773,6 @@ div.menu div.menuItemSep {
   margin: 4px 2px;
 }
 
-div.menu .menuItemTextSep {
-  border:transparent 1px;
-  color: #333333;
-  cursor: default;
-  display: block;
-  padding: 3px 1em;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
 .toolbarbutton {
         /*float: left;*/
         margin-left: 5px;
@@ -818,6 +810,7 @@ div.menu .menuItemTextSep {
 
 
 .aw04yah {
+height: 16px;
 margin: 0px;
 padding: 3px;
 padding-left: 6px;
@@ -978,11 +971,6 @@ color: #FFFFFF;
 text-decoration:none;
 }
 
-.aw04tab2selcontent a:link {
-color: #FFFFFF;
-text-decoration:none;
-}
-
 .aw04tab2selcontent a:hover {
 color: #FFFFFF;
 text-decoration:underline;
@@ -1130,13 +1118,10 @@ border-top: 1px solid #FFFFFF;
 border-bottom: 1px solid #D0D0D0;
 border-left: 1px solid #FFFFFF;
 border-right: 1px solid #D0D0D0;
-background-color: #C1C1C1;
-padding-top: 5px;
-padding-bottom: 5px;
-padding-left: 8px;
+background-color: #E1E1E1;
+padding: 8px;
 font-family: Verdana, Arial, sans-serif;
-font-size: 12px;
-font-weight: bold;
+font-size: 11px;
 color:#000000;
 }
 
@@ -1161,6 +1146,19 @@ color:#000000;
 
 
 
+.aw04contentcell2head {
+border-top: 1px solid #FFFFFF;
+border-bottom: 1px solid #BDBDBD;
+border-left: 1px solid #FFFFFF;
+border-right: 1px solid #BDBDBD;
+background-color: #EFEFEF;
+padding: 2px;
+font-family: Arial, sans-serif;
+font-size: 11px;
+color:#000000;
+}
+
+
 .aw04formbutton {
 border-top: 1px solid #FFFFFF;
 border-bottom: 1px solid #000000;
@@ -1174,271 +1172,8 @@ font-weight: bold;
 color:#FFFFFF;
 }
 
-4/16/2004
-/* KALENER */
-
-
-
-.aw04kalender01 {
-margin: 0px;
-padding-top: 6px;
-padding-left: 6px;
-padding-right: 6px;
-padding-bottom: 0px;
-background-color: #E1E1E1;
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalender02 {
-padding-bottom: 5px;
-font-family: Arial, sans-serif;
-font-size: 12px;
-font-weight: bold;
-color:#000000;
-vertical-align: middle;
-}
-
-.aw04kalender02 a {
-color: #0017AF;
-text-decoration:none;
-}
-
-.aw04kalender02 a:hover {
-color: #0017AF;
-text-decoration:underline;
-}
-
-.aw04kalenderkast01 {
-font-family: Arial, verdana, sans-serif;
-font-size: 11px;
-color: #000000;
-margin: 0px;
-padding: 4px;
-background-color: #EFEFEF;
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalenderkast01today {
-margin: 0px;
-padding: 4px;
-background-color: #E1E1E1;
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalenderkast02 {
-margin: 0px;
-padding: 2px;
-background-color: #FFFFFF;
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalenderkast02today {
-margin: 0px;
-padding: 2px;
-background-color: #EFEFEF;
-border-top: 1px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalenderkast03 {
-margin: 0px;
-padding: 5px;
-background-color: #FFFFFF;
-border-top: 0px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-.aw04kalenderkast03today {
-margin: 0px;
-padding: 5px;
-background-color: #EFEFEF;
-border-top: 0px solid #FFFFFF;
-border-bottom: 1px solid #BDBDBD;
-border-left: 1px solid #FFFFFF;
-border-right: 1px solid #BDBDBD;
-}
-
-
-.aw04kalendersubevent {
-margin: 2px;
-padding: 2px;
-font-family: Arial, verdana, sans-serif;
-font-size: 11px;
-color: #000000;
-/*background-color: #FFFFFF;*/
-border: 1px solid #DFDFDF;
-}
-
-.aw04kalendersubeventnobg {
-margin: 2px;
-padding: 2px;
-font-family: Arial, verdana, sans-serif;
-font-size: 11px;
-color: #000000;
-}
-
-
-.aw04kalendersubevent a {
-color: #000000;
-text-decoration:none;
-}
-
-.aw04kalendersubevent a:hover {
-color: #0017AF;
-text-decoration:underline;
-}
-
-.aw04kalendermini {
-background-color:#BDBDBD;
-}
-
-.aw04kalendertext {
-font-family: Arial, sans-serif;
-font-size: 11px;
-font-weight: normal;
-color:#000000;
-text-align: center;
-}
-
-.aw04kalendertextevent {
-font-family: Arial, sans-serif;
-font-size: 11px;
-font-weight: normal;
-color:#000000;
-}
-
-.aw04kalendertextday {
-font-family: Arial, sans-serif;
-font-size: 11px;
-font-weight: bold;
-color:#000000;
-}
-
-.aw04kalendertask {
-font-family: Arial, verdana, sans-serif;
-font-size: 11px;
-color: #000000;
-background: #FFFFFF;
-padding: 4px;
-}
-
-.aw04kalendertask a {
-color: #000000;
-text-decoration:none;
-}
-
-.aw04kalendertask a:hover {
-color: #0017AF;
-text-decoration:underline;
-}
-
-/* END KALENDER */
-
 .reallysmall { 
 	font-family: Arial,Helvetica,sans-serif;
 	font-size: 10px;
 
 } 
-
-.awmenuedittableframeclass {
-background-color: #E2E2DB
-}
-
-
-.chaintab2selcontent {
-height: 24px;
-font-family: Arial, sans-serif;
-font-size: 12px;
-font-weight: bold;
-color:#FFFFFF;
-vertical-align: top;
-}
-
-.chaintab2selcontent a {
-color: #FFFFFF;
-text-decoration:none;
-}
-
-.chaintab2selcontent a:link {
-color: #FFFFFF;
-text-decoration:none;
-}
-
-.chaintab2selcontent a:hover {
-color: #FFFFFF;
-text-decoration:underline;
-}
-
-.chaintab2selcontent a:visited {
-color: #FFFFFF;
-text-decoration:none;
-}
-
-/********** RATE **********/
-
-.rate_rowbgcolor_odd {
-background-color: #FFF1DC;
-}
-
-.rate_rowbgcolor_even {
-background-color: #FEFAEF;
-}
-
-.rate_aw04contentcellleft {
-text-align: left;
-padding: 2px;
-padding-left: 8px;
-padding-right: 8px;
-font-family: Verdana, Arial, sans-serif;
-font-size: 11px;
-color:#000003;
-font-weight: normal;
-width: 160px;
-height: 20px;
-}
-
-.rate_aw04contentcellleft a {
-color: #005FC9;
-text-decoration:underline;
-}
-
-.rate_aw04contentcellleft a:hover {
-color: #00438E;
-text-decoration:underline;
-}
-
-.rate_aw04contentcellright {
-padding: 2px;
-padding-left: 8px;
-font-family: Verdana, Arial, sans-serif;
-font-size: 12px;
-color:#000003;
-}
-
-.rate_aw04contentcellright a {
-color: #005FC9;
-text-decoration:underline;
-}
-
-.rate_aw04contentcellright a:hover {
-color: #00438E;
-text-decoration:underline;
-}
-
-/****************************/
