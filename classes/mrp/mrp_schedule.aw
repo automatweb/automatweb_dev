@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.43 2005/04/08 08:10:08 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.44 2005/04/22 16:46:23 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -267,7 +267,7 @@ class mrp_schedule extends class_base
 	  		### Release&remove semaphore. stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
-				echo "Viga: planeerimisluku avamine ebaõnnestus! Järgnevad planeerimised ei toimu enne vea kõrvaldamist.";
+				echo "Viga: planeerimisluku avamine ebaõnnestus!";
 			}
 
 			sem_remove($sem_id);
@@ -561,7 +561,7 @@ class mrp_schedule extends class_base
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
 		{
-			echo "Viga: planeerimisluku avamine ebaõnnestus! Järgnevad planeerimised ei toimu enne vea kõrvaldamist.";
+			echo "Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!";
 		}
 
 		sem_remove($sem_id);
@@ -576,9 +576,10 @@ class mrp_schedule extends class_base
 	{
 		$log = get_instance(CL_MRP_WORKSPACE);
 
-		### rescheduled project states
+		### rescheduled job & project states
 		$applicable_states = array (
 			MRP_STATUS_NEW,
+			MRP_STATUS_ABORTED,
 		);
 
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
@@ -589,16 +590,17 @@ class mrp_schedule extends class_base
 				{
 					$project = obj ($project_id);
 
-					if ($date != $project->prop("planned_date"))
-					{
-						$log->mrp_log(
-							$project->id(),
-							0,
-							"Projekti planeeritud valmimisaeg muutus ".
-								date("d.m.Y H:i", $project->prop("planned_date"))." => ".
-								date("d.m.Y H:i", $date)
-						);
-					}
+					/// Prismas v2ideti et aja muutuste logimist pole vaja. Voldemar 4/22/05
+					// if ($date != $project->prop("planned_date"))
+					// {
+						// $log->mrp_log(
+							// $project->id(),
+							// 0,
+							// "Projekti planeeritud valmimisaeg muutus ".
+								// date("d.m.Y H:i", $project->prop("planned_date"))." => ".
+								// date("d.m.Y H:i", $date)
+						// );
+					// }
 
 					$project->set_prop ("planned_date", $date);
 
@@ -625,19 +627,23 @@ class mrp_schedule extends class_base
 				if (is_oid($job_id) and $job_data[1])
 				{
 					$job = obj ($job_id);
-					if ($job->prop("starttime") != $job_data[0])
-					{
-						$log->mrp_log(
-							$job->prop("project"),
-							$job->id(),
-							"T&ouml;&ouml; aeg muutus ".
-								date("d.m.Y H:i", $job->prop("starttime"))." => ".
-								date("d.m.Y H:i", $job_data[0])
-						);
-					}
+
+					/// Prismas v2ideti et aja muutuste logimist pole vaja. Voldemar 4/22/05
+					// if ($job->prop("starttime") != $job_data[0])
+					// {
+						// $log->mrp_log(
+							// $job->prop("project"),
+							// $job->id(),
+							// "T&ouml;&ouml; aeg muutus ".
+								// date("d.m.Y H:i", $job->prop("starttime"))." => ".
+								// date("d.m.Y H:i", $job_data[0])
+						// );
+					// }
+
 					$job->set_prop ("starttime", $job_data[0]);
 					$job->set_prop ("planned_length", $job_data[1]);
-					if (MRP_STATUS_PLANNED != $job->prop("state"))
+
+					if (in_array ($job->prop("state"), $applicable_states))
 					{
 						$log->mrp_log(
 							$job->prop("project"),
@@ -647,6 +653,7 @@ class mrp_schedule extends class_base
 								$this->state_names[MRP_STATUS_PLANNED]
 						);
 					}
+
 					$job->set_prop ("state", MRP_STATUS_PLANNED);
 					aw_disable_acl();
 					$job->save ();

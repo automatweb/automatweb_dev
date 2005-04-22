@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.53 2005/04/21 18:39:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.54 2005/04/22 16:46:23 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -462,6 +462,7 @@ class mrp_resource extends class_base
 		$table->define_field(array(
 			"name" => "state",
 			"caption" => t("Staatus"),
+			"sortable" => 1,
 			"align" => "center"
 		));
 		$table->define_field(array(
@@ -1081,7 +1082,9 @@ class mrp_resource extends class_base
 		$thread_data = array(1 => array ("state" => MRP_STATUS_RESOURCE_AVAILABLE, "job" => NULL));
 		$resource->set_prop ("thread_data", $thread_data);
 
+		aw_disable_acl();
 		$resource->save ();
+		aw_restore_acl();
 	}
 }
 

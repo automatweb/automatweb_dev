@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.66 2005/04/21 18:39:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.67 2005/04/22 16:46:23 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1316,7 +1316,9 @@ class mrp_case extends class_base
 									"reltype" => "RELTYPE_MRP_RESOURCE",
 								));
 								$job->set_prop ("resource", $value);
+								aw_disable_acl();
 								$job->save ();
+								aw_restore_acl();
 							}
 							else
 							{
@@ -1330,7 +1332,9 @@ class mrp_case extends class_base
 							break;
 					}
 
+					aw_disable_acl();
 					$job->save ();
+					aw_restore_acl();
 				}
 				else
 				{
@@ -1381,7 +1385,9 @@ class mrp_case extends class_base
 					{
 						$job = obj ($job_id);
 						$job->set_prop ("prerequisites", implode (",", $prerequisites));
+						aw_disable_acl();
 						$job->save ();
+						aw_restore_acl();
 					}
 				}
 			}
@@ -1507,7 +1513,9 @@ class mrp_case extends class_base
 		{
 			$job = obj ($job_id);
 			$job->set_prop ("exec_order", ($key + 1));
+			aw_disable_acl();
 			$job->save ();
+			aw_restore_acl();
 		}
 	}
 
@@ -1546,7 +1554,9 @@ class mrp_case extends class_base
 			{
 				$job = obj ($job_id);
 				$job->set_prop ("exec_order", ($key + 1));
+				aw_disable_acl();
 				$job->save ();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -1694,7 +1704,9 @@ class mrp_case extends class_base
 		$job->set_prop ("post_buffer", $post_buffer);
 		$job->set_prop ("resource", $resource_id);
 		$job->set_name ($this_object->name () . "-" . $resource->name ());
+		aw_disable_acl();
 		$job->save ();
+		aw_restore_acl();
 
 		if ($resource)
 		{
@@ -1849,7 +1861,9 @@ class mrp_case extends class_base
 	{
 		$project = obj ($arr["oid"]);
 		$project->set_prop ("state", MRP_STATUS_DELETED);
+		aw_disable_acl();
 		$project->save ();
+		aw_restore_acl();
 
 		### delete project's jobs
 		$connections = $project->connections_from (array ("type" => "RELTYPE_MRP_PROJECT_JOB"));
@@ -1873,7 +1887,9 @@ class mrp_case extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -2116,7 +2132,9 @@ class mrp_case extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -2249,7 +2267,9 @@ class mrp_case extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -2324,7 +2344,9 @@ class mrp_case extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{

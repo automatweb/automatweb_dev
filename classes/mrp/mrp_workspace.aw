@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.106 2005/04/20 10:39:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.107 2005/04/22 16:46:23 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -804,8 +804,8 @@ class mrp_workspace extends class_base
 					return PROP_IGNORE;
 				}
 				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("T&ouml;&ouml;s / v&otilde;ib alustada")."</span>&nbsp;&nbsp;";
-				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
 				break;
 
 			case "sp_name":

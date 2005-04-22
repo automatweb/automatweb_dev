@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.57 2005/04/21 18:39:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.58 2005/04/22 16:46:23 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -66,8 +66,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@comment Enne seda kuupäeva, kellaaega ei lubata tööd alustada
 	@caption Varaseim alustusaeg
 
-	@property prerequisites type=textbox
-	@comment Komaga eraldatud
+	@property prerequisites type=text
 	@caption Eeldustööd
 
 
@@ -244,6 +243,18 @@ class mrp_job extends class_base
 				$project_name = $this->project->name () ? $this->project->name () : "...";
 				$resource_name = $this->resource->name () ? $this->resource->name () : "...";
 				$prop["value"] = $project_name . " - " . $resource_name;
+				break;
+
+			case "prerequisites":
+				$prerequisites = explode (",", $prop["value"]);
+
+				foreach ($prerequisites as $prerequisite_oid)
+				{
+					$prerequisite = obj ($prerequisite_oid);
+					$prerequisite_orders[] = $prerequisite->prop ("exec_order");
+				}
+
+				$prop["value"] = implode (",", $prerequisite_orders);
 				break;
 
 			case "resource":
@@ -593,8 +604,8 @@ class mrp_job extends class_base
 			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 
 			### all went well, save and say OK
-			$this_object->save ();
 			aw_disable_acl();
+			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();
 
@@ -646,9 +657,12 @@ class mrp_job extends class_base
 		else
 		{
 			### finish job
+			$time = time ();
 			$this_object->set_prop ("state", MRP_STATUS_DONE);
-			$this_object->set_prop ("finished", time ());
+			$this_object->set_prop ("finished", $time);
+			aw_disable_acl();
 			$this_object->save ();
+			aw_restore_acl();
 
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
@@ -668,7 +682,9 @@ class mrp_job extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -775,7 +791,9 @@ class mrp_job extends class_base
 		{
 			### abort job
 			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
+			aw_disable_acl();
 			$this_object->save ();
+			aw_restore_acl();
 
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
@@ -796,7 +814,9 @@ class mrp_job extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -863,12 +883,13 @@ class mrp_job extends class_base
 			$pt[] = array("start" => time(), "end" => NULL);
 			$this_object->set_meta("paused_times" , $pt);
 
-			$this_object->save ();
-
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
-			aw_disable_acl();
+
+			### save project&job
+			aw_disable_acl();//!!! no mis pagana acl-i jama see on.
+			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();
 
@@ -939,12 +960,12 @@ class mrp_job extends class_base
 			$pt[count($pt)-1]["end"] = time();
 			$this_object->set_meta("paused_times" , $pt);
 
-			$this_object->save ();
-
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+
 			aw_disable_acl();
+			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();
 
@@ -1010,13 +1031,14 @@ class mrp_job extends class_base
 		{
 			### continue job
 			$this_object->set_prop ("state", MRP_STATUS_INPROGRESS);
-			$this_object->save ();
 
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
 			$project->set_prop ("state", MRP_STATUS_INPROGRESS);
+
 			aw_disable_acl();
+			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();
 
@@ -1073,12 +1095,13 @@ class mrp_job extends class_base
 		{
 			### pause job
 			$this_object->set_prop ("state", MRP_STATUS_PAUSED);
-			$this_object->save ();
 
 			### update progress
 			$progress = max ($project->prop ("progress"), time ());
 			$project->set_prop ("progress", $progress);
+
 			aw_disable_acl();
+			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();
 
@@ -1169,8 +1192,21 @@ class mrp_job extends class_base
 	function on_delete_job ($arr)
 	{
 		$job = obj ((int) $arr["oid"]);
+
+		if ($job->prop ("state") == MRP_STATUS_INPROGRESS)
+		{
+			### free resource
+			$mrp_resource = get_instance(CL_MRP_RESOURCE);
+			$mrp_resource->stop_job(array(
+				"resource" => $job->prop("resource"),
+				"job" => $job->id (),
+			));
+		}
+
 		$job->set_prop ("state", MRP_STATUS_DELETED);
+		aw_disable_acl();
 		$job->save ();
+		aw_restore_acl();
 
 		### get project for deleted job
 		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
@@ -1209,7 +1245,9 @@ class mrp_job extends class_base
 				### ...
 				$successor_prerequisites = implode (",", $successor_prerequisites);
 				$other_job->set_prop ("prerequisites", $successor_prerequisites);
+				aw_disable_acl();
 				$other_job->save ();
+				aw_restore_acl();
 			}
 		}
 
@@ -1235,7 +1273,9 @@ class mrp_job extends class_base
 			if ($workspace)
 			{
 				$workspace->set_prop("rescheduling_needed", 1);
+				aw_disable_acl();
 				$workspace->save();
+				aw_restore_acl();
 			}
 			else
 			{
