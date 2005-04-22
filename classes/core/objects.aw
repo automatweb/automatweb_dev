@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.4 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/objects.aw,v 1.5 2005/04/22 11:13:50 kristo Exp $
 // objects.aw - objektide haldamisega seotud funktsioonid
 class objects extends core
 {
@@ -55,10 +55,13 @@ class objects extends core
 		{
 			if (isset($row["oid"]))
 			{
+				$this->save_handle();
 				if (!$this->can("view", $row["oid"]))
 				{
+					$this->restore_handle();
 					continue;
 				}
+				$this->restore_handle();
 			}
 			$ret[] = $row;
 		}
