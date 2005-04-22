@@ -116,6 +116,18 @@
             <caption>Vaate tabid</caption>
       </property>
       <property>
+            <name>event_entry_classes</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>chooser</type>
+            <multiple>1</multiple>
+            <orient>vertical</orient>
+            <caption>Sündmuste klassid</caption>
+            <comment>Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks</comment>
+      </property>
+      <property>
             <name>vac_count</name>
             <table>objects</table>
             <group>vac_settings</group>
