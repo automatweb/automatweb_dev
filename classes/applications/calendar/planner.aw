@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.69 2005/04/22 11:47:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.70 2005/04/22 14:21:58 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -20,13 +20,11 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@default method=serialize
 	@classinfo relationmgr=yes syslog_type=ST_PLANNER
 
-
 	@property default_view type=select rel=1
 	@caption Aeg
 
 	property event_cfgform type=relpicker reltype=RELTYPE_EVENT_ENTRY
 	caption Def. s&uuml;ndmuse sisetamise vorm
-
 
 	@property day_start type=time_select group=time_settings rel=1
 	@caption Päev algab
@@ -54,6 +52,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	
 	@property tab_views type=chooser multiple=1 group=advanced
 	@caption Vaate tabid
+	
+	@property del_views type=select multiple=1 group=advanced
+	@caption Kustutamisvõimalusega vaated
 	
 	@property event_entry_classes type=chooser multiple=1 orient=vertical group=advanced
 	@caption Sündmuste klassid
@@ -195,11 +196,19 @@ class planner extends class_base
 		$this->lc_load("planner","lc_planner");
 			
 		$this->viewtypes = array(
-				"1" => "day",
-				"3" => "week",
-				"4" => "month",
-				"5" => "relative",
+			"1" => "day",
+			"3" => "week",
+			"4" => "month",
+			"5" => "relative",
 		);
+		$this->vt = array(
+			"day" => t("Päev"),
+			"week" => t("Nädal"),
+			"month" => t("Kuu"),
+			"relative" => t("Ülevaade"),
+			"search" => t("Otsing"),
+		);
+
 
 		//  list all clids here, that can be added to the calendar (those should at least have a referenfe to planner.start)
 		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS);
@@ -330,6 +339,10 @@ class planner extends class_base
 				);
 				break;
 				
+			case "del_views":
+				$data["options"] = $this->vt;
+				break;
+				
 			case "default_view":
 				$data["options"] = $this->viewtypes;
 				break;
@@ -417,16 +430,17 @@ class planner extends class_base
 				break;
 				
 			case "event_search_tb":
+				if(!$arr["request"]["event_search_name"] && !$arr["request"]["event_search_content"] && !$arr["request"]["event_search_type"])
+				{
+					return PROP_IGNORE;
+				}
+				$tab_view = array("search");
 				$tb = safe_array($arr["obj_inst"]->prop("del_views"));
 				if(count($tb) > 0)
 				{
-					$tab_views = $tb;
+					$tab_view = $tb;
 				}
-				elseif($arr["request"]["event_search_name"] or $arr["request"]["event_search_content"] or $arr["request"]["event_search_type"])
-				{
-					$true = true;
-				}
-				if(($true or in_array($arr["request"]["group"], $tab_view) && $this->can("edit", $arr["obj_inst"]->id())))
+				if(in_array($arr["request"]["group"], $tab_view) && $this->can("edit", $arr["obj_inst"]->id()))
 				{
 					$data["vcl_inst"]->add_button(array(
 						"name" => "delete",
@@ -1535,10 +1549,21 @@ class planner extends class_base
 
 			// XXX: check acl and only show that button, if the user actually _can_
 			// edit the calendar
-
-			$def = $arr["obj_inst"]->prop("default_view");
-			$view = $_REQUEST["viewtype"];
-			if($this->can("edit", $arr["obj_inst"]->id()) && ((($def == 1 || $def == 3) && ($view != $this->viewtypes[4])) || ($view == $this->viewtypes[3] || $view == $this->viewtypes[1] || $view == $this->viewtypes[5])))
+			$prp = safe_array($arr["obj_inst"]->prop("del_views"));
+			$view = $_REQUEST["viewtype"] ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+			$views = array("week");
+			if(count($prp) > 0)
+			{
+				$views = array();
+				foreach($this->viewtypes as $val)
+				{
+					if(in_array($val, $prp))
+					{
+						$views[] = $val;
+					}
+				}
+			}
+			if($this->can("edit", $arr["obj_inst"]->id()) && in_array($view, $views))
 			{
 				$toolbar->add_button(array(
 					"name" => "delete",
@@ -1676,11 +1701,21 @@ class planner extends class_base
 			"filt_views" => $o->prop("tab_views"),
 		));
 		
-		$def = $arr["obj_inst"]->prop("default_view");
-		$view = $_REQUEST["viewtype"];
-
-		// ok, would the author of the following turd please step up?
-		if($this->can("edit", $arr["obj_inst"]->id()) && ((($def == 1 || $def == 3) && ($view != $this->viewtypes[4])) || ($view == $this->viewtypes[3] || $view == $this->viewtypes[1] || $view == $this->viewtypes[5])))
+		$prp = safe_array($arr["obj_inst"]->prop("del_views"));
+		$view = $_REQUEST["viewtype"] ? $_REQUEST["viewtype"] : $this->viewtypes[$arr["obj_inst"]->prop("default_view")];
+		$views = array("week");
+		if(count($prp) > 0)
+		{
+			$views = array();
+			foreach($this->viewtypes as $val)
+			{
+				if(in_array($val, $prp))
+				{
+					$views[] = $val;
+				}
+			}
+		}
+		if($this->can("edit", $arr["obj_inst"]->id()) && in_array($view, $views))
 		{
 			$arr["prop"]["vcl_inst"]->adm_day = 1;
 		}

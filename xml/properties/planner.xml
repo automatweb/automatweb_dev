@@ -116,6 +116,16 @@
             <caption>Vaate tabid</caption>
       </property>
       <property>
+            <name>del_views</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Kustutamisvõimalusega vaated</caption>
+      </property>
+      <property>
             <name>event_entry_classes</name>
             <table>objects</table>
             <group>advanced</group>
