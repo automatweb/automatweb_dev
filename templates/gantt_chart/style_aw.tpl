@@ -1,22 +1,22 @@
 <style type="text/css" title="Vcl Gantt Chart Default">
-.VclGanttChartLink
+.VclGanttLink
 {
 	text-decoration: none;
 }
 
-a.VclGanttChartBarLink
+.VclGanttColumn a, .VclGanttSubdivision a
 {
 	z-index: 1000;
 	position: relative;
 }
 
-a.VclGanttChartBarLink:hover
+.VclGanttColumn a:hover, .VclGanttSubdivision a:hover
 {
 	z-index: 1001;
 	background-color: white;
 }
 
-td.VclGanttChartHeader
+td.VclGanttHeader
 {
 	border-left: 1px solid white;
 	padding-bottom: 2px;
@@ -24,12 +24,12 @@ td.VclGanttChartHeader
 	white-space: nowrap;
 }
 
-a.VclGanttChartHeader
+a.VclGanttHeader
 {
 	white-space: nowrap;
 }
 
-a.VclGanttChartBarLink span
+.VclGanttColumn a span, .VclGanttSubdivision a span
 {
 	display: none;
 	color: black;
@@ -41,13 +41,13 @@ a.VclGanttChartBarLink span
 	background-color: white;
 }
 
-a.VclGanttChartBarLink:hover span
+.VclGanttColumn a:hover span, .VclGanttSubdivision a:hover span
 {
 	position: absolute;
 	display: block;
 }
 
-.VclGanttChartRowName
+.VclGanttRowName
 {
 	background-color: #EEEEEE;
 	font-family : Verdana, Arial, Helvetica, Geneva, sans-serif;
@@ -60,7 +60,7 @@ a.VclGanttChartBarLink:hover span
 	border-top: none;
 }
 
-.VclGanttChartDataImg
+.VclGanttColumn img, .VclGanttSubdivision img
 {
 	position: relative;
 	border: none;
@@ -68,31 +68,34 @@ a.VclGanttChartBarLink:hover span
 	margin: 0px;
 }
 
-#VclGanttChartTable{VAR:chart_id}
+#VclGanttTable{VAR:chart_id}
 {
-	width: {VAR:chart_width};
+	width: {VAR:chart_width}px;
 }
 
-.VclGanttChartCell
-{
-	border-color: #CCC;
-}
-
-.VclGanttChartColumn
+.VclGanttColumn, .VclGanttSubdivision
 {
 	border: none;
 	border-bottom: 1px solid ;
+	border-color: #CCC;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 11px;
+	color: #000000;
+	color: #0018AF;
+	text-decoration: none;
+}
+
+.VclGanttColumn
+{
 	border-left: 1px solid #CCCCCC;
 }
 
-.VclGanttChartSubdivision
+.VclGanttSubdivision
 {
-	border: none;
-	border-bottom: 1px solid;
 	border-left: 1px solid #EEEEEE;
 }
 
-.VclGanttChartTimespan
+.VclGanttTimespan
 {
 	font-size: 9px;
 	font-weight: normal;
@@ -100,7 +103,7 @@ a.VclGanttChartBarLink:hover span
 	padding-left: 2px;
 }
 
-img.VclGanttChartStartBar
+img.VclGanttStartBar
 {
 	border-left: 1px solid #DF0D12;
 	margin-right: -1px;
