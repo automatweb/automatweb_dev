@@ -436,7 +436,6 @@ msgstr "Time settings"
 # classes/applications/calendar/planner.aw:group_add_event
 msgid "Grupi Muuda s&uuml;ndmust (add_event) pealkiri"
 msgstr "Edit event"
-msgstr "Change event"
 
 # classes/applications/calendar/planner.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
