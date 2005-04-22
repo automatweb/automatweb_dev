@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:49 +0300\n"
+"POT-Creation-Date: Fri, 22 Apr 2005 16:09:34 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,268 +9,278 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/image.aw:prop_needs_translation
+# classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""
 
-#: classes/image.aw:prop_needs_translation_comment
+# classes/image.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_needs_translation_help
+# classes/image.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
 msgstr ""
 
-#: classes/image.aw:prop_is_translated
+# classes/image.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
 msgstr ""
 
-#: classes/image.aw:prop_is_translated_comment
+# classes/image.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_is_translated_help
+# classes/image.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
-#: classes/image.aw:prop_subclass
+# classes/image.aw:prop_subclass
 msgid "Omaduse  (subclass) caption"
 msgstr ""
 
-#: classes/image.aw:prop_subclass_comment
+# classes/image.aw:prop_subclass_comment
 msgid "Omaduse  (subclass) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_subclass_help
+# classes/image.aw:prop_subclass_help
 msgid "Omaduse  (subclass) help"
 msgstr ""
 
-#: classes/image.aw:prop_file
+# classes/image.aw:prop_file
 msgid "Omaduse Pilt (file) caption"
 msgstr ""
 
-#: classes/image.aw:prop_file_comment
+# classes/image.aw:prop_file_comment
 msgid "Omaduse Pilt (file) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_file_help
+# classes/image.aw:prop_file_help
 msgid "Omaduse Pilt (file) help"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions
+# classes/image.aw:prop_dimensions
 msgid "Omaduse Mõõtmed (dimensions) caption"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions_comment
+# classes/image.aw:prop_dimensions_comment
 msgid "Omaduse Mõõtmed (dimensions) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions_help
+# classes/image.aw:prop_dimensions_help
 msgid "Omaduse Mõõtmed (dimensions) help"
 msgstr ""
 
-#: classes/image.aw:prop_file2
+# classes/image.aw:prop_file2
 msgid "Omaduse Suur pilt (file2) caption"
 msgstr ""
 
-#: classes/image.aw:prop_file2_comment
+# classes/image.aw:prop_file2_comment
 msgid "Omaduse Suur pilt (file2) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_file2_help
+# classes/image.aw:prop_file2_help
 msgid "Omaduse Suur pilt (file2) help"
 msgstr ""
 
-#: classes/image.aw:prop_file2_del
+# classes/image.aw:prop_file2_del
 msgid "Omaduse Kustuta suur pilt (file2_del) caption"
 msgstr ""
 
-#: classes/image.aw:prop_file2_del_comment
+# classes/image.aw:prop_file2_del_comment
 msgid "Omaduse Kustuta suur pilt (file2_del) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_file2_del_help
+# classes/image.aw:prop_file2_del_help
 msgid "Omaduse Kustuta suur pilt (file2_del) help"
 msgstr ""
 
-#: classes/image.aw:prop_author
+# classes/image.aw:prop_comment
+msgid "Omaduse Pildi allkiri (comment) caption"
+msgstr ""
+
+# classes/image.aw:prop_comment_comment
+msgid "Omaduse Pildi allkiri (comment) kommentaar"
+msgstr ""
+
+# classes/image.aw:prop_comment_help
+msgid "Omaduse Pildi allkiri (comment) help"
+msgstr ""
+
+# classes/image.aw:prop_author
 msgid "Omaduse Pildi autor (author) caption"
 msgstr ""
 
-#: classes/image.aw:prop_author_comment
+# classes/image.aw:prop_author_comment
 msgid "Omaduse Pildi autor (author) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_author_help
+# classes/image.aw:prop_author_help
 msgid "Omaduse Pildi autor (author) help"
 msgstr ""
 
-#: classes/image.aw:prop_alt
+# classes/image.aw:prop_alt
 msgid "Omaduse Alt (alt) caption"
 msgstr ""
 
-#: classes/image.aw:prop_alt_comment
+# classes/image.aw:prop_alt_comment
 msgid "Omaduse Alt (alt) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_alt_help
+# classes/image.aw:prop_alt_help
 msgid "Omaduse Alt (alt) help"
 msgstr ""
 
-#: classes/image.aw:prop_link
+# classes/image.aw:prop_link
 msgid "Omaduse Link (link) caption"
 msgstr ""
 
-#: classes/image.aw:prop_link_comment
+# classes/image.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_link_help
+# classes/image.aw:prop_link_help
 msgid "Omaduse Link (link) help"
 msgstr ""
 
-#: classes/image.aw:prop_newwindow
+# classes/image.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
 msgstr ""
 
-#: classes/image.aw:prop_newwindow_comment
+# classes/image.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_newwindow_help
+# classes/image.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
 msgstr ""
 
-#: classes/image.aw:prop_no_print
+# classes/image.aw:prop_no_print
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) caption"
 msgstr ""
 
-#: classes/image.aw:prop_no_print_comment
+# classes/image.aw:prop_no_print_comment
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_no_print_help
+# classes/image.aw:prop_no_print_help
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) help"
 msgstr ""
 
-#: classes/image.aw:prop_new_w
+# classes/image.aw:prop_new_w
 msgid "Omaduse Uus laius (new_w) caption"
 msgstr ""
 
-#: classes/image.aw:prop_new_w_comment
+# classes/image.aw:prop_new_w_comment
 msgid "Omaduse Uus laius (new_w) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_new_w_help
+# classes/image.aw:prop_new_w_help
 msgid "Omaduse Uus laius (new_w) help"
 msgstr ""
 
-#: classes/image.aw:prop_new_h
+# classes/image.aw:prop_new_h
 msgid "Omaduse Uus k&otilde;rgus (new_h) caption"
 msgstr ""
 
-#: classes/image.aw:prop_new_h_comment
+# classes/image.aw:prop_new_h_comment
 msgid "Omaduse Uus k&otilde;rgus (new_h) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_new_h_help
+# classes/image.aw:prop_new_h_help
 msgid "Omaduse Uus k&otilde;rgus (new_h) help"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions_big
+# classes/image.aw:prop_dimensions_big
 msgid "Omaduse Mõõtmed (dimensions_big) caption"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions_big_comment
+# classes/image.aw:prop_dimensions_big_comment
 msgid "Omaduse Mõõtmed (dimensions_big) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_dimensions_big_help
+# classes/image.aw:prop_dimensions_big_help
 msgid "Omaduse Mõõtmed (dimensions_big) help"
 msgstr ""
 
-#: classes/image.aw:prop_new_w_big
+# classes/image.aw:prop_new_w_big
 msgid "Omaduse Uus laius (suur) (new_w_big) caption"
 msgstr ""
 
-#: classes/image.aw:prop_new_w_big_comment
+# classes/image.aw:prop_new_w_big_comment
 msgid "Omaduse Uus laius (suur) (new_w_big) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_new_w_big_help
+# classes/image.aw:prop_new_w_big_help
 msgid "Omaduse Uus laius (suur) (new_w_big) help"
 msgstr ""
 
-#: classes/image.aw:prop_new_h_big
+# classes/image.aw:prop_new_h_big
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) caption"
 msgstr ""
 
-#: classes/image.aw:prop_new_h_big_comment
+# classes/image.aw:prop_new_h_big_comment
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_new_h_big_help
+# classes/image.aw:prop_new_h_big_help
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) help"
 msgstr ""
 
-#: classes/image.aw:prop_do_resize
+# classes/image.aw:prop_do_resize
 msgid "Omaduse  (do_resize) caption"
 msgstr ""
 
-#: classes/image.aw:prop_do_resize_comment
+# classes/image.aw:prop_do_resize_comment
 msgid "Omaduse  (do_resize) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_do_resize_help
+# classes/image.aw:prop_do_resize_help
 msgid "Omaduse  (do_resize) help"
 msgstr ""
 
-#: classes/image.aw:prop_ord
+# classes/image.aw:prop_ord
 msgid "Omaduse J&auml;rjekord (ord) caption"
 msgstr ""
 
-#: classes/image.aw:prop_ord_comment
+# classes/image.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_ord_help
+# classes/image.aw:prop_ord_help
 msgid "Omaduse J&auml;rjekord (ord) help"
 msgstr ""
 
-#: classes/image.aw:prop_resize_warn
+# classes/image.aw:prop_resize_warn
 msgid "Omaduse Info (resize_warn) caption"
 msgstr ""
 
-#: classes/image.aw:prop_resize_warn_comment
+# classes/image.aw:prop_resize_warn_comment
 msgid "Omaduse Info (resize_warn) kommentaar"
 msgstr ""
 
-#: classes/image.aw:prop_resize_warn_help
+# classes/image.aw:prop_resize_warn_help
 msgid "Omaduse Info (resize_warn) help"
 msgstr ""
 
-#: classes/image.aw:group_settings
+# classes/image.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr ""
 
-#: classes/image.aw:group_img2
+# classes/image.aw:group_img2
 msgid "Grupi Suur pilt (img2) pealkiri"
 msgstr ""
 
-#: classes/image.aw:group_resize
+# classes/image.aw:group_resize
 msgid "Grupi Muuda suurust (resize) pealkiri"
 msgstr ""
 
-#: classes/image.aw:group_resize_big
+# classes/image.aw:group_resize_big
 msgid "Grupi Muuda suure pildi suurust (resize_big) pealkiri"
 msgstr ""
 
-#: classes/image.aw:rel_RELTYPE_MOD_COMMENT
+# classes/image.aw:rel_RELTYPE_MOD_COMMENT
 msgid "Seose Moderaatori kommentaar (RELTYPE_MOD_COMMENT) tekst"
 msgstr ""
 
 #: classes/image.aw:646
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
-

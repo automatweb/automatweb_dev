@@ -33,7 +33,6 @@ $GLOBALS["TRANS"]["created new section<br>"] = "created new section<br>";
 $GLOBALS["TRANS"]["updating existing section"] = "updating existing section";
 $GLOBALS["TRANS"]["<h1>sections</h1>"] = "<h1>sections</h1>";
 $GLOBALS["TRANS"]["<h1>sections done</h1>"] = "<h1>sections done</h1>";
-$GLOBALS["TRANS"]["creating person objects<br>"] = "creating person objects<br>";
 $GLOBALS["TRANS"]["<br>creating new person object<br>"] = "<br>creating new person object<br>";
 $GLOBALS["TRANS"]["updating existing person object"] = "updating existing person object";
 ?>

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:41 +0300\n"
+"POT-Creation-Date: Fri, 22 Apr 2005 16:09:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -269,80 +269,80 @@ msgstr " "
 msgid "Seose Manus (RELTYPE_ATTACHMENT) tekst"
 msgstr "Attachment"
 
-#: classes/applications/messenger/mail_message.aw:143
+#: classes/applications/messenger/mail_message.aw:142
 msgid "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 msgstr ""
 "couldn't retrieve message %s, perhaps it has been deleted or moved?<bR>"
 
-#: classes/applications/messenger/mail_message.aw:248
+#: classes/applications/messenger/mail_message.aw:247
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr "Unfortunately your mail reader can not display HTML messages"
 
-#: classes/applications/messenger/mail_message.aw:507
+#: classes/applications/messenger/mail_message.aw:506
 msgid "Saada"
 msgstr "Sent"
 
-#: classes/applications/messenger/mail_message.aw:514
+#: classes/applications/messenger/mail_message.aw:513
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/messenger/mail_message.aw:537
+#: classes/applications/messenger/mail_message.aw:536
 msgid "Vasta"
 msgstr "Reply"
 
-#: classes/applications/messenger/mail_message.aw:544
+#: classes/applications/messenger/mail_message.aw:543
 msgid "Vasta/kõigile"
 msgstr "Reply to all"
 
-#: classes/applications/messenger/mail_message.aw:551
+#: classes/applications/messenger/mail_message.aw:550
 msgid "Edasta"
 msgstr "Forward"
 
-#: classes/applications/messenger/mail_message.aw:559
+#: classes/applications/messenger/mail_message.aw:558
 msgid "Kustutada see kiri? (tagasi ei saa!)"
 msgstr "Delete this message? (can not be undone!)"
 
-#: classes/applications/messenger/mail_message.aw:560
+#: classes/applications/messenger/mail_message.aw:559
 msgid "Kustuta"
 msgstr "Delete"
 
-#: classes/applications/messenger/mail_message.aw:578
+#: classes/applications/messenger/mail_message.aw:577
 msgid "Lisa kalendrisse"
 msgstr "Add to calendar"
 
-#: classes/applications/messenger/mail_message.aw:613
+#: classes/applications/messenger/mail_message.aw:612
 msgid "Päised"
 msgstr "Headers"
 
-#: classes/applications/messenger/mail_message.aw:618
+#: classes/applications/messenger/mail_message.aw:617
 msgid "Tavaline"
 msgstr "Regular"
 
-#: classes/applications/messenger/mail_message.aw:624
+#: classes/applications/messenger/mail_message.aw:623
 msgid "Kõik päised"
 msgstr "All headers"
 
-#: classes/applications/messenger/mail_message.aw:783
+#: classes/applications/messenger/mail_message.aw:782
 msgid "err, ei leidnud kalendrit"
 msgstr "could not find calendar!"
 
-#: classes/applications/messenger/mail_message.aw:800
+#: classes/applications/messenger/mail_message.aw:799
 msgid "Toimetus lisatud<br>"
 msgstr "Task added<br>"
 
-#: classes/applications/messenger/mail_message.aw:822
+#: classes/applications/messenger/mail_message.aw:821
 msgid "kustutatud!"
 msgstr "deleted!"
 
-#: classes/applications/messenger/mail_message.aw:824
-#: classes/applications/messenger/mail_message.aw:877
+#: classes/applications/messenger/mail_message.aw:823
+#: classes/applications/messenger/mail_message.aw:876
 msgid "sulge aken"
 msgstr "close window"
 
-#: classes/applications/messenger/mail_message.aw:876
+#: classes/applications/messenger/mail_message.aw:875
 msgid "saadetud<p>"
 msgstr "sent<p>"
 
-#: classes/applications/messenger/mail_message.aw:993
+#: classes/applications/messenger/mail_message.aw:992
 msgid "----Forwarded message-----\n"
 msgstr "----Forwarded message-----\n"

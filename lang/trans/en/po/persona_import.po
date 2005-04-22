@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 17:26:38 +0300\n"
+"POT-Creation-Date: Fri, 22 Apr 2005 16:09:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/persona_import/persona_import.aw:prop_last_import
+# classes/applications/persona_import/persona_import.aw:prop_last_import
 msgid "Omaduse Viimane import toimus (last_import) caption"
 msgstr "Last import took place at"
 
@@ -93,8 +93,9 @@ msgstr ""
 msgid "Omaduse Struktuuriüksuste XML fail (xml_structure_file) help"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
-msgid "Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"
+# classes/applications/persona_import/persona_import.aw:prop_xml_image_folder
+msgid ""
+"Omaduse Pildifailide kataloog (kui on eraldi) (xml_image_folder) caption"
 msgstr "Images folder (if separate)"
 
 # classes/applications/persona_import/persona_import.aw:prop_xml_image_folder_comment
@@ -142,7 +143,7 @@ msgstr ""
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) help"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:group_settings
+# classes/applications/persona_import/persona_import.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr "Settings"
 
@@ -244,9 +245,9 @@ msgstr "<h1>sections</h1>"
 msgid "<h1>sections done</h1>"
 msgstr "<h1>sections done</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:515
-msgid "creating person objects<br>"
-msgstr "creating person objects<br>"
+#: classes/applications/persona_import/persona_import.aw:639
+msgid "creating person)objects<br>"
+msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:662
 msgid "<br>creating new person object<br>"
@@ -256,3 +257,5 @@ msgstr "<br>creating new person object<br>"
 msgid "updating existing person object"
 msgstr "updating existing person object"
 
+#~ msgid "creating person objects<br>"
+#~ msgstr "creating person objects<br>"
