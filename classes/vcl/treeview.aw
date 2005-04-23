@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.46 2005/04/23 11:35:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.47 2005/04/23 13:51:35 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -97,7 +97,6 @@ class treeview extends class_base
 		// generates the tree
 		extract($args);
 		$root = $args["config"]["root"];
-		$this->urltemplate = isset($args["urltemplate"]) ? $args["urltemplate"] : "";
 		$this->config = $args["config"];
 
 		$rootobj = obj($root);
@@ -166,7 +165,6 @@ class treeview extends class_base
 		extract($args);
 		$obj = obj($id);
 		return $this->generate(array(
-			"urltemplate" => $args["urltemplate"],
 			"config" => $obj->meta(),
 		));
 	}
@@ -241,10 +239,6 @@ class treeview extends class_base
 		if (isset($row["link"]) && $row["link"])
 		{
 			$url = $row["link"];
-		}
-		elseif ($this->urltemplate)
-		{
-			$url = sprintf($this->urltemplate,$row["oid"]);
 		}
 		else
 		{
@@ -721,6 +715,7 @@ class treeview extends class_base
 				$name = "<strong>$name</strong>";
 			};
 
+			$url_target = !isset($item["url_target"]) ? $this->tree_dat["url_target"] : $item["url_target"];
 			$this->vars(array(
 				"name" => $name,
 				"id" => $item["id"],
@@ -730,7 +725,9 @@ class treeview extends class_base
 				// source of the page look better
 				"spacer" => str_repeat("    ",$this->level),
 				"menu_level" => $this->level,
+				"target" => $url_target,
 			));
+
 
 
 			if (empty($subres))
