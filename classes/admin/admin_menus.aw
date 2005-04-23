@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.99 2005/04/07 09:53:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.100 2005/04/23 20:59:55 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -33,6 +33,7 @@ class admin_menus extends aw_template
 			$this->usable = $atc_o->meta("usable");
 			$this->is_atc = true;
 		}
+		$this->clss = aw_ini_get("classes");
 		return ($this->req_get_default_add_menu(0, $id, $period, 0));
 	}
 
@@ -79,13 +80,15 @@ class admin_menus extends aw_template
 				}
 			}
 		}
+
 	}
 
 	function req_get_default_add_menu($prnt, $parent, $period, $fld_id = 0)
 	{
 		$ret = "";
 		# see teeb esimese taseme klassid
-		$clss = aw_ini_get("classes");
+		//$clss = aw_ini_get("classes");
+		$clss = $this->clss;
 		if (is_array($clss) && $prnt == 0)
 		{
 			$tcnt = 0;
@@ -144,7 +147,7 @@ class admin_menus extends aw_template
 						{
 							if (!$this->is_atc || $this->usable[$clid])
 							{
-								$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $cldata["file"], true, true);
+								$addlink = $this->mk_my_orb("new", array("parent" => $parent, "period" => $period), $clid, true, true);
 							}
 							else
 							{
@@ -1028,7 +1031,8 @@ class admin_menus extends aw_template
 		$this->db_query($q);
 
 		// perhaps this should even be in the config file?
-		$containers = array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
+		//$containers = array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
+		$containers = get_container_classes();
 
 		$num_records = 0;
 
@@ -1037,16 +1041,18 @@ class admin_menus extends aw_template
 		{
 			case 'big':
 				$tpl = 'bigicons.tpl';
-			break;
+				break;
+
 			case 'small':
 				$tpl = 'smallicons.tpl';
-			break;
+				break;
+
 			case 'detail':
 				$tpl = 'js_popup_menu.tpl';
 				$view_type = 'detail';
-			break;
-			default :
-			{
+				break;
+
+			default:
 				if (isset($GLOBALS['menu_last_view'][$parent]) && ($GLOBALS['menu_last_view'][$parent] != 'detail'))
 				{
 					$view_type = $GLOBALS['menu_last_view'][$parent];
@@ -1057,20 +1063,18 @@ class admin_menus extends aw_template
 					$tpl = 'js_popup_menu.tpl';
 					$view_type = 'detail';
 				}
-			}
 		}
 		
-		//if ($view_type != 'detail')
-		{
-			$menu_last_view = $GLOBALS['menu_last_view'];
-			$menu_last_view[$parent] = $view_type;
-			aw_session_set('menu_last_view',$menu_last_view);
-		}
+		$menu_last_view = $GLOBALS['menu_last_view'];
+		$menu_last_view[$parent] = $view_type;
+		aw_session_set('menu_last_view',$menu_last_view);
 	
 		$this->set_parse_method("eval");
 		$this->read_template($tpl);
 
 		$clss = aw_ini_get("classes");
+
+
 
 		while ($row = $this->db_next())
 		{
@@ -1091,7 +1095,9 @@ class admin_menus extends aw_template
 			}
 			else
 			{
-				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$clss[$row["class_id"]]["file"]);
+				$chlink = $this->mk_my_orb("change", array("id" => $row["oid"], "period" => $period),$row["class_id"]);
+				
+
 			}
 
 			$dellink = $this->mk_my_orb("delete", array("reforb" => 1, "id" => $row["oid"], "parent" => $row["parent"],"sel[".$row["oid"]."]" => "1"), "admin_menus",true,true);
@@ -1243,6 +1249,7 @@ class admin_menus extends aw_template
 		));
 
 		$this->read_template("right_frame.tpl");
+
 
 		$toolbar = $this->rf_toolbar(array(
 			"parent" => $parent,
