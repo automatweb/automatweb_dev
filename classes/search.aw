@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.92 2005/03/24 14:40:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.93 2005/04/23 21:12:51 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -698,8 +698,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 				if (!$is_remote)
 				{
-					$row_o = obj($row["oid"]);
-					$row["location"] = $row_o->path_str();
+					$row_o = obj($row["oid"]);				
+					//$row["location"] = $row_o->path_str();
 					$row["icon"] = sprintf("<img src='%s' alt='$type' title='$type'>",icons::get_icon_url($row_o));
 				}
 				else
@@ -727,7 +727,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				));
 				if (!$args["clid"] || ($args["clid"] == "aliasmgr"))
 				{
-					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $clss[$row["class_id"]]["file"]) . "'>$row[name]</a>";
+					$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $row["class_id"]) . "'>$row[name]</a>";
 				};
 
 				// trim the location to show only up to 3 levels
@@ -747,7 +747,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				{
 					$row["name"] = html::href(array(
 						"caption" => $row["name"],
-						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $clss[$row["class_id"]]["file"])
+						"url" => $this->mk_my_orb("change", array("id" => $row["oid"]), $row["class_id"])
 					));
 				}
 			
@@ -1872,7 +1872,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 			));
 			if (!isset($args["clid"]) || ($args["clid"] == "aliasmgr"))
 			{
-				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $clss[$row["class_id"]]["file"]) . "'>$row[name]</a>";
+				$row["name"] = "<a href='" . $this->mk_my_orb("change", array("id" => $row["oid"], "parent" => $row["parent"]), $row["class_id"]) . "'>$row[name]</a>";
 			};
 
 			// trim the location to show only up to 3 levels
