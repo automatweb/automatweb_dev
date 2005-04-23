@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.387 2005/04/23 18:47:33 duke Exp $
+// $Id: class_base.aw,v 2.388 2005/04/23 19:51:42 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -924,12 +924,12 @@ class class_base extends aw_template
 			{
 				$args["cfgform"] = $_POST["cfgform"];
 			};
-			$retval = $this->mk_my_orb($action,$args,$orb_class);
+			//$retval = $this->mk_my_orb($action,$args,$orb_class);
+			$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
 			if (is_numeric($class))
 			{
 				$retval = aw_url_change_var("class",$class,$retval);
 			};
-			$retval = $this->mk_my_orb($action,$args,$orb_class,false, ($request["ret_to_orb"] ? true : false), "&", false);
 			if ($args["return"] == "id")
 			{
 				$retval = $this->id;
