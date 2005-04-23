@@ -80,6 +80,11 @@ class relationmgr extends aw_template
 				$this->rel_classes[$rel["value"]] = $tmp;
 			}
 		}
+		if (is_array($arr["property"]["configured_rels"]))
+		{
+			$this->rel_classes = $this->rel_classes + $arr["property"]["configured_rels"];
+			$this->reltypes = $this->reltypes + $arr["property"]["configured_rel_names"];
+		};
 		$atc = get_instance(CL_ADD_TREE_CONF);
 		$filt = false;
 		if (($adc_id = $atc->get_current_conf()))
@@ -627,6 +632,7 @@ class relationmgr extends aw_template
 				"url" => "javascript:awdelete()",
 			));
 		}
+		$tb->add_cdata("[[ Seostehaldur V3 ]]");
 		return $tb;
 	}
 	
@@ -835,6 +841,10 @@ class relationmgr extends aw_template
 		}
 		$req = safe_array($arr["request"]);
 		unset($req["action"]);
+		if (!is_array($req))
+		{
+			$req = array();
+		};
 		$reforb = $this->mk_reforb("submit", $req + array("reforb" => 1), $req["class"]);
 		$this->vars(array(
 			"class_ids" => $this->clid_list,
@@ -843,6 +853,12 @@ class relationmgr extends aw_template
 			"period" => $period,
 			"search_url" => aw_ini_get("baseurl").aw_url_change_var(array("srch" => 1)),
 		));
+		/*
+		$pr["form"] = array(
+			"name" => $arr["prop"]["name"],
+			"type" => "text",
+		);
+		*/
 		$tbl->table_header = $this->parse();
 		$tbl->set_default_sortby("title");
 		$tbl->sort_by();
