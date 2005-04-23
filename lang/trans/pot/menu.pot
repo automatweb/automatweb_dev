@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sat, 23 Apr 2005 21:58:32 +0300\n"
+"POT-Creation-Date: Sat, 23 Apr 2005 22:15:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -975,7 +975,7 @@ msgid "Muuda"
 msgstr ""
 
 #: classes/menu.aw:691
-msgid "NR"
+msgid "Pildi number"
 msgstr ""
 
 #: classes/menu.aw:697
