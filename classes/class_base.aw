@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.386 2005/04/23 13:02:59 duke Exp $
+// $Id: class_base.aw,v 2.387 2005/04/23 18:47:33 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1167,6 +1167,7 @@ class class_base extends aw_template
 			$name = $this->obj_inst->name();
 		};
 		$return_url = !empty($this->request["return_url"]) ? $this->request["return_url"] : "";
+		$is_container = in_array($this->clid,get_container_classes());
 		// XXX: pathi peaks htmlclient tegema
 		$title = isset($args["title"]) ? $args["title"] : "";
 		if (is_oid($this->id))
@@ -1175,13 +1176,21 @@ class class_base extends aw_template
 			{
 				$title = $name;
 			};
+			if ($is_container)
+			{
+				$title = html::href(array(
+					"url" => $this->mk_my_orb("right_frame",array("parent" => $this->id),"admin_menus"),
+					"caption" => $name,
+				));
+				$title .= " / " . t("Muuda");
+			};
 			$parent = $this->obj_inst->parent();
 		}
 		else
 		{
 			if (empty($title))
 			{
-				$title = "Uus $classname";
+				$title = t("Uus") . " ${classname}";
 			};
 			$parent = $args["parent"];
 		};
