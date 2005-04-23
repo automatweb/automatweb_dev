@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.186 2005/04/21 08:29:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.187 2005/04/23 18:46:58 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -65,6 +65,12 @@ if (!defined("DEFS"))
 		$retval = str_replace(chr(154), "&Scaron;", $retval);
 
 		return $retval;
+	}
+
+	function get_container_classes()
+	{
+		// classes listed here will be handled as containers where applicable
+		return array(CL_MENU,CL_BROTHER,CL_PROMO,CL_GROUP,CL_MSGBOARD_TOPIC);
 	}
 
 	function obj_link($oid)
@@ -381,7 +387,8 @@ if (!defined("DEFS"))
 		$clss = aw_ini_get("classes");
 		if (!isset($clss[$clid]))
 		{
-			return false;
+			// XXX: perse küll!
+			//return false;
 		}
 
 		return true;
