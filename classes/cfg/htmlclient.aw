@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.103 2005/03/30 09:50:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.104 2005/04/23 12:59:47 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -67,6 +67,16 @@ class htmlclient extends aw_template
 	function set_layout($arr)
 	{
 		$this->layoutinfo = $arr;
+	}
+	
+	/** this can be used to set the different aspects of the behaviour of the client. 
+	**/
+	function configure($arr)
+	{
+		// help_url - set to the thing that should give you more information about the place you are in 
+		// .. i need a few strings too, like "help", "close", "more" .. and also inline help about the group
+		// but that should probably be somewhere in the finish_output
+		$this->config = $arr;
 	}
 
 	function set_form_layout($l)
@@ -457,10 +467,20 @@ class htmlclient extends aw_template
 		// give the first letter of a caption a tooltip
 		if (!empty($args["comment"]))
 		{
+			if ($this->config["show_help"])
+			{
+				$title = "";
+				$help_url = "javascript:show_property_help(\"" . $args["name"] . "\")";
+			}
+			else
+			{
+				$help_url = "javascript:void(0);";
+				$title = $args["comment"];
+			};
 			$caption = html::href(array(
-				"url" => "javascript:void(0)",
+				"url" => $help_url,
 				"caption" => substr($caption,0,1),
-				"title" => $args["comment"],
+				"title" => $title,
 				)) . substr($caption,1);
 		};
 		$tpl_vars = array(
@@ -694,10 +714,20 @@ class htmlclient extends aw_template
 		$vars = array();
 		// proplist tehakse enne ja siis layout takka otsa .. and this will break a lot of things
 		// now how do I work this out?
+		$property_help = "";
 		if (sizeof($this->proplist) > 0)
 		{
 			foreach($this->proplist as $ki => $item)
 			{
+				$this->vars(array(
+					"property_name" => $item["name"],
+					"property_caption" => $item["caption"],
+					"property_comment" => $item["comment"],
+					"property_help" => $item["help"],
+				));
+
+				$property_help .= $this->parse("PROPERTY_HELP");
+
 				if($this->tplmode == "groups")
 				{
 					if (!empty($item["error"]))
@@ -991,6 +1021,8 @@ class htmlclient extends aw_template
 				"reforb" => $this->mk_reforb($action,$data,$orb_class),
 				"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
 				"SUBMIT" => $sbt,
+				"help" => $arr["help"],
+				"PROPERTY_HELP" => $property_help,
 				//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 			));
 
@@ -1051,6 +1083,19 @@ class htmlclient extends aw_template
 			if (is_object($this->tabpanel))
 			{
 				$tp = $this->tabpanel;
+			};
+			$tp->vars(array(
+				"help" => $this->vars["help"],
+				"help_url" => $this->config["help_url"],
+				"more_help_text" => $this->config["more_help_text"],
+				"close_help_text" => $this->config["close_help_text"],
+				"open_help_text" => $this->config["open_help_text"],
+			));
+			if ($this->config["show_help"])
+			{
+				$tp->vars(array(
+					"SHOW_HELP" => $tp->parse("SHOW_HELP"),
+				));
 			};
 			if ($this->form_layout != "boxed")
 			{

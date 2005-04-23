@@ -42,10 +42,57 @@
 
   </table>
   </td>
+
+<!-- SUB: SHOW_HELP -->
+  <td valign="right" align="center" class="tabpanelheaderstyle">
+
+  <span class="aw04tab2content"><a href="javascript:showhide_help();">{VAR:open_help_text}</a></span>
+  </td>
+  <!-- END SUB: SHOW_HELP -->
   </tr>
 
 </tr>
 </table>
+
+<script type="text/javascript">
+function showhide_help()
+{
+	help_layer = document.getElementById('help_layer');
+	if (help_layer.style.display == 'none')
+	{
+		show_help();
+	}
+	else
+	{
+		close_help();
+	};
+}
+
+function show_help()
+{
+	help_layer = document.getElementById('help_layer');
+	help_layer.style.display = 'block';
+}
+
+function close_help()
+{
+	help_layer = document.getElementById('help_layer');
+	help_layer.style.display = 'none';
+}
+
+function show_property_help(propname)
+{
+	prophelp_layer = document.getElementById('property_' + propname + '_help');
+	if (prophelp_layer)
+	{
+		helptext_layer = document.getElementById('helptext_layer');
+		helptext_layer.innerHTML = prophelp_layer.innerHTML;
+		show_help();
+	}
+
+}
+</script>
+
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr><td class="aw04tab2divvahe"><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/trans.gif" WIDTH="1" HEIGHT="8" BORDER="0" ALT=""></td></tr></table>
@@ -84,6 +131,14 @@
 			</table>
 </div>
 <!-- END SUB: tabs_L2 -->
+<div id="help_layer" style="background-color: #F7F7F7; border: 1px solid #91DA52; display: none; padding: 5px;">
+<div id="helptext_layer" style="font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000; height: 28px; background-color: #F7F7F7; ">
+{VAR:help}
+</div>
+<div style="text-align: right; width: 100%; font-family: verdana, sans-serif; font-size: 11px; font-weight: normal; color: #000000;">
+<a href="javascript:void(0);" onclick="window.open('{VAR:help_url}','awhelp','width=600,height=400');">{VAR:more_help_text}</a> | <a href="javascript:close_help();">{VAR:close_help_text}</a>
+</div>
+</div>
 
 <!-- SUB: tabs_L3 -->
 <div class="aw04tab2divl2">
