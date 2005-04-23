@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.385 2005/04/22 06:11:31 kristo Exp $
+// $Id: class_base.aw,v 2.386 2005/04/23 13:02:59 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -549,11 +549,21 @@ class class_base extends aw_template
 		};
 
 		$this->cli = &$cli;
+		$cli->configure(array(
+			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
+			"more_help_text" => t("rohkem infot"),
+			"close_help_text" => t("peida ära"),
+			"open_help_text" => t("abiinfo"),
+			// sellest teeme ini settingu
+			"show_help" => aw_ini_get("class_base.show_help"),
+		));
 
 		// käes ongi .. see asi eeldab, et layoutile on grupp peale väänatud ..
 		// samas ei pruugi see üldse case olla. sitta sellest grupist .. propertyle öeldakse
 		// mis grupis ta on ja kui seal mingi layout ka ringi töllerdab eks ma siis lihtsalt
 		// kasutan seda
+
+		// aga mul on kuidagi vaja need layout asjad ka õigesse kohta saada .. how the fuck do I do that?
 		if (is_array($this->layoutinfo) && method_exists($cli,"set_layout"))
 		{
 			$tmp = array();
@@ -735,6 +745,7 @@ class class_base extends aw_template
 			// hm, dat is weird!
 			"submit" => isset($gdata["submit"]) ? $gdata["submit"] : "",
 			"data" => $argblock,
+			"help" => "Siin tuleb üldine info selle tabi (grupi) kohta, aga seda pole veel kirjutatud. Proovi klikkida omaduste esitähtedel.",
 		));
 
 		extract($args);
