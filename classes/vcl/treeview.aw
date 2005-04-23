@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.44 2005/04/18 08:49:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.45 2005/04/23 08:40:59 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1116,6 +1116,8 @@ class treeview extends class_base
 		$tv = get_instance(CL_TREEVIEW);
 		$aw_classes = get_class_picker (array ("field" => "def"));
 
+		$req_uri = urlencode(aw_global_get('REQUEST_URI'));
+
 		$class_id = $arr["root_item"]->class_id ();
 		$class_name = strtolower (substr ($aw_classes[$class_id], 3));
 
@@ -1123,7 +1125,7 @@ class treeview extends class_base
 		{
 			$tree_opts["root_url"] = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+				"return_url" => $req_uri,
 			), $class_name);
 		}
 		else
@@ -1138,7 +1140,7 @@ class treeview extends class_base
 		{
 			$url = $this->mk_my_orb ($node_actions[$class_id], array(
 				"id" => $o->id (),
-				"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+				"return_url" => $req_uri,
 			), $class_name);
 		}
 		else
@@ -1162,15 +1164,17 @@ class treeview extends class_base
 		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
 			$oname = parse_obj_name($o->name());
+			$oid = $o->id();
+			$class_id = $o->class_id();
 
-			if ($var && $_GET[$var] == $o->id())
+			if ($var && $_GET[$var] == $oid)
 			{
 				$oname = "<b>".$oname."</b>";
 			}
 
-			if ( ($tv->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id (), $arr["checkbox_class_filter"]) )
+			if ( ($tv->tree_type == TREE_DHTML_WITH_CHECKBOXES) and is_array ($arr["checkbox_class_filter"]) and in_array ($class_id, $arr["checkbox_class_filter"]) )
 			{
-				if (is_array ($this->checked_nodes) and in_array ($o->id (), $this->checked_nodes))
+				if (is_array ($this->checked_nodes) and in_array ($oid, $this->checked_nodes))
 				{
 					$checkbox_status = 1;
 				}
@@ -1179,7 +1183,7 @@ class treeview extends class_base
 					$checkbox_status = 0;
 				}
 			}
-			elseif ( ($tv->tree_type == TREE_DHTML_WITH_BUTTONS) and is_array ($arr["checkbox_class_filter"]) and in_array ($o->class_id (), $arr["checkbox_class_filter"]) )
+			elseif ( ($tv->tree_type == TREE_DHTML_WITH_BUTTONS) and is_array ($arr["checkbox_class_filter"]) and in_array ($class_id, $arr["checkbox_class_filter"]) )
 			{
 				$checkbox_status = "button";
 			}
@@ -1188,19 +1192,18 @@ class treeview extends class_base
 				$checkbox_status = "undefined";
 			}
 
-			$class_id = $o->class_id ();
 			$class_name = strtolower (substr ($aw_classes[$class_id], 3));
 
 			if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
 			{
 				$url = $this->mk_my_orb ($node_actions[$class_id], array(
-					"id" => $o->id (),
-					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
+					"id" => $oid,
+					"return_url" => $req_uri,
 				), $class_name);
 			}
 			else
 			{
-				$url = aw_url_change_var ($var, $o->id ());
+				$url = aw_url_change_var ($var, $oid);
 			}
 
 			$parent = $o->parent();
@@ -1210,7 +1213,7 @@ class treeview extends class_base
 			}
 			if (!$arr["icon"])
 			{
-				$icon = (($o->class_id() == CL_MENU) ? NULL : $ic->get_icon_url($o->class_id(),""));
+				$icon = (($class_id == CL_MENU) ? NULL : $ic->get_icon_url($class_id,""));
 			}	
 			else
 			{
@@ -1218,7 +1221,7 @@ class treeview extends class_base
 			}
 			$tv->add_item($parent,array(
 				"name" => $oname,
-				"id" => $o->id(),
+				"id" => $oid,
 				"url" => $url,
 				"iconurl" => $icon,
 				"checkbox" => $checkbox_status,
