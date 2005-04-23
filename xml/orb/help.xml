@@ -1,0 +1,22 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="help" folder="core/help" extends="aw_template">
+		<action name="browser" default="1">
+			<function name="browser">
+				<arguments>
+					<required name="clid" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="grouphelp">
+			<function name="grouphelp">
+				<arguments>
+					<required name="clid" />
+					<required name="grpid" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
