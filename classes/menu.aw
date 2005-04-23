@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.131 2005/04/23 18:48:44 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.132 2005/04/23 19:07:44 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -666,7 +666,7 @@ class menu extends class_base
 			));
 
 			$t->define_data(array(
-				"nr" => sprintf("Pilt #%d",$i),
+				"nr" => " $i",
 				"ord" => html::textbox(array(
 					"name" => "img_ord[$i]",
 					"value" => $imdata[$i]["ord"],
@@ -688,7 +688,7 @@ class menu extends class_base
 	{
 		$t->define_field(array(
 			"name" => "nr",
-			"caption" => t("NR"),
+			"caption" => t("Pildi number"),
 			"talign" => "center",
 			"align" => "center",
 		));
@@ -1434,17 +1434,18 @@ class menu extends class_base
 
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEEALSO_DOC")) as $c)
 		{
+			$cto = $c->prop("to");
 			$t->define_data(array(
-				"doc" => html::get_change_url($c->prop("to"), array(), $c->prop("to.name")),
+				"doc" => html::get_change_url($cto, array(), $c->prop("to.name")),
 				"doc_subs" => html::checkbox(array(
-					"name" => "sad_opts[".$c->prop("to")."][submenus]",
-					"value" => $c->prop("to"),
-					"checked" => $sad_opts[$c->prop("to")]["submenus"]
+					"name" => "sad_opts[".$cto."][submenus]",
+					"value" => $cto,
+					"checked" => $sad_opts[$cto]["submenus"]
 				)),
 				"tpl" => html::select(array(
-					"name" => "sad_opts[".$c->prop("to")."][tpl]",
+					"name" => "sad_opts[".$cto."][tpl]",
 					"options" => $tpls,
-					"selected" => $sad_opts[$c->prop("to")]["tpl"]
+					"selected" => $sad_opts[$cto]["tpl"]
 				))
 			));
 		}
