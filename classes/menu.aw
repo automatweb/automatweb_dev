@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.130 2005/04/11 08:25:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.131 2005/04/23 18:48:44 duke Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -1053,28 +1053,6 @@ class menu extends class_base
 				"ex_icons" => $request["ex_icons"],
 			));
 		};
-	}
-
-	function callback_gen_path($args = array())
-	{
-		// XXX: rewrite it to use some kind of global list of container objects
-		// because, all this does it to put a clickable link on the YAH to see
-		// the contents of the container
-		if ($args["id"])
-		{
-			$obj = new object($args["id"]);
-			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"admin_menus");
-			$title = html::href(array(
-				"url" => $link,
-				"caption" => $obj->name(),
-			));
-			$title .= " / ".t("Muuda");
-		}
-		else
-		{
-			$title = t("Lisa");
-		};
-		return $title;
 	}
 
 	////
