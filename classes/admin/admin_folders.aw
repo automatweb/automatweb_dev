@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.42 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.43 2005/04/23 14:59:29 duke Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -37,23 +37,23 @@ class admin_folders extends aw_template
 		));
 
 		echo ($sf->parse());
-	global $awt;
-	if (is_object($awt))
-	{
-		$sums = $awt->summaries();
+		global $awt;
+		if (is_object($awt))
+		{
+			$sums = $awt->summaries();
+
+			echo "<!--\n";
+			while(list($k,$v) = each($sums))
+			{
+				print "$k = $v\n";
+			};
+			echo " querys = ".aw_global_get("qcount")." \n";
+			echo "-->\n";
+		}
 
 		echo "<!--\n";
-		while(list($k,$v) = each($sums))
-		{
-			print "$k = $v\n";
-		};
-		echo " querys = ".aw_global_get("qcount")." \n";
-		echo "-->\n";
-	}
-
-	echo "<!--\n";
-	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
-	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
+		echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
+		echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
 		echo "-->\n";
 
 		die();
@@ -61,7 +61,7 @@ class admin_folders extends aw_template
 
 	////
 	// !Listib koik objektid
-	function db_listall()
+	function db_listall($parent = false)
 	{
 		enter_function("admin_folders::db_listall");
 		$where = "objects.status != 0 AND ((menu.type != ".MN_FORM_ELEMENT . " AND menu.type != ".MN_HOME_FOLDER . ") OR menu.type IS NULL)";
@@ -70,12 +70,10 @@ class admin_folders extends aw_template
 		{
 			$aa.="AND (objects.lang_id=".aw_global_get("lang_id")." OR menu.type = ".MN_CLIENT." OR menu.type = ".MN_ADMIN1.")";
 		}
-		/*
-		if (!empty($this->use_parent))
+		if ($parent)
 		{
-			$where .= " AND objects.parent = " . $this->use_parent;
+			$where .= " AND objects.parent IN (" . join(",",$parent) . ")";
 		};
-		*/
 		$q = "SELECT objects.oid as oid, 
 				objects.parent as parent,
 				objects.comment as comment,
@@ -139,18 +137,34 @@ class admin_folders extends aw_template
 		));
 
 		$awt->start("menu-list");
-		// listib koik menyyd ja paigutab need arraysse
-
-		// this is HARD. I probably cannot load this thing on demand, if I have a 
-		// selected branch .. but I really should be able to.
-		$this->db_listall();
-		$awt->stop("menu-list");
-		$awt->start("menu-map");
-		while ($row = $this->db_next())
+		if ($this->tree->has_feature(LOAD_ON_DEMAND))
 		{
-			if ($this->tree->has_feature(LOAD_ON_DEMAND))
+			// siin tuleb teha 2-faasiline lähenemine
+			$this->db_listall(array($rn,$this->cfg["amenustart"]));
+			$other_parents = array();
+			while ($row = $this->db_next())
 			{
-				if ($row["parent"] == $rn)
+				// don't check acl for items we don't really care about
+				if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+				{
+					$arr[$row["parent"]][] = $row;
+					$mpr[] = $row["parent"];
+					if ($this->resolve_item(&$row))
+					{
+						$this->tree->add_item($row["parent"],$row);
+					};
+					$other_parents[] = $row["id"];
+				}
+				else
+				{
+					//$this->x_mpr[$row['oid']] = 1;
+				}
+			}
+
+			if (sizeof($other_parents) > 0)
+			{
+				$this->db_listall($other_parents);
+				while ($row = $this->db_next())
 				{
 					// don't check acl for items we don't really care about
 					if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
@@ -164,17 +178,16 @@ class admin_folders extends aw_template
 					}
 					else
 					{
-						$this->x_mpr[$row['oid']] = 1;
+						//$this->x_mpr[$row['oid']] = 1;
 					}
 				}
-				else
-				{
-					$arr[$row["parent"]][] = $row;
-					$mpr[] = $row["parent"];
-					$this->tree->add_item($row["parent"],array("id" => "x"));
-				};
-			}
-			else
+			};
+		}
+		else
+		{
+			$awt->start("menu-map");
+			$this->db_listall();
+			while ($row = $this->db_next())
 			{
 				if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
 				{
@@ -191,6 +204,8 @@ class admin_folders extends aw_template
 				}
 			};
 		}
+		$awt->stop("menu-list");
+
 
 		// list groups as well..
 		if (empty($this->use_parent))
@@ -400,10 +415,9 @@ class admin_folders extends aw_template
 		// if all else fails ..
 		$arr["iconurl"] = $iconurl;
 
-		$prog = aw_ini_get("programs");
-
 		if (empty($arr["linkxxx"]))
 		{
+			$prog = aw_ini_get("programs");
 			if ($arr["admin_feature"])
 			{
 				$arr["url"] = $prog[$arr["admin_feature"]]["url"];
@@ -435,10 +449,6 @@ class admin_folders extends aw_template
 		{
 			if (!$this->tree->node_has_children($arr["id"]) && ($arr["periodic"] == 0))
 			{
-				if ($arr["id"] == 126106)
-				{	
-					print "ignoring<br>";	
-				};
 				$rv = false;
 			};
 		};
