@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.11 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.12 2005/04/23 20:11:07 duke Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -10,6 +10,9 @@
 
 @property is_registered type=checkbox ch_value=1 field=meta method=serialize
 @caption Klass on registreeritud
+
+@property infomsg type=text store=no
+@caption Info
 
 @property visualize type=text store=no
 @caption 
@@ -103,6 +106,8 @@ class class_designer extends class_base
 		$this->all_els = $this->elements;
 		$this->all_els[] = CL_PROPERTY_GROUP;
 		$this->all_els[] = CL_PROPERTY_GRID;
+		
+		$this->gen_folder = $this->cfg["site_basedir"]."/files/classes";
 	}
 
 	function callback_mod_reforb(&$arr)
@@ -209,6 +214,14 @@ class class_designer extends class_base
 						$prop["options"][$o->id()] = $o->name();
 					};
 
+				};
+				break;
+
+			case "infomsg":
+				$clx = aw_ini_get("classes");
+				if (!is_writable($this->gen_folder))
+				{
+					$prop["value"] = t("Väljundkataloog ei ole kirjutatav!");
 				};
 				break;
 
@@ -898,16 +911,52 @@ class class_designer extends class_base
 
 	function callback_post_save($arr)
 	{
+		// I need to put class information into an ini file as well
 		print "generating class file";
 		$cldef = $this->gen_classdef(array(
 			"obj_inst" => $arr["obj_inst"],
 		));
-		$fld = $this->cfg["site_basedir"]."/files/classes";
-		$this->put_file(array(
-			"file" => $fld . "/" . $arr["obj_inst"]->id() . ".aw",
-			"content" => $cldef,
-		));
-		//print "done, I think";
+
+		// kuidas ma selle ini faili nüüd õiges kohas sisse loen?
+		$fld = $this->gen_folder;
+		if (is_writable($fld))
+		{
+			$this->put_file(array(
+				"file" => $fld . "/" . $arr["obj_inst"]->id() . ".aw",
+				"content" => $cldef,
+			));
+
+			// generate class information for generated classes as well
+	                $clist = new object_list(array(
+				"class_id" => CL_CLASS_DESIGNER,
+				"can_add"  => 1,
+                	));
+
+			$ini_file = "";
+
+			// def, name, file, can_add, alias, parents
+			foreach($clist->arr() as $class_obj)
+			{
+				$clid = $class_obj->prop("reg_class_id");
+				$prefix = "classes[$clid]";
+
+				$ini_file .= $prefix . "[def] = " . "CL_" . $clid . "\n";
+				$ini_file .= $prefix . "[name] = " . $class_obj->name() . "\n";
+				$ini_file .= $prefix . "[file] = " . $class_obj->id() . "\n";
+				$ini_file .= $prefix . "[parents] = " . $class_obj->prop("class_folder") . "\n";
+				// maybe I do not need this .. don't know right now
+				$ini_file .= $prefix . "[generated] = 1\n";
+				$ini_file .= $prefix . "[can_add] = " . $class_obj->prop("can_add") . "\n\n";
+			};
+
+			$this->put_file(array(
+				"file" => $fld . "/" . "generated_classes.ini",
+				"content" => $ini_file,
+			));
+
+		};
+
+		print "done<br>";
 
 	}
 }
