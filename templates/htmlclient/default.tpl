@@ -69,19 +69,30 @@
 <!-- SUB: SUBITEM -->
 	<span style='color: red'>{VAR:err_msg}</span>
         {VAR:element}
-        {VAR:caption}
+        <span class="aw04contentcellright">{VAR:caption}</span>
 	&nbsp;
 <!-- END SUB: SUBITEM -->
 
 <!-- SUB: SUBITEM2 -->
 	<span style='color: red'>{VAR:err_msg}</span>
-        {VAR:caption}
-        {VAR:element}
-	&nbsp;
+        <div class="aw04contentcellleft">{VAR:caption}</div>
+        <div class="aw04contentcellright">{VAR:element}</div>
 <!-- END SUB: SUBITEM2 -->
+
+<!-- SUB: GRIDITEM -->
+	<div class="aw04contentcellright">{VAR:caption}: {VAR:element}</div>
+<!-- END SUB: GRIDITEM -->
+
+<!-- SUB: PROPERTY_HELP -->
+<div id="property_{VAR:property_name}_help" style="display: none;">
+<strong>{VAR:property_caption} - {VAR:property_comment}</strong>
+<p>{VAR:property_help}</p>
+</div>
+<!-- END SUB: PROPERTY_HELP -->
 
 <!-- SUB: SHOW_CHANGEFORM2 -->
 {VAR:reforb}
+</table>
 <script type="text/javascript">
 function submit_changeform(action)
 {
@@ -106,7 +117,6 @@ body {
         overflow:hidden;
 }
 <!-- END SUB: iframe_body_style -->
-
 <!-- SUB: CHECK_LEAVE_PAGE -->
 <script language="javascript">
 
@@ -145,4 +155,3 @@ function generic_unloader()
 	}
 }
 </script>
-<!-- END SUB: CHECK_LEAVE_PAGE -->
