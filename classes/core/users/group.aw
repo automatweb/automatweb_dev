@@ -594,28 +594,6 @@ class group extends class_base
 		return $ret;
 	}
 
-	function callback_gen_path($args = array())
-	{
-		// XXX: rewrite it to use some kind of global list of container objects
-		// because, all this does it to put a clickable link on the YAH to see
-		// the contents of the container
-		if ($args["id"])
-		{
-			$obj = obj($args["id"]);
-			$link = $this->mk_my_orb("right_frame",array("parent" => $args["id"]),"admin_menus");
-			$title = html::href(array(
-				"url" => $link,
-				"caption" => $obj->name(),
-			));
-			$title .= t(" / Muuda");
-		}
-		else
-		{
-			$title = "Lisa";
-		};
-		return $title;
-	}
-
 	function on_save_grp($arr)
 	{
 		$o = obj($arr["oid"]);
