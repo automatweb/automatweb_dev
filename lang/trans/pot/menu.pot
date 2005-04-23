@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:01:02 +0300\n"
+"POT-Creation-Date: Sat, 23 Apr 2005 21:58:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -946,7 +946,7 @@ msgstr ""
 msgid "OID"
 msgstr ""
 
-#: classes/menu.aw:537 classes/menu.aw:1226 classes/menu.aw:1278
+#: classes/menu.aw:537 classes/menu.aw:1204 classes/menu.aw:1256
 msgid "Nimi"
 msgstr ""
 
@@ -970,7 +970,7 @@ msgstr ""
 msgid "Vali pilt.."
 msgstr ""
 
-#: classes/menu.aw:657 classes/menu.aw:1071
+#: classes/menu.aw:657
 msgid "Muuda"
 msgstr ""
 
@@ -1038,35 +1038,31 @@ msgstr ""
 msgid "-- vali --"
 msgstr ""
 
-#: classes/menu.aw:1075
-msgid "Lisa"
-msgstr ""
-
-#: classes/menu.aw:1084 classes/menu.aw:1104
+#: classes/menu.aw:1062 classes/menu.aw:1082
 msgid "--vali--"
 msgstr ""
 
-#: classes/menu.aw:1218 classes/menu.aw:1270
+#: classes/menu.aw:1196 classes/menu.aw:1248
 msgid "ID"
 msgstr ""
 
-#: classes/menu.aw:1231
+#: classes/menu.aw:1209
 msgid "kustuta"
 msgstr ""
 
-#: classes/menu.aw:1283
+#: classes/menu.aw:1261
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/menu.aw:1431
+#: classes/menu.aw:1409
 msgid "Dokument"
 msgstr ""
 
-#: classes/menu.aw:1438
+#: classes/menu.aw:1416
 msgid "ka alammen&uuml;&uuml;de juures"
 msgstr ""
 
-#: classes/menu.aw:1444
+#: classes/menu.aw:1422
 msgid "Vali asukoht"
 msgstr ""
 

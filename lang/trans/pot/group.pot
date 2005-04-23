@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:55 +0300\n"
+"POT-Creation-Date: Sat, 23 Apr 2005 21:58:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -339,15 +339,11 @@ msgstr ""
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:601
-msgid " / Muuda"
-msgstr ""
-
-#: classes/core/users/group.aw:793
+#: classes/core/users/group.aw:771
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:839
+#: classes/core/users/group.aw:817
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 
