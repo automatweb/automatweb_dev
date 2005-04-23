@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.45 2005/04/23 08:40:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.46 2005/04/23 11:35:58 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -298,6 +298,8 @@ class treeview extends class_base
 			$this->separator = empty($arr["separator"]) ? "," : $arr["separator"];
 			$this->checkbox_data_var = empty ($arr["checkbox_data_var"]) ? $arr["tree_id"] : $arr["checkbox_data_var"];
 		}
+
+		$this->open_nodes = array();
 	}
 
 	function has_feature($feature)
@@ -323,6 +325,10 @@ class treeview extends class_base
 		// that node directly.
 		$this->itemdata[$item["id"]] = $item;
 		$this->items[$parent][] = &$this->itemdata[$item["id"]];
+		if (isset($item["is_open"]))
+		{
+			$this->open_nodes[] = $item["id"];
+		};
 	}
 
 	function get_item_ids()
@@ -474,6 +480,12 @@ class treeview extends class_base
 			};
 			$this->r_path = array_unique($r_path);
 		};
+
+		if (sizeof($this->open_nodes) > 0)
+		{
+			$this->r_path = $this->r_path + $this->open_nodes;
+		};
+
 
 		$t = get_instance("languages");
 		$this->vars(array(
