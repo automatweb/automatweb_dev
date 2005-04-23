@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
+"POT-Creation-Date: Sat, 23 Apr 2005 21:58:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -282,15 +282,15 @@ msgstr ""
 msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:166
+#: classes/core/users/group.aw:170
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:167
+#: classes/core/users/group.aw:171
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:176
+#: classes/core/users/group.aw:180
 msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
@@ -303,47 +303,47 @@ msgid "
 				"
 msgstr ""
 
-#: classes/core/users/group.aw:214
+#: classes/core/users/group.aw:218
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:372
+#: classes/core/users/group.aw:376
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:401
+#: classes/core/users/group.aw:405
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:410
+#: classes/core/users/group.aw:414
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:419
+#: classes/core/users/group.aw:423
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:428
+#: classes/core/users/group.aw:432
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:448
+#: classes/core/users/group.aw:452
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:551
+#: classes/core/users/group.aw:555
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:576
+#: classes/core/users/group.aw:580
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:597
-msgid " / Muuda"
+#: classes/core/users/group.aw:771
+msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:826
+#: classes/core/users/group.aw:817
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 
