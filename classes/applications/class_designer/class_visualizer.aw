@@ -232,6 +232,8 @@ class class_visualizer extends class_base
 		$tree = new object_tree(array(
 			"parent" => $o->id(),
 			"class_id" => CL_PROPERTY_GROUP,
+			"site_id" => array(),
+			"lang_id" => array(),
 		));
 		$tlist = $tree->to_list();
 		$group = $arr["group"];
@@ -256,6 +258,15 @@ class class_visualizer extends class_base
 			$groupitems[$name]["caption"] = $xo->name();
 		};
 
+		if ($o->prop("relationmgr") == 1)
+		{
+			$groupitems["relationmgr"] = array(
+				"caption" => t("Seostehaldur"),
+				//"no_form" => 1,
+				"submit" => "no",
+			);
+		};
+
 		return $groupitems;
 	}
 
@@ -265,6 +276,8 @@ class class_visualizer extends class_base
 			"parent" => $arr["id"],
 			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
 		));
+
+		$o = new object($arr["id"]);
 		
 		$els = $element_tree->to_list();
 		$grid2grp = array();
@@ -320,9 +333,19 @@ class class_visualizer extends class_base
 					}
 				}
 
-				//$rv[$el->id()] = $propdata;
 				$rv[$sysname] = $propdata;
 			};
+		};
+		
+		if ($o->prop("relationmgr") == 1)
+		{
+			$rv["relationmgr"] = array(
+				"name" => "relationmgr",
+				"type" => "relationmgr",
+				"caption" => t("Seostehaldur"),
+				"store" => "no",
+				"group" => "relationmgr",
+			);
 		};
 
 		return $rv;
