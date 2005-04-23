@@ -11,6 +11,15 @@
             <caption>Klass on registreeritud</caption>
       </property>
       <property>
+            <name>infomsg</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>infomsg</field>
+            <caption>Info</caption>
+      </property>
+      <property>
             <name>visualize</name>
             <table>objects</table>
             <group>general</group>
