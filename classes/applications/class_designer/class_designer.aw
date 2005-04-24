@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.12 2005/04/23 20:11:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.13 2005/04/24 07:51:09 duke Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -14,33 +14,39 @@
 @property infomsg type=text store=no
 @caption Info
 
-@property visualize type=text store=no
-@caption 
+property visualize type=text store=no
+caption 
 
 @default group=settings
 @property reg_class_id type=text table=aw_class field=class_id
 @caption CLID
+@comment Kui klass on registreeritud, siis näitab klassile määratud ID-d
 
 @property object_name type=select field=meta method=serialize
 @caption Objekti nime omadus
+@comment Siit valitud vormi väljast võetakse objektile nimi
 
 @property can_add type=checkbox ch_value=1 table=aw_class
 @caption Saab lisada
+@comment Kui see märgistada, siis saab klassi lisada rohelise nupu menüü kaudu
 
-@property class_folder type=textbox table=aw_class
-@caption classfolder
+@property class_folder type=select table=aw_class
+@caption Asukoht lisamismenüüs
+@comment Läheb arvesse ainult siis, kui klassi 'saab lisada'
 
 @default field=meta
 @default method=serialize
 
 @property relationmgr type=checkbox ch_value=1 default=1
 @caption Seostehaldur
+@comment Kas klassil on seostehaldur?
 
 @property no_comment type=checkbox ch_value=1
 @caption Kommentaari muuta ei saa
 
 @property no_status type=checkbox ch_value=1
 @caption Aktiivsust muuta ei saa
+@comment Kui see märgistada, siis ei saa klassi aktiivsust muuta, ta on alati aktiivne
 
 @default group=classdef
 @property classdef type=text store=no no_caption=1
@@ -203,10 +209,9 @@ class class_designer extends class_base
 			case "object_name":
 				$otree = new object_tree(array(
 					"parent" => $arr["obj_inst"],
-					// not much point in using a checkbox as name is there?
-					//"class_id" => CL_PROPERTY_TEXTBOX,
 				));
 				$olist = $otree->to_list();
+				// not much point in using a checkbox as name is there?
 				foreach($olist->arr() as $o)
 				{
 					if (CL_PROPERTY_TEXTBOX == $o->class_id())
@@ -223,6 +228,10 @@ class class_designer extends class_base
 				{
 					$prop["value"] = t("Väljundkataloog ei ole kirjutatav!");
 				};
+				break;
+
+			case "class_folder":
+				$prop["options"] = $this->gen_folder_tree();
 				break;
 
 
@@ -257,17 +266,19 @@ class class_designer extends class_base
 	{
 		$o = $arr["obj_inst"];
 		$tree = &$arr["prop"]["vcl_inst"];
+		$oid = $o->id();
 		$tree->add_item(0,array(
 			"name" => $o->name(),
-			"id" => $o->id(),
+			"id" => $oid,
+			"is_open" => 1,
 			"url" => $this->mk_my_orb("change",array(
-				"id" => $o->id(),
+				"id" => $oid,
 				"group" => "designer",
 			)),
 		));
 
 		$el_tree = new object_tree(array(
-			"parent" => $o->id(),
+			"parent" => $oid,
 			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
 			"lang_id" => array(),
 			"site_id" => array(),
@@ -292,13 +303,13 @@ class class_designer extends class_base
 				"name" => $el->name(),
 				"id" => $el_id,
 				"url" => $this->mk_my_orb("change",array(
-					"id" => $o->id(),
+					"id" => $oid,
 					"group" => "designer",
 					"group_parent" => $el_id,
 				)),
 				"iconurl" => $iconurl,
+				"is_open" => 1,
 			));
-			//arr($el);
 		};
 
 		$tree->set_selected_item($this->group_parent);
@@ -722,6 +733,10 @@ class class_designer extends class_base
 				if (in_array($el_clid,$saveable))
 				{
 					$saver .= "\t\t\$o->set_meta('${sys_name}',\$arr[\"request\"][\"${sys_name}\"]);\n";
+					if ($el->id() == $name_prop)
+					{
+						$saver .= "\t\t\$o->set_name(\$arr[\"request\"][\"${sys_name}\"]);\n";
+					};
 				};
 
 			};
@@ -887,6 +902,37 @@ class class_designer extends class_base
 		return $arr["return_url"];
 	}
 
+	function gen_folder_tree()
+	{
+		$folders = aw_ini_get("classfolders");
+		$this->by_parent = array();
+		foreach($folders as $id => $folderdat)
+		{
+			$this->by_parent[$folderdat["parent"]][$id] = $folderdat["name"];
+		};
+		$this->level = -1;
+		return $this->_rec_folder_tree(0);
+	}
+
+	function _rec_folder_tree($parent)
+	{
+		$this->level++;
+		$rv = array();
+		foreach ($this->by_parent[$parent] as $key => $val)
+		{
+			$spacer = str_repeat("&nbsp;",$this->level*4);
+			$rv[$key] = $spacer .= $val;
+			if ($this->by_parent[$key])
+			{
+				$rv = $rv + $this->_rec_folder_tree($key);
+			};
+		};
+		$this->level--;
+		return $rv;
+
+
+	}
+
 	// register class in central register
 	function do_register_class($arr)
 	{
@@ -912,12 +958,11 @@ class class_designer extends class_base
 	function callback_post_save($arr)
 	{
 		// I need to put class information into an ini file as well
-		print "generating class file";
+		//print "generating class file";
 		$cldef = $this->gen_classdef(array(
 			"obj_inst" => $arr["obj_inst"],
 		));
 
-		// kuidas ma selle ini faili nüüd õiges kohas sisse loen?
 		$fld = $this->gen_folder;
 		if (is_writable($fld))
 		{
@@ -956,7 +1001,7 @@ class class_designer extends class_base
 
 		};
 
-		print "done<br>";
+		//print "done<br>";
 
 	}
 }
