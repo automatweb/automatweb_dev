@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:20 +0300\n"
+"POT-Creation-Date: Sun, 24 Apr 2005 10:58:44 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -22,16 +22,16 @@ msgstr ""
 msgid "Omaduse Klass on registreeritud (is_registered) help"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:prop_visualize
-msgid "Omaduse  (visualize) caption"
+#: classes/applications/class_designer/class_designer.aw:prop_infomsg
+msgid "Omaduse Info (infomsg) caption"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:prop_visualize_comment
-msgid "Omaduse  (visualize) kommentaar"
+#: classes/applications/class_designer/class_designer.aw:prop_infomsg_comment
+msgid "Omaduse Info (infomsg) kommentaar"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:prop_visualize_help
-msgid "Omaduse  (visualize) help"
+#: classes/applications/class_designer/class_designer.aw:prop_infomsg_help
+msgid "Omaduse Info (infomsg) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_reg_class_id
@@ -71,15 +71,15 @@ msgid "Omaduse Saab lisada (can_add) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_class_folder
-msgid "Omaduse classfolder (class_folder) caption"
+msgid "Omaduse Asukoht lisamismenüüs (class_folder) caption"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_class_folder_comment
-msgid "Omaduse classfolder (class_folder) kommentaar"
+msgid "Omaduse Asukoht lisamismenüüs (class_folder) kommentaar"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_class_folder_help
-msgid "Omaduse classfolder (class_folder) help"
+msgid "Omaduse Asukoht lisamismenüüs (class_folder) help"
 msgstr ""
 
 #: classes/applications/class_designer/class_designer.aw:prop_relationmgr
@@ -246,59 +246,63 @@ msgstr ""
 msgid "Seose seos (RELTYPE_RELATION) tekst"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:186
+#: classes/applications/class_designer/class_designer.aw:197
 msgid "Visualiseeri"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:311
+#: classes/applications/class_designer/class_designer.aw:229
+msgid "Väljundkataloog ei ole kirjutatav!"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:335
 msgid "Uus tab"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:322
+#: classes/applications/class_designer/class_designer.aw:346
 msgid "Uus grid"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:358
+#: classes/applications/class_designer/class_designer.aw:382
 msgid "Save"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:368
+#: classes/applications/class_designer/class_designer.aw:392
 msgid "Cut"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:378
+#: classes/applications/class_designer/class_designer.aw:402
 msgid "Paste"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:387
+#: classes/applications/class_designer/class_designer.aw:411
 msgid "Delete"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:390
+#: classes/applications/class_designer/class_designer.aw:414
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:400
+#: classes/applications/class_designer/class_designer.aw:424
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:406
+#: classes/applications/class_designer/class_designer.aw:430
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:411
+#: classes/applications/class_designer/class_designer.aw:435
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:416 classes/applications/class_designer/class_designer.aw:460
+#: classes/applications/class_designer/class_designer.aw:440 classes/applications/class_designer/class_designer.aw:484
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:492
+#: classes/applications/class_designer/class_designer.aw:516
 msgid "Grupp "
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:523
+#: classes/applications/class_designer/class_designer.aw:547
 msgid "vbox "
 msgstr ""
 
