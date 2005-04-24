@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.31 2005/04/19 18:06:51 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.32 2005/04/24 05:42:09 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -665,6 +665,10 @@ class calendar_view extends class_base
 		if (is_oid($this->target_doc))
 		{
 			$args["target_section"] = $this->target_doc;
+		}
+		else
+		{
+			$args["target_section"] = aw_global_get("section");
 		};
 		$status = array(STAT_ACTIVE, STAT_NOTACTIVE);
 		if($this->obj_inst->prop("actives_only") == 1)
@@ -672,7 +676,6 @@ class calendar_view extends class_base
 			$status = array(STAT_ACTIVE);
 			$args["active_only"] = 1;
 		}
-
 
 		$vcal->configure($args);
 
