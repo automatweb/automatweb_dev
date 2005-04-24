@@ -20,21 +20,13 @@
             <caption>Info</caption>
       </property>
       <property>
-            <name>visualize</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>text</type>
-            <store>no</store>
-            <field>visualize</field>
-            <caption></caption>
-      </property>
-      <property>
             <name>reg_class_id</name>
             <table>aw_class</table>
             <group>settings</group>
             <type>text</type>
             <field>class_id</field>
             <caption>CLID</caption>
+            <comment>Kui klass on registreeritud, siis näitab klassile määratud ID-d</comment>
       </property>
       <property>
             <name>object_name</name>
@@ -44,6 +36,7 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Objekti nime omadus</caption>
+            <comment>Siit valitud vormi väljast võetakse objektile nimi</comment>
       </property>
       <property>
             <name>can_add</name>
@@ -53,14 +46,16 @@
             <ch_value>1</ch_value>
             <field>can_add</field>
             <caption>Saab lisada</caption>
+            <comment>Kui see märgistada, siis saab klassi lisada rohelise nupu menüü kaudu</comment>
       </property>
       <property>
             <name>class_folder</name>
             <table>aw_class</table>
             <group>settings</group>
-            <type>textbox</type>
+            <type>select</type>
             <field>class_folder</field>
-            <caption>classfolder</caption>
+            <caption>Asukoht lisamismenüüs</caption>
+            <comment>Läheb arvesse ainult siis, kui klassi 'saab lisada'</comment>
       </property>
       <property>
             <name>relationmgr</name>
@@ -72,6 +67,7 @@
             <ch_value>1</ch_value>
             <default>1</default>
             <caption>Seostehaldur</caption>
+            <comment>Kas klassil on seostehaldur?</comment>
       </property>
       <property>
             <name>no_comment</name>
@@ -92,6 +88,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Aktiivsust muuta ei saa</caption>
+            <comment>Kui see märgistada, siis ei saa klassi aktiivsust muuta, ta on alati aktiivne</comment>
       </property>
       <property>
             <name>classdef</name>
