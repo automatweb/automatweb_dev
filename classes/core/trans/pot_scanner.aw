@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.25 2005/04/15 11:19:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.26 2005/04/25 13:52:15 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -287,6 +287,11 @@ class pot_scanner extends core
 			$strings[] = array(
 				"line" => "group_".$gn,
 				"str" => "Grupi ".$gd["caption"]." ($gn) pealkiri",
+			);
+
+			$strings[] = array(
+				"line" => "group_".$gn."_help",
+				"str" => "Grupi ".$gd["caption"]." ($gn) help",
 			);
 		}
 
