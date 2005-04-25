@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.2 2005/04/25 09:47:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.3 2005/04/25 09:58:06 ahti Exp $
 // flyer.aw - Flaier 
 /*
 
@@ -67,25 +67,36 @@ class flyer extends class_base
 			case "dimensions1":
 			case "dimensions2":
 			case "dimensions3":
-				$x = (int)$prop["name"]{(strlen($prop["name"]) - 1)};
-				$fl = $arr["obj_inst"]->prop("file{$x}");
-				if (!empty($fl))
+				if(!$prop["value"] = $this->_get_size($arr))
 				{
-					$fl = basename($fl);
-					if ($fl{0} != "/")
-					{
-						$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
-					}
-					$sz = @getimagesize($fl);
-					$prop["value"] = $sz[0] . " X " . $sz[1];
+					return PROP_IGNORE;
 				}
-				else
-				{
-					$retval = PROP_IGNORE;
-				};
 				break;
 		};
 		return $retval;
+	}
+	
+	function _get_size($arr)
+	{
+		$x = (int)$arr["prop"]["name"]{(strlen($arr["prop"]["name"]) - 1)};
+		$fl = $arr["obj_inst"]->prop("file{$x}");
+		if (!empty($fl))
+		{
+			$fl = basename($fl);
+			if ($fl{0} != "/")
+			{
+				$fl = $this->cfg["site_basedir"]."/files/".$fl{0}."/".$fl;
+			}
+			$sz = @getimagesize($fl);
+			if($arr["request"])
+			{
+				return $sz[0] . " X " . $sz[1];
+			}
+			else
+			{
+				return array("width" => $sz[0], "height" => $sz[1]); 
+			}
+		}
 	}
 
 	function set_property($arr = array())
@@ -142,13 +153,23 @@ class flyer extends class_base
 	
 	function show($obj)
 	{
+		$mes = $this->_get_size(array(
+			"prop" => array(
+				"name" => "file2",
+			),
+			"obj_inst" => $obj,
+		));
 		return html::popup(array(
 			"caption" => html::img(array(
 				"url" => $this->image->get_url($obj->prop("file1")),
 				"border" => 0,
 			)),
+			"width" => $mes["width"],
+			"height" => $mes["height"],
 			"url" => $this->mk_my_orb("show_flyer", array("id" => $obj->id())),
-			
+			"menubar" => 1,
+			"resizable" => 1,
+			"scrollbars" => 1,
 		));
 	}
 	
