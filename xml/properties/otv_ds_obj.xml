@@ -41,6 +41,16 @@
             <caption>Failil nime asemel kommentaar</caption>
       </property>
       <property>
+            <name>ignore_site_id</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Objektid k&amp;otilde;ikidest saitidest</caption>
+      </property>
+      <property>
             <name>sort_by</name>
             <table>objects</table>
             <group>general</group>
