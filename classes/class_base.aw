@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.388 2005/04/23 19:51:42 duke Exp $
+// $Id: class_base.aw,v 2.389 2005/04/25 13:53:42 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -551,9 +551,9 @@ class class_base extends aw_template
 		$this->cli = &$cli;
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
-			"more_help_text" => t("rohkem infot"),
-			"close_help_text" => t("peida ära"),
-			"open_help_text" => t("abiinfo"),
+			"more_help_text" => t("Rohkem infot"),
+			"close_help_text" => t("Peida ära"),
+			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
 			"show_help" => aw_ini_get("class_base.show_help"),
 		));
