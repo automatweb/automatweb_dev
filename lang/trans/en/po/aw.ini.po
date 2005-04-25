@@ -1447,11 +1447,11 @@ msgstr "Comic script"
 
 # aw.ini:class_920
 msgid "Klassi Lao toodete otsing (920) nimi"
-msgstr ""
+msgstr "Warehouse product search"
 
 # aw.ini:class_922
 msgid "Klassi Flaier (922) nimi"
-msgstr ""
+msgstr "Flyer"
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"

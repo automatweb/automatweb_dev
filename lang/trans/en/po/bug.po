@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/applications/bug_o_matic_3000/bug.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
-msgstr ""
+msgstr "Status"
 
 # classes/applications/bug_o_matic_3000/bug.aw:prop_status_comment
 msgid "Omaduse Staatus (status) kommentaar"

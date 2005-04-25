@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Staatus (status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Kataloogid (folders) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita katalooge (show_folders) caption"] = "Show folders";
 $GLOBALS["TRANS"]["Omaduse N&auml;ita toolbari (show_add) caption"] = "Show toolbar";

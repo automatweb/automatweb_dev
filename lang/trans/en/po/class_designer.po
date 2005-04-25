@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:prop_infomsg
 msgid "Omaduse Info (infomsg) caption"
-msgstr ""
+msgstr "Info"
 
 # classes/applications/class_designer/class_designer.aw:prop_infomsg_comment
 msgid "Omaduse Info (infomsg) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:prop_class_folder
 msgid "Omaduse Asukoht lisamismenüüs (class_folder) caption"
-msgstr ""
+msgstr "Location in add menu"
 
 # classes/applications/class_designer/class_designer.aw:prop_class_folder_comment
 msgid "Omaduse Asukoht lisamismenüüs (class_folder) kommentaar"
@@ -251,7 +251,7 @@ msgstr "Visualize"
 
 #: classes/applications/class_designer/class_designer.aw:229
 msgid "Väljundkataloog ei ole kirjutatav!"
-msgstr ""
+msgstr "Output folder is not writeable"
 
 #: classes/applications/class_designer/class_designer.aw:335
 msgid "Uus tab"

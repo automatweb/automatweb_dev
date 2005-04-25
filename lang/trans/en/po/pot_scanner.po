@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/core/trans/pot_scanner.aw:622
 msgid "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
-msgstr ""
+msgstr "\n\nnumber of untranslated strings: %s\nnumber of strings: %s\n\n"
 

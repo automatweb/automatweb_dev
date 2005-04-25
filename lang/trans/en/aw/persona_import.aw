@@ -18,6 +18,8 @@ $GLOBALS["TRANS"]["Seose Kaust (RELTYPE_FOLDER) tekst"] = "folder";
 $GLOBALS["TRANS"]["Seose Logifail (RELTYPE_LOGFILE) tekst"] = "log file";
 $GLOBALS["TRANS"]["Seose Kordus (RELTYPE_RECURRENCE) tekst"] = "recurrence";
 $GLOBALS["TRANS"]["Käivita import"] = "Run import";
+$GLOBALS["TRANS"]["Jätka poolikut importi"] = "Continue unfinished import";
+$GLOBALS["TRANS"]["Impordi pildid"] = "Import images";
 $GLOBALS["TRANS"]["You forgot to enter server data"] = "You forgot to enter server data";
 $GLOBALS["TRANS"]["Nii ei saa ju rallit sõita!"] = "Ya cant drive the rally like this!";
 $GLOBALS["TRANS"]["Isikute kataloog valimata"] = "Person folder not selected";
@@ -33,6 +35,7 @@ $GLOBALS["TRANS"]["created new section<br>"] = "created new section<br>";
 $GLOBALS["TRANS"]["updating existing section"] = "updating existing section";
 $GLOBALS["TRANS"]["<h1>sections</h1>"] = "<h1>sections</h1>";
 $GLOBALS["TRANS"]["<h1>sections done</h1>"] = "<h1>sections done</h1>";
+$GLOBALS["TRANS"]["creating person)objects<br>"] = "creating person)objects<br>";
 $GLOBALS["TRANS"]["<br>creating new person object<br>"] = "<br>creating new person object<br>";
 $GLOBALS["TRANS"]["updating existing person object"] = "updating existing person object";
 ?>

@@ -185,7 +185,7 @@ msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_form_groups
 msgid "Omaduse Kasuta vormi gruppe (form_groups) caption"
-msgstr ""
+msgstr "Use form groups"
 
 # classes/contentmgmt/webform.aw:prop_form_groups_comment
 msgid "Omaduse Kasuta vormi gruppe (form_groups) kommentaar"
@@ -197,7 +197,7 @@ msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_specialtoolbar
 msgid "Omaduse Spetsiaali toolbar (specialtoolbar) caption"
-msgstr ""
+msgstr "Special toolbar"
 
 # classes/contentmgmt/webform.aw:prop_specialtoolbar_comment
 msgid "Omaduse Spetsiaali toolbar (specialtoolbar) kommentaar"
@@ -209,7 +209,7 @@ msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_groups_tbl
 msgid "Omaduse Gruppide tabel (groups_tbl) caption"
-msgstr ""
+msgstr "Groups table"
 
 # classes/contentmgmt/webform.aw:prop_groups_tbl_comment
 msgid "Omaduse Gruppide tabel (groups_tbl) kommentaar"
@@ -233,7 +233,7 @@ msgstr ""
 
 # classes/contentmgmt/webform.aw:prop_form_output_style
 msgid "Omaduse Väljundi tekstide stiil (form_output_style) caption"
-msgstr ""
+msgstr "Output text style"
 
 # classes/contentmgmt/webform.aw:prop_form_output_style_comment
 msgid "Omaduse Väljundi tekstide stiil (form_output_style) kommentaar"
@@ -397,7 +397,7 @@ msgstr "Properties"
 
 # classes/contentmgmt/webform.aw:group_special
 msgid "Grupi Spetsiaal (special) pealkiri"
-msgstr ""
+msgstr "Special"
 
 # classes/contentmgmt/webform.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
@@ -589,31 +589,31 @@ msgstr "Are you sure you want to delete selected properties?"
 
 #: classes/contentmgmt/webform.aw:513
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/contentmgmt/webform.aw:517
 msgid "Järjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/contentmgmt/webform.aw:604
 msgid "Lisa grupp"
-msgstr ""
+msgstr "Add group"
 
 #: classes/contentmgmt/webform.aw:610
 msgid "Kustuta valitud grupid"
-msgstr ""
+msgstr "Delete selected grouos"
 
 #: classes/contentmgmt/webform.aw:613
 msgid "Oled kindel, et tahad antud grupid kustutada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected groups?"
 
 #: classes/contentmgmt/webform.aw:644
 msgid "Ühtegi gruppi pole veel!"
-msgstr ""
+msgstr "No groups created yet!"
 
 #: classes/contentmgmt/webform.aw:654
 msgid "Liiguta"
-msgstr ""
+msgstr "Move"
 
 #: classes/contentmgmt/webform.aw:773
 msgid "Andmed"

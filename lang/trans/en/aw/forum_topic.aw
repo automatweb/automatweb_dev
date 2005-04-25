@@ -1,4 +1,6 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Pealkiri (name) caption"] = "Name";
+$GLOBALS["TRANS"]["Omaduse Sisu (comment) caption"] = "Content";
 $GLOBALS["TRANS"]["Omaduse Autori nimi (author_name) caption"] = "Author name";
 $GLOBALS["TRANS"]["Omaduse Autori meil (author_email) caption"] = "Author e-mail";
 $GLOBALS["TRANS"]["Omaduse Teema lukus (locked) caption"] = "Topic locked";

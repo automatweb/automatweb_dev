@@ -177,11 +177,11 @@ msgstr "Run import"
 
 #: classes/applications/persona_import/persona_import.aw:114
 msgid "Jätka poolikut importi"
-msgstr ""
+msgstr "Continue unfinished import"
 
 #: classes/applications/persona_import/persona_import.aw:120
 msgid "Impordi pildid"
-msgstr ""
+msgstr "Import images"
 
 #: classes/applications/persona_import/persona_import.aw:150
 #: classes/applications/persona_import/persona_import.aw:186
@@ -247,7 +247,7 @@ msgstr "<h1>sections done</h1>"
 
 #: classes/applications/persona_import/persona_import.aw:639
 msgid "creating person)objects<br>"
-msgstr ""
+msgstr "creating person)objects<br>"
 
 #: classes/applications/persona_import/persona_import.aw:662
 msgid "<br>creating new person object<br>"

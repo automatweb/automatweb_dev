@@ -11,6 +11,7 @@ $GLOBALS["TRANS"]["Omaduse Lao tellijate kataloog (buyers_fld) caption"] = "Ware
 $GLOBALS["TRANS"]["Omaduse Lao otsinguvorm (search_form) caption"] = "Warehouse search form";
 $GLOBALS["TRANS"]["Omaduse Haldurfirmad (manager_cos) caption"] = "Manager companies";
 $GLOBALS["TRANS"]["Omaduse Ladu m&uuml;&uuml;b tooteid, mitte pakendeid (sell_prods) caption"] = "Warehouse selles packages, not products";
+$GLOBALS["TRANS"]["Omaduse Ladu ei müü pakette (no_packets) caption"] = "Warehouse does not sell packets";
 $GLOBALS["TRANS"]["Seose kataloog (RELTYPE_FOLDER) tekst"] = "folder";
 $GLOBALS["TRANS"]["Seose otsinguvorm (RELTYPE_SEARCH_FORM) tekst"] = "search form";
 $GLOBALS["TRANS"]["Seose haldaja firma (RELTYPE_MANAGER_CO) tekst"] = "manager company";

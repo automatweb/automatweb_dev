@@ -95,7 +95,7 @@ msgstr ""
 
 # classes/image.aw:prop_comment
 msgid "Omaduse Pildi allkiri (comment) caption"
-msgstr ""
+msgstr "Image comment"
 
 # classes/image.aw:prop_comment_comment
 msgid "Omaduse Pildi allkiri (comment) kommentaar"

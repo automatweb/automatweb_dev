@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_name
 msgid "Omaduse Nimetus (name) caption"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_name_comment
 msgid "Omaduse Nimetus (name) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_prod_code
 msgid "Omaduse Tootekood (prod_code) caption"
-msgstr ""
+msgstr "Product code"
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_prod_code_comment
 msgid "Omaduse Tootekood (prod_code) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_unit
 msgid "Omaduse Ühik (unit) caption"
-msgstr ""
+msgstr "Unit"
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_unit_comment
 msgid "Omaduse Ühik (unit) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_price
 msgid "Omaduse Hind (price) caption"
-msgstr ""
+msgstr "Price"
 
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_price_comment
 msgid "Omaduse Hind (price) kommentaar"

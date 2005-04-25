@@ -74,6 +74,7 @@ msgstr ""
 msgid ""
 "Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"
 msgstr ""
+"Display event content in calendar view"
 
 # classes/calendar/calendar_view.aw:prop_show_event_content_comment
 msgid ""
@@ -88,7 +89,7 @@ msgstr ""
 
 # classes/calendar/calendar_view.aw:prop_actives_only
 msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"
-msgstr ""
+msgstr "Display only active events"
 
 # classes/calendar/calendar_view.aw:prop_actives_only_comment
 msgid "Omaduse Näita ainult aktiivseid sündmusi (actives_only) kommentaar"

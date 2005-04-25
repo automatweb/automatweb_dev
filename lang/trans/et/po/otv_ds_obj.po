@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:04 +0300\n"
+"POT-Creation-Date: Sun, 24 Apr 2005 21:11:08 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,156 +9,166 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_comment
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_help
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder
-msgid "Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) caption"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder
+msgid ""
+"Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder_comment
-msgid "Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) kommentaar"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder_comment
+msgid ""
+"Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_folder_help
 msgid "Omaduse N&auml;ita mitteaktiivseid katalooge (show_notact_folder) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick
 msgid "Omaduse Mitteaktiivsed pole klikitavad (show_notact_noclick) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick_comment
 msgid "Omaduse Mitteaktiivsed pole klikitavad (show_notact_noclick) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact_noclick_help
 msgid "Omaduse Mitteaktiivsed pole klikitavad (show_notact_noclick) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_comment
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_help
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by
 msgid "Omaduse Objekte sorteeritakse (sort_by) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by_comment
 msgid "Omaduse Objekte sorteeritakse (sort_by) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by_help
 msgid "Omaduse Objekte sorteeritakse (sort_by) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders
-msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) caption"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders
+msgid ""
+"Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) "
+"caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders_comment
-msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) kommentaar"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders_comment
+msgid ""
+"Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) "
+"kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders_help
-msgid "Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) help"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_use_meta_as_folders_help
+msgid ""
+"Omaduse Kasuta kaustade puu joonistamiseks muutujaid (use_meta_as_folders) "
+"help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform
-msgid "Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) caption"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform
+msgid ""
+"Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform_comment
-msgid "Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) kommentaar"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform_comment
+msgid ""
+"Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) "
+"kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform_help
-msgid "Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) help"
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_via_cfgform_help
+msgid ""
+"Omaduse Objekti vaatamine l&auml;bi seadete vormi (show_via_cfgform) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders
 msgid "Omaduse Kataloogid (folders) caption"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders_comment
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders_comment
 msgid "Omaduse Kataloogid (folders) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders_help
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_folders_help
 msgid "Omaduse Kataloogid (folders) help"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_ADD_TYPE
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_ADD_TYPE
 msgid "Seose lisatav objektit&uuml;&uuml;p (RELTYPE_ADD_TYPE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_TYPE
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_TYPE
 msgid "Seose n&auml;idatav objektit&uuml;&uuml;p (RELTYPE_SHOW_TYPE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_CFGFORM
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_SHOW_CFGFORM
 msgid "Seose v&auml;ljundi seadete vorm (RELTYPE_SHOW_CFGFORM) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_META
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_META
 msgid "Seose Muutuja (RELTYPE_META) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_TRANSFORM
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_TRANSFORM
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:73
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:76
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:74
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:77
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:123
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:126
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:131
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:134
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:136
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:139
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:143
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:146
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:390
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:393
 msgid "J&auml;rjekord"
 msgstr ""
-

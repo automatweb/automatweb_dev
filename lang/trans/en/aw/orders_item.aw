@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Toote nimetus (name) caption"] = "Name";
 $GLOBALS["TRANS"]["Omaduse Kood (product_code) caption"] = "code";
 $GLOBALS["TRANS"]["Omaduse Värvus (product_color) caption"] = "colour";
 $GLOBALS["TRANS"]["Omaduse Suurus (product_size) caption"] = "Size";

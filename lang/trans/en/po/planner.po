@@ -130,7 +130,7 @@ msgstr ""
 
 # classes/applications/calendar/planner.aw:prop_tab_views
 msgid "Omaduse Vaate tabid (tab_views) caption"
-msgstr ""
+msgstr "View tabs"
 
 # classes/applications/calendar/planner.aw:prop_tab_views_comment
 msgid "Omaduse Vaate tabid (tab_views) kommentaar"

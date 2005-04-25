@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
-msgstr ""
+msgstr "Start"
 
 # classes/applications/calendar/party.aw:prop_start1_comment
 msgid "Omaduse Algus (start1) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_end
 msgid "Omaduse Lõpp (end) caption"
-msgstr ""
+msgstr "End"
 
 # classes/applications/calendar/party.aw:prop_end_comment
 msgid "Omaduse Lõpp (end) kommentaar"
@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_image
 msgid "Omaduse Flyer (image) caption"
-msgstr ""
+msgstr "Flyer"
 
 # classes/applications/calendar/party.aw:prop_image_comment
 msgid "Omaduse Flyer (image) kommentaar"
@@ -47,7 +47,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 # classes/applications/calendar/party.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -59,7 +59,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_from_artist
 msgid "Omaduse Võta esineja objektist ürituse (from_artist) caption"
-msgstr ""
+msgstr "From performer object get"
 
 # classes/applications/calendar/party.aw:prop_from_artist_comment
 msgid "Omaduse Võta esineja objektist ürituse (from_artist) kommentaar"
@@ -71,7 +71,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_relman
 msgid "Omaduse Seostehaldur (relman) caption"
-msgstr ""
+msgstr "Connection manager"
 
 # classes/applications/calendar/party.aw:prop_relman_comment
 msgid "Omaduse Seostehaldur (relman) kommentaar"
@@ -83,7 +83,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_artists_toolbar
 msgid "Omaduse Esinejate toolbar (artists_toolbar) caption"
-msgstr ""
+msgstr "Performer toolbar"
 
 # classes/applications/calendar/party.aw:prop_artists_toolbar_comment
 msgid "Omaduse Esinejate toolbar (artists_toolbar) kommentaar"
@@ -95,7 +95,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_artists
 msgid "Omaduse Esinejad (artists) caption"
-msgstr ""
+msgstr "Performers"
 
 # classes/applications/calendar/party.aw:prop_artists_comment
 msgid "Omaduse Esinejad (artists) kommentaar"
@@ -107,7 +107,7 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
-msgstr ""
+msgstr "Projects"
 
 # classes/applications/calendar/party.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
@@ -119,60 +119,60 @@ msgstr ""
 
 # classes/applications/calendar/party.aw:group_artists
 msgid "Grupi Esinejad (artists) pealkiri"
-msgstr ""
+msgstr "Performers"
 
 # classes/applications/calendar/party.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
-msgstr ""
+msgstr "Projects"
 
 # classes/applications/calendar/party.aw:rel_RELTYPE_FLYER
 msgid "Seose Flaier (RELTYPE_FLYER) tekst"
-msgstr ""
+msgstr "Flyer"
 
 # classes/applications/calendar/party.aw:rel_RELTYPE_ARTIST
 msgid "Seose Esineja (RELTYPE_ARTIST) tekst"
-msgstr ""
+msgstr "Performer"
 
 #: classes/applications/calendar/party.aw:92
 msgid "--vali--"
-msgstr ""
+msgstr "--select--"
 
 #: classes/applications/calendar/party.aw:93
 msgid "Pilt"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/party.aw:94
 msgid "Sisu"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/calendar/party.aw:131
 msgid "Lisa uus esineja"
-msgstr ""
+msgstr "Add new performer"
 
 #: classes/applications/calendar/party.aw:137
 msgid "Salvesta"
-msgstr ""
+msgstr "Save"
 
 #: classes/applications/calendar/party.aw:143
 msgid "Otsi"
-msgstr ""
+msgstr "Search"
 
 #: classes/applications/calendar/party.aw:153
 msgid "Eemalda esineja"
-msgstr ""
+msgstr "Remove performer"
 
 #: classes/applications/calendar/party.aw:155
 msgid "Oled kindel, et soovid valitud esinejad eemaldada?"
-msgstr ""
+msgstr "Are you sure you want to delete selected performers?"
 
 #: classes/applications/calendar/party.aw:165
 msgid "Nimi"
-msgstr ""
+msgstr "Name"
 
 #: classes/applications/calendar/party.aw:170
 msgid "Jrk"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/calendar/party.aw:175
 msgid "Amet"
-msgstr ""
+msgstr "Profession"

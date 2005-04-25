@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Number (name) caption"] = "Number";
 $GLOBALS["TRANS"]["Omaduse Numbri tüüp (type) caption"] = "Number type";
 $GLOBALS["TRANS"]["Seose Numbriga seotud objekt (RELTYPE_BELONGTO) tekst"] = "Number belongs to";
 $GLOBALS["TRANS"]["tööl"] = "at work";

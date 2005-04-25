@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/crm/crm_company.aw:prop_name
 msgid "Omaduse Organisatsiooni nimi (name) caption"
-msgstr ""
+msgstr "Company name"
 
 # classes/crm/crm_company.aw:prop_name_comment
 msgid "Omaduse Organisatsiooni nimi (name) kommentaar"
@@ -1159,7 +1159,7 @@ msgstr "Organisation group"
 
 # classes/crm/crm_company.aw:rel_RELTYPE_CONTRACT
 msgid "Seose Leping (RELTYPE_CONTRACT) tekst"
-msgstr ""
+msgstr "Contract"
 
 # classes/crm/crm_company.aw:rel_RELTYPE_OFFER_FILE
 msgid "Seose Pakkumise fail (RELTYPE_OFFER_FILE) tekst"

@@ -138,31 +138,31 @@ msgstr ""
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:73
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:76
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:74
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:77
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:123
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:126
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:131
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:134
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:136
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:139
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:143
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:146
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr ""
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:390
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:393
 msgid "J&auml;rjekord"
 msgstr ""
 

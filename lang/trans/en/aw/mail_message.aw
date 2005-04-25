@@ -6,6 +6,7 @@ $GLOBALS["TRANS"]["Omaduse Kellelt (mfrom) caption"] = "From";
 $GLOBALS["TRANS"]["Omaduse Kellele (mto) caption"] = "To";
 $GLOBALS["TRANS"]["Omaduse Koopia (cc) caption"] = "CC";
 $GLOBALS["TRANS"]["Omaduse Pimekoopia (bcc) caption"] = "BCC";
+$GLOBALS["TRANS"]["Omaduse Teema (name) caption"] = "Subject";
 $GLOBALS["TRANS"]["Omaduse HTML kiri (html_mail) caption"] = "HTML Message";
 $GLOBALS["TRANS"]["Omaduse Sisu (message) caption"] = "Message";
 $GLOBALS["TRANS"]["Omaduse Manused (attachments) caption"] = "Attachments";

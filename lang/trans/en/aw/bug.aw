@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Staatus (status) caption"] = "Status";
 $GLOBALS["TRANS"]["Omaduse Prioriteet (priority) caption"] = "Priority";
 $GLOBALS["TRANS"]["Omaduse T&ouml;sidus (severity) caption"] = "Severity";
 $GLOBALS["TRANS"]["Omaduse Brauser (reporter_browser) caption"] = "Browser";

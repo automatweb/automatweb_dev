@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_folder
 msgid "Omaduse Toodete kaust (folder) caption"
-msgstr ""
+msgstr "Product folder"
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_folder_comment
 msgid "Omaduse Toodete kaust (folder) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_import_file
 msgid "Omaduse Andmed failist (import_file) caption"
-msgstr ""
+msgstr "Data from file"
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_import_file_comment
 msgid "Omaduse Andmed failist (import_file) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_replace_prods
 msgid "Omaduse Asenda tooted (replace_prods) caption"
-msgstr ""
+msgstr "Replace products"
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_replace_prods_comment
 msgid "Omaduse Asenda tooted (replace_prods) kommentaar"
@@ -72,29 +72,29 @@ msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:group_orders
 msgid "Grupi Tellimused (orders) pealkiri"
-msgstr ""
+msgstr "Orders"
 
 #: classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose Tootekataloog (RELTYPE_WAREHOUSE) tekst"
-msgstr ""
+msgstr "Warehouse"
 
 #: classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_FOLDER
 msgid "Seose Toodete kaust (RELTYPE_FOLDER) tekst"
-msgstr ""
+msgstr "Product folder"
 
 #: classes/applications/simple_shop/simple_shop.aw:140
 msgid "kustutan %d objekti"
-msgstr ""
+msgstr "delete %d objects"
 
 #: classes/applications/simple_shop/simple_shop.aw:143
 msgid "kustutatud"
-msgstr ""
+msgstr "deleted"
 
 #: classes/applications/simple_shop/simple_shop.aw:148
 msgid "impordin %d objekti"
-msgstr ""
+msgstr "importing %d objects"
 
 #: classes/applications/simple_shop/simple_shop.aw:173
 msgid "imporditud"
-msgstr ""
+msgstr "imported"
 

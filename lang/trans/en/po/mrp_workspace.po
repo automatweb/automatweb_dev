@@ -1378,11 +1378,11 @@ msgstr "Second"
 
 #: classes/mrp/mrp_workspace.aw:807
 msgid "V&otilde;ib alustada"
-msgstr ""
+msgstr "Can be started"
 
 #: classes/mrp/mrp_workspace.aw:808
 msgid "Ei saa alustada/t&ouml;&ouml;s"
-msgstr ""
+msgstr "Can not be started/in progress"
 
 #: classes/mrp/mrp_workspace.aw:837
 msgid "Tehtud"

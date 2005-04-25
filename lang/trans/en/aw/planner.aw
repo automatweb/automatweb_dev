@@ -9,6 +9,7 @@ $GLOBALS["TRANS"]["Omaduse Kuud navigaatoris (navigator_months) caption"] = "# o
 $GLOBALS["TRANS"]["Omaduse Näita projekte (my_projects) caption"] = "Show events from projects";
 $GLOBALS["TRANS"]["Omaduse S&uuml;ndmuste kataloog (event_folder) caption"] = "Event folder";
 $GLOBALS["TRANS"]["Omaduse Näidatavad päevad (workdays) caption"] = "Days shown in calendar";
+$GLOBALS["TRANS"]["Omaduse Vaate tabid (tab_views) caption"] = "View tabs";
 $GLOBALS["TRANS"]["Omaduse Sündmuste klassid (event_entry_classes) caption"] = "Event entry classes";
 $GLOBALS["TRANS"]["Omaduse Sündmuste klassid (event_entry_classes) kommentaar"] = "Classes selected from here can be used to add events to this calendar";
 $GLOBALS["TRANS"]["Omaduse Vabu aegu (vac_count) caption"] = "Number of free times";

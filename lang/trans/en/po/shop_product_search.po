@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_wh
 msgid "Omaduse Ladu (wh) caption"
-msgstr ""
+msgstr "Warehouse"
 
 #: classes/applications/shop/shop_product_search.aw:prop_wh_comment
 msgid "Omaduse Ladu (wh) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_objs_in_res
 msgid "Omaduse Tulemuseks on  (objs_in_res) caption"
-msgstr ""
+msgstr "Result displays"
 
 #: classes/applications/shop/shop_product_search.aw:prop_objs_in_res_comment
 msgid "Omaduse Tulemuseks on  (objs_in_res) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:prop_search_btn_caption
 msgid "Omaduse Otsi nupu tekst (search_btn_caption) caption"
-msgstr ""
+msgstr "Search button text"
 
 #: classes/applications/shop/shop_product_search.aw:prop_search_btn_caption_comment
 msgid "Omaduse Otsi nupu tekst (search_btn_caption) kommentaar"
@@ -96,41 +96,41 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_search.aw:group_s_form
 msgid "Grupi Koosta otsinguvorm (s_form) pealkiri"
-msgstr ""
+msgstr "Create search form"
 
 #: classes/applications/shop/shop_product_search.aw:group_s_res
 msgid "Grupi Koosta tulemuste tabel (s_res) pealkiri"
-msgstr ""
+msgstr "Create result table"
 
 #: classes/applications/shop/shop_product_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
-msgstr ""
+msgstr "Seearch"
 
 #: classes/applications/shop/shop_product_search.aw:rel_RELTYPE_WAREHOUSE
 msgid "Seose ladu (RELTYPE_WAREHOUSE) tekst"
-msgstr ""
+msgstr "warehouse"
 
 #: classes/applications/shop/shop_product_search.aw:122 classes/applications/shop/shop_product_search.aw:248
 msgid "Klass"
-msgstr ""
+msgstr "Class"
 
 #: classes/applications/shop/shop_product_search.aw:128 classes/applications/shop/shop_product_search.aw:254
 msgid "Omadus"
-msgstr ""
+msgstr "Property"
 
 #: classes/applications/shop/shop_product_search.aw:134
 msgid "Vormis?"
-msgstr ""
+msgstr "In form?"
 
 #: classes/applications/shop/shop_product_search.aw:140
 msgid "Tekst"
-msgstr ""
+msgstr "Text"
 
 #: classes/applications/shop/shop_product_search.aw:260
 msgid "Tabelis?"
-msgstr ""
+msgstr "In table?"
 
 #: classes/applications/shop/shop_product_search.aw:266
 msgid "Tulba pealkiri"
-msgstr ""
+msgstr "Column heading"
 

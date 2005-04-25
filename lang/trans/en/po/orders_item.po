@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/applications/orders/orders_item.aw:prop_name
 msgid "Omaduse Toote nimetus (name) caption"
-msgstr ""
+msgstr "Name"
 
 # classes/applications/orders/orders_item.aw:prop_name_comment
 msgid "Omaduse Toote nimetus (name) kommentaar"

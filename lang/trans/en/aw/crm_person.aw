@@ -25,6 +25,7 @@ $GLOBALS["TRANS"]["Omaduse Aadress (address) caption"] = "Address";
 $GLOBALS["TRANS"]["Omaduse Meiliaadressid (email) caption"] = "Mail addresses";
 $GLOBALS["TRANS"]["Omaduse Telefoninumbrid (phone) caption"] = "Phone numbers";
 $GLOBALS["TRANS"]["Omaduse Veebiaadressid (url) caption"] = "Websites";
+$GLOBALS["TRANS"]["Omaduse Kontakt (comment) caption"] = "Contact";
 $GLOBALS["TRANS"]["Omaduse org_actions (org_actions) caption"] = "org_actions";
 $GLOBALS["TRANS"]["Omaduse Kõned (org_calls) caption"] = "Phonecalls";
 $GLOBALS["TRANS"]["Omaduse Kohtumised (org_meetings) caption"] = "Meetings";

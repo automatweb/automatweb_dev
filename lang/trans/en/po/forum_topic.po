@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/contentmgmt/forum/forum_topic.aw:prop_name
 msgid "Omaduse Pealkiri (name) caption"
-msgstr ""
+msgstr "Name"
 
 # classes/contentmgmt/forum/forum_topic.aw:prop_name_comment
 msgid "Omaduse Pealkiri (name) kommentaar"
@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/contentmgmt/forum/forum_topic.aw:prop_comment
 msgid "Omaduse Sisu (comment) caption"
-msgstr ""
+msgstr "Content"
 
 # classes/contentmgmt/forum/forum_topic.aw:prop_comment_comment
 msgid "Omaduse Sisu (comment) kommentaar"

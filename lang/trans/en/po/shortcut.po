@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/admin/shortcut.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
-msgstr ""
+msgstr "Status"
 
 # classes/admin/shortcut.aw:prop_status_comment
 msgid "Omaduse Staatus (status) kommentaar"

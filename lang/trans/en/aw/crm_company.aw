@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Organisatsiooni nimi (name) caption"] = "Company name";
 $GLOBALS["TRANS"]["Omaduse Registri number (reg_nr) caption"] = "Register number";
 $GLOBALS["TRANS"]["Omaduse Õiguslik vorm (ettevotlusvorm) caption"] = "Legal form";
 $GLOBALS["TRANS"]["Omaduse Organisatsiooni logo(url) (logo) caption"] = "Company logo (url)";
@@ -112,6 +113,7 @@ $GLOBALS["TRANS"]["Seose Projekt (RELTYPE_PROJECT) tekst"] = "Project";
 $GLOBALS["TRANS"]["Seose Kliendihaldur (RELTYPE_CLIENT_MANAGER) tekst"] = "Clent manager";
 $GLOBALS["TRANS"]["Seose Üksus veebis (RELTYPE_SECTION_WEBSIDE) tekst"] = "Section webside";
 $GLOBALS["TRANS"]["Seose organisatsiooni grupp (RELTYPE_GROUP) tekst"] = "Organisation group";
+$GLOBALS["TRANS"]["Seose Leping (RELTYPE_CONTRACT) tekst"] = "Contract";
 $GLOBALS["TRANS"]["Seose Pakkumise fail (RELTYPE_OFFER_FILE) tekst"] = "Offer file";
 $GLOBALS["TRANS"]["Muuda"] = "Change";
 $GLOBALS["TRANS"]["Otsi kogu süsteemist"] = "Search everywhere";

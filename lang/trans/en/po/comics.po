@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_start1
 msgid "Omaduse Avaldatakse (start1) caption"
-msgstr ""
+msgstr "Publication date"
 
 #: classes/applications/calendar/comics.aw:prop_start1_comment
 msgid "Omaduse Avaldatakse (start1) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/comics.aw:prop_image_comment
 msgid "Omaduse Pilt (image) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_num
 msgid "Omaduse Koomiksi number (num) caption"
-msgstr ""
+msgstr "Comic number"
 
 #: classes/applications/calendar/comics.aw:prop_num_comment
 msgid "Omaduse Koomiksi number (num) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
-msgstr ""
+msgstr "Content"
 
 #: classes/applications/calendar/comics.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_relman
 msgid "Omaduse Seostehaldur (relman) caption"
-msgstr ""
+msgstr "Connection manager"
 
 #: classes/applications/calendar/comics.aw:prop_relman_comment
 msgid "Omaduse Seostehaldur (relman) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:prop_project_selector
 msgid "Omaduse Projektid (project_selector) caption"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/comics.aw:prop_project_selector_comment
 msgid "Omaduse Projektid (project_selector) kommentaar"
@@ -96,17 +96,17 @@ msgstr ""
 
 #: classes/applications/calendar/comics.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
-msgstr ""
+msgstr "Projects"
 
 #: classes/applications/calendar/comics.aw:group_scripts
 msgid "Grupi Skriptid (scripts) pealkiri"
-msgstr ""
+msgstr "Scripts"
 
 #: classes/applications/calendar/comics.aw:rel_RELTYPE_PICTURE
 msgid "Seose Pilt (RELTYPE_PICTURE) tekst"
-msgstr ""
+msgstr "Image"
 
 #: classes/applications/calendar/comics.aw:rel_RELTYPE_SCRIPT
 msgid "Seose Skript (RELTYPE_SCRIPT) tekst"
-msgstr ""
+msgstr "Script"
 

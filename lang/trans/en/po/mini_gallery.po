@@ -67,4 +67,4 @@ msgstr "image folder"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:181
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
-msgstr ""
+msgstr "No add access to the selected image folder"

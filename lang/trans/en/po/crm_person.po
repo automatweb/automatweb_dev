@@ -335,7 +335,7 @@ msgstr ""
 
 # classes/crm/crm_person.aw:prop_comment
 msgid "Omaduse Kontakt (comment) caption"
-msgstr ""
+msgstr "Contact"
 
 # classes/crm/crm_person.aw:prop_comment_comment
 msgid "Omaduse Kontakt (comment) kommentaar"

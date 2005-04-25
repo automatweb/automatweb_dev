@@ -5,6 +5,7 @@ $GLOBALS["TRANS"]["Omaduse Pilt (file) caption"] = "Image";
 $GLOBALS["TRANS"]["Omaduse Mõõtmed (dimensions) caption"] = "Dimensions";
 $GLOBALS["TRANS"]["Omaduse Suur pilt (file2) caption"] = "Big image";
 $GLOBALS["TRANS"]["Omaduse Kustuta suur pilt (file2_del) caption"] = "Delete big image";
+$GLOBALS["TRANS"]["Omaduse Pildi allkiri (comment) caption"] = "Image comment";
 $GLOBALS["TRANS"]["Omaduse Pildi autor (author) caption"] = "Image author";
 $GLOBALS["TRANS"]["Omaduse Alt (alt) caption"] = "Alt";
 $GLOBALS["TRANS"]["Omaduse Link (link) caption"] = "Lnk";

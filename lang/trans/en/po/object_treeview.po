@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
-msgstr ""
+msgstr "Status"
 
 # classes/contentmgmt/object_treeview.aw:prop_status_comment
 msgid "Omaduse Staatus (status) kommentaar"

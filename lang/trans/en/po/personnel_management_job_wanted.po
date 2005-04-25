@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_name
 msgid "Omaduse Ametinimetus (name) caption"
-msgstr ""
+msgstr "Profession"
 
 # classes/applications/personnel_management/personnel_management_job_wanted.aw:prop_name_comment
 msgid "Omaduse Ametinimetus (name) kommentaar"

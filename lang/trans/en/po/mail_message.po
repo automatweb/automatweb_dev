@@ -95,7 +95,7 @@ msgstr ""
 
 # classes/applications/messenger/mail_message.aw:prop_name
 msgid "Omaduse Teema (name) caption"
-msgstr ""
+msgstr "Subject"
 
 # classes/applications/messenger/mail_message.aw:prop_name_comment
 msgid "Omaduse Teema (name) kommentaar"

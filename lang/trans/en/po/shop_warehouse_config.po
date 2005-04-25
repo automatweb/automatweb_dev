@@ -168,7 +168,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse_config.aw:prop_no_packets
 msgid "Omaduse Ladu ei müü pakette (no_packets) caption"
-msgstr ""
+msgstr "Warehouse does not sell packets"
 
 # classes/applications/shop/shop_warehouse_config.aw:prop_no_packets_comment
 msgid "Omaduse Ladu ei müü pakette (no_packets) kommentaar"

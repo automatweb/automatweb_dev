@@ -11,7 +11,7 @@ msgstr ""
 
 # classes/crm/crm_phone.aw:prop_name
 msgid "Omaduse Number (name) caption"
-msgstr ""
+msgstr "Number"
 
 # classes/crm/crm_phone.aw:prop_name_comment
 msgid "Omaduse Number (name) kommentaar"

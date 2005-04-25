@@ -1,4 +1,5 @@
 <?php
+$GLOBALS["TRANS"]["Omaduse Ametinimetus (name) caption"] = "Profession";
 $GLOBALS["TRANS"]["Omaduse Palgasoov (palgasoov) caption"] = "Salary wanted";
 $GLOBALS["TRANS"]["Omaduse Tegevusala (valdkond) caption"] = "Area of acitvity";
 $GLOBALS["TRANS"]["Omaduse T&ouml;&ouml; liik (liik) caption"] = "Job type";
