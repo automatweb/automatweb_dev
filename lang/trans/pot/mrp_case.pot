@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:18 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -554,24 +554,48 @@ msgstr ""
 msgid "Grupi &Uuml;ldine (grp_general) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_case.aw:group_grp_general_help
+msgid "Grupi &Uuml;ldine (grp_general) help"
+msgstr ""
+
 #: classes/mrp/mrp_case.aw:group_grp_case_data
 msgid "Grupi Projekti andmed (grp_case_data) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:group_grp_case_data_help
+msgid "Grupi Projekti andmed (grp_case_data) help"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:group_grp_case_workflow
 msgid "Grupi Ressursid ja töövoog (grp_case_workflow) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_case.aw:group_grp_case_workflow_help
+msgid "Grupi Ressursid ja töövoog (grp_case_workflow) help"
+msgstr ""
+
 #: classes/mrp/mrp_case.aw:group_grp_case_schedule
 msgid "Grupi Kalender (grp_case_schedule) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:group_grp_case_schedule_help
+msgid "Grupi Kalender (grp_case_schedule) help"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:group_grp_case_comments
 msgid "Grupi Kommentaarid (grp_case_comments) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_case.aw:group_grp_case_comments_help
+msgid "Grupi Kommentaarid (grp_case_comments) help"
+msgstr ""
+
 #: classes/mrp/mrp_case.aw:group_grp_case_log
 msgid "Grupi Ajalugu (grp_case_log) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_case.aw:group_grp_case_log_help
+msgid "Grupi Ajalugu (grp_case_log) help"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:rel_RELTYPE_MRP_MANAGER

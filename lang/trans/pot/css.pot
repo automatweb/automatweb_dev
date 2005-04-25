@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:05 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -470,8 +470,16 @@ msgstr ""
 msgid "Grupi Tabel (table) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/css.aw:group_table_help
+msgid "Grupi Tabel (table) help"
+msgstr ""
+
 #: classes/contentmgmt/css.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/css.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
 #: classes/contentmgmt/css.aw:rel_RELTYPE_CSS

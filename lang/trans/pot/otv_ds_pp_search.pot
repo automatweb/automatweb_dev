@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri,  8 Apr 2005 21:44:33 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -32,30 +32,6 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_sform_t_help
 msgid "Omaduse Otsinguvorm (sform_t) help"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit
-msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) caption"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit_comment
-msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit_help
-msgid "Omaduse &Auml;ra n&auml;ita otsi nuppu (no_submit) help"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form
-msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) caption"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form_comment
-msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_search_form_help
-msgid "Omaduse &Auml;ra n&auml;ita otsingu vormi (otsing ainult urli kaudu) (no_search_form) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_no_submit
@@ -122,12 +98,24 @@ msgstr ""
 msgid "Grupi Otsinguvorm (sform) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_sform_help
+msgid "Grupi Otsinguvorm (sform) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_stbl
 msgid "Grupi Tulemuste tabel (stbl) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_stbl_help
+msgid "Grupi Tulemuste tabel (stbl) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_srch
 msgid "Grupi Otsi (srch) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_srch_help
+msgid "Grupi Otsi (srch) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:rel_RELTYPE_PP

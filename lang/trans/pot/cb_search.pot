@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:24 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:31 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -146,16 +146,32 @@ msgstr ""
 msgid "Grupi Väljad (props) pealkiri"
 msgstr ""
 
+#: classes/cfg/cb_search.aw:group_props_help
+msgid "Grupi Väljad (props) help"
+msgstr ""
+
 #: classes/cfg/cb_search.aw:group_mktbl
 msgid "Grupi Koosta tulemuste tabel (mktbl) pealkiri"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:group_mktbl_help
+msgid "Grupi Koosta tulemuste tabel (mktbl) help"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:group_parents
 msgid "Grupi Kataloogid (parents) pealkiri"
 msgstr ""
 
+#: classes/cfg/cb_search.aw:group_parents_help
+msgid "Grupi Kataloogid (parents) help"
+msgstr ""
+
 #: classes/cfg/cb_search.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:group_search_help
+msgid "Grupi Otsi (search) help"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:rel_RELTYPE_SYN

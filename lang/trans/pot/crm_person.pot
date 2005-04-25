@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:39 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -530,60 +530,120 @@ msgstr ""
 msgid "Grupi Üldine (general2) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_general2_help
+msgid "Grupi Üldine (general2) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_description
 msgid "Grupi Kirjeldus (description) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_description_help
+msgid "Grupi Kirjeldus (description) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_relatives
 msgid "Grupi Sugulased (relatives) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_relatives_help
+msgid "Grupi Sugulased (relatives) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_contact
 msgid "Grupi Kontaktandmed (contact) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_contact_help
+msgid "Grupi Kontaktandmed (contact) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_overview
 msgid "Grupi Tegevused (overview) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_overview_help
+msgid "Grupi Tegevused (overview) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_all_actions
 msgid "Grupi Kõik (all_actions) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_all_actions_help
+msgid "Grupi Kõik (all_actions) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_calls
 msgid "Grupi Kõned (calls) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_calls_help
+msgid "Grupi Kõned (calls) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_meetings
 msgid "Grupi Kohtumised (meetings) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_meetings_help
+msgid "Grupi Kohtumised (meetings) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_tasks_help
+msgid "Grupi Toimetused (tasks) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_forms
 msgid "Grupi Väljundid (forms) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_forms_help
+msgid "Grupi Väljundid (forms) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_cv
 msgid "Grupi Elulugu (cv) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_cv_help
+msgid "Grupi Elulugu (cv) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_education
 msgid "Grupi Hariduskäik (education) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_education_help
+msgid "Grupi Hariduskäik (education) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:group_add_edu
 msgid "Grupi Täienduskoolitus (add_edu) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_add_edu_help
+msgid "Grupi Täienduskoolitus (add_edu) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_experiences
 msgid "Grupi Töökogemused (experiences) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_person.aw:group_experiences_help
+msgid "Grupi Töökogemused (experiences) help"
+msgstr ""
+
 #: classes/crm/crm_person.aw:group_recommends
 msgid "Grupi Soovitajad (recommends) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_person.aw:group_recommends_help
+msgid "Grupi Soovitajad (recommends) help"
 msgstr ""
 
 #: classes/crm/crm_person.aw:rel_RELTYPE_ADDRESS

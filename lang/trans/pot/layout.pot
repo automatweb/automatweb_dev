@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:23 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -230,28 +230,56 @@ msgstr ""
 msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/layout.aw:group_settings_help
+msgid "Grupi M&auml;&auml;rangud (settings) help"
+msgstr ""
+
 #: classes/contentmgmt/layout.aw:group_layout
 msgid "Grupi Tabel (layout) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:group_layout_help
+msgid "Grupi Tabel (layout) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/layout.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
+msgstr ""
+
 #: classes/contentmgmt/layout.aw:group_aliases
 msgid "Grupi Tabeli sisu (aliases) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:group_aliases_help
+msgid "Grupi Tabeli sisu (aliases) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:group_hfoot
 msgid "Grupi P&auml;is ja jalus (hfoot) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/layout.aw:group_hfoot_help
+msgid "Grupi P&auml;is ja jalus (hfoot) help"
+msgstr ""
+
 #: classes/contentmgmt/layout.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/layout.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
 #: classes/contentmgmt/layout.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/layout.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
 #: classes/contentmgmt/layout.aw:rel_RELTYPE_CELLSTYLE_FOLDER

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:19 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:35 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -96,6 +96,10 @@ msgstr ""
 
 #: classes/core/aw_help.aw:group_help_ui
 msgid "Grupi Omadused (help_ui) pealkiri"
+msgstr ""
+
+#: classes/core/aw_help.aw:group_help_ui_help
+msgid "Grupi Omadused (help_ui) help"
 msgstr ""
 
 #: classes/core/aw_help.aw:48

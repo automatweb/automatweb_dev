@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:22 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -122,20 +122,40 @@ msgstr ""
 msgid "Grupi Klikke (clicks) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/poll.aw:group_clicks_help
+msgid "Grupi Klikke (clicks) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_clicks_stats
 msgid "Grupi Statistika (clicks_stats) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_clicks_stats_help
+msgid "Grupi Statistika (clicks_stats) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:group_clicks_detail
 msgid "Grupi Vastajad (clicks_detail) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/poll.aw:group_clicks_detail_help
+msgid "Grupi Vastajad (clicks_detail) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_translate
 msgid "Grupi T&otilde;lgi (translate) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/poll.aw:group_translate_help
+msgid "Grupi T&otilde;lgi (translate) help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/poll.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
 #: classes/contentmgmt/poll.aw:470

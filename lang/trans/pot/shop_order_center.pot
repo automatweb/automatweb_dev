@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:26 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -302,16 +302,32 @@ msgstr ""
 msgid "Grupi Makseviisid (payment) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_order_center.aw:group_payment_help
+msgid "Grupi Makseviisid (payment) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:group_appear
 msgid "Grupi N&auml;itamine (appear) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_appear_help
+msgid "Grupi N&auml;itamine (appear) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:group_psfieldmap
 msgid "Grupi Isukuandmete kaart (psfieldmap) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_order_center.aw:group_psfieldmap_help
+msgid "Grupi Isukuandmete kaart (psfieldmap) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:group_orgfieldmap
 msgid "Grupi Firma andmete kaart (orgfieldmap) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:group_orgfieldmap_help
+msgid "Grupi Firma andmete kaart (orgfieldmap) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:rel_RELTYPE_WAREHOUSE

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:41 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:19 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -266,32 +266,64 @@ msgstr ""
 msgid "Grupi Baasi salvestamise seaded (db_saving_settings) pealkiri"
 msgstr ""
 
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_db_saving_settings_help
+msgid "Grupi Baasi salvestamise seaded (db_saving_settings) help"
+msgstr ""
+
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_additional_info
 msgid "Grupi Lisainfo korterite tabeli jaoks (additional_info) pealkiri"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_additional_info_help
+msgid "Grupi Lisainfo korterite tabeli jaoks (additional_info) help"
 msgstr ""
 
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_content_change
 msgid "Grupi XML-i muutmine (content_change) pealkiri"
 msgstr ""
 
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_content_change_help
+msgid "Grupi XML-i muutmine (content_change) help"
+msgstr ""
+
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_group_01
 msgid "Grupi Tab 01 (group_01) pealkiri"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_group_01_help
+msgid "Grupi Tab 01 (group_01) help"
 msgstr ""
 
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_group_02
 msgid "Grupi Tab 02 (group_02) pealkiri"
 msgstr ""
 
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_group_02_help
+msgid "Grupi Tab 02 (group_02) help"
+msgstr ""
+
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_group_03
 msgid "Grupi Tab 03 (group_03) pealkiri"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_group_03_help
+msgid "Grupi Tab 03 (group_03) help"
 msgstr ""
 
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_group_04
 msgid "Grupi Tab 04 (group_04) pealkiri"
 msgstr ""
 
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_group_04_help
+msgid "Grupi Tab 04 (group_04) help"
+msgstr ""
+
 #: classes/applications/xml_editor/maja_xml_editor.aw:group_group_05
 msgid "Grupi Tab 05 (group_05) pealkiri"
+msgstr ""
+
+#: classes/applications/xml_editor/maja_xml_editor.aw:group_group_05_help
+msgid "Grupi Tab 05 (group_05) help"
 msgstr ""
 
 #: classes/applications/xml_editor/maja_xml_editor.aw:rel_RELTYPE_DB_TABLE_CONTENTS

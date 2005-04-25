@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:11 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/crm/crm_country.aw:prop_name
+msgid "Omaduse Riigi nimetus (name) caption"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_name_comment
+msgid "Omaduse Riigi nimetus (name) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_country.aw:prop_name_help
+msgid "Omaduse Riigi nimetus (name) help"
+msgstr ""
 
 #: classes/crm/crm_country.aw:prop_name_en
 msgid "Omaduse Nimetus inglise keeles (name_en) caption"

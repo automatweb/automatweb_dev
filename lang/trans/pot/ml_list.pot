@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:38 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:20 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -458,48 +458,96 @@ msgstr ""
 msgid "Grupi Liikmed (membership) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_membership_help
+msgid "Grupi Liikmed (membership) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_member_list
 msgid "Grupi Nimekiri (member_list) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_member_list_help
+msgid "Grupi Nimekiri (member_list) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:group_subscribing
 msgid "Grupi Liitumine (subscribing) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_subscribing_help
+msgid "Grupi Liitumine (subscribing) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_unsubscribing
 msgid "Grupi Lahkumine (unsubscribing) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_unsubscribing_help
+msgid "Grupi Lahkumine (unsubscribing) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:group_export_members
 msgid "Grupi Eksport (export_members) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_export_members_help
+msgid "Grupi Eksport (export_members) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_export_to_file
 msgid "Grupi Eksport faili (export_to_file) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_export_to_file_help
+msgid "Grupi Eksport faili (export_to_file) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:group_raports
 msgid "Grupi Kirjad (raports) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_raports_help
+msgid "Grupi Kirjad (raports) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_list_status
 msgid "Grupi Saadetud kirjad (list_status) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_list_status_help
+msgid "Grupi Saadetud kirjad (list_status) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:group_unsent
 msgid "Grupi Saatmata kirjad (unsent) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_unsent_help
+msgid "Grupi Saatmata kirjad (unsent) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_write_mail
 msgid "Grupi Saada kiri (write_mail) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_write_mail_help
+msgid "Grupi Saada kiri (write_mail) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:group_mail_report
 msgid "Grupi Kirja raport (mail_report) pealkiri"
 msgstr ""
 
+#: classes/applications/mailinglist/ml_list.aw:group_mail_report_help
+msgid "Grupi Kirja raport (mail_report) help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:group_show_mail
 msgid "Grupi Listi kiri (show_mail) pealkiri"
+msgstr ""
+
+#: classes/applications/mailinglist/ml_list.aw:group_show_mail_help
+msgid "Grupi Listi kiri (show_mail) help"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:rel_RELTYPE_MEMBER_PARENT
@@ -650,43 +698,43 @@ msgstr ""
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1677
+#: classes/applications/mailinglist/ml_list.aw:1763
 msgid "jah"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1677
+#: classes/applications/mailinglist/ml_list.aw:1763
 msgid "ei"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1723
+#: classes/applications/mailinglist/ml_list.aw:1809
 msgid "Liikmeid: %s, saadetud: %s %s"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1805
+#: classes/applications/mailinglist/ml_list.aw:1891
 msgid " - vali - "
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1814
+#: classes/applications/mailinglist/ml_list.aw:1900
 msgid "Vali template"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1823
+#: classes/applications/mailinglist/ml_list.aw:1909
 msgid "Saada peale salvestamist ära"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1840
+#: classes/applications/mailinglist/ml_list.aw:1926
 msgid "Saatja e-maili aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1845
+#: classes/applications/mailinglist/ml_list.aw:1931
 msgid "Saatja nimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1853
+#: classes/applications/mailinglist/ml_list.aw:1939
 msgid "Asenduste legend"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1854
+#: classes/applications/mailinglist/ml_list.aw:1940
 msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
@@ -697,7 +745,7 @@ msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							Näiteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2127
+#: classes/applications/mailinglist/ml_list.aw:2213
 msgid "all done"
 msgstr ""
 

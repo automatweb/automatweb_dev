@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:38 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:14 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -192,6 +192,10 @@ msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:group_test
 msgid "Grupi Test (test) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/recurrence.aw:group_test_help
+msgid "Grupi Test (test) help"
 msgstr ""
 
 #: classes/applications/calendar/recurrence.aw:147

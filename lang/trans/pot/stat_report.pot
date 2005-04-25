@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:08 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:03 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,10 @@ msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:group_settings
 msgid "Grupi Seadistamine (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/stat_report/stat_report.aw:group_settings_help
+msgid "Grupi Seadistamine (settings) help"
 msgstr ""
 
 #: classes/applications/stat_report/stat_report.aw:rel_RELTYPE_REPORT_TYPE

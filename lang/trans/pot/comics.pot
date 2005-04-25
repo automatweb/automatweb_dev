@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:13 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -98,8 +98,16 @@ msgstr ""
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/comics.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
+msgstr ""
+
 #: classes/applications/calendar/comics.aw:group_scripts
 msgid "Grupi Skriptid (scripts) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/comics.aw:group_scripts_help
+msgid "Grupi Skriptid (scripts) help"
 msgstr ""
 
 #: classes/applications/calendar/comics.aw:rel_RELTYPE_PICTURE

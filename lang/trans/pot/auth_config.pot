@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:32 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -38,8 +38,16 @@ msgstr ""
 msgid "Grupi Autentimine (servers) pealkiri"
 msgstr ""
 
+#: classes/core/users/auth/auth_config.aw:group_servers_help
+msgid "Grupi Autentimine (servers) help"
+msgstr ""
+
 #: classes/core/users/auth/auth_config.aw:group_activity
 msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+#: classes/core/users/auth/auth_config.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
 #: classes/core/users/auth/auth_config.aw:rel_RELTYPE_AUTH_SERVER

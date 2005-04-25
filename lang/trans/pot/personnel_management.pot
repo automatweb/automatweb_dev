@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:28 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:06 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -398,100 +398,200 @@ msgstr ""
 msgid "Grupi Minu profiil (my_profile) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_my_profile_help
+msgid "Grupi Minu profiil (my_profile) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile
 msgid "Grupi Tööpakkuja profiil (org_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_org_profile_help
+msgid "Grupi Tööpakkuja profiil (org_profile) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_employee
 msgid "Grupi Tööotsijad (employee) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_employee_help
+msgid "Grupi Tööotsijad (employee) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_employers
 msgid "Grupi Tööpakkumised (employers) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_employers_help
+msgid "Grupi Tööpakkumised (employers) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_managers
 msgid "Grupi Halduri profiil (managers) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_managers_help
+msgid "Grupi Halduri profiil (managers) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_mycvs
 msgid "Grupi Minu CV-d (my_profile_mycvs) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_my_profile_mycvs_help
+msgid "Grupi Minu CV-d (my_profile_mycvs) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_candits
 msgid "Grupi Kandideerin (my_profile_candits) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_my_profile_candits_help
+msgid "Grupi Kandideerin (my_profile_candits) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_my_profile_personal
 msgid "Grupi Minu andmed (my_profile_personal) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_my_profile_personal_help
+msgid "Grupi Minu andmed (my_profile_personal) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_jobs
 msgid "Grupi Tööpakkumised (org_profile_jobs) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_org_profile_jobs_help
+msgid "Grupi Tööpakkumised (org_profile_jobs) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_candits
 msgid "Grupi Kandideerijad (org_profile_candits) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_org_profile_candits_help
+msgid "Grupi Kandideerijad (org_profile_candits) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_org_profile_info
 msgid "Grupi Tööpakkuja andmed (org_profile_info) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_org_profile_info_help
+msgid "Grupi Tööpakkuja andmed (org_profile_info) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_all_setings
 msgid "Grupi Seadistused (all_setings) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_all_setings_help
+msgid "Grupi Seadistused (all_setings) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_dir_setings
 msgid "Grupi Kaustade seaded (dir_setings) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_dir_setings_help
+msgid "Grupi Kaustade seaded (dir_setings) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_layout_setings
 msgid "Grupi Seaded (layout_setings) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_layout_setings_help
+msgid "Grupi Seaded (layout_setings) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_env_setings
 msgid "Grupi Keskkonna seaded (env_setings) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_env_setings_help
+msgid "Grupi Keskkonna seaded (env_setings) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_education_setings
 msgid "Grupi Haridus seaded (education_setings) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_education_setings_help
+msgid "Grupi Haridus seaded (education_setings) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join
 msgid "Grupi Registreeru (my_join) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_my_join_help
+msgid "Grupi Registreeru (my_join) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join_worker
 msgid "Grupi T&ouml;&ouml;otsija (my_join_worker) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_my_join_worker_help
+msgid "Grupi T&ouml;&ouml;otsija (my_join_worker) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_my_join_offerer
 msgid "Grupi T&ouml;&ouml;pakkuja (my_join_offerer) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_my_join_offerer_help
+msgid "Grupi T&ouml;&ouml;pakkuja (my_join_offerer) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile
 msgid "Grupi Halduri profiil (manager_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_help
+msgid "Grupi Halduri profiil (manager_profile) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_persons
 msgid "Grupi Tööotsijad (manager_profile_persons) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_persons_help
+msgid "Grupi Tööotsijad (manager_profile_persons) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_orgs
 msgid "Grupi Tööpakkujad (manager_profile_orgs) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_manager_profile_orgs_help
+msgid "Grupi Tööpakkujad (manager_profile_orgs) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:group_search
 msgid "Grupi Otsi (search) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_search_help
+msgid "Grupi Otsi (search) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_search_cv
 msgid "Grupi Otsi CV'sid (search_cv) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management.aw:group_search_cv_help
+msgid "Grupi Otsi CV'sid (search_cv) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management.aw:group_search_offer
 msgid "Grupi Otsi pakkumisi (search_offer) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management.aw:group_search_offer_help
+msgid "Grupi Otsi pakkumisi (search_offer) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management.aw:rel_RELTYPE_MENU

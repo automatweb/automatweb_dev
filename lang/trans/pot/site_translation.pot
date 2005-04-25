@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:20 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -134,60 +134,120 @@ msgstr ""
 msgid "Grupi Tõlgitud (translated) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_translated_help
+msgid "Grupi Tõlgitud (translated) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_untranslated
 msgid "Grupi Tõlkimata (untranslated) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_untranslated_help
+msgid "Grupi Tõlkimata (untranslated) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_in_progress
 msgid "Grupi T&ouml;&ouml;s (in_progress) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_in_progress_help
+msgid "Grupi T&ouml;&ouml;s (in_progress) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_utr_all
 msgid "Grupi Kõik (utr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_all_help
+msgid "Grupi Kõik (utr_all) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_utr_day
 msgid "Grupi Viimane päev (utr_day) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_utr_day_help
+msgid "Grupi Viimane päev (utr_day) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_utr_week
 msgid "Grupi Viimane nädal (utr_week) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_utr_week_help
+msgid "Grupi Viimane nädal (utr_week) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_utr_month
 msgid "Grupi Viimane kuu (utr_month) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_utr_month_help
+msgid "Grupi Viimane kuu (utr_month) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_ipr_all
 msgid "Grupi Kõik (ipr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_all_help
+msgid "Grupi Kõik (ipr_all) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_ipr_day
 msgid "Grupi Viimane päev (ipr_day) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_ipr_day_help
+msgid "Grupi Viimane päev (ipr_day) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_ipr_week
 msgid "Grupi Viimane nädal (ipr_week) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_ipr_week_help
+msgid "Grupi Viimane nädal (ipr_week) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_ipr_month
 msgid "Grupi Viimane kuu (ipr_month) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_ipr_month_help
+msgid "Grupi Viimane kuu (ipr_month) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_tr_all
 msgid "Grupi Kõik (tr_all) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_all_help
+msgid "Grupi Kõik (tr_all) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:group_tr_day
 msgid "Grupi Viimane päev (tr_day) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_tr_day_help
+msgid "Grupi Viimane päev (tr_day) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_tr_week
 msgid "Grupi Viimane nädal (tr_week) pealkiri"
 msgstr ""
 
+#: classes/translate/site_translation.aw:group_tr_week_help
+msgid "Grupi Viimane nädal (tr_week) help"
+msgstr ""
+
 #: classes/translate/site_translation.aw:group_tr_month
 msgid "Grupi Viimane kuu (tr_month) pealkiri"
+msgstr ""
+
+#: classes/translate/site_translation.aw:group_tr_month_help
+msgid "Grupi Viimane kuu (tr_month) help"
 msgstr ""
 
 #: classes/translate/site_translation.aw:rel_RELTYPE_CLASS

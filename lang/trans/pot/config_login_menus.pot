@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:36 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -38,11 +38,15 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) pealkiri"
 msgstr ""
 
+#: classes/admin/config/config_login_menus.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
+msgstr ""
+
 #: classes/admin/config/config_login_menus.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/admin/config/config_login_menus.aw:146
+#: classes/admin/config/config_login_menus.aw:143
 msgid " menyy"
 msgstr ""
 

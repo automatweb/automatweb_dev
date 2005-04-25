@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:29 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:09 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -206,12 +206,24 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 #: classes/applications/register/register.aw:group_mail_send_settings
 msgid "Grupi E-maili saatmise seaded (mail_send_settings) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register.aw:group_mail_send_settings_help
+msgid "Grupi E-maili saatmise seaded (mail_send_settings) help"
+msgstr ""
+
 #: classes/applications/register/register.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register.aw:group_search_help
+msgid "Grupi Otsing (search) help"
 msgstr ""
 
 #: classes/applications/register/register.aw:rel_RELTYPE_CFGFORM

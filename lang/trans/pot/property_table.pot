@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:24 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -98,16 +98,32 @@ msgstr ""
 msgid "Grupi Tulbad (designer) pealkiri"
 msgstr ""
 
+#: classes/applications/class_designer/property_table.aw:group_designer_help
+msgid "Grupi Tulbad (designer) help"
+msgstr ""
+
 #: classes/applications/class_designer/property_table.aw:group_data
 msgid "Grupi Demo andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_data_help
+msgid "Grupi Demo andmed (data) help"
 msgstr ""
 
 #: classes/applications/class_designer/property_table.aw:group_data_rels
 msgid "Grupi Demo andmed (data_rels) pealkiri"
 msgstr ""
 
+#: classes/applications/class_designer/property_table.aw:group_data_rels_help
+msgid "Grupi Demo andmed (data_rels) help"
+msgstr ""
+
 #: classes/applications/class_designer/property_table.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
 msgstr ""
 
 #: classes/applications/class_designer/property_table.aw:78

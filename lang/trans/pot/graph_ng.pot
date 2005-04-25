@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:25 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:59 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -170,11 +170,23 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
+#: classes/graph/graph_ng.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 #: classes/graph/graph_ng.aw:group_conf
 msgid "Grupi &Uuml;dine_konfiguratsioon (conf) pealkiri"
 msgstr ""
 
+#: classes/graph/graph_ng.aw:group_conf_help
+msgid "Grupi &Uuml;dine_konfiguratsioon (conf) help"
+msgstr ""
+
 #: classes/graph/graph_ng.aw:group_specific
 msgid "Grupi T&uuml;&uuml;bi_konfiguratsioon (specific) pealkiri"
+msgstr ""
+
+#: classes/graph/graph_ng.aw:group_specific_help
+msgid "Grupi T&uuml;&uuml;bi_konfiguratsioon (specific) help"
 msgstr ""
 

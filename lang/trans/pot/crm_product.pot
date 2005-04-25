@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:12 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -32,6 +32,18 @@ msgstr ""
 
 #: classes/crm/crm_product.aw:prop_toode_en_help
 msgid "Omaduse Inglise keelne tootenimetus (toode_en) help"
+msgstr ""
+
+#: classes/crm/crm_product.aw:prop_comment
+msgid "Omaduse Kirjeldus (comment) caption"
+msgstr ""
+
+#: classes/crm/crm_product.aw:prop_comment_comment
+msgid "Omaduse Kirjeldus (comment) kommentaar"
+msgstr ""
+
+#: classes/crm/crm_product.aw:prop_comment_help
+msgid "Omaduse Kirjeldus (comment) help"
 msgstr ""
 
 #: classes/crm/crm_product.aw:prop_kood

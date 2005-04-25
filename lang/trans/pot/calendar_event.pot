@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:15 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:15 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -398,12 +398,24 @@ msgstr ""
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/calendar_event.aw:group_recurrence_help
+msgid "Grupi Kordumine (recurrence) help"
+msgstr ""
+
 #: classes/applications/calendar/calendar_event.aw:group_projects22
 msgid "Grupi projects22 (projects22) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_event.aw:group_projects22_help
+msgid "Grupi projects22 (projects22) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_event.aw:rel_RELTYPE_PICTURE

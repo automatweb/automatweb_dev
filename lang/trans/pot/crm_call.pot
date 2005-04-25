@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:03 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:35 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -230,20 +230,40 @@ msgstr ""
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_recurrence_help
+msgid "Grupi Kordumine (recurrence) help"
+msgstr ""
+
 #: classes/crm/crm_call.aw:group_calendars
 msgid "Grupi Kalendrid (calendars) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_calendars_help
+msgid "Grupi Kalendrid (calendars) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
+msgstr ""
+
 #: classes/crm/crm_call.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_call.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
+msgstr ""
+
 #: classes/crm/crm_call.aw:group_participants
 msgid "Grupi Osalejad (participants) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_call.aw:group_participants_help
+msgid "Grupi Osalejad (participants) help"
 msgstr ""
 
 #: classes/crm/crm_call.aw:rel_RELTYPE_RECURRENCE

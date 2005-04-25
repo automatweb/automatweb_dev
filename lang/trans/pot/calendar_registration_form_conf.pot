@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:41 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:17 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -192,6 +192,10 @@ msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:group_emails
 msgid "Grupi E-mailid (emails) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/calendar_registration_form_conf.aw:group_emails_help
+msgid "Grupi E-mailid (emails) help"
 msgstr ""
 
 #: classes/applications/calendar/calendar_registration_form_conf.aw:rel_RELTYPE_EVENT

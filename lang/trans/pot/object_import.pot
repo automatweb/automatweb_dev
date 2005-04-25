@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:40 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -230,20 +230,40 @@ msgstr ""
 msgid "Grupi Omadused (props) pealkiri"
 msgstr ""
 
+#: classes/admin/object_import.aw:group_props_help
+msgid "Grupi Omadused (props) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_connect
 msgid "Grupi Seosta tulbad (connect) pealkiri"
+msgstr ""
+
+#: classes/admin/object_import.aw:group_connect_help
+msgid "Grupi Seosta tulbad (connect) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr ""
 
+#: classes/admin/object_import.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_sched
 msgid "Grupi Automaatne import (sched) pealkiri"
 msgstr ""
 
+#: classes/admin/object_import.aw:group_sched_help
+msgid "Grupi Automaatne import (sched) help"
+msgstr ""
+
 #: classes/admin/object_import.aw:group_del
 msgid "Grupi Kustutamine (del) pealkiri"
+msgstr ""
+
+#: classes/admin/object_import.aw:group_del_help
+msgid "Grupi Kustutamine (del) help"
 msgstr ""
 
 #: classes/admin/object_import.aw:rel_RELTYPE_OBJECT_TYPE

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:04 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -108,6 +108,10 @@ msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER

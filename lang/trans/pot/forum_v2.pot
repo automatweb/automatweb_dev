@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -434,24 +434,48 @@ msgstr ""
 msgid "Grupi Sisu (contents) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_contents_help
+msgid "Grupi Sisu (contents) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_settings_help
+msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_topic_selector
 msgid "Grupi Teemad (topic_selector) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_topic_selector_help
+msgid "Grupi Teemad (topic_selector) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:group_mail_settings
 msgid "Grupi Meiliseaded (mail_settings) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:group_mail_settings_help
+msgid "Grupi Meiliseaded (mail_settings) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_TOPIC_FOLDER

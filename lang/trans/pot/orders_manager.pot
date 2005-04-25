@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:22 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,10 @@ msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:group_ordermnager
 msgid "Grupi Tellimused (ordermnager) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_manager.aw:group_ordermnager_help
+msgid "Grupi Tellimused (ordermnager) help"
 msgstr ""
 
 #: classes/applications/orders/orders_manager.aw:rel_RELTYPE_CFGMANAGER

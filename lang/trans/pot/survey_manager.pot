@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:35 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -134,8 +134,16 @@ msgstr ""
 msgid "Grupi Nimekiri (survey_list) pealkiri"
 msgstr ""
 
+#: classes/applications/survey/survey_manager.aw:group_survey_list_help
+msgid "Grupi Nimekiri (survey_list) help"
+msgstr ""
+
 #: classes/applications/survey/survey_manager.aw:group_survey_search
 msgid "Grupi Otsing (survey_search) pealkiri"
+msgstr ""
+
+#: classes/applications/survey/survey_manager.aw:group_survey_search_help
+msgid "Grupi Otsing (survey_search) help"
 msgstr ""
 
 #: classes/applications/survey/survey_manager.aw:rel_RELTYPE_SURVEY_FOLDER

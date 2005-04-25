@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:24 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -122,8 +122,16 @@ msgstr ""
 msgid "Grupi Nupu m&auml;&auml;rangud (but_props) pealkiri"
 msgstr ""
 
+#: classes/applications/class_designer/property_toolbar_button.aw:group_but_props_help
+msgid "Grupi Nupu m&auml;&auml;rangud (but_props) help"
+msgstr ""
+
 #: classes/applications/class_designer/property_toolbar_button.aw:group_men_props
 msgid "Grupi Nupu m&auml;&auml;rangud (men_props) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_toolbar_button.aw:group_men_props_help
+msgid "Grupi Nupu m&auml;&auml;rangud (men_props) help"
 msgstr ""
 
 #: classes/applications/class_designer/property_toolbar_button.aw:65

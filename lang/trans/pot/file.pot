@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:48 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:43 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -158,8 +158,16 @@ msgstr ""
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
 
+#: classes/file.aw:group_settings_help
+msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
 #: classes/file.aw:group_dates
 msgid "Grupi Ajad (dates) pealkiri"
+msgstr ""
+
+#: classes/file.aw:group_dates_help
+msgid "Grupi Ajad (dates) help"
 msgstr ""
 
 #: classes/file.aw:rel_RELTYPE_KEYWORD

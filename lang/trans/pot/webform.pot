@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:40 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -386,8 +386,16 @@ msgstr ""
 msgid "Grupi Vorm (form) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:group_form_help
+msgid "Grupi Vorm (form) help"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:group_props
 msgid "Grupi Omadused (props) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:group_props_help
+msgid "Grupi Omadused (props) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_special
@@ -398,32 +406,64 @@ msgstr ""
 msgid "Grupi Stiilid (styles) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_show_entries
 msgid "Grupi Sisestused (show_entries) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:group_show_entries_help
+msgid "Grupi Sisestused (show_entries) help"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:group_entries
 msgid "Grupi N&auml;ita sisestusi (entries) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:group_entries_help
+msgid "Grupi N&auml;ita sisestusi (entries) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:group_search_help
+msgid "Grupi Otsing (search) help"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:group_controllers
 msgid "Grupi Kontrollerid (controllers) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:group_controllers_help
+msgid "Grupi Kontrollerid (controllers) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:group_set_controllers
 msgid "Grupi Salvestamine (set_controllers) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/webform.aw:group_set_controllers_help
+msgid "Grupi Salvestamine (set_controllers) help"
+msgstr ""
+
 #: classes/contentmgmt/webform.aw:group_get_controllers
 msgid "Grupi N&auml;itamine (get_controllers) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:group_get_controllers_help
+msgid "Grupi N&auml;itamine (get_controllers) help"
 msgstr ""
 
 #: classes/contentmgmt/webform.aw:rel_RELTYPE_METAMGR
@@ -702,7 +742,7 @@ msgstr ""
 msgid "Saada"
 msgstr ""
 
-#: classes/contentmgmt/webform.aw:2294
+#: classes/contentmgmt/webform.aw:2013
 msgid "Liigu edasi &raquo;"
 msgstr ""
 

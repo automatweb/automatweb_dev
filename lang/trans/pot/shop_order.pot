@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:06 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -144,6 +144,10 @@ msgstr ""
 
 #: classes/applications/shop/shop_order.aw:group_items
 msgid "Grupi Tellimuse sisu (items) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_order.aw:group_items_help
+msgid "Grupi Tellimuse sisu (items) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order.aw:rel_RELTYPE_PRODUCT

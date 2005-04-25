@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:09 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -302,28 +302,56 @@ msgstr ""
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/profile.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
 #: classes/applications/commune/profile.aw:group_settings_general
 msgid "Grupi Üldandmed (settings_general) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_general_help
+msgid "Grupi Üldandmed (settings_general) help"
 msgstr ""
 
 #: classes/applications/commune/profile.aw:group_settings_outlook
 msgid "Grupi Välimus (settings_outlook) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/profile.aw:group_settings_outlook_help
+msgid "Grupi Välimus (settings_outlook) help"
+msgstr ""
+
 #: classes/applications/commune/profile.aw:group_settings_hobbies
 msgid "Grupi Harrastused (settings_hobbies) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_settings_hobbies_help
+msgid "Grupi Harrastused (settings_hobbies) help"
 msgstr ""
 
 #: classes/applications/commune/profile.aw:group_settings_habits
 msgid "Grupi Harjumused (settings_habits) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/profile.aw:group_settings_habits_help
+msgid "Grupi Harjumused (settings_habits) help"
+msgstr ""
+
 #: classes/applications/commune/profile.aw:group_settings_occupation
 msgid "Grupi Kool/Töö (settings_occupation) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/profile.aw:group_settings_occupation_help
+msgid "Grupi Kool/Töö (settings_occupation) help"
+msgstr ""
+
 #: classes/applications/commune/profile.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/profile.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 
 #: classes/applications/commune/profile.aw:rel_RELTYPE_PRF_EYES_COLOR

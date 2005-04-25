@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:05 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:54 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/contentmgmt/links.aw:prop_comment
+msgid "Omaduse Kommentaar lingikogusse (comment) caption"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_comment_comment
+msgid "Omaduse Kommentaar lingikogusse (comment) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:prop_comment_help
+msgid "Omaduse Kommentaar lingikogusse (comment) help"
+msgstr ""
 
 #: classes/contentmgmt/links.aw:prop_url
 msgid "Omaduse URL (url) caption"
@@ -230,8 +242,16 @@ msgstr ""
 msgid "Grupi Javascript (Javascript) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/links.aw:group_Javascript_help
+msgid "Grupi Javascript (Javascript) help"
+msgstr ""
+
 #: classes/contentmgmt/links.aw:group_Pilt
 msgid "Grupi Pilt (Pilt) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/links.aw:group_Pilt_help
+msgid "Grupi Pilt (Pilt) help"
 msgstr ""
 
 #: classes/contentmgmt/links.aw:121 classes/contentmgmt/links.aw:166

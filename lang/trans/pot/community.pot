@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:34 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:05 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -146,32 +146,64 @@ msgstr ""
 msgid "Grupi Üldised seaded (general2) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/community.aw:group_general2_help
+msgid "Grupi Üldised seaded (general2) help"
+msgstr ""
+
 #: classes/applications/commune/community.aw:group_forum_settings
 msgid "Grupi Foorumi seaded (forum_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_forum_settings_help
+msgid "Grupi Foorumi seaded (forum_settings) help"
 msgstr ""
 
 #: classes/applications/commune/community.aw:group_calendar_settings
 msgid "Grupi Kalendri seaded (calendar_settings) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/community.aw:group_calendar_settings_help
+msgid "Grupi Kalendri seaded (calendar_settings) help"
+msgstr ""
+
 #: classes/applications/commune/community.aw:group_content
 msgid "Grupi Sisu (content) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_content_help
+msgid "Grupi Sisu (content) help"
 msgstr ""
 
 #: classes/applications/commune/community.aw:group_connected
 msgid "Grupi Seotud isikud (connected) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/community.aw:group_connected_help
+msgid "Grupi Seotud isikud (connected) help"
+msgstr ""
+
 #: classes/applications/commune/community.aw:group_members
 msgid "Grupi Liikmed (members) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_members_help
+msgid "Grupi Liikmed (members) help"
 msgstr ""
 
 #: classes/applications/commune/community.aw:group_moderators
 msgid "Grupi Moderaatorid (moderators) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/community.aw:group_moderators_help
+msgid "Grupi Moderaatorid (moderators) help"
+msgstr ""
+
 #: classes/applications/commune/community.aw:group_blocked
 msgid "Grupi Blokeeritud (blocked) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/community.aw:group_blocked_help
+msgid "Grupi Blokeeritud (blocked) help"
 msgstr ""
 
 #: classes/applications/commune/community.aw:rel_RELTYPE_MODERATOR

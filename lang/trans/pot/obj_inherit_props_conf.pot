@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:19 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:34 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -110,24 +110,48 @@ msgstr ""
 msgid "Grupi Doonorklass (donor) pealkiri"
 msgstr ""
 
+#: classes/core/obj_inherit_props_conf.aw:group_donor_help
+msgid "Grupi Doonorklass (donor) help"
+msgstr ""
+
 #: classes/core/obj_inherit_props_conf.aw:group_destination
 msgid "Grupi Sihtklass (destination) pealkiri"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:group_destination_help
+msgid "Grupi Sihtklass (destination) help"
 msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:group_ihf
 msgid "Grupi P&auml;rimine (ihf) pealkiri"
 msgstr ""
 
+#: classes/core/obj_inherit_props_conf.aw:group_ihf_help
+msgid "Grupi P&auml;rimine (ihf) help"
+msgstr ""
+
 #: classes/core/obj_inherit_props_conf.aw:group_ihf_donor
 msgid "Grupi Doonorklass (ihf_donor) pealkiri"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:group_ihf_donor_help
+msgid "Grupi Doonorklass (ihf_donor) help"
 msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:group_ihf_destination
 msgid "Grupi Sihtklass (ihf_destination) pealkiri"
 msgstr ""
 
+#: classes/core/obj_inherit_props_conf.aw:group_ihf_destination_help
+msgid "Grupi Sihtklass (ihf_destination) help"
+msgstr ""
+
 #: classes/core/obj_inherit_props_conf.aw:group_if_ov
 msgid "Grupi Tingimused (if_ov) pealkiri"
+msgstr ""
+
+#: classes/core/obj_inherit_props_conf.aw:group_if_ov_help
+msgid "Grupi Tingimused (if_ov) help"
 msgstr ""
 
 #: classes/core/obj_inherit_props_conf.aw:rel_RELTYPE_INHERIT_FROM

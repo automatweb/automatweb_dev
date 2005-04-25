@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:04 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:39 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -230,20 +230,40 @@ msgstr ""
 msgid "Grupi Otsing (f2) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_db.aw:group_f2_help
+msgid "Grupi Otsing (f2) help"
+msgstr ""
+
 #: classes/crm/crm_db.aw:group_firmad
 msgid "Grupi Nimekiri (firmad) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_db.aw:group_firmad_help
+msgid "Grupi Nimekiri (firmad) help"
 msgstr ""
 
 #: classes/crm/crm_db.aw:group_org
 msgid "Grupi Organisatsioonid (org) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_db.aw:group_org_help
+msgid "Grupi Organisatsioonid (org) help"
+msgstr ""
+
 #: classes/crm/crm_db.aw:group_tegevusalad
 msgid "Grupi Tegevusalad (tegevusalad) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_db.aw:group_tegevusalad_help
+msgid "Grupi Tegevusalad (tegevusalad) help"
+msgstr ""
+
 #: classes/crm/crm_db.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_db.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
 msgstr ""
 
 #: classes/crm/crm_db.aw:rel_RELTYPE_SELECTIONS

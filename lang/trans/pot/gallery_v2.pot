@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:43 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -290,44 +290,88 @@ msgstr ""
 msgid "Grupi Lehek&uuml;lg&nbsp;1 (page_1) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_1_help
+msgid "Grupi Lehek&uuml;lg&nbsp;1 (page_1) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_2
 msgid "Grupi Lehek&uuml;lg&nbsp;2 (page_2) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_2_help
+msgid "Grupi Lehek&uuml;lg&nbsp;2 (page_2) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_3
 msgid "Grupi Lehek&uuml;lg&nbsp;3 (page_3) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_3_help
+msgid "Grupi Lehek&uuml;lg&nbsp;3 (page_3) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_4
 msgid "Grupi Lehek&uuml;lg&nbsp;4 (page_4) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_4_help
+msgid "Grupi Lehek&uuml;lg&nbsp;4 (page_4) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_5
 msgid "Grupi Lehek&uuml;lg&nbsp;5 (page_5) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_5_help
+msgid "Grupi Lehek&uuml;lg&nbsp;5 (page_5) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_6
 msgid "Grupi Lehek&uuml;lg&nbsp;6 (page_6) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_6_help
+msgid "Grupi Lehek&uuml;lg&nbsp;6 (page_6) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_7
 msgid "Grupi Lehek&uuml;lg&nbsp;7 (page_7) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_7_help
+msgid "Grupi Lehek&uuml;lg&nbsp;7 (page_7) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_8
 msgid "Grupi Lehek&uuml;lg&nbsp;8 (page_8) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_8_help
+msgid "Grupi Lehek&uuml;lg&nbsp;8 (page_8) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_page_9
 msgid "Grupi Lehek&uuml;lg&nbsp;9 (page_9) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_page_9_help
+msgid "Grupi Lehek&uuml;lg&nbsp;9 (page_9) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_import
 msgid "Grupi Impordi (import) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_import_help
+msgid "Grupi Impordi (import) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_v2.aw:group_preview
 msgid "Grupi Eelvaade (preview) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_v2.aw:group_preview_help
+msgid "Grupi Eelvaade (preview) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_v2.aw:rel_RELTYPE_FTP_LOGIN

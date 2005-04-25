@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:08 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:59 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -86,39 +86,47 @@ msgstr ""
 msgid "Grupi Muutujad (manager) pealkiri"
 msgstr ""
 
+#: classes/meta/metamgr.aw:group_manager_help
+msgid "Grupi Muutujad (manager) help"
+msgstr ""
+
 #: classes/meta/metamgr.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
-#: classes/meta/metamgr.aw:140
+#: classes/meta/metamgr.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
+#: classes/meta/metamgr.aw:144
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:145
+#: classes/meta/metamgr.aw:149
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:152
+#: classes/meta/metamgr.aw:156
 msgid "V‰‰rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:159
+#: classes/meta/metamgr.aw:163
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:315
+#: classes/meta/metamgr.aw:319
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:323
+#: classes/meta/metamgr.aw:327
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:378
+#: classes/meta/metamgr.aw:382
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:379
+#: classes/meta/metamgr.aw:383
 msgid "Kustuta valitud muutujad?"
 msgstr ""
 

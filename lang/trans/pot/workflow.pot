@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:00 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:45 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -98,20 +98,40 @@ msgstr ""
 msgid "Grupi Juhtumid (show_entities) pealkiri"
 msgstr ""
 
+#: classes/workflow/workflow.aw:group_show_entities_help
+msgid "Grupi Juhtumid (show_entities) help"
+msgstr ""
+
 #: classes/workflow/workflow.aw:group_show_processes
 msgid "Grupi Protessid (show_processes) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow.aw:group_show_processes_help
+msgid "Grupi Protessid (show_processes) help"
 msgstr ""
 
 #: classes/workflow/workflow.aw:group_show_actions
 msgid "Grupi Tegevused (show_actions) pealkiri"
 msgstr ""
 
+#: classes/workflow/workflow.aw:group_show_actions_help
+msgid "Grupi Tegevused (show_actions) help"
+msgstr ""
+
 #: classes/workflow/workflow.aw:group_show_actors
 msgid "Grupi Tegijad (show_actors) pealkiri"
 msgstr ""
 
+#: classes/workflow/workflow.aw:group_show_actors_help
+msgid "Grupi Tegijad (show_actors) help"
+msgstr ""
+
 #: classes/workflow/workflow.aw:group_show_documentation
 msgid "Grupi Juhendmaterjalid (show_documentation) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow.aw:group_show_documentation_help
+msgid "Grupi Juhendmaterjalid (show_documentation) help"
 msgstr ""
 
 #: classes/workflow/workflow.aw:rel_RELTYPE_WORKFLOW_CONFIG

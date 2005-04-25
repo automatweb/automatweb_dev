@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 15:44:14 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:18 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -122,8 +122,16 @@ msgstr ""
 msgid "Grupi Esinejad (artists) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/party.aw:group_artists_help
+msgid "Grupi Esinejad (artists) help"
+msgstr ""
+
 #: classes/applications/calendar/party.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/party.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 #: classes/applications/calendar/party.aw:rel_RELTYPE_FLYER

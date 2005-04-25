@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:54 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -122,24 +122,48 @@ msgstr ""
 msgid "Grupi Konto ülevaade (account_overview) pealkiri"
 msgstr ""
 
+#: classes/pank/account.aw:group_account_overview_help
+msgid "Grupi Konto ülevaade (account_overview) help"
+msgstr ""
+
 #: classes/pank/account.aw:group_account_overview_incoming
 msgid "Grupi Sissemaksed (account_overview_incoming) pealkiri"
+msgstr ""
+
+#: classes/pank/account.aw:group_account_overview_incoming_help
+msgid "Grupi Sissemaksed (account_overview_incoming) help"
 msgstr ""
 
 #: classes/pank/account.aw:group_account_overview_outgoing
 msgid "Grupi Väljamaksed (account_overview_outgoing) pealkiri"
 msgstr ""
 
+#: classes/pank/account.aw:group_account_overview_outgoing_help
+msgid "Grupi Väljamaksed (account_overview_outgoing) help"
+msgstr ""
+
 #: classes/pank/account.aw:group_other_account_overview
 msgid "Grupi Konto ülevaade (other_account_overview) pealkiri"
+msgstr ""
+
+#: classes/pank/account.aw:group_other_account_overview_help
+msgid "Grupi Konto ülevaade (other_account_overview) help"
 msgstr ""
 
 #: classes/pank/account.aw:group_other_account_overview_incoming
 msgid "Grupi Sissemaksed (other_account_overview_incoming) pealkiri"
 msgstr ""
 
+#: classes/pank/account.aw:group_other_account_overview_incoming_help
+msgid "Grupi Sissemaksed (other_account_overview_incoming) help"
+msgstr ""
+
 #: classes/pank/account.aw:group_other_account_overview_outgoing
 msgid "Grupi Väljamaksed (other_account_overview_outgoing) pealkiri"
+msgstr ""
+
+#: classes/pank/account.aw:group_other_account_overview_outgoing_help
+msgid "Grupi Väljamaksed (other_account_overview_outgoing) help"
 msgstr ""
 
 #: classes/pank/account.aw:rel_RELTYPE_TAX_CHAIN

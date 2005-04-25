@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:54 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:41 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -218,28 +218,56 @@ msgstr ""
 msgid "Grupi Sisu (content) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_content_help
+msgid "Grupi Sisu (content) help"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_recurrence_help
+msgid "Grupi Kordumine (recurrence) help"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:group_calendars
 msgid "Grupi Kalendrid (calendars) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_calendars_help
+msgid "Grupi Kalendrid (calendars) help"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:group_products_show
 msgid "Grupi Tooted (products_show) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_products_show_help
+msgid "Grupi Tooted (products_show) help"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_history
 msgid "Grupi Ajalugu (history) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_offer.aw:group_history_help
+msgid "Grupi Ajalugu (history) help"
+msgstr ""
+
 #: classes/crm/crm_offer.aw:group_offer
 msgid "Grupi Pakkumine (offer) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:group_offer_help
+msgid "Grupi Pakkumine (offer) help"
 msgstr ""
 
 #: classes/crm/crm_offer.aw:rel_RELTYPE_RECURRENCE

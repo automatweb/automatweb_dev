@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:19 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -206,8 +206,16 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_job.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 #: classes/mrp/mrp_job.aw:group_workflow
 msgid "Grupi Töövoog (workflow) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_job.aw:group_workflow_help
+msgid "Grupi Töövoog (workflow) help"
 msgstr ""
 
 #: classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE

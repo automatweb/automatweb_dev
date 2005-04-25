@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:48 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:45 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -698,16 +698,32 @@ msgstr ""
 msgid "Grupi Kalender (calendar) pealkiri"
 msgstr ""
 
+#: classes/document_brother.aw:group_calendar_help
+msgid "Grupi Kalender (calendar) help"
+msgstr ""
+
 #: classes/document_brother.aw:group_vennastamine
 msgid "Grupi Vennastamine (vennastamine) pealkiri"
+msgstr ""
+
+#: classes/document_brother.aw:group_vennastamine_help
+msgid "Grupi Vennastamine (vennastamine) help"
 msgstr ""
 
 #: classes/document_brother.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr ""
 
+#: classes/document_brother.aw:group_settings_help
+msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
 #: classes/document_brother.aw:group_relationmgr
 msgid "Grupi Seostehaldur (relationmgr) pealkiri"
+msgstr ""
+
+#: classes/document_brother.aw:group_relationmgr_help
+msgid "Grupi Seostehaldur (relationmgr) help"
 msgstr ""
 
 #: classes/document_brother.aw:222

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:38 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -62,8 +62,16 @@ msgstr ""
 msgid "Grupi Klassi konfiguratsioon (settings) pealkiri"
 msgstr ""
 
+#: classes/admin/object_type.aw:group_settings_help
+msgid "Grupi Klassi konfiguratsioon (settings) help"
+msgstr ""
+
 #: classes/admin/object_type.aw:group_defobj
 msgid "Grupi Aktiivne objekt (defobj) pealkiri"
+msgstr ""
+
+#: classes/admin/object_type.aw:group_defobj_help
+msgid "Grupi Aktiivne objekt (defobj) help"
 msgstr ""
 
 #: classes/admin/object_type.aw:rel_RELTYPE_OBJECT_CFGFORM

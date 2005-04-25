@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:24 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -722,24 +722,48 @@ msgstr ""
 msgid "Grupi Toote info (data) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:group_data_help
+msgid "Grupi Toote info (data) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_packaging
 msgid "Grupi Pakendid (packaging) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_packaging_help
+msgid "Grupi Pakendid (packaging) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_img
 msgid "Grupi Pildid (img) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:group_img_help
+msgid "Grupi Pildid (img) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_fls
 msgid "Grupi Failid (fls) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_fls_help
+msgid "Grupi Failid (fls) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:group_doc
 msgid "Grupi Dokumendid (doc) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_product.aw:group_doc_help
+msgid "Grupi Dokumendid (doc) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product.aw:group_lnk
 msgid "Grupi Lingid (lnk) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:group_lnk_help
+msgid "Grupi Lingid (lnk) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product.aw:rel_RELTYPE_IMAGE

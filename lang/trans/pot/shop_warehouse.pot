@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:40 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -362,56 +362,112 @@ msgstr ""
 msgid "Grupi Tooted (products) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_products_help
+msgid "Grupi Tooted (products) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_productgroups
 msgid "Grupi Tootegrupid (productgroups) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_productgroups_help
+msgid "Grupi Tootegrupid (productgroups) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_packets
 msgid "Grupi Paketid (packets) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_packets_help
+msgid "Grupi Paketid (packets) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_storage
 msgid "Grupi Laoseis (storage) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_storage_help
+msgid "Grupi Laoseis (storage) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_storage_storage
 msgid "Grupi Laoseis (storage_storage) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_storage_storage_help
+msgid "Grupi Laoseis (storage_storage) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_storage_income
 msgid "Grupi Sissetulekud (storage_income) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_storage_income_help
+msgid "Grupi Sissetulekud (storage_income) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_storage_export
 msgid "Grupi V&auml;ljaminekud (storage_export) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_storage_export_help
+msgid "Grupi V&auml;ljaminekud (storage_export) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_order
 msgid "Grupi Tellimused (order) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_order_help
+msgid "Grupi Tellimused (order) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_order_unconfirmed
 msgid "Grupi Kinnitamata (order_unconfirmed) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_order_unconfirmed_help
+msgid "Grupi Kinnitamata (order_unconfirmed) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_order_confirmed
 msgid "Grupi Kinnitatud (order_confirmed) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_order_confirmed_help
+msgid "Grupi Kinnitatud (order_confirmed) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_order_orderer_cos
 msgid "Grupi Tellijad (order_orderer_cos) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_order_orderer_cos_help
+msgid "Grupi Tellijad (order_orderer_cos) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_search_help
+msgid "Grupi Otsing (search) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:group_search_search
 msgid "Grupi Otsing (search_search) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_warehouse.aw:group_search_search_help
+msgid "Grupi Otsing (search_search) help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse.aw:group_order_current
 msgid "Grupi Pakkumine (order_current) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse.aw:group_order_current_help
+msgid "Grupi Pakkumine (order_current) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_CONFIG

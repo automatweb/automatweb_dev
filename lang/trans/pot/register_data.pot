@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:12 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:12 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -3098,20 +3098,40 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:group_textboxes
 msgid "Grupi Textbox (textboxes) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:group_textboxes_help
+msgid "Grupi Textbox (textboxes) help"
 msgstr ""
 
 #: classes/applications/register/register_data.aw:group_textareas
 msgid "Grupi Textarea (textareas) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:group_textareas_help
+msgid "Grupi Textarea (textareas) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:group_classificators
 msgid "Grupi Classificator (classificators) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:group_classificators_help
+msgid "Grupi Classificator (classificators) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:group_texts
 msgid "Grupi Text (texts) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:group_texts_help
+msgid "Grupi Text (texts) help"
 msgstr ""
 
 #: classes/applications/register/register_data.aw:rel_RELTYPE_VARUSER1

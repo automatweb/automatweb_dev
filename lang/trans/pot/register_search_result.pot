@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:13 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:13 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -50,8 +50,16 @@ msgstr ""
 msgid "Grupi Otsing (search) pealkiri"
 msgstr ""
 
+#: classes/applications/register/register_search_result.aw:group_search_help
+msgid "Grupi Otsing (search) help"
+msgstr ""
+
 #: classes/applications/register/register_search_result.aw:group_search_res
 msgid "Grupi Tulemused (search_res) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_search_result.aw:group_search_res_help
+msgid "Grupi Tulemused (search_res) help"
 msgstr ""
 
 #: classes/applications/register/register_search_result.aw:rel_RELTYPE_SEARCH

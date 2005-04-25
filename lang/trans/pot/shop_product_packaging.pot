@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:07 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -410,8 +410,16 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:group_img
 msgid "Grupi img (img) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_img_help
+msgid "Grupi img (img) help"
 msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_IMAGE

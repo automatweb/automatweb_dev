@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:44 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:24 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -50,8 +50,16 @@ msgstr ""
 msgid "Grupi Lisatavad objektid (add) pealkiri"
 msgstr ""
 
+#: classes/applications/class_designer/property_tree_branch.aw:group_add_help
+msgid "Grupi Lisatavad objektid (add) help"
+msgstr ""
+
 #: classes/applications/class_designer/property_tree_branch.aw:group_filter
 msgid "Grupi Andmete filter (filter) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree_branch.aw:group_filter_help
+msgid "Grupi Andmete filter (filter) help"
 msgstr ""
 
 #: classes/applications/class_designer/property_tree_branch.aw:90

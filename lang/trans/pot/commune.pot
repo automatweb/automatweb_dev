@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:34 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:04 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -830,224 +830,448 @@ msgstr ""
 msgid "Grupi Mina (me) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_me_help
+msgid "Grupi Mina (me) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_profile
 msgid "Grupi Profiil (profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile_help
+msgid "Grupi Profiil (profile) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_profile_view
 msgid "Grupi Vaata (profile_view) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_profile_view_help
+msgid "Grupi Vaata (profile_view) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_profile_change
 msgid "Grupi Muuda (profile_change) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_profile_change_help
+msgid "Grupi Muuda (profile_change) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_all_profiles
 msgid "Grupi Kõik profiilid (all_profiles) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_all_profiles_help
+msgid "Grupi Kõik profiilid (all_profiles) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_images
 msgid "Grupi Pildid (images) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_images_help
+msgid "Grupi Pildid (images) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_my_images
 msgid "Grupi Minu pildid (my_images) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_my_images_help
+msgid "Grupi Minu pildid (my_images) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_switch_profile
 msgid "Grupi Vaheta profiili (switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_switch_profile_help
+msgid "Grupi Vaheta profiili (switch_profile) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_show_image_comments
 msgid "Grupi  (show_image_comments) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_show_image_comments_help
+msgid "Grupi  (show_image_comments) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_settings
 msgid "Grupi Sätted (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_settings_help
+msgid "Grupi Sätted (settings) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_browsing_conditions
 msgid "Grupi Sirvimise sätted (browsing_conditions) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_browsing_conditions_help
+msgid "Grupi Sirvimise sätted (browsing_conditions) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_view_conditions
 msgid "Grupi Kuvamise sätted (view_conditions) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_view_conditions_help
+msgid "Grupi Kuvamise sätted (view_conditions) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_message_conditions
 msgid "Grupi Teadete sätted (message_conditions) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_message_conditions_help
+msgid "Grupi Teadete sätted (message_conditions) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_lists
 msgid "Grupi Listid (lists) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_lists_help
+msgid "Grupi Listid (lists) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_friend_list
 msgid "Grupi Sõbralist (friend_list) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_friend_list_help
+msgid "Grupi Sõbralist (friend_list) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_ignored_list
 msgid "Grupi Ignoreeritute list (ignored_list) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_ignored_list_help
+msgid "Grupi Ignoreeritute list (ignored_list) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_blocked_list
 msgid "Grupi Blokeeritute list (blocked_list) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_blocked_list_help
+msgid "Grupi Blokeeritute list (blocked_list) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_l_switch_profile
 msgid "Grupi Vaheta profiili (l_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_l_switch_profile_help
+msgid "Grupi Vaheta profiili (l_switch_profile) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_profile_search
 msgid "Grupi Otsing (profile_search) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_profile_search_help
+msgid "Grupi Otsing (profile_search) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_prof_comments
 msgid "Grupi Kommentaarid (prof_comments) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_prof_comments_help
+msgid "Grupi Kommentaarid (prof_comments) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_c_switch_profile
 msgid "Grupi Vaheta profiili (c_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_c_switch_profile_help
+msgid "Grupi Vaheta profiili (c_switch_profile) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_horoscope
 msgid "Grupi Horoskoop (horoscope) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_horoscope_help
+msgid "Grupi Horoskoop (horoscope) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_matching_profiles
 msgid "Grupi Sobivad kasutajad (matching_profiles) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_matching_profiles_help
+msgid "Grupi Sobivad kasutajad (matching_profiles) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_friends
 msgid "Grupi Sõbrad (friends) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_friends_help
+msgid "Grupi Sõbrad (friends) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_prof_friends
 msgid "Grupi Minu sõbrad (prof_friends) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_prof_friends_help
+msgid "Grupi Minu sõbrad (prof_friends) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_address_book
 msgid "Grupi Aadressiraamat (address_book) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_address_book_help
+msgid "Grupi Aadressiraamat (address_book) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_friend_groups
 msgid "Grupi Sõbragrupid (friend_groups) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_friend_groups_help
+msgid "Grupi Sõbragrupid (friend_groups) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_search_n_add
 msgid "Grupi Otsi ja lisa (search_n_add) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_search_n_add_help
+msgid "Grupi Otsi ja lisa (search_n_add) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_f_switch_profile
 msgid "Grupi Vaheta profiili (f_switch_profile) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_f_switch_profile_help
+msgid "Grupi Vaheta profiili (f_switch_profile) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_friend_details
 msgid "Grupi  (friend_details) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_friend_details_help
+msgid "Grupi  (friend_details) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_ratings
 msgid "Grupi Hindamine (ratings) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_ratings_help
+msgid "Grupi Hindamine (ratings) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_rate
 msgid "Grupi Hinda (rate) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_rate_help
+msgid "Grupi Hinda (rate) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_top_men
 msgid "Grupi Top-mehed (top_men) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_top_men_help
+msgid "Grupi Top-mehed (top_men) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_top_women
 msgid "Grupi Top-naised (top_women) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_top_women_help
+msgid "Grupi Top-naised (top_women) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_last_added
 msgid "Grupi Viimati lisatud (last_added) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_last_added_help
+msgid "Grupi Viimati lisatud (last_added) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_messages
 msgid "Grupi Postkast (messages) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_messages_help
+msgid "Grupi Postkast (messages) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_inbox
 msgid "Grupi Inbox (inbox) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_inbox_help
+msgid "Grupi Inbox (inbox) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_outbox
 msgid "Grupi Outbox (outbox) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_outbox_help
+msgid "Grupi Outbox (outbox) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_archive
 msgid "Grupi Arhiiv (archive) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_archive_help
+msgid "Grupi Arhiiv (archive) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_newmessage
 msgid "Grupi Uus teade (newmessage) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_newmessage_help
+msgid "Grupi Uus teade (newmessage) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_forumtab
 msgid "Grupi Foorum (forumtab) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_forumtab_help
+msgid "Grupi Foorum (forumtab) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_forum
 msgid "Grupi Foorum (forum) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_forum_help
+msgid "Grupi Foorum (forum) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_my_forum_topics
 msgid "Grupi Minu teemad (my_forum_topics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_my_forum_topics_help
+msgid "Grupi Minu teemad (my_forum_topics) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_forum_settings
 msgid "Grupi Sätted (forum_settings) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_forum_settings_help
+msgid "Grupi Sätted (forum_settings) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_communities
 msgid "Grupi Kogukonnad (communities) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_communities_help
+msgid "Grupi Kogukonnad (communities) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_my_communities
 msgid "Grupi Minu kogukonnad (my_communities) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_my_communities_help
+msgid "Grupi Minu kogukonnad (my_communities) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_categories
 msgid "Grupi Kategooriad (categories) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_categories_help
+msgid "Grupi Kategooriad (categories) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_community_search
 msgid "Grupi Otsing (community_search) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_community_search_help
+msgid "Grupi Otsing (community_search) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_statistics
 msgid "Grupi Statistika (statistics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_statistics_help
+msgid "Grupi Statistika (statistics) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_my_statistics
 msgid "Grupi Minu statistika (my_statistics) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_my_statistics_help
+msgid "Grupi Minu statistika (my_statistics) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_general_statistics
 msgid "Grupi Üldstatistika (general_statistics) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_general_statistics_help
+msgid "Grupi Üldstatistika (general_statistics) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_join
 msgid "Grupi Liitumine (join) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_join_help
+msgid "Grupi Liitumine (join) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_join_form
 msgid "Grupi Liitu kasutajaks (join_form) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_join_form_help
+msgid "Grupi Liitu kasutajaks (join_form) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:group_forgot_password
 msgid "Grupi Unustasid salasõna? (forgot_password) pealkiri"
 msgstr ""
 
+#: classes/applications/commune/commune.aw:group_forgot_password_help
+msgid "Grupi Unustasid salasõna? (forgot_password) help"
+msgstr ""
+
 #: classes/applications/commune/commune.aw:group_locations
 msgid "Grupi Sisuobjektid (locations) pealkiri"
+msgstr ""
+
+#: classes/applications/commune/commune.aw:group_locations_help
+msgid "Grupi Sisuobjektid (locations) help"
 msgstr ""
 
 #: classes/applications/commune/commune.aw:rel_RELTYPE_PROF_SEARCH

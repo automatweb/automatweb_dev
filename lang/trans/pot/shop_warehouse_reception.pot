@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:25 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:01 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -36,6 +36,10 @@ msgstr ""
 
 #: classes/applications/shop/shop_warehouse_reception.aw:group_income
 msgid "Grupi Sissetuleku sisu (income) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_warehouse_reception.aw:group_income_help
+msgid "Grupi Sissetuleku sisu (income) help"
 msgstr ""
 
 #: classes/applications/shop/shop_warehouse_reception.aw:rel_RELTYPE_PRODUCT

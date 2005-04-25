@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:42 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -146,12 +146,24 @@ msgstr ""
 msgid "Grupi Staatiline otsing (static) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content.aw:group_static_help
+msgid "Grupi Staatiline otsing (static) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:group_keywords
 msgid "Grupi Märksõnade järgi otsing (keywords) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/site_search/site_search_content.aw:group_keywords_help
+msgid "Grupi Märksõnade järgi otsing (keywords) help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
 msgid "Grupi Otsingu grupid (searchgroups) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups_help
+msgid "Grupi Otsingu grupid (searchgroups) help"
 msgstr ""
 
 #: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_REPEATER

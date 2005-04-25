@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:13 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:08 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -302,32 +302,64 @@ msgstr ""
 msgid "Grupi Üldine (general2) pealkiri"
 msgstr ""
 
+#: classes/applications/groupware/project.aw:group_general2_help
+msgid "Grupi Üldine (general2) help"
+msgstr ""
+
 #: classes/applications/groupware/project.aw:group_web_settings
 msgid "Grupi Veebiseadistused (web_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_web_settings_help
+msgid "Grupi Veebiseadistused (web_settings) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:group_prj_image
 msgid "Grupi Pilt (prj_image) pealkiri"
 msgstr ""
 
+#: classes/applications/groupware/project.aw:group_prj_image_help
+msgid "Grupi Pilt (prj_image) help"
+msgstr ""
+
 #: classes/applications/groupware/project.aw:group_event_list
 msgid "Grupi Sündmused (event_list) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_event_list_help
+msgid "Grupi Sündmused (event_list) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:group_add_event
 msgid "Grupi Muuda sündmust (add_event) pealkiri"
 msgstr ""
 
+#: classes/applications/groupware/project.aw:group_add_event_help
+msgid "Grupi Muuda sündmust (add_event) help"
+msgstr ""
+
 #: classes/applications/groupware/project.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_files_help
+msgid "Grupi Failid (files) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr ""
 
+#: classes/applications/groupware/project.aw:group_trans_help
+msgid "Grupi Tõlkimine (trans) help"
+msgstr ""
+
 #: classes/applications/groupware/project.aw:group_userdefined
 msgid "Grupi Andmed (userdefined) pealkiri"
+msgstr ""
+
+#: classes/applications/groupware/project.aw:group_userdefined_help
+msgid "Grupi Andmed (userdefined) help"
 msgstr ""
 
 #: classes/applications/groupware/project.aw:rel_RELTYPE_SUBPROJECT

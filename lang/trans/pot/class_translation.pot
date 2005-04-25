@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:27 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:28 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -72,5 +72,9 @@ msgstr ""
 
 #: classes/translate/class_translation.aw:group_workbench
 msgid "Grupi Tõlgi (workbench) pealkiri"
+msgstr ""
+
+#: classes/translate/class_translation.aw:group_workbench_help
+msgid "Grupi Tõlgi (workbench) help"
 msgstr ""
 

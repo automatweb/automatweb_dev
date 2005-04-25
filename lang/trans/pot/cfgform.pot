@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:56 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:30 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -314,88 +314,176 @@ msgstr ""
 msgid "Grupi Grupid (groupdata) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_groupdata_help
+msgid "Grupi Grupid (groupdata) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_layout
 msgid "Grupi Layout (layout) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_layout_help
+msgid "Grupi Layout (layout) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_avail
 msgid "Grupi Kıik omadused (avail) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_avail_help
+msgid "Grupi Kıik omadused (avail) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_controllers
 msgid "Grupi Kontrollerid (controllers) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_controllers_help
+msgid "Grupi Kontrollerid (controllers) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_set_controllers
 msgid "Grupi Salvestamine (set_controllers) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_set_controllers_help
+msgid "Grupi Salvestamine (set_controllers) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_get_controllers
 msgid "Grupi N‰itamine (get_controllers) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_get_controllers_help
+msgid "Grupi N‰itamine (get_controllers) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_defaults
 msgid "Grupi Omaduste v‰‰rtused (defaults) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_defaults_help
+msgid "Grupi Omaduste v‰‰rtused (defaults) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_system
 msgid "Grupi Vormi seaded (system) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_system_help
+msgid "Grupi Vormi seaded (system) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_translate
 msgid "Grupi T&otilde;lgi (translate) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_translate_help
+msgid "Grupi T&otilde;lgi (translate) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_1
 msgid "Grupi lang (lang_1) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_1_help
+msgid "Grupi lang (lang_1) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_2
 msgid "Grupi lang (lang_2) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_2_help
+msgid "Grupi lang (lang_2) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_3
 msgid "Grupi lang (lang_3) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_3_help
+msgid "Grupi lang (lang_3) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_4
 msgid "Grupi lang (lang_4) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_4_help
+msgid "Grupi lang (lang_4) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_5
 msgid "Grupi lang (lang_5) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_5_help
+msgid "Grupi lang (lang_5) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_6
 msgid "Grupi lang (lang_6) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_6_help
+msgid "Grupi lang (lang_6) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_7
 msgid "Grupi lang (lang_7) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_7_help
+msgid "Grupi lang (lang_7) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_8
 msgid "Grupi lang (lang_8) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_8_help
+msgid "Grupi lang (lang_8) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_9
 msgid "Grupi lang (lang_9) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_9_help
+msgid "Grupi lang (lang_9) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_10
 msgid "Grupi lang (lang_10) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_10_help
+msgid "Grupi lang (lang_10) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:group_lang_11
 msgid "Grupi lang (lang_11) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgform.aw:group_lang_11_help
+msgid "Grupi lang (lang_11) help"
+msgstr ""
+
 #: classes/cfg/cfgform.aw:group_lang_12
 msgid "Grupi lang (lang_12) pealkiri"
+msgstr ""
+
+#: classes/cfg/cfgform.aw:group_lang_12_help
+msgid "Grupi lang (lang_12) help"
 msgstr ""
 
 #: classes/cfg/cfgform.aw:rel_RELTYPE_PROP_GROUP

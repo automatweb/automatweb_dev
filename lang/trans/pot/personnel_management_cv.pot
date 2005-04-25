@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:28 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:07 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -422,52 +422,104 @@ msgstr ""
 msgid "Grupi Oskused (skills) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_skills_help
+msgid "Grupi Oskused (skills) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_arvutioskus
 msgid "Grupi Arvutioskus (arvutioskus) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_arvutioskus_help
+msgid "Grupi Arvutioskus (arvutioskus) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_keeleoskused
 msgid "Grupi Keeleoskus (keeleoskused) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_keeleoskused_help
+msgid "Grupi Keeleoskus (keeleoskused) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_driving_licenses
 msgid "Grupi Juhiload (driving_licenses) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_driving_licenses_help
+msgid "Grupi Juhiload (driving_licenses) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_other_skills
 msgid "Grupi Muud oskused (other_skills) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_other_skills_help
+msgid "Grupi Muud oskused (other_skills) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_education_main
 msgid "Grupi Hariduskäik (education_main) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_education_main_help
+msgid "Grupi Hariduskäik (education_main) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_haridustee
 msgid "Grupi Hariduskäik (haridustee) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_haridustee_help
+msgid "Grupi Hariduskäik (haridustee) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_taienduskoolitus
 msgid "Grupi Täienduskoolitus (taienduskoolitus) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_taienduskoolitus_help
+msgid "Grupi Täienduskoolitus (taienduskoolitus) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_soovitajad
 msgid "Grupi Soovitajad (soovitajad) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_soovitajad_help
+msgid "Grupi Soovitajad (soovitajad) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_tookogemus
 msgid "Grupi Töökogemused (tookogemus) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_tookogemus_help
+msgid "Grupi Töökogemused (tookogemus) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_toosoov
 msgid "Grupi Soovitud töö (toosoov) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_toosoov_help
+msgid "Grupi Soovitud töö (toosoov) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_statistika
 msgid "Grupi Statistika (statistika) pealkiri"
 msgstr ""
 
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_statistika_help
+msgid "Grupi Statistika (statistika) help"
+msgstr ""
+
 #: classes/applications/personnel_management/personnel_management_cv.aw:group_cv_view
 msgid "Grupi Vaata CV-d (cv_view) pealkiri"
+msgstr ""
+
+#: classes/applications/personnel_management/personnel_management_cv.aw:group_cv_view_help
+msgid "Grupi Vaata CV-d (cv_view) help"
 msgstr ""
 
 #: classes/applications/personnel_management/personnel_management_cv.aw:rel_RELTYPE_EDUCATION

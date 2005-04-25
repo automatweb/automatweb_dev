@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:54 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -194,20 +194,40 @@ msgstr ""
 msgid "Grupi Konto ülevaade (account_overview) pealkiri"
 msgstr ""
 
+#: classes/pank/pank.aw:group_account_overview_help
+msgid "Grupi Konto ülevaade (account_overview) help"
+msgstr ""
+
 #: classes/pank/pank.aw:group_accounts
 msgid "Grupi Kontod (accounts) pealkiri"
+msgstr ""
+
+#: classes/pank/pank.aw:group_accounts_help
+msgid "Grupi Kontod (accounts) help"
 msgstr ""
 
 #: classes/pank/pank.aw:group_pank_owner_group
 msgid "Grupi ... (pank_owner_group) pealkiri"
 msgstr ""
 
+#: classes/pank/pank.aw:group_pank_owner_group_help
+msgid "Grupi ... (pank_owner_group) help"
+msgstr ""
+
 #: classes/pank/pank.aw:group_pank_owner_group_main_sub
 msgid "Grupi ... (pank_owner_group_main_sub) pealkiri"
 msgstr ""
 
+#: classes/pank/pank.aw:group_pank_owner_group_main_sub_help
+msgid "Grupi ... (pank_owner_group_main_sub) help"
+msgstr ""
+
 #: classes/pank/pank.aw:group_pank_make_trans
 msgid "Grupi Tee ülekanne (pank_make_trans) pealkiri"
+msgstr ""
+
+#: classes/pank/pank.aw:group_pank_make_trans_help
+msgid "Grupi Tee ülekanne (pank_make_trans) help"
 msgstr ""
 
 #: classes/pank/pank.aw:rel_RELTYPE_OWNER

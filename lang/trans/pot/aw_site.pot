@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:45 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:44 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -194,8 +194,16 @@ msgstr ""
 msgid "Grupi Templated (templates) pealkiri"
 msgstr ""
 
+#: classes/install/aw_site.aw:group_templates_help
+msgid "Grupi Templated (templates) help"
+msgstr ""
+
 #: classes/install/aw_site.aw:group_db
 msgid "Grupi Andmebaas (db) pealkiri"
+msgstr ""
+
+#: classes/install/aw_site.aw:group_db_help
+msgid "Grupi Andmebaas (db) help"
 msgstr ""
 
 #: classes/install/aw_site.aw:rel_RELTYPE_LAYOUT

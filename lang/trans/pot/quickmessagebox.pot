@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:35 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:07 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -122,16 +122,32 @@ msgstr ""
 msgid "Grupi Uus teade (newmessage) pealkiri"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox.aw:group_newmessage_help
+msgid "Grupi Uus teade (newmessage) help"
+msgstr ""
+
 #: classes/applications/quickmessage/quickmessagebox.aw:group_inbox
 msgid "Grupi Inbox (inbox) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_inbox_help
+msgid "Grupi Inbox (inbox) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:group_outbox
 msgid "Grupi Outbox (outbox) pealkiri"
 msgstr ""
 
+#: classes/applications/quickmessage/quickmessagebox.aw:group_outbox_help
+msgid "Grupi Outbox (outbox) help"
+msgstr ""
+
 #: classes/applications/quickmessage/quickmessagebox.aw:group_archive
 msgid "Grupi Arhiiv (archive) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/quickmessagebox.aw:group_archive_help
+msgid "Grupi Arhiiv (archive) help"
 msgstr ""
 
 #: classes/applications/quickmessage/quickmessagebox.aw:rel_RELTYPE_OWNER

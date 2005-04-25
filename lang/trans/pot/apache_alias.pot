@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:27 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:18 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -60,6 +60,10 @@ msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:group_list
 msgid "Grupi Nimekiri (list) pealkiri"
+msgstr ""
+
+#: classes/applications/apache/apache_alias.aw:group_list_help
+msgid "Grupi Nimekiri (list) help"
 msgstr ""
 
 #: classes/applications/apache/apache_alias.aw:62

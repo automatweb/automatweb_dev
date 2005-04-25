@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:00 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:45 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -74,16 +74,32 @@ msgstr ""
 msgid "Grupi Tegijate seaded (config_actor) pealkiri"
 msgstr ""
 
+#: classes/workflow/workflow_config.aw:group_config_actor_help
+msgid "Grupi Tegijate seaded (config_actor) help"
+msgstr ""
+
 #: classes/workflow/workflow_config.aw:group_config_action
 msgid "Grupi Tegevuste seaded (config_action) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_action_help
+msgid "Grupi Tegevuste seaded (config_action) help"
 msgstr ""
 
 #: classes/workflow/workflow_config.aw:group_config_entity
 msgid "Grupi Juhtumite seaded (config_entity) pealkiri"
 msgstr ""
 
+#: classes/workflow/workflow_config.aw:group_config_entity_help
+msgid "Grupi Juhtumite seaded (config_entity) help"
+msgstr ""
+
 #: classes/workflow/workflow_config.aw:group_config_process
 msgid "Grupi Protsesside seaded (config_process) pealkiri"
+msgstr ""
+
+#: classes/workflow/workflow_config.aw:group_config_process_help
+msgid "Grupi Protsesside seaded (config_process) help"
 msgstr ""
 
 #: classes/workflow/workflow_config.aw:rel_RELTYPE_ROOTMENU

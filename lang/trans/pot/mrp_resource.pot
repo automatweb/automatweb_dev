@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:19 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:26 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -194,28 +194,56 @@ msgstr ""
 msgid "Grupi Kalender (grp_resource_schedule) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:group_grp_resource_schedule_help
+msgid "Grupi Kalender (grp_resource_schedule) help"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:group_grp_resource_joblist
 msgid "Grupi Tööleht (grp_resource_joblist) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:group_grp_resource_joblist_help
+msgid "Grupi Tööleht (grp_resource_joblist) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_settings
 msgid "Grupi Seaded (grp_resource_settings) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:group_grp_resource_settings_help
+msgid "Grupi Seaded (grp_resource_settings) help"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:group_grp_resource_maintenance
 msgid "Grupi Hooldus (grp_resource_maintenance) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:group_grp_resource_maintenance_help
+msgid "Grupi Hooldus (grp_resource_maintenance) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable
 msgid "Grupi Tööajad (grp_resource_unavailable) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_help
+msgid "Grupi Tööajad (grp_resource_unavailable) help"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work
 msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_work_help
+msgid "Grupi T&ouml;&ouml;ajad (grp_resource_unavailable_work) help"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_una
 msgid "Grupi Kinnised ajad (grp_resource_unavailable_una) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_resource.aw:group_grp_resource_unavailable_una_help
+msgid "Grupi Kinnised ajad (grp_resource_unavailable_una) help"
 msgstr ""
 
 #: classes/mrp/mrp_resource.aw:rel_RELTYPE_MRP_SCHEDULE

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:22 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:50 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -218,16 +218,32 @@ msgstr ""
 msgid "Grupi Kaustad (folders) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview.aw:group_folders_help
+msgid "Grupi Kaustad (folders) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview.aw:group_clids
 msgid "Grupi Objektit&uuml;&uuml;bid (clids) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:group_clids_help
+msgid "Grupi Objektit&uuml;&uuml;bid (clids) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/object_treeview.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
+msgstr ""
+
 #: classes/contentmgmt/object_treeview.aw:group_columns
 msgid "Grupi Tulbad (columns) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/object_treeview.aw:group_columns_help
+msgid "Grupi Tulbad (columns) help"
 msgstr ""
 
 #: classes/contentmgmt/object_treeview.aw:rel_RELTYPE_FOLDER

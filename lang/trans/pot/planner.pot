@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:37 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:13 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -119,15 +119,15 @@ msgid "Omaduse S&uuml;ndmuste kataloog (event_folder) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays
-msgid "Omaduse Näidatavad päevad (workdays) caption"
+msgid "Omaduse Tööpäevad (workdays) caption"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays_comment
-msgid "Omaduse Näidatavad päevad (workdays) kommentaar"
+msgid "Omaduse Tööpäevad (workdays) kommentaar"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_workdays_help
-msgid "Omaduse Näidatavad päevad (workdays) help"
+msgid "Omaduse Tööpäevad (workdays) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:prop_tab_views
@@ -410,52 +410,104 @@ msgstr ""
 msgid "Grupi Seaded (general) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_general_help
+msgid "Grupi Seaded (general) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_general2
 msgid "Grupi &Uuml;ldine (general2) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_general2_help
+msgid "Grupi &Uuml;ldine (general2) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:group_advanced
 msgid "Grupi Sisuseaded (advanced) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_advanced_help
+msgid "Grupi Sisuseaded (advanced) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_vac_settings
 msgid "Grupi Vabad ajad (vac_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_vac_settings_help
+msgid "Grupi Vabad ajad (vac_settings) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:group_views
 msgid "Grupi S&uuml;ndmused (views) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_views_help
+msgid "Grupi S&uuml;ndmused (views) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_vacancies
 msgid "Grupi Vabad ajad (vacancies) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_vacancies_help
+msgid "Grupi Vabad ajad (vacancies) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:group_create_events
 msgid "Grupi S&uuml;ndmuste lisamine (create_events) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_create_events_help
+msgid "Grupi S&uuml;ndmuste lisamine (create_events) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_create_vacancies
 msgid "Grupi Vabad ajad (create_vacancies) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_create_vacancies_help
+msgid "Grupi Vabad ajad (create_vacancies) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:group_create_vacancies_cal
 msgid "Grupi Vabad ajad (kalendrivaade) (create_vacancies_cal) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_create_vacancies_cal_help
+msgid "Grupi Vabad ajad (kalendrivaade) (create_vacancies_cal) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_time_settings
 msgid "Grupi Ajaseaded (time_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_time_settings_help
+msgid "Grupi Ajaseaded (time_settings) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:group_add_event
 msgid "Grupi Muuda s&uuml;ndmust (add_event) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_add_event_help
+msgid "Grupi Muuda s&uuml;ndmust (add_event) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
 msgstr ""
 
+#: classes/applications/calendar/planner.aw:group_search_help
+msgid "Grupi Otsing (search) help"
+msgstr ""
+
 #: classes/applications/calendar/planner.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:group_tasks_help
+msgid "Grupi Toimetused (tasks) help"
 msgstr ""
 
 #: classes/applications/calendar/planner.aw:rel_RELTYPE_EVENT_SOURCE
@@ -490,23 +542,31 @@ msgstr ""
 msgid "Seose Teised (RELTYPE_OTHER_CALENDAR) tekst"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:205 classes/applications/calendar/planner.aw:324
+#: classes/applications/calendar/planner.aw:207 classes/applications/calendar/planner.aw:326
 msgid "Päev"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:206 classes/applications/calendar/planner.aw:325
+#: classes/applications/calendar/planner.aw:208 classes/applications/calendar/planner.aw:327
 msgid "Nädal"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:207 classes/applications/calendar/planner.aw:326
+#: classes/applications/calendar/planner.aw:209 classes/applications/calendar/planner.aw:328
 msgid "Kuu"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:208 classes/applications/calendar/planner.aw:327
+#: classes/applications/calendar/planner.aw:210 classes/applications/calendar/planner.aw:329
 msgid "Ülevaade"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:209
+#: classes/applications/calendar/planner.aw:211
+msgid "Otsing"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:307
+msgid "Kasutajal '%s' puudub default kalender"
+msgstr ""
+
+#: classes/applications/calendar/planner.aw:394
 msgid "Otsing"
 msgstr ""
 
@@ -518,163 +578,163 @@ msgstr ""
 msgid "Pakkumine"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:393
+#: classes/applications/calendar/planner.aw:395
 msgid "Kõne"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:394
+#: classes/applications/calendar/planner.aw:396
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:395
+#: classes/applications/calendar/planner.aw:397
 msgid "Kohtumine"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:423
+#: classes/applications/calendar/planner.aw:425
 msgid "Otsingu tulemusena ei leitud ühtegi objekti"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:447 classes/applications/calendar/planner.aw:1570
+#: classes/applications/calendar/planner.aw:449 classes/applications/calendar/planner.aw:1572
 msgid "Kustuta märgitud sündmused"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:449 classes/applications/calendar/planner.aw:1572
+#: classes/applications/calendar/planner.aw:451 classes/applications/calendar/planner.aw:1574
 msgid "Oled kindel, et soovid valitud sündmused kustutada?"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:475
+#: classes/applications/calendar/planner.aw:477
 msgid "Otsi tehtud sündmusi"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:476
+#: classes/applications/calendar/planner.aw:478
 msgid "Otsi tegemata sündmusi"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:477
+#: classes/applications/calendar/planner.aw:479
 msgid "Otsi kõigist kalendritest"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:865
+#: classes/applications/calendar/planner.aw:867
 msgid "header"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:919
+#: classes/applications/calendar/planner.aw:921
 msgid "Sündmuste kataloog on valimata"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:977
+#: classes/applications/calendar/planner.aw:979
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1455
+#: classes/applications/calendar/planner.aw:1457
 msgid "Kalender / Muuda sündmust"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1482
+#: classes/applications/calendar/planner.aw:1484
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1536
+#: classes/applications/calendar/planner.aw:1538
 msgid "Otsi kalendri sündmust"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1544
+#: classes/applications/calendar/planner.aw:1546
 msgid "Täna"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1583
+#: classes/applications/calendar/planner.aw:1585
 msgid "--filtreeri projekti järgi--"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1630
+#: classes/applications/calendar/planner.aw:1632
 msgid "Reload"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1638
+#: classes/applications/calendar/planner.aw:1640
 msgid "Ainult vabad ajad"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1943
+#: classes/applications/calendar/planner.aw:1945
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1948 classes/applications/calendar/planner.aw:2144 classes/applications/calendar/planner.aw:2257 classes/applications/calendar/planner.aw:2823
+#: classes/applications/calendar/planner.aw:1950 classes/applications/calendar/planner.aw:2146 classes/applications/calendar/planner.aw:2259 classes/applications/calendar/planner.aw:2825
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1952 classes/applications/calendar/planner.aw:2150
+#: classes/applications/calendar/planner.aw:1954 classes/applications/calendar/planner.aw:2152
 msgid "Lõpp"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:1957 classes/applications/calendar/planner.aw:2161 classes/applications/calendar/planner.aw:2857
+#: classes/applications/calendar/planner.aw:1959 classes/applications/calendar/planner.aw:2163 classes/applications/calendar/planner.aw:2859
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2154 classes/applications/calendar/planner.aw:2197
+#: classes/applications/calendar/planner.aw:2156 classes/applications/calendar/planner.aw:2199
 msgid "Uus kohtumine"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2204
+#: classes/applications/calendar/planner.aw:2206
 msgid "Uus k&otilde;ne"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2211
+#: classes/applications/calendar/planner.aw:2213
 msgid "Uus toimetus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2237
+#: classes/applications/calendar/planner.aw:2239
 msgid "Sündmuse nimi"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2243
+#: classes/applications/calendar/planner.aw:2245
 msgid "Sündmuse looja"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2250
+#: classes/applications/calendar/planner.aw:2252
 msgid "Sündmusel osalejad"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2268 classes/applications/calendar/planner.aw:2832
+#: classes/applications/calendar/planner.aw:2270 classes/applications/calendar/planner.aw:2834
 msgid "Muudetud"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2495
+#: classes/applications/calendar/planner.aw:2497
 msgid "Tulemuste tabel"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2506
+#: classes/applications/calendar/planner.aw:2508
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2512
+#: classes/applications/calendar/planner.aw:2514
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2518
+#: classes/applications/calendar/planner.aw:2520
 msgid "E-post"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2524
+#: classes/applications/calendar/planner.aw:2526
 msgid "Ametinimetus"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2530
+#: classes/applications/calendar/planner.aw:2532
 msgid "Organisatsioon"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2817
+#: classes/applications/calendar/planner.aw:2819
 msgid "ID"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2840
+#: classes/applications/calendar/planner.aw:2842
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2846
+#: classes/applications/calendar/planner.aw:2848
 msgid "Sisu"
 msgstr ""
 
-#: classes/applications/calendar/planner.aw:2851
+#: classes/applications/calendar/planner.aw:2853
 msgid "Asukoht"
 msgstr ""
 

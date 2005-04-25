@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:22 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -242,12 +242,24 @@ msgstr ""
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
 
+#: classes/applications/orders/orders_form.aw:group_config_help
+msgid "Grupi Seaded (config) help"
+msgstr ""
+
 #: classes/applications/orders/orders_form.aw:group_ordering
 msgid "Grupi Tellimine (ordering) pealkiri"
 msgstr ""
 
+#: classes/applications/orders/orders_form.aw:group_ordering_help
+msgid "Grupi Tellimine (ordering) help"
+msgstr ""
+
 #: classes/applications/orders/orders_form.aw:group_payment
 msgid "Grupi Makseviisid (payment) pealkiri"
+msgstr ""
+
+#: classes/applications/orders/orders_form.aw:group_payment_help
+msgid "Grupi Makseviisid (payment) help"
 msgstr ""
 
 #: classes/applications/orders/orders_form.aw:rel_RELTYPE_ORDERFORM

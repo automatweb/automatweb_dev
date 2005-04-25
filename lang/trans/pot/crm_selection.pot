@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:05 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:43 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -74,8 +74,16 @@ msgstr ""
 msgid "Grupi Objektid (contents) pealkiri"
 msgstr ""
 
+#: classes/crm/crm_selection.aw:group_contents_help
+msgid "Grupi Objektid (contents) help"
+msgstr ""
+
 #: classes/crm/crm_selection.aw:group_preview
 msgid "Grupi Näita (preview) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_selection.aw:group_preview_help
+msgid "Grupi Näita (preview) help"
 msgstr ""
 
 #: classes/crm/crm_selection.aw:rel_RELTYPE_BACKFORMS2

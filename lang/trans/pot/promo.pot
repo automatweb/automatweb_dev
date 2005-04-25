@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 13 Apr 2005 15:49:39 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:51 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -116,6 +116,18 @@ msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_is_dyn_help
 msgid "Omaduse Sisu ei cacheta (is_dyn) help"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_not_in_search
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_not_in_search_comment
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:prop_not_in_search_help
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:prop_trans_all_langs
@@ -302,8 +314,16 @@ msgstr ""
 msgid "Grupi Kaustad (menus) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/promo.aw:group_menus_help
+msgid "Grupi Kaustad (menus) help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:group_show
 msgid "Grupi Näitamine (show) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/promo.aw:group_show_help
+msgid "Grupi Näitamine (show) help"
 msgstr ""
 
 #: classes/contentmgmt/promo.aw:rel_RELTYPE_ASSIGNED_MENU

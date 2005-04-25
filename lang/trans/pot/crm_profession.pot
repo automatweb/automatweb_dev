@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:05 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:42 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,10 @@ msgstr ""
 
 #: classes/crm/crm_profession.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
+msgstr ""
+
+#: classes/crm/crm_profession.aw:group_trans_help
+msgid "Grupi Tõlkimine (trans) help"
 msgstr ""
 
 #: classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:53 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:47 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,10 @@ msgstr ""
 
 #: classes/poll_ng.aw:group_choices
 msgid "Grupi Vastusevariandid (choices) pealkiri"
+msgstr ""
+
+#: classes/poll_ng.aw:group_choices_help
+msgid "Grupi Vastusevariandid (choices) help"
 msgstr ""
 
 #: classes/poll_ng.aw:rel_RELTYPE_ANSWER

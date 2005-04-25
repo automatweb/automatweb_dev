@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:22 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:52 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -24,5 +24,9 @@ msgstr ""
 
 #: classes/contentmgmt/messageboard.aw:group_comments
 msgid "Grupi Kommentaarid (comments) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/messageboard.aw:group_comments_help
+msgid "Grupi Kommentaarid (comments) help"
 msgstr ""
 

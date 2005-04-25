@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:22 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -494,8 +494,16 @@ msgstr ""
 msgid "Grupi Piltide&nbsp;suurused (imgsize) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:group_imgsize_help
+msgid "Grupi Piltide&nbsp;suurused (imgsize) help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_conf.aw:group_logo
 msgid "Grupi Lisapilt (logo) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/gallery/gallery_conf.aw:group_logo_help
+msgid "Grupi Lisapilt (logo) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/gallery_conf.aw:rel_RELTYPE_FOLDER

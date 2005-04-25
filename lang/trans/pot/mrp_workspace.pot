@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:20 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:27 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1154,72 +1154,144 @@ msgstr ""
 msgid "Grupi Kliendid (grp_customers) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_customers_help
+msgid "Grupi Kliendid (grp_customers) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_projects
 msgid "Grupi Projektid (grp_projects) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_projects_help
+msgid "Grupi Projektid (grp_projects) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_search
 msgid "Grupi Otsing (grp_search) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_search_help
+msgid "Grupi Otsing (grp_search) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_search_proj
 msgid "Grupi Otsi projekte (grp_search_proj) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_search_proj_help
+msgid "Grupi Otsi projekte (grp_search_proj) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_search_cust
 msgid "Grupi Otsi kliente (grp_search_cust) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_search_cust_help
+msgid "Grupi Otsi kliente (grp_search_cust) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_schedule
 msgid "Grupi Kalender (grp_schedule) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_schedule_help
+msgid "Grupi Kalender (grp_schedule) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer
 msgid "Grupi Operaatori vaade (grp_printer) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_printer_help
+msgid "Grupi Operaatori vaade (grp_printer) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_current
 msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_printer_current_help
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_done
 msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_printer_done_help
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
 msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_printer_aborted_help
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings
 msgid "Grupi Seaded (grp_settings) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_settings_help
+msgid "Grupi Seaded (grp_settings) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_def
 msgid "Grupi Seaded (grp_settings_def) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_settings_def_help
+msgid "Grupi Seaded (grp_settings_def) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
 msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_settings_salesman_help
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_users_tree
 msgid "Grupi Kasutajate puu (grp_users_tree) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_users_tree_help
+msgid "Grupi Kasutajate puu (grp_users_tree) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_users_mgr
 msgid "Grupi Kasutajate rollid (grp_users_mgr) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_users_mgr_help
+msgid "Grupi Kasutajate rollid (grp_users_mgr) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_grp_resources
 msgid "Grupi Ressursside haldus (grp_resources) pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group_grp_resources_help
+msgid "Grupi Ressursside haldus (grp_resources) help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:group_grp_login_select_res
 msgid "Grupi Vali kasutatav ressurss (grp_login_select_res) pealkiri"
 msgstr ""
 
+#: classes/mrp/mrp_workspace.aw:group_grp_login_select_res_help
+msgid "Grupi Vali kasutatav ressurss (grp_login_select_res) help"
+msgstr ""
+
 #: classes/mrp/mrp_workspace.aw:group_
 msgid "Grupi  () pealkiri"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:group__help
+msgid "Grupi  () help"
 msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:rel_RELTYPE_MRP_FOLDER

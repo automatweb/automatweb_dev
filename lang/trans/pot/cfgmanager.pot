@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:20 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:30 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -38,6 +38,10 @@ msgstr ""
 msgid "Grupi Seaded (config) pealkiri"
 msgstr ""
 
+#: classes/cfg/cfgmanager.aw:group_config_help
+msgid "Grupi Seaded (config) help"
+msgstr ""
+
 #: classes/cfg/cfgmanager.aw:rel_RELTYPE_C_GROUP
 msgid "Seose Grupp (RELTYPE_C_GROUP) tekst"
 msgstr ""
@@ -46,11 +50,11 @@ msgstr ""
 msgid "Seose Seadete vorm (RELTYPE_C_CFGFORM) tekst"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:74
+#: classes/cfg/cfgmanager.aw:97
 msgid "Grupp"
 msgstr ""
 
-#: classes/cfg/cfgmanager.aw:80
+#: classes/cfg/cfgmanager.aw:103
 msgid "Seadete vorm"
 msgstr ""
 

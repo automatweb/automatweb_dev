@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:32 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:09 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -134,8 +134,16 @@ msgstr ""
 msgid "Grupi Sisu (content) pealkiri"
 msgstr ""
 
+#: classes/applications/awmyadmin/db_table_contents.aw:group_content_help
+msgid "Grupi Sisu (content) help"
+msgstr ""
+
 #: classes/applications/awmyadmin/db_table_contents.aw:group_admcontent
 msgid "Grupi Muuda sisu (admcontent) pealkiri"
+msgstr ""
+
+#: classes/applications/awmyadmin/db_table_contents.aw:group_admcontent_help
+msgid "Grupi Muuda sisu (admcontent) help"
 msgstr ""
 
 #: classes/applications/awmyadmin/db_table_contents.aw:rel_RELTYPE_DB_LOGIN

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:27 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -242,15 +242,31 @@ msgstr ""
 msgid "Grupi T&uuml;&uuml;bid (types) pealkiri"
 msgstr ""
 
+#: classes/syslog/dronline_conf.aw:group_types_help
+msgid "Grupi T&uuml;&uuml;bid (types) help"
+msgstr ""
+
 #: classes/syslog/dronline_conf.aw:group_actions
 msgid "Grupi Tegevused (actions) pealkiri"
+msgstr ""
+
+#: classes/syslog/dronline_conf.aw:group_actions_help
+msgid "Grupi Tegevused (actions) help"
 msgstr ""
 
 #: classes/syslog/dronline_conf.aw:group_combo
 msgid "Grupi Kombineeritud (combo) pealkiri"
 msgstr ""
 
+#: classes/syslog/dronline_conf.aw:group_combo_help
+msgid "Grupi Kombineeritud (combo) help"
+msgstr ""
+
 #: classes/syslog/dronline_conf.aw:group_ipfilter
 msgid "Grupi IPfilter (ipfilter) pealkiri"
+msgstr ""
+
+#: classes/syslog/dronline_conf.aw:group_ipfilter_help
+msgid "Grupi IPfilter (ipfilter) help"
 msgstr ""
 

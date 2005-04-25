@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:01 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:33 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -48,6 +48,10 @@ msgstr ""
 
 #: classes/core/aw_script.aw:group_configure
 msgid "Grupi Seadistused (configure) pealkiri"
+msgstr ""
+
+#: classes/core/aw_script.aw:group_configure_help
+msgid "Grupi Seadistused (configure) help"
 msgstr ""
 
 #: classes/core/aw_script.aw:rel_RELTYPE_CONFIG_OPTION

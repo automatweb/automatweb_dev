@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:21 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:48 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -134,8 +134,16 @@ msgstr ""
 msgid "Grupi Hinded (rates) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum.aw:group_rates_help
+msgid "Grupi Hinded (rates) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum.aw:group_languages
 msgid "Grupi Keel (languages) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum.aw:group_languages_help
+msgid "Grupi Keel (languages) help"
 msgstr ""
 
 #: classes/contentmgmt/forum/forum.aw:195

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:41 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:05:19 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -158,12 +158,24 @@ msgstr ""
 msgid "Grupi Prügikast (recycle) pealkiri"
 msgstr ""
 
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_help
+msgid "Grupi Prügikast (recycle) help"
+msgstr ""
+
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_list
 msgid "Grupi Nimekiri (recycle_list) pealkiri"
 msgstr ""
 
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_list_help
+msgid "Grupi Nimekiri (recycle_list) help"
+msgstr ""
+
 #: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_search
 msgid "Grupi Otsing (recycle_search) pealkiri"
+msgstr ""
+
+#: classes/applications/recycle_bin/recycle_bin.aw:group_recycle_search_help
+msgid "Grupi Otsing (recycle_search) help"
 msgstr ""
 
 #: classes/applications/recycle_bin/recycle_bin.aw:110

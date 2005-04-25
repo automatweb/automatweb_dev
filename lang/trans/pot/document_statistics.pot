@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:03 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:51 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -158,12 +158,24 @@ msgstr ""
 msgid "Grupi Kataloogid ja perioodid (folders) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/document_statistics.aw:group_folders_help
+msgid "Grupi Kataloogid ja perioodid (folders) help"
+msgstr ""
+
 #: classes/contentmgmt/document_statistics.aw:group_mail
 msgid "Grupi E-mail (mail) pealkiri"
 msgstr ""
 
+#: classes/contentmgmt/document_statistics.aw:group_mail_help
+msgid "Grupi E-mail (mail) help"
+msgstr ""
+
 #: classes/contentmgmt/document_statistics.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/document_statistics.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
 msgstr ""
 
 #: classes/contentmgmt/document_statistics.aw:rel_RELTYPE_SHOW_FOLDER

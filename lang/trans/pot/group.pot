@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sat, 23 Apr 2005 21:58:28 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:31 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -254,12 +254,24 @@ msgstr ""
 msgid "Grupi Otsing (dyn_search) pealkiri"
 msgstr ""
 
+#: classes/core/users/group.aw:group_dyn_search_help
+msgid "Grupi Otsing (dyn_search) help"
+msgstr ""
+
 #: classes/core/users/group.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
 
+#: classes/core/users/group.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
 #: classes/core/users/group.aw:group_objects
 msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_objects_help
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
 #: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM

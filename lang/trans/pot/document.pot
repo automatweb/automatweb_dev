@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:59 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 17:04:50 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,67 +10,67 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/document.aw:414
+#: classes/document.aw:415
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:617
+#: classes/document.aw:618
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:641
+#: classes/document.aw:642
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1068 classes/document.aw:1117
+#: classes/document.aw:1070 classes/document.aw:1119
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1073 classes/document.aw:1122
+#: classes/document.aw:1075 classes/document.aw:1124
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2865 classes/document.aw:3445
+#: classes/document.aw:2867 classes/document.aw:3447
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2872
+#: classes/document.aw:2874
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2880 classes/document.aw:3463
+#: classes/document.aw:2882 classes/document.aw:3465
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:3403
+#: classes/document.aw:3405
 msgid "<font face='arial'>Toimub staatiliste lehtede	genereerimine, palun oodake!<br /><br />\n\n"
 msgstr ""
 
-#: classes/document.aw:3433
+#: classes/document.aw:3435
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:3435
+#: classes/document.aw:3437
 msgid "tagasi dokumendi muutmise juurde"
 msgstr ""
 
-#: classes/document.aw:3451
+#: classes/document.aw:3453
 msgid "Lead"
 msgstr ""
 
-#: classes/document.aw:3457
+#: classes/document.aw:3459
 msgid "Sisu"
 msgstr ""
 
-#: classes/document.aw:3473
+#: classes/document.aw:3475
 msgid "Periood"
 msgstr ""
 
-#: classes/document.aw:3533
+#: classes/document.aw:3535
 msgid "Objektiotsing"
 msgstr ""
 
-#: classes/document.aw:3533
+#: classes/document.aw:3535
 msgid "Dokumentide otsing"
 msgstr ""
 
