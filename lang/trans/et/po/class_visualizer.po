@@ -1,14 +1,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:43 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 11:11:14 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
 
 #: classes/applications/class_designer/class_visualizer.aw:26
 msgid "I'm so depessed"
@@ -18,3 +17,7 @@ msgstr ""
 msgid "this will not work"
 msgstr ""
 
+#: classes/applications/class_designer/class_visualizer.aw:264
+#: classes/applications/class_designer/class_visualizer.aw:345
+msgid "Seostehaldur"
+msgstr ""

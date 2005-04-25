@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:31 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 11:11:23 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -313,10 +313,6 @@ msgstr ""
 msgid "Klassi Puu (137) nimi"
 msgstr ""
 
-# aw.ini:class_138
-msgid "Klassi Alamsait (138) nimi"
-msgstr ""
-
 # aw.ini:class_139
 msgid "Klassi Linn (139) nimi"
 msgstr ""
@@ -363,10 +359,6 @@ msgstr ""
 
 # aw.ini:class_154
 msgid "Klassi SQL P&auml;ring (154) nimi"
-msgstr ""
-
-# aw.ini:class_156
-msgid "Klassi Objekti omaduste grupp (156) nimi"
 msgstr ""
 
 # aw.ini:class_157

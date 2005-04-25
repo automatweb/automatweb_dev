@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 18 Apr 2005 11:46:25 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 11:11:19 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -327,7 +327,7 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:537
+#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:538
 msgid "Ava"
 msgstr ""
 
@@ -335,14 +335,14 @@ msgstr ""
 msgid "Staatus"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:469
+#: classes/mrp/mrp_resource.aw:470
 msgid "Alustamisaeg"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:475
+#: classes/mrp/mrp_resource.aw:476
 msgid "Projekt-Töö nr."
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:481
+#: classes/mrp/mrp_resource.aw:482
 msgid "Klient"
 msgstr ""

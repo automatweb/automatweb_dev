@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:30 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 11:11:20 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1377,12 +1377,12 @@ msgid "Sekund"
 msgstr "Second"
 
 #: classes/mrp/mrp_workspace.aw:807
-msgid "T&ouml;&ouml;s / v&otilde;ib alustada"
-msgstr "In progress / can be started"
+msgid "V&otilde;ib alustada"
+msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:808
-msgid "Ei saa alustada"
-msgstr "Can not be started"
+msgid "Ei saa alustada/t&ouml;&ouml;s"
+msgstr ""
 
 #: classes/mrp/mrp_workspace.aw:837
 msgid "Tehtud"
@@ -1678,6 +1678,12 @@ msgstr "Log out"
 #: classes/mrp/mrp_workspace.aw:4041 classes/mrp/mrp_workspace.aw:4099
 msgid "Valitud projekt"
 msgstr "Selected project"
+
+#~ msgid "T&ouml;&ouml;s / v&otilde;ib alustada"
+#~ msgstr "In progress / can be started"
+
+#~ msgid "Ei saa alustada"
+#~ msgstr "Can not be started"
 
 # classes/mrp/mrp_workspace.aw:prop_chart_project_hilight
 #~ msgid "Omaduse Valitud projekt (chart_project_hilight) caption"

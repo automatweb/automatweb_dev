@@ -3,7 +3,6 @@ $GLOBALS["TRANS"]["Omaduse Klass on registreeritud (is_registered) caption"] = "
 $GLOBALS["TRANS"]["Omaduse CLID (reg_class_id) caption"] = "CLID";
 $GLOBALS["TRANS"]["Omaduse Objekti nime omadus (object_name) caption"] = "Object name property";
 $GLOBALS["TRANS"]["Omaduse Saab lisada (can_add) caption"] = "Can add";
-$GLOBALS["TRANS"]["Omaduse classfolder (class_folder) caption"] = "classfolder";
 $GLOBALS["TRANS"]["Omaduse Seostehaldur (relationmgr) caption"] = "Connection manager";
 $GLOBALS["TRANS"]["Omaduse Kommentaari muuta ei saa (no_comment) caption"] = "Comment can not be changed";
 $GLOBALS["TRANS"]["Omaduse Aktiivsust muuta ei saa (no_status) caption"] = "Activity can not be changed";

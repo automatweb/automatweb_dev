@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 11:11:07 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,120 +9,118 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/admin/admin_menus.aw:239
+#: classes/admin/admin_menus.aw:242
 msgid "Ava"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:249 classes/admin/admin_menus.aw:1372
+#: classes/admin/admin_menus.aw:252 classes/admin/admin_menus.aw:1379
 msgid "Muuda"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:257 classes/admin/admin_menus.aw:1341
+#: classes/admin/admin_menus.aw:260 classes/admin/admin_menus.aw:1348
 msgid "L&otilde;ika"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:266 classes/admin/admin_menus.aw:1348
+#: classes/admin/admin_menus.aw:269 classes/admin/admin_menus.aw:1355
 msgid "Kopeeri"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:274
+#: classes/admin/admin_menus.aw:277
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:278 classes/admin/admin_menus.aw:1365
+#: classes/admin/admin_menus.aw:281 classes/admin/admin_menus.aw:1372
 msgid "Kustuta"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:516
+#: classes/admin/admin_menus.aw:519
 msgid "Vali kuidas objekte kopeerida"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:705
+#: classes/admin/admin_menus.aw:708
 msgid "Menyyde importimisel tekkis viga real %s "
 msgstr ""
 
-#: classes/admin/admin_menus.aw:722
+#: classes/admin/admin_menus.aw:725
 msgid "Menyyde importimisel ei leidnud parent menyyd real %s "
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1162
+#: classes/admin/admin_menus.aw:1168
 msgid "Link"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1177
+#: classes/admin/admin_menus.aw:1183
 msgid "Mitteaktiivne"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1177 classes/admin/admin_menus.aw:1611
+#: classes/admin/admin_menus.aw:1183 classes/admin/admin_menus.aw:1618
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1281
+#: classes/admin/admin_menus.aw:1288
 msgid "Uus"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1323
+#: classes/admin/admin_menus.aw:1330
 msgid "Salvesta"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1331
+#: classes/admin/admin_menus.aw:1338
 msgid "Otsi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1357
+#: classes/admin/admin_menus.aw:1364
 msgid "Kleebi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1381
+#: classes/admin/admin_menus.aw:1388
 msgid "Uuenda"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1388
+#: classes/admin/admin_menus.aw:1395
 msgid "Impordi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1394
+#: classes/admin/admin_menus.aw:1401
 msgid "Suured ikoonid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1395
+#: classes/admin/admin_menus.aw:1402
 msgid "Väiksed ikoonid"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1396
+#: classes/admin/admin_menus.aw:1403
 msgid "Detailne vaade"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1519
+#: classes/admin/admin_menus.aw:1526
 msgid "Valitud pole &uuml;htegi objekti!"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1596
+#: classes/admin/admin_menus.aw:1603
 msgid "Nimi"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1605
+#: classes/admin/admin_menus.aw:1612
 msgid "Jrk"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1620
+#: classes/admin/admin_menus.aw:1627
 msgid "Muutja"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1630
+#: classes/admin/admin_menus.aw:1637
 msgid "Muudetud"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1643
+#: classes/admin/admin_menus.aw:1650
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1653
+#: classes/admin/admin_menus.aw:1660
 msgid "Tegevus"
 msgstr ""
 
-#: classes/admin/admin_menus.aw:1662
+#: classes/admin/admin_menus.aw:1669
 msgid "<a href='javascript:selall()'>Vali</a>"
 msgstr ""
-
