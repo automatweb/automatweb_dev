@@ -1,8 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.3 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/iframe.aw,v 1.4 2005/04/25 14:14:49 kristo Exp $
 // iframe.aw - iframes
 
 /*
+	@classinfo relationmgr=yes
 
 	@default table=objects
 	@default field=meta
@@ -11,6 +12,9 @@
 
 	@property url type=textbox size=40 
 	@caption URL
+
+	@property content type=relpicker reltype=RELTYPE_CONTENT
+	@caption Sisu
 
 	@property width type=textbox size=4 maxlength=4
 	@caption Laius
@@ -24,6 +28,8 @@
 	@property scrolling type=select 
 	@caption Kerimisribad
 
+	@reltype CONTENT value=1 clid=CL_DOCUMENT
+	@caption sisu
 */
 class iframe extends class_base
 {
@@ -136,8 +142,14 @@ class iframe extends class_base
 			"p" => "right",
 		);
 
+		$url = $obj->prop("url");
+		if (is_oid($obj->prop("content")) && $this->can("view", $obj->prop("content")))
+		{
+			$url = obj_link($obj->prop("content"))."?only_document_content=1";
+		}
+
 		$this->vars(array(
-			"url" => $obj->prop("url"),
+			"url" => $url,
 			"width" => $obj->prop("width"),
 			"height" => $obj->prop("height"),
 			"scrolling" => $obj->prop("scrolling"),
