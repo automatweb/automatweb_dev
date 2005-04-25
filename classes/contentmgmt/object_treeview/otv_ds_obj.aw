@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.33 2005/04/06 12:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.34 2005/04/25 14:15:53 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -19,6 +19,9 @@
 
 @property file_show_comment type=checkbox ch_value=1 field=meta method=serialize
 @caption Failil nime asemel kommentaar
+
+@property ignore_site_id type=checkbox ch_value=1 field=meta method=serialize
+@caption Objektid k&otilde;ikidest saitidest
 
 @property sort_by type=select field=meta method=serialize
 @caption Objekte sorteeritakse
@@ -563,6 +566,11 @@ class otv_ds_obj extends class_base
 					$_ft[$params['filters']['filter_by_char_field']] = $params['filters']['char']."%";
 				}
 			}
+		}
+
+		if ($ob->prop("ignore_site_id"))
+		{
+			$_ft["site_id"] = array();
 		}
 
 		enter_function("otv_ds_obj::get_objects::list");
