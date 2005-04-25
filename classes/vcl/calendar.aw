@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.52 2005/04/22 06:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.53 2005/04/25 08:06:14 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -361,7 +361,6 @@ class vcalendar extends aw_template
 		$this->event_counter = 0;
 
 
-
 		if (!empty($arr["text"]))
 		{
 			$content = $arr["text"];
@@ -596,6 +595,8 @@ class vcalendar extends aw_template
 		};
 
 		$this->vars(array(
+			"RANDOM" => $this->random,
+			"YEARS" => $this->years,
 			"PAGE" => $ts,
 			"mininaviurl" => aw_url_change_var("date","") . $urlsufix,
 			"naviurl" => aw_url_change_var("date",""),
@@ -623,6 +624,7 @@ class vcalendar extends aw_template
 
 	function draw_month()
 	{
+		//$this->read_template("week_view.tpl");
 		$this->read_template("month_view.tpl");
 		$rv = "";
 
@@ -737,6 +739,7 @@ class vcalendar extends aw_template
 					"dayname" => date("F d, Y",$reals),
 					"date" => locale::get_lc_date($reals,5),
 					"lc_weekday" => locale::get_lc_weekday(date("w",$reals)),
+					"lc_month" => locale::get_lc_month(date("m",$reals)),
 					"daylink" => aw_url_change_var(array(
 						"viewtype" => "day",
 						"date" => date("d-m-Y",$reals),
@@ -909,7 +912,6 @@ class vcalendar extends aw_template
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
 		};
-
 		$this->vars(array(
 			"DAY" => $rv,
 		));

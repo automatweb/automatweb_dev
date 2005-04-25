@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.32 2005/04/24 05:42:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.33 2005/04/25 08:06:14 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -556,6 +556,26 @@ class calendar_view extends class_base
 		return $events;
 	}
 	
+	function get_first_event($arr)
+	{
+		extract($arr);
+		if(!$sources)
+		{
+			$sources = $this->get_event_sources($o);
+		}
+		$obj = new object_list(array(
+			"parent" => $sources,
+			"class_id" => $this->event_entry_classes,
+			//new object_list_filter(array("non_filter_classes" => CL_CALENDAR_EVENT)),
+			"brother_of" => new obj_predicate_prop("id"),
+			"status" => $status,
+			"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, time()),
+			"sort_by" => "planner.start DESC",
+			"limit" => 1,
+		));
+		return $obj->begin();
+	}
+	
 	function get_event_sources($o)
 	{
 		$sources = array();
@@ -732,21 +752,34 @@ class calendar_view extends class_base
 			foreach($conns as $conn)
 			{
 				$to_o = $conn->to();
-				$events = $this->get_events_from_object(array(
-					"obj_inst" => $to_o,
-					"range" => $range,
-					"status" => $status,
-				));
-				
 				$sources = $this->get_event_sources($to_o);
-				$first = reset($events);
+				if($_GET["date"])
+				{
+					$first = reset($this->get_events_from_object(array(
+						"obj_inst" => $to_o,
+						"range" => $range,
+						"status" => $status,
+					)));
+					$first = obj($first["id"]);
+					$start1 = $first->prop("start1");
+				}
+				else
+				{
+					$first = $this->get_first_event(array(
+						"obj" => $to_o,
+						"sources" => $sources,
+						"status" => $status,
+					));
+					$start1 = $first->prop("start1");
+				}
 				if($first)
 				{
 					$objs = new object_list(array(
 						"parent" => $sources,
 						"class_id" => $this->event_entry_classes,
-						"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $first["start1"]),
+						"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $start1),
 						"brother_of" => new obj_predicate_prop("id"),
+						"oid" => new obj_predicate_not($first->id()),
 						"status" => $status,
 						"limit" => 1,
 					));
@@ -757,18 +790,15 @@ class calendar_view extends class_base
 					}
 					else
 					{
-						$ec["overview_start"] = $ec["start"] = $first["start1"];
-						$ec["prev"] = date("d-m-Y", $first["start1"]);
+						$ec["overview_start"] = $ec["start"] = $start1;
+						$ec["prev"] = date("d-m-Y", $start1);
 					}
-				}
-				$last = end($events);
-				if($last)
-				{
 					$objs = new object_list(array(
 						"parent" => $sources,
 						"class_id" => $this->event_entry_classes,
-						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER, $last["start1"]),
+						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start1),
 						"brother_of" => new obj_predicate_prop("id"),
+						"oid" => new obj_predicate_not($first->id()),
 						"status" => $status,
 						"limit" => 1,
 					));
@@ -779,23 +809,86 @@ class calendar_view extends class_base
 					}
 					else
 					{
-						$ec["overview_end"] = $ec["end"]  = $last["start1"];
-						$ec["next"] = date("d-m-Y", $last["start1"]);
+						$ec["overview_end"] = $ec["end"]  = $start1;
+						$ec["next"] = date("d-m-Y", $start1);
 					}
 				}
 				$vcal->items = array();
-				foreach($events as $event)
-				{
-					$o = new object($event["id"]);
-					$i = $o->instance();
-					$text .= $i->request_execute($o);
-				};
+				$i = $first->instance();
+				$text .= $i->request_execute($first);
 			}
 			if(!empty($ec))
 			{
 				$range_p["show_ec"] = $ec;
 			}
 			$viewtype = "day";
+			$this->read_template("last_events/intranet1.tpl");
+			if($this->is_template("RANDOM"))
+			{
+				$objs = new object_list(array(
+					"parent" => $sources,
+					"class_id" => $this->event_entry_classes,
+					"brother_of" => new obj_predicate_prop("id"),
+					//"oid" => new obj_predicate_not($first->id()),
+					"status" => $status,
+					"limit" => 10,
+				));
+				$ids = $objs->ids();
+				shuffle($ids);
+				foreach($ids as $id)
+				{
+					$obj = obj($id);
+					$this->vars(array(
+						"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
+					));
+					$random .= $this->parse("RANDOM");
+				}
+				$vcal->random = $random;
+			}
+			if($this->is_template("YEARS"))
+			{
+				$objs1 = new object_list(array(
+					"parent" => $sources,
+					"class_id" => $this->event_entry_classes,
+					"status" => $status,
+					"brother_of" => new obj_predicate_prop("id"),
+					"limit" => 1,
+					new object_list_filter(array("non_filter_classes" => CL_COMICS)),
+					"sort_by" => "planner.start ASC",
+				));
+				$obj = $objs->begin();
+				$start = $obj->prop("start1");
+				$objs = new object_list(array(
+					"parent" => $sources,
+					"class_id" => $this->event_entry_classes,
+					"status" => $status,
+					"brother_of" => new obj_predicate_prop("id"),
+					"limit" => 1,
+					new object_list_filter(array("non_filter_classes" => CL_COMICS)),
+					"sort_by" => "planner.start DESC",
+				));
+				$obj = $objs->begin();
+				$end = $obj->prop("start1");
+				$range = range(date("Y", $start), date("Y", $end));
+				foreach($range as $year)
+				{
+					$objs = new object_list(array(
+						"parent" => $sources,
+						"class_id" => $this->event_entry_classes,
+						"status" => $status,
+						"brother_of" => new obj_predicate_prop("id"),
+						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, mktime(0, 0, 1, 1, 1, $year)),
+						"limit" => 1,
+					));
+					$obj = $objs->begin();
+					$this->vars(array(
+						"link" => aw_url_change_var(array("date" => date("d-m-Y", $obj->prop("start1")))),
+						"name" => $year,
+					));
+					$years .= $this->parse("YEARS");
+				}
+				$vcal->years = $years;
+			}
 			exit_function("calendar_view::show_event_content");
 		}
 		$range = $vcal->get_range($range_p);
