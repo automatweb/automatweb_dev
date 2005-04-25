@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.5 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_local.aw,v 1.6 2005/04/25 09:09:01 kristo Exp $
 // auth_server_local.aw - Autentimsserver Kohalik 
 /*
 
@@ -84,7 +84,33 @@ class auth_server_local extends class_base
 		{
 			$msg = "Sellist kasutajat pole $credentials[uid]";
 		};
-		
+
+		// check ip address
+		if (is_oid($udata["oid"]) && $this->can("view", $udata["oid"]))
+		{
+			$u_o = obj($udata["oid"]);
+			$conns = $u_o->connections_from(array("type" => "RELTYPE_ACCESS_FROM_IP"));
+			if (count($conns))
+			{
+				$allow = false;
+				$ipi = get_instance(CL_IPADDRESS);
+				$cur_ip = inet::is_ip($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
+				foreach($conns as $c)
+				{
+					$ipa = $c->to();
+					if ($ipi->match($ipa->prop("addr"), $cur_ip))
+					{
+						$allow = true;
+					}
+				}
+
+				if (!$allow)
+				{
+					return array(false, sprintf(t("Sellelt aadressilt (%s) pole ligip&auml;&auml;s lubatud!"), $cur_ip));
+				}
+			}
+		}
+
 		if($success && users_user::require_password_change($udata["uid"]) && users_user::is_first_login($udata["uid"]) && !$credentials["pwdchange"])
 		{ 
 			Header("Location: ".$this->mk_my_orb("change_password_not_logged", array("uid" => $udata["uid"]), "users"));

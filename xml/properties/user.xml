@@ -419,6 +419,11 @@
                   <clid>CL_FORM_ENTRY</clid>
                   <caption>FG profiil</caption>
             </FG_PROFILE>
+            <ACCESS_FROM_IP>
+                  <value>8</value>
+                  <clid>CL_IPADDRESS</clid>
+                  <caption>ligip&amp;auml;&amp;auml;su aadress</caption>
+            </ACCESS_FROM_IP>
       </reltypes>
 </properties>
 

@@ -174,6 +174,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @reltype FG_PROFILE value=7 clid=CL_FORM_ENTRY
 @caption FG profiil
 
+@reltype ACCESS_FROM_IP value=8 clid=CL_IPADDRESS
+@caption ligip&auml;&auml;su aadress
+
 */
 
 class user extends class_base
