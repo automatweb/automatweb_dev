@@ -585,6 +585,16 @@
             <field>no_show_in_promo</field>
             <caption>&amp;Auml;ra n&amp;auml;ita konteineris</caption>
       </property>
+      <property>
+            <name>show_in_iframe</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasuta siseraami</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <no_comment>1</no_comment>

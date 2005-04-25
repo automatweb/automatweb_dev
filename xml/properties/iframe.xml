@@ -11,6 +11,16 @@
             <caption>URL</caption>
       </property>
       <property>
+            <name>content</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTENT</reltype>
+            <caption>Sisu</caption>
+      </property>
+      <property>
             <name>width</name>
             <table>objects</table>
             <field>meta</field>
@@ -52,5 +62,15 @@
             <type>select</type>
             <caption>Kerimisribad</caption>
       </property>
+      <classinfo>
+            <relationmgr>yes</relationmgr>
+      </classinfo>
+      <reltypes>
+            <CONTENT>
+                  <value>1</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>sisu</caption>
+            </CONTENT>
+      </reltypes>
 </properties>
 

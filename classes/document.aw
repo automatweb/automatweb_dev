@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.326 2005/04/15 08:57:30 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.327 2005/04/25 14:08:16 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -447,6 +447,16 @@ class document extends aw_template
 		{
 			$this->read_any_template($tpl);
 		};
+
+		// if show in iframe is set, just return the iframe
+		if ($doc_o->prop("show_in_iframe") && !$_REQUEST["only_document_content"])
+		{
+			$this->vars(array(
+				"iframe_url" => obj_link($doc_o->id())."?only_document_content=1"
+			));
+			return $this->parse("IFRAME");
+		}
+
 		
 		$l = get_instance(CL_LANGUAGE);
 		$l->do_insert_texts($this);

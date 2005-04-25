@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.130 2005/04/07 12:22:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.131 2005/04/25 14:08:16 kristo Exp $
 
 /*
 
@@ -925,6 +925,15 @@ class site_show extends class_base
 		if ($GLOBALS["real_no_menus"] == 1)
 		{
 			die($docc);
+		}
+
+		if ($_REQUEST["only_document_content"])
+		{
+			$this->read_template("main_only_document_content.tpl");
+			$this->vars(array(
+				"doc_content" => $docc,
+			));
+			return $this->parse();
 		}
 
 		if ($this->sel_section_obj->prop("no_menus") == 1 || $GLOBALS["print"] || 1 == $arr["content_only"])

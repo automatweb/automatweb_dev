@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:23 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 16:59:10 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,18 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_url_help
 msgid "Omaduse URL (url) help"
+msgstr ""
+
+#: classes/contentmgmt/iframe.aw:prop_content
+msgid "Omaduse Sisu (content) caption"
+msgstr ""
+
+#: classes/contentmgmt/iframe.aw:prop_content_comment
+msgid "Omaduse Sisu (content) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/iframe.aw:prop_content_help
+msgid "Omaduse Sisu (content) help"
 msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_width
@@ -68,5 +80,9 @@ msgstr ""
 
 #: classes/contentmgmt/iframe.aw:prop_scrolling_help
 msgid "Omaduse Kerimisribad (scrolling) help"
+msgstr ""
+
+#: classes/contentmgmt/iframe.aw:rel_RELTYPE_CONTENT
+msgid "Seose sisu (RELTYPE_CONTENT) tekst"
 msgstr ""
 

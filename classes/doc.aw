@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.105 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.106 2005/04/25 14:08:16 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -179,6 +179,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 
 @property no_show_in_promo type=checkbox ch_value=1 group=settings trans=1 table=documents field=no_show_in_promo method=
 @caption &Auml;ra n&auml;ita konteineris
+
+@property show_in_iframe type=checkbox ch_value=1 group=settings table=objects field=meta method=serialize
+@caption Kasuta siseraami
+
 
 @groupinfo calendar caption=Kalender
 @groupinfo vennastamine caption=Vennastamine
