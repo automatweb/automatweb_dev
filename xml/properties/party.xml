@@ -59,33 +59,23 @@
             <caption>Seostehaldur</caption>
       </property>
       <property>
-            <name>artists</name>
-            <table>objects</table>
+            <name>artists_toolbar</name>
+            <table>planner</table>
             <group>artists</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_ARTIST</reltype>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>firstname</num_1>
-                  <num_2>lastname</num_2>
-                  <num_3>notes</num_3>
-            </props>
-            <mode>manager</mode>
-            <field>meta</field>
-            <method>serialize</method>
-            <table_fields>
-                  <num_0>name</num_0>
-                  <num_1>firstname</num_1>
-                  <num_2>lastname</num_2>
-                  <num_3>notes</num_3>
-            </table_fields>
-            <table_edit_fields>
-                  <num_0>name</num_0>
-                  <num_1>firstname</num_1>
-                  <num_2>lastname</num_2>
-                  <num_3>notes</num_3>
-            </table_edit_fields>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <field>artists_toolbar</field>
+            <caption>Esinejate toolbar</caption>
+      </property>
+      <property>
+            <name>artists</name>
+            <table>planner</table>
+            <group>artists</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>artists</field>
             <caption>Esinejad</caption>
       </property>
       <property>
@@ -103,10 +93,12 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <r2>yea</r2>
       </classinfo>
       <groupinfo>
             <artists>
                   <caption>Esinejad</caption>
+                  <submit>no</submit>
             </artists>
             <projects>
                   <caption>Projektid</caption>

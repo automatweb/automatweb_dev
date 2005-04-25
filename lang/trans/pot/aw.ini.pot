@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:23 +0300\n"
+"POT-Creation-Date: Mon, 25 Apr 2005 15:44:21 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1448,6 +1448,10 @@ msgstr ""
 
 #: aw.ini:class_920
 msgid "Klassi Lao toodete otsing (920) nimi"
+msgstr ""
+
+#: aw.ini:class_922
+msgid "Klassi Flaier (922) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29

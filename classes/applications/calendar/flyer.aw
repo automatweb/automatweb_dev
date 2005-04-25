@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.3 2005/04/25 09:58:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.4 2005/04/25 12:40:07 ahti Exp $
 // flyer.aw - Flaier 
 /*
 
@@ -35,6 +35,49 @@
 
 class flyer extends class_base
 {
+	/**
+		@attrib name=show_flyer nologin=1
+		@param id required type=int acl=edit
+		@param side optional
+	**/
+	function show_flyer($arr)
+	{
+		$obj = obj($arr["id"]);
+		$side = 2;
+		if($arr["side"] == 3)
+		{
+			$side = 3;
+		}
+		$file3 = $obj->prop("file3");
+		if(!empty($file3))
+		{
+			$image = html::href(array(
+				"url" => $this->mk_my_orb("show_flyer", array(
+					"id" => $obj->id(), 
+					"side" => (($arr["side"] == 2 || empty($arr["side"])) ? 3 : 2),
+				), CL_FLYER, false ,true),
+				"caption" => html::img(array(
+					"url" => $this->image->get_url($obj->prop("file{$side}")),
+					"border" => 0,
+				)),
+			));
+		}
+		else
+		{
+			$image = html::img(array(
+				"url" => $this->image->get_url($obj->prop("file{$side}")),
+				"border" => 0,
+			));
+		}
+		
+		$this->read_template("flyer_show.tpl");
+		$this->vars(array(
+			"name" => $obj->name(),
+			"image" => $image,
+		));
+		return $this->parse();
+	}
+	
 	function flyer()
 	{
 		$this->init(array(
@@ -166,22 +209,10 @@ class flyer extends class_base
 			)),
 			"width" => $mes["width"],
 			"height" => $mes["height"],
-			"url" => $this->mk_my_orb("show_flyer", array("id" => $obj->id())),
+			"url" => $this->mk_my_orb("show_flyer", array("id" => $obj->id()), CL_FLYER, false ,true),
 			"menubar" => 1,
 			"resizable" => 1,
-			"scrollbars" => 1,
 		));
-	}
-	
-	/**
-		@attrib name=show_flyer nologin=1
-		@param id required type=int acl=edit
-		@param side optional
-	**/
-	function show_flyer($arr)
-	{
-		$this->read_template("flyer_show.tpl");
-		return $this->parse();
 	}
 }
 ?>

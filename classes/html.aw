@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.74 2005/04/11 13:49:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.75 2005/04/25 12:40:06 ahti Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -524,17 +524,17 @@ class html extends aw_template
 	function popup($arr = array())
 	{
 		extract($arr);
-		$arr["onClick"] = "javascript:window.open('$url', '".$target.
-		"', 'toolbar=".($toolbar ? "yes" : "no").
-		",directories=".($directories ? "yes" : "no").
-		",status=".($status ? "yes" : "no").
-		",location=".($location ? "yes" : "no").
-		",resizable=".($resizable ? "yes" : "no").
-		",scrollbars=".($scrollbars ? "yes" : "no").
-		",menubar=".($menubar ? "yes" : "no").
-		",height=".($height ? $height : 400).
-		",width=".($width ? $width : 400).
-		"');return false;'";
+		$arr["onClick"] = 'javascript:window.open("'.$url.'", "'.$target.
+		'", "toolbar='.($toolbar ? "yes" : "no").
+		',directories='.($directories ? "yes" : "no").
+		',status='.($status ? "yes" : "no").
+		',location='.($location ? "yes" : "no").
+		',resizable='.($resizable ? "yes" : "no").
+		',scrollbars='.($scrollbars ? "yes" : "no").
+		',menubar='.($menubar ? "yes" : "no").
+		',height='.($height ? $height : 400).
+		',width='.($width ? $width : 400).
+		'");return false;';
 		if($no_link)
 		{
 			return $arr["onClick"];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.54 2005/04/25 09:47:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.55 2005/04/25 12:40:07 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1250,6 +1250,7 @@ class vcalendar extends aw_template
 				}
 			}
 			$evt["project"] = implode(", ", $proj);
+			$meta = $obj->meta("artists");
 			unset($fa[0]);
 			if(count($fa) > 0 && ($artist = $obj->get_first_obj_by_reltype("RELTYPE_ARTIST")))
 			{
@@ -1264,13 +1265,41 @@ class vcalendar extends aw_template
 			}
 			else
 			{
+				$art = array();
 				foreach($artists = $obj->connections_from(array("type" => "RELTYPE_ARTIST")) as $artist)
 				{
-					$evt["artist"] .= html::href(array(
-						"url" => obj_link($artist->prop("to")),
-						"caption" => $artist->prop("to.name"),
-					))."<br />"; 
+					$id = $artist->prop("to");
+					$art[] = array(
+						"id" => $id,
+						"name" => $artist->prop("to.name"),
+						"ord" => $meta["ord"][$id],
+						"profession" => $meta["profession"][$id],
+					);
 				}
+				uasort($art, array($this, "__sort_by_ord"));
+				$xz = array();
+				foreach($art as $a)
+				{
+					$x = html::href(array(
+						"url" => obj_link($a["id"]),
+						"caption" => $a["name"],
+					));
+					if(count($a["profession"]) > 0)
+					{
+						$profs = array();
+						foreach($a["profession"] as $prof)
+						{
+							if(is_oid($prof) && $this->can("view", $prof))
+							{
+								$ob = obj($prof);
+								$profs[] = $ob->name();
+							}
+						}
+						$x .= " - ".implode(", ", $profs);
+					}
+					$xz[] = $x;
+				}
+				$evt["artist"] = implode("<br />", $xz);
 			}
 			if($image = $obj->get_first_obj_by_reltype("RELTYPE_FLYER"))
 			{
@@ -1358,6 +1387,11 @@ class vcalendar extends aw_template
 		
 
 		return $this->evt_tpl->parse();
+	}
+	
+	function __sort_by_ord($el1, $el2)
+	{
+		return $el1["ord"] - $el2["ord"];
 	}
 
 	function __asc_sort($el1,$el2)
