@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.3 2005/04/21 09:41:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.4 2005/04/25 09:47:41 ahti Exp $
 // party.aw - Pidu 
 /*
 
@@ -17,8 +17,11 @@
 @property end type=datetime_select
 @caption Lõpp
 
-@property image type=relpicker reltype=RELTYPE_PICTURE table=objects field=meta method=serialize
-@caption Flaier
+@property image type=releditor reltype=RELTYPE_FLYER rel_id=first use_form=emb
+@caption Flyer
+
+//@property image type=relpicker reltype=RELTYPE_FLYER table=objects field=meta method=serialize
+//@caption Flaier
 
 @property content type=textarea cols=60 rows=20 field=description
 @caption Sisu
@@ -39,7 +42,7 @@
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
 
-@reltype PICTURE value=1 clid=CL_IMAGE
+@reltype FLYER value=1 clid=CL_FLYER
 @caption Flaier
 
 @reltype ARTIST value=2 clid=CL_CRM_PERSON

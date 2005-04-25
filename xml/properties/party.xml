@@ -18,13 +18,15 @@
       </property>
       <property>
             <name>image</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PICTURE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Flaier</caption>
+            <type>releditor</type>
+            <reltype>RELTYPE_FLYER</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <field>image</field>
+            <caption>Flyer</caption>
       </property>
       <property>
             <name>content</name>
@@ -118,11 +120,11 @@
             </planner>
       </tableinfo>
       <reltypes>
-            <PICTURE>
+            <FLYER>
                   <value>1</value>
-                  <clid>CL_IMAGE</clid>
+                  <clid>CL_FLYER</clid>
                   <caption>Flaier</caption>
-            </PICTURE>
+            </FLYER>
             <ARTIST>
                   <value>2</value>
                   <clid>CL_CRM_PERSON</clid>

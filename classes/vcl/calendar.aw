@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.53 2005/04/25 08:06:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.54 2005/04/25 09:47:41 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1272,11 +1272,10 @@ class vcalendar extends aw_template
 					))."<br />"; 
 				}
 			}
-			if(is_oid($evt["image"]) && $this->can("view", $evt["image"]))
+			if($image = $obj->get_first_obj_by_reltype("RELTYPE_FLYER"))
 			{
-				$img_i = get_instance(CL_IMAGE);
-				$imgdata = $img_i->get_image_by_id($evt["image"]);
-				$evt["image"] = $imgdata["url"];
+				$flyer_i = get_instance(CL_FLYER);
+				$evt["image"] = $flyer_i->show($image);
 			}
 			$evt["content"] = nl2br($evt["content"]);
 			$this->aliasmgr->parse_oo_aliases($evt["id"], $evt["content"]);
