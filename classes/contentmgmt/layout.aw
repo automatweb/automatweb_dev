@@ -435,9 +435,13 @@ class layout extends class_base
 			"site_id" => array(),
 			"sort_by" => "objects.jrk,objects.name"
 		));
-		return array("" => "") + $ol->names(array(
-			"add_folders" => true
-		));
+		$ret = array("" => "");
+		foreach($ol->arr() as $o)
+		{
+			$pt = obj($o->parent());
+			$ret[$o->id()] = $pt->name()." / ".$o->name();
+		}
+		return $ret;
 	}
 
 	function _unserialize($args)
