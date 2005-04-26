@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.58 2005/04/22 16:46:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.59 2005/04/26 10:50:59 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1117,6 +1117,38 @@ class mrp_job extends class_base
 		}
 	}
 
+	function job_prerequisites_are_done($arr)
+	{
+		if (is_oid ($arr["job"]))
+		{
+			$job = obj ($arr["job"]);
+		}
+		else
+		{
+			return false;
+		}
+
+		if (trim ($job->prop ("prerequisites")))
+		{
+			$prerequisites = explode (",", $job->prop ("prerequisites"));
+			$applicable_states = array (
+				MRP_STATUS_DONE,
+			);
+
+			foreach ($prerequisites as $prerequisite_oid)
+			{
+				$prerequisite = obj ($prerequisite_oid);
+
+				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
+				{
+					return false;
+				}
+			}
+		}
+
+		return true;
+	}
+
 /**
     @attrib name=can_start
 	@param job required type=int
@@ -1168,25 +1200,7 @@ class mrp_job extends class_base
 		}
 
 		### check if all prerequisite jobs are done
-		if (trim ($job->prop ("prerequisites")))
-		{
-			$prerequisites = explode (",", $job->prop ("prerequisites"));
-			$applicable_states = array (
-				MRP_STATUS_DONE,
-			);
-
-			foreach ($prerequisites as $prerequisite_oid)
-			{
-				$prerequisite = obj ($prerequisite_oid);
-
-				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
-				{
-					return false;
-				}
-			}
-		}
-
-		return true;
+		return $this->job_prerequisites_are_done(array("job" => $job->id()));
 	}
 
 	function on_delete_job ($arr)

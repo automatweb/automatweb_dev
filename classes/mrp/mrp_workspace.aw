@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.107 2005/04/22 16:46:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.108 2005/04/26 10:50:59 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -17,6 +17,11 @@
 	groupinfo grp_printer_old caption="Tegemata t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_done caption="Tehtud t&ouml;&ouml;d" parent=grp_printer submit=no
 	@groupinfo grp_printer_aborted caption="Katkestatud t&ouml;&ouml;d" parent=grp_printer submit=no
+
+	@groupinfo grp_printer_in_progress caption="K&otilde;ik t&ouml;&ouml;s olevad" parent=grp_printer submit=no
+	@groupinfo grp_printer_startable caption="K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada" parent=grp_printer submit=no
+	@groupinfo grp_printer_notstartable caption="T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada" parent=grp_printer submit=no
+
 
 @groupinfo grp_settings caption="Seaded"
 	@groupinfo grp_settings_def caption="Seaded" parent=grp_settings
@@ -213,7 +218,7 @@
 	@property parameter_timescale_unit type=select
 	@caption Skaala ajaühik
 
-@default group=grp_printer_current,grp_printer_done,grp_printer_aborted
+@default group=grp_printer_current,grp_printer_done,grp_printer_aborted,grp_printer_in_progress,grp_printer_startable,grp_printer_notstartable
 
 	@property printer_legend type=text
 	@caption Legend
@@ -373,7 +378,8 @@ class mrp_workspace extends class_base
 	var $pj_colors = array(
 		"done" => "#BADBAD",
 		"can_start" => "#eff6d5",
-		"can_not_start" => "#ffe1e1"
+		"can_not_start" => "#ffe1e1",
+		"resource_in_use" => "#ecd995",
 	);
 
 	function mrp_workspace()
@@ -806,6 +812,7 @@ class mrp_workspace extends class_base
 				$prop["value"]  = "<span style='padding: 5px; background: ".$this->pj_colors["done"]."'>".t("Valmis")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_start"]."'>".t("V&otilde;ib alustada")."</span>&nbsp;&nbsp;";
 				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["can_not_start"]."'>".t("Ei saa alustada/t&ouml;&ouml;s")."</span>&nbsp;&nbsp;";
+				$prop["value"] .= "<span style='padding: 5px; background: ".$this->pj_colors["resource_in_use"]."'>".t("Eeldust&ouml;&ouml; tehtud")."</span>&nbsp;&nbsp;";
 				break;
 
 			case "sp_name":
@@ -3181,6 +3188,7 @@ if ($_GET['show_thread_data'] == 1)
 			"ws" => $arr["obj_inst"]
 		));
 
+		$limit = 50;
 		switch ($arr["request"]["group"])
 		{
 			case "grp_printer_done":
@@ -3198,12 +3206,29 @@ if ($_GET['show_thread_data'] == 1)
 				$default_sortby = "tm";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
 				break;
+
+			case "grp_printer_in_progress":
+				$default_sortby = "tm";
+				$states = array(MRP_STATUS_INPROGRESS);
+				break;
+
+			case "grp_printer_startable":
+				$default_sortby = "tm";
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
+				$limit = 100;
+				break;
+
+			case "grp_printer_notstartable":
+				$default_sortby = "tm";
+				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
+				$limit = 100;
+				break;
 		}
 
 		classload("date_calc");
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
-			"limit" => 30,
+			"limit" => $limit,
 //			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
 //			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
 			"states" => $states
@@ -3214,12 +3239,14 @@ if ($_GET['show_thread_data'] == 1)
 		$mrp_job = get_instance(CL_MRP_JOB);
 		$mrp_case = get_instance(CL_MRP_CASE);
 
+		$cnt = 0;
 		foreach($jobs as $job)
 		{
 			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
 			{
 				continue;
 			}
+			$cnt++;
 			$res = obj($job->prop("resource"));
 			$proj = obj($job->prop("project"));
 
@@ -3242,7 +3269,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-				$custo = html::get_change_url($cust->id(), array(
+					$custo = html::get_change_url($cust->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
 					$cust->name()
@@ -3268,9 +3295,27 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			else
 			{
-				// light red
-				$bgcol = $this->pj_colors["can_not_start"];
+				if ($mrp_job->job_prerequisites_are_done(array("job" => $job->id())))
+				{
+					$bgcol = $this->pj_colors["resource_in_use"];
+				}
+				else
+				{
+					// light red
+					$bgcol = $this->pj_colors["can_not_start"];
+				}
 			}
+
+			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol != $this->pj_colors["can_start"])
+			{
+				continue;
+			}
+
+			if ($arr["request"]["group"] == "grp_printer_notstartable" && ($bgcol == $this->pj_colors["can_start"] || $cnt > 5))
+			{
+				continue;
+			}
+			
 			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### get length, end and start according to job state
@@ -3295,6 +3340,7 @@ if ($_GET['show_thread_data'] == 1)
 					$length = $job->prop("length");
 					break;
 			}
+
 
 			$len  = sprintf ("%02d", floor($length / 3600)).":";
 			$len .= sprintf ("%02d", floor(($length % 3600) / 60));
