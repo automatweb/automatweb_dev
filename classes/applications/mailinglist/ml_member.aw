@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.6 2005/04/21 11:51:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.7 2005/04/26 11:17:32 ahti Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -203,7 +203,11 @@ class ml_member extends class_base
 		$added = false;
 		foreach($user_folders as $user_folder)
 		{
-			if (!$this->check_member(array("email" => $email,"folder" => $user_folder)))
+			if(is_array($user_folder))
+			{
+				$user_folder = reset($user_folder);
+			}
+			if (!$this->check_member(array("email" => $email, "folder" => $user_folder)))
 			{
 				$xobjname = htmlspecialchars($objname);
 				// Why do we duplicate name and email in object metadata?
