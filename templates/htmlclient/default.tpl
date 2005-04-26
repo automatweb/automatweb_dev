@@ -80,8 +80,34 @@
 <!-- END SUB: SUBITEM2 -->
 
 <!-- SUB: GRIDITEM -->
-	<div class="aw04contentcellright">{VAR:caption}: {VAR:element}</div>
+	<div class="aw04gridcell_caption">{VAR:caption}: {VAR:element}</div>
 <!-- END SUB: GRIDITEM -->
+
+<!-- SUB: GRIDITEM_NO_CAPTION -->
+	<div class="aw04gridcell_no_caption">{VAR:element}</div>
+<!-- END SUB: GRIDITEM_NO_CAPTION -->
+
+<!-- SUB: GRID_HBOX -->
+<table border=0 cellspacing=0 cellpadding=0 width='100%'>
+<tr>
+<!-- SUB: GRID_HBOX_ITEM -->
+<td valign='top' {VAR:item_width}>
+{VAR:item}
+</td>
+<!-- END SUB: GRID_HBOX_ITEM -->
+</tr>
+</table>
+<!-- END SUB: GRID_HBOX -->
+
+<!-- SUB: GRID_VBOX -->
+<table border=0 cellspacing=0 cellpadding=0 width='100%'>
+<!-- SUB: GRID_VBOX_ITEM -->
+<tr>
+<td valign='top'>{VAR:item}</td>
+</tr>
+<!-- END SUB: GRID_VBOX_ITEM -->
+</table>
+<!-- END SUB: GRID_VBOX -->
 
 <!-- SUB: PROPERTY_HELP -->
 <div id="property_{VAR:property_name}_help" style="display: none;">
