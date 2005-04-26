@@ -128,5 +128,12 @@
 			</function>
 		</action>
 
+		<action name="save_pj_comment">
+			<function name="save_pj_comment">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

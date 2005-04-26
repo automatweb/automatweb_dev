@@ -787,7 +787,27 @@
             <rows>5</rows>
             <cols>50</cols>
             <store>no</store>
+            <parent>comment_hbox</parent>
+            <no_caption>1</no_caption>
             <caption>Kommentaar</caption>
+      </property>
+      <property>
+            <name>pj_change_comment_history</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <parent>comment_hbox</parent>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pj_title_job_data</name>
@@ -1296,5 +1316,20 @@
                   <caption>Projekti headeri kontroller</caption>
             </MRP_HEADER_CONTROLLER>
       </reltypes>
+      <layout>
+            <comment_hbox>
+                  <type>hbox</type>
+                  <width>40%:60%</width>
+                  <group>
+                        <num_0>grp_printer_current</num_0>
+                        <num_1>grp_printer_done</num_1>
+                        <num_2>grp_printer_aborted</num_2>
+                        <num_3>grp_printer_in_progress</num_3>
+                        <num_4>grp_printer_startable</num_4>
+                        <num_5>grp_printer_notstartable</num_5>
+                  </group>
+                  <caption>Kommentaar</caption>
+            </comment_hbox>
+      </layout>
 </properties>
 

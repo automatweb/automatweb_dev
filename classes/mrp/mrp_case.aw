@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.67 2005/04/22 16:46:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.68 2005/04/26 13:00:21 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1163,16 +1163,12 @@ class mrp_case extends class_base
 			$resource_name = $resource->name () ? $resource->name () : "...";
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
-			$comment = "";
-
-			if ($job->prop("comment") != "")
-			{
-				$comment = html::href(array(
-					"url" => "#",
-					"caption" => t("JAH"),
-					"title" => $job->prop("comment")
-				));
-			}
+			$comment = html::textbox(array(
+				"name" => "comments[".$job->id()."]",
+				"value" => htmlspecialchars($job->prop("comment")),
+				"size" => 10,
+				"textsize" => "11px"
+			));
 
 			$table->define_data(array(
 				"name" => html::get_change_url(
@@ -1331,6 +1327,8 @@ class mrp_case extends class_base
 							$job->set_prop ("minstart", $minstart);
 							break;
 					}
+
+					$job->set_comment($arr["request"]["comments"][$job->id()]);
 
 					aw_disable_acl();
 					$job->save ();
@@ -2369,15 +2367,22 @@ class mrp_case extends class_base
 	**/
 	function on_popup_search_change($arr)
 	{
+		if (!is_oid($arr["oid"]))
+		{
+			return;
+		}
 		$o = obj($arr["oid"]);
 		foreach($o->connections_from(array("type" => "RELTYPE_MRP_CUSTOMER")) as $c)
 		{
 			$c->delete();
 		}
-		$o->connect(array(
-			"to" => $o->prop($arr["prop"]),
-			"reltype" => "RELTYPE_MRP_CUSTOMER"
-		));
+		if (is_oid($arr["prop"]))
+		{
+			$o->connect(array(
+				"to" => $o->prop($arr["prop"]),
+				"reltype" => "RELTYPE_MRP_CUSTOMER"
+			));
+		}
 	}
 }
 

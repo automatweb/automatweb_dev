@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.108 2005/04/26 10:50:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.109 2005/04/26 13:00:21 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -237,8 +237,13 @@
 	@property pj_errors type=text store=no
 	@caption Vead
 
-	@property pj_change_comment type=textarea rows=5 cols=50 store=no
+	@layout comment_hbox type=hbox width=40%:60%
 	@caption Kommentaar
+
+	@property pj_change_comment type=textarea rows=5 cols=50 store=no parent=comment_hbox no_caption=1
+	@caption Kommentaar
+
+	@property pj_change_comment_history type=text store=no parent=comment_hbox no_caption=1
 
 	@property pj_title_job_data type=text store=no subtitle=1
 	@caption T&ouml;&ouml; andmed
@@ -591,6 +596,20 @@ class mrp_workspace extends class_base
 						$c_o = obj($job->prop("project"));
 						$c_i = $c_o->instance();
 						$prop["value"] = $c_i->get_header(array("obj_inst" => $c_o));
+						break;
+
+					case "change_comment_history":
+						$txt = array();
+						$cnt = 0;
+						foreach(safe_array($job->meta("change_comment_history")) as $comment_hist_item)
+						{
+							$txt[] = date("d.m.Y H:i", $comment_hist_item["tm"]).": ".$comment_hist_item["text"]." (".$comment_hist_item["uid"].")";
+							if ($cnt++ > 4)
+							{
+								break;
+							}
+						}
+						$prop["value"] = join("<br>", $txt);
 						break;
 
 					default:
@@ -2538,6 +2557,8 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			aw_global_set("hide_yah", true);
 		}
+
+		$arr["post_ru"] = post_ru();
 	}
 
 	/** cuts the selected person objects
@@ -3131,6 +3152,17 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$t->define_field(array(
+			"name" => "project",
+			"caption" => t("Projekt"),
+			"align" => "center",
+			"chgbgcolor" => "bgcol",
+			"sortable" => 1,
+			"numeric" => 1,
+			"callback" => array(&$this, "pj_project_field_callback"),
+			"callb_pass_row" => true
+		));
+
+		$t->define_field(array(
 			"name" => "customer",
 			"caption" => t("Klient"),
 			"align" => "center",
@@ -3139,16 +3171,8 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$t->define_field(array(
-			"name" => "project",
-			"caption" => t("Projekt"),
-			"align" => "center",
-			"chgbgcolor" => "bgcol",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"name" => "proj_pri",
-			"caption" => t("Prioriteet"),
+			"name" => "job_comment",
+			"caption" => t("Kommentaar"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
 			"sortable" => 1
@@ -3255,8 +3279,8 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-			}
+					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3273,8 +3297,8 @@ if ($_GET['show_thread_data'] == 1)
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
 					$cust->name()
-				);
-			}
+					);
+				}
 				else
 				{
 					$custo = $cust->name();
@@ -3356,13 +3380,15 @@ if ($_GET['show_thread_data'] == 1)
 			}
 
 			$project_str = $proj->name();
-			if ($this->can("edit", $proj->id()))
+
+			$comment = $job->comment();
+			if (strlen($comment) > 20)
 			{
-				$project_str = html::get_change_url($proj->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$proj->name()
-				);
+				$comment = html::href(array(
+					"url" => "javascript:void(0)",
+					"caption" => substr($comment, 0, 20),
+					"title" => $comment
+				));
 			}
 			### ...
 			$t->define_data(array(
@@ -3379,10 +3405,12 @@ if ($_GET['show_thread_data'] == 1)
 				"resource" => $resource_str,
 				"worker" => join(", ",$workers_str),
 				"project" => $project_str,
+				"project_id" => $proj->id(),
 				"proj_pri" => $proj->prop("project_priority"),
 				"customer" => $custo,
 				"status" => $state,
-				"bgcol" => $bgcol
+				"bgcol" => $bgcol,
+				"job_comment" => $comment
 			));
 		}
 
@@ -3657,6 +3685,11 @@ if ($_GET['show_thread_data'] == 1)
 		$j = get_instance(CL_MRP_JOB);
 		$j->create_job_toolbar($arr);
 
+		$arr["prop"]["toolbar"]->add_button(array(
+			"name" => "save_comment",
+			"tooltip" => t("Salvesta kommentaar"),
+			"action" => "save_pj_comment",
+		));
 		$arr["obj_inst"] = $tmp;
 	}
 
@@ -4157,6 +4190,33 @@ if ($_GET['show_thread_data'] == 1)
 			"value" => $arr["request"]["chart_customer"]
 		));
 		$arr["prop"]["value"] = $str;
+	}
+
+	/**
+
+		@attrib name=save_pj_comment
+
+	**/
+	function save_pj_comment($arr)
+	{
+		$job = get_instance(CL_MRP_JOB);
+		$job->add_comment($arr["pj_job"], $arr["pj_change_comment"]);
+		return $arr["post_ru"];
+	}
+
+	function pj_project_field_callback($row)
+	{
+		if ($this->can("edit", $row["project_id"]))
+		{
+			return html::get_change_url(
+				$row["project_id"], 
+				array(
+					"return_url" => get_ru()
+				),
+				$row["project"]
+			);
+		}
+		return $row["project"];
 	}
 }
 
