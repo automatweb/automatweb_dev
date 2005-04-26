@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.7 2005/03/24 10:13:00 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/Attic/personnel_management_cv.aw,v 1.8 2005/04/26 14:14:52 duke Exp $
 // personnel_management_cv.aw - CV 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_PERSONNEL_MANAGEMENT_CV, on_cv_save)
@@ -37,8 +37,8 @@ caption Sain t&ouml;&ouml;d teie kaudu
 
 @property stats_table type=table group=statistika no_caption=1
 
-@property cv_view_tb type=toolbar no_caption=1 store=no wrapchildren=1 group=cv_view
-@property cv_view type=text no_caption=1 store=no wrapchildren=1 group=cv_view
+@property cv_view_tb type=toolbar no_caption=1 store=no group=cv_view
+@property cv_view type=text no_caption=1 store=no group=cv_view
 
 ------------------ARVUTIOSKUSED---------------------
 @property computer_skills type=table store=no group=arvutioskus no_caption=1
