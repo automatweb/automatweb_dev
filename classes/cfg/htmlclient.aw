@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.107 2005/04/26 12:35:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.108 2005/04/26 14:25:42 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -187,48 +187,14 @@ class htmlclient extends aw_template
 			return false;
 		};
 
-		// I need to redo this
-		$wrapchildren = false;
-
 		// but actually, settings parets should take place in class_base itself
 		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
-			// if wrapchildren is set, then we attempt to place the properties
-			// next to each other using a HTML table. Other output clients
-			// can probably just ignore it, since it really is only used
-			// to lay out blocks of HTML
-			if (isset($args["wrapchildren"]))
-			{
-				$wrapchildren = true;
-				$cnt = count($args["items"]);
-			};
-
-			$i = 1;
 			foreach($args["items"] as $el)
 			{
-				if ($wrapchildren)
-				{
-					if ($i == 1)
-					{
-						$res .= "<table border='0' width='100%'><tr><td valign='top' width='200'><small>";
-					};
-				};
 	 			$this->mod_property(&$el);
 				$res .= $this->put_subitem($el);
-				//$res .= $this->draw_element($el);
-				if ($wrapchildren)
-				{
-					if ($i == $cnt)
-					{
-						$res .= "</td></tr></table>";
-					}
-					else
-					{
-						$res .= "</td><td valign='top'>";
-					};
-				};
-				$i++;
 			};
 			$args["value"] = $res;
 			$args["type"] = "text";
