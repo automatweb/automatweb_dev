@@ -106,7 +106,6 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <wrapchildren>1</wrapchildren>
             <field>cv_view_tb</field>
       </property>
       <property>
@@ -116,7 +115,6 @@
             <type>text</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <wrapchildren>1</wrapchildren>
             <field>cv_view</field>
       </property>
       <property>
