@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.69 2005/04/13 08:07:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.70 2005/04/26 08:12:56 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -867,12 +867,18 @@ class promo extends class_base
 				if ($o->meta("version") == 2 && ($this->cfg["version"] == 2 || true))
 				{
 					$docid = array_values(safe_array($o->meta("content_documents")));
-
+					foreach($docid as $_idx => $_did)
+					{
+						if (!is_oid($_did))
+						{
+							unset($docid[$_idx]);
+						}
+					}
 					if (count($docid))
 					{
 						// prefetch docs in list so we get them in one query
 						$ol = new object_list(array("oid" => $docid));
-						$ol->arr();
+						$tt = $ol->arr();
 						$nids = $this->make_keys($ol->ids());
 						$tmp = array();	
 						foreach($docid as $_id)
@@ -1255,6 +1261,11 @@ class promo extends class_base
 		$dd = $si->get_default_document(array(
 			"obj" => $o
 		));
+		if ($dd == false)
+		{
+			$dd = array();
+		}
+
 		if (!is_array($dd))
 		{
 			$dd = array($dd);
