@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.68 2005/04/26 13:00:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.69 2005/04/26 14:21:26 duke Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -149,7 +149,7 @@ default group=grp_case_material
 
 
 @default group=grp_case_workflow
-	@property manager type=text no_caption=1 store=no wrapchildren=1
+	@layout manager type=hbox 
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
 

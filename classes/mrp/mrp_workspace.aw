@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.109 2005/04/26 13:00:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.110 2005/04/26 14:21:26 duke Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -46,7 +46,7 @@
 
 @default group=grp_customers
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
-	@property vsplitbox type=text no_caption=1 store=no wrapchildren=1 group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
+	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@property customers_toolbar type=toolbar store=no no_caption=1 parent=box
 	@property customers_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
