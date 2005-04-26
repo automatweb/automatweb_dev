@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.28 2005/04/22 06:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.29 2005/04/26 11:28:48 ahti Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -821,7 +821,7 @@ class ml_list extends class_base
 		$lines = explode("\n", $arr["text"]);
 		$list_obj = new object($arr["list_id"]);
 		$fld = new aw_array($list_obj->prop("def_user_folder"));
-		foreach($fld as $fold)
+		foreach($fld->get() as $fold)
 		{
 			if(!is_oid($fold) || !$this->can("add", $fold))
 			{
