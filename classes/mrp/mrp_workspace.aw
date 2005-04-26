@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.110 2005/04/26 14:21:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.111 2005/04/26 18:56:09 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2126,6 +2126,7 @@ if ($_GET['show_thread_data'] == 1)
 			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 		);
 
 		if ($arr["request"]["chart_customer"])
@@ -3279,8 +3280,8 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-				}
+				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+			}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3293,12 +3294,12 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-					$custo = html::get_change_url($cust->id(), array(
+				$custo = html::get_change_url($cust->id(), array(
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 					),
 					$cust->name()
-					);
-				}
+				);
+			}
 				else
 				{
 					$custo = $cust->name();
@@ -3325,9 +3326,9 @@ if ($_GET['show_thread_data'] == 1)
 				}
 				else
 				{
-					// light red
-					$bgcol = $this->pj_colors["can_not_start"];
-				}
+				// light red
+				$bgcol = $this->pj_colors["can_not_start"];
+			}
 			}
 
 			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol != $this->pj_colors["can_start"])
@@ -3339,7 +3340,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				continue;
 			}
-			
+
 			$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
 			### get length, end and start according to job state
@@ -4209,7 +4210,7 @@ if ($_GET['show_thread_data'] == 1)
 		if ($this->can("edit", $row["project_id"]))
 		{
 			return html::get_change_url(
-				$row["project_id"], 
+				$row["project_id"],
 				array(
 					"return_url" => get_ru()
 				),
