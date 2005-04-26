@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.390 2005/04/26 10:58:00 duke Exp $
+// $Id: class_base.aw,v 2.391 2005/04/26 12:19:15 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -570,7 +570,8 @@ class class_base extends aw_template
 			// export only layout information for the current group
 			foreach($this->layoutinfo as $key => $val)
 			{
-				if ($val["group"] == $this->use_group)
+				$_lgroups = is_array($val["group"]) ? $val["group"] : array($val["group"]);
+				if (in_array($this->use_group,$_lgroups))
 				{
 					$tmp[$key] = $val;
 				};
