@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.68 2005/04/22 06:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.69 2005/04/26 10:03:12 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1459,7 +1459,7 @@ class webform extends class_base
 		
 					$form_conf_i->_insert_event_inf($event, $form_conf);
 		
-					if ($form_conf->prop("max_pers") && $form_conf_i->get_count_for_event($event) > $form_conf->prop("max_pers"))
+					if ($form_conf->prop("max_pers") && $form_conf_i->get_count_for_event($event) >= $form_conf->prop("max_pers"))
 					{
 						return $form_conf_i->parse();
 					}
