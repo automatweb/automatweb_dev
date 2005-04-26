@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.8 2005/03/24 10:04:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/pank/pank.aw,v 1.9 2005/04/26 10:57:15 duke Exp $
 // crm_pank.aw - Pank 
 /*
 @classinfo syslog_type=ST_PANK relationmgr=yes
@@ -233,7 +233,10 @@ class pank extends class_base
 			case 'to_company':
 				$company = get_instance(CL_CRM_COMPANY);
 				$clients = array();
-				$comp = $this->get_owner($arr['obj_inst']);
+				if (!$arr["new"])
+				{
+					$comp = $this->get_owner($arr['obj_inst']);
+				};
 				if($comp)
 				{
 					$company->get_customers_for_company($comp, &$clients);
@@ -300,10 +303,7 @@ class pank extends class_base
 
 	function callback_mod_tab($arr)
 	{
-		if($arr['id']=='pank_owner_group' || 
-			$arr['id']=='pank_owner_group_main_sub' 
-			&& is_oid($arr['obj_inst']->id())
-		)
+		if(!$arr["new"] && ($arr['id']=='pank_owner_group_main_sub' || $arr['id'] == 'pank_owner_group'))
 		{
 			$company = $this->get_owner($arr['obj_inst']);
 			if($company)
