@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.80 2005/04/19 17:52:37 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.81 2005/04/26 12:15:54 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -71,6 +71,9 @@ caption Msn/yahoo/aol/icq
 
 @property picture type=releditor reltype=RELTYPE_PICTURE rel_id=first props=file 
 @caption Pilt/foto
+
+@property picture2 type=releditor reltype=RELTYPE_PICTURE2 rel_id=first props=file 
+@caption Pilt suuremana
 
 @property username type=text store=no
 @caption Kasutaja
@@ -264,6 +267,9 @@ CREATE TABLE `kliendibaas_isik` (
 /*
 @reltype ADDRESS value=1 clid=CL_CRM_ADDRESS
 @caption aadressid
+
+@reltype PICTURE2 value=2 clid=CL_IMAGE
+@caption pilt2
 
 @reltype PICTURE value=3 clid=CL_IMAGE
 @caption pilt
@@ -1184,6 +1190,17 @@ class crm_person extends class_base
 		$arx["alias"]["target"] = $obj->id();
 		return $this->parse_alias($arx);
 	}
+	
+	function _get_size($fl)
+	{
+		$fl = basename($fl);
+		if ($fl{0} != "/")
+		{
+			$fl = aw_ini_get("site_basedir")."/files/".$fl{0}."/".$fl;
+		}
+		$sz = @getimagesize($fl);
+		return array("width" => $sz[0], "height" => $sz[1]); 
+	}
 
 	function parse_alias($arr)
 	{
@@ -1191,17 +1208,7 @@ class crm_person extends class_base
 		// a list of authors documents. If it does, then I need to create that list
 		extract($arr);
 		$to = new object($arr["alias"]["target"]);
-		switch($to->prop("templates"))
-		{
-			case 1:
-				$template = "pic_documents.tpl";
-				break;
-	
-			default:
-				$template = "pic_documents.tpl";
-				break;
-		};
-		$this->read_template($template);
+		$this->read_template("pic_documents.tpl");
 		$pdat = $this->fetch_person_by_id(array(
 			"id" => $to->id(),
 		));
@@ -1209,7 +1216,7 @@ class crm_person extends class_base
 		$al = get_instance("aliasmgr");
 		$notes = $to->prop("notes");
 
-		$al->parse_oo_aliases($to->id(),&$notes);
+		$al->parse_oo_aliases($to->id(), &$notes);
 
 		$this->vars(array(
 			"name" => $to->name(),
@@ -1220,17 +1227,29 @@ class crm_person extends class_base
 		// show image if there is a placeholder for it in the current template
 		if ($this->template_has_var("imgurl") || $this->is_template("IMAGE"))
 		{
-			$conns = $to->connections_from(array(
-				"type" => "RELTYPE_PICTURE",
-			));
-			$imgurl = "";
-			$img_inst = get_instance(CL_IMAGE);
-			foreach($conns as $conn)
+			if($img = $to->get_first_conn_by_reltype("RELTYPE_PICTURE"))
 			{
-				$imgurl = $img_inst->get_url_by_id($conn->prop("to"));
-			};
+				$img_inst = get_instance(CL_IMAGE);
+				$imgurl = $img_inst->get_url_by_id($img->prop("to"));
+				if($img2 = $to->get_first_obj_by_reltype("RELTYPE_PICTURE2"))
+				{
+					$mes = $this->_get_size($img2->prop("file"));
+					$imgurl2 = html::popup(array(
+						"caption" => html::img(array(
+							"url" => $imgurl,
+							"border" => 0,
+						)),
+						"width" => $mes["width"],
+						"height" => $mes["height"],
+						"url" => $this->mk_my_orb("show_image", array("id" => $to->id()), CL_CRM_PERSON, false ,true),
+						"menubar" => 1,
+						"resizable" => 1,
+					));
+				}
+			}
 			$this->vars(array(
 				"imgurl" => $imgurl,
+				"imgurl2" => $imgurl2,
 			));
 			if(strlen($imgurl) > 0)
 			{
@@ -1317,6 +1336,30 @@ class crm_person extends class_base
 				));
 			};
 		};
+		return $this->parse();
+	}
+	
+	/**
+		@attrib name=show_image nologin=1
+		@param id required type=int acl=edit
+		@param side optional
+	**/
+	function show_image($arr)
+	{
+		$obj = obj($arr["id"]);
+		if($img = $obj->get_first_obj_by_reltype("RELTYPE_PICTURE2"))
+		{
+			$img_inst = get_instance(CL_IMAGE);
+			$image = html::img(array(
+				"url" => $img_inst->get_url($img->prop("file")),
+				"border" => 0,
+			));
+		}
+		$this->read_template("image_show.tpl");
+		$this->vars(array(
+			"name" => $img->name(),
+			"image" => $image,
+		));
 		return $this->parse();
 	}
 
@@ -1423,7 +1466,7 @@ class crm_person extends class_base
 		{
 			$target_obj->connect(array(
 				'to' => $conn->prop('from'),
-				'reltype' => 21 //crm_section.reltype_section
+				'reltype' => "RELTYPE_SECTION",
 			));
 		}
 		

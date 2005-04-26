@@ -166,6 +166,18 @@
             <caption>Pilt/foto</caption>
       </property>
       <property>
+            <name>picture2</name>
+            <table>kliendibaas_isik</table>
+            <group>general2</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_PICTURE2</reltype>
+            <rel_id>first</rel_id>
+            <props>file</props>
+            <store>no</store>
+            <field>picture2</field>
+            <caption>Pilt suuremana</caption>
+      </property>
+      <property>
             <name>username</name>
             <table>kliendibaas_isik</table>
             <group>general2</group>
@@ -529,6 +541,11 @@
                   <clid>CL_CRM_ADDRESS</clid>
                   <caption>aadressid</caption>
             </ADDRESS>
+            <PICTURE2>
+                  <value>2</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt2</caption>
+            </PICTURE2>
             <PICTURE>
                   <value>3</value>
                   <clid>CL_IMAGE</clid>
