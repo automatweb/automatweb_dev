@@ -394,6 +394,10 @@ class propcollector extends aw_template
 	function add_layout($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
+		if (empty($fields["group"]) && !empty($this->defaults["group"]))
+		{
+			$fields["group"] = $this->defaults["group"];
+		};
 		$this->layout[$name] = $fields;
 		$this->name = $name;
 		$this->last_element = "layout";
