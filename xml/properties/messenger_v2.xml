@@ -49,24 +49,13 @@
             <caption>Msg. toolbar</caption>
       </property>
       <property>
-            <name>msg_cont</name>
-            <table>objects</table>
-            <group>main_view</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <wrapchildren>1</wrapchildren>
-            <caption>Konteiner</caption>
-      </property>
-      <property>
             <name>treeview</name>
             <table>objects</table>
             <group>main_view</group>
             <field>meta</field>
             <method>serialize</method>
             <type>text</type>
-            <parent>msg_cont</parent>
+            <parent>message_view</parent>
             <no_caption>1</no_caption>
             <caption>Folderid</caption>
       </property>
@@ -78,7 +67,7 @@
             <method>serialize</method>
             <type>table</type>
             <no_caption>1</no_caption>
-            <parent>msg_cont</parent>
+            <parent>message_view</parent>
             <store>no</store>
             <caption>Kirjad</caption>
       </property>
@@ -258,5 +247,11 @@
                   <caption>maili ruul</caption>
             </RULE>
       </reltypes>
+      <layout>
+            <message_view>
+                  <type>hbox</type>
+                  <group>main_view</group>
+            </message_view>
+      </layout>
 </properties>
 
