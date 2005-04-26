@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.105 2005/04/26 11:38:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.106 2005/04/26 11:40:22 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1205,7 +1205,6 @@ class htmlclient extends aw_template
 		$html = "";
 		$ldata = $this->layoutinfo[$layout_name];
 		$location = false;
-		arr($this->lp_chain);
 		if ($layout_name == "_main")
 		{
 			// put already parsed layouts in their correct places
