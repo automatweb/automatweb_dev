@@ -32,6 +32,7 @@ class site_list_updater extends aw_template
 		{
 			return;
 		}
+		$this->_set_last_update_time();
 		// else
 		// update this site's info in the site list
 		// check if we have a session key for this site
