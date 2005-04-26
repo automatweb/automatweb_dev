@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.7 2005/03/22 17:04:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.8 2005/04/26 14:11:01 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -30,13 +30,12 @@ caption Identiteet
 @property mail_toolbar type=toolbar no_caption=1 group=main_view store=no
 @caption Msg. toolbar
 
-@property msg_cont type=text group=main_view no_caption=1 wrapchildren=1
-@caption Konteiner
+@layout message_view type=hbox group=main_view
 
-@property treeview type=text parent=msg_cont group=main_view no_caption=1
+@property treeview type=text parent=message_view group=main_view no_caption=1
 @caption Folderid
 
-@property message_list type=table no_caption=1 group=main_view parent=msg_cont no_caption=1
+@property message_list type=table no_caption=1 group=main_view parent=message_view no_caption=1
 @caption Kirjad
 
 // muu mudru
@@ -145,19 +144,19 @@ class messenger_v2 extends class_base
 
 	function get_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "user_messenger":
 				$users = get_instance("users");
 				$obj_id = $arr["obj_inst"]->id();
 
-				$data['value'] = $users->get_user_config(array(
+				$prop["value"] = $users->get_user_config(array(
 					"uid" => aw_global_get("uid"),
 					"key" => "user_messenger",
 				));
-                                $data['ch_value'] = $arr["obj_inst"]->id();
+                                $data["ch_value"] = $arr["obj_inst"]->id();
 				break;
 
 			case "message_list":
@@ -165,38 +164,38 @@ class messenger_v2 extends class_base
 				break;
 
 			case "mail_toolbar":
-				$data["value"] = $this->gen_mail_toolbar($arr);
+				$prop["value"] = $this->gen_mail_toolbar($arr);
 				break;
 			
 			case "treeview":
-				$data["value"] = $this->make_folder_tree($arr);
+				$prop["value"] = $this->make_folder_tree($arr);
 				break;
 
 			case "mailbox":
-				$data["value"] = $this->use_mailbox;
+				$prop["value"] = $this->use_mailbox;
 				break;
 				
 			case "autofilter_delay":
-				$data["options"] = array("0" => "--","3" => "3","5" => "5","10" => "10");
+				$prop["options"] = array("0" => "--","3" => "3","5" => "5","10" => "10");
 				break;
 
 			case "testfilters":
-				$data["value"] = html::href(array(
+				$prop["value"] = html::href(array(
 					"url" => $this->mk_my_orb("test_filters",array("id" => $arr["obj_inst"]->id())),
-					"caption" => $data["caption"],
+					"caption" => $prop["caption"],
 				));
 				break;
 
 			case "currentfolder":
-				$data["value"] = $this->use_mailbox;
+				$prop["value"] = $this->use_mailbox;
 				break;
 
 			case "s_from":
-				$data["value"] = $arr["request"]["s_from"];
+				$prop["value"] = $arr["request"]["s_from"];
 				break;
 
 			case "s_subject":
-				$data["value"] = $arr["request"]["s_subject"];
+				$prop["value"] = $arr["request"]["s_subject"];
 				break;
 
 			case "s_results":
@@ -204,7 +203,7 @@ class messenger_v2 extends class_base
 				break;
 
 			case "s_toolbar":
-				$t = &$data["toolbar"];
+				$t = &$prop["toolbar"];
 				$t->add_button(array(
 					"name" => "delete",
 					"img" => "delete.gif",
@@ -548,6 +547,7 @@ class messenger_v2 extends class_base
 		$rv = $this->_connect_server(array(
 			"msgr_id" => $arr["obj_inst"]->id(),
 		));
+
 
 		$drafts = $this->msgobj->prop("msg_drafts");
 		$toolbar = &$arr["prop"]["vcl_inst"];
