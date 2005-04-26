@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.3 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/Attic/xulclient.aw,v 1.4 2005/04/26 14:16:52 duke Exp $
 // xulclient - generates XUL for configuration forms
 
 class xulclient extends aw_template
@@ -80,58 +80,16 @@ class xulclient extends aw_template
 		// if value is array, then try to interpret
 		// it as a list of elements.
 
-		// I need to redo this
-
-		$wrapchildren = false;
-
 		// but actually, settings parets should take place in class_base itself
 		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
-			// if wrapchildren is set, then we attempt to place the properties
-			// next to each other using a HTML table. Other output clients
-			// can probably just ignore it, since it really is only used
-			// to lay out blocks of HTML
-			if (isset($args["wrapchildren"]))
-			{
-				$wrapchildren = true;
-				$cnt = count($args["items"]);
-			};
-
 			$i = 1;
 			foreach($args["items"] as $el)
 			{
-				if ($wrapchildren)
-				{
-					if ($i == 1)
-					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "<table border='0' width='100%'><tr><td valign='top' width='200'><small>",
-						));
-					};
-				};
 	 			$this->mod_property(&$el);
 				$res .= $this->put_subitem($el);
 				//$res .= $this->draw_element($el);
-				if ($wrapchildren)
-				{
-					if ($i == $cnt)
-					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "</td></tr></table>",
-						));
-					}
-					else
-					{
-						$res .= $this->draw_element(array(
-							"type" => "text",
-							"value" => "</td><td valign='top'>",
-						));
-					};
-				};
-
 				$i++;
 			};
 			$args["type"] = "text";
