@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.44 2005/04/22 16:46:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.45 2005/04/26 19:33:07 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -576,10 +576,10 @@ class mrp_schedule extends class_base
 	{
 		$log = get_instance(CL_MRP_WORKSPACE);
 
-		### rescheduled job & project states
+		### job & project states for which to change state to planned and log change
 		$applicable_states = array (
 			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,
+			// MRP_STATUS_ABORTED,
 		);
 
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))

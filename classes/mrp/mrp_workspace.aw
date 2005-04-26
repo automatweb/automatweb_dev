@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.111 2005/04/26 18:56:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.112 2005/04/26 19:33:07 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2377,9 +2377,16 @@ if ($_GET['show_thread_data'] == 1)
 				case "mrp_job_reschedule":
 					if ($value)
 					{
+						$applicable_states = array (
+							MRP_STATUS_ABORTED,
+						);
 						$job = obj ($oid);
-						$job->set_prop ("state", MRP_STATUS_PLANNED);
-						$job->save ();
+
+						if (in_array ($job->prop ("state"), $applicable_states))
+						{
+							$job->set_prop ("state", MRP_STATUS_PLANNED);
+							$job->save ();
+						}
 					}
 					break;
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.69 2005/04/26 14:21:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.70 2005/04/26 19:33:07 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -149,7 +149,7 @@ default group=grp_case_material
 
 
 @default group=grp_case_workflow
-	@layout manager type=hbox 
+	@layout manager type=hbox
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
 
@@ -1168,7 +1168,7 @@ class mrp_case extends class_base
 				"value" => htmlspecialchars($job->prop("comment")),
 				"size" => 10,
 				"textsize" => "11px"
-			));
+				));
 
 			$table->define_data(array(
 				"name" => html::get_change_url(
@@ -1312,9 +1312,6 @@ class mrp_case extends class_base
 									"reltype" => "RELTYPE_MRP_RESOURCE",
 								));
 								$job->set_prop ("resource", $value);
-								aw_disable_acl();
-								$job->save ();
-								aw_restore_acl();
 							}
 							else
 							{
@@ -2378,10 +2375,10 @@ class mrp_case extends class_base
 		}
 		if (is_oid($arr["prop"]))
 		{
-			$o->connect(array(
-				"to" => $o->prop($arr["prop"]),
-				"reltype" => "RELTYPE_MRP_CUSTOMER"
-			));
+		$o->connect(array(
+			"to" => $o->prop($arr["prop"]),
+			"reltype" => "RELTYPE_MRP_CUSTOMER"
+		));
 		}
 	}
 }
