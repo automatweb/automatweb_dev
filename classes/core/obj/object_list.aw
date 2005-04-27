@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.48 2005/04/27 11:41:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.49 2005/04/27 12:47:07 kristo Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -132,7 +132,7 @@ class object_list extends _int_obj_container_base
 
 	function last()
 	{
-		return $this->_int_get_at(end($this->iter_lut));
+		return $this->_int_get_at(end(array_keys($this->list)));
 	}
 
 	function begin()
