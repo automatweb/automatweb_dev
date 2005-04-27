@@ -344,17 +344,6 @@
             <caption>Kommentaarid juhtumi ja tööde kohta</caption>
       </property>
       <property>
-            <name>manager</name>
-            <group>grp_case_workflow</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
-      </property>
-      <property>
             <name>resource_tree</name>
             <group>grp_case_workflow</group>
             <table>objects</table>
@@ -480,5 +469,11 @@
                   <caption>Projekti omanik</caption>
             </MRP_OWNER>
       </reltypes>
+      <layout>
+            <manager>
+                  <type>hbox</type>
+                  <group>grp_case_workflow</group>
+            </manager>
+      </layout>
 </properties>
 
