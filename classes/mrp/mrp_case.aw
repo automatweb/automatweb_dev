@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.72 2005/04/27 08:41:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.73 2005/04/27 14:48:47 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -741,7 +741,7 @@ class mrp_case extends class_base
 			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),//!!! tegelikult on see kontroll jama. selliseid t8id mil pole projekti, ressurssi ei tohiks mingil juhul yldse olla.
 		));
 		$jobs = array_merge ($list->arr (), $jobs);
 
@@ -1078,7 +1078,7 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "prerequisites",
-			"caption" => t("Eeldus&shy;tööd"),
+			"caption" => t("Eel&shy;dus&shy;tööd"),
 		));
 		$table->define_field(array(
 			"name" => "name",
@@ -1090,11 +1090,11 @@ class mrp_case extends class_base
 		));
 		$table->define_field(array(
 			"name" => "pre_buffer",
-			"caption" => t("Eel&shy;puhver (h)"),
+			"caption" => t("Eel&shy;puh&shy;ver (h)"),
 		));
 		$table->define_field(array(
 			"name" => "post_buffer",
-			"caption" => t("Järel&shy;puhver (h)"),
+			"caption" => t("Järel&shy;puh&shy;ver (h)"),
 		));
 		$table->define_field(array(
 			"name" => "comment",
@@ -2377,10 +2377,10 @@ class mrp_case extends class_base
 		}
 		if (is_oid($arr["prop"]))
 		{
-			$o->connect(array(
-				"to" => $o->prop($arr["prop"]),
-				"reltype" => "RELTYPE_MRP_CUSTOMER"
-			));
+		$o->connect(array(
+			"to" => $o->prop($arr["prop"]),
+			"reltype" => "RELTYPE_MRP_CUSTOMER"
+		));
 		}
 	}
 }
