@@ -100,10 +100,11 @@ function hilight_event(el,tgt)
 <div class="aw04kalender01" align="right">
 <table border="0" cellpadding="0" cellspacing="0">
 		<tr>
-	
+			<!-- SUB: TODAY -->
 		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
 		  <td class="aw04tab2smallcontent" background="{VAR:baseurl}/automatweb/images/aw04/tab2small_back.gif"><a href="{VAR:today_url}"><b>Täna</b></a></td>
 		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_right.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>
+		  <!-- END SUB: TODAY -->
 
 			<!-- SUB: PAGE -->
 		  <td><IMG SRC="{VAR:baseurl}/automatweb/images/aw04/tab2small_left.gif" WIDTH="7" HEIGHT="18" BORDER="0" ALT=""></td>

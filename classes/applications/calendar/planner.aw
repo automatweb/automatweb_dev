@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.71 2005/04/27 10:15:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.72 2005/04/27 11:25:05 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -321,6 +321,7 @@ class planner extends class_base
 		{
 			case "tab_views":
 				$data["options"] = array(
+					"today" => t("Täna"),
 					"day" => t("Päev"),
 					"week" => t("Nädal"),
 					"month" => t("Kuu"),

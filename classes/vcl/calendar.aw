@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.57 2005/04/27 10:15:31 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.58 2005/04/27 11:25:05 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -483,6 +483,7 @@ class vcalendar extends aw_template
 
 		$this->read_template($this->container_template);
 		$types = array(
+			"today" => t("Täna"),
 			"day" => t("Päev"),
 			"week" => t("Nädal"),
 			"month" => t("Kuu"),
@@ -509,7 +510,14 @@ class vcalendar extends aw_template
 				"link" => aw_url_change_var("viewtype",$type),
 				"text" => $name,
 			));
-			$ts .= $this->parse(($type == $this->range["viewtype"]) ? "SEL_PAGE" : "PAGE");
+			if($type == "today")
+			{
+				$ts .= $this->parse("TODAY");
+			}
+			else
+			{
+				$ts .= $this->parse(($type == $this->range["viewtype"]) ? "SEL_PAGE" : "PAGE");
+			}
 		};
 
 
@@ -586,10 +594,13 @@ class vcalendar extends aw_template
 				));
 				if($obj = $objs->end())
 				{
-					$prevlink = aw_url_change_var(array(
-						"date" => date("d-m-Y", $obj->prop("start1")),
-						"section" => $this->target_section,
+					$this->vars(array(
+						"prevlink" => aw_url_change_var(array(
+							"date" => date("d-m-Y", $obj->prop("start1")),
+							"section" => $this->target_section,
+						))
 					));
+					$prev = $this->parse("PREV");
 				}
 			}
 			if(!empty($this->last_event))
@@ -605,10 +616,13 @@ class vcalendar extends aw_template
 				));
 				if($obj = $objs->begin())
 				{
-					$nextlink = aw_url_change_var(array(
-						"date" => date("d-m-Y", $obj->prop("start1")),
-						"section" => $this->target_section,
+					$this->vars(array(
+						"nextlink" => aw_url_change_var(array(
+							"date" => date("d-m-Y", $obj->prop("start1")),
+							"section" => $this->target_section,
+						)),
 					));
+					$next = $this->parse("NEXT");
 				}
 			}
 			exit_function("vcalendar::show_days_with_events");
@@ -638,6 +652,8 @@ class vcalendar extends aw_template
 			"RANDOM" => $this->random,
 			"YEARS" => $this->years,
 			"PAGE" => $ts,
+			"PREV" => $prev,
+			"NEXT" => $next,
 			"mininaviurl" => aw_url_change_var("date","") . $urlsufix,
 			"naviurl" => aw_url_change_var("date",""),
 			"mnames" => html::picker((int)$m,$mnames),
