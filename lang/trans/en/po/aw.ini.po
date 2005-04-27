@@ -1251,7 +1251,7 @@ msgstr "Event registration"
 
 # aw.ini:class_856
 msgid "Klassi Pr&uuml;gikast (856) nimi"
-msgstr "Trash can"
+msgstr "Recycle bin"
 
 # aw.ini:class_850
 msgid "Klassi Sündmuste otsing (850) nimi"
