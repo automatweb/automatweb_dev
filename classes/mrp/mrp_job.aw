@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.60 2005/04/26 13:00:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.61 2005/04/27 10:32:04 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1308,6 +1308,10 @@ class mrp_job extends class_base
 
 	function add_comment($job, $comment)
 	{
+		if (trim($comment) == "")
+		{
+			return;
+		}
 		$job = obj($job);
 		$hist = safe_array($job->meta("change_comment_history"));
 		array_unshift($hist, array(
