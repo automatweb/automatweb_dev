@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.12 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_org_search.aw,v 1.13 2005/04/27 09:47:29 ahti Exp $
 // crm_org_search.aw - kliendibaasi otsing 
 /*
 
@@ -125,7 +125,7 @@ class crm_org_search extends class_base
 
 		$tf->define_field(array(
 			"name" => "ceo",
-			"caption" => t("Juht"),
+			"caption" => t("Kontaktisik"),
 			"sortable" => 1,
 		));
 
