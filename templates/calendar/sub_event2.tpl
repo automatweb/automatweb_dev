@@ -2,7 +2,7 @@
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr class="aw04kalendersubevent">
 <td>
-<em>{VAR:lc_date}</em> - <img src="{VAR:iconurl}" /> <a href="{VAR:link}">{VAR:name}</a>
+<em>{VAR:lc_date}</em> - <img src="{VAR:iconurl}" /> <a href="{VAR:link}" title="{VAR:title}" alt="{VAR:title}">{VAR:name}</a>
 
 <!-- SUB: COMMENT -->
 /<i>{VAR:comment_content}</i>

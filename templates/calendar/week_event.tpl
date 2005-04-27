@@ -3,7 +3,7 @@
 <tr class="aw04kalendersubevent">
 <td width="10%">{VAR:time}</td>
 <td>
-<a href="{VAR:link}"><img src="{VAR:iconurl}" border="0"/> {VAR:name}</a>
+<a href="{VAR:link}" title="{VAR:title}" alt="{VAR:title}"><img src="{VAR:iconurl}" border="0"/> {VAR:name}</a>
 <!-- SUB: COMMENT -->
 <hr size="1" width="100%" color="#CCCCCC">
 {VAR:comment}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.56 2005/04/27 08:53:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.57 2005/04/27 10:15:31 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1404,8 +1404,10 @@ class vcalendar extends aw_template
 		{
 			$time = $evt["time"];
 		}
+		$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
 		
 		$this->evt_tpl->vars(array(
+			"title" => $title,
 			"odd" => $this->event_counter % 2,
 			"time" => $time,
 			"date" => date("j-m-Y H:i",$evt["timestamp"]),

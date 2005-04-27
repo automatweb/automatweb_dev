@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.70 2005/04/22 14:21:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.71 2005/04/27 10:15:31 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1755,6 +1755,10 @@ class planner extends class_base
 						"icon" => $event["event_icon_url"],
 						"link" => $event["link"],
 						"comment" => $event["comment"],
+						"created" => $event["created"],
+						"createdby" => $event["createdby"],
+						"modified" => $event["modified"],
+						"modifiedby" => $event["modifiedby"],
 					),
 					"recurrence" => $this->recur_info[$event["id"]],
 				));
