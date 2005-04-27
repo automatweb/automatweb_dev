@@ -8,6 +8,7 @@
 {
 	z-index: 1000;
 	position: relative;
+	white-space: nowrap;
 }
 
 .VclGanttColumn a:hover, .VclGanttSubdivision a:hover
