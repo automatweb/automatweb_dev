@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.45 2005/04/26 19:33:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.46 2005/04/27 06:15:45 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -340,9 +340,9 @@ class mrp_schedule extends class_base
 
 			while ($job = $this->db_next ())
 			{
-				if (is_oid ($job["resource"]))
+				if (is_oid ($job["resource"]) and is_oid($job["oid"]) and $this->can("view", $job["oid"]))
 				{
-					$this->job_schedule[$job["oid"]] = $this->reserve_time ($job["resource"], $job["starttime"], $$job["length"]);
+					$this->job_schedule[$job["oid"]] = $this->reserve_time ($job["resource"], $job["starttime"], $job["length"]);
 				}
 			}
 */
@@ -414,6 +414,10 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
+			if (!$this->can("view", $job["oid"]))
+			{
+				continue;
+			}
 			if (array_key_exists ($job["project"], $projects))
 			{
 				$projects[$job["project"]]["jobs"][$job["exec_order"]] = $job;
