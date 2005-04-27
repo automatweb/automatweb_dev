@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.55 2005/04/27 13:59:55 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.56 2005/04/27 14:01:40 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -529,7 +529,6 @@ class mrp_resource extends class_base
 				### colour job status
 				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
-				$starttime = date (MRP_DATE_FORMAT, $job->prop ("starttime"));
 				$change_url = $this->mk_my_orb ("change", array (
 					"id" => $job->id (),
 					"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
@@ -543,7 +542,7 @@ class mrp_resource extends class_base
 						)),
 					"project" => $project,
 					"state" => $state,
-					"starttime" => $starttime,
+					"starttime" => $job->prop ("starttime"),
 					"client" => $client
 				));
 			}
