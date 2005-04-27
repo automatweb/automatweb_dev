@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.47 2005/04/27 09:24:30 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.48 2005/04/27 09:28:45 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -394,7 +394,7 @@ class mrp_schedule extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,
+			MRP_STATUS_ABORTED,//!!!miks aborted ka??
 		);
 
 		$this->db_query ("SELECT job.* FROM " . $this->jobs_table . " as job WHERE " .
@@ -419,6 +419,9 @@ class mrp_schedule extends class_base
 			{
 				continue;
 			}
+
+/* dbg */ echo 1;
+
 			if (array_key_exists ($job["project"], $projects))
 			{
 				$projects[$job["project"]]["jobs"][$job["exec_order"]] = $job;
