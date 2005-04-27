@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.54 2005/04/22 16:46:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.55 2005/04/27 13:59:55 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -469,7 +469,10 @@ class mrp_resource extends class_base
 			"name" => "starttime",
 			"caption" => t("Alustamisaeg"),
 			"sortable" => 1,
-			"align" => "center"
+			"align" => "center",
+			"type" => "time",
+			"format" => MRP_DATE_FORMAT,
+			"numeric" => 1,
 		));
 		$table->define_field(array(
 			"name" => "project",
