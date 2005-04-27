@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.70 2005/04/26 19:33:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.71 2005/04/27 07:20:37 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -724,6 +724,7 @@ class mrp_case extends class_base
 			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 		));
 		$jobs = $list->arr ();
 
@@ -740,6 +741,7 @@ class mrp_case extends class_base
 			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 		));
 		$jobs = array_merge ($list->arr (), $jobs);
 
