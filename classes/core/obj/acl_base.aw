@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.9 2005/04/05 13:52:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.10 2005/04/27 10:02:39 kristo Exp $
 
 lc_load("definition");
 
@@ -268,7 +268,7 @@ class acl_base extends db_connector
 	{
 		$access="can_".$access;
 
-		$this->save_handle();
+		//$this->save_handle();
 
 		$max_priority = -1;
 		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
@@ -346,7 +346,7 @@ class acl_base extends db_connector
 			$oid = $parent;
 		}
 
-		$this->restore_handle();
+		//$this->restore_handle();
 	
 		if ($GLOBALS["acl_dbg"] == 1)
 		{
@@ -375,6 +375,7 @@ class acl_base extends db_connector
 			return $GLOBALS["object_loader"]->can($access, $oid);
 		}
 
+		$this->save_handle();
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)) || $GLOBALS["acl_dbg"])
 		{
 			// try for file cache
@@ -424,6 +425,7 @@ class acl_base extends db_connector
 			echo "final final acl, asked for $access $oid = ".dbg::dump($max_acl)." <br>";
 		}
 		$access="can_".$access;
+		$this->restore_handle();
 		return $max_acl[$access];
 	}
 
