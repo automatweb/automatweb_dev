@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.18 2005/04/09 09:49:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.19 2005/04/27 10:12:35 kristo Exp $
 // mrp_prisma_import.aw - Prisma import 
 /*
 
@@ -530,7 +530,7 @@ class mrp_prisma_import extends class_base
 		$db = $this->_get_conn();
 		if ($db)
 		{
-			$db->db_query($sql);
+			//$db->db_query($sql);
 		}
 	}
 
