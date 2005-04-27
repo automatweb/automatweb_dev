@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.58 2005/04/27 14:26:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.59 2005/04/27 14:29:32 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -597,6 +597,7 @@ class mrp_resource extends class_base
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
 				### show only applicable projects' jobs
+				$project = obj ($job->prop ("project"));
 				$applicable_states = array (
 					MRP_STATUS_PLANNED,
 					MRP_STATUS_PAUSED,
@@ -604,9 +605,8 @@ class mrp_resource extends class_base
 					MRP_STATUS_DONE,
 				);
 
-				if (in_array ($project->prop ("state"), $applicable_states) and is_oid ($job->prop ("project")))
+				if (in_array ($project->prop ("state"), $applicable_states))
 				{
-					$project = obj ($job->prop ("project"));
 					$project_name = $project->name () ? $project->name () : "...";
 
 					### set timestamp according to state
