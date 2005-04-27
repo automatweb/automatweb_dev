@@ -2902,7 +2902,7 @@ class crm_company extends class_base
 	{
 		$arr['unit'] = $this->unit;
 		$arr['category'] = $this->category;
-		$arr['return_url'] = urlencode(aw_global_get('REQUEST_URI'));
+		$arr['return_url'] = get_ru();
 		$arr['cat'] = $this->cat;
 	}
 
