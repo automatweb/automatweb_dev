@@ -1086,7 +1086,12 @@ class _int_object
 	{
 		// make sure props are loaded
 		$this->_int_get_prop(NULL);
-		return $this->obj["properties"];
+		$ret = $this->obj["properties"];
+		$ret["createdby"] = $this->createdby();
+		$ret["modifiedby"] = $this->modifiedby();
+		$ret["created"] = $this->created();
+		$ret["modified"] = $this->modified();
+		return $ret;
 	}
 
 	function fetch()
