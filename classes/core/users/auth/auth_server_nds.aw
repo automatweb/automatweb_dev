@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.3 2005/04/06 12:19:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.4 2005/04/27 08:26:18 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
@@ -255,17 +255,22 @@ class auth_server_nds extends class_base
 			return;
 		}
 
-		$sr=ldap_search($res, $dn, "uid=".$cred["uid"], array("eMailAddress","givenName"));
+		$sr=ldap_search($res, $dn, "uid=".$cred["uid"], array("mail","fullname", "givenname", "sn"));
 
 		$info = ldap_get_entries($res, $sr);
 
-		if ($info["count"] > 0 && $info[0]["eMailAddress"]["count"])
+		if ($info["count"] > 0 && $info[0]["mail"]["count"] > 0)
 		{
-			$cred["mail"] = $info[0]["eMailAddress"]["0"];
+			$cred["mail"] = $info[0]["mail"][0];
 		}
-		if ($info["count"] > 0 && $info[0]["givenname"]["count"])
+		if ($info["count"] > 0 && $info[0]["fullname"]["count"] > 0)
 		{
-			$cred["name"] = $info[0]["givenname"]["0"];
+			$cred["name"] = $info[0]["fullname"]["0"];
+		}
+
+		if ($info["count"] > 0 && $info[0]["givenname"]["count"] > 0)
+		{
+			$cred["name"] = $info[0]["givenname"][0]." ".$info[0]["sn"][0];
 		}
 	}
 
@@ -287,6 +292,34 @@ class auth_server_nds extends class_base
 			$g->remove_user_from_group($u, obj($grp));
 			aw_restore_acl();
 		}
+	}
+
+	function user_info($uid)
+	{
+			$cred = array("uid" => $uid);
+			
+		$sl = new object_list(array("class_id" => CL_AUTH_SERVER_NDS, "lang_id" => array(), "site_id" => array(), "sort_by" => "objects.name"));
+		foreach($sl->arr() as $server)
+		{
+			echo "server ".$server->name()." <br>";
+			$srv = $server->prop("server");
+			if ($server->prop("server_ldaps"))
+			{
+				$srv = "ldaps://".$srv;
+			}
+
+			$dn = $server->prop("ad_base_dn");
+			$res = ldap_connect($srv, $server->prop("server_port"));
+
+			echo "kasutaja info otsing: dn = '$dn' , parameeter = 'uid=$uid' <br>";
+			$sr=ldap_search($res, $dn, "uid=".$uid);
+
+			$info = ldap_get_entries($res, $sr);
+			echo dbg::dump($info);
+
+			$this->_proc_credentials($res, $server, $cred);
+		}
+		echo "kasutaja info: ".(dbg::dump($cred));
 	}
 }
 ?>
