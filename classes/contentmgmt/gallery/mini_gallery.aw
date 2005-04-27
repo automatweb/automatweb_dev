@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.11 2005/04/19 10:05:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.12 2005/04/27 11:50:02 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -54,10 +54,9 @@ class mini_gallery extends class_base
 		switch($prop["name"])
 		{
 			case "zip_file":
-				global $zip_file;
-				if (is_uploaded_file($zip_file))
+				if (is_uploaded_file($_FILES["zip_file"]["tmp_name"]))
 				{
-					$this->_do_zip_import($arr["obj_inst"], $zip_file);
+					$this->_do_zip_import($arr["obj_inst"], $_FILES["zip_file"]["tmp_name"]);
 				}
 				break;
 		}
