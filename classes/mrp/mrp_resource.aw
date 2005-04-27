@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.56 2005/04/27 14:01:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.57 2005/04/27 14:24:21 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -526,25 +526,35 @@ class mrp_resource extends class_base
 					}
 				}
 
-				### colour job status
-				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+				### show only applicable projects' jobs
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_PAUSED,
+					MRP_STATUS_INPROGRESS,
+				);
 
-				$change_url = $this->mk_my_orb ("change", array (
-					"id" => $job->id (),
-					"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
-					"group" => "",
-				), "mrp_job");
+				if (in_array ($p->prop ("state"), $applicable_states))
+				{
+					### colour job status
+					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
 
-				$table->define_data (array (
-					"modify" => html::href (array (
-						"caption" => t("Ava"),
-						"url" => $change_url,
-						)),
-					"project" => $project,
-					"state" => $state,
-					"starttime" => $job->prop ("starttime"),
-					"client" => $client
-				));
+					$change_url = $this->mk_my_orb ("change", array (
+						"id" => $job->id (),
+						"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
+						"group" => "",
+					), "mrp_job");
+
+					$table->define_data (array (
+						"modify" => html::href (array (
+							"caption" => t("Ava"),
+							"url" => $change_url,
+							)),
+						"project" => $project,
+						"state" => $state,
+						"starttime" => $job->prop ("starttime"),
+						"client" => $client
+					));
+				}
 			}
 		}
 	}
@@ -586,24 +596,33 @@ class mrp_resource extends class_base
 		{
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
-				### project name
-				$project = is_oid ($job->prop ("project")) ? obj ($job->prop ("project")) : NULL;
-				$project_name = is_object ($project) ? $project->name () : "...";
+				### show only applicable projects' jobs
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_PAUSED,
+					MRP_STATUS_INPROGRESS,
+				);
 
-				### set timestamp according to state
-				$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
+				if (in_array ($project->prop ("state"), $applicable_states) and is_oid ($job->prop ("project")))
+				{
+					$project = obj ($job->prop ("project"));
+					$project_name = $project->name () ? $project->name () : "...";
 
-				### colour job status
-				$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+					### set timestamp according to state
+					$timestamp = ($job->prop ("state") == MRP_STATUS_DONE) ? $job->prop ("started") : $job->prop ("starttime");
 
-				### ...
-				$calendar->add_item (array (
-					"timestamp" => $timestamp,
-					"data" => array(
-						"name" => '<span  style="white-space: nowrap;">' . $project_name . "-" . $job->prop ("exec_order") . " [" . $state . "]</span>",
-						"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
-					),
-				));
+					### colour job status
+					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+
+					### ...
+					$calendar->add_item (array (
+						"timestamp" => $timestamp,
+						"data" => array(
+							"name" => '<span  style="white-space: nowrap;">' . $project_name . "-" . $job->prop ("exec_order") . " [" . $state . "]</span>",
+							"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
+						),
+					));
+				}
 			}
 		}
 
