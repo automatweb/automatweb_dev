@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.108 2005/04/26 14:25:42 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.109 2005/04/27 11:56:31 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -187,14 +187,48 @@ class htmlclient extends aw_template
 			return false;
 		};
 
+		// I need to redo this
+		$wrapchildren = false;
+
 		// but actually, settings parets should take place in class_base itself
 		if (isset($args["items"]) && is_array($args["items"]))
 		{
 			$res = "";
+			// if wrapchildren is set, then we attempt to place the properties
+			// next to each other using a HTML table. Other output clients
+			// can probably just ignore it, since it really is only used
+			// to lay out blocks of HTML
+			if (isset($args["wrapchildren"]))
+			{
+				$wrapchildren = true;
+				$cnt = count($args["items"]);
+			};
+
+			$i = 1;
 			foreach($args["items"] as $el)
 			{
+				if ($wrapchildren)
+				{
+					if ($i == 1)
+					{
+						$res .= "<table border='0' width='100%'><tr><td valign='top' width='200'><small>";
+					};
+				};
 	 			$this->mod_property(&$el);
 				$res .= $this->put_subitem($el);
+				//$res .= $this->draw_element($el);
+				if ($wrapchildren)
+				{
+					if ($i == $cnt)
+					{
+						$res .= "</td></tr></table>";
+					}
+					else
+					{
+						$res .= "</td><td valign='top'>";
+					};
+				};
+				$i++;
 			};
 			$args["value"] = $res;
 			$args["type"] = "text";
@@ -214,12 +248,67 @@ class htmlclient extends aw_template
 		{
 			$lf = array();
 		};
+		//arr($res);
+
+		if ($type == "iframe")
+		{
+			$src = $args["src"];
+			$args["html"] = "<iframe id='contentarea' name='contentarea' src='${src}' style='width: 100%; height: 95%; border-top: 1px solid black;' frameborder='no' scrolling='yes'></iframe>";
+		}
+		else
+		if ($this->layout_mode == "fixed_toolbar")
+		{
+			$args["html"] = $args["value"];
+		}
+		else
+		if ($args["parent"] && empty($this->layoutinfo[$args["parent"]]))
+		{
+			$this->proplist[$args["parent"]]["html"] .= $this->put_subitem($args);
+		}
+		else
+		if ($args["layout"] && sizeof($lf["items"]) < ($lf["cols"] * $lf["rows"]))
+		{
+			$args["html"] = $this->put_subitem($args);
+		}
+		else
+		// hidden elements end up in the orb_vars
+		if ($type == "hidden")
+		{
+			$this->orb_vars[$args["name"]] = $args["value"];
+		}
+		else
+		if ($args["type"] == "submit")
+		{
+			$args["html"] = $this->put_submit($args);
+			$this->submit_done = true;
+		}
+		else
+		if (isset($args["no_caption"]))
+		{
+			$args["html"] = $this->put_content($args);
+		}
+		else
+		if (isset($args["subtitle"]))
+		{
+			$args["html"] = $this->put_header_subtitle($args);
+		}
+		else
+		if ($type)
+		{
+			$args["html"] = $this->put_line($args);
+		}
+		elseif (!empty($args["caption"]))
+		{
+			$args["html"] = $this->put_header($args);
+		}
+		else
+		{
+			$args["html"] = $this->put_content($args);
+		};
 
 		if ($args["parent"] && !empty($this->layoutinfo[$args["parent"]]))
 		{
-			//$this->layoutinfo[$args["parent"]]["items"][] = $args["html"];
-			$this->proplist[$args["name"]] = $args;
-
+			$this->layoutinfo[$args["parent"]]["items"][] = $args["html"];
 		}
 		// now I have to check whether this property is placed in a grid
 		// if so, place this thing int he grid
@@ -623,38 +712,6 @@ class htmlclient extends aw_template
 
 		// ach! vahi raiska .. siit see jama ju sisse tuleb!
 		$vars = array();
-
-		$this->layout_by_parent = array();
-
-		$this->lp_chain = array();
-
-		foreach($this->layoutinfo as $key => $val)
-		{
-			$lparent = isset($val["parent"]) ? $val["parent"] : "_main";
-			$val["name"] = $key;
-			$this->layout_by_parent[$lparent][$key] = $val;
-
-			$this->lp_chain[$key] = $lparent;
-			// mul on iga layoudi kohta vaja teada tema kõige esimest layouti
-		};
-
-		$this->properties_by_parent = array();
-
-		if (sizeof($this->proplist) > 0)
-		{
-			foreach($this->proplist as $ki => $item)
-			{
-				$pp = isset($item["parent"]) ? $item["parent"] : "_main";
-				$this->properties_by_parent[$pp][$ki] = $ki;
-			};
-		};
-
-		$this->layoutinfo["_main"] = array(
-			"type" => "vbox",
-		);
-
-                $xxx = $this->parse_layouts("_main");
-
 		// proplist tehakse enne ja siis layout takka otsa .. and this will break a lot of things
 		// now how do I work this out?
 		$property_help = "";
@@ -662,12 +719,6 @@ class htmlclient extends aw_template
 		{
 			foreach($this->proplist as $ki => $item)
 			{
-				// this was set in parse_layout
-				if ($item["__ignore"])
-				{
-					continue;
-				};
-
 				$this->vars(array(
 					"property_name" => $item["name"],
 					"property_caption" => $item["caption"],
@@ -676,7 +727,6 @@ class htmlclient extends aw_template
 				));
 
 				$property_help .= $this->parse("PROPERTY_HELP");
-				$item["html"] = $this->create_element($item);
 
 				if($this->tplmode == "groups")
 				{
@@ -727,6 +777,187 @@ class htmlclient extends aw_template
 			};
 		};
 
+		// i hope that people, who are using those grouptemplates, have decency not to use
+		// vbox, hbox and other thatkind of crap -- ahz
+		if (!empty($this->layoutinfo))
+		{
+			// first pass creates contents for all boxes
+			foreach($this->layoutinfo as $key => $val)
+			{
+				// this takes care of all layout boxes with parents 
+				if (empty($val["parent"]))
+				{
+					continue;
+				};
+
+				if ("grid" == $val["type"])
+				{
+					continue;
+				};
+
+				$type = $val["type"];
+				// it can be one of:
+				// 1. hbox
+				// 2. vbox
+				$tmp = "";
+				// geezas christ, this thing is SO bad :(
+				if ($type == "vbox")
+				{
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top><table border=0 cellspacing=0 cellpadding=0 width=100%>".
+					join("</table><table border=0 cellspacing=0 cellpadding=0 width=100%>",$val["items"]).
+					"</table></td></tr></table>";
+				};
+				if ($type == "hbox")
+				{
+					$tmp .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top><table border=0 cellpadding=0 cellspacing=0>".
+					join("</table></td><td valign=top><table border=0 cellpadding=0 cellspacing=0>",$val["items"]).
+					"</table></td></tr></table>";
+				};
+					
+				$this->layoutinfo[$val["parent"]]["items"][] = $tmp;
+			};
+
+
+			// second one tries to put together the complete picture
+			foreach($this->layoutinfo as $key => $val)
+			{
+				if (!empty($val["parent"]))
+				{
+					continue;
+				};
+
+
+				$type = $val["type"];
+				// it can be one of:
+				// 1. hbox
+				// 2. vbox
+				if ($type == "vbox")
+				{
+					$res .= "<table border=0 cellpadding=0 cellspacing=0><tr><td valign=top>".
+							join("</td></tr><tr><td valign=top>",$val["items"]).
+							"</td></tr></table>";
+				};
+				if ($type == "hbox")
+				{
+					if(isset($val['width']))
+					{
+						$width_array = explode(':',$val['width']);
+						$tmp_html = '';
+						foreach($val['items'] as $key=>$value)
+						{
+							$width="";
+							if(isset($width_array[$key]))
+							{
+								$width = 'width="'.$width_array[$key].'"';
+							}
+							$tmp_html.='<td nowrap valign=top '.$width.'>'.$value.'</td>';
+						}
+						if ($_GET["XX5"])
+						{
+							print "<pre>";
+							print htmlspecialchars($tmp_html);
+							print "</pre>";
+						};
+						$res.="<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr>$tmp_html</tr></table>";
+					}
+					else
+					{
+						$width = (int)100 / sizeof($val["items"]);
+						$res .= "<table border=0 cellpadding=0 cellspacing=0 width='100%'><tr><td valign=top width='${width}%'>".
+								join("</td><td valign=top width='${width}%'>",$val["items"]).
+								"</td></tr></table>";
+					}
+				};
+
+				if ("grid" == $type)
+				{
+					$rows = $val["rows"];
+					$cols = $val["cols"];
+					// siin tuleks siis vast midagi ette võtta nii et näidataks tõesti ainult
+					// vajalikke asju. JA, see asi tuleks kuidagi liita seadete vormiga ..
+					// oh god, that is just horrible
+					$grid = new aw_template();
+					$grid->tpl_init("htmlclient");
+					$grid->read_template("grid.tpl");
+
+					$items = $val["items"];
+					$idx = 0;
+					$tres = "";
+					$used = array();
+					for ($i = 1; $i <= $rows; $i++)
+					{
+						$cells = "";
+						for ($j = 1; $j <= $cols; $j++)
+						{
+							//print "doing $i * $j<br>";
+							if ($used[$i][$j])
+							{
+								//print "skipping, cause it is used<br>";
+								continue;
+							};
+							// now how do I get the spans to work?
+							if (isset($items[$idx]))
+							{
+								$rowspan = $items[$idx]["rowspan"];
+								$colspan = $items[$idx]["colspan"];
+								if (empty($rowspan))
+								{
+									$rowspan = 1;
+								};
+								if (empty($colspan))
+								{
+									$colspan = 1;
+								};
+
+								if ($rowspan > 1 || $colspan > 1)
+								{
+									for ($i1 = $i; $i1 <= $i + $rowspan; $i1++)
+									{
+										for ($j1 = $j; $j1 <= $j + $colspan; $j1++)
+										{
+											$used[$i1][$j1] = 1;
+										}
+									};
+								};
+								// now, how do I leave out stolen cells?
+								$grid->vars(array(
+									"element" => $this->draw_element($items[$idx]),
+									"caption" => $items[$idx]["caption"],
+									"colspan" => $colspan,
+									"rowspan" => $rowspan,
+								));
+								// I need to be able to hide cells without a caption
+								$tpl = "GRID_CELL";
+								if (isset($items[$idx]["no_caption"]))
+								{
+									$tpl .= "_NO_CAPTION";
+								};
+								$cells .= $grid->parse($tpl);
+							}
+							else
+							{
+								$cells .= $grid->parse("GRID_EMPTY_CELL");
+							};
+							// now how do I get the spans to work?
+							$idx++;
+						};
+						$grid->vars(array(
+							"GRID_CELL" => $cells,
+						));
+						$tres .= $grid->parse("GRID_ROW");
+					};
+					$grid->vars(array(
+						"GRID_ROW" => $tres,
+					));
+					$res .= $this->put_content(array(
+						"type" => "text",
+						"value" => $grid->parse(),
+					));
+						
+				};
+			};
+		};
+
 		$submit_handler = $txt = "";
 		if ($this->rte)
 		{
@@ -735,15 +966,28 @@ class htmlclient extends aw_template
 			// would be nice if I could update the textareas right when the iframe loses focus ..
 			// I'm almost sure I can do that.
 			$baseurl = aw_ini_get("baseurl");
+			$txt .= 'remove_exp = new RegExp("href=\"' . $baseurl . '","gi");' . "\n";
+			$txt .= 'br_remove = new RegExp("<br>","gi");' . "\n";
+			$txt .= 'br_remove2 = new RegExp("<br />","gi");' . "\n";
 
 			foreach($this->rtes as $rte)
 			{
 				$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				#$txt .= "tmpdat = tmpdat.replace(/\\n/gi,' ');";
+				#$txt .= "tmpdat = tmpdat.replace(/\\r/gi,'');";
+
+				#$txt .= "tmpdat = tmpdat.replace(br_remove,\"\\r\\n\");\n";
+				#$txt .= "tmpdat = tmpdat.replace(br_remove2,\"\\r\\n\");\n";
+
+
 				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				#$txt .= "document.changeform.elements['${rte}'].value=tmpdat.replace(remove_exp," . '"href=\"");' . "\n";
 				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
 			$submit_handler = $txt;
+			// aha, but I have to put the linefeeds into the thing if it has been created with the plain
+			// old editor.
 		}
 	
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
@@ -1095,186 +1339,6 @@ class htmlclient extends aw_template
 		{
 			return $this->tp->add_tab($arr);
 		};
-	}
-	
-	function create_element($item)
-	{
-		$type = isset($item["type"]) ? $item["type"] : "";
-
-		if ($type == "iframe")
-		{
-			$src = $item["src"];
-			$item["html"] = "<iframe id='contentarea' name='contentarea' src='${src}' style='width: 100%; height: 95%; border-top: 1px solid black;' frameborder='no' scrolling='yes'></iframe>";
-		}
-		else if ($this->layout_mode == "fixed_toolbar")
-		{
-			$item["html"] = $item["value"];
-		}
-		/*
-		else if ($item["parent"] && empty($this->layoutinfo[$item["parent"]]))
-		{
-			// kui sellist layouti veel olnud pole, siis lisame asja kuhu vaja
-			$this->proplist[$item["parent"]]["html"] .= $this->put_subitem($item);
-		}
-		*/
-		else if ($type == "hidden")
-		{
-			// hidden elements end up in the orb_vars
-			$this->orb_vars[$item["name"]] = $item["value"];
-		}
-		else if ($item["type"] == "submit")
-		{
-			$item["html"] = $this->put_submit($item);
-			$this->submit_done = true;
-		}
-		else if (isset($item["no_caption"]))
-		{
-			$item["html"] = $this->put_content($item);
-		}
-		else if (isset($item["subtitle"]))
-		{
-			$item["html"] = $this->put_header_subtitle($item);
-		}
-		else if ($type)
-		{
-			$item["html"] = $this->put_line($item);
-		}
-		// this I do not like
-		elseif (!empty($item["caption"]))
-		{
-			$item["html"] = $this->put_header($item);
-		}
-		else
-		{
-			$item["html"] = $this->put_content($item);
-		};
-		return $item["html"];
-	}
-	
-	function parse_layouts($layout_name)
-	{
-		$layout_items = array();
-		$sub_layouts = array();
-
-		foreach($this->layout_by_parent[$layout_name] as $lkey => $lval)
-		{
-			$html = $this->parse_layouts($lkey);
-
-			$sub_layouts[$lkey] = $html;
-
-			if (!empty($html))
-			{
-				$layout_items[] = $html;
-			};
-		}
-
-		$html = "";
-		$ldata = $this->layoutinfo[$layout_name];
-		$location = false;
-		if ($layout_name == "_main")
-		{
-			// put already parsed layouts in their correct places
-			// first property in the layout sets the location
-			foreach($this->proplist as $pkey => $pval)
-			{
-				if (!empty($pval["parent"]))
-				{
-					$gx = $this->lp_chain[$pval["parent"]];
-					if ($sub_layouts[$gx])
-					{
-						$this->proplist[$pkey]["value"] = $sub_layouts[$gx];
-						$this->proplist[$pkey]["type"] = "text";
-						$this->proplist[$pkey]["caption"] = $this->layoutinfo[$gx]["caption"];
-						unset($this->proplist[$pkey]["__ignore"]);
-						unset($sub_layouts[$gx]);
-					}
-					// this deals with lp_chain thingie .. I need to fix that too
-					elseif ($sub_layouts[$pval["parent"]])
-					{
-						$gx = $pval["parent"];
-						$this->proplist[$pkey]["value"] = $sub_layouts[$gx];
-						$this->proplist[$pkey]["type"] = "text";
-						// XXX: this will probably cause me problems later on ...
-						unset($this->proplist[$pkey]["caption"]);
-						if (!empty($this->layoutinfo[$gx]["caption"]))
-						{
-							$this->proplist[$pkey]["caption"] = $this->layoutinfo[$gx]["caption"];
-							unset($this->proplist[$pkey]["no_caption"]);
-						};
-						unset($this->proplist[$pkey]["__ignore"]);
-						unset($sub_layouts[$gx]);
-					};
-				};
-			};
-		}
-		else
-		{
-			// this deals with  deepers levels
-			foreach($this->properties_by_parent[$layout_name] as $pkey => $pval)
-			{
-				$layout_items[] = $this->put_griditem($this->proplist[$pkey]);
-				$this->proplist[$pkey]["__ignore"] = 1;
-			};
-		};
-
-		if ("hbox" == $ldata["type"])
-		{
-			$cell_widths = array();
-			if (!empty($ldata["width"]))
-			{
-				$cell_widths = explode(":",$ldata["width"]);
-			};
-
-			$content = "";
-			foreach($layout_items as $cell_nr => $layout_item)
-			{
-				$cell_width = isset($cell_widths[$cell_nr]) ? " width='" . $cell_widths[$cell_nr] . "'" : "";
-				$this->vars(array(
-					"item" => $layout_item,
-					"item_width" => $cell_width,
-				));
-				$content .= $this->parse("GRID_HBOX_ITEM");
-			};
-
-			$this->vars(array(
-				"GRID_HBOX_ITEM" => $content,
-			));
-			$html .= $this->parse("GRID_HBOX");
-
-		}
-		elseif ("vbox" == $ldata["type"])
-		{
-			$content = "";
-			foreach($layout_items as $cell_nr => $layout_item)
-			{
-				$this->vars(array(
-					"item" => $layout_item,
-				));
-				$content .= $this->parse("GRID_VBOX_ITEM");
-			};
-
-			$this->vars(array(
-				"GRID_VBOX_ITEM" => $content,
-			));
-			
-			$html .= $this->parse("GRID_VBOX");
-		};
-
-		return $html;
-	}
-
-	function put_griditem($arr)
-	{
-		$this->vars(array(
-			"caption" => $arr["caption"],
-			"element" => $this->draw_element($arr),
-		));
-		$tpl = "GRIDITEM";
-		if (!empty($arr["no_caption"]))
-		{
-			$tpl = "GRIDITEM_NO_CAPTION";
-		};
-		return $this->parse($tpl);
 	}
 };
 ?>
