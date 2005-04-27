@@ -58,7 +58,6 @@ class _int_object
 				"msg" => sprintf(t("object::save(): object (%s) cannot be saved, needed properties are not set (parent, class_id)"), $this->obj["oid"])
 			));
 		}
-
 		return $this->_int_do_save();
 	}
 
@@ -515,6 +514,16 @@ class _int_object
 
 		$this->_int_set_of_value("parent", $parent);
 		$this->_int_do_implicit_save();
+
+		// also, check parent object and set site_id according to these rules:
+		// - if parent is client type menu, then do nothing
+		// - else set site_id same as parent's
+		$o = obj($parent);
+		if (!($o->class_id() == CL_MENU && $o->prop("type") == MN_CLIENT))
+		{
+			$this->set_site_id($o->site_id());
+		}
+
 		return $prev;
 	}
 
@@ -1329,6 +1338,7 @@ class _int_object
 			}
 			$_is_new = true;
 		}
+
 		// now, save objdata
 		$GLOBALS["object_loader"]->ds->save_properties(array(
 			"objdata" => $this->obj,
@@ -1558,7 +1568,10 @@ class _int_object
 		$this->_int_set_of_value("created", time());
 		$this->_int_set_of_value("createdby", aw_global_get("uid"));
 		$this->_int_set_of_value("hits", 0);
-		$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["__default"]["site_id"]);
+		if (!$this->obj["site_id"])
+		{
+			$this->_int_set_of_value("site_id", $GLOBALS["cfg"]["__default"]["site_id"]);
+		}
 
 		// new objects can't be created with deleted status
 		if (!$this->obj["status"])
