@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.46 2005/04/27 06:15:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.47 2005/04/27 09:24:30 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -340,7 +340,8 @@ class mrp_schedule extends class_base
 
 			while ($job = $this->db_next ())
 			{
-				if (is_oid ($job["resource"]) and is_oid($job["oid"]) and $this->can("view", $job["oid"]))
+				if (is_oid ($job["resource"]) and is_oid($job["oid"]) and $this->can("view", $job["oid"]))//!!!  can view???
+				// if (is_oid ($job["resource"]))
 				{
 					$this->job_schedule[$job["oid"]] = $this->reserve_time ($job["resource"], $job["starttime"], $job["length"]);
 				}
@@ -414,7 +415,7 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
-			if (!$this->can("view", $job["oid"]))
+			if (!$this->can("view", $job["oid"]))//!!! ???
 			{
 				continue;
 			}
@@ -623,6 +624,10 @@ class mrp_schedule extends class_base
 					aw_disable_acl();
 					$project->save ();
 					aw_restore_acl();
+
+/* dbg */ if ($_GET["mrp_dbg"]) {
+/* dbg */ echo "proj-" . $project_id . ": [" . date (MRP_DATE_FORMAT, $date) . "]<br>";
+/* dbg */ }
 				}
 			}
 
@@ -663,12 +668,12 @@ class mrp_schedule extends class_base
 					$job->save ();
 					aw_restore_acl();
 
-// /* dbg */ echo $job_id . ": [" . date (MRP_DATE_FORMAT, $job_data[0]) . "] - [" . date (MRP_DATE_FORMAT, $job_data[0]+$job_data[1]) . "]<br>";
+/* dbg */ if ($_GET["mrp_dbg"]) {
+/* dbg */ echo "job-" . $job_id . ": [" . date (MRP_DATE_FORMAT, $job_data[0]) . "] - [" . date (MRP_DATE_FORMAT, $job_data[0]+$job_data[1]) . "]<br>";
+/* dbg */ }
 				}
 			}
 		}
-
-/* dbg */ if ($_GET["mrp_scheduler_dbg"]) { echo "planned."; }
 	}
 
 /* --------------------------  PRIVATE METHODS ----------------------------- */
