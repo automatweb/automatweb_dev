@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.51 2005/04/27 09:53:04 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.52 2005/04/27 09:53:53 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -415,7 +415,7 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
-/* dbg */ echo $job["oid"];
+/* dbg */ echo $job["oid"] . "|";
 			if (!$this->can("view", $job["oid"]))//!!! ???
 			{
 				continue;
