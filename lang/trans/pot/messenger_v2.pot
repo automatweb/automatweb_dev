@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:19 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:51 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,18 +68,6 @@ msgstr ""
 
 #: classes/applications/messenger/messenger_v2.aw:prop_mail_toolbar_help
 msgid "Omaduse Msg. toolbar (mail_toolbar) help"
-msgstr ""
-
-#: classes/applications/messenger/messenger_v2.aw:prop_msg_cont
-msgid "Omaduse Konteiner (msg_cont) caption"
-msgstr ""
-
-#: classes/applications/messenger/messenger_v2.aw:prop_msg_cont_comment
-msgid "Omaduse Konteiner (msg_cont) kommentaar"
-msgstr ""
-
-#: classes/applications/messenger/messenger_v2.aw:prop_msg_cont_help
-msgid "Omaduse Konteiner (msg_cont) help"
 msgstr ""
 
 #: classes/applications/messenger/messenger_v2.aw:prop_treeview
@@ -286,35 +274,35 @@ msgstr ""
 msgid "Seose maili ruul (RELTYPE_RULE) tekst"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:137
+#: classes/applications/messenger/messenger_v2.aw:136
 msgid "kulla mees, sa pole omale default messengeri ju valinud?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:211
+#: classes/applications/messenger/messenger_v2.aw:210
 msgid "Kustutada?"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:212 classes/applications/messenger/messenger_v2.aw:599
+#: classes/applications/messenger/messenger_v2.aw:211 classes/applications/messenger/messenger_v2.aw:599
 msgid "Kustuta m‰rgitud kirjad"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:265
+#: classes/applications/messenger/messenger_v2.aw:264
 msgid "IMAP extension not available"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:277
+#: classes/applications/messenger/messenger_v2.aw:276
 msgid "IMAP sissep‰‰s on konfigureerimata"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:328
+#: classes/applications/messenger/messenger_v2.aw:327
 msgid "Login failed, check whether server name, user and password are correct.<br>"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:424
+#: classes/applications/messenger/messenger_v2.aw:423
 msgid "ei"
 msgstr ""
 
-#: classes/applications/messenger/messenger_v2.aw:424
+#: classes/applications/messenger/messenger_v2.aw:423
 msgid "jah"
 msgstr ""
 

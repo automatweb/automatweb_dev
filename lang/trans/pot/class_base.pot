@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:47 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -90,35 +90,35 @@ msgstr ""
 msgid "Abiinfo"
 msgstr ""
 
-#: classes/class_base.aw:599
+#: classes/class_base.aw:600
 msgid "tab panel"
 msgstr ""
 
-#: classes/class_base.aw:1185
+#: classes/class_base.aw:1186
 msgid "Muuda"
 msgstr ""
 
-#: classes/class_base.aw:1193
+#: classes/class_base.aw:1194
 msgid "Uus"
 msgstr ""
 
-#: classes/class_base.aw:1220
+#: classes/class_base.aw:1221
 msgid "Tagasi"
 msgstr ""
 
-#: classes/class_base.aw:1410 classes/class_base.aw:4492 classes/class_base.aw:4503
+#: classes/class_base.aw:1412 classes/class_base.aw:4494 classes/class_base.aw:4505
 msgid "Seostehaldur"
 msgstr ""
 
-#: classes/class_base.aw:3105
+#: classes/class_base.aw:3107
 msgid "See väli ei tohi olla tühi!"
 msgstr ""
 
-#: classes/class_base.aw:3114
+#: classes/class_base.aw:3116
 msgid "See pole korrektne e-posti aadress!"
 msgstr ""
 
-#: classes/class_base.aw:4391
+#: classes/class_base.aw:4393
 msgid "%s is not a valid configuration form!"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sat, 23 Apr 2005 16:14:27 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:49 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -73,39 +73,60 @@ msgstr ""
 msgid "Grupi Üldine (general) pealkiri"
 msgstr "General"
 
+# classes/class_base.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/class_base.aw:554
-msgid "rohkem infot"
-msgstr "more"
+msgid "Rohkem infot"
+msgstr ""
 
 #: classes/class_base.aw:555
-msgid "peida ära"
-msgstr "close"
+msgid "Peida ära"
+msgstr ""
 
 #: classes/class_base.aw:556
-msgid "abiinfo"
-msgstr "help"
+msgid "Abiinfo"
+msgstr ""
 
-#: classes/class_base.aw:599
+#: classes/class_base.aw:600
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:1211
+#: classes/class_base.aw:1186
+msgid "Muuda"
+msgstr ""
+
+#: classes/class_base.aw:1194
+msgid "Uus"
+msgstr ""
+
+#: classes/class_base.aw:1221
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1401 classes/class_base.aw:4483
-#: classes/class_base.aw:4494
+#: classes/class_base.aw:1412 classes/class_base.aw:4494
+#: classes/class_base.aw:4505
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3096
+#: classes/class_base.aw:3107
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3105
+#: classes/class_base.aw:3116
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4382
+#: classes/class_base.aw:4393
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
+
+#~ msgid "rohkem infot"
+#~ msgstr "more"
+
+#~ msgid "peida ära"
+#~ msgstr "close"
+
+#~ msgid "abiinfo"
+#~ msgstr "help"

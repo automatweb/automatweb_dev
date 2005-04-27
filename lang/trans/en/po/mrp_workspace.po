@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:20 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:58 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -930,6 +930,18 @@ msgstr ""
 msgid "Omaduse Kommentaar (pj_change_comment) help"
 msgstr ""
 
+# classes/mrp/mrp_workspace.aw:prop_pj_change_comment_history
+msgid "Omaduse  (pj_change_comment_history) caption"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:prop_pj_change_comment_history_comment
+msgid "Omaduse  (pj_change_comment_history) kommentaar"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:prop_pj_change_comment_history_help
+msgid "Omaduse  (pj_change_comment_history) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:prop_pj_title_job_data
 msgid "Omaduse T&ouml;&ouml; andmed (pj_title_job_data) caption"
 msgstr "Job data"
@@ -1210,73 +1222,178 @@ msgstr ""
 msgid "Grupi Kliendid (grp_customers) pealkiri"
 msgstr "Customers"
 
+# classes/mrp/mrp_workspace.aw:group_grp_customers_help
+msgid "Grupi Kliendid (grp_customers) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_projects
 msgid "Grupi Projektid (grp_projects) pealkiri"
 msgstr "Projects"
+
+# classes/mrp/mrp_workspace.aw:group_grp_projects_help
+msgid "Grupi Projektid (grp_projects) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_search
 msgid "Grupi Otsing (grp_search) pealkiri"
 msgstr "Search"
 
+# classes/mrp/mrp_workspace.aw:group_grp_search_help
+msgid "Grupi Otsing (grp_search) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_search_proj
 msgid "Grupi Otsi projekte (grp_search_proj) pealkiri"
 msgstr "Search cases"
+
+# classes/mrp/mrp_workspace.aw:group_grp_search_proj_help
+msgid "Grupi Otsi projekte (grp_search_proj) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_search_cust
 msgid "Grupi Otsi kliente (grp_search_cust) pealkiri"
 msgstr "Search customers"
 
+# classes/mrp/mrp_workspace.aw:group_grp_search_cust_help
+msgid "Grupi Otsi kliente (grp_search_cust) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_schedule
 msgid "Grupi Kalender (grp_schedule) pealkiri"
 msgstr "Calendar"
+
+# classes/mrp/mrp_workspace.aw:group_grp_schedule_help
+msgid "Grupi Kalender (grp_schedule) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_printer
 msgid "Grupi Operaatori vaade (grp_printer) pealkiri"
 msgstr "Operator view"
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_help
+msgid "Grupi Operaatori vaade (grp_printer) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_printer_current
 msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) pealkiri"
 msgstr "Current jobs"
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_current_help
+msgid "Grupi Jooksvad t&ouml;&ouml;d (grp_printer_current) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_printer_done
 msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) pealkiri"
 msgstr "Done jobs"
 
+# classes/mrp/mrp_workspace.aw:group_grp_printer_done_help
+msgid "Grupi Tehtud t&ouml;&ouml;d (grp_printer_done) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_printer_aborted
 msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) pealkiri"
 msgstr "Aborted jobs"
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_aborted_help
+msgid "Grupi Katkestatud t&ouml;&ouml;d (grp_printer_aborted) help"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress
+msgid ""
+"Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress_help
+msgid "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) help"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_startable
+msgid ""
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_startable_help
+msgid ""
+"Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
+"(grp_printer_startable) help"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable
+msgid ""
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) pealkiri"
+msgstr ""
+
+# classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable_help
+msgid ""
+"Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
+"(grp_printer_notstartable) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_settings
 msgid "Grupi Seaded (grp_settings) pealkiri"
 msgstr "Settings"
 
+# classes/mrp/mrp_workspace.aw:group_grp_settings_help
+msgid "Grupi Seaded (grp_settings) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_settings_def
 msgid "Grupi Seaded (grp_settings_def) pealkiri"
 msgstr "Settings"
+
+# classes/mrp/mrp_workspace.aw:group_grp_settings_def_help
+msgid "Grupi Seaded (grp_settings_def) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_settings_salesman
 msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) pealkiri"
 msgstr "Salesperson settings"
 
+# classes/mrp/mrp_workspace.aw:group_grp_settings_salesman_help
+msgid "Grupi M&uuml;&uuml;gimehe seaded (grp_settings_salesman) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_users_tree
 msgid "Grupi Kasutajate puu (grp_users_tree) pealkiri"
 msgstr "User tree"
+
+# classes/mrp/mrp_workspace.aw:group_grp_users_tree_help
+msgid "Grupi Kasutajate puu (grp_users_tree) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_users_mgr
 msgid "Grupi Kasutajate rollid (grp_users_mgr) pealkiri"
 msgstr "User roles"
 
+# classes/mrp/mrp_workspace.aw:group_grp_users_mgr_help
+msgid "Grupi Kasutajate rollid (grp_users_mgr) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_grp_resources
 msgid "Grupi Ressursside haldus (grp_resources) pealkiri"
 msgstr "Resource management"
+
+# classes/mrp/mrp_workspace.aw:group_grp_resources_help
+msgid "Grupi Ressursside haldus (grp_resources) help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:group_grp_login_select_res
 msgid "Grupi Vali kasutatav ressurss (grp_login_select_res) pealkiri"
 msgstr "Selectc used resource"
 
+# classes/mrp/mrp_workspace.aw:group_grp_login_select_res_help
+msgid "Grupi Vali kasutatav ressurss (grp_login_select_res) help"
+msgstr ""
+
 # classes/mrp/mrp_workspace.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr " "
+
+# classes/mrp/mrp_workspace.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
 
 # classes/mrp/mrp_workspace.aw:rel_RELTYPE_MRP_FOLDER
 msgid "Seose Kaust (RELTYPE_MRP_FOLDER) tekst"
@@ -1298,384 +1415,392 @@ msgstr "Workspace owner"
 msgid "Seose Projekti headeri kontroller (RELTYPE_MRP_HEADER_CONTROLLER) tekst"
 msgstr "Project header controller"
 
-#: classes/mrp/mrp_workspace.aw:383
+#: classes/mrp/mrp_workspace.aw:394
 msgid "Vaba"
 msgstr "Available"
 
-#: classes/mrp/mrp_workspace.aw:384
+#: classes/mrp/mrp_workspace.aw:395
 msgid "Kasutusel"
 msgstr "In use"
 
-#: classes/mrp/mrp_workspace.aw:385
+#: classes/mrp/mrp_workspace.aw:396
 msgid "Suletud"
 msgstr "Closed"
 
-#: classes/mrp/mrp_workspace.aw:389 classes/mrp/mrp_workspace.aw:2837
+#: classes/mrp/mrp_workspace.aw:400 classes/mrp/mrp_workspace.aw:2873
 msgid "Uus"
 msgstr "New"
 
-#: classes/mrp/mrp_workspace.aw:390 classes/mrp/mrp_workspace.aw:3030
+#: classes/mrp/mrp_workspace.aw:401 classes/mrp/mrp_workspace.aw:3066
 msgid "Planeeritud"
 msgstr "Planned"
 
-#: classes/mrp/mrp_workspace.aw:391
+#: classes/mrp/mrp_workspace.aw:402
 msgid "Töös"
 msgstr "In progress"
 
-#: classes/mrp/mrp_workspace.aw:392 classes/mrp/mrp_workspace.aw:838
-#: classes/mrp/mrp_workspace.aw:1417
+#: classes/mrp/mrp_workspace.aw:403 classes/mrp/mrp_workspace.aw:864
+#: classes/mrp/mrp_workspace.aw:1443
 msgid "Katkestatud"
 msgstr "Aborted"
 
-#: classes/mrp/mrp_workspace.aw:393 classes/mrp/mrp_workspace.aw:806
-#: classes/mrp/mrp_workspace.aw:1429
+#: classes/mrp/mrp_workspace.aw:404 classes/mrp/mrp_workspace.aw:831
+#: classes/mrp/mrp_workspace.aw:1455
 msgid "Valmis"
 msgstr "Done"
 
-#: classes/mrp/mrp_workspace.aw:394
+#: classes/mrp/mrp_workspace.aw:405
 msgid "Lukustatud"
 msgstr "Locked"
 
-#: classes/mrp/mrp_workspace.aw:395
+#: classes/mrp/mrp_workspace.aw:406
 msgid "Paus"
 msgstr "Pause"
 
-#: classes/mrp/mrp_workspace.aw:396
+#: classes/mrp/mrp_workspace.aw:407
 msgid "Kustutatud"
 msgstr "Deleted"
 
-#: classes/mrp/mrp_workspace.aw:397 classes/mrp/mrp_workspace.aw:1423
+#: classes/mrp/mrp_workspace.aw:408 classes/mrp/mrp_workspace.aw:1449
 msgid "Plaanist väljas"
 msgstr "Out of planning"
 
-#: classes/mrp/mrp_workspace.aw:398 classes/mrp/mrp_workspace.aw:1435
+#: classes/mrp/mrp_workspace.aw:409 classes/mrp/mrp_workspace.aw:1461
 msgid "Arhiveeritud"
 msgstr "Archived"
 
-#: classes/mrp/mrp_workspace.aw:643
+#: classes/mrp/mrp_workspace.aw:668
 msgid "&Uuml;le t&auml;htaja planeeritud"
 msgstr "Planned beyond due date"
 
-#: classes/mrp/mrp_workspace.aw:644
+#: classes/mrp/mrp_workspace.aw:669
 msgid "&Uuml;le t&auml;htaja l&auml;inud"
 msgstr "Done beyond due date"
 
-#: classes/mrp/mrp_workspace.aw:743
+#: classes/mrp/mrp_workspace.aw:768
 msgid "[Planeeri]"
 msgstr "[Plan]"
 
-#: classes/mrp/mrp_workspace.aw:753
+#: classes/mrp/mrp_workspace.aw:778
 msgid "Päev"
 msgstr "Dat"
 
-#: classes/mrp/mrp_workspace.aw:754
+#: classes/mrp/mrp_workspace.aw:779
 msgid "Minut"
 msgstr "Minute"
 
-#: classes/mrp/mrp_workspace.aw:755
+#: classes/mrp/mrp_workspace.aw:780
 msgid "Sekund"
 msgstr "Second"
 
-#: classes/mrp/mrp_workspace.aw:807
+#: classes/mrp/mrp_workspace.aw:832
 msgid "V&otilde;ib alustada"
 msgstr "Can be started"
 
-#: classes/mrp/mrp_workspace.aw:808
+#: classes/mrp/mrp_workspace.aw:833
 msgid "Ei saa alustada/t&ouml;&ouml;s"
 msgstr "Can not be started/in progress"
 
-#: classes/mrp/mrp_workspace.aw:837
+#: classes/mrp/mrp_workspace.aw:834
+msgid "Eeldust&ouml;&ouml; tehtud"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:863
 msgid "Tehtud"
 msgstr "Done"
 
-#: classes/mrp/mrp_workspace.aw:839
+#: classes/mrp/mrp_workspace.aw:865
 msgid "Avatud"
 msgstr "Opened"
 
-#: classes/mrp/mrp_workspace.aw:1101 classes/mrp/mrp_workspace.aw:2611
-#: classes/mrp/mrp_workspace.aw:2926
+#: classes/mrp/mrp_workspace.aw:1127 classes/mrp/mrp_workspace.aw:2647
+#: classes/mrp/mrp_workspace.aw:2962
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/mrp/mrp_workspace.aw:1106
+#: classes/mrp/mrp_workspace.aw:1132
 msgid "Operaator"
 msgstr "Opertor"
 
-#: classes/mrp/mrp_workspace.aw:1111 classes/mrp/mrp_workspace.aw:3120
+#: classes/mrp/mrp_workspace.aw:1137 classes/mrp/mrp_workspace.aw:3156
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/mrp/mrp_workspace.aw:1116
+#: classes/mrp/mrp_workspace.aw:1142
 msgid "Jrk."
 msgstr "Ord."
 
-#: classes/mrp/mrp_workspace.aw:1203
+#: classes/mrp/mrp_workspace.aw:1229
 msgid "Lisa uus"
 msgstr "Add new"
 
-#: classes/mrp/mrp_workspace.aw:1207 classes/mrp/mrp_workspace.aw:1775
-#: classes/mrp/mrp_workspace.aw:1889 classes/mrp/mrp_workspace.aw:3152
+#: classes/mrp/mrp_workspace.aw:1233 classes/mrp/mrp_workspace.aw:1801
+#: classes/mrp/mrp_workspace.aw:1915 classes/mrp/mrp_workspace.aw:3191
 msgid "Ressurss"
 msgstr "Resource"
 
-#: classes/mrp/mrp_workspace.aw:1212
+#: classes/mrp/mrp_workspace.aw:1238
 msgid "Ressurssikategooria"
 msgstr "Resource category"
 
-#: classes/mrp/mrp_workspace.aw:1220
+#: classes/mrp/mrp_workspace.aw:1246
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/mrp/mrp_workspace.aw:1227
+#: classes/mrp/mrp_workspace.aw:1253
 msgid "Kopeeri"
 msgstr "Copy"
 
-#: classes/mrp/mrp_workspace.aw:1237
+#: classes/mrp/mrp_workspace.aw:1263
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/mrp/mrp_workspace.aw:1248 classes/mrp/mrp_workspace.aw:2866
+#: classes/mrp/mrp_workspace.aw:1274 classes/mrp/mrp_workspace.aw:2902
 msgid "Kustuta"
 msgstr "delete"
 
-#: classes/mrp/mrp_workspace.aw:1250
+#: classes/mrp/mrp_workspace.aw:1276
 msgid "Kustutada kõik valitud ressursid?"
 msgstr "Delete all selected resources?"
 
-#: classes/mrp/mrp_workspace.aw:1266
+#: classes/mrp/mrp_workspace.aw:1292
 msgid "Lisa uus projekt"
 msgstr "Add new project"
 
-#: classes/mrp/mrp_workspace.aw:1272
+#: classes/mrp/mrp_workspace.aw:1298
 msgid "Kustuta valitud projekt(id)"
 msgstr "Delete selected project(s)"
 
-#: classes/mrp/mrp_workspace.aw:1273
+#: classes/mrp/mrp_workspace.aw:1299
 msgid "Kustutada kõik valitud projektid?"
 msgstr "Delete all selected projects?"
 
-#: classes/mrp/mrp_workspace.aw:1387
+#: classes/mrp/mrp_workspace.aw:1413
 msgid "Plaanisolevad"
 msgstr "Planned"
 
-#: classes/mrp/mrp_workspace.aw:1393
+#: classes/mrp/mrp_workspace.aw:1419
 msgid "Hetkel töös"
 msgstr "In progress"
 
-#: classes/mrp/mrp_workspace.aw:1399
+#: classes/mrp/mrp_workspace.aw:1425
 msgid "Planeeritud üle tähtaja"
 msgstr "Planned over deadline"
 
-#: classes/mrp/mrp_workspace.aw:1405
+#: classes/mrp/mrp_workspace.aw:1431
 msgid "Üle tähtaja"
 msgstr "Over deadline"
 
-#: classes/mrp/mrp_workspace.aw:1411
+#: classes/mrp/mrp_workspace.aw:1437
 msgid "Uued"
 msgstr "New"
 
-#: classes/mrp/mrp_workspace.aw:1441
+#: classes/mrp/mrp_workspace.aw:1467
 msgid "Kõik projektid"
 msgstr "All projects"
 
-#: classes/mrp/mrp_workspace.aw:1447
+#: classes/mrp/mrp_workspace.aw:1473
 msgid "Allhanket&ouml;&ouml;d"
 msgstr "Subcontracts"
 
-#: classes/mrp/mrp_workspace.aw:1453
+#: classes/mrp/mrp_workspace.aw:1479
 msgid "Katkestatud t&ouml;&ouml;d"
 msgstr "Aborted jobs"
 
-#: classes/mrp/mrp_workspace.aw:1479 classes/mrp/mrp_workspace.aw:1763
-#: classes/mrp/mrp_workspace.aw:1879 classes/mrp/mrp_workspace.aw:3128
-#: classes/mrp/mrp_workspace.aw:4107
+#: classes/mrp/mrp_workspace.aw:1505 classes/mrp/mrp_workspace.aw:1789
+#: classes/mrp/mrp_workspace.aw:1905 classes/mrp/mrp_workspace.aw:3175
+#: classes/mrp/mrp_workspace.aw:4194
 msgid "Klient"
 msgstr "Customer"
 
-#: classes/mrp/mrp_workspace.aw:1485
+#: classes/mrp/mrp_workspace.aw:1511
 msgid "Pro&shy;jekt"
 msgstr "Project"
 
-#: classes/mrp/mrp_workspace.aw:1502
+#: classes/mrp/mrp_workspace.aw:1528
 msgid "Materjalide saabumine"
 msgstr "Materials arrive"
 
-#: classes/mrp/mrp_workspace.aw:1510
+#: classes/mrp/mrp_workspace.aw:1536
 msgid "Planeeritud valmimine"
 msgstr "Planned date"
 
-#: classes/mrp/mrp_workspace.aw:1518
+#: classes/mrp/mrp_workspace.aw:1544
 msgid "Tähtaeg"
 msgstr "Deadline"
 
-#: classes/mrp/mrp_workspace.aw:1527 classes/mrp/mrp_workspace.aw:1540
+#: classes/mrp/mrp_workspace.aw:1553 classes/mrp/mrp_workspace.aw:1566
 msgid "Prio&shy;ri&shy;teet"
 msgstr "Priority"
 
-#: classes/mrp/mrp_workspace.aw:1548
+#: classes/mrp/mrp_workspace.aw:1574
 msgid "Müü&shy;gi prio&shy;ri&shy;teet"
 msgstr "Sales priority"
 
-#: classes/mrp/mrp_workspace.aw:1769 classes/mrp/mrp_workspace.aw:1884
-#: classes/mrp/mrp_workspace.aw:3136
+#: classes/mrp/mrp_workspace.aw:1795 classes/mrp/mrp_workspace.aw:1910
+#: classes/mrp/mrp_workspace.aw:3164
 msgid "Projekt"
 msgstr "Project"
 
-#: classes/mrp/mrp_workspace.aw:1784
+#: classes/mrp/mrp_workspace.aw:1810
 msgid "Planeeritud algusaeg"
 msgstr "Planned start time"
 
-#: classes/mrp/mrp_workspace.aw:1790
+#: classes/mrp/mrp_workspace.aw:1816
 msgid "Soovitav algusaeg"
 msgstr "Recommended start time"
 
-#: classes/mrp/mrp_workspace.aw:1795 classes/mrp/mrp_workspace.aw:1850
-#: classes/mrp/mrp_workspace.aw:1910 classes/mrp/mrp_workspace.aw:1963
-#: classes/mrp/mrp_workspace.aw:3168 classes/mrp/mrp_workspace.aw:3327
+#: classes/mrp/mrp_workspace.aw:1821 classes/mrp/mrp_workspace.aw:1876
+#: classes/mrp/mrp_workspace.aw:1936 classes/mrp/mrp_workspace.aw:1989
+#: classes/mrp/mrp_workspace.aw:3207 classes/mrp/mrp_workspace.aw:3407
 msgid "Ava"
 msgstr "Open"
 
-#: classes/mrp/mrp_workspace.aw:1897
+#: classes/mrp/mrp_workspace.aw:1923
 msgid "Projekti tähtaeg"
 msgstr "Project deadline"
 
-#: classes/mrp/mrp_workspace.aw:1902
+#: classes/mrp/mrp_workspace.aw:1928
 msgid "Vara&shy;seim jätka&shy;mis&shy;aeg"
 msgstr "Earliest continue time"
 
-#: classes/mrp/mrp_workspace.aw:1906
+#: classes/mrp/mrp_workspace.aw:1932
 msgid "Tagasta planeerimisse"
 msgstr "Back to planner"
 
-#: classes/mrp/mrp_workspace.aw:2060
+#: classes/mrp/mrp_workspace.aw:2086
 msgid "Kinnine aeg %s - %s"
 msgstr "Unavailable time %s - %s"
 
-#: classes/mrp/mrp_workspace.aw:2275
+#: classes/mrp/mrp_workspace.aw:2302
 msgid "<<"
 msgstr "<<"
 
-#: classes/mrp/mrp_workspace.aw:2276
+#: classes/mrp/mrp_workspace.aw:2303
 msgid "5 tagasi"
 msgstr "5 back"
 
-#: classes/mrp/mrp_workspace.aw:2280
+#: classes/mrp/mrp_workspace.aw:2307
 msgid "Eelmine"
 msgstr "Previous"
 
-#: classes/mrp/mrp_workspace.aw:2284
+#: classes/mrp/mrp_workspace.aw:2311
 msgid "Täna"
 msgstr "Today"
 
-#: classes/mrp/mrp_workspace.aw:2288
+#: classes/mrp/mrp_workspace.aw:2315
 msgid "Järgmine"
 msgstr "Next"
 
-#: classes/mrp/mrp_workspace.aw:2292
+#: classes/mrp/mrp_workspace.aw:2319
 msgid ">>"
 msgstr ">>"
 
-#: classes/mrp/mrp_workspace.aw:2293
+#: classes/mrp/mrp_workspace.aw:2320
 msgid "5 edasi"
 msgstr "5 next"
 
-#: classes/mrp/mrp_workspace.aw:2297
+#: classes/mrp/mrp_workspace.aw:2324
 msgid "&nbsp;&nbsp;Periood: %s &nbsp;&nbsp;Päevi perioodis: %s"
 msgstr "&nbsp;&nbsp;Period: %s &nbsp;&nbsp;Days in period: %s"
 
-#: classes/mrp/mrp_workspace.aw:2303
+#: classes/mrp/mrp_workspace.aw:2330
 msgid "Kaota valik"
 msgstr "Clear selection"
 
-#: classes/mrp/mrp_workspace.aw:2307
+#: classes/mrp/mrp_workspace.aw:2334
 msgid " &nbsp;&nbsp;Valitud projekt: "
 msgstr " &nbsp;&nbsp;Selected project: "
 
-#: classes/mrp/mrp_workspace.aw:2586
+#: classes/mrp/mrp_workspace.aw:2622
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/mrp/mrp_workspace.aw:2618
+#: classes/mrp/mrp_workspace.aw:2654
 msgid "Vali ressurss"
 msgstr "Select resource"
 
-#: classes/mrp/mrp_workspace.aw:2624
+#: classes/mrp/mrp_workspace.aw:2660
 msgid "N&auml;ita k&otilde;ikide ressurside t&ouml;id"
 msgstr "Display jobs from all resources"
 
-#: classes/mrp/mrp_workspace.aw:2630
+#: classes/mrp/mrp_workspace.aw:2666
 msgid "N&auml;ita osakonna ressurside t&ouml;id"
 msgstr "Display jobs from departement resources"
 
-#: classes/mrp/mrp_workspace.aw:2636
+#: classes/mrp/mrp_workspace.aw:2672
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/mrp/mrp_workspace.aw:2842
+#: classes/mrp/mrp_workspace.aw:2878
 msgid "Lisa kategooria"
 msgstr "Add category"
 
-#: classes/mrp/mrp_workspace.aw:2854
+#: classes/mrp/mrp_workspace.aw:2890
 msgid "Lisa klient"
 msgstr "Add customer"
 
-#: classes/mrp/mrp_workspace.aw:2933
+#: classes/mrp/mrp_workspace.aw:2969
 msgid "Aadress"
 msgstr "Address"
 
-#: classes/mrp/mrp_workspace.aw:2940
+#: classes/mrp/mrp_workspace.aw:2976
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/mrp/mrp_workspace.aw:2947
+#: classes/mrp/mrp_workspace.aw:2983
 msgid "E-mail"
 msgstr "E-mail"
 
-#: classes/mrp/mrp_workspace.aw:2954 classes/mrp/mrp_workspace.aw:3144
+#: classes/mrp/mrp_workspace.aw:2990
 msgid "Prioriteet"
 msgstr "Priority"
 
-#: classes/mrp/mrp_workspace.aw:2999
+#: classes/mrp/mrp_workspace.aw:3035
 msgid "Number"
 msgstr "Number"
 
-#: classes/mrp/mrp_workspace.aw:3006
+#: classes/mrp/mrp_workspace.aw:3042 classes/mrp/mrp_workspace.aw:3183
 msgid "Kommentaar"
 msgstr "Comment"
 
-#: classes/mrp/mrp_workspace.aw:3012 classes/mrp/mrp_workspace.aw:3089
+#: classes/mrp/mrp_workspace.aw:3048 classes/mrp/mrp_workspace.aw:3125
 msgid "Algus"
 msgstr "Start"
 
-#: classes/mrp/mrp_workspace.aw:3021
+#: classes/mrp/mrp_workspace.aw:3057
 msgid "T&auml;htaeg"
 msgstr "Deadline"
 
-#: classes/mrp/mrp_workspace.aw:3100
+#: classes/mrp/mrp_workspace.aw:3136
 msgid "Pikkus"
 msgstr "Length"
 
-#: classes/mrp/mrp_workspace.aw:3109
+#: classes/mrp/mrp_workspace.aw:3145
 msgid "L&otilde;pp"
 msgstr "End"
 
-#: classes/mrp/mrp_workspace.aw:3160
+#: classes/mrp/mrp_workspace.aw:3199
 msgid "Teostaja"
 msgstr "Implenmentor"
 
-#: classes/mrp/mrp_workspace.aw:3398
+#: classes/mrp/mrp_workspace.aw:3480
 msgid "K&otilde;ik ressursid"
 msgstr "All resources"
 
-#: classes/mrp/mrp_workspace.aw:3407
+#: classes/mrp/mrp_workspace.aw:3489
 msgid "Osakonna ressursid"
 msgstr "Departement resources"
 
-#: classes/mrp/mrp_workspace.aw:3941
+#: classes/mrp/mrp_workspace.aw:3698
+msgid "Salvesta kommentaar"
+msgstr ""
+
+#: classes/mrp/mrp_workspace.aw:4028
 msgid "Logi v&auml;lja"
 msgstr "Log out"
 
-#: classes/mrp/mrp_workspace.aw:4041 classes/mrp/mrp_workspace.aw:4099
+#: classes/mrp/mrp_workspace.aw:4128 classes/mrp/mrp_workspace.aw:4186
 msgid "Valitud projekt"
 msgstr "Selected project"
 

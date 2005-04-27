@@ -4,7 +4,6 @@ $GLOBALS["TRANS"]["Omaduse Konfiguratsioon (config) caption"] = "Configuration";
 $GLOBALS["TRANS"]["Omaduse Kasutaja default messenger (user_messenger) caption"] = "User's default messenger";
 $GLOBALS["TRANS"]["Omaduse Mailbox ID (sys) (mailbox) caption"] = "Mailbox ID";
 $GLOBALS["TRANS"]["Omaduse Msg. toolbar (mail_toolbar) caption"] = "Msg. toolbar";
-$GLOBALS["TRANS"]["Omaduse Konteiner (msg_cont) caption"] = "Container";
 $GLOBALS["TRANS"]["Omaduse Folderid (treeview) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse Kirjad (message_list) caption"] = "Messages";
 $GLOBALS["TRANS"]["Omaduse Saadetud kirjad (msg_outbox) caption"] = "Sent messages";

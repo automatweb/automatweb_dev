@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:19 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:56 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -205,9 +205,17 @@ msgstr ""
 msgid "Grupi Andmed (data) pealkiri"
 msgstr "Data"
 
+# classes/mrp/mrp_job.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
 # classes/mrp/mrp_job.aw:group_workflow
 msgid "Grupi Töövoog (workflow) pealkiri"
 msgstr "Workflow"
+
+# classes/mrp/mrp_job.aw:group_workflow_help
+msgid "Grupi Töövoog (workflow) help"
+msgstr ""
 
 # classes/mrp/mrp_job.aw:rel_RELTYPE_MRP_RESOURCE
 msgid "Seose Tööks kasutatav ressurss (RELTYPE_MRP_RESOURCE) tekst"
@@ -329,10 +337,10 @@ msgstr "Abort job?"
 msgid "Kommentaar peab olema t&auml;idetud!"
 msgstr "Comment must not be empty!"
 
-#: classes/mrp/mrp_job.aw:494 classes/mrp/mrp_job.aw:636
-#: classes/mrp/mrp_job.aw:769 classes/mrp/mrp_job.aw:855
-#: classes/mrp/mrp_job.aw:924 classes/mrp/mrp_job.aw:1000
-#: classes/mrp/mrp_job.aw:1073
+#: classes/mrp/mrp_job.aw:494 classes/mrp/mrp_job.aw:638
+#: classes/mrp/mrp_job.aw:772 classes/mrp/mrp_job.aw:859
+#: classes/mrp/mrp_job.aw:929 classes/mrp/mrp_job.aw:1006
+#: classes/mrp/mrp_job.aw:1080
 msgid "Töö id vale"
 msgstr "Wrong job id"
 
@@ -360,33 +368,33 @@ msgstr "Resource is busy"
 msgid "Projekti alustamine ebaõnnestus"
 msgstr "Project start failed"
 
-#: classes/mrp/mrp_job.aw:648
+#: classes/mrp/mrp_job.aw:650
 msgid "Töö staatus sobimatu"
 msgstr "Job status invalid"
 
-#: classes/mrp/mrp_job.aw:676 classes/mrp/mrp_job.aw:807
+#: classes/mrp/mrp_job.aw:678 classes/mrp/mrp_job.aw:810
 msgid "Ressursi vabastamine ebaõnnestus"
 msgstr "Freeing the resource failed"
 
-#: classes/mrp/mrp_job.aw:691 classes/mrp/mrp_job.aw:823
-#: classes/mrp/mrp_job.aw:1282
+#: classes/mrp/mrp_job.aw:693 classes/mrp/mrp_job.aw:826
+#: classes/mrp/mrp_job.aw:1304
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr "Resource manager undefined."
 
-#: classes/mrp/mrp_job.aw:781 classes/mrp/mrp_job.aw:867
-#: classes/mrp/mrp_job.aw:1085
+#: classes/mrp/mrp_job.aw:784 classes/mrp/mrp_job.aw:871
+#: classes/mrp/mrp_job.aw:1092
 msgid "Töö pole tegemisel"
 msgstr "Job is not in progress"
 
-#: classes/mrp/mrp_job.aw:939
+#: classes/mrp/mrp_job.aw:944
 msgid "Töö pole pausil"
 msgstr "Job is not paused"
 
-#: classes/mrp/mrp_job.aw:944 classes/mrp/mrp_job.aw:1021
+#: classes/mrp/mrp_job.aw:949 classes/mrp/mrp_job.aw:1027
 msgid "Projekt pole jätkatav"
 msgstr "Case can not be continued"
 
-#: classes/mrp/mrp_job.aw:1016
+#: classes/mrp/mrp_job.aw:1022
 msgid "Töö pole katkestatud"
 msgstr "Job is not aborted"
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:20 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:51 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -698,43 +698,43 @@ msgstr ""
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1763
+#: classes/applications/mailinglist/ml_list.aw:1677
 msgid "jah"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1763
+#: classes/applications/mailinglist/ml_list.aw:1677
 msgid "ei"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1809
+#: classes/applications/mailinglist/ml_list.aw:1723
 msgid "Liikmeid: %s, saadetud: %s %s"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1891
+#: classes/applications/mailinglist/ml_list.aw:1805
 msgid " - vali - "
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1900
+#: classes/applications/mailinglist/ml_list.aw:1814
 msgid "Vali template"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1909
+#: classes/applications/mailinglist/ml_list.aw:1823
 msgid "Saada peale salvestamist ära"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1926
+#: classes/applications/mailinglist/ml_list.aw:1840
 msgid "Saatja e-maili aadress"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1931
+#: classes/applications/mailinglist/ml_list.aw:1845
 msgid "Saatja nimi"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1939
+#: classes/applications/mailinglist/ml_list.aw:1853
 msgid "Asenduste legend"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1940
+#: classes/applications/mailinglist/ml_list.aw:1854
 msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							#username# - AutomatWebi kasutajanimi<br />
 							#name# - Listi liikme nimi<br />
@@ -745,7 +745,7 @@ msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
 							Näiteks: http://www.struktuur.ee/aw#traceid#"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:2213
+#: classes/applications/mailinglist/ml_list.aw:2127
 msgid "all done"
 msgstr ""
 

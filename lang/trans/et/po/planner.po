@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:37 +0300\n"
+"POT-Creation-Date: Wed, 27 Apr 2005 11:55:50 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -409,52 +409,104 @@ msgstr ""
 msgid "Grupi Seaded (general) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_general_help
+msgid "Grupi Seaded (general) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_general2
 msgid "Grupi &Uuml;ldine (general2) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_general2_help
+msgid "Grupi &Uuml;ldine (general2) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:group_advanced
 msgid "Grupi Sisuseaded (advanced) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_advanced_help
+msgid "Grupi Sisuseaded (advanced) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_vac_settings
 msgid "Grupi Vabad ajad (vac_settings) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_vac_settings_help
+msgid "Grupi Vabad ajad (vac_settings) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:group_views
 msgid "Grupi S&uuml;ndmused (views) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_views_help
+msgid "Grupi S&uuml;ndmused (views) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_vacancies
 msgid "Grupi Vabad ajad (vacancies) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_vacancies_help
+msgid "Grupi Vabad ajad (vacancies) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:group_create_events
 msgid "Grupi S&uuml;ndmuste lisamine (create_events) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_create_events_help
+msgid "Grupi S&uuml;ndmuste lisamine (create_events) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_create_vacancies
 msgid "Grupi Vabad ajad (create_vacancies) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_create_vacancies_help
+msgid "Grupi Vabad ajad (create_vacancies) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:group_create_vacancies_cal
 msgid "Grupi Vabad ajad (kalendrivaade) (create_vacancies_cal) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_create_vacancies_cal_help
+msgid "Grupi Vabad ajad (kalendrivaade) (create_vacancies_cal) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_time_settings
 msgid "Grupi Ajaseaded (time_settings) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_time_settings_help
+msgid "Grupi Ajaseaded (time_settings) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:group_add_event
 msgid "Grupi Muuda s&uuml;ndmust (add_event) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_add_event_help
+msgid "Grupi Muuda s&uuml;ndmust (add_event) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
 msgstr ""
 
+# classes/applications/calendar/planner.aw:group_search_help
+msgid "Grupi Otsing (search) help"
+msgstr ""
+
 # classes/applications/calendar/planner.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
+msgstr ""
+
+# classes/applications/calendar/planner.aw:group_tasks_help
+msgid "Grupi Toimetused (tasks) help"
 msgstr ""
 
 # classes/applications/calendar/planner.aw:rel_RELTYPE_EVENT_SOURCE
