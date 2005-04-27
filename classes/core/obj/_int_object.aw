@@ -1367,6 +1367,13 @@ class _int_object
 		// obj inherit props impl
 		$this->_int_do_obj_inherit_props();
 
+		// if this is a brother object, we should save the original as well
+		if ($this->obj["oid"] != $this->obj["brother_of"])
+		{
+			$original = obj($this->obj["brother_of"]);
+			$original->save();
+		}
+
 		// log save
 		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"]);
 
