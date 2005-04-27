@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.57 2005/04/27 14:24:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.58 2005/04/27 14:26:10 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -601,6 +601,7 @@ class mrp_resource extends class_base
 					MRP_STATUS_PLANNED,
 					MRP_STATUS_PAUSED,
 					MRP_STATUS_INPROGRESS,
+					MRP_STATUS_DONE,
 				);
 
 				if (in_array ($project->prop ("state"), $applicable_states) and is_oid ($job->prop ("project")))
