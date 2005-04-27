@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.55 2005/04/25 12:40:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.56 2005/04/27 08:53:32 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -401,7 +401,6 @@ class vcalendar extends aw_template
 					$caption = date("j. ",$this->range["timestamp"]) . locale::get_lc_month(date("m",$this->range["timestamp"])) . date(" Y",$this->range["timestamp"]);
 			};
 		};
-
 		
 		classload("date_calc");
 		$m = date("m",$this->range["timestamp"]);
@@ -562,7 +561,6 @@ class vcalendar extends aw_template
 		// I'm trying to get the javascript function inside the template to generate
 		// a correct url
 		$urlsufix = strpos(aw_global_get("REQUEST_URI"),"?") === false ? "?" : "";
-
 		$prevlink = aw_url_change_var(array(
 			"date" => $this->range["prev"],
 			"section" => $this->target_section,
@@ -572,7 +570,49 @@ class vcalendar extends aw_template
 			"date" => $this->range["next"],
 			"section" => $this->target_section,
 		));
-
+		if(!empty($this->show_days_with_events) && !empty($this->event_sources) && $this->fix_links)
+		{
+			enter_function("vcalendar::show_days_with_events");
+			if(!empty($this->first_event))
+			{
+				$objs = new object_list(array(
+					"parent" => $this->event_sources,
+					"class_id" => $this->event_entry_classes,
+					"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $this->first_event["start1"]),
+					"brother_of" => new obj_predicate_prop("id"),
+					"oid" => new obj_predicate_not($this->first_event["id"]),
+					"status" => $this->obj_status,
+					"limit" => $this->limit_events,
+				));
+				if($obj = $objs->end())
+				{
+					$prevlink = aw_url_change_var(array(
+						"date" => date("d-m-Y", $obj->prop("start1")),
+						"section" => $this->target_section,
+					));
+				}
+			}
+			if(!empty($this->last_event))
+			{
+				$objs = new object_list(array(
+					"parent" => $this->event_sources,
+					"class_id" => $this->event_entry_classes,
+					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $this->first_event["start1"]),
+					"brother_of" => new obj_predicate_prop("id"),
+					"oid" => new obj_predicate_not($this->first_event["id"]),
+					"status" => $this->obj_status,
+					"limit" => $this->limit_events,
+				));
+				if($obj = $objs->begin())
+				{
+					$nextlink = aw_url_change_var(array(
+						"date" => date("d-m-Y", $obj->prop("start1")),
+						"section" => $this->target_section,
+					));
+				}
+			}
+			exit_function("vcalendar::show_days_with_events");
+		}
 		if ($this->template_has_var("prevweek_link"))
 		{
 			$weekrange = get_date_range(array(
@@ -686,6 +726,10 @@ class vcalendar extends aw_template
 				{
 					$events = $this->items[$dstamp];
 					uasort($events,array($this,"__asc_sort"));
+					if(!$this->first_event)
+					{
+						$this->first_event = reset($events);
+					}
 					foreach($events as $event)
 					{
 						$sday = $this->draw_event($event);
@@ -756,6 +800,7 @@ class vcalendar extends aw_template
 			$rv = "";
 			$w .= $this->parse("WEEK");
 		};
+		$this->last_event = $event;
 
 		$this->vars(array(
 			"HEADER" => $header,
@@ -811,6 +856,10 @@ class vcalendar extends aw_template
 				{
 					$events = $this->items[$dstamp];
 					uasort($events,array($this,"__asc_sort"));
+					if(!$this->first_event)
+					{
+						$this->first_event = reset($events);
+					}
 					foreach($events as $event)
 					{
 						$sday = $this->draw_event($event);
@@ -834,6 +883,7 @@ class vcalendar extends aw_template
 				$rv .= $this->parse("MONTH");
 			};
 		};
+		$this->last_event = $event;
 
 		$this->vars(array(
 			"MONTH" => $rv,
@@ -875,7 +925,11 @@ class vcalendar extends aw_template
 			if (is_array($this->items[$dstamp]))
 			{
 				$events = $this->items[$dstamp];
-				uasort($events,array($this,"__asc_sort"));
+				uasort($events, array($this,"__asc_sort"));
+				if(!$this->first_event)
+				{
+					$this->first_event = reset($events);
+				}
 				foreach($events as $event)
 				{
 					$events_for_day .= $this->draw_event($event);
@@ -912,6 +966,7 @@ class vcalendar extends aw_template
 			$tpl = $dstamp == $now ? "TODAY" : "DAY";
 			$rv .= $this->parse($tpl);
 		};
+		$this->last_event = $event;
 		$this->vars(array(
 			"DAY" => $rv,
 		));
@@ -936,11 +991,16 @@ class vcalendar extends aw_template
 		{
 			$events = $this->items[$dstamp];
 			uasort($events,array($this,"__asc_sort"));
+			if(!$this->first_event)
+			{
+				$this->first_event = reset($events);
+			}
 			foreach($events as $event)
 			{
 				$events_for_day .= $this->draw_event($event);
 			};
 		};
+		$this->last_event = $event;
 		$i = $this->range["start"];
 		$dt = date("d",$i);
 		$mn = get_lc_month(date("m",$i));
@@ -1284,6 +1344,7 @@ class vcalendar extends aw_template
 						"url" => obj_link($a["id"]),
 						"caption" => $a["name"],
 					));
+					/*
 					if(count($a["profession"]) > 0)
 					{
 						$profs = array();
@@ -1297,9 +1358,10 @@ class vcalendar extends aw_template
 						}
 						$x .= " - ".implode(", ", $profs);
 					}
+					*/
 					$xz[] = $x;
 				}
-				$evt["artist"] = implode("<br />", $xz);
+				$evt["artist"] = implode(", ", $xz);
 			}
 			if($image = $obj->get_first_obj_by_reltype("RELTYPE_FLYER"))
 			{

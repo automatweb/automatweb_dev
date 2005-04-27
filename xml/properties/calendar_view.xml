@@ -69,6 +69,18 @@
             <caption>Näita ainult aktiivseid sündmusi</caption>
       </property>
       <property>
+            <name>fix_links</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>
+            <![CDATA["Eelmine"-"Järgmine" lingid viivad sündmusega päevale]]>
+            </caption>
+      </property>
+      <property>
             <name>minical_day_with_events</name>
             <table>objects</table>
             <group>style</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.33 2005/04/25 08:06:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.34 2005/04/27 08:53:32 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -34,6 +34,9 @@
 
 @property actives_only type=checkbox ch_value=1
 @caption Näita ainult aktiivseid sündmusi
+
+@property fix_links type=checkbox ch_value=1
+@caption "Eelmine"-"Järgmine" lingid viivad sündmusega päevale
 
 @groupinfo style caption=Stiilid
 @default group=style
@@ -696,6 +699,11 @@ class calendar_view extends class_base
 			$status = array(STAT_ACTIVE);
 			$args["active_only"] = 1;
 		}
+		if($this->obj_inst->prop("fix_links") == 1)
+		{
+			$args["fix_links"] = 1;
+		}
+		$vcal->obj_status = $status;
 
 		$vcal->configure($args);
 
@@ -734,32 +742,32 @@ class calendar_view extends class_base
 			"viewtype" => $viewtype,
 			"date" => aw_global_get("date"),
 		);
+		$range_p["limit_events"] = $vcal->limit_events = $this->obj_inst->prop("num_next_events");
 		if ($use_template == "last_events")
 		{
-			$range_p["limit_events"] = $this->obj_inst->prop("num_next_events");
 			$range_p["viewtype"] = "last_events";
 			$range_p["type"] = "last_events";
 		}
-		
+		$conns = $this->obj_inst->connections_from(array(
+			"type" => "RELTYPE_EVENT_SOURCE",
+		));
 		$range = $vcal->get_range($range_p);
 		if($this->obj_inst->prop("show_event_content") == 1)
 		{
 			enter_function("calendar_view::show_event_content");
-			$conns = $this->obj_inst->connections_from(array(
-				"type" => "RELTYPE_EVENT_SOURCE",
-			));
 			$ec = array();
 			foreach($conns as $conn)
 			{
 				$to_o = $conn->to();
 				$sources = $this->get_event_sources($to_o);
-				if($_GET["date"])
+				if($_GET["date"] || $range_p["limit_events"] > 1)
 				{
-					$first = reset($this->get_events_from_object(array(
+					$events = $this->get_events_from_object(array(
 						"obj_inst" => $to_o,
 						"range" => $range,
 						"status" => $status,
-					)));
+					));
+					$first = reset($events);
 					$first = obj($first["id"]);
 					$start1 = $first->prop("start1");
 				}
@@ -770,6 +778,8 @@ class calendar_view extends class_base
 						"sources" => $sources,
 						"status" => $status,
 					));
+					$f = $first->properties() + array("id" => $first->id());
+					$events = array($f);
 					$start1 = $first->prop("start1");
 				}
 				if($first)
@@ -814,15 +824,19 @@ class calendar_view extends class_base
 					}
 				}
 				$vcal->items = array();
-				$i = $first->instance();
-				$text .= $i->request_execute($first);
+				foreach($events as $event)
+				{
+					$event = obj($event["id"]);
+					$i = $event->instance();
+					$text .= $i->request_execute($event);
+				}
 			}
 			if(!empty($ec))
 			{
 				$range_p["show_ec"] = $ec;
 			}
 			$viewtype = "day";
-			$this->read_template("last_events/intranet1.tpl");
+			$this->read_template($use_template."/intranet1.tpl");
 			if($this->is_template("RANDOM"))
 			{
 				$objs = new object_list(array(
@@ -891,6 +905,17 @@ class calendar_view extends class_base
 			}
 			exit_function("calendar_view::show_event_content");
 		}
+		else
+		{
+			$sources = array();
+			foreach($conns as $conn)
+			{
+				$to_o = $conn->to();
+				$sources = $sources + $this->get_event_sources($to_o);
+			}
+			$vcal->event_sources = $sources;
+			$vcal->event_entry_classes = $this->event_entry_classes;
+		}
 		$range = $vcal->get_range($range_p);
 		if ($arr["start_from"])
 		{
@@ -916,26 +941,15 @@ class calendar_view extends class_base
 			//$arr["event_template"] = "groupitem.tpl";
 		};
 
-
 		$vcal->init_output(array("event_template" => $arr["event_template"]));
-
-		if ($use_template == "last_events")
-		{
-			$exp_args["limit_events"] = $this->obj_inst->prop("num_next_events");
-		};
-
+		$exp_args["limit_events"] = $this->obj_inst->prop("num_next_events");
 		if ($arr["obj_inst"])
 		{
 			$exp_args["oid"] = $arr["obj_inst"]->id();
 		};
-
 		$this->_export_events($exp_args);
-
-
 		classload("layout/active_page_data");
-
 		$style = array();
-
 		// export all defined styles to the active page and the
 		// current template
 		$style_props = array(
