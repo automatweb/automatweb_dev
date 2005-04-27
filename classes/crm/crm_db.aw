@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.16 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.17 2005/04/27 09:40:08 ahti Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -848,7 +848,7 @@ class crm_db extends class_base
 							'link' => $this->mk_my_orb('new',array(
 								'class' => basename($classinf["file"]),
 								'parent' => $parents[$val['clid']],
-								'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+								'return_url' => get_ru(),
 							)),
 							'text' => sprintf(t('Lisa %s'),$classinf["name"]),
 						));
