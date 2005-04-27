@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.50 2005/04/27 09:32:58 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.51 2005/04/27 09:53:04 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -394,7 +394,7 @@ class mrp_schedule extends class_base
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 			MRP_STATUS_NEW,
-			MRP_STATUS_ABORTED,//!!!miks aborted ka??
+			MRP_STATUS_ABORTED,
 		);
 
 		$this->db_query ("SELECT job.* FROM " . $this->jobs_table . " as job WHERE " .
@@ -415,7 +415,7 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
-/* dbg */ echo 1;
+/* dbg */ echo $job["oid"];
 			if (!$this->can("view", $job["oid"]))//!!! ???
 			{
 				continue;
@@ -516,7 +516,7 @@ class mrp_schedule extends class_base
 				elseif (in_array ($job["state"], $applicable_timereserve_states) or ($job["length"] == 0))
 				{
 					### postpone next jobs by job length
- 					$scheduled_start = $minstart;
+ 					$scheduled_start = $minstart;//!!! aborted t88dega peaks vist midagi muud tegema
  					$scheduled_length = $job["length"];
 				}
 				else
