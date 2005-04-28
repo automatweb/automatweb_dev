@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.58 2005/04/27 11:25:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.59 2005/04/28 10:55:04 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -81,9 +81,7 @@ class vcalendar extends aw_template
 	// day_end - array (hour,minute) of day end
 	function configure($arr = array())
 	{
-		$attribs = array("tasklist_func","overview_func","overview_range",
-			"container_template","show_days_with_events","skip_empty",
-			"full_weeks","target_section","day_start","day_end", "show_ec", "filt_views");
+		$attribs = array("tasklist_func", "overview_func", "overview_range", "container_template", "show_days_with_events", "skip_empty", "full_weeks", "target_section", "day_start", "day_end", "show_ec", "filt_views", "fix_links");
 
 		foreach($attribs as $attrib)
 		{
@@ -578,21 +576,23 @@ class vcalendar extends aw_template
 			"date" => $this->range["next"],
 			"section" => $this->target_section,
 		));
-		if(!empty($this->show_days_with_events) && !empty($this->event_sources) && $this->fix_links)
+		if(!empty($this->show_days_with_events) && !empty($this->event_sources) && $this->fix_links == 1)
 		{
 			enter_function("vcalendar::show_days_with_events");
 			if(!empty($this->first_event))
 			{
+				$f = obj($this->first_event["id"]);
 				$objs = new object_list(array(
 					"parent" => $this->event_sources,
 					"class_id" => $this->event_entry_classes,
 					"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $this->first_event["start1"]),
 					"brother_of" => new obj_predicate_prop("id"),
-					"oid" => new obj_predicate_not($this->first_event["id"]),
+					"oid" => new obj_predicate_not($f->brother_of()),
 					"status" => $this->obj_status,
 					"limit" => $this->limit_events,
+					"sort_by" => "planner.start DESC",
 				));
-				if($obj = $objs->end())
+				if($obj = $objs->last())
 				{
 					$this->vars(array(
 						"prevlink" => aw_url_change_var(array(
@@ -605,14 +605,16 @@ class vcalendar extends aw_template
 			}
 			if(!empty($this->last_event))
 			{
+				$l = obj($this->last_event["id"]);
 				$objs = new object_list(array(
 					"parent" => $this->event_sources,
 					"class_id" => $this->event_entry_classes,
-					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $this->first_event["start1"]),
+					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $this->last_event["start1"]),
 					"brother_of" => new obj_predicate_prop("id"),
-					"oid" => new obj_predicate_not($this->first_event["id"]),
+					"oid" => new obj_predicate_not($l->brother_of()),
 					"status" => $this->obj_status,
-					"limit" => $this->limit_events,
+					"limit" => 1,
+					"sort_by" => "planner.start ASC",
 				));
 				if($obj = $objs->begin())
 				{
@@ -647,7 +649,6 @@ class vcalendar extends aw_template
 				)),
 			));
 		};
-
 		$this->vars(array(
 			"RANDOM" => $this->random,
 			"YEARS" => $this->years,
@@ -1322,7 +1323,16 @@ class vcalendar extends aw_template
 				$obx = obj($obz->parent());
 				if($obx->class_id() == CL_PROJECT)
 				{
-					$proj[] = $obx->name();
+					$doc_id = $obx->prop("doc_id");
+					$nm = $obx->name();
+					if(is_oid($doc_id) && $this->can("view", $doc_id))
+					{
+						$nm = html::href(array(
+							"caption" => $nm,
+							"url" => obj_link($doc_id),
+						));
+					}
+					$proj[] = $nm;
 				}
 			}
 			$evt["project"] = implode(", ", $proj);
