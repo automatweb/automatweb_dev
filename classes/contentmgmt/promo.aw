@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.70 2005/04/26 08:12:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.71 2005/04/28 14:45:42 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -864,7 +864,7 @@ class promo extends class_base
 					obj_set_opt("no_cache", 1);
 				}
 
-				if ($o->meta("version") == 2 && ($this->cfg["version"] == 2 || true))
+				if ($o->meta("version") == 2 && ($this->cfg["version"] == 2))
 				{
 					$docid = array_values(safe_array($o->meta("content_documents")));
 					foreach($docid as $_idx => $_did)
