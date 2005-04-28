@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.32 2005/04/18 08:49:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.33 2005/04/28 07:41:09 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -145,10 +145,11 @@ class crm_offer extends class_base
 		);		
 
 		$this->addable = array(
-			CL_CRM_OFFER_CHAPTER, 
-			CL_CRM_OFFER_GOAL, 
-			CL_CRM_OFFER_PAYMENT_TERMS,
-			CL_CRM_OFFER_PRODUCTS_LIST
+			CL_CRM_OFFER_CHAPTER => t("Peat&uuml;kk"), 
+			CL_CRM_OFFER_GOAL => t("Eesm&auml;rk"), 
+			CL_CRM_OFFER_PAYMENT_TERMS => t("Maksetingimused"),
+			CL_CRM_OFFER_PRODUCTS_LIST => t("Toodete nimekiri"),
+			CL_CRM_OFFER_COMPARE_TABLE => t("V&otilde;rdlustabel")
 		);
 	}
 
@@ -413,11 +414,11 @@ class crm_offer extends class_base
 
 		$clss = aw_ini_get("classes");
 
-		foreach($this->addable as $clid)
+		foreach($this->addable as $clid => $tx)
 		{
 			$t->add_menu_item(array(
 				"parent" => "new",
-				"text" => sprintf(t("Lisa %s"), $clss[$clid]["name"]),
+				"text" => $tx,
 				"link" => html::get_new_url($clid, $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), array("return_url" => get_ru()))
 			));
 		}
@@ -476,7 +477,7 @@ class crm_offer extends class_base
 			),
 			"root_item" => $arr["obj_inst"],
 			"ot" => new object_tree(array(
-				"class_id" => $this->addable,
+				"class_id" => array_keys($this->addable),
 				"parent" => $arr["obj_inst"]->id(),
 			)),
 			"var" => "tf",
@@ -567,7 +568,7 @@ class crm_offer extends class_base
 
 		$ol = new object_list(array(
 			"parent" => $arr["request"]["tf"] ? $arr["request"]["tf"] : $arr["obj_inst"]->id(),
-			"class_id" => $this->addable
+			"class_id" => array_keys($this->addable)
 		));
 		foreach($ol->arr() as $o)
 		{
@@ -650,7 +651,7 @@ class crm_offer extends class_base
 		// get offer subobjects
 		$ot = new object_tree(array(
 			"parent" => $o->id(),
-			"class_id" => $this->addable,
+			"class_id" => array_keys($this->addable),
 			"sort_by" => "objects.jrk"
 		));
 
