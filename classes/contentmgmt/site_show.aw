@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.131 2005/04/25 14:08:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.132 2005/04/28 06:34:48 kristo Exp $
 
 /*
 
@@ -933,6 +933,7 @@ class site_show extends class_base
 			$this->vars(array(
 				"doc_content" => $docc,
 			));
+			$this->do_sub_callbacks(isset($arr["sub_callbacks"]) ? $arr["sub_callbacks"] : array());
 			return $this->parse();
 		}
 
