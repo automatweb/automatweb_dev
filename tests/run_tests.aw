@@ -32,5 +32,22 @@ for($i = 2; $i < $argc; $i++)
 		echo $result -> toString();
 	}
 }
+echo "\n";
 
+
+function __disable_err()
+{
+	aw_global_set("__from_raise_error", 1);
+}
+
+function __is_err()
+{
+	aw_global_set("__from_raise_error", 0);
+	if ($GLOBALS["aw_is_error"] == 1)
+	{
+		$GLOBALS["aw_is_error"] = 0;
+		return true;
+	}
+	return false;
+}
 ?>
