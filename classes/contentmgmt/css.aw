@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.10 2005/03/30 20:18:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.11 2005/04/28 08:54:41 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -240,6 +240,17 @@ class css extends class_base
 					if ($val == 1)
 					{
 						$mask = "font-weight: bold;\n";
+					}
+					else
+					{
+						$ign = true;
+					};
+					break;
+
+				case "italic":
+					if ($val == 1)
+					{
+						$mask = "font-style: italic;\n";
 					}
 					else
 					{
