@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:54 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -217,29 +217,57 @@ msgstr ""
 msgid "Grupi Sisu (content) pealkiri"
 msgstr "Content"
 
+# classes/crm/crm_offer.aw:group_content_help
+msgid "Grupi Sisu (content) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:group_recurrence
 msgid "Grupi Kordumine (recurrence) pealkiri"
 msgstr "Recurrence"
+
+# classes/crm/crm_offer.aw:group_recurrence_help
+msgid "Grupi Kordumine (recurrence) help"
+msgstr ""
 
 # classes/crm/crm_offer.aw:group_calendars
 msgid "Grupi Kalendrid (calendars) pealkiri"
 msgstr "Calendars"
 
+# classes/crm/crm_offer.aw:group_calendars_help
+msgid "Grupi Kalendrid (calendars) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr "Projects"
+
+# classes/crm/crm_offer.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
+msgstr ""
 
 # classes/crm/crm_offer.aw:group_products_show
 msgid "Grupi Tooted (products_show) pealkiri"
 msgstr "Products"
 
+# classes/crm/crm_offer.aw:group_products_show_help
+msgid "Grupi Tooted (products_show) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:group_history
 msgid "Grupi Ajalugu (history) pealkiri"
 msgstr "History"
 
+# classes/crm/crm_offer.aw:group_history_help
+msgid "Grupi Ajalugu (history) help"
+msgstr ""
+
 # classes/crm/crm_offer.aw:group_offer
 msgid "Grupi Pakkumine (offer) pealkiri"
 msgstr "Offer"
+
+# classes/crm/crm_offer.aw:group_offer_help
+msgid "Grupi Pakkumine (offer) help"
+msgstr ""
 
 # classes/crm/crm_offer.aw:rel_RELTYPE_RECURRENCE
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
@@ -285,66 +313,85 @@ msgstr "Rejected"
 msgid "Positiivelt lõppenud"
 msgstr "Psitively ended"
 
-#: classes/crm/crm_offer.aw:361
+#: classes/crm/crm_offer.aw:148
+msgid "Peat&uuml;kk"
+msgstr "Chapter"
+
+#: classes/crm/crm_offer.aw:149
+msgid "Eesm&auml;rk"
+msgstr "Goal"
+
+#: classes/crm/crm_offer.aw:150
+msgid "Maksetingimused"
+msgstr "Payment terms"
+
+#: classes/crm/crm_offer.aw:151
+msgid "Toodete nimekiri"
+msgstr "Products list"
+
+#: classes/crm/crm_offer.aw:152
+msgid "V&otilde;rdlustabel"
+msgstr "Compare table"
+
+#: classes/crm/crm_offer.aw:362
 msgid "Algstaatus"
 msgstr "Starting status"
 
-#: classes/crm/crm_offer.aw:367
+#: classes/crm/crm_offer.aw:368
 msgid "Lõppstaatus"
 msgstr "Final status"
 
-#: classes/crm/crm_offer.aw:373
+#: classes/crm/crm_offer.aw:374
 msgid "Muutuse aeg"
 msgstr "Change time"
 
-#: classes/crm/crm_offer.aw:379
+#: classes/crm/crm_offer.aw:380
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/crm/crm_offer.aw:411
+#: classes/crm/crm_offer.aw:412
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/crm/crm_offer.aw:420
-msgid "Lisa %s"
-msgstr "Add %s"
-
-#: classes/crm/crm_offer.aw:434
+#: classes/crm/crm_offer.aw:435
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr "Typical components"
 
-#: classes/crm/crm_offer.aw:456
+#: classes/crm/crm_offer.aw:457
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_offer.aw:463
+#: classes/crm/crm_offer.aw:464
 msgid "Kustuta valitud osad"
 msgstr "Delete selected parts"
 
-#: classes/crm/crm_offer.aw:464
+#: classes/crm/crm_offer.aw:465
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr "Are you sure you want to delete the selected parts?"
 
-#: classes/crm/crm_offer.aw:522
+#: classes/crm/crm_offer.aw:523
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/crm/crm_offer.aw:530
+#: classes/crm/crm_offer.aw:531
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_offer.aw:536
+#: classes/crm/crm_offer.aw:537
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/crm/crm_offer.aw:542
+#: classes/crm/crm_offer.aw:543
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/crm/crm_offer.aw:582
+#: classes/crm/crm_offer.aw:583
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr "Remove from typical component list"
 
-#: classes/crm/crm_offer.aw:593
+#: classes/crm/crm_offer.aw:594
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr "Mark as typical"
+
+#~ msgid "Lisa %s"
+#~ msgstr "Add %s"

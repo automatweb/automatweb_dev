@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:43 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:49:54 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -61,10 +61,14 @@ msgstr ""
 msgid "Grupi Import (import) pealkiri"
 msgstr "Import"
 
+# classes/contentmgmt/gallery/mini_gallery.aw:group_import_help
+msgid "Grupi Import (import) help"
+msgstr ""
+
 # classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
 msgid "Seose piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
 msgstr "image folder"
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:181
+#: classes/contentmgmt/gallery/mini_gallery.aw:180
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"

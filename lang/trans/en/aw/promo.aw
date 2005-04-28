@@ -8,6 +8,7 @@ $GLOBALS["TRANS"]["Omaduse Kasti tüüp (type) caption"] = "Container type";
 $GLOBALS["TRANS"]["Omaduse Link (link) caption"] = "Link";
 $GLOBALS["TRANS"]["Omaduse Lingi kirjeldus (link_caption) caption"] = "Link description";
 $GLOBALS["TRANS"]["Omaduse Sisu ei cacheta (is_dyn) caption"] = "Content is not cached";
+$GLOBALS["TRANS"]["Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"] = "Do not display on search result page";
 $GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"] = "Content displayed in all languages";
 $GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"] = "Content displayed in all languages";
 $GLOBALS["TRANS"]["Omaduse Template (dokumendi sees) (promo_tpl) caption"] = "Template (in document)";

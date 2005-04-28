@@ -12,7 +12,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_file1
 msgid "Omaduse Flaier (file1) caption"
-msgstr ""
+msgstr "Flyer"
 
 #: classes/applications/calendar/flyer.aw:prop_file1_comment
 msgid "Omaduse Flaier (file1) kommentaar"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions1
 msgid "Omaduse Mõõtmed (dimensions1) caption"
-msgstr ""
+msgstr "Dimensions"
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions1_comment
 msgid "Omaduse Mõõtmed (dimensions1) kommentaar"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_file2
 msgid "Omaduse Flaier suurelt (file2) caption"
-msgstr ""
+msgstr "Big flyer"
 
 #: classes/applications/calendar/flyer.aw:prop_file2_comment
 msgid "Omaduse Flaier suurelt (file2) kommentaar"
@@ -48,7 +48,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions2
 msgid "Omaduse Mõõtmed (dimensions2) caption"
-msgstr ""
+msgstr "Dimensions"
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions2_comment
 msgid "Omaduse Mõõtmed (dimensions2) kommentaar"
@@ -60,7 +60,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_file3
 msgid "Omaduse Flaieri teine külg (file3) caption"
-msgstr ""
+msgstr "Flyer other side"
 
 #: classes/applications/calendar/flyer.aw:prop_file3_comment
 msgid "Omaduse Flaieri teine külg (file3) kommentaar"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions3
 msgid "Omaduse Mõõtmed (dimensions3) caption"
-msgstr ""
+msgstr "Dimensions"
 
 #: classes/applications/calendar/flyer.aw:prop_dimensions3_comment
 msgid "Omaduse Mõõtmed (dimensions3) kommentaar"
@@ -84,7 +84,7 @@ msgstr ""
 
 #: classes/applications/calendar/flyer.aw:prop_file3_del
 msgid "Omaduse Kustuta teine külg (file3_del) caption"
-msgstr ""
+msgstr "Delete other side"
 
 #: classes/applications/calendar/flyer.aw:prop_file3_del_comment
 msgid "Omaduse Kustuta teine külg (file3_del) kommentaar"

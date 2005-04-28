@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 27 Apr 2005 11:55:58 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:49:53 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,24 +10,32 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 #: classes/vcl/calendar.aw:486
+msgid "Täna"
+msgstr "Today"
+
+#: classes/vcl/calendar.aw:487
 msgid "Päev"
 msgstr "Day"
 
-#: classes/vcl/calendar.aw:487
+#: classes/vcl/calendar.aw:488
 msgid "Nädal"
 msgstr "Week"
 
-#: classes/vcl/calendar.aw:488
+#: classes/vcl/calendar.aw:489
 msgid "Kuu"
 msgstr "Month"
 
-#: classes/vcl/calendar.aw:489
+#: classes/vcl/calendar.aw:490
 msgid "Ülevaade"
 msgstr "Overview"
 
-#: classes/vcl/calendar.aw:543
+#: classes/vcl/calendar.aw:551
 msgid "Toimetused"
 msgstr "Events"
+
+#: classes/vcl/calendar.aw:1423
+msgid "Lisas [%s] %s /  Muutis [%s] %s"
+msgstr "Added by [%s] %s / Modified by [%s] %s"
 
 #~ msgid "Eelmine kuu"
 #~ msgstr "Last month"

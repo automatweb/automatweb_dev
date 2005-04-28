@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:41 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -314,67 +314,83 @@ msgstr ""
 msgid "Positiivelt lõppenud"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:361
+#: classes/crm/crm_offer.aw:148
+msgid "Peat&uuml;kk"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:149
+msgid "Eesm&auml;rk"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:150
+msgid "Maksetingimused"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:151
+msgid "Toodete nimekiri"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:152
+msgid "V&otilde;rdlustabel"
+msgstr ""
+
+#: classes/crm/crm_offer.aw:362
 msgid "Algstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:367
+#: classes/crm/crm_offer.aw:368
 msgid "Lõppstaatus"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:373
+#: classes/crm/crm_offer.aw:374
 msgid "Muutuse aeg"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:379
+#: classes/crm/crm_offer.aw:380
 msgid "Muutja"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:411
+#: classes/crm/crm_offer.aw:412
 msgid "Lisa"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:420
-msgid "Lisa %s"
-msgstr ""
-
-#: classes/crm/crm_offer.aw:434
+#: classes/crm/crm_offer.aw:435
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:456
+#: classes/crm/crm_offer.aw:457
 msgid "Salvesta"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:463
+#: classes/crm/crm_offer.aw:464
 msgid "Kustuta valitud osad"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:464
+#: classes/crm/crm_offer.aw:465
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:522
+#: classes/crm/crm_offer.aw:523
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:530
+#: classes/crm/crm_offer.aw:531
 msgid "Nimi"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:536
+#: classes/crm/crm_offer.aw:537
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:542
+#: classes/crm/crm_offer.aw:543
 msgid "Muuda"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:582
+#: classes/crm/crm_offer.aw:583
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr ""
 
-#: classes/crm/crm_offer.aw:593
+#: classes/crm/crm_offer.aw:594
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr ""
 

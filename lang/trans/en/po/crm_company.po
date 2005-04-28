@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:38 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:49:58 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -913,117 +913,233 @@ msgstr ""
 msgid "Grupi &Uuml;ldine (general_sub) pealkiri"
 msgstr "General"
 
+# classes/crm/crm_company.aw:group_general_sub_help
+msgid "Grupi &Uuml;ldine (general_sub) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_cedit
 msgid "Grupi Üldkontaktid (cedit) pealkiri"
 msgstr "General contacts"
+
+# classes/crm/crm_company.aw:group_cedit_help
+msgid "Grupi Üldkontaktid (cedit) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_org_sections
 msgid "Grupi Tegevus (org_sections) pealkiri"
 msgstr "Activity"
 
+# classes/crm/crm_company.aw:group_org_sections_help
+msgid "Grupi Tegevus (org_sections) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_add_info
 msgid "Grupi Lisainfo (add_info) pealkiri"
 msgstr "Additional information"
+
+# classes/crm/crm_company.aw:group_add_info_help
+msgid "Grupi Lisainfo (add_info) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_user_settings
 msgid "Grupi Kasutajate seaded (user_settings) pealkiri"
 msgstr "User settings"
 
+# classes/crm/crm_company.aw:group_user_settings_help
+msgid "Grupi Kasutajate seaded (user_settings) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_people
 msgid "Grupi Inimesed (people) pealkiri"
 msgstr "Persons"
+
+# classes/crm/crm_company.aw:group_people_help
+msgid "Grupi Inimesed (people) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_contacts
 msgid "Grupi Kontaktid (contacts) pealkiri"
 msgstr "Contacts"
 
+# classes/crm/crm_company.aw:group_contacts_help
+msgid "Grupi Kontaktid (contacts) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_contacts2
 msgid "Grupi Puuvaade (contacts2) pealkiri"
 msgstr "Treeview"
+
+# classes/crm/crm_company.aw:group_contacts2_help
+msgid "Grupi Puuvaade (contacts2) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_oldcontacts
 msgid "Grupi Isikud (oldcontacts) pealkiri"
 msgstr "Persons"
 
+# classes/crm/crm_company.aw:group_oldcontacts_help
+msgid "Grupi Isikud (oldcontacts) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_overview
 msgid "Grupi Tegevused (overview) pealkiri"
 msgstr "Actions"
+
+# classes/crm/crm_company.aw:group_overview_help
+msgid "Grupi Tegevused (overview) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_all_actions
 msgid "Grupi Kõik (all_actions) pealkiri"
 msgstr "All"
 
+# classes/crm/crm_company.aw:group_all_actions_help
+msgid "Grupi Kõik (all_actions) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_calls
 msgid "Grupi Kõned (calls) pealkiri"
 msgstr "Calls"
+
+# classes/crm/crm_company.aw:group_calls_help
+msgid "Grupi Kõned (calls) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_meetings
 msgid "Grupi Kohtumised (meetings) pealkiri"
 msgstr "Meetings"
 
+# classes/crm/crm_company.aw:group_meetings_help
+msgid "Grupi Kohtumised (meetings) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_tasks
 msgid "Grupi Toimetused (tasks) pealkiri"
 msgstr "Events"
+
+# classes/crm/crm_company.aw:group_tasks_help
+msgid "Grupi Toimetused (tasks) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_tasks_overview
 msgid "Grupi Ülevaade (tasks_overview) pealkiri"
 msgstr "Overview"
 
+# classes/crm/crm_company.aw:group_tasks_overview_help
+msgid "Grupi Ülevaade (tasks_overview) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_relorg
 msgid "Grupi Kliendid (relorg) pealkiri"
 msgstr "Customers"
+
+# classes/crm/crm_company.aw:group_relorg_help
+msgid "Grupi Kliendid (relorg) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_customers
 msgid "Grupi Kõik kliendid (customers) pealkiri"
 msgstr "All customers"
 
+# classes/crm/crm_company.aw:group_customers_help
+msgid "Grupi Kõik kliendid (customers) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_my_customers
 msgid "Grupi Minu kliendid (my_customers) pealkiri"
 msgstr "My customers"
+
+# classes/crm/crm_company.aw:group_my_customers_help
+msgid "Grupi Minu kliendid (my_customers) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_fcustomers
 msgid "Grupi Tulevased kliendid (fcustomers) pealkiri"
 msgstr "Potential customers"
 
+# classes/crm/crm_company.aw:group_fcustomers_help
+msgid "Grupi Tulevased kliendid (fcustomers) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_partners
 msgid "Grupi Partnerid (partners) pealkiri"
 msgstr "Partners"
+
+# classes/crm/crm_company.aw:group_partners_help
+msgid "Grupi Partnerid (partners) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_fpartners
 msgid "Grupi Tulevased partnerid (fpartners) pealkiri"
 msgstr "Potential partners"
 
+# classes/crm/crm_company.aw:group_fpartners_help
+msgid "Grupi Tulevased partnerid (fpartners) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_competitors
 msgid "Grupi Konkurendid (competitors) pealkiri"
 msgstr "Competitors"
+
+# classes/crm/crm_company.aw:group_competitors_help
+msgid "Grupi Konkurendid (competitors) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_personal_offers
 msgid "Grupi Tööpakkumised (personal_offers) pealkiri"
 msgstr "Job offers"
 
+# classes/crm/crm_company.aw:group_personal_offers_help
+msgid "Grupi Tööpakkumised (personal_offers) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_personal_candits
 msgid "Grupi Kandideerijad (personal_candits) pealkiri"
 msgstr "Job seekers"
+
+# classes/crm/crm_company.aw:group_personal_candits_help
+msgid "Grupi Kandideerijad (personal_candits) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_offers
 msgid "Grupi Pakkumised (offers) pealkiri"
 msgstr "Offers"
 
+# classes/crm/crm_company.aw:group_offers_help
+msgid "Grupi Pakkumised (offers) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_org_objects_main
 msgid "Grupi Objektid (org_objects_main) pealkiri"
 msgstr "Objects"
+
+# classes/crm/crm_company.aw:group_org_objects_main_help
+msgid "Grupi Objektid (org_objects_main) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:group_org_objects
 msgid "Grupi Objektid (org_objects) pealkiri"
 msgstr "Objects"
 
+# classes/crm/crm_company.aw:group_org_objects_help
+msgid "Grupi Objektid (org_objects) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_org_projects
 msgid "Grupi Projektid (org_projects) pealkiri"
 msgstr "Projects"
 
+# classes/crm/crm_company.aw:group_org_projects_help
+msgid "Grupi Projektid (org_projects) help"
+msgstr ""
+
 # classes/crm/crm_company.aw:group_my_projects
 msgid "Grupi Minu projektid (my_projects) pealkiri"
 msgstr "My projects"
+
+# classes/crm/crm_company.aw:group_my_projects_help
+msgid "Grupi Minu projektid (my_projects) help"
+msgstr ""
 
 # classes/crm/crm_company.aw:rel_RELTYPE_ETTEVOTLUSVORM
 msgid "Seose Õiguslik vorm (RELTYPE_ETTEVOTLUSVORM) tekst"

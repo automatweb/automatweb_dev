@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:05 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:00 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -133,6 +133,10 @@ msgstr ""
 msgid "Grupi  () pealkiri"
 msgstr ""
 
+# classes/crm/crm_org_search.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
 #: classes/crm/crm_org_search.aw:93
 msgid "Organisatsioon"
 msgstr ""
@@ -158,7 +162,7 @@ msgid "Telefon"
 msgstr ""
 
 #: classes/crm/crm_org_search.aw:128
-msgid "Juht"
+msgid "Kontaktisik"
 msgstr ""
 
 #: classes/crm/crm_org_search.aw:375

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 15:44:21 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:10 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1452,6 +1452,18 @@ msgstr "Warehouse product search"
 # aw.ini:class_922
 msgid "Klassi Flaier (922) nimi"
 msgstr "Flyer"
+
+# aw.ini:class_924
+msgid "Klassi Pakkumise v&otilde;rdlustabel (924) nimi"
+msgstr "Offer compare table"
+
+# aw.ini:class_925
+msgid "Klassi Pakkumise v&otilde;rdlustabeli tulp (925) nimi"
+msgstr "Offer compare table column"
+
+# aw.ini:class_926
+msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
+msgstr "Offer compare table row"
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"

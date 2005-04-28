@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri,  8 Apr 2005 21:44:34 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -41,38 +41,38 @@ msgstr ""
 msgid "object_list::sort_by_cb(%s): no function %s exists!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:176
+#: classes/core/obj/object_list.aw:180
 msgid "object_list::foreach_o(): parameter must be an array"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:198
+#: classes/core/obj/object_list.aw:202
 msgid ""
 "object_list::foreach_o(): %s is not a member function of the object class!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:228
+#: classes/core/obj/object_list.aw:232
 msgid "object_list::foreach_cb(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:238
+#: classes/core/obj/object_list.aw:242
 msgid ""
 "object_list::foreach_cb(): callback method %s does not exist in class %s!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:247
+#: classes/core/obj/object_list.aw:251
 msgid "object_list::foreach_cb(): callback function %s does not exist!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:293
+#: classes/core/obj/object_list.aw:297
 msgid "object_list::from_arr(): parameter must be an array!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:394
+#: classes/core/obj/object_list.aw:398
 msgid ""
 "object_list::filter(%s => %s): can not complex searches on metadata fields!"
 msgstr ""
 
-#: classes/core/obj/object_list.aw:401
+#: classes/core/obj/object_list.aw:405
 msgid ""
 "object_list::filter(%s => %s): can not do LIKE searches on metadata fields!"
 msgstr ""

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.26 2005/04/25 13:52:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.27 2005/04/28 07:57:27 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -544,18 +544,18 @@ class pot_scanner extends core
 		if (file_exists($file_to))
 		{
 			$tmpf = tempnam(aw_ini_get("server.tmpdir"), "awtrans");
-			$this->_write_file($tmpf, $strings, date("r", filemtime($file_to)), $file_from);
+			$this->_write_file($tmpf, $strings, date("r", mktime(0,0,0,1,1,2020)), $file_from);
 		
 			if (md5($this->get_file(array("file" => $tmpf))) != md5($this->get_file(array("file" => $file_to))))
 			{
-				$this->_write_file($file_to, $strings, date("r"), $file_from);
+				$this->_write_file($file_to, $strings, date("r",mktime(0,0,0,1,1,2020)), $file_from);
 			}
 			@unlink($tmpf);
 			touch($file_to);
 		}
 		else
 		{
-			$this->_write_file($file_to, $strings, date("r"), $file_from);
+			$this->_write_file($file_to, $strings, date("r",mktime(0,0,0,1,1,2020)), $file_from);
 		}
 	}
 
@@ -642,6 +642,10 @@ class pot_scanner extends core
 			return true;
 		}
 		if (preg_match("/Omaduse .* \(.*\) help/imsU", $msgid))
+		{
+			return true;
+		}
+		if (preg_match("/Grupi .* \(.*\) help/imsU", $msgid))
 		{
 			return true;
 		}

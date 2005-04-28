@@ -203,7 +203,7 @@ msgstr ""
 
 # classes/crm/crm_person.aw:prop_picture2
 msgid "Omaduse Pilt suuremana (picture2) caption"
-msgstr ""
+msgstr "Large image"
 
 # classes/crm/crm_person.aw:prop_picture2_comment
 msgid "Omaduse Pilt suuremana (picture2) kommentaar"
@@ -663,7 +663,7 @@ msgstr "addresses"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_PICTURE2
 msgid "Seose pilt2 (RELTYPE_PICTURE2) tekst"
-msgstr ""
+msgstr "image 2"
 
 # classes/crm/crm_person.aw:rel_RELTYPE_PICTURE
 msgid "Seose pilt (RELTYPE_PICTURE) tekst"

@@ -1302,6 +1302,7 @@ msgstr ""
 msgid ""
 "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) pealkiri"
 msgstr ""
+"All jobs in progress"
 
 # classes/mrp/mrp_workspace.aw:group_grp_printer_in_progress_help
 msgid "Grupi K&otilde;ik t&ouml;&ouml;s olevad (grp_printer_in_progress) help"
@@ -1312,6 +1313,7 @@ msgid ""
 "Grupi K&otilde;ik t&ouml;&ouml;d mida oleks v&otilde;imalik alustada "
 "(grp_printer_startable) pealkiri"
 msgstr ""
+"All jobs that can be started"
 
 # classes/mrp/mrp_workspace.aw:group_grp_printer_startable_help
 msgid ""
@@ -1324,6 +1326,7 @@ msgid ""
 "Grupi T&ouml;&ouml;d, mida ei ole veel v&otilde;imalik alustada "
 "(grp_printer_notstartable) pealkiri"
 msgstr ""
+"All jobs that can not be started yet"
 
 # classes/mrp/mrp_workspace.aw:group_grp_printer_notstartable_help
 msgid ""
@@ -1503,7 +1506,7 @@ msgstr "Can not be started/in progress"
 
 #: classes/mrp/mrp_workspace.aw:834
 msgid "Eeldust&ouml;&ouml; tehtud"
-msgstr ""
+msgstr "Prerequisites done"
 
 #: classes/mrp/mrp_workspace.aw:863
 msgid "Tehtud"
@@ -1794,7 +1797,7 @@ msgstr "Departement resources"
 
 #: classes/mrp/mrp_workspace.aw:3698
 msgid "Salvesta kommentaar"
-msgstr ""
+msgstr "Save comment"
 
 #: classes/mrp/mrp_workspace.aw:4028
 msgid "Logi v&auml;lja"

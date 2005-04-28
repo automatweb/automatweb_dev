@@ -79,15 +79,15 @@ msgstr ""
 
 #: classes/class_base.aw:554
 msgid "Rohkem infot"
-msgstr ""
+msgstr "More info"
 
 #: classes/class_base.aw:555
 msgid "Peida ära"
-msgstr ""
+msgstr "Hide"
 
 #: classes/class_base.aw:556
 msgid "Abiinfo"
-msgstr ""
+msgstr "Help"
 
 #: classes/class_base.aw:600
 msgid "tab panel"
@@ -95,11 +95,11 @@ msgstr "tab panel"
 
 #: classes/class_base.aw:1186
 msgid "Muuda"
-msgstr ""
+msgstr "Change"
 
 #: classes/class_base.aw:1194
 msgid "Uus"
-msgstr ""
+msgstr "New"
 
 #: classes/class_base.aw:1221
 msgid "Tagasi"

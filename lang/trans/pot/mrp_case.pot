@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 27 Apr 2005 11:55:56 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:08 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -727,7 +727,7 @@ msgid "Nr."
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:1081
-msgid "Eeldus&shy;tööd"
+msgid "Eel&shy;dus&shy;tööd"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:1085
@@ -739,11 +739,11 @@ msgid "Pikkus (h)"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:1093
-msgid "Eel&shy;puhver (h)"
+msgid "Eel&shy;puh&shy;ver (h)"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:1097
-msgid "Järel&shy;puhver (h)"
+msgid "Järel&shy;puh&shy;ver (h)"
 msgstr ""
 
 #: classes/mrp/mrp_case.aw:1101

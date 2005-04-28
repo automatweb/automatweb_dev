@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:30 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:50:02 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -14,7 +14,7 @@ msgstr ""
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr ""
 
-#: classes/core/obj/acl_base.aw:537
+#: classes/core/obj/acl_base.aw:539
 msgid "acl_base::prog_acl(%s, %s): the only program you can get access rights for is PRG_MENUEDIT, all others are deprecated!"
 msgstr ""
 

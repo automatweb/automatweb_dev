@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 16:59:10 +0300\n"
+"POT-Creation-Date: Thu, 28 Apr 2005 10:49:55 +0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,31 +9,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/contentmgmt/site_show.aw:1600
+#: classes/contentmgmt/site_show.aw:1601
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1680
+#: classes/contentmgmt/site_show.aw:1681
 msgid ""
 "site_show::exec_subtemplate_handlers(): could not find subtemplate handler "
 "in %s"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:1854
+#: classes/contentmgmt/site_show.aw:1855
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2350
+#: classes/contentmgmt/site_show.aw:2351
 msgid ""
 "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2386
+#: classes/contentmgmt/site_show.aw:2387
 msgid ""
 "Access denied and error redirects are defined.incorrectly. Please report "
 "this to the site administrator"
 msgstr ""
 
-#: classes/contentmgmt/site_show.aw:2391
+#: classes/contentmgmt/site_show.aw:2392
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr ""

@@ -103,6 +103,7 @@ msgid ""
 "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale "
 "(fix_links) caption"
 msgstr ""
+"\"Previous\"-\"Next\" links move to days with events "
 
 # classes/calendar/calendar_view.aw:prop_fix_links_comment
 msgid ""

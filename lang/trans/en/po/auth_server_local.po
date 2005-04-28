@@ -12,5 +12,5 @@ msgstr ""
 
 #: classes/core/users/auth/auth_server_local.aw:109
 msgid "Sellelt aadressilt (%s) pole ligip&auml;&auml;s lubatud!"
-msgstr ""
+msgstr "Access is denied from your current address (%s)!"
 
