@@ -518,10 +518,13 @@ class _int_object
 		// also, check parent object and set site_id according to these rules:
 		// - if parent is client type menu, then do nothing
 		// - else set site_id same as parent's
-		$o = obj($parent);
-		if (!($o->class_id() == CL_MENU && $o->prop("type") == MN_CLIENT) && $o->site_id())
+		if (is_oid($parent) && $GLOBALS["object_loader"]->ds->can("view", $parent))
 		{
-			$this->set_site_id($o->site_id());
+			$o = obj($parent);
+			if (!($o->class_id() == CL_MENU && $o->prop("type") == MN_CLIENT) && $o->site_id())
+			{
+				$this->set_site_id($o->site_id());
+			}
 		}
 
 		return $prev;
