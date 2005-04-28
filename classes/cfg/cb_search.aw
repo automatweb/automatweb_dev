@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.34 2005/04/21 09:47:17 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.35 2005/04/28 07:36:15 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -535,7 +535,6 @@ class cb_search extends class_base
 		}
 
 		$clss = aw_ini_get("classes");
-
 		//$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
 		$controller_inst = get_instance(CL_CFGCONTROLLER);
 		// now do the actual bloody search
@@ -1012,6 +1011,7 @@ class cb_search extends class_base
 		aw_session_set("no_cache", 1);
 		$ob = new object($arr["id"]);
 		$request = array("s" => $GLOBALS["s"]);
+		$this->dequote(&$request);
 		if ($GLOBALS["search_butt"])
 		{
 			$request["search_butt"] = $GLOBALS["search_butt"];
@@ -1020,7 +1020,6 @@ class cb_search extends class_base
 		{
 			$request["ft_page"] = $GLOBALS["ft_page"];
 		}
-
 		list($props, $clid, $relinfo) = $this->get_props_from_obj($ob);
 		
 		$props = $this->callback_gen_search(array(
@@ -1194,6 +1193,7 @@ class cb_search extends class_base
 	{
 		// string
 		$has_pct = (strpos($v,"%") !== NULL ? true : false);
+		$has_pct_first = $v{0} == "%";
 		$v = str_replace("%", "", $v);
 
 		$has_syn = false;
@@ -1233,7 +1233,14 @@ class cb_search extends class_base
 			$tmp = array();
 			foreach($res as $val)
 			{
-				$tmp[] = $val."%";
+				if ($has_pct_first)
+				{
+					$tmp[] = "%".$val."%";
+				}
+				else
+				{
+					$tmp[] = $val."%";
+				}
 			}
 			$res = $tmp;
 		}

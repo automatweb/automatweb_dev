@@ -1834,6 +1834,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			
 		}
 	}
+
+	function quote(&$str)
+	{
+		$str = str_replace("'", "\\'", str_replace("\\", "\\\\", $str));
+	}
 }
 
 ?>
