@@ -520,10 +520,14 @@ class _int_object
 		// - else set site_id same as parent's
 		if (is_oid($parent) && $GLOBALS["object_loader"]->ds->can("view", $parent))
 		{
-			$o = obj($parent);
-			if (!($o->class_id() == CL_MENU && $o->prop("type") == MN_CLIENT) && $o->site_id())
+			$objdata = $GLOBALS["object_loader"]->ds->get_objdata($parent, array("no_errors" => true));
+			if ($objdata !== NULL)
 			{
-				$this->set_site_id($o->site_id());
+				$o = obj($parent);
+				if (!($o->class_id() == CL_MENU && $o->prop("type") == MN_CLIENT) && $o->site_id())
+				{
+					$this->set_site_id($o->site_id());
+				}
 			}
 		}
 
