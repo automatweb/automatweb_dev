@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.73 2005/04/27 14:48:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.74 2005/04/28 12:20:41 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -2375,7 +2375,7 @@ class mrp_case extends class_base
 		{
 			$c->delete();
 		}
-		if (is_oid($arr["prop"]))
+		if (is_oid($o->prop($arr["prop"])))
 		{
 		$o->connect(array(
 			"to" => $o->prop($arr["prop"]),
