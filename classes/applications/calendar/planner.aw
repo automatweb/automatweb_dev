@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.73 2005/04/28 10:54:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.74 2005/04/28 13:58:20 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -60,6 +60,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@caption Sündmuste klassid
 	@comment Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks
 
+	@property month_week type=checkbox ch_value=1 group=advanced
+	@caption Näita kuuvaadet samamoodi nagu nädalavaadet
+	
 	@property vac_count type=textbox size=2 group=vac_settings default=10
 	@caption Vabu aegu
 
@@ -1696,6 +1699,7 @@ class planner extends class_base
 			"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
 			"full_weeks" => $full_weeks,
+			"month_week" => $o->prop("month_week"),
 			// päeva algus ja päeva lõpp on vaja ette anda!
 			"day_start" => $o->prop("day_start"),
 			"day_end" => $o->prop("day_end"),

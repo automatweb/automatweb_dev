@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.59 2005/04/28 10:55:04 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.60 2005/04/28 13:58:20 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -81,7 +81,7 @@ class vcalendar extends aw_template
 	// day_end - array (hour,minute) of day end
 	function configure($arr = array())
 	{
-		$attribs = array("tasklist_func", "overview_func", "overview_range", "container_template", "show_days_with_events", "skip_empty", "full_weeks", "target_section", "day_start", "day_end", "show_ec", "filt_views", "fix_links");
+		$attribs = array("tasklist_func", "overview_func", "overview_range", "container_template", "show_days_with_events", "skip_empty", "full_weeks", "target_section", "day_start", "day_end", "show_ec", "filt_views", "fix_links", "month_week");
 
 		foreach($attribs as $attrib)
 		{
@@ -681,8 +681,12 @@ class vcalendar extends aw_template
 
 	function draw_month()
 	{
-		//$this->read_template("week_view.tpl");
-		$this->read_template("month_view.tpl");
+		$tpl = "month_view.tpl";
+		if($this->month_week == 1)
+		{
+			$tpl = "month_week_view.tpl";
+		}
+		$this->read_template($tpl);
 		$rv = "";
 
 		for ($i = 1; $i <= 7; $i++)
@@ -762,6 +766,7 @@ class vcalendar extends aw_template
 		$s_parts = unpack("a4year/a2mon/a2day",date("Ymd",$realstart));
 		for ($j = $realstart; $j < $realend; $j = $j + (7*86400))
 		{
+			$sz = 1;
 			for ($i = $j; $i <= $j + (7*86400)-1; $i = $i + 86400)
 			{
 				$reals = mktime(0,0,0,$s_parts["mon"],$s_parts["day"],$s_parts["year"]);
@@ -780,7 +785,18 @@ class vcalendar extends aw_template
 				{
 					$wn = 7;
 				};
-				if (!$this->full_weeks && $wn > 5)
+				if($i == $j)
+				{
+					$d1 = date("j", $reals);
+					$mon1 = locale::get_lc_month(date("m", $reals));
+				}
+				elseif($sz == $wn)
+				{
+					$d2 = date("j", $reals);
+					$mon2 = locale::get_lc_month(date("m", $reals));
+				}
+				$sz++;
+				if (!$this->full_weeks && $wn > 5 && !$this->month_week)
 				{
 					continue;
 				};
@@ -808,11 +824,15 @@ class vcalendar extends aw_template
 				));
 				$tpl = $dstamp == $now ? "TODAY" : "DAY";
 				$rv .= $this->parse($tpl);
-
 				$last = $dstamp;
 			};
+			if($mon1 == $mon2)
+			{
+				$mon1 = "";
+			}
 			$this->vars(array(
 				"DAY" => $rv,
+				"monthvar" => "$d1. $mon1 - $d2. $mon2",
 			));
 			$rv = "";
 			$w .= $this->parse("WEEK");

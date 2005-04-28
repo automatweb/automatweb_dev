@@ -139,6 +139,16 @@
             <comment>Siit valitud klasse saab kasutada kalendrisse sündmuste sisestamiseks</comment>
       </property>
       <property>
+            <name>month_week</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita kuuvaadet samamoodi nagu nädalavaadet</caption>
+      </property>
+      <property>
             <name>vac_count</name>
             <table>objects</table>
             <group>vac_settings</group>
