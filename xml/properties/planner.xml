@@ -103,6 +103,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
+            <orient>vertical</orient>
             <caption>Näidatavad päevad</caption>
       </property>
       <property>

@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.81 2005/04/26 12:15:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.82 2005/04/28 10:54:35 ahti Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -1244,6 +1244,13 @@ class crm_person extends class_base
 						"url" => $this->mk_my_orb("show_image", array("id" => $to->id()), CL_CRM_PERSON, false ,true),
 						"menubar" => 1,
 						"resizable" => 1,
+					));
+				}
+				else
+				{
+					$imgurl2 = html::img(array(
+						"url" => $imgurl,
+						"border" => 0,
 					));
 				}
 			}

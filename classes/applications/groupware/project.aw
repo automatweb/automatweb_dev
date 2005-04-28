@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.37 2005/04/21 10:34:21 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.38 2005/04/28 10:54:35 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -35,6 +35,9 @@
 
 @property use_template type=select field=meta method=serialize
 @caption Välimus
+
+@property doc_id type=textbox size=6 field=meta method=serialize
+@caption Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse
 
 @default group=prj_image
 @property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize

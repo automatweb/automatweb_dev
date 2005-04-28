@@ -83,6 +83,16 @@
             <caption>Välimus</caption>
       </property>
       <property>
+            <name>doc_id</name>
+            <table>objects</table>
+            <group>web_settings</group>
+            <type>textbox</type>
+            <size>6</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse</caption>
+      </property>
+      <property>
             <name>prj_image</name>
             <table>objects</table>
             <group>prj_image</group>

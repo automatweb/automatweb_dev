@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.72 2005/04/27 11:25:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.73 2005/04/28 10:54:35 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -47,7 +47,7 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption S&uuml;ndmuste kataloog
 
-	@property workdays type=chooser multiple=1 group=advanced
+	@property workdays type=chooser multiple=1 group=advanced orient=vertical
 	@caption Näidatavad päevad
 	
 	@property tab_views type=chooser multiple=1 group=advanced
