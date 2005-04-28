@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:13 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -105,6 +105,24 @@ msgstr ""
 
 # classes/applications/groupware/project.aw:prop_use_template_help
 msgid "Omaduse Välimus (use_template) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_doc_id
+msgid ""
+"Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse "
+"(doc_id) caption"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_doc_id_comment
+msgid ""
+"Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse "
+"(doc_id) kommentaar"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_doc_id_help
+msgid ""
+"Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse "
+"(doc_id) help"
 msgstr ""
 
 # classes/applications/groupware/project.aw:prop_prj_image
@@ -303,32 +321,64 @@ msgstr ""
 msgid "Grupi Üldine (general2) pealkiri"
 msgstr ""
 
+# classes/applications/groupware/project.aw:group_general2_help
+msgid "Grupi Üldine (general2) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:group_web_settings
 msgid "Grupi Veebiseadistused (web_settings) pealkiri"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_web_settings_help
+msgid "Grupi Veebiseadistused (web_settings) help"
 msgstr ""
 
 # classes/applications/groupware/project.aw:group_prj_image
 msgid "Grupi Pilt (prj_image) pealkiri"
 msgstr ""
 
+# classes/applications/groupware/project.aw:group_prj_image_help
+msgid "Grupi Pilt (prj_image) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:group_event_list
 msgid "Grupi Sündmused (event_list) pealkiri"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_event_list_help
+msgid "Grupi Sündmused (event_list) help"
 msgstr ""
 
 # classes/applications/groupware/project.aw:group_add_event
 msgid "Grupi Muuda sündmust (add_event) pealkiri"
 msgstr ""
 
+# classes/applications/groupware/project.aw:group_add_event_help
+msgid "Grupi Muuda sündmust (add_event) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_files_help
+msgid "Grupi Failid (files) help"
 msgstr ""
 
 # classes/applications/groupware/project.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr ""
 
+# classes/applications/groupware/project.aw:group_trans_help
+msgid "Grupi Tõlkimine (trans) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:group_userdefined
 msgid "Grupi Andmed (userdefined) pealkiri"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_userdefined_help
+msgid "Grupi Andmed (userdefined) help"
 msgstr ""
 
 # classes/applications/groupware/project.aw:rel_RELTYPE_SUBPROJECT
@@ -375,26 +425,26 @@ msgstr ""
 msgid "Seose Video (RELTYPE_PRJ_VIDEO) tekst"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:171
+#: classes/applications/groupware/project.aw:174
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1070
+#: classes/applications/groupware/project.aw:1073
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1102
+#: classes/applications/groupware/project.aw:1105
 msgid "Alamprojekt"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1207
+#: classes/applications/groupware/project.aw:1210
 msgid "Etendus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1431
+#: classes/applications/groupware/project.aw:1434
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1492
+#: classes/applications/groupware/project.aw:1495
 msgid "header"
 msgstr ""
