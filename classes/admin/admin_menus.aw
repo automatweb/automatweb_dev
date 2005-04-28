@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.100 2005/04/23 20:59:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.101 2005/04/28 15:08:38 ahti Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1339,7 +1339,13 @@ class admin_menus extends aw_template
 			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
 			"img" => "search.gif",
 		));
-		
+		$toolbar->add_button(array(
+			"name" => "preview",
+			"tooltip" => t("Eelvaade"),
+			"target" => "_blank",
+			"url" => obj_link($parent),
+			"img" => "preview.gif",
+		));
 
 		$toolbar->add_separator();
 
@@ -1380,7 +1386,6 @@ class admin_menus extends aw_template
 			"url" => "javascript:change()",
 			"img" => "edit.gif",
 		));
-		
 		$toolbar->add_separator();
 	
 		$toolbar->add_button(array(
