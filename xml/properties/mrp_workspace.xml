@@ -34,23 +34,6 @@
             <store>no</store>
       </property>
       <property>
-            <name>vsplitbox</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>
-                  <num_0>grp_customers</num_0>
-                  <num_1>grp_projects</num_1>
-                  <num_2>grp_resources</num_2>
-                  <num_3>grp_users_tree</num_3>
-                  <num_4>grp_users_mgr</num_4>
-            </group>
-            <type>text</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <wrapchildren>1</wrapchildren>
-      </property>
-      <property>
             <name>customers_toolbar</name>
             <table>objects</table>
             <field>meta</field>
@@ -1317,6 +1300,16 @@
             </MRP_HEADER_CONTROLLER>
       </reltypes>
       <layout>
+            <vsplitbox>
+                  <type>hbox</type>
+                  <group>
+                        <num_0>grp_customers</num_0>
+                        <num_1>grp_projects</num_1>
+                        <num_2>grp_resources</num_2>
+                        <num_3>grp_users_tree</num_3>
+                        <num_4>grp_users_mgr</num_4>
+                  </group>
+            </vsplitbox>
             <comment_hbox>
                   <type>hbox</type>
                   <width>40%:60%</width>
