@@ -84,6 +84,7 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Näita projekte</caption>
+            <comment>Kui valitud, siis näidatakse ka sündmusi kõigist projektidest, milles kalendri omanik osaleb.</comment>
       </property>
       <property>
             <name>event_folder</name>
@@ -94,6 +95,7 @@
             <type>relpicker</type>
             <reltype>RELTYPE_EVENT_FOLDER</reltype>
             <caption>S&amp;uuml;ndmuste kataloog</caption>
+            <comment>Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi</comment>
       </property>
       <property>
             <name>workdays</name>
@@ -103,8 +105,7 @@
             <method>serialize</method>
             <type>chooser</type>
             <multiple>1</multiple>
-            <orient>vertical</orient>
-            <caption>Näidatavad päevad</caption>
+            <caption>Tööpäevad</caption>
       </property>
       <property>
             <name>tab_views</name>
