@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.60 2005/04/21 12:14:09 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.61 2005/04/29 08:07:46 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1373,6 +1373,7 @@ class event_search extends class_base
 			),
 			"method" => "get",
 			"form_handler" => aw_ini_get("baseurl")."/".aw_global_get("section"),
+			"submit" => "no"
 		));
 
 		$html = $htmlc->get_result(array(
