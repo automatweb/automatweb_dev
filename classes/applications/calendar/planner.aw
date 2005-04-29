@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.74 2005/04/28 13:58:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.75 2005/04/29 13:27:51 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -43,12 +43,19 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property my_projects type=checkbox ch_value=1 group=advanced
 	@caption Näita projekte
+	@comment Kui valitud, siis näidatakse ka sündmusi kõigist projektidest, milles kalendri omanik osaleb.
 
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption S&uuml;ndmuste kataloog
+	@comment Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi
 
+<<<<<<< planner.aw
+	@property workdays type=chooser multiple=1 group=advanced
+	@caption Tööpäevad
+=======
 	@property workdays type=chooser multiple=1 group=advanced orient=vertical
 	@caption Näidatavad päevad
+>>>>>>> 1.74
 	
 	@property tab_views type=chooser multiple=1 group=advanced
 	@caption Vaate tabid
@@ -1826,6 +1833,7 @@ class planner extends class_base
 				"mask" => OBJ_IS_DONE,
 				"flags" => 0,
 			),
+			"site_id" => array(),
 		));
 
 		if (0 == $tasklist->count())
@@ -1849,7 +1857,9 @@ class planner extends class_base
 			"flags" => array(
 				"mask" => OBJ_IS_DONE,
 				"flags" => 0
-			)
+			),
+			"site_id" => array(),
+
 		));
 
 		$rv = array();
