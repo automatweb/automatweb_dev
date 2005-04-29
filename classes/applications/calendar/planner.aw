@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.75 2005/04/29 13:27:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.76 2005/04/29 13:28:15 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -49,13 +49,8 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@caption S&uuml;ndmuste kataloog
 	@comment Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi
 
-<<<<<<< planner.aw
 	@property workdays type=chooser multiple=1 group=advanced
 	@caption Tööpäevad
-=======
-	@property workdays type=chooser multiple=1 group=advanced orient=vertical
-	@caption Näidatavad päevad
->>>>>>> 1.74
 	
 	@property tab_views type=chooser multiple=1 group=advanced
 	@caption Vaate tabid
