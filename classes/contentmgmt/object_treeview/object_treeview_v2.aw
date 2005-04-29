@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.76 2005/04/15 16:18:55 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.77 2005/04/29 21:32:11 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -825,7 +825,7 @@ class object_treeview_v2 extends class_base
 		{
 			$udef_cols = $col_list;
 		}
-		if (($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char']))
+		if ((($ih_ob->meta("hide_content_table_by_default") == 1) && empty($_GET['tv_sel']) && empty($_GET['char'])) || empty($ol))
 		{
 
 		}
@@ -1266,11 +1266,12 @@ class object_treeview_v2 extends class_base
 				// use treeview widget
 				$tv = get_instance("vcl/treeview");
 				$tv->start_tree(array(
+					"tree_id" => "folders_tree",
 					"root_name" => "",
 					"root_url" => "",
 					"root_icon" => "",
 					"type" => TREE_DHTML, //$ob->meta('tree_type'),
-					"persist_state" => true
+					"persist_state" => true,
 				));
 
 				// now, insert all folders defined
