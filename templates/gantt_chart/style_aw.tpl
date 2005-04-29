@@ -40,6 +40,7 @@ a.VclGanttHeader
 	padding: 2px;
 	border: 1px solid black;
 	background-color: white;
+	white-space: normal;
 }
 
 .VclGanttColumn a:hover span, .VclGanttSubdivision a:hover span
