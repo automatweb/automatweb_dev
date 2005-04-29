@@ -8,7 +8,6 @@
 {
 	z-index: 1000;
 	position: relative;
-	white-space: nowrap;
 }
 
 .VclGanttColumn a:hover, .VclGanttSubdivision a:hover
@@ -32,6 +31,7 @@ a.VclGanttHeader
 
 .VclGanttColumn a span, .VclGanttSubdivision a span
 {
+	white-space: normal;
 	display: none;
 	color: black;
 	text-decoration: none;
@@ -40,13 +40,13 @@ a.VclGanttHeader
 	padding: 2px;
 	border: 1px solid black;
 	background-color: white;
-	white-space: normal;
 }
 
 .VclGanttColumn a:hover span, .VclGanttSubdivision a:hover span
 {
+	white-space: normal;
 	position: absolute;
-	display: block;
+	display: inline;
 }
 
 .VclGanttRowName
@@ -107,6 +107,7 @@ a.VclGanttHeader
 
 img.VclGanttStartBar
 {
+	white-space: nowrap;
 	border-left: 1px solid #DF0D12;
 	margin-right: -1px;
 }
