@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.112 2005/04/26 19:33:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.113 2005/05/01 16:44:43 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3220,7 +3220,7 @@ if ($_GET['show_thread_data'] == 1)
 			"ws" => $arr["obj_inst"]
 		));
 
-		$limit = 50;
+		$limit = 200;
 		switch ($arr["request"]["group"])
 		{
 			case "grp_printer_done":
@@ -3247,13 +3247,13 @@ if ($_GET['show_thread_data'] == 1)
 			case "grp_printer_startable":
 				$default_sortby = "tm";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
-				$limit = 100;
+				$limit = 200;
 				break;
 
 			case "grp_printer_notstartable":
 				$default_sortby = "tm";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_LOCKED,MRP_STATUS_PAUSED,MRP_STATUS_ONHOLD);
-				$limit = 100;
+				$limit = 200;
 				break;
 		}
 
@@ -3287,8 +3287,8 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-			}
+					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3301,12 +3301,12 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-				$custo = html::get_change_url($cust->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$cust->name()
-				);
-			}
+					$custo = html::get_change_url($cust->id(), array(
+							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						),
+						$cust->name()
+					);	
+				}
 				else
 				{
 					$custo = $cust->name();
@@ -3333,9 +3333,9 @@ if ($_GET['show_thread_data'] == 1)
 				}
 				else
 				{
-				// light red
-				$bgcol = $this->pj_colors["can_not_start"];
-			}
+					// light red
+					$bgcol = $this->pj_colors["can_not_start"];
+				}
 			}
 
 			if ($arr["request"]["group"] == "grp_printer_startable" && $bgcol != $this->pj_colors["can_start"])
