@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.29 2005/04/26 11:28:48 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.30 2005/05/01 16:31:09 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -471,7 +471,7 @@ class ml_list extends class_base
 			$retval = $this->cfg["baseurl"] . "/" . $mx["redir_obj"];
 		}
 		else
-		if  (is_oid($list_obj->prop("redir_obj")))
+		if  (is_oid($list_obj->prop("redir_obj")) && $this->can("view", $list_obj->prop("redir_obj")))
 		{
 			$ro = obj($list_obj->prop("redir_obj"));
 			$retval = $this->cfg["baseurl"] . "/" . $ro->id();
