@@ -40,17 +40,6 @@
             <caption>P&amp;auml;ri n&amp;auml;itamise omadused objektist</caption>
       </property>
       <property>
-            <name>add_table_anchor_to_url</name>
-            <table>objects</table>
-            <group>showing</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Lisa #table URL-i l&amp;otilde;ppu</caption>
-            <comment>Lisab #table kataloogide URL-i l&amp;otilde;ppu</comment>
-      </property>
-      <property>
             <name>show_folders</name>
             <table>objects</table>
             <group>showing</group>
