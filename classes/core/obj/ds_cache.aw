@@ -146,7 +146,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		return $this->contained->delete_object($oid);
 	}
 
-	function search($params)
+	function search($params, $to_fetch = NULL)
 	{
 		$this->search_cache_is_cleared = false;
 		$tp = $params;
@@ -158,7 +158,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		{
 			$tp["site_id"] = aw_ini_get("site_id");
 		}
-		$query_hash = "search-".md5(serialize($tp));
+		$query_hash = "search-".md5(serialize($tp).serialize($to_fetch));
 
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
@@ -167,7 +167,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		}
 		else
 		{
-			$ret = $this->contained->search($params);
+			$ret = $this->contained->search($params, $to_fetch);
 			$this->_set_cache($query_hash, 0, $ret);
 			return $ret;
 		}

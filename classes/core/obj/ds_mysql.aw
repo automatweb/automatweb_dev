@@ -501,6 +501,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->quote($metadata);
 		$this->quote(&$objdata);
 
+		// insert default new acl to object table here
+		$acld_fld = $acld_val = "";
+		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "" || true)
+		{
+			$g_d = aw_global_get("current_user_group");
+			$acld_fld = ",acldata";
+			$acld_val = ",'".str_replace("'", "\\'", aw_serialize(array(
+				$g_d["oid"] => $this->get_acl_value_n($this->acl_get_default_acl_arr())
+			)))."'";
+		}
+
 		// create oid
 		$q = "
 			INSERT INTO objects (
@@ -509,12 +520,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				hits,						lang_id,						comment,					modifiedby,
 				jrk,						period,							alias,						periodic,
 				cachedirty,					metadata,						subclass,					flags
+				$acld_fld
 		) VALUES (
 				'".$objdata["parent"]."',	'".$objdata["class_id"]."',		'".$objdata["name"]."',		'".$objdata["createdby"]."',
 				'".$objdata["created"]."',	'".$objdata["modified"]."',		'".$objdata["status"]."',	'".$objdata["site_id"]."',
 				'".$objdata["hits"]."',		'".$objdata["lang_id"]."',		'".$objdata["comment"]."',	'".$objdata["modifiedby"]."',
 				'".$objdata["jrk"]."',		'".$objdata["period"]."',		'".$objdata["alias"]."',	'".$objdata["periodic"]."',
 				'1',						'".$metadata."',				'".$objdata["subclass"]."',	'".$objdata["flags"]."'
+				$acld_val
 		)";
 		//echo "q = <pre>". htmlentities($q)."</pre> <br />";
 
@@ -937,7 +950,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	// params:
 	//	array of filter parameters 
 	// if class id is present, properties can also be filtered, otherwise only object table fields
-	function search($params)
+	function search($params, $to_fetch = NULL)
 	{
 		$this->used_tables = array();
 
@@ -961,6 +974,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		$this->joins = array();
 
 		$this->has_data_table_filter = false;
+		list($fetch_sql, $fetch_props, $fetch_metafields) = $this->_get_search_fetch($to_fetch);
 
 		$where = $this->req_make_sql($params);
 
@@ -988,8 +1002,11 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			{
 				$acld = ", objects.acldata as acldata, objects.parent as parent";
 			}
-			$q = "
-				SELECT 
+
+			$datafetch = true;
+			if ($fetch_sql == "")
+			{
+				$fetch_sql = "					
 					objects.oid as oid,
 					objects.name as name,
 					objects.parent as parent, 
@@ -997,6 +1014,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					objects.status as status,
 					objects.class_id as class_id
 					$acld 
+				";
+				$datafetch = false;
+			}
+
+			$q = "
+				SELECT 
+					$fetch_sql
 				FROM 
 					$joins 
 				WHERE 
@@ -1005,21 +1029,43 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$acldata = array();
 			$parentdata = array();
 			$objdata = array();
-
 			$this->db_query($q);
-			while ($row = $this->db_next())
+
+			if ($datafetch)
 			{
-				$ret[$row["oid"]] = $row["name"];
-				$parentdata[$row["oid"]] = $row["parent"];
-				$objdata[$row["oid"]] = array(
-					"brother_of" => $row["brother_of"],
-					"status" => $row["status"],
-					"class_id" => $row["class_id"]
-				);
-				if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+				$ret = array();
+				while($row = $this->db_next())
 				{
-					$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
-					$acldata[$row["oid"]] = $row;
+					// process metafields
+					foreach($fetch_metafields as $f_mf => $f_keys)
+					{
+						$f_unser = aw_unserialize($row[$f_mf]);
+						foreach($f_keys as $f_key_name)
+						{
+							$row[$f_key_name] = $f_unser[$f_key_name];
+						}
+						unset($row[$f_mf]);
+					}
+					$ret[] = $row;
+				}
+				return $ret;
+			}
+			else
+			{
+				while ($row = $this->db_next())
+				{
+					$ret[$row["oid"]] = $row["name"];
+					$parentdata[$row["oid"]] = $row["parent"];
+					$objdata[$row["oid"]] = array(
+						"brother_of" => $row["brother_of"],
+						"status" => $row["status"],
+						"class_id" => $row["class_id"]
+					);
+					if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
+					{
+						$row["acldata"] = safe_array(aw_unserialize($row["acldata"]));
+						$acldata[$row["oid"]] = $row;
+					}
 				}
 			}
 		}
@@ -1838,6 +1884,58 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function quote(&$str)
 	{
 		$str = str_replace("'", "\\'", str_replace("\\", "\\\\", $str));
+	}
+
+	function _get_search_fetch($to_fetch)
+	{
+		$ret = array();
+		$serialized_fields = array();
+		foreach($to_fetch as $clid => $props)
+		{
+			$p = $GLOBALS["properties"][$clid];
+			$this->_do_add_class_id($clid, true);
+
+			foreach($props as $pn => $resn)
+			{
+				if (substr($pn, 0, 5) == "meta.")
+				{
+					$serialized_fields["objects.metadata"][] = substr($pn, 5);
+				}
+				else
+				if (!isset($p[$pn]))
+				{
+					// assume obj table
+					$ret[$pn] = " objects.$pn AS $resn ";
+				}
+				else
+				if ($p[$pn]["method"] == "serialize")
+				{
+					if ($p[$pn]["table"] == "objects" && $p[$pn]["field"] == "meta")
+					{
+						$serialized_fields["objects.metadata"][] = $pn;
+					}
+					else
+					{
+						$serialized_fields[$p[$pn]["table"].".".$p[$pn]["field"]][] = substr($pn, 5);
+					}
+				}
+				else
+				{
+					$ret[$pn] = " ".$p[$pn]["table"].".".$p[$pn]["field"]." AS $resn ";
+				}
+			}
+		}
+
+		$sf = array();
+		foreach($serialized_fields as $fld => $stuff)
+		{
+			$fldn = str_replace(".", "_", $fld);
+			$ret[] = " ".$fld." AS ".$fldn." ";
+			$sf[$fldn] = $stuff;
+		}
+
+		$res =  join(",", $ret);
+		return array($res, array_keys($ret), $sf);
 	}
 }
 

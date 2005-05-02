@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.10 2005/04/27 10:02:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.11 2005/05/02 13:54:49 kristo Exp $
 
 lc_load("definition");
 
@@ -75,6 +75,12 @@ class acl_base extends db_connector
 		}
 	}
 
+	function add_acl_group_to_new_obj($gid,$oid, $aclarr)
+	{
+		$acl = $this->get_acl_value($aclarr);
+		$this->db_query("INSERT INTO acl(acl,oid,gid) VALUES($acl,$oid,$gid)");
+	}
+
 	function remove_acl_group_from_obj($gid,$oid)
 	{
 		$this->db_query("DELETE FROM acl WHERE gid = $gid AND oid = $oid");
@@ -99,29 +105,8 @@ class acl_base extends db_connector
 
 	function save_acl($oid,$gid,$aclarr, $invd = true)
 	{
-		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
-		reset($acl_ids);
-		$nd = array();
-		while(list($bitpos,$name) = each($acl_ids))
-		{
-			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
-			{
-				$a = $GLOBALS["cfg"]["acl"]["allowed"];
-			}
-			else
-			{
-				$a = $GLOBALS["cfg"]["acl"]["denied"];
-			}
-
-			$nd[$name] = (int)$aclarr[$name];
-			$qstr[] = " ( $a << $bitpos ) ";
-		}
-		//let's calculate the acl in PHP
-		//don't want to multiple the different syntaxes of bitshifting into every
-		//freaking db implementations
-		eval('$acl='.join(" | ",$qstr).";");
+		$acl = $this->get_acl_value($aclarr);
 		$this->db_query("UPDATE acl SET acl = $acl WHERE oid = $oid AND gid = $gid");
-		//$this->db_query("UPDATE acl SET acl = (".join(" | ",$qstr).") WHERE oid = $oid AND gid = $gid");
 
 		if (aw_ini_get("acl.use_new_acl"))
 		{
@@ -129,7 +114,7 @@ class acl_base extends db_connector
 			// convert gid to oid
 			$g = get_instance("users");
 			$g_oid = $g->get_oid_for_gid($gid);
-			$ad[$g_oid] = $nd;
+			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
 			$ser = aw_serialize($ad);
 			$this->quote(&$ser);
 			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
@@ -463,7 +448,7 @@ class acl_base extends db_connector
 
 			if ($gr)
 			{
-				$this->add_acl_group_to_obj($gr["gid"], $oid, $aclarr, false);
+				$this->add_acl_group_to_new_obj($gr["gid"], $oid, $aclarr);
 			}
 		}
 	}
@@ -654,8 +639,60 @@ class acl_base extends db_connector
 	// !returns the default group for the user
 	function get_user_group($uid)
 	{
+		if ($uid == $_SESSION["uid"])
+		{
+			return aw_global_get("current_user_group");
+		}
 		$this->db_query("SELECT * FROM groups WHERE type=1 AND name='$uid'");
 		return $this->db_next();
+	}
+
+	function get_acl_value($aclarr)
+	{
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
+		reset($acl_ids);
+		$nd = array();
+		while(list($bitpos,$name) = each($acl_ids))
+		{
+			if (isset($aclarr[$name]) && $aclarr[$name] == 1)
+			{
+				$a = $GLOBALS["cfg"]["acl"]["allowed"];
+			}
+			else
+			{
+				$a = $GLOBALS["cfg"]["acl"]["denied"];
+			}
+
+			$nd[$name] = (int)$aclarr[$name];
+			$qstr[] = " ( $a << $bitpos ) ";
+		}
+		eval('$acl='.join(" | ",$qstr).";");
+		return $acl;
+	}
+
+	function get_acl_value_n($aclarr)
+	{
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
+		reset($acl_ids);
+		$nd = array();
+		while(list($bitpos,$name) = each($acl_ids))
+		{
+			$nd[$name] = (int)$aclarr[$name];
+		}
+		return $nd;
+	}
+
+	function acl_get_default_acl_arr()
+	{
+		$acl_ids = $GLOBALS["cfg"]["acl"]["ids"];
+
+		reset($acl_ids);
+		$aclarr = array();
+		while (list(,$k) = each($acl_ids))
+		{
+			$aclarr[$k] = $GLOBALS["cfg"]["acl"]["allowed"];
+		}
+		return $aclarr;
 	}
 }
 ?>

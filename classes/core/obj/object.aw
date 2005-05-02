@@ -7,6 +7,7 @@ classload(
 	"core/obj/connection",
 	"core/obj/object_loader", 
 	"core/obj/object_list", 
+	"core/obj/object_data_list", 
 	"core/obj/object_tree",
 	"core/obj/object_list_filter",
 	"core/obj/obj_predicate_not",

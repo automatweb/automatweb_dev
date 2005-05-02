@@ -520,7 +520,15 @@ class _int_object
 		// - else set site_id same as parent's
 		if (is_oid($parent) && $GLOBALS["object_loader"]->ds->can("view", $parent))
 		{
-			$objdata = $GLOBALS["object_loader"]->ds->get_objdata($parent, array("no_errors" => true));
+			if (is_object($GLOBALS["objects"][$parent]))
+			{
+				$objdata = $GLOBALS["objects"][$parent]->obj;
+			}
+			else
+			{
+				$objdata = $GLOBALS["object_loader"]->ds->get_objdata($parent, array("no_errors" => true));
+			}
+
 			if ($objdata !== NULL)
 			{
 				$o = obj($parent);
@@ -1350,14 +1358,16 @@ class _int_object
 			}
 			$_is_new = true;
 		}
-
-		// now, save objdata
-		$GLOBALS["object_loader"]->ds->save_properties(array(
-			"objdata" => $this->obj,
-			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
-			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
-			"propvalues" => $this->obj["properties"]
-		));
+		else
+		{
+			// now, save objdata
+			$GLOBALS["object_loader"]->ds->save_properties(array(
+				"objdata" => $this->obj,
+				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
+				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
+				"propvalues" => $this->obj["properties"]
+			));
+		}
 
 		if (is_array($this->obj["_create_connections"]))
 		{
@@ -1382,7 +1392,7 @@ class _int_object
 		}
 
 		// log save
-		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"]);
+		$GLOBALS["object_loader"]->_log($_is_new, $this->obj["oid"], $this->obj["name"], $this->obj["class_id"]);
 
 		return $this->obj["oid"];
 	}
@@ -1723,6 +1733,13 @@ class _int_object
 	function _int_load_property_values()
 	{
 		$this->_int_load_properties();
+
+		if (!is_oid($this->obj["oid"]))
+		{
+			// do not try to read an empty object
+			return;
+		}
+
 		$this->obj["properties"] = $GLOBALS["object_loader"]->ds->read_properties(array(
 			"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 			"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],

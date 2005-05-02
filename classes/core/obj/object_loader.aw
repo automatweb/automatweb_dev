@@ -505,11 +505,15 @@ class _int_object_loader extends core
 		return (int)$max_acl["can_".$acl_name];
 	}
 
-	function _log($new, $oid, $name)
+	function _log($new, $oid, $name, $clid = NULL)
 	{
-		$tmpo = obj($oid);
-		// get object's class info
-		$clid = $tmpo->class_id();
+		if ($clid === NULL)
+		{
+			$tmpo = obj($oid);
+			// get object's class info
+			$clid = $tmpo->class_id();
+		}
+
 		if ($clid == 7)
 		{
 			$type = ST_DOCUMENT;
