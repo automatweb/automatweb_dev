@@ -432,14 +432,28 @@ class layout extends class_base
 			"parent" => $folders,
 			"class_id" => CL_CSS,
 			"lang_id" => array(),
-			"site_id" => array(),
-			"sort_by" => "objects.jrk,objects.name"
+			"sort_by" => "objects.site_id,objects.jrk,objects.name"
 		));
 		$ret = array("" => "");
+		$sl = get_instance("install/site_list");
 		foreach($ol->arr() as $o)
 		{
 			$pt = obj($o->parent());
-			$ret[$o->id()] = $pt->name()." / ".$o->name();
+			$ret[$o->id()] = $sl->get_url_for_site($o->site_id()).": ".$pt->name()." / ".$o->name();
+		}
+
+		$ol = new object_list(array(
+			"parent" => $folders,
+			"class_id" => CL_CSS,
+			"lang_id" => array(),
+			"site_id" => new obj_predicate_not(aw_ini_get("site_id")),
+			"sort_by" => "objects.site_id,objects.jrk,objects.name"
+		));
+		$sl = get_instance("install/site_list");
+		foreach($ol->arr() as $o)
+		{
+			$pt = obj($o->parent());
+			$ret[$o->id()] = $sl->get_url_for_site($o->site_id()).": ".$pt->name()." / ".$o->name();
 		}
 		return $ret;
 	}
