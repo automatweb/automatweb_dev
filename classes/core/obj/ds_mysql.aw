@@ -503,7 +503,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
-		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "" || true)
+		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
 		{
 			$g_d = aw_global_get("current_user_group");
 			$acld_fld = ",acldata";
