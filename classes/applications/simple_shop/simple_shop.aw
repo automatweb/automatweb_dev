@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.1 2005/04/21 09:40:49 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.2 2005/05/02 11:36:26 ahti Exp $
 // simple_shop.aw - Lihtne tootekataloog 
 /*
 
@@ -86,6 +86,7 @@ class simple_shop extends class_base
 
 	function callback_mod_reforb($arr)
 	{
+		$arr["INTENSE_DUKE"] = 1;
 		$arr["post_ru"] = post_ru();
 	}
 
@@ -152,10 +153,15 @@ class simple_shop extends class_base
 			$row = explode("\t", $row);
 			
 			// kill some overkills.. ehehehehe... :(
-			if($count == 0 || $count > 17000)
+			
+			if($count == 0)
 			{
 				$count++;
 				continue;
+			}
+			if($count > 17000)
+			{
+				break;
 			}
 			$count++;
 			$obj = obj();
@@ -170,14 +176,9 @@ class simple_shop extends class_base
 		$cache = get_instance("cache");
 		$cache->full_flush();
 		exit_function("simple_shop::prod_import");
+		global $awt;
 		echo t("imporditud")."<br />";
-	}
-	function callback_post_save($arr)
-	{
-		if($arr["new"])
-		{
-			$this->db_query("create table simple_shop_$arr[id] (prod_code VARCHAR(70) NOT NULL default 0, descr VARCHAR(255) NULL, unit VARCHAR(70), price INT(11) NOT NULL, key(prod_code));");
-		}
+		arr($awt->summaries());
 	}
 }
 ?>
