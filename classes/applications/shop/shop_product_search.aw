@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.1 2005/04/21 14:23:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.2 2005/05/02 14:32:17 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -13,6 +13,9 @@
 	@property wh type=relpicker reltype=RELTYPE_WAREHOUSE automatic=1 
 	@caption Ladu
 
+	@property oc type=relpicker reltype=RELTYPE_OC automatic=1 
+	@caption Tellimiskeskkond
+
 	@property objs_in_res type=select 
 	@caption Tulemuseks on 
 
@@ -25,18 +28,30 @@
 @default group=s_res
 	@property s_tbl type=table no_caption=1
 
+@default group=s_res_ctr
+
+	@property s_tbl_ctr type=relpicker reltype=RELTYPE_CONTROLLER
+	@caption Tulemuste andmete n&auml;itamise kontroller
+
 @default group=search
 	@property search_form type=callback callback=callback_gen_search_form
 
-	@property s_res type=table no_caption=1
+	@property s_res type=text no_caption=1
+
 
 @groupinfo s_form caption="Koosta otsinguvorm"
 @groupinfo s_res caption="Koosta tulemuste tabel"
+@groupinfo s_res_ctr caption="Kontrollerid"
 @groupinfo search caption="Otsi" submit_method=get submit=no
 
 @reltype WAREHOUSE value=1 clid=CL_SHOP_WAREHOUSE
 @caption ladu
 
+@reltype CONTROLLER value=2 clid=CL_FORM_CONTROLLER
+@caption kontroller
+
+@reltype OC value=3 clid=CL_SHOP_ORDER_CENTER
+@caption tellimiskeskkond
 */
 
 class shop_product_search extends class_base
@@ -67,11 +82,15 @@ class shop_product_search extends class_base
 				$this->_s_res($arr);
 				break;
 
+			case "s_res_tb":
+				$this->_s_res_tb($arr);
+				break;
+
 			case "objs_in_res":
 				$prop["options"] = array(
 					CL_SHOP_PACKET => "Paketid",
 					CL_SHOP_PRODUCT => "Tooted",
-					CL_SHOP_PACKAGING => "Pakendid"
+					CL_SHOP_PRODUCT_PACKAGING => "Pakendid"
 				);
 				break;
 		};
@@ -107,10 +126,46 @@ class shop_product_search extends class_base
 
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
+		$o = obj($arr["id"]);
+
+		$request = array(
+			"MAX_FILE_SIZE" => $_GET["do_search"],
+			"s" => $_GET["s"]
+		);
+
+		$props =  $this->callback_gen_search_form(array(
+			"obj_inst" => $o,
+			"request" => $request
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($props as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		$prop = array();
+		$this->_s_res(array(
+			"obj_inst" => &$o,
+			"request" => $request,
+			"prop" => &$prop
+		));
+		$table = $prop["value"];
+
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"form" => $html,
+			"section" => aw_global_get("section"),
+			"table" => $table,
+			"reforb" => $this->mk_reforb("submit_add_cart", array(
+				"oc" => $o->prop("oc"),
+			), "shop_order_cart")
 		));
 		return $this->parse();
 	}
@@ -132,6 +187,12 @@ class shop_product_search extends class_base
 		$t->define_field(array(
 			"name" => "in_form",
 			"caption" => t("Vormis?"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
 
@@ -174,6 +235,11 @@ class shop_product_search extends class_base
 					"caption" => html::textbox(array(
 						"name" => "dat[$clid][$pn][caption]",
 						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption"] : $capts[0]
+					)),
+					"ord" => html::textbox(array(
+						"name" => "dat[$clid][$pn][ord]",
+						"value" => $dat[$clid][$pn]["ord"],
+						"size" => 5
 					))
 				));
 			}
@@ -262,6 +328,12 @@ class shop_product_search extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tulba pealkiri"),
 			"align" => "center"
@@ -300,6 +372,11 @@ class shop_product_search extends class_base
 					"caption" => html::textbox(array(
 						"name" => "dat[$clid][$pn][caption]",
 						"value" => isset($dat[$clid][$pn]) ? $dat[$clid][$pn]["caption"] : $capts[0]
+					)),
+					"ord" => html::textbox(array(
+						"name" => "dat[$clid][$pn][ord]",
+						"value" => $dat[$clid][$pn]["ord"],
+						"size" => 5
 					))
 				));
 			}
@@ -318,9 +395,12 @@ class shop_product_search extends class_base
 
 		$ret = array();	
 
+		$cu = get_instance("cfg/cfgutils");
+
 		$form_props = safe_array($o->meta("s_form"));
 		foreach($form_props as $clid => $ps)
 		{
+			$r_props = $cu->load_properties(array("clid" => $clid));
 			foreach($ps as $pn => $pd)
 			{
 				if ($pd["in_form"] == 1)
@@ -328,14 +408,17 @@ class shop_product_search extends class_base
 					$nm = "s[$clid][".$pn."]";
 					$ret[$nm] = array(
 						"name" => $nm,
-						"type" => "textbox",
+						"type" => $r_props[$pn]["type"] == "checkbox" ? "checkbox" : "textbox",
 						"caption" => $pd["caption"],
 						"store" => "no",
-						"value" => $arr["request"]["s"][$clid][$pn]
+						"value" => $arr["request"]["s"][$clid][$pn],
+						"ch_value" => 1,
+						"_ord" => $pd["ord"]
 					);
 				}
 			}
 		}
+		uasort($ret, create_function('$a,$b', 'if ($a["_ord"] == $b["_ord"]) { return 0; } else { return $a["_ord"] > $b["_ord"] ? 1 : -1; }'));
 
 		$ret["do_search"] = array(
 			"name" => "do_search",
@@ -348,22 +431,41 @@ class shop_product_search extends class_base
 
 	function _s_res($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		classload("vcl/table");
+		$t = new aw_table(array("layout" => "generic"));
 
 		$cols = safe_array($arr["obj_inst"]->meta("s_tbl"));
+		$flds = array();
 		foreach($cols as $clid => $cold)
 		{
 			foreach($cold as $coln => $coli)
 			{
 				if ($coli["in_form"] == 1)
 				{
-					$t->define_field(array(
+					$flds[] = array(
 						"name" => $clid."_".$coln,
-						"caption" => $coli["caption"]
-					));
+						"caption" => $coli["caption"],
+						"_ord" => $coli["ord"]
+					);
 				}
 			}
 		}
+		uasort($flds, create_function('$a,$b', 'if ($a["_ord"] == $b["_ord"]) { return 0; } else { return $a["_ord"] > $b["_ord"] ? 1 : -1; }'));
+		foreach($flds as $fld)
+		{
+			$t->define_field($fld);
+		}
+		$t->define_field(array(
+			"name" => "add_to_cart",
+			"caption" => t("Vali")
+		));
+
+		$ctr = NULL;
+		if (is_oid($ctr_id = $arr["obj_inst"]->prop("s_tbl_ctr")) && $this->can("view", $ctr_id))
+		{
+			$ctr = $ctr_id;
+		}
+		$ctr_i = get_instance(CL_FORM_CONTROLLER);
 
 		if ($arr["request"]["MAX_FILE_SIZE"] != "")
 		{
@@ -372,13 +474,110 @@ class shop_product_search extends class_base
 			{
 				$clid = $o->class_id();
 				$data = array();
-				foreach($cols[$clid] as $coln => $cold)
+
+				$packet = $prod = $pk = NULL;
+
+				switch($clid)
 				{
-					$data[$clid."_".$coln] = $o->prop($coln);
+					case CL_SHOP_PACKET:
+						$packet = $o;
+						$prod = $o->get_first_obj_by_reltype("RELTYPE_PRODUCT");
+						if ($prod)
+						{
+							$pk = $prod->get_first_obj_by_reltype("RELTYPE_PACKAGING");
+						}
+						if (!$prod)
+						{
+							$prod = obj();
+							$pk = obj();
+						}
+						else
+						if (!$pk)
+						{
+							$pk = obj();
+						}
+						break;
+					
+					case CL_SHOP_PRODUCT:
+						$prod = $o;
+						$packet = reset($o->connections_to(array(
+							"from.class_id" => CL_SHOP_PACKET
+						)));
+						if ($packet)
+						{
+							$packet = $packet->from();
+						}
+						$pk = $prod->get_first_obj_by_reltype("RELTYPE_PACKAGING");
+						if (!$packet)
+						{
+							$packet = obj();
+						}
+						if (!$pk)
+						{
+							$pk = obj();
+						}
+						break;
+
+					case CL_SHOP_PRODUCT_PACKAGING:
+						$pk = $o;
+						$prod_c = reset($pk->connections_to(array(
+							"from.class_id" => CL_SHOP_PRODUCT
+						)));
+						if ($prod_c)
+						{
+							$prod = $prod_c->from();
+						}
+						if (!$prod)
+						{
+							$prod = obj();
+							$packet = obj();
+						}
+						else
+						{
+							$packet_c = reset($prod->connections_to(array(
+								"from.class_id" => CL_SHOP_PACKET
+							)));
+							if ($packet_c)
+							{
+								$packet = $packet_c->from();
+							}
+							else
+							{
+								$packet = obj();
+							}
+						}
+						break;
+				}
+
+				foreach(safe_array($cols[CL_SHOP_PACKET]) as $coln => $cold)
+				{
+					$data[CL_SHOP_PACKET."_".$coln] = $packet->prop($coln);
+				}
+				foreach(safe_array($cols[CL_SHOP_PRODUCT]) as $coln => $cold)
+				{
+					$data[CL_SHOP_PRODUCT."_".$coln] = $prod->prop($coln);
+				}
+				foreach(safe_array($cols[CL_SHOP_PRODUCT_PACKAGING]) as $coln => $cold)
+				{
+					$data[CL_SHOP_PRODUCT_PACKAGING."_".$coln] = $pk->prop($coln);
+				}
+
+				$data[CL_SHOP_PACKET."_oid"] = $packet->id();
+				$data[CL_SHOP_PRODUCT."_oid"] = $prod->id();
+				$data[CL_SHOP_PRODUCT_PACKAGING."_oid"] = $pk->id();
+				$data["add_to_cart"] = html::checkbox(array(
+					"name" => "add_to_cart[".$data[$arr["obj_inst"]->prop("objs_in_res")."_oid"]."]",
+					"value" => 1
+				));
+				if ($ctr)
+				{
+					$ctr_i->eval_controller_ref($ctr, $cols, $data, $data);
 				}
 				$t->define_data($data);
 			}
 		}
+		$html = $t->draw();
+		$arr["prop"]["value"] = $html;
 	}
 
 	function get_search_results($o, $params)

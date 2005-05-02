@@ -12,6 +12,17 @@
             <caption>Ladu</caption>
       </property>
       <property>
+            <name>oc</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_OC</reltype>
+            <automatic>1</automatic>
+            <caption>Tellimiskeskkond</caption>
+      </property>
+      <property>
             <name>objs_in_res</name>
             <table>objects</table>
             <group>general</group>
@@ -50,6 +61,16 @@
             <store>no</store>
       </property>
       <property>
+            <name>s_tbl_ctr</name>
+            <table>objects</table>
+            <group>s_res_ctr</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Tulemuste andmete n&amp;auml;itamise kontroller</caption>
+      </property>
+      <property>
             <name>search_form</name>
             <table>objects</table>
             <group>search</group>
@@ -64,9 +85,8 @@
             <group>search</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
+            <type>text</type>
             <no_caption>1</no_caption>
-            <store>no</store>
       </property>
       <classinfo>
             <syslog_type>ST_SHOP_PRODUCT_SEARCH</syslog_type>
@@ -81,6 +101,9 @@
             <s_res>
                   <caption>Koosta tulemuste tabel</caption>
             </s_res>
+            <s_res_ctr>
+                  <caption>Kontrollerid</caption>
+            </s_res_ctr>
             <search>
                   <caption>Otsi</caption>
                   <submit_method>get</submit_method>
@@ -93,6 +116,16 @@
                   <clid>CL_SHOP_WAREHOUSE</clid>
                   <caption>ladu</caption>
             </WAREHOUSE>
+            <CONTROLLER>
+                  <value>2</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kontroller</caption>
+            </CONTROLLER>
+            <OC>
+                  <value>3</value>
+                  <clid>CL_SHOP_ORDER_CENTER</clid>
+                  <caption>tellimiskeskkond</caption>
+            </OC>
       </reltypes>
 </properties>
 
