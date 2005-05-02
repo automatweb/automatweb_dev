@@ -150,6 +150,16 @@
             <caption>Näita kuuvaadet samamoodi nagu nädalavaadet</caption>
       </property>
       <property>
+            <name>multi_days</name>
+            <table>objects</table>
+            <group>advanced</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita mitmepäevaseid sündmusi ainult esimesel päeval</caption>
+      </property>
+      <property>
             <name>vac_count</name>
             <table>objects</table>
             <group>vac_settings</group>

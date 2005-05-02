@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.60 2005/04/28 13:58:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.61 2005/05/02 10:30:06 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -357,7 +357,6 @@ class vcalendar extends aw_template
 		};
 		
 		$this->event_counter = 0;
-
 
 		if (!empty($arr["text"]))
 		{

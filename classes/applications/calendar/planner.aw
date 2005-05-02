@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.76 2005/04/29 13:28:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.77 2005/05/02 10:30:06 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -64,6 +64,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 
 	@property month_week type=checkbox ch_value=1 group=advanced
 	@caption Näita kuuvaadet samamoodi nagu nädalavaadet
+	
+	@property multi_days type=checkbox ch_value=1 group=advanced
+	@caption Näita mitmepäevaseid sündmusi ainult esimesel päeval
 	
 	@property vac_count type=textbox size=2 group=vac_settings default=10
 	@caption Vabu aegu
@@ -1742,7 +1745,7 @@ class planner extends class_base
 			"date" => date("d-m-Y",$range["timestamp"]),
 		));
 		$awt->stop("init-event-source");
-
+		$multi_e = $arr["obj_inst"]->prop("multi_days");
 
 		foreach($events as $event)
 		{
@@ -1753,9 +1756,9 @@ class planner extends class_base
 			// recurrence information on lihtsalt nimekiri timestampidest, millel sündmus esineb
 			if (!$_GET["XX6"])
 			{
-				$arr["prop"]["vcl_inst"]->add_item(array(
+				$varx = array(
 					"item_start" => $event["start"],
-					"item_end" => $event["end"],
+					
 					"data" => array(
 						"id" => $event["id"],
 						"name" => $event["name"],
@@ -1768,7 +1771,12 @@ class planner extends class_base
 						"modifiedby" => $event["modifiedby"],
 					),
 					"recurrence" => $this->recur_info[$event["id"]],
-				));
+				);
+				if(empty($multi_e))
+				{
+					$varx["item_end"] = $event["end"];
+				}
+				$arr["prop"]["vcl_inst"]->add_item($varx);
 			}
 			else
 			{
