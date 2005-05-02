@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.38 2005/04/28 10:54:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.39 2005/05/02 10:31:44 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -247,11 +247,6 @@ class project extends class_base
 
 		$end = $range["end"];
 		classload("core/icons");
-
-		if ($range["overview_start"])
-		{
-			$start = $range["overview_start"];
-		};
 
 		// event translations have the id of the object in original language
 		$o = $arr["obj_inst"];
@@ -579,6 +574,10 @@ class project extends class_base
 
 		// ma pean lugema sündmusi sellest projektist ja selle alamprojektidest.
 		$_start = $arr["range"]["start"];
+		if ($arr["range"]["overview_start"])
+		{
+			$_start = $arr["range"]["overview_start"];
+		};
 		$_end = $arr["range"]["end"];
 		$lang_id = aw_global_get("lang_id");
 		$stat_str = "objects.status != 0";
@@ -609,12 +608,30 @@ class project extends class_base
 			OR
 			(planner.end >= '${_start}' AND planner.end <= '${_end}')) AND
 			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
+		
+		if($arr["range"]["viewtype"] == "relative")
+		{
+			$q = "
+			SELECT 
+				objects.oid AS id,
+				objects.parent,
+				objects.class_id,
+				objects.brother_of,
+				objects.name,
+				planner.start,
+				planner.end
+			FROM planner
+			LEFT JOIN objects ON (planner.id = objects.brother_of)
+			WHERE planner.start >= ".($_start - 3600*365)." AND planner.start <= ".($_start + 3600*365)." AND
+			$stat_str AND objects.parent IN (${parent}) order by planner.start LIMIT ".($arr["range"]["past"] + $arr["range"]["future"]);
+		}
 
 
 		if (aw_global_get("uid") == "duke")
 		{
 			print $q;
 		};
+
 
 
 		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)

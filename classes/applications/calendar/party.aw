@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.5 2005/04/25 12:40:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/party.aw,v 1.6 2005/05/02 10:31:44 ahti Exp $
 // party.aw - Pidu 
 /*
 
@@ -77,7 +77,8 @@ class party extends class_base
 	function party()
 	{
 		$this->init(array(
-			"clid" => CL_PARTY
+			"clid" => CL_PARTY,
+			"tpldir" => "applications/calendar",
 		));
 	}
 
@@ -223,6 +224,95 @@ class party extends class_base
 		}
 		$tb->set_default_sortby("ordx");
 		$tb->sort_by();
+	}
+	
+	function request_execute($obj)
+	{
+		$this->read_template("party_show.tpl");
+		$objs = new object_list(array(
+			"brother_of" => $obj->brother_of(),
+		));
+		$evt = $obj->properties();
+		$fa = safe_array($obj->prop("from_artist"));
+		$proj = array();
+		foreach($objs->arr() as $obz)
+		{
+			$obx = obj($obz->parent());
+			if($obx->class_id() == CL_PROJECT)
+			{
+				$doc_id = $obx->prop("doc_id");
+				$nm = $obx->name();
+				if(is_oid($doc_id) && $this->can("view", $doc_id))
+				{
+					$nm = html::href(array(
+						"caption" => $nm,
+						"url" => obj_link($doc_id),
+					));
+				}
+				$proj[] = $nm;
+			}
+		}
+		$evt["project"] = implode(", ", $proj);
+		$meta = $obj->meta("artists");
+		unset($fa[0]);
+		if(count($fa) > 0 && ($artist = $obj->get_first_obj_by_reltype("RELTYPE_ARTIST")))
+		{
+			if($fa["content"])
+			{
+				$evt["content"] = $artist->prop("notes");
+			}
+			if($fa["image"])
+			{
+				$evt["image"] = $artist->prop("picture");
+			}
+		}
+		else
+		{
+			$art = array();
+			foreach($artists = $obj->connections_from(array("type" => "RELTYPE_ARTIST")) as $artist)
+			{
+				$id = $artist->prop("to");
+				$art[] = array(
+					"id" => $id,
+					"name" => $artist->prop("to.name"),
+					"ord" => $meta["ord"][$id],
+					"profession" => $meta["profession"][$id],
+				);
+			}
+			uasort($art, array($this, "__sort_by_ord"));
+			$xz = array();
+			foreach($art as $a)
+			{
+				$x = html::href(array(
+					"url" => obj_link($a["id"]),
+					"caption" => $a["name"],
+				));
+				/*
+				if(count($a["profession"]) > 0)
+				{
+					$profs = array();
+					foreach($a["profession"] as $prof)
+					{
+						if(is_oid($prof) && $this->can("view", $prof))
+						{
+							$ob = obj($prof);
+							$profs[] = $ob->name();
+						}
+					}
+					$x .= " - ".implode(", ", $profs);
+				}
+				*/
+				$xz[] = $x;
+			}
+			$evt["artist"] = implode(", ", $xz);
+		}
+		if($image = $obj->get_first_obj_by_reltype("RELTYPE_FLYER"))
+		{
+			$flyer_i = get_instance(CL_FLYER);
+			$evt["image"] = $flyer_i->show($image);
+		}
+		$this->vars($evt);
+		return $this->parse();
 	}
 }
 ?>

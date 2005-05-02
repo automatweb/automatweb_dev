@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.34 2005/04/27 08:53:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.35 2005/05/02 10:31:44 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -127,6 +127,7 @@ class calendar_view extends class_base
 					"weekview" => t("Nädala vaade"),
 					"last_events" => t("Järgmised sündmused"),
 					"grouped" => t("Grupeeri allika järgi"),
+					"relative" => t("Ülevaade"),
 				);
 				break;
 
@@ -141,6 +142,7 @@ class calendar_view extends class_base
 					"week" => t("nädal"),
 					"month" => t("kuu"),
 					"last" => t("Järgmised"),
+					"relative" => t("Ülevaade"),
 				);
 				break;
 
@@ -634,6 +636,7 @@ class calendar_view extends class_base
 			"last_events" => "calendar/calendar_view/last_events", 
 			// BUG: this should be possible in ALL views
 			"grouped" => "calendar/calendar_view/day",
+			"relative" => "calendar/calendar_view/relative"
 		);
 
 		if ($use2dir[$use_template])
@@ -660,6 +663,10 @@ class calendar_view extends class_base
 			$args["overview_func"] = array(&$this,"get_overview");
 			$args["overview_range"] = 1;
 		};
+		if($use_template == "relative")
+		{
+			$args["overview_range"] = 3;
+		}
 
 
 		if (1 == $this->obj_inst->prop("show_days_with_events"))
@@ -718,8 +725,6 @@ class calendar_view extends class_base
 			$viewtype = $arr["viewtype"];
 		};
 		
-
-
 		if ($_GET["viewtype"])
 		{
 			$viewtype = $_GET["viewtype"];
@@ -965,13 +970,14 @@ class calendar_view extends class_base
 		// day viewd peab saama kuidagi grupeerida
 
 		$props = $this->obj_inst->properties();
+		$stylex = get_instance(CL_STYLE);
 		foreach($style_props as $style_prop)
 		{
 			$prop_value = $props[$style_prop];
 			if (0 != $prop_value)
 			{
 				active_page_data::add_site_css_style($prop_value);
-				$style[$style_prop] = "st" . $prop_value;
+				$style[$style_prop] = $stylex->get_style_name($prop_value);
 			};
 		}
 
