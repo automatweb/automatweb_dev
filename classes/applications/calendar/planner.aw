@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.77 2005/05/02 10:30:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.78 2005/05/03 14:45:15 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -846,7 +846,7 @@ class planner extends class_base
 				$real_obj = $of->get_original();
 				$eo = $real_obj;
 				$row["name"] = $real_obj->name();
-				$row["comment"] = $real_obj->comment();;
+				$row["comment"] = $real_obj->comment();
 				$row["status"] = $real_obj->status();
 				$row["flags"] = $real_obj->flags();
 			};
@@ -2308,7 +2308,7 @@ class planner extends class_base
 		$user_inst = get_instance(CL_USER);
 		$users_i = get_instance("users");
 		foreach ($data->arr() as $result)
-		{	
+		{
 		
 			$participants = $result->connections_to(array(
 				"type" => array(8,9,10),
@@ -2330,7 +2330,7 @@ class planner extends class_base
 			}
 			
 			$iconurl = icons::get_icon_url($result->class_id());
-			if($result->prop("is_done"))
+			if($result->flags() & OBJ_IS_DONE)
 			{
 				$iconurl = str_replace(".gif", "_done.gif", $iconurl);
 			}
