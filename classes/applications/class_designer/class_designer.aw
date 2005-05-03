@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.13 2005/04/24 07:51:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.14 2005/05/03 13:15:58 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -120,6 +120,7 @@ class class_designer extends class_base
 	{
 		$arr["return_url"] = aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
 		$arr["group_parent"] = $_GET["group_parent"] ? $_GET["group_parent"] : $arr["id"];
+		$arr["register_under"] = $_REQUEST["register_under"];
 	}
 
 	function callback_pre_edit($arr)
@@ -232,6 +233,10 @@ class class_designer extends class_base
 
 			case "class_folder":
 				$prop["options"] = $this->gen_folder_tree();
+				if (!$prop["value"])
+				{
+					$prop["value"] = $arr["obj_inst"]->meta("register_under");
+				}
 				break;
 
 
@@ -957,6 +962,12 @@ class class_designer extends class_base
 
 	function callback_post_save($arr)
 	{
+		if ($arr["request"]["register_under"])
+		{
+			$arr["obj_inst"]->set_meta("register_under", $arr["request"]["register_under"]);
+			$arr["obj_inst"]->save();
+		}
+
 		// I need to put class information into an ini file as well
 		//print "generating class file";
 		$cldef = $this->gen_classdef(array(
