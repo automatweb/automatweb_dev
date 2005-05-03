@@ -42,7 +42,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>box</parent>
       </property>
       <property>
             <name>customers_tree</name>
@@ -86,7 +85,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>box</parent>
       </property>
       <property>
             <name>projects_tree</name>
@@ -271,7 +269,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>box</parent>
       </property>
       <property>
             <name>resources_tree</name>
@@ -383,7 +380,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>box</parent>
       </property>
       <property>
             <name>user_list_tree</name>
@@ -416,7 +412,6 @@
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>box</parent>
       </property>
       <property>
             <name>user_mgr_tree</name>
