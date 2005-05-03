@@ -4,14 +4,14 @@ The properties for different types of objects are defined in class files, the pr
 
 <b>This spec defines 4 new classes</b>
 
-<ul><li>#menu1#
+<ul><li>object
 This class represents a single object and has member functions via which you can modify or query all aspects of the object, also save it, copy id and delete it.
 
-<li>#menu2#
+<li>connection
 this class abstracts the current alias system
 
-<li>#menu3#
+<li>object_list
 with this class you can combine objects into lists and perform operations on several objects at once. basically, this is the replacement for sql search queries.
 
-<li>#menu4#
+<li>object_tree
 with this class you can manage object trees, this is the basis for automatweb's object filesystem, it presents the datbase as an abstract tree.</ul>

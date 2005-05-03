@@ -81,9 +81,64 @@ class connection_test extends PHPUnit_TestCase
 		$this->assertTrue(__is_err());
 	}
 
-	function test_find()
+	function test_find_err()
 	{
+		__disable_err();
+		$c = new connection();
+		$c->find();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_find_from()
+	{
+		// get some conns and check those
+		$row = $this->db->db_fetch_row("SELECT id,source FROM aliases");
 		
+		$c = new connection();
+		$res = $c->find(array(
+			"from" => $row["source"]
+		));
+		$first = reset($res);
+		$this->assertTrue($first["from"] == $row["source"]);
+	}
+
+	function test_find_to()
+	{
+		// get some conns and check those
+		$row = $this->db->db_fetch_row("SELECT id,target FROM aliases");
+		
+		$c = new connection();
+		$res = $c->find(array(
+			"to" => $row["target"]
+		));
+		$first = reset($res);
+		$this->assertTrue($first["to"] == $row["target"]);
+	}
+
+	function test_find_type()
+	{
+		// get some conns and check those
+		$row = $this->db->db_fetch_row("SELECT id,target,reltype FROM aliases");
+		
+		$c = new connection();
+		$res = $c->find(array(
+			"to" => $row["target"]
+		));
+		$first = reset($res);
+		$this->assertTrue($first["reltype"] == $row["reltype"]);
+	}
+
+	function test_find_to_obj()
+	{
+		// get some conns and check those
+		$row = $this->db->db_fetch_row("SELECT id,target,o.name as name FROM aliases left join objects o on o.oid = aliases.target");
+		
+		$c = new connection();
+		$res = $c->find(array(
+			"to" => $row["target"]
+		));
+		$first = reset($res);
+		$this->assertTrue($first["to.name"] == $row["name"]);
 	}
 }
 
