@@ -466,6 +466,8 @@ class core extends acl_base
 			$send_mail = false;	
 		}
 
+		$GLOBALS["aw_is_error"] = 1;
+
 		if (aw_global_get("__from_raise_error") > 0)
 		{
 			return false;
