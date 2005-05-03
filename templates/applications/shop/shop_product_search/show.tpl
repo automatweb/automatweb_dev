@@ -3,8 +3,7 @@
 <table border="0" cellpadding="0" cellspacing="0">
 {VAR:form}
 </table>
-{VAR:reforb}
-
+<input type="hidden" name="section" value="{VAR:section}">
 </form>
 
 <form action="{VAR:baseurl}/reforb.{VAR:ext}" method="POST">
