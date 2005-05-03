@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.54 2005/05/03 11:49:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.55 2005/05/03 13:36:48 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -436,7 +436,11 @@ class mrp_schedule extends class_base
 		{
 			if (!$this->can("view", $job["oid"]))
 			{
-				echo t("Esines töö, mis pole kasutajale nähtav. Planeerimine ei toimu adekvaatselt.");
+				echo t(sprintf ("Esines töö (id: %s), mis pole kasutajale nähtav. Planeerimine ei toimu adekvaatselt.", $job["oid"]));
+				send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n job id:" . $job["oid"]);
+				// error::raise (array (
+					// "" => sprintf ("Esines töö (id: %s), mis pole kasutajale nähtav. Planeerimine ei toimu adekvaatselt.", $job["oid"]),
+				// ));
 				continue;
 			}
 

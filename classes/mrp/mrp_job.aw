@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.62 2005/05/03 11:49:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.63 2005/05/03 13:36:48 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -652,21 +652,8 @@ class mrp_job extends class_base
 		}
 
 		### ...
-		if ($errors)
+		if (empty ($errors))
 		{
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
-		}
-		else
-		{
-			### finish job
-			$time = time ();
-			$this_object->set_prop ("state", MRP_STATUS_DONE);
-			$this_object->set_prop ("finished", $time);
-			aw_disable_acl();
-			$this_object->save ();
-			aw_restore_acl();
-
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
 			$resource_freed = $mrp_resource->stop_job(array(
@@ -677,77 +664,93 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-			}
-
-			### post rescheduling msg
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
+				send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
 			}
 			else
 			{
-				$errors[] = t("Ressursihalduskeskkond defineerimata.");
-			}
+				### finish job
+				$time = time ();
+				$this_object->set_prop ("state", MRP_STATUS_DONE);
+				$this_object->set_prop ("finished", $time);
+				aw_disable_acl();
+				$this_object->save ();
+				aw_restore_acl();
 
-			### log job change
-			$ws = get_instance (CL_MRP_WORKSPACE);
-			$ws->mrp_log(
-				$this_object->prop ("project"),
-				$this_object->id (),
-				"T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")],
-				$arr["pj_change_comment"]
-			);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+				### post rescheduling msg
+				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 
-			### finish project if this was the last job
-			$list = new object_list (array (
-				"class_id" => CL_MRP_JOB,
-				"project" => $project->id (),
-				"state" => MRP_STATUS_DONE,
-			));
-			$done_jobs = (int) $list->count ();
-
-			$list = new object_list (array (
-				"class_id" => CL_MRP_JOB,
-				"project" => $project->id (),
-			));
-			$all_jobs = (int) $list->count ();
-
-			if ($done_jobs == $all_jobs)
-			{
-				### finish project
-				$mrp_case = get_instance(CL_MRP_CASE);
-				$project_finish = $mrp_case->finish(array("id" => $project->id ()));
-
-				$project_errors = parse_url($project_finish);
-				$project_errors = explode("&", $project_errors["query"]);
-				$project_errors = unserialize(urldecode($project_errors["errors"]));
-
-				if ($project_errors)
+				if ($workspace)
 				{
-					$project_state = $project->prop ("state");
-
-					$errors[] = t(sprintf ("Projekti lõpetamine ebaõnnestus. Projekti staatus oli '%s'", $project_state));
-					$errors = array_merge($errors, $project_errors);
+					$workspace->set_prop("rescheduling_needed", 1);
+					aw_disable_acl();
+					$workspace->save();
+					aw_restore_acl();
 				}
-			}
-			else
-			{
-				### update progress
-				$project->set_prop ("progress", time ());
-				aw_disable_acl();
-				$project->save ();
-				aw_restore_acl();
-			}
+				else
+				{
+					$errors[] = t("Ressursihalduskeskkond defineerimata.");
+				}
 
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
+				### log job change
+				$ws = get_instance (CL_MRP_WORKSPACE);
+				$ws->mrp_log(
+					$this_object->prop ("project"),
+					$this_object->id (),
+					"T&ouml;&ouml; ".$this_object->name() . " staatus muudeti ".$this->states[$this_object->prop("state")],
+					$arr["pj_change_comment"]
+				);
+				$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+
+				### finish project if this was the last job
+				$list = new object_list (array (
+					"class_id" => CL_MRP_JOB,
+					"project" => $project->id (),
+					"state" => MRP_STATUS_DONE,
+				));
+				$done_jobs = (int) $list->count ();
+
+				$list = new object_list (array (
+					"class_id" => CL_MRP_JOB,
+					"project" => $project->id (),
+				));
+				$all_jobs = (int) $list->count ();
+
+				if ($done_jobs == $all_jobs)
+				{
+					### finish project
+					$mrp_case = get_instance(CL_MRP_CASE);
+					$project_finish = $mrp_case->finish(array("id" => $project->id ()));
+
+					$project_errors = parse_url($project_finish);
+					$project_errors = explode("&", $project_errors["query"]);
+					$project_errors = unserialize(urldecode($project_errors["errors"]));
+
+					if ($project_errors)
+					{
+						$project_state = $project->prop ("state");
+
+						$errors[] = t(sprintf ("Projekti lõpetamine ebaõnnestus. Projekti staatus oli '%s'", $project_state));
+						$errors = array_merge($errors, $project_errors);
+					}
+				}
+				else
+				{
+					### update progress
+					$project->set_prop ("progress", time ());
+					aw_disable_acl();
+					$project->save ();
+					aw_restore_acl();
+				}
+
+/* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
+/* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
+/* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
+/* dbg */ }
+			}
 		}
+
+		$errors = urlencode(serialize($errors));
+		return aw_url_change_var ("errors", $errors, $return_url);
 	}
 
 /**
@@ -786,19 +789,8 @@ class mrp_job extends class_base
 		}
 
 		### ...
-		if ($errors)
+		if (empty ($errors))
 		{
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
-		}
-		else
-		{
-			### abort job
-			$this_object->set_prop ("state", MRP_STATUS_ABORTED);
-			aw_disable_acl();
-			$this_object->save ();
-			aw_restore_acl();
-
 			### set resource as free
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
 			$resource_freed = $mrp_resource->stop_job(array(
@@ -809,32 +801,46 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-			}
-
-			### post rescheduling msg
-			$project = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_PROJECT");
-			$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
-
-			if ($workspace)
-			{
-				$workspace->set_prop("rescheduling_needed", 1);
-				aw_disable_acl();
-				$workspace->save();
-				aw_restore_acl();
+				send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
 			}
 			else
 			{
-				$errors[] = t("Ressursihalduskeskkond defineerimata.");
+				### abort job
+				$this_object->set_prop ("state", MRP_STATUS_ABORTED);
+				aw_disable_acl();
+				$this_object->save ();
+				aw_restore_acl();
+
+				### post rescheduling msg
+				$project = $this_object->get_first_obj_by_reltype("RELTYPE_MRP_PROJECT");
+				$workspace = $project->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
+
+				if ($workspace)
+				{
+					$workspace->set_prop("rescheduling_needed", 1);
+					aw_disable_acl();
+					$workspace->save();
+					aw_restore_acl();
+				}
+				else
+				{
+					$errors[] = t("Ressursihalduskeskkond defineerimata.");
+				}
+
+				### log event
+				$ws = get_instance(CL_MRP_WORKSPACE);
+				$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
+				$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
+
+/* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
+/* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
+/* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
+/* dbg */ }
 			}
-
-			### log event
-			$ws = get_instance(CL_MRP_WORKSPACE);
-			$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
-			$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
-
-			$errors = urlencode(serialize($errors));
-			return aw_url_change_var ("errors", $errors, $return_url);
 		}
+
+		$errors = urlencode(serialize($errors));
+		return aw_url_change_var ("errors", $errors, $return_url);
 	}
 
 /**
