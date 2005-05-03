@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.2 2005/05/02 14:32:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.3 2005/05/03 09:10:14 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -126,6 +126,7 @@ class shop_product_search extends class_base
 
 	function show($arr)
 	{
+		aw_session_set("no_cache", 1);
 		$o = obj($arr["id"]);
 
 		$request = array(
@@ -551,15 +552,24 @@ class shop_product_search extends class_base
 
 				foreach(safe_array($cols[CL_SHOP_PACKET]) as $coln => $cold)
 				{
-					$data[CL_SHOP_PACKET."_".$coln] = $packet->prop($coln);
+					if ($cold["in_form"] == 1)
+					{
+						$data[CL_SHOP_PACKET."_".$coln] = $packet->prop_str($coln);
+					}
 				}
 				foreach(safe_array($cols[CL_SHOP_PRODUCT]) as $coln => $cold)
 				{
-					$data[CL_SHOP_PRODUCT."_".$coln] = $prod->prop($coln);
+					if ($cold["in_form"] == 1)
+					{
+						$data[CL_SHOP_PRODUCT."_".$coln] = $prod->prop_str($coln);
+					}
 				}
 				foreach(safe_array($cols[CL_SHOP_PRODUCT_PACKAGING]) as $coln => $cold)
 				{
-					$data[CL_SHOP_PRODUCT_PACKAGING."_".$coln] = $pk->prop($coln);
+					if ($cold["in_form"] == 1)
+					{
+						$data[CL_SHOP_PRODUCT_PACKAGING."_".$coln] = $pk->prop_str($coln);
+					}
 				}
 
 				$data[CL_SHOP_PACKET."_oid"] = $packet->id();
