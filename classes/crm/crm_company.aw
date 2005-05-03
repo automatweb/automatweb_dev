@@ -3099,7 +3099,7 @@ class crm_company extends class_base
 		}
 	}
 
-	function do_contact_toolbar($tb,$arr)
+	function do_contact_toolbar(&$tb,&$arr)
 	{
 		$tb->add_menu_button(array(
 			'name'=>'add_item',

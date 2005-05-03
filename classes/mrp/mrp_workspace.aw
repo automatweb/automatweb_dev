@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.113 2005/05/01 16:44:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.114 2005/05/03 09:14:42 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2498,7 +2498,7 @@ if ($_GET['show_thread_data'] == 1)
 			$arr["obj_inst"] = $o;
 			$co = $o->instance();
 			$co->callback_on_load($arr);
-			$co->do_contact_toolbar(&$arr["prop"]['toolbar'],&$arr);
+			$co->do_contact_toolbar($arr["prop"]['toolbar'],$arr);
 
 			$tb =& $arr["prop"]["vcl_inst"];
 			$tb->remove_button("Kone");
