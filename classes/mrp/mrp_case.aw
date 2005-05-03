@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.74 2005/04/28 12:20:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.75 2005/05/03 11:49:44 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -423,6 +423,7 @@ class mrp_case extends class_base
 				break;
 
 			case "workflow_table":
+				### project states for updating schedule
 				$applicable_states = array (
 					MRP_STATUS_PLANNED,
 					MRP_STATUS_INPROGRESS,
@@ -505,7 +506,7 @@ class mrp_case extends class_base
 				$save = $this->save_workflow_data ($arr);
 
 				if ($save !== PROP_OK)
-				{
+				{echo $save;
 					$prop["error"] = $save;
 					return PROP_FATAL_ERROR;
 				}
@@ -547,24 +548,27 @@ class mrp_case extends class_base
 		$this_object =& $arr["obj_inst"];
 		$this->workspace->save ();
 
-		if ( ($arr["new"]) and (is_oid ($arr["request"]["mrp_workspace"])) )
+		if ($arr["new"])
 		{
-			### set status
-			$this_object->set_prop ("state", MRP_STATUS_NEW);
+			if (is_oid ($arr["request"]["mrp_workspace"]))
+			{
+				### set status
+				$this_object->set_prop ("state", MRP_STATUS_NEW);
 
-			### connect newly created obj. to workspace from which the req. was made
-			$workspace = obj ($arr["request"]["mrp_workspace"]);
-			$projects_folder = $workspace->prop ("projects_folder");
-			$this_object->connect (array (
-				"to" => $workspace,
-				"reltype" => "RELTYPE_MRP_OWNER",
-			));
-			$this_object->set_parent ($projects_folder);
-			$this_object->save ();
-		}
-		else
-		{
-			// $workspace =& $this->get_current_workspace ($arr);
+				### connect newly created obj. to workspace from which the req. was made
+				$workspace = obj ($arr["request"]["mrp_workspace"]);
+				$projects_folder = $workspace->prop ("projects_folder");
+				$this_object->connect (array (
+					"to" => $workspace,
+					"reltype" => "RELTYPE_MRP_OWNER",
+				));
+				$this_object->set_parent ($projects_folder);
+				$this_object->save ();
+			}
+			else
+			{
+				echo t("Ressursihalduskeskkond defineerimata või katkine");
+			}
 		}
 
 		if (is_string ($arr["request"]["mrp_resourcetree_data"]))
@@ -1237,10 +1241,24 @@ class mrp_case extends class_base
 		$jobs = array ();
 		$workflow = array ();
 
+		### non-changeable job states
+		$applicable_states = array(
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
+			MRP_STATUS_DONE,
+		);
+
 		foreach ($connections as $connection)
 		{
 			$job = $connection->to ();
 			$jobs[$job->prop ("exec_order")] = $job->id ();
+
+			### add non-changeable jobs to workflow
+			if (in_array ($job->prop ("state"), $applicable_states))
+			{
+				$prerequisites = explode (",", $job->prop ("state"));
+				$workflow[$job->id ()] = $prerequisites;
+			}
 		}
 
 		foreach ($arr["request"] as $name => $value)
@@ -1253,85 +1271,59 @@ class mrp_case extends class_base
 				{
 					$job = obj ($property[1]);
 					$property = $property[2];
-					$status = $job->prop ("state");
 
-					if ( ($status == MRP_STATUS_INPROGRESS) or ($status == MRP_STATUS_DONE) )
+					if (!in_array ($job->prop ("state"), $applicable_states))
 					{
-						break;
-					}
+						switch ($property)
+						{
+							case "prerequisites":
+								### translate prerequisites from execution orders to object id-s
+								$prerequisites_userdata = explode (",", $value);
+								$prerequisites = array ();
 
-					switch ($property)
-					{
-						case "prerequisites":
-							### translate prerequisites from execution orders to object id-s
-							$prerequisites_userdata = explode (",", $value);
-							$prerequisites = array ();
-
-							foreach ($prerequisites_userdata as $prerequisite)
-							{
-								settype ($prerequisite, "integer");
-								$job_id = $jobs[$prerequisite];
-								$prerequisites[] = $job_id;
-							}
-
-							$workflow[$job->id ()] = $prerequisites;
-							break;
-
-						case "length":
-						case "pre_buffer":
-						case "post_buffer":
-							$value = $this->safe_settype_float ($value);
-
-							switch ($property)
-							{
-								case "length":
-									$job->set_prop ("length", (round ($value * 3600)));
-									break;
-
-								case "pre_buffer":
-									$job->set_prop ("pre_buffer", (round ($value * 3600)));
-									break;
-
-								case "post_buffer":
-									$job->set_prop ("post_buffer", (round ($value * 3600)));
-									break;
-							}
-							break;
-
-						case "resource":
-							if (is_oid ($value))
-							{
-								### delete currently used/connected resource
-								$connections = $job->connections_from(array ("type" => "RELTYPE_MRP_RESOURCE", "class_id" => CL_MRP_RESOURCE));
-
-								foreach ($connections as $connection)
+								foreach ($prerequisites_userdata as $prerequisite)
 								{
-									$connection->delete ();
+									settype ($prerequisite, "integer");
+									$job_id = $jobs[$prerequisite];
+									$prerequisites[] = $job_id;
 								}
 
-								$job->connect (array (
-									"to" => obj ($value),
-									"reltype" => "RELTYPE_MRP_RESOURCE",
-								));
-								$job->set_prop ("resource", $value);
-							}
-							else
-							{
-								$errors .= t("Ressursi objekti-id katkine. ");//!!! mida see t2hendada v6iks?
-							}
-							break;
+								$workflow[$job->id ()] = $prerequisites;
+								break;
 
-						case "minstart":
-							$minstart = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
-							$job->set_prop ("minstart", $minstart);
-							break;
+							case "length":
+							case "pre_buffer":
+							case "post_buffer":
+								$value = $this->safe_settype_float ($value);
+
+								switch ($property)
+								{
+									case "length":
+										$job->set_prop ("length", (round ($value * 3600)));
+										break;
+
+									case "pre_buffer":
+										$job->set_prop ("pre_buffer", (round ($value * 3600)));
+										break;
+
+									case "post_buffer":
+										$job->set_prop ("post_buffer", (round ($value * 3600)));
+										break;
+								}
+								break;
+
+							case "minstart":
+								$minstart = mktime ($value["hour"], $value["minute"], 0, $value["month"], $value["day"], $value["year"]);
+								$job->set_prop ("minstart", $minstart);
+								break;
+						}
+
+						$job->set_comment($arr["request"]["comments"][$job->id()]);
+
+						aw_disable_acl();
+						$job->save ();
+						aw_restore_acl();
 					}
-
-					$job->set_comment($arr["request"]["comments"][$job->id()]);
-
-					aw_disable_acl();
-					$job->save ();
-					aw_restore_acl();
 				}
 				else
 				{
@@ -1765,7 +1757,6 @@ class mrp_case extends class_base
 		// save data to prisma server
 		$i = get_instance(CL_MRP_PRISMA_IMPORT);
 		$i->write_proj($arr["oid"]);
-
 	}
 
 	function mrp_log($proj, $job, $msg, $comment = '')
@@ -1851,7 +1842,6 @@ class mrp_case extends class_base
 					$case_id,NULL,'".aw_global_get("uid")."',".time().",'Projekt lisati'
 				)
 		");
-
 	}
 
 	function on_delete_case ($arr)
@@ -2035,7 +2025,7 @@ class mrp_case extends class_base
 
 		if ($done_jobs != $all_jobs)
 		{
-			$errors[] = t("Kõik projekti tööd pole valmis");
+			$errors[] = t("Projekti ei saa lõpetada. Kõik projekti tööd pole valmis");
 		}
 
 		### states for finishing a project
@@ -2375,7 +2365,7 @@ class mrp_case extends class_base
 		{
 			$c->delete();
 		}
-		if (is_oid($o->prop($arr["prop"])))
+		if (is_oid($arr["prop"]))
 		{
 		$o->connect(array(
 			"to" => $o->prop($arr["prop"]),

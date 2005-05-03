@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.61 2005/04/27 10:32:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.62 2005/05/03 11:49:44 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -335,6 +335,7 @@ class mrp_job extends class_base
 		### post rescheduling msg where necessary
 		$applicable_planning_states = array(
 			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
 			MRP_STATUS_PLANNED,
 		);
 
@@ -1010,26 +1011,69 @@ class mrp_job extends class_base
 
 		$project = $this_object->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
 		$applicable_project_states = array (
-			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PLANNED,
+			MRP_STATUS_INPROGRESS,
 		);
 		$applicable_job_states = array (
 			MRP_STATUS_ABORTED,
 		);
-
-		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
-		{
-			$errors[] = t("Töö pole katkestatud");
-		}
 
 		if (!in_array ($project->prop ("state"), $applicable_project_states))
 		{
 			$errors[] = t("Projekt pole jätkatav");
 		}
 
-		### ...
+		if (!in_array ($this_object->prop ("state"), $applicable_job_states))
+		{
+			$errors[] = t("Töö pole katkestatud");
+		}
+
+		### check if prerequisites are done
+		$prerequisites = trim($this_object->prop ("prerequisites")) ? explode(",", $this_object->prop("prerequisites")) : array();
+		$prerequisites_done = true;
+
+		foreach ($prerequisites as $prerequisite_oid)
+		{
+			$prerequisite_oid = (int) $prerequisite_oid;
+
+			if (is_oid ($prerequisite_oid))
+			{
+				$prerequisite = obj ($prerequisite_oid);
+
+				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
+				{
+					$prerequisites_done = false;
+					$errors[] = t("Eeldustööd tegemata");
+					break;
+				}
+			}
+			else
+			{
+				$errors[] = t("Eeldustöö definitsioon on katki");
+				break;
+			}
+		}
+
+		### reserve resource
+		$mrp_resource = get_instance(CL_MRP_RESOURCE);
+		$resource_is_reserved = $mrp_resource->start_job(array(
+			"resource" => $this_object->prop("resource"),
+			"job" => $this_object->id (),
+		));
+
+		if ($resource_is_reserved === false)
+		{
+			$errors[] = t("Ressurss kinni");
+		}
+
+		### if no errors, save
 		if ($errors)
 		{
+			### free resource and exit
+			$mrp_resource->stop_job(array(
+				"resource" => $this_object->prop("resource"),
+				"job" => $this_object->id (),
+			));
 			$errors = urlencode(serialize($errors));
 			return aw_url_change_var ("errors", $errors, $return_url);
 		}
@@ -1215,7 +1259,13 @@ class mrp_job extends class_base
 	{
 		$job = obj ((int) $arr["oid"]);
 
-		if ($job->prop ("state") == MRP_STATUS_INPROGRESS)
+		### job states that require freeing resource
+		$applicable_states = array (
+			MRP_STATUS_INPROGRESS,
+			MRP_STATUS_PAUSED,
+		);
+
+		if (in_array ($job->prop ("state"), $applicable_states))
 		{
 			### free resource
 			$mrp_resource = get_instance(CL_MRP_RESOURCE);
@@ -1308,10 +1358,6 @@ class mrp_job extends class_base
 
 	function add_comment($job, $comment)
 	{
-		if (trim($comment) == "")
-		{
-			return;
-		}
 		$job = obj($job);
 		$hist = safe_array($job->meta("change_comment_history"));
 		array_unshift($hist, array(
