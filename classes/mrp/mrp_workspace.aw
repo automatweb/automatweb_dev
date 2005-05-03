@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.115 2005/05/03 11:49:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.116 2005/05/03 13:42:10 duke Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -47,14 +47,14 @@
 @default group=grp_customers
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
-	@property customers_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property customers_toolbar type=toolbar store=no no_caption=1 
 	@property customers_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
 
 
 @default group=grp_projects
-	@property projects_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property projects_toolbar type=toolbar store=no no_caption=1
 	@property projects_tree type=text store=no no_caption=1 parent=vsplitbox
 	@property projects_list type=table store=no no_caption=1 parent=vsplitbox
 
@@ -106,7 +106,7 @@
 	@property cs_result type=table no_caption=1
 
 @default group=grp_resources
-	@property resources_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property resources_toolbar type=toolbar store=no no_caption=1 
 	@property resources_tree type=text store=no no_caption=1 parent=vsplitbox
 	@property resources_list type=table store=no no_caption=1 parent=vsplitbox
 
@@ -134,12 +134,12 @@
 	@caption N&auml;ita
 
 @default group=grp_users_tree
-	@property user_list_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property user_list_toolbar type=toolbar store=no no_caption=1 
 	@property user_list_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property user_list type=table store=no no_caption=1 parent=vsplitbox
 
 @default group=grp_users_mgr
-	@property user_mgr_toolbar type=toolbar store=no no_caption=1 parent=box
+	@property user_mgr_toolbar type=toolbar store=no no_caption=1 
 	@property user_mgr_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property user_mgr type=table store=no no_caption=1 parent=vsplitbox
 
