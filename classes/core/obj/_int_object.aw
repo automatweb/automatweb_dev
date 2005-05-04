@@ -1387,6 +1387,9 @@ class _int_object
 		// if this is a brother object, we should save the original as well
 		if ($this->obj["oid"] != $this->obj["brother_of"])
 		{
+			// first, unload the object
+			// of course, we will lose data here if it is modified, but this is a race condition anyway.
+			unset($GLOBALS["objects"][$this->obj["brother_of"]]);
 			obj_set_opt("no_cache", 1);
 			$original = obj($this->obj["brother_of"]);
 			obj_set_opt("no_cache", 0);
