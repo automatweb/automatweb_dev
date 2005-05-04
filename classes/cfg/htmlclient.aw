@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.110 2005/04/27 12:05:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.111 2005/05/04 13:18:40 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -588,30 +588,6 @@ class htmlclient extends aw_template
 			$data = array();
 		};
 
-		if ($this->submit_done || $this->view_mode == 1)
-		{
-		
-		}
-		else
-		if (empty($submit) || $submit !== "no")
-		{
-			$var_name = "SUBMIT";
-			$tpl_vars = array(
-				"sbt_caption" => "Salvesta",
-			);
-			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
-			{
-				$this->sub_tpl->vars($tpl_vars);
-				$sbt = $this->sub_tpl->parse($var_name);
-			}
-			else
-			{
-				// I need to figure out whether I have a relation manager
-				$this->vars($tpl_vars);
-				$sbt = $this->parse($var_name);
-			}
-			
-		};
 		$orb_class = ($data["orb_class"]) ? $data["orb_class"] : "cfgmanager";
 		unset($data["orb_class"]);
 	
@@ -747,6 +723,31 @@ class htmlclient extends aw_template
 
 			$submit_handler = $txt;
 		}
+		
+		if ($this->submit_done || $this->view_mode == 1)
+		{
+		
+		}
+		else
+		if (empty($submit) || $submit !== "no")
+		{
+			$var_name = "SUBMIT";
+			$tpl_vars = array(
+				"sbt_caption" => "Salvesta",
+			);
+			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
+			{
+				$this->sub_tpl->vars($tpl_vars);
+				$sbt = $this->sub_tpl->parse($var_name);
+			}
+			else
+			{
+				// I need to figure out whether I have a relation manager
+				$this->vars($tpl_vars);
+				$sbt = $this->parse($var_name);
+			}
+			
+		};
 	
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
