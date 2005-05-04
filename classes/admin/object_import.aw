@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.31 2005/04/01 12:13:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.32 2005/05/04 06:52:21 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -1013,7 +1013,9 @@ class object_import extends class_base
 		$cur = safe_array($o->meta("last_import_log"));
 		$cur[] = date("d.m.Y / H:i").": ".$msg;
 		$o->set_meta("last_import_log", $cur);
+		aw_disable_acl();
 		$o->save();
+		aw_restore_acl();
 	}
 
 	function _get_date_value($date, $format)
