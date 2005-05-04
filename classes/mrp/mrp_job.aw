@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.63 2005/05/03 13:36:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.64 2005/05/04 08:59:51 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1252,7 +1252,27 @@ class mrp_job extends class_base
 			MRP_STATUS_RESOURCE_AVAILABLE,
 		);
 
-		if (!in_array ($resource->prop ("state"), $applicable_states))
+		/*if (!in_array ($resource->prop ("state"), $applicable_states))
+		{
+			return false;
+		}*/
+
+		// get max number of threads for resource
+		$max_jobs = min(1, count($resource->prop("thread_data")));
+		// get number of jobs using resource
+		$cur_jobs = $this->db_fetch_field("
+			SELECT 
+				count(j.oid) AS cnt 
+			FROM 
+				mrp_job j
+				LEFT JOIN objects o ON o.oid = j.oid
+			WHERE 
+				j.resource = ".$resource->id()." AND 
+				o.status > 0 AND
+				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+		", "cnt");
+		// compare
+		if ($cur_jobs >= $max_jobs)
 		{
 			return false;
 		}
