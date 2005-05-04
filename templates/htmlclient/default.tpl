@@ -91,7 +91,7 @@
 <table border=0 cellspacing=0 cellpadding=0 width='100%'>
 <tr>
 <!-- SUB: GRID_HBOX_ITEM -->
-<td valign='top' {VAR:item_width}>
+<td valign='top' {VAR:item_width} style='padding-left: 5px;'>
 {VAR:item}
 </td>
 <!-- END SUB: GRID_HBOX_ITEM -->
@@ -118,7 +118,6 @@
 
 <!-- SUB: SHOW_CHANGEFORM2 -->
 {VAR:reforb}
-</table>
 <script type="text/javascript">
 function submit_changeform(action)
 {
