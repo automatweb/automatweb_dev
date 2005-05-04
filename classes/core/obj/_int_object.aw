@@ -1387,7 +1387,9 @@ class _int_object
 		// if this is a brother object, we should save the original as well
 		if ($this->obj["oid"] != $this->obj["brother_of"])
 		{
+			obj_set_opt("no_cache", 1);
 			$original = obj($this->obj["brother_of"]);
+			obj_set_opt("no_cache", 0);
 			$original->save();
 		}
 
