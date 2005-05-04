@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.29 2005/04/21 09:31:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.30 2005/05/04 10:21:21 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -2169,14 +2169,14 @@ class otto_import extends class_base
 
 	function _get_id_by_code($code)
 	{
-		$id = $this->db_fetch_field("SELECT aw_oid FROM aw_shop_products WHERE user20 = '$code'", "aw_oid");
+		$id = $this->db_fetch_field("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid = objects.oid WHERE user20 = '$code' AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"), "aw_oid");
 		return $id;
 	}
 
 	function _get_ids_by_code($code)
 	{
 		$ret = array();
-		$this->db_query("SELECT aw_oid FROM aw_shop_products WHERE user20 = '$code'");
+		$this->db_query("SELECT aw_oid FROM aw_shop_products LEFT JOIN objects ON objects.oid = aw_shop_products.aw_oid = objects.oid WHERE user20 = '$code' AND objects.status > 0 AND objects.lang_id = ".aw_global_get("lang_id"));
 		while ($row = $this->db_next())
 		{
 			$ret[] = obj($row["aw_oid"]);
