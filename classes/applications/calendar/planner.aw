@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.79 2005/05/04 06:55:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.80 2005/05/04 07:16:50 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1175,7 +1175,7 @@ class planner extends class_base
 		{
 			$args["event_id"] = $this->event_id;
 		};
-		$args['return_url'] = aw_global_get('REQUEST_URI');
+		//$args['return_url'] = aw_global_get('REQUEST_URI');
 	}
 
 	function callback_mod_retval($arr)
