@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.78 2005/05/03 14:45:15 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.79 2005/05/04 06:55:52 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2419,6 +2419,7 @@ class planner extends class_base
 			"name" => "%".$arr["event_search_name"]."%",
 			"comment" => "%".$arr["event_search_comment"]."%",
 			"content" => "%".$arr["event_search_content"]."%",
+			"site_id" => array(),
 		);
 		
 		if (is_array($parents))
