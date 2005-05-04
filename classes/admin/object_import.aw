@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.32 2005/05/04 06:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.33 2005/05/04 11:39:32 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -534,7 +534,8 @@ class object_import extends class_base
 		@param oid optional 
 	**/
 	function do_check_import($arr = array())
-	{
+	{	
+		die();
 		$filt = array(
 			"class_id" => CL_OBJECT_IMPORT,
 			"site_id" => array(),
