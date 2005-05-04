@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.111 2005/05/04 13:18:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.112 2005/05/04 13:45:20 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -624,7 +624,39 @@ class htmlclient extends aw_template
 			{
 				$pp = isset($item["parent"]) ? $item["parent"] : "_main";
 				$this->properties_by_parent[$pp][$ki] = $ki;
+				// track usage of submit button, if one does not exist in class properties
+				// then we add one ourself. This is not a good way to do this, but hey ..
+				// and it gets worse...
+				if ($item["type"] == "submit")
+				{
+					$this->submit_done = true;
+				};
 			};
+		};
+		
+		if ($this->submit_done || $this->view_mode == 1)
+		{
+		
+		}
+		else
+		if (empty($submit) || $submit !== "no")
+		{
+			$var_name = "SUBMIT";
+			$tpl_vars = array(
+				"sbt_caption" => "Salvesta",
+			);
+			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
+			{
+				$this->sub_tpl->vars($tpl_vars);
+				$sbt = $this->sub_tpl->parse($var_name);
+			}
+			else
+			{
+				// I need to figure out whether I have a relation manager
+				$this->vars($tpl_vars);
+				$sbt = $this->parse($var_name);
+			}
+			
 		};
 
 		$this->layoutinfo["_main"] = array(
@@ -633,8 +665,6 @@ class htmlclient extends aw_template
 
                 $xxx = $this->parse_layouts("_main");
 
-		// proplist tehakse enne ja siis layout takka otsa .. and this will break a lot of things
-		// now how do I work this out?
 		$property_help = "";
 		if (sizeof($this->proplist) > 0)
 		{
@@ -693,13 +723,14 @@ class htmlclient extends aw_template
 						));
 						$res .= $this->parse("PROP_ERR_MSG");
 					};
+
+					// this is what I was talking about before ...
+					// move submit button _before_ the aliasmgr
 					if (!empty($sbt) && $item["type"] == "aliasmgr")
 					{
 						$res .= $sbt;
 						unset($sbt);
 					};
-					// noh, aga ega siin ei ole midagi erilist .. kui ma satun gridi otsa,
-					// siis ma asendan selle gridi lihtsalt tema leiaudiga
 					$res .= $item["html"];
 				}
 			};
@@ -724,30 +755,6 @@ class htmlclient extends aw_template
 			$submit_handler = $txt;
 		}
 		
-		if ($this->submit_done || $this->view_mode == 1)
-		{
-		
-		}
-		else
-		if (empty($submit) || $submit !== "no")
-		{
-			$var_name = "SUBMIT";
-			$tpl_vars = array(
-				"sbt_caption" => "Salvesta",
-			);
-			if($this->tplmode == "groups" && $this->sub_tpl->is_template($var_name))
-			{
-				$this->sub_tpl->vars($tpl_vars);
-				$sbt = $this->sub_tpl->parse($var_name);
-			}
-			else
-			{
-				// I need to figure out whether I have a relation manager
-				$this->vars($tpl_vars);
-				$sbt = $this->parse($var_name);
-			}
-			
-		};
 	
 		$fn = basename($_SERVER["SCRIPT_FILENAME"],".aw");
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
@@ -1113,13 +1120,6 @@ class htmlclient extends aw_template
 		{
 			$item["html"] = $item["value"];
 		}
-		/*
-		else if ($item["parent"] && empty($this->layoutinfo[$item["parent"]]))
-		{
-			// kui sellist layouti veel olnud pole, siis lisame asja kuhu vaja
-			$this->proplist[$item["parent"]]["html"] .= $this->put_subitem($item);
-		}
-		*/
 		else if ($type == "hidden")
 		{
 			// hidden elements end up in the orb_vars
