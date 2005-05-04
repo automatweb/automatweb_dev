@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.61 2005/04/29 08:07:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.62 2005/05/04 14:04:54 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -88,6 +88,7 @@ class event_search extends class_base
 		));
 
 		$this->fields = array("fulltext","fulltext2", "start_date","end_date","project1","project2", "active", "format");
+		lc_site_load("event_search", &$this);
 	}
 
 	function callback_search_form($arr)
