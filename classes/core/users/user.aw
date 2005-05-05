@@ -1371,12 +1371,14 @@ class user extends class_base
 			}
 		}
 
-	
-		$this->users->set_user_config(array(
-			"uid" => $arr["obj_inst"]->prop("uid"),
-			"key" => "real_name",
-			"value" => $arr["request"]["name"]
-		));
+		if ($arr["request"]["group"] == "general")
+		{
+			$this->users->set_user_config(array(
+				"uid" => $arr["obj_inst"]->prop("uid"),
+				"key" => "real_name",
+				"value" => $arr["request"]["name"]
+			));
+		}
 
 		// now, find the correct brother
 		if ($go_to)
