@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.33 2005/05/04 11:39:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.34 2005/05/05 06:54:15 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -535,7 +535,17 @@ class object_import extends class_base
 	**/
 	function do_check_import($arr = array())
 	{	
-		die();
+		if (date("H") > 8)
+		{
+			echo "not during the day! <br>";
+			$sc = get_instance("scheduler");
+			$sc->add(array(
+				"event" => $this->mk_my_orb("do_check_import"),
+				"time" => time() + 60 * 60,
+				"sessid" => session_id()
+			));
+			die();
+		}
 		$filt = array(
 			"class_id" => CL_OBJECT_IMPORT,
 			"site_id" => array(),
