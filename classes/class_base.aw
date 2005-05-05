@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.391 2005/04/26 12:19:15 duke Exp $
+// $Id: class_base.aw,v 2.392 2005/05/05 10:40:59 ahti Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1318,6 +1318,7 @@ class class_base extends aw_template
 					"activegroup" => $activegroup,
 					"tabgroup" => &$val["tabgroup"],
 					"new" => $this->new,
+					"classinfo" => &$this->classinfo,
 				);
 
 				$res = true;
