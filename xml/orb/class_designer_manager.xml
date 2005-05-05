@@ -3,4 +3,3 @@
 	<class name="class_designer_manager" folder="applications/class_designer" extends="class_base">
 	</class>
 </orb>
-		

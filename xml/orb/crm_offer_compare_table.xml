@@ -3,4 +3,3 @@
 	<class name="crm_offer_compare_table" folder="crm" extends="class_base">
 	</class>
 </orb>
-		
