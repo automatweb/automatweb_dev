@@ -1466,6 +1466,10 @@ msgstr ""
 msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
 msgstr ""
 
+#: aw.ini:class_929
+msgid "Klassi Klasside brauser (929) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""

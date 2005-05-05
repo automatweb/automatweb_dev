@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:50:10 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -1463,6 +1463,10 @@ msgstr ""
 
 # aw.ini:class_926
 msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
+msgstr ""
+
+# aw.ini:class_929
+msgid "Klassi Klasside brauser (929) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29

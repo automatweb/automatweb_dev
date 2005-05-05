@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:40 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -482,19 +482,19 @@ msgstr ""
 msgid "Seose Kordus (RELTYPE_RECURRENCE) tekst"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:239
+#: classes/crm/crm_meeting.aw:227
 msgid "Kustuta valitud"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:241
+#: classes/crm/crm_meeting.aw:229
 msgid "Oled kindel, et tahad valitud osalejad eemaldada?"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:249
+#: classes/crm/crm_meeting.aw:237
 msgid "Otsi"
 msgstr ""
 
-#: classes/crm/crm_meeting.aw:258
+#: classes/crm/crm_meeting.aw:246
 msgid "Salvesta"
 msgstr ""
 

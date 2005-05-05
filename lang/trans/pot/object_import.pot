@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:40 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -350,71 +350,71 @@ msgstr ""
 msgid "&Auml;ra impordi"
 msgstr ""
 
-#: classes/admin/object_import.aw:553
+#: classes/admin/object_import.aw:564
 msgid "Importi alustati uuesti realt %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:621
+#: classes/admin/object_import.aw:632
 msgid "created uniqueness filter for %s objects. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:634
+#: classes/admin/object_import.aw:645
 msgid "impordin rida %s... <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:653
+#: classes/admin/object_import.aw:664
 msgid "leidsin juba olemasoleva objekti %s, kasutan olemasolevat objekti <br>"
 msgstr ""
 
-#: classes/admin/object_import.aw:764
+#: classes/admin/object_import.aw:775
 msgid "importisin objekti %s (%s) kataloogi %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:776
+#: classes/admin/object_import.aw:787
 msgid "Imporditud %s objekti"
 msgstr ""
 
-#: classes/admin/object_import.aw:783
+#: classes/admin/object_import.aw:794
 msgid "Valmis! <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:799
+#: classes/admin/object_import.aw:810
 msgid "Import edukalt l&otilde;ppenud"
 msgstr ""
 
-#: classes/admin/object_import.aw:916
+#: classes/admin/object_import.aw:927
 msgid "create uniq filter for delete <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:922
+#: classes/admin/object_import.aw:933
 msgid "got filter <Br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:933
+#: classes/admin/object_import.aw:944
 msgid "unset keys <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:954
+#: classes/admin/object_import.aw:965
 msgid "ERROR: number of objects to delete is %s greater than the max allowed: %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:955
+#: classes/admin/object_import.aw:966
 msgid "VIGA: leitud kustutamisele minevate objektide hulk %s on suurem kui maksimaalne: %s"
 msgstr ""
 
-#: classes/admin/object_import.aw:961
+#: classes/admin/object_import.aw:972
 msgid "delete object %s <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:967
+#: classes/admin/object_import.aw:978
 msgid "delete done. <br>\n"
 msgstr ""
 
-#: classes/admin/object_import.aw:969
+#: classes/admin/object_import.aw:980
 msgid "Edukalt kustutatud %s objekti!"
 msgstr ""
 
-#: classes/admin/object_import.aw:1007
+#: classes/admin/object_import.aw:1018
 msgid "Importi alustati "
 msgstr ""
 

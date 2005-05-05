@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 15:44:14 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -121,9 +121,17 @@ msgstr ""
 msgid "Grupi Esinejad (artists) pealkiri"
 msgstr "Performers"
 
+# classes/applications/calendar/party.aw:group_artists_help
+msgid "Grupi Esinejad (artists) help"
+msgstr ""
+
 # classes/applications/calendar/party.aw:group_projects
 msgid "Grupi Projektid (projects) pealkiri"
 msgstr "Projects"
+
+# classes/applications/calendar/party.aw:group_projects_help
+msgid "Grupi Projektid (projects) help"
+msgstr ""
 
 # classes/applications/calendar/party.aw:rel_RELTYPE_FLYER
 msgid "Seose Flaier (RELTYPE_FLYER) tekst"
@@ -133,46 +141,46 @@ msgstr "Flyer"
 msgid "Seose Esineja (RELTYPE_ARTIST) tekst"
 msgstr "Performer"
 
-#: classes/applications/calendar/party.aw:92
+#: classes/applications/calendar/party.aw:93
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/applications/calendar/party.aw:93
+#: classes/applications/calendar/party.aw:94
 msgid "Pilt"
 msgstr "Image"
 
-#: classes/applications/calendar/party.aw:94
+#: classes/applications/calendar/party.aw:95
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/applications/calendar/party.aw:131
+#: classes/applications/calendar/party.aw:132
 msgid "Lisa uus esineja"
 msgstr "Add new performer"
 
-#: classes/applications/calendar/party.aw:137
+#: classes/applications/calendar/party.aw:138
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/applications/calendar/party.aw:143
+#: classes/applications/calendar/party.aw:144
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/applications/calendar/party.aw:153
+#: classes/applications/calendar/party.aw:154
 msgid "Eemalda esineja"
 msgstr "Remove performer"
 
-#: classes/applications/calendar/party.aw:155
+#: classes/applications/calendar/party.aw:156
 msgid "Oled kindel, et soovid valitud esinejad eemaldada?"
 msgstr "Are you sure you want to delete selected performers?"
 
-#: classes/applications/calendar/party.aw:165
+#: classes/applications/calendar/party.aw:166
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/calendar/party.aw:170
+#: classes/applications/calendar/party.aw:171
 msgid "Jrk"
 msgstr "Order"
 
-#: classes/applications/calendar/party.aw:175
+#: classes/applications/calendar/party.aw:176
 msgid "Amet"
 msgstr "Profession"

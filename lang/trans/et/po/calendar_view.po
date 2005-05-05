@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 27 Apr 2005 11:55:52 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -336,58 +336,62 @@ msgstr ""
 msgid "Grupeeri allika järgi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:140
-msgid "päev"
+#: classes/calendar/calendar_view.aw:130 classes/calendar/calendar_view.aw:145
+msgid "Ülevaade"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:141
-msgid "nädal"
+msgid "päev"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:142
-msgid "kuu"
+msgid "nädal"
 msgstr ""
 
 #: classes/calendar/calendar_view.aw:143
+msgid "kuu"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:144
 msgid "Järgmised"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:182
+#: classes/calendar/calendar_view.aw:184
 msgid "Nimi"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:187
+#: classes/calendar/calendar_view.aw:189
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:192
+#: classes/calendar/calendar_view.aw:194
 msgid "Aktiivne"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:198
+#: classes/calendar/calendar_view.aw:200
 msgid "Jrk"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:203
+#: classes/calendar/calendar_view.aw:205
 msgid "Seaded"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:208
+#: classes/calendar/calendar_view.aw:210
 msgid "Väljade eraldaja"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:213
+#: classes/calendar/calendar_view.aw:215
 msgid "Lisaväljad"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:229
+#: classes/calendar/calendar_view.aw:231
 msgid "Väljundvorm on valimata"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1005
+#: classes/calendar/calendar_view.aw:1010
 msgid "&lt;&lt;"
 msgstr ""
 
-#: classes/calendar/calendar_view.aw:1012
+#: classes/calendar/calendar_view.aw:1017
 msgid "&gt;&gt;"
 msgstr ""

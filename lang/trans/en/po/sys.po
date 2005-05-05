@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:49 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -17,34 +17,34 @@ msgstr "Failed opening connection to server %s"
 msgid "Write error"
 msgstr "Write error"
 
-#: classes/sys.aw:506
+#: classes/sys.aw:505
 msgid "L&otilde;i saidi andmebaasi tabelid"
 msgstr "Created site database tables"
 
-#: classes/sys.aw:562
+#: classes/sys.aw:561
 msgid "all done! "
 msgstr "all done! "
 
-#: classes/sys.aw:607
+#: classes/sys.aw:606
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/sys.aw:611
+#: classes/sys.aw:610
 msgid "Klass"
 msgstr "Class"
 
-#: classes/sys.aw:615
+#: classes/sys.aw:614
 msgid "Muutja"
 msgstr "Modifiedby"
 
-#: classes/sys.aw:619
+#: classes/sys.aw:618
 msgid "Muutmise aeg"
 msgstr "Modified"
 
-#: classes/sys.aw:785
+#: classes/sys.aw:784
 msgid "all done!! database seems to be relatively ok!"
 msgstr "all done!! database seems to be relatively ok!"
 
-#: classes/sys.aw:845
+#: classes/sys.aw:844
 msgid "All done"
 msgstr "All done"

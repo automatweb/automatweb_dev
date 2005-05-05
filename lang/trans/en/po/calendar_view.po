@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 27 Apr 2005 11:55:52 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -102,8 +102,7 @@ msgstr ""
 msgid ""
 "Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale "
 "(fix_links) caption"
-msgstr ""
-"\"Previous\"-\"Next\" links move to days with events "
+msgstr "\"Previous\"-\"Next\" links move to days with events "
 
 # classes/calendar/calendar_view.aw:prop_fix_links_comment
 msgid ""
@@ -337,58 +336,62 @@ msgstr "Next events"
 msgid "Grupeeri allika järgi"
 msgstr "Group by source"
 
-#: classes/calendar/calendar_view.aw:140
+#: classes/calendar/calendar_view.aw:130 classes/calendar/calendar_view.aw:145
+msgid "Ülevaade"
+msgstr ""
+
+#: classes/calendar/calendar_view.aw:141
 msgid "päev"
 msgstr "day"
 
-#: classes/calendar/calendar_view.aw:141
+#: classes/calendar/calendar_view.aw:142
 msgid "nädal"
 msgstr "week"
 
-#: classes/calendar/calendar_view.aw:142
+#: classes/calendar/calendar_view.aw:143
 msgid "kuu"
 msgstr "month"
 
-#: classes/calendar/calendar_view.aw:143
+#: classes/calendar/calendar_view.aw:144
 msgid "Järgmised"
 msgstr "Next"
 
-#: classes/calendar/calendar_view.aw:182
+#: classes/calendar/calendar_view.aw:184
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/calendar/calendar_view.aw:187
+#: classes/calendar/calendar_view.aw:189
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/calendar/calendar_view.aw:192
+#: classes/calendar/calendar_view.aw:194
 msgid "Aktiivne"
 msgstr "Active"
 
-#: classes/calendar/calendar_view.aw:198
+#: classes/calendar/calendar_view.aw:200
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/calendar/calendar_view.aw:203
+#: classes/calendar/calendar_view.aw:205
 msgid "Seaded"
 msgstr "Settings"
 
-#: classes/calendar/calendar_view.aw:208
+#: classes/calendar/calendar_view.aw:210
 msgid "Väljade eraldaja"
 msgstr "Field separator"
 
-#: classes/calendar/calendar_view.aw:213
+#: classes/calendar/calendar_view.aw:215
 msgid "Lisaväljad"
 msgstr "Additional fields"
 
-#: classes/calendar/calendar_view.aw:229
+#: classes/calendar/calendar_view.aw:231
 msgid "Väljundvorm on valimata"
 msgstr "Output form is not selected"
 
-#: classes/calendar/calendar_view.aw:1005
+#: classes/calendar/calendar_view.aw:1010
 msgid "&lt;&lt;"
 msgstr "&lt;&lt;"
 
-#: classes/calendar/calendar_view.aw:1012
+#: classes/calendar/calendar_view.aw:1017
 msgid "&gt;&gt;"
 msgstr "&gt;&gt;"

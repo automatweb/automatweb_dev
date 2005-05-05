@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 24 Apr 2005 10:58:44 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -229,80 +229,96 @@ msgstr ""
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr "Settings"
 
+# classes/applications/class_designer/class_designer.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
 # classes/applications/class_designer/class_designer.aw:group_designer
 msgid "Grupi Disainer (designer) pealkiri"
 msgstr "Designer"
+
+# classes/applications/class_designer/class_designer.aw:group_designer_help
+msgid "Grupi Disainer (designer) help"
+msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:group_relations
 msgid "Grupi Seosed (relations) pealkiri"
 msgstr "Connections"
 
+# classes/applications/class_designer/class_designer.aw:group_relations_help
+msgid "Grupi Seosed (relations) help"
+msgstr ""
+
 # classes/applications/class_designer/class_designer.aw:group_classdef
 msgid "Grupi Klassi definitsioon (classdef) pealkiri"
 msgstr "Class definition"
+
+# classes/applications/class_designer/class_designer.aw:group_classdef_help
+msgid "Grupi Klassi definitsioon (classdef) help"
+msgstr ""
 
 # classes/applications/class_designer/class_designer.aw:rel_RELTYPE_RELATION
 msgid "Seose seos (RELTYPE_RELATION) tekst"
 msgstr "connection"
 
-#: classes/applications/class_designer/class_designer.aw:197
+#: classes/applications/class_designer/class_designer.aw:198
 msgid "Visualiseeri"
 msgstr "Visualize"
 
-#: classes/applications/class_designer/class_designer.aw:229
+#: classes/applications/class_designer/class_designer.aw:230
 msgid "Väljundkataloog ei ole kirjutatav!"
 msgstr "Output folder is not writeable"
 
-#: classes/applications/class_designer/class_designer.aw:335
+#: classes/applications/class_designer/class_designer.aw:340
 msgid "Uus tab"
 msgstr "New tab"
 
-#: classes/applications/class_designer/class_designer.aw:346
+#: classes/applications/class_designer/class_designer.aw:351
 msgid "Uus grid"
 msgstr "New grid"
 
-#: classes/applications/class_designer/class_designer.aw:382
+#: classes/applications/class_designer/class_designer.aw:387
 msgid "Save"
 msgstr "Save"
 
-#: classes/applications/class_designer/class_designer.aw:392
+#: classes/applications/class_designer/class_designer.aw:397
 msgid "Cut"
 msgstr "Cut"
 
-#: classes/applications/class_designer/class_designer.aw:402
+#: classes/applications/class_designer/class_designer.aw:407
 msgid "Paste"
 msgstr "Paste"
 
-#: classes/applications/class_designer/class_designer.aw:411
+#: classes/applications/class_designer/class_designer.aw:416
 msgid "Delete"
 msgstr "Delete"
 
-#: classes/applications/class_designer/class_designer.aw:414
+#: classes/applications/class_designer/class_designer.aw:419
 msgid "Kustutada valitud objektid?"
 msgstr "Delete selected objects?"
 
-#: classes/applications/class_designer/class_designer.aw:424
+#: classes/applications/class_designer/class_designer.aw:429
 msgid "Jrk"
 msgstr "Ord"
 
-#: classes/applications/class_designer/class_designer.aw:430
+#: classes/applications/class_designer/class_designer.aw:435
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/applications/class_designer/class_designer.aw:435
+#: classes/applications/class_designer/class_designer.aw:440
 msgid "Tüüp"
 msgstr "Type"
 
-#: classes/applications/class_designer/class_designer.aw:440
-#: classes/applications/class_designer/class_designer.aw:484
+#: classes/applications/class_designer/class_designer.aw:445
+#: classes/applications/class_designer/class_designer.aw:489
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/class_designer/class_designer.aw:516
+#: classes/applications/class_designer/class_designer.aw:521
 msgid "Grupp "
 msgstr "Group "
 
-#: classes/applications/class_designer/class_designer.aw:547
+#: classes/applications/class_designer/class_designer.aw:552
 msgid "vbox "
 msgstr "vbox "
 

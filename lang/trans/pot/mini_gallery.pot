@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:49:54 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -35,15 +35,27 @@ msgid "Omaduse Tulpi (cols) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
-msgid "Omaduse ridu (rows) caption"
+msgid "Omaduse Ridu (rows) caption"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
-msgid "Omaduse ridu (rows) kommentaar"
+msgid "Omaduse Ridu (rows) kommentaar"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_help
-msgid "Omaduse ridu (rows) help"
+msgid "Omaduse Ridu (rows) help"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style
+msgid "Omaduse Piltide stiil (style) caption"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style_comment
+msgid "Omaduse Piltide stiil (style) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:prop_style_help
+msgid "Omaduse Piltide stiil (style) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_zip_file
@@ -67,10 +79,14 @@ msgid "Grupi Import (import) help"
 msgstr ""
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
-msgid "Seose piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
+msgid "Seose Piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:180
+#: classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_STYLE
+msgid "Seose Stiil (RELTYPE_STYLE) tekst"
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:194
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 

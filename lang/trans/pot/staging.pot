@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:14 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -142,27 +142,31 @@ msgstr ""
 msgid "Aktiivne objekt"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:118
+#: classes/applications/calendar/staging.aw:120
+msgid "Originaalobjekti ID"
+msgstr ""
+
+#: classes/applications/calendar/staging.aw:127
 msgid "Originaalobjekt"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:126
+#: classes/applications/calendar/staging.aw:135
 msgid "Koopia"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:129
+#: classes/applications/calendar/staging.aw:138
 msgid " (Aktiivne)"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:147
+#: classes/applications/calendar/staging.aw:156
 msgid "Uued"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:156
+#: classes/applications/calendar/staging.aw:165
 msgid "Uus %s"
 msgstr ""
 
-#: classes/applications/calendar/staging.aw:166
+#: classes/applications/calendar/staging.aw:175
 msgid "Tee sündmus %s"
 msgstr ""
 

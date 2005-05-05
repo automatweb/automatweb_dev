@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:34 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -265,16 +265,32 @@ msgstr ""
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr ""
 
+# classes/image.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
 # classes/image.aw:group_img2
 msgid "Grupi Suur pilt (img2) pealkiri"
+msgstr ""
+
+# classes/image.aw:group_img2_help
+msgid "Grupi Suur pilt (img2) help"
 msgstr ""
 
 # classes/image.aw:group_resize
 msgid "Grupi Muuda suurust (resize) pealkiri"
 msgstr ""
 
+# classes/image.aw:group_resize_help
+msgid "Grupi Muuda suurust (resize) help"
+msgstr ""
+
 # classes/image.aw:group_resize_big
 msgid "Grupi Muuda suure pildi suurust (resize_big) pealkiri"
+msgstr ""
+
+# classes/image.aw:group_resize_big_help
+msgid "Grupi Muuda suure pildi suurust (resize_big) help"
 msgstr ""
 
 # classes/image.aw:rel_RELTYPE_MOD_COMMENT

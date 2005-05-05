@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:50:01 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -74,91 +74,91 @@ msgstr ""
 msgid "object::set_parent(%s): no parent specified!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:560
+#: classes/core/obj/_int_object.aw:572
 msgid "object::set_class(%s): specified class id id is not valid!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:598
+#: classes/core/obj/_int_object.aw:610
 msgid "object::set_status(%s): incorrect status code!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:665
+#: classes/core/obj/_int_object.aw:677
 msgid "object::set_ord(%s): order must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:726
+#: classes/core/obj/_int_object.aw:738
 msgid "object::set_period(%s): period must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:748
+#: classes/core/obj/_int_object.aw:760
 msgid "object::set_periodic(%s): order must be integer or boolean!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:770
+#: classes/core/obj/_int_object.aw:782
 msgid "object::set_site_id(%s): site_id must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:814
+#: classes/core/obj/_int_object.aw:826
 msgid "object::set_subclass(%s): subclass must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:836
+#: classes/core/obj/_int_object.aw:848
 msgid "object::set_flags(%s): flags must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:851
+#: classes/core/obj/_int_object.aw:863
 msgid "object::flag(%s): flag must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:864
+#: classes/core/obj/_int_object.aw:876
 msgid "object::set_flag(%s, %s): flag must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:871
+#: classes/core/obj/_int_object.aw:883
 msgid "object::set_flag(%s, %s): value must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1004
+#: classes/core/obj/_int_object.aw:1016
 msgid "object::set_prop(%s, %s): no property %s defined for current object!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1061
+#: classes/core/obj/_int_object.aw:1073
 msgid "object::merge(%s): parameter must be an array of properties to merge!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1075
+#: classes/core/obj/_int_object.aw:1087
 msgid "object::merge_prop(%s): parameter must be an array of properties to merge!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1129
+#: classes/core/obj/_int_object.aw:1141
 msgid "object::set_cache_dirty(%s): parameter must be integer or boolean!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1158
+#: classes/core/obj/_int_object.aw:1170
 msgid "object::instance(): no object loaded or class id not set!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1169
+#: classes/core/obj/_int_object.aw:1181
 msgid "object::create_brother(%s): no object loaded!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1174
+#: classes/core/obj/_int_object.aw:1186
 msgid "object::create_brother(%s): no parent!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1230
+#: classes/core/obj/_int_object.aw:1242
 msgid "object::load(%s): no view access for object %s!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1505
+#: classes/core/obj/_int_object.aw:1524
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1552
+#: classes/core/obj/_int_object.aw:1571
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1566
+#: classes/core/obj/_int_object.aw:1585
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""
 

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:40 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -352,36 +352,72 @@ msgstr ""
 msgid "Grupi Pildid (imgs) pealkiri"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_imgs_help
+msgid "Grupi Pildid (imgs) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_files
 msgid "Grupi Failid (files) pealkiri"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_files_help
+msgid "Grupi Failid (files) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:group_foldersa
 msgid "Grupi Kataloogid (foldersa) pealkiri"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_foldersa_help
+msgid "Grupi Kataloogid (foldersa) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:group_folderspri
 msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) pealkiri"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_folderspri_help
+msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_views
 msgid "Grupi Vaated (views) pealkiri"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_views_help
+msgid "Grupi Vaated (views) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:group_jm
 msgid "Grupi J&auml;relmaks (jm) pealkiri"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_jm_help
+msgid "Grupi J&auml;relmaks (jm) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_delete
 msgid "Grupi Kustutamine (delete) pealkiri"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_delete_help
+msgid "Grupi Kustutamine (delete) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_post_import_fix
 msgid "Grupi Parandused (post_import_fix) pealkiri"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_post_import_fix_help
+msgid "Grupi Parandused (post_import_fix) help"
 msgstr ""
 
 # classes/applications/shop/otto/otto_import.aw:rel_RELTYPE_FOLDER

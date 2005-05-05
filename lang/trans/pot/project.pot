@@ -422,23 +422,23 @@ msgstr ""
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1073
+#: classes/applications/groupware/project.aw:1104
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1105
+#: classes/applications/groupware/project.aw:1136
 msgid "Alamprojekt"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1210
+#: classes/applications/groupware/project.aw:1241
 msgid "Etendus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1434
+#: classes/applications/groupware/project.aw:1465
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1495
+#: classes/applications/groupware/project.aw:1526
 msgid "header"
 msgstr ""
 
