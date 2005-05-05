@@ -2,11 +2,17 @@ loads the connection
 
 <b>errors:</b>
 - if the parameter is not integer or array, error is thrown
-none
+
 
 <b>parameters:</b>
 - connection id or connection data, required:
-type: integer or array
+  type: integer or array
+  array indexes are:
+   - from - start object of the connection (required)
+   - to - end object of the connection (required)
+   - reltype - relation type of the connection, can not be string (optional)
+   - data - string to save with connection (optional)
+   - idx - index of the connection (optional)
 
 <b>returns:</b>
 none

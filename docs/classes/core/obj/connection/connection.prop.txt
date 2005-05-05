@@ -16,8 +16,8 @@ property names are:
 - relobj_id
 - pri
 - reltype
-- to.* ( all object fields of connected object)
-- from.* (all object fields of originating object)
+- to.* ( object fields of connected object - name,class_id,parent,modified,modifiedby,flags,status,lang_id,jrk)
+- from.* (object fields of originating object - name,class_id,parent,modified,modifiedby,flags,status,lang_id,jrk)
 
 <b>returns:</b>
 value of the requested property for the current connection

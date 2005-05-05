@@ -5,15 +5,34 @@ finds connections that match the given filter
 
 <b>parameters:</b>
 - array of connection parameters by what to search connections
+  possible array indexes are (all optional and can be arrays):
+    - from - start object of the connection
+    - to - end object of the connection
+    - type - relation type of the connection, can be string, if from.class_id is given
+    - relobj_id - relation object id
+    - idx - index of the connection
+    - [from|to].lang_id - lang_id of the from or to object of the connection
+    - [from|to].flags - flags of the from or to object of the connection
+    - [from|to].modified - modified of the from or to object of the connection
+    - [from|to].modifiedby - modifiedby of the from or to object of the connection
+    - [from|to].name - name of the from or to object of the connection
+    - [from|to].class_id - class_id of the from or to object of the connection
+    - [from|to].jrk - order of the from or to object of the connection 
+    - [from|to].status - status of the from or to object of the connection
+    - [from|to].parent - parent of the from or to object of the connection
 
 <b>returns:</b>
-array of connection objects that match the filter
+array of arrays containing connection data that match the filter
 
 #php#
 <b>examples:</b>
 $conn = new connection();
-$conn->find(array(
+$results = $conn->find(array(
 		"from" => 90,
 		"type" => RELTYPE_FOO
 ));
+foreach($results as $result)
+{
+	echo "from = $result[from] , to = $retult[to] <br>";
+}
 #/php#

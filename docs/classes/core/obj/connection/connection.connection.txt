@@ -1,6 +1,6 @@
 connection class - with this you can manage connections (aliases)
 normally, you do not create these objects yourself, instead you get them from the object class, from the connections() method, except
-if you want to search fonr connections, then you create an empty connection instance and use the search() method
+if you want to search for connections, then you create an empty connection instance and use the search() method on it.
 
 
 <b>constructor</b>
@@ -8,13 +8,19 @@ if you want to search fonr connections, then you create an empty connection inst
 inits the connection
 
 <b>errors:</b>
-- if the parameter is not integer, error is thrown
+- if the parameter is not integer or array, error is thrown
 - if the connection does not exist in the database, error is thrown
 none
 
 <b>parameters:</b>
 - connection id, optional:
-  type: integer
+  type: integer or array
+  array indexes are:
+   - from - start object of the connection (required)
+   - to - end object of the connection (required)
+   - reltype - relation type of the connection, can not be string (optional)
+   - data - string to save with connection (optional)
+   - idx - index of the connection (optional)
 
 <b>returns:</b>
 none
@@ -27,4 +33,12 @@ $conn = new connection(56);
 // find all connections from object 66
 $c = new connection();
 $results = $c->search(array("from" => 66));
+
+// create a new connection
+$c = new connection(array(
+	"from" => 67,
+	"to" => 45,
+	"reltype" => 34343
+));
+$c->save();
 #/php#

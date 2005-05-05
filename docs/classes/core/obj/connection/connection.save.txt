@@ -1,0 +1,19 @@
+saves the current connection - this should be used to save the connection after is has been inited via an array by the constructor or load()
+
+<b>errors:</b>
+error is thrown, if the from and to properties are not set
+error is thrown if the current user has no view access for both endpoints
+
+<b>parameters:</b>
+none
+
+<b>returns:</b>
+none
+
+<b>examples:</b>#php#
+$conn = new connection(array(
+	"from" => 100,
+	"to" => 200
+));
+$conn->save();
+#/php#

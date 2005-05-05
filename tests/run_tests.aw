@@ -3,9 +3,10 @@ $basedir = realpath("..");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini", $argv[1])));
 classload("defs");
-classload("aw_template");
+classload("aw_template","timer");
 classload("core/obj/object", "core/error");
 require_once 'PHPUnit.php';
+$awt = new aw_timer;
 
 if ($argc < 3)
 {

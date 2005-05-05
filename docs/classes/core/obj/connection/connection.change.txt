@@ -1,16 +1,16 @@
-alters the connection parameters that are specified
+alters the connection parameters that are specified. the connection is automatically saved, you do not need to call save() explicitly
 
 <b>errors:</b>
-- if the user does not have view access to the connected objects, acl error is returned
+- if the user does not have view access to the connected objects, acl error is thrown
 
 <b>parameters:</b>
 - array of connection parameters to change, possible indexes are:
-from - object id
-to - object id
-reltype - connection type
-relobj_id - connection object id
-data - connection data
-cached - if the connection is cached
+  from - object id
+  to - object id
+  reltype - connection type
+  relobj_id - connection object id
+  data - connection data
+  cached - if the connection is cached
 
 <b>returns:</b>
 none
