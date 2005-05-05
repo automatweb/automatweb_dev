@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.113 2005/05/02 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.114 2005/05/05 15:56:28 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -166,7 +166,8 @@ class users_user extends aw_template
 		{
 			list($success, $msg) = $auth->check_auth($auth_id, array(
 				"uid" => $uid,
-				"password" => $password
+				"password" => $password,
+				"server" => $server
 			));
 		}
 		else
@@ -176,6 +177,11 @@ class users_user extends aw_template
 				"uid" => $uid,
 				"password" => $password
 			));
+		}
+
+		if ($server != "")
+		{
+			$uid .= ".".$server;
 		}
 
 		$this->msg = $msg;

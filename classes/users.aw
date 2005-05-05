@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.142 2005/05/02 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.143 2005/05/05 15:56:28 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1636,6 +1636,7 @@ class users extends users_user
 		@param remote_host optional
 		@param return optional
 		@param hash optional
+		@param server optional
 		
 		@returns
 		

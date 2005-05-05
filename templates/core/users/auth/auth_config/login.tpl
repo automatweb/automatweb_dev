@@ -5,6 +5,12 @@
 <b>Selle ressursi kasutamiseks peate olema sisse logitud</b>
 </td>
 </tr>
+							<!-- SUB: SERVER_PICKER -->
+						  <tr> 
+                            <td align="left" valign="top" width="123"><b>Server</b>:</td>
+                            <td align="left" valign="top" width="123"><select name="server">{VAR:servers}</select></td>
+                          </tr>
+							<!-- END SUB: SERVER_PICKER -->
 <tr>
 <td>
 	Kasutajanimi:

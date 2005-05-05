@@ -165,6 +165,7 @@
 					<optional name="remote_host" />
 					<optional name="return" />
 					<optional name="hash" />
+					<optional name="server" />
 				</arguments>
 			</function>
 		</action>

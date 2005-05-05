@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.4 2005/04/27 08:26:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.5 2005/05/05 15:56:28 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
@@ -276,6 +276,11 @@ class auth_server_nds extends class_base
 
 	function remove_user_from_group($grp, $cred)
 	{
+		if ($cred["server"] != "")
+		{
+			$cred["uid"] .= ".".$cred["server"];
+		}
+
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
 			"name" => $cred["uid"],
@@ -311,11 +316,16 @@ class auth_server_nds extends class_base
 			$dn = $server->prop("ad_base_dn");
 			$res = ldap_connect($srv, $server->prop("server_port"));
 
+			ldap_bind($res, "cn=".$server->prop("ad_uid").",".$server->prop("ad_base_dn"), $server->prop("ad_pwd"));
+
 			echo "kasutaja info otsing: dn = '$dn' , parameeter = 'uid=$uid' <br>";
 			$sr=ldap_search($res, $dn, "uid=".$uid);
 
 			$info = ldap_get_entries($res, $sr);
 			echo dbg::dump($info);
+
+			/*$sr=ldap_search($res, $server->prop("ad_base_dn"), "(objectClass=groupOfNames)"); 
+			$info = ldap_get_entries($res, $sr);*/
 
 			$this->_proc_credentials($res, $server, $cred);
 		}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.13 2005/04/04 08:47:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.14 2005/05/05 15:56:28 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -132,6 +132,11 @@ class auth_config extends class_base
 			"caption" => t("J&auml;rjekord"),
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "int_name",
+			"caption" => t("Nimetus"),
+			"align" => "center"
+		));
 	}
 
 	function do_servers($arr)
@@ -159,7 +164,12 @@ class auth_config extends class_base
 					"value" => $data[$serv->id()]["jrk"],
 					"size" => 4
 				)),
-				"hidden_jrk" => $data[$serv->id()]["jrk"]
+				"hidden_jrk" => $data[$serv->id()]["jrk"],
+				"int_name" => html::textbox(array(
+					"name" => "data[".$serv->id()."][int_name]",
+					"value" => $data[$serv->id()]["int_name"],
+					"size" => 10
+				)),
 			));
 		}
 
@@ -203,8 +213,19 @@ class auth_config extends class_base
 		// get list of servers, sort by order and try each one
 		$servers = $this->_get_auth_servers($auth_id);
 
+		$settings = obj($auth_id);
+		$dat = $settings->meta("auth");
+
 		foreach($servers as $server)
 		{
+			if ($credentials["server"] != "")
+			{
+				if ($dat[$server->id()]["int_name"] != $credentials["server"])
+				{
+					continue;
+				}
+			}
+
 			$server_inst = get_instance($server->class_id());
 			list($is_valid, $msg, $break_chain) = $server_inst->check_auth($server, $credentials, $this);
 
@@ -269,6 +290,10 @@ class auth_config extends class_base
 	**/
 	function check_local_user($auth_id, $cred)
 	{
+		if ($cred["server"] != "")
+		{
+			$cred["uid"] .= ".".$cred["server"];
+		}
 		obj_set_opt("no_cache", 1);
 		$ol = new object_list(array(
 			"class_id" => CL_USER,
@@ -351,7 +376,42 @@ class auth_config extends class_base
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("login",array(),'users'),
 		));
+		if (is_oid($ac_id = auth_config::has_config()))
+		{
+			$sl = $this->get_server_ext_list($ac_id);
+			$this->vars(array(
+				"servers" => $this->picker(-1, $sl)
+			));
+			if (count($sl))
+			{
+				$this->vars(array(
+					"SERVER_PICKER" => $this->parse("SERVER_PICKER")
+				));
+			}
+		}
 		return $this->parse();
+	}
+
+	function get_server_ext_list($id)
+	{
+		$o = obj($id);
+		$dat = $o->meta("auth");
+		$srvs = $this->_get_auth_servers($id);
+		$ret = array();
+		$empty = true;
+		foreach($srvs as $srv)
+		{
+			$ret[$dat[$srv->id()]["int_name"]] = $srv->name();
+			if ($dat[$srv->id()]["int_name"])
+			{
+				$empty = false;
+			}
+		}
+		if ($empty)
+		{
+			return array();
+		}
+		return $ret;
 	}
 
 	/** if the current page requires login, then remember the url, ask for login and put the user back

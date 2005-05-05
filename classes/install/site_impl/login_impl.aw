@@ -5,6 +5,22 @@ $te = new aw_template;
 $te->tpl_init("");
 $te->read_template("login.tpl");
 
+// if there is an auth config then get the list of servers to add 
+$ac = get_instance(CL_AUTH_CONFIG);
+if (is_oid($ac_id = auth_config::has_config()))
+{
+	$sl = $ac->get_server_ext_list($ac_id);
+	$te->vars(array(
+		"servers" => $te->picker(-1, $sl)
+	));
+	if (count($sl))
+	{
+		$te->vars(array(
+			"SERVER_PICKER" => $te->parse("SERVER_PICKER")
+		));
+	}
+}
+
 $m = get_instance("contentmgmt/site_cache");
 
 $si =&__get_site_instance();
