@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.12 2005/04/27 11:50:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.13 2005/05/05 11:17:28 ahti Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -15,16 +15,23 @@
 @caption Tulpi
 
 @property rows type=textbox size=5 field=meta method=serialize
-@caption ridu
+@caption Ridu
+
+@property style type=relpicker reltype=RELTYPE_STYLE field=meta method=serialize
+@caption Piltide stiil
 
 @groupinfo import caption="Import"
 @default group=import
 
-	@property zip_file type=fileupload store=no
-	@caption Uploadi ZIP fail
+@property zip_file type=fileupload store=no
+@caption Uploadi ZIP fail
 
 @reltype IMG_FOLDER value=1 clid=CL_MENU
-@caption piltide kataloog
+@caption Piltide kataloog
+
+@reltype STYLE value=2 clid=CL_CSS
+@caption Stiil
+
 */
 
 class mini_gallery extends class_base
@@ -127,6 +134,13 @@ class mini_gallery extends class_base
 			$imtpl = $this->get_template_string("IMAGE_BIG_LINKED");
 			$tplar["image_big_linked"] = $imtpl;
 		}
+		$s_id = $ob->prop("style");
+		if(is_oid($s_id) && $this->can("view", $s_id))
+		{
+			$style_i = get_instance(CL_STYLE);
+			active_page_data::add_site_css_style($s_id);
+			$use_style = $style_i->get_style_name($s_id);
+		}
 
 		$str = "";
 		for ($r = 0; $r < $rows; $r++)
@@ -139,15 +153,15 @@ class mini_gallery extends class_base
 					$args = array(
 						"alias" => array(
 							"target" => $img->id()
-						)
+						),
+						"tpls" => $tplar,
+						"use_style" => $use_style,
 					);
-					$args["tpls"] = $tplar;
 					$tmp = $ii->parse_alias($args);
 					$this->vars(array(
 						"imgcontent" => $tmp["replacement"]
 
 					));
-
 					$img = $images->next();
 					$imgc ++;
 				}

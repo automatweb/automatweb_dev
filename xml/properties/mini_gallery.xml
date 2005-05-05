@@ -29,7 +29,17 @@
             <size>5</size>
             <field>meta</field>
             <method>serialize</method>
-            <caption>ridu</caption>
+            <caption>Ridu</caption>
+      </property>
+      <property>
+            <name>style</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Piltide stiil</caption>
       </property>
       <property>
             <name>zip_file</name>
@@ -54,8 +64,13 @@
             <IMG_FOLDER>
                   <value>1</value>
                   <clid>CL_MENU</clid>
-                  <caption>piltide kataloog</caption>
+                  <caption>Piltide kataloog</caption>
             </IMG_FOLDER>
+            <STYLE>
+                  <value>2</value>
+                  <clid>CL_CSS</clid>
+                  <caption>Stiil</caption>
+            </STYLE>
       </reltypes>
 </properties>
 
