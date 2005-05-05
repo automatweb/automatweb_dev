@@ -1,5 +1,5 @@
-`<?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.94 2005/05/05 07:12:26 kristo Exp $
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.95 2005/05/05 07:53:40 kristo Exp $
 // search.aw - Search Manager
 
 /*
