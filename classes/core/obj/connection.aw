@@ -185,6 +185,7 @@ class connection
 		);
 
 		$GLOBALS["object_loader"]->ds->delete_connection($this->conn["id"]);
+		return $this->conn["id"];
 	}
 
 	function id()
