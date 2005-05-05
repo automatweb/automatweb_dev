@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.77 2005/04/29 21:32:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.78 2005/05/05 14:39:10 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -452,11 +452,13 @@ class object_treeview_v2 extends class_base
 		}
 
 		$this->read_template('show.tpl');
+		$this->set_parse_method("eval");
 		// init driver
 		$d_o = obj($ih_ob->prop("ds"));
 		$d_inst = $d_o->instance();
 
 		$this->_insert_styles($ih_ob);
+
 
 		// returns an array of object id's that are folders that are in the object
 		$tree_type = $ob->prop("tree_type");
