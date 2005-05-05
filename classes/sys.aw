@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.50 2005/04/21 09:22:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.51 2005/05/05 14:14:50 ahti Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -180,7 +180,6 @@ class sys extends aw_template
 	{
 		$files = array(
 			"www2.just.ee" => "www2.just.ee",
-			"envir.struktuur.ee" => "envir.struktuur.ee",
 			"work.struktuur.ee" => "work.struktuur.ee",
 			"aw.struktuur.ee" => "aw.struktuur.ee",
 			"idaviru.struktuur.ee" => "idaviru.struktuur.ee",
@@ -191,7 +190,6 @@ class sys extends aw_template
 			"www.ut.ee" => "www.ut.ee",
 			"intranet.automatweb.com" => "intranet.automatweb.com",
 			"www.notar.ee" => "www.notar.ee",
-			"prisma.struktuur.ee" => "prisma.struktuur.ee",
 			"koolitus.automatweb.com" => "koolitus.automatweb.com",
 			"sven.dev.struktuur.ee" => "sven.dev.struktuur.ee",
 			"otto.struktuur.ee" => "otto.struktuur.ee",
@@ -199,7 +197,8 @@ class sys extends aw_template
 			"www.kiosk.ee" => "www.kiosk.ee",
 			"prisma.struktuur.ee" => "prisma.struktuur.ee",
 			"linnaehitus.struktuur.ee" => "linnaehitus.struktuur.ee",
-			"envir.struktuur.ee" => "envir.struktuur.ee"
+			"envir.struktuur.ee" => "envir.struktuur.ee",
+			"bbraun.struktuur.ee" => "bbraun.struktuur.ee",
 		);
 		
 		$this->read_template("compare_db_step1.tpl");
