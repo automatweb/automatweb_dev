@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.35 2005/05/02 10:31:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.36 2005/05/05 14:18:35 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -147,7 +147,7 @@ class calendar_view extends class_base
 				break;
 
 			case "num_next_events":
-				if ($arr["obj_inst"]->prop("use_template") != "last_events")
+				if ($arr["obj_inst"]->prop("use_template") != "last_events" && $arr["obj_inst"]->prop("use_template") != "relative")
 				{
 					return PROP_IGNORE;
 				}
@@ -921,7 +921,6 @@ class calendar_view extends class_base
 			$vcal->event_sources = $sources;
 			$vcal->event_entry_classes = $this->event_entry_classes;
 		}
-		$range = $vcal->get_range($range_p);
 		if ($arr["start_from"])
 		{
 			// this is used by project to limit the year view to start from the current month

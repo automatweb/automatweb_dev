@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.39 2005/05/02 10:31:44 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.40 2005/05/05 14:18:34 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -318,6 +318,10 @@ class project extends class_base
 				"item_end" => $end,
 				"data" => array(
 					"name" => $o->prop("name"),
+					"modifiedby" => $o->modifiedby(),
+					"modified" => $o->modified(),
+					"created" => $o->created(),
+					"createdby" => $o->createdby(),
 					"icon" => icons::get_icon_url($o),
 					"link" => $link,
 				),
@@ -521,7 +525,6 @@ class project extends class_base
 	function get_events($arr)
 	{
 		extract($arr);
-
 		$o = new object($arr["id"]);
 		$orig_conns = $o->connections_from(array(
 			"type" => 103,
@@ -562,6 +565,7 @@ class project extends class_base
 				};
 			};
 		};
+		$limit_num = 100;
 
 		$parent = join(",",$parents);
 
@@ -611,6 +615,16 @@ class project extends class_base
 		
 		if($arr["range"]["viewtype"] == "relative")
 		{
+			if($_GET["date"])
+			{
+				list($d, $m, $y) = split("-", $_GET["date"]);
+				$_start = mktime(23, 59, 59, $m, $d, $y);
+			}
+			else
+			{
+				$_start = mktime(23, 59, 59, 12, 12, 2020);
+			}
+			$_start = 
 			$q = "
 			SELECT 
 				objects.oid AS id,
@@ -622,8 +636,8 @@ class project extends class_base
 				planner.end
 			FROM planner
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
-			WHERE planner.start >= ".($_start - 3600*365)." AND planner.start <= ".($_start + 3600*365)." AND
-			$stat_str AND objects.parent IN (${parent}) order by planner.start LIMIT ".($arr["range"]["past"] + $arr["range"]["future"]);
+			WHERE (planner.start - $_start) <= 0 AND
+			$stat_str AND objects.parent IN (${parent}) order by ($_start - planner.start) LIMIT $limit_num";
 		}
 
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.61 2005/05/02 10:30:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.62 2005/05/05 14:18:35 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -133,7 +133,6 @@ class vcalendar extends aw_template
 		{
 			$range["limit_events"] = $arr["limit_events"];
 		}
-
 		if ($this->overview_range == 3)
 		{
 			// start of the previous month
@@ -584,14 +583,26 @@ class vcalendar extends aw_template
 				$objs = new object_list(array(
 					"parent" => $this->event_sources,
 					"class_id" => $this->event_entry_classes,
-					"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $this->first_event["start1"]),
-					"brother_of" => new obj_predicate_prop("id"),
+					"start1" => new obj_predicate_compare(OBJ_COMP_LESS, $this->first_event["start1"]),
+					//"brother_of" => new obj_predicate_prop("id"),
 					"oid" => new obj_predicate_not($f->brother_of()),
 					"status" => $this->obj_status,
-					"limit" => $this->limit_events,
+					"limit" => $this->limit_events ? $this->limit_events : 1,
 					"sort_by" => "planner.start DESC",
+					"site_id" => array(),
 				));
-				if($obj = $objs->last())
+				if($this->range["viewtype"] == "relative")
+				{
+					if($obj = $objs->begin())
+					{
+						$fo = true;
+					}
+				}
+				elseif($obj = $objs->last())
+				{
+					$fo = true;
+				}
+				if($fo)
 				{
 					$this->vars(array(
 						"prevlink" => aw_url_change_var(array(
@@ -608,14 +619,26 @@ class vcalendar extends aw_template
 				$objs = new object_list(array(
 					"parent" => $this->event_sources,
 					"class_id" => $this->event_entry_classes,
-					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $this->last_event["start1"]),
-					"brother_of" => new obj_predicate_prop("id"),
+					"start1" => new obj_predicate_compare(OBJ_COMP_GREATER, $this->last_event["start1"]),
+					//"brother_of" => new obj_predicate_prop("id"),
 					"oid" => new obj_predicate_not($l->brother_of()),
 					"status" => $this->obj_status,
-					"limit" => 1,
+					"limit" => $this->limit_events ? $this->limit_events : 1,
 					"sort_by" => "planner.start ASC",
+					"site_id" => array(),
 				));
-				if($obj = $objs->begin())
+				if($this->range["viewtype"] == "relative")
+				{
+					if($obj = $objs->last())
+					{
+						$lo = true;
+					}
+				}
+				elseif($obj = $objs->begin())
+				{
+					$lo = true;
+				}
+				if($lo)
 				{
 					$this->vars(array(
 						"nextlink" => aw_url_change_var(array(
@@ -1057,7 +1080,7 @@ class vcalendar extends aw_template
 	{
 		$this->read_template("relative_view.tpl");
 		$ok = false;
-		$events = $this->past;
+		//$events = $this->past;
 
 		$limit = $this->past_limit;
 		$count = 0;
@@ -1067,6 +1090,10 @@ class vcalendar extends aw_template
 		if (is_array($this->past))
 		{
 			uasort($this->past,array($this,"__desc_sort"));
+			if(!$this->first_event)
+			{
+				$this->last_event = reset($this->past);
+			}
 			foreach($this->past as $event)
 			{
 				$count++;
@@ -1080,6 +1107,8 @@ class vcalendar extends aw_template
 				};
 			};
 		};
+		//arr(dbg::process_backtrace(debug_backtrace()));
+		$this->first_event = $event;
 
 		$limit = $this->future_limit;
 		$count = 0;
@@ -1101,6 +1130,7 @@ class vcalendar extends aw_template
 				};
 			};
 		};
+		
 
 		$this->vars(array(
 			"PAST_EVENT" => $past, 

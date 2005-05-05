@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.4 2005/04/25 12:40:07 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/flyer.aw,v 1.5 2005/05/05 14:18:34 ahti Exp $
 // flyer.aw - Flaier 
 /*
 
@@ -210,7 +210,6 @@ class flyer extends class_base
 			"width" => $mes["width"],
 			"height" => $mes["height"],
 			"url" => $this->mk_my_orb("show_flyer", array("id" => $obj->id()), CL_FLYER, false ,true),
-			"menubar" => 1,
 			"resizable" => 1,
 		));
 	}
