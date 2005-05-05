@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.10 2005/04/08 11:44:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.11 2005/05/05 13:47:43 duke Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -110,6 +110,15 @@ class staging extends class_base
 			"caption" => t("Aktiivne objekt"),
 		);
 		*/
+		$rv["orig_id_" . $prefix] = array(
+			"type" => "text",
+			"name" => $prefix . "[orig_id]",
+			"value" => html::href(array(
+				"url" => $this->mk_my_orb("change",array("id" => $o->id())),
+				"caption" => $o->id(),
+			)),
+			"caption" => t("Originaalobjekti ID"),
+		);
 		
 		$rv["active_" . $prefix] = array(
 			"type" => "text",
