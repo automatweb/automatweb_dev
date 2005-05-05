@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.30 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.31 2005/05/05 09:23:12 ahti Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -387,10 +387,14 @@ class crm_meeting extends class_base
 		$output_form = $cform_obj->prop("use_output");
 		if (is_oid($output_form))
 		{
-			$cform = $output_form;
-		};
-		$t = get_instance(CL_CFGFORM);
-		$props = $t->get_props_from_cfgform(array("id" => $cform));
+			$t = get_instance(CL_CFGFORM);
+			$props = $t->get_props_from_cfgform(array("id" => $output_form));
+		}
+		else
+		{
+			$props = $this->load_defaults();
+		}
+
 		$htmlc = get_instance("cfg/htmlclient",array("template" => "webform.tpl"));
 		$htmlc->start_output();
 
