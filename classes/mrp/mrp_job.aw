@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.64 2005/05/04 08:59:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.65 2005/05/05 12:04:42 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -398,7 +398,7 @@ class mrp_job extends class_base
 			//"img" => "new.gif",
 			"tooltip" => t("Alusta"),
 			"action" => "start",
-			// "confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?"),
+			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?"),
 			"disabled" => $disabled,
 		));
 
@@ -426,6 +426,7 @@ class mrp_job extends class_base
 			"tooltip" => t("Paus"),
 			"action" => "pause",
 			"disabled" => $disabled_inprogress,
+			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d pausile panna?"),
 		));
 		$toolbar->add_button(array(
 			"name" => "end_shift",
@@ -458,6 +459,7 @@ class mrp_job extends class_base
 			"tooltip" => t("J&auml;tka"),
 			"action" => $action,
 			"disabled" => $disabled,
+			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d j&auml;tkata?"),
 		));
 
 		$toolbar->add_button(array(
@@ -1384,17 +1386,21 @@ class mrp_job extends class_base
 
 	function add_comment($job, $comment)
 	{
-		$job = obj($job);
-		$hist = safe_array($job->meta("change_comment_history"));
-		array_unshift($hist, array(
-			"tm" => time(),
-			"uid" => aw_global_get("uid"),
-			"text" => trim($comment)
-		));
-		$job->set_meta("change_comment_history", $hist);
 		if (trim($comment) != "")
 		{
+			$job = obj($job);
+			$hist = safe_array($job->meta("change_comment_history"));
+			array_unshift($hist, array(
+				"tm" => time(),
+				"uid" => aw_global_get("uid"),
+				"text" => trim($comment)
+			));
+			$job->set_meta("change_comment_history", $hist);
+
 			aw_disable_acl();
+			$workspace_i = get_instance(CL_MRP_WORKSPACE);
+			$workspace_i->mrp_log($job->prop("project"), $job->id(), t("Lisas kommentaari"), $comment);
+
 			$job->save();
 			aw_restore_acl();
 		}

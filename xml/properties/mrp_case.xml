@@ -472,6 +472,9 @@
       <layout>
             <manager>
                   <type>hbox</type>
+                  <width>
+                  <![CDATA["20%:80%"]]>
+                  </width>
                   <group>grp_case_workflow</group>
             </manager>
       </layout>

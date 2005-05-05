@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.75 2005/05/03 11:49:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.76 2005/05/05 12:04:42 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -149,7 +149,7 @@ default group=grp_case_material
 
 
 @default group=grp_case_workflow
-	@layout manager type=hbox
+	@layout manager type=hbox width="20%:80%"
 	@property resource_tree type=text store=no no_caption=1 parent=manager
 	@property workflow_table type=table store=no no_caption=1 parent=manager
 
@@ -1318,7 +1318,12 @@ class mrp_case extends class_base
 								break;
 						}
 
-						$job->set_comment($arr["request"]["comments"][$job->id()]);
+						if ($job->comment() != $arr["request"]["comments"][$job->id()])
+						{
+							$job->set_comment($arr["request"]["comments"][$job->id()]);
+							$workspace_i = get_instance(CL_MRP_WORKSPACE);
+							$workspace_i->mrp_log($job->prop("project"), $job->id(), t("Lisas kommentaari"), $arr["request"]["comments"][$job->id()]);
+						}
 
 						aw_disable_acl();
 						$job->save ();

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.48 2005/04/18 08:49:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.49 2005/05/05 12:04:42 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -200,6 +200,22 @@ class aw_table extends aw_template
 	function set_default_sorder($dir)
 	{
 		$this->default_odir = $dir;
+	}
+
+	/** defines that the table has a pager
+
+		@attrib api=1
+
+		@comment
+			type -> "text" || "buttons" || "lb"
+			records_per_page -> number of records per page
+			
+	**/
+	function define_pageselector($arr)
+	{
+		$this->has_pages = true;
+		$this->records_per_page = $arr["records_per_page"];
+		$this->pageselector = $arr["type"];
 	}
 
 	////

@@ -680,6 +680,23 @@
             <caption>Legend</caption>
       </property>
       <property>
+            <name>printer_jobs_prev_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
+      <property>
             <name>printer_jobs</name>
             <table>objects</table>
             <field>meta</field>
@@ -695,6 +712,23 @@
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
+      </property>
+      <property>
+            <name>printer_jobs_next_link</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
       </property>
       <property>
             <name>pj_toolbar</name>
@@ -854,7 +888,27 @@
             </group>
             <type>text</type>
             <store>no</store>
+            <parent>resource_hbox</parent>
+            <no_caption>1</no_caption>
             <caption>Ressurss</caption>
+      </property>
+      <property>
+            <name>pj_job_comment</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>text</type>
+            <store>no</store>
+            <parent>resource_hbox</parent>
+            <caption>T&amp;ouml;&amp;ouml; kommentaar</caption>
       </property>
       <property>
             <name>pj_state</name>
@@ -1318,6 +1372,21 @@
                   </group>
                   <caption>Kommentaar</caption>
             </comment_hbox>
+            <resource_hbox>
+                  <type>hbox</type>
+                  <width>
+                  <![CDATA["50%:50%"]]>
+                  </width>
+                  <group>
+                        <num_0>grp_printer_current</num_0>
+                        <num_1>grp_printer_done</num_1>
+                        <num_2>grp_printer_aborted</num_2>
+                        <num_3>grp_printer_in_progress</num_3>
+                        <num_4>grp_printer_startable</num_4>
+                        <num_5>grp_printer_notstartable</num_5>
+                  </group>
+                  <caption>Ressurss</caption>
+            </resource_hbox>
       </layout>
 </properties>
 

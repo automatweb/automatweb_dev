@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.116 2005/05/03 13:42:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.117 2005/05/05 12:04:42 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -223,7 +223,11 @@
 	@property printer_legend type=text
 	@caption Legend
 
+	@property printer_jobs_prev_link type=text store=no no_caption=1
+
 	@property printer_jobs type=table no_caption=1
+
+	@property printer_jobs_next_link type=text store=no no_caption=1
 
 	@property pj_toolbar type=toolbar store=no no_caption=1
 	@caption Muuda staatust
@@ -260,8 +264,14 @@
 	property pj_post_buffer type=text store=no
 	caption Järelpuhveraeg (h)
 
-	@property pj_resource type=text store=no
+	@layout resource_hbox type=hbox width="50%:50%"
 	@caption Ressurss
+
+	@property pj_resource type=text store=no parent=resource_hbox no_caption=1
+	@caption Ressurss
+
+	@property pj_job_comment type=text store=no parent=resource_hbox
+	@caption T&ouml;&ouml; kommentaar
 
 	@property pj_state type=text store=no
 	@caption Staatus
@@ -612,6 +622,10 @@ class mrp_workspace extends class_base
 						$prop["value"] = join("<br>", $txt);
 						break;
 
+					case "job_comment":
+						$prop["value"] = $job->comment();
+						break;
+
 					default:
 						$prop["value"] = $job->prop($rpn);
 						if ($prop["value"] == "" && $prop["name"] != "pj_change_comment")
@@ -880,6 +894,32 @@ class mrp_workspace extends class_base
 
 			case "chart_search":
 				$this->_chart_search($arr);
+				break;
+
+			case "printer_jobs_next_link":
+				if ($arr["request"]["pj_job"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::href(array(
+					"url" => aw_url_change_var("printer_job_page", $arr["request"]["printer_job_page"]+1),
+					"caption" => t("J&auml;rgmine lehek&uuml;lg")
+				));
+				break;
+
+			case "printer_jobs_prev_link":
+				if ($arr["request"]["pj_job"])
+				{
+					return PROP_IGNORE;
+				}
+				if (!$arr["request"]["printer_job_page"])
+				{
+					return PROP_IGNORE;
+				}
+				$prop["value"] = html::href(array(
+					"url" => aw_url_change_var("printer_job_page", $arr["request"]["printer_job_page"]-1),
+					"caption" => t("Eelmine lehek&uuml;lg")
+				));
 				break;
 		}
 		return $retval;
@@ -1412,73 +1452,109 @@ if ($_GET['show_thread_data'] == 1)
 		$tree->add_item (0, array (
 			"name" => t("Plaanisolevad") . " (" . $count_projects_planned . ")",
 			"id" => "planned",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "planned"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "planned",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Hetkel töös") . " (" . $count_projects_in_work . ")",
 			"id" => "inwork",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "inwork"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "inwork",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Planeeritud üle tähtaja") . " (" . $count_projects_planned_overdue . ")",
 			"id" => "planned_overdue",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "planned_overdue"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "planned_overdue",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Üle tähtaja") . " (" . $count_projects_overdue . ")",
 			"id" => "overdue",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "overdue"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "overdue",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Uued") . " (" . $count_projects_new . ")",
 			"id" => "new",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "new"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "new",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Katkestatud") . " (" . $count_projects_aborted . ")",
 			"id" => "aborted",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "aborted"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "aborted",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Plaanist väljas") . " (" . $count_projects_onhold . ")",
 			"id" => "onhold",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "onhold"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "onhold",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Valmis") . " (" . $count_projects_done . ")",
 			"id" => "done",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "done"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "done",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Arhiveeritud") . " (" . $count_projects_archived . ")",
 			"id" => "archived",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "archived"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "archived",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Kõik projektid") . " (" . $count_projects_all . ")",
 			"id" => "all",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "all"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "all",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Allhanket&ouml;&ouml;d") . " (" . $count_jobs_subcontracted . ")",
 			"id" => "subcontracts",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "subcontracts"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "subcontracts",
+				"ft_page" => 0
+			)),
 		));
 
 		$tree->add_item (0, array (
 			"name" => t("Katkestatud t&ouml;&ouml;d") . " (" . $count_jobs_aborted . ")",
 			"id" => "aborted_jobs",
-			"url" => aw_url_change_var ("mrp_tree_active_item", "aborted_jobs"),
+			"url" => aw_url_change_var (array(
+				"mrp_tree_active_item" => "aborted_jobs",
+				"ft_page" => 0
+			)),
 		));
 
 		$active_node = empty ($arr["request"]["mrp_tree_active_item"]) ? "planned" : $arr["request"]["mrp_tree_active_item"];
@@ -1777,6 +1853,11 @@ if ($_GET['show_thread_data'] == 1)
 
 			$table->define_data($definition);
 		}
+
+		$table->define_pageselector(array(
+			"type" => "text",
+			"records_per_page" => 30
+		));
 	}
 
 	function create_subcontract_jobs_list ($arr = array ())
@@ -1893,6 +1974,10 @@ if ($_GET['show_thread_data'] == 1)
 
 			$table->define_data($definition);
 		}
+		$table->define_pageselector(array(
+			"type" => "text",
+			"records_per_page" => 30
+		));
 	}
 
 	function create_aborted_jobs_list ($arr = array ())
@@ -3148,7 +3233,6 @@ if ($_GET['show_thread_data'] == 1)
 			"format" => "d.m.Y H:i",
 			"numeric" => 1,
 			"chgbgcolor" => "bgcol",
-			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -3175,7 +3259,6 @@ if ($_GET['show_thread_data'] == 1)
 			"caption" => t("Klient"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
-			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -3207,7 +3290,6 @@ if ($_GET['show_thread_data'] == 1)
 			"caption" => t("Ava"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
-			"sortable" => 1
 		));
 	}
 
@@ -3220,45 +3302,85 @@ if ($_GET['show_thread_data'] == 1)
 			"ws" => $arr["obj_inst"]
 		));
 
-		$limit = 200;
+		$per_page = 50;
+
+		$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",".$per_page;
 		switch ($arr["request"]["group"])
 		{
 			case "grp_printer_done":
 				$states = array(MRP_STATUS_DONE);
-				$default_sortby = "tm_end";
+				$default_sortby = "mrp_job.started";
 				break;
 
 			case "grp_printer_aborted":
 				$states = array(MRP_STATUS_ABORTED);
-				$default_sortby = "tm";
+				$default_sortby = "mrp_job.started";
 				break;
 
 			case "grp_printer":
 			case "grp_printer_current":
-				$default_sortby = "tm";
+				$default_sortby = "mrp_job.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_in_progress":
-				$default_sortby = "tm";
+				$default_sortby = "mrp_job.starttime";
 				$states = array(MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_startable":
 			case "grp_printer_notstartable":
-				$default_sortby = "tm";
+				$default_sortby = "mrp_job.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
-				$limit = 100;
 				break;
 		}
 
+		$sby = $arr["request"]["sortby"];
+		if ($sby == "")
+		{
+			$sby = $default_sortby;
+		}
+		else
+		{
+			// map to db table
+			switch($sby)
+			{
+				case "tm":
+					$sby = "mrp_job.starttime";
+					break;
+
+				case "length":
+					$sby = "mrp_job.length";
+					break;
+
+				case "status":
+					$sby = "mrp_job.status";
+					break;
+
+				case "project":
+					$sby = "mrp_job.project";
+					break;
+
+				case "job_comment":
+					$sby = "objects.comment";
+					break;
+
+				case "resource":
+					$sby ="mrp_job.resource";
+					break;
+			}
+		}
+
+		if ($sby != "" && $arr["request"]["sort_order"] != "")
+		{
+			$sby .= " ".$arr["request"]["sort_order"];
+		}
 		classload("date_calc");
 		$jobs = $this->get_next_jobs_for_resources(array(
 			"resources" => $res,
 			"limit" => $limit,
-//			"minstart" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? get_day_start() : NULL),
-//			"maxend" => ($arr["request"]["group"] == "grp_printer_current" || $arr["request"]["group"] == "grp_printer" ? NULL : get_day_start()),
-			"states" => $states
+			"states" => $states,
+			"sort_by" => $sby
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -3282,8 +3404,8 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-			}
+					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+				}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3296,12 +3418,12 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-				$custo = html::get_change_url($cust->id(), array(
-						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-					),
-					$cust->name()
-				);
-			}
+					$custo = html::get_change_url($cust->id(), array(
+							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+						),
+						$cust->name()
+					);
+				}
 				else
 				{
 					$custo = $cust->name();
@@ -3417,8 +3539,9 @@ if ($_GET['show_thread_data'] == 1)
 			));
 		}
 
-		$t->set_default_sortby($default_sortby);
-		$t->sort_by();
+		//$t->set_default_sortby($default_sortby);
+		//$t->sort_by();
+		$t->set_sortable(false);
 	}
 
 	function get_cur_printer_resources_desc($arr)
@@ -3598,19 +3721,13 @@ if ($_GET['show_thread_data'] == 1)
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			//"starttime" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $arr["minstart"]),
-			"sort_by" => "mrp_job.starttime"
+			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_job.starttime"
 		);
 
 		if ($arr["states"])
 		{
 			$filt["state"] = $arr["states"];
 		}
-
-		/*if ($arr["maxend"] > 100 )
-		{
-			$filt["starttime"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, 100, $arr["maxend"]);
-		}*/
 
 		$jobs = new object_list($filt);
 
@@ -3692,6 +3809,7 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "save_comment",
 			"tooltip" => t("Salvesta kommentaar"),
 			"action" => "save_pj_comment",
+			"confirm" => t("Oled kindel et soovid kommentaari salvestada?"),
 		));
 		$arr["obj_inst"] = $tmp;
 	}
@@ -3980,6 +4098,12 @@ if ($_GET['show_thread_data'] == 1)
 	{
 		if ($arr["id"] == "grp_login_select_res")
 		{
+			return false;
+		}
+
+		if ($_GET["group"] == "grp_login_select_res")
+		{
+			unset($arr["classinfo"]["relationmgr"]);
 			return false;
 		}
 		return true;
