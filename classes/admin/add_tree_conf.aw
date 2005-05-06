@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.30 2005/03/24 11:13:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.31 2005/05/06 09:20:09 kristo Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -222,6 +222,10 @@ class add_tree_conf extends class_base
 	**/
 	function get_current_conf()
 	{
+		if (aw_ini_get("acl.check_prog") == 0)
+		{
+			return false;
+		}
 		$ret = false;
 
 		// go over groups and for each check if it has the conf
