@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.31 2005/05/06 09:20:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.32 2005/05/06 11:47:41 ahti Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -416,8 +416,70 @@ class add_tree_conf extends class_base
 				$ret = false;
 			}
 		}
-
 		return $ret;
+	}
+	
+	
+	function can_access_classes($atc, $classes)
+	{
+		$grps = $atc->meta("folder_structure");
+		if (!is_array($grps))
+		{
+			$grps = aw_ini_get("classfolders");
+		}
+		$us = $atc->meta("usable");
+		$v = $atc->meta("visible");
+		$clss = $atc->meta("class_structure");
+		if (!is_array($clss))
+		{
+			$clss = aw_ini_get("classes");
+		}
+		$tmp = array();
+		foreach($classes as $key => $val)
+		{
+			$tmp[$key] = array();
+			foreach($val as $class => $vadeva)
+			{
+				if(!($us[$class] == 1))
+				{
+					continue;
+				}
+				if ($class != CL_MENU)
+				{
+					// also, if the class is in some groups and for all those groups access has been turned off
+					// do not show the alias
+					$grp = explode(",",$clss[$class]["parents"]);
+					$show = false;
+					foreach($grp as $g)
+					{
+						// must check group parents as well :(
+						$has_grp = $v["fld"][$g];
+						if ($has_grp)
+						{
+							while ($g)
+							{
+								if (!$v["fld"][$g])
+								{
+									$has_grp = false;
+									break;
+								}
+								$g = $grps[$g]["parent"];
+							}
+						}
+						if ($has_grp)
+						{
+							$show = true;
+						}
+					}
+					if(!$show)
+					{
+						continue;
+					}
+				}
+				$tmp[$key][$class] = $vadeva;
+			}
+		}
+		return $tmp;
 	}
 
 	function on_site_init($dbi, $site, &$ini_opts, &$log, &$osi_vars)

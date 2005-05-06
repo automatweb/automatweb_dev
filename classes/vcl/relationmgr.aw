@@ -94,18 +94,7 @@ class relationmgr extends aw_template
 		}
 		if($filt)
 		{
-			$tmp = array();
-			foreach($this->rel_classes as $key => $val)
-			{
-				foreach($val as $key2 => $val2)
-				{
-					if($atc->can_access_class($adc, $val2))
-					{
-						$tmp[$key][$key2] = $val2;
-					}
-				}
-			}
-			$this->true_rel_classes = $tmp;
+			$this->true_rel_classes = $atc->can_access_classes($adc, $this->rel_classes);
 			$tmp = array();
 			foreach($this->clids as $key => $val)
 			{
