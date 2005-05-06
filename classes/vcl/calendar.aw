@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.62 2005/05/05 14:18:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.63 2005/05/06 11:48:20 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1090,7 +1090,7 @@ class vcalendar extends aw_template
 		if (is_array($this->past))
 		{
 			uasort($this->past,array($this,"__desc_sort"));
-			if(!$this->first_event)
+			if(!$this->last_event)
 			{
 				$this->last_event = reset($this->past);
 			}
@@ -1116,6 +1116,7 @@ class vcalendar extends aw_template
 		if (is_array($this->future))
 		{
 			uasort($this->future,array($this,"__asc_sort"));
+			$this->last_event = end($this->future);
 			foreach($this->future as $event)
 			{
 				$count++;
