@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.65 2005/05/05 12:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.66 2005/05/06 06:23:39 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1225,7 +1225,14 @@ class mrp_job extends class_base
 		}
 
 		### check if project is ready to go on
-		$project = $job->get_first_obj_by_reltype ("RELTYPE_MRP_PROJECT");
+		if (is_oid($job->prop("project")) && $this->can("view", $job->prop("project")))
+		{
+			$project = obj($job->prop("project"));
+		}
+		if (!$project)
+		{
+			return false;
+		}
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PLANNED,
