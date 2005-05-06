@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.34 2005/05/05 06:54:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.35 2005/05/06 11:28:43 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -584,6 +584,7 @@ class object_import extends class_base
 		if ($o->prop("ds"))
 		{
 			set_time_limit(0);
+			ignore_user_abort(true);
 			$sc = get_instance("scheduler");
 			$sc->add(array(
 				"event" => $this->mk_my_orb("do_check_import"),
@@ -789,7 +790,7 @@ class object_import extends class_base
 			}
 
 			$this->_add_log($o, $this->_delete_objects($o, $properties, $tableinfo, $data_rows, $p2c, $userval, $class_id));
-			
+
 			$this->do_mark_finish_import($o);
 			echo t("Valmis! <br>\n");
 			echo "<script language=javascript>setTimeout(\"window.location='".$this->mk_my_orb("change", array("id" => $o->id()))."'\", 5000);</script>";
