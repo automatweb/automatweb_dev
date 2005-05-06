@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.78 2005/05/05 14:39:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.79 2005/05/06 09:53:16 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -452,7 +452,6 @@ class object_treeview_v2 extends class_base
 		}
 
 		$this->read_template('show.tpl');
-		$this->set_parse_method("eval");
 		// init driver
 		$d_o = obj($ih_ob->prop("ds"));
 		$d_inst = $d_o->instance();
