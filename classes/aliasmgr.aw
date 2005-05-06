@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.178 2005/04/19 17:48:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.179 2005/05/06 09:50:53 ahti Exp $
 
 class aliasmgr extends aw_template
 {
@@ -433,6 +433,12 @@ class aliasmgr extends aw_template
 					// if not, then parse all the aliases one by one
 					foreach($claliases as $avalue => $adata)
 					{
+						// if there is no object, then we just skip it -- ahz
+						if(!is_oid($adata["target"]) || !$this->can("view", $adata["target"]))
+						{
+							$source = str_replace($avalue, "", $source);
+							continue;
+						}
 						// check if the alias is cached
 						// if nothing comes up, we just replace it with a empty string
 						$replacement = $this->get_alias_cache($adata, $$emb_obj_name, &$cache_inst);
