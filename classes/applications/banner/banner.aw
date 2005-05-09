@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.9 2005/04/21 09:33:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.10 2005/05/09 09:09:34 kristo Exp $
 
 /*
 
@@ -278,6 +278,7 @@ class banner extends class_base
 	// !adds a record to the banner_ids table to identify shown banners l8r
 	function add_view($bid,$ss,$noview,$clid)
 	{
+		$this->quote(&$ss);
 		$this->db_query("INSERT INTO banner_ids(ss,bid,tm,clid) values('$ss','$bid',".time().",'$clid')");
 		if (!$noview)
 		{
