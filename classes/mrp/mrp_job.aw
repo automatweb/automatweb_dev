@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.66 2005/05/06 06:23:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.67 2005/05/09 11:53:47 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1267,7 +1267,7 @@ class mrp_job extends class_base
 		}*/
 
 		// get max number of threads for resource
-		$max_jobs = min(1, count($resource->prop("thread_data")));
+		$max_jobs = max(1, count($resource->prop("thread_data")));
 		// get number of jobs using resource
 		$cur_jobs = $this->db_fetch_field("
 			SELECT 

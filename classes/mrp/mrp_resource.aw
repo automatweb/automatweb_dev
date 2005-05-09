@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.62 2005/05/09 08:31:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.63 2005/05/09 11:53:47 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -1053,7 +1053,7 @@ class mrp_resource extends class_base
 				$resource->save ();
 				aw_restore_acl();
 				//return $started;
-				$max_jobs = min(1, count($resource->prop("thread_data")));
+				$max_jobs = max(1, count($resource->prop("thread_data")));
 				$cur_jobs = $this->db_fetch_field("
 					SELECT
 						count(j.oid) AS cnt 
