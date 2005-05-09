@@ -557,6 +557,18 @@ function get_instance($class,$args = array(), $errors = true)
 	return $instance;
 }
 
+function load_class_translations($class)
+{
+	if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	{
+		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
+		if (file_exists($trans_fn))
+		{
+			require_once($trans_fn);
+		}
+	}
+}
+
 function upd_instance($class,$ref)
 {
 	$id = sprintf("instance::%s",$class);

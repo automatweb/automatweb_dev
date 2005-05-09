@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.53 2005/05/09 10:35:12 kristo Exp $
+// $Id: cfgutils.aw,v 1.54 2005/05/09 10:37:47 kristo Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -120,10 +120,7 @@ class cfgutils extends aw_template
 			$file = $this->clist[$clid];
 		};
 		$fqfn = $this->fbasedir . $file . ".xml";
-		if (is_class_id($__clid = clid_for_name($file)))
-		{
-			$_unused = get_instance($__clid);
-		}
+		load_class_translations($file);
 
 		$source = $this->get_file(array("file" => $fqfn));
 		$properties = array();
