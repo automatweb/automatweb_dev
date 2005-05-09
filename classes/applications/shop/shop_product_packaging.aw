@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.15 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.16 2005/05/09 13:31:53 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -199,6 +199,10 @@ class shop_product_packaging extends class_base
 			$parent_fld = obj($parent_fld->parent());
 		}
 		while($parent_fld->class_id() != CL_MENU && $parent_fld->parent());
+
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->get_cart($oc_obj);
+		$inf = $soc->get_item_in_cart($pi->id());
 		$ivs = array(
 			"packaging_name" => $pi->name(),
 			"packaging_price" => $this->get_price($pi),
@@ -210,6 +214,7 @@ class shop_product_packaging extends class_base
 			"tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($prod)), 2),
 			"obj_price" => $this->get_price($pi),
 			"obj_tot_price" => number_format(((int)($arr["quantity"]) * $this->get_calc_price($pi)), 2),
+			"read_price_total" => number_format(((int)($arr["quantity"]) * str_replace(",", "", $inf["data"]["read_price"])), 2),
 			"id" => $prod->id(),
 			"trow_id" => "trow".$prod->id(),
 			"err_class" => ($arr["is_err"] ? "class='selprod'" : ""),
@@ -297,9 +302,6 @@ class shop_product_packaging extends class_base
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 
 		// order data
-		$soc = get_instance(CL_SHOP_ORDER_CART);
-		$soc->get_cart($oc_obj);
-		$inf = $soc->get_item_in_cart($pi->id());
 		$awa = new aw_array($inf["data"]);
 		foreach($awa->get() as $datan => $datav)
 		{

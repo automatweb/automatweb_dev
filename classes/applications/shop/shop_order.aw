@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.29 2005/04/21 09:32:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.30 2005/05/09 13:31:52 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -650,7 +650,8 @@ class shop_order extends class_base
 
 		$p = "";
 		$total = 0;
-		
+
+	
 		foreach($prods as $prod)
 		{
 			$inst = $prod->instance();
@@ -692,7 +693,8 @@ class shop_order extends class_base
 			$this->vars(array(
 				"prod_name" => $product_info->name(),
 				"prod_price" => $product_info_i->get_price($product_info),
-				"prod_tot_price" => number_format($cur_tot, 2)
+				"prod_tot_price" => number_format($cur_tot, 2),
+				"read_price_total" => number_format($tp[$prod->id()] * str_replace(",", "", $ord_item_data[$prod->id()]["read_price"]), 2)
 			));
 
 			foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
