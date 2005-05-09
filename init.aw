@@ -363,7 +363,11 @@ function lc_load($file)
 function lc_site_load($file,&$obj)
 {
 //	enter_function("__global::lc_site_load",array());
-	$LC = aw_global_get("LC");
+	$LC = aw_global_get("admin_lang_lc");
+	if ($LC == "")
+	{
+		$LC = "et";
+	}
 	$fname = $GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/".$LC."/$file.".$GLOBALS["cfg"]["__default"]["ext"];
 	@include_once($GLOBALS["cfg"]["__default"]["site_basedir"]."/lang/" . $LC . "/$file.".$GLOBALS["cfg"]["__default"]["ext"]);
 	if ($obj)
@@ -602,10 +606,9 @@ function aw_startup()
 
 	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
-
 	$l = get_instance("languages");
 	$l->request_startup();
-
+	
 	// check multi-lang frontpage
 	if (is_array($GLOBALS["cfg"]["__default"]["frontpage"]))
 	{
@@ -619,13 +622,13 @@ function aw_startup()
 
 	$p = get_instance(CL_PERIOD);
 	$p->request_startup();
-
+	
 	// this check reduces the startup memory usage for not logged in users by a whopping 1.3MB! --duke
 	// 
 	// the check was if user is logged on. now we need to do this all the time, because public users are acl controlled now. 
 	$u = get_instance("users");
 	$u->request_startup();
-
+	
 	if (!is_array(aw_global_get("gidlist")))
 	{
 		aw_global_set("gidlist", array());
@@ -634,10 +637,10 @@ function aw_startup()
 
 	#$syslog = get_instance("syslog/syslog");
 	#$syslog->request_startup();
-
+	
 	$m = get_instance("menuedit");
 	$m->request_startup();
-
+	
 	__init_aw_session_track();
 
 //	list($micro,$sec) = split(" ",microtime());
