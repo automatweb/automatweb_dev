@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.187 2005/04/23 18:46:58 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.188 2005/05/09 14:57:18 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -225,7 +225,7 @@ if (!defined("DEFS"))
 		if (sizeof($arg_list) > 1)
 		{
 			$arg_list[0] = array($arg1 => $arg2);
-		}
+		};
 		if (!$url)
 		{
 			$url = aw_global_get("REQUEST_URI");
@@ -352,8 +352,7 @@ if (!defined("DEFS"))
 	// !tagastab lokaliseeritud päevanime
 	function get_lc_weekday($id)
 	{
-		$daynames = explode("|",LC_WEEKDAY);
-		return $daynames[$id];
+		return locale::get_lc_weekday($id);
 	}
 
 	////
