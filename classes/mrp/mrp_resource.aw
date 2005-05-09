@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.61 2005/05/03 11:49:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.62 2005/05/09 08:31:26 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -1052,8 +1052,25 @@ class mrp_resource extends class_base
 				aw_disable_acl();
 				$resource->save ();
 				aw_restore_acl();
-				return $started;
-
+				//return $started;
+				$max_jobs = min(1, count($resource->prop("thread_data")));
+				$cur_jobs = $this->db_fetch_field("
+					SELECT
+						count(j.oid) AS cnt 
+					FROM 
+						mrp_job j
+						LEFT JOIN objects o ON o.oid = j.oid
+					WHERE 
+						j.resource = ".$resource->id()." AND 
+						o.status > 0 AND
+						j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
+				", "cnt");
+				// compare
+				if ($cur_jobs >= $max_jobs)
+				{
+					return false;
+				}
+				return true;
 			default:
 				return false;
 		}
