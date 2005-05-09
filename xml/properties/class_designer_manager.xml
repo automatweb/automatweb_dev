@@ -32,6 +32,38 @@
             <parent>mgr_hbox</parent>
             <store>no</store>
       </property>
+      <property>
+            <name>rels_tb</name>
+            <table>objects</table>
+            <group>rels</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>rels_tree</name>
+            <table>objects</table>
+            <group>rels</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <no_caption>1</no_caption>
+            <parent>rels_hbox</parent>
+            <store>no</store>
+      </property>
+      <property>
+            <name>rels_tbl</name>
+            <table>objects</table>
+            <group>rels</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>rels_hbox</parent>
+            <store>no</store>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -43,6 +75,10 @@
                   <caption>Manager</caption>
                   <submit>no</submit>
             </mgr>
+            <rels>
+                  <caption>Seosed</caption>
+                  <submit>no</submit>
+            </rels>
       </groupinfo>
       <layout>
             <mgr_hbox>
@@ -50,6 +86,11 @@
                   <width>20%:80%</width>
                   <group>mgr</group>
             </mgr_hbox>
+            <rels_hbox>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>rels</group>
+            </rels_hbox>
       </layout>
 </properties>
 

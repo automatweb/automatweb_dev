@@ -20,6 +20,15 @@
             <caption>Info</caption>
       </property>
       <property>
+            <name>preview</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>preview</field>
+            <caption></caption>
+      </property>
+      <property>
             <name>reg_class_id</name>
             <table>aw_class</table>
             <group>settings</group>
