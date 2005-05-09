@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.14 2005/05/03 13:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.15 2005/05/09 09:34:46 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -14,8 +14,8 @@
 @property infomsg type=text store=no
 @caption Info
 
-property visualize type=text store=no
-caption 
+@property preview type=text store=no
+@caption 
 
 @default group=settings
 @property reg_class_id type=text table=aw_class field=class_id
@@ -229,6 +229,10 @@ class class_designer extends class_base
 				{
 					$prop["value"] = t("Väljundkataloog ei ole kirjutatav!");
 				};
+				if ($prop["value"] == "")
+				{
+					return PROP_IGNORE;
+				}
 				break;
 
 			case "class_folder":
@@ -239,7 +243,24 @@ class class_designer extends class_base
 				}
 				break;
 
-
+			case "preview":
+				if (!$arr["obj_inst"]->prop("reg_class_id"))
+				{
+					return PROP_IGNORE;
+				}
+				// find some objects
+				
+				$ol = new object_list(array("class_id" => $arr["obj_inst"]->prop("reg_class_id"),"limit" => 2));
+				if ($ol->count())
+				{
+					$o = $ol->begin();
+					$prop["value"] = html::get_change_url($o->id(), array("return_url" => get_ru()), t("Eelvaade"));
+				}
+				else
+				{
+					$prop["value"] = html::get_new_url($arr["obj_inst"]->prop("reg_class_id"), $arr["obj_inst"]->id(), array("return_url" => get_ru()), t("Eelvaade"));
+				}
+				break;
 		};
 		return $retval;
 	}

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.1 2005/05/03 13:15:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.2 2005/05/09 09:34:46 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -19,7 +19,17 @@
 	@property mgr_tree type=treeview no_caption=1 parent=mgr_hbox
 	@property mgr_tbl type=table no_caption=1 parent=mgr_hbox
 
+@default group=rels
+
+	@property rels_tb type=toolbar no_caption=1
+
+	@layout rels_hbox type=hbox width=20%:80%
+
+	@property rels_tree type=treeview no_caption=1 parent=rels_hbox
+	@property rels_tbl type=table no_caption=1 parent=rels_hbox
+
 @groupinfo mgr caption="Manager" submit=no
+@groupinfo rels caption="Seosed" submit=no
 */
 
 class class_designer_manager extends class_base
@@ -48,6 +58,18 @@ class class_designer_manager extends class_base
 
 			case "mgr_tbl":
 				$this->_mgr_tbl($arr);
+				break;
+
+			case "rels_tb":
+				$this->_rels_tb($arr);
+				break;
+
+			case "rels_tree":
+				$this->_mgr_tree($arr);
+				break;
+
+			case "rels_tbl":
+				$this->_rels_tbl($arr);
 				break;
 
 		};
@@ -181,6 +203,151 @@ class class_designer_manager extends class_base
 				"design" => $design
 			));
 		}
+	}
+
+	function _rels_tb($arr)
+	{
+		$t =& $arr["prop"]["toolbar"];
+
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"caption" => t('Lisa'),
+			"url" => html::get_new_url(
+				CL_CLASS_DESIGNER, 
+				$arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"register_under" => $_GET["tf"]
+				)
+			)
+		));
+	}
+
+	function _init_rels_tree(&$t)
+	{
+		$t->define_field(array(
+			"name" => "class_name",
+			"caption" => t("Klassi nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "rel_name",
+			"caption" => t("Seose nimi"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "rel_to",
+			"caption" => t("Seos klassiga"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "sel",
+			"caption" => t("Vali"),
+			"align" => "center",
+		));
+	}
+
+	function _rels_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_rels_tree($t);
+
+		$ol = new object_list(array(
+			"class_id" => CL_CLASS_DESIGNER,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$designed = array();
+		foreach($ol->arr() as $designer)
+		{
+			$designed[$designer->prop("reg_class_id")] = $designer->id();
+		}
+
+		$tf = $arr["request"]["tf"];
+		$clss = aw_ini_get("classes");
+		foreach($clss as $clid => $cld)
+		{
+			$show = false;
+			if ($cld["parents"] == "" && !$tf)
+			{
+				$show = true;
+			}
+			else
+			{
+				$parents = $this->make_keys(explode(",", $cld["parents"]));
+				if ($parents[$tf])
+				{
+					$show = true;
+				}
+			}
+
+			if (!$show)
+			{
+				continue;
+			}
+
+			$sel = "";
+			if ($designed[$clid])
+			{
+				$sel = html::get_change_url(
+					$designed[$clid], 
+					array(
+						"return_url" => get_ru(),
+						"group" => "relations",
+						"relations_mgr" => "new"
+					),
+					t("Lisa seos")
+				);
+			}
+
+			$t->define_data(array(
+				"class_name" => $cld["name"],
+				"rel_name" => "",
+				"rel_to" => "",
+				"sel" => $sel
+			));
+
+			// rels for class
+			if ($designed[$clid])
+			{
+				$rels = array();
+				$d_o = obj($designed[$clid]);
+				foreach($d_o->connections_from(array("reltype" => "RELTYPE_RELATION")) as $c)
+				{
+					$rel_o = $c->to();
+					$rels[] = array(
+						"caption" => $rel_o->name(),
+						"clid" => $rel_o->prop("r_class_id")
+					);
+				}
+			}
+			else
+			{
+				$cu = get_instance("cfg/cfgutils");
+				$ps = $cu->load_properties(array("clid" => $clid, "file" => basename($cld["file"])));
+				$rels = $cu->get_relinfo();
+			}
+			foreach($rels as $rel)
+			{
+				$rel_to = array();
+				foreach(safe_array($rel["clid"]) as $r_clid)
+				{
+					$rel_to[] = $clss[$r_clid]["name"];
+				}
+
+				$t->define_data(array(
+					"class_name" => "",
+					"rel_name" => $rel["caption"],
+					"rel_to" => join(", ", $rel_to),
+					"sel" => ""
+				));
+			}
+		}
+		$t->set_sortable(false);
 	}
 }
 ?>
