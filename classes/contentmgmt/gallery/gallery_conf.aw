@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.13 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.14 2005/05/10 10:33:42 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -405,7 +405,7 @@ class gallery_conf extends class_base
 		{
 			$si_height = (int)($height * (((int)substr($si_height, 0, -1))/100));
 		}
-		if($w < $width && $h < $height)
+		/*if($w < $width && $h < $height)
 		{
 			$width = $w;
 			$height = $h;
@@ -421,7 +421,7 @@ class gallery_conf extends class_base
 			$ratio = $w / $width;
 			$width = (int)($w * $ratio);
 			$height = (int)($h * $ratio);
-		}
+		}*/
 		return array(
 			"width" => $width,
 			"height" => $height,
