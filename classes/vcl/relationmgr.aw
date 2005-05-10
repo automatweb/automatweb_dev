@@ -232,6 +232,11 @@ class relationmgr extends aw_template
 			"caption" => t("Otsi vendi"),
 			"checked" => ($arr["request"]["search_bros"]),
 		);
+		$rval["searched"] = array(
+			"name" => "searched",
+			"type" => "hidden",
+			"value"=> 1,
+		);
 		$rval["sbt"] = array(
 			"name" => "sbt",
 			"type" => "submit",
@@ -471,7 +476,10 @@ class relationmgr extends aw_template
 		}
 
 		$this->qparts = $parts;
-		$this->do_search = true;
+		if($arr["request"]["searched"])
+		{
+			$this->do_search = true;
+		}
 	}
 	
 	function _make_toolbar($arr)
