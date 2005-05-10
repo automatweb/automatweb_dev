@@ -263,7 +263,7 @@ class site_template_compiler extends aw_template
 			$level = substr($parts[3], 1)+1;
 
 
-			if ($has_inside)
+			if ($has_inside && $parts[count($parts)-1] != "AFTER")
 			{
 				$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check"] = true;
 				$this->menu_areas[$area]["levels"][$level]["has_subitems_sel_check_tpl"] = $tpl;
@@ -312,7 +312,7 @@ class site_template_compiler extends aw_template
 
 			$level = substr($parts[3], 1)+1;
 			
-			if ($has_inside)
+			if ($has_inside && $parts[count($parts)-1] != "AFTER")
 			{
 				$this->menu_areas[$area]["levels"][$level]["no_subitems_sel_check"] = true;
 				$this->menu_areas[$area]["levels"][$level]["no_subitems_sel_check_tpl"] = $tpl;
@@ -581,7 +581,9 @@ class site_template_compiler extends aw_template
 					);
 				}
 
-				if ($ldat["no_subitems_sel_check_after_item"]  && $has_sel)
+				$tpl_l = strlen($ldat["no_subitems_sel_check_tpl"]);
+				$tpl_s = $ldat["no_subitems_sel_check_tpl"];
+				if ($ldat["no_subitems_sel_check_after_item"]  && ($has_sel || !($tpl_s{$tpl_l-1} == "L" && $tpl_s{$tpl_l-2} == "E" && $tpl_s{$tpl_l-3} == "S")))
 				{
 					$this->ops[] = array(
 						"op" => OP_CHECK_NO_SUBITEMS_SEL,
