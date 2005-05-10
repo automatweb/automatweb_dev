@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.132 2005/04/28 06:34:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.133 2005/05/10 13:50:35 kristo Exp $
 
 /*
 
@@ -521,6 +521,7 @@ class site_show extends class_base
 
 		$no_in_promo = false;
 
+		$filt_lang_id = aw_global_get("lang_id");
 		// no default, show list
 		if ($docid < 1)	
 		{
@@ -529,6 +530,10 @@ class site_show extends class_base
 				if ($obj->prop("show_inact") == 1)
 				{
 					$get_inact = true;
+				}
+				if ($obj->prop("content_all_langs"))
+				{
+					$filt_lang_id = array();
 				}
 				$skipfirst = $obj->prop("start_ndocs");
 				$lm = $obj->meta("last_menus");
@@ -661,7 +666,7 @@ class site_show extends class_base
 				$filter["status"] = STAT_ACTIVE;
 			}
 			$filter["class_id"] = array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT);
-			$filter["lang_id"] = aw_global_get("lang_id");
+			$filter["lang_id"] = $filt_lang_id;
 			$filter["sort_by"] = $ordby;
 			$filter["site_id"] = array();
 
