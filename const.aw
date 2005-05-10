@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.99 2005/04/21 08:25:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.100 2005/05/10 13:49:11 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -68,6 +68,11 @@ if (strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 		$pi = "?".substr($_SERVER["REQUEST_URI"], 1);
 		$pi = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $pi))));
 	}
+}
+
+if ($pi{0} == "?")
+{
+	$pi = substr($pi, 1);
 }
 
 if ($pi) 
