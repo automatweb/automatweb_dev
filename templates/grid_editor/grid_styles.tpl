@@ -12,7 +12,7 @@
 	<tr>
 		<!-- SUB: COL -->
 		<td {VAR:td_style}>
-			<input type="checkbox" name="sel_row={VAR:row};col={VAR:col}">{VAR:content}
+			{VAR:style_icon}<input type="checkbox" name="sel_row={VAR:row};col={VAR:col}">{VAR:content}
 		</td>
 		<!-- END SUB: COL -->
 

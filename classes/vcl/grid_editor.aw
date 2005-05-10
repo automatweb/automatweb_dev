@@ -1293,11 +1293,15 @@ class grid_editor extends class_base
 				$cell = $this->arr["styles"][$map["row"]][$map["col"]];
 				$scell = $this->arr["styles"][$map["row"]][$map["col"]];
 				
+				$style_icon = "";
 				$st = $this->_get_cell_style_id($i, $a, $scell);
 				if ($st)
 				{
 					$td_style = "colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\"";
 					active_page_data::add_site_css_style($st);
+					$st_o = obj($st);
+					$st_name = $st_o->name()." (".$st_o->id().")";
+					$style_icon = "<img src='".$this->cfg["baseurl"]."/automatweb/images/icons/class_71.gif' alt='".$st_name."' title='".$st_name."'>";
 				}
 				else
 				{
@@ -1308,7 +1312,8 @@ class grid_editor extends class_base
 					"col" => $a,
 					"row" => $i,
 					"td_style" => $td_style,
-					"content" => $this->arr["aliases"][$map["row"]][$map["col"]]
+					"content" => $this->arr["aliases"][$map["row"]][$map["col"]],
+					"style_icon" => $style_icon
 				));
 				$col.=$this->parse("COL");
 			}
