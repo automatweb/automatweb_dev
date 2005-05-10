@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.63 2005/05/06 11:48:20 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.64 2005/05/10 12:53:08 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1255,16 +1255,14 @@ class vcalendar extends aw_template
 					{
 						$mode = 1;
 					};
-
-					if ($act_stamp == $dstamp)
-					{
-						$style = $style_day_active;
-					};
-
 					if ($now == $dstamp)
 					{
 						$style = $style_day_today;
-					};
+					}
+					if ($act_stamp == $dstamp)
+					{
+						$style = $style_day_active;
+					}
 				}
 				else
 				{
