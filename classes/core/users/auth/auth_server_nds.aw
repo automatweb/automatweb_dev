@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.5 2005/05/05 15:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_nds.aw,v 1.6 2005/05/10 13:52:09 kristo Exp $
 // auth_server_nds.aw - Autentimisserver NDS 
 /*
 
@@ -255,9 +255,25 @@ class auth_server_nds extends class_base
 			return;
 		}
 
-		$sr=ldap_search($res, $dn, "uid=".$cred["uid"], array("mail","fullname", "givenname", "sn"));
+		//$sr=ldap_search($res, $dn, "uid=".$cred["uid"], array("mail","fullname", "givenname", "sn"));
+		$sr = ldap_search($res, $dn, "objectclass=user", array("mail","fullname", "givenname", "sn"));
 
-		$info = ldap_get_entries($res, $sr);
+		$fdn = trim(strtolower("cn=".$cred["uid"].",".$dn));
+		$a_info = ldap_get_entries($res, $sr);
+		$info = NULL;
+		for($tmp = 0; $tmp < $a_info["count"]; $tmp++)
+		{
+			if (trim(strtolower($a_info[$tmp]["dn"])) == $fdn)
+			{
+				$info = array(0 => $a_info[$tmp],"count" => 1);
+				break;
+			}
+		}
+		
+		if (!$info)
+		{
+			return;
+		}
 
 		if ($info["count"] > 0 && $info[0]["mail"]["count"] > 0)
 		{
@@ -301,7 +317,7 @@ class auth_server_nds extends class_base
 
 	function user_info($uid)
 	{
-			$cred = array("uid" => $uid);
+			$cred = array("uid" => "Maarit");
 			
 		$sl = new object_list(array("class_id" => CL_AUTH_SERVER_NDS, "lang_id" => array(), "site_id" => array(), "sort_by" => "objects.name"));
 		foreach($sl->arr() as $server)
@@ -315,12 +331,11 @@ class auth_server_nds extends class_base
 
 			$dn = $server->prop("ad_base_dn");
 			$res = ldap_connect($srv, $server->prop("server_port"));
-
+			ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 			ldap_bind($res, "cn=".$server->prop("ad_uid").",".$server->prop("ad_base_dn"), $server->prop("ad_pwd"));
 
 			echo "kasutaja info otsing: dn = '$dn' , parameeter = 'uid=$uid' <br>";
 			$sr=ldap_search($res, $dn, "uid=".$uid);
-
 			$info = ldap_get_entries($res, $sr);
 			echo dbg::dump($info);
 
