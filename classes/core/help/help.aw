@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.1 2005/04/23 13:00:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/help/help.aw,v 1.2 2005/05/10 13:51:43 kristo Exp $
 
 // more ideas --- I might want to keep the help open when switching between tabs... for this I need to 
 // set a cookie
@@ -97,7 +97,6 @@ class help extends aw_template
 			"clid" => $arr["clid"],
 			"filter" => $filter,
 		));
-		
 		$groups = $cfgu->get_groupinfo();
 
 		if (empty($groups[$arr["grpid"]]))
