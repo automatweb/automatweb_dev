@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,14 +9,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj/connection.aw:54
 msgid "connection::constructior(%s): parameter must be numeric or array!"
 msgstr "connection::constructior(%s): parameter must be numeric or array!"
 
 #: classes/core/obj/connection.aw:73
-msgid "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
-msgstr "connection::load(): parameter must be either array (connection data) or integer (connection id)!"
+msgid ""
+"connection::load(): parameter must be either array (connection data) or "
+"integer (connection id)!"
+msgstr ""
+"connection::load(): parameter must be either array (connection data) or "
+"integer (connection id)!"
 
 #: classes/core/obj/connection.aw:92
 msgid "connection::find(): parameter must be an array of filter parameters!"
@@ -34,19 +37,18 @@ msgstr "connection::delete(): no current connection to delete!"
 msgid "connection::delete(): no view access for this connection (%s)!"
 msgstr "connection::delete(): no view access for this connection (%s)!"
 
-#: classes/core/obj/connection.aw:210 classes/core/obj/connection.aw:222
+#: classes/core/obj/connection.aw:211 classes/core/obj/connection.aw:223
 msgid "connection::to(): no current connection!"
 msgstr "connection::to(): no current connection!"
 
-#: classes/core/obj/connection.aw:244
+#: classes/core/obj/connection.aw:245
 msgid "connection::load(%s): no connection with id $id!"
 msgstr "connection::load(%s): no connection with id $id!"
 
-#: classes/core/obj/connection.aw:253 classes/core/obj/connection.aw:275
+#: classes/core/obj/connection.aw:254 classes/core/obj/connection.aw:276
 msgid "connection::load(%s): no view access for this connection!"
 msgstr "connection::load(%s): no view access for this connection!"
 
-#: classes/core/obj/connection.aw:264
+#: classes/core/obj/connection.aw:265
 msgid "connection::save(): connection must have both ends defined!"
 msgstr "connection::save(): connection must have both ends defined!"
-

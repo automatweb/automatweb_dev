@@ -7,4 +7,5 @@ $GLOBALS["TRANS"]["Serveri t&uuml;&uuml;p"] = "Server type";
 $GLOBALS["TRANS"]["Nimi"] = "Name";
 $GLOBALS["TRANS"]["Kasuta?"] = "Use?";
 $GLOBALS["TRANS"]["J&auml;rjekord"] = "Order";
+$GLOBALS["TRANS"]["Nimetus"] = "Internal name";
 ?>

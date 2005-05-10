@@ -39,9 +39,11 @@ $GLOBALS["TRANS"]["Tööd pole veel lõpetatud"] = "Job is not finished yet";
 $GLOBALS["TRANS"]["Alusta"] = "Start";
 $GLOBALS["TRANS"]["Oled kindel et soovid t&ouml;&ouml;d alustada?"] = "Are you sure you wish to start the job?";
 $GLOBALS["TRANS"]["Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?"] = "Are you sure you wish to finish the job?";
+$GLOBALS["TRANS"]["Oled kindel et soovid t&ouml;&ouml;d pausile panna?"] = "Are you sure you wish to pause the job?";
 $GLOBALS["TRANS"]["Lõpeta vahetus ja logi v&auml;lja?"] = "End shift and log out?";
 $GLOBALS["TRANS"]["Vahetuse l&otilde;pp"] = "End shift";
 $GLOBALS["TRANS"]["J&auml;tka"] = "Continue";
+$GLOBALS["TRANS"]["Oled kindel et soovid t&ouml;&ouml;d j&auml;tkata?"] = "Are you sure you wish to continue the job?";
 $GLOBALS["TRANS"]["Katkesta"] = "Abort";
 $GLOBALS["TRANS"]["Katkesta t&ouml;&ouml;?"] = "Abort job?";
 $GLOBALS["TRANS"]["Kommentaar peab olema t&auml;idetud!"] = "Comment must not be empty!";
@@ -59,4 +61,5 @@ $GLOBALS["TRANS"]["Töö pole tegemisel"] = "Job is not in progress";
 $GLOBALS["TRANS"]["Töö pole pausil"] = "Job is not paused";
 $GLOBALS["TRANS"]["Projekt pole jätkatav"] = "Case can not be continued";
 $GLOBALS["TRANS"]["Töö pole katkestatud"] = "Job is not aborted";
+$GLOBALS["TRANS"]["Lisas kommentaari"] = "Added comment";
 ?>

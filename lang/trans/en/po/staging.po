@@ -143,7 +143,7 @@ msgstr "Active object"
 
 #: classes/applications/calendar/staging.aw:120
 msgid "Originaalobjekti ID"
-msgstr ""
+msgstr "Original object ID"
 
 #: classes/applications/calendar/staging.aw:127
 msgid "Originaalobjekt"

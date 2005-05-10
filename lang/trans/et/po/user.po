@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 15:44:16 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -469,36 +469,72 @@ msgstr ""
 msgid "Grupi Parool (chpwd) pealkiri"
 msgstr ""
 
+# classes/core/users/user.aw:group_chpwd_help
+msgid "Grupi Parool (chpwd) help"
+msgstr ""
+
 # classes/core/users/user.aw:group_objects
 msgid "Grupi Objektid ja &Otilde;igused (objects) pealkiri"
+msgstr ""
+
+# classes/core/users/user.aw:group_objects_help
+msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_objects_own
 msgid "Grupi Enda tehtud (objects_own) pealkiri"
 msgstr ""
 
+# classes/core/users/user.aw:group_objects_own_help
+msgid "Grupi Enda tehtud (objects_own) help"
+msgstr ""
+
 # classes/core/users/user.aw:group_objects_other
 msgid "Grupi Teiste tehtud (objects_other) pealkiri"
+msgstr ""
+
+# classes/core/users/user.aw:group_objects_other_help
+msgid "Grupi Teiste tehtud (objects_other) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_groups
 msgid "Grupi Grupid (groups) pealkiri"
 msgstr ""
 
+# classes/core/users/user.aw:group_groups_help
+msgid "Grupi Grupid (groups) help"
+msgstr ""
+
 # classes/core/users/user.aw:group_jdata
 msgid "Grupi Liitumise info (jdata) pealkiri"
+msgstr ""
+
+# classes/core/users/user.aw:group_jdata_help
+msgid "Grupi Liitumise info (jdata) help"
 msgstr ""
 
 # classes/core/users/user.aw:group_stat
 msgid "Grupi Statistika (stat) pealkiri"
 msgstr ""
 
+# classes/core/users/user.aw:group_stat_help
+msgid "Grupi Statistika (stat) help"
+msgstr ""
+
 # classes/core/users/user.aw:group_aclwizard
 msgid "Grupi ACL Maag (aclwizard) pealkiri"
 msgstr ""
 
+# classes/core/users/user.aw:group_aclwizard_help
+msgid "Grupi ACL Maag (aclwizard) help"
+msgstr ""
+
 # classes/core/users/user.aw:group_userdef
 msgid "Grupi User-defined (userdef) pealkiri"
+msgstr ""
+
+# classes/core/users/user.aw:group_userdef_help
+msgid "Grupi User-defined (userdef) help"
 msgstr ""
 
 # classes/core/users/user.aw:rel_RELTYPE_GRP
@@ -621,29 +657,29 @@ msgstr ""
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1556
+#: classes/core/users/user.aw:1558
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1628
+#: classes/core/users/user.aw:1630
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1633
+#: classes/core/users/user.aw:1635
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1638
+#: classes/core/users/user.aw:1640
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1648
+#: classes/core/users/user.aw:1650
 msgid ""
 "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
 "kehtib default.<br>N&auml;gemis&otilde;inus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1684
+#: classes/core/users/user.aw:1686
 msgid ""
 "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
 "rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "

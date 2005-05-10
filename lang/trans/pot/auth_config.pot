@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:32 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,5 +68,9 @@ msgstr ""
 
 #: classes/core/users/auth/auth_config.aw:132
 msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/core/users/auth/auth_config.aw:137
+msgid "Nimetus"
 msgstr ""
 

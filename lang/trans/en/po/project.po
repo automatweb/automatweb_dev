@@ -111,7 +111,7 @@ msgstr ""
 msgid ""
 "Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse "
 "(doc_id) caption"
-msgstr ""
+msgstr "Document ID, via what events are displayed"
 
 # classes/applications/groupware/project.aw:prop_doc_id_comment
 msgid ""

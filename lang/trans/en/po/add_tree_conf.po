@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 31 Mar 2005 14:06:18 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,21 +9,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/admin/add_tree_conf.aw:prop_sel
+# classes/admin/add_tree_conf.aw:prop_sel
 msgid "Omaduse  (sel) caption"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:prop_sel_comment
+# classes/admin/add_tree_conf.aw:prop_sel_comment
 msgid "Omaduse  (sel) kommentaar"
 msgstr ""
 
-#: classes/admin/add_tree_conf.aw:prop_sel_help
+# classes/admin/add_tree_conf.aw:prop_sel_help
 msgid "Omaduse  (sel) help"
 msgstr ""
-
-#: classes/admin/add_tree_conf.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
 
 #: classes/admin/add_tree_conf.aw:68
 msgid "Nimi"
@@ -41,3 +37,6 @@ msgstr "Usable"
 msgid "Aliasena lisatav"
 msgstr "Can be used as alias"
 
+# classes/admin/add_tree_conf.aw:group_general
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"

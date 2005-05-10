@@ -71,7 +71,7 @@ msgstr "Search"
 
 #: classes/admin/admin_menus.aw:1344
 msgid "Eelvaade"
-msgstr ""
+msgstr "Preview"
 
 #: classes/admin/admin_menus.aw:1370
 msgid "Kleebi"

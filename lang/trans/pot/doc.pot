@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:25 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -730,6 +730,18 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) help"
 msgstr ""
 
+#: classes/doc.aw:prop_show_in_iframe
+msgid "Omaduse Kasuta siseraami (show_in_iframe) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_show_in_iframe_comment
+msgid "Omaduse Kasuta siseraami (show_in_iframe) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_show_in_iframe_help
+msgid "Omaduse Kasuta siseraami (show_in_iframe) help"
+msgstr ""
+
 #: classes/doc.aw:group_calendar
 msgid "Grupi Kalender (calendar) pealkiri"
 msgstr ""
@@ -770,23 +782,23 @@ msgstr ""
 msgid "Seose Meeldetuletus (RELTYPE_REMINDER) tekst"
 msgstr ""
 
-#: classes/doc.aw:298
+#: classes/doc.aw:302
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:600
+#: classes/doc.aw:595
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:610
+#: classes/doc.aw:605
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:773
+#: classes/doc.aw:768
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:786
+#: classes/doc.aw:781
 msgid "Dokument (vend)"
 msgstr ""
 

@@ -338,7 +338,7 @@ msgstr "Group by source"
 
 #: classes/calendar/calendar_view.aw:130 classes/calendar/calendar_view.aw:145
 msgid "Ülevaade"
-msgstr ""
+msgstr "Overview"
 
 #: classes/calendar/calendar_view.aw:141
 msgid "päev"

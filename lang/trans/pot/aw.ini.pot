@@ -1470,6 +1470,10 @@ msgstr ""
 msgid "Klassi Klasside brauser (929) nimi"
 msgstr ""
 
+#: aw.ini:class_931
+msgid "Klassi Lihtne tellimus (931) nimi"
+msgstr ""
+
 #: aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"
 msgstr ""

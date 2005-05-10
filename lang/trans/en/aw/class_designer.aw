@@ -20,6 +20,7 @@ $GLOBALS["TRANS"]["Grupi Klassi definitsioon (classdef) pealkiri"] = "Class defi
 $GLOBALS["TRANS"]["Seose seos (RELTYPE_RELATION) tekst"] = "connection";
 $GLOBALS["TRANS"]["Visualiseeri"] = "Visualize";
 $GLOBALS["TRANS"]["Väljundkataloog ei ole kirjutatav!"] = "Output folder is not writeable";
+$GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Uus tab"] = "New tab";
 $GLOBALS["TRANS"]["Uus grid"] = "New grid";
 $GLOBALS["TRANS"]["Save"] = "Save";

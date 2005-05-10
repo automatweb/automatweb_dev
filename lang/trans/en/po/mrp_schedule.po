@@ -1,0 +1,44 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/mrp/mrp_schedule.aw:255
+msgid "Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"
+msgstr "Fatal error: planning lock acquire failed!"
+
+#: classes/mrp/mrp_schedule.aw:261
+msgid "Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!"
+msgstr "Fatal error: planning lock failed!"
+
+#: classes/mrp/mrp_schedule.aw:265
+msgid "Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!"
+msgstr "Error: delete of planning lock without acquire failed!"
+
+#: classes/mrp/mrp_schedule.aw:283
+msgid "Viga: planeerimisluku avamine ebaõnnestus!"
+msgstr "Error: releasing planning lock failed!"
+
+#: classes/mrp/mrp_schedule.aw:288
+msgid "Viga: planeerimisluku kustutamine ebaõnnestus!"
+msgstr "Error: planning lock delete failed!"
+
+#: classes/mrp/mrp_schedule.aw:602
+msgid "Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!"
+msgstr "Error: planning lock release failed after planning!"
+
+#: classes/mrp/mrp_schedule.aw:607
+msgid "Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
+msgstr "Error: planning lock delete failed after planning!"
+
+#: classes/mrp/mrp_schedule.aw:1147
+msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu."
+msgstr "Resource with id %s has no free times in the limit."
+

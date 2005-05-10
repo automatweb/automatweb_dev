@@ -1004,7 +1004,7 @@ msgstr ""
 
 # classes/mrp/mrp_workspace.aw:prop_pj_job_comment
 msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) caption"
-msgstr ""
+msgstr "Job comment"
 
 # classes/mrp/mrp_workspace.aw:prop_pj_job_comment_comment
 msgid "Omaduse T&ouml;&ouml; kommentaar (pj_job_comment) kommentaar"
@@ -1539,11 +1539,11 @@ msgstr "Opened"
 
 #: classes/mrp/mrp_workspace.aw:906
 msgid "J&auml;rgmine lehek&uuml;lg"
-msgstr ""
+msgstr "Next page"
 
 #: classes/mrp/mrp_workspace.aw:921
 msgid "Eelmine lehek&uuml;lg"
-msgstr ""
+msgstr "Previous page"
 
 #: classes/mrp/mrp_workspace.aw:1167 classes/mrp/mrp_workspace.aw:2732
 #: classes/mrp/mrp_workspace.aw:3047
@@ -1830,7 +1830,7 @@ msgstr "Save comment"
 
 #: classes/mrp/mrp_workspace.aw:3812
 msgid "Oled kindel et soovid kommentaari salvestada?"
-msgstr ""
+msgstr "Are you sure you want to enter a comment?"
 
 #: classes/mrp/mrp_workspace.aw:4147
 msgid "Logi v&auml;lja"

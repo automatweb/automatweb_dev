@@ -7,6 +7,7 @@ $GLOBALS["TRANS"]["Omaduse Loe lähemalt (doc) caption"] = "Read more";
 $GLOBALS["TRANS"]["Omaduse Ära näita alamprojektide sündmusi (skip_subproject_events) caption"] = "Do not display sub-project events";
 $GLOBALS["TRANS"]["Omaduse Näita projektide navigaatorit (project_navigator) caption"] = "Display project navigator";
 $GLOBALS["TRANS"]["Omaduse Välimus (use_template) caption"] = "Template";
+$GLOBALS["TRANS"]["Omaduse Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse (doc_id) caption"] = "Document ID, via what events are displayed";
 $GLOBALS["TRANS"]["Omaduse Pilt (prj_image) caption"] = "Image";
 $GLOBALS["TRANS"]["Omaduse Sündmuste toolbar  (event_toolbar) caption"] = "Event toolbar";
 $GLOBALS["TRANS"]["Omaduse Sündmused (event_list) caption"] = "Events";

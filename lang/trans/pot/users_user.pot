@@ -10,23 +10,23 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/users_user.aw:218
+#: classes/users_user.aw:224
 msgid "uid is empty!"
 msgstr ""
 
-#: classes/users_user.aw:226
+#: classes/users_user.aw:232
 msgid "oid for uid is empty uid = '%s'!"
 msgstr ""
 
-#: classes/users_user.aw:234
+#: classes/users_user.aw:240
 msgid "user object is not user object!!!! %s clid = %s"
 msgstr ""
 
-#: classes/users_user.aw:242
+#: classes/users_user.aw:248
 msgid "user object is of wrong type! %s props = %s"
 msgstr ""
 
-#: classes/users_user.aw:1088
+#: classes/users_user.aw:1094
 msgid "Error in group hierarchy, count of 100 exceeded! probably offending group - %s"
 msgstr ""
 

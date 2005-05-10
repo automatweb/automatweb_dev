@@ -1467,7 +1467,11 @@ msgstr "Offer compare table row"
 
 # aw.ini:class_929
 msgid "Klassi Klasside brauser (929) nimi"
-msgstr ""
+msgstr "Class browser"
+
+# aw.ini:class_931
+msgid "Klassi Lihtne tellimus (931) nimi"
+msgstr "Simple order"
 
 # aw.ini:classfolder_29
 msgid "Klassi kataloogi Dokumendid (29) nimi"

@@ -35,7 +35,7 @@ msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
 msgid "Omaduse Ridu (rows) caption"
-msgstr ""
+msgstr "Rows"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_rows_comment
 msgid "Omaduse Ridu (rows) kommentaar"
@@ -47,7 +47,7 @@ msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_style
 msgid "Omaduse Piltide stiil (style) caption"
-msgstr ""
+msgstr "Image style"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:prop_style_comment
 msgid "Omaduse Piltide stiil (style) kommentaar"
@@ -79,20 +79,13 @@ msgstr ""
 
 # classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
 msgid "Seose Piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
-msgstr ""
+msgstr "image folder"
 
 # classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_STYLE
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
-msgstr ""
+msgstr "style"
 
 #: classes/contentmgmt/gallery/mini_gallery.aw:194
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
-# classes/contentmgmt/gallery/mini_gallery.aw:prop_rows
-#~ msgid "Omaduse ridu (rows) caption"
-#~ msgstr "Rows"
-
-# classes/contentmgmt/gallery/mini_gallery.aw:rel_RELTYPE_IMG_FOLDER
-#~ msgid "Seose piltide kataloog (RELTYPE_IMG_FOLDER) tekst"
-#~ msgstr "image folder"

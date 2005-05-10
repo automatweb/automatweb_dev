@@ -13,6 +13,7 @@ $GLOBALS["TRANS"]["Grupi Ajad (times) pealkiri"] = "Times";
 $GLOBALS["TRANS"]["Seose Pilt (RELTYPE_PICTURE) tekst"] = "Image";
 $GLOBALS["TRANS"]["Seose Koopia (RELTYPE_COPY) tekst"] = "Copy";
 $GLOBALS["TRANS"]["Aktiivne objekt"] = "Active object";
+$GLOBALS["TRANS"]["Originaalobjekti ID"] = "Original object ID";
 $GLOBALS["TRANS"]["Originaalobjekt"] = "Original";
 $GLOBALS["TRANS"]["Koopia"] = "Copy";
 $GLOBALS["TRANS"][" (Aktiivne)"] = " (Active)";

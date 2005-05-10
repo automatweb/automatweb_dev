@@ -33,6 +33,7 @@ $GLOBALS["TRANS"]["Algavad sündmused"] = "Starting events";
 $GLOBALS["TRANS"]["Nädala vaade"] = "Week view";
 $GLOBALS["TRANS"]["Järgmised sündmused"] = "Next events";
 $GLOBALS["TRANS"]["Grupeeri allika järgi"] = "Group by source";
+$GLOBALS["TRANS"]["Ülevaade"] = "Overview";
 $GLOBALS["TRANS"]["päev"] = "day";
 $GLOBALS["TRANS"]["nädal"] = "week";
 $GLOBALS["TRANS"]["kuu"] = "month";

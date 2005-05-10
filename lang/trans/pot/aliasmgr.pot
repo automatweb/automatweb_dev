@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:51 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:498
+#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:503
 msgid ""
 msgstr ""
 
@@ -18,71 +18,71 @@ msgstr ""
 msgid "Klass"
 msgstr ""
 
-#: classes/aliasmgr.aw:506
+#: classes/aliasmgr.aw:511
 msgid "Nimi"
 msgstr ""
 
-#: classes/aliasmgr.aw:512
+#: classes/aliasmgr.aw:517
 msgid "Keel"
 msgstr ""
 
-#: classes/aliasmgr.aw:519
+#: classes/aliasmgr.aw:524
 msgid "Muu info"
 msgstr ""
 
-#: classes/aliasmgr.aw:525
+#: classes/aliasmgr.aw:530
 msgid "Alias"
 msgstr ""
 
-#: classes/aliasmgr.aw:533
+#: classes/aliasmgr.aw:538
 msgid "Link"
 msgstr ""
 
-#: classes/aliasmgr.aw:542
+#: classes/aliasmgr.aw:547
 msgid "Cache"
 msgstr ""
 
-#: classes/aliasmgr.aw:551
+#: classes/aliasmgr.aw:556
 msgid "Muutja"
 msgstr ""
 
-#: classes/aliasmgr.aw:559
+#: classes/aliasmgr.aw:564
 msgid "Muudetud"
 msgstr ""
 
-#: classes/aliasmgr.aw:570
+#: classes/aliasmgr.aw:575
 msgid "Tüüp"
 msgstr ""
 
-#: classes/aliasmgr.aw:578
+#: classes/aliasmgr.aw:583
 msgid "Seose tüüp"
 msgstr ""
 
-#: classes/aliasmgr.aw:1144
+#: classes/aliasmgr.aw:1148
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/aliasmgr.aw:1154 classes/aliasmgr.aw:1163
+#: classes/aliasmgr.aw:1158 classes/aliasmgr.aw:1167
 msgid "Otsi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1180
+#: classes/aliasmgr.aw:1184
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1191
+#: classes/aliasmgr.aw:1195
 msgid "Reload"
 msgstr ""
 
-#: classes/aliasmgr.aw:1202
+#: classes/aliasmgr.aw:1206
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/aliasmgr.aw:1212
+#: classes/aliasmgr.aw:1216
 msgid "Salvesta"
 msgstr ""
 
-#: classes/aliasmgr.aw:1219
+#: classes/aliasmgr.aw:1223
 msgid "Kustuta valitud seos(ed)"
 msgstr ""
 

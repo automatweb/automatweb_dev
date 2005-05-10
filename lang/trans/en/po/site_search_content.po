@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,156 +9,168 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
+# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
 msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
 msgstr "Search keywords"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_comment
 msgid "Omaduse Otsing märksõnadest (do_keyword_search) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search_help
 msgid "Omaduse Otsing märksõnadest (do_keyword_search) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
+# classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes
 msgid "Omaduse Klassid (keyword_search_classes) caption"
 msgstr "Classes"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_comment
 msgid "Omaduse Klassid (keyword_search_classes) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_keyword_search_classes_help
 msgid "Omaduse Klassid (keyword_search_classes) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_static
 msgid "Omaduse Otsing staatilisse koopiasse (search_static) caption"
 msgstr "Search static copy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_comment
 msgid "Omaduse Otsing staatilisse koopiasse (search_static) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_static_help
 msgid "Omaduse Otsing staatilisse koopiasse (search_static) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_live
 msgid "Omaduse Otsing aktiivsest saidist (search_live) caption"
 msgstr "Search live site"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_comment
 msgid "Omaduse Otsing aktiivsest saidist (search_live) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_search_live_help
 msgid "Omaduse Otsing aktiivsest saidist (search_live) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups
+# classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups
 msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) caption"
 msgstr "Search shows multiple groups"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_comment
 msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_multi_groups_help
 msgid "Omaduse Otsimisel saab kasutada mitut gruppi (multi_groups) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page
+# classes/contentmgmt/site_search/site_search_content.aw:prop_per_page
 msgid "Omaduse Mitu tulemust lehel (per_page) caption"
 msgstr "Results per page"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_comment
 msgid "Omaduse Mitu tulemust lehel (per_page) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_per_page_help
 msgid "Omaduse Mitu tulemust lehel (per_page) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_order
 msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) caption"
 msgstr "Default sort order"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_comment
 msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_order_help
 msgid "Omaduse Vaikimisi sorteeritakse tulemused (default_order) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg
+# classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg
 msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) caption"
 msgstr "Search group configuration"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_comment
 msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_grpcfg_help
 msgid "Omaduse Otsingugruppide konfigureerimine (grpcfg) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt
 msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) caption"
 msgstr "Default search type"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_comment
-msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) kommentaar"
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_comment
+msgid ""
+"Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_default_search_opt_help
 msgid "Omaduse Vaikimisi otsingu t&uuml;&uuml;p (default_search_opt) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit
+# classes/contentmgmt/site_search/site_search_content.aw:prop_reledit
 msgid "Omaduse Seos (reledit) caption"
 msgstr "Connection"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_comment
 msgid "Omaduse Seos (reledit) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_reledit_help
 msgid "Omaduse Seos (reledit) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link
+# classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link
 msgid "Omaduse Staatilise genereerimise link (static_gen_link) caption"
 msgstr "Generate static copy link"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_comment
+# classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_comment
 msgid "Omaduse Staatilise genereerimise link (static_gen_link) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_help
+# classes/contentmgmt/site_search/site_search_content.aw:prop_static_gen_link_help
 msgid "Omaduse Staatilise genereerimise link (static_gen_link) help"
 msgstr ""
 
-#: classes/contentmgmt/site_search/site_search_content.aw:group_static
+# classes/contentmgmt/site_search/site_search_content.aw:group_static
 msgid "Grupi Staatiline otsing (static) pealkiri"
 msgstr "Static search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:group_keywords
+# classes/contentmgmt/site_search/site_search_content.aw:group_static_help
+msgid "Grupi Staatiline otsing (static) help"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:group_keywords
 msgid "Grupi Märksõnade järgi otsing (keywords) pealkiri"
 msgstr "Keyword search"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
+# classes/contentmgmt/site_search/site_search_content.aw:group_keywords_help
+msgid "Grupi Märksõnade järgi otsing (keywords) help"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
 msgid "Grupi Otsingu grupid (searchgroups) pealkiri"
 msgstr "Search groups"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_REPEATER
+# classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups_help
+msgid "Grupi Otsingu grupid (searchgroups) help"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_REPEATER
 msgid "Seose kordus staatilise koopia genereerimiseks (RELTYPE_REPEATER) tekst"
 msgstr "recurrence for static search generation"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_SEARCH_GRP
+# classes/contentmgmt/site_search/site_search_content.aw:rel_RELTYPE_SEARCH_GRP
 msgid "Seose otsingu grupp (RELTYPE_SEARCH_GRP) tekst"
 msgstr "search group"
 
@@ -182,11 +194,13 @@ msgstr "All"
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modification date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:108 classes/contentmgmt/site_search/site_search_content.aw:187
+#: classes/contentmgmt/site_search/site_search_content.aw:108
+#: classes/contentmgmt/site_search/site_search_content.aw:187
 msgid "Pealkirja j&auml;rgi"
 msgstr "By title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:109 classes/contentmgmt/site_search/site_search_content.aw:188
+#: classes/contentmgmt/site_search/site_search_content.aw:109
+#: classes/contentmgmt/site_search/site_search_content.aw:188
 msgid "Sisu j&auml;rgi"
 msgstr "By content"
 
@@ -233,4 +247,3 @@ msgstr "By date (newest first)"
 #: classes/contentmgmt/site_search/site_search_content.aw:186
 msgid "Kuupäeva järgi (vanem enne)"
 msgstr "By date (oldest first)"
-

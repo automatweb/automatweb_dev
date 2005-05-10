@@ -23,7 +23,7 @@ msgstr ""
 
 # classes/applications/shop/shop_product_search.aw:prop_oc
 msgid "Omaduse Tellimiskeskkond (oc) caption"
-msgstr ""
+msgstr "Order center"
 
 # classes/applications/shop/shop_product_search.aw:prop_oc_comment
 msgid "Omaduse Tellimiskeskkond (oc) kommentaar"
@@ -83,7 +83,7 @@ msgstr ""
 
 # classes/applications/shop/shop_product_search.aw:prop_s_tbl_ctr
 msgid "Omaduse Tulemuste andmete n&auml;itamise kontroller (s_tbl_ctr) caption"
-msgstr ""
+msgstr "Result display controller"
 
 # classes/applications/shop/shop_product_search.aw:prop_s_tbl_ctr_comment
 msgid ""
@@ -136,7 +136,7 @@ msgstr ""
 
 # classes/applications/shop/shop_product_search.aw:group_s_res_ctr
 msgid "Grupi Kontrollerid (s_res_ctr) pealkiri"
-msgstr ""
+msgstr "Controllers"
 
 # classes/applications/shop/shop_product_search.aw:group_s_res_ctr_help
 msgid "Grupi Kontrollerid (s_res_ctr) help"
@@ -156,11 +156,11 @@ msgstr "warehouse"
 
 # classes/applications/shop/shop_product_search.aw:rel_RELTYPE_CONTROLLER
 msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
-msgstr ""
+msgstr "controller"
 
 # classes/applications/shop/shop_product_search.aw:rel_RELTYPE_OC
 msgid "Seose tellimiskeskkond (RELTYPE_OC) tekst"
-msgstr ""
+msgstr "order center"
 
 #: classes/applications/shop/shop_product_search.aw:178
 #: classes/applications/shop/shop_product_search.aw:315
@@ -179,7 +179,7 @@ msgstr "In form?"
 #: classes/applications/shop/shop_product_search.aw:196
 #: classes/applications/shop/shop_product_search.aw:333
 msgid "J&auml;rjekord"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/shop/shop_product_search.aw:202
 msgid "Tekst"
@@ -195,4 +195,4 @@ msgstr "Column heading"
 
 #: classes/applications/shop/shop_product_search.aw:461
 msgid "Vali"
-msgstr ""
+msgstr "Select"

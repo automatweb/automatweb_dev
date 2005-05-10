@@ -315,7 +315,7 @@ msgstr "Are you sure you wish to finish the job?"
 
 #: classes/mrp/mrp_job.aw:429
 msgid "Oled kindel et soovid t&ouml;&ouml;d pausile panna?"
-msgstr ""
+msgstr "Are you sure you wish to pause the job?"
 
 #: classes/mrp/mrp_job.aw:434
 msgid "Lõpeta vahetus ja logi v&auml;lja?"
@@ -331,7 +331,7 @@ msgstr "Continue"
 
 #: classes/mrp/mrp_job.aw:462
 msgid "Oled kindel et soovid t&ouml;&ouml;d j&auml;tkata?"
-msgstr ""
+msgstr "Are you sure you wish to continue the job?"
 
 #: classes/mrp/mrp_job.aw:468
 msgid "Katkesta"
@@ -385,7 +385,7 @@ msgid "Ressursi vabastamine ebaõnnestus"
 msgstr "Freeing the resource failed"
 
 #: classes/mrp/mrp_job.aw:693 classes/mrp/mrp_job.aw:829
-#: classes/mrp/mrp_job.aw:1382
+#: classes/mrp/mrp_job.aw:1389
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr "Resource manager undefined."
 
@@ -406,9 +406,9 @@ msgstr "Case can not be continued"
 msgid "Töö pole katkestatud"
 msgstr "Job is not aborted"
 
-#: classes/mrp/mrp_job.aw:1402
+#: classes/mrp/mrp_job.aw:1409
 msgid "Lisas kommentaari"
-msgstr ""
+msgstr "Added comment"
 
 #~ msgid "Projekti lõpetamine ebaõnnestus"
 #~ msgstr "Case finishing unsuccessful"

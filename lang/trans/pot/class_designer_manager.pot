@@ -1,0 +1,136 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tb
+msgid "Omaduse  (mgr_tb) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tb_comment
+msgid "Omaduse  (mgr_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tb_help
+msgid "Omaduse  (mgr_tb) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tree
+msgid "Omaduse  (mgr_tree) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tree_comment
+msgid "Omaduse  (mgr_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tree_help
+msgid "Omaduse  (mgr_tree) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tbl
+msgid "Omaduse  (mgr_tbl) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tbl_comment
+msgid "Omaduse  (mgr_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_mgr_tbl_help
+msgid "Omaduse  (mgr_tbl) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tb
+msgid "Omaduse  (rels_tb) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tb_comment
+msgid "Omaduse  (rels_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tb_help
+msgid "Omaduse  (rels_tb) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tree
+msgid "Omaduse  (rels_tree) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tree_comment
+msgid "Omaduse  (rels_tree) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tree_help
+msgid "Omaduse  (rels_tree) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tbl
+msgid "Omaduse  (rels_tbl) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tbl_comment
+msgid "Omaduse  (rels_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:prop_rels_tbl_help
+msgid "Omaduse  (rels_tbl) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:group_mgr
+msgid "Grupi Manager (mgr) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:group_mgr_help
+msgid "Grupi Manager (mgr) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:group_rels
+msgid "Grupi Seosed (rels) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:group_rels_help
+msgid "Grupi Seosed (rels) help"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:101 classes/applications/class_designer/class_designer_manager.aw:144 classes/applications/class_designer/class_designer_manager.aw:215
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:138
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:150
+msgid "Disaini"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:202
+msgid "Lisa objekt"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:231
+msgid "Klassi nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:237
+msgid "Seose nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:243
+msgid "Seos klassiga"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:249
+msgid "Vali"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:303
+msgid "Lisa seos"
+msgstr ""
+

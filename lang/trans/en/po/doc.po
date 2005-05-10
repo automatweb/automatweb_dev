@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:49 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -729,21 +729,49 @@ msgstr ""
 msgid "Omaduse &Auml;ra n&auml;ita konteineris (no_show_in_promo) help"
 msgstr ""
 
+# classes/doc.aw:prop_show_in_iframe
+msgid "Omaduse Kasuta siseraami (show_in_iframe) caption"
+msgstr "Use iframe"
+
+# classes/doc.aw:prop_show_in_iframe_comment
+msgid "Omaduse Kasuta siseraami (show_in_iframe) kommentaar"
+msgstr ""
+
+# classes/doc.aw:prop_show_in_iframe_help
+msgid "Omaduse Kasuta siseraami (show_in_iframe) help"
+msgstr ""
+
 # classes/doc.aw:group_calendar
 msgid "Grupi Kalender (calendar) pealkiri"
 msgstr "Calendar"
+
+# classes/doc.aw:group_calendar_help
+msgid "Grupi Kalender (calendar) help"
+msgstr ""
 
 # classes/doc.aw:group_vennastamine
 msgid "Grupi Vennastamine (vennastamine) pealkiri"
 msgstr "Brothers"
 
+# classes/doc.aw:group_vennastamine_help
+msgid "Grupi Vennastamine (vennastamine) help"
+msgstr ""
+
 # classes/doc.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr "Settings"
 
+# classes/doc.aw:group_settings_help
+msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
 # classes/doc.aw:group_relationmgr
 msgid "Grupi Seostehaldur (relationmgr) pealkiri"
 msgstr "Connection manager"
+
+# classes/doc.aw:group_relationmgr_help
+msgid "Grupi Seostehaldur (relationmgr) help"
+msgstr ""
 
 # classes/doc.aw:rel_RELTYPE_TIMING
 msgid "Seose Aeg (RELTYPE_TIMING) tekst"
@@ -753,23 +781,23 @@ msgstr "Time"
 msgid "Seose Meeldetuletus (RELTYPE_REMINDER) tekst"
 msgstr "Reminder"
 
-#: classes/doc.aw:298
+#: classes/doc.aw:302
 msgid "puudub"
 msgstr "missing"
 
-#: classes/doc.aw:591
+#: classes/doc.aw:595
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/doc.aw:601
+#: classes/doc.aw:605
 msgid "Eelvaade"
 msgstr "Preview"
 
-#: classes/doc.aw:764
+#: classes/doc.aw:768
 msgid "Dokument 2.0"
 msgstr "Document 2.0"
 
-#: classes/doc.aw:777
+#: classes/doc.aw:781
 msgid "Dokument (vend)"
 msgstr "Document (brother)"
 

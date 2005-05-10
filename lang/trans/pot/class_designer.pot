@@ -34,6 +34,18 @@ msgstr ""
 msgid "Omaduse Info (infomsg) help"
 msgstr ""
 
+#: classes/applications/class_designer/class_designer.aw:prop_preview
+msgid "Omaduse  (preview) caption"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_preview_comment
+msgid "Omaduse  (preview) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:prop_preview_help
+msgid "Omaduse  (preview) help"
+msgstr ""
+
 #: classes/applications/class_designer/class_designer.aw:prop_reg_class_id
 msgid "Omaduse CLID (reg_class_id) caption"
 msgstr ""
@@ -270,55 +282,59 @@ msgstr ""
 msgid "Väljundkataloog ei ole kirjutatav!"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:340
+#: classes/applications/class_designer/class_designer.aw:257 classes/applications/class_designer/class_designer.aw:261
+msgid "Eelvaade"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer.aw:361
 msgid "Uus tab"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:351
+#: classes/applications/class_designer/class_designer.aw:372
 msgid "Uus grid"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:387
+#: classes/applications/class_designer/class_designer.aw:408
 msgid "Save"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:397
+#: classes/applications/class_designer/class_designer.aw:418
 msgid "Cut"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:407
+#: classes/applications/class_designer/class_designer.aw:428
 msgid "Paste"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:416
+#: classes/applications/class_designer/class_designer.aw:437
 msgid "Delete"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:419
+#: classes/applications/class_designer/class_designer.aw:440
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:429
+#: classes/applications/class_designer/class_designer.aw:450
 msgid "Jrk"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:435
+#: classes/applications/class_designer/class_designer.aw:456
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:440
+#: classes/applications/class_designer/class_designer.aw:461
 msgid "Tüüp"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:445 classes/applications/class_designer/class_designer.aw:489
+#: classes/applications/class_designer/class_designer.aw:466 classes/applications/class_designer/class_designer.aw:510
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:521
+#: classes/applications/class_designer/class_designer.aw:542
 msgid "Grupp "
 msgstr ""
 
-#: classes/applications/class_designer/class_designer.aw:552
+#: classes/applications/class_designer/class_designer.aw:573
 msgid "vbox "
 msgstr ""
 

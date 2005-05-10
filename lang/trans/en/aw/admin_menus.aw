@@ -14,6 +14,7 @@ $GLOBALS["TRANS"]["Aktiivne"] = "Active";
 $GLOBALS["TRANS"]["Uus"] = "New";
 $GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Otsi"] = "Search";
+$GLOBALS["TRANS"]["Eelvaade"] = "Preview";
 $GLOBALS["TRANS"]["Kleebi"] = "Paste";
 $GLOBALS["TRANS"]["Uuenda"] = "Refresh";
 $GLOBALS["TRANS"]["Impordi"] = "Import";

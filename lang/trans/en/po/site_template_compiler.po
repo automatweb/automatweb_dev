@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:03 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,8 +9,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/site_template_compiler.aw:862
-msgid "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
-msgstr "show_site::generate_code(): could not find generator for op %s (%s) op = %s"
-
+#: classes/contentmgmt/site_template_compiler.aw:864
+msgid ""
+"show_site::generate_code(): could not find generator for op %s (%s) op = %s"
+msgstr ""
+"show_site::generate_code(): could not find generator for op %s (%s) op = %s"
