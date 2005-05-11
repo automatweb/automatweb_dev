@@ -664,6 +664,11 @@
                   <clid>CL_EXTLINK</clid>
                   <caption>link</caption>
             </LNK>
+            <KW>
+                  <value>11</value>
+                  <clid>CL_KEYWORD</clid>
+                  <caption>v&amp;otilde;tmes&amp;otilde;na</caption>
+            </KW>
       </reltypes>
 </properties>
 

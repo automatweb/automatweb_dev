@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.17 2005/03/24 10:04:06 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.18 2005/05/11 13:26:55 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -650,6 +650,10 @@ class join_site extends class_base
 						$prop["value"] = $cf_sd[$prop["name"]];
 					}
 					$tp[$pid] = $prop;
+					if ($tp[$pid]["type"] != "password")
+					{
+						$tp[$pid]["type"] = "textbox";
+					}
 				}
 			}
 		
@@ -1331,6 +1335,13 @@ class join_site extends class_base
 			"id" => $data_o->id(),
 			"cb_no_groups" => 1
 		);
+
+		// get relinfo for class
+		$cu = get_instance("cfg/cfgutils");
+		$_ps = $cu->load_properties(array(
+			"clid" => $data_o->class_id()
+		));
+		$reli = $cu->get_relinfo();
 		foreach($props as $pid => $prop)
 		{	
 			if ($visible[$clid][$prop["name"]])
@@ -1343,9 +1354,35 @@ class join_site extends class_base
 					$data_o->set_prop($pid, $cf_sd[$oldn]);
 				}
 
-				if ($prop["type"] == "relmanager")
+				if ($prop["type"] == "relmanager" || $prop["type"] == "releditor" || $prop["type"] == "relpicker")
 				{
-					$submit_data["cb_emb"] = $data["cb_emb"][$wn];
+					//$submit_data["cb_emb"] = $data["cb_emb"][$wn];
+					// damn. we need to make the right thing from textbox
+					// so check if the object has an object for this property
+					// if so, modify it
+					// if not, create new 
+					// set the object's id as the submit value
+					$p_oid = $data_o->prop($prop["name"]);
+					if (is_oid($p_oid) && $this->can("view", $p_oid))
+					{
+						$p_obj = obj($p_oid);
+						$p_obj->set_name($cf_sd[$oldn]);
+						$p_obj->save();
+					}
+					else
+					{
+						$p_obj = obj();
+						$p_obj->set_parent($data_o->id());
+						$p_obj->set_class_id($reli[$prop["reltype"]]["clid"][0]);
+						$p_obj->set_name($cf_sd[$oldn]);
+						$p_obj->save();
+
+						$data_o->connect(array(
+							"to" => $p_obj->id(),
+							"reltype" => $prop["reltype"]
+						));
+						$data_o->set_prop($prop["name"] , $p_obj->id());
+					}
 				}
 				else
 				{

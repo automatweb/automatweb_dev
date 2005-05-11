@@ -39,14 +39,17 @@
       <layout>
             <bugl>
                   <type>vbox</type>
+                  <group>general</group>
             </bugl>
             <bugl_tb>
                   <type>hbox</type>
                   <parent>bugl</parent>
+                  <group>general</group>
             </bugl_tb>
             <bugl_lower>
                   <type>hbox</type>
                   <parent>bugl</parent>
+                  <group>general</group>
             </bugl_lower>
       </layout>
 </properties>
