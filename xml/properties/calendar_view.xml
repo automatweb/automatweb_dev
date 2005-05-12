@@ -59,6 +59,16 @@
             <caption>Näita kalendrivaates kohe sündmuse sisu</caption>
       </property>
       <property>
+            <name>show_event_days</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Näita sündmust kõikidel päevadel</caption>
+      </property>
+      <property>
             <name>actives_only</name>
             <table>objects</table>
             <group>general</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.36 2005/05/05 14:18:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.37 2005/05/12 16:04:16 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -31,6 +31,9 @@
 
 @property show_event_content type=checkbox ch_value=1
 @caption Näita kalendrivaates kohe sündmuse sisu
+
+@property show_event_days type=checkbox ch_value=1
+@caption Näita sündmust kõikidel päevadel
 
 @property actives_only type=checkbox ch_value=1
 @caption Näita ainult aktiivseid sündmusi
@@ -425,6 +428,7 @@ class calendar_view extends class_base
 	// !Scans events source connections and exports them to the calendar component
 	function _export_events($arr)
 	{
+		$multi_e = $arr["obj_inst"]->prop("show_event_days");
 		// alright .. this function needs to accept an object id from which to ask events
 		$range = $arr["range"];
 		$arr["cal_inst"]->vars($this->vars);
@@ -447,10 +451,16 @@ class calendar_view extends class_base
 				$evt_obj = new object($event["id"]);
 				$data = $evt_obj->properties() + $data;
 				$data["icon"] = "event_icon_url";
-				$arr["cal_inst"]->add_item(array(
+				$varx = array(
+					"item_start" => $event["start"],
 					"timestamp" => $event["start"],
 					"data" => $data,
-				));
+				);
+				if(!empty($multi_e))
+				{
+					$varx["item_end"] = $event["end"];
+				}
+				$arr["cal_inst"]->add_item($varx);
 			};
 
 		}
@@ -480,10 +490,16 @@ class calendar_view extends class_base
 					$data = $evt_obj->properties() + $data;
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
-					$arr["cal_inst"]->add_item(array(
+					$varx = array(
+						"item_start" => $event["start"],
 						"timestamp" => $event["start"],
 						"data" => $data,
-					));
+					);
+					if(!empty($multi_e))
+					{
+						$varx["item_end"] = $event["end"];
+					}
+					$arr["cal_inst"]->add_item($varx);
 				};
 
 			};
@@ -1018,7 +1034,10 @@ class calendar_view extends class_base
 			));
 
 			$rv .= "<br>";
-
+				if(aw_global_get("uid") == "ahz")
+				{
+					arr($range);
+				}
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
@@ -1042,7 +1061,6 @@ class calendar_view extends class_base
 						"data" => $data,
 					));
 				};
-
 				if (sizeof($events) > 0)
 				{
 					$rv .= $vcal->draw_day(array("caption" => $to_o->name()));
