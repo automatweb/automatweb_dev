@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.327 2005/04/25 14:08:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.328 2005/05/12 08:57:11 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -83,18 +83,11 @@ class document extends aw_template
 			{
 				$ot = new object_tree(array(
 					"class_id" => CL_MENU,
-					"parent" => $fm_id,
+					"parent" => $gm_id,
 					"status" => array(STAT_NOTACTIVE, STAT_ACTIVE),
 					"sort_by" => "objects.parent"
 				));
 				$sections = $ot->ids();	
-				/*
-				$_sm_list = $this->get_menu_list(false, false, $fm_id);
-				foreach($_sm_list as $_sm_i => $ttt)
-				{
-					$sections[$_sm_i] = $_sm_i;
-				}
-				*/
 			}
 		}
 
@@ -107,7 +100,7 @@ class document extends aw_template
 		{
 			$periods = $row->meta("pers");
 		}
-		
+
 		if (is_array($sections))
 		{
 			$pstr = join(",",$sections);
