@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.7 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_table.aw,v 1.8 2005/05/12 11:28:47 kristo Exp $
 // property_table.aw - Tabel 
 /*
 
@@ -598,7 +598,7 @@ class property_table extends class_base
 		return true;
 	}
 
-	function _init_demo_rels_data_t(&$t)
+	function _init_demo_rels_data_t(&$t, $levels)
 	{
 		$t->define_field(array(
 			"name" => "col",
@@ -607,12 +607,22 @@ class property_table extends class_base
 			"sortable" => 1
 		));
 
-		$t->define_field(array(
+		/*$t->define_field(array(
 			"name" => "prop",
-			"caption" => t("Omadus"),
+			"caption" => t("Omadus / Seos"),
 			"align" => "center",
 			"sortable" => 1
-		));
+		));*/
+
+		for ($i = 0; $i < $levels; $i++)
+		{
+			$t->define_field(array(
+				"name" => "prop_".$i,
+				"caption" => t("Omadus / Seos"),
+				"align" => "center",
+				"sortable" => 1
+			));
+		}
 	}
 
 	function generate_demo_rels_data_table($arr)
@@ -630,45 +640,88 @@ class property_table extends class_base
 		{
 			$clid = reset($clid);
 		}
+
 		$cfgu = get_instance("cfg/cfgutils");
 		$ps = $cfgu->load_properties(array(
 			"clid" => $clid
 		));
-		$props = array();
-		foreach($ps as $pn => $pd)
-		{
-			if ($pd["store"] == "no")
-			{
-				continue;
-			}
-			$props[$pn] = $pd["caption"];
-		}
+		$rels = $cfgu->get_relinfo();
 
+		$props = $this->_get_property_picker_from_clid($clid);
+		
 		// let user match property to table column
 		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_demo_rels_data_t($t);
 
 		$table_items = new object_list(array(
 			"parent" => $arr["obj_inst"]->id(),
 			"class_id" => CL_PROPERTY_TABLE_COLUMN
 		));
 		$col2prop = safe_array($arr["obj_inst"]->meta("col2prop"));
+		$reld = safe_array($arr["obj_inst"]->meta("rel_data"));
+
+		$max_level = 1;
 		foreach($table_items->arr() as $o)
 		{
-			$t->define_data(array(
+			$row_dat = array(
 				"col" => $o->name(),
 				"prop" => html::select(array(
 					"name" => "col2prop[".$o->id()."]",
 					"options" => $props,
 					"value" => $col2prop[$o->id()]
 				))
-			));
+			);
+
+			$cur_level = 0;
+			$from_clid = $clid;
+			foreach(explode(".", $col2prop[$o->id()].".") as $p_or_rel)
+			{
+				if (!$from_clid)
+				{
+					break;
+				}
+				$row_dat["prop_".$cur_level] = html::select(array(
+					"name" => "col2prop[".$o->id()."][]",
+					"options" => $this->_get_property_picker_from_clid($from_clid),
+					"value" => $p_or_rel
+				));
+
+				if ($p_or_rel)
+				{
+					$cfgu = get_instance("cfg/cfgutils");
+					$ps = $cfgu->load_properties(array(
+						"clid" => $from_clid
+					));
+					$rels = $cfgu->get_relinfo();
+
+					$from_clid = $this->_get_rel_class_id_for_prop_or_rel($from_clid, $ps, $rels, $p_or_rel);
+				}
+
+				$cur_level++;
+				$max_level = max($cur_level, $max_level);
+			}
+
+			$t->define_data($row_dat);
 		}
+
+		$this->_init_demo_rels_data_t($t, $max_level);
 	}
 
 	function save_demo_rels_data_t($arr)
 	{
-		$arr["obj_inst"]->set_meta("col2prop", $arr["request"]["col2prop"]);
+		$c2p = safe_array($arr["request"]["col2prop"]);
+		$res = array();
+		foreach($c2p as $_id => $inf)
+		{
+			foreach($inf as $_k => $_v)
+			{
+				if (!$_v)
+				{
+					unset($inf[$_k]);
+				}
+			}
+			$res[$_id] = join(".",$inf);
+		}
+		$arr["obj_inst"]->set_meta("col2prop", $res);
 	}
 
 	function _init_vertical_group_t(&$t)
@@ -702,6 +755,61 @@ class property_table extends class_base
 		}
 
 		$t->set_sortable(false);
+	}
+
+	function _get_rel_class_id_for_prop_or_rel($clid, $ps, $rels, $sel_p)
+	{
+		$reltype = "";
+		if (isset($ps[$sel_p]))
+		{
+			if (!empty($ps[$sel_p]["reltype"]))
+			{
+				$reltype = $ps[$sel_p]["reltype"];
+			}
+		}
+		else
+		if (substr($sel_p, 0, 7) == "RELTYPE")
+		{
+			$reltype = $sel_p;
+		}
+		$clid = false;
+		if ($reltype)
+		{
+			$clid = $rels[$reltype]["clid"][0];
+		}
+
+		return $clid;
+	}
+
+	function _get_property_picker_from_clid($clid)
+	{
+		$cfgu = get_instance("cfg/cfgutils");
+		$ps = $cfgu->load_properties(array(
+			"clid" => $clid
+		));
+		$rels = $cfgu->get_relinfo();
+
+		$props = array("" => "");
+		$props[] = t("Omadused:");
+		foreach($ps as $pn => $pd)
+		{
+			if ($pd["store"] == "no")
+			{
+				continue;
+			}
+			$props[$pn] = "&nbsp;&nbsp;".$pd["caption"];
+		}
+
+		$props[] = t("Seosed:");
+		foreach($rels as $rel_k => $rel_d)
+		{
+			if (substr($rel_k, 0, 7) == "RELTYPE")
+			{
+				$props[$rel_k] = "&nbsp;&nbsp;".$rel_d["caption"];
+			}
+		}
+
+		return $props;
 	}
 }
 ?>
