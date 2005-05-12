@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.22 2005/04/15 10:12:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.23 2005/05/12 11:28:56 kristo Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -329,7 +329,9 @@ class site_search_content_grp extends class_base
 				$mt = safe_array($grp->meta("grp_menus"));
 				$mt[$o->id()] = $o->id();
 				$grp->set_meta("grp_menus", $mt);
+				aw_disable_acl();
 				$grp->save();
+				aw_restore_acl();
 			}
 			else
 			{
@@ -338,7 +340,9 @@ class site_search_content_grp extends class_base
 				{
 					unset($mt[$o->id()]);
 					$grp->set_meta("grp_menus", $mt);
+					aw_disable_acl();
 					$grp->save();
+					aw_restore_acl();
 				}
 			}
 		}
@@ -377,7 +381,9 @@ class site_search_content_grp extends class_base
 	{
 		$grp->set_meta("grp_menus", $this->_get_menus(array("id" => $grp->id())));
 		$grp->set_meta("version", 2);
+		aw_disable_acl();
 		$grp->save();
+		aw_restore_acl();
 	}
 
 	function on_save_grp($arr)

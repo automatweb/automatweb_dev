@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.58 2005/04/14 08:57:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.59 2005/05/12 11:29:24 kristo Exp $
 
 /*
 
@@ -706,7 +706,7 @@ class gallery_v2 extends class_base
 		$cf = get_instance(CL_GALLERY_CONF);
 		$tmp = $cf->get_image_folder($this->_get_conf_for_folder($parent));
 
-		if ($tmp)
+		if (is_oid($tmp) && $this->can("view", $tmp))
 		{
 			return $tmp;
 		}
