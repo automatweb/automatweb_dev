@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.136 2005/05/05 11:17:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.137 2005/05/12 11:50:03 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1159,6 +1159,9 @@ class image extends class_base
 		{
 			$img->resize_simple($xyd["width"], $xyd["height"]);
 		}
+		
+		$gv = get_instance(CL_GALLERY_V2);
+		$img = $gv->_do_logo($img, $conf, $prefix);
 
 		$img->save($file, IMAGE_JPEG);
 	}
