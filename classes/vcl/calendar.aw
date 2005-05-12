@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.65 2005/05/12 13:15:58 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.66 2005/05/12 15:14:41 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -14,7 +14,7 @@ class vcalendar extends aw_template
 		$this->container_template = "container.tpl";
 
 		$this->output_initialized = false;
-		
+		lc_site_load("vcl_calendar", &$this);
 	}
 
 	function has_feature($feature)
