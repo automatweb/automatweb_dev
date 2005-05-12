@@ -225,9 +225,7 @@
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <caption>
-            <![CDATA["Toolbar"]]>
-            </caption>
+            <caption>Toolbar</caption>
       </property>
       <property>
             <name>recurrence</name>
