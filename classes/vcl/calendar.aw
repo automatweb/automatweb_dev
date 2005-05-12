@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.64 2005/05/10 12:53:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.65 2005/05/12 13:15:58 ahti Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1278,6 +1278,10 @@ class vcalendar extends aw_template
 				}
 				else
 				{
+					if (aw_global_get("uid") == "duke")
+					{
+						print "x";
+					};
 					$day_url = aw_url_change_var(array(
 						"viewtype" => "day",
 						"event_id" => "",
@@ -1293,18 +1297,27 @@ class vcalendar extends aw_template
 				// and that pretty much is it.
 
 				// I set default styles in the container template and let them be overriden
+				$caption = date("j",$reals);
 				if($mode == 0)
 				{
-					$link = "<a href='$day_url'>".date("j",$reals)."</a>";
+					$link = "<a href='$day_url'>$caption</a>";
 				}
 				else
 				{
-					$link = date("j",$reals);
+					$link = $caption;
 				}
 				$this->vars(array(
 					"style" => $style,
 					"link" => $link,
+					"link2" => $day_url,
+					"caption" => $caption,
 				));
+				if($this->is_template("CLICKABLE") && $mode == 0)
+				{
+					$this->vars(array(
+						"link" => $this->parse("CLICKABLE"),
+					));
+				}
 				$day .= $this->parse("DAY");
 				$i = $i + 86400;
 			};
