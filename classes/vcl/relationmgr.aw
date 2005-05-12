@@ -476,7 +476,7 @@ class relationmgr extends aw_template
 		}
 
 		$this->qparts = $parts;
-		if($arr["request"]["searched"])
+		if($arr["searched"])
 		{
 			$this->do_search = true;
 		}

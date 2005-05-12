@@ -265,6 +265,10 @@ class class_visualizer extends class_base
 				//"no_form" => 1,
 				"submit" => "no",
 			);
+			if($_REQUEST["srch"] == 1)
+			{
+				$groupitems["relationmgr"]["submit_method"] = "get";
+			}
 		};
 
 		return $groupitems;
