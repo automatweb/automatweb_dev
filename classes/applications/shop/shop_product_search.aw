@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.3 2005/05/03 09:10:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.4 2005/05/13 08:59:25 ahti Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -419,7 +419,7 @@ class shop_product_search extends class_base
 				}
 			}
 		}
-		uasort($ret, create_function('$a,$b', 'if ($a["_ord"] == $b["_ord"]) { return 0; } else { return $a["_ord"] > $b["_ord"] ? 1 : -1; }'));
+		uasort($ret, create_function('$a,$b', 'return $a["_ord"] - $b["_ord"];'));
 
 		$ret["do_search"] = array(
 			"name" => "do_search",
@@ -451,7 +451,7 @@ class shop_product_search extends class_base
 				}
 			}
 		}
-		uasort($flds, create_function('$a,$b', 'if ($a["_ord"] == $b["_ord"]) { return 0; } else { return $a["_ord"] > $b["_ord"] ? 1 : -1; }'));
+		uasort($flds, create_function('$a,$b', 'return $a["_ord"] - $b["_ord"];'));
 		foreach($flds as $fld)
 		{
 			$t->define_field($fld);
