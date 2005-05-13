@@ -7,11 +7,8 @@ the constructor can be called in four different ways:
 - without parameters: creates empty object
 - single integer: loads the object
 - single textual parameter: assumes the parameter is object alias, finds the object and loads it
-- single array parameter: loads the object from the array 
-  (array format is the same, as core::get_object returns and 
-  "properties" key, that contains property values)
 
-in addition to the constructor, there os an utility function obj() in the global scope, to lessen the need to type, that passes it's parameters to the constructor
+in addition to the constructor, there is an utility function obj() in the global scope, to lessen the need to type, that passes it's parameters to the constructor
 
 <b>Errors</b>
 
@@ -24,13 +21,13 @@ constructors have no return value
 
 <b>Examples</b>
 #php#
-$o =& new object; // creates an empty object
+$o = new object; // creates an empty object
 
-$o =& obj(666);	  // loads object with id 666
+$o = obj(666);	  // loads object with id 666
 
 // finds object that has alias osakonnad/majandus and loads it
-$o =& obj("osakonnad/majandus");		
-$o =& new object(array(
+$o = obj("osakonnad/majandus");		
+$o = new object(array(
    "name" => $name, 
    "parent" => $parent,
    "class_id" => CL_FOO
