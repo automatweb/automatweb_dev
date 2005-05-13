@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.30 2005/04/21 14:23:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.31 2005/05/13 09:00:13 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -2460,10 +2460,13 @@ class shop_warehouse extends class_base
 	function get_prod_add_config_forms($arr)
 	{
 		$wh = obj($arr["warehouse"]);
-		$conf = obj($wh->prop("conf"));
-
+		$conf_id = $wh->prop("conf");
 		$ret = array();
-		$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "sp_cfgform");
+		if(is_oid($conf_id) && $this->can("view", $conf_id))
+		{
+			$conf = obj($conf_id);
+			$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "sp_cfgform");
+		}
 		return $ret;
 	}
 
@@ -2476,10 +2479,13 @@ class shop_warehouse extends class_base
 	function get_prod_packaging_add_config_forms($arr)
 	{
 		$wh = obj($arr["warehouse"]);
-		$conf = obj($wh->prop("conf"));
-
+		$conf_id = $wh->prop("conf");
 		$ret = array();
-		$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "packaging_cfgform");
+		if(is_oid($conf_id) && $this->can("view", $conf_id))
+		{
+			$conf = obj($conf_id);
+			$this->_req_get_prod_add_config_forms($conf->prop("prod_type_fld"), $ret, "packaging_cfgform");
+		}
 		return $ret;
 	}
 
