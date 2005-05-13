@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.4 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner_client.aw,v 1.5 2005/05/13 09:10:19 kristo Exp $
 
 /*
 
@@ -53,6 +53,7 @@ class banner_client extends class_base
 
 	function show($arr)
 	{
+		return "[bloc".$arr["id"]."]";
 		$ob = new object($arr["id"]);
 		// return is html for banner area
 		return str_replace("[ss]", "[ss".$arr["id"]."]",$ob->prop("html"));

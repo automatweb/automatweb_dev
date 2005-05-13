@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.10 2005/05/09 09:09:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.11 2005/05/13 09:10:19 kristo Exp $
 
 /*
 
@@ -189,7 +189,7 @@ class banner extends class_base
 		@comment
 			$gid - banner area id
 	**/
-	function get_grp($gid)
+	function get_grp($gid, $die = true)
 	{
 		$baids = array();
 		$cnt = 0;
@@ -204,7 +204,7 @@ class banner extends class_base
 		$bbs = join(",",$bbs);
 		if ($bbs == "")
 		{
-			$this->error_banner();
+			$this->error_banner($die);
 		}
 
 		$q = "
@@ -242,7 +242,7 @@ class banner extends class_base
 				$bid = $baids[array_rand($baids)]["id"];
 				if (!$bid)
 				{
-					$this->error_banner();
+					$this->error_banner($die);
 				}
 			}
 			else
@@ -269,7 +269,7 @@ class banner extends class_base
 		{
 			if (!$bid)
 			{
-				$this->error_banner();
+				$this->error_banner($die);
 			}
 		}
 	}
@@ -292,6 +292,19 @@ class banner extends class_base
 			$this->db_query("INSERT INTO banner_views(tm,bid,ip,clid) VALUES(".time().",$bid,'$ip','$clid')");
 			$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 		}
+	}
+
+	function add_simple_view($bid, $clid)
+	{
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+		if ($ip == "" || !(strpos($ip,"unknown") === false))
+		{
+			$ip = aw_global_get("REMOTE_ADDR");
+		}
+		// ok. a prize for anybody (except terryf and duke) who figures out why the next line is like it is :)
+		$day = mktime(8,42,17,date("n"),date("d"),date("Y"));
+		$this->db_query("INSERT INTO banner_views(tm,bid,ip,clid) VALUES(".time().",$bid,'$ip','$clid')");
+		$this->db_query("UPDATE banners SET views=views+1 WHERE id = $bid");
 	}
 
 	/** called when user clicks on banner, finds the correct banner according to the session id 
@@ -402,11 +415,14 @@ class banner extends class_base
 
 	////
 	// !shows a transparent gif, used if any errors occur while showing banner
-	function error_banner()
+	function error_banner($die = true)
 	{
-		header("Content-type: image/gif");
-		readfile($this->cfg["baseurl"]."/automatweb/images/trans.gif");
-		die();
+		if ($die)
+		{
+			header("Content-type: image/gif");
+			readfile($this->cfg["baseurl"]."/automatweb/images/trans.gif");
+			die();
+		}
 	}
 
 	////
@@ -440,6 +456,64 @@ class banner extends class_base
 			$i->show(array(
 				"file" => basename($f_o->prop("file"))
 			));
+		}
+	}
+
+	function get_banner_html($loc, $count)
+	{
+		$banner = $this->get_grp($loc, false);
+		if ($banner)
+		{
+			$content = $banner->prop("banner_file");
+			if (is_oid($content) && $this->can("view", $content))
+			{
+				$this->add_simple_view($banner->id(), $loc);
+				$content_o = obj($content);
+				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()));
+				switch($content_o->class_id())
+				{
+					case CL_IMAGE:
+						$i = get_instance("image");
+						$img = $i->get_url_by_id($content_o->id());
+						$html = "<a href='$url'><img border='0' src='$img'></a>";
+						break;
+
+					case CL_FILE:
+						$i = get_instance("file");
+						$f_url = $i->get_url($content_o->id(), $content_o->name());
+						if ($i->can_be_embedded($content_o))
+						{
+							$c_html = "<img border='0' src='$f_url'>";
+						}
+						else
+						{
+							$c_html = $content_o->name();
+						}
+						$html = "<a href='$url'>$c_html</a>";
+						break;
+
+					case CL_FLASH:
+						$f = get_instance(CL_FLASH);
+						$html = "<a href='$url'>".$f->view(array(
+							"id" => $content_o->id()
+						))."</a>";
+						break;
+
+					case CL_EXTLINK:
+						$l = get_instance(CL_EXTLINK);
+						$html = $l->parse_alias(array("alias" => array("target" => $content_o->id())));
+						break;
+
+					case CL_DOCUMENT:
+						$l = get_instance("document");
+						$html = $l->gen_preview(array("docid" => $content_o->id(), "leadonly" => 1));
+						break;
+	
+					default:
+						$html = "";
+				}
+				return $html;
+			}
 		}
 	}
 }

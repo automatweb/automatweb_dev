@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.22 2005/04/07 12:14:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.23 2005/05/13 09:10:19 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -177,6 +177,11 @@ class site_cache extends aw_template
 		if (strpos($res,"[ss") !== false)
 		{
 			$res = preg_replace("/\[ss(\d+)\]/e","md5(time().\$_SERVER[\"REMOTE_ADDR\"].\"\\1\")",$res);
+		};
+		if (strpos($res,"[bloc") !== false)
+		{
+			$bn = get_instance(CL_BANNER);
+			$res = preg_replace("/\[bloc(\d+)\]/e","\$bn->get_banner_html(\"\\1\")",$res);
 		};
 		if (strpos($res,"[document_statistics") !== false)
 		{
