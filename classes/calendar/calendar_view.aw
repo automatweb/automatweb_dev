@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.37 2005/05/12 16:04:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.38 2005/05/13 08:31:50 ahti Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -280,7 +280,6 @@ class calendar_view extends class_base
 					"size" => 15,
 				));
 			}
-			//arr($oldvals[$sname]["fields"]);
 			$nums = count($oldvals[$sname]["fields"]);
 			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
 			{
@@ -788,9 +787,11 @@ class calendar_view extends class_base
 						"range" => $range,
 						"status" => $status,
 					));
-					$first = reset($events);
-					$first = obj($first["id"]);
-					$start1 = $first->prop("start1");
+					if($first = reset($events))
+					{
+						$first = obj($first["id"]);
+						$start1 = $first->prop("start1");
+					}
 				}
 				else
 				{
@@ -803,58 +804,18 @@ class calendar_view extends class_base
 					$events = array($f);
 					$start1 = $first->prop("start1");
 				}
-				if($first)
-				{
-					$objs = new object_list(array(
-						"parent" => $sources,
-						"class_id" => $this->event_entry_classes,
-						"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $start1),
-						"brother_of" => new obj_predicate_prop("id"),
-						"oid" => new obj_predicate_not($first->id()),
-						"status" => $status,
-						"limit" => 1,
-					));
-					if($day = $objs->begin())
-					{
-						$ec["overview_start"] = $ec["start"] = $day->prop("start1");
-						$ec["prev"] = date("d-m-Y", $day->prop("start1"));
-					}
-					else
-					{
-						$ec["overview_start"] = $ec["start"] = $start1;
-						$ec["prev"] = date("d-m-Y", $start1);
-					}
-					$objs = new object_list(array(
-						"parent" => $sources,
-						"class_id" => $this->event_entry_classes,
-						"start1" => new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $start1),
-						"brother_of" => new obj_predicate_prop("id"),
-						"oid" => new obj_predicate_not($first->id()),
-						"status" => $status,
-						"limit" => 1,
-					));
-					if($day = $objs->begin())
-					{
-						$ec["overview_end"] = $ec["end"]  = $day->prop("start1");
-						$ec["next"] = date("d-m-Y", $day->prop("start1"));
-					}
-					else
-					{
-						$ec["overview_end"] = $ec["end"]  = $start1;
-						$ec["next"] = date("d-m-Y", $start1);
-					}
-				}
 				$vcal->items = array();
 				foreach($events as $event)
 				{
+					if(!$vcal->first_event)
+					{
+						$vcal->first_event = $event;
+					}
 					$event = obj($event["id"]);
 					$i = $event->instance();
 					$text .= $i->request_execute($event);
 				}
-			}
-			if(!empty($ec))
-			{
-				$range_p["show_ec"] = $ec;
+				$vcal->last_event = $event->properties() + array("id" => $event->id());
 			}
 			$viewtype = "day";
 			$this->read_template($use_template."/intranet1.tpl");
@@ -934,9 +895,9 @@ class calendar_view extends class_base
 				$to_o = $conn->to();
 				$sources = $sources + $this->get_event_sources($to_o);
 			}
-			$vcal->event_sources = $sources;
-			$vcal->event_entry_classes = $this->event_entry_classes;
 		}
+		$vcal->event_entry_classes = $this->event_entry_classes;
+		$vcal->event_sources = $sources;
 		if ($arr["start_from"])
 		{
 			// this is used by project to limit the year view to start from the current month
