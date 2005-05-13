@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.188 2005/05/09 14:57:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.189 2005/05/13 07:19:01 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1449,6 +1449,14 @@ if (!defined("DEFS"))
 			return $var;
 		}
 		return array();
+	}
+
+	if (!function_exists("cal_days_in_month"))
+	{
+		function cal_days_in_month($type, $month, $year)
+		{
+			return date("j",mktime(0,0,0,$month+1,0,$year));
+		}
 	}
 
 	if (!function_exists("strptime"))
