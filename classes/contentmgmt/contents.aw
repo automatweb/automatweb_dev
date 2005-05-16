@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.4 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/contents.aw,v 1.5 2005/05/16 07:07:15 kristo Exp $
 // contents.aw - Saidi sisukord
 /*
 
@@ -127,7 +127,7 @@ class contents extends class_base
 				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
 				"period" => $this->period, 
 				"parent" => $ld,
-				"status" => array(STAT_NOTACTIVE,STAT_ACTIVE),
+				"status" => array(STAT_ACTIVE),
 			));
 			if ($ol->count() > 0)
 			{
@@ -195,7 +195,7 @@ class contents extends class_base
 			$filta = array(
 				"class_id" => array(CL_DOCUMENT, CL_PERIODIC_SECTION, CL_BROTHER_DOCUMENT),
 				"parent" => $o->id(),
-				"status" => array(STAT_NOTACTIVE,STAT_ACTIVE),
+				"status" => array(STAT_ACTIVE),
 				"sort_by" => "objects.jrk"
 			);
 			if ($this->period > 1)
