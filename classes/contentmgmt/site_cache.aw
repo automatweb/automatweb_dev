@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.23 2005/05/13 09:10:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.24 2005/05/16 07:06:32 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -34,6 +34,7 @@ class site_cache extends aw_template
 			$this->ip_access($arr);
 			return $this->do_final_content_checks($content);
 		}
+
 		// okey, now
 
 		$inst = get_instance("contentmgmt/site_show");

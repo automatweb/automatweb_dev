@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.133 2005/05/10 13:50:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.134 2005/05/16 07:06:10 kristo Exp $
 
 /*
 
@@ -779,6 +779,7 @@ class site_show extends class_base
 		$d = get_instance(CL_DOCUMENT);
 		$d->set_opt("parent", $this->sel_section);
 		$ct = "";
+
 
 		// oleks vaja teha voimalus feedbacki tegemiseks. S.t. doku voib 
 		// lisaks enda sisule tekitada veel mingeid datat, mida siis menuedit

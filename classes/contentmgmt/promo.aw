@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.71 2005/04/28 14:45:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.72 2005/05/16 07:06:49 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -899,7 +899,6 @@ class promo extends class_base
 						"all_langs" => true
 					));
 				}
-
 
 				if ($o->prop("trans_all_langs"))
 				{

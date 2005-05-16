@@ -68,6 +68,7 @@ class object
 		{
 			die(t("object loader is not object!!"));
 		}
+
 		enter_function("object::load");
 		$this->oid = $GLOBALS["object_loader"]->load($GLOBALS["object_loader"]->param_to_oid($param));
 		exit_function("object::load");
