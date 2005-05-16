@@ -831,7 +831,7 @@ class site_list extends class_base
 			"server" => "register.automatweb.com",
 			"no_errors" => true
 		));
-		foreach($list as $id => $row)
+		foreach(safe_array($list) as $id => $row)
 		{
 			if ($existing[$id])
 			{
