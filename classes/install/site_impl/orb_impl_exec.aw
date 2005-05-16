@@ -21,7 +21,6 @@ $vars = $_GET + $_POST + $AW_GET_VARS;
 
 
 $class = $vars["class"];
-
 // I'll burn in hell for this
 if (!$class)
 {
@@ -47,9 +46,7 @@ if ($vars["fastcall"] == 1)
 	// ja ongi k6ik
 	die($inst->$action($vars));
 }
-
 include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
-
 enter_function("orb_impl_exec::process_request");
 classload("core/orb/orb");
 $orb = new orb();
