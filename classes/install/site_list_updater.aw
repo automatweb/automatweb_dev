@@ -84,7 +84,8 @@ class site_list_updater extends aw_template
 			"server" => "http://register.automatweb.com",
 			"params" => array(
 				"site_id" => aw_ini_get("site_id")
-			)
+			),
+			"no_errors" => true
 		));
 		$this->set_cval("site_list_xtea_session_key".aw_ini_get("site_id"), $key);
 		return $key;
