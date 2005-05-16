@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.30 2005/05/01 16:31:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.31 2005/05/16 17:10:41 kristo Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -1137,7 +1137,7 @@ class ml_list extends class_base
 	{
 		$perpage = 100;
 		$ft_page = (int)$GLOBALS["ft_page"];
-		$ml_list_members = $this->get_members($arr["obj_inst"]->id(), $perpage * $ft_page +1, $perpage * ($ft_page + 1));
+		$ml_list_members = $this->get_members($arr["obj_inst"]->id(), $perpage * $ft_page , $perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
  		$t->parse_xml_def("mlist/member_list");
 		$t->set_default_sortby("id");

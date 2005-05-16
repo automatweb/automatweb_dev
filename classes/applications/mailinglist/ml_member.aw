@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.7 2005/04/26 11:17:32 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.8 2005/05/16 17:10:41 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -201,6 +201,10 @@ class ml_member extends class_base
 		};
 
 		$added = false;
+		if (!is_array($user_folders) && is_oid($user_folders))
+		{
+			$user_folders = array($user_folders);
+		}
 		foreach($user_folders as $user_folder)
 		{
 			if(is_array($user_folder))
