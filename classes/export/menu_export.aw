@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.6 2005/04/01 12:06:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/menu_export.aw,v 1.7 2005/05/16 07:02:59 kristo Exp $
 // menu_export.aw - helper class for exporting menus
 class menu_export
 {
@@ -79,17 +79,15 @@ class menu_export
 
 	function _get_row($o)
 	{
-		$cb = $o->createdby();
-		$mb = $o->modifiedby();
 		return array(
 			"parent" => $o->parent(),
 			"oid" => $o->id(),
 			"comment" => $o->comment(),
 			"name" => $o->name(),
 			"created" => $o->created(),
-			"createdby" => $cb,
+			"createdby" => $o->createdby(),
 			"modified" => $o->modified(),
-			"modifiedby" => $mb,
+			"modifiedby" => $o->modifiedby(),
 			"status" => $o->status(),
 			"jrk" => $o->ord(),
 			"alias" => $o->prop("alias"),
