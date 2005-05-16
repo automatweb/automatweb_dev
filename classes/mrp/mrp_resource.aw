@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.63 2005/05/09 11:53:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.64 2005/05/16 10:45:16 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -597,7 +597,10 @@ class mrp_resource extends class_base
 			for ($job =& $list->begin(); !$list->end(); $job =& $list->next())
 			{
 /* dbg */ if (!is_oid ($job->prop ("project"))) { echo "project is not an object. job:" . $job->id () . " proj:" . $job->prop ("project") ."<br>"; }
-
+				if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+				{
+					continue;
+				}
 				### show only applicable projects' jobs
 				$project = obj ($job->prop ("project"));
 				$applicable_states = array (
