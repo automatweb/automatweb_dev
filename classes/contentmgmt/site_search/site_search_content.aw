@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.47 2005/04/19 06:47:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.48 2005/05/16 07:05:36 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -1085,7 +1085,7 @@ class site_search_content extends class_base
 
 		lc_site_load("search_conf", &$this);
 		
-		if (count($results) < 1)
+		if (count($results) < 1 && !$multigroups)
 		{
 			$this->read_template("no_results.tpl");
 			$this->vars(array(
@@ -1221,8 +1221,8 @@ class site_search_content extends class_base
 				));
 
 				$grpcfg = $o->meta("grpcfg");
-
-				foreach($conns as $conn)
+				$has_res = false;
+				foreach($conns as $_idx => $conn)
 				{
 					$cid = $conn->prop("to");
 					if ($conn->prop("to.class_id") == CL_EVENT_SEARCH)
@@ -1246,6 +1246,17 @@ class site_search_content extends class_base
 							"date" => $date
 						));
 					};
+					$results_arr[$_idx] = $results;
+					if (count($results))
+					{
+						$has_res = true;
+					}
+				}
+
+				foreach($conns as $_idx => $conn)
+				{
+					$results = $results_arr[$_idx];
+					$cid = $conn->prop("to");
 
 					$grp_sort_by = $sort_by;
 					if (!empty($grpcfg["sorder"][$cid]))
@@ -1271,9 +1282,14 @@ class site_search_content extends class_base
 							"sdate" => $arr["s_date"],
 							"opts" => $arr["opts"]
 						),
-						"page" => $page
+						"page" => $page,
+						"multigroups" => $has_res
 					));
 					$search = true;
+					if (!$has_res)
+					{
+						break;
+					}
 				};
 			}
 			else
