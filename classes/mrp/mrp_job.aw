@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.67 2005/05/09 11:53:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.68 2005/05/16 12:10:59 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1197,6 +1197,10 @@ class mrp_job extends class_base
 
 			foreach ($prerequisites as $prerequisite_oid)
 			{
+				if (!is_oid($prerequisite_oid) || !$this->can("view", $prerequisite_oid))
+				{
+					continue;
+				}
 				$prerequisite = obj ($prerequisite_oid);
 
 				if (!in_array ($prerequisite->prop ("state"), $applicable_states))

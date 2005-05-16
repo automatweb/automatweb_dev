@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.117 2005/05/05 12:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.118 2005/05/16 12:10:59 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2248,6 +2248,10 @@ if ($_GET['show_thread_data'] == 1)
 
 		foreach ($jobs as $job)
 		{
+			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			{
+				continue;
+			}
 			$project = obj ($job->prop ("project"));
 
 			### project states that are shown in chart
@@ -2583,7 +2587,8 @@ if ($_GET['show_thread_data'] == 1)
 			$arr["obj_inst"] = $o;
 			$co = $o->instance();
 			$co->callback_on_load($arr);
-			$co->do_contact_toolbar($arr["prop"]['toolbar'],$arr);
+			#$co->do_contact_toolbar($arr["prop"]['toolbar'],$arr);
+			$co->do_contact_toolbar($arr["prop"]['vcl_inst'],$arr);
 
 			$tb =& $arr["prop"]["vcl_inst"];
 			$tb->remove_button("Kone");
@@ -3354,7 +3359,7 @@ if ($_GET['show_thread_data'] == 1)
 					break;
 
 				case "status":
-					$sby = "mrp_job.status";
+					$sby = "mrp_job.state";
 					break;
 
 				case "project":
@@ -3397,7 +3402,14 @@ if ($_GET['show_thread_data'] == 1)
 			}
 			$cnt++;
 			$res = obj($job->prop("resource"));
-			$proj = obj($job->prop("project"));
+			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			{
+				$proj = obj();
+			}
+			else
+			{
+				$proj = obj($job->prop("project"));
+			}
 
 			$workers_str = array();
 			foreach(safe_array($workers[$res->id()]) as $person)

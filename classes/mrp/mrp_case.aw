@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.76 2005/05/05 12:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.77 2005/05/16 12:10:59 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -751,7 +751,16 @@ class mrp_case extends class_base
 
 		foreach ($jobs as $job)
 		{
+			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			{
+				continue;
+			}
 			$project = obj ($job->prop ("project"));
+
+			if (!is_oid($job->prop("resource")) || !$this->can("view", $job->prop("resource")))
+			{
+				continue;
+			}
 			$resource = obj ($job->prop ("resource"));
 
 			if (!in_array ($resource->id (), $project_resources))
