@@ -2,7 +2,7 @@
 </script>
 
 <script LANGUAGE="JavaScript">
-var listB = new DynamicOptionList("aselect","reltype");
+var listB = new DynamicOptionList("aselect", "reltype");
 
 {VAR:rels1}
 

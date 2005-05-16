@@ -1,11 +1,4 @@
 <?php
-/*
-if (empty($class) && !empty($alias))
-{
-	$class = $alias;
-}
-*/
-
 if ($class  || $reforb)
 {
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/orb_impl_exec.".aw_ini_get("ext"));
@@ -15,6 +8,7 @@ else
 	// if no orb call, do a normal pageview
 	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_header.".aw_ini_get("ext"));
 }
+
 
 enter_function("index_impl::after_init");
 // get an instance if the site class

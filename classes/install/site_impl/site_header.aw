@@ -19,13 +19,11 @@ classload("timer");
 classload("menuedit");
 classload("document");
 classload("file");
-
 $awt = new aw_timer();
 
 enter_function("site_header::aw_startup");
 aw_startup();
 exit_function("site_header::aw_startup");
-
 // oughta put this in aw_startup() as well, but it is used in so many places
 // in the code that I just don't have the time do deal with that right now
 if (!$section)
