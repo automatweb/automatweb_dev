@@ -12,7 +12,7 @@
 		<action name="grouphelp">
 			<function name="grouphelp">
 				<arguments>
-					<required name="clid" />
+					<required name="clid" type="int" />
 					<required name="grpid" />
 				</arguments>
 			</function>
