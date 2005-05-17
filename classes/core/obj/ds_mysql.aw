@@ -749,6 +749,12 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				$this->db_query($q);
 			}
 		}
+
+		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["brother_of"]]);
+		unset($GLOBALS["__obj_sys_objd_memc"][$objdata["oid"]]);
+
+		unset($this->read_properties_data_cache[$objdata["oid"]]);
+		unset($this->read_properties_data_cache[$objdata["brother_of"]]);
 	}
 
 	function read_connection($id)
