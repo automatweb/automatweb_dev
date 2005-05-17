@@ -632,26 +632,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$objdata["brother_of"] = $objdata["oid"];
 		}
 
-		if (true ||  aw_global_get("uid") == "kix")
-		{
-			$old_mod_cnt = (int)$objdata["mod_cnt"];
-			$new_mod_cnt = (int)$this->db_fetch_field("SELECT mod_cnt FROM objects WHERE oid = ".$objdata["oid"], "mod_cnt");
-			if ($old_mod_cnt != $new_mod_cnt && $new_mod_cnt > 1)
-			{
-				// check if things are out of sync
-				error::raise(array(
-					"id" => "ERR_OBJS_OUT_OF_SYNC",
-					"msg" => t("object $objdata[oid] old mod_cnt = $old_mod_cnt , new = $new_mod_cnt "),
-					"fatal" => false,
-					"show" => false
-				));
-			}
-			if (is_object($GLOBALS["objects"][$objdata["oid"]]))
-			{
-				$GLOBALS["objects"][$objdata["oid"]]->obj["mod_cnt"] = $new_mod_cnt+1;
-			}
-		}	
-		// first, save all object table fields.
 		$q = "UPDATE objects SET
 			parent = '".$objdata["parent"]."',
 			name = '".$objdata["name"]."',
@@ -670,8 +650,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			metadata = '".$metadata."',
 			subclass = '".$objdata["subclass"]."',
 			flags = '".$objdata["flags"]."',
-			brother_of = '".$objdata["brother_of"]."',
-			mod_cnt = mod_cnt + 1
+			brother_of = '".$objdata["brother_of"]."'
 			WHERE oid = '".$objdata["oid"]."'
 		";
 
