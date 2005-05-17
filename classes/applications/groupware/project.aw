@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.40 2005/05/05 14:18:34 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.41 2005/05/17 13:47:36 ahti Exp $
 // project.aw - Projekt 
 /*
 
@@ -578,10 +578,12 @@ class project extends class_base
 
 		// ma pean lugema sündmusi sellest projektist ja selle alamprojektidest.
 		$_start = $arr["range"]["start"];
+		/* this code is ev0l, we should outcomment it -- ahz
 		if ($arr["range"]["overview_start"])
 		{
 			$_start = $arr["range"]["overview_start"];
 		};
+		*/
 		$_end = $arr["range"]["end"];
 		$lang_id = aw_global_get("lang_id");
 		$stat_str = "objects.status != 0";
