@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.392 2005/05/05 10:40:59 ahti Exp $
+// $Id: class_base.aw,v 2.393 2005/05/17 14:48:08 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -260,6 +260,7 @@ class class_base extends aw_template
 		{
 			$this->no_active_tab = 1;
 		};
+
 
 		if (empty($use_form))
 		{
@@ -4510,6 +4511,16 @@ class class_base extends aw_template
 
 		};
 
+		if (isset($this->classinfo["no_status"]))
+		{
+			unset($defaults["status"]);
+		};
+
+		if (isset($this->classinfo["no_comment"]))
+		{
+			unset($defaults["comment"]);
+		};
+			
 		$this->layoutinfo = $cfgu->get_layoutinfo();
 
 		$this->relinfo = $cfgu->get_relinfo();
