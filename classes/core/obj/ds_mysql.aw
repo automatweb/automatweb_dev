@@ -632,6 +632,25 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			$objdata["brother_of"] = $objdata["oid"];
 		}
 
+		if (true ||  aw_global_get("uid") == "kix")
+		{
+			$old_mod_cnt = (int)$objdata["mod_cnt"];
+			$new_mod_cnt = (int)$this->db_fetch_field("SELECT mod_cnt FROM objects WHERE oid = ".$objdata["oid"], "mod_cnt");
+			if ($old_mod_cnt != $new_mod_cnt && $new_mod_cnt > 1)
+			{
+				// check if things are out of sync
+				error::raise(array(
+					"id" => "ERR_OBJS_OUT_OF_SYNC",
+					"msg" => t("object $objdata[oid] old mod_cnt = $old_mod_cnt , new = $new_mod_cnt "),
+					"fatal" => false,
+					"show" => false
+				));
+			}
+			if (is_object($GLOBALS["objects"][$objdata["oid"]]))
+			{
+				$GLOBALS["objects"][$objdata["oid"]]->obj["mod_cnt"] = $new_mod_cnt+1;
+			}
+		}	
 		// first, save all object table fields.
 		$q = "UPDATE objects SET
 			parent = '".$objdata["parent"]."',
@@ -651,8 +670,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			metadata = '".$metadata."',
 			subclass = '".$objdata["subclass"]."',
 			flags = '".$objdata["flags"]."',
-			brother_of = '".$objdata["brother_of"]."'
-			
+			brother_of = '".$objdata["brother_of"]."',
+			mod_cnt = mod_cnt + 1
 			WHERE oid = '".$objdata["oid"]."'
 		";
 
@@ -1691,6 +1710,13 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				));
 			}
 
+			$set_clid = false;
+			if (($_pos = strpos($pp, "(")) !== false)
+			{
+				$set_clid = constant(substr($pp, $_pos+1, -1));
+				$pp = substr($pp, 0, $_pos);
+			}
+
 			error::raise_if(!is_array($GLOBALS["properties"][$cur_clid][$pp]), array(
 				"id" => ERR_OBJ_NO_PROP,
 				"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no property %s in class %s "), $pp, $cur_clid)
@@ -1704,7 +1730,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::raise_if($cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
+				error::raise_if(!$set_clid && $cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => t("ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise")
 				));
@@ -1731,7 +1757,8 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						break;
 	
 					default:
-						error::raise(array(
+						$new_clid = $set_clid;
+						error::raise_if(!$set_clid, array(
 							"id" => ERR_OBJ_W_TP,
 							"msg" => sprintf(t("ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"), $cur_prop["type"])
 						));

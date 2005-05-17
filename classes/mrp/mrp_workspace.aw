@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.118 2005/05/16 12:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.119 2005/05/17 08:05:27 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3264,6 +3264,7 @@ if ($_GET['show_thread_data'] == 1)
 			"caption" => t("Klient"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
+//			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -3363,7 +3364,7 @@ if ($_GET['show_thread_data'] == 1)
 					break;
 
 				case "project":
-					$sby = "mrp_job.project";
+					$sby = "CAST(objects_826_project.name AS UNSIGNED)";
 					break;
 
 				case "job_comment":
@@ -3371,7 +3372,11 @@ if ($_GET['show_thread_data'] == 1)
 					break;
 
 				case "resource":
-					$sby ="mrp_job.resource";
+					$sby = "mrp_job.resource";
+					break;
+
+				case "customer":
+					$sby = "";
 					break;
 			}
 		}
@@ -3733,14 +3738,15 @@ if ($_GET['show_thread_data'] == 1)
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_job.starttime"
+			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_job.starttime",
 		);
 
 		if ($arr["states"])
 		{
 			$filt["state"] = $arr["states"];
 		}
-
+		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
+//		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).name"] = "%";
 		$jobs = new object_list($filt);
 
 		$ret = array();

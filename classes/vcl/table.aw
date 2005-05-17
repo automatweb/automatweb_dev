@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.49 2005/05/05 12:04:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.50 2005/05/17 08:05:27 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1372,7 +1372,10 @@ class aw_table extends aw_template
 					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
 					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
 				}
-
+				if ($_GET["sort_order"])
+				{
+					$so = $_GET["sort_order"] == "asc" ? "desc" : "asc";
+				}
 				$url = aw_global_get("REQUEST_URI");
 				$url = preg_replace("/sortby=[^&$]*/","",$url);
 				$url = preg_replace("/sort_order=[^&$]*/","",$url);
@@ -1691,7 +1694,12 @@ class aw_table extends aw_template
 					$sufix = $this->sorder[$v["name"]] == "desc" ? $this->up_arr : $this->dn_arr;
 					$so = $this->sorder[$v["name"]] == "desc" ? "asc" : "desc";
 				}
-
+				else
+				if ($_GET["sort_order"] && $_GET["sortby"] == $v["name"])
+				{
+					$sufix = $_GET["sort_order"] == "desc" ? $this->up_arr : $this->dn_arr;
+					$so = $_GET["sort_order"] == "desc" ? "asc" : "desc";
+				}
 				$url = aw_global_get("REQUEST_URI");
 				$url = preg_replace("/sortby=[^&$]*/","",$url);
 				$url = preg_replace("/sort_order=[^&$]*/","",$url);
