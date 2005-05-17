@@ -1,5 +1,43 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="class_designer_manager" folder="applications/class_designer" extends="class_base">
+		<action name="check_add_object">
+			<function name="check_add_object">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="clid" type="int" />
+					<optional name="ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="cut_p">
+			<function name="cut_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="copy_p">
+			<function name="copy_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="paste_p">
+			<function name="paste_p">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_clf">
+			<function name="create_clf">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
