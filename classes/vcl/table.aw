@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.50 2005/05/17 08:05:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.51 2005/05/18 14:31:14 ahti Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -81,7 +81,10 @@ class aw_table extends aw_template
 	function define_data($row)
 	{
 		$this->data[] = $row;
-		$this->d_row_cnt++;
+		if(!$this->no_recount)
+		{
+			$this->d_row_cnt++;
+		}
 	}
 
 	function set_data($idx, $row)
@@ -216,6 +219,14 @@ class aw_table extends aw_template
 		$this->has_pages = true;
 		$this->records_per_page = $arr["records_per_page"];
 		$this->pageselector = $arr["type"];
+		if($arr["d_row_cnt"])
+		{
+			$this->d_row_cnt = $arr["d_row_cnt"];
+		}
+		if($arr["no_recount"])
+		{
+			$this->no_recount = 1;
+		}
 	}
 
 	////
@@ -477,7 +488,6 @@ class aw_table extends aw_template
 	function draw($arr = array())
 	{
 		// väljastab tabeli
-		$this->read_template("scripts.tpl");
 		if (!is_array($this->rowdefs))
 		{
 			print "Don't know what to do";
@@ -522,6 +532,20 @@ class aw_table extends aw_template
 			$this->has_pages = $has_pages;
 		}
 
+		$this->vars(array(
+			"sel_row_style" => $this->tr_sel,
+		));
+		
+		$this->read_template("scripts.tpl");
+		if ($this->use_chooser && !$arr["no_chooser_script"])
+		{
+			$tbl .= $this->parse("selallscript");
+			if ($this->chooser_hilight)
+			{
+				$tbl .= $this->parse("hilight_script");
+			};
+		}
+		
 		if (!empty($this->pageselector))
 		{
 			switch($this->pageselector)
@@ -544,18 +568,7 @@ class aw_table extends aw_template
 			}
 		}
 
-		$this->vars(array(
-			"sel_row_style" => $this->tr_sel,
-		));
-		
-		if ($this->use_chooser && !$arr["no_chooser_script"])
-		{
-			$tbl .= $this->parse("selallscript");
-			if ($this->chooser_hilight)
-			{
-				$tbl .= $this->parse("hilight_script");
-			};
-		}
+
 
 
 		// moodustame välimise raami alguse
@@ -630,7 +643,7 @@ class aw_table extends aw_template
 				$counter++;
 				$p_counter++;
 				// if this is not on the active page, don't show the damn thing
-				if (isset($this->has_pages) && $this->has_pages && isset($this->records_per_page) && $this->records_per_page)
+				if (isset($this->has_pages) && $this->has_pages && isset($this->records_per_page) && $this->records_per_page && !$this->no_recount)
 				{
 					$cur_page = (int)(($p_counter-1) / $this->records_per_page);
 					if ($cur_page != $act_page)
