@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.62 2005/05/04 14:04:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.63 2005/05/18 13:35:59 ahti Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -303,6 +303,7 @@ class event_search extends class_base
 				$prop["options"] = array(
 					0 => t("Kuu j&auml;rgi"),
 					1 => t("P&auml;eva j&auml;rgi"),
+					2 => t("Kuu alates t&auml;nasest"),
 				);
 				break;
 			case "ftsearch_fields":
@@ -544,8 +545,9 @@ class event_search extends class_base
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
-		$sd = $ob->prop("show_type") == 1 ? date("d") : 1;
-		$ed = $ob->prop("show_type") == 1 ? date("d") : $cur_days;
+		$show_type = $ob->prop("show_type");
+		$sd = $show_type == 1 or $show_type == 2 ? date("d") : 1;
+		$ed = $show_type == 1 or $show_type == 2 ? date("d") : $cur_days;
 		if($start_tm == -1)
 		{
 			$start_tm = mktime(0, 0, 0, date("m"), $sd, date("Y"));
@@ -555,9 +557,21 @@ class event_search extends class_base
 		}
 		if($end_tm == -1)
 		{
-			$end_tm = mktime(0, 0, 0, date("m"), $ed, date("Y"));
-			$arr["end_date"]["month"] = date("m");
-			$arr["end_date"]["year"] = date("Y");
+			$md = date("m");
+			$yd = date("Y");
+			if($show_type == 2)
+			{
+				$md++;
+				if($md > 12)
+				{
+					$md = 1;
+					$yd++;
+				}
+			}
+			$cur_days = cal_days_in_month(CAL_GREGORIAN, $md, $yd);
+			$end_tm = mktime(0, 0, 0, $md, $ed, $yd);
+			$arr["end_date"]["month"] = $md;
+			$arr["end_date"]["year"] = $yd;
 			$arr["end_date"]["day"] = $cur_days;
 		}
 		if($formconfig["fulltext"]["active"])
