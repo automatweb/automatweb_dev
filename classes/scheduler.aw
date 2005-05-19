@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.32 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.33 2005/05/19 07:51:47 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -48,6 +48,7 @@ class scheduler extends aw_template
 				$this->evnt_add($row["recur_start"],$event,$uid,$password,$rep_id,$event_id);
 				$ltime = $row["recur_start"];
 				//arr($row);
+				break;
 			};
 			// if we use a repeater for scheduling events we get a bunch of times and add the events for those times
 			//$pl = get_instance(CL_PLANNER);
