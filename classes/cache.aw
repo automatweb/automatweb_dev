@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.39 2005/04/21 08:28:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cache.aw,v 2.40 2005/05/19 07:53:18 kristo Exp $
 
 // cache.aw - klass objektide cachemisex. 
 // cachet hoitakse failisysteemis, kataloogis, mis peax olema defineeritud ini muutujas cache.page_cache
@@ -206,13 +206,10 @@ class cache extends core
 	function file_invalidate($key)
 	{
 		global $awt;
-		$awt->start("file-invalidate");
-		$awt->count("file-invalidate");
 		if ($this->cfg["page_cache"] != "")
 		{
 			@unlink($this->get_fqfn($key));
 		}
-		$awt->stop("file-invalidate");
 	}
 
 	// fname = fully qualified file name minus basedir
