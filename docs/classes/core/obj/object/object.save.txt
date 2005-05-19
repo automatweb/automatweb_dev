@@ -20,6 +20,6 @@ Id of the object that was saved or created.
 #php#
 $o = obj();
 $o->set_parent(555);
-$o->set_class(CL_FOO);
+$o->set_class_id(CL_FOO);
 $o->save();
 #/php#

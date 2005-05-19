@@ -101,7 +101,7 @@ class _int_object_loader extends core
 		// else just try to match the whole string
 		{
 			return $this->ds->get_oid_by_alias(array(
-				"alias" => $part,
+				"alias" => $alias,
 				"site_id" => aw_ini_get("site_id")
 			));
 		}

@@ -34,7 +34,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				status != 0 %s %s
 		", OID, $alias, $site_id,$parent);
 
-		return $this->db_fetch_row($q);
+		return $this->db_fetch_field($q, OID);
 	}
 
 	function get_objdata($oid, $param = array())

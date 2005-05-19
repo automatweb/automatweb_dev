@@ -3,7 +3,7 @@ Parameters are the same as the constructor's, objects can be loaded based on:
 
 object id 
 alias
-array
+object instance
 
 <b>Errors:</b>
 - If user has no access, acl error is thrown.
@@ -14,14 +14,7 @@ id of the object loaded
 
 <b>Examples:</b>
 #php#
+$o = new object();
 $o->load(666);
 $o->load("alias/alias2");
-$o->load(array(
-		"name" => "kala",
-		"meta" => array(
-			"kaamera" => "ruulib"
-		),
-		"properties" => array(
-			"type" => "itchy trigga finga nigga"
-		)
-));#/php#
+$o->load(obj(666));#/php#

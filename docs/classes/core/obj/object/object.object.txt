@@ -7,6 +7,7 @@ the constructor can be called in four different ways:
 - without parameters: creates empty object
 - single integer: loads the object
 - single textual parameter: assumes the parameter is object alias, finds the object and loads it
+- object class instance: loads the same object from memory
 
 in addition to the constructor, there is an utility function obj() in the global scope, to lessen the need to type, that passes it's parameters to the constructor
 

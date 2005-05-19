@@ -1,5 +1,4 @@
-returns the currently loaded object as an array that can be passed to the load method
-or to the constructor
+returns the currently loaded object as an array 
 
 <b>errors:</b>
 none
@@ -12,5 +11,4 @@ array that has elements for all the object's properties and it's metadata
 #php#
 $o = obj(78);
 $arr = $o->arr();
-$o2 = obj($arr);
 #/php#
