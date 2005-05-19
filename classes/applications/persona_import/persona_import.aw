@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.6 2005/04/22 06:11:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.7 2005/05/19 12:40:27 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -674,6 +674,9 @@ class persona_import extends class_base
 			$bday = mktime(0,0,0,$bd_parts[1],$bd_parts[0],$bd_parts[2]);
 
 			print "tm = " . $bday . "<br>";
+
+			$worker["EESNIMI"] = convert_unicode($worker["EESNIMI"]);
+			$worker["PEREKONNANIMI"] = convert_unicode($worker["PEREKONNANIMI"]);
 
 			$person_obj->set_name($worker["EESNIMI"] . " " . $worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
