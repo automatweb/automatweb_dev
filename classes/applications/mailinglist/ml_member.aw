@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.8 2005/05/16 17:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.9 2005/05/19 10:12:35 duke Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -338,7 +338,8 @@ class ml_member extends class_base
 		$mailto = $m->prop("mail");
 		$memberdata["name"] = $m->prop("name");
 		$memberdata["id"] = $m->id();
-		$memberdata["joined"] = get_lc_date($m->created(), 7);
+		//$memberdata["joined"] = get_lc_date($m->created(), 7);
+		$memberdata["joined"] = $m->created();
 		if($from_user)
 		{
 			if($usr = reset($m->connections_to(array(
