@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.47 2005/04/23 13:51:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.48 2005/05/19 10:56:01 kristo Exp $
 // treeview.aw - tree generator
 /*
 
@@ -1205,10 +1205,7 @@ class treeview extends class_base
 
 			if ( (is_array ($node_actions)) and ($node_actions[$class_id]) )
 			{
-				$url = $this->mk_my_orb ($node_actions[$class_id], array(
-					"id" => $oid,
-					"return_url" => $req_uri,
-				), $class_name);
+				$url = html::get_change_url($oid, array("return_url" => $req_uri));
 			}
 			else
 			{

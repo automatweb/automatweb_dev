@@ -1725,7 +1725,7 @@ class crm_company extends class_base
 				$persons[] = $conn->prop('to');
 			}
 		}
-
+		
 		if (isset($arr["person_filter"]) && is_array($arr["person_filter"]))
 		{
 			$tmp = array();
@@ -1841,7 +1841,6 @@ class crm_company extends class_base
 			}
 			$t->define_data($tdata);
 		};
-
 	}
 
 	function get_all_workers_for_company($obj,$data,$workers_too=false)
@@ -1879,13 +1878,11 @@ class crm_company extends class_base
 
 	function callb_human_name($arr)
 	{
-		return html::href(array(
-			"url" => $this->mk_my_orb("change",array(
-				"id" => $arr["id"],
-				"return_url" => urlencode(aw_global_get("REQUEST_URI")),
-			),CL_CRM_PERSON),
-			"caption" => $arr["name"],
-		));
+		return html::get_change_url(
+			$arr["id"],
+			array("return_url" => get_ru()),
+			parse_obj_name($arr["name"])
+		);
 	}
 
 	function do_tasks_call($arr)

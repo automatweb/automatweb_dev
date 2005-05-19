@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.119 2005/05/17 08:05:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.120 2005/05/19 10:56:01 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -773,6 +773,10 @@ class mrp_workspace extends class_base
 				// break;
 
 			case "replan":
+				if ($arr["request"]["action"] == "view")
+				{
+					return PROP_IGNORE;
+				}
 				$plan_url = $this->mk_my_orb("create", array(
 					"return_url" => urlencode(aw_global_get('REQUEST_URI')),
 					"mrp_workspace" => $this_object->id (),
@@ -1778,7 +1782,12 @@ if ($_GET['show_thread_data'] == 1)
 		foreach ($projects as $project_id => $project)
 		{
 			$priority = $project->prop ("project_priority");
-			$change_url = $this->mk_my_orb("change", array(
+			$act = "change";
+			if (!$this->can("edit", $project_id))
+			{
+				$act = "view";
+			}
+			$change_url = $this->mk_my_orb($act, array(
 				"id" => $project_id,
 				"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
 				"group" => "grp_case_workflow",
@@ -4114,6 +4123,10 @@ if ($_GET['show_thread_data'] == 1)
 
 	function callback_mod_tab($arr)
 	{
+		if ($_GET["action"] == "view" && $arr["id"] == "grp_search")
+		{
+			return false;
+		}
 		if ($arr["id"] == "grp_login_select_res")
 		{
 			return false;

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.54 2005/04/18 11:21:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.55 2005/05/19 10:56:01 kristo Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -320,6 +320,10 @@ class releditor extends core
 
 	function init_rel_toolbar($arr)
 	{
+		if ($arr["request"]["action"] == "view")
+		{
+			return;
+		}
 		if ($arr["prop"]["direct_links"])
 		{
 			$params = array(
@@ -538,18 +542,20 @@ class releditor extends core
 			));
 		};
 
-		$awt->define_field(array(
-			"name" => "edit",
-			"caption" => t("Muuda"),
-			"align" => "center",
-		));
-
-		// aliasmgr uses "check"
-		$awt->define_chooser(array(
-			"field" => "conn_id",
-			"name" => "check",
-		));
-
+		if ($arr["request"]["action"] != "view")
+		{
+			$awt->define_field(array(
+				"name" => "edit",
+				"caption" => t("Muuda"),
+				"align" => "center",
+			));
+		
+			// aliasmgr uses "check"
+			$awt->define_chooser(array(
+				"field" => "conn_id",
+				"name" => "check",
+			));
+		}
 		// and how do I get values for those?
 
 		// and how do I show the selected row?

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.64 2005/05/16 10:45:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.65 2005/05/19 10:56:01 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -537,12 +537,7 @@ class mrp_resource extends class_base
 				{
 					### colour job status
 					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-
-					$change_url = $this->mk_my_orb ("change", array (
-						"id" => $job->id (),
-						"return_url" => urlencode (aw_global_get ('REQUEST_URI')),
-						"group" => "",
-					), "mrp_job");
+					$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
 
 					$table->define_data (array (
 						"modify" => html::href (array (
@@ -625,7 +620,7 @@ class mrp_resource extends class_base
 						"timestamp" => $timestamp,
 						"data" => array(
 							"name" => '<span  style="white-space: nowrap;">' . $project_name . "-" . $job->prop ("exec_order") . " [" . $state . "]</span>",
-							"link" => $this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job"),
+							"link" => html::get_change_url($job->id(), array("return_url" => get_ru()))   /*$this->mk_my_orb ("change",array ("id" => $job->id ()), "mrp_job")*/,
 						),
 					));
 				}
