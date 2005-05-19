@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.73 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.74 2005/05/19 12:13:22 kristo Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1834,6 +1834,29 @@ class forum_v2 extends class_base
 		$text = preg_replace("/\r([^<])/m","<br />\n\$1",$text);
 		//$text = nl2br($text);
 		return $text;
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["request"]["new"])
+		{
+			// create folders and set props
+			$topic_folder = obj();
+			$topic_folder->set_parent($arr["obj_inst"]->parent());
+			$topic_folder->set_name($arr["obj_inst"]->name().t(" teemade kaust"));
+			$topic_folder->set_class_id(CL_MENU);
+			$topic_folder->save();
+			$arr["obj_inst"]->set_prop("topic_folder", $topic_folder->id());
+
+			$address_folder = obj();
+			$address_folder->set_parent($arr["obj_inst"]->parent());
+			$address_folder->set_name($arr["obj_inst"]->name().t(" aadresside kaust"));
+			$address_folder->set_class_id(CL_MENU);
+			$address_folder->save();
+			$arr["obj_inst"]->set_prop("address_folder", $address_folder->id());
+
+			$arr["obj_inst"]->save();
+		}
 	}
 };
 ?>
