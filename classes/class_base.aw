@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.393 2005/05/17 14:48:08 duke Exp $
+// $Id: class_base.aw,v 2.394 2005/05/19 09:16:00 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1406,7 +1406,7 @@ class class_base extends aw_template
 			};
 
 			// experimental hook for new relationmgr
-			if (empty($this->classinfo["r2"]))
+			if (empty($this->classinfo["r2"]) && $this->view != 1)
 			{
 				$this->cli->add_tab(array(
 					"id" => "list_aliases",
