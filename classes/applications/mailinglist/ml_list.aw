@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.31 2005/05/16 17:10:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_list.aw,v 1.32 2005/05/19 12:06:42 duke Exp $
 // ml_list.aw - Mailing list
 /*
 @default table=objects
@@ -1139,7 +1139,29 @@ class ml_list extends class_base
 		$ft_page = (int)$GLOBALS["ft_page"];
 		$ml_list_members = $this->get_members($arr["obj_inst"]->id(), $perpage * $ft_page , $perpage * ($ft_page + 1));
 		$t = &$arr["prop"]["vcl_inst"];
- 		$t->parse_xml_def("mlist/member_list");
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"width" => 50,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "email",
+			"caption" => t("Aadress"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "joined",
+			"caption" => t("Liitunud"),
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "H:i d-m-Y",
+			"smart" => 1,
+		));
 		$t->set_default_sortby("id");
 		$t->set_default_sorder("desc");
 		$cfg = $arr["obj_inst"]->prop("member_config");
