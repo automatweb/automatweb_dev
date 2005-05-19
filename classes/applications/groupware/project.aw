@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.41 2005/05/17 13:47:36 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.42 2005/05/19 07:53:37 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -776,7 +776,7 @@ class project extends class_base
 				break;
 			}
 		};
-
+		
 		// kas ma saan pr-i hiljem arvutada?
 		exit_function("project::query");
 
@@ -915,7 +915,6 @@ class project extends class_base
 			};
 		};
 
-
 		if (sizeof($events) > 0)
 		{
 			$mpr = $this->get_master_project($o,$level);
@@ -982,7 +981,7 @@ class project extends class_base
 			exit_function("find-parent");
 
 		};
-
+		
 		return $events;
 	}
 
