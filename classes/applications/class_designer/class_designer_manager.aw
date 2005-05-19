@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.3 2005/05/17 09:14:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.4 2005/05/19 08:56:41 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -91,6 +91,8 @@ class class_designer_manager extends class_base
 		$arr["post_ru"] = post_ru();
 		$arr["tf"] = $_REQUEST["tf"];
 		$arr["classf_name"] = "";
+		$arr["ch_classf_name"] = "";
+		$arr["ch_classf_id"] = "";
 	}
 
 	function _mgr_tb($arr)
@@ -122,8 +124,14 @@ class class_designer_manager extends class_base
 			"onClick" => "document.changeform.classf_name.value=prompt('Sisesta nimi', ' ');"
 		));
 
-		$t->add_separator();
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"caption" => t('Kustuta'),
+			"action" => "delete_p",
+		));
 
+		$t->add_separator();
 		$t->add_button(array(
 			"name" => "cut",
 			"img" => "cut.gif",
@@ -202,14 +210,8 @@ class class_designer_manager extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "add",
-			"caption" => t("Lisa"),
-			"align" => "center"
-		));
-
-		$t->define_field(array(
-			"name" => "design",
-			"caption" => t("Disaini"),
+			"name" => "menu",
+			"caption" => t("Tegevus"),
 			"align" => "center"
 		));
 
@@ -261,7 +263,8 @@ class class_designer_manager extends class_base
 				"icon" => html::img(array(
 					"url" => aw_ini_get("icons.server")."/class_1.gif"
 				)),
-				"sel" => $sel
+				"sel" => $sel,
+				"menu" => $this->_get_menu("fld", $clf, NULL, $dat["name"])
 			));
 		}			
 
@@ -293,17 +296,6 @@ class class_designer_manager extends class_base
 				$design = html::get_change_url($designed[$clid], array("return_url" => get_ru()), "Disaini");
 			}
 
-			$add_link = html::href(array(
-				"url" => $this->mk_my_orb(
-					"check_add_object",
-					array(
-						"clid" => $clid,
-						"id" => $arr["obj_inst"]->id(),
-						"ru" => get_ru()
-					)
-				),
-				"caption" => t("Demo objekt"),
-			));
 
 			$sel = html::checkbox(array(
 				"name" => "sel[]",
@@ -312,14 +304,14 @@ class class_designer_manager extends class_base
 
 			$t->define_data(array(
 				"name" => $cld["name"],
-				"add" => $add_link,
 				"design" => $design,
 				"clid_nm" => $cld["def"],
 				"size" => $this->get_class_size($cld["file"]),
 				"icon" => html::img(array(
 					"url" => aw_ini_get("icons.server")."/class_".$clid.".gif"
 				)),
-				"sel" => $sel
+				"sel" => $sel,
+				"menu" => $this->_get_menu("cls", $clid, $designed[$clid], $cld["name"], $arr["obj_inst"]->id())
 			));
 		}
 		$t->set_sortable(false);
@@ -556,7 +548,10 @@ class class_designer_manager extends class_base
 	/**
 
 		@attrib name=cut_p
-
+	
+		@param sel optional 
+		@param sel_fld optional
+		@param post_ru required
 	**/
 	function cut_p($arr)
 	{
@@ -569,6 +564,9 @@ class class_designer_manager extends class_base
 
 		@attrib name=copy_p
 
+		@param sel optional 
+		@param sel_fld optional
+		@param post_ru required
 	**/
 	function copy_p($arr)
 	{
@@ -663,6 +661,22 @@ class class_designer_manager extends class_base
 		));
 	}
 
+	function _del_ini_file_value($file, $k)
+	{
+		$ls = file($file);
+		foreach($ls as $key => $line)
+		{
+			if (substr($line, 0, strlen($k)) == $k)
+			{
+				unset($ls[$key]);
+			}
+		}
+		$this->put_file(array(
+			"file" => $file,
+			"content" => join("", $ls)
+		));
+	}
+
 	function get_clf_size($clf)
 	{
 		$clss = array();
@@ -716,6 +730,121 @@ class class_designer_manager extends class_base
 		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][name]", $arr["classf_name"]);
 		$this->_add_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$max_fld][parent]", $arr["tf"]);
 		
+		return $arr["post_ru"];
+	}
+
+	function _get_menu($tp, $id, $designer = NULL, $nm = NULL, $obj_id = NULL)
+	{
+		$this->tpl_init("automatweb/menuedit");
+		$this->read_template("js_popup_menu.tpl");
+
+		$this->vars(array(
+			"menu_id" => $tp.$id,
+			"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
+		));
+	
+		if ($tp == "fld")
+		{
+			$items = array(
+				"javascript:submit_changeform('change_clf_name',document.changeform.ch_classf_name.value=prompt('Sisesta nimi','$nm'),document.changeform.ch_classf_id.value=$id)" => t("Muuda nime"),
+				$this->mk_my_orb("cut_p", array("sel_fld" => array($id), "post_ru" => get_ru())) => t("L&otilde;ika"),
+				$this->mk_my_orb("copy_p", array("sel_fld" => array($id), "post_ru" => get_ru())) => t("Kopeeri"),
+				$this->mk_my_orb("delete_p", array("sel_fld" => array($id), "post_ru" => get_ru())) => t("Kustuta")
+			);
+		}
+		else
+		{
+			$add_link = $this->mk_my_orb(
+				"check_add_object",
+				array(
+					"clid" => $id,
+					"id" => $obj_id,
+					"ru" => get_ru()
+				)
+			);
+
+			$items = array(
+				$add_link => t("Demo objekt"),
+				"javascript:submit_changeform('change_class_name',document.changeform.ch_classf_name.value=prompt('Sisesta nimi','$nm'),document.changeform.ch_classf_id.value=$id)" => t("Muuda nime"),
+			);
+			if ($designer)
+			{
+				$items[html::get_change_url($designer, array("return_url" => get_ru()))] = t("Disaini");
+			}
+			else
+			{
+				$items[$this->mk_my_orb("create_designer_from_class", array("id" => $obj_id, "ru" => get_ru(), "clid" => $id))] = t("Loo disainer");
+			}
+			$items[$this->mk_my_orb("cut_p", array("sel" => array($id), "post_ru" => get_ru()))] = t("L&otilde;ika");
+			$items[$this->mk_my_orb("copy_p", array("sel" => array($id), "post_ru" => get_ru()))] = t("Kopeeri");
+			$items[$this->mk_my_orb("delete_p", array("sel" => array($id), "post_ru" => get_ru()))] = t("Kustuta");
+		}
+
+		$mi = "";
+		foreach($items as $url => $txt)
+		{
+			$this->vars(array(
+				"link" => $url,
+				"text" => $txt
+			));
+			$mi .= $this->parse("MENU_ITEM");
+		}
+
+		$this->vars(array(
+			"MENU_ITEM" => $mi
+		));
+		return $this->parse();
+	}
+
+	/**
+
+		@attrib name=change_clf_name
+
+	**/
+	function change_clf_name($arr)
+	{
+		$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classfolders.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classfolders[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		return $arr["post_ru"];
+	}
+
+	/**
+
+		@attrib name=change_class_name
+
+	**/
+	function change_class_name($arr)
+	{
+		$this->_set_ini_file_value(aw_ini_get("basedir")."/config/ini/classes.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		$this->_set_ini_file_value(aw_ini_get("basedir")."/aw.ini", "classes[$arr[ch_classf_id]][name]", $arr["ch_classf_name"]);
+		return $arr["post_ru"];
+	}
+
+	/**
+
+		@attrib name=delete_p
+
+		@param sel optional 
+		@param sel_fld optional
+		@param post_ru required
+	**/
+	function delete_p($arr)
+	{
+		$inif1 = aw_ini_get("basedir")."/config/ini/classfolders.ini";
+		$inif2 = aw_ini_get("basedir")."/aw.ini";
+		foreach(safe_array($arr["sel_fld"]) as $fld_id)
+		{
+			$this->_del_ini_file_value($inif1, "classfolders[$fld_id]");
+			$this->_del_ini_file_value($inif2, "classfolders[$fld_id]");
+		}
+
+		$inif1 = aw_ini_get("basedir")."/config/ini/classes.ini";
+		$inif2 = aw_ini_get("basedir")."/aw.ini";
+		foreach(safe_array($arr["sel"]) as $fld_id)
+		{
+			$this->_del_ini_file_value($inif1, "classes[$fld_id]");
+			$this->_del_ini_file_value($inif2, "classes[$fld_id]");
+		}
 		return $arr["post_ru"];
 	}
 }

@@ -14,6 +14,9 @@
 		<action name="cut_p">
 			<function name="cut_p">
 				<arguments>
+					<optional name="sel" />
+					<optional name="sel_fld" />
+					<required name="post_ru" />
 				</arguments>
 			</function>
 		</action>
@@ -21,6 +24,9 @@
 		<action name="copy_p">
 			<function name="copy_p">
 				<arguments>
+					<optional name="sel" />
+					<optional name="sel_fld" />
+					<required name="post_ru" />
 				</arguments>
 			</function>
 		</action>
@@ -35,6 +41,30 @@
 		<action name="create_clf">
 			<function name="create_clf">
 				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_clf_name">
+			<function name="change_clf_name">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="change_class_name">
+			<function name="change_class_name">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="delete_p">
+			<function name="delete_p">
+				<arguments>
+					<optional name="sel" />
+					<optional name="sel_fld" />
+					<required name="post_ru" />
 				</arguments>
 			</function>
 		</action>
