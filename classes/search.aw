@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.95 2005/05/05 07:53:40 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.96 2005/05/19 10:38:07 duke Exp $
 // search.aw - Search Manager
 
 /*
@@ -788,7 +788,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		// disable some search fileds in search used by menuedit
 		if (($args['class'] == 'search') && ($args['action'] == 'search'))
 		{
-			$fields = array("location" => "n/a");
+			//$fields = array("location" => "n/a");
 		}
 		else
 		{
