@@ -806,7 +806,11 @@ msgstr ""
 msgid "Seose link (RELTYPE_LNK) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:459
+#: classes/applications/shop/shop_product.aw:rel_RELTYPE_KW
+msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:462
 msgid "shop_product::draw(): no layout set!"
 msgstr ""
 

@@ -176,6 +176,6 @@ msgstr ""
 msgid "N&auml;itamise t&otilde;en&auml;osuse %"
 msgstr ""
 
-#: classes/applications/banner/banner.aw:349
+#: classes/applications/banner/banner.aw:362
 msgid "No banner location id given"
 msgstr ""

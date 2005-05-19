@@ -5,6 +5,7 @@ $GLOBALS["TRANS"]["Omaduse Vaade (default_view) caption"] = "View";
 $GLOBALS["TRANS"]["Omaduse Otsinguvorm (search_form) caption"] = "Search form";
 $GLOBALS["TRANS"]["Omaduse Näita ainult sündmustega päevi (show_days_with_events) caption"] = "Display only days with events";
 $GLOBALS["TRANS"]["Omaduse Näita kalendrivaates kohe sündmuse sisu (show_event_content) caption"] = "Display event content in calendar view";
+$GLOBALS["TRANS"]["Omaduse Näita sündmust kõikidel päevadel (show_event_days) caption"] = "Show event on all days";
 $GLOBALS["TRANS"]["Omaduse Näita ainult aktiivseid sündmusi (actives_only) caption"] = "Display only active events";
 $GLOBALS["TRANS"]["Omaduse \"Eelmine\"-\"Järgmine\" lingid viivad sündmusega päevale (fix_links) caption"] = "\"Previous\"-\"Next\" links move to days with events ";
 $GLOBALS["TRANS"]["Omaduse Sündmustega päev (minical_day_with_events) caption"] = "Day with events";

@@ -162,10 +162,19 @@ msgid "Joondamine"
 msgstr ""
 
 #: classes/applications/class_designer/property_table.aw:605
-#: classes/applications/class_designer/property_table.aw:678
+#: classes/applications/class_designer/property_table.aw:731
 msgid "Tulp"
 msgstr ""
 
 #: classes/applications/class_designer/property_table.aw:612
-msgid "Omadus"
+#: classes/applications/class_designer/property_table.aw:621
+msgid "Omadus / Seos"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:793
+msgid "Omadused:"
+msgstr ""
+
+#: classes/applications/class_designer/property_table.aw:803
+msgid "Seosed:"
 msgstr ""

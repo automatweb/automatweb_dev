@@ -1466,7 +1466,7 @@ msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
 msgstr ""
 
 # aw.ini:class_929
-msgid "Klassi Klasside brauser (929) nimi"
+msgid "Klassi Klasside haldus (929) nimi"
 msgstr ""
 
 # aw.ini:class_931

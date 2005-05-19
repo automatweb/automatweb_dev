@@ -162,10 +162,22 @@ msgid "Joondamine"
 msgstr "Align"
 
 #: classes/applications/class_designer/property_table.aw:605
-#: classes/applications/class_designer/property_table.aw:678
+#: classes/applications/class_designer/property_table.aw:731
 msgid "Tulp"
 msgstr "Column"
 
 #: classes/applications/class_designer/property_table.aw:612
-msgid "Omadus"
-msgstr "Property"
+#: classes/applications/class_designer/property_table.aw:621
+msgid "Omadus / Seos"
+msgstr "Property / relation"
+
+#: classes/applications/class_designer/property_table.aw:793
+msgid "Omadused:"
+msgstr "Properties:"
+
+#: classes/applications/class_designer/property_table.aw:803
+msgid "Seosed:"
+msgstr "Relations:"
+
+#~ msgid "Omadus"
+#~ msgstr "Property"

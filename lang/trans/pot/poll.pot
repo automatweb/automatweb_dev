@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:52 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -158,43 +158,43 @@ msgstr ""
 msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:470
+#: classes/contentmgmt/poll.aw:484
 msgid "UID"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:477
+#: classes/contentmgmt/poll.aw:491
 msgid "IP"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:484
+#: classes/contentmgmt/poll.aw:498
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:494 classes/contentmgmt/poll.aw:524
+#: classes/contentmgmt/poll.aw:508 classes/contentmgmt/poll.aw:538
 msgid "Vastus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:531
+#: classes/contentmgmt/poll.aw:545
 msgid "Klikke"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:540
+#: classes/contentmgmt/poll.aw:554
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:549 classes/contentmgmt/poll.aw:800
+#: classes/contentmgmt/poll.aw:563 classes/contentmgmt/poll.aw:814
 msgid ""
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:627 classes/contentmgmt/poll.aw:639
+#: classes/contentmgmt/poll.aw:641 classes/contentmgmt/poll.aw:653
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:808
+#: classes/contentmgmt/poll.aw:822
 msgid "K&uuml;simus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:818
+#: classes/contentmgmt/poll.aw:832
 msgid "Vastus nr %s "
 msgstr ""
 

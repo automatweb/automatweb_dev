@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:46 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -314,75 +314,75 @@ msgstr ""
 msgid "Seose default seoste objektid (RELTYPE_REL_OBJ) tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:161
+#: classes/contentmgmt/join/join_site.aw:152
 msgid "E-maili sisu, mis saadetakse kasutajale liitumisel (kasutajanime alias #kasutaja#, parooli alias #parool# ja parooli muutmise lingi alias #pwd_hash#)."
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:244
+#: classes/contentmgmt/join/join_site.aw:235
 msgid "Reegel"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:250
+#: classes/contentmgmt/join/join_site.aw:241
 msgid "Grupp"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:256 classes/contentmgmt/join/join_site.aw:277
+#: classes/contentmgmt/join/join_site.aw:247 classes/contentmgmt/join/join_site.aw:268
 msgid "Muuda"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:287 classes/contentmgmt/join/join_site.aw:306
+#: classes/contentmgmt/join/join_site.aw:278 classes/contentmgmt/join/join_site.aw:297
 msgid "Omadus"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:291
+#: classes/contentmgmt/join/join_site.aw:282
 msgid "T&auml;idetav"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:296
+#: classes/contentmgmt/join/join_site.aw:287
 msgid "N&otilde;utav"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:310
+#: classes/contentmgmt/join/join_site.aw:301
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:315
+#: classes/contentmgmt/join/join_site.aw:306
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:325
+#: classes/contentmgmt/join/join_site.aw:316
 msgid "Sisestatud number"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:330
+#: classes/contentmgmt/join/join_site.aw:321
 msgid "Lehe nimi"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:356
+#: classes/contentmgmt/join/join_site.aw:347
 msgid "Tekst"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:463
+#: classes/contentmgmt/join/join_site.aw:454
 msgid "<b>Vahepealkirjad</b>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:701
+#: classes/contentmgmt/join/join_site.aw:695
 msgid "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:754
+#: classes/contentmgmt/join/join_site.aw:747
 msgid "Liitun"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1476
+#: classes/contentmgmt/join/join_site.aw:1467
 msgid "Liitumise meili from aadress (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1487
+#: classes/contentmgmt/join/join_site.aw:1478
 msgid "Liitumise meili subjekt (%s)"
 msgstr ""
 
-#: classes/contentmgmt/join/join_site.aw:1500
+#: classes/contentmgmt/join/join_site.aw:1491
 msgid "Liitumise meil (%s)"
 msgstr ""
 

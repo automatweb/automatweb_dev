@@ -39,6 +39,7 @@ $GLOBALS["TRANS"]["Kuu navigaator"] = "Month navigator";
 $GLOBALS["TRANS"]["N&auml;dala navigaator"] = "Week navigator";
 $GLOBALS["TRANS"]["Kuu j&auml;rgi"] = "By month";
 $GLOBALS["TRANS"]["P&auml;eva j&auml;rgi"] = "By day";
+$GLOBALS["TRANS"]["Kuu alates t&auml;nasest"] = "Month from today";
 $GLOBALS["TRANS"]["Klikitav"] = "Clickable";
 $GLOBALS["TRANS"]["T&auml;isvaates"] = "Full view";
 $GLOBALS["TRANS"]["Reavahetused"] = "Line breaks";

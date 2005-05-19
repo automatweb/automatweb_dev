@@ -274,15 +274,15 @@ msgid "Omaduse Aliastehaldur (aliasmgr) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_task_toolbar
-msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
+msgid "Omaduse Toolbar (task_toolbar) caption"
 msgstr "Toolbar"
 
 # classes/crm/crm_meeting.aw:prop_task_toolbar_comment
-msgid "Omaduse \"Toolbar\" (task_toolbar) kommentaar"
+msgid "Omaduse Toolbar (task_toolbar) kommentaar"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_task_toolbar_help
-msgid "Omaduse \"Toolbar\" (task_toolbar) help"
+msgid "Omaduse Toolbar (task_toolbar) help"
 msgstr ""
 
 # classes/crm/crm_meeting.aw:prop_recurrence
@@ -496,3 +496,7 @@ msgstr "Search"
 #: classes/crm/crm_meeting.aw:246
 msgid "Salvesta"
 msgstr "Save"
+
+# classes/crm/crm_meeting.aw:prop_task_toolbar
+#~ msgid "Omaduse \"Toolbar\" (task_toolbar) caption"
+#~ msgstr "Toolbar"

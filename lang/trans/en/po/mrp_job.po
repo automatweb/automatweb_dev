@@ -385,7 +385,7 @@ msgid "Ressursi vabastamine ebaõnnestus"
 msgstr "Freeing the resource failed"
 
 #: classes/mrp/mrp_job.aw:693 classes/mrp/mrp_job.aw:829
-#: classes/mrp/mrp_job.aw:1389
+#: classes/mrp/mrp_job.aw:1393
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr "Resource manager undefined."
 
@@ -406,7 +406,7 @@ msgstr "Case can not be continued"
 msgid "Töö pole katkestatud"
 msgstr "Job is not aborted"
 
-#: classes/mrp/mrp_job.aw:1409
+#: classes/mrp/mrp_job.aw:1413
 msgid "Lisas kommentaari"
 msgstr "Added comment"
 

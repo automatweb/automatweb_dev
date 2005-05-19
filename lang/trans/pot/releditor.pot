@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:32 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -26,27 +26,27 @@ msgstr ""
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:348
+#: classes/vcl/releditor.aw:352
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:355
+#: classes/vcl/releditor.aw:359
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:363
+#: classes/vcl/releditor.aw:367
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:426 classes/vcl/releditor.aw:543
+#: classes/vcl/releditor.aw:430 classes/vcl/releditor.aw:549
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:507 classes/vcl/releditor.aw:532
+#: classes/vcl/releditor.aw:511 classes/vcl/releditor.aw:536
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:537
+#: classes/vcl/releditor.aw:541
 msgid "Nimi"
 msgstr ""
 

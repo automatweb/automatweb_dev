@@ -51,4 +51,6 @@ $GLOBALS["TRANS"]["Jäta välja"] = "Exclude";
 $GLOBALS["TRANS"]["k.a. alamkaustad"] = "incl. subfolders";
 $GLOBALS["TRANS"]["Uus teema"] = "New topic";
 $GLOBALS["TRANS"]["Lisa"] = "Add";
+$GLOBALS["TRANS"][" teemade kaust"] = " topic folder";
+$GLOBALS["TRANS"][" aadresside kaust"] = " address folder";
 ?>

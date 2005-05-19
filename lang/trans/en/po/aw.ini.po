@@ -1466,8 +1466,8 @@ msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
 msgstr "Offer compare table row"
 
 # aw.ini:class_929
-msgid "Klassi Klasside brauser (929) nimi"
-msgstr "Class browser"
+msgid "Klassi Klasside haldus (929) nimi"
+msgstr "Class manager"
 
 # aw.ini:class_931
 msgid "Klassi Lihtne tellimus (931) nimi"
@@ -1704,6 +1704,10 @@ msgstr "Orders"
 # aw.ini:classfolder_59
 msgid "Klassi kataloogi Bug-o-matic 3000 (59) nimi"
 msgstr "Bug-o-matic 3000"
+
+# aw.ini:class_929
+#~ msgid "Klassi Klasside brauser (929) nimi"
+#~ msgstr "Class browser"
 
 # aw.ini:class_138
 #~ msgid "Klassi Alamsait (138) nimi"

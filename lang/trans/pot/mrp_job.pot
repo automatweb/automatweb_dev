@@ -382,7 +382,7 @@ msgstr ""
 msgid "Ressursi vabastamine ebaõnnestus"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:693 classes/mrp/mrp_job.aw:829 classes/mrp/mrp_job.aw:1389
+#: classes/mrp/mrp_job.aw:693 classes/mrp/mrp_job.aw:829 classes/mrp/mrp_job.aw:1393
 msgid "Ressursihalduskeskkond defineerimata."
 msgstr ""
 
@@ -402,7 +402,7 @@ msgstr ""
 msgid "Töö pole katkestatud"
 msgstr ""
 
-#: classes/mrp/mrp_job.aw:1409
+#: classes/mrp/mrp_job.aw:1413
 msgid "Lisas kommentaari"
 msgstr ""
 

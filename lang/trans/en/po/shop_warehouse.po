@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:25 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,440 +9,495 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/shop/shop_warehouse.aw:prop_conf
+# classes/applications/shop/shop_warehouse.aw:prop_conf
 msgid "Omaduse Konfiguratsioon (conf) caption"
 msgstr "Configuration"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_conf_comment
+# classes/applications/shop/shop_warehouse.aw:prop_conf_comment
 msgid "Omaduse Konfiguratsioon (conf) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_conf_help
+# classes/applications/shop/shop_warehouse.aw:prop_conf_help
 msgid "Omaduse Konfiguratsioon (conf) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_center
+# classes/applications/shop/shop_warehouse.aw:prop_order_center
 msgid "Omaduse Tellimiskeskkond tellimuste jaoks (order_center) caption"
 msgstr "Ordering center for orders"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_center_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_center_comment
 msgid "Omaduse Tellimiskeskkond tellimuste jaoks (order_center) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_center_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_center_help
 msgid "Omaduse Tellimiskeskkond tellimuste jaoks (order_center) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_products_toolbar
 msgid "Omaduse  (products_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_products_toolbar_comment
 msgid "Omaduse  (products_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_products_toolbar_help
 msgid "Omaduse  (products_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_list
+# classes/applications/shop/shop_warehouse.aw:prop_products_list
 msgid "Omaduse Toodete nimekiri  (products_list) caption"
 msgstr "Products list"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_list_comment
+# classes/applications/shop/shop_warehouse.aw:prop_products_list_comment
 msgid "Omaduse Toodete nimekiri  (products_list) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_products_list_help
+# classes/applications/shop/shop_warehouse.aw:prop_products_list_help
 msgid "Omaduse Toodete nimekiri  (products_list) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar
 msgid "Omaduse  (productgroups_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar_comment
 msgid "Omaduse  (productgroups_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_toolbar_help
 msgid "Omaduse  (productgroups_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_list
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_list
 msgid "Omaduse Tootegruppide nimekiri  (productgroups_list) caption"
 msgstr "Product groups list"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_list_comment
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_list_comment
 msgid "Omaduse Tootegruppide nimekiri  (productgroups_list) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_productgroups_list_help
+# classes/applications/shop/shop_warehouse.aw:prop_productgroups_list_help
 msgid "Omaduse Tootegruppide nimekiri  (productgroups_list) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar
 msgid "Omaduse  (packets_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar_comment
 msgid "Omaduse  (packets_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_packets_toolbar_help
 msgid "Omaduse  (packets_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_list
+# classes/applications/shop/shop_warehouse.aw:prop_packets_list
 msgid "Omaduse Pakettide nimekiri (packets_list) caption"
 msgstr "Packets list"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_list_comment
+# classes/applications/shop/shop_warehouse.aw:prop_packets_list_comment
 msgid "Omaduse Pakettide nimekiri (packets_list) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_packets_list_help
+# classes/applications/shop/shop_warehouse.aw:prop_packets_list_help
 msgid "Omaduse Pakettide nimekiri (packets_list) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_list
+# classes/applications/shop/shop_warehouse.aw:prop_storage_list
 msgid "Omaduse Laoseis (storage_list) caption"
 msgstr "Warehouse status"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_list_comment
+# classes/applications/shop/shop_warehouse.aw:prop_storage_list_comment
 msgid "Omaduse Laoseis (storage_list) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_list_help
+# classes/applications/shop/shop_warehouse.aw:prop_storage_list_help
 msgid "Omaduse Laoseis (storage_list) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar
 msgid "Omaduse  (storage_income_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar_comment
 msgid "Omaduse  (storage_income_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income_toolbar_help
 msgid "Omaduse  (storage_income_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income
 msgid "Omaduse Sissetulekud (storage_income) caption"
 msgstr "Receptions"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_comment
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income_comment
 msgid "Omaduse Sissetulekud (storage_income) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_income_help
+# classes/applications/shop/shop_warehouse.aw:prop_storage_income_help
 msgid "Omaduse Sissetulekud (storage_income) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar
 msgid "Omaduse  (storage_export_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar_comment
 msgid "Omaduse  (storage_export_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export_toolbar_help
 msgid "Omaduse  (storage_export_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export
 msgid "Omaduse V&auml;ljaminekud (storage_export) caption"
 msgstr "Exports"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_comment
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export_comment
 msgid "Omaduse V&auml;ljaminekud (storage_export) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_storage_export_help
+# classes/applications/shop/shop_warehouse.aw:prop_storage_export_help
 msgid "Omaduse V&auml;ljaminekud (storage_export) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar
 msgid "Omaduse  (order_unconfirmed_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar_comment
 msgid "Omaduse  (order_unconfirmed_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_toolbar_help
 msgid "Omaduse  (order_unconfirmed_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed
 msgid "Omaduse  (order_unconfirmed) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_comment
 msgid "Omaduse  (order_unconfirmed) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_unconfirmed_help
 msgid "Omaduse  (order_unconfirmed) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar
 msgid "Omaduse  (order_confirmed_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar_comment
 msgid "Omaduse  (order_confirmed_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_toolbar_help
 msgid "Omaduse  (order_confirmed_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed
 msgid "Omaduse  (order_confirmed) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_comment
 msgid "Omaduse  (order_confirmed) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_confirmed_help
 msgid "Omaduse  (order_confirmed) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree
 msgid "Omaduse  (order_orderer_cos_tree) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree_comment
 msgid "Omaduse  (order_orderer_cos_tree) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_tree_help
 msgid "Omaduse  (order_orderer_cos_tree) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos
 msgid "Omaduse  (order_orderer_cos) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_comment
 msgid "Omaduse  (order_orderer_cos) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_orderer_cos_help
 msgid "Omaduse  (order_orderer_cos) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_tb
+# classes/applications/shop/shop_warehouse.aw:prop_search_tb
 msgid "Omaduse Otsingo toolbar (search_tb) caption"
 msgstr "Search toolbar"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_tb_comment
+# classes/applications/shop/shop_warehouse.aw:prop_search_tb_comment
 msgid "Omaduse Otsingo toolbar (search_tb) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_tb_help
+# classes/applications/shop/shop_warehouse.aw:prop_search_tb_help
 msgid "Omaduse Otsingo toolbar (search_tb) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_form
+# classes/applications/shop/shop_warehouse.aw:prop_search_form
 msgid "Omaduse Otsinguvorm (search_form) caption"
 msgstr "Search form"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_form_comment
+# classes/applications/shop/shop_warehouse.aw:prop_search_form_comment
 msgid "Omaduse Otsinguvorm (search_form) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_form_help
+# classes/applications/shop/shop_warehouse.aw:prop_search_form_help
 msgid "Omaduse Otsinguvorm (search_form) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_res
+# classes/applications/shop/shop_warehouse.aw:prop_search_res
 msgid "Omaduse Otsingu tulemused (search_res) caption"
 msgstr "Search results"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_res_comment
+# classes/applications/shop/shop_warehouse.aw:prop_search_res_comment
 msgid "Omaduse Otsingu tulemused (search_res) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_res_help
+# classes/applications/shop/shop_warehouse.aw:prop_search_res_help
 msgid "Omaduse Otsingu tulemused (search_res) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text
 msgid "Omaduse Hetke tellimus text (search_cur_ord_text) caption"
 msgstr "Current order text"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text_comment
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text_comment
 msgid "Omaduse Hetke tellimus text (search_cur_ord_text) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text_help
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_text_help
 msgid "Omaduse Hetke tellimus text (search_cur_ord_text) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord
 msgid "Omaduse Hetke tellimus tabel (search_cur_ord) caption"
 msgstr "Current order table"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_comment
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_comment
 msgid "Omaduse Hetke tellimus tabel (search_cur_ord) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_help
+# classes/applications/shop/shop_warehouse.aw:prop_search_cur_ord_help
 msgid "Omaduse Hetke tellimus tabel (search_cur_ord) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar
 msgid "Omaduse  (order_current_toolbar) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar_comment
 msgid "Omaduse  (order_current_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_toolbar_help
 msgid "Omaduse  (order_current_toolbar) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_table
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_table
 msgid "Omaduse  (order_current_table) caption"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_table_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_table_comment
 msgid "Omaduse  (order_current_table) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_table_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_table_help
 msgid "Omaduse  (order_current_table) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_org
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_org
 msgid "Omaduse Tellija organisatsioon (order_current_org) caption"
 msgstr "Orderer company"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_org_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_org_comment
 msgid "Omaduse Tellija organisatsioon (order_current_org) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_org_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_org_help
 msgid "Omaduse Tellija organisatsioon (order_current_org) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_person
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_person
 msgid "Omaduse Tellija isik (order_current_person) caption"
 msgstr "Orderer person"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_person_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_person_comment
 msgid "Omaduse Tellija isik (order_current_person) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_person_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_person_help
 msgid "Omaduse Tellija isik (order_current_person) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_form
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_form
 msgid "Omaduse Tellimuse info vorm (order_current_form) caption"
 msgstr "Order info form"
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_form_comment
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_form_comment
 msgid "Omaduse Tellimuse info vorm (order_current_form) kommentaar"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:prop_order_current_form_help
+# classes/applications/shop/shop_warehouse.aw:prop_order_current_form_help
 msgid "Omaduse Tellimuse info vorm (order_current_form) help"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:group_products
+# classes/applications/shop/shop_warehouse.aw:group_products
 msgid "Grupi Tooted (products) pealkiri"
 msgstr "Products"
 
-#: classes/applications/shop/shop_warehouse.aw:group_productgroups
+# classes/applications/shop/shop_warehouse.aw:group_products_help
+msgid "Grupi Tooted (products) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_productgroups
 msgid "Grupi Tootegrupid (productgroups) pealkiri"
 msgstr "Product groups"
 
-#: classes/applications/shop/shop_warehouse.aw:group_packets
+# classes/applications/shop/shop_warehouse.aw:group_productgroups_help
+msgid "Grupi Tootegrupid (productgroups) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_packets
 msgid "Grupi Paketid (packets) pealkiri"
 msgstr "Packets"
 
-#: classes/applications/shop/shop_warehouse.aw:group_storage
+# classes/applications/shop/shop_warehouse.aw:group_packets_help
+msgid "Grupi Paketid (packets) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_storage
 msgid "Grupi Laoseis (storage) pealkiri"
 msgstr "Warehouse status"
 
-#: classes/applications/shop/shop_warehouse.aw:group_storage_storage
+# classes/applications/shop/shop_warehouse.aw:group_storage_help
+msgid "Grupi Laoseis (storage) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_storage_storage
 msgid "Grupi Laoseis (storage_storage) pealkiri"
 msgstr "Warehouse status"
 
-#: classes/applications/shop/shop_warehouse.aw:group_storage_income
+# classes/applications/shop/shop_warehouse.aw:group_storage_storage_help
+msgid "Grupi Laoseis (storage_storage) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_storage_income
 msgid "Grupi Sissetulekud (storage_income) pealkiri"
 msgstr "Receptions"
 
-#: classes/applications/shop/shop_warehouse.aw:group_storage_export
+# classes/applications/shop/shop_warehouse.aw:group_storage_income_help
+msgid "Grupi Sissetulekud (storage_income) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_storage_export
 msgid "Grupi V&auml;ljaminekud (storage_export) pealkiri"
 msgstr "Exports"
 
-#: classes/applications/shop/shop_warehouse.aw:group_order
+# classes/applications/shop/shop_warehouse.aw:group_storage_export_help
+msgid "Grupi V&auml;ljaminekud (storage_export) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_order
 msgid "Grupi Tellimused (order) pealkiri"
 msgstr "Orders"
 
-#: classes/applications/shop/shop_warehouse.aw:group_order_unconfirmed
+# classes/applications/shop/shop_warehouse.aw:group_order_help
+msgid "Grupi Tellimused (order) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_order_unconfirmed
 msgid "Grupi Kinnitamata (order_unconfirmed) pealkiri"
 msgstr "Unconfirmed"
 
-#: classes/applications/shop/shop_warehouse.aw:group_order_confirmed
+# classes/applications/shop/shop_warehouse.aw:group_order_unconfirmed_help
+msgid "Grupi Kinnitamata (order_unconfirmed) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_order_confirmed
 msgid "Grupi Kinnitatud (order_confirmed) pealkiri"
 msgstr "Confirmed"
 
-#: classes/applications/shop/shop_warehouse.aw:group_order_orderer_cos
+# classes/applications/shop/shop_warehouse.aw:group_order_confirmed_help
+msgid "Grupi Kinnitatud (order_confirmed) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_order_orderer_cos
 msgid "Grupi Tellijad (order_orderer_cos) pealkiri"
 msgstr "Orderers"
 
-#: classes/applications/shop/shop_warehouse.aw:group_search
+# classes/applications/shop/shop_warehouse.aw:group_order_orderer_cos_help
+msgid "Grupi Tellijad (order_orderer_cos) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_search
 msgid "Grupi Otsing (search) pealkiri"
 msgstr "Search"
 
-#: classes/applications/shop/shop_warehouse.aw:group_search_search
+# classes/applications/shop/shop_warehouse.aw:group_search_help
+msgid "Grupi Otsing (search) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_search_search
 msgid "Grupi Otsing (search_search) pealkiri"
 msgstr "Search"
 
-#: classes/applications/shop/shop_warehouse.aw:group_order_current
+# classes/applications/shop/shop_warehouse.aw:group_search_search_help
+msgid "Grupi Otsing (search_search) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:group_order_current
 msgid "Grupi Pakkumine (order_current) pealkiri"
 msgstr "Offer"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_CONFIG
+# classes/applications/shop/shop_warehouse.aw:group_order_current_help
+msgid "Grupi Pakkumine (order_current) help"
+msgstr ""
+
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_CONFIG
 msgid "Seose konfiguratsioon (RELTYPE_CONFIG) tekst"
 msgstr "configuration"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_PRODUCT
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_PRODUCT
 msgid "Seose toode (RELTYPE_PRODUCT) tekst"
 msgstr "product"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_PACKET
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_PACKET
 msgid "Seose pakett (RELTYPE_PACKET) tekst"
 msgstr "packet"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_INCOME
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_INCOME
 msgid "Seose lao sissetulek (RELTYPE_STORAGE_INCOME) tekst"
 msgstr "warehouse reception"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_EXPORT
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_STORAGE_EXPORT
 msgid "Seose lao v&auml;jaminek (RELTYPE_STORAGE_EXPORT) tekst"
 msgstr "warehouse export"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER
 msgid "Seose tellimus (RELTYPE_ORDER) tekst"
 msgstr "order"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER_CENTER
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_ORDER_CENTER
 msgid "Seose tellimiskeskkond (RELTYPE_ORDER_CENTER) tekst"
 msgstr "ordering center"
 
-#: classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_EMAIL
+# classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_EMAIL
 msgid "Seose saada tellimused (RELTYPE_EMAIL) tekst"
 msgstr "send offers"
 
@@ -470,7 +525,16 @@ msgstr "New offer"
 msgid "Lehek&uuml;lg"
 msgstr "Page"
 
-#: classes/applications/shop/shop_warehouse.aw:378 classes/applications/shop/shop_warehouse.aw:518 classes/applications/shop/shop_warehouse.aw:730 classes/applications/shop/shop_warehouse.aw:941 classes/applications/shop/shop_warehouse.aw:1031 classes/applications/shop/shop_warehouse.aw:1105 classes/applications/shop/shop_warehouse.aw:1216 classes/applications/shop/shop_warehouse.aw:1471 classes/applications/shop/shop_warehouse.aw:1564 classes/applications/shop/shop_warehouse.aw:1612
+#: classes/applications/shop/shop_warehouse.aw:378
+#: classes/applications/shop/shop_warehouse.aw:518
+#: classes/applications/shop/shop_warehouse.aw:730
+#: classes/applications/shop/shop_warehouse.aw:941
+#: classes/applications/shop/shop_warehouse.aw:1031
+#: classes/applications/shop/shop_warehouse.aw:1105
+#: classes/applications/shop/shop_warehouse.aw:1216
+#: classes/applications/shop/shop_warehouse.aw:1471
+#: classes/applications/shop/shop_warehouse.aw:1564
+#: classes/applications/shop/shop_warehouse.aw:1612
 msgid "Nimi"
 msgstr "Name"
 
@@ -478,7 +542,10 @@ msgstr "Name"
 msgid "Kogus"
 msgstr "Amount"
 
-#: classes/applications/shop/shop_warehouse.aw:439 classes/applications/shop/shop_warehouse.aw:828 classes/applications/shop/shop_warehouse.aw:1158 classes/applications/shop/shop_warehouse.aw:1269
+#: classes/applications/shop/shop_warehouse.aw:439
+#: classes/applications/shop/shop_warehouse.aw:828
+#: classes/applications/shop/shop_warehouse.aw:1158
+#: classes/applications/shop/shop_warehouse.aw:1269
 msgid "Uus"
 msgstr "New"
 
@@ -486,7 +553,8 @@ msgstr "New"
 msgid "Lisa kaust"
 msgstr "Add folder"
 
-#: classes/applications/shop/shop_warehouse.aw:457 classes/applications/shop/shop_warehouse.aw:487
+#: classes/applications/shop/shop_warehouse.aw:457
+#: classes/applications/shop/shop_warehouse.aw:487
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
@@ -498,7 +566,12 @@ msgstr "Add to basket"
 msgid "Lisa uus tootegrupp"
 msgstr "Add new product group"
 
-#: classes/applications/shop/shop_warehouse.aw:508 classes/applications/shop/shop_warehouse.aw:522 classes/applications/shop/shop_warehouse.aw:688 classes/applications/shop/shop_warehouse.aw:769 classes/applications/shop/shop_warehouse.aw:920 classes/applications/shop/shop_warehouse.aw:966
+#: classes/applications/shop/shop_warehouse.aw:508
+#: classes/applications/shop/shop_warehouse.aw:522
+#: classes/applications/shop/shop_warehouse.aw:688
+#: classes/applications/shop/shop_warehouse.aw:769
+#: classes/applications/shop/shop_warehouse.aw:920
+#: classes/applications/shop/shop_warehouse.aw:966
 msgid "Muuda"
 msgstr "Change"
 
@@ -506,11 +579,21 @@ msgstr "Change"
 msgid "Kaust"
 msgstr "Folder"
 
-#: classes/applications/shop/shop_warehouse.aw:653 classes/applications/shop/shop_warehouse.aw:757 classes/applications/shop/shop_warehouse.aw:908 classes/applications/shop/shop_warehouse.aw:954 classes/applications/shop/shop_warehouse.aw:1004 classes/applications/shop/shop_warehouse.aw:1051
+#: classes/applications/shop/shop_warehouse.aw:653
+#: classes/applications/shop/shop_warehouse.aw:757
+#: classes/applications/shop/shop_warehouse.aw:908
+#: classes/applications/shop/shop_warehouse.aw:954
+#: classes/applications/shop/shop_warehouse.aw:1004
+#: classes/applications/shop/shop_warehouse.aw:1051
 msgid "V&otilde;ta laost"
 msgstr "Get from warehouse"
 
-#: classes/applications/shop/shop_warehouse.aw:665 classes/applications/shop/shop_warehouse.aw:763 classes/applications/shop/shop_warehouse.aw:928 classes/applications/shop/shop_warehouse.aw:960 classes/applications/shop/shop_warehouse.aw:1018 classes/applications/shop/shop_warehouse.aw:1057
+#: classes/applications/shop/shop_warehouse.aw:665
+#: classes/applications/shop/shop_warehouse.aw:763
+#: classes/applications/shop/shop_warehouse.aw:928
+#: classes/applications/shop/shop_warehouse.aw:960
+#: classes/applications/shop/shop_warehouse.aw:1018
+#: classes/applications/shop/shop_warehouse.aw:1057
 msgid "Vii lattu"
 msgstr "Take to warehouse"
 
@@ -522,11 +605,13 @@ msgstr "&nbsp;"
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/shop/shop_warehouse.aw:743 classes/applications/shop/shop_warehouse.aw:1037
+#: classes/applications/shop/shop_warehouse.aw:743
+#: classes/applications/shop/shop_warehouse.aw:1037
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/applications/shop/shop_warehouse.aw:750 classes/applications/shop/shop_warehouse.aw:947
+#: classes/applications/shop/shop_warehouse.aw:750
+#: classes/applications/shop/shop_warehouse.aw:947
 msgid "Kogus laos"
 msgstr "Amount in warehouse"
 
@@ -550,23 +635,42 @@ msgstr "Package"
 msgid "Laoseis"
 msgstr "Warehouse status"
 
-#: classes/applications/shop/shop_warehouse.aw:1073 classes/applications/shop/shop_warehouse.aw:1184
+#: classes/applications/shop/shop_warehouse.aw:1073
+#: classes/applications/shop/shop_warehouse.aw:1184
 msgid "Sissetulek kinnitatud"
 msgstr "Income confirmed"
 
-#: classes/applications/shop/shop_warehouse.aw:1086 classes/applications/shop/shop_warehouse.aw:1132 classes/applications/shop/shop_warehouse.aw:1197 classes/applications/shop/shop_warehouse.aw:1243 classes/applications/shop/shop_warehouse.aw:1453 classes/applications/shop/shop_warehouse.aw:1505 classes/applications/shop/shop_warehouse.aw:1553 classes/applications/shop/shop_warehouse.aw:1589 classes/applications/shop/shop_warehouse.aw:1629 classes/applications/shop/shop_warehouse.aw:1710
+#: classes/applications/shop/shop_warehouse.aw:1086
+#: classes/applications/shop/shop_warehouse.aw:1132
+#: classes/applications/shop/shop_warehouse.aw:1197
+#: classes/applications/shop/shop_warehouse.aw:1243
+#: classes/applications/shop/shop_warehouse.aw:1453
+#: classes/applications/shop/shop_warehouse.aw:1505
+#: classes/applications/shop/shop_warehouse.aw:1553
+#: classes/applications/shop/shop_warehouse.aw:1589
+#: classes/applications/shop/shop_warehouse.aw:1629
+#: classes/applications/shop/shop_warehouse.aw:1710
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/shop/shop_warehouse.aw:1110 classes/applications/shop/shop_warehouse.aw:1221
+#: classes/applications/shop/shop_warehouse.aw:1110
+#: classes/applications/shop/shop_warehouse.aw:1221
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/applications/shop/shop_warehouse.aw:1117 classes/applications/shop/shop_warehouse.aw:1228 classes/applications/shop/shop_warehouse.aw:1489 classes/applications/shop/shop_warehouse.aw:1575 classes/applications/shop/shop_warehouse.aw:1621
+#: classes/applications/shop/shop_warehouse.aw:1117
+#: classes/applications/shop/shop_warehouse.aw:1228
+#: classes/applications/shop/shop_warehouse.aw:1489
+#: classes/applications/shop/shop_warehouse.aw:1575
+#: classes/applications/shop/shop_warehouse.aw:1621
 msgid "Kes"
 msgstr "Who"
 
-#: classes/applications/shop/shop_warehouse.aw:1124 classes/applications/shop/shop_warehouse.aw:1235 classes/applications/shop/shop_warehouse.aw:1496 classes/applications/shop/shop_warehouse.aw:1581 classes/applications/shop/shop_warehouse.aw:1625
+#: classes/applications/shop/shop_warehouse.aw:1124
+#: classes/applications/shop/shop_warehouse.aw:1235
+#: classes/applications/shop/shop_warehouse.aw:1496
+#: classes/applications/shop/shop_warehouse.aw:1581
+#: classes/applications/shop/shop_warehouse.aw:1625
 msgid "Millal"
 msgstr "When"
 
@@ -586,15 +690,19 @@ msgstr "Warehouse export: %s"
 msgid "Lao sissetulek: %s"
 msgstr "Warehouse income: %s"
 
-#: classes/applications/shop/shop_warehouse.aw:1384 classes/applications/shop/shop_warehouse.aw:1516
+#: classes/applications/shop/shop_warehouse.aw:1384
+#: classes/applications/shop/shop_warehouse.aw:1516
 msgid "Uus tellimus"
 msgstr "New order"
 
-#: classes/applications/shop/shop_warehouse.aw:1389 classes/applications/shop/shop_warehouse.aw:1521
+#: classes/applications/shop/shop_warehouse.aw:1389
+#: classes/applications/shop/shop_warehouse.aw:1521
 msgid "Lisa tellimus"
 msgstr "Add order"
 
-#: classes/applications/shop/shop_warehouse.aw:1477 classes/applications/shop/shop_warehouse.aw:1569 classes/applications/shop/shop_warehouse.aw:1617
+#: classes/applications/shop/shop_warehouse.aw:1477
+#: classes/applications/shop/shop_warehouse.aw:1569
+#: classes/applications/shop/shop_warehouse.aw:1617
 msgid "Hind"
 msgstr "Price"
 
@@ -615,14 +723,21 @@ msgid "Moodusta pakkumine"
 msgstr "Create offer"
 
 #: classes/applications/shop/shop_warehouse.aw:2292
-msgid "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
-msgstr "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
+msgid ""
+"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
+"object set!"
+msgstr ""
+"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
+"object set!"
 
 #: classes/applications/shop/shop_warehouse.aw:2300
-msgid "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
-msgstr "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
+msgid ""
+"shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
+"order folder set!"
+msgstr ""
+"shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
+"order folder set!"
 
 #: classes/applications/shop/shop_warehouse.aw:2400
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"
-

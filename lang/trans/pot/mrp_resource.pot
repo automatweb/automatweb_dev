@@ -342,7 +342,7 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:549
+#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:544
 msgid "Ava"
 msgstr ""
 

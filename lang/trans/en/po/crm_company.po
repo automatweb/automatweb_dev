@@ -1297,7 +1297,7 @@ msgstr "Search from customers of %s"
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/crm/crm_company.aw:1164 classes/crm/crm_company.aw:4232
+#: classes/crm/crm_company.aw:1164 classes/crm/crm_company.aw:4229
 msgid "Kustuta"
 msgstr "Delete"
 
@@ -1322,7 +1322,7 @@ msgid "Kehtiv kuni"
 msgstr "Valid until"
 
 #: classes/crm/crm_company.aw:1367 classes/crm/crm_company.aw:1511
-#: classes/crm/crm_company.aw:1562 classes/crm/crm_company.aw:4009
+#: classes/crm/crm_company.aw:1562 classes/crm/crm_company.aw:4006
 msgid "X"
 msgstr "X"
 
@@ -1351,33 +1351,33 @@ msgstr "Candidates"
 msgid "Vaata kandidaate"
 msgstr "View candidates"
 
-#: classes/crm/crm_company.aw:1596 classes/crm/crm_company.aw:3734
-#: classes/crm/crm_company.aw:3970 classes/crm/crm_company.aw:4432
-#: classes/crm/crm_company.aw:4625
+#: classes/crm/crm_company.aw:1596 classes/crm/crm_company.aw:3731
+#: classes/crm/crm_company.aw:3967 classes/crm/crm_company.aw:4429
+#: classes/crm/crm_company.aw:4622
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_company.aw:1605 classes/crm/crm_company.aw:2570
-#: classes/crm/crm_company.aw:3409 classes/crm/crm_company.aw:3741
+#: classes/crm/crm_company.aw:1605 classes/crm/crm_company.aw:2567
+#: classes/crm/crm_company.aw:3406 classes/crm/crm_company.aw:3738
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/crm/crm_company.aw:1611 classes/crm/crm_company.aw:2558
-#: classes/crm/crm_company.aw:3398 classes/crm/crm_company.aw:3746
+#: classes/crm/crm_company.aw:1611 classes/crm/crm_company.aw:2555
+#: classes/crm/crm_company.aw:3395 classes/crm/crm_company.aw:3743
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/crm/crm_company.aw:1617 classes/crm/crm_company.aw:3132
-#: classes/crm/crm_company.aw:3751
+#: classes/crm/crm_company.aw:1617 classes/crm/crm_company.aw:3129
+#: classes/crm/crm_company.aw:3748
 msgid "Üksus"
 msgstr "Section"
 
-#: classes/crm/crm_company.aw:1623 classes/crm/crm_company.aw:3145
-#: classes/crm/crm_company.aw:3756
+#: classes/crm/crm_company.aw:1623 classes/crm/crm_company.aw:3142
+#: classes/crm/crm_company.aw:3753
 msgid "Ametinimetus"
 msgstr "Profession"
 
-#: classes/crm/crm_company.aw:1829 classes/crm/crm_company.aw:3184
+#: classes/crm/crm_company.aw:1829 classes/crm/crm_company.aw:3181
 msgid "Uus toimetus"
 msgstr "New task"
 
@@ -1385,192 +1385,192 @@ msgstr "New task"
 msgid "Uus kõne"
 msgstr "New call"
 
-#: classes/crm/crm_company.aw:1837 classes/crm/crm_company.aw:3176
+#: classes/crm/crm_company.aw:1837 classes/crm/crm_company.aw:3173
 msgid "Uus kohtumine"
 msgstr "New meeting"
 
-#: classes/crm/crm_company.aw:2363 classes/crm/crm_company.aw:3106
-#: classes/crm/crm_company.aw:3249 classes/crm/crm_company.aw:3333
-#: classes/crm/crm_company.aw:4209 classes/crm/crm_company.aw:4298
+#: classes/crm/crm_company.aw:2360 classes/crm/crm_company.aw:3103
+#: classes/crm/crm_company.aw:3246 classes/crm/crm_company.aw:3330
+#: classes/crm/crm_company.aw:4206 classes/crm/crm_company.aw:4295
 msgid "Uus"
 msgstr "New"
 
-#: classes/crm/crm_company.aw:2401 classes/crm/crm_company.aw:2458
+#: classes/crm/crm_company.aw:2398 classes/crm/crm_company.aw:2455
 msgid "Lisa %s"
 msgstr "Add %s"
 
-#: classes/crm/crm_company.aw:2403
+#: classes/crm/crm_company.aw:2400
 msgid "Kataloog määramata"
 msgstr "Folder not set"
 
-#: classes/crm/crm_company.aw:2457
+#: classes/crm/crm_company.aw:2454
 msgid "Kalender või kalendri sündmuste kataloog määramata"
 msgstr "Calendar or calendar event folder not set"
 
-#: classes/crm/crm_company.aw:2470 classes/crm/crm_company.aw:2471
+#: classes/crm/crm_company.aw:2467 classes/crm/crm_company.aw:2468
 msgid "Lisa pakkumine"
 msgstr "Add offer"
 
-#: classes/crm/crm_company.aw:2482
+#: classes/crm/crm_company.aw:2479
 msgid "Kasutaja kalender"
 msgstr "User's calendar"
 
-#: classes/crm/crm_company.aw:2534 classes/crm/crm_company.aw:3380
-#: classes/crm/crm_company.aw:3962
+#: classes/crm/crm_company.aw:2531 classes/crm/crm_company.aw:3377
+#: classes/crm/crm_company.aw:3959
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/crm/crm_company.aw:2540
+#: classes/crm/crm_company.aw:2537
 msgid "Põhitegevus"
 msgstr "Main activity"
 
-#: classes/crm/crm_company.aw:2546 classes/crm/crm_company.aw:3386
+#: classes/crm/crm_company.aw:2543 classes/crm/crm_company.aw:3383
 msgid "Õiguslik vorm"
 msgstr "Legal form"
 
-#: classes/crm/crm_company.aw:2552 classes/crm/crm_company.aw:3392
+#: classes/crm/crm_company.aw:2549 classes/crm/crm_company.aw:3389
 msgid "Aadress"
 msgstr "Address"
 
-#: classes/crm/crm_company.aw:2564 classes/crm/crm_company.aw:3404
+#: classes/crm/crm_company.aw:2561 classes/crm/crm_company.aw:3401
 msgid "WWW"
 msgstr "WWW"
 
-#: classes/crm/crm_company.aw:2575 classes/crm/crm_company.aw:3415
+#: classes/crm/crm_company.aw:2572 classes/crm/crm_company.aw:3412
 msgid "Juht"
 msgstr "Director"
 
-#: classes/crm/crm_company.aw:2581 classes/crm/crm_company.aw:4643
-#: classes/crm/crm_company.aw:4907
+#: classes/crm/crm_company.aw:2578 classes/crm/crm_company.aw:4640
+#: classes/crm/crm_company.aw:4904
 msgid "Rollid"
 msgstr "Roles"
 
-#: classes/crm/crm_company.aw:3118
+#: classes/crm/crm_company.aw:3115
 msgid "Töötaja"
 msgstr "Employee"
 
-#: classes/crm/crm_company.aw:3160 classes/crm/crm_company.aw:3240
-#: classes/crm/crm_company.aw:3296
+#: classes/crm/crm_company.aw:3157 classes/crm/crm_company.aw:3237
+#: classes/crm/crm_company.aw:3293
 msgid "Kustuta valitud"
 msgstr "Delete selected"
 
-#: classes/crm/crm_company.aw:3168
+#: classes/crm/crm_company.aw:3165
 msgid "Tee kõne"
 msgstr "Make call"
 
-#: classes/crm/crm_company.aw:3193 classes/crm/crm_company.aw:3305
+#: classes/crm/crm_company.aw:3190 classes/crm/crm_company.aw:3302
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/crm/crm_company.aw:3202 classes/crm/crm_company.aw:3314
+#: classes/crm/crm_company.aw:3199 classes/crm/crm_company.aw:3311
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_company.aw:3212
+#: classes/crm/crm_company.aw:3209
 msgid "L&otilde;ika"
 msgstr "Cut"
 
-#: classes/crm/crm_company.aw:3219
+#: classes/crm/crm_company.aw:3216
 msgid "Kopeeri"
 msgstr "Copy"
 
-#: classes/crm/crm_company.aw:3228
+#: classes/crm/crm_company.aw:3225
 msgid "Kleebi"
 msgstr "Paste"
 
-#: classes/crm/crm_company.aw:3264
+#: classes/crm/crm_company.aw:3261
 msgid "Kategooria"
 msgstr "Category"
 
-#: classes/crm/crm_company.aw:3280
+#: classes/crm/crm_company.aw:3277
 msgid "Klient"
 msgstr "Customer"
 
-#: classes/crm/crm_company.aw:3325 classes/crm/crm_company.aw:3339
+#: classes/crm/crm_company.aw:3322 classes/crm/crm_company.aw:3336
 msgid "Kustuta valitud tööpakkumised"
 msgstr "Delete selected job offers"
 
-#: classes/crm/crm_company.aw:3341
+#: classes/crm/crm_company.aw:3338
 msgid "Kas oled kindel et soovid valitud tööpakkumised kustudada?"
 msgstr "Are you sure you wish to delete the selected job offers?"
 
-#: classes/crm/crm_company.aw:3357
+#: classes/crm/crm_company.aw:3354
 msgid "Tööpakkumine"
 msgstr "Job offer"
 
-#: classes/crm/crm_company.aw:3977
+#: classes/crm/crm_company.aw:3974
 msgid "Koostaja"
 msgstr "Createdby"
 
-#: classes/crm/crm_company.aw:3984
+#: classes/crm/crm_company.aw:3981
 msgid "Lisatud"
 msgstr "Added"
 
-#: classes/crm/crm_company.aw:3994
+#: classes/crm/crm_company.aw:3991
 msgid "Summa"
 msgstr "Sum"
 
-#: classes/crm/crm_company.aw:4001
+#: classes/crm/crm_company.aw:3998
 msgid "Staatus"
 msgstr "Status"
 
-#: classes/crm/crm_company.aw:4055
+#: classes/crm/crm_company.aw:4052
 msgid "Koostamisel"
 msgstr "Being created"
 
-#: classes/crm/crm_company.aw:4056
+#: classes/crm/crm_company.aw:4053
 msgid "Saadetud"
 msgstr "Sent"
 
-#: classes/crm/crm_company.aw:4057
+#: classes/crm/crm_company.aw:4054
 msgid "Esitletud"
 msgstr "Presented"
 
-#: classes/crm/crm_company.aw:4058
+#: classes/crm/crm_company.aw:4055
 msgid "Tagasilükatud"
 msgstr "Rejected"
 
-#: classes/crm/crm_company.aw:4059
+#: classes/crm/crm_company.aw:4056
 msgid "Positiivelt lõppenud"
 msgstr "Positively finished"
 
-#: classes/crm/crm_company.aw:4142
+#: classes/crm/crm_company.aw:4139
 msgid "Kõik organisatsioonid"
 msgstr "All organisations"
 
-#: classes/crm/crm_company.aw:4223
+#: classes/crm/crm_company.aw:4220
 msgid "Pakkumine"
 msgstr "Offer"
 
-#: classes/crm/crm_company.aw:4231
+#: classes/crm/crm_company.aw:4228
 msgid "Kas oled kindel, et soovid valitud pakkumise(d) kustutada?"
 msgstr "Are you sure you want to delete the selected offer(s)?"
 
-#: classes/crm/crm_company.aw:4335
+#: classes/crm/crm_company.aw:4332
 msgid "Kustuta valitud objektid"
 msgstr "Delete selected objects"
 
-#: classes/crm/crm_company.aw:4342
+#: classes/crm/crm_company.aw:4339
 msgid "Cut"
 msgstr "Cut"
 
-#: classes/crm/crm_company.aw:4351
+#: classes/crm/crm_company.aw:4348
 msgid "Paste"
 msgstr "Paste"
 
-#: classes/crm/crm_company.aw:4438
+#: classes/crm/crm_company.aw:4435
 msgid "Muudetud"
 msgstr "Modified"
 
-#: classes/crm/crm_company.aw:4448
+#: classes/crm/crm_company.aw:4445
 msgid "Tüüp"
 msgstr "Type"
 
-#: classes/crm/crm_company.aw:4631
+#: classes/crm/crm_company.aw:4628
 msgid "Osalejad"
 msgstr "Participants"
 
-#: classes/crm/crm_company.aw:4637
+#: classes/crm/crm_company.aw:4634
 msgid "Loodud"
 msgstr "Created"
 

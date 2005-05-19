@@ -20,5 +20,7 @@ $GLOBALS["TRANS"]["Laius"] = "Width";
 $GLOBALS["TRANS"]["Sorteeritav"] = "Sortable";
 $GLOBALS["TRANS"]["Joondamine"] = "Align";
 $GLOBALS["TRANS"]["Tulp"] = "Column";
-$GLOBALS["TRANS"]["Omadus"] = "Property";
+$GLOBALS["TRANS"]["Omadus / Seos"] = "Property / relation";
+$GLOBALS["TRANS"]["Omadused:"] = "Properties:";
+$GLOBALS["TRANS"]["Seosed:"] = "Relations:";
 ?>

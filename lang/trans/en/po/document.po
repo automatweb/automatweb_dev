@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 17 Apr 2005 21:12:59 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,39 +9,39 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/document.aw:414
+#: classes/document.aw:407
 msgid "Viimati muudetud:"
 msgstr "Last modified"
 
-#: classes/document.aw:617
+#: classes/document.aw:620
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr "<br /><B>continue reading from the magazine!</b></font>"
 
-#: classes/document.aw:641
+#: classes/document.aw:644
 msgid "Loe edasi"
 msgstr "Read on"
 
-#: classes/document.aw:1068 classes/document.aw:1117
+#: classes/document.aw:1071 classes/document.aw:1120
 msgid "Vaata lisaks:"
 msgstr "See also"
 
-#: classes/document.aw:1073 classes/document.aw:1122
+#: classes/document.aw:1076 classes/document.aw:1125
 msgid "Samal teemal:"
 msgstr "On the same subject:"
 
-#: classes/document.aw:2865 classes/document.aw:3445
+#: classes/document.aw:2868 classes/document.aw:3448
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/document.aw:2872
+#: classes/document.aw:2875
 msgid "Kuup&auml;ev"
 msgstr "Date"
 
-#: classes/document.aw:2880 classes/document.aw:3463
+#: classes/document.aw:2883 classes/document.aw:3466
 msgid "Autor"
 msgstr "Author"
 
-#: classes/document.aw:3403
+#: classes/document.aw:3406
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
 "<br /><br />\n"
@@ -51,30 +51,30 @@ msgstr ""
 "><br />\n"
 "\n"
 
-#: classes/document.aw:3433
+#: classes/document.aw:3436
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr "Static pages created"
 
-#: classes/document.aw:3435
+#: classes/document.aw:3438
 msgid "tagasi dokumendi muutmise juurde"
 msgstr "back to document editing"
 
-#: classes/document.aw:3451
+#: classes/document.aw:3454
 msgid "Lead"
 msgstr "Lead"
 
-#: classes/document.aw:3457
+#: classes/document.aw:3460
 msgid "Sisu"
 msgstr "Content"
 
-#: classes/document.aw:3473
+#: classes/document.aw:3476
 msgid "Periood"
 msgstr "Period"
 
-#: classes/document.aw:3533
+#: classes/document.aw:3536
 msgid "Objektiotsing"
 msgstr "Object search"
 
-#: classes/document.aw:3533
+#: classes/document.aw:3536
 msgid "Dokumentide otsing"
 msgstr "Document search"

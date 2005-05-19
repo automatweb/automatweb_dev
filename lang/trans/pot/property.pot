@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:30 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,23 +10,27 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/cfg/property.aw:prop_test
+#: classes/applications/class_designer/property.aw:prop_test
 msgid "Omaduse Test (test) caption"
 msgstr ""
 
-#: classes/cfg/property.aw:prop_test_comment
+#: classes/applications/class_designer/property.aw:prop_test_comment
 msgid "Omaduse Test (test) kommentaar"
 msgstr ""
 
-#: classes/cfg/property.aw:prop_test_help
+#: classes/applications/class_designer/property.aw:prop_test_help
 msgid "Omaduse Test (test) help"
 msgstr ""
 
-#: classes/cfg/property.aw:group_
+#: classes/applications/class_designer/property.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
 
-#: classes/cfg/property.aw:group__help
+#: classes/applications/class_designer/property.aw:group__help
 msgid "Grupi  () help"
+msgstr ""
+
+#: classes/applications/class_designer/property.aw:49
+msgid "--vali--"
 msgstr ""
 

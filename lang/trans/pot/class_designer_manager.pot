@@ -98,39 +98,87 @@ msgstr ""
 msgid "Grupi Seosed (rels) help"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:101 classes/applications/class_designer/class_designer_manager.aw:144 classes/applications/class_designer/class_designer_manager.aw:215
-msgid "Lisa"
+#: classes/applications/class_designer/class_designer_manager.aw:109
+msgid "Lisa klass"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:138
+#: classes/applications/class_designer/class_designer_manager.aw:122
+msgid "Lisa perekond"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:130 classes/applications/class_designer/class_designer_manager.aw:752 classes/applications/class_designer/class_designer_manager.aw:780
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:138 classes/applications/class_designer/class_designer_manager.aw:750 classes/applications/class_designer/class_designer_manager.aw:778
+msgid "L&otilde;ika"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:145 classes/applications/class_designer/class_designer_manager.aw:751 classes/applications/class_designer/class_designer_manager.aw:779
+msgid "Kopeeri"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:158
+msgid "Kleebi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:189
+msgid ""
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:196
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:150
-msgid "Disaini"
-msgstr ""
-
 #: classes/applications/class_designer/class_designer_manager.aw:202
-msgid "Lisa objekt"
+msgid "ID"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:231
-msgid "Klassi nimi"
+#: classes/applications/class_designer/class_designer_manager.aw:208
+msgid "Suurus"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:237
-msgid "Seose nimi"
+#: classes/applications/class_designer/class_designer_manager.aw:214
+msgid "Tegevus"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:243
-msgid "Seos klassiga"
-msgstr ""
-
-#: classes/applications/class_designer/class_designer_manager.aw:249
+#: classes/applications/class_designer/class_designer_manager.aw:220 classes/applications/class_designer/class_designer_manager.aw:361
 msgid "Vali"
 msgstr ""
 
-#: classes/applications/class_designer/class_designer_manager.aw:303
+#: classes/applications/class_designer/class_designer_manager.aw:327
+msgid "Lisa"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:343
+msgid "Klassi nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:349
+msgid "Seose nimi"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:355
+msgid "Seos klassiga"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:415
 msgid "Lisa seos"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:749 classes/applications/class_designer/class_designer_manager.aw:768
+msgid "Muuda nime"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:767
+msgid "Demo objekt"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:772
+msgid "Disaini"
+msgstr ""
+
+#: classes/applications/class_designer/class_designer_manager.aw:776
+msgid "Loo disainer"
 msgstr ""
 
