@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.394 2005/05/19 09:16:00 duke Exp $
+// $Id: class_base.aw,v 2.395 2005/05/19 13:42:05 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3348,7 +3348,7 @@ class class_base extends aw_template
 			};
 			*/
 
-			if (!empty($property["value"]))
+			if (isset($property["value"]))
 			{
 				$xval = $property["value"];
 			};
