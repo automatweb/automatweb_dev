@@ -69,5 +69,15 @@
 			</function>
 		</action>
 
+		<action name="create_designer_from_class">
+			<function name="create_designer_from_class">
+				<arguments>
+					<required name="id" type="int" acl="view" />
+					<required name="clid" type="int" />
+					<required name="ru" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

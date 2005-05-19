@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.4 2005/05/19 08:56:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer_manager.aw,v 1.5 2005/05/19 14:36:02 kristo Exp $
 // class_designer_manager.aw - Klasside brauser 
 /*
 
@@ -478,41 +478,15 @@ class class_designer_manager extends class_base
 	**/
 	function check_add_object($arr)
 	{
-		$pt = $this->_get_class_path_in_tree($arr["clid"]);
-		$o = obj($arr["id"]);
-		foreach($pt as $inf)
-		{
-			$filt = array(
-				"parent" => $o->id(),
-				"class_id" => CL_MENU,
-				"name" => $inf["name"],
-				"lang_id" => array(),
-				"site_id" => array()
-			);
-			$ol = new object_list($filt);
-			if (!$ol->count())
-			{
-				$_pt = $o->id();
-				$o = obj();
-				$o->set_parent($_pt);
-				$o->set_class_id(CL_MENU);
-				$o->set_name($inf["name"]);
-				$o->save();
-			}
-			else
-			{
-				$o = $ol->begin();
-			}
-		}
-
+		$parent = $this->_get_obj_parent_by_clid($arr["id"], $arr["clid"]);
 		$ol = new object_list(array(
-			"parent" => $o->id(),
+			"parent" => $parent,
 			"class_id" => $arr["clid"],
 		));
 
 		if (!$ol->count())
 		{
-			return html::get_new_url($arr["clid"], $o->id(), array("return_url" => urlencode($arr["ru"])));
+			return html::get_new_url($arr["clid"], $parent, array("return_url" => urlencode($arr["ru"])));
 		}
 		else
 		{
@@ -846,6 +820,180 @@ class class_designer_manager extends class_base
 			$this->_del_ini_file_value($inif2, "classes[$fld_id]");
 		}
 		return $arr["post_ru"];
+	}
+
+	/** 
+
+		@attrib name=create_designer_from_class
+
+		@param id required type=int acl=view
+		@param clid required type=int
+		@param ru required
+	**/
+	function create_designer_from_class($arr)
+	{
+		$parent = $this->_get_obj_parent_by_clid($arr["id"], $arr["clid"]);
+
+		$clss = aw_ini_get("classes");
+		$o = $this->_get_object_by_parent_type_name($parent, CL_CLASS_DESIGNER, $clss[$arr["clid"]]["name"]);
+		$o->set_prop("is_registered", 1);
+		$o->set_prop("reg_class_id", $arr["clid"]);
+		$o->set_prop("can_add", $clss[$arr["clid"]]["can_add"]);
+		$o->set_prop("class_folder", $clss[$arr["clid"]]["parents"]);
+		$o->save();
+
+		$this->_parse_designer_from_class($o, $arr["clid"], $clss[$arr["clid"]]);
+
+
+		return html::get_change_url($o->id(), array("return_url" => urlencode($arr["ru"])));
+	}
+
+	function _get_obj_parent_by_clid($id, $clid)
+	{
+		$pt = $this->_get_class_path_in_tree($clid);
+		$o = obj($id);
+		foreach($pt as $inf)
+		{
+			$filt = array(
+				"parent" => $o->id(),
+				"class_id" => CL_MENU,
+				"name" => $inf["name"],
+				"lang_id" => array(),
+				"site_id" => array()
+			);
+			$ol = new object_list($filt);
+			if (!$ol->count())
+			{
+				$_pt = $o->id();
+				$o = obj();
+				$o->set_parent($_pt);
+				$o->set_class_id(CL_MENU);
+				$o->set_name($inf["name"]);
+				$o->save();
+			}
+			else
+			{
+				$o = $ol->begin();
+			}
+		}
+
+		return $o->id();
+	}
+
+	function _parse_designer_from_class($designer, $clid, $cld)
+	{
+		$cu = get_instance("cfg/cfgutils");
+		$ps = $cu->load_properties(array("clid" => $clid));
+		$gp = $cu->get_groupinfo();
+		$ci = $cu->get_classinfo();
+		$designer->set_prop("relationmgr", ($ci["relationmgr"] == "yes" ? 1 : 0));
+		$designer->set_prop("no_comment", ($ci["no_comment"] == "1" ? 1 : 0));
+		$designer->set_prop("no_status", ($ci["no_status"] == "1" ? 1 : 0));
+		$designer->save();
+
+		$element_ords = array();
+
+		$this->type_map = array(
+			"text" => CL_PROPERTY_TEXTBOX,
+			"textbox" => CL_PROPERTY_TEXTBOX,
+			"relpicker" => CL_PROPERTY_SELECT,
+			"callback" => CL_PROPERTY_TEXTBOX,
+			"checkbox" => CL_PROPERTY_CHECKBOX,
+			"fileupload" => CL_PROPERTY_TEXTBOX,
+			"hidden" => CL_PROPERTY_TEXTBOX,
+			"date" => CL_PROPERTY_TEXTBOX,
+			"select" => CL_PROPERTY_SELECT,
+			"date_select" => CL_PROPERTY_TEXTBOX,
+			"password" => CL_PROPERTY_TEXTBOX,
+			"submit" => CL_PROPERTY_TEXTBOX,
+			"status" => CL_PROPERTY_TEXTBOX,
+			"textarea" => CL_PROPERTY_TEXTAREA,
+			"table" => CL_PROPERTY_TABLE,
+			"chooser" => CL_PROPERTY_CHOOSER,
+			"releditor" => CL_PROPERTY_TABLE,
+			"datetime_select" => CL_PROPERTY_TEXTBOX,
+			"aliasmgr" => CL_PROPERTY_TEXTBOX,
+			"comments" => CL_PROPERTY_TEXTBOX,
+			"toolbar" => CL_PROPERTY_TOOLBAR,
+			"treeview" => CL_PROPERTY_TREE,
+			"relmanager" => CL_PROPERTY_TEXTBOX,
+			"calendar" => CL_PROPERTY_TEXTBOX,
+			"objpicker" => CL_PROPERTY_TEXTBOX,
+			"classificator" => CL_PROPERTY_CHOOSER,
+			"popup_search" => CL_PROPERTY_TEXTBOX,
+			"form" => CL_PROPERTY_TEXTBOX,
+			"reminder" => CL_PROPERTY_TEXTBOX,
+			"generated" => CL_PROPERTY_TEXTBOX,
+			"colorpicker" => CL_PROPERTY_TEXTBOX,
+			"time_select" => CL_PROPERTY_TEXTBOX,
+		);
+
+		// get groups
+		$cnt = 0;
+		foreach($gp as $gpid => $gpd)
+		{
+			// create group objs
+			$g = $this->_get_object_by_parent_type_name($designer->id(), CL_PROPERTY_GROUP, $gpid);
+			$g->set_prop("caption", $gpd["caption"]);
+			$element_ords[$g->id()] = ++$cnt;
+			if ($gpd["no_submit"])
+			{
+				$g->set_prop("no_submit", 1);
+			}
+			$g->save();
+
+			// for each group make default grid
+			$grid = $this->_get_object_by_parent_type_name($g->id(), CL_PROPERTY_GRID, "default");
+			$element_ords[$grid->id()] = ++$cnt;
+
+			// stick in properties
+			foreach($ps as $pn => $pd)
+			{
+				if ($this->_prop_is_in_group($gpid , $pd["group"]))
+				{
+					$prop = $this->_get_object_by_parent_type_name($grid->id(), $this->type_map[$pd["type"]], $pn);
+					$element_ords[$prop->id()] = ++$cnt;
+					$prop_i = $prop->instance();
+					if (method_exists($prop_i, "parse_property_from_class"))
+					{
+						$prop_i->parse_property_from_class($designer, $prop, $pd, $clid);
+					}
+				}
+			}
+		}
+
+		$designer->set_meta("element_ords", $element_ords);
+		$designer->save();
+
+		// make relations
+	}
+
+	function _prop_is_in_group($gpid, $grp)
+	{
+		if (is_array($grp))
+		{
+			return in_array($gpid, $grp);
+		}
+		return $gpid == $grp;
+	}
+
+	function _get_object_by_parent_type_name($parent, $type, $name)
+	{
+		$ol = new object_list(array(
+			"parent" => $parent,
+			"class_id" => $type,
+			"name" => $name
+		));
+		if ($ol->count())
+		{
+			return $ol->begin();
+		}
+		$o = obj();
+		$o->set_parent($parent);
+		$o->set_class_id($type);
+		$o->set_name($name);
+		$o->save();
+		return $o;
 	}
 }
 ?>

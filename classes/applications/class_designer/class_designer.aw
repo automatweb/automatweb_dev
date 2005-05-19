@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.15 2005/05/09 09:34:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.16 2005/05/19 14:36:02 kristo Exp $
 // class_designer.aw - Vormidisainer 
 /*
 
@@ -769,7 +769,7 @@ class class_designer extends class_base
 			if ($el_clid == CL_PROPERTY_GROUP)
 			{
 				$grpid = $this->_valid_id($name);
-				$grps .= "@groupinfo $grpid caption=\"$name\"\n";
+				$grps .= "@groupinfo $grpid caption=\"".($el->prop("caption") != "" ? $el->prop("caption") : $name)."\"\n";
 			};
 		};
 		
