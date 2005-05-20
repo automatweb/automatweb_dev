@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.9 2005/05/19 10:12:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.10 2005/05/20 08:27:21 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -146,7 +146,7 @@ class ml_member extends class_base
 	function get_member_by_id($id)
 	{
 		$id = (int)$id;
-		$member_obj = new object($id);
+		$row = new object($id);
 		return $row->prop("name") . " " . $row->prop("email");
 	}
 
