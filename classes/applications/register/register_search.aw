@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.24 2005/04/04 08:42:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.25 2005/05/20 15:35:33 ahti Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -475,6 +475,26 @@ class register_search extends class_base
 			return $class_id;
 		}
 	}
+	
+	function get_ot_from_reg($reg)
+	{
+		$awa = new aw_array($reg->prop("data_cfgform"));
+		foreach($awa->get() as $cfid)
+		{
+			if (!is_oid($cfid) || !$this->can("view", $cfid))
+			{
+				continue;
+			}
+			$cff = obj($cfid);
+			if($ot = reset($cff->connections_to(array(
+				"from.class_id" => CL_OBJECT_TYPE,
+				"type" => 1,
+			))))
+			{
+				return $ot->prop("from");
+			}
+		}
+	}
 
 	function callback_get_sform($arr)
 	{
@@ -487,6 +507,7 @@ class register_search extends class_base
 		$props = $this->get_props_from_reg($reg);
 		$clid = $this->get_clid_from_reg($reg);
 		$fdata = $o->meta("fdata");
+		$ot = $this->get_ot_from_reg($reg);
 
 		// load props for entire class, cause from cfgform we don't get all dat
 		$cfgu = get_instance("cfg/cfgutils");
@@ -532,6 +553,7 @@ class register_search extends class_base
 		{*/
 			$i = get_instance($clid);
 			$xp = $i->parse_properties(array(
+				"object_type_id" => $ot,
 				"properties" => $tmp,
 				"name_prefix" => "rsf"
 			));
