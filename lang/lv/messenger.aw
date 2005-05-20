@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/lv/messenger.aw,v 1.1 2004/09/09 11:19:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/lv/messenger.aw,v 1.2 2005/05/20 08:19:44 kristo Exp $
 // messenger.aw - Messengeri lokaliseeringud
 
 // väljad otsinguvormis

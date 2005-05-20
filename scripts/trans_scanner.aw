@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/scripts/trans_scanner.aw,v 1.1 2003/08/29 11:51:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/scripts/trans_scanner.aw,v 1.2 2005/05/20 08:19:43 kristo Exp $
 $basedir = realpath(".");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini")));

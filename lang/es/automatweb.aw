@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/es/automatweb.aw,v 1.1 2003/06/04 13:43:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/es/automatweb.aw,v 1.2 2005/05/20 08:19:43 kristo Exp $
 // automatwebis kasutatavad teated
 define("E_ORB_CLASS_UNDEF","ORB: class not defined");
 define("E_ORB_ACTION_UNDEF","ORB: action not defined");

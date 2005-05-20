@@ -1,7 +1,7 @@
 <?php
 
 global $lc_messenger;
-// $Header: /home/cvs/automatweb_dev/lang/en/messenger.aw,v 1.3 2001/07/26 16:54:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/en/messenger.aw,v 1.4 2005/05/20 08:19:43 kristo Exp $
 // messenger.aw - Messengeri lokaliseeringud
 
 // väljad otsinguvormis

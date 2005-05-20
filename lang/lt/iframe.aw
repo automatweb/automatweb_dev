@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/lt/iframe.aw,v 1.1 2004/09/20 13:17:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/lt/iframe.aw,v 1.2 2005/05/20 08:19:44 kristo Exp $
 global $lc_iframe;
 
 $lc_iframe["LC_IFRAME_SAVE"] = "Save";

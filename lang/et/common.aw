@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.5 2004/06/01 14:10:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/et/common.aw,v 1.6 2005/05/20 08:19:43 kristo Exp $
 // kuude nimed
 define("LC_M1","jaanuar");
 define("LC_M2","veebruar");

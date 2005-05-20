@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/lang/es/manager.aw,v 1.1 2003/06/04 13:43:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/lang/es/manager.aw,v 1.2 2005/05/20 08:19:43 kristo Exp $
 global $lc_manager;
 
 $lc_manager["LC_MANAGER_HINT_NEW_FOLDER"] = "New folder";
