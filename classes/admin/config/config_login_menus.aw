@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.13 2005/03/18 11:46:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/config/config_login_menus.aw,v 1.14 2005/05/20 08:15:58 kristo Exp $
 // config_login_menus.aw - Login men&uuml;&uuml;d 
 /*
 
@@ -282,7 +282,6 @@ class config_login_menus extends class_base
 		{
 			return;
 		}
-
 		$gids = aw_global_get("gidlist");
 		$cur_pri = -1;
 		$cur_menu = -1;

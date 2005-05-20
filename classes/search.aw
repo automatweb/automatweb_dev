@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.96 2005/05/19 10:38:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.97 2005/05/20 08:15:37 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -672,7 +672,6 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 
 				$results = 0;
 			};
-
 			$obj_list = array();
 
 			$is_remote = false;
