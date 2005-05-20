@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.63 2005/05/18 13:35:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.64 2005/05/20 11:30:59 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -546,8 +546,8 @@ class event_search extends class_base
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
 		$show_type = $ob->prop("show_type");
-		$sd = $show_type == 1 or $show_type == 2 ? date("d") : 1;
-		$ed = $show_type == 1 or $show_type == 2 ? date("d") : $cur_days;
+		$sd = ($show_type == 1 or $show_type == 2) ? date("d") : 1;
+		$ed = ($show_type == 1 or $show_type == 2) ? date("d") : $cur_days;
 		if($start_tm == -1)
 		{
 			$start_tm = mktime(0, 0, 0, date("m"), $sd, date("Y"));
