@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.11 2005/04/28 08:54:41 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.12 2005/05/20 08:24:21 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -213,6 +213,7 @@ class css extends class_base
 		};
 		foreach($data as $key => $val)
 		{
+			$mask = "";
 			if ($val === "")
 			{
 				continue;
@@ -333,6 +334,10 @@ class css extends class_base
 					break;
 			};
 
+			if ($mask == "")
+			{
+				continue;
+			}
 			if ($key == "size")
 			{
 				$retval .= "\tfont-size: $val" . "px;\n";
