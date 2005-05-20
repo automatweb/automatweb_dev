@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.58 2005/05/16 12:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.59 2005/05/20 09:40:27 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -606,6 +606,8 @@ class mrp_schedule extends class_base
 		{
 			echo t("Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!");
 		}
+
+		return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
 	}
 
 	function compute_due_date ()

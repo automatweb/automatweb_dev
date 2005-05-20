@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.77 2005/05/16 12:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.78 2005/05/20 09:40:27 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -477,6 +477,11 @@ class mrp_case extends class_base
 				{
 					$this->workspace->set_prop("rescheduling_needed", 1);
 				}
+				break;
+
+			case "user_comments":
+				$ws = get_instance(CL_MRP_WORKSPACE);
+				$ws->mrp_log($arr["obj_inst"]->id(), NULL, "", $prop["value"]["comment"]);
 				break;
 		}
 
