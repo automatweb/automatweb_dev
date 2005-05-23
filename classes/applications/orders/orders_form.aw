@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.16 2005/05/23 12:31:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.17 2005/05/23 14:48:17 duke Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -806,7 +806,7 @@ class orders_form extends class_base
 		$states = array();
 		foreach(safe_array($states_f) as $s_l)
 		{
-			list($s_c, $s_v) = ecplode(";", $s_l);
+			list($s_c, $s_v) = explode(";", $s_l);
 			$states[$s_c] = $s_v;
 		}
 		
