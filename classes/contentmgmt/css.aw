@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.12 2005/05/20 08:24:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.13 2005/05/23 10:16:16 kristo Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -329,6 +329,10 @@ class css extends class_base
 					$mask = "padding: %spx;\n";
 					break;
 
+				case "size":
+					$mask = "font-size: %spx;\n";
+					break;
+	
 				default:
 					$ign = true;
 					break;
@@ -338,11 +342,6 @@ class css extends class_base
 			{
 				continue;
 			}
-			if ($key == "size")
-			{
-				$retval .= "\tfont-size: $val" . "px;\n";
-			}
-			else
 			if (!$ign)
 			{
 				$retval .= sprintf("\t" . $mask,$val);
