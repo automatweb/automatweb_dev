@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.80 2005/05/04 07:16:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.81 2005/05/23 07:30:23 ahti Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -942,9 +942,14 @@ class planner extends class_base
 			{
 				$event_obj = $event_obj->get_original();
 			};
-			$event_cfgform = $event_obj->meta("cfgform_id");
+			//$event_cfgform = $event_obj->meta("cfgform_id");
 			$this->event_id = $event_id;
 			$clid = $event_obj->class_id();
+			$event_i = $event_obj->instance();
+			$event_cfgform = $event_i->get_cfgform_for_object(array(
+				"obj_inst" => &$event_obj,
+				"action" => "change",
+			));
 			if ($clid == CL_DOCUMENT || $clid == CL_BROTHER_DOCUMENT)
 			{
 				unset($clid);
