@@ -98,6 +98,18 @@
             <comment>Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi</comment>
       </property>
       <property>
+            <name>no_event_folder</name>
+            <table>objects</table>
+            <group>general2</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <store>no</store>
+            <newonly>1</newonly>
+            <ch_value>1</ch_value>
+            <caption>Ära tee sündmuste kataloogi</caption>
+      </property>
+      <property>
             <name>workdays</name>
             <table>objects</table>
             <group>advanced</group>
