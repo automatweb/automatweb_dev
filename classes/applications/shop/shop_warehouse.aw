@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.31 2005/05/13 09:00:13 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.32 2005/05/23 12:32:55 ahti Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -67,6 +67,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @groupinfo order_unconfirmed parent=order caption="Kinnitamata"
 @groupinfo order_confirmed parent=order caption="Kinnitatud"
 @groupinfo order_orderer_cos parent=order caption="Tellijad"
+@groupinfo order_search parent=order caption="Otsing" submit_method=get
 
 @property order_unconfirmed_toolbar type=toolbar no_caption=1 group=order_unconfirmed store=no
 @property order_unconfirmed type=table store=no group=order_unconfirmed no_caption=1
@@ -79,6 +80,38 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @property order_orderer_cos_tree type=text store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 @property order_orderer_cos type=table store=no parent=hbox_oc group=order_orderer_cos no_caption=1
 
+@property osearch_uname type=textbox group=order_search store=no
+@caption Tellija kasutajanimi
+
+@property osearch_pname type=textbox group=order_search store=no
+@caption Tellija isikunimi
+
+@property osearch_oname type=textbox group=order_search store=no
+@caption Organisatsiooni nimi
+
+@property osearch_oid type=textbox size=8 group=order_search store=no
+@caption Tellimuse ID
+
+@property osearch_prodname type=textbox group=order_search store=no
+@caption Toote nimi
+
+@property osearch_from type=chooser group=order_search store=no
+@caption Otsi staatuse järgi
+
+@property osearch_odates type=date_select group=order_search store=no
+@caption Tellimuse ajavahemik (alates)
+
+@property osearch_odatee type=date_select group=order_search store=no
+@caption Tellimuse ajavahemik (kuni)
+
+@property osearch_hidden type=hidden value=1 group=order_search store=no
+@caption Otsing
+
+@property osearch_submit type=submit group=order_search
+@caption Otsi
+
+@property osearch_table type=table group=order_search no_caption=1
+@caption Tulemuste tabel
 
 // search tab
 @groupinfo search caption="Otsing" submit_method=get
@@ -88,7 +121,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @default group=search_search
 
 @property search_tb type=toolbar store=no no_caption=1
-@caption Otsingo toolbar
+@caption Otsingu toolbar
 
 @property search_form type=callback callback=callback_get_search_form submit_method=get store=no
 @caption Otsinguvorm
@@ -143,6 +176,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_SHOP_WAREHOUSE, on_popup_se
 @reltype EMAIL value=7 clid=CL_ML_MEMBER
 @caption saada tellimused
 
+@reltype CFGMANAGER value=8 clid=CL_CFGMANAGER
+@caption Seadete haldur
 */
 
 class shop_warehouse extends class_base
@@ -154,6 +189,18 @@ class shop_warehouse extends class_base
 			"clid" => CL_SHOP_WAREHOUSE
 		));
 	}
+	
+	function callback_on_load($arr)
+	{
+		if(is_oid($arr["request"]["id"]) && $this->can("view", $arr["request"]["id"]))
+		{
+			$obj = obj($arr["request"]["id"]);
+			if($cfgmanager = $obj->get_first_conn_by_reltype("RELTYPE_CFGMANAGER"))
+			{
+				$this->cfgmanager = $cfgmanager->prop("to");
+			}
+		}
+	}
 
 	function get_property($arr)
 	{
@@ -161,10 +208,30 @@ class shop_warehouse extends class_base
 		{
 			return PROP_OK;
 		}
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
-		switch($data["name"])
+		switch($prop["name"])
 		{
+			case "osearch_from":
+				$prop["options"] = array(
+					0 => t("k&otilde;ik"),
+					1 => t("kinnitatud"),
+					2 => t("kinnitamata"),
+				);
+			case "osearch_uname":
+			case "osearch_pname":
+			case "osearch_oname":
+			case "osearch_oid":
+			case "osearch_prodname":
+			case "osearch_odates":
+			case "osearch_odatee":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+				
+			case "osearch_table":
+				$this->do_search_tbl($arr);
+				break;
+				
 			case "products_toolbar":
 				$this->mk_prod_toolbar($arr);
 				break;
@@ -307,9 +374,18 @@ class shop_warehouse extends class_base
 		$oc = obj($arr["obj_inst"]->prop("order_center"));
 		$soc = get_instance(CL_SHOP_ORDER_CART);
 		$awa = new aw_array($arr["request"]["quant"]);
-		foreach($awa->get() as $iid => $quant)
+		foreach($awa->get() as $iid => $quantx)
 		{
-			$soc->set_item($iid, $quant, $oc);
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
+			{
+				$soc->set_item(array(
+					"iid" => $iid,
+					"quant" => $quant,
+					"oc" => $oc,
+					"it" => $x,
+				));
+			}
 		}
 
 		if ($is_post)
@@ -324,6 +400,137 @@ class shop_warehouse extends class_base
 
 			$arr["obj_inst"]->set_meta("order_cur_pages", $arr["request"]["pgnr"]);
 		}
+	}
+	
+	function do_search_tbl($arr)
+	{
+		$srch = $arr["request"];
+		if(!$srch["osearch_hidden"])
+		{
+			return;
+		}
+		$fields = array(
+			"id" => t("Tellimus"),
+			"prodname" => t("Toode"),
+			"uname" => t("Kasutaja"),
+			"pname" => t("Isik"),
+			"oname" => t("Organisatsioon"),
+			"odate" => t("Telliti"),
+		);
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->set_sortable(false);
+		foreach($fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+				"sortable" => 1,
+			));
+		}
+		if($srch["osearch_uname"])
+		{
+			$z .= " AND user.name LIKE '%".$srch["osearch_uname"]."%'";
+		}
+		if($srch["osearch_pname"])
+		{
+			$z .= " AND isik.name LIKE '%".$srch["osearch_pname"]."%'";
+		}
+		if($srch["osearch_oname"])
+		{
+			$z .= " AND com.name LIKE '%".$srch["osearch_pname"]."%'";
+		}
+		if($srch["osearch_oid"])
+		{
+			$z .= " AND objects.oid = '".$srch["osearch_oid"]."'";
+		}
+		if(is_array($srch["osearch_odates"]))
+		{
+			$d = $srch["osearch_odates"];
+			$z .= " AND objects.created > ".mktime(0, 0, 0, $d["month"], $d["day"], $d["year"]);
+		}
+		if(is_array($srch["osearch_odatee"]))
+		{
+			$d = $srch["osearch_odatee"];
+			$z .= " AND objects.created < ".mktime(23, 59, 59, $d["month"], $d["day"], $d["year"]);
+		}
+		if($srch["osearch_from"] == 1)
+		{
+			$z .= " AND so.confirmed = 1";
+		}
+		elseif($srch["osearch_from"] == 2)
+		{
+			$z .= " AND so.confirmed = 0";
+		}
+		$q = "
+			SELECT
+				objects.oid AS id,
+				isik.name AS pname,
+				isik.oid AS pname_id,
+				user.name AS uname,
+				user.oid AS uname_id,
+				com.name AS oname,
+				com.oid AS oname_id,
+				objects.created AS odate,
+				so.confirmed as confirmed
+			FROM 
+				objects
+				LEFT JOIN aw_shop_orders so ON (so.aw_oid = objects.oid)
+				LEFT JOIN objects isik ON (so.aw_orderer_person = isik.oid)
+				LEFT JOIN objects com ON (so.aw_orderer_company = com.oid)
+				LEFT JOIN aliases isik2user ON (isik2user.target = isik.oid AND isik2user.reltype = 2)
+				LEFT JOIN users ON (isik2user.source = users.oid)
+				LEFT JOIN objects user ON (users.oid = user.oid)
+			WHERE
+				objects.status > 0 AND
+				isik.status > 0 AND
+				com.status > 0 AND
+				user.status > 0 AND
+				objects.parent = ".$this->order_fld."
+				$z
+				GROUP BY objects.created DESC
+		";
+		$this->db_query($q);
+		$vars = array("return_url" => urlencode(aw_ini_get("baseurl").aw_global_get("REQUEST_URI")));
+		$t->table_header = t("<center>Leiti ".$this->num_rows()." kirjet</center>");
+		while($w = $this->db_next())
+		{
+			$this->save_handle();
+			if($srch["osearch_prodname"])
+			{
+				$z2 .= " AND objects.name LIKE '%".$srch["osearch_prodname"]."%'";
+			}
+			$q2 = "
+			SELECT objects.name AS name, objects.oid AS id
+			FROM objects 
+				LEFT JOIN aw_shop_products prod ON (objects.oid = prod.aw_oid)
+				LEFT JOIN aliases order2prod ON (order2prod.target = objects.oid AND order2prod.reltype = 1)
+			WHERE
+				objects.oid > 0 AND
+				order2prod.source = '".$w["id"]."'
+				$z2
+			";
+			$this->db_query($q2);
+			
+			if($this->num_rows() == 0)
+			{
+				continue;
+			}
+			$e = array();
+			while($w2 = $this->db_next())
+			{
+				$e[$w2["id"]] = html::get_change_url($w2["id"], $vars, $w2["name"]);
+			}
+			$this->restore_handle();
+			$t->define_data(array(
+				"id" => html::get_change_url($w["id"], $vars, $w["id"]),
+				"pname" => html::get_change_url($w["pname_id"], $vars, $w["pname"]),
+				"uname" => html::get_change_url($w["uname_id"], $vars, $w["uname"]),
+				"oname" => html::get_change_url($w["oname_id"], $vars, $w["oname"]),
+				"prodname" => implode(", ", $e),
+				"odate" => date("d-m-Y", $w["odate"]),
+			));
+		}
+		
 	}
 
 	function do_order_cur_tb($data)
@@ -545,7 +752,7 @@ class shop_warehouse extends class_base
 						"item_type" => $o->id(),
 						"parent" => $this->prod_tree_root,
 						"alias_to" => $data["obj_inst"]->id(),
-						"reltype" => RELTYPE_PRODUCT,
+						"reltype" => 2, //RELTYPE_PRODUCT,
 						"return_url" => urlencode(aw_global_get("REQUEST_URI")),
 						"cfgform" => $o->prop("sp_cfgform"),
 						"object_type" => $o->prop("sp_object_type")
@@ -610,21 +817,22 @@ class shop_warehouse extends class_base
 		// get items 
 		if (!$_GET["tree_filter"])
 		{
-			$ot = new object_tree();
+			$ot = new object_list();
 		}
 		else
 		{
-			$ot = new object_tree(array(
+			$ot = new object_list(array(
 				"parent" => $_GET["tree_filter"],
-				"class_id" => array(CL_MENU,CL_SHOP_PRODUCT),
+				"class_id" => CL_SHOP_PRODUCT,
 				"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
 			));
 		}
 
 		classload("core/icons");
 
-		$ol = $ot->to_list();
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		//$ol = $ot->to_list();
+		$ol = $ot->arr();
+		foreach($ol as $o)
 		{
 
 			if ($o->class_id() == CL_MENU)
@@ -834,7 +1042,7 @@ class shop_warehouse extends class_base
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->pkt_tree_root,
 				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => RELTYPE_PACKET,
+				"reltype" => 2, //RELTYPE_PACKET,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			), CL_SHOP_PACKET)
 		));
@@ -1064,7 +1272,7 @@ class shop_warehouse extends class_base
 	{
 		$this->_init_storage_income_tbl($arr["prop"]["vcl_inst"]);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_STORAGE_INCOME)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STORAGE_INCOME")) as $c)
 		{
 			$to = $c->to();
 
@@ -1164,7 +1372,7 @@ class shop_warehouse extends class_base
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->reception_fld,
 				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => RELTYPE_STORAGE_INCOME,
+				"reltype" => 3, //RELTYPE_STORAGE_INCOME,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			), CL_SHOP_WAREHOUSE_RECEPTION)
 		));
@@ -1175,7 +1383,7 @@ class shop_warehouse extends class_base
 	{
 		$this->_init_storage_export_tbl($arr["prop"]["vcl_inst"]);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_STORAGE_EXPORT)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_STORAGE_EXPORT")) as $c)
 		{
 			$to = $c->to();
 
@@ -1275,7 +1483,7 @@ class shop_warehouse extends class_base
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->export_fld,
 				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => RELTYPE_STORAGE_EXPORT,
+				"reltype" => 4, //RELTYPE_STORAGE_EXPORT,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			), CL_SHOP_WAREHOUSE_EXPORT)
 		));
@@ -1309,13 +1517,13 @@ class shop_warehouse extends class_base
 
 		$e->connect(array(
 			"to" => $p->id(),
-			"reltype" => 1 // RELTYPE_PRODUCT
+			"reltype" => "RELTYPE_PRODUCT",
 		));
 
 		// also connect the export to warehouse
 		$o->connect(array(
 			"to" => $e,
-			"reltype" => 4 // RELTYPE_STORAGE_EXPORT
+			"reltype" => "RELTYPE_STORAGE_EXPORT",
 		));
 
 		return $this->mk_my_orb("change", array(
@@ -1356,13 +1564,13 @@ class shop_warehouse extends class_base
 
 		$e->connect(array(
 			"to" => $p->id(),
-			"reltype" => 1 // RELTYPE_PRODUCT
+			"reltype" => "RELTYPE_PRODUCT",
 		));
 
 		// also connect the reception to warehouse
 		$o->connect(array(
 			"to" => $e,
-			"reltype" => 3 // RELTYPE_STORAGE_INCOME
+			"reltype" => "RELTYPE_STORAGE_INCOME",
 		));
 
 		return $this->mk_my_orb("change", array(
@@ -1390,7 +1598,7 @@ class shop_warehouse extends class_base
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => RELTYPE_ORDER,
+				"reltype" => 5, //RELTYPE_ORDER,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			), CL_SHOP_ORDER)
 		));
@@ -1406,7 +1614,7 @@ class shop_warehouse extends class_base
 			"class_id" => CL_SHOP_ORDER,
 			"confirmed" => 0
 		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
 			$mb = $o->modifiedby();
 			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
@@ -1441,6 +1649,7 @@ class shop_warehouse extends class_base
 				}
 			}
 			$t->define_data(array(
+				"id" => $o->id(),
 				"name" => $o->name(),
 				"modifiedby" => $mb,
 				"modified" => $o->created(),
@@ -1466,6 +1675,11 @@ class shop_warehouse extends class_base
 
 	function _init_order_unconfirmed_tbl(&$t)
 	{
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"sortable" => 1
+		));
 		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
@@ -1522,7 +1736,7 @@ class shop_warehouse extends class_base
 			"link" => $this->mk_my_orb("new", array(
 				"parent" => $this->order_fld,
 				"alias_to" => $data["obj_inst"]->id(),
-				"reltype" => RELTYPE_ORDER,
+				"reltype" => 5, //RELTYPE_ORDER,
 				"return_url" => urlencode(aw_global_get("REQUEST_URI"))
 			), CL_SHOP_ORDER)
 		));
@@ -1538,12 +1752,46 @@ class shop_warehouse extends class_base
 			"class_id" => CL_SHOP_ORDER,
 			"confirmed" => 1
 		));
-		for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		foreach($ol->arr() as $o)
 		{
+			$mb = $o->modifiedby();
+			if (is_oid($o->prop("orderer_person")) && $this->can("view", $o->prop("orderer_company")))
+			{
+				$_person = obj($o->prop("orderer_person"));
+				$mb = $_person->name();
+			}
+			else
+			if (is_oid($o->prop("oc")))
+			{
+				$oc = obj($o->prop("oc"));
+				if (($pp = $oc->prop("data_form_person")))
+				{
+					$_ud = $o->meta("user_data");
+					$mb = $_ud[$pp];
+				}
+			}
+
+			if (is_oid($o->prop("orderer_company")) && $this->can("view", $o->prop("orderer_company")))
+			{
+				$_comp = obj($o->prop("orderer_company"));
+				$mb .= " / ".$_comp->name();
+			}
+			else
+			if (is_oid($o->prop("oc")))
+			{
+				$oc = obj($o->prop("oc"));
+				if (($pp = $oc->prop("data_form_company")))
+				{
+					$_ud = $o->meta("user_data");
+					$mb = $_ud[$pp];
+				}
+			}
 			$t->define_data(array(
+				"id" => $o->id(),
 				"name" => $o->name(),
+				"madeby" => $mb,
 				"modifiedby" => $o->modifiedby(),
-				"modified" => $m->modified(),
+				"modified" => $o->modified(),
 				"view" => html::href(array(
 					"url" => $this->mk_my_orb("change", array(
 						"id" => $o->id(),
@@ -1560,33 +1808,44 @@ class shop_warehouse extends class_base
 	function _init_order_confirmed_tbl(&$t)
 	{
 		$t->define_field(array(
-			"name" => "name",
-			"caption" => t("Nimi")
+			"name" => "id",
+			"caption" => t("ID"),
+			"sortable" => 1
 		));
-
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1
+		));
 		$t->define_field(array(
 			"name" => "price",
 			"caption" => t("Hind"),
 			"align" => "center"
 		));
-
+		$t->define_field(array(
+			"name" => "madeby",
+			"caption" => t("Kes"),
+			"align" => "center",
+			"sortable" => 1
+		));
 		$t->define_field(array(
 			"name" => "modifiedby",
-			"caption" => t("Kes"),
-			"align" => "center"
+			"caption" => t("Kinnitas"),
+			"align" => "center",
+			"sortable" => 1
 		));
-
 		$t->define_field(array(
 			"name" => "modified",
 			"caption" => t("Millal"),
 			"type" => "time",
 			"format" => "d.m.Y H:i",
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
-
 		$t->define_field(array(
 			"name" => "view",
-			"caption" => t("Vaata")
+			"caption" => t("Vaata"),
+			"align" => "center"
 		));
 	}
 
@@ -1649,7 +1908,7 @@ class shop_warehouse extends class_base
 			// get workers for co
 			$co = obj($arr["request"]["tree_company"]);
 			$ids = array();
-			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 			{
 				$ids[] = $c->prop("to");
 			}
@@ -1673,7 +1932,7 @@ class shop_warehouse extends class_base
 				foreach($cat->connections_to(array("from.class_id" => CL_CRM_COMPANY)) as $c)
 				{
 					$co = $c->from();
-					foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+					foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 					{
 						$ids[] = $c->prop("to");
 					}
@@ -1740,7 +1999,7 @@ class shop_warehouse extends class_base
 
 			$co = obj($co_id);
 			// now all people for that company
-			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 			{
 				$tv->add_item("nocode_co".$co->id(), array(
 					"name" => $c->prop("to.name"),
@@ -1861,7 +2120,7 @@ class shop_warehouse extends class_base
 			unset($this->all_cos_ids[$co->id()]);
 
 			// now all people for that company
-			foreach($co->connections_from(array("type" => 8 /* RELTYPE_WORKER */)) as $c)
+			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
 			{
 				$tv->add_item($code."co".$co->id(), array(
 					"name" => $c->prop("to.name"),
@@ -2012,7 +2271,7 @@ class shop_warehouse extends class_base
 			"msg" => t("shop_warehouse::gen_order(): no order center object selected!")
 		));
 
-		$soc = get_instance("applications/shop/shop_order_cart");
+		$soc = get_instance(CL_SHOP_ORDER_CART);
 		if (!aw_global_get("wh_order_cur_order_id"))
 		{
 			$ordid = $soc->do_create_order_from_cart($oc, $arr["id"], array(
@@ -2227,6 +2486,8 @@ class shop_warehouse extends class_base
 	**/
 	function get_packet_list($arr)
 	{
+		enter_function("shop_warehouse::get_packet_list");
+		
 		$wh = obj($arr["id"]);
 		$conf = obj($wh->prop("conf"));
 
@@ -2238,20 +2499,20 @@ class shop_warehouse extends class_base
 
 		$ret = array();
 
-		$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")));	
-		if ($po->is_brother())
+		if($conf->prop("no_packets") != 1)
 		{
-			$po = $po->get_original();
-		}
-
-		$ol = new object_list(array(
-			"parent" => $po->id(),
-			"class_id" => CL_SHOP_PACKET,
-			"status" => $status
-		));
-		foreach($ol->arr() as $o)
-		{
-			$ret[] = $o;
+			$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("pkt_fld")));
+			if ($po->is_brother())
+			{
+				$po = $po->get_original();
+			}
+	
+			$ol = new object_list(array(
+				"parent" => $po->id(),
+				"class_id" => CL_SHOP_PACKET,
+				"status" => $status
+			));
+			$ret = $ol->arr();
 		}
 
 		$po = obj((!empty($arr["parent"]) ? $arr["parent"] : $conf->prop("prod_fld")));	
@@ -2259,30 +2520,29 @@ class shop_warehouse extends class_base
 		{
 			$po = $po->get_original();
 		}
-
-		$filt = array(
+		enter_function("warehouse::object_list");
+		$ol = new object_list(array(
 			"parent" => $po->id(),
-			"class_id" => array(CL_SHOP_PRODUCT),
-			"status" => array(STAT_ACTIVE, STAT_NOTACTIVE)
-		);
-		$ol = new object_list($filt);
-		foreach($ol->arr() as $o)
+			"class_id" => CL_SHOP_PRODUCT,
+		));
+		$ret = array_merge($ret, $ol->arr());
+		exit_function("warehouse::object_list");
+		if(!$conf->prop("sell_prods"))
 		{
-			$ret[] = $o;
-		}
-
-		// now, let the classes add sub-items to the list
-		$tmp = array();
-		foreach($ret as $o)
-		{
-			$inst = $o->instance();
-			foreach($inst->get_contained_products($o, $conf) as $co)
+			// now, let the classes add sub-items to the list
+			$tmp = array();
+			foreach($ret as $o)
 			{
-				$tmp[] = $co;
+				$inst = $o->instance();
+				foreach($inst->get_contained_products($o) as $co)
+				{
+					$tmp[] = $co;
+				}
 			}
+			$ret = $tmp;
 		}
-
-		return $tmp;
+		exit_function("shop_warehouse::get_packet_list");
+		return $ret;
 	}
 
 	function get_order_folder($w)
@@ -2319,7 +2579,7 @@ class shop_warehouse extends class_base
 		$awa = new aw_array($arr["sel"]);
 		foreach($awa->get() as $iid)
 		{
-			$soc->add_item($iid, 1, $oc);
+			$soc->add_item(array("iid" => $iid, "quant" => 1, "oc" => $oc));
 		}
 
 		$this->do_save_prod_ord($arr);

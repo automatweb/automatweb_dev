@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.16 2005/05/09 13:31:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.17 2005/05/23 12:32:55 ahti Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -186,12 +186,18 @@ class shop_product_packaging extends class_base
 		$pr_i = get_instance(CL_SHOP_PRODUCT);
 
 		$pi = $prod;
-		$prod = reset($pi->connections_to(array(
+		if(!$prod = reset($pi->connections_to(array(
 			"from.class_id" => CL_SHOP_PRODUCT,
-		)));
+		))))
+		{
+			return NULL;
+		}
 		$prod = $prod->from();
-		$l_inst = $layout->instance();
-		$l_inst->read_template($layout->prop("template"));
+		if(!$l_inst)
+		{
+			$l_inst = $layout->instance();
+			$l_inst->read_template($layout->prop("template"));
+		}
 
 		$parent_fld = $pi;
 		do
@@ -204,6 +210,8 @@ class shop_product_packaging extends class_base
 		$soc->get_cart($oc_obj);
 		$inf = $soc->get_item_in_cart($pi->id());
 		$ivs = array(
+			"it" => $it,
+			"bgcolor" => $bgcolor,
 			"packaging_name" => $pi->name(),
 			"packaging_price" => $this->get_price($pi),
 			"packaging_id" => $pi->id(),
@@ -228,7 +236,7 @@ class shop_product_packaging extends class_base
 		$proc_ivs = $ivs;
 
 		// insert images
-		$i = get_instance("image");
+		$i = get_instance(CL_IMAGE);
 		$cnt = 1;
 		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
 		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
@@ -302,8 +310,10 @@ class shop_product_packaging extends class_base
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 
 		// order data
-		$awa = new aw_array($inf["data"]);
-		foreach($awa->get() as $datan => $datav)
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$awa = $soc->get_item_in_cart(array("iid" => $pi->id(), "it" => $arr["it"]));
+		//$awa = new aw_array($inf["data"]);
+		foreach($awa as $datan => $datav)
 		{
 			if ($datan == "url")
 			{
@@ -317,8 +327,7 @@ class shop_product_packaging extends class_base
 		}
 		$pr_i->_int_proc_ivs($proc_ivs, $l_inst);
 
-		$tmp = $awa->get();
-		if ($tmp["url"] != "")
+		if ($awa["url"] != "")
 		{
 			$l_inst->vars(Array(
 				"URL_IN_DATA" => $l_inst->parse("URL_IN_DATA")
@@ -385,12 +394,14 @@ class shop_product_packaging extends class_base
 
 	function get_must_order_num($o)
 	{
-		$prod = reset($o->connections_to(array(
+		if($prod = reset($o->connections_to(array(
 			"from.class_id" => CL_SHOP_PRODUCT,
-		)));
-		$prod = $prod->from();
-		$prod_i = $prod->instance();
-		return $prod_i->get_must_order_num($prod);
+		))))
+		{
+			$prod = $prod->from();
+			$prod_i = $prod->instance();
+			return $prod_i->get_must_order_num($prod);
+		}
 	}
 }
 ?>

@@ -181,6 +181,108 @@
             <field>order_orderer_cos</field>
       </property>
       <property>
+            <name>osearch_uname</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>osearch_uname</field>
+            <caption>Tellija kasutajanimi</caption>
+      </property>
+      <property>
+            <name>osearch_pname</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>osearch_pname</field>
+            <caption>Tellija isikunimi</caption>
+      </property>
+      <property>
+            <name>osearch_oname</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>osearch_oname</field>
+            <caption>Organisatsiooni nimi</caption>
+      </property>
+      <property>
+            <name>osearch_oid</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>textbox</type>
+            <size>8</size>
+            <store>no</store>
+            <field>osearch_oid</field>
+            <caption>Tellimuse ID</caption>
+      </property>
+      <property>
+            <name>osearch_prodname</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>osearch_prodname</field>
+            <caption>Toote nimi</caption>
+      </property>
+      <property>
+            <name>osearch_from</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>chooser</type>
+            <store>no</store>
+            <field>osearch_from</field>
+            <caption>Otsi staatuse järgi</caption>
+      </property>
+      <property>
+            <name>osearch_odates</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>osearch_odates</field>
+            <caption>Tellimuse ajavahemik (alates)</caption>
+      </property>
+      <property>
+            <name>osearch_odatee</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>osearch_odatee</field>
+            <caption>Tellimuse ajavahemik (kuni)</caption>
+      </property>
+      <property>
+            <name>osearch_hidden</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>hidden</type>
+            <value>1</value>
+            <store>no</store>
+            <field>osearch_hidden</field>
+            <caption>Otsing</caption>
+      </property>
+      <property>
+            <name>osearch_submit</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>osearch_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>osearch_table</name>
+            <table>objects</table>
+            <group>order_search</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>osearch_table</field>
+            <caption>Tulemuste tabel</caption>
+      </property>
+      <property>
             <name>search_tb</name>
             <table>objects</table>
             <group>search_search</group>
@@ -188,7 +290,7 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <field>search_tb</field>
-            <caption>Otsingo toolbar</caption>
+            <caption>Otsingu toolbar</caption>
       </property>
       <property>
             <name>search_form</name>
@@ -327,6 +429,11 @@
                   <parent>order</parent>
                   <caption>Tellijad</caption>
             </order_orderer_cos>
+            <order_search>
+                  <parent>order</parent>
+                  <caption>Otsing</caption>
+                  <submit_method>get</submit_method>
+            </order_search>
             <search>
                   <caption>Otsing</caption>
                   <submit_method>get</submit_method>
@@ -389,6 +496,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>saada tellimused</caption>
             </EMAIL>
+            <CFGMANAGER>
+                  <value>8</value>
+                  <clid>CL_CFGMANAGER</clid>
+                  <caption>Seadete haldur</caption>
+            </CFGMANAGER>
       </reltypes>
       <layout>
             <hbox_oc>

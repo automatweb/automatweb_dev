@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.30 2005/05/09 13:31:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.31 2005/05/23 12:32:55 ahti Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -166,7 +166,7 @@ class shop_order extends class_base
 		if ($arr["new"])
 		{
 			// check if the current user has an organization
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			if (($p = $us->get_current_person()))
 			{
 				$arr["obj_inst"]->connect(array(
@@ -191,8 +191,13 @@ class shop_order extends class_base
 	function do_ord_table(&$arr)
 	{
 		$t = &$arr["prop"]["vcl_inst"];
+		if(file_exists($this->site_template_dir."/add_script.tpl"))
+		{
+			$this->read_site_template("add_script.tpl", true);
+			$t->table_header = $this->parse();
+		}
 		$pd = $arr["obj_inst"]->meta("ord_content");
-		$pd_data = $arr["obj_inst"]->meta("ord_item_data");
+		$pd_data = new aw_array($arr["obj_inst"]->meta("ord_item_data"));
 		
 		$t->define_field(array(
 			"name" => "name",
@@ -218,63 +223,124 @@ class shop_order extends class_base
 			"field" => "id",
 			"name" => "sel",
 		));
+		$add_fields = array();
+		$cfgform = get_instance(CL_CFGFORM);
 		$conf = $arr["obj_inst"]->prop("confirmed") == 1;
-		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
+		$arrz = array("name", "comment", "status", "item_count", "item_type", "price", "must_order_num", "brother_of", "parent", "class_id", "lang_id" ,"period", "created", "modified", "periodic");
+		foreach($pd_data->get() as $id => $prod)
 		{
-			$_tmp = array();
-			$id = $c->prop("to");
-			$vals = array();
-			foreach(safe_array($pd_data[$id]) as $fl => $val)
+			if(!is_oid($id) || !$this->can("view", $id))
 			{
-				$vals[$fl] = html::textbox(array(
-					"name" => "prod_data[$id][$fl]",
-					"value" => $val,
-					"size" => 10,
-				));
-				$_tmp[$fl] = $fl;
+				continue;
 			}
-			$leftover = array_diff($matchers, $_tmp);
-			foreach($leftover as $key)
+			$to = obj($id);
+			$cfg_id = $to->meta("cfgform_id");
+			if(is_oid($cfg_id) && $this->can("view", $cfg_id))
 			{
-				$vals[$key] = html::textbox(array(
-					"name" => "prod_data[$id][$key]",
-					"size" => 10,
-				));
-			}
-			if ($conf)
-			{
-				$cnt = $pd[$id];
+				$props = $cfgform->get_props_from_cfgform(array("id" => $to->meta("cfgform_id")));
 			}
 			else
 			{
-				$cnt = html::textbox(array(
-					"name" => "pd[$id]",
-					"value" => $pd[$id],
-					"size" => 5
-				));
+				$to_i = $to->instance();
+				$props = $to_i->load_defaults();
 			}
-			$name = $c->prop("to.name");
-			$name = html::get_change_url($id, array(), $name);
-
-			$to = $c->to();
+			foreach($to->properties() as $key => $val)
+			{
+				if(!empty($val["value"]) && $val["type"] != "text" && !in_array($key, $arrz))
+				{
+					$add_fields[$key] = $props[$key]["caption"];
+				}
+			}
+			$name = $to->name();
+			
+			if($this->can("edit", $id))
+			{
+				$name = html::get_change_url($id, array(), $name);
+			}
 			$prod_conn = reset($to->connections_to(array("from.class_id" => "CL_SHOP_PRODUCT")));
 			if ($prod_conn)
 			{
 				$name = t("Pakend: ").$name.",  ".t("Toode: ").html::get_change_url($prod_conn->prop("from"), array(), $prod_conn->prop("from.name"));
 			}
-
-			$t->define_data(array(
-				"name" => $name,
-				"count" => $cnt,
-				"id" => $id,
-			) + $vals);
+			$prod = new aw_array($prod);
+			foreach($prod->get() as $x => $val)
+			{
+				$_tmp = array();
+				$vals = array();
+				$xtmp = $to->properties();
+				foreach($add_fields as $field => $bs)
+				{
+					if($props[$field]["type"] == "classificator" && is_oid($xtmp[$field]) && $this->can("view", $xtmp[$field]))
+					{
+						$cls_obj = obj($xtmp[$field]);
+						$vals[$field] = $cls_obj->name();
+					}
+					else
+					{
+						$vals[$field] = $xtmp[$field];
+					}
+				}
+				foreach(safe_array($val) as $fl => $valx)
+				{
+					$vals[$fl] = html::textbox(array(
+						"name" => "prod_data[$id][$x][$fl]",
+						"value" => $valx,
+						"size" => 10,
+					));
+					$_tmp[$fl] = $fl;
+				}
+				$leftover = array_diff($matchers, $_tmp);
+				foreach($leftover as $key)
+				{
+					$vals[$key] = html::textbox(array(
+						"name" => "prod_data[$id][$x][$key]",
+						"size" => 10,
+					));
+				}
+				if ($conf)
+				{
+					$cnt = $val["items"];
+				}
+				else
+				{
+					$cnt = html::textbox(array(
+						"name" => "prod_data[$id][$x][items]",
+						"value" => $val["items"],
+						"size" => 5
+					));
+				}
+				// forgive me for doing this hack :(( -- ahz
+				foreach($vals as $key => $item)
+				{
+					if($key == "duedate" || $key == "tduedate")
+					{
+						$vals[$key] .= '<a href="javascript:void(0);" onClick="cal.select(changeform.prod_data_'.$id.'__'.$x.'__'.$key.'_,\'anchor'.$id.'\',\'dd/MM/yy\'); return false;" title="Vali kuupäev" name="anchor'.$id.'" id="anchor'.$id.'">vali</a>';
+					}
+					if($key == "tduedate")
+					{
+						$vals[$key] .= ' <a href="javascript:void(0);" onclick="document.changeform.prod_data_'.$id.'__'.$x.'__tduedate_.value = document.changeform.prod_data_'.$id.'__'.$x.'__duedate_.value">sama</a>';
+					}
+				}
+				$t->define_data(array(
+					"name" => $name,
+					"count" => $cnt,
+					"id" => $id."_".$x,
+				) + $vals);
+			}
+		}
+		foreach($add_fields as $key => $val)
+		{
+			$t->define_field(array(
+				"name" => $key,
+				"caption" => $val,
+			));
 		}
 	}
 
 	function save_ord_table(&$arr)
 	{
 		$arr["obj_inst"]->set_meta("ord_item_data", $arr["request"]["prod_data"]);
-		$arr["obj_inst"]->set_meta("ord_content", $arr["request"]["pd"]);
+		//$arr["obj_inst"]->set_meta("ord_content", $arr["request"]["pd"]);
 	}
 
 	function do_confirm($o)
@@ -346,17 +412,24 @@ class shop_order extends class_base
 
 	function get_price($o)
 	{
-		$d = $o->meta("ord_content");
+		$d = new aw_array($o->meta("ord_item_data"));
 
 		$sum = 0;
 
-		// go over all products in order
-		foreach($o->connections_from(array("type" => 1)) as $c)
+		foreach($d->get() as $id => $prod)
 		{
-			$it = $c->to();
+			if(!is_oid($id) || !$this->can("view", $id))
+			{
+				continue;
+			}
+			$it = obj($id);
 			$inst = $it->instance();
-
-			$sum += $inst->get_price($it) * $d[$it->id()];
+			$price = $inst->get_price($it);
+			$prod = new aw_array($prod);
+			foreach($prod->get() as $x => $val)
+			{
+				$sum += $price * $val["items"];
+			}
 		}
 	
 		return number_format($sum, 2);
@@ -365,17 +438,16 @@ class shop_order extends class_base
 	function start_order($warehouse, $oc = NULL)
 	{
 		$this->order_items = array();
-		$this->order_item_data = array();
 		$this->order_warehouse = $warehouse;
 		$this->order_center = $oc;
 	}
 
-	function add_item($item, $quantity, $item_data=false)
+	function add_item($arr)
 	{
-		$this->order_items[$item] = $quantity;
-		if($item_data)
+		extract($arr);
+		if($item_data["items"] > 0)
 		{
-			$this->order_item_data[$item] = $item_data;
+			$this->order_items[$iid][$it] = $item_data;
 		}
 	}
 
@@ -432,6 +504,8 @@ class shop_order extends class_base
 			));
 		}
 
+		
+		
 		// connect to current person/company
 		if (!$pers_id)
 		{
@@ -499,23 +573,31 @@ class shop_order extends class_base
 		// now, products
 		$mp = array();
 		$sum = 0;
-		foreach($this->order_items as $iid => $quant)
+		foreach($this->order_items as $iid => $quantx)
 		{
-			if ($quant < 1 || !is_oid($iid) || !$this->can("view", $iid))
+			if(!is_oid($iid) || !$this->can("view", $iid))
 			{
 				continue;
 			}
 			$i_o = obj($iid);
 			$i_inst = $i_o->instance();
-
+			$price = $i_inst->get_price($i_o);
 			$oi->connect(array(
 				"to" => $iid,
-				"reltype" => 1 // RELTYPE_PRODUCT
+				"reltype" => "RELTYPE_PRODUCT",
 			));
-			$mp[$iid] = $quant;
-			$sum += ($quant * $i_inst->get_price($i_o));
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
+			{
+				if ($quant < 1)
+				{
+					continue;
+				}
+			$mp[$iid] = $quant["items"];
+			$sum += ($quant["items"] * $price);
+			}
 		}
-		$oi->set_meta('ord_item_data', $this->order_item_data);
+		$oi->set_meta('ord_item_data', $this->order_items);
 		$oi->set_meta("ord_content", $mp);
 		$oi->set_prop("sum", $sum);
 		$oi->save();
@@ -545,31 +627,48 @@ class shop_order extends class_base
 				$mail_from_name = $order_center->prop("mail_from_name");
 			}
 		}
-
+		$awm = get_instance("protocols/mail/aw_mail");
 		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
+		$at = $this->order_center->prop("send_attach");
 		if (count($emails) > 0)
 		{
 			$html = $this->show(array(
 				"id" => $oi->id()
 			));
-
+			
 			foreach($emails as $c)
 			{
 				$eml = $c->to();
-			
-
-				$awm = get_instance("protocols/mail/aw_mail");
+				$awm->clean();
 				$awm->create_message(array(
 					"froma" => $mail_from_addr,
 					"fromn" => $mail_from_name,
 					"subject" => $email_subj,
 					"to" => $eml->prop("mail"),
-					"body" => strip_tags(str_replace("<br>", "\n",$html)),
+					"body" => "see on html kiri",
 				));
 				$awm->htmlbodyattach(array(
-					"data" => $html
+					"data" => $html,
 				));
+				if($at == 1)
+				{
+					$vars = array(
+						"id" => $oi->id(),
+					);
+					if(file_exists($this->site_template_dir."/show_attach.tpl"))
+					{
+						$vars["template"] = "show_attach.tpl";
+					}
+					$org = obj($c_com_id);
+					$htmla = $this->show($vars);
+					$awm->fattach(array(
+						"contenttype" => "application/vnd.ms-excel",
+						"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+						"content" => $htmla,
+					));
+				}
+				//strip_tags(str_replace("<br>", "\n",$html))
 				$awm->gen_mail();
 			}
 		}
@@ -578,7 +677,9 @@ class shop_order extends class_base
 		// but using a different template
 		$ud = $oi->meta("user_data");
 		//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
-		if (!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "")
+		// this is one ugly mess and i don't really want to sort it out, so i'll just make
+		// a backdoor for myself -- ahz
+		if ((!$arr["no_send_mail"] && $this->order_center->prop("mail_to_el") != "" && ($_send_to = $ud[$this->order_center->prop("mail_to_el")]) != "") || ($this->order_center->prop("mail_to_client") == 1 && is_oid($pers_id) && $this->can("view", $pers_id)))
 		{
 			if ($this->order_center->prop("mail_cust_content") != "")
 			{
@@ -592,8 +693,8 @@ class shop_order extends class_base
 				));
 			}
 
-		//echo "sent to $_send_to content = $html <br>";
-			$awm = get_instance("protocols/mail/aw_mail");
+			//echo "sent to $_send_to content = $html <br>";
+			
 			$awm->create_message(array(
 				"froma" => $mail_from_addr,
 				"fromn" => $mail_from_name,
@@ -626,7 +727,7 @@ class shop_order extends class_base
 		
 		$o = obj($arr["id"]);
 		$tp = $o->meta("ord_content");
-		$ord_item_data = $o->meta('ord_item_data');
+		$ord_item_data = new aw_array($o->meta('ord_item_data'));
 
 		// we need to sort the damn products based on their page values. if they are set of course. blech.
 		// so go over prods, make sure all have page numbers and then sort by page numbers
@@ -636,7 +737,7 @@ class shop_order extends class_base
 		{
 			$pages = array(1 => 1);
 		}
-		foreach($o->connections_from(array("type" => 1 /* RELTYPE_PRODUCT */)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$prod = $c->to();
 			if (!$pages[$prod->id()])
@@ -650,74 +751,71 @@ class shop_order extends class_base
 
 		$p = "";
 		$total = 0;
-
-	
-		foreach($prods as $prod)
+		foreach($ord_item_data->get() as $id => $prodx)
 		{
+			if(!is_oid($id) || !$this->can("view", $id))
+			{
+				continue;
+			}
+			$prodx = new aw_array($prodx);
+			$prod = obj($id);
 			$inst = $prod->instance();
 			$pr = $inst->get_calc_price($prod);
-			
-			$product_info = reset($prod->connections_to(array(
+			if ($product_info = reset($prod->connections_to(array(
 				"from.class_id" => CL_SHOP_PRODUCT,
-			)));
-
-			if (is_object($product_info))
+			))))
 			{
 				$product_info = $product_info->from();
 			}
-
-			if (!is_object($product_info))
+			else
 			{
 				$product_info = $prod;
 			}
-
-			for( $i=1; $i<21; $i++)
-			{
-				$ui = $product_info->prop("user".$i);
-
-				if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
-				{
-					$ui = $prod->prop("user3");
-				}
-
-				$this->vars(array(
-					'user'.$i => $ui,
-					"packaging_user".$i => $prod->prop("user".$i),
-					"packaging_uservar".$i => $prod->prop_str("uservar".$i)
-				));
-			}
-
 			$product_info_i = $product_info->instance();
-			$cur_tot = $tp[$prod->id()] * $product_info_i->get_calc_price($product_info);
-			$prod_total += $cur_tot;
-			$this->vars(array(
-				"prod_name" => $product_info->name(),
-				"prod_price" => $product_info_i->get_price($product_info),
-				"prod_tot_price" => number_format($cur_tot, 2),
-				"read_price_total" => number_format($tp[$prod->id()] * str_replace(",", "", $ord_item_data[$prod->id()]["read_price"]), 2)
-			));
-
-			foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
+			$calc_price = $product_info_i->get_calc_price($product_info);
+			foreach($prodx->get() as $x => $val)
 			{
+				for($i = 1; $i < 21; $i++)
+				{
+					$ui = $product_info->prop("user".$i);
+					if ($i == 16 && aw_ini_get("site_id") == 139 && $product_info->prop("userch5"))
+					{
+						$ui = $prod->prop("user3");
+					}
+					$this->vars(array(
+						'user'.$i => $ui,
+						"packaging_user".$i => $prod->prop("user".$i),
+						"packaging_uservar".$i => $prod->prop_str("uservar".$i)
+					));
+				}
+				$cur_tot = $val["items"] * $calc_price;
+				$prod_total += $cur_tot;
 				$this->vars(array(
-					"order_data_".$__nm => $__vl
+					"prod_name" => $product_info->name(),
+					"prod_price" => $product_info_i->get_price($product_info),
+					"prod_tot_price" => number_format($cur_tot, 2)
 				));
+				foreach(safe_array($val) as $__nm => $__vl)
+				{
+					$this->vars(array(
+						"order_data_".$__nm => $__vl
+					));
+				}
+				$this->vars(array(
+					"name" => $prod->name(),
+					"p_name" => ($product_info ? $product_info->name() : $prod->name()),
+					"quant" => $val["items"],
+					"price" => number_format($pr,2),
+					"obj_tot_price" => number_format(((int)($val["items"]) * $pr), 2),
+					"order_data_color" => $val["color"],
+					"order_data_size" => $val['size'],
+					"order_data_price" => $val['price'],
+					"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged"))
+				));
+				$total += ($pr * $val["items"]);
+	
+				$p .= $this->parse("PROD");
 			}
-
-			$this->vars(array(
-				"name" => $prod->name(),
-				"p_name" => ($product_info ? $product_info->name() : $prod->name()),
-				"quant" => $tp[$prod->id()],
-				"price" => number_format($pr,2),
-				"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $pr), 2),
-				"order_data_color" => $ord_item_data[$prod->id()]["color"],
-				"order_data_size" => $ord_item_data[$prod->id()]['size'],
-				"order_data_price" => $ord_item_data[$prod->id()]['price'],
-				"logged" => (aw_global_get("uid") == "" ? "" : $this->parse("logged"))
-			));
-			$total += ($pr * $tp[$prod->id()]);
-
-			$p .= $this->parse("PROD");
 		}
 
 		$this->vars(array(
@@ -771,7 +869,6 @@ class shop_order extends class_base
 			foreach($objs as $prefix => $obj)
 			{
 				$ops = $obj->properties();
-				
 				foreach($ops as $opk => $opv)
 				{
 					if($opk == "email_id" && is_oid($opv) && $this->can("view", $opv))
@@ -784,14 +881,15 @@ class shop_order extends class_base
 						$ob = obj($opv);
 						$vars[$prefix."phone_value"] = $ob->name();
 					}
-					elseif($opk == "")
+					elseif($opk == "contact" && is_oid($opv) && $this->can("view", $opv))
 					{
+						$ob = obj($opv);
+						$vars[$prefix."address_value"] = $ob->name();
 					}
 					
 					$vars[$prefix.$opk] = $opv;
 				}
 			}
-
 			$vars["logged"] = $this->parse("logged");
 			$vars["username"] = aw_global_get("uid");
 			$this->vars($vars);
@@ -1092,9 +1190,14 @@ class shop_order extends class_base
 
 	function request_execute($o)
 	{
-		return $this->show(array(
-			"id" => $o->id()
-		));
+		$vars = array(
+			"id" => $o->id(),
+		);
+		if(file_exists($this->site_template_dir."/show_ordered.tpl"))
+		{
+			$vars["template"] = "show_ordered.tpl";
+		}
+		return $this->show($vars);
 	}
 
 	function get_items_from_order($ord)
@@ -1174,13 +1277,17 @@ class shop_order extends class_base
 		$prp_count = $obj->meta("ord_content");
 		foreach(safe_array($arr["sel"]) as $sel)
 		{
-			unset($prp_data[$sel]);
-			unset($prp_count[$sel]);
-			$obj->disconnect(array(
-				"from" => $sel,
-				"reltype" => "RELTYPE_PRODUCT",
-				"errors" => false,
-			));
+			list($sel, $x) = explode("_", $sel);
+			unset($prp_data[$sel][$x]);
+			unset($prp_count[$sel][$x]);
+			if(count($prp_data[$sel]) <= 0)
+			{
+				$obj->disconnect(array(
+					"from" => $sel,
+					"reltype" => "RELTYPE_PRODUCT",
+					"errors" => false,
+				));
+			}
 		}
 		$obj->set_meta("ord_item_data", $prp_data);
 		$obj->set_meta("ord_content", $prp_count);

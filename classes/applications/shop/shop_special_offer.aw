@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.10 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_special_offer.aw,v 1.11 2005/05/23 12:32:55 ahti Exp $
 // shop_special_offer.aw - Poe eripakkumine 
 /*
 
@@ -180,6 +180,8 @@ class shop_special_offer extends class_base
 		}
 		else
 		{
+			$l_inst = $layout->instance();
+			$l_inst->read_template($layout->prop("template"));
 			foreach($plut as $pid => $tmp)
 			{
 				$prod = obj($pid);
@@ -190,6 +192,7 @@ class shop_special_offer extends class_base
 					"prod" => $prod,
 					"prodat" => $prodat,
 					"plut" => $plut,
+					"l_inst" => $l_inst,
 					"price" => $prodat[$pid]["price"]
 				);
 

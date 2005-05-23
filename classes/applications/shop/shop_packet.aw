@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.11 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.12 2005/05/23 12:32:55 ahti Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -138,7 +138,7 @@ class shop_packet extends class_base
 
 		$this->_init_packet_table($arr["prop"]["vcl_inst"]);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_PRODUCT)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$arr["prop"]["vcl_inst"]->define_data(array(
 				"name" => $c->prop("to.name"),
@@ -184,9 +184,13 @@ class shop_packet extends class_base
 
 		$sct = get_instance(CL_SHOP_ORDER_CART);
 
-		$l_inst = $layout->instance();
-		$l_inst->read_template($layout->prop("template"));
+		if(!$l_inst)
+		{
+			$l_inst = $layout->instance();
+			$l_inst->read_template($layout->prop("template"));
+		}
 		$l_inst->vars(array(
+			"it" => $it,
 			"name" => $prod->name(),
 			"price" => $prod->prop("price"),
 			"id" => $prod->id(),
@@ -206,6 +210,8 @@ class shop_packet extends class_base
 		$p_cnt = 1;
 		$pager = array();
 		$sct->get_cart($oc_obj);
+		$clssf = get_instance(CL_CLASSIFICATOR);
+		$i = get_instance(CL_IMAGE);
 		foreach($prod->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			$w = $c->to();
@@ -220,8 +226,7 @@ class shop_packet extends class_base
 
 			if ($GLOBALS["prod"] == $w->id() || (!$GLOBALS["prod"] && $first))
 			{
-				$itemd = $sct->get_item_in_cart($w->id());
-				$clssf = get_instance(CL_CLASSIFICATOR);
+				$itemd = $sct->get_item_in_cart(array("iid" => $w->id()));
 				for ($i = 1; $i < 11; $i++)
 				{
 					if ($l_inst->template_has_var("sel_prod_uservar".$i."_edit"))
@@ -233,7 +238,7 @@ class shop_packet extends class_base
 								"name" => "uservar".$i,
 								"obj_inst" => $w,
 							)),
-							"selected" => $itemd["data"]["uservar".$i]
+							"selected" => $itemd["uservar".$i]
 						));
 						$l_inst->vars(array(
 							"sel_prod_uservar".$i."_edit" => $html
@@ -241,28 +246,28 @@ class shop_packet extends class_base
 					}
 				}
 
-				for ($i = 1; $i < 6; $i++)
+				for ($zi = 1; $iz < 6; $iz++)
 				{
-					if ($l_inst->template_has_var("sel_prod_uservarm".$i."_edit"))
+					if ($l_inst->template_has_var("sel_prod_uservarm".$iz."_edit"))
 					{
 						$tmp = $clssf->get_options_for(array(
 							"clid" => $w->class_id(),
-							"name" => "uservarm".$i,
+							"name" => "uservarm".$iz,
 							"obj_inst" => $w,
 						));
 						$options = array();
-						$awa = new aw_array($w->prop("uservarm".$i));
+						$awa = new aw_array($w->prop("uservarm".$iz));
 						foreach($awa->get() as $v)
 						{
 							$options[$v] = $tmp[$v];
 						}
 						$html = html::select(array(
-							"name" => "order_data[".$w->id()."][uservarm".$i."]",
+							"name" => "order_data[".$w->id()."][uservarm".$iz."]",
 							"options" => $options,
-							"selected" => $itemd["data"]["uservarm".$i]
+							"selected" => $itemd["uservarm".$iz]
 						));
 						$l_inst->vars(array(
-							"sel_prod_uservarm".$i."_edit" => $html,
+							"sel_prod_uservarm".$iz."_edit" => $html,
 						));
 					}
 				}
@@ -270,7 +275,7 @@ class shop_packet extends class_base
 				$l_inst->vars(array(
 					"sel_prod_id" => $w->id(),
 					"sel_prod_name" => $w->name(),
-					"sel_prod_quantity" => $itemd["quant"],
+					"sel_prod_quantity" => $itemd["items"],
 					"sel_prod_price" => $w_i->get_price($w),
 					"sel_prod_userta2" => $w->prop("userta2")
 				));
@@ -278,7 +283,6 @@ class shop_packet extends class_base
 
 			// insert images
 			$l_inst->vars($pisets);
-			$i = get_instance("image");
 			$cnt = 1;
 			$imgc = $w->connections_from(array("type" => "RELTYPE_IMAGE"));
 			usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
@@ -357,7 +361,6 @@ class shop_packet extends class_base
 		));
 
 		// insert images
-		$i = get_instance("image");
 		$cnt = 1;
 		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
 		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));

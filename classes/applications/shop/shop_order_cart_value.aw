@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.5 2005/04/21 08:48:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart_value.aw,v 1.6 2005/05/23 12:32:55 ahti Exp $
 // shop_order_cart_value.aw - Poe ostukorvi v&auml;&auml;rtus 
 /*
 
@@ -19,6 +19,7 @@ class shop_order_cart_value extends class_base
 			"clid" => CL_SHOP_ORDER_CART_VALUE
 		));
 	}
+	/*
 
 	function get_property($arr)
 	{
@@ -40,7 +41,9 @@ class shop_order_cart_value extends class_base
 
 		}
 		return $retval;
-	}	
+	}
+	
+	*/
 
 	function parse_alias($arr)
 	{
@@ -56,13 +59,17 @@ class shop_order_cart_value extends class_base
 		$count = 0;
 		foreach($soc->get_items_in_cart() as $dat)
 		{
-			$count += $dat;
+			$dat = new aw_array($dat);
+			foreach($dat->get() as $dat2)
+			{
+				$count += $dat2["items"];
+			}
 		}
 
 		list($t1, $t2) = $soc->get_cart_value(true);
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"value" => number_format($t1,2),
+			"value" => number_format($t1, 2),
 			"prod_value" => number_format($t2, 2),
 			"count" => $count
 		));

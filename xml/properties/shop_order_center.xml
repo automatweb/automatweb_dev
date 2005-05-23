@@ -28,6 +28,16 @@
             <caption>Ostukorvi tüüp</caption>
       </property>
       <property>
+            <name>multi_items</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ostukorvis võib olla mitu sama ID-ga toodet</caption>
+      </property>
+      <property>
             <name>show_unconfirmed</name>
             <group>general</group>
             <table>objects</table>
@@ -36,6 +46,28 @@
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <caption>Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi</caption>
+      </property>
+      <property>
+            <name>no_change_button</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>
+            <![CDATA[Ära kuva tellimiskeskkonnas toote kõrvale "Muuda" nuppu]]>
+            </caption>
+      </property>
+      <property>
+            <name>only_prods</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ostukorvis on tooted ilma pakendite, piltide jms</caption>
       </property>
       <property>
             <name>pdf_template</name>
@@ -73,6 +105,26 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Organisatsiooni nime element andmete vormis</caption>
+      </property>
+      <property>
+            <name>send_attach</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisa meili manusega tellimus</caption>
+      </property>
+      <property>
+            <name>mail_to_client</name>
+            <group>general</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada tellijale e-mail</caption>
       </property>
       <property>
             <name>mail_to_el</name>

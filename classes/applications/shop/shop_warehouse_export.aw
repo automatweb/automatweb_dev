@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.4 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse_export.aw,v 1.5 2005/05/23 12:32:55 ahti Exp $
 // shop_warehouse_export.aw - Lao v&auml;ljaminek 
 /*
 
@@ -95,7 +95,7 @@ class shop_warehouse_export extends class_base
 
 		$this->_init_exp_table($arr["prop"]["vcl_inst"]);
 
-		foreach($arr["obj_inst"]->connections_from(array("type" => RELTYPE_PRODUCT)) as $c)
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PRODUCT")) as $c)
 		{
 			if ($arr["obj_inst"]->prop("confirm") == 1)
 			{
@@ -128,14 +128,19 @@ class shop_warehouse_export extends class_base
 			// make sure we don't re-confirm receptions
 			return;
 		}
-
-		$pd = $o->meta("exp_content");
-		foreach($o->connections_from(array("type" => 1 /*RELTYPE_PRODUCT*/)) as $c)
+		$inf = new aw_array($o->meta("order_item_data"));
+		foreach($inf->get() as $id => $prod)
 		{
-			$to = $c->to();
+			$to = obj($id);
+			$prod = new aw_array($prod);
 			if ($to->is_property("item_count"))
 			{
-				$to->set_prop("item_count", $to->prop("item_count") - $pd[$to->id()]);
+				$item_count = $to->prop("item_count");
+				foreach($prod->get() as $x => $val)
+				{
+					$item_count -= $val["items"];
+				}
+				$to->set_prop("item_count", $item_count);
 				$to->save();
 			}
 		}

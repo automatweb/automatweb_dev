@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.34 2005/05/23 09:27:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.35 2005/05/23 12:32:55 ahti Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -40,6 +40,7 @@ class shop_order_cart extends class_base
 			"clid" => CL_SHOP_ORDER_CART
 		));
 	}
+	/*
 
 	function get_property($arr)
 	{
@@ -62,6 +63,7 @@ class shop_order_cart extends class_base
 		}
 		return $retval;
 	}
+	*/
 	
 	function get_cart($oc)
 	{
@@ -132,7 +134,6 @@ class shop_order_cart extends class_base
 		aw_session_del("soc_err");
 
 		$oc = obj($oc);
-
 		// get cart to user from oc
 		if ($arr["id"])
 		{
@@ -142,8 +143,7 @@ class shop_order_cart extends class_base
 		{
 			$cart_o = obj($oc->prop("cart"));
 		}
-
-		// now get item layout from cart
+		
 		error::raise_if(!$cart_o->prop("prod_layout"), array(
 			"id" => "ERR_NO_PROD_LAYOUT",
 			"msg" => sprintf(t("shop_order_cart::show(): no product layout set for cart (%s) "), $cart_o->id())
@@ -152,40 +152,51 @@ class shop_order_cart extends class_base
 
 		$total = 0;
 		$prod_total = 0;
-
 		$cart = $this->get_cart($oc);
 		$awa = new aw_array($cart["items"]);
 		$show_info_page = true;
-		foreach($awa->get() as $iid => $quant)
+		$l_inst = $layout->instance();
+		$l_inst->read_template($layout->prop("template"));
+		foreach($awa->get() as $iid => $quantx)
 		{
-			if ($quant < 1 || !is_oid($iid) || !$this->can("view", $iid))
+			if(!is_oid($iid) || !$this->can("view", $iid))
 			{
 				continue;
 			}
+			$quantx = new aw_array($quantx);
 			$i = obj($iid);
 			$inst = $i->instance();
-			$this->vars(array(
-				"prod_html" => $inst->do_draw_product(array(
-					"layout" => $layout,
-					"prod" => $i,
-					"quantity" => $quant,
-					"oc_obj" => $oc,
-					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
-				))
-			));
-			$show_info_page = false;
-
-			$total += ($quant * $inst->get_price($i));
-			if (get_class($inst) == "shop_product_packaging")
+			$price = $inst->get_price($i);
+			
+			foreach($quantx->get() as $x => $quant)
 			{
-				$prod_total += ($quant * $inst->get_prod_calc_price($i));
+				if($quant["items"] < 1)
+				{
+					continue;
+				}
+				$this->vars(array(
+					"prod_html" => $inst->do_draw_product(array(
+						"layout" => $layout,
+						"prod" => $i,
+						"it" => $x,
+						"l_inst" => $l_inst,
+						"quantity" => $quant["items"],
+						"oc_obj" => $oc,
+						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+					))
+				));
+				$show_info_page = false;
+				$total += ($quant["items"] * $price);
+				if (get_class($inst) == "shop_product_packaging")
+				{
+					$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
+				}
+				else
+				{
+					$prod_total = $total;
+				}
+				$str .= $this->parse("PROD");
 			}
-			else
-			{
-				$prod_total = $total;
-			}
-
-			$str .= $this->parse("PROD");
 		}
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
@@ -212,7 +223,7 @@ class shop_order_cart extends class_base
 
 		if (aw_global_get("uid") != "")
 		{
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			$objs = array(
 				"user_data_user_" => obj($us->get_current_user()),
 				"user_data_person_" => obj($us->get_current_person()),
@@ -291,9 +302,11 @@ class shop_order_cart extends class_base
 	**/
 	function submit_add_cart($arr)
 	{
+		//arr($arr);
 		extract($arr);
 		$oc = obj($oc);
-		
+		//$this->clear_cart($oc);
+		//die();
 		$cart = $this->get_cart($oc);
 		aw_session_set("order.accept_cond", $arr["order_cond_ok"]);
 
@@ -304,7 +317,7 @@ class shop_order_cart extends class_base
 		$layout = obj($cart_o->prop("prod_layout"));
 
 		$order_ok = true;
-
+		
 		if (!empty($arr["add_to_cart_id"]))
 		{
 			$arr["add_to_cart"] = $add_to_cart = array(
@@ -315,46 +328,48 @@ class shop_order_cart extends class_base
 			);
 		}
 		$awa = new aw_array($arr["add_to_cart"]);
-		foreach($awa->get() as $iid => $quant)
+		foreach($awa->get() as $iid => $quantx)
 		{
 			if (!is_oid($iid) || !$this->can("view", $iid))
 			{
+				unset($arr["add_to_cart"]["items"][$iid]);
 				continue;
 			}
 			$i_o = obj($iid);
 			$i_i = $i_o->instance();
-
-			if ($arr["update"] == 1)
-			{
-				$cc = $quant;
-			}
-			else
-			{
-				$cc = $cart["items"][$iid] + $quant;
-			}
-
 			$mon = $i_i->get_must_order_num($i_o);
-			if ($mon)
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
 			{
-				if (($cc % $mon) != 0)
+				if ($arr["update"] == 1)
 				{
-					$soce = aw_global_get("soc_err");
-					if (!is_array($soce))
+					$cc = $quant;
+				}
+				else
+				{
+					$cc = (int)$cart["items"][$iid][$x]["items"] + $quant;
+				}
+				if ($mon)
+				{
+					if (($cc % $mon) != 0)
 					{
-						$soce = array();
+						$soce = aw_global_get("soc_err");
+						if (!is_array($soce))
+						{
+							$soce = array();
+						}
+						$soce[$iid] = array(
+							"msg" => sprintf(t("%s peab tellima %s kaupa, hetkel kokku %s!"), $i_o->name(),$mon, $cc),
+							"prod_name" => $i_o->name(),
+							"prod_id" => $i_o->id(),
+							"must_order_num" => $mon,
+							"ordered_num" => $cc,
+							"ordered_num_enter" => $quant,
+							"is_err" => true
+						);
+						aw_session_set("soc_err", $soce);
+						$order_ok = false;
 					}
-
-					$soce[$iid] = array(
-						"msg" => sprintf(t("%s peab tellima %s kaupa, hetkel kokku %s!"), $i_o->name(),$mon, $cc),
-						"prod_name" => $i_o->name(),
-						"prod_id" => $i_o->id(),
-						"must_order_num" => $mon,
-						"ordered_num" => $cc,
-						"ordered_num_enter" => $quant,
-						"is_err" => true
-					);
-					aw_session_set("soc_err", $soce);
-					$order_ok = false;
 				}
 			}
 		}
@@ -449,58 +464,107 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-		//arr($arr);
+		
+		// i'm quite sure that you don't want to know, whatta hell is going on in here
+		// neighter do i... -- ahz
 		$awa = new aw_array($arr["add_to_cart"]);
-		foreach($awa->get() as $iid => $quant)
+		$order_data = safe_array($order_data);
+		foreach($awa->get() as $iid => $quantx)
 		{
-			if ($arr["update"] == 1)
+			$cart["items"][$iid] = safe_array($cart["items"][$iid]);
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
 			{
-				$cart["items"][$iid] = $quant;
-			}
-			else
-			{
-				$cart["items"][$iid] += $quant;
-			}
-		}
-
-		if ($arr["from"] != "confirm")
-		{
-			$awa = safe_array($order_data);
-			foreach($awa as $iid => $dat)
-			{
-				$cart["item_data"][$iid] = $dat;
-			}
-
-			if (isset($awa["all_items"]) && is_array($awa["all_items"]))
-			{
-				$awa_i = new aw_array($arr["add_to_cart"]);
-				$awa_all = safe_array($awa["all_items"]);
-				foreach($awa_i->get() as $iid => $quant)
+				if ($arr["update"] == 1)
 				{
-					if ($quant > 0)
+					$cart["items"][$iid][$x] = safe_array($cart["items"][$iid][$x]);
+					$cart["items"][$iid][$x]["items"] = $quant;
+				}
+				else
+				{
+					if($oc->prop("multi_items") == 1)
 					{
-						if (!isset($cart["item_data"][$iid]) || !is_array($cart["item_data"][$iid]))
+						$x = 0;
+						// get the highest id from items -- ahz
+						if(count($cart["items"][$iid]) > 0)
 						{
-							$cart["item_data"][$iid] = array();
+							foreach($cart["items"][$iid] as $key => $val)
+							{
+								if($key > $x)
+								{
+									$x = $key;
+								}
+							}
+							$x++;
 						}
-
-						foreach($awa_all as $aa_k => $aa_v)
+						$cart["items"][$iid][$x]["items"] = $quant;
+					}
+					else
+					{
+						$cart["items"][$iid][$x]["items"] += $quant;
+					}
+				}
+				if($arr["from"] != "confirm")
+				{
+					foreach($order_data[$iid] as $key => $val)
+					{
+						if((string)$key == "all_items" || (string)$key == "all_pkts")
 						{
-							$cart["item_data"][$iid][$aa_k] = $aa_v;
+							continue;
+						}
+						if(is_array($val))
+						{
+							if($key == $x)
+							{
+								$tmp = $cart["items"][$iid][$x];
+								$cart["items"][$iid][$x] = $val + $tmp;
+								break;
+							}
+						}
+						else
+						{
+							$cart["items"][$iid][$x][$key] = $val;
 						}
 					}
 				}
 			}
-			if (isset($awa["all_pkts"]) && is_array($awa["all_pkts"]))
+		}
+		if($arr["from"] != "confirm")
+		{
+			if (is_array($order_data["all_items"]))
 			{
-				foreach($awa["all_pkts"] as $iid => $k_d)
+				$awa_i = new aw_array($arr["add_to_cart"]);
+				$awa_all = safe_array($order_data["all_items"]);
+				foreach($awa_i->get() as $iid => $quantx)
 				{
-					if (is_oid($iid) && $this->can("view", $iid))
+					$quantx = new aw_array($quantx);
+					foreach($quantx->get() as $x => $quant)
 					{
-						$tmp = obj($iid);
-						foreach($tmp->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
+						if($quant > 0)
 						{
-							$cart["item_data"][$c->prop("to")] = $k_d;
+							$cart["items"][$iid][$x] = safe_array($cart["items"][$iid][$x]);
+							foreach($awa_all as $aa_k => $aa_v)
+							{
+								$cart["items"][$iid][$x][$aa_k] = $aa_v;
+							}
+						}
+					}
+				}
+			}
+			if (is_array($order_data["all_pkts"]))
+			{
+				foreach($order_data["all_pkts"] as $iid => $k_d)
+				{
+					if (!is_oid($iid) || !$this->can("view", $iid))
+					{
+						continue;
+					}
+					$tmp = obj($iid);
+					foreach($tmp->connections_from(array("type" => "RELTYPE_PACKAGING")) as $c)
+					{
+						foreach($cart["items"][$c->prop("to")] as $key => $val)
+						{
+							$cart["items"][$c->prop("to")][$key] = $k_d;
 						}
 					}
 				}
@@ -508,11 +572,23 @@ class shop_order_cart extends class_base
 		}
 		foreach(safe_array($to_remove) as $xid => $rm)
 		{
-			if($rm == 1)
+			$rm = new aw_array($rm);
+			foreach($rm->get() as $key => $val)
 			{
-				unset($cart["items"][$xid]);
+				if($val == 1)
+				{
+					unset($cart["items"][$xid][$key]);
+				}
 			}
 		}
+		foreach(safe_array($cart["items"]) as $iid => $val)
+		{
+			if(count($val) <= 0)
+			{
+				unset($cart["items"][$iid]);
+			}
+		}
+		//arr($cart);
 		$this->set_cart(array(
 			"oc" => $oc,
 			"cart" => $cart,
@@ -569,20 +645,26 @@ class shop_order_cart extends class_base
 			// do confirm order and show user
 			// if cart is empty, redirect to front page
 			$awa = new aw_array($cart["items"]);
-			$tmp = $awa->get();
-			if (count($tmp) < 1)
+			$empty = true;
+			foreach($awa->get() as $val)
+			{
+				if (count($val) >= 1)
+				{
+					$empty = false;
+					break;
+				}
+			}
+			if($empty)
 			{
 				return aw_ini_get("baseurl");
 			}
-
-			if (is_oid($cart_o->prop("finish_handler")) && $this->can("view", $cart_o->prop("finish_handler")))
+			if(is_oid($cart_o->prop("finish_handler")) && $this->can("view", $cart_o->prop("finish_handler")))
 			{
 				$ctr = get_instance(CL_FORM_CONTROLLER);
 				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
 			}
-
 			aw_session_del("order.accept_cond");
-			$ordid = $this->do_create_order_from_cart($arr["oc"],NULL,array(
+			$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
 				"payment" => $cart["payment"],
 				"payment_type" => $cart["payment_method"]
 			));
@@ -627,33 +709,61 @@ class shop_order_cart extends class_base
 		$awa = new aw_array($cart["items"]);
 		foreach($awa->get() as $iid => $quant)
 		{
-			$so->add_item($iid, $quant, $cart["item_data"][$iid]);
+			$qu = new aw_array($quant);
+			foreach($qu->get() as $key => $val)
+			{
+				$so->add_item(array("iid" => $iid, "item_data" => $cart["items"][$iid][$key], "it" => $key));
+			}
 		}
-
-		return $so->finish_order($params);
+		$rval = $so->finish_order($params);
+		$this->clear_cart($oc);
+		return $rval;
 	}
 
-	function add_item($iid, $quant, $oc, $prod_data = array())
+	function add_item($arr)
 	{
+		extract($arr);
+		$prod_data = safe_array($prod_data);
 		$cart = $this->get_cart($oc);
-		$cart["items"][$iid] += $quant;
-		$cart["item_data"][$iid] = $prod_data;
+		
+		$multi = $oc->prop("multi_items");
+		$cart["items"][$iid] = safe_array($cart["items"][$iid]);
+		foreach($cart["items"][$iid] as $iid => $qx)
+		{
+			if($multi == 1)
+			{
+				$x = 0;
+				foreach($cart["items"][$iid] as $high => $low)
+				{
+					if($high > $x)
+					{
+						$x = $high;
+					}
+				}
+				$x++;
+			}
+			$tmp = array();
+			$tmp["items"] = $cart["items"][$iid][$x]["items"] + $quant;
+			$cart["items"][$iid][$x] = $tmp + $prod_data;
+		}
 		$this->set_cart(array(
 			"oc" => $oc,
 			"cart" => $cart,
 		));
 	}
 
-	function set_item($iid, $quant, $oc)
+	function set_item($arr)
 	{
+		extract($arr);
+		$it = !$it ? 0 : $it;
 		$cart = $this->get_cart($oc);
 		if ($quant == 0)
 		{
-			unset($cart["items"][$iid]);
+			unset($cart["items"][$iid][$it]);
 		}
 		else
 		{
-			$cart["items"][$iid] = $quant;
+			$cart["items"][$iid][$it]["items"] = $quant;
 		}
 		$this->set_cart(array(
 			"oc" => $oc,
@@ -666,19 +776,25 @@ class shop_order_cart extends class_base
 		$total = 0;
 
 		$awa = new aw_array($_SESSION["cart"]["items"]);
-		foreach($awa->get() as $iid => $quant)
+		foreach($awa->get() as $iid => $quantx)
 		{
-			if ($this->can("view", $iid))
+			if(!is_oid($iid) || !$this->can("view", $iid))
 			{
-				$i = obj($iid);
-				$inst = $i->instance();
-				$total += ($quant * $inst->get_calc_price($i));
-				if ($prod)				
+				continue;
+			}
+			$i = obj($iid);
+			$inst = $i->instance();
+			$price = $inst->get_calc_price($i);
+			$quantx = new aw_array($quantx);
+			foreach($quantx->get() as $x => $quant)
+			{
+				$total += ($quant["items"] * $price);
+				if ($prod)
 				{
 					if ($i->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 					{
-						$prod_total += ($quant * $inst->get_prod_calc_price($i));
-					}	
+						$prod_total += ($quant["items"] *  $inst->get_prod_calc_price($i));
+					}
 					else
 					{
 						$prod_total = $total;
@@ -686,7 +802,6 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
-
 		if ($prod)
 		{
 			return array($total, $prod_total);
@@ -703,22 +818,23 @@ class shop_order_cart extends class_base
 		$ret = array();
 		foreach($awa->get() as $iid => $q)
 		{
-			if ($q > 0)
+			$q = new aw_array($q);
+			foreach($q->get() as $v => $z)
 			{
-				$ret[$iid] = $q;
+				if ($z > 0)
+				{
+					$ret[$iid][$v] = $z;
+				}
 			}
 		}
 		return $ret;
 	}
 		/* siin pannakse andmed lõplikku tabelisse */
-	function get_item_in_cart($iid)
+	function get_item_in_cart($arr)
 	{
-		return array(
-			"quant" => $_SESSION["cart"]["items"][$iid],
-			"data" => $_SESSION["cart"]["item_data"][$iid]
-		);
+		$it = !$arr["it"] ? 0 : $arr["it"];
+		return safe_array($_SESSION["cart"]["items"][$arr["iid"]][$it]);
 	}
-	
 
 	function clear_cart($oc)
 	{
@@ -785,6 +901,9 @@ class shop_order_cart extends class_base
 		));
 		$layout = obj($cart_o->prop("prod_layout"));
 		$layout->set_prop("template", "prod_pre_confirm.tpl");
+		
+		$l_inst = $layout->instance();
+		$l_inst->read_template($layout->prop("template"));
 
 		$total = 0;
 		$prod_total = 0;
@@ -792,38 +911,46 @@ class shop_order_cart extends class_base
 		$cart = $this->get_cart($oc);
 		
 		$awa = new aw_array($cart["items"]);
-		foreach($awa->get() as $iid => $quant)
+		foreach($awa->get() as $iid => $quantx)
 		{
-			if ($quant < 1 || !is_oid($iid) || !$this->can("view", $iid))
+			if(!is_oid($iid) || !$this->can("view", $iid))
 			{
 				continue;
 			}
-
+			$quantx = new aw_array($quantx);
 			$i = obj($iid);
 			$inst = $i->instance();
-			
-			$this->vars(array(
-				"prod_html" => $inst->do_draw_product(array(
-					"layout" => $layout,
-					"prod" => $i,
-					"quantity" => $quant,
-					"oc_obj" => $oc,
-					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
-				))
-			));
-			$prod_total += ($quant * $inst->get_price($i));
-			if (get_class($inst) == "shop_product_packaging")
+			foreach($quantx->get() as $x => $quant)
 			{
-				$prod_total += ($quant * $inst->get_prod_calc_price($i));
+				if ($quant["items"] < 1)
+				{
+					continue;
+				}
+				$this->vars(array(
+					"prod_html" => $inst->do_draw_product(array(
+						"layout" => $layout,
+						"prod" => $i,
+						"it" => $x,
+						"l_inst" => $l_inst,
+						"quantity" => $quant["items"],
+						"oc_obj" => $oc,
+						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+					))
+				));
+				$prod_total += ($quant["items"] * $inst->get_price($i));
+				if (get_class($inst) == "shop_product_packaging")
+				{
+					$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
+				}
+				/*
+				else
+				{
+					$prod_total = $total;
+				}
+				*/
+	
+				$str .= $this->parse("PROD");
 			}
-			/*
-			else
-			{
-				$prod_total = $total;
-			}
-			*/
-
-			$str .= $this->parse("PROD");
 		}
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
 		$wh_o = obj($oc->prop("warehouse"));
@@ -1018,29 +1145,33 @@ class shop_order_cart extends class_base
 		$cart = $this->get_cart($oc);
 		
 		$awa = new aw_array($cart["items"]);
-		foreach($awa->get() as $iid => $quant)
+		foreach($awa->get() as $iid => $quantx)
 		{
-			if ($quant < 1 || !$this->can("view", $iid))
+			if (!is_oid($iid) or !$this->can("view", $iid))
 			{
 				continue;
 			}
-
 			$i = obj($iid);
 			$inst = $i->instance();
-			
-			$this->vars(array(
-				"prod_html" => $inst->do_draw_product(array(
-					"layout" => $layout,
-					"prod" => $i,
-					"quantity" => $quant,
-					"oc_obj" => $oc,
-					"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
-				))
-			));
-
-			$total += ($quant * $inst->get_price($i));
-
-			$str .= $this->parse("PROD");
+			$price = $inst->get_price($i);
+			foreach($quantx as $quant)
+			{
+				if($quant["items"] < 1)
+				{
+					continue;
+				}
+				$this->vars(array(
+					"prod_html" => $inst->do_draw_product(array(
+						"layout" => $layout,
+						"prod" => $i,
+						"quantity" => $quant["items"],
+						"oc_obj" => $oc,
+						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+					))
+				));
+				$total += ($quant["items"] * $price);
+				$str .= $this->parse("PROD");
+			}
 		}
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
@@ -1104,7 +1235,7 @@ class shop_order_cart extends class_base
 
 		if (aw_global_get("uid") != "")
 		{
-			$us = get_instance("core/users/user");
+			$us = get_instance(CL_USER);
 			$objs = array(
 				"user_data_user_" => obj($us->get_current_user()),
 				"user_data_person_" => obj($us->get_current_person()),
@@ -1160,58 +1291,65 @@ class shop_order_cart extends class_base
 			$ls_pgs = $this->make_keys(explode(",", $i->prop("jm_lasting")));
 			$ft_pgs = $this->make_keys(explode(",", $i->prop("jm_furniture")));
 			$awa = new aw_array($cart["items"]);
-			foreach($awa->get() as $iid => $quant)
+			foreach($awa->get() as $iid => $quantx)
 			{
-				if ($quant < 1 || !$this->can("view", $iid))
+				if (!is_oid($iid) || !$this->can("view", $iid))
 				{
 					continue;
 				}
-
 				$pr = obj($iid);
 				if ($pr->class_id() == CL_SHOP_PRODUCT_PACKAGING)
 				{
 					$c = reset($pr->connections_to(array("from.class_id" => CL_SHOP_PRODUCT)));
 					$pr = $c->from();
 				}
-
 				$i = obj($iid);
 				$inst = $i->instance();
-				
-				$this->vars(array(
-					"prod_html" => $inst->do_draw_product(array(
-						"layout" => $layout,
-						"prod" => $i,
-						"quantity" => $quant,
-						"oc_obj" => $oc,
-						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
-					))
-				));
-
-				if (get_class($inst) == "shop_product_packaging")
+				$calc_price = $inst->get_prod_calc_price($i);
+				$price = $inst->get_price($i);
+				$parent = $pr->parent();
+				foreach($quantx as $quant)
 				{
-					$pr_price = ($quant * $inst->get_prod_calc_price($i));
-				}
-				else
-				{
-					$pr_price = ($quant * $inst->get_price($i));
-				}
-
-				if ( $cl_pgs[$pr->parent()] || (!$ft_pgs[$pr->parent()] && !$ls_pgs[$pr->parent()]))
-				{
-					$cl_total += $pr_price;
-					$cl_str .= $this->parse("PROD");
-				}
-				else
-				if ($ft_pgs[$pr->parent()])
-				{
-					$ft_total += $pr_price;
-					$ft_str .= $this->parse("PROD");
-				}
-				else
-				if ($ls_pgs[$pr->parent()])
-				{
-					$ls_total += $pr_price;
-					$ls_str .= $this->parse("PROD");
+					if($quant["items"] < 1)
+					{
+						continue;
+					}
+					$this->vars(array(
+						"prod_html" => $inst->do_draw_product(array(
+							"layout" => $layout,
+							"prod" => $i,
+							"quantity" => $quant["items"],
+							"oc_obj" => $oc,
+							"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
+						))
+					));
+	
+					if (get_class($inst) == "shop_product_packaging")
+					{
+						$pr_price = ($quant["items"] * $calc_price);
+					}
+					else
+					{
+						$pr_price = ($quant["items"] * $price);
+					}
+	
+					if ( $cl_pgs[$parent] || (!$ft_pgs[$parent] && !$ls_pgs[$parent]))
+					{
+						$cl_total += $pr_price;
+						$cl_str .= $this->parse("PROD");
+					}
+					else
+					if ($ft_pgs[$parent])
+					{
+						$ft_total += $pr_price;
+						$ft_str .= $this->parse("PROD");
+					}
+					else
+					if ($ls_pgs[$parent])
+					{
+						$ls_total += $pr_price;
+						$ls_str .= $this->parse("PROD");
+					}
 				}
 			}
 

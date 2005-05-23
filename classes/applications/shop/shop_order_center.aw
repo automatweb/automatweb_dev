@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.23 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.24 2005/05/23 12:32:55 ahti Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -22,8 +22,17 @@
 @property cart_type type=chooser
 @caption Ostukorvi tüüp
 
+@property multi_items type=checkbox ch_value=1
+@caption Ostukorvis võib olla mitu sama ID-ga toodet
+
 @property show_unconfirmed type=checkbox ch_value=1
 @caption Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi
+
+@property no_change_button type=checkbox ch_value=1
+@caption Ära kuva tellimiskeskkonnas toote kõrvale "Muuda" nuppu
+
+@property only_prods type=checkbox ch_value=1
+@caption Ostukorvis on tooted ilma pakendite, piltide jms
 
 @property pdf_template type=textbox
 @caption PDF Template faili nimi
@@ -36,6 +45,12 @@
 
 @property data_form_company type=select
 @caption Organisatsiooni nime element andmete vormis
+
+@property send_attach type=checkbox ch_value=1
+@caption Lisa meili manusega tellimus
+
+@property mail_to_client type=checkbox ch_value=1
+@caption Saada tellijale e-mail
 
 @property mail_to_el type=select
 @caption E-maili element, kuhu saata tellimus
@@ -147,7 +162,7 @@ class shop_order_center extends class_base
 				$opts = array();
 				if (is_oid($df) && $this->can("view", $df))
 				{
-					$cu = get_instance("cfg/cfgform");
+					$cu = get_instance(CL_CFGFORM);
 					$ps = $cu->get_props_from_cfgform(array(
 						"id" => $df
 					));
@@ -304,7 +319,7 @@ class shop_order_center extends class_base
 		$t =& $arr["prop"]["vcl_inst"];
 		$this->_init_layoutbl($t);
 
-		$wh = get_instance("applications/shop/shop_warehouse");
+		$wh = get_instance(CL_SHOP_WAREHOUSE);
 
 		$o = $arr["obj_inst"];
 		$this->_get_folder_ot_from_o($o);
@@ -313,7 +328,7 @@ class shop_order_center extends class_base
 
 		$this->tblayouts = $o->meta("tblayouts");
 		$this->tblayout_items = array("0" => t("--vali--"));
-		foreach($o->connections_from(array("type" => RELTYPE_TABLE_LAYOUT)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_TABLE_LAYOUT")) as $c)
 		{
 			$this->tblayout_items[$c->prop("to")] = $c->prop("to.name");
 		}
@@ -323,7 +338,7 @@ class shop_order_center extends class_base
 		$this->itemlayouts_long_2 = $o->meta("itemlayouts_long_2");
 
 		$this->itemlayout_items = array("0" => "--vali--");
-		foreach($o->connections_from(array("type" => RELTYPE_ITEM_LAYOUT)) as $c)
+		foreach($o->connections_from(array("type" => "RELTYPE_ITEM_LAYOUT")) as $c)
 		{
 			$this->itemlayout_items[$c->prop("to")] = $c->prop("to.name");
 		}
@@ -535,7 +550,7 @@ class shop_order_center extends class_base
 		enter_function("shop_order_center::show_items");
 		extract($arr);
 		$soc = obj($arr["id"]);
-		if ($soc->prop("use_controller") )
+		if ($soc->prop("use_controller"))
 		{
 			$ctr = $soc->prop("controller");
 
@@ -577,27 +592,26 @@ class shop_order_center extends class_base
 		$tmp = array();
 		$ss->_init_path_vars($tmp);
 		$html = $ss->show_documents($tmp);
-
+		
 		$pl = $wh->get_packet_list(array(
 			"id" => $wh_id,
 			"parent" => $section,
 			"only_active" => $soc->prop("only_active_items")
 		));
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
-
+		
 		// get the template for products for this folder
 		$layout = $this->get_prod_layout_for_folder($soc, $section);
 
 		// get the table layout for this folder
 		$t_layout = $this->get_prod_table_layout_for_folder($soc, $section);
-
+		
 		$html .= $this->do_draw_prods_with_layout(array(
 			"t_layout" => $t_layout, 
 			"layout" => $layout, 
 			"pl" =>  $pl,
 			"soc" => $soc
 		));
-
 		exit_function("shop_order_center::show_items");
 		return $html;
 	}
@@ -647,6 +661,9 @@ class shop_order_center extends class_base
 		$tl_inst = $t_layout->instance();
 		$tl_inst->start_table($t_layout, $soc);
 
+		$xi = 0;
+		$l_inst = $layout->instance();
+		$l_inst->read_template($layout->prop("template"));
 		foreach($pl as $o)
 		{
 			$i = $o->instance();
@@ -654,17 +671,16 @@ class shop_order_center extends class_base
 			{
 				$oid = $o->id();
 				$tl_inst->add_product($i->do_draw_product(array(
+					"bgcolor" => $xi % 2 ? "cartbgcolor1" : "cartbgcolor2",
 					"prod" => $o,
 					"layout" => $layout,
 					"oc_obj" => $soc,
+					"l_inst" => $l_inst,
 					"quantity" => $soce[$oid]["ordered_num_enter"],
 					"is_err" => $soce[$oid]["is_err"],
 					"prod_link_cb" => $arr["prod_link_cb"]
 				)));
-			}
-			else
-			{
-				$tl_inst->add_product("");
+				$xi++;
 			}
 		}
 
@@ -710,13 +726,17 @@ class shop_order_center extends class_base
 		// get current person and get the orders from that
 		$u = get_instance(CL_USER);
 		$p = obj($u->get_current_person());
-		$ord = $p->get_first_obj_by_reltype("RELTYPE_ORDER");
-		$center = $ord->get_first_obj_by_reltype("RELTYPE_ORDER_CENTER");
 		$this->read_template("orders.tpl");
+		if($ord = $p->get_first_obj_by_reltype("RELTYPE_ORDER"))
+		{
+			$center = $ord->get_first_obj_by_reltype("RELTYPE_ORDER_CENTER");
+			;
+			$unconfed = $center->prop("show_unconfirmed");
+		}
 		foreach($p->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
 		{
 			$ord = $c->to();
-			if($center->prop("show_unconfirmed") == 1 && $ord->prop("confirmed") == 1)
+			if($unconfed == 1 && $confirmed = $ord->prop("confirmed") == 1)
 			{
 				continue;
 			}
@@ -729,6 +749,19 @@ class shop_order_center extends class_base
 			));
 			$l .= $this->parse("LINE");
 		}
+		foreach($p->connections_to(array("from.class_id" => CL_ORDERS_ORDER)) as $c)
+		{
+			$ord = $c->from();
+			$this->vars(array(
+				"name" => $ord->name(),
+				"tm" => $ord->created(),
+				"sum" => number_format($ord->prop("sum"), 2),
+				"view_link" => obj_link($ord->id()),
+				"id" => $ord->id()
+			));
+			$l .= $this->parse("LINE2");
+		}
+		
 
 		$this->vars(array(
 			"LINE" => $l,
@@ -1013,7 +1046,7 @@ class shop_order_center extends class_base
 			return PROP_ERROR;
 		}
 
-		$cff = get_instance("cfg/cfgform");
+		$cff = get_instance(CL_CFGFORM);
 		$ret =  $cff->get_props_from_cfgform(array(
 			"id" => $arr["obj_inst"]->prop("data_form")
 		));
