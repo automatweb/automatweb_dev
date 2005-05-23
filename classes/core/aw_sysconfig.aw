@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.2 2005/03/23 10:31:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/aw_sysconfig.aw,v 1.3 2005/05/23 13:01:08 duke Exp $
 // aw_sysconfig.aw - AW Sysconfig 
 /*
 
@@ -50,7 +50,8 @@ class aw_sysconfig extends class_base
 		$msgs = array("MSG_USER_CREATE");
 		$res = array();
 		$conns = $arr["obj_inst"]->connections_from(array(
-			"type" => "RELTYPE_CONFIG_OPTION",
+			//"type" => "RELTYPE_CONFIG_OPTION",
+			"type" => "RELTYPE_SCRIPT",
 		));
 
 		foreach($msgs as $msg)
