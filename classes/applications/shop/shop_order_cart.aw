@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.33 2005/05/23 09:26:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.34 2005/05/23 09:27:39 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1342,7 +1342,7 @@ class shop_order_cart extends class_base
 
 	/**
 
-		@attrib name=clear_cart
+		@attrib name=clear_cart nologin=1
 
 		@param oc required type=int acl=view
 	**/

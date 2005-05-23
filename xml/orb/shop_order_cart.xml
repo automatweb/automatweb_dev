@@ -39,7 +39,7 @@
 			</function>
 		</action>
 
-		<action name="clear_cart">
+		<action name="clear_cart" nologin="1">
 			<function name="orb_clear_cart">
 				<arguments>
 					<required name="oc" type="int" acl="view" />
