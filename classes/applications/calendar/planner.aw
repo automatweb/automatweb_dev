@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.81 2005/05/23 07:30:23 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.82 2005/05/23 20:58:23 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -48,6 +48,9 @@ EMIT_MESSAGE(MSG_MEETING_DELETE_PARTICIPANTS);
 	@property event_folder type=relpicker reltype=RELTYPE_EVENT_FOLDER
 	@caption S&uuml;ndmuste kataloog
 	@comment Sellest kataloogist võetakse ja ka salvestatakse siia kalendrisse lisatavaid sündmusi
+
+	@property no_event_folder type=checkbox store=no newonly=1 ch_value=1
+	@caption Ära tee sündmuste kataloogi
 
 	@property workdays type=chooser multiple=1 group=advanced
 	@caption Tööpäevad
@@ -509,10 +512,10 @@ class planner extends class_base
 
 	function set_property($arr)
 	{
-		$data = &$arr["prop"];
+		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 
-		switch($data["name"])
+		switch($prop["name"])
 		{
 			case "add_event":
 				$this->register_event_with_planner($arr);
@@ -526,6 +529,29 @@ class planner extends class_base
 			case "vacancies":
 			case "vacancies_cal":
 				$this->update_vacancies($arr);
+				break;
+
+			// by default we create a folder for events as well, since this seems to be
+			// the most common scenario, but we let the user skip this step, if she wants
+			// too
+			case "no_event_folder":
+				if (empty($prop["value"]))
+				{
+					$f_o = new object();
+					$o = $arr["obj_inst"];
+					$f_o->set_class_id(CL_MENU);
+					$f_o->set_parent($o->parent());
+					$f_o->set_name($o->name());
+					$f_o->set_status(STAT_ACTIVE);
+					$f_o->save();
+
+					$o->connect(array(
+						"to" => $f_o->id(),
+						"reltype" => "RELTYPE_EVENT_FOLDER",
+					));
+					$o->set_prop("event_folder",$f_o->id());
+				};
+
 				break;
 
 		}
