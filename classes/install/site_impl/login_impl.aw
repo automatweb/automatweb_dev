@@ -32,5 +32,12 @@ $content = $m->show(array(
 	"sub_callbacks" => $si->get_sub_callbacks()
 ));
 
-include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_footer.".aw_ini_get("ext"));
+if (file_exists(aw_ini_get("site_basedir")."/public/site_footer.aw"))
+{
+	include(aw_ini_get("site_basedir")."/public/site_footer.aw");
+}
+else
+{
+	include(aw_ini_get("classdir")."/".aw_ini_get("site_impl_dir")."/site_footer.".aw_ini_get("ext"));
+}
 ?>
