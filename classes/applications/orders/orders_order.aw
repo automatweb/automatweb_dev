@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.14 2005/05/23 08:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.15 2005/05/23 12:31:59 ahti Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -124,12 +124,16 @@ class orders_order extends class_base
 		$person = $arr["obj_inst"]->get_first_obj_by_reltype('RELTYPE_PERSON');
 		switch($prop["name"])
 		{
+			case "forward":
+				return PROP_IGNORE;
+				break;
+				
 			case "firstname":
 				if($person)
 				{
 					$prop["value"] = $person->prop("firstname");
 				}
-			break;
+				break;
 			
 			
 			case "lastname":
@@ -137,21 +141,22 @@ class orders_order extends class_base
 				{
 					$prop["value"] = $person->prop("lastname");
 				}
-			break;
+				break;
 			
 			case "personal_id":
 				if($person)
 				{
 					$prop["value"] = $person->prop("personal_id");
 				}
-			break;
+				break;
+				
 			case "person_email":
 				if($person && $person->prop("email"))
 				{
 					$email = &obj($person->prop("email"));
 					$prop["value"] = $email->prop("mail");
 				}
-			break;
+				break;
 			
 			case "person_phone":
 				if($person && $person->prop("phone"))
@@ -159,88 +164,73 @@ class orders_order extends class_base
 					$phone = &obj($person->prop("phone"));
 					$prop["value"] = $phone->prop("name");
 				}
-			break;
+				break;
+				
 			case "person_contact":
 				if($person)
 				{
 					$prop["value"] = $person->prop("comment");
 				}
-			break;
+				break;
 			
 			case "orders_table":
-				$table = &$prop["vcl_inst"];
-				$table->define_field(array(
-					"name" => "product_name",
-					"caption" => t("Toode"),
-				));
-			
-				$table->define_field(array(
-					"name" => "product_code",
-					"caption" => t("Toote kood"),
-				));
-					
-				$table->define_field(array(
-					"name" => "product_color",
-					"caption" => t("Värv"),
-				));
-				
-				$table->define_field(array(
-					"name" => "product_size",
-					"caption" => t("Suurus"),
-				));
-				
-				$table->define_field(array(
-					"name" => "product_count",
-					"caption" => t("Kogus"),
-				));
-					
-				$table->define_field(array(
-					"name" => "product_price",
-					"caption" => t("Hind"),
-				));
-				
 				$conns = $arr["obj_inst"]->connections_from(array(
 					"type" => "RELTYPE_ORDER"
 				));
 				
 				$ol = new object_list($conns);
+				$o = $ol->begin();
+				$cfgform = $o->meta("cfgform_id");
+				$table = &$prop["vcl_inst"];
+				if(is_oid($cfgform) && $this->can("view", $cfgform))
+				{
+					$cfgform_i = get_instance(CL_CFGFORM);
+					$props = $cfgform_i->get_props_from_cfgform(array("id" => $cfgform));
+					foreach($props as $prop)
+					{
+						$table->define_field(array(
+							"name" => $prop["name"],
+							"caption" => $prop["caption"],
+						));
+					}
+				}
+				else
+				{
+					$table->define_field(array(
+						"name" => "name",
+						"caption" => t("Toode"),
+					));
+					$table->define_field(array(
+						"name" => "product_code",
+						"caption" => t("Toote kood"),
+					));
+					$table->define_field(array(
+						"name" => "product_color",
+						"caption" => t("Värv"),
+					));
+					$table->define_field(array(
+						"name" => "product_size",
+						"caption" => t("Suurus"),
+					));
+					$table->define_field(array(
+						"name" => "product_count",
+						"caption" => t("Kogus"),
+					));
+					$table->define_field(array(
+						"name" => "product_price",
+						"caption" => t("Hind"),
+					));
+				}
 				
 				foreach ($ol->arr() as $obj)
 				{
-					$table->define_data(array(
-						"product_name" => $obj->name(),
-						"product_code" => $obj->prop("product_code"),
-						"product_color"=> $obj->prop("product_color"),
-						"product_size" => $obj->prop("product_size"),
-						"product_count" => $obj->prop("product_count"),
-						"product_price" => $obj->prop("product_price"),
-					));	
+					$table->define_data($obj->properties());
 				}
-				
-			break;
-			
-			/*
-			case "submit":
-			break;*/
-			
+				break;
 		};
 		return $retval;
 	}
-	
 
-	/*
-	function set_property($arr = array())
-	{
-		$prop = &$arr["prop"];
-		$retval = PROP_OK;
-		switch($prop["name"])
-		{
-
-		}
-		return $retval;
-	}	
-	*/
-	
 	function callback_post_save($arr)
 	{
 		$props = $arr["request"];
@@ -340,8 +330,8 @@ class orders_order extends class_base
 				$arr["obj_inst"]->connect(array(
 					"to" => $person->id(),
 					"reltype" => "RELTYPE_PERSON",
-				));	
-			}	
+				));
+			}
 		}
 	}
 	
@@ -907,15 +897,12 @@ class orders_order extends class_base
 	function request_execute($obj)
 	{
 		$form_i = get_instance(CL_ORDERS_FORM);
-		if(!$_SESSION["order_cart_id"])
-		{
-			$_SESSION["order_cart_id"] = $obj->id();
-			$form = new object_list(array(
-				"class_id" => CL_ORDERS_FORM,
-			));
-			$form = reset($form->arr());
-			$_SESSION["order_form_id"] = $form->id();
-		}
+		$_SESSION["order_cart_id"] = $obj->id();
+		$form = new object_list(array(
+			"class_id" => CL_ORDERS_FORM,
+		));
+		$form = reset($form->arr());
+		$_SESSION["order_form_id"] = $form->id();
 		$_SESSION["show_order"] = 1;
 		$val = $form_i->change(array("show_order" => 1));
 		unset($_SESSION["show_order"]);

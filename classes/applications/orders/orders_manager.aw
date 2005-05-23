@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.5 2005/04/07 09:51:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.6 2005/05/23 12:31:59 ahti Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -114,6 +114,10 @@ class orders_manager extends class_base
 			if($person = $order->get_first_obj_by_reltype("RELTYPE_PERSON"))
 			{
 				$person_name = $person->prop("firstname")." ".$person->prop("lastname");
+				if($company = $person->get_first_conn_by_reltype("RELTYPE_WORK"))
+				{
+					$person_name .= " / ".$company->prop("to.name");
+				}
 			}
 			$t->define_data(array(
 				"oid" => $order->id(),
@@ -121,7 +125,7 @@ class orders_manager extends class_base
 				"date" => $order->created(),
 				"view" => html::href(array(
 					"caption" => t("Vaata tellimust"),
-					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "group" => "orderitems", "return_url" => get_ru(), ), CL_ORDERS_ORDER)
+					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "group" => "orderitems", "return_url" => get_ru()), CL_ORDERS_ORDER)
 				)),
 			));
 		}

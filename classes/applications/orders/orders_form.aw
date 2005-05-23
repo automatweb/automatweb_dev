@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.15 2005/05/23 09:29:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.16 2005/05/23 12:31:59 ahti Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -275,7 +275,6 @@ class orders_form extends class_base
 			$form_obj = obj($_SESSION["order_form_id"]);
 			$order = obj($_SESSION["order_cart_id"]);
 		}
-		
 		$this->read_template("orders_form.tpl");
 		$this->submerge = 1;
 		
