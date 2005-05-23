@@ -39,5 +39,13 @@
 			</function>
 		</action>
 
+		<action name="clear_cart">
+			<function name="orb_clear_cart">
+				<arguments>
+					<required name="oc" type="int" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

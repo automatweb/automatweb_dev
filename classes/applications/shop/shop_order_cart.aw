@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.31 2005/04/21 09:32:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.32 2005/05/23 08:46:20 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1031,6 +1031,15 @@ class shop_order_cart extends class_base
 			$str .= $this->parse("PROD");
 		}
 
+		if ($cart["payment_method"] == "rent" && $total < $oc->prop("rent_min_amt"))
+		{
+			$this->read_template("cart_too_small_for_rent.tpl");
+			$this->vars(array(
+				"cancel_order" => $this->mk_my_orb("clear_cart", array("oc" => $oc->id()))
+			));
+			return $this->parse();
+		}
+
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
 		$wh_o = obj($oc->prop("warehouse"));
 
@@ -1309,6 +1318,19 @@ class shop_order_cart extends class_base
 
 		aw_session_del("soc_err_ud");
 		return $ret;
+	}
+
+	/**
+
+		@attrib name=clear_cart
+
+		@param oc required type=int acl=view
+	**/
+	function orb_clear_cart($arr)
+	{
+		$oc = obj($arr["oc"]);
+		$this->clear_cart($oc);
+		return aw_ini_get("baseurl");
 	}
 }
 ?>

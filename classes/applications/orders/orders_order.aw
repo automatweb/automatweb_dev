@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.13 2005/04/07 09:51:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.14 2005/05/23 08:46:20 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -91,6 +91,14 @@ class orders_order extends class_base
 			"tpldir" => "applications/orders",
 			"clid" => CL_ORDERS_ORDER
 		));
+
+		$this->prod_statuses = array(
+			"" => "t&auml;psustamisel",
+			NULL => "t&auml;psustamisel",
+			0 => "puudub",
+			1 => "laos",
+			2 => "pikk tarnet&auml;htaeg"
+		);
 	}
 	
 	function callback_on_load($arr)
@@ -523,10 +531,13 @@ class orders_order extends class_base
 		return $this->parse();	
 	}*/
 	
-	function send_mail_to_admin()
+	function send_mail_to_admin($admin_mail = NULL)
 	{
 		$form = obj($_SESSION["order_form_id"]);
-		$admin_mail = $form->prop("orders_post_to");
+		if ($admin_mail == NULL)
+		{
+			$admin_mail = $form->prop("orders_post_to");
+		}
 		$form_inst = get_instance(CL_ORDERS_FORM);
 		$order = obj($_SESSION["order_cart_id"]);
 		$vars = array("order" => $order);
@@ -552,6 +563,10 @@ class orders_order extends class_base
 		else
 		{
 			$person = $order->get_first_obj_by_reltype("RELTYPE_PERSON");
+		}
+		if (!$person)
+		{
+			return;
 		}
 		if($person && $person->prop("email"))
 		{
@@ -653,7 +668,10 @@ class orders_order extends class_base
 	function rent_step_1($arr)
 	{
 		$this->read_template("rent_step_1.tpl");
-	
+
+		$of_i = get_instance(CL_ORDERS_FORM);
+		$states = $of_i->get_states();	
+
 		$o = obj($arr["id"]);
 		$inf = $o->meta("rent_data");
 		$item_types = array();
@@ -668,7 +686,7 @@ class orders_order extends class_base
 
 		foreach($items->arr() as $item)
 		{
-			$this->_insert_item_inf($item);
+			$this->_insert_item_inf($item, $states);
 			$this->vars(array(
 				"item_types" => html::select(array(
 					"name" => "rent_items[".$item->id()."]",
@@ -689,8 +707,14 @@ class orders_order extends class_base
 		return $this->parse();
 	}
 
-	function _insert_item_inf($item)
+	function _insert_item_inf($item, $states = NULL)
 	{
+		$name = $item->name();
+		if (false && isset($states[$item->prop("product_code")]))
+		{
+			$str = $this->prod_statuses[$states[$item->prop("product_code")]];
+			$name = "<a href='javascript:void(0)' alt='$str' title='$str'>$name</a>";
+		}
 		$this->vars(array(
 			"product_code" => $item->prop("product_code"),
 			"product_color" => $item->prop("product_color"),
@@ -700,7 +724,7 @@ class orders_order extends class_base
 			"product_image" => $item->prop("product_image"),
 			"product_page" => $item->prop("product_page"),
 			"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
-			"name" => $item->name(),
+			"name" => $name,
 		));
 	}
 
@@ -736,6 +760,9 @@ class orders_order extends class_base
 	{
 		$this->read_template("rent_step_2.tpl");
 
+		$of_i = get_instance(CL_ORDERS_FORM);
+		$states = $of_i->get_states();	
+
 		$o = obj($arr["id"]);
 		$inf = $o->meta("rent_data");
 
@@ -757,7 +784,7 @@ class orders_order extends class_base
 			$tot_price = 0;
 			foreach($items as $item)
 			{
-				$this->_insert_item_inf($item);
+				$this->_insert_item_inf($item, $states);
 
 				$item_in_cat .= $this->parse("ITEM_IN_CAT");
 

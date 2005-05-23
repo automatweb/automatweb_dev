@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.13 2005/04/07 09:51:57 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.14 2005/05/23 08:46:20 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -111,6 +111,14 @@ class orders_form extends class_base
 			"clid" => CL_ORDERS_FORM,
 			"tpldir" =>  "applications/orders",
 		));
+
+		$this->prod_statuses = array(
+			"" => "t&auml;psustamisel",
+			NULL => "t&auml;psustamisel",
+			0 => "puudub",
+			1 => "laos",
+			2 => "pikk tarnet&auml;htaeg"
+		);
 	}
 
 	//////
@@ -336,7 +344,10 @@ class orders_form extends class_base
 			$person = current($order->connections_from(array(
 				"type" => "RELTYPE_PERSON",
 			)));
-			$person = $person->to();
+			if ($person)
+			{
+				$person = $person->to();
+			}
 		}
 		
 		if(!$person)
@@ -719,6 +730,8 @@ class orders_form extends class_base
 			$cats[(int)$_SESSION["orders_form"]["payment"]["itypes"][$item->id()]][$item->id()] = $item;
 		}
 
+		$states = $this->get_states();
+
 		// display cats
 		$item_cat = "";
 		$totalsum = 0;
@@ -728,7 +741,7 @@ class orders_form extends class_base
 			$tot_price = 0;
 			foreach($items as $item)
 			{
-				$this->_insert_item_inf($item);
+				$this->_insert_item_inf($item, $states);
 
 				$tot_price += $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price"));
 				$item_in_cat .= $this->parse("ITEM_IN_CAT");
@@ -791,10 +804,13 @@ class orders_form extends class_base
 			return;
 		}
 		
+		$states = $this->get_states();
+
 		$ol = new object_list($conns);
 		$this->submerge = 1;
 		foreach ($ol->arr() as $item)
 		{
+			$_state = $states[$item->prop("product_code")];
 			$this->vars(array(
 				"name" => $item->name(),
 				"editurl" => aw_url_change_var(array(
@@ -816,6 +832,7 @@ class orders_form extends class_base
 				"product_image" => $item->prop("product_image"),
 				"product_page" => $item->prop("product_page"),
 				"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
+				"product_status" => ""/*$this->prod_statuses[$_state]*/
 			));
 			if(!$_SESSION["show_order"])
 			{
@@ -942,8 +959,14 @@ class orders_form extends class_base
 		return PROP_OK;
 	}
 
-	function _insert_item_inf($item)
+	function _insert_item_inf($item, $states = NULL)
 	{
+		$name = $item->name();
+		if (false && isset($states[$item->prop("product_code")]))
+		{
+			$str = $this->prod_statuses[$states[$item->prop("product_code")]];
+			$name = "<a href='javascript:void(0)' alt='$str' title='$str'>$name</a>";
+		}
 		$this->vars(array(
 			"product_code" => $item->prop("product_code"),
 			"product_color" => $item->prop("product_color"),
@@ -953,8 +976,24 @@ class orders_form extends class_base
 			"product_image" => $item->prop("product_image"),
 			"product_page" => $item->prop("product_page"),
 			"product_sum" => $item->prop("product_count") * str_replace(",", ".", $item->prop("product_price")),
-			"name" => $item->name(),
+			"name" => $name,
 		));
+	}
+
+	function get_states()
+	{
+		$states_f = @file(aw_ini_get("site_basedir")."/public/laoseis.txt");
+		$states = array();
+		foreach(safe_array($states_f) as $s_l)
+		{
+			if (trim($s_l) != "")
+			{
+				list($s_c, $s_v) = explode(";", $s_l);
+				$states[$s_c] = trim($s_v);
+			}
+		}
+
+		return $states;
 	}
 }
 ?>
