@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.25 2005/05/20 15:35:33 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.26 2005/05/23 09:29:56 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -549,19 +549,12 @@ class register_search extends class_base
 			}
 		}
 
-/*		if ($clid)
-		{*/
-			$i = get_instance($clid);
-			$xp = $i->parse_properties(array(
-				"object_type_id" => $ot,
-				"properties" => $tmp,
-				"name_prefix" => "rsf"
-			));
-/*		}
-		else
-		{
-			$xp = $tmp;
-		}*/
+		$i = get_instance($clid);
+		$xp = $i->parse_properties(array(
+			"object_type_id" => $ot,
+			"properties" => $tmp,
+			"name_prefix" => "rsf"
+		));
 
 		$xp["search_butt"] = array(
 			"name" => "search_butt",

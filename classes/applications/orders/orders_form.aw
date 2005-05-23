@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.14 2005/05/23 08:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_form.aw,v 1.15 2005/05/23 09:29:56 kristo Exp $
 // orders_form.aw - Tellimuse vorm 
 /*
 
@@ -111,7 +111,6 @@ class orders_form extends class_base
 			"clid" => CL_ORDERS_FORM,
 			"tpldir" =>  "applications/orders",
 		));
-
 		$this->prod_statuses = array(
 			"" => "t&auml;psustamisel",
 			NULL => "t&auml;psustamisel",
@@ -802,6 +801,14 @@ class orders_form extends class_base
 		)))
 		{
 			return;
+		}
+
+		$states_f = @file(aw_ini_get("site_basedir")."/public/laoseis.txt");
+		$states = array();
+		foreach(safe_array($states_f) as $s_l)
+		{
+			list($s_c, $s_v) = ecplode(";", $s_l);
+			$states[$s_c] = $s_v;
 		}
 		
 		$states = $this->get_states();
