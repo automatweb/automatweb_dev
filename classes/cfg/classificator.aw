@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.9 2005/05/23 08:37:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.10 2005/05/23 09:30:21 kristo Exp $
 
 /*
 
@@ -228,6 +228,7 @@ class classificator extends class_base
 				"clid" => $arr["clid"],
 			));
 		};
+
 		//if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type"))) 
 		{
