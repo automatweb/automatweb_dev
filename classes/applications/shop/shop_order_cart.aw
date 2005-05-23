@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.32 2005/05/23 08:46:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.33 2005/05/23 09:26:21 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -242,6 +242,12 @@ class shop_order_cart extends class_base
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"]))
 		));
 
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$this->vars(array(
+				"HAS_POSTAGE_FEE" => $this->parse("HAS_POSTAGE_FEE")
+			));
+		}
 		if($show_info_page)
 		{
 			$this->vars(array(
@@ -950,6 +956,12 @@ class shop_order_cart extends class_base
 			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));
 
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$this->vars(array(
+				"HAS_POSTAGE_FEE" => $this->parse("HAS_POSTAGE_FEE")
+			));
+		}
 		$ll = $lln = "";
 		if (aw_global_get("uid") != "")
 		{
@@ -1029,15 +1041,6 @@ class shop_order_cart extends class_base
 			$total += ($quant * $inst->get_price($i));
 
 			$str .= $this->parse("PROD");
-		}
-
-		if ($cart["payment_method"] == "rent" && $total < $oc->prop("rent_min_amt"))
-		{
-			$this->read_template("cart_too_small_for_rent.tpl");
-			$this->vars(array(
-				"cancel_order" => $this->mk_my_orb("clear_cart", array("oc" => $oc->id()))
-			));
-			return $this->parse();
 		}
 
 		$swh = get_instance(CL_SHOP_WAREHOUSE);
@@ -1128,6 +1131,12 @@ class shop_order_cart extends class_base
 			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));
 
+		if ($cart_o->prop("postal_price") > 0)
+		{
+			$this->vars(array(
+				"HAS_POSTAGE_FEE" => $this->parse("HAS_POSTAGE_FEE")
+			));
+		}
 		$ll = $lln = "";
 		if (aw_global_get("uid") != "")
 		{
@@ -1243,6 +1252,17 @@ class shop_order_cart extends class_base
 				"total_price_rent_w_pst" => number_format($cl_tot_wr + $ft_total_wr + $ls_total_wr + $cart_o->prop("postal_price"),2),
 				"postal_price" => number_format($cart_o->prop("postal_price"))
 			));
+
+			if ($cart["payment_method"] == "rent" && ($cl_total + $ft_total + $ls_total) < $oc->prop("rent_min_amt"))
+			{
+				$this->read_template("cart_too_small_for_rent.tpl");
+				$this->vars(array(
+					"cancel_order" => $this->mk_my_orb("clear_cart", array("oc" => $oc->id()))
+				));
+				return $this->parse();
+			}
+
+
 			if ($cl_tot_wr + $ft_total_wr + $ls_total_wr > 8000)
 			{
 				$this->vars(array(
