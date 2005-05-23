@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.8 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.9 2005/05/23 08:37:41 ahti Exp $
 
 /*
 
@@ -89,6 +89,10 @@ class classificator extends class_base
 		if($prop["sort_by"])
 		{
 			$ch_args["sort_by"] = $prop["sort_by"];
+		}
+		if($arr["object_type_id"])
+		{
+			$ch_args["object_type_id"] = $arr["object_type_id"];
 		}
 		if (is_oid($prop["object_type_id"]))
 		{
