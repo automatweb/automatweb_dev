@@ -62,6 +62,16 @@
             <caption>Meili From aadress</caption>
       </property>
       <property>
+            <name>resize_before_crop</name>
+            <table>objects</table>
+            <group>imgsize</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Muuda suurust enne kadreerimist</caption>
+      </property>
+      <property>
             <name>img_vert</name>
             <table>objects</table>
             <group>imgsize</group>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.14 2005/05/10 10:33:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_conf.aw,v 1.15 2005/05/23 09:39:21 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_GALLERY_CONF relationmgr=yes
@@ -31,6 +31,9 @@
 @caption Meili From aadress
 
 @default group=imgsize
+
+@property resize_before_crop type=checkbox ch_value=1 
+@caption Muuda suurust enne kadreerimist
 
 @property img_vert 
 @caption Kui pilt on k&otilde;rgem kui laiem

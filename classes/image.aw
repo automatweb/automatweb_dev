@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.137 2005/05/12 11:50:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.138 2005/05/23 09:39:21 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1144,15 +1144,33 @@ class image extends class_base
 		));
 		if ($xyd["is_subimage"] && $xyd["si_width"] && $xyd["si_height"])
 		{
-			// make subimage
-			$img->resize(array(
-				"x" => $xyd["si_left"],
-				"y" => $xyd["si_top"],
-				"width" => $xyd["si_width"],
-				"height" => $xyd["si_height"],
-				"new_width" => $xyd["width"],
-				"new_height" => $xyd["height"]
-			));
+			if ($conf->prop("resize_before_crop"))
+			{
+				if ($i_width != $xyd["si_width"] || $i_height != $xyd["si_height"])
+				{
+					$img->resize_simple($xyd["width"], $xyd["height"]);
+				}
+				$img->resize(array(
+					"x" => $xyd["si_left"],
+					"y" => $xyd["si_top"],
+					"width" => $xyd["si_width"],
+					"height" => $xyd["si_height"],
+					"new_width" => $xyd["si_width"],
+					"new_height" => $xyd["si_height"]
+				));
+			}
+			else
+			{
+				// make subimage
+				$img->resize(array(
+					"x" => $xyd["si_left"],
+					"y" => $xyd["si_top"],
+					"width" => $xyd["si_width"],
+					"height" => $xyd["si_height"],
+					"new_width" => $xyd["width"],
+					"new_height" => $xyd["height"]
+				));
+			}
 		}
 		else
 		if ($xyd["width"] != $i_width || $xyd["height"] != $i_height)
