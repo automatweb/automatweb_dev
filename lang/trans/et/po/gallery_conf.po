@@ -81,6 +81,18 @@ msgstr ""
 msgid "Omaduse Meili From aadress (send_from_addr) help"
 msgstr ""
 
+# classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
+msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) caption"
+msgstr ""
+
+# classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop_comment
+msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop_help
+msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) help"
+msgstr ""
+
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_img_vert
 msgid "Omaduse Kui pilt on k&otilde;rgem kui laiem (img_vert) caption"
 msgstr ""

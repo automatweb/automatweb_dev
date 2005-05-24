@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri, 22 Apr 2005 16:09:39 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -147,9 +147,17 @@ msgstr ""
 msgid "Grupi Seaded (settings) pealkiri"
 msgstr "Settings"
 
+# classes/applications/persona_import/persona_import.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
 # classes/applications/persona_import/persona_import.aw:group_autoimport
 msgid "Grupi Automaatne import (autoimport) pealkiri"
 msgstr "Automatic import"
+
+# classes/applications/persona_import/persona_import.aw:group_autoimport_help
+msgid "Grupi Automaatne import (autoimport) help"
+msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_CRM_DB
 msgid "Seose kliendibaas (RELTYPE_CRM_DB) tekst"
@@ -185,7 +193,7 @@ msgstr "Import images"
 
 #: classes/applications/persona_import/persona_import.aw:150
 #: classes/applications/persona_import/persona_import.aw:186
-#: classes/applications/persona_import/persona_import.aw:1106
+#: classes/applications/persona_import/persona_import.aw:1109
 msgid "You forgot to enter server data"
 msgstr "You forgot to enter server data"
 

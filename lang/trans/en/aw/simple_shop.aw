@@ -12,7 +12,6 @@ $GLOBALS["TRANS"]["Omaduse Otsi (search) caption"] = "Search";
 $GLOBALS["TRANS"]["Grupi Import (import) pealkiri"] = "Import";
 $GLOBALS["TRANS"]["Grupi Tellimused (orders) pealkiri"] = "Orders";
 $GLOBALS["TRANS"]["Seose Tootekataloog (RELTYPE_WAREHOUSE) tekst"] = "Warehouse";
-$GLOBALS["TRANS"]["Seose Toodete kaust (RELTYPE_FOLDER) tekst"] = "Product folder";
 $GLOBALS["TRANS"]["Seose Kasutaja andmed (RELTYPE_USER_DATA) tekst"] = "user data";
 $GLOBALS["TRANS"]["ID"] = "ID";
 $GLOBALS["TRANS"]["Aeg"] = "Time";

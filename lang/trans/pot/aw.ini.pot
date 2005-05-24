@@ -1467,11 +1467,19 @@ msgid "Klassi Pakkumise v&otilde;rdlustabeli rida (926) nimi"
 msgstr ""
 
 #: aw.ini:class_929
-msgid "Klassi Klasside haldus (929) nimi"
+msgid "Klassi Klasside brauser (929) nimi"
 msgstr ""
 
 #: aw.ini:class_931
 msgid "Klassi Lihtne tellimus (931) nimi"
+msgstr ""
+
+#: aw.ini:class_935
+msgid "Klassi Kinnisvarahalduse keskkond (935) nimi"
+msgstr ""
+
+#: aw.ini:class_936
+msgid "Klassi Kinnisvaraobjekt (936) nimi"
 msgstr ""
 
 #: aw.ini:classfolder_29
@@ -1704,5 +1712,9 @@ msgstr ""
 
 #: aw.ini:classfolder_59
 msgid "Klassi kataloogi Bug-o-matic 3000 (59) nimi"
+msgstr ""
+
+#: aw.ini:classfolder_60
+msgid "Klassi kataloogi Kinnisvarahaldus (60) nimi"
 msgstr ""
 

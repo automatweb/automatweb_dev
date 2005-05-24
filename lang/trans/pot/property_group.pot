@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:23 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -32,5 +32,17 @@ msgstr ""
 
 #: classes/applications/class_designer/property_group.aw:prop_no_submit_help
 msgid "Omaduse Salvesta nuppu pole tarvis (no_submit) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_group.aw:prop_caption
+msgid "Omaduse Caption (caption) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_group.aw:prop_caption_comment
+msgid "Omaduse Caption (caption) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_group.aw:prop_caption_help
+msgid "Omaduse Caption (caption) help"
 msgstr ""
 

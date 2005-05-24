@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 17:26:38 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/applications/persona_import/persona_import.aw:prop_last_import
+# classes/applications/persona_import/persona_import.aw:prop_last_import
 msgid "Omaduse Viimane import toimus (last_import) caption"
 msgstr ""
 
@@ -143,12 +143,20 @@ msgstr ""
 msgid "Omaduse Automaatse impordi seadistamine (recur_edit) help"
 msgstr ""
 
-#: classes/applications/persona_import/persona_import.aw:group_settings
+# classes/applications/persona_import/persona_import.aw:group_settings
 msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+# classes/applications/persona_import/persona_import.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:group_autoimport
 msgid "Grupi Automaatne import (autoimport) pealkiri"
+msgstr ""
+
+# classes/applications/persona_import/persona_import.aw:group_autoimport_help
+msgid "Grupi Automaatne import (autoimport) help"
 msgstr ""
 
 # classes/applications/persona_import/persona_import.aw:rel_RELTYPE_CRM_DB
@@ -185,7 +193,7 @@ msgstr ""
 
 #: classes/applications/persona_import/persona_import.aw:150
 #: classes/applications/persona_import/persona_import.aw:186
-#: classes/applications/persona_import/persona_import.aw:1106
+#: classes/applications/persona_import/persona_import.aw:1109
 msgid "You forgot to enter server data"
 msgstr ""
 

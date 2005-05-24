@@ -21,6 +21,18 @@ msgstr ""
 msgid "Omaduse Tootekataloog (warehouse) help"
 msgstr ""
 
+# classes/applications/simple_shop/simple_shop.aw:prop_orders_folder
+msgid "Omaduse Tellimuste kataloog (orders_folder) caption"
+msgstr ""
+
+# classes/applications/simple_shop/simple_shop.aw:prop_orders_folder_comment
+msgid "Omaduse Tellimuste kataloog (orders_folder) kommentaar"
+msgstr ""
+
+# classes/applications/simple_shop/simple_shop.aw:prop_orders_folder_help
+msgid "Omaduse Tellimuste kataloog (orders_folder) help"
+msgstr ""
+
 # classes/applications/simple_shop/simple_shop.aw:prop_user_data
 msgid "Omaduse Kasutaja andmete vorm (user_data) caption"
 msgstr ""
@@ -180,33 +192,33 @@ msgid "Seose Tootekataloog (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
 # classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_FOLDER
-msgid "Seose Toodete kaust (RELTYPE_FOLDER) tekst"
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 # classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_USER_DATA
 msgid "Seose Kasutaja andmed (RELTYPE_USER_DATA) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:122
+#: classes/applications/simple_shop/simple_shop.aw:125
 msgid "ID"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:126
+#: classes/applications/simple_shop/simple_shop.aw:129
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:180
+#: classes/applications/simple_shop/simple_shop.aw:183
 msgid "kustutan %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:183
+#: classes/applications/simple_shop/simple_shop.aw:186
 msgid "kustutatud"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:188
+#: classes/applications/simple_shop/simple_shop.aw:191
 msgid "impordin %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:212
+#: classes/applications/simple_shop/simple_shop.aw:215
 msgid "imporditud"
 msgstr ""

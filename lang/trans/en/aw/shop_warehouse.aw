@@ -7,7 +7,6 @@ $GLOBALS["TRANS"]["Omaduse Pakettide nimekiri (packets_list) caption"] = "Packet
 $GLOBALS["TRANS"]["Omaduse Laoseis (storage_list) caption"] = "Warehouse status";
 $GLOBALS["TRANS"]["Omaduse Sissetulekud (storage_income) caption"] = "Receptions";
 $GLOBALS["TRANS"]["Omaduse V&auml;ljaminekud (storage_export) caption"] = "Exports";
-$GLOBALS["TRANS"]["Omaduse Otsingo toolbar (search_tb) caption"] = "Search toolbar";
 $GLOBALS["TRANS"]["Omaduse Otsinguvorm (search_form) caption"] = "Search form";
 $GLOBALS["TRANS"]["Omaduse Otsingu tulemused (search_res) caption"] = "Search results";
 $GLOBALS["TRANS"]["Omaduse Hetke tellimus text (search_cur_ord_text) caption"] = "Current order text";

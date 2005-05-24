@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:22 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -74,99 +74,99 @@ msgstr ""
 msgid "Kuupäev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:97 classes/applications/orders/orders_manager.aw:123
+#: classes/applications/orders/orders_manager.aw:97 classes/applications/orders/orders_manager.aw:127
 msgid "Vaata tellimust"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:219
+#: classes/applications/orders/orders_manager.aw:223
 msgid "Toote nimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:220
+#: classes/applications/orders/orders_manager.aw:224
 msgid "Kood"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:221
+#: classes/applications/orders/orders_manager.aw:225
 msgid "V&auml;rvus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:222
+#: classes/applications/orders/orders_manager.aw:226
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:223
+#: classes/applications/orders/orders_manager.aw:227
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:224
+#: classes/applications/orders/orders_manager.aw:228
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:225
+#: classes/applications/orders/orders_manager.aw:229
 msgid "Lehek&uuml;lg"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:226
+#: classes/applications/orders/orders_manager.aw:230
 msgid "Pilt"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:229
+#: classes/applications/orders/orders_manager.aw:233
 msgid "Eesnimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:230
+#: classes/applications/orders/orders_manager.aw:234
 msgid "Perekonnanimi"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:231
+#: classes/applications/orders/orders_manager.aw:235
 msgid "Aadress"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:232
+#: classes/applications/orders/orders_manager.aw:236
 msgid "S&uuml;nnip&auml;ev"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:233
+#: classes/applications/orders/orders_manager.aw:237
 msgid "E-mail"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:234
+#: classes/applications/orders/orders_manager.aw:238
 msgid "Telefon"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:237
+#: classes/applications/orders/orders_manager.aw:241
 msgid "Kliendi number"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:238
+#: classes/applications/orders/orders_manager.aw:242
 msgid "Postiindeks"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:239
+#: classes/applications/orders/orders_manager.aw:243
 msgid "Linn"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:240
+#: classes/applications/orders/orders_manager.aw:244
 msgid "Telefon t&ouml;&ouml;l"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:241
+#: classes/applications/orders/orders_manager.aw:245
 msgid "Mobiil"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:242
+#: classes/applications/orders/orders_manager.aw:246
 msgid "Kliendo t&uuml;&uuml;p"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:249
+#: classes/applications/orders/orders_manager.aw:253
 msgid "OID"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:249
+#: classes/applications/orders/orders_manager.aw:253
 msgid "Millal"
 msgstr ""
 
-#: classes/applications/orders/orders_manager.aw:302
+#: classes/applications/orders/orders_manager.aw:306
 msgid "all done!"
 msgstr ""
 

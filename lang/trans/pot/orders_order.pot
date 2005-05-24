@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:23 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -410,39 +410,39 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:166
+#: classes/applications/orders/orders_order.aw:201
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:171
+#: classes/applications/orders/orders_order.aw:205
 msgid "Toote kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:176
+#: classes/applications/orders/orders_order.aw:209
 msgid "Värv"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:181
+#: classes/applications/orders/orders_order.aw:213
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:186
+#: classes/applications/orders/orders_order.aw:217
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:191
+#: classes/applications/orders/orders_order.aw:221
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:458
+#: classes/applications/orders/orders_order.aw:456
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:478
+#: classes/applications/orders/orders_order.aw:476
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:575
+#: classes/applications/orders/orders_order.aw:580
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""
 

@@ -22,6 +22,18 @@ msgstr ""
 msgid "Omaduse Tootekataloog (warehouse) help"
 msgstr ""
 
+#: classes/applications/simple_shop/simple_shop.aw:prop_orders_folder
+msgid "Omaduse Tellimuste kataloog (orders_folder) caption"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_orders_folder_comment
+msgid "Omaduse Tellimuste kataloog (orders_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_orders_folder_help
+msgid "Omaduse Tellimuste kataloog (orders_folder) help"
+msgstr ""
+
 #: classes/applications/simple_shop/simple_shop.aw:prop_user_data
 msgid "Omaduse Kasutaja andmete vorm (user_data) caption"
 msgstr ""
@@ -83,15 +95,27 @@ msgid "Omaduse Asenda tooted (replace_prods) help"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_order_time
-msgid "Omaduse Pakkumise aeg (order_time) caption"
+msgid "Omaduse Pakkumine alates (order_time) caption"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_order_time_comment
-msgid "Omaduse Pakkumise aeg (order_time) kommentaar"
+msgid "Omaduse Pakkumine alates (order_time) kommentaar"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_order_time_help
-msgid "Omaduse Pakkumise aeg (order_time) help"
+msgid "Omaduse Pakkumine alates (order_time) help"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_order_time2
+msgid "Omaduse Pakkumine kuni (order_time2) caption"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_order_time2_comment
+msgid "Omaduse Pakkumine kuni (order_time2) kommentaar"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_order_time2_help
+msgid "Omaduse Pakkumine kuni (order_time2) help"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:prop_order_orderer
@@ -175,34 +199,78 @@ msgid "Seose Tootekataloog (RELTYPE_WAREHOUSE) tekst"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_FOLDER
-msgid "Seose Toodete kaust (RELTYPE_FOLDER) tekst"
+msgid "Seose Kaust (RELTYPE_FOLDER) tekst"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_USER_DATA
 msgid "Seose Kasutaja andmed (RELTYPE_USER_DATA) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:122
+#: classes/applications/simple_shop/simple_shop.aw:136
+msgid "Kustuta tellimused"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:137
+msgid "Oled kindel, et sooovid valitud tellimused eemaldada?"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:148
 msgid "ID"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:126
+#: classes/applications/simple_shop/simple_shop.aw:153
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:180
+#: classes/applications/simple_shop/simple_shop.aw:161
+msgid "Tellija"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:166
+msgid ""
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:239
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:279
+msgid "Otsi"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:365
+msgid "Tootekood"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:370
+msgid "Nimetus"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:375
+msgid "Ühik"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:380
+msgid "Hind"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:386
+msgid "Lisa korvi"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:449
 msgid "kustutan %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:183
+#: classes/applications/simple_shop/simple_shop.aw:452
 msgid "kustutatud"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:188
+#: classes/applications/simple_shop/simple_shop.aw:457
 msgid "impordin %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:212
+#: classes/applications/simple_shop/simple_shop.aw:481
 msgid "imporditud"
 msgstr ""
 

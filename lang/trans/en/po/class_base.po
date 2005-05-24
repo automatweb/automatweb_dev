@@ -105,20 +105,20 @@ msgstr "New"
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1414 classes/class_base.aw:4496
-#: classes/class_base.aw:4507
+#: classes/class_base.aw:1414 classes/class_base.aw:4497
+#: classes/class_base.aw:4508
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3109
+#: classes/class_base.aw:3110
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3118
+#: classes/class_base.aw:3119
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4395
+#: classes/class_base.aw:4396
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 

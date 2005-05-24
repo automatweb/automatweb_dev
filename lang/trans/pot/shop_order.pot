@@ -186,11 +186,11 @@ msgstr ""
 msgid "Oled kindel, et soovitud valitud tooted tellimusest eemaldada?"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:199
+#: classes/applications/shop/shop_order.aw:204
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:203
+#: classes/applications/shop/shop_order.aw:208
 msgid "Mitu"
 msgstr ""
 
@@ -202,15 +202,15 @@ msgstr ""
 msgid "Toode: "
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:303
+#: classes/applications/shop/shop_order.aw:369
 msgid "shop_order::do_confirm(): could not find parent folder for warehouse export!"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:310
+#: classes/applications/shop/shop_order.aw:376
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:392 classes/applications/shop/shop_order.aw:523
+#: classes/applications/shop/shop_order.aw:464 classes/applications/shop/shop_order.aw:605
 msgid "Tellimus laost %s"
 msgstr ""
 

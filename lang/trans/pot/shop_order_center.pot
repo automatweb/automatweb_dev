@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:02 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -46,6 +46,18 @@ msgstr ""
 msgid "Omaduse Ostukorvi tüüp (cart_type) help"
 msgstr ""
 
+#: classes/applications/shop/shop_order_center.aw:prop_multi_items
+msgid "Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_multi_items_comment
+msgid "Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_multi_items_help
+msgid "Omaduse Ostukorvis võib olla mitu sama ID-ga toodet (multi_items) help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed
 msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) caption"
 msgstr ""
@@ -56,6 +68,30 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_show_unconfirmed_help
 msgid "Omaduse Näita tellijale tellimuste nimekirjas ainult kinnitamata tellimusi (show_unconfirmed) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_no_change_button
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_no_change_button_comment
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_no_change_button_help
+msgid "Omaduse Ära kuva tellimiskeskkonnas toote kõrvale \"Muuda\" nuppu (no_change_button) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_prods
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_prods_comment
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_only_prods_help
+msgid "Omaduse Ostukorvis on tooted ilma pakendite, piltide jms (only_prods) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_pdf_template
@@ -104,6 +140,30 @@ msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_data_form_company_help
 msgid "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_send_attach
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_send_attach_comment
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_send_attach_help
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) help"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_client
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_client_comment
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_order_center.aw:prop_mail_to_client_help
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) help"
 msgstr ""
 
 #: classes/applications/shop/shop_order_center.aw:prop_mail_to_el
@@ -354,63 +414,63 @@ msgstr ""
 msgid "Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:140
+#: classes/applications/shop/shop_order_center.aw:155
 msgid "Sessionipõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:141
+#: classes/applications/shop/shop_order_center.aw:156
 msgid "Kasutajapõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:272
+#: classes/applications/shop/shop_order_center.aw:287
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:277
+#: classes/applications/shop/shop_order_center.aw:292
 msgid "Tabeli kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:283
+#: classes/applications/shop/shop_order_center.aw:298
 msgid "Paketi kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:289
+#: classes/applications/shop/shop_order_center.aw:304
 msgid "Paketi vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:295
+#: classes/applications/shop/shop_order_center.aw:310
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:315 classes/applications/shop/shop_order_center.aw:1065
+#: classes/applications/shop/shop_order_center.aw:330 classes/applications/shop/shop_order_center.aw:1098
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:391
+#: classes/applications/shop/shop_order_center.aw:406
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:397
+#: classes/applications/shop/shop_order_center.aw:412
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:415
+#: classes/applications/shop/shop_order_center.aw:430
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:894
+#: classes/applications/shop/shop_order_center.aw:927
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:909
+#: classes/applications/shop/shop_order_center.aw:942
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1012
+#: classes/applications/shop/shop_order_center.aw:1045
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1039
+#: classes/applications/shop/shop_order_center.aw:1072
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""
 
