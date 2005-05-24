@@ -60,9 +60,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 	function create_new_object($arr)
 	{
 		$id =  $this->contained->create_new_object($arr);
-		// I assume that since creating a new object always calls save_properties
-		// then this cache_clear is really unnesseary -- duke
-		//$this->_clear_cache($id);
+		$this->_clear_cache($id);
 		return $id;
 	}
 
