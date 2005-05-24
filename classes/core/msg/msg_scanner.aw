@@ -123,7 +123,7 @@ class msg_scanner extends class_base
 					$inst = get_instance($class);
 					if (!method_exists($inst, $handler))
 					{
-						echo sprintf(f("ERROR: class %s defines function %s as message handler for message %s (with param %s),\n       but the function does not exist in that class!\n\n"), $class, $handler, $msg, $param);
+						echo sprintf(t("ERROR: class %s defines function %s as message handler for message %s (with param %s),\n       but the function does not exist in that class!\n\n"), $class, $handler, $msg, $param);
 						echo dbg::process_backtrace(debug_backtrace());
 						die();
 					}
