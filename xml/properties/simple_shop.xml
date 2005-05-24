@@ -1,9 +1,49 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>folder</name>
+            <name>warehouse</name>
             <table>objects</table>
             <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_WAREHOUSE</reltype>
+            <caption>Tootekataloog</caption>
+      </property>
+      <property>
+            <name>orders_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FOLDER</reltype>
+            <caption>Tellimuste kataloog</caption>
+      </property>
+      <property>
+            <name>user_data</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_USER_DATA</reltype>
+            <caption>Kasutaja andmete vorm</caption>
+      </property>
+      <property>
+            <name>ud_from_logged</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kui kasutaja on sisse loginud, võta isikuandmed objektidest</caption>
+      </property>
+      <property>
+            <name>folder</name>
+            <table>objects</table>
+            <group>import</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -13,7 +53,7 @@
       <property>
             <name>import_file</name>
             <table>objects</table>
-            <group>general</group>
+            <group>import</group>
             <field>meta</field>
             <method>serialize</method>
             <type>fileupload</type>
@@ -23,13 +63,65 @@
       <property>
             <name>replace_prods</name>
             <table>objects</table>
-            <group>general</group>
+            <group>import</group>
             <field>meta</field>
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <store>no</store>
             <caption>Asenda tooted</caption>
+      </property>
+      <property>
+            <name>order_time</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Pakkumine alates</caption>
+      </property>
+      <property>
+            <name>order_time2</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>date_select</type>
+            <store>no</store>
+            <caption>Pakkumine kuni</caption>
+      </property>
+      <property>
+            <name>order_orderer</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Tellija</caption>
+      </property>
+      <property>
+            <name>order_cont</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>4</rows>
+            <cols>20</cols>
+            <store>no</store>
+            <caption>Tellimuse sisu</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <group>orders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
       </property>
       <property>
             <name>orders_toolbar</name>
@@ -56,10 +148,15 @@
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <r2>yes</r2>
       </classinfo>
       <groupinfo>
+            <import>
+                  <caption>Import</caption>
+            </import>
             <orders>
                   <caption>Tellimused</caption>
+                  <submit_method>get</submit_method>
             </orders>
       </groupinfo>
       <reltypes>
@@ -71,8 +168,13 @@
             <FOLDER>
                   <value>2</value>
                   <clid>CL_MENU</clid>
-                  <caption>Toodete kaust</caption>
+                  <caption>Kaust</caption>
             </FOLDER>
+            <USER_DATA>
+                  <value>3</value>
+                  <clid>CL_WEBFORM</clid>
+                  <caption>Kasutaja andmed</caption>
+            </USER_DATA>
       </reltypes>
 </properties>
 

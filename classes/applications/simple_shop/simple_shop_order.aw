@@ -1,12 +1,36 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop_order.aw,v 1.1 2005/05/06 09:59:54 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop_order.aw,v 1.2 2005/05/24 08:13:10 ahti Exp $
 // simple_shop_order.aw - Lihtne tellimus 
 /*
 
-@classinfo syslog_type=ST_SIMPLE_SHOP_ORDER relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SIMPLE_SHOP_ORDER relationmgr=yes no_comment=1 no_status=1 r2=yes
 
 @default table=objects
 @default group=general
+
+@groupinfo orderer caption="Tellija andmed"
+@default group=orderer
+
+@property orderer type=text
+@caption Siin ei ole kala
+
+@groupinfo order caption="Tellimus" submit=no
+@default group=order
+
+@property order_tb type=toolbar no_caption=1
+@caption Tellimuste toolbar
+
+@property order type=table no_caption=1
+@caption Tellimuste tabel
+
+@property order_sum type=text
+@caption Kogusumma
+
+@reltype ORDERITEM value=1 clid=CL_SIMPLE_SHOP_PRODUCT
+@caption Toode
+
+@reltype ORDERER value=2 clid=CL_CRM_PERSON
+@caption Tellija
 
 */
 
@@ -14,23 +38,29 @@ class simple_shop_order extends class_base
 {
 	function simple_shop_order()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/simple_shop/simple_shop_order",
 			"clid" => CL_SIMPLE_SHOP_ORDER
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "order_tb":
+				$this->mk_order_tb($arr);
+				break;
+				
+			case "order":
+				$this->mk_order_table($arr);
+				break;
+				
+			case "order_sum":
+				$prop["value"] = $this->sum;
+				break;
 		};
 		return $retval;
 	}
@@ -41,32 +71,81 @@ class simple_shop_order extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
-
+			case "order":
+				$arr["obj_inst"]->set_meta("order_info", $arr["request"]["order"]);
+				$arr["obj_inst"]->save();
+				break;
 		}
 		return $retval;
-	}	
-
+	}
+	
+	function mk_order_tb($arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Eemalda tooted"),
+			"confirm" => t("Oled kindel, et sooovid tooted tellimusest eemaldada?"),
+			"action" => "delete_items",
+			"img" => "delete.gif",
+		));
+		$tb->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "",
+			"img" => "save.gif",
+		));
+	}
+	
+	function mk_order_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$prod_i = get_instance(CL_SIMPLE_SHOP_PRODUCT);
+		$props = $prod_i->load_defaults();
+		foreach($props as $prop)
+		{
+			$t->define_field(array(
+				"name" => $prop["name"],
+				"caption" => $prop["caption"],
+			));
+		}
+		$t->define_field(array(
+			"name" => "quant",
+			"caption" => t("Kogus"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid",
+		));
+		$order = $arr["obj_inst"]->meta("order_info");
+		$sum = 0;
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_ORDERITEM")) as $prod)
+		{
+			$prod = $prod->to();
+			$id = $prod->id();
+			$sum += $prod->prop("price") * $order[$id];
+			$t->define_data($prod->properties() + array(
+				"oid" => $id,
+				"quant" => html::textbox(array(
+					"name" => "order[$id]",
+					"size" => 6,
+					"value" => $order[$id],
+				)),
+			));
+		}
+		$this->sum = $sum;
+	}
+	
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
+	
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	
 	function show($arr)
 	{
 		$ob = new object($arr["id"]);
@@ -76,7 +155,5 @@ class simple_shop_order extends class_base
 		));
 		return $this->parse();
 	}
-
-	//-- methods --//
 }
 ?>

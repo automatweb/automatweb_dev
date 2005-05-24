@@ -1,14 +1,29 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.2 2005/05/02 11:36:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.3 2005/05/24 08:13:10 ahti Exp $
 // simple_shop.aw - Lihtne tootekataloog 
 /*
 
-@classinfo syslog_type=ST_SIMPLE_SHOP relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=ST_SIMPLE_SHOP relationmgr=yes no_comment=1 no_status=1 r2=yes
 
 @default table=objects
 @default group=general
 @default field=meta
 @default method=serialize
+
+@property warehouse type=relpicker reltype=RELTYPE_WAREHOUSE
+@caption Tootekataloog
+
+@property orders_folder type=relpicker reltype=RELTYPE_FOLDER
+@caption Tellimuste kataloog
+
+@property user_data type=relpicker reltype=RELTYPE_USER_DATA
+@caption Kasutaja andmete vorm
+
+@property ud_from_logged type=checkbox ch_value=1
+@caption Kui kasutaja on sisse loginud, võta isikuandmed objektidest
+
+@groupinfo import caption="Import"
+@default group=import
 
 @property folder type=relpicker reltype=RELTYPE_FOLDER
 @caption Toodete kaust
@@ -19,8 +34,23 @@
 @property replace_prods type=checkbox ch_value=1 store=no
 @caption Asenda tooted
 
-@groupinfo orders caption="Tellimused"
+@groupinfo orders caption="Tellimused" submit_method=get
 @default group=orders
+
+@property order_time type=date_select store=no
+@caption Pakkumine alates
+
+@property order_time2 type=date_select store=no
+@caption Pakkumine kuni
+
+@property order_orderer type=textbox store=no
+@caption Tellija
+
+@property order_cont type=textarea rows=4 cols=20 store=no
+@caption Tellimuse sisu
+
+@property search type=submit
+@caption Otsi
 
 @property orders_toolbar type=toolbar no_caption=1
 
@@ -30,7 +60,10 @@
 @caption Tootekataloog
 
 @reltype FOLDER value=2 clid=CL_MENU
-@caption Toodete kaust
+@caption Kaust
+
+@reltype USER_DATA value=3 clid=CL_WEBFORM
+@caption Kasutaja andmed
 
 */
 
@@ -38,22 +71,25 @@ class simple_shop extends class_base
 {
 	function simple_shop()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/simple_shop/simple_shop",
 			"clid" => CL_SIMPLE_SHOP
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "order_time":
+			case "order_time2":
+			case "order_orderer":
+			case "order_cont":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+				
 			case "import_file":
 			case "replace_prods":
 				if($arr["new"])
@@ -66,6 +102,14 @@ class simple_shop extends class_base
 					return $retval;
 				}
 				return PROP_IGNORE;
+				break;
+				
+			case "orders_table":
+				$this->mk_orders_table($arr);
+				break;
+				
+			case "orders_toolbar":
+				$this->mk_orders_toolbar($arr);
 				break;
 		}
 		return $retval;
@@ -82,38 +126,301 @@ class simple_shop extends class_base
 				break;
 		}
 		return $retval;
-	}	
+	}
+	
+	function mk_orders_toolbar($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "delete",
+			"tooltip" => t("Kustuta tellimused"),
+			"confirm" => t("Oled kindel, et sooovid valitud tellimused eemaldada?"),
+			"action" => "delete_items",
+			"img" => "delete.gif",
+		));
+	}
+	
+	function mk_orders_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+			"type" => "time",
+			"format" => "H:i d-m-Y",
+			"numeric" => 1,
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "orderer",
+			"caption" => t("Tellija"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t(""),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+		));
+		$of = $arr["obj_inst"]->prop("orders_folder");
+		if(!is_oid($of) or !$this->can("view", $of))
+		{
+			return;
+		}
+		$vars = array(
+			"parent" => $of,
+			"class_id" => CL_SIMPLE_SHOP_ORDER,
+		);
+		$orderer = &$arr["request"]["order_orderer"];
+		$cont = &$arr["request"]["order_cont"];
+		if($orderer != "")
+		{
+			$vars["CL_SIMPLE_SHOP_ORDER.RELTYPE_ORDERER.name"] = "%$orderer%";
+		}
+		if($cont != "")
+		{
+			$vars["CL_SIMPLE_SHOP_ORDER.RELTYPE_ORDERITEM.name"] = "%$cont%";
+		}
+		$v = &$arr["request"]["order_time"];
+		$v2 = &$arr["request"]["order_time2"];
+		if(strpos(implode($v), "-") === false && !empty($v))
+		{
+			$x = mktime(0, 0, 0, $v["month"], $v["day"], $v["year"]);
+		}
+		if(strpos(implode($v2), "-") === false && !empty($v2))
+		{
+			$x2 = mktime(23, 59, 59, $v2["month"], $v2["day"], $v2["year"]);
+		}
+		if($x2 && $x)
+		{
+			$vars["created"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $x, $x2);
+		}
+		elseif($x)
+		{
+			$vars["created"] = new obj_predicate_compare(OBJ_COMP_GREATER_OR_EQ, $x);
+		}
+		elseif($x2)
+		{
+			$vars["created"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $x2);
+		}
+		$obs = new object_list($vars);
+		if($obs->count() <= 0)
+		{
+			return;
+		}
+		$num = 100;
+		$t->define_pageselector(array(
+			"records_per_page" => $num,
+			"type" => "text",
+			"d_row_cnt" => $obs->count(),
+			"no_recount" => 1,
+		));
+		$objs = new object_list(array(
+			"oid" => array_slice($obs->ids(), ($arr["request"]["ft_page"]* $num), $num),
+		));
+		foreach($objs->arr() as $obj)
+		{
+			$id = $obj->id();
+			if($pers = $obj->get_first_obj_by_reltype("RELTYPE_ORDERER"))
+			{
+				$orderer = $pers->name();
+			}
+			$t->define_data(array(
+				"id" => $id,
+				"time" => $obj->created(),
+				"orderer" => $orderer,
+				"change" => html::get_change_url($id, array("group" => "order", "return_url" => get_ru()), t("Muuda")),
+			));
+		}
+	}
 
 	function callback_mod_reforb($arr)
 	{
-		$arr["INTENSE_DUKE"] = 1;
+		//$arr["DUKE"] = 1;
+		//$arr["INTENSE_DUKE"] = 1;
 		$arr["post_ru"] = post_ru();
 	}
 
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		//tootekood, nimetus, mõõtühik, hind
+		enter_function("simple_shop::show");
+		aw_session_set("no_cache", 1);
+		$o = obj($arr["id"]);
+		$props = array();
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		$prod = get_instance(CL_SIMPLE_SHOP_PRODUCT);
+		$props = array();
+		foreach($prod->get_properties_by_name(array("clid" => CL_SIMPLE_SHOP_PRODUCT, "props" => array("name", "prod_code"))) as $key => $val)
+		{
+			$val["value"] = $_REQUEST[$key];
+			$props[$key] = $val;
+		}
+		$props = $props + array(
+			"srch" => array(
+				"name" => "srch",
+				"type" => "hidden",
+				"value" => 1,
+			),
+			"sbt" => array(
+				"name" => "sbt",
+				"caption" => t("Otsi"),
+				"type" => "submit",
+			),
+		);
+		foreach($props as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+		$arr = $_REQUEST;
+		$arr["obj_inst"] = &$o;
+		if($arr["srch"])
+		{
+			$table = $this->_init_search_table($arr);
+			$submit = '<input type="submit" value="Lisa ostukorvi">';
+		}
+		$prop = array();
 		$this->read_template("show.tpl");
 		$this->vars(array(
-			"name" => $ob->prop("name"),
+			"form" => $html,
+			"section" => aw_global_get("section"),
+			"table" => $table,
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section")), "simple_shop"),
+			"submit" => $submit,
 		));
+		exit_function("simple_shop::show");
 		return $this->parse();
+	}
+	
+	function load_cart()
+	{
+		if(aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			$cart = safe_array($user->meta("simple_shop_cart"));
+		}
+		else
+		{
+			$cart = safe_array($_SESSION["simple_shop_cart"]);
+		}
+		return $cart;
+	}
+	
+	function save_cart($cart)
+	{
+		if(aw_global_get("uid") != "")
+		{
+			$user = obj(aw_global_get("uid_oid"));
+			$user->set_meta("simple_shop_cart", $cart);
+			$user->save();
+		}
+		else
+		{
+			$_SESSION["simple_shop_cart"] = $cart;
+		}
+	}
+	
+	/** shows the cart to user
+	
+		@attrib name=submit_add_cart nologin="1" 
+
+		@param quant optional
+		@param section optional 
+		
+	**/
+	function submit_add_cart($arr)
+	{
+		$cart = $this->load_cart();
+		foreach(safe_array($arr["quant"]) as $id => $quant)
+		{
+			$cart[$id] += $quant;
+		}
+		$this->save_cart($cart);
+		return aw_global_get("basedir")."/".$arr["section"]."?show_cart=1";
+	}
+	
+	function _init_search_table($arr)
+	{
+		classload("vcl/table");
+		$t = new aw_table();
+		$t->define_field(array(
+			"name" => "prod_code",
+			"caption" => t("Tootekood"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimetus"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("Ühik"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"sortable" => 1,
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+			"caption" => t("Lisa korvi"),
+		));
+		$fld = $arr["obj_inst"]->prop("folder");
+		if(!is_oid($fld) or !$this->can("view", $fld))
+		{
+			return "";
+		}
+		$params = array(
+			"parent" => $fld,
+			"class_id" => CL_SIMPLE_SHOP_PRODUCT,
+			"sort_by" => "name",
+		);
+		if($arr["name"] != "")
+		{
+			$params["name"] = "%".$arr["name"]."%";
+		}
+		if($arr["prod_code"] != "")
+		{
+			$params["prod_code"] = "%".$arr["prod_code"]."%";
+		}
+		$num = 100;
+		$objs = new object_list($params);
+		$t->define_pageselector(array(
+			"records_per_page" => $num,
+			"type" => "text",
+			"d_row_cnt" => $objs->count(),
+			"no_recount" => 1,
+		));
+		if($objs->count() > 0)
+		{
+			$params["oid"] = array_slice($objs->ids(), ($arr["ft_page"]* $num), $num);
+			$objs = new object_list($params);
+			foreach($objs->arr() as $obj)
+			{
+				$t->define_data($obj->properties() + array("id" => $obj->id()));
+			}
+		}
+		return $t->draw();
 	}
 
 	function _import_file($arr)
@@ -130,6 +437,7 @@ class simple_shop extends class_base
 			return PROP_IGNORE;
 		}
 		$fc = explode("\n", $fc);
+		unset($fc[0]);
 		$fld = $arr["obj_inst"]->prop("folder");
 		if($arr["request"]["replace_prods"] == 1)
 		{
@@ -151,14 +459,7 @@ class simple_shop extends class_base
 		foreach($fc as $row)
 		{
 			$row = explode("\t", $row);
-			
 			// kill some overkills.. ehehehehe... :(
-			
-			if($count == 0)
-			{
-				$count++;
-				continue;
-			}
 			if($count > 17000)
 			{
 				break;
@@ -167,8 +468,8 @@ class simple_shop extends class_base
 			$obj = obj();
 			$obj->set_class_id(CL_SIMPLE_SHOP_PRODUCT);
 			$obj->set_parent($fld);
-			$obj->set_prop("name", $row[0]);
-			$obj->set_prop("prod_code", $row[1]);
+			$obj->set_prop("name", $row[1]);
+			$obj->set_prop("prod_code", $row[0]);
 			$obj->set_prop("unit", $row[2]);
 			$obj->set_prop("price", $row[3]);
 			$obj->save();

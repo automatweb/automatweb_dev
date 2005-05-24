@@ -1,5 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="simple_shop" folder="applications/simple_shop" extends="class_base">
+		<action name="submit_add_cart" nologin="1">
+			<function name="submit_add_cart">
+				<arguments>
+					<optional name="quant" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

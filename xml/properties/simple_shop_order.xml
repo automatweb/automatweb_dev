@@ -1,10 +1,68 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>orderer</name>
+            <table>objects</table>
+            <group>orderer</group>
+            <type>text</type>
+            <field>orderer</field>
+            <caption>Siin ei ole kala</caption>
+      </property>
+      <property>
+            <name>order_tb</name>
+            <table>objects</table>
+            <group>order</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>order_tb</field>
+            <caption>Tellimuste toolbar</caption>
+      </property>
+      <property>
+            <name>order</name>
+            <table>objects</table>
+            <group>order</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>order</field>
+            <caption>Tellimuste tabel</caption>
+      </property>
+      <property>
+            <name>order_sum</name>
+            <table>objects</table>
+            <group>order</group>
+            <type>text</type>
+            <field>order_sum</field>
+            <caption>Kogusumma</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SIMPLE_SHOP_ORDER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
             <no_status>1</no_status>
+            <r2>yes</r2>
       </classinfo>
+      <groupinfo>
+            <orderer>
+                  <caption>Tellija andmed</caption>
+            </orderer>
+            <order>
+                  <caption>Tellimus</caption>
+                  <submit>no</submit>
+            </order>
+      </groupinfo>
+      <reltypes>
+            <ORDERITEM>
+                  <value>1</value>
+                  <clid>CL_SIMPLE_SHOP_PRODUCT</clid>
+                  <caption>Toode</caption>
+            </ORDERITEM>
+            <ORDERER>
+                  <value>2</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Tellija</caption>
+            </ORDERER>
+      </reltypes>
 </properties>
 
