@@ -459,13 +459,16 @@ class user extends class_base
 				break;
 
 			case "ui_language":
-				if ($prop["value"] == "")
+				if ($arr["obj_inst"]->prop("uid") == aw_global_get("uid"))
 				{
-					aw_session_del("user_adm_ui_lc");
-				}
-				else
-				{
-					aw_session_set("user_adm_ui_lc", $prop["value"]);
+					if ($prop["value"] == "")
+					{
+						aw_session_del("user_adm_ui_lc");
+					}
+					else
+					{
+						aw_session_set("user_adm_ui_lc", $prop["value"]);
+					}
 				}
 				break;
 		}
