@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.120 2005/05/19 10:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.121 2005/05/24 10:51:34 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -165,6 +165,9 @@
 
 	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER
 	@caption Projekti headeri kontroller
+
+	@property pv_per_page type=textbox 
+	@caption Operaatori vaates t&ouml;id lehel
 
 	@property max_subcontractor_timediff type=textbox default=1
 	@comment Erinevus allhankijaga kokkulepitud aja ning planeeritud algusaja vahel, mis on lubatud hilinemise/ettejõudmise piires.
@@ -3317,7 +3320,7 @@ if ($_GET['show_thread_data'] == 1)
 			"ws" => $arr["obj_inst"]
 		));
 
-		$per_page = 50;
+		$per_page = $arr["obj_inst"]->prop("pv_per_page");
 
 		$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",".$per_page;
 		switch ($arr["request"]["group"])
@@ -3756,8 +3759,16 @@ if ($_GET['show_thread_data'] == 1)
 		}
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
 //		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).name"] = "%";
+if (aw_global_get("uid") == "kix")
+{
+//$GLOBALS["DUKE"] = 1;
+//$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
+}
 		$jobs = new object_list($filt);
-
+if (aw_global_get("uid") == "kix")
+{
+//	$GLOBALS["DUKE"] = 0;
+}
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
@@ -4347,9 +4358,81 @@ if ($_GET['show_thread_data'] == 1)
 			"name" => "chart_customer",
 			"value" => $arr["request"]["chart_customer"]
 		));
+
+		$spl = $this->mk_my_orb("cust_search_pop", array("id" => $arr["obj_inst"]->id()));
+		$str .= " <a href='javascript:void(0)' onClick='aw_popup_scroll(\"$spl\",\"_spop\",300,400)'>Otsi kliente</a>";
+		$str .= "<script language='javascript'>function setLink(n) { document.changeform.chart_customer.value = n; document.changeform.submit();}</script>";
 		$arr["prop"]["value"] = $str;
 	}
 
+	/**
+
+		@attrib name=cust_search_pop
+
+		@param s_name optional
+		@param s_content optional
+	**/
+	function cust_search_pop($arr)
+	{
+		extract($arr);
+		$this->read_template("csp.tpl");
+		if ($s_name != "" || $s_content != "")
+		{
+
+			load_vcl("table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+			$t->define_field(array(
+				"name" => "name",
+				"caption" => t("Nimetus"),
+				"sortable" => 1
+			));
+			$t->define_field(array(
+                                "name" => "pick",
+                                "caption" => t("Vali see"),
+                        ));
+
+
+			$sres = new object_list(array(
+				"class_id" => CL_CRM_COMPANY,
+				"name" => "%".$s_name."%",
+			));
+			for($o =& $sres->begin(); !$sres->end(); $o =& $sres->next())
+			{
+				$name = strip_tags($o->name());
+				$name = str_replace("'","",$name);
+
+				$row["pick"] = html::href(array(
+					"url" => 'javascript:ss("'.str_replace("'", "&#39;", $o->name()).'")',
+					"caption" => t("Vali see")
+				));
+				$row["name"] = html::href(array(
+					"url" => $this->mk_my_orb("change", array("id" => $o->id())),
+					"caption" => $o->name()
+				));
+				$t->define_data($row);
+
+			}
+
+			$t->set_default_sortby("name");
+			$t->sort_by();
+			$this->vars(array("LINE" => $t->draw()));
+		}
+		else
+		{
+			$s_name = "%";
+			$s_content = "%";
+		}
+		$this->vars(array(
+			"reforb" => $this->mk_reforb("cust_search_pop", array("reforb" => 0)),
+			"s_name"	=> $s_name,
+			"doc_sel" => checked($s_class_id != "item"),
+		));
+
+		return $this->parse();
+	}
+	
 	/**
 
 		@attrib name=save_pj_comment

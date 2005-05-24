@@ -512,6 +512,15 @@
             <caption>Projekti headeri kontroller</caption>
       </property>
       <property>
+            <name>pv_per_page</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>grp_settings_def</group>
+            <type>textbox</type>
+            <caption>Operaatori vaates t&amp;ouml;id lehel</caption>
+      </property>
+      <property>
             <name>max_subcontractor_timediff</name>
             <table>objects</table>
             <field>meta</field>
