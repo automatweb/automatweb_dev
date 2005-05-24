@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/mrp/mrp_schedule.aw:255
 msgid "Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"
 msgstr "Fatal error: planning lock acquire failed!"
@@ -38,7 +37,6 @@ msgstr "Error: planning lock release failed after planning!"
 msgid "Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
 msgstr "Error: planning lock delete failed after planning!"
 
-#: classes/mrp/mrp_schedule.aw:1147
+#: classes/mrp/mrp_schedule.aw:1149
 msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu."
 msgstr "Resource with id %s has no free times in the limit."
-

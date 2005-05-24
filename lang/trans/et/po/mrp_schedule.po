@@ -9,7 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/mrp/mrp_schedule.aw:255
 msgid "Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"
 msgstr ""
@@ -38,7 +37,6 @@ msgstr ""
 msgid "Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1147
+#: classes/mrp/mrp_schedule.aw:1149
 msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu."
 msgstr ""
-
