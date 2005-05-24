@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.328 2005/05/12 08:57:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.329 2005/05/24 11:20:22 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -267,6 +267,8 @@ class document extends aw_template
 		!isset($leadonly) ? $leadonly = -1 : "";
 		!isset($strip_img) ? $strip_img = 0 : "";
 		!isset($notitleimg) ? $notitleimg = 0 : "";
+
+
 
 		$baseurl = $this->cfg["baseurl"];
 		$ext = $this->cfg["ext"];
@@ -1285,7 +1287,27 @@ class document extends aw_template
 			
 		}
 
-
+		$document_link = obj_link($doc["docid"]);
+		if ($doc_o->alias() != "")
+		{
+			if (aw_ini_get("menuedit.recursive_aliases"))
+			{
+				$als = array();
+				$pt = $doc_o->path();
+				foreach($pt as $pt_o)
+				{
+					if ($pt_o->alias() != "")
+					{
+						$als[] = $pt_o->alias();
+					}
+				}
+				$document_link = aw_ini_get("baseurl")."/".join("/", $als);
+			}
+			else
+			{
+				$document_link = aw_ini_get("baseurl")."/".$doc_o->alias();
+			}
+		}
 		$this->vars(array(
 			"sel_lang_img_url" => $sel_lang_img_url,
 			"doc_modified" => $_date,
@@ -1338,6 +1360,7 @@ class document extends aw_template
 			"user6" => $doc["user6"],
 			"obj_modified" => (is_object($doc_o) ? $doc_o->modified() : ""),
 			"sel_menu_id" => $doc_o->parent(),
+			"document_link" => $document_link
 		));
 
 		for($i = 1;  $i < 7; $i++)
@@ -1464,8 +1487,9 @@ class document extends aw_template
 
 		if (aw_global_get("print") && $this->cfg["remove_links_from_print"])
 		{
-			$retval = preg_replace("/<a(.*)>/U", "", $retval);
+			$retval = preg_replace("/<a(.*)>/iU", "", $retval);
 			$retval = str_replace("</a>", "", $retval);
+			$retval = str_replace("</A>", "", $retval);
 		}
 
 		if (aw_global_get("print") || $GLOBALS["action"] == "print")
@@ -3025,7 +3049,7 @@ class document extends aw_template
 		}
 		else
 		{
-			$replacement = $this->gen_preview(array("docid" => $d["target"]));
+			$replacement = $this->gen_preview(array("docid" => $d["target"] , "leadonly" => 1 ));
 		};
 		return $replacement;
 
