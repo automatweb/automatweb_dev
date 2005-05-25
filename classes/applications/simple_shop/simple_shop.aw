@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.3 2005/05/24 08:13:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.4 2005/05/25 11:33:16 ahti Exp $
 // simple_shop.aw - Lihtne tootekataloog 
 /*
 
@@ -18,6 +18,9 @@
 
 @property user_data type=relpicker reltype=RELTYPE_USER_DATA
 @caption Kasutaja andmete vorm
+
+@property controller type=relpicker reltype=RELTYPE_CONTROLLER
+@caption Tootelingi kontroller
 
 @property ud_from_logged type=checkbox ch_value=1
 @caption Kui kasutaja on sisse loginud, võta isikuandmed objektidest
@@ -64,6 +67,9 @@
 
 @reltype USER_DATA value=3 clid=CL_WEBFORM
 @caption Kasutaja andmed
+
+@reltype CONTROLLER value=4 clid=CL_FORM_CONTROLLER
+@caption Kontroller
 
 */
 
@@ -339,7 +345,75 @@ class simple_shop extends class_base
 	
 	/** shows the cart to user
 	
-		@attrib name=submit_add_cart nologin="1" 
+		@attrib name=my_offers is_public=1 params=name caption="Minu pakkumised" 
+		
+		@param section optional
+	**/
+	function my_offers($arr)
+	{
+		$cart = $this->load_cart();
+		classload("vcl/table");
+		$t = new aw_table();
+		$t->define_field(array(
+			"name" => "prod_code",
+			"caption" => t("Tootekood"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimetus"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "unit",
+			"caption" => t("Ühik"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "price",
+			"caption" => t("Hind"),
+			"sortable" => 1,
+		));
+		$t->define_field(array(
+			"name" => "quant",
+			"caption" => t("Kogus"),
+		));
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "id",
+			"caption" => t("Eemalda korvist"),
+		));
+		foreach($cart as $id => $item)
+		{
+			if(!is_oid($id) or !$this->can("view", $id))
+			{
+				unset($cart[$id]);
+				continue;
+			}
+			$obj = obj($id);
+			$t->define_data($obj->properties() + array(
+				"quant" => html::textbox(array(
+					"name" => "quant[$id]",
+					"size" => 4,
+					"value" => $item,
+				)),
+				"id" => $id,
+			));
+		}
+		$this->save_cart($cart);
+		$this->read_template("show.tpl");
+		$this->vars(array(
+			"section" => aw_global_get("section"),
+			"table" => $t->draw(),
+			"submit" => '<input type="submit" value="Lisa ostukorvi">',
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "finish_order" => 1), "simple_shop"),
+		));
+		return $this->parse();
+	}
+	
+	/** shows the cart to user
+	
+		@attrib name=submit_add_cart
 
 		@param quant optional
 		@param section optional 
@@ -350,6 +424,10 @@ class simple_shop extends class_base
 		$cart = $this->load_cart();
 		foreach(safe_array($arr["quant"]) as $id => $quant)
 		{
+			if($quant <= 0)
+			{
+				unset($cart[$id]);
+			}
 			$cart[$id] += $quant;
 		}
 		$this->save_cart($cart);
@@ -380,11 +458,14 @@ class simple_shop extends class_base
 			"caption" => t("Hind"),
 			"sortable" => 1,
 		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "id",
-			"caption" => t("Lisa korvi"),
-		));
+		if(aw_global_get("uid") != "")
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "id",
+				"caption" => t("Lisa korvi"),
+			));
+		}
 		$fld = $arr["obj_inst"]->prop("folder");
 		if(!is_oid($fld) or !$this->can("view", $fld))
 		{
@@ -411,13 +492,59 @@ class simple_shop extends class_base
 			"d_row_cnt" => $objs->count(),
 			"no_recount" => 1,
 		));
+		$flds = array();
+		$wh = $arr["obj_inst"]->prop("warehouse");
+		if(is_oid($wh) && $this->can("view", $wh))
+		{
+			$whx = obj($wh);
+			$conf = $whx->prop("conf");
+			if(is_oid($conf) && $this->can("view", $conf))
+			{
+				$conf = obj($conf);
+				$wh_i = get_instance(CL_SHOP_WAREHOUSE);
+				list($asd, $fld) = $wh_i->get_packet_folder_list(array("id" => $wh));
+				$flds = $fld->ids();
+			}
+			$sc = $whx->prop("order_center");
+			if(is_oid($sc) && $this->can("view", $sc))
+			{
+				$soc = $sc;
+			}
+		}
 		if($objs->count() > 0)
 		{
+			$ctr = $arr["obj_inst"]->prop("controller");
 			$params["oid"] = array_slice($objs->ids(), ($arr["ft_page"]* $num), $num);
 			$objs = new object_list($params);
+			$fc = get_instance(CL_FORM_CONTROLLER);
+			$isctr = (is_oid($ctr) && $this->can("view", $ctr));
 			foreach($objs->arr() as $obj)
 			{
-				$t->define_data($obj->properties() + array("id" => $obj->id()));
+				if(!empty($flds) && $isctr)
+				{
+					$obx = new object_list(array(
+						"parent" => $flds,
+						"class_id" => CL_SHOP_PRODUCT_PACKAGING,
+						"user2" => $obj->prop("prod_code"),
+					));
+					$obz = $obx->begin();
+				}
+				$vars = $obj->properties();
+				if(is_object($obz))
+				{
+					$vars["name"] = html::popup(array(
+						"caption" => $vars["name"],
+						"url" => $fc->eval_controller($ctr, array(
+							"pid" => $obz->id(),
+							"soc" => $soc,
+						)),
+					));
+				}
+				elseif(aw_global_get("uid") != "")
+				{
+					$vars["id"] = $obj->id();
+				}
+				$t->define_data($vars);
 			}
 		}
 		return $t->draw();
@@ -458,6 +585,7 @@ class simple_shop extends class_base
 		enter_function("simple_shop::prod_import");
 		foreach($fc as $row)
 		{
+			echo sprintf(t("impordin objekti %d... "), $count);
 			$row = explode("\t", $row);
 			// kill some overkills.. ehehehehe... :(
 			if($count > 17000)
@@ -473,6 +601,7 @@ class simple_shop extends class_base
 			$obj->set_prop("unit", $row[2]);
 			$obj->set_prop("price", $row[3]);
 			$obj->save();
+			echo t("imporditud")."<br />";
 		}
 		$cache = get_instance("cache");
 		$cache->full_flush();

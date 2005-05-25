@@ -31,6 +31,16 @@
             <caption>Kasutaja andmete vorm</caption>
       </property>
       <property>
+            <name>controller</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTROLLER</reltype>
+            <caption>Tootelingi kontroller</caption>
+      </property>
+      <property>
             <name>ud_from_logged</name>
             <table>objects</table>
             <group>general</group>
@@ -175,6 +185,11 @@
                   <clid>CL_WEBFORM</clid>
                   <caption>Kasutaja andmed</caption>
             </USER_DATA>
+            <CONTROLLER>
+                  <value>4</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>Kontroller</caption>
+            </CONTROLLER>
       </reltypes>
 </properties>
 

@@ -11,5 +11,6 @@
 	<class id="menu" name="Kaust"/>
 	<class id="commune" name="Kommuun"/>
 	<class id="shop_order_center" name="Lao tellimused"/>
-	<class id="community" name="Kogukond" />
+	<class id="community" name="Kogukond"/>
+	<class id="simple_shop" name="Lihtne pood"/>
 </interface>
