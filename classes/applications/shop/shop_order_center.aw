@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.24 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.25 2005/05/25 11:31:56 ahti Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -730,7 +730,6 @@ class shop_order_center extends class_base
 		if($ord = $p->get_first_obj_by_reltype("RELTYPE_ORDER"))
 		{
 			$center = $ord->get_first_obj_by_reltype("RELTYPE_ORDER_CENTER");
-			;
 			$unconfed = $center->prop("show_unconfirmed");
 		}
 		foreach($p->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
