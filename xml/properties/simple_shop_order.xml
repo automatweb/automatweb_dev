@@ -4,9 +4,11 @@
             <name>orderer</name>
             <table>objects</table>
             <group>orderer</group>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_orderer</callback>
+            <no_caption>1</no_caption>
             <field>orderer</field>
-            <caption>Siin ei ole kala</caption>
+            <caption>Tellija andmed</caption>
       </property>
       <property>
             <name>order_tb</name>
@@ -46,6 +48,7 @@
       <groupinfo>
             <orderer>
                   <caption>Tellija andmed</caption>
+                  <submit>no</submit>
             </orderer>
             <order>
                   <caption>Tellimus</caption>
@@ -63,6 +66,10 @@
                   <clid>CL_CRM_PERSON</clid>
                   <caption>Tellija</caption>
             </ORDERER>
+            <ORDERER_INFO>
+                  <value>3</value>
+                  <clid>CL_REGISTER_DATA</clid>
+            </ORDERER_INFO>
       </reltypes>
 </properties>
 

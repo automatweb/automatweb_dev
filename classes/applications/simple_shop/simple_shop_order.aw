@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop_order.aw,v 1.2 2005/05/24 08:13:10 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop_order.aw,v 1.3 2005/05/25 15:36:57 ahti Exp $
 // simple_shop_order.aw - Lihtne tellimus 
 /*
 
@@ -8,11 +8,11 @@
 @default table=objects
 @default group=general
 
-@groupinfo orderer caption="Tellija andmed"
+@groupinfo orderer caption="Tellija andmed" submit=no
 @default group=orderer
 
-@property orderer type=text
-@caption Siin ei ole kala
+@property orderer type=callback callback=callback_orderer no_caption=1
+@caption Tellija andmed
 
 @groupinfo order caption="Tellimus" submit=no
 @default group=order
@@ -31,6 +31,8 @@
 
 @reltype ORDERER value=2 clid=CL_CRM_PERSON
 @caption Tellija
+
+@reltype ORDERER_INFO value=3 clid=CL_REGISTER_DATA
 
 */
 
@@ -77,6 +79,23 @@ class simple_shop_order extends class_base
 				break;
 		}
 		return $retval;
+	}
+	
+	function callback_mod_tab($arr)
+	{
+		if($arr["id"] == "orderer" && !$this->form)
+		{
+			return false;
+		}
+	}
+	
+	function callback_order($arr)
+	{
+		
+		if(!($this->form = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER")) or !($this->form = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ORDERER_INFO")))
+		{
+			return false;
+		}
 	}
 	
 	function mk_order_tb($arr)

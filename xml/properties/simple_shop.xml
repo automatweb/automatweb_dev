@@ -182,7 +182,7 @@
             </FOLDER>
             <USER_DATA>
                   <value>3</value>
-                  <clid>CL_WEBFORM</clid>
+                  <clid>CL_CFGFORM</clid>
                   <caption>Kasutaja andmed</caption>
             </USER_DATA>
             <CONTROLLER>

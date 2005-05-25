@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.4 2005/05/25 11:33:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/simple_shop/Attic/simple_shop.aw,v 1.5 2005/05/25 15:36:57 ahti Exp $
 // simple_shop.aw - Lihtne tootekataloog 
 /*
 
@@ -65,7 +65,7 @@
 @reltype FOLDER value=2 clid=CL_MENU
 @caption Kaust
 
-@reltype USER_DATA value=3 clid=CL_WEBFORM
+@reltype USER_DATA value=3 clid=CL_CFGFORM
 @caption Kasutaja andmed
 
 @reltype CONTROLLER value=4 clid=CL_FORM_CONTROLLER
@@ -247,13 +247,6 @@ class simple_shop extends class_base
 		}
 	}
 
-	function callback_mod_reforb($arr)
-	{
-		//$arr["DUKE"] = 1;
-		//$arr["INTENSE_DUKE"] = 1;
-		$arr["post_ru"] = post_ru();
-	}
-
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -300,7 +293,7 @@ class simple_shop extends class_base
 		if($arr["srch"])
 		{
 			$table = $this->_init_search_table($arr);
-			$submit = '<input type="submit" value="Lisa ostukorvi">';
+			$submit = $this->parse("SUBMIT");
 		}
 		$prop = array();
 		$this->read_template("show.tpl");
@@ -348,6 +341,7 @@ class simple_shop extends class_base
 		@attrib name=my_offers is_public=1 params=name caption="Minu pakkumised" 
 		
 		@param section optional
+		@param id optional
 	**/
 	function my_offers($arr)
 	{
@@ -378,11 +372,6 @@ class simple_shop extends class_base
 			"name" => "quant",
 			"caption" => t("Kogus"),
 		));
-		$t->define_chooser(array(
-			"name" => "sel",
-			"field" => "id",
-			"caption" => t("Eemalda korvist"),
-		));
 		foreach($cart as $id => $item)
 		{
 			if(!is_oid($id) or !$this->can("view", $id))
@@ -401,22 +390,40 @@ class simple_shop extends class_base
 			));
 		}
 		$this->save_cart($cart);
+		if($arr["finish_order"] == 1)
+		{
+		}
+		else
+		{
+			$t->define_chooser(array(
+				"name" => "sel",
+				"field" => "id",
+				"caption" => t("Eemalda korvist"),
+			));
+		}
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"section" => aw_global_get("section"),
 			"table" => $t->draw(),
-			"submit" => '<input type="submit" value="Lisa ostukorvi">',
-			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section"), "finish_order" => 1), "simple_shop"),
+			"submit" => $this->parse("FINISH"),
+			"reforb" => $this->mk_reforb("submit_add_cart", array("section" => aw_global_get("section")), "simple_shop"),
 		));
 		return $this->parse();
+	}
+	
+	function _show_order_table()
+	{
 	}
 	
 	/** shows the cart to user
 	
 		@attrib name=submit_add_cart
 
+		@param id optional
+		@param sel optional
 		@param quant optional
 		@param section optional 
+		@param finish_order optional
 		
 	**/
 	function submit_add_cart($arr)
@@ -424,14 +431,14 @@ class simple_shop extends class_base
 		$cart = $this->load_cart();
 		foreach(safe_array($arr["quant"]) as $id => $quant)
 		{
-			if($quant <= 0)
-			{
-				unset($cart[$id]);
-			}
-			$cart[$id] += $quant;
+			$cart[$id] = $quant;
+		}
+		foreach(safe_array($arr["sel"]) as $id => $sel)
+		{
+			unset($cart[$id]);
 		}
 		$this->save_cart($cart);
-		return aw_global_get("basedir")."/".$arr["section"]."?show_cart=1";
+		return $this->mk_my_orb("my_offers", array("id" => $arr["id"], "section" => $arr["section"], "finish_order" => $arr["finish_order"]), "simple_shop");
 	}
 	
 	function _init_search_table($arr)

@@ -1,19 +1,23 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="simple_shop" folder="applications/simple_shop" extends="class_base">
-		<action name="my_offers" nologin="1" is_public="1" caption="Minu pakkumised">
+		<action name="my_offers" is_public="1" caption="Minu pakkumised">
 			<function name="my_offers">
 				<arguments>
 					<optional name="section" />
+					<optional name="id" />
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_add_cart" nologin="1">
+		<action name="submit_add_cart">
 			<function name="submit_add_cart">
 				<arguments>
+					<optional name="id" />
+					<optional name="sel" />
 					<optional name="quant" />
 					<optional name="section" />
+					<optional name="finish_order" />
 				</arguments>
 			</function>
 		</action>
