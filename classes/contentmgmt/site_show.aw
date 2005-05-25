@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.134 2005/05/16 07:06:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.135 2005/05/25 08:50:50 kristo Exp $
 
 /*
 
@@ -1110,7 +1110,6 @@ class site_show extends class_base
 		$show_obj_tree = false;
 
 		$sfo = NULL;
-
 		for ($i=0; $i < $cnt; $i++)
 		{
 			if (!aw_ini_get("menuedit.long_menu_aliases"))
@@ -1212,7 +1211,7 @@ class site_show extends class_base
 			}
 			$prev = $ref;
 		}
-
+		
 		// form table yah links get made here.
 		// basically the session contains a vriable fg_table_sessions that has all the possible yah links for
 		// all shown tables (and yeah, I know it is gonna be friggin huge.
@@ -1785,7 +1784,7 @@ class site_show extends class_base
 		// site_title_rev - shows two levels in reverse order
 		$pcnt = count($this->title_yah_arr);
 		$site_title_rev = ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-1])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "");
-		$site_title_yah = " / ". ($pcnt > 0 ? strip_tags($this->title_yah_arr[$pcnt-2])." / " : "").($pcnt > 1 ? strip_tags($this->title_yah_arr[$pcnt-1]) : "");
+		$site_title_yah = " / ".join(" / ", $this->title_yah_arr);
 
 		$adt = "";
 		if (is_oid($this->active_doc) && $this->can("view", $this->active_doc))
