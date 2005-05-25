@@ -135,7 +135,7 @@ class doc_display extends aw_template
 		{
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
-				$text = $doc->prop("lead").$this->cfg["lead_splitter"].$doc->prop("content");
+				$text = $doc->prop("lead").aw_ini_get("document.lead_splitter").$doc->prop("content");
 			}
 			else
 			{

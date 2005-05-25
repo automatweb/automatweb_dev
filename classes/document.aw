@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.330 2005/05/25 08:18:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.331 2005/05/25 11:47:59 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -327,10 +327,10 @@ class document extends aw_template
 			{
 				$tpl = $tplmgr->get_long_template($doc["parent"]);
 			}
-			if (!$tpl)
+			/*if (!$tpl)
 			{
 				$tpl = "plain.tpl";
-			}
+			}*/
 		}
 
 		$this->dequote(&$doc["lead"]);
@@ -3052,7 +3052,7 @@ class document extends aw_template
 		}
 		else
 		{
-			$replacement = $this->gen_preview(array("docid" => $d["target"] , "leadonly" => 1 ));
+			$replacement = $this->gen_preview(array("docid" => $d["target"], "leadonly" => 1 ));
 		};
 		return $replacement;
 
