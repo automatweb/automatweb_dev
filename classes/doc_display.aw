@@ -118,6 +118,11 @@ class doc_display extends aw_template
 		{
 			$tpl = $tplmgr->get_long_template($doc["parent"]);
 		}
+		if ($tpl == "")
+		{
+			return $arr["leadonly"] ? "lead.tpl" : "plain.tpl";
+		}
+		return $tpl;
 	}
 
 	function _get_text($arr, $doc)

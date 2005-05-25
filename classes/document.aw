@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.329 2005/05/24 11:20:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.330 2005/05/25 08:18:23 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -315,7 +315,6 @@ class document extends aw_template
 				return $fl["content"];
 			};
 		}
-		
 		if (($params["tpl_auto"] || true) && !$params["tpl"])
 		{
 			// do template autodetect from parent
@@ -327,6 +326,10 @@ class document extends aw_template
 			else
 			{
 				$tpl = $tplmgr->get_long_template($doc["parent"]);
+			}
+			if (!$tpl)
+			{
+				$tpl = "plain.tpl";
 			}
 		}
 
