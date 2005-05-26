@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.35 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.36 2005/05/26 10:32:13 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -377,7 +377,7 @@ class shop_order_cart extends class_base
 		{
 			$cart["user_data"] = $GLOBALS["user_data"];
 		}
-
+		
 		if (isset($arr["payment_method"]))
 		{
 			$cart["payment_method"] = $arr["payment_method"];
@@ -469,10 +469,18 @@ class shop_order_cart extends class_base
 		// neighter do i... -- ahz
 		$awa = new aw_array($arr["add_to_cart"]);
 		$order_data = safe_array($order_data);
+
 		foreach($awa->get() as $iid => $quantx)
 		{
 			$cart["items"][$iid] = safe_array($cart["items"][$iid]);
-			$quantx = new aw_array($quantx);
+			if (is_numeric($quantx))
+			{
+				$quantx = new aw_array(array($quantx));
+			}
+			else
+			{
+				$quantx = new aw_array($quantx);
+			}
 			foreach($quantx->get() as $x => $quant)
 			{
 				if ($arr["update"] == 1)
@@ -529,6 +537,7 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
+		
 		if($arr["from"] != "confirm")
 		{
 			if (is_array($order_data["all_items"]))
@@ -664,7 +673,7 @@ class shop_order_cart extends class_base
 				$ctr->do_check($cart_o->prop("finish_handler"), NULL, $cart_o, $oc);
 			}
 			aw_session_del("order.accept_cond");
-			$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
+		 	$ordid = $this->do_create_order_from_cart($arr["oc"], NULL, array(
 				"payment" => $cart["payment"],
 				"payment_type" => $cart["payment_method"]
 			));

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.31 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.32 2005/05/26 10:32:13 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -589,12 +589,12 @@ class shop_order extends class_base
 			$quantx = new aw_array($quantx);
 			foreach($quantx->get() as $x => $quant)
 			{
-				if ($quant < 1)
+				if (count($quant) < 1)
 				{
 					continue;
 				}
-			$mp[$iid] = $quant["items"];
-			$sum += ($quant["items"] * $price);
+				$mp[$iid] = $quant["items"];
+				$sum += ($quant["items"] * $price);
 			}
 		}
 		$oi->set_meta('ord_item_data', $this->order_items);
@@ -1050,7 +1050,8 @@ class shop_order extends class_base
 					"prod_tot_price" => number_format($cur_tot, 2)
 				));
 
-				foreach(safe_array($ord_item_data[$prod->id()]) as $__nm => $__vl)
+				$_oid = $ord_item_data->get();
+				foreach(safe_array($_oid[$prod->id()][0]) as $__nm => $__vl)
 				{
 					$this->vars(array(
 						"order_data_".$__nm => $__vl
@@ -1065,9 +1066,9 @@ class shop_order extends class_base
 					"quant" => $tp[$prod->id()],
 					"price" => number_format($_pr,2),
 					"obj_tot_price" => number_format(((int)($tp[$prod->id()]) * $_pr), 2),
-					'order_data_color' => $ord_item_data[$prod->id()]['color'],
-					'order_data_size' => $ord_item_data[$prod->id()]['size'],
-					'order_data_price' => $ord_item_data[$prod->id()]['price'],
+					'order_data_color' => $_oid[$prod->id()][0]['color'],
+					'order_data_size' => $_oid[$prod->id()][0]['size'],
+					'order_data_price' => $_oid[$prod->id()][0]['price'],
 				));
 
 				//$pr_price= ($_pr * $tp[$prod->id()]);
