@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.82 2005/05/23 20:58:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.83 2005/05/26 14:51:06 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2487,6 +2487,7 @@ class planner extends class_base
 		$GLOBALS["DUKE"] = 1;
 		*/
 		$event_ol = new object_list($params);
+
 		if($event_ol->count() == 0)
 		{
 			return $event_ol;
@@ -2502,6 +2503,7 @@ class planner extends class_base
 		
 		$retval = new object_list(array(
 			"oid" => $ids,
+			"site_id" => array(),
 		));
 
 		return $retval;
