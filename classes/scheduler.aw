@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.33 2005/05/19 07:51:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.34 2005/05/26 07:34:45 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -78,7 +78,7 @@ class scheduler extends aw_template
 			{
 				$this->evnt_add(
 					$ltime+1, 
-					$this->mk_my_orb("update_repeater", array("id" => $rep_id))
+					$this->mk_my_orb("update_repeaters", array("id" => $rep_id))
 				);
 			}
 		}
@@ -377,6 +377,12 @@ class scheduler extends aw_template
 		$this->log_event($evnt, $req);
 
 		$this->remove($evnt);
+
+		// update repeater
+		if ($evnt["rep_id"])
+		{
+			$this->update_repeaters(array("id" => $evnt["rep_id"]));
+		}
 		fwrite($fl, ob_get_contents());
 		fclose($fl);
 		ob_end_flush();

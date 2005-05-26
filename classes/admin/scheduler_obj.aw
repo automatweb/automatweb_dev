@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.4 2005/03/18 11:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/scheduler_obj.aw,v 1.5 2005/05/26 07:34:45 kristo Exp $
 // scheduler.aw - Scheduler
 
 // okey, objektid mida käima tõmmatakse, defineeritakse seostega. Metainfos salvestatud
@@ -76,32 +76,27 @@ class scheduler_obj extends class_base
 			$rep_id = $first->prop("to");
 		};
 
-		// again, only the first for now
 		$targets = $arr["obj_inst"]->connections_from(array(
 			"type" => "RELTYPE_TARGET_OBJ",
 		));
-
-		if (sizeof($targets) > 0)
+		foreach($targets as $target)
 		{
-			$target = reset($targets);
 			$target_id = $target->prop("to");
 			$target_obj = $target->to();
-		};
 
-		// try and schedule the event
-		if ($rep_id && $target_id)
-		{
-			$sch = get_instance("scheduler");
-			$event_url = $this->mk_my_orb("invoke",array("id" => $target_id),$target_obj->class_id());
-			$sch->add(array(
-				"event" => $event_url,
-				"rep_id" => $rep_id,
-				"uid" => $arr["obj_inst"]->prop("login_uid"),
-				"password" => $arr["obj_inst"]->prop("login_password"),
-			));
-		};
-
-
+			// try and schedule the event
+			if ($rep_id && $target_id)
+			{
+				$sch = get_instance("scheduler");
+				$event_url = $this->mk_my_orb("invoke",array("id" => $target_id),$target_obj->class_id());
+				$sch->add(array(
+					"event" => $event_url,
+					"rep_id" => $rep_id,
+					"uid" => $arr["obj_inst"]->prop("login_uid"),
+					"password" => $arr["obj_inst"]->prop("login_password"),
+				));
+			};
+		}
 	}
 
 	
