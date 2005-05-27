@@ -311,6 +311,9 @@ class class_visualizer extends class_base
 				$eltype = $clinf[$clid]["def"];
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$eltype));
 				$sysname = strtolower(preg_replace("/\s/","_",$el->name()));
+				
+				$p_o = new object($el->parent());
+
 				$propdata = array(
 					//"name" => $el->name(),
 					//"name" => $el->id(),
@@ -322,6 +325,16 @@ class class_visualizer extends class_base
 					"field" => "meta",
 					"method" => "serialize",
 				);
+
+				if ($p_o->class_id() == CL_PROPERTY_GRID)
+				{
+					$prop_parent = "hbox" . $p_o->id();
+				}
+				else
+				{
+					$prop_parent = false;
+				};
+
 				if ($clid == CL_PROPERTY_CHOOSER)
 				{
 					$propdata["multiple"] = $el->prop("multiple");
@@ -337,10 +350,15 @@ class class_visualizer extends class_base
 					}
 				}
 
+				if ($prop_parent)
+				{
+					$propdata["parent"] = $prop_parent;
+				};
+
 				$rv[$sysname] = $propdata;
 			};
 		};
-		
+
 		if ($o->prop("relationmgr") == 1)
 		{
 			$rv["relationmgr"] = array(
@@ -353,6 +371,45 @@ class class_visualizer extends class_base
 		};
 
 		return $rv;
+
+	}
+
+	function get_layouts($arr)
+	{
+		$element_tree = new object_tree(array(
+			"parent" => $arr["class_id"],
+			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+		));
+
+		$els = $element_tree->to_list();
+
+		$i = 0;
+		$rv = array();
+		foreach($els->arr() as $el)
+		{
+			if ($el->class_id() == CL_PROPERTY_GRID)
+			{
+				$p_o = new object($el->parent());
+				$i++;
+				$i = $el->id();
+				$rv["hbox" . $i] = array(
+					"type" => "hbox",
+					//"group" => $this->_valid_id($p_o->name()),
+					"group" => $p_o->id(),
+				);
+
+			};
+		};
+		return $rv;
+		
+
+
+	}
+	
+	function _valid_id($src)
+	{
+		return strtolower(preg_replace("/\s/","_",$src));
+
 
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.6 2005/03/18 12:13:19 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_toolbar.aw,v 1.7 2005/05/27 12:26:54 duke Exp $
 // property_toolbar.aw - Toolbar 
 /*
 
@@ -58,6 +58,7 @@ class property_toolbar extends class_base
 
 	function get_visualizer_prop($el, &$propdata)
 	{
+		/*
 		$t = get_instance("vcl/toolbar");
 		
 		$buttons = new object_list($el->connections_from(array(
@@ -73,6 +74,7 @@ class property_toolbar extends class_base
 		$propdata["type"] = "text";
 		$propdata["value"] = $t->get_toolbar();
 		$propdata["no_caption"] = 1;
+		*/
 	}
 
 	function generate_get_property($arr)

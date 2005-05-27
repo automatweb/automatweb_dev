@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.6 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.7 2005/05/27 12:26:54 duke Exp $
 // property_tree.aw - Puu komponent 
 /*
 
@@ -177,7 +177,7 @@ class property_tree extends class_base
 			$i->get_vis_tree_item($tv, $o, $var, $el);
 		}
 
-		$pd["type"] = "text";
+		$pd["type"] = "tree";
 		$pd["value"] = $tv->finalize_tree();
 		
 		if ($el->prop("no_caption") == 1)
@@ -236,6 +236,7 @@ class property_tree extends class_base
 
 		$rv = "\tfunction $name(\$arr)\n";
 		$rv .= "\t{\n";
+		/*
 		$rv .= "\t\tclassload(\"core/icons\");\n";
 		$rv .= "\t\t\$var = \"$var\";\n";
 		$rv .= "\t\t" . '$t = &$arr["prop"]["vcl_inst"];' . "\n";
@@ -247,6 +248,7 @@ class property_tree extends class_base
 		$rv .= "\t\t\t\"root_url\" => aw_url_change_var(\$var, NULL)\n";
 		$rv .= "\t\t));\n";
 		$rv .= "\t\t\n";
+		*/
 		
 		$i = get_instance(CL_PROPERTY_TREE_BRANCH);
 		foreach($els->arr() as $el)

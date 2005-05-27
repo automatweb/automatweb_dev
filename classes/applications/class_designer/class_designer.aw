@@ -1,6 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.16 2005/05/19 14:36:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.17 2005/05/27 12:26:54 duke Exp $
 // class_designer.aw - Vormidisainer 
+
+// üldine, soovituslik, kohustuslik
+// nõude number, ext_id
 /*
 
 @classinfo syslog_type=ST_CLASS_DESIGNER relationmgr=yes
@@ -14,8 +17,11 @@
 @property infomsg type=text store=no
 @caption Info
 
-@property preview type=text store=no
-@caption 
+@property visualize type=text store=no
+@caption Eelvaade
+
+property preview type=text store=no
+caption 
 
 @default group=settings
 @property reg_class_id type=text table=aw_class field=class_id
@@ -52,12 +58,46 @@
 @property classdef type=text store=no no_caption=1
 @caption Klassi definitsioon
 
+@default group=planner
+@layout phbox1 type=hbox
+
+@property planner_toolbar type=toolbar no_caption=1 store=no parent=phbox1
+@caption Planeerija toolbar
+
+@property el_defs_toolbar type=toolbar store=no group=el_defs no_caption=1
+@caption Elementide toolbar
+
+@property int_refs_toolbar type=toolbar store=no group=int_refs no_caption=1
+@caption Sisemiste seoste toolbar
+
+@property ext_refs_toolbar type=toolbar store=no group=ext_refs no_caption=1
+@caption Väliste seoste toolbar
+
+@layout pvbox1 type=vbox  group=planner,el_defs,int_refs,ext_refs
+@layout phbox2 type=hbox parent=pvbox1 width=30%:70% group=planner,el_defs,int_refs,ext_refs
+
+@property planner_tree type=treeview parent=phbox2 no_caption=1 group=planner,el_defs,int_refs,ext_refs
+@caption Planeerija puu
+
+@property planner_list type=table no_caption=1 parent=phbox2 no_caption=1
+@caption Planeerija elemendid
+
+
+@property el_defs_table type=table group=el_defs no_caption=1 parent=phbox2
+@caption Elementide tabel
+
+@property int_refs_table type=table group=int_refs no_caption=1 parent=phbox2
+@caption Sisemiste seoste tabel
+
+@property ext_refs_table type=table group=ext_refs no_caption=1 parent=phbox2
+@caption Väliste seoste tabel
+
 @default group=designer
 
 @layout hbox1 type=hbox group=designer
 
 @property designer_toolbar type=toolbar no_caption=1 store=no parent=hbox1
-@caption Designer toolbar
+@caption Disaineri toolbar
 
 @layout vbox1 type=vbox group=designer
 @layout hbox2 type=hbox group=designer parent=vbox1 width=30%:70%
@@ -81,13 +121,21 @@
 	@caption Seosed
 
 @groupinfo settings caption="Seaded"
+@groupinfo cl_planner caption="Planeerija" 
+@groupinfo planner caption="Planeerija" parent=cl_planner submit=no
+@groupinfo el_defs caption="Elemendid" parent=cl_planner  submit=no
+@groupinfo int_refs caption="Sisemised seosed" parent=cl_planner submit=no
+@groupinfo ext_refs caption="Välised seosed" parent=cl_planner submit=no
 @groupinfo designer caption="Disainer" submit=no
-@groupinfo relations caption="Seosed" submit=no
+@groupinfo relations caption="Seosed" submit=no parent=cl_planner
 @groupinfo classdef caption="Klassi definitsioon" submit=no
 
 
 @reltype RELATION value=1 clid=CL_CLASS_DESIGNER_RELATION
 @caption seos
+
+@reltype CL_REVIEW value=2 clid=CL_CLASS_DESIGNER
+@caption Eelvaade
 
 @tableinfo aw_class index=aw_id master_table=objects master_index=brother_of
 
@@ -125,7 +173,7 @@ class class_designer extends class_base
 
 	function callback_pre_edit($arr)
 	{
-		if ($arr["request"]["group"] == "designer")
+		if (in_array($arr["request"]["group"],array("designer","planner","cl_planner","int_refs","ext_refs","el_defs")))
 		{
 			$can_add = array(
 				"group" => false,
@@ -171,6 +219,14 @@ class class_designer extends class_base
 				$this->create_designer_toolbar(&$arr);
 				break;
 
+			case "planner_toolbar":
+				$this->create_planner_toolbar(&$arr);
+				break;
+			
+			case "planner_tree":
+				$this->create_planner_tree(&$arr);
+				break;
+
 			case "layout_tree":
 				$this->create_layout_tree(&$arr);
 				break;
@@ -193,10 +249,32 @@ class class_designer extends class_base
 				break;
 
 			case "visualize":
-				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("view",array("class" => $arr["obj_inst"]->id()),"class_visualizer"),
-					"caption" => t("Visualiseeri"),
+				// first check, whether we have an object
+				$conns = $arr["obj_inst"]->connections_from(array(
+					"type" => "RELTYPE_CL_PREVIEW",
 				));
+				$reg_class_id = $arr["obj_inst"]->prop("reg_class_id");
+				$ol = new object_list(array(
+					"parent" => $arr["obj_inst"]->id(),
+					"class_id" => $reg_class_id,
+				));
+				if (sizeof($ol->ids()) > 0)
+				{
+					$ob = $ol->begin();
+					$prop["value"] = html::href(array(
+						"url" => $this->mk_my_orb("change",array("class" => $arr["obj_inst"]->id(),"id" => $ob->id())),
+						"caption" => t("Eelvaade"),
+					));
+				}
+				else
+				{
+					$prop["value"] = html::href(array(
+						"url" => $this->mk_my_orb("new",array("class" => $arr["obj_inst"]->id(),"parent" => $arr["obj_inst"]->id()),"class_visualizer"),
+						"caption" => t("Eelvaade"),
+					));
+
+
+				};
 				break;
 
 			case "is_registered":
@@ -243,6 +321,36 @@ class class_designer extends class_base
 				}
 				break;
 
+			case "int_refs_table":
+				$this->do_int_refs_table($arr);
+				break;
+
+			case "ext_refs_table":
+				$this->do_ext_refs_table($arr);
+				break;
+
+			case "el_defs_toolbar":
+				$this->do_el_defs_toolbar($arr);
+				break;
+			
+			case "int_refs_toolbar":
+				$this->do_int_refs_toolbar($arr);
+				break;
+			
+			case "ext_refs_toolbar":
+				$this->do_ext_refs_toolbar($arr);
+				break;
+
+			case "el_defs_table":
+				$this->do_el_defs_table($arr);
+				break;
+
+			case "planner_list":
+				$this->do_planner_list($arr);
+				break;
+
+
+
 			case "preview":
 				if (!$arr["obj_inst"]->prop("reg_class_id"))
 				{
@@ -282,9 +390,74 @@ class class_designer extends class_base
 				};
 				break;
 
+			case "el_defs_table":
+				$this->update_el_defs_table($arr);
+				break;
+
 		}
 		return $retval;
 	}	
+	
+	/** Creates a hierarchy of groups for the planner
+	**/
+	function create_planner_tree(&$arr)
+	{
+		$o = $arr["obj_inst"];
+		$tree = &$arr["prop"]["vcl_inst"];
+		$oid = $o->id();
+		$tree->add_item(0,array(
+			"name" => $o->name(),
+			"id" => $oid,
+			"is_open" => 1,
+			"url" => $this->mk_my_orb("change",array(
+				"id" => $oid,
+				"group" => $arr["request"]["group"],
+			)),
+		));
+		
+		$el_tree = new object_tree(array(
+			"parent" => $oid,
+			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+			"lang_id" => array(),
+			"site_id" => array(),
+
+		));
+		$el_list = $el_tree->to_list();
+		$ellist = $el_list->arr();
+		$this->__elord = $o->meta("element_ords");
+		usort($ellist, array(&$this, "__ellist_comp"));
+
+		foreach($ellist as $el)
+		{
+			$clid = $el->class_id();
+			$iconurl = "";
+			// XXX: use class icons
+			$parent = $el->parent();
+			if ($clid == CL_PROPERTY_GRID)
+			{
+				$p_obj = new object($el->parent());
+				$parent = $p_obj->parent();
+			};
+			$el_id = $el->id();
+			if ($clid != CL_PROPERTY_GRID)
+			{
+				$tree->add_item($parent,array(
+					"name" => $el->name(),
+					"id" => $el_id,
+					"url" => $this->mk_my_orb("change",array(
+						"id" => $oid,
+						"group" => $arr["request"]["group"],
+						"group_parent" => $el_id,
+					)),
+					"iconurl" => $iconurl,
+					"is_open" => 1,
+				));
+			};
+		};
+
+		$tree->set_selected_item($this->group_parent);
+
+	}
 
 	/** Creates a hierarchy of groups and grids
 	**/
@@ -299,7 +472,7 @@ class class_designer extends class_base
 			"is_open" => 1,
 			"url" => $this->mk_my_orb("change",array(
 				"id" => $oid,
-				"group" => "designer",
+				"group" => $arr["request"]["group"],
 			)),
 		));
 
@@ -342,6 +515,42 @@ class class_designer extends class_base
 
 	}
 
+	/** Planner toolbar
+	**/
+	function create_planner_toolbar(&$arr)
+	{
+		$tb = &$arr["prop"]["vcl_inst"];
+		$tb->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus"),
+		));
+		// I don't know .. it feels a bit of uncomfortable to create a menu for just 2 elements
+		// but hey .. what do I know
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"name" => "newgrp",
+			"link" => $this->mk_my_orb("create_group", array(
+				"group_parent" => $this->group_parent, 
+				"return_url" => get_ru(),
+				"id" => $arr["obj_inst"]->id()
+			)),
+			"text" => t("Grupp"),
+		));
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"name" => "newprop",
+			"link" => $this->mk_my_orb("create_element", array(
+				"element_type" => CL_PROPERTY, 
+				"group_parent" => $this->group_parent, 
+				"return_url" => get_ru(),
+				"id" => $arr["obj_inst"]->id()
+			)),
+			"text" => t("Omadus"),
+		));
+
+	}
+
 	/** Helper toolbar to deal with elements
 	**/
 	function create_designer_toolbar(&$arr)
@@ -358,7 +567,7 @@ class class_designer extends class_base
 		// elementi saab lisada ainult siis kui parentiks on grid
 		$tb->add_menu_item(array(
 			"parent" => "new",
-			"text" => t("Uus tab"),
+			"text" => t("tab"),
 			"link" => $this->mk_my_orb("create_group", array(
 				"group_parent" => $this->group_parent, 
 				"return_url" => get_ru(),
@@ -369,20 +578,98 @@ class class_designer extends class_base
 
 		$tb->add_menu_item(array(
 			"parent" => "new",
-			"text" => t("Uus grid"),
+			"text" => t("vbox"),
 			"link" => $this->mk_my_orb("create_grid", array(
 				"group_parent" => $this->group_parent, 
 				"return_url" => get_ru(),
+				"gtype" => 0, 
+				"id" => $arr["obj_inst"]->id()
+			)),
+			"disabled" => !$this->can_add["grid"],
+		));
+		
+		$tb->add_menu_item(array(
+			"parent" => "new",
+			"text" => t("hbox"),
+			"link" => $this->mk_my_orb("create_grid", array(
+				"group_parent" => $this->group_parent, 
+				"return_url" => get_ru(),
+				"gtype" => 1,
 				"id" => $arr["obj_inst"]->id()
 			)),
 			"disabled" => !$this->can_add["grid"],
 		));
 
+		// siia ma lisan kõik omadused, mis on planeerijast siia paigutatud
+		$oid = $arr["obj_inst"]->id();
+		$el_tree = new object_tree(array(
+			"parent" => $oid,
+			//"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+			"lang_id" => array(),
+			"site_id" => array(),
+
+		));
+		$el_list = $el_tree->to_list();
+		$clinf = aw_ini_get("classes");
+
+		$used_clids = array();
+		/*
 		$tb->add_menu_separator(array(
 			"parent" => "new"
 		));
 
 
+		$allowed = $this->elements;
+		$allowed[] = CL_PROPERTY;
+
+		foreach($el_list->arr() as $el_o)
+		{
+			$el_clid = $el_o->class_id();
+
+			if ($el_clid == CL_PROPERTY)
+			{
+				if (is_oid($el_o->prop("property_type")))
+				{
+					$el_clid = $el_o->prop("property_type");
+				};
+			};
+
+
+			if (!in_array($el_clid,$allowed))
+			{
+				continue;
+			};
+
+			if (empty($used_clids[$el_clid]))
+			{
+				$used_clids[$el_clid] = 1;
+				$tb->add_sub_menu(array(
+					"parent" => "new",
+					"name" => $el_clid,
+					"text" => $clinf[$el_clid]["name"],
+				));
+			};
+
+			$tb->add_menu_item(array(
+				"parent" => $el_clid,
+				"text" => parse_obj_name($el_o->name()),
+				"link" => $this->mk_my_orb("place_element", array(
+					"el_id" => $el_o->id(), 
+					"group_parent" => $this->group_parent, 
+					"return_url" => get_ru(),
+					"id" => $arr["obj_inst"]->id()
+				)),
+				"disabled" => !$this->can_add["element"],
+			));
+
+
+		};
+
+		*/
+
+
+		// aga ma tahan ikkagi 
+		/*
 		$clinf = aw_ini_get("classes");
 		foreach($this->elements as $element)
 		{
@@ -398,6 +685,7 @@ class class_designer extends class_base
 				"disabled" => !$this->can_add["element"],
 			));
 		};
+		*/
 
 
 		$tb->add_separator();
@@ -556,6 +844,7 @@ class class_designer extends class_base
 
 		@param id required type=int acl=view
 		@param group_parent required
+		@param gtype required
 		@param return_url required
 
 	**/
@@ -615,6 +904,27 @@ class class_designer extends class_base
 		$o->save();
 
 		return html::get_change_url($e->id(), array("return_url" => urlencode($arr["return_url"])));
+	}
+
+	/**
+		@attrib name=place_element
+		@param id required type=int
+		@param group_parent required type=int
+		@param el_id required type=int
+		@param return_url optional
+
+	**/
+	function place_element($arr)
+	{
+		// klassi id on muutujas id
+		// elemendi id on muutujas el_id
+		// koht elemendi jaoks on muutujas group_parent
+		$el_o = new object($arr["el_id"]);
+		$el_o->set_parent($arr["group_parent"]);
+		$el_o->save();
+		// aga kuidas ma saan elementi korraga mitmesse kohta paigutada?
+
+		return $arr["return_url"];
 	}
 
 	/**
@@ -684,18 +994,42 @@ class class_designer extends class_base
 		$saveable = array(CL_PROPERTY_TEXTBOX,CL_PROPERTY_TEXTAREA,CL_PROPERTY_CHOOSER,CL_PROPERTY_CHECKBOX);
 		$name_prop = $c->prop("object_name");
 
+		$allowed = $this->elements;
+		$allowed[] = CL_PROPERTY;
+
 		foreach($ellist as $el)
 		{
 			$el_clid = $el->class_id();
+			if (CL_PROPERTY == $el_clid)
+			{
+				if (!is_oid($el->prop("real_property")))
+				{
+					continue;
+				};
+
+				$el_clid = $el->prop("real_property");
+			};
 			$name = $el->name();
-			if (in_array($el_clid,$this->elements))
+			// I need a fully qualified name, or there will be unparseable code
+			if (empty($name))
+			{
+				continue;
+			};
+			if (in_array($el_clid,$allowed))
 			{
 				$parent = new object($el->parent());
 				$grandparent = new object($parent->parent());
 				$sys_name = $this->_valid_id($name);
 				$group_name = $this->_valid_id($grandparent->name());
+				$grid_name = $this->_valid_id($parent->name());
+				// this is not correct
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
 				$rv .= "@property ${sys_name} type=${eltype} group=${group_name}";
+				if ($parent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grid_name .= $parent->id();
+					$rv .= " parent=" . $grid_name;
+				};
 				$inst = $el->instance();
 				$generate_methods = array();
 					
@@ -717,6 +1051,8 @@ class class_designer extends class_base
 
 				};
 
+				// nii .. midagi peaks nende asjadega ka ette võtma, sest vastutavad klassid peaks
+				// ise oma propertydefinitsioonid kirjutama
 				if ($el_clid == CL_PROPERTY_CHOOSER)
 				{
 					if ($el->prop("orient") == 1)
@@ -770,6 +1106,25 @@ class class_designer extends class_base
 			{
 				$grpid = $this->_valid_id($name);
 				$grps .= "@groupinfo $grpid caption=\"".($el->prop("caption") != "" ? $el->prop("caption") : $name)."\"\n";
+			};
+
+			if ($el_clid == CL_PROPERTY_GRID)
+			{
+				$parent_o = new object($el->parent());
+				$p_clid = $parent_o->class_id();
+				$p_id = $this->_valid_id($parent_o->name());
+				$group = "";
+				$el_id = $this->_valid_id($el->name());
+				$el_id .= $el->id();
+				if ($p_clid == CL_PROPERTY_GROUP)
+				{
+					$group = "group=$p_id";
+				};
+				$rv .= "@layout $el_id type=hbox $group\n";
+
+				// @layout hbox_oc type=hbox group=order_orderer_cos
+				
+				//arr($el->properties());
 			};
 		};
 		
@@ -1035,6 +1390,224 @@ class class_designer extends class_base
 
 		//print "done<br>";
 
+	}
+
+	function do_int_refs_table(&$arr)
+	{
+		$ot = new object_tree(array(
+			"parent" => $arr["obj_inst"]->id(),
+		));
+
+		$ol = $ot->to_list();
+		$int_refs = array();
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() == CL_PROPERTY && $o->prop("int_ref") == 1)
+			{
+				$t->define_data(array(
+					"id" => $o->prop("id"),
+					"name" => $o->name(),
+				));
+			};
+		};
+	}
+
+	function do_ext_refs_table(&$arr)
+	{
+		$ot = new object_tree(array(
+			"parent" => $arr["obj_inst"]->id(),
+		));
+
+		$ol = $ot->to_list();
+		$int_refs = array();
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() == CL_PROPERTY && $o->prop("ext_ref") == 1)
+			{
+				$t->define_data(array(
+					"id" => $o->prop("id"),
+					"name" => $o->name(),
+				));
+			};
+		};
+
+
+	}
+
+	function do_el_defs_toolbar(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+			"img" => "save.gif",
+		));
+	}
+	
+	function do_int_refs_toolbar(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+			"img" => "save.gif",
+		));
+	}
+	
+	function do_ext_refs_toolbar(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->add_button(array(
+			"name" => "save",
+			"tooltip" => t("Salvesta"),
+			"action" => "submit",
+			"img" => "save.gif",
+		));
+	}
+
+	function do_el_defs_table(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Tüüp"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "int_ref",
+			"caption" => t("Sisemine seos"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "ext_ref",
+			"caption" => t("Väline seos"),
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "edit",
+			"caption" => t("Muuda"),
+			"align" => "center",
+		));
+
+		$tree_parent = is_oid($arr["request"]["group_parent"]) ? $arr["request"]["group_parent"] : $arr["obj_inst"]->id();
+
+		$ot = new object_tree(array(
+			"parent" => $tree_parent,
+		));
+		$clinf = aw_ini_get("classes");
+		$clist = $this->elements;
+		$cldat = array();
+		$cldat[0] = t("--vali--");
+		foreach($clist as $cl)
+		{
+			$cldat[$cl] = $clinf[$cl]["name"];
+		};
+
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $o)
+		{
+			if ($o->class_id() == CL_PROPERTY)
+			{
+				$oid = $o->id();
+				$t->define_data(array(
+					"id" => $oid,
+					"name" => $o->name(),
+					"type" => html::select(array(
+						"name" => "property_type[" . $oid . "]",
+						"options" => $cldat,
+						"value" => $o->prop("property_type"),
+					)),
+					"int_ref" => html::checkbox(array(
+						"name" => "int_ref[" . $oid . "]",
+						"value" => 1,
+						"checked" => $o->prop("int_ref"),
+					)),
+					"ext_ref" => html::checkbox(array(
+						"name" => "ext_ref[" . $oid . "]",
+						"value" => 1,
+						"checked" => $o->prop("ext_ref"),
+					)),
+					"edit" => html::href(array(
+						"url" => $this->mk_my_orb("change",array("id" => $o->id()),CL_PROPERTY),
+						"caption" => t("Muuda"),
+					)),
+				));
+			};
+		}
+
+	}
+
+	function do_planner_list(&$arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "type",
+			"caption" => t("Tüüp"),
+		));
+		$group_parent = is_oid($arr["request"]["group_parent"]) ? $arr["request"]["group_parent"] : $arr["obj_inst"]->id();
+		$ot = new object_tree(array(
+			"parent" => $group_parent,
+		));
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $o)
+		{
+			$clid = $o->class_id();
+			if ($clid == CL_PROPERTY_GRID || $clid == CL_PROPERTY_GROUP)
+			{
+				continue;
+			};
+
+			$t->define_data(array(
+				"name" => $o->name(),
+				"id" => $o->id(),
+				"type" => $o->prop("property_type"),
+			));
+		};
+	}
+
+	function update_el_defs_table($arr)
+	{
+		$proptypes = $arr["request"]["property_type"];
+		$int_ref = $arr["request"]["int_ref"];
+		$ext_ref = $arr["request"]["ext_ref"];
+		if (is_array($proptypes))
+		{
+			$inst = get_instance(CL_PROPERTY);
+			foreach($proptypes as $prop_id => $proptype)
+			{
+				$po = new object($prop_id);
+				$rv = $inst->submit(array(
+					"id" => $prop_id,
+					"name" => $po->name(),
+					"property_type" => $proptype,
+					"int_ref" => $int_ref[$prop_id],
+					"ext_ref" => $ext_ref[$prop_id],
+					"return" => "id",
+				));
+				//print "finished updating $rv<br>";
+			};
+		};
+		return $arr["request"]["return_url"];
 	}
 }
 ?>
