@@ -47,5 +47,12 @@
 			</function>
 		</action>
 
+		<action name="create_calendars_for_users">
+			<function name="create_calendars_for_users">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
