@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.8 2005/05/27 10:28:31 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.9 2005/05/27 10:39:54 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -255,7 +255,6 @@ class newsfeed extends class_base
 			
 			default:
 				header("Content-type: text/xml");
-				$data = str_replace("<br />","",$data);
 				print $this->rss20_encode($data);
 		};
 		exit;
@@ -299,6 +298,7 @@ class newsfeed extends class_base
 		};
 		$res .= "\t</channel>\n";
 		$res .= "</rss>\n";
+		$res = str_replace("<br />","",$res);
 		return $res;
 	}
 
