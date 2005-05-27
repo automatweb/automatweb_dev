@@ -115,6 +115,16 @@
             <caption>Ilma pealkirjata</caption>
       </property>
       <property>
+            <name>auto_period</name>
+            <group>show</group>
+            <table>objects</table>
+            <field>meta</field>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <method>serialize</method>
+            <caption>Perioodilise, automaatselt vahetuva sisuga</caption>
+      </property>
+      <property>
             <name>groups</name>
             <group>show</group>
             <table>objects</table>

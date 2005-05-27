@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.72 2005/05/16 07:06:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.73 2005/05/27 09:48:51 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -62,6 +62,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 	@property no_title type=checkbox ch_value=1  group=show method=serialize
 	@caption Ilma pealkirjata
+
+	@property auto_period type=checkbox ch_value=1  group=show method=serialize
+	@caption Perioodilise, automaatselt vahetuva sisuga
 
 	@property groups type=select multiple=1 size=15 group=show method=serialize
 	@caption Grupid, kellele kasti näidata

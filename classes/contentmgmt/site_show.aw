@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.135 2005/05/25 08:50:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.136 2005/05/27 09:48:51 kristo Exp $
 
 /*
 
@@ -678,6 +678,11 @@ class site_show extends class_base
 			if ($no_in_promo)
 			{
 				$filter["no_show_in_promo"] = new obj_predicate_not(1);
+			}
+
+			if ($obj->prop("auto_period") == 1)
+			{
+				$filter["period"] = aw_global_get("act_per_id");
 			}
 
 			$documents = new object_list($filter);
