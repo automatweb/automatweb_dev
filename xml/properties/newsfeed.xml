@@ -49,10 +49,25 @@
             <size>2</size>
             <caption>Mitme viimase päeva omad</caption>
       </property>
+      <property>
+            <name>folders</name>
+            <table>objects</table>
+            <group>folders</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Kaustade seaded</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_NEWSFEED</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
+      <groupinfo>
+            <folders>
+                  <caption>Kaustad</caption>
+            </folders>
+      </groupinfo>
       <reltypes>
             <FEED_SOURCE>
                   <value>1</value>
