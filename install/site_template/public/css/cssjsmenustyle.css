@@ -1,0 +1,32 @@
+
+
+ul.nde-menu-system *
+{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 9px;
+	color: #FFFFFF;
+	font-weight: bold;
+	margin-top: 10px;
+}
+
+ul.nde-menu-system li a
+{
+  display: inline;
+  margin: 0;
+  text-decoration: none;
+}
+
+ul.nde-menu-system li a:hover
+{
+text-decoration: underline;
+}
+
+ul.nde-menu-system li.submenu ul a
+{
+	background-color: #C0C0C0;
+}
+
+ul.nde-menu-system li.submenu ul a:hover
+{
+	background-color: #6CBA2C;
+}
