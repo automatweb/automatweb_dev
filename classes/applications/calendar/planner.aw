@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.83 2005/05/26 14:51:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.84 2005/05/27 11:26:35 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2935,6 +2935,72 @@ class planner extends class_base
 
 		};
 
+
+	}
+
+	/** create and configure calendars for users that do not have one yet
+		@attrib name=create_calendars_for_users
+	**/
+	function create_calendars_for_users($arr)
+	{
+		// CALENDAR_OWNERSHIP planner->user
+		// 1. create list of users
+		// 2. check whether they have calendars
+		// 3. create calendars for users that do not have one?
+
+		$user_list = new object_list(array(
+			"class_id" => CL_USER,
+			"site_id" => array(),
+			"brother_of" => new obj_predicate_prop("id")
+		));
+
+		$users_need_calendars = array();
+		foreach($user_list->arr() as $user_o)
+		{
+			// dunno .. it seems that there are some test objects lying around that
+			// do not have an uid, I just want to ignore them
+			$uid = $user_o->prop("uid");
+			if (empty($uid))
+			{
+				continue;
+			};
+			$user_oid = $user_o->id();
+			$users_need_calendars[$user_oid] = 1;
+		};
+		$c = new connection();
+		$existing = $c->find(array(
+			"from.class_id" => CL_PLANNER,
+			"to.class_id" => CL_USER,
+			"type" => RELTYPE_CALENDAR_OWNERSHIP,
+		));
+		foreach($existing as $conn)
+		{
+			unset($users_need_calendars[$conn["to"]]);
+		};
+
+		print "the following users need calendars";
+		foreach($users_need_calendars as $user_oid => $check)
+		{
+			$user_o = new object($user_oid);
+			$uid = $user_o->prop("uid");
+
+			print "uid = $uid<br>";
+
+			$t = get_instance(CL_PLANNER);
+			$new_cal_id = $t->submit(array(
+				"parent" => 137459,
+				"name" => $uid . " kalender",
+				"return" => "id",
+			));
+
+			$cal_obj = new object($new_cal_id);
+			$cal_obj->connect(array(
+				"to" => $user_o->id(),
+				"reltype" => "RELTYPE_CALENDAR_OWNERSHIP",
+			));
+
+		};
+		print "all done<br>";
 
 	}
 };
