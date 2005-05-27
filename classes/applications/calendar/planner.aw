@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.84 2005/05/27 11:26:35 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.85 2005/05/27 11:51:10 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2698,6 +2698,22 @@ class planner extends class_base
 			"cb_group" => $arr["emb"]["cb_group"]
 		), $arr["class"]);
 	}
+
+	/*
+		@attrib name=wtf
+	*/
+	function wtf()
+	{
+		$ol = new object_list(array(
+			"parent" => 437,
+			"class_id" => CL_CRM_MEETING,
+		));
+		foreach($ol->arr() as $o)
+		{
+			arr($o->properties());
+		};
+
+	}
 	
 	/**
 		@attrib name=delete_events
@@ -2948,6 +2964,10 @@ class planner extends class_base
 		// 2. check whether they have calendars
 		// 3. create calendars for users that do not have one?
 
+		$create_parent = 973;
+
+		print "Creating calendars under $create_parent";
+
 		$user_list = new object_list(array(
 			"class_id" => CL_USER,
 			"site_id" => array(),
@@ -2971,7 +2991,7 @@ class planner extends class_base
 		$existing = $c->find(array(
 			"from.class_id" => CL_PLANNER,
 			"to.class_id" => CL_USER,
-			"type" => RELTYPE_CALENDAR_OWNERSHIP,
+			"type" => 8 // RELTYPE_CALENDAR_OWNERSHIP,
 		));
 		foreach($existing as $conn)
 		{
@@ -2986,9 +3006,10 @@ class planner extends class_base
 
 			print "uid = $uid<br>";
 
+
 			$t = get_instance(CL_PLANNER);
 			$new_cal_id = $t->submit(array(
-				"parent" => 137459,
+				"parent" => $create_parent,
 				"name" => $uid . " kalender",
 				"return" => "id",
 			));
@@ -2996,7 +3017,8 @@ class planner extends class_base
 			$cal_obj = new object($new_cal_id);
 			$cal_obj->connect(array(
 				"to" => $user_o->id(),
-				"reltype" => "RELTYPE_CALENDAR_OWNERSHIP",
+				//"reltype" => "RELTYPE_CALENDAR_OWNERSHIP",
+				"reltype" => 8,
 			));
 
 		};
