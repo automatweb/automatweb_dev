@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.397 2005/05/24 08:12:15 ahti Exp $
+// $Id: class_base.aw,v 2.398 2005/05/27 12:27:42 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3977,6 +3977,14 @@ class class_base extends aw_template
 					$cfg_props[$key]["value"] = $meta[$key];
 				};
 			};
+
+			$lx = $cl_vis->get_layouts(array(
+				"class_id" => $cls_id,
+			));
+
+			$this->layoutinfo = $lx;
+
+			// okei, aga kus see layout mäng tuleb?
 			$all_properties = $cfg_props;
 
 		}
