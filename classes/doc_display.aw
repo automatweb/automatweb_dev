@@ -85,6 +85,11 @@ class doc_display extends aw_template
 			$ps = $this->parse("PRINTANDSEND");
 		}
 
+		if ($doc->prop("title_clickable"))
+		{
+			$this->vars(array("TITLE_LINK_BEGIN" => $this->parse("TITLE_LINK_BEGIN"), "TITLE_LINK_END" => $this->parse("TITLE_LINK_END")));
+		}
+
 		$this->vars(array(
 			"SHOW_TITLE" => ($doc->prop("show_title") == 1 && $doc->prop("title") != "") ? $this->parse("SHOW_TITLE") : "",
 			"PRINTANDSEND" => $ps,
