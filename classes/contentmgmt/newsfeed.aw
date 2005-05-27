@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.7 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.8 2005/05/27 10:28:31 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -27,6 +27,11 @@
 @property days type=textbox size=2
 @caption Mitme viimase päeva omad
 
+@property folders type=table store=no group=folders 
+@caption Kaustade seaded
+
+@groupinfo folders caption="Kaustad"
+
 @reltype FEED_SOURCE value=1 clid=CL_MENU
 @caption Materjalide kaust
 
@@ -36,8 +41,6 @@ class newsfeed extends class_base
 {
 	function newsfeed()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "contentmgmt/newsfeed",
 			"clid" => CL_NEWSFEED
@@ -67,23 +70,72 @@ class newsfeed extends class_base
 				);
 				break;
 
+			case "folders":
+				$this->do_folders_table($arr);
+				break;
+
 
 		};
 		return $retval;
 	}
 
-	/*
+	function do_folders_table($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Name"),
+		));
+		$t->define_field(array(
+			"name" => "include_subs",
+			"caption" => t("Võta alamkaustadest ka"),
+			"align" => "center",
+			"width" => 150,
+		));
+
+		$conns = $arr["obj_inst"]->connections_from(array(
+			"reltype" => "RELTYPE_FEED_SOURCE",
+		));
+
+		$include_subs = $arr["obj_inst"]->meta("include_subs");
+
+		foreach($conns as $conn)
+		{
+			$c_id = $conn->prop("to");
+			$t->define_data(array(
+				"id" => $c_id,
+				"name" => $conn->prop("to.name"),
+				"include_subs" => html::checkbox(array(
+					"name" => "include_subs[${c_id}]",
+					"value" => 1,
+					"checked" => $include_subs[$c_id],
+				)),
+			));
+		};
+	}
+
+	function save_folders($arr)
+	{
+		$arr["obj_inst"]->set_meta("include_subs",$arr["request"]["include_subs"]);
+	}
+
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "folders":
+				$this->save_folders($arr);
+				break;
 
 		}
 		return $retval;
 	}	
-	*/
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
@@ -104,10 +156,23 @@ class newsfeed extends class_base
 		$sources = $feedobj->connections_from(array(
 			"type" => "RELTYPE_FEED_SOURCE",
 		));
+		$include_subs = $feedobj->meta("include_subs");
 		foreach($sources as $source)
 		{
-			$parents[] = $source->prop("to");
+			$src_folder = $source->prop("to");
+			$parents[] = $src_folder;
+			if ($include_subs[$src_folder])
+			{
+				$tree = new object_tree(array(
+					"parent" => $src_folder,
+					"class_id" => CL_MENU,
+					"site_id" => array(),
+				));
+				$items = $tree->to_list();
+				$parents = $parents + $items->ids();
+			};
 		};
+
 		$items = array();
 		//arr($o->properties());
 		$res = array();
@@ -190,6 +255,7 @@ class newsfeed extends class_base
 			
 			default:
 				header("Content-type: text/xml");
+				$data = str_replace("<br />","",$data);
 				print $this->rss20_encode($data);
 		};
 		exit;
