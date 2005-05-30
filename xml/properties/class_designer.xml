@@ -20,13 +20,14 @@
             <caption>Info</caption>
       </property>
       <property>
-            <name>preview</name>
+            <name>visualize</name>
             <table>objects</table>
             <group>general</group>
             <type>text</type>
             <store>no</store>
-            <field>preview</field>
-            <caption></caption>
+            <editonly>1</editonly>
+            <field>visualize</field>
+            <caption>Eelvaade</caption>
       </property>
       <property>
             <name>reg_class_id</name>
@@ -111,6 +112,116 @@
             <caption>Klassi definitsioon</caption>
       </property>
       <property>
+            <name>planner_toolbar</name>
+            <table>objects</table>
+            <group>planner</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>phbox1</parent>
+            <caption>Planeerija toolbar</caption>
+      </property>
+      <property>
+            <name>el_defs_toolbar</name>
+            <table>objects</table>
+            <group>el_defs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Elementide toolbar</caption>
+      </property>
+      <property>
+            <name>int_refs_toolbar</name>
+            <table>objects</table>
+            <group>int_refs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Sisemiste seoste toolbar</caption>
+      </property>
+      <property>
+            <name>ext_refs_toolbar</name>
+            <table>objects</table>
+            <group>ext_refs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Väliste seoste toolbar</caption>
+      </property>
+      <property>
+            <name>planner_tree</name>
+            <table>objects</table>
+            <group>
+                  <num_0>planner</num_0>
+                  <num_1>el_defs</num_1>
+                  <num_2>int_refs</num_2>
+                  <num_3>ext_refs</num_3>
+            </group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>treeview</type>
+            <parent>phbox2</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Planeerija puu</caption>
+      </property>
+      <property>
+            <name>planner_list</name>
+            <table>objects</table>
+            <group>planner</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>phbox2</parent>
+            <store>no</store>
+            <caption>Planeerija elemendid</caption>
+      </property>
+      <property>
+            <name>el_defs_table</name>
+            <table>objects</table>
+            <group>el_defs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>phbox2</parent>
+            <store>no</store>
+            <caption>Elementide tabel</caption>
+      </property>
+      <property>
+            <name>int_refs_table</name>
+            <table>objects</table>
+            <group>int_refs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>phbox2</parent>
+            <store>no</store>
+            <caption>Sisemiste seoste tabel</caption>
+      </property>
+      <property>
+            <name>ext_refs_table</name>
+            <table>objects</table>
+            <group>ext_refs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <parent>phbox2</parent>
+            <store>no</store>
+            <caption>Väliste seoste tabel</caption>
+      </property>
+      <property>
             <name>designer_toolbar</name>
             <table>objects</table>
             <group>designer</group>
@@ -120,7 +231,7 @@
             <no_caption>1</no_caption>
             <store>no</store>
             <parent>hbox1</parent>
-            <caption>Designer toolbar</caption>
+            <caption>Disaineri toolbar</caption>
       </property>
       <property>
             <name>layout_tree</name>
@@ -206,11 +317,35 @@
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER</syslog_type>
             <relationmgr>yes</relationmgr>
+            <no_status>1</no_status>
       </classinfo>
       <groupinfo>
             <settings>
                   <caption>Seaded</caption>
             </settings>
+            <cl_planner>
+                  <caption>Planeerija</caption>
+            </cl_planner>
+            <planner>
+                  <caption>Planeerija</caption>
+                  <parent>cl_planner</parent>
+                  <submit>no</submit>
+            </planner>
+            <el_defs>
+                  <caption>Elemendid</caption>
+                  <parent>cl_planner</parent>
+                  <submit>no</submit>
+            </el_defs>
+            <int_refs>
+                  <caption>Sisemised seosed</caption>
+                  <parent>cl_planner</parent>
+                  <submit>no</submit>
+            </int_refs>
+            <ext_refs>
+                  <caption>Välised seosed</caption>
+                  <parent>cl_planner</parent>
+                  <submit>no</submit>
+            </ext_refs>
             <designer>
                   <caption>Disainer</caption>
                   <submit>no</submit>
@@ -218,6 +353,7 @@
             <relations>
                   <caption>Seosed</caption>
                   <submit>no</submit>
+                  <parent>cl_planner</parent>
             </relations>
             <classdef>
                   <caption>Klassi definitsioon</caption>
@@ -237,8 +373,37 @@
                   <clid>CL_CLASS_DESIGNER_RELATION</clid>
                   <caption>seos</caption>
             </RELATION>
+            <CL_REVIEW>
+                  <value>2</value>
+                  <clid>CL_CLASS_DESIGNER</clid>
+                  <caption>Eelvaade</caption>
+            </CL_REVIEW>
       </reltypes>
       <layout>
+            <phbox1>
+                  <type>hbox</type>
+                  <group>planner</group>
+            </phbox1>
+            <pvbox1>
+                  <type>vbox</type>
+                  <group>
+                        <num_0>planner</num_0>
+                        <num_1>el_defs</num_1>
+                        <num_2>int_refs</num_2>
+                        <num_3>ext_refs</num_3>
+                  </group>
+            </pvbox1>
+            <phbox2>
+                  <type>hbox</type>
+                  <parent>pvbox1</parent>
+                  <width>30%:70%</width>
+                  <group>
+                        <num_0>planner</num_0>
+                        <num_1>el_defs</num_1>
+                        <num_2>int_refs</num_2>
+                        <num_3>ext_refs</num_3>
+                  </group>
+            </phbox2>
             <hbox1>
                   <type>hbox</type>
                   <group>designer</group>
