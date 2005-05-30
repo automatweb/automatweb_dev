@@ -234,10 +234,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			if (count($fields) > 0)
 			{
 				$q = "SELECT ".join(",", $fields)." FROM $table WHERE ".$tableinfo[$table]["index"]." = '".$object_id."'";
-				if (aw_global_get("uid") == "kix")
-				{
-				//	echo "q = $q <br />";
-				}
 				
 				if (isset($this->read_properties_data_cache[$object_id]))
 				{
@@ -1562,7 +1558,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		{
 			$this->joins[] = " LEFT JOIN $tbl ".$tbl."_".$clid." ON ".$tbl."_".$clid.".".$tbldat["index"]." = ".$tbldat["master_table"].".".$tbldat["master_index"]." ";
 		}
-
 		// now make joins and for the final prop, query
 		foreach($this->join_data as $pos => $join)
 		{
@@ -1603,12 +1598,16 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					// join from rel to prop
 					$prev_t = "aliases_".$prev["from_class"];
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
+					$do_other_join = false;
 					if (!is_array($new_t) || $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["table"] == "objects")
 					{
 						// class only has objects table, so join that
 						$tbl = "objects_rel_".$prev["reltype"];
 						$tbl_r = "objects";
 						$field = "oid";
+
+						// and also join any other tables as well just to be on the safe side.
+						$do_other_join = is_array($new_t);
 					}
 					else
 					{
@@ -1622,24 +1621,30 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 						$tbl,
 						$join["field"],
 					);
+
 					break;
 				}
 				else
 				if (!$join["to_class"])
 				{
-					$prev_t = $join["table"]."_".$prev_clid."_".$prev_filt;
+					if ($pos == (count($this->join_data)-1))
+					{
+						$prev_t = $join["table"]."_".$prev_clid."_".$prev_filt;
+					}
 					$ret = array(
 						$prev_t,
 						$GLOBALS["properties"][$join["from_class"]][$join["prop"]]["field"],
 					);
 					continue;
 				}
-
 				// if the next stop is a property
 				// then join all the tables in that class
 				// first the objects table
 
-				$prev_t = $join["table"]."_".$join["from_class"];
+				if (!$prev_t)
+				{
+					$prev_t = $join["table"]."_".$join["from_class"];
+				}
 				$prev_filt = $join["field"];
 				$prev_clid = $join["from_class"];
 				
@@ -1648,6 +1653,21 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 				{
 					$this->joins[] = " LEFT JOIN objects $objt_name ON ".$objt_name.".oid = $prev_t.".$join["field"]." ";
 					$done_ot_js[$objt_name] = 1;
+				}
+
+				$new_t = $GLOBALS["tableinfo"][$join["to_class"]];
+				if (is_array($new_t))
+				{
+					$tbl = $tbl_r = reset(array_keys($new_t));
+					$field = $new_t[$tbl]["index"];
+					$tbl .= "_".$join["from_class"]."_".$join["field"];
+					if (!isset($done_ot_js[$tbl_r]))
+					{
+						$str = " LEFT JOIN ".$tbl_r." $tbl ON ".$tbl.".".$field." = ".$objt_name.".brother_of";
+						$this->joins[] = $str;
+						$done_ot_js[$tbl_r] = 1;
+						$prev_t = $tbl;
+					}
 				}
 			}
 		}
@@ -1715,10 +1735,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 			// if it is the last one, then it can be anything
 			if ($pos < (count($filt) - 1))
 			{
-				error::raise_if(!$set_clid && $cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
+				/*error::raise_if(!$set_clid && $cur_prop["type"] != "relpicker" && $cur_prop["type"] != "relmanager" && $cur_prop["type"] != "classificator", array(
 					"id" => ERR_OBJ_NO_RP,
 					"msg" => t("ds_mysql::_req_do_pcp(): currently join properties can only be of type relpicker - can't figure out the class id of the object-to-join otherwise")
-				));
+				));*/
 	
 				error::raise_if($cur_prop["method"] == "serialize", array(
 					"id" => ERR_OBJ_NO_META,
@@ -1730,6 +1750,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 					case "relpicker":
 					case "relmanager":
 					case "classificator":
+					case "popup_search":
 						$relt_s = $cur_prop["reltype"];
 						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
 				

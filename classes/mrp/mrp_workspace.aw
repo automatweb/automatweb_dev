@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.121 2005/05/24 10:51:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.122 2005/05/30 09:01:11 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3276,7 +3276,7 @@ if ($_GET['show_thread_data'] == 1)
 			"caption" => t("Klient"),
 			"align" => "center",
 			"chgbgcolor" => "bgcol",
-//			"sortable" => 1
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -3388,7 +3388,7 @@ if ($_GET['show_thread_data'] == 1)
 					break;
 
 				case "customer":
-					$sby = "";
+					$sby = "objects_828_customer.name";
 					break;
 			}
 		}
@@ -3758,17 +3758,8 @@ if ($_GET['show_thread_data'] == 1)
 			$filt["state"] = $arr["states"];
 		}
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
-//		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer(CL_CRM_COMPANY).name"] = "%";
-if (aw_global_get("uid") == "kix")
-{
-//$GLOBALS["DUKE"] = 1;
-//$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
-}
+		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
 		$jobs = new object_list($filt);
-if (aw_global_get("uid") == "kix")
-{
-//	$GLOBALS["DUKE"] = 0;
-}
 		$ret = array();
 		foreach($jobs->arr() as $o)
 		{
