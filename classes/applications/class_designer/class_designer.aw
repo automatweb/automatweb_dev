@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.17 2005/05/27 12:26:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.18 2005/05/30 09:16:53 frgp Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -7,6 +7,7 @@
 /*
 
 @classinfo syslog_type=ST_CLASS_DESIGNER relationmgr=yes
+@classinfo no_status=1
 
 @default table=objects
 @default group=general
