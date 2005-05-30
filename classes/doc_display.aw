@@ -26,6 +26,8 @@ class doc_display extends aw_template
 		$this->tpl_init("automatweb/documents");
 		$this->read_any_template($this->_get_template($arr));
 
+		lc_site_load("document",$this);
+
 		$si = __get_site_instance();
 		if ($si)
 		{
