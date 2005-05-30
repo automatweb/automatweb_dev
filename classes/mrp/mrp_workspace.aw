@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.122 2005/05/30 09:01:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.123 2005/05/30 09:13:12 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3550,7 +3550,7 @@ if ($_GET['show_thread_data'] == 1)
 				"tm_end" => $end,
 				"length" => $len,
 				"job" => html::href(array(
-					"caption" => t("Ava"),
+					"caption" => "<span style=\"font-size: 15px;\">".t("Ava")."</span>",
 					"url" => aw_url_change_var(array(
 						"pj_job" =>  $job->id(),
 						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
