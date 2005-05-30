@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.18 2005/05/30 09:16:53 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.19 2005/05/30 09:30:15 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -18,7 +18,7 @@
 @property infomsg type=text store=no
 @caption Info
 
-@property visualize type=text store=no
+@property visualize type=text store=no editonly=1
 @caption Eelvaade
 
 property preview type=text store=no
