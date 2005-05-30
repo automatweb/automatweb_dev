@@ -26,8 +26,6 @@ class doc_display extends aw_template
 		$this->tpl_init("automatweb/documents");
 		$this->read_any_template($this->_get_template($arr));
 
-		lc_site_load("document",$this);
-
 		$si = __get_site_instance();
 		if ($si)
 		{
@@ -46,6 +44,9 @@ class doc_display extends aw_template
 				"meta" => &$mt
 			)
 		);
+
+		lc_site_load("document",$this);
+
 		$this->vars($al->get_vars());
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 
@@ -142,7 +143,12 @@ class doc_display extends aw_template
 		{
 			if ($doc->prop("showlead") || $arr["showlead"])
 			{
-				$text = $doc->prop("lead").aw_ini_get("document.lead_splitter").$doc->prop("content");
+				$lead = $doc->prop("lead");
+				if (aw_ini_get("document.boldlead"))
+				{
+					$lead = "<b>".$lead."</b>";
+				}
+				$text = $lead.aw_ini_get("document.lead_splitter").$doc->prop("content");
 			}
 			else
 			{
