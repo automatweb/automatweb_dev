@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.20 2005/05/31 11:55:29 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.21 2005/05/31 13:14:52 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -782,9 +782,15 @@ class class_designer extends class_base
 			$elname = $element->name();
 
 			$real_clid = $el_clid;
+			$change_id = $el_id;
 			if ($el_clid == CL_PROPERTY)
 			{
 				$real_clid = $element->prop("property_type");
+				$real_obj = $element->get_first_obj_by_reltype("RELTYPE_REAL_PROPERTY");
+				if ($real_obj)
+				{
+					$change_id = $real_obj->id();
+				};
 			};
 
 			$t->define_data(array(
@@ -803,7 +809,7 @@ class class_designer extends class_base
 				)),
 				"edit" => html::href(array(
 					"caption" => t("Muuda"),
-					"url" => $this->mk_my_orb("change",array("id" => $el_id, "return_url" => urlencode(aw_global_get("REQUEST_URI"))),$el_clid),
+					"url" => $this->mk_my_orb("change",array("id" => $change_id, "return_url" => urlencode(aw_global_get("REQUEST_URI"))),$real_clid),
 				)),
 			));
 		};
