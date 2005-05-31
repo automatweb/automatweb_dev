@@ -438,6 +438,12 @@ class layout extends class_base
 		$sl = get_instance("install/site_list");
 		foreach($ol->arr() as $o)
 		{
+			// did something just change? because this object_list returns objets
+                        // where parent == 0.
+                        if (0 == $o->parent())
+                        {
+                                continue;
+                        };
 			$pt = obj($o->parent());
 			$ret[$o->id()] = $sl->get_url_for_site($o->site_id()).": ".$pt->name()." / ".$o->name();
 		}
