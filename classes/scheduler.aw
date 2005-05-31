@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.34 2005/05/26 07:34:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.35 2005/05/31 08:20:36 kristo Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -45,40 +45,19 @@ class scheduler extends aw_template
 			$this->db_query($q);
 			while($row = $this->db_next())
 			{
-				$this->evnt_add($row["recur_start"],$event,$uid,$password,$rep_id,$event_id);
+				$this->evnt_add($row["recur_start"],$event."&ts=".$row["recur_start"],$uid,$password,$rep_id,$event_id);
 				$ltime = $row["recur_start"];
-				//arr($row);
 				break;
 			};
-			// if we use a repeater for scheduling events we get a bunch of times and add the events for those times
-			//$pl = get_instance(CL_PLANNER);
-			// siin tuleb lugeda sisse otse repeaters tabelist asju
-			/*
-			$reps = $pl->get_events(array( 
-				"start" => time(), 
-				"limit" => 20,
-				"index_time" => true,
-				"event" => $rep_id, 
-				"end" => time()+24*3600*300
-			));
-			*/
-			/*
-			if (is_array($reps))
-			{
-				foreach($reps as $time => $_e)
-				{
-					$this->evnt_add($time, $event, $uid, $password, $rep_id, $event_id);
-					$ltime = $time;
-				}
-			};
-			*/
 			// and the clever bit here - schedule an event right after the last repeater to reschedule 
 			// events for that repeater
 			if ($ltime)
 			{
 				$this->evnt_add(
-					$ltime+1, 
-					$this->mk_my_orb("update_repeaters", array("id" => $rep_id))
+					$ltime+3000, 
+					str_replace("automatweb/", "", $this->mk_my_orb("update_repeaters", array("id" => $rep_id))),
+					$uid,
+					$password
 				);
 			}
 		}
@@ -86,7 +65,7 @@ class scheduler extends aw_template
 
 	/** updates the scheduled events that use repeater $id 
 		
-		@attrib name=update_repeaters params=name default="0"
+		@attrib name=update_repeaters params=name default="0" nologin="1"
 		
 		@param id required
 		
@@ -99,11 +78,9 @@ class scheduler extends aw_template
 	function update_repeaters($arr)
 	{
 		extract($arr);
-
 		$this->open_session();
 
 		$newdat = array();
-		$evdat = array();
 		
 		// delete the events for that repeater
 		foreach($this->repdata as $evnt)
@@ -112,30 +89,50 @@ class scheduler extends aw_template
 			{
 				$newdat[] = $evnt;
 			}
-			else
-			{
-				$evdat = $evnt;
-			}
 		}
 		$this->repdata = $newdat;
 
-		// and now add new events for that repeater
-		$pl = get_instance(CL_PLANNER);
-		$reps = $pl->get_events(array( 
-			"start" => time(), 
-			"limit" => 20,
-			"index_time" => true,
-			"event" => $id, 
-			"end" => time()+24*3600*300
-		));
-		if (is_array($reps))
+		$now = time();
+		$q = "SELECT * FROM recurrence WHERE recur_id = '$id' AND recur_start >= '${now}' ORDER BY recur_start LIMIT 20";
+		$this->db_query($q);
+		while($row = $this->db_next())
 		{
-			foreach($reps as $time => $_e)
+			// get events for scheduler obj
+			$o = obj($id);
+			$cs = $o->connections_to(array("from.class_id" => CL_SCHEDULER));
+			$c = reset($cs);
+			if ($c)
 			{
-				$evdat["time"] = $time;
-				$this->repdata[] = $evdat;
+				$o = obj($c->prop("from"));
+				foreach($o->connections_from(array("type" => 1)) as $c)
+				{
+					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("to")),$c->prop('to.class_id')));
+					$re = $event."&ts=".$row["recur_start"];
+					$this->evnt_add(
+						$row["recur_start"],
+						$re,
+						$o->prop("login_uid"),
+						$o->prop("login_password"),
+						$id,
+						md5($re)
+					);
+					$ltime = $row["recur_start"];
+					echo "added event $re at $row[recur_start] <br>";
+				}
 			}
+			break;
 		};
+		// and the clever bit here - schedule an event right after the last repeater to reschedule 
+		// events for that repeater
+		if ($ltime)
+		{
+			$this->evnt_add(
+				$ltime+3000, 
+				str_replace("automatweb/", "", $this->mk_my_orb("update_repeaters", array("id" => $id))),
+				$uid,
+				$password
+			);
+		}
 		$this->close_session(true);
 	}
 
