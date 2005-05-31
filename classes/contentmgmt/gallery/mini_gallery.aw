@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.13 2005/05/05 11:17:28 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.14 2005/05/31 07:51:05 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -292,6 +292,21 @@ class mini_gallery extends class_base
 		$this->vars(array(
 			"PAGESELECTOR" => $this->parse("PAGESELECTOR")
 		));
+	}
+
+	function callback_post_save($arr)
+	{
+		if ($arr["request"]["new"])
+		{
+			// create folders and set props
+			$folder = obj();
+			$folder->set_parent($arr["obj_inst"]->parent());
+			$folder->set_name(t("Galerii ").$arr["obj_inst"]->name().t(" pildid"));
+			$folder->set_class_id(CL_MENU);
+			$folder->save();
+			$arr["obj_inst"]->set_prop("folder", $folder->id());
+			$arr["obj_inst"]->save();
+		}
 	}
 }
 ?>
