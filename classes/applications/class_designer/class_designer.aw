@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.19 2005/05/30 09:30:15 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.20 2005/05/31 11:55:29 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -155,7 +155,7 @@ class class_designer extends class_base
 			CL_PROPERTY_TEXTBOX,CL_PROPERTY_CHOOSER,
 			CL_PROPERTY_CHECKBOX,CL_PROPERTY_TABLE,
 			CL_PROPERTY_TEXTAREA,CL_PROPERTY_SELECT,
-			CL_PROPERTY_TREE,CL_PROPERTY_TOOLBAR
+			CL_PROPERTY_TREE,CL_PROPERTY_TOOLBAR,CL_PROPERTY
 		);
 
 		$this->all_els = $this->elements;
@@ -781,6 +781,12 @@ class class_designer extends class_base
 			$el_clid = $element->class_id();
 			$elname = $element->name();
 
+			$real_clid = $el_clid;
+			if ($el_clid == CL_PROPERTY)
+			{
+				$real_clid = $element->prop("property_type");
+			};
+
 			$t->define_data(array(
 				"namebox" => html::textbox(array(
 					"name" => "name[${el_id}]",
@@ -788,7 +794,7 @@ class class_designer extends class_base
 					"value" => $elname,
 				)),
 				"id" => $el_id,
-				"class_id" => $clinf[$el_clid]["name"],
+				"class_id" => $clinf[$real_clid]["name"],
 				"ord" => $elords[$element->id()],
 				"ordbox" => html::textbox(array(
 					"name" => "ord[${el_id}]",
@@ -1570,6 +1576,7 @@ class class_designer extends class_base
 			"parent" => $group_parent,
 		));
 		$ol = $ot->to_list();
+		$clinf = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
 		{
 			$clid = $o->class_id();
@@ -1581,7 +1588,7 @@ class class_designer extends class_base
 			$t->define_data(array(
 				"name" => $o->name(),
 				"id" => $o->id(),
-				"type" => $o->prop("property_type"),
+				"type" => $clinf[$o->prop("property_type")]["name"],
 			));
 		};
 	}
