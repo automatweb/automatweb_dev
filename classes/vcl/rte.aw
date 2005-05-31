@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.13 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.14 2005/05/31 08:39:03 duke Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -231,6 +231,69 @@ class rte extends class_base
 			"target" => "_self",
 			"url" => "javascript:oldurl=window.location.href;window.location.href=oldurl + '&no_rte=1';",
 		));
+
+		$toolbar->add_separator();
+		
+		$toolbar->add_menu_button(array(
+			"name" => "headings",
+			"tooltip" => t("Päised"),
+			"img" => "h1.gif",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 1"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h1>','</h1>');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 2"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h2>','</h2>');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 3"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h3>','</h3>');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 4"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h4>','</h4>');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 5"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h5>','</h5>');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "headings",
+			"text" => t("Heading 6"),
+			"url" => "javascript:{$js_url_prefix}surroundHTML('<h6>','</h6>');",
+		));
+		
+		$toolbar->add_menu_button(array(
+			"name" => "textcolor",
+			"tooltip" => t("Teksti värv"),
+			"img" => "textcolor.gif",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "textcolor",
+			"text" => t("Sinine"),
+			"url" => "javascript:{$js_url_prefix}colortext('#0000ff');",
+		));
+		
+		$toolbar->add_menu_item(array(
+			"parent" => "textcolor",
+			"text" => t("Punane"),
+			"url" => "javascript:{$js_url_prefix}colortext('#ff0000');",
+		));
+
 
 		$this->get_styles_from_site();
 
