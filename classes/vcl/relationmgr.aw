@@ -646,6 +646,10 @@ class relationmgr extends aw_template
 	
 	function _show_relations($arr)
 	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		classload("core/icons");
 		$pr = array();
 		
