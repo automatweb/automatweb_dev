@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.63 2005/04/17 18:03:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.64 2005/05/31 08:47:25 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1313,6 +1313,7 @@ class cfgform extends class_base
 			$ot - object type object's id 
 			$values - array of property name => property value pairs
 			$for_show - if true, classificator values are resolved
+			$site_lang - if true, translations are read from site language, not admin
 		
 	**/
 	function get_props_from_ot($arr)
@@ -1367,8 +1368,32 @@ class cfgform extends class_base
 			}
 			$tmp[$pn] = $pd;
 		}
-		$els = $tmp;
-		return $els;
+		$ret = $tmp;
+
+		$trans = $o->meta("translations");
+
+		if ($arr["site_lang"])
+		{
+			$lc = aw_global_get("LC");
+		}
+		else
+		{
+			$lc = aw_ini_get("user_interface.default_language");
+		}
+
+		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
+		{
+			$tc = $trans[$lc];
+			foreach($ret as $pn => $pd)
+			{
+				if ($tc[$pn] != "")
+				{
+					$ret[$pn]["caption"] = $tc[$pn];
+				}
+			}
+		}
+
+		return $ret;
 	}
 
 	function on_site_init($dbi, $site, &$ini_opts, &$log, &$osi_vars)

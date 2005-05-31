@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.69 2005/04/26 10:03:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.70 2005/05/31 08:47:25 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1509,6 +1509,10 @@ class webform extends class_base
 		$object_type = obj($arr["ot"]);
 		$clf_type = $object_type->meta("clf_type");
 		$cfgform_i = get_instance(CL_CFGFORM);
+		if (!is_admin())
+		{
+			$arr["site_lang"] = true;
+		}
 		$els = $cfgform_i->get_props_from_ot($arr);
 		$cfgform = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CFGFORM");
 		$sel_styles = safe_array($arr["obj_inst"]->meta("xstyles"));
