@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.64 2005/05/31 08:47:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.65 2005/05/31 08:50:19 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1340,6 +1340,30 @@ class cfgform extends class_base
 			$els = $tmp;
 
 			uasort($els, create_function('$a, $b','if ($a["ord"] == $b["ord"]) { return 0;} else {return $a["ord"] > $b["ord"] ? 1 : -1;}'));
+	
+
+			$trans = $cff->meta("translations");
+
+			if ($arr["site_lang"])
+			{
+				$lc = aw_global_get("LC");
+			}
+			else
+			{
+				$lc = aw_ini_get("user_interface.default_language");
+			}
+
+			if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
+			{
+				$tc = $trans[$lc];
+				foreach($els as $pn => $pd)
+				{
+					if ($tc[$pn] != "")
+					{
+						$els[$pn]["caption"] = $tc[$pn];
+					}
+				}
+			}
 		}
 		$tmp = array();
 		foreach($els as $pn => $pd)
@@ -1369,30 +1393,6 @@ class cfgform extends class_base
 			$tmp[$pn] = $pd;
 		}
 		$ret = $tmp;
-
-		$trans = $o->meta("translations");
-
-		if ($arr["site_lang"])
-		{
-			$lc = aw_global_get("LC");
-		}
-		else
-		{
-			$lc = aw_ini_get("user_interface.default_language");
-		}
-
-		if (isset($trans[$lc]) && is_array($trans[$lc]) && count($trans[$lc]))
-		{
-			$tc = $trans[$lc];
-			foreach($ret as $pn => $pd)
-			{
-				if ($tc[$pn] != "")
-				{
-					$ret[$pn]["caption"] = $tc[$pn];
-				}
-			}
-		}
-
 		return $ret;
 	}
 
