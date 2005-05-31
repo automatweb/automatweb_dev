@@ -267,6 +267,13 @@ function surroundHTML(startTag, endTag)
 	this.replaceHTML(startTag + html + endTag);
 };
 
+function colortext(color)
+{
+	start = "<span style='color:" + color + "'>";
+	end = "</span>";
+	surroundHTML(start,end);
+};
+
 /// Retrieve the selected block
 function getSelectedHTML()
 {
