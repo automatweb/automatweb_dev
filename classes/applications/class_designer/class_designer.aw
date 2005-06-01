@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.22 2005/06/01 11:55:19 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.23 2005/06/01 12:35:22 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -349,8 +349,6 @@ class class_designer extends class_base
 			case "planner_list":
 				$this->do_planner_list($arr);
 				break;
-
-
 
 			case "preview":
 				if (!$arr["obj_inst"]->prop("reg_class_id"))
@@ -1579,6 +1577,14 @@ class class_designer extends class_base
 	{
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
+			"name" => "id",
+			"caption" => t("ID"),
+		));
+		$t->define_field(array(
+			"name" => "parent",
+			"caption" => t("Parent"),
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
@@ -1599,10 +1605,12 @@ class class_designer extends class_base
 			{
 				continue;
 			};
+			$parent_o =  new object($o->parent());
 
 			$t->define_data(array(
-				"name" => $o->name(),
+				"name" => parse_obj_name($o->name()),
 				"id" => $o->id(),
+				"parent" => parse_obj_name($parent_o->name()),
 				"type" => $clinf[$o->prop("property_type")]["name"],
 			));
 		};
