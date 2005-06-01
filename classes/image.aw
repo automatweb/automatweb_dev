@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.138 2005/05/23 09:39:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.139 2005/06/01 10:39:18 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -731,9 +731,19 @@ class image extends class_base
 				if (is_uploaded_file($_FILES["file"]["tmp_name"]))
 				{
 					$_fi = get_instance(CL_FILE);
+
+					$ct = $this->get_file(array("file" => $_FILES["file"]["tmp_name"]));
+					if ($ct === false)
+					{
+						$nn = aw_ini_get("site_basedir")."/files/".gen_uniq_id();
+						move_uploaded_file($_FILES["file"]["tmp_name"], $nn);
+						$ct = $this->get_file(array("file" => $nn));
+						unlink($nn);
+					}
+
 					$fl = $_fi->_put_fs(array(
 						"type" => $_FILES["file"]["type"],
-						"content" => $this->get_file(array("file" => $_FILES["file"]["tmp_name"])),
+						"content" => $ct,
 					));
 					$prop["value"] = $fl;
 					$set = true;

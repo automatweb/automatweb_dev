@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.105 2005/04/19 12:50:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.106 2005/06/01 10:39:18 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -229,6 +229,14 @@ class file extends class_base
 					$fc = $this->get_file(array(
 						"file" => $file,
 					));
+
+					if ($fc === false)
+					{
+						$nn = aw_ini_get("site_basedir")."/files/".gen_uniq_id();
+						move_uploaded_file($file, $nn);
+						$fc = $this->get_file(array("file" => $nn));
+						unlink($nn);
+					}
 				}
 			
 				if ($fc != "")
