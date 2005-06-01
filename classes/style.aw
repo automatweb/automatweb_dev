@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.44 2005/04/21 08:39:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/style.aw,v 2.45 2005/06/01 11:06:28 kristo Exp $
 
 define("ST_TABLE",0);
 define("ST_CELL",1);
@@ -938,7 +938,7 @@ class style extends aw_template
 	
 	function get_table_style_picker()
 	{
-		$ret = $this->get_select(0, ST_TABLE, true);
+		$aret = $this->get_select(0, ST_TABLE, true);
 		$ol = new object_list(array(
 			"class_id" => CL_CSS,
 			"lang_id" => array(),
@@ -947,8 +947,24 @@ class style extends aw_template
 		));
 		foreach($ol->names() as $id => $nm)
 		{
-			$ret[$id] = "CSS: ".$nm;
+			$aret[$id] = "CSS: ".$nm;
 		}
+		
+		$ol = new object_list(array(
+			"oid" => array_keys($aret),
+			"sort_by" => "objects.site_id,objects.class_id",
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		
+		$ret = array("" => "");
+		$sl = get_instance("install/site_list");
+		foreach($ol->arr() as $o)
+		{
+			$pt = obj($o->parent());
+			$ret[$o->id()] = $sl->get_url_for_site($o->site_id()).": ".$aret[$o->id()];
+		}
+
 		return $ret;
 	}
 
