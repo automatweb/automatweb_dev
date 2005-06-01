@@ -306,7 +306,7 @@ class class_visualizer extends class_base
 		foreach($elements->arr() as $el)
 		{
 			$clid = $el->class_id();
-			if (in_array($clid,$items))
+			if (in_array($clid,$items) && $clid != CL_PROPERTY)
 			{
 				$eltype = $clinf[$clid]["def"];
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$eltype));
@@ -314,13 +314,20 @@ class class_visualizer extends class_base
 				
 				$p_o = new object($el->parent());
 
+				$group = $grid2grp[$el->parent()];
+
+				if ($p_o->class_id() == CL_PROPERTY)
+				{
+					$group = $grid2grp[$p_o->parent()];
+				};
+
 				$propdata = array(
 					//"name" => $el->name(),
 					//"name" => $el->id(),
 					"name" => $sysname,
 					"caption" => $el->name(),
 					"type" => $eltype,
-					"group" => $grid2grp[$el->parent()],
+					"group" => $group,
 					"table" => "objects",
 					"field" => "meta",
 					"method" => "serialize",
@@ -328,12 +335,21 @@ class class_visualizer extends class_base
 
 				if ($p_o->class_id() == CL_PROPERTY_GRID)
 				{
-					$prop_parent = "hbox" . $p_o->id();
+					$grid_type = $p_o->prop("grid_type") == 0 ? "vbox" : "hbox";
+					$prop_parent = $grid_type . $p_o->id();
 				}
 				else
 				{
 					$prop_parent = false;
 				};
+
+				if ($p_o->class_id() == CL_PROPERTY)
+				{
+					$grandparent = new object($p_o->parent());
+					$grid_type = $grandparent->prop("grid_type") == 0 ? "vbox" : "hbox";
+					$prop_parent = $grid_type . $grandparent->id();
+				};
+
 
 				if ($clid == CL_PROPERTY_CHOOSER)
 				{

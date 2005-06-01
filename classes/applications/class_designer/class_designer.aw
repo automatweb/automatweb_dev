@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.21 2005/05/31 13:14:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.22 2005/06/01 11:55:19 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -1034,13 +1034,22 @@ class class_designer extends class_base
 				$grandparent = new object($parent->parent());
 				$sys_name = $this->_valid_id($name);
 				$group_name = $this->_valid_id($grandparent->name());
-				$grid_name = $this->_valid_id($parent->name());
+				if ($grandparent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grandgrandparent = new object($grandparent->parent());
+					$group_name = $this->_valid_id($grandgrandparent->name());
+				}
 				// this is not correct
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
 				$rv .= "@property ${sys_name} type=${eltype} group=${group_name}";
 				if ($parent->class_id() == CL_PROPERTY_GRID)
 				{
 					$grid_name .= $parent->id();
+					$rv .= " parent=" . $grid_name;
+				};
+				if ($grandparent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grid_name = $this->_valid_id($grandparent->name());
 					$rv .= " parent=" . $grid_name;
 				};
 				$inst = $el->instance();
@@ -1127,13 +1136,14 @@ class class_designer extends class_base
 				$p_clid = $parent_o->class_id();
 				$p_id = $this->_valid_id($parent_o->name());
 				$group = "";
+				$grid_type = ($el->prop("grid_type") == 0) ? "hbox" : "vbox";
 				$el_id = $this->_valid_id($el->name());
 				$el_id .= $el->id();
 				if ($p_clid == CL_PROPERTY_GROUP)
 				{
 					$group = "group=$p_id";
 				};
-				$rv .= "@layout $el_id type=hbox $group\n";
+				$rv .= "@layout $el_id type=${grid_type} $group\n";
 
 				// @layout hbox_oc type=hbox group=order_orderer_cos
 				
@@ -1158,7 +1168,6 @@ class class_designer extends class_base
 		$methods .= "\t{\n";
 		$methods .= "\t\t\$o = \$arr[\"obj_inst\"];\n";
 		$methods .= $saver;
-
 		$methods .= "\t}\n";
 		$clsrc = str_replace("//-- get_property --//",$gpblock,$clsrc);
 		$clsrc = str_replace("//-- set_property --//",$spblock,$clsrc);
