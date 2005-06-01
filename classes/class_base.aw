@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.398 2005/05/27 12:27:42 duke Exp $
+// $Id: class_base.aw,v 2.399 2005/06/01 07:21:37 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -343,7 +343,6 @@ class class_base extends aw_template
 		}
 
 		// Now I need to deal with relation elements
-
 		// it's the bloody run order .. FUCK
 		$properties = $this->get_property_group($filter);
 		if ($this->classinfo(array("name" => "trans")) == 1 && $this->id)
@@ -3129,6 +3128,7 @@ class class_base extends aw_template
 				{
 					$controller_id = $contr;
 					$prpdata["value"] = $val;
+					$props[$key]["value"] = $val;
 					// $controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst
 					// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
 					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
@@ -3941,7 +3941,6 @@ class class_base extends aw_template
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
-
 		// nii .. ja kuidas ma nüüd saan teada kõik omadused, mis mind huvitavad?
 
 
@@ -4211,7 +4210,6 @@ class class_base extends aw_template
 
 		// do it 2 cycles, first figure out which groups have properties
 		// so that I can select a new default group
-
 		foreach($cfg_props as $key => $val)
 		{
 			// ignore properties that are not defined in the defaults
@@ -4291,7 +4289,10 @@ class class_base extends aw_template
 			// skip anything that is not in the active group
 			if (empty($this->cb_no_groups) && !in_array($use_group,$propgroups))
 			{
-				continue;
+				if (!(($key == "needs_translation" || $key == "is_translated") && $use_group == "general2"))
+				{
+					continue;
+				}
 			};
 
 			if (1 == $propdata["richtext"] && 0 == $this->classinfo["allow_rte"])
@@ -4309,6 +4310,7 @@ class class_base extends aw_template
 			{
 				if ($propdata["type"] != "toolbar")
 				{
+if (aw_global_get("uid") == "meff") { echo "for $key , continue ".__LINE__." <br>"; }
 					continue;
 				};
 			};
