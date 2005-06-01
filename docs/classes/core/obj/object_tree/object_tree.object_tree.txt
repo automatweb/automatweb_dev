@@ -23,6 +23,6 @@ none
 #php#
 $ot = new object_tree(array(
 	"parent" => 666, 
-	"class" => CL_FILE
+	"class_id" => CL_FILE
 ));
 #/php#
