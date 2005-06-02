@@ -1,6 +1,6 @@
 <?php
 // date_calc.aw - Kuupäevaaritmeetika
-// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.20 2005/04/15 09:52:03 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/date_calc.aw,v 2.21 2005/06/02 10:10:28 kristo Exp $
 
 ////
 // !get_date_range
@@ -208,7 +208,7 @@ function get_date_range($args = array())
 
 		case "last_events":
 			$start_ts = $rg_start;
-			$end_ts = time()+24*3600*100; // far enough methinks
+			$end_ts = time()+24*3600*200; // far enough methinks
 
 			$next = $end_ts + 1;
 			$prev = $start_ts - 1;
