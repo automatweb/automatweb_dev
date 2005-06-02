@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.23 2005/06/01 12:35:22 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.24 2005/06/02 10:20:14 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -1381,7 +1381,7 @@ class class_designer extends class_base
 			// generate class information for generated classes as well
 	                $clist = new object_list(array(
 				"class_id" => CL_CLASS_DESIGNER,
-				"can_add"  => 1,
+			//	"can_add"  => 1,
                 	));
 
 			$ini_file = "";
@@ -1400,6 +1400,8 @@ class class_designer extends class_base
 				$ini_file .= $prefix . "[generated] = 1\n";
 				$ini_file .= $prefix . "[can_add] = " . $class_obj->prop("can_add") . "\n\n";
 			};
+
+			arr($ini_file);
 
 			$this->put_file(array(
 				"file" => $fld . "/" . "generated_classes.ini",
