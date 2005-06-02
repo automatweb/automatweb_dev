@@ -141,6 +141,8 @@ class relationmgr extends aw_template
 			"id" => $arr["obj_inst"]->id(),
 			"saveurl" => $this->mk_my_orb("submit", array("reltype" => $this->reltype, "group" => $req["group"], "return_url" => get_ru(), "reforb" => 1, "id" => $req["id"]), $req["class"]),
 		));
+		// XXX: fixfixfix
+		$this->vars["saveurl"] = aw_url_change_var("class",$req["class"],$this->vars["saveurl"]);
 		$tb->add_cdata($this->parse());
 		$pr = array(
 			"rel_toolbar" => array(
