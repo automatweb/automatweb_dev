@@ -1,6 +1,26 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>data_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Andmed</caption>
+      </property>
+      <property>
+            <name>ct_rels_levels</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <editonly>1</editonly>
+            <size>5</size>
+            <caption>Mitu taset puus</caption>
+      </property>
+      <property>
             <name>no_caption</name>
             <table>objects</table>
             <group>general</group>
@@ -13,22 +33,21 @@
       <property>
             <name>ct_toolbar</name>
             <table>objects</table>
-            <group>content</group>
+            <group>content_user</group>
             <field>meta</field>
             <method>serialize</method>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
-            <parent>hbox1</parent>
       </property>
       <property>
             <name>ct_tree</name>
             <table>objects</table>
-            <group>content</group>
+            <group>content_user</group>
             <field>meta</field>
             <method>serialize</method>
             <type>treeview</type>
-            <parent>hbox2</parent>
+            <parent>cu_hbox</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Puu</caption>
@@ -36,14 +55,35 @@
       <property>
             <name>ct_list</name>
             <table>objects</table>
-            <group>content</group>
+            <group>content_user</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
-            <parent>hbox2</parent>
+            <parent>cu_hbox</parent>
             <no_caption>1</no_caption>
             <store>no</store>
             <caption>Tabel</caption>
+      </property>
+      <property>
+            <name>ct_clids</name>
+            <table>objects</table>
+            <group>content_objs</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Objektit&amp;uuml;&amp;uuml;bid, mida puus kuvada</caption>
+      </property>
+      <property>
+            <name>ct_rel</name>
+            <table>objects</table>
+            <group>content_rels</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Sisuobjektide seose t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <classinfo>
             <syslog_type>ST_PROPERTY_TREE</syslog_type>
@@ -52,25 +92,25 @@
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
-            <content>
+            <content_user>
                   <caption>Sisu</caption>
                   <submit>no</submit>
-            </content>
+            </content_user>
+            <content_objs>
+                  <caption>Sisu</caption>
+            </content_objs>
+            <content_rels>
+                  <caption>Sisu</caption>
+            </content_rels>
       </groupinfo>
       <layout>
-            <hbox1>
+            <cu_hbox>
                   <type>hbox</type>
-                  <group>content</group>
-            </hbox1>
-            <vbox1>
-                  <type>vbox</type>
-                  <group>content</group>
-            </vbox1>
-            <hbox2>
-                  <type>hbox</type>
-                  <group>content</group>
-                  <parent>vbox1</parent>
-            </hbox2>
+                  <width>
+                  <![CDATA["20%:80%"]]>
+                  </width>
+                  <group>content_user</group>
+            </cu_hbox>
       </layout>
 </properties>
 

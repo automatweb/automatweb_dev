@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.2 2005/04/18 08:49:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_mgr.aw,v 1.3 2005/06/02 11:47:29 kristo Exp $
 // crm_offer_mgr.aw - Pakkumiste haldus 
 /*
 
@@ -35,7 +35,7 @@
 @reltype WAREHOUSE value=2 clid=CL_SHOP_WAREHOUSE
 @caption ladu
 
-@reltype TYPICAL_COMPONENT value=3 clid=CL_CRM_OFFER_CHAPTER,CL_CRM_OFFER_GOAL,CL_CRM_OFFER_PAYMENT_TERMS,CL_CRM_OFFER_PRODUCTS_LIST
+@reltype TYPICAL_COMPONENT value=3 clid=CL_CRM_OFFER_CHAPTER,CL_CRM_OFFER_GOAL,CL_CRM_OFFER_PAYMENT_TERMS,CL_CRM_OFFER_PRODUCTS_LIST,CL_PROJECT
 @caption t&uuml;piline komponent
 
 */

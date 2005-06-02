@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.21 2005/03/30 21:56:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.22 2005/06/02 11:47:29 kristo Exp $
 // __classname.aw - __name 
 /*
 
@@ -77,6 +77,6 @@ class __classname extends class_base
 		return $this->parse();
 	}
 
-	//-- methods --//
+//-- methods --//
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.7 2005/05/27 12:26:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/property_tree.aw,v 1.8 2005/06/02 11:47:29 kristo Exp $
 // property_tree.aw - Puu komponent 
 /*
 
@@ -10,24 +10,41 @@
 @default field=meta
 @default method=serialize
 
+@property data_from type=select
+@caption Andmed
+
+@property ct_rels_levels type=textbox editonly=1 size=5
+@caption Mitu taset puus
+
 @property no_caption type=checkbox ch_value=1 
 @caption Ilma tekstita
 
-@default group=content 
+@default group=content_user 
 
-	@layout hbox1 type=hbox group=content
-	@property ct_toolbar type=toolbar no_caption=1 store=no parent=hbox1
+	@property ct_toolbar type=toolbar no_caption=1 store=no 
 
-	@layout vbox1 type=vbox group=content
-	@layout hbox2 type=hbox group=content parent=vbox1 
+	@layout cu_hbox type=hbox width="20%:80%"
 
-	@property ct_tree type=treeview parent=hbox2 no_caption=1
+	@property ct_tree type=treeview parent=cu_hbox no_caption=1
 	@caption Puu
 
-	@property ct_list type=table parent=hbox2 no_caption=1
+	@property ct_list type=table parent=cu_hbox no_caption=1
 	@caption Tabel
 
-@groupinfo content caption="Sisu" submit=no
+@default group=content_objs
+
+	@property ct_clids type=select multiple=1
+	@caption Objektit&uuml;&uuml;bid, mida puus kuvada
+
+@default group=content_rels
+
+	@property ct_rel type=table no_caption=1
+	@caption Sisuobjektide seose t&uuml;&uuml;p
+
+@groupinfo content_user caption="Sisu" submit=no
+@groupinfo content_objs caption="Sisu" 
+@groupinfo content_rels caption="Sisu" 
+
 */
 
 class property_tree extends class_base
@@ -38,6 +55,12 @@ class property_tree extends class_base
 			"tpldir" => "applications/class_designer/property_tree",
 			"clid" => CL_PROPERTY_TREE
 		));
+
+		$this->data_from = array(
+			"user" => t("Kasutaja poolt sisestatud"),
+			"objs" => t("Objektid objektis&uuml;steemist"),
+			"rels" => t("Seostatud")
+		);
 	}
 
 	function get_property($arr)
@@ -57,6 +80,25 @@ class property_tree extends class_base
 			case "ct_list":
 				$this->_ct_list($arr);
 				break;
+
+			case "data_from":
+				$prop["options"] = $this->data_from;
+				break;
+
+			case "ct_clids":
+				$prop["options"] = get_class_picker();
+				break;
+
+			case "ct_rels_levels":
+				if ($arr["obj_inst"]->prop("data_from") != "rels")
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
+			case "ct_rel":
+				$this->_ct_rel($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -67,7 +109,9 @@ class property_tree extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
+			case "ct_rel":
+				$this->_save_ct_rel($arr);
+				break;
 		}
 		return $retval;
 	}	
@@ -186,6 +230,36 @@ class property_tree extends class_base
 		}
 	}
 
+	function callback_mod_tab($arr)
+	{
+		switch($arr["obj_inst"]->prop("data_from"))
+		{
+			case "rels":
+				if ($arr["id"] == "content_objs" || $arr["id"] == "content_user")
+				{
+					return false;
+				}
+				break;
+
+			case "objs":
+				if ($arr["id"] == "content_user" || $arr["id"] == "content_rels")
+				{
+					return false;
+				}
+				break;
+		
+			case "user":
+			default:
+				if ($arr["id"] == "content_objs" || $arr["id"] == "content_rels")
+				{
+					return false;
+				}
+				break;
+		}
+
+		return true;
+	}
+
 	function callback_mod_reforb($arr)
 	{
 		$arr["return_url"] = $_SERVER["REQUEST_METHOD"] == "GET" ? post_ru() : $arr["return_url"];
@@ -224,8 +298,29 @@ class property_tree extends class_base
 	
 	function generate_method($arr)
 	{
-		$name = $arr["name"];
 		$obj = new object($arr["id"]);
+		switch($obj->prop("data_from"))
+		{
+			case "rels":
+				$ret = $this->_generate_rels_meth($arr);
+				break;
+
+			case "objs":
+				$ret = $this->_generate_objs_meth($arr);
+				break;
+		
+			case "user":
+			default:
+				$ret = $this->_generate_user_meth($arr);
+				break;
+		}
+		return $ret;
+	}
+
+	function _generate_user_meth($arr)
+	{
+		$obj = new object($arr["id"]);
+		$name = $arr["name"];
 		$els = new object_tree(array(
 			"parent" => $arr["id"],
 			"class_id" => CL_PROPERTY_TREE_BRANCH,
@@ -236,20 +331,7 @@ class property_tree extends class_base
 
 		$rv = "\tfunction $name(\$arr)\n";
 		$rv .= "\t{\n";
-		/*
-		$rv .= "\t\tclassload(\"core/icons\");\n";
-		$rv .= "\t\t\$var = \"$var\";\n";
-		$rv .= "\t\t" . '$t = &$arr["prop"]["vcl_inst"];' . "\n";
-		$rv .= "\t\t\n";
-		$rv .= "\t\t\$t->start_tree(array(\n";
-		$rv .= "\t\t\t\"type\" => TREE_DHTML,\n";
-		$rv .= "\t\t\t\"tree_id\" => \"treee_{$name}\",\n";
-		$rv .= "\t\t\t\"persist_state\" => true,\n";
-		$rv .= "\t\t\t\"root_url\" => aw_url_change_var(\$var, NULL)\n";
-		$rv .= "\t\t));\n";
-		$rv .= "\t\t\n";
-		*/
-		
+
 		$i = get_instance(CL_PROPERTY_TREE_BRANCH);
 		foreach($els->arr() as $el)
 		{
@@ -258,6 +340,218 @@ class property_tree extends class_base
 
 		$rv .= "\t}\n\n";
 		return $rv;
+	}
+
+	function _generate_objs_meth($arr)
+	{
+		$obj = new object($arr["id"]);
+		$name = $arr["name"];
+
+		$rv = "\tfunction $name(\$arr)\n";
+		$rv .= "\t{\n";
+
+		// TODO: objects from below
+
+		$rv .= "\t}\n\n";
+		return $rv;
+	}
+
+	function _generate_rels_meth($arr)
+	{
+		$obj = new object($arr["id"]);
+		$name = $arr["name"];
+		$var = $name."_tf";
+
+		$rv = "\tfunction $name(\$arr)\n";
+		$rv .= "\t{\n";
+
+		// begin tree
+		$rv .= "\t\t\$t =& \$arr[\"prop\"][\"vcl_inst\"];\n";
+		$rv .= "\t\t\$cur_o = \$arr[\"obj_inst\"];\n";
+		$rv .= "\t\t\$stack = array();\n";
+		$reld = safe_array($obj->meta("ct_rels_dat"));
+
+		// nest foreaches for levels
+		for($level = 0; $level < $obj->prop("ct_rels_levels"); $level++)
+		{
+			$rv .= $this->_i($level)."//level $level \n";
+			// start from the cur obj and find the correct related obj
+			$pts = explode(".", $reld[$level]);
+			$idx = 0;
+			if (count($pts) > 1)
+			{
+				for($idx = 0; $idx < (count($pts)-1); $idx++)
+				{
+					$rv .= $this->_i($level)."\$cur_o = \$cur_o->get_first_obj_by_reltype(\"".$pts[$idx]."\");\n";
+				}
+			}
+
+			// now, get connected objects from the last rel and ionsert into tree
+			$rv .= $this->_i($level)."foreach(\$cur_o->connections_from(array(\"type\" => \"".$pts[$idx]."\")) as \$c)\n";
+			$rv .= $this->_i($level)."{\n";
+			$rv .= $this->_i($level+1)."\$item_$level = \$c->to();\n";
+
+			if ($level == 0)
+			{
+				$rv .= $this->_i($level+1)."\$t->add_item(0, array(\n";
+			}
+			else
+			{
+				$rv .= $this->_i($level+1)."\$t->add_item(\$item_".($level-1)."->id(), array(\n";
+			}
+			$rv .= $this->_i($level+1)."\t\"name\" => \$arr[\"request\"][\"$var\"] == \$item_".$level."->id() ? \"<b>\".\$item_".$level."->name().\"</b>\" : \$item_".$level."->name(),\n";
+			$rv .= $this->_i($level+1)."\t\"id\" => \$item_".$level."->id(),\n";
+			$rv .= $this->_i($level+1)."\t\"url\" => aw_url_change_var(\"$var\", \$item_".$level."->id()),\n";
+			$rv .= $this->_i($level+1)."\t\"iconurl\" => icons::get_icon_url(CL_MENU, \"\"),\n";
+			$rv .= $this->_i($level+1)."));\n";
+			$rv .= $this->_i($level+1)."\$cur_o = \$c->to();\n";
+
+			//$rv .= $this->_i($level+1)."array_push(\$stack, \$cur_o);\n";
+
+		}
+
+		for($level = $obj->prop("ct_rels_levels")-1; $level > -1 ; $level--)
+		{
+			//$rv .= $this->_i($level+1)."\$cur_o = array_pop(\$stack);\n";
+			$rv .= $this->_i($level)."}\n";
+		}
+
+		$rv .= "\t}\n\n";
+		return $rv;
+	}
+
+	function _init_ct_rel(&$t)
+	{
+		$t->define_field(array(
+			"name" => "level",
+			"caption" => t("Tase"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "rel",
+			"caption" => t("Seos(ed)"),
+			"align" => "center"
+		));
+	}
+
+	function _get_designer($o)
+	{
+		$pt = $o->path();
+		foreach($pt as $p)
+		{
+			if ($p->class_id() == CL_CLASS_DESIGNER)
+			{
+				return $p;
+			}
+		}
+		return NULL;
+	}
+
+	function _ct_rel($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_ct_rel($t);
+
+		$reld = safe_array($arr["obj_inst"]->meta("ct_rels_dat"));
+		$prop_tbl = get_instance(CL_PROPERTY_TABLE);
+
+		$clss = aw_ini_get("classes");
+
+		$from_clid = 0;
+		for($level = 0; $level < $arr["obj_inst"]->prop("ct_rels_levels"); $level++)
+		{
+			$rels = array();
+
+			$str = $reld[$level];
+			if ($str != "")
+			{
+				$str .= ".";
+			}
+			foreach(explode(".", $str) as $l_rel)
+			{
+				if (!$from_clid)
+				{
+					// read all connections from designer class
+					$d = $this->_get_designer($arr["obj_inst"]);
+					$relp = array("" => "");
+					foreach($d->connections_from(array("type" => "RELTYPE_RELATION")) as $c)
+					{
+						$rel_o = $c->to();
+						$k = "RELTYPE_".strtoupper($rel_o->name());
+						$relp[$k] = $rel_o->name();
+						if ($l_rel == $k)
+						{
+							$from_clid = reset($rel_o->prop("r_class_id"));
+						}
+					}
+					$rels[] = $d->name().": ".html::select(array(
+						"name" => "rels[$level][]",
+						"options" => $relp,
+						"value" => $l_rel
+					));
+				}
+				else
+				{
+					$pp = $prop_tbl->_get_property_picker_from_clid($from_clid);
+					$rels[] = $clss[$from_clid]["name"].": ".html::select(array(
+						"name" => "rels[$level][]",
+						"options" => $pp,
+						"value" => $l_rel
+					));
+
+					if ($l_rel)
+					{
+						$cfgu = get_instance("cfg/cfgutils");
+						$ps = $cfgu->load_properties(array(
+							"clid" => $from_clid
+						));
+						$r_rels = $cfgu->get_relinfo();
+	
+						$from_clid = $prop_tbl->_get_rel_class_id_for_prop_or_rel($from_clid, $ps, $r_rels, $l_rel);
+					}
+				}
+
+			}
+
+
+			$t->define_data(array(
+				"level" => sprintf(t("Tase %s"), $level+1),
+				"rel" => join("<br>", $rels)
+			));
+		}
+
+		$t->set_sortable(false);
+	}
+
+	function _save_ct_rel($arr)
+	{
+		$save = array();
+
+		$rels = safe_array($arr["request"]["rels"]);
+		foreach($rels as $level => $parts)
+		{
+			$rp = array();
+			foreach($parts as $part)
+			{
+				if ($part != "")
+				{
+					$rp[] = $part;
+				}
+			}
+
+			if (count($rp))
+			{
+				$save[$level] = join(".", $rp);
+			}
+		}
+
+		$arr["obj_inst"]->set_meta("ct_rels_dat", $save);
+	}
+
+	function _i($level)
+	{
+		return "\t\t".str_repeat("\t", $level);
 	}
 }
 ?>

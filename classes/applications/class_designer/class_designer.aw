@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.25 2005/06/02 10:23:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.26 2005/06/02 11:47:29 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -1039,6 +1039,10 @@ class class_designer extends class_base
 				}
 				// this is not correct
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
+				if ($eltype == "tree")
+				{
+					$eltype = "treeview";
+				}
 				$rv .= "@property ${sys_name} type=${eltype} group=${group_name}";
 				if ($parent->class_id() == CL_PROPERTY_GRID)
 				{

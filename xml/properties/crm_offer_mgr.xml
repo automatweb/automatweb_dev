@@ -64,6 +64,7 @@
                         <num_1>CL_CRM_OFFER_GOAL</num_1>
                         <num_2>CL_CRM_OFFER_PAYMENT_TERMS</num_2>
                         <num_3>CL_CRM_OFFER_PRODUCTS_LIST</num_3>
+                        <num_4>CL_PROJECT</num_4>
                   </clid>
                   <caption>t&amp;uuml;piline komponent</caption>
             </TYPICAL_COMPONENT>

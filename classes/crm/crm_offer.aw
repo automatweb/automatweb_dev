@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.33 2005/04/28 07:41:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.34 2005/06/02 11:47:29 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -149,7 +149,8 @@ class crm_offer extends class_base
 			CL_CRM_OFFER_GOAL => t("Eesm&auml;rk"), 
 			CL_CRM_OFFER_PAYMENT_TERMS => t("Maksetingimused"),
 			CL_CRM_OFFER_PRODUCTS_LIST => t("Toodete nimekiri"),
-			CL_CRM_OFFER_COMPARE_TABLE => t("V&otilde;rdlustabel")
+			CL_CRM_OFFER_COMPARE_TABLE => t("V&otilde;rdlustabel"),
+			CL_PROJECT => t("Projekt")
 		);
 	}
 
