@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="scheduler" folder="" extends="aw_template">
-		<action name="update_repeaters">
+		<action name="update_repeaters" nologin="1">
 			<function name="update_repeaters">
 				<arguments>
 					<required name="id" />
