@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.43 2005/06/02 08:52:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.44 2005/06/02 09:35:21 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -744,6 +744,8 @@ class project extends class_base
 			$event_brother = $e_obj->brother_of();
 
 			enter_function("assign-event");
+			if (!(++$limit_counter >= ($limit_num+1) && $limit_num))
+			{
 			$events[$event_brother] = array(
 				"start" => $row["start"],
 				"end" => $row["end"],
@@ -762,16 +764,17 @@ class project extends class_base
 					"id" => $eid,
 				),$row["class_id"],true,true),
 			);
+			}
 			exit_function("assign-event");
 			$ids[$row["brother_of"]] = $row["brother_of"];
 			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
 
 			$by_parent[$event_parent][] = $event_brother;
 
-			if (++$limit_counter >= $limit_num && $limit_num)
+			/*if (++$limit_counter >= $limit_num && $limit_num)
 			{
 				break;
-			}
+			}*/
 		};
 		
 		// kas ma saan pr-i hiljem arvutada?
