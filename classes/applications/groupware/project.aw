@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.42 2005/05/19 07:53:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.43 2005/06/02 08:52:08 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -106,6 +106,27 @@
 @property userch5 type=checkbox ch_value=1 
 @caption User-defined checkbox 5
 
+
+@groupinfo goals caption="Verstapostid" submit=no
+
+	@groupinfo goals_edit caption="Muuda" parent=goals submit=no
+	@default group=goals_edit
+
+@property goal_tb type=toolbar no_caption=1
+
+@layout goal_vb type=hbox width="20%:80%"
+
+@property goal_tree type=treeview parent=goal_vb no_caption=1
+
+@property goal_table type=table parent=goal_vb no_caption=1
+
+	@groupinfo goals_gantt caption="Vaata" parent=goals submit=no
+
+	@default group=goals_gantt 
+
+	@property goals_gantt type=text store=no no_caption=1
+		
+
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
 
@@ -153,6 +174,7 @@ class project extends class_base
 		lc_site_load("project",&$this);
 
 		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
+		classload("icons");
 	}
 
 	function get_property($arr)
@@ -173,6 +195,22 @@ class project extends class_base
 				$data["options"] = array(
 					"weekview" => t("Nädala vaade"),
 				);
+				break;
+
+			case "goal_tb":
+				$this->_goal_tb($arr);
+				break;
+
+			case "goal_tree":
+				$this->_goal_tree($arr);
+				break;
+
+			case "goal_table":
+				$this->_goal_table($arr);
+				break;
+
+			case "goals_gantt":
+				$data["value"] = $this->_goals_gantt($arr);
 				break;
 		}
 		return $retval;
@@ -613,7 +651,7 @@ class project extends class_base
 			WHERE ((planner.start >= '${_start}' AND planner.start <= '${_end}')
 			OR
 			(planner.end >= '${_start}' AND planner.end <= '${_end}')) AND
-			$stat_str AND objects.parent IN (${parent}) order by planner.start"; // $limit
+			$stat_str AND objects.parent IN (${parent})  order by planner.start"; // $limit
 		
 		if($arr["range"]["viewtype"] == "relative")
 		{
@@ -640,20 +678,16 @@ class project extends class_base
 			LEFT JOIN objects ON (planner.id = objects.brother_of)
 			WHERE (planner.start - $_start) <= 0 AND
 			$stat_str AND objects.parent IN (${parent}) order by ($_start - planner.start) LIMIT $limit_num";
+
 		}
 
 
-		if (aw_global_get("uid") == "duke")
-		{
-			print $q;
-		};
 
 
 
 		// SELECT objects.oid AS id, objects.parent, objects.class_id, objects.brother_of, objects.name, planner.start, planner.end FROM planner LEFT JOIN objects ON (planner.id = objects.brother_of) WHERE ((planner.start >= '1099260000' AND planner.start <= '1104530399') OR (planner.end >= '1099260000' AND planner.end <= '1104530399')) AND objects.status != 0 AND objects.parent IN (2186)
 
 		enter_function("project::query");
-		dbg::p1($q);
 		$this->db_query($q);
 		$events = array();
 		$pl = get_instance(CL_PLANNER);
@@ -664,6 +698,7 @@ class project extends class_base
 		// weblingi jaoks on vaja küsida connectioneid selle projekti juurde!
 		while($row = $this->db_next())
 		{
+
 			// now figure out which project this thing belongs to?
 			//$web_page_id = $row["parent"];
 
@@ -683,6 +718,7 @@ class project extends class_base
 			{
 				//dbg::p1($row["name"]);
 				//dbg::p1("skip2");
+
 				continue;
 			};
 			
@@ -693,18 +729,7 @@ class project extends class_base
 			// koostan nimekirja asjadest, mida mul vaja on? ja edasi on vaja
 			// nimekirja piltidest
 
-			//enter_function("find-original");
-
-
-			// nii, see on see koht, mis tuleks tsüklist välja tõsta.
-			//obj_set_opt("no_auto_translation",1);
-			//$fx = $pr_obj->get_first_obj_by_reltype(RELTYPE_ORIGINAL);
-			//exit_function("find-original");
-			//if ($fx)
-			//{
-			//	$pr_obj = $fx;
-			//};
-			
+		
 			$prid = $pr_obj->id();
 
 			// mida fakki .. miks see asi NII on?
@@ -712,35 +737,6 @@ class project extends class_base
 
 			// äkki ma saan siis siin ka kasutada seda tsüklite ühendamist?
 			obj_set_opt("no_auto_translation",0);
-			/*
-			$conns = $pr_obj->connections_to(array(
-				"type" => 17, // RELTYPE_CONTENT_FROM
-				"from.lang_id" => aw_global_get("lang_id"),
-			));
-
-			// see on see bloody originaal ju :(
-			$first = reset($conns);
-			if (is_object($first))
-			{
-				$from = $first->from();
-				//$web_page_id = $first->prop("from");
-				$web_page_id = $from->id();
-			};
-			*/
-			
-			
-
-			// but some objects have no idea about an image
-			// what the hell am I going to do with those?
-			/*$pr_image = $pr_obj->get_first_obj_by_reltype("RELTYPE_PRJ_IMAGE");
-
-
-			if ($pr_image)
-			{
-				$inst = $pr_image->instance();
-				$row["project_image"] = $inst->get_url_by_id($pr_image->id());
-			};
-			*/
 
 			$eid = $e_obj->id();
 
@@ -768,6 +764,7 @@ class project extends class_base
 			);
 			exit_function("assign-event");
 			$ids[$row["brother_of"]] = $row["brother_of"];
+			$ids[$e_obj->brother_of()] = $e_obj->brother_of();
 
 			$by_parent[$event_parent][] = $event_brother;
 
@@ -858,6 +855,7 @@ class project extends class_base
 				"from" => $ids,
 				"type" => 1, // RELTYPE_PICTURE from CL_STAGING
 			));
+
 
 			foreach($conns as $conn)
 			{
@@ -1664,6 +1662,11 @@ class project extends class_base
 		};
 	}
 
+	function callback_mod_reforb($arr)
+	{
+		$arr["post_ru"] = post_ru();
+	}
+
 	function request_execute($o)
 	{
 		$rv = "";
@@ -1900,5 +1903,218 @@ class project extends class_base
 		return $rv;
 	}
 
+	function _goal_tb($arr)
+	{
+		$t =& $arr["prop"]["toolbar"];
+
+		$t->add_menu_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa")
+		));
+
+		$t->add_menu_item(array(
+			"name" => "new_goal",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_PROJECT_GOAL, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				array("return_url" => get_ru())
+			),
+			"text" => t("Verstapost"),
+		));
+
+		$t->add_menu_item(array(
+			"name" => "new_event",
+			"parent" => "new",
+			"link" => html::get_new_url(
+				CL_TASK, 
+				is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id(), 
+				array("return_url" => get_ru())
+			),
+			"text" => t("Toimetus"),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_goals",
+			"tooltip" => t("Kustuta"),
+		));
+	}
+
+	function _goal_tree($arr)
+	{
+		classload("core/icons");
+		$arr["prop"]["vcl_inst"] = treeview::tree_from_objects(array(
+			"tree_opts" => array(
+				"type" => TREE_DHTML, 
+				"persist_state" => true,
+				"tree_id" => "proj_goal_t",
+			),
+			"root_item" => $arr["obj_inst"],
+			"ot" => new object_tree(array(
+				"class_id" => CL_PROJECT_GOAL,
+				"parent" => $arr["obj_inst"]->id(),
+			)),
+			"var" => "tf",
+			"icon" => icons::get_icon_url(CL_MENU)
+		));
+	}
+
+	function _init_goal_table(&$t)
+	{
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"align" => "center",
+			"sortable" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "start1",
+			"caption" => t("Algus"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "end",
+			"caption" => t("L&otilde;pp"),
+			"align" => "center",
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+
+		$t->define_chooser(array(
+			"name" => "sel",
+			"field" => "oid"
+		));
+	}
+
+	function _goal_table($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_goal_table($t);
+
+		$parent = is_oid($arr["request"]["tf"]) ? $arr["request"]["tf"] : $arr["obj_inst"]->id();
+
+		$goals = new object_list(array(
+			"parent" => $parent,
+			"class_id" => array(CL_PROJECT_GOAL,CL_TASK)
+		));
+
+		$t->data_from_ol($goals, array("change_col" => "name"));
+	}
+
+	/**
+
+		@attrib name=del_goals
+
+	**/
+	function del_goals($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array("oid" => $arr["sel"]));
+			$ol->delete();
+		}
+
+		return $arr["post_ru"];
+	}
+
+	function _goals_gantt($arr)
+	{
+		$time =  time();
+		$this_object =& $arr["obj_inst"];
+		$chart = get_instance ("vcl/gantt_chart");
+
+		$columns = 7;
+
+		// get all goals/tasks
+		$ot = new object_tree(array(
+			"parent" => $arr["obj_inst"]->id(),
+			"class_id" => array(CL_PROJECT_GOAL,CL_TASK),
+		));
+		$gt_list = $ot->to_list();
+
+		$range_start = 2000000000;
+		$range_end = 0;
+		foreach($gt_list->arr() as $gt)
+		{
+			$range_start = min($gt->prop("start1"), $range_start);
+			$range_end = max($gt->prop("end"), $range_end);
+		}
+
+		$subdivisions = 1;
+
+		foreach($gt_list->arr() as $gt)
+		{
+			$chart->add_row (array (
+				"name" => $gt->id(),
+				"title" => $gt->name(),
+				"uri" => html::get_change_url(
+					$gt->id(),
+					array("return_url" => get_ru())
+				)
+			));
+		}
+
+		
+		foreach ($gt_list->arr() as $gt)
+		{
+			$start = $gt->prop ("start1");
+			$length = $gt->prop("end") - $start;
+			$title = $gt->name()."<br>( ".date("d.m.Y H:i", $start)." - ".date("d.m.Y H:i", $gt->prop("end"))." ) ";
+
+			$bar = array (
+				"id" => $gt->id (),
+				"row" => $gt->id (),
+				"start" => $start,
+				"length" => $length,
+				"title" => $title
+			);
+
+			$chart->add_bar ($bar);
+		}
+
+		$chart->configure_chart (array (
+			"chart_id" => "proj_gantt",
+			"style" => "aw",
+			"start" => $range_start,
+			"end" => $range_end,
+			"columns" => $columns,
+			"subdivisions" => $subdivisions,
+			"timespans" => $subdivisions,
+			"width" => 950,
+			"row_height" => 10,
+		));
+
+		### define columns
+		$i = 0;
+		$days = array ("P", "E", "T", "K", "N", "R", "L");
+
+		while ($i < $columns)
+		{
+			$day_start = ($range_start + ($i * 86400));
+			$day = date ("w", $day_start);
+			$date = date ("j/m/Y", $day_start);
+			$uri = aw_url_change_var ("mrp_chart_length", 1);
+			$uri = aw_url_change_var ("mrp_chart_start", $day_start, $uri);
+			$chart->define_column (array (
+				"col" => ($i + 1),
+				"title" => $days[$day] . " - " . $date,
+				"uri" => $uri,
+			));
+			$i++;
+		}
+
+		return $chart->draw_chart ();
+	}
 };
 ?>
