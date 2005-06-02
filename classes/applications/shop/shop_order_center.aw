@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.26 2005/06/02 12:19:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.27 2005/06/02 12:48:37 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -760,11 +760,18 @@ class shop_order_center extends class_base
 			$ord_ids[] = $ord->id();
 		}
 
-		$ool = new object_list(array(
-			"class_id" => CL_ORDERS_ORDER,
-			"oid" => $ord_ids,
-			"sort_by" => "objects.created"
-		));
+		if (!count($ord_ids))
+		{
+			$ool = new object_list();
+		}
+		else
+		{
+			$ool = new object_list(array(
+				"class_id" => CL_ORDERS_ORDER,
+				"oid" => $ord_ids,
+				"sort_by" => "objects.created"
+			));
+		}
 
 		foreach($ool->arr() as $ord)
 		{
