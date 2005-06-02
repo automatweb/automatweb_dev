@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.36 2005/05/26 10:32:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.37 2005/06/02 13:19:29 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -711,6 +711,8 @@ class shop_order_cart extends class_base
 			$params["postal_price"] = $order_cart->prop("postal_price");
 		}
 		$cart = $this->get_cart($oc);
+
+		$this->update_user_data_from_order($oc, $warehouse, $params);
 
 		$so->start_order(obj($warehouse), $oc);
 		
@@ -1499,5 +1501,61 @@ class shop_order_cart extends class_base
 		$this->clear_cart($oc);
 		return aw_ini_get("baseurl");
 	}
+
+	function update_user_data_from_order($oc, $wh, $params)
+	{
+		if (aw_global_get("uid") == "")
+		{
+			return;
+		}
+		$ud = safe_array($_POST["user_data"]);
+		
+		$ps_pmap = safe_array($oc->meta("ps_pmap"));
+		$org_pmap = safe_array($oc->meta("org_pmap"));
+
+		$u_i = get_instance(CL_USER);
+		$cur_p_id = $u_i->get_current_person();
+		$cur_p = obj();
+		if (is_oid($cur_p_id) && $this->can("view", $cur_p_id))
+		{
+			$cur_p = obj($cur_p_id);
+		}
+
+		$cur_co_id = $u_i->get_current_company();
+		$cur_co = obj();
+		if (is_oid($cur_co_id) && $this->can("view", $cur_co_id))
+		{
+			$cur_co = obj($cur_co_id);
+		}
+
+		foreach($ud as $pn => $pv)
+		{
+			if ($key = array_search($pn, $ps_pmap))
+			{
+				$cur_p->set_prop($key, $pv);
+				$p_m = true;
+			}
+			if ($key = array_search($pn, $org_pmap))
+			{
+				$cur_co->set_prop($key, $pv);
+				$c_m = true;
+			}
+		}
+
+		if ($p_m)
+		{
+			aw_disable_acl();
+			$cur_p->save();
+			aw_restore_acl();
+		}		
+
+		if ($c_m)
+		{
+			aw_disable_acl();
+			$cur_co->save();
+			aw_restore_acl();
+		}		
+	}
 }
 ?>
+ 

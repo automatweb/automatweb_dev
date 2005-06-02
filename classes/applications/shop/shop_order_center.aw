@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.27 2005/06/02 12:48:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.28 2005/06/02 13:19:29 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -919,6 +919,24 @@ class shop_order_center extends class_base
 			"clid" => $class_id,
 		));
 
+		$ps_pmap = safe_array($oc->meta("ps_pmap"));
+		$org_pmap = safe_array($oc->meta("org_pmap"));
+
+		$u_i = get_instance(CL_USER);
+		$cur_p_id = $u_i->get_current_person();
+		$cur_p = obj();
+		if (is_oid($cur_p_id) && $this->can("view", $cur_p_id))
+		{
+			$cur_p = obj($cur_p_id);
+		}
+
+		$cur_co_id = $u_i->get_current_company();
+		$cur_co = obj();
+		if (is_oid($cur_co_id) && $this->can("view", $cur_co_id))
+		{
+			$cur_co = obj($cur_co_id);
+		}
+
 		// rewrite names as user_data[prop]
 		foreach($cf_ps as $pn => $pd)
 		{
@@ -929,6 +947,16 @@ class shop_order_center extends class_base
 			$ret[$pn] = $all_ps[$pn];
 			$ret[$pn]["caption"] = $pd["caption"];
 			$ret[$pn]["name"] = "user_data[$pn]";
+
+			if (($fld = array_search($pn, $ps_pmap)))
+			{
+				$cud[$pn] = $cur_p->prop($fld);
+			}
+
+			if (($fld = array_search($pn, $org_pmap)))
+			{
+				$cud[$pn] = $cur_co->prop($fld);
+			}
 
 			if ($ret[$pn]["type"] == "date_select")
 			{
