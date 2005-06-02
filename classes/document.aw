@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.331 2005/05/25 11:47:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.332 2005/06/02 08:59:21 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -1939,7 +1939,8 @@ class document extends aw_template
 
 		return $this->mk_my_orb("change",array(
 			"id" => $oob["oid"], 
-			"section" => $_GET["section"]
+			"section" => $_GET["section"],
+			"period" => $arr["period"]
 		),"doc");
 	}
 
