@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 20:54+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tılget (needs_translation) caption"
@@ -51,11 +52,11 @@ msgstr ""
 
 # classes/image.aw:prop_file_comment
 msgid "Omaduse Pilt (file) kommentaar"
-msgstr ""
+msgstr "v‰lja j‰rel oleval Browse nupul klikkides avaneb vıimalus valida k‰ttesaadavalt andmekandjalt soovitud pildifail"
 
 # classes/image.aw:prop_file_help
 msgid "Omaduse Pilt (file) help"
-msgstr ""
+msgstr "v‰lja j‰rel oleval Browse nupul klikkides avaneb vıimalus valida k‰ttesaadavalt andmekandjalt soovitud pildifail"
 
 # classes/image.aw:prop_dimensions
 msgid "Omaduse Mııtmed (dimensions) caption"
@@ -63,11 +64,11 @@ msgstr ""
 
 # classes/image.aw:prop_dimensions_comment
 msgid "Omaduse Mııtmed (dimensions) kommentaar"
-msgstr ""
+msgstr "siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li ilmub peale pildi esmakordset salvestamist"
 
 # classes/image.aw:prop_dimensions_help
 msgid "Omaduse Mııtmed (dimensions) help"
-msgstr ""
+msgstr "siin kuvatakse sisestatud pildi suurust pixlites (laius X kırgus). V‰li ilmub peale pildi esmakordset salvestamist"
 
 # classes/image.aw:prop_file2
 msgid "Omaduse Suur pilt (file2) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/image.aw:prop_file2_comment
 msgid "Omaduse Suur pilt (file2) kommentaar"
-msgstr ""
+msgstr "v‰lja j‰rel oleval Browse nupul klikkides avaneb vıimalus valida k‰ttesaadavalt andmekandjalt soovitud pildifail. "
 
 # classes/image.aw:prop_file2_help
 msgid "Omaduse Suur pilt (file2) help"
-msgstr ""
+msgstr "v‰lja j‰rel oleval Browse nupul klikkides avaneb vıimalus valida k‰ttesaadavalt andmekandjalt soovitud pildifail. "
 
 # classes/image.aw:prop_file2_del
 msgid "Omaduse Kustuta suur pilt (file2_del) caption"
@@ -87,11 +88,11 @@ msgstr ""
 
 # classes/image.aw:prop_file2_del_comment
 msgid "Omaduse Kustuta suur pilt (file2_del) kommentaar"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks Suur pilt kustutakse"
 
 # classes/image.aw:prop_file2_del_help
 msgid "Omaduse Kustuta suur pilt (file2_del) help"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks Suur pilt kustutakse"
 
 # classes/image.aw:prop_comment
 msgid "Omaduse Pildi allkiri (comment) caption"
@@ -99,11 +100,11 @@ msgstr ""
 
 # classes/image.aw:prop_comment_comment
 msgid "Omaduse Pildi allkiri (comment) kommentaar"
-msgstr ""
+msgstr " vıimaldab lisada pildile kommentaari. Pildi allkirja n‰idatakse veebilehel pildi all v‰ikeses kirjas"
 
 # classes/image.aw:prop_comment_help
 msgid "Omaduse Pildi allkiri (comment) help"
-msgstr ""
+msgstr " vıimaldab lisada pildile kommentaari. Pildi allkirja n‰idatakse veebilehel pildi all v‰ikeses kirjas"
 
 # classes/image.aw:prop_author
 msgid "Omaduse Pildi autor (author) caption"
@@ -111,11 +112,11 @@ msgstr ""
 
 # classes/image.aw:prop_author_comment
 msgid "Omaduse Pildi autor (author) kommentaar"
-msgstr ""
+msgstr "vıimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal."
 
 # classes/image.aw:prop_author_help
 msgid "Omaduse Pildi autor (author) help"
-msgstr ""
+msgstr "vıimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal.(ei pruugi kıigi kujunduste tulla veebilehel n‰htavale)"
 
 # classes/image.aw:prop_alt
 msgid "Omaduse Alt (alt) caption"
@@ -123,11 +124,11 @@ msgstr ""
 
 # classes/image.aw:prop_alt_comment
 msgid "Omaduse Alt (alt) kommentaar"
-msgstr ""
+msgstr "tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale."
 
 # classes/image.aw:prop_alt_help
 msgid "Omaduse Alt (alt) help"
-msgstr ""
+msgstr "tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale. Vıimalus lisada pildile kommentaari"
 
 # classes/image.aw:prop_link
 msgid "Omaduse Link (link) caption"
@@ -135,11 +136,11 @@ msgstr ""
 
 # classes/image.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
-msgstr ""
+msgstr "vıimalus suunata kasutaja peale pildil klikkimist antud v‰lja sisestatud veebiaadressile"
 
 # classes/image.aw:prop_link_help
 msgid "Omaduse Link (link) help"
-msgstr ""
+msgstr "vıimalus suunata kasutaja peale pildil klikkimist antud v‰lja sisestatud veebiaadressile. Kui tegemist on v‰ljaspoole antud veebilehte viiva lingiga siis tuleb aadress sisestada kujul http://... (N: http://www.struktuur.ee). Veebilehe sisese lingi puhul piisab kui kirjutada / ja objekti ID "
 
 # classes/image.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
@@ -147,11 +148,11 @@ msgstr ""
 
 # classes/image.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks vıimaldab avada Link v‰lja sisesatud aadressil asuva veebilehe uude Internetilehitseja aknasse "
 
 # classes/image.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks vıimaldab avada Link v‰lja sisesatud aadressil asuva veebilehe uude Internetilehitseja aknasse "
 
 # classes/image.aw:prop_no_print
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) caption"
@@ -159,11 +160,11 @@ msgstr ""
 
 # classes/image.aw:prop_no_print_comment
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) kommentaar"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks ei kuvata pilti Print-vaates"
 
 # classes/image.aw:prop_no_print_help
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) help"
-msgstr ""
+msgstr "m‰rkides v‰lja valituks ei kuvata pilti Print-vaates"
 
 # classes/image.aw:prop_new_w
 msgid "Omaduse Uus laius (new_w) caption"
@@ -171,11 +172,11 @@ msgstr ""
 
 # classes/image.aw:prop_new_w_comment
 msgid "Omaduse Uus laius (new_w) kommentaar"
-msgstr ""
+msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue laiuse"
 
 # classes/image.aw:prop_new_w_help
 msgid "Omaduse Uus laius (new_w) help"
-msgstr ""
+msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue laiuse"
 
 # classes/image.aw:prop_new_h
 msgid "Omaduse Uus k&otilde;rgus (new_h) caption"
@@ -183,11 +184,11 @@ msgstr ""
 
 # classes/image.aw:prop_new_h_comment
 msgid "Omaduse Uus k&otilde;rgus (new_h) kommentaar"
-msgstr ""
+msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue kırguse"
 
 # classes/image.aw:prop_new_h_help
 msgid "Omaduse Uus k&otilde;rgus (new_h) help"
-msgstr ""
+msgstr "vıimaldab m‰‰rata ‹ldine vaates sisestatud pildi uue kırguse"
 
 # classes/image.aw:prop_dimensions_big
 msgid "Omaduse Mııtmed (dimensions_big) caption"
@@ -195,11 +196,11 @@ msgstr ""
 
 # classes/image.aw:prop_dimensions_big_comment
 msgid "Omaduse Mııtmed (dimensions_big) kommentaar"
-msgstr ""
+msgstr "siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X kırgus)"
 
 # classes/image.aw:prop_dimensions_big_help
 msgid "Omaduse Mııtmed (dimensions_big) help"
-msgstr ""
+msgstr "siin kuvatakse ‹ldine vaates sisestatud pildi suurust pixlites (laius X kırgus)"
 
 # classes/image.aw:prop_new_w_big
 msgid "Omaduse Uus laius (suur) (new_w_big) caption"
@@ -207,11 +208,11 @@ msgstr ""
 
 # classes/image.aw:prop_new_w_big_comment
 msgid "Omaduse Uus laius (suur) (new_w_big) kommentaar"
-msgstr ""
+msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue laiuse"
 
 # classes/image.aw:prop_new_w_big_help
 msgid "Omaduse Uus laius (suur) (new_w_big) help"
-msgstr ""
+msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue laiuse"
 
 # classes/image.aw:prop_new_h_big
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) caption"
@@ -219,11 +220,11 @@ msgstr ""
 
 # classes/image.aw:prop_new_h_big_comment
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) kommentaar"
-msgstr ""
+msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue kırguse"
 
 # classes/image.aw:prop_new_h_big_help
 msgid "Omaduse Uus k&otilde;rgus (suur) (new_h_big) help"
-msgstr ""
+msgstr "vıimaldab m‰‰rata Suur pilt vaates sisestatud pildi uue kırguse"
 
 # classes/image.aw:prop_do_resize
 msgid "Omaduse  (do_resize) caption"
@@ -243,11 +244,11 @@ msgstr ""
 
 # classes/image.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
-msgstr ""
+msgstr "pildi puhul, mıjutab j‰rjekord veebil kuvamist juhul, kui pilti kuvatakse minigalerii abil."
 
 # classes/image.aw:prop_ord_help
 msgid "Omaduse J&auml;rjekord (ord) help"
-msgstr ""
+msgstr "pildi puhul, mıjutab j‰rjekord veebil kuvamist juhul, kui pilti kuvatakse minigalerii abil."
 
 # classes/image.aw:prop_resize_warn
 msgid "Omaduse Info (resize_warn) caption"
@@ -300,3 +301,4 @@ msgstr ""
 #: classes/image.aw:646
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
+

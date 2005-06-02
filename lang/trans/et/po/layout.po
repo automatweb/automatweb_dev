@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu, 28 Apr 2005 10:49:54 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 21:13+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/layout.aw:prop_rows
 msgid "Omaduse Ridu (rows) caption"
@@ -15,11 +16,11 @@ msgstr ""
 
 # classes/layout.aw:prop_rows_comment
 msgid "Omaduse Ridu (rows) kommentaar"
-msgstr ""
+msgstr "tabeli ridade arv"
 
 # classes/layout.aw:prop_rows_help
 msgid "Omaduse Ridu (rows) help"
-msgstr ""
+msgstr "tabeli ridade arv"
 
 # classes/layout.aw:prop_columns
 msgid "Omaduse Tulpi (columns) caption"
@@ -27,11 +28,11 @@ msgstr ""
 
 # classes/layout.aw:prop_columns_comment
 msgid "Omaduse Tulpi (columns) kommentaar"
-msgstr ""
+msgstr "tabeli tulpade arv"
 
 # classes/layout.aw:prop_columns_help
 msgid "Omaduse Tulpi (columns) help"
-msgstr ""
+msgstr "tabeli tulpade arv"
 
 # classes/layout.aw:prop_cell_style_folders
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) caption"
@@ -39,11 +40,11 @@ msgstr ""
 
 # classes/layout.aw:prop_cell_style_folders_comment
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) kommentaar"
-msgstr ""
+msgstr "kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", siis on võimalik valida, millistest kaustadest stiilid võetakse."
 
 # classes/layout.aw:prop_cell_style_folders_help
 msgid "Omaduse Stiilide kataloogid (cell_style_folders) help"
-msgstr ""
+msgstr "kui seostehalduri abil on seotud seose tüüp \"celli stiilide kataloog\", siis on võimalik valida, millistest kaustadest stiilid võetakse."
 
 # classes/layout.aw:prop_grid
 msgid "Omaduse Tabel (grid) caption"
@@ -51,11 +52,11 @@ msgstr ""
 
 # classes/layout.aw:prop_grid_comment
 msgid "Omaduse Tabel (grid) kommentaar"
-msgstr ""
+msgstr "Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja lahutada."
 
 # classes/layout.aw:prop_grid_help
 msgid "Omaduse Tabel (grid) help"
-msgstr ""
+msgstr "Tabel vaates on võimalik tabeli lahtreid valida ning omavahel ühendada ja lahutada."
 
 # classes/layout.aw:prop_table_style
 msgid "Omaduse Vali vaikimisi tabeli stiil (table_style) caption"
@@ -63,11 +64,11 @@ msgstr ""
 
 # classes/layout.aw:prop_table_style_comment
 msgid "Omaduse Vali vaikimisi tabeli stiil (table_style) kommentaar"
-msgstr ""
+msgstr "võimaldab valida tabelile üldise stiili."
 
 # classes/layout.aw:prop_table_style_help
 msgid "Omaduse Vali vaikimisi tabeli stiil (table_style) help"
-msgstr ""
+msgstr "võimaldab valida tabelile üldise stiili."
 
 # classes/layout.aw:prop_sel_style
 msgid "Omaduse Vali elemendi stiil (sel_style) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/layout.aw:prop_sel_style_comment
 msgid "Omaduse Vali elemendi stiil (sel_style) kommentaar"
-msgstr ""
+msgstr "võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi stiile rakendada."
 
 # classes/layout.aw:prop_sel_style_help
 msgid "Omaduse Vali elemendi stiil (sel_style) help"
-msgstr ""
+msgstr "võimaldab selekteeritud lahtritele või tervetele tulpadele/ridadele eraldi stiile rakendada."
 
 # classes/layout.aw:prop_grid_styles
 msgid "Omaduse Vali element (grid_styles) caption"
@@ -87,11 +88,11 @@ msgstr ""
 
 # classes/layout.aw:prop_grid_styles_comment
 msgid "Omaduse Vali element (grid_styles) kommentaar"
-msgstr ""
+msgstr "lahtrite, tulpade ja/või ridade selekteerimine."
 
 # classes/layout.aw:prop_grid_styles_help
 msgid "Omaduse Vali element (grid_styles) help"
-msgstr ""
+msgstr "lahtrite, tulpade ja/või ridade selekteerimine."
 
 # classes/layout.aw:prop_row_widths
 msgid "Omaduse Ridade laiused (row_widths) caption"
@@ -123,11 +124,11 @@ msgstr ""
 
 # classes/layout.aw:prop_grid_aliases_comment
 msgid "Omaduse Aliased (grid_aliases) kommentaar"
-msgstr ""
+msgstr "tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva seostehalduri abil tekitatud aliased."
 
 # classes/layout.aw:prop_grid_aliases_help
 msgid "Omaduse Aliased (grid_aliases) help"
-msgstr ""
+msgstr "tabeli täitmine sisuga. Sisuks võib olla nii tekst kui ka alloleva seostehalduri abil tekitatud aliased."
 
 # classes/layout.aw:prop_grid_aliases_list
 msgid "Omaduse Aliaste manager (grid_aliases_list) caption"
@@ -147,11 +148,11 @@ msgstr ""
 
 # classes/layout.aw:prop_grid_preview_comment
 msgid "Omaduse Eelvaade (grid_preview) kommentaar"
-msgstr ""
+msgstr "võimaldab tabeli sisu eelvaadet."
 
 # classes/layout.aw:prop_grid_preview_help
 msgid "Omaduse Eelvaade (grid_preview) help"
-msgstr ""
+msgstr "võimaldab tabeli sisu eelvaadet."
 
 # classes/layout.aw:prop_import_file
 msgid "Omaduse Uploadi .csv fail (import_file) caption"
@@ -159,28 +160,22 @@ msgstr ""
 
 # classes/layout.aw:prop_import_file_comment
 msgid "Omaduse Uploadi .csv fail (import_file) kommentaar"
-msgstr ""
+msgstr "võimaldab tekitada tabeli arvutist lisatud csv failist."
 
 # classes/layout.aw:prop_import_file_help
 msgid "Omaduse Uploadi .csv fail (import_file) help"
-msgstr ""
+msgstr "võimaldab tekitada tabeli arvutist lisatud csv failist."
 
 # classes/layout.aw:prop_import_remove_empty
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"caption"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) caption"
 msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty_comment
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"kommentaar"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) kommentaar"
 msgstr ""
 
 # classes/layout.aw:prop_import_remove_empty_help
-msgid ""
-"Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) "
-"help"
+msgid "Omaduse Kas eemaldame t&uuml;hjad read l&otilde;pust (import_remove_empty) help"
 msgstr ""
 
 # classes/layout.aw:prop_import_sep
@@ -189,25 +184,23 @@ msgstr ""
 
 # classes/layout.aw:prop_import_sep_comment
 msgid "Omaduse Mis m&auml;rgiga on tulbad eraldatud? (import_sep) kommentaar"
-msgstr ""
+msgstr "tulpade tekitamiseks tuleb ette anda eraldav sümbol."
 
 # classes/layout.aw:prop_import_sep_help
 msgid "Omaduse Mis m&auml;rgiga on tulbad eraldatud? (import_sep) help"
-msgstr ""
+msgstr "tulpade tekitamiseks tuleb ette anda eraldav sümbol."
 
 # classes/layout.aw:prop_show_in_folders
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) caption"
 msgstr ""
 
 # classes/layout.aw:prop_show_in_folders_comment
-msgid ""
-"Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
-msgstr ""
+msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) kommentaar"
+msgstr "kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole midagi valitud siis ei ole tabelil mingit näitamise piirangut."
 
 # classes/layout.aw:prop_show_in_folders_help
 msgid "Omaduse Millistes kataloogides n&auml;idatakse (show_in_folders) help"
-msgstr ""
+msgstr "kui seostehalduri abil on seotud seose tüüp \"Näita selles kataloogis\", siis on võimalik valida, millistes seda tabelit näidatakse. Kui ei ole midagi valitud siis ei ole tabelil mingit näitamise piirangut."
 
 # classes/layout.aw:prop_header
 msgid "Omaduse P&auml;is (header) caption"
@@ -215,11 +208,11 @@ msgstr ""
 
 # classes/layout.aw:prop_header_comment
 msgid "Omaduse P&auml;is (header) kommentaar"
-msgstr ""
+msgstr "võimaldab tabelile tekitada päise."
 
 # classes/layout.aw:prop_header_help
 msgid "Omaduse P&auml;is (header) help"
-msgstr ""
+msgstr "võimaldab tabelile tekitada päise."
 
 # classes/layout.aw:prop_footer
 msgid "Omaduse Jalus (footer) caption"
@@ -227,11 +220,11 @@ msgstr ""
 
 # classes/layout.aw:prop_footer_comment
 msgid "Omaduse Jalus (footer) kommentaar"
-msgstr ""
+msgstr "võimaldab tabelile tekitada jaluse."
 
 # classes/layout.aw:prop_footer_help
 msgid "Omaduse Jalus (footer) help"
-msgstr ""
+msgstr "võimaldab tabelile tekitada jaluse."
 
 # classes/layout.aw:group_settings
 msgid "Grupi M&auml;&auml;rangud (settings) pealkiri"
@@ -296,3 +289,4 @@ msgstr ""
 # classes/layout.aw:rel_RELTYPE_SHOW_FOLDER
 msgid "Seose näita selles kataloogis (RELTYPE_SHOW_FOLDER) tekst"
 msgstr ""
+

@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 21:06+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/contentmgmt/css.aw:prop_ffamily1
 msgid "Omaduse Font 1 (ffamily1) caption"
@@ -15,11 +16,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_ffamily1_comment
 msgid "Omaduse Font 1 (ffamily1) kommentaar"
-msgstr ""
+msgstr "kirja fondi esimene eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily1_help
 msgid "Omaduse Font 1 (ffamily1) help"
-msgstr ""
+msgstr "kirja fondi esimene eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily2
 msgid "Omaduse Font 3 (ffamily2) caption"
@@ -27,11 +28,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_ffamily2_comment
 msgid "Omaduse Font 3 (ffamily2) kommentaar"
-msgstr ""
+msgstr "kirja fondi teine eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily2_help
 msgid "Omaduse Font 3 (ffamily2) help"
-msgstr ""
+msgstr "kirja fondi teine eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily3
 msgid "Omaduse Font 3 (ffamily3) caption"
@@ -39,11 +40,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_ffamily3_comment
 msgid "Omaduse Font 3 (ffamily3) kommentaar"
-msgstr ""
+msgstr "kirja fondi kolmas eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily3_help
 msgid "Omaduse Font 3 (ffamily3) help"
-msgstr ""
+msgstr "kirja fondi kolmas eelistus"
 
 # classes/contentmgmt/css.aw:prop_ffamily
 msgid "Omaduse  (ffamily) caption"
@@ -63,11 +64,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_italic_comment
 msgid "Omaduse <i>Italic</i> (italic) kommentaar"
-msgstr ""
+msgstr "kiri kaldkirjas"
 
 # classes/contentmgmt/css.aw:prop_italic_help
 msgid "Omaduse <i>Italic</i> (italic) help"
-msgstr ""
+msgstr "kiri kaldkirjas"
 
 # classes/contentmgmt/css.aw:prop_bold
 msgid "Omaduse <b>Bold</b> (bold) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_bold_comment
 msgid "Omaduse <b>Bold</b> (bold) kommentaar"
-msgstr ""
+msgstr "kiri paksus kirjas"
 
 # classes/contentmgmt/css.aw:prop_bold_help
 msgid "Omaduse <b>Bold</b> (bold) help"
-msgstr ""
+msgstr "kiri paksus kirjas"
 
 # classes/contentmgmt/css.aw:prop_underline
 msgid "Omaduse <u>Underline</u> (underline) caption"
@@ -87,11 +88,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_underline_comment
 msgid "Omaduse <u>Underline</u> (underline) kommentaar"
-msgstr ""
+msgstr "kiri allajoonitult"
 
 # classes/contentmgmt/css.aw:prop_underline_help
 msgid "Omaduse <u>Underline</u> (underline) help"
-msgstr ""
+msgstr "kiri allajoonitult"
 
 # classes/contentmgmt/css.aw:prop_size
 msgid "Omaduse Kirja suurus (px) (size) caption"
@@ -99,11 +100,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_size_comment
 msgid "Omaduse Kirja suurus (px) (size) kommentaar"
-msgstr ""
+msgstr "kirja suurus pixlites"
 
 # classes/contentmgmt/css.aw:prop_size_help
 msgid "Omaduse Kirja suurus (px) (size) help"
-msgstr ""
+msgstr "kirja suurus pixlites"
 
 # classes/contentmgmt/css.aw:prop_fgcolor
 msgid "Omaduse Teksti v&auml;rv (fgcolor) caption"
@@ -111,11 +112,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_fgcolor_comment
 msgid "Omaduse Teksti v&auml;rv (fgcolor) kommentaar"
-msgstr ""
+msgstr "kirja värv"
 
 # classes/contentmgmt/css.aw:prop_fgcolor_help
 msgid "Omaduse Teksti v&auml;rv (fgcolor) help"
-msgstr ""
+msgstr "kirja värv"
 
 # classes/contentmgmt/css.aw:prop_bgcolor
 msgid "Omaduse Tausta v&auml;rv (bgcolor) caption"
@@ -123,11 +124,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_bgcolor_comment
 msgid "Omaduse Tausta v&auml;rv (bgcolor) kommentaar"
-msgstr ""
+msgstr "elemendi sisu või tabeli tausta värv"
 
 # classes/contentmgmt/css.aw:prop_bgcolor_help
 msgid "Omaduse Tausta v&auml;rv (bgcolor) help"
-msgstr ""
+msgstr "elemendi sisu või tabeli tausta värv"
 
 # classes/contentmgmt/css.aw:prop_lineheight
 msgid "Omaduse Joone k&otilde;rgus  (lineheight) caption"
@@ -135,11 +136,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_lineheight_comment
 msgid "Omaduse Joone k&otilde;rgus  (lineheight) kommentaar"
-msgstr ""
+msgstr "teksti ridade kõrgus"
 
 # classes/contentmgmt/css.aw:prop_lineheight_help
 msgid "Omaduse Joone k&otilde;rgus  (lineheight) help"
-msgstr ""
+msgstr "teksti ridade kõrgus"
 
 # classes/contentmgmt/css.aw:prop_border
 msgid "Omaduse &Auml;&auml;rejoone j&auml;medus (border) caption"
@@ -147,11 +148,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_border_comment
 msgid "Omaduse &Auml;&auml;rejoone j&auml;medus (border) kommentaar"
-msgstr ""
+msgstr "elementi või tabelit ümbritseva joone jämedus pixlites"
 
 # classes/contentmgmt/css.aw:prop_border_help
 msgid "Omaduse &Auml;&auml;rejoone j&auml;medus (border) help"
-msgstr ""
+msgstr "elementi või tabelit ümbritseva joone jämedus pixlites"
 
 # classes/contentmgmt/css.aw:prop_bordercolor
 msgid "Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) caption"
@@ -159,11 +160,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_bordercolor_comment
 msgid "Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) kommentaar"
-msgstr ""
+msgstr "elementi või tabelit ümbritseva joone värv"
 
 # classes/contentmgmt/css.aw:prop_bordercolor_help
 msgid "Omaduse &Auml;&auml;rejoone v&auml;rv (bordercolor) help"
-msgstr ""
+msgstr "elementi või tabelit ümbritseva joone värv"
 
 # classes/contentmgmt/css.aw:prop_align
 msgid "Omaduse Align (align) caption"
@@ -171,11 +172,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_align_comment
 msgid "Omaduse Align (align) kommentaar"
-msgstr ""
+msgstr "sisu horisontaalne paigutus"
 
 # classes/contentmgmt/css.aw:prop_align_help
 msgid "Omaduse Align (align) help"
-msgstr ""
+msgstr "sisu horisontaalne paigutus"
 
 # classes/contentmgmt/css.aw:prop_valign
 msgid "Omaduse Valign (valign) caption"
@@ -183,11 +184,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_valign_comment
 msgid "Omaduse Valign (valign) kommentaar"
-msgstr ""
+msgstr "sisu vertikaalne paigutus"
 
 # classes/contentmgmt/css.aw:prop_valign_help
 msgid "Omaduse Valign (valign) help"
-msgstr ""
+msgstr "sisu vertikaalne paigutus"
 
 # classes/contentmgmt/css.aw:prop_width
 msgid "Omaduse Laius (width) caption"
@@ -195,11 +196,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
-msgstr ""
+msgstr "elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast ruumist"
 
 # classes/contentmgmt/css.aw:prop_width_help
 msgid "Omaduse Laius (width) help"
-msgstr ""
+msgstr "elemendi või tabeli laius pixlites või protsentides ümbrtisevast vabast ruumist"
 
 # classes/contentmgmt/css.aw:prop_height
 msgid "Omaduse K&otilde;rgus (height) caption"
@@ -207,11 +208,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_height_comment
 msgid "Omaduse K&otilde;rgus (height) kommentaar"
-msgstr ""
+msgstr "elemendi või tabeli maksimaalne kõrgus."
 
 # classes/contentmgmt/css.aw:prop_height_help
 msgid "Omaduse K&otilde;rgus (height) help"
-msgstr ""
+msgstr "elemendi või tabeli maksimaalne kõrgus."
 
 # classes/contentmgmt/css.aw:prop_padding
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) caption"
@@ -219,11 +220,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_padding_comment
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) kommentaar"
-msgstr ""
+msgstr "tabeli lahtrite kaugus üksteisest pikslitest"
 
 # classes/contentmgmt/css.aw:prop_padding_help
 msgid "Omaduse Elementide vahe (cellspacing) (px) (padding) help"
-msgstr ""
+msgstr "tabeli lahtrite kaugus üksteisest pikslitest"
 
 # classes/contentmgmt/css.aw:prop_margin
 msgid "Omaduse Sisu kaugus joontest (cellspadding) (px) (margin) caption"
@@ -231,11 +232,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_margin_comment
 msgid "Omaduse Sisu kaugus joontest (cellspadding) (px) (margin) kommentaar"
-msgstr ""
+msgstr "tabelilahtris oleva sisu kaugus lahtri äärtest"
 
 # classes/contentmgmt/css.aw:prop_margin_help
 msgid "Omaduse Sisu kaugus joontest (cellspadding) (px) (margin) help"
-msgstr ""
+msgstr "tabelilahtris oleva sisu kaugus lahtri äärtest"
 
 # classes/contentmgmt/css.aw:prop_a_style
 msgid "Omaduse Lingi stiil (a_style) caption"
@@ -243,11 +244,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_a_style_comment
 msgid "Omaduse Lingi stiil (a_style) kommentaar"
-msgstr ""
+msgstr "kui sisuks on link, siis võimalik määrata, et linki näidataks erineva stiiliga teistest tekstidest "
 
 # classes/contentmgmt/css.aw:prop_a_style_help
 msgid "Omaduse Lingi stiil (a_style) help"
-msgstr ""
+msgstr "kui sisuks on link, siis võimalik määrata, et linki näidataks erineva stiiliga teistest tekstidest "
 
 # classes/contentmgmt/css.aw:prop_a_hover_style
 msgid "Omaduse Lingi stiil (hover) (a_hover_style) caption"
@@ -255,11 +256,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_a_hover_style_comment
 msgid "Omaduse Lingi stiil (hover) (a_hover_style) kommentaar"
-msgstr ""
+msgstr "lingi stiil sellele hiirekursoriga liikudes"
 
 # classes/contentmgmt/css.aw:prop_a_hover_style_help
 msgid "Omaduse Lingi stiil (hover) (a_hover_style) help"
-msgstr ""
+msgstr "lingi stiil sellele hiirekursoriga liikudes"
 
 # classes/contentmgmt/css.aw:prop_a_visited_style
 msgid "Omaduse Lingi stiil (visited) (a_visited_style) caption"
@@ -267,11 +268,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_a_visited_style_comment
 msgid "Omaduse Lingi stiil (visited) (a_visited_style) kommentaar"
-msgstr ""
+msgstr "varem külastatud lingi stiil"
 
 # classes/contentmgmt/css.aw:prop_a_visited_style_help
 msgid "Omaduse Lingi stiil (visited) (a_visited_style) help"
-msgstr ""
+msgstr "varem külastatud lingi stiil"
 
 # classes/contentmgmt/css.aw:prop_a_active_style
 msgid "Omaduse Lingi stiil (active) (a_active_style) caption"
@@ -279,11 +280,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_a_active_style_comment
 msgid "Omaduse Lingi stiil (active) (a_active_style) kommentaar"
-msgstr ""
+msgstr "valitud lingi stiil"
 
 # classes/contentmgmt/css.aw:prop_a_active_style_help
 msgid "Omaduse Lingi stiil (active) (a_active_style) help"
-msgstr ""
+msgstr "valitud lingi stiil"
 
 # classes/contentmgmt/css.aw:prop_user_css
 msgid "Omaduse Kasutaja css (user_css) caption"
@@ -291,11 +292,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_user_css_comment
 msgid "Omaduse Kasutaja css (user_css) kommentaar"
-msgstr ""
+msgstr "kasutaja poolt vabalt defineeritud CSS stiiliparameetrid"
 
 # classes/contentmgmt/css.aw:prop_user_css_help
 msgid "Omaduse Kasutaja css (user_css) help"
-msgstr ""
+msgstr "kasutaja poolt vabalt defineeritud CSS stiiliparameetrid"
 
 # classes/contentmgmt/css.aw:prop_site_css
 msgid "Omaduse Saidi css failis defineeritud stiil (site_css) caption"
@@ -303,11 +304,11 @@ msgstr ""
 
 # classes/contentmgmt/css.aw:prop_site_css_comment
 msgid "Omaduse Saidi css failis defineeritud stiil (site_css) kommentaar"
-msgstr ""
+msgstr "saidi üldises css-failis defineeritud stiili nimi"
 
 # classes/contentmgmt/css.aw:prop_site_css_help
 msgid "Omaduse Saidi css failis defineeritud stiil (site_css) help"
-msgstr ""
+msgstr "saidi üldises css-failis defineeritud stiili nimi"
 
 # classes/contentmgmt/css.aw:prop_frow_style
 msgid "Omaduse Esimeste ridade stiil (frow_style) caption"
@@ -484,3 +485,4 @@ msgstr ""
 # classes/contentmgmt/css.aw:rel_RELTYPE_CSS
 msgid "Seose css stiil (RELTYPE_CSS) tekst"
 msgstr ""
+

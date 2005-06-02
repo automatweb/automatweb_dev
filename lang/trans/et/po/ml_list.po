@@ -2,13 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu,  7 Apr 2005 16:09:41 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 20:44+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-
+"Language-Team: \n"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_def_user_folder
 msgid "Omaduse Listi liikmete allikas (def_user_folder) caption"
@@ -16,11 +16,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_def_user_folder_comment
 msgid "Omaduse Listi liikmete allikas (def_user_folder) kommentaar"
-msgstr ""
+msgstr "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_def_user_folder_help
 msgid "Omaduse Listi liikmete allikas (def_user_folder) help"
-msgstr ""
+msgstr "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_multiple_folders
 msgid "Omaduse Lase liitumisel kausta valida (multiple_folders) caption"
@@ -28,11 +28,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_multiple_folders_comment
 msgid "Omaduse Lase liitumisel kausta valida (multiple_folders) kommentaar"
-msgstr ""
+msgstr "seade, mis võimaldab listiga liitujal ise valida sobiva kausta, mille alla tema andmed pannakse."
 
 #: classes/applications/mailinglist/ml_list.aw:prop_multiple_folders_help
 msgid "Omaduse Lase liitumisel kausta valida (multiple_folders) help"
-msgstr ""
+msgstr "seade, mis võimaldab listiga liitujal ise valida sobiva kausta, mille alla tema andmed pannakse. Mitme kausta valimisel pannakse liituja kõigi kaustade alla. Seadistus võimaldab luua temaatilisi meilingliste"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_msg_folder
 msgid "Omaduse Kirjade asukoht (msg_folder) caption"
@@ -40,11 +40,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_msg_folder_comment
 msgid "Omaduse Kirjade asukoht (msg_folder) kommentaar"
-msgstr ""
+msgstr "kaust, mille alla salvestatakse saadetud ja saatmisel olevad kirjad"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_msg_folder_help
 msgid "Omaduse Kirjade asukoht (msg_folder) help"
-msgstr ""
+msgstr "kaust, mille alla salvestatakse saadetud ja saatmisel olevad kirjad"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type
 msgid "Omaduse Vormi tüüp (sub_form_type) caption"
@@ -52,11 +52,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type_comment
 msgid "Omaduse Vormi tüüp (sub_form_type) kommentaar"
-msgstr ""
+msgstr "liitumine võimaldab selle listiga liituda, lahkumine võimaldab lahkuda listist mille liikmete allikas vastab selles meilinglistis valitule"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_sub_form_type_help
 msgid "Omaduse Vormi tüüp (sub_form_type) help"
-msgstr ""
+msgstr "liitumine võimaldab selle listiga liituda, lahkumine võimaldab lahkuda listist mille liikmete allikas vastab selles meilinglistis valitule"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_redir_obj
 msgid "Omaduse Dokument millele suunata (redir_obj) caption"
@@ -64,11 +64,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_redir_obj_comment
 msgid "Omaduse Dokument millele suunata (redir_obj) kommentaar"
-msgstr ""
+msgstr "teade Dokumendi kujul, mida kuvatakse vormi täitnud kasutajale"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_redir_obj_help
 msgid "Omaduse Dokument millele suunata (redir_obj) help"
-msgstr ""
+msgstr "teade Dokumendi kujul, mida kuvatakse vormi täitnud kasutajale"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_config
 msgid "Omaduse Listi liikmete seadetevorm (member_config) caption"
@@ -76,11 +76,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_config_comment
 msgid "Omaduse Listi liikmete seadetevorm (member_config) kommentaar"
-msgstr ""
+msgstr "Seadete vorm, mille abil saab listiga liitujalt küsida lisainfot."
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_config_help
 msgid "Omaduse Listi liikmete seadetevorm (member_config) help"
-msgstr ""
+msgstr "Seadete vorm, mille abil saab listiga liitujalt küsida lisainfot. Nõuab eraldi kujundusmalli seadistamise oskust (peab olema läbitud Kujundusmallide koolitus)"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_list_tb
 msgid "Omaduse Listi staatuse toolbar (member_list_tb) caption"
@@ -100,11 +100,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_list_comment
 msgid "Omaduse Liikmed (member_list) kommentaar"
-msgstr ""
+msgstr "listi liikmed tabelina, kuvatakse nimi, meiliaadress, liitumise aeg. "
 
 #: classes/applications/mailinglist/ml_list.aw:prop_member_list_help
 msgid "Omaduse Liikmed (member_list) help"
-msgstr ""
+msgstr "listi liikmed tabelina, kuvatakse nimi, meiliaadress, liitumise aeg. Vali tulba ja tööriistaribas oleva kustuta nupu abil saab listi liikmeid eemaldada"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe
 msgid "Omaduse Liitumiseks on vaja kinnitust (confirm_subscribe) caption"
@@ -112,11 +112,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe_comment
 msgid "Omaduse Liitumiseks on vaja kinnitust (confirm_subscribe) kommentaar"
-msgstr ""
+msgstr "listiga liitmine eeldab administraatori poolset kinnitust"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe_help
 msgid "Omaduse Liitumiseks on vaja kinnitust (confirm_subscribe) help"
-msgstr ""
+msgstr "listiga liitmine eeldab administraatori poolset kinnitust"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe_msg
 msgid "Omaduse Liitumise kinnituseks saadetav kiri (confirm_subscribe_msg) caption"
@@ -124,11 +124,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe_msg_comment
 msgid "Omaduse Liitumise kinnituseks saadetav kiri (confirm_subscribe_msg) kommentaar"
-msgstr ""
+msgstr "e-mail, mis saadetakse liitunud kasutajale peale liitumise kinnitust"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_confirm_subscribe_msg_help
 msgid "Omaduse Liitumise kinnituseks saadetav kiri (confirm_subscribe_msg) help"
-msgstr ""
+msgstr "e-mail, mis saadetakse liitunud kasutajale peale liitumise kinnitust"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_import_textfile
 msgid "Omaduse Impordi liikmed tekstifailist (import_textfile) caption"
@@ -364,11 +364,11 @@ msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:prop_list_source_comment
 msgid "Omaduse Listi liikmete allikas (list_source) kommentaar"
-msgstr ""
+msgstr "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_list_source_help
 msgid "Omaduse Listi liikmete allikas (list_source) help"
-msgstr ""
+msgstr "Kaust või Kasutajagrupp, millest meilinglisti liikmed võetakse"
 
 #: classes/applications/mailinglist/ml_list.aw:prop_mail_report
 msgid "Omaduse Meili raport (mail_report) caption"
@@ -594,7 +594,10 @@ msgstr ""
 msgid "Kõik andmed"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:723 classes/applications/mailinglist/ml_list.aw:740 classes/applications/mailinglist/ml_list.aw:752 classes/applications/mailinglist/ml_list.aw:763
+#: classes/applications/mailinglist/ml_list.aw:723
+#: classes/applications/mailinglist/ml_list.aw:740
+#: classes/applications/mailinglist/ml_list.aw:752
+#: classes/applications/mailinglist/ml_list.aw:763
 msgid "Selle toimingu jaoks peab listiliikmete allikas olema kaust"
 msgstr ""
 
@@ -614,7 +617,9 @@ msgstr ""
 msgid "(pealkiri puudub)"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_list.aw:1005 classes/applications/mailinglist/ml_list.aw:1017 classes/applications/mailinglist/ml_list.aw:1247
+#: classes/applications/mailinglist/ml_list.aw:1005
+#: classes/applications/mailinglist/ml_list.aw:1017
+#: classes/applications/mailinglist/ml_list.aw:1247
 msgid "Kustuta"
 msgstr ""
 
@@ -687,14 +692,7 @@ msgid "Asenduste legend"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:1795
-msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br />
-							#username# - AutomatWebi kasutajanimi<br />
-							#name# - Listi liikme nimi<br />
-							#subject# - Kirja teema<br />
-							#pea#(pealkiri)#/pea# - (pealkiri) asemele kirjutatud tekst muutub 1. taseme pealkirjaks<br />
-							#ala#(pealkiri)#/ala# - (pealkiri) asemele kirjutatud tekst muutub 2. taseme pealkirjaks<br /><br />
-							Kui soovid kirja pandava lingi puhul teada saada, kas saaja sellele ka klikkis, lisa lingi aadressi lõppu #traceid#
-							Näiteks: http://www.struktuur.ee/aw#traceid#"
+msgid "Meili sisus on võimalik kasutada järgnevaid asendusi:<br /><br /"
 msgstr ""
 
 #: classes/applications/mailinglist/ml_list.aw:2068

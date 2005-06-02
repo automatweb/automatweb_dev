@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 20:38+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/vcl/reminder.aw:prop_remind
 msgid "Omaduse Millal meelde tuletab (remind) caption"
@@ -15,11 +16,11 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_remind_comment
 msgid "Omaduse Millal meelde tuletab (remind) kommentaar"
-msgstr ""
+msgstr "kuupäeva ja kellaaja valik, millal seostatud objektide link saadetakse soovitud e-maili aadressidele"
 
 # classes/vcl/reminder.aw:prop_remind_help
 msgid "Omaduse Millal meelde tuletab (remind) help"
-msgstr ""
+msgstr "kuupäeva ja kellaaja valik, millal seostatud objektide link saadetakse soovitud e-maili aadressidele"
 
 # classes/vcl/reminder.aw:prop_sender
 msgid "Omaduse Saatja e-mail  (sender) caption"
@@ -27,11 +28,11 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_sender_comment
 msgid "Omaduse Saatja e-mail  (sender) kommentaar"
-msgstr ""
+msgstr "e-maili aadress, millelt meeldetuletuse mail välja saadetakse"
 
 # classes/vcl/reminder.aw:prop_sender_help
 msgid "Omaduse Saatja e-mail  (sender) help"
-msgstr ""
+msgstr "e-maili aadress, millelt meeldetuletuse mail välja saadetakse"
 
 # classes/vcl/reminder.aw:prop_emails_text
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) caption"
@@ -39,11 +40,11 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_emails_text_comment
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) kommentaar"
-msgstr ""
+msgstr "e-maili aadressid, kellele meeldetuletus saadetakse"
 
 # classes/vcl/reminder.aw:prop_emails_text_help
 msgid "Omaduse Saaja e-mail(id) (eraldada komaga) (emails_text) help"
-msgstr ""
+msgstr "e-maili aadressid, kellele meeldetuletus saadetakse"
 
 # classes/vcl/reminder.aw:prop_subject
 msgid "Omaduse Teade (subject) caption"
@@ -51,11 +52,11 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_subject_comment
 msgid "Omaduse Teade (subject) kommentaar"
-msgstr ""
+msgstr "sõnum, mis lisatakse e-maili sisusse koos objekti lingiga"
 
 # classes/vcl/reminder.aw:prop_subject_help
 msgid "Omaduse Teade (subject) help"
-msgstr ""
+msgstr "sõnum, mis lisatakse e-maili sisusse koos objekti lingiga"
 
 # classes/vcl/reminder.aw:prop_objects_toolbar
 msgid "Omaduse Objektide toolbar (objects_toolbar) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/vcl/reminder.aw:prop_objects_comment
 msgid "Omaduse Seotud objektid (objects) kommentaar"
-msgstr ""
+msgstr "Selles vaates on võimalik näha kõiki objekte millele seadistatud meeldetuletus mõjub."
 
 # classes/vcl/reminder.aw:prop_objects_help
 msgid "Omaduse Seotud objektid (objects) help"
-msgstr ""
+msgstr "Selles vaates on võimalik näha kõiki objekte millele seadistatud meeldetuletus mõjub. Eemaldada saab objekte nimekirjast neid valides ning punase risti abil kustutades."
 
 # classes/vcl/reminder.aw:group_objects
 msgid "Grupi Seotud objektid (objects) pealkiri"
@@ -116,3 +117,4 @@ msgstr ""
 #: classes/contentmgmt/reminder.aw:271
 msgid "Meeldetuletus"
 msgstr ""
+

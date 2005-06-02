@@ -2,12 +2,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu, 28 Apr 2005 10:49:54 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 19:54+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 # classes/contentmgmt/promo.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -39,11 +40,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_caption_comment
 msgid "Omaduse Pealkiri (caption) kommentaar"
-msgstr ""
+msgstr "konteinerit iseloomustav nimetus, mis kuvatakse veebilehel konteineri päisesse"
 
 # classes/contentmgmt/promo.aw:prop_caption_help
 msgid "Omaduse Pealkiri (caption) help"
-msgstr ""
+msgstr "konteinerit iseloomustav nimetus, mis kuvatakse veebilehel konteineri päisesse"
 
 # classes/contentmgmt/promo.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
@@ -51,11 +52,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_image_comment
 msgid "Omaduse Pilt (image) kommentaar"
-msgstr ""
+msgstr "konteineriga seostatud iseloomustav pilt, mis vajadusel kuvatakse veebilehel konteineri päisesse"
 
 # classes/contentmgmt/promo.aw:prop_image_help
 msgid "Omaduse Pilt (image) help"
-msgstr ""
+msgstr "konteineriga seostatud iseloomustav pilt, mis vajadusel kuvatakse veebilehel konteineri päisesse"
 
 # classes/contentmgmt/promo.aw:prop_tpl_lead
 msgid "Omaduse Template näitamiseks (tpl_lead) caption"
@@ -63,11 +64,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_tpl_lead_comment
 msgid "Omaduse Template näitamiseks (tpl_lead) kommentaar"
-msgstr ""
+msgstr "kujundusmall, millega kuvatakse konteineris olevaid dokumente. Erineb vaates Üldine olevast määrangust selle poolest, et seal määratakse konteineri raami kujundus"
 
 # classes/contentmgmt/promo.aw:prop_tpl_lead_help
 msgid "Omaduse Template näitamiseks (tpl_lead) help"
-msgstr ""
+msgstr "kujundusmall, millega kuvatakse konteineris olevaid dokumente. Erineb vaates Üldine olevast määrangust selle poolest, et seal määratakse konteineri raami kujundus"
 
 # classes/contentmgmt/promo.aw:prop_type
 msgid "Omaduse Kasti tüüp (type) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_type_comment
 msgid "Omaduse Kasti tüüp (type) kommentaar"
-msgstr ""
+msgstr "konteineri välimuse ja asukoha valik veebilehel, sõltub templeitide sisust"
 
 # classes/contentmgmt/promo.aw:prop_type_help
 msgid "Omaduse Kasti tüüp (type) help"
-msgstr ""
+msgstr "konteineri välimuse ja asukoha valik veebilehel, sõltub templeitide sisust"
 
 # classes/contentmgmt/promo.aw:prop_link
 msgid "Omaduse Link (link) caption"
@@ -87,11 +88,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
-msgstr ""
+msgstr "veebiaadress, millele viib klikk Lingi kirjeldusel. Link võib viia näiteks nende dokumentide nimekirjani, mis ei mahu antud seadistuste juures konteinerisse (nt uudiste arhiiv)"
 
 # classes/contentmgmt/promo.aw:prop_link_help
 msgid "Omaduse Link (link) help"
-msgstr ""
+msgstr "veebiaadress, millele viib klikk Lingi kirjeldusel. Link võib viia näiteks nende dokumentide nimekirjani, mis ei mahu antud seadistuste juures konteinerisse (nt uudiste arhiiv)"
 
 # classes/contentmgmt/promo.aw:prop_link_caption
 msgid "Omaduse Lingi kirjeldus (link_caption) caption"
@@ -99,11 +100,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_link_caption_comment
 msgid "Omaduse Lingi kirjeldus (link_caption) kommentaar"
-msgstr ""
+msgstr "eelnevalt kirjeldatud lingi tekst, mis kuvatakse veebikülastajale ja on klikitav"
 
 # classes/contentmgmt/promo.aw:prop_link_caption_help
 msgid "Omaduse Lingi kirjeldus (link_caption) help"
-msgstr ""
+msgstr "eelnevalt kirjeldatud lingi tekst, mis kuvatakse veebikülastajale ja on klikitav"
 
 # classes/contentmgmt/promo.aw:prop_is_dyn
 msgid "Omaduse Sisu ei cacheta (is_dyn) caption"
@@ -111,61 +112,47 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_is_dyn_comment
 msgid "Omaduse Sisu ei cacheta (is_dyn) kommentaar"
-msgstr ""
+msgstr "enamust AutomatWebi objekte cachetakse (salvestatakse serveri vahemälusse). "
 
 # classes/contentmgmt/promo.aw:prop_is_dyn_help
 msgid "Omaduse Sisu ei cacheta (is_dyn) help"
-msgstr ""
+msgstr "enamust AutomatWebi objekte cachetakse (salvestatakse serveri vahemälusse). On olukordi, kus cachemine põhjustab mingi funktsionaaluse kasutamise piirangu, nt võib määrata, et konteineri sisu muutub iga vaatamise järel. Sellisel juhul tuleb teha valik Sisu ei cacheta, vastasel korral kuvatakse konteineris sama sisu kuni mõne sellega seotud objekti järgmise salvestamiseni."
 
 # classes/contentmgmt/promo.aw:prop_not_in_search
-msgid ""
-"Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_not_in_search_comment
-msgid ""
-"Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) "
-"kommentaar"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_not_in_search_help
-msgid ""
-"Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
+msgid "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_trans_all_langs
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) "
-"caption"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_trans_all_langs_comment
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) "
-"kommentaar"
-msgstr ""
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) kommentaar"
+msgstr "selle määrangu valimise korral kuvatakse antud konteinerit kõikide veebi aktiivsete keelte all määratud sektsioonides"
 
 # classes/contentmgmt/promo.aw:prop_trans_all_langs_help
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) help"
-msgstr ""
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_all_langs) help"
+msgstr "selle määrangu valimise korral kuvatakse antud konteinerit kõikide veebi aktiivsete keelte all määratud sektsioonides"
 
 # classes/contentmgmt/promo.aw:prop_content_all_langs
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) "
-"caption"
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_content_all_langs_comment
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) "
-"kommentaar"
-msgstr ""
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) kommentaar"
+msgstr "selle määrangu valimise korral kuvatakse antud konteinerit kõikide veebi aktiivsete keelte all määratud sektsioonides"
 
 # classes/contentmgmt/promo.aw:prop_content_all_langs_help
-msgid ""
-"Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) help"
-msgstr ""
+msgid "Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) help"
+msgstr "selle määrangu valimise korral kuvatakse antud konteinerit kõikide veebi aktiivsete keelte all määratud sektsioonides"
 
 # classes/contentmgmt/promo.aw:prop_promo_tpl
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) caption"
@@ -173,11 +160,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_promo_tpl_comment
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) kommentaar"
-msgstr ""
+msgstr "seadistus, mis võimaldab valida dokumendi sisse asetatud konteinerile spetsiaalse kujundusmalli"
 
 # classes/contentmgmt/promo.aw:prop_promo_tpl_help
 msgid "Omaduse Template (dokumendi sees) (promo_tpl) help"
-msgstr ""
+msgstr "seadistus, mis võimaldab valida dokumendi sisse asetatud konteinerile spetsiaalse kujundusmalli"
 
 # classes/contentmgmt/promo.aw:prop_no_title
 msgid "Omaduse Ilma pealkirjata (no_title) caption"
@@ -185,11 +172,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_no_title_comment
 msgid "Omaduse Ilma pealkirjata (no_title) kommentaar"
-msgstr ""
+msgstr "kui see märkeruut on valitud, siis ei kuvata veebis vaates Üldine sisestatud konteineri pealkirja"
 
 # classes/contentmgmt/promo.aw:prop_no_title_help
 msgid "Omaduse Ilma pealkirjata (no_title) help"
-msgstr ""
+msgstr "kui see märkeruut on valitud, siis ei kuvata veebis vaates Üldine sisestatud konteineri pealkirja"
 
 # classes/contentmgmt/promo.aw:prop_groups
 msgid "Omaduse Grupid, kellele kasti näidata (groups) caption"
@@ -197,11 +184,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_groups_comment
 msgid "Omaduse Grupid, kellele kasti näidata (groups) kommentaar"
-msgstr ""
+msgstr "võimaldab valida kasutajagrupid, kellele antud konteinerit kuvatakse"
 
 # classes/contentmgmt/promo.aw:prop_groups_help
 msgid "Omaduse Grupid, kellele kasti näidata (groups) help"
-msgstr ""
+msgstr "võimaldab valida kasutajagrupid, kellele antud konteinerit kuvatakse"
 
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) caption"
@@ -209,11 +196,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl_comment
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) kommentaar"
-msgstr ""
+msgstr "märkeruudu valimine tähendab, et konteineris olevaid dokumente kuvatakse selle kujundusmalliga, mis on määratud kaustale, mille all vastav dokument asub"
 
 # classes/contentmgmt/promo.aw:prop_use_fld_tpl_help
 msgid "Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) help"
-msgstr ""
+msgstr "märkeruudu valimine tähendab, et konteineris olevaid dokumente kuvatakse selle kujundusmalliga, mis on määratud kaustale, mille all vastav dokument asub"
 
 # classes/contentmgmt/promo.aw:prop_all_menus
 msgid "Omaduse Näita igal pool (all_menus) caption"
@@ -221,62 +208,47 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_all_menus_comment
 msgid "Omaduse Näita igal pool (all_menus) kommentaar"
-msgstr ""
+msgstr "antud konteinerit näidatakse veebi igal leheküljel, kui valitud kujundusmall on seadistatud kodulehekülje kujunduses"
 
 # classes/contentmgmt/promo.aw:prop_all_menus_help
 msgid "Omaduse Näita igal pool (all_menus) help"
-msgstr ""
+msgstr "antud konteinerit näidatakse veebi igal leheküljel, kui valitud kujundusmall on seadistatud kodulehekülje kujunduses"
 
 # classes/contentmgmt/promo.aw:prop_section
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_section_comment
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) "
-"kommentaar"
-msgstr ""
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) kommentaar"
+msgstr "võimaldab valida kaustad, mille all Konteinerit kuvatakse. Eeldab Seostehalduris seost tüübiga Näita menüü juures"
 
 # classes/contentmgmt/promo.aw:prop_section_help
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) help"
-msgstr ""
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti n&auml;idata (section) help"
+msgstr "võimaldab valida kaustad, mille all Konteinerit kuvatakse. Eeldab Seostehalduris seost tüübiga Näita menüü juures"
 
 # classes/contentmgmt/promo.aw:prop_section_noshow
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata "
-"(section_noshow) caption"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_section_noshow_comment
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata "
-"(section_noshow) kommentaar"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_section_noshow_help
-msgid ""
-"Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata "
-"(section_noshow) help"
+msgid "Omaduse Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata (section_noshow) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_last_menus
-msgid ""
-"Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) "
-"caption"
+msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_last_menus_comment
-msgid ""
-"Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) "
-"kommentaar"
-msgstr ""
+msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) kommentaar"
+msgstr "võimaldab valida kaustad, mille all olevaid dokumente Konteineris kuvatakse."
 
 # classes/contentmgmt/promo.aw:prop_last_menus_help
-msgid ""
-"Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) help"
-msgstr ""
+msgid "Omaduse Vali menüüd, mille alt viimaseid dokumente võetakse (last_menus) help"
+msgstr "võimaldab valida kaustad, mille all olevaid dokumente Konteineris kuvatakse. Tulp Pane pealkirjaks muudab konteineri pealkirjaks valitud kausta nimetuse, Tulp k.a. alammenüüd võimaldab valida, kas dokumente võetakse ka selle kausta alamkaustade alt. Eeldab Seostehalduris seost tüübiga Võta dokumente selle menüü alt"
 
 # classes/contentmgmt/promo.aw:prop_ndocs
 msgid "Omaduse Mitu viimast dokumenti (ndocs) caption"
@@ -284,11 +256,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_ndocs_comment
 msgid "Omaduse Mitu viimast dokumenti (ndocs) kommentaar"
-msgstr ""
+msgstr "arv, mitu viimati muudetud dokumenti võetakse valitud kaustadest konteineris kuvamiseks"
 
 # classes/contentmgmt/promo.aw:prop_ndocs_help
 msgid "Omaduse Mitu viimast dokumenti (ndocs) help"
-msgstr ""
+msgstr "arv, mitu viimati muudetud dokumenti võetakse valitud kaustadest konteineris kuvamiseks"
 
 # classes/contentmgmt/promo.aw:prop_start_ndocs
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) caption"
@@ -296,11 +268,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_start_ndocs_comment
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) kommentaar"
-msgstr ""
+msgstr "arv, mitu esimest muudetud dokumentidest jäetakse selles konteineris kuvamisest välja. "
 
 # classes/contentmgmt/promo.aw:prop_start_ndocs_help
 msgid "Omaduse Mitu algusest &auml;ra j&auml;tta (start_ndocs) help"
-msgstr ""
+msgstr "arv, mitu esimest muudetud dokumentidest jäetakse selles konteineris kuvamisest välja. "
 
 # classes/contentmgmt/promo.aw:prop_sort_by
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) caption"
@@ -308,11 +280,11 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_sort_by_comment
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) kommentaar"
-msgstr ""
+msgstr "dokumentide järjestamise tingimus konteineri kuvamisel"
 
 # classes/contentmgmt/promo.aw:prop_sort_by_help
 msgid "Omaduse Dokumente j&auml;rjestatakse (sort_by) help"
-msgstr ""
+msgstr "dokumentide järjestamise tingimus konteineri kuvamisel"
 
 # classes/contentmgmt/promo.aw:prop_sort_ord
 msgid "Omaduse  (sort_ord) caption"
@@ -327,13 +299,11 @@ msgid "Omaduse  (sort_ord) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_show_inact
-msgid ""
-"Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
+msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) caption"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_show_inact_comment
-msgid ""
-"Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
+msgid "Omaduse N&auml;ita mitteaktiivseid dokumente tekstina (show_inact) kommentaar"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_show_inact_help
@@ -428,17 +398,20 @@ msgstr ""
 msgid "V&auml;iksem (vanem) enne"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:264 classes/contentmgmt/promo.aw:313
+#: classes/contentmgmt/promo.aw:264
+#: classes/contentmgmt/promo.aw:313
 #: classes/contentmgmt/promo.aw:360
 msgid "ID"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:272 classes/contentmgmt/promo.aw:321
+#: classes/contentmgmt/promo.aw:272
+#: classes/contentmgmt/promo.aw:321
 #: classes/contentmgmt/promo.aw:369
 msgid "Nimi"
 msgstr ""
 
-#: classes/contentmgmt/promo.aw:277 classes/contentmgmt/promo.aw:326
+#: classes/contentmgmt/promo.aw:277
+#: classes/contentmgmt/promo.aw:326
 msgid "k.a. alammenüüd"
 msgstr ""
 
@@ -449,3 +422,4 @@ msgstr ""
 #: classes/contentmgmt/promo.aw:383
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
+

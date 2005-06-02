@@ -2,35 +2,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
 "POT-Creation-Date: Thu,  7 Apr 2005 17:26:44 +0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2015-06-01 19:19+0200\n"
+"Last-Translator: ergo\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+"Language-Team: \n"
 
 #: classes/file.aw:prop_needs_translation
-msgid "Omaduse Vajab tılget (needs_translation) caption"
+msgid "Omaduse Vajab t√µlget (needs_translation) caption"
 msgstr ""
 
 # classes/file.aw:prop_needs_translation_comment
-msgid "Omaduse Vajab tılget (needs_translation) kommentaar"
+msgid "Omaduse Vajab t√µlget (needs_translation) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_needs_translation_help
-msgid "Omaduse Vajab tılget (needs_translation) help"
+msgid "Omaduse Vajab t√µlget (needs_translation) help"
 msgstr ""
 
 # classes/file.aw:prop_is_translated
-msgid "Omaduse Tılge kinnitatud (is_translated) caption"
+msgid "Omaduse T√µlge kinnitatud (is_translated) caption"
 msgstr ""
 
 # classes/file.aw:prop_is_translated_comment
-msgid "Omaduse Tılge kinnitatud (is_translated) kommentaar"
+msgid "Omaduse T√µlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_is_translated_help
-msgid "Omaduse Tılge kinnitatud (is_translated) help"
+msgid "Omaduse T√µlge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/file.aw:prop_filename
@@ -39,11 +40,11 @@ msgstr ""
 
 # classes/file.aw:prop_filename_comment
 msgid "Omaduse Faili nimi (filename) kommentaar"
-msgstr ""
+msgstr "kuvatakse automaatselt peale faili lisamist."
 
 # classes/file.aw:prop_filename_help
 msgid "Omaduse Faili nimi (filename) help"
-msgstr ""
+msgstr "kuvatakse automaatselt peale faili lisamist."
 
 # classes/file.aw:prop_file
 msgid "Omaduse Vali fail (file) caption"
@@ -51,11 +52,11 @@ msgstr ""
 
 # classes/file.aw:prop_file_comment
 msgid "Omaduse Vali fail (file) kommentaar"
-msgstr ""
+msgstr "v√µimaldab valida faili arvutist."
 
 # classes/file.aw:prop_file_help
 msgid "Omaduse Vali fail (file) help"
-msgstr ""
+msgstr "v√µimaldab valida faili arvutist."
 
 # classes/file.aw:prop_type
 msgid "Omaduse  (type) caption"
@@ -75,11 +76,11 @@ msgstr ""
 
 # classes/file.aw:prop_comment_comment
 msgid "Omaduse Faili allkiri (comment) kommentaar"
-msgstr ""
+msgstr "lingi nimi, millel klikkimine faili avab."
 
 # classes/file.aw:prop_comment_help
 msgid "Omaduse Faili allkiri (comment) help"
-msgstr ""
+msgstr "lingi nimi, millel klikkimine faili avab."
 
 #: classes/file.aw:prop_file_url
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) caption"
@@ -87,23 +88,23 @@ msgstr ""
 
 # classes/file.aw:prop_file_url_comment
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) kommentaar"
-msgstr ""
+msgstr "Interneti aadress, kust fail v√µetakse. Kui on tehtud valik ka ‚ÄûVali fail‚Äú lahtris, siis URLina viitamine ei toimi."
 
 # classes/file.aw:prop_file_url_help
 msgid "Omaduse Url, kust saadakse faili sisu (file_url) help"
-msgstr ""
+msgstr "Interneti aadress, kust fail v√µetakse. Kui on tehtud valik ka ‚ÄûVali fail‚Äú lahtris, siis URLina viitamine ei toimi."
 
 # classes/file.aw:prop_showal
-msgid "Omaduse N‰ita kohe (showal) caption"
+msgid "Omaduse N√§ita kohe (showal) caption"
 msgstr ""
 
 # classes/file.aw:prop_showal_comment
-msgid "Omaduse N‰ita kohe (showal) kommentaar"
-msgstr ""
+msgid "Omaduse N√§ita kohe (showal) kommentaar"
+msgstr "valiku m√§rkimisel ei kuvata faili lingina vaid √ºritatakse seda kohe n√§idata."
 
 # classes/file.aw:prop_showal_help
-msgid "Omaduse N‰ita kohe (showal) help"
-msgstr ""
+msgid "Omaduse N√§ita kohe (showal) help"
+msgstr "valiku m√§rkimisel ei kuvata faili lingina vaid √ºritatakse seda kohe n√§idata."
 
 # classes/file.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
@@ -111,46 +112,46 @@ msgstr ""
 
 # classes/file.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
-msgstr ""
+msgstr "faili uues aknas."
 
 # classes/file.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr ""
+msgstr "faili uues aknas."
 
 # classes/file.aw:prop_show_framed
-msgid "Omaduse N‰ita saidi raamis (show_framed) caption"
+msgid "Omaduse N√§ita saidi raamis (show_framed) caption"
 msgstr ""
 
 # classes/file.aw:prop_show_framed_comment
-msgid "Omaduse N‰ita saidi raamis (show_framed) kommentaar"
+msgid "Omaduse N√§ita saidi raamis (show_framed) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_show_framed_help
-msgid "Omaduse N‰ita saidi raamis (show_framed) help"
+msgid "Omaduse N√§ita saidi raamis (show_framed) help"
 msgstr ""
 
 # classes/file.aw:prop_j_time
-msgid "Omaduse Jıustumise kuup‰ev (j_time) caption"
+msgid "Omaduse J√µustumise kuup√§ev (j_time) caption"
 msgstr ""
 
 # classes/file.aw:prop_j_time_comment
-msgid "Omaduse Jıustumise kuup‰ev (j_time) kommentaar"
+msgid "Omaduse J√µustumise kuup√§ev (j_time) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_j_time_help
-msgid "Omaduse Jıustumise kuup‰ev (j_time) help"
+msgid "Omaduse J√µustumise kuup√§ev (j_time) help"
 msgstr ""
 
 # classes/file.aw:prop_act_date
-msgid "Omaduse Avaldamise kuup‰ev (act_date) caption"
+msgid "Omaduse Avaldamise kuup√§ev (act_date) caption"
 msgstr ""
 
 # classes/file.aw:prop_act_date_comment
-msgid "Omaduse Avaldamise kuup‰ev (act_date) kommentaar"
+msgid "Omaduse Avaldamise kuup√§ev (act_date) kommentaar"
 msgstr ""
 
 # classes/file.aw:prop_act_date_help
-msgid "Omaduse Avaldamise kuup‰ev (act_date) help"
+msgid "Omaduse Avaldamise kuup√§ev (act_date) help"
 msgstr ""
 
 #: classes/file.aw:group_settings
@@ -162,7 +163,7 @@ msgid "Grupi Ajad (dates) pealkiri"
 msgstr ""
 
 # classes/file.aw:rel_RELTYPE_KEYWORD
-msgid "Seose M‰rksına (RELTYPE_KEYWORD) tekst"
+msgid "Seose M√§rks√µna (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
 #: classes/file.aw:106
@@ -172,3 +173,4 @@ msgstr ""
 #: classes/file.aw:951
 msgid "Need either id or parent"
 msgstr ""
+
