@@ -12,7 +12,10 @@
       <property>
             <name>orders_toolbar</name>
             <table>objects</table>
-            <group>ordermnager</group>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -22,7 +25,10 @@
       <property>
             <name>orders_table</name>
             <table>objects</table>
-            <group>ordermnager</group>
+            <group>
+                  <num_0>ordermnager_unc</num_0>
+                  <num_1>ordermnager_cf</num_1>
+            </group>
             <type>table</type>
             <no_caption>1</no_caption>
             <store>no</store>
@@ -38,6 +44,16 @@
                   <caption>Tellimused</caption>
                   <submit>no</submit>
             </ordermnager>
+            <ordermnager_unc>
+                  <caption>Kinnitamata</caption>
+                  <submit>no</submit>
+                  <parent>ordermnager</parent>
+            </ordermnager_unc>
+            <ordermnager_cf>
+                  <caption>Kinnitatud</caption>
+                  <submit>no</submit>
+                  <parent>ordermnager</parent>
+            </ordermnager_cf>
       </groupinfo>
       <reltypes>
             <CFGMANAGER>

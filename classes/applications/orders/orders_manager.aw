@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.7 2005/06/02 12:19:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.8 2005/06/02 13:17:49 kristo Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -11,7 +11,12 @@
 
 
 @groupinfo ordermnager caption="Tellimused" submit=no
-@default group=ordermnager
+
+	@groupinfo ordermnager_unc caption="Kinnitamata" submit=no parent=ordermnager
+
+	@groupinfo ordermnager_cf caption="Kinnitatud" submit=no parent=ordermnager
+
+@default group=ordermnager_unc,ordermnager_cf
 
 @property orders_toolbar type=toolbar no_caption=1
 @caption Tellimuste toolbar
@@ -75,13 +80,16 @@ class orders_manager extends class_base
 			"confirm" => t("Oled kindel, et soovid valitud tellimused kustutada?"),
 		));
 
-		$tb->add_button(array(
-			"name" => "confirm",
-			"img" => "save.gif",
-			"tooltip" => t("Kinnita tellimused"),
-			"action" => "confirm_orders",
-			"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
-		));
+		if ($arr["request"]["group"] != "ordermnager_cf")
+		{
+			$tb->add_button(array(
+				"name" => "confirm",
+				"img" => "save.gif",
+				"tooltip" => t("Kinnita tellimused"),
+				"action" => "confirm_orders",
+				"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
+			));
+		}
 	}
 	
 	function do_orders_table($arr)
@@ -91,6 +99,7 @@ class orders_manager extends class_base
 			"name" => "orderer",
 			"caption" => t("Tellija")
 		));
+
 		$t->define_field(array(
 			"name" => "date",
 			"caption" => t("Kuupäev"),
@@ -100,17 +109,13 @@ class orders_manager extends class_base
 			"width" => 80,
 			"align" => "center",
 		));
+
 		$t->define_field(array(
 			"name" => "view",
 			"caption" => t("Vaata tellimust"),
 			"width" => 80,
 		));
-		$t->define_field(array(
-			"name" => "cf",
-			"caption" => t("Kinnitatud?"),
-			"width" => 80,
-			"align" => "center"
-		));
+
 		$t->define_chooser(array(
 			"name" => "sel",
 			"field" => "oid",
@@ -124,6 +129,20 @@ class orders_manager extends class_base
 		
 		foreach ($ol->arr() as $order)
 		{
+			if ($arr["request"]["group"] == "ordermnager_cf")
+			{
+				if ($order->prop("order_confirmed") != 1)
+				{
+					continue;
+				}
+			}
+			else
+			{
+				if ($order->prop("order_confirmed") == 1)
+				{
+					continue;
+				}
+			}
 			unset($person_name);
 			if($person = $order->get_first_obj_by_reltype("RELTYPE_PERSON"))
 			{
@@ -141,7 +160,6 @@ class orders_manager extends class_base
 					"caption" => t("Vaata tellimust"),
 					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "group" => "orderitems", "return_url" => get_ru()), CL_ORDERS_ORDER)
 				)),
-				"cf" => ($order->prop("order_confirmed") ? t("Jah") : "")
 			));
 		}
 		$t->set_sortable(false);
@@ -339,7 +357,7 @@ class orders_manager extends class_base
 				$o->save();
 			}
 		}
-		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "ordermnager"));
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => $arr["group"]));
 	}
 }
 ?>
