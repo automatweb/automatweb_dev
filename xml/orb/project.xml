@@ -15,5 +15,12 @@
 			</function>
 		</action>
 
+		<action name="del_goals">
+			<function name="del_goals">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
