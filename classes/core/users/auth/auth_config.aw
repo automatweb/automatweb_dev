@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.15 2005/05/31 09:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.16 2005/06/02 07:44:06 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -370,9 +370,7 @@ class auth_config extends class_base
 		// remember the uri used before login so that we can 
 		// redirect the user back there after (and if) he/she has finally
 		// logged in
-		global $request_uri_before_auth;
-		$request_uri_before_auth = aw_global_get("REQUEST_URI");
-		session_register("request_uri_before_auth");
+		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
 		$this->vars(array(
 			"reforb" => $this->mk_reforb("login",array(),'users'),
 		));
@@ -419,9 +417,7 @@ class auth_config extends class_base
 	**/
 	function redir_to_login()
 	{
-		global $request_uri_before_auth;
-		$request_uri_before_auth = aw_global_get("REQUEST_URI");
-		session_register("request_uri_before_auth");
+		$_SESSION["request_uri_before_auth"] = aw_global_get("REQUEST_URI");
 		header("Location: ".aw_ini_get("baaseurl")."/login.".aw_ini_get("ext"));
 		die();
 	}

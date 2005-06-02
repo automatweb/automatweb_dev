@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.114 2005/05/05 15:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.115 2005/06/02 07:44:06 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -280,7 +280,6 @@ class users_user extends aw_template
 			aw_session_set('aliasmgr_obj_history',$aliasmgr_hist);
 		}
 
-
 		// init acl
 		$this->request_startup();
 
@@ -319,7 +318,6 @@ class users_user extends aw_template
 		{
 			$si->on_login();
 		}
-
 		return $this->url;
 	}
 
