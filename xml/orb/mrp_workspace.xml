@@ -128,6 +128,15 @@
 			</function>
 		</action>
 
+		<action name="cust_search_pop">
+			<function name="cust_search_pop">
+				<arguments>
+					<optional name="s_name" />
+					<optional name="s_content" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="save_pj_comment">
 			<function name="save_pj_comment">
 				<arguments>
