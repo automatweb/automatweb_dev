@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.79 2005/05/06 09:53:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.80 2005/06/02 10:16:06 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -370,6 +370,7 @@ class object_treeview_v2 extends class_base
 				$arr["obj_inst"]->set_meta("sel_columns_sep_before", $arr["request"]["column_sep_before"]);
 				$arr["obj_inst"]->set_meta("sel_columns_sep_after", $arr["request"]["column_sep_after"]);
 				$arr["obj_inst"]->set_meta("sel_columns_editable", $arr["request"]["column_edit"]);
+				$arr["obj_inst"]->set_meta("sel_columns_sortable", $arr["request"]["column_sortable"]);
 				$arr["obj_inst"]->set_meta("sel_columns_controller", $arr["request"]["column_view_controller"]);
 ////
 // don't save empty fields
@@ -502,6 +503,9 @@ class object_treeview_v2 extends class_base
 				{
 					$sc[$item['element']] = 1;
 				}
+				// and we need to mark this field also selected, which is used to create groups in table 
+				$sc[$ih_ob->prop("group_in_table")] = 1;
+
 				$params = array(
 					"filters" => array(
 						"saved_filters" => new aw_array($ob->meta("saved_filters")),
@@ -642,22 +646,61 @@ class object_treeview_v2 extends class_base
 		));
 // well, if char is present in the url, then sort only by 
 // the field which is set to be filtered according to char
+
 		$tmp_order = $ih_ob->prop("filter_by_char_order");
 		if(!empty($_GET['char']) && !empty($tmp_order))
 		{
-			$tmp = new aw_array(array(
+			$itemsorts = new aw_array(array(
 				array(
 					"element" => $ih_ob->prop("filter_by_char_field"),
 					"ord" => $tmp_order,
 				),
 			));
 		}
+		else 
+		if (array_key_exists($_GET['sort_by'], $col_list))
+		{
+
+			$tmp = new aw_array($ih_ob->meta("itemsorts"));
+
+			$tmp_group_field = $ih_ob->prop("group_in_table");
+			$itemsorts = new aw_array();
+			foreach ($tmp->get() as $tmp_key => $tmp_value)
+			{
+
+				if ($tmp_value['element'] == $tmp_group_field)
+				{
+					$itemsorts->set($tmp_value);
+				}
+			}
+			$itemsorts->set(array(
+				"element" => $_GET['sort_by'],
+				"ord" => ($_GET['sort_order'] == "asc") ? "asc" : "desc",	
+			));
+		}
 		else
 		{
 			$tmp = new aw_array($ih_ob->meta("itemsorts"));
+			$first_itemsort = $tmp->first();
+			$tmp_group_field = $ih_ob->prop("group_in_table");
+			$itemsorts = new aw_array();
+			if ($first_itemsort['value']['element'] != $tmp_group_field)
+			{
+				$itemsorts->set(array(
+					"element" => $tmp_group_field,
+					"ord" => "asc",
+				));
+				foreach ($tmp->get() as $value)
+				{
+					$itemsorts->set($value);
+				}
+			}
+			else
+			{
+				$itemsorts = $tmp;
+			}
 		}
-
-		$this->__is = $tmp->get();
+		$this->__is = $itemsorts->get();
 		if (count($this->__is))
 		{
 			usort($ol, array(&$this, "__is_sorter"));
@@ -761,6 +804,13 @@ class object_treeview_v2 extends class_base
 		{
 			$no_tb = $this->parse("HEADER_NO_TOOLBAR");
 		}
+			
+		// if table anchor should be added at the end of the url
+		$anchor = "";
+		if ($ih_ob->prop("add_table_anchor_to_url"))
+		{
+			$anchor = "#table";
+		}
 
 		// checking, if there is set a field, which values should be use to filter by first character
 		// and according to this i'm showing or not showing the alphabet list
@@ -768,13 +818,6 @@ class object_treeview_v2 extends class_base
 		if(!empty($filter_by_char_field))
 		{
 			$alphabet_parsed = "";
-			
-			// if table anchor should be added at the end of the url
-			$anchor = "";
-			if ($ih_ob->prop("add_table_anchor_to_url"))
-			{
-				$anchor = "#table";
-			}
 			foreach($this->alphabet as $character)
 			{
 				$this->vars(array(
@@ -822,6 +865,7 @@ class object_treeview_v2 extends class_base
 		));
 
 		$udef_cols = $ih_ob->meta("sel_columns_text");
+		$sortable_cols = $ih_ob->meta("sel_columns_sortable");
 		if (!is_array($udef_cols))
 		{
 			$udef_cols = $col_list;
@@ -839,10 +883,44 @@ class object_treeview_v2 extends class_base
 				$str = "";
 				if ($sel_cols[$colid] == 1)
 				{
-					$this->vars(array(
-						"h_text" => ($udef_cols[$colid])
-					));
+					if ($sortable_cols[$colid] == 1) 
+					{
+						$tmp_url = "?";
+						if ($_GET['sort_order'] == "asc" && $_GET['sort_by'] == $colid)
+						{
+							$tmp_sort_order = "desc";
+						}
+						else
+						{
+							$tmp_sort_order = "asc";
+						}
+//						$tmp_sort_order = ($_GET['sort_order'] == "asc") ? "desc" : "asc";
+						if (empty($_GET))
+						{
+							$tmp_url .= "sort_by=".$colid."&sort_order=".$tmp_sort_order;
+						}
+						else
+						{
+							$tmp_url .= (empty($_GET['char'])) ? "" : "char=".$_GET['char'];
+							$tmp_url .= (empty($_GET['tv_sel'])) ? "" : "tv_sel=".$_GET['tv_sel'];
+							$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
+						}
+						$this->vars(array(
+							"h_text" => html::href(array(
+								"url" => $arr['oid'].$tmp_url.$anchor,
+								"caption" => $udef_cols[$colid],
+							)),
+						));
+					}
+					else
+					{
+						$this->vars(array(
+							"h_text" => ($udef_cols[$colid])
+						));
+					}
+
 					$str = $this->parse("HEADER");
+					
 					$this->vars(array(
 						"HEADER" => $str
 					));
@@ -854,7 +932,6 @@ class object_treeview_v2 extends class_base
 				"HEADER" => $h_str
 			));
 		}
-
 		$res = $this->parse();
 		if ($ih_ob->prop("show_add"))
 		{
@@ -928,6 +1005,12 @@ class object_treeview_v2 extends class_base
 			"sortable" => 1,
 			"align" => "center"
 		));
+		$t->define_field(array(
+			"name" => "sortable",
+			"caption" => t("Sorteeritav"),	
+			"sortable" => 1,
+			"align" => "center",
+		));
 
 		$t->define_field(array(
 			"name" => "fields",
@@ -948,6 +1031,7 @@ class object_treeview_v2 extends class_base
 		$cols_sep_before = $arr["obj_inst"]->meta("sel_columns_sep_before");
 		$cols_sep_after = $arr["obj_inst"]->meta("sel_columns_sep_after");
 		$cols_edit = $arr["obj_inst"]->meta("sel_columns_editable");
+		$cols_sortable = $arr["obj_inst"]->meta("sel_columns_sortable");
 		$cols_fields = $arr["obj_inst"]->meta("sel_columns_fields");
 		$cols_view_controllers = $arr['obj_inst']->meta("sel_columns_controller");
 
@@ -981,7 +1065,7 @@ class object_treeview_v2 extends class_base
 
 		foreach($cold as $colid => $coln)
 		{
-			$text = $editable = $fields = $sep_before = $sep_after = $controller = "";
+			$text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
 
 
 			if ($cols[$colid])
@@ -1008,6 +1092,11 @@ class object_treeview_v2 extends class_base
 					"name" => "column_edit[".$colid."]",
 					"value" => 1,
 					"checked" => $cols_edit[$colid],
+				));
+				$sortable = html::checkbox(array(
+					"name" => "column_sortable[".$colid."]",
+					"value" => 1,
+					"checked" => $cols_sortable[$colid],
 				));
 				$controller = html::select(array(
 					"name" => "column_view_controller[".$colid."]",
@@ -1091,6 +1180,7 @@ class object_treeview_v2 extends class_base
 				)),
 				"text" => $text,
 				"editable" => $editable,
+				"sortable" => $sortable,
 				"fields" => $fields,
 				"sep_before" => $sep_before,
 				"sep_after" => $sep_after,
