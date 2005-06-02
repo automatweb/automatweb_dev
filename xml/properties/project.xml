@@ -245,6 +245,44 @@
             <field>userch5</field>
             <caption>User-defined checkbox 5</caption>
       </property>
+      <property>
+            <name>goal_tb</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>goal_tb</field>
+      </property>
+      <property>
+            <name>goal_tree</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>treeview</type>
+            <parent>goal_vb</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>goal_tree</field>
+      </property>
+      <property>
+            <name>goal_table</name>
+            <table>objects</table>
+            <group>goals_edit</group>
+            <type>table</type>
+            <parent>goal_vb</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>goal_table</field>
+      </property>
+      <property>
+            <name>goals_gantt</name>
+            <table>objects</table>
+            <group>goals_gantt</group>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>goals_gantt</field>
+      </property>
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -278,6 +316,20 @@
             <userdefined>
                   <caption>Andmed</caption>
             </userdefined>
+            <goals>
+                  <caption>Verstapostid</caption>
+                  <submit>no</submit>
+            </goals>
+            <goals_edit>
+                  <caption>Muuda</caption>
+                  <parent>goals</parent>
+                  <submit>no</submit>
+            </goals_edit>
+            <goals_gantt>
+                  <caption>Vaata</caption>
+                  <parent>goals</parent>
+                  <submit>no</submit>
+            </goals_gantt>
       </groupinfo>
       <reltypes>
             <SUBPROJECT>
@@ -347,5 +399,14 @@
                   <caption>Video</caption>
             </PRJ_VIDEO>
       </reltypes>
+      <layout>
+            <goal_vb>
+                  <type>hbox</type>
+                  <width>
+                  <![CDATA["20%:80%"]]>
+                  </width>
+                  <group>goals_edit</group>
+            </goal_vb>
+      </layout>
 </properties>
 
