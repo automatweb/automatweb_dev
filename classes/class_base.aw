@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.399 2005/06/01 07:21:37 kristo Exp $
+// $Id: class_base.aw,v 2.400 2005/06/02 08:59:01 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3967,6 +3967,7 @@ class class_base extends aw_template
 			$cfg_props = $cl_vis->get_group_properties(array(
 				"id" => $cls_id,
 			));
+
 			$designer_obj = new object($this->id);
 			$meta = $designer_obj->meta();
 			foreach($cfg_props as $key => $val)
