@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.15 2005/05/23 12:31:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.16 2005/06/02 12:19:56 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -30,6 +30,7 @@
 @caption Sünnipäev
 
 @property order_completed type=hidden field=meta method=serialize table=objects
+@property order_confirmed type=hidden field=meta method=serialize table=objects
 
 @property udef_textbox1 type=textbox user=1
 @property udef_textbox2 type=textbox user=1

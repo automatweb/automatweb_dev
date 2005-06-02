@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.25 2005/05/25 11:31:56 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.26 2005/06/02 12:19:56 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -748,9 +748,26 @@ class shop_order_center extends class_base
 			));
 			$l .= $this->parse("LINE");
 		}
+
+		$ord_ids = array();
 		foreach($p->connections_to(array("from.class_id" => CL_ORDERS_ORDER)) as $c)
 		{
 			$ord = $c->from();
+			if ($ord->prop("order_confirmed") == 1)
+			{
+				continue;
+			}
+			$ord_ids[] = $ord->id();
+		}
+
+		$ool = new object_list(array(
+			"class_id" => CL_ORDERS_ORDER,
+			"oid" => $ord_ids,
+			"sort_by" => "objects.created"
+		));
+
+		foreach($ool->arr() as $ord)
+		{
 			$this->vars(array(
 				"name" => $ord->name(),
 				"tm" => $ord->created(),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.6 2005/05/23 12:31:59 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_manager.aw,v 1.7 2005/06/02 12:19:56 kristo Exp $
 // orders_manager.aw - Tellimuste haldus 
 /*
 
@@ -74,6 +74,14 @@ class orders_manager extends class_base
 			"action" => "delete_orders",
 			"confirm" => t("Oled kindel, et soovid valitud tellimused kustutada?"),
 		));
+
+		$tb->add_button(array(
+			"name" => "confirm",
+			"img" => "save.gif",
+			"tooltip" => t("Kinnita tellimused"),
+			"action" => "confirm_orders",
+			"confirm" => t("Oled kindel, et soovid valitud tellimused kinnitada?"),
+		));
 	}
 	
 	function do_orders_table($arr)
@@ -96,6 +104,12 @@ class orders_manager extends class_base
 			"name" => "view",
 			"caption" => t("Vaata tellimust"),
 			"width" => 80,
+		));
+		$t->define_field(array(
+			"name" => "cf",
+			"caption" => t("Kinnitatud?"),
+			"width" => 80,
+			"align" => "center"
 		));
 		$t->define_chooser(array(
 			"name" => "sel",
@@ -127,6 +141,7 @@ class orders_manager extends class_base
 					"caption" => t("Vaata tellimust"),
 					"url" => $this->mk_my_orb("change", array("id" => $order->id(), "group" => "orderitems", "return_url" => get_ru()), CL_ORDERS_ORDER)
 				)),
+				"cf" => ($order->prop("order_confirmed") ? t("Jah") : "")
 			));
 		}
 		$t->set_sortable(false);
@@ -304,6 +319,27 @@ class orders_manager extends class_base
 		
 
 		die(t("all done!"));
+	}
+
+	/**
+
+		@attrib name=confirm_orders
+
+	**/
+	function confirm_orders($arr)
+	{
+		if (is_array($arr["sel"]) && count($arr["sel"]))
+		{
+			$ol = new object_list(array(
+				"oid" => $arr["sel"]
+			));
+			foreach($ol->arr() as $o)
+			{
+				$o->set_prop("order_confirmed", 1);
+				$o->save();
+			}
+		}
+		return $this->mk_my_orb("change", array("id" => $arr["id"], "group" => "ordermnager"));
 	}
 }
 ?>

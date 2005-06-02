@@ -19,5 +19,12 @@
 			</function>
 		</action>
 
+		<action name="confirm_orders">
+			<function name="confirm_orders">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

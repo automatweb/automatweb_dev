@@ -75,6 +75,14 @@
             <method>serialize</method>
       </property>
       <property>
+            <name>order_confirmed</name>
+            <table>objects</table>
+            <group>orderinfo</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+      </property>
+      <property>
             <name>udef_textbox1</name>
             <table>orders_order</table>
             <group>orderinfo</group>
