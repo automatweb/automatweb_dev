@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.44 2005/06/02 09:35:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.45 2005/06/02 09:54:01 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -744,8 +744,12 @@ class project extends class_base
 			$event_brother = $e_obj->brother_of();
 
 			enter_function("assign-event");
-			if (!(++$limit_counter >= ($limit_num+1) && $limit_num))
+			if (!($limit_counter >= ($limit_num) && $limit_num))
 			{
+				if (!isset($events[$event_brother]))
+				{
+					$limit_counter++;
+				}
 			$events[$event_brother] = array(
 				"start" => $row["start"],
 				"end" => $row["end"],
