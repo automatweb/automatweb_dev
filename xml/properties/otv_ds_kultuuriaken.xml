@@ -30,7 +30,17 @@
             <store>no</store>
             <field>last_import_text</field>
             <caption>Viimane import</caption>
-            <comment>Viimase impordi tegemise aeg</comment>
+            <comment>Viimase impordi toimumise aeg</comment>
+      </property>
+      <property>
+            <name>next_import_text</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <field>next_import_text</field>
+            <caption>J&amp;auml;rgmine import</caption>
+            <comment>J&amp;auml;rgmise impordi toimumise aeg</comment>
       </property>
       <property>
             <name>import_events</name>
@@ -60,6 +70,36 @@
             <field>xml_config</field>
             <caption>XML vaate seaded </caption>
       </property>
+      <property>
+            <name>recurrence</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kordus</caption>
+      </property>
+      <property>
+            <name>auto_import_user</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kasutaja</caption>
+            <comment>Kasutajanimi, kelle &amp;otilde;igustes automaatne import teostatakse</comment>
+      </property>
+      <property>
+            <name>auto_import_passwd</name>
+            <table>objects</table>
+            <group>recurrence_config</group>
+            <type>password</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Parool</caption>
+            <comment>Kasutaja parool, kelle &amp;otilde;igustes automaatne import teostatakse</comment>
+      </property>
       <classinfo>
             <syslog_type>ST_OTV_DS_KULTUURIAKEN</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -73,6 +113,9 @@
             <xml_view>
                   <caption>Vaade XML</caption>
             </xml_view>
+            <recurrence_config>
+                  <caption>Automaatne import</caption>
+            </recurrence_config>
       </groupinfo>
       <reltypes>
             <EVENT_FORM>
@@ -85,6 +128,11 @@
                   <clid>CL_PROJECT</clid>
                   <caption>Parent</caption>
             </PARENT>
+            <RECURRENCE>
+                  <value>3</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>Kordus</caption>
+            </RECURRENCE>
       </reltypes>
 </properties>
 

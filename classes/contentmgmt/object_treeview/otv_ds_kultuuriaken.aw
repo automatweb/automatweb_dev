@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.3 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw,v 1.4 2005/06/02 11:12:03 dragut Exp $
 // otv_ds_kultuuriaken.aw - Import Kultuuriaknast 
 /*
 
@@ -19,7 +19,11 @@
 
 @property last_import_text type=text store=no
 @caption Viimane import
-@comment Viimase impordi tegemise aeg
+@comment Viimase impordi toimumise aeg
+
+@property next_import_text type=text store=no
+@caption J&auml;rgmine import
+@comment J&auml;rgmise impordi toimumise aeg
 
 @property import_events type=text store=no
 @caption Impordi s&uuml;ndmused
@@ -39,11 +43,29 @@
 @caption XML vaate seaded 
 
 ----------------------------------------------------------------
+@groupinfo recurrence_config caption="Automaatne import"
+@default group=recurrence_config
+
+@property recurrence type=relpicker reltype=RELTYPE_RECURRENCE field=meta method=serialize
+@caption Kordus
+
+@property auto_import_user type=textbox field=meta method=serialize
+@caption Kasutaja
+@comment Kasutajanimi, kelle &otilde;igustes automaatne import teostatakse
+
+@property auto_import_passwd type=password field=meta method=serialize
+@caption Parool
+@comment Kasutaja parool, kelle &otilde;igustes automaatne import teostatakse
+
+----------------------------------------------------------------
 @reltype EVENT_FORM value=1 clid=CL_CFGFORM
 @caption S&uuml;ndmuse vorm
 
 @reltype PARENT value=2 clid=CL_PROJECT
 @caption Parent
+
+@reltype RECURRENCE value=3 clid=CL_RECURRENCE
+@caption Kordus
 */
 
 class otv_ds_kultuuriaken extends class_base
@@ -84,6 +106,18 @@ class otv_ds_kultuuriaken extends class_base
 			case "last_import_text":
 				$last_import = $arr['obj_inst']->meta("last_import");
 				$prop['value'] = (empty($last_import)) ? "0" : date("d-M-y / H:i", $last_import);
+				break;
+			case "next_import_text":
+		//		$next_import = $arr['obj_inst']->meta("next_import");
+		//		$recurrence_inst = get_instance(CL_RECURRENCE);
+
+		//		$next_import = $recurrence_inst->get_next_event(array(
+		//			"id" => $arr['obj_inst']->prop("recurrence"),
+		//		));
+				$next_import = $this->activate_next_auto_import(array(
+					"object" => $arr['obj_inst'],
+				));
+				$prop['value'] = (empty($next_import)) ? "0" : date("d-M-y / H:i", $next_import);
 				break;
 			case "import_events":
 				$prop['value'] = html::href(array(
@@ -242,8 +276,6 @@ class otv_ds_kultuuriaken extends class_base
 		$saved_xml_conf = $arr['obj_inst']->meta("xml_conf");
 		
 		// lets put the data into table
-//		foreach ($index_arr as $value)
-
 		foreach($this->xml_fields as $value)
 		{
 
@@ -341,22 +373,24 @@ class otv_ds_kultuuriaken extends class_base
 		));
 
 		$last_import = $o->meta("last_import");
+
 		foreach ($conns_to_parents as $conn_to_parent)
 		{
 			$conn_id = $conn_to_parent->id();
 			$parent_id = $conn_to_parent->prop("to");
 
-			echo "<strong>".$conn_to_parent->prop('to.name')."</strong><br>";
+			echo "<strong>".$conn_to_parent->prop('to.name')."</strong>";
 
 			$xml_content = $this->load_xml_content(array(
 				"id" => $arr['id'],
 				"owner" => $saved_config_conf[$conn_id]['xml_field_content'],
-				"start" => $last_import,
+		//		"start" => $last_import,
 			));
 			$ol = new object_list(array(
 				"parent" => $parent_id,
 				"class_id" => CL_CRM_MEETING,
 			));
+			echo " ---- olemasolevat s&uuml;ndmusi <strong>".$ol->count()."</strong><br>";
 			$imported_events = array();
 			if ($ol->count() != 0)
 			{
@@ -406,10 +440,12 @@ class otv_ds_kultuuriaken extends class_base
 						$event_obj = new object;
 						$event_obj->set_parent($parent_id);
 						$event_obj->set_class_id(CL_CRM_MEETING);
+						echo "<strong>[ new ] </strong>";
 					}
 					else
 					{
 						$event_obj = new object($imported_events[$event_data[$saved_xml_conf['id']]]);
+						echo "[ --- ] ";
 					}
 					// seems that there are no ord/jrk property
 					$event_obj->set_ord($event_data['jrk']);
@@ -426,9 +462,57 @@ class otv_ds_kultuuriaken extends class_base
 			}
 		}
 echo " <br>..:: IMPORT LÕPPEND ::..<br>";
-		$o->set_meta("last_import", time());	
+		$o->set_meta("last_import", time());
+
+// ok, here should go this part where next import will be put in scheduler
+// the time of next automatic import comes from recurrence object
+		$this->activate_next_auto_import(array(
+			"object" => $o,
+		));
+//		$o->set_meta("next_import", $next);
 		$o->save();
 		return $this->mk_my_orb("change", array("id" => $o->id()), $o->class_id());
 	}
+
+	//// params:
+	// object => otv_ds_kultuuriaken object instance
+	//
+	// this fn. checks if there is a recurrence object configured 
+	// to otv_ds_kultuuriaken import
+	// if it is then put it in scheduler
+	//
+	// returns the timestamp of next import
+	function activate_next_auto_import($arr)
+	{
+		$o = $arr['object'];
+                if (is_oid($o->prop("recurrence")))
+                {
+                        $auto_import_user = $o->prop("auto_import_user");
+                        $auto_import_passwd = $o->prop("auto_import_passwd");
+                        if ($auto_import_user != "" && $auto_import_passwd != "")
+                        {
+
+                                $recurrence_inst = get_instance(CL_RECURRENCE);
+                                $next = $recurrence_inst->get_next_event(array(
+                                        "id" => $o->prop("recurrence")
+                                ));
+                                if ($next)
+                                {
+                                        // add to scheduler
+                                        $sc = get_instance("scheduler");
+                                        $sc->add(array(
+                                                "event" => $this->mk_my_orb("import_events", array("id" => $o->id())),
+                                                "time" => $next,
+                                                "uid" => $auto_import_user,
+                                                "password" => $auto_import_passwd,
+                                        ));
+                                }
+                        }
+                }
+		
+		return $next;
+
+	}
+
 }
 ?>
