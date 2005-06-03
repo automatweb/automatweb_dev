@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.32 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.33 2005/06/03 11:08:42 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -1908,14 +1908,22 @@ class shop_warehouse extends class_base
 			// get workers for co
 			$co = obj($arr["request"]["tree_company"]);
 			$ids = array();
-			foreach($co->connections_from(array("type" => "RELTYPE_WORKER")) as $c)
+			$con = new connection();
+			foreach($con->find(array("from.class_id" => CL_CRM_PERSON, "to" => $co->id())) as $c)
 			{
-				$ids[] = $c->prop("to");
+				$ids[] = $c["from"];
 			}
-			$ol = new object_list(array(
-				"class_id" => CL_SHOP_ORDER,
-				"orderer_person" => $ids
-			));
+			if (!count($ids))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => CL_SHOP_ORDER,
+					"orderer_person" => $ids
+				));
+			}
 		}
 		else
 		if ($arr["request"]["tree_code"])
