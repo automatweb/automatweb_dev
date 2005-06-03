@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.32 2005/05/26 10:32:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.33 2005/06/03 08:21:36 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -483,6 +483,7 @@ class shop_order extends class_base
 		if ($this->order_center)
 		{
 			$oi->set_prop("oc", $this->order_center->id());
+			$oi->set_meta("prod_group_by", $this->order_center->prop("mail_group_by"));
 		}
 		$id = $oi->save();
 
@@ -749,8 +750,18 @@ class shop_order extends class_base
 		$this->__sp = $pages;
 		usort($prods, array(&$this, "__prod_show_sort"));
 
+		if ((($fld = $o->meta("prod_group_by")) != ""))
+		{
+			// sort by that field
+			$ord_it_d = $ord_item_data->get();
+			$this->_sby_fld = $fld;
+			uksort($ord_it_d, array(&$this, "__prod_show_sort_gpby"));
+			$ord_item_data = new aw_array($ord_it_d);
+		}
+
 		$p = "";
 		$total = 0;
+		$prev_fld_val = "";
 		foreach($ord_item_data->get() as $id => $prodx)
 		{
 			if(!is_oid($id) || !$this->can("view", $id))
@@ -759,6 +770,20 @@ class shop_order extends class_base
 			}
 			$prodx = new aw_array($prodx);
 			$prod = obj($id);
+
+			if ($fld != "")
+			{
+				$nv = $prod->prop_str($fld);
+				if ($nv != $prev_fld_val)
+				{
+					$this->vars(array(
+						"group" => $nv
+					));
+					$p .= $this->parse("GRP_SEP");
+				}
+				$prev_fld_val = $nv;
+			}
+
 			$inst = $prod->instance();
 			$pr = $inst->get_calc_price($prod);
 			if ($product_info = reset($prod->connections_to(array(
@@ -1294,6 +1319,13 @@ class shop_order extends class_base
 		$obj->set_meta("ord_content", $prp_count);
 		$obj->save();
 		return html::get_change_url($arr["id"], array("group" => $arr["group"], "return_url" => urlencode($arr["return_url"])));
+	}
+
+	function __prod_show_sort_gpby($a, $b)
+	{
+		$a = obj($a);
+		$b = obj($b);
+		return strcmp($a->prop($this->_sby_fld), $b->prop($this->_sby_fld));
 	}
 }
 ?>

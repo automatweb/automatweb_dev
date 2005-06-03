@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.28 2005/06/02 13:19:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.29 2005/06/03 08:21:37 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -46,15 +46,6 @@
 @property data_form_company type=select
 @caption Organisatsiooni nime element andmete vormis
 
-@property send_attach type=checkbox ch_value=1
-@caption Lisa meili manusega tellimus
-
-@property mail_to_client type=checkbox ch_value=1
-@caption Saada tellijale e-mail
-
-@property mail_to_el type=select
-@caption E-maili element, kuhu saata tellimus
-
 @property data_form_discount type=select
 @caption Allahindluse element andmete vormis
 
@@ -64,14 +55,30 @@
 @property use_controller type=checkbox ch_value=1
 @caption N&auml;itamiseks kasuta kontrollerit
 
-@property mail_from_addr type=textbox
-@caption Meili From aadress
+@groupinfo mail_settings caption="Meiliseaded"
+@default group=mail_settings
 
-@property mail_from_name type=textbox 
-@caption Meili From nimi
+	@property mail_group_by type=select 
+	@caption Toodete grupeerimine meilis
 
-@property mail_cust_content type=textarea rows=10 cols=80
-@caption Meili sisu (kui t&uuml;hi, siis templatest)
+	@property send_attach type=checkbox ch_value=1
+	@caption Lisa meili manusega tellimus
+
+	@property mail_to_client type=checkbox ch_value=1
+	@caption Saada tellijale e-mail
+
+	@property mail_to_el type=select
+	@caption E-maili element, kuhu saata tellimus
+
+	@property mail_from_addr type=textbox
+	@caption Meili From aadress
+
+	@property mail_from_name type=textbox 
+	@caption Meili From nimi
+
+	@property mail_cust_content type=textarea rows=10 cols=80
+	@caption Meili sisu (kui t&uuml;hi, siis templatest)
+
 
 @groupinfo payment caption="Makseviisid"
 @default group=payment
@@ -223,6 +230,17 @@ class shop_order_center extends class_base
 
 			case "orgfieldmap":
 				return $this->do_orgfieldmap($arr);
+				break;
+
+			case "mail_group_by":
+				$cu = get_instance("cfg/cfgutils");
+				$ps = $cu->load_properties(array("clid" => CL_SHOP_PRODUCT));
+				$v = array("" => "");
+				foreach($ps as $pn => $pd)
+				{
+					$v[$pn] = $pd["caption"];
+				}	
+				$prop["options"] = $v;
 				break;
 		};
 		return $retval;

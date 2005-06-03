@@ -107,35 +107,6 @@
             <caption>Organisatsiooni nime element andmete vormis</caption>
       </property>
       <property>
-            <name>send_attach</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Lisa meili manusega tellimus</caption>
-      </property>
-      <property>
-            <name>mail_to_client</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Saada tellijale e-mail</caption>
-      </property>
-      <property>
-            <name>mail_to_el</name>
-            <group>general</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>E-maili element, kuhu saata tellimus</caption>
-      </property>
-      <property>
             <name>data_form_discount</name>
             <group>general</group>
             <table>objects</table>
@@ -165,8 +136,46 @@
             <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
+            <name>mail_group_by</name>
+            <group>mail_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Toodete grupeerimine meilis</caption>
+      </property>
+      <property>
+            <name>send_attach</name>
+            <group>mail_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisa meili manusega tellimus</caption>
+      </property>
+      <property>
+            <name>mail_to_client</name>
+            <group>mail_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada tellijale e-mail</caption>
+      </property>
+      <property>
+            <name>mail_to_el</name>
+            <group>mail_settings</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>E-maili element, kuhu saata tellimus</caption>
+      </property>
+      <property>
             <name>mail_from_addr</name>
-            <group>general</group>
+            <group>mail_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -175,7 +184,7 @@
       </property>
       <property>
             <name>mail_from_name</name>
-            <group>general</group>
+            <group>mail_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -184,7 +193,7 @@
       </property>
       <property>
             <name>mail_cust_content</name>
-            <group>general</group>
+            <group>mail_settings</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -286,6 +295,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+            </mail_settings>
             <payment>
                   <caption>Makseviisid</caption>
             </payment>
