@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.18 2005/05/11 13:26:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.19 2005/06/03 11:23:45 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -732,6 +732,44 @@ class join_site extends class_base
 		return $html;
 	}
 
+	function change_data($o)
+	{
+		$this->read_template("join.tpl");
+
+		$props = $this->get_elements_from_obj($o, array(
+			"err_return_url" => post_ru()
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($props as $xprop)
+		{
+			$htmlc->add_property($xprop);
+		}
+
+		$htmlc->finish_output(array());
+
+		$html .= $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		$this->vars(array(
+			"form" => $html,
+			"join_but_text" => t("Salvesta"),
+			"reforb" => $this->mk_reforb(
+				"submit_update_form", 
+				array(
+					"id" => $o->id(), 
+					"add" => 0, 
+					"section" => aw_global_get("section"),
+					"ru" => post_ru()
+				)
+			)
+		));
+
+		return $this->parse();
+	}
+
 	function show($arr)
 	{
 		$this->read_template("join.tpl");
@@ -858,6 +896,11 @@ class join_site extends class_base
 
 				// apply rules on add
 				$this->apply_rules_on_data_change($this->get_rules_from_obj($obj), $u_oid->id());
+
+				$u_oid->connect(array(
+					"to" => $obj->id(),
+					"reltype" => "RELTYPE_JOIN_SITE"
+				));
 
 				aw_restore_acl();
 
@@ -1045,6 +1088,7 @@ class join_site extends class_base
 	/**
 		$params can contain:
 			- err_return_url - if set, errored inputs go to that
+			- uid - if set, data for that user is returned
 	**/
 	function get_elements_from_obj($ob, $params)
 	{
@@ -1056,10 +1100,12 @@ class join_site extends class_base
 
 		$cfgu = get_instance("cfg/cfgutils");
 
-		if (aw_global_get("uid") != "")
+		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
+
+		if ($user != "")
 		{
 			$us = get_instance("users");
-			$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
+			$u_o = obj($us->get_oid_for_uid($user));
 			$visible[CL_USER]["uid_entry"] = false;
 		}		
 
@@ -1124,7 +1170,6 @@ class join_site extends class_base
 			$class_inst = get_instance($clid);
 			$class_inst->init_class_base();
 			$ttp = $class_inst->parse_properties(array("properties" => $ttp, "obj_inst" => $data_o));
-
 			foreach($ttp as $pid => $prop)
 			{	
 				if ($visible[$clid][$prop["name"]])
@@ -1198,7 +1243,14 @@ class join_site extends class_base
 					// set value in property
 					if ($data_o)
 					{
-						$prop["value"] = $data_o->prop($pid);
+						if ($pid == "name")
+						{
+							$prop["value"] = $data_o->name();
+						}
+						else
+						{
+							$prop["value"] = $data_o->prop($pid);
+						}
 					}
 					else
 					{
@@ -1246,12 +1298,23 @@ class join_site extends class_base
 		return $tp;
 	}
 
-	function submit_update_form($arr)
+	/**
+		@attrib name=submit_update_form
+	**/
+	function orb_submit_update_form($arr)
+	{
+		$this->submit_update_form($arr);
+		return $arr["ru"];
+	}
+
+	function submit_update_form($arr, $params = array())
 	{
 		$obj = obj($arr["id"]);
 
 		$us = get_instance("users");
-		$u_o = obj($us->get_oid_for_uid(aw_global_get("uid")));
+
+		$user = isset($params["uid"]) ? $params["uid"] : aw_global_get("uid");
+		$u_o = obj($us->get_oid_for_uid($user));
 
 		// update data objects
 		$this->_do_update_data_objects($obj, $u_o, $arr);
@@ -1291,7 +1354,19 @@ class join_site extends class_base
 			elseif ($clid == CL_CRM_PERSON)
 			{
 				$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
-				if ($c)
+				if (!$c)
+				{
+					// create person
+					$data_o = obj();
+					$data_o->set_parent($u_o->id());
+					$data_o->set_class_id(CL_CRM_PERSON);
+					$data_o->save();
+					$u_o->connect(array(
+						"to" => $data_o->id(),
+						"reltype" => "RELTYPE_PERSON"
+					));
+				}
+				else
 				{
 					$data_o = $c->to();
 				}
@@ -1299,14 +1374,39 @@ class join_site extends class_base
 			elseif ($clid == CL_CRM_COMPANY)
 			{
 				$c = reset($u_o->connections_from(array("type" => "RELTYPE_PERSON")));
-				if ($c)
+				if (!$c)
+				{
+					// create person
+					$tmp = obj();
+					$tmp->set_parent($u_o->id());
+					$tmp->set_class_id(CL_CRM_PERSON);
+					$tmp->save();
+					$u_o->connect(array(
+						"to" => $tmp->id(),
+						"reltype" => "RELTYPE_PERSON"
+					));
+				}
+				else
 				{
 					$tmp = $c->to();
-					$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
-					if ($c)
-					{
-						$data_o = $c->to();
-					}
+				}
+
+				$c = reset($tmp->connections_from(array("type" => "RELTYPE_WORK" /* from crm_person */)));
+				if (!$c)
+				{
+					// create person
+					$data_o = obj();
+					$data_o->set_parent($u_o->id());
+					$data_o->set_class_id(CL_CRM_COMPANY);
+					$data_o->save();
+					$tmp->connect(array(
+						"to" => $data_o->id(),
+						"reltype" => "RELTYPE_WORK"
+					));
+				}
+				else
+				{
+					$data_o = $c->to();
 				}
 			}
 			elseif($this->can("edit", $a_objs[$clid]) && is_oid($a_objs[$clid]))

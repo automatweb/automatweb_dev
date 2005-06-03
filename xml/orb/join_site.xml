@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="submit_update_form">
+			<function name="orb_submit_update_form">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

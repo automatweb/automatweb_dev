@@ -243,8 +243,10 @@
             <name>jdata</name>
             <table>users</table>
             <group>jdata</group>
-            <type>text</type>
+            <type>callback</type>
+            <callback>callback_jdata</callback>
             <store>no</store>
+            <no_caption>1</no_caption>
             <field>jdata</field>
             <caption>Liitumise andmed</caption>
       </property>
@@ -424,6 +426,11 @@
                   <clid>CL_IPADDRESS</clid>
                   <caption>ligip&amp;auml;&amp;auml;su aadress</caption>
             </ACCESS_FROM_IP>
+            <JOIN_SITE>
+                  <value>9</value>
+                  <clid>CL_JOIN_SITE</clid>
+                  <caption>liitumise andmed</caption>
+            </JOIN_SITE>
       </reltypes>
 </properties>
 

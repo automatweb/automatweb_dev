@@ -119,7 +119,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @default group=jdata
 
-@property jdata type=text  store=no
+@property jdata type=callback callback=callback_jdata  store=no no_caption=1
 @caption Liitumise andmed
 
 @default group=stat
@@ -176,6 +176,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 
 @reltype ACCESS_FROM_IP value=8 clid=CL_IPADDRESS
 @caption ligip&auml;&auml;su aadress
+
+@reltype JOIN_SITE value=9 clid=CL_JOIN_SITE
+@caption liitumise andmed
 
 */
 
@@ -470,6 +473,16 @@ class user extends class_base
 						aw_session_set("user_adm_ui_lc", $prop["value"]);
 					}
 				}
+				break;
+
+			case "jdata":
+				$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_JOIN_SITE");
+				$tmp = $arr["request"];
+				$tmp["id"] = $o->id();
+				$ji = get_instance(CL_JOIN_SITE);
+				$ji->submit_update_form($tmp, array(
+					"uid" => $arr["obj_inst"]->prop("uid")
+				));
 				break;
 		}
 		return PROP_OK;
@@ -1976,6 +1989,29 @@ class user extends class_base
 	function _object_ex($oid)
 	{
 		return $this->db_fetch_field("SELECT oid FROM objects WHERE oid = '$oid'", "oid") ? true : false;
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "jdata")
+		{
+			if (!count($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOIN_SITE"))))
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function callback_jdata($arr)
+	{
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_JOIN_SITE");
+		$i = get_instance(CL_JOIN_SITE);
+
+		return $i->get_elements_from_obj($o, array(
+			"err_return_url" => aw_ini_get("baseurl").aw_global_get("REQUEST_URI"),
+			"uid" => $arr["obj_inst"]->prop("uid")
+		));
 	}
 }
 ?>

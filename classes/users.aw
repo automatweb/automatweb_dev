@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.143 2005/05/05 15:56:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.144 2005/06/03 11:23:45 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -617,11 +617,13 @@ class users extends users_user
 	{
 		extract($arr);
 		$id = aw_global_get("uid");
-		if ($id == "")
+		$uo = obj(aw_global_get("uid_oid"));
+		if ($obj = $uo->get_first_obj_by_reltype("RELTYPE_JOIN_SITE"))
 		{
-			return LC_USERS_NOT_LOGGED_IN;
+			$ui = get_instance(CL_JOIN_SITE);
+			return $ui->change_data($obj);
 		}
-	
+
 		if (not($fid))
 		{
 			$udata = $this->get_user();
