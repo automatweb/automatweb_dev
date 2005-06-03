@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.33 2005/06/03 11:08:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_warehouse.aw,v 1.34 2005/06/03 11:17:25 kristo Exp $
 // shop_warehouse.aw - Ladu 
 /*
 
@@ -617,7 +617,7 @@ class shop_warehouse extends class_base
 				)),
 				"quantity" => html::textbox(array(
 					"name" => "quant[$iid]",
-					"value" => $quant,
+					"value" => is_array($quant) ? $quant[0]["items"] : $quant,
 					"size" => 5
 				))
 			));
@@ -2581,14 +2581,17 @@ class shop_warehouse extends class_base
 	**/
 	function add_to_cart($arr)
 	{
-		$soc = get_instance(CL_SHOP_ORDER_CART);
-		$warehouse = obj($arr["id"]);
-		$oc = obj($warehouse->prop("order_center"));
-		$awa = new aw_array($arr["sel"]);
-		foreach($awa->get() as $iid)
+		$adc = array();
+		foreach(safe_array($arr["sel"]) as $_id)
 		{
-			$soc->add_item(array("iid" => $iid, "quant" => 1, "oc" => $oc));
+			$adc[$_id] = 1;
 		}
+		$warehouse = obj($arr["id"]);
+		$soc = get_instance(CL_SHOP_ORDER_CART);
+		$soc->submit_add_cart(array(
+			"oc" => $warehouse->prop("order_center"),
+			"add_to_cart" => $adc
+		));
 
 		$this->do_save_prod_ord($arr);
 
