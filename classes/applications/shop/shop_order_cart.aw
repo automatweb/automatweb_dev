@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.37 2005/06/02 13:19:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.38 2005/06/03 08:28:04 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1558,4 +1558,3 @@ class shop_order_cart extends class_base
 	}
 }
 ?>
- 
