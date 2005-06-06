@@ -163,6 +163,15 @@ class doc_display extends aw_template
 			$text = str_replace("\r\n","<br />",$text);
 		}
 
+		// if show in iframe is set, just return the iframe
+		if ($doc->prop("show_in_iframe") && !$_REQUEST["only_document_content"])
+		{
+			$this->vars(array(
+				"iframe_url" => obj_link($doc->id())."?only_document_content=1"
+			));
+			return $this->parse("IFRAME");
+		}
+
 		return $text;
 	}
 }
