@@ -1995,7 +1995,7 @@ class user extends class_base
 	{
 		if ($arr["id"] == "jdata")
 		{
-			if (!count($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOIN_SITE"))))
+			if (!is_oid($arr["obj_inst"]->id()) || !count($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_JOIN_SITE"))))
 			{
 				return false;
 			}
