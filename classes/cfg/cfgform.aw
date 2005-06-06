@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.65 2005/05/31 08:50:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.66 2005/06/06 12:48:06 duke Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -415,22 +415,7 @@ class cfgform extends class_base
 		$o = $arr["obj_inst"];
 		$active = 0;
 
-		// 2 passes, because I need to know which element is active before 
-		// doing the table
-		$ol = new object_list(array(
-			"class_id" => $this->clid,
-			"subclass" => $o->subclass(),
-			"lang_id" => array(),
-			"flags" => array(
-				"mask" => OBJ_FLAG_IS_SELECTED,
-				"flags" => OBJ_FLAG_IS_SELECTED
-			)
-		));
-		if (sizeof($ol->ids()) > 0)
-		{
-			$first = $ol->begin();
-			$active = $first->id();
-		};
+		$active = $this->get_sysdefault(array("clid" => $o->subclass()));
 
 		$ol = new object_list(array(
 			"class_id" => $this->clid,
@@ -1611,6 +1596,28 @@ class cfgform extends class_base
 			}
 		}
 		return $ret;
+	}
+
+	function get_sysdefault($arr = array())
+	{
+		// 2 passes, because I need to know which element is active before 
+		// doing the table
+		$active = false;
+		$ol = new object_list(array(
+			"class_id" => $this->clid,
+			"subclass" => $arr["clid"],
+			"lang_id" => array(),
+			"flags" => array(
+				"mask" => OBJ_FLAG_IS_SELECTED,
+				"flags" => OBJ_FLAG_IS_SELECTED
+			)
+		));
+		if (sizeof($ol->ids()) > 0)
+		{
+			$first = $ol->begin();
+			$active = $first->id();
+		};
+		return $active;
 	}
 };
 ?>
