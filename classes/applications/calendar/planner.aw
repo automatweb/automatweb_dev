@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.85 2005/05/27 11:51:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.86 2005/06/06 12:48:53 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -960,6 +960,12 @@ class planner extends class_base
 		// planner configuration
 		$event_cfgform = $args["request"]["cfgform_id"];
 		// are we editing an existing event?
+		$cf = get_instance(CL_CFGFORM);
+		if (empty($event_cfgform))
+		{
+			$sys_default_form = $cf->get_sysdefault(array("clid" => $arr["request"]["clid"]));
+			$event_cfgform = $sys_default_form;
+		};
 		$event_id = $args["request"]["event_id"];
 		if (is_oid($event_id) && $this->can("view", $event_id))
 		{
