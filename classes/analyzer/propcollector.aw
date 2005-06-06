@@ -5,20 +5,21 @@ class propcollector extends aw_template
 	function propcollector($args = array())
 	{
 		$this->init(array("no_db" => 1));
-		
+
 		// there are 3 ways to define a tag
 		// with a context
 		// 	@tag name key1=value1 key2=value2 .. keyN=valueN
 		// without a context, key=value pairs
 		// 	@tag key1=value1 key2=value2 .. keyN=valueN
 		// simple value
-		//	@tag value, always belongs to some previous tag
+		//	@tag value, always (except for "extends") belongs to some previous tag
 
 		define('TAG_CTX',1);
 		define('TAG_PAIRS',2);
 		define('TAG_VALUE',3);
 
 		$this->tags = array(
+			"extends" => TAG_VALUE,
 			"classinfo" => TAG_PAIRS,
 			"default" => TAG_PAIRS,
 			"groupinfo" => TAG_CTX,
@@ -33,9 +34,9 @@ class propcollector extends aw_template
 		);
 	}
 
-        function req_dir($args = array())
-        {
-                $path = $args["path"];
+	function req_dir($args = array())
+    {
+		$path = $args["path"];
 		$paths = is_array($path) ? $path : array($path);
 		foreach($paths as $path)
 		{
@@ -47,7 +48,7 @@ class propcollector extends aw_template
 					if (substr($file,0,1) == ".")
 					{
 						continue;
-					};
+					}
 
 					$fqfn = $path . "/" . $file;
 					if (is_dir($fqfn) && !is_link($fqfn) && ($file != "CVS"))
@@ -57,140 +58,39 @@ class propcollector extends aw_template
 					elseif (is_file($fqfn) && is_readable($fqfn) && (preg_match("/\.aw$/",$fqfn)))
 					{
 						$this->files[] = $fqfn;
-					};
-				};
+					}
+				}
+
 				closedir($dir);
-			};
-		};
-        }
+			}
+		}
+	}
 
 	function run($args = array())
 	{
 		$cdir = $this->cfg["basedir"] . "/classes";
 		$sdir = $this->cfg["basedir"] . "/scripts";
 		$this->files = array();
-		$this->req_dir(array("path" => array($cdir,$sdir)));
+		$this->req_dir (array("path" => array($cdir,$sdir)));
 		$files = $this->files;
 		asort($files);
-		$counter = 0;
-		$total = 0;
+		$this->count_modified = 0;
+		$this->count_total = 0;
 
-		$tags = $this->tags;
-
-		// now we need to parse all the files for properties
 		foreach($files as $key => $name)
 		{
-			// before doing that, we need to check whether
-			// xml file is already up to date
 			$cname = substr(basename($name),0,-3);
-			$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
-			$skip = false;
-			if (file_exists($targetfile))
+			$this->cl_start($cname);
+			$this->_parse_file ($name);
+			$success = $this->cl_end();
+
+			if ($success)
 			{
-				$total++;
-				$target_mtime = filemtime($targetfile);
-				$source_mtime = filemtime($name);
+				$this->count_modified++;
+			}
+		}
 
-				if ($source_mtime < $target_mtime)
-				{
-					//print "$targetfile is up to date\n";
-					$skip = true;
-				};
-			};
-
-			if ($skip == true)
-			{
-				continue;
-			};
-
-			$lines = @file($name);
-
-			$outdir = $this->cfg["basedir"] . "/xml/properties/";
-			if (is_array($lines))
-			{
-				$this->cl_start($cname);
-				foreach($lines as $line)
-				{
-					$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
-					$tagname = $m[1];
-					$tagdata = $m[2];
-					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_PAIRS)
-					{
-						$attribs = $this->_parse_attribs($m[2]);
-						if ($tagname == "classinfo")
-						{
-							$this->classinfo = array_merge($this->classinfo,$attribs);
-						};
-						if ($tagname == "default")
-						{
-							$this->defaults = array_merge($this->defaults,$attribs);
-						};
-
-					};
-
-					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_CTX)
-					{
-						preg_match("/(\w+?) (.*)/",$tagdata,$m);
-						$aname = $m[1];
-						$attribs = $m[2];
-						if ($tagname == "groupinfo")
-						{
-							$this->set_groupinfo($aname,$attribs);
-						}
-						else
-						if ($tagname == "tableinfo")
-						{
-							$this->set_tableinfo($aname,$attribs);
-						}
-						else
-						if ($tagname == "property")
-						{
-							$this->add_property($aname,$attribs);
-						}
-						else
-						if ($tagname == "layout")
-						{
-							$this->add_layout($aname,$attribs);
-						}
-						else
-						if ($tagname == "reltype")
-						{
-							$this->add_reltype($aname,$attribs);
-						}
-						else
-						if ($tagname == "forminfo")
-						{
-							$this->add_forminfo($aname,$attribs);
-						}
-						else
-						{
-							$this->classdef[$tagname][$aname] = $this->_parse_attribs($attribs);
-							$this->name = $aname;
-							$this->last_element = $tagname;
-						};
-					};
-
-					if (isset($tags[$tagname]) && $tags[$tagname] == TAG_VALUE)
-					{
-						if ($tagname == "caption")
-						{
-							$this->add_caption($tagdata);
-						};
-						if ($tagname == "comment")
-						{
-							$this->add_comment($tagdata);
-						};
-					};
-				};
-
-				$success = $this->cl_end();
-				if ($success)
-				{
-					$counter++;
-				};
-			};
-		};
-		printf("Updated %d files out of %d\nAll done.\n",$counter,$total);
+		printf("Updated %d files out of %d\nAll done.\n", $this->count_modified, $this->count_total);
 	}
 
 	////
@@ -207,7 +107,7 @@ class propcollector extends aw_template
 		{
 			$lines = explode("\n",$arr["data"]);
 		};
-		
+
 
 		if (!is_array($lines))
 		{
@@ -355,7 +255,7 @@ class propcollector extends aw_template
 		if (in_array($fields["type"],$no_store))
 		{
 			$fields["store"] = "no";
-		}		
+		}
 
 		// field defaults to the name of the property
 		if (!$fields["field"])
@@ -380,7 +280,7 @@ class propcollector extends aw_template
 		$this->last_element = "property";
 
 	}
-	
+
 	function add_reltype($name,$data)
 	{
 		$fields = $this->_parse_attribs($data);
@@ -389,7 +289,6 @@ class propcollector extends aw_template
 		$this->last_element = "relation";
 
 	}
-
 
 	function add_layout($name,$data)
 	{
@@ -455,10 +354,10 @@ class propcollector extends aw_template
 					$tmp .= $chr;
 				};
 			};
-				
+
 		};
 	}
-	
+
 	function set_tableinfo($id,$data)
 	{
 		$attr = $this->_parse_attribs($data);
@@ -468,7 +367,6 @@ class propcollector extends aw_template
 		};
 		$this->tableinfo[$id] = $attr;
 	}
-
 
 	function add_caption($caption)
 	{
@@ -492,7 +390,7 @@ class propcollector extends aw_template
 
 		};
 	}
-	
+
 	function add_comment($comment)
 	{
 		if ($this->last_element == "property")
@@ -509,11 +407,11 @@ class propcollector extends aw_template
 		$sr->set_child_id("properties","property");
 		$outdir = $this->cfg["basedir"] . "/xml/properties/";
 		$success = false;
+
 		if (sizeof($this->properties) > 0 || sizeof($this->classinfo) > 0)
 		{
 			$fullname = $outdir . $this->cl_name . ".xml";
 			print "Creating $fullname\n";
-			//print "writing out $fullname\n";
 			$arr = array();
 			$arr["properties"] = array_values($this->properties);
 
@@ -546,7 +444,7 @@ class propcollector extends aw_template
 			{
 				$arr["properties"]["layout"] = $this->layout;
 			};
-			
+
 			if (sizeof($this->forminfo) > 0)
 			{
 				$arr["properties"]["forminfo"] = $this->forminfo;
@@ -559,7 +457,6 @@ class propcollector extends aw_template
 
 			if ($write == 1)
 			{
-
 				$res = $sr->xml_serialize($arr);
 				//print_r($res);
 				$this->put_file(array(
@@ -570,12 +467,13 @@ class propcollector extends aw_template
 			else
 			{
 				$this->cdata = $arr;
-			};
+			}
+
 			$success = true;
 		};
 		return $success;
 	}
-	
+
 	function _parse_attribs($data)
 	{
 		$_x = new aw_array(explode(" ",$data));
@@ -599,15 +497,151 @@ class propcollector extends aw_template
 				else
 				{
 					$fields[$fname] = $fvalue;
-				};
+				}
 			}
 			else
 			{
 				print "Invalid syntax: $field\n";
 			};
-		};
+		}
 		return $fields;
 	}
-	
-};
+
+	function _parse_file ($name)
+	{
+		$cname = substr(basename($name),0,-3);
+		$targetfile = $this->cfg["basedir"] . "/xml/properties/$cname" . ".xml";
+		$outdir = $this->cfg["basedir"] . "/xml/properties/";
+
+		### check whether xml file is already up to date
+		if (file_exists($targetfile))
+		{
+			$this->count_total++;
+			$target_mtime = filemtime($targetfile);
+			$source_mtime = filemtime($name);
+
+			if ($source_mtime < $target_mtime)
+			{
+				$modified = false;
+			}
+			else
+			{
+				$modified = true;
+			}
+		}
+		else
+		{
+			$modified = true;
+		}
+
+		### parse file
+		$lines = @file($name);
+
+		if (is_array($lines))
+		{
+			$parent = "";
+
+			foreach ($lines as $line)
+			{ ### see if current class has a parent
+				$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
+				$tagname = $m[1];
+				$tagdata = $m[2];
+
+				if ($tagname == "extends")
+				{
+					$parent = $this->cfg["basedir"] . "/classes/" . trim ($tagdata) . ".aw";
+
+					if (file_exists ($parent))
+					{ ### parse parent class data into current class' data. The fact that this recursive call is made here makes multiple inheritance possible. If that should become undesirable this whole if section can be moved outside innermost foreach loop.
+						$this->count_total--;
+						$parent_modified = $this->_parse_file ($parent);
+					}
+				}
+			}
+
+			if ($modified or $parent_modified)
+			{ ### parse current class
+				$this->_parse_properties ($lines);
+			}
+		}
+
+		return $modified;
+	}
+
+	function _parse_properties ($lines)
+	{
+		foreach($lines as $line)
+		{
+			$taginfo = preg_match("/^\s*@(\w*) (.*)/",$line,$m);
+			$tagname = $m[1];
+			$tagdata = $m[2];
+
+			switch ($this->tags[$tagname])
+			{
+				case TAG_PAIRS:
+					$attribs = $this->_parse_attribs($m[2]);
+
+					if ($tagname == "classinfo")
+					{
+						$this->classinfo = array_merge($this->classinfo,$attribs);
+					}
+
+					if ($tagname == "default")
+					{
+						$this->defaults = array_merge($this->defaults,$attribs);
+					}
+					break;
+
+				case TAG_CTX:
+					preg_match("/(\w+?) (.*)/",$tagdata,$m);
+					$aname = $m[1];
+					$attribs = $m[2];
+
+					if ($tagname == "groupinfo")
+					{
+						$this->set_groupinfo($aname,$attribs);
+					}
+					elseif ($tagname == "tableinfo")
+					{
+						$this->set_tableinfo($aname,$attribs);
+					}
+					elseif ($tagname == "property")
+					{
+						$this->add_property($aname,$attribs);
+					}
+					elseif ($tagname == "layout")
+					{
+						$this->add_layout($aname,$attribs);
+					}
+					elseif ($tagname == "reltype")
+					{
+						$this->add_reltype($aname,$attribs);
+					}
+					elseif ($tagname == "forminfo")
+					{
+						$this->add_forminfo($aname,$attribs);
+					}
+					else
+					{
+						$this->classdef[$tagname][$aname] = $this->_parse_attribs($attribs);
+						$this->name = $aname;
+						$this->last_element = $tagname;
+					}
+					break;
+
+				case TAG_VALUE:
+					if ($tagname == "caption")
+					{
+						$this->add_caption ($tagdata);
+					}
+
+					if ($tagname == "comment")
+					{
+						$this->add_comment ($tagdata);
+					}
+					break;
+			}
+		}
+	}
+}
 ?>
