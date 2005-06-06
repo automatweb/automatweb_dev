@@ -1302,7 +1302,7 @@ class user extends class_base
 			// add user to all users grp if we are not under that
 			$aug = aw_ini_get("groups.all_users_grp");
 			$aug_oid = $this->users->get_oid_for_gid($aug);
-			if ($aug_oid != $arr["obj_inst"]->parent())
+			if (is_oid($aug_oid) && $aug_oid != $arr["obj_inst"]->parent())
 			{
 				$aug_o = obj($aug_oid);
 				$arr["obj_inst"]->connect(array(
