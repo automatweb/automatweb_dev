@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.64 2005/05/20 11:30:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.65 2005/06/07 14:08:57 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -662,6 +662,7 @@ class event_search extends class_base
 					{
 						$rn1[] = $r;
 					}
+					$search_p1 = true;
 					// this goddamn calendar has to manage the 
 					// events from other calendars and projects aswell.. oh hell..
 					$sources = $tmp->connections_from(array(
@@ -686,13 +687,16 @@ class event_search extends class_base
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_SUBPROJECT",
 					));
+					$search_p1 = true;
 					foreach($sources as $source)
 					{
+						$prj_ch1[$source->prop("to")] = $source->prop("to.name");
 						$rn1[] = $source->prop("to");
 					}
 				}
 			}
 		}
+
 		if(count($p_rn2) > 0)
 		{
 			$rn2 = array();
@@ -751,6 +755,7 @@ class event_search extends class_base
 				}
 			}
 		}
+
 		if($search_p1 && $formconfig["project1"]["active"])
 		{
 			$vars = array(
@@ -767,7 +772,8 @@ class event_search extends class_base
 			}
 			else
 			{
-				$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
+				//$vars["options"] = array(0 => t("kõik")) + reset($prj_ch1);
+				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 			}
 			$htmlc->add_property($vars);
 		}
