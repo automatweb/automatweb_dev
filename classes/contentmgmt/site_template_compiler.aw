@@ -126,6 +126,16 @@ class site_template_compiler extends aw_template
 			{
 				$mdefs = $mdefs[aw_global_get("lang_id")];
 			}
+			else
+			{
+				foreach($mdefs as $k => $v)
+				{
+					if (is_array($v))
+					{
+						$mdefs[$k] = $v[aw_global_get("lang_id")];
+					}
+				}
+			}
 		}
 
 		foreach($tpls as $tpl)
