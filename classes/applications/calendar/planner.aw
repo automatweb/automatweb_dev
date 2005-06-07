@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.86 2005/06/06 12:48:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.87 2005/06/07 10:34:54 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -938,12 +938,10 @@ class planner extends class_base
 
 	////
 	// !Displays the form for adding a new event
-
-	// there is a fscking conflict here you see!
-	function callback_get_add_event($args = array())
+	function callback_get_add_event($arr)
 	{
 		// yuck, what a mess
-		$obj = $args["obj_inst"];
+		$obj = $arr["obj_inst"];
 		$meta = $obj->meta();
 		
 		$event_folder = $obj->prop("event_folder");
@@ -958,7 +956,7 @@ class planner extends class_base
 
 		// use the config form specified in the request url OR the default one from the
 		// planner configuration
-		$event_cfgform = $args["request"]["cfgform_id"];
+		$event_cfgform = $arr["request"]["cfgform_id"];
 		// are we editing an existing event?
 		$cf = get_instance(CL_CFGFORM);
 		if (empty($event_cfgform))
@@ -966,7 +964,7 @@ class planner extends class_base
 			$sys_default_form = $cf->get_sysdefault(array("clid" => $arr["request"]["clid"]));
 			$event_cfgform = $sys_default_form;
 		};
-		$event_id = $args["request"]["event_id"];
+		$event_id = $arr["request"]["event_id"];
 		if (is_oid($event_id) && $this->can("view", $event_id))
 		{
 			$event_obj = new object($event_id);
@@ -989,9 +987,9 @@ class planner extends class_base
 		}
 		else
 		{
-			if (!empty($args["request"]["clid"]))
+			if (!empty($arr["request"]["clid"]))
 			{
-				$clid = $args["request"]["clid"];
+				$clid = $arr["request"]["clid"];
 			}
 			elseif (is_oid($event_cfgform))
 			{
@@ -1032,9 +1030,9 @@ class planner extends class_base
 				$t = get_instance($clfile);
 				$t->init_class_base();
 				$emb_group = "general";
-				if ($this->event_id && $args["request"]["cb_group"])
+				if ($this->event_id && $arr["request"]["cb_group"])
 				{
-					$emb_group = $args["request"]["cb_group"];
+					$emb_group = $arr["request"]["cb_group"];
 				};
 				$this->emb_group = $emb_group;
 			
@@ -1042,7 +1040,7 @@ class planner extends class_base
 				
 				// the request has to be handled the other way also, in order to use things, that should be used.. -- ahz
 				
-				$t->request = $args["request"] + array("group" => $args["request"]["cb_group"], "class" => $clfile);
+				$t->request = $arr["request"] + array("group" => $arr["request"]["cb_group"], "class" => $clfile);
 				// aga vaata see koht siin peaks arvestama ka seadete vormi, nicht war?
 
 				$all_props = $t->get_property_group(array(
@@ -1050,7 +1048,7 @@ class planner extends class_base
 					"cfgform_id" => $event_cfgform,
 				));
 
-				$this->do_handle_cae_props($all_props, $args["request"]);
+				$this->do_handle_cae_props($all_props, $arr["request"]);
 
 				$xprops = $t->parse_properties(array(
 						"obj_inst" => $event_obj,
@@ -1083,9 +1081,9 @@ class planner extends class_base
 				{
 					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[id]","value" => $this->event_id);	
 				};
-				if ($args["request"]["cb_group"])
+				if ($arr["request"]["cb_group"])
 				{
-					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cb_group]","value" => $args["request"]["cb_group"]);	
+					$resprops[] = array("emb" => 1,"type" => "hidden","name" => "emb[cb_group]","value" => $arr["request"]["cb_group"]);	
 				}
 			};
 		}
