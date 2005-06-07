@@ -17,7 +17,8 @@ class mail_protector
 
 		// also try to do already existing email links that have as text the mail address
 		$repl = "<script language=\"javascript\">aw_proteml(\"\\3\",\"\\4\");</script><noscript>\\3<img src='".aw_ini_get("baseurl")."/automatweb/images/at.png' alt='@' style='vertical-align: middle;'/>\\4</noscript>";
-		$str = preg_replace("/<a([^>]*) href=([\"|'])mailto:(\w*)@([\w|\.]*)([\"|'])(\w*)>\\3@\\4<\/a>/imsU",$repl, $str);
+
+		$str = preg_replace("/<a([^>]*) href=([\"|'])mailto:(.*)@([\w|\.]*)([\"|'])(\w*)>\\3@\\4<\/a>/imsU",$repl, $str);
 		#$str = preg_replace("/<a([^>]*) href=([\"|'])mailto:(.*)@(.*)([\"|'])(.*)>\\3@\\4<\/a>/imsU",$repl, $str);
 
 		// finally links that go to mail but have the text different from the address
