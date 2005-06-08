@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.70 2005/05/31 08:47:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.71 2005/06/08 11:41:43 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -725,45 +725,45 @@ class webform extends class_base
 		}
 		$set_controllers = array(
 			array(
-				"name" => "M&auml;&auml;ra saaja aadressiks",
+				"name" => t("M&auml;&auml;ra saaja aadressiks"),
 				"formula" => '$value = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);$vals = array();foreach($value as $val){if(is_oid($val) && $this->can("view", $val)){$obj = obj($val);$vals[$val] = $obj->comment();}}if(!empty($vals)){aw_global_set("recievers_name", $vals);}',
 			),
 			array(
-				"name" => "M&auml;&auml;ra saatja aadressiks",
+				"name" => t("M&auml;&auml;ra saatja aadressiks"),
 				"formula" => 'aw_global_set("global_name", $prop["value"]);',
 			),
 			array(
-				"name" => "*elemendinimi* peab olema t&auml;idetud",
+				"name" => t("*elemendinimi* peab olema t&auml;idetud"),
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption peab olema t&auml;idetud",
+				"errmsg" => t("%caption peab olema t&auml;idetud"),
 			),
 			array(
-				"name" => "*elemendinimi* peab olema valitud",
+				"name" => t("*elemendinimi* peab olema valitud"),
 				"formula" => 'if(empty($prop["value"])){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption peab olema valitud",
+				"errmsg" => t("%caption peab olema valitud"),
 			),
 			array(
-				"name" => "Kontrolli e-maili &otilde;igsust",
+				"name" => t("Kontrolli e-maili &otilde;igsust"),
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
-				"errmsg" => "%caption sisestatud e-mailiaadress pole korrektne",
+				"errmsg" => t("%caption sisestatud e-mailiaadress pole korrektne"),
 			),
 			array(
-				"name" => "Kuva sisestaja IP ja host aadress",
+				"name" => t("Kuva sisestaja IP ja host aadress"),
 				"formula" => 'if(empty($prop["value"])){$request[$prop["name"]] = "IP: ".$_SERVER["REMOTE_ADDR"];}',
 			),
 			array(
-				"name" => "Sisesta dokumendi pealkiri",
+				"name" => t("Sisesta dokumendi pealkiri"),
 				"formula" => 'if(empty($prop["value"])){if(is_oid($request["doc_id"]) && $this->can("view", $request["doc_id"])){$doc = obj($request["doc_id"]);$request[$prop["name"]] = $doc->name();}}',
 			),
 			//Host: ".$_SERVER["REMOTE_HOST"]."\n
 		);
 		$get_controllers = array(
 			array(
-				"name" => "Kuva sisestaja IP ja host aadress",
+				"name" => t("Kuva sisestaja IP ja host aadress"),
 				"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
 			),
 			array(
-				"name" => "Sisesta dokumendi pealkiri",
+				"name" => t("Sisesta dokumendi pealkiri"),
 				"formula" => '$value = $arr["obj_inst"]->prop($prop["name"]);if(!empty($value)){$prop["type"] = "text";$prop["value"] = nl2br($value);}',
 			),
 		);
