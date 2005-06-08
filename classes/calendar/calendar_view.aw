@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.38 2005/05/13 08:31:50 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.39 2005/06/08 15:08:01 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -309,6 +309,7 @@ class calendar_view extends class_base
 			//"tasklist_func" => array(&$this,"get_tasklist"),
 			"overview_func" => array(&$this,"get_overview"),
 			"overview_range" => 1,
+			"full_weeks" => 1,
 		));
 		$range = $arr["prop"]["vcl_inst"]->get_range(array(
 			"date" => $arr["request"]["date"],
@@ -406,6 +407,8 @@ class calendar_view extends class_base
 					"start" => $arr["start"],
 					"end" => $arr["end"],
 				));
+
+
 			};
 
 			foreach($overview as $event)
@@ -498,6 +501,7 @@ class calendar_view extends class_base
 					{
 						$varx["item_end"] = $event["end"];
 					}
+
 					$arr["cal_inst"]->add_item($varx);
 				};
 
@@ -562,7 +566,6 @@ class calendar_view extends class_base
 
 			case CL_PROJECT:
 				$pr = get_instance(CL_PROJECT);
-
 				$events = $pr->get_events(array(
 					"id" => $o->id(),
 					"range" => $range,
@@ -697,6 +700,7 @@ class calendar_view extends class_base
 		// this parse_alias is also being invoked directly from the project class, 
 		// without an alias anywhere. I want to show full months if this is an alias
 		// and this it's done
+
 		if (!empty($arr["matches"]))
 		{
 			$arr["full_weeks"] = 1;
@@ -726,6 +730,7 @@ class calendar_view extends class_base
 			$args["fix_links"] = 1;
 		}
 		$vcal->obj_status = $status;
+
 
 		$vcal->configure($args);
 
@@ -995,10 +1000,6 @@ class calendar_view extends class_base
 			));
 
 			$rv .= "<br>";
-				if(aw_global_get("uid") == "ahz")
-				{
-					arr($range);
-				}
 			foreach ($conns as $conn)
 			{
 				$to_o = $conn->to();
