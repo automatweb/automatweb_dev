@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.67 2005/05/12 15:37:05 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.68 2005/06/08 15:07:16 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -261,6 +261,7 @@ class vcalendar extends aw_template
 			// second (and all the remainders start at specified time)
 			$days_between = $end_tm - $start_tm;
 			$day_counter = 0;
+			// XXX: process only the required range to save memory
 			for ($i = $arr["item_start"]; $i <= $arr["item_end"]; $i = $i + 86400)
 			{
 				$day_counter++;
@@ -283,21 +284,8 @@ class vcalendar extends aw_template
 					//$tmp["time"] = "";
 				};
 
-				// ahaa.. sest see on juba lisatud!
-				// miks see kontroll lisab asju, mis on juba lisatud?
-				/*
-				if ($i == $arr["item_start"])
-				{
-					$tmp["item_end"] = 666;
-				};
-				*/
-				/*
-				if ($_GET["XX6"])
-				{
-					print "adding";
-					arr($tmp);
-				};
-				*/
+				$tmp["hide_times"] = 1;
+
 				$this->items[$use_date][] = $tmp;
 			};
 		};
@@ -1155,7 +1143,6 @@ class vcalendar extends aw_template
 	{
 		$this->read_template("minical.tpl");
 
-
 		// the idea here is that drawing of month always starts from
 		// the first day of the week in which the month starts and ends
 		// on the last day of the week in which the month ends
@@ -1279,10 +1266,6 @@ class vcalendar extends aw_template
 				}
 				else
 				{
-					if (aw_global_get("uid") == "duke")
-					{
-						print "x";
-					};
 					$day_url = aw_url_change_var(array(
 						"viewtype" => "day",
 						"event_id" => "",
@@ -1471,17 +1454,24 @@ class vcalendar extends aw_template
 		{
 			$dchecked = $this->evt_tpl->parse("DCHECKED");
 		}
-		/*
-		if ($_GET["XX6"])
-		{
-			arr($evt);
-		};
-		*/
 		if (!isset($evt["time"]))
 		{
 			if ($evt["item_start"] && $evt["item_end"] && $evt["item_start"] != $evt["item_end"])
 			{
-				$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
+				$tm_start = date("H:i",$evt["item_start"]);
+				$tm_end = date("H:i",$evt["item_end"]);
+				if ($tm_start == "00:00")
+				{
+					$time = "";
+				}
+				else if ($tm_end == "00:00")
+				{
+					$time = date("H:i",$evt["item_start"]);
+				}
+				else
+				{
+					$time = date("H:i",$evt["item_start"]) . " - " . date("H:i",$evt["item_end"]);
+				};
 			}
 			else
 			{
@@ -1492,6 +1482,11 @@ class vcalendar extends aw_template
 		{
 			$time = $evt["time"];
 		}
+		
+		if ($evt["hide_times"])
+		{
+			$time = "";
+		};
 		$title = sprintf(t("Lisas [%s] %s /  Muutis [%s] %s"), $evt["createdby"], date("d.m.y", $evt["created"]), $evt["modifiedby"], date("d.m.y", $evt["modified"]));
 		
 		$this->evt_tpl->vars(array(
