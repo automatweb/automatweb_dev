@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.55 2005/05/19 10:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.56 2005/06/09 15:02:06 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -412,25 +412,27 @@ class releditor extends core
 			$name = $arr["prop"]["name"];
 			foreach($conns as $conn)
 			{
+				$c_to = $conn->prop("to");
 				if ($arr["prop"]["direct_links"] == 1)
 				{
-					$url = $this->mk_my_orb("change",array("id" => $conn->prop("to"),"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
+					$url = $this->mk_my_orb("change",array("id" => $c_to,"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
 				}
 				else
 				{
-					$url = aw_url_change_var(array($this->elname => $conn->prop("to")));
+					$url = aw_url_change_var(array($this->elname => $c_to));
 				};
 				$target = $conn->to();
 				$clinst = $target->instance();
 				$rowdata = array(
-					"id" => $conn->prop("to"),
+					"id" => $c_to,
+					"parent" => $target->parent(),
 					"conn_id" => $conn->id(),
 					"name" => $conn->prop("to.name"),
 					"edit" => html::href(array(
 						"caption" => t("Muuda"),
 						"url" => $url,
 					)),
-					"_active" => ($arr["request"][$this->elname] == $conn->prop("to")),
+					"_active" => ($arr["request"][$this->elname] == $c_to),
 				);
 				$property_list = $target->get_property_list();
 				$export_props = array();
@@ -500,6 +502,10 @@ class releditor extends core
 					};
 				};
 				$rowdata = $export_props + $rowdata;
+				if (aw_global_get("uid") == "duke")
+				{
+					arr($rowdata);
+				};
 				$awt->define_data($rowdata);
 			}
 		}
