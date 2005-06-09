@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.76 2005/05/19 11:22:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.77 2005/06/09 10:55:05 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -33,7 +33,7 @@ class html extends aw_template
 			$cl = "class=\"$class\"";
 		}
 
-		if (isset($multiple))
+		if (!empty($multiple))
 		{
 			$mz = "multiple ";
 			$name .= "[]";
