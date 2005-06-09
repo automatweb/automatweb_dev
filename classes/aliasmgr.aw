@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.179 2005/05/06 09:50:53 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.180 2005/06/09 06:15:59 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -521,7 +521,7 @@ class aliasmgr extends aw_template
 		));
 		$this->t->define_field(array(
 			"name" => "comment",
-			"caption" => t("Muu info"),
+			"caption" => t("Asukoht"),
 			"talign" => "center",
 			"sortable" => 1,
 		));
@@ -738,9 +738,13 @@ class aliasmgr extends aw_template
 			// for the chooser
 			$adat["id"] = $alias->prop("id");
 
+			$__to = $alias->to();
+			$__pt1 = obj($__to->parent());
+			$__pt2 = obj($__pt1->parent());
+			$adat["comment"] = $__pt2->name()." / ".$__pt1->name();
 			$adat["name"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => $return_url), $edfile),
-				"caption" => parse_obj_name($alias->prop("to.name")),
+				"caption" => parse_obj_name($__to->name()),
 			));
 
 			$type_str = $this->reltypes[$reltype_id];
