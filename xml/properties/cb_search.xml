@@ -46,6 +46,16 @@
             <caption>Vaatamise seadete vorm</caption>
       </property>
       <property>
+            <name>show_non_cf_fields</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;auml;ita ka v&amp;auml;lju, mis ei ole seadete vormis</caption>
+      </property>
+      <property>
             <name>choose_fields</name>
             <table>objects</table>
             <group>props</group>
@@ -140,6 +150,16 @@
                   <clid>CL_MENU</clid>
                   <caption>kataloog, kust otsida</caption>
             </PARENT>
+            <RESULT_CONTROLLER>
+                  <value>3</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>tulemuste kontroller</caption>
+            </RESULT_CONTROLLER>
+            <ROW_CONTROLLER>
+                  <value>4</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>rea kontroller</caption>
+            </ROW_CONTROLLER>
       </reltypes>
 </properties>
 

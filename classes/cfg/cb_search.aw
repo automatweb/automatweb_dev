@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.35 2005/04/28 07:36:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.36 2005/06/09 10:56:36 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -24,6 +24,9 @@
 
 @property view_cf type=select
 @caption Vaatamise seadete vorm
+
+@property show_non_cf_fields type=checkbox ch_value=1
+@caption N&auml;ita ka v&auml;lju, mis ei ole seadete vormis
 
 @groupinfo props caption="Väljad"
 
@@ -56,6 +59,12 @@
 
 @reltype PARENT value=2 clid=CL_MENU
 @caption kataloog, kust otsida
+
+@reltype RESULT_CONTROLLER value=3 clid=CL_CFGCONTROLLER
+@caption tulemuste kontroller
+
+@reltype ROW_CONTROLLER value=4 clid=CL_CFGCONTROLLER
+@caption rea kontroller
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -175,6 +184,11 @@ class cb_search extends class_base
 			"align" => "center",
 		));
 		$t->define_field(array(
+			"name" => "default",
+			"caption" => t("Vaikimisi"),
+			"align" => "center",
+		));
+		$t->define_field(array(
 			"name" => "caption",
 			"caption" => t("Tekst"),
 			"align" => "center",
@@ -207,6 +221,24 @@ class cb_search extends class_base
 			{
 				$form_dat[$pn]["caption"] = $item["caption"];
 			}
+
+			$default = html::textbox(array(
+				"name" => "form_dat[$clid][$pn][default]",
+				"value" => $form_dat[$clid][$pn]["default"],
+				"size" => 5
+			));
+			if ($item["type"] == "classificator")
+			{
+				$tmp = array($item["name"] => &$item);
+				$this->mod_chooser_prop($tmp, $pn, $clid, $o);
+				$default = html::select(array(
+					"name" => "form_dat[$clid][$pn][default]",
+					"options" => array("" => "") + $item["options"],
+					"selected" => $form_dat[$clid][$pn]["default"],
+					"multiple" => $form_dat[$clid][$pn]["type"] == "checkboxes"
+				));
+			}
+
 			$row = array(
 				"classn" => $cll,
 				"property" => $item["caption"],
@@ -233,7 +265,8 @@ class cb_search extends class_base
 					"name" => "form_dat[$clid][$pn][jrk]",
 					"size" => 5,
 					"value" => $form_dat[$clid][$pn]["jrk"]
-				))
+				)),
+				"default" => $default
 			);
 			if($item["type"] == "classificator")
 			{
@@ -333,6 +366,7 @@ class cb_search extends class_base
 				"multiple" => 1,
 			),
 		);
+
 		foreach($this->in_form as $iname => $item)
 		{
 			$name = $item["name"];
@@ -340,7 +374,16 @@ class cb_search extends class_base
 			if ($this->search_data[$item["clid"]][$name])
 			{
 				$item["value"] = $this->search_data[$item["clid"]][$name];
-			};
+			}
+			else
+			{
+				$def = $fd[$item["clid"]][$name]["default"];
+				if (is_array($def))
+				{
+					$def = $this->make_keys($def);
+				}
+				$item["value"] = $def;
+			}
 
 			$item["ord"] = $fd[$item["clid"]][$iname]["jrk"];
 
@@ -650,7 +693,19 @@ class cb_search extends class_base
 				}
 				$olist = new object_list($sdata);
 				enter_function("cb_search::mk_result_table::objloop");
-				foreach($olist->arr() as $o)
+				$res_data = $olist->arr();
+
+				if (($c_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_RESULT_CONTROLLER")))
+				{
+					$controller_inst->check_property($c_o->id(), $arr["obj_inst"]->id(), $res_data, $arr["request"], $sdata, &$t);
+				}
+
+				if (($c_o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_ROW_CONTROLLER")))
+				{
+					$add_f[] = $c_o->id();
+				}
+
+				foreach($res_data as $o)
 				{
 					$row = array();
 					foreach($this->in_results as $iname => $item)
@@ -832,6 +887,36 @@ class cb_search extends class_base
 				$dat[$pn]["caption"] = $pd["caption"];
 			}
 			$ret = $dat;
+
+			if ($o->prop("show_non_cf_fields"))
+			{
+				$cu = get_instance("cfg/cfgutils");
+				$ps = $cu->load_properties(array("clid" => $o->prop("root_class")));
+
+				foreach($ps as $pn => $pd)
+				{
+					if (!isset($ret[$pn]))
+					{
+						$ret[$pn] = $pd;
+					}
+				}
+			}
+			else
+			{
+				$fd = safe_array($o->meta("form_dat"));
+				foreach($fd as $clid => $inf)
+				{
+					foreach($inf as $pn => $propi)
+					{
+						if ($propi["visible"] == 1 && !isset($ret[$pn]))
+						{
+							$cu = get_instance("cfg/cfgutils");
+							$ps = $cu->load_properties(array("clid" => $o->prop("root_class")));
+							$ret[$pn] = $ps[$pn];
+						}
+					}
+				}
+			}
 		}
 
 		if ($addt)

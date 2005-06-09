@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.52 2005/06/02 09:00:03 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.53 2005/06/09 10:56:36 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -66,6 +66,11 @@ class aw_table extends aw_template
 	function set_sortable($arg)
 	{
 		$this->sortable = $arg;
+	}
+
+	function set_rgroupby($arg)
+	{
+		$this->rgroupby = $arg;
 	}
 
 	/** some users need to put simple plain text above the
@@ -297,7 +302,7 @@ class aw_table extends aw_template
 		}*/
 
 		// grouping - whenever a value of one of these elements changes an extra row gets inserted into the table
-		$this->rgroupby = isset($params["rgroupby"]) ? $params["rgroupby"] : "";
+		$this->rgroupby = isset($params["rgroupby"]) ? $params["rgroupby"] : $this->rgroupby;
 		$this->rgroupsortdat = isset($params["rgroupsortdat"]) ? $params["rgroupsortdat"] : "";
 		$this->vgroupby = isset($params["vgroupby"]) ? $params["vgroupby"] : "";
 		$this->vgroupdat = isset($params["vgroupdat"]) ? $params["vgroupdat"] : "";
@@ -494,6 +499,11 @@ class aw_table extends aw_template
 			return;
 		};
 
+		if ($this->rgroupby && !$arr["rgroupby"])
+		{
+			$arr["rgroupby"] = $this->rgroupby;
+		}
+
 		if (isset($arr["rgroupby"]) && is_array($arr["rgroupby"]))
 		{
 			$this->do_rgroup_counts($arr["rgroupby"]);
@@ -502,7 +512,7 @@ class aw_table extends aw_template
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
-		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : "";
+		$this->titlebar_under_groups = isset($arr["titlebar_under_groups"]) ? $arr["titlebar_under_groups"] : $this->titlebar_under_groups;
 		$tbl = "";
 
 		foreach($this->rowdefs as $rd)
@@ -667,7 +677,7 @@ class aw_table extends aw_template
 				// grpupeerimine
 				if (isset($rgroupby) && is_array($rgroupby))
 				{
-					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v);
+					$tmp = $this->do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style);
 				};
 				if ($tmp != "")
 				{
@@ -1422,7 +1432,7 @@ class aw_table extends aw_template
 		return $tbl;
 	}
 
-	function do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v)
+	function do_col_rgrouping($rgroupby, $rgroupdat, $rgroupby_sep, $v, $rowid, $row_style)
 	{
 		$tbl = "";
 		foreach($rgroupby as $rgel)
@@ -1503,7 +1513,7 @@ class aw_table extends aw_template
 					$tbl.=$this->draw_titlebar_under_rgrp();
 				}
 
-				$tbl .= "<tr>\n";
+				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => $row_style));
 			}
 		}
 		return $tbl;
