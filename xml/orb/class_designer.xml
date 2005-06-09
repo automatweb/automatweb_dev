@@ -16,6 +16,7 @@
 				<arguments>
 					<required name="id" type="int" acl="view" />
 					<required name="group_parent" />
+					<required name="gtype" />
 					<required name="return_url" />
 				</arguments>
 			</function>
@@ -28,6 +29,17 @@
 					<required name="element_type" />
 					<required name="group_parent" />
 					<required name="return_url" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="place_element">
+			<function name="place_element">
+				<arguments>
+					<required name="id" type="int" />
+					<required name="group_parent" type="int" />
+					<required name="el_id" type="int" />
+					<optional name="return_url" />
 				</arguments>
 			</function>
 		</action>
