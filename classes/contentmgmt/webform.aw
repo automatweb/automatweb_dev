@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.71 2005/06/08 11:41:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.72 2005/06/10 12:12:22 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -2016,6 +2016,27 @@ class webform extends class_base
 		));
 		return $this->parse()."<br />".html::href(array("url" => urldecode($arr["url"]), "caption" => t("Liigu edasi &raquo;")));
 		//return "valleraa, siin on vorm";
+	}
+
+	/**
+
+		@attrib api=1
+
+		@param id required
+
+		@comment
+			returns list of properties from the webform ($id)
+
+	**/
+	function get_props_from_wf($arr)
+	{
+		$wf = obj($arr["id"]);
+		$ot = $wf->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
+
+		$cf = get_instance(CL_CFGFORM);
+		return $cf->get_props_from_ot(array(
+			"ot" => $ot->id()
+		));
 	}
 }
 ?>
