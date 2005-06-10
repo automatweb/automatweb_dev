@@ -28,21 +28,12 @@
             <caption>Sisselogimisi</caption>
       </property>
       <property>
-            <name>online</name>
-            <table>users</table>
-            <group>general</group>
-            <store>no</store>
-            <type>text</type>
-            <field>online</field>
-            <caption>Sisselogitud</caption>
-      </property>
-      <property>
             <name>lastaction</name>
             <table>users</table>
             <group>general</group>
             <field>lastaction</field>
             <type>text</type>
-            <caption>Viimane tegevus</caption>
+            <caption>Viimane sisse logimine</caption>
       </property>
       <property>
             <name>blocked</name>

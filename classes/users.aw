@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.144 2005/06/03 11:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.145 2005/06/10 08:07:01 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1266,13 +1266,6 @@ class users extends users_user
 	{
 		if (($uid = aw_global_get("uid")) != "")
 		{
-			/*$_uid = $this->db_fetch_field("SELECT uid FROM users WHERE uid = '$uid' AND blocked != 1", "uid");
-			if ($_uid != $uid)
-			{
-				// if no such user exists, log the bastard out
-				$this->kill_user();
-			}*/
-
 			$this->create_gidlists($uid);
 			$gidlist = aw_global_get("gidlist");
 			$gidlist_pri = aw_global_get("gidlist_pri");
@@ -1280,7 +1273,6 @@ class users extends users_user
 			{
 				$this->kill_user();
 			}
-			$this->touch($uid);
 
 			// get highest priority group
 			$hig = 0;

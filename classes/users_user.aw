@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.115 2005/06/02 07:44:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.116 2005/06/10 08:07:01 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -113,23 +113,6 @@ class users_user extends aw_template
 		return true;
 	}
 
-	////
-	// !Kinky - touch user. Anyway. Seab users tabelis lastaction valja hetke timestambiks
-	// Saab kasutada selleks, et teha kindlaks kui kaua kasutaja on idle istunud
-	function touch($user) 
-	{
-		$t = time();
-		// For perfomance reasons, touch only once per minute.
-		$last_touch = aw_global_get("last_touch");
-		if (($last_touch + 60) < $t)
-		{
-			$q = "UPDATE users SET lastaction = '$t' WHERE uid = '$user'";
-			//$this->db_query($q);
-			aw_session_set("last_touch",$t);
-		};
-	}
-
-	
 	
 	////
 	// !Logib kasutaja sisse
@@ -249,11 +232,9 @@ class users_user extends aw_template
 			));
 		}
 		$logins = $user_obj->prop("logins") + 1;
-		if ($logins < 2)
-		{
-			$user_obj->set_prop("logins", $logins);
-			$user_obj->save(); 
-		}
+		$user_obj->set_prop("logins", $logins);
+		$user_obj->set_prop("lastaction", time());
+		$user_obj->save(); 
 		aw_restore_acl();
 
 		aw_session_set("user_adm_ui_lc", $user_obj->prop("ui_language"));

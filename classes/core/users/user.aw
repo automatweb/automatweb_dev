@@ -43,11 +43,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property logins field=logins type=text store=yes 
 @caption Sisselogimisi
 
-@property online store=no type=text
-@caption Sisselogitud
-
 @property lastaction field=lastaction type=text
-@caption Viimane tegevus
+@caption Viimane sisse logimine
 
 @property blocked field=blocked type=checkbox ch_value=1
 @caption Blokeeritud
@@ -201,11 +198,6 @@ class user extends class_base
 			case "comment":
 				return PROP_IGNORE;
 			
-			case "online":
-				$timeout = ini_get("session.gc_maxlifetime");
-				$prop['value'] = ((time() - $arr["obj_inst"]->prop("lastaction")) < $timeout) ? LC_YES : LC_NO;
-				break;
-
 			case "lastaction";
 				$prop["value"] = $this->db_fetch_field("SELECT lastaction FROM users WHERE uid = '".$arr["obj_inst"]->prop("uid")."'", "lastaction");
 				$prop['value'] = $this->time2date($prop['value'],2);
