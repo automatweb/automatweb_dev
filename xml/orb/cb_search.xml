@@ -10,5 +10,12 @@
 			</function>
 		</action>
 
+		<action name="handle_submit">
+			<function name="handle_submit">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

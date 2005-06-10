@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.36 2005/06/09 10:56:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.37 2005/06/10 15:28:54 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -40,19 +40,30 @@
 
 @groupinfo parents caption="Kataloogid"
 
-@property parents type=table no_caption=1 group=parents
-@caption Kataloogid, ksut otsida
+	@property parents type=table no_caption=1 group=parents
+	@caption Kataloogid, ksut otsida
 
 @groupinfo search caption="Otsi" submit_method=get
 
-@property search type=callback callback=callback_gen_search group=search
-@caption Otsi
+	@property search type=callback callback=callback_gen_search group=search
+	@caption Otsi
 
-@property sbt type=submit group=search
-@caption Otsi
+	@property sbt type=submit group=search
+	@caption Otsi
 
-@property results type=table group=search no_caption=1
-@caption Tulemused
+	@property results type=table group=search no_caption=1
+	@caption Tulemused
+
+@groupinfo submit_after caption="Tulemuste salvestamine"
+
+	@property show_submit type=checkbox ch_value=1 group=submit_after
+	@caption N&auml;ita salvesta nuppu
+
+	@property submit_button_text type=textbox group=submit_after
+	@caption Salvesta nupu tekst
+
+	@property submit_handler_controller type=relpicker reltype=RELTYPE_SUBMIT_CTR group=submit_after
+	@caption Salvestamise kontroller
 
 @reltype SYN value=1 clid=CL_CB_SEARCH_SYNONYMS
 @caption s&uuml;non&uuml;mid
@@ -65,6 +76,9 @@
 
 @reltype ROW_CONTROLLER value=4 clid=CL_CFGCONTROLLER
 @caption rea kontroller
+
+@reltype SUBMIT_CTR value=5 clid=CL_CFGCONTROLLER
+@caption salvestamise kontroller
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -241,7 +255,7 @@ class cb_search extends class_base
 
 			$row = array(
 				"classn" => $cll,
-				"property" => $item["caption"],
+				"property" => $item["caption"]." (".$item["name"].")",
 				"in_form" => html::checkbox(array(
 					"name" => "form_dat[$clid][$pn][visible]",
 					"value" => 1,
@@ -1148,19 +1162,19 @@ class cb_search extends class_base
 		));
 		$table = $t->draw();
 		
-		// this is the damn magic hack, ref and section2 also.. surely there is a better way to
-		// accomplish it than this :| -- no, this is not the way to do it -- ahz
-		//$tpl = $arr["call_in"] == true ? "show2" : "show";
-		
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"form" => $html,
 			"section" => aw_global_get("section"),
 			"table" => $table,
-			//"ref" => $arr["ref"],
-			//"section2" => $arr["section2"],
-			
 		));
+
+		// if there is a submit handler controller, then show submit button with text
+		if ($ob->prop("show_submit") && $request["s"])
+		{
+			$this->_do_submit($ob);
+		}
+
 		exit_function("cb_search::show");
 		return $this->parse();
 	}
@@ -1456,6 +1470,41 @@ class cb_search extends class_base
 			$sdata["parent"] = $pft;
 		}
 		exit_function("cb_search::_add_parent_filter");
+	}
+
+	function _do_submit($o)
+	{
+		$this->vars(array(
+			"submit_text" => $o->prop("submit_button_text")
+		));
+		$this->vars(array(
+			"SUBMIT_BUTTON" => $this->parse("SUBMIT_BUTTON"),
+			"reforb" => $this->mk_reforb("handle_submit", array(
+				"id" => $o->id(),
+				"ret" => post_ru(),
+				"s" => $_REQUEST["s"]
+			))
+		));
+	}
+
+	/**
+
+		@attrib name=handle_submit
+
+	**/
+	function handle_submit($arr)
+	{
+		$o = obj($arr["id"]);
+
+		$c = get_instance(CL_CFGCONTROLLER);
+		return $c->check_property(
+			$o->prop("submit_handler_controller"), 
+			$o,
+			$o,
+			$arr,
+			array(),
+			$o
+		);
 	}
 }
 ?>

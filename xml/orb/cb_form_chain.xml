@@ -1,14 +1,14 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="cb_form_chain" folder="applications/cb_form_chain" extends="class_base">
-		<action name="submit_data">
+		<action name="submit_data" nologin="1">
 			<function name="submit_data">
 				<arguments>
 				</arguments>
 			</function>
 		</action>
 
-		<action name="submit_confirm">
+		<action name="submit_confirm" nologin="1">
 			<function name="submit_confirm">
 				<arguments>
 				</arguments>

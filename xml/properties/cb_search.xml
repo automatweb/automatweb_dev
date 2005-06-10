@@ -118,6 +118,35 @@
             <store>no</store>
             <caption>Tulemused</caption>
       </property>
+      <property>
+            <name>show_submit</name>
+            <table>objects</table>
+            <group>submit_after</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>N&amp;auml;ita salvesta nuppu</caption>
+      </property>
+      <property>
+            <name>submit_button_text</name>
+            <table>objects</table>
+            <group>submit_after</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Salvesta nupu tekst</caption>
+      </property>
+      <property>
+            <name>submit_handler_controller</name>
+            <table>objects</table>
+            <group>submit_after</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBMIT_CTR</reltype>
+            <caption>Salvestamise kontroller</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CB_SEARCH</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -138,6 +167,9 @@
                   <caption>Otsi</caption>
                   <submit_method>get</submit_method>
             </search>
+            <submit_after>
+                  <caption>Tulemuste salvestamine</caption>
+            </submit_after>
       </groupinfo>
       <reltypes>
             <SYN>
@@ -160,6 +192,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>rea kontroller</caption>
             </ROW_CONTROLLER>
+            <SUBMIT_CTR>
+                  <value>5</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>salvestamise kontroller</caption>
+            </SUBMIT_CTR>
       </reltypes>
 </properties>
 

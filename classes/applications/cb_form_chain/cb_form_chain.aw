@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.1 2005/06/10 12:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.2 2005/06/10 15:28:55 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -202,6 +202,12 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "el_table",
+			"caption" => t("Elemendid tabelina"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "repeat_ctr",
 			"caption" => t("Korduste kontroller"),
 			"align" => "center"
@@ -254,6 +260,11 @@ class cb_form_chain extends class_base
 					"name" => "d[".$o->id()."][repeat]",
 					"value" => 1,
 					"checked" => $d[$o->id()]["repeat"] == 1 
+				)),
+				"el_table" => html::checkbox(array(
+					"name" => "d[".$o->id()."][el_table]",
+					"value" => 1,
+					"checked" => $d[$o->id()]["el_table"] == 1 
 				)),
 				"repeat_ctr" => $rc,
 				"def_ctr" => html::select(array(
@@ -329,7 +340,8 @@ class cb_form_chain extends class_base
 				$fd = array(
 					"form" => $form,
 					"rep" => $dat["repeat"],
-					"rep_cnt" => 1
+					"rep_cnt" => 1,
+					"el_table" => $dat["el_table"]
 				);
 				if ($dat["repeat"] && is_oid($dat["rep_ctr"]) && $this->can("view", $dat["rep_ctr"]))
 				{
@@ -355,47 +367,31 @@ class cb_form_chain extends class_base
 		foreach($forms as $form_dat)
 		{
 			$wf = obj($form_dat["form"]);
+			$ot = $wf->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE");
 
-			for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
+			$props = $cf->get_props_from_ot(array(
+				"ot" => $ot->id()
+			));
+			$this->_apply_view_controllers($props, $wf, $i);
+
+			$this->vars(array(
+				"form_name" => $wf->name()
+			));
+			$html .= $this->parse("FORM_HEADER");
+
+			if ($form_dat["el_table"] == 1)
 			{
-				if (!is_array($_SESSION["cbfc_data"][$wf->id()][$i]) && $form_dat["def_ctr"])
-				{
-					$ci = get_instance(CL_CFGCONTROLLER);
-					$ci->check_property($form_dat["def_ctr"], $wf->id(), $_SESSION["cbfc_data"][$wf->id()][$i], $_REQUEST, $i, $o);
-				}
-
-				$props = $cf->get_props_from_ot(array(
-					"ot" => $wf->get_first_obj_by_reltype("RELTYPE_OBJECT_TYPE")
-				));
-				// insert values as well
-				foreach($props as $k => $v)
-				{
-					$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
-				}
-
-				$rd = get_instance(CL_REGISTER_DATA);
-				$els = $rd->parse_properties(array(
-					"properties" => $props,
-					"name_prefix" => "f_".$wf->id()."_".$i
-				));
-
-				$htmlc = get_instance("cfg/htmlclient");
-				$htmlc->start_output();
-				foreach($els as $pn => $pd)
-				{
-					$htmlc->add_property($pd);
-				}
-				$htmlc->finish_output();
-
-				$html .= $htmlc->get_result(array(
-					"raw_output" => 1
-				));
+				$html .= $this->_html_table_from_props($form_dat, $props, $ot, $wf, $o);
+			}
+			else
+			{
+				$html .= $this->_html_from_props($form_dat, $props, $ot, $wf, $o);
 			}
 		}
 
 		$this->vars(array(
 			"form" => $html,
-			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru())),
+			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o))),
 		));
 
 		$this->_do_prev_next_pages($o);
@@ -454,7 +450,7 @@ class cb_form_chain extends class_base
 
 	/**
 
-		@attrib name=submit_data
+		@attrib name=submit_data nologin="1"
 
 	**/
 	function submit_data($arr)
@@ -476,6 +472,34 @@ class cb_form_chain extends class_base
 		if ($arr["confirm"] != "")
 		{
 			return $this->submit_confirm($arr);
+		}
+		if ($arr["goto_next"] != "")
+		{
+			$pgs = $this->_get_page_list(obj($arr["id"]));
+			$prev = false;
+			foreach($pgs as $pg)
+			{
+				if ($prev == $arr["cbfc_pg"])
+				{
+					return aw_url_change_var("cbfc_pg", $pg, $arr["ret"]);
+				}
+				$prev = $pg;
+			}
+			return aw_url_change_var("do_confirm", 1, $arr["ret"]);
+		}
+		else
+		if ($arr["goto_prev"] != "")
+		{
+			$pgs = $this->_get_page_list(obj($arr["id"]));
+			$prev = false;
+			foreach($pgs as $pg)
+			{
+				if ($pg == $arr["cbfc_pg"])
+				{
+					return aw_url_change_var("cbfc_pg", $prev, $arr["ret"]);
+				}
+				$prev = $pg;
+			}
 		}
 
 		return $arr["ret"];
@@ -508,7 +532,7 @@ class cb_form_chain extends class_base
 
 		$this->vars(array(
 			"forms" => $form_str,
-			"reforb" => $this->mk_reforb("submit_confirm", array("id" => $o->id(), "ret" => post_ru())),
+			"reforb" => $this->mk_reforb("submit_confirm", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o))),
 			"prev_link" => aw_url_change_var(array("display" => NULL, "do_confirm" =>  NULL))
 		));
 
@@ -517,7 +541,7 @@ class cb_form_chain extends class_base
 
 	/**
 
-		@attrib name=submit_confirm
+		@attrib name=submit_confirm nologin="1"
 
 	**/
 	function submit_confirm($arr)
@@ -635,8 +659,15 @@ class cb_form_chain extends class_base
 		$o->set_meta("webform_id", $wf->id());
 
 		$o->set_name($this->_get_entry_data_name($wf, $dat));
+
+		$props = $o->get_property_list();
+
 		foreach($dat as $k => $v)
 		{
+			if ($props[$k]["type"] == "date_select")
+			{
+				$v = date_edit::get_timestamp($v);
+			}
 			$o->set_prop($k, $v);
 		}
 		$o->save();
@@ -711,12 +742,30 @@ class cb_form_chain extends class_base
 			$from = $o->prop("mail_from_name")." <$from>";
 		}
 
-		send_mail(
-			$d->prop($o->prop("confirm_mail_to_prop")),	// to
-			$o->prop("confirm_mail_subj"), // subj 
-			$o->prop("confirm_mail"), // msg
-			"From: $from\n" // headers
-		);
+		$d_props = $d->get_property_list();
+		$to_prop = $d_props[$o->prop("confirm_mail_to_prop")];
+		if ($to_prop["type"] == "classificator")
+		{
+			$v = $d->prop($to_prop["name"]);
+			if (is_oid($v) && $this->can("view", $v))
+			{
+				$v = obj($v);
+				$to = $v->comment();
+			}
+		}
+		else
+		{
+			$to = $d->prop_str($to_prop["name"]);
+		}
+		if ($to != "")
+		{
+			send_mail(
+				$to,	// to
+				$o->prop("confirm_mail_subj"), // subj 
+				$o->prop("confirm_mail"), // msg
+				"From: $from\n" // headers
+			);
+		}
 	}
 
 	function _display_data_table($o, $fd)
@@ -745,7 +794,12 @@ class cb_form_chain extends class_base
 			$inf = $_SESSION["cbfc_data"][$fd["form"]][$i];
 			if (!$this->_is_empty($inf))
 			{
-				$t->define_data($inf);
+				$row = array();
+				foreach($props as $pn => $pd)
+				{
+					$row[$pn] = $this->_value_from_data($pd, $inf[$pn]);
+				}
+				$t->define_data($row);
 			}
 		}
 
@@ -764,9 +818,11 @@ class cb_form_chain extends class_base
 
 		foreach($props as $pn => $pd)
 		{
+			$val = $this->_value_from_data($pd,$inf[$pn]);
+
 			$this->vars(array(
 				"caption" => $pd["caption"],
-				"value" => $inf[$pn] == "" ? "&nbsp;" : $inf[$pn]
+				"value" => $val == "" ? "&nbsp;" : $val
 			));
 	
 			$ret .= $this->parse("PROPERTY");
@@ -844,6 +900,8 @@ class cb_form_chain extends class_base
 			"confirmed" => $arr["request"]["group"] == "entries_con" ? 1 : new obj_predicate_not(1)
 		));
 		$t->data_from_ol($ol, array("change_col" => "name"));
+		$t->set_default_sortby("created");
+		$t->set_default_sorder("desc");
 	}
 
 	/**
@@ -887,6 +945,148 @@ class cb_form_chain extends class_base
 			return $o->prop("entry_folder");
 		}
 		return $o->id();
+	}
+
+	function _value_from_data($pd, $val)
+	{
+		if ($pd["type"] == "classificator")
+		{
+			if (is_oid($val) && $this->can("view", $val))
+			{
+				$tmp = obj($val);
+				$val = $tmp->name();
+			}	
+		}
+		if ($pd["type"] == "date_select")
+		{
+			$val = date("d.m.Y", date_edit::get_timestamp($val));
+		}
+
+		return $val;
+	}
+
+	function _apply_view_controllers(&$props, $wf, $i)
+	{
+		foreach($props as $k => $v)
+		{
+			if (is_array($v["view_controllers"]) && count($v["view_controllers"]))
+			{
+				$ci = get_instance(CL_CFG_VIEW_CONTROLLER);
+				foreach($v["view_controllers"] as $ctr_id)
+				{
+					$cpv = $ci->check_property($v, $ctr_id, $_SESSION["cbfc_data"][$wf->id()][$i]);
+					if ($cpv == PROP_IGNORE)
+					{
+						unset($props[$k]);
+						continue;
+					}
+				}
+			}
+		}
+	}
+
+	function _html_from_props($form_dat, $props, $ot, $wf, $o)
+	{
+		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
+		{
+			if (!is_array($_SESSION["cbfc_data"][$wf->id()][$i]) && $form_dat["def_ctr"])
+			{
+				$ci = get_instance(CL_CFGCONTROLLER);
+				$ci->check_property($form_dat["def_ctr"], $wf->id(), $_SESSION["cbfc_data"][$wf->id()][$i], $_REQUEST, $i, $o);
+			}
+
+			// insert values as well
+			foreach($props as $k => $v)
+			{
+				$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+			}
+
+			$rd = get_instance(CL_REGISTER_DATA);
+			$els = $rd->parse_properties(array(
+				"properties" => $props,
+				"name_prefix" => "f_".$wf->id()."_".$i,
+				"object_type_id" => $ot->id()
+			));
+
+			$htmlc = get_instance("cfg/htmlclient");
+			$htmlc->start_output();
+			foreach($els as $pn => $pd)
+			{
+				$htmlc->add_property($pd);
+			}
+			$htmlc->finish_output();
+
+			$html .= $htmlc->get_result(array(
+				"raw_output" => 1
+			));
+		}
+		return $html;
+	}
+
+	function _html_table_from_props($form_dat, $props, $ot, $wf, $o)
+	{
+		// header
+		$h = "";
+		foreach($props as $pn => $pd)
+		{
+			$this->vars(array(
+				"caption" => $pd["caption"]
+			));
+			$h .= $this->parse("HEADER");
+		}
+
+		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
+		{
+			$prefix = "f_".$wf->id()."_".$i;
+			$els = "";
+
+			foreach($props as $k => $v)
+			{
+				$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+			}
+
+			$rd = get_instance(CL_REGISTER_DATA);
+			$pels = $rd->parse_properties(array(
+				"properties" => $props,
+				"name_prefix" => "f_".$wf->id()."_".$i,
+				"object_type_id" => $ot->id()
+			));
+			foreach($pels as $pn => $pd)
+			{
+				switch($pd["type"])
+				{
+					case "date_select":
+						$el = html::date_select($pd);
+						break;
+
+					case "select":
+						$el = html::select($pd);
+						break;
+
+					default:
+						$pd["size"] = 20;
+						$el = html::textbox($pd);
+						break;
+				}
+
+				$this->vars(array(
+					"element" => $el
+				));
+				$els .= $this->parse("ELEMENT");
+			}
+
+			$this->vars(array(
+				"ELEMENT" => $els
+			));
+			$forms .= $this->parse("FORM");
+		}
+
+		$this->vars(array(
+			"HEADER" => $h,
+			"FORM" => $forms
+		));
+
+		return $this->parse("TABLE_FORM");
 	}
 }
 ?>

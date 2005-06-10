@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.1 2005/06/10 12:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.2 2005/06/10 15:28:55 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -120,7 +120,19 @@ class cb_form_chain_entry extends class_base
 		// go over all datas
 		foreach($entries as $entry)
 		{
-			$t->define_data($entry->properties());
+			$row = array();
+			foreach($props as $pn => $pd)
+			{
+				if ($pd["type"] == "date_select")
+				{
+					$row[$pn] = date("d.m.Y", $entry->prop($pn));
+				}
+				else
+				{
+					$row[$pn] = $entry->prop_str($pn);
+				}
+			}
+			$t->define_data($row);
 		}
 
 		$ret = $t->draw();
@@ -136,9 +148,18 @@ class cb_form_chain_entry extends class_base
 		
 		foreach($props as $pn => $pd)
 		{
+			if ($pd["type"] == "date_select")
+			{
+				$val = date("d.m.Y", $d->prop($pn));
+			}
+			else
+			{
+				$val = $d->prop_str($pn);
+			}
+
 			$this->vars(array(
 				"caption" => $pd["caption"],
-				"value" => $d->prop($pn) == "" ? "&nbsp;" : $d->prop($pn)
+				"value" => $val == "" ? "&nbsp;" : $val
 			));
 	
 			$ret .= $this->parse("PROPERTY");

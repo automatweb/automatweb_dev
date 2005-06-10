@@ -7,4 +7,12 @@
 
 </form>
 
+<form action="{VAR:baseurl}/orb.{VAR:ext}" method="POST">
 {VAR:table}
+
+<!-- SUB: SUBMIT_BUTTON -->
+<input type="submit" value="{VAR:submit_text}">
+<!-- END SUB: SUBMIT_BUTTON -->
+
+{VAR:reforb}
+</form>

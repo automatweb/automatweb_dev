@@ -17,16 +17,44 @@ function submit_changeform(action)
 </table>
 
 <!-- SUB: PREV_PAGE -->
-<input type="button" onClick="window.location.href='{VAR:prev_link}'" value="<< Tagasi">
+<input type="submit" name="goto_prev" value="<< Tagasi">
 <!-- END SUB: PREV_PAGE -->
 
 <input type="submit" value="Salvesta">
 
 <!-- SUB: NEXT_PAGE -->
-<input type="button" onClick="window.location.href='{VAR:next_link}'" value="Edasi >>">
+<input type="submit" name="goto_next" value="Edasi >>">
 <!-- END SUB: NEXT_PAGE -->
 
 <!-- SUB: CONFIRM -->
 <input type="submit" value="Saada" name="confirm">
 <!-- END SUB: CONFIRM -->
 </form>
+
+
+<!-- SUB: FORM_HEADER -->
+<tr>
+	<td colspan="2">{VAR:form_name}</td>
+</tr>
+<!-- END SUB: FORM_HEADER -->
+
+<!-- SUB: TABLE_FORM -->
+<tr><td colspan="2">
+<table border="1">
+	<tr>
+	<!-- SUB: HEADER -->
+		<td>{VAR:caption}</td>
+	<!-- END SUB: HEADER -->
+	</tr>
+
+	<!-- SUB: FORM -->
+	<tr>
+		<!-- SUB: ELEMENT -->
+		<td>{VAR:element}</td>
+		<!-- END SUB: ELEMENT -->
+	</tr>
+	<!-- END SUB: FORM -->
+
+</table>
+</td></tr>
+<!-- END SUB: TABLE_FORM -->

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.66 2005/06/06 12:48:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfgform.aw,v 1.67 2005/06/10 15:28:54 kristo Exp $
 // cfgform.aw - configuration form
 // adds, changes and in general manages configuration forms
 
@@ -1311,16 +1311,24 @@ class cfgform extends class_base
 			"clid" => $class_id,
 		));
 
+
 		if ($ot->prop("use_cfgform"))
 		{
 			$cff = obj($ot->prop("use_cfgform"));
+
+			$v_ctr = safe_array($cff->meta("view_controllers"));
+			$ctr = safe_array($cff->meta("controllers"));
+
 			$tmp = array();
 			foreach(safe_array($cff->meta("cfg_proplist")) as $pn => $pd)
 			{
 				$tmp[$pn] = $els[$pn];
-				$tmp[$pn]["group"] = $pd["group"];
-				$tmp[$pn]["caption"] = $pd["caption"];
-				$tmp[$pn]["ord"] = $pd["ord"];
+				foreach($pd as $k => $v)
+				{
+					$tmp[$pn][$k] = $v;
+				}
+				$tmp[$pn]["controllers"] = $ctr[$pn];
+				$tmp[$pn]["view_controllers"] = $v_ctr[$pn];
 			}
 			$els = $tmp;
 
