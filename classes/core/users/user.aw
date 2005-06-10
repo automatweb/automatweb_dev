@@ -1814,7 +1814,13 @@ class user extends class_base
 		// I need to return a class_base generated form
 	}
 	
-	//This returns object list of group objects that $uid belongs to
+	/**
+
+		@attrib api=1
+
+		@comment
+			This returns object list of group objects that $uid belongs to
+	**/
 	function get_groups_for_user($uid)
 	{
 		if(!is_valid("uid", $uid))
