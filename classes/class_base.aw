@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.400 2005/06/02 08:59:01 kristo Exp $
+// $Id: class_base.aw,v 2.401 2005/06/10 08:33:34 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -4311,7 +4311,6 @@ class class_base extends aw_template
 			{
 				if ($propdata["type"] != "toolbar")
 				{
-if (aw_global_get("uid") == "meff") { echo "for $key , continue ".__LINE__." <br>"; }
 					continue;
 				};
 			};
