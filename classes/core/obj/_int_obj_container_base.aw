@@ -101,7 +101,7 @@ class _int_obj_container_base
 
 	function set_prop($prop, $val)
 	{
-		return $this->_int_setter("set_prop", array($key, $val));
+		return $this->_int_setter("set_prop", array($prop, $val));
 	}
 
 	function merge($param)
@@ -130,7 +130,7 @@ class _int_obj_container_base
 		{
 			return $this->foreach_o(array(
 				"func" => $fun,
-				"param" => $param,
+				"params" => $param,
 				"save" => true
 			));
 		}
