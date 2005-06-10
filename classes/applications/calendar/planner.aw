@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.88 2005/06/10 11:28:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.89 2005/06/10 12:01:23 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -945,11 +945,20 @@ class planner extends class_base
 		$meta = $obj->meta();
 		
 		$event_folder = $obj->prop("event_folder");
-		if (empty($event_folder))
+		if (!is_oid($event_folder))
 		{
 			return array(array(
 				"type" => "text",
 				"value" => t("Sündmuste kataloog on valimata"),
+			));
+			return PROP_ERROR;
+		};
+		
+		if (!$this->can("add", $id))
+		{
+			return array(array(
+				"type" => "text",
+				"value" => t("Sul pole õigusi sündmuste kataloogi kirjutamiseks"),
 			));
 			return PROP_ERROR;
 		};
