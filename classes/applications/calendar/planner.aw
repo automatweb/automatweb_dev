@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.87 2005/06/07 10:34:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.88 2005/06/10 11:28:55 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1013,19 +1013,19 @@ class planner extends class_base
 
 		if (isset($clid))
 		{
+			$tmp = aw_ini_get("classes");
 			$entry_classes = $this->get_event_entry_classes($obj);
 			if (!in_array($clid,$entry_classes))
 			{
 				return array(array(
 					"type" => "text",
-					"value" => t("Seda klassi ei saa kasutada sündmuste sisestamiseks"),
+					"value" => sprintf(t("Klassi '%s/%s' ei saa kasutada sündmuste sisestamiseks"),$tmp[$clid]["name"],$tmp[$clid]["def"]),
 				));
 			}
 			else
 			{
 				// 1 - get an instance of that class, for this I need to 
 				aw_session_set('org_action',aw_global_get('REQUEST_URI'));
-				$tmp = aw_ini_get("classes");
 				$clfile = $tmp[$clid]["file"];
 				$t = get_instance($clfile);
 				$t->init_class_base();
