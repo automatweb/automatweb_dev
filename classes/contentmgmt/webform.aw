@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.72 2005/06/10 12:12:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.73 2005/06/10 12:27:51 dragut Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -723,6 +723,30 @@ class webform extends class_base
 				"reltype" => "RELTYPE_OBJECT_TYPE",
 			));
 		}
+
+// hopefully temporary
+		// have to put it here right now - in the future it should work that t() way
+		// so lets create an array where i hold those error messages in both languages
+		$error_messages = array(
+			"element_has_to_be_filled" => array(
+				"et" => "%caption peab olema t&auml;idetud",
+				"en" => "%caption has to be filled out",
+			),
+			"element_has_to_be_selected" => array(
+				"et" => "%caption peab olema valitud",
+				"en" => "%caption has to be selected",
+			),
+			"email_address_not_correct" => array(
+				"et" => "%caption sisestatud e-mailiaadress pole korrektne",
+				"en" => "%caption inserted e-mail address is not correct",
+			),
+			
+		);
+		// now, lets get what language is used
+		$languages_inst = get_instance("languages"); 
+		$lang_data = $languages_inst->fetch(aw_global_get("lang_id"));
+// end of hopefully temporary
+
 		$set_controllers = array(
 			array(
 				"name" => t("M&auml;&auml;ra saaja aadressiks"),
@@ -735,17 +759,20 @@ class webform extends class_base
 			array(
 				"name" => t("*elemendinimi* peab olema t&auml;idetud"),
 				"formula" => 'if($prop["value"] == ""){$retval = PROP_ERROR;}',
-				"errmsg" => t("%caption peab olema t&auml;idetud"),
+//				"errmsg" => t("%caption peab olema t&auml;idetud"),
+				"errmsg" => $error_messages['element_has_to_be_filled'][$lang_data['acceptlang']],
 			),
 			array(
 				"name" => t("*elemendinimi* peab olema valitud"),
 				"formula" => 'if(empty($prop["value"])){$retval = PROP_ERROR;}',
-				"errmsg" => t("%caption peab olema valitud"),
+//				"errmsg" => t("%caption peab olema valitud"),
+				"errmsg" => $error_messages['element_has_to_be_selected'][$lang_data['acceptlang']],
 			),
 			array(
 				"name" => t("Kontrolli e-maili &otilde;igsust"),
 				"formula" => 'if(!is_email($prop["value"])){$retval = PROP_ERROR;}',
-				"errmsg" => t("%caption sisestatud e-mailiaadress pole korrektne"),
+//				"errmsg" => t("%caption sisestatud e-mailiaadress pole korrektne"),
+				"errmsg" => $error_messages['email_address_not_correct'][$lang_data['acceptlang']],
 			),
 			array(
 				"name" => t("Kuva sisestaja IP ja host aadress"),
