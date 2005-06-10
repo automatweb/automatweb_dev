@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.60 2005/06/10 17:42:26 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.61 2005/06/10 17:54:27 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -551,7 +551,7 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == 8635 and $_GET["mrp_dbg"]) {
+/* dbg */ if ($job["oid"] == 34491 and $_GET["mrp_dbg"]) {
 // /* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 // /* dbg */ exit;
