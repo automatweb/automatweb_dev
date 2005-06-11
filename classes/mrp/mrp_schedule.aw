@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.62 2005/06/11 07:38:49 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.63 2005/06/11 07:45:14 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1058,7 +1058,9 @@ class mrp_schedule extends class_base
 			reset ($this->reserved_times[$resource_tag][$time_range]);
 
 /* timing */ timing ("reserve_time - sort reserved_times", "end");
-
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
+/* dbg */ }
 
 			### go through reserved times in current timerange to find place for job being scheduled
 			foreach ($this->reserved_times[$resource_tag][$time_range] as $start1 => $length1)
