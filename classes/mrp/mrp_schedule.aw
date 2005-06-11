@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.61 2005/06/10 17:54:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.62 2005/06/11 07:38:49 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1127,13 +1127,13 @@ class mrp_schedule extends class_base
 					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
 // /* dbg */ echo "start1:". $start1." - length1:".$length1." - d: ".$d." - start:". $start ."-start2:".$start2 ."<br>";
-// /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
-// /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-// /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
-// /* dbg */ }
+/* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
+/* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
+/* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 
 					### check if reserved time goes beyond an unavailable time
@@ -1148,17 +1148,17 @@ class mrp_schedule extends class_base
 								$reserved_time = ($unavailable_start + $unavailable_length);
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-// /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
+/* dbg */ }
 							}
 							else
 							{
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ }
 
 								next ($this->reserved_times[$resource_tag][$time_range]);
 								continue;
@@ -1171,17 +1171,17 @@ class mrp_schedule extends class_base
 						while ( $unavailable_length and (($reserved_time + $length) > $unavailable_start) )
 						{
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." | len: " . $unavailable_length/3600 . " | resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
-// /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." | len: " . $unavailable_length/3600 . " | resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
+/* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
+/* dbg */ }
 
 							### check if with added unavailable period length, job still fits before next job
 							if (($reserved_time + $length + $unavailable_length) > $start2)
 							{
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "cycle didnt fit: true<br>";
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "cycle didnt fit: true<br>";
+/* dbg */ }
 								next ($this->reserved_times[$resource_tag][$time_range]);
 								continue 2;
 							}
@@ -1190,11 +1190,11 @@ class mrp_schedule extends class_base
 								$length += $unavailable_length;
 								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length));
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
-// /* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
-// /* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
+/* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
+/* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
+/* dbg */ }
 
 							}
 						}
@@ -1205,9 +1205,9 @@ class mrp_schedule extends class_base
 					### return planned starttime
 					if ($reserved_time === "NA")
 					{
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "reserved_time = NA<br>";
-// /* dbg */ }
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "reserved_time = NA<br>";
+/* dbg */ }
 
 						next ($this->reserved_times[$resource_tag][$time_range]);
 						continue;
@@ -1221,10 +1221,10 @@ class mrp_schedule extends class_base
 				next ($this->reserved_times[$resource_tag][$time_range]);
 			}
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "suitable slot not found in this start range:";
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "suitable slot not found in this start range:";
 // /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
-// /* dbg */ }
+/* dbg */ }
 
 			### if suitable slot not found in this start range, search next range
 			$time_range++;
