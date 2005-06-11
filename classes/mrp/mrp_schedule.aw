@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.65 2005/06/11 07:54:36 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.66 2005/06/11 08:03:44 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1058,9 +1058,11 @@ class mrp_schedule extends class_base
 			reset ($this->reserved_times[$resource_tag][$time_range]);
 
 /* timing */ timing ("reserve_time - sort reserved_times", "end");
-/* dbg */ if ($this->mrpdbg){ echo "<hr>";
-/* dbg */ foreach ($this->reserved_times[$resource_tag][$time_range] as $keyw => $valuew) {
-/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $keyw) . " len:" . $valuew . " end:" . date (MRP_DATE_FORMAT, $this->schedule_start + $keyw + $valuew) . "<br>";	}
+/* dbg */ if ($this->mrpdbg){ echo "timerange:" . $time_range ."<br>"; $time_range_dbg = 0;
+/* dbg */ while ($time_range_dbg < ($time_range + 1)) {
+/* dbg */ echo "<hr> timerangedbg:" .  $time_range_dbg . "<br>";
+/* dbg */ foreach ($this->reserved_times[$resource_tag][$time_range_dbg] as $keyw => $valuew) {
+/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $keyw) . " len:" . $valuew . " end:" . date (MRP_DATE_FORMAT, $this->schedule_start + $keyw + $valuew) . "<br>";	}  $time_range_dbg++; }
 /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
 /* dbg */ }
 
