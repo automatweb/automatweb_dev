@@ -41,5 +41,15 @@
 			</function>
 		</action>
 
+		<action name="add_faq">
+			<function name="add_faq">
+				<arguments>
+					<required name="id" type="int" acl="edit" />
+					<required name="topic" type="int" acl="edit" />
+					<optional name="section" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.74 2005/05/19 12:13:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.75 2005/06/13 15:09:22 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -25,6 +25,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
 	@caption Listiliikmete kaust
 	@comment Sellesse kausta paigutatakse "listi liikmete" objektid
+
+	@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
+	@caption KKK kaust
+	@comment Sellesse kausta paigutatakse KKK dokumendid
 
 	@property topics_on_page type=select
 	@caption Teemasid lehel
@@ -153,6 +157,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype FORUM_ADMIN value=5 clid=CL_USER,CL_GROUP
 	@caption Administraator
+
+	@reltype FAQ_FOLDER value=6 clid=CL_MENU
+	@caption KKK kaust
 
 */
 
@@ -830,7 +837,7 @@ class forum_v2 extends class_base
 		// the topics can actually be deleted
 		$delete_action = false;
 		$section = aw_global_get("section");
-		$can_admin = $this->_can_admin($args["obj_inst"]->id());
+		$can_admin = $this->_can_admin(array("forum_id" => $args["obj_inst"]->id()));
 
 		foreach($subtopic_list->arr() as $subtopic_obj)
 		{
@@ -879,11 +886,20 @@ class forum_v2 extends class_base
 						"_alias" => get_class($this),
 				)),
 			));
-		
+
 			$del = "";
 			if ($can_admin && $this->can("delete",$st_oid))
 			{
 				$delete_action = true;
+
+				// add_faq_url - it is the matter of template to actually show the link or not
+				$this->vars(array(
+					"add_faq_url" => $this->mk_my_orb("add_faq", array(
+						"topic" => $st_oid,
+						"id" => $oid,
+						"section" => $section,
+					)),
+				));
 				$del = $this->parse("ADMIN_BLOCK");
 			};
 
@@ -961,7 +977,6 @@ class forum_v2 extends class_base
 		$fld = $args["fld"];
 		$this->read_template("topic.tpl");
 
-
 		$topic_obj = new object($args["request"]["topic"]);
 
 		$this->_add_style("style_comment_user");
@@ -1005,9 +1020,7 @@ class forum_v2 extends class_base
 		
 		$oid = $args["obj_inst"]->id();
 
-		$can_delete = $this->_can_admin($oid);
-
-
+		$can_delete = $this->_can_admin(array("forum_id" => $oid));
 		if (is_array($comments))
 		{
 			foreach($comments as $comment)
@@ -1026,7 +1039,19 @@ class forum_v2 extends class_base
 					"createdby" => $comment["createdby"],
 					"uname" => $comment["uname"],
 					"ip" => $comment["ip"],
+					"ADMIN_POST" => "",
 				));
+				// have to check if the comment creator is admin or not
+				if ($this->_can_admin(array(
+					"forum_id" => $oid,
+					"uid" => $comment['createdby'],
+				)))
+				{
+					$this->vars(array(
+						"ADMIN_POST" => $this->parse("ADMIN_POST"),
+					));
+				}
+
 				if ($can_delete)
 				{
 					$this->vars(array(
@@ -1125,6 +1150,18 @@ class forum_v2 extends class_base
 		array_unshift($path,$fp);
 
 		// path drawing ends .. sucks
+		$this->vars(array(
+			"ADMIN_TOPIC" => "",
+		));
+		if ($this->_can_admin(array(
+			"forum_id" => $oid,
+			"uid" => $topic_obj->createdby(),
+		)))
+		{
+			$this->vars(array(
+				"ADMIN_TOPIC" => $this->parse("ADMIN_TOPIC"),
+			));
+		}
 
 		$this->vars(array(
 			"active_page" => $pager,
@@ -1735,7 +1772,7 @@ class forum_v2 extends class_base
 		// _can_admin requires reltypes defined in class header, creating an instance
 		// of the object loads them
 		$forum_obj = new object($arr["id"]);
-		if ($this->_can_admin($arr["id"]) && sizeof($arr["del"]) > 0)
+		if ($this->_can_admin(array("forum_id" => $arr["id"])) && sizeof($arr["del"]) > 0)
 		{
 			$to_delete = new object_list(array(
 				"oid" => $arr["del"],
@@ -1777,14 +1814,31 @@ class forum_v2 extends class_base
 		@comment 
 			checks whether the remote user can admin the forum
 	**/
-	function _can_admin($forum_id)
+//	function _can_admin($forum_id)
+	function _can_admin($arr)
 	{
 		// admin can be either CL_USER or CL_GROUP, check for both
-		$uid_oid = aw_global_get("uid_oid");
-		if (empty($uid_oid))
+		// checking if uid comes through function params ($arr)
+		// if it doesn't, then use logged in user
+		if (empty($arr['uid']))
+		{
+			$uid_oid = aw_global_get("uid_oid");
+			$gids = aw_global_get("gidlist_oid");
+
+		}
+		else
+		{
+			$uid_oid = users::get_oid_for_uid($arr['uid']);
+			$user_inst = get_instance(CL_USER);
+			$user_groups = $user_inst->get_groups_for_user($arr['uid']);
+			$gids = $this->make_keys($user_groups->ids());
+
+		}
+
+		if (empty($uid_oid) || empty($arr['forum_id']))
 		{
 			return false;
-		};
+		}
 
 		if ($_GET["XX5"])
 		{
@@ -1794,11 +1848,10 @@ class forum_v2 extends class_base
 		};
 
 
-		$gids = aw_global_get("gidlist_oid");
 		$check_ids = array($uid_oid) + $gids;
 		$c = new connection();
 		$conns = $c->find(array(
-			"from" => $forum_id,
+			"from" => $arr['forum_id'],
 			"to" => $check_ids,
 			"type" => 5 //RELTYPE_FORUM_ADMIN,
 		));
@@ -1806,6 +1859,7 @@ class forum_v2 extends class_base
 		return sizeof($conns) > 0;
 
 	}
+	
 
 	function on_connect_menu($arr)
 	{
@@ -1857,6 +1911,53 @@ class forum_v2 extends class_base
 
 			$arr["obj_inst"]->save();
 		}
+	}
+
+	/**
+		@attrib name=add_faq no_login=1
+		@param id required type="int" acl="edit"
+		@param topic required type="int" acl="edit"
+		@param section optional 
+	**/	
+	function add_faq($arr)
+	{
+		
+		$forum_obj = new object($arr['id']);
+		$faq_folder_id = $forum_obj->prop("faq_folder");
+		if (!empty($faq_folder_id))
+		{
+
+			$topic_obj = new object($arr['topic']);	
+
+			$comment_inst = get_instance(CL_COMMENT);
+			$comments = $comment_inst->get_comment_list(array("parent" => $topic_obj->id()));
+			$comments_str = "";
+			foreach ($comments as $comment)
+			{
+				$comments_str .= $comment['name']."<br />\n";
+				$comments_str .= "-------------------------------------------------------<br />\n";
+				$comments_str .= $comment['commtext']."<br /><br />\n\n";
+			}
+	
+			$faq_document = new object();
+			$faq_document->set_class_id(CL_DOCUMENT);
+			$faq_document->set_parent($faq_folder_id);
+			$topic_obj_name = $topic_obj->name();
+			$faq_document->set_name($topic_obj_name);
+			$faq_document->set_status(STAT_ACTIVE);
+			$faq_document->set_prop("title", $topic_obj_name); 
+			$faq_document->set_prop("lead", $this->_filter_output($topic_obj->comment()));
+			$faq_document->set_prop("content", $this->_filter_output($comments_str));
+			$faq_document->save();
+
+		}
+		return $this->mk_my_orb("change", array(
+				"id" => $forum_obj->id(),
+				"section" => $arr['section'],
+				"group" => "contents",
+				"_alias" => get_class($this),
+			) 
+		);
 	}
 };
 ?>
