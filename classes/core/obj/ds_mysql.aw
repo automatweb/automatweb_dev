@@ -46,9 +46,17 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		else
 		{
 			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
+/*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
+{
+die(dbg::dump($ret));
+}*/
+ 
 			$ret = $this->_get_objdata_proc($ret, $param);
 		}
-
+/*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
+{
+die(dbg::dump($ret));
+}*/
 		return $ret;
 	}
 
@@ -70,6 +78,10 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 
 		$ret["meta"] = aw_unserialize($ret["metadata"]);
+		if ($ret["metadata"] != "" && $ret["meta"] === NULL)
+		{
+			$ret["meta"] = aw_unserialize(stripslashes(stripslashes($ret["metadata"])));
+		}
 		unset($ret["metadata"]);
 
 		if ($ret["brother_of"] == 0)
