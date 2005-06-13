@@ -33,7 +33,7 @@
 	<td class="{VAR:style_topic_caption}"><center><img src="{VAR:baseurl}/automatweb/images/forum_arrow_sm.gif"></center></td>
 	<td class="{VAR:style_topic_caption}">
 	<!-- SUB: ADMIN_BLOCK -->
-	<input type="checkbox" name="sel_topic[{VAR:topic_id}]" value="1" />
+	<input type="checkbox" name="sel_topic[{VAR:topic_id}]" value="1" /><a href="{VAR:add_faq_url}">[ lisa KKK ]</a>
 	<!-- END SUB: ADMIN_BLOCK -->
 	<a href="{VAR:open_topic_url}">{VAR:name}</a>
 	</td>
