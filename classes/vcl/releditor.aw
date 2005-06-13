@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.56 2005/06/09 15:02:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.57 2005/06/13 11:36:32 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -147,9 +147,6 @@ class releditor extends core
 			};
 		};
 
-
-
-		
 		$form_type = $arr["request"][$this->elname];
 		$this->form_type = $form_type;
 
@@ -306,15 +303,28 @@ class releditor extends core
 			$t->cb_values = $arr["cb_values"];
 		};
 
+
 		// parse_properties fills the thing with values and stuff. And it eats my precious toolbar
 		$xprops = $t->parse_properties(array(
 			"properties" => $act_props,
 			"name_prefix" => $this->elname,
 			"obj_inst" => $obj_inst,
 		));
+	
+		// add this after parse, otherwise the name will be in form propname[elname], and I do not 
+		// want this
+		if ("manager" == $visual)
+		{
+			$act_name = $prop["name"] . "_action";
+			$xprops[$act_name] = array(
+				"type" => "hidden",
+				"name" => $act_name,
+				"id" => $act_name,
+				"value" => "",
+			);
+		};
 
 		exit_function("init-rel-editor");
-		
 		return $xprops;
 	}
 
@@ -352,12 +362,17 @@ class releditor extends core
 			"tooltip" => t("Uus"),
 			"url" => $newurl,
 		));
+		
+		$confirm_test = t("Kustutada valitud objektid?");
+
+		$act_input = $this->elname . "_action";
 
 		$tb->add_button(array(
 			"name" => "delete",
 			"img" => "delete.gif",
-			"confirm" => t("Kustutada valitud objektid?"),
-			"action" => "submit_list",
+			// ma pean siia kuidagi mingi triki tegema. Fuck, I hate this :(
+			"url" => "javascript:if(confirm('${confirm_test}')){el=document.getElementsByName('${act_input}');el[0].value='delete';document.changeform.submit();};",
+			//"action" => "submit_list",
 		));
 		if($arr["prop"]["clone_link"] == 1)
 		{
@@ -410,12 +425,13 @@ class releditor extends core
 				"type" => $arr["prop"]["reltype"],
 			));
 			$name = $arr["prop"]["name"];
+			$return_url = urlencode(aw_global_get("REQUEST_URI"));
 			foreach($conns as $conn)
 			{
 				$c_to = $conn->prop("to");
 				if ($arr["prop"]["direct_links"] == 1)
 				{
-					$url = $this->mk_my_orb("change",array("id" => $c_to,"return_url" => urlencode(aw_global_get("REQUEST_URI"))),$conn->prop("to.class_id"));
+					$url = $this->mk_my_orb("change",array("id" => $c_to,"return_url" => $return_url),$conn->prop("to.class_id"));
 				}
 				else
 				{
@@ -502,10 +518,6 @@ class releditor extends core
 					};
 				};
 				$rowdata = $export_props + $rowdata;
-				if (aw_global_get("uid") == "duke")
-				{
-					arr($rowdata);
-				};
 				$awt->define_data($rowdata);
 			}
 		}
@@ -583,6 +595,7 @@ class releditor extends core
 
 	function process_releditor($arr)
 	{
+
 		$prop = $arr["prop"];
 		$obj = $arr["obj_inst"];
 
@@ -595,7 +608,28 @@ class releditor extends core
 		{
 			$use_clid = $clid;
 		};
-			
+
+		$act_prop = $prop["name"] . "_action";
+
+		if ("delete" == $arr["request"][$act_prop])
+		{
+			// XXX: this will fail, if there are multiple releditors on one page
+			$to_delete = new aw_array($arr["request"]["check"]);
+			foreach($to_delete->get() as $alias_id)
+			{
+				$c = new connection($alias_id);
+				$target = $c->to();
+				$target->delete();
+                        };
+
+			// dunno about that, is it still needed?
+			/*
+			$cache_inst = get_instance("cache");
+			$cache_inst->file_invalidate_regex('alias_cache-source-.*');
+			*/
+
+			return PROP_OK;
+		};
 	
 		$clinst = get_instance($use_clid);
 
@@ -769,16 +803,16 @@ class releditor extends core
 			}
 		}
 
+		/*
 		$cache_inst = get_instance("cache");
 		$cache_inst->file_invalidate_regex('alias_cache-source-.*');
-
-
+		*/
 
 	}
 
 	function get_html()
 	{
-		//return "here be releditor";
+		return "here be releditor";
 		//return $this->t->draw();
 	}
 
