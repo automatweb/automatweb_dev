@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.7 2005/05/19 12:40:27 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.8 2005/06/13 08:56:52 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -173,6 +173,7 @@ class persona_import extends class_base
 	**/
 	function invoke_import($arr)
 	{
+		aw_disable_acl();
 		$obj = new object($arr["id"]);
 
 
