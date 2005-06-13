@@ -30,6 +30,25 @@
             <caption>Kellele</caption>
       </property>
       <property>
+            <name>mail_to_form</name>
+            <table>objects</table>
+            <group>mail_settings_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CF</reltype>
+            <caption>Vorm, milles on saaja aadress</caption>
+      </property>
+      <property>
+            <name>mail_to_prop</name>
+            <table>objects</table>
+            <group>mail_settings_general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Element, milles on saaja aadress	</caption>
+      </property>
+      <property>
             <name>mail_from_addr</name>
             <table>objects</table>
             <group>mail_settings_general</group>

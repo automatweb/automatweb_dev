@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.37 2005/06/10 15:28:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.38 2005/06/13 08:44:13 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -1489,7 +1489,7 @@ class cb_search extends class_base
 
 	/**
 
-		@attrib name=handle_submit
+		@attrib name=handle_submit nologin="1"
 
 	**/
 	function handle_submit($arr)

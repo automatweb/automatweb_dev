@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.2 2005/06/10 15:28:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.3 2005/06/13 08:44:13 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -150,11 +150,20 @@ class cb_form_chain_entry extends class_base
 		{
 			if ($pd["type"] == "date_select")
 			{
+				if ($d->prop($pn) == 0)
+				{
+					continue;
+				}
 				$val = date("d.m.Y", $d->prop($pn));
 			}
 			else
 			{
 				$val = $d->prop_str($pn);
+			}
+
+			if ($val == "")
+			{
+				continue;
 			}
 
 			$this->vars(array(

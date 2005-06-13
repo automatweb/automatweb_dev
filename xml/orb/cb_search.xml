@@ -10,7 +10,7 @@
 			</function>
 		</action>
 
-		<action name="handle_submit">
+		<action name="handle_submit" nologin="1">
 			<function name="handle_submit">
 				<arguments>
 				</arguments>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.2 2005/06/10 15:28:55 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.3 2005/06/13 08:44:13 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -21,6 +21,12 @@
 
 	@property mail_to type=textbox 
 	@caption Kellele
+
+	@property mail_to_form type=relpicker reltype=RELTYPE_CF
+	@caption Vorm, milles on saaja aadress
+
+	@property mail_to_prop type=select 
+	@caption Element, milles on saaja aadress	
 
 	@property mail_from_addr type=textbox
 	@caption Kellelt (aadress)
@@ -119,6 +125,15 @@ class cb_form_chain extends class_base
 				}
 
 				$prop["options"] = $this->get_el_picker_from_wf(obj($arr["obj_inst"]->prop("confirm_mail_to_form")));
+				break;
+
+			case "mail_to_prop":
+				if (!$arr["obj_inst"]->prop("mail_to_form"))
+				{
+					return PROP_IGNORE;
+				}
+
+				$prop["options"] = $this->get_el_picker_from_wf(obj($arr["obj_inst"]->prop("mail_to_form")));
 				break;
 
 			case "entry_name_el":
@@ -290,7 +305,7 @@ class cb_form_chain extends class_base
 		{
 			$i = get_instance(CL_CB_FORM_CHAIN_ENTRY);
 			return $i->show(array(
-				"id" => $_GET["display"]
+				"id" => $_SESSION["cbfc_last_entry"]
 			));
 		}
 
@@ -303,7 +318,9 @@ class cb_form_chain extends class_base
 
 		$forms = $this->_get_forms_for_page($ob, $page);
 
-		return $this->_draw_forms($ob, $forms);
+		$html = $this->_draw_forms($ob, $forms);
+		unset($_SESSION["cbfc_errors"]);
+		return $html;
 	}
 
 	function _get_page_list($o)
@@ -458,6 +475,15 @@ class cb_form_chain extends class_base
 		// save data to session during the form filling
 		// then only when the user clicks confirm, save to objects
 
+		// but we gots to check submit controllers here :(
+		$ps = array();
+
+		$ctr_i = get_instance("cfg/cfgcontroller");
+
+		$errors = array();
+
+		$_SESSION["no_cache"] = 1;
+
 		foreach(safe_array($arr) as $k => $data)
 		{
 			if ($k{0} == "f" && $k{1} == "_")
@@ -465,8 +491,43 @@ class cb_form_chain extends class_base
 				// this is form entry
 				list($tmp, $wf_id, $num) = explode("_", $k);
 
+				$wf = obj($wf_id);
+				if (!isset($ps[$wf_id]))
+				{
+					$wf_i = $wf->instance();
+					$ps[$wf_id] = $wf_i->get_props_from_wf(array("id" => $wf_id));
+				}
+
+				foreach($ps[$wf_id] as $pn => $pd)
+				{
+					$ctr = safe_array($pd["controllers"]);
+					if (count($ctr))
+					{
+						$ok = true;
+						foreach($ctr as $ctr_id)
+						{
+							$pd["value"] = &$data[$pn];
+							if ($ctr_i->check_property($ctr_id, 0, $pd, $arr, $data, $wf) != PROP_OK)
+							{
+								$ok = false;
+								$co = obj($ctr_id);
+
+								$errmsg = str_replace("%caption", $pd["caption"], $co->prop("errmsg"));
+
+								$errors[$wf_id][$num][$pn] = $errmsg;
+							}
+						}
+					}
+				}
+
 				$_SESSION["cbfc_data"][$wf_id][$num] = $data;
 			}
+		}
+
+		if (count($errors))
+		{
+			$_SESSION["cbfc_errors"] = $errors;
+			return $arr["ret"];
 		}
 
 		if ($arr["confirm"] != "")
@@ -549,6 +610,8 @@ class cb_form_chain extends class_base
 		$o = obj($arr["id"]);
 
 		// save data from session to objects
+
+		$_SESSION["no_cache"] = 1;
 		
 		// first, entry object
 		$entry = obj();
@@ -588,6 +651,8 @@ class cb_form_chain extends class_base
 
 		unset($_SESSION["cbfc_data"]);
 
+		$_SESSION["cbfc_last_entry"] = $entry->id();
+
 		return aw_url_change_var(
 			"cbfc_pg", 
 			NULL, 
@@ -596,7 +661,7 @@ class cb_form_chain extends class_base
 				NULL, 
 				aw_url_change_var(
 					"display", 
-					$entry->id(), 
+					1, 
 					$arr["ret"]
 				)
 			)
@@ -690,8 +755,50 @@ class cb_form_chain extends class_base
 			"id" => $entry->id()
 		));
 
+		$to_arr = array();
+		if ($o->prop("mail_to") != "")
+		{
+			$to_arr = explode(",", $o->prop("mail_to"));
+		}
+
+		if ($o->prop("mail_to_form"))
+		{
+			foreach($entry->connections_from(array("type" => "RELTYPE_ENTRY")) as $c)
+			{
+				$do = $c->to();
+				if ($do->meta("webform_id") == $o->prop("mail_to_form"))
+				{
+					break;
+				}
+				$do = NULL;
+			}
+
+			if ($do)
+			{
+				$d_props = $do->get_property_list();
+				$to_prop = $d_props[$o->prop("mail_to_prop")];
+				if ($to_prop["type"] == "classificator")
+				{
+					$v = $do->prop($to_prop["name"]);
+					if (is_oid($v) && $this->can("view", $v))
+					{
+						$v = obj($v);
+						if ($v->comment() != "")
+						{
+							$to_arr[] = $v->comment();
+						}
+					}
+				}
+				else
+				{
+					$to_arr[] = $entry->prop_str($to_prop["name"]);
+				}
+			}
+		}
+
+
 		$mailer = get_instance("protocols/mail/aw_mail");
-		foreach(explode(",", $o->prop("mail_to")) as $to)
+		foreach($to_arr as $to)
 		{
 			$mailer->clean();
 			$mailer->create_message(array(
@@ -787,7 +894,6 @@ class cb_form_chain extends class_base
 				"align" => "center"
 			));
 		}
-
 		// go over all datas
 		for($i = 0; $i < $fd["rep_cnt"]; $i++)
 		{
@@ -813,11 +919,16 @@ class cb_form_chain extends class_base
 		$props = $wf->get_props_from_wf(array(
 			"id" => $fd["form"]
 		));
+		$this->_apply_view_controllers($props, obj($fd["form"]), 0);
 		
 		$inf = $_SESSION["cbfc_data"][$fd["form"]][0];
 
 		foreach($props as $pn => $pd)
 		{
+			if ($props[$pn]["type"] == "date_select" && $inf[$pn] == 0)
+			{
+				continue;
+			}
 			$val = $this->_value_from_data($pd,$inf[$pn]);
 
 			$this->vars(array(
@@ -951,6 +1062,18 @@ class cb_form_chain extends class_base
 	{
 		if ($pd["type"] == "classificator")
 		{
+			if (is_array($val))
+			{
+				if (count($val))
+				{
+					$ol = new object_list(array("oid" => $val));
+					$val = join(", ", $ol->names());
+				}
+				else
+				{
+					$val = "";
+				}
+			}
 			if (is_oid($val) && $this->can("view", $val))
 			{
 				$tmp = obj($val);
@@ -995,11 +1118,34 @@ class cb_form_chain extends class_base
 				$ci->check_property($form_dat["def_ctr"], $wf->id(), $_SESSION["cbfc_data"][$wf->id()][$i], $_REQUEST, $i, $o);
 			}
 
+			$nps = array();
 			// insert values as well
 			foreach($props as $k => $v)
 			{
-				$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+				if (($_err = $_SESSION["cbfc_errors"][$wf->id()][$i][$k]) != "")
+				{
+					$nps[$k."_err"] = array(
+						"name" => $k."_err",
+						"type" => "text",
+						"no_caption" => 1,
+						"value" => $_err,
+						"store" => "no"
+					);
+				}
+				$v["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+
+				// if it is a text type property, insert a hidden element after the text so that the value gets submitted
+				if ($v["type"] == "text")
+				{
+					$v["value"] .= html::hidden(array(
+						"name" => "f_".$wf->id()."_".$i."[$k]",
+						"value" => $v["value"]
+					));
+				}
+
+				$nps[$k] = $v;
 			}
+			$props = $nps;
 
 			$rd = get_instance(CL_REGISTER_DATA);
 			$els = $rd->parse_properties(array(

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.53 2005/06/09 10:56:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.54 2005/06/13 08:44:13 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1868,7 +1868,7 @@ class vcl_table extends aw_table
 
 				if (isset($args["change_col"]) && $args["change_col"] == $v["name"])
 				{
-					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), $val);
+					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($val));
 				}
 				$data[$v["name"]] = $val;
 			}			
