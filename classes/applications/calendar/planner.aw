@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.89 2005/06/10 12:01:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.90 2005/06/13 14:14:09 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -954,7 +954,7 @@ class planner extends class_base
 			return PROP_ERROR;
 		};
 		
-		if (!$this->can("add", $id))
+		if (!$this->can("add", $event_folder))
 		{
 			return array(array(
 				"type" => "text",
