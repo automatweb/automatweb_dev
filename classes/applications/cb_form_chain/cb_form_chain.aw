@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.3 2005/06/13 08:44:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.4 2005/06/13 09:27:43 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -727,14 +727,21 @@ class cb_form_chain extends class_base
 
 		$props = $o->get_property_list();
 
+		$metaf = array();
 		foreach($dat as $k => $v)
 		{
 			if ($props[$k]["type"] == "date_select")
 			{
 				$v = date_edit::get_timestamp($v);
 			}
+			else
+			if ($props[$k]["type"] == "text")
+			{
+				$metaf[$k] = $v;
+			}
 			$o->set_prop($k, $v);
 		}
+		$o->set_meta("metaf", $metaf);
 		$o->save();
 
 		$entry->connect(array(
@@ -1112,7 +1119,7 @@ class cb_form_chain extends class_base
 	{
 		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
 		{
-			if (!is_array($_SESSION["cbfc_data"][$wf->id()][$i]) && $form_dat["def_ctr"])
+			if ((!is_array($_SESSION["cbfc_data"][$wf->id()][$i])) && $form_dat["def_ctr"])
 			{
 				$ci = get_instance(CL_CFGCONTROLLER);
 				$ci->check_property($form_dat["def_ctr"], $wf->id(), $_SESSION["cbfc_data"][$wf->id()][$i], $_REQUEST, $i, $o);
@@ -1143,6 +1150,7 @@ class cb_form_chain extends class_base
 					));
 				}
 
+				unset($v["subtitle"]);
 				$nps[$k] = $v;
 			}
 			$props = $nps;
