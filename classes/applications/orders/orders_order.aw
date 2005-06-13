@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.17 2005/06/13 11:10:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.18 2005/06/13 11:16:31 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -459,6 +459,15 @@ class orders_order extends class_base
 		parent::submit($arr);
 
 		$_SESSION["person_form_values"] = $arr;
+
+		if(!$arr["udef_checkbox1"])
+		{
+			$_SESSION["udef_checkbox1_error"] = t("Tellimiseks peate n&ouml;ustuma tellimistingimustega!");
+			$cv = aw_global_get("cb_values");
+			$cv["udef_checkbox1"]["error"] = t("Tellimiseks peate n&otilde;ustuma tellimistingimustega");
+			aw_session_set("cb_values", $cv);
+		}
+
 
 		if(aw_global_get("cb_values"))
 		{	
