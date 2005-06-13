@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.16 2005/06/02 12:19:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/orders/orders_order.aw,v 1.17 2005/06/13 11:10:48 kristo Exp $
 // orders_order.aw - Tellimus 
 /*
 @classinfo syslog_type=ST_ORDERS_ORDER relationmgr=yes
@@ -449,34 +449,17 @@ class orders_order extends class_base
 		$oform = &obj($_SESSION["order_form_id"]);
 		$arr["cfgform"] = $oform->prop("orderform");
 		parent::submit($arr);
-
-		if(!$arr["udef_checkbox1"])
-		{
-			//$arr["udef_checkbox1"] = 0;
-			// fail here
-			$_SESSION["udef_checkbox1_error"] = t("Tellimiseks peate n&ouml;ustuma tellimistingimustega!");
-			return $this->mk_my_orb("change", 
-				array(
-					"id" => $_SESSION["order_form_id"],
-					"group" => "persondata",
-					"section" => $_SESSION["orders_section"],
-				), CL_ORDERS_FORM);
-		}
+		$_SESSION["no_cache"] = 1;
 		
 		$_SESSION["orders_form"]["payment"]["type"] = $arr["payment_method"];
 
 		$oform = &obj($_SESSION["order_form_id"]);
 		$arr["cfgform"] = $oform->prop("orderform");
+		$arr["cfgform_id"] = $arr["cfgform"];
 		parent::submit($arr);
-		
+
 		$_SESSION["person_form_values"] = $arr;
 
-		if (!$arr["udef_checkbox1"])
-		{
-			$cv = aw_global_get("cb_values");
-			$cv["udef_checkbox1"]["error"] = t("Tellimiseks peate n&otilde;ustuma tellimistingimustega");
-			aw_session_set("cb_values", $cv);
-		}
 		if(aw_global_get("cb_values"))
 		{	
 			return $this->mk_my_orb("change", 
