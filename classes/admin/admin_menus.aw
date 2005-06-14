@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.101 2005/04/28 15:08:38 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.102 2005/06/14 20:08:17 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -923,6 +923,10 @@ class admin_menus extends aw_template
 		$lang_id = aw_global_get("lang_id");
 		$site_id = $this->cfg["site_id"];
 		$parent = !empty($parent) ? $parent : $this->cfg["rootmenu"];
+		if (is_array($parent))
+		{
+			$parent = reset($parent);
+		}
 		$menu_obj = new object($parent);
 
 		if ($menu_obj->is_brother())
