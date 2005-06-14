@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.11 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.12 2005/06/14 10:34:51 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -19,9 +19,16 @@ class relmanager extends aw_template
 
 	function init_rel_manager($arr)
 	{
+		$view = !empty($arr["view"]) ? $arr["view"] : 0;
 		$prop = $arr["prop"];
 		$arr["prop"]["_done"] = 1;
 		$obj = $arr["obj_inst"];
+
+		if ($view)
+		{
+			$prop["type"] = "text";
+			return PROP_OK;
+		};
 
 		load_vcl("table");
 		$this->t = new aw_table(array(
@@ -184,6 +191,10 @@ class relmanager extends aw_template
 		// this _NEEDS_ to be done differently .. like for example
 		// with widgets or something .. urk.
 
+		// how do I make this thing support different fields then?
+
+		// add an object reference to the cell and the use it in get_html? yees?
+
 		foreach($proplist as $propitem)
 		{
 			$type = $xproplist[$propitem]["type"];
@@ -209,7 +220,10 @@ class relmanager extends aw_template
 
 	function get_html()
 	{
-		return $this->t->draw();
+		if ($this->t)
+		{
+			return $this->t->draw();
+		};
 	}
 
 	////
