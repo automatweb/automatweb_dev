@@ -504,11 +504,11 @@ die(dbg::dump($ret));
 		}
 
 		extract($arr);
-
+		
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote($metadata);
 		$this->quote(&$objdata);
-
+		
 		// insert default new acl to object table here
 		$acld_fld = $acld_val = "";
 		if (aw_ini_get("acl.use_new_acl") && $_SESSION["uid"] != "")
@@ -1926,10 +1926,10 @@ die(dbg::dump($ret));
 		}
 	}
 
-	function quote(&$str)
+	/*function quote(&$str)
 	{
 		$str = str_replace("'", "\\'", str_replace("\\", "\\\\", $str));
-	}
+	}*/
 
 	function _get_search_fetch($to_fetch)
 	{
