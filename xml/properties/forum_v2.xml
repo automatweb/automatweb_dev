@@ -35,6 +35,17 @@
             </comment>
       </property>
       <property>
+            <name>faq_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_FAQ_FOLDER</reltype>
+            <caption>KKK kaust</caption>
+            <comment>Sellesse kausta paigutatakse KKK dokumendid</comment>
+      </property>
+      <property>
             <name>topics_on_page</name>
             <table>objects</table>
             <group>general</group>
@@ -409,6 +420,11 @@
                   </clid>
                   <caption>Administraator</caption>
             </FORUM_ADMIN>
+            <FAQ_FOLDER>
+                  <value>6</value>
+                  <clid>CL_MENU</clid>
+                  <caption>KKK kaust</caption>
+            </FAQ_FOLDER>
       </reltypes>
 </properties>
 
