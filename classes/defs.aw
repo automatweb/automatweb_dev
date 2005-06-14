@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.189 2005/05/13 07:19:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.190 2005/06/14 20:18:55 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -1441,6 +1441,8 @@ if (!defined("DEFS"))
 	}
 	
 	/** returns the parameter or an array if the parameter is not an array
+
+		@attrib api=1
 	**/
 	function safe_array($var)
 	{
@@ -1449,6 +1451,20 @@ if (!defined("DEFS"))
 			return $var;
 		}
 		return array();
+	}
+
+	/** returns admin_rootmenu2 setting - always an integer, even if it is an array
+
+		@attrib api=1
+	**/
+	function cfg_get_admin_rootmenu2()
+	{
+		$ret = $GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
+		if (is_array($ret))
+		{
+			return reset($ret);
+		}
+		return $ret;
 	}
 
 	if (!function_exists("cal_days_in_month"))
