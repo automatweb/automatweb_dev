@@ -1482,7 +1482,7 @@ class _int_object
 
 		if (is_admin())
 		{
-			$rootmenu = $GLOBALS["cfg"]["__default"]["admin_rootmenu2"];
+			$rootmenu = cfg_get_admin_rootmenu2();
 			$add = false;
 		}
 		else

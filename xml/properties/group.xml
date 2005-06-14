@@ -79,16 +79,6 @@
             <caption>Otsinguvorm</caption>
       </property>
       <property>
-            <name>admin_rootmenu2</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>callback</type>
-            <callback>get_admin_rootmenus</callback>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Administreerimisliidese juurkaust</caption>
-      </property>
-      <property>
             <name>grp_frontpage</name>
             <table>objects</table>
             <group>general</group>
@@ -187,6 +177,16 @@
             <type>hidden</type>
             <field>gid</field>
       </property>
+      <property>
+            <name>admin_rootmenu2</name>
+            <table>objects</table>
+            <group>admin_rm</group>
+            <type>callback</type>
+            <callback>get_admin_rootmenus</callback>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Administreerimisliidese juurkaust</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_GROUP</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -204,6 +204,9 @@
             <objects>
                   <caption>Objektid ja &amp;Otilde;igused</caption>
             </objects>
+            <admin_rm>
+                  <caption>Admin rootmen&amp;uuml;&amp;uuml;</caption>
+            </admin_rm>
       </groupinfo>
       <tableinfo>
             <groups>

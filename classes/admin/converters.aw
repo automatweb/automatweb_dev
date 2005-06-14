@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.57 2005/04/12 07:30:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/converters.aw,v 1.58 2005/06/14 20:05:22 kristo Exp $
 // converters.aw - this is where all kind of converters should live in
 class converters extends aw_template
 {
@@ -378,7 +378,7 @@ class converters extends aw_template
 			$m = get_instance("menuedit");
 			$parent = $m->add_new_menu(array(
 				"name" => "Perioodid (K)",
-				"parent" => $this->cfg["admin_rootmenu2"],
+				"parent" => cfg_get_admin_rootmenu2(),
 				"type" => MN_CLIENT,
 
 			));

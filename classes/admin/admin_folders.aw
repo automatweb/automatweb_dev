@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.45 2005/05/16 14:46:09 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.46 2005/06/14 20:05:22 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -139,13 +139,27 @@ class admin_folders extends aw_template
 		$awt->start("menu-list");
 		if ($this->tree->has_feature(LOAD_ON_DEMAND))
 		{
+			if (is_array($rn))
+			{
+				$tmp = $rn;
+				$rn = array_shift($tmp);
+				$this->db_listall($tmp);
+				while ($row = $this->db_next())
+				{
+					$row["id"] = $row["oid"];
+					$this->tree->add_item($rn, $row);
+				}
+			}
+			else
+			{
+				$other_parents = array();
+			}
 			// siin tuleb teha 2-faasiline lähenemine
 			$this->db_listall(array($rn,$this->cfg["amenustart"]));
-			$other_parents = array();
 			while ($row = $this->db_next())
 			{
 				// don't check acl for items we don't really care about
-				if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+				if ($this->can("view",$row["oid"]) || $row["oid"] == cfg_get_admin_rootmenu2())
 				{
 					$arr[$row["parent"]][] = $row;
 					$mpr[] = $row["parent"];
@@ -167,7 +181,7 @@ class admin_folders extends aw_template
 				while ($row = $this->db_next())
 				{
 					// don't check acl for items we don't really care about
-					if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+					if ($this->can("view",$row["oid"]) || $row["oid"] == cfg_get_admin_rootmenu2())
 					{
 						$arr[$row["parent"]][] = $row;
 						$mpr[] = $row["parent"];
@@ -189,7 +203,7 @@ class admin_folders extends aw_template
 			$this->db_listall();
 			while ($row = $this->db_next())
 			{
-				if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+				if ($this->can("view",$row["oid"]) || $row["oid"] == cfg_get_admin_rootmenu2())
 				{
 					$arr[$row["parent"]][] = $row;
 					$mpr[] = $row["parent"];
@@ -213,12 +227,12 @@ class admin_folders extends aw_template
 			$this->db_query("SELECT * FROM objects WHERE class_id = ".CL_GROUP." AND status != 0");
 			while ($row = $this->db_next())
 			{
-				if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+				if ($this->can("view",$row["oid"]) || $row["oid"] == cfg_get_admin_rootmenu2())
 				{
 					$arr[$row["parent"]][] = $row;
 					if ($this->resolve_item(&$row))
 					{
-						if ($this->can("view",$row["oid"]) || $row["oid"] == $this->cfg["admin_rootmenu2"])
+						if ($this->can("view",$row["oid"]) || $row["oid"] == cfg_get_admin_rootmenu2())
 						{
 							$this->tree->add_item($row["parent"],$row);
 						}
@@ -244,20 +258,20 @@ class admin_folders extends aw_template
 			{
 				if (isset($this->x_mpr[$d_row["parent"]]))
 				{
-					$d_row["parent"] = $this->cfg["admin_rootmenu2"];
-					$arr[$this->cfg["admin_rootmenu2"]][] = $d_row;
+					$d_row["parent"] = cfg_get_admin_rootmenu2();
+					$arr[cfg_get_admin_rootmenu2()][] = $d_row;
 					if ($this->resolve_item(&$d_row))
 					{
 						if ($this->can("view", $d_row["oid"]))
 						{
-							$this->tree->add_item($this->cfg["admin_rootmenu2"],$d_row);
+							$this->tree->add_item(cfg_get_admin_rootmenu2(),$d_row);
 						}
 					};
 				}
 			}
 		}
 
-		$this->_x_shown[$this->cfg["admin_rootmenu2"]] = true;
+		$this->_x_shown[cfg_get_admin_rootmenu2()] = true;
 
 		// kodukataloom
 
@@ -462,7 +476,7 @@ class admin_folders extends aw_template
 	{
 		enter_function("admin_folders::mk_homefolder");
 		$uid = aw_global_get("uid");
-		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
+		$admin_rootmenu2 = cfg_get_admin_rootmenu2();
 		$ext = $this->cfg["ext"];
 		$baseurl = $this->cfg["baseurl"];
 
@@ -499,7 +513,7 @@ class admin_folders extends aw_template
 		}
 		enter_function("admin_folders::rec_admin_tree");
 
-		$admin_rootmenu2 = $this->cfg["admin_rootmenu2"];
+		$admin_rootmenu2 = cfg_get_admin_rootmenu2();
 		$ext = $this->cfg["ext"];
 		$baseurl = $this->cfg["baseurl"];
 

@@ -23,71 +23,79 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_GROUP, on_remove_alias
 @groupinfo dyn_search caption=Otsing submit=no
 @groupinfo import caption=Import
 @groupinfo objects caption="Objektid ja &Otilde;igused"
+@groupinfo admin_rm caption="Admin rootmen&uuml;&uuml;"
 
 @tableinfo groups index=oid master_table=objects master_index=oid
 
 @default table=groups
+
+
 @default group=general
+	
+	@property gid field=gid type=text
+	@caption Grupi ID
 
-@property gid field=gid type=text
-@caption Grupi ID
+	@property name field=name type=textbox
+	@caption Nimi
 
-@property name field=name type=textbox
-@caption Nimi
+	@property priority field=priority type=textbox size=15
+	@caption Prioriteet
 
-@property priority field=priority type=textbox size=15
-@caption Prioriteet
+	@property modified type=text table=objects field=modified
+	@caption Muudetud
 
-@property modified type=text table=objects field=modified
-@caption Muudetud
+	@property mmodifiedby type=text store=no editonly=1
+	@caption Kes muutis
 
-@property mmodifiedby type=text store=no editonly=1
-@caption Kes muutis
+	@property created type=text field=created table=objects
+	@caption Loodud
 
-@property created type=text field=created table=objects
-@caption Loodud
+	@property mcreatedby type=text store=no editonly=1
+	@caption Kes l&otilde;i
 
-@property mcreatedby type=text store=no editonly=1
-@caption Kes l&otilde;i
+	@property type type=select 
+	@caption T&uuml;&uuml;p
 
-@property type type=select 
-@caption T&uuml;&uuml;p
+	@property search_form type=relpicker reltype=RELTYPE_SEARCHFORM
+	@caption Otsinguvorm
 
-@property search_form type=relpicker reltype=RELTYPE_SEARCHFORM
-@caption Otsinguvorm
+	@property grp_frontpage type=callback callback=get_grp_frontpage field=meta method=serialize table=objects
+	@caption Esileht
 
-@property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
-@caption Administreerimisliidese juurkaust
+	@property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption Kas saab administreerimiskeskkonda
 
-@property grp_frontpage type=callback callback=get_grp_frontpage field=meta method=serialize table=objects
-@caption Esileht
+	@property require_change_pass type=checkbox ch_value=1 field=meta table=objects method=serialize
+	@caption N&otilde;ua parooli vahetust esimesel logimisel
 
-@property can_admin_interface type=checkbox ch_value=1 field=meta table=objects method=serialize
-@caption Kas saab administreerimiskeskkonda
+	@property default_acl type=callback callback=callback_get_default_acl store=no rel=1
+	@caption Default ACL
 
+@default group=dyn_search
+	
+	@property data type=text no_caption=1
 
-@property require_change_pass type=checkbox ch_value=1 field=meta table=objects method=serialize
-@caption N&otilde;ua parooli vahetust esimesel logimisel
+@default group=import
 
-@property default_acl type=callback callback=callback_get_default_acl store=no rel=1
-@caption Default ACL
+	@property import type=fileupload store=no 
+	@caption Impordi kasutajaid
 
-@property data type=text group=dyn_search no_caption=1
-
-@property import type=fileupload store=no group=import
-@caption Impordi kasutajaid
-
-@property import_desc type=text store=no group=import
+	@property import_desc type=text store=no 
 
 @default group=objects
 
-@property objects type=text store=no no_caption=1
-@caption Objektid
+	@property objects type=text store=no no_caption=1
+	@caption Objektid
 
-@property obj_acl type=callback callback=get_acls store=no 
+	@property obj_acl type=callback callback=get_acls store=no 
 
-@property gp_parent type=hidden field=parent table=groups
-@property gp_gid type=hidden field=gid table=groups
+	@property gp_parent type=hidden field=parent table=groups
+	@property gp_gid type=hidden field=gid table=groups
+
+@default group=admin_rm
+
+	@property admin_rootmenu2 type=callback callback=get_admin_rootmenus field=meta method=serialize table=objects
+	@caption Administreerimisliidese juurkaust
 
 @reltype SEARCHFORM value=1 clid=CL_FORM
 @caption otsinguvorm
@@ -561,6 +569,7 @@ class group extends class_base
 				"table" => "objects",
 				"field" => "meta",
 				"method" => "serialize",
+				"multiple" => 1,
 				"caption" => sprintf(t("Administreerimisliidese juurkaust (%s)"), $lname),
 				"value" => $meta["admin_rootmenu2"][$lid],
 				"reltype" => "RELTYPE_ADMIN_ROOT"
@@ -967,4 +976,5 @@ class group extends class_base
 		$c->file_invalidate_regex("acl-cache(.*)");
 	}
 }
+
 ?>

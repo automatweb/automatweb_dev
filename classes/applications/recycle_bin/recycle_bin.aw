@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.17 2005/04/14 13:22:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/recycle_bin/recycle_bin.aw,v 1.18 2005/06/14 20:05:22 kristo Exp $
 // recycle_bin.aw - Prügikast 
 /*
 
@@ -331,12 +331,14 @@ class recycle_bin extends class_base
 			;
 		}
 
+		$adm = cfg_get_admin_rootmenu2();
+
 		$ret = array();
 		foreach($rows as $row)
 		{
 			$pt = array();
 			$id = $o2n[$row["oid"]][1];
-			while ($o2n[$id][1] && $id != $this->cfg["admin_rootmenu2"])
+			while ($o2n[$id][1] && $id != $adm)
 			{
 				$pt[] = $o2n[$id][0];
 				$id = $o2n[$id][1];
