@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.49 2005/04/27 12:47:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.50 2005/06/14 19:10:39 dragut Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -312,7 +312,7 @@ class object_list extends _int_obj_container_base
 		if (isset($arr["add_folders"]) && $arr["add_folders"])
 		{
 			$ret = array();
-			for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+			for ($o =& $this->begin(); !$this->end(); $o =& $this->next())
 			{
 				$ret[$o->id()] = $o->path_str();
 			}
