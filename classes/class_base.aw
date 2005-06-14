@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.401 2005/06/10 08:33:34 kristo Exp $
+// $Id: class_base.aw,v 2.402 2005/06/14 10:12:59 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2397,7 +2397,7 @@ class class_base extends aw_template
 					}
 				}
 				else
-				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count(is_array($val["value"])))
+				if ($this->view && $val["orig_type"] == "select" && is_array($val["value"]) && count($val["value"]) > 0)
 				{
 					$tmp_ol = new object_list(array("oid" => $val["value"]));
 					$val["value"] = join(", ", $tmp_ol->names());
