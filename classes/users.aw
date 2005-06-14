@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.145 2005/06/10 08:07:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.146 2005/06/14 20:13:39 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1302,7 +1302,7 @@ class users extends users_user
 					{
 						aw_ini_set("","admin_rootmenu2",$ar2[$lang_id]);
 						aw_ini_set("","ini_rootmenu", $GLOBALS["cfg"]["__default"]["rootmenu"]);
-						aw_ini_set("","rootmenu",$ar2[$lang_id]);
+						aw_ini_set("","rootmenu",is_array($ar2[$lang_id]) ? reset($ar2[$lang_id]) : $ar2[$lang_id]);
 					}
 					if (is_array($gf) && $gf[$lang_id])
 					{
