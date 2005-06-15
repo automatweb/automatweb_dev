@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.8 2005/06/13 08:56:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.9 2005/06/15 08:07:20 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -307,11 +307,19 @@ class persona_import extends class_base
 		
 		print "<h1>" . $fqfn . "</h1>";
 
+
 		if (strlen($fdat) == 0)
 		{
 			die(t("Not enough data to process<bR>"));
 		};
 
+		print "<h2>";
+		print strlen($fdat) . " bytes of data to proess";
+		print "</h2>";
+
+		print "<pre>";
+		print htmlspecialchars($fdat);
+		print "</pre>";
 
 		print t("got data<br>");
 	
@@ -320,6 +328,13 @@ class persona_import extends class_base
 		$p = xml_parser_create();
 		xml_parse_into_struct($p, $fdat, $vals, $index);
 		xml_parser_free($p);
+
+		/*
+		print "<h1>vals</h1>";
+		arr($vals);
+		*/
+
+		print "<h1>done</h1>";
 
 		print t("parse finished, processing starts<br>");
 		flush();
@@ -360,6 +375,7 @@ class persona_import extends class_base
 				{
 					$processing[$val["tag"]] = true;
 					$target = $val["tag"];
+					print "setting target to $target<br>";
 				}
 				elseif ("close" == $val["type"])
 				{
@@ -369,7 +385,7 @@ class persona_import extends class_base
 			};
 
 
-			if ($target && "RIDA" == $val["tag"])
+			if ($target && "TOOTAJA" == $val["tag"])
 			{
 				if ("open" == $val["type"])
 				{
@@ -390,6 +406,10 @@ class persona_import extends class_base
 
 
 		};
+
+		print "<h1>data follows</h1>";
+		arr($data);
+		print "<h1>datastream ends</h1>";
 
 
 		$persona_import_started = aw_global_get("persona_import_started");
@@ -637,7 +657,7 @@ class persona_import extends class_base
 
 		$persons = array();
 
-		print t("creating person)objects<br>");
+		print t("creating person objects<br>");
 		obj_set_opt("no_cache",1);
 		$persons_per_batch = 10;
 		$batchcounter = 0;
@@ -1162,7 +1182,8 @@ class persona_import extends class_base
 		foreach($files as $file)
 		{
 			// XXX: implement proper detection of image files
-			if (strpos($file,"intranet_pilt"))
+			//if (strpos($file,"intranet_pilt"))
+			if (strpos($file,"pildid.xml"))
 			{
 				print "retrieving and parsing $file<br>";
 				$fdat = $c->get_file($file);
@@ -1175,10 +1196,16 @@ class persona_import extends class_base
 					if ($tootaja_id && $tag["tag"] == "PILT" && $tag["type"] == "complete")
 					{
 						$pilt_data = base64_decode($tag["value"]);
-						print "assigning " . strlen($pilt_data) . " bytes to $tootaja_id<br>";
-						print "ix = ";
+						$tootaja_oid = $px[$tootaja_id];
 						//print $existing_images[$tootaja_id];
-						$t = new object($px[$tootaja_id]);
+						if (!is_oid($tootaja_oid))
+						{
+							print "No worker with id $tootaja_id, ignoring image<br>";
+							continue;
+						};
+						print "assigning " . strlen($pilt_data) . " bytes to $tootaja_id / $tootaja_oid<br>";
+						print "ix = ";
+						$t = new object($tootaja_oid);
 						if (is_oid($config["image_folder"]))
 						{
 							$image_folder = $config["image_folder"];
@@ -1249,6 +1276,9 @@ class persona_import extends class_base
 					if ($tag["tag"] == "TOOTAJA_ID" && $tag["type"] == "complete")
 					{
 						$tootaja_id = $tag["value"];
+						print "tootaja_id = $tootaja_id<br>";
+						$pxo = new object($px[$tootaja_id]);
+						print $pxo->name() . "<br>";
 					};
 				};
 			};
