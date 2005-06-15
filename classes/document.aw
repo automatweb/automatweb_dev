@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.332 2005/06/02 08:59:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.333 2005/06/15 09:17:28 kristo Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -298,6 +298,12 @@ class document extends aw_template
 		if ($params["no_link_if_not_act"] && $doc_o->status() == STAT_NOTACTIVE)
 		{
 			$doc["title_clickable"] = 0;
+		}
+
+		if ($this->cfg["show_real_location"] == 1)
+		{
+			$doc["docid"] = $doc_o->brother_of();
+			$docid = $doc_o->brother_of();
 		}
 
 		// if oid is in the arguments check whether that object is attached to
@@ -1946,99 +1952,6 @@ class document extends aw_template
 
 	/**  
 		
-		@attrib name=sellang params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function sel_lang_bros($arr)
-	{
-		extract($arr);
-		$this->read_template("lang_bros.tpl");
-		$this->sub_merge = 1;
-
-		global $sstring,$slang_id;
-
-		$document = $this->fetch($id);
-		$this->mk_path($document["parent"],LC_DOCUMENT_LANG);
-
-		$lang_brothers = unserialize($document["lang_brothers"]);
-		$t = get_instance("languages");
-		$ar = $t->listall();
-		reset($ar);
-		$first = true;
-		while (list(,$v) = each($ar))
-		{
-			if ($v["id"] != $document["lang_id"])
-			{
-				$this->vars(array("lang_id" => $v["id"], "lang_name" => $v["name"],"sel" => ($slang_id == $v["id"] || ($first && $slang_id < 1) ? "CHECKED" : "")));
-				$this->parse("LANGUAGE");
-				$first = false;
-			}
-		}
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
-			"sstring"	=> $sstring,
-			"menurl"	=> $this->mk_orb("sel_menus",array("id" => $id)),
-			"weburl"	=> $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$id,
-			"change"	=> $this->mk_orb("change", array("id" => $id)),
-			"lburl"		=> $this->mk_orb("sellang", array("id" => $id))
-		));
-
-		if ($slang_id < 1)
-		{
-			return $this->parse();
-		}
-
-
-		$this->mk_menucache($slang_id);
-
-		// selektime otsingule vastavad dokud
-		$this->extrarr = array();
-		$this->db_query("SELECT documents.*,objects.* FROM documents
-										 LEFT JOIN objects ON objects.brother_of = documents.docid
-										 WHERE objects.lang_id=".$slang_id." AND documents.title LIKE '%$sstring%'
-										 ORDER BY objects.parent,jrk");
-		while ($row = $this->db_next()) 
-		{
-			$this->extrarr[$row["parent"]][] = array("docid" => $row["docid"], "name" => $row["title"].".".$this->cfg["ext"]);
-		}
-
-		$this->docs = array("0" => "");
-		$this->mk_folders($this->cfg["admin_rootmenu2"],"");
-
-
-		reset($this->docs);
-		while (list($k,$v) = each($this->docs))
-		{
-			$this->vars(array("name" => $v, "selurl" => $this->mk_orb("set_lang_bro", array("id" => $id, "bro" => $k,"sstring" => $sstring, "slang_id" => $slang_id)),"id" => $k));
-			if ($lang_brothers[$slang_id] == $k)
-			{
-				$mt.=$this->parse("MATCH_SEL");
-			}
-			else
-			{
-				$mt.=$this->parse("MATCH");
-			}
-		}
-
-		$this->vars(array(
-			"reforb" => $this->mk_reforb("seb_s",array("id" => $id)),
-			"sstring"	=> $sstring,
-			"MATCH" => $mt,
-			"MATCH_SEL" => ""
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
 		@attrib name=seb_s params=name default="0"
 		
 		@param id required
@@ -2086,96 +1999,6 @@ class document extends aw_template
 		$this->db_query("UPDATE documents SET lang_brothers = '$lbs' WHERE docid = $bro");
 
 		header("Location: ".$this->mk_orb("change", $arr));
-	}
-
-	function mk_folders($parent,$str)
-	{
-		if (!is_array($this->menucache[$parent]))
-		{
-			return;
-		}
-
-		reset($this->menucache[$parent]);
-		while(list(,$v) = each($this->menucache[$parent]))
-		{
-			$name = $v["data"]["name"];
-			if ($v["data"]["parent"] == 1)
-			{
-				$words = explode(" ",$name);
-				if (count($words) == 1)
-				{
-					$name = $words[0][0].$words[0][1];
-				}
-				else
-				{
-					reset($words);
-					$mstr = "";
-					while(list(,$v3) = each($words))
-					{
-						$mstr.=$v3[0];
-					}
-					$name = $mstr;
-				}
-			}
-
-			$sep = ($str == "" ? "" : " / ");
-			$tstr = $str.$sep.$name;
-
-			if (is_array($this->extrarr[$v["data"]["oid"]]))
-			{
-				reset($this->extrarr[$v["data"]["oid"]]);
-				while (list(,$v2) = each($this->extrarr[$v["data"]["oid"]]))
-				{
-					$this->docs[$v2["docid"]] = $tstr." / ".$v2["name"];
-				}
-			}
-
-			$this->mk_folders($v["data"]["oid"],$tstr);
-		}
-	}
-
-	function mk_menucache($slang_id)
-	{
-		// cacheme menyyd
-		$this->db_query("SELECT objects.oid as oid, 
-														objects.parent as parent,
-														objects.comment as comment,
-														objects.name as name,
-														objects.created as created,
-														objects.createdby as createdby,
-														objects.modified as modified,
-														objects.modifiedby as modifiedby,
-														objects.last as last,
-														objects.status as status,
-														objects.jrk as jrk,
-														objects.class_id as class_id,
-														menu.type as mtype,
-														menu.periodic as mperiodic,
-														menu.is_copied as is_copied,
-														menu.data as data,
-														menu.clickable as clickable,
-														menu.hide_noact as hide_noact,
-														menu.target as target
-											FROM objects 
-											LEFT JOIN menu ON menu.id = objects.oid
-											WHERE (objects.class_id = ".CL_MENU." OR objects.class_id = ".CL_BROTHER.") AND objects.status != 0  AND (objects.lang_id=".$slang_id." OR menu.type= ".MN_CLIENT.")
-											GROUP BY objects.oid
-											ORDER BY objects.parent, menu.is_l3,jrk");
-		// tsykkel yle menyyelementide
-		while ($row = $this->db_next()) 
-		{
-			$sets = unserialize($row["data"]);
-			$this->menucache[$row["parent"]][] = array("data" => $row);
-			if (is_array($sets["section"]))
-			{
-				reset($sets["section"]);
-				while(list(,$v) = each($sets["section"]))
-				{
-					// topime menyystruktuuri arraysse
-					$this->menucache[$v][] = array("data" => $row);
-				}
-			}
-		}
 	}
 
 	/**  
