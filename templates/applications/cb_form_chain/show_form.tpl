@@ -1,3 +1,16 @@
+<!-- SUB: TITLE -->
+{VAR:title}
+<!-- END SUB: TITLE -->
+
+<!-- SUB: TITLE_SEL -->
+<b>{VAR:title}</b>
+<!-- END SUB: TITLE_SEL -->
+
+<!-- SUB: TITLE_SEP -->
+|
+<!-- END SUB: TITLE_SEP -->
+
+
 <table border="0" align="center" width="100%">
 <form action="orb.{VAR:ext}" method="POST" name="changeform" {VAR:form_target}>
 {VAR:form}

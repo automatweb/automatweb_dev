@@ -13,7 +13,17 @@
       <property>
             <name>cfs</name>
             <table>objects</table>
-            <group>cfs</group>
+            <group>cfs_tbl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
+            <name>cfs_headers</name>
+            <table>objects</table>
+            <group>cfs_headers</group>
             <field>meta</field>
             <method>serialize</method>
             <type>table</type>
@@ -193,6 +203,14 @@
             <cfs>
                   <caption>Vormid</caption>
             </cfs>
+            <cfs_tbl>
+                  <caption>Vormid</caption>
+                  <parent>cfs</parent>
+            </cfs_tbl>
+            <cfs_headers>
+                  <caption>Pealkirjad</caption>
+                  <parent>cfs</parent>
+            </cfs_headers>
             <mail_settings>
                   <caption>Meiliseaded</caption>
             </mail_settings>

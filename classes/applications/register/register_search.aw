@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.26 2005/05/23 09:29:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.27 2005/06/15 13:29:30 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -594,6 +594,15 @@ class register_search extends class_base
 		$this->__tdata = $tdata;
 		uksort($props, array(&$this, "__proptbl_srt"));
 
+		$np = 0;
+		foreach($props as $pn => $pd)
+		{
+			if ($tdata[$pn]["visible"])
+			{
+				$np++;
+			}
+		}
+
 		foreach($props as $pn => $pd)
 		{
 			if ($tdata[$pn]["visible"])
@@ -601,7 +610,8 @@ class register_search extends class_base
 				$fd = array(
 					"name" => $pn,
 					"caption" => $tdata[$pn]["caption"],
-					"sortable" => $tdata[$pn]["sortable"]
+					"sortable" => $tdata[$pn]["sortable"],
+					"width" => ((int)(100 / $np))."%"
 				);
 				if ($f_props[$pn]["type"] == "date_select")
 				{
@@ -856,7 +866,7 @@ class register_search extends class_base
 		if ($tdata["__defaultsort"] != "")
 		{
 			$t->set_default_sortby($tdata["__defaultsort"]);	
-			$t->set_default_sorder("desc");
+			$t->set_default_sorder("asc");
 		}
 		else
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.4 2005/06/13 09:27:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.5 2005/06/15 13:29:30 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -13,9 +13,13 @@
 	@property confirm_sep_page type=checkbox ch_value=1
 	@caption Kinnitusvaade enne saatmist
 
-@default group=cfs
+@default group=cfs_tbl
 
 	@property cfs type=table no_caption=1
+
+@default group=cfs_headers
+
+	@property cfs_headers type=table no_caption=1
 
 @default group=mail_settings_general
 
@@ -75,10 +79,15 @@
 	@caption Andmed
 
 @groupinfo cfs caption="Vormid"
+	@groupinfo cfs_tbl caption="Vormid" parent=cfs
+	@groupinfo cfs_headers caption="Pealkirjad" parent=cfs
+
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_general caption="Tellimuse meil" parent=mail_settings
 	@groupinfo mail_settings_confirm caption="Kinnitusmeil" parent=mail_settings
+
 @groupinfo entry_settings caption="Andmete seaded"
+
 @groupinfo entries caption="Andmed"
 	@groupinfo entries_unc caption="Kinnitamata" parent=entries submit=no
 	@groupinfo entries_con caption="Kinnitatud" parent=entries submit=no
@@ -116,6 +125,10 @@ class cb_form_chain extends class_base
 		{
 			case "cfs":
 				$this->_cfs($arr);
+				break;
+
+			case "cfs_headers":
+				$this->_cfs_headers($arr);
 				break;
 
 			case "confirm_mail_to_prop":
@@ -180,6 +193,10 @@ class cb_form_chain extends class_base
 		{
 			case "cfs":
 				$arr["obj_inst"]->set_meta("d", $arr["request"]["d"]);
+				break;
+
+			case "cfs_headers":
+				$arr["obj_inst"]->set_meta("cfs_headers", $arr["request"]["hdrs"]);
 				break;
 		}
 		return $retval;
@@ -292,6 +309,42 @@ class cb_form_chain extends class_base
 		$t->set_sortable(false);
 	}
 
+	function _init_cfs_headers_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "pg",
+			"caption" => t("Lehek&uuml;lg"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "title",
+			"caption" => t("Pealkiri"),
+			"align" => "center"
+		));
+	}
+
+	function _cfs_headers($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_cfs_headers_t($t);
+
+		$hdrs = safe_array($arr["obj_inst"]->meta("cfs_headers"));
+		
+		$pgs = $this->_get_page_list($arr["obj_inst"]);
+		foreach($pgs as $pg)
+		{
+			$t->define_data(array(
+				"pg" => $pg,
+				"title" => html::textbox(array(
+					"name" => "hdrs[$pg][name]",
+					"value" => $hdrs[$pg]["name"]
+				))
+			));
+		}
+		$t->set_sortable(false);
+	}
+
 	function parse_alias($arr)
 	{
 		return $this->show(array("id" => $arr["alias"]["target"]));
@@ -381,6 +434,9 @@ class cb_form_chain extends class_base
 	{
 		$cf = get_instance(CL_CFGFORM);
 		$this->read_template("show_form.tpl");
+
+		$this->_draw_page_titles($o);
+
 		foreach($forms as $form_dat)
 		{
 			$wf = obj($form_dat["form"]);
@@ -1135,7 +1191,7 @@ class cb_form_chain extends class_base
 						"name" => $k."_err",
 						"type" => "text",
 						"no_caption" => 1,
-						"value" => $_err,
+						"value" => "<font color=\"red\">".$_err."</font>",
 						"store" => "no"
 					);
 				}
@@ -1199,12 +1255,18 @@ class cb_form_chain extends class_base
 				$props[$k]["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
 			}
 
+			if ($this->_has_errors($wf->id(), $i))
+			{
+				$forms .= $this->_display_table_errors($props, $wf->id(), $i);
+			}
+
 			$rd = get_instance(CL_REGISTER_DATA);
 			$pels = $rd->parse_properties(array(
 				"properties" => $props,
 				"name_prefix" => "f_".$wf->id()."_".$i,
 				"object_type_id" => $ot->id()
 			));
+
 			foreach($pels as $pn => $pd)
 			{
 				switch($pd["type"])
@@ -1241,6 +1303,74 @@ class cb_form_chain extends class_base
 		));
 
 		return $this->parse("TABLE_FORM");
+	}
+
+	function _get_titles($o)	
+	{
+		$hdrs = safe_array($o->meta("cfs_headers"));
+		$ret = array();
+		foreach($hdrs as $pg => $i)
+		{
+			$ret[$pg] = $i["name"];
+		}
+		return $ret;
+	}
+	
+	function _draw_page_titles($o)
+	{
+		$titles = $this->_get_titles($o);
+		$page = $this->_get_page($o);
+
+		$ts = array();
+		foreach($titles as $pg => $title)
+		{
+			$this->vars(array(
+				"title" => $title
+			));
+
+			if ($pg == $page)
+			{
+				$ts[] = $this->parse("TITLE_SEL");
+			}
+			else
+			{
+				$ts[] = $this->parse("TITLE");
+			}
+		}
+
+		$this->vars(array(
+			"TITLE" => join($this->parse("TITLE_SEP"), $ts),
+			"TITLE_SEL" => "",
+			"TITLE_SEP" => ""
+		));
+	}
+
+	function _display_table_errors($pels, $wf_id, $i)
+	{
+		$els = "";
+		foreach($pels as $pn => $pd)
+		{
+			$this->vars(array(
+				"element" => "<font color=\"red\">".$_SESSION["cbfc_errors"][$wf_id][$i][$pn]."</font>"
+			));
+			$els .= $this->parse("ELEMENT");
+		}
+		$this->vars(array(
+			"ELEMENT" => $els
+		));
+		return $this->parse("FORM");
+	}
+
+	function _has_errors($wf_id, $i)
+	{
+		foreach($_SESSION["cbfc_errors"][$wf_id][$i] as $k => $v)
+		{
+			if ($v != "")
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 }
 ?>
