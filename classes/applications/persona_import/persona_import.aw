@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.9 2005/06/15 08:07:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.10 2005/06/15 11:24:30 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -696,8 +696,12 @@ class persona_import extends class_base
 
 			print "tm = " . $bday . "<br>";
 
+			$worker["EESNIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["EESNIMI"]);
+			$worker["PEREKONNANIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["PEREKONNANIMI"]);
+			/*
 			$worker["EESNIMI"] = convert_unicode($worker["EESNIMI"]);
 			$worker["PEREKONNANIMI"] = convert_unicode($worker["PEREKONNANIMI"]);
+			*/
 
 			$person_obj->set_name($worker["EESNIMI"] . " " . $worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
