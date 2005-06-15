@@ -9,14 +9,6 @@
 			</function>
 		</action>
 
-		<action name="save">
-			<function name="save">
-				<arguments>
-					<required name="id" acl="edit;view" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="new" is_public="1" caption="New document">
 			<function name="add">
 				<arguments>
@@ -35,49 +27,6 @@
 					<required name="id" type="int" acl="edit;view" />
 					<optional name="section" />
 					<optional name="period" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sellang">
-			<function name="sel_lang_bros">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="seb_s">
-			<function name="seb_s">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="set_lang_bro">
-			<function name="set_lang_bro">
-				<arguments>
-					<required name="id" />
-					<required name="sstring" />
-					<required name="slang_id" />
-					<required name="bro" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="sel_menus">
-			<function name="sel_menus">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_menus">
-			<function name="submit_menus">
-				<arguments>
-					<required name="id" />
 				</arguments>
 			</function>
 		</action>
@@ -147,13 +96,6 @@
 			<function name="do_print">
 				<arguments>
 					<required name="section" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="docsearch" all_args="1">
-			<function name="docsearch">
-				<arguments>
 				</arguments>
 			</function>
 		</action>
