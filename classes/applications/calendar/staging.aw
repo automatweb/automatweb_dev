@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.11 2005/05/05 13:47:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.12 2005/06/16 11:01:26 duke Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -43,7 +43,7 @@ property utextbox8 type=textbox no_caption=1
 @caption Projektid
 
 @property trans type=translator store=no group=trans props=name,utextarea1
-@caption Tõlkimine
+@caption Tlkimine
 
 @property times type=callback store=no callback=callback_gen_times group=times
 @caption Ajad
@@ -60,7 +60,7 @@ property utextbox8 type=textbox no_caption=1
 @caption Koopia
 
 @groupinfo projects caption="Projektid"
-@groupinfo trans caption="Tõlkimine"
+@groupinfo trans caption="T&otilde;lkimine"
 @groupinfo times caption="Ajad"
 
 @classinfo trans=1
