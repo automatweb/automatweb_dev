@@ -1,7 +1,7 @@
 <?php
 // siin imporditakse muutujad saidi raami sisse
 // ja väljastatakse see
-
+global $awt;
 $sf->read_template("index.tpl");
 
 $ta = aw_global_get("title_action");
@@ -20,6 +20,7 @@ if ($ta != "")
 $apd = get_instance("layout/active_page_data");
 $styles = $apd->on_shutdown_get_styles();
 $styles_done = false;
+
 
 // do not display the YAH bar, if site_title is empty
 $sf->vars(array(
@@ -66,9 +67,22 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 
 
 $t = new languages;
+$page_charset = $charset = $t->get_charset();
+
+// if you set this global variable in your code, then the whole page will be converted and shown
+// in the requested charset. This will be handy for translation forms .. and hey .. perhaps one
+// day we are going to move to unicode for the whole interface
+
+$output_charset = aw_global_get("output_charset");
+
+if (!empty($output_charset))
+{
+	$charset = $output_charset;
+};
+
 $sf->vars(array(
 	"content"	=> $content,
-	"charset" => $t->get_charset(),
+	"charset" => $charset,
 	"uid" => aw_global_get("uid"),
 	"title_action" => $ta,
 ));
@@ -80,7 +94,14 @@ if ($sf->is_template("aw_styles"))
 	$styles_done = true;
 };
 
-echo $sf->parse();
+if (!empty($output_charset))
+{
+	echo iconv($page_charset,$output_charset . "//TRANSLIT",$sf->parse());
+}
+else
+{
+	echo $sf->parse();
+};
 
 if (!$styles_done)
 {
