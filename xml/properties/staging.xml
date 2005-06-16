@@ -56,7 +56,7 @@
                   <num_0>name</num_0>
                   <num_1>utextarea1</num_1>
             </props>
-            <caption>Tõlkimine</caption>
+            <caption>Tlkimine</caption>
       </property>
       <property>
             <name>times</name>
@@ -79,7 +79,7 @@
                   <caption>Projektid</caption>
             </projects>
             <trans>
-                  <caption>Tõlkimine</caption>
+                  <caption>T&amp;otilde;lkimine</caption>
             </trans>
             <times>
                   <caption>Ajad</caption>
