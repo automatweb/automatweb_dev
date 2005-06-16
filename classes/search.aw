@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.97 2005/05/20 08:15:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/search.aw,v 2.98 2005/06/16 11:31:23 kristo Exp $
 // search.aw - Search Manager
 
 /*
@@ -164,6 +164,7 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 				$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
 				$sid = aw_ini_get("site_id");
 				$sites = array($sid => $sid);
+				$sl = get_instance("install/site_list");
 				foreach($dat as $row)
 				{
 					if ($row["site_id"] != $sid)
@@ -174,7 +175,8 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 						}
 						else
 						{
-							$sites[$row["site_id"]] = $row["site_id"];
+							
+							$sites[$row["site_id"]] = $sl->get_url_for_site($row["site_id"]);
 						}
 					}
 				}
@@ -1217,11 +1219,12 @@ põhimõtteliselt seda valimi tabi ei olegi vaja siin näidata
 		{
 			$dat = $this->_search_mk_call("objects","db_query", array("sql" => "SELECT distinct(site_id) as site_id FROM objects"), $args);
 			$sites = array("0" => t("Igalt poolt"));
+			$sl = get_instance("install/site_list");
 			if (is_array($dat))
 			{
 				foreach($dat as $row)
 				{
-					$sites[$row["site_id"]] = $row["site_id"];
+					$sites[$row["site_id"]] = $sl->get_url_for_site($row["site_id"]);
 				}
 			};	
 			$sites["0"] = t("Igalt poolt");
