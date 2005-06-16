@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.6 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.7 2005/06/16 11:00:43 duke Exp $
 class translator extends  core
 {
 	function translator()
@@ -10,6 +10,8 @@ class translator extends  core
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
+
+		aw_global_set("output_charset","UTF-8");
 
 		$o = $arr["obj_inst"]->get_original();
 		$t_conns = $o->connections_from(array(
@@ -78,6 +80,7 @@ class translator extends  core
                 {
                         $lid = $langdata["id"];
                         $l_accept = $langdata["acceptlang"];
+			$current_charset = $langdata["charset"];
                         $rv["cap_$lid"] = array(
                                 "name" => "cap_$lid",
                                 "type" => "text",
@@ -90,13 +93,21 @@ class translator extends  core
                         foreach($translatable as $key => $val)
                         {
                                 $elname = $val["name"];
+				$value = ($current_translation) ? $current_translation->prop($elname) : "";
+				if (!empty($current_charset))
+				{
+					//print "converting $value from $current_charset to UTF-8<br>";
+					$value = iconv($current_charset,"UTF-8",$value);
+					//print "result = ";
+					//print $value;
+				};
                                 $rv["${prefix}_${lid}_" . $elname] = array(
                                         "name" => "${prefix}[$l_accept][" . $elname . "]",
                                         "type" => $val["type"],
                                         "caption" => $val["caption"],
                                         "cols" => $val["cols"],
                                         "rows" => $val["rows"],
-                                        "value" => ($current_translation) ? $current_translation->prop($elname) : "",
+                                        "value" => $value,
                                 );
                         };
 
@@ -197,13 +208,37 @@ class translator extends  core
                 $act_lang = $o->lang();
                 $o->set_flag(OBJ_HAS_TRANSLATION,OBJ_HAS_TRANSLATION);
 
+		//arr($eldata);
+
+		$l = get_instance("languages");
+                $langinfo = $l->get_list(array(
+                        "key" => "acceptlang",
+                        "all_data" => true,
+                ));
+
+		//$langdata = aw_ini_get("languages.list");
+		//arr($langinfo);
+		/*
+		arr($langinfo);
+		arr($langdata);
+		arr($translated);
+		*/
 		foreach($eldata as $lang => $lang_data)
 		{
+			$curr_lang = $langinfo[$lang];
                         if ($lang == $act_lang)
                         {
                                 foreach($lang_data as $prop_key => $prop_val)
                                 {
-                                        $o->set_prop($prop_key,$prop_val);
+					if (!empty($curr_lang["charset"]))
+					{
+						//print "converting $prop_val to " . $curr_lang["charset"] . "<br>";
+						$prop_val = iconv("UTF-8",$curr_lang["charset"] . "//TRANSLIT",$prop_val);
+						//print "result = ";
+						//print $prop_val;
+					};
+                                       	$o->set_prop($prop_key,$prop_val);
+					
                                 };
                         }
                         else
@@ -237,6 +272,17 @@ class translator extends  core
                                                 $fields_with_values++;
                                         };
                                         //print "setting $prop_key to $prop_val on ".$clone->id()."<br>";
+
+					// vat see on see koht .. kus mul on vaja teostada konvertimine. Selleks aga on mul
+					// vaja teada parajasti kehtiva keele charsetti
+					if (!empty($curr_lang["charset"]))
+					{
+						//print "converting $prop_val to " . $curr_lang["charset"] . "<br>";
+						$prop_val = iconv("UTF-8",$curr_lang["charset"] . "//TRANSLIT",$prop_val);
+						//print "result = ";
+						//print "<br>";
+						//print $prop_val;
+					};
                                         $clone->set_prop($prop_key,$prop_val);
                                 };
 
