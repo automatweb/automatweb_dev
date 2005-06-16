@@ -283,6 +283,12 @@ class _int_obj_ds_auto_translation extends _int_obj_ds_decorator
 		}
 		
 		$oid = $objdata["oid"];
+
+		if (!isset($this->objdata[$oid]))
+		{
+			$this->get_objdata($oid);
+		}
+
 		if ($this->objdata[$oid]["type"] == OBJ_TRANS_TRANSLATED)
 		{
 			// if the object is a translated object, then also read the original and merge the 
