@@ -187,13 +187,13 @@ class doc_display extends aw_template
 			$_sect = aw_global_get("section");
 			// calculate the amount of comments this document has
 			// XXX: I could use a way to figure out which variables are present in the template
-			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
+			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '".$doc->id()."'","cnt");
 			$this->vars(array(
 				"num_comments" => sprintf("%d",$num_comments),
-				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => $_sect),"forum"),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $doc->id(),"section" => $_sect),"forum"),
 			));
 			$forum = get_instance(CL_FORUM);
-			$fr = $forum->add_comment(array("board" => $docid,"section" => $_sect));
+			$fr = $forum->add_comment(array("board" => $doc->id(),"section" => $_sect));
 
 			if ($num_comments > 0)
 			{
