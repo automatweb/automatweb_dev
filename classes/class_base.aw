@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.402 2005/06/14 10:12:59 duke Exp $
+// $Id: class_base.aw,v 2.403 2005/06/16 10:59:27 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -35,7 +35,7 @@
 	@property is_translated type=checkbox field=flags method=bitmask ch_value=4 trans=1 // OBJ_IS_TRANSLATED
 	@caption Tõlge kinnitatud
 
-	@groupinfo general caption=Üldine default=1 icon=edit
+	@groupinfo general caption=&Uuml;ldine default=1 icon=edit
 
 	@forminfo add onload=init_storage_object 
 	@forminfo edit onload=load_storage_object
