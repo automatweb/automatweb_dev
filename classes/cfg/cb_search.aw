@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.39 2005/06/16 12:01:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.40 2005/06/16 12:29:00 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -1195,6 +1195,14 @@ class cb_search extends class_base
 
 		if ($show_results)
 		{
+			if ($_SESSION["cb_search_err"] != "")
+			{
+				$this->vars(array("errmsg" => $_SESSION["cb_search_err"]));
+				$this->vars(array(
+					"HAS_ERROR" => $this->parse("HAS_ERROR")
+				));
+				unset($_SESSION["cb_search_err"]);
+			}
 			$this->vars(array(
 				"NO_ERROR" => $this->parse("NO_ERROR")
 			));
