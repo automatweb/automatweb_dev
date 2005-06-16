@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.38 2005/06/13 08:44:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.39 2005/06/16 12:01:53 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -79,6 +79,9 @@
 
 @reltype SUBMIT_CTR value=5 clid=CL_CFGCONTROLLER
 @caption salvestamise kontroller
+
+@reltype SEARCH_VALID_CTR value=6 clid=CL_CFGCONTROLLER
+@caption otsingu valideerimise kontroller
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -1149,30 +1152,59 @@ class cb_search extends class_base
 			"raw_output" => 1
 		));
 
-		classload("vcl/table");
-		$t = new aw_table(array(
-			"layout" => "generic"
-		));
-		$this->mk_result_table(array(
-			"prop" => array(
-				"vcl_inst" => &$t
-			),
-			"obj_inst" => &$ob,
-			"request" => $request,
-		));
-		$table = $t->draw();
+		$show_results = true;
+		if (($sv_ctr = $ob->get_first_obj_by_reltype("RELTYPE_SEARCH_VALID_CTR")))
+		{
+			$ci = $sv_ctr->instance();
+			if ($ci->check_property($sv_ctr->id(), $ob->id(), $request, $request, $request, $ob) == PROP_ERROR)
+			{
+				$show_results = false;
+				$errmsg = $sv_ctr->prop("errmsg");
+			}
+		}
+		
+		if ($show_results)
+		{
+			classload("vcl/table");
+			$t = new aw_table(array(
+				"layout" => "generic"
+			));
+			$this->mk_result_table(array(
+				"prop" => array(
+					"vcl_inst" => &$t
+				),
+				"obj_inst" => &$ob,
+				"request" => $request,
+			));
+			$table = $t->draw();
+		}
 		
 		$this->read_template("show.tpl");
 		$this->vars(array(
 			"form" => $html,
 			"section" => aw_global_get("section"),
 			"table" => $table,
+			"errmsg" => $errmsg
 		));
 
 		// if there is a submit handler controller, then show submit button with text
 		if ($ob->prop("show_submit") && $request["s"])
 		{
 			$this->_do_submit($ob);
+		}
+
+		if ($show_results)
+		{
+			$this->vars(array(
+				"NO_ERROR" => $this->parse("NO_ERROR")
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"HAS_ERROR" => $this->parse("HAS_ERROR"),
+				"SUBMIT_BUTTON" => ""
+			));
 		}
 
 		exit_function("cb_search::show");

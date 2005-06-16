@@ -197,6 +197,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>salvestamise kontroller</caption>
             </SUBMIT_CTR>
+            <SEARCH_VALID_CTR>
+                  <value>6</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>otsingu valideerimise kontroller</caption>
+            </SEARCH_VALID_CTR>
       </reltypes>
 </properties>
 
