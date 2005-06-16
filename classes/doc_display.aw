@@ -99,6 +99,8 @@ class doc_display extends aw_template
 			"SHOW_MODIFIED" => ($doc->prop("show_modified") ? $this->parse("SHOW_MODIFIED") : ""),
 		));
 
+		$this->_do_forum($doc);
+
 		$str = $this->parse();
 		return $str;
 	}
@@ -173,5 +175,36 @@ class doc_display extends aw_template
 		}
 
 		return $text;
+	}
+
+	function _do_forum($doc)
+	{
+		if ($doc->prop("is_forum") &&
+			($this->is_template("FORUM_ADD_SUB") || $this->is_template("FORUM_ADD_SUB_ALWAYS") || $this->is_template("FORUM_ADD"))
+			
+	     	)
+		{
+			$_sect = aw_global_get("section");
+			// calculate the amount of comments this document has
+			// XXX: I could use a way to figure out which variables are present in the template
+			$num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$docid'","cnt");
+			$this->vars(array(
+				"num_comments" => sprintf("%d",$num_comments),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid,"section" => $_sect),"forum"),
+			));
+			$forum = get_instance(CL_FORUM);
+			$fr = $forum->add_comment(array("board" => $docid,"section" => $_sect));
+
+			if ($num_comments > 0)
+			{
+				$this->vars(array("FORUM_ADD_SUB" => $this->parse("FORUM_ADD_SUB")));
+			}
+			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => $this->parse("FORUM_ADD_SUB_ALWAYS")));
+		}
+		else
+		{
+			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => ""));
+			$this->vars(array("FORUM_ADD_SUB" => ""));
+		}
 	}
 }
