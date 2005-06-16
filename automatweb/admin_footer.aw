@@ -94,14 +94,14 @@ if ($sf->is_template("aw_styles"))
 	$styles_done = true;
 };
 
-if (!empty($output_charset))
-{
-	echo iconv($page_charset,$output_charset . "//TRANSLIT",$sf->parse());
-}
-else
-{
+//if (!empty($output_charset))
+//{
+//	echo iconv($page_charset,$output_charset . "//TRANSLIT",$sf->parse());
+//}
+//else
+//{
 	echo $sf->parse();
-};
+//};
 
 if (!$styles_done)
 {
