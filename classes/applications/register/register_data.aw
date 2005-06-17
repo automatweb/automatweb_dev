@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.33 2005/04/21 08:48:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_data.aw,v 1.34 2005/06/17 09:45:53 kristo Exp $
 // register_data.aw - Registri andmed 
 /*
 @classinfo syslog_type=ST_REGISTER_DATA relationmgr=yes no_comment=1
@@ -803,6 +803,40 @@
 @property usertext50 type=text store=no
 @caption Usertext50
 
+---------------- pildiupload -----------
+
+@property userim1 type=releditor reltype=RELTYPE_IMAGE1 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 1
+	
+@property userim2 type=releditor reltype=RELTYPE_IMAGE2 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 2
+
+@property userim3 type=releditor reltype=RELTYPE_IMAGE3 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 3
+
+@property userim4 type=releditor reltype=RELTYPE_IMAGE4 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 4
+
+@property userim5 type=releditor reltype=RELTYPE_IMAGE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Pildiupload 5
+
+--------------- failiupload ------------
+
+@property userfile1 type=releditor reltype=RELTYPE_FILE1 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 1
+
+@property userfile2 type=releditor reltype=RELTYPE_FILE2 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 2
+
+@property userfile3 type=releditor reltype=RELTYPE_FILE3 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 3
+
+@property userfile4 type=releditor reltype=RELTYPE_FILE4 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 4
+
+@property userfile5 type=releditor reltype=RELTYPE_FILE5 rel_id=first use_form=emb field=meta method=serialize
+@caption Failiupload 5
+
 ---------------- seosed ----------------
 
 @reltype VARUSER1 value=1 clid=CL_META
@@ -1047,6 +1081,36 @@
 
 @reltype REGISTER value=10 clid=CL_REGISTER
 @caption Seostatud register
+
+@reltype IMAGE1 value=81 clid=CL_IMAGE
+@caption pilt1
+
+@reltype IMAGE2 value=82 clid=CL_IMAGE
+@caption pilt2
+
+@reltype IMAGE3 value=83 clid=CL_IMAGE
+@caption pilt3
+
+@reltype IMAGE4 value=85 clid=CL_IMAGE
+@caption pilt4
+
+@reltype IMAGE5 value=85 clid=CL_IMAGE
+@caption pilt5
+
+@reltype FILE1 value=86 clid=CL_FILE
+@caption fail1
+
+@reltype FILE2 value=87 clid=CL_FILE
+@caption fail2
+
+@reltype FILE3 value=88 clid=CL_FILE
+@caption fail3
+
+@reltype FILE4 value=89 clid=CL_FILE
+@caption fail4
+
+@reltype FILE5 value=90 clid=CL_FILE
+@caption fail5
 
 */
 

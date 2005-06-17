@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.73 2005/06/10 12:27:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.74 2005/06/17 09:45:53 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -228,6 +228,8 @@ class webform extends class_base
 			"submit" => t("Saada nupp"),
 			"reset" => t("T&uuml;hista nupp"),
 			"button" => t("Prindi nupp"),
+			"releditor_im" => t("Pildi &uuml;leslaadimine"),
+			"releditor_fl" => t("Faili &uuml;leslaadimine"),
 		);
 		$this->def_props = array(
 			"firstname" => t("Eesnimi"),
@@ -886,6 +888,8 @@ class webform extends class_base
 			"submit" => 7,
 			"reset" => 8,
 			"button" => 9,
+			"releditor_im" => 10,
+			"releditor_fl" => 11
 		);
 		$def_props = array();
 		if($this->p_clid == CL_CALENDAR_REGISTRATION_FORM)
@@ -903,7 +907,20 @@ class webform extends class_base
 				{
 					continue;
 				}
-				$prp_count[$prop["type"]]++;
+
+				if ($prop["type"] == "releditor" && substr($prop["name"], 0, 6) == "userim")
+				{
+					$prp_count[$prop["type"]."_im"]++;
+				}
+				else
+				if ($prop["type"] == "releditor" && substr($prop["name"], 0, 8) == "userfile")
+				{
+					$prp_count[$prop["type"]."_fl"]++;
+				}
+				else
+				{
+					$prp_count[$prop["type"]]++;
+				}
 			}
 		}
 		$show_props = array();
@@ -911,26 +928,41 @@ class webform extends class_base
 		// these props won't go to heaven
 		foreach($this->cfgform_i->all_props as $key => $prop)
 		{
+			if ($prop["type"] == "releditor" && substr($prop["name"], 0, 6) == "userim")
+			{
+				$prop["type"] = "releditor_im";
+			}
+			else
+			if ($prop["type"] == "releditor" && substr($prop["name"], 0, 8) == "userfile")
+			{
+				$prop["type"] = "releditor_fl";
+			}
+
 			if(!array_key_exists($prop["type"], $prop_order))
 			{
 				continue;
 			}
+
 			if(!in_array($prop_order[$prop["type"]], $show_props) && !array_key_exists($key, $c_props))
 			{
 				$show_props[$prop_order[$prop["type"]]] = $prop;
 			}
+
 			if(!array_key_exists($key, $c_props))
 			{
 				if($ext_count[$prop["type"]] == 1 && $prop["type"] == "checkbox")
 				{
 					continue;
 				}
+
 				$ext_count[$prop["type"]]++;
 			}
 		}
+
 		$sc = "";
 		$vrs = array();
 		$cnt = 0;
+
 		foreach($def_props as $key => $prop)
 		{
 			if(!array_key_exists($key, $prplist))
@@ -954,6 +986,7 @@ class webform extends class_base
 		}
 		$sc = "";
 		ksort($show_props);
+
 		foreach($show_props as $prop)
 		{
 			$this->vars(array(
@@ -998,6 +1031,16 @@ class webform extends class_base
 			$ext_count = array();
 			foreach($this->cfgform_i->all_props as $key => $prop)
 			{
+				if ($prop["type"] == "releditor" && substr($prop["name"], 0, 6) == "userim")
+				{
+					$prop["type"] = "releditor_im";
+				}
+				else
+				if ($prop["type"] == "releditor" && substr($prop["name"], 0, 8) == "userfile")
+				{
+					$prop["type"] = "releditor_fl";
+				}
+				
 				$ext_count[$prop["type"]]++;
 			}
 			$mark = $arr["request"]["mark"];
@@ -1016,6 +1059,10 @@ class webform extends class_base
 				}
 				$count = (int)$ext_count[$pkey] - (int)$prp_count[$pkey];
 				$pval = (int)$pval;
+
+				$old_pk = $pkey;
+				$pkey = $pkey == "releditor_fl" ? "releditor" : $pkey == "releditor_im" ? "releditor" : $pkey;
+
 				if($count > 0 && !empty($pval))
 				{
 					// now, lets count the real ammount of thing we'll add
@@ -1034,6 +1081,14 @@ class webform extends class_base
 							}
 							if(!array_key_exists($key, $prplist) && $val["type"] == $pkey)
 							{
+								if ($old_pk == "releditor_fl" && substr($val["name"], 0, 8) != "userfile")
+								{
+									continue;
+								}
+								if ($old_pk == "releditor_im" && substr($val["name"], 0, 6) != "userim")
+								{
+									continue;
+								}
 								$prplist[$key] = array(
 									"name" => $key,
 									"ord" => $highest++,
@@ -1635,10 +1690,16 @@ class webform extends class_base
 		$ftype = $arr["obj_inst"]->prop("form_type");
 		$inst = empty($ftype) ? CL_REGISTER_DATA : $ftype;
 		$rd = get_instance($inst);
+
+		
+		$dummy = new object();
+		$dummy->set_class_id($ftype);
+
 		$els = $rd->parse_properties(array(
 			"properties" => $els,
+			"obj_inst" => $dummy,
 		));
-		
+
 		$def_caption_style = $arr["obj_inst"]->prop("def_caption_style");
 		$def_prop_style = $arr["obj_inst"]->prop("def_prop_style");
 		if(!empty($def_caption_style) or !empty($def_prop_style))

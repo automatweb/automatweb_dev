@@ -2483,6 +2483,136 @@
             <store>no</store>
             <caption>Usertext50</caption>
       </property>
+      <property>
+            <name>userim1</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE1</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Pildiupload 1</caption>
+      </property>
+      <property>
+            <name>userim2</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE2</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Pildiupload 2</caption>
+      </property>
+      <property>
+            <name>userim3</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE3</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Pildiupload 3</caption>
+      </property>
+      <property>
+            <name>userim4</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE4</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Pildiupload 4</caption>
+      </property>
+      <property>
+            <name>userim5</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_IMAGE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Pildiupload 5</caption>
+      </property>
+      <property>
+            <name>userfile1</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE1</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Failiupload 1</caption>
+      </property>
+      <property>
+            <name>userfile2</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE2</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Failiupload 2</caption>
+      </property>
+      <property>
+            <name>userfile3</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE3</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Failiupload 3</caption>
+      </property>
+      <property>
+            <name>userfile4</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE4</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Failiupload 4</caption>
+      </property>
+      <property>
+            <name>userfile5</name>
+            <group>texts</group>
+            <table>objects</table>
+            <method>serialize</method>
+            <field>meta</field>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE5</reltype>
+            <rel_id>first</rel_id>
+            <use_form>emb</use_form>
+            <store>no</store>
+            <caption>Failiupload 5</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_REGISTER_DATA</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -2918,6 +3048,56 @@
                   <clid>CL_REGISTER</clid>
                   <caption>Seostatud register</caption>
             </REGISTER>
+            <IMAGE1>
+                  <value>81</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt1</caption>
+            </IMAGE1>
+            <IMAGE2>
+                  <value>82</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt2</caption>
+            </IMAGE2>
+            <IMAGE3>
+                  <value>83</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt3</caption>
+            </IMAGE3>
+            <IMAGE4>
+                  <value>85</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt4</caption>
+            </IMAGE4>
+            <IMAGE5>
+                  <value>85</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>pilt5</caption>
+            </IMAGE5>
+            <FILE1>
+                  <value>86</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail1</caption>
+            </FILE1>
+            <FILE2>
+                  <value>87</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail2</caption>
+            </FILE2>
+            <FILE3>
+                  <value>88</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail3</caption>
+            </FILE3>
+            <FILE4>
+                  <value>89</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail4</caption>
+            </FILE4>
+            <FILE5>
+                  <value>90</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail5</caption>
+            </FILE5>
       </reltypes>
 </properties>
 
