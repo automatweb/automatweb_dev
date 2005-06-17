@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.4 2005/06/17 10:08:10 duke Exp $
 // video.aw - Video 
 /*
 
@@ -31,14 +31,14 @@
 @property src_rp type=textbox
 @caption URL (RealPlayer)
 
-@property capt_rp type=textbox
-@caption Lingi tekst (RealPlayer)
+property capt_rp type=textbox
+caption Lingi tekst (RealPlayer)
 
 @property src_wm type=textbox
 @caption URL (Windows Media)
 
-@property capt_wm type=textbox
-@caption Lingi tekst (Windows Media)
+property capt_wm type=textbox
+caption Lingi tekst (Windows Media)
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Video pilt
@@ -114,7 +114,8 @@ class video extends class_base
 			{
 				$this->vars(array(
 					"vid_url" => $ob->prop($format[0]),
-					"vid_url_capt" => $ob->prop($format[1]),
+					//"vid_url_capt" => $ob->prop($format[1]),
+					"vid_url_capt" => $ob->name(),
 				));
 				$this->vars(array(
 					$format[2] => $this->parse($format[2])
