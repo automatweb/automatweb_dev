@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.57 2005/06/13 11:36:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.58 2005/06/17 09:45:57 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -22,6 +22,13 @@ class releditor extends core
 		$obj_inst = $obj;
 
 		$clid = $arr["prop"]["clid"][0];
+
+		if (empty($clid) && is_object($arr["obj_inst"]))
+		{
+			$relinfo = $arr["obj_inst"]->get_relinfo();
+			$clid = $relinfo[$prop["reltype"]]["clid"][0];
+
+		}
 
 		$props = $arr["prop"]["props"];
 		if (!is_array($props) && !empty($props))
