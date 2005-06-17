@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.46 2005/06/17 07:50:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.47 2005/06/17 10:23:47 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -892,7 +892,9 @@ class project extends class_base
 			{
 
 				$v_o = new object($conn["to"]);
-				$project_videos[$conn["from"]][] = $v_o->properties(); 
+				$tmp = $v_o->properties();
+				$tmp["media_id"] = $conn["to"];
+				$project_videos[$conn["from"]][] = $tmp; 
 
 			};
 		}
