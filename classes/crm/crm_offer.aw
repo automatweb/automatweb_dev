@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.34 2005/06/02 11:47:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.35 2005/06/17 11:35:06 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -645,6 +645,10 @@ class crm_offer extends class_base
 
 	function generate_offer($o)
 	{
+		// try pdf
+		$this->_try_pdf($o);
+		
+
 		$this->read_template("offer_html.tpl");
 
 		$html = "";
@@ -761,6 +765,56 @@ class crm_offer extends class_base
 		$mgr = get_instance(CL_CRM_OFFER_MGR);
 		$new = $mgr->_copy_object(obj($arr["based_on"]), $arr["parent"] ? $arr["parent"] : $arr["id"]);
 		return $arr["ru"];
+	}
+
+	function _try_pdf($o)
+	{
+		$this->read_template("offer_xsl.tpl");
+
+		$orderer = "";
+		if (is_oid($o->prop("orderer")) && $this->can("view", $o->prop("orderer")))
+		{
+			$orderer_o = obj($o->prop("orderer"));
+			$orderer = $orderer_o->name();
+		}
+		$implementor = "";
+		$imp_o = $o->get_first_obj_by_reltype("RELTYPE_PREFORMER");
+		if (is_object($imp_o))
+		{
+			$implementor = $imp_o->name();
+		}
+
+		$lg = $imp_o->prop("logo");
+
+		$this->vars(array(
+			"name" => $o->name(),
+			"orderer" => $orderer,
+			"implementor" => $implementor,
+			"date" => locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
+			"logo" => $lg
+		));
+
+		$fo = $this->parse();
+
+		// write to temp file
+		$fn_in = tempnam(aw_ini_get("server.tmpdir"), "aw-offer-gen");
+		$fn_out = tempnam(aw_ini_get("server.tmpdir"), "aw-offer-gen");
+		$this->put_file(array(
+			"file" => $fn_in,
+			"content" => $fo
+		));
+
+		chdir(aw_ini_get("server.fop_dir"));
+
+		$fop_cmd = aw_ini_get("server.fop_cmd")." ".$fn_in." ".$fn_out;
+		$res = `$fop_cmd`;
+
+		header("Content-type: application/pdf");
+		echo $this->get_file(array("file" => $fn_out));
+
+		unlink($fn_in);
+		unlink($fn_out);
+		die();
 	}
 }
 ?>

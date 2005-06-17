@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.47 2005/06/17 10:23:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.48 2005/06/17 11:35:06 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -2201,6 +2201,11 @@ class project extends class_base
 		}
 
 		return $chart->draw_chart ();
+	}
+
+	function generate_html($o, $item)
+	{
+		return "";
 	}
 };
 ?>
