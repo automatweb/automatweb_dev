@@ -475,6 +475,7 @@ property projects_listing_toolbar type=toolbar no_caption=1 parent=projects_tool
 @caption Pakkumise fail
 
 @classinfo no_status=1
+@classinfo r2=yes
 			
 */
 /*

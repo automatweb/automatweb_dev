@@ -809,6 +809,7 @@
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
             <no_status>1</no_status>
+            <r2>yes</r2>
       </classinfo>
       <groupinfo>
             <general_sub>
