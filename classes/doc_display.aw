@@ -100,6 +100,7 @@ class doc_display extends aw_template
 		));
 
 		$this->_do_forum($doc);
+		$this->_do_charset($doc);
 
 		$str = $this->parse();
 		return $str;
@@ -206,5 +207,17 @@ class doc_display extends aw_template
 			$this->vars(array("FORUM_ADD_SUB_ALWAYS" => ""));
 			$this->vars(array("FORUM_ADD_SUB" => ""));
 		}
+	}
+
+	function _do_charset($doc)
+	{
+		if ($this->template_has_var("charset"))
+		{
+			$_langs = get_instance("languages");
+			$_ld = $_langs->fetch(aw_global_get("lang_id"));
+			$this->vars(array(
+				"charset" => $_ld["charset"]
+			));
+		};
 	}
 }
