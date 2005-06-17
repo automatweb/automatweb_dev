@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.27 2005/04/28 07:57:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.28 2005/06/17 12:13:06 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -280,7 +280,7 @@ class pot_scanner extends core
 		$grps = $cu->get_groupinfo();
 		foreach($grps as $gn => $gd)
 		{
-			if (($gn == "general" && $gd["caption"] == "Üldine") && basename($file_from) != "class_base.aw")
+			if (($gn == "general" && $gd["caption"] == "&Uuml;ldine") && basename($file_from) != "class_base.aw")
 			{
 				continue;
 			}
