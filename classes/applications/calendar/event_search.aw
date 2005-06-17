@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.65 2005/06/07 14:08:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.66 2005/06/17 10:31:56 kristo Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1434,6 +1434,58 @@ class event_search extends class_base
 		{
 			return (int)($el1["ord"] - $el2["ord"]);
 		}
+	}
+
+    function get_search_results($arr)
+        {
+                // 1. pane kokku object list
+                $ob = new object($arr["id"]);
+                $formconfig = $ob->meta("formconfig");
+                $ft_fields = $ob->prop("ftsearch_fields");
+                $all_projects1 = new object_list(array(
+                        "parent" => array($formconfig["project1"]["rootnode"]),
+                        "class_id" => array(CL_PROJECT, CL_PLANNER),
+                ));
+                $all_projects2 = new object_list(array(
+                        "parent" => array($formconfig["project2"]["rootnode"]),
+                        "class_id" => array(CL_PROJECT, CL_PLANNER),
+                ));
+                $par1 = $all_projects1->ids();
+                $par2 = $all_projects2->ids();
+
+                $search = array();
+                $search["parent"] = array_merge($par1,$par2);
+
+               $ft_fields = $ob->meta("ftsearch_fields");
+               $or_parts = array("name" => "%" . $arr["str"] . "%");
+               foreach($ft_fields as $ft_field)
+               {
+                       $or_parts[$ft_field] = "%" . $arr["str"] . "%";
+
+               };
+               $search[] = new object_list_filter(array(
+                       "logic" => "OR",
+                       "conditions" => $or_parts,
+               ));
+                $search["sort_by"] = "planner.start";
+                $search["class_id"] = array(CL_CRM_MEETING, CL_CALENDAR_EVENT);
+                $start_tm = strtotime("today 0:00");
+                $end_tm = strtotime("+30 days", $start_tm);
+                $search["CL_CALENDAR_EVENT.start1"] = new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, $end_tm);
+                $ol = new object_list($search);
+                $ret = array();
+                $baseurl = aw_ini_get("baseurl");
+                foreach($ol->arr() as $o)
+                {
+                        $orig = $o->get_original();
+                        $oid = $orig->id();
+                        $ret[$oid] = array(
+                                "url" => $baseurl . "/" . $oid,
+                                "title" => $orig->name(),
+                                "modified" => $orig->prop("start1"),
+                        );
+                };
+		return $ret;
 	}
 }
 ?>
