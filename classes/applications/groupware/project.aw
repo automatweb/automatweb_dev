@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.45 2005/06/02 09:54:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.46 2005/06/17 07:50:10 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -603,7 +603,7 @@ class project extends class_base
 				};
 			};
 		};
-		$limit_num = 100;
+		$limit_num = 300;
 
 		$parent = join(",",$parents);
 
@@ -716,8 +716,8 @@ class project extends class_base
 
 			if ($active_lang_only == 1 && $pr_obj->lang_id() != $lang_id)
 			{
-				//dbg::p1($row["name"]);
-				//dbg::p1("skip2");
+				dbg::p1($row["name"]);
+				dbg::p1("skip2");
 
 				continue;
 			};
@@ -780,7 +780,13 @@ class project extends class_base
 				break;
 			}*/
 		};
-		
+
+		$pr_list = new object_list(array(
+			"class_id" => CL_PROJECT,
+		));	
+
+		$pr_data = $pr_list->names();
+
 		// kas ma saan pr-i hiljem arvutada?
 		exit_function("project::query");
 
@@ -813,7 +819,6 @@ class project extends class_base
 				//$projects[$to] = $from;
 			//};
 		};
-		obj_set_opt("no_auto_translation",0);
 
 
 		// nii .. ühesõnaga me diilime kogu aeg originaalprojektidega siin. eks?
@@ -822,10 +827,59 @@ class project extends class_base
 			"from.lang_id" => aw_global_get("lang_id"),
 			"type" => 17,
 		));
+		//foreach($conns as $conn)
+		//{
+			//print $conn["to"] . " - " . $conn["from"];
+			//$tx = new object($conn["from"]);
+			//arr($tx->properties());
+			//print "<br>";
+			/*
+			if (aw_global_get("uid") == "meff")
+			{
+				print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
+			};
+			*/
+
+			//$web_pages[$conn["to"]] = $conn["from"];
+		//};
+
+		/*
+		if (aw_global_get("uid") == "meff")
+		{
+			print "<hr>";
+		};
+		*/
+		$conns = $c->find(array(
+			//"to" => $projects,
+			//"to" => $projects,
+			"from.lang_id" => aw_global_get("lang_id"),
+			"from.class_id" => CL_MENU,
+			"type" => 17,
+		));
+		$clinf = aw_ini_get("classes");
 		foreach($conns as $conn)
 		{
+			//print $conn["to"] . " - " . $conn["from"];
+			//$tx = new object($conn["from"]);
+			//arr($tx->properties());
+			//print "<br>";
 			$web_pages[$conn["to"]] = $conn["from"];
+			/*
+			if (aw_global_get("uid") == "meff")
+			{
+				// nii, aga mind huvitab see, et kas mul on seos olemas aktiivse keele jaoks 
+
+				// ja mida ma teen, kui ei ole? Kuidas ma saan selle õige asja leida?
+				$o1 = new object($conn["from"]);
+				$o2 = new object($conn["to"]);
+
+				//print "connection from " . $conn["from"] . " to " .$conn["to"] . "<br>";
+				printf("connection from %s %s (%s | %s) to %s %s (%s)<br>",$clinf[$o1->class_id()]["name"],$o1->name(),$o1->id(),$o1->lang(),$clinf[$o2->class_id()]["name"],$o2->name(),$o2->id());
+			};
+			*/
 		};
+
+		obj_set_opt("no_auto_translation",0);
 
 		if (1 == $arr["project_media"])
 		{
@@ -838,7 +892,7 @@ class project extends class_base
 			{
 
 				$v_o = new object($conn["to"]);
-				$project_videos[$conn["from"]] = $v_o->properties(); 
+				$project_videos[$conn["from"]][] = $v_o->properties(); 
 
 			};
 		}
@@ -886,6 +940,13 @@ class project extends class_base
 
 		$baseurl = aw_ini_get("baseurl");
 
+		/*
+		if (aw_global_get("uid") == "meff")
+		{
+			arr($web_pages);
+		};
+		*/
+
 		foreach($events as $key => $event)
 		{
 			$prid = $event["pr"];
@@ -893,13 +954,29 @@ class project extends class_base
 			{
 				$prid = $projects[$prid];
 			};
+
+			/*
+			if (aw_global_get("uid") == "meff")
+			{
+				printf("Event name %s, id %s, project %s, prid %s<br>",$event["name"],$event["id"],$event["pr"],$prid);
+
+			};
+			*/
 			if ($web_pages[$prid])
 			{
 				$web_page_id = $web_pages[$prid];
 				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
 				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
 			};
-
+			
+			if ($web_pages[$event["pr"]])
+			{
+				$web_page_id = $web_pages[$event["pr"]];
+				$events[$key]["project_weblink"] =  $baseurl . "/" . $web_page_id;
+				$events[$key]["project_day_url"] = $baseurl . "/" . $web_page_id . "?view=3&date=" . date("d-m-Y",$event["start"]);
+				//$events[$key]["project_name_ucase"] = $pr_data[$event["pr"]];
+			};
+			
 			if ($project_images[$event["id"]])
 			{
 				$events[$key]["first_image"] = $project_images[$event["id"]];

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.68 2005/06/08 15:07:16 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.69 2005/06/17 07:49:00 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1525,10 +1525,16 @@ class vcalendar extends aw_template
 
 		if ($this->evt_tpl->is_template("project_media"))
 		{
-			$this->evt_tpl->vars($evt["media"]);
-			$x = $this->evt_tpl->parse("project_media");
+			// support single items as well as arrays
+			$media_items = new aw_array($evt["media"]);
+			$media_str = "";
+			foreach($media_items->get() as $media_item)
+			{
+				$this->evt_tpl->vars($media_item);
+				$media_str .= $this->evt_tpl->parse("project_media");
+			};
 			$this->evt_tpl->vars(array(
-				"project_media" => $x,
+				"project_media" => $media_str,
 			));
 		};
 		
