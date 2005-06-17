@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.5 2005/06/15 13:29:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.6 2005/06/17 07:43:31 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -1191,7 +1191,7 @@ class cb_form_chain extends class_base
 						"name" => $k."_err",
 						"type" => "text",
 						"no_caption" => 1,
-						"value" => "<font color=\"red\">".$_err."</font>",
+						"value" => "<span class=\"cbfcerror\">".$_err."</span>",
 						"store" => "no"
 					);
 				}
