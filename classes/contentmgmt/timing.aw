@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.10 2005/04/21 08:22:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/timing.aw,v 1.11 2005/06/17 14:53:17 dragut Exp $
 // timing.aw - Ajaline aktiivsus
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_DOCUMENT, on_tconnect_from)
@@ -10,6 +10,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_DOCUMENT, on_tdiscon
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_MENU, on_tdisconnect_from)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_DOCUMENT, on_tdisconnect_to)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_MENU, on_tdisconnect_to)
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_TIMING, init_scheduler)
 
 @classinfo syslog_type=ST_TIMING relationmgr=yes no_status=1
 
@@ -21,6 +22,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_TO, CL_MENU, on_tdisconnect_t
 
 @property deactivate type=datetime_select year_from=2004 year_to=2010 field=meta method=serialize
 @caption Deaktiveerida
+
+
+@property archive_time type=datetime_select year_from=2004 year_to=2010 field=meta method=serialize
+@caption Arhiveerimise aeg
+
+@property archive_folder type=select field=meta method=serialize
+@caption Arhiivi kaust
+@comment Kaust kuhu objekt liigutatakse
+
+@property delete_object type=checkbox ch_value=1 field=meta method=serialize 
+@caption Kustuta objekt
+@comment Objekt kustutatakse arhiveerimise asemel
+
 
 @groupinfo objects caption="Seotud objektid" submit=no
 
@@ -117,6 +131,28 @@ class timing extends class_base
 					$prop["value"] = -1;
 				}
 				break;
+			case "archive_time":
+				if ($arr['new'])
+				{
+					$prop['value'] = -1;
+				}
+				break;
+			case "archive_folder":
+				$archive_folder_ids = aw_ini_get("timing.archive_folders");
+				if (empty($archive_folder_ids))
+				{
+					$archive_folder_ids[1] = $arr['obj_inst']->parent();
+				}
+//				$prop['options'][0] = "---";
+				foreach ($archive_folder_ids as $archive_folder_id)
+				{
+					if ($this->can("add", $archive_folder_id))
+					{
+						$archive_folder_obj = new object($archive_folder_id);
+						$prop['options'][$archive_folder_id] = $archive_folder_obj->name();
+					}
+				}
+				break;
 			case "objects_toolbar":
 				$this->objects_toolbar($arr);
 				break;
@@ -127,36 +163,65 @@ class timing extends class_base
 		return $retval;
 	}
 	
-	function callback_post_save($arr)
+	function init_scheduler($arr)
 	{
 		$scheduler = get_instance("scheduler");
 		$atrue = true;
 		$datrue = true;
-		$act = $arr["request"]["activate"];
-		$deact = $arr["request"]["deactivate"];
-		foreach(safe_array($act) as $value)
+		$archive_true = true;
+
+		// well, when i use this nifty messaging system, then i don't have any $request array
+		// so i have to get those times somewhere else
+		// maybe i'll get them from timing object properties
+		$timing_obj = new object($arr['oid']);
+		$act = $timing_obj->prop("activate");
+		$deact = $timing_obj->prop("deactivate");
+		$archive = $timing_obj->prop("archive_time");
+		$delete = $timing_obj->prop("delete_object");
+
+		if (empty($act) || $act == -1)
 		{
-			if($value == "---")
-			{
-				$atrue = false;
-			}
+			$atrue = false;
 		}
-		foreach(safe_array($deact) as $value)
+		if (empty($deact) || $deact == -1)
 		{
-			if($value == "---")
-			{
-				$datrue = false;
-			}
+			$datrue = false;
+		}
+		if (empty($archive) || $archive == -1)
+		{
+			$archive_true = false;
+		}
+		if($delete == 1)
+		{
+			$event = $this->mk_my_orb("init_action", array(
+				"subaction" => "delete",
+				"id" => $arr['oid'],
+			));
+
+			// a possibility to fix this archive/delete conflict is just to make 
+			// delete action always happen one minute later
+			$scheduler->remove(array("event" => $event));
+			$scheduler->add(array(
+				"time" => $archive + 60,
+				"event" => $event,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
+			// if the object is going to be deleted, then i see no reason to
+			// schedule those activation/deactivation/archive tasks
+			$atrue = false;
+			$datrue = false;
+			$archive_true = false;
 		}
 		if($atrue)
 		{
 			$event = $this->mk_my_orb("init_action", array(
 				"subaction" => "activate", 
-				"id" => $arr["obj_inst"]->id(),
+				"id" => $arr['oid'],
 			));
 			$scheduler->remove(array("event" => $event));
 			$scheduler->add(array(
-				"time" => mktime($act["hour"], $act["minute"], 0, $act["month"], $act["day"], $act["year"]),
+				"time" => $act,
 				"event" =>  $event,
 				"uid" => aw_global_get("uid"),
 				"auth_as_local_user" => true,
@@ -166,16 +231,32 @@ class timing extends class_base
 		{
 			$event = $this->mk_my_orb("init_action", array(
 				"subaction" => "deactivate", 
-				"id" => $arr["obj_inst"]->id(),
+				"id" => $arr['oid'],
 			));
 			$scheduler->remove(array("event" => $event));
 			$scheduler->add(array(
-				"time" => mktime($deact["hour"], $deact["minute"], 0, $deact["month"], $deact["day"], $deact["year"]), 
+				"time" => $deact,
 				"event" => $event,
 				"uid" => aw_global_get("uid"),
 				"auth_as_local_user" => true,
 			));
 		}
+
+		if($archive_true)
+		{
+			$event = $this->mk_my_orb("init_action", array(
+				"subaction" => "archive",
+				"id" => $arr['oid'],
+			));
+			$scheduler->remove(array("event" => $event));
+			$scheduler->add(array(
+				"time" => $archive,
+				"event" => $event,
+				"uid" => aw_global_get("uid"),
+				"auth_as_local_user" => true,
+			));
+		}
+
 		//$time, $event, $uid = "", $password = "", $rep_id = 0, $event_id = "", $sessid ="")
 	}
 	
@@ -261,8 +342,26 @@ class timing extends class_base
 		foreach($objs as $obz)
 		{
 			$obj = $obz->to();
-			$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
-			$obj->save();
+			switch ($arr["subaction"])
+			{
+				case "delete":
+					$obj->delete();	
+					break;
+				case "activate":
+					$obj->set_status(STAT_ACTIVE);
+					$obj->save();
+					break;
+				case "deactivate":
+					$obj->set_status(STAT_NOTACTIVE);
+					$obj->save();
+					break;
+				case "archive":
+					$obj->set_parent($obj_inst->prop("archive_folder"));
+					$obj->save();
+					break;
+//				$obj->set_status(($arr["subaction"] == "activate" ? STAT_ACTIVE : STAT_NOTACTIVE));
+			}
+//			$obj->save();
 		}
 		$mait = get_instance("cache");
 		$mait->full_flush();

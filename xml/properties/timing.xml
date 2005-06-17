@@ -23,6 +23,38 @@
             <caption>Deaktiveerida</caption>
       </property>
       <property>
+            <name>archive_time</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <year_from>2004</year_from>
+            <year_to>2010</year_to>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Arhiveerimise aeg</caption>
+      </property>
+      <property>
+            <name>archive_folder</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Arhiivi kaust</caption>
+            <comment>Kaust kuhu objekt liigutatakse</comment>
+      </property>
+      <property>
+            <name>delete_object</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kustuta objekt</caption>
+            <comment>Objekt kustutatakse arhiveerimise asemel</comment>
+      </property>
+      <property>
             <name>objects_toolbar</name>
             <table>objects</table>
             <group>objects</group>
