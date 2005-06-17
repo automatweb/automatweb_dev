@@ -938,6 +938,21 @@ class _int_object
 		return $GLOBALS["properties"][$this->obj["class_id"]];
 	}
 
+	function get_relinfo()
+	{
+		return $GLOBALS["relinfo"][$this->obj["class_id"]];
+	}
+
+	function get_tableinfo()
+	{
+		return $GLOBALS["tableinfo"][$this->obj["class_id"]];
+	}
+
+	function get_classinfo()
+	{
+		return $GLOBALS["classinfo"][$this->obj["class_id"]];
+	}
+
 	function prop($param)
 	{
 		$retval = $this->_int_get_prop($param);

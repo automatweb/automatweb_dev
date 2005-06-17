@@ -370,6 +370,21 @@ class object
 		return $GLOBALS["objects"][$this->oid]->get_property_list();
 	}
 
+	function get_relinfo()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_relinfo();
+	}
+
+	function get_tableinfo()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_tableinfo();
+	}
+
+	function get_classinfo()
+	{
+		return $GLOBALS["objects"][$this->oid]->get_classinfo();
+	}
+
 	function set_prop($key, $value)
 	{
 		return $GLOBALS["objects"][$this->oid]->set_prop($key, $value);
