@@ -317,6 +317,54 @@ msgstr ""
 msgid "Omaduse User-defined checkbox 5 (userch5) help"
 msgstr ""
 
+# classes/applications/groupware/project.aw:prop_goal_tb
+msgid "Omaduse  (goal_tb) caption"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_tb_comment
+msgid "Omaduse  (goal_tb) kommentaar"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_tb_help
+msgid "Omaduse  (goal_tb) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_tree
+msgid "Omaduse  (goal_tree) caption"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_tree_comment
+msgid "Omaduse  (goal_tree) kommentaar"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_tree_help
+msgid "Omaduse  (goal_tree) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_table
+msgid "Omaduse  (goal_table) caption"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_table_comment
+msgid "Omaduse  (goal_table) kommentaar"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goal_table_help
+msgid "Omaduse  (goal_table) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goals_gantt
+msgid "Omaduse  (goals_gantt) caption"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goals_gantt_comment
+msgid "Omaduse  (goals_gantt) kommentaar"
+msgstr ""
+
+# classes/applications/groupware/project.aw:prop_goals_gantt_help
+msgid "Omaduse  (goals_gantt) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:group_general2
 msgid "Grupi Üldine (general2) pealkiri"
 msgstr "General"
@@ -381,6 +429,30 @@ msgstr "Data"
 msgid "Grupi Andmed (userdefined) help"
 msgstr ""
 
+# classes/applications/groupware/project.aw:group_goals
+msgid "Grupi Verstapostid (goals) pealkiri"
+msgstr "Goals"
+
+# classes/applications/groupware/project.aw:group_goals_help
+msgid "Grupi Verstapostid (goals) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_goals_edit
+msgid "Grupi Muuda (goals_edit) pealkiri"
+msgstr "Edit"
+
+# classes/applications/groupware/project.aw:group_goals_edit_help
+msgid "Grupi Muuda (goals_edit) help"
+msgstr ""
+
+# classes/applications/groupware/project.aw:group_goals_gantt
+msgid "Grupi Vaata (goals_gantt) pealkiri"
+msgstr "View"
+
+# classes/applications/groupware/project.aw:group_goals_gantt_help
+msgid "Grupi Vaata (goals_gantt) help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:rel_RELTYPE_SUBPROJECT
 msgid "Seose alamprojekt (RELTYPE_SUBPROJECT) tekst"
 msgstr "subproject"
@@ -425,26 +497,54 @@ msgstr "implementor"
 msgid "Seose Video (RELTYPE_PRJ_VIDEO) tekst"
 msgstr "video"
 
-#: classes/applications/groupware/project.aw:174
+#: classes/applications/groupware/project.aw:196
 msgid "Nädala vaade"
 msgstr "Week view"
 
-#: classes/applications/groupware/project.aw:1105
+#: classes/applications/groupware/project.aw:1189
 msgid "Uus"
 msgstr "New"
 
-#: classes/applications/groupware/project.aw:1137
+#: classes/applications/groupware/project.aw:1221
 msgid "Alamprojekt"
 msgstr "Subproject"
 
-#: classes/applications/groupware/project.aw:1242
+#: classes/applications/groupware/project.aw:1326
 msgid "Etendus"
 msgstr "Show"
 
-#: classes/applications/groupware/project.aw:1466
+#: classes/applications/groupware/project.aw:1550
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr "This class can not be used for entering events"
 
-#: classes/applications/groupware/project.aw:1527
+#: classes/applications/groupware/project.aw:1611
 msgid "header"
 msgstr "header"
+
+#: classes/applications/groupware/project.aw:1999
+msgid "Lisa"
+msgstr "Add"
+
+#: classes/applications/groupware/project.aw:2010
+msgid "Verstapost"
+msgstr "Goal"
+
+#: classes/applications/groupware/project.aw:2021
+msgid "Toimetus"
+msgstr "Event"
+
+#: classes/applications/groupware/project.aw:2028
+msgid "Kustuta"
+msgstr "Delete"
+
+#: classes/applications/groupware/project.aw:2055
+msgid "Nimi"
+msgstr "Name"
+
+#: classes/applications/groupware/project.aw:2062
+msgid "Algus"
+msgstr "Begin"
+
+#: classes/applications/groupware/project.aw:2072
+msgid "L&otilde;pp"
+msgstr "End"

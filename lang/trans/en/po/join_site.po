@@ -390,18 +390,22 @@ msgid ""
 "<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"
 msgstr "<font color='#FF0000'>Following field must be filled!</font>"
 
-#: classes/contentmgmt/join/join_site.aw:747
+#: classes/contentmgmt/join/join_site.aw:758
+msgid "Salvesta"
+msgstr "Save"
+
+#: classes/contentmgmt/join/join_site.aw:785
 msgid "Liitun"
 msgstr "Join"
 
-#: classes/contentmgmt/join/join_site.aw:1467
+#: classes/contentmgmt/join/join_site.aw:1567
 msgid "Liitumise meili from aadress (%s)"
 msgstr "Join mail from address (%s)"
 
-#: classes/contentmgmt/join/join_site.aw:1478
+#: classes/contentmgmt/join/join_site.aw:1578
 msgid "Liitumise meili subjekt (%s)"
 msgstr "Join mail subject (%s)"
 
-#: classes/contentmgmt/join/join_site.aw:1491
+#: classes/contentmgmt/join/join_site.aw:1591
 msgid "Liitumise meil (%s)"
 msgstr "Join mail (%s)"

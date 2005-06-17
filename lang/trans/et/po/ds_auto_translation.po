@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:17 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,20 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
 #: classes/core/obj/ds_auto_translation.aw:100
-msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation to object %s!"
+msgid ""
+"ds_auto_translation::get_objdata(%s): found more than one translation "
+"relation to object %s!"
 msgstr ""
 
 #: classes/core/obj/ds_auto_translation.aw:221
-msgid "ds_auto_translation::get_objdata(%s): found more than one translation relation from object %s pointing to an object with lang id %s!"
+msgid ""
+"ds_auto_translation::get_objdata(%s): found more than one translation "
+"relation from object %s pointing to an object with lang id %s!"
 msgstr ""
 
-#: classes/core/obj/ds_auto_translation.aw:295
-msgid "ds_auto_translation::read_properties(): no original object id for object %s in get_objdata cache!"
+#: classes/core/obj/ds_auto_translation.aw:301
+msgid ""
+"ds_auto_translation::read_properties(): no original object id for object %s "
+"in get_objdata cache!"
 msgstr ""
 
-#: classes/core/obj/ds_auto_translation.aw:327
-msgid "ds_auto_translation::read_properties(): no info about object %s in get_objdata cache!"
+#: classes/core/obj/ds_auto_translation.aw:333
+msgid ""
+"ds_auto_translation::read_properties(): no info about object %s in "
+"get_objdata cache!"
 msgstr ""
-

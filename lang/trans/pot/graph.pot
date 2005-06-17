@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:52 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -10,7 +10,303 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/graph.aw:78 classes/graph.aw:342
+#: classes/applications/graph/graph.aw:prop_type
+msgid "Omaduse T&uuml;&uuml;p (type) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_type_comment
+msgid "Omaduse T&uuml;&uuml;p (type) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_type_help
+msgid "Omaduse T&uuml;&uuml;p (type) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_ycount
+msgid "Omaduse Andmegruppe (ycount) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_ycount_comment
+msgid "Omaduse Andmegruppe (ycount) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_ycount_help
+msgid "Omaduse Andmegruppe (ycount) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_data
+msgid "Omaduse X-Telje andmed (x_axis_data) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_data_comment
+msgid "Omaduse X-Telje andmed (x_axis_data) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_data_help
+msgid "Omaduse X-Telje andmed (x_axis_data) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_data
+msgid "Omaduse Y-Telje andmed (y_axis_data) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_data_comment
+msgid "Omaduse Y-Telje andmed (y_axis_data) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_data_help
+msgid "Omaduse Y-Telje andmed (y_axis_data) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title
+msgid "Omaduse Pealkiri (title) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title_comment
+msgid "Omaduse Pealkiri (title) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title_help
+msgid "Omaduse Pealkiri (title) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title_col
+msgid "Omaduse Pealkirja v&auml;rv (title_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title_col_comment
+msgid "Omaduse Pealkirja v&auml;rv (title_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_title_col_help
+msgid "Omaduse Pealkirja v&auml;rv (title_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_back_col
+msgid "Omaduse Tausta v&auml;rv (back_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_back_col_comment
+msgid "Omaduse Tausta v&auml;rv (back_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_back_col_help
+msgid "Omaduse Tausta v&auml;rv (back_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_width
+msgid "Omaduse Laius (width) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_width_comment
+msgid "Omaduse Laius (width) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_width_help
+msgid "Omaduse Laius (width) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_height
+msgid "Omaduse K&otilde;rgus (height) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_height_comment
+msgid "Omaduse K&otilde;rgus (height) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_height_help
+msgid "Omaduse K&otilde;rgus (height) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_frame
+msgid "Omaduse Raam (frame) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_frame_comment
+msgid "Omaduse Raam (frame) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_frame_help
+msgid "Omaduse Raam (frame) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_inside
+msgid "Omaduse Sisemine laius (inside) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_inside_comment
+msgid "Omaduse Sisemine laius (inside) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_inside_help
+msgid "Omaduse Sisemine laius (inside) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_text
+msgid "Omaduse Y Telje tekst (y_axis_text) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_text_comment
+msgid "Omaduse Y Telje tekst (y_axis_text) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_text_help
+msgid "Omaduse Y Telje tekst (y_axis_text) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_col
+msgid "Omaduse Y Telje teksti v&auml;rv (y_axis_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_col_comment
+msgid "Omaduse Y Telje teksti v&auml;rv (y_axis_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_axis_col_help
+msgid "Omaduse Y Telje teksti v&auml;rv (y_axis_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_y_val
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_y_val_comment
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_y_val_help
+msgid "Omaduse N&auml;itan Y teljel max ja min v&auml;&auml;rtusi (show_y_val) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_text
+msgid "Omaduse X Telje tekst (x_axis_text) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_text_comment
+msgid "Omaduse X Telje tekst (x_axis_text) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_text_help
+msgid "Omaduse X Telje tekst (x_axis_text) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_col
+msgid "Omaduse X Telje teksti v&auml;rv (x_axis_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_col_comment
+msgid "Omaduse X Telje teksti v&auml;rv (x_axis_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_x_axis_col_help
+msgid "Omaduse X Telje teksti v&auml;rv (x_axis_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid
+msgid "Omaduse Y telje &uuml;hikute arv (y_grid) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid_comment
+msgid "Omaduse Y telje &uuml;hikute arv (y_grid) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid_help
+msgid "Omaduse Y telje &uuml;hikute arv (y_grid) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid_col
+msgid "Omaduse Y Telje &uuml;hikute v&auml;rv (y_grid_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid_col_comment
+msgid "Omaduse Y Telje &uuml;hikute v&auml;rv (y_grid_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_y_grid_col_help
+msgid "Omaduse Y Telje &uuml;hikute v&auml;rv (y_grid_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_grid_val
+msgid "Omaduse N&auml;itan gridil v&auml;&auml;rtusi (show_grid_val) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_grid_val_comment
+msgid "Omaduse N&auml;itan gridil v&auml;&auml;rtusi (show_grid_val) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_show_grid_val_help
+msgid "Omaduse N&auml;itan gridil v&auml;&auml;rtusi (show_grid_val) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_fir_col
+msgid "Omaduse Andmede v&auml;rv (fir_col) caption"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_fir_col_comment
+msgid "Omaduse Andmede v&auml;rv (fir_col) kommentaar"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:prop_fir_col_help
+msgid "Omaduse Andmede v&auml;rv (fir_col) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data
+msgid "Grupi Andmed (data) pealkiri"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data_help
+msgid "Grupi Andmed (data) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data_settings
+msgid "Grupi M&auml;&auml;rangud (data_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data_settings_help
+msgid "Grupi M&auml;&auml;rangud (data_settings) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data_entry
+msgid "Grupi Sisestamine (data_entry) pealkiri"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_data_entry_help
+msgid "Grupi Sisestamine (data_entry) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_settings
+msgid "Grupi Seaded (settings) pealkiri"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:group_settings_help
+msgid "Grupi Seaded (settings) help"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:108
+msgid "Tulbad"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:109
+msgid "Jooned"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:110
+msgid "Tort"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:146
+msgid "Grupp"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:152
+msgid "Andmed"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:158
+msgid "V&auml;rv"
+msgstr ""
+
+#: classes/applications/graph/graph.aw:233 classes/applications/graph/graph.aw:497
 msgid "Tiitel"
 msgstr ""
 

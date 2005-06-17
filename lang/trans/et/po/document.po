@@ -9,69 +9,49 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/document.aw:407
+#: classes/document.aw:418
 msgid "Viimati muudetud:"
 msgstr ""
 
-#: classes/document.aw:620
+#: classes/document.aw:631
 msgid "<br /><B>Edasi loe ajakirjast!</b></font>"
 msgstr ""
 
-#: classes/document.aw:644
+#: classes/document.aw:655
 msgid "Loe edasi"
 msgstr ""
 
-#: classes/document.aw:1071 classes/document.aw:1120
+#: classes/document.aw:1082 classes/document.aw:1131
 msgid "Vaata lisaks:"
 msgstr ""
 
-#: classes/document.aw:1076 classes/document.aw:1125
+#: classes/document.aw:1087 classes/document.aw:1136
 msgid "Samal teemal:"
 msgstr ""
 
-#: classes/document.aw:2868 classes/document.aw:3448
+#: classes/document.aw:2317
 msgid "Pealkiri"
 msgstr ""
 
-#: classes/document.aw:2875
+#: classes/document.aw:2324
 msgid "Kuup&auml;ev"
 msgstr ""
 
-#: classes/document.aw:2883 classes/document.aw:3466
+#: classes/document.aw:2332
 msgid "Autor"
 msgstr ""
 
-#: classes/document.aw:3406
+#: classes/document.aw:2855
 msgid ""
 "<font face='arial'>Toimub staatiliste lehtede\tgenereerimine, palun oodake!"
 "<br /><br />\n"
 "\n"
 msgstr ""
 
-#: classes/document.aw:3436
+#: classes/document.aw:2885
 msgid "Staatilised lehek&uuml;ljed loodud!<br />\n"
 msgstr ""
 
-#: classes/document.aw:3438
+#: classes/document.aw:2887
 msgid "tagasi dokumendi muutmise juurde"
-msgstr ""
-
-#: classes/document.aw:3454
-msgid "Lead"
-msgstr ""
-
-#: classes/document.aw:3460
-msgid "Sisu"
-msgstr ""
-
-#: classes/document.aw:3476
-msgid "Periood"
-msgstr ""
-
-#: classes/document.aw:3536
-msgid "Objektiotsing"
-msgstr ""
-
-#: classes/document.aw:3536
-msgid "Dokumentide otsing"
 msgstr ""

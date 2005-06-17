@@ -90,3 +90,11 @@ msgstr ""
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
+msgid "Galerii "
+msgstr ""
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
+msgid " pildid"
+msgstr ""
+

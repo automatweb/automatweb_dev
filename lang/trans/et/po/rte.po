@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 11 Apr 2005 13:00:56 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -87,4 +87,44 @@ msgstr ""
 
 #: classes/vcl/rte.aw:230
 msgid "HTML"
+msgstr ""
+
+#: classes/vcl/rte.aw:239
+msgid "Päised"
+msgstr ""
+
+#: classes/vcl/rte.aw:245
+msgid "Heading 1"
+msgstr ""
+
+#: classes/vcl/rte.aw:251
+msgid "Heading 2"
+msgstr ""
+
+#: classes/vcl/rte.aw:257
+msgid "Heading 3"
+msgstr ""
+
+#: classes/vcl/rte.aw:263
+msgid "Heading 4"
+msgstr ""
+
+#: classes/vcl/rte.aw:269
+msgid "Heading 5"
+msgstr ""
+
+#: classes/vcl/rte.aw:275
+msgid "Heading 6"
+msgstr ""
+
+#: classes/vcl/rte.aw:281
+msgid "Teksti värv"
+msgstr ""
+
+#: classes/vcl/rte.aw:287
+msgid "Sinine"
+msgstr ""
+
+#: classes/vcl/rte.aw:293
+msgid "Punane"
 msgstr ""

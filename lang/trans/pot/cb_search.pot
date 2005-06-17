@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:50:03 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -68,6 +68,18 @@ msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_view_cf_help
 msgid "Omaduse Vaatamise seadete vorm (view_cf) help"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_show_non_cf_fields
+msgid "Omaduse N&auml;ita ka v&auml;lju, mis ei ole seadete vormis (show_non_cf_fields) caption"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_show_non_cf_fields_comment
+msgid "Omaduse N&auml;ita ka v&auml;lju, mis ei ole seadete vormis (show_non_cf_fields) kommentaar"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_show_non_cf_fields_help
+msgid "Omaduse N&auml;ita ka v&auml;lju, mis ei ole seadete vormis (show_non_cf_fields) help"
 msgstr ""
 
 #: classes/cfg/cb_search.aw:prop_choose_fields
@@ -142,6 +154,42 @@ msgstr ""
 msgid "Omaduse Tulemused (results) help"
 msgstr ""
 
+#: classes/cfg/cb_search.aw:prop_show_submit
+msgid "Omaduse N&auml;ita salvesta nuppu (show_submit) caption"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_show_submit_comment
+msgid "Omaduse N&auml;ita salvesta nuppu (show_submit) kommentaar"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_show_submit_help
+msgid "Omaduse N&auml;ita salvesta nuppu (show_submit) help"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_button_text
+msgid "Omaduse Salvesta nupu tekst (submit_button_text) caption"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_button_text_comment
+msgid "Omaduse Salvesta nupu tekst (submit_button_text) kommentaar"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_button_text_help
+msgid "Omaduse Salvesta nupu tekst (submit_button_text) help"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_handler_controller
+msgid "Omaduse Salvestamise kontroller (submit_handler_controller) caption"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_handler_controller_comment
+msgid "Omaduse Salvestamise kontroller (submit_handler_controller) kommentaar"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:prop_submit_handler_controller_help
+msgid "Omaduse Salvestamise kontroller (submit_handler_controller) help"
+msgstr ""
+
 #: classes/cfg/cb_search.aw:group_props
 msgid "Grupi Väljad (props) pealkiri"
 msgstr ""
@@ -174,6 +222,14 @@ msgstr ""
 msgid "Grupi Otsi (search) help"
 msgstr ""
 
+#: classes/cfg/cb_search.aw:group_submit_after
+msgid "Grupi Tulemuste salvestamine (submit_after) pealkiri"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:group_submit_after_help
+msgid "Grupi Tulemuste salvestamine (submit_after) help"
+msgstr ""
+
 #: classes/cfg/cb_search.aw:rel_RELTYPE_SYN
 msgid "Seose s&uuml;non&uuml;mid (RELTYPE_SYN) tekst"
 msgstr ""
@@ -182,127 +238,147 @@ msgstr ""
 msgid "Seose kataloog, kust otsida (RELTYPE_PARENT) tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:151
+#: classes/cfg/cb_search.aw:rel_RELTYPE_RESULT_CONTROLLER
+msgid "Seose tulemuste kontroller (RELTYPE_RESULT_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:rel_RELTYPE_ROW_CONTROLLER
+msgid "Seose rea kontroller (RELTYPE_ROW_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:rel_RELTYPE_SUBMIT_CTR
+msgid "Seose salvestamise kontroller (RELTYPE_SUBMIT_CTR) tekst"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:rel_RELTYPE_SEARCH_VALID_CTR
+msgid "Seose otsingu valideerimise kontroller (RELTYPE_SEARCH_VALID_CTR) tekst"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:177
 msgid "Klass"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:155
+#: classes/cfg/cb_search.aw:181
 msgid "Omadus"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:159
+#: classes/cfg/cb_search.aw:185
 msgid "Näita vormis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:164
+#: classes/cfg/cb_search.aw:190
 msgid "Otsing komaga eraldatud"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:169
+#: classes/cfg/cb_search.aw:195
 msgid "Tekstikast otsimiseks"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:174
+#: classes/cfg/cb_search.aw:200
 msgid "Tüüp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:179
+#: classes/cfg/cb_search.aw:205
+msgid "Vaikimisi"
+msgstr ""
+
+#: classes/cfg/cb_search.aw:210
 msgid "Tekst"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:184 classes/cfg/cb_search.aw:882
+#: classes/cfg/cb_search.aw:215 classes/cfg/cb_search.aw:984
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:199
+#: classes/cfg/cb_search.aw:230
 msgid "Rippmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:200
+#: classes/cfg/cb_search.aw:231
 msgid "Mitmerealine rippmen&uuml;&uuml;"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:201
+#: classes/cfg/cb_search.aw:232
 msgid "M&auml;rkeruut"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:202
+#: classes/cfg/cb_search.aw:233
 msgid "Raadionupp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:285
+#: classes/cfg/cb_search.aw:335
 msgid "--vali--"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:841
+#: classes/cfg/cb_search.aw:943
 msgid "T&auml;istekstiotsing"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:847
+#: classes/cfg/cb_search.aw:949
 msgid "Kataloog"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:853
+#: classes/cfg/cb_search.aw:955
 msgid "Mitu kirjet lehel"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:889
+#: classes/cfg/cb_search.aw:991
 msgid "Element"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:895
+#: classes/cfg/cb_search.aw:997
 msgid "Tabelis"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:901
+#: classes/cfg/cb_search.aw:1003
 msgid "Hind"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:907
+#: classes/cfg/cb_search.aw:1009
 msgid "Sorditav"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:913
+#: classes/cfg/cb_search.aw:1015
 msgid "Vaikimisi sort"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:919
+#: classes/cfg/cb_search.aw:1021
 msgid "Vaata tulp"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:925
+#: classes/cfg/cb_search.aw:1027
 msgid "Tulba pealkiri"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:941
+#: classes/cfg/cb_search.aw:1043
 msgid "Muuda"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:942
+#: classes/cfg/cb_search.aw:1044
 msgid "Vaata"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:943
+#: classes/cfg/cb_search.aw:1045
 msgid "Kustuta"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1043
+#: classes/cfg/cb_search.aw:1145
 msgid "Otsi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1290
+#: classes/cfg/cb_search.aw:1429
 msgid "OID"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1297
+#: classes/cfg/cb_search.aw:1436
 msgid "Nimi"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1304
+#: classes/cfg/cb_search.aw:1443
 msgid "Kasuta?"
 msgstr ""
 
-#: classes/cfg/cb_search.aw:1310
+#: classes/cfg/cb_search.aw:1449
 msgid "K.A. Alamkataloogid?"
 msgstr ""
 

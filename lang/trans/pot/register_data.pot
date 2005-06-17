@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:12 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -3094,6 +3094,134 @@ msgstr ""
 msgid "Omaduse Usertext50 (usertext50) help"
 msgstr ""
 
+#: classes/applications/register/register_data.aw:prop_userim1
+msgid "Omaduse Pildiupload 1 (userim1) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim1_comment
+msgid "Omaduse Pildiupload 1 (userim1) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim1_help
+msgid "Omaduse Pildiupload 1 (userim1) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim2
+msgid "Omaduse Pildiupload 2 (userim2) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim2_comment
+msgid "Omaduse Pildiupload 2 (userim2) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim2_help
+msgid "Omaduse Pildiupload 2 (userim2) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim3
+msgid "Omaduse Pildiupload 3 (userim3) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim3_comment
+msgid "Omaduse Pildiupload 3 (userim3) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim3_help
+msgid "Omaduse Pildiupload 3 (userim3) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim4
+msgid "Omaduse Pildiupload 4 (userim4) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim4_comment
+msgid "Omaduse Pildiupload 4 (userim4) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim4_help
+msgid "Omaduse Pildiupload 4 (userim4) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim5
+msgid "Omaduse Pildiupload 5 (userim5) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim5_comment
+msgid "Omaduse Pildiupload 5 (userim5) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userim5_help
+msgid "Omaduse Pildiupload 5 (userim5) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile1
+msgid "Omaduse Failiupload 1 (userfile1) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile1_comment
+msgid "Omaduse Failiupload 1 (userfile1) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile1_help
+msgid "Omaduse Failiupload 1 (userfile1) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile2
+msgid "Omaduse Failiupload 2 (userfile2) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile2_comment
+msgid "Omaduse Failiupload 2 (userfile2) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile2_help
+msgid "Omaduse Failiupload 2 (userfile2) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile3
+msgid "Omaduse Failiupload 3 (userfile3) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile3_comment
+msgid "Omaduse Failiupload 3 (userfile3) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile3_help
+msgid "Omaduse Failiupload 3 (userfile3) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile4
+msgid "Omaduse Failiupload 4 (userfile4) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile4_comment
+msgid "Omaduse Failiupload 4 (userfile4) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile4_help
+msgid "Omaduse Failiupload 4 (userfile4) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile5
+msgid "Omaduse Failiupload 5 (userfile5) caption"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile5_comment
+msgid "Omaduse Failiupload 5 (userfile5) kommentaar"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:prop_userfile5_help
+msgid "Omaduse Failiupload 5 (userfile5) help"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
 #: classes/applications/register/register_data.aw:group_data
 msgid "Grupi Andmed (data) pealkiri"
 msgstr ""
@@ -3456,5 +3584,45 @@ msgstr ""
 
 #: classes/applications/register/register_data.aw:rel_RELTYPE_REGISTER
 msgid "Seose Seostatud register (RELTYPE_REGISTER) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE1
+msgid "Seose pilt1 (RELTYPE_IMAGE1) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE2
+msgid "Seose pilt2 (RELTYPE_IMAGE2) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE3
+msgid "Seose pilt3 (RELTYPE_IMAGE3) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE4
+msgid "Seose pilt4 (RELTYPE_IMAGE4) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_IMAGE5
+msgid "Seose pilt5 (RELTYPE_IMAGE5) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_FILE1
+msgid "Seose fail1 (RELTYPE_FILE1) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_FILE2
+msgid "Seose fail2 (RELTYPE_FILE2) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_FILE3
+msgid "Seose fail3 (RELTYPE_FILE3) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_FILE4
+msgid "Seose fail4 (RELTYPE_FILE4) tekst"
+msgstr ""
+
+#: classes/applications/register/register_data.aw:rel_RELTYPE_FILE5
+msgid "Seose fail5 (RELTYPE_FILE5) tekst"
 msgstr ""
 

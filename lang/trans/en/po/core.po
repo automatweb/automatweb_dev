@@ -9,10 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core.aw:703
+#: classes/core.aw:704
 msgid "ACL error saidil %s: CAN_%s denied for oid %s"
 msgstr "ACL error in site %s: CAN_%s denied for oid %s"
 
-#: classes/core.aw:1007
+#: classes/core.aw:1008
 msgid "Couldn't open file '%s' for writing"
 msgstr "Couldn't open file '%s' for writing"

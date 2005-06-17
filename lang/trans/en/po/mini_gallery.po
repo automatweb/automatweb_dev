@@ -89,3 +89,10 @@ msgstr "style"
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr "No add access to the selected image folder"
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
+msgid "Galerii "
+msgstr "Gallery"
+
+#: classes/contentmgmt/gallery/mini_gallery.aw:304
+msgid " pildid"
+msgstr " images"

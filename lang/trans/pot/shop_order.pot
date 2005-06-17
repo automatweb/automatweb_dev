@@ -210,7 +210,7 @@ msgstr ""
 msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr ""
 
-#: classes/applications/shop/shop_order.aw:464 classes/applications/shop/shop_order.aw:605
+#: classes/applications/shop/shop_order.aw:464 classes/applications/shop/shop_order.aw:606
 msgid "Tellimus laost %s"
 msgstr ""
 

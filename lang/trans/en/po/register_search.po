@@ -253,18 +253,18 @@ msgstr "View column"
 msgid "Tulba pealkiri"
 msgstr "Column title"
 
-#: classes/applications/register/register_search.aw:799
+#: classes/applications/register/register_search.aw:809
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/applications/register/register_search.aw:813
+#: classes/applications/register/register_search.aw:823
 msgid "Vaata"
 msgstr "View"
 
-#: classes/applications/register/register_search.aw:824
+#: classes/applications/register/register_search.aw:834
 msgid "Kustutada objekt?"
 msgstr "Delete object?"
 
-#: classes/applications/register/register_search.aw:825
+#: classes/applications/register/register_search.aw:835
 msgid "Kustuta"
 msgstr "Delete"

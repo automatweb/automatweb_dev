@@ -239,7 +239,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_uname
 msgid "Omaduse Tellija kasutajanimi (osearch_uname) caption"
-msgstr ""
+msgstr "Orderer username"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_uname_comment
 msgid "Omaduse Tellija kasutajanimi (osearch_uname) kommentaar"
@@ -251,7 +251,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_pname
 msgid "Omaduse Tellija isikunimi (osearch_pname) caption"
-msgstr ""
+msgstr "Orderer person name"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_pname_comment
 msgid "Omaduse Tellija isikunimi (osearch_pname) kommentaar"
@@ -263,7 +263,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_oname
 msgid "Omaduse Organisatsiooni nimi (osearch_oname) caption"
-msgstr ""
+msgstr "Organisation name"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_oname_comment
 msgid "Omaduse Organisatsiooni nimi (osearch_oname) kommentaar"
@@ -275,7 +275,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_oid
 msgid "Omaduse Tellimuse ID (osearch_oid) caption"
-msgstr ""
+msgstr "Order ID"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_oid_comment
 msgid "Omaduse Tellimuse ID (osearch_oid) kommentaar"
@@ -287,7 +287,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_prodname
 msgid "Omaduse Toote nimi (osearch_prodname) caption"
-msgstr ""
+msgstr "Product name"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_prodname_comment
 msgid "Omaduse Toote nimi (osearch_prodname) kommentaar"
@@ -299,7 +299,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_from
 msgid "Omaduse Otsi staatuse järgi (osearch_from) caption"
-msgstr ""
+msgstr "Search by status"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_from_comment
 msgid "Omaduse Otsi staatuse järgi (osearch_from) kommentaar"
@@ -311,7 +311,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_odates
 msgid "Omaduse Tellimuse ajavahemik (alates) (osearch_odates) caption"
-msgstr ""
+msgstr "Order time (from)"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_odates_comment
 msgid "Omaduse Tellimuse ajavahemik (alates) (osearch_odates) kommentaar"
@@ -323,7 +323,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_odatee
 msgid "Omaduse Tellimuse ajavahemik (kuni) (osearch_odatee) caption"
-msgstr ""
+msgstr "Order time (to)"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_odatee_comment
 msgid "Omaduse Tellimuse ajavahemik (kuni) (osearch_odatee) kommentaar"
@@ -335,7 +335,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_hidden
 msgid "Omaduse Otsing (osearch_hidden) caption"
-msgstr ""
+msgstr "Search"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_hidden_comment
 msgid "Omaduse Otsing (osearch_hidden) kommentaar"
@@ -347,7 +347,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_submit
 msgid "Omaduse Otsi (osearch_submit) caption"
-msgstr ""
+msgstr "Search"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_submit_comment
 msgid "Omaduse Otsi (osearch_submit) kommentaar"
@@ -359,7 +359,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_table
 msgid "Omaduse Tulemuste tabel (osearch_table) caption"
-msgstr ""
+msgstr "Result table"
 
 # classes/applications/shop/shop_warehouse.aw:prop_osearch_table_comment
 msgid "Omaduse Tulemuste tabel (osearch_table) kommentaar"
@@ -371,7 +371,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:prop_search_tb
 msgid "Omaduse Otsingu toolbar (search_tb) caption"
-msgstr ""
+msgstr "Search toolbar"
 
 # classes/applications/shop/shop_warehouse.aw:prop_search_tb_comment
 msgid "Omaduse Otsingu toolbar (search_tb) kommentaar"
@@ -579,7 +579,7 @@ msgstr ""
 
 # classes/applications/shop/shop_warehouse.aw:group_order_search
 msgid "Grupi Otsing (order_search) pealkiri"
-msgstr ""
+msgstr "Search"
 
 # classes/applications/shop/shop_warehouse.aw:group_order_search_help
 msgid "Grupi Otsing (order_search) help"
@@ -643,19 +643,19 @@ msgstr "send offers"
 
 # classes/applications/shop/shop_warehouse.aw:rel_RELTYPE_CFGMANAGER
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
-msgstr ""
+msgstr "configuration mananger"
 
 #: classes/applications/shop/shop_warehouse.aw:217
 msgid "k&otilde;ik"
-msgstr ""
+msgstr "all"
 
 #: classes/applications/shop/shop_warehouse.aw:218
 msgid "kinnitatud"
-msgstr ""
+msgstr "confirmed"
 
 #: classes/applications/shop/shop_warehouse.aw:219
 msgid "kinnitamata"
-msgstr ""
+msgstr "unconfirmed"
 
 #: classes/applications/shop/shop_warehouse.aw:322
 msgid "<br><br>Hetkel pakkumises olevad tooted:"
@@ -663,31 +663,31 @@ msgstr "<br><Br>Products in current offer:"
 
 #: classes/applications/shop/shop_warehouse.aw:413
 msgid "Tellimus"
-msgstr ""
+msgstr "Order"
 
 #: classes/applications/shop/shop_warehouse.aw:414
 msgid "Toode"
-msgstr ""
+msgstr "Product"
 
 #: classes/applications/shop/shop_warehouse.aw:415
 msgid "Kasutaja"
-msgstr ""
+msgstr "User"
 
 #: classes/applications/shop/shop_warehouse.aw:416
 msgid "Isik"
-msgstr ""
+msgstr "Person"
 
 #: classes/applications/shop/shop_warehouse.aw:417
 msgid "Organisatsioon"
-msgstr ""
+msgstr "Organisation"
 
 #: classes/applications/shop/shop_warehouse.aw:418
 msgid "Telliti"
-msgstr ""
+msgstr "Ordered"
 
 #: classes/applications/shop/shop_warehouse.aw:494
 msgid "<center>Leiti "
-msgstr ""
+msgstr "<center>Found "
 
 #: classes/applications/shop/shop_warehouse.aw:543
 msgid "Salvesta"
@@ -833,7 +833,7 @@ msgstr "Income confirmed"
 #: classes/applications/shop/shop_warehouse.aw:1801
 #: classes/applications/shop/shop_warehouse.aw:1847
 #: classes/applications/shop/shop_warehouse.aw:1888
-#: classes/applications/shop/shop_warehouse.aw:1969
+#: classes/applications/shop/shop_warehouse.aw:1977
 msgid "Vaata"
 msgstr "View"
 
@@ -887,7 +887,7 @@ msgstr "Add order"
 #: classes/applications/shop/shop_warehouse.aw:1680
 #: classes/applications/shop/shop_warehouse.aw:1812
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: classes/applications/shop/shop_warehouse.aw:1691
 #: classes/applications/shop/shop_warehouse.aw:1822
@@ -901,37 +901,37 @@ msgstr "Confirm"
 
 #: classes/applications/shop/shop_warehouse.aw:1833
 msgid "Kinnitas"
-msgstr ""
+msgstr "Confirmed"
 
-#: classes/applications/shop/shop_warehouse.aw:2271
+#: classes/applications/shop/shop_warehouse.aw:2279
 msgid "shop_warehouse::gen_order(): no order center object selected!"
 msgstr "shop_warehouse::gen_order(): no order center object selected!"
 
-#: classes/applications/shop/shop_warehouse.aw:2314
+#: classes/applications/shop/shop_warehouse.aw:2322
 msgid "Lisa pakkumisse"
 msgstr "Add to offer"
 
-#: classes/applications/shop/shop_warehouse.aw:2321
+#: classes/applications/shop/shop_warehouse.aw:2329
 msgid "Moodusta pakkumine"
 msgstr "Create offer"
 
-#: classes/applications/shop/shop_warehouse.aw:2552
-msgid ""
-"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
-"object set!"
-msgstr ""
-"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
-"object set!"
-
 #: classes/applications/shop/shop_warehouse.aw:2560
 msgid ""
+"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
+"object set!"
+msgstr ""
+"shop_warehouse::get_order_folder(%s): the warehouse has not configuration "
+"object set!"
+
+#: classes/applications/shop/shop_warehouse.aw:2568
+msgid ""
 "shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
 "order folder set!"
 msgstr ""
 "shop_warehouse::get_order_folder(%s): the warehouse configuration has no "
 "order folder set!"
 
-#: classes/applications/shop/shop_warehouse.aw:2660
+#: classes/applications/shop/shop_warehouse.aw:2671
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"
 

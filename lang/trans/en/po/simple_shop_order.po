@@ -9,92 +9,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer
-msgid "Omaduse Siin ei ole kala (orderer) caption"
+# classes/applications/simple_shop/simple_shop_order.aw:prop_orderer
+msgid "Omaduse Tellija andmed (orderer) caption"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_comment
-msgid "Omaduse Siin ei ole kala (orderer) kommentaar"
+# classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_comment
+msgid "Omaduse Tellija andmed (orderer) kommentaar"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_help
-msgid "Omaduse Siin ei ole kala (orderer) help"
+# classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_help
+msgid "Omaduse Tellija andmed (orderer) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb
 msgid "Omaduse Tellimuste toolbar (order_tb) caption"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb_comment
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb_comment
 msgid "Omaduse Tellimuste toolbar (order_tb) kommentaar"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb_help
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb_help
 msgid "Omaduse Tellimuste toolbar (order_tb) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order
 msgid "Omaduse Tellimuste tabel (order) caption"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_comment
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_comment
 msgid "Omaduse Tellimuste tabel (order) kommentaar"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_help
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_help
 msgid "Omaduse Tellimuste tabel (order) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum
 msgid "Omaduse Kogusumma (order_sum) caption"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum_comment
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum_comment
 msgid "Omaduse Kogusumma (order_sum) kommentaar"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum_help
+# classes/applications/simple_shop/simple_shop_order.aw:prop_order_sum_help
 msgid "Omaduse Kogusumma (order_sum) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:group_orderer
+# classes/applications/simple_shop/simple_shop_order.aw:group_orderer
 msgid "Grupi Tellija andmed (orderer) pealkiri"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:group_orderer_help
+# classes/applications/simple_shop/simple_shop_order.aw:group_orderer_help
 msgid "Grupi Tellija andmed (orderer) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:group_order
+# classes/applications/simple_shop/simple_shop_order.aw:group_order
 msgid "Grupi Tellimus (order) pealkiri"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:group_order_help
+# classes/applications/simple_shop/simple_shop_order.aw:group_order_help
 msgid "Grupi Tellimus (order) help"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERITEM
+# classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERITEM
 msgid "Seose Toode (RELTYPE_ORDERITEM) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERER
+# classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERER
 msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:87
+# classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERER_INFO
+msgid "Seose  (RELTYPE_ORDERER_INFO) tekst"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop_order.aw:106
 msgid "Eemalda tooted"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:88
+#: classes/applications/simple_shop/simple_shop_order.aw:107
 msgid "Oled kindel, et sooovid tooted tellimusest eemaldada?"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:94
+#: classes/applications/simple_shop/simple_shop_order.aw:113
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:114
+#: classes/applications/simple_shop/simple_shop_order.aw:133
 msgid "Kogus"
 msgstr ""
-

@@ -9,23 +9,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/users_user.aw:224
+#: classes/users_user.aw:207
 msgid "uid is empty!"
 msgstr ""
 
-#: classes/users_user.aw:232
+#: classes/users_user.aw:215
 msgid "oid for uid is empty uid = '%s'!"
 msgstr ""
 
-#: classes/users_user.aw:240
+#: classes/users_user.aw:223
 msgid "user object is not user object!!!! %s clid = %s"
 msgstr ""
 
-#: classes/users_user.aw:248
+#: classes/users_user.aw:231
 msgid "user object is of wrong type! %s props = %s"
 msgstr ""
 
-#: classes/users_user.aw:1094
+#: classes/users_user.aw:1073
 msgid ""
 "Error in group hierarchy, count of 100 exceeded! probably offending group - %"
 "s"

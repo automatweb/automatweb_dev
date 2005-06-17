@@ -83,7 +83,7 @@ msgstr ""
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop
 msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) caption"
-msgstr ""
+msgstr "Resize before crop"
 
 # classes/contentmgmt/gallery/gallery_conf.aw:prop_resize_before_crop_comment
 msgid "Omaduse Muuda suurust enne kadreerimist (resize_before_crop) kommentaar"

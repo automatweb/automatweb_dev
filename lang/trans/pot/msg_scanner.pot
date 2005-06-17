@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:29 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -24,6 +24,10 @@ msgstr ""
 
 #: classes/core/msg/msg_scanner.aw:99
 msgid "ERROR: class %s defines function %s as message handler for message %s,\n       but the function does not exist in that class!\n\n"
+msgstr ""
+
+#: classes/core/msg/msg_scanner.aw:126
+msgid "ERROR: class %s defines function %s as message handler for message %s (with param %s),\n       but the function does not exist in that class!\n\n"
 msgstr ""
 
 #: classes/core/msg/msg_scanner.aw:182 classes/core/msg/msg_scanner.aw:198

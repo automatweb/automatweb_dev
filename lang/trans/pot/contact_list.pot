@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:08 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -44,6 +44,14 @@ msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:prop_contact_list_help
 msgid "Omaduse Aadressiraamat (contact_list) help"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/quickmessage/contact_list.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:group_contact_list

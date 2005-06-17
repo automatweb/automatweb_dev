@@ -1,96 +1,103 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:05 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2015-06-01 21:00+0200\n"
 "Last-Translator: ergo\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
-#: classes/contentmgmt/menu_tree.aw:prop_needs_translation
+# classes/contentmgmt/menu_tree.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_needs_translation_comment
+# classes/contentmgmt/menu_tree.aw:prop_needs_translation_comment
 msgid "Omaduse Vajab tõlget (needs_translation) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_needs_translation_help
+# classes/contentmgmt/menu_tree.aw:prop_needs_translation_help
 msgid "Omaduse Vajab tõlget (needs_translation) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated
+# classes/contentmgmt/menu_tree.aw:prop_is_translated
 msgid "Omaduse Tõlge kinnitatud (is_translated) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
+# classes/contentmgmt/menu_tree.aw:prop_is_translated_comment
 msgid "Omaduse Tõlge kinnitatud (is_translated) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_is_translated_help
+# classes/contentmgmt/menu_tree.aw:prop_is_translated_help
 msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_menus
+# classes/contentmgmt/menu_tree.aw:prop_menus
 msgid "Omaduse Menüüd (menus) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_menus_comment
+# classes/contentmgmt/menu_tree.aw:prop_menus_comment
 msgid "Omaduse Menüüd (menus) kommentaar"
 msgstr "menüüde valik, mille kohta sisukaart luuakse."
 
-#: classes/contentmgmt/menu_tree.aw:prop_menus_help
+# classes/contentmgmt/menu_tree.aw:prop_menus_help
 msgid "Omaduse Menüüd (menus) help"
 msgstr "menüüde valik, mille kohta sisukaart luuakse."
 
-#: classes/contentmgmt/menu_tree.aw:prop_children_only
+# classes/contentmgmt/menu_tree.aw:prop_children_only
 msgid "Omaduse Ainult alammenüüd (children_only) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_children_only_comment
+# classes/contentmgmt/menu_tree.aw:prop_children_only_comment
 msgid "Omaduse Ainult alammenüüd (children_only) kommentaar"
-msgstr "valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
+msgstr ""
+"valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
 
-#: classes/contentmgmt/menu_tree.aw:prop_children_only_help
+# classes/contentmgmt/menu_tree.aw:prop_children_only_help
 msgid "Omaduse Ainult alammenüüd (children_only) help"
-msgstr "valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
+msgstr ""
+"valiku tegemisel kuvatakse sisukaardis ainult valitud menüüde alammenüüd."
 
-#: classes/contentmgmt/menu_tree.aw:prop_template
+# classes/contentmgmt/menu_tree.aw:prop_template
 msgid "Omaduse Template (template) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_template_comment
+# classes/contentmgmt/menu_tree.aw:prop_template_comment
 msgid "Omaduse Template (template) kommentaar"
 msgstr "sisukaardi kuvamise template."
 
-#: classes/contentmgmt/menu_tree.aw:prop_template_help
+# classes/contentmgmt/menu_tree.aw:prop_template_help
 msgid "Omaduse Template (template) help"
 msgstr "sisukaardi kuvamise template."
 
-#: classes/contentmgmt/menu_tree.aw:prop_num_levels
+# classes/contentmgmt/menu_tree.aw:prop_num_levels
 msgid "Omaduse Tasemeid (num_levels) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_num_levels_comment
+# classes/contentmgmt/menu_tree.aw:prop_num_levels_comment
 msgid "Omaduse Tasemeid (num_levels) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_num_levels_help
+# classes/contentmgmt/menu_tree.aw:prop_num_levels_help
 msgid "Omaduse Tasemeid (num_levels) help"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_no_unclickable
-msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) caption"
+# classes/contentmgmt/menu_tree.aw:prop_no_unclickable
+msgid ""
+"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
+"(no_unclickable) caption"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_no_unclickable_comment
-msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) kommentaar"
+# classes/contentmgmt/menu_tree.aw:prop_no_unclickable_comment
+msgid ""
+"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
+"(no_unclickable) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/menu_tree.aw:prop_no_unclickable_help
-msgid "Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid (no_unclickable) help"
+# classes/contentmgmt/menu_tree.aw:prop_no_unclickable_help
+msgid ""
+"Omaduse &Auml;ra n&auml;ita mitteklikitavaid men&uuml;&uuml;sid "
+"(no_unclickable) help"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:24 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/applications/class_designer/property_tree.aw:prop_data_from
+msgid "Omaduse Andmed (data_from) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_data_from_comment
+msgid "Omaduse Andmed (data_from) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_data_from_help
+msgid "Omaduse Andmed (data_from) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rels_levels
+msgid "Omaduse Mitu taset puus (ct_rels_levels) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rels_levels_comment
+msgid "Omaduse Mitu taset puus (ct_rels_levels) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rels_levels_help
+msgid "Omaduse Mitu taset puus (ct_rels_levels) help"
+msgstr ""
 
 #: classes/applications/class_designer/property_tree.aw:prop_no_caption
 msgid "Omaduse Ilma tekstita (no_caption) caption"
@@ -58,35 +82,99 @@ msgstr ""
 msgid "Omaduse Tabel (ct_list) help"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:group_content
-msgid "Grupi Sisu (content) pealkiri"
+#: classes/applications/class_designer/property_tree.aw:prop_ct_clids
+msgid "Omaduse Objektit&uuml;&uuml;bid, mida puus kuvada (ct_clids) caption"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:group_content_help
-msgid "Grupi Sisu (content) help"
+#: classes/applications/class_designer/property_tree.aw:prop_ct_clids_comment
+msgid "Omaduse Objektit&uuml;&uuml;bid, mida puus kuvada (ct_clids) kommentaar"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:99
+#: classes/applications/class_designer/property_tree.aw:prop_ct_clids_help
+msgid "Omaduse Objektit&uuml;&uuml;bid, mida puus kuvada (ct_clids) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rel
+msgid "Omaduse Sisuobjektide seose t&uuml;&uuml;p (ct_rel) caption"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rel_comment
+msgid "Omaduse Sisuobjektide seose t&uuml;&uuml;p (ct_rel) kommentaar"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:prop_ct_rel_help
+msgid "Omaduse Sisuobjektide seose t&uuml;&uuml;p (ct_rel) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_user
+msgid "Grupi Sisu (content_user) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_user_help
+msgid "Grupi Sisu (content_user) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_objs
+msgid "Grupi Sisu (content_objs) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_objs_help
+msgid "Grupi Sisu (content_objs) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_rels
+msgid "Grupi Sisu (content_rels) pealkiri"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:group_content_rels_help
+msgid "Grupi Sisu (content_rels) help"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:60
+msgid "Kasutaja poolt sisestatud"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:61
+msgid "Objektid objektis&uuml;steemist"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:62
+msgid "Seostatud"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:143
 msgid "Lisa uus oks"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:105
+#: classes/applications/class_designer/property_tree.aw:149
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:111
+#: classes/applications/class_designer/property_tree.aw:155
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:112
+#: classes/applications/class_designer/property_tree.aw:156
 msgid "Oled kindel et soovid valitud objekte kustutada?"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:122
+#: classes/applications/class_designer/property_tree.aw:166
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/class_designer/property_tree.aw:128
+#: classes/applications/class_designer/property_tree.aw:172
 msgid "Muuda"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:427
+msgid "Tase"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:433
+msgid "Seos(ed)"
+msgstr ""
+
+#: classes/applications/class_designer/property_tree.aw:519
+msgid "Tase %s"
 msgstr ""
 

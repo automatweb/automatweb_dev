@@ -13,6 +13,7 @@ $GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (trans_a
 $GLOBALS["TRANS"]["Omaduse Sisu n&auml;idatakse k&otilde;ikides keeltes (content_all_langs) caption"] = "Content displayed in all languages";
 $GLOBALS["TRANS"]["Omaduse Template (dokumendi sees) (promo_tpl) caption"] = "Template (in document)";
 $GLOBALS["TRANS"]["Omaduse Ilma pealkirjata (no_title) caption"] = "No caption";
+$GLOBALS["TRANS"]["Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) caption"] = "Has periodic, automatically changing content";
 $GLOBALS["TRANS"]["Omaduse Grupid, kellele kasti näidata (groups) caption"] = "Groups to show the container to";
 $GLOBALS["TRANS"]["Omaduse Kasuta dokumendi asukoha templatet (use_fld_tpl) caption"] = "Use document location template";
 $GLOBALS["TRANS"]["Omaduse Näita igal pool (all_menus) caption"] = "Display everywhere";

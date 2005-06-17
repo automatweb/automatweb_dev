@@ -192,78 +192,78 @@ msgid "Impordi pildid"
 msgstr "Import images"
 
 #: classes/applications/persona_import/persona_import.aw:150
-#: classes/applications/persona_import/persona_import.aw:186
-#: classes/applications/persona_import/persona_import.aw:1109
+#: classes/applications/persona_import/persona_import.aw:187
+#: classes/applications/persona_import/persona_import.aw:1134
 msgid "You forgot to enter server data"
 msgstr "You forgot to enter server data"
 
-#: classes/applications/persona_import/persona_import.aw:192
+#: classes/applications/persona_import/persona_import.aw:193
 msgid "Nii ei saa ju rallit sõita!"
 msgstr "Ya cant drive the rally like this!"
 
-#: classes/applications/persona_import/persona_import.aw:202
+#: classes/applications/persona_import/persona_import.aw:203
 msgid "Isikute kataloog valimata"
 msgstr "Person folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:208
+#: classes/applications/persona_import/persona_import.aw:209
 msgid "Aadresside kataloog valimata"
 msgstr "Address folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:214
+#: classes/applications/persona_import/persona_import.aw:215
 msgid "Default kataloog valimata"
 msgstr "Default folder not selected"
 
-#: classes/applications/persona_import/persona_import.aw:223
+#: classes/applications/persona_import/persona_import.aw:224
 msgid "Kliendibaasil puudub muutujate haldur"
 msgstr "Client database has no configuration manager"
 
-#: classes/applications/persona_import/persona_import.aw:297
+#: classes/applications/persona_import/persona_import.aw:298
 msgid "Getting source data<br>"
 msgstr "Getting source data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:311
+#: classes/applications/persona_import/persona_import.aw:313
 msgid "Not enough data to process<bR>"
 msgstr "Not enough data to process<bR>"
 
-#: classes/applications/persona_import/persona_import.aw:315
+#: classes/applications/persona_import/persona_import.aw:324
 msgid "got data<br>"
 msgstr "got data<br>"
 
-#: classes/applications/persona_import/persona_import.aw:323
+#: classes/applications/persona_import/persona_import.aw:339
 msgid "parse finished, processing starts<br>"
 msgstr "parse finished, processing starts<br>"
 
-#: classes/applications/persona_import/persona_import.aw:514
+#: classes/applications/persona_import/persona_import.aw:535
 msgid "creating yksused objects<br>"
 msgstr "creating section objects<Br>"
 
-#: classes/applications/persona_import/persona_import.aw:564
+#: classes/applications/persona_import/persona_import.aw:585
 msgid "created new section<br>"
 msgstr "created new section<br>"
 
-#: classes/applications/persona_import/persona_import.aw:577
+#: classes/applications/persona_import/persona_import.aw:598
 msgid "updating existing section"
 msgstr "updating existing section"
 
-#: classes/applications/persona_import/persona_import.aw:627
+#: classes/applications/persona_import/persona_import.aw:648
 msgid "<h1>sections</h1>"
 msgstr "<h1>sections</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:629
+#: classes/applications/persona_import/persona_import.aw:650
 msgid "<h1>sections done</h1>"
 msgstr "<h1>sections done</h1>"
 
-#: classes/applications/persona_import/persona_import.aw:639
-msgid "creating person)objects<br>"
-msgstr "creating person)objects<br>"
+#: classes/applications/persona_import/persona_import.aw:660
+msgid "creating person objects<br>"
+msgstr "creating person objects<br>"
 
-#: classes/applications/persona_import/persona_import.aw:662
+#: classes/applications/persona_import/persona_import.aw:683
 msgid "<br>creating new person object<br>"
 msgstr "<br>creating new person object<br>"
 
-#: classes/applications/persona_import/persona_import.aw:668
+#: classes/applications/persona_import/persona_import.aw:689
 msgid "updating existing person object"
 msgstr "updating existing person object"
 
-#~ msgid "creating person objects<br>"
-#~ msgstr "creating person objects<br>"
+#~ msgid "creating person)objects<br>"
+#~ msgstr "creating person)objects<br>"

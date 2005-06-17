@@ -9,34 +9,48 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/mrp/mrp_schedule.aw:255
+#: classes/mrp/mrp_schedule.aw:268
+msgid ""
+"Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi "
+"andmata!"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:277
 msgid "Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"
 msgstr "Fatal error: planning lock acquire failed!"
 
-#: classes/mrp/mrp_schedule.aw:261
+#: classes/mrp/mrp_schedule.aw:283
 msgid "Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!"
 msgstr "Fatal error: planning lock failed!"
 
-#: classes/mrp/mrp_schedule.aw:265
+#: classes/mrp/mrp_schedule.aw:287
 msgid "Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!"
 msgstr "Error: delete of planning lock without acquire failed!"
 
-#: classes/mrp/mrp_schedule.aw:283
+#: classes/mrp/mrp_schedule.aw:305
 msgid "Viga: planeerimisluku avamine ebaõnnestus!"
 msgstr "Error: releasing planning lock failed!"
 
-#: classes/mrp/mrp_schedule.aw:288
+#: classes/mrp/mrp_schedule.aw:310
 msgid "Viga: planeerimisluku kustutamine ebaõnnestus!"
 msgstr "Error: planning lock delete failed!"
 
-#: classes/mrp/mrp_schedule.aw:602
+#: classes/mrp/mrp_schedule.aw:655
 msgid "Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!"
 msgstr "Error: planning lock release failed after planning!"
 
-#: classes/mrp/mrp_schedule.aw:607
+#: classes/mrp/mrp_schedule.aw:660
 msgid "Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
 msgstr "Error: planning lock delete failed after planning!"
 
-#: classes/mrp/mrp_schedule.aw:1149
+#: classes/mrp/mrp_schedule.aw:845
+msgid "Viga planeeritud aegade salvestamisel. "
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:973
+msgid "Saatuslik viga: sobivat aega ei leidund tervest kalendrist!"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:1323
 msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu."
 msgstr "Resource with id %s has no free times in the limit."

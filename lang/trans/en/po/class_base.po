@@ -70,57 +70,61 @@ msgid "Omaduse Tõlge kinnitatud (is_translated) help"
 msgstr ""
 
 # classes/class_base.aw:group_general
-msgid "Grupi Üldine (general) pealkiri"
-msgstr "General"
-
-# classes/class_base.aw:group_general_help
-msgid "Grupi Üldine (general) help"
+msgid "Grupi &Uuml;ldine (general) pealkiri"
 msgstr ""
 
-#: classes/class_base.aw:555
+# classes/class_base.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
+#: classes/class_base.aw:554
 msgid "Rohkem infot"
 msgstr "More info"
 
-#: classes/class_base.aw:556
+#: classes/class_base.aw:555
 msgid "Peida ära"
 msgstr "Hide"
 
-#: classes/class_base.aw:557
+#: classes/class_base.aw:556
 msgid "Abiinfo"
 msgstr "Help"
 
-#: classes/class_base.aw:601
+#: classes/class_base.aw:600
 msgid "tab panel"
 msgstr "tab panel"
 
-#: classes/class_base.aw:1187
+#: classes/class_base.aw:1186
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/class_base.aw:1195
+#: classes/class_base.aw:1194
 msgid "Uus"
 msgstr "New"
 
-#: classes/class_base.aw:1222
+#: classes/class_base.aw:1221
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1414 classes/class_base.aw:4497
-#: classes/class_base.aw:4508
+#: classes/class_base.aw:1413 classes/class_base.aw:4507
+#: classes/class_base.aw:4518
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3110
+#: classes/class_base.aw:3109
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3119
+#: classes/class_base.aw:3118
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4396
+#: classes/class_base.aw:4406
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
+
+# classes/class_base.aw:group_general
+#~ msgid "Grupi Üldine (general) pealkiri"
+#~ msgstr "General"
 
 #~ msgid "rohkem infot"
 #~ msgstr "more"

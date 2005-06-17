@@ -5,6 +5,7 @@ $GLOBALS["TRANS"]["Omaduse Piltide asukoht (images_folder) caption"] = "Image fo
 $GLOBALS["TRANS"]["Omaduse Default layout: (def_layout) caption"] = "Default layout";
 $GLOBALS["TRANS"]["Omaduse Kehtib ka pildiobjektidele (apply_image) caption"] = "Applies to image objects";
 $GLOBALS["TRANS"]["Omaduse Meili From aadress (send_from_addr) caption"] = "Mail from address";
+$GLOBALS["TRANS"]["Omaduse Muuda suurust enne kadreerimist (resize_before_crop) caption"] = "Resize before crop";
 $GLOBALS["TRANS"]["Omaduse Kui pilt on k&otilde;rgem kui laiem (img_vert) caption"] = "If image is higher than wider";
 $GLOBALS["TRANS"]["Omaduse Kas v&auml;ike pilt on kadreeritud (v_tn_subimage) caption"] = "Thumbnail is subimage";
 $GLOBALS["TRANS"]["Omaduse Mitu pikslit vasakult kaader algab (v_tn_subimage_left) caption"] = "Number of pixels on left of subimage ";

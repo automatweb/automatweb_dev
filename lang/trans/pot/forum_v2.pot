@@ -46,6 +46,18 @@ msgstr ""
 msgid "Omaduse Listiliikmete kaust (address_folder) help"
 msgstr ""
 
+#: classes/contentmgmt/forum/forum_v2.aw:prop_faq_folder
+msgid "Omaduse KKK kaust (faq_folder) caption"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_faq_folder_comment
+msgid "Omaduse KKK kaust (faq_folder) kommentaar"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:prop_faq_folder_help
+msgid "Omaduse KKK kaust (faq_folder) help"
+msgstr ""
+
 #: classes/contentmgmt/forum/forum_v2.aw:prop_topics_on_page
 msgid "Omaduse Teemasid lehel (topics_on_page) caption"
 msgstr ""
@@ -498,35 +510,39 @@ msgstr ""
 msgid "Seose Administraator (RELTYPE_FORUM_ADMIN) tekst"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:198
+#: classes/contentmgmt/forum/forum_v2.aw:rel_RELTYPE_FAQ_FOLDER
+msgid "Seose KKK kaust (RELTYPE_FAQ_FOLDER) tekst"
+msgstr ""
+
+#: classes/contentmgmt/forum/forum_v2.aw:205
 msgid "Teemade kaust on valimata"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1378
+#: classes/contentmgmt/forum/forum_v2.aw:1415
 msgid "Teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1383
+#: classes/contentmgmt/forum/forum_v2.aw:1420
 msgid "Jäta välja"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1390
+#: classes/contentmgmt/forum/forum_v2.aw:1427
 msgid "k.a. alamkaustad"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1549
+#: classes/contentmgmt/forum/forum_v2.aw:1586
 msgid "Uus teema"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1586
+#: classes/contentmgmt/forum/forum_v2.aw:1623
 msgid "Lisa"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1846
+#: classes/contentmgmt/forum/forum_v2.aw:1900
 msgid " teemade kaust"
 msgstr ""
 
-#: classes/contentmgmt/forum/forum_v2.aw:1853
+#: classes/contentmgmt/forum/forum_v2.aw:1907
 msgid " aadresside kaust"
 msgstr ""
 

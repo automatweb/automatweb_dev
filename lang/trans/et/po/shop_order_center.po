@@ -164,42 +164,6 @@ msgid ""
 "Omaduse Organisatsiooni nime element andmete vormis (data_form_company) help"
 msgstr ""
 
-# classes/applications/shop/shop_order_center.aw:prop_send_attach
-msgid "Omaduse Lisa meili manusega tellimus (send_attach) caption"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_send_attach_comment
-msgid "Omaduse Lisa meili manusega tellimus (send_attach) kommentaar"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_send_attach_help
-msgid "Omaduse Lisa meili manusega tellimus (send_attach) help"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_client
-msgid "Omaduse Saada tellijale e-mail (mail_to_client) caption"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_client_comment
-msgid "Omaduse Saada tellijale e-mail (mail_to_client) kommentaar"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_client_help
-msgid "Omaduse Saada tellijale e-mail (mail_to_client) help"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_el
-msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) caption"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_el_comment
-msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) kommentaar"
-msgstr ""
-
-# classes/applications/shop/shop_order_center.aw:prop_mail_to_el_help
-msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) help"
-msgstr ""
-
 # classes/applications/shop/shop_order_center.aw:prop_data_form_discount
 msgid ""
 "Omaduse Allahindluse element andmete vormis (data_form_discount) caption"
@@ -237,6 +201,54 @@ msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_use_controller_help
 msgid "Omaduse N&auml;itamiseks kasuta kontrollerit (use_controller) help"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_group_by
+msgid "Omaduse Toodete grupeerimine meilis (mail_group_by) caption"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_group_by_comment
+msgid "Omaduse Toodete grupeerimine meilis (mail_group_by) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_group_by_help
+msgid "Omaduse Toodete grupeerimine meilis (mail_group_by) help"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_send_attach
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) caption"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_send_attach_comment
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_send_attach_help
+msgid "Omaduse Lisa meili manusega tellimus (send_attach) help"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_client
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) caption"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_client_comment
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_client_help
+msgid "Omaduse Saada tellijale e-mail (mail_to_client) help"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_el
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) caption"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_el_comment
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:prop_mail_to_el_help
+msgid "Omaduse E-maili element, kuhu saata tellimus (mail_to_el) help"
 msgstr ""
 
 # classes/applications/shop/shop_order_center.aw:prop_mail_from_addr
@@ -400,6 +412,14 @@ msgid ""
 "andmetele (orgfieldmap) help"
 msgstr ""
 
+# classes/applications/shop/shop_order_center.aw:group_mail_settings
+msgid "Grupi Meiliseaded (mail_settings) pealkiri"
+msgstr ""
+
+# classes/applications/shop/shop_order_center.aw:group_mail_settings_help
+msgid "Grupi Meiliseaded (mail_settings) help"
+msgstr ""
+
 # classes/applications/shop/shop_order_center.aw:group_payment
 msgid "Grupi Makseviisid (payment) pealkiri"
 msgstr ""
@@ -456,64 +476,64 @@ msgstr ""
 msgid "Seose n&auml;itamise kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:155
+#: classes/applications/shop/shop_order_center.aw:162
 msgid "Sessionipõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:156
+#: classes/applications/shop/shop_order_center.aw:163
 msgid "Kasutajapõhine"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:287
+#: classes/applications/shop/shop_order_center.aw:305
 msgid "Kataloog"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:292
+#: classes/applications/shop/shop_order_center.aw:310
 msgid "Tabeli kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:298
+#: classes/applications/shop/shop_order_center.aw:316
 msgid "Paketi kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:304
+#: classes/applications/shop/shop_order_center.aw:322
 msgid "Paketi vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:310
+#: classes/applications/shop/shop_order_center.aw:328
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:330
-#: classes/applications/shop/shop_order_center.aw:1098
+#: classes/applications/shop/shop_order_center.aw:348
+#: classes/applications/shop/shop_order_center.aw:1167
 msgid "--vali--"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:406
+#: classes/applications/shop/shop_order_center.aw:424
 msgid "Sorditav v&auml;li"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:412
+#: classes/applications/shop/shop_order_center.aw:430
 msgid "Kasvav / kahanev"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:430
+#: classes/applications/shop/shop_order_center.aw:448
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:927
+#: classes/applications/shop/shop_order_center.aw:996
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:942
+#: classes/applications/shop/shop_order_center.aw:1011
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1045
+#: classes/applications/shop/shop_order_center.aw:1114
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1072
+#: classes/applications/shop/shop_order_center.aw:1141
 msgid ""
 "shop_order_center::get_property_map(%s, %s): the options for type are "
 "'person' and 'org'"

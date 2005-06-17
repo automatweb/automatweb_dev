@@ -794,7 +794,7 @@ msgstr ""
 msgid "Sissetulek kinnitatud"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:1294 classes/applications/shop/shop_warehouse.aw:1340 classes/applications/shop/shop_warehouse.aw:1405 classes/applications/shop/shop_warehouse.aw:1451 classes/applications/shop/shop_warehouse.aw:1662 classes/applications/shop/shop_warehouse.aw:1719 classes/applications/shop/shop_warehouse.aw:1801 classes/applications/shop/shop_warehouse.aw:1847 classes/applications/shop/shop_warehouse.aw:1888 classes/applications/shop/shop_warehouse.aw:1969
+#: classes/applications/shop/shop_warehouse.aw:1294 classes/applications/shop/shop_warehouse.aw:1340 classes/applications/shop/shop_warehouse.aw:1405 classes/applications/shop/shop_warehouse.aw:1451 classes/applications/shop/shop_warehouse.aw:1662 classes/applications/shop/shop_warehouse.aw:1719 classes/applications/shop/shop_warehouse.aw:1801 classes/applications/shop/shop_warehouse.aw:1847 classes/applications/shop/shop_warehouse.aw:1888 classes/applications/shop/shop_warehouse.aw:1977
 msgid "Vaata"
 msgstr ""
 
@@ -850,27 +850,27 @@ msgstr ""
 msgid "Kinnitas"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2271
+#: classes/applications/shop/shop_warehouse.aw:2279
 msgid "shop_warehouse::gen_order(): no order center object selected!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2314
+#: classes/applications/shop/shop_warehouse.aw:2322
 msgid "Lisa pakkumisse"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2321
+#: classes/applications/shop/shop_warehouse.aw:2329
 msgid "Moodusta pakkumine"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2552
+#: classes/applications/shop/shop_warehouse.aw:2560
 msgid "shop_warehouse::get_order_folder(%s): the warehouse has not configuration object set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2560
+#: classes/applications/shop/shop_warehouse.aw:2568
 msgid "shop_warehouse::get_order_folder(%s): the warehouse configuration has no order folder set!"
 msgstr ""
 
-#: classes/applications/shop/shop_warehouse.aw:2660
+#: classes/applications/shop/shop_warehouse.aw:2671
 msgid "Tellimus laost %s"
 msgstr ""
 

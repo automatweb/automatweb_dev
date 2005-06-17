@@ -365,10 +365,6 @@ msgstr ""
 msgid "Klassi Kordus (157) nimi"
 msgstr ""
 
-# aw.ini:class_158
-msgid "Klassi Objekti omadus (158) nimi"
-msgstr ""
-
 # aw.ini:class_160
 msgid "Klassi Kaustade generaator (160) nimi"
 msgstr ""
@@ -1226,15 +1222,11 @@ msgid "Klassi Autentimise Seaded (843) nimi"
 msgstr ""
 
 # aw.ini:class_844
-msgid "Klassi Autentimisserver LDAP (844) nimi"
+msgid "Klassi Autentimisserver Active Directory (844) nimi"
 msgstr ""
 
 # aw.ini:class_845
 msgid "Klassi Autentimsserver Kohalik (845) nimi"
-msgstr ""
-
-# aw.ini:class_846
-msgid "Klassi Autentimisserver AutomatWeb (846) nimi"
 msgstr ""
 
 # aw.ini:class_847
@@ -1469,6 +1461,10 @@ msgstr ""
 msgid "Klassi Klasside brauser (929) nimi"
 msgstr ""
 
+# aw.ini:class_930
+msgid "Klassi Omadus (930) nimi"
+msgstr ""
+
 # aw.ini:class_931
 msgid "Klassi Lihtne tellimus (931) nimi"
 msgstr ""
@@ -1479,6 +1475,70 @@ msgstr ""
 
 # aw.ini:class_936
 msgid "Klassi Kinnisvaraobjekt (936) nimi"
+msgstr ""
+
+# aw.ini:class_938
+msgid "Klassi Verstapost (938) nimi"
+msgstr ""
+
+# aw.ini:class_943
+msgid "Klassi Korter (943) nimi"
+msgstr ""
+
+# aw.ini:class_944
+msgid "Klassi Maja (944) nimi"
+msgstr ""
+
+# aw.ini:class_945
+msgid "Klassi Maatükk (945) nimi"
+msgstr ""
+
+# aw.ini:class_946
+msgid "Klassi Garaaz (946) nimi"
+msgstr ""
+
+# aw.ini:class_947
+msgid "Klassi Äripind (947) nimi"
+msgstr ""
+
+# aw.ini:class_955
+msgid "Klassi Autentimisserver OpenLDAP (955) nimi"
+msgstr ""
+
+# aw.ini:class_948
+msgid "Klassi Aadress v2 (948) nimi"
+msgstr ""
+
+# aw.ini:class_949
+msgid "Klassi Riik v2 (949) nimi"
+msgstr ""
+
+# aw.ini:class_953
+msgid "Klassi Haldusüksus v2 (953) nimi"
+msgstr ""
+
+# aw.ini:class_958
+msgid "Klassi Linn v2 (958) nimi"
+msgstr ""
+
+# aw.ini:class_959
+msgid "Klassi Linnaosa v2 (959) nimi"
+msgstr ""
+
+# aw.ini:class_960
+msgid "Klassi Tänav (960) nimi"
+msgstr ""
+
+# aw.ini:class_961
+msgid "Klassi Riigi haldusjaotus (961) nimi"
+msgstr ""
+
+# aw.ini:class_963
+msgid "Klassi Vormiahel (963) nimi"
+msgstr ""
+
+# aw.ini:class_965
+msgid "Klassi Vormiahela sisestus (965) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29

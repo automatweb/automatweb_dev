@@ -238,6 +238,14 @@ msgstr ""
 msgid "Omaduse  (active_selection) help"
 msgstr ""
 
+#: classes/search.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/search.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
 #: classes/search.aw:group_search
 msgid "Grupi Lihtne&nbsp;otsing (search) pealkiri"
 msgstr ""
@@ -278,111 +286,111 @@ msgstr ""
 msgid "Grupi Valimid (selectione) help"
 msgstr ""
 
-#: classes/search.aw:200
+#: classes/search.aw:202
 msgid "Objektitüübi omadused"
 msgstr ""
 
-#: classes/search.aw:217
+#: classes/search.aw:219
 msgid "<b><font color='red'>Sellel klassil pole ühtegi otsitavat omadust</font></b>"
 msgstr ""
 
-#: classes/search.aw:372
+#: classes/search.aw:374
 msgid "Cannot create an instance of %s"
 msgstr ""
 
-#: classes/search.aw:1018
+#: classes/search.aw:1020
 msgid "Otsi"
 msgstr ""
 
-#: classes/search.aw:1078
+#: classes/search.aw:1080
 msgid "Objekti nimi"
 msgstr ""
 
-#: classes/search.aw:1094
+#: classes/search.aw:1096
 msgid "Server"
 msgstr ""
 
-#: classes/search.aw:1104 classes/search.aw:1322
+#: classes/search.aw:1106 classes/search.aw:1325
 msgid "Nimi"
 msgstr ""
 
-#: classes/search.aw:1113
+#: classes/search.aw:1115
 msgid "Kommentaar"
 msgstr ""
 
-#: classes/search.aw:1122 classes/search.aw:1339
+#: classes/search.aw:1124 classes/search.aw:1342
 msgid "Tüüp"
 msgstr ""
 
-#: classes/search.aw:1135 classes/search.aw:1301
+#: classes/search.aw:1137 classes/search.aw:1304
 msgid "ID"
 msgstr ""
 
-#: classes/search.aw:1146 classes/search.aw:1348
+#: classes/search.aw:1148 classes/search.aw:1351
 msgid "Asukoht"
 msgstr ""
 
-#: classes/search.aw:1156 classes/search.aw:1368
+#: classes/search.aw:1158 classes/search.aw:1371
 msgid "Looja"
 msgstr ""
 
-#: classes/search.aw:1166 classes/search.aw:1388
+#: classes/search.aw:1168 classes/search.aw:1391
 msgid "Muutja"
 msgstr ""
 
-#: classes/search.aw:1176
+#: classes/search.aw:1178
 msgid "Aktiivsus"
 msgstr ""
 
-#: classes/search.aw:1177
+#: classes/search.aw:1179
 msgid "Kõik"
 msgstr ""
 
-#: classes/search.aw:1177
+#: classes/search.aw:1179
 msgid "Aktiivsed"
 msgstr ""
 
-#: classes/search.aw:1177
+#: classes/search.aw:1179
 msgid "Deaktiivsed"
 msgstr ""
 
-#: classes/search.aw:1186
+#: classes/search.aw:1188
 msgid "Alias"
 msgstr ""
 
-#: classes/search.aw:1199 classes/search.aw:1329
+#: classes/search.aw:1201 classes/search.aw:1332
 msgid "Keel"
 msgstr ""
 
-#: classes/search.aw:1210
+#: classes/search.aw:1212
 msgid "Periood"
 msgstr ""
 
-#: classes/search.aw:1219 classes/search.aw:1227
+#: classes/search.aw:1221 classes/search.aw:1230
 msgid "Igalt poolt"
 msgstr ""
 
-#: classes/search.aw:1230
+#: classes/search.aw:1233
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/search.aw:1240
+#: classes/search.aw:1243
 msgid "Leia vendi"
 msgstr ""
 
-#: classes/search.aw:1311
+#: classes/search.aw:1314
 msgid ""
 msgstr ""
 
-#: classes/search.aw:1356
+#: classes/search.aw:1359
 msgid "Loodud"
 msgstr ""
 
-#: classes/search.aw:1376
+#: classes/search.aw:1379
 msgid "Muudetud"
 msgstr ""
 
-#: classes/search.aw:1396
+#: classes/search.aw:1399
 msgid "<a href='javascript:selall(\\"sel\\")'>Vali</a>"
 msgstr ""
 

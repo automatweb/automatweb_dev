@@ -9,6 +9,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/translator.aw:109
+#: classes/vcl/translator.aw:121
 msgid "Aktiivne"
 msgstr "Active"

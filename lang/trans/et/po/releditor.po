@@ -9,43 +9,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/vcl/releditor.aw:49 classes/vcl/releditor.aw:59
-#: classes/vcl/releditor.aw:98
+#: classes/vcl/releditor.aw:56 classes/vcl/releditor.aw:66
+#: classes/vcl/releditor.aw:105
 msgid " "
 msgstr ""
 
-#: classes/vcl/releditor.aw:50
+#: classes/vcl/releditor.aw:57
 msgid "Viga %s definitsioonis (omadused defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:60
+#: classes/vcl/releditor.aw:67
 msgid "Viga %s definitsioonis (seose tüüp defineerimata!)"
 msgstr ""
 
-#: classes/vcl/releditor.aw:99
+#: classes/vcl/releditor.aw:106
 msgid "Seda seost ei saa redigeerida!"
 msgstr ""
 
-#: classes/vcl/releditor.aw:352
+#: classes/vcl/releditor.aw:369
 msgid "Uus"
 msgstr ""
 
-#: classes/vcl/releditor.aw:359
+#: classes/vcl/releditor.aw:373
 msgid "Kustutada valitud objektid?"
 msgstr ""
 
-#: classes/vcl/releditor.aw:367
+#: classes/vcl/releditor.aw:389
 msgid "Klooni valitud objektid"
 msgstr ""
 
-#: classes/vcl/releditor.aw:430 classes/vcl/releditor.aw:549
+#: classes/vcl/releditor.aw:455 classes/vcl/releditor.aw:574
 msgid "Muuda"
 msgstr ""
 
-#: classes/vcl/releditor.aw:511 classes/vcl/releditor.aw:536
+#: classes/vcl/releditor.aw:536 classes/vcl/releditor.aw:561
 msgid "ID"
 msgstr ""
 
-#: classes/vcl/releditor.aw:541
+#: classes/vcl/releditor.aw:566
 msgid "Nimi"
 msgstr ""

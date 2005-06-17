@@ -105,6 +105,18 @@ msgstr ""
 msgid "Omaduse  (order_completed) help"
 msgstr ""
 
+# classes/applications/orders/orders_order.aw:prop_order_confirmed
+msgid "Omaduse  (order_confirmed) caption"
+msgstr ""
+
+# classes/applications/orders/orders_order.aw:prop_order_confirmed_comment
+msgid "Omaduse  (order_confirmed) kommentaar"
+msgstr ""
+
+# classes/applications/orders/orders_order.aw:prop_order_confirmed_help
+msgid "Omaduse  (order_confirmed) help"
+msgstr ""
+
 # classes/applications/orders/orders_order.aw:prop_udef_textbox1
 msgid "Omaduse  (udef_textbox1) caption"
 msgstr ""
@@ -409,38 +421,38 @@ msgstr ""
 msgid "Seose Seadete haldur (RELTYPE_CFGMANAGER) tekst"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:201
+#: classes/applications/orders/orders_order.aw:202
 msgid "Toode"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:205
+#: classes/applications/orders/orders_order.aw:206
 msgid "Toote kood"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:209
+#: classes/applications/orders/orders_order.aw:210
 msgid "Värv"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:213
+#: classes/applications/orders/orders_order.aw:214
 msgid "Suurus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:217
+#: classes/applications/orders/orders_order.aw:218
 msgid "Kogus"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:221
+#: classes/applications/orders/orders_order.aw:222
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:456
+#: classes/applications/orders/orders_order.aw:465
 msgid "Tellimiseks peate n&ouml;ustuma tellimistingimustega!"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:476
+#: classes/applications/orders/orders_order.aw:467
 msgid "Tellimiseks peate n&otilde;ustuma tellimistingimustega"
 msgstr ""
 
-#: classes/applications/orders/orders_order.aw:580
+#: classes/applications/orders/orders_order.aw:573
 msgid "Kahjuks sinu meililugeja ei oska näidata HTML formaadis kirju"
 msgstr ""

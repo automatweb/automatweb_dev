@@ -118,47 +118,47 @@ msgstr ""
 msgid "object::set_flag(%s, %s): value must be integer!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1016
+#: classes/core/obj/_int_object.aw:1031
 msgid "object::set_prop(%s, %s): no property %s defined for current object!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1073
+#: classes/core/obj/_int_object.aw:1088
 msgid "object::merge(%s): parameter must be an array of properties to merge!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1087
+#: classes/core/obj/_int_object.aw:1102
 msgid "object::merge_prop(%s): parameter must be an array of properties to merge!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1141
+#: classes/core/obj/_int_object.aw:1156
 msgid "object::set_cache_dirty(%s): parameter must be integer or boolean!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1170
+#: classes/core/obj/_int_object.aw:1185
 msgid "object::instance(): no object loaded or class id not set!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1181
+#: classes/core/obj/_int_object.aw:1196
 msgid "object::create_brother(%s): no object loaded!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1186
+#: classes/core/obj/_int_object.aw:1201
 msgid "object::create_brother(%s): no parent!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1242
+#: classes/core/obj/_int_object.aw:1257
 msgid "object::load(%s): no view access for object %s!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1524
+#: classes/core/obj/_int_object.aw:1539
 msgid "object::path(%s): error in object hierarchy, infinite loop!"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1571
+#: classes/core/obj/_int_object.aw:1586
 msgid "object::save(): no acess to save object %s under %s !"
 msgstr ""
 
-#: classes/core/obj/_int_object.aw:1585
+#: classes/core/obj/_int_object.aw:1600
 msgid "object::save(): no access to add object under folder %s (gidlist = %s)!"
 msgstr ""
 

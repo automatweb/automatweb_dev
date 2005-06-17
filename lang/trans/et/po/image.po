@@ -4,11 +4,11 @@ msgstr ""
 "POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: 2015-06-01 20:54+0200\n"
 "Last-Translator: ergo\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
-"Language-Team: \n"
 
 # classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
@@ -52,11 +52,15 @@ msgstr ""
 
 # classes/image.aw:prop_file_comment
 msgid "Omaduse Pilt (file) kommentaar"
-msgstr "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail"
+msgstr ""
+"välja järel oleval Browse nupul klikkides avaneb võimalus valida "
+"kättesaadavalt andmekandjalt soovitud pildifail"
 
 # classes/image.aw:prop_file_help
 msgid "Omaduse Pilt (file) help"
-msgstr "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail"
+msgstr ""
+"välja järel oleval Browse nupul klikkides avaneb võimalus valida "
+"kättesaadavalt andmekandjalt soovitud pildifail"
 
 # classes/image.aw:prop_dimensions
 msgid "Omaduse Mõõtmed (dimensions) caption"
@@ -64,11 +68,15 @@ msgstr ""
 
 # classes/image.aw:prop_dimensions_comment
 msgid "Omaduse Mõõtmed (dimensions) kommentaar"
-msgstr "siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli ilmub peale pildi esmakordset salvestamist"
+msgstr ""
+"siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli "
+"ilmub peale pildi esmakordset salvestamist"
 
 # classes/image.aw:prop_dimensions_help
 msgid "Omaduse Mõõtmed (dimensions) help"
-msgstr "siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli ilmub peale pildi esmakordset salvestamist"
+msgstr ""
+"siin kuvatakse sisestatud pildi suurust pixlites (laius X kõrgus). Väli "
+"ilmub peale pildi esmakordset salvestamist"
 
 # classes/image.aw:prop_file2
 msgid "Omaduse Suur pilt (file2) caption"
@@ -76,11 +84,15 @@ msgstr ""
 
 # classes/image.aw:prop_file2_comment
 msgid "Omaduse Suur pilt (file2) kommentaar"
-msgstr "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail. "
+msgstr ""
+"välja järel oleval Browse nupul klikkides avaneb võimalus valida "
+"kättesaadavalt andmekandjalt soovitud pildifail. "
 
 # classes/image.aw:prop_file2_help
 msgid "Omaduse Suur pilt (file2) help"
-msgstr "välja järel oleval Browse nupul klikkides avaneb võimalus valida kättesaadavalt andmekandjalt soovitud pildifail. "
+msgstr ""
+"välja järel oleval Browse nupul klikkides avaneb võimalus valida "
+"kättesaadavalt andmekandjalt soovitud pildifail. "
 
 # classes/image.aw:prop_file2_del
 msgid "Omaduse Kustuta suur pilt (file2_del) caption"
@@ -100,11 +112,15 @@ msgstr ""
 
 # classes/image.aw:prop_comment_comment
 msgid "Omaduse Pildi allkiri (comment) kommentaar"
-msgstr " võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel pildi all väikeses kirjas"
+msgstr ""
+" võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel "
+"pildi all väikeses kirjas"
 
 # classes/image.aw:prop_comment_help
 msgid "Omaduse Pildi allkiri (comment) help"
-msgstr " võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel pildi all väikeses kirjas"
+msgstr ""
+" võimaldab lisada pildile kommentaari. Pildi allkirja näidatakse veebilehel "
+"pildi all väikeses kirjas"
 
 # classes/image.aw:prop_author
 msgid "Omaduse Pildi autor (author) caption"
@@ -112,11 +128,14 @@ msgstr ""
 
 # classes/image.aw:prop_author_comment
 msgid "Omaduse Pildi autor (author) kommentaar"
-msgstr "võimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal."
+msgstr ""
+"võimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal."
 
 # classes/image.aw:prop_author_help
 msgid "Omaduse Pildi autor (author) help"
-msgstr "võimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal.(ei pruugi kõigi kujunduste tulla veebilehel nähtavale)"
+msgstr ""
+"võimaldab pildi juures autori nime, vastaval kujundusega kokkulepitud kohal."
+"(ei pruugi kõigi kujunduste tulla veebilehel nähtavale)"
 
 # classes/image.aw:prop_alt
 msgid "Omaduse Alt (alt) caption"
@@ -124,11 +143,14 @@ msgstr ""
 
 # classes/image.aw:prop_alt_comment
 msgid "Omaduse Alt (alt) kommentaar"
-msgstr "tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale."
+msgstr ""
+"tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale."
 
 # classes/image.aw:prop_alt_help
 msgid "Omaduse Alt (alt) help"
-msgstr "tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale. Võimalus lisada pildile kommentaari"
+msgstr ""
+"tekst, mida kuvatakse veebilehel, kui kasutaja liigub kursoriga pildi peale. "
+"Võimalus lisada pildile kommentaari"
 
 # classes/image.aw:prop_link
 msgid "Omaduse Link (link) caption"
@@ -136,11 +158,17 @@ msgstr ""
 
 # classes/image.aw:prop_link_comment
 msgid "Omaduse Link (link) kommentaar"
-msgstr "võimalus suunata kasutaja peale pildil klikkimist antud välja sisestatud veebiaadressile"
+msgstr ""
+"võimalus suunata kasutaja peale pildil klikkimist antud välja sisestatud "
+"veebiaadressile"
 
 # classes/image.aw:prop_link_help
 msgid "Omaduse Link (link) help"
-msgstr "võimalus suunata kasutaja peale pildil klikkimist antud välja sisestatud veebiaadressile. Kui tegemist on väljaspoole antud veebilehte viiva lingiga siis tuleb aadress sisestada kujul http://... (N: http://www.struktuur.ee). Veebilehe sisese lingi puhul piisab kui kirjutada / ja objekti ID "
+msgstr ""
+"võimalus suunata kasutaja peale pildil klikkimist antud välja sisestatud "
+"veebiaadressile. Kui tegemist on väljaspoole antud veebilehte viiva lingiga "
+"siis tuleb aadress sisestada kujul http://... (N: http://www.struktuur.ee). "
+"Veebilehe sisese lingi puhul piisab kui kirjutada / ja objekti ID "
 
 # classes/image.aw:prop_newwindow
 msgid "Omaduse Uues aknas (newwindow) caption"
@@ -148,11 +176,15 @@ msgstr ""
 
 # classes/image.aw:prop_newwindow_comment
 msgid "Omaduse Uues aknas (newwindow) kommentaar"
-msgstr "märkides välja valituks võimaldab avada Link välja sisesatud aadressil asuva veebilehe uude Internetilehitseja aknasse "
+msgstr ""
+"märkides välja valituks võimaldab avada Link välja sisesatud aadressil asuva "
+"veebilehe uude Internetilehitseja aknasse "
 
 # classes/image.aw:prop_newwindow_help
 msgid "Omaduse Uues aknas (newwindow) help"
-msgstr "märkides välja valituks võimaldab avada Link välja sisesatud aadressil asuva veebilehe uude Internetilehitseja aknasse "
+msgstr ""
+"märkides välja valituks võimaldab avada Link välja sisesatud aadressil asuva "
+"veebilehe uude Internetilehitseja aknasse "
 
 # classes/image.aw:prop_no_print
 msgid "Omaduse &Auml;ra n&auml;ita print-vaates (no_print) caption"
@@ -196,11 +228,15 @@ msgstr ""
 
 # classes/image.aw:prop_dimensions_big_comment
 msgid "Omaduse Mõõtmed (dimensions_big) kommentaar"
-msgstr "siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X kõrgus)"
+msgstr ""
+"siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X "
+"kõrgus)"
 
 # classes/image.aw:prop_dimensions_big_help
 msgid "Omaduse Mõõtmed (dimensions_big) help"
-msgstr "siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X kõrgus)"
+msgstr ""
+"siin kuvatakse Üldine vaates sisestatud pildi suurust pixlites (laius X "
+"kõrgus)"
 
 # classes/image.aw:prop_new_w_big
 msgid "Omaduse Uus laius (suur) (new_w_big) caption"
@@ -244,11 +280,15 @@ msgstr ""
 
 # classes/image.aw:prop_ord_comment
 msgid "Omaduse J&auml;rjekord (ord) kommentaar"
-msgstr "pildi puhul, mõjutab järjekord veebil kuvamist juhul, kui pilti kuvatakse minigalerii abil."
+msgstr ""
+"pildi puhul, mõjutab järjekord veebil kuvamist juhul, kui pilti kuvatakse "
+"minigalerii abil."
 
 # classes/image.aw:prop_ord_help
 msgid "Omaduse J&auml;rjekord (ord) help"
-msgstr "pildi puhul, mõjutab järjekord veebil kuvamist juhul, kui pilti kuvatakse minigalerii abil."
+msgstr ""
+"pildi puhul, mõjutab järjekord veebil kuvamist juhul, kui pilti kuvatakse "
+"minigalerii abil."
 
 # classes/image.aw:prop_resize_warn
 msgid "Omaduse Info (resize_warn) caption"
@@ -301,4 +341,3 @@ msgstr ""
 #: classes/image.aw:646
 msgid "Piltide automaatset suurendamist kontrollib objekt "
 msgstr ""
-

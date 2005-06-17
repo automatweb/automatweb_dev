@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,76 +9,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/contentmgmt/newsfeed.aw:prop_alias
+# classes/contentmgmt/newsfeed.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_alias_comment
+# classes/contentmgmt/newsfeed.aw:prop_alias_comment
 msgid "Omaduse Alias (alias) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_alias_help
+# classes/contentmgmt/newsfeed.aw:prop_alias_help
 msgid "Omaduse Alias (alias) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_feedtype
+# classes/contentmgmt/newsfeed.aw:prop_feedtype
 msgid "Omaduse Tüüp (feedtype) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_feedtype_comment
+# classes/contentmgmt/newsfeed.aw:prop_feedtype_comment
 msgid "Omaduse Tüüp (feedtype) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_feedtype_help
+# classes/contentmgmt/newsfeed.aw:prop_feedtype_help
 msgid "Omaduse Tüüp (feedtype) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_limittype
+# classes/contentmgmt/newsfeed.aw:prop_limittype
 msgid "Omaduse Milliseid uudiseid näidata? (limittype) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_limittype_comment
+# classes/contentmgmt/newsfeed.aw:prop_limittype_comment
 msgid "Omaduse Milliseid uudiseid näidata? (limittype) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_limittype_help
+# classes/contentmgmt/newsfeed.aw:prop_limittype_help
 msgid "Omaduse Milliseid uudiseid näidata? (limittype) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_count
+# classes/contentmgmt/newsfeed.aw:prop_count
 msgid "Omaduse Mitu viimast (count) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_count_comment
+# classes/contentmgmt/newsfeed.aw:prop_count_comment
 msgid "Omaduse Mitu viimast (count) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_count_help
+# classes/contentmgmt/newsfeed.aw:prop_count_help
 msgid "Omaduse Mitu viimast (count) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_days
+# classes/contentmgmt/newsfeed.aw:prop_days
 msgid "Omaduse Mitme viimase päeva omad (days) caption"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_days_comment
+# classes/contentmgmt/newsfeed.aw:prop_days_comment
 msgid "Omaduse Mitme viimase päeva omad (days) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:prop_days_help
+# classes/contentmgmt/newsfeed.aw:prop_days_help
 msgid "Omaduse Mitme viimase päeva omad (days) help"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
+# classes/contentmgmt/newsfeed.aw:prop_folders
+msgid "Omaduse Kaustade seaded (folders) caption"
+msgstr ""
+
+# classes/contentmgmt/newsfeed.aw:prop_folders_comment
+msgid "Omaduse Kaustade seaded (folders) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/newsfeed.aw:prop_folders_help
+msgid "Omaduse Kaustade seaded (folders) help"
+msgstr ""
+
+# classes/contentmgmt/newsfeed.aw:group_folders
+msgid "Grupi Kaustad (folders) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/newsfeed.aw:group_folders_help
+msgid "Grupi Kaustad (folders) help"
+msgstr ""
+
+# classes/contentmgmt/newsfeed.aw:rel_RELTYPE_FEED_SOURCE
 msgid "Seose Materjalide kaust (RELTYPE_FEED_SOURCE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:58
+#: classes/contentmgmt/newsfeed.aw:61
 msgid "RSS 2.0"
 msgstr ""
 
-#: classes/contentmgmt/newsfeed.aw:59
+#: classes/contentmgmt/newsfeed.aw:62
 msgid "Atom (implementeerimata)"
 msgstr ""
 
+#: classes/contentmgmt/newsfeed.aw:87
+msgid "ID"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:91
+msgid "Name"
+msgstr ""
+
+#: classes/contentmgmt/newsfeed.aw:95
+msgid "Võta alamkaustadest ka"
+msgstr ""

@@ -46,6 +46,18 @@ msgstr ""
 msgid "Omaduse Kasutaja andmete vorm (user_data) help"
 msgstr ""
 
+#: classes/applications/simple_shop/simple_shop.aw:prop_controller
+msgid "Omaduse Tootelingi kontroller (controller) caption"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_controller_comment
+msgid "Omaduse Tootelingi kontroller (controller) kommentaar"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:prop_controller_help
+msgid "Omaduse Tootelingi kontroller (controller) help"
+msgstr ""
+
 #: classes/applications/simple_shop/simple_shop.aw:prop_ud_from_logged
 msgid "Omaduse Kui kasutaja on sisse loginud, võta isikuandmed objektidest (ud_from_logged) caption"
 msgstr ""
@@ -178,6 +190,14 @@ msgstr ""
 msgid "Omaduse  (orders_table) help"
 msgstr ""
 
+#: classes/applications/simple_shop/simple_shop.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
 #: classes/applications/simple_shop/simple_shop.aw:group_import
 msgid "Grupi Import (import) pealkiri"
 msgstr ""
@@ -206,71 +226,87 @@ msgstr ""
 msgid "Seose Kasutaja andmed (RELTYPE_USER_DATA) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:136
+#: classes/applications/simple_shop/simple_shop.aw:rel_RELTYPE_CONTROLLER
+msgid "Seose Kontroller (RELTYPE_CONTROLLER) tekst"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:142
 msgid "Kustuta tellimused"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:137
+#: classes/applications/simple_shop/simple_shop.aw:143
 msgid "Oled kindel, et sooovid valitud tellimused eemaldada?"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:148
+#: classes/applications/simple_shop/simple_shop.aw:154
 msgid "ID"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:153
+#: classes/applications/simple_shop/simple_shop.aw:159
 msgid "Aeg"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:161
+#: classes/applications/simple_shop/simple_shop.aw:167
 msgid "Tellija"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:166
+#: classes/applications/simple_shop/simple_shop.aw:172
 msgid ""
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:239
+#: classes/applications/simple_shop/simple_shop.aw:245
 msgid "Muuda"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:279
+#: classes/applications/simple_shop/simple_shop.aw:278
 msgid "Otsi"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:365
+#: classes/applications/simple_shop/simple_shop.aw:353 classes/applications/simple_shop/simple_shop.aw:450
 msgid "Tootekood"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:370
+#: classes/applications/simple_shop/simple_shop.aw:358 classes/applications/simple_shop/simple_shop.aw:455
 msgid "Nimetus"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:375
+#: classes/applications/simple_shop/simple_shop.aw:363 classes/applications/simple_shop/simple_shop.aw:460
 msgid "Ühik"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:380
+#: classes/applications/simple_shop/simple_shop.aw:368 classes/applications/simple_shop/simple_shop.aw:465
 msgid "Hind"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:386
+#: classes/applications/simple_shop/simple_shop.aw:373
+msgid "Kogus"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:401
+msgid "Eemalda korvist"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:473
 msgid "Lisa korvi"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:449
+#: classes/applications/simple_shop/simple_shop.aw:583
 msgid "kustutan %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:452
+#: classes/applications/simple_shop/simple_shop.aw:586
 msgid "kustutatud"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:457
+#: classes/applications/simple_shop/simple_shop.aw:591
 msgid "impordin %d objekti"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop.aw:481
+#: classes/applications/simple_shop/simple_shop.aw:595
+msgid "impordin objekti %d... "
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop.aw:611 classes/applications/simple_shop/simple_shop.aw:617
 msgid "imporditud"
 msgstr ""
 

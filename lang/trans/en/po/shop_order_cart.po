@@ -78,8 +78,8 @@ msgid "Seose kontroller (RELTYPE_CONTROLLER) tekst"
 msgstr "controller"
 
 #: classes/applications/shop/shop_order_cart.aw:149
-#: classes/applications/shop/shop_order_cart.aw:900
-#: classes/applications/shop/shop_order_cart.aw:1138
+#: classes/applications/shop/shop_order_cart.aw:911
+#: classes/applications/shop/shop_order_cart.aw:1149
 msgid "shop_order_cart::show(): no product layout set for cart (%s) "
 msgstr "shop_order_cart::show(): no product layout set for cart (%s) "
 
@@ -89,7 +89,7 @@ msgstr ""
 "For product %s, you must order an amount that is divisble by %s, currently "
 "you ordered %s"
 
-#: classes/applications/shop/shop_order_cart.aw:691
+#: classes/applications/shop/shop_order_cart.aw:700
 msgid ""
 "shop_order_cart::do_creat_order_from_cart(): no warehouse set for cart %s!"
 msgstr ""

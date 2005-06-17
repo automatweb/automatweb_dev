@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/contentmgmt/site_show.aw:1607
+#: classes/contentmgmt/site_show.aw:1611
 msgid "site_show::do_draw_menus(): no compiled filename set!"
 msgstr "site_show::do_draw_menus(): no compiled filename set!"
 
-#: classes/contentmgmt/site_show.aw:1687
+#: classes/contentmgmt/site_show.aw:1691
 msgid ""
 "site_show::exec_subtemplate_handlers(): could not find subtemplate handler "
 "in %s"
@@ -21,17 +21,17 @@ msgstr ""
 "site_show::exec_subtemplate_handlers(): could not find subtemplate handler "
 "in %s"
 
-#: classes/contentmgmt/site_show.aw:1861
+#: classes/contentmgmt/site_show.aw:1865
 msgid "site_show::make_final_vars(): need JOIN_FORM sub back!"
 msgstr "site_show::make_final_vars(): need JOIN_FORM sub back!"
 
-#: classes/contentmgmt/site_show.aw:2357
+#: classes/contentmgmt/site_show.aw:2361
 msgid ""
 "Sellelt aadressilt pole lubatud seda lehte vaadata, vabandame.<br>Aadress: "
 msgstr ""
 "Sorry, sccess is denied to this page from your IP address. <br>Address: "
 
-#: classes/contentmgmt/site_show.aw:2393
+#: classes/contentmgmt/site_show.aw:2397
 msgid ""
 "Access denied and error redirects are defined.incorrectly. Please report "
 "this to the site administrator"
@@ -39,6 +39,6 @@ msgstr ""
 "Access denied and error redirects are defined.incorrectly. Please report "
 "this to the site administrator"
 
-#: classes/contentmgmt/site_show.aw:2398
+#: classes/contentmgmt/site_show.aw:2402
 msgid "No ACL error messages defined! no can_view access for object %s"
 msgstr "No ACL error messages defined! no can_view access for object %s"

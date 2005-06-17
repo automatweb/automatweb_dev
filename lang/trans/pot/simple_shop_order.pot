@@ -11,15 +11,15 @@ msgstr ""
 
 
 #: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer
-msgid "Omaduse Siin ei ole kala (orderer) caption"
+msgid "Omaduse Tellija andmed (orderer) caption"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_comment
-msgid "Omaduse Siin ei ole kala (orderer) kommentaar"
+msgid "Omaduse Tellija andmed (orderer) kommentaar"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_order.aw:prop_orderer_help
-msgid "Omaduse Siin ei ole kala (orderer) help"
+msgid "Omaduse Tellija andmed (orderer) help"
 msgstr ""
 
 #: classes/applications/simple_shop/simple_shop_order.aw:prop_order_tb
@@ -82,19 +82,23 @@ msgstr ""
 msgid "Seose Tellija (RELTYPE_ORDERER) tekst"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:87
+#: classes/applications/simple_shop/simple_shop_order.aw:rel_RELTYPE_ORDERER_INFO
+msgid "Seose  (RELTYPE_ORDERER_INFO) tekst"
+msgstr ""
+
+#: classes/applications/simple_shop/simple_shop_order.aw:106
 msgid "Eemalda tooted"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:88
+#: classes/applications/simple_shop/simple_shop_order.aw:107
 msgid "Oled kindel, et sooovid tooted tellimusest eemaldada?"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:94
+#: classes/applications/simple_shop/simple_shop_order.aw:113
 msgid "Salvesta"
 msgstr ""
 
-#: classes/applications/simple_shop/simple_shop_order.aw:114
+#: classes/applications/simple_shop/simple_shop_order.aw:133
 msgid "Kogus"
 msgstr ""
 

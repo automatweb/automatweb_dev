@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:49:54 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -120,8 +120,7 @@ msgstr ""
 # classes/contentmgmt/promo.aw:prop_not_in_search
 msgid ""
 "Omaduse &Auml;ra n&auml;ita otsingu tulemuste lehel (not_in_search) caption"
-msgstr ""
-"Do not display on search result page"
+msgstr "Do not display on search result page"
 
 # classes/contentmgmt/promo.aw:prop_not_in_search_comment
 msgid ""
@@ -190,6 +189,20 @@ msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_no_title_help
 msgid "Omaduse Ilma pealkirjata (no_title) help"
+msgstr ""
+
+# classes/contentmgmt/promo.aw:prop_auto_period
+msgid ""
+"Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) caption"
+msgstr "Has periodic, automatically changing content"
+
+# classes/contentmgmt/promo.aw:prop_auto_period_comment
+msgid ""
+"Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/promo.aw:prop_auto_period_help
+msgid "Omaduse Perioodilise, automaatselt vahetuva sisuga (auto_period) help"
 msgstr ""
 
 # classes/contentmgmt/promo.aw:prop_groups
@@ -373,80 +386,80 @@ msgstr "image"
 msgid "Seose &auml;ra näita menüü juures (RELTYPE_NO_SHOW_MENU) tekst"
 msgstr "do not display folder"
 
-#: classes/contentmgmt/promo.aw:151
+#: classes/contentmgmt/promo.aw:154
 msgid "Vali template"
 msgstr "Select template"
 
-#: classes/contentmgmt/promo.aw:168
+#: classes/contentmgmt/promo.aw:171
 msgid "Vasakul"
 msgstr "Left"
 
-#: classes/contentmgmt/promo.aw:169
+#: classes/contentmgmt/promo.aw:172
 msgid "Paremal"
 msgstr "Right"
 
-#: classes/contentmgmt/promo.aw:170
+#: classes/contentmgmt/promo.aw:173
 msgid "Üleval"
 msgstr "Top"
 
-#: classes/contentmgmt/promo.aw:171
+#: classes/contentmgmt/promo.aw:174
 msgid "All"
 msgstr "Bottom"
 
-#: classes/contentmgmt/promo.aw:172
+#: classes/contentmgmt/promo.aw:175
 msgid "Skrolliv"
 msgstr "Scrollable"
 
-#: classes/contentmgmt/promo.aw:188
+#: classes/contentmgmt/promo.aw:191
 msgid "J&auml;rjekorra j&auml;rgi"
 msgstr "By order"
 
-#: classes/contentmgmt/promo.aw:189
+#: classes/contentmgmt/promo.aw:192
 msgid "Loomise kuup&auml;eva j&auml;rgi"
 msgstr "By created date"
 
-#: classes/contentmgmt/promo.aw:190
+#: classes/contentmgmt/promo.aw:193
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modified date"
 
-#: classes/contentmgmt/promo.aw:191
+#: classes/contentmgmt/promo.aw:194
 msgid "Dokumenti kirjutatud kuup&auml;eva j&auml;rgi"
 msgstr "By document date"
 
-#: classes/contentmgmt/promo.aw:192
+#: classes/contentmgmt/promo.aw:195
 msgid "Objekti nime j&auml;rgi"
 msgstr "By object name"
 
-#: classes/contentmgmt/promo.aw:193
+#: classes/contentmgmt/promo.aw:196
 msgid "Kalendris valitud aja j&auml;rgi"
 msgstr "By time selected in calendar"
 
-#: classes/contentmgmt/promo.aw:199
+#: classes/contentmgmt/promo.aw:202
 msgid "Suurem (uuem) enne"
 msgstr "Bigger (newer) first"
 
-#: classes/contentmgmt/promo.aw:200
+#: classes/contentmgmt/promo.aw:203
 msgid "V&auml;iksem (vanem) enne"
 msgstr "Smaller (older) first"
 
-#: classes/contentmgmt/promo.aw:264 classes/contentmgmt/promo.aw:313
-#: classes/contentmgmt/promo.aw:360
+#: classes/contentmgmt/promo.aw:267 classes/contentmgmt/promo.aw:316
+#: classes/contentmgmt/promo.aw:363
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/promo.aw:272 classes/contentmgmt/promo.aw:321
-#: classes/contentmgmt/promo.aw:369
+#: classes/contentmgmt/promo.aw:275 classes/contentmgmt/promo.aw:324
+#: classes/contentmgmt/promo.aw:372
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/promo.aw:277 classes/contentmgmt/promo.aw:326
+#: classes/contentmgmt/promo.aw:280 classes/contentmgmt/promo.aw:329
 msgid "k.a. alammenüüd"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/promo.aw:376
+#: classes/contentmgmt/promo.aw:379
 msgid "Pane pealkirjaks"
 msgstr "Set as title"
 
-#: classes/contentmgmt/promo.aw:383
+#: classes/contentmgmt/promo.aw:386
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"

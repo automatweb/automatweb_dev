@@ -18,6 +18,6 @@ msgid "this will not work"
 msgstr "this will not work"
 
 #: classes/applications/class_designer/class_visualizer.aw:264
-#: classes/applications/class_designer/class_visualizer.aw:349
+#: classes/applications/class_designer/class_visualizer.aw:383
 msgid "Seostehaldur"
 msgstr "Connection manager"

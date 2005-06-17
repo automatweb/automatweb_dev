@@ -43,6 +43,7 @@ $GLOBALS["TRANS"]["Lehe nimi"] = "Page name";
 $GLOBALS["TRANS"]["Tekst"] = "Text";
 $GLOBALS["TRANS"]["<b>Vahepealkirjad</b>"] = "<b>Subtitles</b>";
 $GLOBALS["TRANS"]["<font color='#FF0000'>J&auml;rgnev v&auml;li peab olema t&auml;idetud!</font>"] = "<font color='#FF0000'>Following field must be filled!</font>";
+$GLOBALS["TRANS"]["Salvesta"] = "Save";
 $GLOBALS["TRANS"]["Liitun"] = "Join";
 $GLOBALS["TRANS"]["Liitumise meili from aadress (%s)"] = "Join mail from address (%s)";
 $GLOBALS["TRANS"]["Liitumise meili subjekt (%s)"] = "Join mail subject (%s)";

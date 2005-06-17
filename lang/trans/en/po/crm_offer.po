@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 28 Apr 2005 10:50:00 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -333,63 +333,67 @@ msgstr "Products list"
 msgid "V&otilde;rdlustabel"
 msgstr "Compare table"
 
-#: classes/crm/crm_offer.aw:362
+#: classes/crm/crm_offer.aw:153
+msgid "Projekt"
+msgstr "Project"
+
+#: classes/crm/crm_offer.aw:363
 msgid "Algstaatus"
 msgstr "Starting status"
 
-#: classes/crm/crm_offer.aw:368
+#: classes/crm/crm_offer.aw:369
 msgid "Lõppstaatus"
 msgstr "Final status"
 
-#: classes/crm/crm_offer.aw:374
+#: classes/crm/crm_offer.aw:375
 msgid "Muutuse aeg"
 msgstr "Change time"
 
-#: classes/crm/crm_offer.aw:380
+#: classes/crm/crm_offer.aw:381
 msgid "Muutja"
 msgstr "Modified by"
 
-#: classes/crm/crm_offer.aw:412
+#: classes/crm/crm_offer.aw:413
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/crm/crm_offer.aw:435
+#: classes/crm/crm_offer.aw:436
 msgid "T&uuml;&uuml;pkomponendid"
 msgstr "Typical components"
 
-#: classes/crm/crm_offer.aw:457
+#: classes/crm/crm_offer.aw:458
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/crm/crm_offer.aw:464
+#: classes/crm/crm_offer.aw:465
 msgid "Kustuta valitud osad"
 msgstr "Delete selected parts"
 
-#: classes/crm/crm_offer.aw:465
+#: classes/crm/crm_offer.aw:466
 msgid "Oled kindel et soovid valitud osad kustutada?"
 msgstr "Are you sure you want to delete the selected parts?"
 
-#: classes/crm/crm_offer.aw:523
+#: classes/crm/crm_offer.aw:524
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/crm/crm_offer.aw:531
+#: classes/crm/crm_offer.aw:532
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/crm/crm_offer.aw:537
+#: classes/crm/crm_offer.aw:538
 msgid "T&uuml;&uuml;p"
 msgstr "Type"
 
-#: classes/crm/crm_offer.aw:543
+#: classes/crm/crm_offer.aw:544
 msgid "Muuda"
 msgstr "Change"
 
-#: classes/crm/crm_offer.aw:583
+#: classes/crm/crm_offer.aw:584
 msgid "Eemalda t&uuml;&uuml;pkomonentide nimekirjast"
 msgstr "Remove from typical component list"
 
-#: classes/crm/crm_offer.aw:594
+#: classes/crm/crm_offer.aw:595
 msgid "Tee t&uuml;&uuml;pkomponendiks"
 msgstr "Mark as typical"
 

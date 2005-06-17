@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Tue, 19 Apr 2005 21:47:45 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -217,9 +217,17 @@ msgstr ""
 msgid "Grupi Templated (templates) pealkiri"
 msgstr "Templates"
 
+# classes/install/aw_site.aw:group_templates_help
+msgid "Grupi Templated (templates) help"
+msgstr ""
+
 # classes/install/aw_site.aw:group_db
 msgid "Grupi Andmebaas (db) pealkiri"
 msgstr "Database"
+
+# classes/install/aw_site.aw:group_db_help
+msgid "Grupi Andmebaas (db) help"
+msgstr ""
 
 # classes/install/aw_site.aw:rel_RELTYPE_LAYOUT
 msgid "Seose saidi layout (RELTYPE_LAYOUT) tekst"
@@ -430,43 +438,43 @@ msgstr "Got new site id"
 msgid "Ei saanud lugeda serveri id'd! (vali andmebaas)"
 msgstr "Could not read server id! (select database)"
 
-#: classes/install/aw_site.aw:1460
+#: classes/install/aw_site.aw:1471
 msgid "Skrolliv"
 msgstr "Scrollable"
 
-#: classes/install/aw_site.aw:1461
+#: classes/install/aw_site.aw:1472
 msgid "Vasak"
 msgstr "Left"
 
-#: classes/install/aw_site.aw:1462
+#: classes/install/aw_site.aw:1473
 msgid "Parem"
 msgstr "Right"
 
-#: classes/install/aw_site.aw:1463
+#: classes/install/aw_site.aw:1474
 msgid "&Uuml;lemine"
 msgstr "Top"
 
-#: classes/install/aw_site.aw:1464
+#: classes/install/aw_site.aw:1475
 msgid "Alumine"
 msgstr "Bottom"
 
-#: classes/install/aw_site.aw:1488
+#: classes/install/aw_site.aw:1499
 msgid "%s konteiner"
 msgstr "%s container"
 
-#: classes/install/aw_site.aw:1498
+#: classes/install/aw_site.aw:1509
 msgid "%s konteineri sisu"
 msgstr "%s container content"
 
-#: classes/install/aw_site.aw:1499 classes/install/aw_site.aw:1500
+#: classes/install/aw_site.aw:1510 classes/install/aw_site.aw:1511
 msgid "pealkiri"
 msgstr "title"
 
-#: classes/install/aw_site.aw:1524
+#: classes/install/aw_site.aw:1535
 msgid "Saidi url muutus %s => %s"
 msgstr "Site's url changed from %s to %s"
 
-#: classes/install/aw_site.aw:1530
+#: classes/install/aw_site.aw:1541
 msgid ""
 "HOIATUS! Templatede valiku muutmisel kirjutatakse olemasolevad templated "
 "&uuml;le!"
@@ -474,41 +482,49 @@ msgstr ""
 "WARNING! Existing templates will be OVERWRITTEN if new templates are "
 "selected!"
 
-#: classes/install/aw_site.aw:1531
+#: classes/install/aw_site.aw:1542
 msgid "Templated muutusid default templatedest teise saidi omadeks!"
 msgstr "Templates have changed from the default to another site's"
 
-#: classes/install/aw_site.aw:1537
+#: classes/install/aw_site.aw:1548
 msgid "Templatede kataloogide nimekiri muutus!"
 msgstr "Template folder list has changed"
 
-#: classes/install/aw_site.aw:1543
+#: classes/install/aw_site.aw:1554
 msgid "Templatede linkimine muutus!"
 msgstr "Template linking has changed"
 
-#: classes/install/aw_site.aw:1549
+#: classes/install/aw_site.aw:1560
 msgid "Piltide ja css sait muutus (%s => %s)!"
 msgstr "Image and css site has changed (%s => %s)"
 
-#: classes/install/aw_site.aw:1627
+#: classes/install/aw_site.aw:1638
 msgid "aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"
 msgstr "aw_site::_do_change_url(%s): pagecache folder is empty or bad ( %s )!"
 
-#: classes/install/aw_site.aw:1702
+#: classes/install/aw_site.aw:1713
 msgid ""
 "Valmis! Sait on uue aadressi pealt kasutatav paari minuti p&auml;rast! <Br>\n"
 msgstr "Done! Site is usable on new address in a few minutes! <Br>\n"
 
-#: classes/install/aw_site.aw:1735
+#: classes/install/aw_site.aw:1746
 msgid "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (%s)!"
 msgstr "aw_site::_do_change_imgcss(): pagecache folder is empty or wrong (%s)!"
 
-#: classes/install/aw_site.aw:1743
+#: classes/install/aw_site.aw:1754
 msgid "aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"
 msgstr "aw_site::_do_change_imgcss(): basedir is empty or bad (%s)!"
 
-#: classes/install/aw_site.aw:1794
+#: classes/install/aw_site.aw:1805
 msgid ""
 "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
 msgstr ""
 "aw_site::_do_copy_existing_tpls(): pagecache folder is empty or bad (%s)!"
+
+#: classes/install/aw_site.aw:1828
+msgid "Meist"
+msgstr ""
+
+#: classes/install/aw_site.aw:1835
+msgid "Uudised"
+msgstr ""

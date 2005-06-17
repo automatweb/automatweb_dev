@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:31 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -104,18 +104,6 @@ msgstr ""
 
 #: classes/core/users/group.aw:prop_search_form_help
 msgid "Omaduse Otsinguvorm (search_form) help"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_admin_rootmenu2
-msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) caption"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_admin_rootmenu2_comment
-msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) kommentaar"
-msgstr ""
-
-#: classes/core/users/group.aw:prop_admin_rootmenu2_help
-msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) help"
 msgstr ""
 
 #: classes/core/users/group.aw:prop_grp_frontpage
@@ -250,6 +238,26 @@ msgstr ""
 msgid "Omaduse  (gp_gid) help"
 msgstr ""
 
+#: classes/core/users/group.aw:prop_admin_rootmenu2
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) caption"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_admin_rootmenu2_comment
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) kommentaar"
+msgstr ""
+
+#: classes/core/users/group.aw:prop_admin_rootmenu2_help
+msgid "Omaduse Administreerimisliidese juurkaust (admin_rootmenu2) help"
+msgstr ""
+
+#: classes/core/users/group.aw:group_general
+msgid "Grupi &Uuml;ldine (general) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_general_help
+msgid "Grupi &Uuml;ldine (general) help"
+msgstr ""
+
 #: classes/core/users/group.aw:group_dyn_search
 msgid "Grupi Otsing (dyn_search) pealkiri"
 msgstr ""
@@ -274,6 +282,14 @@ msgstr ""
 msgid "Grupi Objektid ja &Otilde;igused (objects) help"
 msgstr ""
 
+#: classes/core/users/group.aw:group_admin_rm
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) pealkiri"
+msgstr ""
+
+#: classes/core/users/group.aw:group_admin_rm_help
+msgid "Grupi Admin rootmen&uuml;&uuml; (admin_rm) help"
+msgstr ""
+
 #: classes/core/users/group.aw:rel_RELTYPE_SEARCHFORM
 msgid "Seose otsinguvorm (RELTYPE_SEARCHFORM) tekst"
 msgstr ""
@@ -294,15 +310,15 @@ msgstr ""
 msgid "Seose lisamise puu (RELTYPE_ADD_TREE) tekst"
 msgstr ""
 
-#: classes/core/users/group.aw:170
+#: classes/core/users/group.aw:178
 msgid "Tavaline"
 msgstr ""
 
-#: classes/core/users/group.aw:171
+#: classes/core/users/group.aw:179
 msgid "D&uuml;naamiline"
 msgstr ""
 
-#: classes/core/users/group.aw:180
+#: classes/core/users/group.aw:188
 msgid "
 					Kasutajate importimise faili formaat on j&auml;rgmine:<br />
 					kasutajanimi,parool,nimi,e-post,aktiivne alates,aktiivne kuni <br />
@@ -315,47 +331,47 @@ msgid "
 				"
 msgstr ""
 
-#: classes/core/users/group.aw:218
+#: classes/core/users/group.aw:226
 msgid "Impordin kasutajaid ... <br />"
 msgstr ""
 
-#: classes/core/users/group.aw:376
+#: classes/core/users/group.aw:384
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/group.aw:405
+#: classes/core/users/group.aw:413
 msgid "Objekti Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:414
+#: classes/core/users/group.aw:422
 msgid "Objekti Asukoht"
 msgstr ""
 
-#: classes/core/users/group.aw:423
+#: classes/core/users/group.aw:431
 msgid "Grupi Nimi"
 msgstr ""
 
-#: classes/core/users/group.aw:432
+#: classes/core/users/group.aw:440
 msgid "&Otilde;igused"
 msgstr ""
 
-#: classes/core/users/group.aw:452
+#: classes/core/users/group.aw:460
 msgid "Muuda objekti %s &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/group.aw:555
+#: classes/core/users/group.aw:564
 msgid "Administreerimisliidese juurkaust (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:580
+#: classes/core/users/group.aw:589
 msgid "Esileht (%s)"
 msgstr ""
 
-#: classes/core/users/group.aw:771
+#: classes/core/users/group.aw:780
 msgid "Kasutaja vaikimisi gruppi ei saa kustutada, palun kustutage kasutaja objekt!"
 msgstr ""
 
-#: classes/core/users/group.aw:817
+#: classes/core/users/group.aw:826
 msgid "Default &otilde;igused seose loomisel"
 msgstr ""
 

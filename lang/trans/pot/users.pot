@@ -14,23 +14,23 @@ msgstr ""
 msgid "Parool on edukalt vahetatud"
 msgstr ""
 
-#: classes/users.aw:1066
+#: classes/users.aw:1068
 msgid "Vigane kasutajanimi"
 msgstr ""
 
-#: classes/users.aw:1078
+#: classes/users.aw:1080
 msgid "Sellist kasutajat pole registreeritud"
 msgstr ""
 
-#: classes/users.aw:1092
+#: classes/users.aw:1094
 msgid "Sellist võtit pole väljastatud"
 msgstr ""
 
-#: classes/users.aw:1107
+#: classes/users.aw:1109
 msgid "See võti on juba aegunud"
 msgstr ""
 
-#: classes/users.aw:1107
+#: classes/users.aw:1109
 msgid "Telli uusi v&otilde;ti"
 msgstr ""
 

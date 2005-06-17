@@ -2,6 +2,7 @@
 $GLOBALS["TRANS"]["Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt (show_logged) caption"] = "Display logged in user's e-mail and name automatically";
 $GLOBALS["TRANS"]["Omaduse Teemade kaust (topic_folder) caption"] = "Topic folder";
 $GLOBALS["TRANS"]["Omaduse Listiliikmete kaust (address_folder) caption"] = "List member folder";
+$GLOBALS["TRANS"]["Omaduse KKK kaust (faq_folder) caption"] = "FAQ Folder";
 $GLOBALS["TRANS"]["Omaduse Teemasid lehel (topics_on_page) caption"] = "Topics per page";
 $GLOBALS["TRANS"]["Omaduse Kommentaare lehel (comments_on_page) caption"] = "Comments per page";
 $GLOBALS["TRANS"]["Omaduse Teemade sügavus (topic_depth) caption"] = "Topic depth";
@@ -45,6 +46,7 @@ $GLOBALS["TRANS"]["Seose Listiliikmete kaust (RELTYPE_ADDRESS_FOLDER) tekst"] = 
 $GLOBALS["TRANS"]["Seose Stiil (RELTYPE_STYLE) tekst"] = "Style";
 $GLOBALS["TRANS"]["Seose Stiilidoonor (RELTYPE_STYLE_DONOR) tekst"] = "Style donor";
 $GLOBALS["TRANS"]["Seose Administraator (RELTYPE_FORUM_ADMIN) tekst"] = "Administrator";
+$GLOBALS["TRANS"]["Seose KKK kaust (RELTYPE_FAQ_FOLDER) tekst"] = "FAW folder";
 $GLOBALS["TRANS"]["Teemade kaust on valimata"] = "Topic folder is not selected";
 $GLOBALS["TRANS"]["Teema"] = "Topic";
 $GLOBALS["TRANS"]["Jäta välja"] = "Exclude";

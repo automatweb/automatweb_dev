@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 11:11:07 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -13,14 +13,14 @@ msgstr ""
 msgid "<b>AutomatWeb</b>"
 msgstr "<b>AutomatWeb</b>"
 
-#: classes/admin/admin_folders.aw:344
+#: classes/admin/admin_folders.aw:358
 msgid "Mitteperioodilised"
 msgstr "Non-periodic"
 
-#: classes/admin/admin_folders.aw:354
+#: classes/admin/admin_folders.aw:368
 msgid "Reload"
 msgstr "Refresh"
 
-#: classes/admin/admin_folders.aw:360
+#: classes/admin/admin_folders.aw:374
 msgid "Logi v&auml;lja"
 msgstr "Log out"

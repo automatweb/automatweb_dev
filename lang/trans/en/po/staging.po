@@ -82,15 +82,15 @@ msgid "Omaduse Projektid (project_selector) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:prop_trans
-msgid "Omaduse Tõlkimine (trans) caption"
+msgid "Omaduse Tlkimine (trans) caption"
 msgstr "Translation"
 
 # classes/applications/calendar/staging.aw:prop_trans_comment
-msgid "Omaduse Tõlkimine (trans) kommentaar"
+msgid "Omaduse Tlkimine (trans) kommentaar"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:prop_trans_help
-msgid "Omaduse Tõlkimine (trans) help"
+msgid "Omaduse Tlkimine (trans) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:prop_times
@@ -114,11 +114,11 @@ msgid "Grupi Projektid (projects) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:group_trans
-msgid "Grupi Tõlkimine (trans) pealkiri"
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
 msgstr "Translation"
 
 # classes/applications/calendar/staging.aw:group_trans_help
-msgid "Grupi Tõlkimine (trans) help"
+msgid "Grupi T&otilde;lkimine (trans) help"
 msgstr ""
 
 # classes/applications/calendar/staging.aw:group_times
@@ -168,3 +168,11 @@ msgstr "New %s"
 #: classes/applications/calendar/staging.aw:175
 msgid "Tee sündmus %s"
 msgstr "Create event %s"
+
+# classes/applications/calendar/staging.aw:prop_trans
+#~ msgid "Omaduse Tõlkimine (trans) caption"
+#~ msgstr "Translation"
+
+# classes/applications/calendar/staging.aw:group_trans
+#~ msgid "Grupi Tõlkimine (trans) pealkiri"
+#~ msgstr "Translation"

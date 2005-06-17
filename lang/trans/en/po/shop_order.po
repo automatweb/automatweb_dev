@@ -212,6 +212,6 @@ msgid "Lao v&auml;ljaminek tellimuse %s p&otilde;hjal"
 msgstr "Warehouse export based on order %s"
 
 #: classes/applications/shop/shop_order.aw:464
-#: classes/applications/shop/shop_order.aw:605
+#: classes/applications/shop/shop_order.aw:606
 msgid "Tellimus laost %s"
 msgstr "Order from warehouse %s"

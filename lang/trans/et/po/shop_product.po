@@ -809,6 +809,6 @@ msgstr ""
 msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:467
+#: classes/applications/shop/shop_product.aw:466
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

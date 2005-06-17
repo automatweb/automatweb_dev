@@ -19,4 +19,14 @@ $GLOBALS["TRANS"]["Kustuta rida"] = "Delete row";
 $GLOBALS["TRANS"]["Poolita rida"] = "Split row";
 $GLOBALS["TRANS"]["Poolita tulp"] = "Split column";
 $GLOBALS["TRANS"]["HTML"] = "HTML";
+$GLOBALS["TRANS"]["Päised"] = "Headings";
+$GLOBALS["TRANS"]["Heading 1"] = "Heading 1";
+$GLOBALS["TRANS"]["Heading 2"] = "Heading 2";
+$GLOBALS["TRANS"]["Heading 3"] = "Heading 3";
+$GLOBALS["TRANS"]["Heading 4"] = "Heading 4";
+$GLOBALS["TRANS"]["Heading 5"] = "Heading 5";
+$GLOBALS["TRANS"]["Heading 6"] = "Heading 6";
+$GLOBALS["TRANS"]["Teksti värv"] = "Text colour";
+$GLOBALS["TRANS"]["Sinine"] = "Blue";
+$GLOBALS["TRANS"]["Punane"] = "Red";
 ?>

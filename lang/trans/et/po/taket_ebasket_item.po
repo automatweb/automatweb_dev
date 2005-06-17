@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:23 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,104 +9,106 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/taket/taket_ebasket_item.aw:prop_product_code
+# classes/taket/taket_ebasket_item.aw:prop_product_code
 msgid "Omaduse  (product_code) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_product_code_comment
+# classes/taket/taket_ebasket_item.aw:prop_product_code_comment
 msgid "Omaduse  (product_code) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_product_code_help
+# classes/taket/taket_ebasket_item.aw:prop_product_code_help
 msgid "Omaduse  (product_code) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_product_name
+# classes/taket/taket_ebasket_item.aw:prop_product_name
 msgid "Omaduse  (product_name) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_product_name_comment
+# classes/taket/taket_ebasket_item.aw:prop_product_name_comment
 msgid "Omaduse  (product_name) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_product_name_help
+# classes/taket/taket_ebasket_item.aw:prop_product_name_help
 msgid "Omaduse  (product_name) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_ebasket_id
+# classes/taket/taket_ebasket_item.aw:prop_ebasket_id
 msgid "Omaduse  (ebasket_id) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_ebasket_id_comment
+# classes/taket/taket_ebasket_item.aw:prop_ebasket_id_comment
 msgid "Omaduse  (ebasket_id) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_ebasket_id_help
+# classes/taket/taket_ebasket_item.aw:prop_ebasket_id_help
 msgid "Omaduse  (ebasket_id) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_quantity
+# classes/taket/taket_ebasket_item.aw:prop_quantity
 msgid "Omaduse  (quantity) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_quantity_comment
+# classes/taket/taket_ebasket_item.aw:prop_quantity_comment
 msgid "Omaduse  (quantity) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_quantity_help
+# classes/taket/taket_ebasket_item.aw:prop_quantity_help
 msgid "Omaduse  (quantity) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_price
+# classes/taket/taket_ebasket_item.aw:prop_price
 msgid "Omaduse  (price) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_price_comment
+# classes/taket/taket_ebasket_item.aw:prop_price_comment
 msgid "Omaduse  (price) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_price_help
+# classes/taket/taket_ebasket_item.aw:prop_price_help
 msgid "Omaduse  (price) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_discount
+# classes/taket/taket_ebasket_item.aw:prop_discount
 msgid "Omaduse  (discount) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_discount_comment
+# classes/taket/taket_ebasket_item.aw:prop_discount_comment
 msgid "Omaduse  (discount) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_discount_help
+# classes/taket/taket_ebasket_item.aw:prop_discount_help
 msgid "Omaduse  (discount) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_inStock
+# classes/taket/taket_ebasket_item.aw:prop_inStock
 msgid "Omaduse  (inStock) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_inStock_comment
+# classes/taket/taket_ebasket_item.aw:prop_inStock_comment
 msgid "Omaduse  (inStock) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_inStock_help
+# classes/taket/taket_ebasket_item.aw:prop_inStock_help
 msgid "Omaduse  (inStock) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_supplier_id
+# classes/taket/taket_ebasket_item.aw:prop_supplier_id
 msgid "Omaduse  (supplier_id) caption"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_supplier_id_comment
+# classes/taket/taket_ebasket_item.aw:prop_supplier_id_comment
 msgid "Omaduse  (supplier_id) kommentaar"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:prop_supplier_id_help
+# classes/taket/taket_ebasket_item.aw:prop_supplier_id_help
 msgid "Omaduse  (supplier_id) help"
 msgstr ""
 
-#: classes/taket/taket_ebasket_item.aw:group_
+# classes/taket/taket_ebasket_item.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
 
+# classes/taket/taket_ebasket_item.aw:group__help
+msgid "Grupi  () help"
+msgstr ""

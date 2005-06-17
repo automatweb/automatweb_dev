@@ -225,6 +225,22 @@ msgstr ""
 msgid "Omaduse Landscape vaatega lehed (sideways_pages) help"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:prop_foldernames
+msgid ""
+"Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) caption"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:prop_foldernames_comment
+msgid ""
+"Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) "
+"kommentaar"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:prop_foldernames_help
+msgid ""
+"Omaduse Kaustade nimed impordi jaoks (id=nimi,id=nimi) (foldernames) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:prop_force_7_view
 msgid "Omaduse 7 pildiga lehed (force_7_view) caption"
 msgstr ""
@@ -388,6 +404,14 @@ msgstr ""
 msgid "Grupi Kataloogide m&auml;&auml;rangud (folderspri) help"
 msgstr ""
 
+# classes/applications/shop/otto/otto_import.aw:group_foldersnames
+msgid "Grupi Kaustade nimed (foldersnames) pealkiri"
+msgstr ""
+
+# classes/applications/shop/otto/otto_import.aw:group_foldersnames_help
+msgid "Grupi Kaustade nimed (foldersnames) help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:group_views
 msgid "Grupi Vaated (views) pealkiri"
 msgstr ""
@@ -424,18 +448,18 @@ msgstr ""
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:503
+#: classes/applications/shop/otto/otto_import.aw:508
 msgid "otto_import::images(): could not fetch html for url %s!"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1364
+#: classes/applications/shop/otto/otto_import.aw:1380
 msgid "all done! <br>"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1796
+#: classes/applications/shop/otto/otto_import.aw:1812
 msgid "Lehed komaga eraldatult"
 msgstr ""
 
-#: classes/applications/shop/otto/otto_import.aw:1802
+#: classes/applications/shop/otto/otto_import.aw:1818
 msgid "AW Kataloogi ID"
 msgstr ""
