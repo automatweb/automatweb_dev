@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.40 2005/06/16 12:29:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cb_search.aw,v 1.41 2005/06/20 10:26:21 kristo Exp $
 // cb_search.aw - Classbase otsing 
 /*
 
@@ -82,6 +82,9 @@
 
 @reltype SEARCH_VALID_CTR value=6 clid=CL_CFGCONTROLLER
 @caption otsingu valideerimise kontroller
+
+@reltype ADDITIONAL_OBJECT_TYPE value=7 clid=CL_OBJECT_TYPE
+@caption lisaks leitav objektit&uuml;&uuml;p
 
 // step 1 - choose a class
 // step 2 - choose a connection (might be optional)
@@ -698,6 +701,9 @@ class cb_search extends class_base
 				$sdata["limit"] = 500;
 				$sdata["join_strategy"] = "data";
 				$sdata["site_id"] = array();
+
+				$this->add_additional_object_types($arr["obj_inst"], $sdata);
+
 				$olist_cnt = new object_list($sdata);
 
 				if ($data["per_page"])
@@ -1545,6 +1551,24 @@ class cb_search extends class_base
 			array(),
 			$o
 		);
+	}
+
+	function add_additional_object_types($o, &$sdata)
+	{
+		$ots = $o->connections_from(array("type" => "RELTYPE_ADDITIONAL_OBJECT_TYPE"));
+		if (count($ots))
+		{
+			if (!is_array($sdata["class_id"]))
+			{
+				$sdata["class_id"] = array($sdata["class_id"]);
+			}
+
+			foreach($ots as $ot_c)
+			{
+				$ot = $ot_c->to();
+				$sdata["class_id"][] = $ot->prop("type");
+			}
+		}
 	}
 }
 ?>

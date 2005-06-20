@@ -202,6 +202,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>otsingu valideerimise kontroller</caption>
             </SEARCH_VALID_CTR>
+            <ADDITIONAL_OBJECT_TYPE>
+                  <value>7</value>
+                  <clid>CL_OBJECT_TYPE</clid>
+                  <caption>lisaks leitav objektit&amp;uuml;&amp;uuml;p</caption>
+            </ADDITIONAL_OBJECT_TYPE>
       </reltypes>
 </properties>
 
