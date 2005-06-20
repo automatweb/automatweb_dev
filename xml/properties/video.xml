@@ -70,15 +70,6 @@
             <caption>URL (RealPlayer)</caption>
       </property>
       <property>
-            <name>capt_rp</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lingi tekst (RealPlayer)</caption>
-      </property>
-      <property>
             <name>src_wm</name>
             <table>objects</table>
             <group>general</group>
@@ -88,13 +79,14 @@
             <caption>URL (Windows Media)</caption>
       </property>
       <property>
-            <name>capt_wm</name>
+            <name>trans</name>
             <table>objects</table>
-            <group>general</group>
+            <group>trans</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>Lingi tekst (Windows Media)</caption>
+            <type>translator</type>
+            <props>name</props>
+            <caption>T&amp;otilde;ge</caption>
       </property>
       <classinfo>
             <syslog_type>ST_VIDEO</syslog_type>
@@ -102,6 +94,11 @@
             <no_comment>1</no_comment>
             <no_status>1</no_status>
       </classinfo>
+      <groupinfo>
+            <trans>
+                  <caption>T&amp;otilde;lkimine</caption>
+            </trans>
+      </groupinfo>
       <reltypes>
             <IMAGE>
                   <value>1</value>
