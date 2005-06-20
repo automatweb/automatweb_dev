@@ -331,6 +331,7 @@ class languages extends aw_template
 			$LC = "et";
 		}
 		aw_global_set("LC", $LC);
+		aw_global_set("charset",$la["charset"]);
 		// oh yeah, we should only overwrite admin_lang_lc if it is not set already!
 		if (aw_global_get("admin_lang_lc") == "")
 		{
