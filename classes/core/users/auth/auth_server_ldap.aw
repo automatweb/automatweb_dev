@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.14 2005/03/23 10:31:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_ldap.aw,v 1.15 2005/06/20 11:17:08 kristo Exp $
 // auth_server_ldap.aw - Autentimisserver LDAP 
 /*
 
@@ -185,9 +185,16 @@ class auth_server_ldap extends class_base
 		$srv = $o->prop("server");
 		if ($o->prop("server_ldaps"))
 		{
-			$srv = "https://".$srv;
+			$srv = "ldaps://".$srv;
 		}
-		$res = ldap_connect($srv, $o->prop("server_port"));
+		if ($o->prop("server_port"))
+		{
+			$res = ldap_connect($srv, $o->prop("server_port"));
+		}
+		else
+		{
+			$res = ldap_connect($srv);
+		}
 		if (!$res)
 		{
 			$this->last_error = t("Ei saanud serveriga &uuml;hendust!");

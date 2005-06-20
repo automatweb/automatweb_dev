@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.1 2005/05/31 09:53:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_server_openldap.aw,v 1.2 2005/06/20 11:17:08 kristo Exp $
 // auth_server_openldap.aw - Autentimisserver OpenLDAP 
 /*
 
@@ -21,6 +21,9 @@
 
 @property ad_base_dn type=textbox
 @caption Baas-DN kasutajate otsimiseks
+
+@property grp_base_dn type=textbox
+@caption Baas-DN gruppide otsimiseks
 
 @property ad_uid type=textbox
 @caption Kasutaja (gruppide lugemiseks)
@@ -137,7 +140,8 @@ class auth_server_openldap extends class_base
 		$uid = $credentials["uid"];
 
 		$break = false;
-		$bind = @ldap_bind($res, "cn=$uid,".$server->prop("ad_base_dn"), $credentials["password"]);
+		$bind = @ldap_bind($res, "uid=".$uid.",".$server->prop("ad_base_dn"), $credentials["password"]);
+		
 		if ($bind)
 		{
 			$grp = $server->prop("ad_grp_txt");
@@ -148,7 +152,7 @@ class auth_server_openldap extends class_base
 			if ($grp == "" || ($grp != "" && $this->_is_member_of($res, $server, $grp, $credentials)))
 			{
 				$this->_proc_credentials($res, $server, $credentials);
-
+				
 				if ($conf->check_local_user($server->id(), $credentials))
 				{
 					return array(true, "", false);
@@ -178,8 +182,7 @@ class auth_server_openldap extends class_base
 			$srv = "ldaps://".$srv;
 		}
 		$res = ldap_connect($srv, $o->prop("server_port"));
-		//echo "ldap_connect($srv, ".$o->prop("server_port")."); res = $res <br>";
-
+		
 		if (!$res)
 		{
 			$this->last_error = t("Ei saanud serveriga &uuml;hendust!");
@@ -187,21 +190,18 @@ class auth_server_openldap extends class_base
 		}
 		ldap_set_option($res, LDAP_OPT_PROTOCOL_VERSION, 3);
 
-
 		$uid = $o->prop("ad_uid");
 		if ($uid)
 		{
-			if (!ldap_bind($res, "cn=$uid,".$o->prop("ad_base_dn"), $o->prop("ad_pwd")))
+			if (!ldap_bind($res, "uid=".$o->prop("ad_uid").",".$o->prop("ad_base_dn"), $o->prop("ad_pwd")))
 			{
 				return array();
 			}
 		}
-		//echo "bound <br>";
 
-		$sr=ldap_search($res, $o->prop("ad_base_dn"), "(objectClass=groupOfNames)"); 
+		$sr=ldap_search($res, $o->prop("grp_base_dn"), "objectclass=posixgroup", array("cn")); 
 		$info = ldap_get_entries($res, $sr);
-		//echo dbg::dump($info);
-
+		
 		$ret = array("" => "");
 		for ($i=0; $i<$info["count"]; $i++) 
 		{
@@ -221,24 +221,16 @@ class auth_server_openldap extends class_base
 			return;
 		}
 
-		$sr=ldap_search($res, $o->prop("ad_base_dn"), "(objectClass=groupOfNames)"); 
+		$sr=ldap_search($res, $o->prop("grp_base_dn"), "cn=".$grp); 
 		$info = ldap_get_entries($res, $sr);
 		$ret = false;
-		for ($i = 0; $i < $info["count"]; $i++) 
+		
+		// check members
+		for($a = 0; $a < $info[0]["memberuid"]["count"]; $a++)
 		{
-			list($cn) = explode(",", $info[$i]["dn"]);
-			list(,$igrp) = explode("=", $cn);
-			if ($grp == $igrp)
+			if ($un == $info[0]["memberuid"][$a])
 			{
-				// check members
-				for($a = 0; $a < $info[$i]["member"]["count"]; $a++)
-				{
-					list($un) = explode(",", $info[$i]["member"][$a]);
-					if ($un == "cn=".$cred["uid"])
-					{
-						return true;
-					}
-				}
+				return true;
 			}
 		}
 
@@ -255,38 +247,18 @@ class auth_server_openldap extends class_base
 			return;
 		}
 
-		//$sr=ldap_search($res, $dn, "uid=".$cred["uid"], array("mail","fullname", "givenname", "sn"));
-		$sr = ldap_search($res, $dn, "objectclass=user", array("mail","fullname", "givenname", "sn"));
-
+		$sr=ldap_search($res, $dn, "uid=".$cred["uid"]);
 		$fdn = trim(strtolower("cn=".$cred["uid"].",".$dn));
-		$a_info = ldap_get_entries($res, $sr);
-		$info = NULL;
-		for($tmp = 0; $tmp < $a_info["count"]; $tmp++)
-		{
-			if (trim(strtolower($a_info[$tmp]["dn"])) == $fdn)
-			{
-				$info = array(0 => $a_info[$tmp],"count" => 1);
-				break;
-			}
-		}
+		$info = ldap_get_entries($res, $sr);
 		
 		if (!$info)
 		{
 			return;
 		}
 
-		if ($info["count"] > 0 && $info[0]["mail"]["count"] > 0)
+		if ($info["count"] > 0 && $info[0]["displayname"]["count"] > 0)
 		{
-			$cred["mail"] = $info[0]["mail"][0];
-		}
-		if ($info["count"] > 0 && $info[0]["fullname"]["count"] > 0)
-		{
-			$cred["name"] = $info[0]["fullname"]["0"];
-		}
-
-		if ($info["count"] > 0 && $info[0]["givenname"]["count"] > 0)
-		{
-			$cred["name"] = $info[0]["givenname"][0]." ".$info[0]["sn"][0];
+			$cred["name"] = $info[0]["displayname"]["0"];
 		}
 	}
 
