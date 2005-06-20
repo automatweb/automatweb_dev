@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.181 2005/06/15 13:29:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.182 2005/06/20 11:22:19 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -222,21 +222,6 @@ class aliasmgr extends aw_template
 		$o->set_meta("aliaslinks",$link);
 		$o->save();
 
-		$cache_inst = get_instance("cache");
-		$alist = $o->connections_from();
-		foreach($alist as $ad)
-		{
-			if ($ad->prop('cached') != $cache[$ad->prop('to')])
-			{
-				if (!$cache[$ad->prop('to')])
-				{
-					$cache_inst->file_invalidate_regex('alias_cache-source-'.$id.'-target-'.$ad->prop('to').'.*');
-				}
-				$ad->change(array(
-					"cached" => $cache[$ad->prop('to')]
-				));
-			}
-		}
 		if (!empty($group))
 		{
 			$act = "change";
@@ -373,7 +358,6 @@ class aliasmgr extends aw_template
 			}
 		}
 
-		$cache_inst = get_instance("cache");
 		$classlist = aw_ini_get("classes");
 
 		// try to find aliases until we no longer find any. 
@@ -439,11 +423,8 @@ class aliasmgr extends aw_template
 							$source = str_replace($avalue, "", $source);
 							continue;
 						}
-						// check if the alias is cached
-						// if nothing comes up, we just replace it with a empty string
-						$replacement = $this->get_alias_cache($adata, $$emb_obj_name, &$cache_inst);
-						$from_cache = true;
-						if (method_exists($$emb_obj_name,"parse_alias") && ($replacement === false))
+						$replacement = false;
+						if (method_exists($$emb_obj_name,"parse_alias"))
 						{
 							$parm = array(
 								"oid" => $oid,
@@ -471,12 +452,9 @@ class aliasmgr extends aw_template
 								$this->tmp_vars = array($inplace => $replacement);
 								$replacement = "";
 							};
-
-							$from_cache = false;
 						}
 
 						$source = str_replace($avalue,$replacement,$source);
-						$this->write_alias_cache($adata, $$emb_obj_name, &$cache_inst, $replacement, $from_cache);
 					}
 				}
 			}
@@ -536,15 +514,6 @@ class aliasmgr extends aw_template
 		$this->t->define_field(array(
 			"name" => "link",
 			"caption" => t("Link"),
-			"talign" => "center",
-			"width" => 50,
-			"align" => "center",
-			"class" => "celltext",
-			"nowrap" => "1",
-		));
-		$this->t->define_field(array(
-			"name" => "cache",
-			"caption" => t("Cache"),
 			"talign" => "center",
 			"width" => 50,
 			"align" => "center",
@@ -777,12 +746,6 @@ class aliasmgr extends aw_template
 			{
 				$adat["reltype"] = $type_str;
 			};
-
-			$adat["cache"] = html::checkbox(array(
-				'name' => 'cache['.$alias->prop('to').']',
-				'value' => 1,
-				'checked' => ($alias->prop('cached') == 1)
-			));
 
 			$this->t->define_data($adat);
 		}
@@ -1252,60 +1215,6 @@ HTM;
 			$alls[] ='"'.$key.'"';
 		}
 		return implode(',', $alls);
-	}
-
-	function get_alias_cache($adata, &$emb_inst, &$cache_inst)
-	{
-		if ($adata['cached'] == 1)
-		{
-			if (method_exists($emb_inst, "callback_alias_cache_get_url_hash"))
-			{
-				$this->url_hash = $emb_inst->callback_alias_cache_get_url_hash();
-			}
-			else
-			{
-				$this->url_hash = gen_uniq_id($this->REQUEST_URI);
-			}
-
-			$key = 'alias_cache-source-'.$adata['from'].'-target-'.$adata['to'].'-urlhash-'.$this->url_hash;
-			if (($replacement = $cache_inst->file_get($key)) !== false)
-			{
-				return $replacement;
-			}
-		}
-		return false;
-	}
-
-	function write_alias_cache($adata, &$emb_inst, &$cache_inst, $replacement, $from_cache)
-	{
-		if ($from_cache)
-		{
-			// just let the object handle the cache show if needed
-			if (method_exists($emb_inst, "callback_alias_cache_show_alias"))
-			{
-				$emb_inst->callback_alias_cache_show_alias(array(
-					"alias" => $adata,
-					"content" => $replacement
-				));
-			}
-		}
-
-		if (!$from_cache)
-		{
-			if ($adata['cached'] == 1)
-			{
-				$groups = array();
-				if (method_exists($emb_inst, "callback_alias_cache_get_groups"))
-				{
-					$groups = $emb_inst->callback_alias_cache_get_groups(array(
-						'id' => $adata['from']
-					));
-				}
-
-				$key = 'alias_cache-source-'.$adata['from'].'-target-'.$adata['to'].'-urlhash-'.$this->url_hash;
-				$cache_inst->file_set($key,$replacement);
-			}
-		}
 	}
 
 	function search_callback_modify_parts(&$args,&$parts)
