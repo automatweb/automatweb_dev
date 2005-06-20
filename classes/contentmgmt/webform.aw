@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.74 2005/06/17 09:45:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.75 2005/06/20 10:34:44 kristo Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -203,6 +203,9 @@
 
 @reltype CAL_REG_FORM_CONF value=13 clid=CL_CALENDAR_REGISTRATION_FORM_CONF
 @caption S&uuml;ndmuse vormi konf
+
+@reltype AFTER_SAVE_CONTROLLER value=14 clid=CL_CFGCONTROLLER
+@caption p&auml;rast salvestamist kontroller
 
 */
 
@@ -1992,6 +1995,14 @@ class webform extends class_base
 			$o->set_name(trim($name));
 			$o->set_prop("register_id", $register->id());
 			$o->save();
+
+			foreach($obj_inst->connections_from(array("type" => "RELTYPE_AFTER_SAVE_CONTROLLER")) as $c)
+			{
+				$controller_obj = $c->to();
+				$controller_i = $controller_obj->instance();
+				$controller_i->check_property($controller_obj->id(), $o->id(), $o->properties(), $arr, $o->properties(), $o);
+			}
+
 			$emxs = $obj_inst->connections_from(array(
 				"type" => "RELTYPE_EMAIL",
 			));

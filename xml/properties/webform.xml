@@ -397,6 +397,11 @@
                   <clid>CL_CALENDAR_REGISTRATION_FORM_CONF</clid>
                   <caption>S&amp;uuml;ndmuse vormi konf</caption>
             </CAL_REG_FORM_CONF>
+            <AFTER_SAVE_CONTROLLER>
+                  <value>14</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>p&amp;auml;rast salvestamist kontroller</caption>
+            </AFTER_SAVE_CONTROLLER>
       </reltypes>
 </properties>
 
