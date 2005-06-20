@@ -1,12 +1,14 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.4 2005/06/17 10:08:10 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.5 2005/06/20 14:55:45 duke Exp $
 // video.aw - Video 
 /*
 
 @classinfo syslog_type=ST_VIDEO relationmgr=yes no_comment=1 no_status=1
 
+
 @default table=objects
 @default group=general
+
 @default field=meta
 @default method=serialize
 
@@ -39,6 +41,11 @@ caption Lingi tekst (RealPlayer)
 
 property capt_wm type=textbox
 caption Lingi tekst (Windows Media)
+
+@property trans type=translator group=trans props=name
+@caption T&otilde;ge
+
+@groupinfo trans caption="T&otilde;lkimine"
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Video pilt
@@ -124,6 +131,13 @@ class video extends class_base
 		}
 	
 		return $this->parse();
+	}
+	
+	function request_execute($o)
+	{
+		$this->read_template("autoplay.tpl");
+		$this->vars($o->properties());
+		die($this->parse());
 	}
 }
 ?>
