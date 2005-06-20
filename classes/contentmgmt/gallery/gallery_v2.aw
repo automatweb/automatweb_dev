@@ -1,6 +1,6 @@
 <?php
 // gallery.aw - gallery management
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.59 2005/05/12 11:29:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/gallery_v2.aw,v 1.60 2005/06/20 10:43:06 kristo Exp $
 
 /*
 
@@ -763,7 +763,8 @@ class gallery_v2 extends class_base
 			$url = aw_url_change_var("page", $pg);
 			$this->vars(array(
 				"link" => $url,
-				"page_num" => $sp
+				"page_num" => $sp,
+				"section" => aw_global_get("section")
 			));
 			if ($pg == $page)
 			{
