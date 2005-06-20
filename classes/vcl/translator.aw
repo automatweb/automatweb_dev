@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.7 2005/06/16 11:00:43 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/translator.aw,v 1.8 2005/06/20 14:55:08 duke Exp $
 class translator extends  core
 {
 	function translator()
@@ -141,7 +141,7 @@ class translator extends  core
 			$conn = reset($t_conns);
 			$orig = $conn->to();
 		};
-		obj_set_opt("no_auto_translation",0);
+		//obj_set_opt("no_auto_translation",0);
 
 		$prnt = new object($orig->parent());
 
@@ -149,15 +149,23 @@ class translator extends  core
 			"brother_of" => $orig->id(),
 		));
 
+		// figure out under the parents for translations for the the current object
 		$o = $orig;
 
 		$brotlist = array();
 		$parents = array();
 
+		// then, how the heck do 
+
 		foreach($brothers->arr() as $brot)
 		{
 			$prt = new object($brot->parent());
 			$_trans = $this->_get_translations_for($prt->id());
+
+			/*print "prid = " . $prt->id() . "<br>";
+			print "translations ";
+			arr($_trans);
+			*/	
 
 			$brotlist[$brot->parent()] = 1;
 
@@ -168,8 +176,17 @@ class translator extends  core
 			};
 		};
 
+		// brotlist contains all the id-s of all brothers of this object
                 obj_set_opt("no_auto_translation", 1);
 
+		//arr($brotlist);
+		//exit;
+
+		//arr($brotlist);
+
+
+		// now, lets figure out the id-s of project translations, so I can create translated
+		// objects under correct parents
 		$tr_conns = $prnt->connections_from(array(
 			"type" => RELTYPE_TRANSLATION, 
 		));
@@ -183,6 +200,7 @@ class translator extends  core
 		// 4. create brothers from those translation objects where needed
                 
 
+		// tr_parents contains the id-s of all parents, sorted by language
 		$tr_parents = array();
 
 		foreach($tr_conns as $tr_conn)
@@ -195,6 +213,7 @@ class translator extends  core
                         "type" => RELTYPE_TRANSLATION,
                 ));
 
+		// translated contains the id-s of all already existing translations of current object
                 $translated = array();
 
                 foreach($tr_conns as $tr_conn)
@@ -202,6 +221,17 @@ class translator extends  core
                         $to = $tr_conn->to();
                         $translated[$to->lang()] = $to;
                 };
+
+		/*
+		print "<h1>";
+		arr($tr_parents);
+		print "</h1>";
+		print "<h1>";
+		arr($translated);
+		print "</h1>";
+		arr($tr_parents);
+		arr($translated);
+		*/
 		
 		obj_set_opt("no_auto_translation", 1);
 
@@ -216,13 +246,8 @@ class translator extends  core
                         "all_data" => true,
                 ));
 
-		//$langdata = aw_ini_get("languages.list");
-		//arr($langinfo);
-		/*
-		arr($langinfo);
-		arr($langdata);
-		arr($translated);
-		*/
+		// oot, see asi ei tõlgi ju ometi koopiaid ka ära? oh fuck küll, miks see nii raske peab olema? :(
+
 		foreach($eldata as $lang => $lang_data)
 		{
 			$curr_lang = $langinfo[$lang];
@@ -267,6 +292,7 @@ class translator extends  core
 
                                 foreach($lang_data as $prop_key => $prop_val)
                                 {
+					// okey then .. this takes care of'
                                         if ($prop_val)
                                         {
                                                 $fields_with_values++;
@@ -319,11 +345,24 @@ class translator extends  core
 					foreach($brotlist as $brot => $savi)
 					{
 						// so I get the real object
+						//print "bx = $brot<br>";
 						$bof = new object($brot);
-						$clid = $clone->create_brother($bof->id());
+						$create_parent = $bof->id();
+						if ($parents[$brot][$lang])
+						{
+							$create_parent = $parents[$brot][$lang];
+							/*arr($lang);
+							arr($parents[$brot]);
+							*/
+						};
+						//print "createing under $create_parent<br>";
+						//print "creating brother under " . $bof->id() . "<br>";
+						$clid = $clone->create_brother($create_parent);
 						$clone_obj = new object($clid);
+						//print "god id" . $clone_obj->id() . "<br>";
 						$clone_obj->set_lang($lang);
 						$clone_obj->save();
+						//*/
 
 					};
 				};
