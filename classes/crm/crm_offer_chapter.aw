@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_chapter.aw,v 1.1 2005/04/13 12:49:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer_chapter.aw,v 1.2 2005/06/21 11:56:25 kristo Exp $
 // crm_offer_chapter.aw - Pakkumise peat&uuml;kk 
 /*
 
@@ -53,6 +53,17 @@ class crm_offer_chapter extends class_base
 	function generate_html($offer, $item)
 	{
 		return "<font size=2>".$item->name()."</font><br><br>".nl2br($item->prop("content"))." <br><br>";
+	}
+
+	function generate_pdf($offer, $item)
+	{
+		$this->read_template("chapter_xsl.tpl");
+		$this->vars(array(
+			"title" => $item->name(),
+			"content" => $item->prop("content"),
+			"ch_id" => $item->id()
+		));
+		return $this->parse();
 	}
 }
 ?>

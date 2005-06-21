@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.35 2005/06/17 11:35:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.36 2005/06/21 11:56:25 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -646,7 +646,10 @@ class crm_offer extends class_base
 	function generate_offer($o)
 	{
 		// try pdf
-		$this->_try_pdf($o);
+		if ($_GET["pdf"] == 1)
+		{
+			$this->_try_pdf($o);
+		}
 		
 
 		$this->read_template("offer_html.tpl");
@@ -697,7 +700,7 @@ class crm_offer extends class_base
 			"logo" => $lg
 		));
 
-		return $this->parse();
+		return html::href(array("url" => aw_url_change_var("pdf", 1), "caption" => "PDF")).$this->parse();
 	}
 
 	/**
@@ -771,6 +774,33 @@ class crm_offer extends class_base
 	{
 		$this->read_template("offer_xsl.tpl");
 
+		// get offer subobjects
+		$ot = new object_tree(array(
+			"parent" => $o->id(),
+			"class_id" => array_keys($this->addable),
+			"sort_by" => "objects.jrk"
+		));
+
+		// go over tree and generate html
+		$list = $ot->to_list();
+		$ce = "";
+		foreach($list->arr() as $item)
+		{
+			$item_i = $item->instance();
+			$cl = get_class($item_i);
+			if ($cl == "crm_offer_chapter")
+			{
+				$html .= $item_i->generate_pdf($o, $item);
+
+				$this->vars(array(
+					"ch_name" => $item->name(),
+					"ch_id" => $item->id()
+				));
+				$ce .= $this->parse("CONTENTS_ENTRY");
+			}
+		}
+
+
 		$orderer = "";
 		if (is_oid($o->prop("orderer")) && $this->can("view", $o->prop("orderer")))
 		{
@@ -787,11 +817,13 @@ class crm_offer extends class_base
 		$lg = $imp_o->prop("logo");
 
 		$this->vars(array(
+			"CONTENTS_ENTRY" => $ce,
 			"name" => $o->name(),
 			"orderer" => $orderer,
 			"implementor" => $implementor,
 			"date" => locale::get_lc_date(date(), LC_DATE_FORMAT_LONG),
-			"logo" => $lg
+			"logo" => $lg,
+			"content" => $html
 		));
 
 		$fo = $this->parse();
@@ -809,8 +841,17 @@ class crm_offer extends class_base
 		$fop_cmd = aw_ini_get("server.fop_cmd")." ".$fn_in." ".$fn_out;
 		$res = `$fop_cmd`;
 
+		$ct = $this->get_file(array("file" => $fn_out));
+		if (strlen($ct) == 0)
+		{
+		unlink($fn_in);
+		unlink($fn_out);
+			die(
+	"<pre>".$res."\n\n".htmlentities($fo)."</pre>");
+		}
+
 		header("Content-type: application/pdf");
-		echo $this->get_file(array("file" => $fn_out));
+		echo $ct;
 
 		unlink($fn_in);
 		unlink($fn_out);
