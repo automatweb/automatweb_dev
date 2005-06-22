@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.29 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.30 2005/06/22 10:12:01 kristo Exp $
 // period.aw - periods 
 /*
 
@@ -165,6 +165,9 @@ class period extends class_base
                         $row["active"] = $act_html;
                         $table->define_data($row);
 		};
+		$table->set_default_sortby("id");
+		$table->set_default_sorder("desc");
+
 		/*
 		$tmp = $args["prop"];
 		$tmp["value"] = $table->draw();
