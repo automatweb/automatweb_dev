@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.31 2005/05/16 13:46:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.32 2005/06/22 10:07:36 kristo Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -781,7 +781,8 @@ class poll extends class_base
 
 		$pl = new object_list(array(
 			"class_id" => CL_POLL,
-			"site_id" => array()
+			"site_id" => array(),
+			"sort_by" => "objects.oid desc"
 		));	
 		foreach($pl->arr() as $o)
 		{
@@ -791,6 +792,8 @@ class poll extends class_base
 			$row["active"] = $act_html;
 			$table->define_data($row);
 		};
+		$table->set_default_sortby("oid");
+		$table->set_default_sorder("desc");
 	}
 
 	function callback_get_translate($arr)
