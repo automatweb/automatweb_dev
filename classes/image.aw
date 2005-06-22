@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.139 2005/06/01 10:39:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.140 2005/06/22 09:40:57 duke Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -669,6 +669,8 @@ class image extends class_base
 			*/
 
 			case "file":
+				$prop["value"] = $this->make_img_tag_wl($arr["obj_inst"]->id());
+				break;
 			case "file2":
 				$url = $this->get_url($arr["obj_inst"]->prop($prop["name"]));
 				if ($url != '')
