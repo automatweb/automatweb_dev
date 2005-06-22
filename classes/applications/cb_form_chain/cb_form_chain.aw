@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.7 2005/06/22 12:52:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.8 2005/06/22 12:54:09 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -318,12 +318,6 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "ord",
-			"caption" => t("J&auml;rjekord"),
-			"align" => "center"
-		));
-
-		$t->define_field(array(
 			"name" => "title",
 			"caption" => t("Pealkiri"),
 			"align" => "center"
@@ -342,10 +336,6 @@ class cb_form_chain extends class_base
 		{
 			$t->define_data(array(
 				"pg" => $pg,
-				"ord" => html::textbox(array(
-					"name" => "hdrs[$pg][ord]",
-					"value" => $hdrs[$pg]["ord"]
-				)),
 				"title" => html::textbox(array(
 					"name" => "hdrs[$pg][name]",
 					"value" => $hdrs[$pg]["name"]
@@ -395,17 +385,9 @@ class cb_form_chain extends class_base
 			$pgs[$dat["page"]] = $dat["page"];
 		}
 
-		$this->_hdrs = safe_array($o->meta("cfs_headers"));
-		uasort($pgs, array(&$this, "__pg_sort"));
+		asort($pgs);
 
 		return $pgs;
-	}
-
-	function __pg_sort($a, $b)
-	{
-		$a = $this->_hdrs[$a]["ord"];
-		$b = $this->_hdrs[$b]["ord"];
-		return $a == $b ? 0 : $a > $b ? 1 : -1;
 	}
 
 	function _get_page($o)
