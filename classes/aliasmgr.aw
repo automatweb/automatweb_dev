@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.182 2005/06/20 11:22:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.183 2005/06/22 10:14:21 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -708,15 +708,18 @@ class aliasmgr extends aw_template
 			$adat["id"] = $alias->prop("id");
 
 			$__to = $alias->to();
+			$str = "";
 			if ($__to->parent())
 			{
 				$__pt1 = obj($__to->parent());
+				$str .= $__pt1->name();
 				if ($__pt1->parent())
 				{
 					$__pt2 = obj($__pt1->parent());
+					$str = $__pt2->name()." / ".$str;
 				}
 			}
-			$adat["comment"] = $__pt2->name()." / ".$__pt1->name();
+			$adat["comment"] = $str;
 			$adat["name"] = html::href(array(
 				"url" => $this->mk_my_orb("change", array("id" => $alias->prop("to"), "return_url" => $return_url), $edfile),
 				"caption" => parse_obj_name($__to->name()),
