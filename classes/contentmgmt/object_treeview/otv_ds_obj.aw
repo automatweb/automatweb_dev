@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.34 2005/04/25 14:15:53 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.35 2005/06/22 09:42:07 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -467,12 +467,22 @@ class otv_ds_obj extends class_base
 			}
 		}
 
+		$props = array();
 		$clids = array();
 		$cttt = $ob->connections_from(array("type" => "RELTYPE_SHOW_TYPE"));
 		foreach($cttt as $c)
 		{
 			$c_o = $c->to();
 			$clids[] = $c_o->subclass();
+
+			$_tmp = obj();
+			$_tmp->set_class_id($c_o->subclass());
+			$pl = $_tmp->get_property_list();
+			foreach($pl as $pn => $pd)
+			{
+				$pd["clid"] = $c_o->subclass();
+				$props[$pn] = $pd;
+			}
 		}
 
 		$awa = new aw_array($parent);
@@ -495,7 +505,7 @@ class otv_ds_obj extends class_base
 //   !!! tuleks teha variant, et saab mingit AND ja OR konstruktsioone kasutada !!!
 // --> and i think it would be nice to check if the ds is able to filter something at all
 
-		
+		$clss = aw_ini_get("classes");
 		$_ft = array(
 			"parent" => $parent,
 			"status" => $ob->prop("show_notact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE,
@@ -538,11 +548,41 @@ class otv_ds_obj extends class_base
 					else
 					if ($filter['is_strict'] == 1)
 					{
-						$cur_filt[$filter['field']] = $filter['value'];
+						$p = $props[$filter['field']];
+						if ($p["type"] == "classificator")
+						{
+							if ($p["store"] == "connect")
+							{
+								$cur_filt[$clss[$p["clid"]]["def"].".".$p["reltype"].".name"] = $filter['value'];
+							}
+							else
+							{
+								$cur_filt[$clss[$p["clid"]]["def"].".".$filter['field'].".name"] = $filter['value'];
+							}
+						}
+						else
+						{
+							$cur_filt[$filter['field']] = $filter['value'];
+						}
 					}
 					else
 					{
-						$cur_filt[$filter['field']] = "%".$filter['value']."%";
+						$p = $props[$filter['field']];
+						if ($p["type"] == "classificator")
+						{
+							if ($p["store"] == "connect")
+							{
+								$cur_filt[$clss[$p["clid"]]["def"].".".$p["reltype"].".name"] = "%".$filter['value']."%";
+							}
+							else
+							{
+								$cur_filt[$clss[$p["clid"]]["def"].".".$filter['field'].".name"] = "%".$filter['value']."%";	
+							}
+						}
+						else
+						{
+							$cur_filt[$filter['field']] = "%".$filter['value']."%";
+						}
 					}
 				}
 
