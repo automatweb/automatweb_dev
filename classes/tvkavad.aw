@@ -155,8 +155,7 @@ class tvkavad extends aw_template
 
 	function kanalid_list($content)
 	{
-
-		$paevad = array("0" => "#telekava_neljapaev#", "1" => "#telekava_reede#", "2" => "#telekava_laupaev#", "3" => "#telekava_pyhapaev#", "4" => "#telekava_esmaspaev#", "5" => "#telekava_teisipaev#", "6" => "#telekava_kolmapaev#");
+		$paevad = array("4" => "#telekava_neljapaev#", "5" => "#telekava_reede#", "6" => "#telekava_laupaev#", "0" => "#telekava_pyhapaev#", "1" => "#telekava_esmaspaev#", "2" => "#telekava_teisipaev#", "3" => "#telekava_kolmapaev#");
 		reset($paevad);
                 while (list($num, $v) = each($paevad))
                 {
@@ -170,13 +169,42 @@ class tvkavad extends aw_template
 			}
                 }
 
+
+
+                $wday = date("w");
+                if ($num < $wday)
+                {
+                        $rdate = mktime(0,0,0,date("m"),date("d")+7,date("Y"));
+                        $rdate = $rdate + (($num - $wday) * 86400);
+                }
+                else if ($num == $wday)
+                {
+                        $rdate = mktime(0,0,0,date("m"),date("d"),date("Y"));
+                }
+                else
+                {
+                        //print "num = $num<br>";
+                        $rdate = mktime(0,0,0,date("m"),date("d"),date("Y"));
+                        $rdate += ($num-$wday) * 86400;
+                };
+
+
+
 		// arvutame v2lja, et millal oli eelmine neljap2ev
+		/*
 		$sub_arr = array("0" => "3", "1" => "4", "2" => "5", "3" => "6", "4" => "0", "5" => "1", "6" => "2");
 		$date = mktime(0,0,0,date("m"),date("d"),date("Y"));
 
 		$d_begin = $date - $sub_arr[date("w")]*24*3600;
 		$date = $d_begin+$num*24*3600;
-	
+
+
+		if ($date < time() && (date("w") > 4 || date("w") == 0))
+		{
+			$date += 24 * 3600 * 7;
+		}	
+		*/
+		$date = $rdate;
 		$this->read_template("kanalid_list.tpl");
 		$this->db_query("SELECT * FROM tv_kanalid");
 		while ($row = $this->db_next())
@@ -190,8 +218,19 @@ class tvkavad extends aw_template
 			$k.=$this->parse("KANAL");
 			$cnt++;
 		}
+		$p2evad = array(
+                        0 => "P&uuml;hap&auml;ev",
+                        1 => "Esmasp&auml;ev",
+                        2 => "Teisip&auml;ev",
+                        3 => "Kolmap&auml;ev",
+                        4 => "Neljap&auml;ev",
+                        5 => "Reede",
+                        6 => "Laup&auml;ev",
+                );
+	
 		$this->vars(array(
-			"date" => $this->time2date(time(), 2), 
+			"date" => date("d.m.Y", $date), 
+			"p2ev" => $p2evad[date("w", $date)],
 			"KANAL" => $k
 		));
 		return $this->parse();
