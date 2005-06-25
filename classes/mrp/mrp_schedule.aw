@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.68 2005/06/14 13:16:46 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.69 2005/06/25 10:22:19 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -265,8 +265,11 @@ class mrp_schedule extends class_base
 		}
 		else
 		{
-			echo t("Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!");
-			exit;
+			error::raise(array(
+				"msg" => t("Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"),
+				"fatal" => true,
+				"show" => true,
+			));
 		}
 
 		### get and acquire semaphore for given workspace
@@ -274,20 +277,29 @@ class mrp_schedule extends class_base
 
 		if ($sem_id === false)
 		{
-			echo t("Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!");
-			exit;
+			error::raise(array(
+				"msg" => t("Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"),
+				"fatal" => true,
+				"show" => true,
+			));
 		}
 
 		if (!sem_acquire($sem_id))
 		{
-			echo t("Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!");
-
 			if (!sem_remove($sem_id))
 			{
-				echo t("Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!");
+				error::raise(array(
+					"msg" => t("Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 
-			exit;
+			error::raise(array(
+				"msg" => t("Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!"),
+				"fatal" => true,
+				"show" => true,
+			));
 		}
 
 		### start scheduling only if input data has been altered
@@ -302,12 +314,20 @@ class mrp_schedule extends class_base
 	  		### Release&remove semaphore. Stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
-				echo t("Viga: planeerimisluku avamine ebaõnnestus!");
+				error::raise(array(
+					"msg" => t("Viga: planeerimisluku avamine ebaõnnestus!"),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 
 			if (!sem_remove($sem_id))
 			{
-				echo t("Viga: planeerimisluku kustutamine ebaõnnestus!");
+				error::raise(array(
+					"msg" => t("Viga: planeerimisluku kustutamine ebaõnnestus!"),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 
 			return;
@@ -469,11 +489,11 @@ class mrp_schedule extends class_base
 			$this->jobs_table . " as job " .
 			"LEFT JOIN objects o ON o.oid = job.oid " .
 		"WHERE " .
-		"job.state IN (" . implode (",", $applicable_states) . ") AND " .
-		"job.project > 0 AND " .
+			"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+			"job.project > 0 AND " .
 			"o.status > 0 AND " .
 			"o.parent = " . $workspace->prop ("jobs_folder") . " AND " .
-		"job.resource > 0 " .
+			"job.resource > 0 " .
 		"");
 
 /* timing */ timing ("get all jobs from db", "end");
@@ -652,15 +672,23 @@ class mrp_schedule extends class_base
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
 		{
-			echo t("Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!");
+			error::raise(array(
+				"msg" => t("Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!"),
+				"fatal" => false,
+				"show" => false,
+			));
 		}
 
 		if (!sem_remove($sem_id))
 		{
-			echo t("Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!");
+			error::raise(array(
+				"msg" => t("Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
+				"fatal" => false,
+				"show" => false,
+			));
 		}
 
-		return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
+		// return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
 	}
 
 	function compute_due_date ()
@@ -969,8 +997,11 @@ class mrp_schedule extends class_base
 
 		if (($weight === "NA") || ($selected_resource_tag === "NA"))
 		{
-			echo "[".$resource_tag."]<br>";
-			echo t("Saatuslik viga: sobivat aega ei leidund tervest kalendrist!");
+			error::raise(array(
+				"msg" => t("Saatuslik viga: sobivat aega ei leidunud tervest kalendrist! resource-tag: [".$resource_tag."]"),
+				"fatal" => false,
+				"show" => false,
+			));
 			return false;
 		}
 
@@ -1009,8 +1040,8 @@ class mrp_schedule extends class_base
 				### move zero marker to job end
 				if ((($reserved_time + $length) < $second_next_range_start) or !$second_next_range_start)
 				{
-						$this->reserved_times[$resource_tag][$time_range + $i][($reserved_time + $length)] = 0;
-						break;
+					$this->reserved_times[$resource_tag][$time_range + $i][($reserved_time + $length)] = 0;
+					break;
 				}
 			}
 			else
@@ -1295,7 +1326,7 @@ class mrp_schedule extends class_base
 		### find if period ends before another starts
 		$i = 0;
 
-		while ($i++ < 1000)
+		while (true)
 		{
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end);
 // /* dbg */ if ($this->mrpdbg){
@@ -1317,10 +1348,14 @@ class mrp_schedule extends class_base
 				break;
 			}
 
-			if ($i == 1000)
+			if ($i++ == 10000)
 			{
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
-				echo sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu."), $resource_id);
+				error::raise(array(
+					"msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades."), $resource_id),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 		}
 
