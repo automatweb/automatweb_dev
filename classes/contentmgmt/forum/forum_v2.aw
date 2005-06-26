@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.75 2005/06/13 15:09:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.76 2005/06/26 22:32:51 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1820,13 +1820,14 @@ class forum_v2 extends class_base
 		// admin can be either CL_USER or CL_GROUP, check for both
 		// checking if uid comes through function params ($arr)
 		// if it doesn't, then use logged in user
-		if (empty($arr['uid']))
+		if (!isset($arr['uid']))
 		{
 			$uid_oid = aw_global_get("uid_oid");
 			$gids = aw_global_get("gidlist_oid");
 
 		}
 		else
+		if (!empty($arr['uid']))
 		{
 			$uid_oid = users::get_oid_for_uid($arr['uid']);
 			$user_inst = get_instance(CL_USER);
