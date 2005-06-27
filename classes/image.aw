@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.141 2005/06/22 09:56:28 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.142 2005/06/27 12:11:12 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1014,6 +1014,29 @@ class image extends class_base
 		$this->read_any_template("show_big.tpl");
 		$this->vars(array(
 			"big_url" => $this->get_url($im["meta"]["file2"]),
+		));
+		die($this->parse());
+	}
+
+	/**  
+		
+		@attrib name=show_small params=name nologin="1" 
+		
+		@param id required type=int
+		
+		@returns
+		
+		
+		@comment
+
+	**/
+	function show_small($arr)
+	{
+		extract($arr);
+		$im = obj($id);
+		$this->read_any_template("show_big.tpl");
+		$this->vars(array(
+			"big_url" => $this->get_url($im->prop("file")),
 		));
 		die($this->parse());
 	}
