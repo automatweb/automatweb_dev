@@ -137,6 +137,7 @@
                   <clid>
                         <num_0>CL_SITE_SEARCH_CONTENT_GRP</num_0>
                         <num_1>CL_EVENT_SEARCH</num_1>
+                        <num_2>CL_SHOP_PRODUCT_SEARCH</num_2>
                   </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>

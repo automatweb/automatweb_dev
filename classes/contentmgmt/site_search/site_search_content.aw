@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.48 2005/05/16 07:05:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.49 2005/06/27 11:01:35 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -55,7 +55,7 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH
 @caption otsingu grupp
 
 @groupinfo searchgroups caption="Otsingu grupid"
@@ -1237,6 +1237,7 @@ class site_search_content extends class_base
 						));
 					}
 					else
+					if ($conn->prop("to.class_id") == CL_SITE_SEARCH_CONTENT_GRP)
 					{
 						$results = $this->fetch_search_results(array(
 							"obj" => $o,
@@ -1245,13 +1246,26 @@ class site_search_content extends class_base
 							"opts" => $opts,
 							"date" => $date
 						));
-					};
+					}
+					else
+					{
+						$i = get_instance($conn->prop("to.class_id"));
+						$results = $i->scs_get_search_results(array(
+							"obj" => $o,
+							"str" => $str,
+							"group" => $cid,
+							"opts" => $opts,
+							"date" => $date
+						));
+					}
 					$results_arr[$_idx] = $results;
 					if (count($results))
 					{
 						$has_res = true;
 					}
 				}
+
+				uasort($conns, array(&$this, "__grps"));
 
 				foreach($conns as $_idx => $conn)
 				{
@@ -1264,27 +1278,39 @@ class site_search_content extends class_base
 						$grp_sort_by = $grpcfg["sorder"][$cid];
 					};
 
-					$ret .= $this->display_results(array(
-						"groupname" => $grpcfg["caption"][$conn->prop("to")],
-						"results" => $results,
-						"obj" => $o, 
-						"str" => $str, 
-						"group" => $group,
-						"sort_by" => $grp_sort_by,
-						"str" => $str,
-						"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
-						"params" => array(
-							"id" => $id, 
+					$i = get_instance($conn->prop("to.class_id"));
+					if (method_exists($i, "scs_display_search_results"))
+					{
+						$ret .= $i->scs_display_search_results(array(
+							"results" => $results,
+							"group" => $cid,
+							"str" => $str
+						));
+					}
+					else
+					{
+						$ret .= $this->display_results(array(
+							"groupname" => $grpcfg["caption"][$conn->prop("to")],
+							"results" => $results,
+							"obj" => $o, 
 							"str" => $str, 
-							"sort_by" => $sort_by, 
-							"group" => $group, 
-							"section" => aw_global_get("section"),
-							"sdate" => $arr["s_date"],
-							"opts" => $arr["opts"]
-						),
-						"page" => $page,
-						"multigroups" => $has_res
-					));
+							"group" => $group,
+							"sort_by" => $grp_sort_by,
+							"str" => $str,
+							"per_page" => ($o->meta("per_page") ? $o->meta("per_page") : 20),
+							"params" => array(
+								"id" => $id, 
+								"str" => $str, 
+								"sort_by" => $sort_by, 
+								"group" => $group, 
+								"section" => aw_global_get("section"),
+								"sdate" => $arr["s_date"],
+								"opts" => $arr["opts"]
+							),
+							"page" => $page,
+							"multigroups" => $has_res
+						));
+					}
 					$search = true;
 					if (!$has_res)
 					{
@@ -1429,6 +1455,11 @@ class site_search_content extends class_base
 		$s->set_meta("default_grp", $grp->id());
 		$s->save();
 
+	}
+
+	function __grps($a, $b)
+	{
+		return ($a->prop("to.jrk") == $b->prop("to.jrk")) ? 0 : $a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1;
 	}
 }
 ?>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.4 2005/05/13 08:59:25 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_search.aw,v 1.5 2005/06/27 11:01:35 kristo Exp $
 // shop_product_search.aw - Lao toodete otsing 
 /*
 
@@ -124,6 +124,12 @@ class shop_product_search extends class_base
 		return $this->show(array("id" => $arr["alias"]["target"]));
 	}
 
+	/** 
+
+		@attrib name=show nologin="1"
+
+		@param id required type=int acl=view
+	**/
 	function show($arr)
 	{
 		aw_session_set("no_cache", 1);
@@ -571,7 +577,6 @@ class shop_product_search extends class_base
 						$data[CL_SHOP_PRODUCT_PACKAGING."_".$coln] = $pk->prop_str($coln);
 					}
 				}
-
 				$data[CL_SHOP_PACKET."_oid"] = $packet->id();
 				$data[CL_SHOP_PRODUCT."_oid"] = $prod->id();
 				$data[CL_SHOP_PRODUCT_PACKAGING."_oid"] = $pk->id();
@@ -605,6 +610,12 @@ class shop_product_search extends class_base
 
 		foreach($params as $clid => $opts)
 		{
+			if ($clid == "_fulltext")
+			{
+				$this->_insert_ft_search($o, $params, $opts, $filt);
+				continue;
+			}
+			
 			foreach($opts as $pn => $pv)
 			{
 				if ($pv == "")
@@ -614,60 +625,145 @@ class shop_product_search extends class_base
 
 				$v = "%".$pv."%";
 				// now, based on the result object we must calc the way to search
-				if ($clid == CL_SHOP_PACKET)
-				{
-					switch($res_type)
-					{	
-						case CL_SHOP_PACKET:
-							$filt[$pn] = $v;
-							break;
-
-						case CL_SHOP_PRODUCT:
-							$filt["CL_SHOP_PACKET.RELTYPE_PRODUCT.$pn"] = $v;
-							break;
-
-						case CL_SHOP_PRODUCT_PACKAGING:
-							$filt["CL_SHOP_PACKET.RELTYPE_PRODUCT.RELTYPE_PACKAGING.$pn"] = $v;
-							break;
-					}
-				}
-				else
-				if ($clid == CL_SHOP_PRODUCT)
-				{
-					switch($res_type)
-					{	
-						case CL_SHOP_PACKET:
-							break;
-
-						case CL_SHOP_PRODUCT:
-							$filt[$pn] = $v;
-							break;
-
-						case CL_SHOP_PRODUCT_PACKAGING:
-							$filt["CL_SHOP_PRODUCT.RELTYPE_PACKAGING.$pn"] = $v;
-							break;
-					}
-				}
-				else
-				if ($clid == CL_SHOP_PRODUCT_PACKAGING)
-				{
-					switch($res_type)
-					{	
-						case CL_SHOP_PACKET:
-							break;
-
-						case CL_SHOP_PRODUCT:
-							break;
-
-						case CL_SHOP_PRODUCT_PACKAGING:
-							$filt[$pn] = $v;
-							break;
-					}
-				}
+				$this->_get_filt_param($clid, $res_type, $pn, $v, &$filt);
 			}
 		}
 		$ol = new object_list($filt);
 		return $ol->arr();
+	}
+
+	function _get_filt_param($clid, $res_type, $pn, $v, &$filt)
+	{
+		if ($clid == CL_SHOP_PACKET)
+		{
+			switch($res_type)
+			{	
+				case CL_SHOP_PACKET:
+					$filt[$pn] = $v;
+					break;
+
+				case CL_SHOP_PRODUCT:
+					$filt["CL_SHOP_PACKET.RELTYPE_PRODUCT.$pn"] = $v;
+					break;
+
+				case CL_SHOP_PRODUCT_PACKAGING:
+					$filt["CL_SHOP_PACKET.RELTYPE_PRODUCT.RELTYPE_PACKAGING.$pn"] = $v;
+					break;
+			}
+		}
+		else
+		if ($clid == CL_SHOP_PRODUCT)
+		{
+			switch($res_type)
+			{	
+				case CL_SHOP_PACKET:
+					break;
+
+				case CL_SHOP_PRODUCT:
+					$filt[$pn] = $v;
+					break;
+
+				case CL_SHOP_PRODUCT_PACKAGING:
+					$filt["CL_SHOP_PRODUCT.RELTYPE_PACKAGING.$pn"] = $v;
+					break;
+			}
+		}
+		else
+		if ($clid == CL_SHOP_PRODUCT_PACKAGING)
+		{
+			switch($res_type)
+			{	
+				case CL_SHOP_PACKET:
+					break;
+
+				case CL_SHOP_PRODUCT:
+					break;
+
+				case CL_SHOP_PRODUCT_PACKAGING:
+					$filt[$pn] = $v;
+					break;
+			}
+		}
+	}
+
+	function _insert_ft_search($o, $params, $str, &$filt)
+	{
+		$cu = get_instance("cfg/cfgutils");
+
+		$ftf = array();
+
+		$form_props = safe_array($o->meta("s_form"));
+		foreach($form_props as $clid => $ps)
+		{
+			$r_props = $cu->load_properties(array("clid" => $clid));
+			foreach($ps as $pn => $pd)
+			{
+				if ($pd["in_form"] == 1)
+				{
+					$this->_get_filt_param($clid, $o->prop("objs_in_res"), $pn, "%".$str."%", $ftf);
+				}
+			}
+		}
+		$filt[] = new object_list_filter(array(
+			"logic" => "OR",
+			"conditions" => $ftf
+		));
+	}
+
+	function scs_get_search_results($arr)
+	{
+		// emulate fulltext search
+		return array(1); //$this->get_search_results(obj($arr["group"]), array("_fulltext" => $arr["str"]));
+	}
+
+	function scs_display_search_results($arr)
+	{
+		$request = array(
+			"MAX_FILE_SIZE" => 1,
+			"s" => array("_fulltext" => $arr["str"])
+		);
+
+		$o = obj($arr["group"]);
+		$props = $this->callback_gen_search_form(array(
+			"obj_inst" => $o,
+			"request" => $request
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		foreach($props as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output();
+
+		$html = $htmlc->get_result(array(
+			"raw_output" => 1
+		));
+
+		$prop = array("value" => "");
+		$arr = array(
+			"obj_inst" => $o,
+			"request" => $request,
+			"prop" => &$prop
+		);
+		$this->_s_res($arr);
+		$table =  $arr["prop"]["value"];
+
+		$this->read_template("show_scs.tpl");
+		$this->vars(array(
+			"form" => $html,
+			"section" => aw_global_get("section"),
+			"table" => $table,
+			"reforb" => $this->mk_reforb("submit_add_cart", array(
+				"oc" => $o->prop("oc"),
+			), "shop_order_cart"),
+			"s_ro" => $this->mk_reforb("show", array(
+				"id" => $o->id(),
+				"no_reforb" => 1
+			))
+		));
+		return $this->parse();
 	}
 }
 ?>
