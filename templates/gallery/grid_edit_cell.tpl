@@ -1,4 +1,9 @@
 		<table border=0 cellpadding=1 cellspacing=1>
+			<tr>
+				<td colspan="2">
+					<a href='javascript:split_hor({VAR:row},{VAR:col})'><img alt='Jaga pooleks horisontaalselt' title='Jaga pooleks horisontaalselt' src='{VAR:baseurl}/automatweb/images/split_cell_down.gif' border=0></a><a href='javascript:split_ver({VAR:row},{VAR:col})'><img alt='Jaga pooleks vertikaalselt' title='Jaga pooleks vertikaalselt' src='{VAR:baseurl}/automatweb/images/split_cell_left.gif' border=0></a>
+				</td>
+			</tr>
 			<!-- SUB: HAS_IMG -->
 			<tr>
 				<td colspan=2 align=center class="celltext"><img src='{VAR:imgurl}'><input type='checkbox' name='erase[{VAR:page}][{VAR:row}][{VAR:col}]' value=1>Kustuta pilt</td>
