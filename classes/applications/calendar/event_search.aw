@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.66 2005/06/17 10:31:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.67 2005/06/27 13:42:32 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -640,7 +640,8 @@ class event_search extends class_base
 			foreach($p_rn1 as $trn1)
 			{
 				$tmp = obj($trn1);
-				if($tmp->class_id() == CL_MENU)
+				$clid = $tmp->class_id();
+				if($clid == CL_MENU)
 				{
 					$prj_cx = $this->_get_project_choices($trn1);
 					// if there are projects to choose from, search from them, else assume that it's a event folder
@@ -655,7 +656,7 @@ class event_search extends class_base
 						$rn1[] = $tmp->id();
 					}
 				}
-				elseif($tmp->class_id() == CL_PLANNER)
+				elseif($clid == CL_PLANNER)
 				{
 					$r = $tmp->prop("event_folder");
 					if(is_oid($r) && $this->can("view", $r))
@@ -681,12 +682,16 @@ class event_search extends class_base
 						}
 					}
 				}
-				elseif($tmp->class_id() == CL_PROJECT)
+				elseif($clid == CL_PROJECT)
 				{
 					$rn1[] = $trn1;
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_SUBPROJECT",
 					));
+					if (aw_global_get("uid") == "struktuur")
+					{
+						arr($sources);
+					};
 					$search_p1 = true;
 					foreach($sources as $source)
 					{
@@ -758,6 +763,10 @@ class event_search extends class_base
 
 		if($search_p1 && $formconfig["project1"]["active"])
 		{
+			if (aw_global_get("uid") == "struktuur")
+			{
+				arr($prj_ch1);
+			};
 			$vars = array(
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
@@ -766,7 +775,7 @@ class event_search extends class_base
 			);
 			if(count($prj_ch1) > 1)
 			{
-				$vars["options"] = array(0 => t("kõik"));
+				$vars["options"] = array(0 => t("kõik")) + $prj_ch1;
 				$vars["optgnames"] = $optgnames1;
 				$vars["optgroup"] = $prj_ch1;
 			}
