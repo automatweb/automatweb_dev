@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.33 2005/06/03 08:21:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.34 2005/06/27 09:23:58 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -831,6 +831,7 @@ class shop_order extends class_base
 					"p_name" => ($product_info ? $product_info->name() : $prod->name()),
 					"quant" => $val["items"],
 					"price" => number_format($pr,2),
+					"obj_price" => number_format($pr, 2),
 					"obj_tot_price" => number_format(((int)($val["items"]) * $pr), 2),
 					"order_data_color" => $val["color"],
 					"order_data_size" => $val['size'],

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.38 2005/06/03 08:28:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.39 2005/06/27 09:23:58 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -948,7 +948,7 @@ class shop_order_cart extends class_base
 						"is_err" => ($soce_arr[$iid]["is_err"] ? "class=\"selprod\"" : "")
 					))
 				));
-				$prod_total += ($quant["items"] * $inst->get_price($i));
+				$prod_total += ($quant["items"] * $inst->get_calc_price($i));
 				if (get_class($inst) == "shop_product_packaging")
 				{
 					$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));

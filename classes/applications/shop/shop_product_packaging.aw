@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.17 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.18 2005/06/27 09:23:58 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -190,9 +190,13 @@ class shop_product_packaging extends class_base
 			"from.class_id" => CL_SHOP_PRODUCT,
 		))))
 		{
-			return NULL;
+			//return NULL;
+			$prod = obj();
 		}
-		$prod = $prod->from();
+		else
+		{
+			$prod = $prod->from();
+		}
 		if(!$l_inst)
 		{
 			$l_inst = $layout->instance();
@@ -238,7 +242,11 @@ class shop_product_packaging extends class_base
 		// insert images
 		$i = get_instance(CL_IMAGE);
 		$cnt = 1;
-		$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
+		$imgc = array();
+		if (is_oid($prod->id()))
+		{
+			$imgc = $prod->connections_from(array("type" => "RELTYPE_IMAGE"));
+		}
 		usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
 		foreach($imgc as $c)
 		{

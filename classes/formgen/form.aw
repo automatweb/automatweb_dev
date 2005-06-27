@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.119 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.120 2005/06/27 09:23:58 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5282,7 +5282,7 @@ class form extends form_base
 			$menulist = array();
 			foreach($this->arr["main_folders"] as $mfid)
 			{
-				$menulist = $menulist + $o->get_list(false,false,$mfid);
+				$menulist = $menulist + $this->get_list(false,false,$mfid);
 			}
 		}
 		else
