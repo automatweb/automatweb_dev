@@ -1324,7 +1324,12 @@ class user extends class_base
 			if ($parent->class_id() == CL_GROUP)
 			{
 				// we have to move the object to a new loacation
-				$arr["obj_inst"]->set_parent(aw_ini_get("users.root_folder"));
+				$rm = aw_ini_get("users.root_folder");
+				if (!$rm)
+				{
+					$rm = aw_ini_get("users.rootmenu");
+				}
+				$arr["obj_inst"]->set_parent($rm);
 				$arr["obj_inst"]->save();
 
 				// and do the add to group thing
