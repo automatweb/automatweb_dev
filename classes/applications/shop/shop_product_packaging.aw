@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.18 2005/06/27 09:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.19 2005/06/27 12:11:36 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -18,6 +18,7 @@
 @caption Hind
 
 @groupinfo data caption="Andmed"
+@groupinfo file caption="Failid"
 @default group=data
 
 @property user1 type=textbox field=user1 group=data
@@ -102,6 +103,9 @@
 @property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
 @caption Pildid
 
+@property files type=releditor reltype=RELTYPE_FILE table=objects field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow group=file table_fields=name
+@caption Failid
+
 @property userch1 type=checkbox ch_value=1  field=userch1 group=data datatype=int
 @caption User-defined checkbox 1
 
@@ -120,6 +124,9 @@
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption pilt 
+
+@reltype FILE value=2 clid=CL_FILE
+@caption fail
 
 */
 

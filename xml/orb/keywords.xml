@@ -5,6 +5,7 @@
 			<function name="show_documents">
 				<arguments>
 					<required name="id" />
+					<optional name="only_document_content" />
 				</arguments>
 			</function>
 		</action>

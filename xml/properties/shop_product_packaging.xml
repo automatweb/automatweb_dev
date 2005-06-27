@@ -237,6 +237,27 @@
             <caption>Pildid</caption>
       </property>
       <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>file</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>file</num_1>
+                  <num_2>type</num_2>
+                  <num_3>comment</num_3>
+                  <num_4>file_url</num_4>
+                  <num_5>newwindow</num_5>
+            </props>
+            <table_fields>name</table_fields>
+            <store>no</store>
+            <caption>Failid</caption>
+      </property>
+      <property>
             <name>userch1</name>
             <table>aw_shop_packaging</table>
             <group>data</group>
@@ -294,6 +315,9 @@
             <data>
                   <caption>Andmed</caption>
             </data>
+            <file>
+                  <caption>Failid</caption>
+            </file>
       </groupinfo>
       <tableinfo>
             <aw_shop_packaging>
@@ -308,6 +332,11 @@
                   <clid>CL_IMAGE</clid>
                   <caption>pilt </caption>
             </IMAGE>
+            <FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail</caption>
+            </FILE>
       </reltypes>
 </properties>
 

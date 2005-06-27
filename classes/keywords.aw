@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.62 2005/03/24 10:14:40 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.63 2005/06/27 12:11:35 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -52,6 +52,7 @@ class keywords extends class_base
 	/**
 		@attrib name=show_documents nologin=1
 		@param id required
+		@param only_document_content optional
 	**/
 	function show_documents($id)
 	{
@@ -73,7 +74,12 @@ class keywords extends class_base
 				if($docs->count() == 1)
 				{
 					$current = current($docarr);
-					return aw_ini_get("baseurl")."/".$current->id();
+					$l = aw_ini_get("baseurl")."/".$current->id();
+					if ($id["only_document_content"])
+					{
+						$l .= "?only_document_content=1";
+					}
+					return $l;
 				}
 				
 				$this->read_template("/automatweb/keywords/doclist2.tpl");
@@ -103,13 +109,20 @@ class keywords extends class_base
 						{
 							$u1 .= " / ";
 						}
+
+						$l = $burl."/".$doc->id();
+						if ($id["only_document_content"])
+						{
+							$l .= "?only_document_content=1";
+						}
+
 						$this->vars(array(
 							"date" => get_lc_date($doc->prop("modified")),
 							"title" => $doc->prop("title"),
 							"author" => $doc->prop("author"),
 							"id" => $doc->id(),
 							"lead" => $lead."<br>",
-							"link" => $burl."/".$doc->id(),
+							"link" => $l,
 							"target" => ($doc->site_id() != $this->cfg["site_id"]) ? " target=\"_blank\" " : "",
 							"site_url" => $burl,
 							"user1" => $u1

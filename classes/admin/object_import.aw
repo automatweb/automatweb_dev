@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.35 2005/05/06 11:28:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.36 2005/06/27 12:11:36 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -25,8 +25,13 @@
 @property folder_is_parent type=checkbox ch_value=1
 @caption Objektid samsse kataloogi, kus imporditavad
 
-@property ds type=relpicker reltype=RELTYPE_DATASOURCE
+@layout ds_hbox type=hbox 
 @caption Andmeallikas
+
+	@property ds type=relpicker reltype=RELTYPE_DATASOURCE parent=ds_hbox no_caption=1
+
+	@property ds_file type=select parent=ds_hbox editonly=1
+	@caption Fail andmeallikast
 
 @property do_import type=checkbox ch_value=1 
 @caption Teosta import
@@ -196,6 +201,24 @@ class object_import extends class_base
 
 			case "folders":
 				$this->do_folders_table($arr);
+				break;
+
+			case "ds_file":
+				if (is_oid($arr["obj_inst"]->prop("ds")))
+				{
+					$ds = obj($arr["obj_inst"]->prop("ds"));
+					if ($ds->prop("ds"))
+					{
+						$ds_f = obj($ds->prop("ds"));
+						if ($ds_f->class_id() == CL_FILE)
+						{
+							$ol = new object_list($ds->connections_from(array("type" => "RELTYPE_DS")));
+							$prop["options"] = array("" => "Andmeallikas valitud") + $ol->names();
+							return PROP_OK;
+						}
+					}
+				}
+				return PROP_IGNORE;
 				break;
 		};
 		return $retval;
@@ -509,7 +532,7 @@ class object_import extends class_base
 		// let the datasource parse the data and return the first row
 		$ds_o = obj($o->prop("ds"));
 		$ds_i = $ds_o->instance();
-		return $ds_i->get_fields($ds_o);
+		return $ds_i->get_fields($ds_o, $o->prop("ds_file"));
 	}
 
 	/**
@@ -608,7 +631,7 @@ class object_import extends class_base
 
 			$line_n = 0;
 
-			$ds_o = obj($o->prop("ds"));
+			$ds_o = obj($o->prop("ds"), $o->prop("ds_file"));
 			$ds_i = $ds_o->instance();
 			$data_rows = $ds_i->get_objects($ds_o);
 			

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.7 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/abstract_datasource.aw,v 1.8 2005/06/27 12:11:36 kristo Exp $
 // abstract_datasource.aw - Andmeallikas 
 /*
 
@@ -136,7 +136,7 @@ class abstract_datasource extends class_base
 	
 	/** returns an array of field id => example text for all the fileds in the datasource
 	**/
-	function get_fields($o)
+	function get_fields($o, $sel_file = NULL)
 	{
 		if (!$o->prop("ds"))
 		{
@@ -156,6 +156,10 @@ class abstract_datasource extends class_base
 		if ($ds_o->class_id() == CL_FILE)
 		{
 			$params["separator"] = $o->prop("file_separator");
+			if (is_oid($sel_file) && $this->can("view", $sel_file))
+			{
+				$ds_o = obj($sel_file);
+			}
 		}
 
 		return $ds_i->get_fields($ds_o, $params);
@@ -166,7 +170,7 @@ class abstract_datasource extends class_base
 		@comment
 			data rows are arrays, keys are the same as keys returned from get_fields()
 	**/
-	function get_objects($o)
+	function get_objects($o, $sel_file = NULL)
 	{
 		if (!$o->prop("ds"))
 		{
@@ -180,6 +184,11 @@ class abstract_datasource extends class_base
 		{
 			$params["separator"] = $o->prop("file_separator");
 			$params["file_has_header"] = $o->prop("file_has_header");
+
+			if (is_oid($sel_file) && $this->can("view", $sel_file))
+			{
+				$ds_o = obj($sel_file);
+			}
 		}
 
 		$ret = $ds_i->get_objects($ds_o, $params);
