@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.67 2005/06/27 13:42:32 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.68 2005/06/27 13:49:33 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -688,10 +688,6 @@ class event_search extends class_base
 					$sources = $tmp->connections_from(array(
 						"type" => "RELTYPE_SUBPROJECT",
 					));
-					if (aw_global_get("uid") == "struktuur")
-					{
-						arr($sources);
-					};
 					$search_p1 = true;
 					foreach($sources as $source)
 					{
@@ -763,10 +759,6 @@ class event_search extends class_base
 
 		if($search_p1 && $formconfig["project1"]["active"])
 		{
-			if (aw_global_get("uid") == "struktuur")
-			{
-				arr($prj_ch1);
-			};
 			$vars = array(
 				"name" => "project1",
 				"caption" => $formconfig["project1"]["caption"],
