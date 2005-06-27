@@ -346,6 +346,26 @@ class _int_object
 			}
 			if (isset($param["type"]))
 			{
+				if (!is_numeric($param["type"]) && substr($param["type"], 0, 7) == "RELTYPE" && is_class_id($param["from.class_id"]))
+				{
+					// it is "RELTYPE_FOO"
+					// resolve it to numeric
+					if (!is_array($GLOBALS["relinfo"][$param["from.class_id"]]))
+					{
+						// load class def
+						_int_object::_int_load_properties($param["from.class_id"]);
+					}
+
+					if (!$GLOBALS["relinfo"][$param["from.class_id"]][$param["type"]]["value"])
+					{
+						$param["type"] = -1; // won't match anything
+					}
+					else
+					{
+						$param["type"] = $GLOBALS["relinfo"][$param["from.class_id"]][$param["type"]]["value"];
+					}
+				}
+
 				$filter["type"] = $param["type"];
 			}
 			if (isset($param["class"]))
