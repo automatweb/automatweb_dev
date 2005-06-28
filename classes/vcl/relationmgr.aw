@@ -12,7 +12,7 @@ class relationmgr extends aw_template
 	function init_vcl_property($arr)
 	{
 		$arr["request"] = safe_array($arr["request"]) + $_REQUEST;
-		if(in_array($arr["obj_inst"]->class_id() , array(CL_MENU, CL_GROUP, CL_PROMO)))
+		if(in_array($arr["obj_inst"]->class_id() , get_container_classes()))
 		{
 			$this->parent = $arr["obj_inst"]->id();
 		}

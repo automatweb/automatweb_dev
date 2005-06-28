@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.183 2005/06/22 10:14:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.184 2005/06/28 16:29:23 duke Exp $
 
 class aliasmgr extends aw_template
 {
@@ -414,6 +414,7 @@ class aliasmgr extends aw_template
 						$$emb_obj_name->embedded = true;
 					}
 
+
 					// if not, then parse all the aliases one by one
 					foreach($claliases as $avalue => $adata)
 					{
@@ -772,7 +773,7 @@ class aliasmgr extends aw_template
 			);
 		};
 
-		if (in_array($obj->class_id() , array(CL_MENU, CL_GROUP, CL_PROMO)))
+		if (in_array($obj->class_id() , get_container_classes()))
 		{
 			$_a_parent = $obj->id();
 		}
@@ -822,7 +823,8 @@ class aliasmgr extends aw_template
 				"reltype" => $reltype,
 				"data" => $args["data"]
 			));
-		}
+
+		};
 	}
 
 	/**  
