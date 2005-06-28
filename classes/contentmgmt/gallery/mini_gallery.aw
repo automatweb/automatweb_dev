@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.14 2005/05/31 07:51:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.15 2005/06/28 14:43:50 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -246,10 +246,6 @@ class mini_gallery extends class_base
 	{
 		if ($rows * $cols >= $img_c)
 		{
-			if (aw_global_get("uid") == "kix")
-			{
-				echo "reta r*c = ".($rows * $cols)." imgc = $img_c <br>";
-			}
 			return;
 		}
 
