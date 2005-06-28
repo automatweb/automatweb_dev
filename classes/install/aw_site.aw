@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.43 2005/04/21 09:22:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/install/aw_site.aw,v 1.44 2005/06/28 14:41:48 kristo Exp $
 /*
 
 @classinfo syslog_type=ST_SITE relationmgr=yes no_comment=1
@@ -387,10 +387,10 @@ class aw_site extends class_base
 			//$log->finish_log();
 
 			// set the site id to the current object so we only let the user change it
-			$ob->set_meta("site_id", $ini_opts["site_id"]);
+			/*$ob->set_meta("site_id", $ini_opts["site_id"]);
 			$ob->set_meta("gen_site", 0);
 			$ob->set_meta("old_site_opts", $site);
-			$ob->save();
+			$ob->save();*/
 
 			// now restart webserver
 			//echo "restarting webserver ... <br />\n";
@@ -440,6 +440,11 @@ class aw_site extends class_base
 		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/lang/* ".$site['docroot']."/lang/");
 		$si->add_cmd("find ".$site['docroot']."/lang/ -type f -exec chmod 666 {} \;");
 		$si->add_cmd("find ".$site['docroot']."/lang/ -type d -exec chmod 777 {} \;");
+
+		$si->add_cmd("copy -r ".$this->cfg["basedir"]."/install/site_template/files/* ".$site['docroot']."/files/");
+		$si->add_cmd("find ".$site['docroot']."/files/ -type f -exec chmod 666 {} \;");
+		$si->add_cmd("find ".$site['docroot']."/files/ -type d -exec chmod 777 {} \;");
+
 		$si->exec();
 		$log->add_line(array(
 			"uid" => "System",
@@ -530,8 +535,10 @@ class aw_site extends class_base
 		$si->add_cmd("chmod 666 $site[docroot]/public/*aw");
 		$si->add_cmd("chmod 777 $site[docroot]/public/css");
 		$si->add_cmd("chmod 777 $site[docroot]/public/img");
+		$si->add_cmd("chmod 777 $site[docroot]/public/js");
 		$si->add_cmd("chmod 666 $site[docroot]/public/img/*");
 		$si->add_cmd("chmod 666 $site[docroot]/public/css/*");
+		$si->add_cmd("chmod 666 $site[docroot]/public/js/*");
 		$si->exec();
 
 		// now, if the user said, that we gots to copy some foldres from other sites, then do that as well
@@ -754,6 +761,7 @@ class aw_site extends class_base
 
 		echo "create separate cache data table<br>\n";
 		flush();
+		$dbi->db_query("DELETE FROM objects_cache_data"); // sync tables
 		$dbi->db_query("INSERT INTO objects_cache_data SELECT oid,cachedirty,cachedata FROM objects");
 		$ini_opts["cache.table_is_sep"] = 1;
 
@@ -1349,7 +1357,13 @@ class aw_site extends class_base
 			echo "got menu area $area , with levels $levels <br>\n";
 			flush();
 
+			$crss = false;
 			$astr = strtoupper(substr($area, 0,1)).strtolower(substr($area, 1));
+			if ($astr == "P6hi")
+			{
+				$crss = true;
+			}
+		
 			$astr = str_replace("6", "&otilde;", $astr);
 			$astr = str_replace("y", "&uuml;", $astr);
 			$astr = str_replace("Y", "&Uuml;", $astr);
@@ -1375,6 +1389,12 @@ class aw_site extends class_base
 			$o->set_prop("type", MN_CLIENT);
 			$o->set_name($fn);
 			$o->save();
+
+			if ($crss)
+			{
+				$this->_create_rss($o, $osi_vars);
+				$this->_create_demo_objects($o, $osi_vars, $dbi);
+			}
 
 			$pt = $o->id();
 			echo "created root menu for area, name = ".$astr." men&uuml;&uuml; id = $pt <br>\n"; 
@@ -1806,6 +1826,124 @@ class aw_site extends class_base
 
 		$def = $this->get_site_def($o->id());
 		$this->do_copy_existing_templates($def, false,false, true);
+	}
+
+	function _create_rss($o, $osi_vars)
+	{
+		$r = obj();
+		$r->set_parent($o->id());
+		$r->set_class_id(CL_MENU);
+		$r->set_status(STAT_ACTIVE);
+		$r->set_name(t("Meist"));
+		$r->save();
+
+		$r2 = obj();
+		$r2->set_parent($r->id());
+		$r2->set_class_id(CL_MENU);
+		$r2->set_status(STAT_ACTIVE);
+		$r2->set_name(t("Uudised"));
+		$r2->save();
+
+		$rss = obj($osi_vars["rss_o"]);
+		$rss->connect(array(
+			"to" => $r2->id(),
+			"reltype" => "RELTYPE_FEED_SOURCE"
+		));
+		$rss->set_meta("include_subs", array($r2->id() => 1));
+		$rss->save();
+	}
+
+	function _create_demo_objects($parent, $osi_vars, &$dbi)
+	{
+		$osi = get_instance("install/object_script_interpreter");
+		$osi->exec_file(array(
+			"file" => aw_ini_get("basedir")."/scripts/install/object_scripts/demo_objects.ojs",
+			"vars" => array(
+				"parent" => $parent->id(),
+			)
+		));
+		$vars = $osi->_get_sym_table();
+
+		// do things osi can not
+		// poll
+		$poll = obj($vars["poll_o"]);
+		$poll->set_meta("name", array(1 => t("Demo polli k&uuml;&uuml;simus")));
+
+		$aid1 = $dbi->db_fetch_field("SELECT MAX(id) as id FROM poll_answers", "id")+1;
+		$dbi->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($aid1,'".t("Jah")."','".$poll->id()."')");
+		$dbi->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($aid1+1,'".t("ei")."','".$poll->id()."')");
+		$dbi->db_query("INSERT INTO poll_answers(id, answer,poll_id) values($aid1+2,'".t("V&otilde;ibolla")."','".$poll->id()."')");
+
+		$poll->set_meta("answers", array(1 => array($aid1 => t("Jah"), $aid1+1 => t("Ei"), $aid1+2 => t("V&otilde;ibolla"))));
+		$poll->save();
+
+		// sitemap
+		$sm = obj($vars["sm_o"]);
+		$sm->set_prop("menus", array($parent->id() => $parent->id()));
+		$sm->save();
+
+		// layout
+		$l = obj($vars["tbl_o"]);
+
+		$ge = get_instance("vcl/grid_editor");
+		$ge->_init_table($l->meta('grid'));
+		$ge->set_num_rows(3);
+		$ge->set_num_cols(3);
+		$ge->set_row_style(0, $vars["css1"]);
+		$ge->set_row_style(1, $vars["css2"]);
+		$ge->set_row_style(2, $vars["css3"]);
+
+		$ge->set_cell_content(0,0, t("Pealkiri"));
+		$ge->set_cell_content(0,1, t("Pealkiri 2"));
+		$ge->set_cell_content(0,2, t("Pealkiri 3"));
+
+		$ge->set_cell_content(1,0, t("Sisu 1"));
+		$ge->set_cell_content(1,1, t("Sisu 2"));
+		$ge->set_cell_content(1,2, t("Sisu 3"));
+
+		$ge->set_cell_content(2,0, t("Veel sisu 1"));
+		$ge->set_cell_content(2,1, t("Veel sisu 2"));
+		$ge->set_cell_content(2,2, t("Veel sisu 3"));
+
+		$l->set_meta("grid", $ge->_get_table());
+		$l->save();
+
+		// webform
+		$wf_o = obj($vars["wf_o"]);
+		$wf_i = get_instance(CL_WEBFORM);
+
+		$wf_i->callback_on_load(array(
+			"id" => NULL
+		));
+
+		$wf_i->_on_init(array(
+			"obj_inst" => $wf_o,
+			"request" => array(
+				"form_type" => CL_REGISTER_DATA,
+				"parent" => $wf_o->id(),
+				"name" => $wf_o->name(),
+			)
+		));
+
+		// now, we need to add some props. belch.
+		// get cfgform from wf
+		$cff = $wf_o->get_first_obj_by_reltype("RELTYPE_CFGFORM");
+		if ($cff)
+		{
+			$cf_i = $cff->instance();
+			$cf_i->cff_add_prop($cff, "user1", array("caption" => t("Eesnimi"), "group" => "data", "ord" => 10));
+			$cf_i->cff_add_prop($cff, "user2", array("caption" => t("Perekonnanimi"), "group" => "data", "ord" => 20));
+			$cf_i->cff_add_prop($cff, "user4", array("caption" => t("E-posti aadress"), "group" => "data", "ord" => 30));
+			$cf_i->cff_add_prop($cff, "userta1", array("caption" => t("Minu teade"), "group" => "data", "ord" => 40));
+			$cf_i->cff_add_prop($cff, "usersubmit1", array("caption" => t("Saadan"), "group" => "data", "ord" => 50));
+			$cff->save();
+		}
+
+		$wf_i->callback_on_load(array(
+			"request" => array(
+				"id" => $wf_o->id()
+			)
+		));
 	}
 }
 ?>

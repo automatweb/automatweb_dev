@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.49 2005/06/27 11:01:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.50 2005/06/28 14:41:48 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -51,6 +51,13 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 
 @property static_gen_link type=text store=no group=static
 @caption Staatilise genereerimise link
+
+
+@groupinfo activity caption=Aktiivsus
+
+	@property activity type=table group=activity no_caption=1
+	@caption Aktiivsus
+
 
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
@@ -139,6 +146,10 @@ class site_search_content extends class_base
 					S_OPT_ALL_WORDS => t("K&otilde;ik s&otilde;nad"),
 					S_OPT_PHRASE => t("Fraas")
 				);
+				break;
+
+			case "activity":
+				$this->mk_activity_table($arr);
 				break;
 		};
 		return $retval;
@@ -259,9 +270,47 @@ class site_search_content extends class_base
 			case "reledit":
 				$this->add_scheduler = true;
 				break;
+
+			case "activity":
+				$ol = new object_list(array(
+					"class_id" => CL_SITE_SEARCH_CONTENT,
+				));
+				for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+				{
+					if ($o->flag(OBJ_FLAG_IS_SELECTED) && $o->id() != $arr["request"]["active"])
+					{
+						$o->set_flag(OBJ_FLAG_IS_SELECTED, false);
+						$o->save();
+					}
+					else
+					if ($o->id() == $arr["request"]["active"] && !$o->flag(OBJ_FLAG_IS_SELECTED))
+					{
+						$o->set_flag(OBJ_FLAG_IS_SELECTED, true);
+						$o->save();
+					}
+				}
+				break;
 		}
 		return $retval;
 	}	
+
+	function mk_activity_table($arr)
+	{
+		$table = &$arr["prop"]["vcl_inst"];
+		$table->parse_xml_def("activity_list");
+
+		$pl = new object_list(array(
+			"class_id" => CL_SITE_SEARCH_CONTENT
+		));	
+		for($o = $pl->begin(); !$pl->end(); $o = $pl->next())
+		{
+			$actcheck = checked($o->flag(OBJ_FLAG_IS_SELECTED));
+			$act_html = "<input type='radio' name='active' $actcheck value='".$o->id()."'>";
+			$row = $o->arr();
+			$row["active"] = $act_html;
+			$table->define_data($row);
+		};
+	}
 
 	function callback_post_save($arr)
 	{
@@ -1178,7 +1227,7 @@ class site_search_content extends class_base
 		
 		@attrib name=do_search params=name nologin="1" 
 		
-		@param id required
+		@param id optional
 		@param group optional
 		@param page optional
 		@param str optional
@@ -1195,6 +1244,16 @@ class site_search_content extends class_base
 	function do_search($arr)
 	{
 		enter_function("site_search_content::do_search");
+		if (!is_oid($arr["id"]))
+		{
+			// see if we got a default
+			$ol = new object_list(array("class_id" => CL_SITE_SEARCH_CONTENT, "flags" => array("mask" => OBJ_FLAG_IS_SELECTED, "flags" => OBJ_FLAG_IS_SELECTED)));
+			if ($ol->count())
+			{
+				$o = $ol->begin();
+				$arr["id"] = $o->id();
+			}
+		}
 		error::view_check($arr["id"]);
 		extract($this->set_defaults($arr));
 		$o = obj($id);

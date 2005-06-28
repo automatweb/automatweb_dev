@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.146 2005/06/14 20:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.147 2005/06/28 14:41:48 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1523,14 +1523,16 @@ class users extends users_user
 
 			
 			aw_global_set("__in_post_message", 1);
-			$admo = obj($this->get_oid_for_gid($admg));
+			// can not use cache here, go direct
+			$adm_oid = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid");
+			$admo = obj($adm_oid);
 			$admo->set_prop("can_admin_interface", 1);
 			$admo->save();
 
 			$editors = $this->addgroup(0,"Toimetajad", GRP_REGULAR,0,5000,0,$ini_opts["groups.tree_root"]);
 			echo "Toimetajad <br>\n";
 			flush();
-			$osi_vars["groups.editors"] = $this->get_oid_for_gid($editors);
+			$osi_vars["groups.editors"] = $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$editors'", "oid");
 
 			/*$this->addgroup(0,"Kliendid", GRP_REGULAR,0,2500,0,$ini_opts["groups.tree_root"]);
 			echo "Kliendid <br>\n";
@@ -1558,10 +1560,10 @@ class users extends users_user
 			$this->add_users_to_group_rec($admg,array($site["site_obj"]["default_user"]),true,true,false);
 			echo "adding user to groups! <br>\n";
 			flush();
-			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($admg));
+			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$admg'", "oid"));
 			echo "administrator <br>\n";
 			flush();
-			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->get_oid_for_gid($aug));
+			$this->_install_create_g_u_o_rel($this->last_user_oid, $this->db_fetch_field("SELECT oid FROM groups WHERE gid = '$aug'", "oid"));
 			echo "all users <br>\n";
 			flush();
 			aw_global_set("__in_post_message", 0);

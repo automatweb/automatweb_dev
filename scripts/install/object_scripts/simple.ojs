@@ -11,14 +11,16 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 				$logged = obj { class_id=CL_MENU, parent=${loginm}, name="Sisse loginud", status=STAT_ACTIVE, type=MN_CLIENT }
 					$logged_admins = obj { class_id=CL_MENU, parent=${logged}, jrk="1", name="Administraatorid", status=STAT_ACTIVE, type=MN_CLIENT }
 
-						$work = obj { class_id=CL_MENU, parent=${logged_admins}, jrk="1", name="Administreeri", status=STAT_ACTIVE, type=MN_CONTENT,  }
+						$work = obj { class_id=CL_MENU, parent=${logged_admins}, jrk="1", name="Administreeri", status=STAT_ACTIVE, type=MN_CONTENT  }
 
-							obj { class_id=CL_MENU, parent=${work}, name="Automatweb", jrk="1", status=STAT_ACTIVE, type=MN_CONTENT, link="/automatweb/" }
-							obj { class_id=CL_MENU, parent=${work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1 }
-							obj { class_id=CL_MENU, parent=${work}, name="Muuda Dokumenti", jrk="3", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/change", meta.pm_url_admin=1 }
+							obj { class_id=CL_MENU, parent=${work}, name="Automatweb", jrk="1", status=STAT_ACTIVE, type=MN_CONTENT, link="/automatweb/", target=1 }
+							obj { class_id=CL_MENU, parent=${work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1, target=1 }
+							obj { class_id=CL_MENU, parent=${work}, name="Muuda Dokumenti", jrk="3", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/change", meta.pm_url_admin=1, target=1 }
+							obj { class_id=CL_MENU, parent=${work}, name="Lisa Kaust", jrk="4", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/new", meta.pm_url_admin=1, target=1 }
+							obj { class_id=CL_MENU, parent=${work}, name="Muuda Kausta", jrk="5", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/change", meta.pm_url_admin=1, target=1 }
 
 						$me = obj { class_id=CL_MENU, parent=${logged_admins}, jrk="2", name="Minu tegevused", status=STAT_ACTIVE, type=MN_CONTENT }
-							obj { class_id=CL_MENU, parent=${me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd"}
+							obj { class_id=CL_MENU, parent=${me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd" }
 							obj { class_id=CL_MENU, parent=${me}, name="Logi v&auml;lja", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/logout"}
 
 					$logged_users = obj { class_id=CL_MENU, parent=${logged}, name="Tavaskasutajad", status=STAT_ACTIVE, type=MN_PMETHOD,  }
@@ -30,9 +32,12 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 						$e_work = obj { class_id=CL_MENU, parent=${logged_editors}, jrk="1", name="Administreeri", status=STAT_ACTIVE, type=MN_CONTENT,  }
 
-							obj { class_id=CL_MENU, parent=${e_work}, name="Automatweb", jrk="1", status=STAT_ACTIVE, type=MN_CONTENT, link="/automatweb/" }
-							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1}
-							obj { class_id=CL_MENU, parent=${e_work}, name="Muuda Dokumenti", jrk="3", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/change", meta.pm_url_admin=1 }
+							obj { class_id=CL_MENU, parent=${e_work}, name="Automatweb", jrk="1", status=STAT_ACTIVE, type=MN_CONTENT, link="/automatweb/", target=1 }
+							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Dokument", jrk="2", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/new", meta.pm_url_admin=1, target=1}
+							obj { class_id=CL_MENU, parent=${e_work}, name="Muuda Dokumenti", jrk="3", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="document/change", meta.pm_url_admin=1, target=1 }
+
+							obj { class_id=CL_MENU, parent=${e_work}, name="Lisa Kaust", jrk="4", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/new", meta.pm_url_admin=1, target=1 }
+							obj { class_id=CL_MENU, parent=${e_work}, name="Muuda Kausta", jrk="5", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="menu/change", meta.pm_url_admin=1, target=1 }
 
 						$e_me = obj { class_id=CL_MENU, parent=${logged_editors}, jrk="2", name="Minu tegevused", status=STAT_ACTIVE, type=MN_CONTENT }
 							obj { class_id=CL_MENU, parent=${e_me}, name="Muuda Parooli", jrk="1", status=STAT_ACTIVE, type=MN_PMETHOD, meta.pclass="users/change_pwd"}
@@ -75,10 +80,12 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 				$search_fld = obj { class_id=CL_MENU, parent=${mn_conf}, name="Otsing", type=MN_CLIENT, status=STAT_ACTIVE }
 					$search_grp = obj { class_id=CL_SITE_SEARCH_CONTENT_GRP, parent=${search_fld}, name="Kogu sait", status=STAT_ACTIVE }
-					$search_obj = obj { class_id=CL_SITE_SEARCH_CONTENT, parent=${search_fld}, name="Saidi sisu otsing", status=STAT_ACTIVE, search_live=1, per_page=20, default_order=1, default_search_opt=1 }
+					$search_obj = obj { class_id=CL_SITE_SEARCH_CONTENT, parent=${search_fld}, name="Saidi sisu otsing", status=STAT_ACTIVE, search_live=1, per_page=20, default_order=1, default_search_opt=1, flags=16 }
 
 				$add_tree_conf = obj { class_id=CL_ADD_TREE_CONF, parent=${mn_conf}, name="Lisamise puu seaded", status=STAT_NOTACTIVE }
 
+
+				$rss_o = obj { class_id=CL_NEWSFEED, parent=${mn_conf}, name="Uudisvoog", alias="rss" feedtype="rss20", limittype="last", count="20"  }
 		$aw_obj_priv = obj { class_id=CL_MENU, parent=${klient}, jrk="3", name="Piiratud ligip&auml;&auml;suga AW Objektid", type=MN_CLIENT, status=STAT_ACTIVE }
 
 

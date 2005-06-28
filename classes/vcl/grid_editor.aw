@@ -323,6 +323,11 @@ class grid_editor extends class_base
 		return $this->arr;
 	}
 
+	function set_cell_content($row, $col, $str)
+	{
+		$this->arr['aliases'][$row][$col] = $str;
+	}
+
 	function _process_command($data)
 	{
 		$fn = "_".$data["action"];

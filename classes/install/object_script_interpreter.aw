@@ -6,6 +6,7 @@ define("OSI_TOK_CREATE_INI", 2);	// params { }
 define("OSI_TOK_CREATE_OBJ", 3);	// params { }
 define("OSI_TOK_SETTING", 4);	// params { $name,$value }
 define("OSI_TOK_CMD_END", 5);		// params { }  - ends line exec
+define("OSI_TOK_CREATE_REL", 6); 
 
 class object_script_interpreter extends class_base
 {
@@ -167,6 +168,14 @@ class object_script_interpreter extends class_base
 		{
 			$toks[] = array(
 				"tok" => OSI_TOK_CREATE_INI,
+				"params" => array()
+			);
+		}
+		else
+		if (substr($line, 0, 3) == "rel")
+		{
+			$toks[] = array(
+				"tok" => OSI_TOK_CREATE_REL,
 				"params" => array()
 			);
 		}
@@ -352,6 +361,10 @@ class object_script_interpreter extends class_base
 							$o->set_parent($this->_get_value($toks[$cnt]["params"]["value"]));
 							break;
 					
+						case "flags":
+							$o->set_flags($this->_get_value($toks[$cnt]["params"]["value"]));
+							break;
+					
 						default:
 							$o->set_prop($toks[$cnt]["params"]["name"], $this->_get_value($toks[$cnt]["params"]["value"]));
 							break;
@@ -372,6 +385,35 @@ class object_script_interpreter extends class_base
 		if ($toks[$start]["tok"] == OSI_TOK_CREATE_INI)
 		{
 			$this->ini_settings[$toks[$start+1]["params"]["name"]] = $toks[$start+1]["params"]["value"];
+		}
+		else
+		if ($toks[$start]["tok"] == OSI_TOK_CREATE_REL)
+		{
+			$c = new connection();
+			$parm = array();
+			// now set all opts
+			$cnt = $start+1;
+			while ($toks[$cnt]["tok"] != OSI_TOK_CMD_END)
+			{
+				$parm[$toks[$cnt]["params"]["name"]] = $this->_get_value($toks[$cnt]["params"]["value"]);
+				$cnt++;
+			}
+
+			if (!count($parm) || !is_oid($parm["from"]) || !is_oid($parm["to"]))
+			{
+				error::raise(array(
+					"id" => ERR_OSI_REL,
+					"msg" => t("object_script_interpreter::_exec_toks(): relation must have both ends defined!")
+				));
+			}
+
+			$c->change($parm);
+
+			if ($start == 1)
+			{
+				$this->sym_table[$toks[0]["params"]["name"]] = $c->id();
+			}
+
 		}
 	}
 
