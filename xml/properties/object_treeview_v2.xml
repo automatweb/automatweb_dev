@@ -8,6 +8,7 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_DATASOURCE</reltype>
+            <editonly>1</editonly>
             <caption>Andmed</caption>
       </property>
       <property>
@@ -18,6 +19,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <editonly>1</editonly>
             <caption>Lehte ei cacheta</caption>
       </property>
       <property>
@@ -28,7 +30,100 @@
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_SEARCH</reltype>
+            <editonly>1</editonly>
             <caption>Otsing</caption>
+      </property>
+      <property>
+            <name>add_new_ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <newonly>1</newonly>
+            <caption>Lisa uus andmeallikas</caption>
+      </property>
+      <property>
+            <name>add_new_ds_type</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <newonly>1</newonly>
+            <store>no</store>
+            <caption>Uue andmeallika t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>copy_ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <newonly>1</newonly>
+            <caption>Kopeeri olemasolev andmeallikas</caption>
+      </property>
+      <property>
+            <name>sel_copy_ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <newonly>1</newonly>
+            <store>no</store>
+            <caption>Vali kopeeritav andmeallikas</caption>
+      </property>
+      <property>
+            <name>connect_ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <newonly>1</newonly>
+            <caption>Seos olemasoleva andmeallikaga</caption>
+      </property>
+      <property>
+            <name>sel_connect_ds</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <newonly>1</newonly>
+            <store>no</store>
+            <caption>Vali seostatav andmeallikas</caption>
+      </property>
+      <property>
+            <name>inherit_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <newonly>1</newonly>
+            <caption>P&amp;auml;ri omadused objektinimekirjast</caption>
+      </property>
+      <property>
+            <name>sel_inherit_from</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <newonly>1</newonly>
+            <store>no</store>
+            <caption>Vali p&amp;auml;ritav objektinimekiri</caption>
       </property>
       <property>
             <name>inherit_view_props_from</name>

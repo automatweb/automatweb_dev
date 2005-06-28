@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.81 2005/06/22 09:42:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.82 2005/06/28 14:42:48 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -10,15 +10,43 @@
 @default field=meta
 @default method=serialize
 
+/// frontpage edit props
 
-@property ds type=relpicker reltype=RELTYPE_DATASOURCE
+@property ds type=relpicker reltype=RELTYPE_DATASOURCE editonly=1
 @caption Andmed
 
-@property no_cache_page type=checkbox ch_value=1
+@property no_cache_page type=checkbox ch_value=1 editonly=1
 @caption Lehte ei cacheta
 
-@property search type=relpicker reltype=RELTYPE_SEARCH
+@property search type=relpicker reltype=RELTYPE_SEARCH editonly=1
 @caption Otsing
+
+/// frontpage add props
+
+@property add_new_ds type=text store=no subtitle=1 newonly=1
+@caption Lisa uus andmeallikas
+
+@property add_new_ds_type type=select newonly=1 store=no
+@caption Uue andmeallika t&uuml;&uuml;p
+
+@property copy_ds type=text store=no subtitle=1 newonly=1
+@caption Kopeeri olemasolev andmeallikas
+
+@property sel_copy_ds type=select newonly=1 store=no
+@caption Vali kopeeritav andmeallikas
+
+@property connect_ds type=text store=no subtitle=1 newonly=1
+@caption Seos olemasoleva andmeallikaga
+
+@property sel_connect_ds type=select newonly=1 store=no
+@caption Vali seostatav andmeallikas
+
+
+@property inherit_from type=text store=no subtitle=1 newonly=1
+@caption P&auml;ri omadused objektinimekirjast
+
+@property sel_inherit_from type=select newonly=1 store=no
+@caption Vali p&auml;ritav objektinimekiri
 
 @groupinfo showing caption="N&auml;itamine"
 @default group=showing
@@ -208,6 +236,7 @@ class object_treeview_v2 extends class_base
 		switch($prop["name"])
 		{
 			case "inherit_view_props_from":
+			case "sel_inherit_from":
 				$ol = new object_list(array(
 					"class_id" => CL_OBJECT_TREEVIEW_V2,
 					"is_inheritable" => 1,
@@ -352,6 +381,31 @@ class object_treeview_v2 extends class_base
 			case "columns_modify":
 				$this->_columns_modify($arr);
 				break;
+
+			case "add_new_ds_type":
+				$arr["obj_inst"]->set_class_id(CL_OBJECT_TREEVIEW_V2);
+				$reli = $arr["obj_inst"]->get_relinfo();
+				$clids = $reli["RELTYPE_DATASOURCE"]["clid"];
+				$tps = array("" => "");
+				$clss = aw_ini_get("classes");
+				foreach($clids as $clid)
+				{
+					$tps[$clid] = $clss[$clid]["name"];
+				}
+				$prop["options"] = $tps;
+				break;
+
+			case "sel_copy_ds":
+			case "sel_connect_ds":
+				$arr["obj_inst"]->set_class_id(CL_OBJECT_TREEVIEW_V2);
+				$reli = $arr["obj_inst"]->get_relinfo();
+				$clids = $reli["RELTYPE_DATASOURCE"]["clid"];
+
+				$ol = new object_list(array(
+					"class_id" => $clids
+				));
+				$prop["options"] = array("" => "") + $ol->names();
+				break;
 		};
 		return $retval;
 	}
@@ -407,6 +461,52 @@ class object_treeview_v2 extends class_base
 
 			case "columns_modify":
 				$arr["obj_inst"]->set_meta("transform_cols", $arr["request"]["transform_cols"]);
+				break;
+		
+			case "add_new_ds_type":
+				if ($prop["value"] != "")
+				{
+					$o = obj();
+					$o->set_class_id($prop["value"]);
+					$o->set_name(sprintf(t("%s andmeallikas"), $arr["request"]["name"]));
+					$o->set_parent($arr["request"]["parent"]);
+					$o->save();
+	
+					$arr["obj_inst"]->set_prop("ds", $o->id());
+				}
+				break;
+
+			case "sel_copy_ds":
+				if ($prop["value"] != "")
+				{
+					$o = obj($prop["value"]);
+					$o->set_name(sprintf(t("%s andmeallikas"), $arr["request"]["name"]));
+					$o->set_parent($arr["request"]["parent"]);
+					$o->save_new();
+				
+					// also rels
+					$old = obj($prop["value"]);
+					foreach($old->connections_from() as $c)
+					{
+						$o->connect(array(
+							"to" => $c->prop("to"),
+							"reltype" => $c->prop("reltype")
+						));
+					}
+			
+					$arr["obj_inst"]->set_prop("ds", $o->id());
+				}
+				break;
+
+			case "sel_connect_ds":
+				if ($prop["value"] != "")
+				{
+					$arr["obj_inst"]->set_prop("ds", $prop["value"]);
+				}
+				break;
+
+			case "sel_inherit_from":
+				$arr["obj_inst"]->set_prop("inherit_view_props_from", $prop["value"]);
 				break;
 		}
 		return $retval;
