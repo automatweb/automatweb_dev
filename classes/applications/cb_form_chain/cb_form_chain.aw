@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.8 2005/06/22 12:54:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.9 2005/06/28 14:43:23 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -240,6 +240,12 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "data_table",
+			"caption" => t("Andmed tabelina"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "repeat_ctr",
 			"caption" => t("Korduste kontroller"),
 			"align" => "center"
@@ -297,6 +303,11 @@ class cb_form_chain extends class_base
 					"name" => "d[".$o->id()."][el_table]",
 					"value" => 1,
 					"checked" => $d[$o->id()]["el_table"] == 1 
+				)),
+				"data_table" => html::checkbox(array(
+					"name" => "d[".$o->id()."][data_table]",
+					"value" => 1,
+					"checked" => $d[$o->id()]["data_table"] == 1 
 				)),
 				"repeat_ctr" => $rc,
 				"def_ctr" => html::select(array(
@@ -413,7 +424,8 @@ class cb_form_chain extends class_base
 					"form" => $form,
 					"rep" => $dat["repeat"],
 					"rep_cnt" => 1,
-					"el_table" => $dat["el_table"]
+					"el_table" => $dat["el_table"],
+					"data_table" => $dat["data_table"]
 				);
 				if ($dat["repeat"] && is_oid($dat["rep_ctr"]) && $this->can("view", $dat["rep_ctr"]))
 				{
@@ -454,13 +466,25 @@ class cb_form_chain extends class_base
 			));
 			$html .= $this->parse("FORM_HEADER");
 
-			if ($form_dat["el_table"] == 1)
+			if ($form_dat["data_table"])
 			{
-				$html .= $this->_html_table_from_props($form_dat, $props, $ot, $wf, $o);
+				$this->_display_entry_data_table($form_dat, $props, $wf, $o);
+
+				if (($idx = $this->_can_show_edit_form($form_dat)))
+				{
+					$html .= $this->_html_from_props($form_dat, $props, $ot, $wf, $o, $idx > 0 ? $idx-1 : NULL);
+				}
 			}
 			else
 			{
-				$html .= $this->_html_from_props($form_dat, $props, $ot, $wf, $o);
+				if ($form_dat["el_table"] == 1)
+				{
+					$html .= $this->_html_table_from_props($form_dat, $props, $ot, $wf, $o);
+				}
+				else
+				{
+					$html .= $this->_html_from_props($form_dat, $props, $ot, $wf, $o);
+				}
 			}
 		}
 
@@ -485,7 +509,7 @@ class cb_form_chain extends class_base
 			if ($pgs[$i+1] == $cur_pg)
 			{
 				$this->vars(array(
-					"prev_link" => aw_url_change_var(array("cbfc_pg" => $pgs[$i], "do_confirm" => NULL, "display" => NULL))
+					"prev_link" => aw_url_change_var(array("cbfc_pg" => $pgs[$i], "do_confirm" => NULL, "display" => NULL, "edit_num" => NULL))
 				));
 				$this->vars(array(
 					"PREV_PAGE" => $this->parse("PREV_PAGE")
@@ -494,7 +518,7 @@ class cb_form_chain extends class_base
 			if ($pgs[$i-1] == $cur_pg)
 			{
 				$this->vars(array(
-					"next_link" => aw_url_change_var(array("cbfc_pg" => $pgs[$i], "display" => NULL))
+					"next_link" => aw_url_change_var(array("cbfc_pg" => $pgs[$i], "display" => NULL, "edit_num" => NULL))
 				));
 				$this->vars(array(
 					"NEXT_PAGE" => $this->parse("NEXT_PAGE")
@@ -508,7 +532,7 @@ class cb_form_chain extends class_base
 			if ($o->prop("confirm_sep_page") == 1)
 			{
 				$this->vars(array(
-					"next_link" => aw_url_change_var(array("do_confirm" => 1, "display" => NULL))
+					"next_link" => aw_url_change_var(array("do_confirm" => 1, "display" => NULL, "edit_num" => NULL))
 				));
 				$this->vars(array(
 					"NEXT_PAGE" => $this->parse("NEXT_PAGE"),
@@ -600,11 +624,11 @@ class cb_form_chain extends class_base
 			{
 				if ($prev == $arr["cbfc_pg"])
 				{
-					return aw_url_change_var("cbfc_pg", $pg, $arr["ret"]);
+					return aw_url_change_var("edit_num", NULL, aw_url_change_var("cbfc_pg", $pg, $arr["ret"]));
 				}
 				$prev = $pg;
 			}
-			return aw_url_change_var("do_confirm", 1, $arr["ret"]);
+			return aw_url_change_var("edit_num", NULL, aw_url_change_var("do_confirm", 1, $arr["ret"]));
 		}
 		else
 		if ($arr["goto_prev"] != "")
@@ -615,7 +639,7 @@ class cb_form_chain extends class_base
 			{
 				if ($pg == $arr["cbfc_pg"])
 				{
-					return aw_url_change_var("cbfc_pg", $prev, $arr["ret"]);
+					return aw_url_change_var("edit_num", NULL, aw_url_change_var("cbfc_pg", $prev, $arr["ret"]));
 				}
 				$prev = $pg;
 			}
@@ -1173,9 +1197,15 @@ class cb_form_chain extends class_base
 		}
 	}
 
-	function _html_from_props($form_dat, $props, $ot, $wf, $o)
+	function _html_from_props($form_dat, $props, $ot, $wf, $o, $num_to_show = NULL)
 	{
-		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
+		$i = 0;
+		if ($num_to_show !== NULL)
+		{
+			$i = $num_to_show;
+			$form_dat["rep_cnt"] = $i+1;
+		}
+		for(; $i < $form_dat["rep_cnt"]; $i++)
 		{
 			if ((!is_array($_SESSION["cbfc_data"][$wf->id()][$i])) && $form_dat["def_ctr"])
 			{
@@ -1373,6 +1403,72 @@ class cb_form_chain extends class_base
 			}
 		}
 		return false;
+	}
+
+	function _display_entry_data_table($form_dat, $props, $wf, $o)
+	{
+		// for all entries for this form
+		$row = "";
+		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
+		{
+			// show row
+			$col = "";
+			foreach($props as $pn => $pd)
+			{
+				$this->vars(array(
+					"content" => $this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn])
+				));
+				$col .= $this->parse("DT_COL");
+			}
+
+			$this->vars(array(
+				"content" => html::href(array(
+					"url" => aw_url_change_var("edit_num", $i+1),
+					"caption" => t("Muuda")
+				))
+			));
+			$col .= $this->parse("DT_COL");
+
+			$this->vars(array(
+				"DT_COL" => $col
+			));
+			$row .= $this->parse("DT_ROW");
+		}
+		
+
+		$this->vars(array(
+			"DT_HEADER" => $this->_get_data_table_header($props),
+			"DT_ROW" => $row
+		));
+
+		$this->vars(array(
+			"DATA_TABLE" => $this->parse("DATA_TABLE")
+		));
+	}
+
+	function _get_data_table_header($props)
+	{
+		// show header
+		$header = "";
+		foreach($props as $pn => $pd)
+		{
+			$this->vars(array(
+				"col_name" => $pd["caption"]
+			));
+			$header .= $this->parse("DT_HEADER");
+		}
+
+		$this->vars(array(
+			"col_name" => t("Muuda")
+		));
+		$header .= $this->parse("DT_HEADER");
+
+		return $header;
+	}
+
+	function _can_show_edit_form($form_dat)
+	{
+		return max($_GET["edit_num"], 1);
 	}
 }
 ?>

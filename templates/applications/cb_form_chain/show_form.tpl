@@ -1,3 +1,4 @@
+
 <!-- SUB: TITLE -->
 {VAR:title}
 <!-- END SUB: TITLE -->
@@ -9,6 +10,33 @@
 <!-- SUB: TITLE_SEP -->
 |
 <!-- END SUB: TITLE_SEP -->
+
+<!-- SUB: DATA_TABLE -->
+<table border="1">
+	<tr>
+		<!-- SUB: DT_HEADER -->
+		<td>{VAR:col_name}</td>
+		<!-- END SUB: DT_HEADER -->
+	</tr>
+
+	<!-- SUB: DT_ROW -->
+	<tr>
+		<!-- SUB: DT_COL -->
+		<td>{VAR:content}</td>
+		<!-- END SUB: DT_COL -->
+	</tr>
+	<!-- END SUB: DT_ROW -->
+</table>
+
+<!-- SUB: DT_CHANGE_COL -->
+<td><a href='{VAR:change_url}'>Muuda</a></td>
+<!-- END SUB: DT_CHANGE_COL -->
+
+<!-- SUB: DT_DEL_COL -->
+<td><a href='{VAR:del_url}'>Kustuta</a></td>
+<!-- END SUB: DT_DEL_COL -->
+
+<!-- END SUB: DATA_TABLE -->
 
 
 <table border="0" align="center" width="100%">
