@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.36 2005/06/27 12:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/object_import.aw,v 1.37 2005/06/28 14:55:37 kristo Exp $
 // object_import.aw - Objektide Import 
 /*
 
@@ -213,7 +213,8 @@ class object_import extends class_base
 						if ($ds_f->class_id() == CL_FILE)
 						{
 							$ol = new object_list($ds->connections_from(array("type" => "RELTYPE_DS")));
-							$prop["options"] = array("" => "Andmeallikas valitud") + $ol->names();
+							$prop["options"] = array("" => "") + $ol->names();
+							$prop["value"] = $ds->prop("ds");
 							return PROP_OK;
 						}
 					}
@@ -258,6 +259,29 @@ class object_import extends class_base
 			case "status":
 				$prop["value"] = STAT_ACTIVE;
 				break;
+
+			case "ds_file":
+				if (is_oid($arr["obj_inst"]->prop("ds")))
+				{
+					$ds = obj($arr["obj_inst"]->prop("ds"));
+					if ($ds->prop("ds"))
+					{
+						$ds_f = obj($ds->prop("ds"));
+						if ($ds_f->class_id() == CL_FILE)
+						{
+							if ($ds->prop("ds") != $prop["value"])
+							{
+								$ds->set_prop("ds", $prop["value"]);
+								$ds->save();
+								$prop["value"] = NULL;
+							}
+							return PROP_OK;
+						}
+					}
+				}
+				return PROP_IGNORE;
+				break;
+				
 		}
 		return $retval;
 	}	
