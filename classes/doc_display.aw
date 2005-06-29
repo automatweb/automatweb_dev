@@ -61,6 +61,9 @@ class doc_display extends aw_template
 			"parent_id" => $doc->parent(),
 			"parent_name" => $doc_parent->name(),
 			"user1" => $doc->prop("user1"),
+			"user2" => $doc->prop("user2"),
+			"user3" => $doc->prop("user3"),
+			"user4" => $doc->prop("user4"),
 			"page_title" => strip_tags($doc->prop("title"))
 		));
 
