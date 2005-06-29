@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.12 2005/06/14 10:34:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/relmanager.aw,v 1.13 2005/06/29 11:51:43 duke Exp $
 /*
 // !Displays a table of relations and adds one line with edit fields to allow adding
 // of new objects
@@ -62,16 +62,6 @@ class relmanager extends aw_template
 
 		// XXX: should multiple classes be supported?
 		$conns = $obj->connections_from($params);
-
-		// alright, I need an alternative way to figure this thing out
-
-		/*
-		$conns = $obj->connections_from(array(
-			"type" => $prop["reltype"],
-			"class" => $prop["clid"][0],
-		));	
-		*/
-
 
 		$rv = array();
 
@@ -159,63 +149,67 @@ class relmanager extends aw_template
 			$this->t->define_data($to_prop);
 		};
 
-		// now add items for each property
+		$counter = 0;
 
-		// A new name perhaps then? Then .. how do I make sure that name is not used anywhere
-		// else? By using a special prefix? Yees .. that is it.
+		$new_items = isset($arr["prop"]["new_items"]) ? $arr["prop"]["new_items"] : 1;
 
-
-		if (strpos($prop["name"],"[") !== false)
+		for ($i = 0; $i < $new_items; $i++)
 		{
-			$bracket = strpos($prop["name"],"[");
-			$pre = substr($prop["name"],0,$bracket);
-			$aft = substr($prop["name"],$bracket);
-			$prefix = "cb_emb[" . $pre . "]" . $aft . "[new]";
-				//$newname = $args["name_prefix"] . "[$pre]" . $aft;
-		}
-		else
-		{
-			$prefix = "cb_emb[" . $prop["name"] . "][new]";
-
-
-		};
-
-		$addline = array();
-		
-		// this has to be optional, I might now want any "Uus" captions
-		if ($use_chooser)
-		{
-			$addline["chooser"] = "Uus";
-		};
-
-		// this _NEEDS_ to be done differently .. like for example
-		// with widgets or something .. urk.
-
-		// how do I make this thing support different fields then?
-
-		// add an object reference to the cell and the use it in get_html? yees?
-
-		foreach($proplist as $propitem)
-		{
-			$type = $xproplist[$propitem]["type"];
-			switch($type)
+			// cb_emb asemel peaks kasutama omaduse nime eksole
+			$counter = $i;
+			// add placeholders for adding new items
+			if (strpos($prop["name"],"[") !== false)
 			{
-				case "fileupload":
-					$widget = html::fileupload(array(
-						"name" => $prefix . "[" . $propitem . "]",
-					));
-					break;
+				$bracket = strpos($prop["name"],"[");
+				$pre = substr($prop["name"],0,$bracket);
+				$aft = substr($prop["name"],$bracket);
+				$prefix = "cb_emb[" . $pre . "]" . $aft . "[new][$counter]";
+					//$newname = $args["name_prefix"] . "[$pre]" . $aft;
+			}
+			else
+			{
+				$prefix = "cb_emb[" . $prop["name"] . "][new][$counter]";
 
-				default:
-					$widget = html::textbox(array(
-						"name" => $prefix . "[" . $propitem . "]",
-					));
-					break;
+
 			};
-			$addline[$propitem] = $widget;
-		};
 
-		$this->t->define_data($addline);
+			$addline = array();
+			
+			// this has to be optional, I might now want any "Uus" captions
+			if ($use_chooser)
+			{
+				$addline["chooser"] = "Uus";
+			};
+
+			// this _NEEDS_ to be done differently .. like for example
+			// with widgets or something .. urk.
+
+			// how do I make this thing support different fields then?
+
+			// add an object reference to the cell and the use it in get_html? yees?
+
+			foreach($proplist as $propitem)
+			{
+				$type = $xproplist[$propitem]["type"];
+				switch($type)
+				{
+					case "fileupload":
+						$widget = html::fileupload(array(
+							"name" => $prefix . "[" . $propitem . "]",
+						));
+						break;
+
+					default:
+						$widget = html::textbox(array(
+							"name" => $prefix . "[" . $propitem . "]",
+						));
+						break;
+				};
+				$addline[$propitem] = $widget;
+			};
+
+			$this->t->define_data($addline);
+		};
 	}
 
 	function get_html()
@@ -252,64 +246,72 @@ class relmanager extends aw_template
 
 		$req = $arr["request"]["cb_emb"][$propname];
 
-		$arglist = array();
+		$num_items = sizeof($req["new"]);
 
-		foreach($xproplist as $name => $act_prop)
-		{
-			if ($act_prop["type"] == "fileupload")
-			{
-				$_fileinf = $_FILES["cb_emb"];
-				$filename = $_fileinf["name"][$propname]["new"][$name];
-				$filetype = $_fileinf["type"][$propname]["new"][$name];
-				$tmpname = $_fileinf["tmp_name"][$propname]["new"][$name];
-				// tundub, et polnud sellist faili, eh?
-				if (empty($tmpname))
-				{
-					return false;
-				};
-				$arglist[$name] = array(
-					"tmp_name" => $tmpname,
-					"type" => $filetype,
-					"name" => $filename,
-				);
-			}
-			else
-			{
-				if (!empty($req["new"][$name]))
-				{
-					$arglist[$name] = $req["new"][$name];
-				};
-			};
-
-		};
-
-		if (sizeof($arglist) == 0)
-		{
-			return false;
-		};
-
-		$arglist["parent"] = $arr["obj_inst"]->parent();
-		$arglist["return"] = "id";
-
-		$inst = get_instance($clid);
-		$obj_id = $inst->submit($arglist);
-
-		// TODO: Implement error checking! What if the relinfo value is not valid?
-		$arr["obj_inst"]->connect(array(
-			"to" => $obj_id,
-			"reltype"=> $arr["prop"]["relinfo"]["value"],
-		));
-
-		// now check, how many connections we have
-		$conns = $arr["obj_inst"]->connections_from(array(
+		$existing_connections = $arr["obj_inst"]->connections_from(array(
 			"type" => $arr["prop"]["relinfo"]["value"],
 		));
 
-		// set the newly created connection as the value of the element, if this was the first entry
-		if (sizeof($conns) == 1)
+		// if this is the first object of this kind, then it needs a bit of special processing
+		$first_object = (sizeof($existing_connections) == 0);
+
+		for ($i = 0; $i < $num_items; $i++)
 		{
-			$arr["prop"]["value"] = $obj_id;
-		}
+			$arglist = array();
+			foreach($xproplist as $name => $act_prop)
+			{
+				if ($act_prop["type"] == "fileupload")
+				{
+					$_fileinf = $_FILES["cb_emb"];
+					$filename = $_fileinf["name"][$propname]["new"][$i][$name];
+					$filetype = $_fileinf["type"][$propname]["new"][$i][$name];
+					$tmpname = $_fileinf["tmp_name"][$propname]["new"][$i][$name];
+					// no such file, oh well then
+					if (empty($tmpname))
+					{
+						continue;
+					};
+					$arglist[$name] = array(
+						"tmp_name" => $tmpname,
+						"type" => $filetype,
+						"name" => $filename,
+					);
+				}
+				else
+				{
+					if (!empty($req["new"][$i][$name]))
+					{
+						$arglist[$name] = $req["new"][$i][$name];
+					};
+				};
+
+			};
+
+			if (sizeof($arglist) == 0)
+			{
+				continue;
+			};
+
+			$arglist["parent"] = $arr["obj_inst"]->parent();
+			$arglist["return"] = "id";
+
+			$inst = get_instance($clid);
+			$obj_id = $inst->submit($arglist);
+
+			// TODO: Implement error checking! What if the relinfo value is not valid?
+			$arr["obj_inst"]->connect(array(
+				"to" => $obj_id,
+				"reltype"=> $arr["prop"]["relinfo"]["value"],
+			));
+
+			// set the newly created connection as the value of the element, if this was the first entry
+			// I'm a bit unsure why this was needed, but since it's there it will remain as it is
+			if ($first_object)
+			{
+				$arr["prop"]["value"] = $obj_id;
+				$first_object = false;
+			};
+		};
 
 	}
 
