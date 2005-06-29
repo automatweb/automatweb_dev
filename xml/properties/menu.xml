@@ -28,16 +28,6 @@
             <caption>Uues aknas</caption>
       </property>
       <property>
-            <name>submenus_from_obj</name>
-            <table>objects</table>
-            <type>relpicker</type>
-            <reltype>RELTYPE_SUBMENUS</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>general</group>
-            <caption>Alammen&amp;uuml;&amp;uuml;d objektist</caption>
-      </property>
-      <property>
             <name>users_only</name>
             <table>objects</table>
             <type>checkbox</type>
@@ -412,6 +402,16 @@
             <group>advanced</group>
             <field>width</field>
             <caption>Laius</caption>
+      </property>
+      <property>
+            <name>submenus_from_obj</name>
+            <table>menu</table>
+            <type>relpicker</type>
+            <reltype>RELTYPE_SUBMENUS</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced</group>
+            <caption>Alammen&amp;uuml;&amp;uuml;d objektist</caption>
       </property>
       <property>
             <name>submenus_from_menu</name>
