@@ -388,6 +388,7 @@ class _int_object_loader extends core
 	{
 		// we get the acl from read_objdata
 		enter_function("object_loader::can");
+
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
 			$max_priority = -1;
@@ -468,11 +469,12 @@ class _int_object_loader extends core
 						}
 					}
 				}
+
 				$acld = safe_array($tmp["acldata"]);
 
 				// now, iterate over the current acl data with the current gidlist
 				// and find the highest priority acl currently
-				
+
 				foreach($acld as $g_oid => $g_acld)
 				{
 					if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority)

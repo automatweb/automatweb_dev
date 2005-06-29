@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.46 2005/06/14 20:05:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.47 2005/06/29 08:58:12 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -485,8 +485,9 @@ class admin_folders extends aw_template
 		{
 			return;
 		}
-		$ucfg = new object($us->get_current_user());
-		if (!is_oid($ucfg) || !$this->can("view", $ucfg->prop("home_folder")))
+		$cur_oid = $us->get_current_user();
+		$ucfg = new object($cur_oid);
+		if (!$this->can("view", $ucfg->prop("home_folder")))
 		{
 			exit_function("admin_folders::mk_homefolder");
 			return;
