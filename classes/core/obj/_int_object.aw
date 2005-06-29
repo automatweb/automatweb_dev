@@ -1057,12 +1057,43 @@ class _int_object
 
 		// if this is a relpicker property, create the relation as well
 		$propi = $GLOBALS["properties"][$this->obj["class_id"]][$key];
-		if (($propi["type"] == "relpicker" || $propi["type"] == "relmanager" || ($propi["type"] == "classificator" && $propi["store"] == "connect")) && is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
+		if (($propi["type"] == "relpicker" || $propi["type"] == "relmanager" || ($propi["type"] == "classificator" && $propi["store"] == "connect")))
 		{
-			$this->connect(array(
-				"to" => $val,
-				"reltype" => $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"]
-			));
+			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
+
+			if ($propi["multiple"] == 1)
+			{
+				// get all old connections
+				// remove the ones that are not selected
+				foreach($this->connections_from(array("type" => $_rt)) as $c)
+				{
+					if (!in_array($c->prop("to"), $val))
+					{
+						$this->disconnect(array("from" => $c->prop("to")));
+					}
+				}
+				// connect to all selected ones
+				foreach(safe_array($val) as $connect_to)
+				{
+					if (is_oid($connect_to) && $GLOBALS["object_loader"]->ds->can("view", $connect_to))
+					{
+						$this->connect(array(
+							"to" => $connect_to,
+							"reltype" => $_rt
+						));
+					}
+				}
+			}
+			else
+			{
+				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
+				{
+					$this->connect(array(
+						"to" => $val,
+						"reltype" => $_rt
+					));
+				}
+			}
 		}
 
 		// if this is an object field property, sync to object field

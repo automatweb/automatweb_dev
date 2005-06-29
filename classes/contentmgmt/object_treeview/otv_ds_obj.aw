@@ -1,40 +1,54 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.36 2005/06/29 10:14:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.37 2005/06/29 13:01:31 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
 @classinfo syslog_type=ST_OTV_DS_OBJ relationmgr=yes no_status=1 no_comment=1
-
 @default table=objects
+
+
 @default group=general
 
-@property show_notact type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita mitteaktiivseid objekte
+	@property show_notact type=checkbox ch_value=1 field=meta method=serialize
+	@caption N&auml;ita mitteaktiivseid objekte
 
-@property show_notact_folder type=checkbox ch_value=1 field=meta method=serialize
-@caption N&auml;ita mitteaktiivseid katalooge
+	@property show_notact_folder type=checkbox ch_value=1 field=meta method=serialize
+	@caption N&auml;ita mitteaktiivseid katalooge
 
-@property show_notact_noclick type=checkbox ch_value=1 field=meta method=serialize
-@caption Mitteaktiivsed pole klikitavad
+	@property show_notact_noclick type=checkbox ch_value=1 field=meta method=serialize
+	@caption Mitteaktiivsed pole klikitavad
 
-@property file_show_comment type=checkbox ch_value=1 field=meta method=serialize
-@caption Failil nime asemel kommentaar
+	@property file_show_comment type=checkbox ch_value=1 field=meta method=serialize
+	@caption Failil nime asemel kommentaar
 
-@property ignore_site_id type=checkbox ch_value=1 field=meta method=serialize
-@caption Objektid k&otilde;ikidest saitidest
+	@property ignore_site_id type=checkbox ch_value=1 field=meta method=serialize
+	@caption Objektid k&otilde;ikidest saitidest
 
-@property sort_by type=select field=meta method=serialize
-@caption Objekte sorteeritakse
+	@property sort_by type=select field=meta method=serialize
+	@caption Objekte sorteeritakse
 
-@property use_meta_as_folders type=checkbox ch_value=1 field=meta method=serialize
-@caption Kasuta kaustade puu joonistamiseks muutujaid
+	@property use_meta_as_folders type=checkbox ch_value=1 field=meta method=serialize
+	@caption Kasuta kaustade puu joonistamiseks muutujaid
 
-@property show_via_cfgform type=relpicker reltype=RELTYPE_SHOW_CFGFORM field=meta method=serialize
-@caption Objekti vaatamine l&auml;bi seadete vormi
+	@property show_via_cfgform type=relpicker reltype=RELTYPE_SHOW_CFGFORM field=meta method=serialize
+	@caption Objekti vaatamine l&auml;bi seadete vormi
+
+@default group=folders
+
+	@property folders type=table store=no callback=callback_get_menus editonly=1 
+	@caption Kataloogid
+
+@default group=types
+
+	@property view_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_SHOW_TYPE
+	@caption N&auml;idatavad objektit&uuml;&uuml;bid
+
+	@property add_ots type=relpicker multiple=1 automatic=1 reltype=RELTYPE_ADD_TYPE
+	@caption Lisatavad objektit&uuml;&uuml;bid
 
 @groupinfo folders caption="Kataloogid"
-@property folders type=table store=no callback=callback_get_menus editonly=1 group=folders
-@caption Kataloogid
+@groupinfo types caption="Objektit&uuml;&uuml;bid"
+
 
 @reltype FOLDER value=1 clid=CL_MENU
 @caption kataloog
@@ -76,6 +90,22 @@ class otv_ds_obj extends class_base
 					"objects.modified DESC" => t("Objekti muutmise kuup&auml;eva j&auml;rgi"),
 					"objects.jrk" => t("Objektide j&auml;rjekorra j&auml;rgi")
 				);
+				break;
+
+			case "show_via_cfgform":
+				// list all cfgforms in system according to show types
+				$sts = array();
+				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SHOW_TYPE")) as $c)
+				{
+					$tp = $c->to();
+					$sts[$tp->prop("type")] = $tp->prop("type");
+				}
+
+				$ol = new object_list(array(
+					"class_id" => CL_CFGFORM,
+					"ctype" => $sts
+				));
+				$prop["options"] = array("" => "--vali--") + $ol->names();
 				break;
 		};
 		return $retval;

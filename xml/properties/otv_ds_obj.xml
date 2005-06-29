@@ -90,6 +90,28 @@
             <field>folders</field>
             <caption>Kataloogid</caption>
       </property>
+      <property>
+            <name>view_ots</name>
+            <table>objects</table>
+            <group>types</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_SHOW_TYPE</reltype>
+            <field>view_ots</field>
+            <caption>N&amp;auml;idatavad objektit&amp;uuml;&amp;uuml;bid</caption>
+      </property>
+      <property>
+            <name>add_ots</name>
+            <table>objects</table>
+            <group>types</group>
+            <type>relpicker</type>
+            <multiple>1</multiple>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_ADD_TYPE</reltype>
+            <field>add_ots</field>
+            <caption>Lisatavad objektit&amp;uuml;&amp;uuml;bid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_OTV_DS_OBJ</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -100,6 +122,9 @@
             <folders>
                   <caption>Kataloogid</caption>
             </folders>
+            <types>
+                  <caption>Objektit&amp;uuml;&amp;uuml;bid</caption>
+            </types>
       </groupinfo>
       <reltypes>
             <FOLDER>
