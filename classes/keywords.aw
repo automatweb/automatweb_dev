@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.63 2005/06/27 12:11:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/keywords.aw,v 2.64 2005/06/29 07:19:05 kristo Exp $
 // keywords.aw - dokumentide võtmesõnad
 /*
 @tableinfo keywords index=id master_table=keywords master_index=brother_of
@@ -75,7 +75,7 @@ class keywords extends class_base
 				{
 					$current = current($docarr);
 					$l = aw_ini_get("baseurl")."/".$current->id();
-					if ($id["only_document_content"])
+					if ($id["only_document_content"] == 1)
 					{
 						$l .= "?only_document_content=1";
 					}
@@ -111,7 +111,7 @@ class keywords extends class_base
 						}
 
 						$l = $burl."/".$doc->id();
-						if ($id["only_document_content"])
+						if ($id["only_document_content"] == 1)
 						{
 							$l .= "?only_document_content=1";
 						}
