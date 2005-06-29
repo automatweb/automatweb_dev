@@ -584,6 +584,40 @@
             <field>seealso_docs_t</field>
             <caption>Vaatalisaks dokumendid</caption>
       </property>
+      <property>
+            <name>has_ctx</name>
+            <table>objects</table>
+            <group>advanced_ctx</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuva alamkaustu kontekstip&amp;otilde;hiselt</caption>
+      </property>
+      <property>
+            <name>ctx</name>
+            <table>menu</table>
+            <group>advanced_ctx</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_CTX</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>status</num_1>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>status</num_1>
+            </table_fields>
+            <table_edit_fields>
+                  <num_0>name</num_0>
+                  <num_1>status</num_1>
+            </table_edit_fields>
+            <store>no</store>
+            <caption>Kontekstid</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>
@@ -592,9 +626,17 @@
             <syslog_type>ST_MENU</syslog_type>
       </classinfo>
       <groupinfo>
+            <advanced_p>
+                  <caption>Spetsiaal</caption>
+            </advanced_p>
             <advanced>
                   <caption>Spetsiaal</caption>
+                  <parent>advanced_p</parent>
             </advanced>
+            <advanced_ctx>
+                  <caption>Kontekst</caption>
+                  <parent>advanced_p</parent>
+            </advanced_ctx>
             <keywords>
                   <caption>Võtmesõnad</caption>
             </keywords>
@@ -742,6 +784,11 @@
                   <clid>CL_TIMING</clid>
                   <caption>Aeg</caption>
             </TIMING>
+            <CTX>
+                  <value>21</value>
+                  <clid>CL_FOLDER_CONTEXT</clid>
+                  <caption>Kontekst</caption>
+            </CTX>
       </reltypes>
 </properties>
 

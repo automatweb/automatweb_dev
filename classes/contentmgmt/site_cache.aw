@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.24 2005/05/16 07:06:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.25 2005/06/29 09:42:07 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -150,6 +150,10 @@ class site_cache extends aw_template
 
 		$cp[] = aw_global_get("act_per_id");
 		$cp[] = aw_global_get("lang_id");
+		if (is_array($_SESSION["menu_context"]))
+		{
+			$cp[] = join(",", $_SESSION["menu_context"]);
+		}
 
 		// here we sould add all the variables that are in the url to the cache parameter list
 		foreach($GLOBALS["HTTP_GET_VARS"] as $var => $val)
@@ -220,13 +224,32 @@ class site_cache extends aw_template
 
 		$last_menu = 0;
 		$cnt = count($this->path);
+		$has_ctx = false;
 		for ($i = 0; $i < $cnt; $i++)
 		{
 			if ($this->path[$i]->class_id() == CL_MENU)
 			{
 				$last_menu = $this->path[$i]->id();
+				if ($this->path[$i]->prop("has_ctx") == 1)
+				{
+					$has_ctx = 1;
+				}
 			}
 		}
+
+		// insert context to session
+		if ($has_ctx == 1)
+		{
+			$lmo = obj($last_menu);
+
+			// write to session all contexts the current menu has
+			$_SESSION["menu_context"] = array();
+			foreach($lmo->connections_from(array("type" => "RELTYPE_CTX")) as $c)
+			{
+				$_SESSION["menu_context"][] = $c->prop("to.name");
+			}
+		}
+
 		$this->sel_section = $last_menu;
 
 		// that sucks. We really need to rewrite that

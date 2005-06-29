@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.133 2005/05/05 12:47:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.134 2005/06/29 09:42:08 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -205,13 +205,24 @@
 	@property seealso_docs_t type=table group=seealso_docs no_caption=1
 	@caption Vaatalisaks dokumendid
 
+@default group=advanced_ctx
+
+	@property has_ctx type=checkbox ch_value=1 table=objects field=meta method=serialize
+	@caption Kuva alamkaustu kontekstip&otilde;hiselt
+	
+	@property ctx type=releditor reltype=RELTYPE_CTX field=meta method=serialize mode=manager props=name,status table_fields=name,status table_edit_fields=name,status
+	@caption Kontekstid
+
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
 	@classinfo objtable_index=id
 	@classinfo syslog_type=ST_MENU
 
 
-	@groupinfo advanced caption=Spetsiaal
+	@groupinfo advanced_p caption=Spetsiaal
+		@groupinfo advanced caption=Spetsiaal parent=advanced_p
+		@groupinfo advanced_ctx caption=Kontekst parent=advanced_p
+
 	@groupinfo keywords caption=Võtmesõnad
 	@groupinfo menus caption=Kaustad
 	@groupinfo relations caption="Vaata lisaks" parent=menus
@@ -281,6 +292,9 @@
 
 	@reltype TIMING value=20 clid=CL_TIMING
 	@caption Aeg
+
+	@reltype CTX value=21 clid=CL_FOLDER_CONTEXT
+	@caption Kontekst
 
 */
 
