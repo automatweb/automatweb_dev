@@ -36,7 +36,7 @@ function get_property($arr)
 #/php#
 </pre>
 
-Attributes of the add_button class
+Arguments for add_button method
 <ul>
 	<li>name - unique name for the button
 	<li>tooltip - shown when the mouse is hovered over the button
@@ -47,10 +47,11 @@ There are some optional attributes as well
 <ul>
 	<li>action - submit a form to a new ORB action (not submit!). If action is specifed, then you can omit URL
 	<li>confirm - ask for confirm before executing the assigned action
+	<li>disabled - makes the button inactive (boolean)
 </ul>
 
 #php#
-add_button(array(
+$toolbar->add_button(array(
 	"name" => "export",
 	"action" => "delete_data",
 	"confirm" => "Are you sure you want to delete selected objects?",
