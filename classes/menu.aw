@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.135 2005/06/29 12:09:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.136 2005/06/29 12:11:11 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -142,10 +142,10 @@
 	@property width type=textbox size=5 group=advanced
 	@caption Laius
 	
-	@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS field=meta method=serialize group=advanced
+	@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS table=objects  field=meta method=serialize group=advanced
 	@caption Alammen&uuml;&uuml;d objektist
 
-	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced field=meta method=serialize table=objects
+	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced table=objects field=meta method=serialize table=objects
 	@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
 
 	@property show_layout type=relpicker reltype=RELTYPE_SHOW_AS_LAYOUT group=advanced field=meta method=serialize table=objects

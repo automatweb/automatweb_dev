@@ -405,7 +405,7 @@
       </property>
       <property>
             <name>submenus_from_obj</name>
-            <table>menu</table>
+            <table>objects</table>
             <type>relpicker</type>
             <reltype>RELTYPE_SUBMENUS</reltype>
             <field>meta</field>
