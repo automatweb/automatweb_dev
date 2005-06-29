@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.11 2005/05/02 13:54:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.12 2005/06/29 09:00:48 kristo Exp $
 
 lc_load("definition");
 
@@ -79,6 +79,18 @@ class acl_base extends db_connector
 	{
 		$acl = $this->get_acl_value($aclarr);
 		$this->db_query("INSERT INTO acl(acl,oid,gid) VALUES($acl,$oid,$gid)");
+
+		if (aw_ini_get("acl.use_new_acl"))
+		{
+			$ad = safe_array(aw_unserialize($this->db_fetch_field("SELECT acldata FROM objects WHERE oid = '$oid'", "acldata")));
+			// convert gid to oid
+			$g = get_instance("users");
+			$g_oid = $g->get_oid_for_gid($gid);
+			$ad[$g_oid] = $this->get_acl_value_n($aclarr);
+			$ser = aw_serialize($ad);
+			$this->quote(&$ser);
+			$this->db_query("UPDATE objects SET acldata = '$ser' WHERE oid = $oid");
+		}
 	}
 
 	function remove_acl_group_from_obj($gid,$oid)
