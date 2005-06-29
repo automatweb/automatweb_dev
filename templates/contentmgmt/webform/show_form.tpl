@@ -6,7 +6,7 @@
 <br><br>
 <!-- END SUB: SHOW_CONTENT -->
 <table class="{VAR:webform_form}">
-<form action="orb.{VAR:ext}" method="POST" name="changeform" {VAR:form_target}>
+<form action="orb.{VAR:ext}" method="POST" name="changeform" {VAR:form_target} enctype='multipart/form-data'>
 {VAR:form}
 {VAR:reforb}
 <script type="text/javascript">

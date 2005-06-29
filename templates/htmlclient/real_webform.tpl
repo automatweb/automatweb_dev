@@ -1,5 +1,5 @@
 <table class="{VAR:webform_form}">
-<form action="{VAR:form_handler}" method="{VAR:method}" name="changeform" {VAR:form_target}>
+<form action="{VAR:form_handler}" method="{VAR:method}" name="changeform" {VAR:form_target} enctype='multipart/form-data'>
 <!--<input type='hidden' NAME='MAX_FILE_SIZE' VALUE='100000000'>-->
 
 {VAR:content}
