@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.17 2005/04/27 09:40:08 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.18 2005/06/29 12:23:37 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -867,7 +867,7 @@ class crm_db extends class_base
 				$toolbar->add_button(array(
 					"name" => "user_calendar",
 					"tooltip" => t("Kasutaja kalender"),
-					"url" => $this->mk_my_orb('change', array('id' => $cal_id,'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
+					"url" => $this->mk_my_orb('change', array('id' => $cal_id,"group" => "views", 'return_url' => urlencode(aw_global_get('REQUEST_URI')),),'planner'),
 					"onClick" => "",
 					"img" => "icon_cal_today.gif",
 					"class" => "menuButton",
