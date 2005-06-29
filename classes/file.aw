@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.106 2005/06/01 10:39:18 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.107 2005/06/29 13:02:02 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -22,10 +22,10 @@
 	@default table=files
 	@default group=general
 
-	@property filename type=text store=no field=name
+	@property filename type=text store=no field=name form=+emb
 	@caption Faili nimi
 
-	@property file type=fileupload 
+	@property file type=fileupload form=+emb
 	@caption Vali fail
 
 	@property type type=hidden

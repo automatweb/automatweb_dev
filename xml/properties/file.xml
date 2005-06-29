@@ -7,6 +7,11 @@
             <type>text</type>
             <store>no</store>
             <field>name</field>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <caption>Faili nimi</caption>
       </property>
       <property>
@@ -14,6 +19,11 @@
             <table>files</table>
             <group>general</group>
             <type>fileupload</type>
+            <form>
+                  <num_0>add</num_0>
+                  <num_1>edit</num_1>
+                  <num_2>emb</num_2>
+            </form>
             <field>file</field>
             <caption>Vali fail</caption>
       </property>
