@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.35 2005/06/22 09:42:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.36 2005/06/29 10:14:21 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -617,7 +617,6 @@ class otv_ds_obj extends class_base
 		$ol = new object_list($_ft);
 		//$ol->sort_by_cb(array(&$this, "_obj_list_sorter"));
 		exit_function("otv_ds_obj::get_objects::list");
-
 		$classlist = aw_ini_get("classes");
 		$fields = $this->get_fields($ob, true);
 

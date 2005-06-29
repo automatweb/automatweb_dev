@@ -1558,17 +1558,22 @@ die(dbg::dump($ret));
 			}
 		}
 
-		$this->foo = array(); 
+		$this->foo = array();
+		$this->join_data = array();
 		$this->_req_do_pcp($filt, 1, $clid, $arr);
 
-		$this->joins = array();
-
+//		$this->joins = array();
 		// join all other tables from the starting class except the objects table
 		$tmp = $GLOBALS["tableinfo"][$clid];
 		unset($tmp["objects"]);
 		foreach($tmp as $tbl => $tbldat)
 		{
-			$this->joins[] = " LEFT JOIN $tbl ".$tbl."_".$clid." ON ".$tbl."_".$clid.".".$tbldat["index"]." = ".$tbldat["master_table"].".".$tbldat["master_index"]." ";
+			// check uniqueness
+			$str = " LEFT JOIN $tbl ".$tbl."_".$clid." ON ".$tbl."_".$clid.".".$tbldat["index"]." = ".$tbldat["master_table"].".".$tbldat["master_index"]." ";
+			if (!in_array($str, $this->joins))
+			{
+				$this->joins[] = $str;
+			}
 		}
 		// now make joins and for the final prop, query
 		foreach($this->join_data as $pos => $join)
@@ -1579,7 +1584,7 @@ die(dbg::dump($ret));
 				$prev_t = $join["table"]."_".$join["from_class"];
 				$prev_clid = $join["from_class"];
 
-				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]." ON aliases_".$join["from_class"].".source = ";
+				$str  = " LEFT JOIN aliases aliases_".$join["from_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".source = ";
 				if ($join["from_class"] == $clid)
 				{
 					$str .= " objects.oid ";
@@ -1591,12 +1596,12 @@ die(dbg::dump($ret));
 
 				if ($join["reltype"])
 				{
-					$str .= " AND aliases_".$join["from_class"].".reltype = ".$join["reltype"];
+					$str .= " AND aliases_".$join["from_class"]."_".$join["reltype"].".reltype = ".$join["reltype"];
 				}
 				$this->joins[] = $str;
 
-				$str  = " LEFT JOIN objects objects_".$join["to_class"]." ON aliases_".$join["from_class"].".target = ";
-				$str .= " objects_".$join["to_class"].".oid ";
+				$str  = " LEFT JOIN objects objects_".$join["to_class"]."_".$join["reltype"]." ON aliases_".$join["from_class"]."_".$join["reltype"].".target = ";
+				$str .= " objects_".$join["to_class"]."_".$join["reltype"].".oid ";
 				$prev_clid = $join["to_class"];
 				$this->joins[] = $str;
 			}
@@ -1608,7 +1613,7 @@ die(dbg::dump($ret));
 
 					$this->_do_add_class_id($join["from_class"]);
 					// join from rel to prop
-					$prev_t = "aliases_".$prev["from_class"];
+					$prev_t = "aliases_".$prev["from_class"]."_".$prev["reltype"];
 					$new_t = $GLOBALS["tableinfo"][$join["from_class"]];
 					$do_other_join = false;
 					if (!is_array($new_t) || $GLOBALS["properties"][$join["from_class"]][$join["prop"]]["table"] == "objects")
@@ -1933,6 +1938,10 @@ die(dbg::dump($ret));
 
 	function _get_search_fetch($to_fetch)
 	{
+		if (!is_array($to_fetch))
+		{
+			return array();
+		}
 		$ret = array();
 		$serialized_fields = array();
 		foreach($to_fetch as $clid => $props)
