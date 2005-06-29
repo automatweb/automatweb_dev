@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.75 2005/06/20 10:34:44 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/webform.aw,v 1.76 2005/06/29 13:29:26 duke Exp $
 // webform.aw - Veebivorm 
 /*
 
@@ -1195,10 +1195,20 @@ class webform extends class_base
 					continue;
 				}
 				$used_props[$property["name"]] = 1;
+
+				$type_str = $this->trans_names[$prpdata["type"]];
+				if ($prpdata["type"] == "releditor" && $prpdata["name"]{4} == "f")
+				{
+					$type_str = $this->trans_names["releditor_fl"];
+				}
+				if ($prpdata["type"] == "releditor" && $prpdata["name"]{4} == "i")
+				{
+					$type_str = $this->trans_names["releditor_im"];
+				}
 				$this->vars(array(
 					"bgcolor" => $cnt % 2 ? "#C9C9C9" : "#FFFFFF",
 					"prp_caption" => $property["caption"],
-					"prp_type" => $this->trans_names[$prpdata["type"]],
+					"prp_type" => $type_str,
 					"prp_key" => $prpdata["name"],
 					"prp_order" => $property["ord"],
 					"capt_ord" => html::select(array(
@@ -1854,8 +1864,10 @@ class webform extends class_base
 			"styles" => safe_array($arr["obj_inst"]->meta("m_styles")),
 		));
 		$htmlc->start_output();
+
 		foreach($els as $pn => $pd)
 		{
+			$pd["capt_ord"] = $pd["wf_capt_ord"];
 			$htmlc->add_property($pd);
 		}
 		$htmlc->finish_output();
@@ -1894,6 +1906,14 @@ class webform extends class_base
 		//$props = $cf->get_props_from_cfgform(array("id" => $cfgform->id()));
 		$register_data_i = get_instance(CL_REGISTER_DATA);
 		$register_data_i->init_class_base();
+		if (is_array($_FILES))
+		{
+			// make file uploads show up in the upload array
+			foreach($_FILES as $name => $dontcare)
+			{
+				$arr[$name] = 1;
+			};
+		};
 		$is_valid = $register_data_i->validate_data(array(
 			//"props" => $props,
 			"request" => &$arr,
@@ -1917,10 +1937,14 @@ class webform extends class_base
 			$o->set_meta("object_type", $object_type->id());
 			//$o->save();
 			$cls = get_instance(CL_CLASSIFICATOR);
+
 			$relprops = $this->get_properties_by_type(array(
 				"clid" => CL_REGISTER_DATA,
-				"type" => "classificator",
+				"type" => array("classificator","releditor"),
 			));
+
+			$relinfo = $o->get_relinfo();
+
 			foreach($arr as $key => $val)
 			{
 				if(!array_key_exists($key, $prplist))
@@ -1945,6 +1969,21 @@ class webform extends class_base
 						),
 						"clid" => CL_REGISTER_DATA,
 					));
+				}
+				if($prplist[$key]["type"] == "releditor")
+				{
+					// fuck, this sucks, it should simply use classbase, but since
+					// there are some groovy things going on - like for example with
+					// the checkbox, I'm a bit scared about converting it over .. 
+					$tmp = $relprops[$key];
+					$tmp["value"] = $val;
+					$tmp["clid"] = $relinfo[$relprops[$key]["reltype"]]["clid"];
+					$rele = get_instance("vcl/releditor");
+					$rele->process_releditor(array(
+						"obj_inst" => $o,
+						"prop" => $tmp,
+					));
+
 				}
 				if($prplist[$key]["type"] == "checkbox")
 				{
