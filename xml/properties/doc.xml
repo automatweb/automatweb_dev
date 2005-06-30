@@ -466,6 +466,66 @@
             <caption>Kasutaja defineeritud 6</caption>
       </property>
       <property>
+            <name>userta2</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <trans>1</trans>
+            <caption>Kasutaja defineeritud textarea 2</caption>
+      </property>
+      <property>
+            <name>userta3</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <trans>1</trans>
+            <caption>Kasutaja defineeritud textarea 3</caption>
+      </property>
+      <property>
+            <name>userta4</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <trans>1</trans>
+            <caption>Kasutaja defineeritud textarea 4</caption>
+      </property>
+      <property>
+            <name>userta5</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <trans>1</trans>
+            <caption>Kasutaja defineeritud textarea 5</caption>
+      </property>
+      <property>
+            <name>userta6</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>2</rows>
+            <cols>60</cols>
+            <trans>1</trans>
+            <caption>Kasutaja defineeritud textarea 6</caption>
+      </property>
+      <property>
             <name>ucheck1</name>
             <table>objects</table>
             <group>general</group>
