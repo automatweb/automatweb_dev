@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.405 2005/06/30 12:50:49 duke Exp $
+// $Id: class_base.aw,v 2.406 2005/06/30 15:00:56 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2435,7 +2435,7 @@ class class_base extends aw_template
 
 			if ($val["type"] == "select")
 			{
-				$val["options"] = $this->make_keys($val["options"]);
+				//$val["options"] = $this->make_keys($val["options"]);
 			};
 			
 			if ( isset($val["editonly"]) && empty($this->id))
@@ -3966,8 +3966,8 @@ class class_base extends aw_template
 			"clfile" => $arr["clfile"],
 			"filter" => $filter,
 		));
-		// nii .. ja kuidas ma nüüd saan teada kõik omadused, mis mind huvitavad?
 
+		// nii .. ja kuidas ma nüüd saan teada kõik omadused, mis mind huvitavad?
 
 		// I could use a different approach here ... for example, if I'm saving then
 		// only the properties that should be saved should be returned. or not?
