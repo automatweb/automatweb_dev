@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.48 2005/06/17 11:35:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.49 2005/06/30 12:29:13 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -881,6 +881,9 @@ class project extends class_base
 
 		obj_set_opt("no_auto_translation",0);
 
+		$lc = aw_global_get("LC");
+		$current_charset = aw_global_get("charset");
+
 		if (1 == $arr["project_media"])
 		{
 			$conns = $c->find(array(
@@ -892,10 +895,30 @@ class project extends class_base
 			{
 
 				$v_o = new object($conn["to"]);
+				//$v_o = $conn->to();
+				// aga miks siis see asi ei anna mulle tõlget õiges keeles?
 				$tmp = $v_o->properties();
 				$tmp["media_id"] = $conn["to"];
+				$tmp["name"] = $prop_val = iconv("UTF-8",$current_charset . "//TRANSLIT",$tmp["trans"][$lc]["name"]);
+				//$tmp = array_merge($tmp,$tmp["trans"][$lc]);
+				// video is always connected to the original project, but when showing
+				// the event, I need to show the translated caption and not the original
 				$project_videos[$conn["from"]][] = $tmp; 
 
+			};
+			
+			if (is_array($projects))
+			{
+				foreach($projects as $project_id)
+				{
+					$fx = $project_id;
+					$fxo = new object($fx);
+					// vat see koht siisn tegeleb remappimisega
+					if ($project_videos[$fx])
+					{
+						$project_videos[$fxo->id()] = $project_videos[$fx];
+					};
+				};
 			};
 		}
 
@@ -931,6 +954,7 @@ class project extends class_base
 				{
 					$fx = $id;
 					$fxo = new object($fx);
+					// vat see koht siisn tegeleb remappimisega
 					if ($project_images[$fx])
 					{
 						$project_images[$fxo->id()] = $project_images[$fx];
@@ -945,7 +969,7 @@ class project extends class_base
 		/*
 		if (aw_global_get("uid") == "meff")
 		{
-			arr($web_pages);
+			arr($project_videos);
 		};
 		*/
 
@@ -957,13 +981,6 @@ class project extends class_base
 				$prid = $projects[$prid];
 			};
 
-			/*
-			if (aw_global_get("uid") == "meff")
-			{
-				printf("Event name %s, id %s, project %s, prid %s<br>",$event["name"],$event["id"],$event["pr"],$prid);
-
-			};
-			*/
 			if ($web_pages[$prid])
 			{
 				$web_page_id = $web_pages[$prid];
@@ -998,7 +1015,7 @@ class project extends class_base
 
 			};
 		};
-
+		
 		if (sizeof($events) > 0)
 		{
 			$mpr = $this->get_master_project($o,$level);
@@ -1856,22 +1873,71 @@ class project extends class_base
 		// it is possible to attach a document containing detailed description of
 		// the project to the project. If the connection is present show the document
 		// in the web
+		$otrans = get_instance("translate/object_translation");
+		$others = $otrans->translation_list($prj_obj->id());
+
+		$lang_id = aw_global_get("lang_id");
+
+		//obj_set_opt("no_auto_translation", 1);
+		/*
+		if (aw_global_get("uid") == "meff")
+		{
+			global $DUKE;
+			$DUKE = 1;
+		};
+		*/
+		
+		/*
+			[15:17] <terryf_home> ongi sihuke kood
+			[15:17] <terryf_home>   if ($arr["from"] && $arr["from.class_id"] && $arr["type"])
+			[15:17] <terryf_home>   {
+			[15:17] <terryf_home> siis t6lgib from 2ra
+			[15:17] <terryf_home> ja muidu ei t6lgi
+			[15:18] <terryf_home> and I haven't goot the faintest idea, miks see nii on
+			[15:18] <terryf_home> ja mida see katki teeks kui ma selle 2ra muudan
+			[15:18] <duke> oki, loen siis kõik seosed ja võtan ise need mis mul vaja on
+		*/
+
+		
+		$c = new connection();
+		$conns = $c->find(array(
+			"from" => $others,
+			"from.class_id" => CL_PROJECT,
+			//"type" => 7,
+			"to.lang_id" => $lang_id,
+		));
+		//obj_set_opt("no_auto_translation", 0);
+
+		/*
 		$conns = $prj_obj->connections_from(array(
 			"type" => "RELTYPE_PRJ_DOCUMENT",
 			"to.lang_id" => aw_global_get("lang_id"),
 		));
+		*/
 
 		$description = "";
+		$first = true;
 		if (is_array($conns))
 		{
-			$first = reset($conns);
-			if ($first)
+			foreach($conns as $conn)
 			{
+				if (!$first)
+				{
+					continue;
+				};
+
+				if ($conn["type"] != 7)
+				{
+					continue;
+				};
+
 				$t = get_instance(CL_DOCUMENT);
 				$description = $t->gen_preview(array(
-					"docid" => $first->prop("to"),
+					"docid" => $conn["to"],
 					"leadonly" => -1,
 				));
+
+				$first = false;
 			};
 		};
 		
