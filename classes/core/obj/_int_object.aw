@@ -1065,11 +1065,14 @@ class _int_object
 			{
 				// get all old connections
 				// remove the ones that are not selected
-				foreach($this->connections_from(array("type" => $_rt)) as $c)
+				if (is_oid($this->id()))
 				{
-					if (!in_array($c->prop("to"), $val))
+					foreach($this->connections_from(array("type" => $_rt)) as $c)
 					{
-						$this->disconnect(array("from" => $c->prop("to")));
+						if (!in_array($c->prop("to"), $val))
+						{
+							$this->disconnect(array("from" => $c->prop("to")));
+						}
 					}
 				}
 				// connect to all selected ones
