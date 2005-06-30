@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.403 2005/06/16 10:59:27 duke Exp $
+// $Id: class_base.aw,v 2.404 2005/06/30 11:07:38 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2170,6 +2170,7 @@ class class_base extends aw_template
 		// be valid for those as well
 		$has_rte = false;
 		$skip_types = array("button", "submit", "reset");
+
 		foreach($properties as $key => $val)
 		{
 			// if the action is view and there is set that no buttons should be shown,
@@ -2226,6 +2227,8 @@ class class_base extends aw_template
 						{
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
+							$resprops[$rkey]["capt_ord"] = $val["capt_ord"];
+							$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
 						};
 					};
 				};
@@ -2280,6 +2283,8 @@ class class_base extends aw_template
 				{
 					$rprop["emb"] = 1;
 					$resprops[$rkey] = $rprop;
+					$resprops[$rkey]["capt_ord"] = $val["capt_ord"];
+					$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
 				};
 
 			}
@@ -2510,6 +2515,9 @@ class class_base extends aw_template
 								{
 									$resprops[$rkey] = $rval;
 								}
+
+								$resprops[$rkey]["capt_ord"] = $val["capt_ord"];
+								$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
 							};
 						};
 					};
@@ -2556,6 +2564,7 @@ class class_base extends aw_template
 						{
 							$this->convert_element(&$rval);
 							$resprops[$rkey] = $rval;
+							$resprops[$rkey]["wf_capt_ord"] = $val["wf_capt_ord"];
 						};
 					};
 					continue;
@@ -2623,6 +2632,7 @@ class class_base extends aw_template
 				$resprops[$name] = $val;
 			};
 		}
+
 		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
 			$this->process_view_controllers(&$resprops, $controllers, $argblock);
@@ -3091,6 +3101,8 @@ class class_base extends aw_template
 		{
 			return $res;
 		};
+
+		global $CFG_DEBUG;
 		foreach($props as $key => $tmp)
 		{
 			// skiping text controllers.. you can't save anything with them, aight? -- ahz
@@ -3131,6 +3143,10 @@ class class_base extends aw_template
 					$props[$key]["value"] = $val;
 					// $controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst
 					// $controller_oid, $obj_id, &$prop, $request, $entry, $obj_inst
+					if ($CFG_DEBUG)
+					{
+						print "validating " . $prpdata["name"] . " against controller $controller_id<br>";
+					};
 					$controller_ret = $controller_inst->check_property($controller_id, $args["id"], &$prpdata, &$arr["request"], $val, &$this->obj_inst);
 					/*
 					$controller_ret = $controller_inst->check_property(array(
@@ -3144,6 +3160,10 @@ class class_base extends aw_template
 					*/
 					if ($controller_ret != PROP_OK)
 					{
+						if ($CFG_DEBUG)
+						{
+							print "validation failed!<br>";
+						};
 						$ctrl_obj = new object($controller_id);
 						$errmsg = $ctrl_obj->prop("errmsg");
 						if (empty($errmsg))
