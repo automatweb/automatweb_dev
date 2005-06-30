@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.404 2005/06/30 11:07:38 kristo Exp $
+// $Id: class_base.aw,v 2.405 2005/06/30 12:50:49 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2431,6 +2431,11 @@ class class_base extends aw_template
 			{
 				$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
 				$val["vcl_inst"]->init_rel_manager($argblock);
+			};
+
+			if ($val["type"] == "select")
+			{
+				$val["options"] = $this->make_keys($val["options"]);
 			};
 			
 			if ( isset($val["editonly"]) && empty($this->id))
