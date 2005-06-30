@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.107 2005/06/30 12:01:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.108 2005/06/30 13:13:52 kristo Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -146,19 +146,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_DOCUMENT, on_save_document)
 @property user6 table=documents group=general type=textbox trans=1
 @caption Kasutaja defineeritud 6
 
-@property userta2 table=objects field=meta method=serialize group=general type=textarea rows=2 cols=60 trans=1
+@property userta2 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
 @caption Kasutaja defineeritud textarea 2
 
-@property userta3 table=objects field=meta method=serialize group=general type=textarea rows=2 cols=60 trans=1
+@property userta3 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
 @caption Kasutaja defineeritud textarea 3
 
-@property userta4 table=objects field=meta method=serialize group=general type=textarea rows=2 cols=60 trans=1
+@property userta4 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
 @caption Kasutaja defineeritud textarea 4
 
-@property userta5 table=objects field=meta method=serialize group=general type=textarea rows=2 cols=60 trans=1
+@property userta5 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
 @caption Kasutaja defineeritud textarea 5
 
-@property userta6 table=objects field=meta method=serialize group=general type=textarea rows=2 cols=60 trans=1
+@property userta6 table=objects field=meta method=serialize group=general type=textarea rows=10 cols=60 trans=1
 @caption Kasutaja defineeritud textarea 6
 
 @property ucheck1 type=checkbox ch_value=1 table=objects field=meta method=serialize group=general

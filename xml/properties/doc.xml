@@ -472,7 +472,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>2</rows>
+            <rows>10</rows>
             <cols>60</cols>
             <trans>1</trans>
             <caption>Kasutaja defineeritud textarea 2</caption>
@@ -484,7 +484,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>2</rows>
+            <rows>10</rows>
             <cols>60</cols>
             <trans>1</trans>
             <caption>Kasutaja defineeritud textarea 3</caption>
@@ -496,7 +496,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>2</rows>
+            <rows>10</rows>
             <cols>60</cols>
             <trans>1</trans>
             <caption>Kasutaja defineeritud textarea 4</caption>
@@ -508,7 +508,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>2</rows>
+            <rows>10</rows>
             <cols>60</cols>
             <trans>1</trans>
             <caption>Kasutaja defineeritud textarea 5</caption>
@@ -520,7 +520,7 @@
             <field>meta</field>
             <method>serialize</method>
             <type>textarea</type>
-            <rows>2</rows>
+            <rows>10</rows>
             <cols>60</cols>
             <trans>1</trans>
             <caption>Kasutaja defineeritud textarea 6</caption>
