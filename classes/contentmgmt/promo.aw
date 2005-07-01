@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.73 2005/05/27 09:48:51 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.74 2005/07/01 09:26:48 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -973,6 +973,7 @@ class promo extends class_base
 					"image" => $image, 
 					"image_url" => $image_url,
 					"image_or_title" => ($image == "" ? $o->meta("caption") : $image),
+					
 				));
 
 				// which promo to use? we need to know this to use
@@ -1001,6 +1002,13 @@ class promo extends class_base
 				{
 					$use_tpl = "LEFT_PROMO";
 				};
+
+				$inst->vars(array(
+					$use_tpl."_image" => $image,
+					$use_tpl."_image_url" => $image_url,
+					$use_tpl."_image_or_title" => ($image == "" ? $o->meta("caption") : $image),
+				));
+
 				$hlc = "";
 				if ($o->meta("link_caption") != "")
 				{
