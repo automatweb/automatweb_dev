@@ -109,6 +109,7 @@ class doc_display extends aw_template
 
 		$this->_do_forum($doc);
 		$this->_do_charset($doc);
+		$this->_do_checkboxes($doc);
 
 		$str = $this->parse();
 		return $str;
@@ -227,5 +228,23 @@ class doc_display extends aw_template
 				"charset" => $_ld["charset"]
 			));
 		};
+	}
+
+	function _do_checkboxes($doc)
+	{
+		if ($doc->prop("ucheck1") == 1)
+		{
+			$this->vars(array(
+				"UCHECK1_CHECKED" => $this->parse("UCHECK1_CHECKED"),
+				"UCHECK1_UNCHECKED" => ""
+			));
+		}
+		else
+		{
+			$this->vars(array(
+				"UCHECK1_CHECKED" => "",
+				"UCHECK1_UNCHECKED" => $this->parse("UCHECK1_UNCHECKED")
+			));
+		}
 	}
 }
