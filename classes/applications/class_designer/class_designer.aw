@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.26 2005/06/02 11:47:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.27 2005/07/01 11:40:58 frgp Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -10,7 +10,19 @@
 @classinfo no_status=1
 
 @default table=objects
-@default group=general
+@default group=general_sub
+
+@property name type=textbox rel=1 trans=1
+@caption Nimi
+@comment Objekti nimi
+
+@property comment type=textbox
+@caption Kommentaar
+@comment Vabas vormis tekst objekti kohta
+
+@property status type=status trans=1 default=1
+@caption Aktiivne
+@comment Kas objekt on aktiivne
 
 @property is_registered type=checkbox ch_value=1 field=meta method=serialize
 @caption Klass on registreeritud
@@ -116,19 +128,47 @@ caption
 @property tmp_name type=hidden
 @property element_type type=hidden
 
-@default group=relations
+@default group=relations_sub
 
 	@property relations_mgr type=releditor reltype=RELTYPE_RELATION mode=manager no_caption=1 props=name,r_class_id,value table_fields=name,r_class_id,value 
 	@caption Seosed
 
-@groupinfo settings caption="Seaded"
-@groupinfo cl_planner caption="Planeerija" 
-@groupinfo planner caption="Planeerija" parent=cl_planner submit=no
-@groupinfo el_defs caption="Elemendid" parent=cl_planner  submit=no
-@groupinfo int_refs caption="Sisemised seosed" parent=cl_planner submit=no
-@groupinfo ext_refs caption="Välised seosed" parent=cl_planner submit=no
+@default group=dev_request
+
+@property temp type=text store=no
+@caption temp
+
+@default group=in_search
+
+@property temp1 type=text store=no
+@caption temp
+
+@default group=data
+
+@property temp2 type=text store=no
+@caption temp
+
+@groupinfo general_sub caption="Üldine" parent=general
+@groupinfo settings caption="Seaded" parent=general
+
+//@groupinfo cl_planner caption="Planeerija" 
+@groupinfo planner caption="Planeerija" submit=no
+
+@groupinfo relations caption="Seosed"
+@groupinfo relations_sub caption="Seosed" submit=no parent=relations
+@groupinfo int_refs caption="Sisemised seosed" parent=relations submit=no
+@groupinfo ext_refs caption="Välised seosed" parent=relations submit=no
+
 @groupinfo designer caption="Disainer" submit=no
-@groupinfo relations caption="Seosed" submit=no parent=cl_planner
+
+@groupinfo el_defs caption="Elemendid" submit=no
+
+@groupinfo dev_request caption="Arendusvajadus"
+
+@groupinfo in_search caption="Otsing"
+
+@groupinfo data caption="Andmed"
+
 @groupinfo classdef caption="Klassi definitsioon" submit=no
 
 
