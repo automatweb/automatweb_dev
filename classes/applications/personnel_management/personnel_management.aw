@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.9 2005/04/01 11:52:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/personnel_management/personnel_management.aw,v 1.10 2005/07/01 08:37:38 kristo Exp $
 // personnel_management.aw - Personalikeskkond 
 /*
 
@@ -1643,7 +1643,7 @@ class personnel_management extends class_base
 					$ss = get_instance("contentmgmt/site_show");
 					$rf = $to_obj->prop("root_folder");
 					$ct = $ss->do_show_menu_template(array(
-						"template" => "menus.tpl",
+						"template" => "templates/menus.tpl",
 						"mdefs" => array(
 							$rf => "YLEMINE"
 						)
