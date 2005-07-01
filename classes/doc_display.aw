@@ -46,7 +46,7 @@ class doc_display extends aw_template
 		);
 
 		lc_site_load("document",$this);
-
+		
 		$this->vars($al->get_vars());
 		$_date = $doc->prop("doc_modified") > 1 ? $doc->prop("doc_modified") : $doc->modified();
 

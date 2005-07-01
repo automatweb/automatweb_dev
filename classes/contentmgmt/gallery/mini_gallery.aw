@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.16 2005/07/01 07:47:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.17 2005/07/01 09:09:26 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -75,7 +75,7 @@ class mini_gallery extends class_base
 		$res = $this->show(array("id" => $arr["alias"]["target"]));
 		if (isset($arr["tpls"]["mini_gallery_inplace"]))
 		{
-			return array(
+			$res = array(
 				"replacement" => localparse($arr["tpls"]["mini_gallery_inplace"], array("content" => $res)),
 				"inplace" => "mini_gallery_inplace"
 			);

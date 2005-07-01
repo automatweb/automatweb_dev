@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.184 2005/06/28 16:29:23 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.185 2005/07/01 09:09:26 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -314,6 +314,8 @@ class aliasmgr extends aw_template
 
 		extract($args);
 
+		$this->tmp_vars = array();
+
 		$o = obj($oid);
 		if ($o->is_brother())
 		{
@@ -450,7 +452,7 @@ class aliasmgr extends aw_template
 
 							if ($inplace)
 							{
-								$this->tmp_vars = array($inplace => $replacement);
+								$this->tmp_vars[$inplace] = $replacement;
 								$replacement = "";
 							};
 						}
