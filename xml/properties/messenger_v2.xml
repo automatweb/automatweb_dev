@@ -1,9 +1,25 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>textbox</type>
+            <field>name</field>
+            <caption>Nimi</caption>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>status</type>
+            <field>status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>fromname</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>textbox</type>
@@ -12,21 +28,12 @@
       <property>
             <name>config</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_MAIL_CONFIG</reltype>
             <caption>Konfiguratsioon</caption>
-      </property>
-      <property>
-            <name>user_messenger</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <caption>Kasutaja default messenger</caption>
       </property>
       <property>
             <name>mailbox</name>
@@ -74,7 +81,7 @@
       <property>
             <name>msg_outbox</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -84,7 +91,7 @@
       <property>
             <name>msg_drafts</name>
             <table>objects</table>
-            <group>general</group>
+            <group>settings</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -92,23 +99,21 @@
             <caption>Mustandite kataloog</caption>
       </property>
       <property>
-            <name>autofilter_delay</name>
+            <name>num_attachments</name>
             <table>objects</table>
-            <group>general</group>
+            <group>advanced</group>
             <field>meta</field>
             <method>serialize</method>
             <type>select</type>
-            <caption>Filtrite käivitamise intervall</caption>
-            <comment>Minutites</comment>
-      </property>
-      <property>
-            <name>testfilters</name>
-            <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>text</type>
-            <caption>Testi filtreid</caption>
+            <default>1</default>
+            <options>
+                  <num_0>1</num_0>
+                  <num_1>2</num_1>
+                  <num_2>3</num_2>
+                  <num_3>4</num_3>
+                  <num_4>5</num_4>
+            </options>
+            <caption>Manuste arv</caption>
       </property>
       <property>
             <name>s_toolbar</name>
@@ -173,9 +178,28 @@
             <caption>Tulemused</caption>
       </property>
       <property>
+            <name>autofilter_delay</name>
+            <table>objects</table>
+            <group>rules_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Filtrite käivitamise intervall</caption>
+            <comment>Minutites</comment>
+      </property>
+      <property>
+            <name>testfilters</name>
+            <table>objects</table>
+            <group>rules_settings</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <caption>Testi filtreid</caption>
+      </property>
+      <property>
             <name>rule_editor</name>
             <table>objects</table>
-            <group>rules</group>
+            <group>rules_editor</group>
             <field>meta</field>
             <method>serialize</method>
             <type>releditor</type>
@@ -200,6 +224,14 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+                  <parent>general</parent>
+            </settings>
+            <advanced>
+                  <caption>Lisaks</caption>
+                  <parent>general</parent>
+            </advanced>
             <main_view>
                   <caption>Kirjad</caption>
                   <submit>no</submit>
@@ -214,6 +246,15 @@
                   <caption>Reeglid</caption>
                   <submit>no</submit>
             </rules>
+            <rules_editor>
+                  <caption>Reeglite defineerimine</caption>
+                  <submit>no</submit>
+                  <parent>rules</parent>
+            </rules_editor>
+            <rules_settings>
+                  <caption>Seaded</caption>
+                  <parent>rules</parent>
+            </rules_settings>
       </groupinfo>
       <reltypes>
             <MAIL_IDENTITY>
@@ -246,6 +287,11 @@
                   <clid>CL_MAIL_RULE</clid>
                   <caption>maili ruul</caption>
             </RULE>
+            <MESSENGER_OWNERSHIP>
+                  <value>7</value>
+                  <clid>CL_USER</clid>
+                  <caption>Omanik</caption>
+            </MESSENGER_OWNERSHIP>
       </reltypes>
       <layout>
             <message_view>

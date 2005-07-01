@@ -104,6 +104,7 @@
                   <num_1>file</num_1>
             </props>
             <chooser>no</chooser>
+            <new_items>5</new_items>
             <caption>Manused</caption>
       </property>
       <property>

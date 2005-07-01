@@ -32,6 +32,17 @@
 		<action name="register_event">
 			<function name="register_event">
 				<arguments>
+					<required name="msgrid" type="int" />
+					<required name="msgid" type="int" />
+					<required name="mailbox" />
+					<required name="create_class" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_register_event" all_args="1">
+			<function name="submit_register_event">
+				<arguments>
 				</arguments>
 			</function>
 		</action>
