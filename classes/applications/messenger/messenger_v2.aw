@@ -1,12 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.8 2005/04/26 14:11:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.9 2005/07/01 12:08:45 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
 @classinfo syslog_type=ST_MESSENGER relationmgr=yes
 
 @default table=objects
-@default group=general
+@default group=settings
+
+@property name type=textbox
+@caption Nimi
+
+@property status type=status
+@caption Staatus
+
 @default field=meta
 @default method=serialize
 
@@ -18,9 +25,6 @@ caption Identiteet
 
 @property config type=relpicker reltype=RELTYPE_MAIL_CONFIG
 @caption Konfiguratsioon
-
-@property user_messenger type=checkbox 
-@caption Kasutaja default messenger
 
 @property mailbox type=hidden group=main_view
 @caption Mailbox ID (sys)
@@ -46,12 +50,8 @@ caption Identiteet
 @property msg_drafts type=relpicker reltype=RELTYPE_FOLDER
 @caption Mustandite kataloog
 
-@property autofilter_delay type=select
-@caption Filtrite käivitamise intervall
-@comment Minutites
-
-@property testfilters type=text 
-@caption Testi filtreid
+@property num_attachments type=select field=meta method=serialize group=advanced default=1 options=1,2,3,4,5
+@caption Manuste arv
 
 @default group=search 
 
@@ -73,12 +73,24 @@ caption Identiteet
 @property s_results type=table no_caption=1
 @caption Tulemused
 
-@property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules table_fields=id,rule_from,rule_subject props=rule_from,rule_subject,target_folder,on_server
+@default group=rules_settings
+@property autofilter_delay type=select
+@caption Filtrite käivitamise intervall
+@comment Minutites
+
+@property testfilters type=text 
+@caption Testi filtreid
+
+@property rule_editor type=releditor reltype=RELTYPE_RULE mode=manager group=rules_editor table_fields=id,rule_from,rule_subject props=rule_from,rule_subject,target_folder,on_server
 @caption Reeglid
 
+@groupinfo settings caption="Seaded" parent=general
+@groupinfo advanced caption="Lisaks" parent=general
 @groupinfo main_view caption="Kirjad" submit=no 
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Reeglid submit=no
+@groupinfo rules_editor caption="Reeglite defineerimine" submit=no parent=rules
+@groupinfo rules_settings caption="Seaded" parent=rules
 
 @reltype MAIL_IDENTITY value=1 clid=CL_MESSENGER_IDENTITY
 @caption messengeri identiteet
@@ -97,6 +109,9 @@ caption Identiteet
 
 @reltype RULE value=6 clid=CL_MAIL_RULE
 @caption maili ruul
+
+@reltype MESSENGER_OWNERSHIP value=7 clid=CL_USER
+@caption Omanik
                         
 */
 
@@ -110,7 +125,7 @@ class messenger_v2 extends class_base
 		));
 		$this->connected = false;
 		$this->outbox = "INBOX.Sent-mail";
-	}
+	} 
 
 	/**  
 		
@@ -125,21 +140,40 @@ class messenger_v2 extends class_base
 	**/
 	function my_messages($arr)
 	{
-		$users = get_instance("users");
-		$obj_id = $users->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "user_messenger"
-		));
+		$msgr_id = $this->get_messenger_for_user();
 
-		if (empty($obj_id))
+		if (empty($msgr_id))
 		{
 			return t("kulla mees, sa pole omale default messengeri ju valinud?");
 		};
-		$arr["id"] = $obj_id;
+		$arr["id"] = $msgr_id;
 		$arr["group"] = "main_view";
 		return $this->change($arr);
 
 
+	}
+
+	function get_messenger_for_user($arr = array())
+	{
+		$uid = $arr["uid"];
+		if (empty($uid))
+		{
+			$uid = aw_global_get("uid");
+		};
+		$users = get_instance("users");
+		$user = new object($users->get_oid_for_uid($uid));
+
+		$conns = $user->connections_to(array(
+			"type" => "RELTYPE_MESSENGER_OWNERSHIP",
+			"from.class_id" => CL_MESSENGER_V2,
+		));
+		if (sizeof($conns) == 0)
+		{
+			return false;
+		};
+		list(,$conn) = each($conns);
+		$obj_id = $conn->prop("from");
+		return $obj_id;
 	}
 
 	function get_property($arr)
@@ -148,16 +182,18 @@ class messenger_v2 extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "user_messenger":
-				$users = get_instance("users");
-				$obj_id = $arr["obj_inst"]->id();
-
-				$prop["value"] = $users->get_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "user_messenger",
-				));
-                                $data["ch_value"] = $arr["obj_inst"]->id();
+			/*
+			case "num_attachments":
+				$prop["options"] = array(
+					0 => 0,
+					1 => 1,
+					2 => 2,
+					3 => 3,
+					4 => 4,
+					5 => 5,
+				);
 				break;
+			*/
 
 			case "message_list":
 				$retval = $this->gen_message_list($arr);
@@ -224,15 +260,6 @@ class messenger_v2 extends class_base
 		{
 			case "autofilter_delay":
 				$this->schedule_filtering($arr);
-				break;
-
-			case "user_messenger":
-				$users = get_instance("users");
-				$users->set_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "user_messenger",
-					"value" => $data["value"],
-				));
 				break;
 		}
 		return $retval;

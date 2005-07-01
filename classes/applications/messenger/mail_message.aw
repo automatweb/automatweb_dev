@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.12 2005/04/21 12:59:26 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.13 2005/07/01 12:08:45 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -40,7 +40,7 @@
 	@property message type=textarea cols=80 rows=40
 	@caption Sisu
 
-	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no
+	@property attachments type=relmanager table=objects field=meta method=serialize reltype=RELTYPE_ATTACHMENT props=comment,file chooser=no new_items=5
 	@caption Manused
 
 	property send type=submit value=Saada store=no 
@@ -115,7 +115,7 @@ class mail_message extends class_base
                 
 		$rv = $msgr->drv_inst->fetch_message(array(
 			"msgid" => $arr["msgid"],
-			));
+		));
 
 		if ($rv && isset($arr["fullheaders"]))
 		{
@@ -301,7 +301,7 @@ class mail_message extends class_base
 		switch($data["name"])
 		{
 			case "view_toolbar":
-				$this->view_toolbar(&$data);
+				$this->view_toolbar(&$arr);
 			break;
 			
 			case "msg_headers":
@@ -529,7 +529,7 @@ class mail_message extends class_base
 
 	function view_toolbar($arr)
 	{
-		$tb = &$arr["toolbar"];
+		$tb = &$arr["prop"]["toolbar"];
 		$tb->add_button(array(
 			"name" => "reply",
 			"action" => "mail_reply",
@@ -559,7 +559,7 @@ class mail_message extends class_base
 			"tooltip" => t("Kustuta"),
 			"img" => "delete.gif",
 		));
-		
+
 
 
 		$pl = get_instance(CL_PLANNER);
@@ -567,7 +567,9 @@ class mail_message extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 
-		$user_cal = 0;
+		//$user_cal = 0;
+
+		$req = $arr["request"];
 
 		if (is_oid($user_cal))
 		{
@@ -585,7 +587,13 @@ class mail_message extends class_base
 				$tb->add_menu_item(array(
 					"parent" => "calendar",
 					"text" => $clinf[$clid]["name"],
-					"action" => "register_event",
+					"url" => $this->mk_my_orb("register_event",array(
+						"mailbox" => $req["mailbox"],
+						"msgrid" => $req["msgrid"],
+						"msgid" => $req["msgid"],
+						"create_class" => $clid,
+					)),
+					//"action" => "register_event",
 				
 					// tegelikult see action võib lihtsalt kuvada
 					// teate "lisatud" .. .. kasutaja ise
@@ -751,6 +759,11 @@ class mail_message extends class_base
 		
 		@attrib name=register_event
 
+		@param msgrid required type=int
+		@param msgid required type=int
+		@param mailbox required
+		@param create_class required type=int
+
 	**/
 	function register_event($arr)
 	{
@@ -760,48 +773,156 @@ class mail_message extends class_base
 			"msgid" => $arr["msgid"],
 		));
 
-		// mind huvitab subject ja content ja from
-		$hdr = "";
-		$hdr .= "From: $msgdata[from]\n";
-		$hdr .= "To: $msgdata[to]\n";
-		$hdr .= "Subject: $msgdata[subject]\n";
-		$hdr .= "Date: $msgdata[date]\n\n";
+		$clids = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL);
 
-		$name = $msgdata["subject"];
-		$content = $hdr . "\n\n" . $msgdata["content"];
+		$tc = get_instance("applications/messenger/calendar_connector");
+		$props = $tc->get_property_group(array("form" => "connector","clfile" => "calendar_connector"));
 
-		// now, how do I create the event?
-
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output();
+		
 		$pl = get_instance(CL_PLANNER);
-		$user_cal = $pl->get_calendar_for_user(array(
-			"uid" => aw_global_get("uid"),
-		));
+		$user_cal = $pl->get_calendar_for_user();
 
-		if (!is_oid($user_cal))
+		$props["title"]["value"] = $msgdata["subject"];
+		$props["start"]["value"] = time();
+
+		$calendars = array();
+
+		$cal_list = new object_list(array(
+			"class_id" => CL_PLANNER,
+			"sort_by" => "name",
+			"site_id" => array(),
+		));
+		foreach($cal_list->arr() as $cal)
 		{
-			die(t("err, ei leidnud kalendrit"));
+			if (is_oid($cal->prop("event_folder")))
+			{
+				$calendars[$cal->id()] = $cal->name();
+			};
 		};
 
-		$user_cal = new object($user_cal);
+		$props["main_calendar"]["options"] = $calendars;
+		$props["main_calendar"]["value"] = $user_cal;
+		unset($calendars[$user_cal]);
+		$props["calendars"]["options"] = $calendars;
 
-		$event_folder = $user_cal->prop("event_folder");
-		$clid = CL_TASK;
+		$props["content"]["value"] = sprintf("From: %s\nTo: %s\nSubject: %s\nDate: %s\n\n%s",
+					$msgdata["from"],$msgdata["to"],$msgdata["subject"],$msgdata["date"],
+					$msgdata["content"]);
 
-		$o = new object;
-		$o->set_class_id($clid);
-		$o->set_parent($user_cal->prop("event_folder"));
-		$o->set_status(STAT_ACTIVE);
-		$o->set_name($name);
-		$o->set_prop("content",$content);
-		$o->set_prop("start1",time());
-		$o->save();
+		$clinf = aw_ini_get("classes");
+		foreach($clids as $key => $val)
+		{
+			$props["class_id"]["options"][$val] = $clinf[$val]["name"];
+		};
 
-		print t("Toimetus lisatud<br>");
+		$props["class_id"]["value"] = $arr["create_class"];
+		// kuidas ma teen siia nimekirja kõigist kasutaja projektidest?
 
-		$arr["id"] = $arr["msgid"];
+		$users = get_instance("users");
+		$user = new object($users->get_oid_for_uid(aw_global_get("uid")));
+		$conns = $user->connections_to(array(
+			"from.class_id" => CL_PROJECT,
+			"sort_by" => "from.name",
+			"type" => "RELTYPE_PARTICIPANT",
+		));
+				
+		foreach($conns as $conn)
+		{
+			$props["projects"]["options"][$conn->prop("from")] = $conn->prop("from.name");
+		};
+
+		foreach($props as $pn => $pd)
+		{
+                        $htmlc->add_property($pd);
+                }
+
+		$htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "action",
+			"value" => "submit_register_event",
+		));
 		
-		return $this->_gen_edit_url($arr);
+		$htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "class",
+			"value" => get_class($this),
+		));
 
+		$htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "mailbox",
+			"value" => $arr["mailbox"],
+		));
+		
+		$htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "msgid",
+			"value" => $arr["msgid"],
+		));
+		
+		$htmlc->add_property(array(
+			"type" => "hidden",
+			"name" => "msgrid",
+			"value" => $arr["msgrid"],
+		));
+
+
+                $htmlc->finish_output();
+
+                $html = $htmlc->get_result(array(
+                ));
+
+		return $html;
+	}
+
+	/**
+		@attrib name=submit_register_event all_args=1
+	**/
+	function submit_register_event($arr)
+	{
+		// this is the meat
+		//print "creating the fucking event";
+
+		load_vcl("date_edit");
+
+		$main_calendar = new object($arr["main_calendar"]);
+		$event_folder = $main_calendar->prop("event_folder");
+		$evt = new object();
+		$evt->set_parent($event_folder);
+		$evt->set_class_id($arr["class_id"]);
+		$evt->set_name($arr["title"]);
+		$evt->set_status(STAT_ACTIVE);
+		$evt->set_prop("start1",date_edit::get_timestamp($arr["start"]));
+		$evt->set_prop("content",$arr["content"]);
+		$evt->save();
+
+		if (is_array($arr["calendars"]))
+		{
+			foreach($arr["calendars"] as $calendar)
+			{
+				$cal_obj = new object($calendar);
+				$evt->create_brother($cal_obj->prop("event_folder"));
+			};
+		};
+
+
+		if (is_array($arr["projects"]))
+		{
+			foreach($arr["projects"] as $project)
+			{
+				$evt->create_brother($project);
+			}
+		};
+
+
+		return $this->mk_my_orb("change",array(
+			"msgrid" => $arr["msgrid"],
+			"msgid" => $arr["msgid"],
+			"form" => "showmsg",
+			"cb_part" => 1,
+			"mailbox" => $arr["mailbox"]),"mail_message");
 
 	}
 	
