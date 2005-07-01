@@ -554,6 +554,13 @@ class propcollector extends aw_template
 					if (file_exists ($parent))
 					{ ### parse parent class data into current class' data. The fact that this recursive call is made here makes multiple inheritance possible. If that should become undesirable this whole if section can be moved outside innermost foreach loop.
 						$this->count_total--;
+
+						### if current was modified, parent has to be parsed too
+						if ($modified)
+						{
+							touch ($parent);
+						}
+
 						$parent_modified = $this->_parse_file ($parent);
 					}
 				}
