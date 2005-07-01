@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.15 2005/06/28 14:43:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/gallery/mini_gallery.aw,v 1.16 2005/07/01 07:47:57 kristo Exp $
 // mini_gallery.aw - Minigalerii 
 /*
 
@@ -72,7 +72,15 @@ class mini_gallery extends class_base
 
 	function parse_alias($arr)
 	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
+		$res = $this->show(array("id" => $arr["alias"]["target"]));
+		if (isset($arr["tpls"]["mini_gallery_inplace"]))
+		{
+			return array(
+				"replacement" => localparse($arr["tpls"]["mini_gallery_inplace"], array("content" => $res)),
+				"inplace" => "mini_gallery_inplace"
+			);
+		}
+		return $res;
 	}
 
 	function show($arr)
