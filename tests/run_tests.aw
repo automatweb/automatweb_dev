@@ -1,4 +1,11 @@
 <?php
+
+if ($argc < 2)
+{
+	die(
+		"Usage: php run_tests.aw /path/to/site/aw.ini [folder folder folder to run tests in]\n\n");
+}
+
 $basedir = realpath("..");
 include("$basedir/init.aw");
 init_config(array("ini_files" => array("$basedir/aw.ini", $argv[1])));
@@ -7,6 +14,7 @@ classload("aw_template","timer");
 classload("core/obj/object", "core/error");
 require_once 'PHPUnit.php';
 $awt = new aw_timer;
+
 
 if ($argc < 3)
 {

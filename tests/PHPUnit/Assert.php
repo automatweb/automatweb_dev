@@ -12,7 +12,7 @@
 // | license@php.net so we can mail you a copy immediately.                 |
 // +------------------------------------------------------------------------+
 //
-// $Id: Assert.php,v 1.1 2005/04/28 14:24:53 kristo Exp $
+// $Id: Assert.php,v 1.2 2005/07/01 08:49:46 kristo Exp $
 //
 
 /**
@@ -87,7 +87,8 @@ class PHPUnit_Assert {
     * @access public
     */
     function assertEquals($expected, $actual, $message = '', $delta = 0) {
-        if ((is_array($actual)  && is_array($expected)) ||
+
+		if ((is_array($actual)  && is_array($expected)) ||
             (is_object($actual) && is_object($expected))) {
             if (is_array($actual) && is_array($expected)) {
                 ksort($actual);
@@ -101,13 +102,14 @@ class PHPUnit_Assert {
 
             $actual   = serialize($actual);
             $expected = serialize($expected);
-
+	
             $message = sprintf(
-              '%sexpected %s, actual %s',
+              '%sexpected %s, actual %s / on line %s',
 
               !empty($message) ? $message . ' ' : '',
               $expected,
-              $actual
+              $actual,
+				$this->_get_line()
             );
 
             if ($actual !== $expected) {
@@ -117,12 +119,13 @@ class PHPUnit_Assert {
 
         elseif (is_numeric($actual) && is_numeric($expected)) {
             $message = sprintf(
-              '%sexpected %s%s, actual %s',
+              '%sexpected %s%s, actual %s / on line %s',
 
               !empty($message) ? $message . ' ' : '',
               $expected,
               ($delta != 0) ? ('+/- ' . $delta) : '',
-              $actual
+              $actual,
+				  $this->_get_line()
             );
 
             if (!($actual >= ($expected - $delta) && $actual <= ($expected + $delta))) {
@@ -132,11 +135,12 @@ class PHPUnit_Assert {
 
         else {
             $message = sprintf(
-              '%sexpected %s, actual %s',
+              '%sexpected %s, actual %s / on line %s',
 
               !empty($message) ? $message . ' ' : '',
               $expected,
-              $actual
+              $actual,
+				  $this->_get_line()
             );
 
             if ($actual !== $expected) {
@@ -163,9 +167,10 @@ class PHPUnit_Assert {
         if ((is_object($expected) || is_null($expected)) &&
             (is_object($actual)   || is_null($actual))) {
             $message = sprintf(
-              '%sexpected two variables to reference the same object',
+              '%sexpected two variables to reference the same object / on line %s',
 
-              !empty($message) ? $message . ' ' : ''
+              !empty($message) ? $message . ' ' : '',
+				  $this->_get_line()
             );
 
             if ($expected !== $actual) {
@@ -194,9 +199,10 @@ class PHPUnit_Assert {
         if ((is_object($expected) || is_null($expected)) &&
             (is_object($actual)   || is_null($actual))) {
             $message = sprintf(
-              '%sexpected two variables to reference different objects',
+              '%sexpected two variables to reference different objects / on line %s',
 
-              !empty($message) ? $message . ' ' : ''
+              !empty($message) ? $message . ' ' : '',
+				  $this->_get_line()
             );
 
             if ($expected === $actual) {
@@ -216,9 +222,10 @@ class PHPUnit_Assert {
     */
     function assertNotNull($actual, $message = '') {
         $message = sprintf(
-          '%sexpected NOT NULL, actual NULL',
+          '%sexpected NOT NULL, actual NULL / on line %s',
 
-          !empty($message) ? $message . ' ' : ''
+          !empty($message) ? $message . ' ' : '',
+			  $this->_get_line()
         );
 
         if (is_null($actual)) {
@@ -235,9 +242,10 @@ class PHPUnit_Assert {
     */
     function assertNull($actual, $message = '') {
         $message = sprintf(
-          '%sexpected NULL, actual NOT NULL',
+          '%sexpected NULL, actual NOT NULL / on line %s',
 
-          !empty($message) ? $message . ' ' : ''
+          !empty($message) ? $message . ' ' : '',
+			  $this->_get_line()
         );
 
         if (!is_null($actual)) {
@@ -254,9 +262,10 @@ class PHPUnit_Assert {
     */
     function assertTrue($condition, $message = '') {
         $message = sprintf(
-          '%sexpected TRUE, actual FALSE',
+          '%sexpected TRUE, actual FALSE / on line %s',
 
-          !empty($message) ? $message . ' ' : ''
+          !empty($message) ? $message . ' ' : '',
+			  $this->_get_line()
         );
 
         if (!$condition) {
@@ -273,9 +282,10 @@ class PHPUnit_Assert {
     */
     function assertFalse($condition, $message = '') {
         $message = sprintf(
-          '%sexpected FALSE, actual TRUE',
+          '%sexpected FALSE, actual TRUE / on line %s',
 
-          !empty($message) ? $message . ' ' : ''
+          !empty($message) ? $message . ' ' : '',
+			  $this->_get_line()
         );
 
         if ($condition) {
@@ -380,5 +390,11 @@ class PHPUnit_Assert {
     * @abstract
     */
     function fail($message = '') { /* abstract */ }
+
+	function _get_line()
+	{
+		$bt = debug_backtrace();
+		return $bt[1]["line"];
+	}
 }
 ?>
