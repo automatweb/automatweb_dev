@@ -17,6 +17,7 @@ class object_test extends PHPUnit_TestCase
 			if ($this->db->can("view", $row["oid"]))
 			{
 				$this->obj_id = $row["oid"];
+				return;
 			}
 		}
 	}
@@ -129,6 +130,579 @@ class object_test extends PHPUnit_TestCase
 		$this->assertEquals($ar["name"], $o->name());
 	}
 
+	function _get_temp_o()
+	{
+		aw_disable_acl();
+		// create new object
+		$o = obj();
+		$o->set_parent(aw_ini_get("site_rootmenu"));
+		$o->set_class_id(CL_MENU);
+		$o->save();
+		aw_restore_acl();
 
+		return $o;
+	}
+
+	function test_delete()
+	{
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		aw_disable_acl();
+		$ret = $o->delete();
+		aw_restore_acl();
+		$this->assertEquals($id, $ret);
+
+		// verify that we do not find it in ol
+		$ol = new object_list(array("oid" => $id));
+		$this->assertEquals(0, $ol->count());
+
+		// and that status = 0
+		$this->assertEquals(0, $this->db->db_fetch_field("SELECT status FROM objects WHERE oid = $id", "status"));
+	}
+
+	function test_delete_final()
+	{
+		$o = $this->_get_temp_o();
+		$id = $o->id();
+		aw_disable_acl();
+		$ret = $o->delete(true);
+		aw_restore_acl();
+		$this->assertEquals($id, $ret);
+
+		// verify that we do not find it in ol
+		$ol = new object_list(array("oid" => $id));
+		$this->assertEquals(0, $ol->count());
+
+		// and that no such line exists
+		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM objects WHERE oid = $id", "cnt"));
+		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM menu WHERE id = $id", "cnt"));
+	}
+
+	function test_connect_id()
+	{
+		$o = $this->_get_temp_o();
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => aw_ini_get("site_rootmenu")
+		));
+
+		$this->assertEquals(aw_ini_get("site_rootmenu"), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connect_obj()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm
+		));
+
+		$this->assertEquals($rm->id(), $this->db->db_fetch_field("SELECT target FROM aliases WHERE source = ".$o->id(), "target"));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connect_list()
+	{
+		$o = $this->_get_temp_o();
+		$ol = new object_list(array("oid" => array_keys(aw_ini_get("menuedit.menu_defs"))));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $ol
+		));
+
+		$this->assertEquals($ol->count(), $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
+		foreach($ol->ids() as $id)
+		{
+			$this->assertEquals($id, $this->db->db_fetch_field("SELECT target FROM aliases WHERE target = $id and source = ".$o->id(), "target"));
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connect_type()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$this->assertEquals(5, $this->db->db_fetch_field("SELECT reltype FROM aliases WHERE source = ".$o->id(), "reltype"));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_disconnect()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$o->disconnect(array(
+			"from" => $rm
+		));
+
+		$this->assertEquals(0, $this->db->db_fetch_field("SELECT count(*) as cnt FROM aliases WHERE source = ".$o->id(), "cnt"));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from();
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_type()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"type" => "RELTYPE_SEEALSO"
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_class()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"class" => CL_MENU
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_to()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"to" => $rm
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_idx()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"idx" => 1
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_to_field()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"to.name" => $rm->name()
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_filter_complex()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_from(array(
+			"type" => "RELTYPE_SEEALSO",
+			"class" => CL_MENU,
+			"to" => $rm,
+			"idx" => 1,
+			"to.name" => $rm->name(),
+			"to.created" => $rm->created()
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_from_err()
+	{
+		$o = obj();
+		__disable_err();
+		$o->connections_from();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_connections_to()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to();
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$rm->disconnect(array("from" => $o));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_type()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"type" => "RELTYPE_SEEALSO",
+			"from.class_id" => CL_MENU
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$rm->disconnect(array("from" => $o));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_class()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"class" => CL_MENU
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$rm->disconnect(array("from" => $o));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_from()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"from" => $rm
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$rm->disconnect(array("from" => $o));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_idx()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"idx" => 1
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$rm->disconnect(array("from" => $o));
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_from_field()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"from.name" => $rm->name()
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("to"), $o->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_filter_complex()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$rm->connect(array(
+			"to" => $o,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->connections_to(array(
+			"type" => "RELTYPE_SEEALSO",
+			"class" => CL_MENU,
+			"from" => $rm,
+			"idx" => 1,
+			"from.name" => $rm->name(),
+			"from.created" => $rm->created(),
+			"from.class_id" => CL_MENU
+		));
+		$this->assertEquals(1, count($cf));
+		if (count($cf))
+		{
+			$r = reset($cf);
+			$this->assertEquals($r->prop("from"), $rm->id());
+		}
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_connections_to_err()
+	{
+		$o = obj();
+		__disable_err();
+		$o->connections_to();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_get_first_conn_by_reltype()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->get_first_conn_by_reltype("RELTYPE_SEEALSO");
+		$this->assertEquals("connection", get_class($cf));
+		$this->assertEquals($cf->prop("to"), $rm->id());
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_get_first_conn_by_reltype_false()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+
+		$cf = $o->get_first_conn_by_reltype();
+		$this->assertFalse($cf);
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_get_first_obj_by_reltype()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+		$o->connect(array(
+			"to" => $rm,
+			"type" => "RELTYPE_SEEALSO"
+		));
+
+		$cf = $o->get_first_obj_by_reltype("RELTYPE_SEEALSO");
+		$this->assertEquals("object", get_class($cf));
+		$this->assertEquals($cf->id(), $rm->id());
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_get_first_obj_by_reltype_false()
+	{
+		$o = $this->_get_temp_o();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+	
+		aw_disable_acl();
+
+		$cf = $o->get_first_obj_by_reltype();
+		$this->assertFalse($cf);
+		$o->delete(true);
+		aw_restore_acl();
+	}
+
+	function test_get_first_conn_by_reltype_err()
+	{
+		__disable_err();
+		$o = obj();
+		$cf = $o->get_first_obj_by_reltype();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_get_first_obj_by_reltype_err()
+	{
+		__disable_err();
+		$o = obj();
+		$cf = $o->get_first_obj_by_reltype();
+		$this->assertTrue(__is_err());
+	}
 }
 ?>

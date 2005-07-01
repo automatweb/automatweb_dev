@@ -4,7 +4,20 @@ returns array of connection object instances, that other objects have to the cur
 - if no object is loaded, error is thrown
 
 <b>parameters:</b>
-none
+- array of filter parameters, optional
+possible array members, all of the filter members can be arrays of the given types as well: 
+
+	filter members:
+	type - connection type: numeric or can be string if from.class_id is also given
+	class - connected object's class_id
+	from - id of the connected object
+	idx - index of the connection that is searched for
+	from.[lang_id,flags,modified,modifiedby,name,class_id,jrk,status,parent] - filter by the connected object's fields
+
+	non filter members:
+	sort_by - the field to sort the results by, sorting as strings
+	sort_by_num - the field to sort the results by, sorting as numbers
+	sort_dir - "asc" or "desc" - defaults to asc, the order of the sorting
 
 <b>returns:</b>
 array of connection objects, array index is connection id

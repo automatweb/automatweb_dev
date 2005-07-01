@@ -8,7 +8,9 @@ object, acl error is thrown
 
 <b>parameters, passed by name:</b>
 - from, the object to disconnect from, required.
-type: id, string, object instance reference or object list instance reference
+type: id, string, object instance or object list instance 
+- errors, if false no error is thrown when the connection does not exist, defaults to true
+type: boolean
 
 <b>returns:</b>
 nothing

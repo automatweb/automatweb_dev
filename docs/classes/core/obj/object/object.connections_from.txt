@@ -5,7 +5,19 @@ returns an array of connection objects that the current object has to other obje
 
 <b>parameters:</b>
 - array of filter parameters, optional
-possible array members: type - connection type / class_id - connected object class / to - id of another object
+possible array members, all of the filter members can be arrays of the given types as well: 
+
+	filter members:
+	type - connection type, string or numeric
+	class - connected object's class_id
+	to - id of the connected object
+	idx - index of the connection that is searched for
+	to.[lang_id,flags,modified,modifiedby,name,class_id,jrk,status,parent] - filter by the connected object's fields
+
+	non filter members:
+	sort_by - the field to sort the results by, sorting as strings
+	sort_by_num - the field to sort the results by, sorting as numbers
+	sort_dir - "asc" or "desc" - defaults to asc, the order of the sorting
 
 <b>returns:</b>
 array of connection object instances, array index is the connection id

@@ -103,7 +103,11 @@ class _int_object
 			));
 		}
 
+		$ret = $this->obj["oid"];
+
 		$this->_int_do_delete($this->obj["oid"], $full_delete);
+
+		return $ret;
 	}
 
 	function connect($param)
@@ -114,6 +118,11 @@ class _int_object
 				"id" => ERR_PARAM,
 				"msg" => sprintf(t("object::connect(%s): parameter must be an array of connection parameters!"), $param)
 			));
+		}
+
+		if (!$param["reltype"] && $param["type"])
+		{
+			$param["reltype"] = $param["type"];
 		}
 
 		$oids = $GLOBALS["object_loader"]->param_to_oid_list($param["to"]);
@@ -255,13 +264,9 @@ class _int_object
 					$filter["type"] = $param["type"];
 				}
 			}
-			if (isset($param["class"]))
-			{
-				$filter["class"] = $param["class"];
-			}
 			if (isset($param["to"]))
 			{
-				$filter["to"] = $param["to"];
+				$filter["to"] = $GLOBALS["object_loader"]->param_to_oid_list($param["to"]);
 			}
 			if (isset($param["idx"]))
 			{
@@ -277,6 +282,11 @@ class _int_object
 				{
 					$filter[$k] = $v;
 				}
+			}
+
+			if (isset($param["class"]))
+			{
+				$filter["to.class_id"] = $param["class"];
 			}
 		}
 
@@ -368,18 +378,11 @@ class _int_object
 
 				$filter["type"] = $param["type"];
 			}
-			if (isset($param["class"]))
-			{
-				$filter["class"] = $param["class"];
-			}
 			if (isset($param["from"]))
 			{
-				$filter["from"] = $param["from"];
+				$filter["from"] = $GLOBALS["object_loader"]->param_to_oid_list($param["from"]);
 			}
-			if (isset($param["sort_by"]))
-			{
-				$filter["sort_by"] = $param["sort_by"];
-			}
+
 			if (isset($param["idx"]))
 			{
 				$filter["idx"] = $param["idx"];
@@ -394,6 +397,11 @@ class _int_object
 				{
 					$filter[$k] = $v;
 				}
+			}
+
+			if (isset($param["class"]))
+			{
+				$filter["from.class_id"] = $param["class"];
 			}
 		}
 
@@ -420,8 +428,19 @@ class _int_object
 		{
 			usort($ret, create_function('$a,$b', 'return strcasecmp($a->prop("'.$param["sort_by"].'"), $b->prop("'.$param["sort_by"].'"));'));
 		}
+		if ($param["sort_by_num"] != "")
+		{
+			uasort($ret, create_function('$a,$b', 'return ($a->prop("'.$param["sort_by_num"].'") == $b->prop("'.$param["sort_by_num"].'") ? 0 : ($a->prop("'.$param["sort_by_num"].'") > $b->prop("'.$param["sort_by_num"].'") ? 1 : -1 ));'));
+		}
 
-		return $ret;
+		if($param['sort_dir'] == 'desc')
+		{
+			return array_reverse($ret);
+		}
+		else
+		{
+			return $ret;
+		}
 	}
 
 	function path($param = NULL)
