@@ -1,16 +1,17 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.54 2005/06/13 08:44:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.55 2005/07/02 11:59:16 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
 {
 	////
-	// !contructor - paramaters:
+	// !constructor - paramaters:
 	// prefix - a symbolic name for the table so we could tell it apart from the others
 	// tbgcolor - default cell background color
 	var $scripts;
 	var $id = 'table_0';
-	
+	var $filter_name = "aw_table_filters";
+
 	function aw_table($data = array())
 	{
 		$this->id = uniqid('table_');
@@ -33,6 +34,7 @@ class aw_table extends aw_template
 		$this->prefix = isset($data["prefix"]) ? $data["prefix"] : "";
 		// table cell background color
 		$this->tbgcolor = isset($data["tbgcolor"]) ? $data["tbgcolor"] : "";
+		$this->filter_name = $this->prefix . $this->filter_name;
 
 		$this->header_attribs = array();
 
@@ -47,6 +49,9 @@ class aw_table extends aw_template
 		$this->actions = array();
 		$this->col_styles = array();
 		$this->nfields = array();
+		$this->filters = array();
+		$this->selected_filters = array();
+		$this->filter_index = array();
 		$this->sortable = true;
 
 		// esimene kord andmeid sisestada?
@@ -61,6 +66,29 @@ class aw_table extends aw_template
 		$this->use_chooser = false;
 		// if true and chooser is used, checking chooser checkboxes changes the style of the row as well
 		$this->chooser_hilight = true;
+
+		### maintain all selected filters
+		$saved_filters = aw_global_get ($this->filter_name . "_saved");
+		$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
+
+		### set/clear new selected filters
+		$request = aw_global_get ("request");
+
+		if ($selected_filter = $request[$this->filter_name])
+		{
+			list ($filter_key, $filter_selection) = explode (",", $selected_filter);
+
+			if ($filter_selection)
+			{
+				$this->selected_filters[$filter_key] = $filter_selection;
+			}
+			else
+			{
+				unset ($this->selected_filters[$filter_key]);
+			}
+		}
+
+		aw_session_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
 	}
 
 	function set_sortable($arg)
@@ -85,7 +113,19 @@ class aw_table extends aw_template
 	// !sisestame andmed
 	function define_data($row)
 	{
+		### apply filter
+		foreach ($this->selected_filters as $filter_key => $filter_selection)
+		{
+			$filter_name = $this->filter_index[$filter_key];
+
+			if ($row[$filter_name] != $this->filters[$filter_name]["filter"][$filter_selection - 1])
+			{
+				return;
+			}
+		}
+
 		$this->data[] = $row;
+
 		if(!$this->no_recount)
 		{
 			$this->d_row_cnt++;
@@ -120,14 +160,14 @@ class aw_table extends aw_template
 
 	////
 	// !here you can add action rows to the table
-	// link - part of the action's link, 
-	// field - the field that will be used to complete the action link, 
+	// link - part of the action's link,
+	// field - the field that will be used to complete the action link,
 	// caption - action text
 	// cspan - colspan
 	// rspan - rowspan
 	// remote - if specified, the link will open in a new window and this parameter also must contain the height,width of the popup
-	//   
-	function define_action($row) 
+	//
+	function define_action($row)
 	{
 		$this->actions[] = $row;
 	}
@@ -164,12 +204,12 @@ class aw_table extends aw_template
 			if ($k=="extra")
 			{
 				$this->headerextra = $v;
-			} 
+			}
 			else
 			if ($k=="extrasize")
 			{
 				$this->headerextrasize = $v;
-			} 
+			}
 			else
 			{
 				$hlinks[] = sprintf("<a href='$k' $hlcl>$v</a>",$k,$v);
@@ -188,12 +228,12 @@ class aw_table extends aw_template
 	////
 	// !sets the default sorting element(s) for the table
 	// if the sorting function finds that there are no other sorting arrangements made, then it will use
-	// the element(s) specified here. 
+	// the element(s) specified here.
 	// sortby - a single element or an array of elements.
-	//   sometimes the array can be a bit weird though - namely, the key specifies the column in which the 
+	//   sometimes the array can be a bit weird though - namely, the key specifies the column in which the
 	//   element is and that is used when determining if a column is sorted
 	//   but when doing the actual sorting, the value is used and that contains an ordinary element, not a column name
-	//   right now this only applies to form tables 
+	//   right now this only applies to form tables
 	//   - so, when setting an array, always have the key and value be the same, unless you really know what you are doing
 	function set_default_sortby($sortby)
 	{
@@ -203,7 +243,7 @@ class aw_table extends aw_template
 	////
 	// !sets the default sorting order
 	// if the sorting function finds that there are no other sorting arrangements made, then it will use
-	// the order specified here. 
+	// the order specified here.
 	// dir - a string (asc/desc) or an array of strings - it will be linked to the sort element by index
 	function set_default_sorder($dir)
 	{
@@ -217,7 +257,7 @@ class aw_table extends aw_template
 		@comment
 			type -> "text" || "buttons" || "lb"
 			records_per_page -> number of records per page
-			
+
 	**/
 	function define_pageselector($arr)
 	{
@@ -240,9 +280,8 @@ class aw_table extends aw_template
 	// sorder - sorting order - asc/desc. you really don't need to specify this, the table can manage it on it's own
 	// rgroupby - an array of elements whose values will be grouped in the table
 	// vgroupby - array of elements that will be vertically grouped
-	function sort_by($params = array()) 
+	function sort_by($params = array())
 	{
-
 		if (!$this->sortable)
 		{
 			return false;
@@ -250,7 +289,7 @@ class aw_table extends aw_template
 
 		// see peaks olema array,
 		// kus on regitud erinevate tabelite andmed
-		$aw_tables = aw_global_get("aw_tables"); 
+		$aw_tables = aw_global_get("aw_tables");
 		$sess_field_key   = $this->prefix . "_sortby";
 		$sess_field_order = $this->prefix . "_sorder";
 
@@ -280,7 +319,7 @@ class aw_table extends aw_template
 				// and if it is not in the url either, we will try the session
 				if (!($this->sorder = $aw_tables[$sess_field_order]))
 				{
-					// and finally we get the default 
+					// and finally we get the default
 					if (!($this->sorder = $this->default_odir))
 					{
 						$this->sorder = "asc";
@@ -289,11 +328,11 @@ class aw_table extends aw_template
 			}
 		}
 
-	
+
 		// we should mark this down only when we have clicked on a link and thus changed something from the default
 		// what's the difference? well - if the defaults change and this is written a reload does not change things
 		//
-		// and well, I think this kinda sucks - I don't want the damn thing to remember the state. 
+		// and well, I think this kinda sucks - I don't want the damn thing to remember the state.
 /*		if (aw_global_get("sort_order") || aw_global_get("sortby"))
 		{
 			$aw_tables[$sess_field_key] = $this->sortby;
@@ -312,13 +351,13 @@ class aw_table extends aw_template
 		$this->make_sort_prop_arrays();
 
 		// switch to estonian locale
-		$old_loc = setlocale(LC_COLLATE,0);	
+		$old_loc = setlocale(LC_COLLATE,0);
 		setlocale(LC_COLLATE, 'et_EE');
 
 
 		// sort the data
 		usort($this->data,array($this,"sorter"));
-		
+
 		// switch back to estonian
 		setlocale(LC_COLLATE, $old_loc);
 
@@ -327,6 +366,7 @@ class aw_table extends aw_template
 		{
 			$tmp = $this->vgroupby;
 			$this->vgrowspans = array();
+
 			foreach($this->vgroupby as $_vgcol => $_vgel)
 			{
 				foreach($this->data as $row)
@@ -349,10 +389,10 @@ class aw_table extends aw_template
 	////
 	// !the sorting function. iow - the tricky bit
 	// it must sort the data correctly, taking into account whether it is numerical or not
-	// then it must sort first by the vgroup element(s), then rgroup element(s), and then the sorting element(s) 
+	// then it must sort first by the vgroup element(s), then rgroup element(s), and then the sorting element(s)
 	function sorter($a,$b)
 	{
-		// what the hell is going on here you ask? well. 
+		// what the hell is going on here you ask? well.
 		// basically the idea is that we go over the sorted columns until we find two values that are different
 		// and then we can compare them and thus we get to sort the entire array.
 		// why don't we just concatenate the strings together? well, because what if the first is a text element, the next
@@ -497,7 +537,7 @@ class aw_table extends aw_template
 		{
 			print "Don't know what to do";
 			return;
-		};
+		}
 
 		if ($this->rgroupby && !$arr["rgroupby"])
 		{
@@ -507,7 +547,7 @@ class aw_table extends aw_template
 		if (isset($arr["rgroupby"]) && is_array($arr["rgroupby"]))
 		{
 			$this->do_rgroup_counts($arr["rgroupby"]);
-		};
+		}
 
 		extract($arr);
 		$PHP_SELF = aw_global_get("PHP_SELF");
@@ -519,6 +559,7 @@ class aw_table extends aw_template
 		{
 			$this->sh_counts_by_parent[$rd["name"]] = $this->_get_sh_count_by_parent($rd["name"]);
 		}
+
 		$this->_get_max_level_cnt("");
 		$this->max_sh_count = $this->_max_gml-1;
 
@@ -545,7 +586,7 @@ class aw_table extends aw_template
 		$this->vars(array(
 			"sel_row_style" => $this->tr_sel,
 		));
-		
+
 		$this->read_template("scripts.tpl");
 		if ($this->use_chooser && !$arr["no_chooser_script"])
 		{
@@ -555,7 +596,7 @@ class aw_table extends aw_template
 				$tbl .= $this->parse("hilight_script");
 			};
 		}
-		
+
 		if (!empty($this->pageselector))
 		{
 			switch($this->pageselector)
@@ -735,7 +776,6 @@ class aw_table extends aw_template
 						}
 						else
 						{
-
 							$style_key = (($counter % 2) == 0) ? "content_style2" : "content_style1";
 							$bgcolor = ($counter % 2) ? $this->bgcolor1 : $this->bgcolor2;
 						};
@@ -824,7 +864,7 @@ class aw_table extends aw_template
 								$is_link = true;
 								$val = $tmt[2];
 							}
-					
+
 							if ($val < 1)
 							{
 								$val = "n/a";
@@ -941,7 +981,7 @@ class aw_table extends aw_template
 		// raam kinni
 		if (is_array($this->frameattribs))
 		{
-			$tbl .= "</td></tr></table>\n";		
+			$tbl .= "</td></tr></table>\n";
 		};
 
 		// tagastame selle käki
@@ -967,7 +1007,7 @@ class aw_table extends aw_template
 		$tbl = "";
 		if(is_array($this->rowdefs))
 		{
-			foreach($this->rowdefs as $v) 
+			foreach($this->rowdefs as $v)
 			{
 				$tbl .= ($tbl ? $sep : "").$this->_format_csv_field($v["caption"], $sep);
 			}
@@ -975,7 +1015,7 @@ class aw_table extends aw_template
 		$d[] = $tbl;
 
 		// koostame tabeli sisu
-		if(is_array($this->data)) 
+		if(is_array($this->data))
 		{
 			reset($this->data);
 			$cnt = 0;
@@ -987,10 +1027,10 @@ class aw_table extends aw_template
 				if(is_array($this->rowdefs))
 				foreach($this->rowdefs as $k1 => $v1)
 				{
-					if ($v1["name"] == "rec") 
+					if ($v1["name"] == "rec")
 					{
-						$val = $cnt;   
-					} else 
+						$val = $cnt;
+					} else
 					{
 						if ($v1["strformat"])
 						{
@@ -999,7 +1039,7 @@ class aw_table extends aw_template
 						}
 						else
 						{
-							$val = $v[$v1["name"]];	
+							$val = $v[$v1["name"]];
 						};
 					};
 
@@ -1023,9 +1063,9 @@ class aw_table extends aw_template
 	}
 
 	// genereerib html tagi
-	function tag($data) 
+	function tag($data)
 	{
-		if (!is_array($data)) 
+		if (!is_array($data))
 		{
 			// kui anti vigased andmed, siis bail out
 			return;
@@ -1035,20 +1075,24 @@ class aw_table extends aw_template
 		// moodustame atribuutidest stringi
 		$attr_list = "";
 		$name = "";
-		foreach($data as $k => $v) 
+		foreach($data as $k => $v)
 		{
-			if ($k == "name") 
+			if ($k == "name")
 			{
 				$name = $v;
-			} 
+			}
 			// whats up with this id?
-			elseif ($k == "id") 
+			elseif ($k == "id")
 			{
 				$attr_list .= " name='$v'";
-			} 
+			}
 			elseif ($k == "domid")
 			{
 				$attr_list .= " id='$v'";
+			}
+			elseif ($k == "title" and !empty ($v))
+			{
+				$attr_list .= " title='$v'";
 			}
 			elseif ($v != "")
 			{
@@ -1078,13 +1122,13 @@ class aw_table extends aw_template
 	}
 
 	// alias eelmisele, monikord voiks selle kasutamine loetavusele kaasa aidata
-	function opentag($data) 
+	function opentag($data)
 	{
 		return $this->tag($data);
 	}
 
 	// loeb faili. Hiljem liigutame selle kuhugi baasklassi
-	function get_file_contents($name,$bytes = 8192) 
+	function get_file_contents($name,$bytes = 8192)
 	{
 		$fh = fopen($name,"r");
 		$data = fread($fh,$bytes);
@@ -1099,7 +1143,7 @@ class aw_table extends aw_template
 		{
 			$attrs["value"] = "";
 		};
-		switch($name) 
+		switch($name)
 		{
 			// vaikimisi määratud sorteerimisjärjekord
 			case "default_order":
@@ -1111,7 +1155,7 @@ class aw_table extends aw_template
 			case "tableattribs":
 				$this->tableattribs = $attrs;
 				break;
-			
+
 			// välimise tabeli atribuudid
 			case "frameattribs":
 				$this->frameattribs = $attrs;
@@ -1144,6 +1188,16 @@ class aw_table extends aw_template
 
 			case "group_add_els_style":
 				$this->group_add_els_style = $attrs["value"];
+				break;
+
+			// filtri stiil
+			case "filter_normal":
+				$this->filter_normal = $attrs["value"];
+				break;
+
+			// valitud filtri stiil
+			case "filter_active":
+				$this->filter_active = $attrs["value"];
 				break;
 
 			// stiil, mida kasutada parajasti sorteeritud välja headeri näitamiseks
@@ -1185,7 +1239,7 @@ class aw_table extends aw_template
 			case "content_tr_sel":
 				$this->tr_sel = $attrs["value"];
 				break;
-			
+
 			case "content_tr_active":
 				$this->tr_active = $attrs["value"];
 				break;
@@ -1202,13 +1256,13 @@ class aw_table extends aw_template
 			// väljad
 			case "field":
 				$temp = array();
-				while(list($k,$v) = each($attrs)) 
+				while(list($k,$v) = each($attrs))
 				{
 					$temp[$k] = $v;
 				};
 				$this->rowdefs[] = $temp;
-				
-				if (isset($attrs["numeric"])) 
+
+				if (isset($attrs["numeric"]))
 				{
 					$this->nfields[$attrs["name"]] = 1;
 				};
@@ -1245,6 +1299,14 @@ class aw_table extends aw_template
 				{
 					$this->col_styles[$attrs["name"]]["group_style"] = $attrs["group_style"];
 				}
+				if (!empty($attrs["filter_normal"]))
+				{
+					$this->col_styles[$attrs["name"]]["filter_normal"] = $attrs["filter_normal"];
+				}
+				if (!empty($attrs["filter_active"]))
+				{
+					$this->col_styles[$attrs["name"]]["filter_active"] = $attrs["filter_active"];
+				}
 				break;
 
 			default:
@@ -1258,7 +1320,22 @@ class aw_table extends aw_template
 		if (isset($args["numeric"]))
 		{
 			$this->nfields[$args["name"]] = 1;
-		};
+		}
+
+		### filter definition for UI parsing
+		if (!empty ($args["filter"]))
+		{
+			### add filter definition
+			$filter = $args["filter"];
+			$filter_key = count ($this->filters) + 1;
+			$this->filters[$args["name"]] = array (
+				"key" => $filter_key,
+				"filter" => $filter,
+				"name" => $args["name"],
+				"active" => false,
+			);
+			$this->filter_index[$filter_key] = $args["name"];
+		}
 	}
 
 	function remove_field($name)
@@ -1273,7 +1350,7 @@ class aw_table extends aw_template
 		}
 	}
 
-	function _xml_end_element($parser,$name) 
+	function _xml_end_element($parser,$name)
 	{
 		// actually, this is only a dummy function that does nothing
 	}
@@ -1284,7 +1361,7 @@ class aw_table extends aw_template
 		xml_parser_set_option($xml_parser,XML_OPTION_CASE_FOLDING,0);
 		xml_set_object($xml_parser,&$this);
 		xml_set_element_handler($xml_parser,"_xml_start_element","_xml_end_element");
-		if (!xml_parse($xml_parser,$xml_data)) 
+		if (!xml_parse($xml_parser,$xml_data))
 		{
 			echo(sprintf("XML error: %s at line %d",
 			xml_error_string(xml_get_error_code($xml_parser)),
@@ -1302,7 +1379,7 @@ class aw_table extends aw_template
 		$this->parse_xml_def($realdef . "_table");
 	}
 
-	function parse_xml_def($file) 
+	function parse_xml_def($file)
 	{
 		//if (substr($file,0,1) != "/"  && substr($file,0,2) != "C:")
 		if (substr($file,0,1) != "/" && !preg_match("/^[a-z]:/i", substr($file,0,2)))
@@ -1318,7 +1395,7 @@ class aw_table extends aw_template
 			}
 		}
 		else
-		{ 
+		{
 			$path = $file;
 		};
 		$xml_data = $this->get_file_contents($path);
@@ -1326,7 +1403,7 @@ class aw_table extends aw_template
 	}
 
 	////
-	// !this makes sure that all sort properties (sortby, sort_order) are 
+	// !this makes sure that all sort properties (sortby, sort_order) are
 	// arrays and not strings - just to unify things
 	function make_sort_prop_arrays()
 	{
@@ -1374,7 +1451,8 @@ class aw_table extends aw_template
 			// the headers between groups are never clickable - less confusing that way
 			$tbl .= $this->opentag(array(
 				"name" => "td",
-				"classid" => ($this->col_styles[$v["name"]]["header_normal"] ? $this->col_styles[$v["name"]]["header_normal"] : $this->header_normal), 
+				"title" => $v["tooltip"],
+				"classid" => ($this->col_styles[$v["name"]]["header_normal"] ? $this->col_styles[$v["name"]]["header_normal"] : $this->header_normal),
 				"align" => ($v["talign"] ? $v["talign"] : "center"),
 				"valign" => ($v["tvalign"] ? $v["tvalign"] : ""),
 				"bgcolor" => ($this->tbgcolor ? $this->tbgcolor : ""),
@@ -1382,7 +1460,7 @@ class aw_table extends aw_template
 			));
 
 			// if the column is sortable, turn it into a link
-			if ($v["sortable"]) 
+			if ($v["sortable"])
 			{
 				// by default (the column is not sorted) don't show any arrows
 				$sufix = "";
@@ -1408,8 +1486,8 @@ class aw_table extends aw_template
 				$url .= $sep."sortby=".$v["name"]."&sort_order=".$so;
 
 				$tbl .= "<b><a href='$url'>$v[caption] $sufix</a></b>";
-			} 
-			else 
+			}
+			else
 			{
 				$tbl .= $v["caption"];
 			};
@@ -1417,7 +1495,7 @@ class aw_table extends aw_template
 		}
 
 		// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
-		if (is_array($this->actions) && (sizeof($this->actions) > 0)) 
+		if (is_array($this->actions) && (sizeof($this->actions) > 0))
 		{
 			$tbl .= $this->opentag(array(
 				"name" => "td",
@@ -1447,7 +1525,7 @@ class aw_table extends aw_template
 						"name" => "td",
 						"colspan" => count($this->rowdefs),
 					));
-	
+
 					if (isset($rgroupby_sep[$rgel]["real_sep_before"]))
 					{
 						$tbl .= $rgroupby_sep[$rgel]["real_sep_before"];
@@ -1534,7 +1612,7 @@ class aw_table extends aw_template
 	}
 
 	////
-	// !draws a listbox pageselector. 
+	// !draws a listbox pageselector.
 	// parameters:
 	//	style - id of the css style to apply to the page
 	//	records_per_page - number of records on each page
@@ -1549,7 +1627,7 @@ class aw_table extends aw_template
 		$this->read_template("text_pageselector.tpl");
 		return $this->finish_pageselector($arr);
 	}
-	
+
 	function draw_button_pageselector($arr)
 	{
 		$this->read_template("button_pageselector.tpl");
@@ -1582,7 +1660,7 @@ class aw_table extends aw_template
 				"style" => $arr["style"],
 				"url" => $url . "ft_page=".$i,
 				"pageurl" => $url,
-				"text" => $from . " - " . $to, 
+				"text" => $from . " - " . $to,
 				"ft_page" => $i,
 				"pagenum" => $i+1,
 			));
@@ -1597,7 +1675,7 @@ class aw_table extends aw_template
 		));
 		return $this->parse();
 	}
-	
+
 	function _get_sh_count_by_parent($parent)
 	{
 		$ret = 0;
@@ -1618,7 +1696,7 @@ class aw_table extends aw_template
 		}
 		return $ret;
 	}
-	
+
 	function _get_max_level_cnt($parent)
 	{
 		$this->_gml++;
@@ -1635,12 +1713,13 @@ class aw_table extends aw_template
 		}
 		$this->_gml--;
 	}
-	
+
 	function _req_draw_header($parent)
 	{
 		$this->_sh_req_level++;
 		$tbl = "";
 		$subs = array();
+		$cell_count = 0;
 		// make header!
 		$tbl .= "<tr>\n";
 		foreach($this->rowdefs as $k => $v)
@@ -1693,6 +1772,7 @@ class aw_table extends aw_template
 			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
 			$tbl.=$this->opentag(array(
 				"name" => "td",
+				"title" => $v["tooltip"],
 				"classid"=> $style,
 				"align" => isset($v["talign"]) ? $v["talign"] : "center",
 				"valign" => isset($v["tvalign"]) ? $v["tvalign"] : "",
@@ -1737,8 +1817,36 @@ class aw_table extends aw_template
 			{
 				$tbl .= $v["caption"];
 			};
+
+			// ### add filter if defined for current column
+			// if (isset ($this->filters[$v["name"]]))
+			// {
+				// $filter_values = $this->filters[$v["name"]]["filter"];
+				// $filter_active = $this->filters[$v["name"]]["active"];
+				// $filter_name = $this->filter_name;
+
+				// ### get filter change url
+				// $url = preg_replace("/{$this->filter_name}=\d,\d/", "", aw_global_get("REQUEST_URI"));
+				// $sep = (strpos($url, "?") === false) ? "?" : "&";
+				// $url = $url . $sep;
+				// $url = preg_replace("/\&{2,}/","&",$url);
+
+				// ### format active filter
+				// $filter_active = $filter_active ? 'red' : 'white';
+
+				// ### add filter selectbox
+				// $args = array (
+					// "name" => $filter_name,
+					// "options" => $filter_values,
+					// "onchange" => "window.location='{$url}{$filter_name}='+{$this->filters[$v["name"]]["key"]}+','+this.options[this.selectedIndex].value",
+					// "textsize" => "10px",
+				// );
+				// $tbl .= '<div style="width: 100%; background-color: ' . $filter_active . ';">' . html::select ($args) . '</div>';
+			// }
+
 			$tbl .= "</td>\n";
-		};
+			$cell_count++;
+		}
 
 		// kui actionid on defineeritud, siis joonistame nende jaoks vajaliku headeri
 		if (is_array($this->actions) && (sizeof($this->actions) > 0))
@@ -1751,6 +1859,7 @@ class aw_table extends aw_template
 			));
 			$tbl .= "Tegevused";
 			$tbl .= "</td>\n";
+			$cell_count++;
 		};
 
 		if ($this->use_chooser)
@@ -1759,20 +1868,124 @@ class aw_table extends aw_template
 				"name" => "td",
 				"align" => "center",
 				"classid" => $this->header_normal,
-			));	
+			));
 			$name = $this->chooser_config["name"];
 			$caption = isset($this->chooser_config["caption"]) ? $this->chooser_config["caption"] : "X";
 			$tbl .= "<a href='javascript:selall(\"${name}\")'>" . $caption . "</a>";
 			$tbl .= "</td>";
+			$cell_count++;
 		};
 
 		// header kinni
 		$tbl .= "</tr>";
 
+		if (empty ($tbl2) and count ($this->filters))
+		{
+			$tbl2 = "<tr>\n";
+
+			foreach($this->rowdefs as $k => $v)
+			{
+				$filter_style = "filter_normal";
+
+				### add filter if defined for current column
+				if (isset ($this->filters[$v["name"]]))
+				{
+					$filter_values = $this->get_filter ($v["name"]);
+					$filter_name = $this->filter_name;
+
+					### get filter change url
+					$url = preg_replace("/{$this->filter_name}=\d,\d/", "", aw_global_get("REQUEST_URI"));
+					$sep = (strpos($url, "?") === false) ? "?" : "&";
+					$url = $url . $sep;
+					$url = preg_replace("/\&{2,}/","&",$url);
+
+					### (re)set filter style
+					$filter_style = $this->filters[$v["name"]]["active"] ? "filter_active" : $filter_style;
+
+					### add filter selectbox
+					$args = array (
+						"name" => $filter_name,
+						"options" => $filter_values,
+						"onchange" => "window.location='{$url}{$filter_name}='+{$this->filters[$v["name"]]["key"]}+','+this.options[this.selectedIndex].value",
+					);
+					$filter_contents = html::select ($args);
+				}
+				else
+				{
+					$filter_contents = "&nbsp;";
+				}
+
+				$tbl2 .= $this->opentag(array(
+					"name" => "td",
+					"align" => "center",
+					"classid" => $this->$filter_style,
+				));
+				$tbl2 .= $filter_contents;
+				$tbl2 .= "</td>\n";
+				$cell_count--;
+			}
+
+			while ($cell_count--)
+			{
+				$tbl2 .= $this->opentag(array(
+					"name" => "td",
+					"align" => "center",
+					"classid" => $this->filter_normal,
+				));
+				$tbl2 .= "&nbsp;";
+				$tbl2 .= "</td>\n";
+			}
+
+			$tbl2 .= "</tr>\n";
+		}
+
 		$this->_sh_req_level--;
 		return $tbl.$tbl2;
 	}
-};
+
+	function get_automatic_filter ($field_name)
+	{
+		$filter = array ();
+
+		foreach ($this->data as $row)
+		{
+			$filter[] = $row[$field_name];
+		}
+
+		$filter = array_unique ($filter);
+		$filter = (count ($filter) > 1) ? $filter : array ();
+		return $filter;
+	}
+
+	function get_filter ($field_name)
+	{
+		### get filter values
+		if ($this->filters[$field_name]["filter"] === "automatic")
+		{
+			$filter = $this->get_automatic_filter ($field_name);
+		}
+		else
+		{
+			$filter = $this->filters[$field_name]["filter"];
+		}
+
+		### add "All" selection
+		$filter = array_merge (array (0 => t("Kõik")), $filter);
+
+		foreach ($this->selected_filters as $selected_filter_key => $filter_selection)
+		{
+			if ($selected_filter_key == $this->filters[$field_name]["key"])
+			{ ### add selected item to first position
+				$filter = array_merge (array ("_" => $filter[$filter_selection]), $filter);
+				$this->filters[$field_name]["active"] = true;
+				break;
+			}
+		}
+
+		$this->filters[$field_name]["filter"] = $filter;
+		return $filter;
+	}
+}
 
 // this is needed to make this work with get_instance
 class vcl_table extends aw_table
@@ -1781,7 +1994,7 @@ class vcl_table extends aw_table
 	{
 		return $this->aw_table($arr);
 	}
-	
+
 	function init_vcl_property($arr)
 	{
 		// I need access to class information!
@@ -1820,7 +2033,7 @@ class vcl_table extends aw_table
 
 		@comment
 			$args can contain:
-				
+
 				change_col - column name with change link to object
 	**/
 	function data_from_ol($ol, $args = array())
@@ -1871,7 +2084,7 @@ class vcl_table extends aw_table
 					$val = html::get_change_url($o->id(), array("return_url" => get_ru()), parse_obj_name($val));
 				}
 				$data[$v["name"]] = $val;
-			}			
+			}
 
 			if ($this->use_chooser)
 			{
@@ -1881,5 +2094,7 @@ class vcl_table extends aw_table
 			$this->define_data($data);
 		}
 	}
-};
+
+}
+
 ?>

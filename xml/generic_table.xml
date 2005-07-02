@@ -25,6 +25,9 @@
 <framebgcolor bgcolor="#E2E2DB" class="awmenuedittableframeclass"/>
 
 <tableattribs border="0" width="100%" cellspacing="1" cellpadding="3"/>
+
+<filter_normal   value="awmenuedittableFilterNormal"/>
+<filter_active   value="awmenuedittableFilterActive"/>
 </definitions>
 
 </tabledef>
