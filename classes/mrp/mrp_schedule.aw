@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.69 2005/06/25 10:22:19 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.70 2005/07/04 14:32:39 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -251,10 +251,11 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
+/* COPY JOBS FROM mrp_job TO mrp_schedule */
 // /* dbg */ if ($_GET["copyjobstoschedule"]==1){
 // /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
 // /* dbg */ while ($job = $this->db_next ()) {
-// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle();} exit;
+// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle();$i++} echo $i." t88d."; exit;
 // /* dbg */ }
 
 		$workspace_id = (int) $arr["mrp_workspace"];
@@ -266,7 +267,7 @@ class mrp_schedule extends class_base
 		else
 		{
 			error::raise(array(
-				"msg" => t("Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"),
+				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -278,7 +279,7 @@ class mrp_schedule extends class_base
 		if ($sem_id === false)
 		{
 			error::raise(array(
-				"msg" => t("Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"),
+				"msg" => t("Planeerimisluku käivitamine ebaõnnestus!"),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -289,14 +290,14 @@ class mrp_schedule extends class_base
 			if (!sem_remove($sem_id))
 			{
 				error::raise(array(
-					"msg" => t("Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
+					"msg" => t("Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
 					"fatal" => false,
 					"show" => false,
 				));
 			}
 
 			error::raise(array(
-				"msg" => t("Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!"),
+				"msg" => t("Planeerimiseks lukustamine ebaõnnestus!"),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -315,7 +316,7 @@ class mrp_schedule extends class_base
 			if (!sem_release($sem_id))
 			{
 				error::raise(array(
-					"msg" => t("Viga: planeerimisluku avamine ebaõnnestus!"),
+					"msg" => t("Planeerimisluku avamine ebaõnnestus!"),
 					"fatal" => false,
 					"show" => false,
 				));
@@ -324,7 +325,7 @@ class mrp_schedule extends class_base
 			if (!sem_remove($sem_id))
 			{
 				error::raise(array(
-					"msg" => t("Viga: planeerimisluku kustutamine ebaõnnestus!"),
+					"msg" => t("Planeerimisluku kustutamine ebaõnnestus!"),
 					"fatal" => false,
 					"show" => false,
 				));
@@ -673,7 +674,7 @@ class mrp_schedule extends class_base
 		if (!sem_release($sem_id))
 		{
 			error::raise(array(
-				"msg" => t("Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!"),
+				"msg" => t("Planeerimisluku avamine peale planeerimist ebaõnnestus!"),
 				"fatal" => false,
 				"show" => false,
 			));
@@ -682,7 +683,7 @@ class mrp_schedule extends class_base
 		if (!sem_remove($sem_id))
 		{
 			error::raise(array(
-				"msg" => t("Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
+				"msg" => t("Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
 				"fatal" => false,
 				"show" => false,
 			));
@@ -998,7 +999,7 @@ class mrp_schedule extends class_base
 		if (($weight === "NA") || ($selected_resource_tag === "NA"))
 		{
 			error::raise(array(
-				"msg" => t("Saatuslik viga: sobivat aega ei leidunud tervest kalendrist! resource-tag: [".$resource_tag."]"),
+				"msg" => t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: [".$resource_tag."]"),
 				"fatal" => false,
 				"show" => false,
 			));
