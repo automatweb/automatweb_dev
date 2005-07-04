@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.65 2005/05/19 10:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.66 2005/07/04 14:13:23 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -524,31 +524,31 @@ class mrp_resource extends class_base
 						$c = obj($p->prop("customer"));
 						$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
 					}
-				}
 
-				### show only applicable projects' jobs
-				$applicable_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_PAUSED,
-					MRP_STATUS_INPROGRESS,
-				);
+					### show only applicable projects' jobs
+					$applicable_states = array (
+						MRP_STATUS_PLANNED,
+						MRP_STATUS_PAUSED,
+						MRP_STATUS_INPROGRESS,
+					);
 
-				if (in_array ($p->prop ("state"), $applicable_states))
-				{
-					### colour job status
-					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-					$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
+					if (in_array ($p->prop ("state"), $applicable_states))
+					{
+						### colour job status
+						$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+						$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
 
-					$table->define_data (array (
-						"modify" => html::href (array (
-							"caption" => t("Ava"),
-							"url" => $change_url,
-							)),
-						"project" => $project,
-						"state" => $state,
-						"starttime" => $job->prop ("starttime"),
-						"client" => $client
-					));
+						$table->define_data (array (
+							"modify" => html::href (array (
+								"caption" => t("Ava"),
+								"url" => $change_url,
+								)),
+							"project" => $project,
+							"state" => $state,
+							"starttime" => $job->prop ("starttime"),
+							"client" => $client
+						));
+					}
 				}
 			}
 		}
@@ -1009,7 +1009,7 @@ class mrp_resource extends class_base
 			return false;
 		}
 
-		switch ($resource->prop ("state"))
+		/*switch ($resource->prop ("state"))
 		{
 			case MRP_STATUS_RESOURCE_AVAILABLE:
 				$thread_data = $resource->prop ("thread_data");
@@ -1049,7 +1049,7 @@ class mrp_resource extends class_base
 				$resource->set_prop ("thread_data", $thread_data);
 				aw_disable_acl();
 				$resource->save ();
-				aw_restore_acl();
+				aw_restore_acl();*/
 				//return $started;
 				$max_jobs = max(1, count($resource->prop("thread_data")));
 				$cur_jobs = $this->db_fetch_field("
@@ -1069,9 +1069,9 @@ class mrp_resource extends class_base
 					return false;
 				}
 				return true;
-			default:
+/*			default:
 				return false;
-		}
+		}*/
 	}
 
 /**

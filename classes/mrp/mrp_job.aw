@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.68 2005/05/16 12:10:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.69 2005/07/04 14:13:23 kristo Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -1257,7 +1257,6 @@ class mrp_job extends class_base
 		{
 			return false;
 		}
-
 		### check if resource is available
 		$resource = obj($job->prop("resource"));
 		$applicable_states = array (

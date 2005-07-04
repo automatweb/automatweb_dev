@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.123 2005/05/30 09:13:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.124 2005/07/04 14:13:23 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -4041,6 +4041,7 @@ if ($_GET['show_thread_data'] == 1)
 
 	function mrp_log($proj, $job, $msg, $comment = '')
 	{
+		$this->quote(&$comment);
 		$this->db_query("
 			INSERT INTO
 				mrp_log(

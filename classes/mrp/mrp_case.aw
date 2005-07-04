@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.78 2005/05/20 09:40:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.79 2005/07/04 14:13:22 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1172,8 +1172,12 @@ class mrp_case extends class_base
 			{
 				if (is_oid ($oid)) //!!! selle can view v6tsin 2ra, sest kui siin on viga siis edasiminekul andmete riknemine laieneb. samas ei saa korrektse systeemi puhul siin viga esineda. nimelt ei ole siinne kasutajainputiga otseselt seotud. voldemar 2/18/2005.
 				{
-					$prerequisite_job = obj ($oid);
-					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
+					// oled ikka kindel - terryf?
+					if ($this->can("view", $oid))
+					{
+						$prerequisite_job = obj ($oid);
+						$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
+					}
 				}
 			}
 
