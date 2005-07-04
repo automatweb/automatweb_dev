@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.70 2005/07/04 14:32:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.71 2005/07/04 14:34:41 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -252,11 +252,11 @@ class mrp_schedule extends class_base
 	function create ($arr)
 	{
 /* COPY JOBS FROM mrp_job TO mrp_schedule */
-// /* dbg */ if ($_GET["copyjobstoschedule"]==1){
-// /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
-// /* dbg */ while ($job = $this->db_next ()) {
-// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle();$i++} echo $i." t88d."; exit;
-// /* dbg */ }
+/* dbg */ if ($_GET["copyjobstoschedule"]==1){
+/* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
+/* dbg */ while ($job = $this->db_next ()) {
+/* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
+/* dbg */ }
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
