@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.76 2005/06/26 22:32:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.77 2005/07/05 09:06:57 duke Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1709,6 +1709,8 @@ class forum_v2 extends class_base
 		};
 		$arr["topic"] = $this->topic_id;
 		// see bloody finish_action kalab :(
+
+		aw_session_set("no_cache", 1);
 		return $this->finish_action($arr);
 	}
 	
@@ -1744,7 +1746,8 @@ class forum_v2 extends class_base
 			"message" => $arr["commtext"],
 			"forum_id" => $arr["id"],
 		));
-
+				
+		aw_session_set("no_cache", 1);
 		return $this->finish_action($arr);
 		/*
                 $this->comm_id = $t->submit($emb);
