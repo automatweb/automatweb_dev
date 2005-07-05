@@ -45,7 +45,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 		}
 		else
 		{
-			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = $oid AND status != 0");
+			$ret = $this->db_fetch_row("SELECT * FROM objects WHERE oid = '$oid' AND status != 0");
 /*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
 {
 die(dbg::dump($ret));
