@@ -916,6 +916,17 @@ class user extends class_base
 		));
 	}
 
+	function callback_on_load($arr)
+	{
+		$o = obj($arr["request"]["id"]);
+		if ($o->id() != $o->brother_of())
+		{
+			header("Location: ".aw_url_change_var("id", $o->brother_of()));
+			die();
+		}
+	}
+	
+
 	function callback_mod_retval($arr)
 	{
 		if ($arr["request"]["edit_acl"])
