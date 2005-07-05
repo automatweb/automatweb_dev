@@ -178,14 +178,23 @@
             <caption>Tulemused</caption>
       </property>
       <property>
-            <name>autofilter_delay</name>
+            <name>imap</name>
             <table>objects</table>
-            <group>rules_settings</group>
+            <group>imap</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Filtrite käivitamise intervall</caption>
-            <comment>Minutites</comment>
+            <type>releditor</type>
+            <reltype>RELTYPE_MAIL_SOURCE</reltype>
+            <rel_id>first</rel_id>
+            <props>
+                  <num_0>server</num_0>
+                  <num_1>port</num_1>
+                  <num_2>user</num_2>
+                  <num_3>password</num_3>
+                  <num_4>use_ssl</num_4>
+            </props>
+            <store>no</store>
+            <caption>IMAP</caption>
       </property>
       <property>
             <name>testfilters</name>
@@ -232,6 +241,10 @@
                   <caption>Lisaks</caption>
                   <parent>general</parent>
             </advanced>
+            <imap>
+                  <caption>IMAP</caption>
+                  <parent>general</parent>
+            </imap>
             <main_view>
                   <caption>Kirjad</caption>
                   <submit>no</submit>
