@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.48 2005/06/29 13:53:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.49 2005/07/05 09:25:34 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -121,7 +121,7 @@ class admin_folders extends aw_template
 		$treetype = aw_ini_get("menuedit.treetype");
 
 		$rn = empty($this->use_parent) ? $this->cfg["admin_rootmenu2"] : $this->use_parent;
-
+		
 		// FIXME: orders mk_my_orb to use empty arguments
 		$this->use_empty = true;
 
@@ -135,11 +135,10 @@ class admin_folders extends aw_template
 			//"persist_state" => true,
 			"get_branch_func" => $this->mk_my_orb("gen_folders",array("period" => $this->period, "parent" => "0"),"workbench"),
 		));
-
 		$awt->start("menu-list");
 		if ($this->tree->has_feature(LOAD_ON_DEMAND))
 		{
-			if (is_array($rn))
+			if (is_array($rn) && count($rn) > 1)
 			{
 				$tmp = $rn;
 				$rn = array_shift($tmp);
@@ -149,6 +148,12 @@ class admin_folders extends aw_template
 					$row["id"] = $row["oid"];
 					$this->tree->add_item($rn, $row);
 				}
+			}
+			else
+			if (is_array($rn))
+			{
+				$rn = reset($rn);
+				$other_parents = array();
 			}
 			else
 			{
@@ -272,7 +277,7 @@ class admin_folders extends aw_template
 		}
 
 		$this->_x_shown[cfg_get_admin_rootmenu2()] = true;
-
+								
 		// kodukataloom
 
 		if (empty($this->use_parent))
@@ -280,7 +285,6 @@ class admin_folders extends aw_template
 			$awt->start("home-folder");
 			$tr.=$this->mk_homefolder(&$arr);
 			$awt->stop("home-folder");
-
 
 			// shortcuts for the programs
 			$this->sufix = "ad";
@@ -292,7 +296,7 @@ class admin_folders extends aw_template
 		$awt->start("tree-gen");
 		$res = $this->tree->finalize_tree(array("rootnode" => $rn));
 		$awt->stop("tree-gen");
-
+		
 		if (!empty($this->use_parent))
 		{
 			print $res;
