@@ -12,25 +12,23 @@
             <name>img</name>
             <table>objects</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>releditor</type>
             <reltype>RELTYPE_PICTURE</reltype>
             <use_form>emb</use_form>
             <rel_id>first</rel_id>
             <store>no</store>
+            <field>img</field>
             <caption>Pilt</caption>
       </property>
       <property>
             <name>utextarea1</name>
-            <table>objects</table>
+            <table>planner</table>
             <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>textarea</type>
             <cols>90</cols>
             <rows>10</rows>
             <trans>1</trans>
+            <field>utextarea1</field>
             <caption>Kirjeldus</caption>
       </property>
       <property>
