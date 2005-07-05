@@ -1,0 +1,241 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>closed_part_table</name>
+            <table>objects</table>
+            <group>parts_closed</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Kinnise osa tabel</caption>
+      </property>
+      <property>
+            <name>open_part_table</name>
+            <table>objects</table>
+            <group>parts_open</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Lahtise osa tabel</caption>
+      </property>
+      <property>
+            <name>open_part_add_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Lahtise osa lisatasu kaldp&amp;ouml;&amp;ouml;rdavanemise korral </caption>
+      </property>
+      <property>
+            <name>glass_sqm_add_price_for3layer</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Klaasi ruutmeetri hinnalisa 3-kordse paketi puhul </caption>
+      </property>
+      <property>
+            <name>one_side_painted_sqm_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Ruutmeetri hind ühelt poolt värvitud aknale </caption>
+      </property>
+      <property>
+            <name>two_side_painted_sqm_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Ruutmeetri hind m&amp;otilde;lemalt poolt v&amp;auml;rvitud aknale</caption>
+      </property>
+      <property>
+            <name>board_price_table</name>
+            <table>objects</table>
+            <group>board</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Aknalaua hinnatabel (1 meetri hind aknalaua paksuse kohta, akna laiusele lisatakse 6 cm) </caption>
+      </property>
+      <property>
+            <name>board_lining_price_table</name>
+            <table>objects</table>
+            <group>board</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Veepleki hinnatabel (meetrihind, täpselt akna laius). </caption>
+      </property>
+      <property>
+            <name>install_price_per_sqm</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Paigalduse hind (akna ruutmeetri kohta) </caption>
+      </property>
+      <property>
+            <name>install_price_add_for_replace</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Paigalduse lisatasu asendamise korral</caption>
+      </property>
+      <property>
+            <name>finish_price_per_sqm</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Viimistluse hind (akna ruutmeetri kohta)</caption>
+      </property>
+      <property>
+            <name>min_area_for_install</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>min_pr_l</parent>
+            <caption>Kui pindala on alla </caption>
+      </property>
+      <property>
+            <name>min_area_for_install_price</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>min_pr_l</parent>
+            <caption>siis paigalduse hind on</caption>
+      </property>
+      <property>
+            <name>min_area_for_finish</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>min_pr_l_p</parent>
+            <caption>Kui pindala on alla </caption>
+      </property>
+      <property>
+            <name>min_area_for_finish_price</name>
+            <table>objects</table>
+            <group>install</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>min_pr_l_p</parent>
+            <caption>siis viimistluse hind on</caption>
+      </property>
+      <property>
+            <name>discount_tbl</name>
+            <table>objects</table>
+            <group>discount</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <caption>Allahindluse tabel</caption>
+      </property>
+      <property>
+            <name>door_full_glass_per_sqm</name>
+            <table>objects</table>
+            <group>door</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>T&amp;auml;isklaasist</caption>
+      </property>
+      <property>
+            <name>door_closed_shield</name>
+            <table>objects</table>
+            <group>door</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Kinnine kilp lisab X EEK</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SHOP_PRICE_MODIFIER_WINDOW</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <parts>
+                  <caption>Aken</caption>
+            </parts>
+            <parts_closed>
+                  <caption>Kinnise osa tabel</caption>
+                  <parent>parts</parent>
+            </parts_closed>
+            <parts_open>
+                  <caption>Lahtise osa tabel</caption>
+                  <parent>parts</parent>
+            </parts_open>
+            <parts_other>
+                  <caption>Muud</caption>
+                  <parent>parts</parent>
+            </parts_other>
+            <board>
+                  <caption>Aknalaud</caption>
+            </board>
+            <install>
+                  <caption>Viimistlus ja paigaldus</caption>
+            </install>
+            <discount>
+                  <caption>Allahindlus</caption>
+            </discount>
+            <door>
+                  <caption>R&amp;otilde;duuks</caption>
+            </door>
+      </groupinfo>
+      <layout>
+            <min_pr_l>
+                  <type>hbox</type>
+                  <width>
+                  <![CDATA["20%:90%"]]>
+                  </width>
+                  <group>install</group>
+            </min_pr_l>
+            <min_pr_l_p>
+                  <type>hbox</type>
+                  <width>
+                  <![CDATA["20%:90%"]]>
+                  </width>
+                  <group>install</group>
+            </min_pr_l_p>
+      </layout>
+</properties>
+

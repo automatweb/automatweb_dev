@@ -35,6 +35,17 @@
             <caption>Mitu peab korraga tellima</caption>
       </property>
       <property>
+            <name>price_settings</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <reltype>RELTYPE_PRICE_SETTINGS</reltype>
+            <caption>Hinnakujundus</caption>
+      </property>
+      <property>
             <name>userch1</name>
             <table>aw_shop_products</table>
             <group>data</group>
@@ -455,6 +466,36 @@
             <caption>User-defined var (multiple) 5</caption>
       </property>
       <property>
+            <name>uservarm6</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm6</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM6</reltype>
+            <caption>User-defined var (multiple) 6</caption>
+      </property>
+      <property>
+            <name>uservarm7</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm7</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM7</reltype>
+            <caption>User-defined var (multiple) 7</caption>
+      </property>
+      <property>
+            <name>uservarm8</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm8</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM8</reltype>
+            <caption>User-defined var (multiple) 8</caption>
+      </property>
+      <property>
             <name>packaging</name>
             <table>objects</table>
             <group>packaging</group>
@@ -669,6 +710,29 @@
                   <clid>CL_KEYWORD</clid>
                   <caption>v&amp;otilde;tmes&amp;otilde;na</caption>
             </KW>
+            <VARUSERM6>
+                  <value>12</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 6</caption>
+            </VARUSERM6>
+            <VARUSERM7>
+                  <value>13</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 7</caption>
+            </VARUSERM7>
+            <VARUSERM8>
+                  <value>14</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 8</caption>
+            </VARUSERM8>
+            <PRICE_SETTINGS>
+                  <value>15</value>
+                  <clid>
+                        <num_0>CL_SHOP_PRICE_MODIFIER</num_0>
+                        <num_1>CL_SHOP_PRICE_MODIFIER_WINDOW</num_1>
+                  </clid>
+                  <caption>hinnakujundus</caption>
+            </PRICE_SETTINGS>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.29 2005/06/03 08:21:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.30 2005/07/05 08:35:16 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -616,6 +616,7 @@ class shop_order_center extends class_base
 			"parent" => $section,
 			"only_active" => $soc->prop("only_active_items")
 		));
+
 		$this->do_sort_packet_list($pl, $soc->meta("itemsorts"));
 		
 		// get the template for products for this folder

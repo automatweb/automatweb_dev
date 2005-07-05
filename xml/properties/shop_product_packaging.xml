@@ -184,6 +184,8 @@
             <group>data</group>
             <type>classificator</type>
             <field>uservar1</field>
+            <store>connect</store>
+            <reltype>RELTYPE_USERVAR1</reltype>
             <caption>User-defined var 1</caption>
       </property>
       <property>
@@ -192,6 +194,8 @@
             <group>data</group>
             <type>classificator</type>
             <field>uservar2</field>
+            <store>connect</store>
+            <reltype>RELTYPE_USERVAR2</reltype>
             <caption>User-defined var 2</caption>
       </property>
       <property>
@@ -200,6 +204,8 @@
             <group>data</group>
             <type>classificator</type>
             <field>uservar3</field>
+            <store>connect</store>
+            <reltype>RELTYPE_USERVAR3</reltype>
             <caption>User-defined var 3</caption>
       </property>
       <property>
@@ -208,6 +214,8 @@
             <group>data</group>
             <type>classificator</type>
             <field>uservar4</field>
+            <store>connect</store>
+            <reltype>RELTYPE_USERVAR4</reltype>
             <caption>User-defined var 4</caption>
       </property>
       <property>
@@ -216,6 +224,8 @@
             <group>data</group>
             <type>classificator</type>
             <field>uservar5</field>
+            <store>connect</store>
+            <reltype>RELTYPE_USERVAR5</reltype>
             <caption>User-defined var 5</caption>
       </property>
       <property>
@@ -337,6 +347,31 @@
                   <clid>CL_FILE</clid>
                   <caption>fail</caption>
             </FILE>
+            <USERVAR1>
+                  <value>3</value>
+                  <clid>CL_META</clid>
+                  <caption>muutuja1</caption>
+            </USERVAR1>
+            <USERVAR2>
+                  <value>4</value>
+                  <clid>CL_META</clid>
+                  <caption>muutuja2</caption>
+            </USERVAR2>
+            <USERVAR3>
+                  <value>5</value>
+                  <clid>CL_META</clid>
+                  <caption>muutuja3</caption>
+            </USERVAR3>
+            <USERVAR4>
+                  <value>6</value>
+                  <clid>CL_META</clid>
+                  <caption>muutuja4</caption>
+            </USERVAR4>
+            <USERVAR5>
+                  <value>7</value>
+                  <clid>CL_META</clid>
+                  <caption>muutuja5</caption>
+            </USERVAR5>
       </reltypes>
 </properties>
 

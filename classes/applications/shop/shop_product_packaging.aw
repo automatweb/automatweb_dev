@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.19 2005/06/27 12:11:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_product_packaging.aw,v 1.20 2005/07/05 08:35:16 kristo Exp $
 // shop_product_packaging.aw - Toote pakend 
 /*
 
@@ -85,19 +85,19 @@
 @caption User-defined ta 5
 
 
-@property uservar1 type=classificator field=uservar1 group=data
+@property uservar1 type=classificator field=uservar1 group=data store=connect reltype=RELTYPE_USERVAR1
 @caption User-defined var 1
 
-@property uservar2 type=classificator field=uservar2 group=data
+@property uservar2 type=classificator field=uservar2 group=data store=connect reltype=RELTYPE_USERVAR2
 @caption User-defined var 2
 
-@property uservar3 type=classificator field=uservar3 group=data
+@property uservar3 type=classificator field=uservar3 group=data store=connect reltype=RELTYPE_USERVAR3
 @caption User-defined var 3
 
-@property uservar4 type=classificator field=uservar4 group=data
+@property uservar4 type=classificator field=uservar4 group=data store=connect reltype=RELTYPE_USERVAR4
 @caption User-defined var 4
 
-@property uservar5 type=classificator field=uservar5 group=data
+@property uservar5 type=classificator field=uservar5 group=data store=connect reltype=RELTYPE_USERVAR5
 @caption User-defined var 5
 
 @property images type=releditor reltype=RELTYPE_IMAGE table=objects field=meta method=serialize mode=manager props=name,ord,status,file group=img
@@ -127,6 +127,21 @@
 
 @reltype FILE value=2 clid=CL_FILE
 @caption fail
+
+@reltype USERVAR1 value=3 clid=CL_META
+@caption muutuja1
+
+@reltype USERVAR2 value=4 clid=CL_META
+@caption muutuja2
+
+@reltype USERVAR3 value=5 clid=CL_META
+@caption muutuja3
+
+@reltype USERVAR4 value=6 clid=CL_META
+@caption muutuja4
+
+@reltype USERVAR5 value=7 clid=CL_META
+@caption muutuja5
 
 */
 
@@ -279,7 +294,7 @@ class shop_product_packaging extends class_base
 		for($i = 1; $i < 21; $i++)
 		{
 			$tmp = $prod->prop("uservar".$i);
-			if ($tmp)
+			if (is_oid($tmp) && $this->can("view", $tmp))
 			{
 				$tmp = obj($tmp);
 				$tmp = $tmp->name();

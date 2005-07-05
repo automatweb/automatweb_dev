@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="shop_price_modifier_window" folder="applications/shop/price_modifiers" extends="class_base">
+	</class>
+</orb>
+		
