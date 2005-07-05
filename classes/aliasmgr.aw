@@ -1,6 +1,6 @@
 <?php
 // aliasmgr.aw - Alias Manager
-// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.185 2005/07/01 09:09:26 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/aliasmgr.aw,v 2.186 2005/07/05 09:43:00 kristo Exp $
 
 class aliasmgr extends aw_template
 {
@@ -784,7 +784,27 @@ class aliasmgr extends aw_template
 			$_a_parent = $obj->parent();
 		}
 
+		$defcs = array(CL_IMAGE => "image.default_folder", CL_FILE => "file.default_folder", CL_EXTLINK => "links.default_folder");
+		$def_str = "";
+		foreach($defcs as $def_clid => $def_ini)
+		{
+			$def_val = aw_ini_get($def_ini);
+			if (is_oid($def_val) && $this->can("view", $def_val) && $this->can("add", $def_val))
+			{
+				$this->vars(array(
+					"parent" => $def_val,
+					"period" => $period,
+					"id" => $id,
+					"return_url" => $return_url,
+					"def_fld_clid" => $def_clid
+				));
+				$def_str .= $this->parse("HAS_DEF_FOLDER");
+			}
+		}
+
+
 		$this->vars(array(
+			"HAS_DEF_FOLDER" => $def_str,
 			"class_ids" => $clids,
 			"table" => $this->t->draw(),
 			"id" => $id,

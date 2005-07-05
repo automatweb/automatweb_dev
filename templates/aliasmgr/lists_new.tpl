@@ -30,13 +30,21 @@ var clids = new Array();
 	with(document.foo)
 	{
 		cl = aselect.options[aselect.selectedIndex].value;
+		rel_type = reltype.options[reltype.selectedIndex].value;
+
 		if (cl == "capt_new_object")
 		{
 			alert('Vali objekti tüüp!');
 		}
 		else
+		<!-- SUB: HAS_DEF_FOLDER -->
+		if (cl == {VAR:def_fld_clid})
 		{
-			rel_type = reltype.options[reltype.selectedIndex].value;
+			window.location.href="orb.{VAR:ext}?class=" + clids[cl] + "&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
+		}
+		else
+		<!-- END SUB: HAS_DEF_FOLDER -->
+		{
 			window.location.href="orb.{VAR:ext}?class=" + clids[cl] + "&action=new&parent={VAR:parent}&period={VAR:period}&alias_to={VAR:id}&return_url={VAR:return_url}&reltype=" + rel_type;
 		};
 	};

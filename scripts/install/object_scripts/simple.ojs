@@ -50,6 +50,10 @@ $root = obj{ class_id=CL_MENU, parent=${parent}, name="Klient", type=MN_CLIENT, 
 
 				$cont = obj { class_id=CL_MENU, parent=${ctmt}, name="Konteinerid", type=MN_CLIENT, status=STAT_ACTIVE }
 
+				$img_def = obj { class_id=CL_MENU, parent=${ctmt}, name="Pildid", type=MN_CLIENT, status=STAT_ACTIVE }
+				$file_def = obj { class_id=CL_MENU, parent=${ctmt}, name="Failid", type=MN_CLIENT, status=STAT_ACTIVE }
+				$link_def = obj { class_id=CL_MENU, parent=${ctmt}, name="Lingid", type=MN_CLIENT, status=STAT_ACTIVE }
+
 
 			obj { class_id=CL_MENU, parent=${aw_obj}, name="Interaktiivne", type=MN_CLIENT, jrk="20", status=STAT_NOTACTIVE }
 			obj { class_id=CL_MENU, parent=${aw_obj}, name="Tugiteenused", type=MN_CLIENT, jrk="30", status=STAT_NOTACTIVE }
@@ -122,3 +126,7 @@ ini { debug_mode = 1 }
 ini { menuedit.recursive_aliases = 1 }
 
 ini { menuedit.long_menu_aliases = 1 }
+
+ini { image.default_folder = ${img_def} }
+ini { file.default_folder = ${file_def} }
+ini { links.default_folder = ${link_def} }
