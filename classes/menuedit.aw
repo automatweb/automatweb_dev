@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.348 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menuedit.aw,v 2.349 2005/07/05 08:35:51 kristo Exp $
 // menuedit.aw - menuedit. heh.
 
 class menuedit extends aw_template
@@ -502,7 +502,7 @@ class menuedit extends aw_template
 		else 
 		{
 			// mingi kontroll, et kui sektsioon ei eksisteeri, siis n?tame esilehte
-			if (!(($section > 0) && $this->can("view", $section))) 
+			if (!(($section > 0) && is_oid($section) && $this->can("view", $section))) 
 			{
 				$this->_log(ST_MENUEDIT, SA_NOTEXIST,sprintf(LC_MENUEDIT_TRIED_ACCESS2,$section), $section);
 				if ($show_errors)
