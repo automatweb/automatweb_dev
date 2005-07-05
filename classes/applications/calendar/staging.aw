@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.12 2005/06/16 11:01:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.13 2005/07/05 14:30:47 duke Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -11,11 +11,15 @@
 @property start1 type=date_chooser field=start table=planner
 @caption Algab
 
-@default field=meta 
-@default method=serialize
 
 @property img type=releditor reltype=RELTYPE_PICTURE use_form=emb rel_id=first
 @caption Pilt
+
+@property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner 
+@caption Kirjeldus
+
+@default field=meta 
+@default method=serialize
 
 layout grid1 type=grid cols=2 rows=5 group=general
 default layout=grid1
@@ -36,8 +40,6 @@ property utextbox7 type=textbox no_caption=1
 
 property utextbox8 type=textbox no_caption=1
 
-@property utextarea1 type=textarea cols=90 rows=10 trans=1
-@caption Kirjeldus
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
