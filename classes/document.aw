@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.334 2005/06/15 13:45:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.335 2005/07/05 13:01:14 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -886,11 +886,6 @@ class document extends aw_template
 			$al->parse_oo_aliases($doc["docid"],&$doc["user2"],array("templates" => &$this->templates,"meta" => &$meta));
 		}
 
-		if ($_GET["XX5"])
-		{
-			arr($doc);
-		};
-
 		// where do I put that shit? that break conversion thingie?
 		if ($doc["nobreaks"] || $doc["meta"]["cb_nobreaks"]["content"])	// kui wysiwyg editori on kasutatud, siis see on 1 ja pole vaja breike lisada
 		{
@@ -905,12 +900,8 @@ class document extends aw_template
 
 		$awt->start("almgr-parse-oo-aliases");
 		$awt->count("almgr-parse-oo-aliases");
-		global $XX3;
-		if ($XX3)
-		{
-			arr($doc["content"]);
-		};	
 		$al->parse_oo_aliases($doc["docid"],&$doc["content"],array("templates" => &$this->templates,"meta" => &$meta));
+
 		$awt->stop("almgr-parse-oo-aliases");
 		$this->vars($al->get_vars());
 
