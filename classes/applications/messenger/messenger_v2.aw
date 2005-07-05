@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.9 2005/07/01 12:08:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/messenger_v2.aw,v 1.10 2005/07/05 11:54:41 duke Exp $
 // messenger_v2.aw - Messenger V2 
 /*
 
@@ -73,10 +73,13 @@ caption Identiteet
 @property s_results type=table no_caption=1
 @caption Tulemused
 
+@property imap type=releditor reltype=RELTYPE_MAIL_SOURCE rel_id=first props=server,port,user,password,use_ssl group=imap
+@caption IMAP
+
 @default group=rules_settings
-@property autofilter_delay type=select
-@caption Filtrite käivitamise intervall
-@comment Minutites
+property autofilter_delay type=select
+caption Filtrite käivitamise intervall
+comment Minutites
 
 @property testfilters type=text 
 @caption Testi filtreid
@@ -86,6 +89,7 @@ caption Identiteet
 
 @groupinfo settings caption="Seaded" parent=general
 @groupinfo advanced caption="Lisaks" parent=general
+@groupinfo imap caption="IMAP" parent=general
 @groupinfo main_view caption="Kirjad" submit=no 
 @groupinfo search caption=Otsing submit=no submit_action=change submit_method=GET
 @groupinfo rules caption=Reeglid submit=no
