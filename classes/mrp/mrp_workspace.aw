@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.124 2005/07/04 14:13:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.125 2005/07/05 10:50:34 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3321,7 +3321,7 @@ if ($_GET['show_thread_data'] == 1)
 		));
 
 		$per_page = $arr["obj_inst"]->prop("pv_per_page");
-
+		$proj_states = false;
 		$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",".$per_page;
 		switch ($arr["request"]["group"])
 		{
@@ -3339,6 +3339,7 @@ if ($_GET['show_thread_data'] == 1)
 			case "grp_printer_current":
 				$default_sortby = "mrp_job.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_in_progress":
@@ -3352,6 +3353,7 @@ if ($_GET['show_thread_data'] == 1)
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 		}
+
 
 		$sby = $arr["request"]["sortby"];
 		if ($sby == "")
@@ -3402,7 +3404,8 @@ if ($_GET['show_thread_data'] == 1)
 			"resources" => $res,
 			"limit" => $limit,
 			"states" => $states,
-			"sort_by" => $sby
+			"sort_by" => $sby,
+			"proj_states" => $proj_states
 		));
 
 		$workers = $this->get_workers_for_resources($res);
@@ -3759,6 +3762,10 @@ if ($_GET['show_thread_data'] == 1)
 		}
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
+		if ($arr["proj_states"])
+		{
+			$filt["CL_MRP_JOB.project(CL_MRP_CASE).state"] = $arr["states"];
+		}
 		$jobs = new object_list($filt);
 		$ret = array();
 		foreach($jobs->arr() as $o)
