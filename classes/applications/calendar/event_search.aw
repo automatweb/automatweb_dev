@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.68 2005/06/27 13:49:33 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.69 2005/07/06 09:08:50 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -811,7 +811,7 @@ class event_search extends class_base
 		{
 			$search["parent"] = $parx2 = array();
 			$search["sort_by"] = "planner.start";
-			$search["class_id"] = array(CL_CALENDAR_EVENT, CL_CRM_MEETING);
+			$search["class_id"] = array(CL_STAGING,CL_CALENDAR_EVENT, CL_CRM_MEETING);
 			$par1 = array();
 			$par2 = array();
 			if($search_p1 || $search_p2)
@@ -955,7 +955,7 @@ class event_search extends class_base
 					{
 						$ol = new object_list(array(
 							"oid" => $ids,
-							"class_id" => array(CL_CRM_MEETING, CL_CALENDAR_EVENT),
+							"class_id" => array(CL_STAGING,CL_CRM_MEETING, CL_CALENDAR_EVENT),
 							"start1" => new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, ($end_tm + 3600*24)),
 							"sort_by" => "planner.start",
 							"lang_id" => array(),
@@ -1487,6 +1487,40 @@ class event_search extends class_base
                         );
                 };
 		return $ret;
+	}
+
+	/**
+		@attrib name=convert_evx
+	**/
+	function convert_evx($arr)
+	{
+		$sql = "SELECT objects.oid,metadata,planner.utextarea1 AS ua FROM objects,planner  WHERE objects.oid = planner.id AND class_id = 831";
+		$this->db_query($sql);
+		while($row = $this->db_next())
+		{
+			if (empty($row["metadata"]))
+			{
+				continue;
+			};
+			$old = aw_unserialize($row["metadata"]);
+			$old_txt = $old["utextarea1"];
+			if (empty($old_txt))
+			{
+				continue;
+			};
+			$this->save_handle();
+			$sql = "UPDATE planner SET utextarea1 = '$old_txt' WHERE id = '" . $row["oid"] . "'";
+			$this->db_query($sql);
+			$this->restore_handle();
+			print "sql = $sql<br>";
+			print "ox = $old_txt<br>";
+			print "<pre>";
+			print_r($row);
+			print "</pre>";
+		};
+		print "all done<br>";
+
+
 	}
 }
 ?>
