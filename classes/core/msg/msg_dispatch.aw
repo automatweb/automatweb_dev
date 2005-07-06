@@ -23,8 +23,10 @@ class msg_dispatch extends class_base
 		));
 
 		$handlers = $this->_get_handlers_for_message($arr["msg"]);
+
 		foreach($handlers as $handler)
 		{
+			print "calling $class / $func <br>";
 			$class = $handler["class"];
 			$func = $handler["func"];
 			$inst = get_instance($handler["class"]);
@@ -58,12 +60,13 @@ class msg_dispatch extends class_base
 		$handlers = $this->_get_handlers_for_message($arr["msg"]);
 		foreach($handlers as $handler)
 		{
-			if (defined($handler["param"]))
+			if (!empty($handler["param"]) && defined($handler["param"]))
 			{
 				$handler["param"] = constant($handler["param"]);
 			}
-			if ($handler["param"] == $arr["param"])
+			if (empty($handler["param"]) || $handler["param"] == $arr["param"])
 			{
+				print "calling $class / $func<br>";
 				$class = $handler["class"];
 				$func = $handler["func"];
 				$inst = get_instance($handler["class"]);
