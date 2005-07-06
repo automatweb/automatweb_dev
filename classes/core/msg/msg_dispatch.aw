@@ -26,7 +26,6 @@ class msg_dispatch extends class_base
 
 		foreach($handlers as $handler)
 		{
-			print "calling $class / $func <br>";
 			$class = $handler["class"];
 			$func = $handler["func"];
 			$inst = get_instance($handler["class"]);
@@ -66,7 +65,6 @@ class msg_dispatch extends class_base
 			}
 			if (empty($handler["param"]) || $handler["param"] == $arr["param"])
 			{
-				print "calling $class / $func<br>";
 				$class = $handler["class"];
 				$func = $handler["func"];
 				$inst = get_instance($handler["class"]);
