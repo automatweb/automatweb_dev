@@ -1,91 +1,113 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>status</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>name</name>
             <group>general</group>
+            <type>textbox</type>
+            <table>objects</table>
+            <field>name</field>
+            <caption>Lühikirjeldus</caption>
+      </property>
+      <property>
+            <name>bug_content</name>
+            <group>general</group>
+            <table>aw_bugs</table>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>80</cols>
+            <field>bug_content</field>
+            <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>bug_status</name>
+            <group>general</group>
+            <table>aw_bugs</table>
             <type>select</type>
-            <field>status</field>
+            <field>bug_status</field>
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>priority</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>bug_priority</name>
             <group>general</group>
+            <table>aw_bugs</table>
             <type>select</type>
-            <field>priority</field>
+            <field>bug_priority</field>
             <caption>Prioriteet</caption>
       </property>
       <property>
-            <name>severity</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>bug_severity</name>
             <group>general</group>
+            <table>aw_bugs</table>
             <type>select</type>
-            <field>severity</field>
+            <field>bug_severity</field>
             <caption>T&amp;ouml;sidus</caption>
       </property>
       <property>
-            <name>reporter_browser</name>
-            <table>aw_bug_o_matic_bugs</table>
-            <group>general</group>
-            <type>classificator</type>
-            <field>reporter_browser</field>
-            <caption>Brauser</caption>
-      </property>
-      <property>
-            <name>reporter_os</name>
-            <table>aw_bug_o_matic_bugs</table>
-            <group>general</group>
-            <type>classificator</type>
-            <field>reporter_os</field>
-            <caption>OS</caption>
-      </property>
-      <property>
             <name>bug_class</name>
-            <table>aw_bug_o_matic_bugs</table>
             <group>general</group>
+            <table>aw_bugs</table>
             <type>select</type>
             <field>bug_class</field>
             <caption>Klass</caption>
       </property>
       <property>
-            <name>component</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>bug_component</name>
             <group>general</group>
+            <table>aw_bugs</table>
             <type>textbox</type>
-            <field>component</field>
+            <field>bug_component</field>
             <caption>Komponent</caption>
       </property>
       <property>
-            <name>url</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>bug_url</name>
             <group>general</group>
+            <table>aw_bugs</table>
             <type>textbox</type>
             <size>100</size>
-            <field>url</field>
+            <field>bug_url</field>
             <caption>URL</caption>
       </property>
       <property>
-            <name>content</name>
-            <table>aw_bug_o_matic_bugs</table>
+            <name>bug_mail</name>
             <group>general</group>
-            <type>textarea</type>
-            <rows>5</rows>
-            <cols>80</cols>
-            <field>content</field>
-            <caption>Sisu</caption>
+            <table>aw_bugs</table>
+            <type>textbox</type>
+            <size>60</size>
+            <field>bug_mail</field>
+            <caption>Bugmail CC</caption>
+      </property>
+      <property>
+            <name>comms</name>
+            <group>comments</group>
+            <table>aw_bugs</table>
+            <type>comments</type>
+            <store>no</store>
+            <field>comms</field>
+            <caption>Kommentaarid</caption>
       </property>
       <classinfo>
             <syslog_type>ST_BUG</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
       </classinfo>
+      <groupinfo>
+            <comments>
+                  <caption>Kommentaarid</caption>
+            </comments>
+      </groupinfo>
       <tableinfo>
-            <aw_bug_o_matic_bugs>
-                  <index>id</index>
+            <aw_bugs>
+                  <index>aw_id</index>
                   <master_index>brother_of</master_index>
                   <master_table>objects</master_table>
-            </aw_bug_o_matic_bugs>
+            </aw_bugs>
       </tableinfo>
+      <reltypes>
+            <MONITOR>
+                  <value>1</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>Jälgija</caption>
+            </MONITOR>
+      </reltypes>
 </properties>
 
