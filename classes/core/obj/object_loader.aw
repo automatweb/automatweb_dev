@@ -324,6 +324,10 @@ class _int_object_loader extends core
 			"oid" => $t_oid
 		));
 
+		post_message(MSG_STORAGE_SAVE, array(
+			"oid" => $t_oid
+		));
+
 		return $t_oid;
 	}
 
