@@ -31,6 +31,16 @@
             <store>no</store>
       </property>
       <property>
+            <name>cfs_entry_tbl</name>
+            <table>objects</table>
+            <group>cfs_entry_tbl</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+      </property>
+      <property>
             <name>mail_to</name>
             <table>objects</table>
             <group>mail_settings_general</group>
@@ -211,6 +221,10 @@
                   <caption>Pealkirjad</caption>
                   <parent>cfs</parent>
             </cfs_headers>
+            <cfs_entry_tbl>
+                  <caption>Andmete tabel</caption>
+                  <parent>cfs</parent>
+            </cfs_entry_tbl>
             <mail_settings>
                   <caption>Meiliseaded</caption>
             </mail_settings>

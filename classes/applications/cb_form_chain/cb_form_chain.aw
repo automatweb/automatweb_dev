@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.9 2005/06/28 14:43:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.10 2005/07/06 12:26:42 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -20,6 +20,10 @@
 @default group=cfs_headers
 
 	@property cfs_headers type=table no_caption=1
+
+@default group=cfs_entry_tbl
+
+	@property cfs_entry_tbl type=table no_caption=1
 
 @default group=mail_settings_general
 
@@ -81,6 +85,7 @@
 @groupinfo cfs caption="Vormid"
 	@groupinfo cfs_tbl caption="Vormid" parent=cfs
 	@groupinfo cfs_headers caption="Pealkirjad" parent=cfs
+	@groupinfo cfs_entry_tbl caption="Andmete tabel" parent=cfs
 
 @groupinfo mail_settings caption="Meiliseaded"
 	@groupinfo mail_settings_general caption="Tellimuse meil" parent=mail_settings
@@ -165,6 +170,10 @@ class cb_form_chain extends class_base
 			case "entry_table":
 				$this->_entry_table($arr);
 				break;
+
+			case "cfs_entry_tbl":
+				$this->_cfs_entry_tbl($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -197,6 +206,10 @@ class cb_form_chain extends class_base
 
 			case "cfs_headers":
 				$arr["obj_inst"]->set_meta("cfs_headers", $arr["request"]["hdrs"]);
+				break;
+
+			case "cfs_entry_tbl":
+				$arr["obj_inst"]->set_meta("entry_tbl", $arr["request"]["t"]);
 				break;
 		}
 		return $retval;
@@ -1192,6 +1205,10 @@ class cb_form_chain extends class_base
 						unset($props[$k]);
 						continue;
 					}
+					if ($cpv != "")
+					{
+						$props[$k]["value"] = $cpv;
+					}
 				}
 			}
 		}
@@ -1205,6 +1222,7 @@ class cb_form_chain extends class_base
 			$i = $num_to_show;
 			$form_dat["rep_cnt"] = $i+1;
 		}
+
 		for(; $i < $form_dat["rep_cnt"]; $i++)
 		{
 			if ((!is_array($_SESSION["cbfc_data"][$wf->id()][$i])) && $form_dat["def_ctr"])
@@ -1227,7 +1245,14 @@ class cb_form_chain extends class_base
 						"store" => "no"
 					);
 				}
-				$v["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+				if ($v["subtitle"] != 1)
+				{
+					$v["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
+				}
+				else
+				{
+					$v["value"] = nl2br($v["value"]);
+				}
 
 				// if it is a text type property, insert a hidden element after the text so that the value gets submitted
 				if ($v["type"] == "text")
@@ -1407,6 +1432,9 @@ class cb_form_chain extends class_base
 
 	function _display_entry_data_table($form_dat, $props, $wf, $o)
 	{
+		$dat = safe_array($o->meta("entry_tbl"));
+
+		$nprops = array();
 		// for all entries for this form
 		$row = "";
 		for($i = 0; $i < $form_dat["rep_cnt"]; $i++)
@@ -1415,10 +1443,14 @@ class cb_form_chain extends class_base
 			$col = "";
 			foreach($props as $pn => $pd)
 			{
-				$this->vars(array(
-					"content" => $this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn])
-				));
-				$col .= $this->parse("DT_COL");
+				if ($dat[$wf->id()][$pn]["show"] == 1)
+				{
+					$this->vars(array(
+						"content" => $this->_value_from_data($pd, $_SESSION["cbfc_data"][$wf->id()][$i][$pn])
+					));
+					$col .= $this->parse("DT_COL");
+					$nprops[$pn] = $pd;
+				}
 			}
 
 			$this->vars(array(
@@ -1437,7 +1469,7 @@ class cb_form_chain extends class_base
 		
 
 		$this->vars(array(
-			"DT_HEADER" => $this->_get_data_table_header($props),
+			"DT_HEADER" => $this->_get_data_table_header($nprops),
 			"DT_ROW" => $row
 		));
 
@@ -1469,6 +1501,54 @@ class cb_form_chain extends class_base
 	function _can_show_edit_form($form_dat)
 	{
 		return max($_GET["edit_num"], 1);
+	}
+
+	function _init_cfs_entry_tbl(&$t)
+	{
+		$t->define_field(array(
+			"name" => "prop",
+			"caption" => t("Omadus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "in_tbl",
+			"caption" => t("N&auml;ita tabelis"),
+			"align" => "center"
+		));
+	}
+
+	function _cfs_entry_tbl($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_cfs_entry_tbl($t);
+
+		$dat = safe_array($arr["obj_inst"]->meta("entry_tbl"));
+		$d = safe_array($arr["obj_inst"]->meta("d"));
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_CF")) as $c)
+		{
+			if ($d[$c->prop("to")]["data_table"] == 1)
+			{
+				$els = $this->get_el_picker_from_wf($c->to());
+				foreach($els as $pn => $pc)
+				{
+					if ($pn != "")
+					{
+						$t->define_data(array(
+							"prop" => $pc,
+							"in_tbl" => html::checkbox(array(
+								"name" => "t[".$c->prop("to")."][$pn][show]",
+								"value" => 1,
+								"checked" => ($dat[$c->prop("to")][$pn]["show"] == 1)
+							))
+						));
+					}
+				}
+			}
+		}
+
+		$t->set_sortable(false);
 	}
 }
 ?>
