@@ -1,6 +1,6 @@
 connection class - with this you can manage connections (aliases)
 normally, you do not create these objects yourself, instead you get them from the object class, from the connections() method, except
-if you want to search for connections, then you create an empty connection instance and use the search() method on it.
+if you want to search for connections, then you create an empty connection instance and use the find() method on it.
 
 
 <b>constructor</b>
