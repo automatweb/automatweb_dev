@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.10 2005/03/22 16:20:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/comments.aw,v 1.11 2005/07/06 18:30:09 duke Exp $
 // comments VCL component
 
 // what kind of forms do I need?
@@ -90,6 +90,8 @@ class comments extends class_base
 				"type" => "textarea",
 				"caption" => t("Kommentaar"),
 				"name" => $prname . "[comment]",
+				"cols" => 60,
+				"rows" => 10,
 			),
 			$prname . "_obj_id" => array(
 				"type" => "hidden",
