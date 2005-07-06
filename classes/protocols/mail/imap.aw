@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.24 2005/07/05 11:52:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/protocols/mail/imap.aw,v 1.25 2005/07/06 18:04:17 duke Exp $
 // imap.aw - IMAP login 
 /*
 
@@ -393,8 +393,8 @@ class imap extends class_base
 				if (strtolower($val->ctype_primary) == "text" && strtolower($val->ctype_secondary) == "plain" && empty($val->disposition))
 				{
 					$msgdata["content"] .= $val->body;
-				};
-
+				}
+				else
 				if (!empty($val->disposition) && $val->disposition == "attachment")
 				{
 					$this->attachments[$key] = $val->d_parameters["filename"];
@@ -403,7 +403,12 @@ class imap extends class_base
 					{
 						$this->attachments[$key] .= " : " . $val->headers["content-description"];
 					};
+				}
+				else
+				{
+					$this->attachments[$key] = $val->ctype_parameters["name"];
 				};
+
 			};
 
 		};
@@ -504,6 +509,10 @@ class imap extends class_base
 		$mime_type = strtolower($part->ctype_primary . "/" . $part->ctype_secondary);
 		$att_name = $part->d_parameters["filename"];
 
+		if (empty($att_name) && $part->ctype_parameters["name"])
+		{
+			$att_name = $part->ctype_parameters["name"];
+		};
 
 		/*$struct = imap_bodystruct($this->mbox, imap_msgno($this->mbox, $arr["msgid"]), $arr["part"]);
 		$params = $this->_decode_parameters($struct->parameters);
