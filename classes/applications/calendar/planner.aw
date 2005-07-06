@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.92 2005/06/27 13:17:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.93 2005/07/06 09:34:09 frgp Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -222,7 +222,7 @@ class planner extends class_base
 
 
 		//  list all clids here, that can be added to the calendar (those should at least have a referenfe to planner.start)
-		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS);
+		$this->event_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_OFFER, CL_CRM_MEETING, CL_CALENDAR_VACANCY, CL_CALENDAR_EVENT, CL_PARTY , CL_COMICS, CL_STAGING);
 		// list all clids, that should be shown by default
 		$this->default_entry_classes = array(CL_TASK, CL_CRM_CALL, CL_CRM_MEETING);
 
