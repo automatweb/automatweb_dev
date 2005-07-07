@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.13 2005/07/01 12:08:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.14 2005/07/07 12:30:46 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -366,7 +366,7 @@ class mail_message extends class_base
 				break;
 
 			case "msg_content":
-				$data["value"] = nl2br(create_links($this->msgdata["content"]));
+				$data["value"] = nl2br(create_links(htmlspecialchars($this->msgdata["content"])));
 				break;
 
 			case "msg_attachments":
