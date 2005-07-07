@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:50 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/contentmgmt/rate/rate_scale.aw:class_188_help
+msgid "Klassi H&auml;&auml;letuse skaala help"
+msgstr ""
 
 #: classes/contentmgmt/rate/rate_scale.aw:prop_rate_clid
 msgid "Omaduse Mis objektit&uuml;&uuml;bile skaala kehtib (rate_clid) caption"

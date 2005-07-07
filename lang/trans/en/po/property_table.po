@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/class_designer/property_table.aw:class_886_help
+msgid "Klassi Tabel help"
+msgstr ""
+
 # classes/applications/class_designer/property_table.aw:prop_demo_data_source
 msgid "Omaduse Demo andmete allikas (demo_data_source) caption"
 msgstr "Demo data source"

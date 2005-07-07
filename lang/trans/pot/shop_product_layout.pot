@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/shop/shop_product_layout.aw:class_315_help
+msgid "Klassi Lao toote kujundus help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_layout.aw:prop_template
 msgid "Omaduse Template (template) caption"
 msgstr ""

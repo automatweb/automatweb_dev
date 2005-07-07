@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/gallery/gallery_v2.aw:class_190_help
+msgid "Klassi Galerii help"
+msgstr ""
+
 # classes/contentmgmt/gallery/gallery_v2.aw:prop_conf_id
 msgid "Omaduse Konfiguratsioon: (conf_id) caption"
 msgstr ""

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/poll.aw:class_33_help
+msgid "Klassi Kiirk&uuml;sitlus help"
+msgstr ""
+
 #: classes/contentmgmt/poll.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""
@@ -182,7 +186,7 @@ msgstr ""
 msgid "Protsent"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:563 classes/contentmgmt/poll.aw:814
+#: classes/contentmgmt/poll.aw:563 classes/contentmgmt/poll.aw:817
 msgid ""
 msgstr ""
 
@@ -190,11 +194,11 @@ msgstr ""
 msgid "Vastus nr %s"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:822
+#: classes/contentmgmt/poll.aw:825
 msgid "K&uuml;simus"
 msgstr ""
 
-#: classes/contentmgmt/poll.aw:832
+#: classes/contentmgmt/poll.aw:835
 msgid "Vastus nr %s "
 msgstr ""
 

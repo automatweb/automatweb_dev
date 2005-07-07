@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/admin/object_type.aw:class_115_help
+msgid "Klassi Objekti t&uuml;&uuml;p help"
+msgstr ""
+
 #: classes/admin/object_type.aw:prop_type
 msgid "Omaduse Objektitüüp (type) caption"
 msgstr ""

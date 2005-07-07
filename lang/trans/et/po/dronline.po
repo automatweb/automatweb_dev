@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:15 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,192 +9,205 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/syslog/dronline.aw:class_162_help
+msgid "Klassi Statistika help"
+msgstr ""
 
-#: classes/syslog/dronline.aw:prop_conf
+# classes/syslog/dronline.aw:prop_conf
 msgid "Omaduse Konfiguratsioon (conf) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_conf_comment
+# classes/syslog/dronline.aw:prop_conf_comment
 msgid "Omaduse Konfiguratsioon (conf) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_conf_help
+# classes/syslog/dronline.aw:prop_conf_help
 msgid "Omaduse Konfiguratsioon (conf) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_numlines
+# classes/syslog/dronline.aw:prop_numlines
 msgid "Omaduse Mitu rida (numlines) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_numlines_comment
+# classes/syslog/dronline.aw:prop_numlines_comment
 msgid "Omaduse Mitu rida (numlines) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_numlines_help
+# classes/syslog/dronline.aw:prop_numlines_help
 msgid "Omaduse Mitu rida (numlines) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_from
+# classes/syslog/dronline.aw:prop_from
 msgid "Omaduse Alates (from) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_from_comment
+# classes/syslog/dronline.aw:prop_from_comment
 msgid "Omaduse Alates (from) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_from_help
+# classes/syslog/dronline.aw:prop_from_help
 msgid "Omaduse Alates (from) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_to
+# classes/syslog/dronline.aw:prop_to
 msgid "Omaduse Kuni (to) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_to_comment
+# classes/syslog/dronline.aw:prop_to_comment
 msgid "Omaduse Kuni (to) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_to_help
+# classes/syslog/dronline.aw:prop_to_help
 msgid "Omaduse Kuni (to) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_g_default_tab
+# classes/syslog/dronline.aw:prop_g_default_tab
 msgid "Omaduse Default tab (g_default_tab) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_g_default_tab_comment
+# classes/syslog/dronline.aw:prop_g_default_tab_comment
 msgid "Omaduse Default tab (g_default_tab) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_g_default_tab_help
+# classes/syslog/dronline.aw:prop_g_default_tab_help
 msgid "Omaduse Default tab (g_default_tab) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj
+# classes/syslog/dronline.aw:prop_save_as_obj
 msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj_comment
+# classes/syslog/dronline.aw:prop_save_as_obj_comment
 msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj_help
+# classes/syslog/dronline.aw:prop_save_as_obj_help
 msgid "Omaduse Salvesta p&auml;ring log objektiks (save_as_obj) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj_name
+# classes/syslog/dronline.aw:prop_save_as_obj_name
 msgid "Omaduse Log objekti nimi (save_as_obj_name) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj_name_comment
+# classes/syslog/dronline.aw:prop_save_as_obj_name_comment
 msgid "Omaduse Log objekti nimi (save_as_obj_name) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_save_as_obj_name_help
+# classes/syslog/dronline.aw:prop_save_as_obj_name_help
 msgid "Omaduse Log objekti nimi (save_as_obj_name) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_q
+# classes/syslog/dronline.aw:prop_lock_q
 msgid "Omaduse Lukusta objektide salvestamine (lock_q) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_q_comment
+# classes/syslog/dronline.aw:prop_lock_q_comment
 msgid "Omaduse Lukusta objektide salvestamine (lock_q) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_q_help
+# classes/syslog/dronline.aw:prop_lock_q_help
 msgid "Omaduse Lukusta objektide salvestamine (lock_q) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_filter
+# classes/syslog/dronline.aw:prop_lock_filter
 msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_filter_comment
+# classes/syslog/dronline.aw:prop_lock_filter_comment
 msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_lock_filter_help
+# classes/syslog/dronline.aw:prop_lock_filter_help
 msgid "Omaduse Lukusta p&auml;ringu tegemine (lock_filter) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_queries
+# classes/syslog/dronline.aw:prop_bg_queries
 msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_queries_comment
+# classes/syslog/dronline.aw:prop_bg_queries_comment
 msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_queries_help
+# classes/syslog/dronline.aw:prop_bg_queries_help
 msgid "Omaduse Cache p&auml;ringud taustal (bg_queries) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries_at
-msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) caption"
+# classes/syslog/dronline.aw:prop_rerun_queries_at
+msgid ""
+"Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) "
+"caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries_at_comment
-msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) kommentaar"
+# classes/syslog/dronline.aw:prop_rerun_queries_at_comment
+msgid ""
+"Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) "
+"kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries_at_help
-msgid "Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) help"
+# classes/syslog/dronline.aw:prop_rerun_queries_at_help
+msgid ""
+"Omaduse Cache uueneb automaatselt vastavalt kordusele (rerun_queries_at) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries
+# classes/syslog/dronline.aw:prop_rerun_queries
 msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries_comment
-msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) kommentaar"
+# classes/syslog/dronline.aw:prop_rerun_queries_comment
+msgid ""
+"Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_rerun_queries_help
+# classes/syslog/dronline.aw:prop_rerun_queries_help
 msgid "Omaduse Uuenda p&auml;ringute&nbsp;cache kohe (rerun_queries) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_status
+# classes/syslog/dronline.aw:prop_bg_query_status
 msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_status_comment
+# classes/syslog/dronline.aw:prop_bg_query_status_comment
 msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_status_help
+# classes/syslog/dronline.aw:prop_bg_query_status_help
 msgid "Omaduse Tausta p&auml;ringute staatus (bg_query_status) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_created
+# classes/syslog/dronline.aw:prop_bg_query_created
 msgid "Omaduse Cache viimati muudetud (bg_query_created) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_created_comment
+# classes/syslog/dronline.aw:prop_bg_query_created_comment
 msgid "Omaduse Cache viimati muudetud (bg_query_created) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_bg_query_created_help
+# classes/syslog/dronline.aw:prop_bg_query_created_help
 msgid "Omaduse Cache viimati muudetud (bg_query_created) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_folders
+# classes/syslog/dronline.aw:prop_folders
 msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) caption"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_folders_comment
+# classes/syslog/dronline.aw:prop_folders_comment
 msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) kommentaar"
 msgstr ""
 
-#: classes/syslog/dronline.aw:prop_folders_help
+# classes/syslog/dronline.aw:prop_folders_help
 msgid "Omaduse Vali kataloogid, mida filtris kasutada (folders) help"
 msgstr ""
 
-#: classes/syslog/dronline.aw:group_folders
+# classes/syslog/dronline.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr ""
 
-#: classes/syslog/dronline.aw:rel_RELTYPE_FOLDER
+# classes/syslog/dronline.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
+msgstr ""
+
+# classes/syslog/dronline.aw:rel_RELTYPE_FOLDER
 msgid "Seose filtri kataloog (RELTYPE_FOLDER) tekst"
 msgstr ""
 
@@ -378,15 +391,18 @@ msgstr ""
 msgid "Vahemik"
 msgstr ""
 
-#: classes/syslog/dronline.aw:824 classes/syslog/dronline.aw:978 classes/syslog/dronline.aw:1162
+#: classes/syslog/dronline.aw:824 classes/syslog/dronline.aw:978
+#: classes/syslog/dronline.aw:1162
 msgid "Mitu"
 msgstr ""
 
-#: classes/syslog/dronline.aw:831 classes/syslog/dronline.aw:984 classes/syslog/dronline.aw:1168
+#: classes/syslog/dronline.aw:831 classes/syslog/dronline.aw:984
+#: classes/syslog/dronline.aw:1168
 msgid "%"
 msgstr ""
 
-#: classes/syslog/dronline.aw:963 classes/syslog/dronline.aw:1131 classes/syslog/dronline.aw:1358
+#: classes/syslog/dronline.aw:963 classes/syslog/dronline.aw:1131
+#: classes/syslog/dronline.aw:1358
 msgid "#"
 msgstr ""
 
@@ -449,4 +465,3 @@ msgstr ""
 #: classes/syslog/dronline.aw:1774
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr ""
-

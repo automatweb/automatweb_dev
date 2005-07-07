@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/simple_shop/simple_shop_order.aw:class_931_help
+msgid "Klassi Lihtne tellimus help"
+msgstr ""
+
 # classes/applications/simple_shop/simple_shop_order.aw:prop_orderer
 msgid "Omaduse Tellija andmed (orderer) caption"
 msgstr ""

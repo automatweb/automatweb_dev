@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/calendar/staging.aw:class_831_help
+msgid "Klassi Lavastus help"
+msgstr ""
+
 # classes/applications/calendar/staging.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr "Needs translation"
@@ -137,35 +141,35 @@ msgstr "Image"
 msgid "Seose Koopia (RELTYPE_COPY) tekst"
 msgstr "Copy"
 
-#: classes/applications/calendar/staging.aw:110
+#: classes/applications/calendar/staging.aw:112
 msgid "Aktiivne objekt"
 msgstr "Active object"
 
-#: classes/applications/calendar/staging.aw:120
+#: classes/applications/calendar/staging.aw:122
 msgid "Originaalobjekti ID"
 msgstr "Original object ID"
 
-#: classes/applications/calendar/staging.aw:127
+#: classes/applications/calendar/staging.aw:129
 msgid "Originaalobjekt"
 msgstr "Original"
 
-#: classes/applications/calendar/staging.aw:135
+#: classes/applications/calendar/staging.aw:137
 msgid "Koopia"
 msgstr "Copy"
 
-#: classes/applications/calendar/staging.aw:138
+#: classes/applications/calendar/staging.aw:140
 msgid " (Aktiivne)"
 msgstr " (Active)"
 
-#: classes/applications/calendar/staging.aw:156
+#: classes/applications/calendar/staging.aw:158
 msgid "Uued"
 msgstr "New"
 
-#: classes/applications/calendar/staging.aw:165
+#: classes/applications/calendar/staging.aw:167
 msgid "Uus %s"
 msgstr "New %s"
 
-#: classes/applications/calendar/staging.aw:175
+#: classes/applications/calendar/staging.aw:177
 msgid "Tee sündmus %s"
 msgstr "Create event %s"
 

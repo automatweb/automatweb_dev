@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/image.aw:class_6_help
+msgid "Klassi Pilt help"
+msgstr ""
+
 #: classes/image.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""

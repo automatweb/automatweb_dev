@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/join/join_site.aw:class_287_help
+msgid "Klassi Saidiga Liitumine help"
+msgstr ""
+
 #: classes/contentmgmt/join/join_site.aw:prop_after_join_url
 msgid "Omaduse P&auml;rast liitumist mine aadressile (after_join_url) caption"
 msgstr ""

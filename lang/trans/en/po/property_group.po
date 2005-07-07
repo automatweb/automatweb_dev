@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/class_designer/property_group.aw:class_880_help
+msgid "Klassi Vormi grupp help"
+msgstr ""
+
 # classes/applications/class_designer/property_group.aw:prop_ord
 msgid "Omaduse Jrk (ord) caption"
 msgstr "Order"

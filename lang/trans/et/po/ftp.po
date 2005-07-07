@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:58 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,40 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/protocols/file/ftp.aw:class_195_help
+msgid "Klassi FTP sissep&auml;&auml;s help"
+msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_server
+# classes/protocols/file/ftp.aw:prop_server
 msgid "Omaduse Server (server) caption"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_server_comment
+# classes/protocols/file/ftp.aw:prop_server_comment
 msgid "Omaduse Server (server) kommentaar"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_server_help
+# classes/protocols/file/ftp.aw:prop_server_help
 msgid "Omaduse Server (server) help"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_username
+# classes/protocols/file/ftp.aw:prop_username
 msgid "Omaduse Kasutajanimi (username) caption"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_username_comment
+# classes/protocols/file/ftp.aw:prop_username_comment
 msgid "Omaduse Kasutajanimi (username) kommentaar"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_username_help
+# classes/protocols/file/ftp.aw:prop_username_help
 msgid "Omaduse Kasutajanimi (username) help"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_password
+# classes/protocols/file/ftp.aw:prop_password
 msgid "Omaduse Parool (password) caption"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_password_comment
+# classes/protocols/file/ftp.aw:prop_password_comment
 msgid "Omaduse Parool (password) kommentaar"
 msgstr ""
 
-#: classes/protocols/file/ftp.aw:prop_password_help
+# classes/protocols/file/ftp.aw:prop_password_help
 msgid "Omaduse Parool (password) help"
 msgstr ""
-

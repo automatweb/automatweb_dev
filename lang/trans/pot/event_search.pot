@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/calendar/event_search.aw:class_850_help
+msgid "Klassi Sündmuste otsing help"
+msgstr ""
+
 #: classes/applications/calendar/event_search.aw:prop_event_cfgform
 msgid "Omaduse Kasutatav vorm (event_cfgform) caption"
 msgstr ""
@@ -334,11 +338,11 @@ msgstr ""
 msgid "V&auml;ljundvorm on valimata"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:769 classes/applications/calendar/event_search.aw:775 classes/applications/calendar/event_search.aw:776 classes/applications/calendar/event_search.aw:791 classes/applications/calendar/event_search.aw:797
+#: classes/applications/calendar/event_search.aw:770 classes/applications/calendar/event_search.aw:776 classes/applications/calendar/event_search.aw:777 classes/applications/calendar/event_search.aw:792 classes/applications/calendar/event_search.aw:798
 msgid "kõik"
 msgstr ""
 
-#: classes/applications/calendar/event_search.aw:804
+#: classes/applications/calendar/event_search.aw:805
 msgid "Otsi"
 msgstr ""
 

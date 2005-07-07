@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/gallery/gallery_conf.aw:class_187_help
+msgid "Klassi Galerii seaded help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/gallery_conf.aw:prop_conf_folders
 msgid "Omaduse Kataloogid, kus konf kehtib (conf_folders) caption"
 msgstr ""

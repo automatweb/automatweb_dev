@@ -47,32 +47,32 @@ msgid ""
 "be set!"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1706
+#: classes/core/obj/ds_mysql.aw:1711
 msgid "ds_mysql::_req_do_pcp(): no relation from class %s named %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1739
+#: classes/core/obj/ds_mysql.aw:1744
 msgid "ds_mysql::_req_do_pcp(): no property %s in class %s "
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1752
+#: classes/core/obj/ds_mysql.aw:1757
 msgid ""
 "ds_mysql::_req_do_pcp(): currently join properties can only be of type "
 "relpicker - can't figure out the class id of the object-to-join otherwise"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1757
+#: classes/core/obj/ds_mysql.aw:1762
 msgid ""
 "ds_mysql::_req_do_pcp(): can not join classes on serialized fields (property "
 "%s in class %s)"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1771
+#: classes/core/obj/ds_mysql.aw:1776
 msgid ""
 "ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from "
 "relpicker property %s"
 msgstr ""
 
-#: classes/core/obj/ds_mysql.aw:1781
+#: classes/core/obj/ds_mysql.aw:1786
 msgid "ds_mysql::_req_do_pcp(): incorrect prop type! (%s)"
 msgstr ""

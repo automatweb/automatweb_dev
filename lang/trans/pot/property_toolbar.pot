@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/class_designer/property_toolbar.aw:class_894_help
+msgid "Klassi Toolbar help"
+msgstr ""
+
 #: classes/applications/class_designer/property_toolbar.aw:prop_buttons
 msgid "Omaduse  (buttons) caption"
 msgstr ""

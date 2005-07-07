@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/video.aw:class_833_help
+msgid "Klassi Video help"
+msgstr ""
+
 #: classes/contentmgmt/video.aw:prop_image
 msgid "Omaduse Pilt (image) caption"
 msgstr ""
@@ -94,18 +98,6 @@ msgstr ""
 msgid "Omaduse URL (RealPlayer) (src_rp) help"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:prop_capt_rp
-msgid "Omaduse Lingi tekst (RealPlayer) (capt_rp) caption"
-msgstr ""
-
-#: classes/contentmgmt/video.aw:prop_capt_rp_comment
-msgid "Omaduse Lingi tekst (RealPlayer) (capt_rp) kommentaar"
-msgstr ""
-
-#: classes/contentmgmt/video.aw:prop_capt_rp_help
-msgid "Omaduse Lingi tekst (RealPlayer) (capt_rp) help"
-msgstr ""
-
 #: classes/contentmgmt/video.aw:prop_src_wm
 msgid "Omaduse URL (Windows Media) (src_wm) caption"
 msgstr ""
@@ -118,16 +110,24 @@ msgstr ""
 msgid "Omaduse URL (Windows Media) (src_wm) help"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:prop_capt_wm
-msgid "Omaduse Lingi tekst (Windows Media) (capt_wm) caption"
+#: classes/contentmgmt/video.aw:prop_trans
+msgid "Omaduse T&otilde;ge (trans) caption"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:prop_capt_wm_comment
-msgid "Omaduse Lingi tekst (Windows Media) (capt_wm) kommentaar"
+#: classes/contentmgmt/video.aw:prop_trans_comment
+msgid "Omaduse T&otilde;ge (trans) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/video.aw:prop_capt_wm_help
-msgid "Omaduse Lingi tekst (Windows Media) (capt_wm) help"
+#: classes/contentmgmt/video.aw:prop_trans_help
+msgid "Omaduse T&otilde;ge (trans) help"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:group_trans
+msgid "Grupi T&otilde;lkimine (trans) pealkiri"
+msgstr ""
+
+#: classes/contentmgmt/video.aw:group_trans_help
+msgid "Grupi T&otilde;lkimine (trans) help"
 msgstr ""
 
 #: classes/contentmgmt/video.aw:rel_RELTYPE_IMAGE

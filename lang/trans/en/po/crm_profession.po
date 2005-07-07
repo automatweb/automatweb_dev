@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:12 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,56 +9,62 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_profession.aw:class_220_help
+msgid "Klassi Ametinimetus help"
+msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_ext_id
+# classes/crm/crm_profession.aw:prop_ext_id
 msgid "Omaduse Sidussüsteemi ID (ext_id) caption"
 msgstr "External ID"
 
-#: classes/crm/crm_profession.aw:prop_ext_id_comment
+# classes/crm/crm_profession.aw:prop_ext_id_comment
 msgid "Omaduse Sidussüsteemi ID (ext_id) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_ext_id_help
+# classes/crm/crm_profession.aw:prop_ext_id_help
 msgid "Omaduse Sidussüsteemi ID (ext_id) help"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_name_in_plural
+# classes/crm/crm_profession.aw:prop_name_in_plural
 msgid "Omaduse Nimi mitmuses (name_in_plural) caption"
 msgstr "Name in plural"
 
-#: classes/crm/crm_profession.aw:prop_name_in_plural_comment
+# classes/crm/crm_profession.aw:prop_name_in_plural_comment
 msgid "Omaduse Nimi mitmuses (name_in_plural) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_name_in_plural_help
+# classes/crm/crm_profession.aw:prop_name_in_plural_help
 msgid "Omaduse Nimi mitmuses (name_in_plural) help"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans
+# classes/crm/crm_profession.aw:prop_trans
 msgid "Omaduse Tõlkimine (trans) caption"
 msgstr "Translation"
 
-#: classes/crm/crm_profession.aw:prop_trans_comment
+# classes/crm/crm_profession.aw:prop_trans_comment
 msgid "Omaduse Tõlkimine (trans) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:prop_trans_help
+# classes/crm/crm_profession.aw:prop_trans_help
 msgid "Omaduse Tõlkimine (trans) help"
 msgstr ""
 
-#: classes/crm/crm_profession.aw:group_trans
+# classes/crm/crm_profession.aw:group_trans
 msgid "Grupi Tõlkimine (trans) pealkiri"
 msgstr "Translation"
 
-#: classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION
+# classes/crm/crm_profession.aw:group_trans_help
+msgid "Grupi Tõlkimine (trans) help"
+msgstr ""
+
+# classes/crm/crm_profession.aw:rel_RELTYPE_SIMILARPROFESSION
 msgid "Seose Sarnane amet (RELTYPE_SIMILARPROFESSION) tekst"
 msgstr "Similal profession"
 
-#: classes/crm/crm_profession.aw:rel_RELTYPE_GROUP
+# classes/crm/crm_profession.aw:rel_RELTYPE_GROUP
 msgid "Seose grupp (RELTYPE_GROUP) tekst"
 msgstr "Group"
 
-#: classes/crm/crm_profession.aw:rel_RELTYPE_DESC_FILE
+# classes/crm/crm_profession.aw:rel_RELTYPE_DESC_FILE
 msgid "Seose Ametijuhend (RELTYPE_DESC_FILE) tekst"
 msgstr "Job description"
-

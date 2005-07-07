@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/promo.aw:class_22_help
+msgid "Klassi Konteiner help"
+msgstr ""
+
 #: classes/contentmgmt/promo.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""

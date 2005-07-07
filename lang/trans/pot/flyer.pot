@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/calendar/flyer.aw:class_922_help
+msgid "Klassi Flaier help"
+msgstr ""
+
 #: classes/applications/calendar/flyer.aw:prop_file1
 msgid "Omaduse Flaier (file1) caption"
 msgstr ""

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/search.aw:class_121_help
+msgid "Klassi Objekti otsing help"
+msgstr ""
+
 #: classes/search.aw:prop_s_server
 msgid "Omaduse Server (s_server) caption"
 msgstr ""
@@ -236,14 +240,6 @@ msgstr ""
 
 #: classes/search.aw:prop_active_selection_help
 msgid "Omaduse  (active_selection) help"
-msgstr ""
-
-#: classes/search.aw:group_general
-msgid "Grupi &Uuml;ldine (general) pealkiri"
-msgstr ""
-
-#: classes/search.aw:group_general_help
-msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
 #: classes/search.aw:group_search

@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/otto/otto_import.aw:class_488_help
+msgid "Klassi Otto toodete import help"
+msgstr ""
+
 # classes/applications/shop/otto/otto_import.aw:prop_base_url
 msgid "Omaduse Toodete csv failide baasaadress (base_url) caption"
 msgstr ""

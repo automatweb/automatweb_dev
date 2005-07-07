@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/register/register_search.aw:class_343_help
+msgid "Klassi Registri otsing help"
+msgstr ""
+
 # classes/applications/register/register_search.aw:prop_register
 msgid "Omaduse Register, millest otsida (register) caption"
 msgstr "Register to search"

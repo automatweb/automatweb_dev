@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/admin/add_tree_conf.aw:class_118_help
+msgid "Klassi Lisamise puu seaded help"
+msgstr ""
+
 # classes/admin/add_tree_conf.aw:prop_sel
 msgid "Omaduse  (sel) caption"
 msgstr ""

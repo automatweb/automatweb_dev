@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:16 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/core/docgen/docgen_analyzer.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
 #: classes/core/docgen/docgen_analyzer.aw:542
 msgid "error: do_parse_parameters failed for string %s <br>\n"
@@ -17,4 +20,3 @@ msgstr ""
 #: classes/core/docgen/docgen_analyzer.aw:1026
 msgid "horrible parse error!"
 msgstr ""
-

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/core/users/auth/auth_config.aw:class_843_help
+msgid "Klassi Autentimise Seaded help"
+msgstr ""
+
 #: classes/core/users/auth/auth_config.aw:prop_servers
 msgid "Omaduse  (servers) caption"
 msgstr ""

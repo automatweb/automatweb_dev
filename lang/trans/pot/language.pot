@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/core/language.aw:class_266_help
+msgid "Klassi Keel help"
+msgstr ""
+
 #: classes/core/language.aw:prop_lang_name
 msgid "Omaduse Nimi (lang_name) caption"
 msgstr ""

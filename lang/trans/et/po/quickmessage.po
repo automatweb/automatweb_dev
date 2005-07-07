@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:35 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,64 +9,66 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/quickmessage/quickmessage.aw:class_335_help
+msgid "Klassi Kiirteade help"
+msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_mstatus
+# classes/applications/quickmessage/quickmessage.aw:prop_mstatus
 msgid "Omaduse  (mstatus) caption"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_mstatus_comment
+# classes/applications/quickmessage/quickmessage.aw:prop_mstatus_comment
 msgid "Omaduse  (mstatus) kommentaar"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_mstatus_help
+# classes/applications/quickmessage/quickmessage.aw:prop_mstatus_help
 msgid "Omaduse  (mstatus) help"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_from
+# classes/applications/quickmessage/quickmessage.aw:prop_user_from
 msgid "Omaduse Kellelt (user_from) caption"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_from_comment
+# classes/applications/quickmessage/quickmessage.aw:prop_user_from_comment
 msgid "Omaduse Kellelt (user_from) kommentaar"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_from_help
+# classes/applications/quickmessage/quickmessage.aw:prop_user_from_help
 msgid "Omaduse Kellelt (user_from) help"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_to
+# classes/applications/quickmessage/quickmessage.aw:prop_user_to
 msgid "Omaduse Kellele (user_to) caption"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_to_comment
+# classes/applications/quickmessage/quickmessage.aw:prop_user_to_comment
 msgid "Omaduse Kellele (user_to) kommentaar"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_user_to_help
+# classes/applications/quickmessage/quickmessage.aw:prop_user_to_help
 msgid "Omaduse Kellele (user_to) help"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_subject
+# classes/applications/quickmessage/quickmessage.aw:prop_subject
 msgid "Omaduse Teema (subject) caption"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_subject_comment
+# classes/applications/quickmessage/quickmessage.aw:prop_subject_comment
 msgid "Omaduse Teema (subject) kommentaar"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_subject_help
+# classes/applications/quickmessage/quickmessage.aw:prop_subject_help
 msgid "Omaduse Teema (subject) help"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_content
+# classes/applications/quickmessage/quickmessage.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_content_comment
+# classes/applications/quickmessage/quickmessage.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
 msgstr ""
 
-#: classes/applications/quickmessage/quickmessage.aw:prop_content_help
+# classes/applications/quickmessage/quickmessage.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
 msgstr ""
-

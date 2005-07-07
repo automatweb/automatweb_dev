@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/shop/shop_product_table_layout.aw:class_316_help
+msgid "Klassi Lao toodete tabeli kujundus help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_table_layout.aw:prop_columns
 msgid "Omaduse Tulpi (columns) caption"
 msgstr ""

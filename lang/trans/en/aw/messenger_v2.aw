@@ -1,21 +1,19 @@
 <?php
 $GLOBALS["TRANS"]["Omaduse Kellelt (fromname) caption"] = "From";
 $GLOBALS["TRANS"]["Omaduse Konfiguratsioon (config) caption"] = "Configuration";
-$GLOBALS["TRANS"]["Omaduse Kasutaja default messenger (user_messenger) caption"] = "User's default messenger";
 $GLOBALS["TRANS"]["Omaduse Mailbox ID (sys) (mailbox) caption"] = "Mailbox ID";
 $GLOBALS["TRANS"]["Omaduse Msg. toolbar (mail_toolbar) caption"] = "Msg. toolbar";
 $GLOBALS["TRANS"]["Omaduse Folderid (treeview) caption"] = "Folders";
 $GLOBALS["TRANS"]["Omaduse Kirjad (message_list) caption"] = "Messages";
 $GLOBALS["TRANS"]["Omaduse Saadetud kirjad (msg_outbox) caption"] = "Sent messages";
 $GLOBALS["TRANS"]["Omaduse Mustandite kataloog (msg_drafts) caption"] = "Drafts folder";
-$GLOBALS["TRANS"]["Omaduse Filtrite käivitamise intervall (autofilter_delay) caption"] = "Filter activation interval";
-$GLOBALS["TRANS"]["Omaduse Testi filtreid (testfilters) caption"] = "Test filters";
 $GLOBALS["TRANS"]["Omaduse Otsingu toolbar (s_toolbar) caption"] = "Search toolbar";
 $GLOBALS["TRANS"]["Omaduse From (s_from) caption"] = "From";
 $GLOBALS["TRANS"]["Omaduse Subject (s_subject) caption"] = "Subject";
 $GLOBALS["TRANS"]["Omaduse Otsi (s_submit) caption"] = "Search";
 $GLOBALS["TRANS"]["Omaduse lolo (no_reforb) caption"] = " lolo ";
 $GLOBALS["TRANS"]["Omaduse Tulemused (s_results) caption"] = "Results";
+$GLOBALS["TRANS"]["Omaduse Testi filtreid (testfilters) caption"] = "Test filters";
 $GLOBALS["TRANS"]["Omaduse Reeglid (rule_editor) caption"] = "Rules";
 $GLOBALS["TRANS"]["Grupi Kirjad (main_view) pealkiri"] = "Messages";
 $GLOBALS["TRANS"]["Grupi Otsing (search) pealkiri"] = "Search";

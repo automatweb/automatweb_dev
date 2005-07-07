@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/layout.aw:class_178_help
+msgid "Klassi Tabel help"
+msgstr ""
+
 # classes/layout.aw:prop_rows
 msgid "Omaduse Ridu (rows) caption"
 msgstr "Rows"

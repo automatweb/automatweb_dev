@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/mrp/mrp_resource.aw:class_825_help
+msgid "Klassi Ressurss help"
+msgstr ""
+
 #: classes/mrp/mrp_resource.aw:prop_state
 msgid "Omaduse Ressursi staatus (state) caption"
 msgstr ""
@@ -342,7 +346,7 @@ msgstr ""
 msgid "Ressurss on allhange"
 msgstr ""
 
-#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:544
+#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:543
 msgid "Ava"
 msgstr ""
 

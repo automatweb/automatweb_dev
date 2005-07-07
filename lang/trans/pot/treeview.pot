@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/vcl/treeview.aw:class_137_help
+msgid "Klassi Puu help"
+msgstr ""
+
 #: classes/vcl/treeview.aw:prop_root
 msgid "Omaduse Root objekt (root) caption"
 msgstr ""

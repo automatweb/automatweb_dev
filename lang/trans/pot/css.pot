@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/css.aw:class_71_help
+msgid "Klassi Stiil CSS help"
+msgstr ""
+
 #: classes/contentmgmt/css.aw:prop_ffamily1
 msgid "Omaduse Font 1 (ffamily1) caption"
 msgstr ""

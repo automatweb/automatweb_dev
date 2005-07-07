@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/webform.aw:class_866_help
+msgid "Klassi Veebivorm help"
+msgstr ""
+
 # classes/contentmgmt/webform.aw:prop_on_init
 msgid "Omaduse Initsialiseeri objekt (on_init) caption"
 msgstr "Initialize object"
@@ -471,251 +475,257 @@ msgstr "Event form"
 msgid "Seose S&uuml;ndmuse vormi konf (RELTYPE_CAL_REG_FORM_CONF) tekst"
 msgstr "Event form config"
 
-#: classes/contentmgmt/webform.aw:221
+# classes/contentmgmt/webform.aw:rel_RELTYPE_AFTER_SAVE_CONTROLLER
+msgid ""
+"Seose p&auml;rast salvestamist kontroller (RELTYPE_AFTER_SAVE_CONTROLLER) "
+"tekst"
+msgstr ""
+
+#: classes/contentmgmt/webform.aw:224
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/contentmgmt/webform.aw:222
+#: classes/contentmgmt/webform.aw:225
 msgid "V&auml;ike tekstikast"
 msgstr "Small textbox"
 
-#: classes/contentmgmt/webform.aw:223
+#: classes/contentmgmt/webform.aw:226
 msgid "Valikv&auml;li"
 msgstr "Select"
 
-#: classes/contentmgmt/webform.aw:224
+#: classes/contentmgmt/webform.aw:227
 msgid "Kuup&auml;evavalik"
 msgstr "Date select"
 
-#: classes/contentmgmt/webform.aw:225
+#: classes/contentmgmt/webform.aw:228
 msgid "Liitu mailinglistiga"
 msgstr "Join mailing list"
 
-#: classes/contentmgmt/webform.aw:226
+#: classes/contentmgmt/webform.aw:229
 msgid "Suur tekstikast"
 msgstr "Textarea"
 
-#: classes/contentmgmt/webform.aw:227
+#: classes/contentmgmt/webform.aw:230
 msgid "Peidetud v&auml;li"
 msgstr "Hidden field"
 
-#: classes/contentmgmt/webform.aw:228
+#: classes/contentmgmt/webform.aw:231
 msgid "Saada nupp"
 msgstr "Send button"
 
-#: classes/contentmgmt/webform.aw:229
+#: classes/contentmgmt/webform.aw:232
 msgid "T&uuml;hista nupp"
 msgstr "Cancel button"
 
-#: classes/contentmgmt/webform.aw:230
+#: classes/contentmgmt/webform.aw:233
 msgid "Prindi nupp"
 msgstr "Print button"
 
-#: classes/contentmgmt/webform.aw:231
+#: classes/contentmgmt/webform.aw:234
 msgid "Pildi &uuml;leslaadimine"
 msgstr "Image upload"
 
-#: classes/contentmgmt/webform.aw:232
+#: classes/contentmgmt/webform.aw:235
 msgid "Faili &uuml;leslaadimine"
 msgstr "File upload"
 
-#: classes/contentmgmt/webform.aw:235
+#: classes/contentmgmt/webform.aw:238
 msgid "Eesnimi"
 msgstr "First name"
 
-#: classes/contentmgmt/webform.aw:236
+#: classes/contentmgmt/webform.aw:239
 msgid "Perekonnanimi"
 msgstr "Last name"
 
-#: classes/contentmgmt/webform.aw:237
+#: classes/contentmgmt/webform.aw:240
 msgid "Organisatsioon"
 msgstr "Organisation"
 
-#: classes/contentmgmt/webform.aw:238
+#: classes/contentmgmt/webform.aw:241
 msgid "Aadress"
 msgstr "Address"
 
-#: classes/contentmgmt/webform.aw:239
+#: classes/contentmgmt/webform.aw:242
 msgid "Telefon"
 msgstr "Phone"
 
-#: classes/contentmgmt/webform.aw:240
+#: classes/contentmgmt/webform.aw:243
 msgid "Faks"
 msgstr "Fax"
 
-#: classes/contentmgmt/webform.aw:241
+#: classes/contentmgmt/webform.aw:244
 msgid "E-post"
 msgstr "E-mail"
 
-#: classes/contentmgmt/webform.aw:244
+#: classes/contentmgmt/webform.aw:247
 msgid "Tavaline vorm"
 msgstr "Regular form"
 
-#: classes/contentmgmt/webform.aw:245
+#: classes/contentmgmt/webform.aw:248
 msgid "S&uuml;ndmusele registreerimine"
 msgstr "Event registration"
 
-#: classes/contentmgmt/webform.aw:246
+#: classes/contentmgmt/webform.aw:249
 msgid "Toode"
 msgstr "Product"
 
-#: classes/contentmgmt/webform.aw:316
+#: classes/contentmgmt/webform.aw:319
 msgid "Elementide kohale"
 msgstr "On top of elements"
 
-#: classes/contentmgmt/webform.aw:317
+#: classes/contentmgmt/webform.aw:320
 msgid "Vormi kohale"
 msgstr "On top of form"
 
-#: classes/contentmgmt/webform.aw:318
+#: classes/contentmgmt/webform.aw:321
 msgid "Vormi alla"
 msgstr "Below form"
 
-#: classes/contentmgmt/webform.aw:392
+#: classes/contentmgmt/webform.aw:395
 msgid "Salvesta"
 msgstr "Save"
 
-#: classes/contentmgmt/webform.aw:399
+#: classes/contentmgmt/webform.aw:402
 msgid "Kustuta valitud omadused"
 msgstr "Delete selected properties"
 
-#: classes/contentmgmt/webform.aw:402
+#: classes/contentmgmt/webform.aw:405
 msgid "Oled kindel, et tahad antud omadused kustutada?"
 msgstr "Are you sure you want to delete selected properties?"
 
-#: classes/contentmgmt/webform.aw:606
+#: classes/contentmgmt/webform.aw:609
 msgid "Andmed"
 msgstr "Data"
 
-#: classes/contentmgmt/webform.aw:754
+#: classes/contentmgmt/webform.aw:757
 msgid "M&auml;&auml;ra saaja aadressiks"
 msgstr "Set as receiver address"
 
-#: classes/contentmgmt/webform.aw:758
+#: classes/contentmgmt/webform.aw:761
 msgid "M&auml;&auml;ra saatja aadressiks"
 msgstr "Set as sender address"
 
-#: classes/contentmgmt/webform.aw:762
+#: classes/contentmgmt/webform.aw:765
 msgid "*elemendinimi* peab olema t&auml;idetud"
 msgstr "*elemendinimi* field has to be filled out "
 
-#: classes/contentmgmt/webform.aw:764
+#: classes/contentmgmt/webform.aw:767
 msgid "%caption peab olema t&auml;idetud"
 msgstr "%caption has to be filled out"
 
-#: classes/contentmgmt/webform.aw:768
+#: classes/contentmgmt/webform.aw:771
 msgid "*elemendinimi* peab olema valitud"
 msgstr "*elemendinimi* has to be selected"
 
-#: classes/contentmgmt/webform.aw:770
+#: classes/contentmgmt/webform.aw:773
 msgid "%caption peab olema valitud"
 msgstr "%caption has to be selected"
 
-#: classes/contentmgmt/webform.aw:774
+#: classes/contentmgmt/webform.aw:777
 msgid "Kontrolli e-maili &otilde;igsust"
 msgstr "Please provide a correct e-mail address"
 
-#: classes/contentmgmt/webform.aw:776
+#: classes/contentmgmt/webform.aw:779
 msgid "%caption sisestatud e-mailiaadress pole korrektne"
 msgstr "%caption inserted e-mail address is not correct"
 
-#: classes/contentmgmt/webform.aw:780 classes/contentmgmt/webform.aw:791
+#: classes/contentmgmt/webform.aw:783 classes/contentmgmt/webform.aw:794
 msgid "Kuva sisestaja IP ja host aadress"
 msgstr "Show users IP and host address"
 
-#: classes/contentmgmt/webform.aw:784 classes/contentmgmt/webform.aw:795
+#: classes/contentmgmt/webform.aw:787 classes/contentmgmt/webform.aw:798
 msgid "Sisesta dokumendi pealkiri"
 msgstr "Please insert document title"
 
-#: classes/contentmgmt/webform.aw:840
+#: classes/contentmgmt/webform.aw:843
 msgid "Otsi"
 msgstr "Search"
 
-#: classes/contentmgmt/webform.aw:848
+#: classes/contentmgmt/webform.aw:851
 msgid "Muuda otsingu seadeid"
 msgstr "Change search settings"
 
-#: classes/contentmgmt/webform.aw:858
+#: classes/contentmgmt/webform.aw:861
 msgid "Kustuta valitud sisestused"
 msgstr "Delete selected entries"
 
-#: classes/contentmgmt/webform.aw:861
+#: classes/contentmgmt/webform.aw:864
 msgid "Oled kindel, et tahad valitud sisestused kustutada?"
 msgstr "Are you sure you want to delete selected entries?"
 
-#: classes/contentmgmt/webform.aw:865
+#: classes/contentmgmt/webform.aw:868
 msgid "Ekspordi objektid"
 msgstr "Export objects"
 
-#: classes/contentmgmt/webform.aw:1154
+#: classes/contentmgmt/webform.aw:1157
 msgid "-- vali --"
 msgstr "-- select --"
 
-#: classes/contentmgmt/webform.aw:1155
+#: classes/contentmgmt/webform.aw:1158
 msgid "Mitmerealine rippmen&uuml;&uuml;"
 msgstr "Multiple select"
 
-#: classes/contentmgmt/webform.aw:1156
+#: classes/contentmgmt/webform.aw:1159
 msgid "Rippmen&uuml;&uuml;"
 msgstr "Select"
 
-#: classes/contentmgmt/webform.aw:1157
+#: classes/contentmgmt/webform.aw:1160
 msgid "M&auml;rkeruut"
 msgstr "Checkbox"
 
-#: classes/contentmgmt/webform.aw:1158
+#: classes/contentmgmt/webform.aw:1161
 msgid "Raadionupp"
 msgstr "Radio button"
 
-#: classes/contentmgmt/webform.aw:1161
+#: classes/contentmgmt/webform.aw:1164
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/contentmgmt/webform.aw:1162
+#: classes/contentmgmt/webform.aw:1165
 msgid "Järjekord (kasvav)"
 msgstr "Order (ascending)"
 
-#: classes/contentmgmt/webform.aw:1163
+#: classes/contentmgmt/webform.aw:1166
 msgid "Järjekord (kahanev)"
 msgstr "Order (descending)"
 
-#: classes/contentmgmt/webform.aw:1164
+#: classes/contentmgmt/webform.aw:1167
 msgid "Nimi (kasvav)"
 msgstr "Name (ascending)"
 
-#: classes/contentmgmt/webform.aw:1165
+#: classes/contentmgmt/webform.aw:1168
 msgid "Nimi (kahanev)"
 msgstr "Name (descending)"
 
-#: classes/contentmgmt/webform.aw:1166
+#: classes/contentmgmt/webform.aw:1169
 msgid "Loomisaeg (kasvav)"
 msgstr "Created (ascending)"
 
-#: classes/contentmgmt/webform.aw:1167
+#: classes/contentmgmt/webform.aw:1170
 msgid "Loomisaeg (kahanev)"
 msgstr "Created (Descending)"
 
-#: classes/contentmgmt/webform.aw:1169
+#: classes/contentmgmt/webform.aw:1172
 msgid "horisontaalne"
 msgstr "horizontal"
 
-#: classes/contentmgmt/webform.aw:1169
+#: classes/contentmgmt/webform.aw:1172
 msgid "vertikaalne"
 msgstr "vertical"
 
-#: classes/contentmgmt/webform.aw:1405
+#: classes/contentmgmt/webform.aw:1418
 msgid "Veateate stiil"
 msgstr "Error message style"
 
-#: classes/contentmgmt/webform.aw:1561
+#: classes/contentmgmt/webform.aw:1574
 msgid "Registreeru"
 msgstr "Register"
 
-#: classes/contentmgmt/webform.aw:1687
+#: classes/contentmgmt/webform.aw:1700
 msgid "Saada"
 msgstr "Send"
 
-#: classes/contentmgmt/webform.aw:2105
+#: classes/contentmgmt/webform.aw:2155
 msgid "Liigu edasi &raquo;"
 msgstr "Go on &raquo;"
 

@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_product.aw:class_295_help
+msgid "Klassi Lao toode help"
+msgstr ""
+
 # classes/applications/shop/shop_product.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
 msgstr ""
@@ -55,6 +59,18 @@ msgstr ""
 
 # classes/applications/shop/shop_product.aw:prop_must_order_num_help
 msgid "Omaduse Mitu peab korraga tellima (must_order_num) help"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_price_settings
+msgid "Omaduse Hinnakujundus (price_settings) caption"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_price_settings_comment
+msgid "Omaduse Hinnakujundus (price_settings) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_price_settings_help
+msgid "Omaduse Hinnakujundus (price_settings) help"
 msgstr ""
 
 # classes/applications/shop/shop_product.aw:prop_userch1
@@ -657,6 +673,42 @@ msgstr ""
 msgid "Omaduse User-defined var (multiple) 5 (uservarm5) help"
 msgstr ""
 
+# classes/applications/shop/shop_product.aw:prop_uservarm6
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) caption"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm6_comment
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm6_help
+msgid "Omaduse User-defined var (multiple) 6 (uservarm6) help"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm7
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) caption"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm7_comment
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm7_help
+msgid "Omaduse User-defined var (multiple) 7 (uservarm7) help"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm8
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) caption"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm8_comment
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) kommentaar"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:prop_uservarm8_help
+msgid "Omaduse User-defined var (multiple) 8 (uservarm8) help"
+msgstr ""
+
 # classes/applications/shop/shop_product.aw:prop_packaging
 msgid "Omaduse Pakendid (packaging) caption"
 msgstr ""
@@ -809,6 +861,22 @@ msgstr ""
 msgid "Seose v&otilde;tmes&otilde;na (RELTYPE_KW) tekst"
 msgstr ""
 
-#: classes/applications/shop/shop_product.aw:466
+# classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM6
+msgid "Seose kasutajadefineeritud muutuja 6 (RELTYPE_VARUSERM6) tekst"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM7
+msgid "Seose kasutajadefineeritud muutuja 7 (RELTYPE_VARUSERM7) tekst"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:rel_RELTYPE_VARUSERM8
+msgid "Seose kasutajadefineeritud muutuja 8 (RELTYPE_VARUSERM8) tekst"
+msgstr ""
+
+# classes/applications/shop/shop_product.aw:rel_RELTYPE_PRICE_SETTINGS
+msgid "Seose hinnakujundus (RELTYPE_PRICE_SETTINGS) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product.aw:490
 msgid "shop_product::draw(): no layout set!"
 msgstr ""

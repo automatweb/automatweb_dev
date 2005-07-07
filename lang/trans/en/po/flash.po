@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:07 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,52 +9,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/flash.aw:class_194_help
+msgid "Klassi Flash help"
+msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_file
+# classes/contentmgmt/flash.aw:prop_file
 msgid "Omaduse Vali fail (file) caption"
 msgstr "Select file"
 
-#: classes/contentmgmt/flash.aw:prop_file_comment
+# classes/contentmgmt/flash.aw:prop_file_comment
 msgid "Omaduse Vali fail (file) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_file_help
+# classes/contentmgmt/flash.aw:prop_file_help
 msgid "Omaduse Vali fail (file) help"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_width
+# classes/contentmgmt/flash.aw:prop_width
 msgid "Omaduse Laius (width) caption"
 msgstr "Width"
 
-#: classes/contentmgmt/flash.aw:prop_width_comment
+# classes/contentmgmt/flash.aw:prop_width_comment
 msgid "Omaduse Laius (width) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_width_help
+# classes/contentmgmt/flash.aw:prop_width_help
 msgid "Omaduse Laius (width) help"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_height
+# classes/contentmgmt/flash.aw:prop_height
 msgid "Omaduse Kõrgus (height) caption"
 msgstr "Height"
 
-#: classes/contentmgmt/flash.aw:prop_height_comment
+# classes/contentmgmt/flash.aw:prop_height_comment
 msgid "Omaduse Kõrgus (height) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_height_help
+# classes/contentmgmt/flash.aw:prop_height_help
 msgid "Omaduse Kõrgus (height) help"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_preview
+# classes/contentmgmt/flash.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
 msgstr "Preview"
 
-#: classes/contentmgmt/flash.aw:prop_preview_comment
+# classes/contentmgmt/flash.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/flash.aw:prop_preview_help
+# classes/contentmgmt/flash.aw:prop_preview_help
 msgid "Omaduse Eelvaade (preview) help"
 msgstr ""
-

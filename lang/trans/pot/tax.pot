@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/pank/tax.aw:class_807_help
+msgid "Klassi Maks help"
+msgstr ""
+
 #: classes/pank/tax.aw:prop_jrk
 msgid "Omaduse Järjekord (jrk) caption"
 msgstr ""

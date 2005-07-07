@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/mailinglist/ml_list.aw:class_72_help
+msgid "Klassi Mailinglist help"
+msgstr ""
+
 #: classes/applications/mailinglist/ml_list.aw:prop_def_user_folder
 msgid "Omaduse Listi liikmete allikas (def_user_folder) caption"
 msgstr ""

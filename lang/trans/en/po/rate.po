@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:01 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,84 +9,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/rate/rate.aw:class_189_help
+msgid "Klassi H&auml;&auml;letus help"
+msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_top
+# classes/contentmgmt/rate/rate.aw:prop_top
 msgid "Omaduse Mitu topis (top) caption"
 msgstr "Number of entries in top"
 
-#: classes/contentmgmt/rate/rate.aw:prop_top_comment
+# classes/contentmgmt/rate/rate.aw:prop_top_comment
 msgid "Omaduse Mitu topis (top) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_top_help
+# classes/contentmgmt/rate/rate.aw:prop_top_help
 msgid "Omaduse Mitu topis (top) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_top_type
+# classes/contentmgmt/rate/rate.aw:prop_top_type
 msgid "Omaduse J&auml;rjestatakse (top_type) caption"
 msgstr "Sort by"
 
-#: classes/contentmgmt/rate/rate.aw:prop_top_type_comment
+# classes/contentmgmt/rate/rate.aw:prop_top_type_comment
 msgid "Omaduse J&auml;rjestatakse (top_type) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_top_type_help
+# classes/contentmgmt/rate/rate.aw:prop_top_type_help
 msgid "Omaduse J&auml;rjestatakse (top_type) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from
+# classes/contentmgmt/rate/rate.aw:prop_objects_from
 msgid "Omaduse Millistele objektidele kehtib (objects_from) caption"
 msgstr "Which obects rating applies to"
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_comment
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_comment
 msgid "Omaduse Millistele objektidele kehtib (objects_from) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_help
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_help
 msgid "Omaduse Millistele objektidele kehtib (objects_from) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_clid
 msgid "Omaduse Vali klass (objects_from_clid) caption"
 msgstr "Select class"
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_comment
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_comment
 msgid "Omaduse Vali klass (objects_from_clid) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_help
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_clid_help
 msgid "Omaduse Vali klass (objects_from_clid) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_folder
 msgid "Omaduse Vali kataloogid (objects_from_folder) caption"
 msgstr "Select folders"
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_comment
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_comment
 msgid "Omaduse Vali kataloogid (objects_from_folder) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_help
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_folder_help
 msgid "Omaduse Vali kataloogid (objects_from_folder) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_oid
 msgid "Omaduse Vali objekt (objects_from_oid) caption"
 msgstr "Select object"
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_comment
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_comment
 msgid "Omaduse Vali objekt (objects_from_oid) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_help
+# classes/contentmgmt/rate/rate.aw:prop_objects_from_oid_help
 msgid "Omaduse Vali objekt (objects_from_oid) help"
 msgstr ""
 
-#: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_FOLDER
+# classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_FOLDER
 msgid "Seose Hinnatavate objektide kataloog (RELTYPE_RATE_FOLDER) tekst"
 msgstr "Ratable objects folder"
 
-#: classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_OID
+# classes/contentmgmt/rate/rate.aw:rel_RELTYPE_RATE_OID
 msgid "Seose Hinnatav objekt (RELTYPE_RATE_OID) tekst"
 msgstr "ratable object"
 
@@ -121,4 +124,3 @@ msgstr "Lowest rating"
 #: classes/contentmgmt/rate/rate.aw:107
 msgid "V&auml;him vaadatud"
 msgstr "Least viewed"
-

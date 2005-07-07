@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/vcl/rte.aw:class_235_help
+msgid "Klassi Rich Text Editor help"
+msgstr ""
+
 #: classes/vcl/rte.aw:85
 msgid "Bold"
 msgstr ""

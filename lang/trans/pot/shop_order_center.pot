@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/shop/shop_order_center.aw:class_314_help
+msgid "Klassi Tellimiskeskkond help"
+msgstr ""
+
 #: classes/applications/shop/shop_order_center.aw:prop_warehouse
 msgid "Omaduse Ladu (warehouse) caption"
 msgstr ""
@@ -462,7 +466,7 @@ msgstr ""
 msgid "Paketi teise vaate kujundus"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:348 classes/applications/shop/shop_order_center.aw:1167
+#: classes/applications/shop/shop_order_center.aw:348 classes/applications/shop/shop_order_center.aw:1168
 msgid "--vali--"
 msgstr ""
 
@@ -478,19 +482,19 @@ msgstr ""
 msgid "J&auml;rjekord"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:996
+#: classes/applications/shop/shop_order_center.aw:997
 msgid "&nbsp"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1011
+#: classes/applications/shop/shop_order_center.aw:1012
 msgid "Vali t&uuml;hjaks"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1114
+#: classes/applications/shop/shop_order_center.aw:1115
 msgid "Tellija andmete vorm valimata!"
 msgstr ""
 
-#: classes/applications/shop/shop_order_center.aw:1141
+#: classes/applications/shop/shop_order_center.aw:1142
 msgid "shop_order_center::get_property_map(%s, %s): the options for type are 'person' and 'org'"
 msgstr ""
 

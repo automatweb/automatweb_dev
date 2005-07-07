@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/quickmessage/contact_list.aw:class_811_help
+msgid "Klassi Aadressiraamat help"
+msgstr ""
+
 #: classes/applications/quickmessage/contact_list.aw:prop_contact_list_toolbar
 msgid "Omaduse  (contact_list_toolbar) caption"
 msgstr ""
@@ -44,14 +48,6 @@ msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:prop_contact_list_help
 msgid "Omaduse Aadressiraamat (contact_list) help"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:group_general
-msgid "Grupi &Uuml;ldine (general) pealkiri"
-msgstr ""
-
-#: classes/applications/quickmessage/contact_list.aw:group_general_help
-msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
 #: classes/applications/quickmessage/contact_list.aw:group_contact_list

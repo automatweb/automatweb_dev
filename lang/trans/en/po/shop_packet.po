@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_packet.aw:class_297_help
+msgid "Klassi Pakett help"
+msgstr ""
+
 # classes/applications/shop/shop_packet.aw:prop_item_count
 msgid "Omaduse Mitu laos (item_count) caption"
 msgstr "Items in warehouse"

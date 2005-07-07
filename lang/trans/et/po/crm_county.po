@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:40:59 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_county.aw:class_140_help
+msgid "Klassi Maakond help"
+msgstr ""
 
-#: classes/crm/crm_county.aw:prop_name
+# classes/crm/crm_county.aw:prop_name
 msgid "Omaduse Maakonna nimetus (name) caption"
 msgstr ""
 
-#: classes/crm/crm_county.aw:prop_name_comment
+# classes/crm/crm_county.aw:prop_name_comment
 msgid "Omaduse Maakonna nimetus (name) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_county.aw:prop_name_help
+# classes/crm/crm_county.aw:prop_name_help
 msgid "Omaduse Maakonna nimetus (name) help"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:50 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,28 +9,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/keywords.aw:class_82_help
+msgid "Klassi V&otilde;tmes&otilde;na help"
+msgstr ""
 
-#: classes/keywords.aw:prop_keyword
+# classes/keywords.aw:prop_keyword
 msgid "Omaduse Märksõna (keyword) caption"
 msgstr ""
 
-#: classes/keywords.aw:prop_keyword_comment
+# classes/keywords.aw:prop_keyword_comment
 msgid "Omaduse Märksõna (keyword) kommentaar"
 msgstr ""
 
-#: classes/keywords.aw:prop_keyword_help
+# classes/keywords.aw:prop_keyword_help
 msgid "Omaduse Märksõna (keyword) help"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_KEYWORD
+# classes/keywords.aw:rel_RELTYPE_KEYWORD
 msgid "Seose Dokument (RELTYPE_KEYWORD) tekst"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_FILE
+# classes/keywords.aw:rel_RELTYPE_FILE
 msgid "Seose Fail (RELTYPE_FILE) tekst"
 msgstr ""
 
-#: classes/keywords.aw:rel_RELTYPE_LINK
+# classes/keywords.aw:rel_RELTYPE_LINK
 msgid "Seose Link (RELTYPE_LINK) tekst"
 msgstr ""
-

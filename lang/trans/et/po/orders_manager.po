@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/orders/orders_manager.aw:class_842_help
+msgid "Klassi Tellimuste haldus help"
+msgstr ""
+
 # classes/applications/orders/orders_manager.aw:prop_export_folder
 msgid "Omaduse Ekspordi kataloog (export_folder) caption"
 msgstr ""

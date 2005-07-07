@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:59 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/meta/metamgr.aw:class_279_help
+msgid "Klassi Muutujate haldus help"
+msgstr ""
 
 #: classes/meta/metamgr.aw:prop_mgrtoolbar
 msgid "Omaduse Toolbar (mgrtoolbar) caption"
@@ -98,35 +102,35 @@ msgstr ""
 msgid "Grupi Import (import) help"
 msgstr ""
 
-#: classes/meta/metamgr.aw:144
+#: classes/meta/metamgr.aw:140
 msgid "ID"
 msgstr ""
 
-#: classes/meta/metamgr.aw:149
+#: classes/meta/metamgr.aw:145
 msgid "Nimi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:156
+#: classes/meta/metamgr.aw:152
 msgid "V‰‰rtus"
 msgstr ""
 
-#: classes/meta/metamgr.aw:163
+#: classes/meta/metamgr.aw:159
 msgid "Jrk"
 msgstr ""
 
-#: classes/meta/metamgr.aw:319
+#: classes/meta/metamgr.aw:315
 msgid "Salvesta"
 msgstr ""
 
-#: classes/meta/metamgr.aw:327
+#: classes/meta/metamgr.aw:323
 msgid "Liiguta valitud omadused gruppi"
 msgstr ""
 
-#: classes/meta/metamgr.aw:382
+#: classes/meta/metamgr.aw:378
 msgid "Kustuta valitud muutujad"
 msgstr ""
 
-#: classes/meta/metamgr.aw:383
+#: classes/meta/metamgr.aw:379
 msgid "Kustuta valitud muutujad?"
 msgstr ""
 

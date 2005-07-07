@@ -1381,6 +1381,10 @@ msgstr ""
 msgid "Klassi Toolbari nupp (895) nimi"
 msgstr ""
 
+# aw.ini:class_896
+msgid "Klassi XML eksport (896) nimi"
+msgstr ""
+
 # aw.ini:class_898
 msgid "Klassi Andmeallika andmete muundaja (898) nimi"
 msgstr ""
@@ -1526,11 +1530,15 @@ msgid "Klassi Linnaosa v2 (959) nimi"
 msgstr ""
 
 # aw.ini:class_960
-msgid "Klassi Tänav (960) nimi"
+msgid "Klassi Tänav v2 (960) nimi"
 msgstr ""
 
 # aw.ini:class_961
-msgid "Klassi Riigi haldusjaotus (961) nimi"
+msgid "Klassi Riigi haldusjaotus v2 (961) nimi"
+msgstr ""
+
+# aw.ini:class_964
+msgid "Klassi Haldusjaotis (964) nimi"
 msgstr ""
 
 # aw.ini:class_963
@@ -1539,6 +1547,18 @@ msgstr ""
 
 # aw.ini:class_965
 msgid "Klassi Vormiahela sisestus (965) nimi"
+msgstr ""
+
+# aw.ini:class_966
+msgid "Klassi Kontekst (966) nimi"
+msgstr ""
+
+# aw.ini:class_967
+msgid "Klassi Akna hinnakujundus (967) nimi"
+msgstr ""
+
+# aw.ini:class_975
+msgid "Klassi Otsingu html indekseerija (975) nimi"
 msgstr ""
 
 # aw.ini:classfolder_29

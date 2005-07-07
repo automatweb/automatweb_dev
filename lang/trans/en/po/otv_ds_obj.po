@@ -1,13 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Sun, 24 Apr 2005 21:11:08 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:class_325_help
+msgid "Klassi Objektinimekirja AW andmeallikas help"
+msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_show_notact
 msgid "Omaduse N&auml;ita mitteaktiivseid objekte (show_notact) caption"
@@ -57,6 +61,18 @@ msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_file_show_comment_help
 msgid "Omaduse Failil nime asemel kommentaar (file_show_comment) help"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_ignore_site_id
+msgid "Omaduse Objektid k&otilde;ikidest saitidest (ignore_site_id) caption"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_ignore_site_id_comment
+msgid "Omaduse Objektid k&otilde;ikidest saitidest (ignore_site_id) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_ignore_site_id_help
+msgid "Omaduse Objektid k&otilde;ikidest saitidest (ignore_site_id) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_sort_by
@@ -117,9 +133,45 @@ msgstr ""
 msgid "Omaduse Kataloogid (folders) help"
 msgstr ""
 
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_view_ots
+msgid "Omaduse N&auml;idatavad objektit&uuml;&uuml;bid (view_ots) caption"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_view_ots_comment
+msgid "Omaduse N&auml;idatavad objektit&uuml;&uuml;bid (view_ots) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_view_ots_help
+msgid "Omaduse N&auml;idatavad objektit&uuml;&uuml;bid (view_ots) help"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_add_ots
+msgid "Omaduse Lisatavad objektit&uuml;&uuml;bid (add_ots) caption"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_add_ots_comment
+msgid "Omaduse Lisatavad objektit&uuml;&uuml;bid (add_ots) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:prop_add_ots_help
+msgid "Omaduse Lisatavad objektit&uuml;&uuml;bid (add_ots) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders
 msgid "Grupi Kataloogid (folders) pealkiri"
 msgstr "Folders"
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_folders_help
+msgid "Grupi Kataloogid (folders) help"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types
+msgid "Grupi Objektit&uuml;&uuml;bid (types) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_obj.aw:group_types_help
+msgid "Grupi Objektit&uuml;&uuml;bid (types) help"
+msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_obj.aw:rel_RELTYPE_FOLDER
 msgid "Seose kataloog (RELTYPE_FOLDER) tekst"
@@ -145,30 +197,30 @@ msgstr "Variable"
 msgid "Seose andmete muundaja (RELTYPE_TRANSFORM) tekst"
 msgstr "data transformer"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:76
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:90
 msgid "Objekti muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By object modified date"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:77
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:91
 msgid "Objektide j&auml;rjekorra j&auml;rgi"
 msgstr "By object order"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:126
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:160
 msgid "ID"
 msgstr "ID"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:134
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:168
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:139
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:173
 msgid "k.a. alammen&uuml;&uuml;d"
 msgstr "incl. submenus"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:146
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:180
 msgid "&auml;ra n&auml;ita peamen&uuml;&uuml;d"
 msgstr "do not display root menu"
 
-#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:393
+#: classes/contentmgmt/object_treeview/otv_ds_obj.aw:427
 msgid "J&auml;rjekord"
 msgstr "Order"

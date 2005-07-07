@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/forum/forum_v2.aw:class_211_help
+msgid "Klassi Foorum help"
+msgstr ""
+
 # classes/contentmgmt/forum/forum_v2.aw:prop_show_logged
 msgid ""
 "Omaduse Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt "
@@ -551,10 +555,10 @@ msgstr "New topic"
 msgid "Lisa"
 msgstr "Add"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1900
+#: classes/contentmgmt/forum/forum_v2.aw:1904
 msgid " teemade kaust"
 msgstr " topic folder"
 
-#: classes/contentmgmt/forum/forum_v2.aw:1907
+#: classes/contentmgmt/forum/forum_v2.aw:1911
 msgid " aadresside kaust"
 msgstr " address folder"

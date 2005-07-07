@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:19 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,45 +9,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/core/dbg/cookiemonster.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_cookietable
+# classes/core/dbg/cookiemonster.aw:prop_cookietable
 msgid "Omaduse  (cookietable) caption"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_cookietable_comment
+# classes/core/dbg/cookiemonster.aw:prop_cookietable_comment
 msgid "Omaduse  (cookietable) kommentaar"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_cookietable_help
+# classes/core/dbg/cookiemonster.aw:prop_cookietable_help
 msgid "Omaduse  (cookietable) help"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_name
+# classes/core/dbg/cookiemonster.aw:prop_new_name
 msgid "Omaduse  (new_name) caption"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_name_comment
+# classes/core/dbg/cookiemonster.aw:prop_new_name_comment
 msgid "Omaduse  (new_name) kommentaar"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_name_help
+# classes/core/dbg/cookiemonster.aw:prop_new_name_help
 msgid "Omaduse  (new_name) help"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_value
+# classes/core/dbg/cookiemonster.aw:prop_new_value
 msgid "Omaduse  (new_value) caption"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_value_comment
+# classes/core/dbg/cookiemonster.aw:prop_new_value_comment
 msgid "Omaduse  (new_value) kommentaar"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:prop_new_value_help
+# classes/core/dbg/cookiemonster.aw:prop_new_value_help
 msgid "Omaduse  (new_value) help"
 msgstr ""
 
-#: classes/core/dbg/cookiemonster.aw:group_
+# classes/core/dbg/cookiemonster.aw:group_
 msgid "Grupi  () pealkiri"
+msgstr ""
+
+# classes/core/dbg/cookiemonster.aw:group__help
+msgid "Grupi  () help"
 msgstr ""
 
 #: classes/core/dbg/cookiemonster.aw:50
@@ -57,4 +64,3 @@ msgstr ""
 #: classes/core/dbg/cookiemonster.aw:56
 msgid "V‰‰rtus"
 msgstr ""
-

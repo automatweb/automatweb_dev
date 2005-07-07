@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/newsfeed.aw:class_885_help
+msgid "Klassi Uudistevoog help"
+msgstr ""
+
 #: classes/contentmgmt/newsfeed.aw:prop_alias
 msgid "Omaduse Alias (alias) caption"
 msgstr ""

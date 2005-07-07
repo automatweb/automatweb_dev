@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_warehouse_export.aw:class_299_help
+msgid "Klassi Lao v&auml;ljaminek help"
+msgstr ""
+
 # classes/applications/shop/shop_warehouse_export.aw:prop_confirm
 msgid "Omaduse Kinnita (confirm) caption"
 msgstr ""

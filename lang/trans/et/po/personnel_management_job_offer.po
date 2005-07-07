@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:28 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,44 +9,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/personnel_management/personnel_management_job_offer.aw:class_285_help
+msgid "Klassi Tööpakkumine help"
+msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession
 msgid "Omaduse Ametikoht (profession) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_comment
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_comment
 msgid "Omaduse Ametikoht (profession) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_help
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_profession_help
 msgid "Omaduse Ametikoht (profession) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline
 msgid "Omaduse Konkursi tähtaeg (deadline) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_comment
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_comment
 msgid "Omaduse Konkursi tähtaeg (deadline) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_help
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_deadline_help
 msgid "Omaduse Konkursi tähtaeg (deadline) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning
 msgid "Omaduse Konkursi algusaeg (beginning) caption"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_comment
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_comment
 msgid "Omaduse Konkursi algusaeg (beginning) kommentaar"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_help
+# classes/applications/personnel_management/personnel_management_job_offer.aw:prop_beginning_help
 msgid "Omaduse Konkursi algusaeg (beginning) help"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_SECTION
+# classes/applications/personnel_management/personnel_management_job_offer.aw:rel_RELTYPE_SECTION
 msgid "Seose Üksus (RELTYPE_SECTION) tekst"
 msgstr ""
 
@@ -62,7 +65,8 @@ msgstr ""
 msgid "Kustuta kandieerijad"
 msgstr ""
 
-#: classes/applications/personnel_management/personnel_management_job_offer.aw:431 classes/applications/personnel_management/personnel_management_job_offer.aw:619
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:431
+#: classes/applications/personnel_management/personnel_management_job_offer.aw:619
 msgid "Nimi"
 msgstr ""
 
@@ -93,4 +97,3 @@ msgstr ""
 #: classes/applications/personnel_management/personnel_management_job_offer.aw:625
 msgid "Vaatamisi"
 msgstr ""
-

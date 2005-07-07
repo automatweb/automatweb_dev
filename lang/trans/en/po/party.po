@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/calendar/party.aw:class_914_help
+msgid "Klassi Pidu help"
+msgstr ""
+
 # classes/applications/calendar/party.aw:prop_start1
 msgid "Omaduse Algus (start1) caption"
 msgstr "Start"

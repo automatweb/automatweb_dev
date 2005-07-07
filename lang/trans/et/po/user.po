@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/core/users/user.aw:class_197_help
+msgid "Klassi Kasutaja help"
+msgstr ""
+
 # classes/core/users/user.aw:prop_uid
 msgid "Omaduse Kasutajanimi (uid) caption"
 msgstr ""
@@ -453,14 +457,6 @@ msgstr ""
 msgid "Omaduse  (join_form_entry) help"
 msgstr ""
 
-# classes/core/users/user.aw:group_general
-msgid "Grupi &Uuml;ldine (general) pealkiri"
-msgstr ""
-
-# classes/core/users/user.aw:group_general_help
-msgid "Grupi &Uuml;ldine (general) help"
-msgstr ""
-
 # classes/core/users/user.aw:group_chpwd
 msgid "Grupi Parool (chpwd) pealkiri"
 msgstr ""
@@ -613,7 +609,7 @@ msgstr ""
 msgid "Muudetud"
 msgstr ""
 
-#: classes/core/users/user.aw:703 classes/core/users/user.aw:1179
+#: classes/core/users/user.aw:703 classes/core/users/user.aw:1190
 msgid "T&uuml;&uuml;p"
 msgstr ""
 
@@ -621,65 +617,65 @@ msgstr ""
 msgid "Muuda"
 msgstr ""
 
-#: classes/core/users/user.aw:939
+#: classes/core/users/user.aw:950
 msgid "Muuda objekti %s  &otilde;igusi"
 msgstr ""
 
-#: classes/core/users/user.aw:1156
+#: classes/core/users/user.aw:1167
 msgid "Nr"
 msgstr ""
 
-#: classes/core/users/user.aw:1160
+#: classes/core/users/user.aw:1171
 msgid "Millal"
 msgstr ""
 
-#: classes/core/users/user.aw:1169
+#: classes/core/users/user.aw:1180
 msgid "Kes"
 msgstr ""
 
-#: classes/core/users/user.aw:1174
+#: classes/core/users/user.aw:1185
 msgid "IP"
 msgstr ""
 
-#: classes/core/users/user.aw:1184
+#: classes/core/users/user.aw:1195
 msgid "Tegevus"
 msgstr ""
 
-#: classes/core/users/user.aw:1191
+#: classes/core/users/user.aw:1202
 msgid "Saidi ID"
 msgstr ""
 
-#: classes/core/users/user.aw:1197
+#: classes/core/users/user.aw:1208
 msgid "OID"
 msgstr ""
 
-#: classes/core/users/user.aw:1202
+#: classes/core/users/user.aw:1213
 msgid "Mida"
 msgstr ""
 
-#: classes/core/users/user.aw:1566
+#: classes/core/users/user.aw:1582
 msgid "users::add_user(%s): no uid specified"
 msgstr ""
 
-#: classes/core/users/user.aw:1638
+#: classes/core/users/user.aw:1654
 msgid "Objekt on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1643
+#: classes/core/users/user.aw:1659
 msgid "Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1648
+#: classes/core/users/user.aw:1664
 msgid "Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"
 msgstr ""
 
-#: classes/core/users/user.aw:1658
+#: classes/core/users/user.aw:1674
 msgid ""
 "Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, "
 "kehtib default.<br>N&auml;gemis&otilde;inus ainult."
 msgstr ""
 
-#: classes/core/users/user.aw:1694
+#: classes/core/users/user.aw:1710
 msgid ""
 "Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;"
 "rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele "

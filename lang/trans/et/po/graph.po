@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/graph/graph.aw:class_28_help
+msgid "Klassi Graafik (vana) help"
+msgstr ""
+
 # classes/applications/graph/graph.aw:prop_type
 msgid "Omaduse T&uuml;&uuml;p (type) caption"
 msgstr ""
@@ -287,31 +291,6 @@ msgstr ""
 msgid "Grupi Seaded (settings) help"
 msgstr ""
 
-#: classes/applications/graph/graph.aw:108
-msgid "Tulbad"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:109
-msgid "Jooned"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:110
-msgid "Tort"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:146
-msgid "Grupp"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:152
-msgid "Andmed"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:158
-msgid "V&auml;rv"
-msgstr ""
-
-#: classes/applications/graph/graph.aw:233
-#: classes/applications/graph/graph.aw:497
+#: classes/graph.aw:78 classes/graph.aw:342
 msgid "Tiitel"
 msgstr ""

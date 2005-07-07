@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:43 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,44 +9,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/clients/ut/xml_import/xml_import.aw:class_97_help
+msgid "Klassi XML import help"
+msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource
 msgid "Omaduse XML datasource (datasource) caption"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource_comment
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource_comment
 msgid "Omaduse XML datasource (datasource) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource_help
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_datasource_help
 msgid "Omaduse XML datasource (datasource) help"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function
 msgid "Omaduse Impordifunktsioon (import_function) caption"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function_comment
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function_comment
 msgid "Omaduse Impordifunktsioon (import_function) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function_help
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_import_function_help
 msgid "Omaduse Impordifunktsioon (import_function) help"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import
 msgid "Omaduse Käivita import (run_import) caption"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_comment
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_comment
 msgid "Omaduse Käivita import (run_import) kommentaar"
 msgstr ""
 
-#: classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_help
+# classes/applications/clients/ut/xml_import/xml_import.aw:prop_run_import_help
 msgid "Omaduse Käivita import (run_import) help"
 msgstr ""
 
 #: classes/applications/clients/ut/xml_import/xml_import.aw:52
 msgid "Käivita import"
 msgstr ""
-

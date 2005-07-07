@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/shop/shop_warehouse_config.aw:class_296_help
+msgid "Klassi Lao konfiguratsioon help"
+msgstr ""
+
 #: classes/applications/shop/shop_warehouse_config.aw:prop_prod_fld
 msgid "Omaduse Toodete kataloog (prod_fld) caption"
 msgstr ""

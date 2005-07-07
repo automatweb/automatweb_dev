@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/mailinglist/ml_member.aw:class_73_help
+msgid "Klassi Meiliaadress help"
+msgstr ""
+
 # classes/applications/mailinglist/ml_member.aw:prop_mail
 msgid "Omaduse E-post (mail) caption"
 msgstr ""

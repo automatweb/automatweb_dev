@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,20 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/admin/tree_root.aw:class_116_help
+msgid "Klassi Puu rootmen&uuml;&uuml; help"
+msgstr ""
 
-#: classes/admin/tree_root.aw:prop_root
+# classes/admin/tree_root.aw:prop_root
 msgid "Omaduse Rootmenüü (root) caption"
 msgstr ""
 
-#: classes/admin/tree_root.aw:prop_root_comment
+# classes/admin/tree_root.aw:prop_root_comment
 msgid "Omaduse Rootmenüü (root) kommentaar"
 msgstr ""
 
-#: classes/admin/tree_root.aw:prop_root_help
+# classes/admin/tree_root.aw:prop_root_help
 msgid "Omaduse Rootmenüü (root) help"
 msgstr ""
 
-#: classes/admin/tree_root.aw:rel_RELTYPE_ROOT
+# classes/admin/tree_root.aw:rel_RELTYPE_ROOT
 msgid "Seose juurmenüü (RELTYPE_ROOT) tekst"
 msgstr ""
-

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/crm/crm_offer_mgr.aw:class_903_help
+msgid "Klassi Pakkumiste haldus help"
+msgstr ""
+
 #: classes/crm/crm_offer_mgr.aw:prop_offers_toolbar
 msgid "Omaduse  (offers_toolbar) caption"
 msgstr ""
@@ -44,14 +48,6 @@ msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:prop_offers_list_help
 msgid "Omaduse Pakkumised (offers_list) help"
-msgstr ""
-
-#: classes/crm/crm_offer_mgr.aw:group_general
-msgid "Grupi &Uuml;ldine (general) pealkiri"
-msgstr ""
-
-#: classes/crm/crm_offer_mgr.aw:group_general_help
-msgid "Grupi &Uuml;ldine (general) help"
 msgstr ""
 
 #: classes/crm/crm_offer_mgr.aw:group_offers

@@ -1,13 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Wed, 13 Apr 2005 15:49:40 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
+# classes/crm/crm_offer_products_list.aw:class_910_help
+msgid "Klassi Pakkumise toodete nimekiri help"
+msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:prop_pk_toolbar
 msgid "Omaduse  (pk_toolbar) caption"
@@ -47,6 +51,10 @@ msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:group_packages_show
 msgid "Grupi Paketid (packages_show) pealkiri"
+msgstr ""
+
+# classes/crm/crm_offer_products_list.aw:group_packages_show_help
+msgid "Grupi Paketid (packages_show) help"
 msgstr ""
 
 # classes/crm/crm_offer_products_list.aw:rel_RELTYPE_PACKET

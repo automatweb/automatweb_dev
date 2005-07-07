@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:32 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/core/users/auth/auth_server_ldap.aw:class_844_help
+msgid "Klassi Autentimisserver Active Directory help"
+msgstr ""
 
 #: classes/core/users/auth/auth_server_ldap.aw:prop_server
 msgid "Omaduse LDAP server (server) caption"
@@ -186,7 +190,7 @@ msgstr ""
 msgid "Sellist kasutajat pole v&otilde;i parool on vale!"
 msgstr ""
 
-#: classes/core/users/auth/auth_server_ldap.aw:193
+#: classes/core/users/auth/auth_server_ldap.aw:200
 msgid "Ei saanud serveriga &uuml;hendust!"
 msgstr ""
 

@@ -1,13 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu, 21 Apr 2005 13:27:22 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
+# classes/contentmgmt/object_treeview.aw:class_209_help
+msgid "Klassi Objektide nimekiri help"
+msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
@@ -223,16 +227,32 @@ msgstr ""
 msgid "Grupi Kaustad (folders) pealkiri"
 msgstr ""
 
+# classes/contentmgmt/object_treeview.aw:group_folders_help
+msgid "Grupi Kaustad (folders) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview.aw:group_clids
 msgid "Grupi Objektit&uuml;&uuml;bid (clids) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/object_treeview.aw:group_clids_help
+msgid "Grupi Objektit&uuml;&uuml;bid (clids) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:group_styles
 msgid "Grupi Stiilid (styles) pealkiri"
 msgstr ""
 
+# classes/contentmgmt/object_treeview.aw:group_styles_help
+msgid "Grupi Stiilid (styles) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview.aw:group_columns
 msgid "Grupi Tulbad (columns) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/object_treeview.aw:group_columns_help
+msgid "Grupi Tulbad (columns) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview.aw:rel_RELTYPE_FOLDER

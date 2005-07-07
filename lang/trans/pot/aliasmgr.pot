@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:503
+#: classes/aliasmgr.aw:136 classes/aliasmgr.aw:171 classes/aliasmgr.aw:484
 msgid ""
 msgstr ""
 
@@ -18,71 +18,67 @@ msgstr ""
 msgid "Klass"
 msgstr ""
 
-#: classes/aliasmgr.aw:511
+#: classes/aliasmgr.aw:492
 msgid "Nimi"
 msgstr ""
 
-#: classes/aliasmgr.aw:517
+#: classes/aliasmgr.aw:498
 msgid "Keel"
 msgstr ""
 
-#: classes/aliasmgr.aw:524
+#: classes/aliasmgr.aw:505
 msgid "Asukoht"
 msgstr ""
 
-#: classes/aliasmgr.aw:530
+#: classes/aliasmgr.aw:511
 msgid "Alias"
 msgstr ""
 
-#: classes/aliasmgr.aw:538
+#: classes/aliasmgr.aw:519
 msgid "Link"
 msgstr ""
 
-#: classes/aliasmgr.aw:547
-msgid "Cache"
-msgstr ""
-
-#: classes/aliasmgr.aw:556
+#: classes/aliasmgr.aw:528
 msgid "Muutja"
 msgstr ""
 
-#: classes/aliasmgr.aw:564
+#: classes/aliasmgr.aw:536
 msgid "Muudetud"
 msgstr ""
 
-#: classes/aliasmgr.aw:575
+#: classes/aliasmgr.aw:547
 msgid "Tüüp"
 msgstr ""
 
-#: classes/aliasmgr.aw:583
+#: classes/aliasmgr.aw:555
 msgid "Seose tüüp"
 msgstr ""
 
-#: classes/aliasmgr.aw:1158
+#: classes/aliasmgr.aw:1148
 msgid "Lisa uus objekt"
 msgstr ""
 
-#: classes/aliasmgr.aw:1168 classes/aliasmgr.aw:1177
+#: classes/aliasmgr.aw:1158 classes/aliasmgr.aw:1167
 msgid "Otsi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1194
+#: classes/aliasmgr.aw:1184
 msgid "Tõlgi"
 msgstr ""
 
-#: classes/aliasmgr.aw:1205
+#: classes/aliasmgr.aw:1195
 msgid "Reload"
 msgstr ""
 
-#: classes/aliasmgr.aw:1216
+#: classes/aliasmgr.aw:1206
 msgid "Loo seos(ed)"
 msgstr ""
 
-#: classes/aliasmgr.aw:1226
+#: classes/aliasmgr.aw:1216
 msgid "Salvesta"
 msgstr ""
 
-#: classes/aliasmgr.aw:1233
+#: classes/aliasmgr.aw:1223
 msgid "Kustuta valitud seos(ed)"
 msgstr ""
 

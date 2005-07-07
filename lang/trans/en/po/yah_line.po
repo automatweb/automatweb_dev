@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:15 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,28 +9,36 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/layout/yah_line.aw:class_181_help
+msgid "Klassi Asukohariba help"
+msgstr ""
 
-#: classes/layout/yah_line.aw:prop_separator
+# classes/layout/yah_line.aw:prop_separator
 msgid "Omaduse Eraldaja (separator) caption"
 msgstr "Separator"
 
-#: classes/layout/yah_line.aw:prop_separator_comment
+# classes/layout/yah_line.aw:prop_separator_comment
 msgid "Omaduse Eraldaja (separator) kommentaar"
 msgstr ""
 
-#: classes/layout/yah_line.aw:prop_separator_help
+# classes/layout/yah_line.aw:prop_separator_help
 msgid "Omaduse Eraldaja (separator) help"
 msgstr ""
 
-#: classes/layout/yah_line.aw:prop_show_nosubs
-msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) caption"
+# classes/layout/yah_line.aw:prop_show_nosubs
+msgid ""
+"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
+"(show_nosubs) caption"
 msgstr "Display menus with no documents"
 
-#: classes/layout/yah_line.aw:prop_show_nosubs_comment
-msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) kommentaar"
+# classes/layout/yah_line.aw:prop_show_nosubs_comment
+msgid ""
+"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
+"(show_nosubs) kommentaar"
 msgstr ""
 
-#: classes/layout/yah_line.aw:prop_show_nosubs_help
-msgid "Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente (show_nosubs) help"
+# classes/layout/yah_line.aw:prop_show_nosubs_help
+msgid ""
+"Omaduse Kas n&auml;idata men&uuml;&uuml;sid, mille all pole dokumente "
+"(show_nosubs) help"
 msgstr ""
-

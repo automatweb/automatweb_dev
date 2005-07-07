@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/menu_tree.aw:class_93_help
+msgid "Klassi Sisukaart help"
+msgstr ""
+
 #: classes/contentmgmt/menu_tree.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""

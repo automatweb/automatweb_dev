@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:08:59 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,28 +9,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/vcl/frameset.aw:class_136_help
+msgid "Klassi Raamistus help"
+msgstr ""
 
-#: classes/vcl/frameset.aw:prop_template
+# classes/vcl/frameset.aw:prop_template
 msgid "Omaduse Frameseti template (template) caption"
 msgstr ""
 
-#: classes/vcl/frameset.aw:prop_template_comment
+# classes/vcl/frameset.aw:prop_template_comment
 msgid "Omaduse Frameseti template (template) kommentaar"
 msgstr ""
 
-#: classes/vcl/frameset.aw:prop_template_help
+# classes/vcl/frameset.aw:prop_template_help
 msgid "Omaduse Frameseti template (template) help"
 msgstr ""
 
-#: classes/vcl/frameset.aw:prop_framedata
+# classes/vcl/frameset.aw:prop_framedata
 msgid "Omaduse Raamide sisu (framedata) caption"
 msgstr ""
 
-#: classes/vcl/frameset.aw:prop_framedata_comment
+# classes/vcl/frameset.aw:prop_framedata_comment
 msgid "Omaduse Raamide sisu (framedata) kommentaar"
 msgstr ""
 
-#: classes/vcl/frameset.aw:prop_framedata_help
+# classes/vcl/frameset.aw:prop_framedata_help
 msgid "Omaduse Raamide sisu (framedata) help"
 msgstr ""
 
@@ -57,4 +60,3 @@ msgstr ""
 #: classes/vcl/frameset.aw:230
 msgid "Keritav"
 msgstr ""
-

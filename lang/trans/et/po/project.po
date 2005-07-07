@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/groupware/project.aw:class_239_help
+msgid "Klassi Projekt help"
+msgstr ""
+
 # classes/applications/groupware/project.aw:prop_status
 msgid "Omaduse Staatus (status) caption"
 msgstr ""
@@ -501,50 +505,50 @@ msgstr ""
 msgid "Nädala vaade"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1189
+#: classes/applications/groupware/project.aw:1206
 msgid "Uus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1221
+#: classes/applications/groupware/project.aw:1238
 msgid "Alamprojekt"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1326
+#: classes/applications/groupware/project.aw:1343
 msgid "Etendus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1550
+#: classes/applications/groupware/project.aw:1567
 msgid "Seda klassi ei saa kasutada sündmuste sisestamiseks"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1611
+#: classes/applications/groupware/project.aw:1628
 msgid "header"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:1999
+#: classes/applications/groupware/project.aw:2065
 msgid "Lisa"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2010
+#: classes/applications/groupware/project.aw:2076
 msgid "Verstapost"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2021
+#: classes/applications/groupware/project.aw:2087
 msgid "Toimetus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2028
+#: classes/applications/groupware/project.aw:2094
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2055
+#: classes/applications/groupware/project.aw:2121
 msgid "Nimi"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2062
+#: classes/applications/groupware/project.aw:2128
 msgid "Algus"
 msgstr ""
 
-#: classes/applications/groupware/project.aw:2072
+#: classes/applications/groupware/project.aw:2138
 msgid "L&otilde;pp"
 msgstr ""

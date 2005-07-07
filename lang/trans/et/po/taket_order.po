@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/taket/taket_order.aw:class_243_help
+msgid "Klassi Taketi tellimus help"
+msgstr ""
+
 # classes/taket/taket_order.aw:prop_comments
 msgid "Omaduse  (comments) caption"
 msgstr ""

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/calendar/calendar_view.aw:class_59_help
+msgid "Klassi Kalendrivaade help"
+msgstr ""
+
 #: classes/calendar/calendar_view.aw:prop_use_template
 msgid "Omaduse Välimus (use_template) caption"
 msgstr ""

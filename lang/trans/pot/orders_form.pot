@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/orders/orders_form.aw:class_841_help
+msgid "Klassi Tellimuse vorm help"
+msgstr ""
+
 #: classes/applications/orders/orders_form.aw:prop_postal_fee
 msgid "Omaduse Postikulu (postal_fee) caption"
 msgstr ""

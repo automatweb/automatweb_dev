@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:04:53 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/pank/transaction.aw:class_650_help
+msgid "Klassi Ülekanne help"
+msgstr ""
 
 #: classes/pank/transaction.aw:prop_name
 msgid "Omaduse Selgitus (name) caption"
@@ -164,5 +168,13 @@ msgstr ""
 
 #: classes/pank/transaction.aw:prop_soorita_help
 msgid "Omaduse  (soorita) help"
+msgstr ""
+
+#: classes/pank/transaction.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/pank/transaction.aw:group_general_help
+msgid "Grupi Üldine (general) help"
 msgstr ""
 

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/cfg/classificator.aw:class_203_help
+msgid "Klassi Klassifikaator help"
+msgstr ""
+
 #: classes/cfg/classificator.aw:prop_folders
 msgid "Omaduse Kus kehtib (folders) caption"
 msgstr ""

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/shop/shop_product_packaging.aw:class_327_help
+msgid "Klassi Toote pakend help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_jrk
 msgid "Omaduse J&auml;rjekord (jrk) caption"
 msgstr ""
@@ -346,6 +350,18 @@ msgstr ""
 msgid "Omaduse Pildid (images) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:prop_files
+msgid "Omaduse Failid (files) caption"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_files_comment
+msgid "Omaduse Failid (files) kommentaar"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:prop_files_help
+msgid "Omaduse Failid (files) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:prop_userch1
 msgid "Omaduse User-defined checkbox 1 (userch1) caption"
 msgstr ""
@@ -414,6 +430,14 @@ msgstr ""
 msgid "Grupi Andmed (data) help"
 msgstr ""
 
+#: classes/applications/shop/shop_product_packaging.aw:group_file
+msgid "Grupi Failid (file) pealkiri"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:group_file_help
+msgid "Grupi Failid (file) help"
+msgstr ""
+
 #: classes/applications/shop/shop_product_packaging.aw:group_img
 msgid "Grupi img (img) pealkiri"
 msgstr ""
@@ -424,5 +448,29 @@ msgstr ""
 
 #: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_IMAGE
 msgid "Seose pilt  (RELTYPE_IMAGE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_FILE
+msgid "Seose fail (RELTYPE_FILE) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_USERVAR1
+msgid "Seose muutuja1 (RELTYPE_USERVAR1) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_USERVAR2
+msgid "Seose muutuja2 (RELTYPE_USERVAR2) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_USERVAR3
+msgid "Seose muutuja3 (RELTYPE_USERVAR3) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_USERVAR4
+msgid "Seose muutuja4 (RELTYPE_USERVAR4) tekst"
+msgstr ""
+
+#: classes/applications/shop/shop_product_packaging.aw:rel_RELTYPE_USERVAR5
+msgid "Seose muutuja5 (RELTYPE_USERVAR5) tekst"
 msgstr ""
 

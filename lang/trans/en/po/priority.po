@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:50 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,20 +9,26 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/priority.aw:class_114_help
+msgid "Klassi Prioriteet help"
+msgstr ""
 
-#: classes/priority.aw:prop_pri
+# classes/priority.aw:prop_pri
 msgid "Omaduse Prioriteedid (pri) caption"
 msgstr "Priorities"
 
-#: classes/priority.aw:prop_pri_comment
+# classes/priority.aw:prop_pri_comment
 msgid "Omaduse Prioriteedid (pri) kommentaar"
 msgstr ""
 
-#: classes/priority.aw:prop_pri_help
+# classes/priority.aw:prop_pri_help
 msgid "Omaduse Prioriteedid (pri) help"
 msgstr ""
 
-#: classes/priority.aw:group_pri
+# classes/priority.aw:group_pri
 msgid "Grupi Prioriteedid (pri) pealkiri"
 msgstr "Priorities"
 
+# classes/priority.aw:group_pri_help
+msgid "Grupi Prioriteedid (pri) help"
+msgstr ""

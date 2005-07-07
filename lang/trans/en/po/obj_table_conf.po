@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:45 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,48 +9,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/admin/obj_table_conf.aw:class_113_help
+msgid "Klassi Objektitabeli seaded help"
+msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptoolbar
+# classes/admin/obj_table_conf.aw:prop_proptoolbar
 msgid "Omaduse  (proptoolbar) caption"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptoolbar_comment
+# classes/admin/obj_table_conf.aw:prop_proptoolbar_comment
 msgid "Omaduse  (proptoolbar) kommentaar"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptoolbar_help
+# classes/admin/obj_table_conf.aw:prop_proptoolbar_help
 msgid "Omaduse  (proptoolbar) help"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptable
+# classes/admin/obj_table_conf.aw:prop_proptable
 msgid "Omaduse  (proptable) caption"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptable_comment
+# classes/admin/obj_table_conf.aw:prop_proptable_comment
 msgid "Omaduse  (proptable) kommentaar"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_proptable_help
+# classes/admin/obj_table_conf.aw:prop_proptable_help
 msgid "Omaduse  (proptable) help"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_sep
+# classes/admin/obj_table_conf.aw:prop_sep
 msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) caption"
 msgstr "Seprator between one column's elements"
 
-#: classes/admin/obj_table_conf.aw:prop_sep_comment
+# classes/admin/obj_table_conf.aw:prop_sep_comment
 msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) kommentaar"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:prop_sep_help
+# classes/admin/obj_table_conf.aw:prop_sep_help
 msgid "Omaduse Eraldaja ühe tulba elementide vahel (sep) help"
 msgstr ""
 
-#: classes/admin/obj_table_conf.aw:group_proptab
+# classes/admin/obj_table_conf.aw:group_proptab
 msgid "Grupi Objektitabel (proptab) pealkiri"
 msgstr "Objects table"
 
-#: classes/admin/obj_table_conf.aw:rel_RELTYPE_GROUP
+# classes/admin/obj_table_conf.aw:group_proptab_help
+msgid "Grupi Objektitabel (proptab) help"
+msgstr ""
+
+# classes/admin/obj_table_conf.aw:rel_RELTYPE_GROUP
 msgid "Seose Kasutajagrupp (RELTYPE_GROUP) tekst"
 msgstr "User group"
 
@@ -233,4 +240,3 @@ msgstr "Sortable"
 #: classes/admin/obj_table_conf.aw:139
 msgid "Omadus"
 msgstr "Property"
-

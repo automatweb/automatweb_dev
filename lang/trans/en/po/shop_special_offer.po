@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_special_offer.aw:class_344_help
+msgid "Klassi Poe eripakkumine help"
+msgstr ""
+
 # classes/applications/shop/shop_special_offer.aw:prop_oc
 msgid "Omaduse Tellimiskeskkond (oc) caption"
 msgstr "Ordering center"

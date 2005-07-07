@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/admin/config/config_login_menus.aw:class_251_help
+msgid "Klassi Login men&uuml;&uuml;d help"
+msgstr ""
+
 # classes/admin/config/config_login_menus.aw:prop_login_menus
 msgid "Omaduse  (login_menus) caption"
 msgstr ""

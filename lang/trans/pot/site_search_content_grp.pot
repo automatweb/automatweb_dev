@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/site_search/site_search_content_grp.aw:class_232_help
+msgid "Klassi Saidi sisu otsingu grupp help"
+msgstr ""
+
 #: classes/contentmgmt/site_search/site_search_content_grp.aw:prop_users_only
 msgid "Omaduse Ainult sisse logitud kasutajatele (users_only) caption"
 msgstr ""

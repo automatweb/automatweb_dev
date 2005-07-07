@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/class_base.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 # classes/class_base.aw:prop_name
 msgid "Omaduse Nimi (name) caption"
 msgstr "Name"
@@ -105,20 +109,20 @@ msgstr "New"
 msgid "Tagasi"
 msgstr "Back"
 
-#: classes/class_base.aw:1413 classes/class_base.aw:4507
-#: classes/class_base.aw:4518
+#: classes/class_base.aw:1413 classes/class_base.aw:4532
+#: classes/class_base.aw:4543
 msgid "Seostehaldur"
 msgstr "Connection manager"
 
-#: classes/class_base.aw:3109
+#: classes/class_base.aw:3126
 msgid "See väli ei tohi olla tühi!"
 msgstr "This field can not be empty"
 
-#: classes/class_base.aw:3118
+#: classes/class_base.aw:3135
 msgid "See pole korrektne e-posti aadress!"
 msgstr "That is not a valid e-mail adddress"
 
-#: classes/class_base.aw:4406
+#: classes/class_base.aw:4431
 msgid "%s is not a valid configuration form!"
 msgstr "%s is not a valid configuration form!"
 

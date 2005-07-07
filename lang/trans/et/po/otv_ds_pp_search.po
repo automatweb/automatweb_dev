@@ -1,13 +1,17 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Fri,  8 Apr 2005 21:44:33 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=ISO-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
+
+# classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:class_820_help
+msgid "Klassi Objektinimekirja pp andmeallika otsing help"
+msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:prop_pp
 msgid "Omaduse Postipoisi andmeallikas, kust otsida (pp) caption"
@@ -103,12 +107,24 @@ msgstr ""
 msgid "Grupi Otsinguvorm (sform) pealkiri"
 msgstr ""
 
+# classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_sform_help
+msgid "Grupi Otsinguvorm (sform) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_stbl
 msgid "Grupi Tulemuste tabel (stbl) pealkiri"
 msgstr ""
 
+# classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_stbl_help
+msgid "Grupi Tulemuste tabel (stbl) help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_srch
 msgid "Grupi Otsi (srch) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:group_srch_help
+msgid "Grupi Otsi (srch) help"
 msgstr ""
 
 # classes/contentmgmt/object_treeview/otv_ds_pp_search.aw:rel_RELTYPE_PP

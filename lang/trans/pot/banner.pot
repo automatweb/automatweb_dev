@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/banner/banner.aw:class_54_help
+msgid "Klassi Banner help"
+msgstr ""
+
 #: classes/applications/banner/banner.aw:prop_url
 msgid "Omaduse URL, kuhu klikkimisel suunatakse (url) caption"
 msgstr ""

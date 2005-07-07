@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:20 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,68 +9,74 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/translate/class_translation.aw:class_213_help
+msgid "Klassi Klassi t&otilde;lge help"
+msgstr ""
 
-#: classes/translate/class_translation.aw:prop_lang_code
+# classes/translate/class_translation.aw:prop_lang_code
 msgid "Omaduse Keel (lang_code) caption"
 msgstr "Language"
 
-#: classes/translate/class_translation.aw:prop_lang_code_comment
+# classes/translate/class_translation.aw:prop_lang_code_comment
 msgid "Omaduse Keel (lang_code) kommentaar"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_lang_code_help
+# classes/translate/class_translation.aw:prop_lang_code_help
 msgid "Omaduse Keel (lang_code) help"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_subclass
+# classes/translate/class_translation.aw:prop_subclass
 msgid "Omaduse Klass (subclass) caption"
 msgstr "Class"
 
-#: classes/translate/class_translation.aw:prop_subclass_comment
+# classes/translate/class_translation.aw:prop_subclass_comment
 msgid "Omaduse Klass (subclass) kommentaar"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_subclass_help
+# classes/translate/class_translation.aw:prop_subclass_help
 msgid "Omaduse Klass (subclass) help"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_info
+# classes/translate/class_translation.aw:prop_info
 msgid "Omaduse Info  (info) caption"
 msgstr "Info"
 
-#: classes/translate/class_translation.aw:prop_info_comment
+# classes/translate/class_translation.aw:prop_info_comment
 msgid "Omaduse Info  (info) kommentaar"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_info_help
+# classes/translate/class_translation.aw:prop_info_help
 msgid "Omaduse Info  (info) help"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_preview
+# classes/translate/class_translation.aw:prop_preview
 msgid "Omaduse Eelvaade (preview) caption"
 msgstr "Preview"
 
-#: classes/translate/class_translation.aw:prop_preview_comment
+# classes/translate/class_translation.aw:prop_preview_comment
 msgid "Omaduse Eelvaade (preview) kommentaar"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_preview_help
+# classes/translate/class_translation.aw:prop_preview_help
 msgid "Omaduse Eelvaade (preview) help"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_workbench
+# classes/translate/class_translation.aw:prop_workbench
 msgid "Omaduse Tõlkimine (workbench) caption"
 msgstr "Translation"
 
-#: classes/translate/class_translation.aw:prop_workbench_comment
+# classes/translate/class_translation.aw:prop_workbench_comment
 msgid "Omaduse Tõlkimine (workbench) kommentaar"
 msgstr ""
 
-#: classes/translate/class_translation.aw:prop_workbench_help
+# classes/translate/class_translation.aw:prop_workbench_help
 msgid "Omaduse Tõlkimine (workbench) help"
 msgstr ""
 
-#: classes/translate/class_translation.aw:group_workbench
+# classes/translate/class_translation.aw:group_workbench
 msgid "Grupi Tõlgi (workbench) pealkiri"
 msgstr "Translate"
 
+# classes/translate/class_translation.aw:group_workbench_help
+msgid "Grupi Tõlgi (workbench) help"
+msgstr ""

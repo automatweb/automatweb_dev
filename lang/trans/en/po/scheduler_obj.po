@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/admin/scheduler_obj.aw:class_108_help
+msgid "Klassi Scheduler help"
+msgstr ""
+
 # classes/admin/scheduler_obj.aw:prop_login_uid
 msgid "Omaduse Kasutaja (login_uid) caption"
 msgstr "User"

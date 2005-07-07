@@ -13,14 +13,14 @@ msgstr ""
 msgid "<b>AutomatWeb</b>"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:358
+#: classes/admin/admin_folders.aw:362
 msgid "Mitteperioodilised"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:368
+#: classes/admin/admin_folders.aw:372
 msgid "Reload"
 msgstr ""
 
-#: classes/admin/admin_folders.aw:374
+#: classes/admin/admin_folders.aw:378
 msgid "Logi v&auml;lja"
 msgstr ""

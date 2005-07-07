@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/cfg/cfgform.aw:class_119_help
+msgid "Klassi Seadete vorm help"
+msgstr ""
+
 # classes/cfg/cfgform.aw:prop_subclass
 msgid "Omaduse Klass (subclass) caption"
 msgstr "Class"

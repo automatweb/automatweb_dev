@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/core/aw_sysconfig.aw:class_479_help
+msgid "Klassi AW Sysconfig help"
+msgstr ""
+
 #: classes/core/aw_sysconfig.aw:prop_matchmaker
 msgid "Omaduse Seadistamise tabel (matchmaker) caption"
 msgstr ""

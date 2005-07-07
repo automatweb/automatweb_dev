@@ -9,26 +9,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-# classes/cfg/property.aw:prop_test
-msgid "Omaduse Test (test) caption"
-msgstr "Test"
-
-# classes/cfg/property.aw:prop_test_comment
-msgid "Omaduse Test (test) kommentaar"
+# classes/applications/class_designer/property.aw:class_930_help
+msgid "Klassi Omadus help"
 msgstr ""
 
-# classes/cfg/property.aw:prop_test_help
-msgid "Omaduse Test (test) help"
+# classes/applications/class_designer/property.aw:prop_int_ref
+msgid "Omaduse Sisemine seos (int_ref) caption"
 msgstr ""
 
-# classes/cfg/property.aw:group_
-msgid "Grupi  () pealkiri"
-msgstr " "
+# classes/applications/class_designer/property.aw:prop_int_ref_comment
+msgid "Omaduse Sisemine seos (int_ref) kommentaar"
+msgstr ""
 
-# classes/applications/class_designer/property.aw:group__help
-msgid "Grupi  () help"
+# classes/applications/class_designer/property.aw:prop_int_ref_help
+msgid "Omaduse Sisemine seos (int_ref) help"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_ext_ref
+msgid "Omaduse Väline seos (ext_ref) caption"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_ext_ref_comment
+msgid "Omaduse Väline seos (ext_ref) kommentaar"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_ext_ref_help
+msgid "Omaduse Väline seos (ext_ref) help"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_property_type
+msgid "Omaduse Omaduse tüüp (property_type) caption"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_property_type_comment
+msgid "Omaduse Omaduse tüüp (property_type) kommentaar"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:prop_property_type_help
+msgid "Omaduse Omaduse tüüp (property_type) help"
+msgstr ""
+
+# classes/applications/class_designer/property.aw:rel_RELTYPE_REAL_PROPERTY
+msgid "Seose Tegelik omadus (RELTYPE_REAL_PROPERTY) tekst"
 msgstr ""
 
 #: classes/applications/class_designer/property.aw:49
 msgid "--vali--"
 msgstr "--select--"
+
+# classes/cfg/property.aw:prop_test
+#~ msgid "Omaduse Test (test) caption"
+#~ msgstr "Test"
+
+# classes/cfg/property.aw:group_
+#~ msgid "Grupi  () pealkiri"
+#~ msgstr " "

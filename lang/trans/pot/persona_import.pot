@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/persona_import/persona_import.aw:class_875_help
+msgid "Klassi Persona import help"
+msgstr ""
+
 #: classes/applications/persona_import/persona_import.aw:prop_last_import
 msgid "Omaduse Viimane import toimus (last_import) caption"
 msgstr ""

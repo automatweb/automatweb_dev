@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/orders/orders_order.aw:class_839_help
+msgid "Klassi Tellimus 2 help"
+msgstr ""
+
 # classes/applications/orders/orders_order.aw:prop_firstname
 msgid "Omaduse Eesnimi (firstname) caption"
 msgstr ""

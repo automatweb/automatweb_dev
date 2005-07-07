@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_order.aw:class_302_help
+msgid "Klassi Tellimus help"
+msgstr ""
+
 # classes/applications/shop/shop_order.aw:prop_confirmed
 msgid "Omaduse Kinnitatud (confirmed) caption"
 msgstr ""

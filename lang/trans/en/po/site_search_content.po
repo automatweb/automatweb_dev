@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/site_search/site_search_content.aw:class_231_help
+msgid "Klassi Saidi sisu otsing help"
+msgstr ""
+
 # classes/contentmgmt/site_search/site_search_content.aw:prop_do_keyword_search
 msgid "Omaduse Otsing märksõnadest (do_keyword_search) caption"
 msgstr "Search keywords"
@@ -142,6 +146,18 @@ msgstr ""
 msgid "Omaduse Staatilise genereerimise link (static_gen_link) help"
 msgstr ""
 
+# classes/contentmgmt/site_search/site_search_content.aw:prop_activity
+msgid "Omaduse Aktiivsus (activity) caption"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:prop_activity_comment
+msgid "Omaduse Aktiivsus (activity) kommentaar"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:prop_activity_help
+msgid "Omaduse Aktiivsus (activity) help"
+msgstr ""
+
 # classes/contentmgmt/site_search/site_search_content.aw:group_static
 msgid "Grupi Staatiline otsing (static) pealkiri"
 msgstr "Static search"
@@ -156,6 +172,14 @@ msgstr "Keyword search"
 
 # classes/contentmgmt/site_search/site_search_content.aw:group_keywords_help
 msgid "Grupi Märksõnade järgi otsing (keywords) help"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:group_activity
+msgid "Grupi Aktiivsus (activity) pealkiri"
+msgstr ""
+
+# classes/contentmgmt/site_search/site_search_content.aw:group_activity_help
+msgid "Grupi Aktiivsus (activity) help"
 msgstr ""
 
 # classes/contentmgmt/site_search/site_search_content.aw:group_searchgroups
@@ -174,76 +198,76 @@ msgstr "recurrence for static search generation"
 msgid "Seose otsingu grupp (RELTYPE_SEARCH_GRP) tekst"
 msgstr "search group"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:86
+#: classes/contentmgmt/site_search/site_search_content.aw:93
 msgid "&uuml;ksk&otilde;ik milline s&otilde;nadest"
 msgstr "any word"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:87
+#: classes/contentmgmt/site_search/site_search_content.aw:94
 msgid "koos k&otilde;igi s&otilde;nadega"
 msgstr "all words"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:88
+#: classes/contentmgmt/site_search/site_search_content.aw:95
 msgid "t&auml;pne fraas"
 msgstr "exact phrase"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:92
+#: classes/contentmgmt/site_search/site_search_content.aw:99
 msgid "K&otilde;ik"
 msgstr "All"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:107
+#: classes/contentmgmt/site_search/site_search_content.aw:114
 msgid "Muutmise kuup&auml;eva j&auml;rgi"
 msgstr "By modification date"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:108
-#: classes/contentmgmt/site_search/site_search_content.aw:187
+#: classes/contentmgmt/site_search/site_search_content.aw:115
+#: classes/contentmgmt/site_search/site_search_content.aw:198
 msgid "Pealkirja j&auml;rgi"
 msgstr "By title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:109
-#: classes/contentmgmt/site_search/site_search_content.aw:188
+#: classes/contentmgmt/site_search/site_search_content.aw:116
+#: classes/contentmgmt/site_search/site_search_content.aw:199
 msgid "Sisu j&auml;rgi"
 msgstr "By content"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:116
+#: classes/contentmgmt/site_search/site_search_content.aw:123
 msgid "uuenda staatiline koopia"
 msgstr "renew static copy"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:138
+#: classes/contentmgmt/site_search/site_search_content.aw:145
 msgid "&Uuml;ksk&otilde;ik milline s&otilde;na"
 msgstr "Ano word"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:139
+#: classes/contentmgmt/site_search/site_search_content.aw:146
 msgid "K&otilde;ik s&otilde;nad"
 msgstr "All words"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:140
+#: classes/contentmgmt/site_search/site_search_content.aw:147
 msgid "Fraas"
 msgstr "Phrase"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:153
+#: classes/contentmgmt/site_search/site_search_content.aw:164
 msgid "Vaikimisi"
 msgstr "Default"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:159
+#: classes/contentmgmt/site_search/site_search_content.aw:170
 msgid "Nimi"
 msgstr "Name"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:164
+#: classes/contentmgmt/site_search/site_search_content.aw:175
 msgid "Vaikimisi järjestus"
 msgstr "Default order"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:169
+#: classes/contentmgmt/site_search/site_search_content.aw:180
 msgid "Pealkiri"
 msgstr "Title"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:184
+#: classes/contentmgmt/site_search/site_search_content.aw:195
 msgid "--vali--"
 msgstr "--select--"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:185
+#: classes/contentmgmt/site_search/site_search_content.aw:196
 msgid "Kuupäeva järgi (uuem enne)"
 msgstr "By date (newest first)"
 
-#: classes/contentmgmt/site_search/site_search_content.aw:186
+#: classes/contentmgmt/site_search/site_search_content.aw:197
 msgid "Kuupäeva järgi (vanem enne)"
 msgstr "By date (oldest first)"

@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_warehouse.aw:class_289_help
+msgid "Klassi Ladu help"
+msgstr ""
+
 # classes/applications/shop/shop_warehouse.aw:prop_conf
 msgid "Omaduse Konfiguratsioon (conf) caption"
 msgstr ""

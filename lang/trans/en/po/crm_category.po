@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:13 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,40 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_category.aw:class_483_help
+msgid "Klassi Kategooria help"
+msgstr ""
 
-#: classes/crm/crm_category.aw:prop_img_upload
+# classes/crm/crm_category.aw:prop_img_upload
 msgid "Omaduse Pilt (img_upload) caption"
 msgstr "Image"
 
-#: classes/crm/crm_category.aw:prop_img_upload_comment
+# classes/crm/crm_category.aw:prop_img_upload_comment
 msgid "Omaduse Pilt (img_upload) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_category.aw:prop_img_upload_help
+# classes/crm/crm_category.aw:prop_img_upload_help
 msgid "Omaduse Pilt (img_upload) help"
 msgstr ""
 
-#: classes/crm/crm_category.aw:prop_extern_id
+# classes/crm/crm_category.aw:prop_extern_id
 msgid "Omaduse  (extern_id) caption"
 msgstr ""
 
-#: classes/crm/crm_category.aw:prop_extern_id_comment
+# classes/crm/crm_category.aw:prop_extern_id_comment
 msgid "Omaduse  (extern_id) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_category.aw:prop_extern_id_help
+# classes/crm/crm_category.aw:prop_extern_id_help
 msgid "Omaduse  (extern_id) help"
 msgstr ""
 
-#: classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
+# classes/crm/crm_category.aw:rel_RELTYPE_IMAGE
 msgid "Seose Pilt (RELTYPE_IMAGE) tekst"
 msgstr "Image"
 
-#: classes/crm/crm_category.aw:rel_RELTYPE_CATEGORY
+# classes/crm/crm_category.aw:rel_RELTYPE_CATEGORY
 msgid "Seose Alam kategooria (RELTYPE_CATEGORY) tekst"
 msgstr "subcategory"
 
-#: classes/crm/crm_category.aw:rel_RELTYPE_CUSTOMER
+# classes/crm/crm_category.aw:rel_RELTYPE_CUSTOMER
 msgid "Seose Klient (RELTYPE_CUSTOMER) tekst"
 msgstr "customer"
-

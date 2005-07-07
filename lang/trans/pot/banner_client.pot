@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/banner/banner_client.aw:class_55_help
+msgid "Klassi Banneri asukoht help"
+msgstr ""
+
 #: classes/applications/banner/banner_client.aw:prop_html
 msgid "Omaduse Asukoha HTML (html) caption"
 msgstr ""

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:27 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,48 +9,54 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/stat_report/stat_report.aw:class_304_help
+msgid "Klassi Stati aruannete upload help"
+msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_filesize
+# classes/applications/stat_report/stat_report.aw:prop_filesize
 msgid "Omaduse Faili max. suurus (KB) (filesize) caption"
 msgstr "File max size"
 
-#: classes/applications/stat_report/stat_report.aw:prop_filesize_comment
+# classes/applications/stat_report/stat_report.aw:prop_filesize_comment
 msgid "Omaduse Faili max. suurus (KB) (filesize) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_filesize_help
+# classes/applications/stat_report/stat_report.aw:prop_filesize_help
 msgid "Omaduse Faili max. suurus (KB) (filesize) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_whitelist
+# classes/applications/stat_report/stat_report.aw:prop_whitelist
 msgid "Omaduse Lubatud laiend (iga laiend eraldi real) (whitelist) caption"
 msgstr "Allowed extensions (on separate lines)"
 
-#: classes/applications/stat_report/stat_report.aw:prop_whitelist_comment
+# classes/applications/stat_report/stat_report.aw:prop_whitelist_comment
 msgid "Omaduse Lubatud laiend (iga laiend eraldi real) (whitelist) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_whitelist_help
+# classes/applications/stat_report/stat_report.aw:prop_whitelist_help
 msgid "Omaduse Lubatud laiend (iga laiend eraldi real) (whitelist) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_final
+# classes/applications/stat_report/stat_report.aw:prop_final
 msgid "Omaduse Õnnestunud uploadi kviteeriv tekst (final) caption"
 msgstr "Successful upload text"
 
-#: classes/applications/stat_report/stat_report.aw:prop_final_comment
+# classes/applications/stat_report/stat_report.aw:prop_final_comment
 msgid "Omaduse Õnnestunud uploadi kviteeriv tekst (final) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:prop_final_help
+# classes/applications/stat_report/stat_report.aw:prop_final_help
 msgid "Omaduse Õnnestunud uploadi kviteeriv tekst (final) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_report.aw:group_settings
+# classes/applications/stat_report/stat_report.aw:group_settings
 msgid "Grupi Seadistamine (settings) pealkiri"
 msgstr "Settings"
 
-#: classes/applications/stat_report/stat_report.aw:rel_RELTYPE_REPORT_TYPE
+# classes/applications/stat_report/stat_report.aw:group_settings_help
+msgid "Grupi Seadistamine (settings) help"
+msgstr ""
+
+# classes/applications/stat_report/stat_report.aw:rel_RELTYPE_REPORT_TYPE
 msgid "Seose Aruannete tyybid (RELTYPE_REPORT_TYPE) tekst"
 msgstr "Report types"
-

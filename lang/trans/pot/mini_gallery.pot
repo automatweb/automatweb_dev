@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/contentmgmt/gallery/mini_gallery.aw:class_318_help
+msgid "Klassi Minigalerii help"
+msgstr ""
+
 #: classes/contentmgmt/gallery/mini_gallery.aw:prop_folder
 msgid "Omaduse Piltide kataloog (folder) caption"
 msgstr ""
@@ -86,15 +90,15 @@ msgstr ""
 msgid "Seose Stiil (RELTYPE_STYLE) tekst"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:194
+#: classes/contentmgmt/gallery/mini_gallery.aw:202
 msgid "Valitud piltide kataloogi ei ole &otilde;igusi objekte lisada!"
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:304
+#: classes/contentmgmt/gallery/mini_gallery.aw:308
 msgid "Galerii "
 msgstr ""
 
-#: classes/contentmgmt/gallery/mini_gallery.aw:304
+#: classes/contentmgmt/gallery/mini_gallery.aw:308
 msgid " pildid"
 msgstr ""
 

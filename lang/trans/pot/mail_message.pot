@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Mon, 25 Apr 2005 17:05:18 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+
+#: classes/applications/messenger/mail_message.aw:class_52_help
+msgid "Klassi Message help"
+msgstr ""
 
 #: classes/applications/messenger/mail_message.aw:prop_edit_toolbar
 msgid "Omaduse Kirja redigeerimise toolbar (edit_toolbar) caption"
@@ -262,6 +266,14 @@ msgstr ""
 msgid "Omaduse  (msg_attachments) help"
 msgstr ""
 
+#: classes/applications/messenger/mail_message.aw:group_general
+msgid "Grupi Üldine (general) pealkiri"
+msgstr ""
+
+#: classes/applications/messenger/mail_message.aw:group_general_help
+msgid "Grupi Üldine (general) help"
+msgstr ""
+
 #: classes/applications/messenger/mail_message.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
@@ -310,43 +322,35 @@ msgstr ""
 msgid "Kustuta"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:577
+#: classes/applications/messenger/mail_message.aw:579
 msgid "Lisa kalendrisse"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:612
+#: classes/applications/messenger/mail_message.aw:620
 msgid "Päised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:617
+#: classes/applications/messenger/mail_message.aw:625
 msgid "Tavaline"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:623
+#: classes/applications/messenger/mail_message.aw:631
 msgid "Kõik päised"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:782
-msgid "err, ei leidnud kalendrit"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:799
-msgid "Toimetus lisatud<br>"
-msgstr ""
-
-#: classes/applications/messenger/mail_message.aw:821
+#: classes/applications/messenger/mail_message.aw:942
 msgid "kustutatud!"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:823 classes/applications/messenger/mail_message.aw:876
+#: classes/applications/messenger/mail_message.aw:944 classes/applications/messenger/mail_message.aw:997
 msgid "sulge aken"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:875
+#: classes/applications/messenger/mail_message.aw:996
 msgid "saadetud<p>"
 msgstr ""
 
-#: classes/applications/messenger/mail_message.aw:992
+#: classes/applications/messenger/mail_message.aw:1113
 msgid "----Forwarded message-----\n"
 msgstr ""
 

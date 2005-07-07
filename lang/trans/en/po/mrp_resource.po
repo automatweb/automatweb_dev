@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/mrp/mrp_resource.aw:class_825_help
+msgid "Klassi Ressurss help"
+msgstr ""
+
 # classes/mrp/mrp_resource.aw:prop_state
 msgid "Omaduse Ressursi staatus (state) caption"
 msgstr "Resource status"
@@ -358,7 +362,7 @@ msgstr "Resource usage is not planned"
 msgid "Ressurss on allhange"
 msgstr "Resource is sub-contract"
 
-#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:544
+#: classes/mrp/mrp_resource.aw:459 classes/mrp/mrp_resource.aw:543
 msgid "Ava"
 msgstr "Open"
 

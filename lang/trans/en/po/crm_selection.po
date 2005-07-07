@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:13 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,80 +9,91 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_selection.aw:class_169_help
+msgid "Klassi Valim help"
+msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_template
+# classes/crm/crm_selection.aw:prop_template
 msgid "Omaduse Näitamise template (template) caption"
 msgstr "Diaply template"
 
-#: classes/crm/crm_selection.aw:prop_template_comment
+# classes/crm/crm_selection.aw:prop_template_comment
 msgid "Omaduse Näitamise template (template) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_template_help
+# classes/crm/crm_selection.aw:prop_template_help
 msgid "Omaduse Näitamise template (template) help"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_forms
+# classes/crm/crm_selection.aw:prop_forms
 msgid "Omaduse Tagasiside vormid (forms) caption"
 msgstr "Feedback forms"
 
-#: classes/crm/crm_selection.aw:prop_forms_comment
+# classes/crm/crm_selection.aw:prop_forms_comment
 msgid "Omaduse Tagasiside vormid (forms) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_forms_help
+# classes/crm/crm_selection.aw:prop_forms_help
 msgid "Omaduse Tagasiside vormid (forms) help"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_selection_toolbar
+# classes/crm/crm_selection.aw:prop_selection_toolbar
 msgid "Omaduse Objektide toolbar (selection_toolbar) caption"
 msgstr "Objects toolbar"
 
-#: classes/crm/crm_selection.aw:prop_selection_toolbar_comment
+# classes/crm/crm_selection.aw:prop_selection_toolbar_comment
 msgid "Omaduse Objektide toolbar (selection_toolbar) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_selection_toolbar_help
+# classes/crm/crm_selection.aw:prop_selection_toolbar_help
 msgid "Omaduse Objektide toolbar (selection_toolbar) help"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_selection_objects
+# classes/crm/crm_selection.aw:prop_selection_objects
 msgid "Omaduse Objektid (selection_objects) caption"
 msgstr "Objects"
 
-#: classes/crm/crm_selection.aw:prop_selection_objects_comment
+# classes/crm/crm_selection.aw:prop_selection_objects_comment
 msgid "Omaduse Objektid (selection_objects) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_selection_objects_help
+# classes/crm/crm_selection.aw:prop_selection_objects_help
 msgid "Omaduse Objektid (selection_objects) help"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_contents
+# classes/crm/crm_selection.aw:prop_contents
 msgid "Omaduse  (contents) caption"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_contents_comment
+# classes/crm/crm_selection.aw:prop_contents_comment
 msgid "Omaduse  (contents) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:prop_contents_help
+# classes/crm/crm_selection.aw:prop_contents_help
 msgid "Omaduse  (contents) help"
 msgstr ""
 
-#: classes/crm/crm_selection.aw:group_contents
+# classes/crm/crm_selection.aw:group_contents
 msgid "Grupi Objektid (contents) pealkiri"
 msgstr "Objects"
 
-#: classes/crm/crm_selection.aw:group_preview
+# classes/crm/crm_selection.aw:group_contents_help
+msgid "Grupi Objektid (contents) help"
+msgstr ""
+
+# classes/crm/crm_selection.aw:group_preview
 msgid "Grupi Näita (preview) pealkiri"
 msgstr "Display"
 
-#: classes/crm/crm_selection.aw:rel_RELTYPE_BACKFORMS2
+# classes/crm/crm_selection.aw:group_preview_help
+msgid "Grupi Näita (preview) help"
+msgstr ""
+
+# classes/crm/crm_selection.aw:rel_RELTYPE_BACKFORMS2
 msgid "Seose Tagasisidevorm (RELTYPE_BACKFORMS2) tekst"
 msgstr "Feedback form"
 
-#: classes/crm/crm_selection.aw:rel_RELTYPE_RELATED_SELECTIONS
+# classes/crm/crm_selection.aw:rel_RELTYPE_RELATED_SELECTIONS
 msgid "Seose Seotud valimid (RELTYPE_RELATED_SELECTIONS) tekst"
 msgstr "Connected selections"
 
@@ -141,4 +152,3 @@ msgstr "no template set"
 #: classes/crm/crm_selection.aw:617
 msgid " valim tühi, või objekte pole aktiivseks tehtud"
 msgstr " selection empty or objects have not been activated"
-

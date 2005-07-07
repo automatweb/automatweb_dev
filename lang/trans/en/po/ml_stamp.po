@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/mailinglist/ml_stamp.aw:class_74_help
+msgid "Klassi Stamp help"
+msgstr ""
 
-#: classes/applications/mailinglist/ml_stamp.aw:prop_content
+# classes/applications/mailinglist/ml_stamp.aw:prop_content
 msgid "Omaduse Sisu (content) caption"
 msgstr "Content"
 
-#: classes/applications/mailinglist/ml_stamp.aw:prop_content_comment
+# classes/applications/mailinglist/ml_stamp.aw:prop_content_comment
 msgid "Omaduse Sisu (content) kommentaar"
 msgstr ""
 
-#: classes/applications/mailinglist/ml_stamp.aw:prop_content_help
+# classes/applications/mailinglist/ml_stamp.aw:prop_content_help
 msgid "Omaduse Sisu (content) help"
 msgstr ""
-

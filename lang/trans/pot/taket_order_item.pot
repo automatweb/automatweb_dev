@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/taket/taket_order_item.aw:class_249_help
+msgid "Klassi Taketi tellimuse item help"
+msgstr ""
+
 #: classes/taket/taket_order_item.aw:prop_order_id
 msgid "Omaduse  (order_id) caption"
 msgstr ""

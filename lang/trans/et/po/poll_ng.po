@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:53 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/poll_ng.aw:class_165_help
+msgid "Klassi Poll (uus) help"
+msgstr ""
 
-#: classes/poll_ng.aw:prop_choices
+# classes/poll_ng.aw:prop_choices
 msgid "Omaduse Variandid (choices) caption"
 msgstr ""
 
-#: classes/poll_ng.aw:prop_choices_comment
+# classes/poll_ng.aw:prop_choices_comment
 msgid "Omaduse Variandid (choices) kommentaar"
 msgstr ""
 
-#: classes/poll_ng.aw:prop_choices_help
+# classes/poll_ng.aw:prop_choices_help
 msgid "Omaduse Variandid (choices) help"
 msgstr ""
 
-#: classes/poll_ng.aw:group_choices
+# classes/poll_ng.aw:group_choices
 msgid "Grupi Vastusevariandid (choices) pealkiri"
 msgstr ""
 
-#: classes/poll_ng.aw:rel_RELTYPE_ANSWER
+# classes/poll_ng.aw:group_choices_help
+msgid "Grupi Vastusevariandid (choices) help"
+msgstr ""
+
+# classes/poll_ng.aw:rel_RELTYPE_ANSWER
 msgid "Seose polli vastus (RELTYPE_ANSWER) tekst"
 msgstr ""
 
@@ -57,4 +64,3 @@ msgstr ""
 #: classes/poll_ng.aw:156
 msgid "invalid choice"
 msgstr ""
-

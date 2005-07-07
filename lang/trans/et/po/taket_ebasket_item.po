@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/taket/taket_ebasket_item.aw:class_245_help
+msgid "Klassi Taketi Ostukorvi Rida help"
+msgstr ""
+
 # classes/taket/taket_ebasket_item.aw:prop_product_code
 msgid "Omaduse  (product_code) caption"
 msgstr ""

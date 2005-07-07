@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/taket/taket_users_import.aw:class_247_help
+msgid "Klassi Taketi kasutajate import help"
+msgstr ""
+
 #: classes/taket/taket_users_import.aw:prop_no
 msgid "Omaduse  (no) caption"
 msgstr ""

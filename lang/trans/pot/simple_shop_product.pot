@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/simple_shop/simple_shop_product.aw:class_912_help
+msgid "Klassi Lihtne toode help"
+msgstr ""
+
 #: classes/applications/simple_shop/simple_shop_product.aw:prop_name
 msgid "Omaduse Nimetus (name) caption"
 msgstr ""

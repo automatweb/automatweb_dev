@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_order_cart.aw:class_319_help
+msgid "Klassi Poe ostukorv help"
+msgstr ""
+
 # classes/applications/shop/shop_order_cart.aw:prop_prod_layout
 msgid "Omaduse Kujundus, mida korvis kasutatakse (prod_layout) caption"
 msgstr "Layout to use in cart"

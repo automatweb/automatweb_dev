@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-#: classes/core/obj/acl_base.aw:327
+#: classes/core/obj/acl_base.aw:339
 msgid "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 msgstr "acl_base->can(%s, %s): error in object hierarchy, count exceeded!"
 
-#: classes/core/obj/acl_base.aw:524
+#: classes/core/obj/acl_base.aw:536
 msgid ""
 "acl_base::prog_acl(%s, %s): the only program you can get access rights for "
 "is PRG_MENUEDIT, all others are deprecated!"

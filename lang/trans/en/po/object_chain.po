@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:50 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,20 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/object_chain.aw:class_86_help
+msgid "Klassi Objektigrupp help"
+msgstr ""
 
-#: classes/object_chain.aw:prop_objs
+# classes/object_chain.aw:prop_objs
 msgid "Omaduse Vali objektid (objs) caption"
 msgstr "Select objects"
 
-#: classes/object_chain.aw:prop_objs_comment
+# classes/object_chain.aw:prop_objs_comment
 msgid "Omaduse Vali objektid (objs) kommentaar"
 msgstr ""
 
-#: classes/object_chain.aw:prop_objs_help
+# classes/object_chain.aw:prop_objs_help
 msgid "Omaduse Vali objektid (objs) help"
 msgstr ""
 
-#: classes/object_chain.aw:rel_RELTYPE_OBJECT
+# classes/object_chain.aw:rel_RELTYPE_OBJECT
 msgid "Seose objekt (RELTYPE_OBJECT) tekst"
 msgstr "object"
-

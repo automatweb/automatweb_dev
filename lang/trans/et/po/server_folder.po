@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:03 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,72 +9,87 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/server_folder.aw:class_278_help
+msgid "Klassi Serveri Kataloog help"
+msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_folder
+# classes/contentmgmt/server_folder.aw:prop_folder
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) caption"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_folder_comment
+# classes/contentmgmt/server_folder.aw:prop_folder_comment
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_folder_help
+# classes/contentmgmt/server_folder.aw:prop_folder_help
 msgid "Omaduse Kataloog serveris kust failid v&otilde;tta (folder) help"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_view_file
+# classes/contentmgmt/server_folder.aw:prop_chf_view_file
 msgid "Omaduse  (chf_view_file) caption"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_view_file_comment
+# classes/contentmgmt/server_folder.aw:prop_chf_view_file_comment
 msgid "Omaduse  (chf_view_file) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_view_file_help
+# classes/contentmgmt/server_folder.aw:prop_chf_view_file_help
 msgid "Omaduse  (chf_view_file) help"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_file
+# classes/contentmgmt/server_folder.aw:prop_chf_file
 msgid "Omaduse  (chf_file) caption"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_file_comment
+# classes/contentmgmt/server_folder.aw:prop_chf_file_comment
 msgid "Omaduse  (chf_file) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_chf_file_help
+# classes/contentmgmt/server_folder.aw:prop_chf_file_help
 msgid "Omaduse  (chf_file) help"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_addf_file
+# classes/contentmgmt/server_folder.aw:prop_addf_file
 msgid "Omaduse  (addf_file) caption"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_addf_file_comment
+# classes/contentmgmt/server_folder.aw:prop_addf_file_comment
 msgid "Omaduse  (addf_file) kommentaar"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:prop_addf_file_help
+# classes/contentmgmt/server_folder.aw:prop_addf_file_help
 msgid "Omaduse  (addf_file) help"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:group_
+# classes/contentmgmt/server_folder.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
 
+# classes/contentmgmt/server_folder.aw:group__help
+msgid "Grupi  () help"
+msgstr ""
+
 #: classes/contentmgmt/server_folder.aw:71
-msgid "server_folder::show_file(%s): the fid parameter does not contain a valid object id!"
+msgid ""
+"server_folder::show_file(%s): the fid parameter does not contain a valid "
+"object id!"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:97
-msgid "server_folder::del_file(%s): the fid parameter does not contain a valid object id!"
+msgid ""
+"server_folder::del_file(%s): the fid parameter does not contain a valid "
+"object id!"
 msgstr ""
 
-#: classes/contentmgmt/server_folder.aw:125 classes/contentmgmt/server_folder.aw:148
-msgid "server_folder::change_file(%s): the fid parameter does not contain a valid object id!"
+#: classes/contentmgmt/server_folder.aw:125
+#: classes/contentmgmt/server_folder.aw:148
+msgid ""
+"server_folder::change_file(%s): the fid parameter does not contain a valid "
+"object id!"
 msgstr ""
 
 #: classes/contentmgmt/server_folder.aw:225
-msgid "server_folder::submit_addfile(%s): the id parameter does not contain a valid object id!"
+msgid ""
+"server_folder::submit_addfile(%s): the id parameter does not contain a valid "
+"object id!"
 msgstr ""
-

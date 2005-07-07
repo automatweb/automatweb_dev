@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:46 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,24 +9,44 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
-
-#: classes/install/object_script_interpreter.aw:31
+#: classes/install/object_script_interpreter.aw:32
 msgid "object_script_interpreter::exec_file(%s): file does not exist!"
 msgstr "object_script_interpreter::exec_file(%s): file does not exist!"
 
-#: classes/install/object_script_interpreter.aw:123
-msgid "object_script_interpreter::_get_sym(%s): no variable by the name %s defined on line %s!"
-msgstr "object_script_interpreter::_get_sym(%s): no variable by the name %s defined on line %s!"
+#: classes/install/object_script_interpreter.aw:124
+msgid ""
+"object_script_interpreter::_get_sym(%s): no variable by the name %s defined "
+"on line %s!"
+msgstr ""
+"object_script_interpreter::_get_sym(%s): no variable by the name %s defined "
+"on line %s!"
 
-#: classes/install/object_script_interpreter.aw:177
-msgid "object_script_interpreter::_tokenize_line(%s): parse error - unrecognized command on line %s!"
-msgstr "object_script_interpreter::_tokenize_line(%s): parse error - unrecognized command on line %s!"
+#: classes/install/object_script_interpreter.aw:186
+msgid ""
+"object_script_interpreter::_tokenize_line(%s): parse error - unrecognized "
+"command on line %s!"
+msgstr ""
+"object_script_interpreter::_tokenize_line(%s): parse error - unrecognized "
+"command on line %s!"
 
-#: classes/install/object_script_interpreter.aw:185
-msgid "object_script_interpreter::_tokenize_line(%s): parse error no opening brace after command on line %s!"
-msgstr "object_script_interpreter::_tokenize_line(%s): parse error no opening brace after command on line %s!"
+#: classes/install/object_script_interpreter.aw:194
+msgid ""
+"object_script_interpreter::_tokenize_line(%s): parse error no opening brace "
+"after command on line %s!"
+msgstr ""
+"object_script_interpreter::_tokenize_line(%s): parse error no opening brace "
+"after command on line %s!"
 
-#: classes/install/object_script_interpreter.aw:190
-msgid "object_script_interpreter::_tokenize_line(%s): parse error no closing brace on line %s!"
-msgstr "object_script_interpreter::_tokenize_line(%s): parse error no closing brace on line %s!"
+#: classes/install/object_script_interpreter.aw:199
+msgid ""
+"object_script_interpreter::_tokenize_line(%s): parse error no closing brace "
+"on line %s!"
+msgstr ""
+"object_script_interpreter::_tokenize_line(%s): parse error no closing brace "
+"on line %s!"
 
+#: classes/install/object_script_interpreter.aw:406
+msgid ""
+"object_script_interpreter::_exec_toks(): relation must have both ends "
+"defined!"
+msgstr ""

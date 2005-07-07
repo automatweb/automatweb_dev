@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:18 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,12 +9,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/core/obj/object_complex_query.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
 #: classes/core/obj/object_complex_query.aw:34
-msgid "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
-msgstr "object_complex_query::compile_search_by_result_set(): start_from class has no fields in the fields array!"
+msgid ""
+"object_complex_query::compile_search_by_result_set(): start_from class has "
+"no fields in the fields array!"
+msgstr ""
+"object_complex_query::compile_search_by_result_set(): start_from class has "
+"no fields in the fields array!"
 
 #: classes/core/obj/object_complex_query.aw:97
-msgid "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
-msgstr "object_complex_query::compile_search_by_param(): start_from class has no fields in the fields array!"
-
+msgid ""
+"object_complex_query::compile_search_by_param(): start_from class has no "
+"fields in the fields array!"
+msgstr ""
+"object_complex_query::compile_search_by_param(): start_from class has no "
+"fields in the fields array!"

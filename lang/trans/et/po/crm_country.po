@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:11 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,28 +9,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_country.aw:class_134_help
+msgid "Klassi Riik help"
+msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_en
+# classes/crm/crm_country.aw:prop_name
+msgid "Omaduse Riigi nimetus (name) caption"
+msgstr ""
+
+# classes/crm/crm_country.aw:prop_name_comment
+msgid "Omaduse Riigi nimetus (name) kommentaar"
+msgstr ""
+
+# classes/crm/crm_country.aw:prop_name_help
+msgid "Omaduse Riigi nimetus (name) help"
+msgstr ""
+
+# classes/crm/crm_country.aw:prop_name_en
 msgid "Omaduse Nimetus inglise keeles (name_en) caption"
 msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_en_comment
+# classes/crm/crm_country.aw:prop_name_en_comment
 msgid "Omaduse Nimetus inglise keeles (name_en) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_en_help
+# classes/crm/crm_country.aw:prop_name_en_help
 msgid "Omaduse Nimetus inglise keeles (name_en) help"
 msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_native
+# classes/crm/crm_country.aw:prop_name_native
 msgid "Omaduse Nimetus kohalikus keeles (name_native) caption"
 msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_native_comment
+# classes/crm/crm_country.aw:prop_name_native_comment
 msgid "Omaduse Nimetus kohalikus keeles (name_native) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_country.aw:prop_name_native_help
+# classes/crm/crm_country.aw:prop_name_native_help
 msgid "Omaduse Nimetus kohalikus keeles (name_native) help"
 msgstr ""
-

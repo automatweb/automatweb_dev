@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:08 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,88 +9,94 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/crm/crm_address.aw:class_146_help
+msgid "Klassi Aadress help"
+msgstr ""
 
-#: classes/crm/crm_address.aw:prop_aadress
+# classes/crm/crm_address.aw:prop_aadress
 msgid "Omaduse Tänav/Küla (aadress) caption"
 msgstr "Street/Village"
 
-#: classes/crm/crm_address.aw:prop_aadress_comment
+# classes/crm/crm_address.aw:prop_aadress_comment
 msgid "Omaduse Tänav/Küla (aadress) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_aadress_help
+# classes/crm/crm_address.aw:prop_aadress_help
 msgid "Omaduse Tänav/Küla (aadress) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_postiindeks
+# classes/crm/crm_address.aw:prop_postiindeks
 msgid "Omaduse Postinindex (postiindeks) caption"
 msgstr "Pstal index"
 
-#: classes/crm/crm_address.aw:prop_postiindeks_comment
+# classes/crm/crm_address.aw:prop_postiindeks_comment
 msgid "Omaduse Postinindex (postiindeks) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_postiindeks_help
+# classes/crm/crm_address.aw:prop_postiindeks_help
 msgid "Omaduse Postinindex (postiindeks) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_linn
+# classes/crm/crm_address.aw:prop_linn
 msgid "Omaduse Linn/Vald/Alev (linn) caption"
 msgstr "City/State/Village"
 
-#: classes/crm/crm_address.aw:prop_linn_comment
+# classes/crm/crm_address.aw:prop_linn_comment
 msgid "Omaduse Linn/Vald/Alev (linn) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_linn_help
+# classes/crm/crm_address.aw:prop_linn_help
 msgid "Omaduse Linn/Vald/Alev (linn) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_maakond
+# classes/crm/crm_address.aw:prop_maakond
 msgid "Omaduse Maakond (maakond) caption"
 msgstr "County"
 
-#: classes/crm/crm_address.aw:prop_maakond_comment
+# classes/crm/crm_address.aw:prop_maakond_comment
 msgid "Omaduse Maakond (maakond) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_maakond_help
+# classes/crm/crm_address.aw:prop_maakond_help
 msgid "Omaduse Maakond (maakond) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_riik
+# classes/crm/crm_address.aw:prop_riik
 msgid "Omaduse Riik (riik) caption"
 msgstr "State"
 
-#: classes/crm/crm_address.aw:prop_riik_comment
+# classes/crm/crm_address.aw:prop_riik_comment
 msgid "Omaduse Riik (riik) kommentaar"
 msgstr ""
 
-#: classes/crm/crm_address.aw:prop_riik_help
+# classes/crm/crm_address.aw:prop_riik_help
 msgid "Omaduse Riik (riik) help"
 msgstr ""
 
-#: classes/crm/crm_address.aw:group_settings
+# classes/crm/crm_address.aw:group_settings
 msgid "Grupi Seadistused (settings) pealkiri"
 msgstr "Settings"
 
-#: classes/crm/crm_address.aw:rel_RELTYPE_LINN
+# classes/crm/crm_address.aw:group_settings_help
+msgid "Grupi Seadistused (settings) help"
+msgstr ""
+
+# classes/crm/crm_address.aw:rel_RELTYPE_LINN
 msgid "Seose Linn (RELTYPE_LINN) tekst"
 msgstr "City"
 
-#: classes/crm/crm_address.aw:rel_RELTYPE_RIIK
+# classes/crm/crm_address.aw:rel_RELTYPE_RIIK
 msgid "Seose Riik (RELTYPE_RIIK) tekst"
 msgstr "State"
 
-#: classes/crm/crm_address.aw:rel_RELTYPE_MAAKOND
+# classes/crm/crm_address.aw:rel_RELTYPE_MAAKOND
 msgid "Seose Maakond (RELTYPE_MAAKOND) tekst"
 msgstr "County"
 
-#: classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
+# classes/crm/crm_address.aw:rel_RELTYPE_BELONGTO
 msgid "Seose Seosobjekt (RELTYPE_BELONGTO) tekst"
 msgstr "belongs to"
 
 #: classes/crm/crm_address.aw:136
 msgid "tel:"
 msgstr "phone:"
-

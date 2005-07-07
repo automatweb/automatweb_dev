@@ -10,47 +10,51 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/mrp/mrp_schedule.aw:268
-msgid "Saatuslik viga: kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"
+#: classes/mrp/mrp_schedule.aw:class_827_help
+msgid "Klassi Ressursiplaneerija help"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:277
-msgid "Saatuslik viga: planeerimisluku käivitamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:270
+msgid "Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:283
-msgid "Saatuslik viga: planeerimiseks lukustamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:282
+msgid "Planeerimisluku käivitamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:287
-msgid "Viga: planeerimisluku lukustamiseta kustutamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:293
+msgid "Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:305
-msgid "Viga: planeerimisluku avamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:300
+msgid "Planeerimiseks lukustamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:310
-msgid "Viga: planeerimisluku kustutamine ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:319
+msgid "Planeerimisluku avamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:655
-msgid "Viga: planeerimisluku avamine peale planeerimist ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:328
+msgid "Planeerimisluku kustutamine ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:660
-msgid "Viga: planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
+#: classes/mrp/mrp_schedule.aw:677
+msgid "Planeerimisluku avamine peale planeerimist ebaõnnestus!"
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:845
+#: classes/mrp/mrp_schedule.aw:686
+msgid "Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"
+msgstr ""
+
+#: classes/mrp/mrp_schedule.aw:874
 msgid "Viga planeeritud aegade salvestamisel. "
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:973
-msgid "Saatuslik viga: sobivat aega ei leidund tervest kalendrist!"
+#: classes/mrp/mrp_schedule.aw:1002
+msgid "Sobivat aega ei leidunud tervest kalendrist! resource-tag: ["
 msgstr ""
 
-#: classes/mrp/mrp_schedule.aw:1323
-msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu."
+#: classes/mrp/mrp_schedule.aw:1356
+msgid "Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades."
 msgstr ""
 

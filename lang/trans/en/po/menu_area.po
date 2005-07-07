@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:15 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,56 +9,58 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/layout/menu_area.aw:class_180_help
+msgid "Klassi Men&uuml;&uuml;piirkond help"
+msgstr ""
 
-#: classes/layout/menu_area.aw:prop_root_folder
+# classes/layout/menu_area.aw:prop_root_folder
 msgid "Omaduse Root kataloog (root_folder) caption"
 msgstr "root folder"
 
-#: classes/layout/menu_area.aw:prop_root_folder_comment
+# classes/layout/menu_area.aw:prop_root_folder_comment
 msgid "Omaduse Root kataloog (root_folder) kommentaar"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_root_folder_help
+# classes/layout/menu_area.aw:prop_root_folder_help
 msgid "Omaduse Root kataloog (root_folder) help"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_num_levels
+# classes/layout/menu_area.aw:prop_num_levels
 msgid "Omaduse Mitu taset (num_levels) caption"
 msgstr "Number of levels"
 
-#: classes/layout/menu_area.aw:prop_num_levels_comment
+# classes/layout/menu_area.aw:prop_num_levels_comment
 msgid "Omaduse Mitu taset (num_levels) kommentaar"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_num_levels_help
+# classes/layout/menu_area.aw:prop_num_levels_help
 msgid "Omaduse Mitu taset (num_levels) help"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_mod_levels
+# classes/layout/menu_area.aw:prop_mod_levels
 msgid "Omaduse Tasemed (mod_levels) caption"
 msgstr "Levels"
 
-#: classes/layout/menu_area.aw:prop_mod_levels_comment
+# classes/layout/menu_area.aw:prop_mod_levels_comment
 msgid "Omaduse Tasemed (mod_levels) kommentaar"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_mod_levels_help
+# classes/layout/menu_area.aw:prop_mod_levels_help
 msgid "Omaduse Tasemed (mod_levels) help"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_show_name
+# classes/layout/menu_area.aw:prop_show_name
 msgid "Omaduse Kas n&auml;idata nime (show_name) caption"
 msgstr "Display name"
 
-#: classes/layout/menu_area.aw:prop_show_name_comment
+# classes/layout/menu_area.aw:prop_show_name_comment
 msgid "Omaduse Kas n&auml;idata nime (show_name) kommentaar"
 msgstr ""
 
-#: classes/layout/menu_area.aw:prop_show_name_help
+# classes/layout/menu_area.aw:prop_show_name_help
 msgid "Omaduse Kas n&auml;idata nime (show_name) help"
 msgstr ""
 
-#: classes/layout/menu_area.aw:rel_RELTYPE_ROOT_FOLDER
+# classes/layout/menu_area.aw:rel_RELTYPE_ROOT_FOLDER
 msgid "Seose root kataloog (RELTYPE_ROOT_FOLDER) tekst"
 msgstr "root folder"
-

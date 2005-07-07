@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:class_890_help
+msgid "Klassi Import Kultuuriaknast help"
+msgstr ""
+
 # classes/contentmgmt/object_treeview/otv_ds_kultuuriaken.aw:prop_event_form
 msgid "Omaduse S&uuml;ndmuse vorm (event_form) caption"
 msgstr ""

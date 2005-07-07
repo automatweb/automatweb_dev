@@ -9,6 +9,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/shop/shop_product_search.aw:class_920_help
+msgid "Klassi Lao toodete otsing help"
+msgstr ""
+
 # classes/applications/shop/shop_product_search.aw:prop_wh
 msgid "Omaduse Ladu (wh) caption"
 msgstr "Warehouse"
@@ -162,37 +166,37 @@ msgstr "controller"
 msgid "Seose tellimiskeskkond (RELTYPE_OC) tekst"
 msgstr "order center"
 
-#: classes/applications/shop/shop_product_search.aw:178
-#: classes/applications/shop/shop_product_search.aw:315
+#: classes/applications/shop/shop_product_search.aw:184
+#: classes/applications/shop/shop_product_search.aw:321
 msgid "Klass"
 msgstr "Class"
 
-#: classes/applications/shop/shop_product_search.aw:184
-#: classes/applications/shop/shop_product_search.aw:321
+#: classes/applications/shop/shop_product_search.aw:190
+#: classes/applications/shop/shop_product_search.aw:327
 msgid "Omadus"
 msgstr "Property"
 
-#: classes/applications/shop/shop_product_search.aw:190
+#: classes/applications/shop/shop_product_search.aw:196
 msgid "Vormis?"
 msgstr "In form?"
 
-#: classes/applications/shop/shop_product_search.aw:196
-#: classes/applications/shop/shop_product_search.aw:333
+#: classes/applications/shop/shop_product_search.aw:202
+#: classes/applications/shop/shop_product_search.aw:339
 msgid "J&auml;rjekord"
 msgstr "Order"
 
-#: classes/applications/shop/shop_product_search.aw:202
+#: classes/applications/shop/shop_product_search.aw:208
 msgid "Tekst"
 msgstr "Text"
 
-#: classes/applications/shop/shop_product_search.aw:327
+#: classes/applications/shop/shop_product_search.aw:333
 msgid "Tabelis?"
 msgstr "In table?"
 
-#: classes/applications/shop/shop_product_search.aw:339
+#: classes/applications/shop/shop_product_search.aw:345
 msgid "Tulba pealkiri"
 msgstr "Column heading"
 
-#: classes/applications/shop/shop_product_search.aw:461
+#: classes/applications/shop/shop_product_search.aw:467
 msgid "Vali"
 msgstr "Select"

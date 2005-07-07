@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/doc.aw:class__help
+msgid "Klassi  help"
+msgstr ""
+
 #: classes/doc.aw:prop_needs_translation
 msgid "Omaduse Vajab tõlget (needs_translation) caption"
 msgstr ""
@@ -586,6 +590,66 @@ msgstr ""
 msgid "Omaduse Kasutaja defineeritud 6 (user6) help"
 msgstr ""
 
+#: classes/doc.aw:prop_userta2
+msgid "Omaduse Kasutaja defineeritud textarea 2 (userta2) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_userta2_comment
+msgid "Omaduse Kasutaja defineeritud textarea 2 (userta2) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_userta2_help
+msgid "Omaduse Kasutaja defineeritud textarea 2 (userta2) help"
+msgstr ""
+
+#: classes/doc.aw:prop_userta3
+msgid "Omaduse Kasutaja defineeritud textarea 3 (userta3) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_userta3_comment
+msgid "Omaduse Kasutaja defineeritud textarea 3 (userta3) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_userta3_help
+msgid "Omaduse Kasutaja defineeritud textarea 3 (userta3) help"
+msgstr ""
+
+#: classes/doc.aw:prop_userta4
+msgid "Omaduse Kasutaja defineeritud textarea 4 (userta4) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_userta4_comment
+msgid "Omaduse Kasutaja defineeritud textarea 4 (userta4) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_userta4_help
+msgid "Omaduse Kasutaja defineeritud textarea 4 (userta4) help"
+msgstr ""
+
+#: classes/doc.aw:prop_userta5
+msgid "Omaduse Kasutaja defineeritud textarea 5 (userta5) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_userta5_comment
+msgid "Omaduse Kasutaja defineeritud textarea 5 (userta5) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_userta5_help
+msgid "Omaduse Kasutaja defineeritud textarea 5 (userta5) help"
+msgstr ""
+
+#: classes/doc.aw:prop_userta6
+msgid "Omaduse Kasutaja defineeritud textarea 6 (userta6) caption"
+msgstr ""
+
+#: classes/doc.aw:prop_userta6_comment
+msgid "Omaduse Kasutaja defineeritud textarea 6 (userta6) kommentaar"
+msgstr ""
+
+#: classes/doc.aw:prop_userta6_help
+msgid "Omaduse Kasutaja defineeritud textarea 6 (userta6) help"
+msgstr ""
+
 #: classes/doc.aw:prop_ucheck1
 msgid "Omaduse Kasutaja defineeritud checkbox 1 (ucheck1) caption"
 msgstr ""
@@ -782,23 +846,23 @@ msgstr ""
 msgid "Seose Meeldetuletus (RELTYPE_REMINDER) tekst"
 msgstr ""
 
-#: classes/doc.aw:302
+#: classes/doc.aw:317
 msgid "puudub"
 msgstr ""
 
-#: classes/doc.aw:595
+#: classes/doc.aw:610
 msgid "Salvesta"
 msgstr ""
 
-#: classes/doc.aw:605
+#: classes/doc.aw:620
 msgid "Eelvaade"
 msgstr ""
 
-#: classes/doc.aw:768
+#: classes/doc.aw:783
 msgid "Dokument 2.0"
 msgstr ""
 
-#: classes/doc.aw:781
+#: classes/doc.aw:796
 msgid "Dokument (vend)"
 msgstr ""
 

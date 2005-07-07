@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:42 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,40 +9,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:class_867_help
+msgid "Klassi BugTrack help"
+msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb
 msgid "Omaduse  (bug_tb) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb_comment
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb_comment
 msgid "Omaduse  (bug_tb) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb_help
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tb_help
 msgid "Omaduse  (bug_tb) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree
 msgid "Omaduse  (bug_tree) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree_comment
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree_comment
 msgid "Omaduse  (bug_tree) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree_help
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_tree_help
 msgid "Omaduse  (bug_tree) help"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list
 msgid "Omaduse  (bug_list) caption"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list_comment
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list_comment
 msgid "Omaduse  (bug_list) kommentaar"
 msgstr ""
 
-#: classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list_help
+# classes/applications/bug_o_matic_3000/bug_tracker.aw:prop_bug_list_help
 msgid "Omaduse  (bug_list) help"
 msgstr ""
 
@@ -77,4 +80,3 @@ msgstr ""
 #: classes/applications/bug_o_matic_3000/bug_tracker.aw:156
 msgid "Muudetud"
 msgstr ""
-

@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/crm/crm_company.aw:class_129_help
+msgid "Klassi Organisatsioon help"
+msgstr ""
+
 #: classes/crm/crm_company.aw:prop_navtoolbar
 msgid "Omaduse  (navtoolbar) caption"
 msgstr ""

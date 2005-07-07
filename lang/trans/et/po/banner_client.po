@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:27 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,16 +9,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/banner/banner_client.aw:class_55_help
+msgid "Klassi Banneri asukoht help"
+msgstr ""
 
-#: classes/applications/banner/banner_client.aw:prop_html
+# classes/applications/banner/banner_client.aw:prop_html
 msgid "Omaduse Asukoha HTML (html) caption"
 msgstr ""
 
-#: classes/applications/banner/banner_client.aw:prop_html_comment
+# classes/applications/banner/banner_client.aw:prop_html_comment
 msgid "Omaduse Asukoha HTML (html) kommentaar"
 msgstr ""
 
-#: classes/applications/banner/banner_client.aw:prop_html_help
+# classes/applications/banner/banner_client.aw:prop_html_help
 msgid "Omaduse Asukoha HTML (html) help"
 msgstr ""
-

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:41 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,112 +9,122 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/image_resizer.aw:class_809_help
+msgid "Klassi Piltide muundaja help"
+msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_input_type
+# classes/applications/image_resizer.aw:prop_input_type
 msgid "Omaduse Sisendi tüüp (input_type) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_input_type_comment
+# classes/applications/image_resizer.aw:prop_input_type_comment
 msgid "Omaduse Sisendi tüüp (input_type) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_input_type_help
+# classes/applications/image_resizer.aw:prop_input_type_help
 msgid "Omaduse Sisendi tüüp (input_type) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder
+# classes/applications/image_resizer.aw:prop_from_folder
 msgid "Omaduse Süsteemi kaust (from_folder) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_comment
+# classes/applications/image_resizer.aw:prop_from_folder_comment
 msgid "Omaduse Süsteemi kaust (from_folder) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_help
+# classes/applications/image_resizer.aw:prop_from_folder_help
 msgid "Omaduse Süsteemi kaust (from_folder) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_aw
+# classes/applications/image_resizer.aw:prop_from_folder_aw
 msgid "Omaduse AW kaust (from_folder_aw) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_aw_comment
+# classes/applications/image_resizer.aw:prop_from_folder_aw_comment
 msgid "Omaduse AW kaust (from_folder_aw) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_aw_help
+# classes/applications/image_resizer.aw:prop_from_folder_aw_help
 msgid "Omaduse AW kaust (from_folder_aw) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_width_bigger_than
+# classes/applications/image_resizer.aw:prop_width_bigger_than
 msgid "Omaduse Laiuse tingimus (width_bigger_than) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_width_bigger_than_comment
+# classes/applications/image_resizer.aw:prop_width_bigger_than_comment
 msgid "Omaduse Laiuse tingimus (width_bigger_than) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_width_bigger_than_help
+# classes/applications/image_resizer.aw:prop_width_bigger_than_help
 msgid "Omaduse Laiuse tingimus (width_bigger_than) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_new_width
+# classes/applications/image_resizer.aw:prop_new_width
 msgid "Omaduse Uus laius (new_width) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_new_width_comment
+# classes/applications/image_resizer.aw:prop_new_width_comment
 msgid "Omaduse Uus laius (new_width) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_new_width_help
+# classes/applications/image_resizer.aw:prop_new_width_help
 msgid "Omaduse Uus laius (new_width) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_message
+# classes/applications/image_resizer.aw:prop_message
 msgid "Omaduse  (message) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_message_comment
+# classes/applications/image_resizer.aw:prop_message_comment
 msgid "Omaduse  (message) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_message_help
+# classes/applications/image_resizer.aw:prop_message_help
 msgid "Omaduse  (message) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_contents
+# classes/applications/image_resizer.aw:prop_from_folder_contents
 msgid "Omaduse Info table (from_folder_contents) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_contents_comment
+# classes/applications/image_resizer.aw:prop_from_folder_contents_comment
 msgid "Omaduse Info table (from_folder_contents) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_from_folder_contents_help
+# classes/applications/image_resizer.aw:prop_from_folder_contents_help
 msgid "Omaduse Info table (from_folder_contents) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_do_resize
+# classes/applications/image_resizer.aw:prop_do_resize
 msgid "Omaduse Töötle (do_resize) caption"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_do_resize_comment
+# classes/applications/image_resizer.aw:prop_do_resize_comment
 msgid "Omaduse Töötle (do_resize) kommentaar"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:prop_do_resize_help
+# classes/applications/image_resizer.aw:prop_do_resize_help
 msgid "Omaduse Töötle (do_resize) help"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:group_config
+# classes/applications/image_resizer.aw:group_config
 msgid "Grupi Võimalused (config) pealkiri"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:group_status
+# classes/applications/image_resizer.aw:group_config_help
+msgid "Grupi Võimalused (config) help"
+msgstr ""
+
+# classes/applications/image_resizer.aw:group_status
 msgid "Grupi Staatus (status) pealkiri"
 msgstr ""
 
-#: classes/applications/image_resizer.aw:rel_RELTYPE_IMAGE_FOLDER
-msgid "Seose Piltide kaust (RELTYPE_IMAGE_FOLDER) tekst"
+# classes/applications/image_resizer.aw:group_status_help
+msgid "Grupi Staatus (status) help"
 msgstr ""
 
+# classes/applications/image_resizer.aw:rel_RELTYPE_IMAGE_FOLDER
+msgid "Seose Piltide kaust (RELTYPE_IMAGE_FOLDER) tekst"
+msgstr ""

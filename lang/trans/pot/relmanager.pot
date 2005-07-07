@@ -10,7 +10,7 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
-#: classes/vcl/relmanager.aw:93
+#: classes/vcl/relmanager.aw:83
 msgid "Vali üks"
 msgstr ""
 

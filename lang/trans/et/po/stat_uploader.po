@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:27 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,104 +9,134 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/stat_report/stat_uploader.aw:class__help
+msgid "Klassi  help"
+msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_header
+# classes/applications/stat_report/stat_uploader.aw:prop_header
 msgid "Omaduse  (header) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_header_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_header_comment
 msgid "Omaduse  (header) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_header_help
+# classes/applications/stat_report/stat_uploader.aw:prop_header_help
 msgid "Omaduse  (header) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_reg
+# classes/applications/stat_report/stat_uploader.aw:prop_reg
 msgid "Omaduse  (reg) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_reg_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_reg_comment
 msgid "Omaduse  (reg) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_reg_help
+# classes/applications/stat_report/stat_uploader.aw:prop_reg_help
 msgid "Omaduse  (reg) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_password
+# classes/applications/stat_report/stat_uploader.aw:prop_password
 msgid "Omaduse  (password) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_password_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_password_comment
 msgid "Omaduse  (password) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_password_help
+# classes/applications/stat_report/stat_uploader.aw:prop_password_help
 msgid "Omaduse  (password) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_report_type
+# classes/applications/stat_report/stat_uploader.aw:prop_report_type
 msgid "Omaduse  (report_type) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_report_type_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_report_type_comment
 msgid "Omaduse  (report_type) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_report_type_help
+# classes/applications/stat_report/stat_uploader.aw:prop_report_type_help
 msgid "Omaduse  (report_type) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_file
+# classes/applications/stat_report/stat_uploader.aw:prop_file
 msgid "Omaduse  (file) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_file_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_file_comment
 msgid "Omaduse  (file) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_file_help
+# classes/applications/stat_report/stat_uploader.aw:prop_file_help
 msgid "Omaduse  (file) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_email
+# classes/applications/stat_report/stat_uploader.aw:prop_name
+msgid "Omaduse  (name) caption"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_name_comment
+msgid "Omaduse  (name) kommentaar"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_name_help
+msgid "Omaduse  (name) help"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_email
 msgid "Omaduse  (email) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_email_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_email_comment
 msgid "Omaduse  (email) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_email_help
+# classes/applications/stat_report/stat_uploader.aw:prop_email_help
 msgid "Omaduse  (email) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE
+# classes/applications/stat_report/stat_uploader.aw:prop_comment
+msgid "Omaduse  (comment) caption"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_comment_comment
+msgid "Omaduse  (comment) kommentaar"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_comment_help
+msgid "Omaduse  (comment) help"
+msgstr ""
+
+# classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE
 msgid "Omaduse  (MAX_FILE_SIZE) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE_comment
 msgid "Omaduse  (MAX_FILE_SIZE) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE_help
+# classes/applications/stat_report/stat_uploader.aw:prop_MAX_FILE_SIZE_help
 msgid "Omaduse  (MAX_FILE_SIZE) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_submit
+# classes/applications/stat_report/stat_uploader.aw:prop_submit
 msgid "Omaduse  (submit) caption"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_submit_comment
+# classes/applications/stat_report/stat_uploader.aw:prop_submit_comment
 msgid "Omaduse  (submit) kommentaar"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:prop_submit_help
+# classes/applications/stat_report/stat_uploader.aw:prop_submit_help
 msgid "Omaduse  (submit) help"
 msgstr ""
 
-#: classes/applications/stat_report/stat_uploader.aw:group_
+# classes/applications/stat_report/stat_uploader.aw:group_
 msgid "Grupi  () pealkiri"
 msgstr ""
 
+# classes/applications/stat_report/stat_uploader.aw:group__help
+msgid "Grupi  () help"
+msgstr ""

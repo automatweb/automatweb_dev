@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:34 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,80 +9,95 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/applications/commune/rate_moderation.aw:class_857_help
+msgid "Klassi Hindamise modereerimine help"
+msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_expiration
-msgid "Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) caption"
+# classes/applications/commune/rate_moderation.aw:prop_expiration
+msgid ""
+"Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) caption"
 msgstr "After how many seconds the moderation expires"
 
-#: classes/applications/commune/rate_moderation.aw:prop_expiration_comment
-msgid "Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) kommentaar"
+# classes/applications/commune/rate_moderation.aw:prop_expiration_comment
+msgid ""
+"Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) "
+"kommentaar"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_expiration_help
-msgid "Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) help"
+# classes/applications/commune/rate_moderation.aw:prop_expiration_help
+msgid ""
+"Omaduse Kui mitme sekundi pärast modereerimismärge aegub (expiration) help"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_commune
+# classes/applications/commune/rate_moderation.aw:prop_commune
 msgid "Omaduse Seotud kommuun (commune) caption"
 msgstr "Connected commune"
 
-#: classes/applications/commune/rate_moderation.aw:prop_commune_comment
+# classes/applications/commune/rate_moderation.aw:prop_commune_comment
 msgid "Omaduse Seotud kommuun (commune) kommentaar"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_commune_help
+# classes/applications/commune/rate_moderation.aw:prop_commune_help
 msgid "Omaduse Seotud kommuun (commune) help"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_pic_folder
+# classes/applications/commune/rate_moderation.aw:prop_pic_folder
 msgid "Omaduse Piltide kataloog (pic_folder) caption"
 msgstr "Image folder"
 
-#: classes/applications/commune/rate_moderation.aw:prop_pic_folder_comment
+# classes/applications/commune/rate_moderation.aw:prop_pic_folder_comment
 msgid "Omaduse Piltide kataloog (pic_folder) kommentaar"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_pic_folder_help
+# classes/applications/commune/rate_moderation.aw:prop_pic_folder_help
 msgid "Omaduse Piltide kataloog (pic_folder) help"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_toolbar
+# classes/applications/commune/rate_moderation.aw:prop_mod_toolbar
 msgid "Omaduse Tuulbaar (mod_toolbar) caption"
 msgstr "TB"
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_toolbar_comment
+# classes/applications/commune/rate_moderation.aw:prop_mod_toolbar_comment
 msgid "Omaduse Tuulbaar (mod_toolbar) kommentaar"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_toolbar_help
+# classes/applications/commune/rate_moderation.aw:prop_mod_toolbar_help
 msgid "Omaduse Tuulbaar (mod_toolbar) help"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_table
+# classes/applications/commune/rate_moderation.aw:prop_mod_table
 msgid "Omaduse Tabel (mod_table) caption"
 msgstr "TBL"
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_table_comment
+# classes/applications/commune/rate_moderation.aw:prop_mod_table_comment
 msgid "Omaduse Tabel (mod_table) kommentaar"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:prop_mod_table_help
+# classes/applications/commune/rate_moderation.aw:prop_mod_table_help
 msgid "Omaduse Tabel (mod_table) help"
 msgstr ""
 
-#: classes/applications/commune/rate_moderation.aw:group_new_pictures
+# classes/applications/commune/rate_moderation.aw:group_new_pictures
 msgid "Grupi Uued pildid (new_pictures) pealkiri"
 msgstr "New images"
 
-#: classes/applications/commune/rate_moderation.aw:group_mod_pictures
+# classes/applications/commune/rate_moderation.aw:group_new_pictures_help
+msgid "Grupi Uued pildid (new_pictures) help"
+msgstr ""
+
+# classes/applications/commune/rate_moderation.aw:group_mod_pictures
 msgid "Grupi Muudetud pildid (mod_pictures) pealkiri"
 msgstr "Changed images"
 
-#: classes/applications/commune/rate_moderation.aw:rel_RELTYPE_PIC_FOLDER
+# classes/applications/commune/rate_moderation.aw:group_mod_pictures_help
+msgid "Grupi Muudetud pildid (mod_pictures) help"
+msgstr ""
+
+# classes/applications/commune/rate_moderation.aw:rel_RELTYPE_PIC_FOLDER
 msgid "Seose Piltide kataloog (RELTYPE_PIC_FOLDER) tekst"
 msgstr "Image folder"
 
-#: classes/applications/commune/rate_moderation.aw:rel_RELTYPE_COMMUNE
+# classes/applications/commune/rate_moderation.aw:rel_RELTYPE_COMMUNE
 msgid "Seose Seotud kommuun (RELTYPE_COMMUNE) tekst"
 msgstr "Connected commune"
 
@@ -129,4 +144,3 @@ msgstr "Activate"
 #: classes/applications/commune/rate_moderation.aw:152
 msgid "Lükka tagasi"
 msgstr "Reject"
-

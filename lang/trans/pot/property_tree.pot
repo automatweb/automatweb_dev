@@ -10,6 +10,10 @@ msgstr ""
 "Generated-By: AutomatWeb POT Scanner\n"
 
 
+#: classes/applications/class_designer/property_tree.aw:class_892_help
+msgid "Klassi Puu help"
+msgstr ""
+
 #: classes/applications/class_designer/property_tree.aw:prop_data_from
 msgid "Omaduse Andmed (data_from) caption"
 msgstr ""

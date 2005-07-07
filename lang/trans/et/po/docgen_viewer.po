@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Automatweb 2.0\n"
-"POT-Creation-Date: Thu,  7 Apr 2005 16:09:16 +0300\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
@@ -9,60 +9,67 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: AutomatWeb POT Scanner\n"
 
+# classes/core/docgen/docgen_viewer.aw:class_323_help
+msgid "Klassi AWDocGen help"
+msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_foorum
+# classes/core/docgen/docgen_viewer.aw:prop_foorum
 msgid "Omaduse  (foorum) caption"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
+# classes/core/docgen/docgen_viewer.aw:prop_foorum_comment
 msgid "Omaduse  (foorum) kommentaar"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_foorum_help
+# classes/core/docgen/docgen_viewer.aw:prop_foorum_help
 msgid "Omaduse  (foorum) help"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_view
+# classes/core/docgen/docgen_viewer.aw:prop_view
 msgid "Omaduse  (view) caption"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_view_comment
+# classes/core/docgen/docgen_viewer.aw:prop_view_comment
 msgid "Omaduse  (view) kommentaar"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_view_help
+# classes/core/docgen/docgen_viewer.aw:prop_view_help
 msgid "Omaduse  (view) help"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_text
 msgid "Omaduse Uuenda (refresh_text) caption"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_text_comment
 msgid "Omaduse Uuenda (refresh_text) kommentaar"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_text_help
 msgid "Omaduse Uuenda (refresh_text) help"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_properties
 msgid "Omaduse Uuenda (refresh_properties) caption"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_comment
 msgid "Omaduse Uuenda (refresh_properties) kommentaar"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
+# classes/core/docgen/docgen_viewer.aw:prop_refresh_properties_help
 msgid "Omaduse Uuenda (refresh_properties) help"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:group_more_options
+# classes/core/docgen/docgen_viewer.aw:group_more_options
 msgid "Grupi Seaded (more_options) pealkiri"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
+# classes/core/docgen/docgen_viewer.aw:group_more_options_help
+msgid "Grupi Seaded (more_options) help"
+msgstr ""
+
+# classes/core/docgen/docgen_viewer.aw:rel_RELTYPE_FORUM
 msgid "Seose foorum (RELTYPE_FORUM) tekst"
 msgstr ""
 
@@ -70,7 +77,12 @@ msgstr ""
 msgid "Open DocGen"
 msgstr ""
 
-#: classes/core/docgen/docgen_viewer.aw:98 classes/core/docgen/docgen_viewer.aw:647 classes/core/docgen/docgen_viewer.aw:716 classes/core/docgen/docgen_viewer.aw:989 classes/core/docgen/docgen_viewer.aw:1059 classes/core/docgen/docgen_viewer.aw:1157
+#: classes/core/docgen/docgen_viewer.aw:98
+#: classes/core/docgen/docgen_viewer.aw:647
+#: classes/core/docgen/docgen_viewer.aw:716
+#: classes/core/docgen/docgen_viewer.aw:989
+#: classes/core/docgen/docgen_viewer.aw:1059
+#: classes/core/docgen/docgen_viewer.aw:1157
 msgid "Classes"
 msgstr ""
 
@@ -105,4 +117,3 @@ msgstr ""
 #: classes/core/docgen/docgen_viewer.aw:963
 msgid "Foorum"
 msgstr ""
-
