@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.37 2005/06/29 13:01:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.38 2005/07/07 10:26:23 kristo Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -93,6 +93,10 @@ class otv_ds_obj extends class_base
 				break;
 
 			case "show_via_cfgform":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				// list all cfgforms in system according to show types
 				$sts = array();
 				foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SHOW_TYPE")) as $c)
