@@ -855,6 +855,7 @@ class site_list extends class_base
 				");
 			}
 		}
+		$this->db_query("UPDATE aw_site_list SET last_update = ".time());
 	}
 
 	/** returns a list of active sites
