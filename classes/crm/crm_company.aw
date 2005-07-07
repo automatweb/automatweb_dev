@@ -725,7 +725,7 @@ class crm_company extends class_base
 			$tmp_obj = new object($prof_conn->to());
 			$name = strlen($tmp_obj->prop('name_in_plural'))?$tmp_obj->prop('name_in_plural'):$tmp_obj->prop('name');
 			
-			if($tmp_obj->id()==$this->active_node)
+			if($tmp_obj->id()==$this->active_node && ($_GET["unit"] == $obj->id()))
 			{
 				$name = '<b>'.$name.'</b>';
 			}
@@ -3854,7 +3854,6 @@ class crm_company extends class_base
 	/**
 		@attrib name=save_search_results
 	**/
-	/*
 	function save_search_results($arr)
 	{
 		foreach($arr['check'] as $key=>$value)
@@ -3880,7 +3879,15 @@ class crm_company extends class_base
 			$person = new object($value);
 			$person->set_prop('work_contact',$arr['id']);
 			$person->save();
-			
+
+			if ($arr["cat"])
+			{
+				$person->connect(array(
+					"to" => $arr["cat"],
+					"reltype" => 7
+				));
+			}
+
 			// run user creation
 			$cuc = get_instance("crm/crm_user_creator");
 			$cuc->on_save_person(array(
@@ -3891,12 +3898,12 @@ class crm_company extends class_base
 		return $this->mk_my_orb('change',array(
 				'id' => $arr['id'],
 				'unit' => $arr['unit'],
+				'cat' => $arr['cat'],
 				'group' => $arr['group'],
 			),
 			$arr['class']
 		);
 	}
-	*/
 
 	//goes through all the relations and builds a set of id into $data
 	function get_customers_for_company($obj, $data, $category = false)
@@ -4283,6 +4290,13 @@ class crm_company extends class_base
 			list($work_contact,) = each($work_contact);
 		}
 		$person->set_prop('work_contact',$work_contact);
+
+		$orgs = array();
+		foreach($person->connections_from(array("type" => "RELTYPE_SECTION")) as $c)
+		{
+			$orgs[$c->prop("to")] = $c->prop("to");
+		}
+		$person->set_prop("org_section", $orgs);
 		$person->save();
 		return html::get_change_url($person->id())."&return_url=".urlencode($arr["return_url"]);
 	}

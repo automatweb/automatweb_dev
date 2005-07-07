@@ -88,6 +88,13 @@
 			</function>
 		</action>
 
+		<action name="save_search_results">
+			<function name="save_search_results">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="create_new_person">
 			<function name="create_new_person">
 				<arguments>
