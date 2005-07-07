@@ -1,0 +1,436 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Automatweb 2.0\n"
+"POT-Creation-Date: Wed,  1 Jan 2020 00:00:00 +0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=ISO-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: AutomatWeb POT Scanner\n"
+
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:class_963_help
+msgid "Klassi Vormiahel help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_sep_page
+msgid "Omaduse Kinnitusvaade enne saatmist (confirm_sep_page) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_sep_page_comment
+msgid "Omaduse Kinnitusvaade enne saatmist (confirm_sep_page) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_sep_page_help
+msgid "Omaduse Kinnitusvaade enne saatmist (confirm_sep_page) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs
+msgid "Omaduse  (cfs) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_comment
+msgid "Omaduse  (cfs) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_help
+msgid "Omaduse  (cfs) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_headers
+msgid "Omaduse  (cfs_headers) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_headers_comment
+msgid "Omaduse  (cfs_headers) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_headers_help
+msgid "Omaduse  (cfs_headers) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_entry_tbl
+msgid "Omaduse  (cfs_entry_tbl) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_entry_tbl_comment
+msgid "Omaduse  (cfs_entry_tbl) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_cfs_entry_tbl_help
+msgid "Omaduse  (cfs_entry_tbl) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to
+msgid "Omaduse Kellele (mail_to) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_comment
+msgid "Omaduse Kellele (mail_to) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_help
+msgid "Omaduse Kellele (mail_to) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_form
+msgid "Omaduse Vorm, milles on saaja aadress (mail_to_form) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_form_comment
+msgid "Omaduse Vorm, milles on saaja aadress (mail_to_form) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_form_help
+msgid "Omaduse Vorm, milles on saaja aadress (mail_to_form) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_prop
+msgid "Omaduse Element, milles on saaja aadress	 (mail_to_prop) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_prop_comment
+msgid "Omaduse Element, milles on saaja aadress	 (mail_to_prop) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_to_prop_help
+msgid "Omaduse Element, milles on saaja aadress	 (mail_to_prop) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_addr
+msgid "Omaduse Kellelt (aadress) (mail_from_addr) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_addr_comment
+msgid "Omaduse Kellelt (aadress) (mail_from_addr) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_addr_help
+msgid "Omaduse Kellelt (aadress) (mail_from_addr) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_name
+msgid "Omaduse Kellelt (nimi) (mail_from_name) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_name_comment
+msgid "Omaduse Kellelt (nimi) (mail_from_name) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_from_name_help
+msgid "Omaduse Kellelt (nimi) (mail_from_name) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_subj
+msgid "Omaduse Teema (mail_subj) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_subj_comment
+msgid "Omaduse Teema (mail_subj) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_mail_subj_help
+msgid "Omaduse Teema (mail_subj) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_send_confirm_mail
+msgid "Omaduse Saada tellijale kinnitusmeil (send_confirm_mail) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_send_confirm_mail_comment
+msgid "Omaduse Saada tellijale kinnitusmeil (send_confirm_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_send_confirm_mail_help
+msgid "Omaduse Saada tellijale kinnitusmeil (send_confirm_mail) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_subj
+msgid "Omaduse Kinnitusmeili subjekt (confirm_mail_subj) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_subj_comment
+msgid "Omaduse Kinnitusmeili subjekt (confirm_mail_subj) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_subj_help
+msgid "Omaduse Kinnitusmeili subjekt (confirm_mail_subj) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail
+msgid "Omaduse Kinnitusmeili sisu (confirm_mail) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_comment
+msgid "Omaduse Kinnitusmeili sisu (confirm_mail) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_help
+msgid "Omaduse Kinnitusmeili sisu (confirm_mail) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_form
+msgid "Omaduse Vorm, milles on saaja aadress (confirm_mail_to_form) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_form_comment
+msgid "Omaduse Vorm, milles on saaja aadress (confirm_mail_to_form) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_form_help
+msgid "Omaduse Vorm, milles on saaja aadress (confirm_mail_to_form) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_prop
+msgid "Omaduse Element, milles on saaja aadress	 (confirm_mail_to_prop) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_prop_comment
+msgid "Omaduse Element, milles on saaja aadress	 (confirm_mail_to_prop) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_confirm_mail_to_prop_help
+msgid "Omaduse Element, milles on saaja aadress	 (confirm_mail_to_prop) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_folder
+msgid "Omaduse Andmete kataloog (entry_folder) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_folder_comment
+msgid "Omaduse Andmete kataloog (entry_folder) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_folder_help
+msgid "Omaduse Andmete kataloog (entry_folder) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_form
+msgid "Omaduse Andmete nime vorm (entry_name_form) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_form_comment
+msgid "Omaduse Andmete nime vorm (entry_name_form) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_form_help
+msgid "Omaduse Andmete nime vorm (entry_name_form) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_el
+msgid "Omaduse Andmete nime elemendid (entry_name_el) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_el_comment
+msgid "Omaduse Andmete nime elemendid (entry_name_el) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_name_el_help
+msgid "Omaduse Andmete nime elemendid (entry_name_el) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_tb
+msgid "Omaduse Andmete toolbar (entry_tb) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_tb_comment
+msgid "Omaduse Andmete toolbar (entry_tb) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_tb_help
+msgid "Omaduse Andmete toolbar (entry_tb) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_table
+msgid "Omaduse Andmed (entry_table) caption"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_table_comment
+msgid "Omaduse Andmed (entry_table) kommentaar"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:prop_entry_table_help
+msgid "Omaduse Andmed (entry_table) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs
+msgid "Grupi Vormid (cfs) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_help
+msgid "Grupi Vormid (cfs) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_tbl
+msgid "Grupi Vormid (cfs_tbl) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_tbl_help
+msgid "Grupi Vormid (cfs_tbl) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_headers
+msgid "Grupi Pealkirjad (cfs_headers) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_headers_help
+msgid "Grupi Pealkirjad (cfs_headers) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_entry_tbl
+msgid "Grupi Andmete tabel (cfs_entry_tbl) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_cfs_entry_tbl_help
+msgid "Grupi Andmete tabel (cfs_entry_tbl) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings
+msgid "Grupi Meiliseaded (mail_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings_help
+msgid "Grupi Meiliseaded (mail_settings) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings_general
+msgid "Grupi Tellimuse meil (mail_settings_general) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings_general_help
+msgid "Grupi Tellimuse meil (mail_settings_general) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings_confirm
+msgid "Grupi Kinnitusmeil (mail_settings_confirm) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_mail_settings_confirm_help
+msgid "Grupi Kinnitusmeil (mail_settings_confirm) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entry_settings
+msgid "Grupi Andmete seaded (entry_settings) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entry_settings_help
+msgid "Grupi Andmete seaded (entry_settings) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries
+msgid "Grupi Andmed (entries) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries_help
+msgid "Grupi Andmed (entries) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries_unc
+msgid "Grupi Kinnitamata (entries_unc) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries_unc_help
+msgid "Grupi Kinnitamata (entries_unc) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries_con
+msgid "Grupi Kinnitatud (entries_con) pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:group_entries_con_help
+msgid "Grupi Kinnitatud (entries_con) help"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:rel_RELTYPE_CF
+msgid "Seose veebivorm (RELTYPE_CF) tekst"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:rel_RELTYPE_REP_CTR
+msgid "Seose vormide kordamise kontroller (RELTYPE_REP_CTR) tekst"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:rel_RELTYPE_ENTRY_FOLDER
+msgid "Seose andmete kataloog (RELTYPE_ENTRY_FOLDER) tekst"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:rel_RELTYPE_DEF_CTR
+msgid "Seose default andmete kontroller (RELTYPE_DEF_CTR) tekst"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:189
+msgid "--vali--"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:227
+msgid "Vorm"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:233 classes/applications/cb_form_chain/cb_form_chain.aw:340
+msgid "Lehek&uuml;lg"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:239
+msgid "J&auml;rjekord"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:245
+msgid "Korduv"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:251
+msgid "Elemendid tabelina"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:257
+msgid "Andmed tabelina"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:263
+msgid "Korduste kontroller"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:269
+msgid "Default andmete kontroller"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:346
+msgid "Pealkiri"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1059
+msgid "Kinnita"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1067
+msgid "Kustuta"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1068
+msgid "Oled kindel et soovid sisestusi kustutada?"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1077
+msgid "Nimi"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1084
+msgid "Loodud"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1094
+msgid "Looja"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1459 classes/applications/cb_form_chain/cb_form_chain.aw:1494
+msgid "Muuda"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1510
+msgid "Omadus"
+msgstr ""
+
+#: classes/applications/cb_form_chain/cb_form_chain.aw:1516
+msgid "N&auml;ita tabelis"
+msgstr ""
+
