@@ -411,7 +411,10 @@ class propcollector extends aw_template
 		if (sizeof($this->properties) > 0 || sizeof($this->classinfo) > 0)
 		{
 			$fullname = $outdir . $this->cl_name . ".xml";
-			print "Creating $fullname\n";
+			if (1 == $write)
+			{
+				print "Creating $fullname\n";
+			};
 			$arr = array();
 			$arr["properties"] = array_values($this->properties);
 
