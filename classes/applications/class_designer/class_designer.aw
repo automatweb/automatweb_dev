@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.28 2005/07/08 16:30:40 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.29 2005/07/08 16:31:04 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -164,7 +164,6 @@ caption
 @groupinfo relations_sub caption="Seosed" submit=no parent=relations
 @groupinfo int_refs caption="Sisemised seosed" parent=relations submit=no
 @groupinfo ext_refs caption="Välised seosed" parent=relations submit=no
-=======
 @default group=dev_request
 
 @property temp type=text store=no
