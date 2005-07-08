@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.10 2005/07/08 12:31:24 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.11 2005/07/08 13:52:54 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -212,7 +212,7 @@ class newsfeed extends class_base
 			$first = 0;
 			$source = aw_ini_get("newsfeed.source");
 			$baseurl = aw_ini_get("baseurl");
-			$parse_embed = $feed_obj->prop("parse_embed");
+			$parse_embed = $feedobj->prop("parse_embed");
 			foreach($ol->arr() as $o)
 			{
 				//$mod_date = $o->modified();
