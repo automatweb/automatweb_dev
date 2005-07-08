@@ -50,6 +50,17 @@
             <caption>Mitme viimase päeva omad</caption>
       </property>
       <property>
+            <name>parse_embed</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <default>1</default>
+            <caption>Näita ka lisatud objekte</caption>
+      </property>
+      <property>
             <name>folders</name>
             <table>objects</table>
             <group>folders</group>
