@@ -1,9 +1,40 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <rel>1</rel>
+            <trans>1</trans>
+            <field>name</field>
+            <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>status</type>
+            <trans>1</trans>
+            <default>1</default>
+            <field>status</field>
+            <caption>Aktiivne</caption>
+            <comment>Kas objekt on aktiivne</comment>
+      </property>
+      <property>
             <name>is_registered</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <field>meta</field>
@@ -13,7 +44,7 @@
       <property>
             <name>infomsg</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>text</type>
             <store>no</store>
             <field>infomsg</field>
@@ -22,7 +53,7 @@
       <property>
             <name>visualize</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <type>text</type>
             <store>no</store>
             <editonly>1</editonly>
@@ -110,6 +141,28 @@
             <store>no</store>
             <no_caption>1</no_caption>
             <caption>Klassi definitsioon</caption>
+      </property>
+      <property>
+            <name>create_sql</name>
+            <table>objects</table>
+            <group>create_sql</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>SQL definitsioon</caption>
+      </property>
+      <property>
+            <name>alter_sql</name>
+            <table>objects</table>
+            <group>alter_sql</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>SQL definitsioon</caption>
       </property>
       <property>
             <name>planner_toolbar</name>
@@ -294,7 +347,7 @@
       <property>
             <name>relations_mgr</name>
             <table>objects</table>
-            <group>relations</group>
+            <group>relations_sub</group>
             <field>meta</field>
             <method>serialize</method>
             <type>releditor</type>
@@ -314,51 +367,107 @@
             <store>no</store>
             <caption>Seosed</caption>
       </property>
+      <property>
+            <name>temp</name>
+            <table>objects</table>
+            <group>dev_request</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>temp</caption>
+      </property>
+      <property>
+            <name>temp1</name>
+            <table>objects</table>
+            <group>in_search</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>temp</caption>
+      </property>
+      <property>
+            <name>temp2</name>
+            <table>objects</table>
+            <group>data</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <caption>temp</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CLASS_DESIGNER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <general_sub>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general_sub>
             <settings>
                   <caption>Seaded</caption>
+                  <parent>general</parent>
             </settings>
-            <cl_planner>
-                  <caption>Planeerija</caption>
-            </cl_planner>
             <planner>
                   <caption>Planeerija</caption>
-                  <parent>cl_planner</parent>
                   <submit>no</submit>
             </planner>
-            <el_defs>
-                  <caption>Elemendid</caption>
-                  <parent>cl_planner</parent>
+            <relations>
+                  <caption>Seosed</caption>
+            </relations>
+            <relations_sub>
+                  <caption>Seosed</caption>
                   <submit>no</submit>
-            </el_defs>
+                  <parent>relations</parent>
+            </relations_sub>
             <int_refs>
                   <caption>Sisemised seosed</caption>
-                  <parent>cl_planner</parent>
+                  <parent>relations</parent>
                   <submit>no</submit>
             </int_refs>
             <ext_refs>
                   <caption>Välised seosed</caption>
-                  <parent>cl_planner</parent>
+                  <parent>relations</parent>
                   <submit>no</submit>
             </ext_refs>
             <designer>
                   <caption>Disainer</caption>
                   <submit>no</submit>
             </designer>
-            <relations>
-                  <caption>Seosed</caption>
+            <el_defs>
+                  <caption>Elemendid</caption>
                   <submit>no</submit>
-                  <parent>cl_planner</parent>
-            </relations>
+            </el_defs>
+            <dev_request>
+                  <caption>Arendusvajadus</caption>
+            </dev_request>
+            <in_search>
+                  <caption>Otsing</caption>
+            </in_search>
+            <data>
+                  <caption>Andmed</caption>
+            </data>
+            <defs>
+                  <caption>Definitsioonid</caption>
+            </defs>
             <classdef>
-                  <caption>Klassi definitsioon</caption>
+                  <caption>Klassi kirjeldus</caption>
                   <submit>no</submit>
+                  <parent>defs</parent>
             </classdef>
+            <create_sql>
+                  <caption>Create SQL</caption>
+                  <submit>no</submit>
+                  <parent>defs</parent>
+            </create_sql>
+            <alter_sql>
+                  <caption>Alter SQL</caption>
+                  <submit>no</submit>
+                  <parent>defs</parent>
+            </alter_sql>
       </groupinfo>
       <tableinfo>
             <aw_class>
