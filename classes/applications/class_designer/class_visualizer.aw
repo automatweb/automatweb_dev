@@ -4,6 +4,7 @@ class class_visualizer extends class_base
 	function class_visualizer()
 	{
 		$this->init("");
+		$this->tpl_init("class_visualizer");
 	}
 
 	/**
@@ -301,6 +302,8 @@ class class_visualizer extends class_base
 		$items = $cf->elements;
 		$clinf = aw_ini_get("classes");
 
+		$cfgu->get_instance("cfg/cfgutils");
+
 		$rv = array();
 
 		foreach($elements->arr() as $el)
@@ -310,7 +313,8 @@ class class_visualizer extends class_base
 			{
 				$eltype = $clinf[$clid]["def"];
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$eltype));
-				$sysname = strtolower(preg_replace("/\s/","_",$el->name()));
+				//$sysname = strtolower(preg_replace("/\s/","_",$el->name()));
+				$sysname = $cfgu->gen_valid_id($el->name());
 				
 				$p_o = new object($el->parent());
 
@@ -422,10 +426,41 @@ class class_visualizer extends class_base
 
 	}
 	
-	function _valid_id($src)
+	/**
+		@attrib name=playground
+	**/
+	function playground($arr)
 	{
-		return strtolower(preg_replace("/\s/","_",$src));
+		$this->read_template("playground.tpl");
+		return $this->parse();
 
+	}
+
+	/**
+		@attrib name=proc all_args=1
+	**/
+	function proc($arr)
+	{
+		$text = $_POST["text"];
+		// ja nüüd ei olegi muud vaja, kui sellest asjast propertyte definitsioon genereerida
+		$anakin = get_instance("analyzer/propcollector");
+		$result = $anakin->parse_file(array(
+			"data" => $text,
+		));
+
+		$objprops = array();
+
+		$htmlc = get_instance("cfg/htmlclient", array("template" => "default.tpl"));
+		foreach($result["properties"] as $key => $val)
+		{
+			if (is_numeric($key))
+			{
+				$htmlc->add_property($val);
+			};
+		};
+
+		$htmlc->finish_output(array("submit" => "no"));
+		return $htmlc->get_result();
 
 	}
 

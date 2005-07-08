@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.27 2005/07/01 11:40:58 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.28 2005/07/08 16:30:40 duke Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -70,6 +70,12 @@ caption
 @default group=classdef
 @property classdef type=text store=no no_caption=1
 @caption Klassi definitsioon
+
+@property create_sql type=text store=no no_caption=1 group=create_sql
+@caption SQL definitsioon
+
+@property alter_sql type=text store=no no_caption=1 group=alter_sql
+@caption SQL definitsioon
 
 @default group=planner
 @layout phbox1 type=hbox
@@ -158,19 +164,42 @@ caption
 @groupinfo relations_sub caption="Seosed" submit=no parent=relations
 @groupinfo int_refs caption="Sisemised seosed" parent=relations submit=no
 @groupinfo ext_refs caption="Välised seosed" parent=relations submit=no
+=======
+@default group=dev_request
+
+@property temp type=text store=no
+@caption temp
+
+@default group=in_search
+
+@property temp1 type=text store=no
+@caption temp
+
+@default group=data
+
+@property temp2 type=text store=no
+@caption temp
+
+@groupinfo general_sub caption="Üldine" parent=general
+@groupinfo settings caption="Seaded" parent=general
+
+//@groupinfo cl_planner caption="Planeerija" 
+@groupinfo planner caption="Planeerija" submit=no
+
+@groupinfo relations caption="Seosed"
+@groupinfo relations_sub caption="Seosed" submit=no parent=relations
+@groupinfo int_refs caption="Sisemised seosed" parent=relations submit=no
+@groupinfo ext_refs caption="Välised seosed" parent=relations submit=no
 
 @groupinfo designer caption="Disainer" submit=no
-
 @groupinfo el_defs caption="Elemendid" submit=no
-
 @groupinfo dev_request caption="Arendusvajadus"
-
 @groupinfo in_search caption="Otsing"
-
 @groupinfo data caption="Andmed"
-
-@groupinfo classdef caption="Klassi definitsioon" submit=no
-
+@groupinfo defs caption="Definitsioonid"
+@groupinfo classdef caption="Klassi kirjeldus" submit=no parent=defs
+@groupinfo create_sql caption="Create SQL" submit=no parent=defs
+@groupinfo alter_sql caption="Alter SQL" submit=no parent=defs
 
 @reltype RELATION value=1 clid=CL_CLASS_DESIGNER_RELATION
 @caption seos
@@ -201,6 +230,9 @@ class class_designer extends class_base
 		$this->all_els = $this->elements;
 		$this->all_els[] = CL_PROPERTY_GROUP;
 		$this->all_els[] = CL_PROPERTY_GRID;
+
+		// list of all elements that can be saved to a table
+		$this->saveable = array(CL_PROPERTY_TEXTBOX,CL_PROPERTY_TEXTAREA,CL_PROPERTY_CHOOSER,CL_PROPERTY_CHECKBOX);
 		
 		$this->gen_folder = $this->cfg["site_basedir"]."/files/classes";
 	}
@@ -286,7 +318,24 @@ class class_designer extends class_base
 				break;
 
 			case "classdef":
+				$this->save_tabledef = 1;
 				$prop["value"] = "<pre>" . htmlspecialchars($this->gen_classdef($arr)) . "</pre>";
+				break;
+
+			case "create_sql":
+				$prop["value"] = "<pre>" . htmlspecialchars($this->gen_create_sql(array("id" => $arr["obj_inst"]->id()))) . "</pre>";
+				break;
+
+			case "alter_sql":
+				$sql = $this->gen_alter_sql(array("id" => $arr["obj_inst"]->id()));
+				if (empty($sql))	
+				{
+					$prop["value"] = t("SQL table is up to date");
+				}
+				else
+				{
+					$prop["value"] = "<pre>" . htmlspecialchars($sql) . "</pre>";
+				};
 				break;
 
 			case "visualize":
@@ -1008,21 +1057,316 @@ class class_designer extends class_base
 		return ($a_o > $b_o ? 1 : -1);
 	}
 
-	function gen_classdef($arr)
+	function visualize_sql($arr)
+	{
+		$this->save_tabledef = 1;
+		$this->gen_tabledef($arr);
+		return $this->create;
+	}
+
+	function gen_tabledef($arr)
+	{
+		$els = $this->get_class_elements($arr);
+		$cfgu = get_instance("cfg/cfgutils");
+
+		$clid = $arr["obj_inst"]->prop("reg_class_id");
+		$sql_table = "class_${clid}_objects";
+
+		$tabledef = array();
+		$clinf = aw_ini_get("classes");
+
+		foreach($els as $el)
+		{
+			$el_clid = $el["class_id"];
+			$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
+			$sys_name = $cfgu->gen_valid_id($el["name"]);
+			/* for SQL tables, feel free to override those */
+			// XXX: figure out a way to specify field types, lengths and possibly indexes in property definitions
+			$field_type = "char";
+			$field_length = 255;
+
+			$can_save = in_array($el_clid,$this->saveable);
+
+			if ($el_clid == CL_PROPERTY_CHECKBOX)
+			{
+				$field_type = "int";
+				$field_length = "11";
+			};
+
+			if ($can_save)
+			{
+				// I cannot rely on using property caption as the field name,
+				// because captions can be changed, but fields should not
+				$tabledef[$sys_name] = array(
+					"proptype" => $eltype,
+					//"field" => "el_" . $el_id,
+					"field_name" => $sys_name,
+					"table" => $sql_table,
+					// nii .. siit tuleb kuidagi teada saada igale väljale vajalik info suuruse kohta
+					"field_type" => $field_type,
+					"field_length" => $field_length,
+					"el_id" => $el["id"],
+				);
+			};
+		};
+
+		return $tabledef;
+	}
+
+	// Generates SQL to alter the table
+	// id - designer object id
+
+	// it can return an empty string, in which case the table does not need altering
+	function gen_alter_sql($arr)
+	{
+		$change_table = $arr["change_table"];
+		$designer = new object($arr["id"]);
+		$tabledef = $this->gen_tabledef(array(
+			"obj_inst" => $designer,
+			"cl_prop_only" => 1,
+		));
+
+		// reg_els contains id => name pairs of all CL_PROPERTY-s for this designer
+		$reg_els = $designer->meta("registered_elements");
+
+		$alter = "";
+
+		foreach($tabledef as $el_id => $el_dat)
+		{
+			$tables[$el_dat["table"]][] = array(
+				"field_name" => $el_dat["field_name"],
+				// aga kuidagi on vaja kindlaks teha see, mis tüüpi väli teha
+				"field_type" => $el_dat["field_type"],
+				"field_length" => $el_dat["field_length"],
+				"el_id" => $el_dat["el_id"],
+			);
+		};
+		
+		foreach($tables as $name => $fields)
+		{
+			// kõigepealt vaatame, kas nimetatud tabel on üldse olemas
+			$sql = "DESCRIBE `$name`";
+			$this->db_query($sql,false);
+			$prev_table = array();
+			while ($row = $this->db_next())
+			{
+				list($main,$extras) = explode(" ",$row["Type"]);
+				preg_match("/(\w*)\((\d*)/",$main,$matches);
+				$prev_table[$row["Field"]] = array(
+					"field_type" => $matches[1],
+					"field_length" => $matches[2],
+					"field_extras" => $extras,
+				);
+			};
+
+			array_unshift($fields,array(
+				"field_name" => "aw_id",
+				"field_type" => "bigint",
+				"field_length" => 20,
+				"field_extras" => "unsigned",
+				"key" => "primary",
+			));
+
+			$columns = array();
+
+			foreach($fields as $key => $val)
+			{
+				$field_name = $val["field_name"];
+				$field_type = $val["field_type"];
+				$field_length = $val["field_length"];
+				$el_id = $val["el_id"];
+				// if it is not in the existing table and is not registerd either, then it 
+				// must be a new name
+				if (empty($prev_table[$field_name]) && !$reg_els[$el_id])
+				{
+					// add column
+					$alter = " ADD `${field_name}` ${field_type}";
+					if (!empty($field_length))
+					{
+						$alter .= "(" . $field_length . ")";
+					};
+					$reg_els[$el_id] = $field_name;
+					$columns[] = $alter;
+				}
+				else
+				{
+					// nüüd peab võrdlema vana ja uut tüüpi
+
+					// kui elementi pole regels sees, siis tuleb nimi ära muuta
+					$prev = $prev_table[$field_name];
+					if ( 	($prev["field_type"] != $field_type) ||
+						($prev["field_length"] != $field_length) ||
+						($field_name != $reg_els[$el_id])
+					)
+					{
+						//print "el_id = $el_id<br>";
+						//print "field_name = $field_name<br>";
+						//var_dump($el_id);
+						//var_dump($reg_els[$el_id]);
+						$old_name = $field_name;
+						if ($reg_els[$el_id])
+						{
+							$old_name = $reg_els[$el_id];
+						};
+						$change = " CHANGE `${old_name}` `${field_name}` ${field_type}";
+						if (!empty($field_length))
+						{
+							$change .= "(" . $field_length . ")";
+						};
+
+						$columns[] = $change;
+						$reg_els[$el_id] = $field_name;
+					};	
+				};
+
+			};
+
+			if (sizeof($columns) > 0)
+			{
+				$alter = "ALTER TABLE `$name` " . join(",\n",$columns);
+				//print "alt = ";
+				//print $alter;
+			};
+
+			if ($change_table)
+			{
+				$this->db_query($alter);
+				$designer->meta("registered_elements",$reg_els);
+				$designer->save();
+			};
+
+
+		};
+
+		return $alter;
+	}	
+
+	// id - designer object id
+	function gen_create_sql($arr)
+	{
+		$designer = new object($arr["id"]);
+		$tabledef = $this->gen_tabledef(array(
+			"obj_inst" => $designer,
+		));
+
+		foreach($tabledef as $el_id => $el_dat)
+		{
+			$tables[$el_dat["table"]][] = array(
+				"field_name" => $el_dat["field_name"],
+				// aga kuidagi on vaja kindlaks teha see, mis tüüpi väli teha
+				"field_type" => $el_dat["field_type"],
+				"field_length" => $el_dat["field_length"],
+			);
+		};
+
+		foreach($tables as $name => $fields)
+		{
+			// kõigepealt vaatame, kas nimetatud tabel on üldse olemas
+			$create .= "CREATE TABLE `$name` ( \n";
+			array_unshift($fields,array(
+				"field_name" => "aw_id",
+				"field_type" => "bigint",
+				"field_length" => 20,
+				"field_extras" => "unsigned",
+				"key" => "primary",
+			));
+			$first = true;
+
+			$add_columns = $change_columns = $drop_columns = array();
+
+			foreach($fields as $key => $val)
+			{
+				$field_name = $val["field_name"];
+				$field_type = $val["field_type"];
+				$field_length = $val["field_length"];
+				$sql = sprintf("`%s` %s",$val["field_name"],$val["field_type"]);
+				if (!empty($val["field_length"]))
+				{
+					$sql .= "(" . $val["field_length"] . ")";
+				};
+				if (!empty($val["field_extras"]))
+				{
+					$sql .= " " . $val["field_extras"];
+				};
+				$sql_parts[] = $sql;
+				if (!empty($val["key"]) && "primary" == $val["key"])
+				{
+					$keys .= ",\n PRIMARY KEY (`" . $val["field_name"] . "`)";
+
+				};
+			};
+
+			$create .= join(",\n",$sql_parts);
+			$create .= $keys . ");\n";
+		};
+
+		return $create;
+	}
+
+
+	function get_class_elements($arr)
 	{
 		$c = $arr["obj_inst"];
 		$cltree = new object_tree(array(
 			"parent" => $c,
 		));
 		$cl_list = $cltree->to_list();
+		
+		$this->__elord = $c->meta("element_ords");
+		$ellist = $cl_list->arr();
+		usort($ellist, array(&$this, "__ellist_comp"));
+
+		$rv = array();
+		
+		foreach($ellist as $el)
+		{
+			$el_clid = $el->class_id();
+			$el_id = $el->id();
+			if (CL_PROPERTY == $el_clid)
+			{
+				if (!is_oid($el->prop("property_type")))
+				{
+					continue;
+				};
+
+				$el_clid = $el->prop("property_type");
+			};
+			$name = $el->name();
+			// I need a fully qualified name, or there will be unparseable code
+			if (empty($name))
+			{
+				continue;
+			};
+
+			if (CL_PROPERTY != $el_clid && $arr["cl_prop_only"])
+			{
+				continue;
+			};	
+
+			$props = $el->properties();
+			$props["class_id"] = $el_clid;
+			$props["id"] = $el_id;
+			
+			$rv[] = $props;
+		};
+		return $rv;
+	}
+
+	function gen_classdef($arr)
+	{
+		$c = $arr["obj_inst"];
+		$ellist = $this->get_class_elements($arr);
+
 		$rv = "";
 		$grps = "";
 		$clinf = aw_ini_get("classes");
-		$clname = $this->_valid_id($c->name());
+
+		$cfgu = get_instance("cfg/cfgutils");
+		$clname = $cfgu->gen_valid_id($c->name());
 
 		$path = aw_ini_get("basedir") . "/install/class_template/classes/base.aw";
 		$clsrc = file_get_contents($path);
-		$clid = "CL_" . strtoupper($this->_valid_id($c->name()));
+		$clid = "CL_" . strtoupper($cfgu->gen_valid_id($c->name()));
 
 		$clid = $c->prop("reg_class_id");
 
@@ -1036,46 +1380,35 @@ class class_designer extends class_base
 		$methods = "";
 
 		// sort elements according to order in metadata
-		$this->__elord = $c->meta("element_ords");
-		$ellist = $cl_list->arr();
-		usort($ellist, array(&$this, "__ellist_comp"));
 
 		$saver = "";
 
-		$saveable = array(CL_PROPERTY_TEXTBOX,CL_PROPERTY_TEXTAREA,CL_PROPERTY_CHOOSER,CL_PROPERTY_CHECKBOX);
 		$name_prop = $c->prop("object_name");
 
 		$allowed = $this->elements;
 		$allowed[] = CL_PROPERTY;
 
+		$this->tabledef = array();
+
+		$sql_table = "class_${clid}_objects";
+		$gen_table = false;
 		foreach($ellist as $el)
 		{
-			$el_clid = $el->class_id();
-			if (CL_PROPERTY == $el_clid)
-			{
-				if (!is_oid($el->prop("real_property")))
-				{
-					continue;
-				};
-
-				$el_clid = $el->prop("real_property");
-			};
-			$name = $el->name();
-			// I need a fully qualified name, or there will be unparseable code
-			if (empty($name))
-			{
-				continue;
-			};
+			$el_clid = $el["class_id"];
+			$el_id = $el["id"];
 			if (in_array($el_clid,$allowed))
 			{
-				$parent = new object($el->parent());
+				$name = $el["name"];
+				$can_save = in_array($el_clid,$this->saveable);
+				$parent = new object($el["parent"]);
 				$grandparent = new object($parent->parent());
-				$sys_name = $this->_valid_id($name);
-				$group_name = $this->_valid_id($grandparent->name());
+				$sys_name = $cfgu->gen_valid_id($name);
+				$group_name = $cfgu->gen_valid_id($grandparent->name());
+
 				if ($grandparent->class_id() == CL_PROPERTY_GRID)
 				{
 					$grandgrandparent = new object($grandparent->parent());
-					$group_name = $this->_valid_id($grandgrandparent->name());
+					$group_name = $cfgu->gen_valid_id($grandgrandparent->name());
 				}
 				// this is not correct
 				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
@@ -1086,21 +1419,24 @@ class class_designer extends class_base
 				$rv .= "@property ${sys_name} type=${eltype} group=${group_name}";
 				if ($parent->class_id() == CL_PROPERTY_GRID)
 				{
-					$grid_name .= $parent->id();
+					$grid_name = $parent->id();
 					$rv .= " parent=" . $grid_name;
 				};
 				if ($grandparent->class_id() == CL_PROPERTY_GRID)
 				{
-					$grid_name = $this->_valid_id($grandparent->name());
+					$grid_name = $cfgu->gen_valid_id($grandparent->name());
 					$rv .= " parent=" . $grid_name;
 				};
-				$inst = $el->instance();
+
+				// and last and foremost .. I need to match old and new names for each property
+				$inst = get_instance($el["class_id"]);
+				//$el->instance();
 				$generate_methods = array();
-					
+
 				if (method_exists($inst,"generate_get_property"))
 				{
 					$gpdata = $inst->generate_get_property(array(
-						"id" => $el->id(),
+						"id" => $el_id,
 						"name" => $sys_name,
 					));
 					if (strlen($gpdata["get_property"]) > 0)
@@ -1111,19 +1447,17 @@ class class_designer extends class_base
 					{
 						$generate_methods = array_merge($generate_methods,$gpdata["generate_methods"]);
 					};
-
-
 				};
 
 				// nii .. midagi peaks nende asjadega ka ette võtma, sest vastutavad klassid peaks
 				// ise oma propertydefinitsioonid kirjutama
 				if ($el_clid == CL_PROPERTY_CHOOSER)
 				{
-					if ($el->prop("orient") == 1)
+					if ($el["orient"] == 1)
 					{
 						$rv .= " orient=vertical";
 					};
-					if ($el->prop("multiple") == 1)
+					if ($el["multiple"] == 1)
 					{
 						$rv .= " multiple=1";
 					};
@@ -1131,11 +1465,18 @@ class class_designer extends class_base
 
 				if ($el_clid == CL_PROPERTY_TEXTBOX)
 				{
-					if ($el->prop("size"))
+					if ($el["size"])
 					{
-						$rv .= " size=" . $el->prop("size");
+						$rv .= " size=" . $el["size"];
 					};
 				};
+				
+				if ($can_save)
+				{
+					$gen_table = true;
+					$rv .= " table=${sql_table}";
+				};
+				
 				$rv .= "\n";
 				$rv .= "@caption $name\n\n";
 
@@ -1145,21 +1486,17 @@ class class_designer extends class_base
 					foreach($generate_methods as $method_name)
 					{
 						$methods .= $inst->generate_method(array(
-							"id" => $el->id(),
+							"id" => $el_id,
 							"name" => $method_name,
 						));
 					};
 					//print "additionally generate methods";
 					//arr($generate_methods);
 				};
-				$spblock .= "\n\t\t\tcase '${sys_name}':\n";
-				$spblock .= "\t\t\t\t\$retval = PROP_IGNORE;\n";
-				$spblock .= "\t\t\t\tbreak;\n";
 
-				if (in_array($el_clid,$saveable))
+				if ($can_save)
 				{
-					$saver .= "\t\t\$o->set_meta('${sys_name}',\$arr[\"request\"][\"${sys_name}\"]);\n";
-					if ($el->id() == $name_prop)
+					if ($el_id == $name_prop)
 					{
 						$saver .= "\t\t\$o->set_name(\$arr[\"request\"][\"${sys_name}\"]);\n";
 					};
@@ -1168,19 +1505,18 @@ class class_designer extends class_base
 			};
 			if ($el_clid == CL_PROPERTY_GROUP)
 			{
-				$grpid = $this->_valid_id($name);
-				$grps .= "@groupinfo $grpid caption=\"".($el->prop("caption") != "" ? $el->prop("caption") : $name)."\"\n";
+				$grpid = $cfgu->gen_valid_id($name);
+				$grps .= "@groupinfo $grpid caption=\"".($el["caption"] != "" ? $el["caption"] : $name)."\"\n";
 			};
 
 			if ($el_clid == CL_PROPERTY_GRID)
 			{
-				$parent_o = new object($el->parent());
+				$parent_o = new object($el["parent"]);
 				$p_clid = $parent_o->class_id();
-				$p_id = $this->_valid_id($parent_o->name());
+				$p_id = $cfgu->gen_valid_id($parent_o->name());
 				$group = "";
-				$grid_type = ($el->prop("grid_type") == 0) ? "hbox" : "vbox";
-				$el_id = $this->_valid_id($el->name());
-				$el_id .= $el->id();
+				$grid_type = ($el["grid_type"] == 0) ? "hbox" : "vbox";
+				$el_id = $cfgu->gen_valid_id($el["name"]) . $el["id"];
 				if ($p_clid == CL_PROPERTY_GROUP)
 				{
 					$group = "group=$p_id";
@@ -1206,6 +1542,11 @@ class class_designer extends class_base
 
 		};
 
+		if ($gen_table)
+		{
+			$grps .= "@tableinfo $sql_table index=aw_id master_table=objects master_field=brother_of\n";
+		};
+
 		$methods .= "\tfunction callback_pre_save(\$arr)\n";
 		$methods .= "\t{\n";
 		$methods .= "\t\t\$o = \$arr[\"obj_inst\"];\n";
@@ -1217,6 +1558,7 @@ class class_designer extends class_base
 		$clsrc = str_replace("--remove-- */","",$clsrc);
 		$clsrc = str_replace("//-- methods --//",$methods,$clsrc);
 		$clsrc = str_replace("@default group=general",$rv . $grps,$clsrc);
+		//$this->gen_tabledef(array());
 		return $clsrc;
 	}
 
@@ -1294,7 +1636,9 @@ class class_designer extends class_base
 
 	function _valid_id($src)
 	{
-		return strtolower(preg_replace("/\s/","_",$src));
+		$rv = strtolower(preg_replace("/\s/","_",$src));
+		$rv = preg_replace("/\W/","",$rv);
+		return $rv;
 
 
 	}
