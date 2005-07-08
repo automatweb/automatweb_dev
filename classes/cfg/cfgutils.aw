@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.54 2005/05/09 10:37:47 kristo Exp $
+// $Id: cfgutils.aw,v 1.55 2005/07/08 16:33:53 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -368,11 +368,46 @@ class cfgutils extends aw_template
 			"filter" => $filter,
 		));
 
-		$objprops = $this->load_class_properties(array(
-			"file" => $file,
-			"filter" => $filter,
-		));
+		$clinf = aw_ini_get("classes");
+		$cldat = $clinf[$clid];
 
+                // full cavity search
+		/*
+                if (preg_match("/\W/",$file))
+                {
+                        die(t("Invalid clid - $file<br />"));
+                };
+		*/
+
+		if ($cldat["generated"] == 1)
+		{
+			$fld = $this->cfg["site_basedir"]."/files/classes";
+			$loc = $fld . "/" . $cldat["file"] . "." . aw_ini_get("ext");
+
+			$anakin = get_instance("analyzer/propcollector");
+			$result = $anakin->parse_file(array(
+				"file" => $loc,
+			));
+
+			$objprops = array();
+
+			foreach($result["properties"] as $key => $val)
+			{
+				$objprops[$val["name"]] = $val;
+			};
+
+			// XXX: wtf?
+			$this->tableinfo = $result["properties"]["tableinfo"];
+		}
+		else
+		{
+			$objprops = $this->load_class_properties(array(
+				"file" => $file,
+				"filter" => $filter,
+			));
+
+
+		};
 
 		if (empty($this->classinfo["trans"]))
 		{
@@ -411,9 +446,7 @@ class cfgutils extends aw_template
 			};
 		};
 
-
-
-		if (is_array($this->tableinfo))
+		if (is_array($this->tableinfo) && $cldat["generated"] != 1)
 		{
 			$tmp = array();
 			foreach($this->tableinfo as $key => $val)
@@ -426,6 +459,7 @@ class cfgutils extends aw_template
 		{
 			$this->tableinfo = $tmp;
 		};
+
 		$rv = array_merge($coreprops,$objprops);
 		return $rv;
 	}
@@ -600,6 +634,13 @@ class cfgutils extends aw_template
 		{
 			$p["store"] = "";
 		}
+	}
+
+	function gen_valid_id($src)
+	{
+		$rv = strtolower(preg_replace("/\s/","_",$src));
+		$rv = preg_replace("/\W/","",$rv);
+		return $rv;
 	}
 };
 ?>
