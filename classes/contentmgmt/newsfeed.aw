@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.9 2005/05/27 10:39:54 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/newsfeed.aw,v 1.10 2005/07/08 12:31:24 duke Exp $
 // newsfeed.aw - Newsfeed 
 /*
 
@@ -26,6 +26,9 @@
 
 @property days type=textbox size=2
 @caption Mitme viimase päeva omad
+
+@property parse_embed type=checkbox ch_value=1 default=1
+@caption Näita ka lisatud objekte
 
 @property folders type=table store=no group=folders 
 @caption Kaustade seaded
@@ -209,6 +212,7 @@ class newsfeed extends class_base
 			$first = 0;
 			$source = aw_ini_get("newsfeed.source");
 			$baseurl = aw_ini_get("baseurl");
+			$parse_embed = $feed_obj->prop("parse_embed");
 			foreach($ol->arr() as $o)
 			{
 				//$mod_date = $o->modified();
@@ -220,8 +224,17 @@ class newsfeed extends class_base
 				$oid = $o->id();
 				$art_lead = $o->prop("lead");
 				$description = $o->prop("content");
-				$al->parse_oo_aliases($oid,$art_lead);
-				$al->parse_oo_aliases($oid,$description);
+				if (1 == $parse_embed)
+				{
+					$al->parse_oo_aliases($oid,$art_lead);
+					$al->parse_oo_aliases($oid,$description);
+				}
+				else
+				{
+					$art_lead = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$art_lead);
+					$description = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$description);
+
+				};
 				$items[] = array(
 					"item_id" => $oid,
 					"title" => $o->name(),
