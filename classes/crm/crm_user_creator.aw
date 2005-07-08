@@ -101,6 +101,7 @@ class crm_user_creator extends core
 			$grp->set_name($co->name());
 			$grp->set_prop("priority", 100);
 			$grp->set_prop("type", GRP_REGULAR);
+			$grp->set_prop("can_admin_interface", 1);
 			$grp->save();
 			// connect co to grp
 			$co->connect(array(
@@ -154,6 +155,7 @@ class crm_user_creator extends core
 				$grp->set_name($o->name());
 				$grp->set_prop("priority", $parent->prop("priority", 100));
 				$grp->set_prop("type", GRP_REGULAR);
+				$grp->set_prop("can_admin_interface", 1);
 				$grp->save();
 				// connect co to grp
 				$o->connect(array(
