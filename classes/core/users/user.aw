@@ -1646,22 +1646,28 @@ class user extends class_base
 	{
 		extract($arr);
 		// user, oid
+		$tmp = $this->db_fetch_field("SELECT brother_of FROM objects WHERE oid = '$oid'", "brother_of");
+		if ($tmp != "" && $tmp != $oid)
+		{
+			$str = sprintf(t("Objekt $oid on vend, &otilde;igusi loetakse objekti %s kaudu.<br>"), $tmp);
+			$oid = $tmp;
+		}
 
 		// check if the object is deleted or under a deleted object
 		list($isd, $dat) = $this->_aclw_is_del($oid);
 		if ("del" == $isd)
 		{
-			return t("Objekt on kustutatud. Pole &otilde;igusi!");
+			return $str.t("Objekt on kustutatud. Pole &otilde;igusi!");
 		}
 		else
 		if ("not" == $isd)
 		{
-			return t("Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!");
+			return $str.t("Objekti pole ega pole kunagi olnud! Pole &otilde;igusi!");
 		}
 		else
 		if ("delp" == $isd)
 		{
-			return sprintf(t("Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"), $dat);
+			return $str.sprintf(t("Objekti &uuml;lemobjekt (%s) on kustutatud. Pole &otilde;igusi!"), $dat);
 		}
 
 		// find the controlling acl - select all gids that user belongs to
@@ -1671,7 +1677,7 @@ class user extends class_base
 		$ca = $this->_aclw_get_controlling_acl($user, $oid);
 		if ($ca === false)
 		{
-			return t("Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.");
+			return $str.t("Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.");
 		}
 
 		$o_str = "";
@@ -1707,7 +1713,7 @@ class user extends class_base
 			"url" => $this->mk_my_orb("change", array("id" => $g_o->id()), $g_o->class_id()),
 			"caption" => $g_o->path_str()
 		));
-		return sprintf(t("Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"), $ro_str, $o_str, $grpstr, $this->_aclw_acl_string($ca["acl"]));
+		return $str.sprintf(t("Info objekti %s &otilde;iguste kohta: <br><br> &Otilde;igusi m&auml;&auml;rab &otilde;igus-seos objekti %s ja grupi %s vahel.<br><br>Sellele seosele m&auml;&auml;ratud &otilde;igused on j&auml;rgnevad:<br>%s"), $ro_str, $o_str, $grpstr, $this->_aclw_acl_string($ca["acl"]));
 	}
 
 	function _aclw_is_del($oid)
