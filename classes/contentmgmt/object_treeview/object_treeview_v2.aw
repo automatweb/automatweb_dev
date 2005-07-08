@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.82 2005/06/28 14:42:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.83 2005/07/08 15:07:43 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1162,7 +1162,6 @@ class object_treeview_v2 extends class_base
 		{
 			$cols_text = $cold;
 		}
-
 		foreach($cold as $colid => $coln)
 		{
 			$text = $editable = $sortable = $fields = $sep_before = $sep_after = $controller = "";
@@ -1601,7 +1600,7 @@ class object_treeview_v2 extends class_base
 			"select" => html::checkbox(array(
 				"name" => "sel[]",
 				"value" => $id,
-			))
+			)),
 		);
 
 		$del = "";
@@ -1643,7 +1642,6 @@ class object_treeview_v2 extends class_base
 						$this->tr_i->transform(obj($tr_id), $content);
 					}
 				}
-
 				if ($edit_columns[$colid] == 1)
 				{
 					$content = html::textbox(array(
@@ -1686,8 +1684,21 @@ class object_treeview_v2 extends class_base
 						// show_link_field property set, have show link in name field
 						$content = $this->_get_link($content, $url, $parms['tree_obj_ih']);
 					}
-				}	
-
+				}
+				$image_obj = "";	
+				if (strstr($colid, "userim"))
+				{
+					if (is_oid($arr[$colid]) && $this->can("view", $arr[$colid]))
+					{
+						$image_inst = get_instance(CL_IMAGE);
+						$image_obj = new object($arr[$colid]);
+						$content = $image_inst->get_url_by_id($arr[$colid]);
+					}
+					else
+					{
+						$sep_before[$colid] = $sep_after[$colid] = "";
+					}
+				}
 				if ($sep_before[$colid] != "")
 				{
 					$content = $sep_before[$colid].$content;
@@ -1696,9 +1707,11 @@ class object_treeview_v2 extends class_base
 				{
 					$content .= $sep_after[$colid];
 				}
+
 				$this->vars(array(
 					"content" => $content,
 				));
+
 				$str .= $this->parse("COLUMN");
 			}
 		}

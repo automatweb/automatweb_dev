@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.38 2005/07/07 10:26:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.39 2005/07/08 15:07:43 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -406,7 +406,7 @@ class otv_ds_obj extends class_base
 			$ps = $ot->get_properties($c->to());
 			foreach($ps as $pn => $pd)
 			{
-				if ($pd["store"] == "no")
+				if ($pd["store"] == "no" && !strstr($pn, "userim"))
 				{
 					continue;
 				}
@@ -662,6 +662,7 @@ class otv_ds_obj extends class_base
 		exit_function("otv_ds_obj::get_objects::arr");
 		
 		enter_function("otv_ds_obj::get_objects::loop");
+
 		foreach($ar as $t)
 		{
 			$url = $target = $fileSizeBytes = $fileSizeKBytes = $fileSizeMBytes = "";
@@ -746,7 +747,6 @@ class otv_ds_obj extends class_base
 				)),
 				"jrk" => $t->ord()
 			);
-
 			foreach($fields as $ff_n => $ff_d)
 			{
 				if ($ff_n != "url")
@@ -769,6 +769,12 @@ class otv_ds_obj extends class_base
 					{
 						$ret[$t->id()][$ff_n] = $classlist[$t->class_id()]["name"];
 					}
+				}
+				if (strstr($ff_n, "userim"))
+				{
+					$img_obj = $t->get_first_obj_by_reltype($ff_d['reltype']);
+					
+					$ret[$t->id()][$ff_n] = (empty($img_obj)) ? "" : $img_obj->id();
 				}
 			}
 
@@ -793,6 +799,25 @@ class otv_ds_obj extends class_base
 		}
 
 		exit_function("otv_ds_obj::get_objects");
+
+
+
+/*
+
+$all_keys = array_keys($ret);
+arr($all_keys);
+$conn_obj = new connection();
+
+$images = $conn_obj->find(array("from" => $all_keys));
+arr($images);
+foreach($images as $i)
+{
+	$ret[$i['from']][''] = $i['to']
+}
+
+*/
+
+
 		return $ret;
 	}
 
