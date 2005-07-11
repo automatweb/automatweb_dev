@@ -8,5 +8,12 @@
 			</function>
 		</action>
 
+		<action name="convert_evx">
+			<function name="convert_evx">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
