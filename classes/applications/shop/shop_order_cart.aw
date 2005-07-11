@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.39 2005/06/27 09:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.40 2005/07/11 12:55:20 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -537,7 +537,7 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
-		
+
 		if($arr["from"] != "confirm")
 		{
 			if (is_array($order_data["all_items"]))
