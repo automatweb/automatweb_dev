@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.77 2005/07/05 09:06:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.78 2005/07/11 10:11:34 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -16,7 +16,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@default method=serialize
 
 	@property show_logged type=checkbox ch_value=1
-	@caption Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt
+	@caption Kuva sisseloginud kasutaja e-posti ja nime automaatselt
 	
 	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
 	@caption Teemade kaust
@@ -594,9 +594,9 @@ class forum_v2 extends class_base
 						"_alias" => get_class($this),
 					)),
 				));
-
-				$tplname = "L" . $this->level . "_FOLDER";
-
+				
+//				$tplname = "L" . $this->level . "_FOLDER"; 
+				
 				$tplname = "FOLDER";
 				$this->vars(array(
 					"spacer" => str_repeat("&nbsp;",6*($this->level-1)),
@@ -635,6 +635,7 @@ class forum_v2 extends class_base
 
 		// ja iga alamtopicu jaoks on mul vaja teada, mitu
 		// teemat seal on.
+		$folder_counter = 0;
 		foreach ($sub_folder_list->arr() as $sub_folder_obj)
 		{
 			list(,$comment_count) = $this->get_comment_counts(array(
@@ -671,6 +672,15 @@ class forum_v2 extends class_base
 				)),
 			));
 			$c .= $this->parse("LAST_LEVEL");
+			if ($folder_counter % 2 == 0)
+			{
+				$c .= $this->parse("LAST_LEVEL_EVEN");
+			}
+			else
+			{
+				$c .= $this->parse("LAST_LEVEL_ODD");
+			}
+			$folder_counter++;
 		};
 		return $c;
 	}
@@ -839,6 +849,7 @@ class forum_v2 extends class_base
 		$section = aw_global_get("section");
 		$can_admin = $this->_can_admin(array("forum_id" => $args["obj_inst"]->id()));
 
+		
 		foreach($subtopic_list->arr() as $subtopic_obj)
 		{
 			$cnt++;
@@ -908,6 +919,14 @@ class forum_v2 extends class_base
 			));
 
 			$c .= $this->parse("SUBTOPIC");
+			if ($cnt % 2 == 0)
+			{
+				$c .= $this->parse("SUBTOPIC_EVEN");
+			}
+			else
+			{
+				$c .= $this->parse("SUBTOPIC_ODD");
+			}
 		};
 
 		$page_count = 0;
@@ -1023,6 +1042,7 @@ class forum_v2 extends class_base
 		$can_delete = $this->_can_admin(array("forum_id" => $oid));
 		if (is_array($comments))
 		{
+			$comment_counter = 0;
 			foreach($comments as $comment)
 			{
 				$cnt++;
@@ -1060,6 +1080,15 @@ class forum_v2 extends class_base
 				};
 
 				$c .= $this->parse("COMMENT");
+				if ($comment_counter % 2 == 0)
+				{
+					$c .= $this->parse("COMMENT_EVEN");
+				}
+				else
+				{
+					$c .= $this->parse("COMMENT_ODD");
+				}
+				$comment_counter++;
 			};
 		};		
 
