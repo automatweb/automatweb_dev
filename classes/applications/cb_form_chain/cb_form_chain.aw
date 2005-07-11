@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.10 2005/07/06 12:26:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.11 2005/07/11 12:56:12 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -247,6 +247,12 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "repeat_fix",
+			"caption" => t("Fikseeritud ridade arv"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "el_table",
 			"caption" => t("Elemendid tabelina"),
 			"align" => "center"
@@ -311,6 +317,11 @@ class cb_form_chain extends class_base
 					"name" => "d[".$o->id()."][repeat]",
 					"value" => 1,
 					"checked" => $d[$o->id()]["repeat"] == 1 
+				)),
+				"repeat_fix" => html::checkbox(array(
+					"name" => "d[".$o->id()."][repeat_fix]",
+					"value" => 1,
+					"checked" => $d[$o->id()]["repeat_fix"] == 1 
 				)),
 				"el_table" => html::checkbox(array(
 					"name" => "d[".$o->id()."][el_table]",
@@ -438,7 +449,8 @@ class cb_form_chain extends class_base
 					"rep" => $dat["repeat"],
 					"rep_cnt" => 1,
 					"el_table" => $dat["el_table"],
-					"data_table" => $dat["data_table"]
+					"data_table" => $dat["data_table"],
+					"repeat_fix" => $dat["repeat_fix"]
 				);
 				if ($dat["repeat"] && is_oid($dat["rep_ctr"]) && $this->can("view", $dat["rep_ctr"]))
 				{
@@ -453,7 +465,6 @@ class cb_form_chain extends class_base
 				$forms[] = $fd;
 			}
 		}
-
 		return $forms;
 	}
 
@@ -503,7 +514,7 @@ class cb_form_chain extends class_base
 
 		$this->vars(array(
 			"form" => $html,
-			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o))),
+			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o), "edit_num" => $_GET["edit_num"])),
 		));
 
 		$this->_do_prev_next_pages($o);
@@ -538,6 +549,19 @@ class cb_form_chain extends class_base
 				));
 				$np = true;
 			}
+		}
+		
+		$fd = $this->_get_forms_for_page($o, $cur_pg);
+		$ed = max(1, $_GET["edit_num"]);
+		if ($fd[0]["repeat_fix"] == 1 && $ed < $fd[0]["rep_cnt"])
+		{
+			$this->vars(array(
+				"next_link" => aw_url_change_var(array("edit_num" => $ed+1))
+			));
+			$this->vars(array(
+				"NEXT_PAGE" => $this->parse("NEXT_PAGE")
+			));
+			$np = true;
 		}
 
 		if (!$np)
@@ -631,6 +655,13 @@ class cb_form_chain extends class_base
 		}
 		if ($arr["goto_next"] != "")
 		{
+			$fd = $this->_get_forms_for_page(obj($arr["id"]), $arr["cbfc_pg"]);
+			$ed = max(1, $arr["edit_num"]);
+			if ($fd[0]["repeat_fix"] == 1 && $ed < $fd[0]["rep_cnt"])
+			{
+				return aw_url_change_var("edit_num", $ed+1, $arr["ret"]);
+			}
+
 			$pgs = $this->_get_page_list(obj($arr["id"]));
 			$prev = false;
 			foreach($pgs as $pg)
@@ -646,6 +677,13 @@ class cb_form_chain extends class_base
 		else
 		if ($arr["goto_prev"] != "")
 		{
+			$fd = $this->_get_forms_for_page(obj($arr["id"]), $arr["cbfc_pg"]);
+			$ed = max(1, $arr["edit_num"]);
+			if ($fd[0]["repeat_fix"] == 1 && $ed > 1)
+			{
+				return aw_url_change_var("edit_num", $ed-1, $arr["ret"]);
+			}
+
 			$pgs = $this->_get_page_list(obj($arr["id"]));
 			$prev = false;
 			foreach($pgs as $pg)
@@ -1199,15 +1237,11 @@ class cb_form_chain extends class_base
 				$ci = get_instance(CL_CFG_VIEW_CONTROLLER);
 				foreach($v["view_controllers"] as $ctr_id)
 				{
-					$cpv = $ci->check_property($v, $ctr_id, $_SESSION["cbfc_data"][$wf->id()][$i]);
+					$cpv = $ci->check_property($v, $ctr_id, $_SESSION["cbfc_data"][$wf->id()][$i], $props[$k]);
 					if ($cpv == PROP_IGNORE)
 					{
 						unset($props[$k]);
 						continue;
-					}
-					if ($cpv != "")
-					{
-						$props[$k]["value"] = $cpv;
 					}
 				}
 			}
