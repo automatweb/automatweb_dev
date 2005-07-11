@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.125 2005/07/05 10:50:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.126 2005/07/11 09:45:49 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -330,6 +330,11 @@
 	@property pjp_naidis type=text store=no
 	@caption N&auml;idis
 
+	@property pjp_title_case_wf type=text store=no subtitle=1
+	@caption Projekti t&ouml;&ouml;voog
+
+	@property pjp_case_wf type=table store=no no_caption=1
+
 @default group=grp_login_select_res
 
 	@property select_session_resource type=select store=no
@@ -505,6 +510,12 @@ class mrp_workspace extends class_base
 				$proj = obj($job->prop("project"));
 				$rpn = substr($prop["name"], 4);
 				$prop["value"] = $proj->prop($rpn);
+
+				if ($prop["name"] == "pjp_case_wf")
+				{
+					$this->_pjp_case_wf($arr);
+					return PROP_OK;
+				}
 
 				$retv = $this->import->get_prop_value($prop, $rpn);
 				if ($retv != PROP_OK)
@@ -4457,6 +4468,15 @@ if ($_GET['show_thread_data'] == 1)
 			);
 		}
 		return $row["project"];
+	}
+
+	function _pjp_case_wf($arr)
+	{
+		$case = get_instance(CL_MRP_CASE);
+		$arr["no_edit"] = 1;
+		$job = obj($arr["request"]["pj_job"]);
+		$arr["obj_inst"] = obj($job->prop("project"));
+		$case->create_workflow_table($arr);
 	}
 }
 

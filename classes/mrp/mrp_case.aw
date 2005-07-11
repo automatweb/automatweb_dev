@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.79 2005/07/04 14:13:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.80 2005/07/11 09:45:49 kristo Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1132,10 +1132,14 @@ class mrp_case extends class_base
 			"name" => "starttime",
 			"caption" => t("Töösse"),
 		));
-		$table->define_chooser(array(
-			"name" => "selection",
-			"field" => "job_id",
-		));
+
+		if (!$arr["no_edit"])
+		{
+			$table->define_chooser(array(
+				"name" => "selection",
+				"field" => "job_id",
+			));
+		}
 
 		$table->set_numeric_field ("exec_order");
 		$table->set_default_sortby ("exec_order");
@@ -1187,12 +1191,24 @@ class mrp_case extends class_base
 			$resource_name = $resource->name () ? $resource->name () : "...";
 			$starttime = $job->prop ("starttime");
 			$planned_start = $starttime ? date (MRP_DATE_FORMAT, $starttime) : "Planeerimata";
-			$comment = html::textbox(array(
-				"name" => "comments[".$job->id()."]",
-				"value" => htmlspecialchars($job->prop("comment")),
-				"size" => 10,
-				"textsize" => "11px"
+			if ($arr["no_edit"] == 1)
+			{
+				$comment = htmlspecialchars($job->prop("comment"));
+			}
+			else
+			{
+				$comment = html::textbox(array(
+					"name" => "comments[".$job->id()."]",
+					"value" => htmlspecialchars($job->prop("comment")),
+					"size" => 10,
+					"textsize" => "11px"
 				));
+			}
+
+			$t_length = round ((($job->prop ("length"))/3600), 2);
+			$t_pre_buffer = round ((($job->prop ("pre_buffer"))/3600), 2);
+			$t_post_buffer = round ((($job->prop ("post_buffer"))/3600), 2);
+			$t_minstart = (($job->prop ("minstart")) ? $job->prop ("minstart") : time());
 
 			$table->define_data(array(
 				"name" => html::get_change_url(
@@ -1200,31 +1216,31 @@ class mrp_case extends class_base
 					array("return_url" => urlencode(aw_global_get("REQUEST_URI"))),
 					$this_object->name () . " - " . $resource_name
 				),
-				"length" => html::textbox(array(
+				"length" => $arr["no_edit"] == 1 ?  $t_length : html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-length",
 					"size" => "1",
 					"textsize" => "11px",
-					"value" => round ((($job->prop ("length"))/3600), 2),
+					"value" => $t_length,
 					"disabled" => $disabled,
 					)
 				),
-				"pre_buffer" => html::textbox(array(
+				"pre_buffer" => $arr["no_edit"] == 1 ? $t_pre_buffer : html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-pre_buffer",
 					"size" => "1",
 					"textsize" => "11px",
-					"value" => round ((($job->prop ("pre_buffer"))/3600), 2),
+					"value" => $t_pre_buffer,
 					"disabled" => $disabled,
 					)
 				),
-				"post_buffer" => html::textbox(array(
+				"post_buffer" => $arr["no_edit"] == 1 ? $t_post_buffer : html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-post_buffer",
 					"size" => "1",
 					"textsize" => "11px",
-					"value" => round ((($job->prop ("post_buffer"))/3600), 2),
+					"value" => $t_post_buffer,
 					"disabled" => $disabled,
 					)
 				),
-				"prerequisites" => html::textbox(array(
+				"prerequisites" => $arr["no_edit"] == 1 ? $prerequisites : html::textbox(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-prerequisites",
 					"size" => "4",
 					"textsize" => "11px",
@@ -1232,9 +1248,9 @@ class mrp_case extends class_base
 					"disabled" => $disabled,
 					)
 				),
-				"minstart" => '<span style="white-space: nowrap;">' . html::datetime_select(array(
+				"minstart" => $arr["no_edit"] == 1 ? date("d.m.Y H:i", $t_minstart) : '<span style="white-space: nowrap;">' . html::datetime_select(array(
 					"name" => "mrp_workflow_job-" . $job_id . "-minstart",
-					"value" => (($job->prop ("minstart")) ? $job->prop ("minstart") : time()),
+					"value" => $t_minstart,
 					"disabled" => $disabled,
 					"day" => "text",
 					"month" => "text",
