@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.69 2005/07/04 14:13:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.70 2005/07/11 12:46:57 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -8,6 +8,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 @classinfo syslog_type=ST_MRP_JOB relationmgr=yes no_status=1 confirm_save_data=1
 
 @tableinfo mrp_job index=oid master_table=objects master_index=oid
+@tableinfo mrp_schedule index=oid master_table=objects master_index=oid
 
 @groupinfo data caption="Andmed"
 @groupinfo workflow caption="Töövoog"
@@ -26,6 +27,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 	@property workflow_errors type=text store=no no_caption=1
 
+@default table=mrp_schedule
+	@property starttime type=text
+	@caption Plaanitud töösseminekuaeg
+
+	@property planned_length type=text
+	@caption Planeeritud kestus (h)
+
+
 @default table=mrp_job
 	@property started type=text
 	@caption Alustatud
@@ -41,12 +50,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 	@property exec_order type=hidden
 	@caption Töö jrk. nr.
-
-	@property starttime type=text
-	@caption Plaanitud töösseminekuaeg
-
-	@property planned_length type=text
-	@caption Planeeritud kestus (h)
 
 	@property state type=text
 	@caption Staatus
@@ -86,10 +89,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 
 @reltype MRP_PROJECT value=2 clid=CL_MRP_CASE
 @caption Projekt
-
-//@reltype MRP_PRIORITY value=3 clid=CL_PRIORITY
-//@caption Töö prioriteet
-
 
 */
 
@@ -147,12 +146,15 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#AFAFAF");
+define ("MRP_COLOUR_PAUSED", "#999999");
+define ("MRP_COLOUR_UNAVAILABLE", "#D0D0D0");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
 define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
+define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
 
 class mrp_job extends class_base
@@ -1201,6 +1203,7 @@ class mrp_job extends class_base
 				{
 					continue;
 				}
+
 				$prerequisite = obj ($prerequisite_oid);
 
 				if (!in_array ($prerequisite->prop ("state"), $applicable_states))
@@ -1233,10 +1236,12 @@ class mrp_job extends class_base
 		{
 			$project = obj($job->prop("project"));
 		}
+
 		if (!$project)
 		{
 			return false;
 		}
+
 		$applicable_states = array (
 			MRP_STATUS_INPROGRESS,
 			MRP_STATUS_PLANNED,
@@ -1257,6 +1262,7 @@ class mrp_job extends class_base
 		{
 			return false;
 		}
+
 		### check if resource is available
 		$resource = obj($job->prop("resource"));
 		$applicable_states = array (
@@ -1273,13 +1279,13 @@ class mrp_job extends class_base
 		$max_jobs = max(1, count($resource->prop("thread_data")));
 		// get number of jobs using resource
 		$cur_jobs = $this->db_fetch_field("
-			SELECT 
-				count(j.oid) AS cnt 
-			FROM 
+			SELECT
+				count(j.oid) AS cnt
+			FROM
 				mrp_job j
 				LEFT JOIN objects o ON o.oid = j.oid
-			WHERE 
-				j.resource = ".$resource->id()." AND 
+			WHERE
+				j.resource = ".$resource->id()." AND
 				o.status > 0 AND
 				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
 		", "cnt");
@@ -1398,14 +1404,14 @@ class mrp_job extends class_base
 	{
 		if (trim($comment) != "")
 		{
-			$job = obj($job);
-			$hist = safe_array($job->meta("change_comment_history"));
-			array_unshift($hist, array(
-				"tm" => time(),
-				"uid" => aw_global_get("uid"),
-				"text" => trim($comment)
-			));
-			$job->set_meta("change_comment_history", $hist);
+		$job = obj($job);
+		$hist = safe_array($job->meta("change_comment_history"));
+		array_unshift($hist, array(
+			"tm" => time(),
+			"uid" => aw_global_get("uid"),
+			"text" => trim($comment)
+		));
+		$job->set_meta("change_comment_history", $hist);
 
 			aw_disable_acl();
 			$workspace_i = get_instance(CL_MRP_WORKSPACE);

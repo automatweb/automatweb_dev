@@ -32,6 +32,22 @@
             <field>workflow_errors</field>
       </property>
       <property>
+            <name>starttime</name>
+            <group>workflow</group>
+            <table>mrp_schedule</table>
+            <type>text</type>
+            <field>starttime</field>
+            <caption>Plaanitud töösseminekuaeg</caption>
+      </property>
+      <property>
+            <name>planned_length</name>
+            <group>workflow</group>
+            <table>mrp_schedule</table>
+            <type>text</type>
+            <field>planned_length</field>
+            <caption>Planeeritud kestus (h)</caption>
+      </property>
+      <property>
             <name>started</name>
             <group>workflow</group>
             <table>mrp_job</table>
@@ -70,22 +86,6 @@
             <type>hidden</type>
             <field>exec_order</field>
             <caption>Töö jrk. nr.</caption>
-      </property>
-      <property>
-            <name>starttime</name>
-            <group>workflow</group>
-            <table>mrp_job</table>
-            <type>text</type>
-            <field>starttime</field>
-            <caption>Plaanitud töösseminekuaeg</caption>
-      </property>
-      <property>
-            <name>planned_length</name>
-            <group>workflow</group>
-            <table>mrp_job</table>
-            <type>text</type>
-            <field>planned_length</field>
-            <caption>Planeeritud kestus (h)</caption>
       </property>
       <property>
             <name>state</name>
@@ -166,6 +166,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </mrp_job>
+            <mrp_schedule>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </mrp_schedule>
       </tableinfo>
       <reltypes>
             <MRP_RESOURCE>
