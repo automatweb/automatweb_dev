@@ -17,6 +17,10 @@ class http
 		$port = (!empty($data["port"]) ? $data["port"] : 80);
 
 		$y_url = $data["path"].($data["query"] != "" ? "?".$data["query"] : "").($data["fragment"] != "" ? "#".$data["fragment"] : "");
+		if ($y_url == "")
+		{
+			$y_url = "/";
+		}
 
 		$req  = "GET $y_url HTTP/1.0\r\n";
 		$req .= "Host: ".$host.($port != 80 ? ":".$port : "")."\r\n";
@@ -40,6 +44,11 @@ class http
 
 		exit_function("http::get");
 		return $data;
+	}
+
+	function get_headers()
+	{
+		return $this->last_request_headers;
 	}
 
 	function get_type()
