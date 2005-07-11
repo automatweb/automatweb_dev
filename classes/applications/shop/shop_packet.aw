@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.12 2005/05/23 12:32:55 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_packet.aw,v 1.13 2005/07/11 12:55:03 kristo Exp $
 // shop_packet.aw - Pakett 
 /*
 
@@ -285,6 +285,7 @@ class shop_packet extends class_base
 			$l_inst->vars($pisets);
 			$cnt = 1;
 			$imgc = $w->connections_from(array("type" => "RELTYPE_IMAGE"));
+			$i = get_instance(CL_IMAGE);
 			usort($imgc, create_function('$a,$b', 'return ($a->prop("to.jrk") == $b->prop("to.jrk") ? 0 : ($a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1));'));
 			foreach($imgc as $c)
 			{
