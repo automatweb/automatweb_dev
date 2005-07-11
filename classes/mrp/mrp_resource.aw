@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.66 2005/07/04 14:13:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.67 2005/07/11 21:49:21 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -125,12 +125,15 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#AFAFAF");
+define ("MRP_COLOUR_PAUSED", "#999999");
+define ("MRP_COLOUR_UNAVAILABLE", "#D0D0D0");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
 define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
+define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
 class mrp_resource extends class_base
 {
@@ -524,31 +527,31 @@ class mrp_resource extends class_base
 						$c = obj($p->prop("customer"));
 						$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
 					}
+				}
 
-					### show only applicable projects' jobs
-					$applicable_states = array (
-						MRP_STATUS_PLANNED,
-						MRP_STATUS_PAUSED,
-						MRP_STATUS_INPROGRESS,
-					);
+				### show only applicable projects' jobs
+				$applicable_states = array (
+					MRP_STATUS_PLANNED,
+					MRP_STATUS_PAUSED,
+					MRP_STATUS_INPROGRESS,
+				);
 
-					if (in_array ($p->prop ("state"), $applicable_states))
-					{
-						### colour job status
-						$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
-						$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
+				if (in_array ($p->prop ("state"), $applicable_states))
+				{
+					### colour job status
+					$state = '<span style="color: ' . $this->state_colours[$job->prop ("state")] . ';">' . $this->states[$job->prop ("state")] . '</span>';
+					$change_url = html::get_change_url($job->id(), array("return_url" => get_ru()));
 
-						$table->define_data (array (
-							"modify" => html::href (array (
-								"caption" => t("Ava"),
-								"url" => $change_url,
-								)),
-							"project" => $project,
-							"state" => $state,
-							"starttime" => $job->prop ("starttime"),
-							"client" => $client
-						));
-					}
+					$table->define_data (array (
+						"modify" => html::href (array (
+							"caption" => t("Ava"),
+							"url" => $change_url,
+							)),
+						"project" => $project,
+						"state" => $state,
+						"starttime" => $job->prop ("starttime"),
+						"client" => $client
+					));
 				}
 			}
 		}
@@ -596,6 +599,7 @@ class mrp_resource extends class_base
 				{
 					continue;
 				}
+
 				### show only applicable projects' jobs
 				$project = obj ($job->prop ("project"));
 				$applicable_states = array (
@@ -731,6 +735,7 @@ class mrp_resource extends class_base
 			$recurrent_unavailable_periods[] = array (
 				"length" => 172800,
 				"start" => $weekend_start,
+				"time" => 0,
 				"end" => $end,
 				"interval" => 604800,
 			);
@@ -1054,12 +1059,12 @@ class mrp_resource extends class_base
 				$max_jobs = max(1, count($resource->prop("thread_data")));
 				$cur_jobs = $this->db_fetch_field("
 					SELECT
-						count(j.oid) AS cnt 
-					FROM 
+						count(j.oid) AS cnt
+					FROM
 						mrp_job j
 						LEFT JOIN objects o ON o.oid = j.oid
-					WHERE 
-						j.resource = ".$resource->id()." AND 
+					WHERE
+						j.resource = ".$resource->id()." AND
 						o.status > 0 AND
 						j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
 				", "cnt");

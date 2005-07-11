@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.70 2005/07/11 12:46:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.71 2005/07/11 21:49:21 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -903,7 +903,7 @@ class mrp_job extends class_base
 			$project->set_prop ("progress", $progress);
 
 			### save project&job
-			aw_disable_acl();//!!! no mis pagana acl-i jama see on.
+			aw_disable_acl();
 			$this_object->save ();
 			$project->save ();
 			aw_restore_acl();

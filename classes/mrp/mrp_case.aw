@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.80 2005/07/11 09:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.81 2005/07/11 21:49:21 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -27,7 +27,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 
 @default group=grp_general
-
 	@property header type=text store=no no_caption=1 group=grp_general,grp_case_data
 
 	@property name type=textbox table=objects field=name
@@ -49,7 +48,7 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
-	@property state type=text
+	@property state type=text group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
 	@caption Staatus
 
 	@property customer type=popup_search reltype=RELTYPE_MRP_CUSTOMER clid=CL_CRM_COMPANY
@@ -236,12 +235,15 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#AFAFAF");
+define ("MRP_COLOUR_PAUSED", "#999999");
+define ("MRP_COLOUR_UNAVAILABLE", "#D0D0D0");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
 define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
+define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
+define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
 
 class mrp_case extends class_base
@@ -760,12 +762,14 @@ class mrp_case extends class_base
 			{
 				continue;
 			}
+
 			$project = obj ($job->prop ("project"));
 
 			if (!is_oid($job->prop("resource")) || !$this->can("view", $job->prop("resource")))
 			{
 				continue;
 			}
+
 			$resource = obj ($job->prop ("resource"));
 
 			if (!in_array ($resource->id (), $project_resources))
@@ -1174,14 +1178,18 @@ class mrp_case extends class_base
 
 			foreach ($prerequisites as $oid)
 			{
-				if (is_oid ($oid)) //!!! selle can view v6tsin 2ra, sest kui siin on viga siis edasiminekul andmete riknemine laieneb. samas ei saa korrektse systeemi puhul siin viga esineda. nimelt ei ole siinne kasutajainputiga otseselt seotud. voldemar 2/18/2005.
+				if (is_oid ($oid) and $this->can("view", $oid))
 				{
-					// oled ikka kindel - terryf?
-					if ($this->can("view", $oid))
-					{
-						$prerequisite_job = obj ($oid);
-						$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
-					}
+					$prerequisite_job = obj ($oid);
+					$prerequisites_translated[] = $prerequisite_job->prop ("exec_order");
+				}
+				else
+				{
+					error::raise(array(
+						"msg" => sprintf (t("Eeldustöö pole objekti id või puudub sellele objektile vaatamisõigus, mis siin peaks kindlasti olemas olema (oid: %s)."), $oid),
+						"fatal" => false,
+						"show" => false,
+					));
 				}
 			}
 
@@ -1197,11 +1205,11 @@ class mrp_case extends class_base
 			}
 			else
 			{
-				$comment = html::textbox(array(
-					"name" => "comments[".$job->id()."]",
-					"value" => htmlspecialchars($job->prop("comment")),
-					"size" => 10,
-					"textsize" => "11px"
+			$comment = html::textbox(array(
+				"name" => "comments[".$job->id()."]",
+				"value" => htmlspecialchars($job->prop("comment")),
+				"size" => 10,
+				"textsize" => "11px"
 				));
 			}
 
@@ -1354,7 +1362,7 @@ class mrp_case extends class_base
 
 						if ($job->comment() != $arr["request"]["comments"][$job->id()])
 						{
-							$job->set_comment($arr["request"]["comments"][$job->id()]);
+						$job->set_comment($arr["request"]["comments"][$job->id()]);
 							$workspace_i = get_instance(CL_MRP_WORKSPACE);
 							$workspace_i->mrp_log($job->prop("project"), $job->id(), t("Lisas kommentaari"), $arr["request"]["comments"][$job->id()]);
 						}
@@ -1588,7 +1596,7 @@ class mrp_case extends class_base
 			}
 			else
 			{
-				veryseriouserror;///!!!
+				veryseriouserror;
 			}
 		}
 	}
@@ -2263,6 +2271,7 @@ class mrp_case extends class_base
 
 		### states for planning a project
 		$applicable_states = array(
+			NULL,
 			MRP_STATUS_NEW,
 			MRP_STATUS_ABORTED,
 			MRP_STATUS_ONHOLD,

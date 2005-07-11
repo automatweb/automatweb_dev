@@ -87,9 +87,14 @@
       </property>
       <property>
             <name>state</name>
-            <group>grp_general</group>
+            <group>
+                  <num_0>grp_case_schedule</num_0>
+                  <num_1>grp_general</num_1>
+                  <num_2>grp_case_workflow</num_2>
+            </group>
             <table>mrp_case</table>
             <type>text</type>
+            <editonly>1</editonly>
             <field>state</field>
             <caption>Staatus</caption>
       </property>

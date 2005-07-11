@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.126 2005/07/11 09:45:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.127 2005/07/11 21:49:21 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -47,7 +47,7 @@
 @default group=grp_customers
 	@property box type=text no_caption=1 store=no group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
 	@layout vsplitbox type=hbox group=grp_customers,grp_projects,grp_resources,grp_users_tree,grp_users_mgr
-	@property customers_toolbar type=toolbar store=no no_caption=1 
+	@property customers_toolbar type=toolbar store=no no_caption=1
 	@property customers_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property customers_list type=table store=no no_caption=1 parent=vsplitbox
 	@property customers_list_proj type=table store=no no_caption=1 parent=vsplitbox
@@ -106,7 +106,7 @@
 	@property cs_result type=table no_caption=1
 
 @default group=grp_resources
-	@property resources_toolbar type=toolbar store=no no_caption=1 
+	@property resources_toolbar type=toolbar store=no no_caption=1
 	@property resources_tree type=text store=no no_caption=1 parent=vsplitbox
 	@property resources_list type=table store=no no_caption=1 parent=vsplitbox
 
@@ -134,12 +134,12 @@
 	@caption N&auml;ita
 
 @default group=grp_users_tree
-	@property user_list_toolbar type=toolbar store=no no_caption=1 
+	@property user_list_toolbar type=toolbar store=no no_caption=1
 	@property user_list_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property user_list type=table store=no no_caption=1 parent=vsplitbox
 
 @default group=grp_users_mgr
-	@property user_mgr_toolbar type=toolbar store=no no_caption=1 
+	@property user_mgr_toolbar type=toolbar store=no no_caption=1
 	@property user_mgr_tree type=treeview store=no no_caption=1 parent=vsplitbox
 	@property user_mgr type=table store=no no_caption=1 parent=vsplitbox
 
@@ -388,13 +388,15 @@ define ("MRP_COLOUR_PLANNED", "#5B9F44");
 define ("MRP_COLOUR_INPROGRESS", "#FF9900");
 define ("MRP_COLOUR_ABORTED", "#FF13F3");
 define ("MRP_COLOUR_DONE", "#996600");
-define ("MRP_COLOUR_PAUSED", "#AFAFAF");
+define ("MRP_COLOUR_PAUSED", "#999999");
+define ("MRP_COLOUR_UNAVAILABLE", "#D0D0D0");
 define ("MRP_COLOUR_ONHOLD", "#9900CC");
 define ("MRP_COLOUR_ARCHIVED", "#0066CC");
 define ("MRP_COLOUR_HILIGHTED", "#FFE706");
 define ("MRP_COLOUR_PLANNED_OVERDUE", "#FBCEC1");
 define ("MRP_COLOUR_OVERDUE", "#DF0D12");
-
+define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
+define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
 class mrp_workspace extends class_base
 {
@@ -597,13 +599,13 @@ class mrp_workspace extends class_base
 						$tmp = obj($job->prop($rpn));
 						if ($this->can("edit", $tmp->id()))
 						{
-						$prop["value"] = html::get_change_url(
-							$tmp->id(),
-							array(
-								"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-							),
-							$tmp->name()
-						);
+							$prop["value"] = html::get_change_url(
+								$tmp->id(),
+								array(
+									"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+								),
+								$tmp->name()
+							);
 						}
 						else
 						{
@@ -1997,6 +1999,7 @@ if ($_GET['show_thread_data'] == 1)
 
 			$table->define_data($definition);
 		}
+
 		$table->define_pageselector(array(
 			"type" => "text",
 			"records_per_page" => 30
@@ -2179,6 +2182,7 @@ if ($_GET['show_thread_data'] == 1)
 						"mrp_start" => $range_start,
 						"mrp_length" => $range_end - $range_start
 					));
+
 					foreach($reserved_times as $rt_start => $rt_end)
 					{
 						if ($rt_end > $time)
@@ -2189,8 +2193,9 @@ if ($_GET['show_thread_data'] == 1)
 								"start" => $rt_start,
 								"length" => $rt_end - $rt_start,
 								"nostartmark" => true,
-								"colour" => MRP_COLOUR_PAUSED,
+								"colour" => MRP_COLOUR_UNAVAILABLE,
 								"url" => "#",
+								"layer" => 2,
 								"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
 							));
 						}
@@ -2275,6 +2280,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				continue;
 			}
+
 			$project = obj ($job->prop ("project"));
 
 			### project states that are shown in chart
@@ -2324,6 +2330,7 @@ if ($_GET['show_thread_data'] == 1)
 				"start" => $start,
 				"colour" => $colour,
 				"length" => $length,
+				"layer" => 0,
 				"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
 /* dbg */ . " [res:" . $resource->id () . " töö:" . $job->id () . " proj:" . $project->id () . "]"
@@ -2340,6 +2347,7 @@ if ($_GET['show_thread_data'] == 1)
 						"row" => $resource->id (),
 						"start" => $pd["start"],
 						"nostartmark" => true,
+						"layer" => 1,
 						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
 						"length" => ($pd["end"] - $pd["start"]),
 						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
@@ -3365,7 +3373,6 @@ if ($_GET['show_thread_data'] == 1)
 				break;
 		}
 
-
 		$sby = $arr["request"]["sortby"];
 		if ($sby == "")
 		{
@@ -3447,8 +3454,8 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $person->id()))
 				{
-					$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
-				}
+				$workers_str[] = html::get_change_url($person->id(), array(), $person->name());
+			}
 				else
 				{
 					$workers_str[] = $person->name();
@@ -3461,12 +3468,12 @@ if ($_GET['show_thread_data'] == 1)
 			{
 				if ($this->can("edit", $cust->id()))
 				{
-					$custo = html::get_change_url($cust->id(), array(
-							"return_url" => urlencode(aw_global_get("REQUEST_URI"))
-						),
-						$cust->name()
-					);
-				}
+				$custo = html::get_change_url($cust->id(), array(
+						"return_url" => urlencode(aw_global_get("REQUEST_URI"))
+					),
+					$cust->name()
+				);
+			}
 				else
 				{
 					$custo = $cust->name();
@@ -3771,6 +3778,7 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			$filt["state"] = $arr["states"];
 		}
+
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).name"] = "%";
 		$filt["CL_MRP_JOB.project(CL_MRP_CASE).customer.name"] = "%";
 		if ($arr["proj_states"])
@@ -4137,7 +4145,7 @@ if ($_GET['show_thread_data'] == 1)
 	function callback_on_load($arr)
 	{
 		if ($this->can("view", 17639))
-	{
+		{
 			$this->cfgmanager = 17639;
 		}
 	}
@@ -4148,6 +4156,7 @@ if ($_GET['show_thread_data'] == 1)
 		{
 			return false;
 		}
+
 		if ($arr["id"] == "grp_login_select_res")
 		{
 			return false;

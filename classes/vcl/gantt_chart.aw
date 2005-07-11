@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.15 2005/04/17 20:05:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.16 2005/07/11 21:49:22 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -37,17 +37,17 @@ class gantt_chart extends class_base
 	// Configure chart
 	// Arguments:
 	// string chart_id - ...
-	// timestamp start - chart start time. defaults to start of week back from current time.
-	// int columns - number of divisions in chart (e.g. 7 days for a chart depicting one week). default is 7.
-	// int subdivisions - number of subdivisions in column (e.g. 24 hours for a column depicting one day). default is 1 (meaning subdivision & column coincide).
-	// int column_length - length of one division in seconds. default is 86400.
-	// int width - chart width in pixels. default is 1000.
-	// int row_height - row height in pixels. default is 12.
-	// string row_dfn - title for row-titles column. default is "Ressurss".
-	// string style - style to use (default| ... ).
-	// bool row_anchors - make hyperlinks of row names (not impl. yet).
-	// bool bar_anchors - make hyperlinks of bars (not impl. yet).
-	// int timespans - number of time stops at the top
+	// unix_timestamp start - Chart start time. defaults to start of week back from current time.
+	// unsigned_int columns - Number of divisions in chart (e.g. 7 days for a chart depicting one week). Default is 7.
+	// unsigned_int subdivisions - Number of subdivisions in column (e.g. 24 hours for a column depicting one day). Default is 1 (meaning subdivision & column coincide).
+	// unsigned_int column_length - Length of one division in seconds. Default is 86400.
+	// unsigned_int width - Chart width in pixels. Default is 1000.
+	// unsigned_int row_height - Row height in pixels. Default is 12.
+	// string row_dfn - Title for row-titles column. Default is "Ressurss".
+	// string style - Style to use (default| ... ).
+	// bool row_anchors - Make hyperlinks of row names ("false" not impl. yet).
+	// bool bar_anchors - Make hyperlinks of bars ("false" not impl. yet).
+	// unsigned_int timespans - Number of time stops at the top.
 	function configure_chart ($arr)
 	{
 		$this->start = empty ($arr["start"]) ? (time () - 302400) : (int) $arr["start"];
@@ -72,7 +72,7 @@ class gantt_chart extends class_base
 
 	// Configure chart navigation
 	// Arguments:
-	// bool show - if set to "false", navigation won't be shown, default is "true".
+	// bool show - If set to "false", navigation won't be shown, default is "true".
 	function configure_navigation ($arr)
 	{
 		$this->navigation = (bool) (empty ($arr["show"]) ? true : $arr["show"]);
@@ -80,12 +80,12 @@ class gantt_chart extends class_base
 
 	// Adds one row.
 	// Arguments:
-	// string type - row type data|separator. default is data.
-	// bool expanded - whether to initially show consequent rows after separator or not. applicable when row type is "separator". default is TRUE.
-	// string name - identifier for the row
-	// string title - title for the row
-	// string uri - uri for row title. Applies if row_anchors property is set to true for chart.
-	// string target - uri target for row title. Applies if row_anchors property is set to true for chart.
+	// string type - Row type data|separator. Default is data.
+	// bool expanded - Whether to initially show consequent rows after separator or not. applicable when row type is "separator". Default is TRUE.
+	// string name - Identifier for the row.
+	// string title - Title for the row.
+	// string uri - URI for row title. Applies if row_anchors property is set to true for chart.
+	// string target - URI target for row title. Applies if row_anchors property is set to true for chart.
 	function add_row ($arr)
 	{
 		$row_name = $arr["name"];
@@ -108,10 +108,10 @@ class gantt_chart extends class_base
 
 	// Defines column. Columns can be defined only after calling configure_chart.
 	// Arguments:
-	// int col - column number from left, 0 is row definitions column.
-	// string title - title for the column.
-	// string uri - uri for column title.
-	// string target - uri target for column title.
+	// unsigned_int col - Column number from left, 0 is row definitions column.
+	// string title - Title for the column.
+	// string uri - URI for column title.
+	// string target - URI target for column title.
 	function define_column ($arr)
 	{
 		$col = $arr["col"];
@@ -128,20 +128,22 @@ class gantt_chart extends class_base
 
 	// Adds one bar/data object to specified row.
 	// Arguments:
-	// string row - row name to which to add new bar. Required.
-	// timestamp start - bar starting place on timeline. Required.
-	// int length - bar length in seconds. Required.
-	// string title - title for the bar.
-	// string colour - (CSS colour definition, name or rgb value).  default is "silver".
-	// bool nostartmark - don't show bar start mark. default is false.
-	// string uri - uri for bar hyperlink. Applies if bar_anchors property is set to true for chart.
-	// string target - uri target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
+	// string row - Row name to which to add new bar. Required.
+	// unix_timestamp start - Bar starting place on timeline. Required.
+	// unsigned_int length - Bar length in seconds. Required.
+	// int layer - Layer to put the bar on. 0 is default. Layers with larger numbers are shown on top.
+	// string title - Title for the bar.
+	// string colour - CSS colour definition, name or rgb value.  Default is "silver".
+	// bool nostartmark - Don't show bar start mark. Default is false.
+	// string uri - URI for bar hyperlink. Applies if bar_anchors property is set to true for chart.
+	// string target - URI target for bar hyperlink. Applies if bar_anchors property is set to true for chart.
 	function add_bar ($arr)
 	{
 		$row = $arr["row"];
 		$start = (int) $arr["start"];
 		$length = (int) $arr["length"];
 		$title = empty ($arr["title"]) ? "" : $arr["title"];
+		$layer = empty ($arr["layer"]) ? 0 : (int) $arr["layer"];
 		$colour = empty ($arr["colour"]) ? "silver" : $arr["colour"];
 		$nostartmark = empty ($arr["nostartmark"]) ? false : true;
 		$uri = empty ($arr["uri"]) ? "#" : $arr["uri"];
@@ -240,18 +242,18 @@ class gantt_chart extends class_base
 
 					while ($this->pointer < $cell_end)
 					{
-						if (!is_array ($this->data[$row["name"]]))
+						if (!is_array ($this->parsed_data[$row["name"]]))
 						{
 							break;
 						}
 						else
 						{
-							$bar = array_shift ($this->data[$row["name"]]);
+							$bar = array_shift ($this->parsed_data[$row["name"]]);
 
 							if (!$bar or ((($cell_end - $bar["start"]) / $this->pixel_length) < 0.5))
 							{
 								### no bars or no bars left in cell
-								array_unshift ($this->data[$row["name"]], $bar);
+								array_unshift ($this->parsed_data[$row["name"]], $bar);
 								break;
 							}
 						}
@@ -304,7 +306,7 @@ class gantt_chart extends class_base
 								$split_bar["length"] = $bar["length"] - ($cell_end - $bar["start"]);
 								$split_bar["start"] = $cell_end;
 								$split_bar["force_colour"] = $bar_colour;
-								array_unshift ($this->data[$row["name"]], $split_bar);
+								array_unshift ($this->parsed_data[$row["name"]], $split_bar);
 							}
 
 							### set length to fill rest of the cell
@@ -544,35 +546,55 @@ class gantt_chart extends class_base
 
 	function sort_data ()
 	{
-		foreach ($this->data as $row => $data)
+		$this->parsed_data = $this->data;
+
+		foreach ($this->parsed_data as $row => $data)
 		{
 			### sort bars
-			usort ($this->data[$row], array ($this, "bar_start_sort"));
+			usort ($this->parsed_data[$row], array ($this, "bar_start_sort"));
 
 			### filter bars with same start time
 			$same_start_key = false;
 
-			while (isset($this->data[$row][$key]))
+			while (isset($this->parsed_data[$row][$key]))
 			{
-				if ($this->data[$row][$key]["start"] == $this->data[$row][$key + 1]["start"])
+				if ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$key + 1]["start"])
 				{
-					if ($this->data[$row][$key]["length"] == $this->data[$row][$key + 1]["length"])
+					if ($this->parsed_data[$row][$key]["layer"] == $this->parsed_data[$row][$key + 1]["layer"])
 					{
-						unset ($this->data[$row][$key]);
+						if ($this->parsed_data[$row][$key]["length"] == $this->parsed_data[$row][$key + 1]["length"])
+						{
+							unset ($this->parsed_data[$row][$key]);
+						}
+						else
+						{ ### different lengths
+							### show shorter bars upon longer
+							$same_start_key = $key + 1;
+							$last_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
+
+							while ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$same_start_key]["start"])
+							{
+								$start = $this->parsed_data[$row][$same_start_key]["start"];
+								$length = $this->parsed_data[$row][$same_start_key]["length"];
+								$this->parsed_data[$row][$same_start_key]["length"] = $start + $length - $last_end;
+								$this->parsed_data[$row][$same_start_key]["start"] = $last_end;
+								$this->parsed_data[$row][$same_start_key]["nostartmark"] = true;
+								$last_end = $start + $length;
+								$same_start_key++;
+							}
+						}
 					}
 					else
-					{ ### show shorter bars upon longer
+					{ ### different layers
+						### show upper layer bars upon lower layer bars
 						$same_start_key = $key + 1;
-						$last_end = $this->data[$row][$key]["start"] + $this->data[$row][$key]["length"];
+						$current_key = $key;
+						$start = $this->parsed_data[$row][$key]["start"];
 
-						while ($this->data[$row][$key]["start"] == $this->data[$row][$same_start_key]["start"])
+						while ($start == $this->parsed_data[$row][$same_start_key]["start"])
 						{
-							$start = $this->data[$row][$same_start_key]["start"];
-							$length = $this->data[$row][$same_start_key]["length"];
-							$this->data[$row][$same_start_key]["length"] = $start + $length - $last_end;
-							$this->data[$row][$same_start_key]["start"] = $last_end;
-							$this->data[$row][$same_start_key]["nostartmark"] = true;
-							$last_end = $start + $length;
+							unset ($this->parsed_data[$row][$current_key]);
+							$current_key = $same_start_key;
 							$same_start_key++;
 						}
 					}
@@ -584,33 +606,34 @@ class gantt_chart extends class_base
 			if ($same_start_key !== false)
 			{
 				### sort bars again
-				usort ($this->data[$row], array ($this, "bar_start_sort"));
+				usort ($this->parsed_data[$row], array ($this, "bar_start_sort"));
 			}
 
 			### filter overlaps
 			$key = 0;
 
-			while (isset($this->data[$row][$key]))
+			while (isset($this->parsed_data[$row][$key]))
 			{
-// /* dbg */ if ($this->data[$row][$key]["id"] == 8580) { $this->mrpdbg = 1;}
+/* dbg */ if ($this->parsed_data[$row][$key]["id"] == $_GET["mrp_gantt_dbg_job"] and $_GET["mrp_gantt_dbg_job"]) { $this->ganttdbg = 1;}
+// /* dbg */ if ($row == 1337) { $this->ganttdbg = 1;}
 
 				$key2 = $key + 1;
 				$overlap_end = NULL;
 				$overlap_start = NULL;
-				$current_bar_end = $this->data[$row][$key]["start"] + $this->data[$row][$key]["length"];
+				$current_bar_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
 
 				### find out whether successive bars exist that continuously overlap current. find farthest overlaping bar end.
-				while ( isset($this->data[$row][$key2]) and ($this->data[$row][$key2]["start"] < $current_bar_end) and (empty ($overlap_end) or ($this->data[$row][$key2]["start"] <= $overlap_end)) )
+				while ( isset($this->parsed_data[$row][$key2]) and ($this->parsed_data[$row][$key2]["start"] < $current_bar_end) and (empty ($overlap_end) or ($this->parsed_data[$row][$key2]["start"] <= $overlap_end)) )
 				{ ### next bar exists, next bar starts before current ends, overlap_end is set and next bar starts before it.
-					$overlap_start = empty ($overlap_start) ? $this->data[$row][$key2]["start"] : $overlap_start;
-					$overlap_end = max ($overlap_end, ($this->data[$row][$key2]["start"] + $this->data[$row][$key2]["length"]));
+					$overlap_start = empty ($overlap_start) ? $this->parsed_data[$row][$key2]["start"] : $overlap_start;
+					$overlap_end = max ($overlap_end, ($this->parsed_data[$row][$key2]["start"] + $this->parsed_data[$row][$key2]["length"]));
 					$key2++;
 				}
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "overlap_end:" . date (MRP_DATE_FORMAT, $overlap_end) . "<br>";
-// /* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
-// /* dbg */ }
+/* dbg */ if ($this->ganttdbg){
+/* dbg */ echo "overlap_end:" . date (MRP_DATE_FORMAT, $overlap_end) . "<br>";
+/* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
+/* dbg */ }
 
 				if (!empty ($overlap_end))
 				{
@@ -618,21 +641,21 @@ class gantt_chart extends class_base
 					{
 						### insert remaining end of current bar after last continuously overlapping bar. see if remainder is overlapped by successive when array pointer gets there.
 						$key2--;
-						$remainder = $this->data[$row][$key];
+						$remainder = $this->parsed_data[$row][$key];
 						$remainder["start"] = $overlap_end;
 						$remainder["length"] = $current_bar_end - $overlap_end;
 						$remainder["nostartmark"] = true;
-						array_splice ($this->data[$row], $key2, 1, array ($this->data[$row][$key2], $remainder));
+						array_splice ($this->parsed_data[$row], $key2, 1, array ($this->parsed_data[$row][$key2], $remainder));
 					}
 
 					### trim current bar to overlap start.
-					$this->data[$row][$key]["length"] = $overlap_start - $this->data[$row][$key]["start"];
+					$this->parsed_data[$row][$key]["length"] = $overlap_start - $this->parsed_data[$row][$key]["start"];
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "trimmed bar:";
-// /* dbg */ arr ($this->data[$row][$key]);
-// /* dbg */ echo "remainder start:" . date (MRP_DATE_FORMAT, $remainder["start"]) . "<br>";
-// /* dbg */ }
+/* dbg */ if ($this->ganttdbg){
+/* dbg */ echo "trimmed bar:";
+/* dbg */ arr ($this->parsed_data[$row][$key]);
+/* dbg */ echo "remainder start:" . date (MRP_DATE_FORMAT, $remainder["start"]) . "<br>";
+/* dbg */ $this->ganttdbg = false;}
 				}
 
 				$key++;
@@ -647,7 +670,15 @@ class gantt_chart extends class_base
 			### sort by length
 			if ($a["length"] == $b["length"])
 			{
-				return 0;
+				### sort by layer
+				if ($a["layer"] == $b["layer"])
+				{
+					return 0;
+				}
+				else
+				{
+					return ($a["layer"] > $b["layer"] ? 1 : -1);
+				}
 			}
 			else
 			{
