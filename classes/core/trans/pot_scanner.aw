@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.28 2005/06/17 12:13:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/trans/pot_scanner.aw,v 1.29 2005/07/11 12:53:27 kristo Exp $
 class pot_scanner extends core
 {
 	function pot_scanner()
@@ -251,6 +251,13 @@ class pot_scanner extends core
 			"file" => basename($propf, ".xml"),
 			"clid" => clid_for_name(basename($propf, ".xml"))
 		));
+
+		$clss = aw_ini_get("classes");
+
+		$strings[] = array(
+			"line" => "class_".clid_for_name(basename($propf, ".xml"))."_help",
+			"str" => "Klassi ".$clss[clid_for_name(basename($propf, ".xml"))]["name"]." help"
+		);
 
 		// generate strings for 
 		//  1) property captions
