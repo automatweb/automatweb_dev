@@ -8,7 +8,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kuva sisseloginud kasutaja e-posti ja nime atuomaatselt</caption>
+            <caption>Kuva sisseloginud kasutaja e-posti ja nime automaatselt</caption>
       </property>
       <property>
             <name>topic_folder</name>
