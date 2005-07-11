@@ -122,6 +122,72 @@
             <store>no</store>
             <caption>Aktiivsus</caption>
       </property>
+      <property>
+            <name>str</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>textbox</type>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>date_from</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>date_select</type>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>date_to</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>date_select</type>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>s_title</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>textbox</type>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>s_group</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>select</type>
+            <caption>Asukoht</caption>
+      </property>
+      <property>
+            <name>results</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tulemused</caption>
+      </property>
+      <property>
+            <name>search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search</group>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_SITE_SEARCH_CONTENT</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -139,6 +205,10 @@
             <searchgroups>
                   <caption>Otsingu grupid</caption>
             </searchgroups>
+            <search>
+                  <caption>Otsi</caption>
+                  <submit_method>get</submit_method>
+            </search>
       </groupinfo>
       <reltypes>
             <REPEATER>
@@ -152,6 +222,8 @@
                         <num_0>CL_SITE_SEARCH_CONTENT_GRP</num_0>
                         <num_1>CL_EVENT_SEARCH</num_1>
                         <num_2>CL_SHOP_PRODUCT_SEARCH</num_2>
+                        <num_3>CL_SITE_SEARCH_CONTENT_GRP_HTML</num_3>
+                        <num_4>CL_SITE_SEARCH_CONTENT_GRP_FS</num_4>
                   </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>

@@ -1,0 +1,124 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>url</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>Sait, mida indekseerida</caption>
+      </property>
+      <property>
+            <name>run</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+      </property>
+      <property>
+            <name>ignore_urls</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>ign_urls</group>
+            <type>textarea</type>
+            <rows>30</rows>
+            <cols>80</cols>
+            <caption>Ignoreeritavad aadressid</caption>
+      </property>
+      <property>
+            <name>title_regex</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>regex</group>
+            <type>textbox</type>
+            <default>
+            <![CDATA["/<TITLE>(.*)<\/TITLE>/iUs"]]>
+            </default>
+            <caption>Pealkirja regulaaravaldis</caption>
+      </property>
+      <property>
+            <name>content_regex</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>regex</group>
+            <type>textbox</type>
+            <default>
+            <![CDATA[""]]>
+            </default>
+            <caption>Sisu regulaarvaldis</caption>
+      </property>
+      <property>
+            <name>indexer_sleep</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>indexer</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Mitu sekundit oodata lehtede vahel</caption>
+      </property>
+      <property>
+            <name>indexer_run_always</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>indexer</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Indekseerija k&amp;auml;ib pidevalt</caption>
+      </property>
+      <property>
+            <name>rc_txt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>indexer</group>
+            <type>text</type>
+            <subtitle>1</subtitle>
+            <caption>Kordus indekseerija k&amp;auml;ivitamiseks</caption>
+      </property>
+      <property>
+            <name>recur_edit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>indexer</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_RECURRENCE</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
+            <store>no</store>
+            <caption>Automaatse impordi seadistamine</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SITE_SEARCH_CONTENT_GRP_HTML</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+      <groupinfo>
+            <ign_urls>
+                  <caption>Ingoreeri aadresse</caption>
+            </ign_urls>
+            <regex>
+                  <caption>Regulaarvaldised</caption>
+            </regex>
+            <indexer>
+                  <caption>Indekseerija</caption>
+            </indexer>
+      </groupinfo>
+      <reltypes>
+            <RECURRENCE>
+                  <value>1</value>
+                  <clid>CL_RECURRENCE</clid>
+                  <caption>kordus</caption>
+            </RECURRENCE>
+      </reltypes>
+</properties>
+

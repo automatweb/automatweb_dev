@@ -1,0 +1,19 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>path</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kataloog, mida indekseerida</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_SITE_SEARCH_CONTENT_GRP_FS</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+      </classinfo>
+</properties>
+

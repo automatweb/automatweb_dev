@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.50 2005/06/28 14:41:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.51 2005/07/11 13:01:47 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -59,14 +59,38 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 	@caption Aktiivsus
 
 
+@default group=search
+
+	@property str type=textbox
+	@caption Otsi
+
+	@property date_from type=date_select
+	@caption Alates
+
+	@property date_to type=date_select
+	@caption Kuni
+
+	@property s_title type=textbox
+	@caption Pealkiri
+
+	@property s_group type=select
+	@caption Asukoht
+
+	@property results type=table no_caption=1
+	@caption Tulemused
+
+	@property search type=submit 
+	@caption Otsi
+
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
 
-@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH
+@reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS
 @caption otsingu grupp
 
 @groupinfo searchgroups caption="Otsingu grupid"
 @groupinfo static caption="Staatiline otsing"
+@groupinfo search caption="Otsi" submit_method=get
 
 */
 
@@ -150,6 +174,23 @@ class site_search_content extends class_base
 
 			case "activity":
 				$this->mk_activity_table($arr);
+				break;
+
+			case "s_group":
+				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
+				$prop["options"] = array("" => "Igalt poolt") + $ol->names();
+
+			case "date_from":
+			case "date_to":
+				$prop["year_from"] = 1990;
+
+			case "str":
+			case "s_title":
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "results":
+				$this->_search_results($arr);
 				break;
 		};
 		return $retval;
@@ -546,7 +587,49 @@ class site_search_content extends class_base
 		$ret = array();
 
 		$ams = new aw_array($menus);	
-	
+		$sections = "";
+		if ($ams->count())
+		{
+			$sections = " AND section IN (".$ams->to_sql().")";
+		}
+
+		if (!$arr["no_lang_id"])
+		{
+			$lang_id = " AND lang_id = '".aw_global_get("lang_id")."'";
+		}
+
+		if ($arr["site_id"])
+		{
+			$site_id = " AND site_id = '$arr[site_id]'";
+		}
+
+		$fulltext = "";
+		if (aw_ini_get("site_search_content.has_fulltext_index") == 1)
+		{
+			$fts = "MATCH(content) AGAINST('\"$str\"')";
+			$fulltext = ", ".$fts;
+			$ob = " ORDER BY $fts DESC ";
+		}
+
+		$date = array();
+		if ($arr["date"]["from"])
+		{
+			$date[] = "modified >= ".$arr["date"]["from"];
+		}
+		if ($arr["date"]["to"])
+		{
+			$date[] = "modified <= ".$arr["date"]["to"];
+		}
+		if (count($date))
+		{
+			$date_s = " AND (".join(" AND ", $date)." OR modified < 100 )";
+		}
+
+		if ($arr["s_title"] != "")
+		{
+			$title_s = " AND ".$this->_get_sstring($arr["s_title"], $opts["str"], "title",true);
+		}
+
 		$this->quote($str);
 		$sql = "
 			SELECT 
@@ -554,12 +637,12 @@ class site_search_content extends class_base
 				title, 
 				modified,
 				content
+				$fulltext
 			FROM 
 				static_content 
 			WHERE 
-				".$this->_get_sstring($str, $opts["str"], "content",true)." AND 
-				section IN (".$ams->to_sql().") AND
-				lang_id = '".aw_global_get("lang_id")."'
+				".$this->_get_sstring($str, $opts["str"], "content",true)." $title_s
+				$sections  $lang_id $date_s $site_id $ob
 		";
 		enter_function("site_search_content::fetch_static_search_results::query");
 		$this->db_query($sql);
@@ -571,7 +654,8 @@ class site_search_content extends class_base
 				"url" => $row["url"],
 				"title" => $row["title"],
 				"modified" => $row["modified"],
-				"content" => $row["content"]
+				"content" => $row["content"],
+				"match" => $row[$fts]
 			);
 		}
 		exit_function("site_search_content::fetch_static_search_results::q_results");
@@ -1519,6 +1603,109 @@ class site_search_content extends class_base
 	function __grps($a, $b)
 	{
 		return ($a->prop("to.jrk") == $b->prop("to.jrk")) ? 0 : $a->prop("to.jrk") > $b->prop("to.jrk") ? 1 : -1;
+	}
+
+	function _init_s_res_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "link",
+			"caption" => t("Link"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "match",
+			"caption" => t("T&auml;psus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "title",
+			"caption" => t("Pealkiri"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "mod",
+			"caption" => t("Muudetud"),
+			"align" => "center",
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
+		));
+
+		$t->define_field(array(
+			"name" => "cont",
+			"caption" => t("Sisu"),
+			"align" => "center"
+		));
+	}
+
+	function _search_results($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+
+		$this->_init_s_res_t($t);
+
+		$arr["request"]["s_date"] = array(
+			"from" => $arr["request"]["date_from"],
+			"to" => $arr["request"]["date_to"]
+		);
+
+		// get search results
+		$settings = $this->set_defaults($arr["request"]);
+		
+		$res = $this->get_multi_search_results($settings);
+
+		// show in table
+		foreach($res as $entry)
+		{
+			// url, title, modified, content
+			$t->define_data(array(
+				"link" => html::href(array(
+					"url" => $entry["url"],
+					"caption" => t("Ava"),
+				)),
+				"match" => $entry["match"],
+				"title" => $entry["title"],
+				"mod" => $entry["modified"],
+				"cont" => substr($entry["content"], 0, 500)
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	function get_multi_search_results($arr)
+	{
+		if ($arr["str"] == "")
+		{
+			return array();
+		}
+
+		$o = obj($arr["id"]);
+
+		$fetch = array();
+
+		foreach($o->connections_from(array("type" => "RELTYPE_SEARCH_GRP")) as $c)
+		{
+			$grp = $c->to();
+			if (in_array($grp->class_id(), $statics))
+			{
+				$fetch[] = $grp;
+			}
+		}
+
+		$GLOBALS["DUKE"] = 1;
+		$res = $this->fetch_static_search_results(array(
+			"str" => $arr["str"],
+			"opts" => $arr["opts"],
+			"date" => $arr["date"],
+			"s_title" => $arr["s_title"],
+			"no_lang_id" => true,
+			"site_id" => $arr["s_group"]
+		));
+		$GLOBALS["DUKE"] = 0;
+		return $res;
 	}
 }
 ?>
