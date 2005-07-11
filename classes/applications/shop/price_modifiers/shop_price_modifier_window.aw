@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.1 2005/07/05 08:35:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.2 2005/07/11 12:52:02 kristo Exp $
 // shop_price_modifier_window.aw - Akna hinnakujundus 
 /*
 
@@ -204,7 +204,7 @@ class shop_price_modifier_window extends class_base
 			"align" => "center"
 		));
 
-		for($i = 500; $i <= 2500; $i+= 200)
+		for($i = 100; $i <= 2500; $i+= 100)
 		{
 			$t->define_field(array(
 				"name" => "f".$i,
@@ -222,10 +222,10 @@ class shop_price_modifier_window extends class_base
 
 		$val = safe_array($arr["obj_inst"]->meta($arr["prop"]["name"]));
 		
-		for($i = 500; $i <= 2500; $i+= 200)
+		for($i = 100; $i <= 2500; $i+= 100)
 		{
 			$td = array("w" => $i);
-			for($a = 500; $a <= 2500; $a+= 200)
+			for($a = 100; $a <= 2500; $a+= 100)
 			{
 				$td["f".$a] = html::textbox(array(
 					"name" => "e[$i][$a]",
