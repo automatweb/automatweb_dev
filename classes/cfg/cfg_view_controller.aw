@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.4 2005/03/28 08:17:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/cfg_view_controller.aw,v 1.5 2005/07/11 12:54:39 kristo Exp $
 // cfg_view_controller.aw - NÃ&auml;itamise kontroller 
 /*
 
@@ -31,7 +31,7 @@ class cfg_view_controller extends class_base
 	
 		
 	//function check_property($arr)
-	function check_property($prop, $controller_oid, $arr)
+	function check_property($prop, $controller_oid, $arr, &$prop)
 	{
 		// $prop, $controller_oid, $arr
 		//extract($arr);
