@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.127 2005/07/11 21:49:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.128 2005/07/12 10:08:36 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3384,7 +3384,7 @@ if ($_GET['show_thread_data'] == 1)
 			switch($sby)
 			{
 				case "tm":
-					$sby = "mrp_job.starttime";
+					$sby = "mrp_schedule_826.starttime";
 					break;
 
 				case "length":
@@ -3771,7 +3771,7 @@ if ($_GET['show_thread_data'] == 1)
 			"class_id" => CL_MRP_JOB,
 			"site_id" => array(),
 			"lang_id" => array(),
-			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_job.starttime",
+			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule_826.starttime",
 		);
 
 		if ($arr["states"])
