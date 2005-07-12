@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.9 2005/04/21 08:54:56 kristo Exp $
-// crm_profession.aw - Ametinimetus 
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.10 2005/07/12 14:30:05 voldemar Exp $
+// crm_profession.aw - Ametinimetus
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
 @tableinfo kliendibaas_amet index=oid master_table=objects master_index=oid
@@ -28,7 +28,7 @@
 @reltype GROUP value=2 clid=CL_GROUP
 @caption grupp
 
-@reltype DESC_FILE value=2 clid=CL_FILE
+@reltype DESC_FILE value=3 clid=CL_FILE
 @caption Ametijuhend
 
 */
