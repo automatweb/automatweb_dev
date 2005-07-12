@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.78 2005/07/11 10:11:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.79 2005/07/12 11:43:33 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1050,7 +1050,6 @@ class forum_v2 extends class_base
 				{
 					continue;
 				};
-
 				$this->vars(array(
 					"id" => $comment["oid"],
 					"name" => $comment["name"],
@@ -1058,9 +1057,17 @@ class forum_v2 extends class_base
 					"date" => $this->time2date($comment["created"],2),
 					"createdby" => $comment["createdby"],
 					"uname" => $comment["uname"],
+					"uemail" => $comment["uemail"],
 					"ip" => $comment["ip"],
 					"ADMIN_POST" => "",
+					"HAS_UEMAIL" => "",
 				));
+				if (!empty($comment['uemail']))
+				{
+					$this->vars(array(
+						"HAS_UEMAIL" => $this->parse("HAS_UEMAIL"),
+					));
+				}
 				// have to check if the comment creator is admin or not
 				if ($this->_can_admin(array(
 					"forum_id" => $oid,
@@ -1257,7 +1264,9 @@ class forum_v2 extends class_base
 			}
 			$this->vars(array(
 				"a_name" => $this->parse("a_name".$add),
+				"a_email" => $this->parse("a_email"),
 			));
+			
 
 			$rv .= $this->parse();
 		};
@@ -1317,7 +1326,6 @@ class forum_v2 extends class_base
 		$all_props[] = array("type" => "hidden","name" => "action","value" => "submit");
 		$all_props[] = array("type" => "hidden","name" => "group","value" => $emb_group);
 		$all_props[] = array("type" => "hidden","name" => "parent","value" => $args["request"]["topic"]);
-
 		return $t->parse_properties(array(
 			"properties" => $all_props,
 			"name_prefix" => "emb",
@@ -1759,7 +1767,7 @@ class forum_v2 extends class_base
 				$arr["uname"] = $uid;
 			}
 		}
-		//arr($arr);
+
 		$t = get_instance(CL_COMMENT);
 		$topic = get_instance(CL_MSGBOARD_TOPIC);
 		
