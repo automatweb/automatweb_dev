@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.79 2005/07/12 11:43:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.80 2005/07/12 16:23:35 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1060,12 +1060,21 @@ class forum_v2 extends class_base
 					"uemail" => $comment["uemail"],
 					"ip" => $comment["ip"],
 					"ADMIN_POST" => "",
-					"HAS_UEMAIL" => "",
+					"HAS_EMAIL" => "",
+					"HAS_NOT_EMAIL" => "",
 				));
-				if (!empty($comment['uemail']))
+
+				// if there is set an email
+				if (empty($comment['uemail']))
 				{
 					$this->vars(array(
-						"HAS_UEMAIL" => $this->parse("HAS_UEMAIL"),
+						"HAS_NOT_EMAIL" => $this->parse("HAS_NOT_EMAIL"),
+					));
+				}
+				else
+				{
+					$this->vars(array(
+						"HAS_EMAIL" => $this->parse("HAS_EMAIL"),
 					));
 				}
 				// have to check if the comment creator is admin or not
@@ -1264,7 +1273,7 @@ class forum_v2 extends class_base
 			}
 			$this->vars(array(
 				"a_name" => $this->parse("a_name".$add),
-				"a_email" => $this->parse("a_email"),
+//				"a_email" => $this->parse("a_email"),
 			));
 			
 
