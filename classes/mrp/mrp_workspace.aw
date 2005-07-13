@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.128 2005/07/12 10:08:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.129 2005/07/13 13:58:14 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3356,19 +3356,19 @@ if ($_GET['show_thread_data'] == 1)
 
 			case "grp_printer":
 			case "grp_printer_current":
-				$default_sortby = "mrp_job.starttime";
+				$default_sortby = "mrp_schedule_826.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_in_progress":
-				$default_sortby = "mrp_job.starttime";
+				$default_sortby = "mrp_schedule_826.starttime";
 				$states = array(MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 
 			case "grp_printer_startable":
 			case "grp_printer_notstartable":
-				$default_sortby = "mrp_job.starttime";
+				$default_sortby = "mrp_schedule_826.starttime";
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				break;
 		}
@@ -3773,7 +3773,7 @@ if ($_GET['show_thread_data'] == 1)
 			"lang_id" => array(),
 			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule_826.starttime",
 		);
-
+		
 		if ($arr["states"])
 		{
 			$filt["state"] = $arr["states"];
