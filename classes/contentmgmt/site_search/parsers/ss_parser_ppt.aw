@@ -24,7 +24,7 @@ class ss_parser_ppt extends ss_parser_base
 
 		$this->_put($fn,$this->content);
 
-		$cmd = "/usr/local/bin/catppt -s 8859-1 -d 8859-4 $fn";
+		$cmd = aw_ini_get("server.catppt")." -s 8859-1 -d 8859-4 $fn";
 		
 		$txt = `$cmd`;
 		unlink($fn);

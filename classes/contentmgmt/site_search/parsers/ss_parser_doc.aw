@@ -24,7 +24,7 @@ class ss_parser_doc extends ss_parser_base
 
 		$this->_put($fn,$this->content);
 
-		$cmd = "/usr/local/bin/catdoc -s 8859-1 -d 8859-4 $fn";
+		$cmd = aw_ini_get("server.catdoc")." -s 8859-1 -d 8859-4 $fn";
 		
 		$txt = `$cmd`;
 		unlink($fn);

@@ -24,7 +24,7 @@ class ss_parser_rtf extends ss_parser_base
 
 		$this->_put($fn,$this->content);
 
-		$cmd = "/www/bin/rtf2txt.pl < $fn";
+		$cmd = aw_ini_get("server.rtf2txt")." < $fn";
 		
 		$txt = shell_exec($cmd);
 		unlink($fn);
