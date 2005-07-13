@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.1 2005/07/01 14:15:49 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.2 2005/07/13 11:00:19 kristo Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -687,6 +687,13 @@ class xml_export extends class_base
 				}
 			}
 		}
+
+		if (!$o)
+		{
+			// seems this is not related to xml export
+			return;
+		}
+
 		if ($recurrence_obj = $o->get_first_obj_by_reltype("RELTYPE_EXP_RECURRENCE"))
 		{
 			$recurrence_inst = get_instance(CL_RECURRENCE);
