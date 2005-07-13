@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.29 2005/07/08 16:31:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.30 2005/07/13 17:42:22 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -32,6 +32,12 @@
 
 @property visualize type=text store=no editonly=1
 @caption Eelvaade
+
+@property from_existing_class type=hidden field=meta method=serialize group=general
+@caption Olemasoleva klassi p&otilde;hjal
+
+@property from_existing_class_file type=hidden field=meta method=serialize group=general
+@caption Olemasoleva klassi fail
 
 property preview type=text store=no
 caption 
@@ -1306,6 +1312,7 @@ class class_designer extends class_base
 	function get_class_elements($arr)
 	{
 		$c = $arr["obj_inst"];
+
 		$cltree = new object_tree(array(
 			"parent" => $c,
 		));
@@ -1355,6 +1362,11 @@ class class_designer extends class_base
 	{
 		$c = $arr["obj_inst"];
 		$ellist = $this->get_class_elements($arr);
+
+		if ($c->prop("from_existing_class") == 1)
+		{
+			return $this->gen_classdef_from_existing($arr);
+		}
 
 		$rv = "";
 		$grps = "";
@@ -1445,8 +1457,8 @@ class class_designer extends class_base
 					if (is_array($gpdata["generate_methods"]))
 					{
 						$generate_methods = array_merge($generate_methods,$gpdata["generate_methods"]);
-					};
-				};
+					};	
+			};
 
 				// nii .. midagi peaks nende asjadega ka ette võtma, sest vastutavad klassid peaks
 				// ise oma propertydefinitsioonid kirjutama
@@ -1779,6 +1791,14 @@ class class_designer extends class_base
 				$clid = $class_obj->prop("reg_class_id");
 				$prefix = "classes[$clid]";
 
+				if ($class_obj->prop("from_existing_class") == 1)
+				{
+					$ini_file .= $prefix."[generated] = 1\n";
+					$ini_file .= $prefix."[file] = ".$class_obj->id()."\n";
+					$ini_file .= $prefix."[orig_file] = ".$class_obj->prop("from_existing_class_file")."\n";
+					continue;
+				}
+
 				$ini_file .= $prefix . "[def] = " . "CL_" . $clid . "\n";
 				$ini_file .= $prefix . "[name] = " . $class_obj->name() . "\n";
 				$ini_file .= $prefix . "[file] = " . $class_obj->id() . "\n";
@@ -2026,6 +2046,336 @@ class class_designer extends class_base
 			};
 		};
 		return $arr["request"]["return_url"];
+	}
+
+	function gen_classdef_from_existing($arr)
+	{
+		$cd = $arr["obj_inst"];
+
+		// read in current class
+		$clss = aw_ini_get("classes");
+		$fn = aw_ini_get("classdir")."/".$clss[$cd->prop("reg_class_id")]["orig_file"].".".aw_ini_get("ext");
+
+		$src = $this->get_file(array("file" => $fn));
+
+		// insert new ones
+		$proplist = $this->_get_cd_props_as_list($cd);
+
+		// filter out props that are not created by class_designer
+		foreach($proplist->arr() as $prop)
+		{
+			if (!count($prop->connections_to(array("from.class_id" => CL_PROPERTY))))
+			{
+				$proplist->remove($prop->id());
+			}
+		}
+
+		// insert properties defined from class_designer
+		// find prop defs end
+		$lines = $this->gcdfe_insert_props(explode("\n", $src),$cd, $proplist);
+
+		// insert get_prop / set_prop classdesigner callbacks
+			// find get_property start/end
+			// insert cd call in the beginning
+		list($get_prop, $methods) = $this->generate_get_property_from_property_list($proplist);
+
+		if ($get_prop != "")
+		{
+			$lines = $this->gcdfe_insert_gp_block($lines, $get_prop);
+		}
+
+		// generate methods to the end of the class as usual
+		if ($methods != "")
+		{
+			// find end of class
+			// insert new funcs
+			$lines = $this->_insert_at_end($lines, $methods);
+		}
+		$src = join("\n", $lines);
+		
+		$orig_name = basename($clss[$cd->prop("reg_class_id")]["orig_file"]);
+		return str_replace("class $orig_name extends class_base", "class ".$cd->name()." extends class_base", $src);
+	}
+
+	function gcdfe_insert_props($lines, $cd, $proplist)
+	{
+		foreach($lines as $num => $line)
+		{
+			if (strpos($line, "@property") !== false)
+			{
+				if (strpos($lines[$num+1], "@comment") !== false)
+				{
+					$last_prop_line = $num+1;
+				}
+				else
+				{
+					$last_prop_line = $num+1;
+				}
+
+				if (trim($lines[$last_prop_line+1]) == "")
+				{
+					$last_prop_line++;
+				}
+			}
+		}
+
+		$propstr = explode("\n", $this->generate_property_defs_from_property_list($proplist, $cd));
+
+		$tmp = array();
+		foreach($lines as $num => $line)
+		{
+			if ($num == ($last_prop_line+1))
+			{
+				foreach($propstr as $pl)
+				{
+					$tmp[] = $pl;
+				}
+			}
+			$tmp[] = $line;
+		}
+		return $tmp;
+	}
+
+	function _get_cd_props_as_list($o)
+	{
+		$cltree = new object_tree(array(
+			"parent" => $o,
+		));
+		return $cltree->to_list();
+	}
+
+	function generate_property_defs_from_property_list($list, $cd)
+	{
+		$allowed = $this->elements;
+		$allowed[] = CL_PROPERTY;
+		$clinf = aw_ini_get("classes");
+		foreach($list->arr() as $el)
+		{
+			$el_clid = $el->class_id();
+			if (CL_PROPERTY == $el_clid)
+			{
+				if (!is_oid($el->prop("real_property")))
+				{
+					continue;
+				};
+
+				$el_clid = $el->prop("real_property");
+			};
+			$name = $el->name();
+			// I need a fully qualified name, or there will be unparseable code
+
+			if (empty($name))
+			{
+				continue;
+			};
+			if (in_array($el_clid,$allowed))
+			{
+				$parent = new object($el->parent());
+				$grandparent = new object($parent->parent());
+				$sys_name = $this->_valid_id($name);
+				$group_name = $this->_valid_id($grandparent->name());
+				if ($grandparent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grandgrandparent = new object($grandparent->parent());
+					$group_name = $this->_valid_id($grandgrandparent->name());
+				}
+				// this is not correct
+				$eltype = strtolower(str_replace("CL_PROPERTY_","",$clinf[$el_clid]["def"]));
+				if ($eltype == "tree")
+				{
+					$eltype = "treeview";
+				}
+				$rv .= "@property ${sys_name} type=${eltype} group=${group_name}";
+				if ($parent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grid_name = $parent->id();
+					$rv .= " parent=" . $grid_name;
+				};
+				if ($grandparent->class_id() == CL_PROPERTY_GRID)
+				{
+					$grid_name = $this->_valid_id($grandparent->name());
+					if (!($grid_name == "default" && $cd->prop("from_existing_class")))
+					{
+						$rv .= " parent=" . $grid_name;
+					}
+				};
+				$inst = $el->instance();
+
+				// nii .. midagi peaks nende asjadega ka ette võtma, sest vastutavad klassid peaks
+				// ise oma propertydefinitsioonid kirjutama
+				if ($el_clid == CL_PROPERTY_CHOOSER)
+				{
+					if ($el->prop("orient") == 1)
+					{
+						$rv .= " orient=vertical";
+					};
+					if ($el->prop("multiple") == 1)
+					{
+						$rv .= " multiple=1";
+					};
+				};
+
+				if ($el_clid == CL_PROPERTY_TEXTBOX)
+				{
+					if ($el->prop("size"))
+					{
+						$rv .= " size=" . $el->prop("size");
+					};
+				};
+				$rv .= "\n";
+				$rv .= "@caption $name\n\n";
+
+			};
+			if ($el_clid == CL_PROPERTY_GROUP)
+			{
+				$grpid = $this->_valid_id($name);
+				$grps .= "@groupinfo $grpid caption=\"".($el->prop("caption") != "" ? $el->prop("caption") : $name)."\"\n";
+			};
+
+			if ($el_clid == CL_PROPERTY_GRID)
+			{
+				$parent_o = new object($el->parent());
+				$p_clid = $parent_o->class_id();
+				$p_id = $this->_valid_id($parent_o->name());
+				$group = "";
+				$grid_type = ($el->prop("grid_type") == 0) ? "hbox" : "vbox";
+				$el_id = $this->_valid_id($el->name());
+				$el_id .= $el->id();
+				if ($p_clid == CL_PROPERTY_GROUP)
+				{
+					$group = "group=$p_id";
+				};
+				$rv .= "@layout $el_id type=${grid_type} $group\n";
+
+				// @layout hbox_oc type=hbox group=order_orderer_cos
+				
+				//arr($el->properties());
+			};
+		};
+		return $rv;
+	}
+
+	function generate_get_property_from_property_list($list)
+	{
+		$allowed = $this->elements;
+		$allowed[] = CL_PROPERTY;
+
+		$generate_methods = array();
+
+		foreach($list->arr() as $el)
+		{
+			$el_clid = $el->class_id();
+			if (CL_PROPERTY == $el_clid)
+			{
+				if (!is_oid($el->prop("real_property")))
+				{
+					continue;
+				};
+
+				$el_clid = $el->prop("real_property");
+			};
+			$name = $el->name();
+			// I need a fully qualified name, or there will be unparseable code
+			if (empty($name))
+			{
+				continue;
+			};
+			if (in_array($el_clid,$allowed))
+			{
+				$sys_name = $this->_valid_id($name);
+				$inst = $el->instance();
+				$generate_methods = array();
+					
+				if (method_exists($inst,"generate_get_property"))
+				{
+					$gpdata = $inst->generate_get_property(array(
+						"id" => $el->id(),
+						"name" => $sys_name,
+					));
+					if (strlen($gpdata["get_property"]) > 0)
+					{
+						$gpblock .= $gpdata["get_property"];
+					};
+					if (is_array($gpdata["generate_methods"]))
+					{
+						$generate_methods = array_merge($generate_methods,$gpdata["generate_methods"]);
+					};
+				};
+
+				if (sizeof($generate_methods) > 0 && method_exists($inst,"generate_method"))
+				{
+					foreach($generate_methods as $method_name)
+					{
+						$methods .= $inst->generate_method(array(
+							"id" => $el_id,
+							"name" => $method_name,
+						));
+					};
+					//print "additionally generate methods";
+					//arr($generate_methods);
+				};
+
+			};
+		};
+		
+		return array($gpblock, $methods);
+	}
+
+	function gcdfe_insert_gp_block($lines, $get_prop)
+	{
+		// find get_property method from class
+		$ret = array();
+		$cnt = count($lines);
+		for($i = 0; $i < $cnt; $i++)
+		{
+			$line = $lines[$i];
+
+			if (preg_match("/function\s+get_property/", $line))
+			{
+				$ret[] = $line;
+				$ret[] = $lines[$i+1];
+				$ret[] = "\t\t\$this->class_designer_get_property(\$arr);";
+				$i++;
+				continue;
+			}
+
+			if ($i == ($cnt-3))
+			{
+				$ret[] = "";
+				$ret[] = "\tfunction class_designer_get_property(\$arr)";
+				$ret[] = "\t{";
+				$ret[] = "\t\t\$prop =& \$arr[\"prop\"];";
+				$ret[] = "\t\tswitch(\$prop[\"name\"])";
+				$ret[] = "\t\t{";
+				$ret[] = $get_prop;
+				$ret[] = "\t\t}";
+				$ret[] = "\t}";
+				$ret[] = "";
+			}
+			$ret[] = $line;
+		}
+		return $ret;
+	}
+
+	function _insert_at_end($lines, $methods)
+	{
+		// find get_property method from class
+		$ret = array();
+		$cnt = count($lines);
+		for($i = 0; $i < $cnt; $i++)
+		{
+			$line = $lines[$i];
+
+			if ($i == ($cnt-3))
+			{
+				foreach(explode("\n", $methods) as $nl)
+				{
+					$ret[] = $nl;
+				}
+			}
+			$ret[] = $line;
+		}
+		return $ret;
 	}
 }
 ?>

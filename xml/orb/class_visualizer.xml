@@ -17,5 +17,19 @@
 			</function>
 		</action>
 
+		<action name="playground">
+			<function name="playground">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="proc" all_args="1">
+			<function name="proc">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

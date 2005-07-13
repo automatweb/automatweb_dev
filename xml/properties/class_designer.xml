@@ -61,6 +61,24 @@
             <caption>Eelvaade</caption>
       </property>
       <property>
+            <name>from_existing_class</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Olemasoleva klassi p&amp;otilde;hjal</caption>
+      </property>
+      <property>
+            <name>from_existing_class_file</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Olemasoleva klassi fail</caption>
+      </property>
+      <property>
             <name>reg_class_id</name>
             <table>aw_class</table>
             <group>settings</group>

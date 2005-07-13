@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.406 2005/06/30 15:00:56 duke Exp $
+// $Id: class_base.aw,v 2.407 2005/07/13 17:42:22 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1400,7 +1400,7 @@ class class_base extends aw_template
 						"id" => $this->id,
 						"return_url" => urlencode($return_url)
 					),
-					get_class($this->orb_class)
+					$_GET["class"] ? $_GET["class"] : get_class($this->orb_class)
 				);
 			};
 
@@ -3993,16 +3993,6 @@ class class_base extends aw_template
 				"id" => $cls_id,
 			));
 
-			$designer_obj = new object($this->id);
-			$meta = $designer_obj->meta();
-			foreach($cfg_props as $key => $val)
-			{
-				if ($meta[$key])
-				{
-					$cfg_props[$key]["value"] = $meta[$key];
-				};
-			};
-
 			$lx = $cl_vis->get_layouts(array(
 				"class_id" => $cls_id,
 			));
@@ -4011,7 +4001,9 @@ class class_base extends aw_template
 
 			// okei, aga kus see layout mäng tuleb?
 			$all_properties = $cfg_props;
-
+			$this->classinfo = $cl_vis->get_classinfo(array(
+				"class_id" => $cls_id
+			));
 		}
 		else
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
@@ -4119,7 +4111,6 @@ class class_base extends aw_template
 				};
 			};
 		};
-
 		$this->_cfg_props = $cfg_props;
 
 		// I need group and caption from each one

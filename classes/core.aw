@@ -719,7 +719,10 @@ class core extends acl_base
 		// resolve to name
 		if (is_numeric($cl_name))
 		{
-			$cl_name = $GLOBALS["cfg"]["__default"]["classes"][$cl_name]["file"];
+			if (isset($GLOBALS["cfg"]["__default"]["classes"][$cl_name]))
+			{
+				$cl_name = $GLOBALS["cfg"]["__default"]["classes"][$cl_name]["file"];
+			}
 		};
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 

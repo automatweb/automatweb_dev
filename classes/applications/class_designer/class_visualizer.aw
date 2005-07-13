@@ -222,208 +222,108 @@ class class_visualizer extends class_base
 
 	}
 
+	function get_classinfo($arr)
+	{
+		// check if we need to regenerate the class def
+		$ot = new object_tree(array(
+			"parent" => $arr["class_id"],
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		$ol = $ot->to_list();
+		foreach($ol->arr() as $o)
+		{
+			$mod = max($mod, $o->modified());
+		}
+
+		$fn = aw_ini_get("site_basedir")."/files/classes/".$arr["class_id"].".aw";
+
+		if (filemtime($fn) < $mod)
+		{
+			$cd = get_instance(CL_CLASS_DESIGNER);
+			$cd->callback_post_save(array(
+				"obj_inst" => obj($arr["class_id"])
+			));
+		}
+
+		$anal = get_instance("analyzer/propcollector");
+
+		$inf = $anal->parse_file(array(
+			"file" => $fn
+		));
+		return $inf["properties"]["classinfo"];
+	}
+
 	function get_class_groups($arr)
 	{
-		extract($arr);
-		$o = new object($obj_id);
-		if ($o->class_id() != CL_CLASS_DESIGNER)
-		{
-			die(t("this will not work"));
-		};
-		$tree = new object_tree(array(
-			"parent" => $o->id(),
-			"class_id" => CL_PROPERTY_GROUP,
-			"site_id" => array(),
-			"lang_id" => array(),
-		));
-		$tlist = $tree->to_list();
-		$group = $arr["group"];
-		//arr($tlist);
-                $cli = get_instance("cfg/htmlclient");
-		$cf = get_instance(CL_CLASS_DESIGNER);
-		$items = $cf->elements;
-		$clinf = aw_ini_get("classes");
-		// kui gruppi pole, siis vali esimene
-		// XXX: ühendada see algoritm sellega, mis tehakse classbases
-		//$group = $arr["group"];
-		$groupitems = array();
-		//$active_groups = array();
-		foreach($tlist->arr() as $xo)
-		{
-			$parent_obj = new object($xo->parent());
-			$name = $xo->id();
-			if ($parent_obj->class_id() == CL_PROPERTY_GROUP)
-			{
-				$groupitems[$name]["parent"] = $xo->parent();
-			};
-			$groupitems[$name]["caption"] = $xo->name();
-		};
+		$anal = get_instance("analyzer/propcollector");
 
+		$cb_inf = $anal->parse_file(array(
+			"file" => aw_ini_get("classdir")."/class_base.aw"
+		));
+
+		$inf = $anal->parse_file(array(
+			"file" => aw_ini_get("site_basedir")."/files/classes/".$arr["obj_id"].".aw"
+		));
+
+		$grpi = $cb_inf["properties"]["groupinfo"];
+		foreach(safe_array($inf["properties"]["groupinfo"]) as $gn => $gi)
+		{
+			$grpi[$gn] = $gi;
+		}
+
+		$o = new object($arr["obj_id"]);
 		if ($o->prop("relationmgr") == 1)
 		{
-			$groupitems["relationmgr"] = array(
+			$grpi["relationmgr"] = array(
 				"caption" => t("Seostehaldur"),
 				//"no_form" => 1,
 				"submit" => "no",
 			);
 			if($_REQUEST["srch"] == 1)
 			{
-				$groupitems["relationmgr"]["submit_method"] = "get";
+				$grpi["relationmgr"]["submit_method"] = "get";
 			}
 		};
-
-		return $groupitems;
+		return $grpi;
 	}
 
 	function get_group_properties($arr)
 	{
-		$element_tree = new object_tree(array(
-			"parent" => $arr["id"],
-			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+		$anal = get_instance("analyzer/propcollector");
+		$cb_inf = $anal->parse_file(array(
+			"file" => aw_ini_get("classdir")."/class_base.aw"
 		));
-
-		$o = new object($arr["id"]);
+		$inf = $anal->parse_file(array(
+			"file" => aw_ini_get("site_basedir")."/files/classes/".$arr["id"].".aw"
+		));
+		$grpi = array();
 		
-		$els = $element_tree->to_list();
-		$grid2grp = array();
-		foreach($els->arr() as $el)
+		foreach(safe_array($cb_inf["properties"]) as $gn => $gi)
 		{
-			if (CL_PROPERTY_GRID == $el->class_id())
+			if (is_numeric($gn))
 			{
-				$grid2grp[$el->id()] = $el->parent();
-			};
-		};
+				$grpi[$gi["name"]] = $gi;
+			}
+		}
 
-		$element_tree = new object_tree(array(
-			"parent" => $arr["id"],
-		));
-		$elements = $element_tree->to_list();
-		$cf = get_instance(CL_CLASS_DESIGNER);
-		$items = $cf->elements;
-		$clinf = aw_ini_get("classes");
-
-		$cfgu->get_instance("cfg/cfgutils");
-
-		$rv = array();
-
-		foreach($elements->arr() as $el)
+		foreach(safe_array($inf["properties"]) as $gn => $gi)
 		{
-			$clid = $el->class_id();
-			if (in_array($clid,$items) && $clid != CL_PROPERTY)
+			if (is_numeric($gn))
 			{
-				$eltype = $clinf[$clid]["def"];
-				$eltype = strtolower(str_replace("CL_PROPERTY_","",$eltype));
-				//$sysname = strtolower(preg_replace("/\s/","_",$el->name()));
-				$sysname = $cfgu->gen_valid_id($el->name());
-				
-				$p_o = new object($el->parent());
-
-				$group = $grid2grp[$el->parent()];
-
-				if ($p_o->class_id() == CL_PROPERTY)
-				{
-					$group = $grid2grp[$p_o->parent()];
-				};
-
-				$propdata = array(
-					//"name" => $el->name(),
-					//"name" => $el->id(),
-					"name" => $sysname,
-					"caption" => $el->name(),
-					"type" => $eltype,
-					"group" => $group,
-					"table" => "objects",
-					"field" => "meta",
-					"method" => "serialize",
-				);
-
-				if ($p_o->class_id() == CL_PROPERTY_GRID)
-				{
-					$grid_type = $p_o->prop("grid_type") == 0 ? "vbox" : "hbox";
-					$prop_parent = $grid_type . $p_o->id();
-				}
-				else
-				{
-					$prop_parent = false;
-				};
-
-				if ($p_o->class_id() == CL_PROPERTY)
-				{
-					$grandparent = new object($p_o->parent());
-					$grid_type = $grandparent->prop("grid_type") == 0 ? "vbox" : "hbox";
-					$prop_parent = $grid_type . $grandparent->id();
-				};
-
-
-				if ($clid == CL_PROPERTY_CHOOSER)
-				{
-					$propdata["multiple"] = $el->prop("multiple");
-					$propdata["orient"] = $el->prop("orient") == 1 ? "vertical" : "";
-					$propdata["options"] = explode("\n",$el->prop("options"));
-				}
-				else
-				{
-					$ti = get_instance($clid);
-					if (method_exists($ti, "get_visualizer_prop"))
-					{
-						$ti->get_visualizer_prop($el, $propdata);
-					}
-				}
-
-				if ($prop_parent)
-				{
-					$propdata["parent"] = $prop_parent;
-				};
-
-				$rv[$sysname] = $propdata;
-			};
-		};
-
-		if ($o->prop("relationmgr") == 1)
-		{
-			$rv["relationmgr"] = array(
-				"name" => "relationmgr",
-				"type" => "relationmgr",
-				"caption" => t("Seostehaldur"),
-				"store" => "no",
-				"group" => "relationmgr",
-			);
-		};
-
-		return $rv;
-
+				$grpi[$gi["name"]] = $gi;
+			}
+		}
+		return $grpi;
 	}
 
 	function get_layouts($arr)
 	{
-		$element_tree = new object_tree(array(
-			"parent" => $arr["class_id"],
-			"class_id" => array(CL_PROPERTY_GROUP,CL_PROPERTY_GRID),
+		$anal = get_instance("analyzer/propcollector");
+		$inf = $anal->parse_file(array(
+			"file" => aw_ini_get("site_basedir")."/files/classes/".$arr["class_id"].".aw"
 		));
-
-		$els = $element_tree->to_list();
-
-		$i = 0;
-		$rv = array();
-		foreach($els->arr() as $el)
-		{
-			if ($el->class_id() == CL_PROPERTY_GRID)
-			{
-				$p_o = new object($el->parent());
-				$i++;
-				$i = $el->id();
-				$rv["hbox" . $i] = array(
-					"type" => "hbox",
-					//"group" => $this->_valid_id($p_o->name()),
-					"group" => $p_o->id(),
-				);
-
-			};
-		};
-		return $rv;
-		
-
-
+		return $inf["layout"];
 	}
 	
 	/**
