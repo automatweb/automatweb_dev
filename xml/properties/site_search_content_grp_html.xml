@@ -10,6 +10,16 @@
             <caption>Sait, mida indekseerida</caption>
       </property>
       <property>
+            <name>i_status</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>text</type>
+            <store>no</store>
+            <caption>Staatus</caption>
+      </property>
+      <property>
             <name>run</name>
             <table>objects</table>
             <field>meta</field>
@@ -64,7 +74,7 @@
             <caption>Mitu sekundit oodata lehtede vahel</caption>
       </property>
       <property>
-            <name>indexer_run_always</name>
+            <name>bg_run_always</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>

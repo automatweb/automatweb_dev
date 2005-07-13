@@ -1,19 +1,56 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.1 2005/07/11 13:01:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.2 2005/07/13 14:27:06 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
 @classinfo syslog_type=ST_SITE_SEARCH_CONTENT_GRP_FS relationmgr=yes no_comment=1 no_status=1
 
 @default table=objects
+@default field=meta
+@default method=serialize
+
 @default group=general
 
-@property path type=textbox field=meta method=serialize
-@caption Kataloog, mida indekseerida
+	@property path type=textbox field=meta method=serialize
+	@caption Kataloog, mida indekseerida
+	
+	@property i_status type=text store=no
+	@caption Staatus
+
+	@property run type=text store=no
+
+@default group=regex
+
+	@property title_regex type=textbox default="/<TITLE>(.*)<\/TITLE>/iUs"
+	@caption Pealkirja regulaaravaldis
+
+	@property content_regex type=textbox default=""
+	@caption Sisu regulaarvaldis
+
+@default group=indexer
+
+	@property indexer_sleep type=textbox size=5
+	@caption Mitu sekundit oodata lehtede vahel
+
+	@property bg_run_always type=checkbox ch_value=1
+	@caption Indekseerija k&auml;ib pidevalt
+
+	@property rc_txt type=text subtitle=1
+	@caption Kordus indekseerija k&auml;ivitamiseks
+
+	@property recur_edit type=releditor reltype=RELTYPE_RECURRENCE use_form=emb rel_id=first
+	@caption Automaatse impordi seadistamine
+
+@groupinfo regex caption="Regulaarvaldised"
+@groupinfo indexer caption="Indekseerija"
+
+@reltype RECURRENCE value=1 clid=CL_RECURRENCE
+@caption kordus
 
 */
 
-class site_search_content_grp_fs extends class_base
+classload("core/run_in_background");
+class site_search_content_grp_fs extends run_in_background
 {
 	function site_search_content_grp_fs()
 	{
@@ -25,14 +62,17 @@ class site_search_content_grp_fs extends class_base
 
 	function get_property($arr)
 	{
-		$this->ss_gen_static_content(array(
-			"obj" => $arr["obj_inst"]
-		));
-
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "run":
+				return $this->bg_run_get_property_control($arr);
+				break;
+
+			case "i_status":
+				return $this->bg_run_get_property_status($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -43,6 +83,9 @@ class site_search_content_grp_fs extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bg_run_always":
+				$this->bg_check_scheduler();
+				break;
 		}
 		return $retval;
 	}	
@@ -52,116 +95,118 @@ class site_search_content_grp_fs extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-
-	function ss_gen_static_content($arr)
-	{
-		$o = $arr["obj"];
-
-		$path = $o->prop("path");
-
-		$this->do_crawl($path, $o);
-	}
-
-	function do_crawl($path, $o)
+	function bg_run_init($o)
 	{
 		$this->pages = array();
 		classload("contentmgmt/site_search/parsers/parser_finder");
 
+		$path = $o->prop("path");
 		$this->path = $path;
 		$this->queue = get_instance("core/queue");
-
-		if ($o->meta("crawl_state") != "started")
-		{
-			// get new crawl index
-			// mark crawl as started
-			$o->set_meta("crawl_state", "started");
-			$o->set_meta("crawl_tm", time());
-			$o->save();
-
-			$this->queue->push($path);
-		}
-		else
-		{
-			// restore queue
-			$this->queue->set_all($o->meta("stored_queue"));
-			$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
-			echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
-		}
-
-		$this->process_queue($o->id());
-
-		// mark crawl as finished
-		// remove all docs whose last_modified time is less than start of crawl
-		$o->set_meta("crawl_state", "done");
-		$o->set_meta("stored_visited_pages", "");
-		$o->set_meta("stored_queue", "");
-		
-		$this->db_query("DELETE FROM static_content WHERE site_id = ".$o->id()." AND created_by = 'ss_fs' AND last_modified < ".$o->meta("crawl_tm"));
-		$o->save();
-
-		echo "all done, fetched ".count($this->pages)." files, containing ".$this->size." bytes of text <br>\n";
-		flush();
-		die();
+		$this->queue->push($path);
 	}
 
-	function process_queue($indexer_id)
+	function bg_run_continue($o)
 	{
-		$cnt = 0;
-		while ($this->queue->has_more())
-		{
-			$path = $this->queue->get();
-
-			if (isset($this->pages[$path]))
-			{
-				continue;
-			}
-
-			$i = parser_finder::instance($path);
-			if ($i === NULL)
-			{
-				continue;
-			}
-
-			$this->pages[$path]["o"] =& $i;
-			$page =& $this->pages[$path]["o"];
-
-			$this->_store_content($page, $indexer_id);
-
-			$paths = $page->get_links();
-			foreach($paths as $path)
-			{
-				if (!isset($this->pages[$path]) && !$this->queue->contains($path))
-				{
-					$this->queue->push($path);
-				}
-			}
-
-			if (++$cnt > 100)
-			{
-				$this->_store_queue_for_restart(obj($indexer_id));
-				$cnt = 0;
-				echo "page count over 100, storing queue for restart, queue contains ".$this->queue->count()." items <br>\n";
-				flush();
-			}
-		}
+		// restore queue
+		$this->queue->set_all($o->meta("stored_queue"));
+		$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
+		echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
 	}
 
-	function _store_queue_for_restart($o)
+	function bg_run_step($o)
+	{
+		$path = $this->queue->get();
+
+		if (isset($this->pages[$path]))
+		{
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
+		}
+
+		$i = parser_finder::instance($path);
+		if ($i === NULL)
+		{
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
+		}
+
+		$this->pages[$path]["o"] =& $i;
+		$page =& $this->pages[$path]["o"];
+
+		if (get_class($i) != "ss_parser_dir")
+		{
+			$this->_store_content($page, $o->id());
+		}
+
+		$paths = $page->get_links();
+		foreach($paths as $path)
+		{
+			if (!isset($this->pages[$path]) && !$this->queue->contains($path))
+			{
+				$this->queue->push($path);
+			}
+		}
+
+		if ($o->prop("indexer_sleep") > 0)
+		{
+			sleep($o->prop("indexer_sleep"));
+		}
+
+		return $this->queue->has_more() ? BG_OK : BG_DONE;
+	}
+
+	function bg_checkpoint($o)
 	{
 		$o->set_meta("stored_queue", $this->queue->get_all());
 		$o->set_meta("stored_visited_pages", array_keys($this->pages));
-		aw_disable_acl();
-		$o->save();
-		aw_restore_acl();
+	}
+
+	function bg_run_finish($o)
+	{
+		$o->set_meta("stored_visited_pages", "");
+		$o->set_meta("stored_queue", "");
+		$o->set_meta("bg_run_log", sprintf(t("Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\nIndekseeriti %s lehte, mis sialdasid %s baiti teksti."), 
+			date("d.m.Y H:i", $o->meta("bg_run_start")),
+			date("d.m.Y H:i", time()),
+			count($this->pages),
+			number_format($this->size)
+		));
+		
+		$this->db_query("DELETE FROM static_content WHERE site_id = ".$o->id()." AND created_by = 'ss_fs' AND last_modified < ".$o->meta("bg_run_start"));
+
+		echo "all done, fetched ".count($this->pages)." files, containing ".$this->size." bytes of text <br>\n";
+		flush();
+	}
+
+	function bg_run_get_log_entry($o)
+	{
+		$res  = sprintf(t("Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"), $o->name(), date("d.m.Y H:i", $o->meta("bg_run_start")));
+		$res .= sprintf(t("Hetkel on indekseeritud %s lehte.\n"), count($this->pages));
+		$res .= sprintf(t("J&auml;rjekorras on %s lehte.\n"), $this->queue->count());
+		$res .= sprintf(t("Viimati uuendati staatust %s.\n"), date("d.m.Y H:i"));
+
+		return $res;
+	}
+
+	function bg_halt($o)
+	{
+		$o->set_meta("stored_visited_pages", "");
+		$o->set_meta("stored_queue", "");
+		$o->set_meta("bg_run_log", sprintf(t("Indekseerija k&auml;ivitati %s, peatati %s."), 
+			date("d.m.Y H:i", $o->meta("bg_run_start")),
+			date("d.m.Y H:i", time())
+		));
 	}
 
 	function _store_content(&$page, $indexer_id)
 	{
+		$o = obj($indexer_id);
+
 		$h_id = md5($page->get_url());
-		$fc = $page->get_text_content();
+		$fc = $page->get_text_content($o);
 		$modified = $page->get_last_modified();
-		$title = $page->get_title();
-		$url = $page->get_url();
+		$title = $page->get_title($o);
+		$fn = $page->get_url();
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("showdoc", array("id" => $indexer_id, "doc" => $h_id), "", false, false, "/"))."/".basename($fn);
 
 		$this->quote(&$fc);
 		$this->quote(&$title);
@@ -175,7 +220,8 @@ class site_search_content_grp_fs extends class_base
 			$q = "
 				UPDATE static_content SET 
 					content = '$fc', modified = '$modified',
-					title = '$title', last_modified = '".time()."'
+					title = '$title', last_modified = '".time()."', url = '$url',
+					file_name = '$fn'
 				WHERE
 					id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'
 			";
@@ -186,16 +232,38 @@ class site_search_content_grp_fs extends class_base
 				INSERT INTO static_content(
 					id, 					content, 					modified, 					 
 					title,						url,						created_by,
-					site_id, last_modified
+					site_id, last_modified,file_name
 				) 
 				VALUES(
 					'$h_id',				'$fc',						'$modified',				
 					'$title',					'$url',						'ss_fs',
-					'$indexer_id', ".time()."
+					'$indexer_id', ".time().", '$fn'
 				)
 			";
 		}
 		$this->db_query($q);
+	}
+
+	/**
+
+		@attrib name=showdoc
+
+		@param id required type=int acl=view
+		@param doc required
+
+	**/
+	function showdoc($arr)
+	{
+		$this->quote(&$arr);
+		$row = $this->db_fetch_row("SELECT * FROM static_content WHERE id = '$arr[doc]' and site_id = '$arr[id]'");
+		if ($row && is_readable($row["file_name"]))
+		{
+			$i = get_instance("core/aw_mime_types");
+			header("Content-type: ".$i->type_for_file($row["file_name"]));
+			readfile($row["file_name"]);
+			die();
+		}
+		die(t("Sellist faili ei ole!"));
 	}
 }
 ?>

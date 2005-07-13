@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.51 2005/07/11 13:01:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.52 2005/07/13 14:27:06 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -176,13 +176,18 @@ class site_search_content extends class_base
 				$this->mk_activity_table($arr);
 				break;
 
-			case "s_group":
-				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
-				$prop["options"] = array("" => "Igalt poolt") + $ol->names();
-
 			case "date_from":
 			case "date_to":
 				$prop["year_from"] = 1990;
+				if (!$arr["request"][$prop["name"]])
+				{
+					$prop["value"] = -1;
+					return PROP_OK;
+				}
+
+			case "s_group":
+				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
+				$prop["options"] = array("" => "Igalt poolt") + $ol->names();
 
 			case "str":
 			case "s_title":
@@ -606,17 +611,17 @@ class site_search_content extends class_base
 		$fulltext = "";
 		if (aw_ini_get("site_search_content.has_fulltext_index") == 1)
 		{
-			$fts = "MATCH(content) AGAINST('\"$str\"')";
+			$fts = "MATCH(title,content) AGAINST('\"$str\"')";
 			$fulltext = ", ".$fts;
 			$ob = " ORDER BY $fts DESC ";
 		}
 
 		$date = array();
-		if ($arr["date"]["from"])
+		if ($arr["date"]["from"] > 1)
 		{
 			$date[] = "modified >= ".$arr["date"]["from"];
 		}
-		if ($arr["date"]["to"])
+		if ($arr["date"]["to"] > 1)
 		{
 			$date[] = "modified <= ".$arr["date"]["to"];
 		}
@@ -1537,36 +1542,40 @@ class site_search_content extends class_base
 		{
 			switch($opt)
 			{
-			case S_OPT_ANY_WORD:
-				$content_s = "( ".join(" OR ", map("MATCH(content) AGAINST ('%s')", $words))." ) ";
-				break;
-				
-			case S_OPT_ALL_WORDS:
-				$content_s = "( ".join(" AND ", map("MATCH(content) AGAINST ('%s')", $words))." ) ";
-				break;
-				
-			case S_OPT_PHRASE:
-				$content_s = " MATCH(content) AGAINST('\"$str\"' IN BOOLEAN MODE) ";
-				break;
-				}
+				case S_OPT_ANY_WORD:
+					// rewrite string
+					
+					$str2 = str_replace(" ", "* ", trim($str));
+					$str2.= "*";
+					$content_s = " MATCH(title,content) AGAINST ('$str2' IN BOOLEAN MODE) ";
+					break;
+					
+				case S_OPT_ALL_WORDS:
+					$content_s = "( ".join(" AND ", map("MATCH(title,content) AGAINST ('%s' IN BOOLEAN MODE)", $words))." ) ";
+					break;
+					
+				case S_OPT_PHRASE:
+					$content_s = " MATCH(title,content) AGAINST('$str'  IN BOOLEAN MODE) ";
+					break;
+			}
 		}
 		else
 		{
-		switch($opt)
-		{
-			case S_OPT_ANY_WORD:
-				$content_s = "(".join(" OR ", map($field." like '%%%s%%'", $words)).")";
-				break;
+			switch($opt)
+			{
+				case S_OPT_ANY_WORD:
+					$content_s = "(".join(" OR ", map($field." like '%%%s%%'", $words)).")";
+					break;
 
-			case S_OPT_ALL_WORDS:
-				$content_s = "(".join(" AND ", map($field." like '%%%s%%'", $words)).")";
-				break;
+				case S_OPT_ALL_WORDS:
+					$content_s = "(".join(" AND ", map($field." like '%%%s%%'", $words)).")";
+					break;
 
-			case S_OPT_PHRASE:
-			default:
-				$content_s = $field." like '%".$str."%'";
-				break;
-		}
+				case S_OPT_PHRASE:
+				default:
+					$content_s = $field." like '%".$str."%'";
+					break;
+			}
 		}
 		return $content_s;
 	}
@@ -1657,6 +1666,12 @@ class site_search_content extends class_base
 		
 		$res = $this->get_multi_search_results($settings);
 
+		$max_match = 0;
+		foreach($res as $entry)
+		{
+			$max_match = max($max_match, $entry["match"]);
+		}
+
 		// show in table
 		foreach($res as $entry)
 		{
@@ -1666,10 +1681,10 @@ class site_search_content extends class_base
 					"url" => $entry["url"],
 					"caption" => t("Ava"),
 				)),
-				"match" => $entry["match"],
+				"match" => ((int)(($entry["match"] / $max_match) * 100))."%",
 				"title" => $entry["title"],
 				"mod" => $entry["modified"],
-				"cont" => substr($entry["content"], 0, 500)
+				"cont" => $this->_get_content_high($entry["content"], $settings["str"])
 			));
 		}
 		$t->set_sortable(false);
@@ -1695,7 +1710,11 @@ class site_search_content extends class_base
 			}
 		}
 
-		$GLOBALS["DUKE"] = 1;
+		$arr["opts"]["str"] = S_OPT_ANY_WORD;
+		if (aw_global_get("uid") == "kix")
+		{
+			$GLOBALS["DUKE"] = 1;
+		}
 		$res = $this->fetch_static_search_results(array(
 			"str" => $arr["str"],
 			"opts" => $arr["opts"],
@@ -1706,6 +1725,50 @@ class site_search_content extends class_base
 		));
 		$GLOBALS["DUKE"] = 0;
 		return $res;
+	}
+
+	function _get_content_high($c, $str)
+	{
+		// try to find complete string first, then any word
+		if (($_pos = strpos($c, $str)) !== false)
+		{
+			return $this->_hgl($c, $str, $_pos);
+		}
+
+		// split by word and try for each
+		$words = explode(" ", $str);
+		foreach($words as $word)
+		{
+			if (($_pos = strpos($c, $word)) !== false)
+			{
+				return $this->_hgl($c, $word, $_pos, $words);
+			}
+		}
+	}
+
+	function _hgl($c, $str, $_pos, $other = array())
+	{
+		// find first space 200 chars before 
+		$begin = $_pos-200;
+		while($c{$begin} != " " && $begin > 0)
+		{
+			$begin--;
+		}
+
+		// find first space 200 chars after
+		$end = strpos($c, " ", $_pos+200+strlen($str));
+		$end = $end ? $end : strlen($str);
+
+		// show
+		$c = str_replace($str, "<b>".$str."</b>", $c);
+		if (count($other))
+		{
+			foreach($other as $word)
+			{
+				$c = str_replace($word, "<b>".$word."</b>", $c);
+			}
+		}
+		return substr($c, $begin, ($end - $begin)+1);
 	}
 }
 ?>

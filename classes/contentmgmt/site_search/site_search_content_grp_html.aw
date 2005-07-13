@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.1 2005/07/11 13:01:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.2 2005/07/13 14:27:06 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property url type=textbox 
 	@caption Sait, mida indekseerida
+
+	@property i_status type=text store=no
+	@caption Staatus
 
 	@property run type=text store=no
 
@@ -34,7 +37,7 @@
 	@property indexer_sleep type=textbox size=5
 	@caption Mitu sekundit oodata lehtede vahel
 
-	@property indexer_run_always type=checkbox ch_value=1
+	@property bg_run_always type=checkbox ch_value=1
 	@caption Indekseerija k&auml;ib pidevalt
 
 	@property rc_txt type=text subtitle=1
@@ -53,7 +56,8 @@
 
 */
 
-class site_search_content_grp_html extends class_base
+classload("core/run_in_background");
+class site_search_content_grp_html extends run_in_background
 {
 	function site_search_content_grp_html()
 	{
@@ -70,12 +74,11 @@ class site_search_content_grp_html extends class_base
 		switch($prop["name"])
 		{
 			case "run":
-				$prop["value"] = html::href(array(
-					"caption" => t("K&auml;ivita"),
-					"url" => $this->mk_my_orb("ss_gen_static_content", array(
-						"id" => $arr["obj_inst"]->id()
-					))
-				));
+				return $this->bg_run_get_property_control($arr);
+				break;
+
+			case "i_status":
+				return $this->bg_run_get_property_status($arr);
 				break;
 		};
 		return $retval;
@@ -87,6 +90,9 @@ class site_search_content_grp_html extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "bg_run_always":
+				$this->bg_check_scheduler();
+				break;
 		}
 		return $retval;
 	}	
@@ -96,133 +102,80 @@ class site_search_content_grp_html extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
-	/**
-
-		@attrib name=ss_gen_static_content
-
-		@param id required type=int 
-	**/
-	function ss_gen_static_content($arr)
+	function bg_run_init($o)
 	{
-		$o = obj($arr["id"]);
-
-		$url = $o->prop("url");
-
-		$this->run_indexer($url, $o);
-	}
-
-	function run_indexer($url, $o)
-	{
-		$this->do_crawl($url, $o);
-	}
-
-	function do_crawl($url, $o)
-	{
-		$this->pages = array();
 		classload("contentmgmt/site_search/parsers/parser_finder");
 
-		$this->baseurl = $url;
+		$this->pages = array();
+		$this->baseurl = $o->prop("url");
+
 		$this->queue = get_instance("core/queue");
+		$this->queue->push($this->baseurl);
+
 		$this->ignore_pages = $this->make_keys(explode("\n", trim($o->prop("ignore_urls"))));
+	}
 
-		if ($o->meta("crawl_state") != "started")
+	function bg_run_continue($o)
+	{
+		$this->queue->set_all($o->meta("stored_queue"));
+		$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
+		echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
+	}
+
+	function bg_run_step($o)
+	{
+		$url = $this->queue->get();
+
+		if (isset($this->pages[$url]))
 		{
-			// get new crawl index
-			// mark crawl as started
-			$o->set_meta("crawl_state", "started");
-			$o->set_meta("crawl_tm", time());
-			$o->save();
-
-			$this->queue->push($url);
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
-		else
+
+		$cont = true;
+		foreach($this->ignore_pages as $ign_url)
 		{
-			// restore queue
-			$this->queue->set_all($o->meta("stored_queue"));
-			$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
-			echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
+			if (strstr($url, $ign_url))
+			{
+				$cont = false;
+			}
+		}
+		if (!$cont)
+		{
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
+		}
+	
+		$i = parser_finder::instance($url);
+		if ($i === NULL)
+		{
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
 
-		$this->process_queue($o->id());
+		$this->pages[$url]["o"] =& $i;
+		$page =& $this->pages[$url]["o"];
 
-		// mark crawl as finished
-		// remove all docs whose last_modified time is less than start of crawl
-		$o->set_meta("crawl_state", "done");
-		$o->set_meta("stored_visited_pages", "");
-		$o->set_meta("stored_queue", "");
-		
-		$this->db_query("DELETE FROM static_content WHERE site_id = ".$o->id()." AND created_by = 'ss_html' AND last_modified < ".$o->meta("crawl_tm"));
-		$o->save();
+		$this->_store_content($page, $o->id());
 
-		echo "all done, fetched ".count($this->pages)." files, containing ".$this->size." bytes of text <br>\n";
+		$urls = $page->get_links();
+		foreach($urls as $url)
+		{
+			if (!$this->is_external($url) && !isset($this->pages[$url]) && !$this->queue->contains($url))
+			{
+				$this->queue->push($url);
+			}
+		}
+
+		if ($o->prop("indexer_sleep") > 0)
+		{
+			sleep($o->prop("indexer_sleep"));
+		}
+		return $this->queue->has_more() ? BG_OK : BG_DONE;
+	}
+
+	function bg_checkpoint($o)
+	{
+		echo "page count over ".$this->bg_checkpoint_steps.", storing queue for restart, queue contains ".$this->queue->count()." items <br>\n";
 		flush();
-		die();
-	}
 
-	function process_queue($indexer_id)
-	{
-		$o = obj($indexer_id);
-
-		$cnt = 0;
-		while ($this->queue->has_more())
-		{
-			$url = $this->queue->get();
-
-			if (isset($this->pages[$url]))
-			{
-				continue;
-			}
-
-			$cont = true;
-			foreach($this->ignore_pages as $ign_url)
-			{
-				if (strstr($url, $ign_url))
-				{
-					$cont = false;
-				}
-			}
-			if (!$cont)
-			{
-				continue;
-			}
-		
-			$i = parser_finder::instance($url);
-			if ($i === NULL)
-			{
-				continue;
-			}
-
-			$this->pages[$url]["o"] =& $i;
-			$page =& $this->pages[$url]["o"];
-
-			$this->_store_content($page, $indexer_id);
-
-			$urls = $page->get_links();
-			foreach($urls as $url)
-			{
-				if (!$this->is_external($url) && !isset($this->pages[$url]) && !$this->queue->contains($url))
-				{
-					$this->queue->push($url);
-				}
-			}
-
-			if (++$cnt > 100)
-			{
-				$this->_store_queue_for_restart(obj($indexer_id));
-				$cnt = 0;
-				echo "page count over 100, storing queue for restart, queue contains ".$this->queue->count()." items <br>\n";
-				flush();
-			}
-
-			if ($o->prop("indexer_sleep") > 0)
-			{
-				sleep($o->prop("indexer_sleep"));
-			}
-		}
-	}
-
-	function _store_queue_for_restart($o)
-	{
 		$o->set_meta("stored_queue", $this->queue->get_all());
 		$o->set_meta("stored_visited_pages", array_keys($this->pages));
 		aw_disable_acl();
@@ -230,14 +183,46 @@ class site_search_content_grp_html extends class_base
 		aw_restore_acl();
 	}
 
+	function bg_run_finish($o)
+	{
+		$o->set_meta("stored_visited_pages", "");
+		$o->set_meta("stored_queue", "");
+		$o->set_meta("bg_run_log", sprintf(t("Indekseerija k&auml;ivitati %s, l&otilde;petas edukalt %s.\nIndekseeriti %s lehte, mis sialdasid %s baiti teksti."), 
+			date("d.m.Y H:i", $o->meta("crawl_tm")),
+			date("d.m.Y H:i", time()),
+			count($this->pages),
+			number_format($this->size)
+		));
+		$this->db_query("DELETE FROM static_content WHERE site_id = ".$o->id()." AND created_by = 'ss_html' AND last_modified < ".$o->meta("bg_run_start"));
+		echo "all done, fetched ".count($this->pages)." files, containing ".$this->size." bytes of text <br>\n";
+	}
+
+	function bg_run_get_log_entry($o)
+	{
+		$res  = sprintf(t("Indekseerija nimega %s alustas t&ouml;&ouml;d %s.\n"), $o->name(), date("d.m.Y H:i", $o->meta("bg_run_start")));
+		$res .= sprintf(t("Hetkel on indekseeritud %s lehte.\n"), count($this->pages));
+		$res .= sprintf(t("J&auml;rjekorras on %s lehte.\n"), $this->queue->count());
+		$res .= sprintf(t("Viimati uuendati staatust %s.\n"), date("d.m.Y H:i"));
+
+		return $res;
+	}
+
+	function bg_halt($o)
+	{
+		$o->set_meta("stored_visited_pages", "");
+		$o->set_meta("stored_queue", "");
+		$o->set_meta("bg_run_log", sprintf(t("Indekseerija k&auml;ivitati %s, peatati %s."), 
+			date("d.m.Y H:i", $o->meta("bg_run_start")),
+			date("d.m.Y H:i", time())
+		));
+	}
+
 	function is_external($link)
 	{
 		if (substr($link, 0, 4) != "http" || (substr($link,0,4) == "http" && strpos($link, $this->baseurl) === false))
 		{
-//			echo "is_external($link) returning true <br />";
 			return true;
 		}
-//		echo "is_external($link) returning false<br />";
 		return false;
 	}
 
