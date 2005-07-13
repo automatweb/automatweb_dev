@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.12 2005/07/13 11:43:42 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.13 2005/07/13 14:19:15 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -268,6 +268,12 @@ class cb_form_chain extends class_base
 		));
 
 		$t->define_field(array(
+			"name" => "data_table_confirm_vert",
+			"caption" => t("Kinnituse vaates tabel &uuml;levalt alla"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
 			"name" => "repeat_ctr",
 			"caption" => t("Korduste kontroller"),
 			"align" => "center"
@@ -335,6 +341,11 @@ class cb_form_chain extends class_base
 					"name" => "d[".$o->id()."][data_table]",
 					"value" => 1,
 					"checked" => $d[$o->id()]["data_table"] == 1 
+				)),
+				"data_table_confirm_vert" => html::checkbox(array(
+					"name" => "d[".$o->id()."][data_table_confirm_vert]",
+					"value" => 1,
+					"checked" => $d[$o->id()]["data_table_confirm_vert"] == 1 
 				)),
 				"repeat_ctr" => $rc,
 				"def_ctr" => html::select(array(
@@ -802,6 +813,7 @@ class cb_form_chain extends class_base
 		$entry->set_parent($this->_get_parent($o));
 		$entry->set_class_id(CL_CB_FORM_CHAIN_ENTRY);
 		$entry->set_name($this->_get_entry_name($o));
+		$entry->set_prop("cb_form_id", $o->id());
 		$entry->save();
 
 		// then for each form, data objects in entry object

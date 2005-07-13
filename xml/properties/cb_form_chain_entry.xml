@@ -10,6 +10,14 @@
             <caption>Kinnitatud</caption>
       </property>
       <property>
+            <name>cb_form_id</name>
+            <group>general</group>
+            <table>aw_cb_form_chain_entries</table>
+            <type>hidden</type>
+            <field>cb_form_id</field>
+            <caption>Vormiahela id</caption>
+      </property>
+      <property>
             <name>data</name>
             <group>data</group>
             <table>aw_cb_form_chain_entries</table>

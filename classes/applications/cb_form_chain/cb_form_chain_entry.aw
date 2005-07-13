@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.4 2005/06/13 09:27:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.5 2005/07/13 14:19:15 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -12,6 +12,9 @@
 
 	@property confirmed type=checkbox ch_value=1 
 	@caption Kinnitatud
+
+	@property cb_form_id type=hidden 
+	@caption Vormiahela id
 
 @default group=data
 
@@ -65,6 +68,13 @@ class cb_form_chain_entry extends class_base
 	{
 		$o = obj($arr["id"]);
 
+		$d = array();
+		if (is_oid($o->prop("cb_form_id")) && $this->can("view", $o->prop("cb_form_id")))
+		{
+			$form = obj($o->prop("cb_form_id"));
+			$di = safe_array($form->meta("d"));
+		}
+
 		$this->read_template("show.tpl");
 
 		$form_str = "";
@@ -82,7 +92,7 @@ class cb_form_chain_entry extends class_base
 		{
 			if (count($entries) > 1)
 			{
-				$form_str .= $this->_display_data_table($o, $wf_id, $entries);
+				$form_str .= $this->_display_data_table($o, $wf_id, $entries, $di);
 			}
 			else
 			{
@@ -97,7 +107,7 @@ class cb_form_chain_entry extends class_base
 		return $this->parse();
 	}
 
-	function _display_data_table($o, $wf_id, $entries)
+	function _display_data_table($o, $wf_id, $entries, $d = array())
 	{
 		// make table via component
 		classload("vcl/table");
@@ -108,33 +118,77 @@ class cb_form_chain_entry extends class_base
 			"id" => $wf_id
 		));
 
-		foreach($props as $pn => $pd)
+		if ($d[$wf_id]["data_table_confirm_vert"] == 1)
 		{
 			$t->define_field(array(
-				"name" => $pn,
-				"caption" => $pd["caption"],
+				"name" => "capt",
+				"caption" => t(""),
 				"align" => "center"
 			));
-		}
+			foreach($entries as $idx => $entry)
+			{
+				$t->define_field(array(
+					"name" => "e".$idx,
+					"caption" => t(""),
+					"align" => "center"
+				));
+			}
 
-		// go over all datas
-		foreach($entries as $entry)
-		{
-			$row = array();
+			// go over all datas
 			foreach($props as $pn => $pd)
 			{
-				if ($pd["type"] == "date_select")
+				$row = array("capt" => $pd["caption"]);
+				foreach($entries as $idx => $entry)
 				{
-					$row[$pn] = date("d.m.Y", $entry->prop($pn));
+					$metaf = $entry->meta("metaf");
+					if ($pd["type"] == "date_select")
+					{
+						$row["e".$idx] = date("d.m.Y", $entry->prop($pn));
+					}
+					else
+					if ($pd["type"] == "text")
+					{
+						$row["e".$idx] = $metaf[$pn];
+					}
+					else
+					{
+						$row["e".$idx] = $entry->prop_str($pn);
+					}
 				}
-				else
-				{
-					$row[$pn] = $entry->prop_str($pn);
-				}
+				$t->define_data($row);
 			}
-			$t->define_data($row);
-		}
 
+		}
+		else
+		{
+			foreach($props as $pn => $pd)
+			{
+				$t->define_field(array(
+					"name" => $pn,
+					"caption" => $pd["caption"],
+					"align" => "center"
+				));
+			}
+
+			// go over all datas
+			foreach($entries as $entry)
+			{
+				$row = array();
+				foreach($props as $pn => $pd)
+				{
+					if ($pd["type"] == "date_select")
+					{
+						$row[$pn] = date("d.m.Y", $entry->prop($pn));
+					}
+					else
+					{
+						$row[$pn] = $entry->prop_str($pn);
+					}
+				}
+				$t->define_data($row);
+			}
+		}
+	
 		$ret = $t->draw();
 		return $ret;
 	}
