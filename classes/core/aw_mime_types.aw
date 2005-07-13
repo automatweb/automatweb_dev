@@ -97,7 +97,9 @@ class aw_mime_types
 		"video/vnd.mpegurl" => "mxu",
 		"video/x-msvideo" => "avi",
 		"video/x-sgi-movie" => "movie",
-		"x-conference/x-cooltalk" => "ice"
+		"x-conference/x-cooltalk" => "ice",
+		"application/vnd.sun.xml.writer" => "sxw",
+		"application/vnd.sun.xml.calc" => "sxc"
 	);
 
 	function type_for_ext($ext)
