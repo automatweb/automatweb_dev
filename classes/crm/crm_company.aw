@@ -113,6 +113,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 @property human_resources type=table store=no no_caption=1 parent=vbox_contacts_right
 @caption Inimesed
 
+///////////// contact search
 @property contact_search_firstname type=textbox size=30 store=no parent=vbox_contacts_right
 @caption Eesnimi
 
@@ -130,6 +131,27 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 @property contacts_search_results type=table store=no no_caption=1 parent=vbox_contacts_right
 @caption Otsingutulemused
+
+///////////// profession search
+@property prof_search_firstname type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Eesnimi
+
+@property prof_search_lastname type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Perenimi
+
+@property prof_search_code type=textbox size=30 store=no parent=vbox_contacts_right
+@caption Isikukood
+
+@property proft_search type=hidden store=no no_caption=1 parent=vbox_contacts_right value=1
+@caption prof_search
+
+@property prof_search_submit type=submit store=no parent=vbox_contacts_right
+@caption Otsi
+
+@property prof_search_results type=table store=no no_caption=1 parent=vbox_contacts_right
+@caption Otsingutulemused
+
+
 
 @default group=cedit
 
@@ -1022,6 +1044,64 @@ class crm_company extends class_base
 				}
 				break;
 			//END OF CONTACTS SEARCH
+
+
+			////// prof search
+			//show or don't show search stuff
+			case 'prof_search_results':
+				if($this->do_search_prof && $arr['request']['prof_search_show_results'])
+				{
+					$this->do_prof_search_results(&$arr);
+				}
+				else
+				{
+					return IGNORE_PROP;
+				}
+				break;
+			case 'prof_search_firstname':
+				if(!$arr['request']['prof_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['prof_search_firstname'];
+				}
+				break;	
+			case 'prof_search_lastname':
+				if(!$arr['request']['prof_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['prof_search_lastname'];
+				}
+				break;
+			case 'prof_search_code':
+				if(!$arr['request']['prof_search'])
+				{
+					return PROP_IGNORE;
+				}
+				else
+				{
+					$data['value'] = $arr['request']['prof_search_code'];
+				}
+				break;
+			case 'prof_search_submit':
+				if(!$arr['request']['prof_search'])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			case 'prof_search':
+				if(!$arr['request']['prof_search'])
+				{
+					return PROP_IGNORE;
+				}
+				break;
+			/////  end of prof search
+
 			case "unit_listing_tree":
 			{
 				$this->_do_unit_listing_tree($arr);
@@ -1192,9 +1272,12 @@ class crm_company extends class_base
 			case 'contact_search':
 				$this->do_contact_search($arr);
 				break;
+			case 'prof_search':
+				$this->do_prof_search($arr);
+				break;
 			case "human_resources":
 				//don't show it if i wan't to show the search part
-				if(!$arr['request']['contact_search'])
+				if(!$arr['request']['contact_search'] && !$arr["request"]["prof_search"])
 				{
 					$this->do_human_resources($arr);
 				}
@@ -2211,6 +2294,25 @@ class crm_company extends class_base
 	}
 	
 	/**
+		@attrib name=search_for_profs
+		@param cat optional type=int
+		@param unit optional type=int
+	**/
+	function search_for_profs($arr)
+	{
+		return $this->mk_my_orb(
+			'change',array(
+				'id' => $arr['id'],
+				'group' => $arr['group'],
+				'prof_search' => true,
+				'unit' => $arr['unit'],
+				'cat' => $arr['cat'],
+			),
+			'crm_company'
+		);
+	}
+	
+	/**
 		@attrib name=search_for_customers
 	**/
 	function search_for_customers($arr)
@@ -2847,6 +2949,7 @@ class crm_company extends class_base
 		if(array_key_exists('request',$arr))
 		{
 			$this->do_search = $arr['request']['contact_search'];
+			$this->do_search_prof = $arr['request']['prof_search'];
 			$this->show_customer_search = $arr['request']['customer_search'];
 			//pean processima tulnud infot, tundub küll imelik koht
 			//ilmselt kui vale, keegi hakkab karjuma
@@ -3066,6 +3169,11 @@ class crm_company extends class_base
 			$arr['args']['contact_search'] = $this->do_search;
 			$arr['args']['contacts_search_show_results'] = 1;
 		}
+
+		if ($this->do_search_prof)
+		{
+			$arr['args']['prof_search_show_results'] = 1;
+		}
 	
 		if($this->show_customer_search)
 		{
@@ -3185,11 +3293,23 @@ class crm_company extends class_base
 
 		$tb->add_separator();
 
-		$tb->add_button(array(
+		$tb->add_menu_button(array(
 			'name' => 'Search',
 			'img' => 'search.gif',
 			'tooltip' => t('Otsi'),
 			'action' => 'search_for_contacts'
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=>'Search',
+			'text' => t('Otsi isikuid'),
+			'link'=> "javascript:submit_changeform('search_for_contacts')"
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=>'Search',
+			'text' => t('Otsi ametinimetusi'),
+			'link'=> "javascript:submit_changeform('search_for_profs')"
 		));
 
 		if($arr['request']['contact_search'])
@@ -3778,6 +3898,94 @@ class crm_company extends class_base
 		}
 
 		if($arr['request']['contact_search_code'])
+		{
+			//$search_params['CL_CRM_PERSON.personal_id'] = $arr['request']['contact_search_code'];
+			$search_params['personal_id'] = '%'.urldecode($arr['request']['contact_search_code']).'%';
+		}
+	
+		//let's try to get certain fields
+		$search_params['sort_by'] = 'name';
+
+		$ol = new object_list($search_params);
+
+		$pl = get_instance(CL_PLANNER);
+		$person = get_instance(CL_CRM_PERSON);
+		$cal_id = $pl->get_calendar_for_user(array('uid'=>aw_global_get('uid')));
+
+		foreach($ol->arr() as $o)
+		{
+			$person_data = $person->fetch_person_by_id(array(
+				'id' => $o->id(),
+				'cal_id' => $calid
+			));
+			$t->define_data(array(
+				"name" => $o->prop('name'),
+				"id" => $o->id(),
+				"phone" => $person_data['phone'],
+				"rank" => $person_data["rank"],
+				'section' => $person_data['section'],
+				"email" => html::href(array(
+					"url" => "mailto:" . $person_data['email'],
+					"caption" => $person_data['email'],
+				)),
+			));
+		}
+	}
+
+	function do_prof_search_results($arr)
+	{
+		$t = &$arr["prop"]["vcl_inst"];
+		$t->define_field(array(
+			'name' => 'name',
+			'caption' => t('Nimi'),
+			'sortable' => '1',
+			'callback' => array(&$this, 'callb_human_name'),
+			'callb_pass_row' => true,
+		));
+		$t->define_field(array(
+			'name' => 'phone',
+			'caption' => t('Telefon'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'email',
+			'caption' => t('E-post'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'section',
+			'caption' => t('Üksus'),
+			'sortable' => '1',
+		));
+		$t->define_field(array(
+			'name' => 'rank',
+			'caption' => t('Ametinimetus'),
+			'sortable' => '1',
+		));
+		$t->define_chooser(array(
+			'name'=>'check',
+			'field'=>'id',
+		));
+
+		$search_params = array(
+			'class_id' => CL_CRM_PERSON,
+			'limit' => 50,
+			'sort_by'=>'name'
+		);
+
+		if($arr['request']['prof_search_firstname'])
+		{
+			//$search_params['CL_CRM_PERSON.firstname'] = $arr['request']['contact_search_firstname'];
+			$search_params['firstname'] = '%'.urldecode($arr['request']['contact_search_firstname']).'%';
+		}
+
+		if($arr['request']['prof_search_lastname'])
+		{
+			//$search_params['CL_CRM_PERSON.lastname'] = $arr['request']['contact_search_lastname'];
+			$search_params['lastname'] = '%'.urldecode($arr['request']['contact_search_lastname']).'%';
+		}
+
+		if($arr['request']['prof_search_code'])
 		{
 			//$search_params['CL_CRM_PERSON.personal_id'] = $arr['request']['contact_search_code'];
 			$search_params['personal_id'] = '%'.urldecode($arr['request']['contact_search_code']).'%';

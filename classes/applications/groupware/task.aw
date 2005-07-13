@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.15 2005/04/21 10:34:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.16 2005/07/13 17:44:23 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -111,7 +111,7 @@ class task extends class_base
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array(
-						'type' => 10,//CRM_PERSON.RELTYPE_PERSON_TASK==10
+						'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
 					));
 					foreach($conns as $conn)
 					{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.32 2005/05/12 13:35:16 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_meeting.aw,v 1.33 2005/07/13 17:44:23 kristo Exp $
 // kohtumine.aw - Kohtumine 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_MEETING_DELETE_PARTICIPANTS,CL_CRM_MEETING, submit_delete_participants_from_calendar);
@@ -346,6 +346,39 @@ class crm_meeting extends class_base
 					if ($obj->is_connected_to(array("to" => $ev->brother_of())))
 					{
 						$obj->disconnect(array("from" => $ev->brother_of()));
+						// also, remove from that person's calendar
+
+						$person_i = $obj->instance();
+						if ($_user = $person_i->has_user($obj))
+						{
+							$cals = $_user->connections_to(array(
+								"from.class_id" => CL_PLANNER,
+								"type" => "RELTYPE_CALENDAR_OWNERSHIP"
+							));
+							foreach($cals as $cal_con)
+							{
+								$cal = $cal_con->from();
+								$event_folder = $cal->prop("event_folder");
+								if (is_oid($event_folder && $this->can("add", $event_folder)))
+								{
+									// get brother
+									$bl = new object_list(array(
+										"brother_of" => $arr["event_id"],
+										"site_id" => array(),
+										"lang_id" => array(),
+										"parent" => $event_folder
+									));
+									if ($bl->count())
+									{
+										$bro = $bl->begin();
+										if ($bro->id() != $bro->brother_of())
+										{
+											$bro->delete();
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 				else

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.93 2005/07/06 09:34:09 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.94 2005/07/13 17:44:22 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -2696,6 +2696,26 @@ class planner extends class_base
 						"to" => $arr["event_id"],
 						"reltype" => "RELTYPE_PERSON_MEETING",
 					));
+
+					// also add the event to the calendar of the participant
+					$person_i = $o->instance();
+					if ($_user = $person_i->has_user($o))
+					{
+						$cals = $_user->connections_to(array(
+							"from.class_id" => CL_PLANNER,
+							"type" => "RELTYPE_CALENDAR_OWNERSHIP"
+						));
+						foreach($cals as $cal_con)
+						{
+							$cal = $cal_con->from();
+							$event_folder = $cal->prop("event_folder");
+							if (is_oid($event_folder && $this->can("add", $event_folder)))
+							{
+								$evo = obj($arr["event_id"]);
+								$evo->create_brother($event_folder);
+							}
+						}
+					}
 				}
 			}
 		}
