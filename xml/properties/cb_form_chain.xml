@@ -274,6 +274,11 @@
                   <clid>CL_CFGCONTROLLER</clid>
                   <caption>default andmete kontroller</caption>
             </DEF_CTR>
+            <GEN_CTR>
+                  <value>5</value>
+                  <clid>CL_CFGCONTROLLER</clid>
+                  <caption>info kontroller</caption>
+            </GEN_CTR>
       </reltypes>
 </properties>
 

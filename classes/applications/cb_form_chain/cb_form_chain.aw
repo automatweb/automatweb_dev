@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.11 2005/07/11 12:56:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.12 2005/07/13 11:43:42 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -109,6 +109,9 @@
 
 @reltype DEF_CTR value=4 clid=CL_CFGCONTROLLER
 @caption default andmete kontroller
+
+@reltype GEN_CTR value=5 clid=CL_CFGCONTROLLER
+@caption info kontroller
 
 */
 
@@ -357,6 +360,18 @@ class cb_form_chain extends class_base
 			"caption" => t("Pealkiri"),
 			"align" => "center"
 		));
+
+		$t->define_field(array(
+			"name" => "has_save",
+			"caption" => t("N&auml;ita salvesta nuppu"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "gen_ctr",
+			"caption" => t("Info kontroller"),
+			"align" => "center"
+		));
 	}
 
 	function _cfs_headers($arr)
@@ -365,6 +380,9 @@ class cb_form_chain extends class_base
 		$this->_init_cfs_headers_t($t);
 
 		$hdrs = safe_array($arr["obj_inst"]->meta("cfs_headers"));
+
+		$def_ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_GEN_CTR")));
+		$defs = array("" => "") + $def_ol->names();
 		
 		$pgs = $this->_get_page_list($arr["obj_inst"]);
 		foreach($pgs as $pg)
@@ -374,6 +392,16 @@ class cb_form_chain extends class_base
 				"title" => html::textbox(array(
 					"name" => "hdrs[$pg][name]",
 					"value" => $hdrs[$pg]["name"]
+				)),
+				"has_save" => html::checkbox(array(
+					"name" => "hdrs[$pg][has_save]",
+					"value" => 1,
+					"checked" => $hdrs[$pg]["has_save"]
+				)),
+				"gen_ctr" => html::select(array(
+					"name" => "hdrs[$pg][gen_ctr]",
+					"options" => $defs,
+					"selected" => $hdrs[$pg]["gen_ctr"]
 				))
 			));
 		}
@@ -483,7 +511,7 @@ class cb_form_chain extends class_base
 			$props = $cf->get_props_from_ot(array(
 				"ot" => $ot->id()
 			));
-			$this->_apply_view_controllers($props, $wf, $i);
+			$this->_apply_view_controllers($props, $wf, $o);
 
 			$this->vars(array(
 				"form_name" => $wf->name()
@@ -515,6 +543,7 @@ class cb_form_chain extends class_base
 		$this->vars(array(
 			"form" => $html,
 			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o), "edit_num" => $_GET["edit_num"])),
+			"gen_ctr_res" => $this->_do_gen_ctr($o)
 		));
 
 		$this->_do_prev_next_pages($o);
@@ -522,10 +551,32 @@ class cb_form_chain extends class_base
 		return $this->parse();
 	}
 
+	function _do_gen_ctr($o)
+	{
+		$page = $this->_get_page($o);
+		$hdrs = safe_array($o->meta("cfs_headers"));
+		if (is_oid($hdrs[$page]["gen_ctr"]) && $this->can("view", $hdrs[$page]["gen_ctr"]))
+		{
+			$ctr_o = obj($hdrs[$page]["gen_ctr"]);
+			$ctr_i = $ctr_o->instance();
+			$val = array();
+			$ctr_i->check_property($ctr_o->id(), $o, $val);
+			return $val["value"];
+		}
+	}
+
 	function _do_prev_next_pages($o)
 	{
 		$pgs = array_values($this->_get_page_list($o));
 		$cur_pg = $this->_get_page($o);
+
+		$hd = safe_array($o->meta("cfs_headers"));
+		if ($hd[$cur_pg]["has_save"] == 1)
+		{
+			$this->vars(array(
+				"SAVE_BUTTON" => $this->parse("SAVE_BUTTON")
+			));
+		}
 
 		$np = false;
 		for($i = 0; $i < count($pgs); $i++)
@@ -1059,7 +1110,7 @@ class cb_form_chain extends class_base
 		$props = $wf->get_props_from_wf(array(
 			"id" => $fd["form"]
 		));
-		$this->_apply_view_controllers($props, obj($fd["form"]), 0);
+		$this->_apply_view_controllers($props, obj($fd["form"]), $o);
 		
 		$inf = $_SESSION["cbfc_data"][$fd["form"]][0];
 
@@ -1228,8 +1279,18 @@ class cb_form_chain extends class_base
 		return $val;
 	}
 
-	function _apply_view_controllers(&$props, $wf, $i)
+	function _apply_view_controllers(&$props, $wf, $o)
 	{
+		$fd = $this->_get_forms_for_page($o, $this->_get_page($o));
+		foreach($fd as $e)
+		{
+			if ($e["form"] == $wf->id())
+			{
+				$fd = $e;
+				break;
+			}
+		}
+
 		foreach($props as $k => $v)
 		{
 			if (is_array($v["view_controllers"]) && count($v["view_controllers"]))
@@ -1237,11 +1298,16 @@ class cb_form_chain extends class_base
 				$ci = get_instance(CL_CFG_VIEW_CONTROLLER);
 				foreach($v["view_controllers"] as $ctr_id)
 				{
-					$cpv = $ci->check_property($v, $ctr_id, $_SESSION["cbfc_data"][$wf->id()][$i], $props[$k]);
-					if ($cpv == PROP_IGNORE)
+					for($i = 0; $i < $fd["rep_cnt"]; $i++)
 					{
-						unset($props[$k]);
-						continue;
+						$tmp = $_SESSION["cbfc_data"][$wf->id()][$i];
+						$tmp["__entry_num"] = $i;
+						$cpv = $ci->check_property($v, $ctr_id, $tmp, $props[$k]);
+						if ($cpv == PROP_IGNORE)
+						{
+							unset($props[$k]);
+							continue;
+						}
 					}
 				}
 			}
@@ -1279,7 +1345,7 @@ class cb_form_chain extends class_base
 						"store" => "no"
 					);
 				}
-				if ($v["subtitle"] != 1)
+				if ($v["subtitle"] != 1 && $v["type"] != "text" && $v["store"] != "no")
 				{
 					$v["value"] = $_SESSION["cbfc_data"][$wf->id()][$i][$k];
 				}
