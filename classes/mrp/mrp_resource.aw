@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.67 2005/07/11 21:49:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.68 2005/07/14 07:06:52 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -517,16 +517,17 @@ class mrp_resource extends class_base
 				### get project and client name
 				$project = $client = "";
 
-				if (is_oid ($job->prop ("project")) && $this->can("view", $job->prop("project")))
+				if (!is_oid ($job->prop ("project")) || !$this->can("view", $job->prop("project")))
 				{
-					$p = obj($job->prop("project"));
-					$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
+					continue;
+				}
+				$p = obj($job->prop("project"));
+				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
 
-					if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
-					{
-						$c = obj($p->prop("customer"));
-						$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
-					}
+				if (is_oid($p->prop("customer")) && $this->can("view", $p->prop("customer")))
+				{
+					$c = obj($p->prop("customer"));
+					$client = html::get_change_url($c->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), $c->name());
 				}
 
 				### show only applicable projects' jobs
