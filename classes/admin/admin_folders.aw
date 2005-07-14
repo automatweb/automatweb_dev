@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.49 2005/07/05 09:25:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_folders.aw,v 1.50 2005/07/14 10:32:05 kristo Exp $
 class admin_folders extends aw_template
 {
 	function admin_folders()
@@ -146,7 +146,10 @@ class admin_folders extends aw_template
 				while ($row = $this->db_next())
 				{
 					$row["id"] = $row["oid"];
-					$this->tree->add_item($rn, $row);
+					if ($this->resolve_item(&$row))
+					{
+						$this->tree->add_item($rn, $row);
+					}
 				}
 			}
 			else

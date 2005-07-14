@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.147 2005/06/28 14:41:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.148 2005/07/14 10:32:06 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -1309,6 +1309,33 @@ class users extends users_user
 						aw_ini_set("","frontpage",$gf[$lang_id]);
 					}
 					obj_set_opt("no_auto_translation", 0);
+				}
+			}
+
+			if (aw_ini_get("groups.multi_group_admin_rootmenu"))
+			{
+				$admr = array();
+				foreach($gidlist_pri as $_gid => $_pri)
+				{
+					$_oid = $this->get_oid_for_gid($_gid);
+					obj_set_opt("no_auto_translation", 1);
+					aw_disable_acl();
+					$o = obj($_oid);
+					aw_restore_acl();
+					$ar2 = $o->meta("admin_rootmenu2");
+					$lang_id = aw_global_get("lang_id");
+					if (is_array($ar2) && $ar2[$lang_id])
+					{
+						foreach(safe_array($ar2[$lang_id]) as $k => $v)
+						{
+							$admr[$k] = $v;
+						}
+					}
+					obj_set_opt("no_auto_translation", 0);
+				}
+				if (count($admr))
+				{
+					aw_ini_set("","admin_rootmenu2",$admr);
 				}
 			}
 		}
