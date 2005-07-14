@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.407 2005/07/13 17:42:22 kristo Exp $
+// $Id: class_base.aw,v 2.408 2005/07/14 09:40:15 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -133,6 +133,11 @@ class class_base extends aw_template
 		$this->vcl_has_getter = array(
 			"classificator" => 1,
 		);
+
+		if (!$this->clid && $arg["clid"])
+		{
+			$this->clid = $arg["clid"];
+		}
 		parent::init($arg);
 	}
 
@@ -1115,6 +1120,7 @@ class class_base extends aw_template
 		};
 
 		$clid = $this->clid;
+
 		if (empty($clid) && method_exists($this->orb_class,"get_opt"))
 		{
 			$clid = $this->orb_class->get_opt("clid");
@@ -1141,6 +1147,7 @@ class class_base extends aw_template
 		{
 			$this->clfile = $clfile;
 		};
+
 		$this->clid = $clid;
 		$this->_ct = $_ct;
 		
@@ -3634,7 +3641,10 @@ class class_base extends aw_template
 				if ($property["method"] == "bitmask")
 				{
 					$val = ($property["ch_value"] == $property["value"]) ? $property["ch_value"] : 0;
-					$this->obj_inst->set_prop($name,$val);
+					if ($this->obj_inst->is_property($name))
+					{
+						$this->obj_inst->set_prop($name,$val);
+					}
 				} 
 				else
 				{

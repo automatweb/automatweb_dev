@@ -453,7 +453,14 @@ function get_instance($class,$args = array(), $errors = true)
 	$site = $designed = false;
 	if (is_numeric($class))
 	{
-		$class = $GLOBALS["cfg"]["__default"]["classes"][$class]["file"];
+		if (!isset($GLOBALS["cfg"]["__default"]["classes"][$class]))
+		{
+			$designed = true;
+		}
+		else
+		{
+			$class = $GLOBALS["cfg"]["__default"]["classes"][$class]["file"];
+		}
 	}
 	if (isset($GLOBALS["cfg"]["__default"]["site_classes"]) && isset($GLOBALS["cfg"]["__default"]["site_classes"][$class]))
 	{
@@ -494,6 +501,7 @@ function get_instance($class,$args = array(), $errors = true)
 			$classdir = $GLOBALS["cfg"]["__default"]["site_basedir"]."/files/classes";
 			$class = basename($class);
 			$lib = $GLOBALS["gen_class_name"];
+//echo "dir = $classdir class = $class , lib = $lib <br>";
 		}
 		else
 		{

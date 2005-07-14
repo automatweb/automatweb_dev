@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.8 2005/07/13 14:26:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/orb/orb.aw,v 1.9 2005/07/14 09:40:15 kristo Exp $
 // tegeleb ORB requestide handlimisega
 lc_load("automatweb");
 
@@ -546,7 +546,14 @@ class orb extends aw_template
 			$ret[$class]["_extends"][0] = "class_base";
 			$ret[$class]["___folder"] = "designedclass";
 			$cl = new object($class);
-			$gen_class_name = strtolower(preg_replace("/\s/","_",$cl->name()));
+			if ($cl->prop("from_existing_class") == 1)
+			{
+				$gen_class_name = basename($GLOBALS["cfg"]["__default"]["classes"][$cl->prop("reg_class_id")]["orig_file"]);
+			}
+			else
+			{
+				$gen_class_name = strtolower(preg_replace("/\s/","_",$cl->name()));
+			}
 			$GLOBALS["gen_class_name"] = $gen_class_name;
 			//print "loading numeric class";
 		}
@@ -593,7 +600,11 @@ class orb extends aw_template
 
 		if (!isset($this->orb_class))
 		{
-			//print "trying to get instance<br>";
+			//print "trying to get instance $folder $class<br>";
+			if ($folder == "designedclass/")
+			{
+				$folder = "";
+			}
 			$this->orb_class = get_instance($folder.$class);
 			unset($GLOBALS["gen_class_name"]);
 			//print "got";

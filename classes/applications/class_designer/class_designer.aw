@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.30 2005/07/13 17:42:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/class_designer/class_designer.aw,v 1.31 2005/07/14 09:40:16 kristo Exp $
 // class_designer.aw - Vormidisainer 
 
 // üldine, soovituslik, kohustuslik
@@ -2094,7 +2094,7 @@ class class_designer extends class_base
 		$src = join("\n", $lines);
 		
 		$orig_name = basename($clss[$cd->prop("reg_class_id")]["orig_file"]);
-		return str_replace("class $orig_name extends class_base", "class ".$cd->name()." extends class_base", $src);
+		return $src;//str_replace("class $orig_name extends class_base", "class ".$cd->name()." extends class_base", $src);
 	}
 
 	function gcdfe_insert_props($lines, $cd, $proplist)
@@ -2120,6 +2120,7 @@ class class_designer extends class_base
 		}
 
 		$propstr = explode("\n", $this->generate_property_defs_from_property_list($proplist, $cd));
+		$grpstr = explode("\n", $this->generate_group_defs_from_designer($cd));
 
 		$tmp = array();
 		foreach($lines as $num => $line)
@@ -2130,6 +2131,11 @@ class class_designer extends class_base
 				{
 					$tmp[] = $pl;
 				}
+				foreach($grpstr as $pl)
+				{
+					$tmp[] = $pl;
+				}
+		
 			}
 			$tmp[] = $line;
 		}
@@ -2376,6 +2382,67 @@ class class_designer extends class_base
 			$ret[] = $line;
 		}
 		return $ret;
+	}
+
+	function generate_group_defs_from_designer($cd)
+	{
+		$tree = new object_tree(array(
+			"parent" => $cd->id(),
+			"class_id" => CL_PROPERTY_GROUP
+		));
+
+		$cfgu = get_instance("cfg/cfgutils");
+
+		$list = $tree->to_list();
+		$grps = array();
+		foreach($list->arr() as $o)
+		{
+			$grpid = $cfgu->gen_valid_id($o->name());
+			$grps[$grpid] = array(
+				"caption" => $o->prop("caption") == "" ? $o->name() : $o->prop("caption")
+			);
+		}
+
+		// get existing groups from the current class
+		if ($cd->prop("from_existing_class") == 1)
+		{
+			$existing_groups = $this->get_groups_from_existing_class($cd);
+			foreach($existing_groups as $gn => $gd)
+			{
+				unset($grps[$gn]);
+			}
+		}
+
+		// generate
+		$ret = "";
+		foreach($grps as $gn => $gd)
+		{
+			$ret .= "@groupinfo $gn caption=\"".$gd["caption"]."\"\n";
+		}
+		return $ret;
+	}
+
+	function get_groups_from_existing_class($cd)
+	{
+		$anal = get_instance("analyzer/propcollector");
+
+		$cb_inf = $anal->parse_file(array(
+			"file" => aw_ini_get("classdir")."/class_base.aw"
+		));
+
+		$clss = aw_ini_get("classes");
+		$old = $clss[$cd->prop("reg_class_id")]["orig_file"];
+
+		$inf = $anal->parse_file(array(
+			"file" => aw_ini_get("classdir")."/".$old.".aw"
+		));
+
+		$grpi = $cb_inf["properties"]["groupinfo"];
+		foreach(safe_array($inf["properties"]["groupinfo"]) as $gn => $gi)
+		{
+			$grpi[$gn] = $gi;
+		}
+		return $grpi;
 	}
 }
 ?>
