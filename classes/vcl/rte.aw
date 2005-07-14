@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.14 2005/05/31 08:39:03 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/rte.aw,v 1.15 2005/07/14 21:51:19 kristo Exp $
 // rte.aw - Rich Text Editor 
 /*
 
@@ -234,7 +234,7 @@ class rte extends class_base
 
 		$toolbar->add_separator();
 		
-		$toolbar->add_menu_button(array(
+		/*$toolbar->add_menu_button(array(
 			"name" => "headings",
 			"tooltip" => t("Päised"),
 			"img" => "h1.gif",
@@ -292,7 +292,7 @@ class rte extends class_base
 			"parent" => "textcolor",
 			"text" => t("Punane"),
 			"url" => "javascript:{$js_url_prefix}colortext('#ff0000');",
-		));
+		));*/
 
 
 		$this->get_styles_from_site();
