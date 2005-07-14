@@ -1449,6 +1449,20 @@ class user extends class_base
 		}
 	}
 
+	/** returns the user object for the given uid
+
+		@attrib api=1
+	**/
+	function get_obj_for_uid($uid)
+	{
+		$oid = $this->users->get_oid_for_uid($uid);
+		if (is_oid($oid) && $this->can("view", $oid))
+		{
+			return obj($oid);
+		}
+		return NULL;
+	}
+
 	function get_current_user()
 	{
 		return $this->users->get_oid_for_uid(aw_global_get("uid"));
