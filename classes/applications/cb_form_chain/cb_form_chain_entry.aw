@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.6 2005/07/15 11:03:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.7 2005/07/15 11:11:08 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -154,7 +154,7 @@ class cb_form_chain_entry extends class_base
 					{
 						if ($pd["type"] == "classificator" && $pd["store"] == "connect")
 						{
-							$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+							$ol = new object_list($entry->connections_from(array("type" => $pd["reltype"])));
 							$row["e".$idx] = join("<br>", $ol->names());
 						}
 						else
@@ -192,7 +192,7 @@ class cb_form_chain_entry extends class_base
 					{
 						if ($pd["type"] == "classificator" && $pd["store"] == "connect")
 						{
-							$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+							$ol = new object_list($entry->connections_from(array("type" => $pd["reltype"])));
 							$row[$pn] = join("<br>", $ol->names());
 						}
 						else
