@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.5 2005/03/24 10:02:24 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_remote_settings.aw,v 1.6 2005/07/15 10:36:27 kristo Exp $
 // auth_remote_settings.aw - Automaatne sissep&auml;&auml;s 
 /*
 
@@ -265,7 +265,6 @@ class auth_remote_settings extends class_base
 	{
 		$sl = get_instance(CL_INSTALL_SITE_LIST);
 		$srv = $sl->get_url_for_site($arr["remote_site"]);
-
 		// check remote hash
 		$res = $this->do_orb_method_call(array(
 			"method" => "xmlrpc",
