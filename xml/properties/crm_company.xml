@@ -325,6 +325,72 @@
             <caption>Otsingutulemused</caption>
       </property>
       <property>
+            <name>prof_search_firstname</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>prof_search_firstname</field>
+            <caption>Eesnimi</caption>
+      </property>
+      <property>
+            <name>prof_search_lastname</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>prof_search_lastname</field>
+            <caption>Perenimi</caption>
+      </property>
+      <property>
+            <name>prof_search_code</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>prof_search_code</field>
+            <caption>Isikukood</caption>
+      </property>
+      <property>
+            <name>proft_search</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>hidden</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
+            <value>1</value>
+            <field>proft_search</field>
+            <caption>prof_search</caption>
+      </property>
+      <property>
+            <name>prof_search_submit</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>submit</type>
+            <store>no</store>
+            <parent>vbox_contacts_right</parent>
+            <field>prof_search_submit</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>prof_search_results</name>
+            <table>objects</table>
+            <group>contacts2</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_contacts_right</parent>
+            <field>prof_search_results</field>
+            <caption>Otsingutulemused</caption>
+      </property>
+      <property>
             <name>contact</name>
             <table>kliendibaas_firma</table>
             <group>cedit</group>

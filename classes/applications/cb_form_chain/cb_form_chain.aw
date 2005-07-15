@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.13 2005/07/13 14:19:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.14 2005/07/15 10:35:47 kristo Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -694,7 +694,10 @@ class cb_form_chain extends class_base
 								$co = obj($ctr_id);
 
 								$errmsg = str_replace("%caption", $pd["caption"], $co->prop("errmsg"));
-
+								if ($errmsg == "")
+								{
+									$errmsg = "Viga";
+								}
 								$errors[$wf_id][$num][$pn] = $errmsg;
 							}
 						}
@@ -710,7 +713,6 @@ class cb_form_chain extends class_base
 			$_SESSION["cbfc_errors"] = $errors;
 			return $arr["ret"];
 		}
-
 		if ($arr["confirm"] != "")
 		{
 			return $this->submit_confirm($arr);
@@ -935,7 +937,10 @@ class cb_form_chain extends class_base
 			{
 				$metaf[$k] = $v;
 			}
-			$o->set_prop($k, $v);
+			if ($o->is_property($k))
+			{
+				$o->set_prop($k, $v);
+			}
 		}
 		$o->set_meta("metaf", $metaf);
 		$o->save();
@@ -975,7 +980,6 @@ class cb_form_chain extends class_base
 				}
 				$do = NULL;
 			}
-
 			if ($do)
 			{
 				$d_props = $do->get_property_list();
@@ -994,7 +998,7 @@ class cb_form_chain extends class_base
 				}
 				else
 				{
-					$to_arr[] = $entry->prop_str($to_prop["name"]);
+					$to_arr[] = $do->prop_str($to_prop["name"]);
 				}
 			}
 		}

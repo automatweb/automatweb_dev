@@ -1080,7 +1080,7 @@ class _int_object
 		{
 			$_rt = $GLOBALS["relinfo"][$this->obj["class_id"]][$propi["reltype"]]["value"];
 
-			if ($propi["multiple"] == 1)
+			if ($propi["multiple"] == 1 || is_array($val))
 			{
 				// get all old connections
 				// remove the ones that are not selected
