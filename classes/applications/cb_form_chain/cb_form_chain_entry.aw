@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.7 2005/07/15 11:11:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.8 2005/07/15 11:21:22 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -182,11 +182,17 @@ class cb_form_chain_entry extends class_base
 			foreach($entries as $entry)
 			{
 				$row = array();
+				$metaf = $entry->meta("metaf");
 				foreach($props as $pn => $pd)
 				{
 					if ($pd["type"] == "date_select")
 					{
 						$row[$pn] = date("d.m.Y", $entry->prop($pn));
+					}
+					else
+					if ($pd["type"] == "text")
+					{
+						$row[$pn] = $metaf[$pn];
 					}
 					else
 					{
