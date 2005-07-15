@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.5 2005/07/13 14:19:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.6 2005/07/15 11:03:57 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -152,7 +152,15 @@ class cb_form_chain_entry extends class_base
 					}
 					else
 					{
-						$row["e".$idx] = $entry->prop_str($pn);
+						if ($pd["type"] == "classificator" && $pd["store"] == "connect")
+						{
+							$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+							$row["e".$idx] = join("<br>", $ol->names());
+						}
+						else
+						{
+							$row["e".$idx] = $entry->prop_str($pn);
+						}
 					}
 				}
 				$t->define_data($row);
@@ -182,7 +190,15 @@ class cb_form_chain_entry extends class_base
 					}
 					else
 					{
-						$row[$pn] = $entry->prop_str($pn);
+						if ($pd["type"] == "classificator" && $pd["store"] == "connect")
+						{
+							$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+							$row[$pn] = join("<br>", $ol->names());
+						}
+						else
+						{
+							$row[$pn] = $entry->prop_str($pn);
+						}
 					}
 				}
 				$t->define_data($row);
@@ -218,7 +234,15 @@ class cb_form_chain_entry extends class_base
 			}
 			else
 			{
-				$val = $d->prop_str($pn);
+				if ($pd["type"] == "classificator" && $pd["store"] == "connect")
+				{
+					$ol = new object_list($d->connections_from(array("type" => $pd["reltype"])));
+					$val = join("<br>", $ol->names());
+				}
+				else
+				{
+					$val = $d->prop_str($pn);
+				}
 			}
 
 			if ($val == "")
