@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.49 2005/06/30 12:29:13 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.50 2005/07/21 10:52:47 duke Exp $
 // project.aw - Projekt 
 /*
 
@@ -756,6 +756,7 @@ class project extends class_base
 				"pr" => $prid,
 				"name" => $e_obj->name(),
 				"parent" => $event_parent,
+				"comment" => $e_obj->comment(),
 				"lang_id" => $e_obj->lang_id(),
 				"id" => $eid,
 				//"project_image" => $row["project_image"],
@@ -780,6 +781,7 @@ class project extends class_base
 				break;
 			}*/
 		};
+
 
 		$pr_list = new object_list(array(
 			"class_id" => CL_PROJECT,
@@ -1082,7 +1084,6 @@ class project extends class_base
 			exit_function("find-parent");
 
 		};
-		
 		return $events;
 	}
 
