@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.408 2005/07/14 09:40:15 kristo Exp $
+// $Id: class_base.aw,v 2.409 2005/07/21 12:23:50 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -971,7 +971,7 @@ class class_base extends aw_template
 		// or, if configuration form should be loaded from somewhere
 		// else, this is the place to do it
 
-		$action = $args["change"];
+		$action = $args["action"];
 
 		$retval = "";
 		$cgid = false;
@@ -988,7 +988,7 @@ class class_base extends aw_template
 				return $cgid;
 			};	
 		};
-
+		
 		// 2. failing that, if there is a config form specified in the object metainfo,
 		//  we will use it
 		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
