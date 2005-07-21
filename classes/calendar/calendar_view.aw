@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.39 2005/06/08 15:08:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/calendar_view.aw,v 1.40 2005/07/21 10:51:12 duke Exp $
 // calendar_view.aw - Kalendrivaade 
 /*
 // so what does this class do? Simpel answer - it allows us to choose different templates
@@ -451,7 +451,8 @@ class calendar_view extends class_base
 			{
 				$data = $event;
 				$evt_obj = new object($event["id"]);
-				$data = $evt_obj->properties() + $data;
+				//$data = $evt_obj->properties() + $data;
+				$data = $data + $evt_obj->properties();
 				$data["icon"] = "event_icon_url";
 				$varx = array(
 					"item_start" => $event["start"],
@@ -489,7 +490,8 @@ class calendar_view extends class_base
 				{
 					$data = $event;
 					$evt_obj = new object($event["id"]);
-					$data = $evt_obj->properties() + $data;
+				//	$data = $evt_obj->properties() + $data;
+					$data = $data + $evt_obj->properties();
 					$data["name"] = $evt_obj->name();
 					$data["icon"] = "event_icon_url";
 					$varx = array(
