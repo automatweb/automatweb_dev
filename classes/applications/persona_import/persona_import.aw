@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.10 2005/06/15 11:24:30 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.11 2005/07/21 16:13:26 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -480,8 +480,27 @@ class persona_import extends class_base
 
 		foreach($email_list->arr() as $member)
 		{
-			$emails[] = $member->prop("mail");
+			// now, for each e-mail 
+			$emails[$member->id()] = $member->prop("mail");
 		};
+
+		$c = new connection();
+		$email_connections = $c->find(array(
+			"from.class_id" => CL_CRM_PERSON,
+			"to.class_id" => CL_ML_MEMBER,
+		));
+
+		// this will now contain links between persons and e-mail objects. I will
+		// use that information later to decide whether a new e-mail object
+		// needs to created or an existing one updated
+		$email_links = array();
+		foreach($email_connections as $email_connection) 
+		{
+			$email_links[$email_connection["from"]] = $email_connection["to"];
+		};
+
+		// and this means that I have to create a list of connections between members and objects
+		// arr
 
 		// list of phone numbers
 		$phone_list = new object_list(array(
@@ -530,7 +549,7 @@ class persona_import extends class_base
 
 		};
 
-		arr($simple_data);
+		//arr($simple_data);
 
 		print t("creating yksused objects<br>");
 		/*
@@ -736,13 +755,26 @@ class persona_import extends class_base
 
 			if (!empty($worker["E_POST"]) && !in_array($worker["E_POST"],$emails))
 			{
-				print "creating e-mail object<br>";
-				print $worker["E_POST"];
-				print "<br>!";
+				// I need to replace e-mail address, not create a new one
 
-				$ml = new object();
-				$ml->set_parent($dir_default);
-				$ml->set_class_id(CL_ML_MEMBER);
+				// at this point person_obj already exists, so I need to check
+				// whether an e-mail address is connected
+
+				if ($email_links[$person_obj->id()])
+				{
+					$ml = new object($email_links[$person_obj->id()]);
+					print "Updating existing e-mail object<br>";
+				}
+				else
+				{
+					print "creating e-mail object<br>";
+					print $worker["E_POST"];
+					print "<br>!";
+					$ml = new object();
+					$ml->set_parent($dir_default);
+					$ml->set_class_id(CL_ML_MEMBER);
+				};
+
 				$ml->set_name($worker["E_POST"]);
 				$ml->set_prop("mail",$worker["E_POST"]);
 				$ml->save();
@@ -774,11 +806,11 @@ class persona_import extends class_base
 					$tmp_o = new object();
 					$tmp_o->set_parent($dir_default);
 					$tmp_o->set_class_id($sdata["clid"]);
-					$tmp_o->set_name($worker[$skey]);
 					$tmp_o->set_status(STAT_ACTIVE);
 					$tmp_o->save();
 					print "creating and connecting to $skey object<br>";
 				};
+				$tmp_o->set_name($worker[$skey]);
 				$tmp_id = $tmp_o->id();
 				$simple_data[$skey][$worker[$skey]] = $tmp_id;
 
@@ -861,14 +893,18 @@ class persona_import extends class_base
 		};
 
 		print "deleting non-existing persons<br>";
+		print "<pre>";
+		var_dump($person_match);
+		print "</pre>";
 		flush();
 
 		// siia jäävad ainult jäägid, need märgime deaktiivseks ja ongi kõik
 		foreach($person_match as $ext_id => $obj_id)
 		{
 			$person_obj = new object($obj_id);
-			$person_obj->set_status(STAT_NOTACTIVE);
-			$person_obj->save();
+			$person_obj->delete();
+			#$person_obj->set_status(STAT_NOTACTIVE);
+			#$person_obj->save();
 		};
 
 		print "Unlinking status file<br>";
@@ -884,9 +920,6 @@ class persona_import extends class_base
 		$cache->full_flush();
 
 		print "everything is done";
-		exit;
-		exit;
-
 		exit;
 	
 		/*
@@ -1049,13 +1082,10 @@ class persona_import extends class_base
 				<lopp>20060906T00:00:00</lopp>
 			</rida>
 
-			// nuu, ma arvan et kasutan siinkohal subclassi ära owneriks
 		*/
 
 
 		print "all done";
-
-		//arr($data);
 
 		/*
 			<taitmata_ametikohad>
@@ -1098,25 +1128,6 @@ class persona_import extends class_base
 
 
 		*/
-
-		// nii .. edasi on vaja siis hakata neid bloody isiku objekte tegema
-		// ja puhkuste objekte
-		// ja tööpepingute peatamise objekte
-
-		// nii, nüüd vaja siis parser üles ehitada lihtsalt
-		print "<pre>";
-		print htmlspecialchars($fdat);
-		print "</pre>";
-
-		//$c->disconnect();
-
-	//	print "tadaaa";
-
-
-		//arr($conn_obj->properties());
-		arr($obj->properties());
-
-
 	}
 
 	/**
