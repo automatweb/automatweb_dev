@@ -53,6 +53,7 @@
             <props>
                   <num_0>name</num_0>
                   <num_1>utextarea1</num_1>
+                  <num_2>comment</num_2>
             </props>
             <caption>Tlkimine</caption>
       </property>
