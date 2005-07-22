@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.82 2005/04/28 10:54:35 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.83 2005/07/22 11:34:15 duke Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -36,6 +36,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @property ext_id type=textbox table=objects field=subclass
 @caption Sidussüsteemi ID
+
+// enviri jaoks
+@property ord type=textbox table=objects field=jrk
+@caption Prioriteet
 
 @property gender type=chooser 
 @caption Sugu
