@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.14 2005/04/21 08:39:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_event.aw,v 1.15 2005/07/22 11:47:38 duke Exp $
 // calendar_event.aw - Kalendri sündmus 
 /*
 
@@ -95,6 +95,9 @@
 
 @property utextvar10 type=classificator
 @caption 
+
+@property aliasmgr type=aliasmgr no_caption=1 store=no
+@caption Aliastehaldur
 
 @default field=meta
 @default method=serialize
