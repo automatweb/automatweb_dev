@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.70 2005/07/22 12:42:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.71 2005/07/22 12:45:59 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -551,6 +551,7 @@ class event_search extends class_base
                         list($_d,$_m,$_y) = explode("-",$arr["date"]);
                         $start_tm = mktime(0,0,0,$_m,$_d,$_y);
                         $end_tm = mktime(23,59,59,$_m,$_d,$_y);
+			$arr["start_date"] = array("day" => $_d, "month" => $_m, "year" => $_y);
 
                 };
 
