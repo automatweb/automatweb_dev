@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.81 2005/07/11 21:49:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.82 2005/07/22 11:03:42 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -19,7 +19,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 @groupinfo grp_case_schedule caption="Kalender" submit=no
 @groupinfo grp_case_comments caption="Kommentaarid"
 @groupinfo grp_case_log caption="Ajalugu" submit=no
-
 
 
 	@property workflow_toolbar type=toolbar store=no no_caption=1 group=grp_case_schedule,grp_general,grp_case_workflow editonly=1
@@ -1298,7 +1297,7 @@ class mrp_case extends class_base
 			### add non-changeable jobs to workflow
 			if (in_array ($job->prop ("state"), $applicable_states))
 			{
-				$prerequisites = explode (",", $job->prop ("state"));
+				$prerequisites = explode (",", $job->prop ("prerequisites"));
 				$workflow[$job->id ()] = $prerequisites;
 			}
 		}
@@ -1337,21 +1336,7 @@ class mrp_case extends class_base
 							case "pre_buffer":
 							case "post_buffer":
 								$value = $this->safe_settype_float ($value);
-
-								switch ($property)
-								{
-									case "length":
-										$job->set_prop ("length", (round ($value * 3600)));
-										break;
-
-									case "pre_buffer":
-										$job->set_prop ("pre_buffer", (round ($value * 3600)));
-										break;
-
-									case "post_buffer":
-										$job->set_prop ("post_buffer", (round ($value * 3600)));
-										break;
-								}
+								$job->set_prop ($property, (round ($value * 3600)));
 								break;
 
 							case "minstart":
