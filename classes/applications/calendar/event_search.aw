@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.69 2005/07/06 09:08:50 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.70 2005/07/22 12:42:55 duke Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -544,6 +544,20 @@ class event_search extends class_base
 		$dt = new date_edit();
 		$start_tm = $dt->get_timestamp($arr["start_date"]);
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
+
+                // if date is set in the url, then try to use that to specify our range.
+                if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2)
+                {
+                        list($_d,$_m,$_y) = explode("-",$arr["date"]);
+                        $start_tm = mktime(0,0,0,$_m,$_d,$_y);
+                        $end_tm = mktime(23,59,59,$_m,$_d,$_y);
+
+                };
+
+
+
+
+
 		$cur_days = cal_days_in_month(CAL_GREGORIAN, date("m"), date("Y"));
 		$show_type = $ob->prop("show_type");
 		$sd = ($show_type == 1 or $show_type == 2) ? date("d") : 1;
