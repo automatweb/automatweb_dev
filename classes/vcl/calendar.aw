@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.69 2005/06/17 07:49:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.70 2005/07/22 12:41:52 duke Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1269,6 +1269,7 @@ class vcalendar extends aw_template
 					$day_url = aw_url_change_var(array(
 						"viewtype" => "day",
 						"event_id" => "",
+						"evt_id" => "",
 						"date" => date("d-m-Y",$reals),
 						"section" => $this->target_section,
 					));
