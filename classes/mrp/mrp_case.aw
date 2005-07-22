@@ -1,12 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.82 2005/07/22 11:03:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.83 2005/07/22 11:33:28 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_MRP_CASE, on_save_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_CASE, on_delete_case)
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_MRP_CASE, on_new_case)
-HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_MRP_CASE, on_popup_search_change)
+HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_change)
 
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1
 
@@ -2387,23 +2387,27 @@ class mrp_case extends class_base
 
 	/** message handler for the MSG_POPUP_SEARCH_CHANGE message so we can create the correct relation
 	**/
-	function on_popup_search_change($arr)
+	function on_popup_search_change ($arr)
 	{
 		if (!is_oid($arr["oid"]))
 		{
 			return;
 		}
+
 		$o = obj($arr["oid"]);
+
 		foreach($o->connections_from(array("type" => "RELTYPE_MRP_CUSTOMER")) as $c)
 		{
 			$c->delete();
 		}
-		if (is_oid($arr["prop"]))
+
+		if (is_oid($o->prop($arr["prop"])))
 		{
-		$o->connect(array(
-			"to" => $o->prop($arr["prop"]),
-			"reltype" => "RELTYPE_MRP_CUSTOMER"
-		));
+			$customer = obj ($o->prop($arr["prop"]));
+			$o->connect(array(
+				"to" => $customer,
+				"reltype" => "RELTYPE_MRP_CUSTOMER"
+			));
 		}
 	}
 }
