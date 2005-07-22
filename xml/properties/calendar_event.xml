@@ -236,6 +236,16 @@
             <caption></caption>
       </property>
       <property>
+            <name>aliasmgr</name>
+            <group>general</group>
+            <table>planner</table>
+            <type>aliasmgr</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>aliasmgr</field>
+            <caption>Aliastehaldur</caption>
+      </property>
+      <property>
             <name>uimage1</name>
             <group>general</group>
             <table>objects</table>
