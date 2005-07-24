@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.71 2005/07/22 12:45:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.72 2005/07/24 14:24:47 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -497,7 +497,7 @@ class event_search extends class_base
 					"size" => 2,
 				)),
 			);
-			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select")
+			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select" || $prop["type"] == "date_chooser")
 			{
 				$prps["props"] = html::textarea(array(
 					"name" => "${pname}[${sname}][props]",
