@@ -1,7 +1,12 @@
+<b>add_topic.tpl</b>
 <form method="POST" action="{VAR:baseurl}/reforb.{VAR:ext}">
 <table border="0" width="100%">
 <tr>
 	<td colspan="2" class="{VAR:style_form_caption}">Lisa teema</td>
+</tr>
+<tr>
+	<td class="{VAR:style_form_text}" nowrap width="16%">Teema:</td>
+	<td><input type="text" name="name" class="{VAR:style_form_element}"></td>
 </tr>
 <tr>
 	<td class="{VAR:style_form_text}" nowrap width="16%">Autori nimi:</td>
@@ -11,10 +16,6 @@
 	<!-- SUB: a_name_logged -->
 	<td class="{VAR:style_form_text}">{VAR:author}</td>
 	<!-- END SUB: a_name_logged -->
-</tr>
-<tr>
-	<td class="{VAR:style_form_text}" nowrap width="16%">Teema:</td>
-	<td><input type="text" name="name" class="{VAR:style_form_element}"></td>
 </tr>
 <tr>
 	<td class="{VAR:style_form_text}" nowrap width="16%">E-mail:</td>

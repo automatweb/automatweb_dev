@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.10 2005/04/21 08:48:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.11 2005/07/25 10:26:57 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -25,6 +25,9 @@
 @property answers_to_mail type=checkbox ch_value=1 store=no
 @caption Soovin vastuseid e-mailile
 
+@property image type=releditor reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+@caption Pilt
+
 @property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers
 
 @classinfo relationmgr=yes syslog_type=ST_FORUM_TOPIC
@@ -33,6 +36,9 @@
 
 @reltype SUBSCRIBER value=1 clid=CL_ML_MEMBER
 @caption Tellija
+
+@reltype IMAGE value=2 clid=CL_IMAGE
+@caption Pilt
 
 @classinfo no_status=1
 

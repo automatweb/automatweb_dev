@@ -52,6 +52,7 @@
       <classinfo>
             <syslog_type>ST_COMMENT</syslog_type>
             <no_status>1</no_status>
+            <relationmgr>yes</relationmgr>
       </classinfo>
       <tableinfo>
             <forum_comments>
@@ -60,5 +61,12 @@
                   <master_index>oid</master_index>
             </forum_comments>
       </tableinfo>
+      <reltypes>
+            <IMAGE>
+                  <value>1</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Pilt</caption>
+            </IMAGE>
+      </reltypes>
 </properties>
 

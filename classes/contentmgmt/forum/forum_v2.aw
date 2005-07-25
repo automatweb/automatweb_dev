@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.81 2005/07/13 13:33:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.82 2005/07/25 10:26:57 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1042,7 +1042,6 @@ class forum_v2 extends class_base
 		$can_delete = $this->_can_admin(array("forum_id" => $oid));
 		if (is_array($comments))
 		{
-			$comment_counter = 0;
 			foreach($comments as $comment)
 			{
 				$cnt++;
@@ -1059,11 +1058,24 @@ class forum_v2 extends class_base
 					"uname" => $comment["uname"],
 					"uemail" => $comment["uemail"],
 					"ip" => $comment["ip"],
+					"comment_image1" => $this->get_image_tag(array("id" => $comment['oid'])),
 					"ADMIN_POST" => "",
 					"HAS_EMAIL" => "",
 					"HAS_NOT_EMAIL" => "",
-				));
 
+				));
+/*
+				$comment_obj = new object($comment['oid']);
+				$comment_image_obj = $comment_obj->get_first_obj_by_reltype("RELTYPE_IMAGE");
+				if (!empty($comment_image_obj))
+				{
+					$image_inst = get_instance(CL_IMAGE);
+					$this->vars(array(
+						"comment_image1" => $image_inst->make_img_tag_wl($comment_image_obj->id()),
+					));
+				
+				}
+*/
 				// if there is set an email
 				if (empty($comment['uemail']))
 				{
@@ -1096,7 +1108,7 @@ class forum_v2 extends class_base
 				};
 
 				$c .= $this->parse("COMMENT");
-				if ($comment_counter % 2 == 0)
+				if ($cnt % 2 == 0)
 				{
 					$c .= $this->parse("COMMENT_EVEN");
 				}
@@ -1104,7 +1116,6 @@ class forum_v2 extends class_base
 				{
 					$c .= $this->parse("COMMENT_ODD");
 				}
-				$comment_counter++;
 			};
 		};		
 
@@ -1214,6 +1225,7 @@ class forum_v2 extends class_base
 			"createdby" => $topic_obj->prop("author_name"),
 			"date" => $this->time2date($topic_obj->created(),2),
 			"comment" => $this->_filter_output($topic_obj->comment()),
+			"topic_image1" => $this->get_image_tag(array("id" => $topic_obj->id())),
 			"COMMENT" => $c,
 			"path" => join(" &gt; ",$path),
 		));
@@ -1639,7 +1651,7 @@ class forum_v2 extends class_base
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
 	
-		$use_props = array("author_name","name","author_email","answers_to_mail","comment");
+		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
 
 		$cb_values = aw_global_get("cb_values");
 		aw_session_del("cb_values");
@@ -1656,7 +1668,11 @@ class forum_v2 extends class_base
 			};
 			$htmlc->add_property($propdata);
 		};
-
+		$htmlc->add_property(array(
+			"name" => "uimage",
+			"caption" => t("Pilt"),
+			"type" => "fileupload",
+		));
 		/*
 		$htmlc->add_property($props["author_name"]);
 		$htmlc->add_property($props["name"]);
@@ -1747,6 +1763,19 @@ class forum_v2 extends class_base
 		$emb["return"] = "id";
 		unset($emb["id"]);
                 $this->topic_id = $t->submit($emb);
+
+		$image_inst = get_instance(CL_IMAGE);
+		// if there is image uploaded:
+		$upload_image = $image_inst->add_upload_image("uimage", $this->topic_id);
+		if ($upload_image !== false && is_oid($this->topic_id) && $this->can("view", $this->topic_id))
+		{
+			$topic_obj = new object($this->topic_id);
+			$topic_obj->connect(array(
+				"to" => $upload_image['id'],
+				"reltype" => "RELTYPE_IMAGE",
+			));
+		}
+
 		$cb_values = $t->cb_values;
 		// ma pean tagasi suunama siin
 		if (is_array($cb_values) && sizeof($cb_values) > 0)
@@ -1779,7 +1808,8 @@ class forum_v2 extends class_base
 
 		$t = get_instance(CL_COMMENT);
 		$topic = get_instance(CL_MSGBOARD_TOPIC);
-		
+		$image_inst = get_instance(CL_IMAGE);
+
 		$emb = $arr;
 		$t->id_only = true;
 		unset($emb["id"]);
@@ -1787,6 +1817,17 @@ class forum_v2 extends class_base
 		$emb["status"] = STAT_ACTIVE;
 		$this->comm_id = $t->submit($emb);
 
+		// if there is image which should be uploaded
+		$upload_image = $image_inst->add_upload_image("uimage", $this->comm_id); 
+		if ($upload_image !== false && is_oid($this->comm_id) && $this->can("view", $this->comm_id))
+		{
+			
+			$comment_obj = new object($this->comm_id);
+			$comment_obj->connect(array(
+				"to" => $upload_image['id'],
+				"reltype" => "RELTYPE_IMAGE",
+			));
+		}
 		$topic->mail_subscribers(array(
 			"id" => $arr["topic"],
 			"message" => $arr["commtext"],
@@ -2009,6 +2050,22 @@ class forum_v2 extends class_base
 				"_alias" => get_class($this),
 			) 
 		);
+	}
+
+	function get_image_tag($arr)
+	{
+		$retval = "";
+		if ( is_oid($arr['id']) && $this->can("view", $arr['id']) )
+		{
+			$obj = new object($arr['id']);
+			$image_obj = $obj->get_first_obj_by_reltype("RELTYPE_IMAGE");
+			if (!empty($image_obj))
+			{
+				$image_inst = get_instance(CL_IMAGE);
+				$retval = $image_inst->make_img_tag_wl($image_obj->id());
+			}
+		}
+		return $retval;
 	}
 };
 ?>

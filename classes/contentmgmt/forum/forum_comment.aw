@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.13 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.14 2005/07/25 10:26:57 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -26,7 +26,11 @@
 @property ip type=textbox 
 @caption IP
 
-@classinfo syslog_type=ST_COMMENT no_status=1
+@classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes
+
+@reltype IMAGE value=1 clid=CL_IMAGE
+@caption Pilt
+
 @tableinfo forum_comments index=id master_table=objects master_index=oid
 */
 
@@ -135,7 +139,6 @@ class forum_comment extends class_base
 			$row["oid"] = $comment->id();
 			$retval[$comment->id()] = $row;
 		};
-
 		return $retval;
 	}
 }

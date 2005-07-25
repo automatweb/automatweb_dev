@@ -22,6 +22,10 @@
 	<td><input type="text" name="uemail" class="{VAR:style_form_element}"></td>
 </tr>
 <tr>
+	<td class="{VAR:style_from_text}">Pilt</td>
+	<td><input type="file" name="uimage" class="{VAR:style_form_element}"></td>
+</tr>
+<tr>
 <td colspan="2" class="{VAR:style_form_text}" nowrap>
 Kommentaar:
 </td>
