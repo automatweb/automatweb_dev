@@ -1,6 +1,6 @@
 <?php
 // poll.aw - Generic poll handling class
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.32 2005/06/22 10:07:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/poll.aw,v 1.33 2005/07/25 13:11:05 duke Exp $
 session_register("poll_clicked");
 
 // poll.aw - it sucks more than my aunt jemimas vacuuming machine 
@@ -434,20 +434,23 @@ class poll extends class_base
 			"class_id" => CL_POLL,
 			"lang_id" => array()
 		));
+		$section = aw_global_get("section");
 		foreach($ol->arr() as $o)
 		{
-			if ($o->meta('in_archive') == 1)
+			if (1 == $o->prop('in_archive'))
 			{
-					$ns = $o->meta("name");
-					$_name  = $o->name();
-					if (isset($ns[aw_global_get("lang_id")]))
-					{
-						$_name = $ns[aw_global_get("lang_id")];
-					}
+				$ns = $o->meta("name");
+				$_name  = $o->name();
+
+				if (isset($ns[$lang_id]))
+				{
+					$_name = $ns[$lang_id];
+				}
+
 				$this->vars(array(
 					"question" => $_name, 
 					"poll_id" => $o_id, 
-					"link" => $this->mk_my_orb("show", array("poll_id" => $o->id(), "section" => aw_global_get("section")))
+					"link" => $this->mk_my_orb("show", array("poll_id" => $o->id(), "section" => $section))
 				));
 				$p.=$this->parse("QUESTION");
 			}
