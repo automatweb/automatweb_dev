@@ -35,37 +35,32 @@
             <name>place</name>
             <table>planner</table>
             <group>general</group>
-            <field>utextbox9</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>utextbox9</field>
             <caption>Toimumiskoht</caption>
       </property>
       <property>
             <name>price</name>
             <table>planner</table>
             <group>general</group>
-            <field>utextbox10</field>
-            <method>serialize</method>
             <type>textbox</type>
+            <field>utextbox10</field>
             <caption>Hind</caption>
       </property>
       <property>
             <name>project_selector</name>
             <table>objects</table>
             <group>projects</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>project_selector</type>
             <store>no</store>
             <all_projects>1</all_projects>
+            <field>project_selector</field>
             <caption>Projektid</caption>
       </property>
       <property>
             <name>trans</name>
             <table>objects</table>
             <group>trans</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>translator</type>
             <store>no</store>
             <props>
@@ -73,17 +68,17 @@
                   <num_1>utextarea1</num_1>
                   <num_2>comment</num_2>
             </props>
+            <field>trans</field>
             <caption>Tlkimine</caption>
       </property>
       <property>
             <name>times</name>
             <table>objects</table>
             <group>times</group>
-            <field>meta</field>
-            <method>serialize</method>
             <type>callback</type>
             <store>no</store>
             <callback>callback_gen_times</callback>
+            <field>times</field>
             <caption>Ajad</caption>
       </property>
       <classinfo>

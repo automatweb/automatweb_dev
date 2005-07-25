@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.15 2005/07/25 00:12:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.16 2005/07/25 09:11:04 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -17,35 +17,36 @@
 @property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner 
 @caption Kirjeldus
 
-@default field=meta 
-@default method=serialize
+// seems i don't need those rules here anymore
+default field=meta 
+default method=serialize
 
 
-property utextbox1 type=textbox
+property utextbox1 type=textbox table=planner
 caption Userdefined textbox 1
 
-property utextbox2 type=textbox
+property utextbox2 type=textbox table=planner
 caption Userdefined textbox 2
 
-property utextbox3 type=textbox
+property utextbox3 type=textbox table=planner
 caption Userdefined textbox 3
 
-property utextbox4 type=textbox
+property utextbox4 type=textbox table=planner
 caption Userdefined textbox 4
 
-property utextbox5 type=textbox
+property utextbox5 type=textbox table=planner
 caption Userdefined textbox 5
 
-property utextbox6 type=textbox
+property utextbox6 type=textbox table=planner
 caption Userdefined textbox 6
 
-property utextbox7 type=textbox
+property utextbox7 type=textbox table=planner
 caption Userdefined textbox 7
 
-property utextbox8 type=textbox
+property utextbox8 type=textbox table=planner
 caption Userdefined textbox 8
 
-// saving the plave and price property values to planner table right now
+// saving the place and price property values to planner table right now
 // to utextbox9 and utextbox10 so i can save those utextbox properties above
 // to utextbox1-utextbox8 fields in planner table
 // actually i think there should be separate table for stagings
@@ -56,6 +57,7 @@ caption Userdefined textbox 8
 
 @property price type=textbox field=utextbox10 table=planner
 @caption Hind
+
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
