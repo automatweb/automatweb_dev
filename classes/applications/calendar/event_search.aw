@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.72 2005/07/24 14:24:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.73 2005/07/25 15:12:11 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -60,7 +60,7 @@
 @groupinfo ftresults caption="Tulemuste seadistamine"
 @default group=ftresults
 
-@property result_table type=table 
+@property result_table type=table
 @caption Tulemuste tabel
 
 @reltype EVENT_CFGFORM value=1 clid=CL_CFGFORM
@@ -516,11 +516,36 @@ class event_search extends class_base
 			}
 			for($i = 0; $i <= $nums; $i++)
 			{
+// if there is still some extra separators needed for added fields, then uncomment these:
+// and implement the show part in show function
+/*
+				$prps["fields"] .= html::textbox(array(
+					"name" => "${pname}[${sname}][fields_attributes][$i][sep]",
+					"value" => $oldvals[$sname]['fields_attributes'][$i]['sep'],
+					"size" => 5,
+				));
+
+				$prps["fields"] .= html::textbox(array(
+					"name" => "${pname}[${sname}][fields_attributes][$i][sep_before]",
+					"value" => $oldvals[$sname]["fields_attributes"][$i]['sep_before'],
+					"size" => 5,
+				));
+*/
 				$prps["fields"] .= html::select(array(
 					"name" => "${pname}[${sname}][fields][$i]",
 					"options" => array(0 => "-- vali --") + $names,
 					"value" => $oldvals[$sname]["fields"][$i],
-				))."<br />";
+				));
+/*
+				$prps["fields"] .= html::textbox(array(
+					"name" => "${pname}[${sname}][fields_attributes][$i][sep_after]",
+					"value" => $oldvals[$sname]["fields_attributes"][$i]['sep_after'],
+					"size" => 5,
+				));
+*/
+				$prps["fields"] .= "<br />";
+
+
 			}
 			$t->define_data($prps);
 		};
@@ -1162,7 +1187,6 @@ class event_search extends class_base
 								if(is_oid($v) && $this->can("view", $v))
 								{
 									$asd = obj($v);
-									//$
 								}
 							}
 							if ($nms == "start1" || $nms == "end")
@@ -1225,7 +1249,7 @@ class event_search extends class_base
 							{
 								$aliasmrg->parse_oo_aliases($ekey, $v);
 							}
-							$val[] = $tabledef[$sname]["sepb"].$v.$tabledef[$sname]["sepa"];
+							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
 						}
 						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 						$this->vars(array(
