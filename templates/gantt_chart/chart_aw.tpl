@@ -68,7 +68,7 @@
 
 <!-- SUB: separator_row -->
 <tr>
-<td class="awmenuedittabletext VclGanttRowName" style="vertical-align: middle;" colspan="{VAR:colspan}"><a href="{VAR:expand_collapse_link}"><img src="{VAR:baseurl}/automatweb/images/{VAR:row_state}node_small.gif" style="border: none;" alt="{VAR:expand_collapse_title}"></a>&nbsp;{VAR:row_title}</td>
+<td class="awmenuedittabletext VclGanttRowName" style="vertical-align: middle; font-weight: bold;" colspan="{VAR:colspan}"><a href="{VAR:expand_collapse_link}"><img src="{VAR:baseurl}/automatweb/images/{VAR:row_state}node_small.gif" style="border: none;" alt="{VAR:expand_collapse_title}"></a>&nbsp;{VAR:row_title}</td>
 </tr>
 <!-- END SUB: separator_row -->
 
