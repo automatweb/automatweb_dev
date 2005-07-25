@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.83 2005/07/22 11:33:28 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.84 2005/07/25 08:45:20 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -691,6 +691,7 @@ class mrp_case extends class_base
 					"mrp_start" => $range_start,
 					"mrp_length" => $range_end - $range_start
 				));
+
 				foreach($reserved_times as $rt_start => $rt_end)
 				{
 					if ($rt_end > $time)
@@ -701,8 +702,9 @@ class mrp_case extends class_base
 							"start" => $rt_start,
 							"length" => $rt_end - $rt_start,
 							"nostartmark" => true,
-							"colour" => MRP_COLOUR_PAUSED,
+							"colour" => MRP_COLOUR_UNAVAILABLE,
 							"url" => "#",
+							"layer" => 2,
 							"title" => sprintf(t("Kinnine aeg %s - %s"), date(MRP_DATE_FORMAT, $rt_start), date(MRP_DATE_FORMAT, $rt_end))
 						));
 					}
@@ -751,7 +753,6 @@ class mrp_case extends class_base
 			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
 			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
 			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),//!!! tegelikult on see kontroll jama. selliseid t8id mil pole projekti, ressurssi ei tohiks mingil juhul yldse olla.
 		));
 		$jobs = array_merge ($list->arr (), $jobs);
 
@@ -793,9 +794,9 @@ class mrp_case extends class_base
 			switch ($job->prop ("state"))
 			{
 				case MRP_STATUS_DONE:
-				case MRP_STATUS_ARCHIVED:
 					$start = $job->prop ("started");
 					$length = $job->prop ("finished") - $job->prop ("started");
+// /* dbg */ echo date(MRP_DATE_FORMAT, $start) . "-" . date(MRP_DATE_FORMAT, $start + $length) . "<br>";
 					break;
 
 				case MRP_STATUS_PLANNED:
@@ -817,10 +818,12 @@ class mrp_case extends class_base
 			$colour = ($job->prop ("project") == $this_object->id ()) ? MRP_COLOUR_HILIGHTED : $this->state_colours[$job->prop ("state")];
 
 			$bar = array (
+				"id" => $job->id (),
 				"row" => $resource->id (),
 				"start" => $start,
 				"colour" => $colour,
 				"length" => $length,
+				"layer" => 0,
 				"uri" => html::get_change_url ($job->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
 // /* dbg */ . " [res:" . $resource->id () . " töö:" . $job->id () . " proj:" . $project->id () . "]"
@@ -838,6 +841,7 @@ class mrp_case extends class_base
 						"start" => $pd["start"],
 						"nostartmark" => true,
 						"colour" => $this->state_colours[MRP_STATUS_PAUSED],
+						"layer" => 1,
 						"length" => ($pd["end"] - $pd["start"]),
 						"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 						"title" => $job_name . ", paus (" . date (MRP_DATE_FORMAT, $pd["start"]) . " - " . date (MRP_DATE_FORMAT, $pd["end"]) . ")"
