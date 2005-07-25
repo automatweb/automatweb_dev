@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.8 2005/07/15 11:21:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.9 2005/07/25 14:04:10 dragut Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -87,7 +87,6 @@ class cb_form_chain_entry extends class_base
 
 			$f2d[$d->meta("webform_id")][] = $d;
 		}
-		
 		foreach($f2d as $wf_id => $entries)
 		{
 			if (count($entries) > 1)
@@ -99,9 +98,9 @@ class cb_form_chain_entry extends class_base
 				$form_str .= $this->_display_data($o, $wf_id, reset($entries));
 			}
 		}
-
 		$this->vars(array(
 			"forms" => $form_str,
+			"gen_ctr_res" => $_SESSION['gen_ctr_res_value'],
 		));
 
 		return $this->parse();

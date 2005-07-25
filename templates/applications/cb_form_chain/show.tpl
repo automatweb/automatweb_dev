@@ -1,6 +1,5 @@
 {VAR:forms}
 
-
 <!-- SUB: FORM -->
 <table border="1">
 	<!-- SUB: PROPERTY -->
@@ -11,3 +10,5 @@
 	<!-- END SUB: PROPERTY -->
 </table>
 <!-- END SUB: FORM -->
+<br>
+<b>{VAR:gen_ctr_res}</b>

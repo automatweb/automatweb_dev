@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.14 2005/07/15 10:35:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain.aw,v 1.15 2005/07/25 14:04:10 dragut Exp $
 // cb_form_chain.aw - Vormiahel 
 /*
 
@@ -432,7 +432,7 @@ class cb_form_chain extends class_base
 		{
 			$i = get_instance(CL_CB_FORM_CHAIN_ENTRY);
 			return $i->show(array(
-				"id" => $_SESSION["cbfc_last_entry"]
+				"id" => $_SESSION["cbfc_last_entry"],
 			));
 		}
 
@@ -550,12 +550,15 @@ class cb_form_chain extends class_base
 				}
 			}
 		}
-
+		$gen_ctr_res = $this->_do_gen_ctr($o);
 		$this->vars(array(
 			"form" => $html,
 			"reforb" => $this->mk_reforb("submit_data", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o), "edit_num" => $_GET["edit_num"])),
-			"gen_ctr_res" => $this->_do_gen_ctr($o)
+			"gen_ctr_res" => $gen_ctr_res,
 		));
+		// i have to remember the result of the controller, if i want to make it available after cb_form_chain_entry saving
+		// too
+		$_SESSION['gen_ctr_res_value'] = (empty($gen_ctr_res)) ? $_SESSION['gen_ctr_res_value'] : $gen_ctr_res;
 
 		$this->_do_prev_next_pages($o);
 
@@ -791,7 +794,8 @@ class cb_form_chain extends class_base
 		$this->vars(array(
 			"forms" => $form_str,
 			"reforb" => $this->mk_reforb("submit_confirm", array("id" => $o->id(), "ret" => post_ru(), "cbfc_pg" => $this->_get_page($o))),
-			"prev_link" => aw_url_change_var(array("display" => NULL, "do_confirm" =>  NULL))
+			"prev_link" => aw_url_change_var(array("display" => NULL, "do_confirm" =>  NULL)),
+			"gen_ctr_res" => $_SESSION['gen_ctr_res_value'],
 		));
 
 		return $this->parse();

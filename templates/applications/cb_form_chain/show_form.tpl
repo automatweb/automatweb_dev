@@ -1,4 +1,3 @@
-
 <!-- SUB: TITLE -->
 {VAR:title}
 <!-- END SUB: TITLE -->
@@ -99,3 +98,5 @@ function submit_changeform(action)
 </table>
 </td></tr>
 <!-- END SUB: TABLE_FORM -->
+<br>
+<b>{VAR:gen_ctr_res}</b>
