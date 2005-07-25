@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.14 2005/07/22 09:55:04 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.15 2005/07/25 00:12:05 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -11,7 +11,6 @@
 @property start1 type=date_chooser field=start table=planner
 @caption Algab
 
-
 @property img type=releditor reltype=RELTYPE_PICTURE use_form=emb rel_id=first
 @caption Pilt
 
@@ -21,25 +20,42 @@
 @default field=meta 
 @default method=serialize
 
-layout grid1 type=grid cols=2 rows=5 group=general
-default layout=grid1
 
-property utextbox1 type=textbox no_caption=1
+property utextbox1 type=textbox
+caption Userdefined textbox 1
 
-property utextbox2 type=textbox no_caption=1
+property utextbox2 type=textbox
+caption Userdefined textbox 2
 
-property utextbox3 type=textbox no_caption=1
+property utextbox3 type=textbox
+caption Userdefined textbox 3
 
-property utextbox4 type=textbox no_caption=1
+property utextbox4 type=textbox
+caption Userdefined textbox 4
 
-property utextbox5 type=textbox no_caption=1
+property utextbox5 type=textbox
+caption Userdefined textbox 5
 
-property utextbox6 type=textbox no_caption=1
+property utextbox6 type=textbox
+caption Userdefined textbox 6
 
-property utextbox7 type=textbox no_caption=1
+property utextbox7 type=textbox
+caption Userdefined textbox 7
 
-property utextbox8 type=textbox no_caption=1
+property utextbox8 type=textbox
+caption Userdefined textbox 8
 
+// saving the plave and price property values to planner table right now
+// to utextbox9 and utextbox10 so i can save those utextbox properties above
+// to utextbox1-utextbox8 fields in planner table
+// actually i think there should be separate table for stagings
+// possible ToDo while creating the WhereToGo module 
+
+@property place type=textbox field=utextbox9 table=planner
+@caption Toimumiskoht
+
+@property price type=textbox field=utextbox10 table=planner
+@caption Hind
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -204,7 +220,6 @@ class staging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
 
 
 
@@ -476,10 +491,10 @@ class staging extends class_base
 		$queries = array();
 		while($row = $this->db_next())
 		{
-			arr($row);
+	//		arr($row);
 			$queries[] = "UPDATE objects SET status = 0 WHERE oid = " . $row["oid"];
 		}
-		arr($queries);
+	//	arr($queries);
 
 		foreach($queries as $query)
 		{
