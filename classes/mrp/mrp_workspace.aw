@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.132 2005/07/26 21:26:50 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.133 2005/07/26 21:37:13 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2144,7 +2144,6 @@ if ($_GET['show_thread_data'] == 1)
 			"parent" => $this_object->prop ("resources_folder"),
 		));
 
-
 		$mrp_schedule = get_instance(CL_MRP_SCHEDULE);
 
 		for ($category =& $toplevel_categories->begin (); !$toplevel_categories->end (); $category =& $toplevel_categories->next ())
@@ -2224,6 +2223,7 @@ if ($_GET['show_thread_data'] == 1)
 		"");
 		rsort ($res[0]);
 		$max_length = reset ($res[0]);
+		$jobs = array ();
 
 		### job states that are shown in chart past
 		$applicable_states = array (
@@ -2232,56 +2232,136 @@ if ($_GET['show_thread_data'] == 1)
 			MRP_STATUS_PAUSED,
 		);
 
-		$filt = array (
-			"class_id" => CL_MRP_JOB,
-			"state" => $applicable_states,
-			"parent" => $this_object->prop ("jobs_folder"),
-			"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
-			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-		);
-
-		if ($arr["request"]["chart_customer"])
+		if ($arr["request"]["chart_customer"])//!!! teha see ka otsep2ringuga, mitte strorage kaudu. kui sobiv siis customeriga ja ilma k6ik yhte p2ringusse.
 		{
+			$filt = array (
+				"class_id" => CL_MRP_JOB,
+				"state" => $applicable_states,
+				"parent" => $this_object->prop ("jobs_folder"),
+				"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+				"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			);
+
 			// filter by customer as well
 			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+			$list = new object_list ($filt);
+			$list_jobs = $list->arr ();
 		}
-		$list = new object_list ($filt);
-		$jobs = $list->arr ();
+		else
+		{
+			$this->db_query (
+			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
+			// "SELECT job.*, schedule.*, o.metadata " .
+			"FROM " .
+				"mrp_job as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+				"LEFT JOIN mrp_schedule schedule ON schedule.oid = job.oid " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"job.started > " . ($range_start - $max_length) . " AND " .
+				"job.started < " . $range_end . " AND " .
+				"job.project > 0 AND " .
+				"job.length > 0 AND " .
+				"job.resource > 0 " .
+			"");
+
+			while ($job = $this->db_next())
+			{
+				if ($this->can("view", $job["oid"]))
+				{
+					$metadata = aw_unserialize ($job["metadata"]);
+					$job["paused_times"] = $metadata["paused_times"];
+					$jobs[] = $job;
+				}
+			}
+		}
 
 		### job states that are shown in chart future
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
 		);
 
-		$filt = array (
-			"class_id" => CL_MRP_JOB,
-			"parent" => $this_object->prop ("jobs_folder"),
-			"state" => $applicable_states,
-			"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
-			"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
-			"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-		);
-
-		if ($arr["request"]["chart_customer"])
+		if ($arr["request"]["chart_customer"])//!!! teha see ka otsep2ringuga, mitte strorage kaudu
 		{
+			$filt = array (
+				"class_id" => CL_MRP_JOB,
+				"parent" => $this_object->prop ("jobs_folder"),
+				"state" => $applicable_states,
+				"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+				"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
+				"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			);
+
 			// filter by customer as well
 			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+			$list = new object_list ($filt);
+			$list_jobs = array_merge ($list->arr (), $list_jobs);
+
+
+			//!!! arrayks konvertimine, et yhtiks db_queryga saadud asjaga, kui kliendiga koos p2ring tehtud pole seda enam vaja.
+			foreach ($list_jobs as $list_job)
+			{
+				$jobs[] = array (
+					"oid" => $list_job->id (),
+					"paused_times" => $list_job->meta ("paused_times"),
+					"project" => $list_job->prop ("project"),
+					"state" => $list_job->prop ("state"),
+					"started" => $list_job->prop ("started"),
+					"finished" => $list_job->prop ("finished"),
+					"planned_length" => $list_job->prop ("planned_length"),
+					"starttime" => $list_job->prop ("starttime"),
+					"resource" => $list_job->prop ("resource"),
+					"exec_order" => $list_job->prop ("exec_order"),
+				);
+			}
+			//!!! END arrayks konvertimine
+		}
+		else
+		{
+			$this->db_query (
+			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
+			// "SELECT job.*,schedule.*,o.metadata " .
+			"FROM " .
+				"mrp_job as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+				"LEFT JOIN mrp_schedule schedule ON schedule.oid = job.oid " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"schedule.starttime > " . ($range_start - $max_length) . " AND " .
+				"schedule.starttime < " . $range_end . " AND " .
+				"schedule.starttime > " . $time . " AND " .
+				"job.project > 0 AND " .
+				"job.length > 0 AND " .
+				"job.resource > 0 " .
+			"");
+
+			while ($job = $this->db_next())
+			{
+				if ($this->can("view", $job["oid"]))
+				{
+					$metadata = aw_unserialize ($job["metadata"]);
+					$job["paused_times"] = $metadata["paused_times"];
+					$jobs[] = $job;
+				}
+			}
 		}
 
-		$list = new object_list ($filt);
-		$jobs = array_merge ($list->arr (), $jobs);
 
 		foreach ($jobs as $job)
 		{
-			if (!is_oid($job->prop("project")) || !$this->can("view", $job->prop("project")))
+			if (!is_oid($job["project"]) || !$this->can("view", $job["project"]))
 			{
 				continue;
 			}
 
-			$project = obj ($job->prop ("project"));
+			$project = obj ($job["project"]);
 
 			### project states that are shown in chart
 			$applicable_states = array (
@@ -2297,35 +2377,35 @@ if ($_GET['show_thread_data'] == 1)
 			}
 
 			### get start&length according to job state
-			switch ($job->prop ("state"))
+			switch ($job["state"])
 			{
 				case MRP_STATUS_DONE:
-					$start = $job->prop ("started");
-					$length = $job->prop ("finished") - $job->prop ("started");
+					$start = $job["started"];
+					$length = $job["finished"] - $job["started"];
 // /* dbg */ echo date(MRP_DATE_FORMAT, $start) . "-" . date(MRP_DATE_FORMAT, $start + $length) . "<br>";
 					break;
 
 				case MRP_STATUS_PLANNED:
-					$start = $job->prop ("starttime");
-					$length = $job->prop ("planned_length");
+					$start = $job["starttime"];
+					$length = $job["planned_length"];
 					break;
 
 				case MRP_STATUS_PAUSED:
 				case MRP_STATUS_INPROGRESS:
-					$start = $job->prop ("started");
-					$length = (($start + $job->prop ("planned_length")) < $time) ? ($time - $start) : $job->prop ("planned_length");
+					$start = $job["started"];
+					$length = (($start + $job["planned_length"]) < $time) ? ($time - $start) : $job["planned_length"];
 					break;
 			}
 
-			$resource = obj ($job->prop ("resource"));
-			$job_name = $project->name () . "-" . $job->prop ("exec_order") . " - " . $resource->name ();
+			$resource = obj ($job["resource"]);
+			$job_name = $project->name () . "-" . $job["exec_order"] . " - " . $resource->name ();
 
 			### set bar colour
-			$colour = $this->state_colours[$job->prop ("state")];
-			$colour = in_array ($job->id (), $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
+			$colour = $this->state_colours[$job["state"]];
+			$colour = in_array ($job["oid"], $hilighted_jobs) ? MRP_COLOUR_HILIGHTED : $colour;
 
 			$bar = array (
-				"id" => $job->id (),
+				"id" => $job["oid"],
 				"row" => $resource->id (),
 				"start" => $start,
 				"colour" => $colour,
@@ -2333,21 +2413,14 @@ if ($_GET['show_thread_data'] == 1)
 				"layer" => 0,
 				"uri" => aw_url_change_var ("mrp_hilight", $project->id ()),
 				"title" => $job_name . " (" . date (MRP_DATE_FORMAT, $start) . " - " . date (MRP_DATE_FORMAT, $start + $length) . ")"
-/* dbg */ . " [res:" . $resource->id () . " töö:" . $job->id () . " proj:" . $project->id () . "]"
+/* dbg */ . " [res:" . $resource->id () . " töö:" . $job["oid"] . " proj:" . $project->id () . "]"
 			);
 
 			$chart->add_bar ($bar);
 
 			### add paused bars
-			foreach(safe_array($job->meta("paused_times")) as $pd)
+			foreach(safe_array($job["paused_times"]) as $pd)
 			{
-if (aw_global_get ("uid") == "voldemar")
-{
-	$this->db_query ("SELECT * from objects where oid=" . $job->id ());
-	$b = $this->db_next();
-	$ass = aw_unserialize ($b["metadata"]);
-	var_dump ($ass["paused_times"]);
-}
 				if ($pd["start"] && $pd["end"])
 				{
 					$bar = array (
