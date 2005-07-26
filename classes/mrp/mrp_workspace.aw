@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.129 2005/07/13 13:58:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.130 2005/07/26 21:13:44 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -166,7 +166,7 @@
 	@property case_header_controller type=relpicker reltype=RELTYPE_MRP_HEADER_CONTROLLER
 	@caption Projekti headeri kontroller
 
-	@property pv_per_page type=textbox 
+	@property pv_per_page type=textbox
 	@caption Operaatori vaates t&ouml;id lehel
 
 	@property max_subcontractor_timediff type=textbox default=1
@@ -2341,6 +2341,12 @@ if ($_GET['show_thread_data'] == 1)
 			### add paused bars
 			foreach(safe_array($job->meta("paused_times")) as $pd)
 			{
+if (aw_global_get ("uid") == "voldemar")
+{
+	$this->db_query ("SELECT meta from objects where oid=" . $job->id ());
+	$b = $this->db_next();
+	arr ($b);
+}
 				if ($pd["start"] && $pd["end"])
 				{
 					$bar = array (
@@ -3773,7 +3779,7 @@ if ($_GET['show_thread_data'] == 1)
 			"lang_id" => array(),
 			"sort_by" => $arr["sort_by"] ? $arr["sort_by"] : "mrp_schedule_826.starttime",
 		);
-		
+
 		if ($arr["states"])
 		{
 			$filt["state"] = $arr["states"];
@@ -4451,7 +4457,7 @@ if ($_GET['show_thread_data'] == 1)
 
 		return $this->parse();
 	}
-	
+
 	/**
 
 		@attrib name=save_pj_comment
