@@ -1145,8 +1145,24 @@ class grid_editor extends class_base
 				$st = $this->_get_cell_style_id($row, $col, $scell);
 				if ($st)
 				{
-					$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
-					active_page_data::add_site_css_style($st);
+					// ok, this is going to really slow :(
+					// but i don't see any better solution right now, cause
+					// every cell can have its own style (which is object).
+					if (is_oid($st) && $this->can("view", $st))
+					{
+						$style_object = new object($st);
+						$style_from_site_css = $style_object->prop("site_css");
+					}
+					if (empty($style_from_site_css))
+					{
+						$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"st".$st."\">";
+						active_page_data::add_site_css_style($st);
+					}
+					else
+					{
+						$cs .= "<td colspan=\"".$spans["colspan"]."\" rowspan=\"".$spans["rowspan"]."\" class=\"".$style_from_site_css."\">";
+
+					}
 				}
 				else
 				{
