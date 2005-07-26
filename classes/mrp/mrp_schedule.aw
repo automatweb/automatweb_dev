@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.71 2005/07/04 14:34:41 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.72 2005/07/26 19:18:11 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -143,8 +143,8 @@ class mrp_schedule extends class_base
 	var $initialized = false;
 
 	# method name to use for saving schedule data.
-	var $save_method = "save_direct";
-	// var $save_method = "save_fileload";
+	// var $save_method = "save_direct";
+	var $save_method = "save_fileload";
 
 	var $state_names = array (
 		MRP_STATUS_NEW => "Uus",
@@ -251,6 +251,7 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
+// http://mail.prismaprint.ee/automatweb/orb.aw?class=mrp_schedule&action=create&copyjobstoschedule=1&mrp_workspace=1259
 /* COPY JOBS FROM mrp_job TO mrp_schedule */
 /* dbg */ if ($_GET["copyjobstoschedule"]==1){
 /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
@@ -572,7 +573,7 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
-/* dbg */ if ($job["oid"] == $_GET["mrp_dbg_job"]) {
+/* dbg */ if ($job["oid"] == $_GET["mrp_dbg_job"] and $_GET["mrp_dbg_job"]) {
 // /* dbg */ if ($job["resource"] == 6670  ) {
 /* dbg */ $this->mrpdbg=1;
 // /* dbg */ exit;
@@ -581,8 +582,8 @@ class mrp_schedule extends class_base
 
 				// /* strict */ $successor_starttime = isset ($starttime_index[$job["oid"]]) ? $starttime_index[$job["oid"]] : 0;
 				/* opt */ $successor_starttime = $starttime_index[$job["oid"]];
-				// /* strict */ $minstart = max ($project_start, $project_progress, time(), $successor_starttime, $job["minstart"]);
-				/* opt */ $minstart = max ($projects[$project_id]["starttime"], $projects[$project_id]["progress"], time(), $starttime_index[$job["oid"]], $job["minstart"]);
+				// /* strict */ $minstart = max ($project_start, $project_progress, $this->schedule_start, $successor_starttime, $job["minstart"]);
+				/* opt */ $minstart = max ($projects[$project_id]["starttime"], $projects[$project_id]["progress"], $this->schedule_start, $starttime_index[$job["oid"]], $job["minstart"]);
 				// $minstart = $job["pre_buffer"] + $minstart;
 
 
