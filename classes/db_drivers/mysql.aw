@@ -1,7 +1,7 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.28 2005/04/21 08:54:57 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.29 2005/07/26 19:29:50 voldemar Exp $
 // mysql.aw - MySQL draiver
-class mysql 
+class mysql
 {
 	var $dbh; #database handle
 	var $db_base; #name of the database
@@ -9,20 +9,22 @@ class mysql
 	var $errmsg; # where we keep our error messages
 	var $rec_count;
 
-	function db_init() 
+	function db_init()
 	{
 		lc_load('definition');
 	}
-		
+
 
 	////
 	// !We need to be able to create multiple connections
 	// even better, connections might go to different databases
-	function db_connect($server,$base,$username,$password) 
+	function db_connect($server,$base,$username,$password)
 	{
 		global $DEBUG;
-		$this->dbh = mysql_connect($server,$username,$password);
-		if (!$this->dbh) 
+		// $this->dbh = mysql_connect($server,$username,$password);
+		$this->dbh = mysql_connect($server,$username,$password,false,128);// enables use of mysql load data local
+
+		if (!$this->dbh)
 		{
 			echo "Can't connect to database";
 			print '<br />';
@@ -34,7 +36,7 @@ class mysql
 			echo "Can't connect to database";
 			print '<br />';
 			print mysql_error();
-			exit;	
+			exit;
 		};
 		$this->db_base = $base;
 	}
@@ -44,7 +46,7 @@ class mysql
 		return $this->db_query($qt." LIMIT ".$limit.($count > 0 ? ",".$count : ""));
 	}
 
-	function db_query($qtext,$errors = true) 
+	function db_query($qtext,$errors = true)
 	{
 		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
 		if ($SLOW_DUKE == 1)
@@ -71,7 +73,7 @@ class mysql
 			list($micro,$sec) = split(' ',microtime());
 			$ts_s = $sec + $micro;
 		}
-		aw_global_set('qcount',aw_global_get('qcount')+1); 
+		aw_global_set('qcount',aw_global_get('qcount')+1);
 
 		enter_function("mysql::db_query");
 
@@ -90,7 +92,7 @@ class mysql
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
 		$this->log_query($qtext);
-		if (!$this->qID ) 
+		if (!$this->qID )
 		{
 			if (!$errors)
 			{
@@ -104,8 +106,8 @@ class mysql
 			$eri = new class_base;
 			$eri->init();
 			$eri->raise_error(ERR_DB_QUERY,LC_MYSQL_ERROR_QUERY."\n".$qtext."\n".mysql_errno($this->dbh)."\n".mysql_error($this->dbh),true,false);
-		} 
-		else 
+		}
+		else
 		{
 			$this->num_rows = @mysql_num_rows($this->qID);
 			$this->num_fields = @mysql_num_fields($this->qID);
@@ -156,9 +158,9 @@ class mysql
 			$this->qID = array_pop($this->qhandles);
 		};
 	}
-		
 
-	function db_next($deq = true) 
+
+	function db_next($deq = true)
 	{
 		$deq = !$GLOBALS['cfg']['__default']['magic_quotes_runtime'];
 		# this function cannot be called before a query is made
@@ -177,7 +179,7 @@ class mysql
 		return $res;
 	}
 
-	function db_last_insert_id() 
+	function db_last_insert_id()
 	{
 		$res = mysql_insert_id($this->dbh);
 		return $res;
@@ -191,7 +193,7 @@ class mysql
 		}
 		return $this->db_next();
 	}
-	
+
 	# seda voib kasutada, kui on vaja teada saada mingit kindlat välja
 	# a 'la cval tabelist config
 	# $cval = db_fetch_field("SELECT cval FROM config WHERE ckey = '$ckey'","cval")
@@ -222,48 +224,48 @@ class mysql
 
 
 	# need 2 funktsiooni oskavad käituda nii array-de kui ka stringidega
-	function quote(&$arr) 
+	function quote(&$arr)
 	{
-		if (is_array($arr)) 
+		if (is_array($arr))
 		{
-			while(list($k,$v) = each($arr)) 
+			while(list($k,$v) = each($arr))
 			{
-				if (is_array($arr[$k])) 
+				if (is_array($arr[$k]))
 				{
 					// do nothing
-				} 
-				else 
+				}
+				else
 				{
 					$arr[$k] = addslashes($arr[$k]);
 				};
 			};
 			reset($arr);
-		} 
-		else 
+		}
+		else
 		{
 			$arr = addslashes($arr);
 			return $arr;
 		};
 	}
 
-	function dequote(&$arr) 
+	function dequote(&$arr)
 	{
-		if (is_array($arr)) 
+		if (is_array($arr))
 		{
-			while(list($k,$v) = each($arr)) 
+			while(list($k,$v) = each($arr))
 			{
-				if (is_array($arr[$k])) 
+				if (is_array($arr[$k]))
 				{
 					$this->dequote(&$arr[$k]);
-				} 
-				else 
+				}
+				else
 				{
 					$arr[$k] = stripslashes($arr[$k]);
 				};
 			};
 			reset($arr);
-		} 
-		else 
+		}
+		else
 		{
 			$arr = stripslashes($arr);
 		};
@@ -293,7 +295,7 @@ class mysql
 		$cnt++;
 		return $res;
 	}
-	
+
 	function db_get_fields()
 	{
 		$retval = array();
@@ -474,7 +476,7 @@ class mysql
 					{
 						$flags[] = 'NOT NULL';
 					};
-			
+
 					if ($row['Extra'])
 					{
 						$flags[] = $row['Extra'];
@@ -485,7 +487,7 @@ class mysql
 						'flags' => $flags,
 						'key' => $row['Key'],
 					);
-					
+
 				};
 				$this->restore_handle();
 			};
