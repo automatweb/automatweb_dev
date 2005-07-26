@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.410 2005/07/26 12:02:44 duke Exp $
+// $Id: class_base.aw,v 2.411 2005/07/26 12:07:46 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3222,6 +3222,8 @@ class class_base extends aw_template
 		// and this of course should handle both creating new objects and updating existing ones
 
 		$callback = method_exists($this->inst,"set_property");
+
+		$class_methods = get_class_methods($this->inst);
 		
 		$new = false;
 		$this->id = isset($id) ? $id : "";
@@ -3450,6 +3452,7 @@ class class_base extends aw_template
 			
 			$status = PROP_OK;
 
+
 		
 			
 			// give the class a possiblity to execute some action
@@ -3459,6 +3462,12 @@ class class_base extends aw_template
 			// whether to save the data or not, so please, make sure
 			// that your set_property returns PROP_OK for stuff
 			// that you want to save
+			$setter = "set_" . $name;
+			if (in_array($setter,$class_methods))
+			{
+				$status = $this->inst->$setter($argblock);
+			}
+			else
 			if ($callback)
 			{
 				$status = $this->inst->set_property($argblock);
