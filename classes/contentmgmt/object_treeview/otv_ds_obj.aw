@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.39 2005/07/08 15:07:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_obj.aw,v 1.40 2005/07/26 10:23:29 dragut Exp $
 // otv_ds_obj.aw - Objektinimekirja AW datasource 
 /*
 
@@ -207,27 +207,28 @@ class otv_ds_obj extends class_base
 		foreach($conns as $conn)
 		{
 			$c_o = $conn->to();
+			$c_o_id = $c_o->id();
 
 			$chk = "";
 			if ($c_o->class_id() == $opts['class'])
 			{
 				$chk = html::checkbox(array(
-					"name" => "include_submenus[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $include_submenus[$c_o->id()],
+					"name" => "include_submenus[".$c_o_id."]",
+					"value" => $c_o_id,
+					"checked" => $include_submenus[$c_o_id],
 				));
 			}
 
 			$this->t->define_data(array(
-				"oid" => $c_o->id(),
+				"oid" => $c_o_id,
 				"name" => $c_o->path_str(array(
 					"max_len" => 3
 				)),
 				"check" => $chk,
 				"ignoreself" => html::checkbox(array(
-					"name" => "ignoreself[".$c_o->id()."]",
-					"value" => $c_o->id(),
-					"checked" => $ignoreself[$c_o->id()],
+					"name" => "ignoreself[".$c_o_id."]",
+					"value" => $c_o_id,
+					"checked" => $ignoreself[$c_o_id],
 				)),
 			));
 		};
