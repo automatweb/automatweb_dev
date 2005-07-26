@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.130 2005/07/26 21:13:44 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.131 2005/07/26 21:16:37 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2343,7 +2343,7 @@ if ($_GET['show_thread_data'] == 1)
 			{
 if (aw_global_get ("uid") == "voldemar")
 {
-	$this->db_query ("SELECT meta from objects where oid=" . $job->id ());
+	$this->db_query ("SELECT * from objects where oid=" . $job->id ());
 	$b = $this->db_next();
 	arr ($b);
 }
