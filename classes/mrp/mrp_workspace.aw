@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.131 2005/07/26 21:16:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.132 2005/07/26 21:26:50 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2345,7 +2345,8 @@ if (aw_global_get ("uid") == "voldemar")
 {
 	$this->db_query ("SELECT * from objects where oid=" . $job->id ());
 	$b = $this->db_next();
-	arr ($b);
+	$ass = aw_unserialize ($b["metadata"]);
+	var_dump ($ass["paused_times"]);
 }
 				if ($pd["start"] && $pd["end"])
 				{
