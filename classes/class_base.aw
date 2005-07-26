@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.409 2005/07/21 12:23:50 duke Exp $
+// $Id: class_base.aw,v 2.410 2005/07/26 12:02:44 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2117,6 +2117,9 @@ class class_base extends aw_template
 		// while we are generating the output form
 		$callback = method_exists($this->inst,"get_property");
 
+		// get_XXX (where XXX is the name of the property) is also supported
+		$class_methods = get_class_methods($this->inst);
+
 		$resprops = array();
 
 		$argblock = array(
@@ -2464,8 +2467,15 @@ class class_base extends aw_template
 				continue;
 			};
 
-
 			$pname = $val["name"];
+			$getter = "get_" . $pname;
+			if (in_array($getter,$class_methods))
+			{
+				$awt->start("getter $getter");
+				$status = $this->inst->$getter($argblock);
+				$awt->stop("getter $getter");
+			}
+			else
 			// callbackiga saad muuta ühe konkreetse omaduse sisu
 			if ($callback)
 			{
@@ -4002,6 +4012,15 @@ class class_base extends aw_template
 			$cfg_props = $cl_vis->get_group_properties(array(
 				"id" => $cls_id,
 			));
+			$designer_obj = new object($this->id);
+			$meta = $designer_obj->meta();
+			foreach($cfg_props as $key => $val)
+			{
+				if ($meta[$key])
+				{
+					$cfg_props[$key]["value"] = $meta[$key];
+				};
+			};
 
 			$lx = $cl_vis->get_layouts(array(
 				"class_id" => $cls_id,
