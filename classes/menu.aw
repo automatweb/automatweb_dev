@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.136 2005/06/29 12:11:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.137 2005/07/27 14:46:34 frgp Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -8,210 +8,274 @@
 
 	@classinfo trans=1
 
-	@property alias type=textbox group=general
-	@caption Alias
+	@groupinfo general_sub caption="Üldine" parent=general
 
-	@property jrk type=textbox size=4 group=general
-	@caption Jrk
+		@property name type=textbox rel=1 trans=1 group=general_sub
+		@caption Nimi
+		@comment Objekti nimi
 
-	@property target type=checkbox group=general ch_value=1 search=1 table=menu
-	@caption Uues aknas
+		@property comment type=textbox group=general_sub
+		@caption Kommentaar
+		@comment Vabas vormis tekst objekti kohta
 
-	@property users_only type=checkbox field=meta method=serialize group=advanced ch_value=1
-	@caption Ainult sisselogitud kasutajatele
+		@property status type=status trans=1 default=1 group=general_sub
+		@caption Aktiivne
+		@comment Kas objekt on aktiivne
 
-	@property color type=colorpicker field=meta method=serialize group=advanced
-	@caption Men&uuml;&uuml; v&auml;rv
+		@property alias type=textbox group=general_sub
+		@caption Alias
+
+		@property jrk type=textbox size=4 group=general_sub
+		@caption Jrk
+
+		@property pmethod_properties type=callback callback=callback_get_pmethod_options group=general_sub store=no
+		@caption Avaliku meetodi seaded
+
+		@property admin_feature type=select group=general_sub table=menu field=admin_feature
+		@caption Vali programm
+
+	@groupinfo advanced_settings caption="Süvaseaded" parent=general
+
+		@property type type=select group=advanced_settings table=menu field=type
+		@caption Menüü tüüp
+
+		@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced_settings
+		@caption Objektitabeli konf
+
+		@property add_tree_conf type=relpicker reltype=RELTYPE_ADD_TREE_CONF field=meta method=serialize group=advanced_settings
+		@caption Objekti lisamise puu konff
+
+		@property cfgmanager type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize group=advanced_settings
+		@caption Konfiguratsioonivorm
+
+	@groupinfo import_export caption=Eksport submit=no parent=general
+
+		@property no_export type=checkbox group=import_export ch_value=1 field=meta method=serialize table=objects
+		@caption &Auml;ra n&auml;ita ekspordis
+
+		@property export type=callback callback=callback_get_export_options group=import_export store=no
+		@caption Eksport
+
+
+	@groupinfo users caption="Kasutajad" parent=general
+
+		@property users_only type=checkbox field=meta method=serialize group=users ch_value=1
+		@caption Ainult sisselogitud kasutajatele
+
+@groupinfo show caption=Näitamine
+
+	@groupinfo show_sub caption="Näitamine" parent=show
+
+
+		@property link_behaviour type=chooser store=no multiple=1 group=show_sub
+		@caption Lingi iseloom
+
+		@property target type=checkbox group=show_sub ch_value=1 search=1 table=menu
+		@caption Uues aknas
+
+		@property clickable type=checkbox group=show_sub ch_value=1 default=1 table=menu
+		@caption Klikitav
+
+
+		@property link type=textbox group=show_sub table=menu
+		@caption Menüü link
+
+
+		@property show_restrictions type=chooser store=no multiple=1 group=show_sub
+		@caption Näitamine
+
+		@property frontpage type=checkbox table=objects field=meta method=serialize group=show_sub ch_value=1
+		@caption Esilehel
+
+		@property mid type=checkbox group=show_sub ch_value=1 table=menu
+		@caption Paremal
+
+
+		@property show_conditions type=chooser store=no multiple=1 group=show_sub
+		@caption Tingimused
+
+		@property hide_noact type=checkbox ch_value=1 group=show_sub table=menu
+		@caption Peida ära, kui selle kausta all aktiivseid dokumente ei ole
+
+		@property no_menus type=checkbox group=show_sub ch_value=1 table=menu
+		@caption Ilma menüüdeta
+
+
+		@property panes type=chooser store=no multiple=1 group=show_sub
+		@caption Paanid
+
+		@property left_pane type=checkbox  ch_value=1 default=1 group=show_sub table=menu
+		@caption Vasak paan
+
+		@property right_pane type=checkbox ch_value=1 default=1 group=show_sub table=menu
+		@caption Parem paan
+
+
+		@property width type=textbox size=5 group=show_sub table=menu
+		@caption Laius
+
+	@groupinfo doc_show caption="Dokumentide kuvamine" parent=show
+
+		@property ndocs type=textbox size=3 group=doc_show table=menu
+		@caption Mitu viimast dokumenti
+
+		@property show_lead type=checkbox field=meta method=serialize group=doc_show ch_value=1
+		@caption Näita ainult leadi
+
+		@property sort_by_name type=checkbox field=meta method=serialize group=doc_show ch_value=1
+		@caption Sorteeri nime järgi
+
+	@groupinfo doc_ord  caption="Dokumentide järjestamine" parent=show
+
+		@property sorter type=table group=doc_ord table=menu
+		@caption Dokumentide järjestamine
+
+		property sort_by type=select table=objects field=meta method=serialize group=doc_ord
+		caption Dokumente j&auml;rjestatakse
+
+		property sort_ord type=select table=objects field=meta method=serialize group=doc_ord
+
+	@groupinfo ip caption="IP piirangud" parent=show
+
+		@property ip type=table store=no group=ip no_caption=1
+
+@groupinfo look caption="Välimus"
+
+	@groupinfo look_sub caption="Välimus" parent=look
+
+		@property color type=colorpicker field=meta method=serialize group=look_sub
+		@caption Menüü värv
+
+		@property color2 type=colorpicker field=meta method=serialize group=look_sub
+		@caption Menüü värv 2
+
+		@property icon type=icon field=meta method=serialize group=look_sub
+		@caption Ikoon
+
+		@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=look_sub 
+		@caption Vali ikoon
+
+	@groupinfo templates caption=Kujunduspõhjad parent=look
+
+		@property tpl_dir table=objects type=select field=meta method=serialize group=templates
+		@caption Template set
+
+		@property show_lead_template type=select field=meta method=serialize group=templates
+		@caption Leadi template
+
+		@property tpl_view type=select group=templates table=menu
+		@caption Template dokumendi näitamiseks (pikk)
+
+		@property tpl_lead type=select group=templates table=menu
+		@caption Template dokumendi näitamiseks (lühike)
+
+		@property show_layout type=relpicker reltype=RELTYPE_SHOW_AS_LAYOUT group=templates field=meta method=serialize table=objects
+		@caption Kasuta n&auml;itamiseks layouti
+
+	@groupinfo presentation caption=Pildid parent=look
+
+		@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
+		@caption V&otilde;ta pildid men&uuml;&uuml; alt
+
+		@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
+		@caption Viivitus piltide vahel (sek.)
+
+		@property imgrelmanager type=relmanager reltype=RELTYPE_IMAGE store=no group=presentation
+		@caption Vali pilte
+
+		@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
+		@caption Aktiivse menüü pilt
+
+		@property menu_images type=table field=meta method=serialize group=presentation store=no
+		@caption Menüü pildid
+
+@groupinfo menus caption="Sisu seaded"
+
+	@groupinfo menus_sub caption="Sisu seaded" parent=menus
+
+		@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS table=objects  field=meta method=serialize group=menus_sub
+		@caption Alammen&uuml;&uuml;d objektist
+
+		@property aip_filename type=textbox field=meta method=serialize group=menus_sub
+		@caption Failinimi
+
+		@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=menus_sub
+		@caption Sisu objektist
+
+		@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=menus_sub table=objects field=meta method=serialize table=objects
+		@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
+
+		@property show_object_tree type=relpicker reltype=RELTYPE_OBJ_TREE group=menus_sub field=meta method=serialize table=objects
+		@caption Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja
+
+	@groupinfo advanced_ctx caption=Kontekst parent=menus
+
+		@property has_ctx type=checkbox ch_value=1 table=objects field=meta method=serialize group=advanced_ctx
+		@caption Kuva alamkaustu kontekstip&otilde;hiselt
 	
-	@property color2 type=colorpicker field=meta method=serialize group=advanced
-	@caption Menüü värv 2
+		@property ctx type=releditor reltype=RELTYPE_CTX field=meta method=serialize mode=manager props=name,status table_fields=name,status table_edit_fields=name,status group=advanced_ctx
+		@caption Kontekstid
 
-	@property icon type=icon field=meta method=serialize group=advanced
-	@caption Ikoon
+	@groupinfo relations caption="Vaata lisaks" parent=menus
 
-	@property sel_icon type=relpicker reltype=RELTYPE_ICON table=objects field=meta method=serialize group=advanced 
-	@caption Vali ikoon
+		@property sa_manager type=relmanager reltype=RELTYPE_SEEALSO group=relations store=no
+		@caption Seosehaldur
 
-	@property sort_by_name type=checkbox field=meta method=serialize group=show ch_value=1
-	@caption Sorteeri nime järgi
+		@property seealso type=table group=relations store=no
+		@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
+		@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
 
-	@property aip_filename type=textbox field=meta method=serialize group=advanced
-	@caption Failinimi
-	
-	@property periodic type=checkbox group=advanced ch_value=1
-	@caption Perioodiline
+		@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
+		@caption Järjekorranumber (vaata lisaks)
 
-	@property objtbl_conf type=relpicker reltype=RELTYPE_OBJ_TABLE_CONF field=meta method=serialize group=advanced
-	@caption Objektitabeli konf
+	@groupinfo brothers caption=Vennastamine parent=menus
 
-	@property add_tree_conf type=relpicker reltype=RELTYPE_ADD_TREE_CONF field=meta method=serialize group=advanced
-	@caption Objekti lisamise puu konff
+		@property sections type=table store=no group=brothers
+		@caption Vennad
 
-	@property cfgmanager type=relpicker reltype=RELTYPE_CFGFORM field=meta method=serialize group=advanced
-	@caption Konfiguratsioonivorm
-	
-	@property show_lead type=checkbox field=meta method=serialize group=advanced ch_value=1
-	@caption Näita ainult leadi
-	
-	@property show_lead_template type=select field=meta method=serialize group=advanced 
-	@caption Leadi template
+	@groupinfo docs_from caption="Sisu asukoht" parent=menus
 
-	@property get_content_from type=relpicker reltype=RELTYPE_CONTENT_FROM field=meta method=serialize group=advanced
-	@caption Sisu objektist
-	
-	@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
-	@caption AW Märksõnad
+		@property sss type=table store=no group=docs_from
+		@caption Menüüd, mille alt viimased dokumendid võetakse
 
-	@property keywords type=textbox field=meta method=serialize group=keywords
-	@caption META keywords
+	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
 
-	@property description type=textbox field=meta method=serialize group=keywords
-	@caption META description
-	
-	@property sections type=table store=no group=brothers
-	@caption Vennad
+		@property seealso_docs_t type=table group=seealso_docs no_caption=1 table=menu
+		@caption Vaatalisaks dokumendid
 
-	@property images_from_menu type=relpicker reltype=RELTYPE_PICTURES_MENU group=presentation field=meta method=serialize
-	@caption V&otilde;ta pildid men&uuml;&uuml; alt
+	@groupinfo periods caption="Perioodid" parent=menus
 
-	@property img_timing type=textbox size=3 field=meta method=serialize group=presentation
-	@caption Viivitus piltide vahel (sek.)
-	
-	@property imgrelmanager type=relmanager reltype=RELTYPE_IMAGE store=no group=presentation
-	@caption Vali pilte
+		@property periodic type=checkbox group=periods ch_value=1
+		@caption Perioodiline
 
-	@property img_act type=relpicker reltype=RELTYPE_IMAGE field=meta method=serialize group=presentation
-	@caption Aktiivse menüü pilt
+		@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=periods reltype=RELTYPE_PERIOD
+		@caption Perioodid, mille alt dokumendid võetakse
 
-	@property menu_images type=table field=meta method=serialize group=presentation store=no
-	@caption Menüü pildid
+		@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=periods
+		@caption K&otilde;ikide perioodide alt
 
-	// and now stuff that goes into menu table
-	@default table=menu
+		@property docs_per_period type=textbox size=3 group=periods table=objects field=meta method=serialize
+		@caption Dokumente perioodist
 
-	@property sss type=table store=no group=docs_from
-	@caption Menüüd, mille alt viimased dokumendid võetakse
-	
-	@property pers type=relpicker multiple=1 size=5 table=objects field=meta method=serialize group=docs_from reltype=RELTYPE_PERIOD
-	@caption Perioodid, mille alt dokumendid võetakse
-	
-	@property all_pers type=checkbox ch_value=1 table=objects field=meta method=serialize group=docs_from
-	@caption K&otilde;ikide perioodide alt
-	
-	@property docs_per_period type=textbox size=3 group=docs_from table=objects field=meta method=serialize
-	@caption Dokumente perioodist
+		@property show_periods type=checkbox ch_value=1 group=periods table=objects field=meta method=serialize
+		@caption Näita perioode
 
-	// -----------------
+		@property show_period_count type=textbox size=4 group=periods table=objects field=meta method=serialize
+		@caption Mitu viimast perioodi
 
-	@property sa_manager type=relmanager reltype=RELTYPE_SEEALSO group=relations store=no
-	@caption Seosehaldur
+	@groupinfo keywords caption=Võtmesõnad parent=menus
 
-	@property seealso type=table group=relations store=no
-	@caption Menüüd, mille all see menüü on "vaata lisaks" menüü
-	@comment Nende menüüde lisamine ja eemaldamine käib läbi seostehalduri
+		@property grkeywords type=select size=10 multiple=1 field=meta method=serialize group=keywords
+		@caption AW Märksõnad
 
-	@property seealso_order type=textbox group=relations size=3 table=objects field=meta method=serialize
-	@caption Järjekorranumber (vaata lisaks)
+		@property keywords type=textbox field=meta method=serialize group=keywords
+		@caption META keywords
 
-	// ---------------
+		@property description type=textbox field=meta method=serialize group=keywords
+		@caption META description
 
-	@property link type=textbox group=show
-	@caption Menüü link
 
-	@property type type=select group=general table=menu field=type
-	@caption Menüü tüüp
-	
-	@property admin_feature type=select group=general table=menu field=admin_feature
-	@caption Vali programm
 
-	@property pmethod_properties type=callback callback=callback_get_pmethod_options group=general store=no
-	@caption Avaliku meetodi seaded
-	
-	@property clickable type=checkbox group=advanced ch_value=1 default=1
-	@caption Klikitav
-	
-	@property no_export type=checkbox group=advanced ch_value=1 field=meta method=serialize table=objects
-	@caption &Auml;ra n&auml;ita ekspordis
-	
-	@property no_menus type=checkbox group=advanced ch_value=1
-	@caption Ilma menüüdeta
-	
-	@property mid type=checkbox group=advanced ch_value=1
-	@caption Paremal
-	
-	@property width type=textbox size=5 group=advanced
-	@caption Laius
-	
-	@property submenus_from_obj type=relpicker reltype=RELTYPE_SUBMENUS table=objects  field=meta method=serialize group=advanced
-	@caption Alammen&uuml;&uuml;d objektist
-
-	@property submenus_from_menu type=relpicker reltype=RELTYPE_SHOW_SUBFOLDERS_MENU group=advanced table=objects field=meta method=serialize table=objects
-	@caption V&otilde;ta alammen&uuml;&uuml;d men&uuml;&uuml; alt
-
-	@property show_layout type=relpicker reltype=RELTYPE_SHOW_AS_LAYOUT group=advanced field=meta method=serialize table=objects
-	@caption Kasuta n&auml;itamiseks layouti
-
-	@property show_object_tree type=relpicker reltype=RELTYPE_OBJ_TREE group=advanced field=meta method=serialize table=objects
-	@caption Kasuta alammen&uuml;&uuml;de n&auml;itamiseks objektide nimekirja
-
-	@default group=show
-
-	@property panes type=chooser store=no multiple=1
-	@caption Paanid
-
-	@property left_pane type=checkbox  ch_value=1 default=1 
-	@caption Vasak paan
-
-	@property right_pane type=checkbox ch_value=1 default=1 
-	@caption Parem paan
-	
-	@property tpl_dir table=objects type=select field=meta method=serialize
-	@caption Template set 
-	
-	@property tpl_view type=select
-	@caption Template dokumendi näitamiseks (pikk)
-	
-	@property tpl_lead type=select
-	@caption Template dokumendi näitamiseks (lühike)
-
-	@property hide_noact type=checkbox ch_value=1
-	@caption Peida ära, kui dokumente pole
-
-	@property ndocs type=textbox size=3 group=docs_from
-	@caption Mitu viimast dokumenti
-
-	@property show_periods type=checkbox ch_value=1 group=show table=objects field=meta method=serialize
-	@caption Näita perioode
-
-	@property show_period_count type=textbox size=4 group=show table=objects field=meta method=serialize
-	@caption Mitu viimast perioodi
-
-	@property export type=callback callback=callback_get_export_options group=import_export store=no
-	@caption Eksport
-
-	@property sorter type=table group=show
-	@caption Dokumentide järjestamine
-
-	property sort_by type=select table=objects field=meta method=serialize group=show
-	caption Dokumente j&auml;rjestatakse
-
-	property sort_ord type=select table=objects field=meta method=serialize group=show
-
-	@property ip type=table store=no group=ip no_caption=1
-
-	@property frontpage type=checkbox table=objects field=meta method=serialize group=advanced ch_value=1
-	@caption Esilehel
-
-	@property seealso_docs_t type=table group=seealso_docs no_caption=1
-	@caption Vaatalisaks dokumendid
-
-@default group=advanced_ctx
-
-	@property has_ctx type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption Kuva alamkaustu kontekstip&otilde;hiselt
-	
-	@property ctx type=releditor reltype=RELTYPE_CTX field=meta method=serialize mode=manager props=name,status table_fields=name,status table_edit_fields=name,status
-	@caption Kontekstid
 
 	@classinfo relationmgr=yes
 	@classinfo objtable=menu
@@ -219,20 +283,6 @@
 	@classinfo syslog_type=ST_MENU
 
 
-	@groupinfo advanced_p caption=Spetsiaal
-		@groupinfo advanced caption=Spetsiaal parent=advanced_p
-		@groupinfo advanced_ctx caption=Kontekst parent=advanced_p
-
-	@groupinfo keywords caption=Võtmesõnad
-	@groupinfo menus caption=Kaustad
-	@groupinfo relations caption="Vaata lisaks" parent=menus
-	@groupinfo brothers caption=Vennastamine parent=menus
-	@groupinfo docs_from caption="Sisu asukoht" parent=menus
-	@groupinfo seealso_docs caption="Vaata lisaks dokumendid" parent=menus
-	@groupinfo presentation caption=Pildid
-	@groupinfo show caption=Näitamine
-	@groupinfo import_export caption=Eksport submit=no
-	@groupinfo ip caption="IP Aadressid"
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 
@@ -376,7 +426,54 @@ class menu extends class_base
 				$data["value"]["left_pane"] = $ob->prop("left_pane");
 				$data["value"]["right_pane"] = $ob->prop("right_pane");
 				break;
-				
+
+
+			case "target":
+			case "clickable":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "link_behaviour":
+				$data["options"] = array(
+					"target" => "Uues aknas",
+					"clickable" => "Klikitav",
+				);
+				$data["value"]["target"] = $ob->prop("target");
+				$data["value"]["clickable"] = $ob->prop("clickable");
+				break;
+
+
+			case "frontpage":
+			case "mid":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_restrictions":
+				$data["options"] = array(
+					"frontpage" => "Esilehel",
+					"mid" => "Paremal",
+				);
+				$data["value"]["frontpage"] = $ob->prop("frontpage");
+				$data["value"]["mid"] = $ob->prop("mid");
+				break;
+
+
+			case "hide_noact":
+			case "no_menus":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_conditions":
+				$data["options"] = array(
+					"hide_noact" => "Peida ära, kui selle kausta all aktiivseid dokumente ei ole",
+					"no_menus" => "Ilma menüüdeta",
+				);
+				$data["value"]["hide_noact"] = $ob->prop("hide_noact");
+				$data["value"]["no_menus"] = $ob->prop("no_menus");
+				break;
+
+
+
 			case "type":
 				$m = get_instance("menuedit");
 				$data["options"] = $m->get_type_sel();
@@ -859,6 +956,41 @@ class menu extends class_base
 				$ob->set_prop("left_pane",isset($data["value"]["left_pane"]) ? 1 : 0);
 				$ob->set_prop("right_pane",isset($data["value"]["right_pane"]) ? 1 : 0);
 				break;
+
+
+			case "target":
+			case "clickable":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "link_behaviour":
+				$ob->set_prop("target",isset($data["value"]["target"]) ? 1 : 0);
+				$ob->set_prop("clickable",isset($data["value"]["clickable"]) ? 1 : 0);
+				break;
+
+
+			case "frontpage":
+			case "mid":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_restrictions":
+				$ob->set_prop("frontpage",isset($data["value"]["frontpage"]) ? 1 : 0);
+				$ob->set_prop("mid",isset($data["value"]["mid"]) ? 1 : 0);
+				break;
+
+
+			case "hide_noact":
+			case "no_menus":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_conditions":
+				$ob->set_prop("hide_noact",isset($data["value"]["hide_noact"]) ? 1 : 0);
+				$ob->set_prop("no_menus",isset($data["value"]["no_menus"]) ? 1 : 0);
+				break;
+
+
 
 			case "sections":
 				$dar = new aw_array($arr["request"]["erase"]);
