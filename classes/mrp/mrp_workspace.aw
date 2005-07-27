@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.134 2005/07/27 12:46:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.135 2005/07/27 14:17:07 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -512,7 +512,7 @@ class mrp_workspace extends class_base
 				$proj = obj($job->prop("project"));
 				$rpn = substr($prop["name"], 4);
 				$prop["value"] = $proj->prop($rpn);
-if (aw_global_get ("uid") == "voldemar"){ exit ("OK");}
+
 				if ($prop["name"] == "pjp_case_wf")
 				{
 					$this->_pjp_case_wf($arr);
