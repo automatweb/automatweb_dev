@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.29 2005/07/26 19:29:50 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.30 2005/07/27 14:49:40 voldemar Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -23,6 +23,11 @@ class mysql
 		global $DEBUG;
 		// $this->dbh = mysql_connect($server,$username,$password);
 		$this->dbh = mysql_connect($server,$username,$password,false,128);// enables use of mysql load data local
+
+		if (!$this->dbh)
+		{
+			$this->dbh = mysql_connect($server,$username,$password);
+		}
 
 		if (!$this->dbh)
 		{
