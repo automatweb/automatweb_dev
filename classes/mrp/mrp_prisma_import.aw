@@ -1,6 +1,6 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.19 2005/04/27 10:12:35 kristo Exp $
-// mrp_prisma_import.aw - Prisma import 
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_prisma_import.aw,v 1.20 2005/07/27 14:34:29 voldemar Exp $
+// mrp_prisma_import.aw - Prisma import
 /*
 
 @classinfo syslog_type=ST_MRP_PRISMA_IMPORT relationmgr=yes no_status=1
@@ -72,7 +72,7 @@ class mrp_prisma_import extends class_base
 
 		}
 		return $retval;
-	}	
+	}
 
 	/** sync prisma and cur db
 
@@ -83,12 +83,12 @@ class mrp_prisma_import extends class_base
 	{
 		aw_disable_messages();
 		set_time_limit(0);
-		
-		$db = $this->_get_conn();
+
+		$db =& $this->_get_conn();
 
 		// now. sync from them to us
 
-		// get co		
+		// get co
 		$co = $this->_get_co();
 
 		// first, customer categories
@@ -150,7 +150,7 @@ class mrp_prisma_import extends class_base
 		foreach($cats as $id => $nm)
 		{
 			// added
-			$o = obj();	
+			$o = obj();
 			$o->set_class_id(CL_CRM_CATEGORY);
 			$o->set_parent($co->id());
 			$o->set_name($nm);
@@ -172,7 +172,7 @@ class mrp_prisma_import extends class_base
 		return $ws->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
 	}
 
-	function _get_conn()
+	function &_get_conn()
 	{
 		if (!aw_ini_get("prisma.db_server"))
 		{
@@ -225,7 +225,7 @@ class mrp_prisma_import extends class_base
 		}
 		foreach($cust as $id => $dat)
 		{
-			// find category 
+			// find category
 			if ($dat["KliendiTüüpID"] != "")
 			{
 				$ol = new object_list(array(
@@ -247,7 +247,7 @@ class mrp_prisma_import extends class_base
 				continue;
 			}
 			// added
-			$o = obj();	
+			$o = obj();
 			$o->set_class_id(CL_CRM_COMPANY);
 			$o->set_parent($co->id());
 			$o->set_prop("extern_id", $id);
@@ -300,7 +300,7 @@ class mrp_prisma_import extends class_base
 				$c->save();
 				$o->set_prop("firmajuht", $c->id());
 			}
-		
+
 			$p = obj($o->prop("firmajuht"));
 			list($fn, $ln) = trim(explode(" ", $dat["Kontaktisik"]));
 			$p->set_prop("firstname", $fn);
@@ -317,7 +317,7 @@ class mrp_prisma_import extends class_base
 			$c->save();
 			$o->set_prop("contact", $c->id());
 		}
-			
+
 		$a = obj($o->prop("contact"));
 		$a->set_name($dat["Aadress"]);
 		$a->save();
@@ -361,11 +361,11 @@ class mrp_prisma_import extends class_base
 		// get db
 		$proj = array();
 		$db->db_query("
-			SELECT 
+			SELECT
 				*,
 				unix_timestamp(TööAlgus) as TööAlgus,
 				unix_timestamp(TellimuseTähtaeg) as TellimuseTähtaeg
-			FROM 
+			FROM
 				tellimused
 		");
 		while ($row = $db->db_next())
@@ -451,7 +451,7 @@ class mrp_prisma_import extends class_base
 				continue;
 			}
 			// added
-			$o = obj();	
+			$o = obj();
 			$o->set_class_id(CL_MRP_CASE);
 			$o->set_parent($ws->prop("projects_folder"));
 			$o->set_prop("extern_id", $id);
@@ -527,7 +527,7 @@ class mrp_prisma_import extends class_base
 			WHERE
 				TellimuseNr = ".$o->prop("extern_id");
 
-		$db = $this->_get_conn();
+		$db =& $this->_get_conn();
 		if ($db)
 		{
 			//$db->db_query($sql);
@@ -540,17 +540,17 @@ class mrp_prisma_import extends class_base
 		aw_disable_messages();
 
 		// get from db
-		$db = $this->_get_conn();
+		$db =& $this->_get_conn();
 		$co = $this->_get_co();
 
 		$dat = $db->db_fetch_row("
-			SELECT 
+			SELECT
 				*,
 				unix_timestamp(TööAlgus) as TööAlgus,
                                 unix_timestamp(TellimuseTähtaeg) as TellimuseTähtaeg
-			FROM 
-				tellimused 
-			WHERE 
+			FROM
+				tellimused
+			WHERE
 				TellimuseNr = '$id'
 		");
 		if ($dat["TööAlgus"] < 100000)
@@ -592,12 +592,12 @@ class mrp_prisma_import extends class_base
 		{
 			$t = $c_ol->begin();
 		}
-	
+
 
 		if (!$ol->count())
 		{
 			// if not, create
-			$o = obj();	
+			$o = obj();
 			$o->set_class_id(CL_MRP_CASE);
 			//$o->set_parent($co->prop("projects_folder"));
 			$o->set_parent(1256);
@@ -665,13 +665,13 @@ class mrp_prisma_import extends class_base
 
 	function _imp_new_cust($co, $id)
 	{
-		$db = $this->_get_conn();
+		$db =& $this->_get_conn();
 		$dat = $db->db_fetch_row("SELECT * FROM kliendid WHERE KliendiID = '$id'");
 		if (!$dat)
 		{
 			return false;
 		}
-		$o = obj();	
+		$o = obj();
 		$o->set_class_id(CL_CRM_COMPANY);
 		$o->set_parent($co->id());
 		$o->set_prop("extern_id", $id);
@@ -703,8 +703,8 @@ class mrp_prisma_import extends class_base
 				{
 					return PROP_IGNORE;
 				}
-				// read from their table. damn. 
-				$c = $this->_get_conn();
+				// read from their table. damn.
+				$c =& $this->_get_conn();
 				if (!$c)
 				{
 					return PROP_IGNORE;
