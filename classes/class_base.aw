@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.411 2005/07/26 12:07:46 duke Exp $
+// $Id: class_base.aw,v 2.412 2005/07/27 07:29:43 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2469,7 +2469,7 @@ class class_base extends aw_template
 
 			$pname = $val["name"];
 			$getter = "get_" . $pname;
-			if (in_array($getter,$class_methods))
+			if (false && in_array($getter,$class_methods))
 			{
 				$awt->start("getter $getter");
 				$status = $this->inst->$getter($argblock);
