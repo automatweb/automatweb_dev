@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.74 2005/07/01 09:26:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.75 2005/07/27 14:53:30 frgp Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -22,65 +22,99 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 
 /*
 	@classinfo trans=1
-	@default group=general
-	
-	@property caption type=textbox table=objects field=meta method=serialize trans=1
-	@caption Pealkiri
 
-	@property image type=relpicker reltype=RELTYPE_IMAGE table=objects field=meta method=serialize 
-	@caption Pilt
+	@groupinfo general_sub caption="Üldine" parent=general
 
-	@property tpl_lead type=select table=menu group=show
-	@caption Template näitamiseks
-	
-	@property type type=select table=objects field=meta method=serialize trans=1
-	@caption Kasti tüüp
+		@property name type=textbox rel=1 trans=1 table=objects group=general_sub
+		@caption Nimi
+		@comment Objekti nimi
 
-	@property link type=textbox table=menu
-	@caption Link
-	
-	@property link_caption type=textbox table=objects field=meta method=serialize
-	@caption Lingi kirjeldus
-	
-	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption Sisu ei cacheta
+		@property comment type=textbox table=objects group=general_sub
+		@caption Kommentaar
+		@comment Vabas vormis tekst objekti kohta
 
-	@property not_in_search type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption &Auml;ra n&auml;ita otsingu tulemuste lehel
+		@property status type=status trans=1 default=1 table=objects group=general_sub
+		@caption Aktiivne
+		@comment Kas objekt on aktiivne
 	
-	@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
-	
-	@property content_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize
-	@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
-	
-	@property promo_tpl type=select table=objects field=meta method=serialize
-	@caption Template (dokumendi sees)
+		@property caption type=textbox table=objects field=meta method=serialize trans=1 group=general_sub
+		@caption Pealkiri
 
-	@default table=objects
-	@default field=meta
+		@property type type=select table=objects field=meta method=serialize trans=1 group=general_sub
+		@caption Kasti tüüp
 
-	@property no_title type=checkbox ch_value=1  group=show method=serialize
-	@caption Ilma pealkirjata
+		@property link type=textbox table=menu group=general_sub
+		@caption Link
 
-	@property auto_period type=checkbox ch_value=1  group=show method=serialize
-	@caption Perioodilise, automaatselt vahetuva sisuga
+		@property link_caption type=textbox table=objects field=meta method=serialize group=general_sub
+		@caption Lingi kirjeldus
 
-	@property groups type=select multiple=1 size=15 group=show method=serialize
-	@caption Grupid, kellele kasti näidata
+	@groupinfo users caption="Kasutajad" parent=general
 
-	@property use_fld_tpl type=checkbox ch_value=1 group=show method=serialize
-	@caption Kasuta dokumendi asukoha templatet
-	
-	@property all_menus type=checkbox ch_value=1 group=menus method=serialize
-	@caption Näita igal pool
+		@property groups type=select multiple=1 size=15 group=users method=serialize table=objects field=meta
+		@caption Grupid, kellele kasti näidata
 
-	@property section type=table group=menus method=serialize store=no
-	@caption Vali men&uuml;&uuml;d, mille all kasti n&auml;idata
-	
-	@property section_noshow type=table group=menus method=serialize store=no
-	@caption Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata
-	
+@groupinfo show caption=Näitamine
+
+	@groupinfo show_sub caption="Näitamine" parent=show
+
+		@property no_title type=checkbox ch_value=1  group=show_sub method=serialize table=objects field=meta
+		@caption Ilma pealkirjata
+
+		@property show_inact type=checkbox ch_value=1 table=objects field=meta method=serialize group=show_sub
+		@caption N&auml;ita mitteaktiivseid dokumente tekstina
+
+		@property auto_period type=checkbox ch_value=1  group=show_sub method=serialize table=objects field=meta
+		@caption Perioodilise, automaatselt vahetuva sisuga
+
+	@groupinfo container_locations caption="Konteineri näitamise asukohad" parent=show
+
+		@property all_menus type=checkbox ch_value=1 group=container_locations method=serialize table=objects field=meta
+		@caption Näita igal pool
+
+		@property not_in_search type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
+		@caption &Auml;ra n&auml;ita otsingu tulemuste lehel
+
+		@property trans_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
+		@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
+
+		@property content_all_langs type=checkbox ch_value=1 table=objects field=meta method=serialize group=container_locations
+		@caption Sisu n&auml;idatakse k&otilde;ikides keeltes
+
+		@property section type=table group=container_locations method=serialize store=no
+		@caption Vali men&uuml;&uuml;d, mille all kasti n&auml;idata
+
+		@property section_noshow type=table group=container_locations method=serialize store=no
+		@caption Vali men&uuml;&uuml;d, mille all kasti EI n&auml;idata
+
+	@groupinfo doc_ord caption="Dokumentide järjestamine" parent=show
+
+		@property sort_by type=select table=objects field=meta method=serialize group=doc_ord
+		@caption Dokumente j&auml;rjestatakse
+
+		@property sort_ord type=select table=objects field=meta method=serialize group=doc_ord
+
+@groupinfo look caption="Välimus"
+
+	@groupinfo look_sub caption="Välimus" parent=look
+
+		@property image type=relpicker reltype=RELTYPE_IMAGE table=objects field=meta method=serialize group=look_sub
+		@caption Pilt
+
+	@groupinfo templates caption="Kujunduspõhjad" parent=look
+
+		@property tpl_lead type=select table=menu group=templates
+		@caption Template näitamiseks
+
+
+		@property use_fld_tpl type=checkbox ch_value=1 group=templates method=serialize table=objects field=meta
+		@caption Kasuta dokumendi asukoha templatet
+
+		@property promo_tpl type=select table=objects field=meta method=serialize group=templates
+		@caption Template (dokumendi sees)
+
+@groupinfo menus caption="Sisu seaded"
+
 	@property last_menus type=table group=menus method=serialize store=no
 	@caption Vali menüüd, mille alt viimaseid dokumente võetakse
 
@@ -90,21 +124,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE,CL_DOCUMENT, on_delete_document)
 	@property start_ndocs type=textbox size=4 group=menus table=objects field=meta method=serialize
 	@caption Mitu algusest &auml;ra j&auml;tta
 
-	@property sort_by type=select table=objects field=meta method=serialize group=show
-	@caption Dokumente j&auml;rjestatakse
+	@property is_dyn type=checkbox ch_value=1 table=objects field=meta method=serialize group=menus
+	@caption Sisu ei cacheta
 
-	@property sort_ord type=select table=objects field=meta method=serialize group=show
 
-	@property show_inact type=checkbox ch_value=1 table=objects field=meta method=serialize group=show
-	@caption N&auml;ita mitteaktiivseid dokumente tekstina
+
+
+
 
 	@classinfo relationmgr=yes
 	@classinfo syslog_type=ST_PROMO
 
 	@tableinfo menu index=id master_table=objects master_index=oid
 
-	@groupinfo menus caption=Kaustad
-	@groupinfo show caption=Näitamine
 
 	@reltype ASSIGNED_MENU value=1 clid=CL_MENU
 	@caption näita menüü juures

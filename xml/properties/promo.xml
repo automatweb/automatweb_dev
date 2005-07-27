@@ -1,235 +1,263 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>name</name>
+            <type>textbox</type>
+            <rel>1</rel>
+            <trans>1</trans>
+            <table>objects</table>
+            <group>general_sub</group>
+            <field>name</field>
+            <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
+      </property>
+      <property>
+            <name>comment</name>
+            <type>textbox</type>
+            <table>objects</table>
+            <group>general_sub</group>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
+      </property>
+      <property>
+            <name>status</name>
+            <type>status</type>
+            <trans>1</trans>
+            <default>1</default>
+            <table>objects</table>
+            <group>general_sub</group>
+            <field>status</field>
+            <caption>Aktiivne</caption>
+            <comment>Kas objekt on aktiivne</comment>
+      </property>
+      <property>
             <name>caption</name>
-            <group>general</group>
             <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <trans>1</trans>
+            <group>general_sub</group>
             <caption>Pealkiri</caption>
       </property>
       <property>
-            <name>image</name>
-            <group>general</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_IMAGE</reltype>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Pilt</caption>
-      </property>
-      <property>
-            <name>tpl_lead</name>
-            <group>show</group>
-            <type>select</type>
-            <table>menu</table>
-            <field>tpl_lead</field>
-            <caption>Template näitamiseks</caption>
-      </property>
-      <property>
             <name>type</name>
-            <group>general</group>
             <type>select</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <trans>1</trans>
+            <group>general_sub</group>
             <caption>Kasti tüüp</caption>
       </property>
       <property>
             <name>link</name>
-            <group>general</group>
             <type>textbox</type>
             <table>menu</table>
+            <group>general_sub</group>
             <field>link</field>
             <caption>Link</caption>
       </property>
       <property>
             <name>link_caption</name>
-            <group>general</group>
             <type>textbox</type>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>general_sub</group>
             <caption>Lingi kirjeldus</caption>
       </property>
       <property>
-            <name>is_dyn</name>
-            <group>general</group>
+            <name>groups</name>
+            <type>select</type>
+            <multiple>1</multiple>
+            <size>15</size>
+            <group>users</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Grupid, kellele kasti näidata</caption>
+      </property>
+      <property>
+            <name>no_title</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>show_sub</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Ilma pealkirjata</caption>
+      </property>
+      <property>
+            <name>show_inact</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <caption>Sisu ei cacheta</caption>
+            <group>show_sub</group>
+            <caption>N&amp;auml;ita mitteaktiivseid dokumente tekstina</caption>
+      </property>
+      <property>
+            <name>auto_period</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>show_sub</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Perioodilise, automaatselt vahetuva sisuga</caption>
+      </property>
+      <property>
+            <name>all_menus</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <group>container_locations</group>
+            <method>serialize</method>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Näita igal pool</caption>
       </property>
       <property>
             <name>not_in_search</name>
-            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>container_locations</group>
             <caption>&amp;Auml;ra n&amp;auml;ita otsingu tulemuste lehel</caption>
       </property>
       <property>
             <name>trans_all_langs</name>
-            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>container_locations</group>
             <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
       </property>
       <property>
             <name>content_all_langs</name>
-            <group>general</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
+            <group>container_locations</group>
             <caption>Sisu n&amp;auml;idatakse k&amp;otilde;ikides keeltes</caption>
       </property>
       <property>
-            <name>promo_tpl</name>
-            <group>general</group>
-            <type>select</type>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <caption>Template (dokumendi sees)</caption>
-      </property>
-      <property>
-            <name>no_title</name>
-            <group>show</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <method>serialize</method>
-            <caption>Ilma pealkirjata</caption>
-      </property>
-      <property>
-            <name>auto_period</name>
-            <group>show</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <method>serialize</method>
-            <caption>Perioodilise, automaatselt vahetuva sisuga</caption>
-      </property>
-      <property>
-            <name>groups</name>
-            <group>show</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>select</type>
-            <multiple>1</multiple>
-            <size>15</size>
-            <method>serialize</method>
-            <caption>Grupid, kellele kasti näidata</caption>
-      </property>
-      <property>
-            <name>use_fld_tpl</name>
-            <group>show</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <method>serialize</method>
-            <caption>Kasuta dokumendi asukoha templatet</caption>
-      </property>
-      <property>
-            <name>all_menus</name>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <method>serialize</method>
-            <caption>Näita igal pool</caption>
-      </property>
-      <property>
             <name>section</name>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
             <type>table</type>
+            <group>container_locations</group>
             <method>serialize</method>
             <store>no</store>
+            <field>section</field>
             <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti n&amp;auml;idata</caption>
       </property>
       <property>
             <name>section_noshow</name>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
             <type>table</type>
+            <group>container_locations</group>
             <method>serialize</method>
             <store>no</store>
+            <field>section_noshow</field>
             <caption>Vali men&amp;uuml;&amp;uuml;d, mille all kasti EI n&amp;auml;idata</caption>
       </property>
       <property>
-            <name>last_menus</name>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>table</type>
-            <method>serialize</method>
-            <store>no</store>
-            <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
-      </property>
-      <property>
-            <name>ndocs</name>
-            <group>menus</group>
-            <table>menu</table>
-            <field>ndocs</field>
-            <type>textbox</type>
-            <size>4</size>
-            <caption>Mitu viimast dokumenti</caption>
-      </property>
-      <property>
-            <name>start_ndocs</name>
-            <group>menus</group>
-            <table>objects</table>
-            <field>meta</field>
-            <type>textbox</type>
-            <size>4</size>
-            <method>serialize</method>
-            <caption>Mitu algusest &amp;auml;ra j&amp;auml;tta</caption>
-      </property>
-      <property>
             <name>sort_by</name>
-            <group>show</group>
+            <type>select</type>
             <table>objects</table>
             <field>meta</field>
-            <type>select</type>
             <method>serialize</method>
+            <group>doc_ord</group>
             <caption>Dokumente j&amp;auml;rjestatakse</caption>
       </property>
       <property>
             <name>sort_ord</name>
-            <group>show</group>
+            <type>select</type>
             <table>objects</table>
             <field>meta</field>
-            <type>select</type>
             <method>serialize</method>
+            <group>doc_ord</group>
       </property>
       <property>
-            <name>show_inact</name>
-            <group>show</group>
+            <name>image</name>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGE</reltype>
             <table>objects</table>
             <field>meta</field>
+            <method>serialize</method>
+            <group>look_sub</group>
+            <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>tpl_lead</name>
+            <type>select</type>
+            <table>menu</table>
+            <group>templates</group>
+            <field>tpl_lead</field>
+            <caption>Template näitamiseks</caption>
+      </property>
+      <property>
+            <name>use_fld_tpl</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
+            <group>templates</group>
             <method>serialize</method>
-            <caption>N&amp;auml;ita mitteaktiivseid dokumente tekstina</caption>
+            <table>objects</table>
+            <field>meta</field>
+            <caption>Kasuta dokumendi asukoha templatet</caption>
+      </property>
+      <property>
+            <name>promo_tpl</name>
+            <type>select</type>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>templates</group>
+            <caption>Template (dokumendi sees)</caption>
+      </property>
+      <property>
+            <name>last_menus</name>
+            <type>table</type>
+            <group>menus</group>
+            <method>serialize</method>
+            <store>no</store>
+            <field>last_menus</field>
+            <caption>Vali menüüd, mille alt viimaseid dokumente võetakse</caption>
+      </property>
+      <property>
+            <name>ndocs</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>menus</group>
+            <table>menu</table>
+            <field>ndocs</field>
+            <caption>Mitu viimast dokumenti</caption>
+      </property>
+      <property>
+            <name>start_ndocs</name>
+            <type>textbox</type>
+            <size>4</size>
+            <group>menus</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Mitu algusest &amp;auml;ra j&amp;auml;tta</caption>
+      </property>
+      <property>
+            <name>is_dyn</name>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>menus</group>
+            <caption>Sisu ei cacheta</caption>
       </property>
       <classinfo>
             <trans>1</trans>
@@ -237,12 +265,43 @@
             <syslog_type>ST_PROMO</syslog_type>
       </classinfo>
       <groupinfo>
-            <menus>
-                  <caption>Kaustad</caption>
-            </menus>
+            <general_sub>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general_sub>
+            <users>
+                  <caption>Kasutajad</caption>
+                  <parent>general</parent>
+            </users>
             <show>
                   <caption>Näitamine</caption>
             </show>
+            <show_sub>
+                  <caption>Näitamine</caption>
+                  <parent>show</parent>
+            </show_sub>
+            <container_locations>
+                  <caption>Konteineri näitamise asukohad</caption>
+                  <parent>show</parent>
+            </container_locations>
+            <doc_ord>
+                  <caption>Dokumentide järjestamine</caption>
+                  <parent>show</parent>
+            </doc_ord>
+            <look>
+                  <caption>Välimus</caption>
+            </look>
+            <look_sub>
+                  <caption>Välimus</caption>
+                  <parent>look</parent>
+            </look_sub>
+            <templates>
+                  <caption>Kujunduspõhjad</caption>
+                  <parent>look</parent>
+            </templates>
+            <menus>
+                  <caption>Sisu seaded</caption>
+            </menus>
       </groupinfo>
       <tableinfo>
             <menu>
