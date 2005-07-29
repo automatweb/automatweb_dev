@@ -1,33 +1,19 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.142 2005/06/27 12:11:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.143 2005/07/29 12:21:34 frgp Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
-	@default group=general
-	@default table=objects
-	
-	@property subclass type=hidden
-	
-	/@property ord table=objects field=jrk type=text size=5 
-	/@caption J&auml;rjekord
+
+
+@default group=general
+
+	@property subclass type=hidden table=objects
 
 	@property file type=fileupload table=images form=+emb
 	@caption Pilt
 
 	@property dimensions type=text group=general,resize store=no
 	@caption Mõõtmed
-	
-	/@property file_show type=text store=no editonly=1
-	/@caption Eelvaade 
-
-	@property file2 type=fileupload group=img2 table=objects field=meta method=serialize 
-	@caption Suur pilt
-
-	/@property file_show2 type=text group=img2 store=no editonly=1
-	/@caption Eelvaade
-
-	@property file2_del type=checkbox ch_value=1 group=img2 store=no
-	@caption Kustuta suur pilt
 
 	@property comment table=objects field=comment type=textbox
 	@caption Pildi allkiri
@@ -38,46 +24,73 @@
 	@property alt type=textbox table=objects field=meta method=serialize
 	@caption Alt
 
-	@property link type=textbox table=images field=link group=settings
+	@property link type=textbox table=images field=link
 	@caption Link
 
-	@property newwindow type=checkbox ch_value=1 table=images field=newwindow group=settings
+	/@property file_show type=text store=no editonly=1
+	/@caption Eelvaade 
+
+@groupinfo show caption="Näitamine"
+@default group=show
+
+	@property show_conditions type=chooser multiple=1 store=no
+	@caption Tingimused
+
+	@property newwindow type=checkbox ch_value=1 table=images field=newwindow
 	@caption Uues aknas
 
-	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize group=settings
+	@property no_print type=checkbox ch_value=1 table=objects field=meta method=serialize
 	@caption &Auml;ra n&auml;ita print-vaates
 
-	@groupinfo settings caption="Seaded"
-	@groupinfo img2 caption="Suur pilt"
-	@groupinfo resize caption="Muuda suurust"
-	@groupinfo resize_big caption="Muuda suure pildi suurust"
-	@classinfo syslog_type=ST_IMAGE
-		
-	@tableinfo images index=id master_table=objects master_index=oid	
+	@property ord type=textbox size=3 table=objects field=jrk
+	@caption J&auml;rjekord
 
+@groupinfo img2 caption="Suur pilt"
+@default group=img2
 
-	@property new_w type=textbox group=resize field=meta method=serialize size=6 store=no
+	@property file2 type=fileupload table=objects field=meta method=serialize
+	@caption Suur pilt
+
+	@property file2_del type=checkbox ch_value=1 store=no
+	@caption Kustuta suur pilt
+
+@groupinfo resize caption="Muuda suurust"
+@default group=resize
+
+	@property new_w type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus laius
 
-	@property new_h type=textbox group=resize field=meta method=serialize size=6 store=no
+	@property new_h type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus k&otilde;rgus
 
-	@property dimensions_big type=text group=resize_big store=no
+	@property do_resize type=submit field=meta method=serialize value=Muuda store=no
+
+@groupinfo resize_big caption="Muuda suure pildi suurust"
+@default group=resize_big
+
+	@property dimensions_big type=text store=no
 	@caption Mõõtmed
 	
-	@property new_w_big type=textbox group=resize_big field=meta method=serialize size=6 store=no
+	@property new_w_big type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus laius (suur)
 
-	@property new_h_big type=textbox group=resize_big field=meta method=serialize size=6 store=no
+	@property new_h_big type=textbox field=meta method=serialize size=6 store=no
 	@caption Uus k&otilde;rgus (suur)
 
-	@property do_resize type=submit field=meta method=serialize group=resize value=Muuda store=no
 
-	@property ord type=textbox size=3 table=objects field=jrk group=settings
-	@caption J&auml;rjekord
+	/@property ord table=objects field=jrk type=text size=5
+	/@caption J&auml;rjekord
+
+	/@property file_show2 type=text group=img2 store=no editonly=1
+	/@caption Eelvaade
 
 	@property resize_warn type=text store=no
 	@caption Info
+
+
+	@classinfo syslog_type=ST_IMAGE
+
+	@tableinfo images index=id master_table=objects master_index=oid
 
 	@reltype MOD_COMMENT value=1 clid=CL_COMMENT
 	@caption Moderaatori kommentaar
@@ -637,6 +650,23 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+
+
+			case "newwindow":
+			case "no_print":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_conditions":
+				$prop["options"] = array(
+					"newwindow" => "Uues aknas",
+					"no_print" => "Ära näita print-vaates",
+				);
+				$prop["value"]["newwindow"] = $arr['obj_inst']->prop("newwindow");
+				$prop["value"]["no_print"] = $arr['obj_inst']->prop("no_print");
+				break;
+
+
 			case "resize_warn":
 				if (is_oid($arr["obj_inst"]->id()))
 				{
@@ -727,6 +757,19 @@ class image extends class_base
 		$retval = PROP_OK;
 		switch ($prop["name"])
 		{
+
+
+			case "newwindow":
+			case "no_print":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "show_conditions":
+				$arr['obj_inst']->set_prop("newwindow",isset($prop["value"]["newwindow"]) ? 1 : 0);
+				$arr['obj_inst']->set_prop("no_print",isset($prop["value"]["no_print"]) ? 1 : 0);
+				break;
+
+
 			case "file":
 				$set = false;
 				// see on siis, kui tuleb vormist

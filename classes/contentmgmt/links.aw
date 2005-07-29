@@ -1,79 +1,76 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.5 2005/04/01 11:52:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.6 2005/07/29 12:18:53 frgp Exp $
 
 /*
 
-@groupinfo Javascript caption=Javascript
-@groupinfo Pilt caption=Pilt
+
 
 @tableinfo extlinks index=id master_table=objects master_index=oid
 
-@default group=general
-
-@property comment type=textarea cols=30 rows=5 table=objects 
+@property comment type=textarea cols=30 rows=5 table=objects group=general
 @caption Kommentaar lingikogusse
 
-@default table=extlinks
-
-@property url type=textbox 
+@property url type=textbox table=extlinks group=general
 @caption URL
 
-@property docid type=hidden table=extlinks 
+@property docid type=hidden table=extlinks group=general
 
-@property hits type=text 
+@property hits type=text table=extlinks group=general
 @caption Klikke
 
-@property url_int_text type=text store=no
+@property url_int_text type=text store=no group=general
 @caption Saidi sisene link
 
-@property alt type=textbox table=objects field=meta method=serialize search=1
+@property alt type=textbox table=objects field=meta method=serialize search=1 group=general
 @caption Alt tekst
 
-@property newwindow type=checkbox ch_value=1 search=1
+@property newwindow type=checkbox ch_value=1 search=1 table=extlinks group=general
 @caption Uues aknas
 
-@property doclinkcollection type=checkbox ch_value=1  
+@property doclinkcollection type=checkbox ch_value=1 table=extlinks group=general
 @caption Dokumendi lingikogusse
 
-@default group=Javascript
-@default table=objects
-@default field=meta
-@default method=serialize
 
-@property use_javascript type=checkbox ch_value=1 search=1
-@caption Kasuta javascripti
+@groupinfo Javascript caption=Javascript table=extlinks
 
-@property newwinwidth type=textbox ch_value=1  
-@caption Uue akna laius
+	@property use_javascript type=checkbox ch_value=1 search=1 group=Javascript table=objects field=meta method=serialize
+	@caption Kasuta javascripti
 
-@property newwinheight type=textbox ch_value=1 
-@caption Uue akna k&otilde;rgus
+	@property newwinwidth type=textbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Uue akna laius
 
-@property newwintoolbar type=checkbox ch_value=1  
-@caption Toolbar
+	@property newwinheight type=textbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Uue akna k&otilde;rgus
 
-@property newwinlocation type=checkbox ch_value=1  
-@caption Address bar
+	@property js_attributes type=chooser multiple=1 store=no group=Javascript
+	@caption Atribuudid
 
-@property newwinmenu type=checkbox ch_value=1  
-@caption Men&uuml;&uuml;d
+	@property newwintoolbar type=checkbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Toolbar
 
-@property newwinscroll type=checkbox ch_value=1  
-@caption Skrollbarid
+	@property newwinlocation type=checkbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Address bar
 
-@default group=Pilt
+	@property newwinmenu type=checkbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Men&uuml;&uuml;d
 
-@property link_image type=fileupload store=no editonly=1
-@caption Pilt
+	@property newwinscroll type=checkbox ch_value=1 group=Javascript table=objects field=meta method=serialize
+	@caption Skrollbarid
 
-@property link_image_show type=text store=no editonly=1
-@caption 
+@groupinfo Pilt caption=Pilt
 
-@property link_image_check_active type=checkbox ch_value=1 
-@caption Pilt aktiivne
+	@property link_image type=fileupload store=no editonly=1 group=Pilt
+	@caption Pilt
 
-@property link_image_active_until type=date_select 
-@caption Pilt aktiivne kuni
+	@property link_image_show type=text store=no editonly=1 group=Pilt
+	@caption 
+
+	@property link_image_check_active type=checkbox ch_value=1 group=Pilt table=objects field=meta method=serialize
+	@caption Pilt aktiivne
+
+	@property link_image_active_until type=date_select group=Pilt table=objects field=meta method=serialize
+	@caption Pilt aktiivne kuni
+
 
 @classinfo no_status=1 syslog_type=ST_LINKS
 
@@ -229,6 +226,29 @@ class links extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+
+
+			case "newwintoolbar":
+			case "newwinlocation":
+			case "newwinmenu":
+			case "newwinscroll":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "js_attributes":
+				$prop["options"] = array(
+					"newwintoolbar" => "Tööriistariba",
+					"newwinlocation" => "Aadressi riba",
+					"newwinmenu" => "Menüüd",
+					"newwinscroll" => "Kerimisriba",
+				);
+				$prop["value"]["newwintoolbar"] = $arr['obj_inst']->prop("newwintoolbar");
+				$prop["value"]["newwinlocation"] = $arr['obj_inst']->prop("newwinlocation");
+				$prop["value"]["newwinmenu"] = $arr['obj_inst']->prop("newwinmenu");
+				$prop["value"]["newwinscroll"] = $arr['obj_inst']->prop("newwinscroll");
+				break;
+
+
 			case "link_image_show":
 				$img = new object_list(array(
 					"parent" => $arr["obj_inst"]->id(),
@@ -275,6 +295,23 @@ class links extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+
+
+			case "newwintoolbar":
+			case "newwinlocation":
+			case "newwinmenu":
+			case "newwinscroll":
+				$retval = PROP_IGNORE;
+				break;
+
+			case "js_attributes":
+				$arr['obj_inst']->set_prop("newwintoolbar",isset($prop["value"]["newwintoolbar"]) ? 1 : 0);
+				$arr['obj_inst']->set_prop("newwinlocation",isset($prop["value"]["newwinlocation"]) ? 1 : 0);
+				$arr['obj_inst']->set_prop("newwinmenu",isset($prop["value"]["newwinmenu"]) ? 1 : 0);
+				$arr['obj_inst']->set_prop("newwinscroll",isset($prop["value"]["newwinscroll"]) ? 1 : 0);
+				break;
+
+
 			case "link_image":
 				$old_file = 0;
 

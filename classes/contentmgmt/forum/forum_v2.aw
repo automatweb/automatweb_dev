@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.82 2005/07/25 10:26:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.83 2005/07/29 12:22:57 frgp Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -10,138 +10,187 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@classinfo syslog_type=ST_FORUM
 	@classinfo relationmgr=yes
 
-	@default table=objects
-	@default group=general
-	@default field=meta
-	@default method=serialize
+@default table=objects
 
-	@property show_logged type=checkbox ch_value=1
-	@caption Kuva sisseloginud kasutaja e-posti ja nime automaatselt
-	
-	@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
-	@caption Teemade kaust
-	@comment Sellest kaustast võetakse foorumi teemad
-	
-	@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
-	@caption Listiliikmete kaust
-	@comment Sellesse kausta paigutatakse "listi liikmete" objektid
 
-	@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
-	@caption KKK kaust
-	@comment Sellesse kausta paigutatakse KKK dokumendid
+	@groupinfo general_sub caption="Üldine" parent=general
+	@default group=general_sub
 
-	@property topics_on_page type=select
-	@caption Teemasid lehel
+		@property name type=textbox rel=1 trans=1
+		@caption Nimi
+		@comment Objekti nimi
 
-	@property comments_on_page type=select
-	@caption Kommentaare lehel
+		@property comment type=textbox
+		@caption Kommentaar
+		@comment Vabas vormis tekst objekti kohta
 
-	@property topic_depth type=select group=topic_selector default=0 
-	@caption Teemade sügavus
+		@property status type=status trans=1 default=1
+		@caption Aktiivne
+		@comment Kas objekt on aktiivne
 
-	@property topic_selector type=table group=topic_selector no_caption=1
-	@caption Teemade tasemed
 
-	@property topic type=hidden store=no group=contents
-	@caption Topic ID (sys)
+@default field=meta
+@default method=serialize
 
-	@property show type=callback callback=callback_gen_contents store=no no_caption=1 group=contents
-	@caption Foorumi sisu
 
-	@property style_donor type=relpicker group=styles reltype=RELTYPE_STYLE_DONOR
-	@caption Stiilidoonor
-	
-	@property style_new_topic_row type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema lisamise stiil
-	
-	@property style_caption type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Tabeli pealkirja stiil
-	
-	@property style_l1_folder type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema kausta stiil
+		@property topic_folder type=relpicker reltype=RELTYPE_TOPIC_FOLDER
+		@caption Teemade kaust
+		@comment Sellest kaustast võetakse foorumi teemad
 
-	@property style_folder_caption type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema kausta pealkirja stiil
-	
-	@property style_folder_topic_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema kausta arvu stiil
-	
-	@property style_folder_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema kausta vastuste arvu stiil
-	
-	@property style_folder_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema kausta viimase vastuse stiil
-	
-	@property style_forum_yah type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Foorumi asukohariba stiil
-	
-	@property style_topic_caption type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema pealkirja stiil
-	
-	@property style_topic_replies type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema vastuste arvu stiil
-	
-	@property style_topic_author type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema autori stiil
-	
-	@property style_topic_last_post type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema viimase vastuse stiil
+		@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
+		@caption Listiliikmete kaust
+		@comment Sellesse kausta paigutatakse "listi liikmete" objektid
 
-	@property style_comment_count type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Vastuste arvu stiil
-	
-	@property style_comment_creator type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Teema autori stiil
+		@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
+		@caption KKK kaust
+		@comment Sellesse kausta paigutatakse KKK dokumendid
 
-	@property style_comment_user type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Vastuse autori stiil
 
-	@property style_comment_time type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Vastuse aja stiil
-
-	@property style_comment_text type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Vastuse teksti stiil
-
-	@property style_form_caption type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Sisestusvormi pealkirja stiil
-
-	@property style_form_text type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Sisestusvormi teksti stiil
-
-	@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
-	@caption Sisestusvormi elemendi stiil
-
-	@property import_xml_file type=fileupload store=no group=import
-	@caption Vali XML fail
-
-	--------------MEILISEADED-------------
+	@groupinfo mail_settings caption="Meiliseaded" parent=general
 	@default group=mail_settings
-	
-	@property answers_to_mail type=checkbox field=meta method=serialize ch_value=1
-	@caption Soovi korral vastused meiliga
-	
-	@property mail_from type=textbox field=meta method=serialize
-	@caption Kellelt
-	comment Default on kommenteerija nimi
-	
-	@property mail_address type=textbox field=meta method=serialize
-	@caption E-maili aadress kellelt
-	comment Default - Kommenteerija e-mail
-	
-	@property mail_subject type=textbox field=meta method=serialize
-	@caption Maili subject
-	@comment Kui määramata, siis foorumi topic
-	-----------------------------------------
-	
-	@property mail_from type=textbox field=meta method=serialize
-	@caption E-mail kellelt
-	
-	@groupinfo contents caption=Sisu submit=no
-	@groupinfo styles caption=Stiilid
-	@groupinfo settings caption=Seadistused
+
+		@property answers_to_mail type=checkbox ch_value=1
+		@caption Soovi korral vastused meiliga
+
+#		@property mail_from type=textbox field=meta method=serialize
+#		@caption Kellelt
+#		comment Default on kommenteerija nimi
+
+		@property mail_from type=textbox
+		@caption E-mail kellelt
+
+		@property mail_address type=textbox
+		@caption E-maili aadress kellelt
+		comment Default - Kommenteerija e-mail
+
+		@property mail_subject type=textbox
+		@caption Maili subject
+		@comment Kui määramata, siis foorumi topic
+
+	@groupinfo users caption="Kasutajad" parent=general
+	@default group=users
+
+		@property show_logged type=checkbox ch_value=1
+		@caption Kuva sisseloginud kasutaja e-posti ja nime automaatselt
+
+@groupinfo look caption="Välimus"
+
+	@groupinfo styles caption="Stiilid" parent=look
+	@default group=styles
+
+		@property style_general_subtitle type=text store=no subtitle=1
+		@caption Üldine
+
+			@property style_donor type=relpicker reltype=RELTYPE_STYLE_DONOR
+			@caption Stiilidoonor
+
+			@property style_caption type=relpicker reltype=RELTYPE_STYLE
+			@caption Tabeli pealkirja stiil
+
+			@property style_forum_yah type=relpicker reltype=RELTYPE_STYLE
+			@caption Foorumi asukohariba stiil
+
+		@property thread_folder_subtitle type=text store=no subtitle=1
+		@caption Teema kaust
+
+			@property style_l1_folder type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema kausta stiil
+
+			@property style_folder_caption type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema kausta pealkirja stiil
+
+			@property style_folder_topic_count type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema kausta arvu stiil
+
+			@property style_folder_comment_count type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema kausta vastuste arvu stiil
+
+			@property style_folder_last_post type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema kausta viimase vastuse stiil
+
+		@property thread_styles_subtitle type=text store=no subtitle=1
+		@caption Teema
+
+			@property style_new_topic_row type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema lisamise stiil
+
+			@property style_topic_caption type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema pealkirja stiil
+
+			@property style_topic_replies type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema vastuste arvu stiil
+
+			@property style_topic_author type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema autori stiil
+
+			@property style_topic_last_post type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema viimase vastuse stiil
+
+			@property style_comment_creator type=relpicker reltype=RELTYPE_STYLE
+			@caption Teema autori stiil
+
+		@property answer_style_subtitle type=text store=no subtitle=1
+		@caption Vastus
+
+			@property style_comment_count type=relpicker reltype=RELTYPE_STYLE
+			@caption Vastuste arvu stiil
+
+			@property style_comment_user type=relpicker reltype=RELTYPE_STYLE
+			@caption Vastuse autori stiil
+
+			@property style_comment_time type=relpicker reltype=RELTYPE_STYLE
+			@caption Vastuse aja stiil
+
+			@property style_comment_text type=relpicker reltype=RELTYPE_STYLE
+			@caption Vastuse teksti stiil
+
+		@property input_form_subtitle type=text store=no subtitle=1
+		@caption Sisestusvorm
+
+			@property style_form_caption type=relpicker reltype=RELTYPE_STYLE
+			@caption Sisestusvormi pealkirja stiil
+
+			@property style_form_text type=relpicker reltype=RELTYPE_STYLE
+			@caption Sisestusvormi teksti stiil
+
+			@property style_form_element type=relpicker group=styles reltype=RELTYPE_STYLE
+			@caption Sisestusvormi elemendi stiil
+
+@groupinfo settings caption="Sisu seaded"
+
 	@groupinfo topic_selector caption=Teemad parent=settings
+	@default group=topic_selector
+
+		@property topics_on_page type=select
+		@caption Teemasid lehel
+
+		@property comments_on_page type=select
+		@caption Kommentaare lehel
+
+		@property topic_depth type=select default=0
+		@caption Teemade sügavus
+
+		@property topic_selector type=table no_caption=1
+		@caption Teemade tasemed
+
 	@groupinfo import caption=Import parent=settings
-	@groupinfo mail_settings caption="Meiliseaded" parent=settings
+	@default group=import
+
+		@property import_xml_file type=fileupload store=no
+		@caption Vali XML fail
+
+	@groupinfo contents caption="Eelvaade" submit=no
+	@default group=contents
+
+		@property topic type=hidden store=no
+		@caption Topic ID (sys)
+
+		@property show type=callback callback=callback_gen_contents store=no no_caption=1
+		@caption Foorumi sisu
+
+
+
+
 
 	@reltype TOPIC_FOLDER value=1 clid=CL_MENU
 	@caption Teemade kaust

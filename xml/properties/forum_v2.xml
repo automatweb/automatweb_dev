@@ -1,19 +1,40 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>show_logged</name>
+            <name>name</name>
             <table>objects</table>
-            <group>general</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Kuva sisseloginud kasutaja e-posti ja nime automaatselt</caption>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <rel>1</rel>
+            <trans>1</trans>
+            <field>name</field>
+            <caption>Nimi</caption>
+            <comment>Objekti nimi</comment>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>comment</field>
+            <caption>Kommentaar</caption>
+            <comment>Vabas vormis tekst objekti kohta</comment>
+      </property>
+      <property>
+            <name>status</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>status</type>
+            <trans>1</trans>
+            <default>1</default>
+            <field>status</field>
+            <caption>Aktiivne</caption>
+            <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
             <name>topic_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -24,7 +45,7 @@
       <property>
             <name>address_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -37,7 +58,7 @@
       <property>
             <name>faq_folder</name>
             <table>objects</table>
-            <group>general</group>
+            <group>general_sub</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
@@ -46,64 +67,63 @@
             <comment>Sellesse kausta paigutatakse KKK dokumendid</comment>
       </property>
       <property>
-            <name>topics_on_page</name>
+            <name>answers_to_mail</name>
             <table>objects</table>
-            <group>general</group>
+            <group>mail_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Teemasid lehel</caption>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Soovi korral vastused meiliga</caption>
       </property>
       <property>
-            <name>comments_on_page</name>
+            <name>mail_from</name>
             <table>objects</table>
-            <group>general</group>
+            <group>mail_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Kommentaare lehel</caption>
+            <type>textbox</type>
+            <caption>E-mail kellelt</caption>
       </property>
       <property>
-            <name>topic_depth</name>
+            <name>mail_address</name>
             <table>objects</table>
-            <group>topic_selector</group>
+            <group>mail_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>select</type>
-            <caption>Teemade sügavus</caption>
+            <type>textbox</type>
+            <caption>E-maili aadress kellelt</caption>
       </property>
       <property>
-            <name>topic_selector</name>
+            <name>mail_subject</name>
             <table>objects</table>
-            <group>topic_selector</group>
+            <group>mail_settings</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>table</type>
-            <no_caption>1</no_caption>
+            <type>textbox</type>
+            <caption>Maili subject</caption>
+            <comment>Kui määramata, siis foorumi topic</comment>
+      </property>
+      <property>
+            <name>show_logged</name>
+            <table>objects</table>
+            <group>users</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Kuva sisseloginud kasutaja e-posti ja nime automaatselt</caption>
+      </property>
+      <property>
+            <name>style_general_subtitle</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
             <store>no</store>
-            <caption>Teemade tasemed</caption>
-      </property>
-      <property>
-            <name>topic</name>
-            <table>objects</table>
-            <group>contents</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>hidden</type>
-            <store>no</store>
-            <caption>Topic ID (sys)</caption>
-      </property>
-      <property>
-            <name>show</name>
-            <table>objects</table>
-            <group>contents</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>callback</type>
-            <callback>callback_gen_contents</callback>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <caption>Foorumi sisu</caption>
+            <subtitle>1</subtitle>
+            <caption>Üldine</caption>
       </property>
       <property>
             <name>style_donor</name>
@@ -116,16 +136,6 @@
             <caption>Stiilidoonor</caption>
       </property>
       <property>
-            <name>style_new_topic_row</name>
-            <table>objects</table>
-            <group>styles</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_STYLE</reltype>
-            <caption>Teema lisamise stiil</caption>
-      </property>
-      <property>
             <name>style_caption</name>
             <table>objects</table>
             <group>styles</group>
@@ -134,6 +144,27 @@
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
             <caption>Tabeli pealkirja stiil</caption>
+      </property>
+      <property>
+            <name>style_forum_yah</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Foorumi asukohariba stiil</caption>
+      </property>
+      <property>
+            <name>thread_folder_subtitle</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Teema kaust</caption>
       </property>
       <property>
             <name>style_l1_folder</name>
@@ -186,14 +217,25 @@
             <caption>Teema kausta viimase vastuse stiil</caption>
       </property>
       <property>
-            <name>style_forum_yah</name>
+            <name>thread_styles_subtitle</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Teema</caption>
+      </property>
+      <property>
+            <name>style_new_topic_row</name>
             <table>objects</table>
             <group>styles</group>
             <field>meta</field>
             <method>serialize</method>
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
-            <caption>Foorumi asukohariba stiil</caption>
+            <caption>Teema lisamise stiil</caption>
       </property>
       <property>
             <name>style_topic_caption</name>
@@ -236,16 +278,6 @@
             <caption>Teema viimase vastuse stiil</caption>
       </property>
       <property>
-            <name>style_comment_count</name>
-            <table>objects</table>
-            <group>styles</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>relpicker</type>
-            <reltype>RELTYPE_STYLE</reltype>
-            <caption>Vastuste arvu stiil</caption>
-      </property>
-      <property>
             <name>style_comment_creator</name>
             <table>objects</table>
             <group>styles</group>
@@ -254,6 +286,27 @@
             <type>relpicker</type>
             <reltype>RELTYPE_STYLE</reltype>
             <caption>Teema autori stiil</caption>
+      </property>
+      <property>
+            <name>answer_style_subtitle</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Vastus</caption>
+      </property>
+      <property>
+            <name>style_comment_count</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_STYLE</reltype>
+            <caption>Vastuste arvu stiil</caption>
       </property>
       <property>
             <name>style_comment_user</name>
@@ -286,6 +339,17 @@
             <caption>Vastuse teksti stiil</caption>
       </property>
       <property>
+            <name>input_form_subtitle</name>
+            <table>objects</table>
+            <group>styles</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>text</type>
+            <store>no</store>
+            <subtitle>1</subtitle>
+            <caption>Sisestusvorm</caption>
+      </property>
+      <property>
             <name>style_form_caption</name>
             <table>objects</table>
             <group>styles</group>
@@ -316,6 +380,44 @@
             <caption>Sisestusvormi elemendi stiil</caption>
       </property>
       <property>
+            <name>topics_on_page</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Teemasid lehel</caption>
+      </property>
+      <property>
+            <name>comments_on_page</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Kommentaare lehel</caption>
+      </property>
+      <property>
+            <name>topic_depth</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Teemade sügavus</caption>
+      </property>
+      <property>
+            <name>topic_selector</name>
+            <table>objects</table>
+            <group>topic_selector</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Teemade tasemed</caption>
+      </property>
+      <property>
             <name>import_xml_file</name>
             <table>objects</table>
             <group>import</group>
@@ -326,57 +428,53 @@
             <caption>Vali XML fail</caption>
       </property>
       <property>
-            <name>answers_to_mail</name>
+            <name>topic</name>
             <table>objects</table>
-            <group>mail_settings</group>
+            <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Soovi korral vastused meiliga</caption>
+            <type>hidden</type>
+            <store>no</store>
+            <caption>Topic ID (sys)</caption>
       </property>
       <property>
-            <name>mail_from</name>
+            <name>show</name>
             <table>objects</table>
-            <group>mail_settings</group>
+            <group>contents</group>
             <field>meta</field>
             <method>serialize</method>
-            <type>textbox</type>
-            <caption>E-mail kellelt</caption>
-      </property>
-      <property>
-            <name>mail_address</name>
-            <table>objects</table>
-            <group>mail_settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>E-maili aadress kellelt</caption>
-      </property>
-      <property>
-            <name>mail_subject</name>
-            <table>objects</table>
-            <group>mail_settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Maili subject</caption>
-            <comment>Kui määramata, siis foorumi topic</comment>
+            <type>callback</type>
+            <callback>callback_gen_contents</callback>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <caption>Foorumi sisu</caption>
       </property>
       <classinfo>
             <syslog_type>ST_FORUM</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
-            <contents>
-                  <caption>Sisu</caption>
-                  <submit>no</submit>
-            </contents>
+            <general_sub>
+                  <caption>Üldine</caption>
+                  <parent>general</parent>
+            </general_sub>
+            <mail_settings>
+                  <caption>Meiliseaded</caption>
+                  <parent>general</parent>
+            </mail_settings>
+            <users>
+                  <caption>Kasutajad</caption>
+                  <parent>general</parent>
+            </users>
+            <look>
+                  <caption>Välimus</caption>
+            </look>
             <styles>
                   <caption>Stiilid</caption>
+                  <parent>look</parent>
             </styles>
             <settings>
-                  <caption>Seadistused</caption>
+                  <caption>Sisu seaded</caption>
             </settings>
             <topic_selector>
                   <caption>Teemad</caption>
@@ -386,10 +484,10 @@
                   <caption>Import</caption>
                   <parent>settings</parent>
             </import>
-            <mail_settings>
-                  <caption>Meiliseaded</caption>
-                  <parent>settings</parent>
-            </mail_settings>
+            <contents>
+                  <caption>Eelvaade</caption>
+                  <submit>no</submit>
+            </contents>
       </groupinfo>
       <reltypes>
             <TOPIC_FOLDER>
