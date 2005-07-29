@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.14 2005/03/22 17:04:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.15 2005/07/29 07:50:37 duke Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -175,7 +175,7 @@ class maja_xml_editor extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "xml_to_db__connections":
+			case "xml_to_db_connections":
 			//	arr($arr['request']);
 				$arr['obj_inst']->set_meta("xml_to_db_conns", $arr['request']['xml_to_db_values']);
 				break;
@@ -746,7 +746,7 @@ class maja_xml_editor extends class_base
 					{
 						if ($default_db_table == "db_table_01")
 						{
-							if ($xml_to_db_conns[$attribute_key] != "empty")
+							if ($xml_to_db_conns[$attribute_key] != "empty" && $xml_to_db_conns[$attribute_key] != "")
 							{
 								$sql_command[$xml_to_db_conns[$attribute_key]] = $attribute_value;
 							}
@@ -767,7 +767,7 @@ class maja_xml_editor extends class_base
 			{
 				$insert = true;
 			}
-
+			
 			foreach($sql_commands as $sql_command)
 			{
 				if($insert)
@@ -780,7 +780,6 @@ class maja_xml_editor extends class_base
 				}
 				foreach($sql_command as $sql_c_key => $sql_c_value)
 				{
-
 // check if the status is changed, if it is changed, then it is updated in staatus2 field also
 					if(($sql_c_key == "staatus" || $sql_c_key == "korter") && !$insert)
 					{
@@ -821,11 +820,15 @@ class maja_xml_editor extends class_base
 					}
 					else
 					{
-
 						$sql_query .= $sql_c_key."='".$sql_c_value."', ";
 					}
 				}
-				$sql_query = substr($sql_query, 0, (strlen($sql_query)-2));
+
+				$sql_query = trim($sql_query);
+				if ($sql_query{strlen($sql_query)-1} == ",")
+				{
+					$sql_query{strlen($sql_query)-1} = " ";
+				//$sql_query = substr($sql_query, 0, (strlen($sql_query)-2));
 				
 				if($insert)
 				{
@@ -845,6 +848,7 @@ class maja_xml_editor extends class_base
 //					echo $sql_query." WHERE maja_nimi='".$house_name."' AND korter='".$sql_command['korter']."'<br>";
 //					echo $sql_query." WHERE maja_nimi='".$house_name."' AND nr='".$sql_command['nr']."'<br>";
 
+				}
 				}
 			}
 			
