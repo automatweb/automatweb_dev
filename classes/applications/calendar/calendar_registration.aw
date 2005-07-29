@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.7 2005/04/13 12:54:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/calendar_registration.aw,v 1.8 2005/07/29 12:50:45 duke Exp $
 // calendar_registration.aw - Kalendri sündmusele registreerumine 
 /*
 
@@ -373,7 +373,7 @@ class calendar_registration extends class_base
 
 			$content = $o->prop("mail_content");
 			$vars = array(
-				"#reg_data#" => $event->prop("content"),
+				"#reg_data#" => preg_replace("/#(\w*)#/","",$event->prop("content")),
 				"#name#" => $pdata["name"],
 				"#phone#" => $pdata["phone"],
 				"#email#" => $pdata["email"],
