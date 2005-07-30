@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.84 2005/07/25 08:45:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.85 2005/07/30 15:10:27 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1208,11 +1208,11 @@ class mrp_case extends class_base
 			}
 			else
 			{
-			$comment = html::textbox(array(
-				"name" => "comments[".$job->id()."]",
-				"value" => htmlspecialchars($job->prop("comment")),
-				"size" => 10,
-				"textsize" => "11px"
+				$comment = html::textbox(array(
+					"name" => "comments[".$job->id()."]",
+					"value" => htmlspecialchars($job->prop("comment")),
+					"size" => 10,
+					"textsize" => "11px"
 				));
 			}
 

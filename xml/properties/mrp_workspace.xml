@@ -883,6 +883,57 @@
             <caption>Plaanitud kestus (h)</caption>
       </property>
       <property>
+            <name>pj_minstart</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>datetime_select</type>
+            <store>no</store>
+            <caption>Arvatav jätkamisaeg</caption>
+      </property>
+      <property>
+            <name>pj_remaining_length</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <caption>Arvatav lõpetamiseks kuluv aeg (h)</caption>
+      </property>
+      <property>
+            <name>pj_submit</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>
+                  <num_0>grp_printer_current</num_0>
+                  <num_1>grp_printer_done</num_1>
+                  <num_2>grp_printer_aborted</num_2>
+                  <num_3>grp_printer_in_progress</num_3>
+                  <num_4>grp_printer_startable</num_4>
+                  <num_5>grp_printer_notstartable</num_5>
+            </group>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Salvesta</caption>
+      </property>
+      <property>
             <name>pj_resource</name>
             <table>objects</table>
             <field>meta</field>

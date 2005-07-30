@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.71 2005/07/11 21:49:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.72 2005/07/30 15:10:27 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -66,8 +66,12 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_DELETE, CL_MRP_JOB, on_delete_job)
 	@caption Järelpuhveraeg (h)
 
 	@property minstart type=datetime_select
-	@comment Enne seda kuupäeva, kellaaega ei lubata tööd alustada
+	@comment Enne seda kuupäeva, kellaaega ei alustata tööd
 	@caption Varaseim alustusaeg
+
+	@property remaining_length type=textbox
+	@comment Arvatav ajakulu töö järeloleva osa tegemiseks
+	@caption Lõpetamiseks kuluv aeg (h)
 
 	@property prerequisites type=text
 	@caption Eeldustööd
@@ -109,6 +113,7 @@ CREATE TABLE `mrp_job` (
   `post_buffer` int(10) unsigned default NULL,
   `started` int(10) unsigned default NULL,
   `finished` int(10) unsigned default NULL,
+  `remaining_length` int(10) unsigned default NULL,
 
 	PRIMARY KEY  (`oid`),
 	UNIQUE KEY `oid` (`oid`)
@@ -289,6 +294,7 @@ class mrp_job extends class_base
 			case "planned_length":
 			case "pre_buffer":
 			case "post_buffer":
+			case "remaining_length":
 				$prop["value"] = round (($prop["value"] / 3600), 2);
 				break;
 
@@ -668,7 +674,7 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-				send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
+				// send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
 			}
 			else
 			{
@@ -748,7 +754,7 @@ class mrp_job extends class_base
 
 /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
 /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
-/* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
+// /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
 /* dbg */ }
 			}
 		}
@@ -805,7 +811,7 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-				send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
+				// send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
 			}
 			else
 			{
@@ -838,7 +844,7 @@ class mrp_job extends class_base
 
 /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
 /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
-/* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
+// /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
 /* dbg */ }
 			}
 		}
@@ -1049,6 +1055,11 @@ class mrp_job extends class_base
 			if (is_oid ($prerequisite_oid))
 			{
 				$prerequisite = obj ($prerequisite_oid);
+
+				if ($prerequisite->class_id() != CL_MRP_JOB)
+				{
+					continue;
+				}
 
 				if (((int) $prerequisite->prop ("state")) != MRP_STATUS_DONE)
 				{
@@ -1296,7 +1307,12 @@ class mrp_job extends class_base
 		}
 
 		### check if all prerequisite jobs are done
-		return $this->job_prerequisites_are_done(array("job" => $job->id()));
+		if (!$this->job_prerequisites_are_done(array("job" => $job->id())))
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	function on_delete_job ($arr)

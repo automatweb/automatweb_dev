@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.72 2005/07/26 19:18:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.73 2005/07/30 15:10:27 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -614,8 +614,8 @@ class mrp_schedule extends class_base
 				elseif (in_array ($job["state"], $applicable_timereserve_states) and in_array ($job["resource"], $this->schedulable_resources))
 				{
 					### postpone next jobs by job length
- 					$scheduled_start = $minstart;//!!! aborted t88dega peaks vist midagi muud tegema
- 					$scheduled_length = $job["length"];
+					$remaining_length = ($job["remaining_length"] > 0) ? $job["remaining_length"] : $job["length"];
+					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $remaining_length);
 				}
 				elseif ( (!$job["length"]) and in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) )
 				{

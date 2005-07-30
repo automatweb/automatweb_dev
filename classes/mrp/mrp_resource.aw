@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.68 2005/07/14 07:06:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.69 2005/07/30 15:10:27 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -521,6 +521,7 @@ class mrp_resource extends class_base
 				{
 					continue;
 				}
+				
 				$p = obj($job->prop("project"));
 				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
 
