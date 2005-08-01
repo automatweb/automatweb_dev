@@ -74,6 +74,11 @@ class date_edit
 			$disabled = isset ($varname["disabled"]) ? "disabled" : "";
 			$varname = $varname["name"];
 		}
+		else
+		{
+			$disabled = "";
+			$textsize = "";
+		};
 
 		if ($timestamp == "+24h")
 		{
@@ -147,7 +152,8 @@ class date_edit
 						"11" => LC_M11,
 						"12" => LC_M12
 					);
-					if($this->mon_for)
+					// wtf is this mon_for thingie?
+					if(isset($this->mon_for))
 					{
 						$mnames = array();
 						$tmp = range(1, 12);
