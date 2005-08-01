@@ -1841,7 +1841,8 @@ class _int_object
 
 		foreach(safe_array($GLOBALS["of2prop"][$this->obj["class_id"]]) as $key => $val)
 		{
-			if (!$this->obj["properties"][$key])
+			//if (!$this->obj["properties"][$key])
+			if (empty($this->obj["properties"][$key]))
 			{
 				$this->_int_sync_from_objfield_to_prop($key);
 			}
