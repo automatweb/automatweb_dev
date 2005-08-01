@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.15 2005/07/29 07:50:37 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.16 2005/08/01 13:32:32 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -441,15 +441,16 @@ class maja_xml_editor extends class_base
 	{
 		$t = &$arr['prop']['vcl_inst'];
 		$fields = array(
-			"flat_nr" => "Korteri nr.",
-			"flat_nr2" => "Alternatiivne korteri nr.",
-			"korrus" => "Korruse nr.",
-			"korrus_nimi" => "Korruse nimi",
-			"staatus2" => "Alternatiivne staatus",
-			"panipaik" => "Panipaik",
-			"terrass" => "Terrass",
-			"korteriomand" => "Korteriomand",
-			"parklakoht" => "Parklakoht",
+			"flat_nr" => t("Korteri nr."),
+			"flat_nr2" => t("Alternatiivne korteri nr."),
+			"korrus" => t("Korruse nr."),
+			"korrus_nimi" => t("Korruse nimi"),
+			"staatus2" => t("Alternatiivne staatus"),
+			"panipaik" => t("Panipaik"),
+			"terrass" => t("Terrass"),
+			"korteriomand" => t("Korteriomand"),
+			"parklakoht" => t("Parklakoht"),
+			"r6du" => t("R&otilde;du"),
 		);
 		foreach($fields as $field_key => $field_value)
 		{
@@ -464,7 +465,6 @@ class maja_xml_editor extends class_base
 
 
 		$flats = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$arr['obj_inst']->prop('house_name')."' ORDER BY korter ASC");
-
 		foreach($flats as $flat)
 		{
 /*
@@ -524,6 +524,11 @@ class maja_xml_editor extends class_base
 				"parklakoht" => html::textbox(array(
 						"name" => "row[".$flat['id']."][parklakoht]",
 						"value" => $flat['parklakoht'],
+						"size" => 10,
+					)),
+				"r6du" => html::textbox(array(
+						"name" => "row[".$flat['id']."][r6du]",
+						"value" => $flat['r6du'],
 						"size" => 10,
 					)),
 			));
@@ -757,7 +762,10 @@ class maja_xml_editor extends class_base
 						}
 					}
 				}
-				array_push($sql_commands, $sql_command);
+//				if (!empty($sql_command))
+//				{
+					$sql_commands[] = $sql_command;
+//				}
 			}
 			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
 
@@ -767,7 +775,6 @@ class maja_xml_editor extends class_base
 			{
 				$insert = true;
 			}
-			
 			foreach($sql_commands as $sql_command)
 			{
 				if($insert)
@@ -824,6 +831,7 @@ class maja_xml_editor extends class_base
 					}
 				}
 
+
 				$sql_query = trim($sql_query);
 				if ($sql_query{strlen($sql_query)-1} == ",")
 				{
@@ -833,13 +841,15 @@ class maja_xml_editor extends class_base
 				if($insert)
 				{
 					$this->db_query($sql_query);
-//					echo $sql_query."<br>";
+			//		echo $sql_query."<br>";
 				}
 				else
 				{
 					if ($default_db_table == "db_table_01")
 					{
 						$this->db_query($sql_query." WHERE maja_nimi='".$house_name."' AND korter='".$sql_command['korter']."'");
+//						echo $sql_query." WHERE maja_nimi='".$house_name."' AND korter='".$sql_command['korter']."'<br>";
+
 					}
 					else
 					{
