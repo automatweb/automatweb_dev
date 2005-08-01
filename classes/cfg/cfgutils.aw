@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.55 2005/07/08 16:33:53 duke Exp $
+// $Id: cfgutils.aw,v 1.56 2005/08/01 12:10:06 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -176,15 +176,18 @@ class cfgutils extends aw_template
 
 			$tableinfo = $parser->get_data("/properties/tableinfo");
 			$relinfo = $parser->get_data("/properties/reltypes");
-			foreach($relinfo[0] as $k => $dat)
+			if (is_array($relinfo[0]))
 			{
-				$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
-				$tmp = t2($tmp);
-				if ($tmp !== NULL)
+				foreach($relinfo[0] as $k => $dat)
 				{
-					$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+					$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
+					$tmp = t2($tmp);
+					if ($tmp !== NULL)
+					{
+						$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+					}
 				}
-			}
+			};
 
 			$forminfo = $parser->get_data("/properties/forminfo");
 			$columns = $parser->get_data("/properties/columns");
@@ -298,19 +301,23 @@ class cfgutils extends aw_template
 			{
 				$_tmp = $this->normalize_text_nodes($val);
 				$name = $_tmp["name"];
+				if (empty($_tmp["form"]))
+				{
+					$_tmp["form"] = "";
+				};
 				if ($do_filter)
 				{
 					$pass = 0;
 					foreach($filter as $key => $val)
 					{
 						// all is a special value, this makes it appear regardless of the filter value
-						if ($_tmp[$key] == "all")
+						if (isset($_tmp[$key]) && $_tmp[$key] == "all")
 						{
 							$pass++;
 						}
 						else if (is_array($val))
 						{
-							if (is_array($_tmp[$key]))
+							if (isset($_tmp[$key]) && is_array($_tmp[$key]))
 							{
 								$intersect = array_intersect($_tmp[$key],$val);
 								if (sizeof($intersect) > 0)
@@ -379,7 +386,7 @@ class cfgutils extends aw_template
                 };
 		*/
 
-		if ($cldat["generated"] == 1)
+		if (isset($cldat["generated"]))
 		{
 			$fld = $this->cfg["site_basedir"]."/files/classes";
 			$loc = $fld . "/" . $cldat["file"] . "." . aw_ini_get("ext");
@@ -446,7 +453,7 @@ class cfgutils extends aw_template
 			};
 		};
 
-		if (is_array($this->tableinfo) && $cldat["generated"] != 1)
+		if (is_array($this->tableinfo) && empty($cldat["generated"]))
 		{
 			$tmp = array();
 			foreach($this->tableinfo as $key => $val)
