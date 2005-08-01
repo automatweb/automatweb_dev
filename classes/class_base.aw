@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.412 2005/07/27 07:29:43 kristo Exp $
+// $Id: class_base.aw,v 2.413 2005/08/01 12:19:28 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -767,13 +767,13 @@ class class_base extends aw_template
 		
 		// it would be nice to get the errors and other stuff from the object also,
 		// so we unset cb_values here -- ahz
-		if($this->cb_values)
+		if(isset($this->cb_values))
 		{
 			aw_session_del("cb_values");
 		}
 
 
-		if ($args["form"] == "new" || $args["form"] == "change")
+		if (isset($args["form"]) && ($args["form"] == "new" || $args["form"] == "change"))
 		{
 			$orb_action = "change";
 		}
@@ -782,7 +782,7 @@ class class_base extends aw_template
 			$orb_action = $args["action"];
 		};
 		
-		if ($this->view == 1)
+		if (isset($this->view) && $this->view == 1)
 		{
 			$orb_action = "view";
 		};
@@ -1242,6 +1242,11 @@ class class_base extends aw_template
 		// I need a way to let the client (the class using class_base to
 		// display the editing form) to add it's own tabs.
 
+		if (empty($this->group))
+		{
+			$this->group = "";
+		};
+
 		$activegroup = isset($this->activegroup) ? $this->activegroup : $this->group;
 		$activegroup = isset($this->action) ? $this->action : $activegroup;
 
@@ -1264,7 +1269,7 @@ class class_base extends aw_template
 		// so .. what .. do I add tabs as well now?
 		$tab_callback = (method_exists($this->inst,"callback_mod_tab")) ? true : false;
 
-		$hide_tabs = $this->classinfo["hide_tabs"];
+		$hide_tabs = isset($this->classinfo["hide_tabs"]);
 		$orb_class = get_class($this->orb_class);
 		if (is_oid(aw_global_get("class")))
 		{
@@ -1282,11 +1287,11 @@ class class_base extends aw_template
 					{
 						$link_args->set_at("section",aw_global_get("section"));
 					};
-					if ($_REQUEST["cb_part"])
+					if (!empty($_REQUEST["cb_part"]))
 					{
 						$link_args->set_at("cb_part",$_REQUEST["cb_part"]);
 					};
-					if ($this->embedded)
+					if (isset($this->embedded))
 					{
 						$link_args->set_at("_alias",get_class($this));
 					};
@@ -1306,7 +1311,7 @@ class class_base extends aw_template
 					$link = !empty($val["active"]) ? "#" : "";
 				};
 				
-				if (is_object($this->tr))
+				if (isset($this->tr) && is_object($this->tr))
 				{
 					$commtrans = $this->tr->get_by_id("group",$key,"caption");
 					if (!empty($commtrans))
@@ -1324,7 +1329,7 @@ class class_base extends aw_template
 					"request" => $this->request,
 					"activegroup" => $activegroup,
 					"tabgroup" => &$val["tabgroup"],
-					"new" => $this->new,
+					"new" => isset($this->new) ? $this->new : false,
 					"classinfo" => &$this->classinfo,
 				);
 
@@ -1335,13 +1340,13 @@ class class_base extends aw_template
 					$res = $this->inst->callback_mod_tab($tabinfo);
 				};
 
-				if ($this->action == "search_aliases" || $this->action == "list_aliases")
+				if (isset($this->action) && ($this->action == "search_aliases" || $this->action == "list_aliases"))
 				{
 					unset($val["active"]);
 				};
 
 				// XXX: temporary hack to hide general tab
-				if ($key == "general" && $this->hide_general)
+				if ($key == "general" && isset($this->hide_general))
 				{
 					$res = false;
 				};
@@ -1350,14 +1355,14 @@ class class_base extends aw_template
 				{
 					$active = !empty($val["active"]);
 					// why exactly is that thing good?
-					if ($this->no_active_tab)
+					if (isset($this->no_active_tab))
 					{
 						$active = false;
 					};
 					$this->cli->add_tab(array(
 						"id" => $tabinfo["id"],
 						"level" => $val["level"],
-						"parent" => $val["parent"],
+						"parent" => isset($val["parent"]) ? $val["parent"] : false,
 						"link" => $tabinfo["link"],
 						"caption" => $tabinfo["caption"],
 						"active" => $active,
@@ -1376,13 +1381,13 @@ class class_base extends aw_template
 
 		};
 
-		if (1 == $this->classinfo["disable_relationmgr"])
+		if (isset($this->classinfo["disable_relationmgr"]))
 		{
 			$this->classinfo["relationmgr"] = false;
 		};
 
 		// temporary workaround to hide relationmgr
-		if ($this->hide_relationmgr)
+		if (isset($this->hide_relationmgr))
 		{
 			$this->classinfo["relationmgr"] = false;
 		};
@@ -1412,7 +1417,7 @@ class class_base extends aw_template
 			};
 
 			// experimental hook for new relationmgr
-			if (empty($this->classinfo["r2"]) && $this->view != 1)
+			if (empty($this->classinfo["r2"]) && empty($this->view))
 			{
 				$this->cli->add_tab(array(
 					"id" => "list_aliases",
@@ -1426,9 +1431,9 @@ class class_base extends aw_template
 		//if (empty($args["content"]))
 		//{
 			$content = $this->cli->get_result(array(
-				"raw_output" => $this->raw_output,
+				"raw_output" => isset($this->raw_output) ? $this->raw_output : false,
 				"content" => $args["content"],
-				"confirm_save_data" => $this->classinfo["confirm_save_data"]
+				"confirm_save_data" => isset($this->classinfo["confirm_save_data"])
 			));
 		//}
 		//else
@@ -4598,7 +4603,7 @@ class class_base extends aw_template
 	// !Can be used to query classinfo
 	function classinfo($arr)
 	{
-		return $this->classinfo[$arr["name"]];
+		return isset($this->classinfo[$arr["name"]]) ? $this->classinfo[$arr["name"]] : false;
 	}
 
 	// name - name
