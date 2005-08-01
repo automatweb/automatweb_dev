@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.112 2005/05/04 13:45:20 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.113 2005/08/01 12:35:02 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -31,8 +31,10 @@ class htmlclient extends aw_template
 		{
 			$this->set_layout_mode($arr["layout_mode"]);
 		};
+		$this->tplmode = "";
+		$this->form_layout = "";
 		if($arr["tplmode"] == "groups")
-		{;
+		{
 			$this->tplmode = "groups";
 			$this->sub_tpl = new aw_template();
 			$this->sub_tpl->tpl_init($arr["tpldir"]);
@@ -402,7 +404,7 @@ class htmlclient extends aw_template
 				"webform_caption" => !empty($args["style"]["caption"]) ? "st".$args["style"]["caption"] : "",
 				"webform_element" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		if(isset($this->tplmode) && $this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
 			//echo "jee";
 			$this->sub_tpl->vars($tpl_vars);
@@ -417,7 +419,7 @@ class htmlclient extends aw_template
 			}
 			// I wanda mis kammi ma selle tmp-iga tegin
 			// different layout mode eh? well, it sucks!
-			if (is_object($this->tmp))
+			if (isset($this->tmp) && is_object($this->tmp))
 			{
 				$this->tmp->vars($tpl_vars);
 				$rv = $this->tmp->parse("LINE".$add);
@@ -551,7 +553,7 @@ class htmlclient extends aw_template
 			"value" => $this->draw_element($args),
 			"webform_content" => !empty($args["style"]["prop"]) ? "st".$args["style"]["prop"] : "",
 		);
-		if($this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
+		if(isset($this->tplmode) && $this->tplmode == "groups" && $this->sub_tpl->is_template($args["name"]))
 		{
 			$this->sub_tpl->vars($tpl_vars);
 			$rv = $this->sub_tpl->parse($args["name"]);
@@ -671,22 +673,22 @@ class htmlclient extends aw_template
 			foreach($this->proplist as $ki => $item)
 			{
 				// this was set in parse_layout
-				if ($item["__ignore"])
+				if (isset($item["__ignore"]))
 				{
 					continue;
 				};
 
 				$this->vars(array(
 					"property_name" => $item["name"],
-					"property_caption" => $item["caption"],
-					"property_comment" => $item["comment"],
-					"property_help" => $item["help"],
+					"property_caption" => isset($item["caption"]) ? $item["caption"] : "",
+					"property_comment" => isset($item["comment"]) ? $item["comment"] : "",
+					"property_help" => isset($item["help"]) ? $item["help"] : "",
 				));
 
 				$property_help .= $this->parse("PROPERTY_HELP");
 				$item["html"] = $this->create_element($item);
 
-				if($this->tplmode == "groups")
+				if(isset($this->tplmode) && $this->tplmode == "groups")
 				{
 					if (!empty($item["error"]))
 					{
@@ -760,7 +762,7 @@ class htmlclient extends aw_template
 		$data["ret_to_orb"] = $fn == "orb" ? 1 : 0;
 	
 		// let's hope that nobody uses that vbox and hbox spagetti with grouptemplates -- ahz
-		if($this->tplmode == "groups")
+		if(isset($this->tplmode) && $this->tplmode == "groups")
 		{
 			$vars = $vars + array(
 				"submit_handler" => $submit_handler,
@@ -786,7 +788,7 @@ class htmlclient extends aw_template
 				"content" => $res,
 				"reforb" => $this->mk_reforb($action,$data,$orb_class),
 				"form_handler" => !empty($form_handler) ? $form_handler : "orb.aw",
-				"SUBMIT" => $sbt,
+				"SUBMIT" => isset($sbt) ? $sbt : "",
 				"help" => $arr["help"],
 				"PROPERTY_HELP" => $property_help,
 				//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
@@ -804,7 +806,7 @@ class htmlclient extends aw_template
 			$apd = get_instance("layout/active_page_data");
 			$apd->add_serialized_css_style($this->parse("iframe_body_style"));
 		};
-		if(!$this->no_form)
+		if(empty($this->no_form))
 		{
 			$this->vars(array(
 				"SHOW_CHANGEFORM" => $this->parse("SHOW_CHANGEFORM"),
@@ -819,11 +821,11 @@ class htmlclient extends aw_template
 			));
 		}
 
-		if ($arr["raw_output"])
+		if (!empty($arr["raw_output"]))
 		{
 			$rv = $this->vars["content"];
 		}
-		elseif ($arr["form_only"])
+		elseif (isset($arr["form_only"]))
 		{
 			return $this->parse();
 		}
@@ -832,7 +834,7 @@ class htmlclient extends aw_template
 		
 			if (empty($arr["content"]))
 			{
-				if($this->tplmode == "groups")
+				if(isset($this->tplmode) && $this->tplmode == "groups")
 				{
 					$rv = $this->sub_tpl->parse();
 				}
@@ -1013,7 +1015,7 @@ class htmlclient extends aw_template
 				break;
 
 			case "textarea":
-				if ($arr["richtext"])
+				if (isset($arr["richtext"]))
 				{
 					$this->rte = true;
 					$this->rtes[] = $arr["name"];
@@ -1038,7 +1040,7 @@ class htmlclient extends aw_template
 					"label" => isset($arr["label"]) ? $arr["label"] : "",
 					"name" => $arr["name"],
 					"value" => isset($arr["ch_value"]) ? $arr["ch_value"] : "",
-					"caption" => $arr["caption"],
+					"caption" => isset($arr["caption"]) ? $arr["caption"] : "",
 					"checked" => ($arr["value"]) && isset($arr["ch_value"]) && ($arr["value"] == $arr["ch_value"])
 				));
 				break;
@@ -1110,6 +1112,7 @@ class htmlclient extends aw_template
 	function create_element($item)
 	{
 		$type = isset($item["type"]) ? $item["type"] : "";
+		$item["html"] = "";
 
 		if ($type == "iframe")
 		{
