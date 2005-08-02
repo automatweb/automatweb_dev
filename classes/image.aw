@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.143 2005/07/29 12:21:34 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.144 2005/08/02 11:27:31 dragut Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -122,7 +122,7 @@ class image extends class_base
 			{
 				$this->db_query($q);
 				$row = $this->db_fetch_row();
-			}
+			};
 
 
 			if ($row)
