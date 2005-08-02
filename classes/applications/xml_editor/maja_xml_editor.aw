@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.16 2005/08/01 13:32:32 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.17 2005/08/02 10:10:01 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -448,9 +448,9 @@ class maja_xml_editor extends class_base
 			"staatus2" => t("Alternatiivne staatus"),
 			"panipaik" => t("Panipaik"),
 			"terrass" => t("Terrass"),
+			"r6du" => t("R&otilde;du"),
 			"korteriomand" => t("Korteriomand"),
 			"parklakoht" => t("Parklakoht"),
-			"r6du" => t("R&otilde;du"),
 		);
 		foreach($fields as $field_key => $field_value)
 		{
@@ -516,6 +516,11 @@ class maja_xml_editor extends class_base
 						"value" => $flat['terrass'],
 						"size" => 5,
 					)),
+				"r6du" => html::textbox(array(
+						"name" => "row[".$flat['id']."][r6du]",
+						"value" => $flat['r6du'],
+						"size" => 10,
+					)),
 				"korteriomand" => html::textbox(array(
 						"name" => "row[".$flat['id']."][korteriomand]",
 						"value" => $flat['korteriomand'],
@@ -526,11 +531,7 @@ class maja_xml_editor extends class_base
 						"value" => $flat['parklakoht'],
 						"size" => 10,
 					)),
-				"r6du" => html::textbox(array(
-						"name" => "row[".$flat['id']."][r6du]",
-						"value" => $flat['r6du'],
-						"size" => 10,
-					)),
+
 			));
 		}
 
@@ -682,7 +683,7 @@ class maja_xml_editor extends class_base
 				{
 					$attributes = "";
 
-					$sql_command = array();
+	//				$sql_command = array();
 
 					if(isset($value['attributes']))
 					{
@@ -735,7 +736,8 @@ class maja_xml_editor extends class_base
 			$sql_commands = array();
 
 			$xml_to_db_conns = $arr['obj_inst']->meta("xml_to_db_conns");
-// tuleb kokku panna sql_commands massiiv, mis koosneb $sql_command massiivides misomakorda on siis parameetrid ilmselt			
+// tuleb kokku panna sql_commands massiiv, mis koosneb $sql_command massiividest kus on kirjas milliseid välju uuendatakse
+// baasis 
 //			arr($arr);
 
 			$xml_tags = $this->get_complete_xml_tags(array(
@@ -762,10 +764,10 @@ class maja_xml_editor extends class_base
 						}
 					}
 				}
-//				if (!empty($sql_command))
-//				{
+				if (!empty($sql_command))
+				{
 					$sql_commands[] = $sql_command;
-//				}
+				}
 			}
 			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
 
