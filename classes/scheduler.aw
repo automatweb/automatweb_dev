@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.35 2005/05/31 08:20:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/scheduler.aw,v 2.36 2005/08/02 14:20:11 duke Exp $
 // scheduler.aw - Scheduler
 class scheduler extends aw_template
 {
@@ -91,20 +91,34 @@ class scheduler extends aw_template
 			}
 		}
 		$this->repdata = $newdat;
-
+			
+		$o = new object($id);
 		$now = time();
+		$clid = $o->class_id();
+			
+		$cs = $o->connections_to(array("from.class_id" => CL_SCHEDULER));
+		$c = reset($cs);
+
+		// recur_id refers to a single CL_RECURRENCE object, conventional connections method is not used
+		// because it would add too much overhead, too much redundant data. There can literally be
+		// thousands of records in the recurrence table for a single recurrence object and every little
+		// bit of speed helps in those cases 
+		//print "recur_id = $id<br>";
 		$q = "SELECT * FROM recurrence WHERE recur_id = '$id' AND recur_start >= '${now}' ORDER BY recur_start LIMIT 20";
 		$this->db_query($q);
 		while($row = $this->db_next())
 		{
 			// get events for scheduler obj
-			$o = obj($id);
-			$cs = $o->connections_to(array("from.class_id" => CL_SCHEDULER));
-			$c = reset($cs);
+			// some classes link to CL_RECURRENCE directly, those will need a separate code path
 			if ($c)
 			{
 				$o = obj($c->prop("from"));
-				foreach($o->connections_from(array("type" => 1)) as $c)
+				// read properties into tmp array, this way accessing login_uid for object
+				// without such property should not cause a fatal error
+				//foreach($o->connections_from(array("type" => 1)) as $c)
+				// see 1 annab target objekti .. aga kõik need probleemid ju tulenevad
+				// sellest, et sihtobjektil võib olla olla seos hoopid scheduleriga
+				foreach($o->connections_from(array("to.class_id" => CL_RECURRENCE)) as $c)
 				{
 					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("to")),$c->prop('to.class_id')));
 					$re = $event."&ts=".$row["recur_start"];
@@ -117,9 +131,30 @@ class scheduler extends aw_template
 						md5($re)
 					);
 					$ltime = $row["recur_start"];
-					echo "added event $re at $row[recur_start] <br>";
+					//echo "added event $re at $row[recur_start] <br>";
 				}
 			}
+			else
+			{
+				foreach($o->connections_to(array("to.class_id" => CL_RECURRENCE)) as $c)
+				{
+					// see asi siin peab invoke uuesti scheduleri sisse püsti panema?
+					$event = str_replace("automatweb/", "", $this->mk_my_orb("invoke",array("id" => $c->prop("from")),$c->prop("from.class_id")));
+						$re = $event."&ts=".$row["recur_start"];
+						$this->evnt_add(
+							$row["recur_start"],
+							$re,
+							$uid,
+							$password,
+							$id,
+							md5($re)
+						);
+						$ltime = $row["recur_start"];
+						//echo "added event $re at $row[recur_start] <br>";
+				};
+
+
+			};
 			break;
 		};
 		// and the clever bit here - schedule an event right after the last repeater to reschedule 
@@ -644,6 +679,53 @@ class scheduler extends aw_template
 		{
 			$this->db_query("CREATE TABLE user_hashes(uid varchar(100),hash char(32), hash_time int)");
 		}	
+	}
+
+	/** Shows a list of all scheduled items
+		@attrib name=list_entries
+	**/
+	function list_entries()
+	{
+		// nii, nyyd ma pean kuidagi html-i tegema? how?
+		$htmlc = get_instance("cfg/htmlclient");
+
+		classload("vcl/table");
+		$t = new vcl_table();
+
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Aeg"),
+		));
+		
+		$t->define_field(array(
+			"name" => "url",
+			"caption" => t("URL"),
+		));
+		
+		$t->define_field(array(
+			"name" => "rep_id",
+			"caption" => t("Kordus"),
+		));
+		
+		$this->open_session();
+		$newdat = array();
+		foreach($this->repdata as $e)
+		{
+			arr($e);
+		}
+	
+		$this->close_session();
+
+		$htmlc->add_property(array(
+			"type" => "table",
+			"vcl_inst" => &$t,
+		));
+
+		$htmlc->finish_output();
+
+		return $htmlc->get_result();
+
+
 	}
 }
 ?>
