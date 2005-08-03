@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.136 2005/07/30 15:10:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.137 2005/08/03 10:47:42 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -3023,29 +3023,38 @@ if ($_GET['show_thread_data'] == 1)
 		$oldal = safe_array($o->meta("umgr_all_resources"));
 		foreach(safe_array($arr["old_all_resources"]) as $k => $v)
 		{
-			if ($arr["all_resources"] != $v)
+			if ($arr["all_resources"][$k] != $v)
 			{
 				$oldal[$k] = $arr["all_resources"][$k];
 			}
 		}
+
 		foreach(safe_array($arr["all_resources"]) as $k => $v)
-                {
-                        if ($arr["all_resources"] != $arr["old_all_resources"])
-                        {
-                                $oldal[$k] = $arr["all_resources"][$k];
-                        }
-                }
+		{
+			if ($arr["all_resources"][$k] != $arr["old_all_resources"][$k])
+			{
+					$oldal[$k] = $arr["all_resources"][$k];
+			}
+		}
 
 		$o->set_meta("umgr_all_resources", $oldal);
 
 		$oldal = safe_array($o->meta("umgr_dept_resources"));
 		foreach(safe_array($arr["old_dept_resources"]) as $k => $v)
 		{
-			if ($arr["dept_resources"] != $v)
+			if ($arr["dept_resources"][$k] != $v)
 			{
-				$oldal[$k] = $arr["dept_resources"][$v];
+				$oldal[$k] = $arr["dept_resources"][$k];
 			}
 		}
+		foreach(safe_array($arr["dept_resources"]) as $k => $v)
+		{
+			if ($arr["dept_resources"][$k] != $arr["old_dept_resources"][$k])
+			{
+					$oldal[$k] = $arr["dept_resources"][$k];
+			}
+		}
+
 		$o->set_meta("umgr_dept_resources", $oldal);
 		$o->save();
 
