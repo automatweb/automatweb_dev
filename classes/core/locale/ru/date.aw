@@ -1,7 +1,7 @@
 <?php
 class date
 {
-	var $month = array("jaanuar", "veebruar", "m&auml;rts", "aprill", "mai", "juuni", "juuli", "august", "september", "oktoober", "november", "detsember");
+	var $month = array("&#1103;&#1085;&#1074;&#1072;&#1088;&#1103;", "&#1092;&#1077;&#1074;&#1088;&#1072;&#1083;&#1103;", "&#1084;&#1072;&#1088;&#1090;&#1072;", "&#1072;&#1087;&#1088;&#1077;&#1083;&#1103;", "&#1084;&#1072;&#1103;", "&#1080;&#1102;&#1085;&#1103;", "&#1080;&#1102;&#1083;&#1103;", "&#1072;&#1074;&#1075;&#1091;&#1089;&#1090;&#1072;", "&#1089;&#1077;&#1085;&#1090;&#1103;&#1073;&#1088;&#1103;", "&#1086;&#1082;&#1090;&#1103;&#1073;&#1088;&#1103;", "&#1085;&#1086;&#1103;&#1073;&#1088;&#1103;", "&#1076;&#1077;&#1082;&#1072;&#1073;&#1088;&#1103;");
 
 	function get_lc_date($timestamp, $format)
 	{
@@ -28,6 +28,18 @@ class date
 			case 4:
 				$newdate=date("d. ", $timestamp).$this->month[date("m", $timestamp)-1].date(" Y",$timestamp);
 				return $newdate;
+
+                        case 5:
+                                $rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1];
+                                return $rv;
+
+                        case 6:
+                                $rv = date("j. ",$timestamp).$this->month[date("m",$timestamp)-1] . date(" Y",$timestamp);
+				return $rv;
+
+				
+
+
 			case 7:
 				$newdate=date("H:i d.m.y", $timestamp);
 				return $newdate;
@@ -36,7 +48,7 @@ class date
 
 	function get_lc_weekday($num, $short = false)
 	{
-		$names = array("Esmaspäev","Teisipäev","Kolmapäev","Neljapäev","Reede","Laupäev","Pühapäev");
+		$names = array("&#1087;&#1086;&#1085;&#1077;&#1076;&#1077;&#1083;&#1100;&#1085;&#1080;&#1082;","&#1074;&#1090;&#1086;&#1088;&#1085;&#1080;&#1082;","&#1089;&#1088;&#1077;&#1076;&#1072;","&#1095;&#1077;&#1090;&#1074;&#1077;&#1088;&#1075;","&#1087;&#1103;&#1090;&#1085;&#1080;&#1094;&#1072;","&#1089;&#1091;&#1073;&#1073;&#1086;&#1090;&#1072;","&#1074;&#1086;&#1089;&#1082;&#1088;&#1077;&#1089;&#1077;&#1085;&#1100;&#1077;");
 		// array starts from 0, estonian weekdays from 1
 		$num--;
 		return $short ? substr($names[$num],0,1) : $names[$num];
