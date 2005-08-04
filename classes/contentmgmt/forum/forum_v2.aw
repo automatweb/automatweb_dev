@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.83 2005/07/29 12:22:57 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.84 2005/08/04 21:33:48 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -163,6 +163,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 		@property topics_on_page type=select
 		@caption Teemasid lehel
+
+		@property show_image_upload_in_add_topic_form type=checkbox ch_value=1
+		@caption N&auml;idata teema lisamise vormis pildi &uuml;leslaadimise v&auml;lja?
 
 		@property comments_on_page type=select
 		@caption Kommentaare lehel
@@ -1717,11 +1720,18 @@ class forum_v2 extends class_base
 			};
 			$htmlc->add_property($propdata);
 		};
-		$htmlc->add_property(array(
-			"name" => "uimage",
-			"caption" => t("Pilt"),
-			"type" => "fileupload",
-		));
+
+		// XXX by dragut
+		// i'll make this hack here, just to not show the image upload field
+		// when adding topic by default
+		if ($this->obj_inst->prop("show_image_upload_in_add_topic_form"))
+		{
+			$htmlc->add_property(array(
+				"name" => "uimage",
+				"caption" => t("Pilt"),
+				"type" => "fileupload",
+			));
+		}
 		/*
 		$htmlc->add_property($props["author_name"]);
 		$htmlc->add_property($props["name"]);
