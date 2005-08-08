@@ -322,24 +322,6 @@
             <caption>Allahindlus</caption>
       </property>
       <property>
-            <name>vahendustasu</name>
-            <group>grp_case_data</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>Vahendustasu</caption>
-      </property>
-      <property>
-            <name>myygi_hind</name>
-            <group>grp_case_data</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>textbox</type>
-            <caption>M&amp;uuml;&amp;uuml;gi hind</caption>
-      </property>
-      <property>
             <name>user_comments</name>
             <group>grp_case_comments</group>
             <table>objects</table>
