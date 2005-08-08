@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.86 2005/08/08 16:18:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.87 2005/08/08 16:19:31 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -128,11 +128,13 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property allahindlus type=textbox
 	@caption Allahindlus
 
-	//@property vahendustasu type=textbox
-	//@caption Vahendustasu
+	// @property vahendustasu type=textbox
+	@property vahendustasu type=hidden
+	@caption Vahendustasu
 
-	//@property myygi_hind type=textbox
-	//@caption M&uuml;&uuml;gi hind
+	// @property myygi_hind type=textbox
+	@property myygi_hind type=hidden
+	@caption M&uuml;&uuml;gi hind
 
 
 default group=grp_case_material
