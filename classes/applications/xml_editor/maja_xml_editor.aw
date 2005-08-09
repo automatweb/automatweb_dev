@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.17 2005/08/02 10:10:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/xml_editor/maja_xml_editor.aw,v 1.18 2005/08/09 20:34:29 dragut Exp $
 // maja_xml_editor.aw - maja xml-i editor 
 /*
 
@@ -326,12 +326,20 @@ class maja_xml_editor extends class_base
 //
 // returns all xml tags, which type is complete, and parent is specified
 // obj_inst - instance of current object
+// parsed_xml_file - parsed xml file
 // parent - the tagname which should be the parent of the returned tags
 //
 ////////////////////////////////////////////////////////////////////////////////
 	function get_complete_xml_tags($arr)
 	{
-		$xml_file = $this->get_xml(array("obj_inst" => $arr['obj_inst']));
+		if (isset($arr['parsed_xml_file']))
+		{
+			$xml_file = $arr['parsed_xml_file'];
+		}
+		else
+		{
+			$xml_file = $this->get_xml(array("obj_inst" => $arr['obj_inst']));
+		}
 		foreach($xml_file[0] as $key => $value)
 		{
 			if ($value['type'] == "open" && $value['tag'] == $arr['parent'])
@@ -597,7 +605,7 @@ class maja_xml_editor extends class_base
 		
 		if ($default_db_table == "db_table_01")
 		{
-			$db_tmp = $this->db_fetch_array("SELECT id,staatus,korter FROM ".$db_table_name." WHERE maja_nimi LIKE '%".$arr['obj_inst']->prop("house_name")."%'");
+			$db_tmp = $this->db_fetch_array("SELECT id,staatus,staatus2,korter,korter2 FROM ".$db_table_name." WHERE maja_nimi LIKE '%".$arr['obj_inst']->prop("house_name")."%'");
 		}
 		else
 		{
@@ -728,9 +736,6 @@ class maja_xml_editor extends class_base
 			fclose($file_handle);
 
 
-
-
-
 			$house_name = $arr['obj_inst']->prop("house_name");
 
 			$sql_commands = array();
@@ -741,7 +746,8 @@ class maja_xml_editor extends class_base
 //			arr($arr);
 
 			$xml_tags = $this->get_complete_xml_tags(array(
-				"obj_inst" => $arr['obj_inst'],
+		//		"obj_inst" => $arr['obj_inst'],
+				"parsed_xml_file" => parse_xml_def(array("xml" => $result)),
 				"parent" => $xml_parent_tag,
 			));
 			foreach ($xml_tags as $xml_tag)
@@ -769,10 +775,9 @@ class maja_xml_editor extends class_base
 					$sql_commands[] = $sql_command;
 				}
 			}
+
 			$db_result = $this->db_fetch_array("SELECT * FROM ".$db_table_name." WHERE maja_nimi='".$house_name."'");
-
 			$insert = false;
-
 			if(empty($db_result))
 			{
 				$insert = true;
@@ -789,8 +794,10 @@ class maja_xml_editor extends class_base
 				}
 				foreach($sql_command as $sql_c_key => $sql_c_value)
 				{
-// check if the status is changed, if it is changed, then it is updated in staatus2 field also
-					if(($sql_c_key == "staatus" || $sql_c_key == "korter") && !$insert)
+					// check if the status is changed, if it is changed, 
+					// then it is updated in staatus2 field also
+					// same thing with korter field
+					if(($sql_c_key == "staatus" || $sql_c_key == "korter"))
 					{
 /*
 						$staatus_from_db = $this->db_fetch_array("SELECT staatus FROM ".$db_table_name." WHERE korter='".$sql_command['korter']."'");
@@ -800,36 +807,65 @@ class maja_xml_editor extends class_base
 							
 						}
 */
-						foreach($db_tmp as $tmp_value)
+						// insert data into db table (xml file is changed at the first time)	
+						if ($insert)
 						{
-							if($tmp_value['korter'] == $sql_command['korter'] )
+							if ($sql_c_key == "staatus")
 							{
-								if($sql_c_key == "staatus")
+								$sql_query .= "staatus='".$sql_c_value."', ";
+								if ($default_db_table == "db_table_01")
 								{
-									if($tmp_value['staatus'] != $sql_c_value)
-									{
-										$sql_query .= "staatus='".$sql_c_value."', ";	
-										if ($default_db_table == "db_table_01" )
-										{
-										$sql_query .= "staatus2='".$sql_c_value."', ";
-										}
-										break;
-									}
+									$sql_query .= "staatus2='".$sql_c_value."', ";
 								}
-								if($sql_c_key == "korter")
+							}
+							if ($sql_c_key == "korter")
+							{
+								$sql_query .= "korter='".$sql_c_value."', ";
+								if ($default_db_table == "db_table_01")
 								{
-									if($tmp_value['korter'] != $sql_c_value)
+									$sql_query .= "korter2='".$sql_c_value."', ";
+								}
+							}
+						}
+						// update the db table
+						else
+						{
+							foreach($db_tmp as $tmp_value)
+							{
+								if($tmp_value['korter'] == $sql_command['korter'] )
+								{
+									if($sql_c_key == "staatus")
 									{
-										$sql_query .= "korter2='".$sql_c_value."', ";
-										break;
+										if($tmp_value['staatus'] != $sql_c_value || empty($tmp_value['staatus2']))
+										{
+											$sql_query .= "staatus='".$sql_c_value."', ";	
+											if ($default_db_table == "db_table_01" )
+											{
+												$sql_query .= "staatus2='".$sql_c_value."', ";
+											}
+											break;
+										}
+									}
+									if($sql_c_key == "korter")
+									{
+										if($tmp_value['korter'] != $sql_c_value || empty($tmp_value['korter2']))
+										{
+											$sql_query .= "korter2='".$sql_c_value."', ";
+											break;
+										}
 									}
 								}
 							}
 						}
+						
 					}
 					else
 					{
 						$sql_query .= $sql_c_key."='".$sql_c_value."', ";
+						if ($insert)
+						{
+							
+						}
 					}
 				}
 
