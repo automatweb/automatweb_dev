@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.84 2005/08/04 21:33:48 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.85 2005/08/11 23:50:25 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -40,6 +40,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 		@property address_folder type=relpicker reltype=RELTYPE_ADDRESS_FOLDER
 		@caption Listiliikmete kaust
 		@comment Sellesse kausta paigutatakse "listi liikmete" objektid
+
+		@property images_folder type=relpicker reltype=RELTYPE_IMAGES_FOLDER
+		@caption Piltide kaust
+		@comment Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille külge pilt pannakse
 
 		@property faq_folder type=relpicker reltype=RELTYPE_FAQ_FOLDER
 		@caption KKK kaust
@@ -212,6 +216,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 
 	@reltype FAQ_FOLDER value=6 clid=CL_MENU
 	@caption KKK kaust
+
+	@reltype IMAGES_FOLDER value=7 clid=CL_MENU
+	@caption Piltide kaust
 
 */
 
@@ -1724,6 +1731,7 @@ class forum_v2 extends class_base
 		// XXX by dragut
 		// i'll make this hack here, just to not show the image upload field
 		// when adding topic by default
+		// actually seems that this should be configurable via cfgform
 		if ($this->obj_inst->prop("show_image_upload_in_add_topic_form"))
 		{
 			$htmlc->add_property(array(
@@ -1824,8 +1832,20 @@ class forum_v2 extends class_base
                 $this->topic_id = $t->submit($emb);
 
 		$image_inst = get_instance(CL_IMAGE);
+		// figure out the images parent:
+		$images_folder_id = $obj_inst->prop("images_folder");
+		if (!empty($images_folder_id))
+		{
+			// if there is images_folder set, then put images there:
+			$image_parent = $images_folder_id;
+		}
+		else
+		{
+			// else lets put it under the object where the image is added:
+			$image_parent = $this->topic_id;
+		}
 		// if there is image uploaded:
-		$upload_image = $image_inst->add_upload_image("uimage", $this->topic_id);
+		$upload_image = $image_inst->add_upload_image("uimage", $image_parent);
 		if ($upload_image !== false && is_oid($this->topic_id) && $this->can("view", $this->topic_id))
 		{
 			$topic_obj = new object($this->topic_id);
@@ -1876,8 +1896,20 @@ class forum_v2 extends class_base
 		$emb["status"] = STAT_ACTIVE;
 		$this->comm_id = $t->submit($emb);
 
+		// figure out the images parent:
+		$images_folder_id = $obj_inst->prop("images_folder");
+		if (!empty($images_folder_id))
+		{
+			// if there is image_folder set, then put images there
+			$image_parent = $images_folder_id;
+		}
+		else
+		{
+			// else lets put it under the object where the image is added:
+			$image_parent = $this->comm_id;
+		}
 		// if there is image which should be uploaded
-		$upload_image = $image_inst->add_upload_image("uimage", $this->comm_id); 
+		$upload_image = $image_inst->add_upload_image("uimage", $image_parent); 
 		if ($upload_image !== false && is_oid($this->comm_id) && $this->can("view", $this->comm_id))
 		{
 			

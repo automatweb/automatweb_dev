@@ -56,6 +56,17 @@
             </comment>
       </property>
       <property>
+            <name>images_folder</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMAGES_FOLDER</reltype>
+            <caption>Piltide kaust</caption>
+            <comment>Kui piltide kaust on valitud, siis foorumisse pandud piltide objektid salvestatakse selle kausta alla, muidu pannakse selle objekti alla, mille külge pilt pannakse</comment>
+      </property>
+      <property>
             <name>faq_folder</name>
             <table>objects</table>
             <group>general_sub</group>
@@ -533,6 +544,11 @@
                   <clid>CL_MENU</clid>
                   <caption>KKK kaust</caption>
             </FAQ_FOLDER>
+            <IMAGES_FOLDER>
+                  <value>7</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Piltide kaust</caption>
+            </IMAGES_FOLDER>
       </reltypes>
 </properties>
 
