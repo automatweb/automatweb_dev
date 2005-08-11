@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.16 2005/07/25 09:11:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.17 2005/08/11 11:26:18 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -16,6 +16,9 @@
 
 @property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner 
 @caption Kirjeldus
+
+@property aliasmanager type=aliasmgr
+@caption Seostehaldur
 
 // seems i don't need those rules here anymore
 default field=meta 
@@ -78,6 +81,9 @@ caption Userdefined textbox 8
 // to overwrite the copied events
 @reltype COPY value=2 clid=CL_STAGING
 @caption Koopia
+
+@reltype DOCUMENT value=3 clid=CL_DOCUMENT
+@caption Dokument
 
 @groupinfo projects caption="Projektid"
 @groupinfo trans caption="T&otilde;lkimine"

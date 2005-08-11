@@ -32,6 +32,14 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
+            <name>aliasmanager</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>aliasmgr</type>
+            <field>aliasmanager</field>
+            <caption>Seostehaldur</caption>
+      </property>
+      <property>
             <name>place</name>
             <table>planner</table>
             <group>general</group>
@@ -115,6 +123,11 @@
                   <clid>CL_STAGING</clid>
                   <caption>Koopia</caption>
             </COPY>
+            <DOCUMENT>
+                  <value>3</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>Dokument</caption>
+            </DOCUMENT>
       </reltypes>
 </properties>
 
