@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.73 2005/07/30 15:10:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.74 2005/08/15 11:47:48 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -251,13 +251,13 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
-// http://mail.prismaprint.ee/automatweb/orb.aw?class=mrp_schedule&action=create&copyjobstoschedule=1&mrp_workspace=1259
-/* COPY JOBS FROM mrp_job TO mrp_schedule */
-/* dbg */ if ($_GET["copyjobstoschedule"]==1){
-/* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
-/* dbg */ while ($job = $this->db_next ()) {
-/* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
-/* dbg */ }
+// http://.ee/automatweb/orb.aw?class=mrp_schedule&action=create&copyjobstoschedule=1&mrp_workspace=1259
+// /* COPY JOBS FROM mrp_job TO mrp_schedule */
+// /* dbg */ if ($_GET["copyjobstoschedule"]==1){
+// /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
+// /* dbg */ while ($job = $this->db_next ()) {
+// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
+// /* dbg */ }
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
@@ -1325,10 +1325,20 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 // /* dbg */ }
 
+		### unavailable periods not defined past $time, stop and return 0?
+		if ($start == $end)
+		{
+			// !!! ajutine lahendus sellele, mis siis saaab kui t88aegu ega midagi pole dfn, v6i peale kysitud hetke pole kinniseid aegu. tagastatakse 1sekundine kinnine aeg 10 aastat p2rast schedule-endi
+			$start = ($start - $this->schedule_start) + $this->schedule_length + (10 * 31536000);
+			$length = 0;
+			return array ($start, $length);
+		}
+
+
 		### find if period ends before another starts
 		$i = 0;
 
-		while (true)
+		while (true)//!!! bad. stupid. wrong.
 		{
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end);
 // /* dbg */ if ($this->mrpdbg){
