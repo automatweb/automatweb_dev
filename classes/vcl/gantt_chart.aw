@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.17 2005/08/15 12:29:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.18 2005/08/15 12:33:39 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -634,7 +634,7 @@ class gantt_chart extends class_base
 					$key2++;
 
 /* dbg */ if ($this->ganttdbg){
-/* dbg */ echo $key2 . ". overlap search length:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["length"]) . "<br>";
+/* dbg */ echo $key2 . ". overlap search length:" . round ($this->parsed_data[$row][$key2]["length"]/3600, 2) . "<br>";
 /* dbg */ echo $key2 . ". overlap search start:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["start"]) . "<br>";
 /* dbg */ }
 
