@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.16 2005/07/11 21:49:22 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.17 2005/08/15 12:29:12 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -623,11 +623,21 @@ class gantt_chart extends class_base
 				$current_bar_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
 
 				### find out whether successive bars exist that continuously overlap current. find farthest overlaping bar end.
-				while ( isset($this->parsed_data[$row][$key2]) and ($this->parsed_data[$row][$key2]["start"] < $current_bar_end) and (empty ($overlap_end) or ($this->parsed_data[$row][$key2]["start"] <= $overlap_end)) )
+				while (
+					isset($this->parsed_data[$row][$key2]) and
+					($this->parsed_data[$row][$key2]["start"] < $current_bar_end) and
+					((!isset ($overlap_end)) or ($this->parsed_data[$row][$key2]["start"] <= $overlap_end))
+				)
 				{ ### next bar exists, next bar starts before current ends, overlap_end is set and next bar starts before it.
-					$overlap_start = empty ($overlap_start) ? $this->parsed_data[$row][$key2]["start"] : $overlap_start;
+					$overlap_start = !isset ($overlap_start) ? $this->parsed_data[$row][$key2]["start"] : $overlap_start;
 					$overlap_end = max ($overlap_end, ($this->parsed_data[$row][$key2]["start"] + $this->parsed_data[$row][$key2]["length"]));
 					$key2++;
+
+/* dbg */ if ($this->ganttdbg){
+/* dbg */ echo $key2 . ". overlap search length:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["length"]) . "<br>";
+/* dbg */ echo $key2 . ". overlap search start:" . date (MRP_DATE_FORMAT, $this->parsed_data[$row][$key2]["start"]) . "<br>";
+/* dbg */ }
+
 				}
 
 /* dbg */ if ($this->ganttdbg){
@@ -635,7 +645,7 @@ class gantt_chart extends class_base
 /* dbg */ echo "overlap_start:" . date (MRP_DATE_FORMAT, $overlap_start) . "<br>";
 /* dbg */ }
 
-				if (!empty ($overlap_end))
+				if (isset ($overlap_end))
 				{
 					if ($overlap_end < $current_bar_end)
 					{
