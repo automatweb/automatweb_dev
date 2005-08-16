@@ -20,6 +20,11 @@
 		<action name="new" is_public="1" all_args="1" caption="Lisa">
 			<function name="new_change">
 				<arguments>
+					<optional name="parent" type="int" acl="add" />
+					<optional name="period" />
+					<optional name="alias_to" />
+					<optional name="return_url" />
+					<optional name="reltype" type="int" />
 				</arguments>
 			</function>
 		</action>

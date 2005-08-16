@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.108 2005/08/16 09:54:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.109 2005/08/16 10:11:47 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -995,6 +995,12 @@ class file extends class_base
 	/** Generate a form for adding or changing an object 
 		
 		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
+
+		@param parent optional type=int acl="add"
+		@param period optional
+		@param alias_to optional
+		@param return_url optional
+		@param reltype optional type=int
 
 	**/
 	function new_change($args)
