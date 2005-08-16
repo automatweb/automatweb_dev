@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.2 2005/07/13 14:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.3 2005/08/16 09:57:19 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property path type=textbox field=meta method=serialize
 	@caption Kataloog, mida indekseerida
+	
+	@property meta_ctr type=relpicker reltype=RELTYPE_META_CTR field=meta method=serialize
+	@caption Metaandmete kontroller
 	
 	@property i_status type=text store=no
 	@caption Staatus
@@ -46,6 +49,9 @@
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption kordus
+
+@reltype META_CTR value=2 clid=CL_FORM_CONTROLLER
+@caption metaandmete kontroller
 
 */
 
@@ -242,6 +248,12 @@ class site_search_content_grp_fs extends run_in_background
 			";
 		}
 		$this->db_query($q);
+		if (is_oid($o->prop("meta_ctr")) && $this->can("view", $o->prop("meta_ctr")))
+		{
+			$m_ctr = obj($o->prop("meta_ctr"));
+			$ctr_i = $m_ctr->instance();
+			$ctr_i->eval_controller_ref($m_ctr->id(), $h_id, $page, $page);
+		}
 	}
 
 	/**

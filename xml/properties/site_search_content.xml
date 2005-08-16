@@ -1,26 +1,6 @@
 <?xml version='1.0'?>
 <properties>
       <property>
-            <name>do_keyword_search</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>keywords</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Otsing märksõnadest</caption>
-      </property>
-      <property>
-            <name>keyword_search_classes</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>keywords</group>
-            <type>select</type>
-            <multiple>1</multiple>
-            <caption>Klassid</caption>
-      </property>
-      <property>
             <name>search_static</name>
             <table>objects</table>
             <field>meta</field>
@@ -59,6 +39,26 @@
             <type>textbox</type>
             <size>5</size>
             <caption>Mitu tulemust lehel</caption>
+      </property>
+      <property>
+            <name>do_keyword_search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>keywords</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Otsing märksõnadest</caption>
+      </property>
+      <property>
+            <name>keyword_search_classes</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>keywords</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <caption>Klassid</caption>
       </property>
       <property>
             <name>default_order</name>
@@ -127,7 +127,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>textbox</type>
             <caption>Otsi</caption>
       </property>
@@ -136,7 +136,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>date_select</type>
             <caption>Alates</caption>
       </property>
@@ -145,7 +145,7 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>date_select</type>
             <caption>Kuni</caption>
       </property>
@@ -154,54 +154,113 @@
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>textbox</type>
             <caption>Pealkiri</caption>
+      </property>
+      <property>
+            <name>s_opt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_simple</group>
+            <type>select</type>
+            <caption>Kuidas otsida</caption>
+      </property>
+      <property>
+            <name>s_seatch_word_part</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_simple</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Otsi s&amp;otilde;naosa</caption>
       </property>
       <property>
             <name>s_group</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>select</type>
             <caption>Asukoht</caption>
       </property>
       <property>
-            <name>results</name>
+            <name>s_limit</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <caption>Tulemused</caption>
+            <group>search_simple</group>
+            <type>select</type>
+            <caption>Mitu tulemust maksimaalselt</caption>
       </property>
       <property>
             <name>search</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
-            <group>search</group>
+            <group>search_simple</group>
             <type>submit</type>
             <store>no</store>
             <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>results</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_simple</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tulemused</caption>
+      </property>
+      <property>
+            <name>c_srch_els</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_complex</group>
+            <type>callback</type>
+            <callback>callback_get_complex_els</callback>
+            <caption>Komplekotsingu elemendid</caption>
+      </property>
+      <property>
+            <name>c_search</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_complex</group>
+            <type>submit</type>
+            <store>no</store>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>c_results</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_complex</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <caption>Tulemused</caption>
       </property>
       <classinfo>
             <syslog_type>ST_SITE_SEARCH_CONTENT</syslog_type>
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <activity>
+                  <caption>Aktiivsus</caption>
+            </activity>
             <static>
                   <caption>Staatiline otsing</caption>
             </static>
             <keywords>
                   <caption>Märksõnade järgi otsing</caption>
             </keywords>
-            <activity>
-                  <caption>Aktiivsus</caption>
-            </activity>
             <searchgroups>
                   <caption>Otsingu grupid</caption>
             </searchgroups>
@@ -209,6 +268,16 @@
                   <caption>Otsi</caption>
                   <submit_method>get</submit_method>
             </search>
+            <search_simple>
+                  <caption>Lihtne otsing</caption>
+                  <submit_method>get</submit_method>
+                  <parent>search</parent>
+            </search_simple>
+            <search_complex>
+                  <caption>Keeruline otsing</caption>
+                  <submit_method>get</submit_method>
+                  <parent>search</parent>
+            </search_complex>
       </groupinfo>
       <reltypes>
             <REPEATER>
@@ -227,6 +296,16 @@
                   </clid>
                   <caption>otsingu grupp</caption>
             </SEARCH_GRP>
+            <CPLX_EL_CTR>
+                  <value>3</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kompleksotsingu elementide kontroller</caption>
+            </CPLX_EL_CTR>
+            <CPLX_RES_CTR>
+                  <value>4</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>kompleksotsingu tulemuste kontroller</caption>
+            </CPLX_RES_CTR>
       </reltypes>
 </properties>
 

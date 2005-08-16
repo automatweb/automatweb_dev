@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.2 2005/07/13 14:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.3 2005/08/16 09:57:19 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -47,7 +47,7 @@
 	@caption Automaatse impordi seadistamine
 	
 
-@groupinfo ign_urls caption="Ingoreeri aadresse"
+@groupinfo ign_urls caption="Ignoreeri aadresse"
 @groupinfo regex caption="Regulaarvaldised"
 @groupinfo indexer caption="Indekseerija"
 

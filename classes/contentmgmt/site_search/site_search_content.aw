@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.52 2005/07/13 14:27:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.53 2005/08/16 09:57:19 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -8,49 +8,49 @@
 @default table=objects
 @default field=meta
 @default method=serialize
+
 @default group=general
 
-@groupinfo static caption="Staatiline otsing"
-@groupinfo keywords caption="Märksõnade järgi otsing"
+	@property search_static type=checkbox ch_value=1
+	@caption Otsing staatilisse koopiasse
 
-@property do_keyword_search type=checkbox group=keywords field=meta method=serialize ch_value=1
-@caption Otsing märksõnadest
+	@property search_live type=checkbox ch_value=1
+	@caption Otsing aktiivsest saidist
 
-@property keyword_search_classes type=select multiple=1 group=keywords field=meta method=serialize
-@caption Klassid
+	@property multi_groups type=checkbox ch_value=1
+	@caption Otsimisel saab kasutada mitut gruppi
 
-@property search_static type=checkbox ch_value=1
-@caption Otsing staatilisse koopiasse
+	@property per_page type=textbox size=5
+	@caption Mitu tulemust lehel
 
-@property search_live type=checkbox ch_value=1
-@caption Otsing aktiivsest saidist
+	
+@default group=keywords
 
-@property multi_groups type=checkbox ch_value=1
-@caption Otsimisel saab kasutada mitut gruppi
+	@property do_keyword_search type=checkbox field=meta method=serialize ch_value=1
+	@caption Otsing märksõnadest
 
-@property per_page type=textbox size=5
-@caption Mitu tulemust lehel
+	@property keyword_search_classes type=select multiple=1 field=meta method=serialize
+	@caption Klassid
 
-property default_grp type=relpicker reltype=RELTYPE_SEARCH_GRP group=searchgroups
-caption Vaikimisi otsingu grupp
+@default group=searchgroups
 
-@property default_order type=select  group=searchgroups
-@caption Vaikimisi sorteeritakse tulemused
+	@property default_order type=select  
+	@caption Vaikimisi sorteeritakse tulemused
 
-@property grpcfg type=table group=searchgroups
-@caption Otsingugruppide konfigureerimine
+	@property grpcfg type=table 
+	@caption Otsingugruppide konfigureerimine
 
-@property default_search_opt type=select group=searchgroups
-@caption Vaikimisi otsingu t&uuml;&uuml;p
+	@property default_search_opt type=select 
+	@caption Vaikimisi otsingu t&uuml;&uuml;p
 
-property static_gen_repeater type=relpicker reltype=RELTYPE_REPEATER group=static
-caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 
-@property reledit type=releditor group=static reltype=RELTYPE_REPEATER use_form=emb rel_id=first
-@caption Seos
+@default group=static
 
-@property static_gen_link type=text store=no group=static
-@caption Staatilise genereerimise link
+	@property reledit type=releditor reltype=RELTYPE_REPEATER use_form=emb rel_id=first
+	@caption Seos
+
+	@property static_gen_link type=text store=no 
+	@caption Staatilise genereerimise link
 
 
 @groupinfo activity caption=Aktiivsus
@@ -59,9 +59,9 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 	@caption Aktiivsus
 
 
-@default group=search
+@default group=search_simple
 
-	@property str type=textbox
+	@property str type=textbox 
 	@caption Otsi
 
 	@property date_from type=date_select
@@ -73,14 +73,35 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 	@property s_title type=textbox
 	@caption Pealkiri
 
+	@property s_opt type=select
+	@caption Kuidas otsida
+
+	@property s_seatch_word_part type=checkbox ch_value=1
+	@caption Otsi s&otilde;naosa
+
 	@property s_group type=select
 	@caption Asukoht
+
+	@property s_limit type=select
+	@caption Mitu tulemust maksimaalselt
+
+	@property search type=submit 
+	@caption Otsi
 
 	@property results type=table no_caption=1
 	@caption Tulemused
 
-	@property search type=submit 
+@default group=search_complex
+
+	@property c_srch_els type=callback callback=callback_get_complex_els
+	@caption Komplekotsingu elemendid
+
+	@property c_search type=submit 
 	@caption Otsi
+
+	@property c_results type=table no_caption=1
+	@caption Tulemused
+	
 
 @reltype REPEATER value=1 clid=CL_RECURRENCE
 @caption kordus staatilise koopia genereerimiseks
@@ -88,9 +109,18 @@ caption Vali kordus, millega tehakse staatilist koopiat otsingu jaoks
 @reltype SEARCH_GRP value=2 clid=CL_SITE_SEARCH_CONTENT_GRP,CL_EVENT_SEARCH,CL_SHOP_PRODUCT_SEARCH,CL_SITE_SEARCH_CONTENT_GRP_HTML,CL_SITE_SEARCH_CONTENT_GRP_FS
 @caption otsingu grupp
 
-@groupinfo searchgroups caption="Otsingu grupid"
+@reltype CPLX_EL_CTR value=3 clid=CL_FORM_CONTROLLER
+@caption kompleksotsingu elementide kontroller
+
+@reltype CPLX_RES_CTR value=4 clid=CL_FORM_CONTROLLER
+@caption kompleksotsingu tulemuste kontroller
+
 @groupinfo static caption="Staatiline otsing"
+@groupinfo keywords caption="Märksõnade järgi otsing"
+@groupinfo searchgroups caption="Otsingu grupid"
 @groupinfo search caption="Otsi" submit_method=get
+	@groupinfo search_simple caption="Lihtne otsing" submit_method=get parent=search
+	@groupinfo search_complex caption="Keeruline otsing" submit_method=get parent=search
 
 */
 
@@ -151,6 +181,7 @@ class site_search_content extends class_base
 			case "grpcfg":
 				$this->do_grpcfg_table($arr);
 				break;
+
 			case "keyword_search_classes":
 				foreach (aw_ini_get("classes") as $key => $class)
 				{
@@ -179,11 +210,24 @@ class site_search_content extends class_base
 			case "date_from":
 			case "date_to":
 				$prop["year_from"] = 1990;
+				$prop["year_to"] = date("Y");
 				if (!$arr["request"][$prop["name"]])
 				{
 					$prop["value"] = -1;
 					return PROP_OK;
 				}
+				$prop["value"] = $arr["request"][$prop["name"]];
+				break;
+
+			case "s_opt":
+				$prop["options"] = $this->search_opts;
+				$prop["value"] = $arr["request"]["s_opt"];
+				break;
+
+			case "s_limit":
+				$prop["options"] = $this->limit_opts;
+				$prop["value"] = $arr["request"]["s_limit"];
+				break;
 
 			case "s_group":
 				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
@@ -191,11 +235,21 @@ class site_search_content extends class_base
 
 			case "str":
 			case "s_title":
+			case "s_seatch_word_part":
 				$prop["value"] = $arr["request"][$prop["name"]];
 				break;
 
 			case "results":
 				$this->_search_results($arr);
+				break;
+
+			case "c_results":
+				$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CPLX_RES_CTR");
+				if ($o && $arr["request"]["MAX_FILE_SIZE"])
+				{
+					$i = $o->instance();
+					$i->eval_controller_ref($o->id(), $arr, $arr["prop"]["vcl_inst"], $arr["prop"]["vcl_inst"]);
+				}
 				break;
 		};
 		return $retval;
@@ -620,10 +674,12 @@ class site_search_content extends class_base
 		if ($arr["date"]["from"] > 1)
 		{
 			$date[] = "modified >= ".$arr["date"]["from"];
+			$ob = " ORDER BY modified DESC ";
 		}
 		if ($arr["date"]["to"] > 1)
 		{
 			$date[] = "modified <= ".$arr["date"]["to"];
+			$ob = " ORDER BY modified DESC ";
 		}
 		if (count($date))
 		{
@@ -632,7 +688,13 @@ class site_search_content extends class_base
 
 		if ($arr["s_title"] != "")
 		{
-			$title_s = " AND ".$this->_get_sstring($arr["s_title"], $opts["str"], "title",true);
+			$title_s = " AND ".$this->_get_sstring($arr["s_title"], $opts["str"], "title",true, $arr["s_seatch_word_part"]);
+		}
+
+		$lim = "";
+		if ($arr["opts"]["limit"] > 0)
+		{
+			$lim = " LIMIT ".((int)$arr["opts"]["limit"]);
 		}
 
 		$this->quote($str);
@@ -646,8 +708,8 @@ class site_search_content extends class_base
 			FROM 
 				static_content 
 			WHERE 
-				".$this->_get_sstring($str, $opts["str"], "content",true)." $title_s
-				$sections  $lang_id $date_s $site_id $ob
+				".$this->_get_sstring($str, $opts["str"], "content",true,$arr["s_seatch_word_part"])." $title_s
+				$sections  $lang_id $date_s $site_id $ob $lim
 		";
 		enter_function("site_search_content::fetch_static_search_results::query");
 		$this->db_query($sql);
@@ -1535,27 +1597,53 @@ class site_search_content extends class_base
 		}
 	}
 
-	function _get_sstring($str, $opt, $field, $static = false)
+	function _get_sstring($str, $opt, $field, $static = false, $word_part = false)
 	{
+		if ($str == "")
+		{
+			return "1=1";
+		}
 		$words = explode(" ", $str);
 		if ((aw_ini_get("site_search_content.has_fulltext_index") == 1 ) && $static)
 		{
+			$fld = $field;
+			if ($fld == "content")
+			{
+				$fld = "title,content";
+			}
 			switch($opt)
 			{
 				case S_OPT_ANY_WORD:
 					// rewrite string
 					
-					$str2 = str_replace(" ", "* ", trim($str));
-					$str2.= "*";
-					$content_s = " MATCH(title,content) AGAINST ('$str2' IN BOOLEAN MODE) ";
+					$str2 = $str;
+					if ($word_part)
+					{
+						$str2 = str_replace(" ", "* ", trim($str));
+						$str2.= "*";
+					}
+					$content_s = " MATCH($fld) AGAINST ('$str2' IN BOOLEAN MODE) ";
 					break;
 					
 				case S_OPT_ALL_WORDS:
-					$content_s = "( ".join(" AND ", map("MATCH(title,content) AGAINST ('%s' IN BOOLEAN MODE)", $words))." ) ";
+					if ($word_part)
+					{
+						$tmp = array();
+						foreach($words as $word)
+						{
+							$tmp[] = $word."*";
+						}
+						$words = $tmp;
+					}
+					$content_s = "( ".join(" AND ", map("MATCH($fld) AGAINST ('%s' IN BOOLEAN MODE)", $words))." ) ";
 					break;
 					
 				case S_OPT_PHRASE:
-					$content_s = " MATCH(title,content) AGAINST('$str'  IN BOOLEAN MODE) ";
+					if ($word_part)
+					{
+						$str .= "*";
+					}
+					$content_s = " MATCH($fld) AGAINST('\"$str\"'  IN BOOLEAN MODE) ";
 					break;
 			}
 		}
@@ -1618,13 +1706,13 @@ class site_search_content extends class_base
 	{
 		$t->define_field(array(
 			"name" => "link",
-			"caption" => t("Link"),
+			"caption" => t(""),
 			"align" => "center"
 		));
 
 		$t->define_field(array(
 			"name" => "match",
-			"caption" => t("T&auml;psus"),
+			"caption" => t("Mitu korda sisaldab"),
 			"align" => "center"
 		));
 
@@ -1672,27 +1760,39 @@ class site_search_content extends class_base
 			$max_match = max($max_match, $entry["match"]);
 		}
 
+		classload("core/icons");
 		// show in table
 		foreach($res as $entry)
 		{
 			// url, title, modified, content
+			$nm = $entry["title"];
+			$pi = pathinfo($nm);
+			if ($pi["extension"] == "" || strlen($pi["extension"]) > 4)
+			{
+				$nm .= ".html";
+			}
+			$num_reps = $this->_get_num_reps($settings["str"], $settings["s_opt"], $entry["content"]);
 			$t->define_data(array(
-				"link" => html::href(array(
-					"url" => $entry["url"],
-					"caption" => t("Ava"),
+				"link" => html::img(array(
+					"url" => icons::get_icon_url(CL_FILE, $nm),
 				)),
-				"match" => ((int)(($entry["match"] / $max_match) * 100))."%",
-				"title" => $entry["title"],
+				"match" => $num_reps, //((int)(($entry["match"] / $max_match) * 100))."%",
+				"title" => html::href(array(
+					"url" => $entry["url"],
+					"caption" => parse_obj_name($entry["title"]),
+					"target" => "_blank"
+				)),
 				"mod" => $entry["modified"],
 				"cont" => $this->_get_content_high($entry["content"], $settings["str"])
 			));
 		}
 		$t->set_sortable(false);
+		$t->pageselector_string = "Leiti ".count($res)." dokumenti";
 	}
 
 	function get_multi_search_results($arr)
 	{
-		if ($arr["str"] == "")
+		if ($arr["str"] == "" && $arr["s_title"] == "")
 		{
 			return array();
 		}
@@ -1715,13 +1815,16 @@ class site_search_content extends class_base
 		{
 			$GLOBALS["DUKE"] = 1;
 		}
+		$arr["opts"]["str"] = $arr["s_opt"];
+		$arr["opts"]["limit"] = $arr["s_limit"];
 		$res = $this->fetch_static_search_results(array(
 			"str" => $arr["str"],
 			"opts" => $arr["opts"],
 			"date" => $arr["date"],
 			"s_title" => $arr["s_title"],
 			"no_lang_id" => true,
-			"site_id" => $arr["s_group"]
+			"site_id" => $arr["s_group"],
+			"s_seatch_word_part" => $arr["s_seatch_word_part"],
 		));
 		$GLOBALS["DUKE"] = 0;
 		return $res;
@@ -1729,6 +1832,7 @@ class site_search_content extends class_base
 
 	function _get_content_high($c, $str)
 	{
+		$c = preg_replace("/\s+/", " ", $c);
 		// try to find complete string first, then any word
 		if (($_pos = strpos($c, $str)) !== false)
 		{
@@ -1742,6 +1846,10 @@ class site_search_content extends class_base
 			if (($_pos = strpos($c, $word)) !== false)
 			{
 				return $this->_hgl($c, $word, $_pos, $words);
+			}
+			else
+			{
+				return substr(trim($c), 0, strpos(trim($c), " ", 200));
 			}
 		}
 	}
@@ -1769,6 +1877,53 @@ class site_search_content extends class_base
 			}
 		}
 		return substr($c, $begin, ($end - $begin)+1);
+	}
+
+	function _get_num_reps($str, $opt, $content)
+	{
+		$res = 0;
+		switch($opt)
+		{
+			case S_OPT_ANY_WORD:
+			case S_OPT_ALL_WORDS:
+				$words = explode(" ", $str);
+				$ct = strtolower($content);
+				foreach($words as $word)
+				{
+					$res += substr_count($content, strtolower($word));
+				}
+				return $res;
+
+			case S_OPT_PHRASE:
+			default:
+				return substr_count(strtolower($content), strtolower($str));
+		}
+	}
+
+	function callback_mod_tab($arr)
+	{
+		if ($arr["id"] == "search_complex")
+		{
+			$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CPLX_EL_CTR");
+			if (!$o)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function callback_get_complex_els($arr)
+	{
+		$o = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_CPLX_EL_CTR");
+		if (!$o)
+		{
+			return false;
+		}
+
+		$i = $o->instance();
+
+		return $i->eval_controller($o->id(), $arr["obj_inst"]);
 	}
 }
 ?>
