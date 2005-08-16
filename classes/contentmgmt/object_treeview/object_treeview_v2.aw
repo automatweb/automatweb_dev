@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.83 2005/07/08 15:07:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.84 2005/08/16 12:55:46 duke Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -212,13 +212,25 @@ class object_treeview_v2 extends class_base
 		$retval = PROP_OK;
 
 		$ob = $arr["obj_inst"];
-		if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+	
+		// $inherited gets set to true the first time if_check is done and the value is later
+		// used to determine whether some properties will be shown or not
+		static $inherited = false;
+		static $ih_check_done = false;
+		static $ih_ob;
+
+		if (!$ih_check_done)
 		{
-			$ih_ob = obj($ob->prop("inherit_view_props_from"));
-		}
-		else
-		{
-			$ih_ob = $ob;
+			if (is_oid($ob->prop("inherit_view_props_from")) && $this->can("view", $ob->prop("inherit_view_props_from")))
+			{
+				$inherited = true;
+				$ih_ob = obj($ob->prop("inherit_view_props_from"));
+			}
+			else
+			{
+				$ih_ob = $ob;
+			};
+			$ih_check_done = true;
 		}
 
 		static $col_list;
@@ -236,6 +248,9 @@ class object_treeview_v2 extends class_base
 		switch($prop["name"])
 		{
 			case "inherit_view_props_from":
+			// duke: what if I would implement lazy initialization for objpicker properties?
+			// this way you could add additional parameters to the object_list created by
+			// objpicker?
 			case "sel_inherit_from":
 				$ol = new object_list(array(
 					"class_id" => CL_OBJECT_TREEVIEW_V2,
@@ -247,7 +262,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "show_link_field":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -260,7 +275,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "url_field":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -268,7 +283,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "tree_type":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -277,10 +292,10 @@ class object_treeview_v2 extends class_base
 					TREE_DHTML => t("DHTML"),
 					TREE_TABLE => t("Tabel"),
 				);
-// if tree_type isn't set, TREE_DHTML will be used 
-// eh, i definitely need a better solution to handle existing objects
-// cause right i now there are at least 2 more checks to make sure, that DHTML
-// will be used when nothing is set
+				// if tree_type isn't set, TREE_DHTML will be used 
+				// eh, i definitely need a better solution to handle existing objects
+				// cause right i now there are at least 2 more checks to make sure, that DHTML
+				// will be used when nothing is set
 
 				if (empty($prop['value']))
 				{
@@ -290,7 +305,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "sortbl":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -317,7 +332,7 @@ class object_treeview_v2 extends class_base
 				}
 				break;
 			case "group_in_table":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -325,7 +340,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "filter_by_char_field":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -333,7 +348,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "filter_by_char_order":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -351,7 +366,7 @@ class object_treeview_v2 extends class_base
 				break;
 
 			case "columns":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -368,7 +383,7 @@ class object_treeview_v2 extends class_base
 			case "alphabet_in_lower_case":
 			case "folders_table_column_count":
 			case "no_cache_page":
-				if (is_oid($arr["obj_inst"]->prop("inherit_view_props_from")))
+				if ($inherited)
 				{
 					return PROP_IGNORE;
 				}
@@ -620,6 +635,7 @@ class object_treeview_v2 extends class_base
 			}
 			else
 			{
+				print "case 2";
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
 				$ol = $this->filter_data(array(
 					"ol" => $ol,
