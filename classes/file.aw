@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.107 2005/06/29 13:02:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.108 2005/08/16 09:54:27 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -989,6 +989,17 @@ class file extends class_base
 		$scanner = get_instance("core/virus_scanner");
 		$ret = $scanner->scan_file($file);
 		return $ret;
+	}
+
+
+	/** Generate a form for adding or changing an object 
+		
+		@attrib name=new params=name all_args="1" is_public="1" caption="Lisa"
+
+	**/
+	function new_change($args)
+	{
+		return parent::change($args);
 	}
 };
 ?>

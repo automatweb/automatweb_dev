@@ -17,5 +17,12 @@
 			</function>
 		</action>
 
+		<action name="new" is_public="1" all_args="1" caption="Lisa">
+			<function name="new_change">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

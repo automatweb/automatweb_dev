@@ -13,4 +13,5 @@
 	<class id="shop_order_center" name="Lao tellimused"/>
 	<class id="community" name="Kogukond"/>
 	<class id="simple_shop" name="Lihtne pood"/>
+	<class id="file" name="Fail"/>
 </interface>
