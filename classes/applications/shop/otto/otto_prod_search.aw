@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.11 2005/04/21 09:31:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.12 2005/08/16 10:01:37 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -33,6 +33,20 @@ class otto_prod_search extends class_base
 		array("Majturiba", array(135965))
 	);
 
+	var $search_fld_bp_ee = array(
+		array("Naistele", array(83)),
+	);
+
+	var $search_fld_bp_lat = array(
+		array("Sievieðu mode", array(135883)),
+		array("Virieðu mode", array(135836)),
+		array("Bernu un pusaudþu mode", array(135962)),
+		array("Apavi", array(135963)),
+		array("Sporta preces", array(135964)),
+		array("Majturiba", array(135965))
+	);
+
+
 	function otto_prod_search()
 	{
 		$this->init(array(
@@ -43,6 +57,18 @@ class otto_prod_search extends class_base
 		if (aw_global_get("lang_id") == 6)
 		{
 			$this->search_fld = $this->search_fld_lat;
+		}
+
+		if (aw_ini_get("site_id") == 276)
+		{
+			if (aw_global_get("lang_id") == 1)
+			{
+				$this->search_fld = $this->search_fld_bp_ee;
+			}
+			else
+			{
+				$this->search_fld = $this->search_fld_bp_lat;
+			}
 		}
 	}
 
@@ -276,7 +302,7 @@ class otto_prod_search extends class_base
 				if ($imnr != "")
 				{
 					$imnr = html::img(array(
-						"url" => "http://image01.otto.de/pool/OttoDe/de_DE/images/formatb/".$imnr.".jpg",
+						"url" => $this->get_img_url($imnr, "formatb"),
 						"width" => 80,
 						//"height" => 140,
 						"border" => "0"
@@ -463,6 +489,17 @@ class otto_prod_search extends class_base
 			$ret[$row["pg"]] = $row["pg"];
 		}
 		return $ret;
+	}
+
+	function get_img_url($imnr,$f = "formatb")
+	{
+		if (aw_ini_get("site_id") == 276)
+		{
+			list($i, $f) = explode("_", $imnr);
+			return "http://image01.otto.de/bonprixbilder/varianten/artikel_ansicht/$f/$i.jpg";
+		}
+
+		return "http://image01.otto.de/pool/OttoDe/de_DE/images/$f/".$imnr.".jpg";
 	}
 }
 ?>
