@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.11 2005/07/21 16:13:26 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.12 2005/08/16 15:38:12 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -88,7 +88,7 @@ class persona_import extends class_base
 
 			case "invk":
 				$prop["value"] = html::href(array(
-					"url" => $this->mk_my_orb("invoke_import",array("id" => $arr["obj_inst"]->id())),
+					"url" => $this->mk_my_orb("invoke",array("id" => $arr["obj_inst"]->id())),
 					"caption" => t("Käivita import"),
 				));
 				// now check whether we have a half completed status file
@@ -110,7 +110,9 @@ class persona_import extends class_base
 
 					$capt = " $done / $total";
 					$prop["value"] = html::href(array(
-						"url" => $this->mk_my_orb("invoke_import",array("id" => $arr["obj_inst"]->id())),
+						"url" => $this->mk_my_orb("invoke",array(
+							"id" => $arr["obj_inst"]->id(),
+						)),
 						"caption" => t("Jätka poolikut importi") . $capt,
 					));
 				};
@@ -168,19 +170,16 @@ class persona_import extends class_base
 	}
 
 	/**
-		@attrib name=invoke_import nologin="1"
+		@attrib name=invoke nologin="1"
 		@param id required type=int
 	**/
-	function invoke_import($arr)
+	function invoke($arr)
 	{
 		aw_disable_acl();
 		$obj = new object($arr["id"]);
 
-
 		$config = $this->get_config($arr);
 
-		//arr($config);
-		//exit;
 
 		if (sizeof($config["ftp"]) == 0)
 		{
@@ -224,38 +223,13 @@ class persona_import extends class_base
 			die(t("Kliendibaasil puudub muutujate haldur"));
 		};
 
-		/*
-		
-		$olist = new object_list(array(
-			"class_id" => array(CL_CRM_PERSON),
-		));
-		foreach($olist->arr() as $o)
-		{
-			print "deleting ". $o->name() . "<br>";
-			$o->delete();
-
-
-		};
-		$olist = new object_list(array(
-			"parent" => $dir_default,
-		));
-		foreach($olist->arr() as $o)
-		{
-			print "deleting ". $o->name() . "<br>";
-			flush();
-			$o->delete();
-
-
-		};
-		exit;
-		*/
-
 		$first = reset($mt_conns);
 		$metamgr = new object($first->prop("to"));
 
 		$meta1list = new object_list(array(
 			"parent" => $metamgr->id(),
 			"class_id" => CL_META,
+			"site_id" => array(),
 		));
 
 		$meta1 = array_flip($meta1list->names());
@@ -305,21 +279,22 @@ class persona_import extends class_base
 		$fdat = $c->get_file($fqfn);
 		$c->disconnect();
 		
-		print "<h1>" . $fqfn . "</h1>";
-
+		print "<h5>" . $fqfn . "</h5>";
 
 		if (strlen($fdat) == 0)
 		{
 			die(t("Not enough data to process<bR>"));
 		};
 
-		print "<h2>";
+		print "<h6>";
 		print strlen($fdat) . " bytes of data to proess";
-		print "</h2>";
+		print "</h6>";
 
+		/*
 		print "<pre>";
 		print htmlspecialchars($fdat);
 		print "</pre>";
+		*/
 
 		print t("got data<br>");
 	
@@ -407,11 +382,6 @@ class persona_import extends class_base
 
 		};
 
-		print "<h1>data follows</h1>";
-		arr($data);
-		print "<h1>datastream ends</h1>";
-
-
 		$persona_import_started = aw_global_get("persona_import_started");
 
 		$persona_to_process = array();
@@ -422,6 +392,8 @@ class persona_import extends class_base
 
 		if (!$stat_file_content)
 		{
+			// fill the array with pairs of ext_id => person_done pairs
+			// at the start everyone gets flagged with 0
 			foreach($data["TOOTAJAD"] as $worker)
 			{
 				$ext_id = $worker["TOOTAJA_ID"];
@@ -435,19 +407,22 @@ class persona_import extends class_base
 		}
 		else
 		{
+			// load status array back into memory
 			print "Trying to continue aborted import process<br>";
 			$persona_to_process = aw_unserialize($stat_file_content);
 		};
 
+		// $folder for persons is defined in the connected crm_db
 		$person_list = new object_list(array(
 			"parent" => $folder_person,
 			"class_id" => CL_CRM_PERSON,
+			"site_id" => array(),
 		));
 		
 		foreach($person_list->arr() as $person_obj)
 		{
 			$ext_id = $person_obj->prop("ext_id");
-			$ext_id = $person_obj->subclass();
+			//$ext_id = $person_obj->subclass();
 			/*
 			var_dump($person_obj->id());
 			print " = ";
@@ -461,28 +436,15 @@ class persona_import extends class_base
 				$person_match[$ext_id] = $person_obj->id();
 			};
 		};
-
+		
 		// list of addresses
 		$addr_list = new object_list(array(
 			"class_id" => CL_CRM_ADDRESS,
+			"site_id" => array(),
 		));
 
 		$addr = $addr_list->names();
 		// ----------------------------
-
-		// list of existing e-mail addresses
-		$email_list = new object_list(array(
-			"parent" => $dir_default,
-			"class_id" => CL_ML_MEMBER,
-		));
-
-		$emails = array();
-
-		foreach($email_list->arr() as $member)
-		{
-			// now, for each e-mail 
-			$emails[$member->id()] = $member->prop("mail");
-		};
 
 		$c = new connection();
 		$email_connections = $c->find(array(
@@ -499,13 +461,11 @@ class persona_import extends class_base
 			$email_links[$email_connection["from"]] = $email_connection["to"];
 		};
 
-		// and this means that I have to create a list of connections between members and objects
-		// arr
-
 		// list of phone numbers
 		$phone_list = new object_list(array(
 			"class_id" => CL_CRM_PHONE,
 			"parent" => $dir_default,
+			"site_id" => array(),
 		));
 
 		$phones = array_flip($phone_list->names());
@@ -544,10 +504,12 @@ class persona_import extends class_base
 			$olist = new object_list(array(
 				"class_id" => $sdata["clid"],
 				"parent" => $dir_default,
+				"site_id" => array(),
 			));
 			$simple_data[$key] = array_flip($olist->names());
 
 		};
+
 
 		//arr($simple_data);
 
@@ -567,6 +529,7 @@ class persona_import extends class_base
 
 		$seco = new object_list(array(
 			"class_id" => CL_CRM_SECTION,
+			"site_id" => array(),
 		));
 
 		$sections = array();
@@ -664,15 +627,19 @@ class persona_import extends class_base
 		$aw_timer = new aw_timer();
 
 
+		/*
 		print t("<h1>sections</h1>");
 		arr($sections);
 		print t("<h1>sections done</h1>");
+		*/
 
 		$persona_persons_done = aw_global_get("persona_persons_done");
 
+		/*
 		print "pmatch";
 		arr($person_match);
 		print "match done<br>";
+		*/
 
 		$persons = array();
 
@@ -688,9 +655,14 @@ class persona_import extends class_base
 		foreach($data["TOOTAJAD"] as $worker)
 		{
 			$ext_id = $worker["TOOTAJA_ID"];
+			$worker["EESNIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["EESNIMI"]);
+			$worker["PEREKONNANIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["PEREKONNANIMI"]);
+
+			$person_name = $worker["EESNIMI"]." ".$worker["PEREKONNANIMI"];
 			if ($persona_to_process[$ext_id] == 1)
 			{
-				print "This person has already been imported in this import, skipping<br>";
+				print "$person_name has already been imported in this import, skipping<br>";
+				unset($person_match[$ext_id]);
 				continue;
 			};
 			if (empty($person_match[$ext_id]))
@@ -715,14 +687,16 @@ class persona_import extends class_base
 
 			print "tm = " . $bday . "<br>";
 
-			$worker["EESNIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["EESNIMI"]);
-			$worker["PEREKONNANIMI"] = iconv("UTF-8", "ISO-8859-4",$worker["PEREKONNANIMI"]);
-			/*
-			$worker["EESNIMI"] = convert_unicode($worker["EESNIMI"]);
-			$worker["PEREKONNANIMI"] = convert_unicode($worker["PEREKONNANIMI"]);
-			*/
-
-			$person_obj->set_name($worker["EESNIMI"] . " " . $worker["PEREKONNANIMI"]);
+			;
+			print "<b>Processing $person_name</b><br>";
+			print "id = " . $person_obj->id() . "<br>";
+			print html::href(array(
+				"url" => $this->mk_my_orb("change",array("id" => $person_obj->id()),CL_CRM_PERSON),
+				"caption" => t("Vaata"),
+			));
+			print "<br>";
+			
+			$person_obj->set_name($person_name);
 			$person_obj->set_prop("firstname",$worker["EESNIMI"]);
 			$person_obj->set_prop("lastname",$worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("ext_id",$ext_id);
@@ -753,13 +727,13 @@ class persona_import extends class_base
 			};
 
 
-			if (!empty($worker["E_POST"]) && !in_array($worker["E_POST"],$emails))
+ 			if (!empty($worker["E_POST"]))
 			{
 				// I need to replace e-mail address, not create a new one
 
 				// at this point person_obj already exists, so I need to check
 				// whether an e-mail address is connected
-
+	
 				if ($email_links[$person_obj->id()])
 				{
 					$ml = new object($email_links[$person_obj->id()]);
@@ -774,13 +748,13 @@ class persona_import extends class_base
 					$ml->set_parent($dir_default);
 					$ml->set_class_id(CL_ML_MEMBER);
 				};
-
+	
 				$ml->set_name($worker["E_POST"]);
 				$ml->set_prop("mail",$worker["E_POST"]);
 				$ml->save();
-
+	
 				$mid = $ml->id();
-
+							
 				$person_obj->connect(array(
 					"to" => $mid,
 					"reltype" => 11,
@@ -796,9 +770,12 @@ class persona_import extends class_base
 					continue;
 				};
 				
-				if ($simple_data[$skey][$worker[$skey]])
+				$_name = $worker[$skey];
+				$_name = iconv("UTF-8", "ISO-8859-4",$_name);
+				
+				if ($simple_data[$skey][$_name])
 				{
-					$tmp_o = new object($simple_data[$skey][$worker[$skey]]);
+					$tmp_o = new object($simple_data[$skey][$_name]);
 					print "connecting to $skey object<br>";
 				}
 				else
@@ -810,9 +787,21 @@ class persona_import extends class_base
 					$tmp_o->save();
 					print "creating and connecting to $skey object<br>";
 				};
-				$tmp_o->set_name($worker[$skey]);
+
+				$tmp_o->set_name($_name);
+
+				print "name is $_name<br>";
 				$tmp_id = $tmp_o->id();
-				$simple_data[$skey][$worker[$skey]] = $tmp_id;
+				print "oid is " . $tmp_id . "<br>";
+				print html::href(array(
+					"url" => $this->mk_my_orb("change",array("id" => $tmp_id),$sdata['clid']),
+					"caption" => t("Vaata"),
+				));
+				print "<br>";
+
+				$simple_data[$skey][$_name] = $tmp_id;
+
+				$tmp_o->save();
 
 				$person_obj->connect(array(
 					"to" => $tmp_id,
@@ -824,12 +813,24 @@ class persona_import extends class_base
 				//print "name = " . $tmp_o->name();
 			};
 		
+			// one person can have different types of phone numbers, each has it's own
+			// tag in the XML. phone_type (defined above) contains all possible types
+			// all existing phone numbers are stored in $phones as phone_number => obj_id 
+			// pairs. Phone number is key for faster access
+		
+			// For each person cycle over all phone types, check whether the given number
+			// exists (in $phones) - if so, then connect person to the phone number object,
+			// if not, then create a new phone number object and connect.
+			
+			// it is not necessary to check whether the connection already exists,
+			// storage basically ignores the connect() if this is the case
 			foreach($phone_type as $pkey => $pval)
 			{
 				//if (!empty($worker[$pkey]) && !in_array($worker[$pkey],$phones))
+				print "checking $pkey<br>";
 				if (!empty($worker[$pkey]) && !$phones[$worker[$pkey]])
 				{
-					print "creating $pkey telefon object";
+					print "creating $pkey phone number object<br>";
 					$this->_create_and_connect_phone(array(
 						"person_obj" => $person_obj,
 						"folder" => $dir_default,
@@ -839,9 +840,19 @@ class persona_import extends class_base
 				};
 				if ($phones[$worker[$pkey]])
 				{
+					
 					$po = new object($phones[$worker[$pkey]]);
 					$po->set_prop("type",$pval);
 					$po->save();
+
+					print "connecting to existing $pkey phone object" . $po->id() . "<br>";
+
+					$person_obj->connect(array(
+						"to" => $po->id(),
+						"reltype" => 13 // phone
+					));
+					
+					
 				};
 			};
 			print "phones connected<bR>";
@@ -1145,6 +1156,8 @@ class persona_import extends class_base
 			die(t("You forgot to enter server data"));
 		};
 
+		set_time_limit(0);
+
 		$c = get_instance(CL_FTP_LOGIN);
 
 
@@ -1351,7 +1364,8 @@ class persona_import extends class_base
 		foreach($conns as $conn)
 		{
 			$rep_id = $conn->prop("to");
-			$event_url = $this->mk_my_orb("invoke_import",array("id" => $o->id()));
+			$event_url = $this->mk_my_orb("invoke",array("id" => $o->id()));
+			// lisab iga ühendatud recurrence objekti kohta kirje scheduleri
 			$sch->add(array(
 			 	"event" => $event_url,
 				"rep_id" => $rep_id,
