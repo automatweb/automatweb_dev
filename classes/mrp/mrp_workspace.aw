@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.137 2005/08/03 10:47:42 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.138 2005/08/16 11:58:28 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1050,7 +1050,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_next_link":
-				if ($arr["request"]["pj_job"])
+				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable")
 				{
 					return PROP_IGNORE;
 				}
@@ -1061,7 +1061,7 @@ class mrp_workspace extends class_base
 				break;
 
 			case "printer_jobs_prev_link":
-				if ($arr["request"]["pj_job"])
+				if ($arr["request"]["pj_job"] || $arr["request"]["group"] == "grp_printer_notstartable")
 				{
 					return PROP_IGNORE;
 				}
@@ -1348,7 +1348,8 @@ if ($_GET['show_thread_data'] == 1)
 			"caption" => t("Jrk."),
 			"callback" => array (&$this, "order_field_callback"),
 			"callb_pass_row" => false,
-			"sortable" => 1
+			"sortable" => 1,
+			"numeric" => 1
 		));
 
 		$table->define_chooser(array(
@@ -3452,7 +3453,10 @@ if ($_GET['show_thread_data'] == 1)
 			case "grp_printer_startable":
 			case "grp_printer_notstartable":
 				$default_sortby = "mrp_schedule_826.starttime";
+				//$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
 				$states = array(MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$proj_states = array(MRP_STATUS_NEW,MRP_STATUS_PLANNED,MRP_STATUS_INPROGRESS,MRP_STATUS_PAUSED);
+				$limit = (((int)$arr["request"]["printer_job_page"])*$per_page).",200";
 				break;
 		}
 
@@ -3617,6 +3621,7 @@ if ($_GET['show_thread_data'] == 1)
 
 				case "grp_printer":
 				case "grp_printer_current":
+				case "grp_printer_startable":
 					$start = $job->prop("starttime");
 					$end = $job->prop("starttime") + $job->prop("length");
 					$length = $job->prop("length");
