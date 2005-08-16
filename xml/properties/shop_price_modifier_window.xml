@@ -63,6 +63,36 @@
             <caption>Ruutmeetri hind m&amp;otilde;lemalt poolt v&amp;auml;rvitud aknale</caption>
       </property>
       <property>
+            <name>pr_add_twopart</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Hinnamuutus kaheosalise akna puhul</caption>
+      </property>
+      <property>
+            <name>pr_add_threepart</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Hinnamuutus kolmeosalise akna puhul</caption>
+      </property>
+      <property>
+            <name>pr_add_tpart</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Hinnamuutus T-kujulise akna puhul</caption>
+      </property>
+      <property>
             <name>board_price_table</name>
             <table>objects</table>
             <group>board</group>

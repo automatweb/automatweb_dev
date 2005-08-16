@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.2 2005/07/11 12:52:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.3 2005/08/16 10:00:28 kristo Exp $
 // shop_price_modifier_window.aw - Akna hinnakujundus 
 /*
 
@@ -33,6 +33,15 @@
 
 	@property two_side_painted_sqm_price type=table
 	@caption Ruutmeetri hind m&otilde;lemalt poolt v&auml;rvitud aknale
+
+	@property pr_add_twopart type=textbox size=5
+	@caption Hinnamuutus kaheosalise akna puhul
+
+	@property pr_add_threepart type=textbox size=5
+	@caption Hinnamuutus kolmeosalise akna puhul
+
+	@property pr_add_tpart type=textbox size=5
+	@caption Hinnamuutus T-kujulise akna puhul
 
 @default group=board
 
