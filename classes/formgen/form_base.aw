@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.28 2005/04/05 13:52:33 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_base.aw,v 1.29 2005/08/17 06:52:30 kristo Exp $
 // form_base.aw - this class loads and saves forms, all form classes should derive from this.
 lc_load("automatweb");
 
@@ -248,7 +248,7 @@ class form_base extends form_db_base
 		$tmp = obj($this->id);
 		$tmp->set_name($this->name);
 		$tmp->set_comment($this->comment);
-		$tmp->set_flags($this->flags);
+		$tmp->set_flags((int)$this->flags);
 		$awa = new aw_array($this->meta);
 		foreach($awa->get() as $k => $v)
 		{
