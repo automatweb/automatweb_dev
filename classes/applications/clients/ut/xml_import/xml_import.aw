@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.3 2005/03/22 15:32:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.4 2005/08/17 13:15:59 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -613,6 +613,12 @@ class xml_import extends class_base
 	function convert_unicode($source)
 	{
 		// utf8_decode doesn't work here
+		// and from now (17.08.2005) this function no longer does what it's name says, 
+		// UT will start using ISO-8859-4 in the source XML. I'm leaving the function 
+		// though, because maybe we need to do some conversions after all and then this
+		// can simply be renamed
+
+		/*
 		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
 		$retval = str_replace(chr(0xC3). chr(0xBC),"ü",$retval);
 		$retval = str_replace(chr(0xC3). chr(0xB6),"ö",$retval);
@@ -627,6 +633,7 @@ class xml_import extends class_base
 		$retval = str_replace(chr(0xC5). chr(0xA1),"&#0353;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBD),"&#381;",$retval);
 		$retval = str_replace(chr(0xC5). chr(0xBE),"&#382;",$retval);
+		*/
 		
 		return $retval;
 	}
