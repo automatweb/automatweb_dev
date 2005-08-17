@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.5 2005/08/17 10:33:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.6 2005/08/17 10:34:08 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -359,7 +359,6 @@ class server_folder extends class_base
 
 	function check_acl($acl, $o, $id)
 	{
-		return true;
 		$fp = $this->_get_safe_path($o, $id);
 		switch($acl)	
 		{
