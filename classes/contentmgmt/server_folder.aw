@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.4 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/server_folder.aw,v 1.5 2005/08/17 10:33:04 kristo Exp $
 // server_folder.aw - Serveri Kataloog 
 /*
 
@@ -31,6 +31,7 @@
 
 */
 
+classload("core/icons");
 class server_folder extends class_base
 {
 	function server_folder()
@@ -72,7 +73,7 @@ class server_folder extends class_base
 		));
 		$o = obj($oid);
 		$fname = urldecode($fname);
-		$fqfn = $o->prop("folder")."/".basename($fname);
+		$fqfn = $o->prop("folder")."/".str_replace("..", "", $fname);
 		if (!file_exists($fqfn))
 		{
 			$fqfn = $o->prop("folder")."/".urlencode(basename($fname));
@@ -235,6 +236,145 @@ class server_folder extends class_base
 
 		$fid = $id.":".urlencode($_FILES["addf_file"]["name"]);
 		return $this->mk_my_orb("change_file", array("fid" => $fid, "section" => $section));
+	}
+
+	/////// object treeview interface functions
+
+	function get_folders($ob, $tree_type = NULL)
+	{
+		$list = array();
+		$fld = $ob->prop("folder");
+		$this->_recur_dir_list($fld, $list);
+
+		$nl = array();
+
+		foreach($list as $k => $d)
+		{
+			$k = str_replace($fld, "", $k);
+			$d["id"] = str_replace($fld, "", $d["id"]);
+
+			if ($d["parent"] == $fld)
+			{
+				$d["parent"] = 0;
+			}
+			else
+			{
+				$d["parent"] = str_replace($fld, "", $d["parent"]);
+			}
+			
+			$nl[$k] = $d;
+		}
+		return $nl;
+	}
+
+	function _recur_dir_list($dir, &$list)
+	{
+		if ($dh = @opendir($dir)) 
+		{
+			while (false !== ($file = readdir($dh))) 
+			{ 
+				if ($file == "." || $file == "..")
+				{
+					continue;
+				}
+
+				$fn = $dir . "/" . $file;
+				if (is_dir($fn))
+				{
+					$list[$fn] = array(
+						"id" => $fn,
+						"parent" => $dir,
+						"name" => $file,
+						"add_date" => filemtime($fn),
+						"mod_date" => filemtime($fn),
+						"icon" => image::make_img_tag(icons::get_icon_url(CL_MENU, "")),
+						"jrk" => $num++
+					);
+					$this->_recur_dir_list($fn, $list);
+				}
+			}
+			closedir($dh);
+		}
+	}
+
+	function get_fields($ob)
+	{
+		return array(
+			"name" => t("Nimi"),
+			"file_size" => t("Faili suurus"),
+			"created" => t("Loomise kuup&auml;ev"),
+			"modified" => t("Muutmise kuup&auml;ev")
+		);
+	}
+
+	function has_feature($f)
+	{
+		return false;
+	}
+
+	function get_objects($ob, $fld = NULL, $tv_sel = NULL, $params = array())
+	{
+		if ($tv_sel == "")
+		{
+			$dir = $ob->prop("folder");
+		}
+		else
+		{
+			$dir = $this->_get_safe_path($ob,$tv_sel);
+		}
+
+		$list = array();
+		if ($dh = @opendir($dir)) 
+		{
+			while (false !== ($file = readdir($dh))) 
+			{ 
+				$fn = $dir . "/" . $file;
+				if (is_file($fn))
+				{
+					$file_p = str_replace($ob->prop("folder"), "", $fn);
+					$fid = $ob->id().":".$file_p;
+					$list[$file_p] = array(
+						"id" => $file_p,
+						"name" => $file,
+						"file_size" => filesize($fn),
+						"add_date" => filemtime($fn),
+						"mod_date" => filemtime($fn),
+						"icon" => image::make_img_tag(icons::get_icon_url(CL_FILE, $fn)),
+						"jrk" => $num++,
+						"url" => $this->mk_my_orb("show_file", array("fid" => $fid)),
+						/*"change" => html::href(array(
+							"url" => $this->mk_my_orb("change_file", array("fid" => $fid, "section" => aw_global_get("section"))),
+							"caption" => html::img(array(
+								"url" => aw_ini_get("baseurl")."/automatweb/images/icons/edit.gif",
+								"border" => 0
+							))
+						))*/
+					);
+				}
+			}
+			closedir($dh);
+		}
+		return $list;
+	}
+
+	function check_acl($acl, $o, $id)
+	{
+		return true;
+		$fp = $this->_get_safe_path($o, $id);
+		switch($acl)	
+		{
+			case "edit":
+			case "add":
+			case "delete":
+				return is_writable($fp);
+				break;
+		}
+		return false;
+	}
+
+	function _get_safe_path($o, $fn)
+	{
+		return $o->prop("folder").str_replace("..", "", urldecode($fn));
 	}
 }
 ?>
