@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.5 2005/08/17 13:16:51 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.6 2005/08/17 13:31:06 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -139,16 +139,16 @@ class xml_import extends class_base
 			if ( ($val["tag"]  == "tudeng") && $val["type"] == "complete" )
 			{
 				$attr = $val["attributes"];		
-				$enimi = $this->convert_unicode($attr["enimi"]);
-				$pnimi = $this->convert_unicode($attr["pnimi"]);
+				$enimi = $this->convert_charset($attr["enimi"]);
+				$pnimi = $this->convert_charset($attr["pnimi"]);
 				$id = $attr["id"];
 				$struktuur = $attr["struktuur"];
 				$oppekava = $attr["oppekava"];
 				$oppeaste = $attr["oppeaste"];
 				$oppevorm = $attr["oppevorm"];
-				$oppekava = $this->convert_unicode($oppekava);
-				$oppeaste = $this->convert_unicode($oppeaste);
-				$oppevorm = $this->convert_unicode($oppevorm);
+				$oppekava = $this->convert_charset($oppekava);
+				$oppeaste = $this->convert_charset($oppeaste);
+				$oppevorm = $this->convert_charset($oppevorm);
 				$nimi = $enimi . " " . $pnimi;
 				$aasta = $attr["aasta"];
 
@@ -215,10 +215,10 @@ class xml_import extends class_base
 				{
 					if ($val["level"] == 2)
 					{
-						$osakond = $this->convert_unicode($val["attributes"]["nimetus"]);
+						$osakond = $this->convert_charset($val["attributes"]["nimetus"]);
 						$ylem_id = $val["attributes"]["id"];
 						$attr = $val["attributes"];		
-						$ylem_name = $this->convert_unicode($attr["nimetus"]);
+						$ylem_name = $this->convert_charset($attr["nimetus"]);
 						$ylem_jrk = $val["attributes"]["jrk"];
 						$this->quote($osakond);
 					};
@@ -235,10 +235,10 @@ class xml_import extends class_base
 				{
 					$attr = $val["attributes"];		
 					$this->quote($attr);
-					$nimetus = $this->convert_unicode($attr["nimetus"]);
+					$nimetus = $this->convert_charset($attr["nimetus"]);
 					$id = $attr["id"];
 					$kood = $attr["kood"];
-					$aadress = $this->convert_unicode($attr["aadress"]);
+					$aadress = $this->convert_charset($attr["aadress"]);
 					$email = $attr["email"];
 					$veeb = $attr["veeb"];
 					$telefon = $attr["telefon"];
@@ -305,7 +305,7 @@ class xml_import extends class_base
 				if ($val["type"]  ==  "open")
 				{
 					$attr = $val["attributes"];		
-					$ylem_name = $this->convert_unicode($attr["nimetus"]);
+					$ylem_name = $this->convert_charset($attr["nimetus"]);
 					$yid = $val["attributes"]["id"];
 					/*
 					print "<b>pushing</b><br />";
@@ -367,14 +367,14 @@ class xml_import extends class_base
 				// lisame uue töötaja baasi
 				$this->quote($t_attr);
 				// collect the data for later use
-				$enimi = $this->convert_unicode($t_attr["enimi"]);
-				$pnimi = $this->convert_unicode($t_attr["pnimi"]);
+				$enimi = $this->convert_charset($t_attr["enimi"]);
+				$pnimi = $this->convert_charset($t_attr["pnimi"]);
 				$tid = $t_attr["id"];
 				$veeb = $t_attr["veeb"];
 				$koht = "";
 				$ruum = $t_attr["ruum"];
 				$email = $t_attr["email"];
-				$markus = $this->convert_unicode($t_attr["markus"]);
+				$markus = $this->convert_charset($t_attr["markus"]);
 				$mobiil = $t_attr["mobiil"];
 				$sisetel = $t_attr["sisetel"];
 				$pritel = $t_attr["pritel"];
@@ -387,14 +387,14 @@ class xml_import extends class_base
 			{
 				$attr = $token["attributes"];
 				$this->quote($attr);
-				$nimi = $this->convert_unicode($attr["nimi"]);
+				$nimi = $this->convert_charset($attr["nimi"]);
 				$ysid = $attr["ysid"];
-				$eriala = $this->convert_unicode($attr["eriala"]);
-				$markus = $this->convert_unicode($attr["markus"]);
+				$eriala = $this->convert_charset($attr["eriala"]);
+				$markus = $this->convert_charset($attr["markus"]);
 				$koht = "";
 				if (strlen($attr["koht"]) > 0)
 				{	
-					$koht = $this->convert_unicode($attr["koht"]);
+					$koht = $this->convert_charset($attr["koht"]);
 
 					$koht = preg_replace("/\s$/","&nbsp;",$koht);
 				};
@@ -462,8 +462,8 @@ class xml_import extends class_base
 			if ( ($token["tag"] == "kraad") && ($token["type"] == "complete") )
 			{
 				$attr = $token["attributes"];
-				$_haru = $this->convert_unicode($attr["haru"]);
-				$_kraad = $this->convert_unicode($attr["kraad"]);
+				$_haru = $this->convert_charset($attr["haru"]);
+				$_kraad = $this->convert_charset($attr["kraad"]);
 				if ($_haru)
 				{
 					$kraad[] = "$_kraad ($_haru)";
@@ -610,15 +610,19 @@ class xml_import extends class_base
 
 	}
 
-	function convert_unicode($source)
+	function convert_charset($source)
 	{
-		// utf8_decode doesn't work here
-		// and from now (17.08.2005) this function no longer does what it's name says, 
-		// UT will start using ISO-8859-4 in the source XML. I'm leaving the function 
-		// though, because maybe we need to do some conversions after all and then this
-		// can simply be renamed
-
+		// iso-8859-4 -> iso-8859-15 according to specification
 		$retval = $source;
+		// suur katusega S
+		$retval = str_replace(chr(0xA9),chr(0xA6),$retval);
+		// väike katusega s
+		$retval = str_replace(chr(0xB9),chr(0xA8),$retval);
+		// suur katusega Z
+		$retval = str_replace(chr(0xAE),chr(0xB4),$retval);
+		// vaike katusega Z
+		$retval = str_replace(chr(0xBE),chr(0xB8),$retval);
+
 
 		/*
 		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
@@ -694,7 +698,7 @@ class xml_import extends class_base
 			{
 				$aasta_urls = array();
 				$attr = $val["attributes"];		
-				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$nimetus = $this->convert_charset($attr["nimetus"]);
 				$nimetus_en = $attr["nimetus_en"];
 				$oppeaste = $attr["oppeaste"];
 				$id = $attr["id"];
@@ -706,7 +710,7 @@ class xml_import extends class_base
 				if (strlen($nimetus) == 0)
 				{
 					$attr = $val["attributes"];		
-					$nimetus = $this->convert_unicode($attr["nimetus"]);
+					$nimetus = $this->convert_charset($attr["nimetus"]);
 					$nimetus_en = $attr["nimetus_en"];
 					$oppeaste = $attr["oppeaste"];
 					$id = $attr["id"];
@@ -759,7 +763,7 @@ class xml_import extends class_base
 			if ( ($val["tag"] == "oppeaste")  && ($val["type"] == "complete") )
 			{
 				$attr = $val["attributes"];		
-				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$nimetus = $this->convert_charset($attr["nimetus"]);
 				$id = $attr["id"];
 				$jrk = $attr["jrk"];
 				$this->quote($nimetus);
@@ -799,7 +803,7 @@ class xml_import extends class_base
 			if ( ($val["tag"] == "oppevormid")  && ($val["type"] == "complete") )
 			{
 				$attr = $val["attributes"];		
-				$nimetus = $this->convert_unicode($attr["nimetus"]);
+				$nimetus = $this->convert_charset($attr["nimetus"]);
 				$id = $attr["id"];
 				$jrk = $attr["jrk"];
 				$this->quote($nimetus);
