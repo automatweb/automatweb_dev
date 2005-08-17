@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.4 2005/08/17 13:15:59 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.5 2005/08/17 13:16:51 duke Exp $
 /*
         @default table=objects
         @default group=general
@@ -617,6 +617,8 @@ class xml_import extends class_base
 		// UT will start using ISO-8859-4 in the source XML. I'm leaving the function 
 		// though, because maybe we need to do some conversions after all and then this
 		// can simply be renamed
+
+		$retval = $source;
 
 		/*
 		$retval = str_replace(chr(0xC3). chr(0xB5),"õ",$source);
