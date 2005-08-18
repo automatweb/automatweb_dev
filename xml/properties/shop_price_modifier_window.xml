@@ -70,7 +70,31 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
+            <parent>pr_add_twopart_hbox</parent>
+            <no_caption>1</no_caption>
             <caption>Hinnamuutus kaheosalise akna puhul</caption>
+      </property>
+      <property>
+            <name>pr_add_twopart_fixed_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_twopart_hbox</parent>
+            <caption>Fikseeritud hind</caption>
+      </property>
+      <property>
+            <name>pr_add_twopart_sep_post_meter_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_twopart_hbox</parent>
+            <caption>Vahepostide meetrihind</caption>
       </property>
       <property>
             <name>pr_add_threepart</name>
@@ -80,7 +104,31 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
+            <parent>pr_add_threepart_hbox</parent>
+            <no_caption>1</no_caption>
             <caption>Hinnamuutus kolmeosalise akna puhul</caption>
+      </property>
+      <property>
+            <name>pr_add_threepart_fixed_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_threepart_hbox</parent>
+            <caption>Fikseeritud hind</caption>
+      </property>
+      <property>
+            <name>pr_add_threepart_sep_post_meter_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_threepart_hbox</parent>
+            <caption>Vahepostide meetrihind</caption>
       </property>
       <property>
             <name>pr_add_tpart</name>
@@ -90,7 +138,31 @@
             <method>serialize</method>
             <type>textbox</type>
             <size>5</size>
+            <parent>pr_add_tpart_hbox</parent>
+            <no_caption>1</no_caption>
             <caption>Hinnamuutus T-kujulise akna puhul</caption>
+      </property>
+      <property>
+            <name>pr_add_tpart_fixed_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_tpart_hbox</parent>
+            <caption>Fikseeritud hind</caption>
+      </property>
+      <property>
+            <name>pr_add_tpart_sep_post_meter_price</name>
+            <table>objects</table>
+            <group>parts_other</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <size>5</size>
+            <parent>pr_add_tpart_hbox</parent>
+            <caption>Vahepostide meetrihind</caption>
       </property>
       <property>
             <name>board_price_table</name>
@@ -252,6 +324,21 @@
             </door>
       </groupinfo>
       <layout>
+            <pr_add_twopart_hbox>
+                  <type>hbox</type>
+                  <group>parts_other</group>
+                  <caption>Hinnamuutus kaheosalise akna puhul</caption>
+            </pr_add_twopart_hbox>
+            <pr_add_threepart_hbox>
+                  <type>hbox</type>
+                  <group>parts_other</group>
+                  <caption>Hinnamuutus kolmeosalise akna puhul</caption>
+            </pr_add_threepart_hbox>
+            <pr_add_tpart_hbox>
+                  <type>hbox</type>
+                  <group>parts_other</group>
+                  <caption>Hinnamuutus T-kujulise akna puhul</caption>
+            </pr_add_tpart_hbox>
             <min_pr_l>
                   <type>hbox</type>
                   <width>
