@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.35 2005/08/18 12:52:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.36 2005/08/18 19:58:56 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -642,35 +642,45 @@ class shop_order extends class_base
 		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
 		$at = $this->order_center->prop("send_attach");
+
+		$html = "";
+		if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
+		{
+			$val = $ud[$_el];
+			if (is_oid($val) && $this->can("view", $val))
+			{
+				$_tmp = obj($val);
+				$val = $_tmp->comment();
+			}
+			if (is_email($val))
+			{
+				$html = $this->show(array(
+					"id" => $oi->id()
+				));
+
+				$awm->clean();
+				$awm->create_message(array(
+					"froma" => $mail_from_addr,
+					"fromn" => $mail_from_name,
+					"subject" => $email_subj,
+					"to" => $val,
+					"body" => "see on html kiri",
+				));
+				$awm->htmlbodyattach(array(
+					"data" => $html,
+				));
+			}
+		}
+
 		if (count($emails) > 0)
 		{
-			$html = $this->show(array(
-				"id" => $oi->id()
-			));
-			
-			if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
+			if ($html == "")
 			{
-				$val = $ud[$_el];
-				if (is_oid($val) && $this->can("view", $val))
-				{
-					$_tmp = obj($val);
-					$val = $_tmp->comment();
-				}
-				if (is_email($val))
-				{
-					$awm->clean();
-					$awm->create_message(array(
-						"froma" => $mail_from_addr,
-						"fromn" => $mail_from_name,
-						"subject" => $email_subj,
-						"to" => $val,
-						"body" => "see on html kiri",
-					));
-					$awm->htmlbodyattach(array(
-						"data" => $html,
-					));
-				}
+				$html = $this->show(array(
+					"id" => $oi->id()
+				));
 			}
+			
 
 			foreach($emails as $c)
 			{
