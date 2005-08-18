@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.13 2005/08/18 13:24:55 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.14 2005/08/18 13:31:49 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -701,6 +701,7 @@ class persona_import extends class_base
 			$person_obj->set_prop("lastname",$worker["PEREKONNANIMI"]);
 			$person_obj->set_prop("ext_id",$ext_id);
 			$person_obj->set_prop("birthday",$bday);
+			$person_obj->set_prop("ord",$worker["PRIORITEET"]);
 			$person_obj->set_status(STAT_ACTIVE);
 
 			if (!in_array($worker["AADRESS"],$addr))
