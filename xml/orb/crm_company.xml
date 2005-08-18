@@ -25,6 +25,15 @@
 			</function>
 		</action>
 
+		<action name="search_for_profs">
+			<function name="search_for_profs">
+				<arguments>
+					<optional name="cat" type="int" />
+					<optional name="unit" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 		<action name="search_for_customers">
 			<function name="search_for_customers">
 				<arguments>
