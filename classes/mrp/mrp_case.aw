@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.87 2005/08/08 16:19:31 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.88 2005/08/18 07:39:53 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1178,7 +1178,7 @@ class mrp_case extends class_base
 
 			### translate prerequisites from object id-s to execution orders
 			$prerequisites = $job->prop ("prerequisites");
-			$prerequisites = explode (",", $prerequisites);
+			$prerequisites = empty ($prerequisites) ? array () : explode (",", $prerequisites);
 			$prerequisites_translated = array ();
 
 			foreach ($prerequisites as $oid)
@@ -1191,7 +1191,7 @@ class mrp_case extends class_base
 				else
 				{
 					error::raise(array(
-						"msg" => sprintf (t("Eeldustöö pole objekti id või puudub sellele objektile vaatamisõigus, mis siin peaks kindlasti olemas olema (oid: %s)."), $oid),
+						"msg" => sprintf (t("Eeldustöö pole objekti id või puudub sellele objektile vaatamisõigus, mis siin peaks kindlasti olemas olema (oid: %s, prerequisites: %s)."), $oid, $job->prop ("prerequisites")),
 						"fatal" => false,
 						"show" => false,
 					));
