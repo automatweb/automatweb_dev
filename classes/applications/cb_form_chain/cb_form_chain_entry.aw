@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.9 2005/07/25 14:04:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/cb_form_chain/cb_form_chain_entry.aw,v 1.10 2005/08/18 12:52:42 kristo Exp $
 // cb_form_chain_entry.aw - Vormiahela sisestus 
 /*
 
@@ -252,7 +252,7 @@ class cb_form_chain_entry extends class_base
 
 			if ($val == "")
 			{
-				continue;
+			//	continue;
 			}
 
 			$this->vars(array(
