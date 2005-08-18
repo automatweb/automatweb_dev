@@ -40,5 +40,12 @@
 			</function>
 		</action>
 
+		<action name="list_entries">
+			<function name="list_entries">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
