@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.3 2005/08/16 10:00:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/price_modifiers/shop_price_modifier_window.aw,v 1.4 2005/08/18 09:22:53 dragut Exp $
 // shop_price_modifier_window.aw - Akna hinnakujundus 
 /*
 
@@ -34,14 +34,41 @@
 	@property two_side_painted_sqm_price type=table
 	@caption Ruutmeetri hind m&otilde;lemalt poolt v&auml;rvitud aknale
 
-	@property pr_add_twopart type=textbox size=5
+	@layout pr_add_twopart_hbox type=hbox
 	@caption Hinnamuutus kaheosalise akna puhul
 
-	@property pr_add_threepart type=textbox size=5
+		@property pr_add_twopart type=textbox size=5 parent=pr_add_twopart_hbox no_caption=1
+		@caption Hinnamuutus kaheosalise akna puhul
+
+		@property pr_add_twopart_fixed_price type=textbox size=5 parent=pr_add_twopart_hbox
+		@caption Fikseeritud hind
+
+		@property pr_add_twopart_sep_post_meter_price type=textbox size=5 parent=pr_add_twopart_hbox
+		@caption Vahepostide meetrihind
+
+	@layout pr_add_threepart_hbox type=hbox
 	@caption Hinnamuutus kolmeosalise akna puhul
 
-	@property pr_add_tpart type=textbox size=5
+		@property pr_add_threepart type=textbox size=5 parent=pr_add_threepart_hbox no_caption=1
+		@caption Hinnamuutus kolmeosalise akna puhul
+
+		@property pr_add_threepart_fixed_price type=textbox size=5 parent=pr_add_threepart_hbox
+		@caption Fikseeritud hind
+
+		@property pr_add_threepart_sep_post_meter_price type=textbox size=5 parent=pr_add_threepart_hbox
+		@caption Vahepostide meetrihind
+
+	@layout pr_add_tpart_hbox type=hbox
 	@caption Hinnamuutus T-kujulise akna puhul
+
+		@property pr_add_tpart type=textbox size=5 parent=pr_add_tpart_hbox no_caption=1
+		@caption Hinnamuutus T-kujulise akna puhul
+
+		@property pr_add_tpart_fixed_price type=textbox size=5 parent=pr_add_tpart_hbox
+		@caption Fikseeritud hind
+
+		@property pr_add_tpart_sep_post_meter_price type=textbox size=5 parent=pr_add_tpart_hbox 
+		@caption Vahepostide meetrihind
 
 @default group=board
 
