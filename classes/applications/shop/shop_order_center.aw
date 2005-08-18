@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.30 2005/07/05 08:35:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.31 2005/08/18 12:52:10 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -56,7 +56,10 @@
 @caption N&auml;itamiseks kasuta kontrollerit
 
 @groupinfo mail_settings caption="Meiliseaded"
-@default group=mail_settings
+	@groupinfo mail_settings_orderer caption="Tellijale" parent=mail_settings
+	@groupinfo mail_settings_seller caption="Pakkujale" parent=mail_settings
+
+@default group=mail_settings_orderer
 
 	@property mail_group_by type=select 
 	@caption Toodete grupeerimine meilis
@@ -79,6 +82,10 @@
 	@property mail_cust_content type=textarea rows=10 cols=80
 	@caption Meili sisu (kui t&uuml;hi, siis templatest)
 
+@default group=mail_settings_seller
+
+	@property mail_to_seller_in_el type=select
+	@caption Saada meil aadressile, mis on elemendis
 
 @groupinfo payment caption="Makseviisid"
 @default group=payment
@@ -139,6 +146,9 @@
 
 @reltype CONTROLLER value=6 clid=CL_FORM_CONTROLLER
 @caption n&auml;itamise kontroller
+
+@reltype ORDER_NAME_CTR value=7 clid=CL_FORM_CONTROLLER
+@caption tellimuse nime kontroller
 */
 
 class shop_order_center extends class_base
@@ -211,6 +221,7 @@ class shop_order_center extends class_base
 			case "data_form_company":
 			case "data_form_discount":
 			case "mail_to_el":
+			case "mail_to_seller_in_el":
 				if (!$arr["obj_inst"]->prop("data_form"))
 				{	
 					return PROP_IGNORE;
@@ -754,6 +765,16 @@ class shop_order_center extends class_base
 		foreach($p->connections_from(array("type" => "RELTYPE_ORDER")) as $c)
 		{
 			$ord = $c->to();
+			$ord_item_data = safe_array($ord->meta('ord_item_data'));
+			$read_price_total = 0;
+			foreach($ord_item_data as $_prod_id => $inf)
+			{
+				foreach($inf as $num => $dat)
+				{
+					$read_price_total += str_replace(",", "", $dat["read_price"]);
+				}
+			}
+
 			if($unconfed == 1 && $confirmed = $ord->prop("confirmed") == 1)
 			{
 				continue;
@@ -762,6 +783,7 @@ class shop_order_center extends class_base
 				"name" => $ord->name(),
 				"tm" => $ord->created(),
 				"sum" => number_format($ord->prop("sum"), 2),
+				"order_data_read_price_total" => number_format($read_price_total,2),
 				"view_link" => obj_link($ord->id()),
 				"id" => $ord->id()
 			));
@@ -919,6 +941,10 @@ class shop_order_center extends class_base
 		}
 
 		// get props from conf form
+		if (!$this->can("view", $oc->prop("data_form")))
+		{
+			return $ret;
+		}
 		$cff = obj($oc->prop("data_form"));
 		$class_id = $cff->prop("ctype");
 		if (!$class_id)

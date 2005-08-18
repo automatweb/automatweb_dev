@@ -496,6 +496,26 @@
             <caption>User-defined var (multiple) 8</caption>
       </property>
       <property>
+            <name>uservarm9</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm9</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM9</reltype>
+            <caption>User-defined var (multiple) 9</caption>
+      </property>
+      <property>
+            <name>uservarm10</name>
+            <table>aw_shop_products</table>
+            <group>data</group>
+            <type>classificator</type>
+            <field>varuserm10</field>
+            <store>connect</store>
+            <reltype>RELTYPE_VARUSERM10</reltype>
+            <caption>User-defined var (multiple) 10</caption>
+      </property>
+      <property>
             <name>packaging</name>
             <table>objects</table>
             <group>packaging</group>
@@ -733,6 +753,16 @@
                   </clid>
                   <caption>hinnakujundus</caption>
             </PRICE_SETTINGS>
+            <VARUSERM9>
+                  <value>16</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 9</caption>
+            </VARUSERM9>
+            <VARUSERM10>
+                  <value>17</value>
+                  <clid>CL_META</clid>
+                  <caption>kasutajadefineeritud muutuja 10</caption>
+            </VARUSERM10>
       </reltypes>
 </properties>
 

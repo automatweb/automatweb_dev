@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.34 2005/06/27 09:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.35 2005/08/18 12:52:09 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -461,6 +461,7 @@ class shop_order extends class_base
 
 		$oi = obj();
 		$oi->set_parent($wh->get_order_folder($this->order_warehouse));
+
 		$oi->set_name(sprintf(t("Tellimus laost %s"), $this->order_warehouse->name()));
 		$oi->set_class_id(CL_SHOP_ORDER);
 		$oi->set_prop("warehouse", $this->order_warehouse->id());
@@ -479,11 +480,17 @@ class shop_order extends class_base
 		$oi->set_meta("postal_price", $params["postal_price"]);
 		$oi->set_meta("payment", $params["payment"]);
 		$oi->set_meta("payment_type", $params["payment_type"]);
-
 		if ($this->order_center)
 		{
 			$oi->set_prop("oc", $this->order_center->id());
 			$oi->set_meta("prod_group_by", $this->order_center->prop("mail_group_by"));
+
+			$name_ctr = $this->order_center->get_first_obj_by_reltype("RELTYPE_ORDER_NAME_CTR");
+			if ($name_ctr)
+			{
+				$ctr_i = $name_ctr->instance();
+				$oi->set_name($ctr_i->eval_controller($name_ctr->id(), $oi, $this->order_items));
+			}
 		}
 		$id = $oi->save();
 
@@ -629,6 +636,9 @@ class shop_order extends class_base
 			}
 		}
 		$awm = get_instance("protocols/mail/aw_mail");
+
+		$ud = $oi->meta("user_data");
+
 		// also, if the warehouse has any e-mails, then generate html from the order and send it to those dudes
 		$emails = $this->order_warehouse->connections_from(array("type" => "RELTYPE_EMAIL"));
 		$at = $this->order_center->prop("send_attach");
@@ -638,6 +648,30 @@ class shop_order extends class_base
 				"id" => $oi->id()
 			));
 			
+			if (($_el = $this->order_center->prop("mail_to_seller_in_el")))
+			{
+				$val = $ud[$_el];
+				if (is_oid($val) && $this->can("view", $val))
+				{
+					$_tmp = obj($val);
+					$val = $_tmp->comment();
+				}
+				if (is_email($val))
+				{
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $val,
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $html,
+					));
+				}
+			}
+
 			foreach($emails as $c)
 			{
 				$eml = $c->to();
@@ -676,7 +710,6 @@ class shop_order extends class_base
 
 		// if the order center has an e-mail element selected, send the order to that one as well
 		// but using a different template
-		$ud = $oi->meta("user_data");
 		//echo "mail to el = ".$this->order_center->prop("mail_to_el")." <br>";
 		// this is one ugly mess and i don't really want to sort it out, so i'll just make
 		// a backdoor for myself -- ahz
@@ -825,6 +858,10 @@ class shop_order extends class_base
 					$this->vars(array(
 						"order_data_".$__nm => $__vl
 					));
+					if ($__nm == "read_price")
+					{
+						$read_price_total += $val["items"] * str_replace(",", "", $__vl);
+					}
 				}
 				$this->vars(array(
 					"name" => $prod->name(),
@@ -845,7 +882,11 @@ class shop_order extends class_base
 		}
 
 		$this->vars(array(
-			"print_link" => aw_url_change_var("print", 1)
+			"print_link" => aw_url_change_var("print", 1),
+			"read_price_total" => number_format($read_price_total, 2)
+		));
+		$this->vars(array(
+			"NOT_IN_PRINT" => (!$_GET["print"] ? $this->parse("NOT_IN_PRINT") : "")
 		));
 
 		$objs = array();

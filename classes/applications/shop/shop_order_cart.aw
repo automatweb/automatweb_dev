@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.40 2005/07/11 12:55:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.41 2005/08/18 12:52:10 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -373,6 +373,7 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
+
 		if ($arr["from"] != "confirm" && $arr["from"] != "")
 		{
 			$cart["user_data"] = $GLOBALS["user_data"];
@@ -526,7 +527,6 @@ class shop_order_cart extends class_base
 							{
 								$tmp = $cart["items"][$iid][$x];
 								$cart["items"][$iid][$x] = $val + $tmp;
-								break;
 							}
 						}
 						else
@@ -630,6 +630,11 @@ class shop_order_cart extends class_base
 		if (!empty($arr["clear_cart"]))
 		{
 			$this->clear_cart($oc);
+		}
+
+		if (!empty($arr["go_to_after"]))
+		{
+			return $arr["go_to_after"];
 		}
 
 		if (!empty($arr["pre_confirm_order"]))
@@ -949,6 +954,7 @@ class shop_order_cart extends class_base
 					))
 				));
 				$prod_total += ($quant["items"] * $inst->get_calc_price($i));
+				$read_price_total += ($quant["items"] * str_replace(",","", $quant["read_price"]));
 				if (get_class($inst) == "shop_product_packaging")
 				{
 					$prod_total += ($quant["items"] * $inst->get_prod_calc_price($i));
@@ -1090,6 +1096,7 @@ class shop_order_cart extends class_base
 			"PROD" => $str,
 			"total" => number_format($total, 2),
 			"prod_total" => number_format($prod_total, 2),
+			"read_price_total" => number_format($read_price_total, 2),
 			"reforb" => $this->mk_reforb("submit_add_cart", array("oc" => $arr["oc"], "update" => 1, "section" => $arr["section"], "from" => "pre")),
 			"postal_price" => number_format($cart_o->prop("postal_price"))
 		));

@@ -137,7 +137,7 @@
       </property>
       <property>
             <name>mail_group_by</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -146,7 +146,7 @@
       </property>
       <property>
             <name>send_attach</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -156,7 +156,7 @@
       </property>
       <property>
             <name>mail_to_client</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -166,7 +166,7 @@
       </property>
       <property>
             <name>mail_to_el</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -175,7 +175,7 @@
       </property>
       <property>
             <name>mail_from_addr</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -184,7 +184,7 @@
       </property>
       <property>
             <name>mail_from_name</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -193,7 +193,7 @@
       </property>
       <property>
             <name>mail_cust_content</name>
-            <group>mail_settings</group>
+            <group>mail_settings_orderer</group>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
@@ -201,6 +201,15 @@
             <rows>10</rows>
             <cols>80</cols>
             <caption>Meili sisu (kui t&amp;uuml;hi, siis templatest)</caption>
+      </property>
+      <property>
+            <name>mail_to_seller_in_el</name>
+            <group>mail_settings_seller</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Saada meil aadressile, mis on elemendis</caption>
       </property>
       <property>
             <name>rent_min_amt</name>
@@ -298,6 +307,14 @@
             <mail_settings>
                   <caption>Meiliseaded</caption>
             </mail_settings>
+            <mail_settings_orderer>
+                  <caption>Tellijale</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_orderer>
+            <mail_settings_seller>
+                  <caption>Pakkujale</caption>
+                  <parent>mail_settings</parent>
+            </mail_settings_seller>
             <payment>
                   <caption>Makseviisid</caption>
             </payment>
@@ -349,6 +366,11 @@
                   <clid>CL_FORM_CONTROLLER</clid>
                   <caption>n&amp;auml;itamise kontroller</caption>
             </CONTROLLER>
+            <ORDER_NAME_CTR>
+                  <value>7</value>
+                  <clid>CL_FORM_CONTROLLER</clid>
+                  <caption>tellimuse nime kontroller</caption>
+            </ORDER_NAME_CTR>
       </reltypes>
 </properties>
 
