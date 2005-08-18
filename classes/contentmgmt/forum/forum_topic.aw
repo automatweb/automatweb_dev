@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.11 2005/07/25 10:26:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.12 2005/08/18 14:13:01 duke Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -92,6 +92,13 @@ class forum_topic extends class_base
 				{
 					$prop["error"] = $prop["caption"] . " ei tohi olla tühi";
 					$retval = PROP_FATAL_ERROR;
+				};
+				break;
+
+			case "image":
+				if ($arr["new"]) 
+				{
+					$retval = PROP_IGNORE;
 				};
 				break;
 			
