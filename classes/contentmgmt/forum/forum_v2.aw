@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.85 2005/08/11 23:50:25 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.86 2005/08/19 12:08:22 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1853,6 +1853,7 @@ class forum_v2 extends class_base
 				"to" => $upload_image['id'],
 				"reltype" => "RELTYPE_IMAGE",
 			));
+			$image_inst->do_apply_gal_conf(obj($upload_image['id']));
 		}
 
 		$cb_values = $t->cb_values;
@@ -1918,6 +1919,7 @@ class forum_v2 extends class_base
 				"to" => $upload_image['id'],
 				"reltype" => "RELTYPE_IMAGE",
 			));
+			$image_inst->do_apply_gal_conf(obj($upload_image['id']));
 		}
 		$topic->mail_subscribers(array(
 			"id" => $arr["topic"],
