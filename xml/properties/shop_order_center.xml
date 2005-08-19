@@ -239,6 +239,16 @@
             <caption>v&amp;auml;&amp;auml;rtus j&amp;auml;relmaksuks</caption>
       </property>
       <property>
+            <name>no_show_cart_contents</name>
+            <group>appear</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>&amp;Auml;ra n&amp;auml;ita korvi kinnitusvaadet</caption>
+      </property>
+      <property>
             <name>controller</name>
             <group>appear</group>
             <table>objects</table>

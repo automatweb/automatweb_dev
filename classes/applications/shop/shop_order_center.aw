@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.31 2005/08/18 12:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.32 2005/08/19 06:19:28 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -102,6 +102,9 @@
 
 @groupinfo appear caption="N&auml;itamine"
 @default group=appear
+
+@property no_show_cart_contents type=checkbox ch_value=1
+@caption &Auml;ra n&auml;ita korvi kinnitusvaadet
 
 @property controller type=relpicker reltype=RELTYPE_CONTROLLER
 @caption Vaikimisi n&auml;itamise kontroller

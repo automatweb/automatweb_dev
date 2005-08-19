@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.41 2005/08/18 12:52:10 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.42 2005/08/19 06:19:28 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -134,6 +134,12 @@ class shop_order_cart extends class_base
 		aw_session_del("soc_err");
 
 		$oc = obj($oc);
+
+		if ($oc->prop("no_show_cart_contents"))
+		{
+			return $this->pre_finish_order($arr);
+		}
+
 		// get cart to user from oc
 		if ($arr["id"])
 		{
