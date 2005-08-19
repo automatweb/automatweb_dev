@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.36 2005/08/18 19:58:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.37 2005/08/19 06:32:11 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -657,18 +657,22 @@ class shop_order extends class_base
 				$html = $this->show(array(
 					"id" => $oi->id()
 				));
-
-				$awm->clean();
-				$awm->create_message(array(
-					"froma" => $mail_from_addr,
-					"fromn" => $mail_from_name,
-					"subject" => $email_subj,
-					"to" => $val,
-					"body" => "see on html kiri",
-				));
-				$awm->htmlbodyattach(array(
-					"data" => $html,
-				));
+//echo "send to $val , from = $mail_from_addr , content = $html <br>";
+				foreach(explode(",", $val) as $_to)
+				{
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $_to,
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $html,
+					));
+					$awm->gen_mail();
+				}
 			}
 		}
 
