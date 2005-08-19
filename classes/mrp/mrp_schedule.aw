@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.74 2005/08/15 11:47:48 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.75 2005/08/19 06:45:13 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -290,11 +290,11 @@ class mrp_schedule extends class_base
 		{
 			if (!sem_remove($sem_id))
 			{
-				error::raise(array(
-					"msg" => t("Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
-					"fatal" => false,
-					"show" => false,
-				));
+				// error::raise(array(
+					// "msg" => t("Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
 			}
 
 			error::raise(array(
@@ -316,20 +316,20 @@ class mrp_schedule extends class_base
 	  		### Release&remove semaphore. Stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
-				error::raise(array(
-					"msg" => t("Planeerimisluku avamine ebaõnnestus!"),
-					"fatal" => false,
-					"show" => false,
-				));
+				// error::raise(array(
+					// "msg" => t("Planeerimisluku avamine ebaõnnestus!"),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
 			}
 
 			if (!sem_remove($sem_id))
 			{
-				error::raise(array(
-					"msg" => t("Planeerimisluku kustutamine ebaõnnestus!"),
-					"fatal" => false,
-					"show" => false,
-				));
+				// error::raise(array(
+					// "msg" => t("Planeerimisluku kustutamine ebaõnnestus!"),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
 			}
 
 			return;
@@ -674,20 +674,21 @@ class mrp_schedule extends class_base
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
 		{
-			error::raise(array(
-				"msg" => t("Planeerimisluku avamine peale planeerimist ebaõnnestus!"),
-				"fatal" => false,
-				"show" => false,
-			));
+			// error::raise(array(
+				// "msg" => t("Planeerimisluku avamine peale planeerimist ebaõnnestus!"),
+				// "fatal" => false,
+				// "show" => false,
+			// ));
 		}
 
 		if (!sem_remove($sem_id))
 		{
-			error::raise(array(
-				"msg" => t("Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
-				"fatal" => false,
-				"show" => false,
-			));
+			// error::raise(array(
+				// "msg" => t("Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
+				// "fatal" => false,
+				// "show" => false,
+			// ));
+			//!!! esineb sageli millegip2rast.
 		}
 
 		// return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
