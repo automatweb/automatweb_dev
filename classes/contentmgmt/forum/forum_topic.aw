@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.13 2005/08/19 12:18:20 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.14 2005/08/19 12:20:30 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -94,14 +94,14 @@ class forum_topic extends class_base
 					$retval = PROP_FATAL_ERROR;
 				};
 				break;
-/*
+
 			case "image":
 				if ($arr["new"]) 
 				{
 					$retval = PROP_IGNORE;
 				};
 				break;
-*/			
+
 		}
 		return $retval;
 	}
