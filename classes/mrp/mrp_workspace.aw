@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.138 2005/08/16 11:58:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.139 2005/08/19 06:56:24 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1039,7 +1039,14 @@ class mrp_workspace extends class_base
 					"ws" => $arr["obj_inst"],
 					"ign_glob" => true
 				));
-				$ol = new object_list(array("oid" => $resids));
+				if (count($resids))
+				{
+					$ol = new object_list(array("oid" => $resids));
+				}
+				else
+				{
+					$ol = new object_list();
+				}
 
 				$prop["options"] = array("" => "") + $ol->names();
 				$prop["value"] = aw_global_get("mrp_operator_use_resource");
