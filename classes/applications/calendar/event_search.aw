@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.73 2005/07/25 15:12:11 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.74 2005/08/22 13:30:58 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -571,7 +571,7 @@ class event_search extends class_base
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
                 // if date is set in the url, then try to use that to specify our range.
-                if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2)
+                if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && $arr['action'] != "search")
                 {
                         list($_d,$_m,$_y) = explode("-",$arr["date"]);
                         $start_tm = mktime(0,0,0,$_m,$_d,$_y);
