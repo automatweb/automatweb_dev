@@ -680,7 +680,8 @@ class core extends acl_base
 				{
 					$u = $co->get_simple_config("error_redirect");
 				}
-				$uid_arr = array("kix", "duke", "sven", "root", "ahti", "dragut");
+//				$uid_arr = array("kix", "duke", "sven", "root", "ahti", "dragut");
+				$uid_arr = explode(",", aw_ini_get("core.show_error_users"));
 
 				if ($u != "" && !headers_sent() && aw_ini_get("site_id") != 138 && !in_array(aw_global_get("uid"), $uid_arr) )
 				{
