@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.42 2005/08/19 06:19:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.43 2005/08/23 08:38:02 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -1041,6 +1041,16 @@ class shop_order_cart extends class_base
 		{
 			$els["userdate2"]["year_from"] = date("Y");
 			$els["userdate2"]["year_to"] = date("Y")+3;
+		}
+
+		// apply view controllers
+		foreach($els as $el_pn => $el_inf)
+		{
+			foreach(safe_array($el_inf["view_controllers"]) as $v_ctr_id)
+			{
+				$vc = get_instance(CL_CFG_VIEW_CONTROLLER);
+				$vc->check_property($el_pn, $v_ctr_id, array(), $els[$el_pn]);
+			}
 		}
 
 		// if there are errors

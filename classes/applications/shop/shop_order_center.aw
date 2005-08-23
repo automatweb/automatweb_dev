@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.32 2005/08/19 06:19:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.33 2005/08/23 08:38:02 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -960,6 +960,7 @@ class shop_order_center extends class_base
 			"id" => $cff->id()
 		));
 
+		$v_ctrs = safe_array($cff->meta("view_controllers"));
 
 		// get all props
 		$cfgx = get_instance("cfg/cfgutils");
@@ -1014,6 +1015,8 @@ class shop_order_center extends class_base
 			{
 				$ret[$pn]["value"] = $cud[$pn];
 			}
+
+			$ret[$pn]["view_controllers"] = $v_ctrs[$pn];
 		}
 
 		return $ret;
