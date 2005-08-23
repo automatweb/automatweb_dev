@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.113 2005/08/01 12:35:02 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.114 2005/08/23 12:19:34 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -149,7 +149,14 @@ class htmlclient extends aw_template
 		}
 		$script = aw_global_get("SCRIPT_NAME");
 		// siia vaja kirjutada see embedded case
-		$handler = empty($script) ? "index" : "orb";
+		if (!$args["handler"])
+		{
+			$handler = empty($script) ? "index" : "orb";
+		}
+		else
+		{
+			$handler = $args["handler"];
+		}
 		if ($this->embedded)
 		{
 			$handler = "index";
@@ -794,6 +801,18 @@ class htmlclient extends aw_template
 				//"form_handler" => isset($form_handler) ? "orb.aw" : $form_handler,
 			));
 
+		}
+		
+		if ($no_insert_reforb)
+		{
+			$ds = array();
+			foreach($data as $k => $v)
+			{
+				$ds[] = "<input type='hidden' name='$k' value='$v'>";
+			}
+			$this->vars(array(
+				"reforb" => join("\n", $ds)
+			));
 		}
 	}
 
