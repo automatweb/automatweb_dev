@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.6 2005/08/17 13:31:06 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/ut/xml_import/xml_import.aw,v 1.7 2005/08/23 07:07:04 kristo Exp $
 /*
         @default table=objects
         @default group=general
@@ -491,6 +491,7 @@ class xml_import extends class_base
 				};
 				if (!$row)
 				{
+					$this->quote(&$realkraad);
 					$q = "INSERT INTO $tootajad_table (id,enimi,pnimi,email,veeb,ruum,markus,mobiil,sisetel,pritel,kraad) 
 						VALUES ('$tid','$enimi','$pnimi','$email','$veeb','$ruum','$markus','$mobiil','$sisetel','$pritel','$realkraad')";
 					print $q;
