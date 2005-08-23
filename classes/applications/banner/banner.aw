@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.11 2005/05/13 09:10:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.12 2005/08/23 09:11:24 kristo Exp $
 
 /*
 
@@ -107,6 +107,10 @@ class banner extends class_base
 
 	function do_save_prob_tbl(&$arr)
 	{
+		if (!is_oid($arr["obj_inst"]->id()))
+		{
+			return;
+		}
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_LOCATION")) as $c)
 		{
 			$loc = $c->to();
