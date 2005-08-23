@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.103 2005/06/14 20:13:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.104 2005/08/23 12:55:14 kristo Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -1339,13 +1339,6 @@ class admin_menus extends aw_template
 			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
 			"img" => "search.gif",
 		));
-		$toolbar->add_button(array(
-			"name" => "preview",
-			"tooltip" => t("Eelvaade"),
-			"target" => "_blank",
-			"url" => obj_link($parent),
-			"img" => "preview.gif",
-		));
 
 		$toolbar->add_separator();
 
@@ -1408,19 +1401,13 @@ class admin_menus extends aw_template
 			"detail" => t("Detailne vaade"),
 		);
 
-
-		$toolbar->add_menu_button(array(
-			"name" => "viewtype",
+		$toolbar->add_button(array(
+			"name" => "preview",
+			"tooltip" => t("Eelvaade"),
+			"target" => "_blank",
+			"url" => obj_link($parent),
 			"img" => "preview.gif",
 		));
-		foreach($view_types as $key => $val)
-		{
-			$toolbar->add_menu_item(array(
-				"parent" => "viewtype",
-				"text" => $val,
-				"link" => aw_url_change_var("view_type",$key),
-			));
-		}
 
 		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
 		{
