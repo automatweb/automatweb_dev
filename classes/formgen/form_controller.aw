@@ -367,6 +367,10 @@ class form_controller extends form_base
 		// include files
 		$eq = preg_replace("/{include:(.*)}/eU","\$this->_incl_file(\"\\1\")",$eq);
 
+		if ($co['meta']['no_var_replace'] == 1)
+		{
+			return $eq;
+		}
 		// now do element metadata as well
 		if (is_object($el_ref) && method_exists($el_ref, "get_metadata"))
 		{
