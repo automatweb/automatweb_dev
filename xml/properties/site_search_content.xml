@@ -41,6 +41,16 @@
             <caption>Mitu tulemust lehel</caption>
       </property>
       <property>
+            <name>show_admin_if</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Veebis keeruline otsimisliides</caption>
+      </property>
+      <property>
             <name>do_keyword_search</name>
             <table>objects</table>
             <field>meta</field>
@@ -129,7 +139,7 @@
             <method>serialize</method>
             <group>search_simple</group>
             <type>textbox</type>
-            <caption>Otsi</caption>
+            <caption>Pealkiri/Sisu</caption>
       </property>
       <property>
             <name>date_from</name>

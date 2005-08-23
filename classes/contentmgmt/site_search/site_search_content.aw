@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.53 2005/08/16 09:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.54 2005/08/23 12:20:16 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -22,6 +22,9 @@
 
 	@property per_page type=textbox size=5
 	@caption Mitu tulemust lehel
+
+	@property show_admin_if type=checkbox ch_value=1
+	@caption Veebis keeruline otsimisliides
 
 	
 @default group=keywords
@@ -62,7 +65,7 @@
 @default group=search_simple
 
 	@property str type=textbox 
-	@caption Otsi
+	@caption Pealkiri/Sisu
 
 	@property date_from type=date_select
 	@caption Alates
@@ -511,6 +514,10 @@ class site_search_content extends class_base
 		enter_function("site_search_content::show");
 		extract($arr);
 		$ob = new object($id);
+		if ($ob->prop("show_admin_if") == 1)
+		{
+			return $this->_show_admin_if($arr);
+		}
 		$this->read_template("search.tpl");
 		lc_site_load("search_conf", $this);
 
@@ -698,6 +705,12 @@ class site_search_content extends class_base
 		}
 
 		$this->quote($str);
+		
+		$content_s = $this->_get_sstring($str, $opts["str"], "content",true,$arr["s_seatch_word_part"]);
+		if ($content_s == "" && $title_s == "" && $sections == "" && $lang_id == "" && $date_s == "" && $site_id == "")
+		{
+			return array();
+		}
 		$sql = "
 			SELECT 
 				url, 
@@ -708,7 +721,7 @@ class site_search_content extends class_base
 			FROM 
 				static_content 
 			WHERE 
-				".$this->_get_sstring($str, $opts["str"], "content",true,$arr["s_seatch_word_part"])." $title_s
+				$content_s $title_s
 				$sections  $lang_id $date_s $site_id $ob $lim
 		";
 		enter_function("site_search_content::fetch_static_search_results::query");
@@ -1374,6 +1387,14 @@ class site_search_content extends class_base
 		return $arr;
 	}
 
+	/** 
+		@attrib name=do_search_if params=name nologin="1" all_args="1"
+	**/
+	function do_search_if($arr)
+	{
+		return $this->show(array("id" => $arr["id"]));
+	}
+	
 	/**  
 		
 		@attrib name=do_search params=name nologin="1" 
@@ -1811,10 +1832,10 @@ class site_search_content extends class_base
 		}
 
 		$arr["opts"]["str"] = S_OPT_ANY_WORD;
-		if (aw_global_get("uid") == "kix")
+/*		if (aw_global_get("uid") == "kix")
 		{
 			$GLOBALS["DUKE"] = 1;
-		}
+		}*/
 		$arr["opts"]["str"] = $arr["s_opt"];
 		$arr["opts"]["limit"] = $arr["s_limit"];
 		$res = $this->fetch_static_search_results(array(
@@ -1826,7 +1847,7 @@ class site_search_content extends class_base
 			"site_id" => $arr["s_group"],
 			"s_seatch_word_part" => $arr["s_seatch_word_part"],
 		));
-		$GLOBALS["DUKE"] = 0;
+//		$GLOBALS["DUKE"] = 0;
 		return $res;
 	}
 
@@ -1834,8 +1855,9 @@ class site_search_content extends class_base
 	{
 		$c = preg_replace("/\s+/", " ", $c);
 		// try to find complete string first, then any word
-		if (($_pos = strpos($c, $str)) !== false)
+		if (($_pos = strpos(strtolower($c), strtolower($str))) !== false)
 		{
+			$str = substr($c, $_pos, strlen($str)); // get correct-case version
 			return $this->_hgl($c, $str, $_pos);
 		}
 
@@ -1843,8 +1865,9 @@ class site_search_content extends class_base
 		$words = explode(" ", $str);
 		foreach($words as $word)
 		{
-			if (($_pos = strpos($c, $word)) !== false)
+			if (($_pos = strpos(strtolower($c), strtolower($word))) !== false)
 			{
+				$str = substr($c, $_pos, strlen($word)); // get correct-case version
 				return $this->_hgl($c, $word, $_pos, $words);
 			}
 			else
@@ -1869,6 +1892,7 @@ class site_search_content extends class_base
 
 		// show
 		$c = str_replace($str, "<b>".$str."</b>", $c);
+		
 		if (count($other))
 		{
 			foreach($other as $word)
@@ -1924,6 +1948,89 @@ class site_search_content extends class_base
 		$i = $o->instance();
 
 		return $i->eval_controller($o->id(), $arr["obj_inst"]);
+	}
+	
+	function _show_admin_if($arr)
+	{
+		$o = obj($arr["id"]);
+
+		$arr["group"] = $_GET["group"];		
+		if ($arr["group"] == "")
+		{
+			$arr["group"] = "search_simple";
+		}
+		$props = $this->_get_aif_grp_props($o, $arr["group"]);
+		
+		$els = $this->_draw_aif_grp_props($o, $props, $arr["group"]);
+		return $this->_draw_aif_tabs($o, $els, $arr["group"]);
+	}
+	
+	function _get_aif_grp_props($o, $grp)
+	{
+		classload("vcl/table");
+		$props = array();
+		$ap = $o->get_property_list();
+		foreach($ap as $pn => $pd)
+		{
+			if ($pd["group"] == $grp)
+			{
+				$props[$pn] = $pd;
+			}
+		}
+		return $props;
+	}
+	
+	function _draw_aif_grp_props($o, $props, $group)
+	{
+		$rd = get_instance(CL_SITE_SEARCH_CONTENT);
+		$rd->init_class_base();
+		$rd->request = $_GET;
+		$els = $rd->parse_properties(array(
+			"properties" => $props,
+			"name_prefix" => "",
+			"obj_inst" => $o
+		));
+
+		$htmlc = get_instance("cfg/htmlclient");
+		$htmlc->start_output(array(
+			"handler" => "index"
+		));
+		foreach($els as $pn => $pd)
+		{
+			$htmlc->add_property($pd);
+		}
+		$htmlc->finish_output(array(
+			"method" => "GET",
+			"action" => "do_search_if",
+			"data" => array(
+				"orb_class" => "site_search_content", 
+				"id" => $o->id(),
+				"section" => aw_global_get("section"),
+				"group" => $group
+			),
+			"no_insert_reforb" => true
+		));
+
+		return $htmlc->get_result(array(
+		));
+	}
+	
+	function _draw_aif_tabs($o, $html, $grp)
+	{
+		$tp = get_instance("vcl/tabpanel");
+		$tp->add_tab(array(
+			"active" => $grp == "search_simple",
+			"caption" => t("Lihtne otsing"),
+			"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_simple"
+		));
+		$tp->add_tab(array(
+			"active" => $grp != "search_simple",
+			"caption" => t("Keeruline otsing"),
+			"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_complex"
+		));
+		return $tp->get_tabpanel(array(
+			"content" => $html
+		));
 	}
 }
 ?>

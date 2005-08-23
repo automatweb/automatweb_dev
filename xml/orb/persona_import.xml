@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="persona_import" folder="applications/persona_import" extends="class_base">
-		<action name="invoke_import" nologin="1">
-			<function name="invoke_import">
+		<action name="invoke" nologin="1">
+			<function name="invoke">
 				<arguments>
 					<required name="id" type="int" />
 				</arguments>

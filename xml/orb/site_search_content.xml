@@ -9,6 +9,13 @@
 			</function>
 		</action>
 
+		<action name="do_search_if" nologin="1" all_args="1">
+			<function name="do_search_if">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 		<action name="do_search" nologin="1">
 			<function name="do_search">
 				<arguments>
