@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.27 2005/06/15 13:29:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.28 2005/08/23 08:55:46 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -356,6 +356,11 @@ class register_search extends class_base
 		if ($GLOBALS["ft_page"])
 		{
 			$request["ft_page"] = $GLOBALS["ft_page"];
+		}
+
+		if ($ob->prop("show_all_right_away"))
+		{
+			$request["search_butt"] = "vimbledon";
 		}
 
 		enter_function("register_search::show::form");
@@ -742,7 +747,7 @@ class register_search extends class_base
 			$sp = $f_props[$tdata["__defaultsort"]];
 			if ($sp)
 			{
-				$filter["sort_by"] = $sp["table"].".".$sp["field"]." DESC ";
+				$filter["sort_by"] = $sp["table"].".".$sp["field"]." ASC ";
 			}
 		}
 		else
