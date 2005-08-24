@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.85 2005/08/17 10:33:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.86 2005/08/24 10:57:38 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -830,6 +830,7 @@ class object_treeview_v2 extends class_base
 
 		$has_access_to = false;
 		$has_add_access = false;
+
 		foreach($ol as $odata)
 		{
 			if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
@@ -1522,8 +1523,7 @@ class object_treeview_v2 extends class_base
 		$tb = get_instance("vcl/toolbar");
 
 		$has_b = false;
-
-		if ($parent && count($types))
+		if ($parent && count($types) && $ds_i->check_acl("add", $ds_o, $parent))
 		{
 			$menu = "";
 			$classes = aw_ini_get("classes");

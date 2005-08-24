@@ -97,6 +97,26 @@
             <type>date_select</type>
             <caption>Avaldamise kuupäev</caption>
       </property>
+      <property>
+            <name>udef1</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <display>none</display>
+            <caption>User-defined 1</caption>
+      </property>
+      <property>
+            <name>udef2</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <display>none</display>
+            <caption>User-defined 2</caption>
+      </property>
       <classinfo>
             <trans>1</trans>
             <relationmgr>yes</relationmgr>

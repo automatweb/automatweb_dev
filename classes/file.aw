@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.109 2005/08/16 10:11:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.110 2005/08/24 10:57:38 kristo Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -57,6 +57,12 @@
 
 	@groupinfo settings caption=Seadistused
     @groupinfo dates caption=Ajad
+
+	@property udef1 type=textbox display=none
+	@caption User-defined 1
+
+	@property udef2 type=textbox display=none
+	@caption User-defined 2
 
 	@tableinfo files index=id master_table=objects master_index=oid	
 
