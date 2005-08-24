@@ -30,6 +30,8 @@ class relpicker extends  core
 				{
 					$olist = new object_list(array(
 						"class_id" => $clid,
+						"site_id" => array(),
+						"lang_id" => array()
 					));
 					$names = $olist->names();
 					asort($names);            
