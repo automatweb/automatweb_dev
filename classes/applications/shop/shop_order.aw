@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.37 2005/08/19 06:32:11 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.38 2005/08/24 08:14:20 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -875,6 +875,7 @@ class shop_order extends class_base
 					if ($__nm == "read_price")
 					{
 						$read_price_total += $val["items"] * str_replace(",", "", $__vl);
+						$read_price_total_sum += str_replace(",", "", $__vl);
 					}
 				}
 				$this->vars(array(
@@ -897,7 +898,8 @@ class shop_order extends class_base
 
 		$this->vars(array(
 			"print_link" => aw_url_change_var("print", 1),
-			"read_price_total" => number_format($read_price_total, 2)
+			"read_price_total" => number_format($read_price_total, 2),
+			"read_price_total_sum" => number_format($read_price_total_sum, 2)
 		));
 		$this->vars(array(
 			"NOT_IN_PRINT" => (!$_GET["print"] ? $this->parse("NOT_IN_PRINT") : "")
