@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.17 2005/08/11 11:26:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/staging.aw,v 1.18 2005/08/24 11:31:14 dragut Exp $
 // staging.aw - Lavastus 
 /*
 
@@ -16,9 +16,6 @@
 
 @property utextarea1 type=textarea cols=90 rows=10 trans=1 table=planner 
 @caption Kirjeldus
-
-@property aliasmanager type=aliasmgr
-@caption Seostehaldur
 
 // seems i don't need those rules here anymore
 default field=meta 
@@ -55,12 +52,20 @@ caption Userdefined textbox 8
 // actually i think there should be separate table for stagings
 // possible ToDo while creating the WhereToGo module 
 
-@property place type=textbox field=utextbox9 table=planner
-@caption Toimumiskoht
+@layout place_box type=hbox
+@caption Toimumispaik
+
+	@property place type=select parent=place_box field=utextbox9 table=planner
+	@caption Vali toimumispaik
+
+	@property new_place type=textbox parent=place_box store=no
+	@caption Uus toimumispaik
 
 @property price type=textbox field=utextbox10 table=planner
 @caption Hind
 
+@property aliasmanager type=aliasmgr
+@caption Seostehaldur
 
 @property project_selector type=project_selector store=no group=projects all_projects=1
 @caption Projektid
@@ -217,6 +222,21 @@ class staging extends class_base
 			case "times":
 				$this->create_copies($arr);
 				break;
+			case "new_place":
+				
+				if (!empty($prop['value']))
+				{
+					$places_parent = aw_ini_get("staging.places_metamgr_oid");
+					if (is_oid($places_parent) && $this->can("add", $places_parent))
+					{
+						$place = new object(array(
+							"class_id" => CL_META,
+							"parent" => $places_parent,
+							"name" => $prop['value'],
+						));
+						$place->save();
+					}
+				}
 
 		}
 		return $retval;
@@ -228,9 +248,18 @@ class staging extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-
-
-
+			case "place":
+				$places_parent = aw_ini_get("staging.places_metamgr_oid");
+				$meta_objects = new object_list(array(
+					"class_id" => CL_META,
+					"parent" => $places_parent,
+				));
+				$places = array();
+				foreach($meta_objects->arr() as $meta_object)
+				{
+					$prop['options'][$meta_object->id()] = $meta_object->name();
+				}
+				break;
 		};
 		return $retval;
 	}

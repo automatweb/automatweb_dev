@@ -32,20 +32,23 @@
             <caption>Kirjeldus</caption>
       </property>
       <property>
-            <name>aliasmanager</name>
-            <table>objects</table>
-            <group>general</group>
-            <type>aliasmgr</type>
-            <field>aliasmanager</field>
-            <caption>Seostehaldur</caption>
-      </property>
-      <property>
             <name>place</name>
             <table>planner</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>select</type>
+            <parent>place_box</parent>
             <field>utextbox9</field>
-            <caption>Toimumiskoht</caption>
+            <caption>Vali toimumispaik</caption>
+      </property>
+      <property>
+            <name>new_place</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <parent>place_box</parent>
+            <store>no</store>
+            <field>new_place</field>
+            <caption>Uus toimumispaik</caption>
       </property>
       <property>
             <name>price</name>
@@ -54,6 +57,14 @@
             <type>textbox</type>
             <field>utextbox10</field>
             <caption>Hind</caption>
+      </property>
+      <property>
+            <name>aliasmanager</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>aliasmgr</type>
+            <field>aliasmanager</field>
+            <caption>Seostehaldur</caption>
       </property>
       <property>
             <name>project_selector</name>
@@ -129,5 +140,12 @@
                   <caption>Dokument</caption>
             </DOCUMENT>
       </reltypes>
+      <layout>
+            <place_box>
+                  <type>hbox</type>
+                  <group>general</group>
+                  <caption>Toimumispaik</caption>
+            </place_box>
+      </layout>
 </properties>
 
