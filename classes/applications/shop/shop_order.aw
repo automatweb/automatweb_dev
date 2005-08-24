@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.38 2005/08/24 08:14:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.39 2005/08/24 13:03:28 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -678,47 +678,124 @@ class shop_order extends class_base
 
 		if (count($emails) > 0)
 		{
-			if ($html == "")
+			// if send mails by grp el is set, do this crap different
+			if ($this->order_center->prop("mails_sep_by_el"))
 			{
-				$html = $this->show(array(
-					"id" => $oi->id()
-				));
-			}
-			
-
-			foreach($emails as $c)
-			{
-				$eml = $c->to();
-				$awm->clean();
-				$awm->create_message(array(
-					"froma" => $mail_from_addr,
-					"fromn" => $mail_from_name,
-					"subject" => $email_subj,
-					"to" => $eml->prop("mail"),
-					"body" => "see on html kiri",
-				));
-				$awm->htmlbodyattach(array(
-					"data" => $html,
-				));
-				if($at == 1)
+				// go over prods, gather mail => prods relations and get html and do the whole mailing things
+				$eml2prod = array();
+				$__fld = $this->order_center->prop("mail_group_by");
+				foreach($this->order_items as $iid => $quantx)
 				{
-					$vars = array(
-						"id" => $oi->id(),
-					);
-					if(file_exists($this->site_template_dir."/show_attach.tpl"))
+					$_po = obj($iid);
+					$eml2prod[$_po->prop($__fld)][] = $iid;
+				}
+
+				$to_send = array();
+				foreach($eml2prod as $eml => $_prods)
+				{
+					if ($eml == "")
 					{
-						$vars["template"] = "show_attach.tpl";
+						// make content for empty prods
+						$_html = $this->show(array(
+							"id" => $oi->id(),
+							"show_only_prods_with_val" => $eml
+						));
+						foreach($emails as $c)
+						{
+							$eml = $c->to();
+							$to_send[$eml->prop("mail")] = array($_html, "");
+						}
 					}
-					$org = obj($c_com_id);
-					$htmla = $this->show($vars);
-					$awm->fattach(array(
-						"contenttype" => "application/vnd.ms-excel",
-						"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
-						"content" => $htmla,
+					else
+					{
+						$_html = $this->show(array(
+							"id" => $oi->id(),
+							"show_only_prods_with_val" => $eml
+						));
+						$eml_o = obj($eml);
+						$to_send[$eml_o->comment()] = array($_html, $eml);
+					}
+				}
+
+				foreach($to_send as $eml => $html)
+				{
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $eml,
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $html[0],
+					));
+					if($at == 1)
+					{
+						$vars = array(
+							"id" => $oi->id(),
+							"show_only_prods_with_val" => $html[1]
+						);
+						if(file_exists($this->site_template_dir."/show_attach.tpl"))
+						{
+							$vars["template"] = "show_attach.tpl";
+						}
+						$org = obj($c_com_id);
+						$htmla = $this->show($vars);
+						$awm->fattach(array(
+							"contenttype" => "application/vnd.ms-excel",
+							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+							"content" => $htmla,
+						));
+					}
+					//strip_tags(str_replace("<br>", "\n",$html))
+					$awm->gen_mail();
+				}
+			}
+			else
+			{
+				if ($html == "")
+				{
+					$html = $this->show(array(
+						"id" => $oi->id()
 					));
 				}
-				//strip_tags(str_replace("<br>", "\n",$html))
-				$awm->gen_mail();
+			
+
+				foreach($emails as $c)
+				{
+					$eml = $c->to();
+					$awm->clean();
+					$awm->create_message(array(
+						"froma" => $mail_from_addr,
+						"fromn" => $mail_from_name,
+						"subject" => $email_subj,
+						"to" => $eml->prop("mail"),
+						"body" => "see on html kiri",
+					));
+					$awm->htmlbodyattach(array(
+						"data" => $html,
+					));
+					if($at == 1)
+					{
+						$vars = array(
+							"id" => $oi->id(),
+						);
+						if(file_exists($this->site_template_dir."/show_attach.tpl"))
+						{
+							$vars["template"] = "show_attach.tpl";
+						}
+						$org = obj($c_com_id);
+						$htmla = $this->show($vars);
+						$awm->fattach(array(
+							"contenttype" => "application/vnd.ms-excel",
+							"name" => $oi->id()."_".date("dmy")."_".$org->name().".xls",
+							"content" => $htmla,
+						));
+					}
+					//strip_tags(str_replace("<br>", "\n",$html))
+					$awm->gen_mail();
+				}
 			}
 		}
 
@@ -799,11 +876,28 @@ class shop_order extends class_base
 
 		if ((($fld = $o->meta("prod_group_by")) != ""))
 		{
-			// sort by that field
-			$ord_it_d = $ord_item_data->get();
-			$this->_sby_fld = $fld;
-			uksort($ord_it_d, array(&$this, "__prod_show_sort_gpby"));
-			$ord_item_data = new aw_array($ord_it_d);
+			if (isset($arr["show_only_prods_with_val"]))
+			{
+				$__tmp = $arr["show_only_prods_with_val"];
+				$ord_it_d = array(); 
+				foreach($ord_item_data->get() as $k => $v)
+				{
+					$a = obj($k);
+					if ($a->prop($fld) == $__tmp)
+					{
+						$ord_it_d[$k] = $v;
+					}
+				}
+				$ord_item_data = new aw_array($ord_it_d);
+			}
+			else
+			{
+				// sort by that field
+				$ord_it_d = $ord_item_data->get();
+				$this->_sby_fld = $fld;
+				uksort($ord_it_d, array(&$this, "__prod_show_sort_gpby"));
+				$ord_item_data = new aw_array($ord_it_d);
+			}
 		}
 
 		$p = "";

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.33 2005/08/23 08:38:02 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.34 2005/08/24 13:03:28 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -61,12 +61,6 @@
 
 @default group=mail_settings_orderer
 
-	@property mail_group_by type=select 
-	@caption Toodete grupeerimine meilis
-
-	@property send_attach type=checkbox ch_value=1
-	@caption Lisa meili manusega tellimus
-
 	@property mail_to_client type=checkbox ch_value=1
 	@caption Saada tellijale e-mail
 
@@ -86,6 +80,16 @@
 
 	@property mail_to_seller_in_el type=select
 	@caption Saada meil aadressile, mis on elemendis
+
+	@property mail_group_by type=select 
+	@caption Toodete grupeerimine meilis
+
+	@property mails_sep_by_el type=checkbox ch_value=1
+	@caption Saada eraldi meilid vastavalt klassifikaatorile
+
+	@property send_attach type=checkbox ch_value=1
+	@caption Lisa meili manusega tellimus
+
 
 @groupinfo payment caption="Makseviisid"
 @default group=payment

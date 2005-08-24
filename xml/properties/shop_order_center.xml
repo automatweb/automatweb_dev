@@ -136,25 +136,6 @@
             <caption>N&amp;auml;itamiseks kasuta kontrollerit</caption>
       </property>
       <property>
-            <name>mail_group_by</name>
-            <group>mail_settings_orderer</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>select</type>
-            <caption>Toodete grupeerimine meilis</caption>
-      </property>
-      <property>
-            <name>send_attach</name>
-            <group>mail_settings_orderer</group>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Lisa meili manusega tellimus</caption>
-      </property>
-      <property>
             <name>mail_to_client</name>
             <group>mail_settings_orderer</group>
             <table>objects</table>
@@ -210,6 +191,35 @@
             <method>serialize</method>
             <type>select</type>
             <caption>Saada meil aadressile, mis on elemendis</caption>
+      </property>
+      <property>
+            <name>mail_group_by</name>
+            <group>mail_settings_seller</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>select</type>
+            <caption>Toodete grupeerimine meilis</caption>
+      </property>
+      <property>
+            <name>mails_sep_by_el</name>
+            <group>mail_settings_seller</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Saada eraldi meilid vastavalt klassifikaatorile</caption>
+      </property>
+      <property>
+            <name>send_attach</name>
+            <group>mail_settings_seller</group>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Lisa meili manusega tellimus</caption>
       </property>
       <property>
             <name>rent_min_amt</name>
