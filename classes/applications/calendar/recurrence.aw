@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.10 2005/03/16 07:09:47 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/recurrence.aw,v 1.11 2005/08/25 07:41:46 voldemar Exp $
 // recurrence.aw - Kordus
 /*
 
@@ -165,7 +165,7 @@ class recurrence extends class_base
 				break;
 
 			case "length":
-				$data["value"] = $this->safe_settype_float ($data["value"]);
+				$data["value"] = abs ($this->safe_settype_float ($data["value"]));
 				break;
 
 			case "test":
@@ -284,7 +284,7 @@ class recurrence extends class_base
 		};
 		return $rv;
 	}
-	
+
 	function calc_range_minutely($arr)
 	{
 		$interval = (int)$arr["interval"];
