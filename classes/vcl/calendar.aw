@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.70 2005/07/22 12:41:52 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.71 2005/08/25 15:08:09 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1272,6 +1272,9 @@ class vcalendar extends aw_template
 						"evt_id" => "",
 						"date" => date("d-m-Y",$reals),
 						"section" => $this->target_section,
+						// try to unset the sbt variable in url, so i can check in event_search
+						// if it is there or not 
+						"sbt" => "",
 					));
 				};
 
@@ -1324,6 +1327,7 @@ class vcalendar extends aw_template
 				"viewtype" => "month",
 				"date" => date("d-m-Y",$arr["timestamp"]),
 				"section" => $this->target_section,
+				"sbt" => "xx",
 			)),
 			"prev_date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 			"next_date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
