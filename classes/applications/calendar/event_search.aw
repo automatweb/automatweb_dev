@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.75 2005/08/25 08:29:07 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.76 2005/08/25 10:40:37 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -497,15 +497,15 @@ class event_search extends class_base
 					"size" => 2,
 				)),
 			);
-			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select" || $prop["type"] == "date_chooser")
-			{
+//			if($prop["type"] == "date_select" || $prop["type"] == "datetime_select" || $prop["type"] == "date_chooser")
+//			{
 				$prps["props"] = html::textarea(array(
 					"name" => "${pname}[${sname}][props]",
 					"value" => $oldvals[$sname]["props"],
 					"rows" => 5,
 					"cols" => 15,
 				));
-			}
+//			}
 			$nums = count($oldvals[$sname]["fields"]);
 			foreach(safe_array($oldvals[$sname]["fields"]) as $k => $v)
 			{
@@ -571,6 +571,7 @@ class event_search extends class_base
 		$end_tm = $dt->get_timestamp($arr["end_date"]);
 
                 // if date is set in the url, then try to use that to specify our range.
+		// last condition in this if is probably temporary --dragut
                 if (isset($arr["date"]) && substr_count($arr["date"],"-") == 2 && $arr['action'] != "search")
                 {
                         list($_d,$_m,$_y) = explode("-",$arr["date"]);
@@ -845,7 +846,6 @@ class event_search extends class_base
 			"caption" => t("Otsi"),
 			"type" => "submit",
 		));
-		
 		$do_search = true;
 		if ($do_search)
 		{
@@ -1188,74 +1188,116 @@ class event_search extends class_base
 								continue;
 							}
 							$v = create_links($eval[$nms]);
-							if($nms == "image")
+								
+							$value = $tabledef[$nms]["props"];
+							// if there is something in the controller field set, then lets see what it is
+							if (!empty($value))
 							{
-								if(is_oid($v) && $this->can("view", $v))
+								// if there is some php code
+								if (strpos($value, "#php#") !== false)
 								{
-									$asd = obj($v);
-								}
-							}
-							if ($nms == "start1" || $nms == "end")
-							{
-								if($skip)
-								{
-									continue;
-								}
-								$value = $tabledef[$nms]["props"];
-								if(!empty($value))
-								{
-									if(strpos($value, "#php#") !== false)
-									{
-										$value = str_replace("#php#", "", $value);
-										$value = str_replace("#/php#", "", $value);
-										// eval is evil and inherited from the satan himself,
-										// so i decided to use it here -- ahz
-										eval($value);
-									}
-									else
-									{
-										$v = date($value, $v);
-									}
+									// remove the php code indicators
+									$value = str_replace("#php#", "", $value);
+									$value = str_replace("#/php#", "", $value);
+									// and execute the code
+									eval($value);
 								}
 								else
 								{
+									// if it isn't a php code, then it might be a date conf string:
+									if ($nms == "start1" || $nms == "end")
+									{
+										$v = date($value, $v);
+									}
+									else
+									{
+										// and if it isn't the date case, then maybe i should
+										// just give it the value which is in controller?
+										// would it make any sense?
+										// not so sure about that, so commenting it out now:
+
+									//	$v = $value;
+									}
+								}
+							}
+							else
+							{	
+								if($nms == "image")
+								{
+									if(is_oid($v) && $this->can("view", $v))
+									{
+										$asd = obj($v);
+									}
+								}
+								if ($nms == "start1" || $nms == "end")
+								{
+									if($skip)
+									{
+										continue;
+									}
+								//	$value = $tabledef[$nms]["props"];
+								//	if(!empty($value))
+								//	{
+								//		if(strpos($value, "#php#") !== false)
+								//		{
+								//			$value = str_replace("#php#", "", $value);
+								//			$value = str_replace("#/php#", "", $value);
+								//			// eval is evil and inherited from the satan himself,
+								//			// so i decided to use it here -- ahz
+								//			eval($value);
+								//		}
+								//		else
+								//		{
+								//			$v = date($value, $v);
+								//		}
+								//	}
+								//	else
+								//	{
+								//		$v = date("d-m-Y", $v);
+								//	}
+									// if there is no controller set for date:
 									$v = date("d-m-Y", $v);
 								}
-							}
-							if($nms == "name")
-							{
-								if($obj->prop("udeftb1") != "")
+								if($nms == "name")
 								{
-									$v = html::popup(array(
-										"url" => $obj->prop("udeftb1"),
+									if($obj->prop("udeftb1") != "")
+									{
+										$v = html::popup(array(
+											"url" => $obj->prop("udeftb1"),
+											"caption" => $v,
+											"target" => "_blank",
+											"toolbar" => 1,
+											"directories" => 1,
+											"status" => 1,
+											"location" => 1,
+											"resizable" => 1,
+											"scrollbars" => 1,
+											"menubar" => 1,
+										));
+									}
+								}
+								if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
+								{
+									$v = html::href(array(
+										"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
 										"caption" => $v,
-										"target" => "_blank",
-										"toolbar" => 1,
-										"directories" => 1,
-										"status" => 1,
-										"location" => 1,
-										"resizable" => 1,
-										"scrollbars" => 1,
-										"menubar" => 1,
 									));
 								}
-							}
-							if($tabledef[$nms]["clickable"] == 1 && !$search["oid"])
-							{
-								$v = html::href(array(
-									"url" => aw_ini_get("baseurl").aw_url_change_var(array("evt_id" => $id)),
-									"caption" => $v,
-								));
-							}
-							if($tabledef[$nms]["brs"] == 1)
-							{
-								$v = nl2br($v);
-							}
-							if(strpos($v, "#") !== false)
-							{
-								$aliasmrg->parse_oo_aliases($ekey, $v);
+								if($tabledef[$nms]["brs"] == 1)
+								{
+									$v = nl2br($v);
+								}
+							
+								// this seems to be the right place to execute controller (props)
+								
+
+								if(strpos($v, "#") !== false)
+								{
+									$aliasmrg->parse_oo_aliases($ekey, $v);
+								}
 							}
 							$val[] = $tabledef[$nms]["sepb"].$v.$tabledef[$nms]["sepa"];
+							
 						}
 						$val = implode(" ".$tabledef[$sname]["sep"]." ", $val);
 						$this->vars(array(
