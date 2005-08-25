@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.75 2005/08/19 06:45:13 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.76 2005/08/25 16:43:16 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -297,11 +297,13 @@ class mrp_schedule extends class_base
 				// ));
 			}
 
-			error::raise(array(
-				"msg" => t("Planeerimiseks lukustamine ebaõnnestus!"),
-				"fatal" => true,
-				"show" => true,
-			));
+			// error::raise(array(
+				// "msg" => t("Planeerimiseks lukustamine ebaõnnestus!"),
+				// "fatal" => true,
+				// "show" => true,
+			// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
+			echo t("Planeerimiseks lukustamine ebaõnnestus!");
+			return;
 		}
 
 		### start scheduling only if input data has been altered
