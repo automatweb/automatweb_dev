@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.74 2005/08/22 13:30:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.75 2005/08/25 08:29:07 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -922,6 +922,12 @@ class event_search extends class_base
 						"logic" => "AND",
 						"conditions" => array(
 							"end" => -1,
+							"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
+						),
+					)),
+					new object_list_filter(array(
+						"logic" => "AND",
+						"conditions" => array(
 							"start1" => new obj_predicate_compare(OBJ_COMP_BETWEEN, $start_tm, ($end_tm + 86399)),
 						),
 					)),
