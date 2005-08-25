@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.71 2005/08/25 15:08:09 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/calendar.aw,v 1.72 2005/08/25 19:27:31 dragut Exp $
 // calendar.aw - VCL calendar
 class vcalendar extends aw_template
 {
@@ -1327,7 +1327,6 @@ class vcalendar extends aw_template
 				"viewtype" => "month",
 				"date" => date("d-m-Y",$arr["timestamp"]),
 				"section" => $this->target_section,
-				"sbt" => "xx",
 			)),
 			"prev_date" => date("d-m-Y",mktime(0,0,0,$m-1,$d,$y)),
 			"next_date" => date("d-m-Y",mktime(0,0,0,$m+1,$d,$y)),
