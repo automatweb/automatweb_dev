@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.69 2005/07/30 15:10:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.70 2005/08/25 07:45:16 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -397,8 +397,42 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
+				### check for user errors
+				if (24 < $prop["value"]["length"])
+				{
+					$prop["error"] .= t("Pikkus ei saa olla suurem kui 24h. ");
+					return PROP_ERROR;
+				}
+
 				$prop["value"]["recur_type"] = 1;
             	$prop["value"]["interval_daily"] = 1;
+
+			case "unavailable_recur":
+				### check for user errors
+				if (empty ($prop["value"]["length"]))
+				{
+					$prop["error"] .= t("Pikkus ei saa olla null. ");
+					return PROP_ERROR;
+				}
+
+				### validate
+				if (empty ($prop["value"]["time"]))
+				{
+					$prop["value"]["time"] = "00:00";
+				}
+
+				$time = explode (":", $prop["value"]["time"]);
+				$time_h = abs ((int) $time[0]);
+				$time_min = abs ((int) $time[1]);
+
+				### check for user errors
+				if ((23 < $time_h) or (59 < $time_min) or (count ($time) < 2))
+				{
+					$prop["error"] .= t("Viga kellaaja määrangus. ");
+					return PROP_ERROR;
+				}
+
+				$prop["value"]["time"] = $time_h . ":" . $time_min;
 				break;
 
 			case "out_of_service":
@@ -521,7 +555,7 @@ class mrp_resource extends class_base
 				{
 					continue;
 				}
-				
+
 				$p = obj($job->prop("project"));
 				$project = html::get_change_url($p->id(), array("return_url" => urlencode(aw_global_get("REQUEST_URI"))), ($p->name() . "-" . $job->prop ("exec_order")));
 
