@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.77 2005/06/09 10:55:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.78 2005/08/26 11:08:54 dragut Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -506,6 +506,8 @@ class html extends aw_template
 			title - Kui mouse hoverib peal, siis mis info juttu näidata
 			caption - tekst mida näeb kasutaja
 			textsize(string) -- examples: "10px", "0.7em", "smaller".
+			class(string) - style class name
+			id(string) - element id (for css mainly)
 	*/
 	function href($args = array())
 	{
@@ -514,7 +516,9 @@ class html extends aw_template
 		$target = isset($target) ? " target='$target' " : "";
 		$onClick = isset($onClick) ? " onClick='$onClick' " : "";
 		$title = isset($title) ? " alt='$title' title='$title' " : "";
-		return "<a href='$url' $target $title $onClick $textsize>$caption</a>";
+		$class = isset($class) ? " class='$class' " : "";
+		$id = isset($id) ? " id='$id' " : "";
+		return "<a href='$url' $target $title $onClick $textsize $class $id>$caption</a>";
 	}
 
 	////
