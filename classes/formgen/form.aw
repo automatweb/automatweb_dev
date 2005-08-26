@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.120 2005/06/27 09:23:58 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.121 2005/08/26 11:30:00 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5259,8 +5259,8 @@ class form extends form_base
 	{
 		extract($arr);
 		$this->if_init($id,"settings_folders.tpl", LC_FORM_CHANGE_FOLDERS);
-		
-		$_menulist = $this->get_menu_list();
+
+		$_menulist = $this->get_menu_list(false,false,-1,false);
 
 		$_tp = $this->get_list(FTYPE_ENTRY,false,true);
 		asort($_tp);
