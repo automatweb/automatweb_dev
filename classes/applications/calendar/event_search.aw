@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.77 2005/08/25 15:09:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.78 2005/08/26 13:16:15 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -1376,7 +1376,7 @@ class event_search extends class_base
 			}
 			$next_month_args["start_date"]["day"] = 1;
 			$next_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $next_month_args["end_date"]["month"], $next_month_args["end_date"]["year"]);
-			
+			$next_month_args["sbt"] = "Otsi";
 			if($prev_month_args["start_date"]["month"] == 1)
 			{
 				$prev_month_args["start_date"]["month"] = 12;
@@ -1393,7 +1393,8 @@ class event_search extends class_base
 			
 			$prev_month_args["start_date"]["day"] = 1;
 			$prev_month_args["end_date"]["day"] = cal_days_in_month(CAL_GREGORIAN, $prev_month_args["end_date"]["month"], $prev_month_args["end_date"]["year"]);
-			
+			$prev_month_args["sbt"] = "Otsi";
+
 			$prev_days = $prev_month_args["end_date"]["day"];
 			$next_days = $next_month_args["end_date"]["day"];
 			$s_date = $arr["start_date"];
@@ -1441,8 +1442,8 @@ class event_search extends class_base
 						"year" => $end_year,
 						"month" => $end_month,
 					),
+					"sbt" => "Otsi",
 				);
-				
 				$this->vars(array(
 					"week_url" => str_replace("event_search", "", $this->mk_my_orb("search", $week_args, "event_search")),
 					"week_nr" => $i,
