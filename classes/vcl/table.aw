@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.55 2005/07/02 11:59:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.56 2005/08/29 11:48:00 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1052,6 +1052,8 @@ class aw_table extends aw_template
 					{
 						$val = "";
 					};
+
+					$val = str_replace("[__jrk_replace__]",$cnt,$val);
 
 					$tbl .= ($tbl ? $sep : "").$this->_format_csv_field($val, $sep);
 				};
