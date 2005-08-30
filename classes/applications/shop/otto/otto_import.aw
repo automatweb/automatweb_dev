@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.30 2005/05/04 10:21:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.31 2005/08/30 09:59:30 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -67,11 +67,16 @@
 
 @groupinfo folderspri caption="Kataloogide m&auml;&auml;rangud" parent=foldersa
 
-@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
-@caption T&auml;htede prioriteedid
+	@property foldpri type=textarea rows=20 cols=20 table=objects field=meta method=serialize group=folderspri
+	@caption T&auml;htede prioriteedid
 
-@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
-@caption Landscape vaatega lehed
+	@property sideways_pages type=textarea rows=4 cols=30 table=objects field=meta method=serialize group=folderspri
+	@caption Landscape vaatega lehed
+
+@groupinfo foldersnames caption="Kaustade nimed" parent=foldersa
+
+	@property foldernames type=textarea rows=20 cols=30 table=objects field=meta method=serialize group=foldersnames
+	@caption Kaustade nimed impordi jaoks (id=nimi,id=nimi)
 
 @groupinfo views caption="Vaated"
 
@@ -228,6 +233,7 @@ class otto_import extends class_base
 	**/
 	function pictimp($arr,$fix_missing = false)
 	{
+		$this->added_images = array();
 		set_time_limit(0);
 
 		if (is_object($arr))
@@ -290,7 +296,7 @@ class otto_import extends class_base
 		else
 		{
 			//$data = array_unique(explode(",", $this->get_file(array("file" => "/www/otto.struktuur.ee/ottids.txt"))));
-			$data = array("198052Y");
+			$data = array("947824");
 		}
 
 		if (!$fix_missing && file_exists($this->cfg["site_basedir"]."/files/status.txt"))
@@ -354,7 +360,62 @@ class otto_import extends class_base
 			echo "process pcode $pcode (".($total - $cur_cnt)." to go, estimated time remaining $rem_hr hr, $rem_min min) <br>\n";
 			flush();
 
-			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
+			if (aw_ini_get("site_id") == 276)
+			{
+				$url = "http://www.bonprix-shop.de/mall/cgi-bin/bonprix.bp.suche?pWkorbid=100825289114822289&pKanal=0&pAnfrage=".$pcode;
+				$html = $this->file_get_contents($url);
+				if (strpos($html, "Leider konnten wir") === false)
+				{
+					// found prod, read images
+					preg_match("/http:\/\/image01\.otto\.de\/bonprixbilder\/varianten\/artikel_ansicht\/var1\/(.*).jpg/imsU", $html, $mt);
+					$first_im = $mt[1]."_var1";
+					$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$first_im' AND nr = '1' AND pcode = '$pcode'", "pcode");
+					if (!$imnr)
+					{
+						echo "insert new image $first_im <br>\n";
+						flush();
+						$q = ("
+							INSERT INTO 
+								otto_prod_img(pcode, nr,imnr, server_id) 
+								values('$pcode','1','$first_im', 6)
+						");
+						//echo "q = $q <br>";
+						$this->db_query($q);
+						$this->added_images[] = $first_im;
+					}
+
+					// get other images
+					list($r_i) = explode("_", $first_im);
+					preg_match_all("/http:\/\/image01\.otto\.de\/bonprixbilder\/varianten\/variante_klein\/(.*)\/".$r_i.".jpg/imsU", $html, $mt, PREG_PATTERN_ORDER);
+					$otherim = $mt[1];
+					foreach($otherim as $nr)
+					{
+						$im = $r_i."_".$nr;
+						$nr = $nr{strlen($nr)-1};
+						$imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '$im' AND nr = '$nr' AND pcode = '$pcode'", "pcode");
+						if (!$imnr)
+						{
+							echo "insert new image $im <br>\n";
+							flush();
+							$q = ("
+								INSERT INTO 
+									otto_prod_img(pcode, nr,imnr, server_id) 
+									values('$pcode','$nr','$im', 6)
+							");
+							//echo "q = $q <br>";
+							$this->db_query($q);
+							$this->added_images[] = $im;
+						}
+					}
+				}
+			}
+			else
+			{
+
+//			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/OttoDe/de_DE/-/EUR/OV_ParametricSearch-Progress;sid=bwNBYJMEb6ZQKdPoiDHte7MOOf78U0shdsyx6iWD?_PipelineID=search_pipe_ovms&_QueryClass=MallSearch.V1&ls=0&Orengelet.sortPipelet.sortResultSetSize=10&SearchDetail=one&Query_Text=".$pcode;
+
+			$url = "http://www.otto.de/is-bin/INTERSHOP.enfinity/WFS/Otto-OttoDe-Site/de_DE/-/EUR/OV_ViewSearch-SearchStart;sid=mDuGagg9T0iHakspt6yqShOR_0e4OZ2Xs5qs8J39FNYYHvjet0FaQJmF?ls=0&Orengelet.sortPipelet.sortResultSetSize=15&SearchDetail=one&stype=N&Query_Text=".$pcode;
+
 		echo "url = $url <br>";
 			$html = $this->file_get_contents($url);
 
@@ -365,7 +426,7 @@ class otto_import extends class_base
 				$this->read_img_from_baur($pcode);
 			}
 			else
-			if (!preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+).jpg/imsU",$html, $mt))
+			if (!preg_match("/pool\/formatd\/(\d+).jpg/imsU",$html, $mt))
 			{
 				echo "for product $pcode multiple images! <br>\n";
 				flush();
@@ -385,6 +446,7 @@ class otto_import extends class_base
 				foreach($mt[1] as $url)
 				{
 					$url = $url."&SearchDetail=one&stype=N&Orengelet.sortPipelet.sortResultSetSize=15&Orengelet.SimCategorize4OttoMsPipelet.Similarity_Parameter=&Orengelet.sortPipelet.sortCursorPosition=0&Query_Text=".$pcode;
+
 					$urld[$url] = $url;
 				}
 
@@ -399,7 +461,7 @@ class otto_import extends class_base
 					// ach! if only single image then no js!!!
 					if (count($mt[1]) == 0)
 					{
-						preg_match("/pool\/OttoDe\/de_DE\/images\/formatb\/(\d+)\.jpg/imsU",$html, $mt2);
+						preg_match("/pool\/formatb\/(\d+)\.jpg/imsU",$html, $mt2);
 						$t_imnr = $this->db_fetch_field("SELECT pcode FROM otto_prod_img WHERE imnr = '".$mt2[1]."' AND nr = '1' AND pcode = '$pcode'", "pcode");
 						if (!$f_imnr)
 						{
@@ -416,6 +478,7 @@ class otto_import extends class_base
 							");
 							//echo "q = $q <br>";
 							$this->db_query($q);
+							$this->added_images[] = $mt2[1];
 						}
 					}
 					else
@@ -439,6 +502,7 @@ class otto_import extends class_base
 								");
 								//echo "q = $q <br>";
 								$this->db_query($q);
+								$this->added_images[] = $mt[2][$idx];
 							}
 						}
 					}
@@ -463,6 +527,7 @@ class otto_import extends class_base
 			{
 				$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
 					values('$pcode',1,'$mt[1]')");	
+				$this->added_images[] = $mt[1];
 
 				$add = 0;
 				// check if we got the main img
@@ -514,9 +579,11 @@ class otto_import extends class_base
 					{
 						$this->db_query("INSERT INTO otto_prod_img (pcode, nr, imnr) 
 							values('$pcode','".($nr+$add)."','$mt[1]')");
+						$this->added_images[] = $mt[1];
 					}
 				}
 			}
+			} // if bonprix
 
 			$stat = fopen($this->cfg["site_basedir"]."/files/status.txt","w");
 		
@@ -578,6 +645,14 @@ class otto_import extends class_base
 		if ($o->prop("do_pict_i"))
 		{
 			$this->pictimp($o);
+		}
+
+		$fldnames_t = explode(",", trim($o->prop("foldersnames")));
+		$fldnames = array();
+		foreach($fldnames_t as $nm)
+		{
+			list($a, $b) = explode("=", $nm);
+			$fldnames[$b] = $a; // name=id
 		}
 
 		obj_set_opt("no_cache", 1);
@@ -663,13 +738,15 @@ class otto_import extends class_base
 					continue;
 				}
 
+//echo dbg::dump($row);
 				$this->quote(&$row);
 				$row = $this->char_replacement($row);
 				$row[2] = $this->conv($row[2]);
-				$desc = $this->conv(trim($row[3]." ".$row[4]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
+				$extrafld = trim($row[3]);
+				$desc = $this->conv(trim($row[4]." ".$row[5]." ".$row[6]." ".$row[7]." ".$row[8]." ".$row[9]." ".$row[10]." ".$row[11]." ".$row[12]." ".$row[13]." ".$row[14]." ".$row[15]." ".$row[16]." ".$row[17]." ".$row[18]." ".$row[19]." ".$row[20]." ".$row[21]." ".$row[22]." ".$row[23]." ".$row[24]." ".$row[25]." ".$row[26]." ".$row[27]." ".$row[28]." ".$row[29]." ".$row[30]." ".$row[31]." ".$row[32]." ".$row[33]." ".$row[34]." ".$row[35]." ".$row[36]." ".$row[37]." ".$row[38]." ".$row[39]." ".$row[40]." ".$row[41]." ".$row[42]));
 				$this->db_query("
-					INSERT INTO otto_imp_t_prod(pg,nr,title,c)
-					VALUES('$cur_pg','$row[1]','$row[2]','$desc')
+					INSERT INTO otto_imp_t_prod(pg,nr,title,c,extrafld)
+					VALUES('$cur_pg','$row[1]','$row[2]','$desc','$extrafld')
 				");
 				if ($row[2] == "")
 				{
@@ -940,7 +1017,8 @@ class otto_import extends class_base
 				c.code as code,
 				c.color as color,
 				c.size as s_type,
-				c.full_code as full_code
+				c.full_code as full_code,
+				p.extrafld as extrafld
 			FROM 
 				otto_imp_t_prod p
 				LEFT JOIN otto_imp_t_codes c ON (c.pg = p.pg AND c.nr = p.nr)
@@ -1023,6 +1101,7 @@ class otto_import extends class_base
 			$dat->set_prop("user16", $row["full_code"]);
 			$dat->set_prop("user17", $row["color"]);
 			$dat->set_prop("user18", $row["pg"]);
+			$dat->set_prop("user11", $row["extrafld"]);
 
 			if (!$new)
 			{
@@ -1920,6 +1999,7 @@ class otto_import extends class_base
 					");
 					//echo "q = $q <br>";
 					$this->db_query($q);
+					$this->added_images[] = $pn;
 				}
 				else
 				{
@@ -1985,6 +2065,7 @@ class otto_import extends class_base
 				");
 				//echo "q = $q <br>";
 				$this->db_query($q);
+				$this->added_images[] = $first_im;
 			}
 
 			// get other images
@@ -2011,6 +2092,7 @@ class otto_import extends class_base
 					");
 					//echo "q = $q <br>";
 					$this->db_query($q);
+					$this->added_images[] = $im;
 				}
 			}
 		}		
@@ -2055,6 +2137,7 @@ class otto_import extends class_base
 				");
 				//echo "q = $q <br>";
 				$this->db_query($q);
+				$this->added_images[] = $first_im;
 			}
 		}
 	}
@@ -2101,6 +2184,7 @@ class otto_import extends class_base
 				");
 				//echo "q = $q <br>";
 				$this->db_query($q);
+				$this->added_images[] = $first_im;
 			}
 
 		}
