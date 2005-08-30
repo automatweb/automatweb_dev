@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.148 2005/07/14 10:32:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.149 2005/08/30 11:38:59 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -300,7 +300,7 @@ class users extends users_user
 		
 		if (is_admin())
 		{
-			return $this->mk_my_orb("gen_list", array());
+			return $this->mk_my_orb("gen_list", array(), "users");
 		}
 		else
 		{
