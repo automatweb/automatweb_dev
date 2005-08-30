@@ -173,6 +173,40 @@ class ftp extends class_base
 		unlink($fn);
 		return $res;
 	}
+	
+	/** deletes $file on the current server
+		@attrib api=1
+		@param file required
+	**/
+	function delete($arr)
+	{
+		if (!$this->handle)
+		{
+			return FTP_ERR_NOTCONNECTED;
+		}
+		if (ftp_delete($this->handle, $arr['file']))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	/** changes the directory on the current server to $path
+		@attrib api=1
+		@param path required
+	**/
+	function cd($arr)
+	{
+		if (!$this->handle)
+		{
+			return FTP_ERR_NOTCONNECTED;
+		}
+		if (ftp_chdir($this->handle, $arr['path']))
+		{
+			return true;
+		}
+		return false;
+	}
 
 	function get($url)
 	{
