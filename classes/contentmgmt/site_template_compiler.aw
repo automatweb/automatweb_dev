@@ -41,6 +41,9 @@ define("OP_IF_SUBMENUS", 24);		// params { a_parent, level}
 define("OP_GET_OBJ_SUBMENUS", 25);	// params { a_parent, level, a_parent_p_fn}
 define("OP_IF_LOGGED", 26);	// params { }
 
+define("OP_GRP_BEGIN", 27); 
+define("OP_GRP_END", 28); 
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -72,7 +75,9 @@ class site_template_compiler extends aw_template
 			23 => "OP_HAS_LUGU",
 			24 => "OP_IF_SUBMENUS",
 			25 => "OP_GET_OBJ_SUBMENUS",
-			26 => "OP_IF_LOGGED"
+			26 => "OP_IF_LOGGED",
+			27 => "OP_GRP_BEGIN",
+			28 => "OP_GRP_END"
 		);
 
 		$this->id_func = (aw_ini_get("menuedit.show_real_location") == 1 ? "brother_of" : "id");
@@ -139,6 +144,12 @@ class site_template_compiler extends aw_template
 				continue;
 			}
 
+			if ($parts[3] == "GRP")
+			{
+				$this->menu_areas[$area]["grps"][$level] = $parts[4];
+				continue;
+			}
+
 			$this->menu_areas[$area]["levels"][$level]["templates"][] = $parts;
 			$this->menu_areas[$area]["parent"] = $this->_mf_srch($area, $mdefs);
 			foreach($parts as $part)
@@ -178,6 +189,12 @@ class site_template_compiler extends aw_template
 			$parent_tpls = $this->get_parent_templates($tpl);
 			foreach($parent_tpls as $parent_tpl)
 			{
+				if (strpos($parent_tpl, "GRP_") !== false)
+				{
+					$parent_tpls = $this->get_parent_templates($parent_tpl);
+					$parent_tpl = reset($parent_tpls);
+				}
+
 				if (substr($parent_tpl, 0, 5) == "MENU_")
 				{
 					$parts = explode("_", $parent_tpl);
@@ -434,6 +451,20 @@ class site_template_compiler extends aw_template
 			);
 		}
 
+		// groups
+		if ($adat["grps"][$level])
+		{
+			$this->ops[] = array(
+				"op" => OP_GRP_BEGIN,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level,
+					"a_name" => $area,
+					"grp_cnt" => $adat["grps"][$level]
+				)
+			);
+		}
+
 		// now figure out the code for displaying
 		// menu items
 
@@ -622,12 +653,28 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		$this->ops[] = array(
-			"op" => OP_LOOP_LIST_END,
-			"params" => array(
-				"tpl" => $cur_tpl
-			)
-		);
+		if ($adat["grps"][$level])
+		{
+			$this->ops[] = array(
+				"op" => OP_GRP_END,
+				"params" => array(
+					"a_parent" => $adat["parent"],
+					"level" => $level,
+					"a_name" => $area,
+					"grp_cnt" => $adat["grps"][$level],
+					"tpl" => $cur_tpl_fqn
+				)
+			);
+		}
+		else
+		{
+			$this->ops[] = array(
+				"op" => OP_LOOP_LIST_END,
+				"params" => array(
+					"tpl" => $cur_tpl
+				)
+			);
+		}
 
 		if ($ldat["has_subitems_sel_check"])
 		{
@@ -1853,6 +1900,77 @@ class site_template_compiler extends aw_template
 
 		$ret .= $this->_gi()."if (aw_global_get(\"uid\") != \"\")\n";
 		return $ret;
+	}
+
+	function _g_op_grp_begin($arr)
+	{
+		$res = "";
+
+		$grp_ct_name = "\$grp_ct_".$arr["a_parent"]."_".$arr["level"];
+
+		$res .= $this->_gi()."$grp_ct_name = \"\";\n";
+
+/*
+		$gn = "\$grp_".$arr["a_name"]."_".$arr["level"];
+		$g_txt = "\$grp_".$arr["a_name"]."_".$arr["level"]."_ct";
+
+		$res .= $this->_gi()."$g_txt = \"\";\n";
+		$res .= $this->_gi()."for($gn = 0; $gn < $arr[grp_cnt]; $gn++)\n";
+		$res .= $this->_gi()."{\n";
+		$this->brace_level++;
+	*/	
+		return $res;
+	}
+
+	function _g_op_grp_end($arr)
+	{
+		$res = "";
+
+		end($this->list_name_stack);
+		$dat = current($this->list_name_stack);
+		$content_name = $dat["content_name"];
+		$o_name = $dat["o_name"];
+		$loop_counter_name = $dat["loop_counter_name"];
+
+		$grp_ct_name = "\$grp_ct_".$arr["a_parent"]."_".$arr["level"];
+		$grp_tpl = "MENU_".$arr["a_name"]."_L".$arr["level"]."_GRP_".$arr["grp_cnt"];
+
+		$tpl = substr($arr["tpl"], strrpos($arr["tpl"], ".")+1);
+		
+
+		// if % count
+		$res .= $this->_gi()."if ($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 0)\n";
+		$res .= $this->_gi()."{\n";
+		$this->brace_level++;
+
+			$res .= $this->_gi()."\$this->vars(array(\n";
+			$this->brace_level++;
+
+				$res .= $this->_gi()."\"".$tpl."\" => $content_name\n";
+
+			$this->brace_level--;
+			$res .= $this->_gi()."));\n";
+
+			$res .= $this->_gi()."$content_name = \"\";\n";
+			$res .= $this->_gi()."$grp_ct_name .= \$this->parse(\"".$grp_tpl."\");\n";
+
+		$this->brace_level--;
+		$res .= $this->_gi()."}\n";
+
+		// this->vars(arr[tpl] => $content_name)
+		// parse grp tpl
+
+		// insert the same thing that op_loop_list_end does, but for groups
+
+		// pop one item off the list name stack
+		$dat = array_pop($this->list_name_stack);
+		$this->last_list_dat = $dat;
+
+		$this->brace_level--;
+		$res .= $this->_gi()."}\n";
+		$res .= $this->_gi()."\$this->vars(array(\"".$grp_tpl."\" => ".$grp_ct_name."));\n";
+		
+		return $res;
 	}
 }
 ?>
