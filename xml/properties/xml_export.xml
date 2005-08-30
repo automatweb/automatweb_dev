@@ -40,6 +40,17 @@
             <caption>Mitu viimati muudeetud objekti exportida</caption>
       </property>
       <property>
+            <name>remove_aliases</name>
+            <table>objects</table>
+            <group>config</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Eemalda aliased</caption>
+            <comment>Eemalda AW aliased (nt. #pict1#)</comment>
+      </property>
+      <property>
             <name>local_file</name>
             <table>objects</table>
             <group>locations</group>

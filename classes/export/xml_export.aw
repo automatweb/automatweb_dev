@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.2 2005/07/13 11:00:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/export/xml_export.aw,v 1.3 2005/08/30 13:04:33 dragut Exp $
 // xml_export.aw - XML eksport 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_export)
@@ -9,64 +9,65 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_RECURRENCE, activate_next_auto_ex
 @default table=objects
 @default group=general
 
-@property do_export type=checkbox_value=1 store=no
-@caption Teosta eksport
+	@property do_export type=checkbox_value=1 store=no
+	@caption Teosta eksport
 
-@property last_export type=text store=no
-@caption Viimane eksport
-@comment Viimase expordi aeg
---------------------------------------------------------------------
+	@property last_export type=text store=no
+	@caption Viimane eksport
+	@comment Viimase expordi aeg
+
 @groupinfo config caption="Seaded"
 @default group=config
 
-@property last_object_change_time type=datetime_select field=meta method=serialize
-@caption Esimese objekti muutmise kuup&auml;ev
-@comment &Auml;ra ekspordi objekte, mis on viimati muudetud varem kui (Kuup&auml;ev)
+	@property last_object_change_time type=datetime_select field=meta method=serialize
+	@caption Esimese objekti muutmise kuup&auml;ev
+	@comment &Auml;ra ekspordi objekte, mis on viimati muudetud varem kui (Kuup&auml;ev)
 
-@property last_changed_obj_count type=textbox size=5 field=meta method=serialize
-@caption Mitu viimati muudeetud objekti exportida
+	@property last_changed_obj_count type=textbox size=5 field=meta method=serialize
+	@caption Mitu viimati muudeetud objekti exportida
+	
+	@property remove_aliases type=checkbox ch_value=1 field=meta method=serialize
+	@caption Eemalda aliased
+	@comment Eemalda AW aliased (nt. #pict1#)
 
---------------------------------------------------------------------
 @groupinfo locations caption="Asukohad"
 @default group=locations
 
-@property local_file type=checkbox ch_value=1 field=meta method=serialize
-@caption Fail salvestatakse kohalikku serverisse
+	@property local_file type=checkbox ch_value=1 field=meta method=serialize
+	@caption Fail salvestatakse kohalikku serverisse
 
-@property local_file_location type=textbox field=meta method=serialize
-@caption Serveri kataloog
-@comment Serveri kataloog, kuhu XML fail salvestatakse (koos failinimega)
+	@property local_file_location type=textbox field=meta method=serialize
+	@caption Serveri kataloog
+	@comment Serveri kataloog, kuhu XML fail salvestatakse (koos failinimega)
 
-@property ftp_file type=checkbox ch_value=1 field=meta method=serialize
-@caption Fail salvestatakse FTP-kataloogi
+	@property ftp_file type=checkbox ch_value=1 field=meta method=serialize
+	@caption Fail salvestatakse FTP-kataloogi
 
-@property ftp_host type=textbox field=meta method=serialize
-@caption FTP aadress
-@comment FTP serveri aadress
+	@property ftp_host type=textbox field=meta method=serialize
+	@caption FTP aadress
+	@comment FTP serveri aadress
 
-@property ftp_user type=textbox field=meta method=serialize
-@caption FTP kasutaja
-@comment Kasutajanimi, millega FTP serverisse logitakse
+	@property ftp_user type=textbox field=meta method=serialize
+	@caption FTP kasutaja
+	@comment Kasutajanimi, millega FTP serverisse logitakse
 
-@property ftp_password type=password field=meta method=serialize
-@caption FTP parool
-@comment Parool FTP kasutajale
+	@property ftp_password type=password field=meta method=serialize
+	@caption FTP parool
+	@comment Parool FTP kasutajale
 
-@property ftp_file_location type=textbox field=meta method=serialize
-@caption FTP kataloog
-@comment Kataloog, kuhu üle FTP fail salvestatakse (koos failinimega)
+	@property ftp_file_location type=textbox field=meta method=serialize
+	@caption FTP kataloog
+	@comment Kataloog, kuhu üle FTP fail salvestatakse (koos failinimega)
 
-@property parents_table type=table store=no 
-@caption Kaustad, mille alt objekte v&otilde;etakse
+	@property parents_table type=table store=no 
+	@caption Kaustad, mille alt objekte v&otilde;etakse
 
---------------------------------------------------------------------
 @groupinfo xml_struct caption="XML struktuur"
 @default group=xml_struct
 
-@property xml_struct_table type=table store=no no_caption=1
-@caption Seadete vormi v&auml;ljad
+	@property xml_struct_table type=table store=no no_caption=1
+	@caption Seadete vormi v&auml;ljad
 
---------------------------------------------------------------------
 @reltype EXP_OBJECT_TYPE value=1 clid=CL_OBJECT_TYPE
 @caption Eksporditav objekt
 
@@ -115,6 +116,65 @@ class xml_export extends class_base
 				$prop['value'] = (empty($last_export)) ? "0" : date("d-M-y / H:i", $last_export);
 
 				break;
+			case "local_file_location":
+				// if file should be exported into local server folder, then lets make sure, that i can
+				// write there. If I can't, then give the error message, so user can fix it
+				$export_local_file_check = $arr['obj_inst']->prop("local_file");
+				if (!empty($export_local_file_check))
+				{
+					if (!is_writable($prop['value']))
+					{
+				//		$retval = PROP_ERROR;
+						$prop['error'] = t("Faili/kausta ei saa kirjutada");
+					}
+				}
+				break;
+			case "ftp_file_location":
+				$export_ftp_file_check = $arr['obj_inst']->prop("ftp_file");
+				if (!empty($export_ftp_file_check))
+				{
+					// I have to check now, if i can write to this ftp location which is given
+					$ftp_inst = get_instance("protocols/file/ftp");
+					$ftp_inst->connect(array(
+						"host" => $arr['obj_inst']->prop("ftp_host"),
+						"user" => $arr['obj_inst']->prop("ftp_user"),
+						"pass" => $arr['obj_inst']->prop("ftp_password"),
+					));
+					
+					// check if the ftp location contains file or not
+					if ($ftp_inst->cd(array("path" => $prop['value'])) === true)
+					{
+						// if it doesn't, then i add a filename "check"
+						$tmp_file = trim($prop['value']);
+						if ($tmp_file{strlen($tmp_file) - 1} != "/")
+						{
+							$tmp_file .= "/";
+						}
+						$tmp_file .= "check";
+					}
+					else
+					{
+						// if it does, then i replace the file name with name "check", just to make
+						// sure not to accidentaly overwrite already exported xml file while checking if
+						// the file is writable or not
+						$tmp_file = substr($prop['value'], 0, strrpos($prop['value'], "/"))."/check";
+					}
+					$ftp_put_result = $ftp_inst->put_file($tmp_file, "check");
+					
+					if ($ftp_put_result ===	false)
+					{
+						$prop['error'] = t("Faili ei saa kirjutada");
+					}
+					else
+					{
+						$ftp_inst->delete(array(
+							"file" => $tmp_file,
+						));
+						
+					}
+
+				}
+				break;
 			case "parents_table":
 				$this->create_parents_table($arr);
 				break;
@@ -131,6 +191,49 @@ class xml_export extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "local_file_location":
+				// if file should be exported into local server folder, then lets check, if there 
+				// is only folder set, if it is, then i add file name by myself, which is xml export
+				// object name.
+				$export_local_file_check = $arr['obj_inst']->prop("local_file");
+				if (!empty($export_local_file_check))
+				{
+					if (is_dir($prop['value']))
+					{
+						$prop['value'] = trim($prop['value']);
+						if ($prop['value']{strlen($prop['value']) - 1} != "/")
+						{
+							$prop['value'] .= "/";
+						}
+						$prop['value'] .= $arr['obj_inst']->name().".xml";
+					}
+				}
+				break;
+			case "ftp_file_location":
+				// so here i'll check if the ftp location points to a directory or 
+				// file,
+				$export_ftp_file_check = $arr['obj_inst']->prop("ftp_file");
+				if (!empty($export_ftp_file_check))
+				{
+					$ftp_inst = get_instance("protocols/file/ftp");
+					$ftp_inst->connect(array(
+						"host" => $arr['obj_inst']->prop("ftp_host"),
+						"user" => $arr['obj_inst']->prop("ftp_user"),
+						"pass" => $arr['obj_inst']->prop("ftp_password"),
+					));	
+					// i'll try to change direcoty into the ftp_file_location
+					// if it fails, it probably is file or don't have read permission or smth
+					if ($ftp_inst->cd(array("path" => $prop['value'])) === true)
+					{
+						$prop['value'] = trim($prop['value']);
+						if ($prop['value']{strlen($prop['value']) - 1} != "/")
+						{
+							$prop['value'] .= "/";
+						}
+						$prop['value'] .= $arr['obj_inst']->name().".xml";
+					}
+				}
+				break;
 			case "parents_table":
 				if (!empty($arr['request']['parents']))
 				{
@@ -442,12 +545,7 @@ class xml_export extends class_base
 	**/
 	function fetch($arr)
 	{
-/*
-		$this->put_file(array(
-			"file" => "/www/dev/dragut/automatweb_dev/files/test_test.txt",
-			"content" => "test\n",
-		));
-*/
+
 		$o = obj($arr['id']);
 		$conns_to_parents = $o->connections_from(array(
 			"type" => RELTYPE_PARENT,
@@ -557,8 +655,8 @@ class xml_export extends class_base
 		// i think this is the place to generate actually the XML file
 		//
 
-//		$xml_file = "&lt;?xml version=\"1.0\" encoding=\"iso-8859-1\"?&gt;\n";
-		$xml_file = "";
+		$xml_file = "<?xml version=\"1.0\" encoding=\"".aw_global_get("charset")."\"?>\n";
+//		$xml_file = "";
 		$xml_file .= "<objects>\n";
 
 		foreach ($all_objects->arr() as $oid => $obj)
@@ -605,9 +703,12 @@ class xml_export extends class_base
 		} 
 
 		$xml_file .= "</objects>";
-
+		if ($o->prop("remove_aliases"))
+		{
+			$xml_file  = preg_replace("/#(\w+?)(\d+?)(v|k|p|)#/i","",$xml_file);
+		}
 //arr(htmlentities($xml_file));
-		header("Content-type: text/xml; charset=ISO-8859-15");
+		header("Content-type: text/xml; charset=".aw_global_get("charset"));
 		echo $xml_file;
 		
 		
