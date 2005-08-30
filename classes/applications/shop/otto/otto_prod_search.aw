@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.12 2005/08/16 10:01:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_prod_search.aw,v 1.13 2005/08/30 08:48:28 kristo Exp $
 // otto_prod_search.aw - Otto toodete otsing 
 /*
 
@@ -138,6 +138,8 @@ class otto_prod_search extends class_base
 	function do_minisearch($arr)
 	{
 		// do search then give results to displayer
+
+		$arr["str"] = trim(str_replace(" ", "", $arr["str"]));
 
 		// fulltext search - fields are 
 		$filter = array(
