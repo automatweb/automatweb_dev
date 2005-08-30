@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.31 2005/08/30 09:59:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/otto/otto_import.aw,v 1.32 2005/08/30 10:00:32 kristo Exp $
 // otto_import.aw - Otto toodete import 
 /*
 
@@ -218,6 +218,10 @@ class otto_import extends class_base
 		
 		if ($arr["obj_inst"]->prop("do_i"))
 		{
+			if ($arr["obj_inst"]->prop("do_pict_i"))
+			{
+				$this->doing_pict_i = true;
+			}
 			$arr["obj_inst"]->set_prop("do_i", 0);
 			$arr["obj_inst"]->set_prop("do_pict_i", 0);
 			$arr["obj_inst"]->set_prop("restart_pict_i", 0);
@@ -538,6 +542,7 @@ class otto_import extends class_base
 						values('$pcode','1','$mt[1]')");
 					echo "rewrote first image as $mt[1] <Br>\n";
 					flush();
+					$this->added_images[] = $mt[1];
 				}
 
 				// also, other images, detect them via the jump_img('nr') js func
@@ -645,6 +650,7 @@ class otto_import extends class_base
 		if ($o->prop("do_pict_i"))
 		{
 			$this->pictimp($o);
+			$doing_pict_imp = 1;
 		}
 
 		$fldnames_t = explode(",", trim($o->prop("foldersnames")));
@@ -1299,9 +1305,20 @@ class otto_import extends class_base
 		{
 			$pktl[$row["user3"]] = $row["aw_oid"];
 		}
+
+		$imgs = "";
+		if ($this->doing_pict_i && !count($this->added_images))
+		{
+			$imgs = " AND 1 = 0 ";
+		}
+		else
+		if (count($this->added_images))
+		{
+			$imgs = " AND imnr IN (".join(",", map("'%s'", $this->added_images)).") ";
+		}
 		
 		$query ="select *, count(*) as cnt from otto_prod_img ".
-					"where nr = 1 AND p_pg is not null  group ".
+					"where nr = 1 AND p_pg is not null $imgs  group ".
 					"by imnr having cnt > 1";
 		$this->db_query($query);
 		while ($row = $this->db_next())
