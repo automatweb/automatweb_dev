@@ -60,7 +60,7 @@
             <table>objects</table>
             <group>general</group>
             <type>releditor</type>
-            <reltype>RELTYPE_IMAGE</reltype>
+            <reltype>RELTYPE_FORUM_IMAGE</reltype>
             <rel_id>first</rel_id>
             <use_form>emb</use_form>
             <field>meta</field>
@@ -98,11 +98,11 @@
                   <clid>CL_ML_MEMBER</clid>
                   <caption>Tellija</caption>
             </SUBSCRIBER>
-            <IMAGE>
+            <FORUM_IMAGE>
                   <value>2</value>
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
-            </IMAGE>
+            </FORUM_IMAGE>
       </reltypes>
 </properties>
 

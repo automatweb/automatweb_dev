@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.14 2005/08/19 12:20:30 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.15 2005/08/31 14:25:57 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -25,7 +25,7 @@
 @property answers_to_mail type=checkbox ch_value=1 store=no
 @caption Soovin vastuseid e-mailile
 
-@property image type=releditor reltype=RELTYPE_IMAGE rel_id=first use_form=emb field=meta method=serialize
+@property image type=releditor reltype=RELTYPE_FORUM_IMAGE rel_id=first use_form=emb field=meta method=serialize
 @caption Pilt
 
 @property subscribers_editor type=releditor store=no mode=manager reltype=RELTYPE_SUBSCRIBER props=mail,name group=subscribers
@@ -37,7 +37,7 @@
 @reltype SUBSCRIBER value=1 clid=CL_ML_MEMBER
 @caption Tellija
 
-@reltype IMAGE value=2 clid=CL_IMAGE
+@reltype FORUM_IMAGE value=2 clid=CL_IMAGE
 @caption Pilt
 
 @classinfo no_status=1
@@ -94,13 +94,14 @@ class forum_topic extends class_base
 					$retval = PROP_FATAL_ERROR;
 				};
 				break;
-
+/*
 			case "image":
 				if ($arr["new"]) 
 				{
 					$retval = PROP_IGNORE;
 				};
 				break;
+*/
 
 		}
 		return $retval;

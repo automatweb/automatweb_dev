@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.14 2005/07/25 10:26:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_comment.aw,v 1.15 2005/08/31 14:25:57 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -28,7 +28,7 @@
 
 @classinfo syslog_type=ST_COMMENT no_status=1 relationmgr=yes
 
-@reltype IMAGE value=1 clid=CL_IMAGE
+@reltype FORUM_IMAGE value=1 clid=CL_IMAGE
 @caption Pilt
 
 @tableinfo forum_comments index=id master_table=objects master_index=oid

@@ -62,11 +62,11 @@
             </forum_comments>
       </tableinfo>
       <reltypes>
-            <IMAGE>
+            <FORUM_IMAGE>
                   <value>1</value>
                   <clid>CL_IMAGE</clid>
                   <caption>Pilt</caption>
-            </IMAGE>
+            </FORUM_IMAGE>
       </reltypes>
 </properties>
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.86 2005/08/19 12:08:22 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.87 2005/08/31 14:25:57 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1709,7 +1709,6 @@ class forum_v2 extends class_base
                 $props = $cfgu->load_class_properties(array(
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
-	
 		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
 
 		$cb_values = aw_global_get("cb_values");
@@ -1851,7 +1850,7 @@ class forum_v2 extends class_base
 			$topic_obj = new object($this->topic_id);
 			$topic_obj->connect(array(
 				"to" => $upload_image['id'],
-				"reltype" => "RELTYPE_IMAGE",
+				"reltype" => "RELTYPE_FORUM_IMAGE",
 			));
 			$image_inst->do_apply_gal_conf(obj($upload_image['id']));
 		}
@@ -1917,7 +1916,7 @@ class forum_v2 extends class_base
 			$comment_obj = new object($this->comm_id);
 			$comment_obj->connect(array(
 				"to" => $upload_image['id'],
-				"reltype" => "RELTYPE_IMAGE",
+				"reltype" => "RELTYPE_FORUM_IMAGE",
 			));
 			$image_inst->do_apply_gal_conf(obj($upload_image['id']));
 		}
@@ -2151,7 +2150,7 @@ class forum_v2 extends class_base
 		if ( is_oid($arr['id']) && $this->can("view", $arr['id']) )
 		{
 			$obj = new object($arr['id']);
-			$image_obj = $obj->get_first_obj_by_reltype("RELTYPE_IMAGE");
+			$image_obj = $obj->get_first_obj_by_reltype("RELTYPE_FORUM_IMAGE");
 			if (!empty($image_obj))
 			{
 				$image_inst = get_instance(CL_IMAGE);
