@@ -1690,7 +1690,7 @@ die(dbg::dump($ret));
 		}
 
 		$arr["key"] = $filt[count($filt)-1];
-
+		$this->joins = array_unique($this->joins);
 		return $ret;
 	}
 
