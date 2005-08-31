@@ -181,6 +181,17 @@
             <caption>Landscape vaatega lehed</caption>
       </property>
       <property>
+            <name>foldernames</name>
+            <table>objects</table>
+            <group>foldersnames</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>30</cols>
+            <caption>Kaustade nimed impordi jaoks (id=nimi,id=nimi)</caption>
+      </property>
+      <property>
             <name>force_7_view</name>
             <table>objects</table>
             <group>views</group>
@@ -304,6 +315,10 @@
                   <caption>Kataloogide m&amp;auml;&amp;auml;rangud</caption>
                   <parent>foldersa</parent>
             </folderspri>
+            <foldersnames>
+                  <caption>Kaustade nimed</caption>
+                  <parent>foldersa</parent>
+            </foldersnames>
             <views>
                   <caption>Vaated</caption>
             </views>

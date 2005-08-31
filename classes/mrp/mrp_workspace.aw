@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.139 2005/08/19 06:56:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.140 2005/08/31 08:34:04 kristo Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2894,7 +2894,7 @@ if ($_GET['show_thread_data'] == 1)
 			"parent" => $arr["obj_inst"]->prop ("resources_folder"),
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
-	));
+		));
 		$l = $resource_tree->to_list();
 		$resources = array("" => "");
 		foreach($l->arr() as $o)

@@ -635,7 +635,7 @@ class crm_company extends class_base
 		}
 		$conns = $obj->connections_from(array(
 			'type' => $conn_type,
-			'sort_by' => 'from.jrk',
+			'sort_by' => 'to.jrk',
 			'sort_dir' => 'asc',
 		));
 		
