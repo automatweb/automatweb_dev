@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.138 2005/09/01 08:31:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.139 2005/09/01 09:24:45 kristo Exp $
 
 /*
 
@@ -315,7 +315,7 @@ class site_show extends class_base
 					$ol = new object_list(array(
 						"class_id" => CL_MENU,
 						"parent" => $this->sel_section,
-						"order_by" => "objects.jrk",
+						"sort_by" => "objects.jrk",
 						"limit" => 1
 					));
 				}
