@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.39 2005/08/24 13:03:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order.aw,v 1.40 2005/09/01 09:46:27 kristo Exp $
 // shop_order.aw - Tellimus 
 /*
 
@@ -819,6 +819,11 @@ class shop_order extends class_base
 			}
 
 			//echo "sent to $_send_to content = $html <br>";
+			if ($_send_to == "" && aw_global_get("uid") != "")
+			{
+				$uo = obj(aw_global_get("uid_oid"));
+				$_send_to = $uo->prop("email");
+			}
 			
 			$awm->create_message(array(
 				"froma" => $mail_from_addr,
