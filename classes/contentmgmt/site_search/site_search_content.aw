@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.54 2005/08/23 12:20:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.55 2005/09/01 10:12:37 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -26,7 +26,15 @@
 	@property show_admin_if type=checkbox ch_value=1
 	@caption Veebis keeruline otsimisliides
 
-	
+	@property max_num_results type=textbox size=5
+	@caption Maksimaalne tulemuste arv
+
+	@property min_s_len type=textbox size=5
+	@caption Minimaalne otsingus&otilde;na pikkus
+		
+	@property max_s_len type=textbox size=5
+	@caption Maksimaalne otsingus&otilde;na pikkus
+		
 @default group=keywords
 
 	@property do_keyword_search type=checkbox field=meta method=serialize ch_value=1
@@ -67,6 +75,9 @@
 	@property str type=textbox 
 	@caption Pealkiri/Sisu
 
+	@property s_title type=textbox 
+	@caption Pealkiri
+
 	@property date_from type=date_select
 	@caption Alates
 
@@ -93,7 +104,7 @@
 
 	@property results type=table no_caption=1
 	@caption Tulemused
-
+	
 @default group=search_complex
 
 	@property c_srch_els type=callback callback=callback_get_complex_els
@@ -123,7 +134,7 @@
 @groupinfo searchgroups caption="Otsingu grupid"
 @groupinfo search caption="Otsi" submit_method=get
 	@groupinfo search_simple caption="Lihtne otsing" submit_method=get parent=search
-	@groupinfo search_complex caption="Keeruline otsing" submit_method=get parent=search
+	@groupinfo search_complex caption="Detailotsing" submit_method=get parent=search
 
 */
 
@@ -212,8 +223,21 @@ class site_search_content extends class_base
 
 			case "date_from":
 			case "date_to":
-				$prop["year_from"] = 1990;
-				$prop["year_to"] = date("Y");
+				if ($arr["request"][$prop["name"]]["year"] > 0)
+				{
+					if ($arr["request"][$prop["name"]]["day"] == "---")
+					{
+						$arr["request"][$prop["name"]]["day"] = $prop["name"] == "date_from" ? 1 : 31;
+					}
+					
+					if ($arr["request"][$prop["name"]]["month"] == "---")
+					{
+						$arr["request"][$prop["name"]]["month"] = $prop["name"] == "date_from" ? 1 : 12;
+					}
+				}
+			
+				$prop["year_to"] = 1990;
+				$prop["year_from"] = date("Y");
 				if (!$arr["request"][$prop["name"]])
 				{
 					$prop["value"] = -1;
@@ -228,8 +252,13 @@ class site_search_content extends class_base
 				break;
 
 			case "s_limit":
-				$prop["options"] = $this->limit_opts;
-				$prop["value"] = $arr["request"]["s_limit"];
+				$prop["options"] = array(
+					"20" => "20", 
+					"50" => "50",
+					"100" => "100",
+					"500" => "500", 
+				);
+				$prop["value"] = $arr["request"]["s_limit"] ? $arr["request"]["s_limit"] : 100;
 				break;
 
 			case "s_group":
@@ -243,6 +272,22 @@ class site_search_content extends class_base
 				break;
 
 			case "results":
+				if (!$arr["request"]["MAX_FILE_SIZE"])
+				{
+					return PROP_IGNORE;
+				}
+				if ($arr["obj_inst"]->prop("min_s_len") && 
+					strlen($arr["request"]["str"]) < $arr["obj_inst"]->prop("min_s_len"))
+				{
+					$prop["error"] = t("Otsingus&otilde;na peab olema pikem kui ".$arr["obj_inst"]->prop("min_s_len")." t&auml;hte!");
+					return PROP_FATAL_ERROR;
+				}
+				if ($arr["obj_inst"]->prop("max_s_len") && 
+					strlen($arr["request"]["str"]) > $arr["obj_inst"]->prop("max_s_len"))
+				{
+					$prop["error"] = t("Otsingus&otilde;na peab olema l&uuml;hem kui ".$arr["obj_inst"]->prop("max_s_len")." t&auml;hte!");
+					return PROP_FATAL_ERROR;
+				}
 				$this->_search_results($arr);
 				break;
 
@@ -716,7 +761,8 @@ class site_search_content extends class_base
 				url, 
 				title, 
 				modified,
-				content
+				content,
+				site_id
 				$fulltext
 			FROM 
 				static_content 
@@ -735,7 +781,8 @@ class site_search_content extends class_base
 				"title" => $row["title"],
 				"modified" => $row["modified"],
 				"content" => $row["content"],
-				"match" => $row[$fts]
+				"match" => $row[$fts],
+				"site_id" => $row["site_id"]
 			);
 		}
 		exit_function("site_search_content::fetch_static_search_results::q_results");
@@ -1726,21 +1773,30 @@ class site_search_content extends class_base
 	function _init_s_res_t(&$t)
 	{
 		$t->define_field(array(
+			"name" => "loc",
+			"caption" => t(""),
+			"align" => "center",
+		));
+		
+		$t->define_field(array(
 			"name" => "link",
 			"caption" => t(""),
-			"align" => "center"
+			"align" => "center",
 		));
 
 		$t->define_field(array(
 			"name" => "match",
 			"caption" => t("Mitu korda sisaldab"),
-			"align" => "center"
+			"align" => "center",
+			"numeric" => 1,
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
 			"name" => "title",
 			"caption" => t("Pealkiri"),
-			"align" => "center"
+			"align" => "center",
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -1749,7 +1805,8 @@ class site_search_content extends class_base
 			"align" => "center",
 			"type" => "time",
 			"format" => "d.m.Y H:i",
-			"numeric" => 1
+			"numeric" => 1,
+			"sortable" => 1
 		));
 
 		$t->define_field(array(
@@ -1793,7 +1850,9 @@ class site_search_content extends class_base
 				$nm .= ".html";
 			}
 			$num_reps = $this->_get_num_reps($settings["str"], $settings["s_opt"], $entry["content"]);
+			$so = obj($entry["site_id"]);
 			$t->define_data(array(
+				"loc" => $so->prop("short_name"),
 				"link" => html::img(array(
 					"url" => icons::get_icon_url(CL_FILE, $nm),
 				)),
@@ -1807,7 +1866,8 @@ class site_search_content extends class_base
 				"cont" => $this->_get_content_high($entry["content"], $settings["str"])
 			));
 		}
-		$t->set_sortable(false);
+		$t->set_default_sortby("match");
+		$t->set_default_sorder("desc");
 		$t->pageselector_string = "Leiti ".count($res)." dokumenti";
 	}
 
@@ -1832,10 +1892,16 @@ class site_search_content extends class_base
 		}
 
 		$arr["opts"]["str"] = S_OPT_ANY_WORD;
-/*		if (aw_global_get("uid") == "kix")
+		/*if (aw_global_get("uid") == "kix")
 		{
 			$GLOBALS["DUKE"] = 1;
 		}*/
+		
+		if (!$arr["s_limit"] || ($o->prop("max_num_results") && $arr["s_limit"] > $o->prop("max_num_results")))
+		{
+			$arr["s_limit"] = $o->prop("max_num_results");
+		}
+		
 		$arr["opts"]["str"] = $arr["s_opt"];
 		$arr["opts"]["limit"] = $arr["s_limit"];
 		$res = $this->fetch_static_search_results(array(
@@ -1860,21 +1926,33 @@ class site_search_content extends class_base
 			$str = substr($c, $_pos, strlen($str)); // get correct-case version
 			return $this->_hgl($c, $str, $_pos);
 		}
-
+		
 		// split by word and try for each
 		$words = explode(" ", $str);
-		foreach($words as $word)
+		$hl = "";
+		foreach($words as $widx => $word)
 		{
 			if (($_pos = strpos(strtolower($c), strtolower($word))) !== false)
 			{
 				$str = substr($c, $_pos, strlen($word)); // get correct-case version
-				return $this->_hgl($c, $word, $_pos, $words);
-			}
-			else
-			{
-				return substr(trim($c), 0, strpos(trim($c), " ", 200));
+				$hl = $this->_hgl($c, $word, $_pos, $words);
+				for(; $widx < count($words); $widx++)
+				{
+					$nw = $words[$widx];
+					if (($_pos = strpos(strtolower($hl), strtolower($nw))) !== false)
+					{
+						$str = substr($hl, $_pos, strlen($nw)); // get correct-case version
+						
+						$hl = substr($hl, 0, $_pos)."<b>".$str."</b>".substr($hl, $_pos + strlen($nw));
+					}
+				}
 			}
 		}
+		if ($hl != "")
+		{
+			return $hl;
+		}
+		return substr(trim($c), 0, strpos(trim($c), " ", 200));
 	}
 
 	function _hgl($c, $str, $_pos, $other = array())
@@ -1887,8 +1965,12 @@ class site_search_content extends class_base
 		}
 
 		// find first space 200 chars after
-		$end = strpos($c, " ", $_pos+200+strlen($str));
-		$end = $end ? $end : strlen($str);
+		$end = $begin + 400 + strlen($str);
+		$clen = strlen($c);
+		while ($end < $clen && $c{$end} != " ")
+		{
+			$end++;
+		}
 
 		// show
 		$c = str_replace($str, "<b>".$str."</b>", $c);
@@ -1900,7 +1982,7 @@ class site_search_content extends class_base
 				$c = str_replace($word, "<b>".$word."</b>", $c);
 			}
 		}
-		return substr($c, $begin, ($end - $begin)+1);
+		return substr($c, $begin, ($end - $begin) + 7); // 7 - strlen("<b></b>")
 	}
 
 	function _get_num_reps($str, $opt, $content)
@@ -1914,7 +1996,7 @@ class site_search_content extends class_base
 				$ct = strtolower($content);
 				foreach($words as $word)
 				{
-					$res += substr_count($content, strtolower($word));
+					$res += substr_count($ct, strtolower($word));
 				}
 				return $res;
 
@@ -2025,7 +2107,7 @@ class site_search_content extends class_base
 		));
 		$tp->add_tab(array(
 			"active" => $grp != "search_simple",
-			"caption" => t("Keeruline otsing"),
+			"caption" => t("Detailotsing"),
 			"link" => aw_ini_get("baseurl")."/index.".aw_ini_get("ext")."?section=".aw_global_get("section")."&group=search_complex"
 		));
 		return $tp->get_tabpanel(array(

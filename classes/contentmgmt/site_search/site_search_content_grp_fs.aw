@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.3 2005/08/16 09:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.4 2005/09/01 10:12:38 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property path type=textbox field=meta method=serialize
 	@caption Kataloog, mida indekseerida
+	
+	@property short_name type=textbox field=meta method=serialize
+	@caption L&uuml;hend
 	
 	@property meta_ctr type=relpicker reltype=RELTYPE_META_CTR field=meta method=serialize
 	@caption Metaandmete kontroller
@@ -123,6 +126,10 @@ class site_search_content_grp_fs extends run_in_background
 	function bg_run_step($o)
 	{
 		$path = $this->queue->get();
+		if ($path == "")
+		{
+			return $this->queue->has_more() ? BG_OK : BG_DONE;
+		}
 
 		if (isset($this->pages[$path]))
 		{
@@ -140,7 +147,11 @@ class site_search_content_grp_fs extends run_in_background
 
 		if (get_class($i) != "ss_parser_dir")
 		{
-			$this->_store_content($page, $o->id());
+			if (!$this->_store_content($page, $o->id()))
+			{
+				unset($this->pages[$path]);
+				return;
+			}
 		}
 
 		$paths = $page->get_links();
@@ -151,7 +162,6 @@ class site_search_content_grp_fs extends run_in_background
 				$this->queue->push($path);
 			}
 		}
-
 		if ($o->prop("indexer_sleep") > 0)
 		{
 			sleep($o->prop("indexer_sleep"));
@@ -214,51 +224,74 @@ class site_search_content_grp_fs extends run_in_background
 		$fn = $page->get_url();
 		$url = str_replace("automatweb/", "", $this->mk_my_orb("showdoc", array("id" => $indexer_id, "doc" => $h_id), "", false, false, "/"))."/".basename($fn);
 
+		$fc = html_entity_decode($fc, ENT_COMPAT, "iso-8859-4");
+		$title = html_entity_decode($title, ENT_COMPAT, "iso-8859-4");
+		
 		$this->quote(&$fc);
 		$this->quote(&$title);
 
-		$this->size += strlen($fc);
+		$fields = array(
+			"content" => $fc,
+			"modified" => $modified,
+			"title" => $title,
+			"last_modified" => time(),
+			"url" => $url,
+			"file_name" => $fn,
+			"id" => $h_id,
+			"created_by" => 'ss_fs',
+			"site_id" => $indexer_id
+		);
+		
+		if (is_oid($o->prop("meta_ctr")) && $this->can("view", $o->prop("meta_ctr")))
+		{
+			$m_ctr = obj($o->prop("meta_ctr"));
+			$ctr_i = $m_ctr->instance();
+			$res = $ctr_i->eval_controller_ref($m_ctr->id(), $h_id, $page, $page);
+			if ($res == false)
+			{
+				return false;
+			}
+			else
+			if (is_array($res))
+			{
+				foreach($res as $k => $v)
+				{
+					$fields[$k] = $v;
+				}
+			}
+		}
 
+		$this->size += strlen($fc);
+		
 		// see if we already got this hash-indexer-site_id copy and if we do, update it
 		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content WHERE id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'", "cnt");
 		if ($cnt > 0)
 		{
+			$sets = join(",", map2("%s = '%s'", $fields));
 			$q = "
 				UPDATE static_content SET 
-					content = '$fc', modified = '$modified',
-					title = '$title', last_modified = '".time()."', url = '$url',
-					file_name = '$fn'
+					$sets
 				WHERE
 					id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'
 			";
 		}
 		else
 		{
+			$flds = join(",", array_keys($fields));
+			$vals = join(",", map("'%s'", array_values($fields)));
 			$q = "
-				INSERT INTO static_content(
-					id, 					content, 					modified, 					 
-					title,						url,						created_by,
-					site_id, last_modified,file_name
-				) 
-				VALUES(
-					'$h_id',				'$fc',						'$modified',				
-					'$title',					'$url',						'ss_fs',
-					'$indexer_id', ".time().", '$fn'
-				)
+				INSERT INTO static_content($flds) 
+				VALUES($vals)
 			";
 		}
 		$this->db_query($q);
-		if (is_oid($o->prop("meta_ctr")) && $this->can("view", $o->prop("meta_ctr")))
-		{
-			$m_ctr = obj($o->prop("meta_ctr"));
-			$ctr_i = $m_ctr->instance();
-			$ctr_i->eval_controller_ref($m_ctr->id(), $h_id, $page, $page);
-		}
+		
+		return true;
 	}
 
 	/**
 
-		@attrib name=showdoc
+		@attrib name=showdoc nologin="1"
 
 		@param id required type=int acl=view
 		@param doc required

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.3 2005/08/16 09:57:19 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.4 2005/09/01 10:12:38 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -13,6 +13,9 @@
 
 	@property url type=textbox 
 	@caption Sait, mida indekseerida
+
+	@property short_name type=textbox 
+	@caption L&uuml;hend
 
 	@property i_status type=text store=no
 	@caption Staatus
@@ -125,7 +128,6 @@ class site_search_content_grp_html extends run_in_background
 	function bg_run_step($o)
 	{
 		$url = $this->queue->get();
-
 		if (isset($this->pages[$url]))
 		{
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
@@ -236,6 +238,10 @@ class site_search_content_grp_html extends run_in_background
 		$title = $page->get_title($o);
 		$url = $page->get_url();
 
+		// rewrite entities in html
+		$fc = html_entity_decode($fc, ENT_COMPAT, "iso-8859-4");
+		$title = html_entity_decode($title, ENT_COMPAT, "iso-8859-4");
+		
 		$this->quote(&$fc);
 		$this->quote(&$title);
 

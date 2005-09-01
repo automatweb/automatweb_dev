@@ -121,10 +121,20 @@ class date_edit
 					{
 						$retval.= "<option value='---'>---</option>\n";
 					}
-					for ($i = $range1; $i <= $range2; $i++)
+					if ($range1 > $range2)
 					{
-						$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
-					};
+						for ($i = $range1; $i >= $range2; $i--)
+						{
+							$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
+						};
+					}
+					else
+					{
+						for ($i = $range1; $i <= $range2; $i++)
+						{
+							$retval .= sprintf("<option value='%s' %s>%s</option>\n",$i,selected($i == $year),$i);
+						};
+					}
 					$retval .= "</select>\n";
 					break;
 

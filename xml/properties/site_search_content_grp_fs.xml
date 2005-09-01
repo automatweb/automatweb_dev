@@ -10,6 +10,15 @@
             <caption>Kataloog, mida indekseerida</caption>
       </property>
       <property>
+            <name>short_name</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <caption>L&amp;uuml;hend</caption>
+      </property>
+      <property>
             <name>meta_ctr</name>
             <table>objects</table>
             <field>meta</field>

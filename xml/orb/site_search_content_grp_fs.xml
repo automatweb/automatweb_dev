@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="site_search_content_grp_fs" folder="contentmgmt/site_search" extends="run_in_background">
-		<action name="showdoc">
+		<action name="showdoc" nologin="1">
 			<function name="showdoc">
 				<arguments>
 					<required name="id" type="int" acl="view" />

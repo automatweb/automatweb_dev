@@ -80,13 +80,15 @@ class ss_parser_html extends ss_parser_base
 					{
 						$str = dirname($this->url)."/".$str;
 					}
-
+					
+					$str = $this->resolve_path($str);
+					
 					$ret[$str] = $str;
 					//echo "found url ".$mt2[1]." , turned into $str <br>";
 				}
 			}
 		}
-		//die(dbg::dump($ret));
+		//echo (dbg::dump($ret));
 		return $ret;
 	}
 
@@ -126,6 +128,76 @@ class ss_parser_html extends ss_parser_base
 			return trim(strip_tags($mt[1]));
 		}
 		return NULL;
+	}
+	
+	function resolve_path($url)
+	{
+		$pu = parse_url($url);
+		
+		$path = $pu["path"];
+
+		$path = explode('/', str_replace('//', '/', $path));
+		for ($i=0; $i<count($path); $i++) 
+		{
+			if ($path[$i] == '.') 
+			{
+				unset($path[$i]);
+				$path = array_values($path);
+				$i--;
+			} 
+			else
+			if ($path[$i] == '..' AND ($i > 1 OR ($i == 1 AND $path[0] != '') ) ) 
+			{
+				unset($path[$i]);
+				unset($path[$i-1]);
+				$path = array_values($path);
+				$i -= 2;
+			} 
+			else
+			if ($path[$i] == '..' AND $i == 1 AND $path[0] == '') 
+			{
+				unset($path[$i]);
+				$path = array_values($path);
+				$i--;
+			} 
+			else 
+			{
+				continue;
+			}
+		}
+		$path = implode('/', $path);
+		
+		$url = "";
+		if (isset($pu["scheme"]))
+		{
+			$url .= $pu["scheme"]."://";
+		}
+		if (isset($pu["user"]))
+		{
+			$url .= $pu["user"];
+		}
+		if (isset($pu["pass"]))
+		{
+			$url .= ":".$pu["pass"]."@";
+		}
+		if (isset($pu["host"]))
+		{
+			$url .= $pu["host"];
+		}
+		
+		$url .= $path;
+		
+		if (isset($pu["query"]))
+		{
+			$url .= "?".$pu["query"];
+		}
+		
+		if (isset($pu["fragment"]))
+		{
+			$url .= "#".$pu["fragment"];
+		}
+		
+		return $url;
 	}
 }
 ?>

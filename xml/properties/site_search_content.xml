@@ -51,6 +51,36 @@
             <caption>Veebis keeruline otsimisliides</caption>
       </property>
       <property>
+            <name>max_num_results</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Maksimaalne tulemuste arv</caption>
+      </property>
+      <property>
+            <name>min_s_len</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Minimaalne otsingus&amp;otilde;na pikkus</caption>
+      </property>
+      <property>
+            <name>max_s_len</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <caption>Maksimaalne otsingus&amp;otilde;na pikkus</caption>
+      </property>
+      <property>
             <name>do_keyword_search</name>
             <table>objects</table>
             <field>meta</field>
@@ -142,6 +172,15 @@
             <caption>Pealkiri/Sisu</caption>
       </property>
       <property>
+            <name>s_title</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>search_simple</group>
+            <type>textbox</type>
+            <caption>Pealkiri</caption>
+      </property>
+      <property>
             <name>date_from</name>
             <table>objects</table>
             <field>meta</field>
@@ -158,15 +197,6 @@
             <group>search_simple</group>
             <type>date_select</type>
             <caption>Kuni</caption>
-      </property>
-      <property>
-            <name>s_title</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>textbox</type>
-            <caption>Pealkiri</caption>
       </property>
       <property>
             <name>s_opt</name>
@@ -284,7 +314,7 @@
                   <parent>search</parent>
             </search_simple>
             <search_complex>
-                  <caption>Keeruline otsing</caption>
+                  <caption>Detailotsing</caption>
                   <submit_method>get</submit_method>
                   <parent>search</parent>
             </search_complex>
