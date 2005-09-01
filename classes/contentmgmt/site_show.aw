@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.137 2005/06/29 09:42:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.138 2005/09/01 08:31:05 kristo Exp $
 
 /*
 
@@ -285,32 +285,47 @@ class site_show extends class_base
 			));
 		}
 
-		if ($this->sel_section_obj->prop("has_ctx") && count($_SESSION["menu_context"]))
+		if ($this->sel_section_obj->prop("has_ctx"))
 		{
-			// check if we need to redirect, based on current context
-			// find the first submenu with the correct context
-			$ol = new object_list(array(
-				"parent" => $this->sel_section,
-				"class_id" => CL_MENU,
-				"CL_MENU.RELTYPE_CTX.name" => $_SESSION["menu_context"],
-				"limit" => 1
-			));
-			if (!$ol->count())
+			$use_ctx = NULL;
+			if (count($_SESSION["menu_context"]))
 			{
-				// get the first submenu
-				$ol = new object_list(array(
-					"class_id" => CL_MENU,
-					"parent" => $this->sel_section,
-					"order_by" => "objects.jrk",
-					"limit" => 1
-				));
+				$use_ctx = $_SESSION["menu_context"];
+			}
+			else
+			if (is_oid($_ctx = $this->sel_section_obj->prop("default_ctx")) && $this->can("view", $_ctx))
+			{
+				$_ctx = obj($_ctx);
+				$use_ctx = $_ctx->name();
 			}
 
-			if ($ol->count())
+			if ($use_ctx)
 			{
-				$o = $ol->begin();
-				header("Location: ".obj_link($o->id()));
-				die();
+				// check if we need to redirect, based on current context
+				// find the first submenu with the correct context
+				$ol = new object_list(array(
+					"parent" => $this->sel_section,
+					"class_id" => CL_MENU,
+					"CL_MENU.RELTYPE_CTX.name" => $use_ctx,
+					"limit" => 1
+				));
+				if (!$ol->count())
+				{
+					// get the first submenu
+					$ol = new object_list(array(
+						"class_id" => CL_MENU,
+						"parent" => $this->sel_section,
+						"order_by" => "objects.jrk",
+						"limit" => 1
+					));
+				}
+
+				if ($ol->count())
+				{
+					$o = $ol->begin();
+					header("Location: ".obj_link($o->id()));
+					die();
+				}
 			}
 		}
 	}

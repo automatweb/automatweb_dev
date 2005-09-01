@@ -506,6 +506,15 @@
             <caption>Kuva alamkaustu kontekstip&amp;otilde;hiselt</caption>
       </property>
       <property>
+            <name>default_ctx</name>
+            <table>objects</table>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>advanced_ctx</group>
+            <caption>Default kontekst</caption>
+      </property>
+      <property>
             <name>ctx</name>
             <table>objects</table>
             <type>releditor</type>

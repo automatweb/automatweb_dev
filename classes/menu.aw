@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.137 2005/07/27 14:46:34 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.138 2005/09/01 08:31:05 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -212,7 +212,10 @@
 
 		@property has_ctx type=checkbox ch_value=1 table=objects field=meta method=serialize group=advanced_ctx
 		@caption Kuva alamkaustu kontekstip&otilde;hiselt
-	
+
+		@property default_ctx type=select table=objects field=meta method=serialize group=advanced_ctx
+		@caption Default kontekst
+
 		@property ctx type=releditor reltype=RELTYPE_CTX field=meta method=serialize mode=manager props=name,status table_fields=name,status table_edit_fields=name,status group=advanced_ctx
 		@caption Kontekstid
 
@@ -733,6 +736,25 @@ class menu extends class_base
 
 			case "seealso_docs_t":
 				$this->_do_seealso_docs_t($arr);
+				break;
+
+			case "default_ctx":
+				// gather contexts from submenus
+				$ol = new object_list(array(
+					"class_id" => CL_MENU,
+					"parent" => $arr["obj_inst"]->id(),
+					"lang_id" => array(),
+					"site_id" => array()
+				));
+				$opts = array("" => "");
+				foreach($ol->arr() as $o)
+				{
+					foreach($o->connections_from(array("type" => "RELTYPE_CTX")) as $c)
+					{
+						$opts[$c->prop("to")] = $c->prop("to.name");
+					}
+				}
+				$data["options"] = $opts;
 				break;
 		};
 		return $retval;
