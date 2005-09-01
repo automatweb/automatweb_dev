@@ -27,6 +27,15 @@
             <caption>Banneri sisu lisaks</caption>
       </property>
       <property>
+            <name>banner_new_win</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>banner_new_win</field>
+            <caption>Link avaneb uues aknas</caption>
+      </property>
+      <property>
             <name>html</name>
             <table>banners</table>
             <group>general</group>

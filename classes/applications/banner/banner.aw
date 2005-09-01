@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.12 2005/08/23 09:11:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.13 2005/09/01 08:45:12 kristo Exp $
 
 /*
 
@@ -17,6 +17,9 @@
 
 @property banner_file_2 type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
 @caption Banneri sisu lisaks
+
+@property banner_new_win type=checkbox ch_value=1
+@caption Link avaneb uues aknas
 
 @property html type=textarea rows=5 cols=30 table=banners
 @caption Banneri html
@@ -474,12 +477,20 @@ class banner extends class_base
 				$this->add_simple_view($banner->id(), $loc);
 				$content_o = obj($content);
 				$url = $this->mk_my_orb("proc_banner", array("click" => 1, "bid" => $banner->id()));
+				$target = $banner->prop("banner_new_win") ? "target=\"_blank\"" : "";
 				switch($content_o->class_id())
 				{
 					case CL_IMAGE:
 						$i = get_instance("image");
 						$img = $i->get_url_by_id($content_o->id());
-						$html = "<a href='$url'><img border='0' src='$img'></a>";
+						if ($banner->prop("url") == "")
+						{
+							$html = "<img border='0' src='$img'>";
+						}
+						else
+						{
+							$html = "<a $target href='$url'><img border='0' src='$img'></a>";
+						}
 						break;
 
 					case CL_FILE:
@@ -493,14 +504,30 @@ class banner extends class_base
 						{
 							$c_html = $content_o->name();
 						}
-						$html = "<a href='$url'>$c_html</a>";
+						if ($banner->prop("url") == "")
+						{
+							$html = $c_html;
+						}
+						else
+						{
+							$html = "<a $target href='$url'>$c_html</a>";
+						}
 						break;
 
 					case CL_FLASH:
 						$f = get_instance(CL_FLASH);
-						$html = "<a href='$url'>".$f->view(array(
-							"id" => $content_o->id()
-						))."</a>";
+						if ($banner->prop("url") == "")
+						{
+							$html = $f->view(array(
+								"id" => $content_o->id()
+							));
+						}
+						else
+						{
+							$html = "<a $target href='$url'>".$f->view(array(
+								"id" => $content_o->id()
+							))."</a>";
+						}
 						break;
 
 					case CL_EXTLINK:
