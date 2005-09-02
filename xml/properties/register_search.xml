@@ -72,6 +72,16 @@
             <caption>Tulemuste all on kuup&amp;auml;ev</caption>
       </property>
       <property>
+            <name>results_from_all_langs</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Tulemused k&amp;otilde;ikidest keeltest</caption>
+      </property>
+      <property>
             <name>sform_frm</name>
             <table>objects</table>
             <group>mkfrm</group>

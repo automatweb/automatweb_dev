@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.28 2005/08/23 08:55:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/register/register_search.aw,v 1.29 2005/09/02 12:59:06 kristo Exp $
 // register_search.aw - Registri otsing 
 /*
 
@@ -30,6 +30,9 @@
 
 @property show_date type=checkbox ch_value=1
 @caption Tulemuste all on kuup&auml;ev
+
+@property results_from_all_langs type=checkbox ch_value=1
+@caption Tulemused k&otilde;ikidest keeltest
 
 /////////
 @groupinfo mkfrm caption="Koosta otsinguvorm"
@@ -672,8 +675,12 @@ class register_search extends class_base
 					"parent" => $reg_flds
 				)
 			))
-			
 		);
+
+		if ($o->prop("results_from_all_langs"))
+		{
+			$filter["lang_id"] = array();
+		}
 		exit_function("register_search::show::dsrt::gsr::init");
 
 		enter_function("register_search::show::dsrt::gsr::loop");
