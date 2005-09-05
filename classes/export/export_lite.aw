@@ -57,7 +57,7 @@ class export_lite extends aw_template
 
 		// ok, this is the complicated bit.
 		// so, how do we do this? first. forget the time limit, this is gonna take a while.
-		set_time_limit(0);
+		set_time_limit(14400);
 		ignore_user_abort(true);
 
 		echo "<font face='Arial'> Toimub staatiliste lehtede genereerimine, palun oodake!<br />\n";
@@ -81,6 +81,21 @@ class export_lite extends aw_template
 		if (aw_ini_get("site_id") == 900)
 		{
 			$this->db_query("UPDATE static_content SET lang_id = 1 WHERE site_id = 900 AND section IN(250,235,234,236)");
+		}
+		$this->db_query("SELECT distinct(section) FROM static_content WHERE lang_id = 2");
+		while ($row = $this->db_next())
+		{
+			if (!is_oid($row["section"]) || !$this->can("view", $row["section"]))
+			{
+				continue;
+			}
+			$o = obj($row["section"]);
+			if ($o->lang_id() != 2 && ($o->prop("type") != ML_CLIENT))
+			{
+				$this->save_handle();
+				$this->db_query("UPDATE static_content SET lang_id = 1 WHERE section = $row[section]");
+				$this->restore_handle();
+			}
 		}
 		echo "<br />all done. <br /><br />\n\n";
 		die();
