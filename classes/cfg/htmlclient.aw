@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.114 2005/08/23 12:19:34 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.115 2005/09/05 14:10:43 kristo Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -756,8 +756,11 @@ class htmlclient extends aw_template
 
 			foreach($this->rtes as $rte)
 			{
+				$txt .= "if (document.getElementById('${rte}_edit'))\n";
+				$txt .= "{\n";
 				$txt .= "tmpdat = document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
 				$txt .= "document.changeform.elements['${rte}'].value=document.getElementById('${rte}_edit').contentWindow.document.body.innerHTML;\n";
+				$txt .= "}\n";
 				$data["cb_nobreaks[${rte}]"] = 1;
 			};
 
