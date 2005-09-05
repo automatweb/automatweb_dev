@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.15 2005/08/31 14:25:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_topic.aw,v 1.16 2005/09/05 10:12:02 dragut Exp $
 // forum_comment.aw - foorumi kommentaar
 /*
 
@@ -94,14 +94,6 @@ class forum_topic extends class_base
 					$retval = PROP_FATAL_ERROR;
 				};
 				break;
-/*
-			case "image":
-				if ($arr["new"]) 
-				{
-					$retval = PROP_IGNORE;
-				};
-				break;
-*/
 
 		}
 		return $retval;
@@ -110,8 +102,10 @@ class forum_topic extends class_base
 	////
 	// !Well. Mails all the subscribers of a topic
 	// id - id of the topic object
+	// forum_id - id of the forum object
 	// subject - subject of the message
 	// message - contents of the message
+	// topic_url - url to topic where comment was added
 	function mail_subscribers($args = array())
 	{
 		$forum_obj = &obj($args["forum_id"]);
@@ -134,6 +128,11 @@ class forum_topic extends class_base
 			$from = "From: automatweb@automatweb.com\n";
 		}
 		
+		// composing the message:
+		$message = $args['title']."\n\n";
+		$message .= $args['message']."\n\n";
+		$message .= $args['topic_url'];
+
 		$targets = array();
 		$targets = $topic_obj->connections_from(array(
 			"type" => "RELTYPE_SUBSCRIBER",
@@ -141,7 +140,7 @@ class forum_topic extends class_base
 		foreach($targets as $target)
 		{
 			$target_obj = $target->to();
-			send_mail($target_obj->prop("mail"),$subject,$args["message"],$from);
+			send_mail($target_obj->prop("mail"),$subject,$message,$from);
 		};
 
 	}
