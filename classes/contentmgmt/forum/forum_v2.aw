@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.87 2005/08/31 14:25:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.88 2005/09/05 10:22:43 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -75,7 +75,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_me
 	@default group=users
 
 		@property show_logged type=checkbox ch_value=1
-		@caption Kuva sisseloginud kasutaja e-posti ja nime automaatselt
+		@caption Luba kasutajal oma andmeid muuta
 
 @groupinfo look caption="Välimus"
 
@@ -846,7 +846,6 @@ class forum_v2 extends class_base
 			}
 			$path[] = $name;
 		};
-
 		
 		$this->_add_style("style_topic_caption");
 		$this->_add_style("style_topic_replies");
@@ -1335,18 +1334,36 @@ class forum_v2 extends class_base
 			
 			$uid = aw_global_get("uid");
 			$add = "";
-			if($this->obj_inst->prop("show_logged") == 1 && !empty($uid))
+			if(!empty($uid))
 			{
+				$uid_oid = users::get_oid_for_uid($uid);
+				$user_obj = new object($uid_oid);
+	
 				$this->vars(array(
 					"author" => $uid,
+					"author_email" => $user_obj->prop("email"),
 				));
+			
+			}
+			if ($this->obj_inst->prop("show_logged") == 1)
+			{
 				$add = "_logged";
 			}
 			$this->vars(array(
 				"a_name" => $this->parse("a_name".$add),
-//				"a_email" => $this->parse("a_email"),
+				"a_email" => $this->parse("a_email".$add),
 			));
-			
+
+			if ($_SESSION['forum_comment_error'])
+			{
+				$this->vars(array(
+					"error_message" => t("Pealkirja v&otilde;i sisu v&auml;li peab olema t&auml;idetud"),
+				));
+				$this->vars(array(
+					"ERROR" => $this->parse("ERROR"),
+				));
+				unset($_SESSION['forum_comment_error']);
+			}
 
 			$rv .= $this->parse();
 		};
@@ -1710,9 +1727,27 @@ class forum_v2 extends class_base
                         "clid" => CL_MSGBOARD_TOPIC,
                 ));
 		$use_props = array("name","author_name","author_email","answers_to_mail","comment");
+		
+		// if user is logged in, 
+		$uid = aw_global_get("uid");
+		if (!empty($uid))
+		{
+			$props['author_name']['value'] = $uid;
+			$uid_oid = users::get_oid_for_uid($uid);
+			$user_obj = new object($uid_oid);
+			$props['author_email']['value'] = $user_obj->prop("email");
+			
+			if ($this->obj_inst->prop("show_logged") != 1)
+			{
+				$props['author_name']['type'] = "text";
+				$props['author_email']['type'] = "text";
+			}
+
+		}
 
 		$cb_values = aw_global_get("cb_values");
 		aw_session_del("cb_values");
+//arr($props);
 		foreach($use_props as $key)
 		{
 			$propdata = $props[$key];
@@ -1814,7 +1849,7 @@ class forum_v2 extends class_base
 		{
 			$obj_inst = obj($arr["id"]);
 			$uid = aw_global_get("uid");
-			if($obj_inst->prop("show_logged") == 1 && !empty($uid))
+			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
 				$user = obj(aw_global_get("uid_oid"));
 				$arr["author_name"] = $uid;
@@ -1875,13 +1910,23 @@ class forum_v2 extends class_base
 	**/
 	function submit_comment($arr)
 	{
+		// at least comment text or title have to be set
+		if (empty($arr['name']) && empty($arr['commtext']))
+		{
+			$_SESSION['forum_comment_error'] = 1;
+			return $this->finish_action($arr);
+		}
 		if(is_oid($arr["id"]) && $this->can("view", $arr["id"]))
 		{
 			$obj_inst = obj($arr["id"]);
 			$uid = aw_global_get("uid");
-			if($obj_inst->prop("show_logged") == 1 && !empty($uid))
+			if($obj_inst->prop("show_logged") != 1 && !empty($uid))
 			{
+				$uid_oid = users::get_oid_for_uid($uid);
+				$user_obj = new object($uid_oid);
+
 				$arr["uname"] = $uid;
+				$arr["uemail"] = $user_obj->prop("email");
 			}
 		}
 
@@ -1920,15 +1965,19 @@ class forum_v2 extends class_base
 			));
 			$image_inst->do_apply_gal_conf(obj($upload_image['id']));
 		}
+
+		$return_url = $this->finish_action($arr);
+
 		$topic->mail_subscribers(array(
 			"id" => $arr["topic"],
 			"message" => $arr["commtext"],
+			"title" => $arr["name"],
 			"forum_id" => $arr["id"],
+			"topic_url" => $return_url,
 		));
-
                 $c = get_instance("cache");
                 $c->full_flush();				
-		return $this->finish_action($arr);
+		return $return_url;
 		/*
                 $this->comm_id = $t->submit($emb);
 		unset($arr["class"]);

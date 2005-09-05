@@ -123,7 +123,7 @@
             <method>serialize</method>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <caption>Kuva sisseloginud kasutaja e-posti ja nime automaatselt</caption>
+            <caption>Luba kasutajal oma andmeid muuta</caption>
       </property>
       <property>
             <name>style_general_subtitle</name>
