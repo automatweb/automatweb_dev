@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.413 2005/08/01 12:19:28 duke Exp $
+// $Id: class_base.aw,v 2.414 2005/09/06 07:42:17 dragut Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -371,7 +371,6 @@ class class_base extends aw_template
 				unset($properties["is_translated"]);
 			};
 		}
-			
 		if (!aw_ini_get("config.object_translation"))
 		{
 			unset($properties["is_translated"]);
@@ -395,7 +394,6 @@ class class_base extends aw_template
 				$this->inst->$onload_method($args);
 			}
 		};
-	
 		$this->request = $args;
 		$gdata = !empty($this->subgroup) ? $this->groupinfo[$this->subgroup] : $this->groupinfo[$this->use_group];
 
@@ -613,10 +611,8 @@ class class_base extends aw_template
 			"properties" => &$properties,
 		));
 		
-		
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
-
 		// what exactly is going on with that subgroup stuff?
 		if (isset($resprops["subgroup"]))
 		{
@@ -794,6 +790,8 @@ class class_base extends aw_template
 		));
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
+
+
 		return $rv;
 	}
 
@@ -1169,7 +1167,6 @@ class class_base extends aw_template
 	function gen_output($args = array())
 	{
 		$classname = $this->_ct[$this->clid]["name"];
-
 		if (is_object($this->obj_inst))
 		{
 			$name = $this->obj_inst->name();
@@ -1254,7 +1251,6 @@ class class_base extends aw_template
 
 
 		$orb_action = isset($args["orb_action"]) ? $args["orb_action"] : "";
-
 		if (!isset($orb_action))
 		{
 			$orb_action = "change";
@@ -1445,7 +1441,6 @@ class class_base extends aw_template
 
 		$vars["content"] = $args["content"];
 		*/
-
 		return $content;
 
 		if ($this->orb_class == "auth")
@@ -1883,7 +1878,6 @@ class class_base extends aw_template
 			};
 			$val["type"] = "text";
 		};
-
 		// XXX: move get_html calls out of here, they really do not belong
 		if (($val["type"] == "toolbar") && is_object($val["vcl_inst"]))
 		{
@@ -1904,7 +1898,6 @@ class class_base extends aw_template
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
-
 
 		if (($val["type"] == "objpicker") && isset($val["clid"]) && defined($val["clid"]))
 		{
@@ -2061,7 +2054,7 @@ class class_base extends aw_template
 	function process_view_controllers(&$properties, $controllers, $argblock)
 	{
 		$view_controller_inst = get_instance(CL_CFG_VIEW_CONTROLLER);
-		
+
 		foreach ($controllers as $key => $value)
 		{
 			if($value)
@@ -2204,7 +2197,6 @@ class class_base extends aw_template
 				// and this as well
 				continue;
 			};
-			
 
 			// eventually all VCL components will have to implement their
 			// own init_vcl_property method
@@ -2473,8 +2465,8 @@ class class_base extends aw_template
 			};
 
 			$pname = $val["name"];
-			$getter = "get_" . $pname;
-			if (false && in_array($getter,$class_methods))
+			$getter = "_get_" . $pname;
+			if ( ($this->classinfo['prop_cb'] == 1) && in_array($getter,$class_methods))
 			{
 				$awt->start("getter $getter");
 				$status = $this->inst->$getter($argblock);
@@ -3468,7 +3460,7 @@ class class_base extends aw_template
 			// that your set_property returns PROP_OK for stuff
 			// that you want to save
 			$setter = "set_" . $name;
-			if (in_array($setter,$class_methods))
+			if ( ($this->classinfo['prop_cb'] == 1) && in_array($setter,$class_methods))
 			{
 				$status = $this->inst->$setter($argblock);
 			}
@@ -3565,8 +3557,6 @@ class class_base extends aw_template
 				$target_reltype = constant($property["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
-
-
 				$vcl_inst->process_releditor($argblock);
 			};
 
@@ -4051,6 +4041,7 @@ class class_base extends aw_template
 		else
 		if (is_oid($arr["cfgform_id"]) && $this->can("view", $arr["cfgform_id"]))
 		{
+
 			$cfg_props = $this->load_from_storage(array(
 				"id" => $arr["cfgform_id"],
 			));
@@ -4152,6 +4143,7 @@ class class_base extends aw_template
 						unset($cfg_props[$key]);
 					};
 				};
+
 			};
 		};
 		$this->_cfg_props = $cfg_props;
@@ -4517,6 +4509,7 @@ class class_base extends aw_template
 				};
 				$tmp[$gkey] = $gval;
 			};
+
 			$this->groupinfo = $tmp;
 			// if the class has a default config file, then load 
 			// that as well
