@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.45 2005/09/06 07:24:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.46 2005/09/06 07:43:07 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -449,7 +449,7 @@ class shop_order_cart extends class_base
 			}
 			die();
 		}
-
+		
 		if ($arr["from"] == "pre" && !$arr["order_cond_ok"])
 		{
 			aw_session_set("order_cond_fail", 1);
@@ -488,6 +488,7 @@ class shop_order_cart extends class_base
 			{
 				$quantx = new aw_array($quantx);
 			}
+			
 			foreach($quantx->get() as $x => $quant)
 			{
 				if ($arr["update"] == 1)
@@ -543,7 +544,7 @@ class shop_order_cart extends class_base
 				}
 			}
 		}
-
+		
 		if($arr["from"] != "confirm")
 		{
 			if (is_array($order_data["all_items"]))
@@ -579,7 +580,10 @@ class shop_order_cart extends class_base
 					{
 						foreach($cart["items"][$c->prop("to")] as $key => $val)
 						{
-							$cart["items"][$c->prop("to")][$key] = $k_d;
+							foreach(safe_array($k_d) as $k_k => $k_v)
+							{
+								$cart["items"][$c->prop("to")][$key][$k_k] = $k_v;
+							}
 						}
 					}
 				}
