@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.22 2005/06/02 11:47:29 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/install/class_template/classes/base.aw,v 1.23 2005/09/06 07:52:48 dragut Exp $
 // __classname.aw - __name 
 /*
 
-@classinfo syslog_type=__syslog_type relationmgr=yes no_comment=1 no_status=1
+@classinfo syslog_type=__syslog_type relationmgr=yes no_comment=1 no_status=1 prop_cb=1
 
 @default table=objects
 @default group=general
