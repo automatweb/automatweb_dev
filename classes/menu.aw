@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.138 2005/09/01 08:31:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/menu.aw,v 2.139 2005/09/06 11:14:48 kristo Exp $
 // menu.aw - adding/editing/saving menus and related functions
 
 /*
@@ -810,6 +810,9 @@ class menu extends class_base
 				"del" => html::checkbox(array(
 					"ch_value" => 1,
 					"name" => "img_del[$i]"
+				)),
+				"up" => html::fileupload(array(
+					"name" => "mimg_$i"
 				))
 			));
 		}
@@ -840,6 +843,12 @@ class menu extends class_base
 		$t->define_field(array(
 			"name" => "rel",
 			"caption" => t("Vali Pilt"),
+			"talign" => "center",
+			"align" => "center",
+		));
+		$t->define_field(array(
+			"name" => "up",
+			"caption" => t("Uploadi Pilt"),
 			"talign" => "center",
 			"align" => "center",
 		));
@@ -1052,6 +1061,7 @@ class menu extends class_base
 						"img_ord" => $arr["request"]["img_ord"],
 						"img" => $arr["request"]["img"],
 						"meta" => $arr["obj_inst"]->meta(),
+						"obj_inst" => $arr["obj_inst"]
 					)));
 					$this->menu_images_done = 1;
 				};
@@ -1162,10 +1172,27 @@ class menu extends class_base
 	function update_menu_images($args = array())
 	{
 		extract($args);
+		$imgar = $meta["menu_images"];
+
+		// rewire the uploaded images as connected and selected
+		foreach(safe_array($_FILES) as $name => $upf)
+		{
+			if (substr($name, 0, 4) == "mimg" && is_uploaded_file($upf["tmp_name"]))
+			{
+				$nm = substr($name, 5);
+				$im = get_instance(CL_IMAGE);
+				$imd = $im->add_upload_image($name, $args["obj_inst"]->id(), $imgar[$nm]["image_id"]);
+				$args["obj_inst"]->connect(array(
+					"to" => $imd["id"],
+					"type" => "RELTYPE_IMAGE"
+				));
+				$img[$nm] = $imd["id"];
+			}
+		}
+
 		$num_menu_images = $this->cfg["num_menu_images"];
 		$t = get_instance(CL_IMAGE);
 
-		$imgar = $meta["menu_images"];
 		for ($i=0; $i < $num_menu_images; $i++)
 		{
 			if ($img_del[$i] == 1 || !$img[$i])
