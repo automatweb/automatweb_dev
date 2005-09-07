@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.4 2005/03/23 11:45:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.5 2005/09/07 10:43:30 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -16,8 +16,13 @@
 
 	@property char_replace type=table no_caption=1
 
+@default group=controller
+
+	@property controller type=textarea rows=30 cols=60 no_caption=1
+
 @groupinfo str_replace caption="Teksti asendused"
 @groupinfo char_replace caption="T&auml;htede asendused"
+@groupinfo controller caption="Kontroller"
 
 */
 
