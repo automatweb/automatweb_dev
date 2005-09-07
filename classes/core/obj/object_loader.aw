@@ -235,7 +235,10 @@ class _int_object_loader extends core
 			}
 			else
 			{
-				$GLOBALS["objects"][$oid] = $ref;
+				if (!isset($GLOBALS["objects"][$oid]))
+				{
+					$GLOBALS["objects"][$oid] = $ref;
+				}
 			};
 		}
 

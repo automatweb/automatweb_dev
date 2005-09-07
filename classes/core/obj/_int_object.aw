@@ -1334,10 +1334,26 @@ class _int_object
 
 		$this->_int_load_property_values();
 
-		// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
-		// this can happen in ds_auto_translation for instance
-		$GLOBALS["objects"][$oid] = $this;
-		$GLOBALS["objects"][$this->obj["oid"]] = $this;
+		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
+		$cld = $GLOBALS["cfg"]["__default"]["classes"][$this->obj["class_id"]];
+		if ($cld["object_override"] != "")
+		{
+			$i = get_instance($cld["object_override"]);
+			// copy props
+			$i->obj = $this->obj;
+			$i->implicit_save = $this->implicit_save;
+			$i->props_loaded = $this->props_loaded;
+			$i->obj_sys_flags = $this->obj_sys_flags;
+			$GLOBALS["objects"][$oid] = $i;
+			$GLOBALS["objects"][$this->obj["oid"]] = $i;
+		}
+		else
+		{
+			// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
+			// this can happen in ds_auto_translation for instance
+			$GLOBALS["objects"][$oid] = $this;
+			$GLOBALS["objects"][$this->obj["oid"]] = $this;
+		}
 	}
 
 	function _int_load_properties($cl_id = NULL)
