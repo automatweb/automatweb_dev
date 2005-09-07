@@ -532,6 +532,43 @@ class _int_object_loader extends core
 
 		$this->cache->_log($type, ($new ? SA_ADD : SA_CHANGE), $name, $oid, false);
 	}
+
+	function resolve_reltype($type, $class_id)
+	{
+		if (is_array($type))
+		{
+			$res = array();
+			foreach($type as $ot)
+			{
+				if (!is_numeric($ot) && substr($ot, 0, 7) == "RELTYPE")
+				{
+					$res[] = $this->_resolve_single_rt($ot, $class_id);
+				}
+				else
+				{
+					$res[] = $ot;
+				}
+			}
+			return $res;
+		}
+		else
+		if (!is_numeric($type) && substr($type, 0, 7) == "RELTYPE")
+		{
+			return $this->_resolve_single_rt($type, $class_id);
+		}
+		return $type;
+	}
+
+	function _resolve_single_rt($type, $class_id)
+	{
+		// it is "RELTYPE_FOO"
+		// resolve it to numeric
+		if (!$GLOBALS["relinfo"][$class_id][$type]["value"])
+		{
+			return -1; // won't match anything
+		}
+		return $GLOBALS["relinfo"][$class_id][$type]["value"];
+	}
 }
 
 $GLOBALS["object_loader"] = new _int_object_loader();

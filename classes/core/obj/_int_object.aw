@@ -246,19 +246,7 @@ class _int_object
 			}
 			if (isset($param["type"]))
 			{
-				if (!is_numeric($param["type"]) && substr($param["type"], 0, 7) == "RELTYPE")
-				{
-					// it is "RELTYPE_FOO"
-					// resolve it to numeric
-					if (!$GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"])
-					{
-						$param["type"] = -1; // won't match anything
-					}
-					else
-					{
-						$param["type"] = $GLOBALS["relinfo"][$this->obj["class_id"]][$param["type"]]["value"];
-					}
-				}
+				$param["type"] = $GLOBALS["object_loader"]->resolve_reltype($param["type"], $this->obj["class_id"]);
 				if ($param["type"])
 				{
 					$filter["type"] = $param["type"];
