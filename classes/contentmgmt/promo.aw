@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.75 2005/07/27 14:53:30 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.76 2005/09/07 10:42:36 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -1189,9 +1189,11 @@ class promo extends class_base
 					$ids = safe_array($box->meta("content_documents"));
 					$ids[$o->id()] = $o->id();
 
+					$limit = $box->prop("ndocs");
+
 					$filt = array(
 						"oid" => $ids,
-						"limit" => $box->prop("ndocs"),
+						"limit" => $limit,
 						"status" => ($box->prop("show_inact") ? array(STAT_ACTIVE, STAT_NOTACTIVE) : STAT_ACTIVE),
 						new object_list_filter(array("non_filter_classes" => CL_DOCUMENT))
 					);
@@ -1200,10 +1202,19 @@ class promo extends class_base
 					{
 						$filt["sort_by"] = $ob;
 					}
-					$ol = new object_list($filt);
 
+					$ol = new object_list($filt);
+					$ids = $ol->ids();
+					if ($box->prop("start_ndocs") > 0)
+					{
+						$fin_cnt = $box->prop("ndocs") - $box->prop("start_ndocs");
+						if (count($ids) > $fin_cnt)
+						{
+							$ids = array_slice($ids, count($ids) - $fin_cnt);
+						}
+					}
 					// now we know the whole list, so just set that
-					$box->set_meta("content_documents", $this->make_keys($ol->ids()));
+					$box->set_meta("content_documents", $this->make_keys($ids));
 					$box->save();
 					continue;
 				}
