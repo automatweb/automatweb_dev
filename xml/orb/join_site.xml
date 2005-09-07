@@ -15,5 +15,13 @@
 			</function>
 		</action>
 
+		<action name="do_confirm_user" nologin="1">
+			<function name="do_confirm_user">
+				<arguments>
+					<required name="h" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

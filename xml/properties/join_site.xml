@@ -150,6 +150,72 @@
             <caption>Meili legend</caption>
       </property>
       <property>
+            <name>join_requires_confirm</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Liitumine n&amp;otilde;uab kinnitust</caption>
+      </property>
+      <property>
+            <name>confirm_mail_legend</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>text</type>
+            <store>no</store>
+            <field>confirm_mail_legend</field>
+            <caption>Kinnitusmeili legend</caption>
+      </property>
+      <property>
+            <name>confirm_mail_from_name</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitusmeili kellelt nimi</caption>
+      </property>
+      <property>
+            <name>confirm_mail_from</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitusmeili kellelt</caption>
+      </property>
+      <property>
+            <name>confirm_mail_subj</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitusmeili teema</caption>
+      </property>
+      <property>
+            <name>confirm_mail</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kinnitusmeili sisu</caption>
+      </property>
+      <property>
+            <name>confirm_redir</name>
+            <table>objects</table>
+            <group>confirm_mail</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kuhu suunata p&amp;auml;rast liitumist</caption>
+      </property>
+      <property>
             <name>jm_texts</name>
             <table>objects</table>
             <group>joinmail</group>
@@ -201,6 +267,9 @@
             <joinmail>
                   <caption>Meil</caption>
             </joinmail>
+            <confirm_mail>
+                  <caption>Kinnitamine</caption>
+            </confirm_mail>
       </groupinfo>
       <reltypes>
             <JOIN_CLASS>

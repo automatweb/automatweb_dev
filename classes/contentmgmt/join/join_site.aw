@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.19 2005/06/03 11:23:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/join/join_site.aw,v 1.20 2005/09/07 11:45:21 kristo Exp $
 // join_site.aw - Saidiga Liitumine 
 /*
 
@@ -69,8 +69,32 @@
 
 @groupinfo joinmail caption="Meil"
 
-@property joinmail_legend type=text store=no group=joinmail
-@caption Meili legend
+	@property joinmail_legend type=text store=no group=joinmail
+	@caption Meili legend
+
+@groupinfo confirm_mail caption="Kinnitamine"
+
+	@property join_requires_confirm type=checkbox ch_value=1 group=confirm_mail field=meta method=serialize
+	@caption Liitumine n&otilde;uab kinnitust
+
+	@property confirm_mail_legend type=text store=no group=confirm_mail
+	@caption Kinnitusmeili legend
+
+	@property confirm_mail_from_name type=textbox group=confirm_mail field=meta method=serialize
+	@caption Kinnitusmeili kellelt nimi
+
+	@property confirm_mail_from type=textbox group=confirm_mail field=meta method=serialize
+	@caption Kinnitusmeili kellelt
+
+	@property confirm_mail_subj type=textbox group=confirm_mail field=meta method=serialize
+	@caption Kinnitusmeili teema
+
+	@property confirm_mail type=textarea rows=10 cols=50 group=confirm_mail field=meta method=serialize
+	@caption Kinnitusmeili sisu
+
+	@property confirm_redir type=textbox group=confirm_mail field=meta method=serialize
+	@caption Kuhu suunata p&auml;rast liitumist
+
 
 @property jm_texts type=callback callback=callback_get_jm_texts group=joinmail store=no
 
@@ -118,6 +142,10 @@ class join_site extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "confirm_mail_legend":
+				$data["value"] = "#confirm# - kasutaja kinnitamise link";
+				break;
+
 			case "join_properties":
 				$this->_do_join_props($arr);
 				break;
@@ -905,7 +933,7 @@ class join_site extends class_base
 				aw_restore_acl();
 
 				// if the props say so, log the user in
-				if (true || $obj->prop("autologin"))
+				if ($obj->prop("autologin"))
 				{
 					$us->login(array(
 						"uid" => $n_uid,
@@ -913,6 +941,27 @@ class join_site extends class_base
 					));
 				}
 
+				if ($obj->prop("join_requires_confirm"))
+				{
+					$u_oid->set_prop("blocked", 1);
+					$u_oid->save();
+					if (!$this->db_table_exists("user_confirm_hashes"))
+					{
+						$this->db_query("CREATE table user_confirm_hashes (uid varchar(50), hash char(10))");
+					}
+					$hash = substr(gen_uniq_id(), 0, 10);
+					$this->db_query("INSERT INTO user_confirm_hashes (uid,hash) values('".$u_oid->prop("uid")."', '$hash')");
+
+					$this->_do_send_confirm_mail(array(
+						"obj" => $obj,
+						"hash" => $hash,
+						"email" => $n_email
+					));
+					aw_session_set("site_join_status", array());
+					aw_session_set("join_err", array());
+					return $obj->prop("confirm_redir");
+				}
+				else
 				// if needed, send join mail
 				if ($obj->prop("send_join_mail"))
 				{
@@ -1626,6 +1675,57 @@ class join_site extends class_base
 		$text = str_replace("#pwd_hash#", $cp, $text);
 
 		send_mail($arr["email"],$subj,$text,"From: ".$from);
+	}
+
+	function _do_send_confirm_mail($arr)
+	{
+		$text = $arr["obj"]->prop("confirm_mail");
+		$url = str_replace("automatweb/", "", $this->mk_my_orb("do_confirm_user", array("h" => $arr["hash"])));
+		$text = str_replace("#confirm#", $url, $text);
+
+		$subj = $arr["obj"]->prop("confirm_mail_subj");
+		$from = $arr["obj"]->prop("confirm_mail_from");
+		if ($arr["obj"]->prop("confirm_mail_from_name") != "")
+		{
+			$from = $arr["obj"]->prop("confirm_mail_from_name")." <$from>";
+		}
+		send_mail($arr["email"],$subj,$text,"From: ".$from);
+	}
+
+	/**
+
+		@attrib name=do_confirm_user nologin="1"
+
+		@param h required
+	**/
+	function do_confirm_user($arr)
+	{
+		$this->quote($arr["h"]);
+		$row = $this->db_fetch_row("SELECT * FROM user_confirm_hashes where hash = '$arr[h]'");
+
+		if ($row["uid"] == "")
+		{
+			return t("Sellise koodiga kasutajat pole olemas!");
+		}
+
+		$this->db_query("DELETE FROM user_confirm_hashes WHERE hash = '$arr[h]'");		
+
+		$u = get_instance("users");
+		$oid = $u->get_oid_for_uid($row["uid"]);
+		$o = obj($oid);
+		$o->set_prop("blocked", 0);
+		aw_disable_acl();
+		$o->save();
+		aw_restore_acl();
+
+		$pwd = $this->db_fetch_field("SELECT password FROM users WHERE uid = '$row[uid]'", "password");
+
+		aw_ini_set("auth", "md5_passwords", 0);
+
+		return $u->login(array(
+			"uid" => $row["uid"],
+			"password" => $pwd
+		));
 	}
 }
 ?>
