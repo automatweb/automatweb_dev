@@ -1931,6 +1931,7 @@ class site_template_compiler extends aw_template
 		$content_name = $dat["content_name"];
 		$o_name = $dat["o_name"];
 		$loop_counter_name = $dat["loop_counter_name"];
+		$list_name = $dat["list_name"];
 
 		$grp_ct_name = "\$grp_ct_".$arr["a_parent"]."_".$arr["level"];
 		$grp_tpl = "MENU_".$arr["a_name"]."_L".$arr["level"]."_GRP_".$arr["grp_cnt"];
@@ -1939,7 +1940,7 @@ class site_template_compiler extends aw_template
 		
 
 		// if % count
-		$res .= $this->_gi()."if ($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 0)\n";
+		$res .= $this->_gi()."if (($loop_counter_name > 0 && ($loop_counter_name % $arr[grp_cnt]) == 1) || ($loop_counter_name == (".$list_name."->count() - 1)))\n";
 		$res .= $this->_gi()."{\n";
 		$this->brace_level++;
 
