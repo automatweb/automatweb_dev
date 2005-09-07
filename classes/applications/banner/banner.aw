@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.13 2005/09/01 08:45:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.14 2005/09/07 11:52:54 kristo Exp $
 
 /*
 
@@ -281,6 +281,18 @@ class banner extends class_base
 		}
 	}
 
+	function add_click($bid)
+	{
+		$this->quote(&$ss);
+		$ip = aw_global_get("HTTP_X_FORWARDED_FOR");
+		if ($ip == "" || !(strpos($ip,"unknown") === false))
+		{
+			$ip = aw_global_get("REMOTE_ADDR");
+		}
+
+		$this->db_query("INSERT INTO banner_clicks(tm,bid,ip) values('".time()."','$bid','$ip')");
+	}
+
 	////
 	// !adds a record to the banner_ids table to identify shown banners l8r
 	function add_view($bid,$ss,$noview,$clid)
@@ -361,6 +373,7 @@ class banner extends class_base
 	function proc_banner($arr)
 	{
 		extract($arr);
+
 		if ($html)
 		{
 			// tagastame baasi kirjutatud htmli banneri naitamisex.
@@ -376,6 +389,7 @@ class banner extends class_base
 			// redirect
 			if ($bid)
 			{
+				$this->add_click($bid);
 				$ba = obj($bid);
 				header("Location: ".$ba->prop("url"));
 				die();
