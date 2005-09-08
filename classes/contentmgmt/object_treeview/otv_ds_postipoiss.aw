@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.23 2005/04/04 08:51:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.24 2005/09/08 12:26:58 dragut Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -8,22 +8,27 @@
 @default table=objects
 @default group=general
 
-@property xml_fld type=textbox field=meta method=serialize
-@caption Serveri kataloog, kus asuvad xml failid
+	@property xml_fld type=textbox field=meta method=serialize
+	@caption Serveri kataloog, kus asuvad xml failid
 
-@property ct_fld type=textbox field=meta method=serialize
-@caption Serveri kataloog, kus asuvad sisu failid
+	@property ct_fld type=textbox field=meta method=serialize
+	@caption Serveri kataloog, kus asuvad sisu failid
 
-@property subj_xml type=textbox field=meta method=serialize
-@caption Teemade xml fail
+	@property subj_xml type=textbox field=meta method=serialize
+	@caption Teemade xml fail
 
-@property update_cache type=text store=no
-@caption 
+	@property update_cache type=text store=no
+	@caption 
+
+@groupinfo settings caption="Seaded"
+
+	@property db_to_xml_connections type=table group=settings no_caption=1
+	@caption Andmebaasi tabeli ja XML faili v&auml;ljade seosed
 
 @groupinfo content caption="Sisu"
 
-@property ct type=table group=content store=no
-@caption Sisu
+	@property ct type=table group=content store=no
+	@caption Sisu
 
 @reltype TRANSFORM value=1 clid=CL_DATA_FILTER
 @caption andmete muundaja
@@ -115,6 +120,9 @@ class otv_ds_postipoiss extends class_base
 					"caption" => t("Uuenda cache")
 				));
 				break;
+			case "db_to_xml_connections":
+				$this->_do_db_to_xml_connections_table($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -125,6 +133,20 @@ class otv_ds_postipoiss extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "db_to_xml_connections":
+				if (is_array($arr['request']['aw_otv_ds_pp_cache_fields_to_xml']))
+				{
+					$fields = $arr['request']['aw_otv_ds_pp_cache_fields_to_xml'];
+					foreach($fields as $key => $value)
+					{
+						if (empty($value))
+						{
+							unset($fields[$key]);
+						}
+					}
+					$arr['obj_inst']->set_meta("aw_otv_ds_pp_cache_fields_to_xml", $fields);
+				}
+				break;
 
 		}
 		return $retval;
@@ -625,12 +647,13 @@ class otv_ds_postipoiss extends class_base
 			echo "Cache on uuem kui failid, uuendada pole vaja (".date("d.m.Y H:i", $c_mtime)." > ".date("d.m.Y H:i", $mtime).") !<br>";
 			return;
 		}
-
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache WHERE aw_pp_id = '".$o->id()."'");
 		$this->db_query("DELETE FROM aw_otv_ds_pp_cache_file2folder WHERE aw_pp_id = '".$o->id()."'");
-		
 		echo "update ".$o->name()." <br>\n";
 		flush();
+
+		$db_to_xml_connections = $o->meta("aw_otv_ds_pp_cache_fields_to_xml");
+
 		foreach($dc as $fe)
 		{
 			echo "file $fe <Br>\n";
@@ -668,14 +691,23 @@ class otv_ds_postipoiss extends class_base
 			{
 				if (!is_array($k))
 				{
-					$data[$k] = $v;
+					$db_field = array_search($k, $db_to_xml_connections);
+					if ($db_field !== false)
+					{
+						// here i have aw_ prefix  already in field name, so i remove it here
+						// because it will added while generating sql query
+						$data[str_replace("aw_", "",  $db_field)] = $v;
+					}
+					else
+					{
+						$data[$k] = $v;
+					}
 				}
 			}
 
 			$data["pp_id"] = $o->id();
 			$data["mtime"] = time();
 			$data["dok_nr"] = $fd["tegevused"]["tegevus"]["dok_nr"];
-
 			$tmp = array();
 			foreach($data as $k => $v)
 			{
@@ -714,6 +746,34 @@ class otv_ds_postipoiss extends class_base
 	function update_object($ef, $id, $data)
 	{
 		return;
+	}
+
+	function _do_db_to_xml_connections_table($arr)
+	{
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "db_field",
+			"caption" => t("Andmebaasi v&auml;li"),
+		));
+		$t->define_field(array(
+			"name" => "xml_field",
+			"caption" => t("XML v&auml;li"),
+		));
+
+		$aw_otv_ds_pp_cache_fields = $this->db_get_table("aw_otv_ds_pp_cache");
+		$saved_fields = $arr['obj_inst']->meta("aw_otv_ds_pp_cache_fields_to_xml");
+		foreach ($aw_otv_ds_pp_cache_fields['fields'] as $field_name => $field_data)
+		{
+			$t->define_data(array(
+				"db_field" => $field_name." [ ".$field_data['type']."(".$field_data['length'].") ]",
+				"xml_field" => html::textbox(array(
+					"name" => "aw_otv_ds_pp_cache_fields_to_xml[".$field_name."]",
+					"value" => $saved_fields[$field_name],
+				)),
+			));
+		}
+
+		
 	}	
 }
 ?>

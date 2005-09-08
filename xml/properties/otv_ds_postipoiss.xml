@@ -37,6 +37,16 @@
             <caption></caption>
       </property>
       <property>
+            <name>db_to_xml_connections</name>
+            <table>objects</table>
+            <group>settings</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>db_to_xml_connections</field>
+            <caption>Andmebaasi tabeli ja XML faili v&amp;auml;ljade seosed</caption>
+      </property>
+      <property>
             <name>ct</name>
             <table>objects</table>
             <group>content</group>
@@ -52,6 +62,9 @@
             <no_comment>1</no_comment>
       </classinfo>
       <groupinfo>
+            <settings>
+                  <caption>Seaded</caption>
+            </settings>
             <content>
                   <caption>Sisu</caption>
             </content>
