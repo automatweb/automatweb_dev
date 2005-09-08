@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.88 2005/09/05 10:22:43 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/forum/forum_v2.aw,v 1.89 2005/09/08 14:31:39 dragut Exp $
 // forum_v2.aw.aw - Foorum 2.0 
 /*
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_FORUM_V2, on_connect_menu)
@@ -1854,6 +1854,13 @@ class forum_v2 extends class_base
 				$user = obj(aw_global_get("uid_oid"));
 				$arr["author_name"] = $uid;
 				$arr["author_email"] = $user->prop("email");
+				// if the logged in user hasn't set his/her email
+				// and it is set, that user can't change his/her data
+				// then i have to make sure something goes to forum_topic
+				// class in author_email field, just so it still passes
+				// forum_topic's empty field checks
+				$arr['author_email'] = (empty($arr['author_email'])) ? "none" : $arr['author_email'];
+
 			} 
 		}
                 $emb = $arr;
