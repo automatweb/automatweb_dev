@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.13 2005/05/23 10:16:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/css.aw,v 1.14 2005/09/09 12:37:05 dragut Exp $
 // css.aw - CSS (Cascaded Style Sheets) haldus
 /*
 
@@ -283,7 +283,7 @@ class css extends class_base
 					break;
 
 				case "lineheight":
-					$mask = "line-height: %spx\n";
+					$mask = "line-height: %spx;\n";
 					break;
 
 				case "border":
