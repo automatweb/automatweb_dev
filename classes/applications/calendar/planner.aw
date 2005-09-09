@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.94 2005/07/13 17:44:22 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.95 2005/09/09 13:16:13 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -1161,7 +1161,6 @@ class planner extends class_base
 
 		//I really don't like this hack //axel
 		$gl = aw_global_get('org_action');
-
 		// so this has something to do with .. connectiong some obscure object to another .. eh?
 
 		// this deals with creating of one additional connection .. hm. I wonder whether
@@ -1179,7 +1178,8 @@ class planner extends class_base
 		preg_match('/alias_to_org=(\w*|\d*)&/', $gl, $o);
 		preg_match('/reltype_org=(\w*|\d*)&/', $gl, $r);
 		preg_match('/alias_to_org_arr=(.*)$/', $gl, $s);
-
+		$r[1] = str_replace("&", "", $r[1]);
+		$o[1] = str_replace("&", "", $o[1]);
 		if (is_numeric($o[1]) && is_numeric($r[1]))
 		{
 			$org_obj = new object($o[1]);
