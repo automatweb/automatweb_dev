@@ -390,16 +390,6 @@ class object
 		return $GLOBALS["objects"][$this->oid]->set_prop($key, $value);
 	}
 
-	function merge($param)
-	{
-		return $GLOBALS["objects"][$this->oid]->merge($param);
-	}
-
-	function merge_prop($param)
-	{
-		return $GLOBALS["objects"][$this->oid]->merge_prop($param);
-	}
-
 	function properties()
 	{
 		return $GLOBALS["objects"][$this->oid]->properties($param);
