@@ -5,6 +5,14 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _int_obj_ds_mysql()
 	{
 		$this->init();
+		$this->all_ot_flds = array(
+			"parent", "name", "class_id",
+			"modified", "status", "lang_id",
+			"comment", "modifiedby", "jrk",
+			"period", "alias", "periodic", 
+			"site_id", "cachedirty", "metadata",
+			"subclass", "flags", "brother_of"
+		);
 	}
 
 	// returns oid for alias
@@ -634,31 +642,27 @@ die(dbg::dump($ret));
 		$metadata = aw_serialize($objdata["meta"]);
 		$this->quote(&$metadata);
 		$this->quote(&$objdata);
+		$objdata["metadata"] = $metadata;
 
 		if ($objdata["brother_of"] == 0)
 		{
 			$objdata["brother_of"] = $objdata["oid"];
 		}
 
+		$ot_sets = array();
+		if (!isset($arr["ot_modified"]))
+		{
+			$arr["ot_modified"] = array_flip($this->all_ot_flds);
+		}
+		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
+		{
+			$ot_sets[] = " $_field = '".$objdata[$_field]."' ";
+		}
+
+		$ot_sets = join(" , ", $ot_sets);
+
 		$q = "UPDATE objects SET
-			parent = '".$objdata["parent"]."',
-			name = '".$objdata["name"]."',
-			class_id = '".$objdata["class_id"]."',
-			modified = '".$objdata["modified"]."',
-			status = '".$objdata["status"]."',
-			lang_id = '".$objdata["lang_id"]."',
-			comment = '".$objdata["comment"]."',
-			modifiedby = '".$objdata["modifiedby"]."',
-			jrk = '".$objdata["jrk"]."',
-			period = '".$objdata["period"]."',
-			alias = '".$objdata["alias"]."',
-			periodic = '".$objdata["periodic"]."',
-			site_id = '".$objdata["site_id"]."',
-			cachedirty = '1',
-			metadata = '".$metadata."',
-			subclass = '".$objdata["subclass"]."',
-			flags = '".$objdata["flags"]."',
-			brother_of = '".$objdata["brother_of"]."'
+			$ot_sets
 			WHERE oid = '".$objdata["oid"]."'
 		";
 
@@ -676,6 +680,23 @@ die(dbg::dump($ret));
 			{
 				$tbls[$data["table"]][] = $data;
 			}
+		}
+
+		// remove all props that are not supposed to be saved
+		if (isset($arr["props_modified"]))
+		{
+			$tmp = array();
+			foreach($tbls as $tbl => $tbld)
+			{
+				foreach($tbld as $idx => $prop)
+				{
+					if ($arr["props_modified"][$prop["name"]] == 1)
+					{
+						$tmp[$tbl][$idx] = $prop;
+					}
+				}
+			}
+			$tbls = $tmp;
 		}
 
 		// now save all props to tables.

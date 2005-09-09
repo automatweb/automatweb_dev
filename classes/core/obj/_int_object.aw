@@ -948,10 +948,13 @@ class _int_object
 	{
 		$prev = $this->obj["meta"][$key];
 
+		$this->_int_set_ot_mod("metadata", $prev, $value);
 		$this->obj["meta"][$key] = $value;
 
+		$dat = $GLOBALS["properties"][$this->obj["class_id"]][$key];
+
 		// if any property is defined for metadata, we gots to sync from object to property
-		if (is_array($GLOBALS["properties"][$this->obj["class_id"]][$key]) && $GLOBALS["properties"][$this->obj["class_id"]][$key]["field"] == "meta" && $GLOBALS["properties"][$this->obj["class_id"]][$key]["table"] == "objects")
+		if (is_array($dat) && $dat["field"] == "meta" && $dat["table"] == "objects")
 		{
 			$this->_int_set_prop($key, $value);
 		}
@@ -1111,6 +1114,7 @@ class _int_object
 		{
 			if ($propi["field"] == "meta")
 			{
+				$this->_int_set_ot_mod("metadata", $this->obj["meta"][$propi["name"]], $val);
 				$this->obj["meta"][$propi["name"]] = $val;
 			}
 			else
@@ -1121,16 +1125,19 @@ class _int_object
 				// zero out cur field bits
 				$mask = $mask & (~((int)$propi["ch_value"]));
 				$mask = $mask | $val;
+				$this->_int_set_ot_mod("flags", $this->obj["flags"], $mask);
 				$this->obj["flags"] = $mask;
 			}
 			else
 			{
 				if ($propi["method"] == "serialize")
 				{
+					$this->_int_set_ot_mod($propi["field"], $this->obj[$propi["field"]][$propi["name"]], $this->obj["properties"][$key]);
 					$this->obj[$propi["field"]][$propi["name"]] = $this->obj["properties"][$key];
 				}
 				else
 				{
+					$this->_int_set_ot_mod($propi["field"], $this->obj[$propi["field"]], $this->obj["properties"][$key]);
 					$this->obj[$propi["field"]] = $this->obj["properties"][$key];
 				}
 			}
@@ -1138,39 +1145,6 @@ class _int_object
 
 		$this->_int_do_implicit_save();
 		return $prev;
-	}
-
-	function merge($param)
-	{
-		if (!is_array($param))
-		{
-			error::raise(array(
-				"id" => ERR_MERGE,
-				"msg" => sprintf(t("object::merge(%s): parameter must be an array of properties to merge!"), $param)
-			));
-		}
-
-		$this->obj += $param;
-		$this->_int_do_implicit_save();
-	}
-
-	function merge_prop($param)
-	{
-		if (!is_array($param))
-		{
-			error::raise(array(
-				"id" => ERR_MERGE,
-				"msg" => sprintf(t("object::merge_prop(%s): parameter must be an array of properties to merge!"), $param)
-			));
-		}
-
-		// make sure props are loaded
-		$this->_int_get_prop(NULL);
-
-		foreach($param as $key => $val)
-		{
-			$this->set_prop($key, $val);
-		}
 	}
 
 	function properties()
@@ -1307,6 +1281,24 @@ class _int_object
 		$this->obj["properties"] = array();
 		$this->implicit_save = false;
 		$this->props_loaded = false;
+		$this->props_modified = array();
+		$this->ot_modified = array("modified" => 1);
+	}
+
+	function _int_set_prop_mod($prop, $oldval, $newval)
+	{
+		if ($oldval != $newval)
+		{
+			$this->props_modified[$prop] = 1;
+		}
+	}
+
+	function _int_set_ot_mod($fld, $oldval, $newval)
+	{
+		if ($oldval != $newval)
+		{
+			$this->ot_modified[$fld] = 1;
+		}
 	}
 
 	function _int_load($oid)
@@ -1457,8 +1449,12 @@ class _int_object
 				"objdata" => $this->obj,
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
-				"propvalues" => $this->obj["properties"]
+				"propvalues" => $this->obj["properties"],
+				"ot_modified" => $this->ot_modified,
+				"props_modified" => $this->props_modified
 			));
+			$this->ot_modified = array("modified" => 1);
+			$this->props_modified = array();
 		}
 
 		if (is_array($this->obj["_create_connections"]))
@@ -1512,6 +1508,7 @@ class _int_object
 						if ($GLOBALS["object_loader"]->ds->can("edit", $from_oid))
 						{
 							$orig = obj($from_oid);
+							$this->_int_set_prop_mod($r_ihd["to_prop"], $this->obj["properties"][$r_ihd["to_prop"]], $orig->prop($r_ihd["from_prop"]));
 							$this->obj["properties"][$r_ihd["to_prop"]] = $orig->prop($r_ihd["from_prop"]);
 						}
 					}
@@ -1557,12 +1554,17 @@ class _int_object
 		}
 	}
 
-	function _int_sync_from_objfield_to_prop($ofname)
+	function _int_sync_from_objfield_to_prop($ofname, $mod = true)
 	{
 		// object field changed, sync to properties
-		if ($GLOBALS["of2prop"][$this->obj["class_id"]][$ofname] != "")
+		$pn = $GLOBALS["of2prop"][$this->obj["class_id"]][$ofname];
+		if ($pn != "")
 		{
-			$this->obj["properties"][$GLOBALS["of2prop"][$this->obj["class_id"]][$ofname]] = $this->obj[$ofname];
+			if ($mod)
+			{
+				$this->_int_set_prop_mod($pn, $this->obj["properties"][$pn], $this->obj[$ofname]);
+			}
+			$this->obj["properties"][$pn] = $this->obj[$ofname];
 		}
 	}
 
@@ -1685,6 +1687,7 @@ class _int_object
 
 	function _int_set_of_value($ofield, $val)
 	{
+		$this->_int_set_ot_mod($ofield, $this->obj[$ofield], $val);
 		$this->obj[$ofield] = $val;
 		$this->_int_sync_from_objfield_to_prop($ofield);
 	}
@@ -1808,6 +1811,7 @@ class _int_object
 		{
 			$this->_int_load_property_values();
 		}
+		$this->_int_set_prop_mod($prop, $this->obj["properties"][$prop], $val);
 		$this->obj["properties"][$prop] = $val;
 	}
 
@@ -1848,7 +1852,7 @@ class _int_object
 			//if (!$this->obj["properties"][$key])
 			if (empty($this->obj["properties"][$key]))
 			{
-				$this->_int_sync_from_objfield_to_prop($key);
+				$this->_int_sync_from_objfield_to_prop($key, false);
 			}
 		}
 		$this->props_loaded = true;
