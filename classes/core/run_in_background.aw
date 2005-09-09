@@ -169,6 +169,7 @@ class run_in_background extends class_base
 	**/
 	function bg_run($arr)
 	{
+		set_time_limit(9999);
 		$o = obj($arr["id"]);
 		if ($this->bg_is_running($o))
 		{

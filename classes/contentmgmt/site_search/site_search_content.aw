@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.55 2005/09/01 10:12:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.56 2005/09/09 10:15:08 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -102,7 +102,7 @@
 	@property search type=submit 
 	@caption Otsi
 
-	@property results type=table no_caption=1
+	@property results type=text no_caption=1
 	@caption Tulemused
 	
 @default group=search_complex
@@ -113,7 +113,7 @@
 	@property c_search type=submit 
 	@caption Otsi
 
-	@property c_results type=table no_caption=1
+	@property c_results type=text no_caption=1
 	@caption Tulemused
 	
 
@@ -296,7 +296,7 @@ class site_search_content extends class_base
 				if ($o && $arr["request"]["MAX_FILE_SIZE"])
 				{
 					$i = $o->instance();
-					$i->eval_controller_ref($o->id(), $arr, $arr["prop"]["vcl_inst"], $arr["prop"]["vcl_inst"]);
+					$i->eval_controller_ref($o->id(), $arr, $arr["prop"], $arr["prop"]);
 				}
 				break;
 		};
@@ -1214,12 +1214,20 @@ class site_search_content extends class_base
 		for ($i=0; $i < $num_pages; $i++)
 		{
 			$params["page"] = $i;
+			if ($arr["link_type"] == 1)
+			{
+				$link = aw_url_change_var("page", $i);
+			}
+			else
+			{
+				$link = $this->mk_my_orb("do_search", $params);
+			}
 			$this->vars(array(
-				"page" => $this->mk_my_orb("do_search", $params),
+				"page" => $link,
 				"page_from" => ($i*$per_page)+1,
 				"page_to" => min(($i+1)*$per_page,$cnt)
 			));
-			if ($i == $page)
+			if ((int)$i == (int)$page)
 			{
 				$pg.=$this->parse("SEL_PAGE");
 			}
@@ -1818,7 +1826,12 @@ class site_search_content extends class_base
 
 	function _search_results($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
+		if (!is_admin())
+		{
+			return $this->_search_results_site($arr);
+		}
+		classload("vcl/table");
+		$t =& new aw_table(array("layout" => "generic"));
 
 		$this->_init_s_res_t($t);
 
@@ -1869,8 +1882,124 @@ class site_search_content extends class_base
 		$t->set_default_sortby("match");
 		$t->set_default_sorder("desc");
 		$t->pageselector_string = "Leiti ".count($res)." dokumenti";
+		$t->sort_by();
+		$arr["prop"]["value"] = $t->draw();
 	}
 
+	function _search_results_site($arr)
+	{
+		$this->read_template("site_results.tpl");
+		
+		$arr["request"]["s_date"] = array(
+			"from" => $arr["request"]["date_from"],
+			"to" => $arr["request"]["date_to"]
+		);
+
+		// get search results
+		$settings = $this->set_defaults($arr["request"]);
+		
+		$res = $this->get_multi_search_results($settings);
+
+		$from = $_GET["page"] * 20;
+		$to = ($_GET["page"]+1) * 20;
+		
+		$sort_by = $_GET["sort_by"];
+		if (!$sort_by)
+		{
+			$sort_by = "num_reps";
+		}
+
+		foreach($res as $idx => $entry)
+		{
+			$res[$idx]["num_reps"] = $this->_get_num_reps($settings["str"], $settings["s_opt"], $entry["content"]);
+		}
+				
+		$this->__sort_by = $sort_by;
+		usort($res, array(&$this, "__sby"));
+		
+		$num = -1;
+		classload("core/icons");
+		foreach($res as $entry)
+		{
+			$num++;
+			if ($num >= $from && $num < $to)
+			{
+				// url, title, modified, content
+				$nm = $entry["title"];
+				$pi = pathinfo($nm);
+				if ($pi["extension"] == "" || strlen($pi["extension"]) > 4)
+				{
+					$nm .= ".html";
+				}
+				$so = obj($entry["site_id"]);
+				
+				$this->vars(array(
+					"icon" => $so->prop("short_name"),
+					"loc" => $so->prop("short_name"),
+					"link" => html::img(array(
+						"url" => icons::get_icon_url(CL_FILE, $nm),
+					)),
+					"match" => $entry["num_reps"], //((int)(($entry["match"] / $max_match) * 100))."%",
+					"title" => html::href(array(
+						"url" => $entry["url"],
+						"caption" => parse_obj_name($entry["title"]),
+						"target" => "_blank"
+					)),
+					"mod" => $entry["modified"],
+					"cont" => $this->_get_content_high($entry["content"], $settings["str"])
+				));
+				$str .= $this->parse("RESULT");
+			}
+		}
+
+		$sts = array(
+			"num_reps" => t("t&auml;psuse"),
+			"modified" => t("kuup&auml;eva"),
+			"title" => t("pealkirja alusel")
+		);
+		$sstr = array();
+		foreach($sts as $var => $nm)
+		{
+			if ($sort_by == $var)
+			{
+				$sstr[] = $nm;
+			}
+			else
+			{
+				$sstr[] = html::href(array(
+					"url" => aw_url_change_var("sort_by", $var),
+					"caption" => $nm
+				));
+			}
+		}
+				
+		$this->vars(array(
+			"RESULT" => $str,
+			"res_cnt" => count($res),
+			"sort_by" => join(" | ", $sstr)
+		));
+		
+		$this->display_pageselector(array(
+			"num_results" => count($res),
+			"cur_page" => $_GET["page"],
+			"per_page" => 20,
+			"params" => $_GET,
+			"link_type" => 1,
+		));
+		
+		// sorting links
+		
+		$arr["prop"]["value"] = $this->parse();
+	}
+	
+	function __sby($a, $b)
+	{
+		$v1 = $a[$this->__sort_by];
+		$v2 = $b[$this->__sort_by];
+		
+		return $v1 == $v2 ? 0 : ($v1 > $v2 ? -1 : 1);
+	}
+	
 	function get_multi_search_results($arr)
 	{
 		if ($arr["str"] == "" && $arr["s_title"] == "")
@@ -1966,13 +2095,22 @@ class site_search_content extends class_base
 
 		// find first space 200 chars after
 		$end = $begin + 400 + strlen($str);
+		
+		if ($begin < 0)
+		{
+			$end += (-$begin);
+			$begin = 0;
+		}
+		
 		$clen = strlen($c);
 		while ($end < $clen && $c{$end} != " ")
 		{
 			$end++;
 		}
-
+		
 		// show
+		$c =  substr($c, $begin, ($end - $begin));
+		
 		$c = str_replace($str, "<b>".$str."</b>", $c);
 		
 		if (count($other))
@@ -1982,7 +2120,7 @@ class site_search_content extends class_base
 				$c = str_replace($word, "<b>".$word."</b>", $c);
 			}
 		}
-		return substr($c, $begin, ($end - $begin) + 7); // 7 - strlen("<b></b>")
+		return $c; // 7 - strlen("<b></b>")
 	}
 
 	function _get_num_reps($str, $opt, $content)

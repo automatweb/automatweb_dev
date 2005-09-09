@@ -251,9 +251,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>search_simple</group>
-            <type>table</type>
+            <type>text</type>
             <no_caption>1</no_caption>
-            <store>no</store>
             <caption>Tulemused</caption>
       </property>
       <property>

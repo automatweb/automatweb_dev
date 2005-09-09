@@ -11,11 +11,12 @@ classload("contentmgmt/site_search/parsers/ss_parser_sxw");
 classload("contentmgmt/site_search/parsers/ss_parser_sxc");
 classload("contentmgmt/site_search/parsers/ss_parser_txt");
 classload("contentmgmt/site_search/parsers/ss_parser_xml");
+classload("contentmgmt/site_search/parsers/ss_parser_file_list");
 class parser_finder
 {
 	function instance($url)
 	{
-		$known_exts = array("html", "doc", "ppt", "pdf", "xls", "rtf", "sxw", "sxc", "txt", "xml");
+		$known_exts = array("html", "doc", "ppt", "pdf", "xls", "rtf", "sxw", "sxc", "txt", "xml", "file_list");
 
 		// if it is a filesystem path and contains a directory, get directory parser
 		if ($url{0} == "/" && is_dir($url))

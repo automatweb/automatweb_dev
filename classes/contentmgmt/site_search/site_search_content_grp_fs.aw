@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.4 2005/09/01 10:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.5 2005/09/09 10:15:08 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
@@ -301,7 +301,12 @@ class site_search_content_grp_fs extends run_in_background
 	{
 		$this->quote(&$arr);
 		$row = $this->db_fetch_row("SELECT * FROM static_content WHERE id = '$arr[doc]' and site_id = '$arr[id]'");
-		if ($row && is_readable($row["file_name"]))
+		if (substr($row["file_name"], 0, 4) == "http")
+		{
+			header("Location: ".$row["file_name"]);
+			die();
+		}
+		if ($row && (is_readable($row["file_name"])))
 		{
 			$i = get_instance("core/aw_mime_types");
 			header("Content-type: ".$i->type_for_file($row["file_name"]));
