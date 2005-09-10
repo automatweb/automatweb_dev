@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.58 2005/06/17 09:45:57 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.59 2005/09/10 12:07:21 ekke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -371,6 +371,10 @@ class releditor extends core
 		));
 		
 		$confirm_test = t("Kustutada valitud objektid?");
+		if (isset($arr['prop']['delete_relations']) && $arr['prop']['delete_relations'])
+		{
+			$confirm_test = t("Kustutada valitud seosed?");
+		}
 
 		$act_input = $this->elname . "_action";
 
@@ -616,6 +620,11 @@ class releditor extends core
 			$use_clid = $clid;
 		};
 
+		if (!isset($prop['delete_relations']))
+		{
+			$prop['delete_relations'] = '0';
+		}
+
 		$act_prop = $prop["name"] . "_action";
 
 		if ("delete" == $arr["request"][$act_prop])
@@ -625,9 +634,16 @@ class releditor extends core
 			foreach($to_delete->get() as $alias_id)
 			{
 				$c = new connection($alias_id);
-				$target = $c->to();
-				$target->delete();
-                        };
+				if ($prop['delete_relations'] == '1')
+				{
+					$c->delete();
+				}
+				else
+				{
+					$target = $c->to();
+					$target->delete();
+				}
+			};
 
 			// dunno about that, is it still needed?
 			/*
