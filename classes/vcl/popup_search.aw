@@ -15,19 +15,41 @@ class popup_search extends aw_template
 
 	function init_vcl_property($arr)
 	{
+		$style = isset($arr['property']['style']) ? $arr['property']['style'] : 'default'; // Options: default, relpicker
+		$reltype = "";
+	
 		$options = array();
-		$name = "popup_search[".$arr["property"]["name"]."]";
-		if (is_array($arr["obj_inst"]->meta($name)))
+		
+		if ($style == 'default')
 		{
-			$options +=  $arr["obj_inst"]->meta($name);
-		}
+			$name = "popup_search[".$arr["property"]["name"]."]";
+			if (is_array($arr["obj_inst"]->meta($name)))
+			{
+				$options +=  $arr["obj_inst"]->meta($name);
+			}
 
-		if (count($options) > 0)
+			if (count($options) > 0)
+			{
+				$ol = new object_list(array(
+					"oid" => $options
+				));
+				$options = $ol->names();
+			}
+		}
+		else if ($style == 'relpicker')
 		{
-			$ol = new object_list(array(
-				"oid" => $options
+			if (!isset($arr['property']['reltype']) || !isset($arr['relinfo'][$arr['property']['reltype']]))
+			{
+				return PROP_IGNORE;
+			}
+			$reltype = $arr['property']['reltype'];
+			$conn = $arr['obj_inst']->connections_from(array(
+					"type" => $reltype
 			));
-			$options = $ol->names();
+			foreach($conn as $c)
+			{
+				$options[$c->prop("to")] = $c->prop("to.name");
+			}
 		}
 
 		$tmp = $arr["property"];
@@ -178,6 +200,22 @@ class popup_search extends aw_template
 
 		if (count($filter) > 1 || $_GET["MAX_FILE_SIZE"])
 		{
+			// Pre-check checkboxes for relpicker
+			$checked = array ();
+			if (isset($arr['id']) && is_oid($arr['id']) && $this->can('view', $arr['id']))
+			{
+				$ob = obj($arr['id']);
+				$props = $ob->get_property_list();
+				$prop = $props[$arr['pn']];
+				if (isset($prop['style']) && $prop['style'] == 'relpicker' && isset($prop['reltype']))
+				{
+					foreach($ob->connections_from(array("type" => $prop['reltype'])) as $c)
+					{
+						$checked[$c->prop("to")] = 1;
+					}
+				}
+			}
+		
 			$ol = new object_list($filter);
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
@@ -191,7 +229,8 @@ class popup_search extends aw_template
 					"modified" => $o->modified(),
 					"sel" => html::checkbox(array(
 						"name" => "sel[]",
-						"value" => $o->id()
+						"value" => $o->id(),
+						"checked" => isset($checked[$o->id()]) ? $checked[$o->id()] : 0,
 					))
 				));
 			}
@@ -225,6 +264,34 @@ class popup_search extends aw_template
 			$o->set_prop($arr["pn"], $arr["sel"][0]);
 		}
 		$o->save();
+		
+		// if relpicker, define relations
+		$props = $o->get_property_list();
+		$prop = $props[$arr['pn']];
+		if (isset($prop['style']) && $prop['style'] == 'relpicker' && isset($prop['reltype']))
+		{
+			$reltype = $prop['reltype'];
+			foreach($o->connections_from(array("type" => $reltype)) as $c)
+			{
+				$c->delete();
+			}
+
+			if (isset($arr['sel']) && is_array($arr['sel']))
+			{
+				foreach($arr['sel'] as $i => $id)
+				{
+					if (is_oid($id) && $this->can("view", $id))
+					{
+						$object = obj($id);
+						$o->connect(array(
+							"to" => $object,
+							"reltype" => $reltype,
+						));
+					}
+				}
+			}
+		}
+		
 		// emit message so objects can update crap
 		post_message_with_param(MSG_POPUP_SEARCH_CHANGE, $o->class_id(), array(
 			"oid" => $o->id(),
