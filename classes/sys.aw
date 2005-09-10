@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.52 2005/07/13 14:18:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.53 2005/09/10 12:39:48 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -24,8 +24,7 @@ class sys extends aw_template
 	function gen_db_struct($args = array())
 	{
 		$tables = $this->db_get_struct();
-		$xml = get_instance("xml",array("ctag" => "tabledefs"));
-		$ser = $xml->xml_serialize($tables);
+		$ser = aw_serialize($tables, SERIALIZE_XML, array("ctag" => "tabledefs"));
 		header("Content-Type: text/xml");
 		header("Content-length: " . strlen($ser));
 		header("Content-Disposition: filename=awtables.xml");
@@ -234,9 +233,8 @@ class sys extends aw_template
 			"server" => $donor,
 			"url" => "/?class=sys&action=gen_db_struct",
 		));
-		$xml = get_instance("xml",array("ctag" => "tabledefs"));
 		global $donor_struct;
-		$dsource = $xml->xml_unserialize(array("source" => $block));
+		$dsource = aw_unserialize($block);
 		$donor_struct = $dsource;
 		session_register("donor_struct");
 		$all_keys = array_merge(array_flip(array_keys($dsource)),array_flip(array_keys($right)));

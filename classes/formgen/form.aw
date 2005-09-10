@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.122 2005/08/30 09:19:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.123 2005/09/10 12:39:49 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -5227,14 +5227,13 @@ class form extends form_base
 	**/
 	function convchains()
 	{
-		$x = get_instance("xml");
 		$this->db_query("DELETE FROM form2chain");
 
 		$this->db_query("SELECT * FROM form_chains");
 		while ($row = $this->db_next())
 		{
 			$this->save_handle();
-			$cc = $x->xml_unserialize(array("source" => $row["content"]));
+			$cc = aw_unserialize($row["content"]);
 			foreach($cc["forms"] as $fid)
 			{
 				$this->db_query("INSERT INTO form2chain(form_id,chain_id,ord) values($fid,".$row["id"].",'".$cc["form_order"][$fid]."')");

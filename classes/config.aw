@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.69 2005/03/24 10:19:14 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.70 2005/09/10 12:39:48 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -138,8 +138,7 @@ class config extends db_config
 		$this->read_template("errors.tpl");
 
 		$es = $this->get_simple_config("errors");
-		$x = get_instance("xml");
-		$ea = $x->xml_unserialize(array("source" => $es));
+		$ea = aw_unserialize($es);
 
 		$u = get_instance("users");
 		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
@@ -176,8 +175,7 @@ class config extends db_config
 		extract($arr);
 
 		$es = $this->get_simple_config("errors");
-		$x = get_instance("xml");
-		$ea = $x->xml_unserialize(array("source" => $es));
+		$ea = aw_unserialize($es);
 
 		if (is_array($grps))
 		{
@@ -188,7 +186,7 @@ class config extends db_config
 			}
 		}
 
-		$ss = $x->xml_serialize($ea);
+		$ss = aw_serialize($ea, SERIALIZE_XML);
 		$this->quote(&$ss);
 		$this->set_simple_config("errors", $ss);
 

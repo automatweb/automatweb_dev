@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.191 2005/09/05 12:22:50 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.192 2005/09/10 12:39:48 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -655,7 +655,7 @@ if (!defined("DEFS"))
 				break;
 
 			case SERIALIZE_XML:
-				classload("xml");
+				classload("core/serializers/xml");
 				$ser = new xml($flags);
 				$str = $ser->xml_serialize($arr);
 				break;
@@ -682,7 +682,7 @@ if (!defined("DEFS"))
 
 		if (substr($str,0,14) == "<?xml version=")
 		{
-			classload("xml");
+			classload("core/serializers/xml");
 			$x = new xml;
 			$retval = $x->xml_unserialize(array("source" => $str));
 		}

@@ -403,7 +403,7 @@ class propcollector extends aw_template
 	// !Ends a class
 	function cl_end($write = 1)
 	{
-		$sr = get_instance("xml",array("ctag" => ""));
+		$sr = get_instance("core/serializers/xml",array("ctag" => ""));
 		$sr->set_child_id("properties","property");
 		$outdir = $this->cfg["basedir"] . "/xml/properties/";
 		$success = false;
