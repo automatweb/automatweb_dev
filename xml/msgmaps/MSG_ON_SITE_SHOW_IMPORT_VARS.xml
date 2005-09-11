@@ -4,4 +4,8 @@
       <class>period</class>
       <func>on_site_show_import_vars</func>
 </num_0>
+<num_1>
+      <class>contentmgmt/site_styles</class>
+      <func>on_site_show</func>
+</num_1>
 </xml>
