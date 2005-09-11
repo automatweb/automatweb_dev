@@ -5,7 +5,7 @@
 		it should also be hard to understand.
 
 */
-classload("tt");
+classload("applications/graph/tt");
 class LineGraph extends TTGraph
 {
 	function LineGraph($border,$inside,$frame)

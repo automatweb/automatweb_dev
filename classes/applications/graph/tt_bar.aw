@@ -1,5 +1,5 @@
 <?
-classload("tt");
+classload("applications/graph/tt");
 class BarGraph extends TTGraph
 {
 	var $ycnt;

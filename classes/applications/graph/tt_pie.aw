@@ -1,5 +1,5 @@
 <?php
-classload("tt");
+classload("applications/graph/tt");
 class PieGraph extends TTGraph
 {
 	var $image;
@@ -118,17 +118,4 @@ class PieGraph extends TTGraph
 		imagestring($this->image, 5, $centerx, $centery, $title, $color);
 	}
 }//class pie
-
-/*
-if (!isset($dataset)) $dataset="75,25,23,34,67,100";
-		$p = new pie(2,5,1);
-		$p->GraphBase(500,600,"BADBAD");
-		$p->dataset=$p->parsedata($dataset);
-		$p->create(150);
-		$p->title();
-		header("Content-type: image/gif");
-		imagegif($p->image);
-		imagedestroy($pie->image);
-
-*/
 ?>

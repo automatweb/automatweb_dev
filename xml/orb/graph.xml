@@ -1,33 +1,9 @@
 <?xml version='1.0'?>
 <orb>
-	<class name="graph" folder="" extends="aw_template">
-		<action name="new">
-			<function name="add">
-				<arguments>
-					<required name="parent" acl="add" />
-					<optional name="alias_doc" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit">
-			<function name="base_add">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
+	<class name="graph" folder="applications/graph" extends="class_base">
 		<action name="savepie">
 			<function name="save_pie">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="change">
-			<function name="configure">
-				<arguments>
-					<required name="id" acl="edit;view" />
 				</arguments>
 			</function>
 		</action>
