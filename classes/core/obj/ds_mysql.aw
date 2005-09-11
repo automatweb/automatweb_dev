@@ -49,7 +49,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	{
 		if (isset($this->read_properties_data_cache[$oid]))
 		{
-			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param);
+			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param, $oid);
 		}
 		else
 		{
@@ -59,7 +59,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 die(dbg::dump($ret));
 }*/
  
-			$ret = $this->_get_objdata_proc($ret, $param);
+			$ret = $this->_get_objdata_proc($ret, $param, $oid);
 		}
 /*if ($oid == 231371 && aw_global_get("uid") == "struktuur")
 {
@@ -68,7 +68,7 @@ die(dbg::dump($ret));
 		return $ret;
 	}
 
-	function _get_objdata_proc($ret, $param)
+	function _get_objdata_proc($ret, $param, $oid = -1)
 	{
 		if ($ret === false)
 		{
