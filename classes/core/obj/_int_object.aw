@@ -1295,7 +1295,7 @@ class _int_object
 
 	function _int_set_ot_mod($fld, $oldval, $newval)
 	{
-		if ($oldval != $newval && isset($GLOBALS["object_loader"]->all_ot_fields[$fld]))
+		if (serialize($oldval) != serialize($newval) && isset($GLOBALS["object_loader"]->all_ot_fields[$fld]))
 		{
 			$this->ot_modified[$fld] = 1;
 		}
@@ -1450,8 +1450,8 @@ class _int_object
 				"properties" => $GLOBALS["properties"][$this->obj["class_id"]],
 				"tableinfo" => $GLOBALS["tableinfo"][$this->obj["class_id"]],
 				"propvalues" => $this->obj["properties"],
-				"ot_modified" => $this->ot_modified,
-				"props_modified" => $this->props_modified
+				//"ot_modified" => $this->ot_modified,
+				//"props_modified" => $this->props_modified
 			));
 			$this->ot_modified = array("modified" => 1);
 			$this->props_modified = array();
