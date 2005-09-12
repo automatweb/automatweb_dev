@@ -1287,7 +1287,7 @@ class _int_object
 
 	function _int_set_prop_mod($prop, $oldval, $newval)
 	{
-		if ($oldval != $newval)
+		if (serialize($oldval) != serialize($newval))
 		{
 			$this->props_modified[$prop] = 1;
 		}
