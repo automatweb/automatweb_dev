@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.78 2005/08/26 13:16:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/event_search.aw,v 1.79 2005/09/12 08:11:10 dragut Exp $
 // event_search.aw - Sndmuste otsing 
 /*
 
@@ -657,6 +657,22 @@ class event_search extends class_base
 		$search_p2 = false;
 		$p_rn1 = $formconfig["project1"]["rootnode"];
 		$p_rn2 = $formconfig["project2"]["rootnode"];
+
+		// dragut starts hacking:
+		// so, if $p_rn1 and $p_rn2 are empty, then maybe there are no root node set
+		// but maybe still there are some event_sources set, so then we try to use them
+		if (empty($p_rn1) && empty($p_rn2))
+		{
+			$connections_to_event_sources = $ob->connections_from(array(
+				"type" => "RELTYPE_EVENT_SOURCE",
+			));
+			foreach ($connections_to_event_sources as $connection_to_event_source)
+			{
+				$p_rn1[] = $connection_to_event_source->prop("to");
+			}
+		}
+		// dragut stops hacking
+
 		$p_rn1 = is_array($p_rn1) ? $p_rn1 : array($p_rn1);
 		$p_rn2 = is_array($p_rn2) ? $p_rn2 : array($p_rn2);
 		foreach($p_rn1 as $pkey => $pval)
@@ -704,7 +720,7 @@ class event_search extends class_base
 					{
 						$rn1[] = $r;
 					}
-					$search_p1 = true;
+				//	$search_p1 = true;
 					// this goddamn calendar has to manage the 
 					// events from other calendars and projects aswell.. oh hell..
 					$sources = $tmp->connections_from(array(
@@ -738,7 +754,6 @@ class event_search extends class_base
 				}
 			}
 		}
-
 		if(count($p_rn2) > 0)
 		{
 			$rn2 = array();
@@ -797,7 +812,6 @@ class event_search extends class_base
 				}
 			}
 		}
-
 		if($search_p1 && $formconfig["project1"]["active"])
 		{
 			$vars = array(
@@ -822,6 +836,7 @@ class event_search extends class_base
 		
 		if($search_p2 && $formconfig["project2"]["active"])
 		{
+
 			$vars = array(
 				"name" => "project2",
 				"caption" => $formconfig["project2"]["caption"],
