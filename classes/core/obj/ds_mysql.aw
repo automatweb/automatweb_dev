@@ -5,14 +5,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 	function _int_obj_ds_mysql()
 	{
 		$this->init();
-		$this->all_ot_flds = array(
-			"parent", "name", "class_id",
-			"modified", "status", "lang_id",
-			"comment", "modifiedby", "jrk",
-			"period", "alias", "periodic", 
-			"site_id", "cachedirty", "metadata",
-			"subclass", "flags", "brother_of"
-		);
 	}
 
 	// returns oid for alias
@@ -652,7 +644,7 @@ die(dbg::dump($ret));
 		$ot_sets = array();
 		if (!isset($arr["ot_modified"]))
 		{
-			$arr["ot_modified"] = array_flip($this->all_ot_flds);
+			$arr["ot_modified"] = $GLOBALS["object_loader"]->all_ot_flds;
 		}
 		foreach(safe_array($arr["ot_modified"]) as $_field => $one)
 		{

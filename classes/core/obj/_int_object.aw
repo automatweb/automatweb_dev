@@ -1295,7 +1295,7 @@ class _int_object
 
 	function _int_set_ot_mod($fld, $oldval, $newval)
 	{
-		if ($oldval != $newval)
+		if ($oldval != $newval && isset($GLOBALS["object_loader"]->all_ot_fields[$fld]))
 		{
 			$this->ot_modified[$fld] = 1;
 		}

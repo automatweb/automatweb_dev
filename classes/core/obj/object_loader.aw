@@ -24,6 +24,15 @@ class _int_object_loader extends core
 	{
 		$this->init();
 
+		$this->all_ot_flds = array_flip(array(
+			"parent", "name", "class_id",
+			"modified", "status", "lang_id",
+			"comment", "modifiedby", "jrk",
+			"period", "alias", "periodic", 
+			"site_id", "cachedirty", "metadata",
+			"subclass", "flags", "brother_of"
+		));
+
 		// init the datasource from the ini file setting
 		$datasources = aw_ini_get("objects.default_datasource");
 		if ($datasources == "")
