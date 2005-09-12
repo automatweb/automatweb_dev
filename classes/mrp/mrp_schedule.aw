@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.76 2005/08/25 16:43:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.77 2005/09/12 16:33:02 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1354,7 +1354,11 @@ class mrp_schedule extends class_base
 // /* dbg */ exit ("res:" . $resource_id . " time:" . date (MRP_DATE_FORMAT, $time) . " t" . $tmptime . " st" . $tmpschtime);
 // /* dbg */ }
 
-			if (($period_start <= $end) and $period_end)
+			if (
+				($period_start <= $end)
+				and $period_end
+				// and ($period_start != $period_end)//!!! kas on vaja siis katkestada kui 0-pikkusega periood?
+			)
 			{
 				$end = $period_end;
 			}
@@ -1371,6 +1375,7 @@ class mrp_schedule extends class_base
 					"fatal" => false,
 					"show" => false,
 				));
+				break;
 			}
 		}
 
