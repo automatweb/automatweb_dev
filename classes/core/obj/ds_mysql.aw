@@ -677,12 +677,21 @@ die(dbg::dump($ret));
 		// remove all props that are not supposed to be saved
 		if (isset($arr["props_modified"]))
 		{
+			// get a list of all table fields that have modified props in them
+			// and include all props that are modified that are written to those
+			// cause if we do not do that, it breaks serialized fields with several props
+			$mod_flds = array();
+			foreach(safe_array($arr["props_modified"]) as $_pn => $_one)
+			{
+				$mod_flds[$properties[$_pn]["table"]][$properties[$_pn]["field"]] = 1;
+			}
+
 			$tmp = array();
 			foreach($tbls as $tbl => $tbld)
 			{
 				foreach($tbld as $idx => $prop)
 				{
-					if ($arr["props_modified"][$prop["name"]] == 1)
+					if ($arr["props_modified"][$prop["name"]] == 1 || isset($mod_flds[$prop["table"]][$prop["field"]]))
 					{
 						$tmp[$tbl][$idx] = $prop;
 					}
