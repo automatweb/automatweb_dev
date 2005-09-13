@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.5 2005/09/07 10:43:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_data_filter.aw,v 1.6 2005/09/13 17:45:15 kristo Exp $
 // otv_data_filter.aw - Andmeallika andmete muundaja 
 /*
 
@@ -18,7 +18,7 @@
 
 @default group=controller
 
-	@property controller type=textarea rows=30 cols=60 no_caption=1
+	@property controller type=textarea rows=30 cols=60 no_caption=1 field=meta method=serialize
 
 @groupinfo str_replace caption="Teksti asendused"
 @groupinfo char_replace caption="T&auml;htede asendused"
@@ -208,6 +208,11 @@ class otv_data_filter extends class_base
 		}
 
 		$code .= "}";
+
+		if ($arr["obj_inst"]->prop("controller") != "")
+		{
+			$code = $code2 = $arr["obj_inst"]->prop("controller");
+		}
 
 		$arr["obj_inst"]->set_meta("code", $code);
 		$arr["obj_inst"]->set_meta("code2", $code2);
