@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.414 2005/09/06 07:42:17 dragut Exp $
+// $Id: class_base.aw,v 2.415 2005/09/13 11:37:20 dragut Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -3459,7 +3459,7 @@ class class_base extends aw_template
 			// whether to save the data or not, so please, make sure
 			// that your set_property returns PROP_OK for stuff
 			// that you want to save
-			$setter = "set_" . $name;
+			$setter = "_set_" . $name;
 			if ( ($this->classinfo['prop_cb'] == 1) && in_array($setter,$class_methods))
 			{
 				$status = $this->inst->$setter($argblock);
