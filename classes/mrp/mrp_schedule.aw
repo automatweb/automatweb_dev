@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.85 2005/09/13 10:01:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.86 2005/09/13 10:51:37 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1387,6 +1387,9 @@ class mrp_schedule extends class_base
 
 			if ($i_dbg++ == 10000)
 			{
+// Kinnine aeg -- "Ahjutihendi remont"; algus: 24.09.2005; l6pp: 25.09.2005; kell: 8:00; pikkus: 36h; korduse tyyp: päev; ressurss: rotoman
+// selline kinnise aja definitsioon tekitas olukorra, kus j6uti siia pidevalt. st. mitte yks kord. ilmselt n2is ressurss lakkamatult kinni olevat.
+
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
 				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
 				error::raise(array(
@@ -1737,7 +1740,7 @@ class mrp_schedule extends class_base
 
 function timing ($name, $action = "time")
 {
-	if (isset ($_GET["showtimings"]) and $_GET["showtimings"] == 1)
+	if (isset ($_GET["show_timings"]) and $_GET["show_timings"] == 1)
 	{
 		static $timings = array ();
 
