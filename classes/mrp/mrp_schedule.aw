@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.79 2005/09/13 08:08:15 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.80 2005/09/13 08:48:11 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -258,8 +258,9 @@ class mrp_schedule extends class_base
 // /* dbg */ while ($job = $this->db_next ()) {
 // /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
 // /* dbg */ }
-		list($micro,$sec) = split(" ",microtime());
-		$ts_s = $sec + $micro;
+
+/* dbg */ list($micro,$sec) = split(" ",microtime());
+/* dbg */ $ts_s = $sec + $micro;
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
@@ -341,6 +342,7 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("initialize", "start");
 
+
 		$this->initialize ($arr);
 
 
@@ -381,14 +383,12 @@ class mrp_schedule extends class_base
 		{
 			foreach ($resources as $resource_id)
 			{
-/* dbg */ if ($i_dbg5++ == 1000) { echo "err@" . __LINE__; break; }
 				$threads = $this->resource_data[$resource_id]["threads"];
 
 				if (is_oid ($resource_id) and in_array ($resource_id, $this->schedulable_resources))
 				{
 					while ($threads--)
 					{
-/* dbg */ if ($i_dbg4++ == 1000) { echo "err@" . __LINE__; break; }
 						$resource_tag = $resource_id . "-" . $threads;
 
 						foreach ($this->range_scale as $key => $start)
@@ -398,22 +398,6 @@ class mrp_schedule extends class_base
 					}
 				}
 			}
-
-
-/*
-			### reserve locked jobs and nonschedulable resources' jobs, if any
-			$this->db_query ("SELECT job.oid,job.starttime,job.length,job.resource FROM " . $this->jobs_table . " as job where (job.state=" . MRP_STATUS_LOCKED . " OR job.resource NOT IN (" . implode (",", $this->schedulable_resources) . ")) AND (job.starttime > " . $this->schedule_start . ") AND job.length > 0");
-
-			while ($job = $this->db_next ())
-			{
-				if (is_oid ($job["resource"]) and is_oid($job["oid"]) and $this->can("view", $job["oid"]))//!!!  can view???
-				// if (is_oid ($job["resource"]))
-				{
-					$this->job_schedule[$job["oid"]] = $this->reserve_time ($job["resource"], $job["starttime"], $job["length"]);
-				}
-			}
-*/
-
 		}
 
 
@@ -698,9 +682,9 @@ class mrp_schedule extends class_base
 			//!!! esineb sageli millegip2rast.
 		}
 
-		list($micro,$sec) = split(" ",microtime());
-		$ts_e = $sec + $micro;
-		$GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
+/* dbg */ list($micro,$sec) = split(" ",microtime());
+/* dbg */ $ts_e = $sec + $micro;
+/* dbg */ $GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
 		// return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
 	}
 
@@ -950,8 +934,6 @@ class mrp_schedule extends class_base
 
 		while ($threads--)
 		{
-/* dbg */ if ($i_dbg6++ == 1000) { echo "err@" . __LINE__; break; }
-
 			$resource_tag = $resource_id . "-" . $threads;
 			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
 
@@ -1034,7 +1016,7 @@ class mrp_schedule extends class_base
 
 		while (isset ($this->reserved_times[$resource_tag][$time_range + (++$i)]))
 		{ ### go through all timeranges consequent to the one where time was reserved
-/* dbg */ if ($i_dbg7++ == 1000) { echo "err@" . __LINE__; break; }
+/* dbg */ if ($i_dbg4++ == 100) { echo "err@" . __LINE__; exit; }
 
 			$next_range_start = reset (array_keys ($this->reserved_times[$resource_tag][$time_range + $i], 0));
 
@@ -1090,7 +1072,7 @@ class mrp_schedule extends class_base
 		### find free space with right length/start
 		while (isset ($this->reserved_times[$resource_tag][$time_range]))
 		{
-/* dbg */ if ($i_dbg8++ == 1000) { echo "err@" . __LINE__; exit; }
+/* dbg */ if ($i_dbg8++ == 100) { echo "err@" . __LINE__; exit; }
 /* timing */ timing ("reserve_time - sort reserved_times", "start");
 
 			ksort ($this->reserved_times[$resource_tag][$time_range], SORT_NUMERIC);
@@ -1116,7 +1098,7 @@ class mrp_schedule extends class_base
 
 				while (isset ($this->reserved_times[$resource_tag][$time_range + $i]))
 				{
-/* dbg */ if ($i_dbg9++ == 1000) { echo "err@" . __LINE__; exit; }
+/* dbg */ if ($i_dbg9++ == 100) { echo "err@" . __LINE__; exit; }
 
 					if ($i > 0)
 					{
@@ -1232,7 +1214,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." | len: " . $unavailable_length/3600 . " | resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
-							if ($i_dbg1++ == 2000)
+							if ($i_dbg1++ == 200)
 							{
 								error::raise(array(
 									"msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
@@ -1734,7 +1716,7 @@ class mrp_schedule extends class_base
 				$this->unavailable_times[$unavailable_start] = $unavailable_end;
 			}
 
-			if ($i_dbg3++ == 50000)
+			if ($i_dbg3++ == 5000)
 			{
 				error::raise(array(
 					"msg" => sprintf (t("Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"), $i_dbg3, $resource_id),
