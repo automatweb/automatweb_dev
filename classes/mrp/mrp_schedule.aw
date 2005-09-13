@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.78 2005/09/13 07:49:51 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.79 2005/09/13 08:08:15 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -258,6 +258,8 @@ class mrp_schedule extends class_base
 // /* dbg */ while ($job = $this->db_next ()) {
 // /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
 // /* dbg */ }
+		list($micro,$sec) = split(" ",microtime());
+		$ts_s = $sec + $micro;
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
@@ -338,7 +340,6 @@ class mrp_schedule extends class_base
 		}
 
 /* timing */ timing ("initialize", "start");
-
 
 		$this->initialize ($arr);
 
@@ -697,6 +698,9 @@ class mrp_schedule extends class_base
 			//!!! esineb sageli millegip2rast.
 		}
 
+		list($micro,$sec) = split(" ",microtime());
+		$ts_e = $sec + $micro;
+		$GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
 		// return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
 	}
 
