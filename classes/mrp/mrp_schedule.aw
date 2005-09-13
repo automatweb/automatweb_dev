@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.80 2005/09/13 08:48:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.81 2005/09/13 09:10:38 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -264,14 +264,14 @@ class mrp_schedule extends class_base
 
 		$workspace_id = (int) $arr["mrp_workspace"];
 
-		if (is_oid($workspace_id))
+		if (is_oid($workspace_id) and $this->can ("view", $workspace_id))
 		{
 			$workspace = obj ($workspace_id);
 		}
 		else
 		{
 			error::raise(array(
-				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata!"),
+				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata või puuduvad õigused selle vaatamiseks."),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -283,7 +283,7 @@ class mrp_schedule extends class_base
 		if ($sem_id === false)
 		{
 			error::raise(array(
-				"msg" => t("Planeerimisluku käivitamine ebaõnnestus!"),
+				"msg" => t("Planeerimisluku käivitamine ebaõnnestus! Planeerimist ei toimunud."),
 				"fatal" => true,
 				"show" => true,
 			));
@@ -305,7 +305,7 @@ class mrp_schedule extends class_base
 				// "fatal" => true,
 				// "show" => true,
 			// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
-			echo t("Planeerimiseks lukustamine ebaõnnestus!");
+			echo t("Planeerimiseks lukustamine ebaõnnestus! Planeerimist ei toimunud.");
 			return;
 		}
 
@@ -1013,10 +1013,11 @@ class mrp_schedule extends class_base
 
 		### make corrections to selected thread's timerange starting-times
 		$i = 0;
+		$i_dbg = 0;
 
 		while (isset ($this->reserved_times[$resource_tag][$time_range + (++$i)]))
 		{ ### go through all timeranges consequent to the one where time was reserved
-/* dbg */ if ($i_dbg4++ == 100) { echo "err@" . __LINE__; exit; }
+/* dbg */ if ($i_dbg++ == 100) { echo "err@" . __LINE__; exit; }
 
 			$next_range_start = reset (array_keys ($this->reserved_times[$resource_tag][$time_range + $i], 0));
 
@@ -1070,9 +1071,11 @@ class mrp_schedule extends class_base
 		list ($resource_id, $thread) = sscanf ($resource_tag, "%u-%u");
 
 		### find free space with right length/start
+		$i_dbg = 0;
+
 		while (isset ($this->reserved_times[$resource_tag][$time_range]))
 		{
-/* dbg */ if ($i_dbg8++ == 100) { echo "err@" . __LINE__; exit; }
+/* dbg */ if ($i_dbg++ == 100) { echo "err@" . __LINE__; exit; }
 /* timing */ timing ("reserve_time - sort reserved_times", "start");
 
 			ksort ($this->reserved_times[$resource_tag][$time_range], SORT_NUMERIC);
@@ -1095,10 +1098,11 @@ class mrp_schedule extends class_base
 				### get next reserved time start
 				$start2 = false;
 				$i = 0;
+				$i_dbg1 = 0;
 
 				while (isset ($this->reserved_times[$resource_tag][$time_range + $i]))
 				{
-/* dbg */ if ($i_dbg9++ == 100) { echo "err@" . __LINE__; exit; }
+/* dbg */ if ($i_dbg1++ == 100) { echo "err@" . __LINE__; exit; }
 
 					if ($i > 0)
 					{
@@ -1206,6 +1210,8 @@ class mrp_schedule extends class_base
 /* timing */ timing ("reserve_time - insert unavailable periods to job length", "start");
 
 						### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
+						$i_dbg1 = 0;
+
 						while ( $unavailable_length and (($reserved_time + $length) > $unavailable_start) )
 						{
 
@@ -1218,7 +1224,7 @@ class mrp_schedule extends class_base
 							{
 								error::raise(array(
 									"msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
-									"fatal" => false,
+									"fatal" => true,
 									"show" => false,
 								));
 								break;
@@ -1295,6 +1301,7 @@ class mrp_schedule extends class_base
 
 		$low = 0;
 		$high = count ($this->range_scale) - 1;
+		$i_dbg = 0;
 
 		while ($low <= $high)
 		{
@@ -1320,11 +1327,11 @@ class mrp_schedule extends class_base
 				}
 			}
 
-			if ($i_dbg2++ == (count ($this->range_scale) * 3))
+			if ($i_dbg++ == (count ($this->range_scale) * 3))
 			{
 				error::raise(array(
 					"msg" => sprintf (t("Timerange search exceeded reasonable limit (%s) of cycles. Job %s"), $i_dbg2, $this->currently_processed_job),
-					"fatal" => false,
+					"fatal" => true,
 					"show" => false,
 				));
 				break;
@@ -1355,7 +1362,7 @@ class mrp_schedule extends class_base
 
 
 		### find if period ends before another starts
-		$i = 0;
+		$i_dbg = 0;
 
 		while (true)//!!! bad. stupid. wrong.
 		{
@@ -1383,12 +1390,12 @@ class mrp_schedule extends class_base
 				break;
 			}
 
-			if ($i++ == 10000)
+			if ($i_dbg++ == 10000)
 			{
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
 				error::raise(array(
 					"msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades."), $resource_id),
-					"fatal" => false,
+					"fatal" => true,
 					"show" => false,
 				));
 				break;
@@ -1439,6 +1446,7 @@ class mrp_schedule extends class_base
 
 		### get recurrences
 		$closest_recurrences = array ();
+		$i_dbg = 0;
 
 		foreach ($this->resource_data[$resource_id]["recurrence_definitions"] as $recurrence)
 		{
@@ -1447,6 +1455,7 @@ class mrp_schedule extends class_base
 // /* dbg */ echo "recstart: " . date (MRP_DATE_FORMAT, $recurrence["start"]) . " | recinterval: " .  $recurrence["interval"] .  " | reclength: " .  $recurrence["length"] / 3600 . "h | rectime: " .  $recurrence["time"] / 3600 . "h<br>";
 // /* dbg */ arr ($recurrence);
 // /* dbg */ }
+/* dbg */ if ($i_dbg++ == 300) { echo "err@" . __LINE__; exit; }
 
 			### make dst corrections
 			$nodst_day_start = $recurrence["start"] + floor (($time - $recurrence["start"]) / $recurrence["interval"]) * $recurrence["interval"];
@@ -1692,6 +1701,7 @@ class mrp_schedule extends class_base
 
 		$this->unavailable_times = array();
 		$pointer = 0;
+		$i_dbg = 0;
 
 		while ($pointer <= $this->schedule_length)
 		{
@@ -1716,7 +1726,7 @@ class mrp_schedule extends class_base
 				$this->unavailable_times[$unavailable_start] = $unavailable_end;
 			}
 
-			if ($i_dbg3++ == 5000)
+			if ($i_dbg++ == 5000)
 			{
 				error::raise(array(
 					"msg" => sprintf (t("Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"), $i_dbg3, $resource_id),
