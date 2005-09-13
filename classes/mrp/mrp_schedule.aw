@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.84 2005/09/13 09:45:10 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.85 2005/09/13 10:01:33 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -66,7 +66,7 @@ define ("MRP_COLOUR_OVERDUE", "#DF0D12");
 define ("MRP_COLOUR_AVAILABLE", "#FCFCF4");
 define ("MRP_COLOUR_PRJHILITE", "#FFE706");
 
-ini_set ("max_execution_time", "90");
+ini_set ("max_execution_time", "60");
 
 class mrp_schedule extends class_base
 {
@@ -994,9 +994,9 @@ class mrp_schedule extends class_base
 
 		if (($weight === "NA") || ($selected_resource_tag === "NA"))
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s<br>"), __LINE__, $resource_tag); flush ();}
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
 			error::raise(array(
-				"msg" => t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: [".$resource_tag."]"),
+				"msg" => sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job),
 				"fatal" => false,
 				"show" => false,
 			));
@@ -1388,9 +1388,9 @@ class mrp_schedule extends class_base
 			if ($i_dbg++ == 10000)
 			{
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res %s<br>"), __LINE__, $resource_id); flush ();}
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
 				error::raise(array(
-					"msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades."), $resource_id),
+					"msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"), $resource_id, $this->currently_processed_job),
 					"fatal" => false,
 					"show" => false,
 				));
