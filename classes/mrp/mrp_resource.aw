@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.70 2005/08/25 07:45:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.71 2005/09/13 10:50:33 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -118,6 +118,12 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define("RECUR_DAILY",1);
+define("RECUR_WEEKLY",2);
+define("RECUR_MONTHLY",3);
+define("RECUR_YEARLY",4);
+define("RECUR_HOURLY",5);
+define("RECUR_MINUTELY",6);
 
 ### colours (CSS colour definition)
 define ("MRP_COLOUR_NEW", "#05F123");
@@ -404,7 +410,7 @@ class mrp_resource extends class_base
 					return PROP_ERROR;
 				}
 
-				$prop["value"]["recur_type"] = 1;
+				$prop["value"]["recur_type"] = RECUR_DAILY;
             	$prop["value"]["interval_daily"] = 1;
 
 			case "unavailable_recur":
@@ -429,6 +435,17 @@ class mrp_resource extends class_base
 				if ((23 < $time_h) or (59 < $time_min) or (count ($time) < 2))
 				{
 					$prop["error"] .= t("Viga kellaaja määrangus. ");
+					return PROP_ERROR;
+				}
+
+				if (
+					((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$prop["value"]["interval_daily"]) < $prop["value"]["length"]))
+					or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$prop["value"]["interval_weekly"]) < $prop["value"]["length"]))
+					or ((RECUR_MONTHLY == $prop["value"]["recur_type"]) and ((24*30) < $prop["value"]["length"]))
+					or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$prop["value"]["interval_yearly"]) < $prop["value"]["length"]))
+				)
+				{
+					$prop["error"] .= t("Pikkus ei saa olla suurem kui korduse periood. ");
 					return PROP_ERROR;
 				}
 
@@ -785,21 +802,21 @@ class mrp_resource extends class_base
 			{
 				switch ($recurrence->prop ("recur_type"))
 				{
-					case "1": //day
+					case RECUR_DAILY: //day
 						$interval = $recurrence->prop ("interval_daily");
 						$interval = round (($interval ? $interval : 1) * 86400);
 						break;
 
-					case "2": //week
+					case RECUR_WEEKLY: //week
 						$interval = $recurrence->prop ("interval_weekly");
 						$interval = round (($interval ? $interval : 1) * 86400 * 7);
 						break;
 
-					case "3": //month
+					case RECUR_MONTHLY: //month
 						continue;
 						break;
 
-					case "4": //year
+					case RECUR_YEARLY: //year
 						$interval = $recurrence->prop ("interval_yearly");
 						$interval = round (($interval ? $interval : 1) * 86400 * 365);
 						break;
