@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.71 2005/09/13 10:50:33 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.72 2005/09/13 10:57:09 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -438,11 +438,15 @@ class mrp_resource extends class_base
 					return PROP_ERROR;
 				}
 
+				$interval_daily = $prop["value"]["interval_daily"] ? $prop["value"]["interval_daily"] : 1;
+				$interval_weekly = $prop["value"]["interval_weekly"] ? $prop["value"]["interval_daily"] : 1;
+				$interval_yearly = $prop["value"]["interval_yearly"] ? $prop["value"]["interval_daily"] : 1;
+
 				if (
-					((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$prop["value"]["interval_daily"]) < $prop["value"]["length"]))
-					or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$prop["value"]["interval_weekly"]) < $prop["value"]["length"]))
+					((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
+					or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
 					or ((RECUR_MONTHLY == $prop["value"]["recur_type"]) and ((24*30) < $prop["value"]["length"]))
-					or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$prop["value"]["interval_yearly"]) < $prop["value"]["length"]))
+					or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
 				)
 				{
 					$prop["error"] .= t("Pikkus ei saa olla suurem kui korduse periood. ");
