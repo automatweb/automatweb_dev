@@ -26,7 +26,8 @@
             <rows>30</rows>
             <cols>60</cols>
             <no_caption>1</no_caption>
-            <field>controller</field>
+            <field>meta</field>
+            <method>serialize</method>
       </property>
       <classinfo>
             <syslog_type>ST_OTV_DATA_FILTER</syslog_type>
