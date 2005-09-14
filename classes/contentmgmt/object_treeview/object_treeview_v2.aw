@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.86 2005/08/24 10:57:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.87 2005/09/14 09:41:13 kristo Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -635,7 +635,6 @@ class object_treeview_v2 extends class_base
 			}
 			else
 			{
-				print "case 2";
 				$ol = $d_inst->get_objects($d_o, $fld, $_GET['tv_sel'], $params);
 				$ol = $this->filter_data(array(
 					"ol" => $ol,
