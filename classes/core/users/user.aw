@@ -49,7 +49,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property blocked field=blocked type=checkbox ch_value=1
 @caption Blokeeritud
 
-@property name store=no type=textbox
+@property real_name type=textbox table=users field=config method=serialize
 @caption Nimi
 
 @property email field=email type=textbox
@@ -70,11 +70,14 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_SAVE, CL_ML_MEMBER, on_save_addr)
 @property target_lang type=select field=meta method=serialize table=objects
 @caption Sihtkeel
 
-@property act_from store=no type=date_select
+@property act_from type=date_select table=users field=config method=serialize
 @caption Aktiivne alates
 
-@property act_to store=no type=date_select
+@property act_to type=date_select table=users field=config method=serialize
 @caption Aktiivne kuni
+
+@property password_hash type=hidden table=users field=config method=serialize
+@property password_hash_timestamp type=hidden table=users field=config method=serialize
 
 @default group=chpwd
 
@@ -195,6 +198,9 @@ class user extends class_base
 		$prop =& $arr["prop"];
 		switch($prop["name"])
 		{
+			case "name":
+				return PROP_IGNORE;
+
 			case "comment":
 				return PROP_IGNORE;
 			
@@ -217,17 +223,6 @@ class user extends class_base
 				}
 				break;*/
 
-			case "name":
-				/*if (!is_oid($arr["obj_inst"]->id()))
-				{
-					return PROP_IGNORE;
-				}*/
-				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "real_name",
-				));
-				break;
-			
 			case "created":
 				$prop['value'] = $this->time2date($prop['value'],2);
 				break;
@@ -242,20 +237,6 @@ class user extends class_base
 				$l = get_instance("languages");
 				$prop['options'] = $l->get_list();
 				$prop['value'] = aw_global_get("admin_lang");
-				break;
-
-			case "act_from":
-				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "act_from",
-				));
-				break;
-			
-			case "act_to":
-				$prop['value'] = $this->users->get_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "act_to",
-				));
 				break;
 
 			case "groups":
@@ -363,22 +344,6 @@ class user extends class_base
 				$admin_lang_lc = $t->get_langid($admin_lang);
 				setcookie("admin_lang",$admin_lang,time()*24*3600*1000,"/");
 				setcookie("admin_lang_lc",$admin_lang_lc,time()*24*3600*1000,"/");
-				break;
-
-			case "act_from":
-				$this->users->set_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "act_from",
-					"value" => date_edit::get_timestamp($prop['value'])
-				));
-				break;
-
-			case "act_to":
-				$this->users->set_user_config(array(
-					"uid" => $arr["obj_inst"]->prop("uid"),
-					"key" => "act_to",
-					"value" => date_edit::get_timestamp($prop['value'])
-				));
 				break;
 
 			case "passwd_again":
@@ -1281,8 +1246,9 @@ class user extends class_base
 		if ($arr["new"])
 		{
 			$arr["obj_inst"]->set_prop("uid", $arr["request"]["uid_entry"]);
-			$arr["obj_inst"]->set_name($arr["request"]["uid_entry"]);
 		}
+
+		$arr["obj_inst"]->set_name($arr["obj_inst"]->prop("uid"));
 	}
 
 	function callback_post_save($arr)
@@ -1395,15 +1361,6 @@ class user extends class_base
 			}
 		}
 
-		if ($arr["request"]["group"] == "general")
-		{
-			$this->users->set_user_config(array(
-				"uid" => $arr["obj_inst"]->prop("uid"),
-				"key" => "real_name",
-				"value" => $arr["request"]["name"]
-			));
-		}
-
 		// now, find the correct brother
 		if ($go_to)
 		{
@@ -1418,10 +1375,7 @@ class user extends class_base
 
 		// create email object
 		$umail = $o->prop("email");
-		$uname = $this->users->get_user_config(array(
-			"uid" => $o->prop("uid"),
-			"key" => "real_name",
-		));
+		$uname = $o->prop("real_name");
 
 		obj_set_opt("no_cache", 1);
 		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
@@ -1502,10 +1456,7 @@ class user extends class_base
 			$p->set_class_id(CL_CRM_PERSON);
 			$p->set_parent($u->parent());
 
-			$rn = $this->users->get_user_config(array(
-				"uid" => $u->prop("uid"),
-				"key" => "real_name",
-			));
+			$rn = $u->prop("real_name");
 
 			$uid = $u->prop("uid");
 
@@ -1556,14 +1507,13 @@ class user extends class_base
 
 			if (!$org_c)
 			{
+				$uo = obj(aw_global_get("uid_oid"));
+
 				// create new person next to user
 				$p = obj();
 				$p->set_class_id(CL_CRM_COMPANY);
 				$p->set_parent($p_o->parent());
-				$p->set_name("CO ".$this->users->get_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "real_name",
-				))." ".aw_global_get("uid"));
+				$p->set_name("CO ".$uo->prop("real_name")." ".aw_global_get("uid"));
 				aw_disable_acl();
 				$p->save();
 				aw_restore_acl();
@@ -1586,7 +1536,7 @@ class user extends class_base
 		@param uid required
 		@param email optional
 		@param password optional
-
+		@param real_name optional
 	**/
 	function add_user($arr)
 	{
@@ -1613,6 +1563,7 @@ class user extends class_base
 		$o->set_prop("uid", $uid);
 		$o->set_prop("password", $password);
 		$o->set_prop("email", $email);
+		$o->set_prop("real_name", $arr["real_name"]);
 		$o->save();
 
 		$this->users->add(array(
@@ -1914,20 +1865,13 @@ class user extends class_base
 		}
 		$user = $c->from();
 
-		$rn = $this->users->get_user_config(array(
-			"uid" => $user->prop("uid"),
-			"key" => "real_name",
-		));
+		$rn = $user->prop("real_name");
 
 		if ($user->prop("email") != $ml_m->prop("mail") || $rn != $ml_m->prop("name"))
 		{
 			$user->set_prop("email", $ml_m->prop("mail"));
+			$user->set_prop("real_name", $ml_m->prop("name"));
 			$user->save();
-			$this->users->set_user_config(array(
-				"uid" => $user->prop("uid"),
-				"key" => "real_name",
-				"value" => $ml_m->prop("name")
-			));
 		}
 	}
 

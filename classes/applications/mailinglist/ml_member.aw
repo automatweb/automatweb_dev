@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.10 2005/05/20 08:27:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_member.aw,v 1.11 2005/09/14 17:57:17 kristo Exp $
 // ml_member.aw - Mailing list member
 
 /*
@@ -347,10 +347,8 @@ class ml_member extends class_base
 				"from.class_id" => CL_USER,
 			))))
 			{
-				$memberdata["name"] = $this->users->get_user_config(array(
-					"uid" => $usr->prop("from.name"),
-					"key" => "real_name",
-				));
+				$uo = $usr->from();
+				$memberdata["name"] = $uo->prop("real_name");
 			}
 		}
 		return array($mailto,$memberdata);

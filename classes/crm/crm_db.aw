@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.18 2005/06/29 12:23:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_db.aw,v 1.19 2005/09/14 17:57:16 kristo Exp $
 // crm_db.aw - CRM database
 /*
 	@classinfo relationmgr=yes syslog_type=ST_CRM_DB
@@ -77,9 +77,6 @@
 
 	@property flimit type=select
 	@caption Kirjeid ühel lehel
-	
-	@property default_kliendibaas type=checkbox 
-	@caption See on kasutaja default kliendibaas
 	
 	default group=objects_manager
 	groupinfo objects_manager caption=Objektide&nbsp;lisamine submit=no
@@ -188,18 +185,7 @@ class crm_db extends class_base
 				break;
 				
 
-			case 'default_kliendibaas':
-				$this->users = get_instance("users");
-				$obj_id = $args["obj_inst"]->id();
-
-				$data['value'] = $this->users->get_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "kliendibaas",
-				));
-				$data['ch_value'] = $args["obj_inst"]->id();
-				break;
-
-			
+		
 			case 'orgtoolbar':
 				$this->org_toolbar($args);
 				break;
@@ -265,15 +251,6 @@ class crm_db extends class_base
 		$retval = PROP_OK;
 		switch($data['name'])
 		{
-			case 'default_kliendibaas':
-				$users = get_instance("users");
-				$users->set_user_config(array(
-					"uid" => aw_global_get("uid"),
-					"key" => "kliendibaas",
-					"value" => $data["value"],
-				));
-				break;
-
 		};
 		return $retval;
 	}
@@ -856,10 +833,9 @@ class crm_db extends class_base
 				};
 			};
 			
-			$users = get_instance("users");
-			$cal_id = $users->get_user_config(array(
+			$pl = get_instance(CL_PLANNER);
+			$cal_id = $pl->get_calendar_for_user(array(
 				"uid" => aw_global_get("uid"),
-				"key" => "user_calendar",
 			));
 			
 			if (!empty($cal_id))	
@@ -1053,10 +1029,9 @@ class crm_db extends class_base
 				};
 			};
 		
-			$users = get_instance("users");
-			$cal_id = $users->get_user_config(array(
+			$pl = get_instance(CL_PLANNER);
+			$cal_id = $pl->get_calendar_for_user(array(
 				"uid" => aw_global_get("uid"),
-				"key" => "user_calendar",
 			));
 
 			if (!empty($cal_id))

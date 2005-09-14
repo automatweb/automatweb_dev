@@ -150,13 +150,6 @@
 			</function>
 		</action>
 
-		<action name="convert_planner_owners">
-			<function name="convert_planner_owners">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="convert_acl_rels">
 			<function name="convert_acl_rels">
 				<arguments>

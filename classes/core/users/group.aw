@@ -256,13 +256,8 @@ class group extends class_base
 					$uo = $us->add_user(array(
 						"uid" => $uid,
 						"password" => $pass,
-						"email" => $email
-					));
-
-					$this->users->set_user_config(array(
-						"uid" => $uid,
-						"key" => "real_name",
-						"value" => $name
+						"email" => $email,
+						"real_name" => $name
 					));
 				}
 				else
@@ -282,21 +277,14 @@ class group extends class_base
 
 				if ($act_from)
 				{
-					$this->users->set_user_config(array(
-						"uid" => $uid,
-						"key" => "act_from",
-						"value" => $act_from
-					));
+					$uo->set_prop("act_from", $act_from);
 				}
 
 				if ($act_to)
 				{
-					$this->users->set_user_config(array(
-						"uid" => $uid,
-						"key" => "act_to",
-						"value" => $act_to
-					));
+					$uo->set_prop("act_to", $act_to);
 				}
+				$uo->save();
 
 				echo "Importisin kasutaja $uid ... <br />\n";
 				flush();

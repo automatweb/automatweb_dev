@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.84 2005/07/22 12:01:01 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.85 2005/09/14 17:57:16 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -674,28 +674,14 @@ class crm_person extends class_base
 	{
 		$toolbar = &$args["prop"]["toolbar"];
 
-		$users = get_instance("users");
-		$crm_db_id = $users->get_user_config(array(
+		$pl = get_instance(CL_PLANNER);
+		$cal_id = $pl->get_calendar_for_user(array(
 			"uid" => aw_global_get("uid"),
-			"key" => "kliendibaas",
-		));
-
-		$cal_id = $users->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "user_calendar",
 		));
 
 		$parents = array();
 
-		if (empty($crm_db_id))
-		{
-			$parents[6] = $args["obj_inst"]->parent();
-		}
-		else
-		{
-			$crm_db = new object($crm_db_id);
-			$parents[6] = $crm_db->prop("dir_firma") == "" ? $crm_db->prop("dir_default") : $crm_db->prop("dir_firma");
-		}
+		$parents[6] = $args["obj_inst"]->parent();
 
 		if (!empty($cal_id))
 		{

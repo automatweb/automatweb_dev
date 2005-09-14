@@ -166,15 +166,6 @@
             <caption>Kirjeid ühel lehel</caption>
       </property>
       <property>
-            <name>default_kliendibaas</name>
-            <table>objects</table>
-            <group>settings</group>
-            <field>meta</field>
-            <method>serialize</method>
-            <type>checkbox</type>
-            <caption>See on kasutaja default kliendibaas</caption>
-      </property>
-      <property>
             <name>active_selection</name>
             <table>objects</table>
             <group>firmad</group>

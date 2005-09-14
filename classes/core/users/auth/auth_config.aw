@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.16 2005/06/02 07:44:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/auth/auth_config.aw,v 1.17 2005/09/14 17:57:17 kristo Exp $
 // auth_config.aw - Autentimise Seaded 
 /*
 
@@ -426,14 +426,8 @@ class auth_config extends class_base
 	{
 		aw_disable_acl();
 		$u->set_prop("email", $cred["mail"]);
+		$u->set_prop("real_name", $cred["name"]);
 		$u->save();
-
-		$users = get_instance("users");
-		$users->set_user_config(array(
-			"uid" => $cred["uid"],
-			"key" => "real_name",
-			"value" => $cred["name"]
-		));
 
 		// get group from auth conf
 		if (($grp = $confo->prop("no_user_grp")))

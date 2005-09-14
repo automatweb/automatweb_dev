@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.116 2005/06/10 08:07:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.117 2005/09/14 17:57:15 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -32,88 +32,6 @@ class users_user extends aw_template
 		$this->init("");
 	}
 
-	// users tabelis on väli config, tyypi text, kuhu saab salvestada
-	// igasugu misc informatsiooni, mida pole vaja kiiresti kätte saada,
-	// aga mis on siiski oluline. Järgnevad 2 funktsiooni tegelevad
-	// selle handlemisega.
-	////
-	// !Loeb kasutaja konfiguratsiooni sisse
-	// uid - kasutaja
-	// key - key, mille sisu teada soovitakse
-	// $data = $users->get_user_config(array(
-	//		"uid" => "duke",
-	//		"key" => "coolness_factor",));
-	function get_user_config($args = array())
-	{
-		extract($args);
-		$udata = $this->_get_user_config($uid);
-		if (!$udata)
-		{
-			return false;
-		};
-		$retval = aw_unserialize($udata["config"]);
-		// return a single key if asked
-		if ($key)
-		{
-			$retval = $retval[$key];
-			//$retval = $tmp[$key];
-		}
-		// otherwise the whole config block
-		return $retval;
-	}
-
-	function _get_user_config($uid)
-	{
-		$row = aw_cache_get("users_cache",$uid);
-		if (!(is_array($row)))
-		{
-			$q = "SELECT config FROM users WHERE uid = '$uid'";
-			$this->db_query($q);
-			$row = $this->db_next();
-		};
-		return $row;
-	}
-
-	////
-	// !Kirjutab kasutaja konfiguratsioonis mingi key yle
-	// uid - kasutaja
-	// key - võtme nimi
-	// value - key väärtus. intenger, string, array, whatever
-	// $users->set_user_config(array(
-	//		"uid" => "duke",
-	//		"key" => "coolness_factor",
-	//		"value" => "99",));
-	function set_user_config($args = array())
-	{
-		extract($args);
-		// loeme vana konfi sisse
-		$old = $this->_get_user_config($uid);
-		if (!$old)
-		{
-			return false;
-		};
-		$config = aw_unserialize($old["config"]);
-		if (is_array($data))
-		{
-			$config = array_merge($config,$data);
-		}
-		else
-		{
-			$config[$key] = $value;
-		};
-		$newconfig = aw_serialize($config);
-		//if (($row = aw_cache_get("users_cache", $uid)))
-		//{
-			$row["config"] = $newconfig;
-			aw_cache_set("users_cache", $uid, $row);
-		//}
-		$this->quote($newconfig);
-		$q = "UPDATE users SET config = '$newconfig' WHERE uid = '$uid'";
-		$this->db_query($q);
-		return true;
-	}
-
-	
 	////
 	// !Logib kasutaja sisse
 	function login($params = array())
@@ -249,17 +167,6 @@ class users_user extends aw_template
 		$_SESSION["uid"] = $uid;
 		aw_global_set("uid", $uid);
 		aw_session_set("uid_oid", $this->get_oid_for_uid($uid));
-
-		$userconfig = $this->get_user_config(array(
-			'uid' => aw_global_get("uid"),
-		));
-		
-		aw_session_set('user_calendar', $userconfig['user_calendar']);
-		aw_session_set('kliendibaas', $userconfig['kliendibaas']);	
-		if (is_array($userconfig['aliasmgr_hist']))
-		{
-			aw_session_set('aliasmgr_obj_history',$aliasmgr_hist);
-		}
 
 		// init acl
 		$this->request_startup();

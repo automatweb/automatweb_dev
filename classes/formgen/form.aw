@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.123 2005/09/10 12:39:49 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form.aw,v 1.124 2005/09/14 17:57:16 kristo Exp $
 // form.aw - Class for creating forms
 
 /*
@@ -1531,16 +1531,6 @@ class form extends form_base
 					}
 					exit_function("form::load_chain_data::iter");
 				}
-			}
-			if ($this->arr["try_fill"])
-			{
-				if (!isset($elvalues) || !is_array($elvalues))
-				{
-					$elvalues = array();
-				}
-				$u = get_instance("users");
-				$ud = new aw_array($u->get_user_info(aw_global_get("uid")));
-				$elvalues=$elvalues + $ud->get();
 			}
 
 			if (is_array($elvalues))

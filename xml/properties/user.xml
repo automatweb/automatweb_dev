@@ -45,12 +45,12 @@
             <caption>Blokeeritud</caption>
       </property>
       <property>
-            <name>name</name>
+            <name>real_name</name>
             <table>users</table>
             <group>general</group>
-            <store>no</store>
             <type>textbox</type>
-            <field>name</field>
+            <field>config</field>
+            <method>serialize</method>
             <caption>Nimi</caption>
       </property>
       <property>
@@ -108,19 +108,35 @@
             <name>act_from</name>
             <table>users</table>
             <group>general</group>
-            <store>no</store>
             <type>date_select</type>
-            <field>act_from</field>
+            <field>config</field>
+            <method>serialize</method>
             <caption>Aktiivne alates</caption>
       </property>
       <property>
             <name>act_to</name>
             <table>users</table>
             <group>general</group>
-            <store>no</store>
             <type>date_select</type>
-            <field>act_to</field>
+            <field>config</field>
+            <method>serialize</method>
             <caption>Aktiivne kuni</caption>
+      </property>
+      <property>
+            <name>password_hash</name>
+            <table>users</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>config</field>
+            <method>serialize</method>
+      </property>
+      <property>
+            <name>password_hash_timestamp</name>
+            <table>users</table>
+            <group>general</group>
+            <type>hidden</type>
+            <field>config</field>
+            <method>serialize</method>
       </property>
       <property>
             <name>passwd</name>

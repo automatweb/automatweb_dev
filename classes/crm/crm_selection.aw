@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.19 2005/04/21 08:54:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_selection.aw,v 1.20 2005/09/14 17:57:16 kristo Exp $
 /*
 @classinfo relationmgr=yes syslog_type=ST_CRM_SELECTION
 @default table=objects
@@ -426,25 +426,6 @@ class crm_selection extends class_base
 		$REQUEST_URI = aw_global_get("REQUEST_URI");
 
 		$users = get_instance("users");
-
-		$kb_id = $users->get_user_config(array(
-			"uid" => aw_global_get("uid"),
-			"key" => "kliendibaas",
-		));
-
-		// include selections from crm_db
-		if (is_oid($kb_id))
-		{
-			$kb_obj = new object($kb_id);
-			$others = $kb_obj->connections_from(array(
-				"type" => 1,
-			));
-			foreach($others as $other)
-			{
-				$ops[$other->prop("to")] = $other->prop("to.name");
-			};
-		};
-
 
 		asort($ops);
 		

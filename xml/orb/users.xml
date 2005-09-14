@@ -79,20 +79,6 @@
 			</function>
 		</action>
 
-		<action name="submit_user_info">
-			<function name="submit_user_info">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="show_user_info">
-			<function name="show_user_info">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
 		<action name="send_hash" nologin="1">
 			<function name="send_hash">
 				<arguments>
@@ -173,16 +159,6 @@
 		<action name="logout" nologin="1" is_public="1" caption="Logi v&amp;amp;auml;lja">
 			<function name="orb_logout">
 				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="events" nologin="1">
-			<function name="events">
-				<arguments>
-					<required name="user" />
-					<required name="password" />
-					<optional name="limit" />
 				</arguments>
 			</function>
 		</action>

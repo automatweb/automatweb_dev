@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.17 2005/04/21 12:48:45 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.18 2005/09/14 17:57:17 kristo Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -734,10 +734,8 @@ class ml_queue extends aw_template
 		if(is_object($user))
 		{
 			$data["username"] = $user->prop("from.name");
-			$data["name"] = $users->get_user_config(array(
-				"uid" => $user->prop("from.name"),
-				"key" => "real_name",
-			));
+			$uo = $user->from();
+			$data["name"] = $uo->prop("real_name");
 		}
 		$message = preg_replace("#\#pea\#(.*?)\#/pea\##si", '<div class="doc-title">\1</div>', $arr["msg"]["message"]);
 		$message = preg_replace("#\#ala\#(.*?)\#/ala\##si", '<div class="doc-titleSub">\1</div>', $message);

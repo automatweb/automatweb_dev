@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.149 2005/08/30 11:38:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.150 2005/09/14 17:57:15 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -83,9 +83,6 @@ class users extends users_user
 		{
 			// also, update users join form entries
 			$this->save(array("uid" => $id, "join_form_entry" => serialize(aw_global_get("session_filled_forms")))); 
-
-			// zero out formgen's user data cache
-			$this->set_user_config(array("uid" => $id, "key" => "user_info_cache", "value" => false));
 
 			// and when we're dont with all of them, update dyn groups and return to user list
 			$this->update_dyn_user($id);
@@ -673,11 +670,6 @@ class users extends users_user
 		// write the entry to the user table as well, in case it is a new entry
 		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE))); 
 
-		// zero out formgen's user data cache
-		$this->set_user_config(array("uid" => $user_id, "key" => "user_info_cache", "value" => false));
-		// and regenerate the cache with the new data
-		$this->get_user_info($user_id);
-
 		$this->update_dyn_user($user_id);
 
 		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
@@ -821,67 +813,6 @@ class users extends users_user
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
 	}
 
-	////
-	// !this is used by formgen to retrieve the data that the user $uid entered when he joined 
-	// the return value is an array(element_name => element_value). 
-	// the function caches the result for better performance
-	// the cache needs to be zeroed out when the user changes his/her data
-	function get_user_info($uid, $ret_id = false)
-	{
-		// yeah. use the cached version if available for better performance
-		$dat = $this->get_user_config(array("uid" => $uid, "key" => "user_info_cache"));
-		if (is_array($dat) && !$ret_id)
-		{
-			return $dat;
-		}
-
-		$elvalues = array();
-		$udata = $this->get_user(array("uid" => $uid));
-		$jf = unserialize($udata["join_form_entry"]);
-		if (is_array($jf))
-		{
-			$elvs = array();
-			$f = get_instance(CL_FORM);
-			foreach($jf as $joinform => $joinentry)
-			{
-				$f->load($joinform);
-				$f->load_entry($joinentry);
-				$elvs = $elvs + $f->entry;
-			};
-			// now elvalues is array el_id => el_value
-			// but we need it to be el_name => el_value
-			// so we do a bigass query to find all the names of the elements
-			if ($ret_id)
-			{
-				return $elvs;
-			}
-			else
-			{
-				$tmp = array();
-				foreach($elvs as $k => $v)
-				{
-					if (is_number($k))
-					{
-						$tmp[$k] = $v;
-					}
-				}
-				$elsss = join(",",map2("%s",$tmp));
-
-				if ($elsss != "")
-				{
-					$this->db_query("SELECT oid,name FROM objects WHERE oid IN($elsss)");
-					while ($row = $this->db_next())
-					{
-						$elvalues[$row["name"]] = $elvs[$row["oid"]];
-					}
-				}
-				$elvalues["E-mail"] = $udata["email"];
-				// but we could also just cache this info in the users table
-				$this->set_user_config(array("uid" => $uid, "key" => "user_info_cache", "value" => $elvalues));
-			}
-		};
-		return $elvalues;
-	}
 
 	function get_join_entries($uid = "")
 	{
@@ -896,57 +827,6 @@ class users extends users_user
 			$ar = array();
 		}
 		return $ar;
-	}
-
-	/**  
-		
-		@attrib name=submit_user_info params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_user_info($arr)
-	{
-		extract($arr);
-		$co = get_instance("config");
-		$fo = $co->get_simple_config("user_info_form");
-
-		$f = get_instance(CL_FORM);
-		$f->process_entry(array("id" => $fo, "entry_id" => $entry_id));
-
-		$this->set_user_config(array("uid" => $u_uid, "key" => "info_entry", "value" => $f->entry_id));
-
-		return $this->mk_my_orb("settings", array("id" => $u_uid));
-	}
-
-	/**  
-		
-		@attrib name=show_user_info params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function show_user_info()
-	{
-		$co = get_instance("config");
-		$fo = $co->get_simple_config("user_info_form");
-		if ($fo)
-		{
-			$eid = $this->get_user_config(array("uid" => aw_global_get("uid"), "key" => "info_entry"));
-			if ($eid)
-			{
-				$f = get_instance(CL_FORM);
-				return $f->show(array("id" => $fo, "entry_id" => $eid,"op_id" => $co->get_simple_config("user_info_op")));
-			}
-		}
 	}
 
 	/** Generates an unique hash, which when used in a url can be used to let the used change 
@@ -1082,10 +962,8 @@ class users extends users_user
 			return $this->parse();
 		};
 
-		$pwhash = $this->get_user_config(array(
-			"uid" => $uid,
-			"key" => "password_hash",
-		));
+		$uo = obj($row["oid"]);
+		$pwhash = $uo->prop("password_hash");
 
 		if ($pwhash != $key)
 		{	
@@ -1096,10 +974,7 @@ class users extends users_user
 			return $this->parse();
 		};
 
-		$ts = $this->get_user_config(array(
-			"uid" => $uid,
-			"key" => "password_hash_timestamp",
-		));
+		$ts = $uo->prop("password_hash_timestamp");
 
 		// default expiration time is 1 hour (3600 seconds)
 		if (($ts + (3600*24*400)) < time())
@@ -1193,10 +1068,8 @@ class users extends users_user
 			return $this->mk_my_orb("send_hash",array());
 		};
 		
-		$pwhash1 = $this->get_user_config(array(
-			"uid" => $uid,
-			"key" => "password_hash",
-		));
+		$uo = obj($row["oid"]);
+		$pwhash1 = $uo->prop("password_hash");
 
 		if ($pwhash1 != $pwhash)
 		{
@@ -1473,17 +1346,12 @@ class users extends users_user
 		$ts = time();
 		$hash = substr(gen_uniq_id(),0,15);
 
-		$this->set_user_config(array(
-			"uid" => $uid,
-			"key" => "password_hash",
-			"value" => $hash,
-		));
-
-		$this->set_user_config(array(
-			"uid" => $uid,
-			"key" => "password_hash_timestamp",
-			"value" => $ts,
-		));
+		aw_disable_acl();
+		$uo = obj($this->get_oid_for_uid($uid));
+		$uo->set_prop("password_hash",$hash);
+		$uo->set_prop("password_hash_timestamp",$ts);
+		$uo->save();
+		aw_restore_acl();
 
 		$host = aw_global_get("HTTP_HOST");
 		return str_replace("orb.aw", "index.aw", str_replace("/automatweb", "", $this->mk_my_orb("pwhash",array(
@@ -1723,101 +1591,6 @@ class users extends users_user
 	function orb_logout($arr = array())
 	{
 		return parent::orb_logout($arr);
-	}
-
-	/** event list
-		@attrib name=events nologin="1"
-
-		@param user required
-		@param password required
-		@param limit optional
-
-	**/
-	function events($arr)
-	{
-		// first, check that user
-
-		$user = $arr["user"];
-		$pass = $arr["password"];
-		$this->quote($user);
-		$this->quote($pass);
-
-		$q = "SELECT count(*) AS cnt FROM users WHERE uid = '$user' AND password = '$pass'";
-		$row = $this->db_fetch_row($q);
-		if ($row["cnt"] == 0)
-		{
-			return false;
-		};
-
-		// if limit is given, then return the events that are in the range between
-		// now and now+limit (seconds)
-
-		// if not give, simply return all upcoming events up to the end of the range
-		$limit = (int)$arr["limit"];
-
-		$cal_id = $this->get_user_config(array(
-			"uid" => $arr["user"],
-			"key" => "user_calendar",
-		));
-
-		$res = array();
-		if (empty($cal_id))
-		{
-			return false;
-
-		};
-		$pl = get_instance(CL_PLANNER);
-
-		// XXX: I do not have the means to ask for next n event, so I'm working
-		// around it by asking events for the current and next week and the 
-		// filtering out the upcoming events
-
-		// XXX: _init_event_source needs to be rewritten
-
-		$evts = $pl->_init_event_source(array(
-			"id" => $cal_id,
-			"type" => "week",
-			"flatlist" => 1,
-		));
-		$evts = $evts + $pl->_init_event_source(array(
-			"id" => $cal_id,
-			"type" => "week",
-			"flatlist" => 1,
-			"date" => date("d-m-Y",time() + 86400 * 7),
-		));
-
-		$now = time();
-
-		$clinf = aw_ini_get("classes");
-		
-		foreach($evts as $item)
-		{
-			$use = false;
-			if ($item["start"] >= $now)
-			{
-				if ($limit == 0)
-				{
-					$use = true;
-				};
-				if ($limit > 0 && $item["start"] <= $now + $limit)
-				{
-					$use = true;
-				};
-			};
-			if (!$use)
-			{
-				continue;
-			};
-			$res[] = array(
-				// XXX: name should not contain the icon
-				"event" => strip_tags($item["name"]),
-				"type" => $clinf[$item["class_id"]]["name"],
-				"start" => $item["start"],
-				"event_url" => $item["link"],
-				"icon_url" => $item["event_icon_url"],
-			);
-		};		
-		return $res;
 	}
 }
 ?>
