@@ -1,4 +1,4 @@
-<h2>{VAR:name}</h2>
+<h3>{VAR:name}</h3>
 
 <!-- SUB: dirlist_item -->
 <a href="{VAR:dirurl}">{VAR:dirname}</a> 
