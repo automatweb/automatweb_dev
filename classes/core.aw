@@ -1237,11 +1237,10 @@ class core extends acl_base
 	function get_menu_list($ignore_langmenus = false,$empty = false,$rootobj = -1, $onlyact = -1, $make_path = true) 
 	{
 		enter_function("core::get_menu_list");
-		$admin_rootmenu = $this->cfg["admin_rootmenu2"];
 
 		if ($rootobj == -1)
 		{
-			$rootobj = $admin_rootmenu;
+			$rootobj = cfg_get_admin_rootmenu2();
 		}
 
 		global $awt;
