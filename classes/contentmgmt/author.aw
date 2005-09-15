@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.3 2005/03/24 10:06:29 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.4 2005/09/15 15:40:18 dragut Exp $
 // author.aw - Autori artiklid 
 /*
 
@@ -81,7 +81,12 @@ class author extends class_base
 		{
 			$this->lim = 10;
 		};
-		return $this->author_docs($par_obj->name());
+		return $this->author_docs(array(
+			"author" => $ob->name(),
+			"limit" => $ob->prop("limit"),
+
+		));
+//		return $this->author_docs($par_obj->name());
 	}
 
 	function get_docs_by_author($arr)
@@ -215,6 +220,7 @@ class author extends class_base
 
 	////
 	// !This will list all documents created by an author
+/*
 	function author_docs($author)
 	{
 		$lsu = aw_ini_get("menuedit.long_section_url");
@@ -283,6 +289,69 @@ class author extends class_base
 		));
 		return $this->parse();
 	}
+*/
+        function author_docs($arr)
+        {
+
+		$author = $arr['author'];
+		$_lim = $arr['limit'];
+		
+		$this->read_template("show.tpl");
+                $lsu = aw_ini_get("menuedit.long_section_url");
+
+//                $_lim = aw_ini_get("document.max_author_docs");
+                if ($_lim)
+                {
+                        $lim = "LIMIT ".$_lim;
+                }
+                $perstr = "";
+                if (aw_ini_get("search_conf.only_active_periods"))
+                {
+                        $pei = get_instance(CL_PERIOD);
+                        $plist = $pei->period_list(0,false,1);
+                        $perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
+                }
+                $sql = "
+                        SELECT docid,title
+                        FROM documents
+                                LEFT JOIN objects ON objects.oid = documents.docid
+                        WHERE author = '$author' AND objects.status = 2 $perstr
+                        ORDER BY objects.created DESC $lim
+                ";
+                $this->db_query($sql);
+                while ($row = $this->db_next())
+                {
+                        $this->save_handle();
+                        $num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$row[docid]'","cnt");
+                        $this->restore_handle();
+
+                        if ($lsu)
+                        {
+                                $link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"];
+                        }
+                        else
+                        {
+                                $link = $this->cfg["baseurl"]."/".$row["docid"];
+                        }
+
+                        $this->vars(array(
+                                "link" => $link,
+                                "comments" => $num_comments,
+                                "title" => strip_tags($row["title"]),
+                                "comm_link" => $this->mk_my_orb("show_threaded",array("board" => $row["docid"]),"forum"),
+                        ));
+                        $hc = "";
+                        if ($num_comments > 0)
+                        {
+                                $hc = $this->parse("HAS_COMM");
+                        }
+
+                        $this->vars(array("HAS_COMM" => $hc));
+
+                        $c.=$this->parse("AUTHOR_DOC");
+                }
+                return $c;
+        }
 
 }
 ?>
