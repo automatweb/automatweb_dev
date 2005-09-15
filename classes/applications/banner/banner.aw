@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.14 2005/09/07 11:52:54 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.15 2005/09/15 12:25:47 ekke Exp $
 
 /*
 
@@ -8,6 +8,17 @@
 @classinfo syslog_type=ST_BANNER relationmgr=yes
 @default table=objects
 @default group=general
+
+@property general_toolbar type=toolbar no_caption=1 store=no 
+
+@property name type=textbox
+@caption Nimi
+
+@property comment type=textbox
+@caption Kommentaar 
+
+@property status type=status
+@caption Aktiivne
 
 @property url type=textbox table=banners 
 @caption URL, kuhu klikkimisel suunatakse
@@ -18,7 +29,7 @@
 @property banner_file_2 type=relpicker reltype=RELTYPE_BANNER_FILE table=banners
 @caption Banneri sisu lisaks
 
-@property banner_new_win type=checkbox ch_value=1
+@property banner_new_win type=checkbox ch_value=16 field=flags method=bitmask
 @caption Link avaneb uues aknas
 
 @property html type=textarea rows=5 cols=30 table=banners
@@ -90,6 +101,9 @@ class banner extends class_base
 			case "probability_tbl":
 				$this->do_prob_tbl($arr);
 				break;
+			case 'general_toolbar':
+				$this->do_general_toolbar(&$prop['toolbar'], $arr);
+				break;	
 		}
 
 		return PROP_OK;
@@ -127,6 +141,54 @@ class banner extends class_base
 		}		
 	}
 
+	// Generates toolbar
+	function do_general_toolbar (&$tb, $arr)
+	{
+		$tb->add_menu_button(array(
+			'name'=>'add_item',
+			'tooltip'=> t('Uus')
+		));
+	
+		$alias_to = $arr['obj_inst']->id();
+		
+		$clss = aw_ini_get("classes");
+		foreach(array(CL_IMAGE, CL_FILE, CL_FLASH, CL_EXTLINK, CL_DOCUMENT) as $clid)
+		{
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text'=> $clss[$clid]['name'], 
+				'link'=>aw_url_change_var(array(
+					'action' => 'new',
+					'parent' => $arr['obj_inst']->id(),
+					'alias_to' => $alias_to,
+					'reltype' => 2, // CL_BANNER.RELTYPE_BANNER_FILE
+					"class" => strlen(strrchr($clss[$clid]['file'], '/')) ?  substr(strrchr($clss[$clid]['file'],'/'), 1) : $clss[$clid]['file'],
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				))
+			));
+		}
+
+		$tb->add_menu_separator(array(
+			'parent' => 'add_item',
+		));
+	
+		$tb->add_menu_item(array(
+			'parent'=>'add_item',
+			'text'=> $clss[CL_BANNER_CLIENT]['name'], 
+			'link'=>aw_url_change_var(array(
+				'action' => 'new',
+				'parent' => $arr['obj_inst']->id(),
+				'alias_to' => $alias_to,
+				'reltype' => 1, // CL_BANNER.RELTYPE_LOCATION
+				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				"class" => "banner_client",
+			))
+		));
+	}
+
+	
+
+
 	function init_prob_tbl(&$t)
 	{
 		$t->define_field(array(
@@ -137,7 +199,7 @@ class banner extends class_base
 
 		$t->define_field(array(
 			"name" => "prob",
-			"caption" => t("N&auml;itamise t&otilde;en&auml;osuse %"),
+			"caption" => t("N&auml;itamise t&otilde;en&auml;osus"),
 			"align" => "center"
 		));
 	}
@@ -200,7 +262,6 @@ class banner extends class_base
 	{
 		$baids = array();
 		$cnt = 0;
-		$t = time();
 		// selektime k6ik bannerid selle kliendi kohta. 
 		$g_obj = obj($gid);
 		$bbs = array();
@@ -225,28 +286,25 @@ class banner extends class_base
 				AND objects.status = 2 
 				AND (clicks <= max_clicks OR (max_clicks is null OR max_clicks = 0)) 
 				AND (views <= max_views OR (max_views is null OR max_views = 0)) 
+			ORDER BY RAND()
 		";
 		$this->db_query($q);
 
-		$bans = array();
-		$baids = array();
-		$found = false;
+		$sum = 0;
 		while ($row = $this->db_next())
 		{
-			$bans[] = $row;
 			$baids[$cnt++] = $row;
-			if ($row["probability"] > 0)
-			{
-				$found = true;
-			}
+			$sum += $row["pb"];
 		}
 
 		if ($cnt > 0)
 		{
 			srand ((double) microtime() * 10000000);
-			if ($found == false)
+			if ($sum == 0)
 			{
-				$bid = $baids[array_rand($baids)]["id"];
+				// If all %-s are zero, all have equal chances
+				// we can just pick first, as list was randomized in SQL
+				$bid = $baids[0]["id"];
 				if (!$bid)
 				{
 					$this->error_banner($die);
@@ -255,19 +313,18 @@ class banner extends class_base
 			else
 			{
 				// select the banner by it's probability. 
-				// so. we pick a number between one and 100
-				// and if that number is <= the banners probability, we pick that banner
-				$num = 0;
-				$found = false;
-				while (!$found)
+				// probability of every banner = it's % / sum of all % 
+				// banners with 0% have no chance now! (unless all are 0, then previous block runs)	
+				$r = rand(1, $sum);
+				$pb = 1;
+				for ($i=1; $i<=$cnt; $i++)
 				{
-					$r = rand(0,101);
-					if ($r <= $baids[$num]["pb"] )
+					if ($r >= $pb && $r < ($pb+$baids[$i-1]["pb"]))
 					{
-						$bid = $baids[$num]["id"];
-						$found = true;
+						$bid = $baids[$i-1]["id"];
+						break;
 					}
-					$num = ($num+1)%$cnt;
+					$pb += $baids[$i-1]["pb"];
 				}
 			}
 			return obj($bid);
