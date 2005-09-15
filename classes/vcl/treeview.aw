@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.48 2005/05/19 10:56:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/treeview.aw,v 1.49 2005/09/15 12:42:26 duke Exp $
 // treeview.aw - tree generator
 /*
 
@@ -319,7 +319,7 @@ class treeview extends class_base
 		// that node directly.
 		$this->itemdata[$item["id"]] = $item;
 		$this->items[$parent][] = &$this->itemdata[$item["id"]];
-		if (isset($item["is_open"]))
+		if (!empty($item["is_open"]))
 		{
 			$this->open_nodes[] = $item["id"];
 		};
