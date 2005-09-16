@@ -8,10 +8,23 @@
             <method>serialize</method>
             <type>textbox</type>
             <caption>Mitu viimast</caption>
+            <comment>Mitut viimast dokumenti n&amp;auml;idata</comment>
+      </property>
+      <property>
+            <name>only_active_period</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <caption>Ainult aktiivsest perioodist</caption>
+            <comment>N&amp;auml;ita dokumente ainult aktiivsest perioodist</comment>
       </property>
       <classinfo>
             <syslog_type>ST_AUTHOR</syslog_type>
             <no_status>1</no_status>
+            <no_comment>1</no_comment>
       </classinfo>
 </properties>
 

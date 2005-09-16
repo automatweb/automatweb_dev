@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.4 2005/09/15 15:40:18 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.5 2005/09/16 11:48:56 dragut Exp $
 // author.aw - Autori artiklid 
 /*
 
-@classinfo syslog_type=ST_AUTHOR no_status=1
+@classinfo syslog_type=ST_AUTHOR no_status=1 no_comment=1
 
 @default table=objects
 @default group=general
@@ -12,6 +12,11 @@
 
 @property limit type=textbox 
 @caption Mitu viimast
+@comment Mitut viimast dokumenti n&auml;idata
+
+@property only_active_period type=checkbox ch_value=1
+@caption Ainult aktiivsest perioodist
+@comment N&auml;ita dokumente ainult aktiivsest perioodist
 
 */
 
@@ -52,7 +57,7 @@ class author extends class_base
 		switch($data["name"])
                 {
 			case "limit":
-				$data["value"] = (int)$data["value"];
+		//		$data["value"] = (int)$data["value"];
 				break;
 
 		}
@@ -74,21 +79,160 @@ class author extends class_base
 
 	function show($arr)
 	{
-		$ob = new object($arr["id"]);
-		$par_obj = new object($ob->parent());
-		$this->lim = (int)$ob->prop("limit");
+		$o = new object($arr["id"]);
+		$par_obj = new object($o->parent());
+
+		$this->lim = (int)$o->prop("limit");
 		if (empty($this->lim))
 		{
 			$this->lim = 10;
 		};
 		return $this->author_docs(array(
-			"author" => $ob->name(),
-			"limit" => $ob->prop("limit"),
-
+			"obj_inst" => $o,
 		));
 //		return $this->author_docs($par_obj->name());
 	}
 
+	////
+	// !This will list all documents created by an author
+        function author_docs($arr)
+        {
+
+		$author = $arr['obj_inst']->prop("name");
+		$limit = $arr['obj_inst']->prop("limit");
+		$only_active_period = $arr['obj_inst']->prop("only_active_period");
+
+		$this->read_template("show.tpl");
+
+// ok, i need a functionality to show documents only from active periods
+                $perstr = "";
+                if (aw_ini_get("search_conf.only_active_periods"))
+                {
+                        $pei = get_instance(CL_PERIOD);
+                        $plist = $pei->period_list(0,false,1);
+                        $perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
+                }
+
+		// composing parameters for documents object_list
+		$object_list_parameters = array(
+			"class_id" => CL_DOCUMENT,
+			"author" => $author,
+			"sort_by" => "objects.created DESC",
+		);
+		
+		// is there set a limit, how many documents should be displayed?
+		if (!empty($limit) || $limit == "0")
+		{
+			$object_list_parameters['limit'] = $limit;
+		}
+
+		if (!empty($only_active_period))
+		{
+			$object_list_parameters['period'] = aw_global_get("act_per_id");
+		}
+
+		$documents = new object_list($object_list_parameters);
+
+		$retval = "";
+		foreach ($documents->arr() as $document)
+		{
+			$document_id = $document->id();
+
+			// so, document comments are not objects yet, so, the only way to get them, is via sql
+			$comments_count = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$document_id'","cnt");
+			$this->vars(array(
+				"link" => obj_link($document_id),
+				"title" => $document->name(),
+				"comments_link" => $this->mk_my_orb("show_threaded", array("board" => $document_id), "forum"),
+				"comments_count" => $comments_count,
+			));
+
+			// if there are comments, then parse the HAS_COMMENTS sub
+			$has_comments  = "";
+                        if ($comments_count > 0)
+                        {
+                                $has_comments = $this->parse("HAS_COMMENTS");
+                        }
+                        $this->vars(array("HAS_COMMENTS" => $has_comments));
+
+                        $retval .= $this->parse("AUTHOR_DOCUMENT");
+
+		}
+                return $retval;
+        }
+/*
+	function author_docs($author)
+	{
+		$lsu = aw_ini_get("menuedit.long_section_url");
+		//$_lim = aw_ini_get("document.max_author_docs");
+
+		$ids = $this->get_author_doc_ids(array(
+			"author" => $author,
+		));
+
+		$this->read_template("show.tpl");
+		$idarr = join(",",$ids);
+
+		$comm_q = "SELECT count(*) AS cnt,board_id FROM comments
+					WHERE board_id IN ($idarr) GROUP BY board_id";
+		$comm_counts = array();
+		$this->db_query($comm_q);
+		while($row = $this->db_next())
+		{
+			$comm_counts[$row["board_id"]] = $row["cnt"];
+		};
+
+		$perinst = get_instance(CL_PERIOD);
+
+		foreach($ids as $docid)
+		{
+			$num_comments = !empty($comm_counts[$docid]) ? $comm_counts[$docid] : 0;
+
+			$docobj = new object($docid);
+			if ($this->can("view",$docobj->parent()))
+			{
+				$par = new object($docobj->parent());
+			};
+
+			$per_oid = $perinst->get_oid_for_id($docobj->period());
+			$per_obj = new object($per_oid);
+
+			if ($lsu)
+			{
+				$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$docid;
+			}
+			else
+			{
+				$link = $this->cfg["baseurl"]."/".$docid;
+			}
+
+			$this->vars(array(
+				"link" => $link,
+				"comments" => $num_comments,
+				"title" => strip_tags($docobj->name()),
+				"topic_name" => $par->name(),
+				"period_name" => $per_obj->name(),
+				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
+			));
+			$hc = "";
+			if ($num_comments > 0)
+			{
+				$hc = $this->parse("HAS_COMM");
+			}
+
+			$this->vars(array("HAS_COMM" => $hc));
+
+			$c.=$this->parse("AUTHOR_DOC");
+		}
+		$this->vars(array(
+			"AUTHOR_DOC" => $c,
+		));
+		return $this->parse();
+	}
+*/
+
+
+	// This is used at least in crm_person class, so it cannot be removed
 	function get_docs_by_author($arr)
 	{
 		$aname = $arr["author"];
@@ -217,141 +361,6 @@ class author extends class_base
 		};
 		return array($nav,$ids);
 	}
-
-	////
-	// !This will list all documents created by an author
-/*
-	function author_docs($author)
-	{
-		$lsu = aw_ini_get("menuedit.long_section_url");
-		//$_lim = aw_ini_get("document.max_author_docs");
-
-		$ids = $this->get_author_doc_ids(array(
-			"author" => $author,
-		));
-
-		$this->read_template("show.tpl");
-		$idarr = join(",",$ids);
-
-		$comm_q = "SELECT count(*) AS cnt,board_id FROM comments
-					WHERE board_id IN ($idarr) GROUP BY board_id";
-		$comm_counts = array();
-		$this->db_query($comm_q);
-		while($row = $this->db_next())
-		{
-			$comm_counts[$row["board_id"]] = $row["cnt"];
-		};
-
-		$perinst = get_instance(CL_PERIOD);
-
-		foreach($ids as $docid)
-		{
-			$num_comments = !empty($comm_counts[$docid]) ? $comm_counts[$docid] : 0;
-
-			$docobj = new object($docid);
-			if ($this->can("view",$docobj->parent()))
-			{
-				$par = new object($docobj->parent());
-			};
-
-			$per_oid = $perinst->get_oid_for_id($docobj->period());
-			$per_obj = new object($per_oid);
-
-			if ($lsu)
-			{
-				$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$docid;
-			}
-			else
-			{
-				$link = $this->cfg["baseurl"]."/".$docid;
-			}
-
-			$this->vars(array(
-				"link" => $link,
-				"comments" => $num_comments,
-				"title" => strip_tags($docobj->name()),
-				"topic_name" => $par->name(),
-				"period_name" => $per_obj->name(),
-				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
-			));
-			$hc = "";
-			if ($num_comments > 0)
-			{
-				$hc = $this->parse("HAS_COMM");
-			}
-
-			$this->vars(array("HAS_COMM" => $hc));
-
-			$c.=$this->parse("AUTHOR_DOC");
-		}
-		$this->vars(array(
-			"AUTHOR_DOC" => $c,
-		));
-		return $this->parse();
-	}
-*/
-        function author_docs($arr)
-        {
-
-		$author = $arr['author'];
-		$_lim = $arr['limit'];
-		
-		$this->read_template("show.tpl");
-                $lsu = aw_ini_get("menuedit.long_section_url");
-
-//                $_lim = aw_ini_get("document.max_author_docs");
-                if ($_lim)
-                {
-                        $lim = "LIMIT ".$_lim;
-                }
-                $perstr = "";
-                if (aw_ini_get("search_conf.only_active_periods"))
-                {
-                        $pei = get_instance(CL_PERIOD);
-                        $plist = $pei->period_list(0,false,1);
-                        $perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
-                }
-                $sql = "
-                        SELECT docid,title
-                        FROM documents
-                                LEFT JOIN objects ON objects.oid = documents.docid
-                        WHERE author = '$author' AND objects.status = 2 $perstr
-                        ORDER BY objects.created DESC $lim
-                ";
-                $this->db_query($sql);
-                while ($row = $this->db_next())
-                {
-                        $this->save_handle();
-                        $num_comments = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$row[docid]'","cnt");
-                        $this->restore_handle();
-
-                        if ($lsu)
-                        {
-                                $link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$row["docid"];
-                        }
-                        else
-                        {
-                                $link = $this->cfg["baseurl"]."/".$row["docid"];
-                        }
-
-                        $this->vars(array(
-                                "link" => $link,
-                                "comments" => $num_comments,
-                                "title" => strip_tags($row["title"]),
-                                "comm_link" => $this->mk_my_orb("show_threaded",array("board" => $row["docid"]),"forum"),
-                        ));
-                        $hc = "";
-                        if ($num_comments > 0)
-                        {
-                                $hc = $this->parse("HAS_COMM");
-                        }
-
-                        $this->vars(array("HAS_COMM" => $hc));
-
-                        $c.=$this->parse("AUTHOR_DOC");
-                }
-                return $c;
-        }
 
 }
 ?>
