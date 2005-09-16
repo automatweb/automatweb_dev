@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.87 2005/09/14 09:41:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.88 2005/09/16 16:11:21 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -664,8 +664,14 @@ class object_treeview_v2 extends class_base
 			}
 		}
 
+		// XXX
 
-		
+		// ok, lets get those fields - aw datasource object seems to give me full prop info too
+		if (method_exists($d_inst, "get_fields"))
+		{
+			$sel_columns_full_prop_info = $d_inst->get_fields($d_o, true);
+		}
+
 		// if there are set some datasource fields to be displayed in one table field
 
 		$sel_columns_fields = new aw_array($ih_ob->meta("sel_columns_fields"));
@@ -704,7 +710,6 @@ class object_treeview_v2 extends class_base
 							$ol_item[$sel_columns_fields_key] .= $value['sep'];
 						}
 						$ol_item[$sel_columns_fields_key] .= $value['left_encloser'];
-
 						if ($value["field"] == "mod_date")
 						{
 							$scf_val = date("d.m.Y H:i", $ol_item[$value['field']]);
@@ -905,7 +910,8 @@ class object_treeview_v2 extends class_base
 				"col_list" => $col_list,
 				"edit_columns" => $edit_columns,
 				"pfk" => $ob,
-				"style_obj" => $style_obj
+				"style_obj" => $style_obj,
+				"sel_columns_full_prop_info" => $sel_columns_full_prop_info,
 			));
 			$group_name = $odata[$group_field];
 
@@ -1650,6 +1656,7 @@ class object_treeview_v2 extends class_base
 			if ($sel_cols[$colid] == 1)
 			{
 				$content = (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid]);
+				$content = (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false) ? date("d.m.Y H:i", $arr[$colid]) : $arr[$colid];
 				if (isset($trs[$colid]) && count($trs[$colid]))
 				{
 					foreach($trs[$colid] as $tr_id)
