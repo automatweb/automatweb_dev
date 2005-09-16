@@ -27,4 +27,13 @@ $ol2 = new object_list(array(
 	"class_id" => CL_BAR,
 	"cool_property" => true
 ));
+
+// it is possible to add sorting rules to object_list parameters
+// they should be "table_name.field_name ASC|DESC"
+
+$ol3 = new object_list(array(
+	"name" => "%foo%",
+	"class_id" => CL_BAR,
+	"sort_by" => "objects.created DESC",
+));
 #/php#
