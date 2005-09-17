@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.5 2005/09/16 11:48:56 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/author.aw,v 1.6 2005/09/17 20:47:55 dragut Exp $
 // author.aw - Autori artiklid 
 /*
 
@@ -49,21 +49,18 @@ class author extends class_base
 		return $retval;
 	}
 	*/
-
+	/*
 	function set_property($arr = array())
 	{
 		$data = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($data["name"])
                 {
-			case "limit":
-		//		$data["value"] = (int)$data["value"];
-				break;
 
 		}
 		return $retval;
 	}	
-
+	*/
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -79,18 +76,9 @@ class author extends class_base
 
 	function show($arr)
 	{
-		$o = new object($arr["id"]);
-		$par_obj = new object($o->parent());
-
-		$this->lim = (int)$o->prop("limit");
-		if (empty($this->lim))
-		{
-			$this->lim = 10;
-		};
 		return $this->author_docs(array(
-			"obj_inst" => $o,
+			"obj_inst" => new object($arr["id"]),
 		));
-//		return $this->author_docs($par_obj->name());
 	}
 
 	////
@@ -104,15 +92,6 @@ class author extends class_base
 
 		$this->read_template("show.tpl");
 
-// ok, i need a functionality to show documents only from active periods
-                $perstr = "";
-                if (aw_ini_get("search_conf.only_active_periods"))
-                {
-                        $pei = get_instance(CL_PERIOD);
-                        $plist = $pei->period_list(0,false,1);
-                        $perstr = " and objects.period IN (".join(",", array_keys($plist)).")";
-                }
-
 		// composing parameters for documents object_list
 		$object_list_parameters = array(
 			"class_id" => CL_DOCUMENT,
@@ -125,20 +104,23 @@ class author extends class_base
 		{
 			$object_list_parameters['limit'] = $limit;
 		}
-
+		
+		// if is set, that documents only from active period should be displayed
 		if (!empty($only_active_period))
 		{
 			$object_list_parameters['period'] = aw_global_get("act_per_id");
 		}
 
+		// so lets get the documents:
 		$documents = new object_list($object_list_parameters);
 
+		// and parse the output:
 		$retval = "";
 		foreach ($documents->arr() as $document)
 		{
 			$document_id = $document->id();
 
-			// so, document comments are not objects yet, so, the only way to get them, is via sql
+			// so, document comments are not objects yet, so, the only way to get them, is via sql query
 			$comments_count = $this->db_fetch_field("SELECT count(*) AS cnt FROM comments WHERE board_id = '$document_id'","cnt");
 			$this->vars(array(
 				"link" => obj_link($document_id),
@@ -160,77 +142,6 @@ class author extends class_base
 		}
                 return $retval;
         }
-/*
-	function author_docs($author)
-	{
-		$lsu = aw_ini_get("menuedit.long_section_url");
-		//$_lim = aw_ini_get("document.max_author_docs");
-
-		$ids = $this->get_author_doc_ids(array(
-			"author" => $author,
-		));
-
-		$this->read_template("show.tpl");
-		$idarr = join(",",$ids);
-
-		$comm_q = "SELECT count(*) AS cnt,board_id FROM comments
-					WHERE board_id IN ($idarr) GROUP BY board_id";
-		$comm_counts = array();
-		$this->db_query($comm_q);
-		while($row = $this->db_next())
-		{
-			$comm_counts[$row["board_id"]] = $row["cnt"];
-		};
-
-		$perinst = get_instance(CL_PERIOD);
-
-		foreach($ids as $docid)
-		{
-			$num_comments = !empty($comm_counts[$docid]) ? $comm_counts[$docid] : 0;
-
-			$docobj = new object($docid);
-			if ($this->can("view",$docobj->parent()))
-			{
-				$par = new object($docobj->parent());
-			};
-
-			$per_oid = $perinst->get_oid_for_id($docobj->period());
-			$per_obj = new object($per_oid);
-
-			if ($lsu)
-			{
-				$link = $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$docid;
-			}
-			else
-			{
-				$link = $this->cfg["baseurl"]."/".$docid;
-			}
-
-			$this->vars(array(
-				"link" => $link,
-				"comments" => $num_comments,
-				"title" => strip_tags($docobj->name()),
-				"topic_name" => $par->name(),
-				"period_name" => $per_obj->name(),
-				"comm_link" => $this->mk_my_orb("show_threaded",array("board" => $docid),"forum"),
-			));
-			$hc = "";
-			if ($num_comments > 0)
-			{
-				$hc = $this->parse("HAS_COMM");
-			}
-
-			$this->vars(array("HAS_COMM" => $hc));
-
-			$c.=$this->parse("AUTHOR_DOC");
-		}
-		$this->vars(array(
-			"AUTHOR_DOC" => $c,
-		));
-		return $this->parse();
-	}
-*/
-
 
 	// This is used at least in crm_person class, so it cannot be removed
 	function get_docs_by_author($arr)
