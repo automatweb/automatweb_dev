@@ -1,3 +1,37 @@
+<script type="text/javascript">
+function make_editable(name)
+{
+	var content = document.getElementById(name + '_content');
+	var editor = document.getElementById(name);
+	var editordiv = document.getElementById(name + '_editor');
+	editor.value = content.innerHTML;
+	editordiv.style.display = 'block';
+	content.style.display = 'none';
+}
+
+function save_changes(name)
+{
+	var content = document.getElementById(name + '_content');
+	var editor = document.getElementById(name);
+	var editordiv = document.getElementById(name + '_editor');
+	content.innerHTML = editor.value;
+	editordiv.style.display = 'none';
+	content.style.display = 'block';
+}
+</script>
+
+<!-- SUB: my_textarea -->
+<div id="{VAR:name}_editor" style="display: none;">
+Tee soovitud muudatused ja siis kliki <a href="javascript:save_changes('{VAR:name}');">Valmis</a><br/>
+<textarea id="{VAR:name}" name="{VAR:name}" cols="{VAR:cols}" rows="{VAR:rows}">
+{VAR:value}
+</textarea>
+</div>
+<div id="{VAR:name}_content" style="white-space:pre; width: {VAR:divcols}; height: {VAR:divrows};" ondblclick="make_editable('{VAR:name}')">
+{VAR:value}
+</div>
+<!-- END SUB: my_textarea -->
+
 <table border='0' class="aw04contenttable" align="center" cellpadding="0" cellspacing="0" width="100%">
 <!-- SUB: SHOW_CHANGEFORM -->
 <form action='{VAR:handler}.{VAR:ext}' method='{VAR:method}' name='changeform' enctype='multipart/form-data' {VAR:form_target}>
@@ -81,6 +115,17 @@
 
 <!-- SUB: GRIDITEM -->
 	<div class="aw04gridcell_caption">{VAR:caption}: {VAR:element}</div>
+<!-- END SUB: GRIDITEM -->
+
+<!-- SUB: GRIDITEM -->
+	<div class="aw04gridcell_caption">
+	<!-- SUB: CAPTION_TOP -->
+	TOP: {VAR:caption}:<br/>
+	<!-- END SUB: CAPTION_TOP -->
+	<!-- SUB: CAPTION_LEFT -->
+	LEFT: {VAR:caption}:
+	<!-- END SUB: CAPTION -->
+	{VAR:element}</div>
 <!-- END SUB: GRIDITEM -->
 
 <!-- SUB: GRIDITEM_NO_CAPTION -->
