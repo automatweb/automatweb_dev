@@ -1,4 +1,4 @@
-filters the object list, or creates a new list from the filter
+creates a new list from the filter, basically same as the constructor
 
 <b>errors:</b>
 none
@@ -14,12 +14,14 @@ number of objects in the list after filtering
 
 <b>examples:</b>
 #php#
+// creates a list of objects that are of type CL_BAR, name ontains foo and cool_property equals true
 $ol = new object_list(array(
 		"name" => "%foo%",
 		"class" => CL_BAR,
 		"cool_property" => true
 	));
 
+// creates a list of all objects in the system, that have status = STAT_ACTIVE, the previous list is discarded
 $ol->filter(array(
 		"status" => STAT_ACTIVE
 	)); 
