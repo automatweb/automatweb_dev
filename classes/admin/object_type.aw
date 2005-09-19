@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.17 2005/03/18 11:46:52 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/object_type.aw,v 1.18 2005/09/19 09:36:39 voldemar Exp $
 // object_type.aw - objekti klass (lisamise puu jaoks)
 /*
 	@default table=objects
@@ -7,7 +7,7 @@
 
 	@property type type=select field=subclass
 	@caption Objektitüüp
-	
+
 	@default field=meta
 	@default method=serialize
 
@@ -24,7 +24,7 @@
 	@groupinfo defobj caption="Aktiivne objekt"
 
 	@classinfo relationmgr=yes syslog_type=ST_OBJECT_TYPE
-	
+
 	@reltype OBJECT_CFGFORM value=1 clid=CL_CFGFORM
 	@caption Seadete vorm
 
@@ -87,6 +87,7 @@ class object_type extends class_base
 			case "configuration":
 				$arr["obj_inst"]->set_meta("classificator",$arr["request"]["classificator"]);
 				$arr["obj_inst"]->set_meta("clf_type",$arr["request"]["clf_type"]);
+				$arr["obj_inst"]->set_meta("clf_default",$arr["request"]["clf_default"]);
 				break;
 
 			case "type":
@@ -102,8 +103,9 @@ class object_type extends class_base
 					"class_id" => $this->clid,
 					"subclass" => $arr["obj_inst"]->prop("type"),
 					"lang_id" => array(),
-					));
-				
+					"site_id" => array(),
+				));
+
 				for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 				{
 					if ($o->flag(OBJ_FLAG_IS_SELECTED) && $o->id() != $data["value"])
@@ -129,6 +131,7 @@ class object_type extends class_base
 			"class_id" => CL_OBJECT_TYPE,
 			"subclass" => $arr["clid"],
 			"lang_id" => array(),
+			"site_id" => array(),
 		));
 		$rv = false;
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
@@ -166,7 +169,7 @@ class object_type extends class_base
 
 		$mx = $obj->meta("classificator");
 		$ct = $obj->meta("clf_type");
-
+		$clf_defaults = $obj->meta("clf_default");
 
 		$prop = $arr["prop"];
 
@@ -176,7 +179,6 @@ class object_type extends class_base
 			"clid" => $obj->prop("type"),
 			"type" => "classificator",
 		));
-
 		$types = array(
 			"" => t("-vali-"),
 			"mselect" => t("multiple select"),
@@ -184,8 +186,8 @@ class object_type extends class_base
 			"checkboxes" => t("checkboxid"),
 			"radiobuttons" => t("radiobuttons"),
 		);
-
 		$rv = array();
+
 		foreach($defaults as $key => $val)
 		{
 			$rv["c".$key] = array(
@@ -211,7 +213,52 @@ class object_type extends class_base
 				"selected" => $ct[$key],
 				"parent" => "c".$key,
 			);
-		};
+
+			if (isset ($mx[$key]))
+			{
+				$classificator = get_instance(CL_CLASSIFICATOR);
+				$prop_args = array (
+					"clid" => $obj->prop("type"),
+					"name" => $key,
+				);
+				list ($options, $name, $use_type) = $classificator->get_choices($prop_args);
+
+				$rv["d".$key] = array(
+					"name" => "clf_default[" . $key . "]",
+					"caption" => t("Vaikimisi välimus"),
+					"options" => $options->names(),
+					"value" => $clf_defaults[$key],
+					"selected" => $clf_defaults[$key],
+					"parent" => "c".$key,
+				);
+
+				switch ($ct[$key])
+				{
+					case "mselect":
+						$rv["d".$key]["type"] = "select";
+						$rv["d".$key]["multiple"] = 1;
+						break;
+
+					case "select":
+						$rv["d".$key]["type"] = "select";
+						break;
+
+					case "checkboxes":
+						$rv["d".$key]["type"] = "chooser";
+						$rv["d".$key]["multiple"] = 1;
+						break;
+
+					case "radiobuttons":
+						$rv["d".$key]["type"] = "chooser";
+						break;
+
+					default:
+						$rv["d".$key]["type"] = "text";
+						$rv["d".$key]["value"] = "";
+						break;
+				}
+			}
+		}
 
 		return $rv;
 	}

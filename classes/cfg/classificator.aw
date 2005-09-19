@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.10 2005/05/23 09:30:21 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/classificator.aw,v 1.11 2005/09/19 09:36:39 voldemar Exp $
 
 /*
 
@@ -18,7 +18,7 @@
 @property folders type=relpicker reltype=RELTYPE_FOLDER multiple=1
 @caption Kus kehtib
 
-@property clids type=select multiple=1 
+@property clids type=select multiple=1
 @caption Klassid millele kehtib
 
 @reltype FOLDER value=1 clid=CL_MENU
@@ -67,10 +67,12 @@ class classificator extends class_base
 	function init_vcl_property($arr)
 	{
 		$prop = &$arr["property"];
+
 		if ($arr["view"])
 		{
 			$this->view = 1;
-		};
+		}
+
 		if($prop["recursive"] == 1)
 		{
 			$this->recursive = 1;
@@ -97,9 +99,9 @@ class classificator extends class_base
 		if (is_oid($prop["object_type_id"]))
 		{
 			$ch_args["object_type_id"] = $prop["object_type_id"];
-		};
-		
-		list($choices,$name,$use_type) = $this->get_choices($ch_args);
+		}
+
+		list($choices,$name,$use_type,$default_value) = $this->get_choices($ch_args);
 
 		$selected = false;
 		$connections = array();
@@ -116,14 +118,13 @@ class classificator extends class_base
 				{
 					$selected = $conn->prop("to");
 					$connections[$selected] = $selected;
-				};
+				}
 			}
 			else
 			{
 				// try to figure out values from some place else
 				$connections = $prop["value"];
-			};
-
+			}
 
 			if (empty($prop["value"]))
 			{
@@ -134,9 +135,16 @@ class classificator extends class_base
 				else
 				{
 					$prop["value"] = $selected;
-				};
-			};
-		};
+				}
+			}
+		}
+
+		if (!empty ($default_value) and empty ($prop["value"]))
+		{  ### set default value
+			$prop["default"] = $default_value;
+		}
+
+
 		/* whatta hell is this thing doing here anyway?
 		// it's not very nice to override caption
 		if (!empty($name))
@@ -145,14 +153,17 @@ class classificator extends class_base
 			// so I know that these are object in that array
 		};
 		*/
+
 		if (empty($use_type))
 		{
 			$use_type = $prop["mode"];
-		};
+		}
+
 		if ($this->view)
 		{
 			$use_type = "view";
 		}
+
 		switch($use_type)
 		{
 			case "checkboxes":
@@ -198,7 +209,7 @@ class classificator extends class_base
 	function get_vcl_property($arr)
 	{
 		$vals = array();
-		
+
 		$prop = &$arr["property"];
 		$options = safe_array($prop["options"]);
 		$values = is_array($prop["value"]) ? $prop["value"] : array($prop["value"]);
@@ -227,20 +238,23 @@ class classificator extends class_base
 			$ff = $ot->get_obj_for_class(array(
 				"clid" => $arr["clid"],
 			));
-		};
+		}
 
 		//if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
-		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type"))) 
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->meta("object_type")))
 		{
 			$custom_ff = $arr["obj_inst"]->meta("object_type");
 			if (is_oid($custom_ff))
 			{
 				$ff = $custom_ff;
-			};
-		};
+			}
+		}
+
 		$oft = new object($ff);
 		$clf = $oft->meta("classificator");
-		
+		$clf_default = $oft->meta("clf_default");
+		$default_value = $clf_default[$arr["name"]];
+
 		$name = $arr["name"];
 		// if name is formatted like userdata[uservar1], convert it to just uservar1
 		if (false !== strpos($name,"["))
@@ -261,7 +275,9 @@ class classificator extends class_base
 			"parent" => $parent,
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"site_id" => array(),
 		);
+
 		if($arr["sort_by"])
 		{
 			$vars["sort_by"] = $arr["sort_by"];
@@ -270,6 +286,7 @@ class classificator extends class_base
 		{
 			$vars["sort_by"] = "objects.jrk";
 		}
+
 		if($this->recursive == 1)
 		{
 			$asd = new object_tree($vars);
@@ -279,8 +296,8 @@ class classificator extends class_base
 		{
 			$olx = new object_list($vars);
 		}
-		return array($olx,$ofto->name(),$use_type);
 
+		return array($olx,$ofto->name(),$use_type, $default_value);
 	}
 
 	function process_vcl_property($arr)
@@ -319,7 +336,8 @@ class classificator extends class_base
 			if (empty($ids[$item]))
 			{
 				continue;
-			};
+			}
+
 			if (is_oid($item))
 			{
 				// create the connection if it didn't exist
@@ -330,11 +348,10 @@ class classificator extends class_base
 						"to" => $item,
 						"reltype" => constant($property["reltype"]),
 					));
-				};
+				}
 				unset($connections[$item]);
-
-			};
-		};
+			}
+		}
 
 		//print "1 = <br>";
 		//arr($connections);
@@ -350,9 +367,8 @@ class classificator extends class_base
 			};
 		};
 
-
-			// XXX: would be nice if connect would recognize symbolic reltypes
-			// and this belongs to some place else, don't you think so?
+		// XXX: would be nice if connect would recognize symbolic reltypes
+		// and this belongs to some place else, don't you think so?
 	}
 
 	////
@@ -386,7 +402,7 @@ class classificator extends class_base
 			$active_object_id = $ot->get_obj_for_class(array(
 				"clid" => $arr["clid"],
 			));
-		
+
 			if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 			{
 				$custom_ff = $arr["obj_inst"]->meta("object_type");
@@ -404,6 +420,7 @@ class classificator extends class_base
 			"parent" => $clinf[$arr["name"]],
 			"class_id" => CL_META,
 			"lang_id" => array(),
+			"site_id" => array(),
 			"sort_by" => "objects.jrk"
 		));
 
@@ -413,7 +430,7 @@ class classificator extends class_base
 	////
 	// !returns a list of id => name of classificators for specified folder/clid combo
 	// parameters:
-	//	clid - class id 
+	//	clid - class id
 	//	parent - folder
 	function get_clfs($arr)
 	{
@@ -435,13 +452,13 @@ class classificator extends class_base
 			$name = $o->name();
 			$found = false;
 			$this->db_query("
-				SELECT 
-					o.name as name,o.oid as oid 
-				FROM 
+				SELECT
+					o.name as name,o.oid as oid
+				FROM
 					classificator2menu c
 					LEFT JOIN objects o ON o.oid = c.clf_id
-				WHERE 
-					c.class_id = '$clid' AND 
+				WHERE
+					c.class_id = '$clid' AND
 					c.menu_id = '$id'
 			");
 			while($row = $this->db_next())
