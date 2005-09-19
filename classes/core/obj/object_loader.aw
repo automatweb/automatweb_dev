@@ -195,7 +195,20 @@ class _int_object_loader extends core
 		else
 		if (is_array($param))
 		{
-			return $param;
+			$res = array();
+			foreach($param as $item)
+			{
+				if (is_object($item) && get_class($item) == "object")
+				{
+					$res[] = $item->id();
+				}
+				else
+				if (is_oid($item))
+				{
+					$res[] = $item;
+				}
+			}
+			return $res;
 		}
 
 		error::raise(array(
