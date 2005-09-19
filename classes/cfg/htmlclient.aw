@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.115 2005/09/05 14:10:43 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.116 2005/09/19 12:37:04 duke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -877,6 +877,8 @@ class htmlclient extends aw_template
 			$tp->vars(array(
 				"help" => $this->vars["help"],
 				"help_url" => $this->config["help_url"],
+				"translate_url" => $this->config["translate_url"],
+				"translate_text" => $this->config["translate_text"],
 				"more_help_text" => $this->config["more_help_text"],
 				"close_help_text" => $this->config["close_help_text"],
 				"open_help_text" => $this->config["open_help_text"],
@@ -1046,6 +1048,10 @@ class htmlclient extends aw_template
 				{
 					//$arr["style"] = "width: 100%;";
 				};
+				//$arr["divcols"] = 8 * $arr["cols"];
+				//$arr["divrows"] = 12 * $arr["rows"];
+				$this->vars($arr);
+				//$retval = $this->parse("my_textarea");
 				$retval = html::textarea($arr);
 				break;
 
@@ -1293,9 +1299,28 @@ class htmlclient extends aw_template
 
 	function put_griditem($arr)
 	{
+		$captionside = "left";
+		// support TOP and LEFT for now only
+		$sufix = "";
+		if ($arr["captionside"] == "top")
+		{
+			$captionside = $arr["captionside"];
+		};
+
+		// subtemplate names are uper case:
+		$captionside = strtoupper($captionside);
+
+		// reset all captions
 		$this->vars(array(
 			"caption" => $arr["caption"],
+			"CAPTION_LEFT" => "",
+			"CAPTION_TOP" => "",
 			"element" => $this->draw_element($arr),
+		));
+		// name refers to a VAR inside the template
+		$caption_template = "CAPTION_${captionside}";
+		$this->vars(array(
+			$caption_template => $this->parse($caption_template),
 		));
 		$tpl = "GRIDITEM";
 		if (!empty($arr["no_caption"]))
