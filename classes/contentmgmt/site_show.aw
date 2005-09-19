@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.139 2005/09/01 09:24:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.140 2005/09/19 13:22:43 dragut Exp $
 
 /*
 
@@ -1308,65 +1308,102 @@ class site_show extends class_base
 	function make_langs()
 	{
 		$lang_id = aw_global_get("lang_id");
-		$langs = get_instance("languages");
-		$lar = $langs->listall();
-		$l = "";
 		$uid = aw_global_get("uid");
 
-		if (count($lar) < 2)
+//		$langs = get_instance("languages");
+//		$lar = $langs->listall();
+
+		$all_languages = new object_list(array(
+			"class_id" => CL_LANGUAGE,
+			"status" => STAT_ACTIVE,
+			"lang_id" => array(),
+			"site_id" => array(),
+			"lang_status" => STAT_ACTIVE,
+			"sort_by" => "objects.jrk ASC",
+		));
+
+		$parsed_language = "";
+
+//		if (count($lar) < 2)
+		if ($all_languages->count() < 2)
 		{
 			// crap, we need to insert the sel lang acharset here at least!
-			$sel_lang = $langs->fetch(aw_global_get("lang_id"));
+//			$sel_lang = $langs->fetch(aw_global_get("lang_id"));
+			// seems that this site has only one language, so lets filter its info out:
+			$selected_language = new object_list(array(
+				"class_id" => CL_LANGUAGE,
+				"status" => STAT_ACTIVE,
+			));
+			$selected_language_charset = $selected_language->prop("lang_charset");
 			$this->vars(array(
-				"sel_charset" => $sel_lang["charset"],
-				"charset" => $sel_lang["charset"],
+				"sel_charset" => $selected_language_charset,
+			//	"sel_charset" => $sel_lang["charset"],
+				"charset" => $selected_language_charset,
+			//	"charset" => $sel_lang["charset"],
 				"se_lang_id" => $lang_id,
-				"lang_code" => $sel_lang["acceptlang"]
+				"lang_code" => $selected_language->prop("lang_acceptlang"),
+			//	"lang_code" => $sel_lang["acceptlang"],
 			));
 			return "";
 		}		
 
-		foreach($lar as $row)
+//		foreach($lar as $row)
+		foreach($all_languages->arr() as $language)
 		{
 			$sel_img_url = "";
 			$img_url = "";
-			
+
+
+			$language_meta = aw_unserialize($language->prop("meta"));
+			$language_id = $language->prop("lang_id");
+
 			// if the language has an image
-			if ($row["meta"]["lang_img"])
+//			if ($row["meta"]["lang_img"])
+			if ($language_meta['lang_img'])
 			{
-				if ($lang_id == $row["id"] && $row["meta"]["lang_img_act"])
+//				if ($lang_id == $row["id"] && $row["meta"]["lang_img_act"])
+				if ($lang_id == $language_id && $language_meta['lang_img_act'])
 				{
-					$sel_img_url = $this->image->get_url_by_id($row["meta"]["lang_img_act"]);
+//					$sel_img_url = $this->image->get_url_by_id($row["meta"]["lang_img_act"]);
+					$sel_img_url = $this->image->get_url_by_id($language_meta['lang_img_act']);
 				}
 
-				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
+//				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
+				$img_url = $this->image->get_url_by_id($language_meta['lang_img']);
 			}
 
-			$url = $this->cfg["baseurl"] . "/?set_lang_id=$row[id]";
-			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
+//			$url = $this->cfg["baseurl"] . "/?set_lang_id=$row[id]";
+			$url = $this->cfg['baseurl'] . "/?set_lang_id=$language_id";
+//			if ($row["meta"]["temp_redir_url"] != "" && $uid == "")
+			if ($language_meta['temp_redir_url'] != "" && $uid == "")
 			{
-				$url = $row["meta"]["temp_redir_url"];
+//				$url = $row["meta"]["temp_redir_url"];
+				$url = $language_meta['temp_redir_url'];
 			}
 			$this->vars(array(
-				"name" => $row["name"],
-				"lang_id" => $row["id"],
+			//	"name" => $row["name"],
+				"name" => $language->prop("lang_name"),
+			//	"lang_id" => $row["id"],
+				"lang_id" => $language_id,
 				"lang_url" => $url,
 				"link" => $url,
 				"target" => "",
 				"img_url" => $img_url,
 				"sel_img_url" => $sel_img_url
 			));
-			if ($row["id"] == $lang_id)
+//			if ($row["id"] == $lang_id)
+			if ($language_id == $lang_id) 
 			{
-				if ($this->is_template("SEL_LANG_BEGIN") && $l == "")
+				if ($this->is_template("SEL_LANG_BEGIN") && $parsed_language == "")
 				{
-					$l.=$this->parse("SEL_LANG_BEGIN");
+					$parsed_language .= $this->parse("SEL_LANG_BEGIN");
 				}
 				else
 				{
-					$l.=$this->parse("SEL_LANG");
+					$parsed_language .= $this->parse("SEL_LANG");
 				}
-				$sel_lang = $row;
+//				$sel_lang = $row;
+				$selected_language = $language;
 				$this->vars(array(
 					"sel_lang_img_url" => $img_url,
 					"sel_lang_sel_img_url" => $sel_img_url,
@@ -1374,31 +1411,41 @@ class site_show extends class_base
 			}
 			else
 			{
-				if ($this->is_template("LANG_BEGIN") && $l == "")
+				if ($this->is_template("LANG_BEGIN") && $parsed_language == "")
 				{
-					$l.=$this->parse("LANG_BEGIN");
+					$parsed_language .= $this->parse("LANG_BEGIN");
 				}
 				else
 				{
-					$l.=$this->parse("LANG");
+					$parsed_language .= $this->parse("LANG");
 				}
 			}
 		}
 
-		if (!$sel_lang)
+		if (!$selected_language)
 		{
-			$ll = get_instance("languages");
-			$sel_lang = $ll->fetch(aw_global_get("lang_id"));
+//			$ll = get_instance("languages");
+//			$sel_lang = $ll->fetch(aw_global_get("lang_id"));
+			$selected_language = new object_list(array(
+				"class_id" => CL_LANGUAGE,
+				"status" => STAT_ACTIVE,
+			));
+			$selected_language = $selected_language->begin();
 		}
+		
 		$this->vars(array(
-			"LANG" => $l,
+//			"LANG" => $l,
+			"LANG" => $parsed_language,
 			"SEL_LANG" => "",
 			"SEL_LANG_BEGIN" => "",
 			"LANG_BEGIN" => "",
-			"sel_charset" => $sel_lang["charset"],
-			"charset" => $sel_lang["charset"],
+//			"sel_charset" => $sel_lang["charset"],
+			"sel_charset" => $selected_language->prop("lang_charset"),
+//			"charset" => $sel_lang["charset"],
+			"charset" => $selected_language->prop("lang_charset"),
 			"se_lang_id" => $lang_id,
-			"lang_code" => $sel_lang["acceptlang"]
+//			"lang_code" => $sel_lang["acceptlang"],
+			"lang_code" => $selected_language->prop("lang_acceptlang"),
 		));
 	}
 
@@ -1472,6 +1519,7 @@ class site_show extends class_base
 			"all_data" => true
 		));
 		$l = "";
+arr($l_dat);
 		foreach($ldat as $lc => $ld)
 		{
 			$name = $ld["name"];
