@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.14 2005/08/18 13:31:49 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/persona_import/persona_import.aw,v 1.15 2005/09/20 11:28:42 duke Exp $
 // persona_import.aw - Persona import 
 /*
 
@@ -15,6 +15,9 @@
 
 @property invk type=text store=no
 @caption Import
+
+@property show_xml type=text store=no
+@caption XML
 
 @default group=settings
 
@@ -84,6 +87,14 @@ class persona_import extends class_base
 		{
 			case "last_import":
 				$prop["value"] = locale::get_lc_date($prop["value"],6) . date(" H:i",$prop["value"]);
+				break;
+
+			case "show_xml":
+				$prop["value"] = html::href(array(
+					"url" => $this->mk_my_orb("show_xml",array("id" => 
+						$arr["obj_inst"]->id())),
+					"caption" => t("Näita XMLi"),
+				));
 				break;
 
 			case "invk":
@@ -165,6 +176,31 @@ class persona_import extends class_base
 			$rv["image_folder"] = $obj->prop("aw_image_folder");
 		};
 		return $rv;
+
+
+	}
+
+	/**
+		@attrib name=show_xml 
+		@param id required type=int
+	**/
+	function show_xml($arr)
+	{
+		aw_disable_acl();
+		$obj = new object($arr["id"]);
+
+		$config = $this->get_config($arr);
+
+		$c = get_instance(CL_FTP_LOGIN);
+		$c->connect($config["ftp"]);
+
+		$fqfn = $obj->prop("xml_folder") . "/" . $obj->prop("xml_filename");
+		$fdat = $c->get_file($fqfn);
+		$c->disconnect();
+
+		header("Content-type: text/xml");
+		print $fdat;
+		exit;
 
 
 	}
@@ -290,11 +326,11 @@ class persona_import extends class_base
 		print strlen($fdat) . " bytes of data to proess";
 		print "</h6>";
 
-		/*
-		print "<pre>";
+		
+		/*print "<pre>";
 		print htmlspecialchars($fdat);
 		print "</pre>";
-		*/
+		die();*/
 
 		print t("got data<br>");
 	
@@ -466,6 +502,7 @@ class persona_import extends class_base
 			"class_id" => CL_CRM_PHONE,
 			"parent" => $dir_default,
 			"site_id" => array(),
+			"lang_id" => array()
 		));
 
 		$phones = array_flip($phone_list->names());
@@ -548,7 +585,7 @@ class persona_import extends class_base
 		{
 			//arr($yksus);
 
-			$name = $yksus["NIMETUS"];
+			$name = iconv("UTF-8", "ISO-8859-4",$yksus["NIMETUS"]);
 			$ext_id = $yksus["YKSUS_ID"];
 			$ylem = $yksus["YLEMYKSUS_ID"];
 
@@ -665,7 +702,7 @@ class persona_import extends class_base
 				unset($person_match[$ext_id]);
 				continue;
 			};
-			if (empty($person_match[$ext_id]))
+			if (!is_oid($person_match[$ext_id]))
 			{
 				// create new object
 				$person_obj = new object();
@@ -725,7 +762,30 @@ class persona_import extends class_base
 
 				$person_obj->set_prop("org_section",$sections[$worker["YKSUS_ID"]]);
 				print "sect connect done<br>";
-			};
+			}
+			else
+			if (!empty($worker["YKSUS_ID"]) && !$sections[$worker["YKSUS_ID"]])
+			{
+				// create yksus
+				$yk = new object();
+				$yk->set_parent($dir_default);
+				$yk->set_class_id(CL_CRM_SECTION);
+				$yk->set_prop("ext_id",$worker["YKSUS_ID"]);
+				$yk->set_subclass($worker["YKSUS_ID"]);
+				$yk->set_name(iconv("UTF-8", "ISO-8859-4",$worker["YKSUS_NIMETUS"]));
+				$yk->save();
+
+				$ykid = $yk->id();
+				$sections[$worker["YKSUS_ID"]] = $ykid;
+
+				$person_obj->connect(array(
+					"to" => $ykid,
+					"reltype" => 21, //RELTYPE_SECTION,
+				));
+
+				$person_obj->set_prop("org_section",$ykid);
+				print "sect connect done<br>";
+			}
 
 
  			if (!empty($worker["E_POST"]))
@@ -825,6 +885,7 @@ class persona_import extends class_base
 			
 			// it is not necessary to check whether the connection already exists,
 			// storage basically ignores the connect() if this is the case
+			$_pers_phones = array();
 			foreach($phone_type as $pkey => $pval)
 			{
 				//if (!empty($worker[$pkey]) && !in_array($worker[$pkey],$phones))
@@ -855,7 +916,21 @@ class persona_import extends class_base
 					
 					
 				};
+				$_pers_phones[$worker[$pkey]] = $worker[$pkey];
 			};
+
+			if (is_oid($person_obj->id()))
+			{
+				// now, go over all the phones connected to the person and disconnect the ones that are not in persona
+				foreach($person_obj->connections_from(array("type" => "RELTYPE_PHONE")) as $c)
+				{
+					if (!isset($_pers_phones[$c->prop("to.name")]))
+					{
+						$person_obj->disconnect(array("from" => $c->prop("to")));
+					}
+				}
+			}
+
 			print "phones connected<bR>";
 			flush();
 
@@ -1295,6 +1370,13 @@ class persona_import extends class_base
 							print "<br>";
 						}
 						
+						// re-save image from $pilt_data 
+						$img_o = obj($t->prop("picture"));
+						$fn = $img_o->prop("file");
+						$this->put_file(array(
+							"file" => $fn,
+							"content" => $pilt_data
+						));
 
 						// n
 						print $t->name();
