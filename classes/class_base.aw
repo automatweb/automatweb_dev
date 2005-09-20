@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.415 2005/09/13 11:37:20 dragut Exp $
+// $Id: class_base.aw,v 2.416 2005/09/20 08:52:28 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -1377,7 +1377,7 @@ class class_base extends aw_template
 
 		};
 
-		if (isset($this->classinfo["disable_relationmgr"]))
+		if (!empty($this->classinfo["disable_relationmgr"]))
 		{
 			$this->classinfo["relationmgr"] = false;
 		};
