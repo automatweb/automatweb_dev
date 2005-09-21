@@ -109,6 +109,7 @@ function parse_config($file)
 function init_config($arr)
 {
 	extract($arr);
+	
 
 //	list($micro,$sec) = split(" ",microtime());
 //	$ts_s = $sec + $micro;
@@ -283,6 +284,22 @@ function init_config($arr)
 	unset($td["errors"]);
 	
 	$GLOBALS["cfg"]["__default__short"] = $td;
+
+	if (!empty($GLOBALS["cfg"]["__default"]["session_handler"]))
+	{
+		if ($GLOBALS["cfg"]["__default"]["session_handler"] == "db")
+		{
+			classload("core/aw_session");
+			$ses_class = new aw_session();
+
+			session_set_save_handler (array(&$ses_class, '_open'),
+					  array(&$ses_class, '_close'),
+					  array(&$ses_class, '_read'),
+					  array(&$ses_class, '_write'),
+					  array(&$ses_class, '_destroy'),
+					  array(&$ses_class, '_gc'));
+		}
+	};
 }
 
 // this is separate from ini parsing, because the session is not started yet, when ini file is parsed :(
@@ -612,6 +629,8 @@ function aw_startup()
 
 	// reset aw_cache_* function globals
 	$GLOBALS["__aw_cache"] = array();
+
+
 
 	classload("defs", "core/error", "core/obj/object");
 	_aw_global_init();
