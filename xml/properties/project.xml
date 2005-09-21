@@ -9,87 +9,182 @@
             <caption>Nimi</caption>
       </property>
       <property>
-            <name>status</name>
-            <table>objects</table>
+            <name>code</name>
+            <table>aw_projects</table>
             <group>general2</group>
-            <type>status</type>
-            <field>status</field>
+            <type>textbox</type>
+            <field>aw_code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>state</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>select</type>
+            <field>aw_state</field>
+            <default>1</default>
             <caption>Staatus</caption>
       </property>
       <property>
-            <name>start</name>
+            <name>orderer</name>
             <table>objects</table>
             <group>general2</group>
-            <type>datetime_select</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_ORDERER</reltype>
+            <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
+            <caption>Tellija</caption>
+      </property>
+      <property>
+            <name>implementor</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_IMPLEMENTOR</reltype>
+            <automatic>1</automatic>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Teostaja</caption>
+      </property>
+      <property>
+            <name>start</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>datetime_select</type>
+            <field>aw_start</field>
             <caption>Algus</caption>
       </property>
       <property>
             <name>end</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>datetime_select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_end</field>
             <caption>L&amp;otilde;pp</caption>
       </property>
       <property>
             <name>deadline</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>datetime_select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_deadline</field>
             <caption>Deadline</caption>
       </property>
       <property>
             <name>doc</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>relpicker</type>
             <reltype>RELTYPE_PRJ_DOCUMENT</reltype>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_doc</field>
             <caption>Loe lähemalt</caption>
       </property>
       <property>
             <name>skip_subproject_events</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>general2</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_skip_subproject_events</field>
             <caption>Ära näita alamprojektide sündmusi</caption>
       </property>
       <property>
+            <name>contact_person</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textbox</type>
+            <field>aw_contact_person</field>
+            <caption>Kontaktisik</caption>
+      </property>
+      <property>
+            <name>contact_phone</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textbox</type>
+            <field>aw_contact_phone</field>
+            <caption>Telefon</caption>
+      </property>
+      <property>
+            <name>contact_email</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textbox</type>
+            <field>aw_contact_email</field>
+            <caption>E-post</caption>
+      </property>
+      <property>
+            <name>hrs_guess</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textbox</type>
+            <field>aw_hrs_guess</field>
+            <size>5</size>
+            <caption> Prognoositav tundide arv</caption>
+      </property>
+      <property>
+            <name>prepayment</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textbox</type>
+            <field>aw_prepayment</field>
+            <size>5</size>
+            <caption>Ettemaks</caption>
+      </property>
+      <property>
+            <name>other_side</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>aw_other_side</field>
+            <caption>Vastaspool</caption>
+      </property>
+      <property>
+            <name>description</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>textarea</type>
+            <rows>10</rows>
+            <cols>50</cols>
+            <field>aw_description</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>proj_type</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>classificator</type>
+            <field>aw_type</field>
+            <store>connect</store>
+            <reltype>RELTYPE_TYPE</reltype>
+            <caption>Liik</caption>
+      </property>
+      <property>
             <name>project_navigator</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>web_settings</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_project_navigator</field>
             <caption>Näita projektide navigaatorit</caption>
       </property>
       <property>
             <name>use_template</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>web_settings</group>
             <type>select</type>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_use_template</field>
             <caption>Välimus</caption>
       </property>
       <property>
             <name>doc_id</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>web_settings</group>
             <type>textbox</type>
             <size>6</size>
-            <field>meta</field>
-            <method>serialize</method>
+            <field>aw_doc_id</field>
             <caption>Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse</caption>
       </property>
       <property>
@@ -104,6 +199,16 @@
             <method>serialize</method>
             <store>no</store>
             <caption>Pilt</caption>
+      </property>
+      <property>
+            <name>participants</name>
+            <table>objects</table>
+            <group>participants</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PARTICIPANT</reltype>
+            <multiple>1</multiple>
+            <field>participants</field>
+            <caption>Osalejad</caption>
       </property>
       <property>
             <name>event_toolbar</name>
@@ -162,87 +267,87 @@
       </property>
       <property>
             <name>user1</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>textbox</type>
-            <field>user1</field>
+            <field>aw_user1</field>
             <caption>User-defined textbox 1</caption>
       </property>
       <property>
             <name>user2</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>textbox</type>
-            <field>user2</field>
+            <field>aw_user2</field>
             <caption>User-defined textbox 2</caption>
       </property>
       <property>
             <name>user3</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>textbox</type>
-            <field>user3</field>
+            <field>aw_user3</field>
             <caption>User-defined textbox 3</caption>
       </property>
       <property>
             <name>user4</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>textbox</type>
-            <field>user4</field>
+            <field>aw_user4</field>
             <caption>User-defined textbox 4</caption>
       </property>
       <property>
             <name>user5</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>textbox</type>
-            <field>user5</field>
+            <field>aw_user5</field>
             <caption>User-defined textbox 5</caption>
       </property>
       <property>
             <name>userch1</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>userch1</field>
+            <field>aw_userch1</field>
             <caption>User-defined checkbox 1</caption>
       </property>
       <property>
             <name>userch2</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>userch2</field>
+            <field>aw_userch2</field>
             <caption>User-defined checkbox 2</caption>
       </property>
       <property>
             <name>userch3</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>userch3</field>
+            <field>aw_userch3</field>
             <caption>User-defined checkbox 3</caption>
       </property>
       <property>
             <name>userch4</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>userch4</field>
+            <field>aw_userch4</field>
             <caption>User-defined checkbox 4</caption>
       </property>
       <property>
             <name>userch5</name>
-            <table>objects</table>
+            <table>aw_projects</table>
             <group>userdefined</group>
             <type>checkbox</type>
             <ch_value>1</ch_value>
-            <field>userch5</field>
+            <field>aw_userch5</field>
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
@@ -288,6 +393,9 @@
             <relationmgr>yes</relationmgr>
       </classinfo>
       <groupinfo>
+            <info>
+                  <caption>Projekti info</caption>
+            </info>
             <general2>
                   <parent>general</parent>
                   <caption>Üldine</caption>
@@ -300,6 +408,10 @@
                   <parent>general</parent>
                   <caption>Pilt</caption>
             </prj_image>
+            <participants>
+                  <parent>general</parent>
+                  <caption>Osalejad</caption>
+            </participants>
             <event_list>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -331,6 +443,13 @@
                   <submit>no</submit>
             </goals_gantt>
       </groupinfo>
+      <tableinfo>
+            <aw_projects>
+                  <index>aw_oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>brother_of</master_index>
+            </aw_projects>
+      </tableinfo>
       <reltypes>
             <SUBPROJECT>
                   <clid>CL_PROJECT</clid>
@@ -341,6 +460,7 @@
                   <clid>
                         <num_0>CL_USER</num_0>
                         <num_1>CL_CRM_COMPANY</num_1>
+                        <num_2>CL_CRM_PERSON</num_2>
                   </clid>
                   <value>2</value>
                   <caption>osaleja</caption>
@@ -398,6 +518,11 @@
                   <clid>CL_VIDEO</clid>
                   <caption>Video</caption>
             </PRJ_VIDEO>
+            <TYPE>
+                  <value>12</value>
+                  <clid>CL_META</clid>
+                  <caption>t&amp;uuml;&amp;uuml;p</caption>
+            </TYPE>
       </reltypes>
       <layout>
             <goal_vb>

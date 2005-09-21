@@ -160,5 +160,26 @@
 			</function>
 		</action>
 
+		<action name="mark_proj_done">
+			<function name="mark_proj_done">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="mark_tasks_done">
+			<function name="mark_tasks_done">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="create_bill">
+			<function name="create_bill">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

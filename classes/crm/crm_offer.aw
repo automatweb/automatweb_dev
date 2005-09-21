@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.36 2005/06/21 11:56:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.37 2005/09/21 12:47:06 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -195,7 +195,6 @@ class crm_offer extends class_base
 					$options[$key] = $obj->name();
 				}
 				
-				$prop["options"] = $options;
 				
 						
 				if($arr["new"] == 1)
@@ -206,7 +205,14 @@ class crm_offer extends class_base
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("orderer");
 				}
-			break;
+
+				if (!isset($options[$prop["value"]]))
+				{
+					$tmp = obj($prop["value"]);
+					$options[$tmp->id()] = $tmp->name();
+				}
+				$prop["options"] = $options;
+				break;
 			
 			case "offer_history":
 				$this->do_offer_history($arr);

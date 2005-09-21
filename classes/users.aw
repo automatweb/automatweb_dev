@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.150 2005/09/14 17:57:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users.aw,v 2.151 2005/09/21 12:47:05 kristo Exp $
 // users.aw - User Management
 
 load_vcl("table","date_edit");
@@ -19,86 +19,6 @@ class users extends users_user
 		lc_site_load("definition",&$this);
 		lc_load("definition");
 		$this->lc_load("users","lc_users");
-	}
-
-	function get_jf_list($join_grp)
-	{
-		$ret = array();
-		$this->db_query("SELECT id,j_name  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN." ORDER BY forms.j_order");
-		while ($row = $this->db_next())
-		{
-			$ret[$row["id"]] = $row["j_name"];
-		}
-		return $ret;
-	}
-
-	function get_next_jf($join_grp)
-	{
-		$session_filled_forms = aw_global_get("session_filled_forms");
-
-		// find all the forms in the selected join group 
-		$this->db_query("SELECT id  FROM forms LEFT JOIN objects ON objects.oid = forms.id WHERE objects.status != 0 and forms.grp='$join_grp' AND forms.subtype = ".FSUBTYPE_JOIN);
-		$jfrm = 0;
-		while ($row = $this->db_next())
-		{
-			if (!$session_filled_forms[$row["id"]])
-			{
-				$jfrm = $row["id"];
-				break;
-			}
-		}
-		return $jfrm;
-	}
-
-	/**  
-		
-		@attrib name=do_change params=name default="0"
-		
-		@param id required
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function do_change($arr)
-	{
-		extract($arr);
-
-		$u = $this->fetch($id);
-		$fs = unserialize($u["join_form_entry"]);
-
-		// iterate over the join forms
-		$jfrm = $this->get_next_jf($u["join_grp"]);
-
-		if ($jfrm)
-		{
-			// show them one after another to the user
-			$orb = $this->mk_my_orb("show", array("id" => $jfrm, "entry_id" => $fs[$jfrm], "extraids[redirect_after]" => urlencode($this->mk_my_orb("do_change", array("id" => $id), "users"))),"form");
-			header("Location: $orb");
-			return $orb;
-		}
-		else
-		{
-			// also, update users join form entries
-			$this->save(array("uid" => $id, "join_form_entry" => serialize(aw_global_get("session_filled_forms")))); 
-
-			// and when we're dont with all of them, update dyn groups and return to user list
-			$this->update_dyn_user($id);
-
-			// check if we are on the site side. if we are, redirect to the beginning. 
-			if (strpos(aw_global_get("REQUEST_URI"), "automatweb") === false)
-			{
-				$orb = $this->mk_my_orb("change", array());
-			}
-			else
-			{
-				$orb = $this->mk_my_orb("gen_list", array());
-			}
-			header("Location: $orb");
-			return $orb;
-		}
 	}
 
 	/** generates the form for changing the users ($id) password 
@@ -123,7 +43,7 @@ class users extends users_user
 			$id = aw_global_get("uid");
 		}
 
-		$u = $this->fetch($id);
+		$u = $this->get_user($id);
 		if (!($this->can("change", $u["oid"]) || aw_global_get("uid") == $id))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
@@ -243,7 +163,7 @@ class users extends users_user
 	function submit_change_pwd($arr)
 	{
 		extract($arr);
-		$udata = $this->fetch($id);
+		$udata = $this->get_user($id);
 		if (!($this->can("change", $udata["oid"]) || aw_global_get("uid") == $id))
 		{
 			$this->raise_error(ERR_ACL, "No can_change access for user $id", true, false);
@@ -598,83 +518,6 @@ class users extends users_user
 		return $ret;
 	}
 
-	/** shows the form $fid with the entry the user entered when he/she joined 
-		
-		@attrib name=udata params=name is_public="1" caption="Edit information" default="0"
-		
-		@param fid optional type=int
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function do_change_site($arr)
-	{
-		extract($arr);
-		$id = aw_global_get("uid");
-		$uo = obj(aw_global_get("uid_oid"));
-		if ($obj = $uo->get_first_obj_by_reltype("RELTYPE_JOIN_SITE"))
-		{
-			$ui = get_instance(CL_JOIN_SITE);
-			return $ui->change_data($obj);
-		}
-
-		if (not($fid))
-		{
-			$udata = $this->get_user();
-			$jfar = $this->get_jf_list(isset($udata["join_grp"]) ? $udata["join_grp"] : "");
-			$jfs = "";
-			reset($jfar);
-			list($fid,$name) = each($jfar);
-		};
-
-		$u = $this->fetch($id);
-		$fs = unserialize($u["join_form_entry"]);
-
-		$t = get_instance(CL_FORM);
-		return $t->gen_preview(array(
-			"id" => $fid, 
-			"entry_id" => $fs[$fid], 
-			"reforb" => $this->mk_reforb("save_udata", array("fid" => $fid,"user_id" => $id,"section" => aw_global_get("section")))
-		));
-	}
-
-	/** this saves the data entered in the form and flushes all necessary caches and group memberships 
-		
-		@attrib name=save_udata params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_do_change_site($arr)
-	{
-		extract($arr);
-
-		$u = $this->fetch($user_id);
-		$fs = unserialize($u["join_form_entry"]);
-
-		$t = get_instance(CL_FORM);
-		$t->process_entry(array(
-			"id" => $fid,
-			"entry_id" => $fs[$fid]
-		));
-
-		$fs[$fid] = $t->entry_id;
-
-		// write the entry to the user table as well, in case it is a new entry
-		$this->save(array("uid" => $user_id, "join_form_entry" => aw_serialize($fs,SERIALIZE_NATIVE))); 
-
-		$this->update_dyn_user($user_id);
-
-		return $this->mk_my_orb("udata", array("fid" => $fid,"section" => $section));
-	}
-
 	////
 	// !shows the data the user entered when he joined if the user is logged in
 	// if he is not logged in, but just joined, then the session contains the variable $last_join_uid and then that will be used
@@ -811,22 +654,6 @@ class users extends users_user
 		send_mail($udata["email"],$c->get_simple_config("remind_pwd_mail_subj".aw_global_get("LC")),$mail,"From: ".$this->cfg["mail_from"]);
 		$this->_log(ST_USERS, SA_REMIND_PWD, $username);
 		return $this->cfg["baseurl"]."/index.".$this->cfg["ext"]."/section=".$after;
-	}
-
-
-	function get_join_entries($uid = "")
-	{
-		if ($uid == "")
-		{
-			$uid = aw_global_get("uid");
-		}
-		$udata = $this->get_user(array("uid" => $uid));
-		$ar = unserialize($udata["join_form_entry"]);
-		if (!is_array($ar))
-		{
-			$ar = array();
-		}
-		return $ar;
 	}
 
 	/** Generates an unique hash, which when used in a url can be used to let the used change 
@@ -1260,85 +1087,6 @@ class users extends users_user
 			aw_global_set("gidlist", array());
 			aw_global_set("gidlist_pri", array());
 		}
-	}
-
-	/**  
-		
-		@attrib name=createpwd params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function createpwd($arr)
-	{
-		extract($arr);
-		$this->read_template("createpwd.tpl");
-		$this->mk_path(0,"Loo paroolid");
-
-		$this->vars(array(
-			"grps" => $this->picker(0,$this->get_group_picker(array("type" => array(GRP_REGULAR, GRP_DYNAMIC)))),
-			"reforb" => $this->mk_reforb("submit_createpwd")
-		));
-		return $this->parse();
-	}
-
-	/**  
-		
-		@attrib name=submit_createpwd params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-
-	**/
-	function submit_createpwd($arr)
-	{
-		extract($arr);
-		$gm = $this->getgroupmembers2($grps);
-		foreach($gm as $uid)
-		{
-			$pwd = substr(gen_uniq_id(),0,8);
-			if (aw_ini_get("auth.md5_passwords"))
-			{
-				$pwd = md5($pwd);
-			}
-			$this->db_query("UPDATE users SET password = '$pwd' WHERE uid = '$uid'");
-			echo "generated password $pwd for user $uid <br />\n";
-		}
-		die();
-//		return $this->mk_my_orb("gen_list");
-	}
-
-	/** Encrypts the passwords in the database with md5 
-		
-		@attrib name=pwconv params=name default="0"
-		
-		
-		@returns
-		
-		
-		@comment
-		don't forget to turn on auth.md5_passwords after you do that,
-		otherwise it will be impossible to log in.
-
-	**/
-	function pwconv($args = array())
-	{
-		print "Encrypting passwords with MD5. This may take a few moments<br />";
-		flush();
-		$q = "UPDATE users SET password = md5(password)";
-		$this->db_query($q);
-		print "Done!<br /> Don't forget to turn on auth.md5_passwords or you wont be able to log in anymore!";
-
-		// here be dragons .. or rather the code to set the
-		// variable in the site ini file
-
 	}
 
 	function get_change_pwd_hash_link($uid)

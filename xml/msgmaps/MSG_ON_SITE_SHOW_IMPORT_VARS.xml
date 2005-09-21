@@ -1,11 +1,11 @@
 <?xml version='1.0'?>
 <xml>
 <num_0>
-      <class>period</class>
-      <func>on_site_show_import_vars</func>
-</num_0>
-<num_1>
       <class>contentmgmt/site_styles</class>
       <func>on_site_show</func>
+</num_0>
+<num_1>
+      <class>period</class>
+      <func>on_site_show_import_vars</func>
 </num_1>
 </xml>

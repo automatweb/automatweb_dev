@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.101 2005/05/10 14:09:45 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.102 2005/09/21 12:47:04 kristo Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -278,5 +278,9 @@ define("LC_DATE_FORMAT_SHORT", 1); // For example: 20.06.88 or 05.12.98
 define("LC_DATE_FORMAT_SHORT_FULLYEAR", 2); // For example: 20.06.1999 or 05.12.1998
 define("LC_DATE_FORMAT_LONG", 3); // For example: 20. juuni 99
 define("LC_DATE_FORMAT_LONG_FULLYEAR", 4); // For example: 20. juuni 1999
+
+// project statuses
+define("PROJ_IN_PROGRESS", 1);
+define("PROJ_DONE", 2);
 
 ?>

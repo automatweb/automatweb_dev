@@ -1,0 +1,37 @@
+<?xml version='1.0'?>
+<properties>
+      <property>
+            <name>content</name>
+            <table>aw_crm_day_report</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>20</rows>
+            <cols>50</cols>
+            <field>aw_content</field>
+            <caption>Tegevused</caption>
+      </property>
+      <property>
+            <name>num_hrs</name>
+            <table>aw_crm_day_report</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>aw_num_hrs</field>
+            <caption>T&amp;ouml;&amp;ouml;tundide arv</caption>
+      </property>
+      <classinfo>
+            <syslog_type>ST_CRM_DAY_REPORT</syslog_type>
+            <relationmgr>yes</relationmgr>
+            <no_comment>1</no_comment>
+            <no_status>1</no_status>
+            <prop_cb>1</prop_cb>
+      </classinfo>
+      <tableinfo>
+            <aw_crm_day_report>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_crm_day_report>
+      </tableinfo>
+</properties>
+

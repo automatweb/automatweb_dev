@@ -57,9 +57,45 @@
             <name>ettevotlusvorm</name>
             <table>kliendibaas_firma</table>
             <group>general_sub</group>
-            <type>select</type>
+            <type>relpicker</type>
+            <automatic>1</automatic>
+            <reltype>RELTYPE_ETTEVOTLUSVORM</reltype>
             <field>ettevotlusvorm</field>
             <caption>Õiguslik vorm</caption>
+      </property>
+      <property>
+            <name>code</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>tax_nr</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>textbox</type>
+            <field>tax_nr</field>
+            <caption>KMKohuslase nr</caption>
+      </property>
+      <property>
+            <name>cust_contract_date</name>
+            <table>kliendibaas_firma</table>
+            <group>general_sub</group>
+            <type>date_select</type>
+            <field>cust_contract_date</field>
+            <caption>Kliendilepingu kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>referal_type</name>
+            <table>objects</table>
+            <group>general_sub</group>
+            <type>classificator</type>
+            <store>connect</store>
+            <reltype>RELTYPE_REFERAL_TYPE</reltype>
+            <field>referal_type</field>
+            <caption>Sissetuleku meetod</caption>
       </property>
       <property>
             <name>logo</name>
@@ -125,6 +161,7 @@
             <group>org_sections</group>
             <type>relpicker</type>
             <reltype>RELTYPE_TOOTED</reltype>
+            <automatic>1</automatic>
             <method>serialize</method>
             <field>meta</field>
             <caption>Tooted</caption>
@@ -135,6 +172,7 @@
             <group>org_sections</group>
             <type>relpicker</type>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
+            <automatic>1</automatic>
             <field>pohitegevus</field>
             <caption>Põhitegevus</caption>
       </property>
@@ -310,6 +348,7 @@
             <type>submit</type>
             <store>no</store>
             <parent>vbox_contacts_right</parent>
+            <no_caption>1</no_caption>
             <field>contact_search_submit</field>
             <caption>Otsi</caption>
       </property>
@@ -358,7 +397,7 @@
             <caption>Isikukood</caption>
       </property>
       <property>
-            <name>proft_search</name>
+            <name>prof_search</name>
             <table>objects</table>
             <group>contacts2</group>
             <type>hidden</type>
@@ -366,7 +405,7 @@
             <no_caption>1</no_caption>
             <parent>vbox_contacts_right</parent>
             <value>1</value>
-            <field>proft_search</field>
+            <field>prof_search</field>
             <caption>prof_search</caption>
       </property>
       <property>
@@ -376,6 +415,7 @@
             <type>submit</type>
             <store>no</store>
             <parent>vbox_contacts_right</parent>
+            <no_caption>1</no_caption>
             <field>prof_search_submit</field>
             <caption>Otsi</caption>
       </property>
@@ -701,6 +741,7 @@
             <size>15</size>
             <store>no</store>
             <parent>vbox_customers_right</parent>
+            <no_caption>1</no_caption>
             <field>customer_search_submit</field>
             <caption>Otsi</caption>
       </property>
@@ -813,63 +854,551 @@
             <field>offers_current_org_id</field>
       </property>
       <property>
-            <name>objects_listing_toolbar</name>
+            <name>org_proj_tb</name>
             <table>objects</table>
-            <group>org_objects</group>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>my_projects</num_1>
+            </group>
             <type>toolbar</type>
             <no_caption>1</no_caption>
-            <parent>objects_toolbar</parent>
             <store>no</store>
-            <field>objects_listing_toolbar</field>
+            <field>org_proj_tb</field>
       </property>
       <property>
-            <name>objects_listing_tree</name>
+            <name>org_proj_arh_tb</name>
             <table>objects</table>
-            <group>org_objects</group>
-            <type>treeview</type>
+            <group>org_projects_archive</group>
+            <type>toolbar</type>
             <no_caption>1</no_caption>
-            <parent>objects_tree</parent>
             <store>no</store>
-            <field>objects_listing_tree</field>
-      </property>
-      <property>
-            <name>objects_listing_table</name>
-            <table>objects</table>
-            <group>org_objects</group>
-            <type>table</type>
-            <no_caption>1</no_caption>
-            <parent>objects_table</parent>
-            <store>no</store>
-            <field>objects_listing_table</field>
+            <field>org_proj_arh_tb</field>
       </property>
       <property>
             <name>projects_listing_tree</name>
             <table>objects</table>
-            <group>org_projects</group>
-            <no_caption>1</no_caption>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
             <type>treeview</type>
+            <no_caption>1</no_caption>
             <parent>projects_tree</parent>
             <store>no</store>
             <field>projects_listing_tree</field>
       </property>
       <property>
+            <name>all_proj_search_cust</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>all_proj_search_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_name</field>
+            <caption>Projekti nimi</caption>
+      </property>
+      <property>
+            <name>all_proj_search_code</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_code</field>
+            <caption>Projekti kood</caption>
+      </property>
+      <property>
+            <name>all_proj_search_task_name</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>all_proj_search_task_name</field>
+            <caption>&amp;Uuml;lesande nimi</caption>
+      </property>
+      <property>
+            <name>all_proj_search_dl_from</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>all_proj_search_dl_from</field>
+            <caption>T&amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>all_proj_search_dl_to</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>all_proj_search_dl_to</field>
+            <caption>T&amp;auml;htaeg kuni</caption>
+      </property>
+      <property>
+            <name>all_proj_search_state</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>select</type>
+            <store>no</store>
+            <parent>all_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>all_proj_search_state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>all_proj_search_sbt</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>submit</type>
+            <parent>all_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>all_proj_search_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>all_proj_search_clear</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>submit</type>
+            <parent>all_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>all_proj_search_clear</field>
+            <caption>T&amp;uuml;hista otsing</caption>
+      </property>
+      <property>
             <name>projects_listing_table</name>
             <table>objects</table>
-            <group>org_projects</group>
-            <no_caption>1</no_caption>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
             <type>table</type>
+            <no_caption>1</no_caption>
             <parent>projects_table</parent>
             <store>no</store>
             <field>projects_listing_table</field>
       </property>
       <property>
+            <name>proj_search_cust</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>proj_search_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>proj_search_name</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>proj_search_name</field>
+            <caption>Projekti nimi</caption>
+      </property>
+      <property>
+            <name>proj_search_code</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>proj_search_code</field>
+            <caption>Projekti kood</caption>
+      </property>
+      <property>
+            <name>proj_search_task_name</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <size>30</size>
+            <captionside>top</captionside>
+            <field>proj_search_task_name</field>
+            <caption>&amp;Uuml;lesande nimi</caption>
+      </property>
+      <property>
+            <name>proj_search_dl_from</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>proj_search_dl_from</field>
+            <caption>T&amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>proj_search_dl_to</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>proj_search_dl_to</field>
+            <caption>T&amp;auml;htaeg kuni</caption>
+      </property>
+      <property>
+            <name>proj_search_state</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>select</type>
+            <store>no</store>
+            <parent>my_proj_search_b</parent>
+            <captionside>top</captionside>
+            <field>proj_search_state</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>proj_search_sbt</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>submit</type>
+            <parent>my_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>proj_search_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>proj_search_clear</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>submit</type>
+            <parent>my_proj_search_but_row</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>proj_search_clear</field>
+            <caption>T&amp;uuml;hista otsing</caption>
+      </property>
+      <property>
             <name>my_projects</name>
             <table>objects</table>
             <group>my_projects</group>
+            <type>table</type>
             <no_caption>1</no_caption>
+            <store>no</store>
+            <parent>my_proj</parent>
+            <field>my_projects</field>
+      </property>
+      <property>
+            <name>docs_tb</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>docs_tb</field>
+      </property>
+      <property>
+            <name>docs_tree</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>treeview</type>
+            <parent>docs_left</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>docs_tree</field>
+      </property>
+      <property>
+            <name>docs_s_name</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_name</field>
+            <caption>Nimetus</caption>
+      </property>
+      <property>
+            <name>docs_s_type</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>select</type>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_type</field>
+            <caption>Liik</caption>
+      </property>
+      <property>
+            <name>docs_s_task</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_task</field>
+            <caption>Juhtum</caption>
+      </property>
+      <property>
+            <name>docs_s_user</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_user</field>
+            <caption>Tegija</caption>
+      </property>
+      <property>
+            <name>docs_s_customer</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>textbox</type>
+            <size>30</size>
+            <store>no</store>
+            <captionside>top</captionside>
+            <parent>docs_search</parent>
+            <field>docs_s_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>docs_s_sbt</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_s_but_row</parent>
+            <field>docs_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>docs_s_clear</name>
+            <table>objects</table>
+            <group>documents</group>
+            <type>submit</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>docs_s_but_row</parent>
+            <field>docs_s_clear</field>
+            <caption>T&amp;uuml;hista otsing</caption>
+      </property>
+      <property>
+            <name>docs_tbl</name>
+            <table>objects</table>
+            <group>documents</group>
             <type>table</type>
             <store>no</store>
-            <field>my_projects</field>
+            <no_caption>1</no_caption>
+            <parent>docs_lt</parent>
+            <field>docs_tbl</field>
+      </property>
+      <property>
+            <name>bill_tb</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_tb</field>
+      </property>
+      <property>
+            <name>bill_proj_list</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_proj_list</field>
+      </property>
+      <property>
+            <name>bill_task_list</name>
+            <table>objects</table>
+            <group>bills_create</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bill_task_list</field>
+      </property>
+      <property>
+            <name>bills_list</name>
+            <table>objects</table>
+            <group>bills_list</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>bills_list</field>
+      </property>
+      <property>
+            <name>my_tasks_tb</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>toolbar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>my_tasks_tb</field>
+      </property>
+      <property>
+            <name>act_s_cust</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>textbox</type>
+            <size>30</size>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_cust</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>act_s_task_name</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>textbox</type>
+            <size>30</size>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_task_name</field>
+            <caption>Toimetuse nimi</caption>
+      </property>
+      <property>
+            <name>act_s_code</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>textbox</type>
+            <size>30</size>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_code</field>
+            <caption>Toimetuse kood</caption>
+      </property>
+      <property>
+            <name>act_s_proj_name</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>textbox</type>
+            <size>30</size>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_proj_name</field>
+            <caption>Projekti nimi</caption>
+      </property>
+      <property>
+            <name>act_s_dl_from</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_act_search</parent>
+            <captionside>top</captionside>
+            <field>act_s_dl_from</field>
+            <caption>T&amp;auml;htaeg alates</caption>
+      </property>
+      <property>
+            <name>act_s_dl_to</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>date_select</type>
+            <store>no</store>
+            <parent>all_act_search</parent>
+            <captionside>top</captionside>
+            <field>act_s_dl_to</field>
+            <caption>T&amp;auml;htaeg kuni</caption>
+      </property>
+      <property>
+            <name>act_s_status</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>select</type>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_status</field>
+            <caption>Staatus</caption>
+      </property>
+      <property>
+            <name>act_s_sbt</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>submit</type>
+            <parent>all_act_search</parent>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>act_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>my_tasks</name>
+            <table>objects</table>
+            <group>my_tasks</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>my_tasks</parent>
+            <field>my_tasks</field>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -901,9 +1430,6 @@
             <people>
                   <caption>Inimesed</caption>
             </people>
-            <contacts>
-                  <caption>Kontaktid</caption>
-            </contacts>
             <contacts2>
                   <caption>Puuvaade</caption>
                   <parent>people</parent>
@@ -914,9 +1440,27 @@
                   <parent>people</parent>
                   <submit>no</submit>
             </oldcontacts>
+            <personal_offers>
+                  <caption>Tööpakkumised</caption>
+                  <parent>people</parent>
+                  <submit>no</submit>
+            </personal_offers>
+            <personal_candits>
+                  <caption>Kandideerijad</caption>
+                  <parent>people</parent>
+                  <submit>no</submit>
+            </personal_candits>
+            <contacts>
+                  <caption>Kontaktid</caption>
+            </contacts>
             <overview>
                   <caption>Tegevused</caption>
             </overview>
+            <my_tasks>
+                  <caption>Minu toimetused</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </my_tasks>
             <all_actions>
                   <caption>Kõik</caption>
                   <parent>overview</parent>
@@ -944,6 +1488,21 @@
             <relorg>
                   <caption>Kliendid</caption>
             </relorg>
+            <my_projects>
+                  <caption>Minu projektid</caption>
+                  <parent>relorg</parent>
+                  <submit>no</submit>
+            </my_projects>
+            <org_projects>
+                  <caption>Projektid</caption>
+                  <submit>no</submit>
+                  <parent>relorg</parent>
+            </org_projects>
+            <org_projects_archive>
+                  <caption>Projektide arhiiv</caption>
+                  <submit>no</submit>
+                  <parent>relorg</parent>
+            </org_projects_archive>
             <customers>
                   <caption>Kõik kliendid</caption>
                   <parent>relorg</parent>
@@ -970,40 +1529,29 @@
                   <caption>Konkurendid</caption>
                   <parent>relorg</parent>
             </competitors>
-            <personal_offers>
-                  <caption>Tööpakkumised</caption>
-                  <parent>people</parent>
-                  <submit>no</submit>
-            </personal_offers>
-            <personal_candits>
-                  <caption>Kandideerijad</caption>
-                  <parent>people</parent>
-                  <submit>no</submit>
-            </personal_candits>
             <offers>
                   <caption>Pakkumised</caption>
                   <submit>no</submit>
                   <parent>relorg</parent>
             </offers>
-            <org_objects_main>
-                  <caption>Objektid</caption>
+            <documents>
+                  <caption>Dokumendid</caption>
                   <submit>no</submit>
-            </org_objects_main>
-            <org_objects>
-                  <caption>Objektid</caption>
+            </documents>
+            <bills>
+                  <caption>Arved</caption>
                   <submit>no</submit>
-                  <parent>org_objects_main</parent>
-            </org_objects>
-            <org_projects>
-                  <caption>Projektid</caption>
+            </bills>
+            <bills_create>
+                  <parent>bills</parent>
+                  <caption>Loo arve</caption>
                   <submit>no</submit>
-                  <parent>relorg</parent>
-            </org_projects>
-            <my_projects>
-                  <caption>Minu projektid</caption>
-                  <parent>relorg</parent>
+            </bills_create>
+            <bills_list>
+                  <parent>bills</parent>
+                  <caption>Nimekiri</caption>
                   <submit>no</submit>
-            </my_projects>
+            </bills_list>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>
@@ -1188,6 +1736,21 @@
                   <clid>CL_FILE</clid>
                   <caption>Pakkumise fail</caption>
             </OFFER_FILE>
+            <DAY_REPORT>
+                  <value>39</value>
+                  <clid>CL_CRM_DAY_REPORT</clid>
+                  <caption>p&amp;auml;eva raport</caption>
+            </DAY_REPORT>
+            <DOCS_FOLDER>
+                  <value>40</value>
+                  <clid>CL_MENU</clid>
+                  <caption>dokumentide kataloog</caption>
+            </DOCS_FOLDER>
+            <REFERAL_TYPE>
+                  <value>41</value>
+                  <clid>CL_META</clid>
+                  <caption>sissetuleku meetod</caption>
+            </REFERAL_TYPE>
       </reltypes>
       <layout>
             <hbox_toolbar>
@@ -1196,8 +1759,8 @@
             </hbox_toolbar>
             <hbox_others>
                   <type>hbox</type>
-                  <group>contacts2</group>
                   <width>20%:80%</width>
+                  <group>contacts2</group>
             </hbox_others>
             <vbox_contacts_left>
                   <type>vbox</type>
@@ -1215,18 +1778,18 @@
             </personal_toolbar>
             <personal_tree_table>
                   <type>hbox</type>
-                  <group>personal_offers</group>
                   <width>20%:80%</width>
+                  <group>personal_offers</group>
             </personal_tree_table>
             <personal_hbox_tree>
                   <type>vbox</type>
-                  <group>personal_offers</group>
                   <parent>personal_tree_table</parent>
+                  <group>personal_offers</group>
             </personal_hbox_tree>
             <personal_hbox_table>
                   <type>vbox</type>
-                  <group>personal_offers</group>
                   <parent>personal_tree_table</parent>
+                  <group>personal_offers</group>
             </personal_hbox_table>
             <personal_toolbar_cand>
                   <type>hbox</type>
@@ -1234,18 +1797,18 @@
             </personal_toolbar_cand>
             <personal_tree_table_cand>
                   <type>hbox</type>
-                  <group>personal_candits</group>
                   <width>20%:80%</width>
+                  <group>personal_candits</group>
             </personal_tree_table_cand>
             <personal_hbox_tree_cand>
                   <type>vbox</type>
-                  <group>personal_candits</group>
                   <parent>personal_tree_table_cand</parent>
+                  <group>personal_candits</group>
             </personal_hbox_tree_cand>
             <personal_hbox_table_cand>
                   <type>vbox</type>
-                  <group>personal_candits</group>
                   <parent>personal_tree_table_cand</parent>
+                  <group>personal_candits</group>
             </personal_hbox_table_cand>
             <customer_hbox_toolbar>
                   <type>hbox</type>
@@ -1253,8 +1816,8 @@
             </customer_hbox_toolbar>
             <customers_hbox_others>
                   <type>hbox</type>
-                  <group>customers</group>
                   <width>20%:80%</width>
+                  <group>customers</group>
             </customers_hbox_others>
             <vbox_customers_left>
                   <type>vbox</type>
@@ -1272,8 +1835,8 @@
             </my_customers_hbox_toolbar>
             <my_customers_hbox_others>
                   <type>hbox</type>
-                  <group>my_customers</group>
                   <width>20%:80%</width>
+                  <group>my_customers</group>
             </my_customers_hbox_others>
             <vbox_my_customers_left>
                   <type>vbox</type>
@@ -1304,40 +1867,96 @@
                   <parent>offers_main</parent>
                   <group>offers</group>
             </offers_table>
-            <objects_toolbar>
-                  <type>hbox</type>
-                  <group>org_objects</group>
-            </objects_toolbar>
-            <objects_main>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>org_objects</group>
-            </objects_main>
-            <objects_tree>
-                  <type>vbox</type>
-                  <parent>objects_main</parent>
-                  <group>org_objects</group>
-            </objects_tree>
-            <objects_table>
-                  <type>vbox</type>
-                  <parent>objects_main</parent>
-                  <group>org_objects</group>
-            </objects_table>
             <projects_main>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>org_projects</group>
+                  <group>
+                        <num_0>org_projects</num_0>
+                        <num_1>org_projects_archive</num_1>
+                  </group>
             </projects_main>
             <projects_tree>
                   <type>vbox</type>
                   <parent>projects_main</parent>
-                  <group>org_projects</group>
+                  <group>
+                        <num_0>org_projects</num_0>
+                        <num_1>org_projects_archive</num_1>
+                  </group>
             </projects_tree>
+            <all_proj_search_b>
+                  <type>vbox</type>
+                  <parent>projects_tree</parent>
+                  <group>
+                        <num_0>org_projects</num_0>
+                        <num_1>org_projects_archive</num_1>
+                  </group>
+            </all_proj_search_b>
+            <all_proj_search_but_row>
+                  <type>hbox</type>
+                  <parent>projects_tree</parent>
+                  <group>
+                        <num_0>org_projects</num_0>
+                        <num_1>org_projects_archive</num_1>
+                  </group>
+            </all_proj_search_but_row>
             <projects_table>
                   <type>vbox</type>
                   <parent>projects_main</parent>
-                  <group>org_projects</group>
+                  <group>
+                        <num_0>org_projects</num_0>
+                        <num_1>org_projects_archive</num_1>
+                  </group>
             </projects_table>
+            <my_proj>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>my_projects</group>
+            </my_proj>
+            <my_proj_search>
+                  <type>vbox</type>
+                  <parent>my_proj</parent>
+                  <group>my_projects</group>
+            </my_proj_search>
+            <my_proj_search_b>
+                  <type>vbox</type>
+                  <parent>my_proj_search</parent>
+                  <group>my_projects</group>
+            </my_proj_search_b>
+            <my_proj_search_but_row>
+                  <type>hbox</type>
+                  <parent>my_proj_search</parent>
+                  <group>my_projects</group>
+            </my_proj_search_but_row>
+            <docs_lt>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>documents</group>
+            </docs_lt>
+            <docs_left>
+                  <type>vbox</type>
+                  <parent>docs_lt</parent>
+                  <group>documents</group>
+            </docs_left>
+            <docs_search>
+                  <type>vbox</type>
+                  <parent>docs_left</parent>
+                  <group>documents</group>
+            </docs_search>
+            <docs_s_but_row>
+                  <type>hbox</type>
+                  <parent>docs_left</parent>
+                  <group>documents</group>
+            </docs_s_but_row>
+            <my_tasks>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>my_tasks</group>
+            </my_tasks>
+            <all_act_search>
+                  <type>vbox</type>
+                  <parent>my_tasks</parent>
+                  <group>my_tasks</group>
+            </all_act_search>
       </layout>
 </properties>
 

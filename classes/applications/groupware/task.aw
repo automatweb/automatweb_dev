@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.16 2005/07/13 17:44:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.17 2005/09/21 12:47:05 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -7,6 +7,16 @@
 
 @default table=objects
 @default group=general
+
+@property customer type=select table=planner field=customer
+@caption Klient
+
+@property code type=textbox size=5 table=planner field=code
+@caption Kood
+
+@property project type=select table=planner field=project
+@caption Projekt
+
 
 @property info_on_object type=text store=no
 @caption Osalejad
@@ -18,13 +28,36 @@
 @caption Algus
 
 @property end type=datetime_select table=planner 
-@caption Lõpeb
+@caption L&otilde;peb
+
+@property deadline type=datetime_select table=objects field=meta method=serialize
+@caption T&auml;htaeg
 
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
 
+@layout num_hrs type=hbox 
+
+	@property num_hrs_guess type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Prognoositav tundide arv 	
+
+	@property num_hrs_real type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Tegelik tundide arv
+
+	@property num_hrs_to_cust type=textbox size=5 field=meta method=serialize parent=num_hrs
+	@caption Tundide arv kliendile
+
+@property hr_price type=textbox size=5 field=meta method=serialize 
+@caption Tunni hind
+
 @property content type=textarea cols=70 rows=30 field=description table=planner
 @caption Sisu
+
+@property client_remind type=checkbox ch_value=1 table=objects field=meta method=serialize
+@caption Kliendi teavitamine vajalik
+
+@property bill_no type=textbox table=planner 
+@caption Arve number
 
 @property aliasmgr type=aliasmgr store=no
 @caption Seostehaldur
@@ -76,6 +109,10 @@ caption Osalejad
 @property search_contact_results type=table store=no group=participants no_caption=1
 @caption Tulemuste tabel
 
+@default group=other_exp
+
+	@property other_expenses type=table store=no no_caption=1
+
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised submit_method=get
@@ -83,6 +120,7 @@ caption Osalejad
 @groupinfo comments caption=Kommentaarid
 @groupinfo reminders caption=Meeldetuletused
 @groupinfo participants caption=Osalejad submit=no
+@groupinfo other_exp caption="Muud kulud" submit=no
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
@@ -213,6 +251,22 @@ class task extends class_base
 				$this->return_url=aw_global_get('REQUEST_URI');
 				break;
 			}
+
+			case "project":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_projects()));
+				$data["options"] = array("" => "") + $ol->names();
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_customers()));
+				$data["options"] = array("" => "") + $ol->names();
+				break;
+
+			case "other_expenses":
+				$this->_other_expenses($arr);
+				break;
 		};
 		return $retval;
 	}
@@ -248,6 +302,26 @@ class task extends class_base
 					$arr["obj_inst"]->set_prop("end",$dayend);
 				};
 				break;
+
+			case "project":
+				// add to proj
+				if (is_oid($prop["value"]) && $this->can("view", $prop["value"]))
+				{
+					$this->add_to_proj = $prop["value"];
+				}
+				break;
+
+			case "other_expenses":
+				$set = array();
+				foreach(safe_array($_POST["exp"]) as $entry)
+				{
+					if ($entry["exp"] != "" && $entry["cost"] != "")
+					{
+						$set[] = $entry;
+					}
+				}
+				$arr["obj_inst"]->set_meta("other_expenses", $set);
+				break;
 		};
 		return $retval;
 	}
@@ -264,6 +338,11 @@ class task extends class_base
 				'reltype' => 'RELTYPE_PERSON_TASK',
 				'to' => $arr['obj_inst'],
 			));
+		}
+
+		if ($this->add_to_proj)
+		{
+			$arr["obj_inst"]->create_brother($this->add_to_proj);
 		}
 	}
 	
@@ -282,6 +361,46 @@ class task extends class_base
 	{
 		$elib = get_instance('calendar/event_property_lib');
 		return $elib->participant_selector($arr);
+	}
+
+	function _init_other_exp_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "exp",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "cost",
+			"caption" => t("Hind")
+		));
+	}
+
+	function _other_expenses($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_other_exp_t($t);
+		
+		$dat = safe_array($arr["obj_inst"]->meta("other_expenses"));
+		$dat[] = array();
+
+		$nr = 1;
+		foreach($dat as $exp)
+		{
+			$t->define_data(array(
+				"exp" => html::textbox(array(
+					"name" => "exp[$nr][exp]",
+					"value" => $exp["exp"]
+				)),
+				"cost" => html::textbox(array(
+					"name" => "exp[$nr][cost]",
+					"size" => 5,
+					"value" => $exp["cost"]
+				))
+			));
+			$nr++;
+		}
+
+		$t->set_sortable(false);
 	}
 }
 ?>

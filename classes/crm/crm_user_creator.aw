@@ -210,7 +210,19 @@ class crm_user_creator extends core
 			// create user
 			$us = get_instance(CL_USER);
 
-			$o_uid = $uid = $pers->prop("firstname").".".$pers->prop("lastname");
+			$uid = htmlentities($pers->prop("firstname").".".$pers->prop("lastname"));
+
+			$uid = str_replace("&Auml;", "A", $uid);
+			$uid = str_replace("&auml;", "a", $uid);
+			$uid = str_replace("&Uuml;", "U", $uid);
+			$uid = str_replace("&uuml;", "u", $uid);
+			$uid = str_replace("&Ouml;", "O", $uid);
+			$uid = str_replace("&ouml;", "a", $uid);
+			$uid = str_replace("&Otilde;", "O", $uid);
+			$uid = str_replace("&otilde;", "o", $uid);
+			$uid = str_replace(" ", "_", $uid);
+
+			$o_uid = $uid;
 
 			while ($us->username_is_taken($uid))
 			{

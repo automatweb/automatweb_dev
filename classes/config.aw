@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.70 2005/09/10 12:39:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/config.aw,v 2.71 2005/09/21 12:47:04 kristo Exp $
 
 class db_config extends aw_template 
 {
@@ -140,17 +140,20 @@ class config extends db_config
 		$es = $this->get_simple_config("errors");
 		$ea = aw_unserialize($es);
 
-		$u = get_instance("users");
-		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
-		while($row = $u->db_next())
+		$ol = new object_list(array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
 		{
 			$this->vars(array(
-				"grp_id" => $row["gid"],
-				"grp_name" => $row["name"],
-				"url" => $ea[$row["gid"]]["url"],
-				"priority" => $ea[$row["gid"]]["pri"]
+				"grp_id" => $o->prop("gid"),
+				"grp_name" => $o->prop("name"),
+				"url" => $ea[$o->prop("gid")]["url"],
+				"priority" => $ea[$o->prop("gid")]["pri"]
 			));
-			$li.=$this->parse("LINE");
+			$li .= $this->parse("LINE");
 		}
 		$this->vars(array(
 			"LINE" => $li,
@@ -223,17 +226,20 @@ class config extends db_config
 		$this->read_template("login_grp_redirect.tpl");
 		$ea = $this->get_grp_redir();
 
-		$u = get_instance("users");
-		$u->listgroups(-1,-1,GRP_REGULAR,GRP_DYNAMIC);
-		while($row = $u->db_next())
+		$ol = new object_list(array(
+			"class_id" => CL_GROUP,
+			"lang_id" => array(),
+			"site_id" => array()
+		));
+		foreach($ol->arr() as $o)
 		{
 			$this->vars(array(
-				"grp_id" => $row["gid"],
-				"grp_name" => $row["name"] != "" ? $row["name"] : $row["o_name"],
-				"url" => $ea[$row["gid"]]["url"],
-				"priority" => $ea[$row["gid"]]["pri"]
+				"grp_id" => $o->prop("gid"),
+				"grp_name" => $o->prop("name"),
+				"url" => $ea[$o->prop("gid")]["url"],
+				"priority" => $ea[$o->prop("gid")]["pri"]
 			));
-			$li.=$this->parse("LINE");
+			$li .= $this->parse("LINE");
 		}
 		$this->vars(array(
 			"LINE" => $li,

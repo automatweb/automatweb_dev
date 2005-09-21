@@ -135,8 +135,8 @@ class crm_role_manager extends class_base
 			"align" => "center"
 		));
 
-		$c = get_instance(CL_CRM_COMPANY);
-		$c->do_human_resources(array(
+		$c = get_instance("applications/crm/crm_company_people_impl");
+		$c->_get_human_resources(array(
 			"prop" => array(
 				"vcl_inst" => &$t
 			),

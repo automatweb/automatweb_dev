@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.117 2005/09/14 17:57:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.118 2005/09/21 12:47:05 kristo Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -261,16 +261,6 @@ class users_user extends aw_template
 	}
 	
 	////
-	// Küsib info mingit kasutaja kohta
-	// DEPRECATED. core->get_user on parem
-	function fetch($uid) 
-	{
-		return $this->get_user(array(
-			"uid" => $uid,
-		));
-	}
-
-	////
 	// !Salvestab kasutaja info. Ma ei tea kui relevantne see on, sest osa andmed hoitakse ju enivei
 	// hoopis vormides
 	// suht relevantne on , kasutaja tabelis on ka sitax inffi.
@@ -299,26 +289,6 @@ class users_user extends aw_template
 		$q = "UPDATE users SET $sets WHERE uid = '".$data["uid"]."'";
 		$this->db_query($q);
 		$this->_log(ST_USERS, SA_CHANGE, $data['uid']);
-	}
-
-	function savegroup($data) 
-	{
-		$this->quote($data);
-		$sets = array();	
-
-		reset($data);
-		while (list($k,$v) = each($data))
-		{
-			if ($k != "gid")
-			{
-				$sets[] = " $k = '$v' ";
-			}
-		}
-		$sets = join(",", $sets);
-
-		$q = "UPDATE groups SET modified = ".time().", modifiedby = '".aw_global_get("uid")."', $sets WHERE gid = '".$data["gid"]."'";
-		$this->db_query($q);
-		$this->_log(ST_GROUPS, SA_CHANGE, $data['gid']);
 	}
 
 	///
@@ -541,7 +511,7 @@ class users_user extends aw_template
 				// then update user record so that he will not be reinserted into that group again
 				if ($checkdyn && $dyn)
 				{
-					$user = $this->fetch($k);
+					$user = $this->get_user($k);
 					$udata = unserialize($user["exclude_grps"]);
 					$udata[$gid] = 1;
 					$this->save(array("uid" => $k, "exclude_grps" => serialize($udata)));
@@ -822,7 +792,7 @@ class users_user extends aw_template
 	{
 		// ok, this is the shitty part, because we must do all the searches for all the groups
 		// because the user might belong in any of them
-		$user = $this->fetch($uid);
+		$user = $this->get_user($uid);
 
 		$ugrps = $this->getgroupsforuser($uid);
 
@@ -1086,20 +1056,6 @@ class users_user extends aw_template
 		};
 
 		return $retval;
-	}
-
-	function do_delete_user($uid)
-	{
-		$this->save(array(
-			"uid" => $uid, 
-			"blocked" => 1, 
-			"blockedby" => aw_global_get("uid")
-		));
-		$this->savegroup(array(
-			"gid" => $this->get_gid_by_uid($uid),
-			"type" => 3
-		));
-		$this->_log(ST_USERS, SA_BLOCK_USER, aw_global_get("uid")." blocked user $uid");
 	}
 
 	function get_gid_for_oid($oid)

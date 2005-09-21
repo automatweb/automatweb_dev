@@ -652,16 +652,6 @@ class form_controller extends form_base
 				$entry_id = $et_entry_id;
 			}
 			else
-			if ($et_type == "user_data")
-			{
-				// we must read the data from the user info, which means that this form
-				// must have an entry in the user data for the current user
-				// so find that to get the entry id
-				$us = get_instance("users");
-				$jfe = $us->get_join_entries();
-				$entry_id = $jfe[$fid];
-			}
-			else
 			if ($et_type == "user_entry")
 			{
 				// the first entry made for this form by the current user

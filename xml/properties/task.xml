@@ -1,6 +1,31 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>customer</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>select</type>
+            <field>customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>code</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>code</field>
+            <caption>Kood</caption>
+      </property>
+      <property>
+            <name>project</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>select</type>
+            <field>project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>info_on_object</name>
             <table>objects</table>
             <group>general</group>
@@ -33,7 +58,16 @@
             <group>general</group>
             <type>datetime_select</type>
             <field>end</field>
-            <caption>Lõpeb</caption>
+            <caption>L&amp;otilde;peb</caption>
+      </property>
+      <property>
+            <name>deadline</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>datetime_select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>T&amp;auml;htaeg</caption>
       </property>
       <property>
             <name>whole_day</name>
@@ -46,6 +80,49 @@
             <caption>Kestab terve päeva</caption>
       </property>
       <property>
+            <name>num_hrs_guess</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Prognoositav tundide arv 	</caption>
+      </property>
+      <property>
+            <name>num_hrs_real</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tegelik tundide arv</caption>
+      </property>
+      <property>
+            <name>num_hrs_to_cust</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <parent>num_hrs</parent>
+            <caption>Tundide arv kliendile</caption>
+      </property>
+      <property>
+            <name>hr_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Tunni hind</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>planner</table>
             <group>general</group>
@@ -54,6 +131,24 @@
             <rows>30</rows>
             <field>description</field>
             <caption>Sisu</caption>
+      </property>
+      <property>
+            <name>client_remind</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kliendi teavitamine vajalik</caption>
+      </property>
+      <property>
+            <name>bill_no</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>bill_no</field>
+            <caption>Arve number</caption>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -224,6 +319,16 @@
             <no_caption>1</no_caption>
             <caption>Tulemuste tabel</caption>
       </property>
+      <property>
+            <name>other_expenses</name>
+            <table>objects</table>
+            <group>other_exp</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -254,6 +359,10 @@
                   <caption>Osalejad</caption>
                   <submit>no</submit>
             </participants>
+            <other_exp>
+                  <caption>Muud kulud</caption>
+                  <submit>no</submit>
+            </other_exp>
       </groupinfo>
       <tableinfo>
             <planner>
@@ -269,5 +378,11 @@
                   <caption>Kordus</caption>
             </RECURRENCE>
       </reltypes>
+      <layout>
+            <num_hrs>
+                  <type>hbox</type>
+                  <group>general</group>
+            </num_hrs>
+      </layout>
 </properties>
 

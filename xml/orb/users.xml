@@ -1,14 +1,6 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="users" folder="" extends="users_user">
-		<action name="do_change">
-			<function name="do_change">
-				<arguments>
-					<required name="id" />
-				</arguments>
-			</function>
-		</action>
-
 		<action name="change_pwd" is_public="1" caption="Change password">
 			<function name="change_pwd">
 				<arguments>
@@ -45,21 +37,6 @@
 
 		<action name="submit_user_site" nologin="1">
 			<function name="submit_user_site">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="udata" is_public="1" caption="Edit information">
-			<function name="do_change_site">
-				<arguments>
-					<optional name="fid" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="save_udata">
-			<function name="submit_do_change_site">
 				<arguments>
 				</arguments>
 			</function>
@@ -115,27 +92,6 @@
 
 		<action name="submit_password_hash" nologin="1">
 			<function name="submit_password_hash">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="createpwd">
-			<function name="createpwd">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="submit_createpwd">
-			<function name="submit_createpwd">
-				<arguments>
-				</arguments>
-			</function>
-		</action>
-
-		<action name="pwconv">
-			<function name="pwconv">
 				<arguments>
 				</arguments>
 			</function>

@@ -1156,7 +1156,6 @@ die(dbg::dump($ret));
 	{
 		$sql = array();
 		$p_tmp = $params;
-
 		foreach($params as $key => $val)
 		{
 			if ($val === NULL)
@@ -1583,7 +1582,6 @@ die(dbg::dump($ret));
 		$this->foo = array();
 		$this->join_data = array();
 		$this->_req_do_pcp($filt, 1, $clid, $arr);
-
 //		$this->joins = array();
 		// join all other tables from the starting class except the objects table
 		$tmp = $GLOBALS["tableinfo"][$clid];

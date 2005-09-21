@@ -1,9 +1,12 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.50 2005/07/21 10:52:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.51 2005/09/21 12:47:05 kristo Exp $
 // project.aw - Projekt 
 /*
 
+
 @classinfo syslog_type=ST_PROJECT relationmgr=yes
+
+@tableinfo aw_projects index=aw_oid master_table=objects master_index=brother_of
 
 @default table=objects
 @default group=general2
@@ -11,37 +14,81 @@
 @property name type=textbox
 @caption Nimi
 
-@property status type=status
+@property code type=textbox table=aw_projects field=aw_code
+@caption Kood
+
+@property state type=select table=aw_projects field=aw_state default=1
 @caption Staatus
 
-@property start type=datetime_select field=meta method=serialize
+@property orderer type=relpicker reltype=RELTYPE_ORDERER automatic=1 table=objects field=meta method=serialize
+@caption Tellija
+
+@property implementor type=relpicker reltype=RELTYPE_IMPLEMENTOR automatic=1 table=objects field=meta method=serialize
+@caption Teostaja
+
+@property start type=datetime_select table=aw_projects field=aw_start
 @caption Algus
 
-@property end type=datetime_select field=meta method=serialize
+@property end type=datetime_select table=aw_projects field=aw_end
 @caption L&otilde;pp
 
-@property deadline type=datetime_select field=meta method=serialize
+@property deadline type=datetime_select table=aw_projects field=aw_deadline
 @caption Deadline
 
-@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT field=meta method=serialize
+@property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc
 @caption Loe lähemalt
 
-@property skip_subproject_events type=checkbox ch_value=1 field=meta method=serialize
+@property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
 @caption Ära näita alamprojektide sündmusi
 
+@groupinfo info caption="Projekti info"
+@default group=info
+
+	@property contact_person type=textbox table=aw_projects field=aw_contact_person
+	@caption Kontaktisik
+
+	@property contact_phone type=textbox table=aw_projects field=aw_contact_phone
+	@caption Telefon
+
+	@property contact_email type=textbox table=aw_projects field=aw_contact_email
+	@caption E-post
+
+	@property hrs_guess type=textbox table=aw_projects field=aw_hrs_guess size=5
+	@caption  Prognoositav tundide arv
+
+	@property prepayment type=textbox table=aw_projects field=aw_prepayment size=5
+	@caption Ettemaks
+
+	@property other_side type=textarea rows=10 cols=50 table=aw_projects field=aw_other_side 
+	@caption Vastaspool
+
+	@property description type=textarea rows=10 cols=50 table=aw_projects field=aw_description 
+	@caption Kirjeldus
+
+	@property proj_type type=classificator table=aw_projects field=aw_type store=connect reltype=RELTYPE_TYPE
+	@caption Liik
+
+
+
+
 @default group=web_settings
-@property project_navigator type=checkbox ch_value=1 field=meta method=serialize
-@caption Näita projektide navigaatorit
+	@property project_navigator type=checkbox ch_value=1 table=aw_projects field=aw_project_navigator
+	@caption Näita projektide navigaatorit
 
-@property use_template type=select field=meta method=serialize
-@caption Välimus
+	@property use_template type=select table=aw_projects field=aw_use_template
+	@caption Välimus
 
-@property doc_id type=textbox size=6 field=meta method=serialize
-@caption Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse
+	@property doc_id type=textbox size=6 table=aw_projects field=aw_doc_id
+	@caption Dokumendi ID, milles asub kalendri vaade, milles sündmusi kuvatakse
 
 @default group=prj_image
-@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
-@caption Pilt
+	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
+	@caption Pilt
+
+@default group=participants
+
+	@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1
+	@caption Osalejad
 
 @default group=event_list
 
@@ -67,6 +114,7 @@
 @groupinfo general2 parent=general caption="Üldine"
 @groupinfo web_settings parent=general caption="Veebiseadistused"
 @groupinfo prj_image parent=general caption="Pilt"
+@groupinfo participants parent=general caption="Osalejad"
 
 @groupinfo event_list caption="Sündmused" submit=no
 @groupinfo add_event caption="Muuda sündmust"
@@ -76,34 +124,34 @@
 @groupinfo userdefined caption="Andmed"
 @default group=userdefined
 
-@property user1 type=textbox 
+@property user1 type=textbox table=aw_projects field=aw_user1
 @caption User-defined textbox 1
 
-@property user2 type=textbox 
+@property user2 type=textbox table=aw_projects field=aw_user2
 @caption User-defined textbox 2
 
-@property user3 type=textbox 
+@property user3 type=textbox table=aw_projects field=aw_user3
 @caption User-defined textbox 3
 
-@property user4 type=textbox 
+@property user4 type=textbox table=aw_projects field=aw_user4
 @caption User-defined textbox 4
 
-@property user5 type=textbox 
+@property user5 type=textbox table=aw_projects field=aw_user5
 @caption User-defined textbox 5
 
-@property userch1 type=checkbox ch_value=1 
+@property userch1 type=checkbox ch_value=1 table=aw_projects field=aw_userch1
 @caption User-defined checkbox 1
 
-@property userch2 type=checkbox ch_value=1 
+@property userch2 type=checkbox ch_value=1 table=aw_projects field=aw_userch2
 @caption User-defined checkbox 2
 
-@property userch3 type=checkbox ch_value=1 
+@property userch3 type=checkbox ch_value=1 table=aw_projects field=aw_userch3
 @caption User-defined checkbox 3
 
-@property userch4 type=checkbox ch_value=1 
+@property userch4 type=checkbox ch_value=1 table=aw_projects field=aw_userch4
 @caption User-defined checkbox 4
 
-@property userch5 type=checkbox ch_value=1 
+@property userch5 type=checkbox ch_value=1 table=aw_projects field=aw_userch5
 @caption User-defined checkbox 5
 
 
@@ -130,7 +178,7 @@
 @reltype SUBPROJECT clid=CL_PROJECT value=1
 @caption alamprojekt
 
-@reltype PARTICIPANT clid=CL_USER,CL_CRM_COMPANY value=2
+@reltype PARTICIPANT clid=CL_USER,CL_CRM_COMPANY,CL_CRM_PERSON value=2
 @caption osaleja
 
 @reltype PRJ_EVENT value=3 clid=CL_TASK,CL_CRM_CALL,CL_CRM_OFFER,CL_CRM_DEAL,CL_CRM_MEETING,CL_PARTY,CL_COMICS
@@ -160,6 +208,8 @@
 @reltype PRJ_VIDEO value=11 clid=CL_VIDEO
 @caption Video
 
+@reltype TYPE value=12 clid=CL_META
+@caption t&uuml;&uuml;p
 */
 
 class project extends class_base
@@ -175,6 +225,11 @@ class project extends class_base
 
 		$this->event_entry_classes = array(CL_CALENDAR_EVENT, CL_STAGING, CL_CRM_MEETING, CL_TASK, CL_CRM_CALL, CL_PARTY, CL_COMICS);
 		classload("icons");
+
+		$this->states = array(
+			PROJ_IN_PROGRESS => t("T&ouml;&ouml;s"),
+			PROJ_DONE => t("Valmis")
+		);
 	}
 
 	function get_property($arr)
@@ -183,6 +238,25 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "participants":
+				$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
+				$people = array();
+				$u = get_instance(CL_USER);
+				$co = $u->get_current_company();
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company(obj($co),&$people);
+				$ol = new object_list(array("oid" => array_values($people)));
+				foreach($cur_pts as $pt)
+				{
+					$ol->add($pt->prop("to"));
+				}
+				$data["options"] = array("" => t("--Vali--")) + $ol->names();
+				break;
+
+			case "state":
+				$data["options"] = $this->states;
+				break;
+
 			case "event_list":
 				$this->gen_event_list($arr);
 				break;
@@ -1769,6 +1843,8 @@ class project extends class_base
 	function callback_mod_reforb($arr)
 	{
 		$arr["post_ru"] = post_ru();
+		$arr["connect_impl"] = $_GET["connect_impl"];
+		$arr["connect_orderer"] = $_GET["connect_orderer"];
 	}
 
 	function request_execute($o)
@@ -2273,6 +2349,94 @@ class project extends class_base
 	function generate_html($o, $item)
 	{
 		return "";
+	}
+
+	function callback_post_save($arr)
+	{
+		if (is_oid($arr["request"]["connect_impl"]) && $this->can("view", $arr["request"]["connect_impl"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["connect_impl"],
+				"reltype" => "RELTYPE_IMPLEMENTOR"
+			));
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["connect_impl"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+
+			$add_mem = true;
+		}
+		if (is_oid($arr["request"]["connect_orderer"]) && $this->can("view", $arr["request"]["connect_orderer"]))
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["connect_orderer"],
+				"reltype" => "RELTYPE_ORDERER"
+			));
+
+			$arr["obj_inst"]->connect(array(
+				"to" => $arr["request"]["connect_orderer"],
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+			$add_mem = true;
+		}
+
+		if ($add_mem)
+		{
+			$arr["obj_inst"]->connect(array(
+				"to" => aw_global_get("uid_oid"),
+				"reltype" => "RELTYPE_PARTICIPANT"
+			));
+		}
+	}
+
+	function _mk_tbl()
+	{
+		$this->db_query("
+			create table aw_projects(
+				aw_oid int primary key, 
+				aw_state int, 
+				aw_start int, 
+				aw_end int, 
+				aw_deadline int, 
+				aw_doc int, 
+				aw_skip_subproject_events int,
+				aw_project_navigator int, 
+				aw_use_template int, 
+				aw_doc_id int, 
+				aw_user1 varchar(255), 
+				aw_user2 varchar(255),
+				aw_user3 varchar(255),
+				aw_user4 varchar(255),
+				aw_user5 varchar(255),
+				aw_userch1 int, 
+				aw_userch2 int, 
+				aw_userch3 int, 
+				aw_userch4 int, 
+				aw_userch5 int
+		)");
+		$q = "SELECT * FROM objects WHERE class_id = ".CL_PROJECT." AND status > 0";
+		$this->db_query($q);
+		aw_disable_acl();
+		while($row = $this->db_next())
+		{
+			$this->save_handle();
+			$this->db_query("INSERT INTO aw_projects(aw_oid) values(".$row["oid"].")");
+			$o = obj($row["oid"]);
+			$pl = $o->get_property_list();
+			foreach($pl as $pn => $pd)
+			{
+				if ($pd["table"] == "aw_projects")
+				{
+					flush();
+					$o->set_prop($pn, $o->meta($pn));
+				}
+			}
+			$o->save();
+
+			$this->restore_handle();
+		}
+		aw_restore_acl();
 	}
 };
 ?>

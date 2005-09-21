@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/user_change_password.aw,v 1.1 2005/03/23 13:30:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/user_change_password.aw,v 1.2 2005/09/21 12:47:05 kristo Exp $
 // user_change_password.aw - Kasutaja parooli muutmine 
 /*
 
@@ -72,9 +72,7 @@ class user_change_password extends class_base
 		$arr["id"] = aw_global_get("uid");
 		extract($arr);
 
-		$u = get_instance("users");
-
-		$udata = $u->fetch($id);
+		$udata = $this->get_user($id);
 
 		if ($arr["pwd"] != $arr["pwd2"])
 		{
@@ -90,6 +88,7 @@ class user_change_password extends class_base
 
 		if ($arr["pwd"] != "")
 		{
+			$u = get_instance("users");
 			$u->save(array(
 				"uid" => $arr["id"], 
 				"password" => $arr["pwd"],

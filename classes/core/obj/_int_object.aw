@@ -1028,10 +1028,17 @@ class _int_object
 				}
 
 			case "oid":
-				if (is_oid($val) && $GLOBALS["object_loader"]->ds->can("view", $val))
+				if (is_oid($val))
 				{
-					$tmp = new object($val);
-					$val = $tmp->name();
+					if ($GLOBALS["object_loader"]->ds->can("view", $val))
+					{
+						$tmp = new object($val);
+						$val = $tmp->name();
+					}
+					else
+					{
+						$val = "";
+					}
 				}
 				else
 				if (is_array($val))
@@ -1039,10 +1046,13 @@ class _int_object
 					$vals = array();
 					foreach($val as $k)
 					{
-						if (is_oid($k) && $GLOBALS["object_loader"]->ds->can("view", $k))
+						if (is_oid($k))
 						{
-							$tmp = new object($k);
-							$vals[] = $tmp->name();
+							if ($GLOBALS["object_loader"]->ds->can("view", $k))
+							{
+								$tmp = new object($k);
+								$vals[] = $tmp->name();
+							}
 						}
 					}
 					$val = join(", ", $vals);

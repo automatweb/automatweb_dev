@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.30 2005/07/27 14:49:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.31 2005/09/21 12:47:06 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -53,6 +53,10 @@ class mysql
 
 	function db_query($qtext,$errors = true)
 	{
+		if ($GLOBALS["QD"] == 1)
+		{
+			die($qtext);
+		}
 		global $DUKE, $INTENSE_DUKE, $SLOW_DUKE;
 		if ($SLOW_DUKE == 1)
 		{
@@ -96,6 +100,14 @@ class mysql
 			}
 		};
 		$this->qID = @mysql_query($qtext, $this->dbh);
+		if (!$this->qID)
+		{
+			if ($this->_proc_error($qtext))
+			{
+				$this->qID = @mysql_query($qtext, $this->dbh);
+			}
+		}
+
 		$this->log_query($qtext);
 		if (!$this->qID )
 		{
@@ -729,6 +741,15 @@ class mysql
 	function db_get_table_type($tbl)
 	{
 		return DB_TABLE_TYPE_TABLE;
+	}
+
+	function _proc_error($q)
+	{
+		if (strpos($q, "aw_projects") !== false)
+		{
+			$p = get_instance(CL_PROJECT);
+			$p->_mk_tbl();
+		}
 	}
 };
 ?>
