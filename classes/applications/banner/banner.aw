@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.15 2005/09/15 12:25:47 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/banner/banner.aw,v 1.16 2005/09/22 06:19:21 kristo Exp $
 
 /*
 
@@ -269,6 +269,11 @@ class banner extends class_base
 		{
 			$bbs[] = $c->prop("from");
 		}
+		if (!count($bbs))
+		{
+			return $this->error_banner(false);
+		}
+
 		$bbs = join(",",$bbs);
 		if ($bbs == "")
 		{
