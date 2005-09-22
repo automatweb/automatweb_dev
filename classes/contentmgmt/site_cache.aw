@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.25 2005/06/29 09:42:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.26 2005/09/22 07:24:46 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -14,7 +14,6 @@ class site_cache extends aw_template
 		{
 			$arr["template"] = "main.tpl";
 		}
-		
 		$log = get_instance("contentmgmt/site_logger");
 		$log->add($arr);
 		$si = __get_site_instance();
@@ -216,6 +215,10 @@ class site_cache extends aw_template
 	function build_popups()
 	{
 		if ($_GET["print"] == 1)
+		{
+			return;
+		}
+		if (!$this->can("view", aw_global_get("section")))
 		{
 			return;
 		}

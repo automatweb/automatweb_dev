@@ -44,6 +44,8 @@ define("OP_IF_LOGGED", 26);	// params { }
 define("OP_GRP_BEGIN", 27); 
 define("OP_GRP_END", 28); 
 
+define("OP_LIST_INIT_END", 29);	// params { level }
+
 class site_template_compiler extends aw_template
 {
 	function site_template_compiler()
@@ -77,7 +79,8 @@ class site_template_compiler extends aw_template
 			25 => "OP_GET_OBJ_SUBMENUS",
 			26 => "OP_IF_LOGGED",
 			27 => "OP_GRP_BEGIN",
-			28 => "OP_GRP_END"
+			28 => "OP_GRP_END",
+			29 => "OP_LIST_INIT_END"
 		);
 
 		$this->id_func = (aw_ini_get("menuedit.show_real_location") == 1 ? "brother_of" : "id");
@@ -705,6 +708,11 @@ class site_template_compiler extends aw_template
 				"params" => array()
 			);
 		}
+
+		$this->ops[] = array(
+			"op" => OP_LIST_INIT_END,
+			"params" => array("level" => $level)
+		);
 
 		if ($ldat["in_logged"])
 		{
@@ -1720,14 +1728,14 @@ class site_template_compiler extends aw_template
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
-			$this->brace_level--;
+			/*$this->brace_level--;
 			$ret .= $this->_gi()."}\n";
 			$ret .= $this->_gi()."else\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(aw_ini_get(\"rootmenu\"));\n";
 			$this->brace_level--;
-			$ret .= $this->_gi()."}\n";
+			$ret .= $this->_gi()."}\n";*/
 		}
 		else
 		{
@@ -1900,6 +1908,15 @@ class site_template_compiler extends aw_template
 
 		$ret .= $this->_gi()."if (aw_global_get(\"uid\") != \"\")\n";
 		return $ret;
+	}
+
+	function _g_op_list_init_end($arr)
+	{
+		if ($arr["level"] == 1)
+		{
+			$this->brace_level--;
+			return $this->_gi()."}\n";
+		}
 	}
 
 	function _g_op_grp_begin($arr)
