@@ -589,6 +589,11 @@ class core extends acl_base
 			$send_mail = false;
 		}
 
+		if ($err_type == 31 && strpos($GLOBALS["class"], "@") !== false)
+		{
+			$send_mail = false;
+		}
+
 		$si = __get_site_instance();
 		if (is_object($si) && method_exists($si,"process_error"))
 		{
