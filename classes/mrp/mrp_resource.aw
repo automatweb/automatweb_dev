@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.72 2005/09/13 10:57:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.73 2005/09/24 17:48:15 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -414,6 +414,11 @@ class mrp_resource extends class_base
             	$prop["value"]["interval_daily"] = 1;
 
 			case "unavailable_recur":
+				if ($prop["value"] == "")
+				{
+					return PROP_OK;
+				}
+
 				### check for user errors
 				if (empty ($prop["value"]["length"]))
 				{
