@@ -709,10 +709,10 @@ class site_template_compiler extends aw_template
 			);
 		}
 
-		$this->ops[] = array(
+		/*$this->ops[] = array(
 			"op" => OP_LIST_INIT_END,
 			"params" => array("level" => $level)
-		);
+		);*/
 
 		if ($ldat["in_logged"])
 		{
@@ -1728,14 +1728,14 @@ class site_template_compiler extends aw_template
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(".$arr["a_parent_p_fn"].");\n";
-			/*$this->brace_level--;
+			$this->brace_level--;
 			$ret .= $this->_gi()."}\n";
 			$ret .= $this->_gi()."else\n";
 			$ret .= $this->_gi()."{\n";
 			$this->brace_level++;
 			$ret .= $this->_gi()."\$parent_obj = new object(aw_ini_get(\"rootmenu\"));\n";
 			$this->brace_level--;
-			$ret .= $this->_gi()."}\n";*/
+			$ret .= $this->_gi()."}\n";
 		}
 		else
 		{
