@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.12 2005/06/29 09:00:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.13 2005/09/26 08:53:37 kristo Exp $
 
 lc_load("definition");
 
@@ -366,6 +366,11 @@ class acl_base extends db_connector
 		if ($GLOBALS["cfg"]["acl"]["no_check"])
 		{
 			return true;
+		}
+
+		if (!is_oid($oid))
+		{
+			return false;
 		}
 		if ($GLOBALS["cfg"]["acl"]["use_new_acl"])
 		{
