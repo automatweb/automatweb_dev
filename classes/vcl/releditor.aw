@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.59 2005/09/10 12:07:21 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.60 2005/09/26 15:36:00 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -195,6 +195,11 @@ class releditor extends core
 			$cfg = get_instance(CL_CFGFORM);
 			$act_props = $cfg->get_props_from_cfgform(array("id" => $cfgform_id));
 		}
+	
+		if (!empty($prop["choose_default"]))
+		{
+			$this->choose_default = 1;
+		};
 
 		if ($visual == "manager")
 		{
@@ -206,6 +211,7 @@ class releditor extends core
 			$tabledef = $this->init_rel_table($arr);
 			$act_props[$tabledef["name"]] = $tabledef;
 		};
+
 
 		// "form" does not need a caption
 		if ($visual == "manager" && $form_type == "new")
@@ -512,6 +518,7 @@ class releditor extends core
 					}
 					$export_props[$_pn] = $prop["value"];
 				}
+				$ed_fields["name"] = 1;
 				//$export_props = $target->properties();
 				if ($ed_fields && ($this->form_type != $target->id()))
 				{
@@ -529,9 +536,29 @@ class releditor extends core
 					};
 				};
 				$rowdata = $export_props + $rowdata;
+				if ($this->choose_default)
+				{
+					$rowdata = $rowdata + array(
+						"default" => html::radiobutton(array(
+							"name" => $arr["prop"]["name"] . '[_default]',
+							"value" => $rowdata["id"],
+							"checked" => ($arr["prop"]["value"] == $rowdata["id"]),
+						)),
+					);
+
+				};
 				$awt->define_data($rowdata);
 			}
 		}
+
+		if ($this->choose_default)
+		{
+			$awt->define_field(array(
+				"name" => "default",
+				"caption" => t("Vali üks"),
+				"align" => "center",
+			));
+		};
 
 		if($arr["prop"]["filt_edit_fields"] == 1)
 		{
@@ -607,10 +634,11 @@ class releditor extends core
 	function process_releditor($arr)
 	{
 
-		$prop = $arr["prop"];
+		$prop = &$arr["prop"];
 		$obj = $arr["obj_inst"];
 
 		$clid = $arr["prop"]["clid"][0];
+
 		if ($clid == 7)
 		{
 			$use_clid = "doc";
@@ -661,6 +689,16 @@ class releditor extends core
 		$emb = $arr["request"][$elname];
 		// _data is used to edit multiple connections at once
 		unset($emb["_data"]);
+
+		$set_default_relation = false;
+
+		if (is_oid($emb["_default"]))
+		{
+			$prop["value"] = $emb["_default"];
+			$set_default_relation = $emb["_default"];
+		};
+
+		unset($emb["_default"]);
 
 		$clinst->init_class_base();
 		$emb_group = "general";
