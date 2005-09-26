@@ -927,11 +927,7 @@ class core extends acl_base
 	// !creates a list of menus above $parent and appends $text and assigns it to the correct variable
 	function mk_path($oid,$text = "",$period = 0)
 	{
-		if (!$this->can("view", $oid))
-		{
-			return;
-		}
-		if (is_oid($oid))
+		if ($this->can("view", $oid))
 		{
 			$path = "";
 			$current = new object($oid);
