@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.87 2005/09/28 06:06:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.88 2005/09/28 12:12:16 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -9,20 +9,6 @@
 @default group=general
 @default field=meta
 @default method=serialize
-
-*/
-
-/*
-
-CREATE TABLE `mrp_schedule` (
-	`oid` int(11) NOT NULL default '0',
-	`planned_length` int(10) unsigned NOT NULL default '0',
-	`starttime` int(10) unsigned default NULL,
-	PRIMARY KEY  (`oid`),
-	UNIQUE KEY `oid` (`oid`)
-) TYPE=MyISAM;
-
-CREATE TABLE `mrp_schedule` ( `oid` int(11) NOT NULL default '0', `planned_length` int(10) unsigned NOT NULL default '0', `starttime` int(10) unsigned default NULL, PRIMARY KEY  (`oid`), UNIQUE KEY `oid` (`oid`) ) TYPE=MyISAM
 
 */
 
@@ -173,6 +159,7 @@ class mrp_schedule extends class_base
 		$schedule_length = $workspace->prop ("parameter_schedule_length");
 		$this->schedule_length = (int) empty ($schedule_length) ? $this->schedule_length : $schedule_length;
 		$this->schedule_length = (int) $this->schedule_length * 31536000;
+		define ("MRP_INF", $this->schedule_length * 10);
 
 		$schedule_start = $workspace->prop ("parameter_schedule_start");
 		$this->schedule_start = $this->scheduling_time + ((int) empty ($schedule_start) ? $this->schedule_start : $schedule_start);
@@ -220,8 +207,7 @@ class mrp_schedule extends class_base
 		}
 
 		### get schedulable resources
-
-		### shcedulable resource types
+		#### shcedulable resource types
 		$applicable_types = array (
 			MRP_RESOURCE_SCHEDULABLE,
 			MRP_RESOURCE_SUBCONTRACTOR,
@@ -251,14 +237,6 @@ class mrp_schedule extends class_base
 **/
 	function create ($arr)
 	{
-// http://.ee/automatweb/orb.aw?class=mrp_schedule&action=create&copyjobstoschedule=1&mrp_workspace=1259
-// /* COPY JOBS FROM mrp_job TO mrp_schedule */
-// /* dbg */ if ($_GET["copyjobstoschedule"]==1){
-// /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
-// /* dbg */ while ($job = $this->db_next ()) {
-// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
-// /* dbg */ }
-
 /* dbg */ list($micro,$sec) = split(" ",microtime());
 /* dbg */ $ts_s = $sec + $micro;
 
@@ -395,13 +373,12 @@ class mrp_schedule extends class_base
 
 						foreach ($this->range_scale as $key => $start)
 						{
-							$this->reserved_times[$resource_tag][$key] = array ($start => 0);
+							$this->reserved_times[$resource_tag][$key] = array ();
 						}
 					}
 				}
 			}
 		}
-
 
 /* timing */ timing ("initiate resource timetables", "end");
 /* timing */ timing ("insert inprogress jobs", "start");
@@ -461,6 +438,7 @@ class mrp_schedule extends class_base
 				"due_date" => $project["due_date"],
 				"customer_priority" => $project["customer_priority"],
 				"project_priority" => $project["project_priority"],
+				"state" => $project["state"],
 			);
 		}
 
@@ -499,11 +477,14 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
-			/*if (!$this->can("view", $job["oid"]))
+			/* kiiruse huvides seda kontrolli praegu ei tehta. sellest v6ib mingitel juhtudel jama olla. !!!vaadata altpoolt kas kuskil vaja yldse midagi mis eeldab vaatamis6iguse olemasolu t88le.
+			//!!! [15:16] <terryf> see onyks asi, mis seal fiksimist vajab jah
+			if (!$this->can("view", $job["oid"]))
 			{
 				// echo t(sprintf ("Esines töö (id: %s), mis pole kasutajale nähtav. Planeerimine ei toimu adekvaatselt.", $job["oid"]));
 				continue;
-			}*/
+			}
+			*/
 
 			if (array_key_exists ($job["project"], $projects))
 			{
@@ -542,85 +523,83 @@ class mrp_schedule extends class_base
 		### schedule jobs in all projects
 		foreach ($projects as $project_id => $project)
 		{
-			if (!is_array ($project["jobs"]))
+			if (is_array ($project["jobs"]))
 			{
-				continue;
-			}
-
 // /* dbg */ if ($project_id == 7700) {
 // /* dbg */ $this->mrpdbg=1;
 // /* dbg */ exit;
 // /* dbg */ }
 /* timing */ timing ("one project total", "start");
 
-			// /* strict */ $project_start = isset ($projects[$project_id]["starttime"]) ? $projects[$project_id]["starttime"] : 0;
-			/* opt */ $project_start = $projects[$project_id]["starttime"];
-			// /* strict */ $project_progress = isset ($projects[$project_id]["progress"]) ? $projects[$project_id]["progress"] : 0;
-			/* opt */ $project_progress = $projects[$project_id]["progress"];
+				// /* strict */ $project_start = isset ($projects[$project_id]["starttime"]) ? $projects[$project_id]["starttime"] : 0;
+				/* opt */ $project_start = $projects[$project_id]["starttime"];
+				// /* strict */ $project_progress = isset ($projects[$project_id]["progress"]) ? $projects[$project_id]["progress"] : 0;
+				/* opt */ $project_progress = $projects[$project_id]["progress"];
 
-			### schedule project jobs
-			foreach ($project["jobs"] as $key => $job)
-			{
+				### schedule project jobs
+				foreach ($project["jobs"] as $key => $job)
+				{
 
 /* timing */ timing ("one job total", "start");
 /* timing */ timing ("reserve time & modify earliest start", "start");
 /* dbg */ if ($job["oid"] == $_GET["mrp_dbg_job"] and $_GET["mrp_dbg_job"]) {
-// /* dbg */ if ($job["resource"] == 6670  ) {
+// /* dbg */ if ($job["resource"] == 7704  ) {
 /* dbg */ $this->mrpdbg=1;
+/* dbg */ echo "<hr><h2>Job oid: {$job["oid"]}</h2><hr>";
 // /* dbg */ exit;
 /* dbg */ }
 
 
-				$this->currently_processed_job = $job["oid"];
+					$this->currently_processed_job = $job["oid"];
 
-				// /* strict */ $successor_starttime = isset ($starttime_index[$job["oid"]]) ? $starttime_index[$job["oid"]] : 0;
-				/* opt */ $successor_starttime = $starttime_index[$job["oid"]];
-				// /* strict */ $minstart = max ($project_start, $project_progress, $this->schedule_start, $successor_starttime, $job["minstart"]);
-				/* opt */ $minstart = max ($projects[$project_id]["starttime"], $projects[$project_id]["progress"], $this->schedule_start, $starttime_index[$job["oid"]], $job["minstart"]);
-				// $minstart = $job["pre_buffer"] + $minstart;
+					// /* strict */ $successor_starttime = isset ($starttime_index[$job["oid"]]) ? $starttime_index[$job["oid"]] : 0;
+					/* opt */ $successor_starttime = $starttime_index[$job["oid"]];
+					// /* strict */ $minstart = max ($project_start, $project_progress, $this->schedule_start, $successor_starttime, $job["minstart"]);
+					/* opt */ $minstart = max ($projects[$project_id]["starttime"], $projects[$project_id]["progress"], $this->schedule_start, $starttime_index[$job["oid"]], $job["minstart"]);
+					// $minstart = $job["pre_buffer"] + $minstart;
 
 
 /* dbg */ if ($this->mrpdbg) {
 /* dbg */ echo "minstart-". date (MRP_DATE_FORMAT,$minstart )." | length - ". $job["length"]/3600 ."h <br>";
 /* dbg */ arr ($job);
-// /* dbg */ echo "minplan jobstart: " . date (MRP_DATE_FORMAT,$this->min_planning_jobstart) . "<br>";
-// /* dbg */ echo "sched start: " . date (MRP_DATE_FORMAT,$this->schedule_start) . "<br>";
+/* dbg */ echo "minplan jobstart: " . date (MRP_DATE_FORMAT,$this->min_planning_jobstart) . "<br>";
+/* dbg */ echo "sched start: " . date (MRP_DATE_FORMAT,$this->schedule_start) . "<br>";
 /* dbg */ }
 
-				### states for planning jobs
-				$applicable_planning_states = array (
-					MRP_STATUS_PLANNED,
-					MRP_STATUS_NEW,
-				);
+					### states for planning jobs
+					$applicable_planning_states = array (
+						MRP_STATUS_PLANNED,
+						MRP_STATUS_NEW,
+					);
 
-				### states for reserving job time and length w/o planning
-				$applicable_timereserve_states = array (
-					MRP_STATUS_ABORTED,
-				);
+					### states for reserving job time and length w/o planning
+					$applicable_timereserve_states = array (
+						MRP_STATUS_ABORTED,
+					);
 
-				if ( in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) and ($job["length"] > 0))
-				{
-					### (re)schedule job next in line
-					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job["length"]);
-					$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length);
-				}
-				elseif (in_array ($job["state"], $applicable_timereserve_states) and in_array ($job["resource"], $this->schedulable_resources))
-				{
-					### postpone next jobs by job length
-					$remaining_length = ($job["remaining_length"] > 0) ? $job["remaining_length"] : $job["length"];
-					list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $remaining_length);
-				}
-				elseif ( (!$job["length"]) and in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) )
-				{
-					### postpone next jobs by zero length job start
- 					$scheduled_start = $minstart;
- 					$scheduled_length = 0;
-					$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length);
-				}
-				else
-				{
-					continue;
-				}
+					if ( in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) and (($job["starttime"] >= $this->min_planning_jobstart) or ($job["starttime"] < $this->schedule_start) or !$job["starttime"]) and ($job["length"] > 0))
+					{
+						### (re)schedule job next in line
+						list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $job["length"]);
+						$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length, $job["state"]);
+					}
+					elseif (in_array ($job["state"], $applicable_timereserve_states) and in_array ($job["resource"], $this->schedulable_resources))
+					{
+						### postpone next jobs by job length
+						$remaining_length = ($job["remaining_length"] > 0) ? $job["remaining_length"] : $job["length"];
+						list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $remaining_length);
+					}
+					elseif ( (!$job["length"]) and in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) )
+					{
+						### postpone next jobs by zero length job start
+						$scheduled_start = $minstart;
+						$scheduled_length = 0;
+						$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length, $job["state"]);
+					}
+					else
+					{
+						continue;
+					}
 
 // /* dbg */ if ($this->mrpdbg) {
 // /* dbg */ echo "rsrv time ret: ". date (MRP_DATE_FORMAT,$scheduled_start )." | length - ". $scheduled_length/3600 ."h <br>";
@@ -628,30 +607,31 @@ class mrp_schedule extends class_base
 /* timing */ timing ("reserve time & modify earliest start", "end");
 /* timing */ timing ("modify starttimes for next jobs in wf", "start");
 
-				### modify earliest starttime for unscheduled jobs next in workflow
-				if (is_array ($successor_index[$job["oid"]]))
-				{
-					foreach ($successor_index[$job["oid"]] as $successor_id)
+					### modify earliest starttime for unscheduled jobs next in workflow
+					if (is_array ($successor_index[$job["oid"]]))
 					{
-						$starttime_index[$successor_id] = max ($starttime_index[$successor_id], ($scheduled_start + $scheduled_length + $job["post_buffer"]));
+						foreach ($successor_index[$job["oid"]] as $successor_id)
+						{
+							$starttime_index[$successor_id] = max ($starttime_index[$successor_id], ($scheduled_start + $scheduled_length + $job["post_buffer"]));
+						}
 					}
-				}
 
 /* timing */ timing ("modify starttimes for next jobs in wf", "end");
 
-				### set planned finishing date for project
-				if (!isset ($project["jobs"][$key + 1]))
-				{
-					$this->project_schedule[$project_id] = $scheduled_start + $scheduled_length;
-				}
+					### set planned finishing date for project
+					if (!isset ($project["jobs"][$key + 1]))
+					{
+						$planned_date = $scheduled_start + $scheduled_length;
+						$this->project_schedule[$project_id] = array ($planned_date, $project["state"]);
+					}
 
 /* timing */ timing ("one job total", "end");
 /* dbg */ $this->mrpdbg=0;
 // /* dbg */ echo "<small>proj: " . $project_id . " | job: " . $job["oid"] . " | res: " . $job["resource"] . " | start: " . date (MRP_DATE_FORMAT, $scheduled_start) . " | end: " . date (MRP_DATE_FORMAT, $scheduled_start+$scheduled_length) . "</small><br>";
-			}
+				}
 
 /* timing */ timing ("one project total", "end");
-
+			}
 		}
 
 /* timing */ timing ("schedule jobs total", "end");
@@ -781,8 +761,6 @@ class mrp_schedule extends class_base
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
 		{
 			$log = get_instance(CL_MRP_WORKSPACE);
-			$tmpname = tempnam(aw_ini_get("server.tmpdir"), "mrpschedule");
-			$tmp = fopen ($tmpname, "w");
 
 			### job & project states for which to change state to planned and log change
 			$applicable_project_states = array (
@@ -793,87 +771,136 @@ class mrp_schedule extends class_base
 				MRP_STATUS_NEW,
 			);
 
-timing("save projects", "start");
-			foreach ($this->project_schedule as $project_id => $date)
+/* timing */ timing ("save schedule data - projects", "start");
+			$tmpname = tempnam(aw_ini_get("server.tmpdir"), "mrpschedule");
+			$tmp = fopen ($tmpname, "w");
+
+			foreach ($this->project_schedule as $project_id => $project_data)
 			{
 				if (is_oid($project_id))
 				{
-					$project = obj ($project_id);
-					$project->set_prop ("planned_date", $date);
+/* timing */ timing ("save schedule data - projects - write datafile record", "start");
 
-					if (in_array ($project->prop("state"), $applicable_project_states))
+					$line = "{$project_id}\t{$project_data[0]}\n";
+					fwrite ($tmp, $line);
+
+/* timing */ timing ("save schedule data - projects - write datafile record", "end");
+					if (in_array ($project_data[1], $applicable_job_states))
 					{
-						$project->set_prop ("state", MRP_STATUS_PLANNED);
-						$log->mrp_log(
-							$project->id(),
-							0,
-							"Projekti staatus muutus ".
-								$this->state_names[$project->prop("state")]." => ".
-								$this->state_names[MRP_STATUS_PLANNED]
-						);
-					}
+/* timing */ timing ("save schedule data - projects - save new state", "start");
 
-					aw_disable_acl();
-					$project->save ();
-					aw_restore_acl();
+						$project = obj ($project_id);
+
+						if (in_array ($project->prop("state"), $applicable_project_states))
+						{
+							$project->set_prop ("state", MRP_STATUS_PLANNED);
+							$log->mrp_log(
+								$project->id(),
+								0,
+								"Projekti staatus muutus ".
+									$this->state_names[$project->prop("state")]." => ".
+									$this->state_names[MRP_STATUS_PLANNED]
+							);
+						}
+
+						aw_disable_acl();
+						$project->save ();
+						aw_restore_acl();
+
+/* timing */ timing ("save schedule data - projects - save new state", "end");
+					}
+				}
+				else
+				{
+					error::raise(array(
+						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id),
+						"fatal" => false,
+						"show" => false,
+					));
+				}
 
 /* dbg */ if ($_GET["mrp_dbg"]) {
-// /* dbg */ echo "proj-" . $project_id . ": [" . date (MRP_DATE_FORMAT, $date) . "]<br>";
+// /* dbg */ echo "proj-" . $project_id . ": [" . date (MRP_DATE_FORMAT, $project_data[0]) . "]<br>";
 /* dbg */ }
-
-				}
 			}
-timing("save projects", "end");
-timing("save jobs", "start");
 
-			// read job statuses
-			$state_lut = array();
-			$this->db_query("SELECT state,oid FROM mrp_job"); 
-			while ($row = $this->db_next())
+/* timing */ timing ("save schedule data - projects", "end");
+/* timing */ timing ("save schedule data - load projectdata to DB", "start");
+
+			### load local file into db. LOCAL is slower but used because dbserver might be on another machine. Subject to change if speed is primary concern.
+			$query = "LOAD DATA LOCAL INFILE '{$tmpname}' REPLACE INTO TABLE mrp_case_schedule";
+			// $query = "LOAD DATA LOCAL INFILE '{$tmpname}' REPLACE INTO TABLE mrp_case_schedule FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (oid,planned_length,starttime)";
+			// $query = "LOAD DATA INFILE '{$tmpname}' REPLACE INTO TABLE mrp_case_schedule";
+			// $query = "LOAD DATA INFILE '{$tmpname}' REPLACE INTO TABLE mrp_case_schedule FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (oid,planned_length,starttime)";
+			$db_retval = $this->db_query ($query);
+
+/* timing */ timing ("save schedule data - load projectdata to DB", "end");
+
+			if (!$db_retval)
 			{
-				$state_lut[$row["oid"]] = $row["state"];
+				error::raise(array(
+					"msg" => t("Viga tööde planeeritud aegade salvestamisel. ") . $this->db_last_error,
+					"fatal" => false,
+					"show" => true,
+				));
 			}
+
+			fclose($tmp);
+			unlink($tmpname);
+
+
+/* timing */ timing ("save schedule data - jobs", "start");
+			$tmpname = tempnam(aw_ini_get("server.tmpdir"), "mrpschedule");
+			$tmp = fopen ($tmpname, "w");
+
 			foreach ($this->job_schedule as $job_id => $job_data)
 			{
-				if (is_oid($job_id))
+				if (is_oid ($job_id))
 				{
-					//$job = obj ($job_id);
-					// $job->set_prop ("starttime", $job_data[0]);
-					// $job->set_prop ("planned_length", $job_data[1]);
+/* timing */ timing ("save schedule data - jobs - write datafile record", "start");
+
 					$line = "{$job_id}\t{$job_data[1]}\t{$job_data[0]}\n";
 					fwrite ($tmp, $line);
 
-					if (in_array ($state_lut[$job_id], $applicable_job_states))
+/* timing */ timing ("save schedule data - jobs - write datafile record", "end");
+
+					if (in_array ($job_data[2], $applicable_job_states))
 					{
+/* timing */ timing ("save schedule data - jobs - save new state", "start");
+
 						$job = obj ($job_id);
-						if ($job->prop("state") != MRP_STATUS_PLANNED)
-						{
-							$log->mrp_log(
-								$job->prop("project"),
-								$job->id(),
-								"T&ouml;&ouml; staatus muutus ".
-									$this->state_names[$job->prop("state")]." => ".
-									$this->state_names[MRP_STATUS_PLANNED]
-							);
+						$log->mrp_log(
+							$job->prop("project"),
+							$job->id(),
+							"T&ouml;&ouml; staatus muutus ".
+								$this->state_names[$job->prop("state")]." => ".
+								$this->state_names[MRP_STATUS_PLANNED]
+						);
 
-							$job->set_prop ("state", MRP_STATUS_PLANNED);
-							aw_disable_acl();
-							$job->save ();
-							aw_restore_acl();
-						}
+						$job->set_prop ("state", MRP_STATUS_PLANNED);
+						aw_disable_acl();
+						$job->save ();
+						aw_restore_acl();
+
+/* timing */ timing ("save schedule data - jobs - save new state", "end");
 					}
-
+				}
+				else
+				{
+					error::raise(array(
+						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]),
+						"fatal" => false,
+						"show" => false,
+					));
+				}
 
 /* dbg */ if ($_GET["mrp_dbg"]) {
-// /* dbg */ echo "job-" . $job_id . ": [" . date (MRP_DATE_FORMAT, $job_data[0]) . "] - [" . date (MRP_DATE_FORMAT, $job_data[0]+$job_data[1]) . "]<br>";
+/* dbg */ echo "job-" . $job_id . ": [" . date (MRP_DATE_FORMAT, $job_data[0]) . "] - [" . date (MRP_DATE_FORMAT, $job_data[0]+$job_data[1]) . "]<br>";
 /* dbg */ }
-
-				}
 			}
-timing("save jobs", "end");
-if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
-			// fclose($tmp);
+/* timing */ timing ("save schedule data - jobs", "end");
+/* timing */ timing ("save schedule data - load jobdata to DB", "start");
 
 			### load local file into db. LOCAL is slower but used because dbserver might be on another machine. Subject to change if speed is primary concern.
 			$query = "LOAD DATA LOCAL INFILE '{$tmpname}' REPLACE INTO TABLE mrp_schedule";
@@ -882,10 +909,12 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			// $query = "LOAD DATA INFILE '{$tmpname}' REPLACE INTO TABLE mrp_schedule FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (oid,planned_length,starttime)";
 			$db_retval = $this->db_query ($query);
 
+/* timing */ timing ("save schedule data - load jobdata to DB", "end");
+
 			if (!$db_retval)
 			{
 				error::raise(array(
-					"msg" => t("Viga planeeritud aegade salvestamisel. ") . $this->db_last_error,
+					"msg" => t("Viga tööde planeeritud aegade salvestamisel. ") . $this->db_last_error,
 					"fatal" => false,
 					"show" => true,
 				));
@@ -947,6 +976,12 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
 	function reserve_time ($resource_id, $start, $length)
 	{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h4>reserve_time</h4>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 		$threads = $this->resource_data[$resource_id]["threads"];
 		$available_times = array ();
 
@@ -955,62 +990,71 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			$resource_tag = $resource_id . "-" . $threads;
 			$available_times[$resource_tag] = $this->get_available_time ($resource_tag, $start, $length);
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "thread nr." . $threads. " restag:" . $resource_tag. " reservation (time,len,timerange): ";
-// /* dbg */ arr ($available_times[$resource_tag]);
-// /* dbg */ echo "reserved times this tag: ";
-// /* dbg */ arr ($this->reserved_times[$resource_tag]);
-// /* dbg */ }
-
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h4>reserve_time</h4>";
+/* dbg */ echo "thread nr." . $threads. " restag:" . $resource_tag. " reservation (time,len,timerange): ";
+/* dbg */ arr ($available_times[$resource_tag]);
+/* dbg */ echo "reserved times this tag: ";
+/* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 		}
 
 		### select thread with minimal start&length
-		$weight = "NA";
-		$selected_resource_tag = "NA";
+		$weight = NULL;
+		$selected_resource_tag = NULL;
 
 		foreach ($available_times as $resource_tag => $available_time)
 		{
 			if (is_array ($available_time))
 			{
-				$start = $available_time[0];
-				$length = $available_time[1];
+				list ($start, $length, $time_range) = $available_time;
 				$new_weight = ($start * $this->parameter_start_priority + $length * $this->parameter_length_priority) / 2;
 
-				if ($weight === "NA")
+				if (!isset ($weight))
 				{
 					$selected_resource_tag = $resource_tag;
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "weight=na. selected_resource_tag: " . $selected_resource_tag . "<br>";
 // /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				}
 				elseif ($new_weight < $weight)
 				{
 					$selected_resource_tag = $resource_tag;
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "new_weight<weight. selected_resource_tag: " . $selected_resource_tag . "<br>";
 // /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				}
 
-				$weight = ($weight === "NA") ? $new_weight : min ($weight, $new_weight);
+				$weight = isset ($weight) ? min ($weight, $new_weight) : $new_weight;
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 // /* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "new_weight: " . $new_weight . "<br>";
 // /* dbg */ echo "weight: " . $weight . "<br><br>";
 // /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 			}
 		}
 
-// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
 // /* dbg */ echo "available_times: ";
 // /* dbg */ arr ($available_times);
-// /* dbg */ echo "selected_resource_tag: " . $selected_resource_tag;
-// /* dbg */ }
+/* dbg */ echo "selected_resource_tag: " . $selected_resource_tag;
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-		if (($weight === "NA") || ($selected_resource_tag === "NA"))
+		if (!isset ($weight) or !isset ($selected_resource_tag))
 		{
 			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
 			error::raise(array(
@@ -1025,291 +1069,315 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 		$resource_tag = $selected_resource_tag;
 		$reserved_time = $available_times[$resource_tag][0];
 		$length = $available_times[$resource_tag][1];
-		$time_range = (int) $available_times[$resource_tag][2];
 		$this->reserved_times[$resource_tag][$time_range][$reserved_time] = $length;
+		$reserved_time += $this->schedule_start;
 
-/* timing */ timing ("reserve_time - make corrections to timerange starting-times", "start");
+/* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "reserved times after this reservation: ";
+/* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ echo "reserved time: " . $reserved_time . " [" . date (MRP_DATE_FORMAT, $reserved_time) . "]";
+/* dbg */ }
+/* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-		### make corrections to selected thread's timerange starting-times
-		$i = 0;
-
-		while (isset ($this->reserved_times[$resource_tag][$time_range + (++$i)]))
-		{ ### go through all timeranges consequent to the one where time was reserved
-			$next_range_start = reset (array_keys ($this->reserved_times[$resource_tag][$time_range + $i], 0));
-
-			### find out if job laps over next timerange
-			if ( (($reserved_time + $length) > $next_range_start) and $next_range_start )
-			{
-				### get second_next_range_start
-				if (isset ($this->reserved_times[$resource_tag][$time_range + $i +1]))
-				{
-					$second_next_range_start = reset (array_keys ($this->reserved_times[$resource_tag][$time_range + $i +1], 0));
-				}
-				else
-				{
-					$second_next_range_start = false;
-				}
-
-				### delete range start marker
-				unset ($this->reserved_times[$resource_tag][$time_range + $i][$next_range_start]);
-
-				### move zero marker to job end
-				if ((($reserved_time + $length) < $second_next_range_start) or !$second_next_range_start)
-				{
-					$this->reserved_times[$resource_tag][$time_range + $i][($reserved_time + $length)] = 0;
-					break;
-				}
-			}
-			else
-			{
-				break;
-			}
-		}
-
-
-/* timing */ timing ("reserve_time - make corrections to timerange starting-times", "end");
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "reserved times: ";
-// /* dbg */ arr ($this->reserved_times[$resource_tag]);
-// /* dbg */ echo "reserved time: " . $reserved_time;
-// /* dbg */ }
-
-		$reserved_time = $this->schedule_start + $reserved_time;
 		return array ($reserved_time, $length);
 	}
 
-	function get_available_time ($resource_tag, $start, $length)
-	{
-		### find range for given starttime
-		$reserved_time = "NA";
-		$start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
-		$time_range = $this->find_range ($start);
-		list ($resource_id, $thread) = sscanf ($resource_tag, "%u-%u");
+	function get_snug_slot ($resource_tag, $start, $length, $time_range)
+	{ ## find free space with right length/start
+/* timing */ timing ("reserve_time - get_snug_slot", "start");
 
-		### find free space with right length/start
-		while (isset ($this->reserved_times[$resource_tag][$time_range]))
-		{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h4>get_snug_slot</h4>";
+/* dbg */ echo "timerange:" . $time_range ."<br>"; $time_range_dbg = 0;
+// /* dbg */ while ($time_range_dbg < ($time_range + 1)) {
+// /* dbg */ echo "<hr> timerangedbg:" .  $time_range_dbg . "<br>";
+// /* dbg */ foreach ($this->reserved_times[$resource_tag][$time_range_dbg] as $time_range_dbg_start => $time_range_dbg_length) {
+// /* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $time_range_dbg_start) . " len:" . $time_range_dbg_length . " end:" . date (MRP_DATE_FORMAT, $this->schedule_start + $time_range_dbg_start + $time_range_dbg_length) . "<br>";	}  $time_range_dbg++; }
+// /* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 /* timing */ timing ("reserve_time - sort reserved_times", "start");
 
-			ksort ($this->reserved_times[$resource_tag][$time_range], SORT_NUMERIC);
-			reset ($this->reserved_times[$resource_tag][$time_range]);
+		ksort ($this->reserved_times[$resource_tag][$time_range], SORT_NUMERIC);
+		reset ($this->reserved_times[$resource_tag][$time_range]);
 
 /* timing */ timing ("reserve_time - sort reserved_times", "end");
-/* dbg */ if ($this->mrpdbg){ echo "timerange:" . $time_range ."<br>"; $time_range_dbg = 0;
-/* dbg */ while ($time_range_dbg < ($time_range + 1)) {
-/* dbg */ echo "<hr> timerangedbg:" .  $time_range_dbg . "<br>";
-/* dbg */ foreach ($this->reserved_times[$resource_tag][$time_range_dbg] as $keyw => $valuew) {
-/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $keyw) . " len:" . $valuew . " end:" . date (MRP_DATE_FORMAT, $this->schedule_start + $keyw + $valuew) . "<br>";	}  $time_range_dbg++; }
-/* dbg */ arr ($this->reserved_times[$resource_tag]);
-/* dbg */ }
 
+		if (count ($this->reserved_times[$resource_tag][$time_range]))
+		{ ### timerange has already reserved times
 			### go through reserved times in current timerange to find place for job being scheduled
 			foreach ($this->reserved_times[$resource_tag][$time_range] as $start1 => $length1)
 			{
-/* timing */ timing ("reserve_time - get next reserved time start", "start");
-
-				### get next reserved time start
-				$start2 = false;
-				$i = 0;
-
-				while (isset ($this->reserved_times[$resource_tag][$time_range + $i]))
-				{
-					if ($i > 0)
-					{
-						ksort ($this->reserved_times[$resource_tag][$time_range + $i], SORT_NUMERIC);
-						reset ($this->reserved_times[$resource_tag][$time_range + $i]);
-
-						if (current ($this->reserved_times[$resource_tag][$time_range + $i]))
-						{
-							$start2 = key ($this->reserved_times[$resource_tag][$time_range + $i]);
-						}
-						else
-						{
-							next ($this->reserved_times[$resource_tag][$time_range + $i]);
-							$start2 = key ($this->reserved_times[$resource_tag][$time_range + $i]);
-						}
-					}
-					else
-					{
-						if (next ($this->reserved_times[$resource_tag][$time_range + $i]))
-						{
-							$start2 = key ($this->reserved_times[$resource_tag][$time_range + $i]);
-						}
-						else
-						{
-							next ($this->reserved_times[$resource_tag][$time_range + $i]);
-							$start2 = key ($this->reserved_times[$resource_tag][$time_range + $i]);
-							prev ($this->reserved_times[$resource_tag][$time_range + $i]);
-						}
-
-						prev ($this->reserved_times[$resource_tag][$time_range + $i]);
-					}
-
-					if ($start2)
-					{
-						break;
-					}
-					else
-					{
-						$i++;
-					}
+				### get next reserved time start -- start2
+				if (false !== next ($this->reserved_times[$resource_tag][$time_range]))
+				{ #### look for it in the same timerange, after current reserved time (start1)
+					$start2 = key ($this->reserved_times[$resource_tag][$time_range]);
+					prev ($this->reserved_times[$resource_tag][$time_range]);
 				}
-
-				if (!$start2)
-				{
-					$start2 = $this->schedule_length;
+				else
+				{ #### look for it in the sequent timeranges
+					$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
 				}
-
-/* timing */ timing ("reserve_time - get next reserved time start", "end");
 
 				$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
 
 				### check if requested space is available between start1 & start2
 				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 				{
-					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
-					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
+/* timing */ timing ("reserve_time - get_snug_slot", "end");
+					return array ($start1, $length1, $start2);
+				}
 
+				next ($this->reserved_times[$resource_tag][$time_range]);
+			}
+		}
+		else
+		{ ### no times reserved yet
+			$start1 = $this->range_scale[$time_range];
+			$length1 = 0;
+			$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
 
+			$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
 
+			### check if requested space is available between start1 & start2
+			if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+			{
+/* timing */ timing ("reserve_time - get_snug_slot", "end");
+				return array ($start1, $length1, $start2);
+			}
+		}
+
+/* timing */ timing ("reserve_time - get_snug_slot", "end");
+		return false;
+	}
+
+	function get_next_range_first_job ($resource_tag, $time_range)
+	{
+		$i = 1;
+		$start2 = MRP_INF;
+
+		while (isset ($this->reserved_times[$resource_tag][$time_range + $i]) and ($start2 === MRP_INF))
+		{
+			ksort ($this->reserved_times[$resource_tag][$time_range + $i], SORT_NUMERIC);
+
+			if (reset ($this->reserved_times[$resource_tag][$time_range + $i]))
+			{
+				$start2 = key ($this->reserved_times[$resource_tag][$time_range + $i]);
+			}
+			else
+			{
+				$i++;
+			}
+		}
+
+		return $start2;
+	}
+
+	function add_unavailable_times ($resource_tag, $reserved_time, $length, $start2)
+	{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
-// /* dbg */ echo "start1:". $start1." - length1:".$length1." - d: ".$d." - start:". $start ."-start2:".$start2 ."<br>";
+/* dbg */ echo "<h4>add_unavailable_times</h4>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+		list ($resource_id, $thread) = sscanf ($resource_tag, "%u-%u");
+		list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
+
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
 /* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 
+		### check if unavailable time starts before reserved time ends
+		if (($reserved_time + $length) > $unavailable_start)
+		{
+			### check if reserved starttime is in an unavailable period & make starttime correction, shifting it to the end of that unavail. period
+			if ( ($reserved_time < ($unavailable_start + $unavailable_length)) and ($reserved_time >= $unavailable_start) )
+			{
+				### check whether with moved starttime it still fits before next already scheduled job's starting time
+				if (($unavailable_start + $unavailable_length + $length) <= $start2)
+				{
+					$reserved_time = ($unavailable_start + $unavailable_length);
+					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-					### check if reserved time goes beyond an unavailable time
-					if (($reserved_time + $length) > $unavailable_start)
-					{
-						### check if reserved starttime is in an unavailable period & make starttime correction, shifting it to the end of that unavail. period
-						if ( ($reserved_time < ($unavailable_start + $unavailable_length)) and ($reserved_time >= $unavailable_start) )
-						{
-							### check whether with moved starttime it still fits before next already scheduled job's starting time
-							if (($unavailable_start + $unavailable_length + $length) <= $start2)
-							{
-								$reserved_time = ($unavailable_start + $unavailable_length);
-								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time);
 
-
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 
-							}
-							else
-							{
+				}
+				else
+				{
 
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-
-								next ($this->reserved_times[$resource_tag][$time_range]);
-								continue;
-							}
-						}
+					return false;
+				}
+			}
 
 /* timing */ timing ("reserve_time - insert unavailable periods to job length", "start");
 
-						### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
-						$i_dbg1 = 0;
+			### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
+			$i_dbg1 = 0;
 
-						while ( $unavailable_length and (($reserved_time + $length) > $unavailable_start) )
-						{
+			while ( $unavailable_length and (($reserved_time + $length) > $unavailable_start) )
+			{
 
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "cycle start unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." | len: " . $unavailable_length/3600 . " | resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-							if ($i_dbg1++ == 1000)
-							{
-								if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job: %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
-								error::raise(array(
-									"msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
-									"fatal" => false,
-									"show" => false,
-								));
-								break;
-							}
+				if ($i_dbg1++ == 1000)
+				{
+					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job: %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
+					error::raise(array(
+						"msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
+						"fatal" => false,
+						"show" => false,
+					));
+					return false;
+				}
 
 
-							### check if with added unavailable period length, job still fits before next job
-							if (($reserved_time + $length + $unavailable_length) > $start2)
-							{
-								next ($this->reserved_times[$resource_tag][$time_range]);
-								continue 2;
-
+				### check if with added unavailable period length, job still fits before next job
+				if (($reserved_time + $length + $unavailable_length) > $start2)
+				{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "cycle didnt fit: true<br>";
 /* dbg */ }
-							}
-							else
-							{
-								$length += $unavailable_length;
-								list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length));
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+					return false;
+				}
+				else
+				{
+					$length += $unavailable_length;
+					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length));
 
 
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "cycle end unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)." resp to time: " . date (MRP_DATE_FORMAT, $this->schedule_start + $dbg_time) . "<br>";
 /* dbg */ echo "cycle end length: " . $length/3600 . "h<br>";
-/* dbg */ echo "cycle end rt+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
+/* dbg */ echo "cycle end reserved_time+length: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time + $length) . "<br>";
 /* dbg */ }
-							}
-						}
-
-/* timing */ timing ("reserve_time - insert unavailable periods to job length", "end");
-					}
-
-					### return planned starttime
-					if ($reserved_time === "NA")
-					{
-/* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "reserved_time = NA<br>";
-/* dbg */ }
-
-						next ($this->reserved_times[$resource_tag][$time_range]);
-						continue;
-					}
-					else
-					{
-						return array ($reserved_time, $length, $time_range);
-					}
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 				}
-
-				next ($this->reserved_times[$resource_tag][$time_range]);
 			}
 
-/* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "suitable slot not found in this start range:";
-// /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
-/* dbg */ }
-
-			### if suitable slot not found in this start range, search next range
-			$time_range++;
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "next range:";
-// /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
-// /* dbg */ }
+/* timing */ timing ("reserve_time - insert unavailable periods to job length", "end");
 		}
 
-		### ... slot not found in this thread
-		return false;
+		return array ($reserved_time, $length);
+	}
+
+	function get_available_time ($resource_tag, $start, $length)
+	{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h4>get_available_time</h4>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+		### find range for given starttime
+		$reserved_time = NULL;
+		$start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
+		$time_range = $this->find_range ($start);
+
+		### get place for job
+		while (isset ($this->reserved_times[$resource_tag][$time_range]) and !isset ($reserved_time))
+		{
+			$snug_slot = $this->get_snug_slot ($resource_tag, $start, $length, $time_range);
+
+			if (is_array ($snug_slot))
+			{
+				list ($start1, $length1, $start2) = $snug_slot;
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - d: ".$d." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
+/* dbg */ echo "start1:". $start1." - length1:".$length1." - d: ".$d." - start:". $start ."-start2:".$start2 ."<br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+
+				$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
+				$reserved_time_data = $this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
+
+				if (is_array ($reserved_time_data))
+				{
+					list ($reserved_time, $length) = $reserved_time_data;
+				}
+				else
+				{
+					$reserved_time = NULL;
+				}
+			}
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range}):";
+// /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
+// /* dbg */ echo "next range is:";
+// /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+			$time_range++;
+		}
+
+		### return planned starttime
+		if (isset ($reserved_time))
+		{
+			return array ($reserved_time, $length, $time_range);
+		}
+		else
+		{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+// /* dbg */ if ($this->mrpdbg){
+// /* dbg */ echo "reserved_time = NA<br>";
+// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+			### ... slot not found in this thread
+			return false;
+		}
 	}
 
 	function find_range ($starttime)
 	{
 /* timing */ timing ("find_range", "start");
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h5>find_range</h5>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 		$low = 0;
 		$high = count ($this->range_scale) - 1;
@@ -1324,6 +1392,11 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			{
 
 /* timing */ timing ("find_range", "end");
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "found range [{$mid}] resp. to starttime [{$starttime}]";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				return $mid;
 			}
@@ -1354,15 +1427,20 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
 	function get_closest_unavailable_period ($resource_id, $time)
 	{
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h4>get_closest_unavailable_period</h4>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 		$time = $time + $this->schedule_start;
-// /* dbg */ if ($resource_id==8946){
-// /* dbg */ echo "[".date (MRP_DATE_FORMAT, ($this->schedule_start))."]";
-// /* dbg */ }
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time);
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 		### unavailable periods not defined past $time, stop and return 0?
 		if ($start == $end)
@@ -1380,15 +1458,18 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 		while (true)//!!! bad. stupid. wrong.
 		{
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end);
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "_closestper cycle: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . "<br>";
-// /* dbg */ }
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "_closestper cycle: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . "<br>";
+/* dbg */ }
 // /* dbg */ $tmptime = time();
 // /* dbg */ $tmpschtime = $this->scheduling_time;
 // /* dbg */ if (($tmptime - $tmpschtime) > 15) {
 // /* dbg */ var_dump ($this);
 // /* dbg */ exit ("res:" . $resource_id . " time:" . date (MRP_DATE_FORMAT, $time) . " t" . $tmptime . " st" . $tmpschtime);
 // /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 			if (
 				($period_start <= $end)
@@ -1405,7 +1486,7 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
 			if ($i_dbg++ == 10000)
 			{
-// Kinnine aeg -- "Ahjutihendi remont"; algus: 24.09.2005; l6pp: 25.09.2005; kell: 8:00; pikkus: 36h; korduse tyyp: päev; ressurss: rotoman
+//!!! Kinnine aeg -- "Ahjutihendi remont"; algus: 24.09.2005; l6pp: 25.09.2005; kell: 8:00; pikkus: 36h; korduse tyyp: päev; ressurss: rotoman
 // selline kinnise aja definitsioon tekitas olukorra, kus j6uti siia pidevalt. st. mitte yks kord. ilmselt n2is ressurss lakkamatult kinni olevat.
 
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
@@ -1423,9 +1504,11 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 		$period_start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
 		$length = ($start > $this->schedule_start) ? ($end - $start) : ($end - $this->schedule_start);
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 		return array ($period_start, $length);
 	}
@@ -1434,12 +1517,15 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 	function _get_closest_unavailable_period ($resource_id, $time)
 	{
 /* timing */ timing ("get_closest_unavailable_period", "start");
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "<br>timeforclosestper:". date (MRP_DATE_FORMAT, $time)."<br>";
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "<h5>_get_closest_unavailable_period</h5>";
+/* dbg */ echo "timeforclosestper:". date (MRP_DATE_FORMAT, $time)."<br>";
+/* dbg */ }
 // /* dbg */ if ((time() - $this->scheduling_time) > 25){
 // /* dbg */ echo "<br>time:". date (MRP_DATE_FORMAT, $time) . " res:".$resource_id." t:".$this->scheduling_time."<br>";
 // /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 		$closest_periods = array ();
 
@@ -1462,18 +1548,18 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 		}
 
 		### get recurrences
-		$closest_recurrences = array ();
-
 		foreach ($this->resource_data[$resource_id]["recurrence_definitions"] as $recurrence)
 		{
-// /* dbg */ if ($this->mrpdbg) {
-// /* dbg */ if ($resource_id == 8950){
-// /* dbg */ echo "recstart: " . date (MRP_DATE_FORMAT, $recurrence["start"]) . " | recinterval: " .  $recurrence["interval"] .  " | reclength: " .  $recurrence["length"] / 3600 . "h | rectime: " .  $recurrence["time"] / 3600 . "h<br>";
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg) {
+/* dbg */ echo "recstart: " . date (MRP_DATE_FORMAT, $recurrence["start"]) . " | recinterval: " .  $recurrence["interval"] .  " | reclength: " .  $recurrence["length"] / 3600 . "h | rectime: " .  $recurrence["time"] / 3600 . "h<br>";
 // /* dbg */ arr ($recurrence);
-// /* dbg */ }
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 			### make dst corrections
-			$nodst_day_start = $recurrence["start"] + floor (($time - $recurrence["start"]) / $recurrence["interval"]) * $recurrence["interval"];
+			// $nodst_day_start = $recurrence["start"] + floor (($time - $recurrence["start"]) / $recurrence["interval"]) * $recurrence["interval"];
+			$nodst_day_start = $recurrence["start"] + (($time - $recurrence["start"]) - (($time - $recurrence["start"]) % $recurrence["interval"]));
 			$nodst_day_hour = (int) date ("H", $nodst_day_start);
 
 			if ($nodst_day_hour === 0)
@@ -1499,80 +1585,50 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			$recurrence_end = $recurrence_start + $recurrence["length"];
 
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h<br>";
-// /* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . "<br>";
-// /* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . "<br>";
-// /* dbg */ echo "closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h<br>";
+/* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . "<br>";
+/* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . "<br>";
+// /* dbg */ echo " closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-			if ($recurrence_start > $time)
+			while ($recurrence_start > $time)
 			{
-				$recurrence_start = $recurrence_start - $recurrence["interval"];
-				$recurrence_end = $recurrence_end - $recurrence["interval"];
+				$recurrence_start -= $recurrence["interval"];
+				$recurrence_end -= $recurrence["interval"];
 			}
 
-				if ($recurrence_end <= $time)
+			while ($recurrence_end <= $time)
 			{
 				$recurrence_start += $recurrence["interval"];
 				$recurrence_end += $recurrence["interval"];
 			}
 
-			if ($recurrence_end > $time)
+			if (($recurrence_end > $recurrence["start"]) and ($recurrence_start < $recurrence["end"]))
 			{
-				$closest_recurrences[$recurrence_start] = $recurrence_end;
+				$closest_periods[$recurrence_start] = max ($recurrence_end, $closest_periods[$recurrence_start]);
 			}
 		}
 
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ foreach ($closest_recurrences as $key => $value){ echo "closestrec-s:" . date (MRP_DATE_FORMAT,$key) ."-". date (MRP_DATE_FORMAT,$value) . "<br>";}
-// /* dbg */ }
-
-		if (!empty ($closest_recurrences))
-		{
-			list ($recurrence_start, $recurrence_end) = $this->find_combined_range ($closest_recurrences, $time);
-
-			// /* strict */ if (isset ($closest_periods[$recurrence_start]))
-			// /* strict */ {
-			// /* strict */ 	$closest_periods[$recurrence_start] = max ($recurrence_end, $closest_periods[$recurrence_start]);
-			// /* strict */ }
-			// /* strict */ else
-			// /* strict */ {
-			// /* strict */ 	$closest_periods[$recurrence_start] = $recurrence_end;
-			// /* strict */ }
-			/* opt */ $closest_periods[$recurrence_start] = max ($recurrence_end, $closest_periods[$recurrence_start]);
-		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "combined unavail rec: [".date (MRP_DATE_FORMAT, $recurrence_start)." - ".date (MRP_DATE_FORMAT, $recurrence_end) . "]<br>";
-// /* dbg */ }
-
-		### get closest separate unavailable period
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "closest_periods before:";
+/* dbg */ arr ($closest_periods);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+		### add separate unavailable periods
 		foreach ($this->resource_data[$resource_id]["unavailable_periods"] as $period_start => $period_end)
 		{
-// /* dbg */ if ($resource_id == 8950){
-// /* dbg */ echo "sep unavail per.: " . date (MRP_DATE_FORMAT, $period_start) . " - " .  date (MRP_DATE_FORMAT, $period_end) ."<br>";
-// /* dbg */ }
-
-			if ($period_end > $time)
-			{
-				// /* strict */ if (isset ($closest_periods[$period_start]))
-				// /* strict */ {
-				// /* strict */ 	$closest_periods[$period_start] = max ($period_end, $closest_periods[$period_start]);
-				// /* strict */ }
-				// /* strict */ else
-				// /* strict */ {
-				// /* strict */ 	$closest_periods[$period_start] = $period_end;
-				// /* strict */ }
-				/* opt */ $closest_periods[$period_start] = max ($period_end, $closest_periods[$period_start]);
-				break;
-			}
+			$closest_periods[$period_start] = max ($period_end, $closest_periods[$period_start]);
 		}
-
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ if ($resource_id == 8950){
-// /* dbg */ foreach ($closest_periods as $key => $value){ echo "closestper-s:" . date (MRP_DATE_FORMAT,$key) ."-". date (MRP_DATE_FORMAT,$value) . "<br>";}
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "closest_periods after:";
+/* dbg */ arr ($closest_periods);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 		### combine buffer, recurrence & period
 		if (!empty ($closest_periods))
@@ -1589,10 +1645,11 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			$start = $end = 0;
 		}
 
-// /* dbg */ if ($resource_id==8946){
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "combined unavail: t - ".date (MRP_DATE_FORMAT, $time)." [".date (MRP_DATE_FORMAT, $start)." - ".date (MRP_DATE_FORMAT, $end) . "]<br>";
-// /* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "combined unavail: t - ".date (MRP_DATE_FORMAT, $time)." [".date (MRP_DATE_FORMAT, $start)." - ".date (MRP_DATE_FORMAT, $end) . "]<br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("get_closest_unavailable_period", "end");
 
 
@@ -1602,59 +1659,62 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 	### find and combine ranges closest to $value, exclude ranges that don't exceed $value directly or through overlapping ranges
 	function find_combined_range ($ranges, $value)
 	{
+		$start = $end = $value;
 		ksort ($ranges, SORT_NUMERIC);
-		reset ($ranges);
-		$first = true;
-		$start = false;
-		$end = false;
 
-		foreach ($ranges as $range_start => $range_end)
+		if (end ($ranges) > $value)
 		{
-			if ($range_start == $range_end)
+			$ranges = $this->combine_ranges ($ranges);
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "ranges after combining:";
+/* dbg */ arr ($ranges);
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
+			foreach ($ranges as $range_start => $range_end)
 			{
-				next ($ranges);
-				continue;
-			}
-
-			if ($first)
-			{
-				$start = $range_start;
-				$end = $range_end;
-				$first = false;
-			}
-
-			$nextend = next ($ranges);
-
-			if ($nextend)
-			{
-				$nextstart = key ($ranges);
-
-				if ($range_end < $nextstart)
+				if ($range_end > $value)
 				{
-					if ($range_end > $value)
-					{
-						break;
-					}
-					else
-					{
-						$start = $nextstart;
-						$end = $nextend;
-					}
-				}
-				else
-				{
-					$end = max ($nextend, $range_end, $end);
+					$start = $range_start;
+					$end = $range_end;
+					break;
 				}
 			}
 		}
 
-		if ((!$start) or (!$end) or ($end <= $value))
-		{
-			$start = $value;
-			$end = $value;
-		}
-
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "found range:";
+/* dbg */ arr (array ($start, $end));
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 		return array ($start, $end);
+	}
+
+	## input is an array sorted by key, pointer at start.
+	function combine_ranges ($ranges)
+	{
+		$prev_end = NULL;
+		$combined_ranges = array ();
+
+		foreach ($ranges as $start => $end)
+		{
+			if (($start <= $prev_end) and isset ($prev_end))
+			{
+				$prev_end = max ($end, $prev_end);
+				$combined_ranges[$prev_start] = $prev_end;
+			}
+			else
+			{
+				$combined_ranges[$start] = $end;
+				$prev_start = $start;
+				$prev_end = $end;
+			}
+		}
+
+		return $combined_ranges;
 	}
 
 	function init_resource_data ($resources)
@@ -1692,8 +1752,10 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
 		if (!$this->initialized)
 		{
+			$this->scheduling_time = time ();
 			$this->schedule_start = $arr["mrp_start"];
 			$this->schedule_length = $arr["mrp_length"];
+			$this->scheduling_day_end = mktime (23, 59, 59, date ("m", $this->scheduling_time), date ("d", $this->scheduling_time), date("Y", $this->scheduling_time));
 
 			$resources_folder = $workspace->prop ("resources_folder");
 			$resource_tree = new object_tree (array (
@@ -1730,18 +1792,9 @@ if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 			$pointer = $unavailable_start + $unavailable_length + 1;
 			$unavailable_start = $this->schedule_start + $unavailable_start;
 			$unavailable_end = $unavailable_start + $unavailable_length;
+			$this->unavailable_times[$unavailable_start] = max ($unavailable_end, $this->unavailable_times[$unavailable_start]);
 
-			if (array_key_exists ($unavailable_start, $this->unavailable_times))
-			{
-				### longer unavailable period prevails
-				$this->unavailable_times[$unavailable_start] = $unavailable_start + max (($unavailable_end - $unavailable_start), ($unavailable_end - $this->unavailable_times[$unavailable_start]));
-			}
-			else
-			{
-				$this->unavailable_times[$unavailable_start] = $unavailable_end;
-			}
-
-			if ($i_dbg++ == 5000)
+			if (5000 == $i_dbg++)
 			{
 				error::raise(array(
 					"msg" => sprintf (t("Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"), $i_dbg3, $resource_id),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.89 2005/08/31 10:03:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.90 2005/09/28 12:12:16 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -11,6 +11,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE, CL_MRP_CASE, on_popup_search_
 @classinfo syslog_type=ST_MRP_CASE relationmgr=yes no_status=1 confirm_save_data=1
 
 @tableinfo mrp_case index=oid master_table=objects master_index=oid
+@tableinfo mrp_case_schedule index=oid master_table=objects master_index=oid
 
 @groupinfo grp_general caption="&Uuml;ldine" parent=general
 @groupinfo grp_case_data caption="Projekti andmed" parent=general
@@ -41,9 +42,6 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 	@property due_date type=datetime_select
 	@caption Valmimistähtaeg
 
-	@property planned_date type=text editonly=1
-	@caption Planeeritud valmimisaeg
-
 	@property project_priority type=textbox
 	@caption Projekti prioriteet
 
@@ -55,6 +53,10 @@ groupinfo grp_case_material caption="Kasutatav materjal"
 
 	@property progress type=hidden
 	@property extern_id type=hidden
+
+@default table=mrp_case_schedule
+	@property planned_date type=text editonly=1
+	@caption Planeeritud valmimisaeg
 
 @default table=objects
 @default field=meta
@@ -193,15 +195,20 @@ CREATE TABLE `mrp_case` (
   `oid` int(11) NOT NULL default '0',
   `starttime` int(10) unsigned default NULL,
   `progress` int(10) unsigned default NULL,
-  `planned_date` int(10) unsigned default NULL,
   `due_date` int(10) unsigned default NULL,
   `project_priority` int(10) unsigned default NULL,
   `state` tinyint(2) unsigned default '1',
   `extern_id` int(11) unsigned default NULL,
   `customer` int(11) unsigned default NULL,
 
-	PRIMARY KEY  (`oid`),
-	UNIQUE KEY `oid` (`oid`)
+	PRIMARY KEY  (`oid`)
+) TYPE=MyISAM;
+
+CREATE TABLE `mrp_case_schedule` (
+	`oid` int(11) NOT NULL default '0',
+	`planned_date` int(10) unsigned default NULL,
+
+	PRIMARY KEY  (`oid`)
 ) TYPE=MyISAM;
 
 */
@@ -1925,11 +1932,10 @@ class mrp_case extends class_base
 
 	function safe_settype_float ($value)
 	{
-		$parts1 = explode (",", $value, 2);
-		$parts2 = explode (".", $value, 2);
-		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
-		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
-		return $value;
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 
 	function get_header($arr)

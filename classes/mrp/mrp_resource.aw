@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.74 2005/09/28 08:37:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.75 2005/09/28 12:12:16 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -118,6 +118,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MRP_NEWLINE", "<br />\n");
 define("RECUR_DAILY",1);
 define("RECUR_WEEKLY",2);
 define("RECUR_MONTHLY",3);
@@ -403,66 +404,76 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
-				if ($prop["value"] == "")
+				if (($arr["request"]["work_hrs_recur_action"] != "delete") and is_array ($prop["value"]))
 				{
-					return PROP_OK;
+					$prop["value"]["recur_type"] = RECUR_DAILY;
+					$prop["value"]["interval_daily"] = 1;
 				}
-				### check for user errors
-				if (24 < $prop["value"]["length"])
-				{
-					$prop["error"] .= t("Pikkus ei saa olla suurem kui 24h. ");
-					return PROP_ERROR;
-				}
-
-				$prop["value"]["recur_type"] = RECUR_DAILY;
-            	$prop["value"]["interval_daily"] = 1;
 
 			case "unavailable_recur":
-				if ($prop["value"] == "")
+				if (($arr["request"]["work_hrs_recur_action"] != "delete") and ($arr["request"]["unavailable_recur_action"] != "delete") and is_array ($prop["value"]))
 				{
-					return PROP_OK;
+					$applicable_types = array (
+						RECUR_DAILY,
+						RECUR_WEEKLY,
+						RECUR_YEARLY,
+					);
+
+					if (!in_array ($prop["value"]["recur_type"], $applicable_types))
+					{
+						$prop["error"] .= t("Seda tüüpi kordust ei saa kasutada. ") . MRP_NEWLINE;
+					}
+
+					### validate
+					if (empty ($prop["value"]["time"]))
+					{
+						$prop["value"]["time"] = "00:00";
+					}
+
+					$time = explode (":", $prop["value"]["time"]);
+					$time_h = abs ((int) $time[0]);
+					$time_min = abs ((int) $time[1]);
+
+					### check for user errors
+					if ((23 < $time_h) or (59 < $time_min) or (count ($time) < 2))
+					{
+						$prop["error"] .= t("Viga kellaaja määrangus. ") . MRP_NEWLINE;
+					}
+
+					$interval_daily = $prop["value"]["interval_daily"] ? $prop["value"]["interval_daily"] : 1;
+					$interval_weekly = $prop["value"]["interval_weekly"] ? $prop["value"]["interval_daily"] : 1;
+					$interval_yearly = $prop["value"]["interval_yearly"] ? $prop["value"]["interval_daily"] : 1;
+
+					if (
+						((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
+						or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
+						// or ((RECUR_MONTHLY == $prop["value"]["recur_type"]) and ((24*30) < $prop["value"]["length"]))
+						or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
+					)
+					{
+						$prop["error"] .= t("Pikkus ei saa olla suurem kui korduse periood. ") . MRP_NEWLINE;
+					}
+
+					if (empty ($prop["value"]["length"]))
+					{
+						$prop["error"] .= t("Pikkus ei saa olla null. ");
+					}
+
+					$start =  mktime(0, 0, 0, $prop["value"]["start"]["month"], $prop["value"]["start"]["day"], $prop["value"]["start"]["year"]);
+					$end =  mktime(0, 0, 0, $prop["value"]["end"]["month"], $prop["value"]["end"]["day"], $prop["value"]["end"]["year"]);
+
+					if ($start >= $end)
+					{
+						$prop["error"] .= t("'Alates' peab olema varasem aeg kui 'Kuni'. ") . MRP_NEWLINE;
+					}
+
+					if (!empty ($prop["error"]))
+					{
+						return PROP_ERROR;
+					}
+
+					$prop["value"]["time"] = $time_h . ":" . $time_min;
 				}
-
-				### check for user errors
-				if (empty ($prop["value"]["length"]))
-				{
-					$prop["error"] .= t("Pikkus ei saa olla null. ");
-					return PROP_ERROR;
-				}
-
-				### validate
-				if (empty ($prop["value"]["time"]))
-				{
-					$prop["value"]["time"] = "00:00";
-				}
-
-				$time = explode (":", $prop["value"]["time"]);
-				$time_h = abs ((int) $time[0]);
-				$time_min = abs ((int) $time[1]);
-
-				### check for user errors
-				if ((23 < $time_h) or (59 < $time_min) or (count ($time) < 2))
-				{
-					$prop["error"] .= t("Viga kellaaja määrangus. ");
-					return PROP_ERROR;
-				}
-
-				$interval_daily = $prop["value"]["interval_daily"] ? $prop["value"]["interval_daily"] : 1;
-				$interval_weekly = $prop["value"]["interval_weekly"] ? $prop["value"]["interval_daily"] : 1;
-				$interval_yearly = $prop["value"]["interval_yearly"] ? $prop["value"]["interval_daily"] : 1;
-
-				if (
-					((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
-					or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
-					or ((RECUR_MONTHLY == $prop["value"]["recur_type"]) and ((24*30) < $prop["value"]["length"]))
-					or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
-				)
-				{
-					$prop["error"] .= t("Pikkus ei saa olla suurem kui korduse periood. ");
-					return PROP_ERROR;
-				}
-
-				$prop["value"]["time"] = $time_h . ":" . $time_min;
 				break;
 
 			case "out_of_service":
@@ -471,7 +482,7 @@ class mrp_resource extends class_base
 					case MRP_STATUS_RESOURCE_INUSE:
 						if ($prop["value"] == 1)
 						{
-							$prop["error"] = "Ressurss on kasutusel. Ei saa hooldusse panna. ";
+							$prop["error"] = t("Ressurss on kasutusel. Ei saa hooldusse panna. ");
 							$retval = PROP_ERROR;
 						}
 						break;
@@ -712,25 +723,22 @@ class mrp_resource extends class_base
 		return $ret;
 	}
 
-	function _get_unavailable_dates ($dates, $period_start, $period_end)
+	function get_unavailable_periods ($resource, $start, $end)
 	{
+// /* dbg */ if ($resource->id () == 6670  ) {
+// /* dbg */ $this->mrpdbg=1;
+// /* dbg */ }
+
+		$period_start = $start;
+		$period_end = $end;
 		$unavailable_dates = array ();
+		$dates = $resource->prop ("unavailable_dates");
 		$dates = explode (";", $dates);
-		// $pattern = 		"/([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2})\s*)*\-" .
-								// "\s*([1-9]|\d{2})\s*[\:\.\,\/]\s*([1-9]|\d{2})\s*[\:\.\,\/\|]\s*(\d{1,2})\s*([\:\.\,]\s*(\d{1,2}))*/S";
 		$separators = " ,.:/|-\\";
 		$period_start_year = date ("Y", $period_start);
-		$period_start_mon = date ("n", $period_start);
-		$period_start_day = date ("j", $period_start);
-		$period_end_year = date ("Y", $period_end);
-		$period_end_mon = date ("n", $period_end);
-		$period_end_day = date ("j", $period_end);
 
 		foreach ($dates as $date)
 		{
-			// $match = preg_match (&$pattern, $date, $datedefinition);
-			// list ($NULL, $start_day, $start_mon, $start_hour, $NULL, $start_min, $end_day, $end_mon, $end_hour, $NULL, $end_min) = $datedefinition;
-
 			$start_day = (int) strtok ($date, $separators);
 			$start_mon = (int) strtok ($separators);
 			$start_hour = (int) strtok ($separators);
@@ -739,28 +747,35 @@ class mrp_resource extends class_base
 			$end_mon = (int) strtok ($separators);
 			$end_hour = (int) strtok ($separators);
 			$end_min = (int) strtok ($separators);
+			$in_period_range = true;
+			$year = $period_start_year;
 
-			// if ($match and (mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $period_start_year) < mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($period_start_year + 1))))
-			if ($start_day and $start_mon and $end_day and $end_mon and (mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $period_start_year) < mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($period_start_year + 1))))
+			while ($in_period_range)
 			{
-				$year = $period_start_year;
+				$start = mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $year);
+				$end = mktime ($end_hour, $end_min, 0, $end_mon, $end_day, $year);
 
-				while ($year <= $period_end_year)
+				if ($start < $period_end)
 				{
-					if (
-						(( ((int) $year) != ((int) $period_start_year) ) and ( ((int) $year) != ((int) $period_end_year) )) or
-						(($year == $period_start_year) and ($start_mon >= $period_start_mon) and ($start_day >= $period_start_day))
-						// (($year == $period_end_year) and ($end_mon <= $period_end_mon) and ($end_day <= $period_end_day))
-					)
+					if ($start < $end)
 					{
-						$start = mktime ($start_hour, $start_min, 0, $start_mon, $start_day, $year);
-						$end = mktime ($end_hour, $end_min, 0, $end_mon, $end_day, $year);
-						$end = ($end < $start) ? mktime ($end_hour, $end_min, 0, $end_mon, $end_day, ($year + 1)) : $end;
-						$unavailable_dates[$start] = $end;
+						$unavailable_dates[$start] = max ($end, $unavailable_dates[$start]);
 					}
-
-					$year++;
 				}
+				else
+				{
+					$in_period_range = false;
+				}
+
+				$year++;
+			}
+		}
+
+		foreach ($unavailable_dates as $start => $end)
+		{
+			if ($end <= $period_start)
+			{
+				unset ($unavailable_dates[$start]);
 			}
 		}
 
@@ -769,19 +784,7 @@ class mrp_resource extends class_base
 // /* dbg */ arr ($unavailable_dates);
 // /* dbg */ }
 
-		ksort ($unavailable_dates);
 		return $unavailable_dates;
-	}
-
-	function get_unavailable_periods ($resource, $start, $end)
-	{
-// /* dbg */ if ($resource->id () == 6670  ) {
-// /* dbg */ $this->mrpdbg=1;
-// /* dbg */ }
-
-		$unavailable_periods = array ();
-		$unavailable_periods = $this->_get_unavailable_dates ($resource->prop ("unavailable_dates"), $start, $end);
-		return $unavailable_periods;
 	}
 
 	function get_recurrent_unavailable_periods ($resource, $start, $end)
@@ -825,14 +828,13 @@ class mrp_resource extends class_base
 						$interval = round (($interval ? $interval : 1) * 86400 * 7);
 						break;
 
-					case RECUR_MONTHLY: //month
-						continue;
-						break;
-
 					case RECUR_YEARLY: //year
 						$interval = $recurrence->prop ("interval_yearly");
 						$interval = round (($interval ? $interval : 1) * 86400 * 365);
 						break;
+
+					default:
+						continue;
 				}
 
 				$recurrence_starttime = $recurrence->prop ("time");
@@ -1021,11 +1023,10 @@ class mrp_resource extends class_base
 
 	function safe_settype_float ($value)
 	{
-		$parts1 = explode (",", $value, 2);
-		$parts2 = explode (".", $value, 2);
-		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
-		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
-		return $value;
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 
 	function sort_recurrences_by_start ($recurrence1, $recurrence2)

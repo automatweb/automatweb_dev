@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.140 2005/08/31 08:34:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.141 2005/09/28 12:12:16 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -1041,7 +1041,7 @@ class mrp_workspace extends class_base
 				));
 				if (count($resids))
 				{
-					$ol = new object_list(array("oid" => $resids));
+				$ol = new object_list(array("oid" => $resids));
 				}
 				else
 				{
@@ -2216,15 +2216,16 @@ if ($_GET['show_thread_data'] == 1)
 			$hilighted_jobs = $list->ids ();
 		}
 
-		### get jobs in requested range & add bars
-		$res = $this->db_fetch_array (
-			"SELECT MAX(job.planned_length), MAX(job.finished-job.started) FROM mrp_job as job ".
-			"WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
-			"job.length > 0 AND ".
-			"job.resource > 0 ".
-		"");
-		rsort ($res[0]);
-		$max_length = reset ($res[0]);
+		// ### get jobs in requested range & add bars
+		// $res = $this->db_fetch_array (
+			// "SELECT MAX(schedule.planned_length), MAX(job.finished-job.started) FROM mrp_job as job ".
+			// "LEFT JOIN mrp_schedule schedule ON schedule.oid = job.oid " .
+			// "WHERE job.state !=" . MRP_STATUS_DELETED . " AND ".
+			// "job.length > 0 AND ".
+			// "job.resource > 0 ".
+		// "");
+		// rsort ($res[0]);
+		// $max_length = reset ($res[0]);
 		$jobs = array ();
 
 		### job states that are shown in chart past
@@ -2234,28 +2235,58 @@ if ($_GET['show_thread_data'] == 1)
 			MRP_STATUS_PAUSED,
 		);
 
-		if ($arr["request"]["chart_customer"])//!!! teha see ka otsep2ringuga, mitte strorage kaudu. kui sobiv siis customeriga ja ilma k6ik yhte p2ringusse.
+		if ($arr["request"]["chart_customer"])
 		{
-			$filt = array (
-				"class_id" => CL_MRP_JOB,
-				"state" => $applicable_states,
-				"parent" => $this_object->prop ("jobs_folder"),
-				"started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
-				"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-				"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-				"project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			);
+			$this->db_query (
+			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
+			"FROM " .
+				"mrp_job as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+				"LEFT JOIN mrp_schedule schedule ON schedule.oid = job.oid " .
+				"LEFT JOIN aliases a_job ON (a_job.source = o.oid AND a_job.reltype = 2) " .
+				"LEFT JOIN aliases a_case ON (a_case.source = a_job.target AND a_case.reltype = 2) " .
+				"LEFT JOIN objects o_cust ON o_cust.oid = a_case.target " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"o_cust.name like '%{$arr["request"]["chart_customer"]}%' AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
+				"job.started < {$range_end} AND " .
+				"job.project > 0 AND " .
+				"job.length > 0 AND " .
+				"job.resource > 0 " .
+			"");
 
-			// filter by customer as well
-			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
-			$list = new object_list ($filt);
-			$list_jobs = $list->arr ();
+			while ($job = $this->db_next())
+			{
+				if ($this->can("view", $job["oid"]))
+				{
+					$metadata = aw_unserialize ($job["metadata"]);
+					$job["paused_times"] = $metadata["paused_times"];
+					$jobs[] = $job;
+				}
+			}
+
+			// $filt = array (
+				// "class_id" => CL_MRP_JOB,
+				// "state" => $applicable_states,
+				// "parent" => $this_object->prop ("jobs_folder"),
+				// "started" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+				// "resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				// "length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				// "project" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			// );
+
+			// ### filter by customer as well
+			// $filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+			// $list = new object_list ($filt);
+			// $list_jobs = $list->arr ();
 		}
 		else
 		{
 			$this->db_query (
 			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
-			// "SELECT job.*, schedule.*, o.metadata " .
 			"FROM " .
 				"mrp_job as job " .
 				"LEFT JOIN objects o ON o.oid = job.oid " .
@@ -2264,8 +2295,8 @@ if ($_GET['show_thread_data'] == 1)
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
 				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
-				"job.started > " . ($range_start - $max_length) . " AND " .
-				"job.started < " . $range_end . " AND " .
+				"((!(job.started < {$range_start})) OR ((job.state = " . MRP_STATUS_DONE . " AND job.finished > {$range_start}) OR (job.state != " . MRP_STATUS_DONE . " AND {$time} > {$range_start}))) AND " .
+				"job.started < {$range_end} AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -2287,47 +2318,78 @@ if ($_GET['show_thread_data'] == 1)
 			MRP_STATUS_PLANNED,
 		);
 
-		if ($arr["request"]["chart_customer"])//!!! teha see ka otsep2ringuga, mitte strorage kaudu
+		if ($arr["request"]["chart_customer"])
 		{
-			$filt = array (
-				"class_id" => CL_MRP_JOB,
-				"parent" => $this_object->prop ("jobs_folder"),
-				"state" => $applicable_states,
-				"starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
-				"starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
-				"resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-				"length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
-			);
+			$this->db_query (
+			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
+			"FROM " .
+				"mrp_job as job " .
+				"LEFT JOIN objects o ON o.oid = job.oid " .
+				"LEFT JOIN mrp_schedule schedule ON schedule.oid = job.oid " .
+				"LEFT JOIN aliases a_job ON (a_job.source = o.oid AND a_job.reltype = 2) " .
+				"LEFT JOIN aliases a_case ON (a_case.source = a_job.target AND a_case.reltype = 2) " .
+				"LEFT JOIN objects o_cust ON o_cust.oid = a_case.target " .
+			"WHERE " .
+				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
+				"o_cust.name like '%{$arr["request"]["chart_customer"]}%' AND " .
+				"o.status > 0 AND " .
+				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
+				"schedule.starttime < {$range_end} AND " .
+				"schedule.starttime > {$time} AND " .
+				"((!(schedule.starttime < {$range_start})) OR ((schedule.starttime + schedule.planned_length) > {$range_start})) AND " .
+				"job.project > 0 AND " .
+				"job.length > 0 AND " .
+				"job.resource > 0 " .
+			"");
 
-			// filter by customer as well
-			$filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
-			$list = new object_list ($filt);
-			$list_jobs = array_merge ($list->arr (), $list_jobs);
-
-
-			//!!! arrayks konvertimine, et yhtiks db_queryga saadud asjaga, kui kliendiga koos p2ring tehtud pole seda enam vaja.
-			foreach ($list_jobs as $list_job)
+			while ($job = $this->db_next())
 			{
-				$jobs[] = array (
-					"oid" => $list_job->id (),
-					"paused_times" => $list_job->meta ("paused_times"),
-					"project" => $list_job->prop ("project"),
-					"state" => $list_job->prop ("state"),
-					"started" => $list_job->prop ("started"),
-					"finished" => $list_job->prop ("finished"),
-					"planned_length" => $list_job->prop ("planned_length"),
-					"starttime" => $list_job->prop ("starttime"),
-					"resource" => $list_job->prop ("resource"),
-					"exec_order" => $list_job->prop ("exec_order"),
-				);
+				if ($this->can("view", $job["oid"]))
+				{
+					$metadata = aw_unserialize ($job["metadata"]);
+					$job["paused_times"] = $metadata["paused_times"];
+					$jobs[] = $job;
+				}
 			}
-			//!!! END arrayks konvertimine
+
+			// $filt = array (
+				// "class_id" => CL_MRP_JOB,
+				// "parent" => $this_object->prop ("jobs_folder"),
+				// "state" => $applicable_states,
+				// "starttime" => new obj_predicate_compare (OBJ_COMP_BETWEEN, ($range_start - $max_length), $range_end),
+				// "starttime" => new obj_predicate_compare (OBJ_COMP_GREATER, time ()),
+				// "resource" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+				// "length" => new obj_predicate_compare (OBJ_COMP_GREATER, 0),
+			// );
+
+			// ### filter by customer as well
+			// $filt["CL_MRP_JOB.RELTYPE_MRP_PROJECT.RELTYPE_MRP_CUSTOMER.name"] = $arr["request"]["chart_customer"];
+			// $list = new object_list ($filt);
+			// $list_jobs = array_merge ($list->arr (), $list_jobs);
+
+
+			// #//!!! arrayks konvertimine, et yhtiks db_queryga saadud asjaga, kui kliendiga koos p2ring tehtud pole seda enam vaja.
+			// foreach ($list_jobs as $list_job)
+			// {
+				// $jobs[] = array (
+					// "oid" => $list_job->id (),
+					// "paused_times" => $list_job->meta ("paused_times"),
+					// "project" => $list_job->prop ("project"),
+					// "state" => $list_job->prop ("state"),
+					// "started" => $list_job->prop ("started"),
+					// "finished" => $list_job->prop ("finished"),
+					// "planned_length" => $list_job->prop ("planned_length"),
+					// "starttime" => $list_job->prop ("starttime"),
+					// "resource" => $list_job->prop ("resource"),
+					// "exec_order" => $list_job->prop ("exec_order"),
+				// );
+			// }
+			// #//!!! END arrayks konvertimine
 		}
 		else
 		{
 			$this->db_query (
 			"SELECT job.oid,job.project,job.state,job.started,job.finished,job.resource,job.exec_order,schedule.*,o.metadata " .
-			// "SELECT job.*,schedule.*,o.metadata " .
 			"FROM " .
 				"mrp_job as job " .
 				"LEFT JOIN objects o ON o.oid = job.oid " .
@@ -2336,9 +2398,9 @@ if ($_GET['show_thread_data'] == 1)
 				"job.state IN (" . implode (",", $applicable_states) . ") AND " .
 				"o.status > 0 AND " .
 				"o.parent = " . $this_object->prop ("jobs_folder") . " AND " .
-				"schedule.starttime > " . ($range_start - $max_length) . " AND " .
-				"schedule.starttime < " . $range_end . " AND " .
-				"schedule.starttime > " . $time . " AND " .
+				"schedule.starttime < {$range_end} AND " .
+				"schedule.starttime > {$time} AND " .
+				"((!(schedule.starttime < {$range_start})) OR ((schedule.starttime + schedule.planned_length) > {$range_start})) AND " .
 				"job.project > 0 AND " .
 				"job.length > 0 AND " .
 				"job.resource > 0 " .
@@ -2894,7 +2956,7 @@ if ($_GET['show_thread_data'] == 1)
 			"parent" => $arr["obj_inst"]->prop ("resources_folder"),
 			"class_id" => array(CL_MENU, CL_MRP_RESOURCE),
 			"sort_by" => "objects.jrk",
-		));
+	));
 		$l = $resource_tree->to_list();
 		$resources = array("" => "");
 		foreach($l->arr() as $o)
@@ -3717,7 +3779,7 @@ if ($_GET['show_thread_data'] == 1)
 				"lang_id" => array(),
 			"site_id" => array(),
 			"class_id" => CL_MRP_RESOURCE_OPERATOR
-			));
+		));
 
 		// get resources
 		$ret = array();
@@ -4182,11 +4244,10 @@ if ($_GET['show_thread_data'] == 1)
 
 	function safe_settype_float ($value)
 	{
-		$parts1 = explode (",", $value, 2);
-		$parts2 = explode (".", $value, 2);
-		$parts = (count ($parts2) == 1) ? $parts1 : $parts2;
-		$value = (float) ((isset ($parts[0]) ? ((int) $parts[0]) : 0) . "." . (isset ($parts[1]) ? ((int) $parts[1]) : 0));
-		return $value;
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 
 	/**
@@ -4590,6 +4651,8 @@ if ($_GET['show_thread_data'] == 1)
 	}
 }
 
+
+/***************************** MISC. SCRIPTS *********************************/
 #set all  PLANNED projects INPROGRESS that have jobs INPROGRESS, DONE, PAUSED or ABORTED
 // UPDATE mrp_case, mrp_job, objects SET mrp_case.state=3 WHERE
 // mrp_case.oid=mrp_job.oid AND
@@ -4599,5 +4662,21 @@ if ($_GET['show_thread_data'] == 1)
 // mrp_case.state=2 AND
 // mrp_job.state in (3,5,7,4)
 //    lisada parenti kontrollimine
+
+// http://mailprisma/automatweb/orb.aw?class=mrp_schedule&action=create&copyjobstoschedule=1&mrp_workspace=1259
+// /* COPY JOBS FROM mrp_job TO mrp_schedule */
+// /* dbg */ if ($_GET["copyjobstoschedule"]==1){
+// /* dbg */ $this->db_query ("SELECT mrp_job.oid FROM mrp_job LEFT JOIN objects ON objects.oid = mrp_job.oid WHERE objects.status > 0");
+// /* dbg */ while ($job = $this->db_next ()) {
+// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." t88d."; exit;
+// /* dbg */ }
+
+// http://mailprisma/automatweb/orb.aw?class=mrp_schedule&action=create&copyprojectstoschedule=1&mrp_workspace=1259
+// /* COPY PROJECTS FROM mrp_case TO mrp_case_schedule */
+// /* dbg */ if ($_GET["copyprojectstoschedule"]==1){
+// /* dbg */ $this->db_query ("SELECT mrp_case.oid FROM mrp_case LEFT JOIN objects ON objects.oid = mrp_case.oid WHERE objects.status > 0");
+// /* dbg */ while ($job = $this->db_next ()) {
+// /* dbg */ $this->save_handle(); $this->db_query ("insert into mrp_case_schedule (oid) values ({$job["oid"]})"); $this->restore_handle(); $i++;} echo $i." projekti."; exit;
+// /* dbg */ }
 
 ?>

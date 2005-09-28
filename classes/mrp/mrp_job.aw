@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.72 2005/07/30 15:10:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_job.aw,v 1.73 2005/09/28 12:12:16 voldemar Exp $
 // mrp_job.aw - Tegevus
 /*
 
@@ -115,8 +115,15 @@ CREATE TABLE `mrp_job` (
   `finished` int(10) unsigned default NULL,
   `remaining_length` int(10) unsigned default NULL,
 
-	PRIMARY KEY  (`oid`),
-	UNIQUE KEY `oid` (`oid`)
+	PRIMARY KEY  (`oid`)
+) TYPE=MyISAM;
+
+CREATE TABLE `mrp_schedule` (
+	`oid` int(11) NOT NULL default '0',
+	`planned_length` int(10) unsigned NOT NULL default '0',
+	`starttime` int(10) unsigned default NULL,
+
+	PRIMARY KEY  (`oid`)
 ) TYPE=MyISAM;
 
 */
@@ -403,7 +410,6 @@ class mrp_job extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "start",
-			//"img" => "new.gif",
 			"tooltip" => t("Alusta"),
 			"action" => "start",
 			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d alustada?"),
@@ -422,7 +428,6 @@ class mrp_job extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "done",
-			//"img" => "done.gif",
 			"tooltip" => t("Valmis"),
 			"action" => "done",
 			"confirm" => t("Oled kindel et soovid t&ouml;&ouml;d l&otilde;petada?"),
@@ -430,7 +435,6 @@ class mrp_job extends class_base
 		));
 		$toolbar->add_button(array(
 			"name" => "pause",
-			//"img" => "pause.gif",
 			"tooltip" => t("Paus"),
 			"action" => "pause",
 			"disabled" => $disabled_inprogress,
@@ -438,7 +442,6 @@ class mrp_job extends class_base
 		));
 		$toolbar->add_button(array(
 			"name" => "end_shift",
-			//"img" => "end_shift.gif",
 			"confirm" => t("Lõpeta vahetus ja logi v&auml;lja?"),
 			"tooltip" => t("Vahetuse l&otilde;pp"),
 			"action" => "end_shift",
@@ -463,7 +466,6 @@ class mrp_job extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "continue",
-			//"img" => "continue.gif",
 			"tooltip" => t("J&auml;tka"),
 			"action" => $action,
 			"disabled" => $disabled,
@@ -472,7 +474,6 @@ class mrp_job extends class_base
 
 		$toolbar->add_button(array(
 			"name" => "abort",
-			//"img" => "abort.gif",
 			"tooltip" => t("Katkesta"),
 			//"action" => "abort",
 			"url" => "#",
@@ -674,7 +675,11 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-				// send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
+				error::raise(array(
+					"msg" => sprintf (t("Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 			else
 			{
@@ -752,10 +757,10 @@ class mrp_job extends class_base
 					aw_restore_acl();
 				}
 
-/* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
-/* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
+// /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
+// /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
 // /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
-/* dbg */ }
+// /* dbg */ }
 			}
 		}
 
@@ -811,7 +816,11 @@ class mrp_job extends class_base
 			if (!$resource_freed)
 			{
 				$errors[] = t("Ressursi vabastamine ebaõnnestus");
-				// send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n res. vabastamata \n job id:" . $this_object->id ());
+				error::raise(array(
+					"msg" => sprintf (t("Ressursi vabastamine ebaõnnestus. Job: %s, res: %s"), $this_object->id (), $this_object->prop("resource")),
+					"fatal" => false,
+					"show" => false,
+				));
 			}
 			else
 			{
@@ -842,10 +851,10 @@ class mrp_job extends class_base
 				$ws->mrp_log($this_object->prop("project"), $this_object->id(), "T&ouml;&ouml; ".$this_object->name()." staatus muudeti ".$this->states[$this_object->prop("state")], $arr["pj_change_comment"]);
 				$this->add_comment($this_object->id(), $arr["pj_change_comment"]);
 
-/* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
-/* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
+// /* dbg */ $tmp_resource = obj ($this_object->prop("resource"));
+// /* dbg */ if ($tmp_resource->prop ("state") != MRP_STATUS_RESOURCE_AVAILABLE) {
 // /* dbg */ send_mail ("ve@starman.ee", "!VIGA @ MRP", __FILE__ . " " . __LINE__ . "\n ressurss kinni j22nd \n job id:" . $this_object->id ());
-/* dbg */ }
+// /* dbg */ }
 			}
 		}
 
@@ -1281,14 +1290,17 @@ class mrp_job extends class_base
 			MRP_STATUS_RESOURCE_AVAILABLE,
 		);
 
-		/*if (!in_array ($resource->prop ("state"), $applicable_states))
+		/*
+		if (!in_array ($resource->prop ("state"), $applicable_states))
 		{
 			return false;
-		}*/
+		}
+		*/
 
-		// get max number of threads for resource
+		### get max number of threads for resource
 		$max_jobs = max(1, count($resource->prop("thread_data")));
-		// get number of jobs using resource
+
+		### get number of jobs using resource
 		$cur_jobs = $this->db_fetch_field("
 			SELECT
 				count(j.oid) AS cnt
@@ -1300,7 +1312,8 @@ class mrp_job extends class_base
 				o.status > 0 AND
 				j.state IN (".MRP_STATUS_INPROGRESS.",".MRP_STATUS_PAUSED.")
 		", "cnt");
-		// compare
+
+		### compare
 		if ($cur_jobs >= $max_jobs)
 		{
 			return false;
