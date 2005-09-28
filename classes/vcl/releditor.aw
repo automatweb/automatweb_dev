@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.60 2005/09/26 15:36:00 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.61 2005/09/28 12:52:07 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -792,6 +792,25 @@ class releditor extends core
 
 
 			$obj_id = $clinst->submit($emb);
+
+			// fucking hackery :(
+			$cb_values = aw_global_get("cb_values");
+			if (is_array($cb_values) && sizeof($cb_values) > 0)
+			{
+				$errtxt = "";
+				foreach($cb_values as $pkey => $pval)
+				{
+					$errtxt .= $pval["error"];
+				};
+				$prop["error"] = $errtxt;
+				return PROP_ERROR;
+				/*
+				print "<pre>";
+				print_r($cb_values);
+				print "</pre>";
+				*/
+			}
+
 
 			if ($prop["rel_id"] == "first" && empty($emb["id"]))
 			{
