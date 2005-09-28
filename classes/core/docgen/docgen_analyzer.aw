@@ -3,9 +3,9 @@
 /** aw code analyzer
 
 	@author terryf <kristo@struktuur.ee>
-	@cvs $Id: docgen_analyzer.aw,v 1.21 2005/04/05 13:52:34 kristo Exp $
+	@cvs $Id: docgen_analyzer.aw,v 1.22 2005/09/28 21:39:49 voldemar Exp $
 
-	@comment 
+	@comment
 	analyses aw code
 **/
 
@@ -36,7 +36,9 @@ class docgen_analyzer extends class_base
 		$this->cur_file = $file;
 
 		$this->classinfo = aw_ini_get("classes");
-		
+
+/* dbg siin ja edaspidi selles failis parandus veale. kui esines stringides muutuja: "asdfas{$sadf}dflkljlsd" siis kuna '{' ei t88delda siin T_CURLY_OPEN-ina, kutsuti '}' esinemisel handle_brace_end ilma vastava handle_brace_begin-ita. dbg on ajutine lahendus! */ $variable_token_occurred = false;
+
 		reset($this->tokens);
 		while ($token = $this->get())
 		{
@@ -67,9 +69,10 @@ class docgen_analyzer extends class_base
 						$this->handle_t_string($token);
 						break;
 
-/*					case T_VARIABLE:
-						$this->handle_variable_ref($token);
-						break;*/
+					case T_VARIABLE:
+/* dbg */ $variable_token_occurred = true;
+						/*$this->handle_variable_ref($token);*/
+						break;
 
 					/*case T_NEW:
 						$this->assert_fail($token);
@@ -87,9 +90,16 @@ class docgen_analyzer extends class_base
 					case "{":
 						$this->handle_brace_begin();
 						break;
-					
+
 					case "}":
+/* dbg */ if ($variable_token_occurred)
+/* dbg */ {
+/* dbg */ 	$variable_token_occurred = false;
+/* dbg */ }
+/* dbg */ else
+/* dbg */ {
 						$this->handle_brace_end();
+/* dbg */ }
 						break;
 				}
 			}
@@ -135,7 +145,7 @@ class docgen_analyzer extends class_base
 		}
 		else
 		{
-			$this->cur_line -= substr_count($tmp, "\n");		
+			$this->cur_line -= substr_count($tmp, "\n");
 		}
 		prev($this->tokens);
 	}
@@ -521,7 +531,7 @@ class docgen_analyzer extends class_base
 		$data = array();
 
 		$data["short_comment"] = trim(substr(array_shift($lines), 3));
-		
+
 		reset($lines);
 		while (list(, $line) = each($lines))
 		{
@@ -685,7 +695,7 @@ class docgen_analyzer extends class_base
 	{
 		$ret = array();
 		list($ret["name"], $ret["req"], $extra) = explode(" ", $str, 3);
-		
+
 		// now parse extra params
 		$att = $this->_do_parse_attributes($extra);
 
@@ -752,7 +762,7 @@ class docgen_analyzer extends class_base
 						$class = $cln[1].$this->do_read_funcall(false);
 						//echo "from t_var got class $class <br>";
 						break;
-					
+
 					case T_ARRAY:
 						$class = "";
 						$this->read_const_array_def();
@@ -976,7 +986,7 @@ class docgen_analyzer extends class_base
 
 	function add_track_var($varn, $vard)
 	{
-		if ($this->in_function) 
+		if ($this->in_function)
 		{
 			/*if ($this->current_function == "_req_add_itypes")
 			{
@@ -990,8 +1000,8 @@ class docgen_analyzer extends class_base
 	function _try_parse_complex_expr()
 	{
 		// we are insode a complex expression. try to figure out if it is constant
-		// by type (since currently we only get here from finding the isset token 
-		// on variable assign, it probably is an array. 
+		// by type (since currently we only get here from finding the isset token
+		// on variable assign, it probably is an array.
 		// TODO: right. currently, just return unknown type
 		return array(
 			"type" => "other",
@@ -1191,7 +1201,7 @@ class docgen_analyzer extends class_base
 					}
 				}
 			}
-	
+
 			$this->restore_bm();
 		}
 	}
