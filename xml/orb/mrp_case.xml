@@ -24,53 +24,5 @@
 			</function>
 		</action>
 
-		<action name="start">
-			<function name="start">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="finish">
-			<function name="finish">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="abort">
-			<function name="abort">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="archive">
-			<function name="archive">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="plan">
-			<function name="plan">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
-		<action name="set_on_hold">
-			<function name="set_on_hold">
-				<arguments>
-					<required name="id" type="int" />
-				</arguments>
-			</function>
-		</action>
-
 	</class>
 </orb>

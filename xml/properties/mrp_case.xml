@@ -69,15 +69,6 @@
             <caption>Valmimistähtaeg</caption>
       </property>
       <property>
-            <name>planned_date</name>
-            <group>grp_general</group>
-            <table>mrp_case</table>
-            <type>text</type>
-            <editonly>1</editonly>
-            <field>planned_date</field>
-            <caption>Planeeritud valmimisaeg</caption>
-      </property>
-      <property>
             <name>project_priority</name>
             <group>grp_general</group>
             <table>mrp_case</table>
@@ -121,6 +112,15 @@
             <table>mrp_case</table>
             <type>hidden</type>
             <field>extern_id</field>
+      </property>
+      <property>
+            <name>planned_date</name>
+            <group>grp_general</group>
+            <table>mrp_case_schedule</table>
+            <type>text</type>
+            <editonly>1</editonly>
+            <field>planned_date</field>
+            <caption>Planeeritud valmimisaeg</caption>
       </property>
       <property>
             <name>sales_priority</name>
@@ -446,6 +446,11 @@
                   <master_table>objects</master_table>
                   <master_index>oid</master_index>
             </mrp_case>
+            <mrp_case_schedule>
+                  <index>oid</index>
+                  <master_table>objects</master_table>
+                  <master_index>oid</master_index>
+            </mrp_case_schedule>
       </tableinfo>
       <reltypes>
             <MRP_MANAGER>
