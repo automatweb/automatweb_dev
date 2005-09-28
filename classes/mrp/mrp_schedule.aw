@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.86 2005/09/13 10:51:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.87 2005/09/28 06:06:04 kristo Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -314,7 +314,9 @@ class mrp_schedule extends class_base
 		{
 			### set scheduling not needed, and start scheduling
 			$workspace->set_prop("rescheduling_needed", 0);
+			aw_disable_acl();
 			$workspace->save();
+			aw_restore_acl();
 		}
 		else
 		{
@@ -497,11 +499,11 @@ class mrp_schedule extends class_base
 
 		while ($job = $this->db_next())
 		{
-			if (!$this->can("view", $job["oid"]))
+			/*if (!$this->can("view", $job["oid"]))
 			{
 				// echo t(sprintf ("Esines töö (id: %s), mis pole kasutajale nähtav. Planeerimine ei toimu adekvaatselt.", $job["oid"]));
 				continue;
-			}
+			}*/
 
 			if (array_key_exists ($job["project"], $projects))
 			{
@@ -791,6 +793,7 @@ class mrp_schedule extends class_base
 				MRP_STATUS_NEW,
 			);
 
+timing("save projects", "start");
 			foreach ($this->project_schedule as $project_id => $date)
 			{
 				if (is_oid($project_id))
@@ -820,31 +823,44 @@ class mrp_schedule extends class_base
 
 				}
 			}
+timing("save projects", "end");
+timing("save jobs", "start");
 
+			// read job statuses
+			$state_lut = array();
+			$this->db_query("SELECT state,oid FROM mrp_job"); 
+			while ($row = $this->db_next())
+			{
+				$state_lut[$row["oid"]] = $row["state"];
+			}
 			foreach ($this->job_schedule as $job_id => $job_data)
 			{
 				if (is_oid($job_id))
 				{
-					$job = obj ($job_id);
+					//$job = obj ($job_id);
 					// $job->set_prop ("starttime", $job_data[0]);
 					// $job->set_prop ("planned_length", $job_data[1]);
 					$line = "{$job_id}\t{$job_data[1]}\t{$job_data[0]}\n";
 					fwrite ($tmp, $line);
 
-					if (in_array ($job->prop("state"), $applicable_job_states))
+					if (in_array ($state_lut[$job_id], $applicable_job_states))
 					{
-						$log->mrp_log(
-							$job->prop("project"),
-							$job->id(),
-							"T&ouml;&ouml; staatus muutus ".
-								$this->state_names[$job->prop("state")]." => ".
-								$this->state_names[MRP_STATUS_PLANNED]
-						);
+						$job = obj ($job_id);
+						if ($job->prop("state") != MRP_STATUS_PLANNED)
+						{
+							$log->mrp_log(
+								$job->prop("project"),
+								$job->id(),
+								"T&ouml;&ouml; staatus muutus ".
+									$this->state_names[$job->prop("state")]." => ".
+									$this->state_names[MRP_STATUS_PLANNED]
+							);
 
-						$job->set_prop ("state", MRP_STATUS_PLANNED);
-						aw_disable_acl();
-						$job->save ();
-						aw_restore_acl();
+							$job->set_prop ("state", MRP_STATUS_PLANNED);
+							aw_disable_acl();
+							$job->save ();
+							aw_restore_acl();
+						}
 					}
 
 
@@ -854,6 +870,8 @@ class mrp_schedule extends class_base
 
 				}
 			}
+timing("save jobs", "end");
+if ($_GET["show_filesize"]==1){echo filesize ($tmpname); }
 
 			// fclose($tmp);
 
