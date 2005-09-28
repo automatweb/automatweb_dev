@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.416 2005/09/20 08:52:28 kristo Exp $
+// $Id: class_base.aw,v 2.417 2005/09/28 12:54:54 duke Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -119,6 +119,7 @@ class class_base extends aw_template
 			"multi_calendar" => "applications/calendar/vcl/multi_calendar",
 			"date_chooser" => "vcl/date_chooser",
 			"table" => "vcl/table",
+			"object_table" => "vcl/object_table",
 			"relationmgr" => "vcl/relationmgr",
 		);
 
@@ -153,6 +154,9 @@ class class_base extends aw_template
 
 
 	}
+
+	// vormid. Kuidas ma siis vorme defineerin? Asi läheb liiga keeruliseks, kui ma
+	// üritan kõiki neid asju klassi päises kirjeldada.
 
 	function load_storage_object($arr)
 	{
@@ -552,9 +556,12 @@ class class_base extends aw_template
 		};
 
 		$this->cli = &$cli;
+		// aga mis siis, kui see on sama aken?
 		$cli->configure(array(
 			"help_url" => $this->mk_my_orb("browser",array("clid" => $this->clid),"help"),
+			"translate_url" => $this->mk_my_orb("editor",array("clid" => $this->clid),"cb_translate"),
 			"more_help_text" => t("Rohkem infot"),
+			"translate_text" => t("Tõlgi"),
 			"close_help_text" => t("Peida ära"),
 			"open_help_text" => t("Abiinfo"),
 			// sellest teeme ini settingu
@@ -636,7 +643,6 @@ class class_base extends aw_template
 		{
 			$cli->view_mode = 1;
 		};
-
 
 		foreach($resprops as $val)
 		{
@@ -788,6 +794,7 @@ class class_base extends aw_template
 			//"orb_action" => $this->view == 1 ? "view" : "",
 			"orb_action" => $orb_action,
 		));
+
 		$awt->stop("final-bit");
 		$awt->stop("cb-change");
 
@@ -810,6 +817,7 @@ class class_base extends aw_template
 	{
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
+
 
 		// check whether this current class is based on class_base
 		$this->init_class_base();
@@ -2579,6 +2587,15 @@ class class_base extends aw_template
 
 					if (is_array($relres))
 					{
+						if ($val["error"])
+						{
+							$resprops[$val["name"]."_error"] = array(
+								"type" => "text",
+								"value" => "",
+								"error" => $val["error"],
+							);
+						};
+
 						foreach($relres as $rkey => $rval)
 						{
 							$this->convert_element(&$rval);
@@ -3329,7 +3346,6 @@ class class_base extends aw_template
 			"props" => &$properties,
 		));
 
-
 		$pvalues = array();
 
 		// this is here so I can keep things in the session
@@ -3542,6 +3558,7 @@ class class_base extends aw_template
 			// don't care about text elements
 			// but i do --dragut
 			// seems that it CANNOT be removed! --dragut
+			// why? -- duke
 			if ($type == "text")
 			{
 				continue;	
@@ -3557,7 +3574,16 @@ class class_base extends aw_template
 				$target_reltype = constant($property["reltype"]);
 				$argblock["prop"]["reltype"] = $target_reltype;
 				$argblock["prop"]["clid"] = $this->relinfo[$target_reltype]["clid"];
-				$vcl_inst->process_releditor($argblock);
+				$res = $vcl_inst->process_releditor($argblock);
+
+				if (PROP_ERROR == $res)
+				{
+					$propvalues[$name]["error"] = $argblock["prop"]["error"];
+					aw_session_set("cb_values",$propvalues);
+					$this->cb_values = $propvalues;
+					return false;
+				}
+
 			};
 
 			// the current behaviour is to call set_property and not ever
