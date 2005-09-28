@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.6 2005/07/29 12:18:53 frgp Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.7 2005/09/28 08:35:47 dragut Exp $
 
 /*
 
@@ -220,7 +220,7 @@ class links extends class_base
 		exit;
 	}
 	
-	function get_property(&$arr)
+	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
