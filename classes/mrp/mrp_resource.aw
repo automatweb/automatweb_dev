@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.73 2005/09/24 17:48:15 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.74 2005/09/28 08:37:17 kristo Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -403,6 +403,10 @@ class mrp_resource extends class_base
 				break;
 
 			case "work_hrs_recur":
+				if ($prop["value"] == "")
+				{
+					return PROP_OK;
+				}
 				### check for user errors
 				if (24 < $prop["value"]["length"])
 				{
