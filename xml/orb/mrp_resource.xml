@@ -1,5 +1,23 @@
 <?xml version='1.0'?>
 <orb>
 	<class name="mrp_resource" folder="mrp" extends="class_base">
+		<action name="start_job">
+			<function name="start_job">
+				<arguments>
+					<required name="resource" type="int" />
+					<required name="job" type="int" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="stop_job">
+			<function name="stop_job">
+				<arguments>
+					<required name="resource" type="int" />
+					<required name="job" type="int" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
