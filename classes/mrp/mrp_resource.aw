@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.75 2005/09/28 12:12:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.76 2005/09/28 17:26:40 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -447,7 +447,6 @@ class mrp_resource extends class_base
 					if (
 						((RECUR_DAILY == $prop["value"]["recur_type"]) and ((24*$interval_daily) < $prop["value"]["length"]))
 						or ((RECUR_WEEKLY == $prop["value"]["recur_type"]) and ((24*7*$interval_weekly) < $prop["value"]["length"]))
-						// or ((RECUR_MONTHLY == $prop["value"]["recur_type"]) and ((24*30) < $prop["value"]["length"]))
 						or ((RECUR_YEARLY == $prop["value"]["recur_type"]) and ((24*365*$interval_yearly) < $prop["value"]["length"]))
 					)
 					{

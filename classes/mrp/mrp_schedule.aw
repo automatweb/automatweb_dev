@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.88 2005/09/28 12:12:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.89 2005/09/28 17:26:40 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -839,7 +839,7 @@ class mrp_schedule extends class_base
 			if (!$db_retval)
 			{
 				error::raise(array(
-					"msg" => t("Viga tööde planeeritud aegade salvestamisel. ") . $this->db_last_error,
+					"msg" => t("Viga projektide planeeritud aegade salvestamisel. ") . $this->db_last_error,
 					"fatal" => false,
 					"show" => true,
 				));
