@@ -453,9 +453,10 @@ die(dbg::dump($ret));
 					objects.subclass as subclass,
 					objects.cachedata as cachedata,
 					objects.flags as flags";
-
-//					objects.acldata as acldata
-//				";
+				if (aw_ini_get("acl.use_new_acl") == 1)
+				{
+					$q .= ",objects.acldata as acldata";
+				}
 				if (count($fields) > 0)
 				{
 					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
