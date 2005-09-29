@@ -15,6 +15,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/ajax.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/autosuggest.js"></script>
 
 
