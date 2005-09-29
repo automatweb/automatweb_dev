@@ -19,6 +19,19 @@ class run_in_background extends class_base
 	{
 		$prop =& $arr["prop"];
 		$fn = $this->lock_file.".".$arr["obj_inst"]->id();
+		$fn_s = $this->stop_file.".".$arr["obj_inst"]->id();
+		if (file_exists($fn_s))
+		{
+			$prop["value"] = html::href(array(
+				"caption" => t("Reset"),
+				"url" => $this->mk_my_orb("bg_control", array(
+					"id" => $arr["obj_inst"]->id(),
+					"do" => "reset",
+					"ru" => get_ru()
+				))
+			));
+		}
+		else
 		if (file_exists($fn))
 		{
 			$prop["value"] = html::href(array(
@@ -98,6 +111,15 @@ class run_in_background extends class_base
 					"content" => t("Protsess l&otilde;petab t&ouml;&ouml;d")
 				));
 				break;
+
+			case "reset":
+				unlink($this->stop_file.".".$o->id());
+				unlink($this->lock_file.".".$o->id());
+				$o->set_meta("bg_run_state", "");
+				aw_disable_acl();
+				$o->save();
+				aw_restore_acl();
+				break;
 		}
 		return $arr["ru"];
 	}
@@ -120,10 +142,30 @@ class run_in_background extends class_base
 		));
 		foreach($ol->arr() as $o)
 		{
+			echo "object ".$o->name()." <br>";
 			$url = $this->mk_my_orb("bg_run", array("id" => $o->id()));
 			$s->remove(array(
 				"event" => $url
 			));
+
+			// here we have to check if the process is in a stopped state, if it is, restart it as soon as possible
+			if ($o->meta("bg_run_state") == "started")
+			{
+				if (!$this->bg_is_running($o))
+				{
+					echo "process halted, restart immediately <br>";
+					// add run scheduler immediately
+					$s->add(array(
+						"event" => $url,
+						"time" => time()
+					));
+					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess j&auml;tkab hiljemalt kahe minuti p&auml;rast"));
+					aw_disable_acl();
+					$o->save();
+					aw_restore_acl();
+					continue;
+				}
+			}
 
 			// get the time it should run a
 			if ($o->prop("bg_run_always"))
@@ -132,10 +174,11 @@ class run_in_background extends class_base
 					"event" => $url,
 					"time" => time()
 				));
-				$o->set_meta("bg_run_log",t("Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"));
+				$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub hiljemalt kahe minuti p&auml;rast"));
 				aw_disable_acl();
 				$o->save();
 				aw_restore_acl();
+				echo "process is done, run always set, restart <br>";
 			}
 			else
 			{
@@ -146,19 +189,22 @@ class run_in_background extends class_base
 						"event" => $url,
 						"rep_id" => $recur->id()
 					));
-					$o->set_meta("bg_run_log",t("Protsess k&auml;ivitub j&auml;rgmisel kordusel"));
+					$o->set_meta("bg_run_log",$o->meta("bg_run_log").t("<br>Protsess k&auml;ivitub j&auml;rgmisel kordusel"));
 					aw_disable_acl();
 					$o->save();
 					aw_restore_acl();
+					echo "added with repeater ".$recur->id()." <br>";
 				}
 			}
 		}
 
-		// add scheduler check every 20 min
+		echo "add scheduler check at ".date("d.m.Y H:i:s", time()+5*60)." <br>";
+		// add scheduler check every 5 min
 		$s->add(array(
 			"event" => $this->mk_my_orb("bg_check_scheduler", array()),
-			"time" => time()+40*60
+			"time" => time()+5*60
 		));
+		echo "all done <br>";
 	}
 
 	/**
@@ -169,6 +215,8 @@ class run_in_background extends class_base
 	**/
 	function bg_run($arr)
 	{
+		echo "enter bg_run $arr[id] <br>\n";
+		flush();
 		set_time_limit(9999);
 		$o = obj($arr["id"]);
 		if ($this->bg_is_running($o))
@@ -180,15 +228,20 @@ class run_in_background extends class_base
 		// run init
 		if (method_exists($this, "bg_run_init"))
 		{
+			echo "call bg_run_init <br>\n";
+			flush();
 			$this->bg_run_init($o);
 		}
-
+echo "after init, state = ".$o->meta("bg_run_state")." <br>\n";
+flush();
 		// figure out if this is start or restart
 		if ($o->meta("bg_run_state") == "started")
 		{
 			// and if it is restart, then run restore step
 			if (method_exists($this, "bg_run_continue"))
 			{
+				echo "calling br_run_continue <br>\n";
+				flush();
 				$this->bg_run_continue($o);
 			}
 		}
@@ -202,10 +255,13 @@ class run_in_background extends class_base
 			aw_restore_acl();
 
 		}
-
+echo "after continue <br>\n";
+flush();
 		// get first log entry
 		if (method_exists($this, "bg_run_get_log_entry"))
 		{
+		echo "call get_log_entry <br>\n";
+		flush();
 			$this->bg_write_log_entry($this->bg_run_get_log_entry($o), $o);
 		}
 
@@ -215,12 +271,17 @@ class run_in_background extends class_base
 		{
 			if (file_exists($this->stop_file.".".$o->id()))
 			{
+			echo "calling halt for stop flag <br>\n";
+				flush();
 				$this->bg_do_halt($o);
 			}
-
+echo "running step <br>\n";
+flush();
 			$res = $this->bg_run_step($o);
 			if ($res == BG_DONE)
 			{
+			echo "recieved done , breaking <br>\n";
+			flush();
 				break;
 			}
 
@@ -228,25 +289,35 @@ class run_in_background extends class_base
 			{
 				if (method_exists($this, "bg_checkpoint"))
 				{
+				echo "iter = $iter, calling checkpoint <Br>\n";
+				flush();
 					$this->bg_checkpoint($o);
 					aw_disable_acl();
 					$o->save();
 					aw_restore_acl();
+				echo "checkpint saved <br>\n";
+				flush();
 				}
+				$iter = 0;
 			}
 
-			if ($iter > $this->bg_log_steps)
+			if (++$log_iter > $this->bg_log_steps)
 			{
-				if (method_exists($this, "bg_run_get_log_entry"))
+				if (method_exists($this, "bg_write_log_entry"))
 				{
+				echo "calling write log entry <br>\n";
+				flush();
 					$this->bg_write_log_entry($this->bg_run_get_log_entry($o), $o);
 				}
+				$log_iter = 0;
 			}
 		}
 
 		// call finalizer
 		if (method_exists($this, "bg_run_finish"))
 		{
+		echo "calling finalizer <br>\n";
+		flush();
 			$this->bg_run_finish($o);
 		}
 
@@ -264,7 +335,7 @@ class run_in_background extends class_base
 		$fn = $this->lock_file.".".$o->id();
 		if (file_exists($fn))
 		{
-			if (filemtime($fn) > (time()-39*60))
+			if (filemtime($fn) > (time()-4*60))
 			{
 				return true;
 			}
