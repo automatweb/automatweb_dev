@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.1 2005/09/27 15:35:51 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.2 2005/09/29 08:24:33 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -32,9 +32,6 @@
 @groupinfo publications caption="V&auml;ljaanded"
 @default group=publications
 
-	@property publications_toolbar type=toolbar no_caption=1 group=publications_general_info,publications_list,general_images,general_files,general_links,general_polls,general_webforms,general_forum
-	@caption V&auml;ljaannete t&ouml;&ouml;riistariba
-
 	@groupinfo publications_general_info caption="V&auml;ljaannete &uuml;ldinfo" parent=publications
 	@default group=publications_general_info
 
@@ -53,46 +50,37 @@
 	@groupinfo publications_list caption="V&auml;ljaanded" parent=publications
 	@default group=publications_list
 
-		property publications_table type=table no_caption=1
-		caption V&auml;ljaanded
-
 		@property publications_table type=releditor reltype=RELTYPE_PUBLICATION field=meta method=serialize mode=manager props=name
 		@caption V&auml;ljaanded
 
 	@groupinfo general_images caption="Pildid" parent=publications
 	@default group=general_images
 
-		property general_images_table type=table no_caption=1
-		caption Pildid
-
-		@property general_images type=releditor reltype=RELTYPE_GENERAL_IMAGE field=meta method=serialize mode=manager props=name,file,dimensions,comment,author,alt,link,file_show
+		@property general_images type=releditor reltype=RELTYPE_GENERAL_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,dimensions,comment,author,alt,link,file_show table_fields=name,ord table_edit_fields=ord
 		$caption Pildid
 
 	@groupinfo general_files caption="Failid" parent=publications
 	@default group=general_files
 	
-	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow table_fields=name
+	        @property general_files type=releditor reltype=RELTYPE_GENERAL_FILE field=meta method=serialize mode=manager props=file,ord,type,comment,file_url,newwindow,status table_fields=name,ord table_edit_fields=ord
         	@caption Failid
 
 	@groupinfo general_links caption="Lingid" parent=publications
 	@default group=general_links
 
-		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager use_form=emb
+		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindowd table_fields=name,ord table_edit_fields=ord
 		@caption Lingid
 
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
 	@default group=general_polls
 
-		@property general_polls type=releditor reltype=RELTYPE_GENERAL_POLL field=meta method=serialize mode=manager props=name,question,answers
+		@property general_polls type=releditor reltype=RELTYPE_GENERAL_POLL field=meta method=serialize mode=manager props=name,question,answers,status
 		@caption Kiirk&uuml;sitlused
 
 	@groupinfo general_webforms caption="Veebivormid" parent=publications
 	@default group=general_webforms
 
-		property general_webforms_table type=table no_caption=1
-		caption Veebivormid
-
-		@property general_webform type=releditor reltype=RELTYPE_GENERAL_WEBFORM field=meta method=serialize mode=manager props=name
+		@property general_webform type=releditor reltype=RELTYPE_GENERAL_WEBFORM field=meta method=serialize mode=manager props=name,status
 		@caption Veebivorm
 
 	@groupinfo general_forum caption="Foorum" parent=publications
@@ -100,12 +88,6 @@
 
 		@property general_forum type=text  
 		@caption Foorum
-
-	groupinfo add_item caption="Uus" parent=publications
-	default group=add_item
-
-		property add_item callback=callback_add_item group=add_item
-		caption Uus
 
 @groupinfo stats caption="Statistika"
 @default group=stats
@@ -187,10 +169,6 @@ class expp_journal_management extends class_base
 				{
 					$forum_object_id = $forum_object->id();
 				}
-				else
-				{
-					$prop['error'] = "Foorum on seostamata";
-				}
 				if (is_oid($forum_object_id) && $this->can("view", $forum_object_id))
 				{
 					$prop['value'] = html::href(array(
@@ -201,12 +179,20 @@ class expp_journal_management extends class_base
 						"caption" => t("Link foorumile"),
 					));
 				}
-/*
+
 				else
 				{
-					$prop['value'] = "";
+					$prop['value'] = html::href(array(
+						"url" => $this->mk_my_orb("new", array(
+							"alias_to" => $arr['obj_inst']->id(),
+							"parent" => $arr['obj_inst']->parent(),
+							"reltype" => 11, // expp_journal_management.general_forum
+							"return_url" => get_ru(),
+						), CL_FORUM_V2),
+						"caption" => t("Lisa foorum"),
+					));
 				}
-*/
+
 				break;
 		};
 		return $retval;
@@ -228,15 +214,6 @@ class expp_journal_management extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	function callback_mod_tab($arr)
-	{
-		if ($arr['activegroup'] != "add_item" && $arr['id'] == "add_item")
-		{
-			return false;
-		}
-	}
-
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////

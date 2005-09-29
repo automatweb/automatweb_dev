@@ -53,25 +53,6 @@
             <caption>P&amp;otilde;hitoon</caption>
       </property>
       <property>
-            <name>publications_toolbar</name>
-            <table>objects</table>
-            <group>
-                  <num_0>publications_general_info</num_0>
-                  <num_1>publications_list</num_1>
-                  <num_2>general_images</num_2>
-                  <num_3>general_files</num_3>
-                  <num_4>general_links</num_4>
-                  <num_5>general_polls</num_5>
-                  <num_6>general_webforms</num_6>
-                  <num_7>general_forum</num_7>
-            </group>
-            <type>toolbar</type>
-            <no_caption>1</no_caption>
-            <store>no</store>
-            <field>publications_toolbar</field>
-            <caption>V&amp;auml;ljaannete t&amp;ouml;&amp;ouml;riistariba</caption>
-      </property>
-      <property>
             <name>publications_name</name>
             <table>objects</table>
             <group>publications_general_info</group>
@@ -138,14 +119,21 @@
             <mode>manager</mode>
             <props>
                   <num_0>name</num_0>
-                  <num_1>file</num_1>
-                  <num_2>dimensions</num_2>
-                  <num_3>comment</num_3>
-                  <num_4>author</num_4>
-                  <num_5>alt</num_5>
-                  <num_6>link</num_6>
-                  <num_7>file_show</num_7>
+                  <num_1>ord</num_1>
+                  <num_2>status</num_2>
+                  <num_3>file</num_3>
+                  <num_4>dimensions</num_4>
+                  <num_5>comment</num_5>
+                  <num_6>author</num_6>
+                  <num_7>alt</num_7>
+                  <num_8>link</num_8>
+                  <num_9>file_show</num_9>
             </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+            </table_fields>
+            <table_edit_fields>ord</table_edit_fields>
             <store>no</store>
       </property>
       <property>
@@ -158,14 +146,19 @@
             <method>serialize</method>
             <mode>manager</mode>
             <props>
-                  <num_0>name</num_0>
-                  <num_1>file</num_1>
+                  <num_0>file</num_0>
+                  <num_1>ord</num_1>
                   <num_2>type</num_2>
                   <num_3>comment</num_3>
                   <num_4>file_url</num_4>
                   <num_5>newwindow</num_5>
+                  <num_6>status</num_6>
             </props>
-            <table_fields>name</table_fields>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+            </table_fields>
+            <table_edit_fields>ord</table_edit_fields>
             <store>no</store>
             <caption>Failid</caption>
       </property>
@@ -178,7 +171,20 @@
             <field>meta</field>
             <method>serialize</method>
             <mode>manager</mode>
-            <use_form>emb</use_form>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>url</num_1>
+                  <num_2>ord</num_2>
+                  <num_3>docid</num_3>
+                  <num_4>hits</num_4>
+                  <num_5>alt</num_5>
+                  <num_6>newwindowd</num_6>
+            </props>
+            <table_fields>
+                  <num_0>name</num_0>
+                  <num_1>ord</num_1>
+            </table_fields>
+            <table_edit_fields>ord</table_edit_fields>
             <store>no</store>
             <caption>Lingid</caption>
       </property>
@@ -195,6 +201,7 @@
                   <num_0>name</num_0>
                   <num_1>question</num_1>
                   <num_2>answers</num_2>
+                  <num_3>status</num_3>
             </props>
             <store>no</store>
             <caption>Kiirk&amp;uuml;sitlused</caption>
@@ -208,7 +215,10 @@
             <field>meta</field>
             <method>serialize</method>
             <mode>manager</mode>
-            <props>name</props>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>status</num_1>
+            </props>
             <store>no</store>
             <caption>Veebivorm</caption>
       </property>
