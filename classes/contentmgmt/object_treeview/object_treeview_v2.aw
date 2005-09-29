@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.88 2005/09/16 16:11:21 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.89 2005/09/29 12:33:01 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1025,6 +1025,7 @@ class object_treeview_v2 extends class_base
 						{
 							$tmp_url .= (empty($_GET['char'])) ? "" : "char=".$_GET['char'];
 							$tmp_url .= (empty($_GET['tv_sel'])) ? "" : "tv_sel=".$_GET['tv_sel'];
+							$tmp_url .= (empty($_GET['section'])) ? "" : "section=".$_GET['section'];
 							$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
 						}
 						$this->vars(array(
