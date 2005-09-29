@@ -704,5 +704,59 @@ class object_test extends PHPUnit_TestCase
 		$cf = $o->get_first_obj_by_reltype();
 		$this->assertTrue(__is_err());
 	}
+
+	function test_path_err_no_obj()
+	{
+		__disable_err();
+		$o = obj();
+		$o->path();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path_err_static_no_id()
+	{
+		__disable_err();
+		object::path();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path_err_param()
+	{
+		__disable_err();
+		$rm = obj(aw_ini_get("site_rootmenu"));
+		$rm->path(56);
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path()
+	{
+		$o = obj(aw_ini_get("site_rootmenu"));
+		$pt = $o->path();
+		$this->assertEquals(count($pt), 1);
+		$this->assertEquals($pt[0]->id(), aw_ini_get("site_rootmenu"));
+	}
+
+	function test_path_str_err_obj()
+	{
+		__disable_err();
+		$o = obj();
+		$o->path_str();
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path_str_err_param()
+	{
+		__disable_err();
+		$o = obj(aw_ini_get("site_rootmenu"));
+		$o->path_str(56);
+		$this->assertTrue(__is_err());
+	}
+
+	function test_path_str()
+	{
+		$o = obj(aw_ini_get("site_rootmenu"));
+		$str = $o->path_str();
+		$this->assertEquals($str, $o->name());
+	}
 }
 ?>

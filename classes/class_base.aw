@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.417 2005/09/28 12:54:54 duke Exp $
+// $Id: class_base.aw,v 2.418 2005/09/29 09:53:12 kristo Exp $
 // the root of all good.
 // 
 // ------------------------------------------------------------------
@@ -2038,7 +2038,7 @@ class class_base extends aw_template
 			is_object($this->obj_inst) &&
 			$property["store"] != "no" && 
 			empty($property["value"]) && 
-			$this->obj_inst->is_property($property["name"]) && 
+			/*$this->obj_inst->is_property($property["name"]) && */
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
 			// I need to implement this in storage .. so that $obj->prop('blag')

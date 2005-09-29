@@ -1,0 +1,30 @@
+returns true if the given string is a property name for the currently loaded object
+
+<b>errors:</b>
+- if no object is loaded or class id not set, error is thrown
+- if parameter is not a string, error is thrown
+
+<b>parameters</b>, passed by position:
+- name of property to check
+type: string
+
+<b>returns:</b>
+true if the given string is a name of a property defined for the current object
+false, if no such property exists.
+
+<b>examples:</b>
+#php#
+$o = obj();
+$o->set_class_id(CL_MENU);
+if (!$o->is_property("foobar"))
+{
+		echo "works! <br>";
+}
+
+$o = get_some_document_object();
+if ($o->is_property("content"))
+{
+		echo "document class has content property <br>";
+}
+
+#/php#

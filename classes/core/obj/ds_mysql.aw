@@ -39,6 +39,7 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
+echo dbg::dump($this->read_properties_data_cache[$oid]);
 		if (isset($this->read_properties_data_cache[$oid]))
 		{
 			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param, $oid);
@@ -427,7 +428,34 @@ die(dbg::dump($ret));
 
 			if ($full)
 			{
-				$q = "SELECT objects.* ";
+				$q = "SELECT 
+					objects.oid as oid,
+					objects.parent as parent,
+					objects.name as name,
+					objects.createdby as createdby,
+					objects.class_id as class_id,
+					objects.created as created,
+					objects.modified as modified,
+					objects.status as status,
+					objects.hits as hits,
+					objects.lang_id as lang_id,
+					objects.comment as comment,
+					objects.last as last,
+					objects.modifiedby as modifiedby,
+					objects.jrk as jrk,
+					objects.visible as visible,
+					objects.period as period,
+					objects.alias as alias,
+					objects.periodic as periodic,
+					objects.site_id as site_id,
+					objects.brother_of as brother_of,
+					objects.cachedirty as cachedirty,
+					objects.metadata as metadata,
+					objects.subclass as subclass,
+					objects.cachedata as cachedata,
+					objects.flags as flags,
+					objects.acldata as acldata
+				";
 				if (count($fields) > 0)
 				{
 					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
@@ -1942,7 +1970,6 @@ die(dbg::dump($ret));
 			{
 				$sql["q"] .= " IN (".join(",", $cl2obj[$clid]).")";
 			}
-
 			if ($sql["q"] != "" && $sql["q2"] == "")
 			{
 				// query

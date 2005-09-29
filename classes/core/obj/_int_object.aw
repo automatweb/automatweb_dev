@@ -465,7 +465,7 @@ class _int_object
 
 	function path_str($param = NULL)
 	{
-		if (!param != NULL)
+		if ($param != NULL)
 		{
 			if (!is_array($param))
 			{
@@ -479,7 +479,7 @@ class _int_object
 		$pt = $this->path($param);
 		$i = 0;
 		$cnt = count($pt);
-        	if (isset($param["max_len"]))
+       	if (isset($param["max_len"]))
 		{
 			$i = $cnt - $param["max_len"];
 		}
@@ -516,6 +516,16 @@ class _int_object
 
 	function is_property($param)
 	{
+		error::raise_if(!is_string($param), array(
+			"err" => "ERR_PARAM",
+			"msg" => sprintf(t("object::is_property(%s): parameter must be a string!"), $param)
+		));
+
+		error::raise_if(!is_class_id($this->obj["class_id"]), array(
+			"err" => "ERR_NO_CLASS_ID",
+			"msg" => sprintf(t("object::is_property(%s): no class_id for the current object is set!"), $param)
+		));
+
 		return $this->_int_is_property($param);
 	}
 

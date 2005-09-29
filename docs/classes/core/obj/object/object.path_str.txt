@@ -2,6 +2,7 @@ returns a string that contains the names of objects in the path with / 's betwee
 
 <b>errors:</b>
 - if no object is loaded, error is thrown
+- if parameter is given and it is not an array, error is shown
 
 <b>parameters</b>, passed by name:
 - max_len - reverse max length of path (items are left out from the beginning), optional
