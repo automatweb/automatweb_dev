@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.7 2005/09/28 08:35:47 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/links.aw,v 1.8 2005/09/29 08:07:10 dragut Exp $
 
 /*
 
@@ -30,6 +30,8 @@
 @property doclinkcollection type=checkbox ch_value=1 table=extlinks group=general
 @caption Dokumendi lingikogusse
 
+@property ord type=textbox size=3 table=objects field=jrk
+@caption J&auml;rjekord
 
 @groupinfo Javascript caption=Javascript table=extlinks
 

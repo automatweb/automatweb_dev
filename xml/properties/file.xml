@@ -35,6 +35,15 @@
             <field>type</field>
       </property>
       <property>
+            <name>ord</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>3</size>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>comment</name>
             <table>objects</table>
             <group>general</group>

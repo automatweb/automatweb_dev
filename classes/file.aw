@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.110 2005/08/24 10:57:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.111 2005/09/29 08:07:10 dragut Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -29,6 +29,9 @@
 	@caption Vali fail
 
 	@property type type=hidden
+
+	@property ord type=textbox size=3 table=objects field=jrk
+	@caption J&auml;rjekord
 
 	@property comment type=textbox table=objects field=comment
 	@caption Faili allkiri

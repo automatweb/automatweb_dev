@@ -71,6 +71,14 @@
             <caption>Dokumendi lingikogusse</caption>
       </property>
       <property>
+            <name>ord</name>
+            <type>textbox</type>
+            <size>3</size>
+            <table>objects</table>
+            <field>jrk</field>
+            <caption>J&amp;auml;rjekord</caption>
+      </property>
+      <property>
             <name>use_javascript</name>
             <type>checkbox</type>
             <ch_value>1</ch_value>
