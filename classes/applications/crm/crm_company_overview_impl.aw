@@ -16,21 +16,21 @@ class crm_company_overview_impl extends class_base
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_CALL";
-		$this->do_org_actions($arr, array());
+		$this->do_org_actions($arr, $args);
 	}
 
 	function _get_org_meetings($arr)
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_KOHTUMINE";
-		$this->do_org_actions($arr, array());
+		$this->do_org_actions($arr, $args);
 	}
 	
 	function _get_org_tasks($arr)
 	{
 		$args = array();
 		$args["type"] = "RELTYPE_TASK";
-		$this->do_org_actions($arr, array());
+		$this->do_org_actions($arr, $args);
 	}
 
 	function get_overview($arr = array())
@@ -180,6 +180,7 @@ class crm_company_overview_impl extends class_base
 			"caption" => t("Klient"),
 			"name" => "customer",
 			"align" => "center",
+			"chgbgcolor" => "col",
 			"sortable" => 1
 		));
 
@@ -187,6 +188,7 @@ class crm_company_overview_impl extends class_base
 			"caption" => t("Projekt"),
 			"name" => "proj_name",
 			"align" => "center",
+			"chgbgcolor" => "col",
 			"sortable" => 1
 		));
 
@@ -194,6 +196,7 @@ class crm_company_overview_impl extends class_base
 			"caption" => t("Toimetus"),
 			"name" => "name",
 			"align" => "center",
+			"chgbgcolor" => "col",
 			"sortable" => 1
 		));
 
@@ -204,10 +207,21 @@ class crm_company_overview_impl extends class_base
 			"sortable" => 1,
 			"numeric" => 1,
 			"type" => "time",
+			"chgbgcolor" => "col",
 			"format" => "d.m.Y H:i"
 		));
 
+		$t->define_field(array(
+			"caption" => t("Prioriteet"),
+			"name" => "priority",
+			"chgbgcolor" => "col",
+			"align" => "center",
+			"sortable" => 1,
+			"numeric" => 1
+		));
+
 		$t->define_chooser(array(
+			"chgbgcolor" => "col",
 			"field" => "oid",
 			"name" => "sel"
 		));
@@ -219,7 +233,22 @@ class crm_company_overview_impl extends class_base
 		$this->_init_my_tasks_t($t);
 
 		$i = get_instance(CL_CRM_COMPANY);
-		$tasks = $i->get_my_tasks();
+		if ($arr["request"]["group"] == "all_tasks")
+		{
+			// get all undone tasks
+			$ol = new object_list(array(
+				"class_id" => CL_TASK,
+				"site_id" => array(),
+				"lang_id" => array(),
+				"is_done" => new obj_predicate_not(OBJ_IS_DONE),
+				"brother_of" => new obj_predicate_prop("id")
+			));
+			$tasks = $ol->ids();
+		}
+		else
+		{
+			$tasks = $i->get_my_tasks();
+		}
 
 		if ($arr["request"]["act_s_sbt"] != "")
 		{
@@ -260,14 +289,37 @@ class crm_company_overview_impl extends class_base
 				$proj_str = html::get_change_url($proj, array("return_url" => get_ru()), $proj_o->name());
 			}
 
+			$col = "";
+			$dl = $task->prop("deadline");
+			if (time() > $dl)
+			{
+				$col = "#BBBBBB";
+			}
+			else
+			if (date("d.m.Y") == date("d.m.Y", $dl)) // today
+			{
+				$col = "#EEEEEE";
+			}
 			$t->define_data(array(
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
 				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), $task->name()),
-				"deadline" => $task->prop("deadline"),
-				"oid" => $task->id()
+				"deadline" => $dl,
+				"oid" => $task->id(),
+				"priority" => $task->prop("priority"),
+				"col" => $col
 			));
 		}
+
+		$t->set_default_sortby("deadline");
+		$t->set_default_sorder("asc");
+
+		$t->sort_by(array(
+			"field" => $arr["request"]["sortby"],
+			"sorder" => ($arr["request"]["sortby"] == "priority" ? "desc" : $arr["request"]["sort_order"])
+		));
+
+		$t->set_sortable(false);
 	}
 
 	function _get_tasks_search_filt($r, $tasks)
@@ -312,7 +364,7 @@ class crm_company_overview_impl extends class_base
 			$res["deadline"] = new obj_predicate_compare(OBJ_COMP_LESS_OR_EQ, $r["act_s_dl_to"]);
 		}
 
-		if ($r["act_s_status"] != "")
+		if ($r["act_s_status"] > 0 && $r["act_s_status"] < 3)
 		{
 			$res["is_done"] = $r["act_s_status"] == 1 ? 0 : 8;
 		}

@@ -4,15 +4,16 @@
             <name>customer</name>
             <table>planner</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
             <field>customer</field>
+            <clid>CL_CRM_COMPANY</clid>
             <caption>Klient</caption>
       </property>
       <property>
             <name>code</name>
             <table>planner</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>text</type>
             <size>5</size>
             <field>code</field>
             <caption>Kood</caption>
@@ -21,8 +22,9 @@
             <name>project</name>
             <table>planner</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
             <field>project</field>
+            <clid>CL_PROJECT</clid>
             <caption>Projekt</caption>
       </property>
       <property>
@@ -78,6 +80,25 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>Kestab terve päeva</caption>
+      </property>
+      <property>
+            <name>send_bill</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <field>send_bill</field>
+            <default>1</default>
+            <caption>Saata arve</caption>
+      </property>
+      <property>
+            <name>priority</name>
+            <table>planner</table>
+            <group>general</group>
+            <type>textbox</type>
+            <size>5</size>
+            <field>priority</field>
+            <caption>Prioriteet</caption>
       </property>
       <property>
             <name>num_hrs_guess</name>
@@ -146,9 +167,35 @@
             <name>bill_no</name>
             <table>planner</table>
             <group>general</group>
-            <type>textbox</type>
+            <type>text</type>
             <field>bill_no</field>
             <caption>Arve number</caption>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>relmanager</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>file</num_1>
+                  <num_2>comment</num_2>
+            </props>
+            <table_fields>name</table_fields>
+            <caption>Failid</caption>
+      </property>
+      <property>
+            <name>participants</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Osalejad</caption>
       </property>
       <property>
             <name>aliasmgr</name>
@@ -361,7 +408,6 @@
             </participants>
             <other_exp>
                   <caption>Muud kulud</caption>
-                  <submit>no</submit>
             </other_exp>
       </groupinfo>
       <tableinfo>
@@ -377,6 +423,11 @@
                   <clid>CL_RECURRENCE</clid>
                   <caption>Kordus</caption>
             </RECURRENCE>
+            <FILE>
+                  <value>2</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail</caption>
+            </FILE>
       </reltypes>
       <layout>
             <num_hrs>

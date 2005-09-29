@@ -23,9 +23,12 @@ class popup_search extends aw_template
 		if ($style == 'default')
 		{
 			$name = "popup_search[".$arr["property"]["name"]."]";
-			if (is_array($arr["obj_inst"]->meta($name)))
+			if (is_object($arr["obj_inst"]))
 			{
-				$options +=  $arr["obj_inst"]->meta($name);
+				if (is_array($arr["obj_inst"]->meta($name)))
+				{
+					$options +=  $arr["obj_inst"]->meta($name);
+				}
 			}
 
 			if (count($options) > 0)
@@ -55,20 +58,39 @@ class popup_search extends aw_template
 		$tmp = $arr["property"];
 
 		$tmp["type"] = "text";
-		$url = $this->mk_my_orb("do_search", array(
-			"id" => $arr["obj_inst"]->id(),
-			"pn" => $tmp["name"],
-			"clid" => constant($tmp["clid"])
-		));
+		if (is_object($arr["obj_inst"]))
+		{
+			$url = $this->mk_my_orb("do_search", array(
+				"id" => $arr["obj_inst"]->id(),
+				"pn" => $tmp["name"],
+				"clid" => constant($tmp["clid"])
+			));
+		}
+
+		if (is_array($tmp["options"]) && count($tmp["options"]))
+		{
+			$options = $tmp["options"];
+		}
 
 		$tmp["value"] = html::select(array(
 			"name" => $arr["property"]["name"],
 			"options" => array("" => "--Vali--") + $options,
-			"selected" => $arr["obj_inst"]->prop($arr["property"]["name"])
-		)).html::href(array(
-			"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
-			"caption" => t("Otsi")
+			"selected" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop($arr["property"]["name"]) : ""
 		));
+
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$tmp["value"] .= html::href(array(
+				"url" => "javascript:aw_popup_scroll(\"$url\",\"Otsing\",550,500)",
+				"caption" => t("Otsi")
+			));
+
+			if ($this->can("view", ($_id = $arr["obj_inst"]->prop($arr["property"]["name"]))))
+			{
+				$tmp["value"] .= " / ";
+				$tmp["value"] .= html::get_change_url($_id, array("return_url" => get_ru()), t("Muuda valitud objekti"));
+			}
+		}
 
 		return array(
 			$arr["property"]["name"] => $tmp,
@@ -215,8 +237,10 @@ class popup_search extends aw_template
 					}
 				}
 			}
-		
+			$filter["lang_id"] = array();
+			$filter["site_id"] = array();
 			$ol = new object_list($filter);
+
 			for($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 			{
 				$t->define_data(array(

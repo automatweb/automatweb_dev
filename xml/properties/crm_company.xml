@@ -172,7 +172,6 @@
             <group>org_sections</group>
             <type>relpicker</type>
             <reltype>RELTYPE_TEGEVUSALAD</reltype>
-            <automatic>1</automatic>
             <field>pohitegevus</field>
             <caption>Põhitegevus</caption>
       </property>
@@ -456,6 +455,7 @@
             <type>relmanager</type>
             <reltype>RELTYPE_URL</reltype>
             <props>name</props>
+            <default>http://</default>
             <field>url_id</field>
             <caption>Veebiaadress</caption>
       </property>
@@ -478,33 +478,6 @@
             <props>name</props>
             <field>telefax_id</field>
             <caption>Faks</caption>
-      </property>
-      <property>
-            <name>tasks_call</name>
-            <table>objects</table>
-            <group>tasks_overview</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>tasks_call</field>
-            <caption>Kõned</caption>
-      </property>
-      <property>
-            <name>org_add_call</name>
-            <table>objects</table>
-            <group>tasks_overview</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_CALL</reltype>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>comment</num_1>
-                  <num_2>start1</num_2>
-                  <num_3>is_done</num_3>
-                  <num_4>content</num_4>
-            </props>
-            <store>no</store>
-            <field>org_add_call</field>
-            <caption>Lisa kõne</caption>
       </property>
       <property>
             <name>org_actions</name>
@@ -635,24 +608,14 @@
             <caption>Rühmade puu</caption>
       </property>
       <property>
-            <name>customer</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <parent>vbox_customers_right</parent>
-            <field>customer</field>
-            <caption>Kliendid</caption>
-      </property>
-      <property>
             <name>customer_search_name</name>
             <table>objects</table>
             <group>customers</group>
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_name</field>
             <caption>Nimi</caption>
       </property>
@@ -663,7 +626,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_reg</field>
             <caption>Reg nr.</caption>
       </property>
@@ -674,7 +638,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_leader</field>
             <caption>Firmajuht</caption>
       </property>
@@ -685,7 +650,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_field</field>
             <caption>Põhitegevus</caption>
       </property>
@@ -696,7 +662,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_county</field>
             <caption>Maakond</caption>
       </property>
@@ -707,7 +674,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_city</field>
             <caption>Linn/Vald/Alev</caption>
       </property>
@@ -718,7 +686,8 @@
             <type>textbox</type>
             <size>30</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_address</field>
             <caption>Tänav/Küla</caption>
       </property>
@@ -729,7 +698,8 @@
             <orient>vertical</orient>
             <type>chooser</type>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
+            <captionside>top</captionside>
             <field>customer_search_only</field>
             <caption>Valim</caption>
       </property>
@@ -740,7 +710,7 @@
             <type>submit</type>
             <size>15</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
             <no_caption>1</no_caption>
             <field>customer_search_submit</field>
             <caption>Otsi</caption>
@@ -752,22 +722,10 @@
             <type>submit</type>
             <size>15</size>
             <store>no</store>
-            <parent>vbox_customers_right</parent>
+            <parent>vbox_customers_left</parent>
             <action>create_new_company</action>
             <field>customer_search_add</field>
             <caption>Lisa</caption>
-      </property>
-      <property>
-            <name>customer_search</name>
-            <table>objects</table>
-            <group>customers</group>
-            <type>hidden</type>
-            <store>no</store>
-            <parent>vbox_customers_right</parent>
-            <value>1</value>
-            <no_caption>1</no_caption>
-            <field>customer_search</field>
-            <caption>Otsi</caption>
       </property>
       <property>
             <name>customer_search_results</name>
@@ -779,6 +737,17 @@
             <no_caption>1</no_caption>
             <field>customer_search_results</field>
             <caption>Otsi tulemused </caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>objects</table>
+            <group>customers</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_customers_right</parent>
+            <field>customer</field>
+            <caption>Kliendid</caption>
       </property>
       <property>
             <name>my_customers_toolbar</name>
@@ -794,24 +763,12 @@
             </caption>
       </property>
       <property>
-            <name>my_customers_listing_tree</name>
-            <table>objects</table>
-            <group>my_customers</group>
-            <type>treeview</type>
-            <no_caption>1</no_caption>
-            <parent>vbox_my_customers_left</parent>
-            <store>no</store>
-            <field>my_customers_listing_tree</field>
-            <caption>Rühmade puu</caption>
-      </property>
-      <property>
             <name>my_customers_table</name>
             <table>objects</table>
             <group>my_customers</group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
-            <parent>vbox_my_customers_right</parent>
             <field>my_customers_table</field>
             <caption>Kliendid</caption>
       </property>
@@ -1144,6 +1101,19 @@
             <field>my_projects</field>
       </property>
       <property>
+            <name>report_list</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_reports</num_0>
+                  <num_1>all_reports</num_1>
+            </group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>report_list</field>
+            <caption>P&amp;auml;eva raportid</caption>
+      </property>
+      <property>
             <name>docs_tb</name>
             <table>objects</table>
             <group>documents</group>
@@ -1292,7 +1262,10 @@
       <property>
             <name>my_tasks_tb</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1301,7 +1274,10 @@
       <property>
             <name>act_s_cust</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <parent>all_act_search</parent>
@@ -1313,7 +1289,10 @@
       <property>
             <name>act_s_task_name</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <parent>all_act_search</parent>
@@ -1325,7 +1304,10 @@
       <property>
             <name>act_s_code</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <parent>all_act_search</parent>
@@ -1337,7 +1319,10 @@
       <property>
             <name>act_s_proj_name</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>textbox</type>
             <size>30</size>
             <parent>all_act_search</parent>
@@ -1349,7 +1334,10 @@
       <property>
             <name>act_s_dl_from</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>date_select</type>
             <store>no</store>
             <parent>all_act_search</parent>
@@ -1360,7 +1348,10 @@
       <property>
             <name>act_s_dl_to</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>date_select</type>
             <store>no</store>
             <parent>all_act_search</parent>
@@ -1371,7 +1362,10 @@
       <property>
             <name>act_s_status</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>select</type>
             <parent>all_act_search</parent>
             <store>no</store>
@@ -1382,7 +1376,10 @@
       <property>
             <name>act_s_sbt</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>submit</type>
             <parent>all_act_search</parent>
             <no_caption>1</no_caption>
@@ -1393,7 +1390,10 @@
       <property>
             <name>my_tasks</name>
             <table>objects</table>
-            <group>my_tasks</group>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>all_tasks</num_1>
+            </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -1461,6 +1461,11 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </my_tasks>
+            <all_tasks>
+                  <caption>K&amp;otilde;ikide toimetused</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </all_tasks>
             <all_actions>
                   <caption>Kõik</caption>
                   <parent>overview</parent>
@@ -1481,38 +1486,47 @@
                   <parent>overview</parent>
                   <submit>no</submit>
             </tasks>
-            <tasks_overview>
-                  <caption>Ülevaade</caption>
-                  <parent>overview</parent>
-            </tasks_overview>
-            <relorg>
-                  <caption>Kliendid</caption>
-            </relorg>
+            <projs>
+                  <caption>Projektid</caption>
+            </projs>
             <my_projects>
                   <caption>Minu projektid</caption>
-                  <parent>relorg</parent>
+                  <parent>projs</parent>
                   <submit>no</submit>
             </my_projects>
             <org_projects>
                   <caption>Projektid</caption>
                   <submit>no</submit>
-                  <parent>relorg</parent>
+                  <parent>projs</parent>
             </org_projects>
             <org_projects_archive>
                   <caption>Projektide arhiiv</caption>
                   <submit>no</submit>
-                  <parent>relorg</parent>
+                  <parent>projs</parent>
             </org_projects_archive>
-            <customers>
-                  <caption>Kõik kliendid</caption>
-                  <parent>relorg</parent>
+            <my_reports>
+                  <caption>Minu raportid</caption>
                   <submit>no</submit>
-            </customers>
+                  <parent>projs</parent>
+            </my_reports>
+            <all_reports>
+                  <caption>K&amp;otilde;ik raportid</caption>
+                  <submit>no</submit>
+                  <parent>projs</parent>
+            </all_reports>
+            <relorg>
+                  <caption>Kliendid</caption>
+            </relorg>
             <my_customers>
                   <caption>Minu kliendid</caption>
                   <parent>relorg</parent>
                   <submit>no</submit>
             </my_customers>
+            <customers>
+                  <caption>Kõik kliendid</caption>
+                  <parent>relorg</parent>
+                  <submit>no</submit>
+            </customers>
             <fcustomers>
                   <caption>Tulevased kliendid</caption>
                   <parent>relorg</parent>
@@ -1653,7 +1667,10 @@
             </TOOTSIJA>
             <CUSTOMER>
                   <value>22</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>Klient</caption>
             </CUSTOMER>
             <POTENTIONAL_CUSTOMER>
@@ -1833,21 +1850,6 @@
                   <type>hbox</type>
                   <group>my_customers</group>
             </my_customers_hbox_toolbar>
-            <my_customers_hbox_others>
-                  <type>hbox</type>
-                  <width>20%:80%</width>
-                  <group>my_customers</group>
-            </my_customers_hbox_others>
-            <vbox_my_customers_left>
-                  <type>vbox</type>
-                  <parent>my_customers_hbox_others</parent>
-                  <group>my_customers</group>
-            </vbox_my_customers_left>
-            <vbox_my_customers_right>
-                  <type>vbox</type>
-                  <parent>my_customers_hbox_others</parent>
-                  <group>my_customers</group>
-            </vbox_my_customers_right>
             <offers_toolbar>
                   <type>hbox</type>
                   <group>offers</group>
@@ -1950,12 +1952,18 @@
             <my_tasks>
                   <type>hbox</type>
                   <width>20%:80%</width>
-                  <group>my_tasks</group>
+                  <group>
+                        <num_0>my_tasks</num_0>
+                        <num_1>all_tasks</num_1>
+                  </group>
             </my_tasks>
             <all_act_search>
                   <type>vbox</type>
                   <parent>my_tasks</parent>
-                  <group>my_tasks</group>
+                  <group>
+                        <num_0>my_tasks</num_0>
+                        <num_1>all_tasks</num_1>
+                  </group>
             </all_act_search>
       </layout>
 </properties>

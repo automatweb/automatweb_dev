@@ -9,6 +9,15 @@
             <caption>Sidussüsteemi ID</caption>
       </property>
       <property>
+            <name>hr_price</name>
+            <table>objects</table>
+            <group>general</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>textbox</type>
+            <caption>Tunnihind</caption>
+      </property>
+      <property>
             <name>name_in_plural</name>
             <table>kliendibaas_amet</table>
             <group>general</group>

@@ -175,7 +175,19 @@ class crm_company_people_impl extends class_base
 
 	function callb_human_name($arr)
 	{
-		return html::get_change_url(
+		if ($arr["cal"])
+		{
+			$calo = obj($arr["cal"]);
+
+			$cal = html::href(array(
+				"url" => html::get_change_url($calo->id(), array("return_url" => get_ru(), "group" => "views", "viewtype" => "week"))."#today",
+				"caption" => html::img(array(
+					"url" => icons::get_icon_url(CL_PLANNER),
+					"border" => 0
+				))
+			))." ";
+		}
+		return $cal.html::get_change_url(
 			$arr["id"],
 			array("return_url" => get_ru()),
 			parse_obj_name($arr["name"])
@@ -253,6 +265,7 @@ class crm_company_people_impl extends class_base
 			return PROP_IGNORE;
 		}
 
+		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
 		$this->_init_human_resources_table($t, $old_iface);
 					 
@@ -338,6 +351,9 @@ class crm_company_people_impl extends class_base
 			$persons = $tmp;
 		}
 
+		// get calendars for persons
+		$pers2cal = $this->_get_calendars_for_persons($persons);
+
 		foreach($persons as $person)
 		{
 			$person = new object($person);
@@ -410,6 +426,7 @@ class crm_company_people_impl extends class_base
 
 			$tdata = array(
 				"name" => $person->prop('name'),
+				"cal" => $pers2cal[$person->id()],
 				"id" => $person->id(),
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
@@ -903,6 +920,41 @@ class crm_company_people_impl extends class_base
 	function _get_contact_search_desc($arr)
 	{
 		$arr["prop"]["value"] = "<span style=\"border: 1px black;\"><b>Otsi isikuid</b>";
+	}
+
+	function _get_calendars_for_persons($persons)
+	{
+		$ret = array();
+		
+		$c = new connection();
+		$cs = $c->find(array(
+			"from.class_id" => CL_USER,
+			"to.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON",
+			"to" => $persons
+		));
+
+		$users = array();
+		$u2p = array();
+		foreach($cs as $c)
+		{
+			$users[] = $c["from"];
+			$u2p[$c["from"]] = $c["to"];
+		}
+
+		$c = new connection();
+		$owners = $c->find(array(
+			"from.class_id" => CL_PLANNER,
+			"to.class_id" => CL_USER,
+			"to" => $users
+		));
+
+		foreach($owners as $owner)
+		{
+			$ret[$u2p[$owner["to"]]] = $owner["from"];
+		}
+
+		return $ret;
 	}
 }
 ?>

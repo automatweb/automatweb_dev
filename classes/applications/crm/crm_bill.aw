@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.1 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_bill.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
 // crm_bill.aw - Arve 
 /*
 
@@ -145,10 +145,11 @@ class crm_bill extends class_base
 		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_TASK")) as $c)
 		{
 			$task = $c->to();
+			$id = $task->id();
 
-			if (!isset($inf[$task->id()]))
+			if (!isset($inf[$id]))
 			{
-				$inf[$task->id()] = array(
+				$inf[$id] = array(
 					"name" => $task->name(),
 					"unit" => t("tund"),
 					"price" => $task->prop("hr_price"),
@@ -157,39 +158,89 @@ class crm_bill extends class_base
 				);
 			}
 
-			$t_inf = $inf[$task->id()];
+			$t_inf = $inf[$id];
 			$t->define_data(array(
 				"name" => html::textbox(array(
-					"name" => "rows[".$task->id()."][name]",
+					"name" => "rows[$id][name]",
 					"value" => $t_inf["name"]
 				)),
 				"unit" => html::textbox(array(
-					"name" => "rows[".$task->id()."][unit]",
+					"name" => "rows[$id][unit]",
 					"value" => $t_inf["unit"],
 					"size" => 10
 				)),
 				"price" => html::textbox(array(
-					"name" => "rows[".$task->id()."][price]",
+					"name" => "rows[$id][price]",
 					"value" => $t_inf["price"],
 					"size" => 5
 				)),
 				"amt" => html::textbox(array(
-					"name" => "rows[".$task->id()."][amt]",
+					"name" => "rows[$id][amt]",
 					"value" => $t_inf["amt"],
 					"size" => 5
 				)),
 				"sum" => html::textbox(array(
-					"name" => "rows[".$task->id()."][sum]",
+					"name" => "rows[$id][sum]",
 					"value" => $t_inf["sum"],
 					"size" => 5
 				)),
 				"has_tax" => html::checkbox(array(
-					"name" => "rows[".$task->id()."][has_tax]",
+					"name" => "rows[$id][has_tax]",
 					"ch_value" => 1,
 					"checked" => $t_inf["has_tax"] == 1 ? true : false
 				))
 			));
+
+			// also, add all other exp rows from task
+			foreach(safe_array($task->meta("other_expenses")) as $idx => $entry)
+			{
+				$id = $task->id()."_".$idx;
+				if (!isset($inf[$id]))
+				{
+					$t_inf = array(
+						"name" => $entry["exp"],
+						"price" => $entry["cost"]
+					);
+				}
+				else
+				{
+					$t_inf = $inf[$id];
+				}
+
+				$t->define_data(array(
+					"name" => html::textbox(array(
+						"name" => "rows[$id][name]",
+						"value" => $t_inf["name"]
+					)),
+					"unit" => html::textbox(array(
+						"name" => "rows[$id][unit]",
+						"value" => $t_inf["unit"],
+						"size" => 10
+					)),
+					"price" => html::textbox(array(
+						"name" => "rows[$id][price]",
+						"value" => $t_inf["price"],
+						"size" => 5
+					)),
+					"amt" => html::textbox(array(
+						"name" => "rows[$id][amt]",
+						"value" => $t_inf["amt"],
+						"size" => 5
+					)),
+					"sum" => html::textbox(array(
+						"name" => "rows[$id][sum]",
+						"value" => $t_inf["sum"],
+						"size" => 5
+					)),
+					"has_tax" => html::checkbox(array(
+						"name" => "rows[$id][has_tax]",
+						"ch_value" => 1,
+						"checked" => $t_inf["has_tax"] == 1 ? true : false
+					))
+				));
+			}
 		}
+		$t->set_sortable(false);
 	}
 }
 ?>

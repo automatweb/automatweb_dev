@@ -1,6 +1,22 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>date</name>
+            <table>aw_crm_day_report</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_date</field>
+            <caption>Kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>reporter</name>
+            <table>aw_crm_day_report</table>
+            <group>general</group>
+            <type>text</type>
+            <field>aw_reporter</field>
+            <caption>Esitaja</caption>
+      </property>
+      <property>
             <name>content</name>
             <table>aw_crm_day_report</table>
             <group>general</group>

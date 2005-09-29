@@ -1,18 +1,29 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>project</name>
+            <table>aw_crm_document</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <clid>CL_PROJECT</clid>
+            <field>aw_project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
             <name>task</name>
             <table>aw_crm_document</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
+            <clid>CL_TASK</clid>
             <field>aw_task</field>
-            <caption>Juhtum</caption>
+            <caption>&amp;Uuml;lesanne</caption>
       </property>
       <property>
             <name>customer</name>
             <table>aw_crm_document</table>
             <group>general</group>
-            <type>select</type>
+            <type>popup_search</type>
+            <clid>CL_CRM_COMPANY</clid>
             <field>aw_customer</field>
             <caption>Klient</caption>
       </property>
@@ -49,6 +60,16 @@
             <caption>Registreerimisnumber</caption>
       </property>
       <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>comment</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
             <name>files</name>
             <table>objects</table>
             <group>files</group>
@@ -72,7 +93,6 @@
       <classinfo>
             <syslog_type>ST_CRM_DOCUMENT</syslog_type>
             <relationmgr>yes</relationmgr>
-            <no_comment>1</no_comment>
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>

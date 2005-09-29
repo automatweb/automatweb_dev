@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_day_report.aw,v 1.1 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_day_report.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
 // crm_day_report.aw - P&auml;eva raport 
 /*
 
@@ -9,6 +9,12 @@
 @default group=general
 
 @tableinfo aw_crm_day_report index=aw_oid master_index=brother_of master_table=objects
+
+@property date type=date_select table=aw_crm_day_report field=aw_date
+@caption Kuup&auml;ev
+
+@property reporter type=text table=aw_crm_day_report field=aw_reporter
+@caption Esitaja
 
 @property content type=textarea rows=20 cols=50 table=aw_crm_day_report field=aw_content
 @caption Tegevused
@@ -34,6 +40,26 @@ class crm_day_report extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "date":
+				if ($arr["new"])
+				{
+					$prop["value"] = time();
+				}
+				break;
+
+			case "reporter":
+				if ($prop["value"] == "")
+				{
+					$u = get_instance(CL_USER);
+					$prop["value"] = $u->get_current_person();
+				}
+
+				if ($this->can("view", $prop["value"]))
+				{
+					$o = obj($prop["value"]);
+					$prop["value"] = html::get_change_url($prop["value"], array("return_url" => get_ru()), $o->name());
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -44,6 +70,14 @@ class crm_day_report extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "reporter":
+				if ($arr["obj_inst"]->prop("reporter") == "")
+				{
+					$u = get_instance(CL_USER);
+					$prop["value"] = $u->get_current_person();
+					$arr["obj_inst"]->set_prop("reporter", $prop["value"]);
+				}
+				break;
 		}
 		return $retval;
 	}	

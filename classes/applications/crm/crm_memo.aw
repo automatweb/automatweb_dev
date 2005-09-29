@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.1 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_memo.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
 // crm_memo.aw - Memo 
 /*
 
@@ -8,29 +8,86 @@
 @default table=objects
 @default group=general
 
+@tableinfo aw_crm_memo index=aw_oid master_index=brother_of master_table=objects
+
+
+@default group=general
+
+	@property project type=popup_search clid=CL_PROJECT table=aw_crm_memo field=aw_project
+	@caption Projekt
+
+	@property task type=popup_search clid=CL_TASK table=aw_crm_memo field=aw_task
+	@caption &Uuml;lesanne
+
+	@property customer type=popup_search clid=CL_CRM_COMPANY table=aw_crm_memo field=aw_customer
+	@caption Klient
+
+	@property reg_date type=date_select table=aw_crm_memo field=aw_reg_date
+	@caption Reg kuup&auml;ev
+
+	@property comment type=textarea rows=5 cols=50 table=objects field=comment
+	@caption Kirjeldus
+
+@default group=files
+
+	@property files type=releditor reltype=RELTYPE_FILE field=meta method=serialize mode=manager props=name,file,type,comment,file_url,newwindow table_fields=name 
+	@caption Failid
+
+@groupinfo files caption="Failid"
+
+@reltype FILE value=1 clid=CL_FILE
+@caption fail
+
 */
 
 class crm_memo extends class_base
 {
 	function crm_memo()
 	{
-		// change this to the folder under the templates folder, where this classes templates will be, 
-		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
 			"tpldir" => "applications/crm/crm_memo",
 			"clid" => CL_CRM_MEMO
 		));
 	}
 
-	//////
-	// class_base classes usually need those, uncomment them if you want to use them
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- get_property --//
+			case "project":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_projects()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_customers()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
+
+			case "task":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_tasks()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
 		};
 		return $retval;
 	}
@@ -41,8 +98,6 @@ class crm_memo extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
-
 		}
 		return $retval;
 	}	
@@ -51,32 +106,5 @@ class crm_memo extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
-
-	////////////////////////////////////
-	// the next functions are optional - delete them if not needed
-	////////////////////////////////////
-
-	////
-	// !this will be called if the object is put in a document by an alias and the document is being shown
-	// parameters
-	//    alias - array of alias data, the important bit is $alias[target] which is the id of the object to show
-	function parse_alias($arr)
-	{
-		return $this->show(array("id" => $arr["alias"]["target"]));
-	}
-
-	////
-	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
-	function show($arr)
-	{
-		$ob = new object($arr["id"]);
-		$this->read_template("show.tpl");
-		$this->vars(array(
-			"name" => $ob->prop("name"),
-		));
-		return $this->parse();
-	}
-
-//-- methods --//
 }
 ?>

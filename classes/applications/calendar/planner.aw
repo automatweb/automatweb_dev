@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.95 2005/09/09 13:16:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.96 2005/09/29 06:38:23 kristo Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -266,6 +266,25 @@ class planner extends class_base
 	function get_event_classes()
 	{
 		return $this->event_entry_classes;
+	}
+
+	function get_calendar_for_person($p)
+	{
+		// get user for person
+		$conn = $p->connections_to(array(
+			"from.class_id" => CL_USER,
+			"type" => "RELTYPE_PERSON"
+		));
+		if (!count($conn))
+		{
+			return false;
+		}
+		$c = reset($conn);
+		$u = $c->from();
+
+		return $this->get_calendar_for_user(array(
+				"uid" => $u->prop("uid")
+		));
 	}
 
 	function get_calendar_for_user($arr = array())
@@ -3056,6 +3075,16 @@ class planner extends class_base
 		};
 		print "all done<br>";
 
+	}
+
+	function add_event_to_calendar($calendar, $event)
+	{
+		$evf = $calendar->prop("event_folder");
+		if (!$this->can("add", $evf))
+		{
+			return false;
+		}
+		$event->create_brother($evf);
 	}
 };
 ?>

@@ -1,9 +1,9 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.1 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/crm/crm_document.aw,v 1.2 2005/09/29 06:38:24 kristo Exp $
 // crm_document.aw - CRM Dokument 
 /*
 
-@classinfo syslog_type=ST_CRM_DOCUMENT relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_CRM_DOCUMENT relationmgr=yes no_status=1 prop_cb=1
 
 @default table=objects
 @tableinfo aw_crm_document index=aw_oid master_index=brother_of master_table=objects
@@ -11,10 +11,13 @@
 
 @default group=general
 
-	@property task type=select table=aw_crm_document field=aw_task
-	@caption Juhtum
+	@property project type=popup_search clid=CL_PROJECT table=aw_crm_document field=aw_project
+	@caption Projekt
 
-	@property customer type=select table=aw_crm_document field=aw_customer
+	@property task type=popup_search clid=CL_TASK table=aw_crm_document field=aw_task
+	@caption &Uuml;lesanne
+
+	@property customer type=popup_search clid=CL_CRM_COMPANY table=aw_crm_document field=aw_customer
 	@caption Klient
 
 	@property state type=select table=aw_crm_document field=aw_state
@@ -28,6 +31,9 @@
 
 	@property reg_nr type=date_select table=aw_crm_document field=aw_reg_nr
 	@caption Registreerimisnumber
+
+	@property comment type=textarea rows=5 cols=50 table=objects field=comment
+	@caption Kirjeldus
 
 @default group=files
 
@@ -57,6 +63,38 @@ class crm_document extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "project":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_projects()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
+
+			case "customer":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_customers()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
+
+			case "task":
+				$i = get_instance(CL_CRM_COMPANY);
+				$ol = new object_list(array("oid" => $i->get_my_tasks()));
+				$prop["options"] = array("" => "") + $ol->names();
+				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
+				{
+					$tmp = obj($prop["value"]);
+					$prop["options"][$tmp->id()] = $tmp->name();
+				}
+				break;
 		};
 		return $retval;
 	}

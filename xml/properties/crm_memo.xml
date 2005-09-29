@@ -1,5 +1,71 @@
 <?xml version='1.0'?>
 <properties>
+      <property>
+            <name>project</name>
+            <table>aw_crm_memo</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <clid>CL_PROJECT</clid>
+            <field>aw_project</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>task</name>
+            <table>aw_crm_memo</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <clid>CL_TASK</clid>
+            <field>aw_task</field>
+            <caption>&amp;Uuml;lesanne</caption>
+      </property>
+      <property>
+            <name>customer</name>
+            <table>aw_crm_memo</table>
+            <group>general</group>
+            <type>popup_search</type>
+            <clid>CL_CRM_COMPANY</clid>
+            <field>aw_customer</field>
+            <caption>Klient</caption>
+      </property>
+      <property>
+            <name>reg_date</name>
+            <table>aw_crm_memo</table>
+            <group>general</group>
+            <type>date_select</type>
+            <field>aw_reg_date</field>
+            <caption>Reg kuup&amp;auml;ev</caption>
+      </property>
+      <property>
+            <name>comment</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textarea</type>
+            <rows>5</rows>
+            <cols>50</cols>
+            <field>comment</field>
+            <caption>Kirjeldus</caption>
+      </property>
+      <property>
+            <name>files</name>
+            <table>objects</table>
+            <group>files</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_FILE</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>file</num_1>
+                  <num_2>type</num_2>
+                  <num_3>comment</num_3>
+                  <num_4>file_url</num_4>
+                  <num_5>newwindow</num_5>
+            </props>
+            <table_fields>name</table_fields>
+            <store>no</store>
+            <caption>Failid</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_CRM_MEMO</syslog_type>
             <relationmgr>yes</relationmgr>
@@ -7,5 +73,24 @@
             <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
+      <groupinfo>
+            <files>
+                  <caption>Failid</caption>
+            </files>
+      </groupinfo>
+      <tableinfo>
+            <aw_crm_memo>
+                  <index>aw_oid</index>
+                  <master_index>brother_of</master_index>
+                  <master_table>objects</master_table>
+            </aw_crm_memo>
+      </tableinfo>
+      <reltypes>
+            <FILE>
+                  <value>1</value>
+                  <clid>CL_FILE</clid>
+                  <caption>fail</caption>
+            </FILE>
+      </reltypes>
 </properties>
 

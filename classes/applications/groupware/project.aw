@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.51 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.52 2005/09/29 06:38:24 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -26,13 +26,13 @@
 @property implementor type=relpicker reltype=RELTYPE_IMPLEMENTOR automatic=1 table=objects field=meta method=serialize
 @caption Teostaja
 
-@property start type=datetime_select table=aw_projects field=aw_start
+@property start type=date_select table=aw_projects field=aw_start
 @caption Algus
 
-@property end type=datetime_select table=aw_projects field=aw_end
+@property end type=date_select table=aw_projects field=aw_end
 @caption L&otilde;pp
 
-@property deadline type=datetime_select table=aw_projects field=aw_deadline
+@property deadline type=date_select table=aw_projects field=aw_deadline
 @caption Deadline
 
 @property doc type=relpicker reltype=RELTYPE_PRJ_DOCUMENT table=aw_projects field=aw_doc
@@ -41,11 +41,23 @@
 @property skip_subproject_events type=checkbox ch_value=1 table=aw_projects field=aw_skip_subproject_events
 @caption Ära näita alamprojektide sündmusi
 
+@layout parts type=hbox width=20%:80%
+@caption Osalejad
+
+	@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1 table=objects field=meta method=serialize no_caption=1 parent=parts
+	@caption Osalejad
+
+	property implementor_person type=select multiple=1 table=objects field=meta method=serialize parent=parts
+	caption Teostaja isik
+
 @groupinfo info caption="Projekti info"
 @default group=info
 
-	@property contact_person type=textbox table=aw_projects field=aw_contact_person
-	@caption Kontaktisik
+	@property contact_person_orderer type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person
+	@caption Tellija kontaktisik
+
+	@property contact_person_implementor type=relpicker reltype=RELTYPE_CONTACT_PERSON table=aw_projects field=aw_contact_person_impl
+	@caption Teostaja kontaktisik
 
 	@property contact_phone type=textbox table=aw_projects field=aw_contact_phone
 	@caption Telefon
@@ -85,10 +97,6 @@
 	@property prj_image type=releditor reltype=RELTYPE_PRJ_IMAGE use_form=emb rel_id=first field=meta method=serialize
 	@caption Pilt
 
-@default group=participants
-
-	@property participants type=relpicker reltype=RELTYPE_PARTICIPANT multiple=1
-	@caption Osalejad
 
 @default group=event_list
 
@@ -105,16 +113,61 @@
 @caption Lisa sündmus
 
 @default group=files
-@property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
-@caption Failid
 
-@property trans type=translator store=no group=trans props=name
-@caption Tõlkimine
+	@property file_editor type=releditor reltype=RELTYPE_PRJ_FILE mode=manager props=filename,file,comment
+	@caption Failid
+
+@default group=trans
+
+	@property trans type=translator store=no props=name
+	@caption Tõlkimine
+
+@default group=sides
+
+	@property sides_tb type=toolbar no_caption=1
+	@property sides type=table store=no no_caption=1
+
+@default group=userdefined
+
+	@property user1 type=textbox table=aw_projects field=aw_user1
+	@caption User-defined textbox 1
+
+	@property user2 type=textbox table=aw_projects field=aw_user2
+	@caption User-defined textbox 2
+
+	@property user3 type=textbox table=aw_projects field=aw_user3
+	@caption User-defined textbox 3
+
+	@property user4 type=textbox table=aw_projects field=aw_user4
+	@caption User-defined textbox 4
+
+	@property user5 type=textbox table=aw_projects field=aw_user5
+	@caption User-defined textbox 5
+
+	@property userch1 type=checkbox ch_value=1 table=aw_projects field=aw_userch1
+	@caption User-defined checkbox 1
+
+	@property userch2 type=checkbox ch_value=1 table=aw_projects field=aw_userch2
+	@caption User-defined checkbox 2
+
+	@property userch3 type=checkbox ch_value=1 table=aw_projects field=aw_userch3
+	@caption User-defined checkbox 3
+
+	@property userch4 type=checkbox ch_value=1 table=aw_projects field=aw_userch4
+	@caption User-defined checkbox 4
+
+	@property userch5 type=checkbox ch_value=1 table=aw_projects field=aw_userch5
+	@caption User-defined checkbox 5
+
+	@property userclassif1 type=classificator reltype=RELTYPE_CLF1 table=aw_projects field=aw_userclf1
+	@caption User-defined classificator 1
+
 
 @groupinfo general2 parent=general caption="Üldine"
-@groupinfo web_settings parent=general caption="Veebiseadistused"
-@groupinfo prj_image parent=general caption="Pilt"
-@groupinfo participants parent=general caption="Osalejad"
+	@groupinfo web_settings parent=general caption="Veebiseadistused"
+	@groupinfo prj_image parent=general caption="Pilt"
+	@groupinfo participants parent=general caption="Osalejad"
+	@groupinfo sides parent=general caption="Vastaspooled" submit=no
 
 @groupinfo event_list caption="Sündmused" submit=no
 @groupinfo add_event caption="Muuda sündmust"
@@ -122,38 +175,6 @@
 @groupinfo trans caption="Tõlkimine"
 
 @groupinfo userdefined caption="Andmed"
-@default group=userdefined
-
-@property user1 type=textbox table=aw_projects field=aw_user1
-@caption User-defined textbox 1
-
-@property user2 type=textbox table=aw_projects field=aw_user2
-@caption User-defined textbox 2
-
-@property user3 type=textbox table=aw_projects field=aw_user3
-@caption User-defined textbox 3
-
-@property user4 type=textbox table=aw_projects field=aw_user4
-@caption User-defined textbox 4
-
-@property user5 type=textbox table=aw_projects field=aw_user5
-@caption User-defined textbox 5
-
-@property userch1 type=checkbox ch_value=1 table=aw_projects field=aw_userch1
-@caption User-defined checkbox 1
-
-@property userch2 type=checkbox ch_value=1 table=aw_projects field=aw_userch2
-@caption User-defined checkbox 2
-
-@property userch3 type=checkbox ch_value=1 table=aw_projects field=aw_userch3
-@caption User-defined checkbox 3
-
-@property userch4 type=checkbox ch_value=1 table=aw_projects field=aw_userch4
-@caption User-defined checkbox 4
-
-@property userch5 type=checkbox ch_value=1 table=aw_projects field=aw_userch5
-@caption User-defined checkbox 5
-
 
 @groupinfo goals caption="Verstapostid" submit=no
 
@@ -210,6 +231,15 @@
 
 @reltype TYPE value=12 clid=CL_META
 @caption t&uuml;&uuml;p
+
+@reltype CONTACT_PERSON value=13 clid=CL_CRM_PERSON
+@caption kontaktisik
+
+@reltype CLF1 value=14 clid=CL_META
+@caption klassifikaator 1
+
+@reltype SIDE value=15 clid=CL_CRM_COMPANY,CL_CRM_PERSON
+@caption osapool
 */
 
 class project extends class_base
@@ -238,7 +268,97 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "implementor_person":
+				$i = get_instance(CL_CRM_COMPANY);
+				if ($this->can("view", $arr["obj_inst"]->prop("implementor")))
+				{
+					$inf = array();
+					$i->get_all_workers_for_company(obj($arr["obj_inst"]->prop("implementor")),&$inf);
+					$ol = new object_list(array("oid" => $inf));
+					$data["options"] = array("" => "") + $ol->names();
+				}
+				break;
+
+			case "sides_tb":
+				$this->_sides_tb($arr);
+				break;
+
+			case "sides":
+				$this->_sides($arr);
+				break;
+
+			case "code":
+				// call site based code gen
+				$si = __get_site_instance();
+				if (method_exists($si, "project_gen_code"))
+				{
+					$data["value"] = $si->project_gen_code($arr);
+				}
+				break;
+
+			case "contact_person_orderer":
+				$ord = $arr["obj_inst"]->prop("orderer");
+				if (is_array($ord))
+				{
+					$ord = reset($ord);
+				}
+				if ($this->can("view", $ord))
+				{
+					$this->_proc_cp(obj($ord), $data);
+				}
+				break;
+
+			case "contact_person_implementor":
+				$ord = $arr["obj_inst"]->prop("implementor");
+				if (is_array($ord))
+				{
+					$ord = reset($ord);
+				}
+				if ($this->can("view", $ord))
+				{
+					$this->_proc_cp(obj($ord), $data);
+				}
+				break;
+
+			case "orderer":
+				if ($arr["new"])
+				{
+					$data["value"] = $arr["request"]["connect_orderer"];
+				}
+				$sa = safe_array($data["value"]);
+				$dv = reset($sa);
+				if ($this->can("view", $dv))
+				{
+					$data["post_append_text"] = html::get_change_url(
+						$dv,
+						array("return_url" => get_ru()),
+						t("Muuda valitud objekti")
+					);
+				}
+				break;
+
+			case "implementor":
+				if ($arr["new"])
+				{
+					$data["value"] = $arr["request"]["connect_impl"];
+				}
+				$sa = safe_array($data["value"]);
+				$dv = reset($sa);
+				if ($this->can("view", $dv))
+				{
+					$data["post_append_text"] = html::get_change_url(
+						$dv,
+						array("return_url" => get_ru()),
+						t("Muuda valitud objekti")
+					);
+				}
+				break;
+
 			case "participants":
+				if ($arr["new"])
+				{
+					return PROP_IGNORE;
+				}
 				$cur_pts = $arr["obj_inst"]->connections_from(array("type" => "RELTYPE_PARTICIPANT"));
 				$people = array();
 				$u = get_instance(CL_USER);
@@ -246,11 +366,14 @@ class project extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$i->get_all_workers_for_company(obj($co),&$people);
 				$ol = new object_list(array("oid" => array_values($people)));
+				$sel = array();
 				foreach($cur_pts as $pt)
 				{
 					$ol->add($pt->prop("to"));
+					$sel[$pt->prop("to")] = $pt->prop("to");
 				}
 				$data["options"] = array("" => t("--Vali--")) + $ol->names();
+				$data["value"] = $sel;
 				break;
 
 			case "state":
@@ -296,6 +419,33 @@ class project extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
+			case "orderer":
+			case "implementor":
+			case "implementor_person":
+				if (is_oid($prop["value"]))
+				{
+					$prop["value"] = array($prop["value"]);
+				}
+				else
+				if (!is_array($prop["value"]))
+				{
+					$prop["value"] = array();
+				}
+				if (count($prop["value"]))
+				{
+					foreach($prop["value"] as $v)
+					{
+						if ($arr["new"] || !$arr["obj_inst"]->is_connected_to(array("type" => "RELTYPE_PARTICIPANT", "to" => $v)))
+						{
+							$arr["obj_inst"]->connect(array(
+								"reltype" => "RELTYPE_PARTICIPANT",
+								"to" => $v
+							));
+						}
+					}
+				}
+				break;
+
 			case "add_event":
 				$this->register_event_with_planner($arr);
 				break;
@@ -1332,7 +1482,10 @@ class project extends class_base
 		};
 					
 		$cl_inf = aw_ini_get("classes");
+		$adds = array(CL_STAGING, CL_TASK, CL_CRM_CALL, CL_CRM_MEETING);
+
 		$cl_name = $cl_inf[CL_STAGING]["name"];
+
 
 		$create_args = array();
 
@@ -1371,15 +1524,18 @@ class project extends class_base
 					{
 						foreach($forms as $form_id => $form_name)
 						{
-							$tb->add_menu_item(array(
-								"name" => "x_" . $prj_id . "_" . $form_id,
-								"parent" => $prj_id,
-								"text" => $cl_name,
-								"link" => $this->mk_my_orb("new",array(
+							foreach($adds as $add_clid)
+							{
+								$tb->add_menu_item(array(
+									"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
 									"parent" => $prj_id,
-									"group" => "change",
-								),CL_STAGING),
-							));
+									"text" => $cl_inf[$add_clid]["name"],
+									"link" => $this->mk_my_orb("new",array(
+										"parent" => $prj_id,
+										"group" => "change",
+									),$add_clid),
+								));
+							}
 						};
 					};
 				};
@@ -1412,17 +1568,19 @@ class project extends class_base
 			}
 			else
 			{
-				$tb->add_menu_item(array(
-					"name" => "x_" . $o->id(),
-					"parent" => "subprj",
-					"text" => t("Etendus"),
-					"link" => $this->mk_my_orb("new",array(
-						"parent" => $o->id(),
-						"group" => "change",
-						"clid" => CL_STAGING,
-						"return_url" => urlencode(aw_global_get("REQUEST_URI")),
-					),CL_STAGING),
-				));
+				foreach($adds as $add_clid)
+				{
+					$tb->add_menu_item(array(
+						"name" => "x_" . $o->id()."_".$add_clid,
+						"parent" => "subprj",
+						"text" => $cl_inf[$add_clid]["name"],
+						"link" => $this->mk_my_orb("new",array(
+							"parent" => $o->id(),
+							"group" => "change",
+							"return_url" => get_ru(),
+						),$add_clid),
+					));
+				}
 			};
 		};
 
@@ -2437,6 +2595,241 @@ class project extends class_base
 			$this->restore_handle();
 		}
 		aw_restore_acl();
+	}
+
+	function _proc_cp($ord, &$data)
+	{
+		$res = array();
+		if ($ord)
+		{
+			$wl = array();
+			$i = get_instance(CL_CRM_COMPANY);
+			$i->get_all_workers_for_company($ord, &$wl);
+			if (count($wl))
+			{
+				$ol = new object_list(array("oid" => $wl));
+				$res = array("" => t("--Vali--")) + $ol->names();
+			}
+
+			$data["post_append_text"] .= " / ".html::href(array(
+				"url" => $this->mk_my_orb(
+					"create_new_person", 
+					array(
+						"parent" => $ord->id(),
+						"alias_to" => $ord->id(),
+						"reltype" => 8,
+						"return_url" => get_ru(),
+						"id" => $ord->id()
+					),
+					CL_CRM_COMPANY
+				),
+				"caption" => t("Lisa uus isik")
+			));
+		}
+		$data["options"] = $res;
+	}
+
+	function _sides_tb($arr)
+	{
+		$tb =& $arr["prop"]["vcl_inst"];
+		
+		// add, search, del
+		$tb->add_menu_button(array(
+			"name" => "add",
+			"img" => "new.gif",
+			"tooltip" => t("Lisa"),
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("Isik"),
+			"link" => html::get_new_url(
+				CL_CRM_PERSON, 
+				$arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to" => $arr["obj_inst"]->id(),
+					"reltype" => 15 // RELTYPE_SIDE
+				)
+			)
+		));
+
+		$tb->add_menu_item(array(
+			"parent" => "add",
+			"text" => t("Organisatsioon"),
+			"link" => html::get_new_url(
+				CL_CRM_COMPANY, 
+				$arr["obj_inst"]->id(), 
+				array(
+					"return_url" => get_ru(),
+					"alias_to" => $arr["obj_inst"]->id(),
+					"reltype" => 15 // RELTYPE_SIDE
+				)
+			)
+		));
+
+		$tb->add_button(array(
+			"name" => "search",
+			"img" => "search.gif",
+			"url" => "javascript:void(0)",
+			"onClick" => html::popup(array(
+				"url" => $this->mk_my_orb("pop_side_search", array(
+					"id" => $arr["obj_inst"]->id()
+				)),
+				"target" => "pss",
+				"height" => 400,
+				"width" => 400,
+				"quote" => "'",
+				"no_link" => 1,
+				//"no_return" => true
+			)),
+			"tooltip" => t("Otsi"),
+		));
+
+		$tb->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"action" => "del_sides",
+			"tooltip" => t("Kustuta"),
+		));
+	}
+
+	function _init_sides_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "side",
+			"caption" => t("Vastaspool"),
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+	}
+
+	function _sides($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_sides_t($t);
+
+		foreach($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SIDE")) as $c)
+		{
+			$t->define_data(array(
+				"side" => html::get_change_url($c->prop("to"), array("return_url" => get_ru()), $c->prop("to.name")),
+				"oid" => $c->prop("to")
+			));
+		}
+		$t->set_sortable(false);
+	}
+
+	/**
+		@attrib name=del_sides
+	**/
+	function del_sides($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			$o->disconnect(array(
+				"from" => $id
+			));
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=pop_side_search
+	**/
+	function pop_side_search($arr)
+	{
+		$h = get_instance("cfg/htmlclient");
+		$h->start_output();
+
+		$els = array(
+			"s_name" => array("caption" => t("Nimi"), "type" => "textbox", "size" => 30),
+			"s_class_id" => array("caption" => t("T&uuml;&uuml;p"), "type" => "select", "options" => array("" => "", CL_CRM_PERSON => t("Isik"), CL_CRM_COMPANY => t("Organisatsioon"))),
+		);
+
+		foreach($els as $k => $v)
+		{
+			$v["name"] = $k;
+			$v["value"] = $_GET[$k];
+
+			$h->add_property($v);
+		}
+
+		$h->put_submit(array());
+		$h->finish_output(array(
+			"method" => "GET",
+			"action" => "pop_side_search",
+			"data" => array(
+				"orb_class" => "project",
+				"id" => $_GET["id"]
+			),
+			"sbt_caption" => t("Otsi")
+		));
+		$html = $h->get_result();
+
+		$content = $this->_get_pop_s_res_t($arr);
+		$content .= html::submit(array(
+			"value" => t("Vali")
+		));
+		$content .= $this->mk_reforb("save_pop_s_res", array("id" => $_GET["id"]));
+		
+
+		$html .= html::form(array(
+			"method" => "POST",
+			"action" => "orb.aw",
+			"content" => $content 
+		));
+
+		return $html;
+	}
+
+	function _get_pop_s_res_t($arr)
+	{
+		get_instance("vcl/table");
+		$t = new vcl_table();
+
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+
+		$t->define_chooser(array(
+			"field" => "oid",
+			"name" => "sel"
+		));
+
+		if ($_GET["MAX_FILE_SIZE"])
+		{
+			$ol = new object_list(array(
+				"class_id" => $_GET["s_class_id"] ? $_GET["s_class_id"] : array(CL_CRM_COMPANY, CL_CRM_PERSON),
+				"name" => "%".$_GET["s_name"]."%",
+				"lang_id" => array(),
+				"site_id" => array()
+			));
+			$t->data_from_ol($ol);
+		}
+
+		return $t->draw();
+	}
+
+	/**
+		@attrib name=save_pop_s_res
+	**/
+	function save_pop_s_res($arr)
+	{
+		$o = obj($arr["id"]);
+		foreach(safe_array($arr["sel"]) as $id)
+		{
+			$o->connect(array(
+				"to" => $id,
+				"reltype" => "RELTYPE_SIDE"
+			));
+		}
+		return aw_ini_get("baseurl")."/automatweb/closewin.html";
 	}
 };
 ?>

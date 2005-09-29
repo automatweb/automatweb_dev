@@ -181,5 +181,33 @@
 			</function>
 		</action>
 
+		<action name="add_proj_to_co_as_ord">
+			<function name="add_proj_to_co_as_ord">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_proj_to_co_as_impl">
+			<function name="add_proj_to_co_as_impl">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="submit_delete_docs">
+			<function name="submit_delete_docs">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="add_task_to_co">
+			<function name="add_task_to_co">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

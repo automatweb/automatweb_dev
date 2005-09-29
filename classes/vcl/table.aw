@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.57 2005/09/21 12:47:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.58 2005/09/29 06:38:25 kristo Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -117,8 +117,7 @@ class aw_table extends aw_template
 		foreach ($this->selected_filters as $filter_key => $filter_selection)
 		{
 			$filter_name = $this->filter_index[$filter_key];
-
-			if ($row[$filter_name] != $this->filters[$filter_name]["filter"][$filter_selection - 1])
+			if (strpos($row[$filter_name], $this->filters[$filter_name]["filter"][$filter_selection - 1]) === false)
 			{
 				return;
 			}

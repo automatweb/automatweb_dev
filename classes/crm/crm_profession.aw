@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.10 2005/07/12 14:30:05 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_profession.aw,v 1.11 2005/09/29 06:38:24 kristo Exp $
 // crm_profession.aw - Ametinimetus
 /*
 @classinfo syslog_type=ST_CRM_PROFESSION relationmgr=yes
@@ -12,6 +12,9 @@
 
 @property ext_id field=subclass type=textbox
 @caption Sidussüsteemi ID
+
+@property hr_price field=meta method=serialize type=textbox
+@caption Tunnihind
 
 @property name_in_plural type=textbox table=kliendibaas_amet
 @caption Nimi mitmuses

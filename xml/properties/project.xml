@@ -51,7 +51,7 @@
             <name>start</name>
             <table>aw_projects</table>
             <group>general2</group>
-            <type>datetime_select</type>
+            <type>date_select</type>
             <field>aw_start</field>
             <caption>Algus</caption>
       </property>
@@ -59,7 +59,7 @@
             <name>end</name>
             <table>aw_projects</table>
             <group>general2</group>
-            <type>datetime_select</type>
+            <type>date_select</type>
             <field>aw_end</field>
             <caption>L&amp;otilde;pp</caption>
       </property>
@@ -67,7 +67,7 @@
             <name>deadline</name>
             <table>aw_projects</table>
             <group>general2</group>
-            <type>datetime_select</type>
+            <type>date_select</type>
             <field>aw_deadline</field>
             <caption>Deadline</caption>
       </property>
@@ -90,12 +90,35 @@
             <caption>Ära näita alamprojektide sündmusi</caption>
       </property>
       <property>
-            <name>contact_person</name>
+            <name>participants</name>
+            <table>objects</table>
+            <group>general2</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_PARTICIPANT</reltype>
+            <multiple>1</multiple>
+            <field>meta</field>
+            <method>serialize</method>
+            <no_caption>1</no_caption>
+            <parent>parts</parent>
+            <caption>Osalejad</caption>
+      </property>
+      <property>
+            <name>contact_person_orderer</name>
             <table>aw_projects</table>
             <group>info</group>
-            <type>textbox</type>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
             <field>aw_contact_person</field>
-            <caption>Kontaktisik</caption>
+            <caption>Tellija kontaktisik</caption>
+      </property>
+      <property>
+            <name>contact_person_implementor</name>
+            <table>aw_projects</table>
+            <group>info</group>
+            <type>relpicker</type>
+            <reltype>RELTYPE_CONTACT_PERSON</reltype>
+            <field>aw_contact_person_impl</field>
+            <caption>Teostaja kontaktisik</caption>
       </property>
       <property>
             <name>contact_phone</name>
@@ -201,16 +224,6 @@
             <caption>Pilt</caption>
       </property>
       <property>
-            <name>participants</name>
-            <table>objects</table>
-            <group>participants</group>
-            <type>relpicker</type>
-            <reltype>RELTYPE_PARTICIPANT</reltype>
-            <multiple>1</multiple>
-            <field>participants</field>
-            <caption>Osalejad</caption>
-      </property>
-      <property>
             <name>event_toolbar</name>
             <table>objects</table>
             <group>event_list</group>
@@ -264,6 +277,24 @@
             <props>name</props>
             <field>trans</field>
             <caption>Tõlkimine</caption>
+      </property>
+      <property>
+            <name>sides_tb</name>
+            <table>objects</table>
+            <group>sides</group>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>sides_tb</field>
+      </property>
+      <property>
+            <name>sides</name>
+            <table>objects</table>
+            <group>sides</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>sides</field>
       </property>
       <property>
             <name>user1</name>
@@ -351,6 +382,15 @@
             <caption>User-defined checkbox 5</caption>
       </property>
       <property>
+            <name>userclassif1</name>
+            <table>aw_projects</table>
+            <group>userdefined</group>
+            <type>classificator</type>
+            <reltype>RELTYPE_CLF1</reltype>
+            <field>aw_userclf1</field>
+            <caption>User-defined classificator 1</caption>
+      </property>
+      <property>
             <name>goal_tb</name>
             <table>objects</table>
             <group>goals_edit</group>
@@ -412,6 +452,11 @@
                   <parent>general</parent>
                   <caption>Osalejad</caption>
             </participants>
+            <sides>
+                  <parent>general</parent>
+                  <caption>Vastaspooled</caption>
+                  <submit>no</submit>
+            </sides>
             <event_list>
                   <caption>Sündmused</caption>
                   <submit>no</submit>
@@ -523,8 +568,32 @@
                   <clid>CL_META</clid>
                   <caption>t&amp;uuml;&amp;uuml;p</caption>
             </TYPE>
+            <CONTACT_PERSON>
+                  <value>13</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>kontaktisik</caption>
+            </CONTACT_PERSON>
+            <CLF1>
+                  <value>14</value>
+                  <clid>CL_META</clid>
+                  <caption>klassifikaator 1</caption>
+            </CLF1>
+            <SIDE>
+                  <value>15</value>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
+                  <caption>osapool</caption>
+            </SIDE>
       </reltypes>
       <layout>
+            <parts>
+                  <type>hbox</type>
+                  <width>20%:80%</width>
+                  <group>general2</group>
+                  <caption>Osalejad</caption>
+            </parts>
             <goal_vb>
                   <type>hbox</type>
                   <width>

@@ -37,9 +37,34 @@ class crm_company_bills_impl extends class_base
 		// get all open tasks
 		$i = get_instance(CL_CRM_COMPANY);
 		$proj = $i->get_my_projects();
+		$proj_i = get_instance(CL_PROJECT);
+
 		foreach($proj as $p)
 		{
+			$events = $proj_i->get_events(array(
+				"id" => $p,
+				"range" => array(
+					"start" => 1,
+					"end" => time() + 24*3600*365*10
+				)
+			));
+			if (!count($events))
+			{
+				continue;
+			}
+			$evt_ol = new object_list(array(
+				"class_id" => CL_TASK,
+				"oid" => array_keys($events),
+				"bill_no" => new obj_predicate_compare(OBJ_COMP_EQUAL, ""),
+				"send_bill" => 1
+			));
+			if (!$evt_ol->count())
+			{
+				continue;
+			}
+
 			$po = obj($p);
+
 			$t->define_data(array(
 				"name" => html::get_change_url($p, array("return_url" => get_ru()), $po->name()),
 				"open" => html::href(array(
@@ -85,12 +110,15 @@ class crm_company_bills_impl extends class_base
 		foreach($events as $evt)
 		{
 			$o = obj($evt["id"]);
-			if ($o->prop("bill_no") == "")
+			if ($o->prop("send_bill"))
 			{
-				$t->define_data(array(
-					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
-					"oid" => $o->id()
-				));
+				if ($o->prop("bill_no") == "")
+				{
+					$t->define_data(array(
+						"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
+						"oid" => $o->id()
+					));
+				}
 			}
 		}
 	}

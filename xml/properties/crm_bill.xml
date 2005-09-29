@@ -14,7 +14,7 @@
             <group>general</group>
             <type>date_select</type>
             <field>aw_date</field>
-            <caption>Koop&amp;auml;ev</caption>
+            <caption>Kuup&amp;auml;ev</caption>
       </property>
       <property>
             <name>bill_due_date</name>

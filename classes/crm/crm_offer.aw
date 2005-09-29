@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.37 2005/09/21 12:47:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.38 2005/09/29 06:38:24 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -161,6 +161,18 @@ class crm_offer extends class_base
 		
 		switch($prop["name"])
 		{
+			case "preformer":
+				if ($arr["new"])
+				{
+					if ($arr["request"]["alias_to"])
+					{
+						$o = obj($arr["request"]["alias_to"]);
+						$prop["options"] = array("" => t("--Vali--"), $o->id() => $o->name());
+						$prop["value"] = $o->id();
+					}
+				}
+				break;
+
 			case "start1":
 			//	return PROP_IGNORE;
 			break;

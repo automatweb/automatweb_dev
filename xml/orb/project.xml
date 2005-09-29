@@ -22,5 +22,26 @@
 			</function>
 		</action>
 
+		<action name="del_sides">
+			<function name="del_sides">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="pop_side_search">
+			<function name="pop_side_search">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="save_pop_s_res">
+			<function name="save_pop_s_res">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

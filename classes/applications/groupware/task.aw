@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.17 2005/09/21 12:47:05 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.18 2005/09/29 06:38:24 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -8,13 +8,13 @@
 @default table=objects
 @default group=general
 
-@property customer type=select table=planner field=customer
+@property customer type=popup_search table=planner field=customer clid=CL_CRM_COMPANY
 @caption Klient
 
-@property code type=textbox size=5 table=planner field=code
+@property code type=text size=5 table=planner field=code
 @caption Kood
 
-@property project type=select table=planner field=project
+@property project type=popup_search table=planner field=project clid=CL_PROJECT
 @caption Projekt
 
 
@@ -36,6 +36,12 @@
 @property whole_day type=checkbox ch_value=1 field=meta method=serialize
 @caption Kestab terve päeva
 
+@property send_bill type=checkbox ch_value=1 table=planner field=send_bill default=1
+@caption Saata arve
+
+@property priority type=textbox size=5 table=planner field=priority
+@caption Prioriteet
+
 @layout num_hrs type=hbox 
 
 	@property num_hrs_guess type=textbox size=5 field=meta method=serialize parent=num_hrs
@@ -56,8 +62,14 @@
 @property client_remind type=checkbox ch_value=1 table=objects field=meta method=serialize
 @caption Kliendi teavitamine vajalik
 
-@property bill_no type=textbox table=planner 
+@property bill_no type=text table=planner 
 @caption Arve number
+
+@property files type=relmanager reltype=RELTYPE_FILE field=meta method=serialize  props=name,file,comment table_fields=name 
+@caption Failid
+
+@property participants type=select multiple=1 table=objects field=meta method=serialize
+@caption Osalejad
 
 @property aliasmgr type=aliasmgr store=no
 @caption Seostehaldur
@@ -120,12 +132,15 @@ caption Osalejad
 @groupinfo comments caption=Kommentaarid
 @groupinfo reminders caption=Meeldetuletused
 @groupinfo participants caption=Osalejad submit=no
-@groupinfo other_exp caption="Muud kulud" submit=no
+@groupinfo other_exp caption="Muud kulud" 
 
 @tableinfo planner index=id master_table=objects master_index=brother_of
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption Kordus
+
+@reltype FILE value=2 clid=CL_FILE
+@caption fail
 
 */
 
@@ -145,6 +160,83 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "participants":
+				$opts = array();
+				$p = array();
+				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
+				{
+					$conns = $arr['obj_inst']->connections_to(array(
+						'type' => array(10, 8),//CRM_PERSON.RELTYPE_PERSON_TASK==10
+					));
+					foreach($conns as $conn)
+					{
+						$obj = $conn->from();
+						$opts[$obj->id()] = $obj->name();
+						$p[$obj->id()] = $obj->id();
+					}
+				}
+				// also add all workers for my company
+				$u = get_instance(CL_USER);
+				$co = $u->get_current_company();
+				$w = array();
+				$i = get_instance(CL_CRM_COMPANY);
+				$i->get_all_workers_for_company(obj($co), &$w);
+				foreach($w as $oid)
+				{
+					$o = obj($oid);
+					$opts[$oid] = $o->name();
+				}
+				$data["options"] = array("" => t("--Vali--")) + $opts;	
+				$data["value"] = $p;
+				break;
+
+			case "code":
+				if (is_object($arr["obj_inst"]))
+				{
+					$pj = $arr["obj_inst"]->prop("project");
+					if ($this->can("view", $pj))
+					{
+						$proj = obj($pj);
+						$data["value"] = $proj->prop("code");
+					}
+				}
+				break;
+
+			case "hr_price":
+				// get first person connected as participant and read their hr price
+				if ($data["value"] == "" && is_object($arr["obj_inst"]))
+				{
+					$conns = $arr['obj_inst']->connections_to(array());
+					foreach($conns as $conn)
+					{
+						if($conn->prop('from.class_id')==CL_CRM_PERSON)
+						{
+							$pers = $conn->from();
+							// get profession
+							$rank = $pers->prop("rank");
+							if (is_oid($rank) && $this->can("view", $rank))
+							{
+								$rank = obj($rank);
+								$data["value"] = $rank->prop("hr_price");
+								break;
+							}
+						}
+					}
+
+				}
+				break;
+
+			case "bill_no":
+				if ($data["value"] != "")
+				{
+					$data["value"] = html::get_change_url($data["value"], array("return_url" => get_ru()), $data["value"]);
+				}
+				else
+				{
+					return PROP_IGNORE;
+				}
+				break;
+
 			case 'info_on_object':
 				if(is_object($arr['obj_inst']) && is_oid($arr['obj_inst']->id()))
 				{
@@ -256,12 +348,29 @@ class task extends class_base
 				$i = get_instance(CL_CRM_COMPANY);
 				$ol = new object_list(array("oid" => $i->get_my_projects()));
 				$data["options"] = array("" => "") + $ol->names();
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
 				break;
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
 				$ol = new object_list(array("oid" => $i->get_my_customers()));
 				$data["options"] = array("" => "") + $ol->names();
+
+				if ($_GET["alias_to_org"])
+				{
+					$data["value"] = $_GET["alias_to_org"];
+					//$arr["obj_inst"]->set_prop($customer, $data["value"]);
+				}
+
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
+				}
 				break;
 
 			case "other_expenses":
@@ -285,6 +394,38 @@ class task extends class_base
 		
 		switch($prop["name"])
 		{
+			case "participants":
+				if (!is_oid($arr["obj_inst"]->id()))
+				{
+					return PROP_IGNORE;
+				}
+				$pl = get_instance(CL_PLANNER);
+				foreach(safe_array($prop["value"]) as $person)
+				{
+					$p = obj($person);
+					$p->connect(array(
+						"to" => $arr["obj_inst"]->id(),
+						"reltype" => "RELTYPE_PERSON_TASK"
+					));
+
+					// also add to their calendar
+					if (($cal = $pl->get_calendar_for_person($p)))
+					{
+						$pl->add_event_to_calendar(obj($cal), $arr["obj_inst"]);
+					}
+				}
+				break;
+
+			case "code":
+				$pj = $arr["obj_inst"]->prop("project");
+				if ($this->can("view", $pj))
+				{
+					$proj = obj($pj);
+					$prop["value"] = $proj->prop("code");
+					$arr["obj_inst"]->set_prop("code", $proj->prop("code"));
+				}
+				break;
+
 			case "other_selector":
 				$elib = get_instance("calendar/event_property_lib");
 				$elib->process_other_selector($arr);
@@ -303,7 +444,12 @@ class task extends class_base
 				};
 				break;
 
+			case "customer":
+				$prop["value"] = $_POST["customer"];
+				break;
+
 			case "project":
+				$prop["value"] = $_POST["project"];
 				// add to proj
 				if (is_oid($prop["value"]) && $this->can("view", $prop["value"]))
 				{
@@ -401,6 +547,15 @@ class task extends class_base
 		}
 
 		$t->set_sortable(false);
+	}
+
+	/**
+		@attrib name=search_for_proj
+		@param retf optional
+	**/
+	function search_for_proj($arr)
+	{
+		
 	}
 }
 ?>

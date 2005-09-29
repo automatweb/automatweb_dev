@@ -7,7 +7,7 @@ class crm_company_cust_impl extends class_base
 		$this->init();
 	}
 
-	function do_projects_table_header(&$table)
+	function do_projects_table_header(&$table, $data = false)
 	{
 		$table->define_field(array(
 			"name" => "project_name",
@@ -15,15 +15,34 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
+		if (is_array($data))
+		{
+			$filt = array();
+			foreach($data as $row)
+			{
+				$filt["project_orderer"][] = $row["project_orderer"];
+				$filt["project_impl"][] = $row["project_impl"];
+				$part = strip_tags($row["project_participants"]);
+				foreach(explode(",", $part) as $nm)
+				{
+					$filt["project_participants"][] = trim($nm);
+				}
+			}
+		}
+
+		$filt["project_participants"] = array_unique($filt["project_participants"]);
+
 		$table->define_field(array(
 			"name" => "project_orderer",
 			"caption" => t("Tellija"),
 			"sortable" => 1,
+			"filter" => $filt["project_orderer"]
 		));
 		$table->define_field(array(
 			"name" => "project_impl",
 			"caption" => t("Teostaja"),
 			"sortable" => 1,
+			"filter" => $filt["project_impl"]
 		));
 		
 		$table->define_field(array(
@@ -39,12 +58,16 @@ class crm_company_cust_impl extends class_base
 			"name" => "project_participants",
 			"caption" => t("Osalejad"),
 			"sortable" => 1,
+			"filter" => $filt["project_participants"]
 		));
 		
 		$table->define_field(array(
 			"name" => "project_created",
 			"caption" => t("Loodud"),
 			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y H:i",
+			"numeric" => 1
 		));
 
 		$table->define_field(array(
@@ -62,9 +85,8 @@ class crm_company_cust_impl extends class_base
 	function _get_my_projects($arr)
 	{
 		$table = &$arr["prop"]["vcl_inst"];
-		$this->do_projects_table_header($table);
 		
-		$conns = new connection();
+		/*$conns = new connection();
 		$conns_ar = $conns->find(array(
 			"from.class_id" => CL_PROJECT,
 			"to" => aw_global_get("uid_oid"),
@@ -74,7 +96,10 @@ class crm_company_cust_impl extends class_base
 		foreach($conns_ar as $con)
 		{
 			$conns_ol->add($con["from"]);
-		}
+		}*/
+		$i = get_instance(CL_CRM_COMPANY);
+		$conns_ol = new object_list(array("oid" => $i->get_my_projects()));
+
 		if ($arr["request"]["do_proj_search"] && $conns_ol->count())
 		{
 			$filt = $this->_get_my_proj_search_filt($arr["request"], $conns_ol->ids());
@@ -91,17 +116,30 @@ class crm_company_cust_impl extends class_base
 		}
 		foreach ($conns_ol->arr() as $project_obj)
 		{
-			$table->define_data(array(
+			if (is_oid($cpi = $project_obj->prop("contact_person_implementor")) && $this->can("view", $cpi))
+			{
+				$impl = html::get_change_url($cpi, array("return_url" => get_ru()), $project_obj->prop_str("contact_person_implementor"));
+			}
+			else
+			{
+				$impl = $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_IMPLEMENTOR")));
+			}
+			$data[] = array(
 				"project_name" => html::get_change_url($project_obj->id(), array("return_url" => get_ru()), $project_obj->name()),
 				"project_participants"	=> $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
-				"project_created" => get_lc_date($project_obj->created()),
+				"project_created" => $project_obj->created(),
 				"project_orderer" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_ORDERER"))),
-				"project_impl" => $this->_get_linked_names($project_obj->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))),
+				"project_impl" => $impl,
 				"project_deadline" => $project_obj->prop("deadline"),
 				"oid" => $project_obj->id()
-			));
+			);
 		}
 	
+		$this->do_projects_table_header($table, $data);
+		foreach($data as $row)
+		{
+			$table->define_data($row);
+		}
 		return PROP_OK;
 	}
 
@@ -115,7 +153,16 @@ class crm_company_cust_impl extends class_base
 		));
 
 		$alias_to = $arr['obj_inst']->id();
-		
+
+		if (!(int)$arr['request']['category'])
+		{
+			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+			if ($f_cat)
+			{
+				(int)$arr['request']['category'] = $f_cat->id();
+			}
+		}
+
 		if((int)$arr['request']['category'])
 		{
 			$alias_to = $arr['request']['category'];
@@ -144,11 +191,23 @@ class crm_company_cust_impl extends class_base
 						'parent' => $arr['obj_inst']->id(),
 						'alias_to' => $alias_to,
 						'reltype' => 3, // crm_category.CUSTOMER,
-						'return_url' => urlencode(aw_global_get('REQUEST_URI'))
+						'return_url' => get_ru()
 					),
 					'crm_company'
 				)
 			));
+			/*$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => t('Klient (eraisik)'),
+				'link' => $this->mk_my_orb('new',array(
+						'parent' => $arr['obj_inst']->id(),
+						'alias_to' => $alias_to,
+						'reltype' => 3, // crm_category.CUSTOMER,
+						'return_url' => get_ru()
+					),
+					CL_CRM_PERSON
+				)
+			));*/
 		}
 
 		//delete button
@@ -158,8 +217,6 @@ class crm_company_cust_impl extends class_base
 			'tooltip' => t('Kustuta valitud'),
 			'action' => 'submit_delete_customer_relations',
 		));
-
-		$tb->add_separator();
 
 		$tb->add_button(array(
 			'name' => 'Search',
@@ -178,18 +235,45 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 
+		$tb->add_separator();
+
+		$tb->add_button(array(
+			"name" => "add_proj_impl",
+			"tooltip" => t("Lisa projekt teostajana"),
+			"action" => "add_proj_to_co_as_impl"
+		));
+
+		$tb->add_button(array(
+			"name" => "add_proj_ord",
+			"tooltip" => t("Lisa projekt tellijana"),
+			"action" => "add_proj_to_co_as_ord"
+		));
+
+		$tb->add_button(array(
+			"name" => "add_task",
+			"tooltip" => t("Lisa toimetus"),
+			"action" => "add_task_to_co"
+		));
+
 		return PROP_OK;
 	}
 
 	function _get_customer_listing_tree($arr)
 	{
+		if ($arr["request"]["customer_search"])
+		{
+			return PROP_IGNORE;
+		}
 		$tree_inst = &$arr['prop']['vcl_inst'];
 		$tree_inst->set_only_one_level_opened(1);
 
 		$node_id = 0;
 
+		// get first cat
+		$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+
 		$i = get_instance(CL_CRM_COMPANY);
-		$i->active_node = (int)$arr['request']['category'];
+		$i->active_node = (int)$arr['request']['category'] ? (int)$arr['request']['category'] : $f_cat->id();
 		$i->generate_tree(array(
 			'tree_inst' => &$tree_inst,
 			'obj_inst' => $arr['obj_inst'],
@@ -218,11 +302,11 @@ class crm_company_cust_impl extends class_base
 			"sortable" => 1,
 		));
 
-		$tf->define_field(array(
+		/*$tf->define_field(array(
 			"name" => "corpform",
 			"caption" => t("Õiguslik vorm"),
 			"sortable" => 1,
-		));
+		));*/
 
 		$tf->define_field(array(
 			"name" => "address",
@@ -278,6 +362,16 @@ class crm_company_cust_impl extends class_base
 		//will list the companys from the category
 		//if category is selected
 		$organization = &$arr['obj_inst'];
+
+		if (!is_oid($arr['request']['category']))
+		{
+			$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
+			if ($f_cat)
+			{
+				$arr['request']['category'] = $f_cat->id();
+			}
+		}
+
 		if($arr['request']['category']!='parent' && is_oid($arr['request']['category']))
 		{
 			$organization = new object($arr['request']['category']);
@@ -290,6 +384,10 @@ class crm_company_cust_impl extends class_base
 		foreach($orgs as $org)
 		{
 			$orglist[$org->prop("to")] = $org->prop("to");
+		}
+		if ($filter)
+		{
+			$orglist = $this->make_keys($filter);
 		}
 
 		$rs_by_co = array();
@@ -307,7 +405,7 @@ class crm_company_cust_impl extends class_base
 						"group" => "contacts2",
 						"unit" => $role_entry->prop("unit"),
 					), 
-					$role_entry->prop_str("unit")
+					parse_obj_name($role_entry->prop_str("unit"))
 				)
 				."/".
 				html::get_change_url(
@@ -316,20 +414,20 @@ class crm_company_cust_impl extends class_base
 						"group" => "contacts2",
 						"cat" => $role_entry->prop("role")
 					), 
-					$role_entry->prop_str("role")
+					parse_obj_name($role_entry->prop_str("role"))
 				);
 		}
 
-		foreach($orgs as $org)
+		foreach($orglist as $org)
 		{
 			if($filter)
 			{
-				if(!in_array($org->prop('to'),$filter))
+				if(!in_array($org,$filter))
 				{
 					continue;
 				}
 			}
-			$o = $org->to();
+			$o = obj($org);
 			// aga ülejäänud on kõik seosed!
 			$vorm = $tegevus = $contact = $juht = $juht_id = $phone = $url = $mail = "";
 			if (is_oid($o->prop("ettevotlusvorm")))
@@ -363,12 +461,7 @@ class crm_company_cust_impl extends class_base
 
 			$tf->define_data(array(
 				"id" => $o->id(),
-				"name" => html::href(array(
-					"url" => $this->mk_my_orb("change",array(
-						"id" => $o->id(),
-					),$o->class_id()),
-					"caption" => $o->name(),
-				)),
+				"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()." ".$vorm),
 				"reg_nr" => $o->prop("reg_nr"),
 				"pohitegevus" => $o->prop_str("pohitegevus"),
 				"corpform" => $vorm,
@@ -409,7 +502,7 @@ class crm_company_cust_impl extends class_base
 		foreach($iter as $r_p_id => $r_p_data)
 		{
 			$r_p_o = obj($r_p_id);
-			$roles[] = html::get_change_url($r_p_o->id(), array(), $r_p_o->name()).": ".join(",", $r_p_data);
+			$roles[] = html::get_change_url($r_p_o->id(), array(), parse_obj_name($r_p_o->name())).": ".join(",", $r_p_data);
 		}
 		$roles = join("<br>", $roles);
 
@@ -926,7 +1019,7 @@ class crm_company_cust_impl extends class_base
 			$filter[$conn->prop('to')] = $conn->prop('to');
 		}*/
 		$i = get_instance(CL_CRM_COMPANY);
-		$this->_get_customer($arr/*, $i->get_my_customers()*/);
+		$this->_get_customer($arr, $i->get_my_customers());
 	}
 
 	function _get_offers_listing_toolbar($arr)
@@ -943,6 +1036,7 @@ class crm_company_cust_impl extends class_base
 			'reltype'=> 9, //RELTYPE_OFFER,
 			'org' => $arr['obj_inst']->id(),
 			'alias_to_org' => $arr['request']['org_id'],
+			"return_url" => get_ru()
 		);
 		
 		$tb->add_menu_item(array(
@@ -1177,14 +1271,24 @@ class crm_company_cust_impl extends class_base
 		
 			if(!$arr["request"]["org_id"])
 			{
-				return;
+				$i = get_instance(CL_CRM_COMPANY);
+				$cust = array();
+				$i->get_customers_for_company($arr["obj_inst"], &$cust);
+
+				$project_conns = $project_conns->find(array(
+					"to" => $cust,
+					"reltype" => 10,
+					"from.class_id" => CL_PROJECT
+				));
 			}
-			
-			$project_conns = $project_conns->find(array(
-				"to" => $arr["request"]["org_id"],
-				"reltype" => 10,
-				"from.class_id" => CL_PROJECT
-			));
+			else
+			{
+				$project_conns = $project_conns->find(array(
+					"to" => $arr["request"]["org_id"],
+					"reltype" => 10,
+					"from.class_id" => CL_PROJECT
+				));
+			}
 		}
 		else
 		{
@@ -1243,7 +1347,7 @@ class crm_company_cust_impl extends class_base
 						"group" => "contacts2",
 						"unit" => $role_entry->prop("unit"),
 					), 
-					$role_entry->prop_str("unit")
+					parse_obj_name($role_entry->prop_str("unit"))
 				)
 				."/".
 				html::get_change_url(
@@ -1252,7 +1356,7 @@ class crm_company_cust_impl extends class_base
 						"group" => "contacts2",
 						"cat" => $role_entry->prop("role")
 					), 
-					$role_entry->prop_str("role")
+					parse_obj_name($role_entry->prop_str("role"))
 				);
 		}
 		
@@ -1268,7 +1372,7 @@ class crm_company_cust_impl extends class_base
 			$table->define_data(array(
 				"project_name" => html::get_change_url($project->id(), array("return_url" => get_ru()), $project->name()),
 				"project_participants"	=> $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_PARTICIPANT"))),
-				"project_created" => get_lc_date($project->created()),
+				"project_created" => $project->created(),
 				"roles" => $roles,
 				"project_orderer" => $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_ORDERER"))),
 				"project_impl" => $this->_get_linked_names($project->connections_from(array("type" => "RELTYPE_IMPLEMENTOR"))),
@@ -1332,6 +1436,30 @@ class crm_company_cust_impl extends class_base
 					"return_url" => get_ru()
 				)
 			),
+		));
+
+		$pl = get_instance(CL_PLANNER);
+		$this->cal_id = $pl->get_calendar_for_user(array(
+			"uid" => aw_global_get("uid"),
+		));
+
+		$url = $this->mk_my_orb('new',array(
+			'alias_to_org' => $arr['obj_inst']->id(),
+			'reltype_org' => 13,
+			'class' => 'planner',
+			'id' => $this->cal_id,
+			'group' => 'add_event',
+			'clid' => CL_TASK,
+			'action' => 'change',
+			'title' => t("Toimetus"),
+			'parent' => $arr["obj_inst"]->id(),
+			'return_url' => get_ru()
+		));
+
+		$tb->add_menu_item(array(
+			'parent'=>'new',
+			'text' => t('Toimetus'),
+			'link' => $url
 		));
 
 		$tb->add_button(array(
@@ -1440,6 +1568,81 @@ class crm_company_cust_impl extends class_base
 				"org_id" => NULL
 			))
 		));
+	}
+
+	function _get_first_cust_cat($o)
+	{
+		$ol = new object_list($o->connections_from(array(
+			"type" => "RELTYPE_CATEGORY",
+		)));
+		$ol->sort_by(array("prop" => "ord"));
+		return $ol->begin();
+	}
+
+	function _init_report_list_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "date",
+			"caption" => t("Kuup&auml;ev"),
+			"sortable" => 1,
+			"type" => "time",
+			"format" => "d.m.Y",
+			"numeric" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "reporter",
+			"caption" => t("Esitaja"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+			"sortable" => 1,
+			"align" => "center"
+		));
+	}
+
+	function _get_report_list($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_report_list_t(&$t);
+
+		if ($arr["request"]["group"] == "all_reports")
+		{
+			$reps = new object_list(array(
+				"class_id" => CL_CRM_DAY_REPORT,
+				"parent" => $arr["obj_inst"]->id(),
+			));
+		}
+		else
+		{
+			$u = get_instance(CL_USER);
+			$reps = new object_list(array(
+				"class_id" => CL_CRM_DAY_REPORT,
+				"parent" => $arr["obj_inst"]->id(),
+				"reporter" => $u->get_current_person()
+			));
+		}
+
+		foreach($reps->arr() as $r)
+		{
+			$rep = "";
+			if ($this->can("view", $r->prop("reporter")))
+			{
+				$o = obj($r->prop("reporter"));
+				$rep = html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name());
+			}
+			$t->define_data(array(
+				"date" => $r->prop("date"),
+				"reporter" => $rep,
+				"name" => html::get_change_url($r->id(), array("return_url" => get_ru()), $r->name())
+			));
+		}
+
+		$t->set_default_sortby("date");
+		$t->set_default_sorder("desc");
 	}
 }
 ?>

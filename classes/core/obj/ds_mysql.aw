@@ -1329,6 +1329,11 @@ die(dbg::dump($ret));
 							$v_data = $val->data2;
 							break;
 
+						case OBJ_COMP_EQUAL:
+							$comparator = " = ";
+							$v_data = $val->data2;
+							break;
+
 						default:
 							error::raise(array(
 								"id" => ERR_OBJ_COMPARATOR,
@@ -1341,13 +1346,13 @@ die(dbg::dump($ret));
 						$tmp = array();
 						foreach($v_data as $d_k)
 						{
-							$tmp[] = $tf." $comparator $d_k ";
+							$tmp[] = $tf." $comparator '$d_k' ";
 						}
 						$sql[] = "(".join(" OR ", $tmp).")";
 					}
 					else
 					{
-						$sql[] = $tf." $comparator ".$v_data." ";
+						$sql[] = $tf." $comparator '".$v_data."' ";
 					}
 				}
 				else

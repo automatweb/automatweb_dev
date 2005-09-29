@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.78 2005/08/26 11:08:54 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.79 2005/09/29 06:38:23 kristo Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -76,7 +76,7 @@ class html extends aw_template
 		{
 			$onc = 'onchange="'.$onchange.'"';
 		}
-		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>\n";
+		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
 	}
 
 	////
@@ -528,8 +528,9 @@ class html extends aw_template
 	function popup($arr = array())
 	{
 		extract($arr);
-		$arr["onClick"] = 'javascript:window.open("'.$url.'", "'.$target.
-		'", "toolbar='.($toolbar ? "yes" : "no").
+		$quote = isset($arr["quote"]) ? $arr["quote"] : "\"";
+		$arr["onClick"] = 'javascript:window.open('.$quote.''.$url.''.$quote.', '.$quote.''.$target.
+		''.$quote.', '.$quote.'toolbar='.($toolbar ? "yes" : "no").
 		',directories='.($directories ? "yes" : "no").
 		',status='.($status ? "yes" : "no").
 		',location='.($location ? "yes" : "no").
@@ -538,7 +539,7 @@ class html extends aw_template
 		',menubar='.($menubar ? "yes" : "no").
 		',height='.($height ? $height : 400).
 		',width='.($width ? $width : 400).
-		'");return false;';
+		''.$quote.');'.(!$arr["no_return"] ? 'return false;' : '');
 		if($no_link)
 		{
 			return $arr["onClick"];
