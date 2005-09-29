@@ -39,7 +39,6 @@ class _int_obj_ds_mysql extends _int_obj_ds_base
 
 	function get_objdata($oid, $param = array())
 	{
-echo dbg::dump($this->read_properties_data_cache[$oid]);
 		if (isset($this->read_properties_data_cache[$oid]))
 		{
 			$ret = $this->_get_objdata_proc($this->read_properties_data_cache[$oid], $param, $oid);
@@ -453,9 +452,10 @@ die(dbg::dump($ret));
 					objects.metadata as metadata,
 					objects.subclass as subclass,
 					objects.cachedata as cachedata,
-					objects.flags as flags,
-					objects.acldata as acldata
-				";
+					objects.flags as flags";
+
+//					objects.acldata as acldata
+//				";
 				if (count($fields) > 0)
 				{
 					$q .= ",".join(",", $fields)." FROM objects LEFT JOIN $table ON objects.brother_of = ".$table.".".$tableinfo[$table]["index"]." WHERE ";
