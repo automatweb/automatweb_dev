@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.79 2005/09/29 06:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.80 2005/09/29 09:59:48 voldemar Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -76,6 +76,7 @@ class html extends aw_template
 		{
 			$onc = 'onchange="'.$onchange.'"';
 		}
+		
 		return "<select name=\"$name\" $cl id=\"$name\" $sz $mz $onc $disabled $textsize>\n$optstr</select>$post_append_text\n";
 	}
 
@@ -83,9 +84,13 @@ class html extends aw_template
 	// !html text input
 	// name(string)
 	// value(string)
+	// content(string) -- text visible to user when $option_is_tuple is set to TRUE.
 	// size(int)
 	// disabled(bool)
 	// textsize(string) -- examples: "10px", "0.7em", "smaller".
+	// autocomplete_source (string) -- relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
+	// autocomplete_params (array) -- array of form element names whose values will be posted to orb method giving autocomplete options
+	// option_is_tuple (bool) -- indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
 	function textbox($args = array())
 	{
 		extract($args);
@@ -97,7 +102,42 @@ class html extends aw_template
 		$id = str_replace("]","_",$id);
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
-		return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" $disabled $textsize />\n";
+		settype ($option_is_tuple, "boolean");
+
+		### compose autocompletes source url
+		if ($autocomplete_source)
+		{
+			$autocomplete_params = count ($autocomplete_params) ? "new Array ('" . implode ("','", $autocomplete_params) . "')" : "new Array ()";
+			$is_tuple = $option_is_tuple ? "true" : "false";
+			$select_autocomplete = "selectAutoCompleteOption (this);";
+
+			### compose autocompletes html
+			if (in_array ($name, $autocomplete_params))
+			{
+				$get_autocomplete = "";
+				$autocomplete_init = "<script>new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, '{$autocomplete_source}', {$autocomplete_params});</script>\n";
+			}
+			else
+			{
+				$get_autocomplete = "getAutoCompleteOptions (this, '{$autocomplete_source}', {$autocomplete_params}, {$is_tuple});";
+				$autocomplete_init = "<script>new AutoComplete(document.getElementById('{$id}awAutoCompleteTextbox'), false, {$is_tuple}, false, false);</script>\n";
+			}
+		}
+		else
+		{
+			$get_autocomplete = "";
+			$select_autocomplete = "";
+			$autocomplete_init = "";
+		}
+
+		if ($option_is_tuple)
+		{
+			return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" onchange=\"{$select_autocomplete}\" $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
+		}
+		else
+		{
+			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $disabled $textsize />\n" . $autocomplete_init;
+		}
 	}
 
 	////

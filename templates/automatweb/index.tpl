@@ -15,6 +15,7 @@
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/aw.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/browserdetect.js"></script>
 <script type="text/javascript" src="{VAR:baseurl}/automatweb/js/cbobjects.js"></script>
+<script type="text/javascript" src="{VAR:baseurl}/automatweb/js/autosuggest.js"></script>
 
 
 <script type="text/javascript">
@@ -66,7 +67,7 @@ function check_generic_unloader()
 </script>
 </head>
 <body link="#0000ff" vlink="#0000ff" onBeforeUnLoad="check_generic_unloader();" onLoad="create_objects(); check_generic_loader();">
-
+ <div id="awAutoComplete"><ul></ul></div>
 	<!-- SUB: LANG_STRING -->
 <table border="0" cellpadding="0" cellspacing="0" width="100%">
 <tr>

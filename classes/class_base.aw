@@ -1,13 +1,13 @@
 <?php
-// $Id: class_base.aw,v 2.418 2005/09/29 09:53:12 kristo Exp $
+// $Id: class_base.aw,v 2.419 2005/09/29 09:59:48 voldemar Exp $
 // the root of all good.
-// 
+//
 // ------------------------------------------------------------------
 // Do not be writink any HTML in this class, it defeats half
 // of the purpose of this class. If you really absolutely
 // must, then do it in the htmlclient class.
 // ------------------------------------------------------------------
-// 
+//
 // Common properties for all classes
 /*
 	@default table=objects
@@ -17,7 +17,7 @@
 	@caption Nimi
 	@comment Objekti nimi
 
-	@property comment type=textbox 
+	@property comment type=textbox
 	@caption Kommentaar
 	@comment Vabas vormis tekst objekti kohta
 
@@ -26,7 +26,7 @@
 	// we need to do this in a different way
 	@property status type=status trans=1 default=1
 	@caption Aktiivne
-	@comment Kas objekt on aktiivne 
+	@comment Kas objekt on aktiivne
 
 	@property needs_translation type=checkbox field=flags method=bitmask ch_value=2 // OBJ_NEEDS_TRANSLATION
 	@caption Vajab tõlget
@@ -37,7 +37,7 @@
 
 	@groupinfo general caption=&Uuml;ldine default=1 icon=edit
 
-	@forminfo add onload=init_storage_object 
+	@forminfo add onload=init_storage_object
 	@forminfo edit onload=load_storage_object
 
 */
@@ -73,7 +73,7 @@ define('CB_FATAL_ERROR',2);
 
 // a special type for relations - link. This can be used to create links
 // between objects - defining "link" is left to the owning class of the
-// object. Basically it's just like "alias" but the alias textbox is 
+// object. Basically it's just like "alias" but the alias textbox is
 // _not_ show in the relation manager
 define('RELTYPE_LINK',100);
 
@@ -171,20 +171,20 @@ class class_base extends aw_template
 	}
 
 
-	/** Generate a form for adding or changing an object 
-		
-		@attrib name=new params=name all_args="1" 
-		
+	/** Generate a form for adding or changing an object
+
+		@attrib name=new params=name all_args="1"
+
 		@param parent optional type=int acl="add"
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
 		@param reltype optional type=int
 
-		
+
 		@returns
-		
-		
+
+
 		@comment
 		id _always_ refers to the objects table. Always. If you want to load
 		any other data, then you'll need to use other field name
@@ -195,19 +195,19 @@ class class_base extends aw_template
 		return $this->change($args);
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=change params=name all_args="1"
-		
+
 		@param id optional type=int acl="edit"
 		@param group optional
 		@param period optional
 		@param alias_to optional
 		@param return_url optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -230,13 +230,13 @@ class class_base extends aw_template
 			$this->cb_values = $cb_values;
 			$has_errors = true;
 		};
-		
+
 		$cfgform_id = "";
 		$this->subgroup = $this->reltype = "";
 		$this->is_rel = false;
 
 		$this->orb_action = $args["action"];
-		
+
 		$this->is_translated = 0;
 
 
@@ -244,7 +244,7 @@ class class_base extends aw_template
 		{
 			$args["action"] = "view";
 		};
-		
+
 		if($args["no_buttons"])
 		{
 			$this->no_buttons = true;
@@ -256,8 +256,8 @@ class class_base extends aw_template
 		};
 
 		$use_form = $args["form"];
-			
-			
+
+
 		if (method_exists($this->inst,"callback_on_load"))
 		{
 			$this->inst->callback_on_load(array(
@@ -332,8 +332,8 @@ class class_base extends aw_template
 			"cfgform_id" => $cfgform_id,
 			"cb_part" => $args["cb_part"],
 		);
-		
-		
+
+
 		if (!empty($args["form"]))
 		{
 			$filter["form"] = $args["form"];
@@ -477,13 +477,13 @@ class class_base extends aw_template
 				"form" => $args["form"],
 				"attr" => "template",
 			));
-			
+
 			$o_arr = array();
 			if($gdata["no_form"] == 1)
 			{
 				$o_arr["no_form"] = true;
 			}
-			
+
 			// the magical check, that you are fully qualified to use a different templatemodel -- ahz
 			$tpls = str_replace(aw_ini_get("basedir")."/templates/", "", $this->inst->adm_template_dir);
 			$tplx = aw_ini_get("basedir")."/templates/".$tpls."/group_".$this->use_group.".tpl";
@@ -506,7 +506,7 @@ class class_base extends aw_template
 				$o_arr["group"] = $this->use_group;
 				$o_arr["tpldir"] = $tpls2;
 			}
-			
+
 			if (!empty($template))
 			{
 				$o_arr["template"] = $template;
@@ -519,7 +519,7 @@ class class_base extends aw_template
 			// if there no class in the request URI, then we are embedded
 			if (false === strpos(aw_global_get("REQUEST_URI"),"class="))
 			{
-				$o_arr["embedded"] = true;		
+				$o_arr["embedded"] = true;
 			}
 
 			$cli = get_instance("cfg/" . $this->output_client,$o_arr);
@@ -595,7 +595,7 @@ class class_base extends aw_template
 			$this->set_classinfo(array("name" => "hide_tabs","value" => 1));
 			$this->set_classinfo(array("name" => "no_yah","value" => 1));
 		};
-		
+
 
 		// parse the properties - resolve generated properties and
 		// do any callbacks
@@ -617,7 +617,7 @@ class class_base extends aw_template
 		$resprops = $this->parse_properties(array(
 			"properties" => &$properties,
 		));
-		
+
 		$awt->stop("parse-properties");
 		$awt->start("add-property");
 		// what exactly is going on with that subgroup stuff?
@@ -629,7 +629,7 @@ class class_base extends aw_template
 		if ($has_errors)
 		{
 			// give the output client a chance to display a message stating
-			// that there were errors in entered data. Individual error 
+			// that there were errors in entered data. Individual error
 			// messages will be next to their respective properties, this
 			// is just the caption
 			$cli->show_error();
@@ -680,7 +680,7 @@ class class_base extends aw_template
 			"return_url" => !empty($this->request["return_url"]) ? $this->request["return_url"] : "",
 			"subgroup" => $this->subgroup,
 		) + (isset($this->request["extraids"]) && is_array($this->request["extraids"]) ? array("extraids" => $this->request["extraids"]) : array());
-		
+
 		if(!empty($this->reltype))
 		{
 			$argblock["reltype"] = $this->reltype;
@@ -739,7 +739,7 @@ class class_base extends aw_template
 		if (!empty($gdata["submit_action"]))
 		{
 			$submit_action = $gdata["submit_action"];
-		}	
+		}
 
 		if ($method == "GET")
 		{
@@ -766,7 +766,7 @@ class class_base extends aw_template
 				$_tmp = $this->gen_output(array());
 			};
 		};
-		
+
 		// it would be nice to get the errors and other stuff from the object also,
 		// so we unset cb_values here -- ahz
 		if(isset($this->cb_values))
@@ -783,7 +783,7 @@ class class_base extends aw_template
 		{
 			$orb_action = $args["action"];
 		};
-		
+
 		if (isset($this->view) && $this->view == 1)
 		{
 			$orb_action = "view";
@@ -802,14 +802,14 @@ class class_base extends aw_template
 		return $rv;
 	}
 
-	/** Saves the data that comes from the form generated by change 
-		
-		@attrib name=submit params=name 
-		
-		
+	/** Saves the data that comes from the form generated by change
+
+		@attrib name=submit params=name
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -828,7 +828,7 @@ class class_base extends aw_template
 		//$this->quote($args);
 		extract($args);
 
-	
+
 		$request = $args;
 
 		// I need to know the id of the configuration form, so that I
@@ -845,7 +845,7 @@ class class_base extends aw_template
 				$this->is_rel = true;
 			};
 		};
-		
+
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
 
@@ -886,7 +886,7 @@ class class_base extends aw_template
 		{
 			$orb_class = $class;
 		};
-	
+
 		if ($save_ok)
 		{
 			// logging should be defined by the form info
@@ -967,7 +967,7 @@ class class_base extends aw_template
 			$syslog_type = @constant($this->classinfo['syslog_type']);
 		}
 
-		// XXX: if I want to save data that does not belong to 
+		// XXX: if I want to save data that does not belong to
 		// objects table, then I don't want to log it like this --duke
 		//$this->_log($syslog_type, isset($this->new) ? SA_ADD : SA_CHANGE, $name, $this->id);
 	}
@@ -992,9 +992,9 @@ class class_base extends aw_template
 			if ($this->can("view", $cgid))
 			{
 				return $cgid;
-			};	
+			};
 		};
-		
+
 		// 2. failing that, if there is a config form specified in the object metainfo,
 		//  we will use it
 		if (($action == "change") && $args["obj_inst"]->meta("cfgform_id") != "")
@@ -1005,7 +1005,7 @@ class class_base extends aw_template
 				return $cgid;
 			};
 		};
-		
+
 		// 3. failing that too, we will check whether this class has a default cfgform
 		// and if so, use it
 		if ($this->clid == CL_DOCUMENT)
@@ -1016,7 +1016,7 @@ class class_base extends aw_template
 			{
 				return $cgid;
 			}
-		
+
 			/*
 			$cfgu = get_instance("cfg/cfgutils");
 			$def = $this->get_file(array("file" => (aw_ini_get("basedir") . "/xml/documents/def_cfgform.xml")));
@@ -1038,7 +1038,7 @@ class class_base extends aw_template
 			return false;
 		};
 
-		
+
 		$ol = new object_list(array(
 			"class_id" => CL_CFGFORM,
 			"subclass" => $this->clid,
@@ -1058,7 +1058,7 @@ class class_base extends aw_template
 		// okey, I need a helper class. Something that I can create, something can load
 		// properties into and then query them. cfgform is taken, what name will I use?
 
-		
+
 
 		// right now .. only document class has the default config form .. or the default
 		// file. Ungh.
@@ -1067,9 +1067,9 @@ class class_base extends aw_template
 		// and if so, use it
 
 		// 5. if all above fails, simply load the default properties. that means do nothing
-		return false; 
+		return false;
 	}
-	
+
 	////
 	// !This checks whether we have all required data and sets up the correct
 	// environment if so.
@@ -1078,7 +1078,7 @@ class class_base extends aw_template
 		$_ct = $GLOBALS["cfg"]["__default"]["classes"];
 		// only classes which have defined properties
 		// can use class_base
-		
+
 		// create an instance of the class servicing the object ($this->inst)
 		// set $this->clid and $this->clfile
 		$cfgu = get_instance("cfg/cfgutils");
@@ -1156,7 +1156,7 @@ class class_base extends aw_template
 
 		$this->clid = $clid;
 		$this->_ct = $_ct;
-		
+
 		// get an instance of the class that handles this object type
 		// fuck me plenty! .. orb.aw sets $this->orb_class
 		if (is_object($this->orb_class))
@@ -1169,7 +1169,7 @@ class class_base extends aw_template
 		{
 			$this->inst = get_instance($this->clfile);
 		};
-		
+
 	}
 
 	function gen_output($args = array())
@@ -1262,8 +1262,8 @@ class class_base extends aw_template
 		if (!isset($orb_action))
 		{
 			$orb_action = "change";
-		};	
-			
+		};
+
 		$link_args = new aw_array(array(
 			"id" => isset($this->id) ? $this->id : false,
 			"group" => "",
@@ -1314,7 +1314,7 @@ class class_base extends aw_template
 				{
 					$link = !empty($val["active"]) ? "#" : "";
 				};
-				
+
 				if (isset($this->tr) && is_object($this->tr))
 				{
 					$commtrans = $this->tr->get_by_id("group",$key,"caption");
@@ -1468,7 +1468,7 @@ class class_base extends aw_template
 
 	////
 	// !Returns a list of properties for generating an output
-	// or saving data. 
+	// or saving data.
 	// DEPRECATED!!
 	function get_active_properties($args = array())
 	{
@@ -1539,7 +1539,7 @@ class class_base extends aw_template
 
 		// now I know the group
 		$property_list = array();
-		
+
 		$retval = array();
 
 		foreach($this->all_props as $key => $val)
@@ -1678,7 +1678,7 @@ class class_base extends aw_template
 		{
 			$this->classinfo = array();
 		};
-		
+
 		$clif = new aw_array($cfgu->get_classinfo());
 		$this->classinfo = $this->classinfo + $clif->get();
 		$this->relinfo = $cfgu->get_relinfo();
@@ -1689,7 +1689,7 @@ class class_base extends aw_template
 		{
 			$this->classinfo = array_merge($this->classinfo,$this->classconfig);
 		};
-		
+
 
 		$group_el_cnt = $this->all_props = array();
 
@@ -1702,7 +1702,7 @@ class class_base extends aw_template
 		$this->grp_children = array();
 
 		// I need a hook somewhere to add those dynamic properties
-		
+
 		foreach($grplist as $key => $val)
 		{
 			// don't even try that
@@ -1710,13 +1710,13 @@ class class_base extends aw_template
 			{
 				$this->grp_children[$val["parent"]][] = $key;
 			};
-						
+
 			// first default group is used
 			if (isset($val["default"]) && empty($this->default_group))
 			{
 				$this->default_group = $key;
 			};
-		};				
+		};
 
 		//var_dump($this->cfgform_id);
 
@@ -1755,8 +1755,8 @@ class class_base extends aw_template
 				if (empty($val["caption"]))
 				{
 					$val["caption"] = $_all_props[$k]["caption"];
-				};	
-			
+				};
+
 				// reset the richtext attribute, if it was disabled in the config form
 				if (($_all_props[$k]["type"] == "textarea") && (empty($orig["richtext"])))
 				{
@@ -1772,7 +1772,7 @@ class class_base extends aw_template
 					unset($val["richtext"]);
 				};
 			}
-			
+
 			// if it is a translated object, then don't show properties that can't be translated
 			if ($this->is_translated && $val["trans"] != 1 && $val["name"] != "is_translated")
 			{
@@ -1891,17 +1891,17 @@ class class_base extends aw_template
 		{
 			$val["value"] = $val["vcl_inst"]->get_toolbar();
 		};
-	
+
 		if (($val["type"] == "relmanager") && is_object($val["vcl_inst"]))
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
-		
+
 		if (($val["type"] == "releditor") && is_object($val["vcl_inst"]))
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
 		};
-		
+
 		if (($val["type"] == "calendar") && is_object($val["vcl_inst"]))
 		{
 			$val["value"] = $val["vcl_inst"]->get_html();
@@ -2009,7 +2009,7 @@ class class_base extends aw_template
 		};
 
 		$nm = $property["name"];
-		
+
 		// if this is a new object and the property has a default value, use it
 		if (empty($this->id) && isset($property["default"]))
 		{
@@ -2036,8 +2036,8 @@ class class_base extends aw_template
 		if ( 	/*($property["trans"] == 0) &&*/
 			empty($property["emb"]) &&
 			is_object($this->obj_inst) &&
-			$property["store"] != "no" && 
-			empty($property["value"]) && 
+			$property["store"] != "no" &&
+			empty($property["value"]) &&
 			/*$this->obj_inst->is_property($property["name"]) && */
 			$this->obj_inst->prop($property["name"]) != NULL )
 		{
@@ -2105,7 +2105,7 @@ class class_base extends aw_template
 			$this->obj_inst = $args["obj_inst"];
 			$this->id = $this->obj_inst->id();
 		};
-				
+
 
 
 		// only relation object uses this. But hey, if the relation object
@@ -2139,10 +2139,10 @@ class class_base extends aw_template
 		$this->cfgu = get_instance("cfg/cfgutils");
 
 		$remap_children = false;
-		
+
 		// how do I stop parsing of properties that _are_ already parsed?
 
-		// 
+		//
 
 		$resprops = array();
 
@@ -2181,7 +2181,7 @@ class class_base extends aw_template
 		$properties = $resprops;
 
 		$resprops = array();
-	
+
 		// First we resolve all callback properties, so that get_property calls will
 		// be valid for those as well
 		$has_rte = false;
@@ -2199,7 +2199,7 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+
 			if ( isset($val["newonly"]) && !empty($this->id))
 			{
 				// and this as well
@@ -2260,7 +2260,7 @@ class class_base extends aw_template
 				// to come through that classes get_property and whatever else
 				// calls
 
-				// so .. I need to load the class instance, invoke get_property 
+				// so .. I need to load the class instance, invoke get_property
 				// calls on it .. and then get the results and inject those
 				// into my output stream. Uh, that's going to be hard.
 
@@ -2329,7 +2329,7 @@ class class_base extends aw_template
 		{
 			$has_rte = false;
 		};
-		
+
 
 
 		$properties = $resprops;
@@ -2358,13 +2358,13 @@ class class_base extends aw_template
 			{
 				continue;
 			};
-			
+
 			if ($val["type"] == "textarea" && $has_rte == false)
 			{
 				unset($val["richtext"]);
 			};
 
-				
+
 			if (isset($val["emb"]) && $val["emb"] == 1)
 			{
 				// embedded properties have already passed through parse_properties
@@ -2441,7 +2441,7 @@ class class_base extends aw_template
 
 
 			$argblock["prop"] = &$val;
-			
+
 			if ($val["type"] == "relmanager" && empty($val["_parsed"]))
 			{
 				$argblock["prop"]["clid"] = $this->relinfo[$val["reltype"]]["clid"];
@@ -2452,7 +2452,7 @@ class class_base extends aw_template
 			{
 				//$val["options"] = $this->make_keys($val["options"]);
 			};
-			
+
 			if ( isset($val["editonly"]) && empty($this->id))
 			{
 				// this should be form depenent
@@ -2564,7 +2564,7 @@ class class_base extends aw_template
 					};
 					continue;
 				};
-				
+
 				if ($val["type"] == "releditor")
 				{
 					if (!is_object($val["vcl_inst"]))
@@ -2581,7 +2581,7 @@ class class_base extends aw_template
 					{
 						$argblock["cb_values"] = $this->cb_values[$val["name"]];
 					};
-					
+
 					// init_rel_editor returns an array of properties to be embbeded
 					$relres = $val["vcl_inst"]->init_rel_editor($argblock);
 
@@ -2628,7 +2628,7 @@ class class_base extends aw_template
 								"target" => "contentarea",
 								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
 							));
-							
+
 						}
 					};
 
@@ -2654,7 +2654,7 @@ class class_base extends aw_template
 						$tmp[] = $item;
 					};
 					$val["items"] = $tmp;
-				};	
+				};
 
 				$awt->start("convert_property_${pname}");
 				$this->convert_element(&$val);
@@ -2675,14 +2675,16 @@ class class_base extends aw_template
 		}
 
 
-		// if name_prefix given, prefixes all element names with the value 
+		// if name_prefix given, prefixes all element names with the value
 		// e.g. if name_prefix => "emb" and there is a property named comment,
-		// then the result will be name => emb[comment], this simplifies 
+		// then the result will be name => emb[comment], this simplifies
 		// processing of embedded config forms
 		if ($args["name_prefix"])
 		{
 			$tmp = $resprops;
 			$resprops = array();
+			$newname_index = array ();
+
 			foreach($tmp as $key => $el)
 			{
 				$bracket = strpos($el["name"],"[");
@@ -2701,9 +2703,24 @@ class class_base extends aw_template
 						$el["parent"] = $args["name_prefix"] . "_" . $el["parent"];
 					};
 				};
+				$newname_index[$el["name"]] = $newname;
 				$el["name"] = $newname;
-				// just to get an hopefully unique name .. 
+				// just to get an hopefully unique name ..
 				$resprops[$args["name_prefix"] . "_" . $key] = $el;
+			}
+
+			### add prefixes to property names whose values will be parameters for ... (e.g. autocomplete source method)
+			foreach ($tmp as $key => $el)
+			{
+				if (is_array ($el["autocomplete_params"]))
+				{
+					foreach ($el["autocomplete_params"] as $param_key => $param_name)
+					{
+						$el["autocomplete_params"][$param_key] = $newname_index[$param_name];
+					}
+				}
+
+				$resprops[$args["name_prefix"] . "_" . $key]["autocomplete_params"] = $el["autocomplete_params"];
 			}
 		}
 
@@ -2726,12 +2743,12 @@ class class_base extends aw_template
 		return $resprops;
 	}
 
-	
+
 	/*function process_properties($arr)
 	{
-		// if name_prefix given, prefixes all element names with the value 
+		// if name_prefix given, prefixes all element names with the value
 		// e.g. if name_prefix => "emb" and there is a property named comment,
-		// then the result will be name => emb[comment], this simplifies 
+		// then the result will be name => emb[comment], this simplifies
 		// processing of embedded config forms
 		if ($arr["name_prefix"])
 		{
@@ -2756,7 +2773,7 @@ class class_base extends aw_template
 					};
 				};
 				$el["name"] = $newname;
-				// just to get an hopefully unique name .. 
+				// just to get an hopefully unique name ..
 				$resprops[$args["name_prefix"] . "_" . $key] = $el;
 			}
 		}
@@ -2765,14 +2782,14 @@ class class_base extends aw_template
 
 	// wrappers for alias manager
 
-	/** Displays alias manager inside the configuration manager interface 
-		
-		@attrib name=list_aliases params=name all_args="1" 
-		
-		
+	/** Displays alias manager inside the configuration manager interface
+
+		@attrib name=list_aliases params=name all_args="1"
+
+
 		@returns
-		
-		
+
+
 		@comment
 		this means I have to generate a list of group somewhere
 
@@ -2782,7 +2799,7 @@ class class_base extends aw_template
 		extract($args);
 
 		$this->init_class_base();
-			
+
 		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 		$this->cli = &$cli;
 
@@ -2793,13 +2810,13 @@ class class_base extends aw_template
 		$this->id = $args["id"];
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-		
+
 		$cfgform_id = $args["args"]["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
 			$cfgform_id = $this->obj_inst->meta("cfgform_id");
 		};
-		
+
 		$this->use_group = "list_aliases";
 
 		$defaults = $this->get_property_group(array(
@@ -2851,14 +2868,14 @@ class class_base extends aw_template
 
 	////"log.txt"
 	// !Displays alias manager search form inside the configuration manager interface
-	/**  
-		
-		@attrib name=search_aliases params=name all_args="1" 
-		
-		
+	/**
+
+		@attrib name=search_aliases params=name all_args="1"
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2866,7 +2883,7 @@ class class_base extends aw_template
 	{
 		extract($args);
 		$this->init_class_base();
-		
+
 		$cli = get_instance("cfg/" . $this->output_client,$o_arr);
 		$this->cli = &$cli;
 
@@ -2876,7 +2893,7 @@ class class_base extends aw_template
 		$this->request = $args;
 
 		$almgr = get_instance("aliasmgr",array("use_class" => get_class($this->orb_class)));
-		
+
 		$cfgform_id = $args["args"]["cfgform"];
 		if (empty($cfgform_id) && is_object($this->obj_inst))
 		{
@@ -2890,7 +2907,7 @@ class class_base extends aw_template
 			"group" => $args["group"],
 			"cfgform_id" => $cfgform_id,
 		));
-		
+
 
 		$reltypes = $this->get_rel_types();
 
@@ -2923,16 +2940,16 @@ class class_base extends aw_template
 			"title" => $title,
 			"orb_action" => "change",
 		));
-	}	
+	}
 
-	/** Handles the "saving" of relation list 
-		
-		@attrib name=submit_list params=name all_args="1" 
-		
-		
+	/** Handles the "saving" of relation list
+
+		@attrib name=submit_list params=name all_args="1"
+
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -2952,14 +2969,14 @@ class class_base extends aw_template
 		return $retval;
 	}
 
-	/** Handles creating of new relations between the object and 
-		
-		@attrib name=addalias params=name all_args="1" 
-		
-		
+	/** Handles creating of new relations between the object and
+
+		@attrib name=addalias params=name all_args="1"
+
+
 		@returns
-		
-		
+
+
 		@comment
 		selected search results
 
@@ -2976,15 +2993,15 @@ class class_base extends aw_template
 		return $retval;
 	}
 
-	/** _serialize replacement for class_base based objects 
-		
-		@attrib name=ng_serialize params=name 
-		
+	/** _serialize replacement for class_base based objects
+
+		@attrib name=ng_serialize params=name
+
 		@param oid required type=int
-		
+
 		@returns
-		
-		
+
+
 		@comment
 
 	**/
@@ -3065,7 +3082,7 @@ class class_base extends aw_template
 			"rawdata" => $raw,
 			"is_paste" => true
 		));
-		
+
 		foreach(safe_array($raw["connections"]) as $con)
 		{
 			$this->obj_inst->connect(array(
@@ -3077,7 +3094,7 @@ class class_base extends aw_template
 		// object_translation depends on getting the id from here
 		return $this->id;
 	}
-	
+
 	//This function returns all submit controllers current configform has.
 	function get_all_controllers($config_id)
 	{
@@ -3098,7 +3115,7 @@ class class_base extends aw_template
 		$obj = &obj($config_id);
 		return $obj->meta("view_controllers");
 	}
-	
+
 	////
 	// !You give it a class id and a list of properties .. it performs a validation on all the data
 	// and returns something eatable
@@ -3130,7 +3147,7 @@ class class_base extends aw_template
 			$controller_inst = get_instance(CL_CFGCONTROLLER);
 			$controllers = $this->get_all_controllers($arr["cfgform_id"]);
 		};
-		
+
 		$res = array();
 
 		if (!is_array($arr["request"]))
@@ -3167,7 +3184,7 @@ class class_base extends aw_template
 					);
 				};
 			};
-			
+
 			$rvs = array();
 			if($controllers[$key])
 			{
@@ -3218,13 +3235,13 @@ class class_base extends aw_template
 		};
 		return $res;
 	}
-	 
+
 	////
 	// !Processes and saves form data
 	function process_data($args = array())
 	{
 		extract($args);
-		
+
 		$this->init_class_base();
 		if (method_exists($this->inst,"callback_on_load"))
 		{
@@ -3242,7 +3259,7 @@ class class_base extends aw_template
 		$new = false;
 		$this->id = isset($id) ? $id : "";
 
-		// basically, if this is a new object, then I need to load all the properties 
+		// basically, if this is a new object, then I need to load all the properties
 		// that have default values and add them to the bunch.
 
 		// only create the object, if one of the tables used by the object
@@ -3269,7 +3286,7 @@ class class_base extends aw_template
 
 			$new = true;
 			$this->id = $id;
-			
+
 		};
 
 		// new object should not have any translation connections, so skip it
@@ -3284,7 +3301,7 @@ class class_base extends aw_template
 		}
 
 		$args["new"] = $this->new = $new;
-		
+
 
 		// the question is .. should I call set_property for those too?
 		// and how do I load the stuff with defaults?
@@ -3394,7 +3411,7 @@ class class_base extends aw_template
 
 			$name = $property["name"];
 			$type = $property["type"];
-			
+
 			$xval = isset($rawdata[$name]) ? $rawdata[$name] : "";
 
 			/* the following is bogus, storage takes care of default values anyway
@@ -3439,11 +3456,11 @@ class class_base extends aw_template
 		}
 
 		$realprops = $tmp;
-		
+
 		// this seems not to be neccessary, because the real checking is done lightyears before -- ahz
 		/*
 		$controller_inst = get_instance(CL_CFGCONTROLLER);
-		
+
 		if($args["cfgform"])
 		{
 			$controllers = $this->get_all_controllers($args["cfgform"]);
@@ -3462,11 +3479,11 @@ class class_base extends aw_template
 				"obj_inst" => &$this->obj_inst,
 				"relinfo" => $this->relinfo,
 			);
-			
+
 			$status = PROP_OK;
 
 
-		
+
 			
 			// give the class a possiblity to execute some action
 			// while we are saving it.
@@ -3488,13 +3505,13 @@ class class_base extends aw_template
 				// other raises an error. Then we will have the original
 				// value in the session. Is that a problem?
 			};
-		
+
 			// what the duke is going on here? errors?
 			if (isset($errors[$name]["msg"]))
 			{
 				$status = PROP_FATAL_ERROR;
 				$argblock["prop"]["error"] = $errors[$name]["msg"];
-				
+
 			};
 
 			if ($status == PROP_OK && "int" == $property["datatype"])
@@ -3511,8 +3528,8 @@ class class_base extends aw_template
 					$property["error"] = $property["caption"] . " - siia saab sisestada ainult arvu!";
 				};
 			};
-			
-					
+
+
 			if (PROP_ERROR == $status)
 			{
 				$propvalues[$name]["error"] = $argblock["prop"]["error"];
@@ -3520,15 +3537,15 @@ class class_base extends aw_template
 				$this->cb_values = $propvalues;
 				$status = PROP_IGNORE;
 			}
-			
-			
+
+
 			if (PROP_FATAL_ERROR == $status)
 			{
 				// so what the fuck do I do now?
 				// I need to give back a sensible error message
 				// and allow the user to correct the values in the form
 				// I need to remember the values .. oh fuck, fuck, fuck, fuck
-				
+
 				// now register the variables in the session
 
 				// I don't even want to think about serializers right about now.
@@ -3545,7 +3562,7 @@ class class_base extends aw_template
 				aw_session_set("cb_values",$propvalues);
 
 				$this->stop_processing = true;
-				
+
 				//return false;
 			};
 
@@ -3561,9 +3578,9 @@ class class_base extends aw_template
 			// why? -- duke
 			if ($type == "text")
 			{
-				continue;	
+				continue;
 			};
-			
+
 			if ($property["type"] == "releditor")
 			{
 				/// XXX: right now I can only have one type of rel editor
@@ -3598,7 +3615,7 @@ class class_base extends aw_template
 					$argblock["prop"] = $property;
 					$argblock["clid"] = $this->clid;
 					$res = $ot->process_vcl_property($argblock);
-			
+
 					if (PROP_ERROR == $res)
 					{
 						$propvalues[$name]["error"] = $argblock["prop"]["error"];
@@ -3657,12 +3674,12 @@ class class_base extends aw_template
 				// pop, push, pop, push
 				if ( ($pvalues[$name] & $property["ch_value"]) && !($rawdata[$name] & $property["ch_value"]))
 				{
-					$pvalues[$name] -= $property["ch_value"]; 
-				}       
+					$pvalues[$name] -= $property["ch_value"];
+				}
 				elseif (!($pvalues[$name] & $property["ch_value"]) && ($rawdata[$name] & $property["ch_value"]))
 				{
 					$pvalues[$name] += $property["ch_value"];
-				};     
+				};
 			};
 
 			if ($this->is_rel)
@@ -3712,7 +3729,7 @@ class class_base extends aw_template
 		}
 
 		// translation. if the object is is_translated or needs_translation, it gets the has_translation flag
-		if ($this->obj_inst->flag(OBJ_NEEDS_TRANSLATION) || $this->obj_inst->flag(OBJ_IS_TRANSLATED) || 
+		if ($this->obj_inst->flag(OBJ_NEEDS_TRANSLATION) || $this->obj_inst->flag(OBJ_IS_TRANSLATED) ||
 			$this->obj_inst->prop("needs_translation") || $this->obj_inst->prop("is_translated"))
 		{
 			$this->obj_inst->set_flag(OBJ_HAS_TRANSLATION, true);
@@ -3720,7 +3737,7 @@ class class_base extends aw_template
 
 		// gee, I wonder how many pre_save handlers do I have to fix to get this thing working
 		// properly
-		
+
 		if (method_exists($this->inst,"callback_pre_save"))
 		{
 			$this->inst->callback_pre_save(array(
@@ -3743,7 +3760,7 @@ class class_base extends aw_template
 			$this->obj_inst->set_meta("cb_nobreaks",$args["cb_nobreaks"]);
 		}
 
-		// there is a bug somewhere which causes certain objects to get a 
+		// there is a bug somewhere which causes certain objects to get a
 		// status of 0, until I figure it out, the first part of this if clause
 		// deals with it -- duke
 		if ($this->obj_inst->prop("status") == 0 || $this->classinfo["no_status"]["text"] == 1)
@@ -3811,7 +3828,7 @@ class class_base extends aw_template
 
 				dbg::p5("target_prop = " . $target_prop);
 
-				// now check, whether that property has a value. If not, 
+				// now check, whether that property has a value. If not,
 				// set it to point to the newly created connection
 				if (!empty($symname) && !empty($target_prop))
 				{
@@ -3846,12 +3863,12 @@ class class_base extends aw_template
 				"new" => $new,
 			));
 		}
-		
+
 		return true;
 	}
 
 	//////////////////////////////////////////////////////////////////////
-	// 
+	//
 	// init functions for classes that do not use automatic form generator
 	//
 	//////////////////////////////////////////////////////////////////////
@@ -3865,7 +3882,7 @@ class class_base extends aw_template
 	function _add_init($args, $classname, $tpl)
 	{
 		// check if we can add objects under the parent menu
-		if (!$this->can("add", $args["parent"]))	
+		if (!$this->can("add", $args["parent"]))
 		{
 			$this->acl_error("add", $args["parent"]);
 		}
@@ -3928,19 +3945,19 @@ class class_base extends aw_template
 		return $reltypes;
 	}
 
-	/**  
-		
+	/**
+
 		@attrib name=view params=name all_args="1"
-		
+
 		@param id required type=int acl="view"
 		@param group optional
 		@param period optional
-		
+
 		@returns
-		
-		
+
+
 		@comment
-	
+
 	**/
 	function view($arr = array())
 	{
@@ -3974,7 +3991,7 @@ class class_base extends aw_template
 		if(!is_oid($this->inst->cfgmanager))
 		{
 			enter_function("class_base::load_def_cfgmanager");
-			
+
 			if($oid = $this->db_fetch_field("SELECT oid FROM objects WHERE class_id='".CL_CFGMANAGER."' AND objects.status > 0 AND objects.subclass = 1 LIMIT 1", "oid"))
 			{
 				$this->inst->cfgmanager = $oid;
@@ -3991,7 +4008,7 @@ class class_base extends aw_template
 			exit_function("class_base::load_def_cfgmanager");
 		}
 		*/
-	
+
 		// load defaults (from the generated properties XML file) first
 
 		$filter = array();
@@ -4079,7 +4096,7 @@ class class_base extends aw_template
 			};
 
 			// if there is a bug in config form which caused the groupdata
-			// to be empty, then this is the place where we should fix it.	
+			// to be empty, then this is the place where we should fix it.
 		}
 		else
 		{
@@ -4148,7 +4165,7 @@ class class_base extends aw_template
 					$cfg_props = $this->load_from_storage(array(
 						"id" => $found_form,
 					));
-			
+
 					global $CFG_DEBUG;
 					if ($CFG_DEBUG)
 					{
@@ -4204,7 +4221,7 @@ class class_base extends aw_template
 			{
 				$default_group = $gkey;
 			};
-			
+
 			$this->grpmap[$parent][$gkey] = $ginfo;
 		};
 
@@ -4267,8 +4284,8 @@ class class_base extends aw_template
 
 
 		$grpinfo = $this->groupinfo[$use_group];
-		// and climb back down again, e.g. make sure we always have _all_ active groups 
-		// (active meaning in the path) 
+		// and climb back down again, e.g. make sure we always have _all_ active groups
+		// (active meaning in the path)
 		while(isset($grpinfo["parent"]) && isset($this->groupinfo[$grpinfo["parent"]]))
 		{
 			if (!in_array($grpinfo["parent"],$this->active_groups))
@@ -4429,7 +4446,7 @@ class class_base extends aw_template
 		return $rv;
 
 	}
-	
+
 	////
 	// !Returns a list of properties having the requested name
 	function get_properties_by_name($arr)
@@ -4460,7 +4477,7 @@ class class_base extends aw_template
 	// relmanager and releditor need it
 
 	////
-	// !id - config form id	
+	// !id - config form id
 	function load_from_storage($arr)
 	{
 		extract($arr);
@@ -4537,7 +4554,7 @@ class class_base extends aw_template
 			};
 
 			$this->groupinfo = $tmp;
-			// if the class has a default config file, then load 
+			// if the class has a default config file, then load
 			// that as well
 		};
 		return $rv;
@@ -4609,7 +4626,7 @@ class class_base extends aw_template
 		{
 			unset($defaults["comment"]);
 		};
-			
+
 		$this->layoutinfo = $cfgu->get_layoutinfo();
 
 		$this->relinfo = $cfgu->get_relinfo();
@@ -4656,7 +4673,7 @@ class class_base extends aw_template
 			$visible_groups[] = $gkey;
 		};
 
-		
+
 		foreach($this->active_groups as $act_group)
 		{
 			if (isset($this->grpmap[$act_group]))
@@ -4671,7 +4688,7 @@ class class_base extends aw_template
 		$rv = array();
 		foreach($visible_groups as $vgr)
 		{
-			// remove groups with no properties. CL_RELATION is one of the big 
+			// remove groups with no properties. CL_RELATION is one of the big
 			// users of this
 			if (!isset($this->prop_by_group[$vgr]))
 			{
@@ -4695,7 +4712,7 @@ class class_base extends aw_template
 				$gval["level"] = $par_count;
 
 			}
-			
+
 			if (in_array($vgr,$this->active_groups))
 			{
 				$gval["active"] = 1;
