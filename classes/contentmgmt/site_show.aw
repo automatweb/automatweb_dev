@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.142 2005/09/20 09:06:05 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_show.aw,v 1.143 2005/09/29 09:49:50 dragut Exp $
 
 /*
 
@@ -1355,30 +1355,35 @@ class site_show extends class_base
 			));
 			return "";
 		}		
-
 //		foreach($lar as $row)
-		foreach($all_languages->arr() as $language)
+		foreach($all_languages->ids() as $language_id)
 		{
+			// so this is a workaround, because languageas.meta ja objects.meta fields 
+			// were in conflict
+			$language = new object($language_id);
+
 			$sel_img_url = "";
 			$img_url = "";
-
-
 			$language_meta = aw_unserialize($language->prop("meta"));
 			$language_lang_id = $language->prop("lang_id");
-
+			$language_image_id = $language->prop("lang_img");
+			$language_image_active_id = $language->prop("lang_img_act");
 			// if the language has an image
 //			if ($row["meta"]["lang_img"])
-			if ($language_meta['lang_img'])
+//			if ($language_meta['lang_img'])
+			if (!empty($language_image_id))
 			{
 //				if ($lang_id == $row["id"] && $row["meta"]["lang_img_act"])
-				if ($lang_id == $language_lang_id && $language_meta['lang_img_act'])
+				if ($lang_id == $language_lang_id && !empty($language_image_active_id))
 				{
 //					$sel_img_url = $this->image->get_url_by_id($row["meta"]["lang_img_act"]);
-					$sel_img_url = $this->image->get_url_by_id($language_meta['lang_img_act']);
+//					$sel_img_url = $this->image->get_url_by_id($language_meta['lang_img_act']);
+					$sel_img_url = $this->image->get_url_by_id($language_image_active_id);
+
 				}
 
 //				$img_url = $this->image->get_url_by_id($row["meta"]["lang_img"]);
-				$img_url = $this->image->get_url_by_id($language_meta['lang_img']);
+				$img_url = $this->image->get_url_by_id($language_image_id);
 			}
 
 //			$url = $this->cfg["baseurl"] . "/?set_lang_id=$row[id]";
