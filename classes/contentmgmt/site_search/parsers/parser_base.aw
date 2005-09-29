@@ -68,6 +68,10 @@ class ss_parser_base
 
 		$this->content = $http->get($this->url);
 		$this->headers = $http->get_headers();
+		if (strpos($this->headers, "404 Not Found") !== false)
+		{
+			$this->content = "";
+		}
 
 		list($usec, $sec) = explode(" ", microtime());
 		$tm_e = ((float)$usec + (float)$sec);
@@ -77,6 +81,8 @@ class ss_parser_base
 
 		//echo "content for ".$this->url." = ".$this->content." <br>";
 		unset($http);
+
+		$this->content = html_entity_decode(str_replace("&#160;", " ", $this->content));
 	}
 
 	function _put($fn, $c)

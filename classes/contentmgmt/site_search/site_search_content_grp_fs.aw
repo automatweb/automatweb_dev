@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.5 2005/09/09 10:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_fs.aw,v 1.6 2005/09/29 06:31:04 kristo Exp $
 // site_search_content_grp_fs.aw - Otsingu failis&uuml;steemi indekseerija 
 /*
 
@@ -113,67 +113,99 @@ class site_search_content_grp_fs extends run_in_background
 		$this->path = $path;
 		$this->queue = get_instance("core/queue");
 		$this->queue->push($path);
+		echo "after init, queue = ".dbg::dump($this->queue);
 	}
 
 	function bg_run_continue($o)
 	{
 		// restore queue
+		if (count(safe_array($o->meta("stored_queue"))) < 2)
+		{
+			// if restored queue count is too small, start over.
+			echo "restored queue too small, restarting <br>";
+			return;
+		}
 		$this->queue->set_all($o->meta("stored_queue"));
 		$this->pages = $this->make_keys($o->meta("stored_visited_pages"));
+		
 		echo "restored queue, items = ".$this->queue->count()." pages = ".count($this->pages)."<br>";
 	}
 
 	function bg_run_step($o)
 	{
 		$path = $this->queue->get();
+		echo  "read from queue path $path <br>\n";
+		flush();
 		if ($path == "")
 		{
+		echo "ret for path = empty <br>\n";
+		flush();
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
 
 		if (isset($this->pages[$path]))
 		{
+		echo "ret for page done <br>\n";
+		flush();
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
-
 		$i = parser_finder::instance($path);
 		if ($i === NULL)
 		{
+		echo "ret cause no parser for path <br>\n";
+		flush();
 			return $this->queue->has_more() ? BG_OK : BG_DONE;
 		}
-
+echo "loaded parser <br>\n";
+flush();
 		$this->pages[$path]["o"] =& $i;
 		$page =& $this->pages[$path]["o"];
-
 		if (get_class($i) != "ss_parser_dir")
 		{
-			if (!$this->_store_content($page, $o->id()))
+			if (!$this->_store_content($page, $o->id()) && get_class($i) != "ss_parser_file_list")
 			{
+			echo "ret for false from store <br>\n";
+			flush();
 				unset($this->pages[$path]);
 				return;
 			}
 		}
-
+		$p_cnt = 0;
 		$paths = $page->get_links();
+		echo "got links <br>\n";
+		flush();
 		foreach($paths as $path)
 		{
 			if (!isset($this->pages[$path]) && !$this->queue->contains($path))
 			{
 				$this->queue->push($path);
+			$p_cnt++;
+			if (($p_cnt % 1000) == 1)
+			{
+			echo "p_cnt = $p_cnt <br>\n";
+			flush();
 			}
+			}
+			
 		}
+		echo "pushed $p_cnt links to queue <Br>\n";
+		flush();
 		if ($o->prop("indexer_sleep") > 0)
 		{
 			sleep($o->prop("indexer_sleep"));
 		}
-
+echo "end step <br>\n";
+flush();
 		return $this->queue->has_more() ? BG_OK : BG_DONE;
 	}
 
 	function bg_checkpoint($o)
 	{
+	echo "checkpointing queue, ".dbg::dump(count($this->queue->get_all()));
 		$o->set_meta("stored_queue", $this->queue->get_all());
 		$o->set_meta("stored_visited_pages", array_keys($this->pages));
+		echo "checkpoint done <br>\n";
+		flush();
 	}
 
 	function bg_run_finish($o)

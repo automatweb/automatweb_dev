@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.56 2005/09/09 10:15:08 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content.aw,v 1.57 2005/09/29 06:31:04 kristo Exp $
 // site_search_content.aw - Saidi sisu otsing 
 /*
 
@@ -46,14 +46,13 @@
 @default group=searchgroups
 
 	@property default_order type=select  
-	@caption Vaikimisi sorteeritakse tulemused
+	@caption Vaikimisi sorteeritakse
+
+	@property default_search_opt type=select
+	@caption Vaikimisi otsingu t&uuml;&uuml;p
 
 	@property grpcfg type=table 
 	@caption Otsingugruppide konfigureerimine
-
-	@property default_search_opt type=select 
-	@caption Vaikimisi otsingu t&uuml;&uuml;p
-
 
 @default group=static
 
@@ -75,26 +74,23 @@
 	@property str type=textbox 
 	@caption Pealkiri/Sisu
 
-	@property s_title type=textbox 
-	@caption Pealkiri
+	property s_title type=textbox 
+	caption Pealkiri
 
-	@property date_from type=date_select
-	@caption Alates
+	property date_from type=date_select
+	caption Alates
 
-	@property date_to type=date_select
-	@caption Kuni
-
-	@property s_title type=textbox
-	@caption Pealkiri
+	property date_to type=date_select
+	caption Kuni
 
 	@property s_opt type=select
-	@caption Kuidas otsida
+	@caption Leia 
 
-	@property s_seatch_word_part type=checkbox ch_value=1
-	@caption Otsi s&otilde;naosa
+	property s_seatch_word_part type=checkbox ch_value=1
+	caption Otsi s&otilde;naosa
 
-	@property s_group type=select
-	@caption Asukoht
+	property s_group type=select
+	caption Asukoht
 
 	@property s_limit type=select
 	@caption Mitu tulemust maksimaalselt
@@ -142,10 +138,12 @@ define("S_ORD_TIME", 1);
 define("S_ORD_TITLE", 2);
 define("S_ORD_CONTENT", 3);
 define("S_ORD_TIME_ASC", 4);
+define("S_ORD_MATCH", 5);
 
 define("S_OPT_ANY_WORD", 1);
 define("S_OPT_ALL_WORDS", 2);
 define("S_OPT_PHRASE", 3);
+define("S_OPT_WORD_PART", 4);
 
 class site_search_content extends class_base
 {
@@ -158,9 +156,10 @@ class site_search_content extends class_base
 		$this->site_id = aw_ini_get("site_id");
 
 		$this->search_opts = array(
-			S_OPT_ANY_WORD => t("&uuml;ksk&otilde;ik milline s&otilde;nadest"),
-			S_OPT_ALL_WORDS => t("koos k&otilde;igi s&otilde;nadega"),
-			S_OPT_PHRASE => t("t&auml;pne fraas")
+			S_OPT_ANY_WORD => t("&uuml;ksk&otilde;ik milline s&otilde;nadest (v&otilde;i)"),
+			S_OPT_ALL_WORDS => t("koos k&otilde;igi s&otilde;nadega (ja)"),
+			S_OPT_PHRASE => t("t&auml;pne fraas"),
+			S_OPT_WORD_PART => t("s&otilde;naosa")
 		);
 
 		$this->limit_opts = array(
@@ -181,7 +180,9 @@ class site_search_content extends class_base
 				$prop["options"] = array(
 					S_ORD_TIME => t("Muutmise kuup&auml;eva j&auml;rgi"),
 					S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
-					S_ORD_CONTENT => t("Sisu j&auml;rgi")
+					S_ORD_CONTENT => t("Sisu j&auml;rgi"),
+					S_ORD_MATCH => t("T&auml;psuse j&auml;rgi"),
+					
 				);
 				break;
 				
@@ -209,12 +210,7 @@ class site_search_content extends class_base
 				break;
 
 			case "default_search_opt":
-				$prop["options"] = array(
-					0 => "--",
-					S_OPT_ANY_WORD => t("&Uuml;ksk&otilde;ik milline s&otilde;na"),
-					S_OPT_ALL_WORDS => t("K&otilde;ik s&otilde;nad"),
-					S_OPT_PHRASE => t("Fraas")
-				);
+				$prop["options"] = array("" => "") + $this->search_opts;
 				break;
 
 			case "activity":
@@ -248,7 +244,14 @@ class site_search_content extends class_base
 
 			case "s_opt":
 				$prop["options"] = $this->search_opts;
-				$prop["value"] = $arr["request"]["s_opt"];
+				if (!$arr["request"]["s_opt"])
+				{
+					$prop["value"] = $arr["obj_inst"]->prop("default_search_opt");
+				}
+				else
+				{
+					$prop["value"] = $arr["request"]["s_opt"];
+				}
 				break;
 
 			case "s_limit":
@@ -263,7 +266,7 @@ class site_search_content extends class_base
 
 			case "s_group":
 				$ol = new object_list($arr["obj_inst"]->connections_from(array("type" => "RELTYPE_SEARCH_GRP")));
-				$prop["options"] = array("" => "Igalt poolt") + $ol->names();
+				$prop["options"] = array("" => t("K&otilde;ikjalt")) + $ol->names();
 
 			case "str":
 			case "s_title":
@@ -277,15 +280,16 @@ class site_search_content extends class_base
 					return PROP_IGNORE;
 				}
 				if ($arr["obj_inst"]->prop("min_s_len") && 
-					strlen($arr["request"]["str"]) < $arr["obj_inst"]->prop("min_s_len"))
+					strlen($arr["request"]["str"]) < $arr["obj_inst"]->prop("min_s_len") &&
+					$arr["request"]["str"] != "")
 				{
-					$prop["error"] = t("Otsingus&otilde;na peab olema pikem kui ".$arr["obj_inst"]->prop("min_s_len")." t&auml;hte!");
+					$prop["error"] = sprintf(t("Otsingus&otilde;na pikkus peab olema v&auml;hemalt %s t&auml;hem&auml;rki!"), $arr["obj_inst"]->prop("min_s_len"));
 					return PROP_FATAL_ERROR;
 				}
 				if ($arr["obj_inst"]->prop("max_s_len") && 
 					strlen($arr["request"]["str"]) > $arr["obj_inst"]->prop("max_s_len"))
 				{
-					$prop["error"] = t("Otsingus&otilde;na peab olema l&uuml;hem kui ".$arr["obj_inst"]->prop("max_s_len")." t&auml;hte!");
+					$prop["error"] = sprintf(t("Otsingus&otilde;na peab olema l&uuml;hem kui %s t&auml;hem&auml;rki!"), $arr["obj_inst"]->prop("max_s_len"));
 					return PROP_FATAL_ERROR;
 				}
 				$this->_search_results($arr);
@@ -308,6 +312,11 @@ class site_search_content extends class_base
 		$o = $arr["obj_inst"];
 		$t = &$arr["prop"]["vcl_inst"];
 		$t->define_field(array(
+			"name" => "ord",
+			"caption" => t("J&auml;rjekord"),
+			"align" => "center"
+		));
+		$t->define_field(array(
 			"name" => "act",
 			"caption" => t("Vaikimisi"),
 			"align" => "center",
@@ -320,7 +329,7 @@ class site_search_content extends class_base
 
 		$t->define_field(array(
 			"name" => "sorder",
-			"caption" => t("Vaikimisi järjestus"),
+			"caption" => t("Vaikimisi sorteeritakse"),
 		));
 		
 		$t->define_field(array(
@@ -329,7 +338,7 @@ class site_search_content extends class_base
 		));
 
 		$conns = $o->connections_from(array(
-			"reltype" => "RELTYPE_SEARCH_GRP",
+			"type" => "RELTYPE_SEARCH_GRP",
 		));
 
 		$meta = $o->meta();
@@ -345,6 +354,7 @@ class site_search_content extends class_base
 			S_ORD_TIME_ASC => t("Kuupäeva järgi (vanem enne)"),
 			S_ORD_TITLE => t("Pealkirja j&auml;rgi"),
 			S_ORD_CONTENT => t("Sisu j&auml;rgi"),
+			S_ORD_MATCH => t("T&auml;psuse j&auml;rgi")
 		);
 
 		foreach($conns as $conn)
@@ -367,8 +377,9 @@ class site_search_content extends class_base
 				));
 			};
 
+			$c_o = obj($cid);
 			$t->define_data(array(
-				"name" => $conn->prop("to.name"),
+				"name" => html::get_change_url($cid, array("return_url" => get_ru()), $conn->prop("to.name")),
 				"act" => $act,
 				"sorder" => html::select(array(
 					"name" => "${propname}[sorder][${cid}]",
@@ -380,6 +391,11 @@ class site_search_content extends class_base
 					"size" => 20,
 					"value" => $meta["grpcfg"]["caption"][$cid],
 				)),
+				"ord" => html::textbox(array(
+					"size" => 5,
+					"name" => "${propname}[ord][${cid}]",
+					"value" => $c_o->ord()
+				))
 			));
 		};
 
@@ -395,6 +411,18 @@ class site_search_content extends class_base
 			case "grpcfg":
 				$o->set_meta("grpcfg",$prop["value"]);
 				$o->set_meta("default_grp",$arr["request"]["defaultgrp"]);
+				foreach(safe_array($arr["request"]["grpcfg"]["ord"]) as $grp_id => $ord)
+				{
+					if (is_oid($grp_id) && $this->can("view", $grp_id))
+					{
+						$o = obj($grp_id);
+						if ($o->ord() != $ord)
+						{
+							$o->set_ord($ord);
+							$o->save();
+						}
+					}
+				}
 				break;
 
 			case "static_gen_repeater":
@@ -1721,6 +1749,12 @@ class site_search_content extends class_base
 					}
 					$content_s = " MATCH($fld) AGAINST('\"$str\"'  IN BOOLEAN MODE) ";
 					break;
+
+				case S_OPT_WORD_PART:
+					$str2 = str_replace(" ", "* ", trim($str));
+					$str2.= "*";
+					$content_s = " MATCH($fld) AGAINST ('$str2' IN BOOLEAN MODE) ";
+					break;
 			}
 		}
 		else
@@ -1842,7 +1876,6 @@ class site_search_content extends class_base
 
 		// get search results
 		$settings = $this->set_defaults($arr["request"]);
-		
 		$res = $this->get_multi_search_results($settings);
 
 		$max_match = 0;
@@ -1867,7 +1900,7 @@ class site_search_content extends class_base
 			$t->define_data(array(
 				"loc" => $so->prop("short_name"),
 				"link" => html::img(array(
-					"url" => icons::get_icon_url(CL_FILE, $nm),
+					"url" => icons::get_icon_url(CL_FILE, $entry["url"]),
 				)),
 				"match" => $num_reps, //((int)(($entry["match"] / $max_match) * 100))."%",
 				"title" => html::href(array(
@@ -1897,16 +1930,26 @@ class site_search_content extends class_base
 
 		// get search results
 		$settings = $this->set_defaults($arr["request"]);
-		
 		$res = $this->get_multi_search_results($settings);
-
+		if (count($res) == 0)
+		{
+			$arr["prop"]["value"] = $this->parse("NO_RESULTS");
+			return ;
+		}
 		$from = $_GET["page"] * 20;
 		$to = ($_GET["page"]+1) * 20;
 		
 		$sort_by = $_GET["sort_by"];
 		if (!$sort_by)
 		{
-			$sort_by = "num_reps";
+			$s_lut = array(
+				S_ORD_TIME => "modified",
+				S_ORD_TIME_ASC => "modified",
+				S_ORD_MATCH => "num_reps",
+				S_ORD_TITLE => "title",
+				S_ORD_CONTENT => "title"
+			);
+			$sort_by = $s_lut[$arr["obj_inst"]->prop("default_order")];
 		}
 
 		foreach($res as $idx => $entry)
@@ -1925,25 +1968,25 @@ class site_search_content extends class_base
 			if ($num >= $from && $num < $to)
 			{
 				// url, title, modified, content
-				$nm = $entry["title"];
+				$nm = $entry["url"];
 				$pi = pathinfo($nm);
 				if ($pi["extension"] == "" || strlen($pi["extension"]) > 4)
 				{
 					$nm .= ".html";
 				}
 				$so = obj($entry["site_id"]);
-				
+				$loc = "<a href='javascript:void(0)' alt='".$so->name()."' title='".$so->name()."'>".$so->prop("short_name")."</a>";
 				$this->vars(array(
-					"icon" => $so->prop("short_name"),
-					"loc" => $so->prop("short_name"),
+					"icon" => $loc,
+					"loc" => $loc,
 					"link" => html::img(array(
 						"url" => icons::get_icon_url(CL_FILE, $nm),
 					)),
 					"match" => $entry["num_reps"], //((int)(($entry["match"] / $max_match) * 100))."%",
 					"title" => html::href(array(
 						"url" => $entry["url"],
-						"caption" => parse_obj_name($entry["title"]),
-						"target" => "_blank"
+						"caption" => "<span class=\"sres\">".parse_obj_name($entry["title"])."</span>",
+						"target" => "_blank",
 					)),
 					"mod" => $entry["modified"],
 					"cont" => $this->_get_content_high($entry["content"], $settings["str"])
@@ -1954,8 +1997,8 @@ class site_search_content extends class_base
 
 		$sts = array(
 			"num_reps" => t("t&auml;psuse"),
-			"modified" => t("kuup&auml;eva"),
-			"title" => t("pealkirja alusel")
+			"modified" => t("kuup&auml;eva alusel"),
+//			"title" => t("pealkirja alusel")
 		);
 		$sstr = array();
 		foreach($sts as $var => $nm)
@@ -1997,7 +2040,14 @@ class site_search_content extends class_base
 		$v1 = $a[$this->__sort_by];
 		$v2 = $b[$this->__sort_by];
 		
-		return $v1 == $v2 ? 0 : ($v1 > $v2 ? -1 : 1);
+		if ($this->__sort_by == "title")
+		{
+			return $v1 == $v2 ? 0 : ($v1 > $v2 ? 1 : -1);
+		}
+		else
+		{
+			return $v1 == $v2 ? 0 : ($v1 > $v2 ? -1 : 1);
+		}
 	}
 	
 	function get_multi_search_results($arr)
@@ -2020,7 +2070,7 @@ class site_search_content extends class_base
 			}
 		}
 
-		$arr["opts"]["str"] = S_OPT_ANY_WORD;
+		//$arr["opts"]["str"] = S_OPT_ANY_WORD;
 		/*if (aw_global_get("uid") == "kix")
 		{
 			$GLOBALS["DUKE"] = 1;
@@ -2030,7 +2080,6 @@ class site_search_content extends class_base
 		{
 			$arr["s_limit"] = $o->prop("max_num_results");
 		}
-		
 		$arr["opts"]["str"] = $arr["s_opt"];
 		$arr["opts"]["limit"] = $arr["s_limit"];
 		$res = $this->fetch_static_search_results(array(
@@ -2072,7 +2121,7 @@ class site_search_content extends class_base
 					{
 						$str = substr($hl, $_pos, strlen($nw)); // get correct-case version
 						
-						$hl = substr($hl, 0, $_pos)."<b>".$str."</b>".substr($hl, $_pos + strlen($nw));
+						$hl = substr($hl, 0, $_pos)."<span class=\"match\">".$str."</span>".substr($hl, $_pos + strlen($nw));
 					}
 				}
 			}
@@ -2111,13 +2160,13 @@ class site_search_content extends class_base
 		// show
 		$c =  substr($c, $begin, ($end - $begin));
 		
-		$c = str_replace($str, "<b>".$str."</b>", $c);
+		$c = str_replace($str, "<span class=\"match\">".$str."</span>", $c);
 		
 		if (count($other))
 		{
 			foreach($other as $word)
 			{
-				$c = str_replace($word, "<b>".$word."</b>", $c);
+				$c = str_replace($word, "<nb>".$word."</span>", $c);
 			}
 		}
 		return $c; // 7 - strlen("<b></b>")

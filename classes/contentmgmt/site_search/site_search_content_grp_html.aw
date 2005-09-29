@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.4 2005/09/01 10:12:38 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp_html.aw,v 1.5 2005/09/29 06:31:04 kristo Exp $
 // site_search_content_grp_html.aw - Otsingu html indekseerija 
 /*
 
@@ -16,6 +16,9 @@
 
 	@property short_name type=textbox 
 	@caption L&uuml;hend
+
+	@property meta_ctr type=relpicker reltype=RELTYPE_META_CTR field=meta method=serialize
+	@caption Metaandmete kontroller
 
 	@property i_status type=text store=no
 	@caption Staatus
@@ -56,6 +59,9 @@
 
 @reltype RECURRENCE value=1 clid=CL_RECURRENCE
 @caption kordus
+
+@reltype META_CTR value=2 clid=CL_FORM_CONTROLLER
+@caption metaandmete kontroller
 
 */
 
@@ -111,7 +117,7 @@ class site_search_content_grp_html extends run_in_background
 
 		$this->pages = array();
 		$this->baseurl = $o->prop("url");
-
+echo "baseurl = ".$this->baseurl." <br>";
 		$this->queue = get_instance("core/queue");
 		$this->queue->push($this->baseurl);
 
@@ -245,36 +251,63 @@ class site_search_content_grp_html extends run_in_background
 		$this->quote(&$fc);
 		$this->quote(&$title);
 
+		$fields = array(
+			"content" => $fc,
+			"modified" => $modified,
+			"title" => $title,
+			"last_modified" => time(),
+			"url" => $url,
+			"file_name" => $fn,
+			"id" => $h_id,
+			"created_by" => 'ss_fs',
+			"site_id" => $indexer_id
+		);
+		
+		if (is_oid($o->prop("meta_ctr")) && $this->can("view", $o->prop("meta_ctr")))
+		{
+			$m_ctr = obj($o->prop("meta_ctr"));
+			$ctr_i = $m_ctr->instance();
+			$res = $ctr_i->eval_controller_ref($m_ctr->id(), $h_id, $page, $page);
+			if ($res == false)
+			{
+				return false;
+			}
+			else
+			if (is_array($res))
+			{
+				foreach($res as $k => $v)
+				{
+					$fields[$k] = $v;
+				}
+			}
+		}
+
 		$this->size += strlen($fc);
 
 		// see if we already got this hash-indexer-site_id copy and if we do, update it
-		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content WHERE id = '$h_id' AND created_by = 'ss_html' AND site_id = '$indexer_id'", "cnt");
+		$cnt = $this->db_fetch_field("SELECT count(*) AS cnt FROM static_content WHERE id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'", "cnt");
 		if ($cnt > 0)
 		{
+			$sets = join(",", map2("%s = '%s'", $fields));
 			$q = "
 				UPDATE static_content SET 
-					content = '$fc', modified = '$modified',
-					title = '$title', last_modified = '".time()."'
+					$sets
 				WHERE
-					id = '$h_id' AND created_by = 'ss_html' AND site_id = '$indexer_id'
+					id = '$h_id' AND created_by = 'ss_fs' AND site_id = '$indexer_id'
 			";
 		}
 		else
 		{
+			$flds = join(",", array_keys($fields));
+			$vals = join(",", map("'%s'", array_values($fields)));
 			$q = "
-				INSERT INTO static_content(
-					id, 					content, 					modified, 					 
-					title,						url,						created_by,
-					site_id, last_modified
-				) 
-				VALUES(
-					'$h_id',				'$fc',						'$modified',				
-					'$title',					'$url',						'ss_html',
-					'$indexer_id', ".time()."
-				)
+				INSERT INTO static_content($flds) 
+				VALUES($vals)
 			";
 		}
 		$this->db_query($q);
+		
+		return true;
 	}
 }
 ?>

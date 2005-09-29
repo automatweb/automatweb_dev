@@ -10,10 +10,16 @@ class ss_parser_file_list extends ss_parser_base
 	function get_links()
 	{
 		$ret = array();
-
 		$fs = file($this->url);
-		foreach($fs as $line)
+		echo "read file ".$this->url." lines = ".count($fs)." <br>\n";
+		flush();
+		foreach($fs as $idx => $line)
 		{
+			if (($idx % 100) == 1)
+			{
+				echo "idx = $idx <br>\n";
+				flush();
+			}
 			$line = trim($line);
 			if ($line == "")
 			{
@@ -31,6 +37,8 @@ class ss_parser_file_list extends ss_parser_base
 			}
 			$ret[] = $line;
 		}
+		echo "parsed lines <br>\n";
+		flush();
 		return $ret;
 	}
 

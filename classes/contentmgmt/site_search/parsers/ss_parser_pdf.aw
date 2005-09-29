@@ -17,6 +17,8 @@ class ss_parser_pdf extends ss_parser_base
 
 	function get_text_content()
 	{
+echo "enter get_text_content fpr pdf <br>\n";
+flush();
 		$this->_init_content();
 
 		// write to temp file
@@ -24,10 +26,13 @@ class ss_parser_pdf extends ss_parser_base
 		$o_fn = tempnam(aw_ini_get("server.tmpdir"), "ss-pdf2txt-o");
 
 		$this->_put($fn,$this->content);
-
+echo "put file <br>\n";
+flush();
 		$cmd = aw_ini_get("server.pdftotext")." $fn $o_fn";
-		
+
 		$txt = `$cmd`;
+echo "cmd = $cmd , res = $txt <br>\n";
+flush();
 
 		$fc = $this->_get($o_fn);
 
