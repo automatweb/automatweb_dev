@@ -1,0 +1,51 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="user_manager" folder="core/users" extends="class_base">
+		<action name="delete">
+			<function name="delete">
+				<arguments>
+					<optional name="sel_u" />
+					<optional name="sel_g" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ob_cut">
+			<function name="ob_cut">
+				<arguments>
+					<optional name="sel_u" />
+					<optional name="sel_g" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ob_copy">
+			<function name="ob_copy">
+				<arguments>
+					<optional name="sel_u" />
+					<optional name="sel_g" />
+					<optional name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+		<action name="ob_paste">
+			<function name="ob_paste">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="block_u">
+			<function name="block_u">
+				<arguments>
+					<required name="oid" type="int" acl="edit" />
+					<required name="post_ru" />
+				</arguments>
+			</function>
+		</action>
+
+	</class>
+</orb>
