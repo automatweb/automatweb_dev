@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.76 2005/09/28 17:26:40 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.77 2005/09/30 12:54:17 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -847,6 +847,7 @@ class mrp_resource extends class_base
 					"start" => $recurrence->prop ("start"),
 					"time" => $recurrence_starttime,
 					"end" => $recurrence->prop ("end"),
+					"max_span" => $recurrence->prop ("end") + $time + $length,
 					"interval" => $interval,
 				);
 			}
@@ -968,6 +969,7 @@ class mrp_resource extends class_base
 						"start" => $combination_start,
 						"end" => $combination_end,
 						"time" => $time,
+						"max_span" => $recurrence->prop ("end") + $time + $length,
 						"interval" => $interval,
 					);
 				}
@@ -1018,14 +1020,6 @@ class mrp_resource extends class_base
 		}
 
 		return $week_start;
-	}
-
-	function safe_settype_float ($value)
-	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
 	}
 
 	function sort_recurrences_by_start ($recurrence1, $recurrence2)
@@ -1195,6 +1189,14 @@ class mrp_resource extends class_base
 		aw_disable_acl();
 		$resource->save ();
 		aw_restore_acl();
+	}
+
+	function safe_settype_float ($value)
+	{
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 }
 
