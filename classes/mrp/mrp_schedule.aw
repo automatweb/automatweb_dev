@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.90 2005/09/30 10:07:21 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.91 2005/09/30 10:20:12 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1295,7 +1295,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("reserve_time - insert unavailable periods to job length", "end");
 		}
 
-		return array ($reserved_time, $length);
+		return array ((int) $reserved_time, (int) $length);
 	}
 
 	function get_available_time ($resource_tag, $start, $length)
@@ -1337,7 +1337,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range}):";
+/* dbg */ echo "suitable slot found in start range nr {$time_range}:";
 // /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
 // /* dbg */ echo "next range is:";
 // /* dbg */ arr ($this->reserved_times[$resource_tag][$time_range]);
@@ -1347,7 +1347,6 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
-					$reserved_time = NULL;
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1358,10 +1357,10 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+					$reserved_time = NULL;
+					$time_range++;
 				}
 			}
-
-			$time_range++;
 		}
 
 		### return planned starttime
