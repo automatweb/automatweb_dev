@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.1 2005/09/11 16:48:57 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_styles.aw,v 1.2 2005/09/30 10:33:22 kristo Exp $
 // site_styles.aw - Saidi stiilid 
 //
 // Usage: Create object, define alias, stylesheet files, default and random option.
@@ -7,7 +7,10 @@
 // Change styles with url argument /?set_style_(alias)=val where (alias) means object's alias 
 // and val is one of: prev, next, last, random or numeric value representing style order num.
 /*
-HANDLE_MESSAGE(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show)
+HANDLE_MESSAGE
+// not right now
+
+(MSG_ON_SITE_SHOW_IMPORT_VARS, on_site_show)
 
 @classinfo syslog_type=ST_SITE_STYLES no_comment=1
 
