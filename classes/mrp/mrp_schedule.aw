@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.91 2005/09/30 10:20:12 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.92 2005/09/30 10:33:17 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1347,6 +1347,9 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
+					$reserved_time = NULL;
+				}
+			}
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1357,16 +1360,13 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-					$reserved_time = NULL;
-					$time_range++;
-				}
-			}
+			$time_range++;
 		}
 
 		### return planned starttime
 		if (isset ($reserved_time))
 		{
-			return array ($reserved_time, $length, $time_range);
+			return array ($reserved_time, $length, --$time_range);
 		}
 		else
 		{
