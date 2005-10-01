@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.13 2005/09/26 08:53:37 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/acl_base.aw,v 1.14 2005/10/01 09:45:23 ekke Exp $
 
 lc_load("definition");
 
@@ -627,6 +627,7 @@ class acl_base extends db_connector
 			SELECT 
 				objects.name as obj_name, 
 				objects.oid,
+				objects.status,
 				objects.createdby as createdby,
 				objects.parent as obj_parent,
 				acl.gid,

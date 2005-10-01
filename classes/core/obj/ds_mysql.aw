@@ -150,7 +150,7 @@ die(dbg::dump($ret));
 			if ($prop["method"] == "serialize")
 			{
 				// metadata is unserialized in read_objprops
-				$ret[$prop["name"]] = $objdata[$prop["field"]][$prop["name"]];
+				$ret[$prop["name"]] = isset($objdata[$prop['field']]) && isset($objdata[$prop["field"]][$prop["name"]]) ? $objdata[$prop["field"]][$prop["name"]] : "";
 			}
 			else
 			if ($prop["method"] == "bitmask")
@@ -162,7 +162,7 @@ die(dbg::dump($ret));
 				$ret[$prop["name"]] = $objdata[$prop["field"]];
 			}
 
-			if ($prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+			if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
 			{
 				$ret[$prop["name"]] = "0";
 			}
@@ -275,7 +275,7 @@ die(dbg::dump($ret));
 						$ret[$prop["name"]] = $unser[$prop["name"]];
 					}
 
-					if ($prop["datatype"] == "int" && $ret[$prop["name"]] == "")
+					if (isset($prop["datatype"]) && $prop["datatype"] == "int" && $ret[$prop["name"]] == "")
 					{
 						$ret[$prop["name"]] = "0";
 					}

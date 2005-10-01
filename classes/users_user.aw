@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.119 2005/09/29 06:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/users_user.aw,v 2.120 2005/10/01 09:45:22 ekke Exp $
 // jaaa, on kyll tore nimi sellel failil.
 
 // gruppide jaoks vajalikud konstandid
@@ -10,14 +10,14 @@
 // 2 - dynamic group
 // 3 - deleted user group
 // 4 - group added below the users default group
-define(GRP_REGULAR,0);
-define(GRP_DEFAULT,1);
-define(GRP_DYNAMIC,2);
-define(GRP_DELETED_USER,3);
-define(GRP_USERGRP,4);
+define("GRP_REGULAR",0);
+define("GRP_DEFAULT",1);
+define("GRP_DYNAMIC",2);
+define("GRP_DELETED_USER",3);
+define("GRP_USERGRP",4);
 
-define(GROUP_LEVEL_PRIORITY, 100000);
-define(USER_GROUP_PRIORITY, GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
+define("GROUP_LEVEL_PRIORITY", 100000);
+define("USER_GROUP_PRIORITY", GROUP_LEVEL_PRIORITY*1000);	// max 1000 levels of groups
 
 /*
 
@@ -576,7 +576,7 @@ class users_user extends aw_template
 
 	function getgroupsforuser($uid)
 	{
-		$this->db_query("SELECT * FROM groupmembers WHERE uid = '$uid'");
+		$this->db_query("SELECT gid, uid FROM groupmembers WHERE uid = '$uid'");
 		$ret = array();
 		while ($row = $this->db_next())
 		{

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.118 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/cfg/htmlclient.aw,v 1.119 2005/10/01 09:45:23 ekke Exp $
 // htmlclient - generates HTML for configuration forms
 
 // The idea is that if we want to implement other interfaces
@@ -1087,7 +1087,14 @@ class htmlclient extends aw_template
 			case "submit":
 				// but what if there is more than 1 of those?
 				// attaching this might just break something somewhere
-				$arr["onclick"] = "submit_changeform();";
+				if (isset($arr['action']))
+				{
+					$arr["onclick"] = "submit_changeform('" . $arr['action'] . "'); return false;";
+				}
+				else
+				{
+					$arr["onclick"] = "submit_changeform();";
+				}
 				$arr["class"] = "sbtbutton";
 				$retval = html::submit($arr);
 				break;

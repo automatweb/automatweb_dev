@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.58 2005/09/29 06:38:25 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.59 2005/10/01 09:45:24 ekke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -1749,7 +1749,7 @@ class aw_table extends aw_template
 			}
 
 			$style = false;
-			if (isset($v["sortable"]))
+			if (ifset($v,"sortable"))
 			{
 				if (isset($this->sortby[$v["name"]]))
 				{
@@ -1767,7 +1767,7 @@ class aw_table extends aw_template
 			$style = isset($this->col_styles[$v["name"]][$style_key]) ? $this->col_styles[$v["name"]][$style_key] : "";
 			if (!$style)
 			{
-				$style = (isset($v["sortable"]) ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
+				$style = (ifset($v,"sortable") ? (isset($this->sortby[$v["name"]]) ? $this->header_sorted : $this->header_sortable) : $this->header_normal);
 			}
 
 			$sh_cnt = $this->sh_counts_by_parent[$v["name"]];
@@ -1785,7 +1785,7 @@ class aw_table extends aw_template
 			));
 
 			// if the column is sortable, turn it into a link
-			if (isset($v["sortable"]))
+			if (ifset($v,"sortable"))
 			{
 				// by default (the column is not sorted) don't show any arrows
 				$sufix = "";

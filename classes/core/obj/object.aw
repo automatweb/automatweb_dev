@@ -92,12 +92,12 @@ class object
 
 	function get_implicit_save()
 	{
-		return $GLOBALS["objects"][$this->oid]->get_implicit_save($param);
+		return $GLOBALS["objects"][$this->oid]->get_implicit_save();
 	}
 
 	function arr()
 	{
-		return $GLOBALS["objects"][$this->oid]->arr($param);
+		return $GLOBALS["objects"][$this->oid]->arr();
 	}
 
 	function delete($full_delete = false)
@@ -167,7 +167,7 @@ class object
 
 	function parent()
 	{
-		return $GLOBALS["objects"][$this->oid]->parent($param);
+		return $GLOBALS["objects"][$this->oid]->parent();
 	}
 
 	function set_parent($param)
@@ -177,7 +177,7 @@ class object
 
 	function name()
 	{
-		return $GLOBALS["objects"][$this->oid]->name($param);
+		return $GLOBALS["objects"][$this->oid]->name();
 	}
 
 	function set_name($param)
@@ -187,7 +187,7 @@ class object
 
 	function class_id()
 	{
-		return $GLOBALS["objects"][$this->oid]->class_id($param);
+		return $GLOBALS["objects"][$this->oid]->class_id();
 	}
 
 	function set_class_id($param)
@@ -197,7 +197,7 @@ class object
 
 	function status()
 	{
-		return $GLOBALS["objects"][$this->oid]->status($param);
+		return $GLOBALS["objects"][$this->oid]->status();
 	}
 
 	function set_status($param)
@@ -207,12 +207,12 @@ class object
 
 	function lang()
 	{
-		return $GLOBALS["objects"][$this->oid]->lang($param);
+		return $GLOBALS["objects"][$this->oid]->lang();
 	}
 
 	function lang_id()
 	{
-		return $GLOBALS["objects"][$this->oid]->lang_id($param);
+		return $GLOBALS["objects"][$this->oid]->lang_id();
 	}
 
 	function set_lang($param)
@@ -222,7 +222,7 @@ class object
 
 	function comment()
 	{
-		return $GLOBALS["objects"][$this->oid]->comment($param);
+		return $GLOBALS["objects"][$this->oid]->comment();
 	}
 
 	function set_comment($param)
@@ -232,7 +232,7 @@ class object
 
 	function ord()
 	{
-		return $GLOBALS["objects"][$this->oid]->ord($param);
+		return $GLOBALS["objects"][$this->oid]->ord();
 	}
 
 	function set_ord($param)
@@ -242,7 +242,7 @@ class object
 
 	function alias()
 	{
-		return $GLOBALS["objects"][$this->oid]->alias($param);
+		return $GLOBALS["objects"][$this->oid]->alias();
 	}
 
 	function set_alias($param)
@@ -252,32 +252,32 @@ class object
 
 	function id()
 	{
-		return $GLOBALS["objects"][$this->oid]->id($param);
+		return $GLOBALS["objects"][$this->oid]->id();
 	}
 
 	function createdby()
 	{
-		return $GLOBALS["objects"][$this->oid]->createdby($param);
+		return $GLOBALS["objects"][$this->oid]->createdby();
 	}
 
 	function created()
 	{
-		return $GLOBALS["objects"][$this->oid]->created($param);
+		return $GLOBALS["objects"][$this->oid]->created();
 	}
 
 	function modifiedby()
 	{
-		return $GLOBALS["objects"][$this->oid]->modifiedby($param);
+		return $GLOBALS["objects"][$this->oid]->modifiedby();
 	}
 
 	function modified()
 	{
-		return $GLOBALS["objects"][$this->oid]->modified($param);
+		return $GLOBALS["objects"][$this->oid]->modified();
 	}
 
 	function period()
 	{
-		return $GLOBALS["objects"][$this->oid]->period($param);
+		return $GLOBALS["objects"][$this->oid]->period();
 	}
 
 	function set_period($param)
@@ -287,7 +287,7 @@ class object
 
 	function is_periodic()
 	{
-		return $GLOBALS["objects"][$this->oid]->is_periodic($param);
+		return $GLOBALS["objects"][$this->oid]->is_periodic();
 	}
 
 	function set_periodic($param)
@@ -297,7 +297,7 @@ class object
 
 	function site_id()
 	{
-		return $GLOBALS["objects"][$this->oid]->site_id($param);
+		return $GLOBALS["objects"][$this->oid]->site_id();
 	}
 
 	function set_site_id($param)
@@ -307,17 +307,17 @@ class object
 
 	function is_brother()
 	{
-		return $GLOBALS["objects"][$this->oid]->is_brother($param);
+		return $GLOBALS["objects"][$this->oid]->is_brother();
 	}
 
 	function get_original()
 	{
-		return $GLOBALS["objects"][$this->oid]->get_original($param);
+		return $GLOBALS["objects"][$this->oid]->get_original();
 	}
 
 	function subclass()
 	{
-		return $GLOBALS["objects"][$this->oid]->subclass($param);
+		return $GLOBALS["objects"][$this->oid]->subclass();
 	}
 
 	function set_subclass($param)
@@ -327,7 +327,7 @@ class object
 
 	function flags()
 	{
-		return $GLOBALS["objects"][$this->oid]->flags($param);
+		return $GLOBALS["objects"][$this->oid]->flags();
 	}
 
 	function set_flags($param)
@@ -392,7 +392,7 @@ class object
 
 	function properties()
 	{
-		return $GLOBALS["objects"][$this->oid]->properties($param);
+		return $GLOBALS["objects"][$this->oid]->properties();
 	}
 
 	function fetch()
@@ -403,7 +403,7 @@ class object
 
 	function is_cache_dirty()
 	{
-		return $GLOBALS["objects"][$this->oid]->is_cache_dirty($param);
+		return $GLOBALS["objects"][$this->oid]->is_cache_dirty();
 	}
 
 	function set_cache_dirty($param = true)
@@ -473,7 +473,7 @@ no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
 **/
 function obj_set_opt($opt, $val)
 {
-	$tmp = $GLOBALS["__obj_sys_opts"][$opt];
+	$tmp = ifset($GLOBALS,"__obj_sys_opts",$opt);
 	$GLOBALS["__obj_sys_opts"][$opt] = $val;
 	return $tmp;
 }

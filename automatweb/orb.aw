@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.19 2005/04/21 08:27:20 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.20 2005/10/01 09:45:22 ekke Exp $
 if (!ini_get("safe_mode"))
 {
 	set_time_limit(0);
@@ -29,7 +29,7 @@ if (is_array($_POST))
 {
 	$vars = $vars + $_POST;
 };
-if (is_array($_AW_GET_VARS))
+if (isset($_AW_GET_VARS) && is_array($_AW_GET_VARS))
 {
 	$vars = $vars + $_AW_GET_VARS;
 };
@@ -42,7 +42,7 @@ if (empty($class) && isset($vars["alias"]))
 	$class = $vars["alias"];
 };
 
-if ($vars["fastcall"] == 1)
+if (array_key_exists("fastcall", $vars) && $vars["fastcall"] == 1)
 {
 	// loadime klassi
 	classload("fastcall_base");
@@ -76,7 +76,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
+if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !ifset($vars,"no_redir"))
 {
 	if (headers_sent())
 	{

@@ -30,7 +30,7 @@ class msg_dispatch extends class_base
 			$func = $handler["func"];
 			$inst = get_instance($handler["class"]);
 			error::raise_if(!method_exists($inst, $func), array(
-				"id" => ERR_NO_HANDLER_FUNC,
+				"id" => 'ERR_NO_HANDLER_FUNC',
 				"msg" => sprintf(t("msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"), $func, $class, $arr["msg"])
 			));
 
@@ -69,7 +69,7 @@ class msg_dispatch extends class_base
 				$func = $handler["func"];
 				$inst = get_instance($handler["class"]);
 				error::raise_if(!method_exists($inst, $func), array(
-					"id" => ERR_NO_HANDLER_FUNC,
+					"id" => 'ERR_NO_HANDLER_FUNC',
 					"msg" => sprintf(t("msg_dispatch::post_message - no handler function (%s) in class (%s) for message %s!"), $func, $class, $arr["msg"])
 				));
 				$inst->$func($arr["params"]);

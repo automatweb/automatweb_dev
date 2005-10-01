@@ -9,6 +9,34 @@
 // include aw const
 include_once(dirname(__FILE__)."/const.aw");
 
+	// Retuns null unless exists $arr[$key1][$key2][...][$keyN] (then returns the value)
+	// $a = array_isset($arr,$key1,$key2,$keyN)  
+	//         instead of $a=isset($arr[$key1]) && isset($arr[$key2) .... ? $arr[$key1][$key2] : null
+	function ifset($item)
+	{
+		$tmp[] = array();
+		$i = 0;
+		$count = func_num_args();
+		$tmp[0] = $item;
+		for (; $i < $count-1; $i++)
+		{
+			$key = func_get_arg($i+1);
+			if (is_array($tmp[$i]) && isset($tmp[$i][$key]))
+			{
+				$tmp[$i+1] = $tmp[$i][$key];
+			}
+			else if (is_object($tmp[$i]) && isset($tmp[$i]->$key))
+			{
+				$tmp[$i+1] = $tmp[$i]->$key;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		return $tmp[$i];
+	}
+
 function aw_ini_get($var)
 {
 //	enter_function("__global::aw_ini_get",array());
@@ -22,7 +50,7 @@ function aw_ini_get($var)
 		$class = "__default";
 	}
 //	exit_function("__global::aw_ini_get");
-	return $GLOBALS["cfg"][$class][$var];
+	return isset($GLOBALS["cfg"][$class]) && array_key_exists($var, $GLOBALS["cfg"][$class]) ? $GLOBALS["cfg"][$class][$var] : null; 
 }
 
 function parse_config($file)
@@ -181,11 +209,11 @@ function init_config($arr)
 		$GLOBALS["cfg"]["__default"]["basedir"] = $basedir;
 
 		// also, site_basedir from the second ini file
-		$site_basedir = dirname($ini_files[1]);
+		$site_basedir = isset($ini_files[1]) ? dirname($ini_files[1]) : "";
 		$GLOBALS["cfg"]["__default"]["site_basedir"] = $site_basedir;
 
 		// now, baseurl
-		$baseurl = "http://".$GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"];
+		$baseurl = isset($GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"]) ? "http://".$GLOBALS["HTTP_SERVER_VARS"]["HTTP_HOST"] : "";
 		$GLOBALS["cfg"]["__default"]["baseurl"] = $baseurl;
 		foreach($ini_files as $k => $file)
 		{
@@ -193,7 +221,7 @@ function init_config($arr)
 		}
 
 		// and write to cache if file is specified
-		if ($cache_file)
+		if (!empty($cache_file))
 		{
 			$str = serialize($GLOBALS["cfg"]);
 			
@@ -256,7 +284,10 @@ function init_config($arr)
 		// defines for syslog
 		foreach($GLOBALS["cfg"]["syslog"]["types"] as $stid => $std)
 		{
-			define($std["def"], $stid);
+			if (isset($std['def']) && !defined($std["def"]))
+			{
+				define($std["def"], $stid);
+			}
 		}
 		// defines fos syslog actions
 		foreach($GLOBALS["cfg"]["syslog"]["actions"] as $said => $sad)
@@ -306,13 +337,13 @@ function init_config($arr)
 function lc_init()
 {
 	// see if user has an ui language pref
-	if (($_tmp = $_SESSION["user_adm_ui_lc"]) != "")
+	if (isset($_SESSION['user_adm_ui_lc']) && ($_tmp = $_SESSION["user_adm_ui_lc"]) != "")
 	{
 		$GLOBALS["cfg"]["user_interface"]["default_language"] = $_tmp;
 	}
 
 	// translate class names if it is so said
-	if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/aw.ini.aw";
 		if (file_exists($trans_fn))
@@ -367,8 +398,8 @@ function lc_load($file)
 {
 //	enter_function("__global::lc_load",array());
 //	global $LC,$admin_lang_lc;
-	$LC =  $GLOBALS["__aw_globals"]["LC"];
-	$admin_lang_lc = $GLOBALS["__aw_globals"]["admin_lang_lc"];
+	$LC = isset($GLOBALS["__aw_globals"]) ? $GLOBALS["__aw_globals"]["LC"] : "";
+	$admin_lang_lc = isset($GLOBALS["__aw_globals"]) && isset($GLOBALS["__aw_globals"]["admin_lang_lc"]) ? $GLOBALS["__aw_globals"]["admin_lang_lc"] : false;
 	if (!$admin_lang_lc)
 	{
 		$admin_lang_lc = "et";
@@ -447,7 +478,7 @@ function classload($args)
 			{
 				$lib = $GLOBALS["cfg"]["__default"]["classdir"]."/".$lib.".".$GLOBALS["cfg"]["__default"]["ext"];
 
-				if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+				if (isset($GLOBALS['cfg']['user_interface']) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 				{
 					$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($lib);
 //echo "classload: tf = $trans_fn <br>";
@@ -495,8 +526,8 @@ function get_instance($class,$args = array(), $errors = true)
 	$lib = basename($class);
 
 	// check if the class is remoted. if it is, then create proxy class instance, not real class instance
-	$clid = $GLOBALS["cfg"]["class_lut"][$lib];
-	if (($rs = $GLOBALS["cfg"]["__default"]["classes"][$clid]["is_remoted"]) != "")
+	$clid = (isset($GLOBALS['cfg']['class_lut']) && isset($GLOBALS["cfg"]["class_lut"][$lib])) ? $GLOBALS["cfg"]["class_lut"][$lib] : 0;
+	if (($rs = ifset($GLOBALS,"cfg","__default","classes",$clid,"is_remoted")) != "")
 	{
 		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
 		{
@@ -540,7 +571,7 @@ function get_instance($class,$args = array(), $errors = true)
 		require_once($classdir."/".str_replace(".","", $class).".".$ext);
 
 		// also load translations
-		if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+		if (isset($GLOBALS["cfg"]["user_interface"]) && ($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
 		{
 			$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 //echo "get_instance: tf = $trans_fn <br>";
@@ -589,7 +620,7 @@ function get_instance($class,$args = array(), $errors = true)
 
 function load_class_translations($class)
 {
-	if (($adm_ui_lc = $GLOBALS["cfg"]["user_interface"]["default_language"]) != "")
+	if (($adm_ui_lc = ifset($GLOBALS,"cfg","user_interface","default_language")) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 		if (file_exists($trans_fn))
@@ -752,6 +783,10 @@ function enter_function($name,$args = array())
 		$awt->start($name);
 		$awt->count($name);
 	}
+	if (!isset($GLOBALS['enter_function_calls']))
+	{
+		$GLOBALS["enter_function_calls"] = 0;
+	}
 	$GLOBALS["enter_function_calls"]++;
 }
 
@@ -762,19 +797,23 @@ function exit_function($name,$ret = "")
 	{
 		$awt->stop($name);
 	}
+	if (!isset($GLOBALS["exit_function_calls"]))
+	{
+		$GLOBALS["exit_function_calls"] = 0;
+	}
 	$GLOBALS["exit_function_calls"]++;
 }
 
 function __init_aw_session_track()
 {
-	if (($tmp = $_SESSION["aw_session_track"]["aw"]["do_redir"]) != "")
+	if (($tmp = ifset($_SESSION,"aw_session_track","aw","do_redir")) != "")
 	{
 		$_SESSION["aw_session_track"]["aw"]["do_redir"] = "";
 		header("Location: ".$tmp);
 		die();
 	}
 
-	if (($tmp = $_SESSION["aw_session_track"]["aw"]["do_message"]) != "")
+	if (($tmp = ifset($_SESSION,"aw_session_track","aw","do_message")) != "")
 	{
 		$_SESSION["aw_session_track"]["aw"]["do_message"] = "";
 		echo "<script language=\"javascript\">alert(\"".$tmp."\");</script>";
@@ -783,8 +822,8 @@ function __init_aw_session_track()
 	// add session tracking options
 	$_SESSION["aw_session_track"] = array(
 		"server" => array(
-			"ip" => $_SERVER["REMOTE_ADDR"],
-			"referer" => $_SERVER["HTTP_REFERER"],
+			"ip" => ifset($_SERVER,"REMOTE_ADDR"),
+			"referer" => ifset($_SERVER,"HTTP_REFERER"),
 			"ru" => $GLOBALS["REQUEST_URI"],
 			"site" => $GLOBALS["HTTP_HOST"],
 		),
@@ -929,7 +968,7 @@ function __aw_error_handler($errno, $errstr, $errfile, $errline,  $context)
 function log_pv($mt)
 {
 	//list($usec, $sec) = explode(" ", $mt);
-	$start = $mt ;((float)$usec + (float)$sec);
+	$start = $mt ;//((float)$usec + (float)$sec);
 
 	list($usec, $sec) = explode(" ", microtime());
 	$end = ((float)$usec + (float)$sec);

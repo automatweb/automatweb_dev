@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.104 2005/08/23 12:55:14 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.105 2005/10/01 09:45:23 ekke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -448,7 +448,14 @@ class admin_menus extends aw_template
 
 		aw_session_set("cut_objects",$cut_objects);
 
-		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		if (!empty($arr['return_url']))
+		{
+			return $arr['return_url'];
+		}
+		else
+		{
+			return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		}
 	}
 
 	/** copies the selected objects 
@@ -495,7 +502,14 @@ class admin_menus extends aw_template
 
 		aw_session_set("copied_objects", $copied_objects);
 
-		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		if (!empty($arr['return_url']))
+		{
+			return $arr['return_url'];
+		}
+		else
+		{
+			return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		}
 	}
 
 	/**  
@@ -654,7 +668,14 @@ class admin_menus extends aw_template
 		aw_session_set("copied_objects",array());
 		$_SESSION["cut_objects"] = false;
 		$_SESSION["copied_objects"] = false;
-		return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		if (!empty($arr['return_url']))
+		{
+			return $arr['return_url'];
+		}
+		else
+		{
+			return $this->mk_my_orb("right_frame", array("parent" => $parent, "period" => $period));
+		}
 	}
 
 	function o_delete($arr)

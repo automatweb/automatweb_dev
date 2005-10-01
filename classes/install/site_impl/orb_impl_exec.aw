@@ -13,7 +13,7 @@ if (!is_array($_POST))
 };
 
 //$vars = array_merge($_GET,$_POST,$AW_GET_VARS);
-if (!is_array($AW_GET_VARS))
+if (!isset($AW_GET_VARS) || !is_array($AW_GET_VARS))
 {
 	$AW_GET_VARS = array();
 };
@@ -30,7 +30,7 @@ if (!$class)
 
 $action = $vars["action"];
 
-if ($vars["fastcall"] == 1)
+if (isset($vars['fastcall']) && $vars["fastcall"] == 1)
 {
 	session_name("automatweb");
 	session_start();

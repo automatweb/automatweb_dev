@@ -207,19 +207,28 @@ class group extends class_base
 
 		if ($prop['name'] == 'data')
 		{
-			$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
+			if (isset($arr['request']['gid']))
+			{
+				$gid = $arr['request']['gid']; // This avoids error upon group copy-paste
+			}
+			else
+			{
+				$gid = $this->users->get_gid_for_oid($arr["request"]["group_id"]);
+			}	
 			$pg = $this->users->fetchgroup($gid);
-		
-			$f = get_instance(CL_FORM);
-			$f->process_entry(array(
-				"id" => $pg["search_form"], 
-				"entry_id" => $arr["entry_id"]
-			));
-			$eid = $f->entry_id;
+			if (isset($pg["search_form"]))
+			{
+				$f = get_instance(CL_FORM);
+				$f->process_entry(array(
+					"id" => $pg["search_form"], 
+					"entry_id" => $arr["entry_id"]
+				));
+				$eid = $f->entry_id;
 
-			$this->db_query("UPDATE groups SET data = '$eid' WHERE gid = '$gid'");
-
-			$this->users->update_dyn_group($gid);
+				$this->db_query("UPDATE groups SET data = '$eid' WHERE gid = '$gid'");
+			
+				$this->users->update_dyn_group($gid);
+			}
 		}
 		else
 		if ($prop['name'] == 'import')
@@ -376,6 +385,14 @@ class group extends class_base
 
 		foreach($dat as $row)
 		{
+			$o = obj($row['oid']);
+			$row['obj_name'] = html::href(array(
+				'url' => $this->mk_my_orb('change',array(
+					'id' => $row['oid'],
+					'return_url' => urlencode(aw_global_get('REQUEST_URI')),
+				), $o->class_id()),
+				'caption' => $row['obj_name'],
+			));
 			$row['obj_parent'] = $ml[$row['obj_parent']];	
 			$row["acl"] = html::href(array(
 				"caption" => t("Muuda"),

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/const.aw,v 2.102 2005/09/21 12:47:04 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/const.aw,v 2.103 2005/10/01 09:45:22 ekke Exp $
 error_reporting(E_ALL ^ E_NOTICE);
 // here we define basic constants needed by all components
 set_magic_quotes_runtime(0);
@@ -40,28 +40,28 @@ if (is_array($_SERVER))
 extract($_POST);
 extract($_GET);
 
-$PATH_INFO = preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO);
-$QUERY_STRING = preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING);
+$PATH_INFO = isset($PATH_INFO) ? preg_replace("/\?automatweb=[^&]*/","", $PATH_INFO) : "";
+$QUERY_STRING = isset($QUERY_STRING) ? preg_replace("/\?automatweb=[^&]*/","", $QUERY_STRING) : "";
 
-if (strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	// apache 2 fix
 	$QUERY_STRING = str_replace("index.aw", "", str_replace("orb.aw", "", str_replace("login.aw", "", str_replace("reforb.aw", "", $QUERY_STRING))));
 }
 
 
-if ( isset($PATH_INFO) && (strlen($PATH_INFO) > 1))
+if (strlen($PATH_INFO) > 1)
 {
 	$pi = $PATH_INFO;
 };
-if ( isset($QUERY_STRING) && (strlen($QUERY_STRING) > 1))
+if (strlen($QUERY_STRING) > 1)
 {
 	$pi .= "?".$QUERY_STRING;
 };
 
-$_SERVER["REQUEST_URI"] = preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]);
+$_SERVER["REQUEST_URI"] = isset($_SERVER['REQUEST_URI']) ? preg_replace("/\?automatweb=[^&]*/","", $_SERVER["REQUEST_URI"]) : "";
 
-if (strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
+if (isset($_SERVER['SERVER_SOFTWARE']) && strpos($_SERVER["SERVER_SOFTWARE"], "Apache/2") !== false)
 {
 	if ($_SERVER["REQUEST_URI"] != "")
 	{
@@ -81,7 +81,7 @@ if ($pi)
 		parse_str(str_replace("?","&",str_replace("/","&",$pi)),$HTTP_GET_VARS);
 //		echo "gv = <pre>", var_dump($HTTP_GET_VARS),"</pre> <br>";
 		extract($HTTP_GET_VARS);
-		$GLOBALS["fastcall"] = $HTTP_GET_VARS["fastcall"];
+		$GLOBALS["fastcall"] = array_key_exists("fastcall", $HTTP_GET_VARS) ? $HTTP_GET_VARS["fastcall"] : null;
 	} 
 
 	if (($_pos = strpos($pi, "section=")) === false)

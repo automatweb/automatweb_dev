@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.56 2005/08/01 12:10:06 duke Exp $
+// $Id: cfgutils.aw,v 1.57 2005/10/01 09:45:23 ekke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -137,7 +137,7 @@ class cfgutils extends aw_template
 			// translate
 			foreach($properties as $k => $d)
 			{
-				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
+				$t_str = "Omaduse ".ifset($d,"caption","text")." (".$d["name"]["text"].") caption";
 				$tmp = t2($t_str);
 				//echo "reans $t_str = $tmp <br>";
 				if ($tmp !== NULL)
@@ -145,13 +145,13 @@ class cfgutils extends aw_template
 					$properties[$k]["caption"]["text"] = $tmp;
 				}
 
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
+				$tmp = t2("Omaduse ".ifset($d,"caption","text")." (".$d["name"]["text"].") kommentaar");
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["comment"]["text"] = $tmp;
 				}
 
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
+				$tmp = t2("Omaduse ".ifset($d,"caption","text")." (".$d["name"]["text"].") help");
 				if ($tmp !== NULL)
 				{
 					$properties[$k]["help"]["text"] = $tmp;
@@ -180,7 +180,7 @@ class cfgutils extends aw_template
 			{
 				foreach($relinfo[0] as $k => $dat)
 				{
-					$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
+					$tmp = "Seose ".ifset($dat,0,"caption","text")." (RELTYPE_".$k.") tekst";
 					$tmp = t2($tmp);
 					if ($tmp !== NULL)
 					{
@@ -270,7 +270,10 @@ class cfgutils extends aw_template
 					$tmp[$key] = $relx;
 					$tmp[$_name] = $relx;
 					// define the constant
-					define($_name,$tmp[$key]["value"]);
+					if (!defined($_name))
+					{
+						define($_name,$tmp[$key]["value"]);
+					}
 					$tmp[$tmp[$key]["value"]] = $relx;
 				};
 			};

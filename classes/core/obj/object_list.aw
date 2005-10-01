@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.50 2005/06/14 19:10:39 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/obj/object_list.aw,v 1.51 2005/10/01 09:45:23 ekke Exp $
 // object_list.aw - with this you can manage object lists
 
 class object_list extends _int_obj_container_base
@@ -281,7 +281,7 @@ class object_list extends _int_obj_container_base
 	function arr()
 	{
 		$ret = array();
-		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next(), $cnt++)
+		for ($o =& $this->begin(), $cnt = 0; !$this->end(); $o =& $this->next())
 		{
 			$ret[$o->id()] = $o;
 		}

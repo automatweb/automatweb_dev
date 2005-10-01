@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/php_file.aw,v 2.4 2005/04/21 08:32:27 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/php_file.aw,v 2.5 2005/10/01 09:45:22 ekke Exp $
 // php.aw - PHP serializer
 class php_serializer_file
 {
@@ -12,7 +12,7 @@ class php_serializer_file
 			return false;
 		}
 
-		$arrname = ($this->arr_name != "" ? $this->arr_name : "arr");
+		$arrname = (isset($this->arr_name) && $this->arr_name != "" ? $this->arr_name : "arr");
 
 		$dat = "\$".$arrname." = ".$this->req_serialize($arr).";";
 		return $dat;

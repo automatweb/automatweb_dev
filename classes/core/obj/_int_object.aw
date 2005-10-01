@@ -35,7 +35,7 @@ class _int_object
 
 	function load($param)
 	{
-		if ($GLOBALS["TRACE_OBJ"])
+		if (ifset($GLOBALS,"TRACE_OBJ"))
 		{
 			echo "load object $param from <br>".dbg::short_backtrace()." <br>";
 		}
@@ -941,7 +941,7 @@ class _int_object
 
 	function meta($param = false)
 	{
-		// calling this withoun an argument returns the contents of whole metainfo
+		// calling this without an argument returns the contents of whole metainfo
 		// site_content->build_menu_chain for example needs access to the whole metainfo at once -- duke
 		if ($param === false)
 		{
@@ -949,7 +949,7 @@ class _int_object
 		}
 		else
 		{
-			$retval = $this->obj["meta"][$param];
+			$retval = ifset($this,"obj","meta",$param);
 		};
 		return $retval;
 	}
@@ -1348,7 +1348,7 @@ class _int_object
 
 		// now that we know the class id, change the object instance out from beneath us, if it is set so in the ini file
 		$cld = $GLOBALS["cfg"]["__default"]["classes"][$this->obj["class_id"]];
-		if ($cld["object_override"] != "")
+		if (ifset($cld,"object_override") != "")
 		{
 			$i = get_instance($cld["object_override"]);
 			// copy props
@@ -1381,7 +1381,7 @@ class _int_object
 		}
 
 		// then get the properties
-		$file = $GLOBALS["cfg"]["classes"][$cl_id]["file"];
+		$file = ifset($GLOBALS,"cfg","classes",$cl_id,"file");
 		if ($cl_id == 29)
 		{
 			$file = "doc";
@@ -1585,6 +1585,8 @@ class _int_object
 			{
 				$this->_int_set_prop_mod($pn, $this->obj["properties"][$pn], $this->obj[$ofname]);
 			}
+//			$this->obj["properties"][$pn] = isset($this->obj[$ofname]) ? $this->obj[$ofname] : null;
+			// For whatever reason, upper row breaks shit. And i mean shit, like, the whole AW.
 			$this->obj["properties"][$pn] = $this->obj[$ofname];
 		}
 	}
@@ -1843,10 +1845,11 @@ class _int_object
 			$this->_int_load_property_values();
 		}
 
-		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
+//		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
+		$pd = ifset($GLOBALS,"properties",ifset($this, "obj","class_id"),$prop);
 		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
 		{
-			return $this->obj["meta"][$pd["name"]];
+			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;
 		}
 
 		return $this->obj["properties"][$prop];

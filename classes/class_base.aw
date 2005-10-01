@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.419 2005/09/29 09:59:48 voldemar Exp $
+// $Id: class_base.aw,v 2.420 2005/10/01 09:45:22 ekke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -135,7 +135,7 @@ class class_base extends aw_template
 			"classificator" => 1,
 		);
 
-		if (!$this->clid && $arg["clid"])
+		if (!ifset($this, "clid") && ifset($arg, "clid"))
 		{
 			$this->clid = $arg["clid"];
 		}
@@ -815,6 +815,7 @@ class class_base extends aw_template
 	**/
 	function submit($args = array())
 	{
+		$form_data = null;
 		// since submit should never change the return url, make sure we get at it later
 		$real_return_url = $args["return_url"];
 
@@ -848,17 +849,16 @@ class class_base extends aw_template
 
 		$args["rawdata"] = $args;
 		$save_ok = $this->process_data($args);
-
 		$args = array(
 			"id" => $this->id,
 			"group" => $group,
-			"return" => $args["return"],
+			"return" => ifset($args, "return"),
 			"period" => aw_global_get("period"),
 			"alias_to" => $request["alias_to"],
 			"return_url" => $request["return_url"],
 		) + ( (isset($extraids) && is_array($extraids)) ? $extraids : array());
 
-		if ($form_data["no_rte"] == 1)
+		if (ifset($form_data,"no_rte") == 1)
 		{
 			$args["no_rte"] = 1;
 		};
@@ -903,7 +903,7 @@ class class_base extends aw_template
 					"new" => $this->new,
 				));
 
-				if ($args["goto"])
+				if (ifset($args,"goto"))
 				{
 					return $args["goto"];
 				};
@@ -926,7 +926,7 @@ class class_base extends aw_template
 				//$args["_alias"] = get_class($this);
 				$use_orb = false;
 			};
-			if ($request["XUL"])
+			if (ifset($request,"XUL"))
 			{
 				$args["XUL"] = 1;
 			};
@@ -2134,6 +2134,7 @@ class class_base extends aw_template
 			"groupinfo" => &$this->groupinfo,
 			"new" => $this->new,
 			"view" => $this->view,
+			"name_prefix" => $args["name_prefix"],
 		);
 
 		$this->cfgu = get_instance("cfg/cfgutils");

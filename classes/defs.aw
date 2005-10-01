@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.193 2005/09/29 06:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.194 2005/10/01 09:45:22 ekke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -10,6 +10,7 @@ if (!defined("DEFS"))
 	define("SERIALIZE_NATIVE",3);
 	define("SERIALIZE_PHP_NOINDEX",4);
 	define("SERIALIZE_XMLRPC", 5);
+	define("SERIALIZE_PHP_FILE",6);
 
 	/** use this to get the correct return_url argument for GET requests
 
@@ -764,11 +765,11 @@ if (!defined("DEFS"))
 		$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "REMOTE_HOST", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
 		foreach($server as $var)
 		{
-			aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
+			aw_global_set($var,ifset($GLOBALS,"HTTP_SERVER_VARS",$var));
 		}
 		
 
-		if (isset($GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]))
+		if (ifset($GLOBALS,"HTTP_COOKIE_VARS","lang_id"))
 		{
 			aw_global_set("lang_id", $GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]);
 		}
@@ -803,7 +804,7 @@ if (!defined("DEFS"))
 		{
 			return false;
 		}
-		if (!is_array($GLOBALS["__aw_cache"]))
+		if (!is_array(ifset($GLOBALS,"__aw_cache")))
 		{
 			return false;
 		}
@@ -861,7 +862,7 @@ if (!defined("DEFS"))
 			$GLOBALS["__aw_cache"] = array();
 			return false;
 		}
-		return $GLOBALS["__aw_cache"][$cache];
+		return ifset($GLOBALS,"__aw_cache",$cache);
 	}
 
 	////

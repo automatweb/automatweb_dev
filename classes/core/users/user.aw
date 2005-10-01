@@ -804,7 +804,7 @@ class user extends class_base
 	{
 		extract($arr);
 		$ob = obj($oid);
-		if (is_array($ob))
+		if (is_object($ob))
 		{
 			return aw_serialize($ob->fetch(), SERIALIZE_NATIVE);
 		}
@@ -861,7 +861,7 @@ class user extends class_base
 			{
 				continue;
 			}
-			if (!is_oid($row["oid"]))
+			if (!is_oid($row["oid"]) || $row['status'] == STAT_DELETED)
 			{
 				continue;
 			};
@@ -1642,7 +1642,7 @@ class user extends class_base
 		$ca = $this->_aclw_get_controlling_acl($user, $oid);
 		if ($ca === false)
 		{
-			return $str.t("Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;inus ainult.");
+			return $str.t("Objektile pole sellele kasutaja gruppidele &otilde;igusi m&auml;&auml;ratud, kehtib default.<br>N&auml;gemis&otilde;igus ainult.");
 		}
 
 		$o_str = "";
