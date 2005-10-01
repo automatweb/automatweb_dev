@@ -8,6 +8,7 @@
 					<required name="pn" />
 					<required name="clid" type="int" />
 					<optional name="s" />
+					<optional name="append_html" />
 				</arguments>
 			</function>
 		</action>

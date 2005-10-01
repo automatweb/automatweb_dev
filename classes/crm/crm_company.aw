@@ -50,6 +50,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property year_founded type=date_select table=kliendibaas_firma year_from=1800 default=-1
 	@caption Asutatud
 
+	@property openhours type=releditor reltype=RELTYPE_OPENHOURS rel_id=first use_form=emb store=no
+	@caption Avamisajad
+
 	@property priority type=textbox table=kliendibaas_firma 
 	@caption Prioriteet
 
@@ -64,9 +67,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 	@property tooted type=relpicker reltype=RELTYPE_TOOTED automatic=1 method=serialize field=meta table=objects
 	@caption Tooted
-
-	@property pohitegevus type=relpicker reltype=RELTYPE_TEGEVUSALAD table=kliendibaas_firma
-	@caption Põhitegevus
+	
+	@property pohitegevus type=popup_search clid=CL_CRM_SECTOR table=kliendibaas_firma style=relpicker reltype=RELTYPE_TEGEVUSALAD
+	@caption P&otilde;hitegevus / Tegevusalad
 
 ------ Yldine - Lisainfo grupp----------
 @default group=add_info
@@ -321,6 +324,18 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property offers_current_org_id type=hidden store=no 
 ------------ END PAKKUMISED -------------------
 
+---------- ERIPAKKUMISED ---------
+@default group=special_offers
+	@property special_offers type=releditor reltype=RELTYPE_SPECIAL_OFFERS field=meta method=serialize mode=manager props=name,comment,ord,status,valid_from,valid_to table_fields=name,ord table_edit_fields=ord table=objects direct_links=1
+	@caption Eripakkumised
+---------- END ERIPAKKUMISED ---------
+	
+---------- PILDID ---------
+@default group=org_images
+	@property images type=releditor reltype=RELTYPE_IMAGE field=meta method=serialize mode=manager props=name,ord,status,file,file2,new_w,new_h,new_w_big,new_h_big,comment,cfgform table_fields=name,ord table_edit_fields=ord table=objects
+	@caption Pildid
+---------- END PILDID ---------
+
 ------------ ORGANISATSIOONI OBJEKTID ---------
 default group=org_objects
 
@@ -516,6 +531,7 @@ default group=org_objects
 @groupinfo org_sections caption="Tegevus" parent=general
 @groupinfo add_info caption="Lisainfo" parent=general
 @groupinfo user_settings caption="Kasutajate seaded" parent=general
+@groupinfo special_offers caption="Eripakkumised" submit=no parent=general
 @groupinfo people caption="Inimesed"
 
 	@groupinfo contacts2 caption="Puuvaade" parent=people submit=no
@@ -552,6 +568,9 @@ default group=org_objects
 groupinfo org_objects_main caption="Objektid" submit=no
 
 	groupinfo org_objects caption="Objektid" submit=no parent=org_objects_main
+
+
+@groupinfo org_images caption="Pildid" submit=yes
 
 @groupinfo documents caption="Dokumendid" submit=no
 
@@ -624,7 +643,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @caption Partner
 
 @reltype POTENTIONAL_PARTNER value=25 clid=CL_CRM_COMPANY
-@caption Tulevate partner
+@caption Tulevane partner
 
 @reltype COMPETITOR value=26 clid=CL_CRM_COMPANY
 @caption Konkurent
@@ -657,7 +676,7 @@ groupinfo org_objects_main caption="Objektid" submit=no
 @caption Üksus veebis
 
 @reltype GROUP value=36 clid=CL_GROUP
-@caption organisatsiooni grupp
+@caption Organisatsiooni grupp
 
 @reltype CONTRACT value=37 clid=CL_FILE
 @caption Leping
@@ -673,7 +692,16 @@ groupinfo org_objects_main caption="Objektid" submit=no
 		
 @reltype REFERAL_TYPE value=41 clid=CL_META
 @caption sissetuleku meetod
-		
+
+@reltype IMAGE value=42 clid=CL_IMAGE
+@caption Pilt
+
+@reltype SPECIAL_OFFERS value=43 clid=CL_CRM_SPECIAL_OFFER
+@caption Eripakkumine
+
+@reltype OPENHOURS value=44 clid=CL_OPENHOURS
+@caption Avamisajad
+
 */
 /*
 CREATE TABLE `kliendibaas_firma` (
