@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.77 2005/09/30 12:54:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_resource.aw,v 1.78 2005/10/03 10:36:03 voldemar Exp $
 // mrp_resource.aw - Ressurss
 /*
 
@@ -800,11 +800,13 @@ class mrp_resource extends class_base
 		if ($resource->prop ("unavailable_weekends"))
 		{
 			$weekend_start = $this->get_week_start ($start) + (5 * 86400);
+			$weekend_length = 172800;
 			$recurrent_unavailable_periods[] = array (
-				"length" => 172800,
+				"length" => $weekend_length,
 				"start" => $weekend_start,
 				"time" => 0,
 				"end" => $end,
+				"max_span" => $end + $weekend_length,
 				"interval" => 604800,
 			);
 		}
