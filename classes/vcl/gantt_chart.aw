@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.18 2005/08/15 12:33:39 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/gantt_chart.aw,v 1.19 2005/10/03 10:17:30 voldemar Exp $
 // gantt_chart.aw - Gantti diagramm
 /*
 
@@ -554,60 +554,150 @@ class gantt_chart extends class_base
 			usort ($this->parsed_data[$row], array ($this, "bar_start_sort"));
 
 			### filter bars with same start time
-			$same_start_key = false;
+			$keys_to_delete = array ();
+			$key = 0;
 
 			while (isset($this->parsed_data[$row][$key]))
 			{
-				if ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$key + 1]["start"])
+				### index bars starting at same time
+				$current_key = $key;
+				$same_start_index = array ();
+
+				while (isset ($this->parsed_data[$row][$current_key +1]) and $this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$current_key + 1]["start"])
 				{
-					if ($this->parsed_data[$row][$key]["layer"] == $this->parsed_data[$row][$key + 1]["layer"])
-					{
-						if ($this->parsed_data[$row][$key]["length"] == $this->parsed_data[$row][$key + 1]["length"])
-						{
-							unset ($this->parsed_data[$row][$key]);
-						}
-						else
-						{ ### different lengths
-							### show shorter bars upon longer
-							$same_start_key = $key + 1;
-							$last_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
-
-							while ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$same_start_key]["start"])
-							{
-								$start = $this->parsed_data[$row][$same_start_key]["start"];
-								$length = $this->parsed_data[$row][$same_start_key]["length"];
-								$this->parsed_data[$row][$same_start_key]["length"] = $start + $length - $last_end;
-								$this->parsed_data[$row][$same_start_key]["start"] = $last_end;
-								$this->parsed_data[$row][$same_start_key]["nostartmark"] = true;
-								$last_end = $start + $length;
-								$same_start_key++;
-							}
-						}
-					}
-					else
-					{ ### different layers
-						### show upper layer bars upon lower layer bars
-						$same_start_key = $key + 1;
-						$current_key = $key;
-						$start = $this->parsed_data[$row][$key]["start"];
-
-						while ($start == $this->parsed_data[$row][$same_start_key]["start"])
-						{
-							unset ($this->parsed_data[$row][$current_key]);
-							$current_key = $same_start_key;
-							$same_start_key++;
-						}
-					}
+					$same_start_index[$this->parsed_data[$row][$current_key]["layer"]][$this->parsed_data[$row][$current_key]["length"]] = $current_key;
+					$current_key++;
 				}
 
-				$key++;
+				### show shorter bars upon longer and upper layers on lower
+				ksort ($same_start_index);
+				$upper_layer_end = NULL;
+
+				foreach ($same_start_index as $layer => $length_index)
+				{
+					ksort ($length_index);
+					$shorter_bar_end = NULL;
+					$this_layer_end = NULL;
+
+					foreach ($length_index as $length => $index_key)
+					{
+						$start = $this->parsed_data[$row][$index_key]["start"];
+
+						if (isset ($upper_layer_end) and (($start + $length) > $upper_layer_end))
+						{
+							if (isset ($shorter_bar_end))
+							{
+								$this->parsed_data[$row][$index_key]["start"] = $shorter_bar_end;
+								$this->parsed_data[$row][$index_key]["length"] = ($start + $length) - $shorter_bar_end;
+							}
+
+							$shorter_bar_end = $start + $length;
+							$this_layer_end = max ($this_layer_end, $shorter_bar_end);
+						}
+						else
+						{
+							$keys_to_delete[] = $index_key;
+						}
+					}
+
+					$upper_layer_end = max ($upper_layer_end, $this_layer_end);
+				}
+
+				$key = $current_key + 1;
 			}
 
-			if ($same_start_key !== false)
+			if (count ($keys_to_delete))
 			{
+				foreach ($keys_to_delete as $key)
+				{
+					unset ($this->parsed_data[$row][$key]);
+				}
+
 				### sort bars again
 				usort ($this->parsed_data[$row], array ($this, "bar_start_sort"));
 			}
+
+			// while (isset($this->parsed_data[$row][$key]))
+			// {
+				// if ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$key + 1]["start"])
+				// {
+					// if ($this->parsed_data[$row][$key]["layer"] == $this->parsed_data[$row][$key + 1]["layer"])
+					// {
+						// if ($this->parsed_data[$row][$key]["length"] == $this->parsed_data[$row][$key + 1]["length"])
+						// {
+							// unset ($this->parsed_data[$row][$key]);
+						// }
+						// else
+						// { ### different lengths
+							// ### show shorter bars upon longer
+							// $same_start_key = $key + 1;
+							// $last_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
+
+							// while ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$same_start_key]["start"])
+							// {
+								// $start = $this->parsed_data[$row][$same_start_key]["start"];
+								// $length = $this->parsed_data[$row][$same_start_key]["length"];
+								// $this->parsed_data[$row][$same_start_key]["length"] = $start + $length - $last_end;
+								// $this->parsed_data[$row][$same_start_key]["start"] = $last_end;
+								// $this->parsed_data[$row][$same_start_key]["nostartmark"] = true;
+								// $last_end = $start + $length;
+								// $same_start_key++;
+							// }
+						// }
+					// }
+					// else
+					// { ### different layers
+						// if ($this->parsed_data[$row][$key]["length"] == $this->parsed_data[$row][$key + 1]["length"])
+						// { ### same length
+							// ### show upper layer bars upon lower layer bars
+							// $same_start_key = $key + 1;
+							// $current_key = $key;
+							// $start = $this->parsed_data[$row][$key]["start"];
+
+							// while ($start == $this->parsed_data[$row][$same_start_key]["start"])
+							// {
+								// unset ($this->parsed_data[$row][$current_key]);
+								// $current_key = $same_start_key;
+								// $same_start_key++;
+							// }
+						// }
+						// else
+						// { ### different lengths
+							// ### show shorter bars upon longer and upper layers on lower
+							// #### find keys by layer
+							// $layer_keys = array ($this->parsed_data[$row][$key]["layer"] => array ($key));
+							// $same_start_key = $key + 1;
+
+							// while ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$same_start_key]["start"])
+							// {
+								// $layer_keys[$layer] = $
+								// $same_start_key++;
+							// }
+
+							// $last_end = $this->parsed_data[$row][$key]["start"] + $this->parsed_data[$row][$key]["length"];
+
+							// while ($this->parsed_data[$row][$key]["start"] == $this->parsed_data[$row][$same_start_key]["start"])
+							// {
+								// $start = $this->parsed_data[$row][$same_start_key]["start"];
+								// $length = $this->parsed_data[$row][$same_start_key]["length"];
+								// $this->parsed_data[$row][$same_start_key]["length"] = $start + $length - $last_end;
+								// $this->parsed_data[$row][$same_start_key]["start"] = $last_end;
+								// $this->parsed_data[$row][$same_start_key]["nostartmark"] = true;
+								// $last_end = $start + $length;
+								// $same_start_key++;
+							// }
+						// }
+					// }
+				// }
+
+				// $key++;
+			// }
+
+			// if (isset ($same_start_key))
+			// {
+				// ### sort bars again
+				// usort ($this->parsed_data[$row], array ($this, "bar_start_sort"));
+			// }
 
 			### filter overlaps
 			$key = 0;
