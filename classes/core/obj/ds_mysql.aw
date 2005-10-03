@@ -1822,15 +1822,25 @@ die(dbg::dump($ret));
 					case "relmanager":
 					case "classificator":
 					case "popup_search":
+						$new_clid = false;
+
 						$relt_s = $cur_prop["reltype"];
 						$relt = $GLOBALS["relinfo"][$cur_clid][$relt_s]["value"];
-				
-						error::raise_if(!$relt, array(
+
+						if (!$relt)
+						{
+							$new_clid = @constant($cur_prop["clid"]);
+						}				
+
+						error::raise_if(!$relt && !$new_clid, array(
 							"id" => ERR_OBJ_NO_REL,
 							"msg" => sprintf(t("ds_mysql::_req_do_pcp(): no reltype %s in class %s , got reltype from relpicker property %s"), $relt_s, $cur_clid, $cur_prop["name"])
 						));
 	
-						$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
+						if (!$new_clid)
+						{
+							$new_clid = $GLOBALS["relinfo"][$cur_clid][$relt_s]["clid"][0];
+						}
 						break;
 	
 					default:
