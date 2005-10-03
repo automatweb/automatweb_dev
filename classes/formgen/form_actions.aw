@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.43 2005/09/21 12:47:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/formgen/form_actions.aw,v 1.44 2005/10/03 07:00:18 kristo Exp $
 // form_actions.aw - creates and executes form actions
 classload("formgen/form_base");
 class form_actions extends form_base
@@ -777,7 +777,8 @@ class form_actions extends form_base
 
 		if (aw_global_get("uid") != "" && !$data["no_user_info_link"])
 		{
-			$uif = $this->get_user(aw_global_get("uid"));
+			$u = get_instance("users");
+			$uif = $u->get_user(aw_global_get("uid"));
 			$jfes = unserialize($uif["join_form_entry"]);
 
 			if (is_array($jfes))
