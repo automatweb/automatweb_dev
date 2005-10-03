@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.6 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_deal.aw,v 1.7 2005/10/03 14:01:57 kristo Exp $
 // crm_deal.aw - Tehing 
 /*
 
@@ -56,8 +56,16 @@ class crm_deal extends class_base
 		{
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_projects()));
-				$prop["options"] = array("" => "") + $ol->names();
+				$prj = $i->get_my_projects();
+				if (!count($prj))
+				{
+					$prop["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $prj));
+					$prop["options"] = array("" => "") + $ol->names();
+				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);
@@ -67,8 +75,16 @@ class crm_deal extends class_base
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_customers()));
-				$prop["options"] = array("" => "") + $ol->names();
+				$cst = $i->get_my_customers();
+				if (!count($cst))
+				{
+					$prop["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $cst));
+					$prop["options"] = array("" => "") + $ol->names();
+				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);
@@ -78,8 +94,16 @@ class crm_deal extends class_base
 
 			case "task":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_tasks()));
-				$prop["options"] = array("" => "") + $ol->names();
+				$tsk = $i->get_my_tasks();
+				if (!count($tsk))
+				{
+					$prop["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $tsk));
+					$prop["options"] = array("" => "") + $ol->names();
+				}
 				if (!isset($prop["options"][$prop["value"]]) && $this->can("view", $prop["value"]))
 				{
 					$tmp = obj($prop["value"]);

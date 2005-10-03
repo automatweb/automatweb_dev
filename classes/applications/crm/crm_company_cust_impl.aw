@@ -196,7 +196,7 @@ class crm_company_cust_impl extends class_base
 					'crm_company'
 				)
 			));
-			/*$tb->add_menu_item(array(
+			$tb->add_menu_item(array(
 				'parent'=>'add_item',
 				'text' => t('Klient (eraisik)'),
 				'link' => $this->mk_my_orb('new',array(
@@ -207,7 +207,7 @@ class crm_company_cust_impl extends class_base
 					),
 					CL_CRM_PERSON
 				)
-			));*/
+			));
 		}
 
 		//delete button

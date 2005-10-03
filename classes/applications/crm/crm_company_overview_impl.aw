@@ -368,6 +368,7 @@ class crm_company_overview_impl extends class_base
 		{
 			$res["is_done"] = $r["act_s_status"] == 1 ? 0 : 8;
 		}
+
 		return $res;
 	}
 
