@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.31 2005/09/21 12:47:06 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/db_drivers/mysql.aw,v 1.32 2005/10/04 10:23:18 kristo Exp $
 // mysql.aw - MySQL draiver
 class mysql
 {
@@ -745,11 +745,11 @@ class mysql
 
 	function _proc_error($q)
 	{
-		if (strpos($q, "aw_projects") !== false)
+		/*if (strpos($q, "aw_projects") !== false)
 		{
 			$p = get_instance(CL_PROJECT);
 			$p->_mk_tbl();
-		}
+		}*/
 	}
 };
 ?>
