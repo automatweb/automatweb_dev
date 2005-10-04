@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.2 2005/09/29 08:24:33 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.3 2005/10/04 15:23:03 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -8,14 +8,19 @@
 @default table=objects
 @default group=general
 
+	@property code type=textbox field=meta method=serialize
+	@caption Kood
+
 @groupinfo organisation_general_information caption="Ettev&otilde;tte &uuml;ldandmed"
 @default group=organisation_general_information
 
 	@groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
 	@default group=general_info
 
-		@property organisation type=releditor reltype=RELTYPE_ORGANISATION rel_id=first field=meta method=serialize props=name,contact,phone_id,url_id,email_id,telefax_id,logo
+		@property organisation type=releditor reltype=RELTYPE_ORGANISATION rel_id=first field=meta method=serialize props=name,contact,code,phone_id,url_id,email_id,telefax_id,logo
 		@caption Organisatsioon
+
+		
 
 	@groupinfo design caption="Kujundus" parent=organisation_general_information
 	@default group=design
@@ -107,7 +112,7 @@
 @reltype CRM_SECTION value=4 clid=CL_CRM_SECTION
 @caption &Uuml;ksus/Toode
 
-@reltype PUBLICATION value=5 clid=CL_EXPP_PUBLICATION
+@reltype PUBLICATION value=5 clid=CL_EXPP_PUBLICATION,CL_CRM_SECTION
 @caption V&auml;ljaanne
 
 @reltype PUBLICATION_IMAGE value=6 clid=CL_IMAGE

@@ -1,6 +1,15 @@
 <?xml version='1.0'?>
 <properties>
       <property>
+            <name>code</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>textbox</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kood</caption>
+      </property>
+      <property>
             <name>organisation</name>
             <table>objects</table>
             <group>general_info</group>
@@ -12,11 +21,12 @@
             <props>
                   <num_0>name</num_0>
                   <num_1>contact</num_1>
-                  <num_2>phone_id</num_2>
-                  <num_3>url_id</num_3>
-                  <num_4>email_id</num_4>
-                  <num_5>telefax_id</num_5>
-                  <num_6>logo</num_6>
+                  <num_2>code</num_2>
+                  <num_3>phone_id</num_3>
+                  <num_4>url_id</num_4>
+                  <num_5>email_id</num_5>
+                  <num_6>telefax_id</num_6>
+                  <num_7>logo</num_7>
             </props>
             <store>no</store>
             <caption>Organisatsioon</caption>
@@ -319,7 +329,10 @@
             </CRM_SECTION>
             <PUBLICATION>
                   <value>5</value>
-                  <clid>CL_EXPP_PUBLICATION</clid>
+                  <clid>
+                        <num_0>CL_EXPP_PUBLICATION</num_0>
+                        <num_1>CL_CRM_SECTION</num_1>
+                  </clid>
                   <caption>V&amp;auml;ljaanne</caption>
             </PUBLICATION>
             <PUBLICATION_IMAGE>
