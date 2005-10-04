@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.69 2005/04/05 13:52:32 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.70 2005/10/04 15:47:25 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -21,6 +21,7 @@ class aw_template extends core
 		{
 			$this->tpl_init($args);
 		}
+		$this->debug_mode = aw_ini_get("debug_mode");
 	}
 
 	function tpl_init($basedir = "", $has_top_level_folder = false)
@@ -402,6 +403,13 @@ class aw_template extends core
 			}
 	   		$this->vars[$object] .= $src;
 		}
+		if ($this->debug_mode == 1 && $_GET["TPL"] == 2 && $object == "MAIN")
+		{
+			print "Available variables for: " . $this->template_filename;
+			print "<pre>";
+			print_r($this->vars);
+			print "</pre>";
+		};
 		$awt->stop("parse");
 		return $src;
 	}
@@ -410,8 +418,7 @@ class aw_template extends core
 	// !$arr - template content, array of lines of text
 	function read_tpl($arr)
 	{
-		global $TPL;
-		if ( (aw_ini_get("debug_mode") !=0 ) && $TPL)
+		if ($this->debug_mode != 0 && $_GET["TPL"] == 1)
 		{
 			print "using " . $this->template_filename . "<br />";
 		};
