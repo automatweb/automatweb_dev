@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.20 2005/10/01 09:45:22 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/automatweb/orb.aw,v 2.21 2005/10/04 10:48:59 kristo Exp $
 if (!ini_get("safe_mode"))
 {
 	set_time_limit(0);
@@ -76,7 +76,7 @@ $content = $orb->get_data();
 // et kui orb_data on link, siis teeme ümbersuunamise
 // see ei ole muidugi parem lahendus. In fact, see pole üleüldse
 // mingi lahendus
-if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !ifset($vars,"no_redir"))
+if ((substr($content,0,5) == "http:" || (isset($vars["reforb"]) && ($vars["reforb"] == 1))) && !$vars["no_redir"])
 {
 	if (headers_sent())
 	{
