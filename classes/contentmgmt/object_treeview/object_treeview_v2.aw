@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.89 2005/09/29 12:33:01 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.90 2005/10/04 10:19:04 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -1007,7 +1007,7 @@ class object_treeview_v2 extends class_base
 				{
 					if ($sortable_cols[$colid] == 1) 
 					{
-						$tmp_url = "?";
+						$tmp_url = aw_global_get("REQUEST_URI");
 						if ($_GET['sort_order'] == "asc" && $_GET['sort_by'] == $colid)
 						{
 							$tmp_sort_order = "desc";
@@ -1017,20 +1017,21 @@ class object_treeview_v2 extends class_base
 							$tmp_sort_order = "asc";
 						}
 //						$tmp_sort_order = ($_GET['sort_order'] == "asc") ? "desc" : "asc";
-						if (empty($_GET))
+						if (!empty($_GET))
 						{
-							$tmp_url .= "sort_by=".$colid."&sort_order=".$tmp_sort_order;
+							$tmp_url = aw_url_change_var("char", $_GET['char'], $tmp_url);
+							$tmp_url = aw_url_change_var("tv_sel", $_GET['tv_sel'], $tmp_url);
+						//	$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
+
 						}
-						else
-						{
-							$tmp_url .= (empty($_GET['char'])) ? "" : "char=".$_GET['char'];
-							$tmp_url .= (empty($_GET['tv_sel'])) ? "" : "tv_sel=".$_GET['tv_sel'];
-							$tmp_url .= (empty($_GET['section'])) ? "" : "section=".$_GET['section'];
-							$tmp_url .= "&sort_by=".$colid."&sort_order=".$tmp_sort_order;
-						}
+
+						$tmp_url = aw_url_change_var("sort_by", $colid, $tmp_url);
+						$tmp_url = aw_url_change_var("sort_order", $tmp_sort_order, $tmp_url);
+
 						$this->vars(array(
 							"h_text" => html::href(array(
-								"url" => $arr['oid'].$tmp_url.$anchor,
+						//		"url" => $arr['oid'].$tmp_url.$anchor,
+								"url" => $tmp_url.$anchor,
 								"caption" => $udef_cols[$colid],
 							)),
 						));
@@ -1656,8 +1657,18 @@ class object_treeview_v2 extends class_base
 		{
 			if ($sel_cols[$colid] == 1)
 			{
-				$content = (isset($formatv[$colid]) ? $formatv[$colid] : $arr[$colid]);
-				$content = (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false) ? date("d.m.Y H:i", $arr[$colid]) : $arr[$colid];
+				if (isset($formatv[$colid]))
+				{
+					$content = $formatv[$colid];
+				}else if (strpos($sel_columns_full_prop_info[$colid]['type'], "date") !== false)
+				{
+					$content = date("d.m.Y", $arr[$colid]);
+				}
+				else
+				{
+					$content = $arr[$colid];
+				}
+
 				if (isset($trs[$colid]) && count($trs[$colid]))
 				{
 					foreach($trs[$colid] as $tr_id)
