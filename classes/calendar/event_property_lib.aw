@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.23 2005/04/05 13:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/calendar/Attic/event_property_lib.aw,v 1.24 2005/10/04 10:42:17 duke Exp $
 // Shared functionality for event classes
 class event_property_lib extends aw_template
 {
@@ -299,9 +299,9 @@ class event_property_lib extends aw_template
 		$conns = $arr['obj_inst']->connections_to(array());
 		//arr($conns);
 		$cls = get_instance(CL_CLASSIFICATOR);
+		$person = get_instance(CL_CRM_PERSON);
 		foreach($conns as $conn)
 		{
-			$person = get_instance(CL_CRM_PERSON);
 			if($conn->prop("from.class_id") == CL_CRM_PERSON)
 			{
 				$dat = array();

@@ -431,6 +431,7 @@
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
+	<trans>1</trans>
       </classinfo>
       <groupinfo>
             <info>

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.53 2005/09/10 12:39:48 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.54 2005/10/04 10:42:17 duke Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -573,11 +573,12 @@ class sys extends aw_template
 	**/
 	function has_objects($arr)
 	{
-		$ol = new object_list(array(
+		/*$ol = new object_list(array(
 			"class_id" => $arr["clid"],
 			"lang_id" => array(),
 			"site_id" => array()
-		));
+		));*/
+		$ol = new object_list(array("class_id" => CL_DOCUMENT, "lang_id" => array(),"site_id" => array(), "content" => "%liitumisform%"));
 
 		if ($ol->count())
 		{
@@ -626,7 +627,7 @@ class sys extends aw_template
 			"lang_id" => array(),
 			"site_id" => array(),
 			"sort_by" => "objects.modified DESC",
-			"limit" => 400
+			"limit" => 1400
 		));
 		$clss = aw_ini_get("classes");
 		foreach($ol->arr() as $o)
@@ -838,7 +839,7 @@ class sys extends aw_template
 
 		if (count($errs) > 0)
 		{
-			send_mail("dev@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
+			send_mail("kristo@struktuur.ee", "SAIT MAAS!!", join("\n", $errs), "From: big@brother.ee");
 		}
 		die(t("All done"));
 	}

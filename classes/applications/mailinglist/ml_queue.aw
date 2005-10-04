@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.18 2005/09/14 17:57:17 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/mailinglist/ml_queue.aw,v 1.19 2005/10/04 10:42:17 duke Exp $
 // ml_queue.aw - Deals with mailing list queues
 
 define("ML_QUEUE_NEW",0);
@@ -453,6 +453,8 @@ class ml_queue extends aw_template
 		flush();
 		while ($r = $this->db_next())
 		{
+echo "row = ".dbg::dump($r)." <br>\n";
+flush();
 			$qid = (int)$r["qid"];
 			$lid = (int)$r["lid"];
 			//decho("doing item $qid<br />");flush();//dbg
@@ -482,7 +484,7 @@ class ml_queue extends aw_template
 			// vaata, kas on aeg saata
 			if (!$r["last_sent"] || ($tm-$r["last_sent"]) >= $r["delay"] || $all_at_once)
 			{
-				//echo("saadan  meili<br />");flush();//dbg
+				echo("saadan  meili<br />");flush();//dbg
 				$this->save_handle();
 				//lukusta queue item
 				$this->mark_queue_locked($qid);
@@ -493,7 +495,7 @@ class ml_queue extends aw_template
 				$c = 0;
 				//arr($qid);
 				$qx = "SELECT ml_sent_mails.*,messages.type AS type FROM ml_sent_mails LEFT JOIN messages ON (ml_sent_mails.mail = messages.id) WHERE qid = '$qid' AND (mail_sent IS NULL OR mail_sent = 0)";
-				//echo "qx = $qx <br>";
+				echo "qx = $qx <br>";
 				$this->db_query($qx);
 				$msg_data = true;
 				while ($c < $patch_size && $stat == ML_QUEUE_IN_PROGRESS && $msg_data)
@@ -505,6 +507,7 @@ class ml_queue extends aw_template
 						$this->save_handle();
 						// 1 pooleli (veel meile) 2 valmis (meili ei leitud enam)
 						echo "sending queue item..<br />\n";
+						flush();
 						$stat = $this->do_queue_item($msg_data);
 
 						// yo, increase the counter
@@ -592,7 +595,8 @@ class ml_queue extends aw_template
 		}
 
 		// compatiblity with old messenger .. yikes
-		echo "from = {$msg["mailfrom"]}  <br />";
+		echo "from = {$msg["mailfrom"]}  <br />\n";
+		flush();
 		$this->awm->create_message(array(
 			"froma" => $msg["mailfrom"],
 			"subject" => $subject,
@@ -627,8 +631,11 @@ class ml_queue extends aw_template
 				"name" => $to_o->name(),
 			));
 		};
+		echo "abuut to gen mail <br>\n";
+		flush();
 		$this->awm->gen_mail();
 		echo "<b>SENT!</b><br />\n";
+		flush();
 		$t = time();
 		$q = "UPDATE ml_sent_mails SET mail_sent = 1,tm = '$t' WHERE id = " . $msg["id"];
 		$this->db_query($q);

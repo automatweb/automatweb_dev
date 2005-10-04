@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.5 2005/06/20 14:55:45 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/video.aw,v 1.6 2005/10/04 10:42:18 duke Exp $
 // video.aw - Video 
 /*
 
@@ -49,6 +49,7 @@ caption Lingi tekst (Windows Media)
 
 @reltype IMAGE value=1 clid=CL_IMAGE
 @caption Video pilt
+
 
 */
 

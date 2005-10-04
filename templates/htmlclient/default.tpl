@@ -99,6 +99,7 @@
 <!-- END SUB: GRIDITEM_NO_CAPTION -->
 
 <!-- SUB: GRID_HBOX -->
+<!-- hbox -->
 <table border=0 cellspacing=0 cellpadding=0 width='100%'>
 <tr>
 <!-- SUB: GRID_HBOX_ITEM -->
@@ -111,6 +112,7 @@
 <!-- END SUB: GRID_HBOX -->
 
 <!-- SUB: GRID_VBOX -->
+<!-- vbox -->
 <table border=0 cellspacing=0 cellpadding=0 width='100%'>
 <!-- SUB: GRID_VBOX_ITEM -->
 <tr>

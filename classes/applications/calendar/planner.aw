@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.96 2005/09/29 06:38:23 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.97 2005/10/04 10:42:17 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -250,6 +250,7 @@ class planner extends class_base
 			CL_CRM_MEETING,
 			&$arr
 		);
+		// XXX: miks tyhi?
 		return $arr['return_url'];
 	}
 
@@ -2523,6 +2524,7 @@ class planner extends class_base
 		{
 			return $event_ol;
 		}
+
 		/*obj_set_opt("no_cache", 0);
 		$GLOBALS["DUKE"] = 0;
 		*/
