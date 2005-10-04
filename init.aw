@@ -980,6 +980,8 @@ function log_pv($mt)
 		$time = "0";
 	}
 
+	$promo_time = $GLOBALS["awt"]->timers["mainc-contentmgmt/promo"]["elapsed"];
+
 	// log pv to file
 	$fn = aw_ini_get("basedir")."/files/logs/";
 	if (!is_dir($fn))
@@ -991,7 +993,7 @@ function log_pv($mt)
 	$f = @fopen($fn, "a");
 	if ($f)
 	{
-		fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")." $time \n");
+		fwrite($f, date("d.m.Y H:i:s")." ".aw_ini_get("site_id")." ".aw_ini_get("baseurl")." ".aw_global_get("REQUEST_URI")." $time $promo_time\n");
 		fclose($f);
 	}
 }
