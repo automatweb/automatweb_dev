@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.99 2005/10/05 16:19:23 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.100 2005/10/05 17:07:54 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1250,7 +1250,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("add_unavailable_times", "end");
 	}
 
-	function get_available_time (&$resource_tag, &$start, &$length)
+	function get_available_time ($resource_tag, $start, $length)
 	{
 /* timing */ timing ("get_available_time", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1888,6 +1888,7 @@ function timing ($name = NULL, $action = "show")
 				{
 					$timings[$name]["sum"] += ($time - $timings[$name]["start"]);
 					$timings[$name]["count"]++;
+					$timings[$name]["max"] = max ($timings[$name]["max"], ($time - $timings[$name]["start"]));
 					$timings[$name]["start"] = 0;
 				}
 				return;
@@ -1898,7 +1899,7 @@ function timing ($name = NULL, $action = "show")
 
 				foreach ($timings as $name => $timing)
 				{
-					echo "[" . $name . "] => " . ($timing["sum"] / $timing["count"]) . " (count: " . $timing["count"] . ", total: " . $timing["sum"] . ")\n";
+					echo "[" . $name . "]\n\t\t avg: " . ($timing["sum"] / $timing["count"]) . "\n\t\t max: " . $timing["max"] . "\n\t\t : " . $timing["count"] . "\n\t\t total: " . $timing["sum"] . ")\n";
 				}
 
 				echo "</pre>";
