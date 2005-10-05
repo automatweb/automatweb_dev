@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.94 2005/10/05 13:06:14 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.95 2005/10/05 13:30:20 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1198,6 +1198,7 @@ class mrp_schedule extends class_base
 
 	function add_unavailable_times ($resource_tag, $reserved_time, $length, $start2)
 	{
+/* timing */ timing ("add_unavailable_times", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "<h4>add_unavailable_times</h4>";
@@ -1255,7 +1256,7 @@ class mrp_schedule extends class_base
 				}
 			}
 
-/* timing */ timing ("reserve_time - insert unavailable periods to job length", "start");
+/* timing */ timing ("add_unavailable_times - insert unavailable periods to job length", "start");
 
 			### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
 			$i_dbg1 = 0;
@@ -1310,8 +1311,10 @@ class mrp_schedule extends class_base
 				}
 			}
 
-/* timing */ timing ("reserve_time - insert unavailable periods to job length", "end");
+/* timing */ timing ("add_unavailable_times - insert unavailable periods to job length", "end");
 		}
+
+/* timing */ timing ("add_unavailable_times", "end");
 
 		return array ((int) $reserved_time, (int) $length);
 	}
@@ -1456,6 +1459,7 @@ class mrp_schedule extends class_base
 
 	function get_closest_unavailable_period ($resource_id, $time, $length)
 	{
+/* timing */ timing ("get_closest_unavailable_period", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "<h4>get_closest_unavailable_period</h4>";
@@ -1474,7 +1478,7 @@ class mrp_schedule extends class_base
 		### unavailable periods not defined past $time, stop and return 0?
 		if ($start == $end)
 		{
-			// !!! ajutine lahendus sellele, mis siis saaab kui t88aegu ega midagi pole dfn, v6i peale kysitud hetke pole kinniseid aegu. tagastatakse 1sekundine kinnine aeg 10 aastat p2rast schedule-endi
+			// !!! ajutine lahendus sellele, mis siis saaab kui t88aegu ega midagi pole dfn, v6i peale kysitud hetke pole kinniseid aegu. tagastatakse 0sekundine kinnine aeg 10 aastat p2rast schedule-endi
 			$quasi_start = ($start - $this->schedule_start) + MRP_INF;
 			$quasi_length = 0;
 			return array ($quasi_start, $quasi_length);
@@ -1535,6 +1539,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* timing */ timing ("get_closest_unavailable_period", "end");
 
 		return array ($period_start, $length);
 	}
@@ -1542,7 +1547,7 @@ class mrp_schedule extends class_base
 	## returns start and length of next unavailable period after $time. if $time is in an unavail. period, that period's data is returned.
 	function _get_closest_unavailable_period ($resource_id, $time, $length)
 	{
-/* timing */ timing ("get_closest_unavailable_period", "start");
+/* timing */ timing ("_get_closest_unavailable_period", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "<h5>_get_closest_unavailable_period</h5>";
@@ -1680,7 +1685,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "combined unavail: t - ".date (MRP_DATE_FORMAT, $time)." [".date (MRP_DATE_FORMAT, $start)." - ".date (MRP_DATE_FORMAT, $end) . "]<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* timing */ timing ("get_closest_unavailable_period", "end");
+/* timing */ timing ("_get_closest_unavailable_period", "end");
 
 
 		return array ($start, $end);
@@ -1689,6 +1694,7 @@ class mrp_schedule extends class_base
 	### find and combine ranges closest to $value, exclude ranges that don't exceed $value directly or through overlapping ranges
 	function find_combined_range ($ranges, $value)
 	{
+/* timing */ timing ("find_combined_range", "start");
 		$start = $end = $value;
 		ksort ($ranges, SORT_NUMERIC);
 
@@ -1720,12 +1726,15 @@ class mrp_schedule extends class_base
 /* dbg */ arr (array ($start, $end));
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* timing */ timing ("find_combined_range", "end");
+
 		return array ($start, $end);
 	}
 
 	## input is an array sorted by key, pointer at start.
 	function combine_ranges ($ranges)
 	{
+/* timing */ timing ("combine_ranges", "start");
 		$prev_end = NULL;
 		$combined_ranges = array ();
 
@@ -1743,6 +1752,8 @@ class mrp_schedule extends class_base
 				$prev_end = $end;
 			}
 		}
+
+/* timing */ timing ("combine_ranges", "end");
 
 		return $combined_ranges;
 	}
