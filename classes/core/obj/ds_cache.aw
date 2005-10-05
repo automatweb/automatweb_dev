@@ -236,6 +236,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			if (!$this->search_cache_is_cleared)
 			{
 				$this->cache->file_invalidate_regex($cfn."-search-(.*)");
+				$this->cache->file_invalidate_regex($cfn."-fetch_list-(.*)");
 				$this->search_cache_is_cleared = true;
 				$this->cache->flush_cache();
 				if ($GLOBALS["INTENSE_DUKE"] == 1)
@@ -269,6 +270,25 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			// when doing connections_from
 			$this->cache->flush_cache();
 		};
+	}
+
+	function fetch_list($param)
+	{
+		$this->search_cache_is_cleared = false;
+		$hash = "fetch_list-".md5(serialize($param));
+		$ret = $this->_get_cache($hash, 0);
+		if (is_array($ret))
+		{
+			foreach($ret as $row)
+			{
+				$this->contained->read_properties_data_cache[$row["oid"]] = $row;
+			}
+		}
+		else
+		{
+			$ret = $this->contained->fetch_list($param);
+			$this->_set_cache($hash, 0, $ret);
+		}
 	}
 }
 ?>

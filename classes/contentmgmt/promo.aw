@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.76 2005/09/07 10:42:36 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/promo.aw,v 1.77 2005/10/05 09:02:03 kristo Exp $
 // promo.aw - promokastid.
 
 /* content documents for promo boxes are handled thusly:
@@ -747,7 +747,7 @@ class promo extends class_base
 		$filter = array();
 		$filter["status"] = STAT_ACTIVE;
 		$filter["class_id"] = CL_PROMO;
-		$filter["sort_by"] = "objects.jrk";
+		//$filter["sort_by"] = "objects.jrk";
 
 		/*if (aw_ini_get("menuedit.lang_menus"))
 		{
@@ -755,7 +755,12 @@ class promo extends class_base
 		}*/
 		$filter["lang_id"] = array();
 
+		enter_function("promo_get_list");
 		$list = new object_list($filter);
+		$parr = $list->arr();
+		$list->sort_by(array("prop" => "ord"));
+		$parr = $list->arr();
+		exit_function("promo_get_list");
 
 		$tplmgr = get_instance("templatemgr");
 		$promos = array();
@@ -766,7 +771,7 @@ class promo extends class_base
 		$tpldir = aw_ini_get("tpldir");
 		$no_acl_checks = aw_ini_get("menuedit.no_view_acl_checks");
 		$promo_areas = aw_ini_get("promo.areas");
-		foreach($list->arr() as $o)
+		foreach($parr as $o)
 		{
 			if ($o->lang_id() != $lang_id && !$o->prop("content_all_langs"))
 			{
@@ -901,6 +906,7 @@ class promo extends class_base
 
 				if ($o->meta("version") == 2 && ($this->cfg["version"] == 2))
 				{
+					enter_function("mainc-contentmgmt/promo-read_docs");
 					$docid = array_values(safe_array($o->meta("content_documents")));
 					foreach($docid as $_idx => $_did)
 					{
@@ -925,14 +931,17 @@ class promo extends class_base
 						}
 						$docid = $tmp;
 					}
+					exit_function("mainc-contentmgmt/promo-read_docs");
 				}
 				else
 				{
+					enter_function("mainc-contentmgmt/promo-read_docs-old");
 					// get_default_document prefetches docs by itself so no need to do list here
 					$docid = $inst->get_default_document(array(
 						"obj" => $o,
 						"all_langs" => true
 					));
+					exit_function("mainc-contentmgmt/promo-read_docs-old");
 				}
 
 				if ($o->prop("trans_all_langs"))
@@ -949,6 +958,7 @@ class promo extends class_base
 
 				$d_cnt = 0;
 				$d_total = count($docid);
+				enter_function("mainc-contentmgmt/promo-show-docs");
 				foreach($docid as $d)
 				{
 					if (($d_cnt % 2)  == 1)
@@ -978,6 +988,7 @@ class promo extends class_base
 					//$pr_c .= str_replace("\r","",str_replace("\n","",$cont));
 					$d_cnt++;
 				}
+				exit_function("mainc-contentmgmt/promo-show-docs");
 
 				if (true || $inst->is_template("PREV_LINK"))
 				{

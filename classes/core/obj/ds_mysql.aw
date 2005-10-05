@@ -1960,6 +1960,8 @@ die(dbg::dump($ret));
 		// read props
 		$this->_do_add_class_id($clids);
 
+		$ret = array();
+
 		// do joins on the data objects for those
 		$joins = array();
 		foreach($clids as $clid)
@@ -1988,10 +1990,13 @@ die(dbg::dump($ret));
 				while ($row = $this->db_next())
 				{
 					$this->read_properties_data_cache[$row["oid"]] = $row;
+					$ret[] = $row;
 				}
 			}
 			
 		}
+
+		return $ret;
 	}
 
 	/*function quote(&$str)
