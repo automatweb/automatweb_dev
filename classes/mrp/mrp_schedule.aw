@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.101 2005/10/05 17:17:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.102 2005/10/05 17:29:54 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1134,6 +1134,7 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+		$tmp_length = $length;
 
 		list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time, $length);
 
@@ -1157,7 +1158,7 @@ class mrp_schedule extends class_base
 				### check whether with moved starttime it still fits before next already scheduled job's starting time
 				if (($unavailable_start + $unavailable_length + $length) <= $start2)
 				{
-					$reserved_time = ($unavailable_start + $unavailable_length);
+					$reserved_time = $unavailable_start + $unavailable_length;
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time, $length);
 
 
@@ -1181,6 +1182,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("add_unavailable_times", "end");
 
+					$length = $tmp_length;
 					$reserved_time = NULL;
 					return;
 				}
@@ -1212,6 +1214,7 @@ class mrp_schedule extends class_base
 					));
 /* timing */ timing ("add_unavailable_times", "end");
 
+					$length = $tmp_length;
 					$reserved_time = NULL;
 					return;
 				}
@@ -1227,6 +1230,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("add_unavailable_times", "end");
 
+					$length = $tmp_length;
 					$reserved_time = NULL;
 					return;
 				}
@@ -1900,7 +1904,7 @@ function timing ($name = NULL, $action = "show")
 
 				foreach ($timings as $name => $timing)
 				{
-					echo "[" . $name . "]\n\t\t avg: " . ($timing["sum"] / $timing["count"]) . "\n\t\t max: " . $timing["max"] . "\n\t\t : " . $timing["count"] . "\n\t\t total: " . $timing["sum"] . ")\n";
+					echo "[" . $name . "]\n\t\t avg: " . ($timing["sum"] / $timing["count"]) . "\t\t max: " . $timing["max"] . "\t\t cnt: " . $timing["count"] . "\t\t sum: " . $timing["sum"] . ")\n";
 				}
 
 				echo "</pre>";
