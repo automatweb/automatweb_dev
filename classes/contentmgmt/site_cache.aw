@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.26 2005/09/22 07:24:46 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_cache.aw,v 1.27 2005/10/05 09:25:25 kristo Exp $
 
 class site_cache extends aw_template
 {
@@ -38,10 +38,6 @@ class site_cache extends aw_template
 
 		$inst = get_instance("contentmgmt/site_show");
 		$content = $inst->show($arr);
-		if (!aw_global_get("no_cache"))
-		{
-			$this->set_cached_content($arr, $content);
-		}
 
 		if (aw_ini_get("menuedit.content_from_class_base") == 1)
 		{
@@ -71,7 +67,10 @@ class site_cache extends aw_template
 
 		};
 
-		$this->set_cached_content($arr, $content);
+		if (!aw_global_get("no_cache"))
+		{
+			$this->set_cached_content($arr, $content);
+		}
 		return $this->do_final_content_checks($content);
 	}
 
