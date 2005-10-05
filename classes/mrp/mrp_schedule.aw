@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.95 2005/10/05 13:30:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.96 2005/10/05 14:23:30 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1088,7 +1088,7 @@ class mrp_schedule extends class_base
 
 	function get_snug_slot ($resource_tag, $start, $length, $time_range)
 	{ ## find free space with right length/start
-/* timing */ timing ("reserve_time - get_snug_slot", "start");
+/* timing */ timing ("get_snug_slot", "start");
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1119,7 +1119,7 @@ class mrp_schedule extends class_base
 
 			if ( (($prev_range_end + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 			{
-/* timing */ timing ("reserve_time - get_snug_slot", "end");
+/* timing */ timing ("get_snug_slot", "end");
 				return array ($prev_range_end, 0, $start2); # fabricated time -- no information available about prev range job ending latest. fortunately no info needed about it later on (!!!??).
 			}
 
@@ -1142,7 +1142,7 @@ class mrp_schedule extends class_base
 				### check if requested space is available between start1 & start2
 				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 				{
-/* timing */ timing ("reserve_time - get_snug_slot", "end");
+/* timing */ timing ("get_snug_slot", "end");
 					return array ($start1, $length1, $start2);
 				}
 
@@ -1159,12 +1159,12 @@ class mrp_schedule extends class_base
 			### check if requested space is available between start1 & start2
 			if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
 			{
-/* timing */ timing ("reserve_time - get_snug_slot", "end");
+/* timing */ timing ("get_snug_slot", "end");
 				return array ($start1, $length1, $start2);
 			}
 		}
 
-/* timing */ timing ("reserve_time - get_snug_slot", "end");
+/* timing */ timing ("get_snug_slot", "end");
 		return false;
 	}
 
@@ -1313,7 +1313,6 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("add_unavailable_times - insert unavailable periods to job length", "end");
 		}
-
 /* timing */ timing ("add_unavailable_times", "end");
 
 		return array ((int) $reserved_time, (int) $length);
@@ -1335,11 +1334,13 @@ class mrp_schedule extends class_base
 		### get place for job
 		while (isset ($this->reserved_times[$resource_tag][$time_range]) and !isset ($reserved_time))
 		{
-			$snug_slot = $this->get_snug_slot ($resource_tag, $start, $length, $time_range);
-
-			if (is_array ($snug_slot))
+			do
 			{
-				list ($start1, $length1, $start2) = $snug_slot;
+				$snug_slot = $this->get_snug_slot ($resource_tag, $start, $length, $time_range);
+
+				if (is_array ($snug_slot))
+				{
+					list ($start1, $length1, $start2) = $snug_slot;
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1349,12 +1350,12 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 
-				$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
-				$reserved_time_data = $this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
+					$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
+					$reserved_time_data = $this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
 
-				if (is_array ($reserved_time_data))
-				{
-					list ($reserved_time, $length) = $reserved_time_data;
+					if (is_array ($reserved_time_data))
+					{
+						list ($reserved_time, $length) = $reserved_time_data;
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1365,12 +1366,15 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-				}
-				else
-				{
-					$reserved_time = NULL;
+					}
+					else
+					{
+						$start = $start1 + $length1;
+						$reserved_time = NULL;
+					}
 				}
 			}
+			while (is_array ($snug_slot) and !isset ($reserved_time));
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1878,6 +1882,7 @@ function timing ($name, $action = "time")
 
 			case "show":
 				echo "<pre>";
+				ksort ($timings);
 
 				foreach ($timings as $name => $timing)
 				{
