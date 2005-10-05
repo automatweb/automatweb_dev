@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.93 2005/10/05 12:53:47 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.94 2005/10/05 13:06:14 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1870,7 +1870,7 @@ function timing ($name, $action = "time")
 
 				foreach ($timings as $name => $timing)
 				{
-					echo "[" . $name . "] => " . ($timing["sum"] / $timing["count"]) . " (count = " . $timing["count"] . ")\n";
+					echo "[" . $name . "] => " . ($timing["sum"] / $timing["count"]) . " (count: " . $timing["count"] . ", total: " . $timing["sum"] . ")\n";
 				}
 
 				echo "</pre>";
