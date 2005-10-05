@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.98 2005/10/05 15:48:09 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.99 2005/10/05 16:19:23 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -633,14 +633,10 @@ class mrp_schedule extends class_base
 		}
 
 /* timing */ timing ("schedule jobs total", "end");
-/* timing */ timing ("save schedule data", "start");
 // /* dbg */ echo "<hr>";
 // /* dbg */ error_reporting (0);
 
 		$this->save ();
-
-/* timing */ timing ("save schedule data", "end");
-/* timing */ timing (null, "show");
 
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
@@ -665,7 +661,7 @@ class mrp_schedule extends class_base
 /* dbg */ list($micro,$sec) = split(" ",microtime());
 /* dbg */ $ts_e = $sec + $micro;
 /* dbg */ $GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
-		// return $this->mk_my_orb("change", array("id" => $arr["mrp_workspace"], "group" => "grp_schedule"), "mrp_workspace");
+/* timing */ timing ();
 	}
 
 	function compute_due_date ()
@@ -756,6 +752,8 @@ class mrp_schedule extends class_base
 
 	function save_fileload ()
 	{
+/* timing */ timing ("save schedule data", "start");
+
 		if (is_array ($this->project_schedule) and is_array ($this->job_schedule))
 		{
 			$log = get_instance(CL_MRP_WORKSPACE);
@@ -921,10 +919,13 @@ class mrp_schedule extends class_base
 			fclose($tmp);
 			unlink($tmpname);
 		}
+/* timing */ timing ("save schedule data", "end");
 	}
 
 	function project_priority_comparison ($project1, $project2)
 	{
+/* timing */ timing ("project_priority_comparison", "start");
+
 		$due_date1 = $project1["due_date"] - $this->schedule_start;
 		$due_date2 = $project2["due_date"] - $this->schedule_start;
 		$project_priority1 = $project1["project_priority"];
@@ -950,11 +951,15 @@ class mrp_schedule extends class_base
 			$result = 0;
 		}
 
+/* timing */ timing ("project_priority_comparison", "end");
+
 		return $result;
 	}
 
 	function combined_priority ($x, $y)
 	{
+/* timing */ timing ("combined_priority", "start");
+
 		if ($x <= 0)
 		{
 			$value = (((-1*$this->parameter_due_date_overdue_slope)*$x) + $this->parameter_due_date_overdue_intercept) + ($this->parameter_priority_slope*$y);
@@ -969,11 +974,14 @@ class mrp_schedule extends class_base
 			$value = (1/(($x*$this->parameter_due_date_decay) + $this->parameter_due_date_intercept)) + ($this->parameter_priority_slope*$y);
 		}
 
+/* timing */ timing ("combined_priority", "end");
+
 		return $value;
 	}
 
 	function reserve_time ($resource_id, $start, $length)
 	{
+/* timing */ timing ("reserve_time", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "<h4>reserve_time</h4>";
@@ -1062,6 +1070,8 @@ class mrp_schedule extends class_base
 				"fatal" => false,
 				"show" => false,
 			));
+/* timing */ timing ("reserve_time", "end");
+
 			return false;
 		}
 
@@ -1082,6 +1092,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "reserved time: " . $reserved_time . " [" . date (MRP_DATE_FORMAT, $reserved_time) . "]";
 /* dbg */ }
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* timing */ timing ("reserve_time", "end");
 
 		return array ($reserved_time, $length);
 	}
@@ -1168,6 +1179,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* timing */ timing ("add_unavailable_times", "end");
 
 					$reserved_time = NULL;
 					return;
@@ -1198,6 +1210,8 @@ class mrp_schedule extends class_base
 						"fatal" => false,
 						"show" => false,
 					));
+/* timing */ timing ("add_unavailable_times", "end");
+
 					$reserved_time = NULL;
 					return;
 				}
@@ -1211,6 +1225,7 @@ class mrp_schedule extends class_base
 /* dbg */ echo "cycle didnt fit: true<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* timing */ timing ("add_unavailable_times", "end");
 
 					$reserved_time = NULL;
 					return;
@@ -1254,7 +1269,7 @@ class mrp_schedule extends class_base
 		while (isset ($this->reserved_times[$resource_tag][$time_range]) and !isset ($reserved_time))
 		{
 			### find free space with right length/start
-/* timing */ timing ("get_snug_slot", "start");
+/* timing */ timing ("get_available_time - get_snug_slot", "start");
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1268,11 +1283,11 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-/* timing */ timing ("reserve_time - sort reserved_times", "start");
+/* timing */ timing ("get_available_time - sort reserved_times", "start");
 
 				ksort ($this->reserved_times[$resource_tag][$time_range], SORT_NUMERIC);
 
-/* timing */ timing ("reserve_time - sort reserved_times", "end");
+/* timing */ timing ("get_available_time - sort reserved_times", "end");
 
 				### get max reach of previous timerange
 				$prev_range_end = $this->range_lengths[$time_range - 1];
@@ -1373,7 +1388,7 @@ class mrp_schedule extends class_base
 					}
 				}
 
-/* timing */ timing ("get_snug_slot", "end");
+/* timing */ timing ("get_available_time - get_snug_slot", "end");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range}):";
@@ -1456,6 +1471,7 @@ class mrp_schedule extends class_base
 				break;
 			}
 		}
+/* timing */ timing ("find_range", "end");
 	}
 
 	function get_closest_unavailable_period (&$resource_id, &$time, &$length)
@@ -1482,6 +1498,8 @@ class mrp_schedule extends class_base
 			// !!! ajutine lahendus sellele, mis siis saaab kui t88aegu ega midagi pole dfn, v6i peale kysitud hetke pole kinniseid aegu. tagastatakse 0sekundine kinnine aeg 10 aastat p2rast schedule-endi
 			$quasi_start = ($start - $this->schedule_start) + MRP_INF;
 			$quasi_length = 0;
+
+/* timing */ timing ("get_closest_unavailable_period", "end");
 			return array ($quasi_start, $quasi_length);
 		}
 
@@ -1851,35 +1869,32 @@ class mrp_schedule extends class_base
 	}
 }
 
-function timing ($name, $action = "time")
+function timing ($name = NULL, $action = "show")
 {
 	if (isset ($_GET["show_timings"]) and $_GET["show_timings"] == 1)
 	{
 		static $timings = array ();
+		list ($msec, $sec) = explode (" ", microtime ());
+		$time = ((float) $msec + (float) $sec);
 
 		switch ($action)
 		{
-			case "time":
 			case "start":
-			case "end":
-				list ($msec, $sec) = explode (" ", microtime ());
-				$time = ((float) $msec + (float) $sec);
+				$timings[$name]["start"] = $time;
+				return;
 
+			case "end":
 				if ($timings[$name]["start"])
 				{
 					$timings[$name]["sum"] += ($time - $timings[$name]["start"]);
 					$timings[$name]["count"]++;
 					$timings[$name]["start"] = 0;
 				}
-				else
-				{
-					$timings[$name]["start"] = $time;
-				}
-				break;
+				return;
 
 			case "show":
-				echo "<pre>";
 				ksort ($timings);
+				echo "<pre>";
 
 				foreach ($timings as $name => $timing)
 				{
@@ -1887,7 +1902,7 @@ function timing ($name, $action = "time")
 				}
 
 				echo "</pre>";
-				break;
+				return;
 		}
 	}
 }
