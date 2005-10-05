@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.90 2005/10/04 10:19:04 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.91 2005/10/05 11:02:42 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -841,6 +841,10 @@ class object_treeview_v2 extends class_base
 			{
 				$has_access_to = true;
 			}
+			else
+			{
+				$ol[$odata['id']]['change'] = "";
+			}
 			$last_o = $odata;
 		}
 
@@ -1631,6 +1635,7 @@ class object_treeview_v2 extends class_base
 		{
 			$del = $this->parse("DELETE");
 		}
+
 		$this->vars(array(
 			"DELETE" => $del
 		));
