@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.421 2005/10/05 10:59:50 duke Exp $
+// $Id: class_base.aw,v 2.422 2005/10/05 11:16:26 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2623,12 +2623,19 @@ class class_base extends aw_template
 							{
 								continue;
 							};
+							$target = "contentarea";
+							$cb_part = 1;
+							if ($no_rte) 
+							{
+								$target = "_self";
+								$cb_part = null;
+							};
 							$val["vcl_inst"]->add_button(array(
 								"name" => "grp_" . $grp_id,
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
-								"target" => "contentarea",
-								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1,"no_rte" => $no_rte)),
+								"target" => $target,
+								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => $cb_part)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => $cb_part)),
 							));
 
 						}
