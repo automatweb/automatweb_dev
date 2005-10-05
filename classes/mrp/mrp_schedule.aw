@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.100 2005/10/05 17:07:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.101 2005/10/05 17:17:57 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1331,6 +1331,7 @@ class mrp_schedule extends class_base
 							}
 							else
 							{ #### look for it in the sequent timeranges
+								$start2 = 0;
 								$this->get_next_range_first_job ($resource_tag, $time_range, $start2);
 							}
 
