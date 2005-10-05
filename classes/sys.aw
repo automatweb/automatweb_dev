@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.55 2005/10/05 06:12:12 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.56 2005/10/05 06:18:00 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -687,10 +687,11 @@ class sys extends aw_template
 			$times = array();
 			$page_times = array();
 			$tot_page_times = array();
+			$promo_time = array();
 
 			foreach($lines as $line)
 			{
-				list($dp, $tm, $sid, $bu, $url, $time, $promo_time) = explode(" ", $line);
+				list($dp, $tm, $sid, $bu, $url, $time, $p_time) = explode(" ", $line);
 				$sites[$sid]++;
 				$sid2url[$sid] = $bu;
 				$urls[$bu.$url]++;
@@ -700,8 +701,8 @@ class sys extends aw_template
 				$page_times[] = $time;
 				$page_t2p[] = $bu.$url;
 				$tot_page_times[$bu.$url] += $time;
-				$promo_time[$sid] += $promo_time;
-				$promo_time_cnt[$sid] += ($promo_time > 0 ? 1 : 0);
+				$promo_time[$sid] += $p_time;
+				$promo_time_cnt[$sid] += ($p_time > 0 ? 1 : 0);
 			}
 
 			$avg_page_times = array();
