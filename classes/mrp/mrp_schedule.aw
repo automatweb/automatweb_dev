@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.92 2005/09/30 10:33:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.93 2005/10/05 12:53:47 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -119,6 +119,8 @@ class mrp_schedule extends class_base
 		6048000,
 		12096000,
 	);
+	# farthest ends of currently allocated jobs in $reserved_times for all ranges of $range_scale
+	var $range_lengths = array ();
 
 	var $timings = array ();
 
@@ -205,6 +207,8 @@ class mrp_schedule extends class_base
 			$this->parameter_length_priority = abs ((float) $workspace->prop ("parameter_length_priority"));
 			$this->range_scale = $range_scale;
 		}
+
+		$this->range_lengths = $this->range_scale;
 
 		### get schedulable resources
 		#### shcedulable resource types
@@ -978,6 +982,7 @@ class mrp_schedule extends class_base
 
 		$threads = $this->resource_data[$resource_id]["threads"];
 		$available_times = array ();
+		#### convert to relative time (for $reserved_times, $range_scale, ...)
 		$start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
 
 		while ($threads--)
@@ -1065,6 +1070,9 @@ class mrp_schedule extends class_base
 		$reserved_time = $available_times[$resource_tag][0];
 		$length = $available_times[$resource_tag][1];
 		$this->reserved_times[$resource_tag][$time_range][$reserved_time] = $length;
+		#### update max. reach of selected timerange.
+		$this->range_lengths[$time_range] = max (($reserved_time + $length), $this->range_lengths[$time_range]);
+		#### convert back to real time
 		$reserved_time += $this->schedule_start;
 
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1100,11 +1108,22 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("reserve_time - sort reserved_times", "end");
 
+		### get max reach of previous timerange
+		$prev_range_end = $this->range_lengths[$time_range - 1];
+
 		if (count ($this->reserved_times[$resource_tag][$time_range]))
 		{ ### timerange has already reserved times
-			### go through reserved times in current timerange to find place for job being scheduled
-			reset ($this->reserved_times[$resource_tag][$time_range]);
+			### check if there's space for the job between prev. range end and this range first job
+			$start2 = reset ($this->reserved_times[$resource_tag][$time_range]); # needed here to get $start2 and later for cycling through time_range reserved times with next() and key()
+			$d = ($start < ($prev_range_end)) ? 0 : ($start - ($prev_range_end));
 
+			if ( (($prev_range_end + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+			{
+/* timing */ timing ("reserve_time - get_snug_slot", "end");
+				return array ($prev_range_end, 0, $start2); # fabricated time -- no information available about prev range job ending latest. fortunately no info needed about it later on (!!!??).
+			}
+
+			### go through reserved times in current timerange to find place for job being scheduled
 			foreach ($this->reserved_times[$resource_tag][$time_range] as $start1 => $length1)
 			{
 				### get next reserved time start -- start2
@@ -1132,10 +1151,9 @@ class mrp_schedule extends class_base
 		}
 		else
 		{ ### no times reserved yet
-			$start1 = $this->range_scale[$time_range];//!!!?
+			$start1 = max ($this->range_scale[$time_range], $prev_range_end);
 			$length1 = 0;
-			$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
-
+			$start2 = $this->get_next_range_first_job ($resource_tag, $time_range_search);
 			$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
 
 			### check if requested space is available between start1 & start2
@@ -1497,9 +1515,6 @@ class mrp_schedule extends class_base
 
 			if ($i_dbg++ == 10000)
 			{
-//!!! Kinnine aeg -- "Ahjutihendi remont"; algus: 24.09.2005; l6pp: 25.09.2005; kell: 8:00; pikkus: 36h; korduse tyyp: päev; ressurss: rotoman
-// selline kinnise aja definitsioon tekitas olukorra, kus j6uti siia pidevalt. st. mitte yks kord. ilmselt n2is ressurss lakkamatult kinni olevat.
-
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
 				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
 				error::raise(array(

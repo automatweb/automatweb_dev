@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.90 2005/09/28 12:12:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_case.aw,v 1.91 2005/10/05 12:53:47 voldemar Exp $
 // mrp_case.aw - Juhtum/Projekt
 /*
 
@@ -1930,14 +1930,6 @@ class mrp_case extends class_base
 		}
 	}
 
-	function safe_settype_float ($value)
-	{
-		$separators = ".,";
-		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
-		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
-		return (float) ("{$int}.{$dec}");
-	}
-
 	function get_header($arr)
 	{
 		$ws = $arr["obj_inst"]->get_first_obj_by_reltype("RELTYPE_MRP_OWNER");
@@ -2421,6 +2413,14 @@ class mrp_case extends class_base
 				"reltype" => "RELTYPE_MRP_CUSTOMER"
 			));
 		}
+	}
+
+	function safe_settype_float ($value)
+	{
+		$separators = ".,";
+		$int = (int) preg_replace ("/\s*/S", "", strtok ($value, $separators));
+		$dec = preg_replace ("/\s*/S", "", strtok ($separators));
+		return (float) ("{$int}.{$dec}");
 	}
 }
 
