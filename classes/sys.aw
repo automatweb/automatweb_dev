@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.54 2005/10/04 10:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.55 2005/10/05 06:12:12 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -690,7 +690,7 @@ class sys extends aw_template
 
 			foreach($lines as $line)
 			{
-				list($dp, $tm, $sid, $bu, $url, $time) = explode(" ", $line);
+				list($dp, $tm, $sid, $bu, $url, $time, $promo_time) = explode(" ", $line);
 				$sites[$sid]++;
 				$sid2url[$sid] = $bu;
 				$urls[$bu.$url]++;
@@ -700,6 +700,8 @@ class sys extends aw_template
 				$page_times[] = $time;
 				$page_t2p[] = $bu.$url;
 				$tot_page_times[$bu.$url] += $time;
+				$promo_time[$sid] += $promo_time;
+				$promo_time_cnt[$sid] += ($promo_time > 0 ? 1 : 0);
 			}
 
 			$avg_page_times = array();
@@ -717,8 +719,8 @@ class sys extends aw_template
 			$num = 0;
 			foreach($sites as $site => $cnt)
 			{
-				echo "site ".$sid2url[$site]." got $cnt pageviews and took a total of ".$times[$site]." seconds, average pv is ".($times[$site] / $cnt)." <Br>";
-				if (++$num > 10)
+				echo "site ".$sid2url[$site]." got $cnt pageviews and took a total of ".$times[$site]." seconds, average pv is ".($times[$site] / $cnt)." promo display took ".$promo_time[$site]." avg = ".($promo_time[$site] / $promo_time_cnt[$site])." <Br>";
+				if (++$num > 30)
 				{
 					break;
 				}
