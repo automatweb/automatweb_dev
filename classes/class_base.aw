@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.420 2005/10/01 09:45:22 ekke Exp $
+// $Id: class_base.aw,v 2.421 2005/10/05 10:59:50 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -2614,6 +2614,7 @@ class class_base extends aw_template
 					if ($this->layout_mode == "fixed_toolbar")
 					{
 						//$this->groupinfo = $this->groupinfo();
+						$no_rte = $_GET["no_rte"];
 						foreach($this->groupinfo as $grp_id => $grp_data)
 						{
 							// disable all other buttons besides the general when
@@ -2627,7 +2628,7 @@ class class_base extends aw_template
 								"img" => empty($grp_data["icon"]) ? "" : $grp_data["icon"] . ".gif",
 								"tooltip" => $grp_data["caption"],
 								"target" => "contentarea",
-								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1)),
+								"url" => ($grp_id == "relationmgr") ? $this->mk_my_orb("change",array("id" => $this->id,"action" => "list_aliases","cb_part" => 1)) : $this->mk_my_orb("change",array("id" => $this->id,"group" => $grp_id,"cb_part" => 1,"no_rte" => $no_rte)),
 							));
 
 						}
