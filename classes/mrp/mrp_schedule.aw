@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.111 2005/10/06 19:21:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.112 2005/10/06 19:25:24 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1718,7 +1718,7 @@ class mrp_schedule extends class_base
 			$start = $end = $time;
 			ksort ($closest_periods, SORT_NUMERIC);
 
-			if (end ($ranges) > $time)
+			if (end ($closest_periods) > $time)
 			{
 /* timing */ timing ("find_combined_range - combine_ranges", "start");
 
