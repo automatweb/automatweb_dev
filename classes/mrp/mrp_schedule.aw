@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.103 2005/10/06 12:27:53 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.104 2005/10/06 12:57:44 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1017,18 +1017,21 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "<h4>reserve_time</h4>";
-/* dbg */ echo "thread nr." . $threads. " restag:" . $resource_tag. " reservation (time,len,timerange): ";
+/* dbg */ echo "thread nr." . $threads. " restag:" . $resource_tag. " avail. time this tag: ";
 /* dbg */ arr ($available_times[$resource_tag]);
 /* dbg */ echo "reserved times this tag: ";
 /* dbg */ arr ($this->reserved_times[$resource_tag]);
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 		}
 
 		### select thread with minimal start&length
 		$weight = NULL;
 		$selected_resource_tag = NULL;
+		$reserved_time = NULL;
+		$reserved_length = NULL;
+		$reserved_time_range = NULL;
 
 		foreach ($available_times as $resource_tag => $available_time)
 		{
@@ -1037,49 +1040,33 @@ class mrp_schedule extends class_base
 				list ($start, $length, $time_range) = $available_time;
 				$new_weight = ($start * $this->parameter_start_priority + $length * $this->parameter_length_priority) / 2;
 
-				if (!isset ($weight))
+				if (!isset ($weight) or (isset ($weight) and ($new_weight < $weight)))
 				{
 					$selected_resource_tag = $resource_tag;
+					$weight = $new_weight;
 
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "weight=na. selected_resource_tag: " . $selected_resource_tag . "<br>";
-// /* dbg */ }
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-
-				}
-				elseif ($new_weight < $weight)
-				{
-					$selected_resource_tag = $resource_tag;
-
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "new_weight<weight. selected_resource_tag: " . $selected_resource_tag . "<br>";
-// /* dbg */ }
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-
+					$reserved_time = $start;
+					$reserved_length = $length;
+					$reserved_time_range = $time_range;
 				}
 
-				$weight = isset ($weight) ? min ($weight, $new_weight) : $new_weight;
-
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-// /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "new_weight: " . $new_weight . "<br>";
-// /* dbg */ echo "weight: " . $weight . "<br><br>";
-// /* dbg */ }
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "new_weight: " . $new_weight . "<br>";
+/* dbg */ echo "weight: " . $weight . "<br><br>";
+/* dbg */ echo "potential reserved_time: " . $reserved_time . "<br><br>";
+/* dbg */ }
+/* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 			}
 		}
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-// /* dbg */ echo "available_times: ";
-// /* dbg */ arr ($available_times);
 /* dbg */ echo "selected_resource_tag: " . $selected_resource_tag;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-		if (!isset ($weight) or !isset ($selected_resource_tag))
+		if (!isset ($reserved_time) or !isset ($reserved_length) or !isset ($reserved_time_range))
 		{
 			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
 			// error::raise(array(
@@ -1091,34 +1078,33 @@ class mrp_schedule extends class_base
 
 			return false;
 		}
-
-		### reserve time
-		$resource_tag = $selected_resource_tag;
-		$reserved_time = $available_times[$resource_tag][0];
-		$length = $available_times[$resource_tag][1];
-		$this->reserved_times[$resource_tag][$time_range][$reserved_time] = $length;
-
-		### update max. reach of selected timerange.
-		$tmp = ($reserved_time + $length);
-
-		if ($tmp > $this->range_lengths[$time_range])
+		else
 		{
-			$this->range_lengths[$time_range] = $tmp;
-		}
+			### reserve time
+			$this->reserved_times[$selected_resource_tag][$reserved_time_range][$reserved_time] = $reserved_length;
 
-		### convert back to real time
-		$reserved_time += $this->schedule_start;
+			### update max. reach of selected timerange.
+			$tmp = ($reserved_time + $length);
+
+			if ($tmp > $this->range_lengths[$time_range])
+			{
+				$this->range_lengths[$time_range] = $tmp;
+			}
+
+			### convert back to real time
+			$reserved_time += $this->schedule_start;
 
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "reserved times after this reservation: ";
-/* dbg */ arr ($this->reserved_times[$resource_tag]);
+/* dbg */ arr ($this->reserved_times[$selected_resource_tag]);
 /* dbg */ echo "reserved time: " . $reserved_time . " [" . date (MRP_DATE_FORMAT, $reserved_time) . "]";
 /* dbg */ }
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("reserve_time", "end");
 
-		return array ($reserved_time, $length);
+			return array ($reserved_time, $length);
+		}
 	}
 
 	function get_next_range_first_job ($resource_tag, $time_range)
