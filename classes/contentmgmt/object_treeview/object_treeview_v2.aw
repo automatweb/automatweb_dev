@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.92 2005/10/05 12:24:45 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/object_treeview_v2.aw,v 1.93 2005/10/06 10:26:09 dragut Exp $
 // object_treeview_v2.aw - Objektide nimekiri v2
 /*
 
@@ -835,15 +835,20 @@ class object_treeview_v2 extends class_base
 		$has_access_to = false;
 		$has_add_access = false;
 
-		foreach($ol as $odata)
+		foreach($ol as $okey => $odata)
 		{
 			if ($d_inst->check_acl("edit", $d_o, $odata["id"]))
 			{
 				$has_access_to = true;
 			}
+			else
+			{
+				// if there is no edit permission to an object, then don't show the edit link eather
+				$ol[$okey]['change'] = $odata['change'] = "";
+				
+			}
 			$last_o = $odata;
 		}
-
 		$edit_columns = safe_array($ih_ob->meta("sel_columns_editable"));
 		if (!$has_access_to)
 		{
