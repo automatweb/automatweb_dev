@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.108 2005/10/06 18:24:29 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.109 2005/10/06 18:28:35 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -532,7 +532,7 @@ class mrp_schedule extends class_base
 
 		$projects_count = count ($projects);
 		$tick = $projects_count > 100 ? ceil ($projects_count/100) : ceil (100/$projects_count);
-		$tick_i = 1;
+		$tick_i = 0;
 
 		### schedule jobs in all projects
 		foreach ($projects as $project_id => $project)
@@ -653,6 +653,8 @@ class mrp_schedule extends class_base
 					echo "|";
 					flush ();
 				}
+
+				$tick_i++;
 			}
 		}
 
