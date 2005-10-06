@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.24 2005/09/08 12:26:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/object_treeview/otv_ds_postipoiss.aw,v 1.25 2005/10/06 15:52:47 kristo Exp $
 // otv_ds_postipoiss.aw - Objektinimekirja Postipoisi datasource 
 /*
 
@@ -521,7 +521,7 @@ class otv_ds_postipoiss extends class_base
 
 	function request_execute($obj)
 	{
-		$td = explode(":", aw_global_get("section"));
+		$td = explode(":", aw_global_get("raw_section"));
 		if (count($td) == 3)
 		{
 			// get file name
@@ -540,7 +540,7 @@ class otv_ds_postipoiss extends class_base
 		}
 		
 		return $this->show(array(
-			"id" => aw_global_get("section")
+			"id" => aw_global_get("raw_section")
 		));
 	}
 
