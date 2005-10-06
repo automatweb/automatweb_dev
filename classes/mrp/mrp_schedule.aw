@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.112 2005/10/06 19:25:24 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.113 2005/10/06 20:21:25 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -35,6 +35,7 @@ define ("MRP_STATUS_RESOURCE_OUTOFSERVICE", 12);
 
 ### misc
 define ("MRP_DATE_FORMAT", "j/m/Y H.i");
+define ("MRP_NEWLINE", "<br>");
 
 ### colours (CSS colour definition)
 define ("MRP_COLOUR_NEW", "#05F123");
@@ -252,7 +253,6 @@ class mrp_schedule extends class_base
 		}
 		else
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			error::raise(array(
 				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata või puuduvad õigused selle vaatamiseks."),
 				"fatal" => true,
@@ -265,7 +265,6 @@ class mrp_schedule extends class_base
 
 		if ($sem_id === false)
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			error::raise(array(
 				"msg" => t("Planeerimisluku käivitamine ebaõnnestus! Planeerimist ei toimunud."),
 				"fatal" => true,
@@ -277,7 +276,7 @@ class mrp_schedule extends class_base
 		{
 			if (!sem_remove($sem_id))
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -285,13 +284,13 @@ class mrp_schedule extends class_base
 				// ));
 			}
 
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimiseks lukustamine ebaõnnestus!"),
 				// "fatal" => true,
 				// "show" => true,
 			// ));//!!! vaadata uurida miks ikkagi aegajalt ei saada seda semafori k2tte.
-			echo t("Planeerimiseks lukustamine ebaõnnestus! Planeerimist ei toimunud.");
+			echo t("Planeerimiseks lukustamine ebaõnnestus! Planeerimist ei toimunud.") . MRP_NEWLINE;
 			return;
 		}
 
@@ -309,7 +308,7 @@ class mrp_schedule extends class_base
 	  		### Release&remove semaphore. Stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku avamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -319,7 +318,7 @@ class mrp_schedule extends class_base
 
 			if (!sem_remove($sem_id))
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku kustutamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -667,7 +666,7 @@ class mrp_schedule extends class_base
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimisluku avamine peale planeerimist ebaõnnestus!"),
 				// "fatal" => false,
@@ -677,7 +676,7 @@ class mrp_schedule extends class_base
 
 		if (!sem_remove($sem_id))
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s"), __LINE__) . MRP_NEWLINE; flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
 				// "fatal" => false,
@@ -841,12 +840,13 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
-					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. proj: %s<br>"), __LINE__, $project_id); flush ();}
-					error::raise(array(
-						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id),
-						"fatal" => false,
-						"show" => false,
-					));
+					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. proj: %s"), __LINE__, $project_id) . MRP_NEWLINE; flush ();}
+					// error::raise(array(
+						// "msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id),
+						// "fatal" => false,
+						// "show" => false,
+					// ));
+					echo sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id) . MRP_NEWLINE;
 				}
 
 /* dbg */ if ($_GET["mrp_dbg"]) {
@@ -868,7 +868,6 @@ class mrp_schedule extends class_base
 
 			if (!$db_retval)
 			{
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. db error: %s<br>"), __LINE__, $this->db_last_error); flush ();}
 				error::raise(array(
 					"msg" => t("Viga projektide planeeritud aegade salvestamisel. ") . $this->db_last_error,
 					"fatal" => false,
@@ -918,12 +917,13 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
-					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s.<br>"), __LINE__); flush ();}
-					error::raise(array(
-						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]),
-						"fatal" => false,
-						"show" => false,
-					));
+					// if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s."), __LINE__) . MRP_NEWLINE; flush ();}
+					// error::raise(array(
+						// "msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]),
+						// "fatal" => false,
+						// "show" => false,
+					// ));
+					echo sprintf (t("Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]) . MRP_NEWLINE;
 				}
 
 /* dbg */ if ($_GET["mrp_dbg"]) {
@@ -1088,12 +1088,13 @@ class mrp_schedule extends class_base
 
 		if (!isset ($reserved_time) or !isset ($reserved_length) or !isset ($reserved_time_range))
 		{
-			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
+			// if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
 			// error::raise(array(
 				// "msg" => sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job),
 				// "fatal" => false,
 				// "show" => false,
 			// ));
+			echo sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job) . MRP_NEWLINE;
 /* timing */ timing ("reserve_time", "end");
 
 			return false;
@@ -1233,11 +1234,12 @@ class mrp_schedule extends class_base
 				if ($i_dbg1++ == 1000)
 				{
 					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job: %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
-					error::raise(array(
-						"msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
-						"fatal" => false,
-						"show" => false,
-					));
+					// error::raise(array(
+						// "msg" => sprintf (t("Unavailable times covered by reserved exceeded reasonable limit (%s). Resource %s, job %s"), $i_dbg1, $resource_id, $this->currently_processed_job),
+						// "fatal" => false,
+						// "show" => false,
+					// ));
+					echo "viga@" . __LINE__ . MRP_NEWLINE;
 /* timing */ timing ("add_unavailable_times", "end");
 
 					return;
@@ -1492,11 +1494,12 @@ class mrp_schedule extends class_base
 			if ($i_dbg++ == (count ($this->range_scale) * 3))
 			{
 				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. job: %s<br>"), __LINE__, $this->currently_processed_job); flush ();}
-				error::raise(array(
-					"msg" => sprintf (t("Timerange search exceeded reasonable limit (%s) of cycles. Job %s"), $i_dbg2, $this->currently_processed_job),
-					"fatal" => false,
-					"show" => false,
-				));
+				// error::raise(array(
+					// "msg" => sprintf (t("Timerange search exceeded reasonable limit (%s) of cycles. Job %s"), $i_dbg2, $this->currently_processed_job),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
+				echo "viga@" . __LINE__ . MRP_NEWLINE;
 				break;
 			}
 		}
@@ -1562,12 +1565,13 @@ class mrp_schedule extends class_base
 			if ($i_dbg++ == 10000)
 			{
 				//!!! siia j6utakse t6en2oliselt siis kui kogu aeg on ressurss kinni, tykkide kaupa.
-				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
-				error::raise(array(
-					"msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"), $resource_id, $this->currently_processed_job),
-					"fatal" => false,
-					"show" => false,
-				));
+				// if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. res: %s, job %s<br>"), __LINE__, $resource_id, $this->currently_processed_job); flush ();}
+				// error::raise(array(
+					// "msg" => sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"), $resource_id, $this->currently_processed_job),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
+				echo sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"), $resource_id, $this->currently_processed_job);
 				break;
 			}
 		}
@@ -1917,11 +1921,12 @@ class mrp_schedule extends class_base
 
 			if (5000 == $i_dbg++)
 			{
-				error::raise(array(
-					"msg" => sprintf (t("Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"), $i_dbg3, $resource_id),
-					"fatal" => false,
-					"show" => false,
-				));
+				// error::raise(array(
+					// "msg" => sprintf (t("Search for unavailable times for range exceeded reasonable limit (%s) of cycles. Resource %s"), $i_dbg3, $resource_id),
+					// "fatal" => false,
+					// "show" => false,
+				// ));
+				echo "viga@" . __LINE__ . MRP_NEWLINE;
 				break;
 			}
 		}
