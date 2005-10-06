@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.105 2005/10/06 16:32:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.106 2005/10/06 16:42:17 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1896,7 +1896,7 @@ function timing ($name = NULL, $action = "show")
 
 			case "show":
 				ksort ($timings);
-				echo "<table width='95%'>\n";
+				echo "<table width='95%' border='1' cellspacing='0' cellpadding='2' style='font-size: 10px;'>\n";
 				echo "<tr><td><b>Name</b> <td><b>Average</b> <td><b>Max</b> <td><b>Count</b> <td><b>Total</b>\n";
 
 				foreach ($timings as $name => $timing)
