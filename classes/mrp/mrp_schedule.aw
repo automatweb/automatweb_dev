@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.106 2005/10/06 16:42:17 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.107 2005/10/06 17:32:32 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1693,14 +1693,60 @@ class mrp_schedule extends class_base
 		### combine buffer, recurrence & period
 		if (!empty ($closest_periods))
 		{
-			list ($start, $end) = $this->find_combined_range ($closest_periods, $time);
+/* timing */ timing ("find_combined_range", "start");
+
+			$start = $end = $time;
+			ksort ($closest_periods, SORT_NUMERIC);
+
+			if (end ($ranges) > $time)
+			{
+/* timing */ timing ("find_combined_range - combine_ranges", "start");
+
+				$prev_end = NULL;
+				$combined_ranges = array ();
+
+				foreach ($closest_periods as $start => $end)
+				{
+					if (($start <= $prev_end) and isset ($prev_end))
+					{
+						if ($end > $prev_end)
+						{
+							$prev_end = $end;
+						}
+
+						$combined_ranges[$prev_start] = $prev_end;
+					}
+					else
+					{
+						$combined_ranges[$start] = $end;
+						$prev_start = $start;
+						$prev_end = $end;
+					}
+				}
+
+				$closest_periods = $combined_ranges;
+
+/* timing */ timing ("find_combined_range - combine_ranges", "end");
+
+				foreach ($closest_periods as $range_start => $range_end)
+				{
+					if ($range_end > $time)
+					{
+						$start = $range_start;
+						$end = $range_end;
+						break;
+					}
+				}
+			}
+
+			if ($start == $end)
+			{
+				$start = $end = 0;
+			}
+
+/* timing */ timing ("find_combined_range", "end");
 		}
 		else
-		{
-			$start = $end = 0;
-		}
-
-		if ($start == $end)
 		{
 			$start = $end = 0;
 		}
