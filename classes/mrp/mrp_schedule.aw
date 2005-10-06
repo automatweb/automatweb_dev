@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.102 2005/10/05 17:29:54 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.103 2005/10/06 12:27:53 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -252,6 +252,7 @@ class mrp_schedule extends class_base
 		}
 		else
 		{
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			error::raise(array(
 				"msg" => t("Kasutatava ressursihalduskeskkonna id planeerijale edasi andmata või puuduvad õigused selle vaatamiseks."),
 				"fatal" => true,
@@ -264,6 +265,7 @@ class mrp_schedule extends class_base
 
 		if ($sem_id === false)
 		{
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			error::raise(array(
 				"msg" => t("Planeerimisluku käivitamine ebaõnnestus! Planeerimist ei toimunud."),
 				"fatal" => true,
@@ -275,6 +277,7 @@ class mrp_schedule extends class_base
 		{
 			if (!sem_remove($sem_id))
 			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku lukustamiseta kustutamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -282,6 +285,7 @@ class mrp_schedule extends class_base
 				// ));
 			}
 
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimiseks lukustamine ebaõnnestus!"),
 				// "fatal" => true,
@@ -305,6 +309,7 @@ class mrp_schedule extends class_base
 	  		### Release&remove semaphore. Stop, no rescheduling needed
 			if (!sem_release($sem_id))
 			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku avamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -314,6 +319,7 @@ class mrp_schedule extends class_base
 
 			if (!sem_remove($sem_id))
 			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 				// error::raise(array(
 					// "msg" => t("Planeerimisluku kustutamine ebaõnnestus!"),
 					// "fatal" => false,
@@ -610,7 +616,12 @@ class mrp_schedule extends class_base
 					{
 						foreach ($successor_index[$job["oid"]] as $successor_id)
 						{
-							$starttime_index[$successor_id] = max ($starttime_index[$successor_id], ($scheduled_start + $scheduled_length + $job["post_buffer"]));
+							$tmp = ($scheduled_start + $scheduled_length + $job["post_buffer"]);
+
+							if ($tmp > $starttime_index[$successor_id])
+							{
+								$starttime_index[$successor_id] = $tmp;
+							}
 						}
 					}
 
@@ -641,6 +652,7 @@ class mrp_schedule extends class_base
   		### Release&remove semaphore
 		if (!sem_release($sem_id))
 		{
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimisluku avamine peale planeerimist ebaõnnestus!"),
 				// "fatal" => false,
@@ -650,6 +662,7 @@ class mrp_schedule extends class_base
 
 		if (!sem_remove($sem_id))
 		{
+			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s<br>"), __LINE__); flush ();}
 			// error::raise(array(
 				// "msg" => t("Planeerimisluku kustutamine peale planeerimist ebaõnnestus!"),
 				// "fatal" => false,
@@ -808,6 +821,7 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
+					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. proj: %s<br>"), __LINE__, $project_id); flush ();}
 					error::raise(array(
 						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Projekti id (%s) pole oid."), $project_id),
 						"fatal" => false,
@@ -834,6 +848,7 @@ class mrp_schedule extends class_base
 
 			if (!$db_retval)
 			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. db error: %s<br>"), __LINE__, $this->db_last_error); flush ();}
 				error::raise(array(
 					"msg" => t("Viga projektide planeeritud aegade salvestamisel. ") . $this->db_last_error,
 					"fatal" => false,
@@ -883,6 +898,7 @@ class mrp_schedule extends class_base
 				}
 				else
 				{
+					if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s.<br>"), __LINE__); flush ();}
 					error::raise(array(
 						"msg" => sprintf (t("Viga planeeritud aegade salvestamisel. Töö id (%s) pole oid. (starttime: %s, planned_len: %s, state: %s)"), $job_id, $job_data[0], $job_data[1], $job_data[2]),
 						"fatal" => false,
@@ -909,6 +925,7 @@ class mrp_schedule extends class_base
 
 			if (!$db_retval)
 			{
+				if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. db error: %s<br>"), __LINE__, $this->db_last_error); flush ();}
 				error::raise(array(
 					"msg" => t("Viga tööde planeeritud aegade salvestamisel. ") . $this->db_last_error,
 					"fatal" => false,
@@ -1065,11 +1082,11 @@ class mrp_schedule extends class_base
 		if (!isset ($weight) or !isset ($selected_resource_tag))
 		{
 			if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
-			error::raise(array(
-				"msg" => sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job),
-				"fatal" => false,
-				"show" => false,
-			));
+			// error::raise(array(
+				// "msg" => sprintf (t("Sobivat aega ei leidunud tervest kalendrist! resource-tag: %s, job: %s"), $resource_tag, $this->currently_processed_job),
+				// "fatal" => false,
+				// "show" => false,
+			// ));
 /* timing */ timing ("reserve_time", "end");
 
 			return false;
@@ -1080,8 +1097,15 @@ class mrp_schedule extends class_base
 		$reserved_time = $available_times[$resource_tag][0];
 		$length = $available_times[$resource_tag][1];
 		$this->reserved_times[$resource_tag][$time_range][$reserved_time] = $length;
+
 		### update max. reach of selected timerange.
-		$this->range_lengths[$time_range] = max (($reserved_time + $length), $this->range_lengths[$time_range]);
+		$tmp = ($reserved_time + $length);
+
+		if ($tmp > $this->range_lengths[$time_range])
+		{
+			$this->range_lengths[$time_range] = $tmp;
+		}
+
 		### convert back to real time
 		$reserved_time += $this->schedule_start;
 
@@ -1097,7 +1121,7 @@ class mrp_schedule extends class_base
 		return array ($reserved_time, $length);
 	}
 
-	function get_next_range_first_job (&$resource_tag, &$time_range, &$start2)
+	function get_next_range_first_job ($resource_tag, $time_range)
 	{
 /* timing */ timing ("get_next_range_first_job", "start");
 /* dbg */ if ($this->mrpdbg){
@@ -1123,9 +1147,11 @@ class mrp_schedule extends class_base
 /* dbg */ echo "found next_range_first_job  start2: ".$start2;
 /* dbg */ }
 /* timing */ timing ("get_next_range_first_job", "end");
+
+		return $start2;
 	}
 
-	function add_unavailable_times (&$resource_id, &$reserved_time, &$length, &$start2)
+	function add_unavailable_times ($resource_id, &$reserved_time, &$length, $start2)
 	{
 /* timing */ timing ("add_unavailable_times", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1315,7 +1341,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 						$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
-						$this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
+						$this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){ echo "A -- suitable slot found in start range nr {$time_range}. at range beginning."; }
@@ -1335,8 +1361,7 @@ class mrp_schedule extends class_base
 							}
 							else
 							{ #### look for it in the sequent timeranges
-								$start2 = 0;
-								$this->get_next_range_first_job ($resource_tag, $time_range, $start2);
+								$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
 							}
 
 							$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
@@ -1352,7 +1377,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 								$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
-								$this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
+								$this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){ echo "B -- suitable slot found in start range nr {$time_range}. among reserved times"; }
@@ -1367,10 +1392,17 @@ class mrp_schedule extends class_base
 				}
 				else
 				{ ### no times reserved yet
-					$start1 = max ($this->range_scale[$time_range], $prev_range_end);
+					if ($this->range_scale[$time_range] > $prev_range_end)
+					{
+						$start1 = $this->range_scale[$time_range];
+					}
+					else
+					{
+						$start1 = $prev_range_end;
+					}
+
 					$length1 = 0;
-					$start2 = 0;
-					$this->get_next_range_first_job ($resource_tag, $time_range_search, $start2);
+					$start2 = $this->get_next_range_first_job ($resource_tag, $time_range_search);
 					$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
 
 					### check if requested space is available between start1 & start2
@@ -1384,7 +1416,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 						$reserved_time = (($start1 + $length1) >= $start) ? ($start1 + $length1) : $start;
-						$this->add_unavailable_times ($resource_tag, $reserved_time, $length, $start2);
+						$this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){ echo "C -- suitable slot found in start range nr {$time_range}. from empty range"; }
@@ -1479,7 +1511,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("find_range", "end");
 	}
 
-	function get_closest_unavailable_period (&$resource_id, &$time, &$length)
+	function get_closest_unavailable_period ($resource_id, $time, $length)
 	{
 /* timing */ timing ("get_closest_unavailable_period", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1488,7 +1520,10 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+		### convert to real time
 		$time += $this->schedule_start;
+
+		### ...
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time, $length);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1511,8 +1546,9 @@ class mrp_schedule extends class_base
 
 		### find if period ends before another starts
 		$i_dbg = 0;
+		$inside_up = true;
 
-		while (true)//!!! bad
+		while ($inside_up)
 		{
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end, $length);
 
@@ -1520,25 +1556,15 @@ class mrp_schedule extends class_base
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "_closestper cycle: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . "<br>";
 /* dbg */ }
-// /* dbg */ $tmptime = time();
-// /* dbg */ $tmpschtime = $this->scheduling_time;
-// /* dbg */ if (($tmptime - $tmpschtime) > 15) {
-// /* dbg */ var_dump ($this);
-// /* dbg */ exit ("res:" . $resource_id . " time:" . date (MRP_DATE_FORMAT, $time) . " t" . $tmptime . " st" . $tmpschtime);
-// /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-			if (
-				($period_start <= $end)
-				and $period_end
-				// and ($period_start != $period_end)//!!! kas on vaja siis katkestada kui 0-pikkusega periood?
-			)
+			if (($period_start <= $end) and ($period_end != $period_start) and $period_end)
 			{
 				$end = $period_end;
 			}
 			else
 			{
-				break;
+				$inside_up = false;
 			}
 
 			if ($i_dbg++ == 10000)
@@ -1560,7 +1586,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "_closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$period_length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ echo "closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$period_length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("get_closest_unavailable_period", "end");
@@ -1569,7 +1595,7 @@ class mrp_schedule extends class_base
 	}
 
 	## returns start and length of next unavailable period after $time. if $time is in an unavail. period, that period's data is returned.
-	function _get_closest_unavailable_period (&$resource_id, &$time, &$length)
+	function _get_closest_unavailable_period ($resource_id, $time, $length)
 	{
 /* timing */ timing ("_get_closest_unavailable_period", "start");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1664,9 +1690,9 @@ class mrp_schedule extends class_base
 					$recurrence_end += $recurrence["interval"];
 				}
 
-				if (($recurrence_end > $recurrence["start"]) and ($recurrence_start < $recurrence["end"]))
+				if (($recurrence_end > $recurrence["start"]) and ($recurrence_start < $recurrence["end"]) and ($recurrence_end > $closest_periods[$recurrence_start]))
 				{
-					$closest_periods[$recurrence_start] = max ($recurrence_end, $closest_periods[$recurrence_start]);
+					$closest_periods[$recurrence_start] = $recurrence_end;
 				}
 			}
 		}
@@ -1680,7 +1706,10 @@ class mrp_schedule extends class_base
 		### add separate unavailable periods
 		foreach ($this->resource_data[$resource_id]["unavailable_periods"] as $period_start => $period_end)
 		{
-			$closest_periods[$period_start] = max ($period_end, $closest_periods[$period_start]);
+			if ($period_end > $closest_periods[$period_start])
+			{
+				$closest_periods[$period_start] = $period_end;
+			}
 		}
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
@@ -1716,7 +1745,7 @@ class mrp_schedule extends class_base
 	}
 
 	### find and combine ranges closest to $value, exclude ranges that don't exceed $value directly or through overlapping ranges
-	function find_combined_range (&$ranges, &$value)
+	function find_combined_range ($ranges, $value)
 	{
 /* timing */ timing ("find_combined_range", "start");
 		$start = $end = $value;
@@ -1724,14 +1753,32 @@ class mrp_schedule extends class_base
 
 		if (end ($ranges) > $value)
 		{
-			$this->combine_ranges ($ranges);
+/* timing */ timing ("find_combined_range - combine_ranges", "start");
+			$prev_end = NULL;
+			$combined_ranges = array ();
 
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "ranges after combining:";
-/* dbg */ arr ($ranges);
-/* dbg */ }
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+			foreach ($ranges as $start => $end)
+			{
+				if (($start <= $prev_end) and isset ($prev_end))
+				{
+					if ($end > $prev_end)
+					{
+						$prev_end = $end;
+					}
+
+					$combined_ranges[$prev_start] = $prev_end;
+				}
+				else
+				{
+					$combined_ranges[$start] = $end;
+					$prev_start = $start;
+					$prev_end = $end;
+				}
+			}
+
+			$ranges = $combined_ranges;
+
+/* timing */ timing ("find_combined_range - combine_ranges", "end");
 
 			foreach ($ranges as $range_start => $range_end)
 			{
@@ -1744,42 +1791,9 @@ class mrp_schedule extends class_base
 			}
 		}
 
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "found range:";
-/* dbg */ arr (array ($start, $end));
-/* dbg */ }
-// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("find_combined_range", "end");
 
 		return array ($start, $end);
-	}
-
-	## input is an array sorted by key, pointer at start.
-	function combine_ranges (&$ranges)
-	{
-/* timing */ timing ("combine_ranges", "start");
-		$prev_end = NULL;
-		$combined_ranges = array ();
-
-		foreach ($ranges as $start => $end)
-		{
-			if (($start <= $prev_end) and isset ($prev_end))
-			{
-				$prev_end = max ($end, $prev_end);
-				$combined_ranges[$prev_start] = $prev_end;
-			}
-			else
-			{
-				$combined_ranges[$start] = $end;
-				$prev_start = $start;
-				$prev_end = $end;
-			}
-		}
-
-/* timing */ timing ("combine_ranges", "end");
-
-		return $combined_ranges;
 	}
 
 	function init_resource_data ($resources)
@@ -1789,7 +1803,7 @@ class mrp_schedule extends class_base
 			if (is_oid ($resource_id))
 			{
 				$resource = obj ($resource_id);
-				$thread_data = $resource->prop ("thread_data");//!!! thread datas midagi valesti?
+				$thread_data = $resource->prop ("thread_data");
 				$threads = count ($thread_data) ? count ($thread_data) : 1;
 
 				$this->resource_data[$resource_id]["global_buffer"] = $resource->prop ("global_buffer");
@@ -1847,7 +1861,7 @@ class mrp_schedule extends class_base
 
 		while ($pointer <= $this->schedule_length)
 		{
-			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer, $this->schedule_length);
+			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
 
 			if ($unavailable_length <= 0)
 			{
@@ -1857,7 +1871,11 @@ class mrp_schedule extends class_base
 			$pointer = $unavailable_start + $unavailable_length + 1;
 			$unavailable_start = $this->schedule_start + $unavailable_start;
 			$unavailable_end = $unavailable_start + $unavailable_length;
-			$this->unavailable_times[$unavailable_start] = max ($unavailable_end, $this->unavailable_times[$unavailable_start]);
+
+			if ($unavailable_end > $this->unavailable_times[$unavailable_start])
+			{
+				$this->unavailable_times[$unavailable_start] = $unavailable_end;
+			}
 
 			if (5000 == $i_dbg++)
 			{
@@ -1891,23 +1909,31 @@ function timing ($name = NULL, $action = "show")
 			case "end":
 				if ($timings[$name]["start"])
 				{
-					$timings[$name]["sum"] += ($time - $timings[$name]["start"]);
+					$tmp = ($time - $timings[$name]["start"]);
+					$timings[$name]["sum"] += $tmp;
 					$timings[$name]["count"]++;
-					$timings[$name]["max"] = max ($timings[$name]["max"], ($time - $timings[$name]["start"]));
+
+					if ($tmp > $timings[$name]["max"])
+					{
+						$timings[$name]["max"] = $tmp;
+					}
+
 					$timings[$name]["start"] = 0;
 				}
 				return;
 
 			case "show":
 				ksort ($timings);
-				echo "<pre>";
+				echo "<table width='95%'>\n";
+				echo "<tr><td><b>Name</b> <td><b>Average</b> <td><b>Max</b> <td><b>Count</b> <td><b>Total</b>\n";
 
 				foreach ($timings as $name => $timing)
 				{
-					echo "[" . $name . "]\n\t\t avg: " . ($timing["sum"] / $timing["count"]) . "\t\t max: " . $timing["max"] . "\t\t cnt: " . $timing["count"] . "\t\t sum: " . $timing["sum"] . ")\n";
+					$avg = ($timing["sum"] / $timing["count"]);
+					echo "<tr><td>{$name}<td>{$avg}<td>{$timing["max"]}<td>{$timing["count"]}<td>{$timing["sum"]}\n";
 				}
 
-				echo "</pre>";
+				echo "</table>\n";
 				return;
 		}
 	}
