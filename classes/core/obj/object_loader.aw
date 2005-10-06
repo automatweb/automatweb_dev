@@ -414,7 +414,7 @@ class _int_object_loader extends core
 		// we get the acl from read_objdata
 		//enter_function("object_loader::can");
 
-		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
+		if (!($max_acl = $this->__aw_acl_cache[$oid]))
 		{
 			/*if ($GLOBALS["acl_dbg"] == 1)
 			{
@@ -424,12 +424,12 @@ class _int_object_loader extends core
 
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
-			$hash = md5($fn);
+			$hash = $oid;
 			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
 			if (file_exists($fqfn))
 			{
 				include($fqfn);
-				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+				$this->__aw_acl_cache[$oid] = $max_acl;
 				/*if ($GLOBALS["acl_dbg"] == 1)
 				{
 					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
@@ -460,7 +460,7 @@ class _int_object_loader extends core
 					@chmod($fqfn, 0666);
 				}
 			}
-			aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+			$this->__aw_acl_cache[$oid] = $max_acl;
 			/*if ($GLOBALS["acl_dbg"] == 1)
 			{
 				$GLOBALS["INTENSE_DUKE"] = 0;
@@ -525,7 +525,6 @@ class _int_object_loader extends core
 			if ($tmp === NULL)
 			{
 				// if any object above the one asked for is deleted, no access
-				exit_function("object_loader::can");
 				return false;
 			}
 
