@@ -412,20 +412,134 @@ class _int_object_loader extends core
 	function can($acl_name, $oid, $dbg = false)
 	{
 		// we get the acl from read_objdata
-		enter_function("object_loader::can");
+		//enter_function("object_loader::can");
 
 		if (!($max_acl = aw_cache_get("__aw_acl_cache", $oid)))
 		{
-			$max_priority = -1;
-			$max_acl = $GLOBALS["cfg"]["acl"]["default"];
-
-			$gl = aw_global_get("gidlist_pri_oid");
-
-
-			// go through the object tree and find the acl that is of highest priority among the current users group
-			$cur_oid = $oid;
-			while ($cur_oid > 0)
+			/*if ($GLOBALS["acl_dbg"] == 1)
 			{
+				echo "cache MISS for $acl_name / $oid <br>";
+				$GLOBALS["INTENSE_DUKE"] = 1;
+			}*/
+
+			// try for file cache
+			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
+			$hash = md5($fn);
+			$fqfn = $GLOBALS["cfg"]["cache"]["page_cache"]."/".$hash{0}."/".$fn;
+			if (file_exists($fqfn))
+			{
+				include($fqfn);
+				aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+				/*if ($GLOBALS["acl_dbg"] == 1)
+				{
+					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
+				}*/
+			}
+			else
+			{
+				$max_acl = $this->_calc_max_acl($oid);
+				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
+				{
+					$str = "<?php\n";
+					$str .= aw_serialize($max_acl, SERIALIZE_PHP_FILE, array("arr_name" => "max_acl"));
+					$str .= "?>";
+
+					// make folders if not exist. this is copypaste from cache class, but we can't access that from here. 
+					$fname = $GLOBALS["cfg"]["cache"]["page_cache"];
+
+					$fname .= "/".$hash{0};
+					if (!is_dir($fname))
+					{
+						mkdir($fname, 0777);
+						chmod($fname, 0777);
+					}
+
+					$fp = fopen($fqfn, "w");
+					fwrite($fp, $str);
+					fclose($fp);
+					@chmod($fqfn, 0666);
+				}
+			}
+			aw_cache_set("__aw_acl_cache", $oid, $max_acl);
+			/*if ($GLOBALS["acl_dbg"] == 1)
+			{
+				$GLOBALS["INTENSE_DUKE"] = 0;
+			}*/
+		}
+		/*else
+		{
+			if ($GLOBALS["acl_dbg"] == 1)
+			{
+				echo "cache hit for $acl_name / $oid <br>";
+			}
+		}*/
+
+		//exit_function("object_loader::can");
+		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
+		{
+			return $GLOBALS["cfg"]["acl"]["default"];
+		}
+
+		//echo "------- return ".((int)$max_acl["can_".$acl_name])." for $acl_name on object $oid <br>\n";
+		// and now return the highest found
+		return (int)$max_acl["can_".$acl_name];
+	}
+
+	function _calc_max_acl($oid)
+	{
+		$max_priority = -1;
+		$max_acl = $GLOBALS["cfg"]["acl"]["default"];
+
+		$gl = aw_global_get("gidlist_pri_oid");
+
+
+		// go through the object tree and find the acl that is of highest priority among the current users group
+		$cur_oid = $oid;
+		while ($cur_oid > 0)
+		{
+			if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
+			{
+				$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
+			}
+			else
+			if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]))
+			{
+				$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
+			}
+			else
+			if ($GLOBALS["objects"][$cur_oid])
+			{
+				$tmp = $GLOBALS["objects"][$cur_oid]->obj;
+			}
+			else
+			{
+				$tmp = $this->ds->get_objdata($cur_oid, array(
+					"no_errors" => true
+				));
+				if ($tmp !== NULL)
+				{
+					$GLOBALS["__obj_sys_objd_memc"][$cur_oid] = $tmp;
+				}
+			}
+
+			if ($tmp === NULL)
+			{
+				// if any object above the one asked for is deleted, no access
+				exit_function("object_loader::can");
+				return false;
+			}
+
+			if (isset($tmp["status"]))
+			{
+				if ($tmp["status"] == 0)
+				{
+					return false;
+				}
+			}
+
+			if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0)
+			{
+				$cur_oid = $tmp["brother_of"];
 				if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
 				{
 					$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
@@ -450,86 +564,31 @@ class _int_object_loader extends core
 						$GLOBALS["__obj_sys_objd_memc"][$cur_oid] = $tmp;
 					}
 				}
-
-				if ($tmp === NULL)
-				{
-					// if any object above the one asked for is deleted, no access
-					exit_function("object_loader::can");
-					return false;
-				}
-
-				if (isset($tmp["status"]))
-				{
-					if ($tmp["status"] == 0)
-					{
-						return false;
-					}
-				}
-
-				if ($cur_oid != $tmp["brother_of"] && $tmp["brother_of"] > 0)
-				{
-					$cur_oid = $tmp["brother_of"];
-					if (isset($GLOBALS["__obj_sys_acl_memc"][$cur_oid]))
-					{
-						$tmp = $GLOBALS["__obj_sys_acl_memc"][$cur_oid];
-					}
-					else
-					if (isset($GLOBALS["__obj_sys_objd_memc"][$cur_oid]))
-					{
-						$tmp = $GLOBALS["__obj_sys_objd_memc"][$cur_oid];
-					}
-					else
-					if ($GLOBALS["objects"][$cur_oid])
-					{
-						$tmp = $GLOBALS["objects"][$cur_oid]->obj;
-					}
-					else
-					{
-						$tmp = $this->ds->get_objdata($cur_oid, array(
-							"no_errors" => true
-						));
-						if ($tmp !== NULL)
-						{
-							$GLOBALS["__obj_sys_objd_memc"][$cur_oid] = $tmp;
-						}
-					}
-				}
-
-				$acld = safe_array($tmp["acldata"]);
-
-				// now, iterate over the current acl data with the current gidlist
-				// and find the highest priority acl currently
-
-				foreach($acld as $g_oid => $g_acld)
-				{
-					if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority)
-					{
-						$max_acl = $g_acld;
-						$max_priority = $gl[$g_oid];
-					}
-				}
-
-				if (++$cnt > 100)
-				{
-					$this->raise_error(ERR_ACL_EHIER,sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
-				}
-
-				// go to parent
-				$cur_oid = $tmp["parent"];
 			}
 
-			aw_cache_set("__aw_acl_cache", $oid, $max_acl);
-		}
+			$acld = safe_array($tmp["acldata"]);
 
-		exit_function("object_loader::can");
-		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
-		{
-			return $GLOBALS["cfg"]["acl"]["default"];
-		}
+			// now, iterate over the current acl data with the current gidlist
+			// and find the highest priority acl currently
 
-		//echo "------- return ".((int)$max_acl["can_".$acl_name])." for $acl_name on object $oid <br>\n";
-		// and now return the highest found
-		return (int)$max_acl["can_".$acl_name];
+			foreach($acld as $g_oid => $g_acld)
+			{
+				if (isset($gl[$g_oid]) && $gl[$g_oid] > $max_priority)
+				{
+					$max_acl = $g_acld;
+					$max_priority = $gl[$g_oid];
+				}
+			}
+
+			if (++$cnt > 100)
+			{
+				$this->raise_error(ERR_ACL_EHIER,sprintf(t("object_loader->can(%s, %s): error in object hierarchy, count exceeded!"), $access,$oid),true);
+			}
+
+			// go to parent
+			$cur_oid = $tmp["parent"];
+		}
+		return $max_acl;
 	}
 
 	function _log($new, $oid, $name, $clid = NULL)
