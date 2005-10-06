@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.107 2005/10/06 17:32:32 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.108 2005/10/06 18:24:29 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -530,6 +530,10 @@ class mrp_schedule extends class_base
 /* timing */ timing ("sort projects", "end");
 /* timing */ timing ("schedule jobs total", "start");
 
+		$projects_count = count ($projects);
+		$tick = $projects_count > 100 ? ceil ($projects_count/100) : ceil (100/$projects_count);
+		$tick_i = 1;
+
 		### schedule jobs in all projects
 		foreach ($projects as $project_id => $project)
 		{
@@ -641,6 +645,15 @@ class mrp_schedule extends class_base
 
 /* timing */ timing ("one project total", "end");
 			}
+
+			if ($_GET["show_progress"]==1)
+			{
+				if (!($tick_i%$tick))
+				{
+					echo "|";
+					flush ();
+				}
+			}
 		}
 
 /* timing */ timing ("schedule jobs total", "end");
@@ -675,6 +688,11 @@ class mrp_schedule extends class_base
 /* dbg */ $ts_e = $sec + $micro;
 /* dbg */ $GLOBALS["timings"]["planning_time"] = $ts_s - $ts_e;
 /* timing */ timing ();
+
+		if ($_GET["show_progress"]==1)
+		{
+			return $_SERVER["REQUEST_URI"];
+		}
 	}
 
 	function compute_due_date ()
