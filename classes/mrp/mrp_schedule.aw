@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.109 2005/10/06 18:28:35 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.110 2005/10/06 18:34:07 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1899,7 +1899,7 @@ class mrp_schedule extends class_base
 
 		while ($pointer <= $this->schedule_length)
 		{
-			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer);
+			list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $pointer, $this->schedule_length);
 
 			if ($unavailable_length <= 0)
 			{
