@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.144 2005/08/02 11:27:31 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/image.aw,v 2.145 2005/10/07 07:14:02 kristo Exp $
 // image.aw - image management
 /*
 	@classinfo trans=1
@@ -1100,7 +1100,7 @@ class image extends class_base
 
 	function _get_conf_for_folder($pt, $apply_image = false)
 	{
-		if (!is_oid($pt))
+		if (!is_oid($pt) || !$this->can("view", $pt))
 		{
 			return false;
 		}
