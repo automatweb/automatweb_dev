@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.118 2005/10/07 17:27:43 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.119 2005/10/07 17:52:07 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -579,7 +579,7 @@ class mrp_schedule extends class_base
 						MRP_STATUS_NEW,
 					);
 
-					### states for reserving job time and length w/o planning
+					### states for reserving job time and length
 					$applicable_timereserve_states = array (
 						MRP_STATUS_ABORTED,
 					);
@@ -595,6 +595,7 @@ class mrp_schedule extends class_base
 						### postpone next jobs by job length
 						$remaining_length = ($job["remaining_length"] > 0) ? $job["remaining_length"] : $job["length"];
 						list ($scheduled_start, $scheduled_length) = $this->reserve_time ($job["resource"], $minstart, $remaining_length);
+						$this->job_schedule[$job["oid"]] = array ($scheduled_start, $scheduled_length, $job["state"]);
 					}
 					elseif ( (!$job["length"]) and in_array ($job["state"], $applicable_planning_states) and in_array ($job["resource"], $this->schedulable_resources) )
 					{
@@ -640,7 +641,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("one job total", "end");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "END DBG" . MRP_NEWLINE;
+/* dbg */ echo MRP_NEWLINE . "<i>END DBG</i>" . MRP_NEWLINE . MRP_NEWLINE;
 /* dbg */ $this->mrpdbg=0;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -712,7 +713,7 @@ class mrp_schedule extends class_base
 
 /* --------------------------  PRIVATE METHODS ----------------------------- */
 
-	function save_direct ()
+	function save_direct ()// outdated. if needed must be updated according to save_fileload()
 	{
 		$log = get_instance(CL_MRP_WORKSPACE);
 
