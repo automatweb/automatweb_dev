@@ -739,7 +739,8 @@ class core extends acl_base
 		};
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
-		$this->orb_values = array();
+		// tracked_vars comes from orb->process_request
+		$this->orb_values = $GLOBALS["tracked_vars"];
 
 		if (!empty($arr["section"]))
 		{
@@ -756,18 +757,6 @@ class core extends acl_base
 			$this->orb_values["class"] = $cl_name;
 		};
 		$this->orb_values["action"] = $fun;
-
-		// grr, I hate this, but I can optimize it later
-		$track_vars = array("cal","date","trid","project");
-		foreach($track_vars as $tvar)
-		{
-			$tvar_val = aw_global_get($tvar);
-			if ($tvar_val && empty($arr[$tvar]))
-			{
-				$this->orb_values[$tvar] = $tvar_val;
-			};
-		};		
-
 
 		// figure out the request method once.
 		static $r_use_orb;
@@ -828,27 +817,16 @@ class core extends acl_base
 
 		$cl_name = ("" == $cl_name) ? get_class($this) : basename($cl_name);
 
-		$this->orb_values = array(
-			"class" => $cl_name,
-			"action" => $fun,
-		);
+		// tracked_vars comes from orb->process_request
+		$this->orb_values = $GLOBALS["tracked_vars"];
+		$this->orb_values["class"] = $cl_name;
+		$this->orb_values["action"] = $fun;
 
 		if (empty($arr["no_reforb"]))
 		{
 			$this->orb_values["reforb"] = 1;
 		};
 		
-		// grr, I hate this, but I can optimize it later
-		$track_vars = array("cal","date","trid","project");
-		foreach($track_vars as $tvar)
-		{
-			$tvar_val = aw_global_get($tvar);
-			if ($tvar_val && empty($arr[$tvar]))
-			{
-				$this->orb_values[$tvar] = $tvar_val;
-			};
-		};		
-
 		$this->use_empty = true;
 
 		// flatten is not the correct term!
