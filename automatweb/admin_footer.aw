@@ -32,10 +32,12 @@ $sf->vars(array(
 ));
 
 $tmp = array();
+$l = get_instance("languages");
 if ($site_title != "")	// weird, but lots of places rely on the yah line being empty and thus having no height.
 {
 	// do the language selecta
-	$l = get_instance("languages");
+	$baseurl = aw_ini_get("baseurl");
+	$lang_id = aw_global_get("lang_id");
 	$li = $l->get_list();
 	foreach($li as $lid => $ln)
 	{
@@ -46,13 +48,13 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 		}
 		else
 		{
-			$url = aw_ini_get("baseurl")."/automatweb/index.aw?set_lang_id=".$lid;
+			$url = $baseurl."/automatweb/index.aw?set_lang_id=".$lid;
 			$target = "_top";
 		}
 		$tmp[] = html::href(array(
 			"url" => $url,
 			"target" => $target,
-			"caption" => ($lid == aw_global_get("lang_id") ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
+			"caption" => ($lid == $lang_id ? "<b><font color=\"#FF0000\">".$ln."</font></b>" : $ln)
 		));
 	}
 
@@ -66,8 +68,7 @@ if ($site_title != "")	// weird, but lots of places rely on the yah line being e
 }
 
 
-$t = new languages;
-$page_charset = $charset = $t->get_charset();
+$page_charset = $charset = $l->get_charset();
 
 // if you set this global variable in your code, then the whole page will be converted and shown
 // in the requested charset. This will be handy for translation forms .. and hey .. perhaps one
