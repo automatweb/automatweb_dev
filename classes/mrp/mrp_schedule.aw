@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.115 2005/10/07 16:43:43 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.116 2005/10/07 17:10:06 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1072,9 +1072,9 @@ class mrp_schedule extends class_base
 
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "new_weight: " . $new_weight . "<br>";
-/* dbg */ echo "weight: " . $weight . "<br><br>";
-/* dbg */ echo "potential reserved_time: " . $reserved_time . "<br><br>";
+/* dbg */ echo "new_weight: " . $new_weight . MRP_NEWLINE;
+/* dbg */ echo "weight: " . $weight . MRP_NEWLINE;
+/* dbg */ echo "potential reserved_time: " . $reserved_time . MRP_NEWLINE . MRP_NEWLINE;
 /* dbg */ }
 /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 			}
@@ -1086,7 +1086,7 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-		if (!isset ($reserved_time) or !isset ($reserved_length) or !isset ($reserved_time_range))
+		if (!isset ($reserved_time))
 		{
 			// if ($_GET["show_errors"] == 1) {echo sprintf (t("error@%s. resource-tag: %s, job: %s<br>"), __LINE__, $resource_tag, $this->currently_processed_job); flush ();}
 			// error::raise(array(
@@ -1175,8 +1175,8 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . "<br>";
-/* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ echo "reservedtime: " . date (MRP_DATE_FORMAT, $this->schedule_start + $reserved_time) . MRP_NEWLINE;
+/* dbg */ echo "1st unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length) . MRP_NEWLINE;
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
 // /* dbg */ echo date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
@@ -1198,7 +1198,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ echo "2nd unavail: " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length) . MRP_NEWLINE;
 /* dbg */ $dbg_time = $unavailable_start + $unavailable_length;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1211,7 +1211,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length)."<br>";
+/* dbg */ echo "moved starttime doesn't fit before next job. " . date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start) ."-". date (MRP_DATE_FORMAT, $this->schedule_start + $unavailable_start + $unavailable_length) . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("add_unavailable_times", "end");
@@ -1333,8 +1333,8 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "A -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
-/* dbg */ echo "A -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 ."<br>";
+/* dbg */ echo "A -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2)  . MRP_NEWLINE;
+/* dbg */ echo "A -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2  . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1342,7 +1342,7 @@ class mrp_schedule extends class_base
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* dbg */ if ($this->mrpdbg){ echo "A -- suitable slot found in start range nr {$time_range}. at range beginning."; }
+/* dbg */ if ($this->mrpdbg){ echo "A -- suitable slot found in start range nr {$time_range}. at range beginning." . MRP_NEWLINE; }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				}
@@ -1369,8 +1369,8 @@ class mrp_schedule extends class_base
 						{
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "B -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
-/* dbg */ echo "B -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 ."<br>";
+/* dbg */ echo "B -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
+/* dbg */ echo "B -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1378,7 +1378,7 @@ class mrp_schedule extends class_base
 							list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* dbg */ if ($this->mrpdbg){ echo "B -- suitable slot found in start range nr {$time_range}. among reserved times"; }
+/* dbg */ if ($this->mrpdbg){ echo "B -- suitable slot found in start range nr {$time_range}. among reserved times" . MRP_NEWLINE; }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 							break;
@@ -1408,8 +1408,8 @@ class mrp_schedule extends class_base
 				{
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "C -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) ."<br>";
-/* dbg */ echo "C -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 ."<br>";
+/* dbg */ echo "C -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
+/* dbg */ echo "C -- start1:". $start1." - length1:".$length1." - start:". $start ."-start2:".$start2 . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1417,7 +1417,7 @@ class mrp_schedule extends class_base
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* dbg */ if ($this->mrpdbg){ echo "C -- suitable slot found in start range nr {$time_range}. from empty range"; }
+/* dbg */ if ($this->mrpdbg){ echo "C -- suitable slot found in start range nr {$time_range}. from empty range" . MRP_NEWLINE; }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				}
@@ -1426,7 +1426,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("get_available_time - get_snug_slot", "end");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range}):";
+/* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range})" . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1477,7 +1477,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("find_range", "end");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "found range [{$mid}] resp. to starttime [{$starttime}]";
+/* dbg */ echo "found range [{$mid}] resp. to starttime [{$starttime}]" . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1527,7 +1527,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "<br>_closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+/* dbg */ echo "closestper1: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, $end) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1553,7 +1553,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "_closestper cycle: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . "<br>";
+/* dbg */ echo "closestper cycle: ". date (MRP_DATE_FORMAT, $period_start). "-" .date (MRP_DATE_FORMAT, $period_end) . " | resp to: " .date (MRP_DATE_FORMAT, ($end)) . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -1601,7 +1601,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "<h5>_get_closest_unavailable_period</h5>";
-/* dbg */ echo "timeforclosestper:". date (MRP_DATE_FORMAT, $time)."<br>";
+/* dbg */ echo "timeforclosestper:". date (MRP_DATE_FORMAT, $time) . MRP_NEWLINE;
 /* dbg */ }
 // /* dbg */ if ((time() - $this->scheduling_time) > 25){
 // /* dbg */ echo "<br>time:". date (MRP_DATE_FORMAT, $time) . " res:".$resource_id." t:".$this->scheduling_time."<br>";
@@ -1636,7 +1636,7 @@ class mrp_schedule extends class_base
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg) {
-/* dbg */ echo "recstart: " . date (MRP_DATE_FORMAT, $recurrence["start"]) . " | recinterval: " .  $recurrence["interval"] .  " | reclength: " .  $recurrence["length"] / 3600 . "h | rectime: " .  $recurrence["time"] / 3600 . "h<br>";
+/* dbg */ echo "recstart: " . date (MRP_DATE_FORMAT, $recurrence["start"]) . " | recinterval: " .  $recurrence["interval"] .  " | reclength: " .  $recurrence["length"] / 3600 . "h | rectime: " .  $recurrence["time"] / 3600 . "h" . MRP_NEWLINE;
 // /* dbg */ arr ($recurrence);
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1671,10 +1671,10 @@ class mrp_schedule extends class_base
 
 	// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 	/* dbg */ if ($this->mrpdbg){
-	/* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h<br>";
-	/* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . "<br>";
-	/* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . "<br>";
-	// /* dbg */ echo " closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
+	/* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h" . MRP_NEWLINE;
+	/* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . MRP_NEWLINE;
+	/* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . MRP_NEWLINE;
+	// /* dbg */ echo " closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . MRP_NEWLINE;
 	/* dbg */ }
 	// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
