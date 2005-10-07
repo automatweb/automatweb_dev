@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.116 2005/10/07 17:10:06 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.117 2005/10/07 17:14:38 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1426,7 +1426,7 @@ class mrp_schedule extends class_base
 /* timing */ timing ("get_available_time - get_snug_slot", "end");
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "suitable slot not found in this start range (range nr: {$time_range})" . MRP_NEWLINE;
+/* dbg */ if (!isset ($reserved_time)){ echo "suitable slot not found in this start range (range nr: {$time_range})" . MRP_NEWLINE; }
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
