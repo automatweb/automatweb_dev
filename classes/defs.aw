@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.196 2005/10/06 15:54:13 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.197 2005/10/07 07:39:36 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -680,7 +680,7 @@ if (!defined("DEFS"))
 
 		return $str;
 	}
-
+	
 	function aw_unserialize($str,$dequote = 0)
 	{
 		$retval = false;
@@ -689,14 +689,16 @@ if (!defined("DEFS"))
 			$str = stripslashes($str);
 		};
 
-		if (substr($str,0,14) == "<?xml version=")
+		$magic_bytes = substr($str,0,6);
+
+		if ($magic_bytes == "<?xml ")
 		{
 			classload("core/serializers/xml");
 			$x = new xml;
 			$retval = $x->xml_unserialize(array("source" => $str));
 		}
 		else
-		if (substr($str,0,6) == "\$arr =")
+		if ($magic_bytes == "\$arr =")
 		{
 			classload("php");
 			// php serializer
@@ -704,7 +706,6 @@ if (!defined("DEFS"))
 			$retval = $p->php_unserialize($str);
 		}
 		else
-		//if ($str{0} == "<")
 		if ((strlen($str) > 0) && ($str{0} == "<"))
 		{
 			$ser = get_instance("core/orb/xmlrpc");
@@ -717,6 +718,7 @@ if (!defined("DEFS"))
 		}
 		return $retval;
 	}
+
 
 	/// I think we should just use the PHP superglobal $GLOBALS for storing
 	// those variables instead of messing with our own objects. Empty it
