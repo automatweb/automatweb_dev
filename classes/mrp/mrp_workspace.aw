@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.141 2005/09/28 12:12:16 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_workspace.aw,v 1.142 2005/10/07 17:43:12 voldemar Exp $
 // mrp_workspace.aw - Ressursihalduskeskkond
 /*
 
@@ -2316,6 +2316,7 @@ if ($_GET['show_thread_data'] == 1)
 		### job states that are shown in chart future
 		$applicable_states = array (
 			MRP_STATUS_PLANNED,
+			MRP_STATUS_ABORTED,
 		);
 
 		if ($arr["request"]["chart_customer"])
