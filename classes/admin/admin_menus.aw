@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.105 2005/10/01 09:45:23 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/Attic/admin_menus.aw,v 1.106 2005/10/07 17:05:35 duke Exp $
 class admin_menus extends aw_template
 {
 	function admin_menus()
@@ -37,11 +37,12 @@ class admin_menus extends aw_template
 		return ($this->req_get_default_add_menu(0, $id, $period, 0));
 	}
 
-	function get_az_def_menu($pt, $parent, $period, $fld_id)
+	function get_az_def_menu($pt, $parent, $period)
 	{
 		$cldata = array();
 		$n2id = array();
 		$clss = aw_ini_get("classes");
+		$res = array();
 		foreach($clss as $clid => $_cldata)
 		{
 			if (!empty($_cldata["name"]) && $_cldata["can_add"])
@@ -54,7 +55,7 @@ class admin_menus extends aw_template
 		ksort($cldata);
 		foreach($cldata as $letter => $clns)
 		{
-			$this->add_menu[$fld_id]["letter_" . $letter] = array(
+			$res[$fld_id]["letter_" . $letter] = array(
 				"caption" => $letter,
 				"list" => "list",
 			);
@@ -938,6 +939,7 @@ class admin_menus extends aw_template
 			$this->acl_error("view", PRG_MENUEDIT);
 		}
 
+
 		get_instance("core/icons");
 		aw_global_set("date","");
 
@@ -1239,6 +1241,7 @@ class admin_menus extends aw_template
 
 		}
 
+		/*
 		$this->get_add_menu(array(
 			"id" => $parent,
 			"ret_data" => true,
@@ -1246,6 +1249,7 @@ class admin_menus extends aw_template
 			"addmenu" => 1,
 			"period" => empty($period) && $menu_obj->prop("periodic") == 1 ? $period : $period,
 		));
+		*/
 
 		if (!$sortby)
 		{
@@ -1297,54 +1301,71 @@ class admin_menus extends aw_template
 		return $this->parse();
 	}
 
-	function rf_toolbar($args = array())
+	function rf_toolbar($arr)
 	{
-		extract($args);
 		$toolbar = get_instance("vcl/toolbar");
 
-		if ($this->can("add", $parent) && is_array($this->add_menu))
+		if ($this->can("add", $arr["parent"]))
 		{
 			$toolbar->add_menu_button(array(
 				"name" => "new",
 				"tooltip" => t("Uus"),
 			));
 
-			foreach($this->add_menu as $item_id => $item_collection)
+			$atc = get_instance(CL_ADD_TREE_CONF);
+			$tree = $atc->get_class_tree(array(
+				"az" => 1,
+				"docforms" => 1,
+				// those are for docs menu only
+				"parent" => $arr["parent"],
+				"period" => $arr["period"],
+			));
+
+
+			foreach($tree as $item_id => $item_collection)
 			{
 				foreach($item_collection as $el_id => $el_data)
 				{
-					//if this el_id has children, make it a submenu
-					$children = isset($this->add_menu[$el_id]) ? sizeof($this->add_menu[$el_id]) : 0;
-					$parnt = is_numeric($item_id) && $item_id == 0 ? "new" : $item_id;
+					$parnt = $item_id == "root" ? "new" : $item_id;
+					if ($el_data["clid"])
+					{
+						$toolbar->add_menu_item(array(
+							"parent" => $parnt,
+							"text" => $el_data["name"],
+							"link" => $this->mk_my_orb("new",array("parent" => $arr["parent"]),$el_data["clid"]),
+						));
+					}
+					else
+					if ($el_data["link"])
+					{
+						// docs menu has links ..
+						$toolbar->add_menu_item(array(
+							"parent" => $parnt,
+							"text" => $el_data["name"],
+							"link" => $el_data["link"],
+						));
+					}
+					else
+					{
+						$toolbar->add_sub_menu(array(
+							"parent" => $parnt,
+							"name" => $el_data["id"],
+							"text" => $el_data["name"],
+						));
+
+					};
 					if ($el_data["separator"])
 					{
 						$toolbar->add_menu_separator(array(
 							"parent" => $parnt,
 						));
 					}
-					else
-					if ($children)
-					{
-						$toolbar->add_sub_menu(array(
-							"parent" => $parnt,
-							"name" => $el_id,
-							"text" => $el_data["caption"],
-						));
-					}
-					else
-					{
-						$toolbar->add_menu_item(array(
-							"parent" => $parnt,
-							"text" => $el_data["caption"],
-							"link" => $el_data["link"],
-						));
-					};
 
 				};
 			};
 		};
 
-		if (empty($no_save))
+		if (empty($arr["no_save"]))
 		{
 			$toolbar->add_button(array(
 				"name" => "save",
@@ -1357,7 +1378,7 @@ class admin_menus extends aw_template
 		$toolbar->add_button(array(
 			"name" => "search",
 			"tooltip" => t("Otsi"),
-			"url" => $this->mk_my_orb("search",array("parent" => $parent),"search"),
+			"url" => $this->mk_my_orb("search",array("parent" => $arr["parent"]),"search"),
 			"img" => "search.gif",
 		));
 
@@ -1377,7 +1398,7 @@ class admin_menus extends aw_template
 			"img" => "copy.gif",
 		));
 
-		if ($sel_count > 0)
+		if ($arr["sel_count"] > 0)
 		{
 			$toolbar->add_button(array(
 				"name" => "paste",
@@ -1412,7 +1433,7 @@ class admin_menus extends aw_template
 		$toolbar->add_button(array(
 			"name" => "import",
 			"tooltip" => t("Impordi"),
-			"url" => $this->mk_my_orb("import",array("parent" => $parent)),
+			"url" => $this->mk_my_orb("import",array("parent" => $arr["parent"])),
 			"img" => "import.gif",
 		));
 		
@@ -1426,9 +1447,11 @@ class admin_menus extends aw_template
 			"name" => "preview",
 			"tooltip" => t("Eelvaade"),
 			"target" => "_blank",
-			"url" => obj_link($parent),
+			"url" => obj_link($arr["parent"]),
 			"img" => "preview.gif",
 		));
+
+		$callback = $arr["callback"];
 
 		if (isset($callback) && is_array($callback) && sizeof($callback) == 2)
 		{
