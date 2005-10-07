@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.117 2005/10/07 17:14:38 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.118 2005/10/07 17:27:43 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -638,8 +638,12 @@ class mrp_schedule extends class_base
 					}
 
 /* timing */ timing ("one job total", "end");
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo "END DBG" . MRP_NEWLINE;
 /* dbg */ $this->mrpdbg=0;
-// /* dbg */ echo "<small>proj: " . $project_id . " | job: " . $job["oid"] . " | res: " . $job["resource"] . " | start: " . date (MRP_DATE_FORMAT, $scheduled_start) . " | end: " . date (MRP_DATE_FORMAT, $scheduled_start+$scheduled_length) . "</small><br>";
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 				}
 
 /* timing */ timing ("one project total", "end");
@@ -1318,12 +1322,13 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 			### get max reach of previous timerange
-			$prev_range_end = $this->range_lengths[$time_range - 1];
+			$prev_range_end = (int) $this->range_lengths[$time_range - 1];
 
 			if (count ($this->reserved_times[$resource_tag][$time_range]))
 			{ ### timerange has already reserved times
 				### check if there's space for the job between prev. range end and this range first job (first job by reset because ksort just done)
-				$start2 = reset ($this->reserved_times[$resource_tag][$time_range]); # needed here to get $start2 and later for cycling through time_range reserved times with next() and key()
+				reset ($this->reserved_times[$resource_tag][$time_range]); # needed here to get $start2 and later for cycling through time_range reserved times with next() and key()
+				$start2 = key ($this->reserved_times[$resource_tag][$time_range]);
 				$d = ($start < ($prev_range_end)) ? 0 : ($start - ($prev_range_end));
 
 				if ( (($prev_range_end + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
