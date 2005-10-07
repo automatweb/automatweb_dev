@@ -416,11 +416,11 @@ class _int_object_loader extends core
 
 		if (!($max_acl = $this->__aw_acl_cache[$oid]))
 		{
-			/*if ($GLOBALS["acl_dbg"] == 1)
+			if ($GLOBALS["acl_dbg"] == 1)
 			{
 				echo "cache MISS for $acl_name / $oid <br>";
 				$GLOBALS["INTENSE_DUKE"] = 1;
-			}*/
+			}
 
 			// try for file cache
 			$fn = "acl-cache-".$oid."-uid-".$GLOBALS["__aw_globals"]["uid"];
@@ -430,14 +430,24 @@ class _int_object_loader extends core
 			{
 				include($fqfn);
 				$this->__aw_acl_cache[$oid] = $max_acl;
-				/*if ($GLOBALS["acl_dbg"] == 1)
+				if ($GLOBALS["acl_dbg"] == 1)
 				{
 					echo "acl for $access, $oid , got from file cache , mac_acl = ".dbg::dump($max_acl)." <br>";
-				}*/
+				}
 			}
 			else
 			{
 				$max_acl = $this->_calc_max_acl($oid);
+				if ($max_acl === false)
+				{
+					$max_acl = array(
+						"can_view" => false,
+						"can_edit" => false,
+						"can_delete" => false,
+						"can_admin" => false
+					);
+				}
+
 				if ($GLOBALS["cfg"]["cache"]["page_cache"] != "")
 				{
 					$str = "<?php\n";
@@ -461,18 +471,18 @@ class _int_object_loader extends core
 				}
 			}
 			$this->__aw_acl_cache[$oid] = $max_acl;
-			/*if ($GLOBALS["acl_dbg"] == 1)
+			if ($GLOBALS["acl_dbg"] == 1)
 			{
 				$GLOBALS["INTENSE_DUKE"] = 0;
-			}*/
+			}
 		}
-		/*else
+		else
 		{
 			if ($GLOBALS["acl_dbg"] == 1)
 			{
 				echo "cache hit for $acl_name / $oid <br>";
 			}
-		}*/
+		}
 
 		//exit_function("object_loader::can");
 		if (!isset($max_acl["can_view"]) && aw_global_get("uid") == "")
