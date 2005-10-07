@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.32 2005/05/06 11:47:41 ahti Exp $
+// $Header: /home/cvs/automatweb_dev/classes/admin/add_tree_conf.aw,v 1.33 2005/10/07 17:02:49 duke Exp $
 // add_tree_conf.aw - Lisamise puu konff
 
 /*
@@ -614,5 +614,123 @@ class add_tree_conf extends class_base
 		}
 		$o->set_meta("visible", $v);
 	}
-}
+
+	function get_class_tree($arr = array())
+	{
+		$conf_obj_id = $this->get_current_conf();
+		$this->conf_exists = false;
+
+		$clss = aw_ini_get("classes");
+		if ($conf_obj_id)
+		{
+			$conf_obj = new object($conf_obj_id);
+			$this->visible = $conf_obj->meta("visible");
+			$this->usable = $conf_obj->meta("usable");
+			$this->conf_exists = true;
+		}
+		else
+		{
+			// if no config is available, then assume that all
+			// defined classes are visible and usable
+			$this->visible["obj"] = $clss;
+			$this->visible["fld"] = aw_ini_get("classfolders");
+			$this->usable = $clss;
+		};
+
+		$collect_az = false;
+		if (isset($arr["az"]))
+		{
+			$collect_az = true;
+			$az_classes = array();
+		};
+
+		$by_parent = array();
+		
+		foreach($clss as $clid => $cldata)
+		{
+			if (!isset($cldata["parents"]))
+			{
+				continue;
+			};
+
+			if (empty($cldata["can_add"]))
+			{
+				continue;
+			};
+
+			$parens = explode(",", $cldata["parents"]);
+			if ($this->visible["obj"][$clid])
+			{
+				if ($this->usable[$clid])
+				{
+					foreach($parens as $paren)
+					{
+						if (0 == $paren)
+						{
+							$paren = "root";
+						}
+						else
+						{
+							$paren = "fld_" . $paren;
+						};
+						$cldat = $clss[$clid];
+						$cldat["clid"] = $clid;
+						$cldat["id"] = $clid;
+						$by_parent[$paren][] = $cldat;
+
+						if ($collect_az)
+						{
+							$letter = $cldat["name"]{0};
+							$cldat["parent"] = "letter_" . $letter;
+							$az_classes[$letter][] = $cldat;
+						};
+					};
+				};
+			};
+		};
+
+		$folders = aw_ini_get("classfolders");
+
+		foreach($folders as $folder_id => $folder_data)
+		{
+			$parent = "root";
+			if (!empty($folder_data["parent"]))
+			{
+				$parent = "fld_" . $folder_data["parent"];
+			};
+			$folder_data["id"] = "fld_" . $folder_id;
+			$by_parent[$parent][] = $folder_data;
+
+			if ($folder_data["all_objs"] && $collect_az)
+			{
+				ksort($az_classes);
+				foreach($az_classes as $az_key => $az_val)
+				{
+					$by_parent[$folder_data["id"]][] = array(
+						"name" => $az_key,
+						"id" => "letter_" . $az_key,
+					);
+					uasort($az_val, create_function('$a,$b', 'return strcasecmp($a["name"], $b["name"]);'));
+					$by_parent["letter_".$az_key] = $az_val;
+
+				};
+			};
+
+			if ($arr["docforms"] && $folder_data["docforms"])
+			{
+				$d = get_instance("doc");
+                        	$docmenu = $d->get_doc_add_menu($arr["parent"],$arr["period"]);
+
+				$by_parent[$folder_data["id"]] = $docmenu;
+			};
+
+		}
+
+		//arr($by_parent);
+
+		return $by_parent;
+	}
+
+	
+};
 ?>
