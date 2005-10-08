@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.119 2005/10/07 17:52:07 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.120 2005/10/08 09:28:20 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1175,6 +1175,7 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+		$unavailable_start = $unavailable_length = NULL;
 		list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time, $length);
 
 
@@ -1189,7 +1190,7 @@ class mrp_schedule extends class_base
 
 
 		### check if unavailable time starts before reserved time ends
-		if (($reserved_time + $length) > $unavailable_start)
+		if (isset ($unavailable_start) and (($reserved_time + $length) > $unavailable_start))
 		{
 			### check if reserved starttime is in an unavailable period & make starttime correction, shifting it to the end of that unavail. period
 			if ( ($reserved_time < ($unavailable_start + $unavailable_length)) and ($reserved_time >= $unavailable_start) )
@@ -1198,6 +1199,7 @@ class mrp_schedule extends class_base
 				if (($unavailable_start + $unavailable_length + $length) <= $start2)
 				{
 					$reserved_time = $unavailable_start + $unavailable_length;
+					$unavailable_start = $unavailable_length = NULL;
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, $reserved_time, $length);
 
 
@@ -1230,7 +1232,7 @@ class mrp_schedule extends class_base
 			### check if reserved time covers unavailable periods & make length correction if job fits in slices else start over
 			$i_dbg1 = 0;
 
-			while ( $unavailable_length and (($reserved_time + $length) > $unavailable_start) )
+			while ( isset ($unavailable_start) and (($reserved_time + $length) > $unavailable_start) )
 			{
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1270,6 +1272,7 @@ class mrp_schedule extends class_base
 				else
 				{
 					$length += $unavailable_length;
+					$unavailable_start = $unavailable_length = NULL;
 					list ($unavailable_start, $unavailable_length) = $this->get_closest_unavailable_period ($resource_id, ($unavailable_start + $unavailable_length), $length);
 
 
@@ -1527,6 +1530,7 @@ class mrp_schedule extends class_base
 
 		### convert to real time
 		$time += $this->schedule_start;
+		$start = $end = NULL;
 
 		### ...
 		list ($start, $end) = $this->_get_closest_unavailable_period ($resource_id, $time, $length);
@@ -1537,24 +1541,12 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-		### unavailable periods not defined past $time, stop and return 0?
-		if ($start == $end)
-		{
-			// !!! ajutine lahendus sellele, mis siis saaab kui t88aegu ega midagi pole dfn, v6i peale kysitud hetke pole kinniseid aegu. tagastatakse 0sekundine kinnine aeg 10 aastat p2rast schedule-endi
-			$quasi_start = ($start - $this->schedule_start) + MRP_INF;
-			$quasi_length = 0;
-
-/* timing */ timing ("get_closest_unavailable_period", "end");
-			return array ($quasi_start, $quasi_length);
-		}
-
-
 		### find if period ends before another starts
 		$i_dbg = 0;
-		$inside_up = true;
 
-		while ($inside_up)
+		do
 		{
+			$period_start = $period_end = NULL;
 			list ($period_start, $period_end) = $this->_get_closest_unavailable_period ($resource_id, $end, $length);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1563,13 +1555,9 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-			if (($period_start <= $end) and $period_end)
+			if (isset ($period_start) and ($period_start <= $end))
 			{
 				$end = $period_end;
-			}
-			else
-			{
-				$inside_up = false;
 			}
 
 			if ($i_dbg++ == 10000)
@@ -1585,19 +1573,24 @@ class mrp_schedule extends class_base
 				break;
 			}
 		}
+		while (isset ($period_start));
 
-		### convert back to relative time & return
-		$period_start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
-		$period_length = ($start > $this->schedule_start) ? ($end - $start) : ($end - $this->schedule_start);
+/* timing */ timing ("get_closest_unavailable_period", "end");
+
+		if (isset ($start))
+		{
+			### convert back to relative time & return
+			$period_start = ($start > $this->schedule_start) ? ($start - $this->schedule_start) : 0;
+			$period_length = ($start > $this->schedule_start) ? ($end - $start) : ($end - $this->schedule_start);
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "closestper ret: ". date (MRP_DATE_FORMAT, $start). "-" .date (MRP_DATE_FORMAT, ($start+$period_length)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . "<br>";
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-/* timing */ timing ("get_closest_unavailable_period", "end");
 
-		return array ($period_start, $period_length);
+			return array ($period_start, $period_length);
+		}
 	}
 
 	## returns start and length of next unavailable period after $time. if $time is in an unavail. period, that period's data is returned.
@@ -1675,14 +1668,14 @@ class mrp_schedule extends class_base
 				$recurrence_end = $recurrence_start + $recurrence["length"];
 
 
-	// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
-	/* dbg */ if ($this->mrpdbg){
-	/* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h" . MRP_NEWLINE;
-	/* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . MRP_NEWLINE;
-	/* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . MRP_NEWLINE;
-	// /* dbg */ echo " closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . MRP_NEWLINE;
-	/* dbg */ }
-	// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){
+/* dbg */ echo " rectime:". ($recurrence["time"] / 3600) . " h" . MRP_NEWLINE;
+/* dbg */ echo " recdaystart: nodst - ". date (MRP_DATE_FORMAT, $nodst_day_start) . " | dst - ". date (MRP_DATE_FORMAT, $dst_day_start) . MRP_NEWLINE;
+/* dbg */ echo " recperiod:". date (MRP_DATE_FORMAT, $recurrence_start) ."-". date (MRP_DATE_FORMAT, $recurrence_end) . MRP_NEWLINE;
+// /* dbg */ echo " closestper rec: ". date (MRP_DATE_FORMAT, $recurrence_start). "-" .date (MRP_DATE_FORMAT, ($recurrence_end)) . " | resp to: " .date (MRP_DATE_FORMAT, ($time)) . MRP_NEWLINE;
+/* dbg */ }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 				while ($recurrence_start > $time)
 				{
@@ -1709,6 +1702,7 @@ class mrp_schedule extends class_base
 /* dbg */ arr ($closest_periods);
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 		### add separate unavailable periods
 		foreach ($this->resource_data[$resource_id]["unavailable_periods"] as $period_start => $period_end)
 		{
@@ -1717,6 +1711,7 @@ class mrp_schedule extends class_base
 				$closest_periods[$period_start] = $period_end;
 			}
 		}
+
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "closest_periods after:";
@@ -1724,12 +1719,13 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+		$start = $end = NULL;
+
 		### combine buffer, recurrence & period
 		if (!empty ($closest_periods))
 		{
 /* timing */ timing ("find_combined_range", "start");
 
-			$start = $end = $time;
 			ksort ($closest_periods, SORT_NUMERIC);
 
 			if (end ($closest_periods) > $time)
@@ -1739,22 +1735,22 @@ class mrp_schedule extends class_base
 				$prev_end = NULL;
 				$combined_ranges = array ();
 
-				foreach ($closest_periods as $start => $end)
+				foreach ($closest_periods as $range_start => $range_end)
 				{
-					if (($start <= $prev_end) and isset ($prev_end))
+					if (($range_start <= $prev_end) and isset ($prev_end))
 					{
-						if ($end > $prev_end)
+						if ($range_end > $prev_end)
 						{
-							$prev_end = $end;
+							$prev_end = $range_end;
 						}
 
 						$combined_ranges[$prev_start] = $prev_end;
 					}
 					else
 					{
-						$combined_ranges[$start] = $end;
-						$prev_start = $start;
-						$prev_end = $end;
+						$combined_ranges[$range_start] = $range_end;
+						$prev_start = $range_start;
+						$prev_end = $range_end;
 					}
 				}
 
@@ -1773,16 +1769,12 @@ class mrp_schedule extends class_base
 				}
 			}
 
-			if ($start == $end)
+			if ($start >= $end)
 			{
-				$start = $end = 0;
+				$start = $end = NULL;
 			}
 
 /* timing */ timing ("find_combined_range", "end");
-		}
-		else
-		{
-			$start = $end = 0;
 		}
 
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
@@ -1792,60 +1784,10 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* timing */ timing ("_get_closest_unavailable_period", "end");
 
-
-		return array ($start, $end);
-	}
-
-	### find and combine ranges closest to $value, exclude ranges that don't exceed $value directly or through overlapping ranges
-	function find_combined_range ($ranges, $value)
-	{
-/* timing */ timing ("find_combined_range", "start");
-		$start = $end = $value;
-		ksort ($ranges, SORT_NUMERIC);
-
-		if (end ($ranges) > $value)
+		if (isset ($start) and isset ($end))
 		{
-/* timing */ timing ("find_combined_range - combine_ranges", "start");
-			$prev_end = NULL;
-			$combined_ranges = array ();
-
-			foreach ($ranges as $start => $end)
-			{
-				if (($start <= $prev_end) and isset ($prev_end))
-				{
-					if ($end > $prev_end)
-					{
-						$prev_end = $end;
-					}
-
-					$combined_ranges[$prev_start] = $prev_end;
-				}
-				else
-				{
-					$combined_ranges[$start] = $end;
-					$prev_start = $start;
-					$prev_end = $end;
-				}
-			}
-
-			$ranges = $combined_ranges;
-
-/* timing */ timing ("find_combined_range - combine_ranges", "end");
-
-			foreach ($ranges as $range_start => $range_end)
-			{
-				if ($range_end > $value)
-				{
-					$start = $range_start;
-					$end = $range_end;
-					break;
-				}
-			}
+			return array ($start, $end);
 		}
-
-/* timing */ timing ("find_combined_range", "end");
-
-		return array ($start, $end);
 	}
 
 	function init_resource_data ($resources)
@@ -1947,7 +1889,7 @@ class mrp_schedule extends class_base
 
 function timing ($name = NULL, $action = "show")
 {
-	if (isset ($_GET["show_timings"]) and $_GET["show_timings"] == 1)
+	if (1 == $_GET["show_timings"])
 	{
 		static $timings = array ();
 		list ($msec, $sec) = explode (" ", microtime ());
