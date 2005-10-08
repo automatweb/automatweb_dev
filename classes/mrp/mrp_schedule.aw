@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.122 2005/10/08 17:40:57 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.123 2005/10/08 18:01:27 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1602,9 +1602,16 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
-				if (isset ($period_start) and ($period_start <= $end))
+				if (isset ($period_start))
 				{
-					$end = $period_end;
+					if ($period_start <= $end)
+					{
+						$end = $period_end;
+					}
+					else
+					{
+						$period_start = NULL;
+					}
 				}
 
 				if ($i_dbg++ == 10000)
@@ -1616,11 +1623,6 @@ class mrp_schedule extends class_base
 						// "fatal" => false,
 						// "show" => false,
 					// ));
-
-/* dbg */ echo "<pre>";
-/* dbg */ var_dump ($period_end, $period_start, $start, $end, $i_dbg);
-/* dbg */ echo "</pre>" . MRP_NEWLINE;
-
 					echo sprintf (t("Ressursil id-ga %s pole piirangu ulatuses vabu aegu. Võimalik on ka viga või ettenägematu seadistus ressursi tööaegades. Töö id: %s"), $resource_id, $this->currently_processed_job) . MRP_NEWLINE;
 					flush ();
 					return;
