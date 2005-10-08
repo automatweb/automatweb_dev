@@ -158,7 +158,7 @@ class core extends acl_base
 
 		if (aw_global_get("old_cache_flushed"))
 		{
-			return;
+			//return;
 		}
 		aw_global_set("old_cache_flushed", 1);
 		if ($oid !== NULL)
