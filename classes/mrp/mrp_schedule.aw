@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.120 2005/10/08 09:28:20 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.121 2005/10/08 09:55:47 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -529,9 +529,13 @@ class mrp_schedule extends class_base
 /* timing */ timing ("sort projects", "end");
 /* timing */ timing ("schedule jobs total", "start");
 
-		$projects_count = count ($projects);
-		$tick = $projects_count > 100 ? ceil ($projects_count/100) : ceil (100/$projects_count);
-		$tick_i = 0;
+		if ($_GET["show_progress"]==1)
+		{
+			echo '<div id="mrp_schedule_progress_bar">' . t("Planeerimine") . '<div style="">';
+			$projects_count = count ($projects);
+			$tick = $projects_count > 100 ? ceil ($projects_count/100) : ceil (100/$projects_count);
+			$tick_i = 0;
+		}
 
 		### schedule jobs in all projects
 		foreach ($projects as $project_id => $project)
@@ -697,7 +701,8 @@ class mrp_schedule extends class_base
 
 		if ($_GET["show_progress"]==1)
 		{
-			return $_SERVER["REQUEST_URI"];
+			echo '</div></div><script type="text/javascript">pb = document.getElementById("mrp_schedule_progress_bar"); pb.style.display = "none";</script>';
+			// return $_SERVER["REQUEST_URI"];
 		}
 	}
 
