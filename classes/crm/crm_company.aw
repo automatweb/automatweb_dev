@@ -944,6 +944,7 @@ class crm_company extends class_base
 				}
 				break;
 
+			/* new code allows selection from all connected sectors
 			case "pohitegevus":
 				$ol = new object_list(array(
 					"class_id" => CL_CRM_SECTOR,
@@ -953,7 +954,7 @@ class crm_company extends class_base
 					$data["options"] = array("" => t("--Vali--")) + $ol->names();
 				}
 				break;
-
+			*/
 			case "year_founded":
 				$data["year_from"] = date("Y");
 				$data["year_to"] = 1800;
