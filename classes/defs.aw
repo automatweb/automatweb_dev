@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.197 2005/10/07 07:39:36 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.198 2005/10/09 06:34:47 ekke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -768,11 +768,14 @@ if (!defined("DEFS"))
 		$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "REMOTE_HOST", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
 		foreach($server as $var)
 		{
-			aw_global_set($var,ifset($GLOBALS,"HTTP_SERVER_VARS",$var));
+			if (isset($GLOBALS['HTTP_SERVER_VARS']) && isset($GLOBALS['HTTP_SERVER_VARS'][$var]))
+			{
+				aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
+			}
 		}
 		
 
-		if (ifset($GLOBALS,"HTTP_COOKIE_VARS","lang_id"))
+		if (isset($GLOBALS['HTTP_COOKIE_VARS']) && ifset($GLOBALS["HTTP_COOKIE_VARS"],"lang_id"))
 		{
 			aw_global_set("lang_id", $GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]);
 		}
@@ -807,8 +810,9 @@ if (!defined("DEFS"))
 		{
 			return false;
 		}
-		if (!is_array(ifset($GLOBALS,"__aw_cache")))
+		if (!isset($GLOBALS['__aw_cache']) || !is_array($GLOBALS['__aw_cache']))
 		{
+			$GLOBALS['__aw_cache'] = array();
 			return false;
 		}
 		if (!isset($GLOBALS["__aw_cache"][$cache]) || !is_array($GLOBALS["__aw_cache"][$cache]))
@@ -865,7 +869,7 @@ if (!defined("DEFS"))
 			$GLOBALS["__aw_cache"] = array();
 			return false;
 		}
-		return ifset($GLOBALS,"__aw_cache",$cache);
+		return ifset($GLOBALS["__aw_cache"],$cache);
 	}
 
 	////

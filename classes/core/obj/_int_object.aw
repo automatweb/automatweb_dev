@@ -949,7 +949,7 @@ class _int_object
 		}
 		else
 		{
-			$retval = ifset($this,"obj","meta",$param);
+			$retval = isset($this->obj["meta"][$param]) ? $this->obj["meta"][$param] : null;
 		};
 		return $retval;
 	}
@@ -1299,6 +1299,8 @@ class _int_object
 	{
 		$this->obj = array();
 		$this->obj["properties"] = array();
+		$this->obj['class_id'] = null;
+		$this->obj['meta'] = null;
 		$this->implicit_save = false;
 		$this->props_loaded = false;
 		$this->props_modified = array();
@@ -1381,7 +1383,7 @@ class _int_object
 		}
 
 		// then get the properties
-		$file = ifset($GLOBALS,"cfg","classes",$cl_id,"file");
+		$file = ifset($GLOBALS["cfg"]["classes"],$cl_id,"file");
 		if ($cl_id == 29)
 		{
 			$file = "doc";
@@ -1846,7 +1848,10 @@ class _int_object
 		}
 
 //		$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
-		$pd = ifset($GLOBALS,"properties",ifset($this, "obj","class_id"),$prop);
+		if (isset($GLOBALS["properties"][$this->obj["class_id"]][$prop]))
+		{
+			$pd = $GLOBALS["properties"][$this->obj["class_id"]][$prop];
+		}
 		if ($pd && $pd["field"] == "meta" && $pd["table"] == "objects")
 		{
 			return isset($this->obj["meta"][$pd["name"]]) ? $this->obj["meta"][$pd["name"]] : null;

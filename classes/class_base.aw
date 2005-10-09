@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.422 2005/10/05 11:16:26 duke Exp $
+// $Id: class_base.aw,v 2.423 2005/10/09 06:34:46 ekke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -86,6 +86,8 @@ define('RELTYPE_ORIGINAL',103);
 
 class class_base extends aw_template
 {
+	var $clid;
+
 	function class_base($args = array())
 	{
 		$this->init("");
@@ -135,7 +137,7 @@ class class_base extends aw_template
 			"classificator" => 1,
 		);
 
-		if (!ifset($this, "clid") && ifset($arg, "clid"))
+		if (!isset($this->clid) && ifset($arg, "clid"))
 		{
 			$this->clid = $arg["clid"];
 		}

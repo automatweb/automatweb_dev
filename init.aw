@@ -12,12 +12,30 @@ include_once(dirname(__FILE__)."/const.aw");
 	// Retuns null unless exists $arr[$key1][$key2][...][$keyN] (then returns the value)
 	// $a = array_isset($arr,$key1,$key2,$keyN)  
 	//         instead of $a=isset($arr[$key1]) && isset($arr[$key2) .... ? $arr[$key1][$key2] : null
-	function ifset($item)
+	function ifset(&$item_orig)
 	{
-		$tmp[] = array();
+		enter_function("ifset");
 		$i = 0;
 		$count = func_num_args();
-		$tmp[0] = $item;
+		$item =& $item_orig;
+		for (; $i < $count-1; $i++)
+		{
+			$key = func_get_arg($i+1);
+			if (is_array($item) && isset($item[$key]))
+			{
+				$item =& $item[$key];
+			}
+			else if (is_object($item) && isset($item->$key))
+			{
+				$item =& $item->$key;
+			}
+			else
+			{
+				exit_function("ifset");
+				return null;
+			}
+		}
+/*		$tmp[0] = $item_orig;
 		for (; $i < $count-1; $i++)
 		{
 			$key = func_get_arg($i+1);
@@ -31,10 +49,14 @@ include_once(dirname(__FILE__)."/const.aw");
 			}
 			else
 			{
+				exit_function("ifset");
 				return null;
 			}
 		}
-		return $tmp[$i];
+*/
+		exit_function("ifset");
+		return $item;
+	//	return $tmp[$i];
 	}
 
 function aw_ini_get($var)
@@ -527,7 +549,7 @@ function get_instance($class,$args = array(), $errors = true)
 
 	// check if the class is remoted. if it is, then create proxy class instance, not real class instance
 	$clid = (isset($GLOBALS['cfg']['class_lut']) && isset($GLOBALS["cfg"]["class_lut"][$lib])) ? $GLOBALS["cfg"]["class_lut"][$lib] : 0;
-	if (($rs = ifset($GLOBALS,"cfg","__default","classes",$clid,"is_remoted")) != "")
+	if (isset($GLOBALS['cfg']['__default']['classes'][$clid]) && (($rs = ifset($GLOBALS['cfg']['__default']['classes'][$clid],"is_remoted")) != ""))
 	{
 		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
 		{
@@ -620,7 +642,7 @@ function get_instance($class,$args = array(), $errors = true)
 
 function load_class_translations($class)
 {
-	if (($adm_ui_lc = ifset($GLOBALS,"cfg","user_interface","default_language")) != "")
+	if (($adm_ui_lc = ifset($GLOBALS["cfg"],"user_interface","default_language")) != "")
 	{
 		$trans_fn = $GLOBALS["cfg"]["__default"]["basedir"]."/lang/trans/$adm_ui_lc/aw/".basename($class).".aw";
 		if (file_exists($trans_fn))
@@ -727,6 +749,7 @@ function aw_shutdown()
 	}
 
 	echo "<!--\n";
+	echo function_exists('memory_get_usage') ? ("memory_get_usage = " . memory_get_usage()." \n") : "";
 	echo "enter_function calls = ".$GLOBALS["enter_function_calls"]." \n";
 	echo "exit_function calls = ".$GLOBALS["exit_function_calls"]." \n";
 /*	echo "error handler calls = ".$GLOBALS["error_handler_calls"]." \n";

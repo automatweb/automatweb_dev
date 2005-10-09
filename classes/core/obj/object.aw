@@ -473,7 +473,11 @@ no_cache - 1/0 - if 1, ds_cache is not used even if it is loaded
 **/
 function obj_set_opt($opt, $val)
 {
-	$tmp = ifset($GLOBALS,"__obj_sys_opts",$opt);
+	if (!isset($GLOBALS['__obj_sys_opts']))
+	{
+		$GLOBALS['__obj_sys_opts'] = array();
+	}
+	$tmp = ifset($GLOBALS["__obj_sys_opts"],$opt);
 	$GLOBALS["__obj_sys_opts"][$opt] = $val;
 	return $tmp;
 }

@@ -177,7 +177,7 @@ echo  "list from cache ".dbg::dump($params)." <br>";
 
 	function _get_cache($fn, $oid, $cfn = "objcache")
 	{
-		if (ifset($GLOBALS,"__obj_sys_opts","no_cache") == 1)
+		if (ifset($GLOBALS["__obj_sys_opts"],"no_cache") == 1)
 		{
 			return false;
 		}
