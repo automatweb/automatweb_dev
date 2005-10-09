@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.1 2005/10/01 09:21:59 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/common/openhours.aw,v 1.2 2005/10/09 20:59:45 ekke Exp $
 // openhours.aw - Avamisajad ehk hulk ajavahemikke, millel on m22ratud alguse ja lopu p2ev ning kellaaeg
 /*
 
@@ -127,8 +127,11 @@ class openhours extends class_base
 
 	////
 	// !this shows the object. not strictly necessary, but you'll probably need it, it is used by parse_alias
+	// 'id' - oid
+	// 'style' - default | short
 	function show($arr)
 	{
+		$this->sub_merge = 1;
 		$days_short = array (
 			0 => " ",
 			1 => t("E"), 
@@ -139,14 +142,30 @@ class openhours extends class_base
 			6 => t("L"), 
 			7 => t("P"), 
 		);
-		$this->sub_merge = 1;
 		$ob = new object($arr["id"]);
-		$values = array_reverse($ob->meta('openhours'));
 		$this->read_template("openhours.tpl");
+
+		$style = ifset($arr, 'style') == 'short' ? 'short' : 'default';
+		
+		$values = $ob->meta('openhours');
+		$first = true;
 		foreach ($values as $i => $val)
 		{
-			$show['h1'] = sprintf("%02d", $val['h1']);
-			$show['h2'] = sprintf("%02d", $val['h2']);
+			if (!$first) 
+			{
+				if ($style == 'short')
+				{
+					$this->parse('ALLBUTFIRST_SHORT');
+				}
+				else
+				{
+					$this->parse('ALLBUTFIRST');
+				}
+			}
+			$first = false;
+		
+			$show['h1'] = $val['h1'];//sprintf("%02d", $val['h1']);
+			$show['h2'] = $val['h2'];//sprintf("%02d", $val['h2']);
 			$show['m1'] = sprintf("%02d", $val['m1']);
 			$show['m2'] = sprintf("%02d", $val['m2']);
 			$show['day1'] = $days_short[$val['day1']];
@@ -155,12 +174,22 @@ class openhours extends class_base
 			$this->vars($show);
 			if ($val['day2'] == 0 || $val['day1'] == $val['day2'])
 			{
-				$this->parse('LINE_ONEDAY');
+				$this->parse('ONEDAY');
 			}
 			else
 			{
-				$this->parse('LINE_TWODAYS');
+				$this->parse('TWODAYS');
 			}
+			if ($val['h1'] == $val['h2'] && $val['m1'] == $val['m2']) // If times are equal, it's open all day
+			{
+				$this->parse('TIMES_24H');
+			}
+			else
+			{
+				$this->parse('TIMES');
+			}
+			$this->parse('LINE');
+			$this->vars(array('ONEDAY' => '', 'TWODAYS' => '', 'TIMES' => '', 'TIMES_24H' => '', 'ALLBUTFIRST' => '', 'ALLBUTFIRST_SHORT' => ''));
 		}
 		return $this->parse();
 	}
