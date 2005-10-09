@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.81 2005/10/01 09:45:22 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/html.aw,v 2.82 2005/10/09 20:37:51 ekke Exp $
 // html.aw - helper functions for generating HTML
 class html extends aw_template
 {
@@ -91,6 +91,7 @@ class html extends aw_template
 	// autocomplete_source (string) -- relative (to web root -- it seems that certain browsers don't allow javascript http connections to absolute paths) URL that refers to source of autocomplete options. See documentation for argument $option_is_tuple about options data format.
 	// autocomplete_params (array) -- array of form element names whose values will be posted to orb method giving autocomplete options
 	// option_is_tuple (bool) -- indicates whether autocomplete options are values (FALSE) or names associated with values (TRUE) iow autocomplete options are key/value pairs. If set to TRUE, $content should be set to what the user will see in the textbox. Autocomplete options are expected as strings separated by newline characters (\n). If set to TRUE then the expected format is: key=>value ($key will be posted as property value) and the value returned by POST request under property name is $key if an autocomplete option was selected, $value if new value was entered.
+	// onkeypress (string)
 	function textbox($args = array())
 	{
 		extract($args);
@@ -103,6 +104,7 @@ class html extends aw_template
 		$value = isset($value) ? $value : "";
 		$value = str_replace('"' , '&quot;',$value);
 		settype ($option_is_tuple, "boolean");
+		$onkeypress = isset($onkeypress) ? ' onkeypress="'.$onkeypress.'"' : "";
 
 		### compose autocompletes source url
 		if ($autocomplete_source)
@@ -132,11 +134,11 @@ class html extends aw_template
 
 		if ($option_is_tuple)
 		{
-			return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" onchange=\"{$select_autocomplete}\" $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
+			return "<input type=\"text\" id=\"{$id}awAutoCompleteTextbox\" name=\"{$name}-awAutoCompleteTextbox\" size=\"40\" value=\"$content\" onfocus=\"{$get_autocomplete}\" onchange=\"{$select_autocomplete}\" $onkeypress $disabled $textsize />\n<input type=\"hidden\" id=\"$id\" name=\"$name\" value=\"$value\">\n" . $autocomplete_init;
 		}
 		else
 		{
-			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $disabled $textsize />\n" . $autocomplete_init;
+			return "<input type=\"text\" id=\"$id\" name=\"$name\" size=\"$size\" value=\"$value\" maxlength=\"$maxlength\" onfocus=\"{$get_autocomplete}\" $onkeypress $disabled $textsize />\n" . $autocomplete_init;
 		}
 	}
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.59 2005/10/01 09:45:24 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.60 2005/10/09 20:37:51 ekke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -76,11 +76,14 @@ class aw_table extends aw_template
 
 		if ($selected_filter = $request[$this->filter_name])
 		{
-			list ($filter_key, $filter_selection) = explode (",", $selected_filter);
+			list ($filter_key, $filter_selection, $filter_txtvalue) = explode (",", $selected_filter);
 
 			if ($filter_selection)
 			{
-				$this->selected_filters[$filter_key] = $filter_selection;
+				$this->selected_filters[$filter_key] = array(
+					'filter_selection' => $filter_selection,
+					'filter_txtvalue' => $filter_txtvalue,
+				);
 			}
 			else
 			{
@@ -114,10 +117,16 @@ class aw_table extends aw_template
 	function define_data($row)
 	{
 		### apply filter
-		foreach ($this->selected_filters as $filter_key => $filter_selection)
+		foreach ($this->selected_filters as $filter_key => $filter_array)
 		{
+			extract ($filter_array);
 			$filter_name = $this->filter_index[$filter_key];
-			if (strpos($row[$filter_name], $this->filters[$filter_name]["filter"][$filter_selection - 1]) === false)
+			$type = $this->filters[$filter_name]["type"];
+			
+			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
+			$value = $row[ (isset($row['filtervalue-'.$filter_name]) ? 'filtervalue-' : '') . $filter_name]; 
+			
+			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 			{
 				return;
 			}
@@ -1333,6 +1342,7 @@ class aw_table extends aw_template
 				"key" => $filter_key,
 				"filter" => $filter,
 				"name" => $args["name"],
+				"type" => $args['filter'] == 'text' ? 'text' : 'select',
 				"active" => false,
 			);
 			$this->filter_index[$filter_key] = $args["name"];
@@ -1883,22 +1893,21 @@ class aw_table extends aw_template
 		if (empty ($tbl2) and count ($this->filters))
 		{
 			$tbl2 = "<tr>\n";
+			
+			### get filter change url
+			$url = preg_replace("/.{$this->filter_name}=[^&]*/", "", aw_global_get("REQUEST_URI"));
+			$sep = (strpos($url, "?") === false) ? "?" : "&";
 
 			foreach($this->rowdefs as $k => $v)
 			{
 				$filter_style = "filter_normal";
+				$filter_key = $this->filters[$v['name']]['key'];
 
 				### add filter if defined for current column
-				if (isset ($this->filters[$v["name"]]))
+				if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "select")
 				{
 					$filter_values = $this->get_filter ($v["name"]);
 					$filter_name = $this->filter_name;
-
-					### get filter change url
-					$url = preg_replace("/{$this->filter_name}=\d,\d/", "", aw_global_get("REQUEST_URI"));
-					$sep = (strpos($url, "?") === false) ? "?" : "&";
-					$url = $url . $sep;
-					$url = preg_replace("/\&{2,}/","&",$url);
 
 					### (re)set filter style
 					$filter_style = $this->filters[$v["name"]]["active"] ? "filter_active" : $filter_style;
@@ -1907,9 +1916,24 @@ class aw_table extends aw_template
 					$args = array (
 						"name" => $filter_name,
 						"options" => $filter_values,
-						"onchange" => "window.location='{$url}{$filter_name}='+{$this->filters[$v["name"]]["key"]}+','+this.options[this.selectedIndex].value",
+						"onchange" => "window.location='{$url}{$sep}{$filter_name}={$filter_key},'+this.options[this.selectedIndex].value+','+this.options[this.selectedIndex].text",
 					);
 					$filter_contents = html::select ($args);
+				}
+				else if (isset ($this->filters[$v["name"]]) && $this->filters[$v["name"]]["type"] == "text")
+				{
+					$newurl = $url.$sep.$this->filter_name.'='.$filter_key;
+					$filter_contents = html::textbox(array(
+						'name' => $this->filter_name.'['.$v["name"].']',
+						'size' => 20,
+						'value' => isset($this->selected_filters[$filter_key]) ? $this->selected_filters[$filter_key]['filter_txtvalue'] : '',
+						'onkeypress' => "var key = window.event ? window.event.keyCode : (event ? event.which : NULL); 
+							if(key == 13)
+							{ 
+								window.location = this.value.length>0 ? '$newurl,1,' + this.value : '$url' ;
+								return false;
+							}",
+					));
 				}
 				else
 				{
@@ -1971,13 +1995,14 @@ class aw_table extends aw_template
 		}
 
 		### add "All" selection
-		$filter = array_merge (array (0 => t("Kõik")), $filter);
+		$filter = array_merge (array (0 => t("K&otilde;ik")), $filter);
 
-		foreach ($this->selected_filters as $selected_filter_key => $filter_selection)
+		foreach ($this->selected_filters as $selected_filter_key => $filter_array)
 		{
+			extract ($filter_array);
 			if ($selected_filter_key == $this->filters[$field_name]["key"])
 			{ ### add selected item to first position
-				$filter = array_merge (array ("_" => $filter[$filter_selection]), $filter);
+				$filter = array_merge (array ("_" => $filter_txtvalue), $filter);
 				$this->filters[$field_name]["active"] = true;
 				break;
 			}

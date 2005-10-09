@@ -150,6 +150,45 @@ And that pretty much is it. You don't need to do anything else, the rest (drawin
 
 <b><big>Advanced usage</big></b>.
 
+<b>Filters</b>
+You can add easily filters to table headers. Filters can be textboxes or selectors.
+Textbox filter:
+#php#
+$t->define_field(array(
+	'name' => 'fieldname',
+	'caption' => t("Field name, translatable"),
+	'filter' => "text",
+));
+#/php#
+Automatic selector filter:
+#php#
+$t->define_field(array(
+	'name' => 'fieldname',
+	'caption' => t("Field name, translatable"),
+	'filter' => "automatic",
+));
+#/php#
+Manual selector filter:
+#php#
+$t->define_field(array(
+	'name' => 'fieldname',
+	'caption' => t("Field name, translatable"),
+	'filter' => array(
+		2 => "Thing1",
+		3 => "Zhing1",
+		4 => "Ping1",
+	),
+));
+#/php#
+Upon filtering textual value (selected or typed) is compared to 'value' of row. You can override this by defining alternative value for row with prefix 'filtervalue-'
+eg:
+#php#
+$t->define_data(array(
+	'name' => $url_with_html_et_shit,
+	'filtervalue-name' => $name_clean,
+));
+#/php#
+
 <b>Paging</b>
 If you have lots of data to present (more than 100 rows) then it's impractical to put them all on one page. Fortunetaly the table class has a built-in paging methods
 (for example, you can have 4 pages with 25 rows on each, or whatever combination suits you)
