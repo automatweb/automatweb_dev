@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.70 2005/10/04 15:47:25 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.71 2005/10/09 06:23:53 ekke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -455,8 +455,15 @@ class aw_template extends core
 				$cur_src.="{VAR:".$mt[1]."}";
 			}
 			else
-			if (preg_match("/<!-- END SUB: (.*) -->/",$line, $mt))
+			if (preg_match("/^(.*)<!-- END SUB: (.*) -->/",$line, $mt))
 			{
+				/* This avoid obligatory newline after each block, making templates more flexible.. 
+				/use eg 
+				|<!-- SUB: file-->
+				|{VAR:filecontents}
+				|EOF-with-no-linebreak<!-- END SUB: file -->
+				*/
+				$cur_src .= $mt[1];
 				// found an end of this subtemplate, 
 				// finish and exit
 				$this->v2_templates[$fq_name] = $cur_src;
