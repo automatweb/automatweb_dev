@@ -161,6 +161,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{
+echo  "list from cache ".dbg::dump($params)." <br>";
 			return $ret;
 		}
 		else
@@ -233,7 +234,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			// and if another clear request comes in, before any searches are done
 			// we check the flag and don't clear the cache, because nothing will have been written to it
 			// the flag gets set whenever a search cache is created
-			if (!$this->search_cache_is_cleared)
+			if (true || !$this->search_cache_is_cleared)
 			{
 				$this->cache->file_invalidate_regex($cfn."-search-(.*)");
 				$this->cache->file_invalidate_regex($cfn."-fetch_list-(.*)");
@@ -252,7 +253,7 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 			$this->cache->file_invalidate_regex("connection(.*)");
 			if ($GLOBALS["INTENSE_DUKE"] == 1)
 			{
-				echo "CLEAR CACHE file  connection(.*) got result <br>";
+					echo "CLEAR CACHE file  connection(.*) got result <br>";
 			}
 		}
 
