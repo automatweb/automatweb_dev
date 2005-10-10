@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.46 2005/09/06 07:43:07 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_cart.aw,v 1.47 2005/10/10 09:20:49 kristo Exp $
 // shop_order_cart.aw - Poe ostukorv 
 /*
 
@@ -108,6 +108,7 @@ class shop_order_cart extends class_base
 	{
 		extract($arr);
 		$this->read_template("show.tpl");
+		lc_site_load("shop_order_cart", &$this);
 
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
@@ -882,6 +883,7 @@ class shop_order_cart extends class_base
 	{
 		extract($arr);
 		$this->read_template("show_pre_finish.tpl");
+		lc_site_load("shop_order_cart", &$this);
 
 		$soce = new aw_array(aw_global_get("soc_err"));
 		$soce_arr = $soce->get();
@@ -1162,6 +1164,7 @@ class shop_order_cart extends class_base
 	{
 		extract($arr);
 		$this->read_template("final_finish_order.tpl");
+		lc_site_load("shop_order_cart", &$this);
 
 		$oc = obj($oc);
 

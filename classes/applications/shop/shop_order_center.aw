@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.34 2005/08/24 13:03:28 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/shop/shop_order_center.aw,v 1.35 2005/10/10 09:20:49 kristo Exp $
 // shop_order_center.aw - Tellimiskeskkond 
 /*
 
@@ -701,6 +701,9 @@ class shop_order_center extends class_base
 		$xi = 0;
 		$l_inst = $layout->instance();
 		$l_inst->read_template($layout->prop("template"));
+
+		lc_site_load("shop_order_center", &$this);
+
 		foreach($pl as $o)
 		{
 			$i = $o->instance();
@@ -820,6 +823,8 @@ class shop_order_center extends class_base
 				"sort_by" => "objects.created"
 			));
 		}
+
+		lc_site_load("shop_order_center", &$this);
 
 		foreach($ool->arr() as $ord)
 		{
