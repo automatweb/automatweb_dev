@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.18 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.19 2005/10/10 08:23:56 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -346,7 +346,15 @@ class task extends class_base
 
 			case "project":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_projects()));
+				$prj = $i->get_my_projects();
+				if (!count($prj))
+				{
+					$ol = new object_list();
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $prj));
+				}
 				$data["options"] = array("" => "") + $ol->names();
 				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
 				{
@@ -357,8 +365,16 @@ class task extends class_base
 
 			case "customer":
 				$i = get_instance(CL_CRM_COMPANY);
-				$ol = new object_list(array("oid" => $i->get_my_customers()));
-				$data["options"] = array("" => "") + $ol->names();
+				$cst = $i->get_my_customers();
+				if (!count($cst))
+				{
+					$data["options"] = array("" => "");
+				}
+				else
+				{
+					$ol = new object_list(array("oid" => $cst));
+					$data["options"] = array("" => "") + $ol->names();
+				}
 
 				if ($_GET["alias_to_org"])
 				{
