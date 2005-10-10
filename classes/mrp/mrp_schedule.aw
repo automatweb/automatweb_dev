@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.124 2005/10/10 10:31:11 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.125 2005/10/10 11:22:50 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -1178,9 +1178,9 @@ class mrp_schedule extends class_base
 			### update max. reach of selected timerange.
 			$tmp = ($reserved_time + $length);
 
-			if ($tmp > $this->range_ends[$time_range])
+			if ($tmp > $this->range_ends[$reserved_time_range])
 			{
-				$this->range_ends[$time_range] = $tmp;
+				$this->range_ends[$reserved_time_range] = $tmp;
 			}
 
 			### convert back to real time
@@ -1385,7 +1385,7 @@ class mrp_schedule extends class_base
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
 			### get max reach of previous timerange
-			$prev_range_end = (int) $this->range_ends[$time_range - 1];
+			$prev_range_end = (int) $this->range_ends[($time_range - 1)];
 
 			if (count ($this->reserved_times[$resource_tag][$time_range]))
 			{ ### timerange has already reserved times
