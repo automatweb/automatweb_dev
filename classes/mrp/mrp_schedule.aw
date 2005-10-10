@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.123 2005/10/08 18:01:27 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/mrp/mrp_schedule.aw,v 1.124 2005/10/10 10:31:11 voldemar Exp $
 // mrp_schedule.aw - Ressursiplaneerija
 /*
 
@@ -750,7 +750,11 @@ class mrp_schedule extends class_base
 		if ($_GET["show_progress"]==1)
 		// if ($arr["show_progress"]==1)
 		{
-			echo '</span></div></center></div><script type="text/javascript">pb = document.getElementById("mrp_schedule_progress_bar"); pb.style.display = "none";</script>';
+			echo '</span></div></center></div>
+			<script type="text/javascript">
+			pb = document.getElementById("mrp_schedule_progress_bar");
+			pb.style.display = "none";
+			</script>';
 		}
 
 /* timing */ timing ();
@@ -1217,7 +1221,7 @@ class mrp_schedule extends class_base
 		}
 
 /* dbg */ if ($this->mrpdbg){
-/* dbg */ echo "found next_range_first_job  start2: ".$start2 . " in timerange: ".$time_range;
+/* dbg */ echo "found next_range_first_job  start2: ".$start2 . " in timerange: " . ($time_range+$i-1) . MRP_NEWLINE;
 /* dbg */ }
 /* timing */ timing ("get_next_range_first_job", "end");
 
@@ -1458,19 +1462,26 @@ class mrp_schedule extends class_base
 				if ($this->range_scale[$time_range] > $prev_range_end)
 				{
 					$start1 = $this->range_scale[$time_range];
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){ echo "C -- start1 from range_scale." . MRP_NEWLINE; }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 				}
 				else
 				{ ### prev range contains job that reaches beyond this range start
 					$start1 = $prev_range_end;
+
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+/* dbg */ if ($this->mrpdbg){ echo "C -- start1 from prev_range_end." . MRP_NEWLINE; }
+// /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
+
 				}
 
 				$length1 = 0;
 				$start2 = $this->get_next_range_first_job ($resource_tag, $time_range);
 				$d = ($start < ($start1 + $length1)) ? 0 : ($start - ($start1 + $length1));
 
-				### check if requested space is available between start1 & start2
-				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
-				{
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 /* dbg */ if ($this->mrpdbg){
 /* dbg */ echo "C -- start1:". date (MRP_DATE_FORMAT, $this->schedule_start + $start1)." - length1:".$length1." - start:". date (MRP_DATE_FORMAT, $this->schedule_start + $start) ."-start2:". date (MRP_DATE_FORMAT, $this->schedule_start + $start2) . MRP_NEWLINE;
@@ -1478,6 +1489,9 @@ class mrp_schedule extends class_base
 /* dbg */ }
 // /* dbg */ //-------------------------------------------------------------------------------------------------------------------------------------------
 
+				### check if requested space is available between start1 & start2
+				if ( (($start1 + $length1 + $length + $d) <= $start2) and ($start2  >= ($start + $length)) )
+				{
 					$reserved_time = (($start1 + $length1) > $start) ? ($start1 + $length1) : $start;
 					list ($reserved_time, $reserved_length) = $this->add_unavailable_times ($resource_id, $reserved_time, $length, $start2);
 
@@ -1646,7 +1660,8 @@ class mrp_schedule extends class_base
 /* timing */ timing ("get_closest_unavailable_period", "end");
 	}
 
-	## returns start and length of next unavailable period after $time. if $time is in an unavail. period, that period's data is returned.
+	## returns $start and $length of next unavailable period after $time. if $time is in an unavail. period, that period's data is returned.
+	## $start >= $time < ($start+$length)
 	function _get_closest_unavailable_period ($resource_id, $time)
 	{
 /* timing */ timing ("_get_closest_unavailable_period", "start");
