@@ -161,7 +161,6 @@ class _int_obj_ds_cache extends _int_obj_ds_decorator
 		$ret = $this->_get_cache($query_hash, 0);
 		if (is_array($ret))
 		{
-echo  "list from cache ".dbg::dump($params)." <br>";
 			return $ret;
 		}
 		else
