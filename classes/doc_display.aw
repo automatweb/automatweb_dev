@@ -69,7 +69,8 @@ class doc_display extends aw_template
 			"userta4" => $doc->prop("userta4"),
 			"userta5" => $doc->prop("userta5"),
 			"userta6" => $doc->prop("userta6"),
-			"page_title" => strip_tags($doc->prop("title"))
+			"page_title" => strip_tags($doc->prop("title")),
+			"date" => $_date
 		));
 
 		$ablock = "";
