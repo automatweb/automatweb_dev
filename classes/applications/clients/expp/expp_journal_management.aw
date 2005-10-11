@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.3 2005/10/04 15:23:03 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.4 2005/10/11 18:49:00 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -73,7 +73,7 @@
 	@groupinfo general_links caption="Lingid" parent=publications
 	@default group=general_links
 
-		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindowd table_fields=name,ord table_edit_fields=ord
+		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindowd table_fields=name,ord table_edit_fields=ord parent=self
 		@caption Lingid
 
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
@@ -210,6 +210,17 @@ class expp_journal_management extends class_base
 		switch($prop["name"])
 		{
 			//-- set_property --//
+			case "organisation":
+			case "design_image":
+			case "cover_image":
+			case "publications_table":
+			case "general_images":
+			case "general_files":
+			case "general_links":
+			case "general_polls":
+			case "general_webform":
+				$prop['obj_parent'] = $arr['obj_inst']->id();
+				break;	
 
 		}
 		return $retval;
