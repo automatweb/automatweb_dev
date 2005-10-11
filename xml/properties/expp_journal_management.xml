@@ -209,9 +209,11 @@
             <method>serialize</method>
             <mode>manager</mode>
             <props>
-                  <num_0>name</num_0>
-                  <num_1>lead</num_1>
-                  <num_2>content</num_2>
+                  <num_0>title</num_0>
+                  <num_1>author</num_1>
+                  <num_2></num_2>
+                  <num_3>lead</num_3>
+                  <num_4>content</num_4>
             </props>
             <store>no</store>
             <caption>Dokumendid</caption>
@@ -401,6 +403,11 @@
                   <clid>CL_POLL</clid>
                   <caption>&amp;Uuml;ldine kiirk&amp;uuml;sitlus</caption>
             </GENERAL_POLL>
+            <GENERAL_DOCUMENT>
+                  <value>14</value>
+                  <clid>CL_DOCUMENT</clid>
+                  <caption>&amp;Uuml;ldine dokument</caption>
+            </GENERAL_DOCUMENT>
       </reltypes>
 </properties>
 
