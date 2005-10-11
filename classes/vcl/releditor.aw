@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.62 2005/10/11 17:44:11 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.63 2005/10/11 18:26:47 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -785,8 +785,9 @@ class releditor extends core
 			$obj_parent = $obj->parent();
 			if (is_oid($prop["obj_parent"]))
 			{
-				$emb["parent"] = $prop["obj_parent"];
+				$obj_parent = $prop["obj_parent"];
 			};
+			$emb["parent"] = $obj_parent;
 			$emb["return"] = "id";
 			$emb["prefix"] = $elname;
 
