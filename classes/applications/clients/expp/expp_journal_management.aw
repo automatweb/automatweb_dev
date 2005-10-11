@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.4 2005/10/11 18:49:00 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.5 2005/10/11 23:46:34 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -76,6 +76,12 @@
 		@property general_links type=releditor reltype=RELTYPE_GENERAL_LINK field=meta method=serialize mode=manager props=name,url,ord,docid,hits,alt,newwindowd table_fields=name,ord table_edit_fields=ord parent=self
 		@caption Lingid
 
+        @groupinfo general_documents caption="Dokumendid" parent=publications
+        @default group=general_documents
+
+                @property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=name,lead,content
+                @caption Dokumendid
+
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
 	@default group=general_polls
 
@@ -85,8 +91,14 @@
 	@groupinfo general_webforms caption="Veebivormid" parent=publications
 	@default group=general_webforms
 
-		@property general_webform type=releditor reltype=RELTYPE_GENERAL_WEBFORM field=meta method=serialize mode=manager props=name,status
-		@caption Veebivorm
+		property general_webform type=releditor reltype=RELTYPE_GENERAL_WEBFORM field=meta method=serialize mode=manager props=name,status
+		caption Veebivorm
+
+		@property general_webforms_toolbar type=toolbar no_caption=1
+		@caption Veebivormide t&ouml;&ouml;riistariba
+
+		@property general_webforms_table type=table no_caption=1
+		@caption Veebivormid
 
 	@groupinfo general_forum caption="Foorum" parent=publications
 	@default group=general_forum
@@ -168,37 +180,6 @@ class expp_journal_management extends class_base
 			case "publications_description":
 				$prop['value'] = t("V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta");
 				break;
-			case "general_forum":
-				$forum_object = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_GENERAL_FORUM");
-				if (!empty($forum_object))
-				{
-					$forum_object_id = $forum_object->id();
-				}
-				if (is_oid($forum_object_id) && $this->can("view", $forum_object_id))
-				{
-					$prop['value'] = html::href(array(
-						"url" => $this->mk_my_orb("change", array(
-							"id" => $forum_object_id,
-							"return_url" => get_ru(),
-						), "forum_v2"),
-						"caption" => t("Link foorumile"),
-					));
-				}
-
-				else
-				{
-					$prop['value'] = html::href(array(
-						"url" => $this->mk_my_orb("new", array(
-							"alias_to" => $arr['obj_inst']->id(),
-							"parent" => $arr['obj_inst']->parent(),
-							"reltype" => 11, // expp_journal_management.general_forum
-							"return_url" => get_ru(),
-						), CL_FORUM_V2),
-						"caption" => t("Lisa foorum"),
-					));
-				}
-
-				break;
 		};
 		return $retval;
 	}
@@ -209,7 +190,6 @@ class expp_journal_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			//-- set_property --//
 			case "organisation":
 			case "design_image":
 			case "cover_image":
@@ -217,6 +197,7 @@ class expp_journal_management extends class_base
 			case "general_images":
 			case "general_files":
 			case "general_links":
+			case "general_documents":
 			case "general_polls":
 			case "general_webform":
 				$prop['obj_parent'] = $arr['obj_inst']->id();
@@ -230,6 +211,12 @@ class expp_journal_management extends class_base
 	{
 		$arr["post_ru"] = post_ru();
 	}
+
+        function callback_post_save($arr)
+        {
+                $cache_inst = get_instance("cache");
+                $cache_inst->file_invalidate($arr['obj_inst']->prop("code").".cache");
+        }
 	////////////////////////////////////
 	// the next functions are optional - delete them if not needed
 	////////////////////////////////////
@@ -254,5 +241,168 @@ class expp_journal_management extends class_base
 		));
 		return $this->parse();
 	}
+
+	function _get_general_webforms_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus veebivorm"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 12, // expp_journam_management.general_webform
+				"return_url" => get_ru(),	
+			), CL_WEBFORM),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud veebivormid kustutada?"),
+		));
+
+		
+
+		return PROP_OK;
+	}
+
+	function _get_general_webforms_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "activity",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_webforms = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_WEBFORM",
+			"sort_by_num" => "to.status",
+			"sort_dir" => "asc",
+		));
+		foreach ($connections_to_webforms as $connection_to_webform)
+		{
+			$webform_id = $connection_to_webform->prop("to");
+			$t->define_data(array(
+				"activity" => html::radiobutton(array(
+					"name" => "general_webform[activity]",
+					"value" => $webform_id,
+					"checked" => ($connection_to_webform->prop("to.status") == STAT_ACTIVE) ? true : false,
+				)),
+				"name" => $connection_to_webform->prop("to.name"),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $webform_id,
+						"return_url" => get_ru(),
+						), CL_WEBFORM),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" =>"general_webform[selected][".$webform_id."]",
+					"value" => $webform_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_webforms_table($arr)
+	{
+		$connections_to_webforms = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_WEBFORM",
+		));
+
+		foreach ($connections_to_webforms as $connection_to_webform)
+		{
+			$webform_id = $connection_to_webform->prop("to");
+			if (is_oid($webform_id) && $this->can("edit", $webform_id))
+			{
+				$webform_object = new object($webform_id);
+				if ($arr['request']['general_webform']['activity'] == $webform_id)
+				{
+					$webform_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$webform_object->set_status(STAT_NOTACTIVE);
+				}
+				$webform_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+	function _get_general_forum($arr)
+	{
+		$forum_object = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_GENERAL_FORUM");
+		if (!empty($forum_object))
+		{
+			$forum_object_id = $forum_object->id();
+		}
+		if (is_oid($forum_object_id) && $this->can("view", $forum_object_id))
+		{
+			$arr['prop']['value'] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $forum_object_id,
+					"return_url" => get_ru(),
+				), "forum_v2"),
+				"caption" => t("Link foorumile"),
+			));
+		}
+		else
+		{
+			$arr['prop']['value'] = html::href(array(
+				"url" => $this->mk_my_orb("new", array(
+					"alias_to" => $arr['obj_inst']->id(),
+					"parent" => $arr['obj_inst']->id(),
+					"reltype" => 11, // expp_journal_management.general_forum
+					"return_url" => get_ru(),
+				), CL_FORUM_V2),
+				"caption" => t("Lisa foorum"),
+			));
+		}
+		
+		return PROP_OK;
+	}
+	/**
+		@attrib name=_delete_objects
+	**/
+	function _delete_objects($arr)
+	{
+
+		foreach ($arr['general_webform']['selected'] as $webform_id)
+		{
+			if (is_oid($webform_id) && $this->can("delete", $webform_id))
+			{
+				$webform_object = new object($webform_id);
+				$webform_object->delete();
+			}
+		}
+
+		return $arr['post_ru'];
+	}
+
 }
 ?>

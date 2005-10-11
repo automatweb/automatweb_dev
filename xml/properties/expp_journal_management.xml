@@ -195,8 +195,26 @@
                   <num_1>ord</num_1>
             </table_fields>
             <table_edit_fields>ord</table_edit_fields>
+            <parent>self</parent>
             <store>no</store>
             <caption>Lingid</caption>
+      </property>
+      <property>
+            <name>general_documents</name>
+            <table>objects</table>
+            <group>general_documents</group>
+            <type>releditor</type>
+            <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
+            <field>meta</field>
+            <method>serialize</method>
+            <mode>manager</mode>
+            <props>
+                  <num_0>name</num_0>
+                  <num_1>lead</num_1>
+                  <num_2>content</num_2>
+            </props>
+            <store>no</store>
+            <caption>Dokumendid</caption>
       </property>
       <property>
             <name>general_polls</name>
@@ -217,20 +235,24 @@
             <caption>Kiirk&amp;uuml;sitlused</caption>
       </property>
       <property>
-            <name>general_webform</name>
+            <name>general_webforms_toolbar</name>
             <table>objects</table>
             <group>general_webforms</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_WEBFORM</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>status</num_1>
-            </props>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Veebivorm</caption>
+            <field>general_webforms_toolbar</field>
+            <caption>Veebivormide t&amp;ouml;&amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_webforms_table</name>
+            <table>objects</table>
+            <group>general_webforms</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_webforms_table</field>
+            <caption>Veebivormid</caption>
       </property>
       <property>
             <name>general_forum</name>
@@ -290,6 +312,10 @@
                   <caption>Lingid</caption>
                   <parent>publications</parent>
             </general_links>
+            <general_documents>
+                  <caption>Dokumendid</caption>
+                  <parent>publications</parent>
+            </general_documents>
             <general_polls>
                   <caption>Kiirk&amp;uuml;sitlused</caption>
                   <parent>publications</parent>
