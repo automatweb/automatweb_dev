@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.61 2005/09/28 12:52:07 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.62 2005/10/11 17:44:11 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -782,7 +782,11 @@ class releditor extends core
 		{
 
 			$emb["group"] = "general";
-			$emb["parent"] = $obj->parent();
+			$obj_parent = $obj->parent();
+			if (is_oid($prop["obj_parent"]))
+			{
+				$emb["parent"] = $prop["obj_parent"];
+			};
 			$emb["return"] = "id";
 			$emb["prefix"] = $elname;
 
@@ -810,6 +814,7 @@ class releditor extends core
 				print "</pre>";
 				*/
 			}
+
 
 
 			if ($prop["rel_id"] == "first" && empty($emb["id"]))
