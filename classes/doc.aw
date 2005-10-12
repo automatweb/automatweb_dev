@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.108 2005/06/30 13:13:52 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/doc.aw,v 2.109 2005/10/12 04:13:55 duke Exp $
 // doc.aw - document class which uses cfgform based editing forms
 // this will be integrated back into the documents class later on
 /*
@@ -770,7 +770,7 @@ class doc extends class_base
 		{
 			$tmp = aw_ini_get("classes");
 			$retval["doc_default"] = array(
-				"caption" => $tmp[CL_DOCUMENT]["name"],
+				"name" => $tmp[CL_DOCUMENT]["name"],
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document"),
 			);
 		};
@@ -780,7 +780,7 @@ class doc extends class_base
 		if (empty($def_cfgform))
 		{
 			$retval["ng_doc"] = array(
-				"caption" => t("Dokument 2.0"),
+				"name" => t("Dokument 2.0"),
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"doc"),
 			);
 		}
@@ -788,12 +788,12 @@ class doc extends class_base
 		foreach($cfgforms as $key => $val)
 		{
 			$retval["doc_$key"] = array(
-				"caption" => $val,
+				"name" => $val,
 				"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period,"cfgform" => $key),"doc"),
 			);
 		}
 		$retval["doc_brother"] = array(
-			"caption" => t("Dokument (vend)"),
+			"name" => t("Dokument (vend)"),
 			"link" => $this->mk_my_orb("new",array("parent" => $parent,"period" => $period),"document_brother"),
 		);
 		return $retval;
