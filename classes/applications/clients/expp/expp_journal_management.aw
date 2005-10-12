@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.6 2005/10/11 23:58:57 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.7 2005/10/12 00:06:15 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -79,7 +79,7 @@
         @groupinfo general_documents caption="Dokumendid" parent=publications
         @default group=general_documents
 
-                @property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=title,author,,lead,content
+                @property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=title,author,lead,content
                 @caption Dokumendid
 
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
@@ -152,7 +152,7 @@
 @caption &Uuml;ldine kiirk&uuml;sitlus
 
 @reltype GENERAL_DOCUMENT value=14 clid=CL_DOCUMENT
-@caption &Uuml;ldine dokument
+@caption Dokument
 
 */
 
