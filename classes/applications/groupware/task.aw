@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.19 2005/10/10 08:23:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.20 2005/10/12 13:28:00 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -65,7 +65,7 @@
 @property bill_no type=text table=planner 
 @caption Arve number
 
-@property files type=relmanager reltype=RELTYPE_FILE field=meta method=serialize  props=name,file,comment table_fields=name 
+@property files type=text 
 @caption Failid
 
 @property participants type=select multiple=1 table=objects field=meta method=serialize
@@ -204,7 +204,7 @@ class task extends class_base
 
 			case "hr_price":
 				// get first person connected as participant and read their hr price
-				if ($data["value"] == "" && is_object($arr["obj_inst"]))
+				if ($data["value"] == "" && is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
 				{
 					$conns = $arr['obj_inst']->connections_to(array());
 					foreach($conns as $conn)
@@ -375,10 +375,9 @@ class task extends class_base
 					$ol = new object_list(array("oid" => $cst));
 					$data["options"] = array("" => "") + $ol->names();
 				}
-
-				if ($_GET["alias_to_org"])
+				if ($arr["request"]["alias_to_org"])
 				{
-					$data["value"] = $_GET["alias_to_org"];
+					$data["value"] = $arr["request"]["alias_to_org"];
 					//$arr["obj_inst"]->set_prop($customer, $data["value"]);
 				}
 
@@ -391,6 +390,10 @@ class task extends class_base
 
 			case "other_expenses":
 				$this->_other_expenses($arr);
+				break;
+
+			case "files":
+				$this->_get_files($arr);
 				break;
 		};
 		return $retval;
@@ -410,6 +413,10 @@ class task extends class_base
 		
 		switch($prop["name"])
 		{
+			case "files":
+				$this->_set_files($arr);
+				break;
+
 			case "participants":
 				if (!is_oid($arr["obj_inst"]->id()))
 				{
@@ -572,6 +579,144 @@ class task extends class_base
 	function search_for_proj($arr)
 	{
 		
+	}
+
+	function _get_files($arr)
+	{
+		$objs = array();
+
+		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))
+		{
+			$ol = new object_list($arr["obj_inst"]->connections_from(array(
+				"type" => "RELTYPE_FILE"
+			)));
+			$objs = $ol->arr();
+		}
+
+		$objs[] = obj();
+
+		$types = array(
+			CL_CRM_MEMO => t("Memo"),
+			CL_CRM_DOCUMENT => t("CRM Dokument"),
+			CL_CRM_DEAL => t("Leping"),
+			CL_CRM_OFFER => t("Pakkumine")
+		);
+
+		$clss = aw_ini_get("classes");
+		foreach($objs as $idx => $o)
+		{
+			$this->vars(array(
+				"name" => $o->name(),
+				"idx" => $idx,
+				"types" => $this->picker($types)
+			));
+
+			if (is_oid($o->id()))
+			{
+				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+				$data[] = array(
+					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
+					"file" => html::get_change_url($ff->id(), array("return_url" => get_ru()), $ff->name()),
+					"type" => $clss[$o->class_id()]["name"],
+					"del" => html::href(array(
+						"url" => $this->mk_my_orb("del_file_rel", array(
+								"return_url" => get_ru(),
+								"fid" => $o->id(),
+						)),
+						"caption" => t("Kustuta")
+					))
+				);
+			}
+			else
+			{
+				$data[] = array(
+					"name" => html::textbox(array(
+						"name" => "fups_d[$idx][tx_name]"
+					)),
+					"file" => html::fileupload(array(
+						"name" => "fups_".$idx
+					)),
+					"type" => html::select(array(
+						"options" => $types,
+						"name" => "fups_d[$idx][type]"
+					)),
+					"del" => ""
+				);
+			}
+		}
+
+		classload("vcl/table");
+		$t = new vcl_table(array(
+			"layout" => "generic",
+		));
+		
+		$t->define_field(array(
+			"caption" => t("Nimi"),
+			"name" => "name",
+		));
+
+		$t->define_field(array(
+			"caption" => t("Fail"),
+			"name" => "file",
+		));
+
+		$t->define_field(array(
+			"caption" => t("T&uuml;&uuml;p"),
+			"name" => "type",
+		));
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "del",
+		));
+
+		foreach($data as $e)
+		{
+			$t->define_data($e);
+		}
+
+		$arr["prop"]["value"] = $t->draw();
+	}
+
+	function _set_files($arr)
+	{
+		$t = obj($arr["request"]["id"]);
+		$u = get_instance(CL_USER);
+		$co = obj($u->get_current_company());
+		foreach(safe_array($_POST["fups_d"]) as $num => $entry)
+		{
+			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
+			{
+				// add file
+				$f = get_instance(CL_FILE);
+				$fil = $f->add_upload_image("fups_$num", $arr["request"]["id"]);
+				if (is_array($fil))
+				{
+					$o = obj();
+					$o->set_class_id($entry["type"]);
+					$o->set_name($entry["tx_name"]);
+
+					$f = get_instance("applications/crm/crm_company_docs_impl");
+					$fldo = $f->_init_docs_fld($co);
+					if (!$fldo)
+					{
+						return;
+					}
+					$o->set_parent($fldo->id());
+
+					$o->save();
+					$o->connect(array(
+						"to" => $fil["id"],
+						"reltype" => "RELTYPE_FILE"
+					));
+					$t->connect(array(
+						"to" => $o->id(),
+						"reltype" => "RELTYPE_FILE"
+					));
+				}
+			}
+		}
+		return $arr["post_ru"];
 	}
 }
 ?>

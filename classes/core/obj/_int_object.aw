@@ -1332,7 +1332,6 @@ class _int_object
 				"msg" => sprintf(t("object::load(%s): no view access for object %s!"), $oid, $oid)
 			));
 		}
-
 		$this->_init_empty();
 
 		// now. we gots to find the class_id of the object

@@ -72,10 +72,17 @@ class popup_search extends aw_template
 			$options = $tmp["options"];
 		}
 
+		$sel = $arr["property"]["value"];
+		if ($arr["property"]["value"] == "")
+		{
+			$sel = is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop($arr["property"]["name"]) : "";
+		}
+		
+
 		$tmp["value"] = html::select(array(
 			"name" => $arr["property"]["name"],
 			"options" => array("" => "--Vali--") + $options,
-			"selected" => is_object($arr["obj_inst"]) ? $arr["obj_inst"]->prop($arr["property"]["name"]) : ""
+			"selected" => $sel
 		));
 
 		if (is_object($arr["obj_inst"]) && is_oid($arr["obj_inst"]->id()))

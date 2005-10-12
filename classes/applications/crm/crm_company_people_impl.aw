@@ -1,5 +1,8 @@
 <?php
 
+
+define("CRM_ALL_PERSONS_CAT", 999999);
+
 class crm_company_people_impl extends class_base
 {
 	function crm_company_people_impl()
@@ -33,7 +36,7 @@ class crm_company_people_impl extends class_base
 				'reltype' => $arr['request']['unit'] ? 2 : 8,
 				'return_url' => urlencode(aw_global_get('REQUEST_URI')),
 				"class" => "crm_company",
-				"profession" => $arr["request"]["cat"]
+				"profession" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? 0 : $arr["request"]["cat"]
 			))
 		));
 		
@@ -106,13 +109,13 @@ class crm_company_people_impl extends class_base
 
 		$tb->add_menu_item(array(
 			'parent'=>'Search',
-			'text' => t('Otsi isikuid'),
+			'text' => t('Isikuid'),
 			'link'=> "javascript:submit_changeform('search_for_contacts')"
 		));
 
 		$tb->add_menu_item(array(
 			'parent'=>'Search',
-			'text' => t('Otsi ametinimetusi'),
+			'text' => t('Ametinimetusi'),
 			'link'=> "javascript:submit_changeform('search_for_profs')"
 		));
 
@@ -151,6 +154,15 @@ class crm_company_people_impl extends class_base
 				"action" => "paste_p",
 			));
 		}
+
+		$tb->add_separator();
+
+		$tb->add_button(array(
+			"name" => "mark_important",
+			//"img" => "copy.gif",
+			"tooltip" => t("Oluliseks"),
+			"action" => "mark_p_as_important",
+		));
 	}
 
 	function _get_unit_listing_tree($arr)
@@ -171,31 +183,35 @@ class crm_company_people_impl extends class_base
 			'attrib' => 'unit',
 			'leafs' => true,
 		));
+
+		$nm = t("K&otilde;ik t&ouml;&ouml;tajad");
+		$tree_inst->add_item(0, array(
+			"id" => CRM_ALL_PERSONS_CAT,
+			"name" => $arr["request"]["cat"] == CRM_ALL_PERSONS_CAT ? "<b>".$nm."</b>" : $nm,
+			"url" => aw_url_change_var(array(
+				"cat" =>  CRM_ALL_PERSONS_CAT,
+				"unit" =>  NULL,
+			))
+		));
 	}
 
 	function callb_human_name($arr)
 	{
-		if ($arr["cal"])
-		{
-			$calo = obj($arr["cal"]);
-
-			$cal = html::href(array(
-				"url" => html::get_change_url($calo->id(), array("return_url" => get_ru(), "group" => "views", "viewtype" => "week"))."#today",
-				"caption" => html::img(array(
-					"url" => icons::get_icon_url(CL_PLANNER),
-					"border" => 0
-				))
-			))." ";
-		}
-		return $cal.html::get_change_url(
+		return html::get_change_url(
 			$arr["id"],
 			array("return_url" => get_ru()),
 			parse_obj_name($arr["name"])
 		);
 	}
 
-	function _init_human_resources_table(&$t, $old_iface)
+	function _init_human_resources_table(&$t)
 	{
+		$t->define_field(array(
+			"name" => "cal",
+			"caption" => t(""),
+			"width" => 1
+		));
+
 		$t->define_field(array(
 			'name' => 'name',
 			'caption' => t('Nimi'),
@@ -229,36 +245,14 @@ class crm_company_people_impl extends class_base
             'sortable' => '1',
 		));
 
-		if($old_iface)
-		{		
-			$t->define_field(array(
-				"chgbgcolor" => "cutcopied",
-				'name' => 'new_call',
-				'align' => 'center',
-			));
-			$t->define_field(array(
-				'name' => 'new_meeting',
-				"chgbgcolor" => "cutcopied",
-				'align' => 'center',
-			));
-			$t->define_field(array(
-				"chgbgcolor" => "cutcopied",
-				'name' => 'new_task',
-				'align' => 'center',
-			));
-		}
-		
-		if(!$old_iface)
-		{
-			$t->define_chooser(array(
-				'name'=>'check',
-				'field'=>'id',
-				"chgbgcolor" => "cutcopied",
-			));
-		}
+		$t->define_chooser(array(
+			'name'=>'check',
+			'field'=>'id',
+			"chgbgcolor" => "cutcopied",
+		));
 	}
 
-	function _get_human_resources($arr, $old_iface = false)
+	function _get_human_resources($arr)
 	{
 		if($arr['request']['contact_search'] || $arr["request"]["prof_search"])
 		{
@@ -267,7 +261,7 @@ class crm_company_people_impl extends class_base
 
 		classload("core/icons");
 		$t = &$arr["prop"]["vcl_inst"];
-		$this->_init_human_resources_table($t, $old_iface);
+		$this->_init_human_resources_table($t);
 					 
 		$crmp = get_instance(CL_CRM_PERSON);
 
@@ -303,39 +297,33 @@ class crm_company_people_impl extends class_base
 			}
 		}
 	
-		if(is_oid($arr['request']['cat']))
+		if(is_oid($arr['request']['cat']) && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
 			$professions = array();
 			$tmp_obj = new object($arr['request']['cat']);
 			$professions[$tmp_obj->id()] = $tmp_obj->prop('name');
 		}
 
-		if($old_iface)
+		//if listing from a specific unit, then the reltype is different
+		if((int)$arr['request']['unit'])
 		{
-			$i = get_instance(CL_CRM_COMPANY);
-			$i->get_all_workers_for_company(&$arr['obj_inst'],&$persons,true);
+			$obj = new object((int)$arr['request']['unit']);
+			$conns = $obj->connections_from(array(
+				"type" => "RELTYPE_WORKERS",
+			));
 		}
 		else
 		{
-			//if listing from a specific unit, then the reltype is different
-			if((int)$arr['request']['unit'])
-			{
-				$obj = new object((int)$arr['request']['unit']);
-				$conns = $obj->connections_from(array(
-					"type" => "RELTYPE_WORKERS",
-				));
-			}
-			else
-			{
-				$conns = $arr["obj_inst"]->connections_from(array(
-					"type" => "RELTYPE_WORKERS",
-				));
-			}
+			$u = get_instance(CL_USER);
+			$cur_p = obj($u->get_current_person());
+			$conns = $cur_p->connections_from(array(
+				"type" => "RELTYPE_IMPORTANT_PERSON",
+			));
+		}
 
-			foreach($conns as $conn)
-			{
-				$persons[] = $conn->prop('to');
-			}
+		foreach($conns as $conn)
+		{
+			$persons[] = $conn->prop('to');
 		}
 		
 		if (isset($arr["person_filter"]) && is_array($arr["person_filter"]))
@@ -366,7 +354,7 @@ class crm_company_people_impl extends class_base
 			if(is_oid($arr['request']['cat']))
 			{
 				//persons only from this category
-				if(!in_array($arr['request']['cat'], array_keys($pdat['ranks_arr'])))
+				if($arr["request"]["cat"] != CRM_ALL_PERSONS_CAT && !in_array($arr['request']['cat'], array_keys($pdat['ranks_arr'])))
 				{
 					continue;
 				}
@@ -423,10 +411,22 @@ class crm_company_people_impl extends class_base
 			//selle ametiga, siis seda näidata kujul 
 			
 			$ccp = (isset($_SESSION["crm_copy_p"][$person->id()]) || isset($_SESSION["crm_cut_p"][$person->id()]) ? "#E2E2DB" : "");
+			$cal = "";
+			if ($pers2cal[$person->id()])
+			{
+				$calo = obj($pers2cal[$person->id()]);
+				$cal = html::href(array(
+					"url" => html::get_change_url($calo->id(), array("return_url" => get_ru(), "group" => "views", "viewtype" => "week"))."#today",
+					"caption" => html::img(array(
+						"url" => icons::get_icon_url(CL_PLANNER),
+						"border" => 0
+					))
+				));
+			}
 
 			$tdata = array(
 				"name" => $person->prop('name'),
-				"cal" => $pers2cal[$person->id()],
+				"cal" => $cal,
 				"id" => $person->id(),
 				"phone" => $pdat["phone"],
 				"rank" => $pdat["rank"],
@@ -437,24 +437,6 @@ class crm_company_people_impl extends class_base
 				)),
 				"cutcopied" => $ccp
 			);
-			if($old_iface)
-			{
-				if ($cal_id)
-				{
-					$tdata["new_task"] = html::href(array(
-						"caption" => t("Uus toimetus"),
-						"url" => $pdat["add_task_url"],
-					));
-					$tdata["new_call"] = html::href(array(
-						"caption" => t("Uus kõne"),
-						"url" => $pdat["add_call_url"],
-					));
-					$tdata["new_meeting"] = html::href(array(
-						"caption" => t("Uus kohtumine"),
-						"url" => $pdat["add_meeting_url"],
-					));
-				};
-			}
 			$t->define_data($tdata);
 		};
 	}
@@ -639,31 +621,6 @@ class crm_company_people_impl extends class_base
 		}
 	}
 
-	function _get_addresslist($arr)
-	{
-		$prop = &$arr["prop"];
-		$obj = $arr["obj_inst"];
-		$conns = $obj->connections_from(array(
-			"type" => "RELTYPE_ADDRESS",
-		));
-		$rv = "";
-		foreach($conns as $conn)
-		{
-			$target_obj = $conn->to();
-			$inst = $target_obj->instance();
-			if (method_exists($inst,"request_execute"))
-			{
-				$rv .= $inst->request_execute($target_obj);
-			};
-		};
-		$prop["value"] = $rv;
-	}
-
-	function _get_old_human_resources($arr)
-	{
-		$this->_get_human_resources($arr,true);
-	}
-
 	function _get_personal_offers_toolbar($arr)
 	{
 		$toolbar =& $arr["prop"]["vcl_inst"];
@@ -680,7 +637,7 @@ class crm_company_people_impl extends class_base
 			'confirm' => t("Kas oled kindel et soovid valitud tööpakkumised kustudada?")
 		));
 
-		if($arr["request"]["cat"] && $arr["request"]["unit"])
+		if($arr["request"]["cat"] && $arr["request"]["unit"] && $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT)
 		{
 			$alias_to =  $arr["request"]["unit"];
 			$reltype = 4;
@@ -699,7 +656,7 @@ class crm_company_people_impl extends class_base
 					'alias_to'=>$alias_to,
 					'reltype'=> $reltype,
 					'return_url'=>urlencode(aw_global_get('REQUEST_URI')),
-					'cat' => $arr["request"]["cat"],
+					'cat' => $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT ? $arr["request"]["cat"] : NULL,
 					'unit' => $arr["request"]["unit"],
 					'org' => $arr['obj_inst']->id(),
 			), CL_PERSONNEL_MANAGEMENT_JOB_OFFER)
@@ -795,7 +752,7 @@ class crm_company_people_impl extends class_base
 
 		$job_obj_list = new object_list(array(
 			"oid" => array_keys($jobs_ids),
-			"profession" => $arr["request"]["cat"],
+			"profession" => $arr["request"]["cat"] != CRM_ALL_PERSONS_CAT ? $arr["request"]["cat"] : NULL,
 			"class_id" => CL_PERSONNEL_MANAGEMENT_JOB_OFFER
 		));
 		$job_obj_list = $job_obj_list->arr();

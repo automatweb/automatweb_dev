@@ -98,7 +98,15 @@ class crm_company_cust_impl extends class_base
 			$conns_ol->add($con["from"]);
 		}*/
 		$i = get_instance(CL_CRM_COMPANY);
-		$conns_ol = new object_list(array("oid" => $i->get_my_projects()));
+		$prj = $i->get_my_projects();
+		if (!count($prj))
+		{
+			$conns_ol = new object_list();
+		}
+		else
+		{
+			$conns_ol = new object_list(array("oid" => $prj));
+		}
 
 		if ($arr["request"]["do_proj_search"] && $conns_ol->count())
 		{
@@ -273,7 +281,7 @@ class crm_company_cust_impl extends class_base
 		$f_cat = $this->_get_first_cust_cat($arr["obj_inst"]);
 
 		$i = get_instance(CL_CRM_COMPANY);
-		$i->active_node = (int)$arr['request']['category'] ? (int)$arr['request']['category'] : $f_cat->id();
+		$i->active_node = (int)$arr['request']['category'] ? (int)$arr['request']['category'] : ($f_cat ? $f_cat->id() : 0);
 		$i->generate_tree(array(
 			'tree_inst' => &$tree_inst,
 			'obj_inst' => $arr['obj_inst'],
@@ -1515,6 +1523,11 @@ class crm_company_cust_impl extends class_base
 			));
 		}
 
+		if ($ar[$prefix."proj_search_part"] != "")
+		{
+			$ret["CL_PROJECT.RELTYPE_PARTICIPANT.name"] = "%".$ar[$prefix."proj_search_part"]."%";
+		}
+
 		if ($ar[$prefix."proj_search_name"] != "")
 		{
 			$ret["name"] = "%".$ar[$prefix."proj_search_name"]."%";
@@ -1643,6 +1656,51 @@ class crm_company_cust_impl extends class_base
 
 		$t->set_default_sortby("date");
 		$t->set_default_sorder("desc");
+	}
+
+	function _get_all_proj_search_part($arr)
+	{
+		if (!$arr["request"]["search_all_proj"])
+		{
+			return PROP_IGNORE;
+		}
+
+		if ($arr["request"]["all_proj_search_dl_from"] == "")
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$v = $p->name();
+		}
+		else
+		{
+			$v = $arr["request"]["all_proj_search_part"];
+		}
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "all_proj_search_part",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' onClick='document.changeform.all_proj_search_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		return PROP_OK;
+	}
+
+	function _get_proj_search_part($arr)
+	{
+		if ($arr["request"]["proj_search_dl_from"] == "")
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$v = $p->name();
+		}
+		else
+		{
+			$v = $arr["request"]["proj_search_part"];
+		}
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "proj_search_part",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' onClick='document.changeform.proj_search_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		return PROP_OK;
 	}
 }
 ?>

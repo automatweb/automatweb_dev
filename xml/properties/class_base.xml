@@ -29,7 +29,7 @@
             <default>1</default>
             <field>status</field>
             <caption>Aktiivne</caption>
-            <comment>Kas objekt on aktiivne </comment>
+            <comment>Kas objekt on aktiivne</comment>
       </property>
       <property>
             <name>needs_translation</name>

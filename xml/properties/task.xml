@@ -175,16 +175,8 @@
             <name>files</name>
             <table>objects</table>
             <group>general</group>
-            <type>relmanager</type>
-            <reltype>RELTYPE_FILE</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>file</num_1>
-                  <num_2>comment</num_2>
-            </props>
-            <table_fields>name</table_fields>
+            <type>text</type>
+            <field>files</field>
             <caption>Failid</caption>
       </property>
       <property>

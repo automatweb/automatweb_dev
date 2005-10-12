@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.38 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_offer.aw,v 1.39 2005/10/12 13:28:00 kristo Exp $
 // pakkumine.aw - Pakkumine 
 /*
 
@@ -180,7 +180,7 @@ class crm_offer extends class_base
 			case "orderer":
 				$my_org = false;
 
-				if(!($arr["new"] == 1))
+				if(!($arr["new"] == 1) && is_object($arr["obj_inst"]))
 				{
 					$id = $arr["obj_inst"]->prop("preformer");
 					if (is_oid($id) && $this->can("view", $id))
@@ -213,7 +213,8 @@ class crm_offer extends class_base
 				{
 					$prop["value"] = $arr["request"]["alias_to_org"];
 				}
-				elseif($arr["obj_inst"]->prop("orderer"))
+				else
+				if(is_object($arr["obj_inst"]) && $arr["obj_inst"]->prop("orderer"))
 				{
 					$prop["value"] = $arr["obj_inst"]->prop("orderer");
 				}

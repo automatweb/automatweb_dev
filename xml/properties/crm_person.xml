@@ -693,6 +693,11 @@
                   <clid>CL_CRM_CONTRACT_STOP</clid>
                   <caption>Töölepingu peatamine</caption>
             </CONTRACT_STOP>
+            <IMPORTANT_PERSON>
+                  <value>43</value>
+                  <clid>CL_CRM_PERSON</clid>
+                  <caption>kontaktisik</caption>
+            </IMPORTANT_PERSON>
       </reltypes>
 </properties>
 

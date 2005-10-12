@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.85 2005/09/14 17:57:16 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.86 2005/10/12 13:28:00 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -364,6 +364,9 @@ caption CV
 
 @reltype CONTRACT_STOP value=42 clid=CL_CRM_CONTRACT_STOP
 @caption Töölepingu peatamine
+
+@reltype IMPORTANT_PERSON value=43 clid=CL_CRM_PERSON
+@caption kontaktisik
 
 */
 

@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.57 2005/10/07 07:23:09 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/sys.aw,v 2.58 2005/10/12 13:27:59 kristo Exp $
 // sys.aw - various system related functions
 
 class sys extends aw_template
@@ -179,6 +179,7 @@ class sys extends aw_template
 	{
 		$files = array(
 			"terryf.dev.struktuur.ee" => "terryf.dev.struktuur.ee",
+			"seppik.struktuur.ee" => "seppik.struktuur.ee",
 			"www2.just.ee" => "www2.just.ee",
 			"work.struktuur.ee" => "work.struktuur.ee",
 			"aw.struktuur.ee" => "aw.struktuur.ee",

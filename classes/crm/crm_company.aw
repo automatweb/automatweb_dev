@@ -13,7 +13,7 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 
 @default group=general_sub
-	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub,all_actions,meetings,tasks,calls editonly=1
+	@property navtoolbar type=toolbar store=no no_caption=1 group=general_sub editonly=1
 
 	@property name type=textbox size=30 maxlength=255 table=objects
 	@caption Organisatsiooni nimi
@@ -96,15 +96,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@caption Kas isikud on kasutajad
 
 --------------------------------------
-@default group=oldcontacts
-
-	@property addresslist type=text store=no no_caption=1 
-	@caption Aadress
-
-	@property old_human_resources type=table store=no no_caption=1 
-	@caption Nimekiri
-
-
 @default group=contacts2
 
 	@layout hbox_toolbar type=hbox 
@@ -180,27 +171,6 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 
 	@property telefax_id type=relmanager table=kliendibaas_firma reltype=RELTYPE_TELEFAX props=name
 	@caption Faks
-
-
-@default group=all_actions
-
-	@property org_actions type=calendar no_caption=1 viewtype=relative 
-	@caption org_actions
-
-@default group=calls
-
-	@property org_calls type=calendar no_caption=1 viewtype=relative
-	@caption Kõned
-
-@default group=meetings
-
-	@property org_meetings type=calendar no_caption=1 viewtype=relative
-	@caption Kohtumised
-
-@default group=tasks
-
-	@property org_tasks type=calendar no_caption=1 viewtype=relative
-	@caption Toimetused
 
 
 @default group=personal_offers
@@ -367,6 +337,9 @@ default group=org_objects
 			@property all_proj_search_cust type=textbox store=no parent=all_proj_search_b size=30 captionside=top
 			@caption Klient
 
+			@property all_proj_search_part type=text size=25 parent=all_proj_search_b store=no captionside=top
+			@caption Osaleja
+
 			@property all_proj_search_name type=textbox store=no parent=all_proj_search_b size=30 captionside=top
 			@caption Projekti nimi
 
@@ -407,6 +380,9 @@ default group=org_objects
 
 			@property proj_search_cust type=textbox store=no parent=my_proj_search_b size=30 captionside=top
 			@caption Klient
+
+			@property proj_search_part type=text size=25 parent=my_proj_search_b store=no captionside=top
+			@caption Osaleja
 
 			@property proj_search_name type=textbox store=no parent=my_proj_search_b size=30 captionside=top
 			@caption Projekti nimi
@@ -491,7 +467,7 @@ default group=org_objects
 
 	@property bills_list type=table store=no no_caption=1
 
-@default group=my_tasks,all_tasks
+@default group=my_tasks,meetings,calls,ovrv_offers,all_actions
 
 	@property my_tasks_tb type=toolbar store=no no_caption=1
 
@@ -501,6 +477,9 @@ default group=org_objects
 
 			@property act_s_cust type=textbox size=30 parent=all_act_search store=no captionside=top
 			@caption Klient
+
+			@property act_s_part type=text size=25 parent=all_act_search store=no captionside=top
+			@caption Osaleja
 
 			@property act_s_task_name type=textbox size=30 parent=all_act_search store=no captionside=top
 			@caption Toimetuse nimi
@@ -524,6 +503,7 @@ default group=org_objects
 			@caption Otsi
 
 		@property my_tasks type=table store=no no_caption=1 parent=my_tasks
+		@property my_tasks_cal type=calendar store=no no_caption=1 parent=my_tasks
 
 -------------------------------------------------
 @groupinfo general_sub caption="&Uuml;ldine" parent=general
@@ -534,20 +514,18 @@ default group=org_objects
 @groupinfo special_offers caption="Eripakkumised" submit=no parent=general
 @groupinfo people caption="Inimesed"
 
-	@groupinfo contacts2 caption="Puuvaade" parent=people submit=no
-	@groupinfo oldcontacts caption="Isikud" parent=people submit=no
+	@groupinfo contacts2 caption="Inimesed puuvaates" parent=people submit=no
 	@groupinfo personal_offers caption="Tööpakkumised" parent=people submit=no
 	@groupinfo personal_candits caption="Kandideerijad" parent=people submit=no
 
 @groupinfo contacts caption="Kontaktid"
 @groupinfo overview caption="Tegevused" 
 
-	@groupinfo my_tasks caption="Minu toimetused" parent=overview submit=no
-	@groupinfo all_tasks caption="K&otilde;ikide toimetused" parent=overview submit=no
-	@groupinfo all_actions caption="Kõik" parent=overview submit=no
-	@groupinfo calls caption="Kõned" parent=overview submit=no
+	@groupinfo my_tasks caption="Toimetused" parent=overview submit=no
 	@groupinfo meetings caption="Kohtumised" parent=overview submit=no
-	@groupinfo tasks caption="Toimetused" parent=overview submit=no
+	@groupinfo calls caption="Kõned" parent=overview submit=no
+	@groupinfo ovrv_offers caption="Pakkumised" parent=overview submit=no
+	@groupinfo all_actions caption="Kõik" parent=overview submit=no
 
 @groupinfo projs caption="Projektid"
 	@groupinfo my_projects caption="Minu projektid" parent=projs submit=no
@@ -721,6 +699,10 @@ CREATE TABLE `kliendibaas_firma` (
   KEY `teg_i` (`pohitegevus`)
 ) TYPE=MyISAM;
 */
+
+
+define("CRM_TASK_VIEW_TABLE", 0);
+define("CRM_TASK_VIEW_CAL", 1);
 
 class crm_company extends class_base
 {
@@ -1010,6 +992,8 @@ class crm_company extends class_base
 			case "org_proj_tb":
 			case "org_proj_arh_tb":
 			case "report_list":
+			case "all_proj_search_part":
+			case "proj_search_part":
 				static $cust_impl;
 				if (!$cust_impl)
 				{
@@ -1142,7 +1126,9 @@ class crm_company extends class_base
 			case "org_tasks":
 			case "tasks_call":
 			case "my_tasks":
+			case "my_tasks_cal":
 			case "my_tasks_tb":
+			case "act_s_part":
 				static $overview_impl;
 				if (!$overview_impl)
 				{
@@ -1181,8 +1167,6 @@ class crm_company extends class_base
 			case "human_resources":
 			case 'contacts_search_results':
 			case "prof_search_results":
-			case "addresslist":
-			case "old_human_resources":
 			case "personal_offers_toolbar":
 			case "unit_listing_tree_personal":
 			case "personal_offers_table":
@@ -1970,6 +1954,7 @@ class crm_company extends class_base
 		if ($arr["request"]["proj_search_sbt"])
 		{
 			$arr["args"]["proj_search_cust"] = $arr["request"]["proj_search_cust"];
+			$arr["args"]["proj_search_part"] = $arr["request"]["proj_search_part"];
 			$arr["args"]["proj_search_name"] = $arr["request"]["proj_search_name"];
 			$arr["args"]["proj_search_code"] = $arr["request"]["proj_search_code"];
 			$arr["args"]["proj_search_task_name"] = $arr["request"]["proj_search_task_name"];
@@ -1983,6 +1968,7 @@ class crm_company extends class_base
 		if ($arr["request"]["all_proj_search_sbt"])
 		{
 			$arr["args"]["all_proj_search_cust"] = $arr["request"]["all_proj_search_cust"];
+			$arr["args"]["all_proj_search_part"] = $arr["request"]["all_proj_search_part"];
 			$arr["args"]["all_proj_search_name"] = $arr["request"]["all_proj_search_name"];
 			$arr["args"]["all_proj_search_code"] = $arr["request"]["all_proj_search_code"];
 			$arr["args"]["all_proj_search_task_name"] = $arr["request"]["all_proj_search_task_name"];
@@ -2006,6 +1992,7 @@ class crm_company extends class_base
 		if ($arr["request"]["act_s_sbt"])
 		{
 			$arr["args"]["act_s_cust"] = $arr["request"]["act_s_cust"];
+			$arr["args"]["act_s_part"] = $arr["request"]["act_s_part"];
 			$arr["args"]["act_s_task_name"] = $arr["request"]["act_s_task_name"];
 			$arr["args"]["act_s_code"] = $arr["request"]["act_s_code"];
 			$arr["args"]["act_s_proj_name"] = $arr["request"]["act_s_proj_name"];
@@ -2780,25 +2767,91 @@ class crm_company extends class_base
 
 	function get_my_tasks()
 	{
-		$proj = $this->get_my_projects();
-		// get all open tasks from projects
-		$proj_i = get_instance(CL_PROJECT);
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_TASK",
+		));
 		$ret = array();
-		foreach($proj as $p)
+		foreach($cs as $c)
 		{
-			$events = $proj_i->get_events(array(
-				"id" => $p,
-				"range" => array(
-					"start" => 1,
-					"end" => time() + 24*3600*365*10
-				)
-			));
-			foreach($events as $evt)
-			{
-				$ret[] = $evt["id"];
-			}
+			$ret[] = $c["to"];
+		}
+		return $ret;
+	}
+
+	function get_my_meetings()
+	{
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_MEETING",
+		));
+		$ret = array();
+		foreach($cs as $c)
+		{
+			$ret[] = $c["to"];
+		}
+		return $ret;
+	}
+
+	function get_my_calls()
+	{
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => "RELTYPE_PERSON_CALL",
+		));
+		$ret = array();
+		foreach($cs as $c)
+		{
+			$ret[] = $c["to"];
+		}
+		return $ret;
+	}
+
+	function get_my_offers()
+	{
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"to" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_OFFER,
+			"type" => "RELTYPE_SALESMAN",
+		));
+		$ret = array();
+		foreach($cs as $c)
+		{
+			$ret[] = $c["from"];
+		}
+		return $ret;
+	}
+
+	function get_my_actions()
+	{
+		$u = get_instance(CL_USER);
+		$c = new connection();
+		$cs = $c->find(array(
+			"from" => $u->get_current_person(),
+			"from.class_id" => CL_CRM_PERSON,
+			"type" => array("RELTYPE_PERSON_TASK", "RELTYPE_PERSON_MEETING", "RELTYPE_PERSON_CALL"),
+		));
+		$ret = array();
+		foreach($cs as $c)
+		{
+			$ret[] = $c["to"];
 		}
 
+		foreach($this->get_my_offers() as $ofid)
+		{
+			$ret[] = $ofid;
+		}
 		return $ret;
 	}
 
@@ -2911,6 +2964,43 @@ class crm_company extends class_base
 			'return_url' => urlencode($arr["get_ru"])
 		));
 		
+	}
+
+	/**
+		@attrib name=mark_p_as_important
+	**/
+	function mark_p_as_important($arr)
+	{	
+		$u = get_instance(CL_USER);
+		$p = obj($u->get_current_person());
+
+		foreach(safe_array($arr["check"]) as $pers)
+		{
+			$p->connect(array(
+				"to" => $pers,
+				"reltype" => "RELTYPE_IMPORTANT_PERSON"
+			));
+		}
+
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=tasks_switch_to_cal_view
+	**/
+	function tasks_switch_to_cal_view($arr)
+	{
+		aw_session_set("crm_task_view", CRM_TASK_VIEW_CAL);
+		return $arr["post_ru"];
+	}
+
+	/**
+		@attrib name=tasks_switch_to_table_view
+	**/
+	function tasks_switch_to_table_view($arr)
+	{
+		aw_session_del("crm_task_view");
+		return $arr["post_ru"];
 	}
 }
 ?>

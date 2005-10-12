@@ -1120,7 +1120,7 @@ class grid_editor extends class_base
 
 		if ($this->arr["table_style"])
 		{
-			$table.= "<table border=0 ".$stc->get_table_string($this->arr["table_style"]).">";
+			$table.= "<table border=\"0\" ".$stc->get_table_string($this->arr["table_style"]).">";
 		}
 		else
 		{

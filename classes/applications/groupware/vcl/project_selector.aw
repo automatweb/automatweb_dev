@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.8 2005/04/05 13:52:35 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/vcl/project_selector.aw,v 1.9 2005/10/12 13:28:00 kristo Exp $
 class project_selector extends core
 {
 	function project_selector()
@@ -14,7 +14,6 @@ class project_selector extends core
 		$olist = new object_list(array(
 			"brother_of" => $orig->id(),
 		));
-
 		$prjlist = array();
 		$xlist = array();
 		foreach($olist->arr() as $o)
@@ -36,8 +35,7 @@ class project_selector extends core
 			$olist = new object_list(array(
 				"class_id" => CL_PROJECT,
 			));
-
-
+		
 			foreach($olist->arr() as $o)
 			{
 				$pr = new object($o->parent());

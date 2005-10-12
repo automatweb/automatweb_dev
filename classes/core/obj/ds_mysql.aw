@@ -144,6 +144,7 @@ die(dbg::dump($ret));
 				$objtblprops[] = $data;
 			}
 		}
+
 		// import object table properties in the props array
 		foreach($objtblprops as $prop)
 		{

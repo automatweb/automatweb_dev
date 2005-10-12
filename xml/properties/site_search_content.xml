@@ -107,7 +107,16 @@
             <method>serialize</method>
             <group>searchgroups</group>
             <type>select</type>
-            <caption>Vaikimisi sorteeritakse tulemused</caption>
+            <caption>Vaikimisi sorteeritakse</caption>
+      </property>
+      <property>
+            <name>default_search_opt</name>
+            <table>objects</table>
+            <field>meta</field>
+            <method>serialize</method>
+            <group>searchgroups</group>
+            <type>select</type>
+            <caption>Vaikimisi otsingu t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>grpcfg</name>
@@ -118,15 +127,6 @@
             <type>table</type>
             <store>no</store>
             <caption>Otsingugruppide konfigureerimine</caption>
-      </property>
-      <property>
-            <name>default_search_opt</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>searchgroups</group>
-            <type>select</type>
-            <caption>Vaikimisi otsingu t&amp;uuml;&amp;uuml;p</caption>
       </property>
       <property>
             <name>reledit</name>
@@ -172,59 +172,13 @@
             <caption>Pealkiri/Sisu</caption>
       </property>
       <property>
-            <name>s_title</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>textbox</type>
-            <caption>Pealkiri</caption>
-      </property>
-      <property>
-            <name>date_from</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>date_select</type>
-            <caption>Alates</caption>
-      </property>
-      <property>
-            <name>date_to</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>date_select</type>
-            <caption>Kuni</caption>
-      </property>
-      <property>
             <name>s_opt</name>
             <table>objects</table>
             <field>meta</field>
             <method>serialize</method>
             <group>search_simple</group>
             <type>select</type>
-            <caption>Kuidas otsida</caption>
-      </property>
-      <property>
-            <name>s_seatch_word_part</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
-            <caption>Otsi s&amp;otilde;naosa</caption>
-      </property>
-      <property>
-            <name>s_group</name>
-            <table>objects</table>
-            <field>meta</field>
-            <method>serialize</method>
-            <group>search_simple</group>
-            <type>select</type>
-            <caption>Asukoht</caption>
+            <caption>Leia </caption>
       </property>
       <property>
             <name>s_limit</name>
@@ -281,9 +235,8 @@
             <field>meta</field>
             <method>serialize</method>
             <group>search_complex</group>
-            <type>table</type>
+            <type>text</type>
             <no_caption>1</no_caption>
-            <store>no</store>
             <caption>Tulemused</caption>
       </property>
       <classinfo>

@@ -68,11 +68,11 @@ class relpicker extends  core
 			}
 		}
 		$val["type"] = ($val["display"] == "radio") ? "chooser" : "select";
-		if ($val["type"] == "select" && is_oid($this->obj->prop($val["name"])))
+		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->prop($val["name"])))
 		{
 			$val["post_append_text"] = " ".html::get_change_url($this->obj->prop($val["name"]), array("return_url" => get_ru()), t("Muuda valitud objekti"));
 		}
-		if ($val["type"] == "select" && is_oid($this->obj->id()) && aw_global_get("uid") == "kix")
+		if ($val["type"] == "select" && is_object($this->obj) && is_oid($this->obj->id()) && aw_global_get("uid") == "kix")
 		{
 			$clid = $arr["relinfo"][$reltype]["clid"];
 			$rel_val = $arr["relinfo"][$reltype]["value"];

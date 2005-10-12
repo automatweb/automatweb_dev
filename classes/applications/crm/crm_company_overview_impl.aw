@@ -101,7 +101,16 @@ class crm_company_overview_impl extends class_base
 				$evts[$tmp->id()] = $tmp->id();
 			}
 		}
-		
+
+		// also, do the search filter thingie here
+		if ($arr["request"]["act_s_sbt"] != "")
+		{
+			// filter
+			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $evts));
+			$evts = $this->make_keys($ol->ids());
+		}
+			
+
 		$this->overview = array();
 		classload("core/icons");
 
@@ -174,30 +183,56 @@ class crm_company_overview_impl extends class_base
 		$prop["value"] = $rv;
 	}
 
-	function _init_my_tasks_t(&$t)
+	function _init_my_tasks_t(&$t, $data = false)
 	{
+		if (is_array($data))
+		{
+			$filt = array();
+			foreach($data as $row)
+			{
+				$filt["customer"][] = strip_tags($row["customer"]);
+				$filt["proj_name"][] = strip_tags($row["proj_name"]);
+				$part = strip_tags($row["parts"]);
+				foreach(explode(",", $part) as $nm)
+				{
+					$filt["parts"][] = trim($nm);
+				}
+			}
+		}
+
+		$t->define_field(array(
+			"caption" => t(""),
+			"name" => "icon",
+			"align" => "center",
+//			"chgbgcolor" => "col",
+			"sortable" => 1,
+			"width" => 1
+		));
+
+		$t->define_field(array(
+			"caption" => t("Pealkiri"),
+			"name" => "name",
+			"align" => "center",
+//			"chgbgcolor" => "col",
+			"sortable" => 1
+		));
+
 		$t->define_field(array(
 			"caption" => t("Klient"),
 			"name" => "customer",
 			"align" => "center",
-			"chgbgcolor" => "col",
-			"sortable" => 1
+//			"chgbgcolor" => "col",
+			"sortable" => 1,
+			"filter" => $filt["customer"]
 		));
 
 		$t->define_field(array(
 			"caption" => t("Projekt"),
 			"name" => "proj_name",
 			"align" => "center",
-			"chgbgcolor" => "col",
-			"sortable" => 1
-		));
-
-		$t->define_field(array(
-			"caption" => t("Toimetus"),
-			"name" => "name",
-			"align" => "center",
-			"chgbgcolor" => "col",
-			"sortable" => 1
+//			"chgbgcolor" => "col",
+			"sortable" => 1,
+			"filter" => $filt["proj_name"]
 		));
 
 		$t->define_field(array(
@@ -214,14 +249,23 @@ class crm_company_overview_impl extends class_base
 		$t->define_field(array(
 			"caption" => t("Prioriteet"),
 			"name" => "priority",
-			"chgbgcolor" => "col",
+//			"chgbgcolor" => "col",
 			"align" => "center",
 			"sortable" => 1,
 			"numeric" => 1
 		));
 
+		$t->define_field(array(
+			"caption" => t("Osalejad"),
+			"name" => "parts",
+			"align" => "center",
+//			"chgbgcolor" => "col",
+			"sortable" => 1,
+			"filter" => $filt["parts"]
+		));
+
 		$t->define_chooser(array(
-			"chgbgcolor" => "col",
+//			"chgbgcolor" => "col",
 			"field" => "oid",
 			"name" => "sel"
 		));
@@ -229,31 +273,46 @@ class crm_company_overview_impl extends class_base
 
 	function _get_my_tasks($arr)
 	{
-		$t =& $arr["prop"]["vcl_inst"];
-		$this->_init_my_tasks_t($t);
-
-		$i = get_instance(CL_CRM_COMPANY);
-		if ($arr["request"]["group"] == "all_tasks")
+		if (aw_global_get("crm_task_view") != CRM_TASK_VIEW_TABLE)
 		{
-			// get all undone tasks
-			$ol = new object_list(array(
-				"class_id" => CL_TASK,
-				"site_id" => array(),
-				"lang_id" => array(),
-				"is_done" => new obj_predicate_not(OBJ_IS_DONE),
-				"brother_of" => new obj_predicate_prop("id")
-			));
-			$tasks = $ol->ids();
+			return PROP_IGNORE;
 		}
-		else
+
+		classload("core/icons");
+		$i = get_instance(CL_CRM_COMPANY);
+		$clid = NULL;
+		switch($arr["request"]["group"])
 		{
-			$tasks = $i->get_my_tasks();
+			case "my_tasks":
+				$tasks = $i->get_my_tasks();
+				$clid = CL_TASK;
+				break;
+
+			case "meetings":
+				$tasks = $i->get_my_meetings();
+				$clid = CL_CRM_MEETING;
+				break;
+
+			case "calls":
+				$tasks = $i->get_my_calls();
+				$clid = CL_CRM_CALL;
+				break;
+
+			case "ovrv_offers":
+				$tasks = $i->get_my_offers();
+				$clid = CL_CRM_OFFER;
+				break;
+
+			default:
+				$tasks = $i->get_my_actions();
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				break;
 		}
 
 		if ($arr["request"]["act_s_sbt"] != "")
 		{
 			// filter
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks));
+			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks, $clid));
 		}
 		else
 		{
@@ -264,13 +323,14 @@ class crm_company_overview_impl extends class_base
 			else
 			{
 				$ol = new object_list(array(
-					"class_id" => CL_TASK,
+					"class_id" => $clid,
 					"oid" => $tasks,
 					"is_done" => new obj_predicate_not(OBJ_IS_DONE)
 				));
 			}
 		}
 
+		$table_data = array();
 		foreach($ol->ids() as $task_id)
 		{
 			$task = obj($task_id);
@@ -293,24 +353,44 @@ class crm_company_overview_impl extends class_base
 			$dl = $task->prop("deadline");
 			if (time() > $dl)
 			{
-				$col = "#BBBBBB";
+				$col = "#ff0000";
 			}
 			else
 			if (date("d.m.Y") == date("d.m.Y", $dl)) // today
 			{
-				$col = "#EEEEEE";
+				$col = "#f3f27e";
 			}
-			$t->define_data(array(
+
+			$p_cs = $task->connections_to(array(
+				'from.class_id' => CL_CRM_PERSON
+			));
+			$ns = array();
+			foreach($p_cs as $p_c)
+			{
+				$part = $p_c->from();
+				$ns[] = html::get_change_url($part->id(), array("return_url" => get_ru()), $part->name());
+			}
+
+			$table_data[] = array(
+				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
 				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), $task->name()),
 				"deadline" => $dl,
 				"oid" => $task->id(),
 				"priority" => $task->prop("priority"),
-				"col" => $col
-			));
+				"col" => $col,
+				"parts" => join(", ", $ns)
+			);
 		}
 
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_my_tasks_t($t, $table_data);
+
+		foreach($table_data as $row)
+		{
+			$t->define_data($row);
+		}
 		$t->set_default_sortby("deadline");
 		$t->set_default_sorder("asc");
 
@@ -322,17 +402,66 @@ class crm_company_overview_impl extends class_base
 		$t->set_sortable(false);
 	}
 
-	function _get_tasks_search_filt($r, $tasks)
+	function _get_tasks_search_filt($r, $tasks, $clid)
 	{
+		if (count($tasks) == 0)
+		{
+			$tasks = -1;
+		}
 		$res = array(
-			"class_id" => CL_TASK,
+			"class_id" => $clid,
 			"oid" => $tasks
 		);
 
+		$clss = aw_ini_get("classes");
+		$def = $clss[$clid]["def"];
+	
 		if ($r["act_s_cust"] != "")
 		{
-			$res["CL_TASK.customer(CL_CRM_COMPANY).name"] = "%".$r["act_s_cust"]."%";
+			$res[$def.".customer(CL_CRM_COMPANY).name"] = "%".$r["act_s_cust"]."%";
 		}
+		if ($r["act_s_part"] != "")
+		{
+			if ($clid == CL_CRM_OFFER)
+			{
+				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = "%".$r["act_s_part"]."%";
+			}
+			else
+			{
+				// since someone stupidly decided that task participant relations are FROM person TO task, not the other way around (duh)
+				// we need to select all tasks here and the pass the oids to the rest of the filter
+
+				// get the person(s) typed
+				$persons = new object_list(array(
+					"class_id" => CL_CRM_PERSON,
+					"name" => map("%%%s%%", explode(",", $r["act_s_part"]))
+				));
+
+				$c = new connection();
+				$conns = $c->find(array(
+					"from" => $persons->ids(),
+					"from.class_id" => CL_CRM_PERSON,
+					"to.class_id" => $clid,
+					//"type" => "RELTYPE_PERSON_TASK"
+				));
+
+				$oids = array();
+				foreach($conns as $con)
+				{
+					$oids[] = $con["to"];
+				}
+
+				if (count($oids))
+				{
+					$res["oid"] = $oids;
+				}
+				else
+				{
+					$res["oid"] = 1;
+				}
+			}
+		}
+
 		if ($r["act_s_task_name"] != "")
 		{
 			$res["name"] = "%".$r["act_s_task_name"]."%";
@@ -343,7 +472,7 @@ class crm_company_overview_impl extends class_base
 		}
 		if ($r["act_s_proj_name"] != "")
 		{
-			$res["CL_TASK.project(CL_PROJECT).name"] = "%".$r["act_s_proj_name"]."%";
+			$res[$def.".project(CL_PROJECT).name"] = "%".$r["act_s_proj_name"]."%";
 		}
 
 		$r["act_s_dl_from"] = date_edit::get_timestamp($r["act_s_dl_from"]);
@@ -368,7 +497,6 @@ class crm_company_overview_impl extends class_base
 		{
 			$res["is_done"] = $r["act_s_status"] == 1 ? 0 : 8;
 		}
-
 		return $res;
 	}
 
@@ -386,24 +514,30 @@ class crm_company_overview_impl extends class_base
 			"uid" => aw_global_get("uid"),
 		));
 
-		$url = $this->mk_my_orb('new',array(
-			'alias_to_org' => $arr['obj_inst']->id(),
-			'reltype_org' => 13,
-			'class' => 'planner',
-			'id' => $this->cal_id,
-			'group' => 'add_event',
-			'clid' => CL_TASK,
-			'action' => 'change',
-			'title' => t("Toimetus"),
-			'parent' => $arr["obj_inst"]->id(),
-			'return_url' => get_ru()
-		));
+		$clids = array(CL_TASK => 13, CL_CRM_MEETING => 11, CL_CRM_CALL => 12, CL_CRM_OFFER => 9);
+		$clss = aw_ini_get("classes");
 
-		$tb->add_menu_item(array(
-			'parent'=>'add_item',
-			'text' => t('Toimetus'),
-			'link' => $url
-		));
+		foreach($clids as $clid => $relt)
+		{
+			$url = $this->mk_my_orb('new',array(
+				'alias_to_org' => $arr['obj_inst']->id(),
+				'reltype_org' => $relt,
+				'class' => 'planner',
+				'id' => $this->cal_id,
+				'group' => 'add_event',
+				'clid' => $clid,
+				'action' => 'change',
+				'title' => $clss[$clid]["name"],
+				'parent' => $arr["obj_inst"]->id(),
+				'return_url' => get_ru()
+			));
+
+			$tb->add_menu_item(array(
+				'parent'=>'add_item',
+				'text' => $clss[$clid]["name"],
+				'link' => $url
+			));
+		}
 
 		$tb->add_button(array(
 			'name' => 'mark_as_done',
@@ -411,6 +545,79 @@ class crm_company_overview_impl extends class_base
 			'tooltip' => t('M&auml;rgi tehtuks'),
 			'action' => 'mark_tasks_done',
 		));
+
+		$tb->add_separator();
+
+		if (aw_global_get("crm_task_view") == CRM_TASK_VIEW_TABLE)
+		{
+			$tb->add_button(array(
+				'name' => 'tasks_switch_to_cal',
+				'img' => 'icon_cal_today.gif',
+				'tooltip' => t('Kelendrivaade'),
+				'action' => 'tasks_switch_to_cal_view',
+			));
+		}
+		else
+		{
+			$tb->add_button(array(
+				'name' => 'tasks_switch_to_table',
+				'img' => 'class_'.CL_TABLE.'.gif',
+				'tooltip' => t('Tabelivaade'),
+				'action' => 'tasks_switch_to_table_view',
+			));
+		}
+	}
+
+	function _get_act_s_part($arr)
+	{
+		if ($arr["request"]["act_s_sbt"] == "")
+		{
+			$u = get_instance(CL_USER);
+			$p = obj($u->get_current_person());
+			$v = $p->name();
+		}
+		else
+		{
+			$v = $arr["request"]["act_s_part"];
+		}
+		$arr["prop"]["value"] = html::textbox(array(
+			"name" => "act_s_part",
+			"value" => $v,
+			"size" => 25
+		))."<a href='javascript:void(0)' onClick='document.changeform.act_s_part.value=\"\"'><img src='".aw_ini_get("baseurl")."/automatweb/images/icons/delete.gif' border=0></a>";
+		return PROP_OK;
+	}
+
+	function _get_my_tasks_cal($arr)
+	{
+		if (aw_global_get("crm_task_view") != CRM_TASK_VIEW_CAL)
+		{
+			return PROP_IGNORE;
+		}
+		$args = array();
+		switch($arr["request"]["group"])
+		{
+			case "my_tasks":
+				$args["type"] = "RELTYPE_TASK";
+				break;
+
+			case "meetings":
+				$args["type"] = "RELTYPE_KOHTUMINE";
+				break;
+
+			case "calls":
+				$args["type"] = "RELTYPE_CALL";
+				break;
+
+			case "ovrv_offers":
+				$args["type"] = "RELTYPE_OFFER";
+				break;
+
+			default:
+				$args["type"] = array("RELTYPE_TASK", "RELTYPE_KOHUTMINE", "RELTYPE_CALL", "RELTYPE_OFFER");
+				break;
+		}
+		$this->do_org_actions($arr, $args);
 	}
 }
 ?>

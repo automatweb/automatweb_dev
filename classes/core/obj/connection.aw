@@ -116,6 +116,11 @@ class connection
 			}
 		}
 
+		if (isset($param["type"]) && is_class_id($param["from.class_id"]))
+		{
+			$param["type"] = $GLOBALS["object_loader"]->resolve_reltype($param["type"], $param["from.class_id"]);
+		}
+
 		return $GLOBALS["object_loader"]->ds->find_connections($param);
 	}
 

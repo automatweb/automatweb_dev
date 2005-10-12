@@ -209,5 +209,26 @@
 			</function>
 		</action>
 
+		<action name="mark_p_as_important">
+			<function name="mark_p_as_important">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="tasks_switch_to_cal_view">
+			<function name="tasks_switch_to_cal_view">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
+		<action name="tasks_switch_to_table_view">
+			<function name="tasks_switch_to_table_view">
+				<arguments>
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>

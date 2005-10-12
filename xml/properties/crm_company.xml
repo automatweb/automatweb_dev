@@ -3,13 +3,7 @@
       <property>
             <name>navtoolbar</name>
             <table>objects</table>
-            <group>
-                  <num_0>general_sub</num_0>
-                  <num_1>all_actions</num_1>
-                  <num_2>meetings</num_2>
-                  <num_3>tasks</num_3>
-                  <num_4>calls</num_4>
-            </group>
+            <group>general_sub</group>
             <type>toolbar</type>
             <store>no</store>
             <no_caption>1</no_caption>
@@ -255,26 +249,6 @@
             <caption>Kas isikud on kasutajad</caption>
       </property>
       <property>
-            <name>addresslist</name>
-            <table>objects</table>
-            <group>oldcontacts</group>
-            <type>text</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>addresslist</field>
-            <caption>Aadress</caption>
-      </property>
-      <property>
-            <name>old_human_resources</name>
-            <table>objects</table>
-            <group>oldcontacts</group>
-            <type>table</type>
-            <store>no</store>
-            <no_caption>1</no_caption>
-            <field>old_human_resources</field>
-            <caption>Nimekiri</caption>
-      </property>
-      <property>
             <name>contact_toolbar</name>
             <table>objects</table>
             <group>contacts2</group>
@@ -492,50 +466,6 @@
             <props>name</props>
             <field>telefax_id</field>
             <caption>Faks</caption>
-      </property>
-      <property>
-            <name>org_actions</name>
-            <table>objects</table>
-            <group>all_actions</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_actions</field>
-            <caption>org_actions</caption>
-      </property>
-      <property>
-            <name>org_calls</name>
-            <table>objects</table>
-            <group>calls</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_calls</field>
-            <caption>Kõned</caption>
-      </property>
-      <property>
-            <name>org_meetings</name>
-            <table>objects</table>
-            <group>meetings</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_meetings</field>
-            <caption>Kohtumised</caption>
-      </property>
-      <property>
-            <name>org_tasks</name>
-            <table>objects</table>
-            <group>tasks</group>
-            <type>calendar</type>
-            <no_caption>1</no_caption>
-            <viewtype>relative</viewtype>
-            <store>no</store>
-            <field>org_tasks</field>
-            <caption>Toimetused</caption>
       </property>
       <property>
             <name>personal_offers_toolbar</name>
@@ -930,6 +860,21 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>all_proj_search_part</name>
+            <table>objects</table>
+            <group>
+                  <num_0>org_projects</num_0>
+                  <num_1>org_projects_archive</num_1>
+            </group>
+            <type>text</type>
+            <size>25</size>
+            <parent>all_proj_search_b</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>all_proj_search_part</field>
+            <caption>Osaleja</caption>
+      </property>
+      <property>
             <name>all_proj_search_name</name>
             <table>objects</table>
             <group>
@@ -1068,6 +1013,18 @@
             <captionside>top</captionside>
             <field>proj_search_cust</field>
             <caption>Klient</caption>
+      </property>
+      <property>
+            <name>proj_search_part</name>
+            <table>objects</table>
+            <group>my_projects</group>
+            <type>text</type>
+            <size>25</size>
+            <parent>my_proj_search_b</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>proj_search_part</field>
+            <caption>Osaleja</caption>
       </property>
       <property>
             <name>proj_search_name</name>
@@ -1334,7 +1291,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>toolbar</type>
             <store>no</store>
@@ -1346,7 +1306,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
             <size>30</size>
@@ -1357,11 +1320,32 @@
             <caption>Klient</caption>
       </property>
       <property>
+            <name>act_s_part</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+            </group>
+            <type>text</type>
+            <size>25</size>
+            <parent>all_act_search</parent>
+            <store>no</store>
+            <captionside>top</captionside>
+            <field>act_s_part</field>
+            <caption>Osaleja</caption>
+      </property>
+      <property>
             <name>act_s_task_name</name>
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
             <size>30</size>
@@ -1376,7 +1360,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
             <size>30</size>
@@ -1391,7 +1378,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>textbox</type>
             <size>30</size>
@@ -1406,7 +1396,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -1420,7 +1413,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>date_select</type>
             <store>no</store>
@@ -1434,7 +1430,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>select</type>
             <parent>all_act_search</parent>
@@ -1448,7 +1447,10 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>submit</type>
             <parent>all_act_search</parent>
@@ -1462,13 +1464,32 @@
             <table>objects</table>
             <group>
                   <num_0>my_tasks</num_0>
-                  <num_1>all_tasks</num_1>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
             </group>
             <type>table</type>
             <store>no</store>
             <no_caption>1</no_caption>
             <parent>my_tasks</parent>
             <field>my_tasks</field>
+      </property>
+      <property>
+            <name>my_tasks_cal</name>
+            <table>objects</table>
+            <group>
+                  <num_0>my_tasks</num_0>
+                  <num_1>meetings</num_1>
+                  <num_2>calls</num_2>
+                  <num_3>ovrv_offers</num_3>
+                  <num_4>all_actions</num_4>
+            </group>
+            <type>calendar</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>my_tasks</parent>
+            <field>my_tasks_cal</field>
       </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
@@ -1506,15 +1527,10 @@
                   <caption>Inimesed</caption>
             </people>
             <contacts2>
-                  <caption>Puuvaade</caption>
+                  <caption>Inimesed puuvaates</caption>
                   <parent>people</parent>
                   <submit>no</submit>
             </contacts2>
-            <oldcontacts>
-                  <caption>Isikud</caption>
-                  <parent>people</parent>
-                  <submit>no</submit>
-            </oldcontacts>
             <personal_offers>
                   <caption>Tööpakkumised</caption>
                   <parent>people</parent>
@@ -1532,35 +1548,30 @@
                   <caption>Tegevused</caption>
             </overview>
             <my_tasks>
-                  <caption>Minu toimetused</caption>
+                  <caption>Toimetused</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </my_tasks>
-            <all_tasks>
-                  <caption>K&amp;otilde;ikide toimetused</caption>
-                  <parent>overview</parent>
-                  <submit>no</submit>
-            </all_tasks>
-            <all_actions>
-                  <caption>Kõik</caption>
-                  <parent>overview</parent>
-                  <submit>no</submit>
-            </all_actions>
-            <calls>
-                  <caption>Kõned</caption>
-                  <parent>overview</parent>
-                  <submit>no</submit>
-            </calls>
             <meetings>
                   <caption>Kohtumised</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
             </meetings>
-            <tasks>
-                  <caption>Toimetused</caption>
+            <calls>
+                  <caption>Kõned</caption>
                   <parent>overview</parent>
                   <submit>no</submit>
-            </tasks>
+            </calls>
+            <ovrv_offers>
+                  <caption>Pakkumised</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </ovrv_offers>
+            <all_actions>
+                  <caption>Kõik</caption>
+                  <parent>overview</parent>
+                  <submit>no</submit>
+            </all_actions>
             <projs>
                   <caption>Projektid</caption>
             </projs>
@@ -2048,7 +2059,10 @@
                   <width>20%:80%</width>
                   <group>
                         <num_0>my_tasks</num_0>
-                        <num_1>all_tasks</num_1>
+                        <num_1>meetings</num_1>
+                        <num_2>calls</num_2>
+                        <num_3>ovrv_offers</num_3>
+                        <num_4>all_actions</num_4>
                   </group>
             </my_tasks>
             <all_act_search>
@@ -2056,7 +2070,10 @@
                   <parent>my_tasks</parent>
                   <group>
                         <num_0>my_tasks</num_0>
-                        <num_1>all_tasks</num_1>
+                        <num_1>meetings</num_1>
+                        <num_2>calls</num_2>
+                        <num_3>ovrv_offers</num_3>
+                        <num_4>all_actions</num_4>
                   </group>
             </all_act_search>
       </layout>
