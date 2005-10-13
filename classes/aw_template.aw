@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.71 2005/10/09 06:23:53 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/aw_template.aw,v 2.72 2005/10/13 12:26:27 duke Exp $
 // aw_template.aw - Templatemootor
 
 
@@ -378,8 +378,6 @@ class aw_template extends core
 	// !This is where all the magic takes place
 	function parse($object = "MAIN") 
 	{
-		global $awt;
-		$awt->start("parse");
 		$tmp = isset($this->v2_name_map[$object]) ? $this->v2_name_map[$object] : "";
 		$val = isset($this->v2_templates[$tmp]) ? $this->v2_templates[$tmp] : ""; 
 		if ($this->use_eval)
@@ -410,7 +408,6 @@ class aw_template extends core
 			print_r($this->vars);
 			print "</pre>";
 		};
-		$awt->stop("parse");
 		return $src;
 	}
 
