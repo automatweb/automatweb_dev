@@ -365,6 +365,12 @@ class _int_object_loader extends core
 		{
 			$arr["file"] = "doc";
 		}
+
+		// if system is set, then no captions/translations/etc will be loaded,
+		// since storage really doesn't care. so why should property loader?
+
+		$arr["system"] = 1;
+
 		// cfgu->load_properties is expensive, so we cache the results.
 		// why here? because it does a lot more than just load properties
 		// and it's a bit tricky to cache all that information there --duke
