@@ -1,5 +1,5 @@
 <?php
-// $Id: class_base.aw,v 2.423 2005/10/09 06:34:46 ekke Exp $
+// $Id: class_base.aw,v 2.424 2005/10/13 11:23:06 duke Exp $
 // the root of all good.
 //
 // ------------------------------------------------------------------
@@ -651,6 +651,7 @@ class class_base extends aw_template
 			$cli->add_property($val);
 		};
 		$awt->stop("add-property");
+
 
 		$orb_class = $this->_ct[$this->clid]["file"];
 		if (empty($orb_class))
@@ -2235,7 +2236,7 @@ class class_base extends aw_template
 						"id" => $this->id,
 						"clid" => $this->clid,
 						"obj_inst" => &$this->obj_inst,
-						"columns" => $this->columninfo,
+						//"columns" => $this->columninfo,
 						"relinfo" => $this->relinfo,
 						"view" => $this->view,
 					));
@@ -2343,6 +2344,7 @@ class class_base extends aw_template
 		// where needed and then cycle over the result and generate
 		// the output
 
+
 		foreach($properties as $key => $val)
 		{
 			if ($val["name"] == "tabpanel" && $this->view)
@@ -2352,12 +2354,12 @@ class class_base extends aw_template
 
 
 			// XXX: need to get rid of that "text" index
-			if ($val["name"] == "status" && $this->classinfo["no_status"]["text"] == 1)
+			if ($val["name"] == "status" && $this->classinfo["no_status"] == 1)
 			{
 				continue;
 			};
 
-			if ($val["name"] == "comment" && $this->classinfo["no_comment"]["text"] == 1)
+			if ($val["name"] == "comment" && $this->classinfo["no_comment"] == 1)
 			{
 				continue;
 			};
@@ -2523,7 +2525,7 @@ class class_base extends aw_template
 							"id" => $this->id,
 							"clid" => $this->clid,
 							"obj_inst" => &$this->obj_inst,
-							"columns" => $this->columninfo,
+							//"columns" => $this->columninfo,
 							"relinfo" => $this->relinfo,
 							"view" => $this->view,
 							"request" => $this->request,
@@ -2679,6 +2681,7 @@ class class_base extends aw_template
 				$resprops[$name] = $val;
 			};
 		}
+
 
 		if($this->cfgform_id && $controllers = $this->get_all_view_controllers($this->cfgform_id))
 		{
@@ -3301,7 +3304,7 @@ class class_base extends aw_template
 		};
 
 		// new object should not have any translation connections, so skip it
-		if (!$new && $this->classinfo["trans"]["text"] == 1)
+		if (!$new && $this->classinfo["trans"] == 1)
 		{
 			$o_t = get_instance("translate/object_translation");
 			$t_list = $o_t->translation_list($this->id, true);
@@ -3774,7 +3777,7 @@ class class_base extends aw_template
 		// there is a bug somewhere which causes certain objects to get a
 		// status of 0, until I figure it out, the first part of this if clause
 		// deals with it -- duke
-		if ($this->obj_inst->prop("status") == 0 || $this->classinfo["no_status"]["text"] == 1)
+		if ($this->obj_inst->prop("status") == 0 || $this->classinfo["no_status"] == 1)
 		{
 			$this->obj_inst->set_status(STAT_ACTIVE);
 		};
@@ -4581,8 +4584,8 @@ class class_base extends aw_template
 		{
 			$this->classinfo = array();
 		};
-		$tmp = $cfgu->normalize_text_nodes($cfgu->get_classinfo());
-		$this->classinfo = array_merge($cfgu->normalize_text_nodes($cfgu->get_classinfo()),$this->classinfo);
+		$tmp = $cfgu->get_classinfo();
+		$this->classinfo = array_merge($tmp,$this->classinfo);
 		return $rv;
 	}
 
@@ -4601,12 +4604,12 @@ class class_base extends aw_template
 
 		$this->groupinfo = $cfgu->get_groupinfo();
 		$this->forminfo = $cfgu->get_forminfo();
-		$this->columninfo = $cfgu->get_columninfo();
+		//$this->columninfo = $cfgu->get_columninfo();
 		if (!is_array($this->classinfo))
 		{
 			$this->classinfo = array();
 		};
-		$this->classinfo = array_merge($this->classinfo,$cfgu->normalize_text_nodes($cfgu->get_classinfo()));
+		$this->classinfo = array_merge($this->classinfo,$cfgu->get_classinfo());
 		if (isset($this->classinfo["r2"]))
 		{
 			$this->groupinfo["relationmgr"] = array(

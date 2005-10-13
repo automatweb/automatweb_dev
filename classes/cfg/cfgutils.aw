@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.58 2005/10/09 06:34:47 ekke Exp $
+// $Id: cfgutils.aw,v 1.59 2005/10/13 11:23:07 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -92,18 +92,6 @@ class cfgutils extends aw_template
 		return $result;
 	}
 
-	// I need a more generic solution for caching files
-	// basically, I want to be able to request a file and
-	// let the wrapper class figure out whether it needs
-	// to be reloaded/reparsed or whether we can simply
-	// decompress the serialized representation
-
-	// I think a separate class should do it? Or perhaps not
-	// should I just let the cache class handle it? 
-
-	// actually, the more I think about it the more I prefer
-	// the latter variant
-
 	////
 	// !Loads, unserializes and returns properties for a single class,
 	// optionally also caches them
@@ -112,181 +100,258 @@ class cfgutils extends aw_template
 	// filter(string) - filter the properties based on a attribute
 	function load_class_properties($args = array())
 	{
-		$this->_init_clist();
-		 extract($args);
-		 // here be cache.
-		if (!$file)
+		enter_function("load_class_properties");
+		extract($args);
+		if (!$args['source'] && !$file && !$this->clist_init_done)
 		{
+			$this->_init_clist();
 			$file = $this->clist[$clid];
 		};
-		$fqfn = $this->fbasedir . $file . ".xml";
-		load_class_translations($file);
 
-		$source = $this->get_file(array("file" => $fqfn));
-		$properties = array();
-
-		if ($source)
+		// you can also directly parse XML, in which case we do not cache anything.
+		// the only sad user of this feature is document class and it's def_cfgform.xml functionality,
+		// which really should die.
+		if (!$args['source'])
 		{
-			$parser = get_instance("xml/xml_path_parser");
-			//$parser->parse_data(array("content" => $source));
+			$fqfn = $this->fbasedir . $file . ".xml";
+			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
 
-			$parser->parse_file(array("fname" => "/xml/properties/$file" . ".xml"));
 
-			// XXX: I hate this parser thingie
-			$properties = $parser->get_data("/properties/property");
-			// translate
-			foreach($properties as $k => $d)
+			load_class_translations($file);
+		}
+
+		$from_cache = false;
+
+		if (!$args['source'] && file_exists($cachename))
+		{
+			include($cachename);
+			$from_cache = true;
+		}
+		else
+		{
+			if ($args['source'])
 			{
-				if (!isset($d['caption']))
-				{
-					$d['caption']['text'] = "";
-				}
-				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
-				$tmp = t2($t_str);
-				//echo "reans $t_str = $tmp <br>";
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["caption"]["text"] = $tmp;
-				}
-
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["comment"]["text"] = $tmp;
-				}
-
-				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
-				if ($tmp !== NULL)
-				{
-					$properties[$k]["help"]["text"] = $tmp;
-				}
-			}
-
-			$classinfo = $parser->get_data("/properties/classinfo");
-			$layoutinfo = $parser->get_data("/properties/layout");
-
-			$groupinfo = $parser->get_data("/properties/groupinfo");
-			foreach($groupinfo as $k => $d)
-			{
-				foreach($d as $a => $gr)
-				{
-					$tmp = t2("Grupi ".$gr[0]["caption"]["text"]." (".$a.") pealkiri");
-					if ($tmp !== NULL)
-					{
-						$groupinfo[$k][$a][0]["caption"]["text"] = $tmp;
-					}
-				}
-			}
-
-			$tableinfo = $parser->get_data("/properties/tableinfo");
-			$relinfo = $parser->get_data("/properties/reltypes");
-			if (is_array($relinfo[0]))
-			{
-				foreach($relinfo[0] as $k => $dat)
-				{
-					if (!isset($dat[0]['caption']))
-					{
-						$dat[0]['caption']['text'] = "";
-					}
-					$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
-					$tmp = t2($tmp);
-					if ($tmp !== NULL)
-					{
-						$relinfo[0][$k][0]["caption"]["text"] = $tmp;
-					}
-				}
-			};
-
-			$forminfo = $parser->get_data("/properties/forminfo");
-			$columns = $parser->get_data("/properties/columns");
-			$tmp = array();
-			if (is_array($columns[0]))
-			{
-				foreach($columns[0] as $key => $val)
-				{
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
-				};
-			};
-			$this->columns = $tmp;
-			$tmp = array();
-			if (is_array($groupinfo[0]))
-			{	
-				foreach($groupinfo[0] as $key => $val)
-				{
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
-
-				};
-			};
-			$groupinfo = $tmp;
-			
-			$this->classinfo = $classinfo[0];
-			$tmp = array();
-			if (is_array($layoutinfo[0]))
-			{
-				foreach($layoutinfo[0] as $key => $val)
-				{
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
-				};
-				$this->layoutinfo = $tmp;
-			};
-
-			if (isset($this->groupinfo) && is_array($this->groupinfo))
-			{
-				if (is_array($groupinfo))
-				{
-					$this->groupinfo = array_merge($this->groupinfo,$groupinfo);
-				};
+				$source = $args['source'];
 			}
 			else
 			{
-				$this->groupinfo = $groupinfo;
+				$source = $this->get_file(array("file" => $fqfn));
 			};
-			$tmp = array();
-			if (is_array($forminfo[0]))
-			{	
-				foreach($forminfo[0] as $key => $val)
-				{
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
+			$p = xml_parser_create();
+			$x = xml_parser_set_option($p, XML_OPTION_CASE_FOLDING, 0);
+			$x = xml_parser_set_option($p, XML_OPTION_SKIP_WHITE, 1);
+			xml_parse_into_struct($p, $source, $vals, $index);
+			xml_parser_free($p);
 
-				};
-				$this->forminfo = $tmp;
-			};
-			
-			$this->tableinfo = $tableinfo[0];
-			$tmp = array();
-
-			if (is_array($relinfo[0]))
+			$property_open = false;
+			$props = array();
+			$containers = array("property","classinfo","groupinfo","tableinfo","reltypes","forminfo","layout");
+			$propdef = array();
+			$propkey = false;
+			$rel_clidopen = false;
+			$tagname = false;
+			// if only the XML file would have a bit saner structure, the following could be a lot easier
+			foreach($vals as $val)
 			{
-				foreach($relinfo[0] as $key => $val)
+				if (2 == $val["level"] && "open" == $val["type"] && in_array($val["tag"],$containers))
 				{
-					$_name = "RELTYPE_" . $key;
-					$relx = $this->normalize_text_nodes($val[0]);
-					if (!is_array($relx["clid"]))
+					$propkey = $val["tag"];
+				}
+				else
+				if (2 == $val["level"] && "close" == $val["type"] && in_array($val["tag"],$containers))
+				{
+					$propkey = false;
+				}
+				else
+				if ("property" == $propkey && "complete" == $val["type"])
+				{
+					if ("name" == $val["tag"])
 					{
-						$relx["clid"] = array($relx["clid"]);
+						$propname = $val["value"];
 					};
-					$_clidlist = array();
-					foreach($relx["clid"] as $clid)
+					// if this tags parent is a 'container' (containing multiple values),
+					// then add to that, otherwise just use the name of the tag
+					if ($tagname) 
 					{
-						if (@constant($clid))
-						{
-							$_clidlist[] = constant($clid);
-						};
-
-					};
-					$relx["clid"] = $_clidlist;
-					$tmp[$key] = $relx;
-					$tmp[$_name] = $relx;
-					// define the constant
-					if (!defined($_name))
-					{
-						define($_name,$tmp[$key]["value"]);
+						$propdef[$propkey][$propname][$tagname][] = $val["value"];
 					}
-					$tmp[$tmp[$key]["value"]] = $relx;
+					else
+					{
+						$tag = $val["tag"];
+						$propdef[$propkey][$propname][$tag] = $val["value"];
+					};
+				}
+				else
+				/*** some attributes (props, table_fields) contain multiple values, the following 2
+					ifs deal with that **/
+				if ("property" == $propkey && "open" == $val["type"])
+				{
+					$tagname = $val["tag"];
+				}
+				else
+				if ("property" == $propkey && "close" == $val["type"])
+				{
+					$tagname = false;
+				}
+				else
+				/*** multiple value handling ends **/
+				if ("groupinfo" == $propkey || "reltypes" == $propkey || "tableinfo" == $propkey ||
+						"layout" == $propkey || "forminfo" == $propkey)
+				{
+					// level 3 is the direct child of propkey
+					if (3 == $val["level"] && "open" == $val["type"])
+					{
+						$propname = $val["tag"];
+					}
+					elseif (3 == $val["level"] && "close" == $val["type"])
+					{
+						$propname = false;
+					}
+					// level 4 is the direct child of level 3 tag, this deals with multiple values
+					elseif (4 == $val["level"] && "open" == $val["type"])
+					{
+						if ("open" == $val["type"]) $tagname = $val["tag"];
+					}
+					elseif (4 == $val["level"] && "close" == $val["type"])
+					{
+						if ("close" == $val["type"]) $tagname = false;
+
+					}
+					elseif ($val["level"] > 3 && $val["type"] == "complete")
+					{
+						if ($tagname)
+						{
+							$propdef[$propkey][$propname][$tagname][] = $val["value"];
+						}
+						else
+						{
+							$propdef[$propkey][$propname][$val["tag"]] = $val["value"];
+						};
+					};
+				}
+				else if (!empty($val["value"]))
+				{
+					$propdef[$propkey][$val["tag"]] = $val["value"];
 				};
 			};
-			$this->relinfo = $tmp;
-                };
+		}
+
+		$properties = $propdef["property"];
+
+		// translate
+		foreach($properties as $k => $d)
+		{
+			if (!isset($d['caption']))
+			{
+				$d['caption']['text'] = "";
+			}
+			$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
+			$tmp = t2($t_str);
+			//echo "reans $t_str = $tmp <br>";
+			if ($tmp !== NULL)
+			{
+				$properties[$k]["caption"]["text"] = $tmp;
+			}
+
+			$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
+			if ($tmp !== NULL)
+			{
+				$properties[$k]["comment"]["text"] = $tmp;
+			}
+
+			$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
+			if ($tmp !== NULL)
+			{
+				$properties[$k]["help"]["text"] = $tmp;
+			}
+		}
+
+		$classinfo = $propdef["classinfo"];
+		$this->layoutinfo = $propdef["layout"];
+
+		$groupinfo = $propdef["groupinfo"];
+		foreach($groupinfo as $k => $d)
+		{
+			$tmp = t2("Grupi ".$d["caption"]." (".$k.") pealkiri");
+			if ($tmp !== NULL)
+			{
+				$groupinfo[$k]["caption"] = $tmp;
+			}
+		}
+
+		$tableinfo = $propdef["tableinfo"];
+		$relinfo = $propdef["reltypes"];
+		if (is_array($relinfo))
+		{
+			foreach($relinfo as $k => $dat)
+			{
+				if (!isset($dat[0]['caption']))
+				{
+					$dat[0]['caption']['text'] = "";
+				}
+
+				$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
+				$tmp = t2($tmp);
+				if ($tmp !== NULL)
+				{
+					$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+				}
+				
+			}
+		};
+
+		$this->forminfo = $propdef["forminfo"];
+		
+		$this->classinfo = $classinfo;
+		$tmp = array();
+
+		if (isset($this->groupinfo) && is_array($this->groupinfo))
+		{
+			if (is_array($groupinfo))
+			{
+				$this->groupinfo = array_merge($this->groupinfo,$groupinfo);
+			};
+		}
+		else
+		{
+			$this->groupinfo = $groupinfo;
+		};
+		$tmp = array();
+		$this->tableinfo = $tableinfo;
+		$tmp = array();
+
+		if (is_array($relinfo))
+		{
+			foreach($relinfo as $key => $val)
+			{
+				$_name = "RELTYPE_" . $key;
+				$relx = $val;
+				if (!is_array($relx["clid"]))
+				{
+					$relx["clid"] = array($relx["clid"]);
+				};
+				$_clidlist = array();
+				foreach($relx["clid"] as $clid)
+				{
+					if (@constant($clid))
+					{
+						$_clidlist[] = constant($clid);
+					};
+
+				};
+				$relx["clid"] = $_clidlist;
+				$tmp[$key] = $relx;
+				$tmp[$_name] = $relx;
+				// define the constant
+				if (!defined($_name))
+				{
+					define($_name,$tmp[$key]["value"]);
+				}
+				$tmp[$tmp[$key]["value"]] = $relx;
+			};
+		};
+		$this->relinfo = $tmp;
+
 		$res = array();
 
 		$do_filter = false;
@@ -310,7 +375,7 @@ class cfgutils extends aw_template
 		{
 			foreach($properties as $key => $val)
 			{
-				$_tmp = $this->normalize_text_nodes($val);
+				$_tmp = $val;
 				$name = $_tmp["name"];
 				if (empty($_tmp["form"]))
 				{
@@ -366,6 +431,17 @@ class cfgutils extends aw_template
 				$this->normalize_prop_array($res[$name]);
 			};
 		};
+		if (!$from_cache)
+		{
+			//print "writing out";
+			$fp = fopen($cachename, "w");
+			$str = "<?php\n";
+			$str .= aw_serialize($propdef,SERIALIZE_PHP_FILE,array("arr_name" => "propdef"));
+			$str .= "?>";
+			fwrite($fp, $str);
+			fclose($fp);
+		};
+		exit_function("load_class_properties");
 		return $res;
 	}
 
@@ -375,7 +451,10 @@ class cfgutils extends aw_template
 		// this is the stuff we need to cache
 		// maybe I should implement some kind of include for properties?
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
-		$this->_init_clist();
+		if (!$this->clist_init_done)
+		{
+			$this->_init_clist();
+		};
 		if (empty($file))
 		{
 			$file = $this->clist[$clid];
@@ -464,20 +543,6 @@ class cfgutils extends aw_template
 			};
 		};
 
-		if (is_array($this->tableinfo) && empty($cldat["generated"]))
-		{
-			$tmp = array();
-			foreach($this->tableinfo as $key => $val)
-			{
-				$tmp[$key] = $this->normalize_text_nodes($val[0]);
-			};
-		};
-
-		if (isset($tmp))
-		{
-			$this->tableinfo = $tmp;
-		};
-
 		$rv = array_merge($coreprops,$objprops);
 		return $rv;
 	}
@@ -487,50 +552,10 @@ class cfgutils extends aw_template
 		$proplist = $grplist = array();
 		if (isset($args["xml_definition"]))
 		{
-			$parser = get_instance("xml/xml_path_parser");
-			$parser->parse_data(array("content" => $args["xml_definition"]));
-			$properties = $parser->get_data("/properties/property");
-			$groupinfo = $parser->get_data("/properties/groupinfo");
-			$classinfo = $parser->get_data("/properties/classinfo");
-			$this->classinfo = $classinfo[0];
-
-			// config forms have no business with other stuff in the properties definition
-			// e.g. they cannot decide where the contents of their values are saved, because
-			// config form definitions can be uploaded by the user and if some kind of moron
-			// decides to experiment with those, then it can have catastrophous results for AW
-
-			// so we at least _try_ to protect ourselves against attacks like this
-			$safe_nodes = array("name","caption","group","size","cols","rows","richtext","value","ch_value");
-
-			// unless! it's a relpicker, in which case I will allow additional field types
-			$relpicker_safenodes = array("type","clid","reltype","pri");
-
-			$magic = array_flip($safe_nodes);
-
-			foreach($properties as $key => $val)
-			{
-				// xml_path_parser sucks donkey balls :(
-				$xval = $this->normalize_text_nodes($val);
-				$use_safenodes = $safe_nodes;
-				if ($xval["type"] == "relpicker")
-				{
-					$use_safenodes = array_merge($use_safenodes,$relpicker_safenodes);
-				};
-				$tmp = array_intersect(array_keys($xval),array_values($use_safenodes));
-				// compact does not work on arrays :(
-				// so, do not use the variables defined in safe_nodes in here
-				extract($xval);
-				$tmp2 = compact($tmp);
-				$proplist[$xval["name"]] = compact($tmp);
-			}
-
-			if (is_array($groupinfo[0]))
-			{
-				foreach($groupinfo[0] as $key => $val)
-				{
-					$grplist[$key] = $this->normalize_text_nodes($val[0]);
-				};
-			};
+			$proplist = $this->load_class_properties(array(
+				'source' => $args['xml_definition'],
+			));
+			$grplist = $this->groupinfo;
 		}
 		return array($proplist,$grplist);
 	}
@@ -539,50 +564,10 @@ class cfgutils extends aw_template
 	{
 		if ($args["content"])
 		{
-			$parser = get_instance("xml/xml_path_parser");
-			$parser->parse_data(array("content" => $args["content"]));
-
-			// how on earth do I invoke functions on 
-			$properties = $parser->get_data("/properties/property");
-
-			$classinfo = $parser->get_data("/properties/classinfo");
-			$groupinfo = $parser->get_data("/properties/groupinfo");
-			$tableinfo = $parser->get_data("/properties/tableinfo");
-			$columns = $parser->get_data("/properties/column");
-
-			$tmp = array();
-			if (is_array($groupinfo[0]))
-			{	
-				foreach($groupinfo[0] as $key => $val)
-				{
-					$tmp[$key] = $this->normalize_text_nodes($val[0]);
-
-				};
-			};
-			$this->groupinfo = $tmp;
-
-			$this->classinfo = $classinfo[0];
-			if (is_array($this->groupinfo))
-			{
-				if (is_array($groupinfo))
-				{
-					$this->groupinfo = $this->groupinfo + $groupinfo;
-				};
-			}
-			else
-			{
-				$this->groupinfo = $groupinfo;
-			};
-			$this->tableinfo = $tableinfo[0];
-	
-			$res = array();
-			foreach($properties as $key => $val)
-			{
-				$_tmp = $this->normalize_text_nodes($val);
-				$name = $_tmp["name"];
-				$res[$name] = $_tmp;
-			};
-			return $res;
+			$proplist = $this->load_class_properties(array(
+				'source' => $args['xml_definition'],
+			));
+			return $proplist;
 		}
 	}
 
@@ -606,39 +591,9 @@ class cfgutils extends aw_template
 		return $this->forminfo;
 	}
 
-	function get_columninfo()
-	{
-		return $this->columns;
-	}
-
 	function get_groupinfo()
 	{
 		return $this->groupinfo;
-	}
-
-
-	function normalize_text_nodes($val)
-	{
-		if (is_array($val))
-		{
-			$res = array();
-			foreach($val as $key => $val)
-			{
-				if (isset($val["text"]))
-				{
-					$res[$key] = $val["text"];
-				}
-				else
-				{
-					$res[$key] = array_values($this->normalize_text_nodes($val[0]));
-				};
-			};
-		}
-		else
-		{
-			$res = $val;
-		};
-		return $res;
 	}
 
 	function normalize_prop_array(&$p)
