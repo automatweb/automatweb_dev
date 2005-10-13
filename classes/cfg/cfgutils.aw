@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.60 2005/10/13 11:44:34 duke Exp $
+// $Id: cfgutils.aw,v 1.61 2005/10/13 12:03:19 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -44,28 +44,22 @@ class cfgutils extends aw_template
 	// here we can add different checks later on.
 	function has_properties($args = array())
 	{
-		$this->_init_clist();
 		if ($args['file'])
 		{
 			$fname = basename($args['file']);
 		}
-		elseif ($args['cldef'])
-		{
-			$fname = $this->clist[constant($args['cldef'])];
-		}
 		elseif ($args['clid'])
 		{
-			$fname = $this->clist[$args['clid']];
+			$cldat = aw_ini_get("classes");
+			$fname = basename($cldat[$args['clid']]["file"]);
 		};
 
 		$retval = false;
-		
 		if ($fname)
 		{
 			// that check is a bit of stupid, OTOH it needs to be fast
 			$retval = file_exists($this->fbasedir . $fname . '.xml');
 		};
-
 		return $retval;
 	}
 
@@ -451,13 +445,17 @@ class cfgutils extends aw_template
 		// this is the stuff we need to cache
 		// maybe I should implement some kind of include for properties?
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
+		/*
 		if (!$this->clist_init_done)
 		{
 			$this->_init_clist();
 		};
+		*/
+		$clinf = aw_ini_get("classes");
 		if (empty($file))
 		{
-			$file = $this->clist[$clid];
+			$file = basename($clinf[$clid]["file"]);
+			if ($clid == 7) $file = "doc";
 		};
 		$this->groupinfo = array();
 		$coreprops = $this->load_class_properties(array(
@@ -465,7 +463,6 @@ class cfgutils extends aw_template
 			"filter" => $filter,
 		));
 
-		$clinf = aw_ini_get("classes");
 		$cldat = $clinf[$clid];
 
                 // full cavity search
