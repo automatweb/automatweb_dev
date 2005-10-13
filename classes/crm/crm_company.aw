@@ -1273,7 +1273,7 @@ class crm_company extends class_base
 		));
 	}
 	
-	function get_all_workers_for_company($obj,$data,$workers_too=false)
+	function get_all_workers_for_company($obj,&$data,$workers_too=false)
 	{	
 		//getting all the workers for the $obj
 		$conns = $obj->connections_from(array(

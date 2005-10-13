@@ -73,7 +73,7 @@ class crm_company_overview_impl extends class_base
 		$planner = get_instance(CL_PLANNER);
 
 		// gather a list of events to show
-		$evts = array();
+		/*$evts = array();
 
 		// XXX: optimize the hell out of it. I have the range, I should use 
 		// it.
@@ -100,7 +100,9 @@ class crm_company_overview_impl extends class_base
 			{
 				$evts[$tmp->id()] = $tmp->id();
 			}
-		}
+		}*/
+		$task_ol = $this->_get_task_list($arr);
+		$evts = $this->make_keys($task_ol->ids());
 
 		// also, do the search filter thingie here
 		if ($arr["request"]["act_s_sbt"] != "")
@@ -192,6 +194,7 @@ class crm_company_overview_impl extends class_base
 			{
 				$filt["customer"][] = strip_tags($row["customer"]);
 				$filt["proj_name"][] = strip_tags($row["proj_name"]);
+				$filt["priority"][] = strip_tags($row["priority"]);
 				$part = strip_tags($row["parts"]);
 				foreach(explode(",", $part) as $nm)
 				{
@@ -223,7 +226,7 @@ class crm_company_overview_impl extends class_base
 			"align" => "center",
 //			"chgbgcolor" => "col",
 			"sortable" => 1,
-			"filter" => $filt["customer"]
+			"filter" => array_unique($filt["customer"])
 		));
 
 		$t->define_field(array(
@@ -232,7 +235,7 @@ class crm_company_overview_impl extends class_base
 			"align" => "center",
 //			"chgbgcolor" => "col",
 			"sortable" => 1,
-			"filter" => $filt["proj_name"]
+			"filter" => array_unique($filt["proj_name"])
 		));
 
 		$t->define_field(array(
@@ -252,7 +255,8 @@ class crm_company_overview_impl extends class_base
 //			"chgbgcolor" => "col",
 			"align" => "center",
 			"sortable" => 1,
-			"numeric" => 1
+			"numeric" => 1,
+			"filter" => array_unique($filt["priority"])
 		));
 
 		$t->define_field(array(
@@ -261,7 +265,7 @@ class crm_company_overview_impl extends class_base
 			"align" => "center",
 //			"chgbgcolor" => "col",
 			"sortable" => 1,
-			"filter" => $filt["parts"]
+			"filter" => array_unique($filt["parts"])
 		));
 
 		$t->define_chooser(array(
@@ -279,56 +283,8 @@ class crm_company_overview_impl extends class_base
 		}
 
 		classload("core/icons");
-		$i = get_instance(CL_CRM_COMPANY);
-		$clid = NULL;
-		switch($arr["request"]["group"])
-		{
-			case "my_tasks":
-				$tasks = $i->get_my_tasks();
-				$clid = CL_TASK;
-				break;
 
-			case "meetings":
-				$tasks = $i->get_my_meetings();
-				$clid = CL_CRM_MEETING;
-				break;
-
-			case "calls":
-				$tasks = $i->get_my_calls();
-				$clid = CL_CRM_CALL;
-				break;
-
-			case "ovrv_offers":
-				$tasks = $i->get_my_offers();
-				$clid = CL_CRM_OFFER;
-				break;
-
-			default:
-				$tasks = $i->get_my_actions();
-				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
-				break;
-		}
-
-		if ($arr["request"]["act_s_sbt"] != "")
-		{
-			// filter
-			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks, $clid));
-		}
-		else
-		{
-			if (!count($tasks))
-			{
-				$ol = new object_list();
-			}
-			else
-			{
-				$ol = new object_list(array(
-					"class_id" => $clid,
-					"oid" => $tasks,
-					"is_done" => new obj_predicate_not(OBJ_IS_DONE)
-				));
-			}
-		}
+		$ol = $this->_get_task_list($arr);
 
 		$table_data = array();
 		foreach($ol->ids() as $task_id)
@@ -375,7 +331,7 @@ class crm_company_overview_impl extends class_base
 				"icon" => html::img(array("url" => icons::get_icon_url($task))),
 				"customer" => $cust_str,
 				"proj_name" => $proj_str,
-				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), $task->name()),
+				"name" => html::get_change_url($task->id(), array("return_url" => get_ru()), parse_obj_name($task->name())),
 				"deadline" => $dl,
 				"oid" => $task->id(),
 				"priority" => $task->prop("priority"),
@@ -424,7 +380,7 @@ class crm_company_overview_impl extends class_base
 		{
 			if ($clid == CL_CRM_OFFER)
 			{
-				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = "%".$r["act_s_part"]."%";
+				$res["CL_CRM_OFFER.RELTYPE_SALESMAN.name"] = map("%%%s%%", explode(",", $r["act_s_part"]));
 			}
 			else
 			{
@@ -618,6 +574,62 @@ class crm_company_overview_impl extends class_base
 				break;
 		}
 		$this->do_org_actions($arr, $args);
+	}
+
+	function _get_task_list($arr)
+	{
+		$i = get_instance(CL_CRM_COMPANY);
+		$clid = NULL;
+		switch($arr["request"]["group"])
+		{
+			case "my_tasks":
+				$tasks = $i->get_my_tasks();
+				$clid = CL_TASK;
+				break;
+
+			case "meetings":
+				$tasks = $i->get_my_meetings();
+				$clid = CL_CRM_MEETING;
+				break;
+
+			case "calls":
+				$tasks = $i->get_my_calls();
+				$clid = CL_CRM_CALL;
+				break;
+
+			case "ovrv_offers":
+				$tasks = $i->get_my_offers();
+				$clid = CL_CRM_OFFER;
+				break;
+
+			default:
+				$tasks = $i->get_my_actions();
+				$clid = array(CL_TASK,CL_CRM_MEETING,CL_CRM_CALL,CL_CRM_OFFER);
+				break;
+		}
+
+		if ($arr["request"]["act_s_sbt"] != "")
+		{
+			// filter
+			$ol = new object_list($this->_get_tasks_search_filt($arr["request"], $tasks, $clid));
+		}
+		else
+		{
+			if (!count($tasks))
+			{
+				$ol = new object_list();
+			}
+			else
+			{
+				$ol = new object_list(array(
+					"class_id" => $clid,
+					"oid" => $tasks,
+					"is_done" => new obj_predicate_not(OBJ_IS_DONE)
+				));
+			}
+		}
+
+		return $ol;
 	}
 }
 ?>

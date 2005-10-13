@@ -1525,7 +1525,7 @@ class crm_company_cust_impl extends class_base
 
 		if ($ar[$prefix."proj_search_part"] != "")
 		{
-			$ret["CL_PROJECT.RELTYPE_PARTICIPANT.name"] = "%".$ar[$prefix."proj_search_part"]."%";
+			$ret["CL_PROJECT.RELTYPE_PARTICIPANT.name"] = map("%%%s%%", explode(",", $ar[$prefix."proj_search_part"]));
 		}
 
 		if ($ar[$prefix."proj_search_name"] != "")

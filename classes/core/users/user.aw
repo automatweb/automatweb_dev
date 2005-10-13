@@ -1380,6 +1380,12 @@ class user extends class_base
 		obj_set_opt("no_cache", 1);
 		if($mail = $o->get_first_obj_by_reltype("RELTYPE_EMAIL"))
 		{
+			if ($mail->class_id() != CL_ML_MEMBER)
+			{
+				$o->disconnect(array("from" => $mail->id(), "type" => "RELTYPE_EMAIL"));
+				$this->on_save_user($arr);
+				return;
+			}
 			obj_set_opt("no_cache", 0);
 			$mail->set_prop("mail", $umail);
 			$mail->set_prop("name", $uname);

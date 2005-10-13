@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.52 2005/09/29 06:38:24 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.53 2005/10/13 07:49:17 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -16,6 +16,9 @@
 
 @property code type=textbox table=aw_projects field=aw_code
 @caption Kood
+
+@property priority type=textbox table=aw_projects field=aw_priority size=5
+@caption Prioriteet
 
 @property state type=select table=aw_projects field=aw_state default=1
 @caption Staatus
@@ -465,7 +468,7 @@ class project extends class_base
 				}
 				break;
 
-			case "priority":
+			/*case "priority":
 				if ($prop["value"] != $arr["obj_inst"]->prop("priority") && is_oid($arr["obj_inst"]->id()) && $arr["obj_inst"]->prop("confirm"))
 				{
 					// write priority to all events from this
@@ -480,7 +483,7 @@ class project extends class_base
 					// also, recalc times
 					$this->do_write_times_to_cal($arr);
 				}
-				break;
+				break;*/
 		}
 		return $retval;
 	}	
@@ -1526,15 +1529,45 @@ class project extends class_base
 						{
 							foreach($adds as $add_clid)
 							{
-								$tb->add_menu_item(array(
-									"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
-									"parent" => $prj_id,
-									"text" => $cl_inf[$add_clid]["name"],
-									"link" => $this->mk_my_orb("new",array(
+								if ($add_clid == CL_TASK)
+								{
+									$pl = get_instance(CL_PLANNER);
+									$this->cal_id = $pl->get_calendar_for_user(array(
+										"uid" => aw_global_get("uid"),
+									));
+
+									$url = $this->mk_my_orb('new',array(
+										'alias_to_org' => $arr["obj_inst"]->prop("orderer"),
+										'reltype_org' => 13,
+										'class' => 'planner',
+										'id' => $this->cal_id,
+										'group' => 'add_event',
+										'clid' => CL_TASK,
+										'action' => 'change',
+										'title' => t("Toimetus"),
+										'parent' => $arr["id"],
+										'return_url' => get_ru(),
+										"set_proj" => $arr["obj_inst"]->id()
+									));	
+									$tb->add_menu_item(array(
+										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
 										"parent" => $prj_id,
-										"group" => "change",
-									),$add_clid),
-								));
+										"text" => $cl_inf[$add_clid]["name"],
+										"link" => $url,
+									));
+								}
+								else
+								{
+									$tb->add_menu_item(array(
+										"name" => "x_" . $prj_id . "_" . $form_id."_".$add_clid,
+										"parent" => $prj_id,
+										"text" => $cl_inf[$add_clid]["name"],
+										"link" => $this->mk_my_orb("new",array(
+											"parent" => $prj_id,
+											"group" => "change",
+										),$add_clid),
+									));
+								}
 							}
 						};
 					};
@@ -1570,16 +1603,51 @@ class project extends class_base
 			{
 				foreach($adds as $add_clid)
 				{
-					$tb->add_menu_item(array(
-						"name" => "x_" . $o->id()."_".$add_clid,
-						"parent" => "subprj",
-						"text" => $cl_inf[$add_clid]["name"],
-						"link" => $this->mk_my_orb("new",array(
-							"parent" => $o->id(),
-							"group" => "change",
-							"return_url" => get_ru(),
-						),$add_clid),
-					));
+					if ($add_clid == CL_TASK)
+					{
+						$pl = get_instance(CL_PLANNER);
+						$this->cal_id = $pl->get_calendar_for_user(array(
+							"uid" => aw_global_get("uid"),
+						));
+
+						$ao = $arr["obj_inst"]->prop("orderer");
+						if (is_array($ao))
+						{
+							$ao = reset($ao);
+						}
+						$url = $this->mk_my_orb('new',array(
+							'alias_to_org' => $ao,
+							'reltype_org' => 13,
+							'class' => 'planner',
+							'id' => $this->cal_id,
+							'group' => 'add_event',
+							'clid' => CL_TASK,
+							'action' => 'change',
+							'title' => t("Toimetus"),
+							'parent' => $arr["id"],
+							'return_url' => get_ru(),
+							"set_proj" => $arr["obj_inst"]->id()
+						));	
+						$tb->add_menu_item(array(
+							"name" => "x_" . $o->id()."_".$add_clid,
+							"parent" => "subprj",
+							"text" => $cl_inf[$add_clid]["name"],
+							"link" => $url,
+						));
+					}
+					else
+					{
+						$tb->add_menu_item(array(
+							"name" => "x_" . $o->id()."_".$add_clid,
+							"parent" => "subprj",
+							"text" => $cl_inf[$add_clid]["name"],
+							"link" => $this->mk_my_orb("new",array(
+								"parent" => $o->id(),
+								"group" => "change",
+								"return_url" => get_ru(),
+							),$add_clid),
+						));
+					}
 				}
 			};
 		};

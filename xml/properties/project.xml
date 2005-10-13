@@ -17,6 +17,15 @@
             <caption>Kood</caption>
       </property>
       <property>
+            <name>priority</name>
+            <table>aw_projects</table>
+            <group>general2</group>
+            <type>textbox</type>
+            <field>aw_priority</field>
+            <size>5</size>
+            <caption>Prioriteet</caption>
+      </property>
+      <property>
             <name>state</name>
             <table>aw_projects</table>
             <group>general2</group>
@@ -431,7 +440,6 @@
       <classinfo>
             <syslog_type>ST_PROJECT</syslog_type>
             <relationmgr>yes</relationmgr>
-	<trans>1</trans>
       </classinfo>
       <groupinfo>
             <info>

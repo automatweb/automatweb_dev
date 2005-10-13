@@ -368,12 +368,25 @@
             <store>no</store>
             <no_caption>1</no_caption>
       </property>
+      <property>
+            <name>rows</name>
+            <table>objects</table>
+            <group>rows</group>
+            <field>meta</field>
+            <method>serialize</method>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+      </property>
       <classinfo>
             <syslog_type>ST_TASK</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_status>1</no_status>
       </classinfo>
       <groupinfo>
+            <rows>
+                  <caption>Read</caption>
+            </rows>
             <recurrence>
                   <caption>Kordumine</caption>
                   <submit>no</submit>

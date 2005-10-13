@@ -319,6 +319,19 @@ class crm_company_people_impl extends class_base
 			$conns = $cur_p->connections_from(array(
 				"type" => "RELTYPE_IMPORTANT_PERSON",
 			));
+
+			$i = get_instance(CL_CRM_COMPANY);
+			$all_persons = array();
+			$i->get_all_workers_for_company($arr["obj_inst"], $all_persons);
+
+			// leave only conns that point to people in this company
+			foreach($conns as $idx => $c)
+			{
+				if (!isset($all_persons[$c->prop("to")]))
+				{
+					unset($conns[$idx]);
+				}
+			}
 		}
 
 		foreach($conns as $conn)
@@ -341,6 +354,13 @@ class crm_company_people_impl extends class_base
 
 		// get calendars for persons
 		$pers2cal = $this->_get_calendars_for_persons($persons);
+
+		if ($arr["request"]["cat"] == CRM_ALL_PERSONS_CAT)
+		{
+			$i = get_instance(CL_CRM_COMPANY);
+			$persons = array();
+			$i->get_all_workers_for_company($arr["obj_inst"], $persons);
+		}
 
 		foreach($persons as $person)
 		{

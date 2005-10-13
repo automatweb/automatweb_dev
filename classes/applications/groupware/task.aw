@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.20 2005/10/12 13:28:00 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.21 2005/10/13 07:49:18 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -125,6 +125,11 @@ caption Osalejad
 
 	@property other_expenses type=table store=no no_caption=1
 
+@default group=rows
+
+	@property rows type=table store=no no_caption=1
+
+@groupinfo rows caption=Read 
 @groupinfo recurrence caption=Kordumine submit=no
 @groupinfo calendars caption=Kalendrid
 @groupinfo others caption=Teised submit_method=get
@@ -160,6 +165,10 @@ class task extends class_base
 		$retval = PROP_OK;
 		switch($data["name"])
 		{
+			case "rows":
+				$this->_rows($arr);
+				break;
+
 			case "participants":
 				$opts = array();
 				$p = array();
@@ -356,6 +365,12 @@ class task extends class_base
 					$ol = new object_list(array("oid" => $prj));
 				}
 				$data["options"] = array("" => "") + $ol->names();
+
+				if ($arr["request"]["set_proj"])
+				{
+					$data["value"] = $arr["request"]["set_proj"];
+				}
+
 				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
 				{
 					$tmp = obj($data["value"]);
@@ -413,6 +428,19 @@ class task extends class_base
 		
 		switch($prop["name"])
 		{
+			case "rows":
+				$res = array();
+				foreach(safe_array($arr["request"]["rows"]) as $e)
+				{
+					if ($e["task"] != "")
+					{
+						$res[] = $e;
+					}
+				}
+
+				$arr["obj_inst"]->set_meta("rows", $res);
+				break;
+
 			case "files":
 				$this->_set_files($arr);
 				break;
@@ -596,6 +624,7 @@ class task extends class_base
 		$objs[] = obj();
 
 		$types = array(
+			CL_FILE => t(""),
 			CL_CRM_MEMO => t("Memo"),
 			CL_CRM_DOCUMENT => t("CRM Dokument"),
 			CL_CRM_DEAL => t("Leping"),
@@ -614,9 +643,18 @@ class task extends class_base
 			if (is_oid($o->id()))
 			{
 				$ff = $o->get_first_obj_by_reltype("RELTYPE_FILE");
+				if (!$ff)
+				{
+					$ff = $o;
+				}
+				$fi = $ff->instance();
+				$fu = html::href(array(
+					"url" => $fi->get_url($ff->id(), $ff->name()),
+					"caption" => $ff->name()
+				));
 				$data[] = array(
 					"name" => html::get_change_url($o->id(), array("return_url" => get_ru()), $o->name()),
-					"file" => html::get_change_url($ff->id(), array("return_url" => get_ru()), $ff->name()),
+					"file" => $fu,
 					"type" => $clss[$o->class_id()]["name"],
 					"del" => html::href(array(
 						"url" => $this->mk_my_orb("del_file_rel", array(
@@ -687,36 +725,150 @@ class task extends class_base
 		{
 			if (is_uploaded_file($_FILES["fups_".$num]["tmp_name"]))
 			{
-				// add file
-				$f = get_instance(CL_FILE);
-				$fil = $f->add_upload_image("fups_$num", $arr["request"]["id"]);
-				if (is_array($fil))
+				$f = get_instance("applications/crm/crm_company_docs_impl");
+				$fldo = $f->_init_docs_fld($co);
+				if (!$fldo)
+				{
+					return;
+				}
+
+				if ($entry["type"] == CL_FILE)
+				{
+					// add file
+					$f = get_instance(CL_FILE);
+					$fil = $f->add_upload_image("fups_$num", $fldo->id());
+					if (is_array($fil))
+					{
+						$t->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
+				}
+				else
 				{
 					$o = obj();
 					$o->set_class_id($entry["type"]);
-					$o->set_name($entry["tx_name"]);
+					$o->set_name($entry["tx_name"] != "" ? $entry["tx_name"] : $_FILES["fups_$num"]["name"]);
 
-					$f = get_instance("applications/crm/crm_company_docs_impl");
-					$fldo = $f->_init_docs_fld($co);
-					if (!$fldo)
-					{
-						return;
-					}
+			
 					$o->set_parent($fldo->id());
-
+					if ($entry["type"] != CL_FILE)
+					{
+						$o->set_prop("project", $t->prop("project"));
+						$o->set_prop("task", $t->id());
+						$o->set_prop("customer", $t->prop("customer"));
+					}
 					$o->save();
-					$o->connect(array(
-						"to" => $fil["id"],
-						"reltype" => "RELTYPE_FILE"
-					));
-					$t->connect(array(
-						"to" => $o->id(),
-						"reltype" => "RELTYPE_FILE"
-					));
+
+					// add file
+					$f = get_instance(CL_FILE);
+					$fil = $f->add_upload_image("fups_$num", $o->id());
+					if (is_array($fil))
+					{
+						$o->connect(array(
+							"to" => $fil["id"],
+							"reltype" => "RELTYPE_FILE"
+						));
+						$t->connect(array(
+							"to" => $o->id(),
+							"reltype" => "RELTYPE_FILE"
+						));
+					}
 				}
 			}
 		}
 		return $arr["post_ru"];
+	}
+
+	function _init_rows_t(&$t)
+	{
+		$t->define_field(array(
+			"name" => "task",
+			"caption" => t("Tegevus"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "impl",
+			"caption" => t("Teostaja"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "time",
+			"caption" => t("Kulunud aeg"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "done",
+			"caption" => t("Tehtud"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "on_bill",
+			"caption" => t("Arvele"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "com",
+			"caption" => t("Kommentaar"),
+			"align" => "center"
+		));
+	}
+
+	function _rows($arr)
+	{
+		$t =& $arr["prop"]["vcl_inst"];
+		$this->_init_rows_t($t);
+
+		$impls = array();
+		foreach($arr['obj_inst']->connections_to(array('type' => array(10, 8))) as $c)
+		{
+			$o = $c->from();
+			$impls[$o->id()] = $o->name();
+		}
+
+
+		$dat = safe_array($arr["obj_inst"]->meta("rows"));
+		$dat[] = array();
+		foreach($dat as $idx => $row)
+		{
+			$t->define_data(array(
+				"task" => html::textbox(array(
+					"name" => "rows[$idx][task]",
+					"value" => $row["task"]
+				)),
+				"impl" => html::select(array(
+					"name" => "rows[$idx][impl]",
+					"options" => $impls,
+					"value" => $row["impl"]
+				)),
+				"time" => html::textbox(array(
+					"name" => "rows[$idx][time]",
+					"value" => $row["time"],
+					"size" => 5
+				)),
+				"done" => html::checkbox(array(
+					"name" => "rows[$idx][done]",
+					"value" => 1,
+					"checked" => $row["done"]
+				)),
+				"on_bill" => html::checkbox(array(
+					"name" => "rows[$idx][on_bill]",
+					"value" => 1,
+					"checked" => $row["on_bill"]
+				)),
+				"com" => html::textbox(array(
+					"name" => "rows[$idx][com]",
+					"value" => $row["com"],
+				)),
+			));
+		}
+		$t->set_sortable(false);
 	}
 }
 ?>
