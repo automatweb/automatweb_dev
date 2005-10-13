@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.59 2005/10/13 11:23:07 duke Exp $
+// $Id: cfgutils.aw,v 1.60 2005/10/13 11:44:34 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -122,7 +122,7 @@ class cfgutils extends aw_template
 
 		$from_cache = false;
 
-		if (!$args['source'] && file_exists($cachename))
+		if (!$args['source'] && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
 		{
 			include($cachename);
 			$from_cache = true;
