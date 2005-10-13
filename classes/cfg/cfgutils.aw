@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.61 2005/10/13 12:03:19 duke Exp $
+// $Id: cfgutils.aw,v 1.62 2005/10/13 13:14:09 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -101,6 +101,11 @@ class cfgutils extends aw_template
 			$this->_init_clist();
 			$file = $this->clist[$clid];
 		};
+
+		$system = isset($args["system"]) ? 1 : 0;
+
+		// if system is set, then no captions/translations/etc will be loaded,
+		// since storage really doesn't care. so why should property loader?
 
 		// you can also directly parse XML, in which case we do not cache anything.
 		// the only sad user of this feature is document class and it's def_cfgform.xml functionality,
@@ -231,68 +236,73 @@ class cfgutils extends aw_template
 		}
 
 		$properties = $propdef["property"];
-
-		// translate
-		foreach($properties as $k => $d)
-		{
-			if (!isset($d['caption']))
-			{
-				$d['caption']['text'] = "";
-			}
-			$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
-			$tmp = t2($t_str);
-			//echo "reans $t_str = $tmp <br>";
-			if ($tmp !== NULL)
-			{
-				$properties[$k]["caption"]["text"] = $tmp;
-			}
-
-			$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
-			if ($tmp !== NULL)
-			{
-				$properties[$k]["comment"]["text"] = $tmp;
-			}
-
-			$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
-			if ($tmp !== NULL)
-			{
-				$properties[$k]["help"]["text"] = $tmp;
-			}
-		}
-
+		
 		$classinfo = $propdef["classinfo"];
 		$this->layoutinfo = $propdef["layout"];
 
 		$groupinfo = $propdef["groupinfo"];
-		foreach($groupinfo as $k => $d)
-		{
-			$tmp = t2("Grupi ".$d["caption"]." (".$k.") pealkiri");
-			if ($tmp !== NULL)
-			{
-				$groupinfo[$k]["caption"] = $tmp;
-			}
-		}
-
 		$tableinfo = $propdef["tableinfo"];
 		$relinfo = $propdef["reltypes"];
-		if (is_array($relinfo))
-		{
-			foreach($relinfo as $k => $dat)
-			{
-				if (!isset($dat[0]['caption']))
-				{
-					$dat[0]['caption']['text'] = "";
-				}
 
-				$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
-				$tmp = t2($tmp);
+		// translate
+		if (!$system)
+		{
+			foreach($properties as $k => $d)
+			{
+				if (!isset($d['caption']))
+				{
+					$d['caption']['text'] = "";
+				}
+				$t_str = "Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") caption";
+				$tmp = t2($t_str);
+				//echo "reans $t_str = $tmp <br>";
 				if ($tmp !== NULL)
 				{
-					$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+					$properties[$k]["caption"]["text"] = $tmp;
 				}
-				
+
+				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") kommentaar");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["comment"]["text"] = $tmp;
+				}
+
+				$tmp = t2("Omaduse ".$d["caption"]["text"]." (".$d["name"]["text"].") help");
+				if ($tmp !== NULL)
+				{
+					$properties[$k]["help"]["text"] = $tmp;
+				}
 			}
+
+			foreach($groupinfo as $k => $d)
+			{
+				$tmp = t2("Grupi ".$d["caption"]." (".$k.") pealkiri");
+				if ($tmp !== NULL)
+				{
+					$groupinfo[$k]["caption"] = $tmp;
+				}
+			}
+
+			if (is_array($relinfo))
+			{
+				foreach($relinfo as $k => $dat)
+				{
+					if (!isset($dat[0]['caption']))
+					{
+						$dat[0]['caption']['text'] = "";
+					}
+
+					$tmp = "Seose ".$dat[0]["caption"]["text"]." (RELTYPE_".$k.") tekst";
+					$tmp = t2($tmp);
+					if ($tmp !== NULL)
+					{
+						$relinfo[0][$k][0]["caption"]["text"] = $tmp;
+					}
+					
+				}
+			};
 		};
+
 
 		$this->forminfo = $propdef["forminfo"];
 		
@@ -351,7 +361,7 @@ class cfgutils extends aw_template
 		$do_filter = false;
 
 		// naw, it cannot really be empty, can it?
-		if (empty($filter["form"]))
+		if (empty($filter["form"]) && !$system)
 		{
 			$filter["form"] = array("","add","edit");
 		};
@@ -365,6 +375,7 @@ class cfgutils extends aw_template
 			};
 			$pass_count = sizeof($filter);
 		}
+
 		if (is_array($properties))
 		{
 			foreach($properties as $key => $val)
@@ -442,15 +453,7 @@ class cfgutils extends aw_template
 	function load_properties($args = array())
 	{
 		extract($args);
-		// this is the stuff we need to cache
-		// maybe I should implement some kind of include for properties?
 		$filter = isset($args["filter"]) ? $args["filter"] : array();
-		/*
-		if (!$this->clist_init_done)
-		{
-			$this->_init_clist();
-		};
-		*/
 		$clinf = aw_ini_get("classes");
 		if (empty($file))
 		{
@@ -461,9 +464,11 @@ class cfgutils extends aw_template
 		$coreprops = $this->load_class_properties(array(
 			"file" => "class_base",
 			"filter" => $filter,
+			"system" => $args["system"],
 		));
 
 		$cldat = $clinf[$clid];
+
 
                 // full cavity search
 		/*
@@ -498,6 +503,7 @@ class cfgutils extends aw_template
 			$objprops = $this->load_class_properties(array(
 				"file" => $file,
 				"filter" => $filter,
+				"system" => $args["system"],
 			));
 
 
