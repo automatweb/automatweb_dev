@@ -41,8 +41,8 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_EVENT_ADD, CL_CRM_PERSON, on_add_event_to_person)
 	@property referal_type type=classificator store=connect reltype=RELTYPE_REFERAL_TYPE
 	@caption Sissetuleku meetod
 
-	@property logo type=textbox size=40 method=serialize field=meta table=objects
-	@caption Organisatsiooni logo(url)
+	@property logo type=releditor reltype=RELTYPE_ORGANISATION_LOGO use_form=emb rel_id=first method=serialize field=meta table=objects
+	@caption Organisatsiooni logo
 
 	@property firmajuht type=chooser orient=vertical table=kliendibaas_firma  editonly=1
 	@caption Kontaktisik
@@ -679,6 +679,9 @@ groupinfo org_objects_main caption="Objektid" submit=no
 
 @reltype OPENHOURS value=44 clid=CL_OPENHOURS
 @caption Avamisajad
+
+@reltype ORGANISATION_LOGO value=45 clid=CL_IMAGE
+@caption Organisatsiooni logo
 
 */
 /*

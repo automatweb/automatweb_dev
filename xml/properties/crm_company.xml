@@ -95,11 +95,14 @@
             <name>logo</name>
             <table>objects</table>
             <group>general_sub</group>
-            <type>textbox</type>
-            <size>40</size>
+            <type>releditor</type>
+            <reltype>RELTYPE_ORGANISATION_LOGO</reltype>
+            <use_form>emb</use_form>
+            <rel_id>first</rel_id>
             <method>serialize</method>
             <field>meta</field>
-            <caption>Organisatsiooni logo(url)</caption>
+            <store>no</store>
+            <caption>Organisatsiooni logo</caption>
       </property>
       <property>
             <name>firmajuht</name>
@@ -1873,6 +1876,11 @@
                   <clid>CL_OPENHOURS</clid>
                   <caption>Avamisajad</caption>
             </OPENHOURS>
+            <ORGANISATION_LOGO>
+                  <value>45</value>
+                  <clid>CL_IMAGE</clid>
+                  <caption>Organisatsiooni logo</caption>
+            </ORGANISATION_LOGO>
       </reltypes>
       <layout>
             <hbox_toolbar>
