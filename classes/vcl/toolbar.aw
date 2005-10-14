@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.8 2005/03/24 21:38:37 voldemar Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/toolbar.aw,v 1.9 2005/10/14 13:11:49 duke Exp $
 // toolbar.aw - drawing toolbars
 class toolbar extends aw_template
 {
@@ -52,6 +52,8 @@ class toolbar extends aw_template
 
 	function add_menu_item($arr)
 	{
+		global $mc_counter;
+		$mc_counter++;
 		if ($arr["onClick"])
 		{
 			$arr["onClick"] = " onClick=\"". $arr["onClick"] . "\"";
@@ -66,21 +68,34 @@ class toolbar extends aw_template
 		{
 			$arr["url"] = "javascript:submit_changeform('$arr[action]');";
 		};
-		$this->vars($arr);
-		$tpl = isset($arr["disabled"]) && $arr["disabled"] ? "MENU_ITEM_DISABLED" : "MENU_ITEM";
-		$this->menus[$arr["parent"]] .= $this->parse($tpl);
+
+		if (empty($arr["disabled"]))
+		{
+			$rv ='<a class="menuItem" href="'.$arr["url"].'" '.$arr["onClick"].'>'.$arr["text"]."</a>\n";
+		}
+		else
+		{
+			$rv = '<a class="menuItem" href="" title="'.$arr["title"].'" onclick="return false;" style="color:gray">'.$arr["text"]."</a>\n";
+		}
+		$this->menus[$arr["parent"]] .= $rv;
 	}
 
 	function add_menu_separator($arr)
 	{
-		$this->menus[$arr["parent"]] .= $this->parse("MENU_SEPARATOR");
+		$this->menus[$arr["parent"]] .= '<div class="menuItemSep"></div>'."\n";
 	}
 
 	function add_sub_menu($arr)
 	{
 		$arr["sub_menu_id"] = $arr["name"];
-		$this->vars($arr);
-		$this->menus[$arr["parent"]] .= $this->parse("MENU_ITEM_SUB");
+		$baseurl = $this->cfg["baseurl"];
+		$rv = '<a class="menuItem" href="" onclick="return false;"
+			        onmouseover="menuItemMouseover(event, \''.$arr["sub_menu_id"].'\');">
+				<span class="menuItemText">'.$arr["text"].'</span>
+				<span class="menuItemArrow"><img style="border:0px" src="'.$baseurl.
+				'/automatweb/images/arr.gif" alt=""></span></a>';
+
+		$this->menus[$arr["parent"]] .= $rv;
 	}
 
 	function build_menus()
@@ -93,11 +108,7 @@ class toolbar extends aw_template
 				$this->custom_data .= $this->parse("MENU_HEADER");
 				$init_done = true;
 			};
-			$this->vars(array(
-				"MENU_ITEM" => $menudata,
-				"id" => $parent,
-			));
-			$cdata = $this->parse();
+			$cdata = '<div id="'.$parent.'" class="menu" onmouseover="menuMouseover(event)">'."\n${menudata}</div>\n";
 			$this->custom_data .= $cdata;
 		};
 	}
