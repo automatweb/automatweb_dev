@@ -1365,7 +1365,10 @@ class _int_object
 			// yeees, this looks weird, BUT it is needed if the loaded object is not actually the one requested
 			// this can happen in ds_auto_translation for instance
 			$GLOBALS["objects"][$oid] = $this;
-			$GLOBALS["objects"][$this->obj["oid"]] = $this;
+			if ($oid !== $this->obj["oid"])
+			{
+				$GLOBALS["objects"][$this->obj["oid"]] = $this;
+			}
 		}
 	}
 

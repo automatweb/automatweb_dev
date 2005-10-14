@@ -12,6 +12,16 @@
             <comment>Hallata saab selle objekti all olevaid gruppe ja kasutajaid</comment>
       </property>
       <property>
+            <name>default_loginmenu</name>
+            <table>objects</table>
+            <group>general</group>
+            <type>select</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Vaikimisi loginmen&amp;uuml;&amp;uuml; uutel gruppidel</caption>
+            <comment>Seos Loginmen&amp;uuml;&amp;uuml;de juurkaust peab olema loodud</comment>
+      </property>
+      <property>
             <name>users_tb</name>
             <table>objects</table>
             <group>users</group>
@@ -23,6 +33,17 @@
             <field>users_tb</field>
       </property>
       <property>
+            <name>search_txt</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>textbox</type>
+            <store>no</store>
+            <parent>vbox_users_tree</parent>
+            <size>20</size>
+            <field>search_txt</field>
+            <caption>Otsi gruppi</caption>
+      </property>
+      <property>
             <name>groups_tree</name>
             <table>objects</table>
             <group>users</group>
@@ -32,6 +53,17 @@
             <parent>vbox_users_tree</parent>
             <field>groups_tree</field>
             <caption>Puu</caption>
+      </property>
+      <property>
+            <name>table_selected_groups</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <parent>vbox_users_content</parent>
+            <field>table_selected_groups</field>
+            <caption>Grupid </caption>
       </property>
       <property>
             <name>table_groups</name>
@@ -55,11 +87,22 @@
             <field>table_users</field>
             <caption>Kasutajad </caption>
       </property>
+      <property>
+            <name>submit_save</name>
+            <table>objects</table>
+            <group>users</group>
+            <type>submit</type>
+            <store>no</store>
+            <value>Salvesta</value>
+            <parent>vbox_users_content</parent>
+            <no_caption>1</no_caption>
+            <field>submit_save</field>
+            <caption>Salvesta</caption>
+      </property>
       <classinfo>
             <syslog_type>ST_USER_MANAGER</syslog_type>
             <relationmgr>yes</relationmgr>
             <no_comment>1</no_comment>
-            <no_status>1</no_status>
             <prop_cb>1</prop_cb>
       </classinfo>
       <groupinfo>
@@ -76,6 +119,16 @@
                   </clid>
                   <caption>Juurkaust/-grupp</caption>
             </ROOT>
+            <LOGIN_ROOT>
+                  <value>2</value>
+                  <clid>CL_MENU</clid>
+                  <caption>Loginmen&amp;uuml;&amp;uuml;de juurkaust</caption>
+            </LOGIN_ROOT>
+            <LOGIN_CONF>
+                  <value>3</value>
+                  <clid>CL_CONFIG_LOGIN_MENUS</clid>
+                  <caption>Loginmen&amp;uuml;&amp;uuml; seadete objekt </caption>
+            </LOGIN_CONF>
       </reltypes>
       <layout>
             <hbox_toolbar>

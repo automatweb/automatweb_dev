@@ -1,10 +1,11 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.1 2005/09/30 11:58:28 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/core/users/user_manager.aw,v 1.2 2005/10/14 15:03:25 ekke Exp $
 // user_manager.aw - Kasutajate haldus 
 /*
+HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_NEW, CL_GROUP, on_create_group)
 HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_search_change)
 
-@classinfo syslog_type=ST_USER_MANAGER relationmgr=yes no_comment=1 no_status=1 prop_cb=1
+@classinfo syslog_type=ST_USER_MANAGER relationmgr=yes no_comment=1 prop_cb=1
 
 @default table=objects
 @default group=general
@@ -12,6 +13,10 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @property root type=relpicker reltype=RELTYPE_ROOT field=meta method=serialize 
 @caption Juurkaust/-grupp
 @comment Hallata saab selle objekti all olevaid gruppe ja kasutajaid
+
+@property default_loginmenu type=select field=meta method=serialize
+@caption Vaikimisi loginmen&uuml;&uuml; uutel gruppidel
+@comment Seos Loginmen&uuml;&uuml;de juurkaust peab olema loodud
 
 @groupinfo users caption=Kasutajad 
 @default group=users
@@ -24,10 +29,19 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 
 @layout vbox_users_tree type=vbox parent=hbox_data 
 
+@property search_txt type=textbox store=no parent=vbox_users_tree size=20
+@caption Otsi gruppi
+
+property search_btn type=submit store=no value=Otsi parent=vbox_users_tree no_caption=1 
+caption Otsi
+
 @property groups_tree type=treeview no_caption=1 store=no parent=vbox_users_tree
 @caption Puu
 
 @layout vbox_users_content type=vbox parent=hbox_data
+
+@property table_selected_groups type=table store=no no_caption=1 parent=vbox_users_content
+@caption Grupid 
 
 @property table_groups type=table store=no no_caption=1 parent=vbox_users_content
 @caption Grupid 
@@ -36,10 +50,17 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_POPUP_SEARCH_CHANGE,CL_USER_MANAGER, on_popup_sear
 @caption Kasutajad 
 
 
-
+@property submit_save type=submit store=no value=Salvesta parent=vbox_users_content no_caption=1
+@caption Salvesta
 
 @reltype ROOT value=1 clid=CL_GROUP,CL_MENU
 @caption Juurkaust/-grupp
+
+@reltype LOGIN_ROOT value=2 clid=CL_MENU
+@caption Loginmen&uuml;&uuml;de juurkaust
+
+@reltype LOGIN_CONF value=3 clid=CL_CONFIG_LOGIN_MENUS
+@caption Loginmen&uuml;&uuml; seadete objekt 
 
 */
 
@@ -50,6 +71,7 @@ class user_manager extends class_base
 
 	function user_manager()
 	{
+		// HTML for permissions_form used in popup when linking group to folders and objects
 		$this->permissions_form = "<p class='plain'>".t("Vali õigused").":<br>".html::checkbox(array(
 			'name' => 'sel_can_view',
 			'caption' => t("Vaatamine"),
@@ -72,18 +94,15 @@ class user_manager extends class_base
 		));
 		$this->permissions_form .= "</p>";
 	
-		$this->permissions_form .= "</p>";
-	
 		// change this to the folder under the templates folder, where this classes templates will be, 
 		// if they exist at all. Or delete it, if this class does not use templates
 		$this->init(array(
-			"tpldir" => "core/users/user_manager",
 			"clid" => CL_USER_MANAGER
 		));
 	}
 
 	//////
-	// class_base classes usually need those, uncomment them if you want to use them
+	// Display stuff
 	function get_property($arr)
 	{
 		$prop = &$arr["prop"];
@@ -93,6 +112,9 @@ class user_manager extends class_base
 			//-- get_property --//
 			case 'users_tb':
 				$this->do_users_toolbar(&$prop['toolbar'], $arr);
+			break;
+			case 'table_selected_groups':
+				$this->do_table_selected_groups($prop['vcl_inst'], $arr);
 			break;
 			case 'table_groups':
 				$this->do_table_groups($prop['vcl_inst'], $arr);
@@ -115,10 +137,40 @@ class user_manager extends class_base
 				));
 				$this->do_groups_tree($prop['vcl_inst'], $parent, 0);
 			break;
-		};
+			case 'default_loginmenu':
+				// create list from selected folder's 2nd level children
+				$root = $arr['obj_inst']->get_first_obj_by_reltype('RELTYPE_LOGIN_ROOT');
+				if (is_object($root))
+				{
+					$list = array();
+					
+					$kids = new object_list(array(
+						'parent' => $root->id(),
+						'class_id' => CL_MENU,
+					));
+					for ($k = $kids->begin(); !$kids->end(); $k = $kids->next())
+					{
+						$prefix = $k->name() . ' &gt; ';
+			
+						$grandkids  = new object_list(array(
+							'parent' => $k->id(),
+							'class_id' => CL_MENU,
+						));
+			
+						for ($gk = $grandkids->begin(); !$grandkids->end(); $gk = $grandkids->next())
+						{
+							$list[$gk->id()] = $prefix.$gk->name();
+						}
+					}
+					$prop['options'] = $list;
+				}	
+
+			break;
+		}
 		return $retval;
 	}
-	
+
+	// Store stuff
 	function set_property($arr = array())
 	{
 		$prop = &$arr["prop"];
@@ -147,6 +199,7 @@ class user_manager extends class_base
 		return $retval;
 	}	
 
+	// Carry to POST some variables
 	function callback_mod_reforb($arr)
 	{
 		$arr['last_parent'] = $this->parent;
@@ -154,9 +207,27 @@ class user_manager extends class_base
 		$arr["post_ru"] = post_ru();
 	}
 
+	// Unset parent if searching
 	function callback_pre_edit($arr)
 	{
 		$this->parent = $this->find_parent($arr['obj_inst']);
+		if (isset($arr['request']['search_txt']))
+		{
+			$this->parent = 0;
+		}
+	}
+
+	// Carry over search_txt and parent variables
+	function callback_mod_retval ($arr)
+	{
+		if (!empty($arr['request']['search_txt']))
+		{
+			$arr['args']['search_txt'] = $arr['request']['search_txt'];
+		}	
+		if (!empty($arr['request']['last_parent']))
+		{
+			$arr['args']['parent'] = $arr['request']['last_parent'];
+		}	
 	}
 
 	// Adds content to users toolbar
@@ -185,13 +256,14 @@ class user_manager extends class_base
 				), $clid)
 			));
 		}
-		
+		/* Pointless here, simpler to use through popup menu
 		$tb->add_button(array(
 			'name' => 'import',
 			'tooltip' => t("Impordi"),
 			'img' => 'import.gif',
 			'action' => $this->mk_my_orb('import', array("parent" => $this->parent)),
 		));	
+		*/
 
 		$tb->add_separator();
 
@@ -299,7 +371,7 @@ class user_manager extends class_base
 		return $arr['post_ru'];
 	}		
 
-	/** cuts objects
+	/** cuts objects. wrapper.
 
 		@attrib name=ob_cut
 		@param sel_u optional
@@ -319,7 +391,7 @@ class user_manager extends class_base
 		}
 	}		
 
-	/** copies objects
+	/** copies objects. wrapper.
 
 		@attrib name=ob_copy
 
@@ -338,28 +410,9 @@ class user_manager extends class_base
 			$o = get_instance("admin/admin_menus");
 			return $o->copy(array('sel' => $selected, 'return_url' => $arr['post_ru']));
 		}
-		
-		//$prefix = isset($arr['ob_group']) ? $arr['ob_group'].'_' : '';
-/*		$copy_objects = array();
-		if (count($selected) && is_oid(ifset($arr,'last_parent')))
-		{
-			foreach ($selected as $oid => $value)
-			{
-				if ($value && $this->can('edit', $oid) && !isset($copy_objects[$oid]))
-				{
-					$copy_objects[$oid] = array(
-						'oid' => $oid,
-						'from' => $arr['last_parent'],
-					);
-				}
-			}
-		}
-		aw_session_set($prefix.'copy_objects', $copy_objects);
-		return $arr['post_ru'];
-		*/
 	}
 	
-	/** pastes the cut/copied objects
+	/** pastes the cut/copied objects. wrapper.
 
 		@attrib name=ob_paste
 
@@ -372,35 +425,6 @@ class user_manager extends class_base
 		}
 		$o = get_instance("admin/admin_menus");
 		return $o->paste(array('parent' => $arr['last_parent'], 'return_url' => $arr['post_ru']));
-		
-/*
-		$prefix = isset($arr['ob_group']) ? $arr['ob_group'].'_' : '';
-		
-		$cut_objects = safe_array(aw_global_get($prefix.'cut_objects'));
-		$copy_objects = safe_array(aw_global_get($prefix.'copy_objects'));
-		
-		// first copied persons
-		foreach(safe_array($copy_objects) as $oid => $data)
-		{
-			if (!(is_oid($oid) && $this->can("edit", $oid)))
-			{
-				continue;
-			}
-
-			$o = obj($oid);
-			switch($o->class_id())
-			{
-				case CL_USER: // on copy we need just to add a connection, on cut only move 
-				break;
-				case CL_GROUP: // change parent
-				break;
-			}
-		}
-
-		
-		
-		return $arr['post_ru'];
-		*/
 	}
 	
 	/** blocks/unblocks a user 
@@ -418,7 +442,7 @@ class user_manager extends class_base
 		$o->save();
 		return $arr['post_ru'];
 	}
-
+	
 	// Recursively populates groups tree
 	function do_groups_tree(&$tree, $parent, $treeroot = 1)
 	{
@@ -429,20 +453,86 @@ class user_manager extends class_base
 		
 		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
 		{
+			$name = $o->name();
 			$tree->add_item($treeroot ? $parent : 0,array(
 				'id' => $o->id(),
-				'name' => strlen($o->name()) ? $o->name() : '('.t("nimetu").' '.$o->id().')' ,
-				'url' => aw_url_change_var('parent', $o->id()),
+				'name' => strlen($name) ? $name : '('.t("nimetu").' '.$o->id().')' ,
+				'url' => aw_url_change_var('parent', $o->id(), aw_url_change_var('search_txt','')),
 			));
 			// make kids
 			$this->do_groups_tree(&$tree, $o->id());
 		}
 	}
 
+	// Search functionality is in here, too
+	function do_table_selected_groups (&$table, $arr)
+	{
+		if (is_oid($this->parent))
+		{
+			$parent = obj($this->parent);
+			if ($parent->class_id() != CL_GROUP)
+			{
+				return;
+			}
+			$arr['groups_list'] = array($this->parent);
+			$arr['title'] = t("Grupp '%s'");
+			return $this->do_table_groups($table, $arr);
+		}
+		else if (isset($arr['request']['search_txt'])) // This deals with searching
+		{
+			if (!is_oid($arr['obj_inst']->prop('root')))
+			{
+				return;
+			}
+			$search = $arr['request']['search_txt'];
+			$parent = $arr['obj_inst']->prop('root');
+			$ol = new object_list(array(
+				'name' => '%'.$search.'%',
+			));
+
+			// Sweep through all found groups, check paths
+			$groups = array();
+			for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+			{
+				if ($o->class_id() != CL_GROUP)
+				{
+					continue;
+				}
+				foreach ($o->path() as $p)
+				{
+					if ($p->oid == $parent)
+					{
+						$groups[] = $o->id();
+						break;
+					}
+				}
+			}
+
+			$arr['groups_list'] = $groups;
+			switch(count($groups))
+			{
+				case 0:
+					// No matches
+					$arr['title'] = t("Ei leitud midagi");
+				break;
+				case 1:
+					// One match, make it parent, continue as usual
+					$arr['title'] = t("Grupp '%s'");
+					$this->parent = $groups[0];
+				break;
+				default:
+					// Many matches, just list them
+					$arr['title'] = t("Leitud grupid");
+				break;
+			}
+			return $this->do_table_groups($table, $arr);
+		}
+	}
+
 	// Defines and populates users table
 	function do_table_users (&$table, $arr)
 	{
-		if (!isset($this->parent))
+		if (!isset($this->parent) || !is_oid($this->parent))
 		{
 			return;
 		}
@@ -505,6 +595,11 @@ class user_manager extends class_base
 			'type' => 'RELTYPE_MEMBER',
 			'class' => CL_USER,
 		));
+		
+		if (!count($users))
+		{
+			$table = "";
+		}
 
 		$df = aw_ini_get('config.dateformats');
 		foreach ($users as $c)
@@ -606,6 +701,14 @@ class user_manager extends class_base
 		{
 			return;
 		}
+		$do_loginmenus = false;
+		if ($arr['obj_inst']->get_first_conn_by_reltype('RELTYPE_LOGIN_ROOT') && ($loginconf = $arr['obj_inst']->get_first_obj_by_reltype('RELTYPE_LOGIN_CONF')) )
+		{
+			$do_loginmenus = true;
+			$lm = $loginconf->meta('lm');
+			$users = get_instance("users");
+		}
+		
 		$fields = array(
 			array(
 				'name' => 'gid',
@@ -647,6 +750,10 @@ class user_manager extends class_base
 				'caption' => t("Juurkaustad"),
 			),
 			array(
+				'name' => 'loginmenu',
+				'caption' => t("Loginmen&uuml;&uuml;"),
+			),
+			array(
 				'name' => 'action',
 				'caption' => t("Tegevus"),
 				'sortable' => false,
@@ -668,32 +775,53 @@ class user_manager extends class_base
 		));
 
 		$g = obj($this->parent);
-		$table->set_header(sprintf(t("'%s' alamgrupid"), $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
+		$title = isset($arr['title']) ? $arr['title'] : t("'%s' alamgrupid");
+		$table->set_header(sprintf($title, $g->name() ? $g->name() : '('.t("nimetu").' '.$g->id().')'));
+		$df = aw_ini_get('config.dateformats');
 
 
 		// Now, find data for the table
 
-		$ol = new object_list(array(
-			'parent' => $this->parent,
-			'class_id' => CL_GROUP,
-		));
-
-		$df = aw_ini_get('config.dateformats');
-		for ($o = $ol->begin(); !$ol->end(); $o = $ol->next())
+		if (isset($arr['groups_list']))
 		{
-			if (!$this->can('view', $o->id()))
+			foreach ($arr['groups_list'] as $g)
+			{
+				$target[$g] = obj($g);
+			}
+		}
+		else
+		{
+			$ol = new object_list(array(
+				'parent' => $this->parent,
+				'class_id' => CL_GROUP,
+			));
+			$target = $ol->arr();
+		}
+
+		if (!count($target) && !isset($arr['title'])) // the title is the message.
+		{
+			$table = "";
+		}
+
+		foreach ($target as $oid => $o)
+		{
+			// Check permissions
+			if (!$this->can('view', $o->id()) || $o->class_id() != CL_GROUP)
 			{
 				continue;
 			}
 			
+			// Copypaste
 			$ccp = (isset($_SESSION["copied_objects"][$o->id()]) || isset($_SESSION["cut_objects"][$o->id()]) ? "#E2E2DB" : "");
 		
+			// Find MEMBERS count
 			$conns = $o->connections_from(array(
 				'type' => 'RELTYPE_MEMBER',
 				'class' => CL_USER,
 			));
 			$members = count($conns);
 			
+			// Find ROOTFOLDERS
 			$rootfolders = array();
 			$rootmenus = $o->prop('admin_rootmenu2');
 			if (isset($rootmenus[aw_global_get('lang_id')]))
@@ -701,10 +829,11 @@ class user_manager extends class_base
 				foreach ($rootmenus[aw_global_get('lang_id')] as $jrk => $menu)
 				{
 					$o_menu = obj($menu);
-					$rootfolders[] = $o->name();
+					$rootfolders[] = $o_menu->name();
 				}
 			}
 			
+			// Deletion url
 			$delurl = $this->mk_my_orb("delete", array(
 				"sel_g[".$o->id()."]" => "1", 
 				'post_ru' => urlencode(get_ru()),
@@ -716,14 +845,16 @@ class user_manager extends class_base
 					'name' => 'oid_rootf',
 					'value' => $o->id(),
 				));
-				
-			$url_rootfolder = "javascript:aw_popup_scroll('".$this->mk_my_orb("do_search", array(
-						"id" => $arr["obj_inst"]->id(),
-						"pn" => "table_groups",
-						"clid" => CL_MENU,
-						"append_html" => urlencode((str_replace(array("'","\n"),"",$html))),
-					), 'popup_search')."','Vali',550,500)";
-					
+			
+			// More crapola to pick new rootfolders in a popup
+			$url_rootfolder = "javascript:aw_popup_scroll('".
+				$this->mk_my_orb("do_search", array(
+					"id" => $arr["obj_inst"]->id(),
+					"pn" => "table_groups",
+					"clid" => CL_MENU,
+					"append_html" => urlencode((str_replace(array("'","\n"),"",$html))),
+				), 'popup_search')
+				."','Vali',550,500)";
 			$html = $this->permissions_form . html::hidden(array(
 					'name' => 'oid_objects',
 					'value' => $o->id(),
@@ -735,15 +866,14 @@ class user_manager extends class_base
 						"append_html" => ((urlencode(str_replace("&","%26",str_replace(array("'","\n"),"",($html)))))),
 					), 'popup_search')."','".t("M&auml;&auml;ra &otilde;igused")."',550,500)";
 			
-			$items = array( // Edit-menu items
+			// Edit-menu items
+			$items = array( 
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
 						'return_url' => urlencode(aw_global_get("REQUEST_URI"))
 					), CL_GROUP) => t("Muuda"),
 				$delurl => t("Kustuta"),
 				$this->mk_my_orb("ob_cut", array("sel_g[".$o->id()."]" => 1, "post_ru" => get_ru())) => t("L&otilde;ika"),
-//				$this->mk_my_orb("ob_copy", array("sel_g[".$o->id()."]" => 1, "post_ru" => get_ru())) => t("Kopeeri"),
-				//$this->mk_my_orb("imp", array("sel_fld" => array($id), "post_ru" => get_ru())) => t("Impordi"),
 				$this->mk_my_orb("change", array(
 						'id' => $o->id(),
 						'group' => 'import',
@@ -752,12 +882,34 @@ class user_manager extends class_base
 				$url_rootfolder => t("Juurkaust"),
 				$url_objects => t("Objektid"),
 			);
+
+			// Login menu selecter
+			$loginmenu = "";
+			if ($do_loginmenus) {
+
+				$url_loginmenu = "javascript:aw_popup_scroll('".$this->mk_my_orb("popup_loginmenu", array(
+						"id" => $arr["obj_inst"]->id(),
+						"group" => $o->id(),
+					), 'user_manager')."','".t("Vali loginmen&uuml;&uuml;")."',550,500)";
+			
+				// Edit-menu items
+				$items[$url_loginmenu] = t("Loginmen&uuml;&uuml;");
+				
+				// Find value for table
+				$gid = $users->get_gid_for_oid($o->id());
+				if (isset($lm[$gid]) && isset($lm[$gid]['menu']) && is_oid($lm[$gid]['menu']))
+				{
+					$loginmenu = obj($lm[$gid]['menu']);
+					$loginmenu = $loginmenu->name();
+				}
+			}
 		
+			// Define a table row
 			$row = array(
 				'gid' => $o->prop('gid'),
 				'name' => html::href(array(
 					'caption' => strlen($o->name()) ? $o->name() : '('.t("nimetu").' '.$o->id().')',
-					'url' => aw_url_change_var('parent', $o->id()),
+					'url' => aw_url_change_var('parent', $o->id(), aw_url_change_var('search_txt','')),
 				)),
 				'priority' => html::textbox(array(
 					'name' => 'priority['.$o->id().']', 
@@ -777,6 +929,7 @@ class user_manager extends class_base
 				)),
 				'oid' => $o->id(),
 				'cutcopied' => $ccp,
+				'loginmenu' => $loginmenu,
 			);
 			$table->define_data($row);
 		}
@@ -832,7 +985,6 @@ class user_manager extends class_base
 			"menu_icon" => $this->cfg["baseurl"]."/automatweb/images/blue/obj_settings.gif",
 		));
 	
-			
 		$mi = "";
 		foreach($items as $url => $txt)
 		{
@@ -849,8 +1001,9 @@ class user_manager extends class_base
 		return $this->parse();
 	}
 	
-	/** message handler for the MSG_POPUP_SEARCH_CHANGE message so we can 
-	
+	/** message handler for the MSG_POPUP_SEARCH_CHANGE message
+	    used for linking root folders to groups and giving rights to objects
+		warning : achtung : following code is an ugly fuck : achtung : warning
 	**/
 	function on_popup_search_change($arr)
 	{
@@ -915,6 +1068,154 @@ class user_manager extends class_base
 				$o_i->add_acl_group_to_obj($gid, $id, $acl);
 			}
 		}
+	}
+
+	/** Contents of loginmenu popup window
+		@attrib name=popup_loginmenu
+
+		@param id required type=int acl=view class_id=CL_USER_MANAGER
+		@param group required type=int acl=edit class_id=CL_GROUP
+		@param menu optional type=int acl=view class_id=CL_MENU
+	**/
+	function popup_loginmenu ($arr)
+	{
+		$manager = obj($arr['id']);
+		$rootfolder = $manager->get_first_obj_by_reltype('RELTYPE_LOGIN_ROOT');
+		if (!is_object($rootfolder))
+		{
+			return t("Seostamata menyyde juurikas");
+		}
+
+		if (isset($arr['menu']))
+		{
+			// Set menu to loginmenu for 'group'
+			$conf = $manager->get_first_obj_by_reltype('RELTYPE_LOGIN_CONF');
+			if (!is_object($conf))
+			{
+				return t("Seostamata confiobject");
+			}
+			// Create connection to menu
+			if (!$conf->is_connected_to(array('to' => $arr['menu'])))
+			{
+				$conf->connect(array(
+					'to' => $arr['menu'],
+					'type' => 'RELTYPE_FOLDER',
+				));
+			}
+			$lm = $conf->meta('lm');
+			$users = get_instance("users");
+			$gid = $users->get_gid_for_oid($arr['group']);
+			$lm[$gid] = array(
+				'menu' => $arr['menu'],
+				'pri' => 100, // Priority
+			);
+
+			$confinst = $conf->instance();
+			$confinst->set_property(array(
+				'obj_inst' => $conf,
+				'prop' => array(
+					'name' => 'login_menus',
+				),
+				'request' => array('lm' => $lm),
+			));
+			$conf->save();
+			return '<script type="text/javascript">window.opener.location.reload(true);window.close() </script>';
+		}
+		else
+		{
+			$url = $this->mk_my_orb("popup_loginmenu", array(
+				"id" => $arr['id'],
+				"group" => $arr['group'],
+				"menu" => "%s",
+			), 'user_manager');
+		
+			$return .= "<h2 class='user_manager_popup'>".t("Vali loginmen&uuml;&uuml;")."</h2>";
+		
+			$kids = new object_list(array(
+				'parent' => $rootfolder->id(),
+				'class_id' => CL_MENU,
+			));
+
+			$return .= "<ul class='user_manager_popup'>";
+			for ($k = $kids->begin(); !$kids->end(); $k = $kids->next())
+			{
+				$return .= "<li>".$k->name();
+			
+				$grandkids  = new object_list(array(
+					'parent' => $k->id(),
+					'class_id' => CL_MENU,
+				));
+			
+				$return .= "<ul>";
+				for ($gk = $grandkids->begin(); !$grandkids->end(); $gk = $grandkids->next())
+				{
+					$return .= "<li>" . html::href(array(
+						'url' => sprintf($url, $gk->id()),
+						'caption' => $gk->name(),
+					));
+				}
+				$return .= "</ul>";
+			}
+			$return .= "</ul>";
+		}
+		return $return;
+	}
+
+	/** When new group is created, this function assigns to it a login_menu
+		@attrib on_create_group
+
+		@param oid required type=int class_id=CL_GROUP
+	**/
+	function on_create_group ($arr)
+	{
+		$oid = $arr['oid'];
+		if (!$this->can('view', $oid))
+		{
+			return;
+		}
+		// Find all user_manager objects 
+		$ol = new object_list(array(
+			'class_id' => CL_USER_MANAGER,
+			'status' => STAT_ACTIVE,
+		));
+		$users = get_instance("users");
+		for ($manager = $ol->begin(); !$ol->end(); $manager = $ol->next())
+		{
+			// Set menu to loginmenu for 'group'
+			$conf = $manager->get_first_obj_by_reltype('RELTYPE_LOGIN_CONF');
+			// Find the default menu
+			$menu = $manager->prop('default_loginmenu');
+			if (!$this->can('view', $manager->id()) || !is_object($conf) || !is_oid($menu))
+			{
+				continue;
+			}
+			
+			// Create connection to menu
+			if (!$conf->is_connected_to(array('to' => $menu)))
+			{
+				$conf->connect(array(
+					'to' => $menu,
+					'type' => 'RELTYPE_FOLDER',
+				));
+			}
+			$lm = $conf->meta('lm');
+			$gid = $users->get_gid_for_oid($oid);
+			$lm[$gid] = array(
+				'menu' => $menu,
+				'pri' => 100, // Priority
+			);
+
+			$confinst = $conf->instance();
+			$confinst->set_property(array(
+				'obj_inst' => $conf,
+				'prop' => array(
+					'name' => 'login_menus',
+				),
+				'request' => array('lm' => $lm),
+			));
+			$conf->save();
+			return;
+		}	
 	}
 }
 ?>

@@ -47,5 +47,15 @@
 			</function>
 		</action>
 
+		<action name="popup_loginmenu">
+			<function name="popup_loginmenu">
+				<arguments>
+					<required name="id" type="int" class_id="CL_USER_MANAGER" acl="view" />
+					<required name="group" type="int" class_id="CL_GROUP" acl="edit" />
+					<optional name="menu" type="int" class_id="CL_MENU" acl="view" />
+				</arguments>
+			</function>
+		</action>
+
 	</class>
 </orb>
