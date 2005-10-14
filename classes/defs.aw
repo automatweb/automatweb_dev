@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.199 2005/10/12 13:27:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.200 2005/10/14 08:47:59 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -90,7 +90,7 @@ if (!defined("DEFS"))
 
 	function post_message($msg, $params)
 	{
-		if (aw_global_get("__in_post_message") > 0)
+		if (aw_global_get("__in_post_message") > 0 && !aw_global_get("__allow_rec_msg"))
 		{
 			return;
 		}
@@ -116,6 +116,16 @@ if (!defined("DEFS"))
 		aw_global_set("__in_post_message", aw_global_get("__in_post_message")-1);
 	}
 
+	function aw_allow_recursive_messages()
+	{
+		aw_global_set("__allow_rec_msg", aw_global_get("__allow_rec_msg")+1);
+	}
+
+	function aw_restore_recursive_messages()
+	{
+		aw_global_set("__allow_rec_msg", aw_global_get("__allow_rec_msg")-1);
+	}
+
 	function get_lc_date($time=0, $format=3)
 	{
 		$inst = get_instance("core/locale/".aw_global_get("LC")."/date", array(), false);
@@ -128,7 +138,7 @@ if (!defined("DEFS"))
 	
 	function post_message_with_param($msg, $param, $params)
 	{
-		if (aw_global_get("__in_post_message") > 0)
+		if (aw_global_get("__in_post_message") > 0 && !aw_global_get("__allow_rec_msg"))
 		{
 			return;
 		}
