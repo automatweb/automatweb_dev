@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.60 2005/10/09 20:37:51 ekke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.61 2005/10/14 13:11:12 duke Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -68,6 +68,7 @@ class aw_table extends aw_template
 		$this->chooser_hilight = true;
 
 		### maintain all selected filters
+
 		$saved_filters = aw_global_get ($this->filter_name . "_saved");
 		$this->selected_filters = $saved_filters ? aw_unserialize ($saved_filters) : array ();
 
@@ -91,7 +92,10 @@ class aw_table extends aw_template
 			}
 		}
 
-		aw_session_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
+		if (sizeof($this->selected_filters) > 0)
+		{
+			aw_session_set ($this->filter_name . "_saved", aw_serialize ($this->selected_filters));
+		}
 	}
 
 	function set_sortable($arg)
@@ -661,7 +665,7 @@ class aw_table extends aw_template
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
 			$tbl .= "<tr>\n";
-			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan, "classid" => $this->style1));
+			$tbl .= "<td colspan='$colspan' class='" . $this->style1 . "'>";
 			$tbl .= $this->pageselector_string;
 			$tbl .= "</td>\n";
 			$tbl .= "</tr>\n";
@@ -671,7 +675,7 @@ class aw_table extends aw_template
 		{
 			$colspan = sizeof($this->rowdefs) + sizeof($this->actions)-(int)$this->headerextrasize;
 			$tbl .= "<tr>\n";
-			$tbl .= $this->opentag(array("name" => "td","colspan" => $colspan,"classid" => $this->titlestyle));
+			$tbl .= "<td colspan='$colspan' class='" . $this->titlestyle . "'>";
 			$tbl .= "<strong>" . $this->headerstring . ": ". $this->headerlinks . "</strong>";
 			$tbl .= "</td>\n";
 			$tbl .= $this->headerextra;
@@ -720,7 +724,7 @@ class aw_table extends aw_template
 				// rida algab
 				// rowid/domid is needed for the selector script
 				$rowid = $this->prefix . $this->id . $counter;
-				$tbl .= $this->opentag(array("name" => "tr", "domid" => $rowid, "class" => $row_style));
+				$tbl .= "<tr id='$rowid' class='$row_style'>";
 
 				$tmp = "";
 				// grpupeerimine
