@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.200 2005/10/14 08:47:59 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.201 2005/10/16 16:03:02 duke Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -760,32 +760,30 @@ if (!defined("DEFS"))
 		}
 
 
-
+		// why don't we just use $_SESSION everywhere in the code where session variables ar used?
 
 		// SESSION vars - these cannot be modified by the user except through aw, so they are relatively trustworthy
-		if (is_array($GLOBALS["HTTP_SESSION_VARS"]))
+		if (is_array($_SESSION))
 		{
-			foreach($GLOBALS["HTTP_SESSION_VARS"] as $k => $v)
+			foreach($_SESSION as $k => $v)
 			{
 				aw_global_set($k,$v);
 			}
 		}
-		aw_global_set("uid", $GLOBALS["HTTP_SESSION_VARS"]["uid"]);
+		aw_global_set("uid", $_SESSION["uid"]);
 
 		// server vars - these can be trusted pretty well, so we do these last
 		$server = array("SERVER_SOFTWARE", "SERVER_NAME", "GATEWAY_INTERFACE", "SERVER_PROTOCOL", "SERVER_PORT","REQUEST_METHOD",  "PATH_TRANSLATED","SCRIPT_NAME", "QUERY_STRING", "REMOTE_ADDR", "REMOTE_HOST", "HTTP_ACCEPT","HTTP_ACCEPT_CHARSET", "HTTP_ACCEPT_ENCODING", "HTTP_ACCEPT_LANGUAGE", "HTTP_CONNECTION", "HTTP_HOST", "HTTP_REFERER", "HTTP_USER_AGENT","REMOTE_PORT","SCRIPT_FILENAME", "SERVER_ADMIN", "SERVER_PORT", "SERVER_SIGNATURE", "PATH_TRANSLATED", "SCRIPT_NAME", "REQUEST_URI", "PHP_SELF", "DOCUMENT_ROOT", "PATH_INFO", "SERVER_ADDR", "HTTP_X_FORWARDED_FOR");
+
+		// why don't we just use $_SERVER where needed?
 		foreach($server as $var)
 		{
-			if (isset($GLOBALS['HTTP_SERVER_VARS']) && isset($GLOBALS['HTTP_SERVER_VARS'][$var]))
-			{
-				aw_global_set($var,$GLOBALS["HTTP_SERVER_VARS"][$var]);
-			}
+			aw_global_set($var,isset($_SERVER[$var]) ? $_SERVER[$var] : null);
 		}
 		
-
-		if (isset($GLOBALS['HTTP_COOKIE_VARS']) && ifset($GLOBALS["HTTP_COOKIE_VARS"],"lang_id"))
+		if (isset($_COOKIE["lang_id"]))
 		{
-			aw_global_set("lang_id", $GLOBALS["HTTP_COOKIE_VARS"]["lang_id"]);
+			aw_global_set("lang_id", $_COOKIE["lang_id"]);
 		}
 
 		if (isset($_REQUEST))
