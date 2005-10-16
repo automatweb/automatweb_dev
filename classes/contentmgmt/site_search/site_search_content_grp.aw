@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.23 2005/05/12 11:28:56 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/contentmgmt/site_search/site_search_content_grp.aw,v 1.24 2005/10/16 14:25:47 duke Exp $
 // site_seaarch_content_grp.aw - Saidi sisu otsingu grupp 
 /*
 
@@ -285,21 +285,26 @@ class site_search_content_grp extends class_base
 
 	function on_save_menu($arr)
 	{
+		// this should run only if the status of the menu object
+		// changes and not every time a menu is saved. --duke
 		$o = obj($arr["oid"]);
 		$path = $o->path();
+
+		$oid = $o->id();
 
 		$grps = new object_list(array(
 			"class_id" => CL_SITE_SEARCH_CONTENT_GRP,
 			"lang_id" => array(),
 			"site_id" => array()
 		));
+
 		foreach($grps->arr() as $grp)
 		{
 			$fld = $this->_get_folders_for_grp($grp);
 			$is_in_grp = false;
 			foreach($fld as $f => $subs)
 			{
-				if ($f == $o->id() || ($subs && $this->_is_in_path($path, $f)))
+				if ($f == $oid || ($subs && $this->_is_in_path($path, $f)))
 				{
 					$is_in_grp = true;
 					break;
@@ -327,7 +332,7 @@ class site_search_content_grp extends class_base
 			if ($is_in_grp)
 			{
 				$mt = safe_array($grp->meta("grp_menus"));
-				$mt[$o->id()] = $o->id();
+				$mt[$oid] = $oid;
 				$grp->set_meta("grp_menus", $mt);
 				aw_disable_acl();
 				$grp->save();
@@ -336,9 +341,9 @@ class site_search_content_grp extends class_base
 			else
 			{
 				$mt = safe_array($grp->meta("grp_menus"));
-				if (isset($mt[$o->id()]))
+				if (isset($mt[$oid]))
 				{
-					unset($mt[$o->id()]);
+					unset($mt[$oid]);
 					$grp->set_meta("grp_menus", $mt);
 					aw_disable_acl();
 					$grp->save();
@@ -354,7 +359,8 @@ class site_search_content_grp extends class_base
 		$subs = safe_array($grp->meta("section_include_submenus"));
 		foreach($grp->connections_from(array("type" => "RELTYPE_SEARCH_LOCATION")) as $c)
 		{
-			$ret[$c->prop("to")] = $subs[$c->prop("to")] == $c->prop("to");
+			$c_to = $c->prop("to");
+			$ret[$c_to] = $subs[$c_to] == $c_to;
 		}
 
 		if (!count($ret))
