@@ -10,25 +10,11 @@
             <caption>Kood</caption>
       </property>
       <property>
-            <name>organisation</name>
+            <name>organisation_link</name>
             <table>objects</table>
             <group>general_info</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_ORGANISATION</reltype>
-            <rel_id>first</rel_id>
-            <field>meta</field>
-            <method>serialize</method>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>contact</num_1>
-                  <num_2>code</num_2>
-                  <num_3>phone_id</num_3>
-                  <num_4>url_id</num_4>
-                  <num_5>email_id</num_5>
-                  <num_6>telefax_id</num_6>
-                  <num_7>logo</num_7>
-            </props>
-            <store>no</store>
+            <type>text</type>
+            <field>organisation_link</field>
             <caption>Organisatsioon</caption>
       </property>
       <property>
@@ -61,6 +47,15 @@
             <field>meta</field>
             <method>serialize</method>
             <caption>P&amp;otilde;hitoon</caption>
+      </property>
+      <property>
+            <name>template</name>
+            <table>objects</table>
+            <group>design</group>
+            <type>chooser</type>
+            <field>meta</field>
+            <method>serialize</method>
+            <caption>Kujundusp&amp;otilde;hi</caption>
       </property>
       <property>
             <name>publications_name</name>
@@ -200,41 +195,44 @@
             <caption>Lingid</caption>
       </property>
       <property>
-            <name>general_documents</name>
+            <name>general_documents_toolbar</name>
             <table>objects</table>
             <group>general_documents</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_DOCUMENT</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>title</num_0>
-                  <num_1>author</num_1>
-                  <num_2></num_2>
-                  <num_3>lead</num_3>
-                  <num_4>content</num_4>
-            </props>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
+            <field>general_documents_toolbar</field>
+            <caption>Dokumentide t&amp;ouml;&amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_documents_table</name>
+            <table>objects</table>
+            <group>general_documents</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_documents_table</field>
             <caption>Dokumendid</caption>
       </property>
       <property>
-            <name>general_polls</name>
+            <name>general_polls_toolbar</name>
             <table>objects</table>
             <group>general_polls</group>
-            <type>releditor</type>
-            <reltype>RELTYPE_GENERAL_POLL</reltype>
-            <field>meta</field>
-            <method>serialize</method>
-            <mode>manager</mode>
-            <props>
-                  <num_0>name</num_0>
-                  <num_1>question</num_1>
-                  <num_2>answers</num_2>
-                  <num_3>status</num_3>
-            </props>
+            <type>toolbar</type>
+            <no_caption>1</no_caption>
             <store>no</store>
-            <caption>Kiirk&amp;uuml;sitlused</caption>
+            <field>general_polls_toolbar</field>
+            <caption>Kiirk&amp;uuml;sitluste t&amp;ouml;&amp;ouml;riistariba</caption>
+      </property>
+      <property>
+            <name>general_polls_table</name>
+            <table>objects</table>
+            <group>general_polls</group>
+            <type>table</type>
+            <no_caption>1</no_caption>
+            <store>no</store>
+            <field>general_polls_table</field>
+            <caption>Kiirk&amp;uumlsitlused</caption>
       </property>
       <property>
             <name>general_webforms_toolbar</name>
@@ -406,7 +404,7 @@
             <GENERAL_DOCUMENT>
                   <value>14</value>
                   <clid>CL_DOCUMENT</clid>
-                  <caption>&amp;Uuml;ldine dokument</caption>
+                  <caption>Dokument</caption>
             </GENERAL_DOCUMENT>
       </reltypes>
 </properties>

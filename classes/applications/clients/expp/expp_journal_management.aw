@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.7 2005/10/12 00:06:15 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.8 2005/10/16 23:34:34 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -17,10 +17,11 @@
 	@groupinfo general_info caption="&Uuml;ldandmed" parent=organisation_general_information
 	@default group=general_info
 
-		@property organisation type=releditor reltype=RELTYPE_ORGANISATION rel_id=first field=meta method=serialize props=name,contact,code,phone_id,url_id,email_id,telefax_id,logo
-		@caption Organisatsioon
+		property organisation type=releditor reltype=RELTYPE_ORGANISATION rel_id=first field=meta method=serialize props=name,contact,code,phone_id,url_id,email_id,telefax_id,logo
+		caption Organisatsioon
 
-		
+		@property organisation_link type=text
+		@caption Organisatsioon
 
 	@groupinfo design caption="Kujundus" parent=organisation_general_information
 	@default group=design
@@ -33,6 +34,9 @@
 
 		@property main_color type=textbox field=meta method=serialize
 		@caption P&otilde;hitoon
+		
+		@property template type=chooser field=meta method=serialize
+		@caption Kujundusp&otilde;hi
 
 @groupinfo publications caption="V&auml;ljaanded"
 @default group=publications
@@ -79,14 +83,26 @@
         @groupinfo general_documents caption="Dokumendid" parent=publications
         @default group=general_documents
 
-                @property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=title,author,lead,content
-                @caption Dokumendid
+                property general_documents type=releditor reltype=RELTYPE_GENERAL_DOCUMENT field=meta method=serialize mode=manager props=title,ucheck1,content table_fields=name,ucheck1 table_edit_fields=ucheck1
+                caption Dokumendid
+
+		@property general_documents_toolbar type=toolbar no_caption=1
+		@caption Dokumentide t&ouml;&ouml;riistariba
+
+		@property general_documents_table type=table no_caption=1
+		@caption Dokumendid
 
 	@groupinfo general_polls caption="Kiirk&uuml;sitlused" parent=publications
 	@default group=general_polls
 
-		@property general_polls type=releditor reltype=RELTYPE_GENERAL_POLL field=meta method=serialize mode=manager props=name,question,answers,status
-		@caption Kiirk&uuml;sitlused
+		property general_polls type=releditor reltype=RELTYPE_GENERAL_POLL field=meta method=serialize mode=manager props=name,question,answers,status
+		caption Kiirk&uuml;sitlused
+
+		@property general_polls_toolbar type=toolbar no_caption=1
+		@caption Kiirk&uuml;sitluste t&ouml;&ouml;riistariba
+
+		@property general_polls_table type=table no_caption=1
+		@caption Kiirk&uumlsitlused
 
 	@groupinfo general_webforms caption="Veebivormid" parent=publications
 	@default group=general_webforms
@@ -176,13 +192,20 @@ class expp_journal_management extends class_base
 		$retval = PROP_OK;
 		switch($prop["name"])
 		{
-			case "stats":
-				$prop['value'] = t("Siia tuleb statistika");
+			case "template":
+				$prop['options'] = array(
+					"default_template" => t("Kasutan etteantud p&otilde;hja"),
+					"user_template" => t("Soovin ise kujundada"),
+				);
 				break;
 			case "publications_name":
 			case "publications_description":
 				$prop['value'] = t("V&auml;&auml;rtus tuleb Reggy-st, ei ole v&otilde;imalik muuta");
 				break;
+			case "stats":
+				$prop['value'] = t("Siia tuleb statistika");
+				break;
+
 		};
 		return $retval;
 	}
@@ -243,6 +266,260 @@ class expp_journal_management extends class_base
 			"name" => $ob->prop("name"),
 		));
 		return $this->parse();
+	}
+
+	function _get_organisation_link($arr)
+	{
+		$organisation_object = $arr['obj_inst']->get_first_obj_by_reltype("RELTYPE_ORGANISATION");
+		if (!empty($organisation_object))
+		{
+			$organisation_object_id = $organisation_object->id();
+		}
+		if (is_oid($organisation_object_id) && $this->can("view", $organisation_object_id))
+		{
+			$arr['prop']['value'] = html::href(array(
+				"url" => $this->mk_my_orb("change", array(
+					"id" => $organisation_object_id,
+					"return_url" => get_ru(),
+				), CL_CRM_COMPANY),
+				"caption" => t("Muuda organisatsiooni objekti "),
+			));
+		}
+		else
+		{
+			$arr['prop']['value'] = html::href(array(
+				"url" => $this->mk_my_orb("new", array(
+					"alias_to" => $arr['obj_inst']->id(),
+					"parent" => $arr['obj_inst']->id(),
+					"reltype" => 1, // expp_journal_management.organisation
+					"return_url" => get_ru(),
+				), CL_CRM_COMPANY),
+				"caption" => t("Lisa organisatsioon"),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _get_general_documents_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus dokument"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 14, // expp_journam_management.general_document
+				"return_url" => get_ru(),	
+			), CL_DOCUMENT),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud dokumendid kustutada?"),
+		));
+
+		return PROP_OK;
+	}
+
+	function _get_general_documents_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "as_link",
+			"caption" => t("N&auml;ita lingina"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_documents = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_DOCUMENT",
+		));
+		foreach ($connections_to_documents as $connection_to_document)
+		{
+			$document_id = $connection_to_document->prop("to");
+			$document_object = $connection_to_document->to();
+			$t->define_data(array(
+				"name" => $connection_to_document->prop("to.name"),
+				"as_link" => html::checkbox(array(
+					"name" => "as_link[".$document_id."]",
+					"value" => $document_id,
+					"checked" => ($document_object->prop("ucheck1") == 1) ? true : false,
+				)),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $document_id,
+						"return_url" => get_ru(),
+						), CL_DOCUMENT),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" => "selected_ids[".$document_id."]",
+					"value" => $document_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_documents_table($arr)
+	{
+		$connections_to_documents = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_DOCUMENT",
+		));
+		foreach ($connections_to_documents as $connection_to_document)
+		{
+			$document_id = $connection_to_document->prop("to");
+			if (is_oid($document_id) && $this->can("edit", $document_id))
+			{
+				$document_object = new object($document_id);
+				if (in_array($document_id, $arr['request']['as_link']))
+				{
+					$document_object->set_prop("ucheck1", true);
+				}
+				else
+				{
+					$document_object->set_prop("ucheck1", false);
+				}
+				$document_object->save();
+			}
+		}
+		return PROP_OK;
+	}
+
+
+	function _get_general_polls_toolbar($arr)
+	{
+		$t = &$arr['prop']['toolbar'];
+		$t->add_button(array(
+			"name" => "new",
+			"img" => "new.gif",
+			"tooltip" => t("Uus kiirk&uuml;sitlus"),
+			"url" => $this->mk_my_orb("new", array(
+				"alias_to" => $arr['obj_inst']->id(),
+				"parent" => $arr['obj_inst']->id(),
+				"reltype" => 13, // expp_journam_management.general_poll
+				"return_url" => get_ru(),	
+			), CL_POLL),
+		));
+
+		$t->add_button(array(
+			"name" => "delete",
+			"img" => "delete.gif",
+			"tooltip" => t("Kustuta"),
+			"action" => "_delete_objects",
+			"confirm" => t("Oled kindel, et soovid valitud kiirk&uuml;sitlused kustutada?"),
+		));
+
+		
+
+		return PROP_OK;
+	}
+
+	function _get_general_polls_table($arr)
+	{
+
+		$t = &$arr['prop']['vcl_inst'];
+		$t->define_field(array(
+			"name" => "activity",
+			"caption" => t("Aktiivsus"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "name",
+			"caption" => t("Nimi"),
+		));
+		$t->define_field(array(
+			"name" => "change",
+			"caption" => t("Muuda"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
+			"name" => "select",
+			"caption" => t("Vali"),
+			"align" => "center",
+			"width" => "5%",
+		));
+		$connections_to_polls = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_POLL",
+			"sort_by_num" => "to.status",
+			"sort_dir" => "asc",
+		));
+		foreach ($connections_to_polls as $connection_to_poll)
+		{
+			$poll_id = $connection_to_poll->prop("to");
+			$t->define_data(array(
+				"activity" => html::radiobutton(array(
+					"name" => "activity",
+					"value" => $poll_id,
+					"checked" => ($connection_to_poll->prop("to.status") == STAT_ACTIVE) ? true : false,
+				)),
+				"name" => $connection_to_poll->prop("to.name"),
+				"change" => html::href(array(
+					"url" => $this->mk_my_orb("change", array(
+						"id" => $poll_id,
+						"return_url" => get_ru(),
+						), CL_POLL),
+					"caption" => t("Muuda"),
+				)),
+				"select" => html::checkbox(array(
+					"name" =>"selected_ids[".$poll_id."]",
+					"value" => $poll_id,
+				)),
+			));
+		}
+
+		return PROP_OK;
+	}
+
+	function _set_general_polls_table($arr)
+	{
+		$connections_to_polls = $arr['obj_inst']->connections_from(array(
+			"type" => "RELTYPE_GENERAL_POLL",
+		));
+
+		foreach ($connections_to_polls as $connection_to_poll)
+		{
+			$poll_id = $connection_to_poll->prop("to");
+			if (is_oid($poll_id) && $this->can("edit", $poll_id))
+			{
+				$poll_object = new object($poll_id);
+				if ($arr['request']['activity'] == $poll_id)
+				{
+					$poll_object->set_status(STAT_ACTIVE);
+				}
+				else
+				{
+					$poll_object->set_status(STAT_NOTACTIVE);
+				}
+				$poll_object->save();
+			}
+		}
+		return PROP_OK;
 	}
 
 	function _get_general_webforms_toolbar($arr)
@@ -309,7 +586,7 @@ class expp_journal_management extends class_base
 			$webform_id = $connection_to_webform->prop("to");
 			$t->define_data(array(
 				"activity" => html::radiobutton(array(
-					"name" => "general_webform[activity]",
+					"name" => "activity",
 					"value" => $webform_id,
 					"checked" => ($connection_to_webform->prop("to.status") == STAT_ACTIVE) ? true : false,
 				)),
@@ -322,7 +599,7 @@ class expp_journal_management extends class_base
 					"caption" => t("Muuda"),
 				)),
 				"select" => html::checkbox(array(
-					"name" =>"general_webform[selected][".$webform_id."]",
+					"name" =>"selected_ids[".$webform_id."]",
 					"value" => $webform_id,
 				)),
 			));
@@ -343,7 +620,7 @@ class expp_journal_management extends class_base
 			if (is_oid($webform_id) && $this->can("edit", $webform_id))
 			{
 				$webform_object = new object($webform_id);
-				if ($arr['request']['general_webform']['activity'] == $webform_id)
+				if ($arr['request']['activity'] == $webform_id)
 				{
 					$webform_object->set_status(STAT_ACTIVE);
 				}
@@ -395,12 +672,12 @@ class expp_journal_management extends class_base
 	function _delete_objects($arr)
 	{
 
-		foreach ($arr['general_webform']['selected'] as $webform_id)
+		foreach ($arr['selected_ids'] as $id)
 		{
-			if (is_oid($webform_id) && $this->can("delete", $webform_id))
+			if (is_oid($id) && $this->can("delete", $id))
 			{
-				$webform_object = new object($webform_id);
-				$webform_object->delete();
+				$object = new object($id);
+				$object->delete();
 			}
 		}
 
