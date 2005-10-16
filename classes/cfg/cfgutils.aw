@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.62 2005/10/13 13:14:09 duke Exp $
+// $Id: cfgutils.aw,v 1.63 2005/10/16 14:04:55 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -116,7 +116,10 @@ class cfgutils extends aw_template
 			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
 
 
-			load_class_translations($file);
+			if (!$system)
+			{
+				load_class_translations($file);
+			};
 		}
 
 		$from_cache = false;
@@ -142,12 +145,10 @@ class cfgutils extends aw_template
 			xml_parse_into_struct($p, $source, $vals, $index);
 			xml_parser_free($p);
 
-			$property_open = false;
 			$props = array();
 			$containers = array("property","classinfo","groupinfo","tableinfo","reltypes","forminfo","layout");
 			$propdef = array();
 			$propkey = false;
-			$rel_clidopen = false;
 			$tagname = false;
 			// if only the XML file would have a bit saner structure, the following could be a lot easier
 			foreach($vals as $val)
@@ -347,10 +348,10 @@ class cfgutils extends aw_template
 				$tmp[$key] = $relx;
 				$tmp[$_name] = $relx;
 				// define the constant
-				if (!defined($_name))
-				{
-					define($_name,$tmp[$key]["value"]);
-				}
+				//if (!defined($_name))
+				//{
+					@define($_name,$tmp[$key]["value"]);
+				//}
 				$tmp[$tmp[$key]["value"]] = $relx;
 			};
 		};
@@ -432,8 +433,6 @@ class cfgutils extends aw_template
 				{
 					$res[$name] = $_tmp;
 				};
-
-				$this->normalize_prop_array($res[$name]);
 			};
 		};
 		if (!$from_cache)
@@ -597,19 +596,6 @@ class cfgutils extends aw_template
 	function get_groupinfo()
 	{
 		return $this->groupinfo;
-	}
-
-	function normalize_prop_array(&$p)
-	{
-		if (!isset($p["method"]))
-		{
-			$p["method"] = "";
-		}
-
-		if (!isset($p["store"]))
-		{
-			$p["store"] = "";
-		}
 	}
 
 	function gen_valid_id($src)
