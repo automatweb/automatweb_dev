@@ -547,9 +547,14 @@ function get_instance($class,$args = array(), $errors = true)
 
 	$lib = basename($class);
 
+	$rs = "";	
+	if (isset($GLOBALS['cfg']['__default']['classes'][$clid]))
+	{
+		$clinf = $GLOBALS['cfg']['__default']['classes'][$clid];
+		$rs = $clinf["is_remoted"];
+	};
 	// check if the class is remoted. if it is, then create proxy class instance, not real class instance
-	$clid = (isset($GLOBALS['cfg']['class_lut']) && isset($GLOBALS["cfg"]["class_lut"][$lib])) ? $GLOBALS["cfg"]["class_lut"][$lib] : 0;
-	if (isset($GLOBALS['cfg']['__default']['classes'][$clid]) && (($rs = ifset($GLOBALS['cfg']['__default']['classes'][$clid],"is_remoted")) != ""))
+	if ($rs != "")
 	{
 		if ($rs != $GLOBALS["cfg"]["__default"]["baseurl"])
 		{
