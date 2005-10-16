@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.30 2005/06/22 10:12:01 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/period.aw,v 1.31 2005/10/16 15:22:02 duke Exp $
 // period.aw - periods 
 /*
 
@@ -516,6 +516,7 @@ class period extends class_base
 	// !import period variables into main.tpl
 	function on_site_show_import_vars($arr)
 	{	
+		// PERF: the following code should run only if the site has periods
 		$_t = aw_global_get("act_period");
 
 		$imc = get_instance(CL_IMAGE);
