@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.64 2005/10/17 16:38:55 duke Exp $
+// $Id: cfgutils.aw,v 1.65 2005/10/17 18:34:36 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -251,7 +251,7 @@ class cfgutils extends aw_template
 			$this->tableinfo = $propdef["tableinfo"];
 		};
 
-		if (isset($propdef["relinfo"]))
+		if (isset($propdef["reltypes"]))
 		{
 			$relinfo = $propdef["reltypes"];
 		};
