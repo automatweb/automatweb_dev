@@ -1,0 +1,635 @@
+<?php
+// $Header: /home/cvs/automatweb_dev/classes/expp/expp_va.aw,v 1.1 2005/10/17 10:32:05 dragut Exp $
+// expp_va.aw - Expp väljaanne 
+/*
+
+@classinfo syslog_type=ST_EXPP_VA relationmgr=yes no_comment=1 no_status=1
+
+@default table=objects
+@default group=general
+
+*/
+
+class expp_va extends class_base {
+
+	var $cy;
+	var $cp;
+	var $ch;
+	var $lang;
+
+	function expp_va() {
+		$this->lang = aw_global_get("admin_lang_lc");
+
+		$this->init(array(
+			"tpldir" => "expp",
+			"clid" => CL_EXPP_VA
+		));
+//		$this->cy = get_instance( CL_EXPP_JAH );
+		$this->cp = get_instance( CL_EXPP_PARSE );
+		$this->ch = get_instance("cache");
+
+		lc_site_load( "expp", $this );
+	}
+
+	function show($arr) {
+		$retHTML = '';
+		if( empty( $this->cp->pids )) {
+			return $retHTML;
+		}
+		$this->cp->pidpos = 1;
+		$retHTML =& $this->showTyypList();
+		if ( !empty( $retHTML )) return $retHTML;
+
+		$this->cp->pidpos = 1;
+		$retHTML =& $this->showLiikList();
+		if ( !empty( $retHTML )) return $retHTML;
+
+		$this->cp->pidpos = 1;
+		$retHTML =& $this->showValjaanne();
+		if ( !empty( $retHTML )) return $retHTML;
+
+// viimne valik
+		$this->cp->pidpos = 1;
+		return $this->showLiigid();
+	}
+
+	//-- methods --//
+	function showTyypList() {
+
+		global $lc_expp;
+
+		$retHTML = '';
+		$_tyyp = $this->cp->nextPid();
+		if( empty( $_tyyp )) return $retHTML;
+		if( is_number( $_tyyp )) {
+			$sql = "SELECT id,nimi FROM expp_tyybid WHERE id = '{$_tyyp}'";
+		} else {
+			$_tyyp = addslashes( urldecode( $_tyyp ));
+			$sql = "SELECT id,nimi FROM expp_tyybid WHERE nimi = '{$_tyyp}'";
+		}
+		$row = $this->db_fetch_row($sql);
+		if (!is_array($row)) {
+			return $retHTML;
+		}
+
+		$_tyyp_nimi = $row['nimi'];
+		$_tyyp_id = $row['id'];
+
+		$_lc_key = 'LC_EXPP_DB_'.strtoupper($_tyyp_nimi);
+		$_tyyp_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $_tyyp_nimi );
+		$_tyyp_id = $row['id'];
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $_tyyp_nimi ),
+				'text' => $_tyyp_wnimi
+			));
+
+		$_tmp = $this->cp->pidpos;
+
+		$retHTML =& $this->showLiikList();
+		if ( !empty( $retHTML )) return $retHTML;
+		$this->cp->pidpos = $_tmp;
+
+		$retHTML =& $this->showValjaanne();
+		if ( !empty( $retHTML )) return $retHTML;
+		$this->cp->pidpos = $_tmp;
+
+		$_cache_name = urlencode( $this->lang.'_va_tyyplist_'.$_tyyp_nimi );
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		if( !empty( $retHTML )) {
+			return $retHTML;
+		}
+
+		$retArr = array();
+		$htmlArr = array();
+		$coutArr = array();
+		$this->read_template("expp_tyyp_list.tpl");
+
+		if( $this->lang != 'et' ) {
+			$sql = "SELECT DISTINCT"
+				." v.toote_nimetus, l.liik, tr2.nimetus as lang_toode"
+				." FROM expp_valjaanne v, expp_liigid l, expp_va_liik vl"
+				." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+				." WHERE v.toote_tyyp = '{$_tyyp_id}'"
+				." AND l.tyyp_id = '{$_tyyp_id}'"
+				." AND vl.toote_nimetus = v.toote_nimetus"
+				." AND vl.liik_id = l.id";
+		} else {
+			$sql = "SELECT DISTINCT"
+				." v.toote_nimetus, l.liik"
+				." FROM expp_valjaanne v, expp_liigid l, expp_va_liik vl"
+				." WHERE v.toote_tyyp = '{$_tyyp_id}'"
+				." AND l.tyyp_id = '{$_tyyp_id}'"
+				." AND vl.toote_nimetus = v.toote_nimetus"
+				." AND vl.liik_id = l.id";
+		}
+		$this->db_query($sql);
+		while ($row = $this->db_next()) {
+			$retArr[$row['liik']][] = $row;
+		}
+		$_row_count = max( count($retArr), 1);
+		$colspan = min($_row_count,aw_ini_get('colspan.tyyp'));
+		$this->vars(array(
+				'WIDTH'	=> floor( 100 / $colspan )."%",
+		));
+
+		for( $i = 0; $i< $colspan; $i++ ) {
+			$countArr[$i] = 0;
+			$htmlArr[$i] = '';
+		}
+		foreach( $retArr as $key => $val ) {
+			$_idx = 0;
+			for( $i = 0; $i< $colspan; $i++ ) {
+				if( $countArr[$i] < $countArr[$_idx] ) {
+					$_idx = $i;
+				}
+			}
+/*
+			ksort( $countArr );
+			asort( $countArr );
+			reset( $countArr );
+			$_idx = key( $countArr );
+*/
+			$countArr[$_idx] += count($val);
+			$_tmp = '';
+			foreach( $val as $key1 => $val1 ) {
+				if( $this->lang != 'et' ) {
+					$_laid = ( isset( $val1['lang_toode'] ) && !empty( $val1['lang_toode'] ) ? $val1['lang_toode'] : $val1['toote_nimetus'] );
+				} else {
+					$_laid = $val1['toote_nimetus'];
+				}
+				$this->vars(array(
+					'url' => $myURL.urlencode( $val1['toote_nimetus'] ),
+					'text' => $_laid,
+				));
+				$_tmp .= $this->parse('LINE');
+			}
+			$_lc_key = 'LC_EXPP_DB_'.strtoupper($key);
+			$_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $key );
+
+			$this->vars(array(
+				'text' => $_wnimi,
+				'url' => $myURL.urlencode( $key ),
+				'LINE' => $_tmp
+			));
+			$htmlArr[$_idx] .= $this->parse('SISU_BOX');
+		}
+		$_tmp = '';
+		foreach( $htmlArr as $val ) {
+			$this->vars(array(
+				'SISU_BOX' => $val,
+			));
+			$_tmp .= $this->parse('VISU_BOX');
+		}
+		$this->vars(array(
+			'tyyp' => $_tyyp_nimi,
+			'colspan' => $colspan,
+			'VISU_BOX' => $_tmp
+		));
+		$retHTML = $this->parse();
+		$this->ch->file_set( $_cache_name, $retHTML );
+		return $retHTML;
+	}
+
+	function showLiikList() {
+
+		global $lc_expp;
+
+		$retHTML = '';
+
+		$_liik = $this->cp->nextPid();
+		if( empty( $_liik )) return $retHTML;
+
+		if( is_number( $_liik )) {
+			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE id = '{$_liik}'";
+		} else {
+			$_liik = addslashes(urldecode( $_liik ));
+			$sql = "SELECT id,tyyp_id,liik FROM expp_liigid WHERE liik = '{$_liik}'";
+		}
+		$row = $this->db_fetch_row($sql);
+		if (!is_array($row)) {
+			return $retHTML;
+		}
+
+		$_liik_nimi = $row['liik'];
+
+		$_lc_key = 'LC_EXPP_DB_'.strtoupper($_liik_nimi);
+		$_liik_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $_liik_nimi );
+
+		$_liik_id = $row['id'];
+		$_tyyp_id = $row['tyyp_id'];
+
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $_liik_nimi ),
+				'text' => $_liik_wnimi
+			));
+
+		$_tmp = $this->cp->pidpos;
+		$retHTML =& $this->showValjaanne();
+		if ( !empty( $retHTML )) return $retHTML;
+		$this->cp->pidpos = $_tmp;
+
+		$_cache_name = urlencode( $this->lang.'_va_liiklist_'.$_liik_nimi );
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		if( !empty( $retHTML )) {
+			return $retHTML;
+		}
+
+		$retArr = array();
+		$htmlArr = array();
+		$coutArr = array();
+
+		$this->read_template("expp_liik_list.tpl");
+
+
+		if( $this->lang != 'et' ) {
+			$sql = "SELECT DISTINCT"
+				." v.toote_nimetus, tr2.nimetus as lang_toode"
+				." FROM expp_valjaanne v, expp_va_liik vl"
+				." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+				." WHERE vl.liik_id = '{$_liik_id}'"
+				." AND vl.toote_nimetus = v.toote_nimetus";
+		} else {
+			$sql = "SELECT DISTINCT"
+				." v.toote_nimetus"
+				." FROM expp_valjaanne v, expp_va_liik vl"
+				." WHERE vl.liik_id = '{$_liik_id}'"
+				." AND vl.toote_nimetus = v.toote_nimetus";
+		}
+
+		$this->db_query($sql);
+		$_row_count = max( $this->num_rows(), 1);
+		$colspan = min( $_row_count, aw_ini_get('colspan.liik') );
+		$this->vars(array(
+				'WIDTH'	=> floor( 100 / $colspan )."%",
+		));
+		$_row_count = ceil( $_row_count / $colspan );
+		for( $i = 0; $i< $colspan; $i++ ) {
+			$htmlArr[$i] = '';
+		}
+		$_idx = 0;
+		$i = 0;
+		while ($row = $this->db_next()) {
+			if( $this->lang != 'et' ) {
+				$_laid = ( isset( $row['lang_toode'] ) && !empty( $row['lang_toode'] ) ? $row['lang_toode'] : $row['toote_nimetus'] );
+			} else {
+				$_laid = $row['toote_nimetus'];
+			}
+			$this->vars(array(
+				'url' => $myURL.urlencode($row['toote_nimetus']),
+				'text' => $_laid,
+			));
+			$htmlArr[$_idx] .= $this->parse('LINE');
+			$i++;
+			if( $i >= $_row_count ) {
+				$_idx++;
+				$i = 0;
+			}
+		}
+		$_tmp = '';
+		foreach( $htmlArr as $val ) {
+			$this->vars(array(
+				'SISU_BOX' => $val
+			));
+			$_tmp .= $this->parse('VISU_BOX');
+		}
+		$this->vars(array(
+			'liik' => $_liik_nimi,
+			'colspan' => $colspan,
+			'VISU_BOX' => $_tmp
+		));
+
+		$retHTML = $this->parse();
+		$this->ch->file_set( $_cache_name, $retHTML );
+		return $retHTML;
+	}
+	
+	function showValjaanne() {
+
+		global $lc_expp;
+
+		$retHTML = '';
+		$__aid = $this->cp->nextPid();
+
+//		$_ch_site = str_replace( '%', '#', urlencode( $__aid ))."_site";
+		$_ch_logo = str_replace( '%', '#', urlencode( $__aid ));
+		if( empty( $__aid )) return $retHTML;
+// $this->ch->full_flush(); 
+
+		$cl = get_instance( CL_EXPP_SITE_LOGO );
+		$cl2 = get_instance( CL_EXPP_SITE_CONTENT );
+		$cl->register( $_ch_logo );
+		$cl2->register( $_ch_logo );
+
+		$_aid = addslashes( $__aid );
+		$_vanne = array();
+		if( $this->lang != 'et' ) {
+			$sql = "SELECT v.pindeks, v.valjaande_nimetus, v.kampaania, v.veebi_kirjeldus, tr1.nimetus as lang_va, tr2.nimetus as lang_toode"
+					." FROM expp_valjaanne v"
+					." LEFT JOIN expp_translate tr1 ON tr1.pindeks = v.pindeks AND tr1.tyyp = 'va' AND tr1.lang = '{$this->lang}'"
+					." LEFT JOIN expp_translate tr2 ON tr2.pindeks = v.pindeks AND tr2.tyyp = 'toode' AND tr2.lang = '{$this->lang}'"
+					." WHERE v.toote_nimetus='{$_aid}'";
+		} else {
+			$sql = "SELECT v.pindeks, v.valjaande_nimetus, v.kampaania, v.veebi_kirjeldus"
+					." FROM expp_valjaanne v"
+					." WHERE v.toote_nimetus='{$_aid}'";
+		}
+		$this->db_query( $sql );
+		if( $this->num_rows() == 0 ) return $retHTML;
+		while ( $row = $this->db_next()) {
+			$_vanne[$row['pindeks']] = $row;
+		}
+
+		if( $this->lang != 'et' ) {
+			$_laid = reset( $_vanne );
+			$_laid = ( isset( $_laid['lang_toode'] ) && !empty( $_laid['lang_toode'] ) ? $_laid['lang_toode'] : $__aid );
+		} else {
+			$_laid = $__aid;
+		}
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $__aid ),
+				'text' => $_laid
+			));
+
+		$_cache_name = urlencode( $this->lang.'_va_valjaanne_'.$__aid );
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		if( !empty( $retHTML )) {
+			return $retHTML;
+		}
+
+		$sql = "SELECT v.pindeks, h.id, h.hinna_tyyp, h.kestus, h.baashind, h.juurdekasv, h.hinna_liik"
+			." FROM expp_valjaanne v, expp_hind h"
+			." WHERE v.pindeks = h.pindeks"
+			." AND v.toote_nimetus='{$_aid}'"
+			." AND (h.algus+0 = 0 OR h.algus <= now())"
+			." AND (h.lopp+0 = 0 OR h.lopp >= now())"
+//			." AND h.hinna_liik not like '%SALAJANE%'"
+			." AND h.hinna_liik in ( 'OKHIND', 'AVALIK_OKHIND', 'TAVAHIND', 'AVALIK_TAVAHIND' )"
+			." ORDER BY v.valjaande_nimetus ASC, h.hinna_liik ASC, h.kestus ASC";
+		$this->db_query( $sql );
+		if( $this->num_rows() == 0 ) return $retHTML;
+
+/*
+		if( $this->lang != 'et' ) {
+			$_laid = reset( $_vanne );
+			$_laid = ( isset( $_laid['lang_toode'] ) && !empty( $_laid['lang_toode'] ) ? $_laid['lang_toode'] : $__aid );
+		} else {
+			$_laid = $__aid;
+		}
+		$myURL = $this->cp->addYah( array(
+				'link' => urlencode( $__aid ),
+				'text' => $_laid,
+			));
+*/
+
+		$myURL = aw_ini_get("tell_dir").'telli/';
+		$this->read_template("expp_va.tpl");
+		$_vad			= array();
+		$_reklaam	= '';
+		while ( $row = $this->db_next()) {
+			$_temp_liik = $row["pindeks"].'_'.str_replace( array('OKHIND','TAVAHIND', '_'), '', $row["hinna_liik"] );
+
+			$row['baashind']  = sprintf( "%1.0f", $row['baashind'] );
+			if( !isset( $_vad[$_temp_liik]))	{
+				$_vad[$_temp_liik] = array();
+				$_vad[$_temp_liik]["ht"] = 0;
+				$_vad[$_temp_liik]["pindeks"] = $row["pindeks"];
+			}
+			$_vad[$_temp_liik]["ht"] += $row["hinna_tyyp"];
+//			$_vad[$_temp_liik]["kampaania"] = $row["kampaania"];
+			switch( $row["hinna_tyyp"] ) {
+				case 0:
+						$_text = 'kuu';
+						$_textn = 'kuud';
+					break;
+				case 1:
+						$_text = ' numbri hind';
+						$_textn = ' numbri hind';
+					break;
+				case 3:
+						
+				default:
+					echo $row["hinna_tyyp"];
+					continue 2;
+			}
+			switch( $row["hinna_liik"] ) {
+				case 'OKHIND':
+				case 'AVALIK_OKHIND':
+				case 'SALAJANE_OKHIND':
+					$_vad[$_temp_liik]['hinnad'][0] = array(
+							'h' => $row["baashind"],
+							'id' => $row["id"],
+							'head' => 'otsekorraldus'
+						);
+					break;
+/*
+				case 'OK_TAVA':
+					$_vad[$row["pindeks"]]['hinnad'][0] = array(
+							'h' => $row["baashind"],
+							'id' => $row["id"],
+							'head' => 'otsekorraldus'
+						);
+*/
+				case 'TAVAHIND':
+				case 'AVALIK_TAVAHIND':
+				case 'SALAJANE_TAVAHIND':
+				default:
+					$_vad[$_temp_liik]['hinnad'][$row["kestus"]] = array(
+							'h' => $row["baashind"],
+							'id' => $row["id"],
+							'head' => ( $row["kestus"] == 1 ? $_text : $_textn )
+						);
+/*
+					if ( $row["juurdekasv"] > 0 ) {
+						for( $ii = $row["kestus"]+1; $ii < 13; $ii++ ){
+							$_vad[$row["pindeks"]]['hinnad'][$ii] = array(
+								'h' => sprintf( "%1.0f", $row["baashind"]+$row["juurdekasv"]*($ii-$row["kestus"])),
+								'id' => $row["id"].'-'.$ii,
+								'head' => ( $ii == 1 ? $_text : $_textn )
+							);
+						}
+					}
+*/
+			}
+		}
+		$_cell = '';
+		foreach( $_vad as $__pindeks => $val ) {
+			$_pindeks = $val['pindeks'];
+			if( empty( $_reklaam )) {
+				$_reklaam = stripslashes( $_vanne[$_pindeks]["veebi_kirjeldus"] );
+			}
+			$_url = urlencode( $_vanne[$_pindeks]['valjaande_nimetus'] );
+			$_title = ( isset( $_vanne[$_pindeks]['lang_va'] ) && !empty( $_vanne[$_pindeks]['lang_va'] ) ? $_vanne[$_pindeks]['lang_va'] : $_vanne[$_pindeks]['valjaande_nimetus'] );
+			$_price1 = '';
+			$_price2 = '';
+			if( !empty( $val['hinnad'] )) {
+				ksort( $val['hinnad'] );
+				$_count = count( $val['hinnad'] );
+				foreach( $val['hinnad'] as $_kuu => $val1 ) {
+					$this->vars(array(
+						'hinna_text' => ( $_kuu == 0? ($_count > 13 ? substr( $val1['head'], 0, 2 ) : $val1['head'] ) : ( $_count > 13 ? $_kuu.substr( $val1['head'], 0, 1 ) : $_kuu.$val1['head'] ))
+					));
+					$_price1 .= $this->parse( 'PRICE1' );
+
+					$this->vars(array(
+						'hinna_link' => $myURL.$_url.'?pikkus='.$val1['id'],
+						'hinna_sum' => $val1['h'],
+					));
+					$_price2 .= $this->parse( 'PRICE2' );
+				}
+			}
+
+			$this->vars(array(
+				'nimi' => $_title,
+				'kirjeldus' => $_vanne[$_pindeks]['kampaania'],
+				'PRICE1' => $_price1,
+				'PRICE2' => $_price2
+			));
+			$_cell .= $this->parse('CELL');
+		}
+
+////
+// reklaamikast
+
+		if( !empty( $_reklaam )) {
+			$this->vars(array(
+				'text' => $_reklaam
+			));
+			$_reklaam = $this->parse('REKLAAM');
+		}
+
+////
+// ??? mida teha kirjeldustega?
+		$_desc = '';
+////
+// lõpuks viimane jupats
+
+		$this->vars(array(
+			'colspan' => $_colspan,
+			'toode' => $_GET['id'],
+			'REKLAAM' => $_reklaam,
+			'CELL' => $_cell,
+			'DESC' => $_desc,
+		));
+		$preview = $this->parse();
+		if( empty( $preview )) return $preview;
+
+		$_preview = '';
+/*
+		$cl = new object_list(array(
+			"class_id" => CL_DOCUMENT,
+			"name" => urlencode( $__aid ).".site",
+			"lang_id" => array(),
+			"site_id" => array(),
+		));
+		if( $cl->count() > 0 ) {
+			$cd = $cl->begin();
+			$dcx = get_instance("doc_display");
+			$this->read_tpl(array(
+				$dcx->gen_preview(array(
+					"docid" => $cd->id(),
+	//				"leadonly" => 1
+				))
+			));
+			if( $this->template_has_var("site")) {
+				$this->vars( array(
+					"site" => $preview,
+				));
+				$_preview = $this->parse();
+			}
+			$retHTML = $dcx->gen_preview(array(
+					"docid" => $cd->id(),
+					"leadonly" => 1
+				));
+			if( !empty( $retHTML )) {
+				$this->ch->file_set( $_ch_logo, $retHTML );
+			} else {
+				$this->ch->file_invalidate( $_ch_logo );
+			}
+		}
+*/
+		$retHTML = ( empty( $_preview )? $preview : $_preview );
+		$this->ch->file_set( $_cache_name, $retHTML );
+		return $retHTML;
+	}
+	
+	function showLiigid() {
+
+		global $lc_expp;
+
+		$retHTML = '';
+
+		$cy = get_instance( CL_EXPP_JAH );
+		$myURL = $cy->getURL();
+
+		$_cache_name = urlencode( $this->lang.'_va_liigid' );
+		$retHTML = $this->ch->file_get_ts( $_cache_name, time() - 24*3600);
+		if( !empty( $retHTML )) {
+			return $retHTML;
+		}
+
+		$this->read_template("expp_liigid.tpl");
+		$retLiik = '';
+		$tempLiik = '';
+		$retTyyp = '';
+		$lastTyyp = '';
+		$isCount = 0;
+		$sql = "SELECT l.id, l.liik, t.nimi as tyyp FROM expp_liigid l, expp_tyybid t WHERE l.tyyp_id = t.id AND l.esilehel = 1 ORDER BY t.sort ASC, t.id, l.sort ASC, l.id";
+		$this->db_query( $sql );
+		while ($row = $this->db_next()) {
+			if( $lastTyyp != $row['tyyp'] ) {
+				if( !empty( $lastTyyp ) && !empty( $tempLiik )) {
+					if( $this->lang != 'et' ) {
+						$_lc_key = 'LC_EXPP_DB_'.strtoupper($lastTyyp);
+						$_tyyp_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $lastTyyp );
+					} else {
+						$_tyyp_wnimi = $lastTyyp;
+					}
+					$this->vars(array(
+						'VAHE' => ($isCount == 0?'':$this->parse('VAHE')),
+						'text' => $_tyyp_wnimi
+					));
+					$retTyyp .= $this->parse('TYYP');
+					$this->vars(array(
+						'LINE' => $tempLiik
+					));
+					$retLiik .= $this->parse('SISU');
+					$isCount++;
+				}
+				$lastTyyp = $row['tyyp'];
+				$tempLiik = '';
+			}
+
+			$this->vars(array(
+				'url' => $myURL.urlencode($row['tyyp']).'/'.urlencode($row['liik']),
+				'text' => $row['liik']
+			));
+			$tempLiik .= $this->parse('LINE');
+		}
+		if( !empty( $lastTyyp ) && !empty( $tempLiik )) {
+			if( $this->lang != 'et' ) {
+				$_lc_key = 'LC_EXPP_DB_'.strtoupper($lastTyyp);
+				$_tyyp_wnimi = ( isset( $lc_expp[$_lc_key] ) ? $lc_expp[$_lc_key] : $lastTyyp );
+			} else {
+				$_tyyp_wnimi = $lastTyyp;
+			}
+			$this->vars(array(
+				'VAHE' => (empty($lastTyyp)?'':$this->parse('VAHE')),
+				'text' => $_tyyp_wnimi
+			));
+			$retTyyp .= $this->parse('TYYP');
+			$this->vars(array(
+				'LINE' => $tempLiik
+			));
+			$retLiik .= $this->parse('SISU');
+		}
+		$this->vars(array(
+			'TYYP' => $retTyyp,
+			'SISU' => $retLiik
+		));
+
+		$retHTML = $this->parse();
+		$this->ch->file_set( $_cache_name, $retHTML );
+		return $retHTML;
+	}
+}
+?>
