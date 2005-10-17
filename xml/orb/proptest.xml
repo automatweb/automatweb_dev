@@ -1,0 +1,6 @@
+<?xml version='1.0'?>
+<orb>
+	<class name="proptest" folder="cfg" extends="class_base">
+	</class>
+</orb>
+		
