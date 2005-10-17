@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.8 2005/10/16 23:34:34 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.9 2005/10/17 14:26:41 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -282,7 +282,7 @@ class expp_journal_management extends class_base
 					"id" => $organisation_object_id,
 					"return_url" => get_ru(),
 				), CL_CRM_COMPANY),
-				"caption" => t("Muuda organisatsiooni objekti "),
+				"caption" => t("Muuda organisatsiooni andmeid"),
 			));
 		}
 		else
