@@ -548,6 +548,7 @@ function get_instance($class,$args = array(), $errors = true)
 	$lib = basename($class);
 
 	$rs = "";	
+	$clid = (isset($GLOBALS['cfg']['class_lut']) && isset($GLOBALS["cfg"]["class_lut"][$lib])) ? $GLOBALS["cfg"]["class_lut"][$lib] : 0;
 	if (isset($GLOBALS['cfg']['__default']['classes'][$clid]))
 	{
 		$clinf = $GLOBALS['cfg']['__default']['classes'][$clid];
