@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.335 2005/07/05 13:01:14 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/document.aw,v 2.336 2005/10/17 17:03:02 duke Exp $
 // document.aw - Dokumentide haldus. 
 
 class document extends aw_template
@@ -467,7 +467,6 @@ class document extends aw_template
 
 		lc_site_load("document", &$this);
 
-		$awt->start("phase3");
 		if (( ($meta["show_print"]) && (not($print)) && $leadonly != 1) && !$is_printing)
 		{
 			// another wonderful way of showing a link
@@ -526,8 +525,6 @@ class document extends aw_template
 			};
 		};
 
-		$awt->stop("phase3");
-		$awt->start("phase4");
 
 
 		$this->vars(array("imurl" => "/images/trans.gif"));
@@ -591,8 +588,6 @@ class document extends aw_template
 			$this->parse_keywords($doc["lead"]);
 		}
 		
-		$awt->stop("phase4");
-		$awt->start("phase5");
 
 
 		// in_archive disappears if we move around in archives
@@ -665,9 +660,6 @@ class document extends aw_template
 			}
 		}
 
-		$awt->stop("phase5");
-		$awt->start("phase6");
-		
 	
 		// laeme vajalikud klassid
 		// kui vaja on n?idata ainult dokumendi leadi, siis see tehakse siin
@@ -813,9 +805,6 @@ class document extends aw_template
 			$this->create_keyword_relations(&$doc["lead"]);
 		}
 
-		$awt->stop("phase6");
-		$awt->start("phase7");
-		$awt->start("phase71");
 		
 	
 		// v6tame pealkirjast <p> maha
@@ -847,9 +836,6 @@ class document extends aw_template
 		$top_link = $this->parse("top_link");
 		$doc["content"] = str_replace("#top#", $top_link,$doc["content"]);
 
-		$awt->stop("phase71");
-		$awt->start("phase72");
-
 		// noja, mis fucking "undef" see siin on?
 		// damned if I know , v6tax ta 2kki 2ra siis? - terryf 
 		$al = get_instance("aliasmgr");
@@ -858,18 +844,12 @@ class document extends aw_template
 		{
 			if (strpos($doc["content"],"#") !== false)
 			{
-				$awt->start("phase722");
 				$doc["content"] = $this->parse_aliases(array(
 					"oid" => $docid,
 					"text" => $doc["content"],
 				));
-
-				$awt->stop("phase722");
 			};
 		}; 
-
-		$awt->stop("phase72");
-		$awt->start("phase73");
 
 		if (trim($doc["user3"]) != "" && strpos($doc["user3"],"#") !== false)
 		{
@@ -905,8 +885,6 @@ class document extends aw_template
 		$awt->stop("almgr-parse-oo-aliases");
 		$this->vars($al->get_vars());
 
-		$awt->stop("phase73");
-
 		// this damn ugly-ass hack is here because we need to be able to put the last search value
 		// from form_table to document title
 		if (aw_global_get("set_doc_title") != "")
@@ -920,8 +898,6 @@ class document extends aw_template
 		$this->vars(array(
 			"link_text" => $doc["link_text"],
 		));
-
-		$awt->stop("phase7");
 
 		if ($doc["photos"])
 		{
@@ -1476,29 +1452,29 @@ class document extends aw_template
 			$this->vars(array("LANG_BRO" => $langs));
 		}; // keeleseosed
 		global $awt;
-		$awt->start("tsah");
 
 		$this->do_subtpl_handlers($doc_o);
 		
 		$this->do_plugins($doc_o);
-		$awt->stop("tsah");
 
 		$retval = $this->parse();
 
-		if (aw_global_get("print") && $this->cfg["remove_links_from_print"])
+		$print = aw_global_get("print");
+
+		if ($print && $this->cfg["remove_links_from_print"])
 		{
 			$retval = preg_replace("/<a(.*)>/iU", "", $retval);
 			$retval = str_replace("</a>", "", $retval);
 			$retval = str_replace("</A>", "", $retval);
 		}
 
-		if (aw_global_get("print") || $GLOBALS["action"] == "print")
+		if ($print || $GLOBALS["action"] == "print")
 		{
 			$apd = get_instance("layout/active_page_data");
 			$retval .= $apd->on_shutdown_get_styles();
 		}
 
-		if (aw_global_get("print"))
+		if ($print)
 		{
 			$apd = get_instance("layout/active_page_data");		
 			die($retval.$apd->on_shutdown_get_styles());
@@ -3232,10 +3208,9 @@ class document extends aw_template
 	
 	function parse_text($text)
 	{
-		reset($this->tags);
 		foreach ($this->tags as $tag => $val)
 		{
-			$find = sprintf("#%s#(.*)#\\/%s#",$tag,$tag);
+			$find = "#${tag}#(.*)#\\/${tag}#";
 			$val = trim($val);
 			$text = preg_replace("/" . $find . "/ismU",$val,$text);
 		};
