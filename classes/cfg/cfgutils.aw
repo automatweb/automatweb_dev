@@ -1,5 +1,5 @@
 <?php
-// $Id: cfgutils.aw,v 1.63 2005/10/16 14:04:55 duke Exp $
+// $Id: cfgutils.aw,v 1.64 2005/10/17 16:38:55 duke Exp $
 // cfgutils.aw - helper functions for configuration forms
 class cfgutils extends aw_template
 {
@@ -96,7 +96,7 @@ class cfgutils extends aw_template
 	{
 		enter_function("load_class_properties");
 		extract($args);
-		if (!$args['source'] && !$file && !$this->clist_init_done)
+		if (empty($args['source']) && !$file && !$this->clist_init_done)
 		{
 			$this->_init_clist();
 			$file = $this->clist[$clid];
@@ -110,7 +110,7 @@ class cfgutils extends aw_template
 		// you can also directly parse XML, in which case we do not cache anything.
 		// the only sad user of this feature is document class and it's def_cfgform.xml functionality,
 		// which really should die.
-		if (!$args['source'])
+		if (empty($args['source']))
 		{
 			$fqfn = $this->fbasedir . $file . ".xml";
 			$cachename = aw_ini_get("cache.page_cache") . "/propdef_" . $file . ".cache";
@@ -124,7 +124,7 @@ class cfgutils extends aw_template
 
 		$from_cache = false;
 
-		if (!$args['source'] && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
+		if (empty($args['source']) && file_exists($cachename) && (filemtime($cachename) > filemtime($fqfn)))
 		{
 			include($cachename);
 			$from_cache = true;
@@ -237,13 +237,29 @@ class cfgutils extends aw_template
 		}
 
 		$properties = $propdef["property"];
-		
-		$classinfo = $propdef["classinfo"];
-		$this->layoutinfo = $propdef["layout"];
+		$classinfo = $this->tableinfo = $relinfo = $groupinfo = array();
 
-		$groupinfo = $propdef["groupinfo"];
-		$tableinfo = $propdef["tableinfo"];
-		$relinfo = $propdef["reltypes"];
+		$this->propdef = $propdef;
+
+		if (isset($propdef["classinfo"]))
+		{
+			$classinfo = $propdef["classinfo"];
+		};
+
+		if (isset($propdef["tableinfo"]))
+		{
+			$this->tableinfo = $propdef["tableinfo"];
+		};
+
+		if (isset($propdef["relinfo"]))
+		{
+			$relinfo = $propdef["reltypes"];
+		};
+
+		if (isset($propdef["groupinfo"]))
+		{
+			$groupinfo = $propdef["groupinfo"];
+		};
 
 		// translate
 		if (!$system)
@@ -305,7 +321,6 @@ class cfgutils extends aw_template
 		};
 
 
-		$this->forminfo = $propdef["forminfo"];
 		
 		$this->classinfo = $classinfo;
 		$tmp = array();
@@ -321,8 +336,6 @@ class cfgutils extends aw_template
 		{
 			$this->groupinfo = $groupinfo;
 		};
-		$tmp = array();
-		$this->tableinfo = $tableinfo;
 		$tmp = array();
 
 		if (is_array($relinfo))
@@ -468,15 +481,6 @@ class cfgutils extends aw_template
 
 		$cldat = $clinf[$clid];
 
-
-                // full cavity search
-		/*
-                if (preg_match("/\W/",$file))
-                {
-                        die(t("Invalid clid - $file<br />"));
-                };
-		*/
-
 		if (isset($cldat["generated"]))
 		{
 			$fld = $this->cfg["site_basedir"]."/files/classes";
@@ -580,7 +584,7 @@ class cfgutils extends aw_template
 
 	function get_layoutinfo()
 	{
-		return $this->layoutinfo;
+		return isset($this->propdef["layout"]) ? $this->propdef["layout"] : array();
 	}
 
 	function get_relinfo()
@@ -590,7 +594,7 @@ class cfgutils extends aw_template
 	
 	function get_forminfo()
 	{
-		return $this->forminfo;
+		return isset($this->propdef["forminfo"]) ? $this->propdef["forminfo"] : array();
 	}
 
 	function get_groupinfo()
