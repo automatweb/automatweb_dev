@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.10 2005/10/18 07:39:58 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.11 2005/10/18 09:48:53 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -51,7 +51,7 @@
 		@caption V&auml;ljaande kirjeldus
 
 		@property order_composition_information type=textarea field=meta method=serialize
-		@property Tellimuse vormistamise informatsioon
+		@caption Tellimuse vormistamise informatsioon
 
 		@property cover_image type=releditor use_form=emb reltype=RELTYPE_COVER_IMAGE rel_id=first field=meta method=serialize
 		@caption Esikaane pilt

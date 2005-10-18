@@ -80,12 +80,7 @@
             <type>textarea</type>
             <field>meta</field>
             <method>serialize</method>
-      </property>
-      <property>
-            <name>Tellimuse</name>
-            <table>objects</table>
-            <group>publications_general_info</group>
-            <field>Tellimuse</field>
+            <caption>Tellimuse vormistamise informatsioon</caption>
       </property>
       <property>
             <name>cover_image</name>
