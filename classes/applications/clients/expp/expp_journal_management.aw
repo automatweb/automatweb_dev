@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.9 2005/10/17 14:26:41 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/clients/expp/expp_journal_management.aw,v 1.10 2005/10/18 07:39:58 dragut Exp $
 // expp_journal_management.aw - V&auml;ljaannete haldus 
 /*
 
@@ -332,6 +332,12 @@ class expp_journal_management extends class_base
 
 		$t = &$arr['prop']['vcl_inst'];
 		$t->define_field(array(
+			"name" => "document_id",
+			"caption" => t("Dokumendi id"),
+			"align" => "center",
+			"width" => "10%",
+		));
+		$t->define_field(array(
 			"name" => "name",
 			"caption" => t("Nimi"),
 		));
@@ -361,6 +367,7 @@ class expp_journal_management extends class_base
 			$document_id = $connection_to_document->prop("to");
 			$document_object = $connection_to_document->to();
 			$t->define_data(array(
+				"document_id" => $document_id,
 				"name" => $connection_to_document->prop("to.name"),
 				"as_link" => html::checkbox(array(
 					"name" => "as_link[".$document_id."]",
