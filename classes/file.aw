@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.111 2005/09/29 08:07:10 dragut Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/file.aw,v 2.112 2005/10/19 18:10:21 duke Exp $
 // file.aw - Failide haldus
 
 // if files.file != "" then the file is stored in the filesystem
@@ -204,6 +204,8 @@ class file extends class_base
 
 			case "file":
 				// see asi eeldab ajutise faili tegemist eksole?
+
+				// ah sa raisk küll, siinkohal on mul ju konkreetse faili sisu
 				if (is_array($data["value"]))
 				{
 					$file = $data["value"]["tmp_name"];
@@ -214,6 +216,12 @@ class file extends class_base
 					{
 						$fc = $data["value"]["content"];
 					};
+				}
+				elseif (!empty($data["file_content"]))
+				{
+					// get file contents from arguments
+					$fc = $data["file_content"];
+					$file_name = $data["file_name"];
 				}
 				else
 				{
