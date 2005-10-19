@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.63 2005/10/11 18:26:47 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/releditor.aw,v 1.64 2005/10/19 16:13:11 duke Exp $
 /*
 	Displays a form for editing one connection
 	or alternatively provides an interface to edit
@@ -47,6 +47,7 @@ class releditor extends core
 		// form is a single form, which can be used to edit a single connection. It
 		// is also the default
 		$visual = isset($prop["mode"]) && $prop["mode"] == "manager" ? "manager" : "form";
+
 
 		if (!is_array($props) && empty($prop["use_form"]))
 		{
@@ -773,9 +774,15 @@ class releditor extends core
 					{
 						$el_count++;
 					};
+
+					if ($item["type"] == "checkbox" && !$emb[$item["name"]])
+					{
+						$emb[$item["name"]] = 0;
+					}	
 				};
 			};
 		};
+		
 
 		// TODO: make it give feedback to the user, if an object can not be added
 		if ($el_count > 0)
