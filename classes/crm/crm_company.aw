@@ -2360,7 +2360,7 @@ class crm_company extends class_base
 			);
 		}
 
-		return urldecode($arr["get_ru"]);
+		return $arr["post_ru"];
 	}
 
 	/** copies the selected person objects
@@ -2378,7 +2378,7 @@ class crm_company extends class_base
 			$_SESSION["crm_copy_p"][$p_id] = $p_id;
 		}
 
-		return urldecode($arr["get_ru"]);
+		return $arr["post_ru"];
 	}
 
 	/** pastes the cut/copied person objects
@@ -2480,7 +2480,7 @@ class crm_company extends class_base
 		unset($_SESSION["crm_cut_p"]);
 		unset($_SESSION["crm_copy_p"]);
 
-		return urldecode($arr["get_ru"]);
+		return $arr["post_ru"];
 	}
 
 	function _get_firmajuht($arr)
