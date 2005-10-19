@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.97 2005/10/04 10:42:17 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/calendar/planner.aw,v 1.98 2005/10/19 16:38:49 duke Exp $
 // planner.aw - kalender
 // CL_CAL_EVENT on kalendri event
 /*
@@ -308,6 +308,11 @@ class planner extends class_base
 		list(,$conn) = each($conns);
 		$obj_id = $conn->prop("from");
 		return $obj_id;
+	}
+
+	function get_calendar_obj_for_user($arr)
+	{
+		return new object($this->get_calendar_for_user($arr));
 	}
 	
 	/**  
