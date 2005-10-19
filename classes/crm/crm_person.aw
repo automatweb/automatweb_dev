@@ -1,6 +1,6 @@
 <?php                  
 
-// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.87 2005/10/19 06:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/crm/crm_person.aw,v 1.88 2005/10/19 08:37:21 kristo Exp $
 /*
 
 HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_ADD_FROM, CL_CRM_COMPANY, on_connect_org_to_person)
@@ -36,6 +36,9 @@ HANDLE_MESSAGE_WITH_PARAM(MSG_STORAGE_ALIAS_DELETE_FROM, CL_CRM_SECTION, on_disc
 
 @property ext_id type=textbox table=objects field=subclass
 @caption Sidussüsteemi ID
+
+@property code type=textbox table=kliendibaas_isik
+@caption Kood
 
 @property gender type=chooser 
 @caption Sugu
@@ -412,6 +415,26 @@ class crm_person extends class_base
 	
 		switch($data["name"])
 		{
+			case "code":
+				if ($data["value"] == "" && is_oid($ct = $arr["obj_inst"]->prop("address")) && $this->can("view", $ct))
+				{
+					$ct = obj($ct);
+					$rk = $ct->prop("riik");
+					if (is_oid($rk) && $this->can("view", $rk))
+					{
+						$rk = obj($rk);
+						$code = substr(trim($rk->ord()), 0, 1);
+						// get number of companies that have this country as an address
+						$ol = new object_list(array(
+							"class_id" => CL_CRM_PERSON,
+							"CL_CRM_PERSON.address.riik.name" => $rk->name()
+						));
+						$code .= "-".sprintf("%04d", $ol->count());
+						$data["value"] = $code;
+					}
+				}
+				break;
+
 			case "client_manager":
 				$u = get_instance(CL_USER);
 				$ws = array();
