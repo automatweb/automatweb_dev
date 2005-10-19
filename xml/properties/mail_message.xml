@@ -182,7 +182,7 @@
       </property>
       <property>
             <name>msg_contener_title</name>
-            <group>general</group>
+            <group>add</group>
             <table>objects</table>
             <type>textbox</type>
             <field>meta</field>
@@ -191,7 +191,7 @@
       </property>
       <property>
             <name>msg_contener_content</name>
-            <group>general</group>
+            <group>add</group>
             <table>objects</table>
             <type>textarea</type>
             <field>meta</field>
@@ -219,6 +219,9 @@
                   <caption>Üldine</caption>
                   <submit>no</submit>
             </general>
+            <add>
+                  <caption>Lisa</caption>
+            </add>
       </groupinfo>
       <tableinfo>
             <messages>
