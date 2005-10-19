@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.15 2005/10/19 18:39:53 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/messenger/mail_message.aw,v 1.16 2005/10/19 18:57:35 duke Exp $
 // mail_message.aw - Mail message
 
 /*
@@ -442,6 +442,14 @@ class mail_message extends class_base
 			case "mailbox":
 			case "cb_part":
 				$data["value"] = $arr["request"][$data["name"]];
+				break;
+
+			case "attachments":
+				$msgr = get_instance(CL_MESSENGER_V2);
+				$opts = array();
+				$msgrobj = new object($arr["request"]["msgrid"]);
+				$data["new_items"] = $msgrobj->prop("num_attachments");
+
 				break;
 
 		}
