@@ -1546,6 +1546,16 @@
             <caption>Arve staatus</caption>
       </property>
       <property>
+            <name>stats_s_only_billable</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>stats_s_only_billable</field>
+            <caption>Arvele minevad tunnid ainult</caption>
+      </property>
+      <property>
             <name>stats_s_area</name>
             <table>objects</table>
             <group>stats</group>
@@ -1555,14 +1565,13 @@
             <caption>Valdkond</caption>
       </property>
       <property>
-            <name>stats_s_detailed</name>
+            <name>stats_s_res_type</name>
             <table>objects</table>
             <group>stats</group>
-            <type>checkbox</type>
-            <ch_value>1</ch_value>
+            <type>select</type>
             <store>no</store>
-            <field>stats_s_detailed</field>
-            <caption>N&amp;auml;ita detailselt</caption>
+            <field>stats_s_res_type</field>
+            <caption>Tulemused</caption>
       </property>
       <property>
             <name>stats_s_sbt</name>

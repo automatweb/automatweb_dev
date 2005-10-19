@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.202 2005/10/19 06:43:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/Attic/defs.aw,v 2.203 2005/10/19 14:15:57 kristo Exp $
 // defs.aw - common functions 
 if (!defined("DEFS"))
 {
@@ -29,7 +29,7 @@ if (!defined("DEFS"))
 	**/
 	function post_ru()
 	{
-		return aw_ini_get("baseurl").aw_global_get("REQUEST_URI");
+		return aw_url_change_var("post_ru", NULL, aw_ini_get("baseurl").aw_global_get("REQUEST_URI"));
 	}
 
 	function convert_unicode($source)

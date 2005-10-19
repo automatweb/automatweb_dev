@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.22 2005/10/19 06:43:31 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/task.aw,v 1.23 2005/10/19 14:15:57 kristo Exp $
 // task.aw - TODO item
 /*
 
@@ -796,8 +796,20 @@ class task extends class_base
 		));
 
 		$t->define_field(array(
-			"name" => "time",
-			"caption" => t("Kulunud aeg"),
+			"name" => "time_guess",
+			"caption" => t("Prognoositud tunde"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "time_real",
+			"caption" => t("Kulunud tunde"),
+			"align" => "center"
+		));
+
+		$t->define_field(array(
+			"name" => "time_to_cust",
+			"caption" => t("Tunde kliendile"),
 			"align" => "center"
 		));
 
@@ -847,9 +859,19 @@ class task extends class_base
 					"options" => $impls,
 					"value" => $row["impl"]
 				)),
-				"time" => html::textbox(array(
-					"name" => "rows[$idx][time]",
-					"value" => $row["time"],
+				"time_guess" => html::textbox(array(
+					"name" => "rows[$idx][time_guess]",
+					"value" => $row["time_guess"],
+					"size" => 5
+				)),
+				"time_real" => html::textbox(array(
+					"name" => "rows[$idx][time_real]",
+					"value" => $row["time_real"],
+					"size" => 5
+				)),
+				"time_to_cust" => html::textbox(array(
+					"name" => "rows[$idx][time_to_cust]",
+					"value" => $row["time_to_cust"],
 					"size" => 5
 				)),
 				"done" => html::checkbox(array(

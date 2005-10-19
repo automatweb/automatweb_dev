@@ -523,11 +523,14 @@ default group=org_objects
 	@property stats_s_bill_state type=select store=no
 	@caption Arve staatus
 
+	@property stats_s_only_billable type=checkbox ch_value=1 store=no
+	@caption Arvele minevad tunnid ainult
+
 	@property stats_s_area type=select store=no
 	@caption Valdkond
 
-	@property stats_s_detailed type=checkbox ch_value=1 store=no
-	@caption N&auml;ita detailselt
+	@property stats_s_res_type type=select store=no
+	@caption Tulemused
 
 	@property stats_s_sbt type=submit store=no
 	@caption Otsi
@@ -1323,11 +1326,22 @@ class crm_company extends class_base
 				$fn = "_get_".$data["name"];
 				return $bills_impl->$fn($arr);
 
+			case "stats_s_from":
+			case "stats_s_to":
+				if ($arr["request"][$data["name"]]["year"] > 1)
+				{
+					$data["value"] = $arr["request"][$data["name"]];
+				}
+				else
+				{
+					$data["value"] = -1;
+				}
+				break;
+
 			case "stats_s_cust":
 			case "stats_s_proj":
 			case "stats_s_worker":
-			case "stats_s_from":
-			case "stats_s_to":
+			case "stats_s_only_billable":
 			case "stats_s_detailed":
 				$data["value"] = $arr["request"][$data["name"]];
 				break;
@@ -1335,6 +1349,7 @@ class crm_company extends class_base
 			case "stats_s_cust_type":
 			case "stats_s_res":
 			case "stats_s_state":
+			case "stats_s_res_type":
 			case "stats_s_bill_state":
 			case "stats_s_area":
 				static $stats_impl;

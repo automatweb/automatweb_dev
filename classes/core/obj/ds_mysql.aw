@@ -1323,7 +1323,7 @@ die(dbg::dump($ret));
 							$opn_app = "OR $tf IS NULL";
 						}
 	
-						$sql[] = " (".$tf." != ".$v_data."  $opn_app ) ";
+						$sql[] = " (".$tf." != '".$v_data."'  $opn_app ) ";
 					}
 				}
 				else
