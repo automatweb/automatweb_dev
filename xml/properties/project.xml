@@ -38,9 +38,12 @@
             <name>orderer</name>
             <table>objects</table>
             <group>general2</group>
-            <type>relpicker</type>
+            <type>popup_search</type>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
             <reltype>RELTYPE_ORDERER</reltype>
-            <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
             <caption>Tellija</caption>
@@ -49,9 +52,12 @@
             <name>implementor</name>
             <table>objects</table>
             <group>general2</group>
-            <type>relpicker</type>
+            <type>popup_search</type>
+            <clid>
+                  <num_0>CL_CRM_COMPANY</num_0>
+                  <num_1>CL_CRM_PERSON</num_1>
+            </clid>
             <reltype>RELTYPE_IMPLEMENTOR</reltype>
-            <automatic>1</automatic>
             <field>meta</field>
             <method>serialize</method>
             <caption>Teostaja</caption>
@@ -679,7 +685,10 @@
             </PRJ_IMAGE>
             <ORDERER>
                   <value>9</value>
-                  <clid>CL_CRM_COMPANY</clid>
+                  <clid>
+                        <num_0>CL_CRM_COMPANY</num_0>
+                        <num_1>CL_CRM_PERSON</num_1>
+                  </clid>
                   <caption>tellija</caption>
             </ORDERER>
             <IMPLEMENTOR>

@@ -1482,6 +1482,107 @@
             <parent>my_tasks</parent>
             <field>my_tasks_cal</field>
       </property>
+      <property>
+            <name>stats_s_cust</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>stats_s_cust</field>
+            <caption>Kliendi t&amp;uuml;&amp;uuml;p</caption>
+      </property>
+      <property>
+            <name>stats_s_proj</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>stats_s_proj</field>
+            <caption>Projekt</caption>
+      </property>
+      <property>
+            <name>stats_s_worker</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>textbox</type>
+            <store>no</store>
+            <field>stats_s_worker</field>
+            <caption>T&amp;ouml;&amp;ouml;taja</caption>
+      </property>
+      <property>
+            <name>stats_s_from</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stats_s_from</field>
+            <caption>Alates</caption>
+      </property>
+      <property>
+            <name>stats_s_to</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>date_select</type>
+            <store>no</store>
+            <field>stats_s_to</field>
+            <caption>Kuni</caption>
+      </property>
+      <property>
+            <name>stats_s_state</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <field>stats_s_state</field>
+            <caption>Toimetuse staatus</caption>
+      </property>
+      <property>
+            <name>stats_s_bill_state</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <field>stats_s_bill_state</field>
+            <caption>Arve staatus</caption>
+      </property>
+      <property>
+            <name>stats_s_area</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>select</type>
+            <store>no</store>
+            <field>stats_s_area</field>
+            <caption>Valdkond</caption>
+      </property>
+      <property>
+            <name>stats_s_detailed</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>checkbox</type>
+            <ch_value>1</ch_value>
+            <store>no</store>
+            <field>stats_s_detailed</field>
+            <caption>N&amp;auml;ita detailselt</caption>
+      </property>
+      <property>
+            <name>stats_s_sbt</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>submit</type>
+            <store>no</store>
+            <field>stats_s_sbt</field>
+            <caption>Otsi</caption>
+      </property>
+      <property>
+            <name>stats_s_res</name>
+            <table>objects</table>
+            <group>stats</group>
+            <type>table</type>
+            <store>no</store>
+            <no_caption>1</no_caption>
+            <field>stats_s_res</field>
+            <caption>Tulemused</caption>
+      </property>
       <classinfo>
             <relationmgr>yes</relationmgr>
             <syslog_type>ST_CRM_COMPANY</syslog_type>
@@ -1611,6 +1712,10 @@
                   <caption>Nimekiri</caption>
                   <submit>no</submit>
             </bills_list>
+            <stats>
+                  <caption>Statistika</caption>
+                  <submit_method>get</submit_method>
+            </stats>
       </groupinfo>
       <tableinfo>
             <kliendibaas_firma>

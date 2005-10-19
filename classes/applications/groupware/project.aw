@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.54 2005/10/19 06:43:30 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.55 2005/10/19 09:30:39 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -23,10 +23,10 @@
 	@property state type=select table=aw_projects field=aw_state default=1
 	@caption Staatus
 
-	@property orderer type=relpicker reltype=RELTYPE_ORDERER automatic=1 table=objects field=meta method=serialize
+	@property orderer type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_ORDERER table=objects field=meta method=serialize
 	@caption Tellija
 
-	@property implementor type=relpicker reltype=RELTYPE_IMPLEMENTOR automatic=1 table=objects field=meta method=serialize
+	@property implementor type=popup_search clid=CL_CRM_COMPANY,CL_CRM_PERSON reltype=RELTYPE_IMPLEMENTOR table=objects field=meta method=serialize
 	@caption Teostaja
 
 	@property start type=date_select table=aw_projects field=aw_start
@@ -267,7 +267,7 @@
 @reltype PRJ_IMAGE value=8 clid=CL_IMAGE
 @caption Pilt
 
-@reltype ORDERER value=9 clid=CL_CRM_COMPANY
+@reltype ORDERER value=9 clid=CL_CRM_COMPANY,CL_CRM_PERSON
 @caption tellija
 
 @reltype IMPLEMENTOR value=10 clid=CL_CRM_COMPANY
@@ -401,15 +401,25 @@ class project extends class_base
 				{
 					$data["value"] = $arr["request"]["connect_orderer"];
 				}
-				$sa = safe_array($data["value"]);
-				$dv = reset($sa);
-				if ($this->can("view", $dv))
+				if (is_array($data["value"]))
 				{
-					$data["post_append_text"] = html::get_change_url(
-						$dv,
-						array("return_url" => get_ru()),
-						t("Muuda valitud objekti")
-					);
+					$data["value"] = reset($data["value"]);
+				}
+
+				// get values
+				$u = get_instance(CL_USER);
+				$me = $u->get_current_person();
+				$ol = new object_list(array(
+					"class_id" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
+					"client_manager" => $me
+				));
+
+
+				$data["options"] = array("" => "--vali--") + $ol->names();
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
 				}
 				break;
 
@@ -418,15 +428,14 @@ class project extends class_base
 				{
 					$data["value"] = $arr["request"]["connect_impl"];
 				}
-				$sa = safe_array($data["value"]);
-				$dv = reset($sa);
-				if ($this->can("view", $dv))
+				if (is_array($data["value"]))
 				{
-					$data["post_append_text"] = html::get_change_url(
-						$dv,
-						array("return_url" => get_ru()),
-						t("Muuda valitud objekti")
-					);
+					$data["value"] = reset($data["value"]);
+				}
+				if (!isset($data["options"][$data["value"]]) && $this->can("view", $data["value"]))
+				{
+					$tmp = obj($data["value"]);
+					$data["options"][$tmp->id()] = $tmp->name();
 				}
 				break;
 
