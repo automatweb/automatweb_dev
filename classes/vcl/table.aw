@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.61 2005/10/14 13:11:12 duke Exp $
+// $Header: /home/cvs/automatweb_dev/classes/vcl/table.aw,v 1.62 2005/10/19 11:35:46 voldemar Exp $
 // aw_table.aw - generates the html for tables - you just have to feed it the data
 //
 class aw_table extends aw_template
@@ -126,13 +126,13 @@ class aw_table extends aw_template
 			extract ($filter_array);
 			$filter_name = $this->filter_index[$filter_key];
 			$type = $this->filters[$filter_name]["type"];
-			
+
 			// if exists value filtervalue-[rowname] use that for filtering (good for linked values etc)
-			$value = $row[ (isset($row['filtervalue-'.$filter_name]) ? 'filtervalue-' : '') . $filter_name]; 
-			
+			$value = $row[ (isset($row['filtervalue-'.$filter_name]) ? 'filtervalue-' : '') . $filter_name];
+
 			if (!empty($filter_txtvalue) && stristr($value, $filter_txtvalue) === false)
 			{
-				return;
+				return false;
 			}
 		}
 
@@ -142,6 +142,8 @@ class aw_table extends aw_template
 		{
 			$this->d_row_cnt++;
 		}
+
+		return true;
 	}
 
 	function set_data($idx, $row)
@@ -877,7 +879,11 @@ class aw_table extends aw_template
 								$val = $tmt[2];
 							}
 
-							if ($val < 1)
+							if (!isset ($val))
+							{
+								$val = "";
+							}
+							elseif ($val < 1)
 							{
 								$val = "n/a";
 							}
@@ -1897,7 +1903,7 @@ class aw_table extends aw_template
 		if (empty ($tbl2) and count ($this->filters))
 		{
 			$tbl2 = "<tr>\n";
-			
+
 			### get filter change url
 			$url = preg_replace("/.{$this->filter_name}=[^&]*/", "", aw_global_get("REQUEST_URI"));
 			$sep = (strpos($url, "?") === false) ? "?" : "&";
@@ -1931,9 +1937,9 @@ class aw_table extends aw_template
 						'name' => $this->filter_name.'['.$v["name"].']',
 						'size' => 20,
 						'value' => isset($this->selected_filters[$filter_key]) ? $this->selected_filters[$filter_key]['filter_txtvalue'] : '',
-						'onkeypress' => "var key = window.event ? window.event.keyCode : (event ? event.which : NULL); 
+						'onkeypress' => "var key = window.event ? window.event.keyCode : (event ? event.which : NULL);
 							if(key == 13)
-							{ 
+							{
 								window.location = this.value.length>0 ? '$newurl,1,' + this.value : '$url' ;
 								return false;
 							}",
