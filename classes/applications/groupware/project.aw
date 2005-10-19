@@ -1,5 +1,5 @@
 <?php
-// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.55 2005/10/19 09:30:39 kristo Exp $
+// $Header: /home/cvs/automatweb_dev/classes/applications/groupware/project.aw,v 1.56 2005/10/19 09:43:48 kristo Exp $
 // project.aw - Projekt 
 /*
 
@@ -411,7 +411,13 @@ class project extends class_base
 				$me = $u->get_current_person();
 				$ol = new object_list(array(
 					"class_id" => array(CL_CRM_PERSON,CL_CRM_COMPANY),
-					"client_manager" => $me
+					new object_list_filter(array(
+						"logic" => "OR",
+						"conditions" => array(
+							"CL_CRM_PERSON.client_manager" => $me,
+							"CL_CRM_COMPANY.client_manager" => $me
+						)
+					))
 				));
 
 
